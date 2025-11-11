@@ -1,73 +1,73 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC010329E49
-	for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 09:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A426220F21
+	for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 09:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762851914; cv=none; b=CZpy9azDh73PNWwzGqiRc/8zZIH9khOFcE301bNdWFuJS4pu5h5hv4vbeAz4Fro3VkvialhPVIjrGLA1vFZPcY5+1yI1r3isHuX7VacjQrLwY5T4lsVbF5mvUYba/07LJxGsBdiFP7F5nolbQbonezTw1zS/CYpWlSg9pYY8Xcg=
+	t=1762852109; cv=none; b=LhHYOzF/cNZC0eVBTlz3r/73av+RAIW3Wf6ogcq/jotJt8kV/q1x4gxs9JQQafur+ubTlVhsBV2TZvfix6UCt3JQO4E0Or/Dl7nQwPLSTBoMfxDUK8MPVQai4p9yICF5BNT/2etpi7a42bkBCLuAswYJYjlQHIFcT1aJKl4DDUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762851914; c=relaxed/simple;
-	bh=RciqffmsGUnB8tK3sBcxSnH1zQElvWzvEdnZAAXNZdg=;
+	s=arc-20240116; t=1762852109; c=relaxed/simple;
+	bh=T+mH9+7PNLYr6Z/2ln9TuMbRS+qcoVyhy39YsWeg6dI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IVszaPzDzKaHmaEvEqUaUJkM8X5JVnrQcPExbiSi5aOB7ElBZGcMzLao4wfTY2zX/wjr4FZZTcdw12Dm6cbZMdiAoFmG2T3iQEusoy5dsPUYwgypDZu5TS2q+vd4FVqyFQd6ct4Q27kmNG0R2usLBo6XUpOVq7dJkChcWM9JiD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=27yy346d; arc=none smtp.client-ip=209.85.219.42
+	 To:Cc:Content-Type; b=Sxvq6Dst1wmWqrntaCq5T8zcb6mzXSe6DaEtQS57m+UBqfnFegPYUKmQSxrX0kwyvnyc97o/XHe1OutgPRxVcfE7UGmN3ZAXPaKY3oLozN99DV2qooeLbKn2YeZXIZ/a6MMXWT8gCHwWATV0M9918bNbHcrfWGehQCwZZ1S6eL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Vdy71rul; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="27yy346d"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-88043139c35so40260246d6.0
-        for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 01:05:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Vdy71rul"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ed861eb98cso45651721cf.3
+        for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 01:08:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762851912; x=1763456712; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1762852107; x=1763456907; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RciqffmsGUnB8tK3sBcxSnH1zQElvWzvEdnZAAXNZdg=;
-        b=27yy346dnclGiiaRGp0cW0h4aRUIhMbJJEv8Z0DE7jR04AP645d1yf6wL0xx4T/f0N
-         M+NfNDcKLhzW8/gtxZoh5+r1wZzH0V4jso2uvenkItRGTJ9jLafacVq01siOZEh2/DUs
-         sHxId1RYy3TUqLIuU1U/RTerDQNZwc9/0TkPYRfClJXXZVIIGxT8cTo4ISsddImMc4Mk
-         Uy5fHFkOesF/XqPQ5RIWnN++8tl3+PGKHT7GEvdHsb7BNEWk1dRQf+kYPP+Nr/+OWlWX
-         Vv2GhHsqsHMrqkbctdkCVraDhJz1UQzVpWnvAcGdmXXbGJSwP4+yGgVtrIvL/FqxYG1I
-         n8vQ==
+        bh=T+mH9+7PNLYr6Z/2ln9TuMbRS+qcoVyhy39YsWeg6dI=;
+        b=Vdy71rulvvrYdrfQm66nrjGH0phzgk5iZkDKgQZ8rq4HsxGwzX7WUJbDRi0AEZr2dR
+         cskAPvLGWRILMt3FMUPNB2kYOdE0Oul1ie/s4Jngj9UKWxouvtAOiW0p8ToFps6C5Aou
+         bVprJ//6MTe0D87TRHNk7omhw94yrG0M7LSKu0dU7zUXtsB2ZJDnTRfm1JR9oOX2gO60
+         MsOrucPM4+aZnZiXHJqNwwpziW/uPCN47nBU/X0HynEIYbKLWnS2eOnMwJr7NRWd1GiD
+         gJnTaJVR8X6eDBlbLLEAB0lf0DzIPbH9ZErjSwd7EMegncN0cmUVCeaoguxetymITNBG
+         wqhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762851912; x=1763456712;
+        d=1e100.net; s=20230601; t=1762852107; x=1763456907;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RciqffmsGUnB8tK3sBcxSnH1zQElvWzvEdnZAAXNZdg=;
-        b=FKLypcV0CbN+XveiaPNU+TbF9AOuudfqQcAD/8AvWqMlz2YoYl3ojVds0bW5H0jxST
-         BbX0cKwMfBms+JAgC0Yh9MQflYkCAQiyiZFogkZazZwilbMfKKVhJ0QHMeCLxBiqxKpq
-         AZ+aAh94F6gcYHxyNxP/8wu7hWSj852fcRkhw2e5rltiXVvI677+I0pQYl2lJ2R+VyXF
-         IkWNBm7EbwdBBWExySUXScFtLO5/svpDVjAQX94OUJwgt3P5YXRGRaphSDs7ZLAoAc/T
-         1Y+53lOn7YaT4xCaA62M8mu8gZ7gKjSIDvzpfBT38slkBOew1tZn2X0xRLhYXGi+oruf
-         8ZzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXEXb1KF5FQbN1Ag8YsU4C2IxLoPJKhxkvoAwy53ln/UWUr8nHattkPo40SvAH/WLJTRvRb@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxl0u7hC17Dv0PN8ow2Eph0HDgj85Horn458CBmHgvMsst/6WJU
-	YHD7Ldtc9EAEb1WJ6dMBRVHLxeN9ZeZ6JhLbU4JX4uHIAJcV1OBwtUSxWXj045JrNyIqYBRBwP/
-	QHhhU6t38lFjelJBmjoT1TqD4woFblln/ppyp1jUo
-X-Gm-Gg: ASbGncutiJgtdpFcEMDIKR3l29BStsv5l8ItwYouSy0zmx+JHT58Q1kwdtfhSBQLe3i
-	20+lbJpQLeq9s1vcboYhh+V/NmEK6K3eTHu69yu2gK2V9ymx6gvXTQHvmAxujSFlosVKyu7TrAN
-	+5ViRyar+ffRTEFjToaY0wEHFZ4XABx1IlC0ZfNNxl8QwtmDIlifyg0NWeSPT0/uPpF2ecUV3dp
-	oBkbksbgjsIyWtKyESXSf7lkZsPGixJCIvHvKRq1g4gO+kANl38MJiysMhq29oNm6bvknPYlf67
-	AkUcEm+kDLmFh4xfqpmUVdNx6Q==
-X-Google-Smtp-Source: AGHT+IG5h9zoN8ZgQbNHnylwE6ej/e45pEoTj6YsGsJFK5D5YZvplepfzX5RbzM9p15i6Nqb6Snmeh5EikEQA067P+g=
-X-Received: by 2002:a05:6214:d4c:b0:880:56f6:92ae with SMTP id
- 6a1803df08f44-882386d7384mr151892296d6.57.1762851911409; Tue, 11 Nov 2025
- 01:05:11 -0800 (PST)
+        bh=T+mH9+7PNLYr6Z/2ln9TuMbRS+qcoVyhy39YsWeg6dI=;
+        b=DVRLftyOu/8EMjBP0WVyAG8hEhxP9n5Lwk7SvPiCLkTrB0cUCpi5u2iYLEnYj5BoPO
+         kDGX9HkiGk2Y08jGUg1M1S0H9IplzP5Lkt1xNsGgEDQSI6pEDX8ErpbBxxjSLb2PkZhf
+         eE19yWqO3d8c5dr0qsUDUIJATb1qoxjcq/m1b7PpU5Z1eekY1diHvNBjw+Ve6Prh6rQw
+         anc5NExcKjGECwXN63JwL06NZLfRkwtn/sApNuY+rmeYhR3RWccShC3dng8WtEQad+pA
+         szpqtHRNSpCq0gYUigEM8JbP0fraNY47/pLypsy8I2uGZlhMWnEimqenRcr6TuWt4qD/
+         b/UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWaXDx/UK0AK53NYyyyXrR0RbfgLyFPyZlFm1pli8181KKFj5Se6BV6A3PKizdC3pA0AqN7@lists.linux.dev
+X-Gm-Message-State: AOJu0YyGrShIGWaSzauKFkNXdD7UvVRWaJO1HvKIM/fp/fhbARlgb9ks
+	PbgTS/Grxr49v1fuYOruWz9361JHHCoEWieqTLYo6WD2DGU7t/wLsIAex/1LUw9uxLWSPhzBFKa
+	NgvLuU0nICxTnfaNvn9PN8xmxxcsQH05dltMG7HMn
+X-Gm-Gg: ASbGnctTipLQwLst/bSNiHoH+663pI14TCHjZAZABVDYmvMZY+z3t8jWJ9bAxo2w327
+	yzDdTgFLdVVg4jcQS6rimJP+slxPzzBdcLSLv72vKUIAFQ1PN4WlsrxnSIx3TazF7bUDxVEh1V1
+	tv+lOpypSeifgATwEXINiIdMQKIUtQRM+Y6zgNYcwoGXrcs1eORv/ruJSaAlIavuPy308ARm5Yk
+	7wnowUFJaTQrf0enQ4nsC2+gsHNqatH5xuaUqG9ynZM0BmCvGLFYOli6TdNeKfguIWr869af7Wk
+	saS3X+rpiqYvSvEfO/wqhBmP4TJHClhB+x/1
+X-Google-Smtp-Source: AGHT+IGGiGzNQ2eAyJqdaO9JyMrXkP7w+emfDXwZMPoyyY2gy1i/zUBgnLRf870LMq5UXpv/uG8YRTM2WfKUuwW/Bjc=
+X-Received: by 2002:ac8:5751:0:b0:4ec:f4be:6b12 with SMTP id
+ d75a77b69052e-4eda4fd3621mr141844221cf.72.1762852106635; Tue, 11 Nov 2025
+ 01:08:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <96559d5a8e897f97879259bad3117db617e21377.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <96559d5a8e897f97879259bad3117db617e21377.1761763681.git.m.wieczorretman@pm.me>
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <56d9203b1fcb6281b0d29b44bc181530e5c72327.1761763681.git.m.wieczorretman@pm.me>
+In-Reply-To: <56d9203b1fcb6281b0d29b44bc181530e5c72327.1761763681.git.m.wieczorretman@pm.me>
 From: Alexander Potapenko <glider@google.com>
-Date: Tue, 11 Nov 2025 10:04:34 +0100
-X-Gm-Features: AWmQ_bnTIARw6amUs-gvSQivLCgG0XY32k4ioUAxykbqmf67HMroMwsIF2IdVwY
-Message-ID: <CAG_fn=X5Dr_Dc1pcnAW19zgo7tW8mUSkpDj-v5eaG-awy4S53Q@mail.gmail.com>
-Subject: Re: [PATCH v6 13/18] x86/mm: LAM initialization
+Date: Tue, 11 Nov 2025 10:07:50 +0100
+X-Gm-Features: AWmQ_bksKNIR8oRrvQW5ElnBBjqadCFUKWpQKwYmKonXZ13JEF-XHOSa5ehktsY
+Message-ID: <CAG_fn=U3SLOoy_K-2ShOMYf80i4AE1tB1AL4w7wcJAXBxi+PtA@mail.gmail.com>
+Subject: Re: [PATCH v6 12/18] x86/mm: LAM compatible non-canonical definition
 To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
 Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
 	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
@@ -99,14 +99,19 @@ On Wed, Oct 29, 2025 at 9:08=E2=80=AFPM Maciej Wieczor-Retman
 >
 > From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 >
-> To make use of KASAN's tag based mode on x86, Linear Address Masking
-> (LAM) needs to be enabled. To do that the 28th bit in CR4 has to be set.
+> For an address to be canonical it has to have its top bits equal to each
+> other. The number of bits depends on the paging level and whether
+> they're supposed to be ones or zeroes depends on whether the address
+> points to kernel or user space.
 >
-> Set the bit in early memory initialization.
+> With Linear Address Masking (LAM) enabled, the definition of linear
+> address canonicality is modified. Not all of the previously required
+> bits need to be equal, only the first and last from the previously equal
+> bitmask. So for example a 5-level paging kernel address needs to have
+> bits [63] and [56] set.
 >
-> When launching secondary CPUs the LAM bit gets lost. To avoid this add
-> it in a mask in head_64.S. The bitmask permits some bits of CR4 to pass
-> from the primary CPU to the secondary CPUs without being cleared.
+> Change the canonical checking function to use bit masks instead of bit
+> shifts.
 >
 > Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 Acked-by: Alexander Potapenko <glider@google.com>
