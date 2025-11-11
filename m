@@ -1,72 +1,72 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6ED277C86
-	for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 09:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8287B257831
+	for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 09:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762852997; cv=none; b=FXzgP5+8mqtbXeTd8Cdy0+h/5l9AH8NhGPmeQLFbLSBwWoSFbPmIO+CaYRIDXMnq2VJ3ABr4WN2+9U0bVMnsdnrkjDCxxjN20eYz1lMSiWyVuUNLevG3w0Z43szi7JLZcNnNdxptm7OR7G1DTITvDze98xmnoZZlq1BqSQjXPNI=
+	t=1762853513; cv=none; b=fKe6wTg4x9hOIzKSaIC2pMwE3OpoOSQr5TqDOtoYuu5RRljN557Omw3ldjXuzZjzsoIQwVa89cWr91TbY//Mx+MhvgNUkmaKMIzLsz2YK1/fWzKIQf1N453jP5k35NGLzvTENpb5QBxr3YMP+LUlSQU8KwlsCx293/1Wv3OG0zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762852997; c=relaxed/simple;
-	bh=HW+BHIjHuyTX7OAC9AGqEECbSB0U1bNiaGYXhX8ud1c=;
+	s=arc-20240116; t=1762853513; c=relaxed/simple;
+	bh=r+hEOA78AhLgodINgHVsRcE9W9flQIP3sthYAhVWiZs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ED+lKgcBY6HJlfEw7TipKGSgPnMpt9AHQ04boYMDPbcUgz9RqLnDzs9S5DGekWNh1iodOuC1DnmDgsuj5aIqcYmVdYcegmI1XTdqptCtzeIVIwy5n/tV+awfWmSAzSLvVOLdB6685k2yADu2YffV17DgoCAryvlr8xfzfG+MLjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZXTB8sJR; arc=none smtp.client-ip=209.85.219.46
+	 To:Cc:Content-Type; b=liMZP9XTzc7gmrptomzJ+q0b6r13wHMNQjU5lkwsBGKWxPM4NQEu0nKFeYNhfZ3Db9aGLMqTm49gIljz55BWop++cBL4Lkn4ROIU2XKJfs12lfXARTV6PBPrCk27pZ/VFv0zZXMioA6KUsCnXyhI7lZyf6BsvsBU3NFi4cnG8e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QAQGvhpo; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZXTB8sJR"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8823e39c581so33186736d6.3
-        for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 01:23:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QAQGvhpo"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4ed9c19248bso32560281cf.1
+        for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 01:31:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762852995; x=1763457795; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1762853510; x=1763458310; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HW+BHIjHuyTX7OAC9AGqEECbSB0U1bNiaGYXhX8ud1c=;
-        b=ZXTB8sJRmqcTg3e5DRWXBjGKAYRGYu7Zsn1B/RRBX/2ulb6qaC7tT474MjddyCbNPm
-         xP8eFD9P5jr0xqLtp5s3KfSoLNz8xWG/S3NXUBiavA7yJ3vgYzmJaS8XEV/AfYJCm7ux
-         /LHgSojqN0XvlnUl7Q2t+jb1bwSFIrK9IwhqbCYuQUQyX+TvKIdVCswjDE3LtKLDVIgM
-         EzmvZcDs2pw3LDm/yFdbNi3DYmTgT9QQ73YNFjwMJ3Z1TWPBnpGKGmVgK3ylHofdzjlg
-         sfMsf76j86w5b/uJ9YkcshhBtnJOAOoan3rUo7ycnDfLOwm467AjLrTT8tqvZhOxcMqK
-         1ngQ==
+        bh=mcuXePJv9UMRmDbNyzI2WPi4AQ0WM2JROyTQZuxeHnI=;
+        b=QAQGvhpolI7U5nt4AVAuKIkO0j6+W6Ha4LF1PpkwsUCclZ6ROh0qY1D5yfiO0GNZPG
+         uKYI3dCGypuJqOi1BxgnsgaHtvjpmwhFAbdh2BPMG6aVA/+Rg/oKY67z/bct+uEROg/i
+         rM7BfUyF2NVOWG1wMmdpHfeDR/nam83afT/4B+IqgOKxdoBEz+1T5L0OJwcDsDudBknP
+         71WSjzWPRGv4Zg/+SjZSwsdzwQpIt37pRH2bWbBnDWd8UsaVlpki3muYtu5ieP8uXmKk
+         s06RwEcdhVh0t5HY7FtXvHHBfc6Qc25GvAtKj94ZZ0tWNLaO+qIBFL0bPgyYwEluMQyA
+         kTFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762852995; x=1763457795;
+        d=1e100.net; s=20230601; t=1762853510; x=1763458310;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HW+BHIjHuyTX7OAC9AGqEECbSB0U1bNiaGYXhX8ud1c=;
-        b=w4Fu90dcD3b6cp3Q7GG34Ozp3yndRSXzjT6h1b2hnw9vry5xo/NWjUAzYKdzUDxxny
-         fgb7FlrwHzwV2MXisTxA7cEH7/VaVtMeYEjiXLwDkM5Jt4FzrS4fRpuknce45SivwyPu
-         tIDzvgAYulp2LXsy5K4ydBGknb7oBBW/TUiKeTYwqafdQs6aX/j4OIynUFB/KWTxbDfG
-         tfrL2LOm63cMIaN/zSPx44CyFnLcsS/2bj2SOLea/PjWzHFrig55OofBgd9lucxilkSh
-         xACC90wtUDVeFb0D/MHxWcq2gr67pv9DUx1w/PrPfdQZkRk+uHoU4QzXN+p0UbGfq3yj
-         gR0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXO1CcTeb80kqJXDuAXs1ULlSsR2Hu3QXPqZZ7yAE4npMPsTNn53/7u7SXz8ZkVC61+93AM@lists.linux.dev
-X-Gm-Message-State: AOJu0YyQJcehpy3TIKlampJqhFOCAejKyoviafR7BbZj4+C5aVooTKm+
-	kSf7BJlkkNDhUu22P5+TUjyRyY931tGuMWLAz9BEEHClg1Ep3X8tv9NHZQbo7yF0ZvVfFxsL2ru
-	59bto81F/LcBPfuk82JdnihIkt3zyDHsnkjVRGD8/
-X-Gm-Gg: ASbGncsb2BFS8jY4Ix3+8qUlXJPY3wNPaVVfk0TkTZKVC2jJJAojJ7rMaiTLwHw3Qnp
-	aOU6Rsp4yoo+QczWM5ERSDo4+joW+OHhT579xyva7BSpOZA1uRd82bUFudVn7XYnx532ImdO5x1
-	hpwbcWnKVwT+F0+Kp4ym2GKzehaN6/SkDaGL+KvM85/YRQBvGgDcebTeHWSS0Hz3JriruP2i5Fi
-	QLvif8Uxc2glfakd8tbHUqyvhtlX7D6zaZUkhLTP2U2yUPSSICyh8izg29M3IodlBr/zER3MrWs
-	Nb7qaiX2wLTU1vtCSQSXzfvILg==
-X-Google-Smtp-Source: AGHT+IE0yzs57LETS85djEZyTYXW5DmddvlcMHLtxP59+D7EFGLVQ5m9xCUc4smiAAZV+t8Cn2za8HGBMs1SjTj1Y9o=
-X-Received: by 2002:a05:6214:1310:b0:880:3e92:3d33 with SMTP id
- 6a1803df08f44-8823873d584mr174202246d6.34.1762852994390; Tue, 11 Nov 2025
- 01:23:14 -0800 (PST)
+        bh=mcuXePJv9UMRmDbNyzI2WPi4AQ0WM2JROyTQZuxeHnI=;
+        b=BaOtEB7+mTEJRx2CWw+sz17BUoGYVFVCB8DmxFTPKpb3YsRDwuXeFTgGLr1tk37UmN
+         RxHjHaaPHTOkXSO+Izjxx5gwX+GYlHbsIOMwiA72w6fXYV4YV78+CPPPtD9PJskQ2cca
+         4x2Y510YDd2wARt5MwOBrlLz1n2mlZOzaizekkR7r/Qv/S/j4Eh3rwr1UdGorvjqTQEb
+         XJfYEH1uua/EO5+M7K5+EmaliIoF7iyZ1+zXdmHVI5e8J24QOkqe9vB/UfTKQC0iFFse
+         uFZ8WZQ+mOKHLYonV3wiIQVcsbQFzxrtpGdhjN8tRDOefO/BBaOhkyds8RrbffizQKL0
+         nuOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXevzL3AuvOFia0fNFuvA7msJXD/05+C6VawSGYh6pxk2UiOvvNZn/CtH6JAjG2UbW2iTx7@lists.linux.dev
+X-Gm-Message-State: AOJu0YzacIwbIlR75kx/FI/05oAcKWsv4VNhTsKje5EgmGGNFHd9dvDq
+	JkQdzvS9spwiWYHDvKdL7DAdYas8QX/EFiIoGMMSx8ASrpHZI0Z5yvP8xM1dIGu1iifVnPCSD7W
+	pnqOB8GEL5zMqTDS9q1HkbpQHCq8qbz6Y2jhJxvdD
+X-Gm-Gg: ASbGncv2WIuZ+TNRaiK7O8BRdmGEILF3UERw8wOMAezBVfwIK5rRN9dPFHYrlwe0viE
+	IlMDsbTTL1yYxMb0LU3qZ4bJMO40Cke94wifumlar7OqBXhsUNk0zyZq3xOPt4Y/KVRbUlSGlat
+	m/kBWnD3PZfC/eLsB1ktO+oW9ibjUNJtbVQro144DC/dnZWBvtajnA2NndCtnW0X2q7BWa9pYsz
+	IioxdxDp8lqMSk+kMW/nWswvISNNFB0wfYi/YXnikIH5lvYOvVD2qe0cH9iHVeYfqxoBZHIXaXW
+	AqJkG7pngYA/jyZmuZE3U415E6JuVOvTkMmC
+X-Google-Smtp-Source: AGHT+IEzr91NsU9OUC24gjDEzFi/WJBgPa8H1cJUF2UmeUnuLOth+gagFxzFFCqIthcpMbxe1OUruDtNQIgW1/7rFEY=
+X-Received: by 2002:a05:622a:2c1:b0:4ed:6d2c:dbf2 with SMTP id
+ d75a77b69052e-4eda4edae35mr142374501cf.32.1762853509963; Tue, 11 Nov 2025
+ 01:31:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <8681ee6683b1c65a1d5d65f21c66e63378806ba0.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <8681ee6683b1c65a1d5d65f21c66e63378806ba0.1761763681.git.m.wieczorretman@pm.me>
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <5be986faa12ed1176889c3ba25852c42674305f4.1761763681.git.m.wieczorretman@pm.me>
+In-Reply-To: <5be986faa12ed1176889c3ba25852c42674305f4.1761763681.git.m.wieczorretman@pm.me>
 From: Alexander Potapenko <glider@google.com>
-Date: Tue, 11 Nov 2025 10:22:37 +0100
-X-Gm-Features: AWmQ_bn-gtNt_PIr26xFMqgMDiPlRCOzgcJVubPfw4RNrG4hXg8UIUOVQ0zkb_Q
-Message-ID: <CAG_fn=V46UeEvrPb01VRk+60-wL0DA6Y6ZD5HAfVLzHcgRh+VQ@mail.gmail.com>
-Subject: Re: [PATCH v6 05/18] kasan: Fix inline mode for x86 tag-based mode
+Date: Tue, 11 Nov 2025 10:31:13 +0100
+X-Gm-Features: AWmQ_bnBejbyt9xhMGcc96j04H3RtNf27KB78uQcmIocgSxJqcCqkGPoQwhXWUQ
+Message-ID: <CAG_fn=XFXFAvKS2+bc66FR+gw7rfSybETAOBUR_vneaVdF5F9A@mail.gmail.com>
+Subject: Re: [PATCH v6 06/18] x86/kasan: Add arch specific kasan functions
 To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
 Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
 	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
@@ -92,10 +92,11 @@ Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com,
 	llvm@lists.linux.dev, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
->
-> Explicitly zero out hwasan-instrument-with-calls when enabling inline
-> mode in tag-based KASAN.
->
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+> +#ifdef CONFIG_64BIT
+> +static inline void *__tag_set(const void *__addr, u8 tag)
+> +{
+> +       u64 addr = (u64)__addr;
+> +
+> +       addr &= ~__tag_shifted(KASAN_TAG_MASK);
+
+KASAN_TAG_MASK is only defined in Patch 07, does this patch compile?
