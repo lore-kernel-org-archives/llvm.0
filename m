@@ -1,110 +1,142 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AE430216D
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 23:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A8322068A
+	for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 04:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762816993; cv=none; b=hETcdxGz38qJ52yDtovJdV98Ys9k+N8UBQ1/FarceP8Q/2iBA5z0mt5TaN9/6qCKLXe26WLYzRvkQaHyARbAw3RIOjWhs00HbccqpEIvf2m9jYKRdkO+IxYqG1cOjBTFoK+9GZ1PN9uYE6XUqKhcKeNIjl9bqPz3DMwj8VzHP7M=
+	t=1762834933; cv=none; b=IXVVP6iisV7g/JWGoo8TR7NDWVAMT1DLXl7EUTt7vlE1tXygbF618Bd1Zm/pWXiY0rZFRod8F+GiF4Z1LO1+RYmVONv3dQSTtxFSrOVQ3acCKD2Hq2LD9me8Zh5kkKGXI/167P8TiIkdNGo4Z4S0LQdkGj8/GOwsX+hR1+FB6GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762816993; c=relaxed/simple;
-	bh=lgcoh9p9TCLcPD8PGPy9BtJzRmki9rWnfrJ00klkhMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BA6O0FcfwebpOeq4sUG0q5EDuE/htnIHJ4e/y/ktqJ/UeM3/MKlI8N31oGjmWSppG6EhzFLffhZ2XkKmWl7relKeVpuvOWM3U3Q+tDMfwE8QVnYBmJ2UCmMQkGCgr1rti10QGFumEzaQu4WSlitrfuaxa6MaDl+ilmJJ/FeOtXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=rjYuoLzl; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1762834933; c=relaxed/simple;
+	bh=SeUK/qK0tFgf2I37LhKsrxWlRe01qzTGkhkRDQr7BKI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=dkW8tM/IksE8VOKoMVsZztLsNNqtrn1UqNWLgPEHLAj/kYsKVKrWTzcewHmC/orba0/6gCQjYxTic3cyMYfs9A6SEIH4klRNWcxeUOeuKdmMAw3l9lqprEDZ8c4Zz1YbN4VskTqI8OUASZqFgY9EJMDIibDGgcG4YoV1qnWLpHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OjcfmnJ2; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="rjYuoLzl"
-Received: from [IPV6:2601:646:8081:9484:a4ce:2dbc:ef8e:acc2] ([IPv6:2601:646:8081:9484:a4ce:2dbc:ef8e:acc2])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5AANLvc93880957
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 10 Nov 2025 15:21:58 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5AANLvc93880957
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025102301; t=1762816923;
-	bh=BsN8VBFD5PAgYi4bwE42pnqSTmd+qcr29mOqQybepiA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rjYuoLzlgViwlHxmQg2QGfpz9LPJDhOQAbw4/6aIGNHbpNN57PZ51RsVPdOwQA6yB
-	 2eNjlZzKfZya7G4KhhWgguyHM00AgCEGTcGmu22T0V87nzs1CGXLylHaQ1B7bKomCf
-	 4yz/0LhiJbU3IVmkAeDaty+clqMjGVgwRilI7qypUsrfnmUZvKS2i/+F35IPLAcw7f
-	 BuHueJostF0V0GWeV+jp1PoPSmefFxcdjXd9xrdrNwYM/y51ZIXY3w9UdXd+X2Dg8x
-	 SQzYlmvO8N1yVdVU38QI6EboQsWVZ7uNLIiYngGzemAcHknbmnXkOfw56rFOGv28uz
-	 uQr7m3HHG+8FA==
-Message-ID: <128b82ff-d304-41d6-b914-a44706d8781f@zytor.com>
-Date: Mon, 10 Nov 2025 15:21:52 -0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OjcfmnJ2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762834930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ux+8g5rIAMioq9aONY1L64Ysivv6ogOrsmQ/TymlpGU=;
+	b=OjcfmnJ2ZbGcJyUWjNlSotnrvaKpb5Hc0lqIDSiB41j+sb6YulMX/fyAPqxeI7ptBvvZfx
+	gWA9VBxcWH6t7+EtnNE70vOcJNxvM1qZDEeVvj/TRW24FJCj7kwhhfP47KtzQqFB36Ym4Y
+	KrBjU20Vhmwd9WYYPoTSqELAs1vHRzQ=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-82-RdGhlLfwPceg1LnstOsvcA-1; Mon,
+ 10 Nov 2025 23:22:09 -0500
+X-MC-Unique: RdGhlLfwPceg1LnstOsvcA-1
+X-Mimecast-MFC-AGG-ID: RdGhlLfwPceg1LnstOsvcA_1762834928
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 22A081956089
+	for <llvm@lists.linux.dev>; Tue, 11 Nov 2025 04:22:08 +0000 (UTC)
+Received: from [172.20.1.3] (unknown [10.30.45.70])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A4E821800367;
+	Tue, 11 Nov 2025 04:22:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 10 of 137): Test report for master
+ (6.18.0-rc5, upstream-mainline, 4ea7c171)
+Date: Tue, 11 Nov 2025 04:22:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] Provide the always inline version of some
- functions
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Xie Yuanbin <qq570070308@gmail.com>, david@redhat.com, tglx@linutronix.de,
-        segher@kernel.crashing.org, riel@surriel.com, linux@armlinux.org.uk,
-        mathieu.desnoyers@efficios.com, paulmck@kernel.org, pjw@kernel.org,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, davem@davemloft.net,
-        andreas@gaisler.com, luto@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, acme@kernel.org, namhyung@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        james.clark@linaro.org, anna-maria@linutronix.de, frederic@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, vschneid@redhat.com, nathan@kernel.org,
-        nick.desaulniers+lkml@gmail.com, morbo@google.com,
-        justinstitt@google.com, thuth@redhat.com, brauner@kernel.org,
-        arnd@arndb.de, jlayton@kernel.org, aalbersh@redhat.com,
-        akpm@linux-foundation.org, david@kernel.org,
-        lorenzo.stoakes@oracle.com, max.kellermann@ionos.com,
-        ryan.roberts@arm.com, nysal@linux.ibm.com, urezki@gmail.com,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
-        will@kernel.org
-References: <20251108172346.263590-1-qq570070308@gmail.com>
- <20251108172346.263590-4-qq570070308@gmail.com>
- <04CA2D22-4DE2-4DE1-A2BC-AACE666F5F93@zytor.com>
- <20251109115152.GD2545891@noisy.programming.kicks-ass.net>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20251109115152.GD2545891@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <19356.125111023220900115@us-mta-82.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: _6pfwUhDEo8kGvRj2eo0M3A63U4d_Lp53slnjKWIZNA_1762834928
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-11-09 03:51, Peter Zijlstra wrote:
-> On Sat, Nov 08, 2025 at 02:14:44PM -0800, H. Peter Anvin wrote:
-> 
->>> +static struct rq *finish_task_switch(struct task_struct *prev)
->>> +{
->>> +	return finish_task_switch_ainline(prev);
->>> +}
->>> +
->>> /**
->>>  * schedule_tail - first thing a freshly forked thread must call.
->>>  * @prev: the thread we just switched away from.
->>
->> There is, in fact: you have to have an always_inline version, and wrap it in a noinline version.
-> 
-> Yes, but all of this is particularly retarded, there are exactly _2_
-> callers of this function. Keeping an out-of-line copy for one while
-> inlineing the other makes 0 sense.
-> 
-> Also, the amount of crap he needs to mark __always_inline doesn't make
-> much sense to me, is he building with -Os or something?
+Hi, we tested your kernel and here are the results:
 
-That's another issue -- unless the second instance of the function is on a
-slow path which wants to be isolated from the rest of its function (unlikely.)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-I was merely commenting on the claim that there is no way to control inlining
-on a call site basis - there is.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-	-hpa
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2150429851
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
