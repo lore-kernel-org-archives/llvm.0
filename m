@@ -1,66 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4968313E3B;
-	Tue, 11 Nov 2025 16:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14A3377E9D;
+	Tue, 11 Nov 2025 16:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762878841; cv=none; b=DcCPbq4eQh5q5+A9teDS0Z5VbWJ9zpO4YaP/lc7x4n5t7mQax8Curc0nSdvWl1ri3o/B3ZrgzQp7yW5AF6wHNo+prWF3efcsKvsbxzyyX19OF8I9vE2UWjb5S0Lt7w77dNs+qzZ5sMXPv63yGkQAh+YjJNMB1oXhhhMSnT6BRZQ=
+	t=1762880104; cv=none; b=UAZjPTu7B0ypLLRozGrwVKqo0o1mxoX6H3zEzMGU76Ajf6omicpIID9BXEwb5zXvYhoAOAgbfmkNfOOTmmyRgc8LFH2Pr2wOkpSGNhAE2i0pHCmt8KFlWYc9FN6mrCF9pA28oUOxXwp1v040FnSpKx/MoeQe4uBCST3mZQoGUSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762878841; c=relaxed/simple;
-	bh=yJ2LzCsvw6ArGjiUAFXmFEj3idSKQ3/GF1+iB5RVUl4=;
+	s=arc-20240116; t=1762880104; c=relaxed/simple;
+	bh=prdjIqfhZ5Q0oGHb9kMj2RXqTMX3Z4oj+cyb9XYhN0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m8zrI/0/XJw4Z17NaqR5Besa99R0zVPtczqywcDTGvsM2Kssym54JGMYUe8oJstcSDeYJPZedf0EvylvUU1iBQ2cdAZ6BRoMXr0XW9oEl1wL8MEwKmANSQzfM3IOCuYpza9j6cFFnXB5NsY8r6UcGt/sW2CmgZVIpD2PZdThqdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UeAqx1xL; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=dcHzl34KNxED6P1kJRSrCagvpyDSIStsJ0vp4TP/V442zYYfGbtPCk71+SXnOygwPAApSQmJ03mZNmJq/eUiI5aZ6w3pyukMCVlies6uNbexzrvpeB0lbMS/AyiNvgeQZ6VAo6wlkSIkjVhEMSKBshEFlvYH3SyV0TUZ9hbmURA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kCIRjXUS; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UeAqx1xL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCIRjXUS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762878839; x=1794414839;
+  t=1762880102; x=1794416102;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yJ2LzCsvw6ArGjiUAFXmFEj3idSKQ3/GF1+iB5RVUl4=;
-  b=UeAqx1xL/llCNJ1fdJqJyQ5FMR09sTEijHoAcgzpBiLFncatKtVgZVwr
-   9b5IfQInL0QUdAZOcVMPmS+onss09GkO6TQW+Itd1waq/zt7lsqU67A78
-   kwQMus+ohE3As9wpJYviwjsFlBIZCIPRgdAZDKoVzqpTya1IuSI/Z9Q3q
-   aVxFgsxGVPvMdS9EqAh8rys1jy02MSZdBj/fksjC24uXUUokxOLiAg/kk
-   RPsAR4hrqj7d2gNFc/BXVCMs1pwyoCOhmG0wmuFvk/vjYRBQsGt2RLVpu
-   hepTj7O/ptgrbpp9YU1K3AjueWoGEOb/hXF08FFqrMX4QmQRUW/cvsNBv
-   A==;
-X-CSE-ConnectionGUID: Zk+0gUcXTQmvbZ644qmj1A==
-X-CSE-MsgGUID: 84U6rNBjRxybKbKB9Q1k6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="82341340"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="82341340"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:33:58 -0800
-X-CSE-ConnectionGUID: 42SDqvc9QrqRcuoY5NWowg==
-X-CSE-MsgGUID: y4Yi1rdLQ4avEbGDEdJZeQ==
+  bh=prdjIqfhZ5Q0oGHb9kMj2RXqTMX3Z4oj+cyb9XYhN0c=;
+  b=kCIRjXUSie5mtzwzJA8zfmRA3b/fDhVbGqqK9M3SERqSBTifiZ+wsWdG
+   qvxCA+Oz7LPVZegQYEtOprKI/CywsFHkCKoKYfduIhCL18W0pWs+GG1r3
+   T3TEM4MEa9LeXNdhaVvK63IOkHyRXZx5EBr/T7Tnaz7Qgq0xVeEWG7Rx+
+   Gy4YUEFGRHY/DY7pAPpe6cixUbcmvdeXdYwOmHg7DQxR0os0nO3aJ3ag+
+   IP7q1rBAYiaC55amLkwdlF3upSukyNryETcTw0d0RZ7XD8ttTHrlLQ+oY
+   heaYve2zV1ycJ4rh1LlmlUjHheG/+WESJPjjEmULNtOWxoXIXPdvbwxpq
+   Q==;
+X-CSE-ConnectionGUID: pbjwjsr7S0S8rTRTAVSAmA==
+X-CSE-MsgGUID: DEOHr9xjQ0eweiBax4IOGw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="64150236"
+X-IronPort-AV: E=Sophos;i="6.19,297,1754982000"; 
+   d="scan'208";a="64150236"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:55:01 -0800
+X-CSE-ConnectionGUID: qj9ZEu2IS3q/G3o69uv9+w==
+X-CSE-MsgGUID: LiZ1YefBQLm1L/1gKRqSZw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="193386798"
+X-IronPort-AV: E=Sophos;i="6.19,297,1754982000"; 
+   d="scan'208";a="212405116"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 11 Nov 2025 08:33:56 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 11 Nov 2025 08:54:58 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vIrJZ-0003N3-17;
-	Tue, 11 Nov 2025 16:33:53 +0000
-Date: Wed, 12 Nov 2025 00:33:08 +0800
+	id 1vIrdv-0003Oh-3C;
+	Tue, 11 Nov 2025 16:54:55 +0000
+Date: Wed, 12 Nov 2025 00:54:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Philipp Stanner <phasta@kernel.org>,
+To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Subject: Re: [PATCH v1 2/2] devres: Move devm_alloc_percpu() and related to
- devres.h
-Message-ID: <202511120059.G3PR823H-lkp@intel.com>
-References: <20251111144104.910241-3-andriy.shevchenko@linux.intel.com>
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Fedor Pchelkin <boddah8794@gmail.com>,
+	Andrei Kuchynski <akuchynski@chromium.org>,
+	Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Add duplicate detection to
+ nvidia registration path
+Message-ID: <202511120044.i2blPN85-lkp@intel.com>
+References: <20251111010541.145421-2-acelan.kao@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,163 +71,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251111144104.910241-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251111010541.145421-2-acelan.kao@canonical.com>
 
-Hi Andy,
+Hi Chia-Lin,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.18-rc5 next-20251111]
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.18-rc5 next-20251111]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/devres-Remove-unused-devm_free_percpu/20251111-230827
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20251111144104.910241-3-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 2/2] devres: Move devm_alloc_percpu() and related to devres.h
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20251112/202511120059.G3PR823H-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511120059.G3PR823H-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chia-Lin-Kao-AceLan/usb-typec-ucsi-Add-duplicate-detection-to-nvidia-registration-path/20251111-092153
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20251111010541.145421-2-acelan.kao%40canonical.com
+patch subject: [PATCH v2 2/3] usb: typec: ucsi: Add duplicate detection to nvidia registration path
+config: x86_64-randconfig-072-20251111 (https://download.01.org/0day-ci/archive/20251112/202511120044.i2blPN85-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511120044.i2blPN85-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511120059.G3PR823H-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511120044.i2blPN85-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpiolib-devres.c:9:
->> include/linux/device/devres.h:113:6: error: variable has incomplete type 'void'
-     113 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size, size_t align);
-         |      ^
-   include/linux/compiler_types.h:60:19: note: expanded from macro '__percpu'
-      60 | # define __percpu       __percpu_qual BTF_TYPE_TAG(percpu)
-         |                         ^
-   In file included from drivers/gpio/gpiolib-devres.c:9:
->> include/linux/device/devres.h:113:15: error: expected ';' after top level declarator
-     113 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size, size_t align);
-         |               ^
-   In file included from drivers/gpio/gpiolib-devres.c:17:
-   In file included from drivers/gpio/gpiolib.h:12:
-   In file included from include/linux/cdev.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/loongarch/include/asm/elf.h:9:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpiolib-devres.c:17:
-   In file included from drivers/gpio/gpiolib.h:12:
-   In file included from include/linux/cdev.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/loongarch/include/asm/elf.h:9:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpiolib-devres.c:17:
-   In file included from drivers/gpio/gpiolib.h:12:
-   In file included from include/linux/cdev.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/loongarch/include/asm/elf.h:9:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpiolib-devres.c:17:
-   In file included from drivers/gpio/gpiolib.h:12:
-   In file included from include/linux/cdev.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/loongarch/include/asm/elf.h:9:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpiolib-devres.c:17:
-   In file included from drivers/gpio/gpiolib.h:12:
-   In file included from include/linux/cdev.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/loongarch/include/asm/elf.h:9:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpiolib-devres.c:17:
-   In file included from drivers/gpio/gpiolib.h:12:
-   In file included from include/linux/cdev.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/loongarch/include/asm/elf.h:9:
+>> drivers/usb/typec/ucsi/ucsi.c:547:7: error: call to undeclared function 'ucsi_altmode_is_duplicate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     547 |                 if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
+         |                     ^
+   drivers/usb/typec/ucsi/ucsi.c:570:13: error: static declaration of 'ucsi_altmode_is_duplicate' follows non-static declaration
+     570 | static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
+         |             ^
+   drivers/usb/typec/ucsi/ucsi.c:547:7: note: previous implicit declaration is here
+     547 |                 if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
+         |                     ^
+   2 errors generated.
 
 
-vim +/void +113 include/linux/device/devres.h
+vim +/ucsi_altmode_is_duplicate +547 drivers/usb/typec/ucsi/ucsi.c
 
-    98	
-    99	/**
-   100	 * devm_alloc_percpu - Resource-managed alloc_percpu
-   101	 * @dev: Device to allocate per-cpu memory for
-   102	 * @type: Type to allocate per-cpu memory for
-   103	 *
-   104	 * Managed alloc_percpu. Per-cpu memory allocated with this function is
-   105	 * automatically freed on driver detach.
-   106	 *
-   107	 * RETURNS:
-   108	 * Pointer to allocated memory on success, NULL on failure.
-   109	 */
-   110	#define devm_alloc_percpu(dev, type)      \
-   111		((typeof(type) __percpu *)__devm_alloc_percpu((dev), sizeof(type), __alignof__(type)))
-   112	
- > 113	void __percpu *__devm_alloc_percpu(struct device *dev, size_t size, size_t align);
-   114	
+   483	
+   484	static int
+   485	ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+   486	{
+   487		int max_altmodes = UCSI_MAX_ALTMODES;
+   488		struct typec_altmode_desc desc;
+   489		struct ucsi_altmode alt;
+   490		struct ucsi_altmode orig[UCSI_MAX_ALTMODES];
+   491		struct ucsi_altmode updated[UCSI_MAX_ALTMODES];
+   492		struct ucsi *ucsi = con->ucsi;
+   493		bool multi_dp = false;
+   494		u64 command;
+   495		int ret;
+   496		int len;
+   497		int i;
+   498		int k = 0;
+   499	
+   500		if (recipient == UCSI_RECIPIENT_CON)
+   501			max_altmodes = con->ucsi->cap.num_alt_modes;
+   502	
+   503		memset(orig, 0, sizeof(orig));
+   504		memset(updated, 0, sizeof(updated));
+   505	
+   506		/* First get all the alternate modes */
+   507		for (i = 0; i < max_altmodes; i++) {
+   508			memset(&alt, 0, sizeof(alt));
+   509			command = UCSI_GET_ALTERNATE_MODES;
+   510			command |= UCSI_GET_ALTMODE_RECIPIENT(recipient);
+   511			command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
+   512			command |= UCSI_GET_ALTMODE_OFFSET(i);
+   513			len = ucsi_send_command(con->ucsi, command, &alt, sizeof(alt));
+   514			/*
+   515			 * We are collecting all altmodes first and then registering.
+   516			 * Some type-C device will return zero length data beyond last
+   517			 * alternate modes. We should not return if length is zero.
+   518			 */
+   519			if (len < 0)
+   520				return len;
+   521	
+   522			/* We got all altmodes, now break out and register them */
+   523			if (!len || !alt.svid)
+   524				break;
+   525	
+   526			orig[k].mid = alt.mid;
+   527			orig[k].svid = alt.svid;
+   528			k++;
+   529		}
+   530		/*
+   531		 * Update the original altmode table as some ppms may report
+   532		 * multiple DP altmodes.
+   533		 */
+   534		multi_dp = ucsi->ops->update_altmodes(ucsi, recipient, orig, updated);
+   535	
+   536		/* now register altmodes */
+   537		for (i = 0; i < max_altmodes; i++) {
+   538			struct ucsi_altmode *altmode_array = multi_dp ? updated : orig;
+   539	
+   540			if (!altmode_array[i].svid)
+   541				return 0;
+   542	
+   543			/*
+   544			 * Check for duplicates in current array and already
+   545			 * registered altmodes. Skip if duplicate found.
+   546			 */
+ > 547			if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
+   548						      altmode_array[i].svid,
+   549						      altmode_array[i].mid, i))
+   550				continue;
+   551	
+   552			memset(&desc, 0, sizeof(desc));
+   553			desc.svid = altmode_array[i].svid;
+   554			desc.vdo = altmode_array[i].mid;
+   555			desc.roles = TYPEC_PORT_DRD;
+   556	
+   557			ret = ucsi_register_altmode(con, &desc, recipient);
+   558			if (ret)
+   559				return ret;
+   560		}
+   561	
+   562		return 0;
+   563	}
+   564	
 
 -- 
 0-DAY CI Kernel Test Service
