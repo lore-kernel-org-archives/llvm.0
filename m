@@ -1,185 +1,247 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010045.outbound.protection.outlook.com [52.101.193.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B43A34F247;
-	Tue, 11 Nov 2025 10:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762857745; cv=none; b=afsEeDwSXeyhly77VWXRRpMppi90oBArhPl+54DjOjxJZ1S2qsPuiszlCmo4DikYnCa8vb7ZGLmNUrLJc6opur222ST+iWE3E/ECXJa6BWNW1BCOerNKz1SRbVd99NdCMY+t72hKLAQsxK2B6dfvegNc35oMhxGVD3zIM2oD7hA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762857745; c=relaxed/simple;
-	bh=EvBQ+nafnKKdJuiEBqoaBt041KfoiKj53G5fHkyybXs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p/LGH8fOkRmjUtxuk2v0zGMpIfgbv2s1p7cK5ro3QCiCVFi9SIYrwZBzBL3+ZLQwHq2Abr1vlk7ebCWAZPEJdlOGfeSi0O/sVd9X/sR1VcwCeAmLVAwPi8P3ehtz1NcKwXLUDTGv15mmhnA9dHlo2jqwTywJUwi1Y6d4II9Fo9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A4HbQhHM; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03734351FA0;
+	Tue, 11 Nov 2025 11:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762859180; cv=fail; b=CuNl+VSlbOKCWXq83I59jUd9jixAj03SvbVOXYgFoFS9iLSvwDnn8rpwpZfwTFx48A7op4BFobLUvtNM2UZfuoMGCt3gS+V7imtpta5zaABncAxSgSnNsEJth5JlPhOhFy1dBcUUlnVPkbNKDQdxvNRsj3qjDW/heZlrSg8lInw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762859180; c=relaxed/simple;
+	bh=Ns1EsZCWZU9HZ6enT/L4BN4FjwzZIabPyskIjOFAY5M=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=mdxyMxXAfYi57AN6tWRDjty11r6FjzcMpXv0lWBKr3RZ2sw3/iru39Hf/rifU7aVQmXPuPoVkRbDO+7mHcIxyUxRWnxqwQm1/5Qz2ah39PkXnYdRVFCm9TgK0bi7xK5ZqzskOtYfYRKBMopCYjnfG+g+HT80SIbgF/RX5eqNLE8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WUeuOvKy; arc=fail smtp.client-ip=52.101.193.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A4HbQhHM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762857743; x=1794393743;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EvBQ+nafnKKdJuiEBqoaBt041KfoiKj53G5fHkyybXs=;
-  b=A4HbQhHMiUimgJsHvccDhSKG81fNPUWQuGOce3v66HhlUy9sysXHr1Z4
-   B8fCOkhfOjUe88MbB68HUwLLl9iyOHXUlmK04xB7GMi0LS2QsS44kykJ9
-   RXFrLDh+yNFhTxVLveJLCAhkH5UX1UYPQaU5UzmBxsxRjDg1YIWrOmhro
-   9/v+BdMDpJglK97SvlOYNQoxkG8ow0CwB2Kk4e5AkvS8jxeMbNmluBrE3
-   AN3vfr4XIt/d1c6ONQpG3PZnZLNAEMGk3kxMiQj0OzylcasG2IsX7jdy1
-   dnCiTDtdx487x8UYTSMkHMtwDVkiTu7ctE0n1/+k/dus3mmKPgmclszrj
-   w==;
-X-CSE-ConnectionGUID: dSiE2/FrQ22rhxXa97hD2g==
-X-CSE-MsgGUID: 52f8nh+DT3q7mqmtZVXpTA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="82545876"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="82545876"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 02:42:22 -0800
-X-CSE-ConnectionGUID: bic6vsxET96kWEWmZy4Shw==
-X-CSE-MsgGUID: RrZPJKBeTIucI3ym3xcs/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="189195161"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 11 Nov 2025 02:42:20 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vIlpJ-00033P-36;
-	Tue, 11 Nov 2025 10:42:17 +0000
-Date: Tue, 11 Nov 2025 18:42:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Petr Oros <poros@redhat.com>,
-	Prathosh Satish <Prathosh.Satish@microchip.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-	Jiri Pirko <jiri@resnulli.us>, Michal Schmidt <mschmidt@redhat.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 5/6] dpll: zl3073x: Cache all output properties
- in zl3073x_out
-Message-ID: <202511111809.FLxbtr0Z-lkp@intel.com>
-References: <20251110175818.1571610-6-ivecera@redhat.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WUeuOvKy"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Viy2l/+D0r96erB+sO7TIIQgZtejwqJOSAYgbGWINmho+w9DVMzwu8JPE/oEQ26nadQdJhuCNajL7Q671rVcKMKJtqkin6j9QfDz2sAaxN0pw1VlKEfNHVFoffT6nzqQTwewtoIexeT2bADJCH18rHY5elB9cspq/Rm5LNxKJRRVHMVMd3CdoCF66ycPD90cI0UqSuH4fYhq0wKdYn5VPAkyOJZCBi6E8IxU2qZcbC7DkaiPI0giSWA9V0uAOzZFNydPVU/Qf98alWTkogGwtTT+i7p0WN15ST9TJRqWzFjzwkDDau2aIPY0N4z4KiHM/QNZN9k68tQPrvRQZJHFSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+NNmWUgmyCzxXTFoPg7up8iRT4elAX3ds83adaY2wtk=;
+ b=jeclQ4lV/rCqCLyt/x/Is+E3BbioIm3USllBIjXzzyChuDv6ztyOERAjXJSDKFo7ojBIyUgjHOx0eWI6Wif7Kcoinic2I/G7AuLy7nzz2SYAyqMnV4Jc4xjLquJzV585GcIdjgkcUlCV1lze6GFFMHyqcwzPryHOQLidDR9hd2uHjp6UUlAxFkd18d2sveuyPSDfRuW0AUWUDOVuAgwy3ETao2Hfag9ufDW+xmsJGe1o84qk7z9HrJtjYGNpbyIXSdc8t3fpJRkk2SpizP8Y1n29Jvm8lBGigSHyfTteNFOvGgecW+wz93eXWwXO+UkQ0BJabkVtP9qIvZKrXaxIKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+NNmWUgmyCzxXTFoPg7up8iRT4elAX3ds83adaY2wtk=;
+ b=WUeuOvKyCWKBuGmYY3jpObUR1XIHCE0l5eYeXHBBn7vj8RSHZ9tMDAbQP4xL7Rz5xeKhZBcP7ZI1O3z5ryrdjyEbatvRiu09OBuLMT+ctUY2CmAOaZcPnG3a9EQ2vtsDkKuDNKGAzHQ16MP+RxgpmJT5CQe+5evfBWuvJukCG0fxQQuq6DLLG6uBSPWwVD2qh8bQJAorAwFcN4JaJ3PMB4ReOAT7fcYKwu/MpduJ8PXXbfjW7BW6nl4g08YR+0Jmo9lYGFkmQCm5ZN5K/S7IZPToJpLYc1Z83UpVJ+XmcdtRQCHH6DW9ukEwG5uOfXztsxi8lLnrqyzIf0JhvhVUNw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com (2603:10b6:408:11c::18)
+ by CH2PR12MB4279.namprd12.prod.outlook.com (2603:10b6:610:af::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Tue, 11 Nov
+ 2025 11:06:15 +0000
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::44e5:415d:e1a8:6e42]) by BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::44e5:415d:e1a8:6e42%7]) with mapi id 15.20.9320.013; Tue, 11 Nov 2025
+ 11:06:14 +0000
+Message-ID: <aec90c07-7528-4390-8599-e60d09159133@nvidia.com>
+Date: Tue, 11 Nov 2025 16:36:06 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for
+ min/max_perf
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, viresh.kumar@linaro.org,
+ lenb@kernel.org, robert.moore@intel.com, corbet@lwn.net,
+ pierre.gondois@arm.com, zhenglifeng1@huawei.com, rdunlap@infradead.org,
+ ray.huang@amd.com, gautham.shenoy@amd.com, mario.limonciello@amd.com,
+ perry.yuan@amd.com, ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-tegra@vger.kernel.org,
+ treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+ ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
+ bbasu@nvidia.com, sumitg@nvidia.com
+References: <20251105113844.4086250-5-sumitg@nvidia.com>
+ <202511061802.lIq09jwh-lkp@intel.com>
+ <be696cb5-7d0d-44f6-970b-e417c2f89a8e@nvidia.com>
+ <CAJZ5v0j8bQm+00+m75rmpKpm8yVumvYsWzCdYyCPwksnebY__A@mail.gmail.com>
+Content-Language: en-US
+From: Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <CAJZ5v0j8bQm+00+m75rmpKpm8yVumvYsWzCdYyCPwksnebY__A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0074.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1b3::8) To BN9PR12MB5179.namprd12.prod.outlook.com
+ (2603:10b6:408:11c::18)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251110175818.1571610-6-ivecera@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|CH2PR12MB4279:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd6a943a-1654-4903-3193-08de21125454
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cklNVzFtL1Z3QjNGZUFQMDZEem12dnlPa1RQQ1FpdmVtU1hpMWdMS3ErMWpB?=
+ =?utf-8?B?L1J6UkNCTzg2a1lnenJGbE9KUVcvZWVzZTZmMWFObWo3VUhkMEtZamVjcEk0?=
+ =?utf-8?B?eU1RaEcxZy9rQTZESldVeHZ3azBTOHY4Y1QvZmpONGdpMElrRVhGZWxZUjlD?=
+ =?utf-8?B?SDIrZjJKbmZ3dE82ZmduSGdmeWJHODI3UTA3LzlMOHAzNkFWYXZiUU1ub2hC?=
+ =?utf-8?B?OXl3M3FiWXJkSkM4RkdXK0ViYkhlcktoMUpHa2UrZ1M1TjF3RnZ2VDZ4U1ll?=
+ =?utf-8?B?emZnR08wWm13R2QxLzh4ajVtNVRZT0VDYVgvYTVVeEpzUERLempUMkpuazh1?=
+ =?utf-8?B?Uk0rZy9EUVIvNDJ3SU9mdW10ejZYa0Z6Si96R2lySWRZUWpZNUVzbzlhc01J?=
+ =?utf-8?B?TnN1WVAyc2ZIOXZRMkxNQW5wNElFYXFSaXMyd01FY1VCVzBZdlJqUjdZVEZ2?=
+ =?utf-8?B?L2o3UHBHVjNNclQrNXRUNW05Z0tkRGZsYW9BKzUweXZ5MjFycVRNSEpuaW16?=
+ =?utf-8?B?Rk00dDFlZ2l3M2xhQ3FoTFR5QllXMkMvb0pJNlRvcjA3OU15YW5nb0xoYnhr?=
+ =?utf-8?B?eTlvQlV5ZE9BZVJBMUYvMG9JV0Q0bW5aMzRrVFM5VXdyc0wrN3czWkpjYWh5?=
+ =?utf-8?B?b08ybE5BbDBnTHJiWEFtK1V1RHFLNitha01GMUVxT2JOMG5MK2tFbjF0dU5w?=
+ =?utf-8?B?QkpYU0lGSWtiSEJCdTMxdHd1NFVIS1lxbHhNQTlLTU1KYWZNZFRjdys5SlRN?=
+ =?utf-8?B?TUdFTzdaaHpUWW9helR0azF5dEFJZHNseVVqKzAyN0JBaC9iVWplSjV1Rkth?=
+ =?utf-8?B?M3FYMEdwZ1pBeDNQWXIvZ2dFRWwyRnZaS1VZTVlDd2o0Z2QrM2M2R3hNbFJE?=
+ =?utf-8?B?bG5IcG0vUTd6Q2lmdk9QNTdFQ2FkODV2ZTl4cUc2d2Z5SldjaThZd0JKSkpG?=
+ =?utf-8?B?eFhndWIwVFc1SjRTblNibHEwWFE0cjVQVXo4MEY5a0lpbFhCV0FCY3ZmSEV6?=
+ =?utf-8?B?Nit5ejZTaExmalEzS01IQnlvYUJ3OTloS2s2ZHpqOFZOeCtjLzNWblVUOGVt?=
+ =?utf-8?B?UFpjbzNjMUZMZkowTmtMMjZIWGhKL0E2dUdIM2VqNlVwWHlucnh1ZE41TFVa?=
+ =?utf-8?B?bTVGR1ZpZVh3YXozVk1FRFFmMGo3RXBRbWhGSGtMaXNOTlY0aFBLZktqUTVK?=
+ =?utf-8?B?bkVDaUNub0FTdjhKQWpIdmtJbnE2eExNTW1vaENqcmE4Z1BobGZGeEhjOGtu?=
+ =?utf-8?B?c29JbjB6eVpIYjlnWXBXNE9rOWVUekdLNlYzbHZZVGpVRzZwMFUxaktkMHNX?=
+ =?utf-8?B?THBwM1lMRkRFSHcrcUlQL2VZWW9nekozTzR6OXYxNWcwUS8yVUJVK0E0MjlI?=
+ =?utf-8?B?KzVYTmpvRW9JUFNKZWZzYURUcHZRMDNGMFRjZDNBekg0SkRtSXEzcmRkNk5C?=
+ =?utf-8?B?RzJKOFY0UXVVSVhuZktIUmhIMldKVDJ1WDllcVZKRlp0Q1dLYkZpNHJNbEpp?=
+ =?utf-8?B?MmMzbGdGeHlTSDF4bU9qdUNDYkJuRmdhcm1pYW9rWElUbUZrb3NNQ1lrTlIz?=
+ =?utf-8?B?dE5lWjE0U0xzWVdoN1B5N0NOUHR4eTNwMGgyQ3RkOXduL1hraGJJSkZ4LzFG?=
+ =?utf-8?B?NlBZTWVlcDh1WVhlaGpyRTJRZmsyRVZzaGgzN2hWN3JJWUp5OGRVUzBHVXFU?=
+ =?utf-8?B?c1BFUVBLNXB3eDVYdXdTYnRzTnpWSGNBRjFFcDFNUlBGUVZka0FRdG9wRnJZ?=
+ =?utf-8?B?enlvWE96bm1mNWpzMDhWL0dySG1RdnpJa2ZFWERWalpwdlk3OHVITElNeWdm?=
+ =?utf-8?B?SEhPYkUwQ2lpeitEZnNEZ0hnMmJnRUNGS284bzVXL3RCeWl4eEd2b0lFU1Jm?=
+ =?utf-8?B?N3RaK0dmdzhJUUM0UUJ1c09pWFV3NVVHTW5aR3FnWTZyNUxsNWpXeWdpZ1RT?=
+ =?utf-8?B?U2lkWVIxYW5ZTkE3K0JXMXNIczdVZU80QUVnL0xKL1NzN2VjLytudzZ0OFgx?=
+ =?utf-8?B?SVRlelZEZlZ3PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OFVkdWYzTjBwNnNHc2lJc1dZYUxoYVplaVVzMmtoNVJmdTc5NTh6NjBHNlkz?=
+ =?utf-8?B?MDg4dWhEZ1VCQzVFTVFacXg4QTkyUjdPMDRLb2JRRGN6dFZqRnZLc2FhSHBM?=
+ =?utf-8?B?VEZHeXBXNnZ4bE9ET0dYQy96ZDErZmRQTG9hU1NOcjFxYmRJdVl4RXVSd1VY?=
+ =?utf-8?B?UDd0c084eXg2WGxIWGMyR3VhZUlxTWdsNlBZdFNzb1kyRUY1VnJOL09VTWJq?=
+ =?utf-8?B?ZGg4ekRvbVE1VG90NHZGSExiSldiMzZ0NDU3N1ZuZEZOVWw3RU5Sa2kxNHRj?=
+ =?utf-8?B?ckZUNlN0RUNaVi9JNG1DR090RmFaUisrcCtEQUNxWFZwSFo2MFNLN3hGWHFn?=
+ =?utf-8?B?ckxUVGtKbDVNdTNJZnNWL0lCOVFlRFpJdzlFUnlZTkU0OEVGdFVYV2VvaWJn?=
+ =?utf-8?B?UUlZSmdPNjhjVEhFTFg2K1ZVdEJoaXFnU1FTRDcrSW8zT0hUK01rQnZ2WWcr?=
+ =?utf-8?B?L0E1QmJQclNHS2hOOWpHRjM3cmd3eVV4UElqN1hUWEVuejBET2ZKWmJUaU5O?=
+ =?utf-8?B?WnJSTTN0emh1QjI1T1RaSGxBTEJpcld3Mi85OHA0TllRc3hYdFNKWFFWSHNL?=
+ =?utf-8?B?YTVBK0hPemVFamNxZkRPcXJvT1gwWktLeHRqdlgrZ2hEUHdEMU5KQXRkWU1B?=
+ =?utf-8?B?cVVKeXg1dm1WL3Z2WDY5Q1hSU3h6V0pzMjExNGtFWGh3KzByOG8rd1l6YThJ?=
+ =?utf-8?B?ejROeGprQjJXMGplcUlZaTlJMTNkUDYzNmtlUTdUZ2lEZnhCK0lXV1pUci92?=
+ =?utf-8?B?VmQzeTFBYnhpTitYUjR1WTlzNThQckpMdUtSdXArelpKRmlBYkRZU3laQ0lS?=
+ =?utf-8?B?UVN2SmZJVUNObEoxRVhqTkRRUDhEUXFTUlFoUEJHT29wemE1eTkxaytLWVBu?=
+ =?utf-8?B?L2Q5WThLWFRvSEZJbVV1bTErYnM5Q1oxamFyYUhYU3pkZ0d4NnJCbGdsVVB5?=
+ =?utf-8?B?UnNWa3NqU2d2Z215UUpNUlJIZVZNRkluQXhPT3FKa2RBR3hQVS9YWGE4M0ww?=
+ =?utf-8?B?YVAyS2ZoTXN1WEl3cURYTDlHczhleGpodmYwOG9ndk0ybHZYYnlQN1pUbHNr?=
+ =?utf-8?B?bCtqbTB1cGdvOGt3S1Z1akNEZnNYZi9PRDJhbnpoSnNzL2Irbkl0Sm5JTWJs?=
+ =?utf-8?B?aHo5VjNmaWc1T3V4SjJPQTFCelEzY1kycVBrem45YWNpYUx4YjA3VHZWUkRx?=
+ =?utf-8?B?bzZwR2JhcDZ3Y1VUUmlldEdVMFkwb2h4S2hiYSt1UUtlQUt5N296OEFTMlZH?=
+ =?utf-8?B?SGFJOURPeDhDNUJBQ28wZ2ZVaHZnaGxpenJYbU9DbEovNFNwVVJVTWJST0hp?=
+ =?utf-8?B?bmowbWU2ekRKczhQczlSeWMvRWIzMkgvZTRBejZqeUN5bFkwVExndDl6SWhC?=
+ =?utf-8?B?aDZzbmppdk9kTzQ2eDd5ODdsbG82dlNZbjJsRDZHTHpVemwvcnVCeHI4U3BE?=
+ =?utf-8?B?UTYrcExlek5vMkJJU3JLODgyd2RodEJjeHZZOFVadTJvRFZ2WGpmU2NHTUVS?=
+ =?utf-8?B?dVNyMWNmOHVXNlhDSmg4SkdJVElwaUIzNW5STjQzT29NTUtaMWlaV3paak1w?=
+ =?utf-8?B?Q3gzdzc3T09rSnBPUng3enUzdFJzeWlNUElEOVM2bmtCaEtvdVNLdzYwTU15?=
+ =?utf-8?B?Umd3ZlhsM2lmVmVmaXYySFVDZTVERkxRUFFHVkY0dG9rOURlakErcEZ2ZkhO?=
+ =?utf-8?B?eVpBdWU0TVJZYUFTMmdUSXdLclE4bGFHdzZkVVlTSUFxdmQwdnhmK2hrMnNn?=
+ =?utf-8?B?Qzd6bEVzV0tsWWQ5dDJFamJSMG9EZmUweSsrOTdiTmQ4Ty8zejlpUC9QRndQ?=
+ =?utf-8?B?UnowMVJuK0QzMTBIZDBtUFhlNkxOWk1JMUQzQ3BYOC9aRDB0OUdVUzVuZ2NU?=
+ =?utf-8?B?QVAwQ1NNRXVZd1g1Tjg5K21xVnNJczhJZmFQT2dzVXc0TzNBSGlOdnc4YTJV?=
+ =?utf-8?B?S3JNdVJacWh5S25nNTU4bzUybUNXL3JuTXlNaGE3VTNGRnlRYVArWHNxM1BT?=
+ =?utf-8?B?ay90MGVXQ2l4Ym9oN3ZTdW5TcWFwdjZ2TTlxK3FSY2gzZnJMVnE2U3lsT01p?=
+ =?utf-8?B?WmJXVGoreENDR2NkZHkzSTFzZUltcnhMUTc3V2JyVEtKMkZCai9TUTROaTRB?=
+ =?utf-8?Q?djHye99VeYrGySQpayLVODREU?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd6a943a-1654-4903-3193-08de21125454
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 11:06:14.4868
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7QXVi/UjVcQCr986jLK7QfCqujztNB4tUXSaAXC6md5+cUGQXeYJnP9CGIYEm4t6Fx2ZcwTOXyHTgzbOTj6Igw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4279
 
-Hi Ivan,
 
-kernel test robot noticed the following build warnings:
+On 08/11/25 01:38, Rafael J. Wysocki wrote:
+....
+>
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'policy' not described in 'show_min_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'buf' not described in 'show_min_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'policy' not described in 'store_min_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'buf' not described in 'store_min_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'count' not described in 'store_min_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'policy' not described in 'show_max_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'buf' not described in 'show_max_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'policy' not described in 'store_max_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'buf' not described in 'store_max_perf'
+>>>>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'count' not described in 'store_max_perf'
+>>> --
+>>> 0-DAY CI Kernel Test Service
+>>> https://github.com/intel/lkp-tests/wiki
+>>
+>> Thank you for the report.
+>> Below change to comments seem to be fixing this warning.
+> So can you please send a new version of this patch with the changes
+> below folded in?
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Vecera/dpll-zl3073x-Store-raw-register-values-instead-of-parsed-state/20251111-020236
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20251110175818.1571610-6-ivecera%40redhat.com
-patch subject: [PATCH net-next 5/6] dpll: zl3073x: Cache all output properties in zl3073x_out
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20251111/202511111809.FLxbtr0Z-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511111809.FLxbtr0Z-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511111809.FLxbtr0Z-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/dpll/zl3073x/dpll.c:1488:43: warning: variable 'name' is uninitialized when used here [-Wuninitialized]
-    1488 |                                 "%s%u is driven by different DPLL\n", name,
-         |                                                                       ^~~~
-   drivers/dpll/zl3073x/dpll.c:1467:18: note: initialize the variable 'name' to silence this warning
-    1467 |         const char *name;
-         |                         ^
-         |                          = NULL
-   drivers/dpll/zl3073x/dpll.c:1651:28: warning: variable 'ref' set but not used [-Wunused-but-set-variable]
-    1651 |         const struct zl3073x_ref *ref;
-         |                                   ^
-   2 warnings generated.
+Sure.
 
 
-vim +/name +1488 drivers/dpll/zl3073x/dpll.c
+>> -------------------------------------------------------
+>>     /**
+>>     * show_min_perf - Show minimum performance as frequency (kHz)
+>> + * @policy: cpufreq policy
+>> + * @buf: buffer to write the frequency value to
+>>     *
+>>     * Reads the MIN_PERF register and converts the performance value to
+>>     * frequency (kHz) for user-space consumption.
+>> @@ -1117,6 +1119,9 @@ static ssize_t show_min_perf(struct cpufreq_policy
+>> *policy, char *buf)
+>>
+>>    /**
+>>     * store_min_perf - Set minimum performance from frequency (kHz)
+>> + * @policy: cpufreq policy
+>> + * @buf: buffer to write the frequency value to
+>> + * @count: size of @buf
+>>     *
+>>     * Converts the user-provided frequency (kHz) to a performance value
+>>     * and writes it to the MIN_PERF register.
+>> @@ -1144,6 +1149,8 @@ static ssize_t store_min_perf(struct
+>> cpufreq_policy *policy, const char *buf, si
+>>
+>>    /**
+>>     * show_max_perf - Show maximum performance as frequency (kHz)
+>> + * @policy: cpufreq policy
+>> + * @buf: buffer to write the frequency value to
+>>     *
+>>     * Reads the MAX_PERF register and converts the performance value to
+>>     * frequency (kHz) for user-space consumption.
+>> @@ -1166,6 +1173,9 @@ static ssize_t show_max_perf(struct cpufreq_policy
+>> *policy, char *buf)
+>>
+>>    /**
+>>     * store_max_perf - Set maximum performance from frequency (kHz)
+>> + * @policy: cpufreq policy
+>> + * @buf: buffer to write the frequency value to
+>> + * @count: size of @buf
+>> -------------------------------------------------------
+> As for the whole series, I generally need ARM folks to review it and
+> tell me that it is fine.
+>
+> Thanks!
 
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1446  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1447  /**
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1448   * zl3073x_dpll_pin_is_registrable - check if the pin is registrable
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1449   * @zldpll: pointer to zl3073x_dpll structure
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1450   * @dir: pin direction
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1451   * @index: pin index
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1452   *
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1453   * Checks if the given pin can be registered to given DPLL. For both
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1454   * directions the pin can be registered if it is enabled. In case of
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1455   * differential signal type only P-pin is reported as registrable.
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1456   * And additionally for the output pin, the pin can be registered only
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1457   * if it is connected to synthesizer that is driven by given DPLL.
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1458   *
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1459   * Return: true if the pin is registrable, false if not
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1460   */
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1461  static bool
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1462  zl3073x_dpll_pin_is_registrable(struct zl3073x_dpll *zldpll,
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1463  				enum dpll_pin_direction dir, u8 index)
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1464  {
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1465  	struct zl3073x_dev *zldev = zldpll->dev;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1466  	bool is_diff, is_enabled;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1467  	const char *name;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1468  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1469  	if (dir == DPLL_PIN_DIRECTION_INPUT) {
-b35db42141ccf2a Ivan Vecera 2025-11-10  1470  		u8 ref_id = zl3073x_input_pin_ref_get(index);
-b35db42141ccf2a Ivan Vecera 2025-11-10  1471  		const struct zl3073x_ref *ref;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1472  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1473  		/* Skip the pin if the DPLL is running in NCO mode */
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1474  		if (zldpll->refsel_mode == ZL_DPLL_MODE_REFSEL_MODE_NCO)
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1475  			return false;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1476  
-b35db42141ccf2a Ivan Vecera 2025-11-10  1477  		name = "REF";
-b35db42141ccf2a Ivan Vecera 2025-11-10  1478  		ref = zl3073x_ref_state_get(zldev, ref_id);
-b35db42141ccf2a Ivan Vecera 2025-11-10  1479  		is_diff = zl3073x_ref_is_diff(ref);
-b35db42141ccf2a Ivan Vecera 2025-11-10  1480  		is_enabled = zl3073x_ref_is_enabled(ref);
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1481  	} else {
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1482  		/* Output P&N pair shares single HW output */
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1483  		u8 out = zl3073x_output_pin_out_get(index);
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1484  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1485  		/* Skip the pin if it is connected to different DPLL channel */
-65b8e8e3bf41fda Ivan Vecera 2025-11-10  1486  		if (zl3073x_dev_out_dpll_get(zldev, out) != zldpll->id) {
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1487  			dev_dbg(zldev->dev,
-75a71ecc24125f9 Ivan Vecera 2025-07-04 @1488  				"%s%u is driven by different DPLL\n", name,
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1489  				out);
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1490  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1491  			return false;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1492  		}
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1493  
-11e61915b41b996 Ivan Vecera 2025-11-10  1494  		name = "OUT";
-65b8e8e3bf41fda Ivan Vecera 2025-11-10  1495  		is_diff = zl3073x_dev_out_is_diff(zldev, out);
-65b8e8e3bf41fda Ivan Vecera 2025-11-10  1496  		is_enabled = zl3073x_dev_output_pin_is_enabled(zldev, index);
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1497  	}
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1498  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1499  	/* Skip N-pin if the corresponding input/output is differential */
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1500  	if (is_diff && zl3073x_is_n_pin(index)) {
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1501  		dev_dbg(zldev->dev, "%s%u is differential, skipping N-pin\n",
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1502  			name, index / 2);
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1503  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1504  		return false;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1505  	}
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1506  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1507  	/* Skip the pin if it is disabled */
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1508  	if (!is_enabled) {
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1509  		dev_dbg(zldev->dev, "%s%u%c is disabled\n", name, index / 2,
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1510  			zl3073x_is_p_pin(index) ? 'P' : 'N');
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1511  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1512  		return false;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1513  	}
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1514  
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1515  	return true;
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1516  }
-75a71ecc24125f9 Ivan Vecera 2025-07-04  1517  
+Will wait if ARM folks have any new comment and then re-spin next version?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thank you,
+Sumit Gupta
+
