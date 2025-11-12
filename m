@@ -1,93 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7F227F4F5;
-	Wed, 12 Nov 2025 02:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419EF22F74D;
+	Wed, 12 Nov 2025 02:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762912853; cv=none; b=aZ6BPTcCpZVq7J8YPsnfFsGnaZfLfPh3yR8jHCTZdYKcLl1od9/pGyW2/NnGWiQocR9MEfSoR8CMcsVQgZHq3vEQjFoPtMqwGzniQxsQNLpP/mdeWfUDDCZd52P93uzMB9AtvrZ8aEW1YErNjQc0tL9dKipUvL2n+XHx3T9me9k=
+	t=1762913159; cv=none; b=Fk11oRveGL40NNYHddoEL9ZKFyIpWVfjGvM743BeVAc9Yy2PQYqykhShH0AVdO4pqyX/E85AI7+OR2RX8qHgLHSkj+Uzib8X8r28qQpBHpmdYN0Hoo6UGktbQV0rMb704ByNEtLkAgdcYEccbvtpkg/EnC9dLUOzGMotUq20ME4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762912853; c=relaxed/simple;
-	bh=bmOHQWtKrHPntI9DeDNIWpuAgYazNgi4duLqiFfEnvQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=sFjEpFMLojTM4bRLX0yD9PYN03fOx8ln4rRf513gn6R7QBrL6DRh8UQ4woDWcVPcn24lltkdCNLD42/A1GDezW2tnUgPfeBYYfzVSoHpdw/5kLS+82tw84fBKzoHLzNsglps0EFAdwa5O66OcUlkCs+0SICMkwxOVVNmkxwtcH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRBGDHvT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762913159; c=relaxed/simple;
+	bh=iXo9a81NcpxQrBwVlhIQKSSdxGoVHXdiPTVRhbzilg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ktguhm+YsaDp8Vqu0a97vHUs+oIYWgvOYhnM+6W2t+4bxTCKdO7HY5rNdM6Cpjg20YkSVB3UEW61soxeYaJewwcE93I7H3ZnXRvt+vgHeoNsuQoFska5WziYGYG+juK0bdGgngMZM+QIQdfCfrS7ZGFC0nSVHe+B1fRP8tJfzCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hO6F2gkr; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRBGDHvT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DCEC16AAE;
-	Wed, 12 Nov 2025 02:00:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762912852;
-	bh=bmOHQWtKrHPntI9DeDNIWpuAgYazNgi4duLqiFfEnvQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ZRBGDHvTwVZgG2vuUoyWLjDWMBOrtkEXeNMuDphzzKwHtO/pyy9jL/8NVquwpSRZ1
-	 KfVjxByxLTOEKWZHTSPhIXTBSxRzcXnCVRpw8ARkqLzpKHBF3UtnyPa/DfrotlKE1i
-	 M+hCq3y28JeymcTsVxEoJ6AuUmjElJM1px2jNRLX46fiUDLeqXOIdDhGaOfa0sdWnB
-	 ljT1dJHzE68dXgSzqrynRWRX7ksbPd79IJhNLIe2c220w2kfxAbXbUMbD7SMP0yueO
-	 h3QzdQ6cFb2vzkLjhkWM850fjp6KiLFQc5fLOY0S36PoTH4MAHHvb7uuBkXnN3F+p8
-	 lp5HfcCwv+RNg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADEA7380DBCD;
-	Wed, 12 Nov 2025 02:00:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hO6F2gkr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762913157; x=1794449157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iXo9a81NcpxQrBwVlhIQKSSdxGoVHXdiPTVRhbzilg0=;
+  b=hO6F2gkrHgzr2uLkhMGbftgGAvARCAzAuJ9OsSHKur9mEPbspSOrXlVI
+   JlnSCGTXBI3np9jTHoCCJGWoFYaVrQVHYyWVBuj9BI6MaZKvqHsZ2Dey7
+   dOBQeZTLpeIORNQXdtZreIVZRMMH/epA3BdCZ6hME5C4DWR85ZhbyqbzO
+   hwZJz0+Nr3iqTid4PJ21mitAzSWY0wC/+VAOR1bhqWDwGWngrCxH7TPZ8
+   pCx+c4Y3yJAhO53hM6rioYrLOFN9mE2/R/dnbRFbGoOtNKd82/GZKDTDI
+   BHP1LmjID0dbIewU825dxhcJPUGZcz8Thb8SzfIBbDQ5vHVPs4EeOf7Na
+   g==;
+X-CSE-ConnectionGUID: GhCjcB3RSByLRrXFCeO8RA==
+X-CSE-MsgGUID: 8lLInTI1R1+hny+JajKObQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="64177333"
+X-IronPort-AV: E=Sophos;i="6.19,298,1754982000"; 
+   d="scan'208";a="64177333"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 18:05:56 -0800
+X-CSE-ConnectionGUID: 5sgceOHpRbW7OavioFYyeg==
+X-CSE-MsgGUID: 4dzUsb4mQLObSejwB+iKPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,298,1754982000"; 
+   d="scan'208";a="219736509"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 11 Nov 2025 18:05:50 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vJ0F1-0003kp-0T;
+	Wed, 12 Nov 2025 02:05:47 +0000
+Date: Wed, 12 Nov 2025 10:04:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aditya Garg <gargaditya@linux.microsoft.com>, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
+	kotaranov@microsoft.com, horms@kernel.org,
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com, dipayanroy@linux.microsoft.com,
+	shirazsaleem@microsoft.com, leon@kernel.org, mlevitsk@redhat.com,
+	yury.norov@gmail.com, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, gargaditya@microsoft.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Aditya Garg <gargaditya@linux.microsoft.com>
+Subject: Re: [PATCH net-next v3 2/2] net: mana: Drop TX skb on
+ post_work_request failure and unmap resources
+Message-ID: <202511120917.rSwJ1zUm-lkp@intel.com>
+References: <1762848781-357-3-git-send-email-gargaditya@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] net: netcp: ethss: Fix type of first
- parameter
- in hwtstamp stubs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176291282249.3632748.2889753579213224698.git-patchwork-notify@kernel.org>
-Date: Wed, 12 Nov 2025 02:00:22 +0000
-References: 
- <20251110-netcp_ethss-fix-cpts-stubs-clang-wifpts-v2-1-aa6204ec1f43@kernel.org>
-In-Reply-To: 
- <20251110-netcp_ethss-fix-cpts-stubs-clang-wifpts-v2-1-aa6204ec1f43@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, vadim.fedorenko@linux.dev,
- kory.maincent@bootlin.com, netdev@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1762848781-357-3-git-send-email-gargaditya@linux.microsoft.com>
 
-Hello:
+Hi Aditya,
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+kernel test robot noticed the following build warnings:
 
-On Mon, 10 Nov 2025 13:55:34 -0700 you wrote:
-> When building without CONFIG_TI_CPTS, there are a series of errors from
-> -Wincompatible-pointer-types:
-> 
->   drivers/net/ethernet/ti/netcp_ethss.c:3831:27: error: initialization of 'int (*)(void *, struct kernel_hwtstamp_config *)' from incompatible pointer type 'int (*)(struct gbe_intf *, struct kernel_hwtstamp_config *)' [-Wincompatible-pointer-types]
->    3831 |         .hwtstamp_get   = gbe_hwtstamp_get,
->         |                           ^~~~~~~~~~~~~~~~
->   drivers/net/ethernet/ti/netcp_ethss.c:3831:27: note: (near initialization for 'gbe_module.hwtstamp_get')
->   drivers/net/ethernet/ti/netcp_ethss.c:2758:19: note: 'gbe_hwtstamp_get' declared here
->    2758 | static inline int gbe_hwtstamp_get(struct gbe_intf *gbe_intf,
->         |                   ^~~~~~~~~~~~~~~~
->   drivers/net/ethernet/ti/netcp_ethss.c:3832:27: error: initialization of 'int (*)(void *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' from incompatible pointer type 'int (*)(struct gbe_intf *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' [-Wincompatible-pointer-types]
->    3832 |         .hwtstamp_set   = gbe_hwtstamp_set,
->         |                           ^~~~~~~~~~~~~~~~
->   drivers/net/ethernet/ti/netcp_ethss.c:3832:27: note: (near initialization for 'gbe_module.hwtstamp_set')
->   drivers/net/ethernet/ti/netcp_ethss.c:2764:19: note: 'gbe_hwtstamp_set' declared here
->    2764 | static inline int gbe_hwtstamp_set(struct gbe_intf *gbe_intf,
->         |                   ^~~~~~~~~~~~~~~~
-> 
-> [...]
+[auto build test WARNING on net-next/main]
 
-Here is the summary with links:
-  - [net-next,v2] net: netcp: ethss: Fix type of first parameter in hwtstamp stubs
-    https://git.kernel.org/netdev/net-next/c/34bff6f03c13
+url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Garg/net-mana-Handle-SKB-if-TX-SGEs-exceed-hardware-limit/20251111-162216
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/1762848781-357-3-git-send-email-gargaditya%40linux.microsoft.com
+patch subject: [PATCH net-next v3 2/2] net: mana: Drop TX skb on post_work_request failure and unmap resources
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20251112/202511120917.rSwJ1zUm-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511120917.rSwJ1zUm-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511120917.rSwJ1zUm-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/microsoft/mana/gdma_main.c:1303:23: warning: variable 'gc' set but not used [-Wunused-but-set-variable]
+    1303 |         struct gdma_context *gc;
+         |                              ^
+   1 warning generated.
+
+
+vim +/gc +1303 drivers/net/ethernet/microsoft/mana/gdma_main.c
+
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1297  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1298  int mana_gd_post_work_request(struct gdma_queue *wq,
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1299  			      const struct gdma_wqe_request *wqe_req,
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1300  			      struct gdma_posted_wqe_info *wqe_info)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1301  {
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1302  	u32 client_oob_size = wqe_req->inline_oob_size;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16 @1303  	struct gdma_context *gc;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1304  	u32 sgl_data_size;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1305  	u32 max_wqe_size;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1306  	u32 wqe_size;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1307  	u8 *wqe_ptr;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1308  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1309  	if (wqe_req->num_sge == 0)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1310  		return -EINVAL;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1311  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1312  	if (wq->type == GDMA_RQ) {
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1313  		if (client_oob_size != 0)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1314  			return -EINVAL;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1315  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1316  		client_oob_size = INLINE_OOB_SMALL_SIZE;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1317  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1318  		max_wqe_size = GDMA_MAX_RQE_SIZE;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1319  	} else {
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1320  		if (client_oob_size != INLINE_OOB_SMALL_SIZE &&
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1321  		    client_oob_size != INLINE_OOB_LARGE_SIZE)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1322  			return -EINVAL;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1323  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1324  		max_wqe_size = GDMA_MAX_SQE_SIZE;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1325  	}
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1326  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1327  	sgl_data_size = sizeof(struct gdma_sge) * wqe_req->num_sge;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1328  	wqe_size = ALIGN(sizeof(struct gdma_wqe) + client_oob_size +
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1329  			 sgl_data_size, GDMA_WQE_BU_SIZE);
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1330  	if (wqe_size > max_wqe_size)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1331  		return -EINVAL;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1332  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1333  	if (wq->monitor_avl_buf && wqe_size > mana_gd_wq_avail_space(wq)) {
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1334  		gc = wq->gdma_dev->gdma_context;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1335  		return -ENOSPC;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1336  	}
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1337  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1338  	if (wqe_info)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1339  		wqe_info->wqe_size_in_bu = wqe_size / GDMA_WQE_BU_SIZE;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1340  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1341  	wqe_ptr = mana_gd_get_wqe_ptr(wq, wq->head);
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1342  	wqe_ptr += mana_gd_write_client_oob(wqe_req, wq->type, client_oob_size,
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1343  					    sgl_data_size, wqe_ptr);
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1344  	if (wqe_ptr >= (u8 *)wq->queue_mem_ptr + wq->queue_size)
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1345  		wqe_ptr -= wq->queue_size;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1346  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1347  	mana_gd_write_sgl(wq, wqe_ptr, wqe_req);
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1348  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1349  	wq->head += wqe_size / GDMA_WQE_BU_SIZE;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1350  
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1351  	return 0;
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1352  }
+c8017f5b4856d5 Konstantin Taranov 2025-01-20  1353  EXPORT_SYMBOL_NS(mana_gd_post_work_request, "NET_MANA");
+ca9c54d2d6a5ab Dexuan Cui         2021-04-16  1354  
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
