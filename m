@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159791514DC;
-	Wed, 12 Nov 2025 05:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBA12D97A9;
+	Wed, 12 Nov 2025 05:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762923609; cv=none; b=c+UtaX/UCP0mfh3QAi2Z/3pjQXIpV4ejlG5mdYH1bYuDjGR+hApT4qiR1s825ldljX2OEaSGdB3pFFX4CcM2dNgOgCiPk8sVKn2aylSQ1hwhfiXxKkjcV/KM7ZVc58N7JV/Z5l+3l36c8bAw/XMuGWCtD6YDsKxD1mV1GgBDPuo=
+	t=1762926852; cv=none; b=Swx2fddTuedBjg7O+YheAoNm7PZjK0863UHQfBXGEaVOCY9+tXnnLrejJbDYROeZARTCeT3UePxeFcRlkPRRU7d7veJZv8oHY85OmyAtgAuqEQ1oJUmnZ06Pvkkbeg3MbXuosZeT/JE5fS3yfrRV+AIzkMyBzvRc04LZGZzJF1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762923609; c=relaxed/simple;
-	bh=oVzcjrtUZy9ro5ZLynud7t632MdL27zlclznqXw5X1o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQUCbh+mcPpj+r+YEBRR76Vyk+Euh3ZocSSp6rVRVkoKr1kot+rKHIA6G+oIDk2+HVJNon+oLhjzJGq1VE27WtuoUVDNIk8satZXIZiS38Gt1BjQqgXe7xj2npfa6ENijbA21q+T5g4q+9zUgFoVPEmWiCBu9fV2KgwIhGc7TnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iXPXPDb6; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1762926852; c=relaxed/simple;
+	bh=7J83XQBNWK5axJwzS+szZ/H/JUXqW86n8kUZMBla97U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DVPoPB/iO8SViIb7PCiTl5NPg8nKtPEvpmLx33LIxQbdRdBzYv4uLPMNghovbCf07OgpskIhpql13tLqsSBWIdl8rkxlwq9MyxfW2ezdxV5ndfKXffcBK9AwyI8ubdgHx0cr03EjOrvB4Dup9KWAVpSO3IFeGeFKfKO6SsvGL8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FwDb7sAN; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iXPXPDb6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FwDb7sAN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762923607; x=1794459607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oVzcjrtUZy9ro5ZLynud7t632MdL27zlclznqXw5X1o=;
-  b=iXPXPDb6gaQn4lYZi9JaNIe36u+TM+f3ytIzb/MxmI2L849+dzZQpE0Y
-   66mWOrR6DEM71ddm6z/+RclwBrayi2G01Xdo9k/ys9YsTJrn8oP9LIlde
-   d4yUo2Y8xcJ0XQm8JyJDQCV08SdgjcqrUSRqPQ2fpVaF4hF3TVe81Ux2H
-   IaQSY5X+eqD4fgP8Oca868sYahHLXPDNezHqwjnY/drp1vIJL2g5VNPcv
-   Uvix9uY9YuCt0gpxSNojOvMMJigt8xHcyIijJBGmDjFirkqdL1jMGjban
-   0N9TUJtDXc081qwlEnaFo9f0X1C5mE/HWW5xRTuixjXh9TVcryxH2hXL1
-   g==;
-X-CSE-ConnectionGUID: 6qnHeLgwSs6Pdu/xaPjpmQ==
-X-CSE-MsgGUID: rcL9i7dMT7Gir1MLDemQiQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="65075624"
+  t=1762926851; x=1794462851;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7J83XQBNWK5axJwzS+szZ/H/JUXqW86n8kUZMBla97U=;
+  b=FwDb7sANixJ35RiFGjJ9P4POQZXEtcsu/BUIqyr0qMYzFaXGX2JOl7d7
+   eJZNpqZ+jlc3Qvz79g/FBOFtcBeDIAhUHTSNN7JWKlezlKgADhm26ZDVK
+   5omdKLNj0tKzTHVv9YIvLl2lLU9O7i5/q/R8P+gMBl59Fsr8U/JRHjt99
+   T1WQuwlyBWgVwXvc1qF/mCPiDWzn35Tb95Ih8aFNa1xBTdIMqT2vC03zP
+   qmnOpq9EL9wdoX/alN8+bzXva/KL1k6LqPsVHUj7ae/nK3hZGUJU9Sdx8
+   3sh6qwnEhex33DTCi6nadZYVYbR0b2BpIEHILWlfpYMt6SCEZtCplZfw3
+   w==;
+X-CSE-ConnectionGUID: Awz1X7V3QuiscuUDlkEscQ==
+X-CSE-MsgGUID: wNgOvNOTT6GBB0lunQEolg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="68621670"
 X-IronPort-AV: E=Sophos;i="6.19,298,1754982000"; 
-   d="scan'208";a="65075624"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 21:00:06 -0800
-X-CSE-ConnectionGUID: e9nXy1HZSSivhbPorUyohA==
-X-CSE-MsgGUID: nyCj46xkQmq/uZzmK/ihsg==
+   d="scan'208";a="68621670"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 21:54:11 -0800
+X-CSE-ConnectionGUID: DJN8jGP0QTGdGueA0vxG1g==
+X-CSE-MsgGUID: p5/qm92wQ0+QgFpsjTkM0Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,298,1754982000"; 
-   d="scan'208";a="189289420"
+   d="scan'208";a="188975455"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 Nov 2025 21:00:05 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 11 Nov 2025 21:54:09 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vJ2xe-0003qd-1Q;
-	Wed, 12 Nov 2025 05:00:02 +0000
-Date: Wed, 12 Nov 2025 13:00:00 +0800
+	id 1vJ3ny-0003sH-2f;
+	Wed, 12 Nov 2025 05:54:06 +0000
+Date: Wed, 12 Nov 2025 13:53:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chenghai Huang <huangchenghai2@huawei.com>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 2/4] asm-generic/io.h: add io{read,write}128 accessors
-Message-ID: <202511121204.SWr5k0Gt-lkp@intel.com>
-References: <20251112015846.1842207-3-huangchenghai2@huawei.com>
+Subject: [peterz-queue:x86/bugs 10/12] WARNING: modpost: EXPORT symbol
+ "__WARN_trap" [vmlinux] version generation failed, symbol will not be
+ versioned.
+Message-ID: <202511121314.glh4hyXi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,82 +62,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251112015846.1842207-3-huangchenghai2@huawei.com>
 
-Hi Chenghai,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on arnd-asm-generic/master]
-[also build test ERROR on arm64/for-next/core soc/for-next linus/master v6.18-rc5 next-20251111]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chenghai-Huang/UAPI-Introduce-128-bit-types-and-byteswap-operations/20251112-100133
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-patch link:    https://lore.kernel.org/r/20251112015846.1842207-3-huangchenghai2%40huawei.com
-patch subject: [PATCH RFC 2/4] asm-generic/io.h: add io{read,write}128 accessors
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20251112/202511121204.SWr5k0Gt-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511121204.SWr5k0Gt-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/bugs
+head:   21afb4fd94390c799ac2b6ded372a0ccc3883c7e
+commit: ebfca56e608fdcb6e43cd36e80bca4e9f6dd47a1 [10/12] x86_64/bug: Implement __WARN_printf()
+config: i386-randconfig-015-20251112 (https://download.01.org/0day-ci/archive/20251112/202511121314.glh4hyXi-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511121314.glh4hyXi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511121204.SWr5k0Gt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511121314.glh4hyXi-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/loongarch/include/asm/hardirq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/loongarch/include/asm/io.h:82:
->> include/asm-generic/io.h:948:54: error: passing 'const volatile void *' to parameter of type 'volatile void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     948 |         val = __le128_to_cpu((__le128 __force)__raw_read128(addr));
-         |                                                             ^~~~
-   include/asm-generic/io.h:152:57: note: passing argument to parameter 'addr' here
-     152 | static inline u128 __raw_read128(volatile void __iomem *addr)
-         |                                                         ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:182: arch/loongarch/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1282: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +948 include/asm-generic/io.h
-
-   939	
-   940	#ifdef CONFIG_ARCH_SUPPORTS_INT128
-   941	#ifndef ioread128
-   942	#define ioread128 ioread128
-   943	static inline u128 ioread128(const volatile void __iomem *addr)
-   944	{
-   945		u128 val;
-   946	
-   947		__io_br();
- > 948		val = __le128_to_cpu((__le128 __force)__raw_read128(addr));
-   949		__io_ar(val);
-   950	
-   951		return val;
-   952	}
-   953	#endif
-   954	#endif /* CONFIG_ARCH_SUPPORTS_INT128 */
-   955	
+>> WARNING: modpost: EXPORT symbol "__WARN_trap" [vmlinux] version generation failed, symbol will not be versioned.
+Is "__WARN_trap" prototyped in <asm/asm-prototypes.h>?
 
 -- 
 0-DAY CI Kernel Test Service
