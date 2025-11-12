@@ -1,166 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A1633D6EE;
-	Wed, 12 Nov 2025 15:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E14F2D837C;
+	Wed, 12 Nov 2025 18:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762962127; cv=none; b=gfeHgTDUbJC3NYree0ZkB13a+2ivTrZIUY7apql60nvR2aAwlcDbbYcbjzeZsFsI1cH2AkToHcw/EtdUfmpKkYc5JCRZYKtLV1NLPx48bOKMsTwjbh13Mwq6mGDLzNfigWMT3Vxoo4k3YkInEgZ5aWizFlWL++CJrg7GGIkDCf4=
+	t=1762973079; cv=none; b=uuIdniiTcC0OVB3bsqhOIXIk7FRkYQZQlwR2keXNerrnTt+PG9KQHPaDu2HVEUqNG15K9g42I6laEVVzRSh3wP6/y6eLByDYuqbqfdiwJ2zdKdIX7/3ElhpuUyycU5jKhXleUEAWxxqDZwUvbClJnhgJ+zW+Z89H9MK8vOQ6l5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762962127; c=relaxed/simple;
-	bh=NiZ7ea35pME1fM3maEI5aXEnDEDvdt1SSghBc/AiFyk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sYydFLrRPEI8kxH9/em+b2S9b7o18kH/wRbrmcXsLb41UbTPdLrrjKcGIFr94rZQgC1pK2SUhTwYcSDWHK4WS0D1p7l75tiav5s/o36SFPeaqX5qvUqyAXOp0GHXspUyU3k5MsInLg4IjHD5s2L/NY6HqI6YohtZbNb9OrZczKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R37Sx87/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762973079; c=relaxed/simple;
+	bh=055fA2CcwKNGCqakO62I6DCYxSUugUIeFCK4IyWOGVg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lCAicJTtuFchIhSrVEjK7pf26SJ0r9/G7yj8hSNqLCZZ261vsuqtzan28+ZXnqnN74WkK1sRWJoMFU7S4qwwWQc2WEbBGfOU8RtOe1lObYucKxgi3ODFwv2A4tWrbDkhUPsI+w2FAyW8kCodPSetp7OdR0YTZQoj8OOM//+Xduk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A995IPFp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R37Sx87/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B4EC19423;
-	Wed, 12 Nov 2025 15:42:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A995IPFp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 961ACC4AF09;
+	Wed, 12 Nov 2025 18:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762962127;
-	bh=NiZ7ea35pME1fM3maEI5aXEnDEDvdt1SSghBc/AiFyk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R37Sx87/i8ZHQBhoTFE3dFsIlhXKSfafQa9RFcrnozAwKjGlQ6I43Gj+nu9r3YpI1
-	 wZJuXfNsCUjC5eZyWKbnO5syAAPhPOKJabI09QgxpnHGorsMMlgnyOKVbdwhnUS63I
-	 ONJdbjKKxW3SWgYr6p9SSeI/5zfJWBN355f90Acup8ovlYRmnS3yayYk1LT5pXP8Br
-	 Ewgc0WKL3TTUXbHtqcJb+uioWEM+TVWg4aBVN9oCiR4ovVv3IWjz/JkFd/EUnK9hTp
-	 P0UCtkGfo2OiALXDr5eMNuDw4caLVt5Mn+NZCCPvg8I5x+7XgkLkOQWt2Q8Nt25VSP
-	 mc6lX1AxKFFuw==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 1/9] mm/damon: rename damos core filter helpers to have word core
-Date: Wed, 12 Nov 2025 07:41:04 -0800
-Message-ID: <20251112154114.66053-2-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251112154114.66053-1-sj@kernel.org>
-References: <20251112154114.66053-1-sj@kernel.org>
+	s=k20201202; t=1762973079;
+	bh=055fA2CcwKNGCqakO62I6DCYxSUugUIeFCK4IyWOGVg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=A995IPFpTapVlJqGhwaAGw7ocQ0uSewMFDBBtyk/BARi8MMR+cA6dsgCYGiNXIE92
+	 QdoFNxhg6k4otIJmkKSGNernxl7SW5/5f4/BCgg9532ZL/JaEtqWDXzwAZrS4rah8L
+	 +aJrO/gdz4vp9iKRGafW6voDJ3QD1ETuJiQG14wO43H2Dao2q9bRva+QSC4X3+rsT6
+	 ezgXhParowvCx/yKoCVXDjdfIs26fpujzTVG7+zj41pLJwPDOa5VAKH3zAEfpoQL9x
+	 2j6MrBHdg7iBpgj6BOc+gr1mZf3VLDhlHWhq7RovvvLOCSZAYFIIJe4a6aqOUdOI05
+	 UGCRHep8+/4rA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 12 Nov 2025 11:44:30 -0700
+Subject: [PATCH] pinctrl: airoha: Fix AIROHA_PINCTRL_CONFS_DRIVE_E2 in
+ an7583_pinctrl_match_data
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAI3VFGkC/x2NQQrCMBAAv1L27EKSGhS/Ih426aZdkE3ZaBFK/
+ 97gcQ4zs0NjE27wGHYw3qRJ1Q7+MkBeSGdGmTpDcCF67wOuovljbySxuhAW+SHpLd5HnEw2Rg6
+ Yq5YZv426nVK55lKCS9FBj67GXfkPn6/jOAGR+b8jgAAAAA==
+X-Change-ID: 20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-bbf4cff20b50
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Christian Marangi <ansuelsmth@gmail.com>, 
+ Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1870; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=055fA2CcwKNGCqakO62I6DCYxSUugUIeFCK4IyWOGVg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJkiV6fY70/MEmkRqhM71vLBzL0kvufblMQer7viT7N6H
+ zO2xYl3lLIwiHExyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgIn84GVkWLlfgW3R/fOeiTdq
+ 54Vzn2Wf+df0bOzvrqrujLPak2fnazMyXOJbaVHMqD7nyLf2SH/N7Nkiu00XX1khNe2n8b9dXP6
+ ybAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-DAMOS filters handled by the core layer are called core filters, while
-those handled by the ops layer are called ops filters.  They share the
-same type but are managed in different places since core filters are
-evaluated before the ops filters.  They also have different helper
-functions that depend on their managed places.
+Clang warns (or errors with CONFIG_WERROR=y / W=e):
 
-The helper functions for ops filters have '_ops_' keyword on their name,
-so it is easy to know they are for ops filters.  Meanwhile, the helper
-functions for core filters are not having the 'core' keyword on their
-name.  This makes it easy to be mistakenly used for ops filters.
-Actually there was such a bug.
+  pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+   2064 | static const struct airoha_pinctrl_conf an7583_pinctrl_drive_e2_conf[] = {
+        |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To avoid future mistakes from similar confusions, rename DAMOS core
-filters helper functions to have a keyword 'core' on their names.
+Due to a typo, an7583_pinctrl_drive_e2_conf is only used within
+ARRAY_SIZE() (hence no instance of -Wunused-variable), which is
+evaluated at compile time, so it will not be needed in the final object
+file.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
+Fix the .confs assignment for AIROHA_PINCTRL_CONFS_DRIVE_E2 in
+an7583_pinctrl_match_data to clear up the warning.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2142
+Fixes: 3ffeb17a9a27 ("pinctrl: airoha: add support for Airoha AN7583 PINs")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- .clang-format         |  4 ++--
- include/linux/damon.h |  4 ++--
- mm/damon/core.c       | 14 +++++++-------
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/pinctrl/mediatek/pinctrl-airoha.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.clang-format b/.clang-format
-index f371a13b4d19..748efbe791ad 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -140,8 +140,8 @@ ForEachMacros:
-   - 'damon_for_each_scheme_safe'
-   - 'damon_for_each_target'
-   - 'damon_for_each_target_safe'
--  - 'damos_for_each_filter'
--  - 'damos_for_each_filter_safe'
-+  - 'damos_for_each_core_filter'
-+  - 'damos_for_each_core_filter_safe'
-   - 'damos_for_each_ops_filter'
-   - 'damos_for_each_ops_filter_safe'
-   - 'damos_for_each_quota_goal'
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index f3566b978cdf..6e3db165fe60 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -871,10 +871,10 @@ static inline unsigned long damon_sz_region(struct damon_region *r)
- #define damos_for_each_quota_goal_safe(goal, next, quota) \
- 	list_for_each_entry_safe(goal, next, &(quota)->goals, list)
- 
--#define damos_for_each_filter(f, scheme) \
-+#define damos_for_each_core_filter(f, scheme) \
- 	list_for_each_entry(f, &(scheme)->filters, list)
- 
--#define damos_for_each_filter_safe(f, next, scheme) \
-+#define damos_for_each_core_filter_safe(f, next, scheme) \
- 	list_for_each_entry_safe(f, next, &(scheme)->filters, list)
- 
- #define damos_for_each_ops_filter(f, scheme) \
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index a14cc73c2cab..d4cb11ced13f 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -450,7 +450,7 @@ void damon_destroy_scheme(struct damos *s)
- 	damos_for_each_quota_goal_safe(g, g_next, &s->quota)
- 		damos_destroy_quota_goal(g);
- 
--	damos_for_each_filter_safe(f, next, s)
-+	damos_for_each_core_filter_safe(f, next, s)
- 		damos_destroy_filter(f);
- 
- 	damos_for_each_ops_filter_safe(f, next, s)
-@@ -864,12 +864,12 @@ static int damos_commit_quota(struct damos_quota *dst, struct damos_quota *src)
- 	return 0;
- }
- 
--static struct damos_filter *damos_nth_filter(int n, struct damos *s)
-+static struct damos_filter *damos_nth_core_filter(int n, struct damos *s)
- {
- 	struct damos_filter *filter;
- 	int i = 0;
- 
--	damos_for_each_filter(filter, s) {
-+	damos_for_each_core_filter(filter, s) {
- 		if (i++ == n)
- 			return filter;
- 	}
-@@ -923,15 +923,15 @@ static int damos_commit_core_filters(struct damos *dst, struct damos *src)
- 	struct damos_filter *dst_filter, *next, *src_filter, *new_filter;
- 	int i = 0, j = 0;
- 
--	damos_for_each_filter_safe(dst_filter, next, dst) {
--		src_filter = damos_nth_filter(i++, src);
-+	damos_for_each_core_filter_safe(dst_filter, next, dst) {
-+		src_filter = damos_nth_core_filter(i++, src);
- 		if (src_filter)
- 			damos_commit_filter(dst_filter, src_filter);
- 		else
- 			damos_destroy_filter(dst_filter);
- 	}
- 
--	damos_for_each_filter_safe(src_filter, next, src) {
-+	damos_for_each_core_filter_safe(src_filter, next, src) {
- 		if (j++ < i)
- 			continue;
- 
-@@ -1767,7 +1767,7 @@ static bool damos_filter_out(struct damon_ctx *ctx, struct damon_target *t,
- 	struct damos_filter *filter;
- 
- 	s->core_filters_allowed = false;
--	damos_for_each_filter(filter, s) {
-+	damos_for_each_core_filter(filter, s) {
- 		if (damos_filter_match(ctx, t, r, filter, ctx->min_sz_region)) {
- 			if (filter->allow)
- 				s->core_filters_allowed = true;
--- 
-2.47.3
+diff --git a/drivers/pinctrl/mediatek/pinctrl-airoha.c b/drivers/pinctrl/mediatek/pinctrl-airoha.c
+index bfcedc7f920b..706532a820b0 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-airoha.c
++++ b/drivers/pinctrl/mediatek/pinctrl-airoha.c
+@@ -2993,7 +2993,7 @@ static const struct airoha_pinctrl_match_data an7583_pinctrl_match_data = {
+ 			.num_confs = ARRAY_SIZE(an7583_pinctrl_pulldown_conf),
+ 		},
+ 		[AIROHA_PINCTRL_CONFS_DRIVE_E2] = {
+-			.confs = en7581_pinctrl_drive_e2_conf,
++			.confs = an7583_pinctrl_drive_e2_conf,
+ 			.num_confs = ARRAY_SIZE(an7583_pinctrl_drive_e2_conf),
+ 		},
+ 		[AIROHA_PINCTRL_CONFS_DRIVE_E4] = {
+
+---
+base-commit: 57916750bc0886917ea2c6209ca6a56acb7b8182
+change-id: 20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-bbf4cff20b50
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
