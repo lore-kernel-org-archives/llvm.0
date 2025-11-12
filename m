@@ -1,105 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E14F2D837C;
-	Wed, 12 Nov 2025 18:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359C727F163;
+	Wed, 12 Nov 2025 20:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762973079; cv=none; b=uuIdniiTcC0OVB3bsqhOIXIk7FRkYQZQlwR2keXNerrnTt+PG9KQHPaDu2HVEUqNG15K9g42I6laEVVzRSh3wP6/y6eLByDYuqbqfdiwJ2zdKdIX7/3ElhpuUyycU5jKhXleUEAWxxqDZwUvbClJnhgJ+zW+Z89H9MK8vOQ6l5o=
+	t=1762979800; cv=none; b=UsvSKMkWtDz0BCMCHg2CHPrvUL7fn0iNitZ84HymclJOUlBiMHJuzZB3h7l58HX8JiBTWX+t2KgY9cDxZUl0/wfrMoUE1wAx6nJ1VYAxwxQ5gquZ412gHpaKGqe34pjNltaKh2fruzsEjrci5RvncvKKE65LAm6BcIoQTB/+w5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762973079; c=relaxed/simple;
-	bh=055fA2CcwKNGCqakO62I6DCYxSUugUIeFCK4IyWOGVg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lCAicJTtuFchIhSrVEjK7pf26SJ0r9/G7yj8hSNqLCZZ261vsuqtzan28+ZXnqnN74WkK1sRWJoMFU7S4qwwWQc2WEbBGfOU8RtOe1lObYucKxgi3ODFwv2A4tWrbDkhUPsI+w2FAyW8kCodPSetp7OdR0YTZQoj8OOM//+Xduk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A995IPFp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762979800; c=relaxed/simple;
+	bh=OzkJp3iyLCFp854XG9Kfo3VPKCTB6+38vEjgcKha5Go=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dPVZtVKuUWVhtYDVpiUgpfnUFzOqrVCy0Fg6tJWQsAuji0B6fOXz59FD3E/DPR9t7aEnuIzpf51MoM+aUnvkO8ocOuu25Wfv3DcsbJKvVQaKOEotgraEZQtTiWDAEocp1k0GYrnnjL1vMElQciCQM++xY6czuMXn7OXb22DApHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kp57rjur; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A995IPFp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 961ACC4AF09;
-	Wed, 12 Nov 2025 18:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762973079;
-	bh=055fA2CcwKNGCqakO62I6DCYxSUugUIeFCK4IyWOGVg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=A995IPFpTapVlJqGhwaAGw7ocQ0uSewMFDBBtyk/BARi8MMR+cA6dsgCYGiNXIE92
-	 QdoFNxhg6k4otIJmkKSGNernxl7SW5/5f4/BCgg9532ZL/JaEtqWDXzwAZrS4rah8L
-	 +aJrO/gdz4vp9iKRGafW6voDJ3QD1ETuJiQG14wO43H2Dao2q9bRva+QSC4X3+rsT6
-	 ezgXhParowvCx/yKoCVXDjdfIs26fpujzTVG7+zj41pLJwPDOa5VAKH3zAEfpoQL9x
-	 2j6MrBHdg7iBpgj6BOc+gr1mZf3VLDhlHWhq7RovvvLOCSZAYFIIJe4a6aqOUdOI05
-	 UGCRHep8+/4rA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 12 Nov 2025 11:44:30 -0700
-Subject: [PATCH] pinctrl: airoha: Fix AIROHA_PINCTRL_CONFS_DRIVE_E2 in
- an7583_pinctrl_match_data
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kp57rjur"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=s9o8NRvJdzTieC05I6sj+VphdIDRCWgXCmaEd+EQUzE=; b=kp57rjurHJAHd7F+xCvQZd2no/
+	zldsm/PODHXAoZPRO03KjAvh+i6TFvDrouKIddaHozeoKX6h2p6XnR40qvkW2IfcfJjSqtjOOASHE
+	pcLUkbSjzs9jrpSZ1b8HCTaxH2HZB+iIqy3JOelzm0XwDoUm+rsEL547/n1nbkk1Zdvdon9bDW7m/
+	fbDrR+VT28Mw+bAffi2/e9rYJYquUsYKCdFL34XhsCio+W3x5wyTN9hfghxd3d7PyPKLuC/rsdqJN
+	omr01SQUfqZXqu1vGLmq3jMm7SSbX5suEPyADu3Kw4ySsNlAUtR/0apBO+uhzbLc6bklHuhuBZo+/
+	5LaH1Fjg==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vJHZx-00000006TTz-1U22;
+	Wed, 12 Nov 2025 20:36:33 +0000
+Date: Wed, 12 Nov 2025 20:36:33 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Jinchao Wang <wangjinchao600@gmail.com>
+Cc: kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	workflows@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v8 00/27] mm/ksw: Introduce KStackWatch debugging tool
+Message-ID: <aRTv0eHfX0j8vJOW@casper.infradead.org>
+References: <20251110163634.3686676-1-wangjinchao600@gmail.com>
+ <aRIh4pBs7KCDhQOp@casper.infradead.org>
+ <aRLmGxKVvfl5N792@ndev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAI3VFGkC/x2NQQrCMBAAv1L27EKSGhS/Ih426aZdkE3ZaBFK/
- 97gcQ4zs0NjE27wGHYw3qRJ1Q7+MkBeSGdGmTpDcCF67wOuovljbySxuhAW+SHpLd5HnEw2Rg6
- Yq5YZv426nVK55lKCS9FBj67GXfkPn6/jOAGR+b8jgAAAAA==
-X-Change-ID: 20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-bbf4cff20b50
-To: Linus Walleij <linus.walleij@linaro.org>, 
- Christian Marangi <ansuelsmth@gmail.com>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1870; i=nathan@kernel.org;
- h=from:subject:message-id; bh=055fA2CcwKNGCqakO62I6DCYxSUugUIeFCK4IyWOGVg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJkiV6fY70/MEmkRqhM71vLBzL0kvufblMQer7viT7N6H
- zO2xYl3lLIwiHExyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgIn84GVkWLlfgW3R/fOeiTdq
- 54Vzn2Wf+df0bOzvrqrujLPak2fnazMyXOJbaVHMqD7nyLf2SH/N7Nkiu00XX1khNe2n8b9dXP6
- ybAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aRLmGxKVvfl5N792@ndev>
 
-Clang warns (or errors with CONFIG_WERROR=y / W=e):
+[dropping all the individual email addresses; leaving only the
+mailing lists]
 
-  pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
-   2064 | static const struct airoha_pinctrl_conf an7583_pinctrl_drive_e2_conf[] = {
-        |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Wed, Nov 12, 2025 at 10:14:29AM +0800, Jinchao Wang wrote:
+> On Mon, Nov 10, 2025 at 05:33:22PM +0000, Matthew Wilcox wrote:
+> > On Tue, Nov 11, 2025 at 12:35:55AM +0800, Jinchao Wang wrote:
+> > > Earlier this year, I debugged a stack corruption panic that revealed the
+> > > limitations of existing debugging tools. The bug persisted for 739 days
+> > > before being fixed (CVE-2025-22036), and my reproduction scenario
+> > > differed from the CVE report—highlighting how unpredictably these bugs
+> > > manifest.
+> > 
+> > Well, this demonstrates the dangers of keeping this problem siloed
+> > within your own exfat group.  The fix made in 1bb7ff4204b6 is wrong!
+> > It was fixed properly in 7375f22495e7 which lists its Fixes: as
+> > Linux-2.6.12-rc2, but that's simply the beginning of git history.
+> > It's actually been there since v2.4.6.4 where it's documented as simply:
+> > 
+> >       - some subtle fs/buffer.c race conditions (Andrew Morton, me)
+> > 
+> > As far as I can tell the changes made in 1bb7ff4204b6 should be
+> > reverted.
+> 
+> Thank you for the correction and the detailed history. I wasn't aware this
+> dated back to v2.4.6.4. I'm not part of the exfat group; I simply
+> encountered a bug that 1bb7ff4204b6 happened to resolve in my scenario.
+> The timeline actually illustrates the exact problem KStackWatch addresses:
+> a bug introduced in 2001, partially addressed in 2025, then properly fixed
+> months later. The 24-year gap suggests these silent stack corruptions are
+> extremely difficult to locate.
 
-Due to a typo, an7583_pinctrl_drive_e2_conf is only used within
-ARRAY_SIZE() (hence no instance of -Wunused-variable), which is
-evaluated at compile time, so it will not be needed in the final object
-file.
+I think that's a misdiagnosis caused by not understanding the limited
+circumstances in which the problem occurs.  To hit this problem, you
+have to have a buffer_head allocated on the stack.  That doesn't happen
+in many places:
 
-Fix the .confs assignment for AIROHA_PINCTRL_CONFS_DRIVE_E2 in
-an7583_pinctrl_match_data to clear up the warning.
+fs/buffer.c:    struct buffer_head tmp = {
+fs/direct-io.c: struct buffer_head map_bh = { 0, };
+fs/ext2/super.c:        struct buffer_head tmp_bh;
+fs/ext2/super.c:        struct buffer_head tmp_bh;
+fs/ext4/mballoc-test.c: struct buffer_head bitmap_bh;
+fs/ext4/mballoc-test.c: struct buffer_head gd_bh;
+fs/gfs2/bmap.c: struct buffer_head bh;
+fs/gfs2/bmap.c: struct buffer_head bh;
+fs/isofs/inode.c:       struct buffer_head dummy;
+fs/jfs/super.c: struct buffer_head tmp_bh;
+fs/jfs/super.c: struct buffer_head tmp_bh;
+fs/mpage.c:     struct buffer_head map_bh;
+fs/mpage.c:     struct buffer_head map_bh;
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2142
-Fixes: 3ffeb17a9a27 ("pinctrl: airoha: add support for Airoha AN7583 PINs")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/pinctrl/mediatek/pinctrl-airoha.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It's far more common for buffer_heads to be allocated from slab and
+attached to folios.  The other necessary condition to hit this problem
+is that get_block() has to actually read the data from disk.  That's
+not normal either!  Most filesystems just fill in the metadata about
+the block and defer the actual read to when the data is wanted.  That's
+the high-performance way to do it.
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-airoha.c b/drivers/pinctrl/mediatek/pinctrl-airoha.c
-index bfcedc7f920b..706532a820b0 100644
---- a/drivers/pinctrl/mediatek/pinctrl-airoha.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-airoha.c
-@@ -2993,7 +2993,7 @@ static const struct airoha_pinctrl_match_data an7583_pinctrl_match_data = {
- 			.num_confs = ARRAY_SIZE(an7583_pinctrl_pulldown_conf),
- 		},
- 		[AIROHA_PINCTRL_CONFS_DRIVE_E2] = {
--			.confs = en7581_pinctrl_drive_e2_conf,
-+			.confs = an7583_pinctrl_drive_e2_conf,
- 			.num_confs = ARRAY_SIZE(an7583_pinctrl_drive_e2_conf),
- 		},
- 		[AIROHA_PINCTRL_CONFS_DRIVE_E4] = {
+So our opportunity to catch this bug was highly limited by the fact that
+we just don't run the codepaths that would allow it to trigger.
 
----
-base-commit: 57916750bc0886917ea2c6209ca6a56acb7b8182
-change-id: 20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-bbf4cff20b50
+> > > Initially, I enabled KASAN, but the bug did not reproduce. Reviewing the
+> > > code in __blk_flush_plug(), I found it difficult to trace all logic
+> > > paths due to indirect function calls through function pointers.
+> > 
+> > So why is the solution here not simply to fix KASAN instead of this
+> > giant patch series?
+> 
+> KASAN caught 7375f22495e7 because put_bh() accessed bh->b_count after
+> wait_on_buffer() of another thread returned—the stack was invalid.
+> In 1bb7ff4204b6 and my case, corruption occurred before the victim
+> function of another thread returned. The stack remained valid to KASAN,
+> so no warning triggered. This is timing-dependent, not a KASAN deficiency.
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+I agree that it's a narrow race window, but nevertheless KASAN did catch
+it with ntfs and not with exfat.  The KASAN documentation states that
+it can catch this kind of bug:
+
+Generic KASAN supports finding bugs in all of slab, page_alloc, vmap, vmalloc,
+stack, and global memory.
+
+Software Tag-Based KASAN supports slab, page_alloc, vmalloc, and stack memory.
+
+Hardware Tag-Based KASAN supports slab, page_alloc, and non-executable vmalloc
+memory.
+
+(hm, were you using hwkasan instead of swkasan, and that's why you
+couldn't see it?)
 
