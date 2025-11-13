@@ -1,128 +1,386 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FFB2DF3D1;
-	Thu, 13 Nov 2025 09:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F09F2D979C
+	for <llvm@lists.linux.dev>; Thu, 13 Nov 2025 10:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763027775; cv=none; b=e/2QMajBkkukVB2kv6AkWqYbFVBxrNdzpEGRjQ5SvulK9HFRZmz/CHAPJU7G6BdrwOfzYGbQHkPNrdDfhfavl7F7PXM42CDdDou6s8/p0QpxN8kNo5yiTQMARZI7GDV5VFo7CylJ8sJVKZa+T8cTtVeMVW9yW0cRd4XAih6uC8E=
+	t=1763031176; cv=none; b=WOp89/v3sb7ZE7Bf66ox5zCz8M9JKLucwpjH/VW9AaMBv5PiJp6HoRnWdQdwYl2klkRUCY/6p+I4kmusxF+YY0X6vMRq5666yNc7lNp+Wsj3Am03sKZ8DfB9Xi2GBkUE77oBBON6FasNSX8Ze7bvVwVVqoyI7sfbk9qCwxpYyk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763027775; c=relaxed/simple;
-	bh=krUX7hqpzRIL/jGpRRFrUeqSxfbxEobmiKcyt6cbc6k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=L+vOzbYDmfSEg1bA/9e3ezKNv7/gpEmutHNJVpPM+kKDjGEFT+lfBSuPBAhUu2MHkikV7HSUFH5LFga7yTQSgZd4+cPEX74i9+rwFMfxnaxe8gL7rHDViv/LHRFCgn8R5oW4cxZA66WIKpL/xgTRD/FHPDfsr4D7f/uaWGE3PgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H1GYBK5t; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763031176; c=relaxed/simple;
+	bh=ptjnN+kV6KtL9cjMx1i4vilb0N1AN7KTugMe4NyA6zk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BamLS0ikSpXp1vKybIt6cYPhltqqkp1etihQ4aepuN3a+ArA9FJbyT2tixWBm53eGeD+/vzzQe0QTmmF7yxboXX/woB73ErDJTylax1B1DygsGcgnwHeQgTqhY5gLDZjFa9a/mRrDEaShpuzEnyaDs1HAxyD2wr76ouD4rhcgD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KXBnE2ec; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H1GYBK5t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763027774; x=1794563774;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=krUX7hqpzRIL/jGpRRFrUeqSxfbxEobmiKcyt6cbc6k=;
-  b=H1GYBK5trg8k7QJVZuJK9APMQtLRdR9PuPgosYyvAu0UdSSkclo1ueLk
-   SOPBiLEuuhKryhUom27jPNqaAWnANTxwR+w8hxsPRdmw8IcW7DSW14w8k
-   ZXhpA2bzf34IguTmKHf92xU6IUt8VFZvLgWM4E7vXXIYlD7qvjox/Br1k
-   HjdIUfEPvUGoyHzngaveUzTtDLPGD2pYOQMHtNs79m+3ytCahFlhiNR2C
-   sPa9zFIUz2E0AdRQJfvo84OiLvk0N8jV5amcRCc0UPF9OYLo2LwMy8iAi
-   c2jAugzQaP/zXsZ89z9NfxTWJUReDvm7Y9woz0xOK2MuUL1lphAh56y/5
-   w==;
-X-CSE-ConnectionGUID: tUjaYrNeRmWqyGKcjTpm4A==
-X-CSE-MsgGUID: ocQOmO8vThGsAZ0az5vOwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="67703480"
-X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
-   d="scan'208";a="67703480"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 01:55:52 -0800
-X-CSE-ConnectionGUID: RFR58RY6QvKrhugcWkAumA==
-X-CSE-MsgGUID: 3IOmhhlLTtmwgvPAKfxLrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
-   d="scan'208";a="194442446"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 13 Nov 2025 01:55:50 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vJU3Q-00058j-1R;
-	Thu, 13 Nov 2025 09:55:48 +0000
-Date: Thu, 13 Nov 2025 17:55:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masashi Ozaki <masashi.ozaki.te@renesas.com>,
-	Vinh Nguyen <vinh.nguyen.xz@renesas.com>
-Subject: [morimoto:renesas-lts/v6.18-rc5-2025-11-12-x5h-ironhide 28/39]
- drivers/mailbox/rcar-mfis-mailbox.c:153:32: warning: converting the result
- of '<<' to a boolean always evaluates to true
-Message-ID: <202511131723.vRI1WI6U-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KXBnE2ec"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-34381ec9197so639420a91.1
+        for <llvm@lists.linux.dev>; Thu, 13 Nov 2025 02:52:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763031174; x=1763635974; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OrLY1Uohp4fNrpBoSywOsXuTx3rqnDqEt2AlKMMSpE=;
+        b=KXBnE2ec6IV+3t7OLgSjf4s5SdZtXlDRXZknHyFzb7/EV6/9iavxlR38tCGpfgrRl+
+         w5qsaIeoh98pAi/IXpwEXwRrfrj+pst/g2SNvaGGB1FQrBNqEvw5WVtbMETgXtcFHmf2
+         9Pr23HgjYJY96vAPLiYUSvGn/RE6WARPc5++LYqZox7kR7/fPlGIUPProzSKeLWhwtyW
+         z4xP4s3jACpJNLo94EAlgiNZD2XjZoWYndF5sow9XWiPWg2+QaTabCTUfgz8/Gzp+y/q
+         B4KeQYinkkDF8fQwpvi3xF1QlTg5VRePFdqzsjYOegdRAGxE6LqraFsV2k1srkZKP0nS
+         eNbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763031174; x=1763635974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OrLY1Uohp4fNrpBoSywOsXuTx3rqnDqEt2AlKMMSpE=;
+        b=fO4+YnETfTrHY2H13lWXMsm4yyHd64qPXD74ORtOVHMvSvVp1q94GwVG6kRAYcaTEk
+         vsL9ecq9If13XJbLjdmH3cplIitggLSkx/Jkkwd1DrE25YkwU342XBUdkKA3Q/uFRFFC
+         DTm76fwMtxWWeNUq5tM0z9avulcMneefWT6J97Loz9rZCzS6Gc1jMA/ZElZGbbnZgVbS
+         xusZmRfMRQtCdCsfwo12kCImIq2WEWi2axqT6vM4QuLnVrRTXfY1AI6wFxkyu6lCxDC3
+         UhGxupdsjm4igCOT6od2luGLWL4Q2kxrebdcPDmBGWvxVumRc5sSjN322K0dDtT9TOsv
+         Kc/g==
+X-Forwarded-Encrypted: i=1; AJvYcCUiX9n+GVyG7FjezbBVKLa1VRDmyVefPfTW20mul0fUthHJ3VhOzjfDyI/U5OIuOdQKZ7wm@lists.linux.dev
+X-Gm-Message-State: AOJu0YxhWuqplzswxSyzCpi82FF24hKQ3wGdj2s9Ke7H7sEmhOWKYR8w
+	gYGPmwrGIkb0Fg/zX8RvezyKJYKq1woF78+AwQyZQwvvPbh5bORbIjIS
+X-Gm-Gg: ASbGncs3wiDrdA4fWyZvlMYt02ksVSHRHTHSXoeSaayBWgO7mE3IkJNjB4g36Z3JdmF
+	JXG7L/wMEsYy7xuhDD0G0zTIxPTIFuK3ephRwxnbcrI3rIbM1r3TqlYVCk8zc0Mai1kPWLVNM4P
+	zvrp5t+Mj9rpRXz0x4GOoqXD/DmPJLf2XZmHCT/t533D80g4nqpmPlsgLnLDmUJzjG8oeXSjKgJ
+	0sGeIFRuEt33WnixJNjIu4rBS919hUT9uiWXXm++OJOWdjc3bs3F4cRjLsEyNQUJ7Wv5LxjrNTG
+	dBGhyXYyw4pILAq/NKCqH07N2ot4wB2T8dwZA0jMhQsfg70VpQuxM8fiD0LYzQ3eh9rb44AkifD
+	FloX98pL/GPRypbD21HXzrgx3KeoVI9q1ZsInxPYukzRPpJVTFzGEc+PuveyJi4/4EutBk/+Kxm
+	KYJxO4x73pzSMQyOVp0Xu2iMRipajVTiHF7/Y=
+X-Google-Smtp-Source: AGHT+IHzp6UCtl35V4whLnPDL/LSjb2HQjwqo7fMEKu5Lo9MkJ9BX0nvNUtMKAS1HyvsK3oZoUW6iA==
+X-Received: by 2002:a17:90a:fc50:b0:343:a631:28a8 with SMTP id 98e67ed59e1d1-343dded5123mr8338802a91.37.1763031173562;
+        Thu, 13 Nov 2025 02:52:53 -0800 (PST)
+Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343ed4c939dsm2139616a91.6.2025.11.13.02.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Nov 2025 02:52:52 -0800 (PST)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: tglx@linutronix.de,
+	riel@surriel.com,
+	segher@kernel.crashing.org,
+	david@redhat.com,
+	peterz@infradead.org,
+	hpa@zytor.com,
+	osalvador@suse.de,
+	linux@armlinux.org.uk,
+	mathieu.desnoyers@efficios.com,
+	paulmck@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	hca@linux.ibm.com,
+	gor@linux.ibm.com,
+	agordeev@linux.ibm.com,
+	borntraeger@linux.ibm.com,
+	svens@linux.ibm.com,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	luto@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	anna-maria@linutronix.de,
+	frederic@kernel.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qq570070308@gmail.com,
+	thuth@redhat.com,
+	brauner@kernel.org,
+	arnd@arndb.de,
+	sforshee@kernel.org,
+	mhiramat@kernel.org,
+	andrii@kernel.org,
+	oleg@redhat.com,
+	jlayton@kernel.org,
+	aalbersh@redhat.com,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	lorenzo.stoakes@oracle.com,
+	baolin.wang@linux.alibaba.com,
+	max.kellermann@ionos.com,
+	ryan.roberts@arm.com,
+	nysal@linux.ibm.com,
+	urezki@gmail.com
+Cc: x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev,
+	will@kernel.org
+Subject: [PATCH v3 0/3] Optimize code generation during context switching
+Date: Thu, 13 Nov 2025 18:52:24 +0800
+Message-ID: <20251113105227.57650-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/morimoto/linux renesas-lts/v6.18-rc5-2025-11-12-x5h-ironhide
-head:   6aecb5521a24ea1461406564f89f4449840421dc
-commit: b5e2040ad820fcafdfe92e964efde15f4e8a625a [28/39] mailbox: renesas: Support MFIS mailbox driver
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251113/202511131723.vRI1WI6U-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251113/202511131723.vRI1WI6U-lkp@intel.com/reproduce)
+The purpose of this series of patches is to optimize the performance of
+context switching. It does not change the code logic, but only modifies
+the inline attributes of some functions.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511131723.vRI1WI6U-lkp@intel.com/
+It is found that `finish_task_switch` is not inlined even in the O2 level
+optimization. This may affect performance for the following reasons:
+1. It is in the context switching code, which is a hot code path.
+2. Because of the modern CPU mitigations for vulnerabilities, inside
+switch_mm, the instruction pipeline and cache may be cleared.
+finish_task_switch is right after that, so the performance is greatly
+affected by function calls and branch jumps.
+3. The __schedule function has __sched attribute, which makes it be
+placed in the ".sched.text" section, while finish_task_switch does not,
+which causes their distance to be very far in binary, aggravating the
+above performance degradation.
 
-All warnings (new ones prefixed by >>):
+This series of patches mainly does the following things:
+1. Make enter_lazy_tlb inline on x86.
+2. Make raw_spin_rq_unlock inline.
+3. Let the finish_task_switch function be called inline during context
+switching.
+4. Set the subfunctions called by finish_task_switch to be inline:
+After finish_task_switch is changed to an inline function, the number of
+calls to the subfunctions (called by finish_task_switch) increases in
+this translation unit due to the inline expansion of finish_task_switch.
+For example, the finish_lock_switch function originally had only one
+calling point in core.o (in finish_task_switch func), but because the
+finish_task_switch was inlined, the calling points become two.
+Due to compiler optimization strategies, these functions may transition
+from inline functions to non inline functions, which can actually lead to
+performance degradation.
+Make the subfunctions of finish_task_stwitch inline to prevent
+degradation.
 
->> drivers/mailbox/rcar-mfis-mailbox.c:153:32: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
-     153 |         if (!mfis_info_flag_has(info, MFIS_INFO_FLAGS_IRQ_NO_SUFFIX))
-         |                                       ^
-   drivers/mailbox/rcar-mfis-mailbox.c:29:42: note: expanded from macro 'MFIS_INFO_FLAGS_IRQ_NO_SUFFIX'
-      29 | #define MFIS_INFO_FLAGS_IRQ_NO_SUFFIX   (1 << 0)
-         |                                            ^
-   1 warning generated.
+Performance test data for these patches:
+Time spent on calling finish_task_switch (unit: rdtsc):
+ | compiler && appended cmdline | without patches | with patches  |
+ | gcc + NA                     | 13.93 - 13.94   | 12.39 - 12.44 |
+ | gcc + "spectre_v2_user=on"   | 24.69 - 24.85   | 13.68 - 13.73 |
+ | clang + NA                   | 13.89 - 13.90   | 12.70 - 12.73 |
+ | clang + "spectre_v2_user=on" | 29.00 - 29.02   | 18.88 - 18.97 |
+
+Note: I use x86 for testing here. Different architectures have different
+cmdlines for configuring mitigations. For example, on arm64, spectre v2
+mitigation is enabled by default, and it should be disabled by adding
+"nospectre_v2" to the cmdline.
+
+Test info:
+1. kernel source:
+linux-next
+commit 9c0826a5d9aa4d52206d ("Add linux-next specific files for 20251107")
+2. test machine:
+cpu: intel i5-8300h@4Ghz
+mem: DDR4 2666MHz
+Bare-metal boot, non-virtualized environment
+3. compiler:
+gcc: gcc version 15.2.0 (Debian 15.2.0-7) with
+GNU ld (GNU Binutils for Debian) 2.45
+clang: Debian clang version 21.1.4 (8) with
+Debian LLD 21.1.4 (compatible with GNU linkers)
+4. config:
+base on default x86_64_defconfig, and setting:
+CONFIG_HZ=100
+CONFIG_DEBUG_ENTRY=n
+CONFIG_X86_DEBUG_FPU=n
+CONFIG_EXPERT=y
+CONFIG_MODIFY_LDT_SYSCALL=n
+CONFIG_CGROUPS=n
+CONFIG_BLK_DEV_NVME=y
+5. test method:
+Use rdtsc (cntvct_el0 can be use on arm64/arm) to obtain timestamps
+before and after finish_task_switch calling point, and created multiple
+processes to trigger context switches, then calculated the average
+duration of the finish_task_switch call.
+Note that using multiple processes rather than threads is recommended for
+testing, because this will trigger switch_mm (where spectre v2 mitigations
+may be performed) during context switching.
+The test code is attached at the end of the mail.
 
 
-vim +153 drivers/mailbox/rcar-mfis-mailbox.c
+I also tested the impact on bzImage size, which may affect
+embedded devices:
+1. kernel source && compiler: same as above
+2. config:
+base on default x86_64_defconfig, and setting:
+CONFIG_SCHED_CORE=y
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+CONFIG_NO_HZ_FULL=y
 
-   143	
-   144	#define IRQNAME_NUM 8
-   145	static int mfis_init_mchan(struct device_node *node, struct device_node *ch,
-   146				   const struct mfis_info *info, struct mfis_chan *mchan_top,
-   147				   int idx, int n, int chan, const char **dir)
-   148	{
-   149		struct mfis_chan *mchan = mchan_top + (idx * NUM_DIRECTION) + n;
-   150		char irqname[IRQNAME_NUM];
-   151		char suffix = 0;
-   152	
- > 153		if (!mfis_info_flag_has(info, MFIS_INFO_FLAGS_IRQ_NO_SUFFIX))
-   154			suffix = mfis_irq_direction_suffix[n];
-   155	
-   156		/* ex) "ch0" or "ch0a" */
-   157		scnprintf(irqname, IRQNAME_NUM, "ch%d%c", chan, suffix);
-   158	
-   159		/* use interrupt if it was RX */
-   160		if (strncmp(dir[n], "rx", 2) == 0) {
-   161			int irq = of_irq_get_byname(node, irqname);
-   162	
-   163			if (irq < 0)
-   164				return irq;
-   165	
-   166			mchan->irq = irq;
-   167		}
-   168	
-   169		mchan->chan = chan;
-   170		mchan->ctrl = n;
-   171	
-   172		return 0;
-   173	}
-   174	
+bzImage size:
+ | compiler | without patches | with patches  |
+ | clang    | 13722624        | 13722624      |
+ | gcc      | 12596224        | 12596224      |
+
+No size changes were found on bzImage.
+
+testing code:
+kernel(just for testing, not a commit):
+```c
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 8a4ac4841be6..5a42ec008620 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -395,6 +395,7 @@
+ 468	common	file_getattr		sys_file_getattr
+ 469	common	file_setattr		sys_file_setattr
+ 470	common	listns			sys_listns
++471	common	sched_test		sys_sched_test
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 81cf8452449a..d7e2095aeb7d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5195,6 +5195,36 @@ asmlinkage __visible void schedule_tail(struct task_struct *prev)
+ 	calculate_sigpending();
+ }
+ 
++static DEFINE_PER_CPU(uint64_t, start_time);
++static DEFINE_PER_CPU(uint64_t, total_time);
++static DEFINE_PER_CPU(uint64_t, total_count);
++
++static __always_inline uint64_t test_rdtsc(void)
++{
++    register uint64_t rax __asm__("rax");
++    register uint64_t rdx __asm__("rdx");
++
++    __asm__ __volatile__ ("rdtsc" : "=a"(rax), "=d"(rdx));
++    return rax | (rdx << 32);
++}
++
++static __always_inline void test_start(void)
++{
++	raw_cpu_write(start_time, test_rdtsc());
++}
++
++static __always_inline void test_end(void)
++{
++	const uint64_t end_time = test_rdtsc();
++	const uint64_t cost_time = end_time - raw_cpu_read(start_time);
++
++	raw_cpu_add(total_time, cost_time);
++	if (unlikely(raw_cpu_inc_return(total_count) % (1 << 20) == 0)) {
++		pr_emerg("cpu %d total_time %llu\n", raw_smp_processor_id(), raw_cpu_read(total_time));
++		raw_cpu_write(total_time, 0);
++	}
++}
++
+ /*
+  * context_switch - switch to the new MM and the new thread's register state.
+  */
+@@ -5264,7 +5294,10 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ 	switch_to(prev, next, prev);
+ 	barrier();
+ 
+-	return finish_task_switch(prev);
++	test_start();
++	rq = finish_task_switch(prev);
++	test_end();
++	return rq;
+ }
+ 
+ /*
+@@ -10861,3 +10894,18 @@ void sched_change_end(struct sched_change_ctx *ctx)
+ 		p->sched_class->prio_changed(rq, p, ctx->prio);
+ 	}
+ }
++
++static struct task_struct *wait_task;
++
++SYSCALL_DEFINE0(sched_test)
++{
++	preempt_disable();
++	while (1) {
++		if (likely(wait_task))
++			wake_up_process(wait_task);
++		wait_task = current;
++		set_current_state(TASK_UNINTERRUPTIBLE);
++		__schedule(SM_NONE);
++	}
++	return 0;
++}
+```
+
+User program:
+```c
+int main()
+{
+	cpu_set_t mask;
+	if (fork())
+		sleep(1);
+
+	CPU_ZERO(&mask);
+	CPU_SET(5, &mask); // Assume that cpu5 exists
+	assert(sched_setaffinity(0, sizeof(mask), &mask) == 0);
+	syscall(471);
+	// unreachable
+	return 0;
+}
+```
+
+Usage:
+1. set core5 as isolated cpu: add "isolcpus=5" to cmdline
+2. run user programe
+3. wait for kernel print
+
+v2->v3: https://lore.kernel.org/20251108172346.263590-1-qq570070308@gmail.com
+  - Fix building error in patch 1
+  - Simply add the __always_inline attribute to the existing function,
+    Instead of adding the always inline version functions
+
+v1->v2: https://lore.kernel.org/20251024182628.68921-1-qq570070308@gmail.com
+  - Make raw_spin_rq_unlock inline
+  - Make __balance_callbacks inline
+  - Add comments for always inline functions
+  - Add Performance Test Data
+
+Xie Yuanbin (3):
+  Make enter_lazy_tlb inline on x86
+  Make raw_spin_rq_unlock inline
+  Make finish_task_switch and its subfuncs inline in context switching
+
+ arch/arm/include/asm/mmu_context.h      |  2 +-
+ arch/riscv/include/asm/sync_core.h      |  2 +-
+ arch/s390/include/asm/mmu_context.h     |  2 +-
+ arch/sparc/include/asm/mmu_context_64.h |  2 +-
+ arch/x86/include/asm/mmu_context.h      | 23 ++++++++++++++++++++++-
+ arch/x86/include/asm/sync_core.h        |  2 +-
+ arch/x86/mm/tlb.c                       | 21 ---------------------
+ include/linux/perf_event.h              |  2 +-
+ include/linux/sched/mm.h                | 10 +++++-----
+ include/linux/tick.h                    |  4 ++--
+ include/linux/vtime.h                   |  8 ++++----
+ kernel/sched/core.c                     | 19 +++++++------------
+ kernel/sched/sched.h                    | 24 ++++++++++++++----------
+ 13 files changed, 60 insertions(+), 61 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
