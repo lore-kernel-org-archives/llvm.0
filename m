@@ -1,258 +1,605 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E016238C0D
-	for <llvm@lists.linux.dev>; Thu, 13 Nov 2025 13:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763042172; cv=fail; b=TY6gDZjnKcU8Z4UpRUXtouXDTK61ztBFoV0nLGYl2gwcZJV+J6iJ87MFYkp57hkqFiq0S8fthzb035+6CtxEYh9WTnWSTPQTaSi8r/80nfNXST2DePY+Qasgbf/Zv1IqaIw/6E7ltQJcDC+k+YYAAeoCfPdCIuvK71Vy5a0TwJs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763042172; c=relaxed/simple;
-	bh=x50vR+yEkTE6ecMo8BiQoHM1EN/lRIJYOPsPMLCwrsg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=aOCylaJDrlBqH+bZQlG0ixuH52lg1pYSpKgBi2y+HQ5E5aKUj6a+/v/syhz1WZNXk64eW5V4J75vKRpvn8hLH+Imca+Eg/RGsveGzkjFx0qhVt4NAXur96i/ZTfzBRK4ahwyU0Lvvd6idNihysblZWpAAkBkiJ4+V62WBDks4mM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LCpTXoI5; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=pnnKWnRQ; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415F5284B29;
+	Thu, 13 Nov 2025 14:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763043750; cv=none; b=m+mjVpg1xUPNgewnl6HyV/0OdI1OyB32itYSabgtAlEkTYxLd/pg8JkGk/kc4XPIZh5sjjAO8437Ib0algE6X7SN/YZWFQeAdSqEOfR50MEKC4pXod4xyAuZmZUQvbC71M276o3qPmVnX7PnJVXTtH7srAeLHQN1SMCv9FJDEsE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763043750; c=relaxed/simple;
+	bh=xnnsvmsynLhCJA8kqZ6OTK0ZZJoL8EJpbcjlNFMyjpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fWVZl55FvNAuhKjHOBWvdtMM3deTdVF67WT/Doq35O9C5LgGerzENFAYwxfIfQn6SJ6jw2jyw+vg18N5lToHbd5+fbJAAL7M8fZOVpZxr7hZR2qgMrihVVB8R1EHadeDtZH7V969zbsby3WPwWGXoHIv1JIymfPsraDWN8dYXO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XJsQ5X7U; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LCpTXoI5";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="pnnKWnRQ"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5ADCUavI023170;
-	Thu, 13 Nov 2025 13:56:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=GHbr/iHJex9MfnaaLiRkhV0+5aHJWfy4IIMClL8EvtE=; b=
-	LCpTXoI5kr9yvAlluWJg6UBY0kq8yzSy6DU9RAfr2RZ4X22up1uBthwpXg3UXaZ6
-	ewX4QSbY69ZrFF+7AXnHdsG040isToalj9b7HtFZvo177prgVk+Du9UGpXfkK2hz
-	4AUqfDfqUCAcpzNLF5fqSZu8lO2/XlMbgwo0eln1yg3Gx5ovzglNp+6w6YUmtLP0
-	nBm8bhZUNXmrI/burmm8c5ijdQbDjJmyLqHFqS4C7BpPRF0+lDS0Qvdc4aagLY/C
-	r8D2sxtbbcyzs3YdRsuDBQNms0WX9UgYSiVWh/OxV8Zkvd2WrUvasTe0mnNTaN5q
-	AeLMcqdrEC0MgGdjtqdiIA==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4acvsst8ny-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 13 Nov 2025 13:56:03 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5ADButeQ010789;
-	Thu, 13 Nov 2025 13:56:02 GMT
-Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012020.outbound.protection.outlook.com [40.107.209.20])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a9vanww2x-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 13 Nov 2025 13:56:02 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v+XEUrPnexUS++QAGWJZAyffHA3rTLWx+389Qw+yDTDNuoTpWj4GsKJxmnlO4ltMqENBx4mxDnT3SbPxwkkrbG0umUwDctvg2iSteKEjYY/MJJEQdTdUUb7BAcW9HzCVWrRCb4otczf0d9IJKuMoEMGhaBMMcuJCQ+V3ZIzfaz299iVi3Tg7v49jqTHXnVoezGsocZfwN0gJSlnSSfxEDjbsHvieXX909nlvRfjXWlkhqJJ9K4nh1l68c0IP+YmS+HVRx8iHUTniUMNN9/bGE44ZVWbxjMl5L0ehZo5VCQQs9TF93szl+S0NTCrZX0A8CyrOnNq//XRmSDPQzlQ8kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GHbr/iHJex9MfnaaLiRkhV0+5aHJWfy4IIMClL8EvtE=;
- b=kvuaGiqyp7WLf8gqs3FROhttf5/GxYlaJkqcDjHMv9MxZ5BS74OgBQMwlcNAznBvRtAJiaSpHcvamu+EfBmMuZaaAZiB9CGFXKPybKg0KiT741ZTLB5luwU/YXhJY/wgBPgFX+LLLmVOt3Ab0Zuc60uQOT3dInYj41FlWJKf5xFkUgVYbPy5iqVEpl+iFIFKAqWKwjlhOQtzZG1iVnKjz4L1Lp4I8YjPzAbTvOlx4aT3dgJDr5zcMZb8wIddCimHn0goxzV/P+7Fp2mrMP1Qk/FU3Mk9ofsqogFu6ag6Qy4HsjRryp660SkDB68jwjF91dIBkJM7OIIHpNM4LB1x2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GHbr/iHJex9MfnaaLiRkhV0+5aHJWfy4IIMClL8EvtE=;
- b=pnnKWnRQyU5uP3bqwU6lMOejko+muKQalMPhFuY/FCoT7lWlPfM+QL/tZDFYXHPOMZH4SaCZJLf2AWjZ1K6naAsE8uoc/XFKRh4ZiWkDSD9GhD1anUGZD1DRcslG0j5VcFO5d7frn9ykl8rlWkiOy6UMhn6aJm1y5DsveCLaVQw=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by PH8PR10MB6623.namprd10.prod.outlook.com (2603:10b6:510:221::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Thu, 13 Nov
- 2025 13:55:52 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::743a:3154:40da:cf90]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::743a:3154:40da:cf90%4]) with mapi id 15.20.9298.010; Thu, 13 Nov 2025
- 13:55:52 +0000
-Message-ID: <28311b28-f6f9-4d41-9ef6-c1977b932073@oracle.com>
-Date: Thu, 13 Nov 2025 08:55:50 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] nfsd: Mark variable __maybe_unused to avoid W=1
- build break
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc: Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
-        Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>,
-        Tom Talpey <tom@talpey.com>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-References: <20251113083131.2239677-1-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From: Chuck Lever <chuck.lever@oracle.com>
-In-Reply-To: <20251113083131.2239677-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH5PR05CA0019.namprd05.prod.outlook.com
- (2603:10b6:610:1f0::27) To BN0PR10MB5128.namprd10.prod.outlook.com
- (2603:10b6:408:117::24)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XJsQ5X7U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763043747; x=1794579747;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xnnsvmsynLhCJA8kqZ6OTK0ZZJoL8EJpbcjlNFMyjpQ=;
+  b=XJsQ5X7Ubiuy5L7e5UgOD/v4Sef1i7R+3QA3KuFsd2V3N0eeJf9kIjJW
+   rG8IXNf3DYYm0nWPlS0L9gJgl6BYzlCd9YvWU1ZNRJZD0+eM6M8hB47yZ
+   77mFlcu5HwcIc5DMNistHmzKcrpl/JTDOPb9E3eU2ZWDK35QNbGs73PiZ
+   5fyw4y/a0zm9DIw1ynfq1Y4QFYP34Q6z19aDUKxL8SEMQamKlP6XDerFW
+   8jXpkfrYRJjZ4MgGNFLru2ojukgTIhmx510p6MvNu+HZZM1FVlFyq4GOS
+   mZBR5gtj50kBObUfDdItDgHCYk78k64YT7J959+wfMrapPPnIVWUo0fay
+   Q==;
+X-CSE-ConnectionGUID: ONZ20KjbS7mX3LfjpG4wMA==
+X-CSE-MsgGUID: VPCfnt54SYKZ2hPoIr/DBQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="65030938"
+X-IronPort-AV: E=Sophos;i="6.19,302,1754982000"; 
+   d="scan'208";a="65030938"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 06:22:26 -0800
+X-CSE-ConnectionGUID: fDQyYIHgThyX/u+ldziGTA==
+X-CSE-MsgGUID: riG7g50QQkKnxx+WkBLq3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,302,1754982000"; 
+   d="scan'208";a="220313534"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 13 Nov 2025 06:22:21 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vJYDL-0005QI-0m;
+	Thu, 13 Nov 2025 14:22:19 +0000
+Date: Thu, 13 Nov 2025 22:21:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shivank Garg <shivankg@amd.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Zach O'Keefe <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, shivankg@amd.com,
+	Branden Moore <Branden.Moore@amd.com>
+Subject: Re: [PATCH 1/2] mm/khugepaged: do synchronous writeback for
+ MADV_COLLAPSE
+Message-ID: <202511132138.jhG6hoZ4-lkp@intel.com>
+References: <20251110113254.77822-1-shivankg@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB5128:EE_|PH8PR10MB6623:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e1faeba-4d7c-4b16-cf2d-08de22bc5c0a
-X-LD-Processed: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?ekkvY1R0UGRpZ1Z1ZEozWTNBTmFveGgrbHdXMkRyQmFmZzFxTStUOFVsQVFq?=
- =?utf-8?B?RjdOajRHeFBrZUpvNWVINnU2N1FaNUJMblJlaWRWWHdJYkJjY294WmlPUEE4?=
- =?utf-8?B?RGdScTl3K0hsN1Qzc0VsTFpISE5HNzRBbHRraEM5cUJkWS9NQ2IvUFVlNHB2?=
- =?utf-8?B?WWdZcW42aGlBWHJTaEVsMDNaRVpWYzVNUFZBOTFSMUoyMGlEL3RIMk1iaVZG?=
- =?utf-8?B?OXVIU0ZVeGFaZXlZUlBZekRUZ0VHU2l4dER2bGZNYUpnMWNEL0doQ2xqSC94?=
- =?utf-8?B?V0oraWdXRjNkL1BJZ0swSE5HSndGTmNlMThSc2NiakpWc3FFbFNWeG5MRk5I?=
- =?utf-8?B?ZGg0Z1E3REQ2UXc4ek5raDBtbDVoY1c5M0ZNRG4ybklvYlBuT3FheWZXanV3?=
- =?utf-8?B?bnZEL2R5dExsM0lORjF3YnVVaHJHS1V1eGQrbDRtQlhpNzB6UHpSam5mbXdG?=
- =?utf-8?B?ZnJWdFhhSitkNDEyVjY4WmRKKytEWng0OWNoMGUwdFh2RE80Z1k4aHppNTNM?=
- =?utf-8?B?NjJ6TExqWmJzNXE0aVFTRCtZVzdJRFBndkpQRzhNL00ySTdVTVltTzlOTThT?=
- =?utf-8?B?aWZ1b2o0TWthZklhUkgrQ2lCTi83eGVXdXlvc2J6TVFFaDd1cGNyT3hGV3Vp?=
- =?utf-8?B?ZlBhOWtRLzZ2dmtBLy9oRVBDdG5CdmoxNDF0anN4QzcwdERXQ0U5dHNFZXMv?=
- =?utf-8?B?L1FCY1EydERveXRjU2Qvc0hUdndWemFnS2tTR0JSL3E2My9ObHowOFZqRGVX?=
- =?utf-8?B?bDZNTWFGNnBOUEVBU0xsQlF1SVZobVloc0J4b2FVZGVoU2FwZUxuNUtoYW1r?=
- =?utf-8?B?R3V3Zm9QRlhjZDlBa0VjN3dnbE1xT3JXeE5ac3Q5RnBCT21GYldWRGtsQ1Jo?=
- =?utf-8?B?TWZkUk40NHdQWmp0TEZzSDhaVmcrUDd5TEJodnNEU0JyQnJOajVYQjBYMEJt?=
- =?utf-8?B?ZXovUW9FWkdBZEo5TXUzaUVwdEdwSlI4aVR6RFJVaUZvUHd6M21kZWdkem1l?=
- =?utf-8?B?QjhxaFpDQ1IrUzJ0dDNRY0RSWU1OUFBDR01rTXB0WklPR29pV1U2NkdqcU16?=
- =?utf-8?B?RXdsQWxkdy9ScGRYZXZjbUlLY0pkQkRoa2wrZERvcTdwcWNReWNLbkFrbk9V?=
- =?utf-8?B?ZVZ4WllCK0JOTEpqU2E5VnlxSXc5OHRNZkFuY1UxOFVrdFF0d1VjRGY3ZGFS?=
- =?utf-8?B?OUpLZUExQ1lSek8zUzg4enppL0R4Qkl5ZDUyMXAzVU5pUHRCd1R1THVpOG5Z?=
- =?utf-8?B?bi92R2wvblQ3QWd6S2dKZFZQWUF1WTM3QzVsVFFnUFJpd0gxa3BCa3d5SmtJ?=
- =?utf-8?B?VVIvUEc2cTJBL05aN2dtaExhR1JvbzU2aFlScWFoRXAxcDVncUJRcFYyV1li?=
- =?utf-8?B?V3VtcjVVWVFzNDNVcC82K0xUYlNieGNDcVJzNUlsblBsT21ncEdxTWJ0QXpV?=
- =?utf-8?B?S3BFNlVJS0FESXk4aUxFTkFFSjBid1loZW9nR3MwR2RWZ0Z5OGFYemJVWXBI?=
- =?utf-8?B?dnc5a3RRWnBSL05rTmxkdWYrdks5dzRldXJiWEV2WVM3VXZIZDQzNk4xbmNK?=
- =?utf-8?B?SkhuUEdFZStDZFB4WXpQbUQ5bDM0MW5xbmhEMnRUZ1dMem5lM1drbENqOEVK?=
- =?utf-8?B?aTNRb2RnR0xrWjU1K2ZENkpBU2JVSFlobTZlcld5cnQzSzloVUZRTnV2Z3pw?=
- =?utf-8?B?UWg4Qk5aak1SdHN2TG9lejFzR2F5alZHcGNUVXZQOHUwaERQU3ZhYzk4OUFo?=
- =?utf-8?B?RkV2czhKUU1jUldzNnFFVUJXYUdGLy9obE15cWttaFlpbUZOUUlwRmYxMlM2?=
- =?utf-8?B?NEdQOEdDd2xYdnp4N3JRQXJLNE1EYzF6eUVSNklyN0NZTmNwK0VWSDV0b0VM?=
- =?utf-8?B?NjRFYWVDN0JibUJPTExOOWhES0pZOFpVR1ROanlBTVBaekZjTEZsTnVzL21z?=
- =?utf-8?Q?rnl/AYtHpbVrBTeSHgNiwa7N0sXnSzGb?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?utf-8?B?Sm5EMTVqQWhlZG90dm9McDFJbElvVXpjV05LZVBUbHhESlRpdVlGbnlvNUZx?=
- =?utf-8?B?Qy92dEMyRmp0KzAzR2RuK0pQV0RyMEptS29EcnFNZks0aVlKclpkQ3dPb2tH?=
- =?utf-8?B?aFlqNWdFTlM1RHdCdnFDRFdMOGN3UHlXa3JLMklXOUhPeFJlSkR6TFZqaVJk?=
- =?utf-8?B?K1MzbWNwQlRCd3BXcWVEeXNHZjI5Y2dBbWRqbityMm9maW1GSmpRcXM5YjE1?=
- =?utf-8?B?Q25RUmNUUUV5NFdTREdQQkFOWENZL0Q4U25KTGlKeW1pai9XL0pZbmpQTElW?=
- =?utf-8?B?YkJIMnRJaUdwVFVTN2FkTkFLL0kxUkkxWk1aMHp3SWR6TUFRMkZ4YmJZYmRl?=
- =?utf-8?B?S2JXQjN1RG1KVXN0TGRkR2luMlY4SG4rR3pPdVdsVHpyYmR6bjBJbExUajNT?=
- =?utf-8?B?ZE5XdTBQcEZxQ0MzZGJRTHhadW5wYVJuQldEUEFmUFFJVVVMNG5WK29OYm42?=
- =?utf-8?B?WWRsdm9PaGgzYThqWFdFTTY2bHZJQ0hZcnJUUHF2N2lEMWlYeTdEa2ppVVBi?=
- =?utf-8?B?MzV1NUlwSUNlV1B6alRmaW93SHNpWjVTaE9RL21SOUpvVmdCM0xNbSs4ejlO?=
- =?utf-8?B?UUtjb2VDTmxQc0RnQjBtWGtJRFpHVldSMHhtVWFkblVsbGxNbWJ6M1EyTnhQ?=
- =?utf-8?B?cGpkNUFzejQxWHZIS1VKeTdPSSs4ZEF6UWRzSGMyRkp1OEVERWptT0NYc2xj?=
- =?utf-8?B?N215dU04aVZBZ0dxd2hVbUtnZzJjd281OENmZTNnSlpmR3NiQVpSV1Q2Q3Bq?=
- =?utf-8?B?cDBrODl5d3d6QU9wd1gwcytTcGlwVTlCK2Y0b0xhc2N2RnVVdlJmNndsakZj?=
- =?utf-8?B?eEk5dVgzOENXZFlvWHU5SitOSmtPK2x0VzQvc0xFL0hNMVdLc3NZcUdubTRW?=
- =?utf-8?B?TXBPeVJnOGpIU2pLSCtSc2ZUYTlGN1NkaDFvTXZwVUswNTZpbGlmbUVTRTN1?=
- =?utf-8?B?bXAwZjVCaVNXKzI0K1JpM2ZLclBjRkJQd3lhTDllOUE2emxQZDd0ZXBmT1Ni?=
- =?utf-8?B?SC83YWhqdStzbWJJTExIUVEyclFBcE93Vjl4eUUxVmhUUUFKQUFZamc0N1Bt?=
- =?utf-8?B?YitHZndqcmRwNlNJTTJmK0VxUkpnVUxQZFdBclFvRzBaTWhpTHhnT29Uc29I?=
- =?utf-8?B?aDZDeGNDMlJ6MFRkNWZUZFNOZ0F6SzkweVpuTEtoREp5dUFqRDBXcE5uYnlF?=
- =?utf-8?B?NUlSYTEzMVZ6aUVvbHB3d1hhMUxDTVFtdEt0MHRmd3BzQ2RUcVlJSFhPMUFJ?=
- =?utf-8?B?aUFTdnVQcXpLNG1lR3pjRlpVSFpUL1piR28wUWU2ZjYwMGk5blJ5ODlrSWRK?=
- =?utf-8?B?WU01UHgxWXJYN01VUzAvZzdoUy9sNFloOWF2UkdVVmJHSTVCNkVLY0htU0px?=
- =?utf-8?B?N1NUcFpmODB2ZnhQR3U4djZEbUpaWXNpVHZDVStadGpEQVAycGZheXlOdUY1?=
- =?utf-8?B?YUFTcDV0TGNSN1lFSmZ3ZTdTN2huSGJVRk1jOFQ2REF1bkhrRlFqTTJRNGhU?=
- =?utf-8?B?VVNsK1hxaFpCVldwOExhMjV6eTk5cE5vaUw5cmR2SVpFR2tjUnQzNVVXaVdK?=
- =?utf-8?B?U083VEZud3dSa1IxYnZZL0grZWMyQWhudmJUcGhzUHZtdEFkdmtXUDlZaHNN?=
- =?utf-8?B?U2wzNXRLRlM2MFRVeUlJN0tlTzFOdDhGeUEyU1Jjajc5SG1aQzJZUGVMdzVM?=
- =?utf-8?B?MTd3NlFWQVYxSGlWbGFTYUE3S3lDQk12b1pCVGhrU0lRbmNtQk9xZUdrclRD?=
- =?utf-8?B?YTBwQ1c4WUtWZkZTRjN0VGh3Q2dESGd6SlR5YUNsY2wwelJrSnN3SDFGVFJt?=
- =?utf-8?B?RWdMVG1hdEVoY2toZHNoQ280eTZyOTFqLzRwUjBzQlZ6c0Z5TExzNU43V282?=
- =?utf-8?B?cVh2SWZWSllKYzdIWjZwYnZrWTVlOG5uN0ZIallIa1lVakxLT2tuT0RoWXY3?=
- =?utf-8?B?SXkxK3hobGNnY21jcDEwUFBiTmplYnlEdnRVdWx6TTR3SnZndnB5VUtNTGFq?=
- =?utf-8?B?NVNzOC9PMzVRdUJTcmY3ZWxGQkhISzRVZWpKN3ZQU3VMd3grYThMTUt4eXFB?=
- =?utf-8?B?OVV3RmZ2K1pNWTF4dG12NzUzNFFTSnRwOGFRUnZBZTRENzF6WEJrRXdKZXZ3?=
- =?utf-8?B?TzZPK0ErR2t5UUJSaktneURyRytlc2JLcHFDMkZVcjF1STBkZU1ZeFFGTGM0?=
- =?utf-8?B?cmc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	zlSUwmeGUB0qReDuGlpPNW402NAq2akJYLexo85kJm8HKk43PTwr7XirRanTCf4Kwgbx5DQoyFIzc8bgO/Uqlb5h9fV4nrNSozSEErJYQjt3vPfm/FSJ4WbnV6JsPiSkjdDXsPGTq3i84fwTia6avxF3u2kvva9yNDY7Li6QgCNBCo0Acy8XtxS4Uwv/mOC7+TyGLMXZAbq0RYCaPRlVQkko/gblwQFRvKOvtp9OwEWPwZuROjaCyQrBDzpe2Z94YivRHEuJbivgDcQuUrYtH9tO0WS4M6DMVKnkdJhr5QoNe0sUb/64kFWDHhrU4Pwm8R1DHSSkfO8BR8ANxqObAqchcIM8+GhiPiWQBBF/d9Oxl6R14pfH58koedhy7YgDmqC2HNdiT4TOvOBl3aZ6W9yGJ1DN6VoNWmWdyl1/dmvmgKEphXzuTaa+EpLbIi+52pmdn6nkavg9WVRkQT383O3CyfupIyG4kclui+gliixpyiV7nTYWHzbyKfBTc6iv4cwEwXsY5hepNrBL4iC6LyzYLSKAmdBDNmsGMKlgOSOgix86Mwswv25RzQp/jKPUYbkh9OM4HJ9vz8kJm3Li5DuqEXrBkMYcKhlvdeasvz8=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e1faeba-4d7c-4b16-cf2d-08de22bc5c0a
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2025 13:55:52.8157
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yanQCO4crlJWKZ7JMsnMV8hWDbzolm5j7k25jNw8dqZIN+n+byrH8+viuKhpR9LoMOMt7E3yI2mfLun7ihYqiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6623
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-13_02,2025-11-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 mlxscore=0
- phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2511130106
-X-Authority-Analysis: v=2.4 cv=bJUb4f+Z c=1 sm=1 tr=0 ts=6915e373 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=PVWyGGI_dUP4S9UKt5QA:9 a=QEXdDO2ut3YA:10
- cc=ntf awl=host:12100
-X-Proofpoint-GUID: -T_HqXrojOvpgnP8P6yiSwjNE9ZeAwIp
-X-Proofpoint-ORIG-GUID: -T_HqXrojOvpgnP8P6yiSwjNE9ZeAwIp
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDEyMyBTYWx0ZWRfX3pgBy+Uz40uM
- 4u8E3gwH/BH0XvbVNRSs1IZ8/wwU6dHcbb4+FoSFvfOWjPjHwchLovYaSEdc1LmIMCMUvOMQxHf
- 87/watpVTT/GyjI+dy5cMe98+bICPiS/ieQtCIWsphjUubplflqv2WJp1k0gACl8KO+nsl/jIEK
- CxhhveC0ldR2ByKm2u2a7TpNQCzejC87s1qa6LpMzssY2iQy22tdMW0MQumie/GnMWBulBFimDs
- kuv/mwn+Jp9Z1OfKGfk2kxZO2dHjTItMsrjy/tkShOldhXZvjKvcBzoeQHHboUD4q520sK3hE4n
- ClWlz/mVyCHxJQVwO9zRVu6mrSLg3BnGya9sQXWnz/YEIqYtHcQ5VM29hMh47cyfbrYI626PMCa
- 5rey8o1uZwZnXgL5H3NXeSKZvv4LqCEgsu4khGKEPW2pSSBYZT4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251110113254.77822-1-shivankg@amd.com>
 
-On 11/13/25 3:31 AM, Andy Shevchenko wrote:
-> Clang is not happy about set but (in some cases) unused variable:
-> 
-> fs/nfsd/export.c:1027:17: error: variable 'inode' set but not used [-Werror,-Wunused-but-set-variable]
-> 
-> since it's used as a parameter to dprintk() which might be configured
-> a no-op. To avoid uglifying code with the specific ifdeffery just mark
-> the variable __maybe_unused.
-> 
-> The commit [1], which introduced this behaviour, is quite old and hence
-> the Fixes tag points to the first of Git era.
-> 
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=0431923fb7a1 [1]
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  fs/nfsd/export.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
-> index 9d55512d0cc9..2a1499f2ad19 100644
-> --- a/fs/nfsd/export.c
-> +++ b/fs/nfsd/export.c
-> @@ -1024,7 +1024,7 @@ exp_rootfh(struct net *net, struct auth_domain *clp, char *name,
->  {
->  	struct svc_export	*exp;
->  	struct path		path;
-> -	struct inode		*inode;
-> +	struct inode		*inode __maybe_unused;
+Hi Shivank,
 
-We typically use "#ifdef CONFIG_SUNRPC_DEBUG" instead for this purpose.
-I don't think that would be terribly out of place.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shivank-Garg/mm-khugepaged-return-EAGAIN-for-transient-dirty-pages-in-MADV_COLLAPSE/20251110-193519
+base:   e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+patch link:    https://lore.kernel.org/r/20251110113254.77822-1-shivankg%40amd.com
+patch subject: [PATCH 1/2] mm/khugepaged: do synchronous writeback for MADV_COLLAPSE
+config: arm64-randconfig-002-20251113 (https://download.01.org/0day-ci/archive/20251113/202511132138.jhG6hoZ4-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251113/202511132138.jhG6hoZ4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511132138.jhG6hoZ4-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/khugepaged.c:1867:7: warning: variable 'new_folio' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1867 |                 if (filemap_write_and_wait_range(mapping, range_start, range_end)) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/khugepaged.c:2284:40: note: uninitialized use occurs here
+    2284 |         trace_mm_khugepaged_collapse_file(mm, new_folio, index, addr, is_shmem, file, HPAGE_PMD_NR, result);
+         |                                               ^~~~~~~~~
+   mm/khugepaged.c:1867:3: note: remove the 'if' if its condition is always false
+    1867 |                 if (filemap_write_and_wait_range(mapping, range_start, range_end)) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1868 |                         result = SCAN_FAIL;
+         |                         ~~~~~~~~~~~~~~~~~~~
+    1869 |                         goto out;
+         |                         ~~~~~~~~~
+    1870 |                 }
+         |                 ~
+   mm/khugepaged.c:1847:39: note: initialize the variable 'new_folio' to silence this warning
+    1847 |         struct folio *folio, *tmp, *new_folio;
+         |                                              ^
+         |                                               = NULL
+   1 warning generated.
 
 
->  	struct svc_fh		fh;
->  	int			err;
->  	struct nfsd_net		*nn = net_generic(net, nfsd_net_id);
+vim +1867 mm/khugepaged.c
 
+  1815	
+  1816	/**
+  1817	 * collapse_file - collapse filemap/tmpfs/shmem pages into huge one.
+  1818	 *
+  1819	 * @mm: process address space where collapse happens
+  1820	 * @addr: virtual collapse start address
+  1821	 * @file: file that collapse on
+  1822	 * @start: collapse start address
+  1823	 * @cc: collapse context and scratchpad
+  1824	 *
+  1825	 * Basic scheme is simple, details are more complex:
+  1826	 *  - allocate and lock a new huge page;
+  1827	 *  - scan page cache, locking old pages
+  1828	 *    + swap/gup in pages if necessary;
+  1829	 *  - copy data to new page
+  1830	 *  - handle shmem holes
+  1831	 *    + re-validate that holes weren't filled by someone else
+  1832	 *    + check for userfaultfd
+  1833	 *  - finalize updates to the page cache;
+  1834	 *  - if replacing succeeds:
+  1835	 *    + unlock huge page;
+  1836	 *    + free old pages;
+  1837	 *  - if replacing failed;
+  1838	 *    + unlock old pages
+  1839	 *    + unlock and free huge page;
+  1840	 */
+  1841	static int collapse_file(struct mm_struct *mm, unsigned long addr,
+  1842				 struct file *file, pgoff_t start,
+  1843				 struct collapse_control *cc)
+  1844	{
+  1845		struct address_space *mapping = file->f_mapping;
+  1846		struct page *dst;
+  1847		struct folio *folio, *tmp, *new_folio;
+  1848		pgoff_t index = 0, end = start + HPAGE_PMD_NR;
+  1849		loff_t range_start, range_end;
+  1850		LIST_HEAD(pagelist);
+  1851		XA_STATE_ORDER(xas, &mapping->i_pages, start, HPAGE_PMD_ORDER);
+  1852		int nr_none = 0, result = SCAN_SUCCEED;
+  1853		bool is_shmem = shmem_file(file);
+  1854	
+  1855		VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
+  1856		VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
+  1857	
+  1858		/*
+  1859		 * For MADV_COLLAPSE on regular files, do a synchronous writeback
+  1860		 * to ensure dirty folios are flushed before we attempt collapse.
+  1861		 * This is a best-effort approach to avoid failing on the first
+  1862		 * attempt when freshly-written executable text is still dirty.
+  1863		 */
+  1864		if (!is_shmem && cc && !cc->is_khugepaged && mapping_can_writeback(mapping)) {
+  1865			range_start = (loff_t)start << PAGE_SHIFT;
+  1866			range_end = ((loff_t)end << PAGE_SHIFT) - 1;
+> 1867			if (filemap_write_and_wait_range(mapping, range_start, range_end)) {
+  1868				result = SCAN_FAIL;
+  1869				goto out;
+  1870			}
+  1871		}
+  1872	
+  1873		result = alloc_charge_folio(&new_folio, mm, cc);
+  1874		if (result != SCAN_SUCCEED)
+  1875			goto out;
+  1876	
+  1877		mapping_set_update(&xas, mapping);
+  1878	
+  1879		__folio_set_locked(new_folio);
+  1880		if (is_shmem)
+  1881			__folio_set_swapbacked(new_folio);
+  1882		new_folio->index = start;
+  1883		new_folio->mapping = mapping;
+  1884	
+  1885		/*
+  1886		 * Ensure we have slots for all the pages in the range.  This is
+  1887		 * almost certainly a no-op because most of the pages must be present
+  1888		 */
+  1889		do {
+  1890			xas_lock_irq(&xas);
+  1891			xas_create_range(&xas);
+  1892			if (!xas_error(&xas))
+  1893				break;
+  1894			xas_unlock_irq(&xas);
+  1895			if (!xas_nomem(&xas, GFP_KERNEL)) {
+  1896				result = SCAN_FAIL;
+  1897				goto rollback;
+  1898			}
+  1899		} while (1);
+  1900	
+  1901		for (index = start; index < end;) {
+  1902			xas_set(&xas, index);
+  1903			folio = xas_load(&xas);
+  1904	
+  1905			VM_BUG_ON(index != xas.xa_index);
+  1906			if (is_shmem) {
+  1907				if (!folio) {
+  1908					/*
+  1909					 * Stop if extent has been truncated or
+  1910					 * hole-punched, and is now completely
+  1911					 * empty.
+  1912					 */
+  1913					if (index == start) {
+  1914						if (!xas_next_entry(&xas, end - 1)) {
+  1915							result = SCAN_TRUNCATED;
+  1916							goto xa_locked;
+  1917						}
+  1918					}
+  1919					nr_none++;
+  1920					index++;
+  1921					continue;
+  1922				}
+  1923	
+  1924				if (xa_is_value(folio) || !folio_test_uptodate(folio)) {
+  1925					xas_unlock_irq(&xas);
+  1926					/* swap in or instantiate fallocated page */
+  1927					if (shmem_get_folio(mapping->host, index, 0,
+  1928							&folio, SGP_NOALLOC)) {
+  1929						result = SCAN_FAIL;
+  1930						goto xa_unlocked;
+  1931					}
+  1932					/* drain lru cache to help folio_isolate_lru() */
+  1933					lru_add_drain();
+  1934				} else if (folio_trylock(folio)) {
+  1935					folio_get(folio);
+  1936					xas_unlock_irq(&xas);
+  1937				} else {
+  1938					result = SCAN_PAGE_LOCK;
+  1939					goto xa_locked;
+  1940				}
+  1941			} else {	/* !is_shmem */
+  1942				if (!folio || xa_is_value(folio)) {
+  1943					xas_unlock_irq(&xas);
+  1944					page_cache_sync_readahead(mapping, &file->f_ra,
+  1945								  file, index,
+  1946								  end - index);
+  1947					/* drain lru cache to help folio_isolate_lru() */
+  1948					lru_add_drain();
+  1949					folio = filemap_lock_folio(mapping, index);
+  1950					if (IS_ERR(folio)) {
+  1951						result = SCAN_FAIL;
+  1952						goto xa_unlocked;
+  1953					}
+  1954				} else if (folio_test_dirty(folio)) {
+  1955					/*
+  1956					 * khugepaged only works on read-only fd,
+  1957					 * so this page is dirty because it hasn't
+  1958					 * been flushed since first write. There
+  1959					 * won't be new dirty pages.
+  1960					 *
+  1961					 * Trigger async flush here and hope the
+  1962					 * writeback is done when khugepaged
+  1963					 * revisits this page.
+  1964					 *
+  1965					 * This is a one-off situation. We are not
+  1966					 * forcing writeback in loop.
+  1967					 */
+  1968					xas_unlock_irq(&xas);
+  1969					filemap_flush(mapping);
+  1970					result = SCAN_FAIL;
+  1971					goto xa_unlocked;
+  1972				} else if (folio_test_writeback(folio)) {
+  1973					xas_unlock_irq(&xas);
+  1974					result = SCAN_FAIL;
+  1975					goto xa_unlocked;
+  1976				} else if (folio_trylock(folio)) {
+  1977					folio_get(folio);
+  1978					xas_unlock_irq(&xas);
+  1979				} else {
+  1980					result = SCAN_PAGE_LOCK;
+  1981					goto xa_locked;
+  1982				}
+  1983			}
+  1984	
+  1985			/*
+  1986			 * The folio must be locked, so we can drop the i_pages lock
+  1987			 * without racing with truncate.
+  1988			 */
+  1989			VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+  1990	
+  1991			/* make sure the folio is up to date */
+  1992			if (unlikely(!folio_test_uptodate(folio))) {
+  1993				result = SCAN_FAIL;
+  1994				goto out_unlock;
+  1995			}
+  1996	
+  1997			/*
+  1998			 * If file was truncated then extended, or hole-punched, before
+  1999			 * we locked the first folio, then a THP might be there already.
+  2000			 * This will be discovered on the first iteration.
+  2001			 */
+  2002			if (folio_order(folio) == HPAGE_PMD_ORDER &&
+  2003			    folio->index == start) {
+  2004				/* Maybe PMD-mapped */
+  2005				result = SCAN_PTE_MAPPED_HUGEPAGE;
+  2006				goto out_unlock;
+  2007			}
+  2008	
+  2009			if (folio_mapping(folio) != mapping) {
+  2010				result = SCAN_TRUNCATED;
+  2011				goto out_unlock;
+  2012			}
+  2013	
+  2014			if (!is_shmem && (folio_test_dirty(folio) ||
+  2015					  folio_test_writeback(folio))) {
+  2016				/*
+  2017				 * khugepaged only works on read-only fd, so this
+  2018				 * folio is dirty because it hasn't been flushed
+  2019				 * since first write.
+  2020				 */
+  2021				result = SCAN_FAIL;
+  2022				goto out_unlock;
+  2023			}
+  2024	
+  2025			if (!folio_isolate_lru(folio)) {
+  2026				result = SCAN_DEL_PAGE_LRU;
+  2027				goto out_unlock;
+  2028			}
+  2029	
+  2030			if (!filemap_release_folio(folio, GFP_KERNEL)) {
+  2031				result = SCAN_PAGE_HAS_PRIVATE;
+  2032				folio_putback_lru(folio);
+  2033				goto out_unlock;
+  2034			}
+  2035	
+  2036			if (folio_mapped(folio))
+  2037				try_to_unmap(folio,
+  2038						TTU_IGNORE_MLOCK | TTU_BATCH_FLUSH);
+  2039	
+  2040			xas_lock_irq(&xas);
+  2041	
+  2042			VM_BUG_ON_FOLIO(folio != xa_load(xas.xa, index), folio);
+  2043	
+  2044			/*
+  2045			 * We control 2 + nr_pages references to the folio:
+  2046			 *  - we hold a pin on it;
+  2047			 *  - nr_pages reference from page cache;
+  2048			 *  - one from lru_isolate_folio;
+  2049			 * If those are the only references, then any new usage
+  2050			 * of the folio will have to fetch it from the page
+  2051			 * cache. That requires locking the folio to handle
+  2052			 * truncate, so any new usage will be blocked until we
+  2053			 * unlock folio after collapse/during rollback.
+  2054			 */
+  2055			if (folio_ref_count(folio) != 2 + folio_nr_pages(folio)) {
+  2056				result = SCAN_PAGE_COUNT;
+  2057				xas_unlock_irq(&xas);
+  2058				folio_putback_lru(folio);
+  2059				goto out_unlock;
+  2060			}
+  2061	
+  2062			/*
+  2063			 * Accumulate the folios that are being collapsed.
+  2064			 */
+  2065			list_add_tail(&folio->lru, &pagelist);
+  2066			index += folio_nr_pages(folio);
+  2067			continue;
+  2068	out_unlock:
+  2069			folio_unlock(folio);
+  2070			folio_put(folio);
+  2071			goto xa_unlocked;
+  2072		}
+  2073	
+  2074		if (!is_shmem) {
+  2075			filemap_nr_thps_inc(mapping);
+  2076			/*
+  2077			 * Paired with the fence in do_dentry_open() -> get_write_access()
+  2078			 * to ensure i_writecount is up to date and the update to nr_thps
+  2079			 * is visible. Ensures the page cache will be truncated if the
+  2080			 * file is opened writable.
+  2081			 */
+  2082			smp_mb();
+  2083			if (inode_is_open_for_write(mapping->host)) {
+  2084				result = SCAN_FAIL;
+  2085				filemap_nr_thps_dec(mapping);
+  2086			}
+  2087		}
+  2088	
+  2089	xa_locked:
+  2090		xas_unlock_irq(&xas);
+  2091	xa_unlocked:
+  2092	
+  2093		/*
+  2094		 * If collapse is successful, flush must be done now before copying.
+  2095		 * If collapse is unsuccessful, does flush actually need to be done?
+  2096		 * Do it anyway, to clear the state.
+  2097		 */
+  2098		try_to_unmap_flush();
+  2099	
+  2100		if (result == SCAN_SUCCEED && nr_none &&
+  2101		    !shmem_charge(mapping->host, nr_none))
+  2102			result = SCAN_FAIL;
+  2103		if (result != SCAN_SUCCEED) {
+  2104			nr_none = 0;
+  2105			goto rollback;
+  2106		}
+  2107	
+  2108		/*
+  2109		 * The old folios are locked, so they won't change anymore.
+  2110		 */
+  2111		index = start;
+  2112		dst = folio_page(new_folio, 0);
+  2113		list_for_each_entry(folio, &pagelist, lru) {
+  2114			int i, nr_pages = folio_nr_pages(folio);
+  2115	
+  2116			while (index < folio->index) {
+  2117				clear_highpage(dst);
+  2118				index++;
+  2119				dst++;
+  2120			}
+  2121	
+  2122			for (i = 0; i < nr_pages; i++) {
+  2123				if (copy_mc_highpage(dst, folio_page(folio, i)) > 0) {
+  2124					result = SCAN_COPY_MC;
+  2125					goto rollback;
+  2126				}
+  2127				index++;
+  2128				dst++;
+  2129			}
+  2130		}
+  2131		while (index < end) {
+  2132			clear_highpage(dst);
+  2133			index++;
+  2134			dst++;
+  2135		}
+  2136	
+  2137		if (nr_none) {
+  2138			struct vm_area_struct *vma;
+  2139			int nr_none_check = 0;
+  2140	
+  2141			i_mmap_lock_read(mapping);
+  2142			xas_lock_irq(&xas);
+  2143	
+  2144			xas_set(&xas, start);
+  2145			for (index = start; index < end; index++) {
+  2146				if (!xas_next(&xas)) {
+  2147					xas_store(&xas, XA_RETRY_ENTRY);
+  2148					if (xas_error(&xas)) {
+  2149						result = SCAN_STORE_FAILED;
+  2150						goto immap_locked;
+  2151					}
+  2152					nr_none_check++;
+  2153				}
+  2154			}
+  2155	
+  2156			if (nr_none != nr_none_check) {
+  2157				result = SCAN_PAGE_FILLED;
+  2158				goto immap_locked;
+  2159			}
+  2160	
+  2161			/*
+  2162			 * If userspace observed a missing page in a VMA with
+  2163			 * a MODE_MISSING userfaultfd, then it might expect a
+  2164			 * UFFD_EVENT_PAGEFAULT for that page. If so, we need to
+  2165			 * roll back to avoid suppressing such an event. Since
+  2166			 * wp/minor userfaultfds don't give userspace any
+  2167			 * guarantees that the kernel doesn't fill a missing
+  2168			 * page with a zero page, so they don't matter here.
+  2169			 *
+  2170			 * Any userfaultfds registered after this point will
+  2171			 * not be able to observe any missing pages due to the
+  2172			 * previously inserted retry entries.
+  2173			 */
+  2174			vma_interval_tree_foreach(vma, &mapping->i_mmap, start, end) {
+  2175				if (userfaultfd_missing(vma)) {
+  2176					result = SCAN_EXCEED_NONE_PTE;
+  2177					goto immap_locked;
+  2178				}
+  2179			}
+  2180	
+  2181	immap_locked:
+  2182			i_mmap_unlock_read(mapping);
+  2183			if (result != SCAN_SUCCEED) {
+  2184				xas_set(&xas, start);
+  2185				for (index = start; index < end; index++) {
+  2186					if (xas_next(&xas) == XA_RETRY_ENTRY)
+  2187						xas_store(&xas, NULL);
+  2188				}
+  2189	
+  2190				xas_unlock_irq(&xas);
+  2191				goto rollback;
+  2192			}
+  2193		} else {
+  2194			xas_lock_irq(&xas);
+  2195		}
+  2196	
+  2197		if (is_shmem)
+  2198			__lruvec_stat_mod_folio(new_folio, NR_SHMEM_THPS, HPAGE_PMD_NR);
+  2199		else
+  2200			__lruvec_stat_mod_folio(new_folio, NR_FILE_THPS, HPAGE_PMD_NR);
+  2201	
+  2202		if (nr_none) {
+  2203			__lruvec_stat_mod_folio(new_folio, NR_FILE_PAGES, nr_none);
+  2204			/* nr_none is always 0 for non-shmem. */
+  2205			__lruvec_stat_mod_folio(new_folio, NR_SHMEM, nr_none);
+  2206		}
+  2207	
+  2208		/*
+  2209		 * Mark new_folio as uptodate before inserting it into the
+  2210		 * page cache so that it isn't mistaken for an fallocated but
+  2211		 * unwritten page.
+  2212		 */
+  2213		folio_mark_uptodate(new_folio);
+  2214		folio_ref_add(new_folio, HPAGE_PMD_NR - 1);
+  2215	
+  2216		if (is_shmem)
+  2217			folio_mark_dirty(new_folio);
+  2218		folio_add_lru(new_folio);
+  2219	
+  2220		/* Join all the small entries into a single multi-index entry. */
+  2221		xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+  2222		xas_store(&xas, new_folio);
+  2223		WARN_ON_ONCE(xas_error(&xas));
+  2224		xas_unlock_irq(&xas);
+  2225	
+  2226		/*
+  2227		 * Remove pte page tables, so we can re-fault the page as huge.
+  2228		 * If MADV_COLLAPSE, adjust result to call collapse_pte_mapped_thp().
+  2229		 */
+  2230		retract_page_tables(mapping, start);
+  2231		if (cc && !cc->is_khugepaged)
+  2232			result = SCAN_PTE_MAPPED_HUGEPAGE;
+  2233		folio_unlock(new_folio);
+  2234	
+  2235		/*
+  2236		 * The collapse has succeeded, so free the old folios.
+  2237		 */
+  2238		list_for_each_entry_safe(folio, tmp, &pagelist, lru) {
+  2239			list_del(&folio->lru);
+  2240			folio->mapping = NULL;
+  2241			folio_clear_active(folio);
+  2242			folio_clear_unevictable(folio);
+  2243			folio_unlock(folio);
+  2244			folio_put_refs(folio, 2 + folio_nr_pages(folio));
+  2245		}
+  2246	
+  2247		goto out;
+  2248	
+  2249	rollback:
+  2250		/* Something went wrong: roll back page cache changes */
+  2251		if (nr_none) {
+  2252			xas_lock_irq(&xas);
+  2253			mapping->nrpages -= nr_none;
+  2254			xas_unlock_irq(&xas);
+  2255			shmem_uncharge(mapping->host, nr_none);
+  2256		}
+  2257	
+  2258		list_for_each_entry_safe(folio, tmp, &pagelist, lru) {
+  2259			list_del(&folio->lru);
+  2260			folio_unlock(folio);
+  2261			folio_putback_lru(folio);
+  2262			folio_put(folio);
+  2263		}
+  2264		/*
+  2265		 * Undo the updates of filemap_nr_thps_inc for non-SHMEM
+  2266		 * file only. This undo is not needed unless failure is
+  2267		 * due to SCAN_COPY_MC.
+  2268		 */
+  2269		if (!is_shmem && result == SCAN_COPY_MC) {
+  2270			filemap_nr_thps_dec(mapping);
+  2271			/*
+  2272			 * Paired with the fence in do_dentry_open() -> get_write_access()
+  2273			 * to ensure the update to nr_thps is visible.
+  2274			 */
+  2275			smp_mb();
+  2276		}
+  2277	
+  2278		new_folio->mapping = NULL;
+  2279	
+  2280		folio_unlock(new_folio);
+  2281		folio_put(new_folio);
+  2282	out:
+  2283		VM_BUG_ON(!list_empty(&pagelist));
+  2284		trace_mm_khugepaged_collapse_file(mm, new_folio, index, addr, is_shmem, file, HPAGE_PMD_NR, result);
+  2285		return result;
+  2286	}
+  2287	
 
 -- 
-Chuck Lever
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
