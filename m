@@ -1,141 +1,136 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9104A2D9792
-	for <llvm@lists.linux.dev>; Thu, 13 Nov 2025 11:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C1B257841;
+	Thu, 13 Nov 2025 11:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763033532; cv=none; b=Hh8OPUztiSbctsUuMvftlkElMhu9Ct2WQItw67y7bS++k+kEhOS62FfibcwDyxE04R+MDDhxYNTCgKuHeTjEtMYh2oVx77AMEy89OIs8ZbUosP/W80sKfpngH4Mw9nA4zLiHoFA57dJvkiFySlRxWVitTsnk51FAKSXmwSA34Ss=
+	t=1763034129; cv=none; b=o8tbAK7APCKWKQP8BG3RWTQVviySsKZfB2wgI7Twt3Em58D+vlEzdKAI7+G87EUHgynqW6zO8Ao5CTk/U+/o8OWKSQgzgX76Aw488NXZyT48PLll/qrqngTnBVqZNZLttExomHgqz4wJvtTKc+hIa/7F1eBrUqI7gZeRtJBfXds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763033532; c=relaxed/simple;
-	bh=7aINvlx9vPEOsqiJRX8SNonHphyIzNjHRMMlhsj9SaY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UdBpu1eareb4YNZ/kjJJ2tgQpXmMz8ryVZ5Y90C0Pjueq0FBlFLin3OwOsWEU9VbZqS8dc9m/ol0Q2zUKQzubeGzl6UGLrxaZFxvsLfGpTxOVMkPSqD0Cr1GaTW0IlX71UO/OwQuHo8LIkQY8iQu4slbaoYccFN+B1+ZnfcCyhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Kp+IxAbp; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763034129; c=relaxed/simple;
+	bh=Df0vS3ajxr6s+0fDZXYWEtjZjQAMfod3849JL3iEcdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qp2xgldXAjvWLA5Ku8jX7MC/muEZr9oYF3yT8FNFfROExFw/ahTKaK+vDOznNUDbKWPKP9rf3aDDVxLvVYvli4KZR4kXuDnZdm4By/ZlrBPOYhTEK0MHlnHx9YoN7JLtjx/YVgCaGV9pNXv7W1fasIG14U5d9ZJk8eDmgdCRfg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BUhFxRVs; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Kp+IxAbp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763033529;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=o4owfKUVHO/QpWR7AxE/ksdtH+LxgplAStqNyhlCIck=;
-	b=Kp+IxAbp+yDXP4wdzsX3KFKYy9IAiNvNXcFCe2wgeJ8fWz95/HetxDpd2xXj/QVGbbuwyI
-	Yz6RXM7crQnK8sUEnFmFvmL0W/VHtTIt8uqA2pvff+4GpPBvm0MgBcAdPwuwO+BInhUBRX
-	r/AdVHTQteFAkkw2/H9KtumIAkUCnR8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-230-lOspkbpTNWCE2ur4K7GYdQ-1; Thu,
- 13 Nov 2025 06:32:08 -0500
-X-MC-Unique: lOspkbpTNWCE2ur4K7GYdQ-1
-X-Mimecast-MFC-AGG-ID: lOspkbpTNWCE2ur4K7GYdQ_1763033527
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25B731801235
-	for <llvm@lists.linux.dev>; Thu, 13 Nov 2025 11:32:07 +0000 (UTC)
-Received: from [172.20.120.109] (unknown [10.30.44.79])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AAAA51800965;
-	Thu, 13 Nov 2025 11:32:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 110): Test report for master
- (6.18.0-rc5, upstream-mainline, 6fa9041b)
-Date: Thu, 13 Nov 2025 11:32:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BUhFxRVs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763034128; x=1794570128;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Df0vS3ajxr6s+0fDZXYWEtjZjQAMfod3849JL3iEcdI=;
+  b=BUhFxRVsqQRoaWQsUpwsUYXfwoEDmTgsAIw1of7su+XzF1LtoFCx8SRk
+   nSpZGpH3dSyYwjaiXb+N+P5Cps5FG73DH1noCVxHmgzmrJINUhezYqbXv
+   UelPFFzNvTm6Df4a9fpWrMRXaG2rc1zK39JCuIUkwiNMSth/durH5GDTk
+   zmuzkgWLiOLMbRgvJyCdI4Eu+8DDCLhdjM/m7ygSUrlxczVqWTRM44pnf
+   XBQsEw8M7STckTSphx+eHisTEECaaKG91E6WiKZz0bp82loIWt3A8BjUb
+   Bid5PVtMAIfej2cqS5HT/m50CQnwsx30ipCDJfsB5vqrtGHe0ucty77DK
+   A==;
+X-CSE-ConnectionGUID: P4l1qiJATeGlqoFfEYAbxA==
+X-CSE-MsgGUID: 2XT5ixp/SeeaYd/hmrXHrA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="75426213"
+X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
+   d="scan'208";a="75426213"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 03:42:08 -0800
+X-CSE-ConnectionGUID: l//c8kZmQC+JHGGsWPb5qw==
+X-CSE-MsgGUID: d9IRvUgtQ6yPrXbHTP/axA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
+   d="scan'208";a="189498227"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 13 Nov 2025 03:42:06 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vJViF-0005Gl-2q;
+	Thu, 13 Nov 2025 11:42:03 +0000
+Date: Thu, 13 Nov 2025 19:41:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Airlie <airlied@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [geert-renesas-drivers:master 24/62]
+ drivers/gpu/drm/xe/xe_device.c:997:22: error: use of undeclared identifier
+ 'id'
+Message-ID: <202511131932.czkz3HtQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <33171.125111306320800117@us-mta-230.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: MPQpJTFcVLMzXgzzlmALqWsSeqeoJZd0KE0l_t3q6Wo_1763033527
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
+head:   57dc6a91148b6b50bebe454028ce2488d74422df
+commit: 77c2336923d4a7f24d717ae22128e5cb65162650 [24/62] Merge remote-tracking branch 'drm/drm-next' into renesas-drivers
+config: arm-randconfig-004-20251113 (https://download.01.org/0day-ci/archive/20251113/202511131932.czkz3HtQ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251113/202511131932.czkz3HtQ-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511131932.czkz3HtQ-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.18-3' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/cel/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2155860860
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2155860860_x86_64_kernel-debug
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - bpf_test_progs [x86_64]
-                kselftests upstream - net [x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> drivers/gpu/drm/xe/xe_device.c:997:22: error: use of undeclared identifier 'id'
+     997 |         for_each_gt(gt, xe, id)
+         |                             ^~
+>> drivers/gpu/drm/xe/xe_device.c:997:22: error: use of undeclared identifier 'id'
+     997 |         for_each_gt(gt, xe, id)
+         |                             ^~
+>> drivers/gpu/drm/xe/xe_device.c:997:22: error: use of undeclared identifier 'id'
+     997 |         for_each_gt(gt, xe, id)
+         |                             ^~
+>> drivers/gpu/drm/xe/xe_device.c:997:14: error: use of undeclared identifier 'gt'
+     997 |         for_each_gt(gt, xe, id)
+         |                     ^~
+>> drivers/gpu/drm/xe/xe_device.c:997:22: error: use of undeclared identifier 'id'
+     997 |         for_each_gt(gt, xe, id)
+         |                             ^~
+   drivers/gpu/drm/xe/xe_device.c:998:18: error: use of undeclared identifier 'gt'
+     998 |                 xe_gt_shutdown(gt);
+         |                                ^~
+   6 errors generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [x86_64]
-    /distribution/command [x86_64]
-    /test/misc/machineinfo [x86_64]
-    Boot test [x86_64]
-    CKI/restraint [x86_64]
-    Reboot test [x86_64]
-    SELinux Custom Module Setup [x86_64]
-    Storage - blktests - throtl [x86_64]
-    Storage - blktests - ublk [x86_64]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
+vim +/id +997 drivers/gpu/drm/xe/xe_device.c
 
+dd08ebf6c3525a Matthew Brost     2023-03-30   988  
+dd08ebf6c3525a Matthew Brost     2023-03-30   989  void xe_device_shutdown(struct xe_device *xe)
+dd08ebf6c3525a Matthew Brost     2023-03-30   990  {
+b11a020d914c3b Jouni Högander    2025-10-31   991  	drm_dbg(&xe->drm, "Shutting down device\n");
+b11a020d914c3b Jouni Högander    2025-10-31   992  
+501d799a47e2b8 Maarten Lankhorst 2024-09-05   993  	xe_display_pm_shutdown(xe);
+501d799a47e2b8 Maarten Lankhorst 2024-09-05   994  
+501d799a47e2b8 Maarten Lankhorst 2024-09-05   995  	xe_irq_suspend(xe);
+501d799a47e2b8 Maarten Lankhorst 2024-09-05   996  
+501d799a47e2b8 Maarten Lankhorst 2024-09-05  @997  	for_each_gt(gt, xe, id)
+501d799a47e2b8 Maarten Lankhorst 2024-09-05   998  		xe_gt_shutdown(gt);
+501d799a47e2b8 Maarten Lankhorst 2024-09-05   999  
+501d799a47e2b8 Maarten Lankhorst 2024-09-05  1000  	xe_display_pm_shutdown_late(xe);
+b11a020d914c3b Jouni Högander    2025-10-31  1001  
+b11a020d914c3b Jouni Högander    2025-10-31  1002  	if (!xe_driver_flr_disabled(xe)) {
+501d799a47e2b8 Maarten Lankhorst 2024-09-05  1003  		/* BOOM! */
+501d799a47e2b8 Maarten Lankhorst 2024-09-05  1004  		__xe_driver_flr(xe);
+501d799a47e2b8 Maarten Lankhorst 2024-09-05  1005  	}
+dd08ebf6c3525a Matthew Brost     2023-03-30  1006  }
+dd08ebf6c3525a Matthew Brost     2023-03-30  1007  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+:::::: The code at line 997 was first introduced by commit
+:::::: 501d799a47e2b83b4e41d5306c2266ea5c100a08 drm/xe: Wire up device shutdown handler
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: TO: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+:::::: CC: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
