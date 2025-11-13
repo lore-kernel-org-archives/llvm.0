@@ -1,198 +1,134 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3604D433A6
-	for <llvm@lists.linux.dev>; Thu, 13 Nov 2025 04:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DBB302CBF;
+	Thu, 13 Nov 2025 04:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763008836; cv=none; b=PHCjczoaGMsscCWQIByh31LGKvNnxAZ6NalLqhAGYdBGOgZt+bzJ8pRiN+QlIS4JsZvXWzP2VhY8JDNgUhPE8JldAwZorblUUrdd2kP1NH/BInj1yHugfxFo3nTAyiF7twssEcIwVm1tKeLLH0X0Jo0qWM7lANMt0m+E14oJeFY=
+	t=1763009428; cv=none; b=A0WfN3RfOJHpgMrV8Mf2eS2acm92kZGWl92P6PWeUXVvMB7aH3JuDh8a/FtxHButvv+GNhoxV5/dn7D2cEKhT+Nwpg8ThFjHawVXqUYA4051SaR1WWFzxv1rd1ZG91ExDNyOv4iFyeQiP6EKvUZAWIBLuLM4cJu97QhzDRFOpdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763008836; c=relaxed/simple;
-	bh=juu52SAGCZwSkv94b8hvBh3dmTjc+fF26d4odP+mFag=;
+	s=arc-20240116; t=1763009428; c=relaxed/simple;
+	bh=vj11y1lwKZD2kwb5TCZMGnzf37/CZwEIwmuELzhZsFM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n0Hb8y4LcsXNmp/b+JQW+Sfut6OoStHDlMLlWXeoQ+MdUkFxMxR6x35lJRscnO8DoJoXuOrXjmP5OyN3yhZnzyMxMpPXqSPq+TvsIMEFA7PP7tuUsdKzZZXTEmN/Fi+Il9P4yVWHkM3Pg4JaLeYHr3Wj4WOcRRoE306ej4P969I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBlzJ5ye; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=S623DUFh3uDkpZ11sWhMki1fCtfX4s0CfDCJikTrbDSDTEnXctdjxYdk0FoqpPZqnbbym8uJBPC/AE0CJFWWk5oM78zXEijGSq30Ou8MCySoCs+hyG+mYhwBs7QTFp+x9ijNDKgM/i2xBXFy2Lp6D59Uvby88XtrPpFk8sC849A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=etmf315w; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBlzJ5ye"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-298456bb53aso3902105ad.0
-        for <llvm@lists.linux.dev>; Wed, 12 Nov 2025 20:40:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763008834; x=1763613634; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FDmPn0Nf9DwhMNzLqfPhzr9P36pEvch2Q8c/oMsgpUY=;
-        b=HBlzJ5yegN2+twbprNYRgQtK+TqZjT186L8qgZ1s4PM0iTzTFmfWMmGn7tlF5Ws3Up
-         F0jqR4oX9WEPvUB2/8Iy1X/cskVLiaiPPC0TMnrQQP7vqgU4knaHY8kMQRDHTeopEQGo
-         dzNf3Q8WHVMRYZGPgto2T+ZFsy9XeK4Vfj9jJ+3O6t/1DYKj4WqIHhPNqj+hGubwCd8g
-         HmmmtGgiu1hVmEn30UWT72kVTSpp9tSUWXk377ZhfHRqE6FwmUO2XiVkyqTPKnt+6vw/
-         wdgdrJeoZVGpXq3f43jWHU/o8h+4V84xkFMDPQfvVKpkQj3DSFisizgmOU32l9kfueFH
-         MbOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763008834; x=1763613634;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDmPn0Nf9DwhMNzLqfPhzr9P36pEvch2Q8c/oMsgpUY=;
-        b=uE0QKk7sCyVGCE1zpg9+fkmQeSJZwurRCtCRKkDhLSHVXfDp765EMaAH3ko+4gyEkW
-         QnX6FcqJORD/6VMnd0KUOworJoG87KeFe/Iqyg30aVBesWMhN0jXh1xsJAYT46ZEvOut
-         WF7sr8VY7Glu83UIF6yu51LwiCp/ruhYeENBDMeQudxmbzuZ+TXcZcSl0+BnVUZVhDaZ
-         og+sw93TX4XmElhqnTAgmRxMqfXFxqvyGXSpvhdo2n83dCsEoqfu9g7GP2dj5upIz5UU
-         kSfaiD1s6WKkutoyRC6TVj0qBgbrsHZBwF5mDW0fKEBL+GQpr+BzJVrTOGoGh1ojny0g
-         dA8A==
-X-Forwarded-Encrypted: i=1; AJvYcCU+LkgYTAdvi6OW4AJFtQMWfOAaQMGzXeLvqFVOLLuFaiSnZD7BDyD7sn5uVmiOWz/Uwqb5@lists.linux.dev
-X-Gm-Message-State: AOJu0YzhUK8jZiM9oF58ScfcwdI9yplTikurPhpsBQ1xgTKGnQ1T41ra
-	DtAdOytc4JLXRqhf+xSNnFQxfHxX9uHAyh9/OzENbtVUOTP/XYxSdkaF
-X-Gm-Gg: ASbGncv8C+Kbefe2MpFnC2leS64NKTwdNK2U45vnteV6DaPNV8vDp5osz01G9PnvsLc
-	ckQUVQL6tFaZ7SIBQ6HDiBit7ARmWTqnV0yJHI/KWHnS1bpeVOXFC3cX6pzGsolobkEzMBpfPIP
-	Gi11NsFyBgDt5VLsQtWdgIanWwJP34Fqhzytz+LN7N2Xb1A7Z0KOUtWJUKaLhitMMB0VjvFwRUy
-	6ZHZY7KAleRM9w6Q7VpFNFezYHRjXJOtyUkRHNBVyLUQdCWDx419KWFun20yFCDOUiQ8JPwRW5O
-	pZ4bX7D6m7WBN9ReEnM5muLkv2LS9OwEsTVhKHeQkkIqJY/9xjDt+O9SCq63TS2bJE655ENgHZN
-	G9cDtRoHXX3o6+FChPaxRO81ve5nDsZ3vGBwlp4f5r4saYdSuomTq7XrmPF/E9BPdugo9BmtmH1
-	ZkCE8UxruXLHTwpCFvUVM7FA==
-X-Google-Smtp-Source: AGHT+IF0ZSMjJ2Lc8kz3EXKwlmPjL5NLaFbg0SkOYJJftW8mAPB0mC+cHp/6QWluZgrL5V9rxEgvaA==
-X-Received: by 2002:a17:902:e788:b0:297:e69d:86ac with SMTP id d9443c01a7336-2984edc8d1bmr74152995ad.39.1763008834480;
-        Wed, 12 Nov 2025 20:40:34 -0800 (PST)
-Received: from localhost ([45.8.220.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2b0d68sm8683655ad.61.2025.11.12.20.40.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 20:40:33 -0800 (PST)
-Date: Thu, 13 Nov 2025 12:40:30 +0800
-From: Jinchao Wang <wangjinchao600@gmail.com>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	workflows@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v8 00/27] mm/ksw: Introduce KStackWatch debugging tool
-Message-ID: <aRVhL91rSZXyZ83D@ndev>
-References: <20251110163634.3686676-1-wangjinchao600@gmail.com>
- <aRIh4pBs7KCDhQOp@casper.infradead.org>
- <aRLmGxKVvfl5N792@ndev>
- <aRTv0eHfX0j8vJOW@casper.infradead.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="etmf315w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763009427; x=1794545427;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vj11y1lwKZD2kwb5TCZMGnzf37/CZwEIwmuELzhZsFM=;
+  b=etmf315wbUGkznXmSOXakirs24OdeKE2bUIp2uZtZtGPQ/znCxHDmn6G
+   dYENTaNFW4P2Jw2UIU620EKD9SS6BWtsSB4t3XwZMnrk1SUFXpvawzXFN
+   9I69pGnnrT9MYg1SpWs/sTYFK4ZizK3mXOc42EdTenTS4ptBSbJRvjuKs
+   iYY4Vfp0sa0MMbDYcydSL8z1PjOZJONInNHcBp6CwaBfrhFuQr3nFGUHy
+   gENsJ5/Y9Hxvy2928ocysDyiNcdzaCBVJhXtaevXOGGIm/b/xSoaAg6jR
+   sl1yarPZoIeeTmzmwZTy1cghHEXcieVtIRqgHYmpgznrdfDiZ/S1SuvXJ
+   w==;
+X-CSE-ConnectionGUID: EzPEAXwcSpKBkqBAHkPcOQ==
+X-CSE-MsgGUID: s3wwHdm6TXOpTrISsJLiuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="68947837"
+X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
+   d="scan'208";a="68947837"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 20:50:23 -0800
+X-CSE-ConnectionGUID: ObfaRa59Tha3zyqhECHhig==
+X-CSE-MsgGUID: pWpA78LRRXK7yFi0Ut8iuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
+   d="scan'208";a="212789105"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 12 Nov 2025 20:50:20 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vJPHm-0004sd-28;
+	Thu, 13 Nov 2025 04:50:18 +0000
+Date: Thu, 13 Nov 2025 12:49:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next 1/4] bpf: arena: populate vm_area without
+ allocating memory
+Message-ID: <202511122229.mivV7opC-lkp@intel.com>
+References: <20251111163424.16471-2-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aRTv0eHfX0j8vJOW@casper.infradead.org>
+In-Reply-To: <20251111163424.16471-2-puranjay@kernel.org>
 
-On Wed, Nov 12, 2025 at 08:36:33PM +0000, Matthew Wilcox wrote:
-> [dropping all the individual email addresses; leaving only the
-> mailing lists]
-> 
-> On Wed, Nov 12, 2025 at 10:14:29AM +0800, Jinchao Wang wrote:
-> > On Mon, Nov 10, 2025 at 05:33:22PM +0000, Matthew Wilcox wrote:
-> > > On Tue, Nov 11, 2025 at 12:35:55AM +0800, Jinchao Wang wrote:
-> > > > Earlier this year, I debugged a stack corruption panic that revealed the
-> > > > limitations of existing debugging tools. The bug persisted for 739 days
-> > > > before being fixed (CVE-2025-22036), and my reproduction scenario
-> > > > differed from the CVE report—highlighting how unpredictably these bugs
-> > > > manifest.
-> > > 
-> > > Well, this demonstrates the dangers of keeping this problem siloed
-> > > within your own exfat group.  The fix made in 1bb7ff4204b6 is wrong!
-> > > It was fixed properly in 7375f22495e7 which lists its Fixes: as
-> > > Linux-2.6.12-rc2, but that's simply the beginning of git history.
-> > > It's actually been there since v2.4.6.4 where it's documented as simply:
-> > > 
-> > >       - some subtle fs/buffer.c race conditions (Andrew Morton, me)
-> > > 
-> > > As far as I can tell the changes made in 1bb7ff4204b6 should be
-> > > reverted.
-> > 
-> > Thank you for the correction and the detailed history. I wasn't aware this
-> > dated back to v2.4.6.4. I'm not part of the exfat group; I simply
-> > encountered a bug that 1bb7ff4204b6 happened to resolve in my scenario.
-> > The timeline actually illustrates the exact problem KStackWatch addresses:
-> > a bug introduced in 2001, partially addressed in 2025, then properly fixed
-> > months later. The 24-year gap suggests these silent stack corruptions are
-> > extremely difficult to locate.
-> 
-> I think that's a misdiagnosis caused by not understanding the limited
-> circumstances in which the problem occurs.  To hit this problem, you
-> have to have a buffer_head allocated on the stack.  That doesn't happen
-> in many places:
-> 
-> fs/buffer.c:    struct buffer_head tmp = {
-> fs/direct-io.c: struct buffer_head map_bh = { 0, };
-> fs/ext2/super.c:        struct buffer_head tmp_bh;
-> fs/ext2/super.c:        struct buffer_head tmp_bh;
-> fs/ext4/mballoc-test.c: struct buffer_head bitmap_bh;
-> fs/ext4/mballoc-test.c: struct buffer_head gd_bh;
-> fs/gfs2/bmap.c: struct buffer_head bh;
-> fs/gfs2/bmap.c: struct buffer_head bh;
-> fs/isofs/inode.c:       struct buffer_head dummy;
-> fs/jfs/super.c: struct buffer_head tmp_bh;
-> fs/jfs/super.c: struct buffer_head tmp_bh;
-> fs/mpage.c:     struct buffer_head map_bh;
-> fs/mpage.c:     struct buffer_head map_bh;
-> 
-> It's far more common for buffer_heads to be allocated from slab and
-> attached to folios.  The other necessary condition to hit this problem
-> is that get_block() has to actually read the data from disk.  That's
-> not normal either!  Most filesystems just fill in the metadata about
-> the block and defer the actual read to when the data is wanted.  That's
-> the high-performance way to do it.
-> 
-> So our opportunity to catch this bug was highly limited by the fact that
-> we just don't run the codepaths that would allow it to trigger.
-> 
-> > > > Initially, I enabled KASAN, but the bug did not reproduce. Reviewing the
-> > > > code in __blk_flush_plug(), I found it difficult to trace all logic
-> > > > paths due to indirect function calls through function pointers.
-> > > 
-> > > So why is the solution here not simply to fix KASAN instead of this
-> > > giant patch series?
-> > 
-> > KASAN caught 7375f22495e7 because put_bh() accessed bh->b_count after
-> > wait_on_buffer() of another thread returned—the stack was invalid.
-> > In 1bb7ff4204b6 and my case, corruption occurred before the victim
-> > function of another thread returned. The stack remained valid to KASAN,
-> > so no warning triggered. This is timing-dependent, not a KASAN deficiency.
-> 
-> I agree that it's a narrow race window, but nevertheless KASAN did catch
-> it with ntfs and not with exfat.  The KASAN documentation states that
-> it can catch this kind of bug:
-> 
-> Generic KASAN supports finding bugs in all of slab, page_alloc, vmap, vmalloc,
-> stack, and global memory.
-> 
-> Software Tag-Based KASAN supports slab, page_alloc, vmalloc, and stack memory.
-> 
-> Hardware Tag-Based KASAN supports slab, page_alloc, and non-executable vmalloc
-> memory.
-> 
-> (hm, were you using hwkasan instead of swkasan, and that's why you
-> couldn't see it?)
-> 
-You're right that these conditions are narrow. However, when these bugs
-hit, they're severe and extremely difficult to debug. This year alone,
-this specific buffer_head bug was hit at least twice: 1bb7ff4204b6 and my
-case. Over 24 years, others likely encountered it but lacked tools to
-pinpoint the root cause.
+Hi Puranjay,
 
-I used software KASAN for the exfat case, but the bug didn't reproduce,
-likely due to timing changes from the overhead. More fundamentally, the
-corruption was in-bounds within active stack frames, which KASAN cannot
-detect by design.
+kernel test robot noticed the following build errors:
 
-Beyond buffer_head, I encountered another stack corruption bug in network
-drivers this year. Without KStackWatch, I had to manually instrument the
-code to locate where corruption occurred.
+[auto build test ERROR on bpf-next/master]
 
-These issues may be more common than they appear. Given Linux's massive
-user base combined with the kernel's huge codebase and the large volume of
-driver code, both in-tree and out-of-tree, even narrow conditions will be
-hit.
+url:    https://github.com/intel-lab-lkp/linux/commits/Puranjay-Mohan/bpf-arena-populate-vm_area-without-allocating-memory/20251112-004253
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251111163424.16471-2-puranjay%40kernel.org
+patch subject: [PATCH bpf-next 1/4] bpf: arena: populate vm_area without allocating memory
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251112/202511122229.mivV7opC-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511122229.mivV7opC-lkp@intel.com/reproduce)
 
-Since posting earlier versions, several developers have contacted me about
-using KStackWatch for their own issues. KStackWatch fills a gap: it can
-pinpoint in-bounds stack corruption with much lower overhead than KASAN.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511122229.mivV7opC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/bpf/arena.c:139:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     139 |         flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+         |         ^
+   1 error generated.
+
+
+vim +/flush_tlb_kernel_range +139 kernel/bpf/arena.c
+
+   119	
+   120	static int apply_range_clear_cb(pte_t *pte, unsigned long addr, void *data)
+   121	{
+   122		struct mm_struct *mm = &init_mm;
+   123		pte_t old_pte;
+   124		struct page *page;
+   125	
+   126		/* sanity check */
+   127		old_pte = ptep_get(pte);
+   128		if (pte_none(old_pte) || !pte_present(old_pte))
+   129			return 0; /* nothing to do */
+   130	
+   131		/* get page and free it */
+   132		page = pte_page(old_pte);
+   133		if (WARN_ON_ONCE(!page))
+   134			return -EINVAL;
+   135	
+   136		pte_clear(mm, addr, pte);
+   137	
+   138		/* ensure no stale TLB entries */
+ > 139		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+   140	
+   141		__free_page(page);
+   142	
+   143		return 0;
+   144	}
+   145	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
