@@ -1,66 +1,75 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CBD305E33;
-	Thu, 13 Nov 2025 04:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33393081D2;
+	Thu, 13 Nov 2025 04:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763009429; cv=none; b=Hz3URCXjL9SlK+yZkCIRU3X9XBTPrMhL9CvwMR/H8x4EqhHLyYEfCwdkDyfhgE17fMjfjy9diiaEQVr7RA+5f8biB5bhzUW4yqTV/AZZ6/6RJFKpwG7+EvHqNWpX17gXn+oM0L5CDmtIaOf8eUKao2ZH0UA7s6tCuN8nXCkFW0c=
+	t=1763009430; cv=none; b=sJl2b4Mjz60qpcaUZbcvyYBDRXNBRybk/Rb9CJ75q/DS2sn5QUh2aYqQ6BwIlMn3ecMo2jfYB9fgrkNdg8Na85g3wqH9W0+F3l0pw9rA6LmPbzCjwmjX///nR2qoXIh3u2RL+Sguytdsa3rC1ttOTZqB8lUPXZamrgOBvfyMHIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763009429; c=relaxed/simple;
-	bh=OwNiD+LA708Bkt76Ibt9Y8BhTcH5rbaAndgqlLkl4H4=;
+	s=arc-20240116; t=1763009430; c=relaxed/simple;
+	bh=omOaESTzC5JdyNOxcqj8pYklVvUg+2CQxKky1CjcYzE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q+yoQhOOKXA603jYOSGubPHfK0Mg6Gb7Xz1G7Bxl4Xm7iIKFt4fNwRwUCLvd9tABX4J7kjCnVdYtQHY952catvuAeMQQ3/yO1747Krvjqfog9xAQgLYNJ18xJin9M8OLo38t17zDzbEAw19O6qSrAalwerelVRdcR36HIPIAscY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jd669u0Z; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=hBwv0SaDbwd3L7f09itWF+26PBhmY/YZyqVKUtY6FQsPR3euibHBkDUKtlfGsfA9fFq8cw1SzoDbpBOUwoPJochypMdqi5eGAESG/i2V6KzNdHyC/P1ewrpx0EX+byVruMkVKu0dlqqB5jlH3hiBseoQF7OK6dC4iZuvqk644Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RVBSSQTv; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jd669u0Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RVBSSQTv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763009428; x=1794545428;
+  t=1763009429; x=1794545429;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OwNiD+LA708Bkt76Ibt9Y8BhTcH5rbaAndgqlLkl4H4=;
-  b=Jd669u0Z71HefsC3+TBQc9dWHK76Yk3cV+p365N3+AEsaiWpoCzJF83P
-   RAuIe6ZqDmH7tHUPyupHL3j3PtL3EkuWNmutzHLG+tsS0QZxBvOqQ/RHl
-   YTKLIP0HiphxG7YvXgPCCdzZOjOSUqB/8VOnpJkvyyXJa/XmYJR1ylRp8
-   bvqdZLpgNQyXRMZNviimMwqdC8krOwY9/zEtrY1RnmHI6t34Vxn2UhDfg
-   6syG4cCvqTrW9fa733XXBAQrHs4wBQ8OESY2khtbjD+0BCtjw5Kh9VA87
-   ntHh9PJpC5LJjydZhHrrUm0ld9WwFbXzAddnsBaeZYwgwd6j+26ZZZVR1
-   g==;
-X-CSE-ConnectionGUID: pB0zQ6CvRpO/vW0gkZZ+9g==
-X-CSE-MsgGUID: uCX+3uiYSROUQ+qB1JiVcQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="68947843"
+  bh=omOaESTzC5JdyNOxcqj8pYklVvUg+2CQxKky1CjcYzE=;
+  b=RVBSSQTvnV+ySosvzKH/46irz1n/AEsTuRfDxtyeXLvLswVWo07jKydw
+   Htin5jRn8QcCUoWIq3mZgBLppi+bKEPbNWHdx8t39xcdePed+lzqVFj3O
+   GivL4ELrzFrd1Y+uYDsHojWIkmQjPFe47vUoH8hKVqppZWQ9bdJAxOFRo
+   /hk+UmrbEJljoSEGYNG/jGAmsDx3dpsOmfik9kc05LXVcqyxENFM4onha
+   XjDTM2SAvWhEdcCw66V5hW2oN/GwGuRKb3pRv5v4qHce5dHcsfHLDW1s0
+   +rdGgPgxnzsILSsvsmiAa4jyz3hXOY9YkzbUqCtIql45o7Eih8SlpzXAK
+   A==;
+X-CSE-ConnectionGUID: i2qAU4beTyWrDrDZqb//rw==
+X-CSE-MsgGUID: Tqns9E6sSzOuoypDH7H+JA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11611"; a="68947865"
 X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
-   d="scan'208";a="68947843"
+   d="scan'208";a="68947865"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 20:50:23 -0800
-X-CSE-ConnectionGUID: uGOZoOpJQZWcQ0afR6xfOA==
-X-CSE-MsgGUID: eq8a2LoDTSCyyUsRhxQNkg==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 20:50:25 -0800
+X-CSE-ConnectionGUID: ecAteJ/4Sxa1ScmBr/C/kQ==
+X-CSE-MsgGUID: 4xufap9JQJmtAoHNzMPqyg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,301,1754982000"; 
-   d="scan'208";a="212789109"
+   d="scan'208";a="212789121"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
   by fmviesa002.fm.intel.com with ESMTP; 12 Nov 2025 20:50:20 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vJPHm-0004sk-2O;
+	id 1vJPHm-0004sh-2H;
 	Thu, 13 Nov 2025 04:50:18 +0000
-Date: Thu, 13 Nov 2025 12:49:34 +0800
+Date: Thu, 13 Nov 2025 12:49:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrei Botila <andrei.botila@oss.nxp.com>,
+	Richard Cochran <richardcochran@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Subject: Re: [PATCH v1 2/2] devres: Move devm_alloc_percpu() and related to
- devres.h
-Message-ID: <202511122250.550UBJAu-lkp@intel.com>
-References: <20251111144104.910241-3-andriy.shevchenko@linux.intel.com>
+	netdev@vger.kernel.org, Simon Horman <horms@kernel.org>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Subject: Re: [PATCH net-next 1/8] phy: add hwtstamp_get callback to retrieve
+ config
+Message-ID: <202511130038.ODz0uTOK-lkp@intel.com>
+References: <20251112000257.1079049-2-vadim.fedorenko@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,67 +78,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251111144104.910241-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251112000257.1079049-2-vadim.fedorenko@linux.dev>
 
-Hi Andy,
+Hi Vadim,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.18-rc5 next-20251112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/devres-Remove-unused-devm_free_percpu/20251111-230827
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20251111144104.910241-3-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 2/2] devres: Move devm_alloc_percpu() and related to devres.h
-config: i386-buildonly-randconfig-004-20251112 (https://download.01.org/0day-ci/archive/20251112/202511122250.550UBJAu-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511122250.550UBJAu-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/phy-add-hwtstamp_get-callback-to-retrieve-config/20251112-080606
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20251112000257.1079049-2-vadim.fedorenko%40linux.dev
+patch subject: [PATCH net-next 1/8] phy: add hwtstamp_get callback to retrieve config
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20251113/202511130038.ODz0uTOK-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251113/202511130038.ODz0uTOK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511122250.550UBJAu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511130038.ODz0uTOK-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpiolib-devres.c:9:
->> include/linux/device/devres.h:113:6: error: variable has incomplete type 'void __attribute__((btf_type_tag("percpu")))' (aka 'void')
-     113 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size, size_t align);
-         |      ^
-   include/linux/compiler_types.h:60:19: note: expanded from macro '__percpu'
-      60 | # define __percpu       __percpu_qual BTF_TYPE_TAG(percpu)
-         |                         ^
-   In file included from drivers/gpio/gpiolib-devres.c:9:
-   include/linux/device/devres.h:113:14: error: expected ';' after top level declarator
-     113 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size, size_t align);
-         |              ^
-         |              ;
-   2 errors generated.
+>> drivers/net/ethernet/ti/netcp_ethss.c:2660:23: error: no member named 'hwtstamp' in 'struct mii_timestamper'
+    2660 |                 return phy->mii_ts->hwtstamp(phy->mii_ts, cfg, extack);
+         |                        ~~~~~~~~~~~  ^
+   1 error generated.
 
 
-vim +113 include/linux/device/devres.h
+vim +2660 drivers/net/ethernet/ti/netcp_ethss.c
 
-    98	
-    99	/**
-   100	 * devm_alloc_percpu - Resource-managed alloc_percpu
-   101	 * @dev: Device to allocate per-cpu memory for
-   102	 * @type: Type to allocate per-cpu memory for
-   103	 *
-   104	 * Managed alloc_percpu. Per-cpu memory allocated with this function is
-   105	 * automatically freed on driver detach.
-   106	 *
-   107	 * RETURNS:
-   108	 * Pointer to allocated memory on success, NULL on failure.
-   109	 */
-   110	#define devm_alloc_percpu(dev, type)      \
-   111		((typeof(type) __percpu *)__devm_alloc_percpu((dev), sizeof(type), __alignof__(type)))
-   112	
- > 113	void __percpu *__devm_alloc_percpu(struct device *dev, size_t size, size_t align);
-   114	
+6246168b4a3835 WingMan Kwok    2016-12-08  2645  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2646  static int gbe_hwtstamp_set(void *intf_priv, struct kernel_hwtstamp_config *cfg,
+3f02b82725576a Vadim Fedorenko 2025-11-03  2647  			    struct netlink_ext_ack *extack)
+6246168b4a3835 WingMan Kwok    2016-12-08  2648  {
+3f02b82725576a Vadim Fedorenko 2025-11-03  2649  	struct gbe_intf *gbe_intf = intf_priv;
+3f02b82725576a Vadim Fedorenko 2025-11-03  2650  	struct gbe_priv *gbe_dev;
+3f02b82725576a Vadim Fedorenko 2025-11-03  2651  	struct phy_device *phy;
+3f02b82725576a Vadim Fedorenko 2025-11-03  2652  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2653  	gbe_dev = gbe_intf->gbe_dev;
+6246168b4a3835 WingMan Kwok    2016-12-08  2654  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2655  	if (!gbe_dev->cpts)
+6246168b4a3835 WingMan Kwok    2016-12-08  2656  		return -EOPNOTSUPP;
+6246168b4a3835 WingMan Kwok    2016-12-08  2657  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2658  	phy = gbe_intf->slave->phy;
+3f02b82725576a Vadim Fedorenko 2025-11-03  2659  	if (phy_has_hwtstamp(phy))
+3f02b82725576a Vadim Fedorenko 2025-11-03 @2660  		return phy->mii_ts->hwtstamp(phy->mii_ts, cfg, extack);
+6246168b4a3835 WingMan Kwok    2016-12-08  2661  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2662  	switch (cfg->tx_type) {
+6246168b4a3835 WingMan Kwok    2016-12-08  2663  	case HWTSTAMP_TX_OFF:
+a9423120343cb5 Ivan Khoronzhuk 2018-11-12  2664  		gbe_dev->tx_ts_enabled = 0;
+6246168b4a3835 WingMan Kwok    2016-12-08  2665  		break;
+6246168b4a3835 WingMan Kwok    2016-12-08  2666  	case HWTSTAMP_TX_ON:
+a9423120343cb5 Ivan Khoronzhuk 2018-11-12  2667  		gbe_dev->tx_ts_enabled = 1;
+6246168b4a3835 WingMan Kwok    2016-12-08  2668  		break;
+6246168b4a3835 WingMan Kwok    2016-12-08  2669  	default:
+6246168b4a3835 WingMan Kwok    2016-12-08  2670  		return -ERANGE;
+6246168b4a3835 WingMan Kwok    2016-12-08  2671  	}
+6246168b4a3835 WingMan Kwok    2016-12-08  2672  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2673  	switch (cfg->rx_filter) {
+6246168b4a3835 WingMan Kwok    2016-12-08  2674  	case HWTSTAMP_FILTER_NONE:
+a9423120343cb5 Ivan Khoronzhuk 2018-11-12  2675  		gbe_dev->rx_ts_enabled = HWTSTAMP_FILTER_NONE;
+6246168b4a3835 WingMan Kwok    2016-12-08  2676  		break;
+6246168b4a3835 WingMan Kwok    2016-12-08  2677  	case HWTSTAMP_FILTER_PTP_V1_L4_EVENT:
+6246168b4a3835 WingMan Kwok    2016-12-08  2678  	case HWTSTAMP_FILTER_PTP_V1_L4_SYNC:
+6246168b4a3835 WingMan Kwok    2016-12-08  2679  	case HWTSTAMP_FILTER_PTP_V1_L4_DELAY_REQ:
+a9423120343cb5 Ivan Khoronzhuk 2018-11-12  2680  		gbe_dev->rx_ts_enabled = HWTSTAMP_FILTER_PTP_V1_L4_EVENT;
+3f02b82725576a Vadim Fedorenko 2025-11-03  2681  		cfg->rx_filter = HWTSTAMP_FILTER_PTP_V1_L4_EVENT;
+6246168b4a3835 WingMan Kwok    2016-12-08  2682  		break;
+6246168b4a3835 WingMan Kwok    2016-12-08  2683  	case HWTSTAMP_FILTER_PTP_V2_L4_EVENT:
+6246168b4a3835 WingMan Kwok    2016-12-08  2684  	case HWTSTAMP_FILTER_PTP_V2_L4_SYNC:
+6246168b4a3835 WingMan Kwok    2016-12-08  2685  	case HWTSTAMP_FILTER_PTP_V2_L4_DELAY_REQ:
+6246168b4a3835 WingMan Kwok    2016-12-08  2686  	case HWTSTAMP_FILTER_PTP_V2_L2_EVENT:
+6246168b4a3835 WingMan Kwok    2016-12-08  2687  	case HWTSTAMP_FILTER_PTP_V2_L2_SYNC:
+6246168b4a3835 WingMan Kwok    2016-12-08  2688  	case HWTSTAMP_FILTER_PTP_V2_L2_DELAY_REQ:
+6246168b4a3835 WingMan Kwok    2016-12-08  2689  	case HWTSTAMP_FILTER_PTP_V2_EVENT:
+6246168b4a3835 WingMan Kwok    2016-12-08  2690  	case HWTSTAMP_FILTER_PTP_V2_SYNC:
+6246168b4a3835 WingMan Kwok    2016-12-08  2691  	case HWTSTAMP_FILTER_PTP_V2_DELAY_REQ:
+a9423120343cb5 Ivan Khoronzhuk 2018-11-12  2692  		gbe_dev->rx_ts_enabled = HWTSTAMP_FILTER_PTP_V2_EVENT;
+3f02b82725576a Vadim Fedorenko 2025-11-03  2693  		cfg->rx_filter = HWTSTAMP_FILTER_PTP_V2_EVENT;
+6246168b4a3835 WingMan Kwok    2016-12-08  2694  		break;
+6246168b4a3835 WingMan Kwok    2016-12-08  2695  	default:
+6246168b4a3835 WingMan Kwok    2016-12-08  2696  		return -ERANGE;
+6246168b4a3835 WingMan Kwok    2016-12-08  2697  	}
+6246168b4a3835 WingMan Kwok    2016-12-08  2698  
+6246168b4a3835 WingMan Kwok    2016-12-08  2699  	gbe_hwtstamp(gbe_intf);
+6246168b4a3835 WingMan Kwok    2016-12-08  2700  
+3f02b82725576a Vadim Fedorenko 2025-11-03  2701  	return 0;
+6246168b4a3835 WingMan Kwok    2016-12-08  2702  }
+6246168b4a3835 WingMan Kwok    2016-12-08  2703  
 
 -- 
 0-DAY CI Kernel Test Service
