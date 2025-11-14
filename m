@@ -1,245 +1,177 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8D02D7DE1;
-	Fri, 14 Nov 2025 07:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4877A242D7B;
+	Fri, 14 Nov 2025 08:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763106791; cv=none; b=YH1OzxHOIhicd6ntZ9aWPQdbtilBVHdSkVlRIMEKmvCxo78XjcKBsNzysSG59blVpQ0XGkzjRLtWbRXidYbpXVc2s2J2QEaOZA9kBjeVES8SWPQnaodF+wWPdFWIfAdAW1tzphntI4H/ETBG/ngQ7DYhZV/AzPaG427ALFwhg7I=
+	t=1763107391; cv=none; b=S6TLuZf6PjxtwTI4Gy5G0LBszaJrE5WVbEE9t3PvEV6NxeJJ4f5lPk78z182afbphausnUp+mYPjYjcAqI4wvX+2IXeMkqq4MwVel3CyLuEijm4hTRGEo+chpYbarftfbCms46S1hQ2xyhYPtP4xIiMWIxzfx2Zr3q5lyA6fmOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763106791; c=relaxed/simple;
-	bh=Ugiw+8CpqA265ZRJP3r5j9bjsiFqYmRWm5CmslpIV4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p7uNzBCus7WDEPNiK4z/W9d1fd9jdy62RTZccQQqo0sQckaRaZp+Kbhc10KbOsAN8VH94tGRuN5VI79QL9XzbrXYSBlgaot/HQAZvZk3+qfoOVj60RyhB/1C0YRHRhlUHgDP0WebIpWBK8yAsXpPUcNiXbVaCJf4mxxKSdQadg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LI/f30dG; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1763107391; c=relaxed/simple;
+	bh=zM0BLwwhy9q1Q5GQUWLSaVxHfu7tfupMwf3Y+8YpT7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qS7sitTnl4z7cQiSEL7Mt5I3UcdbYFqZJsbkKo8z+aA5+05V5wWZfAcKWbwL1uF8D0Qzytf1SPsMp+gV/dnLO4OZof/zlZ1z516feL9b3YgqjM37dNqq2KGutIljd9/WWQn+t4HpeCaSEdM92E/xW/SbzsJiyA2l1nibbs2SYnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NoFqayGV; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LI/f30dG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NoFqayGV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763106789; x=1794642789;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Ugiw+8CpqA265ZRJP3r5j9bjsiFqYmRWm5CmslpIV4o=;
-  b=LI/f30dGfSOL5IQV4FDUX5soQxHLc3OZlaoIOlI+57bZswFGjO+vXH1U
-   ESQ4+i8R6ad7EGBA9DzJzb+4a6GgNOXfcO7Smq76vXud1P6BvLwZ+gqdc
-   JmHV6pdqADdGk2zyej+s0N+zNzdz7OjN9QamUWkJilTpf2qcA3FDn8YxJ
-   JTc3fG0ezUl6pPCnoPYiBJqS1A9hKmQwx+ah24iIxDRc/eK3Q3yuExBYM
-   V2sq07BoQvsXbT1kzWC4sRYWPe1bdvCOmHltr4WRuIyIX+EABCTFk711P
-   QJ/ZXMHJytGXrZLSssyyNm+6w5wy6DmfSu0RMpOX7I+6AkF67w3sIS1LK
-   Q==;
-X-CSE-ConnectionGUID: 1aily3mdRWWuyivZQpchZg==
-X-CSE-MsgGUID: 22t1SUJCTmSzCOVC7lnxlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="65232169"
+  t=1763107390; x=1794643390;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zM0BLwwhy9q1Q5GQUWLSaVxHfu7tfupMwf3Y+8YpT7A=;
+  b=NoFqayGVRcTZhaspgmGToCtzuh+SeXS3pMcM14X5LanombFj2ey8ZCJn
+   NQrpglePM6VK1meEGXWb1+t0ad7Jyjgnu1uFN9dakK0kiFy7xdHNpT5H5
+   ARUSaa6c0oGraQKJMrpMQKX10XkF6KxUeefp5SWeepEbArDkrwQG4oAbZ
+   H2vOsz20+ukQOTxUt9oVifhkpsHU0tzGUN5mc164lWbk1t+gTtGkmD7ou
+   9RgExBVPnILALHPtFQD1+HxEY/J/+K0LVjK4gdlXfhJOjZlp+s+BRn0wn
+   DCOE6oRsoKGeBKaLJ8UcmsLhN9S9X9lkuY3S8UG+am2LdWdJiZqSU81Zt
+   w==;
+X-CSE-ConnectionGUID: hSquSA/GRDaZnZDFY2G9LQ==
+X-CSE-MsgGUID: qCANWuf2Q/GikFmboKuyHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="65233208"
 X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="65232169"
+   d="scan'208";a="65233208"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 23:53:08 -0800
-X-CSE-ConnectionGUID: Jw6UaTCCSg6fH5ANFcAJEQ==
-X-CSE-MsgGUID: U1MJOfZERTGAVQvi3ohk0Q==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 00:03:09 -0800
+X-CSE-ConnectionGUID: ozkUyCblTV6bRPxO0D7wyQ==
+X-CSE-MsgGUID: plS5uRL4R22DnwgCv0Hn8Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="190497774"
+   d="scan'208";a="190499349"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 13 Nov 2025 23:53:07 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 14 Nov 2025 00:03:07 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vJocC-0006Jp-1s;
-	Fri, 14 Nov 2025 07:53:04 +0000
-Date: Fri, 14 Nov 2025 15:52:17 +0800
+	id 1vJolt-0006KR-1U;
+	Fri, 14 Nov 2025 08:03:05 +0000
+Date: Fri, 14 Nov 2025 16:02:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas Zampieri <lzampier@redhat.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/1] HID: input: Add support for multiple batteries
- per device
-Message-ID: <202511141515.7CEez9Uh-lkp@intel.com>
-References: <20251111105634.1684751-2-lzampier@redhat.com>
+Subject: [koverstreet-bcachefs:bcachefs-testing 851/875]
+ fs/bcachefs/data/reconcile.c:317:6: error: cannot jump from this goto
+ statement to its label
+Message-ID: <202511141510.PFNhwbDi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251111105634.1684751-2-lzampier@redhat.com>
 
-Hi Lucas,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v6.18-rc5 next-20251114]
-[cannot apply to dtor-input/next dtor-input/for-linus]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Zampieri/HID-input-Add-support-for-multiple-batteries-per-device/20251111-191143
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20251111105634.1684751-2-lzampier%40redhat.com
-patch subject: [RFC PATCH 1/1] HID: input: Add support for multiple batteries per device
-config: riscv-randconfig-002-20251114 (https://download.01.org/0day-ci/archive/20251114/202511141515.7CEez9Uh-lkp@intel.com/config)
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   ab3c04679170b0e63c55680f725ceb4218b2b04c
+commit: 08209c1a245fe1ca0b78b31747565a552670f76e [851/875] bcachefs: bch_extent_rebalance_bp
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20251114/202511141510.PFNhwbDi-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141515.7CEez9Uh-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141510.PFNhwbDi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511141515.7CEez9Uh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511141510.PFNhwbDi-lkp@intel.com/
+
+Note: the koverstreet-bcachefs/bcachefs-testing HEAD ab3c04679170b0e63c55680f725ceb4218b2b04c builds fine.
+      It only hurts bisectability.
 
 All errors (new ones prefixed by >>):
 
-     109 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/hid/hid-input.c:20:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:32:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:854:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     854 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:110:53: note: expanded from macro 'insl'
-     110 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/hid/hid-input.c:20:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:32:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:863:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     863 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsb'
-     122 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/hid/hid-input.c:20:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:32:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:872:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     872 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsw'
-     123 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/hid/hid-input.c:20:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:32:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:881:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     881 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:124:55: note: expanded from macro 'outsl'
-     124 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/hid/hid-input.c:20:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:32:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from drivers/hid/hid-input.c:2475:
->> drivers/hid/hid-input-test.c:18:50: error: incompatible pointer types passing 'struct hid_device *' to parameter of type 'struct hid_battery *' [-Wincompatible-pointer-types]
-      18 |         handled = hidinput_update_battery_charge_status(dev, HID_DG_HEIGHT, 0);
-         |                                                         ^~~
-   drivers/hid/hid-input.c:672:71: note: passing argument to parameter 'bat' here
-     672 | static bool hidinput_update_battery_charge_status(struct hid_battery *bat,
-         |                                                                       ^
-   In file included from drivers/hid/hid-input.c:2475:
-   drivers/hid/hid-input-test.c:22:50: error: incompatible pointer types passing 'struct hid_device *' to parameter of type 'struct hid_battery *' [-Wincompatible-pointer-types]
-      22 |         handled = hidinput_update_battery_charge_status(dev, HID_BAT_CHARGING, 0);
-         |                                                         ^~~
-   drivers/hid/hid-input.c:672:71: note: passing argument to parameter 'bat' here
-     672 | static bool hidinput_update_battery_charge_status(struct hid_battery *bat,
-         |                                                                       ^
-   In file included from drivers/hid/hid-input.c:2475:
-   drivers/hid/hid-input-test.c:26:50: error: incompatible pointer types passing 'struct hid_device *' to parameter of type 'struct hid_battery *' [-Wincompatible-pointer-types]
-      26 |         handled = hidinput_update_battery_charge_status(dev, HID_BAT_CHARGING, 1);
-         |                                                         ^~~
-   drivers/hid/hid-input.c:672:71: note: passing argument to parameter 'bat' here
-     672 | static bool hidinput_update_battery_charge_status(struct hid_battery *bat,
-         |                                                                       ^
-   7 warnings and 3 errors generated.
+>> fs/bcachefs/data/reconcile.c:317:6: error: cannot jump from this goto statement to its label
+     317 |         if (fsck_err_on(!bp.v->level,
+         |             ^
+   fs/bcachefs/init/error.h:143:2: note: expanded from macro 'fsck_err_on'
+     143 |         __fsck_err_on(cond, c, FSCK_CAN_FIX|FSCK_CAN_IGNORE, _err_type, __VA_ARGS__)
+         |         ^
+   fs/bcachefs/init/error.h:130:20: note: expanded from macro '__fsck_err_on'
+     130 |         (unlikely(cond) ? __fsck_err(c, _flags, _err_type, __VA_ARGS__) : false);\
+         |                           ^
+   fs/bcachefs/init/error.h:117:26: note: expanded from macro '__fsck_err'
+     117 | #define __fsck_err(...)         fsck_err_wrap(bch2_fsck_err(__VA_ARGS__))
+         |                                 ^
+   fs/bcachefs/init/error.h:111:3: note: expanded from macro 'fsck_err_wrap'
+     111 |                 goto fsck_err;                                          \
+         |                 ^
+   fs/bcachefs/data/reconcile.c:342:25: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     342 |         CLASS(btree_node_iter, iter2)(trans, bp.v->btree_id, bp.v->pos, 0, bp.v->level - 1, 0);
+         |                                ^
+   1 error generated.
 
 
-vim +18 drivers/hid/hid-input-test.c
+vim +317 fs/bcachefs/data/reconcile.c
 
-a608dc1c06397dc José Expósito 2022-11-24   9  
-a82231b2a8712d0 José Expósito 2025-08-14  10  static void hid_test_input_update_battery_charge_status(struct kunit *test)
-a608dc1c06397dc José Expósito 2022-11-24  11  {
-a608dc1c06397dc José Expósito 2022-11-24  12  	struct hid_device *dev;
-a608dc1c06397dc José Expósito 2022-11-24  13  	bool handled;
-a608dc1c06397dc José Expósito 2022-11-24  14  
-a608dc1c06397dc José Expósito 2022-11-24  15  	dev = kunit_kzalloc(test, sizeof(*dev), GFP_KERNEL);
-a608dc1c06397dc José Expósito 2022-11-24  16  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-a608dc1c06397dc José Expósito 2022-11-24  17  
-a82231b2a8712d0 José Expósito 2025-08-14 @18  	handled = hidinput_update_battery_charge_status(dev, HID_DG_HEIGHT, 0);
-a608dc1c06397dc José Expósito 2022-11-24  19  	KUNIT_EXPECT_FALSE(test, handled);
-a608dc1c06397dc José Expósito 2022-11-24  20  	KUNIT_EXPECT_EQ(test, dev->battery_charge_status, POWER_SUPPLY_STATUS_UNKNOWN);
-a608dc1c06397dc José Expósito 2022-11-24  21  
-a82231b2a8712d0 José Expósito 2025-08-14  22  	handled = hidinput_update_battery_charge_status(dev, HID_BAT_CHARGING, 0);
-a608dc1c06397dc José Expósito 2022-11-24  23  	KUNIT_EXPECT_TRUE(test, handled);
-a608dc1c06397dc José Expósito 2022-11-24  24  	KUNIT_EXPECT_EQ(test, dev->battery_charge_status, POWER_SUPPLY_STATUS_DISCHARGING);
-a608dc1c06397dc José Expósito 2022-11-24  25  
-a82231b2a8712d0 José Expósito 2025-08-14  26  	handled = hidinput_update_battery_charge_status(dev, HID_BAT_CHARGING, 1);
-a608dc1c06397dc José Expósito 2022-11-24  27  	KUNIT_EXPECT_TRUE(test, handled);
-a608dc1c06397dc José Expósito 2022-11-24  28  	KUNIT_EXPECT_EQ(test, dev->battery_charge_status, POWER_SUPPLY_STATUS_CHARGING);
-a608dc1c06397dc José Expósito 2022-11-24  29  }
-a608dc1c06397dc José Expósito 2022-11-24  30  
+   307	
+   308	static struct bkey_s_c rebalance_bp_get_key(struct btree_trans *trans,
+   309						    struct btree_iter *iter,
+   310						    struct bkey_s_c_backpointer bp)
+   311	{
+   312		struct bch_fs *c = trans->c;
+   313		int ret = 0;
+   314		CLASS(printbuf, buf)();
+   315	
+   316		/* don't allow bps to non btree nodes: */
+ > 317		if (fsck_err_on(!bp.v->level,
+   318				trans, reconcile_bp_to_leaf_node_key,
+   319				"reconcile bp to leaf node key\n%s",
+   320				(bch2_bkey_val_to_text(&buf, c, bp.s_c), buf.buf))) {
+   321			ret =   bch2_btree_delete(trans, BTREE_ID_reconcile_scan, bp.k->p, 0) ?:
+   322				bch2_trans_commit(trans, NULL, NULL, BCH_TRANS_COMMIT_no_enospc);
+   323			return ret ? bkey_s_c_err(ret) : bkey_s_c_null;
+   324		}
+   325	
+   326		bch2_trans_node_iter_init(trans, iter, bp.v->btree_id, bp.v->pos, 0, bp.v->level, 0);
+   327		struct bkey_s_c k = bch2_btree_iter_peek_slot(iter);
+   328		if (bkey_err(k))
+   329			return k;
+   330	
+   331		/*
+   332		 * peek_slot() doesn't normally return NULL - except when we ask for a
+   333		 * key at a btree level that doesn't exist.
+   334		 *
+   335		 * We may want to revisit this and change peek_slot():
+   336		 */
+   337		if (k.k && bch2_bkey_get_rebalance_bp(c, k) == bp.k->p.offset)
+   338			return k;
+   339	
+   340		/* walk down a level, check for btree_node_will_make_reachable(b)) */
+   341	
+   342		CLASS(btree_node_iter, iter2)(trans, bp.v->btree_id, bp.v->pos, 0, bp.v->level - 1, 0);
+   343		struct btree *b = bch2_btree_iter_peek_node(&iter2);
+   344		if (IS_ERR(b))
+   345			return bkey_s_c_err(PTR_ERR(b));
+   346	
+   347		if (b) {
+   348			if (btree_node_will_make_reachable(b))
+   349				return bkey_s_c_null;
+   350	
+   351			k = bkey_i_to_s_c(&b->key);
+   352			if (bch2_bkey_get_rebalance_bp(c, k) == bp.k->p.offset)
+   353				return k;
+   354		}
+   355	
+   356		prt_printf(&buf, "reconcile backpointer to missing/incorrect btree ptr\n");
+   357		bch2_bkey_val_to_text(&buf, c, bp.s_c);
+   358		prt_newline(&buf);
+   359		if (k.k)
+   360			bch2_bkey_val_to_text(&buf, c, k);
+   361		else
+   362			prt_str(&buf, "(no key)");
+   363	
+   364		if (b) {
+   365			prt_newline(&buf);
+   366			bch2_bkey_val_to_text(&buf, c, bkey_i_to_s_c(&b->key));
+   367		}
+   368	
+   369		if (fsck_err(trans, reconcile_bp_to_missing_btree_ptr, "%s", buf.buf))
+   370			ret =   bch2_btree_delete(trans, BTREE_ID_reconcile_scan, bp.k->p, 0) ?:
+   371				bch2_trans_commit(trans, NULL, NULL, BCH_TRANS_COMMIT_no_enospc);
+   372	fsck_err:
+   373		return ret ? bkey_s_c_err(ret) : bkey_s_c_null;
+   374	}
+   375	
 
 -- 
 0-DAY CI Kernel Test Service
