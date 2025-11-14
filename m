@@ -1,43 +1,53 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D1934A771;
-	Fri, 14 Nov 2025 18:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2012DECCD;
+	Fri, 14 Nov 2025 18:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763145002; cv=none; b=OINWZFMKYol+wDhHoOq27W4WPpLjSlnBlr7l1mhO+8K+K4B1M6F+RIkppMaCHNnK4+S8rBeZKj02XttCa0fctKYVKtPhv9qHVIcbX1i3DLaxMoHY//do0NFza4ajKahrfX6aq5Ch8RexsPUaEBX13JHjOfatbIACWGjp4p5ZXuQ=
+	t=1763146497; cv=none; b=PjaftuNJ0uRU6ENSub96Utu7/dUiRn6ViwckavH7u6pRP5a5/qmUo/wpRTSX8vVuQuhRYhLHXZn1q2w2xNc4+UmDJYoBksZzvQaSIIo6h+FmTwjcxdNR0yju12i9MZeT/a+U5D5lxp9CYdbg9GgUuMliFiSvC6JCg2yU8B66tzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763145002; c=relaxed/simple;
-	bh=TIbxS6C7c5fCvewEBNrOfoVYvU8etxkoLMi7WDCMwqM=;
+	s=arc-20240116; t=1763146497; c=relaxed/simple;
+	bh=Ox6QqPFoCd7IzVp3NR1hYBKfNcqogOAQNRvJrZ2v9P4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W0h9qoYB52iuwP5xUm2ccWOSWZGiZZW6z1RmmPSlwJmZe//9bNnWMfLxJ+tWQWVp8ORR0PfWecwoyBNDWAm302V1LRFI048l2jQr3azlDSQbLnm7Xc+Cq1DYpv7o/3Ah0FlmQLjYcylIp5b1VrXh//BTDm4xoYP1/nQ9QNzfNkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUbzaX8m; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=lzrBiABkE83kY4NLkeJBeLsbLtdJDh1WrL8UFKCeht3q4u9EeV/DCi54d+9QTVnDbk6NiSdR/OeyfvLFJGiQoAO7mR0zce+6Qj5qKWmqq4hje/6ZxdrvwnI4AjVkjtx0RVMxwRJzx1HQrzpOfnKl22BC4yv+mTv+kEV/ySSPVXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=EXyj+jX/; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUbzaX8m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20FCC2BCB0;
-	Fri, 14 Nov 2025 18:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763145001;
-	bh=TIbxS6C7c5fCvewEBNrOfoVYvU8etxkoLMi7WDCMwqM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XUbzaX8m+OtqpsLPNs4j9vqpnhAj756anYr+ws9QRRC/gShZkuLDg58Le5LCNNOa1
-	 n4jCOkbVMhKaWWj9qU7dXy8wpVeGFYJXtbXNwZhfk6xIjcSVkxK2uZLHKkagIMWu0R
-	 OMypIBkw2zA6BlG3lCYRBGXmbSiqfBXaddUbPs0bWSJeo0n3xu8WXwrRYAzVeAKxc8
-	 WQVM1aaDL5blFOtwVV8vVjP/MpfoZD7Yb3sa1NWV/vE6DjJG3Ut2+QvuIlLSJ1dzWT
-	 uvqKSARrhe+FRNDJeD8NbrWcQyUVxLtQuXe+qEniZEsZRtwYU4X34TtqyJxUYbXwH9
-	 w49/0qdtqNGeA==
-Date: Fri, 14 Nov 2025 11:29:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EXyj+jX/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=BSZ7Nwx1AvWu7mAZVmuradqomXtKIHLL0ikfemFoO2w=; b=EXyj+jX/BCty3AsVD6q8QioIyM
+	2Tu4hXDLT6tK2iLl7v3D8NpDemFXta54A9KS5c/9JTbl/kaYZYgeBcKsuY3S69miBq2y4AXmAv2bL
+	YQD4NgIM7YIim3b0UHSaUhNRz/WimQx7WxGquDaJwIo7MVXyCTLDLjft8/UOa06x5up7w8+pMGpSw
+	y68/Lux4D98y4TT/21m/3RbtLpiIPdbbkbKvR1UMPg15Onw3LD/mL7F2ndcPS9PxptjRtDtDfcio6
+	/OGLs9hEtShvsTvCwTvfTocOLOwo5T+6WGd0vxdCn+uu4DRkTSGzyn6Pz7xZpcmyTbVwWnoXBj/An
+	lkpE5YmQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vJywa-00000009mlh-00u6;
+	Fri, 14 Nov 2025 18:54:48 +0000
+Date: Fri, 14 Nov 2025 18:54:47 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>,
+	"David Hildenbrand (Red Hat)" <david@kernel.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linuxppc-dev@lists.ozlabs.org,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>
 Subject: Re: [akpm-mm:mm-unstable 36/283] mm/hugetlb.c:4753:18: warning:
  implicit conversion from 'unsigned long long' to 'unsigned long' changes
  value from 17179869184 to 0
-Message-ID: <20251114182956.GD2566209@ax162>
+Message-ID: <aRd69_c1pULRoKOU@casper.infradead.org>
 References: <202511141140.LrrRrtIv-lkp@intel.com>
+ <20251114182956.GD2566209@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,79 +56,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202511141140.LrrRrtIv-lkp@intel.com>
+In-Reply-To: <20251114182956.GD2566209@ax162>
 
-On Fri, Nov 14, 2025 at 02:46:06PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-> head:   1c571d1c4c7e042c3c313d1a2058a17848ccebac
-> commit: 2f6ff71280ffddb27ad7174d24f573e2683870cd [36/283] mm: fix MAX_FOLIO_ORDER on powerpc configs with hugetlb
-> config: powerpc-randconfig-002-20251114 (https://download.01.org/0day-ci/archive/20251114/202511141140.LrrRrtIv-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141140.LrrRrtIv-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511141140.LrrRrtIv-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
+On Fri, Nov 14, 2025 at 11:29:56AM -0700, Nathan Chancellor wrote:
+> > >> mm/util.c:1263:16: warning: implicit conversion from 'unsigned long long' to 'unsigned long' changes value from 17179869184 to 0 [-Wconstant-conversion]
+> >     1263 |         if (ps->idx < MAX_FOLIO_NR_PAGES) {
+> >          |                       ^~~~~~~~~~~~~~~~~~
+> >    include/linux/mm.h:2104:36: note: expanded from macro 'MAX_FOLIO_NR_PAGES'
+> >     2104 | #define MAX_FOLIO_NR_PAGES      (1UL << MAX_FOLIO_ORDER)
+> >          |                                         ^~~~~~~~~~~~~~~
+> >    include/linux/mm.h:2095:36: note: expanded from macro 'MAX_FOLIO_ORDER'
+> >     2095 | #define MAX_FOLIO_ORDER         get_order(SZ_16G)
+> >          |                                 ~~~~~~~~~ ^~~~~~
+> >    include/linux/sizes.h:56:19: note: expanded from macro 'SZ_16G'
+> >       56 | #define SZ_16G                          _AC(0x400000000, ULL)
+> >          |                                         ^~~~~~~~~~~~~~~~~~~~~
+
+Clearly this is a 32-bit build, since otherwise a conversion from
+"unsigned long long" to "unsigned long" is a NOP.  But 32-bit cannot
+support 16GB folios!
+
+I say this is a bug in powerpc32's config.
+
+#if !defined(CONFIG_ARCH_HAS_GIGANTIC_PAGE)
+#define MAX_FOLIO_ORDER         MAX_PAGE_ORDER
 ...
-> >> mm/util.c:1263:16: warning: implicit conversion from 'unsigned long long' to 'unsigned long' changes value from 17179869184 to 0 [-Wconstant-conversion]
->     1263 |         if (ps->idx < MAX_FOLIO_NR_PAGES) {
->          |                       ^~~~~~~~~~~~~~~~~~
->    include/linux/mm.h:2104:36: note: expanded from macro 'MAX_FOLIO_NR_PAGES'
->     2104 | #define MAX_FOLIO_NR_PAGES      (1UL << MAX_FOLIO_ORDER)
->          |                                         ^~~~~~~~~~~~~~~
->    include/linux/mm.h:2095:36: note: expanded from macro 'MAX_FOLIO_ORDER'
->     2095 | #define MAX_FOLIO_ORDER         get_order(SZ_16G)
->          |                                 ~~~~~~~~~ ^~~~~~
->    include/linux/sizes.h:56:19: note: expanded from macro 'SZ_16G'
->       56 | #define SZ_16G                          _AC(0x400000000, ULL)
->          |                                         ^~~~~~~~~~~~~~~~~~~~~
->    include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
->       21 | #define _AC(X,Y)        __AC(X,Y)
->          |                         ^~~~~~~~~
->    include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
->       20 | #define __AC(X,Y)       (X##Y)
->          |                          ^~~~
->    <scratch space>:39:1: note: expanded from here
->       39 | 0x400000000ULL
->          | ^~~~~~~~~~~~~~
->    1 warning generated.
+#else
+#define MAX_FOLIO_ORDER         PUD_ORDER
 
-For the record, this is not a clang specific warning, as it happens when
-building the same configuration with GCC:
+(PUD_ORDER is 16GB, so I think this will be what's being picked up)
 
-  In file included from include/vdso/const.h:5,
-                   from include/vdso/bits.h:5,
-                   from include/linux/bits.h:5,
-                   from include/linux/ratelimit_types.h:5,
-                   from include/linux/printk.h:9,
-                   from include/asm-generic/bug.h:28,
-                   from arch/powerpc/include/asm/bug.h:116,
-                   from include/linux/bug.h:5,
-                   from include/linux/mmdebug.h:5,
-                   from include/linux/mm.h:6,
-                   from mm/util.c:2:
-  mm/util.c: In function 'snapshot_page':
-  include/uapi/linux/const.h:20:25: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '17179869184' to '0' [-Woverflow]
-     20 | #define __AC(X,Y)       (X##Y)
-        |                         ^~~~~~
-  include/uapi/linux/const.h:21:25: note: in expansion of macro '__AC'
-     21 | #define _AC(X,Y)        __AC(X,Y)
-        |                         ^~~~
-  include/linux/sizes.h:56:41: note: in expansion of macro '_AC'
-     56 | #define SZ_16G                          _AC(0x400000000, ULL)
-        |                                         ^~~
-  include/linux/mm.h:2214:43: note: in expansion of macro 'SZ_16G'
-   2214 | #define MAX_FOLIO_ORDER         get_order(SZ_16G)
-        |                                           ^~~~~~
-  include/linux/mm.h:2223:41: note: in expansion of macro 'MAX_FOLIO_ORDER'
-   2223 | #define MAX_FOLIO_NR_PAGES      (1UL << MAX_FOLIO_ORDER)
-        |                                         ^~~~~~~~~~~~~~~
-  mm/util.c:1266:23: note: in expansion of macro 'MAX_FOLIO_NR_PAGES'
-   1266 |         if (ps->idx < MAX_FOLIO_NR_PAGES) {
-        |                       ^~~~~~~~~~~~~~~~~~
+but the only place the mentions ARCH_HAS_GIGANTIC_PAGE is pretty
+clearly dependent on 64bit ...
 
-Cheers,
-Nathan
+config PPC_RADIX_MMU
+        bool "Radix MMU Support"
+        depends on PPC_BOOK3S_64
+        select ARCH_HAS_GIGANTIC_PAGE
+
+so I'm a bit stuck about how this comes to be.  Adding the PPC people
+for thoughts.
+
