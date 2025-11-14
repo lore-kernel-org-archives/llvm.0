@@ -1,67 +1,65 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AEB2F6561;
-	Fri, 14 Nov 2025 06:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD022F6583;
+	Fri, 14 Nov 2025 06:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763102890; cv=none; b=V4Io75IxoMenw/mLopAw32X1WQCiiypYPDt9MwIQrMeO+2D6Nel0YUqgC/DDLX/KpJBxi90OW6fbpJCbE10G/SA6IrmCfy/eiHmUOV+HmyzZlr5oNmdy5PmU2DuYWGW2/Bu/avc8nKg2lzeI0Y8KJdr6Zj1DTLYqCKIERZl/wsc=
+	t=1763102890; cv=none; b=dAsUU2bFZuWSZfRM5DpkpiNOFCwDcnxaRMJC5VdfH19b+CqSH0Xe5OtMYJJRcQZg9G25TSBYpu6HUDHWEaNblvR0VjQ2HwLxJUE/PqOx6kibSz1tb+NrOxV9nrGktHsWaFOp0e+16bjaec/xO0Go/dabDhwc07MCnoEfTYCc+GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763102890; c=relaxed/simple;
-	bh=+qqUJbUfdNtUAp4I7SErk4lrdEOAX1LgY9PGJW2fAiE=;
+	bh=pZKyzn89sJVi0HXHu6ieIDlyw1dZFzhc/YUrZJ2GLMw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YbPAE0fuJp1Nf7fjksxQVqxSuNqStx4gUDwanuMnKvbU1uVuRNcFd5MzTGrpirc41KdCY86QR9bE4QD2CMxeZwWdhGGOKi4Iks88tii+iBMEvmOcVdHA1lvVrwUzOWBaFiemHKCNRnKyhv42gT9UJwBwnJQwcz7aiHSRqHqqdgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DMNrcvBn; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=QNSi6j6rk3rTFGf81p5pqgWHH9o5A2NeAt556R3cPCfOj2VjA9aCJrvIA4we045u2wu9gqG3c+QDvzW9dpvD6kwqnxcsv4I4tNvLzWEAgnyWiZJb/7+0bHCqD1e5Kcr5ws4JijDhi9jumylA88pjkHf3mGzABokwC7Kq20Ag3wE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cpWk6KOl; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DMNrcvBn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cpWk6KOl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1763102889; x=1794638889;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+qqUJbUfdNtUAp4I7SErk4lrdEOAX1LgY9PGJW2fAiE=;
-  b=DMNrcvBnVyfMtnWZLNbgNHHwfojyNuE8LwWisfolkxwrmiuiYr7d6TFG
-   /q7PKZq2mUncIlAK6W4s8wGqzT1qrksOP3g1txcbw5Owc6PzFhhDwkbdh
-   5jXUDqdwCgJVp3iGPZDgB0GxBA3TbDTEgIusucYfnAh9Zf7ejN9OB9Sqb
-   JXwKn26TCetj+OYCzyvCeqqJLmGL9VURtLGk+EWVoDokYmr/I+SQooDfT
-   TktQrpaWc7TFuIkQt5SRhYK6uaV4amiUumPpda5+w6DOvrStZWKfwL3Lf
-   Wd1DnI9/UB/FSXPGvcbe2QzupvWv1fbwxBYq3fSMdkmf738zhDbYGCK4H
-   A==;
-X-CSE-ConnectionGUID: BK/tMqtbRT+F05OO+n+Rlw==
-X-CSE-MsgGUID: 8Fc/zUQyQaGcoQN88XNEng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65132792"
+  bh=pZKyzn89sJVi0HXHu6ieIDlyw1dZFzhc/YUrZJ2GLMw=;
+  b=cpWk6KOlfgzxarl+WMgdWQzCt2VUwIrHvcGq8bH8gmwFsCPY+auVZspc
+   UqHi+Qcmeb7BR6/iQv9VG++hJCh/To8XdfEyUShbDBPPvfTXlFI7idoZJ
+   rLK/HHLYewYooqrh3dGHsToraaR5osFu4HNv/LXyeB+fexojhFzK8+Ipj
+   AHVJkXRgQ8fJeAKYcZPCwhFTObDr510b8005HxynBhaPkIbg4DvBxdqeL
+   BBpJ55ponpmUjuYSe4m1eTXUm2DLM5kqKg2IhfgSr31eqHXgM6i3HnLvR
+   kEQN0veqkGgXfUm3hZI7QTcf2blgg4wemdrXU/wHkxoIYjxgvUQx1bXbP
+   g==;
+X-CSE-ConnectionGUID: AcUUomMBRTaPg9YsTngMIQ==
+X-CSE-MsgGUID: FoYEQuo0RTK8Boc1ICoAnQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65132799"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="65132792"
+   d="scan'208";a="65132799"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 22:48:03 -0800
-X-CSE-ConnectionGUID: UrEjQwoeT7KhCKNJzXqufw==
-X-CSE-MsgGUID: GMG8FB9ITbmkemEMh8sdDg==
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 22:48:07 -0800
+X-CSE-ConnectionGUID: tREBgAOfQmyX+dwdZCrVmw==
+X-CSE-MsgGUID: IuZKnL+cS2eLPV/QVIHzXA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="189554985"
+   d="scan'208";a="189554981"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
   by fmviesa006.fm.intel.com with ESMTP; 13 Nov 2025 22:47:59 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vJnbB-0006Fp-1J;
+	id 1vJnbB-0006Fk-1C;
 	Fri, 14 Nov 2025 06:47:57 +0000
 Date: Fri, 14 Nov 2025 14:47:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: T Pratham <t-pratham@ti.com>, Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Manorit Chawdhry <m-chawdhry@ti.com>,
-	Kamlesh Gurudasani <kamlesh@ti.com>,
-	Shiva Tripathi <s-tripathi1@ti.com>,
-	Kavitha Malarvizhi <k-malarvizhi@ti.com>,
-	Vishal Mahaveer <vishalm@ti.com>, linux-crypto@vger.kernel.org,
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/4] crypto: ti - Add support for AES-GCM in DTHEv2
- driver
-Message-ID: <202511141245.zQcC9EcY-lkp@intel.com>
-References: <20251111112137.976121-4-t-pratham@ti.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
+	nuno.sa@analog.com, dlechner@baylibre.com, andy@kernel.org,
+	Michael.Hennerich@analog.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, cosmin.tanislav@analog.com,
+	marcelo.schmitt1@gmail.com
+Subject: Re: [PATCH v1 2/3] iio: adc: Initial support for AD4134
+Message-ID: <202511141221.nUo0NmMn-lkp@intel.com>
+References: <86f532ae3a9b3f122b9d5dbada9c131a0c048ca7.1762777931.git.marcelo.schmitt@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,131 +68,145 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251111112137.976121-4-t-pratham@ti.com>
+In-Reply-To: <86f532ae3a9b3f122b9d5dbada9c131a0c048ca7.1762777931.git.marcelo.schmitt@analog.com>
 
-Hi Pratham,
+Hi Marcelo,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on herbert-crypto-2.6/master]
-[also build test ERROR on linus/master v6.18-rc5]
-[cannot apply to herbert-cryptodev-2.6/master next-20251113]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on c5411c8b9ed1caf53604bb1a5be3f487988efc98]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/T-Pratham/crypto-ti-Add-support-for-AES-XTS-in-DTHEv2-driver/20251111-192827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git master
-patch link:    https://lore.kernel.org/r/20251111112137.976121-4-t-pratham%40ti.com
-patch subject: [PATCH v6 3/4] crypto: ti - Add support for AES-GCM in DTHEv2 driver
-config: arm-randconfig-003-20251114 (https://download.01.org/0day-ci/archive/20251114/202511141245.zQcC9EcY-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141245.zQcC9EcY-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/dt-bindings-iio-adc-Add-AD4134/20251110-204756
+base:   c5411c8b9ed1caf53604bb1a5be3f487988efc98
+patch link:    https://lore.kernel.org/r/86f532ae3a9b3f122b9d5dbada9c131a0c048ca7.1762777931.git.marcelo.schmitt%40analog.com
+patch subject: [PATCH v1 2/3] iio: adc: Initial support for AD4134
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251114/202511141221.nUo0NmMn-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141221.nUo0NmMn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511141245.zQcC9EcY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511141221.nUo0NmMn-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/crypto/ti/dthev2-aes.c:573:17: error: call to undeclared function 'crypto_alloc_sync_aead'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     573 |         ctx->aead_fb = crypto_alloc_sync_aead(alg_name, 0,
-         |                        ^
-   drivers/crypto/ti/dthev2-aes.c:573:17: note: did you mean 'crypto_alloc_aead'?
-   include/crypto/aead.h:181:21: note: 'crypto_alloc_aead' declared here
-     181 | struct crypto_aead *crypto_alloc_aead(const char *alg_name, u32 type, u32 mask);
-         |                     ^
->> drivers/crypto/ti/dthev2-aes.c:573:15: error: incompatible integer to pointer conversion assigning to 'struct crypto_sync_aead *' from 'int' [-Wint-conversion]
-     573 |         ctx->aead_fb = crypto_alloc_sync_aead(alg_name, 0,
-         |                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     574 |                                               CRYPTO_ALG_NEED_FALLBACK);
-         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/crypto/ti/dthev2-aes.c:588:2: error: call to undeclared function 'crypto_free_sync_aead'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     588 |         crypto_free_sync_aead(ctx->aead_fb);
-         |         ^
-   drivers/crypto/ti/dthev2-aes.c:588:2: note: did you mean 'crypto_free_aead'?
-   include/crypto/aead.h:194:20: note: 'crypto_free_aead' declared here
-     194 | static inline void crypto_free_aead(struct crypto_aead *tfm)
-         |                    ^
->> drivers/crypto/ti/dthev2-aes.c:831:2: error: call to undeclared function 'crypto_sync_aead_clear_flags'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     831 |         crypto_sync_aead_clear_flags(ctx->aead_fb, CRYPTO_TFM_REQ_MASK);
-         |         ^
-   drivers/crypto/ti/dthev2-aes.c:831:2: note: did you mean 'crypto_aead_clear_flags'?
-   include/crypto/aead.h:298:20: note: 'crypto_aead_clear_flags' declared here
-     298 | static inline void crypto_aead_clear_flags(struct crypto_aead *tfm, u32 flags)
-         |                    ^
->> drivers/crypto/ti/dthev2-aes.c:832:2: error: call to undeclared function 'crypto_sync_aead_set_flags'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     832 |         crypto_sync_aead_set_flags(ctx->aead_fb,
-         |         ^
->> drivers/crypto/ti/dthev2-aes.c:836:9: error: call to undeclared function 'crypto_sync_aead_setkey'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     836 |         return crypto_sync_aead_setkey(ctx->aead_fb, key, keylen);
-         |                ^
-   drivers/crypto/ti/dthev2-aes.c:836:9: note: did you mean 'crypto_aead_setkey'?
-   include/crypto/aead.h:319:5: note: 'crypto_aead_setkey' declared here
-     319 | int crypto_aead_setkey(struct crypto_aead *tfm,
-         |     ^
->> drivers/crypto/ti/dthev2-aes.c:846:9: error: call to undeclared function 'crypto_sync_aead_setauthsize'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     846 |         return crypto_sync_aead_setauthsize(ctx->aead_fb, authsize);
-         |                ^
-   drivers/crypto/ti/dthev2-aes.c:846:9: note: did you mean 'crypto_aead_setauthsize'?
-   include/crypto/aead.h:332:5: note: 'crypto_aead_setauthsize' declared here
-     332 | int crypto_aead_setauthsize(struct crypto_aead *tfm, unsigned int authsize);
-         |     ^
->> drivers/crypto/ti/dthev2-aes.c:854:2: error: call to undeclared function 'SYNC_AEAD_REQUEST_ON_STACK'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     854 |         SYNC_AEAD_REQUEST_ON_STACK(subreq, ctx->aead_fb);
-         |         ^
->> drivers/crypto/ti/dthev2-aes.c:854:29: error: use of undeclared identifier 'subreq'
-     854 |         SYNC_AEAD_REQUEST_ON_STACK(subreq, ctx->aead_fb);
-         |                                    ^~~~~~
-   drivers/crypto/ti/dthev2-aes.c:856:28: error: use of undeclared identifier 'subreq'
-     856 |         aead_request_set_callback(subreq, req->base.flags,
-         |                                   ^~~~~~
-   drivers/crypto/ti/dthev2-aes.c:858:25: error: use of undeclared identifier 'subreq'
-     858 |         aead_request_set_crypt(subreq, req->src, req->dst, req->cryptlen, req->iv);
-         |                                ^~~~~~
-   drivers/crypto/ti/dthev2-aes.c:859:22: error: use of undeclared identifier 'subreq'
-     859 |         aead_request_set_ad(subreq, req->assoclen);
-         |                             ^~~~~~
-   drivers/crypto/ti/dthev2-aes.c:861:41: error: use of undeclared identifier 'subreq'
-     861 |         return rctx->enc ? crypto_aead_encrypt(subreq) :
-         |                                                ^~~~~~
-   drivers/crypto/ti/dthev2-aes.c:862:23: error: use of undeclared identifier 'subreq'
-     862 |                 crypto_aead_decrypt(subreq);
-         |                                     ^~~~~~
-   14 errors generated.
+>> drivers/iio/adc/ad4134-common.c:178:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     178 |                                  FIELD_PREP(AD4134_DATA_PACKET_CONFIG_FRAME_MASK,
+         |                                  ^
+   1 error generated.
 
 
-vim +/crypto_alloc_sync_aead +573 drivers/crypto/ti/dthev2-aes.c
+vim +/FIELD_PREP +178 drivers/iio/adc/ad4134-common.c
 
-   563	
-   564	static int dthe_aead_init_tfm(struct crypto_aead *tfm)
-   565	{
-   566		struct dthe_tfm_ctx *ctx = crypto_aead_ctx(tfm);
-   567		struct dthe_data *dev_data = dthe_get_dev(ctx);
-   568	
-   569		ctx->dev_data = dev_data;
-   570	
-   571		const char *alg_name = crypto_tfm_alg_name(crypto_aead_tfm(tfm));
-   572	
- > 573		ctx->aead_fb = crypto_alloc_sync_aead(alg_name, 0,
-   574						      CRYPTO_ALG_NEED_FALLBACK);
-   575		if (IS_ERR(ctx->aead_fb)) {
-   576			dev_err(dev_data->dev, "fallback driver %s couldn't be loaded\n",
-   577				alg_name);
-   578			return PTR_ERR(ctx->aead_fb);
-   579		}
-   580	
-   581		return 0;
-   582	}
-   583	
-   584	static void dthe_aead_exit_tfm(struct crypto_aead *tfm)
-   585	{
-   586		struct dthe_tfm_ctx *ctx = crypto_aead_ctx(tfm);
-   587	
- > 588		crypto_free_sync_aead(ctx->aead_fb);
-   589	}
-   590	
+    87	
+    88	int ad4134_probe(struct device *dev, const struct ad4134_bus_info *bus_info)
+    89	{
+    90		bool use_internal_ldo_retulator;
+    91		struct gpio_desc *reset_gpio;
+    92		struct iio_dev *indio_dev;
+    93		struct ad4134_state *st;
+    94		int ret;
+    95	
+    96		indio_dev = devm_iio_device_alloc(dev, sizeof(*st));
+    97		if (!indio_dev)
+    98			return -ENOMEM;
+    99	
+   100		st = iio_priv(indio_dev);
+   101		st->dev = dev;
+   102	
+   103		indio_dev->name = bus_info->chip_info->name;
+   104	
+   105		/* Required regulators */
+   106		ret = devm_regulator_bulk_get_enable(dev, 3, ad4143_regulator_names);
+   107		if (ret)
+   108			return dev_err_probe(dev, ret, "failed to enable power supplies\n");
+   109	
+   110		/* Required regulator that we need to read the voltage */
+   111		ret = devm_regulator_get_enable_read_voltage(dev, "refin");
+   112		if (ret < 0)
+   113			return dev_err_probe(dev, ret, "failed to get REFIN voltage.\n");
+   114	
+   115		st->refin_mv = ret / MILLI;
+   116	
+   117		/*
+   118		 * If ldoin is not provided, then avdd1v8, dvdd1v8, and clkvdd are
+   119		 * required.
+   120		 */
+   121		ret = devm_regulator_get_enable_optional(dev, "ldoin");
+   122		if (ret < 0 && ret != -ENODEV)
+   123			return dev_err_probe(dev, ret, "failed to enable ldoin supply\n");
+   124	
+   125		use_internal_ldo_retulator = ret == 0;
+   126	
+   127		if (!use_internal_ldo_retulator) {
+   128			ret = devm_regulator_get_enable(dev, "avdd1v8");
+   129			if (ret < 0)
+   130				return dev_err_probe(dev, ret,
+   131						     "failed to enable avdd1v8 supply\n");
+   132	
+   133			ret = devm_regulator_get_enable(dev, "dvdd1v8");
+   134			if (ret < 0)
+   135				return dev_err_probe(dev, ret,
+   136						     "failed to enable dvdd1v8 supply\n");
+   137	
+   138			ret = devm_regulator_get_enable(dev, "clkvdd");
+   139			if (ret < 0)
+   140				return dev_err_probe(dev, ret,
+   141						     "failed to enable clkvdd supply\n");
+   142		}
+   143	
+   144		ret = ad4134_clock_select(st);
+   145		if (ret)
+   146			return ret;
+   147	
+   148		crc8_populate_msb(ad4134_spi_crc_table, AD4134_SPI_CRC_POLYNOM);
+   149	
+   150		reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+   151		if (IS_ERR(reset_gpio))
+   152			return dev_err_probe(dev, PTR_ERR(reset_gpio),
+   153					     "failed to find reset GPIO\n");
+   154	
+   155		if (reset_gpio) {
+   156			fsleep(AD4134_RESET_TIME_US);
+   157			gpiod_set_value_cansleep(reset_gpio, 0);
+   158		}
+   159	
+   160		ret = bus_info->bops->config_iio_dev(indio_dev);
+   161		if (ret)
+   162			return dev_err_probe(dev, ret, "failed to config IIO device\n");
+   163	
+   164		st->regmap = bus_info->bops->init_regmap(st);
+   165		if (IS_ERR(st->regmap))
+   166			return dev_err_probe(st->dev, PTR_ERR(st->regmap),
+   167					     "failed to initialize regmap");
+   168	
+   169		/* wiring/configuration specific setup */
+   170		ret = bus_info->bops->setup(st);
+   171		if (ret)
+   172			return dev_err_probe(dev, ret, "failed to setup bus\n");
+   173	
+   174		/* Bump precision to 24-bit */
+   175		st->current_scan_type = AD4134_DATA_PACKET_24BIT_FRAME;
+   176		ret = regmap_update_bits(st->regmap, AD4134_DATA_PACKET_CONFIG_REG,
+   177					 AD4134_DATA_PACKET_CONFIG_FRAME_MASK,
+ > 178					 FIELD_PREP(AD4134_DATA_PACKET_CONFIG_FRAME_MASK,
+   179						    st->current_scan_type));
+   180		if (ret)
+   181			return ret;
+   182	
+   183		/* Set high performance power mode */
+   184		ret = regmap_update_bits(st->regmap, AD4134_DEVICE_CONFIG_REG,
+   185					 AD4134_DEVICE_CONFIG_POWER_MODE_MASK,
+   186					 FIELD_PREP(AD4134_DEVICE_CONFIG_POWER_MODE_MASK,
+   187						    AD4134_POWER_MODE_HIGH_PERF));
+   188		if (ret)
+   189			return ret;
+   190	
+   191		return devm_iio_device_register(dev, indio_dev);
+   192	}
+   193	EXPORT_SYMBOL_NS_GPL(ad4134_probe, "IIO_AD4134");
+   194	
 
 -- 
 0-DAY CI Kernel Test Service
