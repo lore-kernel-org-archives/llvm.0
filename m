@@ -1,62 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5610730F52B;
-	Fri, 14 Nov 2025 17:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D1934A771;
+	Fri, 14 Nov 2025 18:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763140027; cv=none; b=KNk1b1JcXguRo0dKSWTAD0FAzJUsyCYHYl5ewnZJRGdyKf0Fr3SNbF7qM25tlTzyOPkcF1QdPhiqMdCUHv0JlSnw56qbE5gklXYda/7zgTVsqGjS/RtH2N4lsmEORyA07xQj3a+unz1SpufTrPeWtXhCI/IL3mAZ7himVMh6q+k=
+	t=1763145002; cv=none; b=OINWZFMKYol+wDhHoOq27W4WPpLjSlnBlr7l1mhO+8K+K4B1M6F+RIkppMaCHNnK4+S8rBeZKj02XttCa0fctKYVKtPhv9qHVIcbX1i3DLaxMoHY//do0NFza4ajKahrfX6aq5Ch8RexsPUaEBX13JHjOfatbIACWGjp4p5ZXuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763140027; c=relaxed/simple;
-	bh=dvmEoRCW0EDK8YgTunKSG7UFVtCEFJ6JhWmUpWvB9Ag=;
+	s=arc-20240116; t=1763145002; c=relaxed/simple;
+	bh=TIbxS6C7c5fCvewEBNrOfoVYvU8etxkoLMi7WDCMwqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RBSYk/xQ8P3lFjU3SiIcCje3utjqwB/kWB70Gyz+o3rC5nEvMh3AOH8Ui7vKuqLTNhv5Nnyx4219sOQKQFsskevdBtJZ9MnYSX1yPRFcZyuUqsXrcKpqgDuI4GmQae0sTdn8r7yHA8RVWjnlwszytRcbUfaDI1zekWIb/PCqUXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iA7qrkb+; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=W0h9qoYB52iuwP5xUm2ccWOSWZGiZZW6z1RmmPSlwJmZe//9bNnWMfLxJ+tWQWVp8ORR0PfWecwoyBNDWAm302V1LRFI048l2jQr3azlDSQbLnm7Xc+Cq1DYpv7o/3Ah0FlmQLjYcylIp5b1VrXh//BTDm4xoYP1/nQ9QNzfNkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUbzaX8m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iA7qrkb+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763140024; x=1794676024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dvmEoRCW0EDK8YgTunKSG7UFVtCEFJ6JhWmUpWvB9Ag=;
-  b=iA7qrkb+n35PaNmZLj4w7PCEDJQNyXI1S4OUi7MLAFUsCfu65EApWpAH
-   9o34htd7JU+ku6faN2jxFW47mMXBQEFBjw5eACDqbqSr/3MeuIeG4AFCu
-   fpE/tbpTXXMur/gsXDcls6Fa68UVcv9TD8uWP3JhYQnCWqNQoSgIl6OtJ
-   o3HxMlZ3sllzR+wAKIm1R0j6TDxEJ7zvev2E51Ad9DSX/kA6EpWCpAqxc
-   D6pDwiCZ9fL4lQkT0Np68gfnbMh5NtGk6uFDn3V7t951IDXqY+b9zCOzJ
-   j2UwGlRgrqTl29AjzIF8v6RNajkeH9AuOoJOJH2toi5QHhF2mFPGlHEOy
-   g==;
-X-CSE-ConnectionGUID: 16kfvL9HRlOB2vrECHUZGA==
-X-CSE-MsgGUID: Yjnh/6RTQeOoUjy8Y+sC8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65169421"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="65169421"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 09:07:03 -0800
-X-CSE-ConnectionGUID: A6XOc/ZYRIGJdn9NSAIE5w==
-X-CSE-MsgGUID: nWsnSUWUSAaXA1vZaAtPWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
-   d="scan'208";a="189111665"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 14 Nov 2025 09:07:01 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vJxGE-0006pj-30;
-	Fri, 14 Nov 2025 17:06:58 +0000
-Date: Sat, 15 Nov 2025 01:06:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kbusch@kernel.org,
-	chang.seok.bae@intel.com
-Subject: Re: [PATCH 07/10] KVM: emulate: add AVX support to register fetch
- and writeback
-Message-ID: <202511150016.KszKz14N-lkp@intel.com>
-References: <20251114003633.60689-8-pbonzini@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUbzaX8m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20FCC2BCB0;
+	Fri, 14 Nov 2025 18:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763145001;
+	bh=TIbxS6C7c5fCvewEBNrOfoVYvU8etxkoLMi7WDCMwqM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XUbzaX8m+OtqpsLPNs4j9vqpnhAj756anYr+ws9QRRC/gShZkuLDg58Le5LCNNOa1
+	 n4jCOkbVMhKaWWj9qU7dXy8wpVeGFYJXtbXNwZhfk6xIjcSVkxK2uZLHKkagIMWu0R
+	 OMypIBkw2zA6BlG3lCYRBGXmbSiqfBXaddUbPs0bWSJeo0n3xu8WXwrRYAzVeAKxc8
+	 WQVM1aaDL5blFOtwVV8vVjP/MpfoZD7Yb3sa1NWV/vE6DjJG3Ut2+QvuIlLSJ1dzWT
+	 uvqKSARrhe+FRNDJeD8NbrWcQyUVxLtQuXe+qEniZEsZRtwYU4X34TtqyJxUYbXwH9
+	 w49/0qdtqNGeA==
+Date: Fri, 14 Nov 2025 11:29:56 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-unstable 36/283] mm/hugetlb.c:4753:18: warning:
+ implicit conversion from 'unsigned long long' to 'unsigned long' changes
+ value from 17179869184 to 0
+Message-ID: <20251114182956.GD2566209@ax162>
+References: <202511141140.LrrRrtIv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,198 +46,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251114003633.60689-8-pbonzini@redhat.com>
+In-Reply-To: <202511141140.LrrRrtIv-lkp@intel.com>
 
-Hi Paolo,
+On Fri, Nov 14, 2025 at 02:46:06PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   1c571d1c4c7e042c3c313d1a2058a17848ccebac
+> commit: 2f6ff71280ffddb27ad7174d24f573e2683870cd [36/283] mm: fix MAX_FOLIO_ORDER on powerpc configs with hugetlb
+> config: powerpc-randconfig-002-20251114 (https://download.01.org/0day-ci/archive/20251114/202511141140.LrrRrtIv-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141140.LrrRrtIv-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511141140.LrrRrtIv-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+...
+> >> mm/util.c:1263:16: warning: implicit conversion from 'unsigned long long' to 'unsigned long' changes value from 17179869184 to 0 [-Wconstant-conversion]
+>     1263 |         if (ps->idx < MAX_FOLIO_NR_PAGES) {
+>          |                       ^~~~~~~~~~~~~~~~~~
+>    include/linux/mm.h:2104:36: note: expanded from macro 'MAX_FOLIO_NR_PAGES'
+>     2104 | #define MAX_FOLIO_NR_PAGES      (1UL << MAX_FOLIO_ORDER)
+>          |                                         ^~~~~~~~~~~~~~~
+>    include/linux/mm.h:2095:36: note: expanded from macro 'MAX_FOLIO_ORDER'
+>     2095 | #define MAX_FOLIO_ORDER         get_order(SZ_16G)
+>          |                                 ~~~~~~~~~ ^~~~~~
+>    include/linux/sizes.h:56:19: note: expanded from macro 'SZ_16G'
+>       56 | #define SZ_16G                          _AC(0x400000000, ULL)
+>          |                                         ^~~~~~~~~~~~~~~~~~~~~
+>    include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
+>       21 | #define _AC(X,Y)        __AC(X,Y)
+>          |                         ^~~~~~~~~
+>    include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
+>       20 | #define __AC(X,Y)       (X##Y)
+>          |                          ^~~~
+>    <scratch space>:39:1: note: expanded from here
+>       39 | 0x400000000ULL
+>          | ^~~~~~~~~~~~~~
+>    1 warning generated.
 
-kernel test robot noticed the following build errors:
+For the record, this is not a clang specific warning, as it happens when
+building the same configuration with GCC:
 
-[auto build test ERROR on v6.18-rc5]
-[also build test ERROR on linus/master next-20251114]
-[cannot apply to kvm/queue kvm/next mst-vhost/linux-next kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  In file included from include/vdso/const.h:5,
+                   from include/vdso/bits.h:5,
+                   from include/linux/bits.h:5,
+                   from include/linux/ratelimit_types.h:5,
+                   from include/linux/printk.h:9,
+                   from include/asm-generic/bug.h:28,
+                   from arch/powerpc/include/asm/bug.h:116,
+                   from include/linux/bug.h:5,
+                   from include/linux/mmdebug.h:5,
+                   from include/linux/mm.h:6,
+                   from mm/util.c:2:
+  mm/util.c: In function 'snapshot_page':
+  include/uapi/linux/const.h:20:25: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '17179869184' to '0' [-Woverflow]
+     20 | #define __AC(X,Y)       (X##Y)
+        |                         ^~~~~~
+  include/uapi/linux/const.h:21:25: note: in expansion of macro '__AC'
+     21 | #define _AC(X,Y)        __AC(X,Y)
+        |                         ^~~~
+  include/linux/sizes.h:56:41: note: in expansion of macro '_AC'
+     56 | #define SZ_16G                          _AC(0x400000000, ULL)
+        |                                         ^~~
+  include/linux/mm.h:2214:43: note: in expansion of macro 'SZ_16G'
+   2214 | #define MAX_FOLIO_ORDER         get_order(SZ_16G)
+        |                                           ^~~~~~
+  include/linux/mm.h:2223:41: note: in expansion of macro 'MAX_FOLIO_ORDER'
+   2223 | #define MAX_FOLIO_NR_PAGES      (1UL << MAX_FOLIO_ORDER)
+        |                                         ^~~~~~~~~~~~~~~
+  mm/util.c:1266:23: note: in expansion of macro 'MAX_FOLIO_NR_PAGES'
+   1266 |         if (ps->idx < MAX_FOLIO_NR_PAGES) {
+        |                       ^~~~~~~~~~~~~~~~~~
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Bonzini/KVM-emulate-add-MOVNTDQA/20251114-084216
-base:   v6.18-rc5
-patch link:    https://lore.kernel.org/r/20251114003633.60689-8-pbonzini%40redhat.com
-patch subject: [PATCH 07/10] KVM: emulate: add AVX support to register fetch and writeback
-config: i386-buildonly-randconfig-002-20251114 (https://download.01.org/0day-ci/archive/20251115/202511150016.KszKz14N-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511150016.KszKz14N-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511150016.KszKz14N-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:60:15: error: register %ymm14 is only available in 64-bit mode
-      60 |         case 14: asm("vmovdqa %0, %%ymm14" : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm14
-         |                           ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:57:15: error: register %ymm11 is only available in 64-bit mode
-      57 |         case 11: asm("vmovdqa %0, %%ymm11" : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm11
-         |                           ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:58:15: error: register %ymm12 is only available in 64-bit mode
-      58 |         case 12: asm("vmovdqa %0, %%ymm12" : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm12
-         |                           ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:55:15: error: register %ymm9 is only available in 64-bit mode
-      55 |         case 9:  asm("vmovdqa %0, %%ymm9"  : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm9
-         |                           ^~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:61:15: error: register %ymm15 is only available in 64-bit mode
-      61 |         case 15: asm("vmovdqa %0, %%ymm15" : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm15
-         |                           ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:59:15: error: register %ymm13 is only available in 64-bit mode
-      59 |         case 13: asm("vmovdqa %0, %%ymm13" : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm13
-         |                           ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:56:15: error: register %ymm10 is only available in 64-bit mode
-      56 |         case 10: asm("vmovdqa %0, %%ymm10" : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm10
-         |                           ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
->> arch/x86/kvm/fpu.h:54:15: error: register %ymm8 is only available in 64-bit mode
-      54 |         case 8:  asm("vmovdqa %0, %%ymm8"  : : "m"(*data)); break;
-         |                      ^
-   <inline asm>:1:20: note: instantiated into assembly here
-       1 |         vmovdqa 32(%esi), %ymm8
-         |                           ^~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:37:15: error: register %ymm14 is only available in 64-bit mode
-      37 |         case 14: asm("vmovdqa %%ymm14, %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm14, 32(%esi)
-         |                 ^~~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:34:15: error: register %ymm11 is only available in 64-bit mode
-      34 |         case 11: asm("vmovdqa %%ymm11, %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm11, 32(%esi)
-         |                 ^~~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:35:15: error: register %ymm12 is only available in 64-bit mode
-      35 |         case 12: asm("vmovdqa %%ymm12, %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm12, 32(%esi)
-         |                 ^~~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:32:15: error: register %ymm9 is only available in 64-bit mode
-      32 |         case 9:  asm("vmovdqa %%ymm9,  %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm9,  32(%esi)
-         |                 ^~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:38:15: error: register %ymm15 is only available in 64-bit mode
-      38 |         case 15: asm("vmovdqa %%ymm15, %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm15, 32(%esi)
-         |                 ^~~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:36:15: error: register %ymm13 is only available in 64-bit mode
-      36 |         case 13: asm("vmovdqa %%ymm13, %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm13, 32(%esi)
-         |                 ^~~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:33:15: error: register %ymm10 is only available in 64-bit mode
-      33 |         case 10: asm("vmovdqa %%ymm10, %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm10, 32(%esi)
-         |                 ^~~~~~~
-   In file included from arch/x86/kvm/emulate.c:24:
-   In file included from arch/x86/kvm/kvm_emulate.h:16:
-   arch/x86/kvm/fpu.h:31:15: error: register %ymm8 is only available in 64-bit mode
-      31 |         case 8:  asm("vmovdqa %%ymm8,  %0" : "=m"(*data)); break;
-         |                      ^
-   <inline asm>:1:10: note: instantiated into assembly here
-       1 |         vmovdqa %ymm8,  32(%esi)
-         |                 ^~~~~~
-   16 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for I2C_K1
-   Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && OF [=n]
-   Selected by [m]:
-   - MFD_SPACEMIT_P1 [=m] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && I2C [=y]
-
-
-vim +60 arch/x86/kvm/fpu.h
-
-    42	
-    43	static inline void _kvm_write_avx_reg(int reg, const avx256_t *data)
-    44	{
-    45		switch (reg) {
-    46		case 0:  asm("vmovdqa %0, %%ymm0"  : : "m"(*data)); break;
-    47		case 1:  asm("vmovdqa %0, %%ymm1"  : : "m"(*data)); break;
-    48		case 2:  asm("vmovdqa %0, %%ymm2"  : : "m"(*data)); break;
-    49		case 3:  asm("vmovdqa %0, %%ymm3"  : : "m"(*data)); break;
-    50		case 4:  asm("vmovdqa %0, %%ymm4"  : : "m"(*data)); break;
-    51		case 5:  asm("vmovdqa %0, %%ymm5"  : : "m"(*data)); break;
-    52		case 6:  asm("vmovdqa %0, %%ymm6"  : : "m"(*data)); break;
-    53		case 7:  asm("vmovdqa %0, %%ymm7"  : : "m"(*data)); break;
-  > 54		case 8:  asm("vmovdqa %0, %%ymm8"  : : "m"(*data)); break;
-  > 55		case 9:  asm("vmovdqa %0, %%ymm9"  : : "m"(*data)); break;
-  > 56		case 10: asm("vmovdqa %0, %%ymm10" : : "m"(*data)); break;
-  > 57		case 11: asm("vmovdqa %0, %%ymm11" : : "m"(*data)); break;
-  > 58		case 12: asm("vmovdqa %0, %%ymm12" : : "m"(*data)); break;
-  > 59		case 13: asm("vmovdqa %0, %%ymm13" : : "m"(*data)); break;
-  > 60		case 14: asm("vmovdqa %0, %%ymm14" : : "m"(*data)); break;
-  > 61		case 15: asm("vmovdqa %0, %%ymm15" : : "m"(*data)); break;
-    62		default: BUG();
-    63		}
-    64	}
-    65	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
