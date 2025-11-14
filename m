@@ -1,74 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D6E2F3C34;
-	Fri, 14 Nov 2025 06:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175CC220F5D;
+	Fri, 14 Nov 2025 06:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763102827; cv=none; b=G4Ga5k4C6EYZ+F+tcgrk4hRdyL42AMuqfKmh8GHOureZFZhq2ZffnZCBj6HQOYuU95DWQ2g7o57KA/lsv3GodaIlUsf/bsABfKJ9zxnNTYM5c7WinU5fu5TxVJe3vyJjklkgsXoUS5Y7mzW/NWg7dEUdzkeMpfj+8LxIpEQp/OA=
+	t=1763102884; cv=none; b=fXcO+65gZ5RQwdlRc2EjVFZSjr+Y3H5YpA/3Z6QnBeHA2SkHpdQ+GRJ4vWGmTiMJYbKthTwgAuek1KzSF2sR5YxNvxUKMKKdcgO0rr8RTV/7t07U5FzgAaXvtcm1skcRCxaTcvTEei4+XpG548lWAnAtKuwI2go/cDTYcsZxmZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763102827; c=relaxed/simple;
-	bh=pn5oa3TGUgoDE+6tn2mRbL3CFXwukiDstAeboGmSXO4=;
+	s=arc-20240116; t=1763102884; c=relaxed/simple;
+	bh=7kyh+6I6Oh4ZOts3YxSq4YLYKrEateEj8svhoz3xPVE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JGdNFwZ9dAADDHOiaKKJ7RfMLehn/3iUjS0BuU/L4b7FG0X2uY8lACzHrSgzvSDRgj7us/M3KLBv3Jm2pHTNnTJvPF2tFZoV3zJv/HM6EbfOzvcNinlGaBrTWsNOWKpasH8xvjITfv8HmqdFnDYAiHjVIPp1IzkwtUl3VwvMbKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3dP4IKf; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=j6Mr/oH05LLlXAw1DvkQjkmr2kZrB43wJIPreTmn2n9HO490m6I+8e/Waci8CMT2BuP5v4m4mUYllVqGMIuFxp02a8Fcfhnw/HnG+z5dJp5ZAofDK+cCJCHgdjPfkrC7h2LlpJpZt2x0Z0IvkrzdOB1YVU+V0YouSzNuF9ZyFfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QFhQKRgd; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3dP4IKf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QFhQKRgd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763102825; x=1794638825;
+  t=1763102883; x=1794638883;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pn5oa3TGUgoDE+6tn2mRbL3CFXwukiDstAeboGmSXO4=;
-  b=I3dP4IKfTMqKGTe4G5Re/5W53cqH8JqgyEpZnuyu5mcJmjM1ocJnezVe
-   Q4wepwVwRu0LoWRgUKlC+RS3/MSaBp8PaIghZwNOCTEexx8qucLc7J3K+
-   GNXZ4maDx386VA9MjSPQWaEn3UB2ATxYtfHbWyrpdNAJXfIqf43AxytmX
-   MbaQhXUAIUsVsxDJklUtyRp9OOyE/Lh4Dx6bmYFInFVfFQtTG2NYXGXVG
-   M+6OKwQNvWeKGvEexcM2rkuvhXCBDotlYni8gepc0GYszE8rIevtYZ11Y
-   rTBL2zja7WY5T49y64gM9MZ547lEuHCBEWMGDXuNjwdK4RZUG5wPlzZQT
-   g==;
-X-CSE-ConnectionGUID: +UoaugxnROOXhqEcngNpNQ==
-X-CSE-MsgGUID: 5KfCGIjNRBeRzAr6q7EYEw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="64400143"
-X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="64400143"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 22:47:04 -0800
-X-CSE-ConnectionGUID: f3+f0+DlR1eYUHnDegYy7Q==
-X-CSE-MsgGUID: CgfjtlbeSre9NPoZvHkDPA==
+  bh=7kyh+6I6Oh4ZOts3YxSq4YLYKrEateEj8svhoz3xPVE=;
+  b=QFhQKRgdvZQZkLtGGGSTz6Wylzp0Nn+3eYEC30mII5+MtQIeyCrOGj5a
+   btopDW4I0iNSeiKpTdMckw3OBnWXIyCGah6zyHM5T0QHO2I0FTdf9Me1x
+   ndKtrNkUOmwqn5iD/N6BEImItboS7EsrLXdxisgFr8TCua39ofpq/fBUX
+   ToYvXWbrVj8DMZoiq3wrUmTDMh1v3ro76hRGJ5oHeD5kDZhNJaFJn24mX
+   n1ICGtpmEGwO4e3y24/u6InqSv9gQ7A7WnNDiNRzsQQ37DdiTzQali7cn
+   9TZEwC8fpmvwTAfRJFfDiviM2Apj5X0Ee9HK8rcamij26sdS/eGSVo6iK
+   w==;
+X-CSE-ConnectionGUID: ssD69OC9TXKhJiZjq2El4w==
+X-CSE-MsgGUID: r19ZiCmmTPmpkGOrTWYGEA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65132778"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="65132778"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 22:48:03 -0800
+X-CSE-ConnectionGUID: 37HgpYzCQU6lADhFM6AdIQ==
+X-CSE-MsgGUID: w2FhyoCxTUCpPPfVwFrQDA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
-   d="scan'208";a="220359551"
+   d="scan'208";a="189554980"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 13 Nov 2025 22:46:59 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 13 Nov 2025 22:47:59 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vJnaD-0006F5-0S;
-	Fri, 14 Nov 2025 06:46:57 +0000
-Date: Fri, 14 Nov 2025 14:45:59 +0800
+	id 1vJnbB-0006Fh-16;
+	Fri, 14 Nov 2025 06:47:57 +0000
+Date: Fri, 14 Nov 2025 14:47:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>
+To: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
-	Rayagond Kokatanur <rayagond@vayavyalabs.com>,
-	Giuseppe CAVALLARO <peppe.cavallaro@st.com>, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH net] net: stmmac: add clk_prepare_enable() error handling
-Message-ID: <202511141014.PnFNp7CX-lkp@intel.com>
-References: <20251113134009.79440-1-Pavel.Zhigulin@kaspersky.com>
+	kernel-dev@igalia.com, Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Peter Ziljstra <peterz@infradead.org>
+Subject: Re: [PATCH] sched/psi: Streamline the flow in psi_group_change
+Message-ID: <202511141344.rntAQaRB-lkp@intel.com>
+References: <20251113122254.40445-1-tvrtko.ursulin@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,324 +67,133 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251113134009.79440-1-Pavel.Zhigulin@kaspersky.com>
+In-Reply-To: <20251113122254.40445-1-tvrtko.ursulin@igalia.com>
 
-Hi Pavel,
+Hi Tvrtko,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on net/main]
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on linus/master v6.18-rc5 next-20251113]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Zhigulin/net-stmmac-add-clk_prepare_enable-error-handling/20251113-222525
-base:   net/main
-patch link:    https://lore.kernel.org/r/20251113134009.79440-1-Pavel.Zhigulin%40kaspersky.com
-patch subject: [PATCH net] net: stmmac: add clk_prepare_enable() error handling
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251114/202511141014.PnFNp7CX-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tvrtko-Ursulin/sched-psi-Streamline-the-flow-in-psi_group_change/20251113-203009
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20251113122254.40445-1-tvrtko.ursulin%40igalia.com
+patch subject: [PATCH] sched/psi: Streamline the flow in psi_group_change
+config: arm-randconfig-003-20251114 (https://download.01.org/0day-ci/archive/20251114/202511141344.rntAQaRB-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141014.PnFNp7CX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141344.rntAQaRB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511141014.PnFNp7CX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511141344.rntAQaRB-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c:646:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     646 |         if (rc < 0) {
-         |             ^~~~~~
-   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c:687:9: note: uninitialized use occurs here
-     687 |         return ret;
-         |                ^~~
-   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c:646:2: note: remove the 'if' if its condition is always false
-     646 |         if (rc < 0) {
-         |         ^~~~~~~~~~~~~
-     647 |                 dev_err(&pdev->dev, "Cannot enable pclk: %d\n", rc);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     648 |                 goto error_pclk_get;
-         |                 ~~~~~~~~~~~~~~~~~~~~
-     649 |         }
-         |         ~
-   drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c:436:11: note: initialize the variable 'ret' to silence this warning
-     436 |         void *ret;
-         |                  ^
-         |                   = NULL
+   In file included from kernel/sched/build_utility.c:93:
+>> kernel/sched/psi.c:855:42: warning: variable 'state_mask' is uninitialized when used here [-Wuninitialized]
+     855 |         state_mask = test_states(groupc->tasks, state_mask);
+         |                                                 ^~~~~~~~~~
+   kernel/sched/psi.c:802:16: note: initialize the variable 'state_mask' to silence this warning
+     802 |         u32 state_mask;
+         |                       ^
+         |                        = 0
    1 warning generated.
 
 
-vim +646 drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+vim +/state_mask +855 kernel/sched/psi.c
 
-   419	
-   420	/**
-   421	 * stmmac_probe_config_dt - parse device-tree driver parameters
-   422	 * @pdev: platform_device structure
-   423	 * @mac: MAC address to use
-   424	 * Description:
-   425	 * this function is to read the driver parameters from device-tree and
-   426	 * set some private fields that will be used by the main at runtime.
-   427	 */
-   428	static struct plat_stmmacenet_data *
-   429	stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
-   430	{
-   431		struct device_node *np = pdev->dev.of_node;
-   432		struct plat_stmmacenet_data *plat;
-   433		struct stmmac_dma_cfg *dma_cfg;
-   434		static int bus_id = -ENODEV;
-   435		int phy_mode;
-   436		void *ret;
-   437		int rc;
-   438	
-   439		plat = devm_kzalloc(&pdev->dev, sizeof(*plat), GFP_KERNEL);
-   440		if (!plat)
-   441			return ERR_PTR(-ENOMEM);
-   442	
-   443		rc = of_get_mac_address(np, mac);
-   444		if (rc) {
-   445			if (rc == -EPROBE_DEFER)
-   446				return ERR_PTR(rc);
-   447	
-   448			eth_zero_addr(mac);
-   449		}
-   450	
-   451		phy_mode = device_get_phy_mode(&pdev->dev);
-   452		if (phy_mode < 0)
-   453			return ERR_PTR(phy_mode);
-   454	
-   455		plat->phy_interface = phy_mode;
-   456	
-   457		rc = stmmac_of_get_mac_mode(np);
-   458		if (rc >= 0 && rc != phy_mode)
-   459			dev_warn(&pdev->dev,
-   460				 "\"mac-mode\" property used for %s but differs to \"phy-mode\" of %s, and will be ignored. Please report.\n",
-   461				 phy_modes(rc), phy_modes(phy_mode));
-   462	
-   463		/* Some wrapper drivers still rely on phy_node. Let's save it while
-   464		 * they are not converted to phylink. */
-   465		plat->phy_node = of_parse_phandle(np, "phy-handle", 0);
-   466	
-   467		/* PHYLINK automatically parses the phy-handle property */
-   468		plat->port_node = of_fwnode_handle(np);
-   469	
-   470		/* Get max speed of operation from device tree */
-   471		of_property_read_u32(np, "max-speed", &plat->max_speed);
-   472	
-   473		plat->bus_id = of_alias_get_id(np, "ethernet");
-   474		if (plat->bus_id < 0) {
-   475			if (bus_id < 0)
-   476				bus_id = of_alias_get_highest_id("ethernet");
-   477			/* No ethernet alias found, init at -1 so first bus_id is 0 */
-   478			if (bus_id < 0)
-   479				bus_id = -1;
-   480			plat->bus_id = ++bus_id;
-   481		}
-   482	
-   483		/* Default to phy auto-detection */
-   484		plat->phy_addr = -1;
-   485	
-   486		/* Default to get clk_csr from stmmac_clk_csr_set(),
-   487		 * or get clk_csr from device tree.
-   488		 */
-   489		plat->clk_csr = -1;
-   490		if (of_property_read_u32(np, "snps,clk-csr", &plat->clk_csr))
-   491			of_property_read_u32(np, "clk_csr", &plat->clk_csr);
-   492	
-   493		/* "snps,phy-addr" is not a standard property. Mark it as deprecated
-   494		 * and warn of its use. Remove this when phy node support is added.
-   495		 */
-   496		if (of_property_read_u32(np, "snps,phy-addr", &plat->phy_addr) == 0)
-   497			dev_warn(&pdev->dev, "snps,phy-addr property is deprecated\n");
-   498	
-   499		rc = stmmac_mdio_setup(plat, np, &pdev->dev);
-   500		if (rc) {
-   501			ret = ERR_PTR(rc);
-   502			goto error_put_phy;
-   503		}
-   504	
-   505		of_property_read_u32(np, "tx-fifo-depth", &plat->tx_fifo_size);
-   506	
-   507		of_property_read_u32(np, "rx-fifo-depth", &plat->rx_fifo_size);
-   508	
-   509		plat->force_sf_dma_mode =
-   510			of_property_read_bool(np, "snps,force_sf_dma_mode");
-   511	
-   512		if (of_property_read_bool(np, "snps,en-tx-lpi-clockgating")) {
-   513			dev_warn(&pdev->dev,
-   514				 "OF property snps,en-tx-lpi-clockgating is deprecated, please convert driver to use STMMAC_FLAG_EN_TX_LPI_CLK_PHY_CAP\n");
-   515			plat->flags |= STMMAC_FLAG_EN_TX_LPI_CLOCKGATING;
-   516		}
-   517	
-   518		/* Set the maxmtu to a default of JUMBO_LEN in case the
-   519		 * parameter is not present in the device tree.
-   520		 */
-   521		plat->maxmtu = JUMBO_LEN;
-   522	
-   523		/* Set default value for multicast hash bins */
-   524		plat->multicast_filter_bins = HASH_TABLE_SIZE;
-   525	
-   526		/* Set default value for unicast filter entries */
-   527		plat->unicast_filter_entries = 1;
-   528	
-   529		/*
-   530		 * Currently only the properties needed on SPEAr600
-   531		 * are provided. All other properties should be added
-   532		 * once needed on other platforms.
-   533		 */
-   534		if (of_device_is_compatible(np, "st,spear600-gmac") ||
-   535			of_device_is_compatible(np, "snps,dwmac-3.50a") ||
-   536			of_device_is_compatible(np, "snps,dwmac-3.70a") ||
-   537			of_device_is_compatible(np, "snps,dwmac-3.72a") ||
-   538			of_device_is_compatible(np, "snps,dwmac")) {
-   539			/* Note that the max-frame-size parameter as defined in the
-   540			 * ePAPR v1.1 spec is defined as max-frame-size, it's
-   541			 * actually used as the IEEE definition of MAC Client
-   542			 * data, or MTU. The ePAPR specification is confusing as
-   543			 * the definition is max-frame-size, but usage examples
-   544			 * are clearly MTUs
-   545			 */
-   546			of_property_read_u32(np, "max-frame-size", &plat->maxmtu);
-   547			of_property_read_u32(np, "snps,multicast-filter-bins",
-   548					     &plat->multicast_filter_bins);
-   549			of_property_read_u32(np, "snps,perfect-filter-entries",
-   550					     &plat->unicast_filter_entries);
-   551			plat->unicast_filter_entries = dwmac1000_validate_ucast_entries(
-   552					&pdev->dev, plat->unicast_filter_entries);
-   553			plat->multicast_filter_bins = dwmac1000_validate_mcast_bins(
-   554					&pdev->dev, plat->multicast_filter_bins);
-   555			plat->has_gmac = 1;
-   556			plat->pmt = 1;
-   557		}
-   558	
-   559		if (of_device_is_compatible(np, "snps,dwmac-3.40a")) {
-   560			plat->has_gmac = 1;
-   561			plat->enh_desc = 1;
-   562			plat->tx_coe = 1;
-   563			plat->bugged_jumbo = 1;
-   564			plat->pmt = 1;
-   565		}
-   566	
-   567		if (of_device_compatible_match(np, stmmac_gmac4_compats)) {
-   568			plat->has_gmac4 = 1;
-   569			plat->has_gmac = 0;
-   570			plat->pmt = 1;
-   571			if (of_property_read_bool(np, "snps,tso"))
-   572				plat->flags |= STMMAC_FLAG_TSO_EN;
-   573		}
-   574	
-   575		if (of_device_is_compatible(np, "snps,dwmac-3.610") ||
-   576			of_device_is_compatible(np, "snps,dwmac-3.710")) {
-   577			plat->enh_desc = 1;
-   578			plat->bugged_jumbo = 1;
-   579			plat->force_sf_dma_mode = 1;
-   580		}
-   581	
-   582		if (of_device_is_compatible(np, "snps,dwxgmac")) {
-   583			plat->has_xgmac = 1;
-   584			plat->pmt = 1;
-   585			if (of_property_read_bool(np, "snps,tso"))
-   586				plat->flags |= STMMAC_FLAG_TSO_EN;
-   587			of_property_read_u32(np, "snps,multicast-filter-bins",
-   588					     &plat->multicast_filter_bins);
-   589		}
-   590	
-   591		dma_cfg = devm_kzalloc(&pdev->dev, sizeof(*dma_cfg),
-   592				       GFP_KERNEL);
-   593		if (!dma_cfg) {
-   594			ret = ERR_PTR(-ENOMEM);
-   595			goto error_put_mdio;
-   596		}
-   597		plat->dma_cfg = dma_cfg;
-   598	
-   599		of_property_read_u32(np, "snps,pbl", &dma_cfg->pbl);
-   600		if (!dma_cfg->pbl)
-   601			dma_cfg->pbl = DEFAULT_DMA_PBL;
-   602		of_property_read_u32(np, "snps,txpbl", &dma_cfg->txpbl);
-   603		of_property_read_u32(np, "snps,rxpbl", &dma_cfg->rxpbl);
-   604		dma_cfg->pblx8 = !of_property_read_bool(np, "snps,no-pbl-x8");
-   605	
-   606		dma_cfg->aal = of_property_read_bool(np, "snps,aal");
-   607		dma_cfg->fixed_burst = of_property_read_bool(np, "snps,fixed-burst");
-   608		dma_cfg->mixed_burst = of_property_read_bool(np, "snps,mixed-burst");
-   609	
-   610		plat->force_thresh_dma_mode = of_property_read_bool(np, "snps,force_thresh_dma_mode");
-   611		if (plat->force_thresh_dma_mode && plat->force_sf_dma_mode) {
-   612			plat->force_sf_dma_mode = 0;
-   613			dev_warn(&pdev->dev,
-   614				 "force_sf_dma_mode is ignored if force_thresh_dma_mode is set.\n");
-   615		}
-   616	
-   617		of_property_read_u32(np, "snps,ps-speed", &plat->mac_port_sel_speed);
-   618	
-   619		plat->axi = stmmac_axi_setup(pdev);
-   620	
-   621		rc = stmmac_mtl_setup(pdev, plat);
-   622		if (rc) {
-   623			ret = ERR_PTR(rc);
-   624			goto error_put_mdio;
-   625		}
-   626	
-   627		/* clock setup */
-   628		if (!of_device_is_compatible(np, "snps,dwc-qos-ethernet-4.10")) {
-   629			plat->stmmac_clk = devm_clk_get(&pdev->dev,
-   630							STMMAC_RESOURCE_NAME);
-   631			if (IS_ERR(plat->stmmac_clk)) {
-   632				dev_warn(&pdev->dev, "Cannot get CSR clock\n");
-   633				plat->stmmac_clk = NULL;
-   634			}
-   635			rc = clk_prepare_enable(plat->stmmac_clk);
-   636			if (rc < 0)
-   637				dev_warn(&pdev->dev, "Cannot enable CSR clock: %d\n", rc);
-   638		}
-   639	
-   640		plat->pclk = devm_clk_get_optional(&pdev->dev, "pclk");
-   641		if (IS_ERR(plat->pclk)) {
-   642			ret = plat->pclk;
-   643			goto error_pclk_get;
-   644		}
-   645		rc = clk_prepare_enable(plat->pclk);
- > 646		if (rc < 0) {
-   647			dev_err(&pdev->dev, "Cannot enable pclk: %d\n", rc);
-   648			goto error_pclk_get;
-   649		}
-   650	
-   651		/* Fall-back to main clock in case of no PTP ref is passed */
-   652		plat->clk_ptp_ref = devm_clk_get(&pdev->dev, "ptp_ref");
-   653		if (IS_ERR(plat->clk_ptp_ref)) {
-   654			plat->clk_ptp_rate = clk_get_rate(plat->stmmac_clk);
-   655			plat->clk_ptp_ref = NULL;
-   656			dev_info(&pdev->dev, "PTP uses main clock\n");
-   657		} else {
-   658			plat->clk_ptp_rate = clk_get_rate(plat->clk_ptp_ref);
-   659			dev_dbg(&pdev->dev, "PTP rate %lu\n", plat->clk_ptp_rate);
-   660		}
-   661	
-   662		plat->stmmac_rst = devm_reset_control_get_optional(&pdev->dev,
-   663								   STMMAC_RESOURCE_NAME);
-   664		if (IS_ERR(plat->stmmac_rst)) {
-   665			ret = plat->stmmac_rst;
-   666			goto error_hw_init;
-   667		}
-   668	
-   669		plat->stmmac_ahb_rst = devm_reset_control_get_optional_shared(
-   670								&pdev->dev, "ahb");
-   671		if (IS_ERR(plat->stmmac_ahb_rst)) {
-   672			ret = plat->stmmac_ahb_rst;
-   673			goto error_hw_init;
-   674		}
-   675	
-   676		return plat;
-   677	
-   678	error_hw_init:
-   679		clk_disable_unprepare(plat->pclk);
-   680	error_pclk_get:
-   681		clk_disable_unprepare(plat->stmmac_clk);
-   682	error_put_mdio:
-   683		of_node_put(plat->mdio_node);
-   684	error_put_phy:
-   685		of_node_put(plat->phy_node);
-   686	
-   687		return ret;
-   688	}
-   689	
+eb414681d5a07d Johannes Weiner    2018-10-26  792  
+570c8efd5eb79c Peter Zijlstra     2025-05-23  793  #define for_each_group(iter, group) \
+570c8efd5eb79c Peter Zijlstra     2025-05-23  794  	for (typeof(group) iter = group; iter; iter = iter->parent)
+570c8efd5eb79c Peter Zijlstra     2025-05-23  795  
+36b238d5717279 Johannes Weiner    2020-03-16  796  static void psi_group_change(struct psi_group *group, int cpu,
+3840cbe24cf060 Johannes Weiner    2024-10-03  797  			     unsigned int clear, unsigned int set,
+570c8efd5eb79c Peter Zijlstra     2025-05-23  798  			     u64 now, bool wake_clock)
+eb414681d5a07d Johannes Weiner    2018-10-26  799  {
+eb414681d5a07d Johannes Weiner    2018-10-26  800  	struct psi_group_cpu *groupc;
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  801  	unsigned long t, m;
+71dbdde7914d32 Johannes Weiner    2022-08-26  802  	u32 state_mask;
+eb414681d5a07d Johannes Weiner    2018-10-26  803  
+ddae0ca2a8fe12 John Stultz        2024-06-18  804  	lockdep_assert_rq_held(cpu_rq(cpu));
+eb414681d5a07d Johannes Weiner    2018-10-26  805  	groupc = per_cpu_ptr(group->pcpu, cpu);
+eb414681d5a07d Johannes Weiner    2018-10-26  806  
+71dbdde7914d32 Johannes Weiner    2022-08-26  807  	/*
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  808  	 * TSK_ONCPU does not have a corresponding task count - it's just a
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  809  	 * boolean flag directly encoded in the state mask. Clear, set, or carry
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  810  	 * the current state if no changes are requested.
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  811  	 *
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  812  	 * The rest of the state mask is calculated based on the task counts.
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  813  	 * Update those first, then construct the mask.
+71dbdde7914d32 Johannes Weiner    2022-08-26  814  	 */
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  815  	m = clear;
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  816  	for_each_set_bit(t, &m, ARRAY_SIZE(groupc->tasks)) {
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  817  		if (likely(groupc->tasks[t])) {
+9d10a13d1e4c34 Charan Teja Reddy  2021-04-16  818  			groupc->tasks[t]--;
+9d10a13d1e4c34 Charan Teja Reddy  2021-04-16  819  		} else if (!psi_bug) {
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  820  			printk_deferred(KERN_ERR "psi: task underflow! cpu=%d t=%lu tasks=[%u %u %u %u] clear=%x set=%x\n",
+eb414681d5a07d Johannes Weiner    2018-10-26  821  					cpu, t, groupc->tasks[0],
+eb414681d5a07d Johannes Weiner    2018-10-26  822  					groupc->tasks[1], groupc->tasks[2],
+71dbdde7914d32 Johannes Weiner    2022-08-26  823  					groupc->tasks[3], clear, set);
+eb414681d5a07d Johannes Weiner    2018-10-26  824  			psi_bug = 1;
+eb414681d5a07d Johannes Weiner    2018-10-26  825  		}
+eb414681d5a07d Johannes Weiner    2018-10-26  826  	}
+eb414681d5a07d Johannes Weiner    2018-10-26  827  
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  828  	m = set;
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  829  	for_each_set_bit(t, &m, ARRAY_SIZE(groupc->tasks))
+eb414681d5a07d Johannes Weiner    2018-10-26  830  		groupc->tasks[t]++;
+eb414681d5a07d Johannes Weiner    2018-10-26  831  
+34f26a15611afb Chengming Zhou     2022-09-07  832  	if (!group->enabled) {
+34f26a15611afb Chengming Zhou     2022-09-07  833  		/*
+34f26a15611afb Chengming Zhou     2022-09-07  834  		 * On the first group change after disabling PSI, conclude
+34f26a15611afb Chengming Zhou     2022-09-07  835  		 * the current state and flush its time. This is unlikely
+34f26a15611afb Chengming Zhou     2022-09-07  836  		 * to matter to the user, but aggregation (get_recent_times)
+34f26a15611afb Chengming Zhou     2022-09-07  837  		 * may have already incorporated the live state into times_prev;
+34f26a15611afb Chengming Zhou     2022-09-07  838  		 * avoid a delta sample underflow when PSI is later re-enabled.
+34f26a15611afb Chengming Zhou     2022-09-07  839  		 */
+34f26a15611afb Chengming Zhou     2022-09-07  840  		if (unlikely(groupc->state_mask & (1 << PSI_NONIDLE)))
+34f26a15611afb Chengming Zhou     2022-09-07  841  			record_times(groupc, now);
+34f26a15611afb Chengming Zhou     2022-09-07  842  
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  843  		if (unlikely(clear & TSK_ONCPU))
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  844  			state_mask = 0;
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  845  		else if (unlikely(set & TSK_ONCPU))
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  846  			state_mask = PSI_ONCPU;
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  847  		else
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  848  			state_mask = groupc->state_mask & PSI_ONCPU;
+c6ccdabec91131 Tvrtko Ursulin     2025-11-13  849  
+34f26a15611afb Chengming Zhou     2022-09-07  850  		groupc->state_mask = state_mask;
+34f26a15611afb Chengming Zhou     2022-09-07  851  
+34f26a15611afb Chengming Zhou     2022-09-07  852  		return;
+34f26a15611afb Chengming Zhou     2022-09-07  853  	}
+34f26a15611afb Chengming Zhou     2022-09-07  854  
+0ec208ce983492 Tvrtko Ursulin     2024-06-25 @855  	state_mask = test_states(groupc->tasks, state_mask);
+7fae6c8171d20a Chengming Zhou     2021-03-03  856  
+7fae6c8171d20a Chengming Zhou     2021-03-03  857  	/*
+7fae6c8171d20a Chengming Zhou     2021-03-03  858  	 * Since we care about lost potential, a memstall is FULL
+7fae6c8171d20a Chengming Zhou     2021-03-03  859  	 * when there are no other working tasks, but also when
+7fae6c8171d20a Chengming Zhou     2021-03-03  860  	 * the CPU is actively reclaiming and nothing productive
+7fae6c8171d20a Chengming Zhou     2021-03-03  861  	 * could run even if it were runnable. So when the current
+7fae6c8171d20a Chengming Zhou     2021-03-03  862  	 * task in a cgroup is in_memstall, the corresponding groupc
+7fae6c8171d20a Chengming Zhou     2021-03-03  863  	 * on that cpu is in PSI_MEM_FULL state.
+7fae6c8171d20a Chengming Zhou     2021-03-03  864  	 */
+71dbdde7914d32 Johannes Weiner    2022-08-26  865  	if (unlikely((state_mask & PSI_ONCPU) && cpu_curr(cpu)->in_memstall))
+7fae6c8171d20a Chengming Zhou     2021-03-03  866  		state_mask |= (1 << PSI_MEM_FULL);
+7fae6c8171d20a Chengming Zhou     2021-03-03  867  
+34f26a15611afb Chengming Zhou     2022-09-07  868  	record_times(groupc, now);
+34f26a15611afb Chengming Zhou     2022-09-07  869  
+33b2d6302abc4c Suren Baghdasaryan 2019-05-14  870  	groupc->state_mask = state_mask;
+33b2d6302abc4c Suren Baghdasaryan 2019-05-14  871  
+65457b74aa9437 Domenico Cerasuolo 2023-03-30  872  	if (state_mask & group->rtpoll_states)
+65457b74aa9437 Domenico Cerasuolo 2023-03-30  873  		psi_schedule_rtpoll_work(group, 1, false);
+36b238d5717279 Johannes Weiner    2020-03-16  874  
+36b238d5717279 Johannes Weiner    2020-03-16  875  	if (wake_clock && !delayed_work_pending(&group->avgs_work))
+36b238d5717279 Johannes Weiner    2020-03-16  876  		schedule_delayed_work(&group->avgs_work, PSI_FREQ);
+eb414681d5a07d Johannes Weiner    2018-10-26  877  }
+eb414681d5a07d Johannes Weiner    2018-10-26  878  
 
 -- 
 0-DAY CI Kernel Test Service
