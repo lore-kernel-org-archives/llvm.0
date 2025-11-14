@@ -1,125 +1,152 @@
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C2032AAB4
-	for <llvm@lists.linux.dev>; Fri, 14 Nov 2025 14:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B82F328B5E;
+	Fri, 14 Nov 2025 15:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763130493; cv=none; b=GyqdkiyaKRGCUbra3pnnBEAcBWP5ICIiS3EldQtxXmly8C0tlrfbrfQ/UNSRtRWwb8TWBThnxkFbKfxfRbcVHHmV8vWdRzIu3lK/L8TGpqqo/HrVS1ul0I2bBUWr6egj2L2HPL/y9srvBMMeWUjwgOtP0arCRvsWbn1CCfOSBWc=
+	t=1763133901; cv=none; b=EpCQe12eioe6UngbzE/H8M6QL6xkK64feRExFIWs5KeS3hIVIcd3DSxK/2wfx7q8aV5Mdg89nZeyzSzmw1Jv+wed7CZbu4nu8FACFvfPb9286F36g9U6k0zxHlMyPXY28jboKX0cyVyqcJ1BEbk4F1G4KWxL81oE17NRaz8vEVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763130493; c=relaxed/simple;
-	bh=vtbE4iQccIDPAbt51GtKugnCRkvsnDiu597g0q1p1vA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O93GOdg3CXdqs9a8CkFm/2+n5ebIkEUPAwOpVrepdIa1W6SM6ZDOMwMGmXs+gJLt8RUEv+4Pn/2doT74ZATIm/lVmeMwVuxA/lOsG2+E/o/5cMcNLc1YBBLHn+0ItczDMag7++9qB905ec+++TboU5FYHYk+QtsS5GEMvhMnJ5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iN7f0g1Q; arc=none smtp.client-ip=209.85.166.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1763133901; c=relaxed/simple;
+	bh=aizLmedT0fRTy5zVNG9dpD+vEzYlQhCVBL04khAlSb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XfbsQngLKJ7F4kTm3CvbcDkds1prCvtstZTxIcjso7v9DMNBZJQvr4OncPvFHGcT9Bw7jq8zCjXHb02mCcvEbQog/FVuY5QF9Ypdz1yfAdi5PuB5SF7MKvxRRGoyrsqhY3ZmgP6+NjB60VAVM8Icx93o/y9ELp5dXHyDePeyvOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BIxm9/gy; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iN7f0g1Q"
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-4331b4d5c6eso7827415ab.2
-        for <llvm@lists.linux.dev>; Fri, 14 Nov 2025 06:28:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763130491; x=1763735291; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g04XP369OdIGlU7nO8ZhA20Z4uYWbY8J/2UrhgEgmF8=;
-        b=iN7f0g1Q1SVA9sK+LEUX0KdHnEjR+fLlRGvw4djrR67/pCsD7U3LXWh6fnmun6c9vl
-         RFC8ETf2GSbvIr/qtQjmv0Y8JEAqrI7A17C3yAnWcUfO7WE1H2q3grj9Epe5G2YQZA7W
-         cuM0Cgnyqf9g2hFQSY5yLxxY28CXHAWfJvvlY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763130491; x=1763735291;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=g04XP369OdIGlU7nO8ZhA20Z4uYWbY8J/2UrhgEgmF8=;
-        b=NycrPlip5rNmIqTXplAabqqKnydj6bKvTMRy1BzCrU8lsJKpfpN5UyJ1A8Wsa4/oeP
-         HJEdnDCe4ldnP2Q5CBiZY/tqaXoBQpmkgP2UESI7R8N2d+8cvPbGoqFca4x1OtiVFkAO
-         Zyfjt+1DnLlrxnuizas1+YzH2WwHXuvl9RX7QavJ2yo4EuBXxPbpZGRKErA+eH6VuSJi
-         Iq/Yfot3Cqyv2tsrRRMeFyBP5kNqvOjEidH6uxb7o0bW4+95O82jkFw3iffSpcG8frKw
-         NMENQ1eXxEPBu3XCVEayDRlWSMqfLqdzrJYy3v/VPx7vSYHdSpMMj3kPO4y9jicEPIFZ
-         t3tw==
-X-Forwarded-Encrypted: i=1; AJvYcCUP248jmDE8LXqNmrLIjl2vNySlgyiS/XWTBdLmCtUsbGYMvmmB3TQ21ArZOLPMCeuaDnxN@lists.linux.dev
-X-Gm-Message-State: AOJu0YwYPzfgJIWOmM8/w+68JaikSRy5oQdc6m+JyXQ2rV5wDE63w9uz
-	9Nthr8PxFntnD6F8SK89QSTK/yESBqEQFW08fNyn7A0/TqM1PhAnZbCJOmipMazPmw==
-X-Gm-Gg: ASbGncv6Qg6GT7EeqdWoX9GJPSMRyXTBVd/AA+n8S/3HgIgtVag76EGuN/5Q+Pb6MOV
-	jSCcWrDuj/+jBxEFtW+vbTd+RjVvycve4T+36lsSp+c/9q1dbQK7rEfj+XZchkrK7kxI7l0pr9z
-	uBF9ferQSg09SMHR0T65Q3KlbXiMYdBtKJ9bNmC4jimGTas+LZ9LAR2WXavMlEDF7Snx1Or6lXC
-	49z42jHexo91rytAGEUtFvUIDl/mzCiRw/W8Ek7Hcr6Rcrx1ZK5vLZBX91BqTY3N3Wf6r6rd3u0
-	TeD+VR7rdXV9zdaEahu9epGWA1Lf3CONdxzEa/y/EyN4o+VC5j3YjH/3UIy9EoVYsJJB0NFOfOo
-	aEHX8MmN/B2ZjktsjoEzFOsRoFu/7tnJR3eRRSbP0P++ip8geL6RNobeV+qzxI2ZK3bf6t0H8P1
-	nUrimTA66PMqJ9Xas=
-X-Google-Smtp-Source: AGHT+IH9WRXDGpQxQ/K/6unFcP6iH5jd3lNOXJwjoIeZqn0+/6i1yonIkDQHVVuUwWSwfsG4BW0P5Q==
-X-Received: by 2002:a05:6e02:2389:b0:433:330a:a572 with SMTP id e9e14a558f8ab-4348c8e3e5amr60110435ab.13.1763130491388;
-        Fri, 14 Nov 2025 06:28:11 -0800 (PST)
-Received: from chromium.org ([73.34.74.121])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-434839cdb10sm27500205ab.32.2025.11.14.06.28.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 06:28:10 -0800 (PST)
-From: Simon Glass <sjg@chromium.org>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Nicolas Schier <nicolas@fjasle.eu>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Tom Rini <trini@konsulko.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	=?UTF-8?q?J=20=2E=20Neusch=C3=A4fer?= <j.ne@posteo.net>,
-	Simon Glass <sjg@chromium.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Tamir Duberstein <tamird@gmail.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v5 5/8] kbuild: Split out module targets into a variable
-Date: Fri, 14 Nov 2025 07:27:31 -0700
-Message-ID: <20251114142741.1919072-6-sjg@chromium.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251114142741.1919072-1-sjg@chromium.org>
-References: <20251114142741.1919072-1-sjg@chromium.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BIxm9/gy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763133899; x=1794669899;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aizLmedT0fRTy5zVNG9dpD+vEzYlQhCVBL04khAlSb4=;
+  b=BIxm9/gyqLc77UNeWBIGHwXkGwuYanDOcG7VmAhaM+OIuWPIAp5iTPqb
+   2F8GN/kCOmfNZVKuJFvOHvAl5TFLyGkjTCXloOGhfSazxNxKnXuvRWnlO
+   ZK9MHaYb74ZO9ccxadiEeRmfrFPtrizbnUYvz4gJqjxGXqc/FvmdQ6CGU
+   32nfK+cwMmBC8t6UAfBzWZQjm32VWwcxfmk8QH44ygHMKoHgv4IFwtQWu
+   5vsYFHSeEARadF6RbpGK51a5NL5uEfjEnbHyif5WzxKPKUE0YwWDg9Ac6
+   ONdCcQJug1Nz964WCa8RZkDxq9wOdEmE6vIMdpGrG0j10g+1RziCcz/JH
+   A==;
+X-CSE-ConnectionGUID: rjk0rOfgSFq+nGYUUUM2jA==
+X-CSE-MsgGUID: pBRKvxw3SQmGk4H4bym6RA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="82861606"
+X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
+   d="scan'208";a="82861606"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 07:24:57 -0800
+X-CSE-ConnectionGUID: hfJjsgBhRaKfy7+Qo9s9Kg==
+X-CSE-MsgGUID: YaJ0me8VRVeNlnuDFRvNsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
+   d="scan'208";a="189990412"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 14 Nov 2025 07:24:50 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vJvfL-0006i3-12;
+	Fri, 14 Nov 2025 15:24:47 +0000
+Date: Fri, 14 Nov 2025 23:23:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@redhat.com>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Peter Xu <peterx@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Kees Cook <kees@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>
+Subject: Re: [PATCH v2 1/4] mm: declare VMA flags by bit
+Message-ID: <202511142237.yj4hppoj-lkp@intel.com>
+References: <6289d60b6731ea7a111c87c87fb8486881151c25.1763126447.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6289d60b6731ea7a111c87c87fb8486881151c25.1763126447.git.lorenzo.stoakes@oracle.com>
 
-Add a modules-targets variable to list the targets which cause modules
-to be built, since we want to add a conditional target.
+Hi Lorenzo,
 
-Signed-off-by: Simon Glass <sjg@chromium.org>
----
+kernel test robot noticed the following build errors:
 
-Changes in v5:
-- Add a new patch to split out module targets into a variable
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20251114]
+[cannot apply to rust/rust-next tip/sched/core brauner-vfs/vfs.all kees/for-next/execve linus/master v6.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- Makefile | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-declare-VMA-flags-by-bit/20251114-213237
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/6289d60b6731ea7a111c87c87fb8486881151c25.1763126447.git.lorenzo.stoakes%40oracle.com
+patch subject: [PATCH v2 1/4] mm: declare VMA flags by bit
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251114/202511142237.yj4hppoj-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511142237.yj4hppoj-lkp@intel.com/reproduce)
 
-diff --git a/Makefile b/Makefile
-index 638bc09a546a..8cd46222fc48 100644
---- a/Makefile
-+++ b/Makefile
-@@ -772,7 +772,12 @@ endif
- # in addition to whatever we do anyway.
- # Just "make" or "make all" shall build modules as well
- 
--ifneq ($(filter all modules nsdeps compile_commands.json clang-%,$(MAKECMDGOALS)),)
-+modules-targets := all
-+modules-targets += modules
-+modules-targets += nsdeps
-+modules-targets += compile_commands.json
-+modules-targets += clang-%
-+ifneq ($(filter $(modules-targets),$(MAKECMDGOALS)),)
-   KBUILD_MODULES := y
- endif
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511142237.yj4hppoj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+>> include/linux/mm.h:1734:32: error: use of undeclared identifier 'VM_MAYOVERLAY'
+    1734 |         return flags & (VM_MAYSHARE | VM_MAYOVERLAY);
+         |                                       ^~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/arm/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1280: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/VM_MAYOVERLAY +1734 include/linux/mm.h
+
+97a7e4733b9b22 Peter Xu          2021-03-12  1722  
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1723  #ifndef CONFIG_MMU
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1724  static inline bool is_nommu_shared_mapping(vm_flags_t flags)
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1725  {
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1726  	/*
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1727  	 * NOMMU shared mappings are ordinary MAP_SHARED mappings and selected
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1728  	 * R/O MAP_PRIVATE file mappings that are an effective R/O overlay of
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1729  	 * a file mapping. R/O MAP_PRIVATE mappings might still modify
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1730  	 * underlying memory if ptrace is active, so this is only possible if
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1731  	 * ptrace does not apply. Note that there is no mprotect() to upgrade
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1732  	 * write permissions later.
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1733  	 */
+b6b7a8faf05c70 David Hildenbrand 2023-01-02 @1734  	return flags & (VM_MAYSHARE | VM_MAYOVERLAY);
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1735  }
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1736  #endif
+fc4f4be9b5271e David Hildenbrand 2023-01-02  1737  
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
