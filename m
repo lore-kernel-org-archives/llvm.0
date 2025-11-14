@@ -1,59 +1,61 @@
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94019325493
-	for <llvm@lists.linux.dev>; Fri, 14 Nov 2025 14:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C2032AAB4
+	for <llvm@lists.linux.dev>; Fri, 14 Nov 2025 14:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763130483; cv=none; b=pOtedmS9XA3S0V79I8S87EBCRK/0AnD06QAEXo2OKYhULT4kmgyzR8St6830pA2LTFLZl1DBuwvCDgWXsc/A3S3j205zgMwSN0JebmT00wLyHCZUN7ovba1437/dKOgYmX6dVwapIHLeDBbf9F+p5N80S0JoS5LxK265eaLOe28=
+	t=1763130493; cv=none; b=GyqdkiyaKRGCUbra3pnnBEAcBWP5ICIiS3EldQtxXmly8C0tlrfbrfQ/UNSRtRWwb8TWBThnxkFbKfxfRbcVHHmV8vWdRzIu3lK/L8TGpqqo/HrVS1ul0I2bBUWr6egj2L2HPL/y9srvBMMeWUjwgOtP0arCRvsWbn1CCfOSBWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763130483; c=relaxed/simple;
-	bh=BklQGKunSWSC90jjl2C7ggGLVd/hWGKHl6qwpD07aVc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=emwo+So9gvZFOY8XpKf7AT+lR9uMNIOjwQ/oToR7n+nJqo9ATfrgq4BtFF/rC1fL/ogDuQgoVccWVBImFbebQvxSIaW2XilExlXUuTCgx/oAW9R8Ylajthple6uERH0DAeFq4dItdvmhCXIpDlnsuOctsyQZxWe847m2X3Aq/w4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EinRn237; arc=none smtp.client-ip=209.85.166.46
+	s=arc-20240116; t=1763130493; c=relaxed/simple;
+	bh=vtbE4iQccIDPAbt51GtKugnCRkvsnDiu597g0q1p1vA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=O93GOdg3CXdqs9a8CkFm/2+n5ebIkEUPAwOpVrepdIa1W6SM6ZDOMwMGmXs+gJLt8RUEv+4Pn/2doT74ZATIm/lVmeMwVuxA/lOsG2+E/o/5cMcNLc1YBBLHn+0ItczDMag7++9qB905ec+++TboU5FYHYk+QtsS5GEMvhMnJ5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iN7f0g1Q; arc=none smtp.client-ip=209.85.166.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EinRn237"
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-948733e7810so80540739f.0
-        for <llvm@lists.linux.dev>; Fri, 14 Nov 2025 06:28:01 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iN7f0g1Q"
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-4331b4d5c6eso7827415ab.2
+        for <llvm@lists.linux.dev>; Fri, 14 Nov 2025 06:28:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763130481; x=1763735281; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LaRuk9UO1iAqBvlrA4UzPK6vezrUTGPRno5ObeOs0zk=;
-        b=EinRn237IlWfF2ukINjd6/nVXacmpuGXhFP5jvELESjZUYh9XP7oqqJar0te6DjvAW
-         Lrn7Ebe3z4uAGUehI7HfwVCdD/uD/2cSYHbpyBECO0EYqupXYgpuefitrbNdb/VhGO9P
-         KEcl0WLva6uGU5LznQHUOK6SwvjmyU9lVBqws=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763130481; x=1763735281;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1763130491; x=1763735291; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LaRuk9UO1iAqBvlrA4UzPK6vezrUTGPRno5ObeOs0zk=;
-        b=In+P4r2P8byqT5Q28wigcPQOA5zlgggxuxQbOh+bcThPCwKArRGgYAMAzp2axR1yyS
-         g/piUztl9bX8HZiG5MItgbYX9R8pYwHI1ZXFfttNJlWL6oq30FhRPHAww2fVgZADrlf7
-         LJl8+qvDvDCV5bnvQOy4FoPzmdZV0/anqDsbO5UbLhngrhANRL2RHDp0tAsm1y12Zh/R
-         AD0n3FXEpRddMawnKJ/ZGlQVi3m4OBzdREwtc73LtyZHB7NuGhobCocx7l6AmVBXz4Rn
-         nNUTZjXfq+4XQGBPMSwhxQ62NiHdq7fqvJAWxpYEUA68fUq1RNdvEiitMAnxaMi0V3RK
-         f1YA==
-X-Forwarded-Encrypted: i=1; AJvYcCUB7mVd89OLp4nRliAwieAxlfTpWiniDIFNLcSqXQ4BU4R1NsH/DfpJI8Va4VcAdJATBf/P@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw2WvEWfkyJfXv6k9413heVTFv3SqiZs9qT1er0xvoipdmSmowt
-	nEi/I4kwd5dHzfsWZ70TYRTjToIgdlyHLjfO+Vwsyj83hEssfzUe905wP0gN+2XWXQ==
-X-Gm-Gg: ASbGncudf5yz1y+j0XkmMBZxm5bVvApeBGFL6+IKqB8TxRLBQIomPUUG2H86WYEhJ/y
-	LI/InYyy/7M3L+59ikDHwsUaJ8+5fAuu72c28k0HRQ74ostOsKHizY7YVgYYRGUyhz+sb2D2Bz+
-	Yt8aTYAmBxec0gizFwS8C+wp/zN7Q2L8hI2/A8xRDDOIeMIYz8j9cQidfLKDmkxNEZkNL+fZg8Q
-	heVWI+Wv1+kGdTHselk5Y/CUlG9FGhq7m1BOh2wr8eIYbG31O0Qwur5TjYCSf6PNxO4Aui8k0if
-	2m3n2j2BXxrX05KanR//8RSGqhUlrs/pdx/nONZ+CwnNnfXo8arO7i9nGczoNyd+ggsuLXOgxZ3
-	MR5SnHNjvIl7umol06ipEuH1QD9EBnTS9y+xBZ402l7GH0Ob00SkkRiYYDqou3+WiGESbx3t97j
-	mtB4d/
-X-Google-Smtp-Source: AGHT+IEELYloZwlPDfzBUS2CIFoqpVbdAlJTEoxSRiFLxI6XsjRz4z61w7km+eDQVxqihK9V+Z/gwA==
-X-Received: by 2002:a05:6e02:3812:b0:433:7b22:c2cd with SMTP id e9e14a558f8ab-4348c8be2b8mr48366475ab.8.1763130480703;
-        Fri, 14 Nov 2025 06:28:00 -0800 (PST)
+        bh=g04XP369OdIGlU7nO8ZhA20Z4uYWbY8J/2UrhgEgmF8=;
+        b=iN7f0g1Q1SVA9sK+LEUX0KdHnEjR+fLlRGvw4djrR67/pCsD7U3LXWh6fnmun6c9vl
+         RFC8ETf2GSbvIr/qtQjmv0Y8JEAqrI7A17C3yAnWcUfO7WE1H2q3grj9Epe5G2YQZA7W
+         cuM0Cgnyqf9g2hFQSY5yLxxY28CXHAWfJvvlY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763130491; x=1763735291;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=g04XP369OdIGlU7nO8ZhA20Z4uYWbY8J/2UrhgEgmF8=;
+        b=NycrPlip5rNmIqTXplAabqqKnydj6bKvTMRy1BzCrU8lsJKpfpN5UyJ1A8Wsa4/oeP
+         HJEdnDCe4ldnP2Q5CBiZY/tqaXoBQpmkgP2UESI7R8N2d+8cvPbGoqFca4x1OtiVFkAO
+         Zyfjt+1DnLlrxnuizas1+YzH2WwHXuvl9RX7QavJ2yo4EuBXxPbpZGRKErA+eH6VuSJi
+         Iq/Yfot3Cqyv2tsrRRMeFyBP5kNqvOjEidH6uxb7o0bW4+95O82jkFw3iffSpcG8frKw
+         NMENQ1eXxEPBu3XCVEayDRlWSMqfLqdzrJYy3v/VPx7vSYHdSpMMj3kPO4y9jicEPIFZ
+         t3tw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP248jmDE8LXqNmrLIjl2vNySlgyiS/XWTBdLmCtUsbGYMvmmB3TQ21ArZOLPMCeuaDnxN@lists.linux.dev
+X-Gm-Message-State: AOJu0YwYPzfgJIWOmM8/w+68JaikSRy5oQdc6m+JyXQ2rV5wDE63w9uz
+	9Nthr8PxFntnD6F8SK89QSTK/yESBqEQFW08fNyn7A0/TqM1PhAnZbCJOmipMazPmw==
+X-Gm-Gg: ASbGncv6Qg6GT7EeqdWoX9GJPSMRyXTBVd/AA+n8S/3HgIgtVag76EGuN/5Q+Pb6MOV
+	jSCcWrDuj/+jBxEFtW+vbTd+RjVvycve4T+36lsSp+c/9q1dbQK7rEfj+XZchkrK7kxI7l0pr9z
+	uBF9ferQSg09SMHR0T65Q3KlbXiMYdBtKJ9bNmC4jimGTas+LZ9LAR2WXavMlEDF7Snx1Or6lXC
+	49z42jHexo91rytAGEUtFvUIDl/mzCiRw/W8Ek7Hcr6Rcrx1ZK5vLZBX91BqTY3N3Wf6r6rd3u0
+	TeD+VR7rdXV9zdaEahu9epGWA1Lf3CONdxzEa/y/EyN4o+VC5j3YjH/3UIy9EoVYsJJB0NFOfOo
+	aEHX8MmN/B2ZjktsjoEzFOsRoFu/7tnJR3eRRSbP0P++ip8geL6RNobeV+qzxI2ZK3bf6t0H8P1
+	nUrimTA66PMqJ9Xas=
+X-Google-Smtp-Source: AGHT+IH9WRXDGpQxQ/K/6unFcP6iH5jd3lNOXJwjoIeZqn0+/6i1yonIkDQHVVuUwWSwfsG4BW0P5Q==
+X-Received: by 2002:a05:6e02:2389:b0:433:330a:a572 with SMTP id e9e14a558f8ab-4348c8e3e5amr60110435ab.13.1763130491388;
+        Fri, 14 Nov 2025 06:28:11 -0800 (PST)
 Received: from chromium.org ([73.34.74.121])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-434839cdb10sm27500205ab.32.2025.11.14.06.27.58
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-434839cdb10sm27500205ab.32.2025.11.14.06.28.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 06:28:00 -0800 (PST)
+        Fri, 14 Nov 2025 06:28:10 -0800 (PST)
 From: Simon Glass <sjg@chromium.org>
 To: linux-arm-kernel@lists.infradead.org
 Cc: Nicolas Schier <nicolas@fjasle.eu>,
@@ -63,89 +65,61 @@ Cc: Nicolas Schier <nicolas@fjasle.eu>,
 	Ahmad Fatoum <a.fatoum@pengutronix.de>,
 	=?UTF-8?q?J=20=2E=20Neusch=C3=A4fer?= <j.ne@posteo.net>,
 	Simon Glass <sjg@chromium.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
 	Bill Wendling <morbo@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	David Sterba <dsterba@suse.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <kees@kernel.org>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Nick Terrell <terrelln@fb.com>,
 	Nicolas Schier <nicolas.schier@linux.dev>,
-	Parth Pancholi <parth.pancholi@toradex.com>,
-	Rong Xu <xur@google.com>,
 	Tamir Duberstein <tamird@gmail.com>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Will Deacon <will@kernel.org>,
 	linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v5 0/8] scripts/make_fit: Support ramdisks and faster operations
-Date: Fri, 14 Nov 2025 07:27:26 -0700
-Message-ID: <20251114142741.1919072-1-sjg@chromium.org>
+Subject: [PATCH v5 5/8] kbuild: Split out module targets into a variable
+Date: Fri, 14 Nov 2025 07:27:31 -0700
+Message-ID: <20251114142741.1919072-6-sjg@chromium.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251114142741.1919072-1-sjg@chromium.org>
+References: <20251114142741.1919072-1-sjg@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This series updates 'make image.fit' to support adding a ramdisk to the
-FIT, either one provided as a parameter or one created from all the
-kernel modules.
+Add a modules-targets variable to list the targets which cause modules
+to be built, since we want to add a conditional target.
 
-It also includes a few performance improvement, so that building a FIT
-from ~450MB of kernel/module/devicetree files only takes a few seconds
-on a modern machine.
+Signed-off-by: Simon Glass <sjg@chromium.org>
+---
 
 Changes in v5:
-- Fix 'use' typo
 - Add a new patch to split out module targets into a variable
-- Build modules automatically if needed (fix from Nicolas Schier)
 
-Changes in v4:
-- Update the commit message
-- Provide the list of modules from the Makefile
-- Reduce verbosity (don't print every module filename)
-- Rename the Makefile variable from 'EXTRA' to 'MAKE_FIT_FLAGS'
-- Use an empty FIT_MODULES to disable the feature, instead of '0'
-- Make use of the 'modules' dependency to ensure modules are built
-- Pass the list of modules to the script
+ Makefile | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Changes in v3:
-- Move the ramdisk chunk into the correct patch
-- Add a comment at the top of the file about the -r option
-- Count the ramdisk in the total files
-- Update the commit message
-- Add a way to add built modules into the FIT
-
-Changes in v2:
-- Don't compress the ramdisk as it is already compressed
-
-Simon Glass (8):
-  scripts/make_fit: Speed up operation
-  scripts/make_fit: Support an initial ramdisk
-  scripts/make_fit: Move dtb processing into a function
-  scripts/make_fit: Provide a way to add built modules
-  kbuild: Split out module targets into a variable
-  kbuild: Allow adding modules into the FIT ramdisk
-  scripts/make_fit: Support a few more parallel compressors
-  scripts/make_fit: Compress dtbs in parallel
-
- Makefile             |   8 +-
- arch/arm64/Makefile  |   1 +
- scripts/Makefile.lib |  10 +-
- scripts/make_fit.py  | 264 +++++++++++++++++++++++++++++++++++++------
- 4 files changed, 243 insertions(+), 40 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 638bc09a546a..8cd46222fc48 100644
+--- a/Makefile
++++ b/Makefile
+@@ -772,7 +772,12 @@ endif
+ # in addition to whatever we do anyway.
+ # Just "make" or "make all" shall build modules as well
+ 
+-ifneq ($(filter all modules nsdeps compile_commands.json clang-%,$(MAKECMDGOALS)),)
++modules-targets := all
++modules-targets += modules
++modules-targets += nsdeps
++modules-targets += compile_commands.json
++modules-targets += clang-%
++ifneq ($(filter $(modules-targets),$(MAKECMDGOALS)),)
+   KBUILD_MODULES := y
+ endif
+ 
 -- 
 2.43.0
 
-base-commit: 4a71531471926e3c391665ee9c42f4e0295a4585
-branch: fita5
