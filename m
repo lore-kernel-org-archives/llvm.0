@@ -1,141 +1,161 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD641E49F
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 13:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401912D77F6
+	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 13:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763212342; cv=none; b=CzDbD9cqbCcTsvw+lw2cBy+5u7NhRXFW5KtmioBcjay4TRMnpQxpmX6TQaHzyHvdkKmJ9W1sxdI0VXa38y5T50yYUMVonsjFHqUnSzJWEEwv5hMIZj/qYRqYd1tKCg2yzH6vo4qBfOqLfE6Bjitruvm8jc64j4aJPmyfhlTI9JA=
+	t=1763214927; cv=none; b=lNmGpbxRDj+waisPbVuK1NYNrJYDiJ+fB1XwQtcltwzKy4yUzoHQB5YoMGlXidUwDBGJsvmE84ek9/7N+7CpMgwEbgU+94VqFKcZbgZ/WOg9+JyDV1vlZnXU80qJZW+8QeuXjaceCQC5cDcvdNNQTYeINTCXkhIx/bHe/4zvAI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763212342; c=relaxed/simple;
-	bh=osO8GaKQH7QxjuL5YxvE8h50H3PR6iTfopmoJR36wJY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o8yW9L3MlO2pqV/BK/152Q5ieu4gSOlrBCg9ab4q7uVLtHfnkis2rTr9aTGDn9nw8tVj2CTUTRCl4rjr+zqp90bUbWIbDHyJqA+IzXXGdXJd6ECXdTNUavzCGZ5PHKoiv76iTCt4SdApBnKVv9snKm5H1RH2hp77Y54V02+aDuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PZFwTGfZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763214927; c=relaxed/simple;
+	bh=y5QUmSKzlS0amBxXurpdk6aXWqflSKro/h9ErGoIjwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GRLg7YPbsA7F/NvG+8QpgxSQL5G5dghcWHb+AOxxjrhmYiA3lWfabXrlMkA80GnugYDBwh7LUY4zht+6cqvdI703ENn+MEk47ziuKbVA/5BAUn8iHZGlGr4SNcd0CxbL6/uNUl3BLGzPOzXQ5keYxQ4JofLgtk0ubom0QvZXT3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWiCXpLO; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PZFwTGfZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763212338;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=j7GgnNMQ2brSm8oEgc9/8pNijGGI4FguBpqZHcnL5X0=;
-	b=PZFwTGfZOUetz3lZDEDv8wpS4TawkRtToYeEP77MlFZBHBWuYP1TqlWpLrq5Cr1PbMlbQU
-	fF+0MnMsoxWcezAIg0H8UWGte16ssd3K9TG1z4Sq/Kd5S+mtv5PJ7Qe5q0j1ZrNytEnKE1
-	fqKfS9L6alhr8PMLbJ2wVDZKDH8uAB8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-651-avH-CHKKMw2EmRCmWyudnQ-1; Sat,
- 15 Nov 2025 08:12:17 -0500
-X-MC-Unique: avH-CHKKMw2EmRCmWyudnQ-1
-X-Mimecast-MFC-AGG-ID: avH-CHKKMw2EmRCmWyudnQ_1763212336
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 52CDF180047F
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 13:12:16 +0000 (UTC)
-Received: from [172.20.120.109] (unknown [10.30.44.79])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A8FE418002B6;
-	Sat, 15 Nov 2025 13:12:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc5,
- upstream-mainline, 7a0892d2)
-Date: Sat, 15 Nov 2025 13:12:15 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWiCXpLO"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3436d6aa66dso3053932a91.1
+        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 05:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763214925; x=1763819725; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y5QUmSKzlS0amBxXurpdk6aXWqflSKro/h9ErGoIjwQ=;
+        b=hWiCXpLOcCKQkf7AbrcC6p1sW0c/L7jaEWmmY12jG7Iizgl8B5cXH3/eB06iRutBdd
+         SPPvEGDNoHsnzzRWs9rh+akE0TPXE/oFCxe+JJpdGI248ArtmbvQHTQtb4Xu1BePnbS9
+         upU7g2qKdBAJlE44zC2/wBYkgqLyLU984lmL9PuOV0eCeb6BQXjH5rOhy/5E/itimZBk
+         zbY2raRuKdj1pgZefyVhhbB6l3dft2FW83d+7vKIMMTTLbgTN/NOUPdL42RZMZSjXh8z
+         vRQScGkoF8sDFma4YrsducqoiZIx18EUmRgmlKv0gQ0W5yzGWAvw3CfbxjWFelJcq/RB
+         BhtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763214925; x=1763819725;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y5QUmSKzlS0amBxXurpdk6aXWqflSKro/h9ErGoIjwQ=;
+        b=j5fpqkPk/6LWCqQle39c5PbsvFp9JTt3IAKMqreAUkuzYaHMrXPl9P0heKhItjLDGT
+         Cm01BaQHr5urNr7o7GJ+yhqlBvu4MvtgaMfgHCsBdXqGID+Vf2dc4P6fBggSJiN0QIvX
+         0kWub3H53tYNsc5Th6I9rL80+ZOlQBh4qQcU8NKRUkRLZdZm7/jKv8aKlrHZd0iRP5XI
+         6pMyYApaz9QsXyq91/5lxJRO6/LWxbGOx9Q0QBxcAbA9FbQtvdOhJtcgGFtvof0rK4xq
+         pp6hZDiJqrxzKOTEhQuCeIrxFiAbI9UNm9HJydeCNGIHAhmV5BRWm2F6uHzQOBj2jIGU
+         KqFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVaZbpMBLGa+Gd1/Jiff2I7BXM7rbAH0P+fe3mg80msQveFZXk8HEOzeQlRaO4O9mNrFvNY@lists.linux.dev
+X-Gm-Message-State: AOJu0YwuLDNzVGMRNZPaxljSvt1VhO8zqI3ztd5X9+a9ZDOPKpifK1w4
+	ANs+6F2XCedNkr/gRg6vofiyqFA0rZJXc/Y1+pXIzJRZg7AnMgRVvyOF
+X-Gm-Gg: ASbGncv8vkYjRPgNMgALTJ2RZe4Xfe8UN1O6lLwDJvsKmKmd6ZCMl6ZV0d/PqMr3Ofp
+	rxQYfBXir+vbV2FwpG85h8kpcTl90isuLZ6Y1HOUuUtz37IBU+x1g9eHxr1z6nz4Xx7hiXgqBgj
+	vevcBSVElS4prQks1nXWi2UbKCLwbZOtgU+Z257ljd5u33Ljx7xeB5xBR6Ce0O14O6tOPj6L4xN
+	A1nRdor0NYBasIczNDQt0U5Q1JI5f9NAp0eukm0ph8xe4hmWk8GRHBZUXKhrrbhRUnxs5oXOst1
+	0dSQyhNVSQGK1VfQVuA900IvD1pbpuYOI1t142KwwYbYLCytEDhI0TXRvjlTc965mJnz9DyWolO
+	iJ8fHexWvFD/3BsWEjuq4KGGIf3z+egBIj7JguhyvK54/h+NHVeCtARPKozqzFzShiHn2hZLfeN
+	BSq+8xWufcqXZ3Y6gZOeKuM2g9e3MCi7/Aojw=
+X-Google-Smtp-Source: AGHT+IFuTufEP59uKbwpymRKno9yjHG2whmUp7ulswIr3+CxbVVYv/nhc0N014IklbozTKH44HgIGw==
+X-Received: by 2002:a17:90b:3503:b0:340:9d78:59 with SMTP id 98e67ed59e1d1-343eab07fc3mr11539361a91.3.1763214925468;
+        Sat, 15 Nov 2025 05:55:25 -0800 (PST)
+Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343e071571fsm12590727a91.7.2025.11.15.05.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Nov 2025 05:55:25 -0800 (PST)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: tglx@linutronix.de
+Cc: aalbersh@redhat.com,
+	acme@kernel.org,
+	adrian.hunter@intel.com,
+	agordeev@linux.ibm.com,
+	akpm@linux-foundation.org,
+	alex@ghiti.fr,
+	alexander.shishkin@linux.intel.com,
+	andreas@gaisler.com,
+	andrii@kernel.org,
+	anna-maria@linutronix.de,
+	aou@eecs.berkeley.edu,
+	arnd@arndb.de,
+	baolin.wang@linux.alibaba.com,
+	borntraeger@linux.ibm.com,
+	bp@alien8.de,
+	brauner@kernel.org,
+	bsegall@google.com,
+	dave.hansen@linux.intel.com,
+	davem@davemloft.net,
+	david@kernel.org,
+	david@redhat.com,
+	dietmar.eggemann@arm.com,
+	frederic@kernel.org,
+	gor@linux.ibm.com,
+	hca@linux.ibm.com,
+	hpa@zytor.com,
+	irogers@google.com,
+	james.clark@linaro.org,
+	jlayton@kernel.org,
+	jolsa@kernel.org,
+	juri.lelli@redhat.com,
+	justinstitt@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux@armlinux.org.uk,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	lorenzo.stoakes@oracle.com,
+	luto@kernel.org,
+	mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com,
+	max.kellermann@ionos.com,
+	mgorman@suse.de,
+	mhiramat@kernel.org,
+	mingo@redhat.com,
+	morbo@google.com,
+	namhyung@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	nysal@linux.ibm.com,
+	oleg@redhat.com,
+	osalvador@suse.de,
+	palmer@dabbelt.com,
+	paulmck@kernel.org,
+	peterz@infradead.org,
+	pjw@kernel.org,
+	qq570070308@gmail.com,
+	riel@surriel.com,
+	rostedt@goodmis.org,
+	ryan.roberts@arm.com,
+	segher@kernel.crashing.org,
+	sforshee@kernel.org,
+	sparclinux@vger.kernel.org,
+	svens@linux.ibm.com,
+	thuth@redhat.com,
+	urezki@gmail.com,
+	vincent.guittot@linaro.org,
+	vschneid@redhat.com,
+	will@kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v3 1/3] Make enter_lazy_tlb inline on x86
+Date: Sat, 15 Nov 2025 21:54:43 +0800
+Message-ID: <20251115135443.460-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <878qg8bduc.ffs@tglx>
+References: <878qg8bduc.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <34542.125111508121701009@us-mta-651.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: o8zfkX9r8BU0qeGUlMm22aLw8I_VO0yXGOYlFcj3PC0_1763212336
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On Fri, 14 Nov 2025 20:42:35 +0100, Thomas Gleixner wrote:
+> Please use the documented way to denote functions in subject and change
+> log:
+>
+> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#function-references-in-changelogs
+>
+> Also you make this __always_inline and not inline.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks for pointing it out, I will improve it in v4 patch.
 
-
-Kernel information:
-    Commit message: Merge tag 'pci-v6.18-fixes-5' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/pci/pci
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2160041292
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2160041292_x86_64_kernel-debug_kcidb_tool_20009302_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/006
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Xie Yuanbin
