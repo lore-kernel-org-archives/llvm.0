@@ -1,150 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CDCDDA9
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 05:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7E92AE78;
+	Sat, 15 Nov 2025 07:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763185934; cv=none; b=Q8sFTchKXbpFhVZDg0WTAaZo7/XLO9HngxFMw930lwlXkJCVdgNpufDdQ64NgpXA/VwNjXgp4SnsDl5w5u6SzJXCU+q2sel2bLoZXwhyzqecezrxH0t5z8/oWVj0rJCwrGPDNUQGrPOr9vc8LrCpV2jzwaIup74mWwik3z2dJn8=
+	t=1763193399; cv=none; b=KyYcIqQhN/ShMxayA7ofk8R5m7Am5fVX1lAwC4HW3sAnQJ+bduBJ0ntjtKY0mkbwz6hHlWDGH69SdCyLoAJijO2Qzqw1Efmnxpb7BUc3rqLT5KqCiWt1Et63c8TnuC87uQYZhCmrtuVoCM3u0HFvknvJwOHUue8EM/swWYCh5d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763185934; c=relaxed/simple;
-	bh=rDEfqkzgevk1N97ls0eFzmhwo3r5Wb1/d7SfBd1RzZg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=j4MDQBvCcYJhoAAHgSkkpD7mY6uPyW3Xj8zrCEfG+Ksd4V7TKMrB//7YqzHb66QlDqTdc/dVp/MHJlDQBval/OAZ3UbsmtBUoYnKUcvKpx+rXCIN0Ip0R1XhfYfxe2h7/09ZEmAFJRkX19j2Mzu9Ab4Um52pSlspSXE5AoXdmD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EQGIfllO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763193399; c=relaxed/simple;
+	bh=E1/7vDZDEBIJmnNNslgNxNNdGs3gtHMPMC0nw2GuryY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nJX97DasKZTujKGgvFTd+i/p+ho55rmq08QQquTlqPh4iKvBbkzEsK5OxhXNJwVdX+gq+l6cD1xTNemAGsRC1+fLTEAHGYfts47Q57AKNZy2Fa0qk3jIw7IL6hiuISQSHC9R8x90DhDXAwO9efknQKOBdcLKyQl0mtvyQ0rNF0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PNG+h3e0; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EQGIfllO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763185930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hPlVrbq63tkIDiGiGJXPPZdYyJQt4/uLPOmyPNZAc0Q=;
-	b=EQGIfllOfaw26FYX9awtJytgGHbfa4115ZG4chAQHYMV7RSjJjf4pwJRR4eQFufZ6ChvLO
-	bSXVkuM0KmvBGlePHr5enrt/5QhBafUrcZ3DlANIMKAdcQ1SVa7Tng4tFUl34J65ojpd6W
-	7SF/O0blPCLqiguv+xeKgW1ZuSbZrcU=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-602-0yKZGm6HNvGBG257qdMgWg-1; Sat,
- 15 Nov 2025 00:52:09 -0500
-X-MC-Unique: 0yKZGm6HNvGBG257qdMgWg-1
-X-Mimecast-MFC-AGG-ID: 0yKZGm6HNvGBG257qdMgWg_1763185928
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3D554180047F
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 05:52:08 +0000 (UTC)
-Received: from [172.20.120.109] (unknown [10.30.44.79])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BFD43180049F;
-	Sat, 15 Nov 2025 05:52:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 21 of 137): Test report for master
- (6.18.0-rc5, upstream-mainline, d4f8cccc)
-Date: Sat, 15 Nov 2025 05:52:07 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PNG+h3e0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763193397; x=1794729397;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E1/7vDZDEBIJmnNNslgNxNNdGs3gtHMPMC0nw2GuryY=;
+  b=PNG+h3e0eluCmh0BlmxG4U0E7qAjGRZexuC/0FLdQyCfdgIGWgqEZ4Ek
+   jRHlXJ661YZ2V15w1fHcD8CubUIbIplZWtaZN3jPQAMIt7liKs2PdUkBU
+   imqETpWsn/+joysWXk96kvHSVFWyQ2CYhb/xf7+0A2N9IG9g2wZhB39K5
+   QUsWoOU0mF1Mqi8t8vmVDqdVkNLSArCWvtcpATQ1rmaBUmByuXDLlh2PY
+   qK+9Nc57ttPBLoX0V2h78zjvQJtFLZiyzSzrmMFs7zJF8XcfLhvlpB+l0
+   Vibk9j+HLVW6cqs4gp1+Fq9rvWlELVS9WKNaNkEr0dtqy6wP+nVXhSOxW
+   A==;
+X-CSE-ConnectionGUID: N/jzL2ACTsSM8H+JOcYUAw==
+X-CSE-MsgGUID: GYMGyluFTqqt2MtIDSCulQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="65162496"
+X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
+   d="scan'208";a="65162496"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 23:56:36 -0800
+X-CSE-ConnectionGUID: sJUjy0iHQme0QFMeikCrYQ==
+X-CSE-MsgGUID: Z1fd5P6dQQ2xAq2fFhCSKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
+   d="scan'208";a="195128499"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 14 Nov 2025 23:56:36 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKB97-0007nh-0e;
+	Sat, 15 Nov 2025 07:56:33 +0000
+Date: Sat, 15 Nov 2025 15:56:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [daveh-devel:old-ucode-platform 2/7]
+ include/linux/../../arch/x86/include/asm/intel-family.h:5:10: fatal error:
+ 'asm/vfm.h' file not found
+Message-ID: <202511151534.EavsvsAr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <65007.125111500520900120@us-mta-602.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: l0ccrTLq-qUK29Cl31UKUUkh6SDLgEWnUdPmSblKkvE_1763185928
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git old-ucode-platform
+head:   19fb9a6d870e83926b240ba86a3e35870fa2e578
+commit: a2e925d5405ec14de4721ada7fdbd066aa33028c [2/7] x86/cpu: Add missing #include
+config: hexagon-randconfig-001-20251115 (https://download.01.org/0day-ci/archive/20251115/202511151534.EavsvsAr-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511151534.EavsvsAr-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511151534.EavsvsAr-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'block-6.18-20251114' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/axboe/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2159742942
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - bpf_test_progs [x86_64]
-                kselftests upstream - net [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+   In file included from drivers/peci/device.c:6:
+   In file included from include/linux/peci-cpu.h:33:
+>> include/linux/../../arch/x86/include/asm/intel-family.h:5:10: fatal error: 'asm/vfm.h' file not found
+   #include <asm/vfm.h>
+            ^~~~~~~~~~~
+   1 error generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [x86_64]
-    /distribution/command [x86_64]
-    /test/misc/machineinfo [x86_64]
-    Boot test [x86_64]
-    CKI/restraint [x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    kselftests upstream - net [x86_64]
-    Reboot test [x86_64]
-    SELinux Custom Module Setup [x86_64]
-    Storage - blktests - throtl [x86_64]
-    Storage - blktests - ublk [x86_64]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
+vim +5 include/linux/../../arch/x86/include/asm/intel-family.h
 
+     4	
+   > 5	#include <asm/vfm.h>
+     6	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
