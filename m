@@ -1,136 +1,118 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1061B2BF012
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 19:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92112F85B
+	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 22:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763236541; cv=none; b=HVD6Pqj6AIEzNXQAKUdkD6wZxk426bbP7xjFpr52lvMTAA7A64FFPMp9m8h6nD6KKzFpuwQ8a5gXRk3j5xD5SHjqCbGlnjO1guu4mM1NqtPoc/pNbUbrN78c/gudMXbma6wEGQ7s6AAq9IhQCgpVJQJD7quMpu4LayioKCQ3i1s=
+	t=1763247379; cv=none; b=QtgHoaItxcS1QErl5r7qSTqlfUmzn2ccwBIIeMO9mjaJU6HkXIflP7lHzVUfnyKa4miHOznBYvbk+AhXv18ywTTbL6M/3q11jWJUIsrkI5itXAD31mqZiq0jqei0RME+D5KlY6RtstUSNtW0iXW7HVUZ29nNyRY3Swxv2atWkX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763236541; c=relaxed/simple;
-	bh=C+/K7Q5NqN1QoGmW+YDQcSan94kflPiyGMVUObBT0xc=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MCgc1eA5ezYEe+tKZN0ZvUkJzvQF70YPMumKIlfIzD869rdCZGHFCOWQSuDC4O3FjDNGOP5doRNfIeS1mlO7E/hRmjs3V0njogVu9h/tMcTvOIfRoTGrFCQqW+RnwbqHuy0avnnvgSeydtZX8o/R79v0g5hqGz1Z31K8NNKH/Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TroO7oac; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763247379; c=relaxed/simple;
+	bh=ZhDzn/ld47q1+0vFmkFchwNH42k0db3ClRj5pV+jfV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CsjPudp7N4vF7Rw5gvM3gnViGH8iSlKiKbtJzOH00lLldAvVt6YWMa4EsdYWtULvwbWK1I+Gw4Z3zEzZEkRP+f6AU4Ce7WgGYWKO20rOI0zwkyzKPA2zffEqnUch68KUyYoeJlC0bqOqnQ3zIhaAHxIsyJn1TuX0oWW8X4llqe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AWcbnFlw; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TroO7oac"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-42b566859ecso2191722f8f.2
-        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 11:55:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AWcbnFlw"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4711810948aso21645155e9.2
+        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 14:56:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763236538; x=1763841338; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuleB7Uof+tsaQSPA6fNwqHx1Lp/3ZhdyDUy1IclBq8=;
-        b=TroO7oacj16t5chzkHWifN3OS9qwS8apLa3rfIfR3IiUKDglO7vGg1iqtqfDFYpNSS
-         SJp6Gs63yeKtRmOb29gsaq1v2SgfJhUkoS31E3hdgTzoBSR+TvjMtSHC4PM9IY8VQIJO
-         LRl1uNddw4ZRhOfbFwP/i9BOubAboiuqJ9cC8vHPK1d/UtZjQ7Q1YlW2TJd4W2dsB/KP
-         DeMPNgOIjqY6MGuFKBgh+JT6hMNjMITVZaYiOpTt9ARLWN/8SJUkN3EzR+/eyBHhwReM
-         xOwEvtEmPFROToauTduc1CVjnlGhtGjWLFfugFUX1FegRp19K/maLM0v8N8jhyubmjJ/
-         rTQA==
+        d=suse.com; s=google; t=1763247375; x=1763852175; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3rirvFwtgiK9myBJO3SkNaL50zpazm5MLi6a9zIWYCw=;
+        b=AWcbnFlwS3fUy3xVXE836uZyQeeu85fZAC1Un00RZ8dtk/VjZ4uWnrbVG8CpiAV1Hb
+         mulblyGYoh4ciMYowBneqeDZhD9D53iNK5Ot+we2oX2XmJg8bRUac7erf7RL8Z1kMuvp
+         xVO1t4Uq/F6/T311klD6O9j4MFavCoQ/DWSxg7FJ+dkMjyql8Xqjv+MWJB6oz1K9FSaL
+         iOPyvI/JkfGa0bS0uyJVAb7dYQI2QXvNusoj2u68wCRPQ13SzDSmbbS3U9VPFYMu554C
+         6fspZ7BocBD0N4NBxgqH4CfJg1W3i8MBvBVCJ6U4s60V+vHXcfKD3U3VOCFNDci99aks
+         XEag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763236538; x=1763841338;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WuleB7Uof+tsaQSPA6fNwqHx1Lp/3ZhdyDUy1IclBq8=;
-        b=gQc6hX0fB/BNa/kdWAffr489hpehQaYPAagSfbFj2hZhJAcfZazFj9laWI8/+akR2b
-         Jg5zyiKg34HQVeZJSKIxrGoalDsa1l8xBvj6TBfR0SZ5pvlX5U7D0QNzzd4E0gbIsqcP
-         lGbYS3bH8hPndENyIawbvSi0Q0VVaeI4vx1x7r8fFJXWHyHQQxM3FlSGoTR6YYfFUQwg
-         ZWcTqq4hUR1X9+AWTPRB50j8ocfIa/nc9V6lSzEWA25DM8oVIQMJeqWaO7UpOF7dlPSF
-         Zgl3Dp+D+ZPVZ9Dc004pxQg0n7osSdCha8MyDJ6/9iZDXTIVk+m1cwSvUPe5owHr15Jw
-         aE+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVRpF2z4oTdGHT05yJcpxDqkFrw6Lwt2YUZPsgKlh/Wxh916+yJbJ4WCjDotK0dclE20BnZ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy4gNPTA85djGK7EY4cc6gBkcmLGfxvokLJR/vSvtGyy7Pcs+0a
-	cD3ZCGw5ud0t7UC8PaV6w0JGMIXQ94uXrlVWDYYvYWcR0bsVUAsSiPyo
-X-Gm-Gg: ASbGncs7dNcvpmhPK1W6a6I5cpWv/KqHBXfpozsgd0JgLqstC83LKmpiPhsrIagWnAM
-	DeLpugQoUv/ZYAB0nzKMXjnG/srN0wxT87WcNqFyzpLUnww61NRGr3teEZzPJmZKgWEq7S2+jbT
-	QINP9HaejGXM9nHVcn6Ii1ejeCzoxOj5/WPNZvt3WQwAZXeOEa3tnl+ugimH+qjTqR9kt+K2TNR
-	XaMDMzWkUSr5K4AtzMF7/gl4csXA1vnDmSc9TnZTvCOheXq3s8e/0/o44/KLSBR9QQr4hXLaUcl
-	+55riLYfvOd+yXIMBJe+4ITsEIJbK3YtXcakTCzwpk8PrZRVWCxVceqcT+0qaZLbgoLXw3iL+L0
-	7712xe/z6+KNLvB7yfwCi24ysihPC45tLjv/N9Bj+xacp6DPQ6+dw9XrKMio7svqHRuH9sSa1n7
-	CBsDp69y6+5Yw/pUqW67UYPfib0bOQNDYmL7RN8GUnwbP6ItHotLO0oBS9Pv/+YkQ=
-X-Google-Smtp-Source: AGHT+IEf62GmYjxzwvkFlgA1Y2k3Lbqy6ScY6eZSdDpeSqLPl8AdyiMH5V2WcDmQSZsaAfQG8l5H1g==
-X-Received: by 2002:a05:6000:1447:b0:42b:3a84:1ee6 with SMTP id ffacd0b85a97d-42b5934e2d7mr6759730f8f.24.1763236538325;
-        Sat, 15 Nov 2025 11:55:38 -0800 (PST)
-Received: from Ansuel-XPS. (host-87-10-15-59.retail.telecomitalia.it. [87.10.15.59])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53e84a4fsm17126800f8f.11.2025.11.15.11.55.33
+        d=1e100.net; s=20230601; t=1763247375; x=1763852175;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3rirvFwtgiK9myBJO3SkNaL50zpazm5MLi6a9zIWYCw=;
+        b=ue4ZnqmqTX0xtE7Cgx+oykH8Nt6/Zcf6hgakbgcCmqK4rDgaxqs52UP9Jxr3+0/I3K
+         yb4Ewxf2zCHeKH54J3YnltH3+jydUjE+Kb7ata+SYraeIvA4ct5l070vz+si6/+2MOnu
+         u+EeqXA8Gyds8Mbv4a4mlTtoNQaSEvZD/X/GWXKEPDwNjMOU8CJyas27IRGvInkz5BZp
+         PxZyeBEAIYTntcrYlxra0dIdzsEoOZ+iT1Z97TiG6Q4czz/IlF6VLUv4fdHd4NgELFj+
+         bFbDtyea8LP21EtcYQq+omJ46afjFAhnqf05rtaRjoY0ZDTLBgV2OXbTEQ7avGORZLoq
+         EJTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+cqTKWhKO2IIPXdj279G+EhFAV1iLorjm0eJt9sXFabICM1wZhTXjvVk1KwZDWsT19SJW@lists.linux.dev
+X-Gm-Message-State: AOJu0YzltjQkZo1qN6m0ww+KTv3Ha6F2Ra87d/65xOTsoh+eJ6ytkwhB
+	81Mx3ljANTDTh7NoyDrRDyvHY09cWxOj0AmD+JA9E3kOq6to3Detk2XeMB85h9TnMco=
+X-Gm-Gg: ASbGncvALMkAEir+5fazzLqme+4r1P7wIjiaiMvxwNYxcQrD1FdQtEvaTgr/Zg558OB
+	0CwZeQpMsPCYpWXG4eVVj0Sq1ugEATXIzk2FmUS1cqL4w0FnNJEpTJ+7ePwSV0cLOXnkslq75FD
+	SIoO1PV3LUJxzHBIcD4olJLf+ZGWdiS6T56yG528kGIWrqBx3Flhke7uZo70tHvED8zjg7TMFtk
+	33pCzGxz6w04IKQqpVHiRZn4F0mkdBm1K28Y9K2aF+W1v1lkiCS1lwyeJMA5Dio9k53UH7M+6D5
+	mmCIt/SGaNWeGfmnbu7pzrp4S64IO5fpFF1ldLF/cL6XzcPXIS3Og4xZ5oQ1zQxiwNv7PaJU7YA
+	wPr2hlIU4HDhMyoS41cX10fpO7PKvzbi4umUrr4W0pi/XLn8VG8Vhbho6QTxu19+EUJYJ8tQyzO
+	HvfLY7SN/n+CyFNVn5Tf4Vze8Z5m+FoCUvokzwq7o=
+X-Google-Smtp-Source: AGHT+IFhHfehJmL/emYJozkeYLpGysI2URRv7p229WqUqyuhzY90JVFZqHeviqUdYwHL55ENJIkf2w==
+X-Received: by 2002:a05:600c:1382:b0:471:114e:5894 with SMTP id 5b1f17b1804b1-4778fea3098mr56506515e9.25.1763247375256;
+        Sat, 15 Nov 2025 14:56:15 -0800 (PST)
+Received: from F15.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 11:55:37 -0800 (PST)
-Message-ID: <6918dab9.5d0a0220.170613.3fe2@mx.google.com>
-X-Google-Original-Message-ID: <aRjatPM0eXV0N5XZ@Ansuel-XPS.>
-Date: Sat, 15 Nov 2025 20:55:32 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Sean Wang <sean.wang@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] pinctrl: airoha: Fix AIROHA_PINCTRL_CONFS_DRIVE_E2 in
- an7583_pinctrl_match_data
-References: <20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org>
+        Sat, 15 Nov 2025 14:56:14 -0800 (PST)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org
+Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev
+Subject: [bpf-next v1 0/5] selftests/bpf: networking test cleanups and build fix
+Date: Sun, 16 Nov 2025 07:55:35 +0900
+Message-ID: <20251115225550.1086693-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 12, 2025 at 11:44:30AM -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y / W=e):
-> 
->   pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
->    2064 | static const struct airoha_pinctrl_conf an7583_pinctrl_drive_e2_conf[] = {
->         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Due to a typo, an7583_pinctrl_drive_e2_conf is only used within
-> ARRAY_SIZE() (hence no instance of -Wunused-variable), which is
-> evaluated at compile time, so it will not be needed in the final object
-> file.
-> 
-> Fix the .confs assignment for AIROHA_PINCTRL_CONFS_DRIVE_E2 in
-> an7583_pinctrl_match_data to clear up the warning.
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2142
-> Fixes: 3ffeb17a9a27 ("pinctrl: airoha: add support for Airoha AN7583 PINs")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+This series refactors several networking-related BPF selftests and fixes
+a toolchain propagation issue in runqslower.
 
-Acked-by: Christian Marangi <ansuelsmth@gmail.com>
+The first four patches simplify networking selftests by removing custom
+IPv4/IPv6 address wrappers, migrating to sockaddr_storage, dropping
+duplicated TCP helpers, and replacing open-coded congestion-control
+string checks with bpf_strncmp(). These changes reduce duplication and
+improve consistency without altering test behavior.
 
-> ---
->  drivers/pinctrl/mediatek/pinctrl-airoha.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-airoha.c b/drivers/pinctrl/mediatek/pinctrl-airoha.c
-> index bfcedc7f920b..706532a820b0 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-airoha.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-airoha.c
-> @@ -2993,7 +2993,7 @@ static const struct airoha_pinctrl_match_data an7583_pinctrl_match_data = {
->  			.num_confs = ARRAY_SIZE(an7583_pinctrl_pulldown_conf),
->  		},
->  		[AIROHA_PINCTRL_CONFS_DRIVE_E2] = {
-> -			.confs = en7581_pinctrl_drive_e2_conf,
-> +			.confs = an7583_pinctrl_drive_e2_conf,
->  			.num_confs = ARRAY_SIZE(an7583_pinctrl_drive_e2_conf),
->  		},
->  		[AIROHA_PINCTRL_CONFS_DRIVE_E4] = {
-> 
-> ---
-> base-commit: 57916750bc0886917ea2c6209ca6a56acb7b8182
-> change-id: 20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-bbf4cff20b50
-> 
-> Best regards,
-> --  
-> Nathan Chancellor <nathan@kernel.org>
-> 
+The final patch fixes a build issue where the runqslower sub-make does
+not inherit the LLVM toolchain selected for the main selftests build.
+By forwarding CLANG and LLVM_STRIP, the intended toolchain will be used
+for the nested build.
+
+Hoyeon Lee (5):
+  selftests/bpf: use sockaddr_storage instead of addr_port in
+    cls_redirect test
+  selftests/bpf: use sockaddr_storage instead of sa46 in
+    select_reuseport test
+  selftests/bpf: move common TCP helpers into bpf_tracing_net.h
+  selftests/bpf: replace TCP CC string comparisons with bpf_strncmp
+  selftests/bpf: propagate LLVM toolchain to runqslower build
+
+ tools/testing/selftests/bpf/Makefile          |  1 +
+ .../selftests/bpf/prog_tests/cls_redirect.c   | 95 ++++++-------------
+ .../bpf/prog_tests/select_reuseport.c         | 67 ++++++-------
+ .../selftests/bpf/progs/bpf_cc_cubic.c        |  9 --
+ tools/testing/selftests/bpf/progs/bpf_cubic.c |  7 --
+ tools/testing/selftests/bpf/progs/bpf_dctcp.c |  6 --
+ .../selftests/bpf/progs/bpf_iter_setsockopt.c | 17 +---
+ .../selftests/bpf/progs/bpf_tracing_net.h     | 11 +++
+ .../selftests/bpf/progs/connect4_prog.c       | 21 ++--
+ .../bpf/progs/tcp_ca_write_sk_pacing.c        |  2 -
+ tools/testing/selftests/lib.mk                |  1 +
+ 11 files changed, 87 insertions(+), 150 deletions(-)
 
 -- 
-	Ansuel
+2.51.1
+
