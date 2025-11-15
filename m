@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2116E22D4C3;
-	Sat, 15 Nov 2025 15:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98FF137932;
+	Sat, 15 Nov 2025 19:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763221886; cv=none; b=F36INEHVl8TOKnK3UgM/sxpt3+sjzmdHY7e1vQWelXD/MkT6+ApsrmTP/H8fPOf9IHGhIBTW0g2HUC8RA1Rr3avZNKsyVZkKxAtOy0MD49XSce0sdl3kJwbj3NRSSkaCGyq3Sq9ZKPbnSsnRWSIrVu5esc5N981Y78NtUgli4/o=
+	t=1763233607; cv=none; b=MM+9UBFL3Ru1WNNOq2b8bspmQT28MyNNfgdpOM7AxI0N7PduB/J8pYD27ukkRqK1evwrd17b6Ti10i2+h0fCFUJsxteS6nBqJfQC6Zup3BTxkkJM6bZFRwVv9Zr3BFu5OG1I/75etzptuUe3Vale1OhQoh9YjHhSU6QZMOsDXFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763221886; c=relaxed/simple;
-	bh=sXzuvODmAMEHA7GjipRn4j4jK4UXsgSGUyG1J4Tnh+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PooKkKMRqWwHV5ua9q80k1/tjRUcIakhn9xH3N/xHt8hHQLT+I89vEwRWLJcI9T/KNEp3hca8fndbB0rLYpA1hxzpnZWOMhdjWNvxHZbd+/chPDXYSYqblv6NtNO052RlTO4NYgJqNmnhMLR65Dp51e7TCIpmVcIZl4TBepS9Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IP019t6f; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1763233607; c=relaxed/simple;
+	bh=cVdHc0zZMKwI/lhvVkx0Lah8VDIvpX47gfaLp/x4dOY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l6EzD7dGEqWhSBhdNMfrRCnWILch+d3E475vy0PgxZbPGyJSJd9MI3Aw1H8NxYSZ254VYqIrpvah1oH/bB3njU7ar0PqYUWqvAOrdf1DZBq7hXiHHzQeUU28E2eyxuAesDcm84MEKM59X7Sfv12QGv0OJnWrDdK0XLMWhSPCj3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpv80R/w; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IP019t6f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpv80R/w"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763221885; x=1794757885;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sXzuvODmAMEHA7GjipRn4j4jK4UXsgSGUyG1J4Tnh+I=;
-  b=IP019t6f7ym9c8ieSlQiwK6jCjPZe5OaZ4My+zVcLYNLc6yqglAzonMo
-   8YpRGEOx3Azu7YWCHYPN3DSjK6ugtAC8HqZh54X5ubC3qim5PmS98AlAi
-   C1lf+FYJYh5c4oeBLKvTSdvMniI058Grdf+aYzfy+6AubcaJyIayVNiGy
-   OMQcWNEFRkWECKsdzPz9be8u7FcOyMfEL5GmksE1Qfs/kdDE5VckA9c2c
-   w1mocyFTudu0yoarLzcAbECaT4lw9eqsh1dtjhNb9d0hvEbmhLrXG0ySL
-   DvqQLQPvjSpSj/BUQ1eXv/cEOdZCvEPglOWU5xVoIv1iD8CTBGWjIR42C
-   Q==;
-X-CSE-ConnectionGUID: AS+rOMSxTPG6bTODsgi2+Q==
-X-CSE-MsgGUID: cSHNMdStQE+7pwbEYLUukQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="68913270"
+  t=1763233605; x=1794769605;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cVdHc0zZMKwI/lhvVkx0Lah8VDIvpX47gfaLp/x4dOY=;
+  b=bpv80R/w4QiT/MEyH3uP/3OfiwIisROYONMfbioSuQyvOSYQDtY/R+i8
+   oxsz03WkBArU3vznajpUNHYhBZgvins19xXPm01atp7apwEUuR1i133iM
+   Ibeagc9JSTtict87CxIvmPitSqU/nmmYgb7SSPv3TTctfwCZIrueUhqRk
+   YqyW3nuDeLiAlbB/obAAwohQ4k+Pv7RadnEaN04FVFjonATXWtM003/SQ
+   V5lc7c/NNgyCWUyv++vhTItv7sHgw/e0/8c/plzeGdDqpe3g6AwOK5/Dy
+   UdBw+lDasvm2CpD/gG2Vvdb79MyF2DnLLISRZJwMDxhohV/Z9gYtzfoKd
+   A==;
+X-CSE-ConnectionGUID: 3yAuudqpSw2P6CrVSOHo+A==
+X-CSE-MsgGUID: hMkZv7MsRVeuzg3Z6qEgJQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="65326680"
 X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
-   d="scan'208";a="68913270"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 07:51:21 -0800
-X-CSE-ConnectionGUID: /G7SFG5HSZK2GIV28DUQug==
-X-CSE-MsgGUID: ZLWDLyqTRP+cWSyOlFIqgQ==
+   d="scan'208";a="65326680"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 11:06:44 -0800
+X-CSE-ConnectionGUID: MgxB5T1ZRYywJ2N41Elqaw==
+X-CSE-MsgGUID: i0os8C7dQOqSFtYN1KlIhw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
-   d="scan'208";a="190083684"
+   d="scan'208";a="195210382"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 15 Nov 2025 07:51:19 -0800
+  by orviesa005.jf.intel.com with ESMTP; 15 Nov 2025 11:06:43 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vKIYW-00083n-19;
-	Sat, 15 Nov 2025 15:51:16 +0000
-Date: Sat, 15 Nov 2025 23:50:57 +0800
+	id 1vKLbb-0008CN-27;
+	Sat, 15 Nov 2025 19:06:39 +0000
+Date: Sun, 16 Nov 2025 03:06:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haoqin Huang <haoqinhuang7@gmail.com>, chandan.babu@oracle.com,
-	djwong@kernel.org, linux-xfs@vger.kernel.org
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Haoqin Huang <haoqinhuang@tencent.com>,
-	Rongwei Wang <zigiwang@tencent.com>
-Subject: Re: [PATCH] xfs: fix deadlock between busy flushing and t_busy
-Message-ID: <202511152311.UvZyd6Gi-lkp@intel.com>
-References: <20251114152147.66688-1-haoqinhuang7@gmail.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Pratyush Yadav <pratyush@kernel.org>
+Subject: [akpm-mm:mm-nonmm-unstable 82/133]
+ include/linux/kexec_handover.h:108:7: warning: no previous prototype for
+ function 'kho_alloc_preserve'
+Message-ID: <202511160314.OK0OGRXl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,108 +66,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251114152147.66688-1-haoqinhuang7@gmail.com>
 
-Hi Haoqin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on xfs-linux/for-next]
-[also build test ERROR on linus/master v6.18-rc5 next-20251114]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haoqin-Huang/xfs-fix-deadlock-between-busy-flushing-and-t_busy/20251115-002142
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-patch link:    https://lore.kernel.org/r/20251114152147.66688-1-haoqinhuang7%40gmail.com
-patch subject: [PATCH] xfs: fix deadlock between busy flushing and t_busy
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251115/202511152311.UvZyd6Gi-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511152311.UvZyd6Gi-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   4fc88c237bfe11bde443e104428aac56e63a997f
+commit: 88316955b5b1b4cb0cb2fad416f7e8dde9b246a0 [82/133] kho: introduce high-level memory allocation API
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251116/202511160314.OK0OGRXl-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511160314.OK0OGRXl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511152311.UvZyd6Gi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511160314.OK0OGRXl-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
-     639 |                 if (!alloc_flags && busy_gen == READ_ONCE(pag->pagb_gen))
-         |                                                           ^
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
->> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
-   7 errors generated.
+   In file included from mm/mm_init.c:33:
+>> include/linux/kexec_handover.h:108:7: warning: no previous prototype for function 'kho_alloc_preserve' [-Wmissing-prototypes]
+     108 | void *kho_alloc_preserve(size_t size)
+         |       ^
+   include/linux/kexec_handover.h:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     108 | void *kho_alloc_preserve(size_t size)
+         | ^
+         | static 
+>> include/linux/kexec_handover.h:113:6: warning: no previous prototype for function 'kho_unpreserve_free' [-Wmissing-prototypes]
+     113 | void kho_unpreserve_free(void *mem) { }
+         |      ^
+   include/linux/kexec_handover.h:113:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     113 | void kho_unpreserve_free(void *mem) { }
+         | ^
+         | static 
+>> include/linux/kexec_handover.h:114:6: warning: no previous prototype for function 'kho_restore_free' [-Wmissing-prototypes]
+     114 | void kho_restore_free(void *mem) { }
+         |      ^
+   include/linux/kexec_handover.h:114:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     114 | void kho_restore_free(void *mem) { }
+         | ^
+         | static 
+   3 warnings generated.
 
 
-vim +/pag +639 fs/xfs/xfs_extent_busy.c
+vim +/kho_alloc_preserve +108 include/linux/kexec_handover.h
 
-   594	
-   595	/*
-   596	 * Flush out all busy extents for this group.
-   597	 *
-   598	 * If the current transaction is holding busy extents, the caller may not want
-   599	 * to wait for committed busy extents to resolve. If we are being told just to
-   600	 * try a flush or progress has been made since we last skipped a busy extent,
-   601	 * return immediately to allow the caller to try again.
-   602	 *
-   603	 * If we are freeing extents, we might actually be holding the only free extents
-   604	 * in the transaction busy list and the log force won't resolve that situation.
-   605	 * In this case, we must return -EAGAIN to avoid a deadlock by informing the
-   606	 * caller it needs to commit the busy extents it holds before retrying the
-   607	 * extent free operation.
-   608	 */
-   609	int
-   610	xfs_extent_busy_flush(
-   611		struct xfs_trans	*tp,
-   612		struct xfs_group	*xg,
-   613		unsigned		busy_gen,
-   614		uint32_t		alloc_flags)
-   615	{
-   616		struct xfs_extent_busy_tree *eb = xg->xg_busy_extents;
-   617		DEFINE_WAIT		(wait);
-   618		int			error;
-   619	
-   620		error = xfs_log_force(tp->t_mountp, XFS_LOG_SYNC);
-   621		if (error)
-   622			return error;
-   623	
-   624		/* Avoid deadlocks on uncommitted busy extents. */
-   625		if (!list_empty(&tp->t_busy)) {
-   626			if (alloc_flags & XFS_ALLOC_FLAG_TRYFLUSH)
-   627				return 0;
-   628	
-   629			if (busy_gen != READ_ONCE(eb->eb_gen))
-   630				return 0;
-   631	
-   632			if (alloc_flags & XFS_ALLOC_FLAG_FREEING)
-   633				return -EAGAIN;
-   634	
-   635			/*
-   636			 * To avoid deadlocks if alloc_flags without any FLAG set
-   637			 * and t_busy is not empty.
-   638			 */
- > 639			if (!alloc_flags && busy_gen == READ_ONCE(pag->pagb_gen))
-   640				return -EAGAIN;
-   641		}
-   642	
-   643		/* Wait for committed busy extents to resolve. */
-   644		do {
-   645			prepare_to_wait(&eb->eb_wait, &wait, TASK_KILLABLE);
-   646			if  (busy_gen != READ_ONCE(eb->eb_gen))
-   647				break;
-   648			schedule();
-   649		} while (1);
-   650	
-   651		finish_wait(&eb->eb_wait, &wait);
-   652		return 0;
-   653	}
-   654	
+   107	
+ > 108	void *kho_alloc_preserve(size_t size)
+   109	{
+   110		return ERR_PTR(-EOPNOTSUPP);
+   111	}
+   112	
+ > 113	void kho_unpreserve_free(void *mem) { }
+ > 114	void kho_restore_free(void *mem) { }
+   115	
 
 -- 
 0-DAY CI Kernel Test Service
