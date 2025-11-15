@@ -1,212 +1,173 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEE74A32
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 15:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2116E22D4C3;
+	Sat, 15 Nov 2025 15:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763219400; cv=none; b=MQJUmziJ4Ge90StjlC6ToczXrZfaaVEkfvNpPG/eiGpsapVw6Gp3BlHaDgxWY6Gp7a9w5LyS8d/V7EDomYWoH0ltWl8eUyjXiHPmUdbh7iGTvdAMdM4NVLyGHb3uNbtBEo13XbA5V+Zzi4Czy+MM9eb3c/T1UPQtm1tzIlp5+wI=
+	t=1763221886; cv=none; b=F36INEHVl8TOKnK3UgM/sxpt3+sjzmdHY7e1vQWelXD/MkT6+ApsrmTP/H8fPOf9IHGhIBTW0g2HUC8RA1Rr3avZNKsyVZkKxAtOy0MD49XSce0sdl3kJwbj3NRSSkaCGyq3Sq9ZKPbnSsnRWSIrVu5esc5N981Y78NtUgli4/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763219400; c=relaxed/simple;
-	bh=9SA9SEdpJyHPt8tsp4kccmbvrFG5gu2WIbEuJq7mvJw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SegHE2ha/+8X+YlgJ0qX9xnXM0d0/Y6ACqm3x2dQrChuYY+V315ebd0einPOSDD7InaNDPTlhADC75Bvp+Yk0HCPjoY7S7UV4kFeXi1UHF8DSSXDfdZXH4Zu/aSkG8pf3N0fwDpp3Flmt6rN6FWSOacPGUGhlS3n0PfgSR6kv7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YZNjZnby; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763221886; c=relaxed/simple;
+	bh=sXzuvODmAMEHA7GjipRn4j4jK4UXsgSGUyG1J4Tnh+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PooKkKMRqWwHV5ua9q80k1/tjRUcIakhn9xH3N/xHt8hHQLT+I89vEwRWLJcI9T/KNEp3hca8fndbB0rLYpA1hxzpnZWOMhdjWNvxHZbd+/chPDXYSYqblv6NtNO052RlTO4NYgJqNmnhMLR65Dp51e7TCIpmVcIZl4TBepS9Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IP019t6f; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YZNjZnby"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b8eff36e3bso3740139b3a.2
-        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 07:09:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763219398; x=1763824198; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9SA9SEdpJyHPt8tsp4kccmbvrFG5gu2WIbEuJq7mvJw=;
-        b=YZNjZnbynWjAbNWVCAh/Nd9EzWl4JISkzUFvWt6J34Z+3L4KN32d2Xf1G+ws++57R2
-         UCbRFTadJf1Tx0h97WqGa8yfzrIbd2iJj83oZx2MbqXgUC9jlQVY9zFrjJ8UbGhHnbaI
-         s+s2CVX+F0JHM+qgn6WmKYsKvts0i5LRHrbLj+0W8a676+0PcmvhfJPkn6rGEWCVTtsv
-         C+Ql53guthIHUvb/dZV7NUaU5QCD4vX94ykq+b0iKDqOFoSz+pyleIT6Ssgs0xrWpdzT
-         34SPh2Tf+Bx7QTENdRrN53qMaEhBSv3aKwV/T+X07GA6KfpZN7mxydyEEX9Dnz3/fh2T
-         qrdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763219398; x=1763824198;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9SA9SEdpJyHPt8tsp4kccmbvrFG5gu2WIbEuJq7mvJw=;
-        b=V9LsSJdC1XqVPeFTkqOVEVJ/FpRUXdH/OsXuLITVt1dFUiBoe2cPIt2Mc9wWhg0iVZ
-         8P8bDembE60FJzyCDii7HjN47m21M+Fo1Iilj5vtjdRLoIA7sYcPoXCbCTuthQWX+V1N
-         1hu0zet7srdlSmgSNtjnzVNvydjz3+Qnu6FWHMtcxIdYoLSUUt7sCr7S4TKVVbIXT0Ny
-         0FlO1wmj9PqfIPwAQVNNfJl9F+NwBlIWk0Hh2q4v+YvbKmeiesqtqlY258vzgvc8w6Hh
-         Ow6b33roKS4f9w/hxa+BM+dzhvCXprc7fdyCA9rM6P9rJ+Z8wGRto9ZsQz0zVGhTmbWG
-         6Mow==
-X-Forwarded-Encrypted: i=1; AJvYcCXNO4wTQAcm/OUxGlVg8H0BLS848g8Y6ECVxiZ5I0+KIRPUSpWakk5UN7THvQ/Fjt/rhham@lists.linux.dev
-X-Gm-Message-State: AOJu0YwDbG1IB/RWDddYiJPYwxUID5wFfwIyhByvWDfOGU6TE3MsDGNB
-	SKlCIxdh87QKTXdb8XzW5v1772pg9vsfJictbXGSAerW08qF02zymLU1
-X-Gm-Gg: ASbGncsw9HuQTrMq1Ff+z/MK0C6btmFg2tUVnKTvvl+pUia1ygh2xvWRDNJysV7KSUh
-	hem33uNbRKehm+BVH2hRvEDAGquocl0Vivq/RWSP++tJ87ZxOaXurFkT5FhhX1ENZ1jiYNqBDbu
-	qI/BwaXkX/x/qVk+EXlVqh+j61xjSy1uDUaFnJqsIdb+PN1GlpIcs6mh9Gp+GaRI/mB+gX7GZE/
-	zSYl1f+aT+nczhdYmQT4qnSjQFe5MK4J1RU01ds0HIE2eWrcxfvzUyCcAol+bL62P1FKGc7/uK5
-	n13s4BpILjW0VhXIYTtd8CeYxiKYvZDcdId48eGdZjJro0vMYLcaqFHNDGlmd1PimkRDBlEYdqZ
-	+qyeH1DIvm8tHBc6Mnwe+bZyeyIzLegiggpSO5DFADxkOgzdU2SDraL/5Oa/+d4lIYjtSYkoAOf
-	GzEWRccT7jRBmUVfVVGAO/xl4nTUHNxsae6KY=
-X-Google-Smtp-Source: AGHT+IHWcY+GtYxvT2QkvWrdoG6nA29trQIRuLrsD8pNdWPYP/nxv4eW9O/LAvnZtRfQqFwuGVp1RA==
-X-Received: by 2002:a05:6a20:a109:b0:34f:c83b:b3f6 with SMTP id adf61e73a8af0-35ba2598aebmr8896833637.43.1763219398046;
-        Sat, 15 Nov 2025 07:09:58 -0800 (PST)
-Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927d1c413sm8266986b3a.69.2025.11.15.07.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 07:09:57 -0800 (PST)
-From: Xie Yuanbin <qq570070308@gmail.com>
-To: tglx@linutronix.de
-Cc: aalbersh@redhat.com,
-	acme@kernel.org,
-	adrian.hunter@intel.com,
-	agordeev@linux.ibm.com,
-	akpm@linux-foundation.org,
-	alex@ghiti.fr,
-	alexander.shishkin@linux.intel.com,
-	andreas@gaisler.com,
-	andrii@kernel.org,
-	anna-maria@linutronix.de,
-	aou@eecs.berkeley.edu,
-	arnd@arndb.de,
-	baolin.wang@linux.alibaba.com,
-	borntraeger@linux.ibm.com,
-	bp@alien8.de,
-	brauner@kernel.org,
-	bsegall@google.com,
-	dave.hansen@linux.intel.com,
-	davem@davemloft.net,
-	david@kernel.org,
-	david@redhat.com,
-	dietmar.eggemann@arm.com,
-	frederic@kernel.org,
-	gor@linux.ibm.com,
-	hca@linux.ibm.com,
-	hpa@zytor.com,
-	irogers@google.com,
-	james.clark@linaro.org,
-	jlayton@kernel.org,
-	jolsa@kernel.org,
-	juri.lelli@redhat.com,
-	justinstitt@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux@armlinux.org.uk,
-	llvm@lists.linux.dev,
-	lorenzo.stoakes@oracle.com,
-	luto@kernel.org,
-	mark.rutland@arm.com,
-	mathieu.desnoyers@efficios.com,
-	max.kellermann@ionos.com,
-	mgorman@suse.de,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	morbo@google.com,
-	namhyung@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	nysal@linux.ibm.com,
-	oleg@redhat.com,
-	osalvador@suse.de,
-	palmer@dabbelt.com,
-	paulmck@kernel.org,
-	peterz@infradead.org,
-	pjw@kernel.org,
-	qq570070308@gmail.com,
-	riel@surriel.com,
-	rostedt@goodmis.org,
-	ryan.roberts@arm.com,
-	segher@kernel.crashing.org,
-	sforshee@kernel.org,
-	sparclinux@vger.kernel.org,
-	svens@linux.ibm.com,
-	thuth@redhat.com,
-	urezki@gmail.com,
-	vincent.guittot@linaro.org,
-	vschneid@redhat.com,
-	will@kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v3 3/3] Make finish_task_switch and its subfuncs inline in context switching
-Date: Sat, 15 Nov 2025 23:09:28 +0800
-Message-ID: <20251115150928.649-1-qq570070308@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <87346gbd04.ffs@tglx>
-References: <87346gbd04.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IP019t6f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763221885; x=1794757885;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sXzuvODmAMEHA7GjipRn4j4jK4UXsgSGUyG1J4Tnh+I=;
+  b=IP019t6f7ym9c8ieSlQiwK6jCjPZe5OaZ4My+zVcLYNLc6yqglAzonMo
+   8YpRGEOx3Azu7YWCHYPN3DSjK6ugtAC8HqZh54X5ubC3qim5PmS98AlAi
+   C1lf+FYJYh5c4oeBLKvTSdvMniI058Grdf+aYzfy+6AubcaJyIayVNiGy
+   OMQcWNEFRkWECKsdzPz9be8u7FcOyMfEL5GmksE1Qfs/kdDE5VckA9c2c
+   w1mocyFTudu0yoarLzcAbECaT4lw9eqsh1dtjhNb9d0hvEbmhLrXG0ySL
+   DvqQLQPvjSpSj/BUQ1eXv/cEOdZCvEPglOWU5xVoIv1iD8CTBGWjIR42C
+   Q==;
+X-CSE-ConnectionGUID: AS+rOMSxTPG6bTODsgi2+Q==
+X-CSE-MsgGUID: cSHNMdStQE+7pwbEYLUukQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="68913270"
+X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
+   d="scan'208";a="68913270"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 07:51:21 -0800
+X-CSE-ConnectionGUID: /G7SFG5HSZK2GIV28DUQug==
+X-CSE-MsgGUID: ZLWDLyqTRP+cWSyOlFIqgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
+   d="scan'208";a="190083684"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 15 Nov 2025 07:51:19 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKIYW-00083n-19;
+	Sat, 15 Nov 2025 15:51:16 +0000
+Date: Sat, 15 Nov 2025 23:50:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haoqin Huang <haoqinhuang7@gmail.com>, chandan.babu@oracle.com,
+	djwong@kernel.org, linux-xfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Haoqin Huang <haoqinhuang@tencent.com>,
+	Rongwei Wang <zigiwang@tencent.com>
+Subject: Re: [PATCH] xfs: fix deadlock between busy flushing and t_busy
+Message-ID: <202511152311.UvZyd6Gi-lkp@intel.com>
+References: <20251114152147.66688-1-haoqinhuang7@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251114152147.66688-1-haoqinhuang7@gmail.com>
 
-On Fri, 14 Nov 2025 21:00:43 +0100, Thomas Gleixner wrote:
-> What are subfuncs? This is not a SMS service. Use proper words and not
-> made up abbreviations.
->
-> Again you mark them __always_inline and not inline. Most of them are
-> already 'inline'. Can you please precise in your wording?
->
-> This really can go into the comment section below the first '---'
-> separator. No point in having this in the change log.
+Hi Haoqin,
 
-Thanks for pointing it out, I will improve it in v4 patch.
+kernel test robot noticed the following build errors:
 
->> After `finish_task_switch` is changed to an inline function, the number of
->> calls to the subfunctions (called by `finish_task_switch`) increases in
->> this translation unit due to the inline expansion of `finish_task_switch`.
->> Due to compiler optimization strategies, these functions may transition
->> from inline functions to non inline functions, which can actually lead to
->> performance degradation.
->
-> I'm having a hard time to understand this word salad.
+[auto build test ERROR on xfs-linux/for-next]
+[also build test ERROR on linus/master v6.18-rc5 next-20251114]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I think the description is very important here, because it explains why
-it needs to make the subfunctions as __always_inline.
-Where is difficult to understand specifically? Please point it out,
-and I will improve the description in v4 patch. Thank you very much!
+url:    https://github.com/intel-lab-lkp/linux/commits/Haoqin-Huang/xfs-fix-deadlock-between-busy-flushing-and-t_busy/20251115-002142
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+patch link:    https://lore.kernel.org/r/20251114152147.66688-1-haoqinhuang7%40gmail.com
+patch subject: [PATCH] xfs: fix deadlock between busy flushing and t_busy
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251115/202511152311.UvZyd6Gi-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511152311.UvZyd6Gi-lkp@intel.com/reproduce)
 
-> What means (rdtsc)?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511152311.UvZyd6Gi-lkp@intel.com/
 
-This is a high-precision timestamp acquisition method in x86.
-The description here is not sufficient, thanks for pointing it out, I
-will improve it in v4 patch.
+All errors (new ones prefixed by >>):
 
-> So the real benefit is observable when spectre_v2_user mitigations are
-> enabled. You completely fail to explain that.
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+     639 |                 if (!alloc_flags && busy_gen == READ_ONCE(pag->pagb_gen))
+         |                                                           ^
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+>> fs/xfs/xfs_extent_busy.c:639:45: error: use of undeclared identifier 'pag'
+   7 errors generated.
 
-What kind of explanation is needed here?
-```txt
-When spectre_v2_user mitigation is enabled, kernel is likely to
-preform branch prediction hardening inside switch_mm_irq_off, which can
-drastically increase the branch prediction misses in subsequently
-executed code.
 
-On x86, this mitigation is enabled conditionally by default, but on other
-architectures, for example arm32/aarch64, the mitigation may be fully
-enabled by default.
+vim +/pag +639 fs/xfs/xfs_extent_busy.c
 
-`finish_task_switch` is right after `switch_mm_irq_off`, so makeing it
-inline can achieve high performance benefits.
-```
-Is it ok? Thanks very much!
+   594	
+   595	/*
+   596	 * Flush out all busy extents for this group.
+   597	 *
+   598	 * If the current transaction is holding busy extents, the caller may not want
+   599	 * to wait for committed busy extents to resolve. If we are being told just to
+   600	 * try a flush or progress has been made since we last skipped a busy extent,
+   601	 * return immediately to allow the caller to try again.
+   602	 *
+   603	 * If we are freeing extents, we might actually be holding the only free extents
+   604	 * in the transaction busy list and the log force won't resolve that situation.
+   605	 * In this case, we must return -EAGAIN to avoid a deadlock by informing the
+   606	 * caller it needs to commit the busy extents it holds before retrying the
+   607	 * extent free operation.
+   608	 */
+   609	int
+   610	xfs_extent_busy_flush(
+   611		struct xfs_trans	*tp,
+   612		struct xfs_group	*xg,
+   613		unsigned		busy_gen,
+   614		uint32_t		alloc_flags)
+   615	{
+   616		struct xfs_extent_busy_tree *eb = xg->xg_busy_extents;
+   617		DEFINE_WAIT		(wait);
+   618		int			error;
+   619	
+   620		error = xfs_log_force(tp->t_mountp, XFS_LOG_SYNC);
+   621		if (error)
+   622			return error;
+   623	
+   624		/* Avoid deadlocks on uncommitted busy extents. */
+   625		if (!list_empty(&tp->t_busy)) {
+   626			if (alloc_flags & XFS_ALLOC_FLAG_TRYFLUSH)
+   627				return 0;
+   628	
+   629			if (busy_gen != READ_ONCE(eb->eb_gen))
+   630				return 0;
+   631	
+   632			if (alloc_flags & XFS_ALLOC_FLAG_FREEING)
+   633				return -EAGAIN;
+   634	
+   635			/*
+   636			 * To avoid deadlocks if alloc_flags without any FLAG set
+   637			 * and t_busy is not empty.
+   638			 */
+ > 639			if (!alloc_flags && busy_gen == READ_ONCE(pag->pagb_gen))
+   640				return -EAGAIN;
+   641		}
+   642	
+   643		/* Wait for committed busy extents to resolve. */
+   644		do {
+   645			prepare_to_wait(&eb->eb_wait, &wait, TASK_KILLABLE);
+   646			if  (busy_gen != READ_ONCE(eb->eb_gen))
+   647				break;
+   648			schedule();
+   649		} while (1);
+   650	
+   651		finish_wait(&eb->eb_wait, &wait);
+   652		return 0;
+   653	}
+   654	
 
-> bzImage size is completely irrelevant. What's interesting is how the
-> size of the actual function changes.
-
-I think the bzImage size is meaningful, at least for many embedded
-devices. Due to compression algorithms, code size cannot directly reflect
-to the compressed size.
-
-Anyway, I will supplement the size of the .text section in the v4 patch.
-
-Thanks very much!
-
-Xie Yuanbin
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
