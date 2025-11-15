@@ -1,157 +1,178 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C382F257828
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 22:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D079522FE11
+	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 23:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763247419; cv=none; b=t5AVu5urupJuZK5M8/b55Zj+ymCV2aAO/+L2UNXtHSaZVz7rkFvnhsr8DIxeuqQfq7Un4lXVTEVm9Owo+IIVWX4FyO6bFJ4efsrKnsGrPPSLEv36cgA3775eph0i0TcA1/ePnApmGmodjGkSMQU7U5VJmaYQyiGbQtInGFDyXag=
+	t=1763248821; cv=none; b=onANFZduYRqiX4qiS+5E5iNKzXrf2fyzl30lYQTv0t0JE5x2Yq8RW1Zi6tquyibng6AryMsMpisJQLM7Tu1Sc2a06DPY6WHS34T7qqdK//5+Q+ybC58OLhQyvK3N7fmK6Ne2/Ul5dY/AsTMhw+5nEqbovbxhE6up02fQZoo9PDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763247419; c=relaxed/simple;
-	bh=r6WDjhpIq3Wd/J0Y+qOKRxylI1swOi5e1ZWkbyl+O9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tSj6MUmkYDkKaYMBBnyBNIBclvHldFYNmfKpDOJBo3wl6yGLnoiAd1NgRbKvtYKRori9GMQ9yH36MNiJjVkThlHUfDq9RsQQuH8rzVi+bBM/W9eY2cdGiE0e6Rb5s5gy8MWCSF2RIViQc/EFUaqxhscmVTOaRIgglB5TGTNieco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dhpj69+9; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1763248821; c=relaxed/simple;
+	bh=pum41SKQLkewMZV7DS9PT0wZ+5r+WBa5VedGl9TB3KI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i0fWa56gHgScWQMEgrqLKwT7HHryhN9XwId3WSscMxYCsnhk4zvDYWflJn67JEYhru4gB+yExrn7ciFFlmXPV2LqkgtEvl2KQPwD2EJoy+jlTmndVBNvUeaKhKSE7xNw8Fq37y6FVv3i8HK6GXRsprxjWnpB+jOhKwBRnZJGId4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=R6t8Xwr1; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dhpj69+9"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so34782975e9.1
-        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 14:56:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="R6t8Xwr1"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-64175dfc338so5997461a12.0
+        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 15:20:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763247416; x=1763852216; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=soleen.com; s=google; t=1763248818; x=1763853618; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VoQmqXz6sGsQU+5pMM6WGkJhNb0pQ0+RIfWOvYniKT8=;
-        b=dhpj69+91vyBJm4ohJOXty6dngMzIWMzWemJqM87ycIKqu3PdusMgJadwV8PuUxOMV
-         bAOof0jj1GbVi/p0dvSE0meJ3sXXjZM2kdF2IINI3uqG5ke4pqtzN0diaWA+lUTdIWaE
-         36OSQRBrRpDuliIQFGjqE+wcxI5arkrMD7PZvVFS7QO3lIq6sCR4n1yfzy3BdhkU6k3y
-         GyrUUp8tPKp0crfM8WiQ2PKaxbc8tLtPp0nAe/kaY/LrKw/Rg1ckRhZ7hah/hlNKWwWU
-         x+/vSafZ1K1dgrMMVcHUiqIyJ//4Alu1DJaTftgMWn8xxg3Abn8Wfxk8Gg4CiDsxvDMq
-         XUSg==
+        bh=1nG48T3PKR9DL3eRjQ/rPhDhCItZZXCtoC3T/QZzPjg=;
+        b=R6t8Xwr1xn2l0sa4QqbOUWYcgXIkAQqaCcI1iaZu79mbdYMMvcluV4+GiGsYaXKzCU
+         LRqIc+jkX3+NbiuxtKNKuy8GBq3M28trl6ZuE4Ne5uUUgGSzNizXUjz3E7c99cgWIrNR
+         9UdTcnNDPk10ASdf4/00XstkTQI8R9F48Yrgl5F3zhF7jWb7TVhjrsXxGnQxfrQnJQJs
+         UjjVxcTo0motmo5dGpQqH213B2b1Zodb2CcWCILaVFzy0xAO6mbJZ+fd0EVY50W9Qet0
+         0miLLztJAf2UD2fRboJOGKy/Z7HE2yfG0s36Dmmg8hT18/FJ0XU+uNchvss8pqG0i9ex
+         oTbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763247416; x=1763852216;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1763248818; x=1763853618;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VoQmqXz6sGsQU+5pMM6WGkJhNb0pQ0+RIfWOvYniKT8=;
-        b=xOzORfOMxHpH3YMt7HzHbq53hFGiR0WwuuJWvQMrTlq3If5MLG0276r00cGTsOjtEG
-         /38TtyVnuSnpIiC5w4pL/r7pSeuqOY7VWz+q0qZNW5mqhLC0QQKiHbTfGpE/8tD2YneA
-         JVG38wvTO8koNoLnzgoltD62Lh8tGr2ZutFxHiLbT1YLa6brQyeG5bsc6aL502Z3nlTR
-         vPvvkJGoOIW55Ppfqhz+PVFa9fyk16P5+6/Ek7TtSMxCTlousImWFYnaGD3T6SMXU9UP
-         3B7s9wjdB8KX6aDSOgJ3vghYZkg5x/T91z1Nvk0oG0obvAp7jDVBTjQYOhCemesCpZs6
-         7LQg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTNnb3R+N/KRiuyIcqgvMB16UizILrL9U0Uw1YtbHNBEhSZuu9SR5gUlSAayAel/Xsjou8@lists.linux.dev
-X-Gm-Message-State: AOJu0YxQXLzguqmyCcEpvwpI/QsHwuHj0oPfkcr9ks6sGUzFSBgxi4S1
-	NHX8UhKLzz+jb1AwtTpVJrZMaT3o61/dDmWz1bZuXnTUBsThdAfxR48XgwyX1QouSX0=
-X-Gm-Gg: ASbGnctJabelugf05AFY4rRVnHvMzU7RsDezpxnMcDJM5wu7EK7wsdLk03n9sT/mksL
-	79ttflnGm4J+WAgSkS6zqFFTPR/2EQRkW534msxBKeH2jUiSoXWBTrWxqtJymK7+joyCIPDrQ18
-	2fvNeH/6SVSVIEir6Zz7HHDoNF/C0pURewkJhA9tYmA+cSH4DEdk5t3FiXqkGkP+Dzw6lcqxzrz
-	yWFUsyH1Tzx8lsasAMBlwcFxwOoEErybhuD8cUZBZel2/YnzTMBT/pMFwPo5GU7H0euOfSM/kbr
-	YErbSjB0dsGeFEr8pkkHsFUCTnvV+V33tj++jUzp6puctVNpl9gcGMJ1Ge1IVSwET+MG5xEv3st
-	XDL1nh5R/9kp4ZeFEAOkAzlG7JnjUjmu+nIbraWB1WWXgLvPnyMnt3fBSEpDfXg2wuJEkPbL1/A
-	IGRtxyFF6/FukOJ0FK453mLfLrh9HmfKjTVNeO7sSYQ/Tz5rOSkA==
-X-Google-Smtp-Source: AGHT+IHzTCVjlD7bxRYPCcVQyJMUetvvQL/GhvoPlqWuHIenUBMbxrAsm/jIQ3IT68GtJnvxF1gisQ==
-X-Received: by 2002:a05:600c:3b19:b0:471:989:9d7b with SMTP id 5b1f17b1804b1-4778fe95fe2mr74546895e9.21.1763247416137;
-        Sat, 15 Nov 2025 14:56:56 -0800 (PST)
-Received: from F15.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 14:56:55 -0800 (PST)
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-To: bpf@vger.kernel.org
-Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [bpf-next v1 5/5] selftests/bpf: propagate LLVM toolchain to runqslower build
-Date: Sun, 16 Nov 2025 07:55:40 +0900
-Message-ID: <20251115225550.1086693-6-hoyeon.lee@suse.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251115225550.1086693-1-hoyeon.lee@suse.com>
-References: <20251115225550.1086693-1-hoyeon.lee@suse.com>
+        bh=1nG48T3PKR9DL3eRjQ/rPhDhCItZZXCtoC3T/QZzPjg=;
+        b=a1UZG6uRNRg29un75s1Xf1PuWUCXXNphjLsRYKi7IP5iWP7D67GgOejF2zHWQLpUSB
+         vEdKk6jFReRXSfeEI5s4ygllUCPPJABx3YHIu0vHTnZxJwPj/x6RVJoZfpyqo3YerfR5
+         FfPDgiv0JTpUbjbbR7gFJB8CKmluOaacm6Fp9q5hawsD4HYIr3MpMIrVgADhvjw9Spsf
+         5FNQ4pko8SeLHGEM2cjTTWlvzaiOr1aDTg7XwAhZX0ZYiUmGeEeEpXxmNT626RWg97f3
+         yug0zer81ZbuA8caUBetFa19818VQG0EaUv26W+Y2feWjSJWmZbHocd70+XpHUEuh0c/
+         gIhg==
+X-Gm-Message-State: AOJu0YyjP5Pc0JMaXZtmctijYkiSoz/Ll6iuoNFzLrmqBTyMFyysTTE4
+	8REPySFxyqLd+7u/QTVaTVc8qR8P+R7IFOmS6TnZ3EfriJfuOuVPnBipE0c5JsdmssIHNCUOqxw
+	H1ziknZCbSpA/h0CyrGtVAd/oC+PQVz7/449gF4FJUL7CodTzRKxru6vbng==
+X-Gm-Gg: ASbGncvLb0zKbuMX/GIy0BmnqtTugu+dUQKml0mlldk5elaIiAmJ3vCoQQ07uPLl88+
+	IGyDsQd+V/aKbfLcHkddBN/SY6mqkGkIL42ex/FvVloqRXyzV7wYwprYUIofZXQy2ae6ccnJsJR
+	uRW6m5tmZhaqSx6MA6DDLZSVmduQHtV3XkxYGYjh5hsvmZWyb0zLSohGZ9wWCAkpwoVAwH0WCxs
+	qj8oZyO3t8HP8dFZs27g+2TU4s3xODKaWWZcsfBC6xG21VBlmP2f0i10gaM0HhhPmZN
+X-Google-Smtp-Source: AGHT+IGTBT8Fzma+3yYPpDFd+DD3iOx1Wb7+8bSARIoAOt6jXrmqBo207u3iTo22/gyCM7A/fxHKf2NFI2kGEtC+N6w=
+X-Received: by 2002:a05:6402:144d:b0:63c:533f:4b25 with SMTP id
+ 4fb4d7f45d1cf-64350e2091cmr7747458a12.15.1763248817815; Sat, 15 Nov 2025
+ 15:20:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202511160314.OK0OGRXl-lkp@intel.com>
+In-Reply-To: <202511160314.OK0OGRXl-lkp@intel.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Sat, 15 Nov 2025 18:19:41 -0500
+X-Gm-Features: AWmQ_bkBBHTdU9EPBD3bJZ0OQv8SlD-WQo6FALKyAXAkJ9Vd56KVKAMzZ43naZo
+Message-ID: <CA+CK2bBgXDhrHwTVgxrw7YTQ-0=LgW0t66CwPCgG=C85ftz4zw@mail.gmail.com>
+Subject: Re: [akpm-mm:mm-nonmm-unstable 82/133] include/linux/kexec_handover.h:108:7:
+ warning: no previous prototype for function 'kho_alloc_preserve'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Memory Management List <linux-mm@kvack.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Pratyush Yadav <pratyush@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The selftests/bpf invokes a nested make when building runqslower, but
-LLVM toolchain version (clang/llvm-strip) is not propagated. As a
-result, runqslower is built with system default clang, not respecting
-specified LLVM version.
+On Sat, Nov 15, 2025 at 2:06=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-no=
+nmm-unstable
+> head:   4fc88c237bfe11bde443e104428aac56e63a997f
+> commit: 88316955b5b1b4cb0cb2fad416f7e8dde9b246a0 [82/133] kho: introduce =
+high-level memory allocation API
+> config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251116=
+/202511160314.OK0OGRXl-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0=
+bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251116/202511160314.OK0OGRXl-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511160314.OK0OGRXl-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from mm/mm_init.c:33:
+> >> include/linux/kexec_handover.h:108:7: warning: no previous prototype f=
+or function 'kho_alloc_preserve' [-Wmissing-prototypes]
+>      108 | void *kho_alloc_preserve(size_t size)
+>          |       ^
+>    include/linux/kexec_handover.h:108:1: note: declare 'static' if the fu=
+nction is not intended to be used outside of this translation unit
+>      108 | void *kho_alloc_preserve(size_t size)
+>          | ^
+>          | static
+> >> include/linux/kexec_handover.h:113:6: warning: no previous prototype f=
+or function 'kho_unpreserve_free' [-Wmissing-prototypes]
+>      113 | void kho_unpreserve_free(void *mem) { }
+>          |      ^
+>    include/linux/kexec_handover.h:113:1: note: declare 'static' if the fu=
+nction is not intended to be used outside of this translation unit
+>      113 | void kho_unpreserve_free(void *mem) { }
+>          | ^
+>          | static
+> >> include/linux/kexec_handover.h:114:6: warning: no previous prototype f=
+or function 'kho_restore_free' [-Wmissing-prototypes]
+>      114 | void kho_restore_free(void *mem) { }
+>          |      ^
+>    include/linux/kexec_handover.h:114:1: note: declare 'static' if the fu=
+nction is not intended to be used outside of this translation unit
+>      114 | void kho_restore_free(void *mem) { }
+>          | ^
+>          | static
+>    3 warnings generated.
+>
+>
+> vim +/kho_alloc_preserve +108 include/linux/kexec_handover.h
+>
+>    107
+>  > 108  void *kho_alloc_preserve(size_t size)
+>    109  {
+>    110          return ERR_PTR(-EOPNOTSUPP);
+>    111  }
+>    112
+>  > 113  void kho_unpreserve_free(void *mem) { }
+>  > 114  void kho_restore_free(void *mem) { }
+>    115
+>
 
-    # LLVM=-21 make -C tools/testing/selftests/bpf
-    ...
-    make feature_display=0 -C /bpf/tools/bpf/runqslower                        \
-        OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/runqslower/        \
-        BPFOBJ_OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/libbpf/     \
-        BPFOBJ=/bpf/tools/testing/selftests/bpf/tools/build/libbpf/libbpf.a    \
-        BPF_INCLUDE=/bpf/tools/testing/selftests/bpf/tools/include             \
-        BPFTOOL_OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/bpftool/   \
-        VMLINUX_BTF=/sys/kernel/btf/vmlinux BPF_TARGET_ENDIAN=--target=bpfel   \
-        EXTRA_CFLAGS='-g -O0  ' EXTRA_LDFLAGS=' ' &&                           \
-        cp  /bpf/tools/testing/selftests/bpf/tools/build/runqslower/runqslower \
-            /bpf/tools/testing/selftests/bpf/runqslower
-    clang -g -O2 --target=bpfel -I/bpf/tools/testing/selftests/bpf/tools/build/runqslower/ \
-          -I/bpf/tools/testing/selftests/bpf/tools/include -I/bpf/tools/include/uapi       \
-          -c runqslower.bpf.c -o /bpf/tools/testing/selftests/bpf/tools/build/runqslower/runqslower.bpf.o && \
-          llvm-strip -g /bpf/tools/testing/selftests/bpf/tools/build/runqslower//runqslower.bpf.o
-    /bin/sh: 1: clang: not found
+Sorry, missed "static inline"
 
-Explicitly propagate CLANG and LLVM_STRIP to the runqslower sub-make so
-that the LLVM toolchain selection from lib.mk is preserved.
+For, this another warnings:
 
-Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 1 +
- tools/testing/selftests/lib.mk       | 1 +
- 2 files changed, 2 insertions(+)
+diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.=
+h
+index 38a9487a1a00..dde952227b88 100644
+--- a/include/linux/kexec_handover.h
++++ b/include/linux/kexec_handover.h
+@@ -105,13 +105,13 @@ static inline int kho_unpreserve_vmalloc(struct
+kho_vmalloc *preservation)
+        return -EOPNOTSUPP;
+ }
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 34ea23c63bd5..79ab69920dca 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -306,6 +306,7 @@ endif
- 
- $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
- 	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	       \
-+		    CLANG=$(CLANG) LLVM_STRIP=$(LLVM_STRIP)		       \
- 		    OUTPUT=$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=$(VMLINUX_BTF)     \
- 		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
- 		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index a448fae57831..f14255b2afbd 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -8,6 +8,7 @@ LLVM_SUFFIX := $(LLVM)
- endif
- 
- CLANG := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-+LLVM_STRIP := $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
- 
- CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
- CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
--- 
-2.51.1
+-void *kho_alloc_preserve(size_t size)
++static inline void *kho_alloc_preserve(size_t size)
+ {
+        return ERR_PTR(-EOPNOTSUPP);
+ }
 
+-void kho_unpreserve_free(void *mem) { }
+-void kho_restore_free(void *mem) { }
++static inline void kho_unpreserve_free(void *mem) { }
++static inline void kho_restore_free(void *mem) { }
+
+ static inline struct folio *kho_restore_folio(phys_addr_t phys)
+ {
+
+
+
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
