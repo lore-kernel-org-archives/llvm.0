@@ -1,63 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98FF137932;
-	Sat, 15 Nov 2025 19:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1061B2BF012
+	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 19:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763233607; cv=none; b=MM+9UBFL3Ru1WNNOq2b8bspmQT28MyNNfgdpOM7AxI0N7PduB/J8pYD27ukkRqK1evwrd17b6Ti10i2+h0fCFUJsxteS6nBqJfQC6Zup3BTxkkJM6bZFRwVv9Zr3BFu5OG1I/75etzptuUe3Vale1OhQoh9YjHhSU6QZMOsDXFM=
+	t=1763236541; cv=none; b=HVD6Pqj6AIEzNXQAKUdkD6wZxk426bbP7xjFpr52lvMTAA7A64FFPMp9m8h6nD6KKzFpuwQ8a5gXRk3j5xD5SHjqCbGlnjO1guu4mM1NqtPoc/pNbUbrN78c/gudMXbma6wEGQ7s6AAq9IhQCgpVJQJD7quMpu4LayioKCQ3i1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763233607; c=relaxed/simple;
-	bh=cVdHc0zZMKwI/lhvVkx0Lah8VDIvpX47gfaLp/x4dOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=l6EzD7dGEqWhSBhdNMfrRCnWILch+d3E475vy0PgxZbPGyJSJd9MI3Aw1H8NxYSZ254VYqIrpvah1oH/bB3njU7ar0PqYUWqvAOrdf1DZBq7hXiHHzQeUU28E2eyxuAesDcm84MEKM59X7Sfv12QGv0OJnWrDdK0XLMWhSPCj3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpv80R/w; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763236541; c=relaxed/simple;
+	bh=C+/K7Q5NqN1QoGmW+YDQcSan94kflPiyGMVUObBT0xc=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MCgc1eA5ezYEe+tKZN0ZvUkJzvQF70YPMumKIlfIzD869rdCZGHFCOWQSuDC4O3FjDNGOP5doRNfIeS1mlO7E/hRmjs3V0njogVu9h/tMcTvOIfRoTGrFCQqW+RnwbqHuy0avnnvgSeydtZX8o/R79v0g5hqGz1Z31K8NNKH/Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TroO7oac; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpv80R/w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763233605; x=1794769605;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cVdHc0zZMKwI/lhvVkx0Lah8VDIvpX47gfaLp/x4dOY=;
-  b=bpv80R/w4QiT/MEyH3uP/3OfiwIisROYONMfbioSuQyvOSYQDtY/R+i8
-   oxsz03WkBArU3vznajpUNHYhBZgvins19xXPm01atp7apwEUuR1i133iM
-   Ibeagc9JSTtict87CxIvmPitSqU/nmmYgb7SSPv3TTctfwCZIrueUhqRk
-   YqyW3nuDeLiAlbB/obAAwohQ4k+Pv7RadnEaN04FVFjonATXWtM003/SQ
-   V5lc7c/NNgyCWUyv++vhTItv7sHgw/e0/8c/plzeGdDqpe3g6AwOK5/Dy
-   UdBw+lDasvm2CpD/gG2Vvdb79MyF2DnLLISRZJwMDxhohV/Z9gYtzfoKd
-   A==;
-X-CSE-ConnectionGUID: 3yAuudqpSw2P6CrVSOHo+A==
-X-CSE-MsgGUID: hMkZv7MsRVeuzg3Z6qEgJQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="65326680"
-X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
-   d="scan'208";a="65326680"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 11:06:44 -0800
-X-CSE-ConnectionGUID: MgxB5T1ZRYywJ2N41Elqaw==
-X-CSE-MsgGUID: i0os8C7dQOqSFtYN1KlIhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
-   d="scan'208";a="195210382"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 15 Nov 2025 11:06:43 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vKLbb-0008CN-27;
-	Sat, 15 Nov 2025 19:06:39 +0000
-Date: Sun, 16 Nov 2025 03:06:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Pratyush Yadav <pratyush@kernel.org>
-Subject: [akpm-mm:mm-nonmm-unstable 82/133]
- include/linux/kexec_handover.h:108:7: warning: no previous prototype for
- function 'kho_alloc_preserve'
-Message-ID: <202511160314.OK0OGRXl-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TroO7oac"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-42b566859ecso2191722f8f.2
+        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 11:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763236538; x=1763841338; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WuleB7Uof+tsaQSPA6fNwqHx1Lp/3ZhdyDUy1IclBq8=;
+        b=TroO7oacj16t5chzkHWifN3OS9qwS8apLa3rfIfR3IiUKDglO7vGg1iqtqfDFYpNSS
+         SJp6Gs63yeKtRmOb29gsaq1v2SgfJhUkoS31E3hdgTzoBSR+TvjMtSHC4PM9IY8VQIJO
+         LRl1uNddw4ZRhOfbFwP/i9BOubAboiuqJ9cC8vHPK1d/UtZjQ7Q1YlW2TJd4W2dsB/KP
+         DeMPNgOIjqY6MGuFKBgh+JT6hMNjMITVZaYiOpTt9ARLWN/8SJUkN3EzR+/eyBHhwReM
+         xOwEvtEmPFROToauTduc1CVjnlGhtGjWLFfugFUX1FegRp19K/maLM0v8N8jhyubmjJ/
+         rTQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763236538; x=1763841338;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WuleB7Uof+tsaQSPA6fNwqHx1Lp/3ZhdyDUy1IclBq8=;
+        b=gQc6hX0fB/BNa/kdWAffr489hpehQaYPAagSfbFj2hZhJAcfZazFj9laWI8/+akR2b
+         Jg5zyiKg34HQVeZJSKIxrGoalDsa1l8xBvj6TBfR0SZ5pvlX5U7D0QNzzd4E0gbIsqcP
+         lGbYS3bH8hPndENyIawbvSi0Q0VVaeI4vx1x7r8fFJXWHyHQQxM3FlSGoTR6YYfFUQwg
+         ZWcTqq4hUR1X9+AWTPRB50j8ocfIa/nc9V6lSzEWA25DM8oVIQMJeqWaO7UpOF7dlPSF
+         Zgl3Dp+D+ZPVZ9Dc004pxQg0n7osSdCha8MyDJ6/9iZDXTIVk+m1cwSvUPe5owHr15Jw
+         aE+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVRpF2z4oTdGHT05yJcpxDqkFrw6Lwt2YUZPsgKlh/Wxh916+yJbJ4WCjDotK0dclE20BnZ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy4gNPTA85djGK7EY4cc6gBkcmLGfxvokLJR/vSvtGyy7Pcs+0a
+	cD3ZCGw5ud0t7UC8PaV6w0JGMIXQ94uXrlVWDYYvYWcR0bsVUAsSiPyo
+X-Gm-Gg: ASbGncs7dNcvpmhPK1W6a6I5cpWv/KqHBXfpozsgd0JgLqstC83LKmpiPhsrIagWnAM
+	DeLpugQoUv/ZYAB0nzKMXjnG/srN0wxT87WcNqFyzpLUnww61NRGr3teEZzPJmZKgWEq7S2+jbT
+	QINP9HaejGXM9nHVcn6Ii1ejeCzoxOj5/WPNZvt3WQwAZXeOEa3tnl+ugimH+qjTqR9kt+K2TNR
+	XaMDMzWkUSr5K4AtzMF7/gl4csXA1vnDmSc9TnZTvCOheXq3s8e/0/o44/KLSBR9QQr4hXLaUcl
+	+55riLYfvOd+yXIMBJe+4ITsEIJbK3YtXcakTCzwpk8PrZRVWCxVceqcT+0qaZLbgoLXw3iL+L0
+	7712xe/z6+KNLvB7yfwCi24ysihPC45tLjv/N9Bj+xacp6DPQ6+dw9XrKMio7svqHRuH9sSa1n7
+	CBsDp69y6+5Yw/pUqW67UYPfib0bOQNDYmL7RN8GUnwbP6ItHotLO0oBS9Pv/+YkQ=
+X-Google-Smtp-Source: AGHT+IEf62GmYjxzwvkFlgA1Y2k3Lbqy6ScY6eZSdDpeSqLPl8AdyiMH5V2WcDmQSZsaAfQG8l5H1g==
+X-Received: by 2002:a05:6000:1447:b0:42b:3a84:1ee6 with SMTP id ffacd0b85a97d-42b5934e2d7mr6759730f8f.24.1763236538325;
+        Sat, 15 Nov 2025 11:55:38 -0800 (PST)
+Received: from Ansuel-XPS. (host-87-10-15-59.retail.telecomitalia.it. [87.10.15.59])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53e84a4fsm17126800f8f.11.2025.11.15.11.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Nov 2025 11:55:37 -0800 (PST)
+Message-ID: <6918dab9.5d0a0220.170613.3fe2@mx.google.com>
+X-Google-Original-Message-ID: <aRjatPM0eXV0N5XZ@Ansuel-XPS.>
+Date: Sat, 15 Nov 2025 20:55:32 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Sean Wang <sean.wang@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] pinctrl: airoha: Fix AIROHA_PINCTRL_CONFS_DRIVE_E2 in
+ an7583_pinctrl_match_data
+References: <20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,58 +82,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-head:   4fc88c237bfe11bde443e104428aac56e63a997f
-commit: 88316955b5b1b4cb0cb2fad416f7e8dde9b246a0 [82/133] kho: introduce high-level memory allocation API
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251116/202511160314.OK0OGRXl-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511160314.OK0OGRXl-lkp@intel.com/reproduce)
+On Wed, Nov 12, 2025 at 11:44:30AM -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y / W=e):
+> 
+>   pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+>    2064 | static const struct airoha_pinctrl_conf an7583_pinctrl_drive_e2_conf[] = {
+>         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Due to a typo, an7583_pinctrl_drive_e2_conf is only used within
+> ARRAY_SIZE() (hence no instance of -Wunused-variable), which is
+> evaluated at compile time, so it will not be needed in the final object
+> file.
+> 
+> Fix the .confs assignment for AIROHA_PINCTRL_CONFS_DRIVE_E2 in
+> an7583_pinctrl_match_data to clear up the warning.
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2142
+> Fixes: 3ffeb17a9a27 ("pinctrl: airoha: add support for Airoha AN7583 PINs")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511160314.OK0OGRXl-lkp@intel.com/
+Acked-by: Christian Marangi <ansuelsmth@gmail.com>
 
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/mm_init.c:33:
->> include/linux/kexec_handover.h:108:7: warning: no previous prototype for function 'kho_alloc_preserve' [-Wmissing-prototypes]
-     108 | void *kho_alloc_preserve(size_t size)
-         |       ^
-   include/linux/kexec_handover.h:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     108 | void *kho_alloc_preserve(size_t size)
-         | ^
-         | static 
->> include/linux/kexec_handover.h:113:6: warning: no previous prototype for function 'kho_unpreserve_free' [-Wmissing-prototypes]
-     113 | void kho_unpreserve_free(void *mem) { }
-         |      ^
-   include/linux/kexec_handover.h:113:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     113 | void kho_unpreserve_free(void *mem) { }
-         | ^
-         | static 
->> include/linux/kexec_handover.h:114:6: warning: no previous prototype for function 'kho_restore_free' [-Wmissing-prototypes]
-     114 | void kho_restore_free(void *mem) { }
-         |      ^
-   include/linux/kexec_handover.h:114:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     114 | void kho_restore_free(void *mem) { }
-         | ^
-         | static 
-   3 warnings generated.
-
-
-vim +/kho_alloc_preserve +108 include/linux/kexec_handover.h
-
-   107	
- > 108	void *kho_alloc_preserve(size_t size)
-   109	{
-   110		return ERR_PTR(-EOPNOTSUPP);
-   111	}
-   112	
- > 113	void kho_unpreserve_free(void *mem) { }
- > 114	void kho_restore_free(void *mem) { }
-   115	
+> ---
+>  drivers/pinctrl/mediatek/pinctrl-airoha.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-airoha.c b/drivers/pinctrl/mediatek/pinctrl-airoha.c
+> index bfcedc7f920b..706532a820b0 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-airoha.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-airoha.c
+> @@ -2993,7 +2993,7 @@ static const struct airoha_pinctrl_match_data an7583_pinctrl_match_data = {
+>  			.num_confs = ARRAY_SIZE(an7583_pinctrl_pulldown_conf),
+>  		},
+>  		[AIROHA_PINCTRL_CONFS_DRIVE_E2] = {
+> -			.confs = en7581_pinctrl_drive_e2_conf,
+> +			.confs = an7583_pinctrl_drive_e2_conf,
+>  			.num_confs = ARRAY_SIZE(an7583_pinctrl_drive_e2_conf),
+>  		},
+>  		[AIROHA_PINCTRL_CONFS_DRIVE_E4] = {
+> 
+> ---
+> base-commit: 57916750bc0886917ea2c6209ca6a56acb7b8182
+> change-id: 20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-bbf4cff20b50
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Ansuel
