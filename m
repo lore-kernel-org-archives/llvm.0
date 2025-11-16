@@ -1,178 +1,87 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D079522FE11
-	for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 23:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE4729CE1;
+	Sun, 16 Nov 2025 01:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763248821; cv=none; b=onANFZduYRqiX4qiS+5E5iNKzXrf2fyzl30lYQTv0t0JE5x2Yq8RW1Zi6tquyibng6AryMsMpisJQLM7Tu1Sc2a06DPY6WHS34T7qqdK//5+Q+ybC58OLhQyvK3N7fmK6Ne2/Ul5dY/AsTMhw+5nEqbovbxhE6up02fQZoo9PDI=
+	t=1763257699; cv=none; b=cpcWJMi1PLlLvXrAqe4hPot/ndIqsaaDGJNZL3uppF0zznqnUXXUgI+RI8rnUQVb+B1f6tG25XT1I7vTLIq0sYgJHlrg+ONPanvrElZBu1raJD3UdxwwRGpyQnVEqhMRdGZQ+HyHhpnyY0F+MO5ICWHLeVyHlrG8mxfxvxzLCys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763248821; c=relaxed/simple;
-	bh=pum41SKQLkewMZV7DS9PT0wZ+5r+WBa5VedGl9TB3KI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i0fWa56gHgScWQMEgrqLKwT7HHryhN9XwId3WSscMxYCsnhk4zvDYWflJn67JEYhru4gB+yExrn7ciFFlmXPV2LqkgtEvl2KQPwD2EJoy+jlTmndVBNvUeaKhKSE7xNw8Fq37y6FVv3i8HK6GXRsprxjWnpB+jOhKwBRnZJGId4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=R6t8Xwr1; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1763257699; c=relaxed/simple;
+	bh=3UEeAR1C0FviiJNAAm40kI+zcmWiQ18t5O8ABNigF2o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dgRBUMTtsbfOQ3R6Z0e93U9Wwnzpa0xG0dp7eknwdpvwLYdBYJcAbkqTcH3+r6BtHUH33Ulf71FpoGVjYPGYrJ70VlvVYtUmqckE+3iYvm4QctLPe//bBp8VClToFKUTdH7+zmoXam4fc5KFOn3qdaPukz3mUCm1xfp5IU9cYqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J6Wg2bmQ; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="R6t8Xwr1"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-64175dfc338so5997461a12.0
-        for <llvm@lists.linux.dev>; Sat, 15 Nov 2025 15:20:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1763248818; x=1763853618; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1nG48T3PKR9DL3eRjQ/rPhDhCItZZXCtoC3T/QZzPjg=;
-        b=R6t8Xwr1xn2l0sa4QqbOUWYcgXIkAQqaCcI1iaZu79mbdYMMvcluV4+GiGsYaXKzCU
-         LRqIc+jkX3+NbiuxtKNKuy8GBq3M28trl6ZuE4Ne5uUUgGSzNizXUjz3E7c99cgWIrNR
-         9UdTcnNDPk10ASdf4/00XstkTQI8R9F48Yrgl5F3zhF7jWb7TVhjrsXxGnQxfrQnJQJs
-         UjjVxcTo0motmo5dGpQqH213B2b1Zodb2CcWCILaVFzy0xAO6mbJZ+fd0EVY50W9Qet0
-         0miLLztJAf2UD2fRboJOGKy/Z7HE2yfG0s36Dmmg8hT18/FJ0XU+uNchvss8pqG0i9ex
-         oTbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763248818; x=1763853618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1nG48T3PKR9DL3eRjQ/rPhDhCItZZXCtoC3T/QZzPjg=;
-        b=a1UZG6uRNRg29un75s1Xf1PuWUCXXNphjLsRYKi7IP5iWP7D67GgOejF2zHWQLpUSB
-         vEdKk6jFReRXSfeEI5s4ygllUCPPJABx3YHIu0vHTnZxJwPj/x6RVJoZfpyqo3YerfR5
-         FfPDgiv0JTpUbjbbR7gFJB8CKmluOaacm6Fp9q5hawsD4HYIr3MpMIrVgADhvjw9Spsf
-         5FNQ4pko8SeLHGEM2cjTTWlvzaiOr1aDTg7XwAhZX0ZYiUmGeEeEpXxmNT626RWg97f3
-         yug0zer81ZbuA8caUBetFa19818VQG0EaUv26W+Y2feWjSJWmZbHocd70+XpHUEuh0c/
-         gIhg==
-X-Gm-Message-State: AOJu0YyjP5Pc0JMaXZtmctijYkiSoz/Ll6iuoNFzLrmqBTyMFyysTTE4
-	8REPySFxyqLd+7u/QTVaTVc8qR8P+R7IFOmS6TnZ3EfriJfuOuVPnBipE0c5JsdmssIHNCUOqxw
-	H1ziknZCbSpA/h0CyrGtVAd/oC+PQVz7/449gF4FJUL7CodTzRKxru6vbng==
-X-Gm-Gg: ASbGncvLb0zKbuMX/GIy0BmnqtTugu+dUQKml0mlldk5elaIiAmJ3vCoQQ07uPLl88+
-	IGyDsQd+V/aKbfLcHkddBN/SY6mqkGkIL42ex/FvVloqRXyzV7wYwprYUIofZXQy2ae6ccnJsJR
-	uRW6m5tmZhaqSx6MA6DDLZSVmduQHtV3XkxYGYjh5hsvmZWyb0zLSohGZ9wWCAkpwoVAwH0WCxs
-	qj8oZyO3t8HP8dFZs27g+2TU4s3xODKaWWZcsfBC6xG21VBlmP2f0i10gaM0HhhPmZN
-X-Google-Smtp-Source: AGHT+IGTBT8Fzma+3yYPpDFd+DD3iOx1Wb7+8bSARIoAOt6jXrmqBo207u3iTo22/gyCM7A/fxHKf2NFI2kGEtC+N6w=
-X-Received: by 2002:a05:6402:144d:b0:63c:533f:4b25 with SMTP id
- 4fb4d7f45d1cf-64350e2091cmr7747458a12.15.1763248817815; Sat, 15 Nov 2025
- 15:20:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J6Wg2bmQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763257698; x=1794793698;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3UEeAR1C0FviiJNAAm40kI+zcmWiQ18t5O8ABNigF2o=;
+  b=J6Wg2bmQ3GWlF6QKrqQm4AZfKdHT9a7ZpB8eopId/TGAIahzd6wT/9Yo
+   1k58T/p6gQ8aD5r6u/L+EGPwOGL4qaPBnQcedo7pEqFp7Z9qkEDLo7sag
+   K0dDhHqQ21G8zqdSq7U0Gth1l4I1FLWENrhoi68e06lEh2uYTPM+3Cnn/
+   V0NbdlOrO02j5FIt2+cWr2Buj6YuD4xotEPTwx1DZCv7S5L0gyEnB0E+z
+   hMz4P+Nh5n/m6/yDk/chtQQmuc92eDSeyYjQdviHQGwVCBq6Yy0x2e1OM
+   vqV4xITtxnYP/U8RGTa0iZavLKoQazR9BCeRDoJjhJyOJeqHRNW6RsjG/
+   Q==;
+X-CSE-ConnectionGUID: h8IEwuuNRbmUslm5RbJ/+w==
+X-CSE-MsgGUID: Dv4dGmnjRCiW6ASp84HPfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="52871567"
+X-IronPort-AV: E=Sophos;i="6.19,308,1754982000"; 
+   d="scan'208";a="52871567"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 17:48:17 -0800
+X-CSE-ConnectionGUID: LEUHUGh2TwyHqWba+0XJYQ==
+X-CSE-MsgGUID: nh+hnXILRSWwn7dfi9jPYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,308,1754982000"; 
+   d="scan'208";a="194449485"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 15 Nov 2025 17:48:15 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKRsD-0008Pz-29;
+	Sun, 16 Nov 2025 01:48:13 +0000
+Date: Sun, 16 Nov 2025 09:47:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: ld.lld: warning:
+ src/consumer/drivers/gpu/drm/panel/panel-samsung-ld9040.c:241:0: stack frame
+ size (8344) exceeds limit (8192) in function 'ld9040_prepare'
+Message-ID: <202511160915.0YMqUcYM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202511160314.OK0OGRXl-lkp@intel.com>
-In-Reply-To: <202511160314.OK0OGRXl-lkp@intel.com>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 15 Nov 2025 18:19:41 -0500
-X-Gm-Features: AWmQ_bkBBHTdU9EPBD3bJZ0OQv8SlD-WQo6FALKyAXAkJ9Vd56KVKAMzZ43naZo
-Message-ID: <CA+CK2bBgXDhrHwTVgxrw7YTQ-0=LgW0t66CwPCgG=C85ftz4zw@mail.gmail.com>
-Subject: Re: [akpm-mm:mm-nonmm-unstable 82/133] include/linux/kexec_handover.h:108:7:
- warning: no previous prototype for function 'kho_alloc_preserve'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
-	Pratyush Yadav <pratyush@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Nov 15, 2025 at 2:06=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-no=
-nmm-unstable
-> head:   4fc88c237bfe11bde443e104428aac56e63a997f
-> commit: 88316955b5b1b4cb0cb2fad416f7e8dde9b246a0 [82/133] kho: introduce =
-high-level memory allocation API
-> config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251116=
-/202511160314.OK0OGRXl-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0=
-bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251116/202511160314.OK0OGRXl-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511160314.OK0OGRXl-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from mm/mm_init.c:33:
-> >> include/linux/kexec_handover.h:108:7: warning: no previous prototype f=
-or function 'kho_alloc_preserve' [-Wmissing-prototypes]
->      108 | void *kho_alloc_preserve(size_t size)
->          |       ^
->    include/linux/kexec_handover.h:108:1: note: declare 'static' if the fu=
-nction is not intended to be used outside of this translation unit
->      108 | void *kho_alloc_preserve(size_t size)
->          | ^
->          | static
-> >> include/linux/kexec_handover.h:113:6: warning: no previous prototype f=
-or function 'kho_unpreserve_free' [-Wmissing-prototypes]
->      113 | void kho_unpreserve_free(void *mem) { }
->          |      ^
->    include/linux/kexec_handover.h:113:1: note: declare 'static' if the fu=
-nction is not intended to be used outside of this translation unit
->      113 | void kho_unpreserve_free(void *mem) { }
->          | ^
->          | static
-> >> include/linux/kexec_handover.h:114:6: warning: no previous prototype f=
-or function 'kho_restore_free' [-Wmissing-prototypes]
->      114 | void kho_restore_free(void *mem) { }
->          |      ^
->    include/linux/kexec_handover.h:114:1: note: declare 'static' if the fu=
-nction is not intended to be used outside of this translation unit
->      114 | void kho_restore_free(void *mem) { }
->          | ^
->          | static
->    3 warnings generated.
->
->
-> vim +/kho_alloc_preserve +108 include/linux/kexec_handover.h
->
->    107
->  > 108  void *kho_alloc_preserve(size_t size)
->    109  {
->    110          return ERR_PTR(-EOPNOTSUPP);
->    111  }
->    112
->  > 113  void kho_unpreserve_free(void *mem) { }
->  > 114  void kho_restore_free(void *mem) { }
->    115
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f824272b6e3fe24950abc527136e8140f67b0b23
+commit: 020d7f14489b8bc38c6bd4c5b3c25262e8b6de63 Revert "kbuild: make all file references relative to source root"
+date:   6 months ago
+config: x86_64-randconfig-122-20251115 (https://download.01.org/0day-ci/archive/20251116/202511160915.0YMqUcYM-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511160915.0YMqUcYM-lkp@intel.com/reproduce)
 
-Sorry, missed "static inline"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511160915.0YMqUcYM-lkp@intel.com/
 
-For, this another warnings:
+All warnings (new ones prefixed by >>):
 
-diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.=
-h
-index 38a9487a1a00..dde952227b88 100644
---- a/include/linux/kexec_handover.h
-+++ b/include/linux/kexec_handover.h
-@@ -105,13 +105,13 @@ static inline int kho_unpreserve_vmalloc(struct
-kho_vmalloc *preservation)
-        return -EOPNOTSUPP;
- }
+>> ld.lld: warning: src/consumer/drivers/gpu/drm/panel/panel-samsung-ld9040.c:241:0: stack frame size (8344) exceeds limit (8192) in function 'ld9040_prepare'
 
--void *kho_alloc_preserve(size_t size)
-+static inline void *kho_alloc_preserve(size_t size)
- {
-        return ERR_PTR(-EOPNOTSUPP);
- }
-
--void kho_unpreserve_free(void *mem) { }
--void kho_restore_free(void *mem) { }
-+static inline void kho_unpreserve_free(void *mem) { }
-+static inline void kho_restore_free(void *mem) { }
-
- static inline struct folio *kho_restore_folio(phys_addr_t phys)
- {
-
-
-
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
