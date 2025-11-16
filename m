@@ -1,154 +1,104 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFC21F1302
-	for <llvm@lists.linux.dev>; Sun, 16 Nov 2025 09:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6372DC344;
+	Sun, 16 Nov 2025 13:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763286389; cv=none; b=F+e4sjeyHBCCVH6M2zUJOjr41L9L3MslD9D9VSOPEB3ZI3+DQ933jmn+ttMza0cR1e9R+eLEyQE2BwpkhLSK1NHyO0d5bCCN0QZ2vi3ncvhbL1zp6xyo+6eAhSiIKzO9hFVjZo0ejmmUuas8RgfacskKUdVLcMDYMBhYjLpeKGY=
+	t=1763299627; cv=none; b=uWehuAD8whoRePnIkJhkF7L8IraoXi4qb0kKTkyYHng8Wob8XGB8xYcCXc3ZSSv0Gr/0vC5H3851SUJ4BjspCa4+6aNO1TrgZEBp6Tm8yDuDR71irnkFOFruZN16lOlzQc07dunWybtJsSHQhR3s4bu4Qxbk2cfNPg7fxd2PBFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763286389; c=relaxed/simple;
-	bh=6ztonvgPJsydE2Fr7BC1wM68Y2LeGVGJ5yWHycYPRlE=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=T2IuCSepYGa8t3Pe0NKZdA2fbRCTfGy6h1EV2LJ1/SofboGF6sPVIazPxeZYwOY6vw3OcqW3XO5QitajF6NhPER891KItmNUIqKT6YAKGo7Pesl0DHfYSZzZzsWNcBl+YKuXTL4BxP/noDuokTY4NNOkmYXgif+fesskrOfVJdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KFW0QX1t; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1763299627; c=relaxed/simple;
+	bh=fxuxHJ0L9M/iahojHNHpH2oJDjZa/361zz4NmPF4L1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XG7Zk1qZamNxQ47Y3P9+dAWWpHfOUkSCbGRpRqaa3SMv2eT+VBVcIUlDZCsh6xsy7Cjy9FvpTOEqlFMiOvfeSqBbM2Te5zYf1a2axaru/vgZUwopSAdboewO4+tEHWX0BSq0VY2lokiiBAjeDhOOy2Jp85uw8Jldv+O70jnLP7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=krY2+CpL; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KFW0QX1t"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-477a1c28778so877255e9.3
-        for <llvm@lists.linux.dev>; Sun, 16 Nov 2025 01:46:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763286385; x=1763891185; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GHeZFihplztQLyEoF6TlocJd0Sds99NnBKFRe7duhUw=;
-        b=KFW0QX1t3lnkdazHtRdM8Gm194seYIqbyOL9yyDd0Uy/9YbYwKXu7Vj/Igats4NEqo
-         mSqGjogVS9ucNHDbT3Ro3gto6aKtnjkIpC9OWs6MW7bWZAcN62DiB0ICJtabKbqrEVjp
-         0AHmDzIJl4fjNy+2D6enll8btN7Xh5scOpw1Jm7J6mmfxx2CVKVXXruI/Nnb9Q8cVstt
-         w2uW14EgY5dPYvE+s/yONpWLM+P5mv8NfcaG7K6ilL2uPPH1qr1PX4PAj2Ku9JfxuAKC
-         lyaVj5t3zKlis6sLIF+A8dEG9CjB71WNNfe4kYedMVPICx7LemWkbjVrcEH3BvgDcaQP
-         E92A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763286385; x=1763891185;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GHeZFihplztQLyEoF6TlocJd0Sds99NnBKFRe7duhUw=;
-        b=Nmf/F5ln7C3yQ++1fgE4BKc2/5T7LTunffYI1nPCd2IY+Qw9aSa3YpAPF9jzJgcAjy
-         sq7TncaqalDPyhl9UiTr85VWrF/pfKz+UEpZdkrzqADyN7/brBbnPD/RHmzwWfoR2Fzo
-         bTqk7chq89DvAMQG74mADWPgVEcmIb1HyNDaB/J/AyU2lPPgCQs/g+sN6neqOtzaAl16
-         ++WmSj22rJjGIdv6CN9JRyOXGVuU587DLba+5ZoxUMGBQ4kRKjjWLnHP5TPXhxTtPdbC
-         jkVsdQrXCeun+m2R6AHNcSHD+wry/4oKQEvHtz18GplbQyF2Pt9sdJdcPSp81CXqtQhL
-         6KNw==
-X-Gm-Message-State: AOJu0YziEfCRul4U6lyVTgRsBGG/fJqpb3imIATl1aVO6JF/kqGDcBwo
-	AdsNRYiKP9JNlceCBQz5l+MTTORSJVQSUzPQqQvcv6eWI2UB8O7c8YYtsd3i1zRzldwqbx055LH
-	i71uv
-X-Gm-Gg: ASbGncsP/wQKyS5r0WFektegH0RRob/rfX9RTFwYJLRneCFOg5tRrPEjyxn2MVlmu7G
-	BPHJI2IWblmR4CnmJtTWuDQ/5Yg0DUEheKKF3u+qczvZ4sKtvx6OVUVn43oeb5GbGZBoYTEmIOt
-	ax7Nk1jM8oNoUriUmEQfv8ZbeLHaSAnZIoivB05xeukXyLEUZr3GRtYyaLAKQ3uyVbaXDmaC2vu
-	CXc5WNA0MlqLkZVU0LYUWPpi96fdvqdsZTwm5k2VNTqr3/gSAqv9qjy75MiWMmuPPIcr77Z7Spz
-	ro5njD1PmA6muAquO3NrmMvMkuC/L2TQkkZrgxnyzBLvF78ebVdXYKfsH3TdOx64pEkTcQYTTdq
-	2Lw2KiwMbMYxX3bkqmFw3e3R/Dvykam0Sngnj6Z7VFEespZIYQPRD+O0ZE+1hWYexCynmA9uT8r
-	EATryDX0AnL/Ax6EYC9fB0vRLcqN8RZSlHQ4PJoh6McBaAqE+6e5eUvaaJgQ==
-X-Google-Smtp-Source: AGHT+IH3M3qhGH8sf9N/L3RM+lQStIZ4B1aplu6/H+SFScP+8MkQGwd1fDoxNP0CgsE09TV0zwaF4Q==
-X-Received: by 2002:a05:600c:4585:b0:477:6d96:b3e5 with SMTP id 5b1f17b1804b1-4778fe4fa2emr84077915e9.7.1763286385350;
-        Sun, 16 Nov 2025 01:46:25 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47787e442c2sm251831725e9.7.2025.11.16.01.46.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Nov 2025 01:46:24 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sun, 16 Nov 2025 09:46:23 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1094974019.2375.1763286384876@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.18-rc1-73-g3ffeb17a9a27a: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="krY2+CpL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763299622; x=1794835622;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fxuxHJ0L9M/iahojHNHpH2oJDjZa/361zz4NmPF4L1w=;
+  b=krY2+CpLs4ul23oingRVV/6l11YORnfu6oDDGbITiQsVt2BA/8+mG7d6
+   VjOZI4juSWQbg/3IY+KQlG9RbT6gUPuObWO69cV/IG3X77Kv/YZgP7V0i
+   NSwJWx+45HNbIWH4ZRqyszxkv9nb8jmEy3e8Wskg6fIzMkAIHstQ7vZE7
+   HZNirBAmuXducW9cP5NE7zQ+gBAJsPzehPPpFRcmw8gKeGZfTsswC8dxa
+   r9SHfUMtbZ5P480E5ojhLO1Hgv/t+Ic6+HSjdQa2vYVztyUGr0OFskhy6
+   W6spmdC7om430FcerJruJlWEk9vU9vkSMytz2N4IXPXRkWD9WutZEzar2
+   Q==;
+X-CSE-ConnectionGUID: rGyc5mEjQe6qPeyv8nygbg==
+X-CSE-MsgGUID: DiqkTn0WQqKkD925TBdoLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="65223779"
+X-IronPort-AV: E=Sophos;i="6.19,309,1754982000"; 
+   d="scan'208";a="65223779"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2025 05:26:58 -0800
+X-CSE-ConnectionGUID: gTVpkbNRSiaugwx0/EJsSw==
+X-CSE-MsgGUID: AQjVAoqSSFmZ9bKl5GsPqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,309,1754982000"; 
+   d="scan'208";a="190466957"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Nov 2025 05:26:57 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKcmM-0008mx-2b;
+	Sun, 16 Nov 2025 13:26:54 +0000
+Date: Sun, 16 Nov 2025 21:26:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-pie-v3 11/14] mm/vmscan.o: error: objtool:
+ reclaim_throttle+0xfb: can't find switch jump table
+Message-ID: <202511162102.zKpErqbz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_2374_1112577533.1763286383999"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_2374_1112577533.1763286383999
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3
+head:   df5520ea7e635c1cf8dd6620c2ece567ada21c26
+commit: 7a98647d5f5badfa99588a7f64cd39be668fc283 [11/14] x86: Use PIE codegen for the core kernel
+config: x86_64-randconfig-004-20251116 (https://download.01.org/0day-ci/archive/20251116/202511162102.zKpErqbz-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511162102.zKpErqbz-lkp@intel.com/reproduce)
 
-Dear contributor,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511162102.zKpErqbz-lkp@intel.com/
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+All errors (new ones prefixed by >>):
 
-In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
-  | commit v6.18-rc1-73-g3ffeb17a9a27a
-  | Author: Christian Marangi <ansuelsmth@gmail.com>
-  | Date:   Fri Nov 7 00:57:08 2025 +0100
-  | 
-  |     pinctrl: airoha: add support for Airoha AN7583 PINs
-  |     
-  |     Add all the required entry to add suppot for Airoha AN7583 PINs.
-  |     
-  |     Where possible the same function group are used from Airoha EN7581 to
-  | ... 4 lines of the commit log omitted.
+>> mm/vmscan.o: error: objtool: reclaim_throttle+0xfb: can't find switch jump table
+--
+>> mm/shmem.o: error: objtool: shmem_parse_one+0x9c: can't find switch jump table
+--
+>> mm/madvise.o: error: objtool: madvise_should_skip+0x2f: can't find switch jump table
+--
+>> mm/khugepaged.o: error: objtool: madvise_collapse+0x571: can't find switch jump table
+--
+>> mm/mremap.o: error: objtool: move_pgt_entry+0x162: can't find switch jump table
+--
+>> mm/vmalloc.o: error: objtool: pcpu_get_vm_areas+0xf70: can't find switch jump table
+--
+>> mm/fadvise.o: error: objtool: generic_fadvise+0x12b: can't find switch jump table
+--
+>> mm/list_lru.o: error: objtool: __list_lru_walk_one+0x1d6: can't find switch jump table
+--
+>> security/commoncap.o: error: objtool: cap_task_fix_setuid+0x33: can't find switch jump table
+--
+>> net/compat.o: error: objtool: __ia32_compat_sys_socketcall+0x15e: can't find switch jump table
+--
+>> block/bfq-iosched.o: error: objtool: bfq_bfqq_expire+0x658: can't find switch jump table
+..
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 27020
-  | # First few build errors in logs:
-  | # 00:37:42 drivers/pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
-  | # 00:37:42 make[5]: *** [scripts/Makefile.build:287: drivers/pinctrl/mediatek/pinctrl-airoha.o] Error 1
-  | # 00:37:53 make[4]: *** [scripts/Makefile.build:556: drivers/pinctrl/mediatek] Error 2
-  | # 00:47:13 make[3]: *** [scripts/Makefile.build:556: drivers/pinctrl] Error 2
-  | # 01:59:07 make[2]: *** [scripts/Makefile.build:556: drivers] Error 2
-  | # 01:59:07 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:2010: .] Error 2
-  | # 01:59:07 make: *** [Makefile:248: __sub-make] Error 2
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 37290
-  | # First few build errors in logs:
-  | # 01:31:35 make[2]: *** [scripts/Makefile.vmlinux:100: vmlinux] Error 1
-  | # 01:31:52 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:1242: vmlinux] Error 2
-  | # 01:49:18 make: *** [Makefile:248: __sub-make] Error 2
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-2119. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
-
-
-
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/470/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/469/artifact/artifacts
-
-Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/3ffeb17a9a27a668efb6fbd074835e187910a9bb/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/3ffeb17a9a27a668efb6fbd074835e187910a9bb
-------=_Part_2374_1112577533.1763286383999--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
