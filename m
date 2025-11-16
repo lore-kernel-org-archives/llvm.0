@@ -1,297 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F34F8634C;
-	Sun, 16 Nov 2025 08:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFC21F1302
+	for <llvm@lists.linux.dev>; Sun, 16 Nov 2025 09:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763281049; cv=none; b=Hm7XdlqKTBSB9OB94DJ8U+2S8YNjZ3GhHkRv4jK5zPd7HM9RVBbT/34aY/8ijbtEZ5Itdbwq9NOLgmv9yOfU8/yA9YGzhH4ns7hyZ7JROB+wsOd/4SriQEFyOXW/Cs760Bc/G3Mv3vubop3csZZhIZeP3d7uLFxMwVtXCnTOrSg=
+	t=1763286389; cv=none; b=F+e4sjeyHBCCVH6M2zUJOjr41L9L3MslD9D9VSOPEB3ZI3+DQ933jmn+ttMza0cR1e9R+eLEyQE2BwpkhLSK1NHyO0d5bCCN0QZ2vi3ncvhbL1zp6xyo+6eAhSiIKzO9hFVjZo0ejmmUuas8RgfacskKUdVLcMDYMBhYjLpeKGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763281049; c=relaxed/simple;
-	bh=JX0iwPY3B8f53h18SuWzlM68IcEeYuWN+SQJOegTfF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rwZvqhiaQTSoH+sjPtDgonBRjEcKwdSY61MXtHB3CbAwQDT8MeiNQfs6It7zCm7zp9NLQM3DS6iiHihibn3DYZpRN6aq2z8FVGjOK57Rgodd3Tq2j7MkrQhsWF8vmrPGVYZmyvBf/Y+qdRlWeJ6nX24DXgVVbjraElLk4ecCFlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=evt5yK63; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763286389; c=relaxed/simple;
+	bh=6ztonvgPJsydE2Fr7BC1wM68Y2LeGVGJ5yWHycYPRlE=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=T2IuCSepYGa8t3Pe0NKZdA2fbRCTfGy6h1EV2LJ1/SofboGF6sPVIazPxeZYwOY6vw3OcqW3XO5QitajF6NhPER891KItmNUIqKT6YAKGo7Pesl0DHfYSZzZzsWNcBl+YKuXTL4BxP/noDuokTY4NNOkmYXgif+fesskrOfVJdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KFW0QX1t; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="evt5yK63"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763281047; x=1794817047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JX0iwPY3B8f53h18SuWzlM68IcEeYuWN+SQJOegTfF8=;
-  b=evt5yK63x2nX0fSvZKZw4kIVQo9Krdyf+UYzlsWHHwPBhkNNRhUpX315
-   R8uVAxJY9rGu4APKy2e2hK6Eg7rgp7fUe9p8gXcpn2m8pajRoa55zuKw/
-   h6H51Inuj5wQqmy80M/4hycYSBI6SWVQtUXYtzOSoCsd5A8Bt04IIIZcB
-   Y8hw0IE8ChBmXG1BVUOH8hAqk3S7+KhiUN6/4ZlYGjHUPfqB1PCcze10D
-   WYedyMZkZqt30phm2AfcgnUmbDgk2EvDLrtM/adRMIQY19QMioroM3HCX
-   fIXf0OGvIfzie3V9/wqN3/iFlFV+xhpilD4oMVpIkeOhb5On5M1MyvYIt
-   g==;
-X-CSE-ConnectionGUID: D8AAQTTVTpmcyJhxFMEmuQ==
-X-CSE-MsgGUID: E1kkfXtrRciv12RdUGUBdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="76771971"
-X-IronPort-AV: E=Sophos;i="6.19,309,1754982000"; 
-   d="scan'208";a="76771971"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2025 00:17:27 -0800
-X-CSE-ConnectionGUID: IekSeUZmQkCthgKLsoSjpQ==
-X-CSE-MsgGUID: pppzODKLSqqXSa/KY7jhpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,309,1754982000"; 
-   d="scan'208";a="220832343"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 16 Nov 2025 00:17:24 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vKXwn-0008ch-2R;
-	Sun, 16 Nov 2025 08:17:21 +0000
-Date: Sun, 16 Nov 2025 16:17:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anirudh Rayabharam <anirudh@anirudhrb.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	anirudh@anirudhrb.com, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: ioctl for self targeted passthrough hvcalls
-Message-ID: <202511161617.KcDzR4sA-lkp@intel.com>
-References: <20251114095853.3482596-1-anirudh@anirudhrb.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KFW0QX1t"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-477a1c28778so877255e9.3
+        for <llvm@lists.linux.dev>; Sun, 16 Nov 2025 01:46:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763286385; x=1763891185; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GHeZFihplztQLyEoF6TlocJd0Sds99NnBKFRe7duhUw=;
+        b=KFW0QX1t3lnkdazHtRdM8Gm194seYIqbyOL9yyDd0Uy/9YbYwKXu7Vj/Igats4NEqo
+         mSqGjogVS9ucNHDbT3Ro3gto6aKtnjkIpC9OWs6MW7bWZAcN62DiB0ICJtabKbqrEVjp
+         0AHmDzIJl4fjNy+2D6enll8btN7Xh5scOpw1Jm7J6mmfxx2CVKVXXruI/Nnb9Q8cVstt
+         w2uW14EgY5dPYvE+s/yONpWLM+P5mv8NfcaG7K6ilL2uPPH1qr1PX4PAj2Ku9JfxuAKC
+         lyaVj5t3zKlis6sLIF+A8dEG9CjB71WNNfe4kYedMVPICx7LemWkbjVrcEH3BvgDcaQP
+         E92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763286385; x=1763891185;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GHeZFihplztQLyEoF6TlocJd0Sds99NnBKFRe7duhUw=;
+        b=Nmf/F5ln7C3yQ++1fgE4BKc2/5T7LTunffYI1nPCd2IY+Qw9aSa3YpAPF9jzJgcAjy
+         sq7TncaqalDPyhl9UiTr85VWrF/pfKz+UEpZdkrzqADyN7/brBbnPD/RHmzwWfoR2Fzo
+         bTqk7chq89DvAMQG74mADWPgVEcmIb1HyNDaB/J/AyU2lPPgCQs/g+sN6neqOtzaAl16
+         ++WmSj22rJjGIdv6CN9JRyOXGVuU587DLba+5ZoxUMGBQ4kRKjjWLnHP5TPXhxTtPdbC
+         jkVsdQrXCeun+m2R6AHNcSHD+wry/4oKQEvHtz18GplbQyF2Pt9sdJdcPSp81CXqtQhL
+         6KNw==
+X-Gm-Message-State: AOJu0YziEfCRul4U6lyVTgRsBGG/fJqpb3imIATl1aVO6JF/kqGDcBwo
+	AdsNRYiKP9JNlceCBQz5l+MTTORSJVQSUzPQqQvcv6eWI2UB8O7c8YYtsd3i1zRzldwqbx055LH
+	i71uv
+X-Gm-Gg: ASbGncsP/wQKyS5r0WFektegH0RRob/rfX9RTFwYJLRneCFOg5tRrPEjyxn2MVlmu7G
+	BPHJI2IWblmR4CnmJtTWuDQ/5Yg0DUEheKKF3u+qczvZ4sKtvx6OVUVn43oeb5GbGZBoYTEmIOt
+	ax7Nk1jM8oNoUriUmEQfv8ZbeLHaSAnZIoivB05xeukXyLEUZr3GRtYyaLAKQ3uyVbaXDmaC2vu
+	CXc5WNA0MlqLkZVU0LYUWPpi96fdvqdsZTwm5k2VNTqr3/gSAqv9qjy75MiWMmuPPIcr77Z7Spz
+	ro5njD1PmA6muAquO3NrmMvMkuC/L2TQkkZrgxnyzBLvF78ebVdXYKfsH3TdOx64pEkTcQYTTdq
+	2Lw2KiwMbMYxX3bkqmFw3e3R/Dvykam0Sngnj6Z7VFEespZIYQPRD+O0ZE+1hWYexCynmA9uT8r
+	EATryDX0AnL/Ax6EYC9fB0vRLcqN8RZSlHQ4PJoh6McBaAqE+6e5eUvaaJgQ==
+X-Google-Smtp-Source: AGHT+IH3M3qhGH8sf9N/L3RM+lQStIZ4B1aplu6/H+SFScP+8MkQGwd1fDoxNP0CgsE09TV0zwaF4Q==
+X-Received: by 2002:a05:600c:4585:b0:477:6d96:b3e5 with SMTP id 5b1f17b1804b1-4778fe4fa2emr84077915e9.7.1763286385350;
+        Sun, 16 Nov 2025 01:46:25 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47787e442c2sm251831725e9.7.2025.11.16.01.46.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Nov 2025 01:46:24 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sun, 16 Nov 2025 09:46:23 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1094974019.2375.1763286384876@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.18-rc1-73-g3ffeb17a9a27a: Failure on aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251114095853.3482596-1-anirudh@anirudhrb.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_2374_1112577533.1763286383999"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Anirudh,
+------=_Part_2374_1112577533.1763286383999
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+Dear contributor,
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.18-rc5]
-[cannot apply to next-20251114]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anirudh-Rayabharam/Drivers-hv-ioctl-for-self-targeted-passthrough-hvcalls/20251114-182039
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251114095853.3482596-1-anirudh%40anirudhrb.com
-patch subject: [PATCH] Drivers: hv: ioctl for self targeted passthrough hvcalls
-config: x86_64-buildonly-randconfig-005-20251116 (https://download.01.org/0day-ci/archive/20251116/202511161617.KcDzR4sA-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511161617.KcDzR4sA-lkp@intel.com/reproduce)
+In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
+  | commit v6.18-rc1-73-g3ffeb17a9a27a
+  | Author: Christian Marangi <ansuelsmth@gmail.com>
+  | Date:   Fri Nov 7 00:57:08 2025 +0100
+  | 
+  |     pinctrl: airoha: add support for Airoha AN7583 PINs
+  |     
+  |     Add all the required entry to add suppot for Airoha AN7583 PINs.
+  |     
+  |     Where possible the same function group are used from Airoha EN7581 to
+  | ... 4 lines of the commit log omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511161617.KcDzR4sA-lkp@intel.com/
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 27020
+  | # First few build errors in logs:
+  | # 00:37:42 drivers/pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+  | # 00:37:42 make[5]: *** [scripts/Makefile.build:287: drivers/pinctrl/mediatek/pinctrl-airoha.o] Error 1
+  | # 00:37:53 make[4]: *** [scripts/Makefile.build:556: drivers/pinctrl/mediatek] Error 2
+  | # 00:47:13 make[3]: *** [scripts/Makefile.build:556: drivers/pinctrl] Error 2
+  | # 01:59:07 make[2]: *** [scripts/Makefile.build:556: drivers] Error 2
+  | # 01:59:07 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:2010: .] Error 2
+  | # 01:59:07 make: *** [Makefile:248: __sub-make] Error 2
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 37290
+  | # First few build errors in logs:
+  | # 01:31:35 make[2]: *** [scripts/Makefile.vmlinux:100: vmlinux] Error 1
+  | # 01:31:52 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:1242: vmlinux] Error 2
+  | # 01:49:18 make: *** [Makefile:248: __sub-make] Error 2
 
-All errors (new ones prefixed by >>):
+Used configuration :
+ tcwg_kernel/llvm-master-aarch64-next-allmodconfig
 
->> drivers/hv/mshv_root_main.c:125:2: error: use of undeclared identifier 'HVCALL_GET_PARTITION_PROPERTY_EX'
-     125 |         HVCALL_GET_PARTITION_PROPERTY_EX,
-         |         ^
->> drivers/hv/mshv_root_main.c:175:18: error: invalid application of 'sizeof' to an incomplete type 'u16[]' (aka 'unsigned short[]')
-     175 |         for (i = 0; i < ARRAY_SIZE(mshv_passthru_hvcalls); ++i)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   drivers/hv/mshv_root_main.c:179:11: error: invalid application of 'sizeof' to an incomplete type 'u16[]' (aka 'unsigned short[]')
-     179 |         if (i >= ARRAY_SIZE(mshv_passthru_hvcalls))
-         |         ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   drivers/hv/mshv_root_main.c:179:11: error: invalid application of 'sizeof' to an incomplete type 'u16[]' (aka 'unsigned short[]')
-     179 |         if (i >= ARRAY_SIZE(mshv_passthru_hvcalls))
-         |         ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                             ^~~~
-   drivers/hv/mshv_root_main.c:179:11: error: invalid application of 'sizeof' to an incomplete type 'u16[]' (aka 'unsigned short[]')
-     179 |         if (i >= ARRAY_SIZE(mshv_passthru_hvcalls))
-         |         ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
-      68 |         (cond) ?                                        \
-         |          ^~~~
-   5 errors generated.
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-2119. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +/HVCALL_GET_PARTITION_PROPERTY_EX +125 drivers/hv/mshv_root_main.c
 
-   117	
-   118	/*
-   119	 * Only allow hypercalls that have a u64 partition id as the first member of
-   120	 * the input structure.
-   121	 * These are sorted by value.
-   122	 */
-   123	static u16 mshv_passthru_hvcalls[] = {
-   124		HVCALL_GET_PARTITION_PROPERTY,
- > 125		HVCALL_GET_PARTITION_PROPERTY_EX,
-   126		HVCALL_SET_PARTITION_PROPERTY,
-   127		HVCALL_INSTALL_INTERCEPT,
-   128		HVCALL_GET_VP_REGISTERS,
-   129		HVCALL_SET_VP_REGISTERS,
-   130		HVCALL_TRANSLATE_VIRTUAL_ADDRESS,
-   131		HVCALL_CLEAR_VIRTUAL_INTERRUPT,
-   132		HVCALL_REGISTER_INTERCEPT_RESULT,
-   133		HVCALL_ASSERT_VIRTUAL_INTERRUPT,
-   134		HVCALL_GET_GPA_PAGES_ACCESS_STATES,
-   135		HVCALL_SIGNAL_EVENT_DIRECT,
-   136		HVCALL_POST_MESSAGE_DIRECT,
-   137		HVCALL_GET_VP_CPUID_VALUES,
-   138	};
-   139	
-   140	static bool mshv_hvcall_is_async(u16 code)
-   141	{
-   142		switch (code) {
-   143		case HVCALL_SET_PARTITION_PROPERTY:
-   144			return true;
-   145		default:
-   146			break;
-   147		}
-   148		return false;
-   149	}
-   150	
-   151	static int mshv_ioctl_passthru_hvcall(struct mshv_partition *partition,
-   152					      bool partition_locked,
-   153					      void __user *user_args)
-   154	{
-   155		u64 status;
-   156		int ret = 0, i;
-   157		bool is_async;
-   158		struct mshv_root_hvcall args;
-   159		struct page *page;
-   160		unsigned int pages_order;
-   161		void *input_pg = NULL;
-   162		void *output_pg = NULL;
-   163		u64 pt_id = partition ? partition->pt_id : HV_PARTITION_ID_SELF;
-   164	
-   165		if (copy_from_user(&args, user_args, sizeof(args)))
-   166			return -EFAULT;
-   167	
-   168		if (args.status || !args.in_ptr || args.in_sz < sizeof(u64) ||
-   169		    mshv_field_nonzero(args, rsvd) || args.in_sz > HV_HYP_PAGE_SIZE)
-   170			return -EINVAL;
-   171	
-   172		if (args.out_ptr && (!args.out_sz || args.out_sz > HV_HYP_PAGE_SIZE))
-   173			return -EINVAL;
-   174	
- > 175		for (i = 0; i < ARRAY_SIZE(mshv_passthru_hvcalls); ++i)
-   176			if (args.code == mshv_passthru_hvcalls[i])
-   177				break;
-   178	
-   179		if (i >= ARRAY_SIZE(mshv_passthru_hvcalls))
-   180			return -EINVAL;
-   181	
-   182		is_async = mshv_hvcall_is_async(args.code);
-   183		if (is_async) {
-   184			/* async hypercalls can only be called from partition fd */
-   185			if (!partition || !partition_locked)
-   186				return -EINVAL;
-   187			ret = mshv_init_async_handler(partition);
-   188			if (ret)
-   189				return ret;
-   190		}
-   191	
-   192		pages_order = args.out_ptr ? 1 : 0;
-   193		page = alloc_pages(GFP_KERNEL, pages_order);
-   194		if (!page)
-   195			return -ENOMEM;
-   196		input_pg = page_address(page);
-   197	
-   198		if (args.out_ptr)
-   199			output_pg = (char *)input_pg + PAGE_SIZE;
-   200		else
-   201			output_pg = NULL;
-   202	
-   203		if (copy_from_user(input_pg, (void __user *)args.in_ptr,
-   204				   args.in_sz)) {
-   205			ret = -EFAULT;
-   206			goto free_pages_out;
-   207		}
-   208	
-   209		/*
-   210		 * NOTE: This only works because all the allowed hypercalls' input
-   211		 * structs begin with a u64 partition_id field.
-   212		 */
-   213		*(u64 *)input_pg = pt_id;
-   214	
-   215		if (args.reps)
-   216			status = hv_do_rep_hypercall(args.code, args.reps, 0,
-   217						     input_pg, output_pg);
-   218		else
-   219			status = hv_do_hypercall(args.code, input_pg, output_pg);
-   220	
-   221		if (hv_result(status) == HV_STATUS_CALL_PENDING) {
-   222			if (is_async) {
-   223				mshv_async_hvcall_handler(partition, &status);
-   224			} else { /* Paranoia check. This shouldn't happen! */
-   225				ret = -EBADFD;
-   226				goto free_pages_out;
-   227			}
-   228		}
-   229	
-   230		if (hv_result(status) == HV_STATUS_INSUFFICIENT_MEMORY) {
-   231			ret = hv_call_deposit_pages(NUMA_NO_NODE, pt_id, 1);
-   232			if (!ret)
-   233				ret = -EAGAIN;
-   234		} else if (!hv_result_success(status)) {
-   235			ret = hv_result_to_errno(status);
-   236		}
-   237	
-   238		/*
-   239		 * Always return the status and output data regardless of result.
-   240		 * The VMM may need it to determine how to proceed. E.g. the status may
-   241		 * contain the number of reps completed if a rep hypercall partially
-   242		 * succeeded.
-   243		 */
-   244		args.status = hv_result(status);
-   245		args.reps = args.reps ? hv_repcomp(status) : 0;
-   246		if (copy_to_user(user_args, &args, sizeof(args)))
-   247			ret = -EFAULT;
-   248	
-   249		if (output_pg &&
-   250		    copy_to_user((void __user *)args.out_ptr, output_pg, args.out_sz))
-   251			ret = -EFAULT;
-   252	
-   253	free_pages_out:
-   254		free_pages((unsigned long)input_pg, pages_order);
-   255	
-   256		return ret;
-   257	}
-   258	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/470/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/469/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/3ffeb17a9a27a668efb6fbd074835e187910a9bb/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/3ffeb17a9a27a668efb6fbd074835e187910a9bb
+------=_Part_2374_1112577533.1763286383999--
