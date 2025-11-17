@@ -1,148 +1,139 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE322FAC0C
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 11:12:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CCA23EA9D;
+	Mon, 17 Nov 2025 11:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763377940; cv=none; b=JnPSIhDhp8KwTEU3o+lgRopGmzatHjk+Q0eTZ7QIBqRoB3z6jf5C0a4JgyVjZULVrNDmd0KDDVHsBtA1DvM3UGdPhoDw0VrA+E8RlIkB26qPTDrRCwOvktoPgTn4h8pOZ+rNR7NbEXg9rsNlqyO8j+FVdB7A6WriUysKZpQ4rkc=
+	t=1763378636; cv=none; b=fqH3UUAfUpKNZlxdu2I5YuFB2jpJOBwpabpXS08rkF4Dudoj18E1ku5V6nMulY+wW7U+T70/lfY7v5f0/qtd2xSaCKQFf1Op/ZvcPBXhAMdGTt1CpeOT0UV8pqJqXZSzSMpzT6vzObSt0QSrP5c+XeXBtKwEScvkrdZa1ZbKwfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763377940; c=relaxed/simple;
-	bh=eaIRLkvRw1juqGrSKCSHgTqn4MaoGfNQj+HcdbhGJgw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BphaoxetqRdM27539sodEUH0al/XiW9GoDFGCTC/UWbtDi+E4Ym1TLbsBqRIFkm9GRGoB/j09bKH0Q4C4IuH1Hq4oio87qab1owMNS+IDjVY/D6VINywiqy4QXgsUwxxiT6QnlxbuVPSW3oVDdFp7UCtUlYVl2FD/ZlIbG/BqQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J1oa82rU; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763378636; c=relaxed/simple;
+	bh=cTGDxRw5DV/5F6cyNFPFL7KahCJxLa5f7QjjORs1c9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l/Fux7JYWSEhrvpUIMoym0pYxtmLcBYRRHcm1tjper0ldPq08neBdtPUmUnbg9KIul2yDLjXukBE6GOBowVkTmU4ZPEbx7VHU9g51LCSvVhhCF/7hCCJhZWCR8AeGyx4EzXFMcwKDAdXbeoiZ3oGDrzShNLVImdteSkRZXoKQyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YuGDdhb2; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J1oa82rU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763377937;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=c9KC4khCa6cRK2ceJAqapHEwus6t7GPwrzNpplAoSMI=;
-	b=J1oa82rU7j0XJPHmeH0Pdy+sDRzx6lL1Q+ol/0N6wEUOwybp5crpEAbFwlfYmYRjZXQ5Sb
-	FFRd/6R9eUsOBJczR8k7FcCzD41q+5hsKr4INWbICzUGMBy5I0x7wllxeIEoX1sLN5I8C/
-	QlCuanuonOoq6uGAttODYY4nR0YkZfI=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-141-tHvEhY_KNtOHdy2xnRfbFg-1; Mon,
- 17 Nov 2025 06:12:16 -0500
-X-MC-Unique: tHvEhY_KNtOHdy2xnRfbFg-1
-X-Mimecast-MFC-AGG-ID: tHvEhY_KNtOHdy2xnRfbFg_1763377935
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3A277180009D
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 11:12:15 +0000 (UTC)
-Received: from [172.20.120.109] (unknown [10.30.44.79])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B587118004A3;
-	Mon, 17 Nov 2025 11:12:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc5,
- upstream-mainline, 998ccc32)
-Date: Mon, 17 Nov 2025 11:12:14 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YuGDdhb2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763378634; x=1794914634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cTGDxRw5DV/5F6cyNFPFL7KahCJxLa5f7QjjORs1c9I=;
+  b=YuGDdhb2gKIEzxN1ag/fvMDfj+wnYK+F46cPsQjZ8VDGMwcJNFpNtTme
+   N/xb0Y6wjLamp0FT+mLz4mRHK089Eh37HeS6V3VdY0MCGns62sB7cXJri
+   0A6wZm0CHMpo2plLXNKwXsIiSG7Pd/tzif8KggIZDHHXaBwBNEP5WqkFZ
+   4HSeEeH52zJfw0SavP24cJQKyiYaqcgIsJGGgNd9nvVDRe6COxlrJ9gQR
+   cf3Z6LoQkjEKCTgMDStp9gKjXEjApOyf0uV8uAVvrM0QT31VTOYwgppji
+   cWhBAGDhEStzf5jwtaTolbMZgwBhwMO2aHS3sV3qhFogIzY3ie1QTq4z3
+   Q==;
+X-CSE-ConnectionGUID: gedgfF2xSUq6VtimN0irFw==
+X-CSE-MsgGUID: zgciEn4gRX2WQwt+SBw0yg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="75695576"
+X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
+   d="scan'208";a="75695576"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 03:23:54 -0800
+X-CSE-ConnectionGUID: b9ifM0dCTFS+JVYwdDo7VQ==
+X-CSE-MsgGUID: OrnG25PlR/6uAcHgIyuVEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
+   d="scan'208";a="190871048"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 17 Nov 2025 03:23:49 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKxKk-0000U3-1w;
+	Mon, 17 Nov 2025 11:23:46 +0000
+Date: Mon, 17 Nov 2025 19:23:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>,
+	Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
+	Yosry Ahmed <yosry.ahmed@linux.dev>,
+	David Hildenbrand <david@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Youngjun Park <youngjun.park@lge.com>,
+	Hugh Dickins <hughd@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Ying Huang <ying.huang@linux.alibaba.com>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 14/19] mm, swap: sanitize swap entry management
+ workflow
+Message-ID: <202511171942.psG9jTRx-lkp@intel.com>
+References: <20251117-swap-table-p2-v2-14-37730e6ea6d5@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <35568.125111706121600255@us-mta-141.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 4s_Sy1bVLzkzhwDeFy-1UW6geHOYKs0aUjS1PdNHKmU_1763377935
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251117-swap-table-p2-v2-14-37730e6ea6d5@tencent.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Kairui,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on 41218ede767f6b218185af65ce919d0cade75f6b]
 
-Kernel information:
-    Commit message: Merge tag 'perf-tools-fixes-for-v6.18-2-2025-11-16' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
+url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swap-rename-__read_swap_cache_async-to-swap_cache_alloc_folio/20251117-021532
+base:   41218ede767f6b218185af65ce919d0cade75f6b
+patch link:    https://lore.kernel.org/r/20251117-swap-table-p2-v2-14-37730e6ea6d5%40tencent.com
+patch subject: [PATCH v2 14/19] mm, swap: sanitize swap entry management workflow
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20251117/202511171942.psG9jTRx-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251117/202511171942.psG9jTRx-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2161630686
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511171942.psG9jTRx-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2161630686_x86_64_kernel-debug_kcidb_tool_20017064_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2161630686_x86_64_kernel-debug_kcidb_tool_20017064_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
+>> arch/s390/mm/gmap_helpers.c:35:2: error: call to undeclared function 'free_swap_and_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      35 |         free_swap_and_cache(entry);
+         |         ^
+   arch/s390/mm/gmap_helpers.c:35:2: note: did you mean 'free_swap_cache'?
+   include/linux/swap.h:435:6: note: 'free_swap_cache' declared here
+     435 | void free_swap_cache(struct folio *folio);
+         |      ^
+   1 error generated.
 
 
+vim +/free_swap_and_cache +35 arch/s390/mm/gmap_helpers.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+200197908dc4af Claudio Imbrenda 2025-05-28  19  
+200197908dc4af Claudio Imbrenda 2025-05-28  20  /**
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  21   * ptep_zap_softleaf_entry() - discard a software leaf entry.
+200197908dc4af Claudio Imbrenda 2025-05-28  22   * @mm: the mm
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  23   * @entry: the software leaf entry that needs to be zapped
+200197908dc4af Claudio Imbrenda 2025-05-28  24   *
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  25   * Discards the given software leaf entry. If the leaf entry was an actual
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  26   * swap entry (and not a migration entry, for example), the actual swapped
+200197908dc4af Claudio Imbrenda 2025-05-28  27   * page is also discarded from swap.
+200197908dc4af Claudio Imbrenda 2025-05-28  28   */
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  29  static void ptep_zap_softleaf_entry(struct mm_struct *mm, softleaf_t entry)
+200197908dc4af Claudio Imbrenda 2025-05-28  30  {
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  31  	if (softleaf_is_swap(entry))
+200197908dc4af Claudio Imbrenda 2025-05-28  32  		dec_mm_counter(mm, MM_SWAPENTS);
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  33  	else if (softleaf_is_migration(entry))
+6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  34  		dec_mm_counter(mm, mm_counter(softleaf_to_folio(entry)));
+200197908dc4af Claudio Imbrenda 2025-05-28 @35  	free_swap_and_cache(entry);
+200197908dc4af Claudio Imbrenda 2025-05-28  36  }
+200197908dc4af Claudio Imbrenda 2025-05-28  37  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
