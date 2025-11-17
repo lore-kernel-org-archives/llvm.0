@@ -1,44 +1,44 @@
 Received: from mail-24418.protonmail.ch (mail-24418.protonmail.ch [109.224.244.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4D2268C42
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 18:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E4129D268
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 18:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763404060; cv=none; b=oqRdo/2ot+3RWIzFXjIS5lavcFGoeD40Bjp0y6AqqTIw35ievIG/NYF53RhA1OMWJomI0DQb8XxMjByfthOxfiItOECS2iGad44pSKojnssTIaFZEJLxwlOPqol++dVh7t8qDjOVOSZZrtGz23P2U56SgaBKWKHW6FTWHJofhN4=
+	t=1763404548; cv=none; b=EJFEzPh8cy96G1qFIcQ/77lvkJN//ib9AbtoKtg2zsv2tQStBJlvuoBa224kx1KEUSwh9aZpQiFutApjnJ2xmkfEBdoL0upIFn9VArxwkKnIAYrSpqNHN1PFGMY5kmlhjpm5YNKNp4MTmHRn3z8jJf9ZO3pZsUgcZfqXufigIJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763404060; c=relaxed/simple;
-	bh=46c5OQcX8viseysoKVZBgapBG/ROaBDi72ELVHZuRY8=;
+	s=arc-20240116; t=1763404548; c=relaxed/simple;
+	bh=cjOZijZfv+gCL+Wryb9wI/c0+cE3KEtDjZPAz76nomk=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CswamrWIpUctjBLOlgoIIlVk/9KTpDDGrRoHHmiAvakitmp737duyJ26AwUYvXr1YdsDxOo8EGq6O2Cf4Y69YsAZYholqxphwxrz/3j7y1UBZGz+yLTx9B1aSop9YDm5D4zHudKDAKFgu++N4EzbNjJgziW9bG1Py1XJE14TFP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=DweFroUb; arc=none smtp.client-ip=109.224.244.18
+	 MIME-Version:Content-Type; b=RLEabpT1dRCQh2YrHPKWGSiaHVQvplAFF5N9AA+lEzptHY8RNgPPWjoIDt2+bFQWHxhoL4OpMfN9ERBrWhdaL6VvULikVzXRGsoitCyAgJcTvc9YxGOI3jXUeTuZTRaV6AWxRLQ62FkwknmUmIWnIqbTaU9H4z0jeHoWOoLJlO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Ow9517Gl; arc=none smtp.client-ip=109.224.244.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="DweFroUb"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Ow9517Gl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1763404056; x=1763663256;
-	bh=GhZV33r+RQPxcvac5lYHFWgWQCGcX9mvWrodK8gvvLc=;
+	s=protonmail3; t=1763404543; x=1763663743;
+	bh=zH5WVIO3cxOwoV7JqKcP1ToXH/X437vo+cbBXaQZW1Q=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=DweFroUb8uo4PK06n5Wl5fGwhojNY7QszNM7iXFG7EjKvb9GqP59Kp/IQVSd6dPIJ
-	 R7xxMHHCAwnSFusvt8q2csjYAnTNj7gxTwpSolPMogoyXE1bKL5u59danvmqUqUSsW
-	 ToI+LrL+YK42ZNbLleg0ht45BloqOHxM4ZxDO28CNG8x1K77NqVV+E0+CSz1W7GJ+E
-	 G9cevD3xQv7zY3CPjIyxwGsAor1t4RqqX8yW0KcAQ8ltvE2rkXrE4mpVgKNS9IWwkW
-	 fCiVglPffu/+YMy7EF5QrRXfFB1LgpMKvFSBFDcfQzPr+6ef7H8a06OPSOjaENJcHG
-	 sBL89XwygkdmQ==
-Date: Mon, 17 Nov 2025 18:27:30 +0000
+	b=Ow9517GlVkdXb0QK4zjYxuQOHLNlXBQV1cDfbfieA47R/oZppYFaXLUldJ1Tsq5ih
+	 cSQWOVBUEIXNRzU9Z0PwoISODUhBmTaVt175wXQkO+pXpKxbHzlR9FcwRIpzz9Tqw+
+	 IR2AUVjxkUQt58ykh1SuYyNEC2vg9WKSs0zAWb2vchX/qb4b2aj56AuCLDjILSWJKR
+	 y7thVVzmNLOKb57GussgLz8hjrzaxtGyskBAQgEksXSAQcDYFI0X/MRtnGpRX/UsQ8
+	 0/Q9NgRR+AM3VtjauiR5MqSjMmNx7MddjrniFxSo0IFFpcXYNxvJBOr2L2aXvHBWr7
+	 wsuBdyxI2rtlA==
+Date: Mon, 17 Nov 2025 18:35:38 +0000
 To: Alexander Potapenko <glider@google.com>
 From: =?utf-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <m.wieczorretman@pm.me>
 Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, ardb@kernel.org,
 	Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 03/18] kasan: sw_tags: Use arithmetic shift for shadow computation
-Message-ID: <zxn3unp5foytltq6xpzqmsuijaargjuigcu47fdvlhpgyvwfj4@zwcnws34hjfw>
-In-Reply-To: <CAG_fn=XyQ5Mc_ZvsibN4K0r70xfDAkhPqUJgtojVRcgTt-q0WQ@mail.gmail.com>
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <ab71a0af700c8b83b51a7174fb6fd297e9b5f1ee.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=XyQ5Mc_ZvsibN4K0r70xfDAkhPqUJgtojVRcgTt-q0WQ@mail.gmail.com>
+Subject: Re: [PATCH v6 04/18] kasan: sw_tags: Support tag widths less than 8 bits
+Message-ID: <6rh6ynwrmh7afqkfyfphiy6rv2xjpdpcotzooqfye6lg7rddhe@betrc4geghsk>
+In-Reply-To: <CAG_fn=VUx7GkcjuYO3oRH7ptgKVtzQNChW1xKL+1SPfJ=XvWwQ@mail.gmail.com>
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <8319582016f3e433bf7cd1c88ce7858c4a3c60fa.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=VUx7GkcjuYO3oRH7ptgKVtzQNChW1xKL+1SPfJ=XvWwQ@mail.gmail.com>
 Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 6ca281a9780caa8602cb87e0c0e4e958f247dc5c
+X-Pm-Message-ID: 89bdc726c809a41792e2e4dd98d31d2c2e8b87c5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,33 +48,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On 2025-11-11 at 10:39:12 +0100, Alexander Potapenko wrote:
->> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
->> index b00849ea8ffd..952ade776e51 100644
->> --- a/include/linux/kasan.h
->> +++ b/include/linux/kasan.h
->> @@ -61,8 +61,14 @@ int kasan_populate_early_shadow(const void *shadow_st=
-art,
->>  #ifndef kasan_mem_to_shadow
->>  static inline void *kasan_mem_to_shadow(const void *addr)
->>  {
->> -       return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
->> -               + KASAN_SHADOW_OFFSET;
->> +       void *scaled;
->> +
->> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC))
->> +               scaled =3D (void *)((unsigned long)addr >> KASAN_SHADOW_=
-SCALE_SHIFT);
->> +       else
->> +               scaled =3D (void *)((long)addr >> KASAN_SHADOW_SCALE_SHI=
-FT);
->> +
->> +       return KASAN_SHADOW_OFFSET + scaled;
->>  }
->>  #endif
+On 2025-11-10 at 18:37:59 +0100, Alexander Potapenko wrote:
+>> +++ b/include/linux/kasan-tags.h
+>> @@ -2,13 +2,16 @@
+>>  #ifndef _LINUX_KASAN_TAGS_H
+>>  #define _LINUX_KASAN_TAGS_H
+>>
+>> +#include <asm/kasan.h>
 >
->As Marco pointed out, this part is reverted in Patch 17. Any reason to do =
-that?
+>In Patch 07, this is changed to `#include <asm/kasan-tags.h>` what is
+>the point of doing that?
+>Wouldn't it be better to move the addition of kasan-tags.h for
+>different arches to this patch from Patch 07?
 
-I hope I was able to answer that in my reply to Marco
+I wanted to keep the split between adding the generalized definitions
+that Samuel did here, and my arch specific changes. Thought it'd be
+easier to review for people if it was kept this way. But maybe it's a
+good idea to just move the asm/kasan-tags changes here too, I'll
+rearange the code a bit between these two patches.
 
