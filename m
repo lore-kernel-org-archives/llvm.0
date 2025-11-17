@@ -1,108 +1,142 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDFBB2C237C;
-	Mon, 17 Nov 2025 17:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BADF26F46F
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 17:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763401296; cv=none; b=HrPL4na7IrtxeEsNM+hfNDWGw2vg9vf2PGua9Yjkq2Yi4iCPdeCecV7LXhsekhowyHyJ9EhYdSBVuKXxXbnyAkbd9i5rrqtB92N3OjxOROmt3TQZu2XCT1oeCt3gf1Z2X5f4UUfw4o6el719ziyt/DTRRpbSEkd9M3eb7wHQlLI=
+	t=1763401398; cv=none; b=SQxP8lcHKuDuoDLyyWJgQG7U3+QYDXXqXDyXI2tP6i6iL7eRIOlb42AonebGCb0BWtFp7IEVoBKwhJiqOgJqe8rJisFi2r6Z19EYI4B5kiOC/CBSYI3ftg3oYlKtN5JfnK6TxY0ExpDZ9vm6PdG8bT7apHeWpNa2tvlOYDzvko0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763401296; c=relaxed/simple;
-	bh=oANOt64uco5yiTYGF8tU+dJ4GQibeYjCnt1kkfIdqYk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tg5M1/xArxOVZLdfX6+856q/43cGq7Eb9dl4Q6aQJWeG4nR406JXtcn3kjXNWIGqeLGKxMz2fOAg0Gs3l4PBDmpoI9kid8Ijq7oQpYv5kYEOQ4iOoAcisrF6KMiHlg2vUy9EfYLdDTLb12bGUB142ZGVgtvtft192KRmSBU+BnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=XJ5nLYrk; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1763401398; c=relaxed/simple;
+	bh=xY8JHLZreIv5FLdiTXJQTOkB1IjgEPbs+7vo8DTx7M8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Dv/eNktPsOuRikjftaU/Fb0+3ismjljJOy+yALs+T2Vt8CadXu7Jku8lYQLNAbYv3OvAxuYvZcrcqo0AdUCSEKt6BJC0vy2u1VWE+qtRkBa1QFAGyA45Y//5rFb7zBwlutC6ly7QTh+99Kf5328vwdQcsJXQrspMLwj12T+q8KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hWBWAvMJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="XJ5nLYrk"
-Received: from [100.64.192.165] (unknown [20.29.225.195])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CAFB62119CCB;
-	Mon, 17 Nov 2025 09:41:32 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CAFB62119CCB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1763401293;
-	bh=R+qrQ4lprMLFXNOJBsltyEBTs+EtrTEmRmeXfss7c+M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XJ5nLYrkz+icoe3dO5U4S/M0lE//gNZxjb/wv+/sZuhl5cQLxMbKcZy43scAHHBXp
-	 fM5PpixRzXB3eKkel+cO+3er41aOktqXGA6LtWQB0IkEPbHswZP2kcvEmGJ89wMQLW
-	 UGnQbjlPex8gMTM+zbSwkONkR+3IESf5l80qAQP8=
-Message-ID: <522f1bc2-417f-434a-92f9-7b417744cef4@linux.microsoft.com>
-Date: Mon, 17 Nov 2025 09:41:19 -0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hWBWAvMJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763401395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gCYIhlTVxnA8L7coaciThBNanQNmPGlx4ZLyBbahtO4=;
+	b=hWBWAvMJw1KvzJc/vU0SesV1EaLMNhSByvnQYzzpe9ilvkgjHk0uMOOb8442WkiZM4JeB7
+	nxE2n6MiliizOlANIzqH0z3w+3BQH9GBPeYtBopiNUMW6CKJubS0gg7X/SSuYwNlxR9xrj
+	674LhWYaFvHZSvpQYuEjTlNcqo6dDAc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-BrI4NDpzN6CceVyXPwCA1w-1; Mon,
+ 17 Nov 2025 12:43:11 -0500
+X-MC-Unique: BrI4NDpzN6CceVyXPwCA1w-1
+X-Mimecast-MFC-AGG-ID: BrI4NDpzN6CceVyXPwCA1w_1763401391
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C239E18AB303
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 17:43:10 +0000 (UTC)
+Received: from [172.20.120.109] (unknown [10.30.44.79])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6B66E18002A6;
+	Mon, 17 Nov 2025 17:43:10 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 137): Test report for master
+ (6.18.0-rc6, upstream-mainline, 6a23ae0a)
+Date: Mon, 17 Nov 2025 17:43:10 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Drivers: hv: ioctl for self targeted passthrough hvcalls
-To: Wei Liu <wei.liu@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: Anirudh Rayabharam <anirudh@anirudhrb.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Dexuan Cui <decui@microsoft.com>,
- Long Li <longli@microsoft.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251114095853.3482596-1-anirudh@anirudhrb.com>
- <202511161617.KcDzR4sA-lkp@intel.com>
- <20251117173428.GB2380208@liuwe-devbox-debian-v2.local>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <20251117173428.GB2380208@liuwe-devbox-debian-v2.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <56747.125111712431102103@us-mta-67.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: n8XiVnJZINzmAvLgWKW5l5aA8DSahCzdlu7MQllgEEk_1763401391
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/17/2025 9:34 AM, Wei Liu wrote:
-> +Nuno
-> 
-> On Sun, Nov 16, 2025 at 04:17:08PM +0800, kernel test robot wrote:
->> Hi Anirudh,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on linus/master]
->> [also build test ERROR on v6.18-rc5]
->> [cannot apply to next-20251114]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Anirudh-Rayabharam/Drivers-hv-ioctl-for-self-targeted-passthrough-hvcalls/20251114-182039
->> base:   linus/master
->> patch link:    https://lore.kernel.org/r/20251114095853.3482596-1-anirudh%40anirudhrb.com
->> patch subject: [PATCH] Drivers: hv: ioctl for self targeted passthrough hvcalls
->> config: x86_64-buildonly-randconfig-005-20251116 (https://download.01.org/0day-ci/archive/20251116/202511161617.KcDzR4sA-lkp@intel.com/config)
->> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511161617.KcDzR4sA-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202511161617.KcDzR4sA-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/hv/mshv_root_main.c:125:2: error: use of undeclared identifier 'HVCALL_GET_PARTITION_PROPERTY_EX'
->>      125 |         HVCALL_GET_PARTITION_PROPERTY_EX,
->>          |         ^
-> 
-> Anirudh, please check this.
-> 
-This is introduced in hyperv-next, in:
-59aeea195948 mshv: Add the HVCALL_GET_PARTITION_PROPERTY_EX hypercall
+Hi, we tested your kernel and here are the results:
 
-But the bot applies the patch to linus/master, that is probably why.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
->>>> drivers/hv/mshv_root_main.c:175:18: error: invalid application of 'sizeof' to an incomplete type 'u16[]' (aka 'unsigned short[]')
->>      175 |         for (i = 0; i < ARRAY_SIZE(mshv_passthru_hvcalls); ++i)
->>          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This is from the original patch. Perhaps adding the explicit declaration
-> of the array size would help.
-> 
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I think this is just due to the earlier error...
+Kernel information:
+    Commit message: Linux 6.18-rc6
 
-Nuno
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2161669463
 
-> Wei
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: [RHEL10.0] blktests throtl failed
+            URL: https://issues.redhat.com/browse/RHEL-66783
+            Affected tests:
+                Storage - blktests - throtl [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/command [x86_64]
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
