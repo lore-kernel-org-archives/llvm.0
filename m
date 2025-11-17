@@ -1,142 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail-08.mail-europe.com (mail-08.mail-europe.com [57.129.93.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BADF26F46F
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 17:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E7F23C8C7
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 17:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.129.93.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763401398; cv=none; b=SQxP8lcHKuDuoDLyyWJgQG7U3+QYDXXqXDyXI2tP6i6iL7eRIOlb42AonebGCb0BWtFp7IEVoBKwhJiqOgJqe8rJisFi2r6Z19EYI4B5kiOC/CBSYI3ftg3oYlKtN5JfnK6TxY0ExpDZ9vm6PdG8bT7apHeWpNa2tvlOYDzvko0=
+	t=1763401894; cv=none; b=NYCCOx+Akjpnvt4ULFPERY3jvXlbc3cPE5P1LLsrBcAM1EPwbFoYQ6HSgHzUcPcT8q5Eow6T2d7jjPn+dvRgUYQFFk9tnLNJKn+8eD+u766WtVeHZ9OwM48mFptauGREnSE0bLahut9FFSgZ7Srxzg0YhclF5Ku4aZOxYtHSWFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763401398; c=relaxed/simple;
-	bh=xY8JHLZreIv5FLdiTXJQTOkB1IjgEPbs+7vo8DTx7M8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Dv/eNktPsOuRikjftaU/Fb0+3ismjljJOy+yALs+T2Vt8CadXu7Jku8lYQLNAbYv3OvAxuYvZcrcqo0AdUCSEKt6BJC0vy2u1VWE+qtRkBa1QFAGyA45Y//5rFb7zBwlutC6ly7QTh+99Kf5328vwdQcsJXQrspMLwj12T+q8KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hWBWAvMJ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763401894; c=relaxed/simple;
+	bh=dvBUOLItidwfrNQEf4mN9DTt1GLDuvVSAWBtWZ+I3h8=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IuCPAgxduARwUk9BwAweYHCAUg1T07Oiwo4bv0mpBLxZIb9rnT+V6KJIogn079207v2AVKh0fJwL8LUfwOikCuSMTzge9i1S9qHDkpCMA9Fe9/dpQxRDZf/A3Lbr8ie9w5H80vEDc1peDh2nkTS5JX5Mu7pjOKn03GdGFhRq21k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=oQBqUjSf; arc=none smtp.client-ip=57.129.93.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hWBWAvMJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763401395;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gCYIhlTVxnA8L7coaciThBNanQNmPGlx4ZLyBbahtO4=;
-	b=hWBWAvMJw1KvzJc/vU0SesV1EaLMNhSByvnQYzzpe9ilvkgjHk0uMOOb8442WkiZM4JeB7
-	nxE2n6MiliizOlANIzqH0z3w+3BQH9GBPeYtBopiNUMW6CKJubS0gg7X/SSuYwNlxR9xrj
-	674LhWYaFvHZSvpQYuEjTlNcqo6dDAc=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-BrI4NDpzN6CceVyXPwCA1w-1; Mon,
- 17 Nov 2025 12:43:11 -0500
-X-MC-Unique: BrI4NDpzN6CceVyXPwCA1w-1
-X-Mimecast-MFC-AGG-ID: BrI4NDpzN6CceVyXPwCA1w_1763401391
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C239E18AB303
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 17:43:10 +0000 (UTC)
-Received: from [172.20.120.109] (unknown [10.30.44.79])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6B66E18002A6;
-	Mon, 17 Nov 2025 17:43:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 137): Test report for master
- (6.18.0-rc6, upstream-mainline, 6a23ae0a)
-Date: Mon, 17 Nov 2025 17:43:10 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="oQBqUjSf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1763401880; x=1763661080;
+	bh=8JHRGFc+rtU8gXb3Jyiztx9jQrUCtKtMFdopnkmvtTw=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=oQBqUjSfF7G2kJQrbbupyMiiL3urxY+IOjodFvyRKJ7BeHY/Dcl/doiaaDctJYfkJ
+	 neWOwaOGLUAaNvOOA9Lnkn/V7Zxs46ZLspzWPnHWqsqxS/d+3JQ28pmHZyaP3ROCiP
+	 lPORmcpqbEa/NLboQDALyeNMJy7OAFr681dFCiyvFWO465XYCDffdIMULNoQdGBZG5
+	 LqsCEq8v1qizeghermjOZkDdSKpmudU0KEGcYzC75rPAJEG8nR1gQFIh5UjtYTVp5L
+	 Abt+RNltqCl/40foE++yjpzIs3zTJ+mCRrvbsrD50yTsJZVBuZlmevHhrdCKoaSwyO
+	 yZDKI/Aa1I0hg==
+Date: Mon, 17 Nov 2025 17:51:13 +0000
+To: Alexander Potapenko <glider@google.com>
+From: =?utf-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <m.wieczorretman@pm.me>
+Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, ardb@kernel.org,
+	Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, stable@vger.kernel.org, Baoquan He <bhe@redhat.com>
+Subject: Re: [PATCH v6 01/18] kasan: Unpoison pcpu chunks with base address tag
+Message-ID: <ha5gz3hfjtfrmldzbscrbbtptecyqkwzkwdkjxnc2puqzquurl@nthv7frvqatw>
+In-Reply-To: <CAG_fn=Wj9rB0jHKT3QKjZsPYce1JFcb1e72QBOBP52Ybs3_qgQ@mail.gmail.com>
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <fbce40a59b0a22a5735cb6e9b95c5a45a34b23cb.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=Wj9rB0jHKT3QKjZsPYce1JFcb1e72QBOBP52Ybs3_qgQ@mail.gmail.com>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: 7b84ae9accb4bc7551e617e5e7661cf28649358a
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <56747.125111712431102103@us-mta-67.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: n8XiVnJZINzmAvLgWKW5l5aA8DSahCzdlu7MQllgEEk_1763401391
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On 2025-11-10 at 18:32:21 +0100, Alexander Potapenko wrote:
+>On Wed, Oct 29, 2025 at 8:05=E2=80=AFPM Maciej Wieczor-Retman
+><m.wieczorretman@pm.me> wrote:
+>>
+>> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>>
+>> The problem presented here is related to NUMA systems and tag-based
+>> KASAN modes - software and hardware ones. It can be explained in the
+>> following points:
+>>
+>>         1. There can be more than one virtual memory chunk.
+>>         2. Chunk's base address has a tag.
+>>         3. The base address points at the first chunk and thus inherits
+>>            the tag of the first chunk.
+>>         4. The subsequent chunks will be accessed with the tag from the
+>>            first chunk.
+>>         5. Thus, the subsequent chunks need to have their tag set to
+>>            match that of the first chunk.
+>>
+>> Refactor code by moving it into a helper in preparation for the actual
+>> fix.
+>
+>The code in the helper function:
+>
+>> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
+>> +{
+>> +       int area;
+>> +
+>> +       for (area =3D 0 ; area < nr_vms ; area++) {
+>> +               kasan_poison(vms[area]->addr, vms[area]->size,
+>> +                            arch_kasan_get_tag(vms[area]->addr), false)=
+;
+>> +       }
+>> +}
+>
+>is different from what was originally called:
+>
+>> -       for (area =3D 0; area < nr_vms; area++)
+>> -               vms[area]->addr =3D kasan_unpoison_vmalloc(vms[area]->ad=
+dr,
+>> -                               vms[area]->size, KASAN_VMALLOC_PROT_NORM=
+AL);
+>> +       kasan_unpoison_vmap_areas(vms, nr_vms);
+>
+>, so the patch description is a bit misleading.
+>
+>Please also ensure you fix the errors reported by kbuild test robot.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Linux 6.18-rc6
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2161669463
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:
-    /distribution/command [x86_64]
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Thanks for looking at the series! Yes, I'll fix these two patches, I've
+split them off into a separate 'fixes' series and I'm trying to make
+sure it's an acutal refactor this time.
 
