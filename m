@@ -1,44 +1,44 @@
-Received: from mail-07.mail-europe.com (mail-07.mail-europe.com [188.165.51.139])
+Received: from mail-244127.protonmail.ch (mail-244127.protonmail.ch [109.224.244.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DC42FFF99
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 18:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.51.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83C331BCAA
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 18:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763404915; cv=none; b=HYCHZ34Sb6oz8C8KJBJM8OeLB1oHoGfr8xmrWTkAwtIa31ZrvoHU3zQeMvYOwT/iGkgyjHjXKsSqzGMAhWJCarJCDAwB0xTCqLIjVbrjEcuHZaoAcYJxOBuoj8o11GGtMGjEWWjeJhED2Zt8YxkKn7nLjvo2MhL1p2A3BWC9aw4=
+	t=1763405000; cv=none; b=E9shdBOgij+ffYvIaQNrYTSW1l0rzwdvX6j8nbKzr8J7sQj2TVCU7ZkKgCNDHS39zzjrnwutSPEn/BnvF0gJx9BK5V9yjDk6qagydKQzbGxRSe9kbB7lEvyQhZeky8kCWEQir5NDlbnEkJ8CcP9v8aa6j2uC5dQaH9w0W3o1Q/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763404915; c=relaxed/simple;
-	bh=ffADgsIwWOKcJFuGkwnMUFSNfOZmE0SiWXqhXKcbJcw=;
+	s=arc-20240116; t=1763405000; c=relaxed/simple;
+	bh=6pKTzcMGLfqwUQVmfHQOkKnu6jwKpE1aNNYysBG8ve8=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qdCXK5wDmn3HX2JpkY/oCNWjcy3tvSPcgiTSWqad50Jc59BJ11IfhLjD6rtuW+4yeDvCQBA3BaaO0Tiq0I5V9oPBcr07p/GxM1PwuPiC9roD5hoTcOK5Gp2jAgGNnWQXwAN2XQt6XIm22DBzJ0WWrkeHQc3edNCrt+pXXwK5c1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=JhmaQYtS; arc=none smtp.client-ip=188.165.51.139
+	 MIME-Version:Content-Type; b=nvk29Xar3S1DtOgCavwC9ThX+nQlU+LZ2jVhwFZBOtOaGhvQWYkC61Fdl45uWAdOyfelZzIa00GNsB23yg7UdUJzfkbnfoKo2ooBwoEi+ksLQPDd5oCwHbbzVVvdpVQsULzFqxWRHpiyGXS/zaStizcShJvLa52Wedu7igYnhiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=h6XWinzQ; arc=none smtp.client-ip=109.224.244.127
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="JhmaQYtS"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="h6XWinzQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1763404903; x=1763664103;
-	bh=drgz0EubZvWbKD4XfDQItOg+MBM3cOXzoADsisa0KIg=;
+	s=protonmail3; t=1763404993; x=1763664193;
+	bh=+lJV/EDhYGKx5mOX0qR2rU2PR81YfrrZnkEYQ//hRhU=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=JhmaQYtSykcyb/YbPWw44tSyjxwvQu5qj9ANFfDbmQQdN+t4wYrSeoPU5wr8awv7w
-	 Nv4+HeHNbI3AYKkBPALDXGd5ua+5005HNaPxAJX8zjyFtD4Bx8B3sNgDDBKPYZWuNR
-	 FgB1Gsw62xTc05ImjhbBcT4QlABgPkgxdGDAvgUqxcsa9ajoSzvQkkJViTm7A06PKT
-	 dz01/x1F8V82geoUmNU9B033ePiTpKpoT+jMsYrUhpoMOl6yknZtWVEU53UOHxjmLk
-	 eDRaMMJ3onhXZSMX+uzVZ2fETutWrQC2UQnuYO5bJ7DY+KapcpkkD/6AI0HVHWxo6q
-	 5jsrnA85HeUWQ==
-Date: Mon, 17 Nov 2025 18:41:35 +0000
+	b=h6XWinzQKp8D5CNY87Oa4RWY/kKWJKZBE6qNvqcw1rbJHPtnOUbihBOimh98MWfLV
+	 2NN4ZeZ3TnoxsssymM+T8mK6KuXihwDQF3RmO7k/DBoOpCU6VI4fCVbqnfG/xF9Btx
+	 sc8wYjQMFnII0JJmBK7yg/fI2XpG5HXFbHFTnnLuBLgIbNB4v7ahSkExGxDO1YwXHV
+	 MqNYX+gthKlwCPgEne66RZEjKBvlPBgVqlk7zMPCy6U7hbZlGzEozZB3FDWBuJdMgK
+	 l7vfSfDaAUCHBN/aQrFSRnN6Qtgy/aKM3G8OihotTxcLieiPrjGVsucbVvybrnrQl3
+	 fkzFLFPT1YyiQ==
+Date: Mon, 17 Nov 2025 18:43:09 +0000
 To: Alexander Potapenko <glider@google.com>
 From: =?utf-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <m.wieczorretman@pm.me>
 Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, ardb@kernel.org,
 	Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 06/18] x86/kasan: Add arch specific kasan functions
-Message-ID: <6nifmxti2xfbnrdtxbosojfw52sofc7zkyjcbcyeawz5lt372f@h6ksdfqddk4z>
-In-Reply-To: <CAG_fn=XFXFAvKS2+bc66FR+gw7rfSybETAOBUR_vneaVdF5F9A@mail.gmail.com>
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <5be986faa12ed1176889c3ba25852c42674305f4.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=XFXFAvKS2+bc66FR+gw7rfSybETAOBUR_vneaVdF5F9A@mail.gmail.com>
+Subject: Re: [PATCH v6 09/18] mm/execmem: Untag addresses in EXECMEM_ROX related pointer arithmetic
+Message-ID: <5ty6jsrleekmymktmyayidc5jdvqvzz622vsh4fqk3rjtgyalu@argn7tfm3efv>
+In-Reply-To: <CAG_fn=V4jVyS41MDxJeN-A2zk6WhTnxp7m3FRWmkXMpy5f+haA@mail.gmail.com>
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <d6443aca65c3d36903eb9715d37811eed1931cc1.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=V4jVyS41MDxJeN-A2zk6WhTnxp7m3FRWmkXMpy5f+haA@mail.gmail.com>
 Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 24219ab0aedf934d23c98a54e0e420cc21587fb9
+X-Pm-Message-ID: 267961a08d80088fa15811f1ce81d028c93e6629
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,18 +48,59 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On 2025-11-11 at 10:31:13 +0100, Alexander Potapenko wrote:
->> +#ifdef CONFIG_64BIT
->> +static inline void *__tag_set(const void *__addr, u8 tag)
->> +{
->> +       u64 addr =3D (u64)__addr;
->> +
->> +       addr &=3D ~__tag_shifted(KASAN_TAG_MASK);
+On 2025-11-11 at 10:13:57 +0100, Alexander Potapenko wrote:
+>On Wed, Oct 29, 2025 at 8:08=E2=80=AFPM Maciej Wieczor-Retman
+><m.wieczorretman@pm.me> wrote:
+>>
+>> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>>
+>> ARCH_HAS_EXECMEM_ROX was re-enabled in x86 at Linux 6.14 release.
+>> vm_reset_perms() calculates range's start and end addresses using min()
+>> and max() functions. To do that it compares pointers but, with KASAN
+>> software tags mode enabled, some are tagged - addr variable is, while
+>> start and end variables aren't. This can cause the wrong address to be
+>> chosen and result in various errors in different places.
+>>
+>> Reset tags in the address used as function argument in min(), max().
+>>
+>> execmem_cache_add() adds tagged pointers to a maple tree structure,
+>> which then are incorrectly compared when walking the tree. That results
+>> in different pointers being returned later and page permission violation
+>> errors panicking the kernel.
+>>
+>> Reset tag of the address range inserted into the maple tree inside
+>> execmem_vmalloc() which then gets propagated to execmem_cache_add().
+>>
+>> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>Acked-by: Alexander Potapenko <glider@google.com>
 >
->KASAN_TAG_MASK is only defined in Patch 07, does this patch compile?
+>> diff --git a/mm/execmem.c b/mm/execmem.c
+>> index 810a4ba9c924..fd11409a6217 100644
+>> --- a/mm/execmem.c
+>> +++ b/mm/execmem.c
+>> @@ -59,7 +59,7 @@ static void *execmem_vmalloc(struct execmem_range *ran=
+ge, size_t size,
+>>                 return NULL;
+>>         }
+>>
+>> -       return p;
+>> +       return kasan_reset_tag(p);
+>
+>I think a comment would be nice here.
+>
+>
+>> --- a/mm/vmalloc.c
+>> +++ b/mm/vmalloc.c
+>> @@ -3328,7 +3328,7 @@ static void vm_reset_perms(struct vm_struct *area)
+>>          * the vm_unmap_aliases() flush includes the direct map.
+>>          */
+>>         for (i =3D 0; i < area->nr_pages; i +=3D 1U << page_order) {
+>> -               unsigned long addr =3D (unsigned long)page_address(area-=
+>pages[i]);
+>> +               unsigned long addr =3D (unsigned long)kasan_reset_tag(pa=
+ge_address(area->pages[i]));
+>
+>Ditto
 
-Seems I forgot to remove it from patch 7. It's originally defined
-in the mmzone.h file and looked cleaner there according to Andrey.
-
-Thanks for noticing it's still in patch 7, I'll get rid of it.
+Thanks, will add some comments on why these are needed.
 
