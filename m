@@ -1,131 +1,148 @@
-Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7A027CCEE
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 11:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE322FAC0C
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 11:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763377883; cv=none; b=lQ4o+bdLv5tIg8mF0wexOz5soORgq1nGdu2sGXfIBKDqxWH0GikN+JYWLimO9XQJJ6OwOJEwNfL4mqzmNIyiBF6i5RXrXvUo7gwpBVLAyvUwAHPdejMqIiAOwYKV9A1fikHAxlTtgwjV0EUr4Px5K8JZ5Vc1/FA93FtL6Cm6iGI=
+	t=1763377940; cv=none; b=JnPSIhDhp8KwTEU3o+lgRopGmzatHjk+Q0eTZ7QIBqRoB3z6jf5C0a4JgyVjZULVrNDmd0KDDVHsBtA1DvM3UGdPhoDw0VrA+E8RlIkB26qPTDrRCwOvktoPgTn4h8pOZ+rNR7NbEXg9rsNlqyO8j+FVdB7A6WriUysKZpQ4rkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763377883; c=relaxed/simple;
-	bh=yy3ttJfthnlit7qq/XjBi9+6yy9msg19mI7l/XmPIcY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Caz++aPEsM33ajg4dSU5SU5XKKz4fmjgySCq1D4g1GP4AmCZ2fXVEHNrnhNqmBn96epQxhfOD/mNupjuy4TzfL7Oes4QyhGgcIGcqoa3jxvwTI24K1Y/d1T13FoT4ZU3ecdtpMiN0dHFbIgWkhee9z+5bMwjRwiyaFo2Nnvfcqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rLOl8Iv0; arc=none smtp.client-ip=209.85.218.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1763377940; c=relaxed/simple;
+	bh=eaIRLkvRw1juqGrSKCSHgTqn4MaoGfNQj+HcdbhGJgw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BphaoxetqRdM27539sodEUH0al/XiW9GoDFGCTC/UWbtDi+E4Ym1TLbsBqRIFkm9GRGoB/j09bKH0Q4C4IuH1Hq4oio87qab1owMNS+IDjVY/D6VINywiqy4QXgsUwxxiT6QnlxbuVPSW3oVDdFp7UCtUlYVl2FD/ZlIbG/BqQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J1oa82rU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rLOl8Iv0"
-Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-b733b21a138so452173566b.1
-        for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 03:11:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763377880; x=1763982680; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1dBVArd7mJYSTmCE5f6B8F4uwfft+tMBK80V9wiJXm4=;
-        b=rLOl8Iv0MbuX1ZHTrpZrIZX1kBDfJBt34TqHr12rQ8Wb7uUwp+55n50CcyjgeEBXW0
-         JGSHL32t4E54HYCxLDzxRcpuOI3hPHgXvT7BWhL9WWK/frXxzV6xjsUXuWp1ZFmGpcD+
-         IBLH5Zc8czCsV5/GTQN7fQktaTHw9e1wr8YFDA/p146S06JJg/xtKyEXqcF1qOFhgL+z
-         yNbyZEbe4Zok57o5n8uPjxzBiUhJt2xcC4bURT4Eim+e7HUyvulckeasPbkcbN0v38aW
-         oO9J6lIWK+6s18r285EunVPEvQNNDpH7VakuG4VKUFK+2awmRmHO+lM8kbWcltJgLkov
-         1YjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763377880; x=1763982680;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1dBVArd7mJYSTmCE5f6B8F4uwfft+tMBK80V9wiJXm4=;
-        b=aRbwk/cBxbcfTyub4FvnSXuJWDaUyFOWuOOkiO7H7vi6lPMiaaWen3gKkkjtCGc8Hg
-         4lhENZw755r2dNrmTIIX9YxrtMz4kq0E+awYDb7YMLrf5w7rRWLb2+h1/85AOBIQWR7D
-         OBx6GIaGSAazESSd11Bj8mQxB/rYZZhydIEJkwj9SXAAzq6/g8RFuPrviAib1atigkbr
-         1ntaAHslzZzcfPtbHM7OcqH5Eyoeu74Ya+4aWwriCBD0uq1JEvm6lmqEgQ1O2me4i2WK
-         X5BonZqx8mg5bYHdaptUTXJSfxHTWKK+HftYG0fmtpYET1xdQLfrTFU1TnW5IpP27cba
-         EB1w==
-X-Forwarded-Encrypted: i=1; AJvYcCXrtkXhh2bqyV4eJjFL60vAs9VYJsNrdIbR70tSCgi4dLhLX2KyIrP4AqwC3oKiGoesHUr7@lists.linux.dev
-X-Gm-Message-State: AOJu0YwEaRG+zHvDYVi+JSOee9fEFVVpwlDcm1vwjDbZb861sivICYVr
-	at8YwT3xTN4QieYS93/F4GR2jpOjGqkW2kBuDXwE7KXxB2JNr0mseLi4SodI11CFsIbd777M49K
-	ZJ2WrOxe4uk08gQ==
-X-Google-Smtp-Source: AGHT+IEGS45z0l+hi3ZO/M7TNdz92Zhrot8CzIWSAC9H6KdJexA/+kgMYEwfvduedhwP/3cl1ubRuic7XN8dgg==
-X-Received: from ejczi12.prod.google.com ([2002:a17:907:e98c:b0:b72:41e4:7568])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:2d92:b0:b72:614a:ab56 with SMTP id a640c23a62f3a-b73674ea2e1mr1014523866b.0.1763377879966;
- Mon, 17 Nov 2025 03:11:19 -0800 (PST)
-Date: Mon, 17 Nov 2025 11:11:17 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J1oa82rU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763377937;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=c9KC4khCa6cRK2ceJAqapHEwus6t7GPwrzNpplAoSMI=;
+	b=J1oa82rU7j0XJPHmeH0Pdy+sDRzx6lL1Q+ol/0N6wEUOwybp5crpEAbFwlfYmYRjZXQ5Sb
+	FFRd/6R9eUsOBJczR8k7FcCzD41q+5hsKr4INWbICzUGMBy5I0x7wllxeIEoX1sLN5I8C/
+	QlCuanuonOoq6uGAttODYY4nR0YkZfI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-141-tHvEhY_KNtOHdy2xnRfbFg-1; Mon,
+ 17 Nov 2025 06:12:16 -0500
+X-MC-Unique: tHvEhY_KNtOHdy2xnRfbFg-1
+X-Mimecast-MFC-AGG-ID: tHvEhY_KNtOHdy2xnRfbFg_1763377935
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3A277180009D
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 11:12:15 +0000 (UTC)
+Received: from [172.20.120.109] (unknown [10.30.44.79])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B587118004A3;
+	Mon, 17 Nov 2025 11:12:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc5,
+ upstream-mainline, 998ccc32)
+Date: Mon, 17 Nov 2025 11:12:14 -0000
+To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIANQCG2kC/x3MQQqEMAxA0atI1gZMmVH0KuJC06gRMdJKEcS7T
- 5nlW/z/QJSgEqErHgiSNKodGVQWwOt4LILqs8FV7ktEDU4fjJJwYUto03aZ7ejmmj21DfuWIZd nkFnv/7Uf3vcHw1fU62UAAAA=
-X-Change-Id: 20251117-b4-sev-gcov-objtool-2f6cd197cd9c
-X-Mailer: b4 0.14.2
-Message-ID: <20251117-b4-sev-gcov-objtool-v1-1-54f7790d54df@google.com>
-Subject: [PATCH] x86/sev: Disable GCOV on noinstr object
-From: Brendan Jackman <jackmanb@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Brendan Jackman <jackmanb@google.com>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <35568.125111706121600255@us-mta-141.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 4s_Sy1bVLzkzhwDeFy-1UW6geHOYKs0aUjS1PdNHKmU_1763377935
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-With Debian clang version 19.1.7 (3+build5) there are calls to
-kasan_check_write() from __sev_es_nmi_complete, which violates noinstr.
-Fix it by disabling GCOV for the noinstr object, as has been done for
-previous such instrumentation issues.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
-Details:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
- - =E2=9D=AF=E2=9D=AF  clang --version
-   Debian clang version 19.1.7 (3+build5)
-   Target: x86_64-pc-linux-gnu
-   Thread model: posix
-   InstalledDir: /usr/lib/llvm-19/bin
 
- - Compiling from tip/master at 6f85aad74a70d
-   =20
- - Kernel config:
+Kernel information:
+    Commit message: Merge tag 'perf-tools-fixes-for-v6.18-2-2025-11-16' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
 
-   https://gist.githubusercontent.com/bjackman/bbfdf4ec2e1dfd0e18657174f053=
-7e2c/raw/a88dcc6567d14c69445e7928a7d5dfc23ca9f619/gistfile0.txt
-   =20
-Note I also get this error:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2161630686
 
-vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3b: relocation to !ENDBR: =
-machine_kexec_prepare+0x810
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2161630686_x86_64_kernel-debug_kcidb_tool_20017064_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2161630686_x86_64_kernel-debug_kcidb_tool_20017064_12
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
-That one's a total mystery to me. I guess it's better to "fix" the SEV
-one independently rather than waiting until I know how to fix them both.
----
- arch/x86/coco/sev/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: [RHEL10.0] blktests throtl failed
+            URL: https://issues.redhat.com/browse/RHEL-66783
+            Affected tests:
+                Storage - blktests - throtl [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
 
-diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Makefile
-index 3b8ae214a6a64de6bb208eb3b7c8bf12007ccc2c..d2ceae587b6c30b2fb17209a742=
-6e7893dea988c 100644
---- a/arch/x86/coco/sev/Makefile
-+++ b/arch/x86/coco/sev/Makefile
-@@ -8,3 +8,6 @@ UBSAN_SANITIZE_noinstr.o	:=3D n
- # GCC may fail to respect __no_sanitize_address or __no_kcsan when inlinin=
-g
- KASAN_SANITIZE_noinstr.o	:=3D n
- KCSAN_SANITIZE_noinstr.o	:=3D n
-+
-+# Clang 19 and older may fail to respect __no_sanitize_address when inlini=
-ng
-+GCOV_PROFILE_noinstr.o		:=3D n
 
----
-base-commit: 6f85aad74a70d17919a64ecd93037aa51c08698d
-change-id: 20251117-b4-sev-gcov-objtool-2f6cd197cd9c
 
-Best regards,
---=20
-Brendan Jackman <jackmanb@google.com>
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
