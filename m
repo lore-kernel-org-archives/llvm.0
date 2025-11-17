@@ -1,69 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F716316905;
-	Mon, 17 Nov 2025 21:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11D534B677;
+	Mon, 17 Nov 2025 22:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763415423; cv=none; b=CODoiR/8MhoCvpCT2bLly3sXn0lG5fBHXvxUpU61npgIoyCQGilX4nU5tO91trczXOUI6wciHL+Ufo+FjwqTojCkgHRVYMjRnK4x4UYn3T8olm+30/L1AGOM5mEHNaCb11BEJkMvRlpgH50PVWpKLuQ+zqjFNFyQzBaykTXQSkQ=
+	t=1763419813; cv=none; b=EjZnLVCvwvD7Ay12EGgVzrsTKhBMdMEZedazwu3qTCqRUyHTqhRszMzr19ozAzzfyU1NCrJQhM4WjQabAcvt/nBo33Q/QRj2ZyFYemXOixTzO73vx/9VBhR1iQLbfc4QpLHww8/v7NaE4z+4DZGee0EZBGsGe3DNLLJRqM+EcFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763415423; c=relaxed/simple;
-	bh=bf8UyhqPDQoEyCkoewkf1JAlHPpii8P9/c+ZYX7vczg=;
+	s=arc-20240116; t=1763419813; c=relaxed/simple;
+	bh=ho1p3QGA7T1hhyD52Dd36WHe1Q9s1Ct6l/6u2zLQ20A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PupzILuUdPvri/YU9Q2GXh3mRLklmZnCM5lP98qTc/eSwpazAa3/Zynbha/6i3p0dGq8FDLec/a3KiBmIsYzmgd2dd1mo/S7TrKxBxGCeFbEOKwHONlEzWZXt4Ucs8HxRfa3plUnOxgUIFYDuUtloFdCer7v7NheVsAIztpYyd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kpt0/hIM; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=eocQxp4ZjP6UrD0mNhqBPhrMBGLtp5qFUdTI6Yj28tNGbsGpCUW3Ew0Q5Fa6cNHwy9pD1J8MQ4cLmpH2+dRExcd7dDdHh/QKytwb74pdKKxvB6eC9Gk0pPNXWWAr8b8VlrHFmGvtORNsEoOO+FBPxdtc6Pq5sNHsxD6Rbhhwfr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XKD/jFOU; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kpt0/hIM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKD/jFOU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763415421; x=1794951421;
+  t=1763419811; x=1794955811;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bf8UyhqPDQoEyCkoewkf1JAlHPpii8P9/c+ZYX7vczg=;
-  b=kpt0/hIM5DZm/C+aMWQNHpWYHlFcH9yekKjXJhepp3lCq729GWuEvyDL
-   RAJ3LrsYbiluP8s45WVTYUGvp9Vfxfw1pBzsWuj2Vh97zp2PJut4yYmb5
-   iJytVWadIlhrJbad/8pycYW6h1gpiM/70TlkPPYYUoFtjRZqpZYYiMH3A
-   eUYiARfM+ZIE5smbb2D/9Lw8YRLzy5SSs6quL7IXmpWjSNnMEXbOXfqR7
-   +1uxxDMN12n1kmYPh4G5A6nJOwUZCMLPk2HmrQaY4tnRBaMtumeB/uQhn
-   t1QLBkzu9859Rz048dnJkhHQfPSpgbe8nTSP/AuuuIgwbxJV7tqlIMyvd
-   w==;
-X-CSE-ConnectionGUID: xCf8gGLEQ+2tBU/eT3UzIQ==
-X-CSE-MsgGUID: YHzYJs6aRseLlvVhG1Oi5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="65360962"
-X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
-   d="scan'208";a="65360962"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 13:36:58 -0800
-X-CSE-ConnectionGUID: VIADsAQyS8avbJCvaT6BvA==
-X-CSE-MsgGUID: QNzfJMSHQ9qewTBflfn7gw==
+  bh=ho1p3QGA7T1hhyD52Dd36WHe1Q9s1Ct6l/6u2zLQ20A=;
+  b=XKD/jFOUj6M5sbv1Z6cpP6F2tCM2OqpTgaQhu9tFdLxaZan1mqj6WN9U
+   LvTnJNZaQDJzpMQH8JkeO1+1yU3742BfJMz6Nh6ZCb3S3Tjn3TmVsMmAd
+   wYebmzwWyPcm4rdPqbGgqPsof+Ul8WeiMMgVfTCBMPXsVkukqvKI7QLmr
+   TZLcocPrGPCsGURETQyd5DSnP0mG3ga0xBtHHKIbIoYE4jnjmHjaICqxU
+   3hPgduq+Z1REBo1atW943bcYTbtXepFmCfLbDMcDyX5Z0SpniGxE0eR3J
+   xKdxP6ZP62GHAg5cFspcwCdYFRNczE0PtuuSoQpNmZqPkvzfR0qo71vWq
+   g==;
+X-CSE-ConnectionGUID: g1X299gyRXmOKzOefhDT+A==
+X-CSE-MsgGUID: lI7275RGRvCPsWNN5FUKFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="76533890"
+X-IronPort-AV: E=Sophos;i="6.19,313,1754982000"; 
+   d="scan'208";a="76533890"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 14:50:05 -0800
+X-CSE-ConnectionGUID: xK3yYl6ATSG32EPXWS2EjQ==
+X-CSE-MsgGUID: WhMk9VMjQ+eqOU4N8nUaFw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
-   d="scan'208";a="191006777"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 17 Nov 2025 13:36:54 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 17 Nov 2025 14:50:01 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vL6u3-00015R-2h;
-	Mon, 17 Nov 2025 21:36:51 +0000
-Date: Tue, 18 Nov 2025 05:36:07 +0800
+	id 1vL82n-00017f-37;
+	Mon, 17 Nov 2025 22:49:57 +0000
+Date: Tue, 18 Nov 2025 06:49:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Jacob Pan <jacob.jun.pan@linux.intel.com>
+To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org,
+	rostedt@goodmis.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH v2 5/8] x86/irq: soft_moderation: add support for
- posted_msi (intel)
-Message-ID: <202511180439.x4dMf653-lkp@intel.com>
-References: <20251116182839.939139-6-lrizzo@google.com>
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, jolsa@kernel.org, mhiramat@kernel.org,
+	mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+	jiang.biao@linux.dev, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 6/6] bpf: implement "jmp" mode for trampoline
+Message-ID: <202511180613.Om7k1nP1-lkp@intel.com>
+References: <20251117034906.32036-7-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,113 +68,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251116182839.939139-6-lrizzo@google.com>
+In-Reply-To: <20251117034906.32036-7-dongml2@chinatelecom.cn>
 
-Hi Luigi,
+Hi Menglong,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tip/irq/core]
-[also build test ERROR on tip/x86/core tip/master linus/master v6.18-rc6 next-20251117]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-platform-wide-interrupt-moderation-Documentation-Kconfig-irq_desc/20251117-023148
-base:   tip/irq/core
-patch link:    https://lore.kernel.org/r/20251116182839.939139-6-lrizzo%40google.com
-patch subject: [PATCH v2 5/8] x86/irq: soft_moderation: add support for posted_msi (intel)
-config: x86_64-buildonly-randconfig-003-20251118 (https://download.01.org/0day-ci/archive/20251118/202511180439.x4dMf653-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511180439.x4dMf653-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/ftrace-introduce-FTRACE_OPS_FL_JMP/20251117-115243
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251117034906.32036-7-dongml2%40chinatelecom.cn
+patch subject: [PATCH bpf-next v2 6/6] bpf: implement "jmp" mode for trampoline
+config: arm64-randconfig-002-20251118 (https://download.01.org/0day-ci/archive/20251118/202511180613.Om7k1nP1-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511180613.Om7k1nP1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511180439.x4dMf653-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511180613.Om7k1nP1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/irq/irq_moderation.c:369:6: error: call to undeclared function 'posted_msi_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     369 |                    posted_msi_supported() ? " (also on posted_msi)" : "",
-         |                    ^
-   1 error generated.
+   kernel/bpf/trampoline.c:500:11: error: incomplete definition of type 'struct ftrace_ops'
+     500 |                 tr->fops->flags |= FTRACE_OPS_FL_JMP;
+         |                 ~~~~~~~~^
+   include/linux/ftrace.h:40:8: note: forward declaration of 'struct ftrace_ops'
+      40 | struct ftrace_ops;
+         |        ^
+>> kernel/bpf/trampoline.c:500:22: error: use of undeclared identifier 'FTRACE_OPS_FL_JMP'
+     500 |                 tr->fops->flags |= FTRACE_OPS_FL_JMP;
+         |                                    ^~~~~~~~~~~~~~~~~
+   kernel/bpf/trampoline.c:502:11: error: incomplete definition of type 'struct ftrace_ops'
+     502 |                 tr->fops->flags &= ~FTRACE_OPS_FL_JMP;
+         |                 ~~~~~~~~^
+   include/linux/ftrace.h:40:8: note: forward declaration of 'struct ftrace_ops'
+      40 | struct ftrace_ops;
+         |        ^
+   kernel/bpf/trampoline.c:502:23: error: use of undeclared identifier 'FTRACE_OPS_FL_JMP'
+     502 |                 tr->fops->flags &= ~FTRACE_OPS_FL_JMP;
+         |                                     ^~~~~~~~~~~~~~~~~
+   kernel/bpf/trampoline.c:534:12: error: incomplete definition of type 'struct ftrace_ops'
+     534 |                         tr->fops->flags |= FTRACE_OPS_FL_JMP;
+         |                         ~~~~~~~~^
+   include/linux/ftrace.h:40:8: note: forward declaration of 'struct ftrace_ops'
+      40 | struct ftrace_ops;
+         |        ^
+   kernel/bpf/trampoline.c:534:23: error: use of undeclared identifier 'FTRACE_OPS_FL_JMP'
+     534 |                         tr->fops->flags |= FTRACE_OPS_FL_JMP;
+         |                                            ^~~~~~~~~~~~~~~~~
+   kernel/bpf/trampoline.c:536:12: error: incomplete definition of type 'struct ftrace_ops'
+     536 |                         tr->fops->flags &= ~FTRACE_OPS_FL_JMP;
+         |                         ~~~~~~~~^
+   include/linux/ftrace.h:40:8: note: forward declaration of 'struct ftrace_ops'
+      40 | struct ftrace_ops;
+         |        ^
+   kernel/bpf/trampoline.c:536:24: error: use of undeclared identifier 'FTRACE_OPS_FL_JMP'
+     536 |                         tr->fops->flags &= ~FTRACE_OPS_FL_JMP;
+         |                                             ^~~~~~~~~~~~~~~~~
+   8 errors generated.
 
 
-vim +/posted_msi_supported +369 kernel/irq/irq_moderation.c
+vim +/FTRACE_OPS_FL_JMP +500 kernel/bpf/trampoline.c
 
-   321	
-   322		seq_printf(p, HEAD_FMT,
-   323			   "# CPU", "irq/s", "my_irq/s", "cpus", "srcs", "delay_ns",
-   324			   "irq_hi", "my_irq_hi", "hardirq_hi", "timer_set",
-   325			   "disable_irq", "from_msi", "timer_calls", "stray_irq");
-   326	
-   327		for_each_possible_cpu(j) {
-   328			struct irq_mod_state *ms = per_cpu_ptr(&irq_mod_state, j);
-   329			u64 age_ms = min((now - ms->last_ns) / NSEC_PER_MSEC, (u64)999999);
-   330	
-   331			if (age_ms < 10000) {
-   332				/* Average irq_rate over recently active CPUs. */
-   333				active_cpus++;
-   334				irq_rate += ms->irq_rate;
-   335			} else {
-   336				ms->irq_rate = 0;
-   337				ms->my_irq_rate = 0;
-   338				ms->scaled_cpu_count = 64;
-   339				ms->scaled_src_count = 64;
-   340				ms->mod_ns = 0;
-   341			}
-   342	
-   343			irq_high += ms->irq_high;
-   344			my_irq_high += ms->my_irq_high;
-   345			hardirq_high += ms->hardirq_high;
-   346	
-   347			seq_printf(p, BODY_FMT,
-   348				   j, ms->irq_rate, ms->my_irq_rate,
-   349				   (ms->scaled_cpu_count + 128) / 256,
-   350				   (ms->scaled_src_count + 128) / 256,
-   351				   ms->mod_ns, ms->irq_high, ms->my_irq_high,
-   352				   ms->hardirq_high, ms->timer_set, ms->disable_irq,
-   353				   ms->from_posted_msi, ms->timer_calls, ms->stray_irq);
-   354		}
-   355	
-   356		seq_printf(p, "\n"
-   357			   "enabled              %s%s\n"
-   358			   "delay_us             %u\n"
-   359			   "timer_rounds         %u\n"
-   360			   "target_irq_rate      %u\n"
-   361			   "hardirq_percent      %u\n"
-   362			   "update_ms            %u\n"
-   363			   "scale_cpus           %u\n"
-   364			   "count_timer_calls    %s\n"
-   365			   "count_msi_calls      %s\n"
-   366			   "decay_factor         %u\n"
-   367			   "grow_factor          %u\n",
-   368			   str_yes_no(delay_us > 0),
- > 369			   posted_msi_supported() ? " (also on posted_msi)" : "",
-   370			   delay_us, irq_mod_info.timer_rounds,
-   371			   irq_mod_info.target_irq_rate, irq_mod_info.hardirq_percent,
-   372			   irq_mod_info.update_ms, irq_mod_info.scale_cpus,
-   373			   str_yes_no(irq_mod_info.count_timer_calls),
-   374			   str_yes_no(irq_mod_info.count_msi_calls),
-   375			   irq_mod_info.decay_factor, irq_mod_info.grow_factor);
-   376	
-   377		seq_printf(p,
-   378			   "irq_rate             %lu\n"
-   379			   "irq_high             %lu\n"
-   380			   "my_irq_high          %lu\n"
-   381			   "hardirq_percent_high %lu\n"
-   382			   "total_interrupts     %lu\n"
-   383			   "total_cpus           %lu\n",
-   384			   active_cpus ? irq_rate / active_cpus : 0,
-   385			   irq_high, my_irq_high, hardirq_high,
-   386			   READ_ONCE(*((ulong *)&irq_mod_info.total_intrs)),
-   387			   READ_ONCE(*((ulong *)&irq_mod_info.total_cpus)));
-   388	
-   389		return 0;
-   390	}
-   391	
+   470	
+   471		size = arch_bpf_trampoline_size(&tr->func.model, tr->flags,
+   472						tlinks, tr->func.addr);
+   473		if (size < 0) {
+   474			err = size;
+   475			goto out;
+   476		}
+   477	
+   478		if (size > PAGE_SIZE) {
+   479			err = -E2BIG;
+   480			goto out;
+   481		}
+   482	
+   483		im = bpf_tramp_image_alloc(tr->key, size);
+   484		if (IS_ERR(im)) {
+   485			err = PTR_ERR(im);
+   486			goto out;
+   487		}
+   488	
+   489		err = arch_prepare_bpf_trampoline(im, im->image, im->image + size,
+   490						  &tr->func.model, tr->flags, tlinks,
+   491						  tr->func.addr);
+   492		if (err < 0)
+   493			goto out_free;
+   494	
+   495		err = arch_protect_bpf_trampoline(im->image, im->size);
+   496		if (err)
+   497			goto out_free;
+   498	
+   499		if (bpf_trampoline_use_jmp(tr->flags))
+ > 500			tr->fops->flags |= FTRACE_OPS_FL_JMP;
+   501		else
+   502			tr->fops->flags &= ~FTRACE_OPS_FL_JMP;
+   503	
+   504		WARN_ON(tr->cur_image && total == 0);
+   505		if (tr->cur_image)
+   506			/* progs already running at this address */
+   507			err = modify_fentry(tr, orig_flags, tr->cur_image->image,
+   508					    im->image, lock_direct_mutex);
+   509		else
+   510			/* first time registering */
+   511			err = register_fentry(tr, im->image);
+   512	
 
 -- 
 0-DAY CI Kernel Test Service
