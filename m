@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CCA23EA9D;
-	Mon, 17 Nov 2025 11:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AF22139C9;
+	Mon, 17 Nov 2025 11:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763378636; cv=none; b=fqH3UUAfUpKNZlxdu2I5YuFB2jpJOBwpabpXS08rkF4Dudoj18E1ku5V6nMulY+wW7U+T70/lfY7v5f0/qtd2xSaCKQFf1Op/ZvcPBXhAMdGTt1CpeOT0UV8pqJqXZSzSMpzT6vzObSt0QSrP5c+XeXBtKwEScvkrdZa1ZbKwfA=
+	t=1763378637; cv=none; b=ans1hhKhu6+KSfdLth7WMzDsZeEhX7ED98NXAng+g7luPv5xrVGdiABYNq/Rkk5XIHNkpv726FUVcuLTsYoN8it8HqxzSKs2PplQEEcAjqUdDnZwFB6Xv+IfDxlI3h4qjpjCtS0d2kJiqMMaw9aY2FYU2YU4XwlAyFr2Hy0AgqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763378636; c=relaxed/simple;
-	bh=cTGDxRw5DV/5F6cyNFPFL7KahCJxLa5f7QjjORs1c9I=;
+	s=arc-20240116; t=1763378637; c=relaxed/simple;
+	bh=IyRsD3dFuOO27FuFU8cJdLCxe9lG0I9aLgo2AGV7OmQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l/Fux7JYWSEhrvpUIMoym0pYxtmLcBYRRHcm1tjper0ldPq08neBdtPUmUnbg9KIul2yDLjXukBE6GOBowVkTmU4ZPEbx7VHU9g51LCSvVhhCF/7hCCJhZWCR8AeGyx4EzXFMcwKDAdXbeoiZ3oGDrzShNLVImdteSkRZXoKQyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YuGDdhb2; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=dV1ortMmy2uS9NNIVhJobUVftPlK8MiEaeqEcjiY1vwMOuTJQvKw+NhfzGmIOD+g6OF6lndOEct7HbBYn2UzRs5o3xALcyVr+6+omnOCJ1y0R+oMRt34t5XGRNBqZvpwShg7UG/Qr7cs0RPc7hiMW9XIGFLE/uUsdeRi3OZYWy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jhd/X3ei; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YuGDdhb2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jhd/X3ei"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763378634; x=1794914634;
+  t=1763378635; x=1794914635;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=cTGDxRw5DV/5F6cyNFPFL7KahCJxLa5f7QjjORs1c9I=;
-  b=YuGDdhb2gKIEzxN1ag/fvMDfj+wnYK+F46cPsQjZ8VDGMwcJNFpNtTme
-   N/xb0Y6wjLamp0FT+mLz4mRHK089Eh37HeS6V3VdY0MCGns62sB7cXJri
-   0A6wZm0CHMpo2plLXNKwXsIiSG7Pd/tzif8KggIZDHHXaBwBNEP5WqkFZ
-   4HSeEeH52zJfw0SavP24cJQKyiYaqcgIsJGGgNd9nvVDRe6COxlrJ9gQR
-   cf3Z6LoQkjEKCTgMDStp9gKjXEjApOyf0uV8uAVvrM0QT31VTOYwgppji
-   cWhBAGDhEStzf5jwtaTolbMZgwBhwMO2aHS3sV3qhFogIzY3ie1QTq4z3
+  bh=IyRsD3dFuOO27FuFU8cJdLCxe9lG0I9aLgo2AGV7OmQ=;
+  b=Jhd/X3eiYEZvFshyYgE8iWE9Pem6ZWfSGtM3IjFI3lUJFwL5hMSFCH0N
+   mktjhDIp7KZhdRuG0B+1Gyvc6+o+LuBMvWh80Q76/uOU4YbTNFR1NbZ3j
+   i/pJZ/lL/r3TemKJ6uDkg+l3drgtTotejMVHb9ENhg+PR2CSOs6BKkEVE
+   7rbim30gC2GsXQ/KMpgRILw2cZym5poxFIszGIuUmCq1IjLhRaqCivTcy
+   +B8bZie6AsCOGXouWkIj+L5fhmfnhnEPc+WEV1DjYqAWyExvrRdfCvnDG
+   1l9lB8VrCEfDL3X20PgyiewUl6wHbvSDFF7UfvmY8RZ5J0L6j4UV4plD/
    Q==;
-X-CSE-ConnectionGUID: gedgfF2xSUq6VtimN0irFw==
-X-CSE-MsgGUID: zgciEn4gRX2WQwt+SBw0yg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="75695576"
+X-CSE-ConnectionGUID: +lBSTfl9R62TLzXgcKIIvw==
+X-CSE-MsgGUID: wFm5/mTJQoqFh/03BhCN/A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="90853235"
 X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="75695576"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 03:23:54 -0800
-X-CSE-ConnectionGUID: b9ifM0dCTFS+JVYwdDo7VQ==
-X-CSE-MsgGUID: OrnG25PlR/6uAcHgIyuVEw==
+   d="scan'208";a="90853235"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 03:23:54 -0800
+X-CSE-ConnectionGUID: Qhd01F23SFSHkb5YSclT5g==
+X-CSE-MsgGUID: r/l+7D0FQDeMDh9iiRGZFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="190871048"
+   d="scan'208";a="190220827"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 17 Nov 2025 03:23:49 -0800
+  by orviesa009.jf.intel.com with ESMTP; 17 Nov 2025 03:23:49 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vKxKk-0000U3-1w;
+	id 1vKxKk-0000U5-20;
 	Mon, 17 Nov 2025 11:23:46 +0000
-Date: Mon, 17 Nov 2025 19:23:00 +0800
+Date: Mon, 17 Nov 2025 19:22:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -65,12 +65,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Kemeng Shi <shikemeng@huaweicloud.com>,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 14/19] mm, swap: sanitize swap entry management
- workflow
-Message-ID: <202511171942.psG9jTRx-lkp@intel.com>
-References: <20251117-swap-table-p2-v2-14-37730e6ea6d5@tencent.com>
+	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH v2 18/19] mm, swap: drop the SWAP_HAS_CACHE flag
+Message-ID: <202511171912.yMOEajkV-lkp@intel.com>
+References: <20251117-swap-table-p2-v2-18-37730e6ea6d5@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,60 +77,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251117-swap-table-p2-v2-14-37730e6ea6d5@tencent.com>
+In-Reply-To: <20251117-swap-table-p2-v2-18-37730e6ea6d5@tencent.com>
 
 Hi Kairui,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 41218ede767f6b218185af65ce919d0cade75f6b]
+[auto build test WARNING on 41218ede767f6b218185af65ce919d0cade75f6b]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swap-rename-__read_swap_cache_async-to-swap_cache_alloc_folio/20251117-021532
 base:   41218ede767f6b218185af65ce919d0cade75f6b
-patch link:    https://lore.kernel.org/r/20251117-swap-table-p2-v2-14-37730e6ea6d5%40tencent.com
-patch subject: [PATCH v2 14/19] mm, swap: sanitize swap entry management workflow
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20251117/202511171942.psG9jTRx-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20251117-swap-table-p2-v2-18-37730e6ea6d5%40tencent.com
+patch subject: [PATCH v2 18/19] mm, swap: drop the SWAP_HAS_CACHE flag
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251117/202511171912.yMOEajkV-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251117/202511171942.psG9jTRx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251117/202511171912.yMOEajkV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511171942.psG9jTRx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511171912.yMOEajkV-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/s390/mm/gmap_helpers.c:35:2: error: call to undeclared function 'free_swap_and_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      35 |         free_swap_and_cache(entry);
-         |         ^
-   arch/s390/mm/gmap_helpers.c:35:2: note: did you mean 'free_swap_cache'?
-   include/linux/swap.h:435:6: note: 'free_swap_cache' declared here
-     435 | void free_swap_cache(struct folio *folio);
-         |      ^
-   1 error generated.
+>> mm/swapfile.c:88:19: warning: unused variable 'Unused_offset' [-Wunused-const-variable]
+      88 | static const char Unused_offset[] = "Unused swap offset entry ";
+         |                   ^~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/free_swap_and_cache +35 arch/s390/mm/gmap_helpers.c
+vim +/Unused_offset +88 mm/swapfile.c
 
-200197908dc4af Claudio Imbrenda 2025-05-28  19  
-200197908dc4af Claudio Imbrenda 2025-05-28  20  /**
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  21   * ptep_zap_softleaf_entry() - discard a software leaf entry.
-200197908dc4af Claudio Imbrenda 2025-05-28  22   * @mm: the mm
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  23   * @entry: the software leaf entry that needs to be zapped
-200197908dc4af Claudio Imbrenda 2025-05-28  24   *
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  25   * Discards the given software leaf entry. If the leaf entry was an actual
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  26   * swap entry (and not a migration entry, for example), the actual swapped
-200197908dc4af Claudio Imbrenda 2025-05-28  27   * page is also discarded from swap.
-200197908dc4af Claudio Imbrenda 2025-05-28  28   */
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  29  static void ptep_zap_softleaf_entry(struct mm_struct *mm, softleaf_t entry)
-200197908dc4af Claudio Imbrenda 2025-05-28  30  {
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  31  	if (softleaf_is_swap(entry))
-200197908dc4af Claudio Imbrenda 2025-05-28  32  		dec_mm_counter(mm, MM_SWAPENTS);
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  33  	else if (softleaf_is_migration(entry))
-6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  34  		dec_mm_counter(mm, mm_counter(softleaf_to_folio(entry)));
-200197908dc4af Claudio Imbrenda 2025-05-28 @35  	free_swap_and_cache(entry);
-200197908dc4af Claudio Imbrenda 2025-05-28  36  }
-200197908dc4af Claudio Imbrenda 2025-05-28  37  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  84  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  85  static const char Bad_file[] = "Bad swap file entry ";
+^1da177e4c3f41 Linus Torvalds 2005-04-16  86  static const char Unused_file[] = "Unused swap file entry ";
+^1da177e4c3f41 Linus Torvalds 2005-04-16  87  static const char Bad_offset[] = "Bad swap offset entry ";
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @88  static const char Unused_offset[] = "Unused swap offset entry ";
+^1da177e4c3f41 Linus Torvalds 2005-04-16  89  
 
 -- 
 0-DAY CI Kernel Test Service
