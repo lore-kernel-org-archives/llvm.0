@@ -1,181 +1,180 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF10932E723
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 12:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7483314A4
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 13:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763383089; cv=none; b=htNlRDsXvT8Y7oMmnhtk8lMQKVndMRqQWh7q++4YildwEZPzqlTY8S9KDS9KKYM4SjttA2HEyCcMxU2lw9gKTUQgtESsYigTU2wlZmDcJGuEMxSdCMdLdyXAqMZfVZeK7hZckcL9CWe/ReaZ5dCEosi8iidyxOvXnDR8mp44JSw=
+	t=1763384776; cv=none; b=C6HyPO3put9DW3WNDJTHLN6pvDGErVV8pRQqoothLL36xcF4oM0DunAr3jJ5n56Jy4NhyK4zx7UaPPVe5xzM27hfe3zpxwqyhMYFs2qdD+e+BAawViEDglf2LNl8j5C5qq6fcW+9ufmqls7jpCoXI50KBUTK9Hpcq+t4PgBzhpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763383089; c=relaxed/simple;
-	bh=90ARYsr5SJ4blEuyPYL/Jtb4E6D8WXtX8MbAPsByqzw=;
+	s=arc-20240116; t=1763384776; c=relaxed/simple;
+	bh=m3OL8AyMbHbrNVKacBSZn0hUzCvhl8MUsvirhFgMsLk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tgnWvp3FkH1uI01IQdspf5JYs3+x6Ezf5+hUHkWMCiYjgKVuRE32/X66aJxiF0McbphTiFGDPIDwCRJFQjXLCp6gjyXTSlQexXPFeijsXk4l4DbXQy/ZQ6PAnsF73ZdhsH7gZVtZN0jlUq2fiD/NusdcQqymumx37/6oCstjrfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dh76Lmvl; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=ugXNuieInH4Pbew16ibMRS9+tY4vgmSnpy1GXbvgaCYjf/FJIufC8S1S1cUq1SIVC/Pw5AZBMdBg7u2YUGXuAEIM2QyJ4foKgNORVxrLGeiqvCOIXiXrpCEFcYkBr6AxfopFk9FV3tFOd8YnCUcivMGNZQHwntl/HFu9oIWke+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lzupfpa+; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dh76Lmvl"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-587bdad8919so10034e87.0
-        for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 04:38:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lzupfpa+"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b735b7326e5so589617066b.0
+        for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 05:06:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763383084; x=1763987884; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1763384772; x=1763989572; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=URpeK6n/6k1x/9RtXp9adoDav0Kb5+tdysXjc9cJrC0=;
-        b=dh76LmvlwzxE0z9tqCehpSJ/gT0avhnRscS0CTwy58Jv8ZNzhW6PWSObN3tZwEhYFs
-         6PpCITB0TEjNOLTbSbzB7a6gxhgQfgwGZXpaj303CF4ypMLLdRiZ66ji+dVQ5dpDC+WW
-         Dte2vOs2NkpScMe1BzDOQ7t9oNxjukXYC9WFuSW3GzB8bvDT+4/G9qo0KxmlG4wNk74s
-         mNLwN5wdKnszl8ujYjAFrpbyaOU5qR+JddjAVuF6/qsoSbeReuerTzv68AvozouHnzvl
-         otSz7yYJ/cZQIBRwfSvkRNsdid8/Bf4/4M1E4ppaOuxspWSP3AAjoR5XZOhzvfYb2vX/
-         4LnA==
+        bh=dzmClbvPyvBeE+q//jkriOQoEKo3zwFbzk31wn2QdMo=;
+        b=Lzupfpa+Q7xWsFA1xevvtMapNlIdSYV0oKQEVtAIKFeAH++IdsIuvEFU6+vNAxNClN
+         Hy+POk14uVYu6CezTqeDvD3rPVAKKCj0ekcRLjPAVkt9izQS5gDBm68V44McHeoKQMqk
+         r/22Zgl2T/piQ6lRHELpolR9ULTei5GsX4+ohSg1XX9XRamOIAJdRtrWRR3VsP4fpITX
+         v0Dn9ROpq2Iyvw1YNedonu16xKtG17nx3IgNJzA3vRwetsPq49sYsmU0secTQ2Oau7b0
+         wlBu3FVZ8kg1/xcu0dY2SyqWSL0z2CbCPfr1SvzallrPyu0/N3SYdvsIemt7wMWH7zHL
+         sPNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763383084; x=1763987884;
+        d=1e100.net; s=20230601; t=1763384772; x=1763989572;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=URpeK6n/6k1x/9RtXp9adoDav0Kb5+tdysXjc9cJrC0=;
-        b=VVDcTYHhUuftQiQvdnCo80hFTMVlMjeV6oGQJ/VQtj1/rb2nRC4IqlpzcP0YryRRDK
-         aLgyM4/e77fpRYaziUHRct/8yzCuyk9ErDBidFVAdiYgBZfLPSQS9vhKKxWH9hJmr0xx
-         mXc3sLLPNXhN+zM2w05k5SPF/qddkBSUH1MWSn4MTa/0k9hgKpClMVc/RFz+WaCwFgYP
-         /d30zF962e4QAXPy/Vl7UA7SRNZD0RJHQK8+QdVXnfQZmLb1h5NKUMQiGLt2wW+cddK4
-         USRdTwHCp79PWy3qj6vRVqi8xYz62A1FGTCyH8SomRhvDFXcWc3DEQfwox1qOiya6kUd
-         YeWA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjiUQuA6z0jrBGA8yvyLRi1+CUCEhbDOHWb0bQvfNQlDjg4eQIEzLKAK+sU1wE+MGePlyO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyq2ohToXIfcA0ZEt7YbPuRe006V4y3JA+/C18h42TviPVGHTyl
-	L+vbb4CDVPNaSramogHBqqt2Uc7Lv+MorXNj58UTcp/GKnenZIaFQnX+igIwVHKtkAcHuC74sDa
-	JLiNuI/0/OgMR89G5fohFtNv401J5xrPzHyHCClgt
-X-Gm-Gg: ASbGncuvFw0qTj0EKoyhq1qvOWZCxCgOKb+rxKFHJZ552l9M7zLsIJf8JPz3tEEiC/P
-	xHxM6ZWFpvwCjj43NU/lFq7vdr9kjcBXa6xt95Xi0DT9zIgT2w4cTpZ1aVmB4NxFVnuiZyxU7Dm
-	CAd5Ojk2AmE3volchx4cRqXUmU+x1+3FXszt/JZNNOY8pD/lvbr6lkQnbjGdnpV/aA8IYXUxfOX
-	ExpNmKOMtAsOg1YWgjZ9MBfEaKVrStKNs9XVYNsvdkdLlGoNJVUCiHUuDK7bMPEyqvtLaOfPHWX
-	7mHXBhjW7xSEQtONDcT7nvxEAyuWznq2Mso=
-X-Google-Smtp-Source: AGHT+IFy5BQdcKTM5pC/9jMPlY7ZonZoW5+JR6Q7jYJyX3TdaPkFOCjzBNXXomOHFC3iBti8H6R4TD7QvaCuc1Od6Uc=
-X-Received: by 2002:ac2:5489:0:b0:594:43e1:ed43 with SMTP id
- 2adb3069b0e04-59589f3f93dmr136803e87.2.1763383083500; Mon, 17 Nov 2025
- 04:38:03 -0800 (PST)
+        bh=dzmClbvPyvBeE+q//jkriOQoEKo3zwFbzk31wn2QdMo=;
+        b=QXqW0K0NOwYFYb17f81HqO+gIUqICVtAnq4/Y5opDAHEt4i1qh5PGUAztp2DtWr4Vs
+         ttkug2WuKx0eBZ7nAGunDx9YnZy/pP6fQseo3STUdVDDug+biAZ/LdnblayIyVyV3K1Y
+         lKT7kymfc0+hN2Jxg+jxFmjHqvMsmKPqH91r7SnAqdOnwWpD2B3OenOUAJixuEtiZqc8
+         Z/3UPc/8POUsXBKaCpta7xZ2AsFt6q9wWDbfGdf3+MWOnLLUrWoD4qm64ZwtZoBHmgYb
+         hgT5cJCLBdZv04tNeGuHIrQGv5lsmPrJBzDPE/MPTaV/puayekhOHdzg4VemAYTfMF/D
+         sXug==
+X-Forwarded-Encrypted: i=1; AJvYcCVH8ArZ5Gn46kwgLTOupv1P29p4dVVKFTqH/IgIfSjT3h1cvJTRo/yMpcILv1Kd8JZtbJzB@lists.linux.dev
+X-Gm-Message-State: AOJu0YzS+c7b4Wna8UdgdStze+y7WViJNL292pbKeKV9El81S/fe6t2V
+	D2yhiLcdgs8FKSF3yASz8RlG3ZsJwjvSDqHJfCtfiPTaW17DOxLpW36BjPqNFB3CIkx5fA9mxo2
+	v9bHsRkh3CV4qmE2kBj2DhwyhDNYUoZg=
+X-Gm-Gg: ASbGncuC6e8P7usALdo9QydGG3bvTvCcByQlBRm/58Rn0JfQJgYCjXciGKaOFpMPAip
+	sD8iNC//mZLGtt3MdaaSXGz6Tsi3qXdSXVfu8pbVhw946OtrE/vdv/urdPFrsdXA/bba37wMayG
+	aei+Iy8RoZR5CGtC5Oc6D2oeLcEHBitrf02xu0WRZLawBz232JlYDkQF26CDpyMC96Sd49ZKVSb
+	wmEPEM699Lr43OHMPcVIJCOquMe2ESyH/DGTO0cdJd9YtxjJ1GzB8xuiDGXgV8k5TSYfQA7uuO4
+	QFTclXcAj3wX53VcAoxvKRS/huSDSCg=
+X-Google-Smtp-Source: AGHT+IHqj3i2HRsibRzHKXf1dtPdvhXDhojSOWprepzSXOkYrPFcbb3l46Wk1jAyobY6QdZ9jWIdnMjC6+X5l2p7ueM=
+X-Received: by 2002:a17:906:fe4d:b0:b72:7e7c:e848 with SMTP id
+ a640c23a62f3a-b7348570745mr810309066b.17.1763384772052; Mon, 17 Nov 2025
+ 05:06:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251117-b4-sev-gcov-objtool-v1-1-54f7790d54df@google.com>
- <CAMj1kXH8Yg+eeySUxJ7nRTm=nQWx5Tj4XirBjVrqXB-0Qn1=sA@mail.gmail.com> <CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com>
-In-Reply-To: <CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com>
-From: Brendan Jackman <jackmanb@google.com>
-Date: Mon, 17 Nov 2025 13:37:51 +0100
-X-Gm-Features: AWmQ_bkPGKlC7yzB_IKlVYRYwfrtk5qrJ0gV1blydN2SBPqDNyo3yBZpGetbnq0
-Message-ID: <CA+i-1C2-DtH326ppTx6V_yJ3HX-H0b5i9GNnXb0Q5mUF-Kexdg@mail.gmail.com>
-Subject: Re: [PATCH] x86/sev: Disable GCOV on noinstr object
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20251117-swap-table-p2-v2-14-37730e6ea6d5@tencent.com> <202511171942.psG9jTRx-lkp@intel.com>
+In-Reply-To: <202511171942.psG9jTRx-lkp@intel.com>
+From: Kairui Song <ryncsn@gmail.com>
+Date: Mon, 17 Nov 2025 21:05:35 +0800
+X-Gm-Features: AWmQ_bnUFnm0x-eDcpgtaE3URJs_3MiIsOAITzpaSFBE-GfFvya8ZTJD0VLBPq0
+Message-ID: <CAMgjq7BkVvhsCzk2r53159hDoZ+b+AvP1iUTBHA9zvb+SJFg=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 14/19] mm, swap: sanitize swap entry management workflow
+To: linux-mm@kvack.org
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, 
+	Barry Song <baohua@kernel.org>, Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
+	Yosry Ahmed <yosry.ahmed@linux.dev>, David Hildenbrand <david@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Youngjun Park <youngjun.park@lge.com>, 
+	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 17 Nov 2025 at 12:52, Ard Biesheuvel <ardb@kernel.org> wrote:
+On Mon, Nov 17, 2025 at 7:23=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
 >
-> On Mon, 17 Nov 2025 at 12:40, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Mon, 17 Nov 2025 at 12:11, Brendan Jackman <jackmanb@google.com> wro=
-te:
-> > >
-> > > With Debian clang version 19.1.7 (3+build5) there are calls to
-> > > kasan_check_write() from __sev_es_nmi_complete, which violates noinst=
-r.
-> > > Fix it by disabling GCOV for the noinstr object, as has been done for
-> > > previous such instrumentation issues.
-> > >
-> > > Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> > > ---
-> > > Details:
-> > >
-> > >  - =E2=9D=AF=E2=9D=AF  clang --version
-> > >    Debian clang version 19.1.7 (3+build5)
-> > >    Target: x86_64-pc-linux-gnu
-> > >    Thread model: posix
-> > >    InstalledDir: /usr/lib/llvm-19/bin
-> > >
-> > >  - Compiling from tip/master at 6f85aad74a70d
-> > >
-> > >  - Kernel config:
-> > >
-> > >    https://gist.githubusercontent.com/bjackman/bbfdf4ec2e1dfd0e186571=
-74f0537e2c/raw/a88dcc6567d14c69445e7928a7d5dfc23ca9f619/gistfile0.txt
-> > >
-> > > Note I also get this error:
-> > >
-> > > vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3b: relocation to !E=
-NDBR: machine_kexec_prepare+0x810
-> > >
-> > > That one's a total mystery to me. I guess it's better to "fix" the SE=
-V
-> > > one independently rather than waiting until I know how to fix them bo=
-th.
-> > > ---
-> > >  arch/x86/coco/sev/Makefile | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Makefile
-> > > index 3b8ae214a6a64de6bb208eb3b7c8bf12007ccc2c..d2ceae587b6c30b2fb172=
-09a7426e7893dea988c 100644
-> > > --- a/arch/x86/coco/sev/Makefile
-> > > +++ b/arch/x86/coco/sev/Makefile
-> > > @@ -8,3 +8,6 @@ UBSAN_SANITIZE_noinstr.o        :=3D n
-> > >  # GCC may fail to respect __no_sanitize_address or __no_kcsan when i=
-nlining
-> > >  KASAN_SANITIZE_noinstr.o       :=3D n
-> > >  KCSAN_SANITIZE_noinstr.o       :=3D n
-> > > +
-> > > +# Clang 19 and older may fail to respect __no_sanitize_address when =
-inlining
-> > > +GCOV_PROFILE_noinstr.o         :=3D n
-> > >
-> >
-> > After Thomas dug into this issue a while ago, I meant to follow up
-> > with a fix, or at least something to start the discussion.
-> >
-> > TL;DR there is nothing wrong with either compiler (as far as this
-> > issue is concerned)
-> >
-> > The issue is that KASAN/KCSAN enabled builds use a version of
-> > set_bit() that unconditionally inserts a call to
+> Hi Kairui,
 >
-> instrument_atomic_write(), which calls the KASAN/KCSAN intrinsics
-> directly, and these are usually only called by compiler generated
-> code.
+> kernel test robot noticed the following build errors:
 >
-> This completely defeats the noinstr per-function annotation, given
-> that each compilation unit only incorporates a single version of
-> set_bit(), which is the instrumented version unless instrumentation is
-> disabled for the entire file.
+> [auto build test ERROR on 41218ede767f6b218185af65ce919d0cade75f6b]
 >
-> For the short term, we could avoid this by using arch___set_bit()
-> directly in the SEV code that triggers this issue today. But for the
-> longer term, we should get write of those explicit calls to
-> instrumentation intrinsics, as this is fundamentally incompatible with
-> per-function overrides.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swa=
+p-rename-__read_swap_cache_async-to-swap_cache_alloc_folio/20251117-021532
+> base:   41218ede767f6b218185af65ce919d0cade75f6b
+> patch link:    https://lore.kernel.org/r/20251117-swap-table-p2-v2-14-377=
+30e6ea6d5%40tencent.com
+> patch subject: [PATCH v2 14/19] mm, swap: sanitize swap entry management =
+workflow
+> config: s390-defconfig (https://download.01.org/0day-ci/archive/20251117/=
+202511171942.psG9jTRx-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0=
+bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251117/202511171942.psG9jTRx-lkp@intel.com/reproduce)
 >
-> https://lore.kernel.org/all/8734aqulch.ffs@tglx/T/#u
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511171942.psG9jTRx-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> arch/s390/mm/gmap_helpers.c:35:2: error: call to undeclared function '=
+free_swap_and_cache'; ISO C99 and later do not support implicit function de=
+clarations [-Wimplicit-function-declaration]
+>       35 |         free_swap_and_cache(entry);
+>          |         ^
+>    arch/s390/mm/gmap_helpers.c:35:2: note: did you mean 'free_swap_cache'=
+?
+>    include/linux/swap.h:435:6: note: 'free_swap_cache' declared here
+>      435 | void free_swap_cache(struct folio *folio);
+>          |      ^
+>    1 error generated.
+>
+>
+> vim +/free_swap_and_cache +35 arch/s390/mm/gmap_helpers.c
+>
+> 200197908dc4af Claudio Imbrenda 2025-05-28  19
+> 200197908dc4af Claudio Imbrenda 2025-05-28  20  /**
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  21   * ptep_zap_softleaf_entr=
+y() - discard a software leaf entry.
+> 200197908dc4af Claudio Imbrenda 2025-05-28  22   * @mm: the mm
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  23   * @entry: the software l=
+eaf entry that needs to be zapped
+> 200197908dc4af Claudio Imbrenda 2025-05-28  24   *
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  25   * Discards the given sof=
+tware leaf entry. If the leaf entry was an actual
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  26   * swap entry (and not a =
+migration entry, for example), the actual swapped
+> 200197908dc4af Claudio Imbrenda 2025-05-28  27   * page is also discarded=
+ from swap.
+> 200197908dc4af Claudio Imbrenda 2025-05-28  28   */
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  29  static void ptep_zap_soft=
+leaf_entry(struct mm_struct *mm, softleaf_t entry)
+> 200197908dc4af Claudio Imbrenda 2025-05-28  30  {
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  31          if (softleaf_is_s=
+wap(entry))
+> 200197908dc4af Claudio Imbrenda 2025-05-28  32                  dec_mm_co=
+unter(mm, MM_SWAPENTS);
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  33          else if (softleaf=
+_is_migration(entry))
+> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  34                  dec_mm_co=
+unter(mm, mm_counter(softleaf_to_folio(entry)));
+> 200197908dc4af Claudio Imbrenda 2025-05-28 @35          free_swap_and_cac=
+he(entry);
+> 200197908dc4af Claudio Imbrenda 2025-05-28  36  }
+> 200197908dc4af Claudio Imbrenda 2025-05-28  37
 
-Ah, yes thank you I think you are right. My GCOV "fix" seems to be
-bogus, it probably just hides the issue with incidental changes.
+Ops, not sure why this callsite was missed during the renaming
+conversion, probably lost it during a rebase as there are some
+conflicts here. This should fix it:
 
-[Dropping verbose notes so I can remember this next time I come to the
-thread...]
+diff --git a/arch/s390/mm/gmap_helpers.c b/arch/s390/mm/gmap_helpers.c
+index 549f14ad08af..c3f56a096e8c 100644
+--- a/arch/s390/mm/gmap_helpers.c
++++ b/arch/s390/mm/gmap_helpers.c
+@@ -32,7 +32,7 @@ static void ptep_zap_softleaf_entry(struct mm_struct
+*mm, softleaf_t entry)
+                dec_mm_counter(mm, MM_SWAPENTS);
+        else if (softleaf_is_migration(entry))
+                dec_mm_counter(mm, mm_counter(softleaf_to_folio(entry)));
+-       free_swap_and_cache(entry);
++       swap_put_entries_direct(entry, 1);
+ }
 
-I was reading disasm and it appeared that the __sev_es_nmi_complete()
--> kasan_check_write() issue corresponded to the __builtin_memset() in
-vc_ghcb_invalidate().
-
-But yeah, why should GCOV cause a kasan_check_write() to be injected,
-that doesn't really make sense.
-
-So probably rather than compiler instrumentation of the
-__builtin_memset() I am seeing  the __set_bit() in the
-ghcb_set_sw_exit_code() that comes right afterwards.
+Will include it in the next update.
