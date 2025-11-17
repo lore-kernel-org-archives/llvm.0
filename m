@@ -1,76 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F582C0261;
-	Mon, 17 Nov 2025 16:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A9D2D46B4
+	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 16:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763395374; cv=none; b=qWZ7XL4238FU0GA/sEI30VJA82qRblcrE4nH1Xas/xGplBKq6370LimOU0CG9Ap4rccFrC6HNuh9zf8mrBSKaaKq0UihR0mxCO1cZmiSqYrAEt1StMQtADdyKt6RhuxjXdTQw+siXNN6Y6kqcST+TDVBnUyrpZ3QgTQyVvWmtqM=
+	t=1763396703; cv=none; b=CFkgsdGBHOVPiLLrokyzBfktm91SUugS/sGLA+9N500g5iKG/n1+k0l/gst+DgBreKbIaOzk0o61LwT2ocOiQMeQpilcFHDM47OBu0cQQBXXrUurXWRWBoTd8WpAi2za5cml47l825Ob63VbCbgspgP0qytj9oTPKBhoS99PLUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763395374; c=relaxed/simple;
-	bh=wFMJOe56BQ48bez0EDn3Rz1HFLgGbsV/sBCjmqW/V8E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oQgKT19DIcSDzra7BoUU98Rh5ogFIgpWzC9jrfpkUaaRIzUcZOqBJwaXfeNefNDOHTgGD78BipRnu1U2WnodGeQUSShi7ShYOCt6UzcuF1FA53U9L6hfLIUjGmpY39XinwyPGjylZKPskwFhFlhHiaazC2dhEAYn2HaIgz3XIqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+spOels; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763396703; c=relaxed/simple;
+	bh=/qzhbS6r1oxhfzbEFpPhrzjQGdSr7DzdzTsALlNoln4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AjuhaQzMLvg+aBVX+w3MWwhLIJJLt2h1nWgpdWTX/AVvzKbFsVz012oWmTyNBfpRkb1SNF200GdUdA18iSQY5tuwtkma5emFXIYx+/yse26X8JqfqJTfLhz5wvrSESaHmTrNW0tfaqe/9jrlLbnLGEiVUweM0XSi4G5J+ebdVfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MzwHqhYY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+spOels"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3BCC19421;
-	Mon, 17 Nov 2025 16:02:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MzwHqhYY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B60C116B1;
+	Mon, 17 Nov 2025 16:25:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763395374;
-	bh=wFMJOe56BQ48bez0EDn3Rz1HFLgGbsV/sBCjmqW/V8E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=M+spOelsD6hwxTlKECuLBu5zdumUYJDmu+uTLlpXX8iJHO62Ja2rB1zHDi4AahfKH
-	 Ak2Url8Aeir5X1uEIbRxFWcWEbFK/OctsIZLAm4I7F1YA0CbUQE0CGXoj/heqyUSOI
-	 /fnECluas/H2Y+R9aNUIZGvTOyFb0O13nRC4ts+IgOU6eDh1LyYosTtKqyrKmuKmQ7
-	 +3w82LSGHAlEnxp+7w3QaUetQYwg13e6Q2G04MxFE4YyoxohUYygPeNlz+/f2kbn0I
-	 +TrrPOaS1Hol13mb0GTt2kfqc5wLQdNC9JJPdlTeORwcdkxzSXmAnGHAYzEBaRYPAZ
-	 45OBzVhN7Mk0Q==
-Message-ID: <dcfddc3f-1077-409e-91ad-cb2e2fe52a9b@kernel.org>
-Date: Mon, 17 Nov 2025 10:02:52 -0600
+	s=k20201202; t=1763396701;
+	bh=/qzhbS6r1oxhfzbEFpPhrzjQGdSr7DzdzTsALlNoln4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MzwHqhYY8UgaoYxoQeXhe9HNFBKM8w9afg351XjhyF1RMYk1jxj/qbjAXVHa+94QQ
+	 geKjzERhuFbss4xdv+alWLKoVeDPi2a3WwXcsoXHBRU3Q7IAte/aNDjx77NhiZUFM1
+	 6gSDlyuExOiRxCH5nDWSAFzobExxIRPY8ACwU4l61LsVbXfvvN19fagiYMJQAh/I/Z
+	 XqqdQiubwLbyr+IPHMfTw6R6lhY19HM4mnazthZ5NPyjles+qE+Zz9s0wpKSBG347u
+	 6BwRAOYswSB1cweNRjTcGWF2x+pTQieYmaGLpkDhWYiuiXTaWyjCzH4jX9s7NOOdEg
+	 IWh2cUVemYTHg==
+Date: Mon, 17 Nov 2025 09:24:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: linaro-toolchain@lists.linaro.org
+Cc: llvm@lists.linux.dev
+Subject: Re: [Linaro-TCWG-CI] v6.18-rc1-73-g3ffeb17a9a27a: Failure on aarch64
+Message-ID: <20251117162457.GA564441@ax162>
+References: <1094974019.2375.1763286384876@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [agd5f:ring_reset_fixes 2077/2293] ld.lld: error: undefined
- symbol: pm_hibernation_mode_is_suspend
-To: kernel test robot <lkp@intel.com>,
- "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux Infrastructure <z1.linuxinfra@amd.com>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <202511172106.E4boUsgt-lkp@intel.com>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <202511172106.E4boUsgt-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1094974019.2375.1763286384876@jenkins.jenkins>
 
+On Sun, Nov 16, 2025 at 09:46:23AM +0000, ci_notify@linaro.org wrote:
+> Dear contributor,
+> 
+> Our automatic CI has detected problems related to your patch(es). Please find some details below.
+> 
+> In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
+>   | commit v6.18-rc1-73-g3ffeb17a9a27a
+>   | Author: Christian Marangi <ansuelsmth@gmail.com>
+>   | Date:   Fri Nov 7 00:57:08 2025 +0100
+>   | 
+>   |     pinctrl: airoha: add support for Airoha AN7583 PINs
+>   |     
+>   |     Add all the required entry to add suppot for Airoha AN7583 PINs.
+>   |     
+>   |     Where possible the same function group are used from Airoha EN7581 to
+>   | ... 4 lines of the commit log omitted.
+> 
+> Produces Failure:
+>   | Results changed to
+>   | # reset_artifacts:
+>   | -10
+>   | # build_abe binutils:
+>   | -9
+>   | # build_kernel_llvm:
+>   | -5
+>   | # build_abe qemu:
+>   | -2
+>   | # linux_n_obj:
+>   | 27020
+>   | # First few build errors in logs:
+>   | # 00:37:42 drivers/pinctrl/mediatek/pinctrl-airoha.c:2064:41: error: variable 'an7583_pinctrl_drive_e2_conf' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
 
-On 11/17/2025 7:46 AM, kernel test robot wrote:
-> tree:   https://gitlab.freedesktop.org/agd5f/linux.git ring_reset_fixes
-> head:   c592ac07b510abe3ec2f196e6a429df959712063
-> commit: 36646c96fac1f138384238f4348fecd2ed702540 [2077/2293] drm/amd: Fix hybrid sleep
-> config: i386-randconfig-012-20251117 (https://download.01.org/0day-ci/archive/20251117/202511172106.E4boUsgt-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251117/202511172106.E4boUsgt-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511172106.E4boUsgt-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: pm_hibernation_mode_is_suspend
->     >>> referenced by amdgpu_drv.c:2678 (drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:2678)
->     >>>               drivers/gpu/drm/amd/amdgpu/amdgpu_drv.o:(amdgpu_pmops_thaw) in archive vmlinux.a
-> 
+https://lore.kernel.org/20251112-pinctrl-airoha-fix-an7583-drive-e2-confg-usage-v1-1-d2550d55e988@kernel.org/
 
-FYI - based on this failure, this branch is missing:
-
-https://git.kernel.org/torvalds/c/495c8d35035e
-https://git.kernel.org/torvalds/c/bbfe987c5a28
+Cheers,
+Nathan
