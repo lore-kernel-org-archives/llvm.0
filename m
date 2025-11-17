@@ -1,61 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B7633E36C;
-	Mon, 17 Nov 2025 20:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F716316905;
+	Mon, 17 Nov 2025 21:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763411086; cv=none; b=G6VLnTcpDYmdNKhM6I5ZWI6LxB6H4pW10i9a1ZovmCNsAJSQm0xIhloUtr69cOy9URgGp7Gk7T8oKaSyt8OivXNGTEFeqC5h4EbUzlPJAUSZjiqKt4yPVBhPRM6+YbjbHiDoWCddrCt0nt6V/ZkU62BA1OGEMh6s3/fxgZkCJ0w=
+	t=1763415423; cv=none; b=CODoiR/8MhoCvpCT2bLly3sXn0lG5fBHXvxUpU61npgIoyCQGilX4nU5tO91trczXOUI6wciHL+Ufo+FjwqTojCkgHRVYMjRnK4x4UYn3T8olm+30/L1AGOM5mEHNaCb11BEJkMvRlpgH50PVWpKLuQ+zqjFNFyQzBaykTXQSkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763411086; c=relaxed/simple;
-	bh=JrY/5UTWPXVD/Her5W69pZN1QG5Nzpa5eGTOOGV7muk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BM4SAM/8OXr6GzTGZLqZFl4DYHqI400Sui2EYyZvh/XpM7XZwFEvhDQA8J9uJBBr4j/KTdsymoD40hGzfbb4AuRZ95PMZTiXlI/hj+7EW5x8bx23DLRoWkegB82IzW1MtGF9g9NKhSQYwz3popPWrmlVnKIE28S6fgsPv9TkoBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GYZrHwK5; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1763415423; c=relaxed/simple;
+	bh=bf8UyhqPDQoEyCkoewkf1JAlHPpii8P9/c+ZYX7vczg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PupzILuUdPvri/YU9Q2GXh3mRLklmZnCM5lP98qTc/eSwpazAa3/Zynbha/6i3p0dGq8FDLec/a3KiBmIsYzmgd2dd1mo/S7TrKxBxGCeFbEOKwHONlEzWZXt4Ucs8HxRfa3plUnOxgUIFYDuUtloFdCer7v7NheVsAIztpYyd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kpt0/hIM; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GYZrHwK5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kpt0/hIM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763411064; x=1794947064;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JrY/5UTWPXVD/Her5W69pZN1QG5Nzpa5eGTOOGV7muk=;
-  b=GYZrHwK5Fd6iA/8dNseWRH4j/jX/JCAY7rkHnEr3G0VTzg41cRiAcuLU
-   AdgkyUWw8vUlC2BoLhN+/AtVaCltIeq69/jS6GZZnZeIdZXyggfq1w4jA
-   HXm+gqIvTyZWBkkp4ecWLTb+n3uv7uHRwAhpTBdYe9d6evxY2+jnxf/VI
-   cUvS5YCZ+ucpHlf1cGNLIMIvkOyU2zAcABLvgZ30ro5a2E9IzcNOisu0G
-   kIuENGkCpxXwJz8SnR8M57z3OIgwPOZ7aRe6Om9sGINUDtCLtHD2eVo7k
-   ZB8WzNsC5m9+kcmm2niyZVZ8wnt2rpy3TeUITQfOUC748/NxyU0emQuE7
-   A==;
-X-CSE-ConnectionGUID: 4GsGu/XPQlOOadJtnDml7A==
-X-CSE-MsgGUID: 5ojzU2TWTM21gQsdvUqpGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="76775669"
+  t=1763415421; x=1794951421;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bf8UyhqPDQoEyCkoewkf1JAlHPpii8P9/c+ZYX7vczg=;
+  b=kpt0/hIM5DZm/C+aMWQNHpWYHlFcH9yekKjXJhepp3lCq729GWuEvyDL
+   RAJ3LrsYbiluP8s45WVTYUGvp9Vfxfw1pBzsWuj2Vh97zp2PJut4yYmb5
+   iJytVWadIlhrJbad/8pycYW6h1gpiM/70TlkPPYYUoFtjRZqpZYYiMH3A
+   eUYiARfM+ZIE5smbb2D/9Lw8YRLzy5SSs6quL7IXmpWjSNnMEXbOXfqR7
+   +1uxxDMN12n1kmYPh4G5A6nJOwUZCMLPk2HmrQaY4tnRBaMtumeB/uQhn
+   t1QLBkzu9859Rz048dnJkhHQfPSpgbe8nTSP/AuuuIgwbxJV7tqlIMyvd
+   w==;
+X-CSE-ConnectionGUID: xCf8gGLEQ+2tBU/eT3UzIQ==
+X-CSE-MsgGUID: YHzYJs6aRseLlvVhG1Oi5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="65360962"
 X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
-   d="scan'208";a="76775669"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 12:23:48 -0800
-X-CSE-ConnectionGUID: WOYhaCxAQp2/sGCle29Q/g==
-X-CSE-MsgGUID: EHLBHeT1RuS1nZyeYzFmGg==
+   d="scan'208";a="65360962"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 13:36:58 -0800
+X-CSE-ConnectionGUID: VIADsAQyS8avbJCvaT6BvA==
+X-CSE-MsgGUID: QNzfJMSHQ9qewTBflfn7gw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
-   d="scan'208";a="195479489"
+   d="scan'208";a="191006777"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 17 Nov 2025 12:23:47 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 17 Nov 2025 13:36:54 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vL5lI-00011x-20;
-	Mon, 17 Nov 2025 20:23:44 +0000
-Date: Tue, 18 Nov 2025 04:23:06 +0800
+	id 1vL6u3-00015R-2h;
+	Mon, 17 Nov 2025 21:36:51 +0000
+Date: Tue, 18 Nov 2025 05:36:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Saravana Kannan <saravanak@google.com>
+To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Rob Herring (Arm)" <robh@kernel.org>,
-	Herve Codina <herve.codina@bootlin.com>
-Subject: [robh:dt/linus 6/6] drivers/base/core.c:269:9: error: call to
- undeclared function 'get_device_from_fwnode'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202511180429.HKkjl2gG-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH v2 5/8] x86/irq: soft_moderation: add support for
+ posted_msi (intel)
+Message-ID: <202511180439.x4dMf653-lkp@intel.com>
+References: <20251116182839.939139-6-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,90 +72,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251116182839.939139-6-lrizzo@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/linus
-head:   227c4e0e70fe3a1c47b96295af364e512882cef7
-commit: 227c4e0e70fe3a1c47b96295af364e512882cef7 [6/6] of: dynamic: Fix overlayed devices not probing because of fw_devlink
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251118/202511180429.HKkjl2gG-lkp@intel.com/config)
+Hi Luigi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on tip/x86/core tip/master linus/master v6.18-rc6 next-20251117]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-platform-wide-interrupt-moderation-Documentation-Kconfig-irq_desc/20251117-023148
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20251116182839.939139-6-lrizzo%40google.com
+patch subject: [PATCH v2 5/8] x86/irq: soft_moderation: add support for posted_msi (intel)
+config: x86_64-buildonly-randconfig-003-20251118 (https://download.01.org/0day-ci/archive/20251118/202511180439.x4dMf653-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511180429.HKkjl2gG-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511180439.x4dMf653-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511180429.HKkjl2gG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511180439.x4dMf653-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/base/core.c:269:9: error: call to undeclared function 'get_device_from_fwnode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     269 |                 dev = get_device_from_fwnode(fwnode);
-         |                       ^
-   drivers/base/core.c:269:9: note: did you mean 'get_dev_from_fwnode'?
-   include/linux/device.h:1093:16: note: 'get_dev_from_fwnode' declared here
-    1093 | struct device *get_dev_from_fwnode(struct fwnode_handle *fwnode);
-         |                ^
->> drivers/base/core.c:269:7: error: incompatible integer to pointer conversion assigning to 'struct device *' from 'int' [-Wint-conversion]
-     269 |                 dev = get_device_from_fwnode(fwnode);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> kernel/irq/irq_moderation.c:369:6: error: call to undeclared function 'posted_msi_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     369 |                    posted_msi_supported() ? " (also on posted_msi)" : "",
+         |                    ^
+   1 error generated.
 
 
-vim +/get_device_from_fwnode +269 drivers/base/core.c
+vim +/posted_msi_supported +369 kernel/irq/irq_moderation.c
 
-   248	
-   249	/**
-   250	 * fw_devlink_refresh_fwnode - Recheck the tree under this firmware node
-   251	 * @fwnode: The fwnode under which the fwnode tree has changed
-   252	 *
-   253	 * This function is mainly meant to adjust the supplier/consumer dependencies
-   254	 * after a fwnode tree overlay has occurred.
-   255	 */
-   256	void fw_devlink_refresh_fwnode(struct fwnode_handle *fwnode)
-   257	{
-   258		struct device *dev;
-   259	
-   260		/*
-   261		 * Find the closest ancestor fwnode that has been converted to a device
-   262		 * that can bind to a driver (bus device).
-   263		 */
-   264		fwnode_handle_get(fwnode);
-   265		do {
-   266			if (fwnode->flags & FWNODE_FLAG_NOT_DEVICE)
-   267				continue;
-   268	
- > 269			dev = get_device_from_fwnode(fwnode);
-   270			if (!dev)
-   271				continue;
-   272	
-   273			if (dev->bus)
-   274				break;
-   275	
-   276			put_device(dev);
-   277		} while ((fwnode = fwnode_get_next_parent(fwnode)));
-   278	
-   279		/*
-   280		 * If none of the ancestor fwnodes have (yet) been converted to a device
-   281		 * that can bind to a driver, there's nothing to fix up.
-   282		 */
-   283		if (!fwnode)
-   284			return;
-   285	
-   286		WARN(device_is_bound(dev) && dev->links.status != DL_DEV_DRIVER_BOUND,
-   287		     "Don't multithread overlaying and probing the same device!\n");
-   288	
-   289		/*
-   290		 * If the device has already bound to a driver, then we need to redo
-   291		 * some of the work that was done after the device was bound to a
-   292		 * driver. If the device hasn't bound to a driver, running thing too
-   293		 * soon would incorrectly pick up consumers that it shouldn't.
-   294		 */
-   295		if (dev->links.status == DL_DEV_DRIVER_BOUND)
-   296			fw_devlink_pickup_dangling_consumers(dev);
-   297	
-   298		put_device(dev);
-   299		fwnode_handle_put(fwnode);
-   300	}
-   301	
+   321	
+   322		seq_printf(p, HEAD_FMT,
+   323			   "# CPU", "irq/s", "my_irq/s", "cpus", "srcs", "delay_ns",
+   324			   "irq_hi", "my_irq_hi", "hardirq_hi", "timer_set",
+   325			   "disable_irq", "from_msi", "timer_calls", "stray_irq");
+   326	
+   327		for_each_possible_cpu(j) {
+   328			struct irq_mod_state *ms = per_cpu_ptr(&irq_mod_state, j);
+   329			u64 age_ms = min((now - ms->last_ns) / NSEC_PER_MSEC, (u64)999999);
+   330	
+   331			if (age_ms < 10000) {
+   332				/* Average irq_rate over recently active CPUs. */
+   333				active_cpus++;
+   334				irq_rate += ms->irq_rate;
+   335			} else {
+   336				ms->irq_rate = 0;
+   337				ms->my_irq_rate = 0;
+   338				ms->scaled_cpu_count = 64;
+   339				ms->scaled_src_count = 64;
+   340				ms->mod_ns = 0;
+   341			}
+   342	
+   343			irq_high += ms->irq_high;
+   344			my_irq_high += ms->my_irq_high;
+   345			hardirq_high += ms->hardirq_high;
+   346	
+   347			seq_printf(p, BODY_FMT,
+   348				   j, ms->irq_rate, ms->my_irq_rate,
+   349				   (ms->scaled_cpu_count + 128) / 256,
+   350				   (ms->scaled_src_count + 128) / 256,
+   351				   ms->mod_ns, ms->irq_high, ms->my_irq_high,
+   352				   ms->hardirq_high, ms->timer_set, ms->disable_irq,
+   353				   ms->from_posted_msi, ms->timer_calls, ms->stray_irq);
+   354		}
+   355	
+   356		seq_printf(p, "\n"
+   357			   "enabled              %s%s\n"
+   358			   "delay_us             %u\n"
+   359			   "timer_rounds         %u\n"
+   360			   "target_irq_rate      %u\n"
+   361			   "hardirq_percent      %u\n"
+   362			   "update_ms            %u\n"
+   363			   "scale_cpus           %u\n"
+   364			   "count_timer_calls    %s\n"
+   365			   "count_msi_calls      %s\n"
+   366			   "decay_factor         %u\n"
+   367			   "grow_factor          %u\n",
+   368			   str_yes_no(delay_us > 0),
+ > 369			   posted_msi_supported() ? " (also on posted_msi)" : "",
+   370			   delay_us, irq_mod_info.timer_rounds,
+   371			   irq_mod_info.target_irq_rate, irq_mod_info.hardirq_percent,
+   372			   irq_mod_info.update_ms, irq_mod_info.scale_cpus,
+   373			   str_yes_no(irq_mod_info.count_timer_calls),
+   374			   str_yes_no(irq_mod_info.count_msi_calls),
+   375			   irq_mod_info.decay_factor, irq_mod_info.grow_factor);
+   376	
+   377		seq_printf(p,
+   378			   "irq_rate             %lu\n"
+   379			   "irq_high             %lu\n"
+   380			   "my_irq_high          %lu\n"
+   381			   "hardirq_percent_high %lu\n"
+   382			   "total_interrupts     %lu\n"
+   383			   "total_cpus           %lu\n",
+   384			   active_cpus ? irq_rate / active_cpus : 0,
+   385			   irq_high, my_irq_high, hardirq_high,
+   386			   READ_ONCE(*((ulong *)&irq_mod_info.total_intrs)),
+   387			   READ_ONCE(*((ulong *)&irq_mod_info.total_cpus)));
+   388	
+   389		return 0;
+   390	}
+   391	
 
 -- 
 0-DAY CI Kernel Test Service
