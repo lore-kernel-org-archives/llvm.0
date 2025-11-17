@@ -1,102 +1,127 @@
-Received: from mail-08.mail-europe.com (mail-08.mail-europe.com [57.129.93.249])
+Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E7F23C8C7
-	for <llvm@lists.linux.dev>; Mon, 17 Nov 2025 17:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.129.93.249
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763401894; cv=none; b=NYCCOx+Akjpnvt4ULFPERY3jvXlbc3cPE5P1LLsrBcAM1EPwbFoYQ6HSgHzUcPcT8q5Eow6T2d7jjPn+dvRgUYQFFk9tnLNJKn+8eD+u766WtVeHZ9OwM48mFptauGREnSE0bLahut9FFSgZ7Srxzg0YhclF5Ku4aZOxYtHSWFQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763401894; c=relaxed/simple;
-	bh=dvBUOLItidwfrNQEf4mN9DTt1GLDuvVSAWBtWZ+I3h8=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IuCPAgxduARwUk9BwAweYHCAUg1T07Oiwo4bv0mpBLxZIb9rnT+V6KJIogn079207v2AVKh0fJwL8LUfwOikCuSMTzge9i1S9qHDkpCMA9Fe9/dpQxRDZf/A3Lbr8ie9w5H80vEDc1peDh2nkTS5JX5Mu7pjOKn03GdGFhRq21k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=oQBqUjSf; arc=none smtp.client-ip=57.129.93.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4740B2C0F89;
+	Mon, 17 Nov 2025 17:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763402283; cv=pass; b=QpNDuZS5s6DuKDyMYqphVFvSYcA/KQv2cU5KkqpLl6YRkTwjkn6sgWurYwJCUTlUPeeIMNTVTeAhlHChDdCMlqBg5mNeweHYbmnStJwwa8+J96AQK9dUGRifOJlrdlwt6fVuO1j7KFWFHAZ8m/Zc/awTmxjiT6TNCfm2WD5BHQ8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763402283; c=relaxed/simple;
+	bh=2rNH0yyQwPxiUnte3OgDSEm+m3RdQSUEqi6Z6iLPXfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bNH3EUlNwSh+J6E7NVOu8wCAQBO7i9tRhKK8AlQuFsFLXq2cg19Cg75kkTvxdD6OHODc7G0G1mUOLK0b4OggG8dMSdfDiMEgsovxOpcsid3x09Ik6vQKErF75yklW7Ojq4QNo5+GTd93YeKZXsIH4HYKLWlYNIsR+L/mNrW3C9M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anirudhrb.com; spf=pass smtp.mailfrom=anirudhrb.com; dkim=pass (1024-bit key) header.d=anirudhrb.com header.i=anirudh@anirudhrb.com header.b=Hi8HR6gs; arc=pass smtp.client-ip=136.143.188.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anirudhrb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=anirudhrb.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="oQBqUjSf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1763401880; x=1763661080;
-	bh=8JHRGFc+rtU8gXb3Jyiztx9jQrUCtKtMFdopnkmvtTw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=oQBqUjSfF7G2kJQrbbupyMiiL3urxY+IOjodFvyRKJ7BeHY/Dcl/doiaaDctJYfkJ
-	 neWOwaOGLUAaNvOOA9Lnkn/V7Zxs46ZLspzWPnHWqsqxS/d+3JQ28pmHZyaP3ROCiP
-	 lPORmcpqbEa/NLboQDALyeNMJy7OAFr681dFCiyvFWO465XYCDffdIMULNoQdGBZG5
-	 LqsCEq8v1qizeghermjOZkDdSKpmudU0KEGcYzC75rPAJEG8nR1gQFIh5UjtYTVp5L
-	 Abt+RNltqCl/40foE++yjpzIs3zTJ+mCRrvbsrD50yTsJZVBuZlmevHhrdCKoaSwyO
-	 yZDKI/Aa1I0hg==
-Date: Mon, 17 Nov 2025 17:51:13 +0000
-To: Alexander Potapenko <glider@google.com>
-From: =?utf-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <m.wieczorretman@pm.me>
-Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, ardb@kernel.org,
-	Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, stable@vger.kernel.org, Baoquan He <bhe@redhat.com>
-Subject: Re: [PATCH v6 01/18] kasan: Unpoison pcpu chunks with base address tag
-Message-ID: <ha5gz3hfjtfrmldzbscrbbtptecyqkwzkwdkjxnc2puqzquurl@nthv7frvqatw>
-In-Reply-To: <CAG_fn=Wj9rB0jHKT3QKjZsPYce1JFcb1e72QBOBP52Ybs3_qgQ@mail.gmail.com>
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <fbce40a59b0a22a5735cb6e9b95c5a45a34b23cb.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=Wj9rB0jHKT3QKjZsPYce1JFcb1e72QBOBP52Ybs3_qgQ@mail.gmail.com>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 7b84ae9accb4bc7551e617e5e7661cf28649358a
+	dkim=pass (1024-bit key) header.d=anirudhrb.com header.i=anirudh@anirudhrb.com header.b="Hi8HR6gs"
+ARC-Seal: i=1; a=rsa-sha256; t=1763402278; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=fW1KtFHpGqgX6RDESPkICQhiCh9G3/yo4r/5y0vrkOTMex5ALVg3g/fMtVLVuICP3i4Ul6cHFzD+6OTBPKl5RxZWgPDPrDM2TQFpZDWHA7MxB0wyq8ww/YMVyOxfAO7TjMp2VlMZQKakDupWxHjV9+ydeI8NVwQX/NxzyLsxduk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1763402278; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Mtj/y1tj4Qb6xMK6ny1DnT4aSEezLdSFUIrKSEg5pAk=; 
+	b=UTJsRkMdK6SN+lBzntZl98xpEXew4eidh25/O+ONsTTTtH2h/A4hl4gkqW50QLLzYnyBDoOe8I2h6Vf0uz2KzQ817LJxsF8HYnkoAeXr5UDipwcQf54DZmr8dcu5ki1E4DxgC5j2n2WD25DN9uKifuS4QLZBitqOCVFGKVGWziI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=anirudhrb.com;
+	spf=pass  smtp.mailfrom=anirudh@anirudhrb.com;
+	dmarc=pass header.from=<anirudh@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1763402278;
+	s=zoho; d=anirudhrb.com; i=anirudh@anirudhrb.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=Mtj/y1tj4Qb6xMK6ny1DnT4aSEezLdSFUIrKSEg5pAk=;
+	b=Hi8HR6gsKUw7Nb/f4UccZ1opfSR7mbMZJzFhjrCHmGAqyn02ePtYVnRPUqUqFRA9
+	+6s4o474aJbtaPKG0Z+7P5kByh+aovAz9isAXckXnOxwmi1NEfTDjn5hhvc0FbreQO1
+	9MTdgMiG0OFikAN74G36S7hoslEWHmtex2jqIrGY=
+Received: by mx.zohomail.com with SMTPS id 1763402276135717.0723309216664;
+	Mon, 17 Nov 2025 09:57:56 -0800 (PST)
+Date: Mon, 17 Nov 2025 17:57:50 +0000
+From: Anirudh Rayabharam <anirudh@anirudhrb.com>
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>, kernel test robot <lkp@intel.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Drivers: hv: ioctl for self targeted passthrough hvcalls
+Message-ID: <aRtiHkEYMi_eqTvQ@anirudh-surface.localdomain>
+References: <20251114095853.3482596-1-anirudh@anirudhrb.com>
+ <202511161617.KcDzR4sA-lkp@intel.com>
+ <20251117173428.GB2380208@liuwe-devbox-debian-v2.local>
+ <522f1bc2-417f-434a-92f9-7b417744cef4@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <522f1bc2-417f-434a-92f9-7b417744cef4@linux.microsoft.com>
+X-ZohoMailClient: External
 
-On 2025-11-10 at 18:32:21 +0100, Alexander Potapenko wrote:
->On Wed, Oct 29, 2025 at 8:05=E2=80=AFPM Maciej Wieczor-Retman
-><m.wieczorretman@pm.me> wrote:
->>
->> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
->>
->> The problem presented here is related to NUMA systems and tag-based
->> KASAN modes - software and hardware ones. It can be explained in the
->> following points:
->>
->>         1. There can be more than one virtual memory chunk.
->>         2. Chunk's base address has a tag.
->>         3. The base address points at the first chunk and thus inherits
->>            the tag of the first chunk.
->>         4. The subsequent chunks will be accessed with the tag from the
->>            first chunk.
->>         5. Thus, the subsequent chunks need to have their tag set to
->>            match that of the first chunk.
->>
->> Refactor code by moving it into a helper in preparation for the actual
->> fix.
->
->The code in the helper function:
->
->> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
->> +{
->> +       int area;
->> +
->> +       for (area =3D 0 ; area < nr_vms ; area++) {
->> +               kasan_poison(vms[area]->addr, vms[area]->size,
->> +                            arch_kasan_get_tag(vms[area]->addr), false)=
-;
->> +       }
->> +}
->
->is different from what was originally called:
->
->> -       for (area =3D 0; area < nr_vms; area++)
->> -               vms[area]->addr =3D kasan_unpoison_vmalloc(vms[area]->ad=
-dr,
->> -                               vms[area]->size, KASAN_VMALLOC_PROT_NORM=
-AL);
->> +       kasan_unpoison_vmap_areas(vms, nr_vms);
->
->, so the patch description is a bit misleading.
->
->Please also ensure you fix the errors reported by kbuild test robot.
+On Mon, Nov 17, 2025 at 09:41:19AM -0800, Nuno Das Neves wrote:
+> On 11/17/2025 9:34 AM, Wei Liu wrote:
+> > +Nuno
+> > 
+> > On Sun, Nov 16, 2025 at 04:17:08PM +0800, kernel test robot wrote:
+> >> Hi Anirudh,
+> >>
+> >> kernel test robot noticed the following build errors:
+> >>
+> >> [auto build test ERROR on linus/master]
+> >> [also build test ERROR on v6.18-rc5]
+> >> [cannot apply to next-20251114]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >>
+> >> url:    https://github.com/intel-lab-lkp/linux/commits/Anirudh-Rayabharam/Drivers-hv-ioctl-for-self-targeted-passthrough-hvcalls/20251114-182039
+> >> base:   linus/master
+> >> patch link:    https://lore.kernel.org/r/20251114095853.3482596-1-anirudh%40anirudhrb.com
+> >> patch subject: [PATCH] Drivers: hv: ioctl for self targeted passthrough hvcalls
+> >> config: x86_64-buildonly-randconfig-005-20251116 (https://download.01.org/0day-ci/archive/20251116/202511161617.KcDzR4sA-lkp@intel.com/config)
+> >> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> >> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511161617.KcDzR4sA-lkp@intel.com/reproduce)
+> >>
+> >> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> >> the same patch/commit), kindly add following tags
+> >> | Reported-by: kernel test robot <lkp@intel.com>
+> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202511161617.KcDzR4sA-lkp@intel.com/
+> >>
+> >> All errors (new ones prefixed by >>):
+> >>
+> >>>> drivers/hv/mshv_root_main.c:125:2: error: use of undeclared identifier 'HVCALL_GET_PARTITION_PROPERTY_EX'
+> >>      125 |         HVCALL_GET_PARTITION_PROPERTY_EX,
+> >>          |         ^
+> > 
+> > Anirudh, please check this.
+> > 
+> This is introduced in hyperv-next, in:
+> 59aeea195948 mshv: Add the HVCALL_GET_PARTITION_PROPERTY_EX hypercall
+> 
+> But the bot applies the patch to linus/master, that is probably why.
 
-Thanks for looking at the series! Yes, I'll fix these two patches, I've
-split them off into a separate 'fixes' series and I'm trying to make
-sure it's an acutal refactor this time.
+Right. In the v2 of this patch, I used the --base argument to git
+format-patch as suggested by the tool above. That should help it apply
+the patch in the right tree. Let's see if it still complains.
 
+Anirudh
+
+> 
+> >>>> drivers/hv/mshv_root_main.c:175:18: error: invalid application of 'sizeof' to an incomplete type 'u16[]' (aka 'unsigned short[]')
+> >>      175 |         for (i = 0; i < ARRAY_SIZE(mshv_passthru_hvcalls); ++i)
+> >>          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > This is from the original patch. Perhaps adding the explicit declaration
+> > of the array size would help.
+> > 
+> 
+> I think this is just due to the earlier error...
+> 
+> Nuno
+> 
+> > Wei
+> 
