@@ -1,81 +1,169 @@
-Received: from mail-07.mail-europe.com (mail-07.mail-europe.com [188.165.51.139])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79275286A7
-	for <llvm@lists.linux.dev>; Tue, 18 Nov 2025 11:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.51.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FAE29D29B;
+	Tue, 18 Nov 2025 13:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763466524; cv=none; b=so1p5v362TeCEEeHb4bXQVwHb5DZTFM2HvUwt+3VMZsd8uU5pLZ+RZb/ZlE6wbYvXNklqGUK7nPVCXiUFHZNcleQXJP3BXTq/AfEoE4kCGxofk2xLTRslyJKEKpSIQfhRfmAfY6qmwOUwLbaey9Keo//IFaTSnJlD5UyixgIuCg=
+	t=1763473117; cv=none; b=TXhJVDRli0Z38iVhUz5bFTP/b+4eLwA/whOaYo9nl4UzJ0yyXxXcHXP9wCcRJMhfXHPSeDzUhgZ6aFQzs/E4yRXwa187L0342+UAtthC/3xBst8WeLfObm/6S7Muxm+ybGdrE5UkLbaTR1ONmTVJ9dmsFabgDfk3ztKTe/6UhR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763466524; c=relaxed/simple;
-	bh=t+cmHNHprw2f6QV2x50gh1skO7IOa1aj8MCRdXK2yb0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QVellrVvuznLt6IiVrbnyzdx/c6Uhs+oFR386IwAEsTI7NSK0ZcSf5Ktrxzmwj2GLBsKRFaAGFICkFPvzBCt7M22W8ORBDzLmOCNTdiFVDy+2KJb5NVfQ4XO22AtbjfejeX/L1szP52ziagMhE3uJVR+4zKGNu+HLxBJlH8KXss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=gQzkmSZT; arc=none smtp.client-ip=188.165.51.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1763473117; c=relaxed/simple;
+	bh=CSMN+2raUsI5Lk8o1UR3ipHcrxlw73UK/VcudD3rddk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hWzH3Wc08fRt47yiE/3lmNRgGGSjPLwhLDGU206W+S6Vgl6sIC6UYA0iFtTR1asr0NRBXgig0dJ2B/Emm99A/gGa6BtG1x8RIaBZxuge+exYBSsQ5vd9LHCGtYnQFpaDYwR/F5iHzocrEoIweZzYhv1PC3TCiXVi3VM0/HR4vYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wx2S8lYa; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="gQzkmSZT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1763466504; x=1763725704;
-	bh=n6/kLrRa2f455JqtRCfVFIsy+tm9Wn1NEx703c9jG7s=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=gQzkmSZTz46BncYFEP31UJ2/MYDxNGPsZbGhkfP7QuAKwi8wAXU1m+gFTGDBW1nrl
-	 DTIv0nmFW1CACxQKrZae+ZvUHuHfe5FxxKl0oXPpOtJU3maELH1R29VkX/LuutU5nv
-	 ArErm4j3DOfExn1nu5YKzs9Ng0eGJwxyVAyUfhOgGSkXSBgvWp5DOqTgp/lCk4cTAB
-	 m7m0PWLxZH8Q2d3dvbLUErergde1da/CWqSwtOMbZa60ZnJJAoYOM2MaYOyEYk83Rr
-	 l1+di0PmSIdW9qsulupjbKBkIDAf/OUoGZfR7ZSfuMhQdLGdsL22Mj9dXyw6gTBrkl
-	 MYdo+Scv2CK2A==
-Date: Tue, 18 Nov 2025 11:48:19 +0000
-To: Alexander Potapenko <glider@google.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, ardb@kernel.org,
-	Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 18/18] x86/kasan: Make software tag-based kasan available
-Message-ID: <bpyudbe6kvzlj37j7c6zo33zxfc537gos3fn5cbr32yz7ebu23@oeaxjofxyeao>
-In-Reply-To: <CAG_fn=WPQZ4ti3Lb+A3jSXFWLtn6291sTKJBwKBiLD2E9YbuKA@mail.gmail.com>
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <d98f04754c3f37f153493c13966c1e02852f551d.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=WPQZ4ti3Lb+A3jSXFWLtn6291sTKJBwKBiLD2E9YbuKA@mail.gmail.com>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 1f509888f40154949953d5f9b6464c2363ca1311
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wx2S8lYa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763473115; x=1795009115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CSMN+2raUsI5Lk8o1UR3ipHcrxlw73UK/VcudD3rddk=;
+  b=Wx2S8lYaFeWHXYVYaVsa1Ocb/dnFpT3DrFKkwV5LnXzc7iYb2f99ZCvX
+   CWiKGSCnsYcJEfmy3vsq12CKSgjKrTm5jDLcmdWAtkFHO+FA0cMKVUWjF
+   viI75Wqa+lj0yhjctkX3IQvCZBPe7hiQ4Yt0VcUqjIoE4hbPVB1LnuRSt
+   B/afW/FppNwMObPXuWxX/GpgZsFZN66KNd61Y4P+P1g1uOvIZcM5OH+xu
+   EnGeg5wkXFIuR5WoRSfOKXwELVgbYJICnlZk6B4k6ricEmFGtWnK6vXx4
+   5IP2lZ/BmKLaVcDzH2y+V69bExNxbEOoI5+Bfv+O6hyLjZKQ7Z01a6dft
+   g==;
+X-CSE-ConnectionGUID: WlLtQZRyTda8KPPN5J6EjA==
+X-CSE-MsgGUID: WD5iiWGjTnSwOLuwh6/TRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="75818266"
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="75818266"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 05:38:35 -0800
+X-CSE-ConnectionGUID: 89oTEYqAT2axniNjTW3Rew==
+X-CSE-MsgGUID: NC+Xl2XhRAeZOqVb1hZFFg==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 18 Nov 2025 05:38:33 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vLLug-0001md-1Z;
+	Tue, 18 Nov 2025 13:38:30 +0000
+Date: Tue, 18 Nov 2025 21:38:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hao Dongdong <doubled@leap-io-kernel.com>,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, doubled@leap-io-kernel.com,
+	yjzhang@leap-io-kernel.com
+Subject: Re: [PATCH v4] scsi: leapraid: Add new scsi driver
+Message-ID: <202511182038.XDtPzsLQ-lkp@intel.com>
+References: <20251116112803.28078-1-doubled@leap-io-kernel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251116112803.28078-1-doubled@leap-io-kernel.com>
 
-On 2025-11-11 at 10:00:59 +0100, Alexander Potapenko wrote:
->On Wed, Oct 29, 2025 at 9:11=E2=80=AFPM Maciej Wieczor-Retman
-><m.wieczorretman@pm.me> wrote:
->>
->> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
->>
->
->> -   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN s=
-hadow memory
->> +   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN s=
-hadow memory (generic mode)
->> +   fffff40000000000 |   -8    TB | fffffbffffffffff |    8 TB | KASAN s=
-hadow memory (software tag-based mode)
->>    __________________|____________|__________________|_________|________=
-____________________________________________________
->
->
->> +   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN s=
-hadow memory (generic mode)
->> +   ffeffc0000000000 |   -6    PB | fffffbffffffffff |    4 PB | KASAN s=
-hadow memory (software tag-based mode)
->>    __________________|____________|__________________|_________|________=
-____________________________________________________
->
->> +       default 0xeffffc0000000000 if KASAN_SW_TAGS
->>         default 0xdffffc0000000000
->
->Please elaborate in the patch description how these values were picked.
+Hi Hao,
 
-Sure, will do :)
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next linus/master v6.18-rc6 next-20251117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Dongdong/scsi-leapraid-Add-new-scsi-driver/20251116-192921
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20251116112803.28078-1-doubled%40leap-io-kernel.com
+patch subject: [PATCH v4] scsi: leapraid: Add new scsi driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251118/202511182038.XDtPzsLQ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511182038.XDtPzsLQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511182038.XDtPzsLQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/leapraid/leapraid_func.c:4794:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    4794 |         default:
+         |         ^
+   drivers/scsi/leapraid/leapraid_func.c:4794:2: note: insert 'break;' to avoid fall-through
+    4794 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
+
+
+vim +4794 drivers/scsi/leapraid/leapraid_func.c
+
+  4741	
+  4742	static void leapraid_fw_work(struct leapraid_adapter *adapter,
+  4743				     struct leapraid_fw_evt_work *fw_evt)
+  4744	{
+  4745		struct leapraid_sas_dev *sas_dev;
+  4746	
+  4747		adapter->fw_evt_s.cur_evt = fw_evt;
+  4748		leapraid_del_fw_evt_from_list(adapter, fw_evt);
+  4749		if (adapter->access_ctrl.host_removing ||
+  4750		    adapter->access_ctrl.pcie_recovering) {
+  4751			leapraid_fw_evt_put(fw_evt);
+  4752			adapter->fw_evt_s.cur_evt = NULL;
+  4753			return;
+  4754		}
+  4755		switch (fw_evt->evt_type) {
+  4756		case LEAPRAID_EVT_SAS_DISCOVERY:
+  4757		{
+  4758			struct leapraid_evt_data_sas_disc *evt_data;
+  4759	
+  4760			evt_data = fw_evt->evt_data;
+  4761			if (evt_data->reason_code ==
+  4762			    LEAPRAID_EVT_SAS_DISC_RC_STARTED &&
+  4763			    !adapter->dev_topo.card.phys_num)
+  4764				leapraid_sas_host_add(adapter, 0);
+  4765			break;
+  4766		}
+  4767		case LEAPRAID_EVT_SAS_TOPO_CHANGE_LIST:
+  4768			leapraid_sas_topo_chg_evt(adapter, fw_evt);
+  4769			break;
+  4770		case LEAPRAID_EVT_IR_CHANGE:
+  4771			leapraid_sas_ir_chg_evt(adapter, fw_evt);
+  4772			break;
+  4773		case LEAPRAID_EVT_SAS_ENCL_DEV_STATUS_CHANGE:
+  4774			leapraid_sas_enc_dev_stat_chg_evt(adapter, fw_evt);
+  4775			break;
+  4776		case LEAPRAID_EVT_REMOVE_DEAD_DEV:
+  4777			while (scsi_host_in_recovery(adapter->shost) ||
+  4778			       adapter->access_ctrl.shost_recovering) {
+  4779				if (adapter->access_ctrl.host_removing ||
+  4780				    adapter->fw_evt_s.fw_evt_cleanup)
+  4781					goto out;
+  4782	
+  4783				ssleep(1);
+  4784			}
+  4785			leapraid_hardreset_async_logic(adapter);
+  4786			break;
+  4787		case LEAPRAID_EVT_TURN_ON_PFA_LED:
+  4788			sas_dev = leapraid_get_sas_dev_by_hdl(adapter,
+  4789							      fw_evt->dev_handle);
+  4790			leapraid_set_led(adapter, sas_dev, true);
+  4791			break;
+  4792		case LEAPRAID_EVT_SCAN_DEV_DONE:
+  4793			adapter->scan_dev_desc.scan_start = false;
+> 4794		default:
+  4795			break;
+  4796		}
+  4797	out:
+  4798		leapraid_fw_evt_put(fw_evt);
+  4799		adapter->fw_evt_s.cur_evt = NULL;
+  4800	}
+  4801	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
