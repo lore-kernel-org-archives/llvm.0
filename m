@@ -1,56 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584EC27978C;
-	Tue, 18 Nov 2025 01:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6357D3376B9;
+	Tue, 18 Nov 2025 10:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763430438; cv=none; b=pnFAiQx5GXykiClGStmhts6nRfBqILvGjzS6wsxfyFdpGfBzNQeOPNA0buh0jpzQI6WCnpWERVAOmX15vKf4arlKscY1a451+QJpAijkM/Jklqm/77ZKXTq3NxKM4mfVP5SMrQPskI1lAn1EXM2yg5qusrPTcHSaqqWB+qlkYfI=
+	t=1763460737; cv=none; b=tgU+QsZjG9CUTlCLS+DtghUfm7gtzkbCv6yCBpSvc/qwbY/d+doHcYOSOwUWxFWilbSuPxpa2gAfIsxR04RJIAQoneI//eh2YuoAaX9khQp4DeS9yy08oNQ9epMvcT8JXLcnRaSut70PDI0a9SAFcmFtmmJWUjVe2mssDvhaGU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763430438; c=relaxed/simple;
-	bh=ArEvxetBec/vUF/GVXDpbjvfHhc9BlLmAkNVxj8Zp8E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DMAKOHjhhNiTRnoatxDxivkbaSN5Ri1J9m4jIa4rxzdB9sixXMepfDUFCo6yaKpX+4PAyaXcD7yEIN9pr11uUkLkAD3bvylpbB7Ig8KHKDakKPt1TjahlVgwG+Jjo/HtO+y4wgcfasy2speY1pwtLekaw01CznDBMexdofg+UIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ibK0yzx/; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1763460737; c=relaxed/simple;
+	bh=nl7pmGt8CjVlZAWWmPXGrOGwVFNg8prR1eUshaeTMmo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lEpc5rdgMBVdL3Dn8SkFIFCg3qV/khhtVq8F6+Zy9zLeob/C2xXBz+Em5ncV42dwag2Whj85R22V//NTCVneTTEH56GjcCJlbzckOQpDXCIl4eaETCInKJI07m18cuF2ELTndUSTv8vwMhuJvVrITt95OCbPHi7Gz/HWYlUIhLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Br/migN1; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ibK0yzx/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Br/migN1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763430437; x=1794966437;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ArEvxetBec/vUF/GVXDpbjvfHhc9BlLmAkNVxj8Zp8E=;
-  b=ibK0yzx/p404bMjqRYcNqGfY6LqL+9Zp1iu19v8BLydC1MQACHLjXjRx
-   4kNTmCmW+ER7nXjida5M3hoHVGWK6axyTj+3ddjvah5tRz5j5QsUvdKpt
-   2J/ShLcUkKgf3qxd6j/CD+8rh+6HOgZOOtbR3REHZBHG0MgSlrpcoguk/
-   fwXCnhv7WOT1rHo+a/dwBlJXXOZDGpsMdNSTRwq2p+FNRCyHcpwgjh1Jm
-   d0+EhqgDXCH22UXIO6l1nBgk9A/J5ZDaNBVripnhPutu9OwdVGsVEzN4o
-   tfSNKk1tCsnivwy6UP0B8Nu22EtKb1lDHlfq+aK9JUMnV+tc1W2Ew4Rqa
-   g==;
-X-CSE-ConnectionGUID: s5zBKoelT9OucwwPH2w3Dw==
-X-CSE-MsgGUID: Q823mQrxR8mYNDsfewgNVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="76044659"
-X-IronPort-AV: E=Sophos;i="6.19,313,1754982000"; 
-   d="scan'208";a="76044659"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 17:47:16 -0800
-X-CSE-ConnectionGUID: 21PmUJVuQ22J4GBOpjQMfQ==
-X-CSE-MsgGUID: 27ToNhMHRnqmmz0+fyFf9A==
+  t=1763460735; x=1794996735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nl7pmGt8CjVlZAWWmPXGrOGwVFNg8prR1eUshaeTMmo=;
+  b=Br/migN1+AwyfqfcfSiYp2ljSktBS16oeNFM9DF1/+tD6SYZxdoM/ll6
+   61okvpsjjoZ0qLmPbFO9LNzEiuB/bRogEgBwYwDtkAC3/EGL3Bvk9lgb2
+   rAoQVhVU5U/OQSM/QRBXmjphpAOCvBhjX1pCpnvnJrpgJ0LkXdUz9nKcH
+   ZjEjxVHFkGuTKFkRiwdQE0WMVYYU6lAmkJrPSGelJKxSXrrez+5alVoAs
+   fZgSvbexOs55DFu6gA324UedzBS1WHD7lj823W+6TucVORDvkaxmfJCqW
+   hJQD+FHcV2sh3+c7EhvgkgH+zhXPsweWhKkDgq7vZdZ0pju6tYNhnKbCw
+   w==;
+X-CSE-ConnectionGUID: Kz1Fj0enTXmVkbNVwIPgcA==
+X-CSE-MsgGUID: o3TZSXymRbeKob95ANRIdA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="65358559"
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="65358559"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 02:12:14 -0800
+X-CSE-ConnectionGUID: xPGIwTZrQQqn+TtBb2ocTw==
+X-CSE-MsgGUID: aDzpKKoYR7uBPxdb2THN0A==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="191157958"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Nov 2025 17:47:16 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 18 Nov 2025 02:12:12 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vLAoL-0001ER-2V;
-	Tue, 18 Nov 2025 01:47:13 +0000
-Date: Tue, 18 Nov 2025 09:46:29 +0800
+	id 1vLIgz-0001bI-2b;
+	Tue, 18 Nov 2025 10:12:09 +0000
+Date: Tue, 18 Nov 2025 18:12:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-pie-v3 11/14] mm/vmscan.o: error: objtool:
- reclaim_throttle+0xfb: can't find switch jump table
-Message-ID: <202511180920.PCCek90F-lkp@intel.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
+	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
+	ameryhung@gmail.com, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v1 1/1] bpf: Annotate rqspinlock lock acquiring
+ functions with __must_check
+Message-ID: <202511181716.vzqU1M8A-lkp@intel.com>
+References: <20251117191515.2934026-1-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,43 +66,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251117191515.2934026-1-ameryhung@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3
-head:   63117b5289cf043ba592754a72ed16608428e1bb
-commit: 7a98647d5f5badfa99588a7f64cd39be668fc283 [11/14] x86: Use PIE codegen for the core kernel
-config: x86_64-randconfig-004-20251116 (https://download.01.org/0day-ci/archive/20251118/202511180920.PCCek90F-lkp@intel.com/config)
+Hi Amery,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Annotate-rqspinlock-lock-acquiring-functions-with-__must_check/20251118-031838
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251117191515.2934026-1-ameryhung%40gmail.com
+patch subject: [PATCH bpf-next v1 1/1] bpf: Annotate rqspinlock lock acquiring functions with __must_check
+config: i386-randconfig-002-20251118 (https://download.01.org/0day-ci/archive/20251118/202511181716.vzqU1M8A-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511180920.PCCek90F-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511181716.vzqU1M8A-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511180920.PCCek90F-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511181716.vzqU1M8A-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/vmscan.o: error: objtool: reclaim_throttle+0xfb: can't find switch jump table
---
->> mm/shmem.o: error: objtool: shmem_parse_one+0x9c: can't find switch jump table
---
->> mm/madvise.o: error: objtool: madvise_should_skip+0x2f: can't find switch jump table
---
->> mm/khugepaged.o: error: objtool: madvise_collapse+0x571: can't find switch jump table
---
->> mm/mremap.o: error: objtool: move_pgt_entry+0x162: can't find switch jump table
---
->> mm/vmalloc.o: error: objtool: pcpu_get_vm_areas+0xf70: can't find switch jump table
---
->> mm/fadvise.o: error: objtool: generic_fadvise+0x12b: can't find switch jump table
---
->> mm/list_lru.o: error: objtool: __list_lru_walk_one+0x1d6: can't find switch jump table
---
->> security/commoncap.o: error: objtool: cap_task_fix_setuid+0x33: can't find switch jump table
---
->> net/compat.o: error: objtool: __ia32_compat_sys_socketcall+0x15e: can't find switch jump table
---
->> block/bfq-iosched.o: error: objtool: bfq_bfqq_expire+0x658: can't find switch jump table
-..
+>> kernel/locking/locktorture.c:372:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     372 |         raw_res_spin_lock(&rqspinlock);
+         |         ^~~~~~~~~~~~~~~~~ ~~~~~~~~~~~
+   kernel/locking/locktorture.c:396:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     396 |         raw_res_spin_lock_irqsave(&rqspinlock, flags);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rqspinlock.h:255:48: note: expanded from macro 'raw_res_spin_lock_irqsave'
+     255 | #define raw_res_spin_lock_irqsave(lock, flags) __raw_res_spin_lock_irqsave(lock, &flags)
+         |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/warn_unused_result +372 kernel/locking/locktorture.c
+
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15  369  
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15  370  static int torture_raw_res_spin_write_lock(int tid __maybe_unused)
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15  371  {
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15 @372  	raw_res_spin_lock(&rqspinlock);
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15  373  	return 0;
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15  374  }
+a6884f6f1dd565 Kumar Kartikeya Dwivedi 2025-03-15  375  
 
 -- 
 0-DAY CI Kernel Test Service
