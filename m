@@ -1,74 +1,100 @@
-Received: from mail-106119.protonmail.ch (mail-106119.protonmail.ch [79.135.106.119])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5968035CB81
-	for <llvm@lists.linux.dev>; Tue, 18 Nov 2025 15:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A4C35E547;
+	Tue, 18 Nov 2025 15:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763480993; cv=none; b=UU3KNKxkA9rvj0xeCX0RuCWH76pTNiJLolkKX1yj3lHRMw2sKeNO+MUbnwzS3fcRBq7ZS1bUf6AoQYTRqa5FsX9ldzEB9qeyNEK/ZBsgufZz9HrLcqC2lx9C1nVweiomPU7l6n2Rn+QQZPkveTV3pBO+5/X7lm2TKYX/FSfRgEQ=
+	t=1763481290; cv=none; b=ViW0daFbQox0ACvCzGtLT/hMSIBXTgakWLQiexwn8eW6iv7CdF8MU6QpQVwFC62nsDWysdP9jeyWmqwxUcy0F7GCVGecbyejmXYjsOeYGa11VROxzFVQRPLXX/yqzu1MepGABDxaMPlQrrRbDTfkh5B8tu1iGX9pu1z+TC8IKIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763480993; c=relaxed/simple;
-	bh=MfLbaN0dJ19hVIu6xn27SwSPpBPbATDQqKhaL7vSpK0=;
-	h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sepvZHnyRbFN4zgFyLOf2JFpyu826fX0eeP9hHKoi9C1RNAL7/qJEHJoCbMEVuWmZQyZij0BZ9xH7pFy2m9TxDk++G9jupQ/tN/wv2RUy1ID+ry3ZeaYZu2KkrGcWIqtaauQkOKYomKbNKTB/2vY3IssRbaYZS7ZOarwSP2QcEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=VU/bLwEu; arc=none smtp.client-ip=79.135.106.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1763481290; c=relaxed/simple;
+	bh=SJZmduYdNLwpIaCG9udDYZTNJdO/7vSPzVNUjd0rFjw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E+8BUSl/nLjkaoegLv0dUeM2S5GMhh0ShdbzWon9/W0xaPRUKKEICj9yEwc1iHDpUEYZXyKgCL3G2NgQ70+2ld2m099Pm3snO+Xx7v3HMueTN9YKaWL9BxC2DtxDVvKnA1Hze+sMe3rkUJwWz0iS+qEa4+js1Rytun4ZBaeRzSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aWI/s9vG; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="VU/bLwEu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1763480981; x=1763740181;
-	bh=a9ZfR2miDizST+NAQHBsA4FP50QJXQbD9wrCS0aDhy8=;
-	h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=VU/bLwEuIA8h9TCyJ9L4mIWEDwhoUAZ5oktm+sibJB8c9aTCHAxh4iEjZUrUcj6WK
-	 DdWYM7vyaQOmZlh5HL5Rop5CGc1TZipkU5l3spES7VnHm/wUUlnVytrI8uH5q7ufRi
-	 fJw0DGDWl+PDb+suCmmvDLbYmrbGD/oONn1SpgQgOMNsVeLROqr98iWpCJYovuu/sN
-	 41PWpyT55lKaZwMubphsuvZFYg/YtTETtW1C8gMcytVRWd8U1Gal8gOTSiTCz1xJ+K
-	 7NTB37EXbP+Q7djtplgrpcbD/6KUccafGQHCQks1468PHcx+U+AH4aBTr4zCMgXQ4E
-	 UAncnjv3o9aLg==
-Date: Tue, 18 Nov 2025 15:49:28 +0000
-To: Alexander Potapenko <glider@google.com>, xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de,
-	surenb@google.com, ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org
-From: =?utf-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <m.wieczorretman@pm.me>
-Subject: Re: [PATCH v6 06/18] x86/kasan: Add arch specific kasan functions
-Message-ID: <tide3xvqthah7m7ji6bfzb5i3ofabgwf45bn3qvvzsurnswh6z@wjxzriavwlp5>
-In-Reply-To: <6nifmxti2xfbnrdtxbosojfw52sofc7zkyjcbcyeawz5lt372f@h6ksdfqddk4z>
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <5be986faa12ed1176889c3ba25852c42674305f4.1761763681.git.m.wieczorretman@pm.me> <CAG_fn=XFXFAvKS2+bc66FR+gw7rfSybETAOBUR_vneaVdF5F9A@mail.gmail.com> <6nifmxti2xfbnrdtxbosojfw52sofc7zkyjcbcyeawz5lt372f@h6ksdfqddk4z>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 2d31863a5f203112dd7296a62db9ab5faf481d58
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aWI/s9vG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763481289; x=1795017289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SJZmduYdNLwpIaCG9udDYZTNJdO/7vSPzVNUjd0rFjw=;
+  b=aWI/s9vG4MM1qM/PS+6VK/HEm5wcaKe101iVgKGMeajshyXiDQq3HI7c
+   RyGNnjPswav/iF3k+tmvVaB0jpQXcD+fsViUDxDYg3JNhtmPUn29yHm6p
+   GW+ThwhDXSDOpGrlmCrt8kAwci0XavYGUZg3ZSSs/w2tR+uxaXgWn5UT4
+   X2qG5b86UqahCXaIUO9U9mpFWKwVpzeisTXhPaCFI+YmKqJ4GBUvlB1Xf
+   St3+6wVFD1+X3NDugQltk7gVdhucFu5S5sP/E9YYuOJkugAvZn8HGaApq
+   Zzn8FJiLpKHG0Hm0cDbWAMaCEvvvf5DeTNUqr1bFz9M7kro9/MBWLViUa
+   g==;
+X-CSE-ConnectionGUID: MVjIwaK5SC+8Udjb7IqpiQ==
+X-CSE-MsgGUID: fopt37tNQE2cOJ58Bg9W9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="53078100"
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="53078100"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 07:54:46 -0800
+X-CSE-ConnectionGUID: LtPpoil3Q/OLH4mWlhgW+w==
+X-CSE-MsgGUID: EpeEMFRgROCDRoI7jQkzcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="214181099"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 18 Nov 2025 07:54:44 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vLO2U-0001tn-1r;
+	Tue, 18 Nov 2025 15:54:42 +0000
+Date: Tue, 18 Nov 2025 23:53:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Add SHA hash kfuncs for cryptographic
+ hashing
+Message-ID: <202511182314.4OwvmPz8-lkp@intel.com>
+References: <20251117211413.1394-2-git@danielhodges.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251117211413.1394-2-git@danielhodges.dev>
 
-On 2025-11-17 at 18:41:35 +0000, Maciej Wiecz=C3=B3r-Retman wrote:
->On 2025-11-11 at 10:31:13 +0100, Alexander Potapenko wrote:
->>> +#ifdef CONFIG_64BIT
->>> +static inline void *__tag_set(const void *__addr, u8 tag)
->>> +{
->>> +       u64 addr =3D (u64)__addr;
->>> +
->>> +       addr &=3D ~__tag_shifted(KASAN_TAG_MASK);
->>
->>KASAN_TAG_MASK is only defined in Patch 07, does this patch compile?
->
->Seems I forgot to remove it from patch 7. It's originally defined
->in the mmzone.h file and looked cleaner there according to Andrey.
->
->Thanks for noticing it's still in patch 7, I'll get rid of it.
+Hi Daniel,
 
-You were right before, after removing that define in patch 7 it doesn't
-compile. I think I'll just open code this definition here:
+kernel test robot noticed the following build errors:
 
->>> +       addr &=3D ~__tag_shifted((1UL << KASAN_TAG_WIDTH) - 1);
+[auto build test ERROR on bpf-next/master]
 
-I don't see a nicer solution here if taking things from mmzone.h is out
-of the question. I suppose a #ifndef KASAN_TAG_MASK placed here that
-would just shadow the one in mmzone.h could work too?
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Hodges/bpf-Add-SHA-hash-kfuncs-for-cryptographic-hashing/20251118-051958
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251117211413.1394-2-git%40danielhodges.dev
+patch subject: [PATCH bpf-next 1/4] bpf: Add SHA hash kfuncs for cryptographic hashing
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251118/202511182314.4OwvmPz8-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511182314.4OwvmPz8-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511182314.4OwvmPz8-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: sha384
+   >>> referenced by crypto.c
+   >>>               kernel/bpf/crypto.o:(bpf_sha384_hash) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: sha512
+   >>> referenced by crypto.c
+   >>>               kernel/bpf/crypto.o:(bpf_sha512_hash) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
