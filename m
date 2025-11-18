@@ -1,67 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A23536827F;
-	Tue, 18 Nov 2025 15:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F58F31ED7A;
+	Tue, 18 Nov 2025 17:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763481292; cv=none; b=O4cTyHXhOawztqSW2d1wYcjkKxOjmNFxEB65ulqnpmUqvHx+8fKucvwHvNUz1QugkfUfMxu3Jfz86/bq6SS7qlnfFR/XgAHuxtH6dOeq+JhXPwlzGdMsXxcjMVX9gkAyREmpZ4G7ZHdyN/WEMHQ3vUu0aC3GdjDeoZPndeUmobU=
+	t=1763486339; cv=none; b=WfxPpkf8+PusaJlV371pYEvYHiCZAPglkevAEMIJptu92eWYgaOTDVcWNU32pGGGEF7ofDFQUz4vxbrziCWp+95WT7lhXKXlab918wyVd4tBSdEQYV6JpRB1y5tdScL2dYkEkTdevwY6eJQDlKGaSpMUz30/r/36XjEJ+p4T4fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763481292; c=relaxed/simple;
-	bh=D07vP2bTR56TwC70J4fSsfq2NWntIX6r4PR2vKL2tCk=;
+	s=arc-20240116; t=1763486339; c=relaxed/simple;
+	bh=y3tKpCfh/4o57cQqByW+ZX2CwDNoWCthgIox4p5fo6o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B02KI/FVWcoZuh8+LwxGVOA2TiGPwAr922IR2EPXE5Hy1373UjwL9rTnXUaKuI94Ya9d6lUlgbjS/W0YDXnerSh2LKJPYzLfwUTn0ZLJgBmniDMt+R0fJmx0q6XMnztodET8QcnxA6aSrbMjbuXY/fBFY2YRN5+2rdUjPbvA3UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aYSAUeUy; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgffdCZoAr4gwh3prjsbkbQonDG2VUsWYjFhMqjc7h/FBIBDR1GhL6HGQzX7EEP8iXJuVETknUxhuRE30Gl0TjkGjdBuuYLWx+b5ff+sxbzKLst3KH00QXIoP2MO4J46oDhZh2QU895GKzXZOaTKOZIE0P18l9UOzTXYYZvQv7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WdywMGFB; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aYSAUeUy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WdywMGFB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763481291; x=1795017291;
+  t=1763486336; x=1795022336;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=D07vP2bTR56TwC70J4fSsfq2NWntIX6r4PR2vKL2tCk=;
-  b=aYSAUeUyAs8ggOzTXzIxfxykZosrhsPmR4oLRTJXOn9OubbArwzIa590
-   VuUfA2enA6doTaEyq0NArItTEAEMHK3Xx4PMjs0P6OrgRkhmZsVjLIox3
-   l8K1+iYHNE9Sn/afefIEih9PZ/qhZXnDpdBGklyKoffP7W24AprBcvBm1
-   Pjpz/XoIe3mAdcu+bk5bwI+oRV3KKPMQOYSsQivUzCogwRTJEpNvq0Wni
-   YVPfJXTZFiujM+mQsDY+0u28XOvl41Xqt/Jx3RBW37o0G0xXa470qmkHK
-   WC6+QAFmkbn0gvljBPABJv0mGwkrGWNOLgv1krpmscZcAwhwLvq3FtaY1
-   g==;
-X-CSE-ConnectionGUID: 3U9Nlii4QOaLlz7SP+afLA==
-X-CSE-MsgGUID: 1AtjaXYSTh+OZNwAm8eygw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="76184824"
+  bh=y3tKpCfh/4o57cQqByW+ZX2CwDNoWCthgIox4p5fo6o=;
+  b=WdywMGFBGG40xHB84fnSutFdkSBMrQECLUVAFyiBsGQDM9ipOeTSsXXA
+   8Jh6ZjFF2dXuHSqpeUXzRHdTCV2iL2Ig+j9PEeFqswmmQhGxBWEjucF4f
+   h+e3hqlza+6NCQSqa7j3edtwFSBME7RpqzDKtkdMoSw9cJUhtrCIbOyjG
+   yzw1NSawfA5fOI5RYajzZ5WND3Wttny+tmuwap72AXMkyrNDkHeKrz2kS
+   mzd/Lbp6EKTBY3yEPzQN/EPCJUsNCmoLmYGVAynakKr0kGi/U7G6KfTAD
+   YyAFWHJ09gIRaRhlX8t4DTr5GEggNrp5u8DwtoFtBwkR6UUJ5bQ4usA0C
+   w==;
+X-CSE-ConnectionGUID: A1HauI9JRv2KQMQcMwMelA==
+X-CSE-MsgGUID: 28rLgidUR1y9tjHox89dPA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="76194245"
 X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
-   d="scan'208";a="76184824"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 07:54:49 -0800
-X-CSE-ConnectionGUID: gydvxmQoQdqQG2JcwV1l0w==
-X-CSE-MsgGUID: BmWiB7vEQWa3K3hG3Tn+nA==
+   d="scan'208";a="76194245"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 09:18:56 -0800
+X-CSE-ConnectionGUID: jFpulnqIRKuOYT/oQ/ZZ1A==
+X-CSE-MsgGUID: oFR/GI82TzqJSiGhkXrbLw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
-   d="scan'208";a="221695830"
+   d="scan'208";a="228148900"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Nov 2025 07:54:45 -0800
+  by orviesa001.jf.intel.com with ESMTP; 18 Nov 2025 09:18:55 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vLO2U-0001tp-1w;
-	Tue, 18 Nov 2025 15:54:42 +0000
-Date: Tue, 18 Nov 2025 23:53:55 +0800
+	id 1vLPLw-0001zX-0s;
+	Tue, 18 Nov 2025 17:18:52 +0000
+Date: Wed, 19 Nov 2025 01:18:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Praveen K Paladugu <prapal@linux.microsoft.com>, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	tglx@linutronix.de, mingo@redhat.com, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	arnd@arndb.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	anbelski@linux.microsoft.com, prapal@linux.microsoft.com,
-	easwar.hariharan@linux.microsoft.com,
-	nunodasneves@linux.microsoft.com, skinsburskii@linux.microsoft.com
-Subject: Re: [PATCH v5 3/3] hyperv: Cleanly shutdown root partition with MSHV
-Message-ID: <202511182353.5FvVmUhR-lkp@intel.com>
-References: <20251117210855.108126-4-prapal@linux.microsoft.com>
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v7 8/9] x86/hyperv/vtl: Mark the wakeup mailbox page as
+ private
+Message-ID: <202511190008.AA0NTn3G-lkp@intel.com>
+References: <20251117-rneri-wakeup-mailbox-v7-8-4a8b82ab7c2c@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,69 +63,154 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251117210855.108126-4-prapal@linux.microsoft.com>
+In-Reply-To: <20251117-rneri-wakeup-mailbox-v7-8-4a8b82ab7c2c@linux.intel.com>
 
-Hi Praveen,
+Hi Ricardo,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on next-20251117]
-[cannot apply to tip/x86/core linus/master v6.18-rc6 v6.18-rc5 v6.18-rc4 v6.18-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 6f85aad74a70d17919a64ecd93037aa51c08698d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-K-Paladugu/hyperv-Add-definitions-for-MSHV-sleep-state-configuration/20251118-051204
-base:   next-20251117
-patch link:    https://lore.kernel.org/r/20251117210855.108126-4-prapal%40linux.microsoft.com
-patch subject: [PATCH v5 3/3] hyperv: Cleanly shutdown root partition with MSHV
-config: arm64-randconfig-003-20251118 (https://download.01.org/0day-ci/archive/20251118/202511182353.5FvVmUhR-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251118/202511182353.5FvVmUhR-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Neri/x86-acpi-Add-functions-to-setup-and-access-the-wakeup-mailbox/20251118-011935
+base:   6f85aad74a70d17919a64ecd93037aa51c08698d
+patch link:    https://lore.kernel.org/r/20251117-rneri-wakeup-mailbox-v7-8-4a8b82ab7c2c%40linux.intel.com
+patch subject: [PATCH v7 8/9] x86/hyperv/vtl: Mark the wakeup mailbox page as private
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251119/202511190008.AA0NTn3G-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251119/202511190008.AA0NTn3G-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511182353.5FvVmUhR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511190008.AA0NTn3G-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/hv/mshv_common.c:210:6: warning: no previous prototype for function 'hv_sleep_notifiers_register' [-Wmissing-prototypes]
-     210 | void hv_sleep_notifiers_register(void)
-         |      ^
-   drivers/hv/mshv_common.c:210:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     210 | void hv_sleep_notifiers_register(void)
-         | ^
-         | static 
->> drivers/hv/mshv_common.c:224:6: warning: no previous prototype for function 'hv_machine_power_off' [-Wmissing-prototypes]
-     224 | void hv_machine_power_off(void)
-         |      ^
-   drivers/hv/mshv_common.c:224:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     224 | void hv_machine_power_off(void)
-         | ^
-         | static 
-   2 warnings generated.
+   In file included from arch/x86/hyperv/hv_vtl.c:9:
+   In file included from arch/x86/include/asm/acpi.h:11:
+   In file included from arch/x86/include/asm/numa.h:8:
+>> arch/x86/include/asm/topology.h:264:26: error: expected ';' after top level declarator
+     264 | extern bool __read_mostly sysctl_sched_itmt_enabled;
+         |                          ^
+         |                          ;
+   In file included from arch/x86/hyperv/hv_vtl.c:9:
+>> arch/x86/include/asm/acpi.h:179:42: error: unknown type name 'acpi_physical_address'
+     179 | extern void __iomem * (*acpi_os_ioremap)(acpi_physical_address phys,
+         |                                          ^
+>> arch/x86/include/asm/acpi.h:180:7: error: unknown type name 'acpi_size'
+     180 |                                          acpi_size size);
+         |                                          ^
+   arch/x86/include/asm/acpi.h:181:35: error: unknown type name 'acpi_physical_address'
+     181 | void __iomem *x86_acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+         |                                   ^
+   arch/x86/include/asm/acpi.h:181:63: error: unknown type name 'acpi_size'
+     181 | void __iomem *x86_acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+         |                                                               ^
+   In file included from arch/x86/hyperv/hv_vtl.c:10:
+   In file included from arch/x86/include/asm/apic.h:6:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/hyperv/hv_vtl.c:10:
+   In file included from arch/x86/include/asm/apic.h:6:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/hyperv/hv_vtl.c:10:
+   In file included from arch/x86/include/asm/apic.h:6:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/hyperv/hv_vtl.c:10:
+   In file included from arch/x86/include/asm/apic.h:6:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/hyperv/hv_vtl.c:10:
+   In file included from arch/x86/include/asm/apic.h:6:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
 
 
-vim +/hv_machine_power_off +224 drivers/hv/mshv_common.c
+vim +/acpi_physical_address +179 arch/x86/include/asm/acpi.h
 
-   219	
-   220	/*
-   221	 * Power off the machine by entering S5 sleep state via Hyper-V hypercall.
-   222	 * This call does not return if successful.
-   223	 */
- > 224	void hv_machine_power_off(void)
-   225	{
-   226		unsigned long flags;
-   227		struct hv_input_enter_sleep_state *in;
-   228	
-   229		local_irq_save(flags);
-   230		in = *this_cpu_ptr(hyperv_pcpu_input_arg);
-   231		in->sleep_state = HV_SLEEP_STATE_S5;
-   232	
-   233		(void)hv_do_hypercall(HVCALL_ENTER_SLEEP_STATE, in, NULL);
-   234		local_irq_restore(flags);
-   235	
+e7b66d16fe4172 Juergen Gross 2018-10-10  176  
+9221222c717dbd Juergen Gross 2024-08-09  177  #ifdef CONFIG_XEN_PV
+9221222c717dbd Juergen Gross 2024-08-09  178  /* A Xen PV domain needs a special acpi_os_ioremap() handling. */
+9221222c717dbd Juergen Gross 2024-08-09 @179  extern void __iomem * (*acpi_os_ioremap)(acpi_physical_address phys,
+9221222c717dbd Juergen Gross 2024-08-09 @180  					 acpi_size size);
+9221222c717dbd Juergen Gross 2024-08-09  181  void __iomem *x86_acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+9221222c717dbd Juergen Gross 2024-08-09  182  #define acpi_os_ioremap acpi_os_ioremap
+9221222c717dbd Juergen Gross 2024-08-09  183  #endif
+9221222c717dbd Juergen Gross 2024-08-09  184  
 
 -- 
 0-DAY CI Kernel Test Service
