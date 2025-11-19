@@ -1,127 +1,124 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F542366DC7
-	for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 18:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B9921257E;
+	Wed, 19 Nov 2025 18:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763576072; cv=none; b=LK08qFR6Yi7oh9XzX41o085n9BOzTejW9ZlL7Qnz2Te9PPjOh52EHBcaE7rq4yUYWY7b3ghsll/BQSC//ynQ7hEsYNKeOqC+5wIB8qEJ6000rmN+65QrYX9/aMle3WK1lSEGnSgP1g5sHUrOqxwxDKXbUaIyDZENTTGer6B7XR4=
+	t=1763577909; cv=none; b=bsKpLyv1PKB/yYrhd8+GlxfXyqWVXjh4+tREYA5LtKQxBfI/DCNkkludmgJuzFgOh2pyqSbWDN3rqheBe2JSqGXziQnmZcSnjVkZxG4Bc+J28Dz3Dj4ZrkH6vvCmWhYfr89qC2jvpQeIFWKOEUsnNJCUetF6dtXPurfmSUgJUQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763576072; c=relaxed/simple;
-	bh=fOaYndhzO7GXOWo11e/wLosmESF6vtdq2dn5BPwRTXU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cs9UcXKzPxMQpdr3Ug7/9XCxtyXFKonomHQaJ0PsVyPcLKLCp4CWnRC2T/+gLXplCHmSJJrIyCo62syjpO7+AB5ZuG3tqCI9BPWlQAApxZzuTiHJma0wGxG1lyhGVfomAyNAokfoMkkUedyz2HEWXKuXESYOOGLUOIRRUB8UxvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=llzATAru; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1763577909; c=relaxed/simple;
+	bh=lREu9tNPPw7ji/ZfllpGZdKS3aTWW/dNnGWc7GYvBEA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u/KI/N33NKQx+QOJ6nHnMLJ/KqGMKvq6jS81oXp24fTgFCcDrKZYK9dOrmUFFKp35SqDNInk2kEmifGPahZI94PD6nirX/q7BYlQUv8JPkxmtHpf4r4vP+giUyOjk/Pl50FVAK3ba9ZdIKJ3CyGKcLCn49EZxOV9xrieRIgH2x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XG6KJfK2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="llzATAru"
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-43380a6fe8cso476325ab.0
-        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 10:14:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763576055; x=1764180855; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPirOi0w0Cb/s6FnCbMEuNgCnH0qPfOw0gyvUWbzUDU=;
-        b=llzATAru2jk3ZZD0dZ+SB7Yb2q3nN46GsSghbr+uENJWplHZQURAWhcBky7yH1dWVl
-         o93CmpeBoPJBEJDPnlh4EzUy6WZYxl7NfBpESV3X/+/0J5oHwmIvhbrczoVRxicBg6LH
-         YbeV4llS1EsoKtvMXwrvpGmqdh2BF3XzSQ0Kg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763576055; x=1764180855;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RPirOi0w0Cb/s6FnCbMEuNgCnH0qPfOw0gyvUWbzUDU=;
-        b=Fv6qEJAZPghUCwoE7crTJY+lQzHN2So4XoJNwmoXOB6DP2PinHjJIES4OxplFaUyMJ
-         WtF1ND+qJMPaXFTZU/zeg/0t0D2ymt1b9djgYSS4bg+zT7DhaJ0J3/dF3MoTJUxm91j0
-         297Nk4CcmEf5eaBkh3Js9gw3XeZCDnL7XQ+b3ZBrkc7fuoPAFRiDOFkP6cEjo6HAupJC
-         VZF/2uCkxxSfbJNP/RlvlBU0C5nGGgwKCj+jPxMqP8LAz121jaTi2rQkyApNBM2f8ZgZ
-         kuGM+pw2zpUygrhZPLNwE+uAamuc8yM7lo/UfYTRgC5SRS1GIi9XmtZzHXdfmgTljZvs
-         tW3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ7Wrn8jB0ikUtW0oXdt5JY25X2vswmfnPnWJEUtsyXvRfyc7c5trmv5ubrO0PPnUuN1I5@lists.linux.dev
-X-Gm-Message-State: AOJu0YzvSr2o9VK/A3k4w7Z4Qevg3+OU2HXYoX7FJKTt9rhCIxuVKj2r
-	dEqenet/wbks1s3nL0zx2ldnfrxg2UhKH/uljt0EaGOcnI4igR77yMzaCPKIEDOBMQ==
-X-Gm-Gg: ASbGncu4/5tD3QXpYsh0QTwMB4EiIERZeLSZ61hYbhKyTy1TsdqI+fa+lmIm5plGTD4
-	12ViZ1iIg4qCnR2OK9BV9k7pCossbwCg4f/pXmd2lom90eq6QQzKK+UB6kphlUqyOsg3IbTjapN
-	oIbatKQ7wsRKj1Mr8jEG8sCn2gQDEjysGQ3j1gfhdBrjHYmR8t2A1i+NTyPYwi6zVdWhMPQc7jv
-	D6DAHqpSeijb/toConKsKRzDL8TqJScoitnkgUh6FMKz/vxY/UQF+qMeTtS45RVxx+pxqgw9btv
-	NyMYJ0lIWYZEjFlNuuAGJIh7AnuZ51yDLoL4TGkAxBvkRGkQBNUBY91FHVd6Be360CFZWIVUYM+
-	3acSePkihcJq+taOpIeXCHeMdOtph8MtqE4CC7FXL0DQV8Z8yf7F3vV4MhmP6IM3CjThuE2kBkP
-	XnajGv
-X-Google-Smtp-Source: AGHT+IEqawcvOIPqsXpALDErL/1Go+TjtEXbiX8/+Jw/9VSxcMjIN9Ju3r68ajG6bVKTrOJBVHHikA==
-X-Received: by 2002:a05:6e02:3398:b0:433:7f13:3a8c with SMTP id e9e14a558f8ab-435a902d081mr4341845ab.16.1763576054629;
-        Wed, 19 Nov 2025 10:14:14 -0800 (PST)
-Received: from chromium.org ([73.34.74.121])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-949385ae254sm4838639f.1.2025.11.19.10.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 10:14:12 -0800 (PST)
-From: Simon Glass <sjg@chromium.org>
-To: linux-arm-kernel@lists.infradead.org
-Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Tom Rini <trini@konsulko.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	=?UTF-8?q?J=20=2E=20Neusch=C3=A4fer?= <j.ne@posteo.net>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Simon Glass <sjg@chromium.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Tamir Duberstein <tamird@gmail.com>,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v6 5/8] kbuild: Split out module targets into a variable
-Date: Wed, 19 Nov 2025 11:13:26 -0700
-Message-ID: <20251119181333.991099-6-sjg@chromium.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251119181333.991099-1-sjg@chromium.org>
-References: <20251119181333.991099-1-sjg@chromium.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XG6KJfK2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFB2C4CEF5;
+	Wed, 19 Nov 2025 18:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763577905;
+	bh=lREu9tNPPw7ji/ZfllpGZdKS3aTWW/dNnGWc7GYvBEA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XG6KJfK2DmumFoLSpYzy9iwgv2UkuH3HHAlMrJISRMAhTlkWo08RVAJNDN4WJ6nWB
+	 JZgqtpMhiUhjHGTyL289YUxD2lY9OTX0HEmqZkWIIZwqXjGY2BFn7KpaTYaj43dwI+
+	 Xa8ZA2gyzkIou44jFeZtPRCE5vPJb/aKgY7A0isl4iZWQH7qL7tbSdF0WmpXi5njyX
+	 khPoyMlFGQs9xIoop+d+v9v2Tt1pRCGix01MLPg+6TC49/3NxyYGskEbbNCKPCETgN
+	 YHyk4Qd1S0xtPtazwqxd7RGq+ESRKmsJC80CYq3jzn0hOl02/2FgwNYjqru/L4d0mB
+	 mfTuWds/T//vg==
+Date: Wed, 19 Nov 2025 11:45:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	kernel test robot <lkp@intel.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>, Kees Cook <kees@kernel.org>,
+	linux-crypto@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH libcrypto 2/2] crypto: chacha20poly1305: statically check
+ fixed array lengths
+Message-ID: <20251119184500.GA3303394@ax162>
+References: <20251118170240.689299-2-Jason@zx2c4.com>
+ <202511192000.TLYrcg0Z-lkp@intel.com>
+ <CAHk-=wj9+OtEku8u9vfEUzMe5LMN-j5VjkDoo-KyKrcjN0oxrA@mail.gmail.com>
+ <CAHmME9pvgyot-PJDbWu1saYagEYutddc_B9qNHf-MZ-vkw4zoQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHmME9pvgyot-PJDbWu1saYagEYutddc_B9qNHf-MZ-vkw4zoQ@mail.gmail.com>
 
-Add a modules-targets variable to list the targets which cause modules
-to be built, since we want to add a conditional target.
+On Wed, Nov 19, 2025 at 05:46:44PM +0100, Jason A. Donenfeld wrote:
+> Hey Linus,
+> 
+> On Wed, Nov 19, 2025 at 5:29 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> >  On Wed, 19 Nov 2025 at 04:46, kernel test robot <lkp@intel.com> wrote:
+> > >
+> > > >> drivers/net/wireguard/cookie.c:193:2: warning: array argument is too small; contains 31 elements, callee requires at least 32 [-Warray-bounds]
+> >
+> > Hmm. Is this a compiler bug?
+> 
+> It's not. It's a 0day test bot bug! My original patch had in it some
+> commentary about what a bug would look like when it's caught by the
+> compiler. In order to provoke that compiler output, I mentioned in the
+> commit message that this diff will produce such and such result:
+> 
+> diff --git a/drivers/net/wireguard/cookie.h b/drivers/net/wireguard/cookie.h
+> index c4bd61ca03f2..2839c46029f8 100644
+> --- a/drivers/net/wireguard/cookie.h
+> +++ b/drivers/net/wireguard/cookie.h
+> @@ -13,7 +13,7 @@ struct wg_peer;
+> 
+>  struct cookie_checker {
+>         u8 secret[NOISE_HASH_LEN];
+> -       u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN];
+> +       u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN - 1];
+>         u8 message_mac1_key[NOISE_SYMMETRIC_KEY_LEN];
+>         u64 secret_birthdate;
+>         struct rw_semaphore secret_lock;
+> 
+> It looks like the 0day test bot just went through the email and
+> applied all the `diff --git ...` hunks, without taking into account
+> the context area above where the actual patches start.
 
-Signed-off-by: Simon Glass <sjg@chromium.org>
----
+I don't think it is a bot issue. Just running 'b4 shazam' (i.e. just
+applying the patch with 'git am') on the series results in:
 
-(no changes since v5)
+commit 6ddc87109d4bb589d02cc3a8b037c99fdc4cbbf9
+Author: Jason A. Donenfeld <Jason@zx2c4.com>
+Date:   Tue Nov 18 18:02:40 2025 +0100
 
-Changes in v5:
-- Add a new patch to split out module targets into a variable
+    crypto: chacha20poly1305: statically check fixed array lengths
+    
+    Several parameters of the chacha20poly1305 functions require arrays of
+    an exact length. Use the new min_array_size() macro to instruct gcc and
+    clang to statically check that the caller is passing an object of at
+    least that length.
+    
+    Here it is in action, with this faulty patch:
 
- Makefile | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 638bc09a546a..8cd46222fc48 100644
---- a/Makefile
-+++ b/Makefile
-@@ -772,7 +772,12 @@ endif
- # in addition to whatever we do anyway.
- # Just "make" or "make all" shall build modules as well
+diff --git a/drivers/net/wireguard/cookie.h b/drivers/net/wireguard/cookie.h
+index c4bd61ca03f2..2839c46029f8 100644
+--- a/drivers/net/wireguard/cookie.h
++++ b/drivers/net/wireguard/cookie.h
+@@ -13,7 +13,7 @@ struct wg_peer;
  
--ifneq ($(filter all modules nsdeps compile_commands.json clang-%,$(MAKECMDGOALS)),)
-+modules-targets := all
-+modules-targets += modules
-+modules-targets += nsdeps
-+modules-targets += compile_commands.json
-+modules-targets += clang-%
-+ifneq ($(filter $(modules-targets),$(MAKECMDGOALS)),)
-   KBUILD_MODULES := y
- endif
- 
--- 
-2.43.0
+ struct cookie_checker {
+ 	u8 secret[NOISE_HASH_LEN];
+-	u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN];
++	u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN - 1];
+ 	u8 message_mac1_key[NOISE_SYMMETRIC_KEY_LEN];
+ 	u64 secret_birthdate;
+ 	struct rw_semaphore secret_lock;
 
+followed by the rest of the patch for me.
+
+Cheers,
+Nathan
