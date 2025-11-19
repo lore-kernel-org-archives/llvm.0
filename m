@@ -1,144 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441D835BDC1;
-	Wed, 19 Nov 2025 12:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70178364EBF
+	for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 16:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763556355; cv=none; b=EdSX7WhfpoBaphKzsZJh4XBlH6cE/ONSu/YRn5vNRYw4l57yiMZYb5cgOLquwy5prX9b7nYT1Um9zufvu0iNO96WRx1iN3972jdJ/pFIjoB0NUuRcGfy2A6ClTYiLgMgUYoUcvjZ42+/iMsdr2wXIXmQ69gRhHiVH0YN4KLC2Gc=
+	t=1763569400; cv=none; b=uut/QCmLp3L0ldaJPG8QmMmHfSDoL67jY9Go43Y+yELioJ9x54hOhRNgGINzbE8gUboFxmLeXCvxORProb04hBegOFy2JUIfkTftdopBx/3TkgvTYhGAYoaM3sCt5Wnu9Z9kxVoWWkr6n1U9RLiTyGBA4Lq1lSDz4Ao+x9VYQW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763556355; c=relaxed/simple;
-	bh=HF9GdCIMZF1sjrLdRxndNornshZnJxuUvneqfFK3BPw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bW73RLZl49yOemGHbdn/0Xke3CoF0rES0a1a1UT8m22/XYVQgZcJXuXZ2uPexWmGFcudPjeSV1gu2oUP4KUKGMLaZmzUXMgl4of1Xz7F7RumN3MvysAnCRFRNEU3ukq/1+rhmye1fjsyf5eRTp5lRizypm507xGRZ6lmp9aeOGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FCMFAzIo; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763569400; c=relaxed/simple;
+	bh=UKD3Ih/vdXts1YAdrLZqIWg/yDwIkFf0XJQHTJ83sEc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ex6+elQ24pi+rO6lZuI7Pc3KQ3+/nr2832ZR5O/W8FPaUeRQqFlXpGRA3+eVX9bljZnNyoJPKdcKfWmpIaZx/eeBcawqDVwnmJkEJwodpRdNIfGCDwOcmufTjEUn32G/zOJn9S1hpEK775HkAlmVf4+FSRdBa90CwXCr0rxu4gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=hsU7dpaF; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FCMFAzIo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763556352; x=1795092352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HF9GdCIMZF1sjrLdRxndNornshZnJxuUvneqfFK3BPw=;
-  b=FCMFAzIo9jARyIaWXHj+cgaTzumVJ53QT5GZ5mvsb7r2p22tZkLBQ36D
-   IjXCUao7fk49sAw6BcMZ78RdZtw/ZQOCORsMGEC21yTfsLR9xwq9GK+dl
-   lFDIOxA1JOPc31MbkiYfH4AAg1/nKwv3IZSljGmFB5nLtoIuciVHHIiUi
-   ZrZZKuNcNwQqT+ogqBuf8PVPMoEMoiPQqpissMzYU93sTz77Lqg5kBvG3
-   EwjjMBDx+73TzzupkB822z7Fnm0yid/kOy0Dy6/3u6rxl2FIBGd8mpX4t
-   NuvpT8QadvOfJsF2nq4zASAT4dY1Czva+njm2TpWE/8vTtAT4ORfgYP/T
-   A==;
-X-CSE-ConnectionGUID: kFCuKy20QFKrDkTOxPLdTA==
-X-CSE-MsgGUID: TFnXoFa4TsSKl3UO0vh/AQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="91070276"
-X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="91070276"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 04:45:48 -0800
-X-CSE-ConnectionGUID: B0RsA/byT9izExDqLpupDQ==
-X-CSE-MsgGUID: fxKk5ZwHQG+ErFr+MlomYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="190708391"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Nov 2025 04:45:45 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vLhZ9-0002sn-2G;
-	Wed, 19 Nov 2025 12:45:43 +0000
-Date: Wed, 19 Nov 2025 20:45:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>, Kees Cook <kees@kernel.org>,
-	linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH libcrypto 2/2] crypto: chacha20poly1305: statically check
- fixed array lengths
-Message-ID: <202511192000.TLYrcg0Z-lkp@intel.com>
-References: <20251118170240.689299-2-Jason@zx2c4.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="hsU7dpaF"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-63c489f1e6cso1768633a12.1
+        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 08:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1763569396; x=1764174196; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2SE94M0Eu3i3U+0dCVoKdz4qQM+FPRKFn1N8b2gaTM=;
+        b=hsU7dpaFI6kXm9JwLq48xRXLnTYIH+dj2Ayxz+hPej+h4KqvQY2msBnQPIlvuWd7aP
+         vb75ugPllnMHI5UCzx01m6IB2FzhZSjpozB7boxTdu3+S+vOqvJranmpcGiNN+tZzW9i
+         x5Wt0qeq5f15JUj2jTz6ZxXzQg1/4O0paJf+M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763569396; x=1764174196;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y2SE94M0Eu3i3U+0dCVoKdz4qQM+FPRKFn1N8b2gaTM=;
+        b=OvvN11Iaq+2AaZym62pvulYQqMslvmrOwILfliec+APyHJEIi1VbXNQyMnifBbV3bB
+         +swR1GTxaIhNiaHrkXGM/gwaJqTKrAtr5NXCsvWsEX6ljINkIE5601rJLxPpKOlnOnk5
+         PzmFsY+oWqf6HNf+926rVaYg/Kof1Qm1+QmWVE8+LXtslIL+oZA7J3eAgcS8ipNyAYXl
+         rU0jQAY3/MUMbMCBzCOzAuocPB/InJlYLkRCqBgrgU604M19PKSY7JdF5aUHwiNZ0DPO
+         FiW8+k94a7eOtWMu+dND/8+usESmNbNUyseCDmy+k7cwAop6pjKP/4AYGm456cwzHZA/
+         XP8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWQb0I6wmr+j9Xxn4mOVns6Ht5gD8tn91omuiqDy7Bld4GYWHQmSZux3V7eMVmZ+P3YRWhL@lists.linux.dev
+X-Gm-Message-State: AOJu0YxeaAKlC9kwzmpOh6ktNDNWIx5rbHF9zqON1NlaLq8g1im81+KJ
+	9JlynaqGyWcruEwqANTdKYtRwt84E3BKsjwP0vgzhLW+UBpARV37gbVEiUC+tQ/L+KHl/Ixy2Gy
+	6yFAD8Zk=
+X-Gm-Gg: ASbGncs5A5QkDhfPi0lp+txq4WvJ38eZgQ9ifj6L075oQwqWW01foUHX2A9l1f1i4f+
+	dbRzY27rzi7GiLuDg4u9dEDQZ8tvtdlghumyrhuOADa6oV62q7RERYBtzHn/Lj0qHWfHA4Iz/Gh
+	I4G9HYHinlv1LiNG12/fKnfJsFQWEhLl2ct5Z9dgk1Wy1rhbcPFIbnfwhjTW6igIglhdLuaBLzm
+	RdAAX+pI5dVAn2whxi7dDiNkIdIMjc3helfkg0ftd1c/S0ZY5onG+6QAHVET3BnOdEA1XOXvA6v
+	FUib2/eRagDsxc8LxRAO99yMZcN3mwLkvl9/9CyzJubUzeB8PgW1EGSHSkDpWoVHCyKB1TxwFbt
+	/s9qbA8xx6P/lE0y+h/E2NSTzDakUQ87SEeFbfNbh1bo5gm1cUeVHYBBv5ApoxYhiiOO/7oQ8a6
+	1JErCBr3vyh+vUcmfZSlCjcK3cuyj907SklyLKTot1ltXfDCyMKGEBBJsrUzcH
+X-Google-Smtp-Source: AGHT+IG+r1wzW03KvQbMpOS35BWLuF0EqMBAnJTWrXXNGmzTUsU5GA8VyvxS6LI1xjduE6RLmOmKkw==
+X-Received: by 2002:a05:6402:b36:b0:641:88ff:10ad with SMTP id 4fb4d7f45d1cf-6451ee6e083mr2289258a12.14.1763569396353;
+        Wed, 19 Nov 2025 08:23:16 -0800 (PST)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6433a4b1fadsm16793760a12.31.2025.11.19.08.23.13
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Nov 2025 08:23:13 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b727f452fffso184713866b.1
+        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 08:23:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXvuqzEgv7KSkNHfziX6+M7ck2LBk8JGkbNUpu9ZBie4/Cbeyf1UZ1ndFq1HzZ7OzyH6pwo@lists.linux.dev
+X-Received: by 2002:a17:907:3f22:b0:b70:83a2:3f5a with SMTP id
+ a640c23a62f3a-b7637f09c18mr367914966b.0.1763569393225; Wed, 19 Nov 2025
+ 08:23:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251118170240.689299-2-Jason@zx2c4.com>
+References: <20251118170240.689299-2-Jason@zx2c4.com> <202511192000.TLYrcg0Z-lkp@intel.com>
+In-Reply-To: <202511192000.TLYrcg0Z-lkp@intel.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 19 Nov 2025 08:22:51 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj9+OtEku8u9vfEUzMe5LMN-j5VjkDoo-KyKrcjN0oxrA@mail.gmail.com>
+X-Gm-Features: AWmQ_blvNYn7H28EA66iZpW2y6IrvCN6ellqnQuobuFiTc4oP03NDclyafTOCUE
+Message-ID: <CAHk-=wj9+OtEku8u9vfEUzMe5LMN-j5VjkDoo-KyKrcjN0oxrA@mail.gmail.com>
+Subject: Re: [PATCH libcrypto 2/2] crypto: chacha20poly1305: statically check
+ fixed array lengths
+To: kernel test robot <lkp@intel.com>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Kees Cook <kees@kernel.org>, linux-crypto@vger.kernel.org, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jason,
+ On Wed, 19 Nov 2025 at 04:46, kernel test robot <lkp@intel.com> wrote:
+>
+> >> drivers/net/wireguard/cookie.c:193:2: warning: array argument is too small; contains 31 elements, callee requires at least 32 [-Warray-bounds]
 
-kernel test robot noticed the following build warnings:
+Hmm. Is this a compiler bug?
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master ebiggers/libcrypto-next ebiggers/libcrypto-fixes linus/master linux/master v6.18-rc6 next-20251119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+That checker->cookie_encryption_key is declared as
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-A-Donenfeld/crypto-chacha20poly1305-statically-check-fixed-array-lengths/20251119-011125
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20251118170240.689299-2-Jason%40zx2c4.com
-patch subject: [PATCH libcrypto 2/2] crypto: chacha20poly1305: statically check fixed array lengths
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251119/202511192000.TLYrcg0Z-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251119/202511192000.TLYrcg0Z-lkp@intel.com/reproduce)
+        u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN];
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511192000.TLYrcg0Z-lkp@intel.com/
+and NOISE_SYMMETRIC_KEY_LEN is an enum that is defined to be the same
+as CHACHA20POLY1305_KEY_SIZE, which is 32.
 
-All warnings (new ones prefixed by >>):
+And the compiler is aware of that:
 
->> drivers/net/wireguard/cookie.c:193:2: warning: array argument is too small; contains 31 elements, callee requires at least 32 [-Warray-bounds]
-     193 |         xchacha20poly1305_encrypt(dst->encrypted_cookie, cookie, COOKIE_LEN,
-         |         ^
-     194 |                                   macs->mac1, COOKIE_LEN, dst->nonce,
-     195 |                                   checker->cookie_encryption_key);
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/crypto/chacha20poly1305.h:32:20: note: callee declares array parameter as static here
-      32 |                                const u8 key[min_array_size(CHACHA20POLY1305_KEY_SIZE)]);
-         |                                         ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/wireguard/cookie.c:6:
-   In file included from drivers/net/wireguard/cookie.h:9:
-   In file included from drivers/net/wireguard/messages.h:10:
-   In file included from include/crypto/chacha20poly1305.h:11:
-   In file included from include/linux/scatterlist.h:5:
-   In file included from include/linux/string.h:382:
-   include/linux/fortify-string.h:480:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-     480 |                         __write_overflow_field(p_size_field, size);
-         |                         ^
-   2 warnings generated.
+>    include/crypto/chacha20poly1305.h:32:20: note: callee declares array parameter as static here
+>       32 |                                const u8 key[min_array_size(CHACHA20POLY1305_KEY_SIZE)]);
+>          |                                         ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+but still talks about "contains 31 elements".
 
-vim +193 drivers/net/wireguard/cookie.c
+Is this some confusion with the compiler thinking that a "const u8[]"
+is a string, and then at some point subtracted one as the max length,
+and then is confused due to that?
 
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  179  
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  180  void wg_cookie_message_create(struct message_handshake_cookie *dst,
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  181  			      struct sk_buff *skb, __le32 index,
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  182  			      struct cookie_checker *checker)
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  183  {
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  184  	struct message_macs *macs = (struct message_macs *)
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  185  		((u8 *)skb->data + skb->len - sizeof(*macs));
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  186  	u8 cookie[COOKIE_LEN];
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  187  
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  188  	dst->header.type = cpu_to_le32(MESSAGE_HANDSHAKE_COOKIE);
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  189  	dst->receiver_index = index;
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  190  	get_random_bytes_wait(dst->nonce, COOKIE_NONCE_LEN);
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  191  
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  192  	make_cookie(cookie, skb, checker);
-e7096c131e5161 Jason A. Donenfeld 2019-12-09 @193  	xchacha20poly1305_encrypt(dst->encrypted_cookie, cookie, COOKIE_LEN,
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  194  				  macs->mac1, COOKIE_LEN, dst->nonce,
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  195  				  checker->cookie_encryption_key);
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  196  }
-e7096c131e5161 Jason A. Donenfeld 2019-12-09  197  
+Because if compilers screw this up, we can't do that 'static' thing,
+regardless of name. I'm  not willing to play silly buggers with broken
+compiler warnings.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+               Linus
