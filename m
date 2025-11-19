@@ -1,47 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181352F7477
-	for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 16:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFF52E7BCC
+	for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 16:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763570820; cv=none; b=EM9guy5sjn47ieodsBtcmIvyFDiPpTSEQH5Y821vlxNAGOHVqpPjvvWCeP8xsF1fdPIXTzsaf461cgSHFUQVF0uvRgtk72bFcH/b+I6oBTXBx4H4nzpUF0UIZe0CCm2lwe45+dZmWI6AR/KGocviPZ5+vhZxRU4o5ZAiRKgmI04=
+	t=1763571455; cv=none; b=TdBRaudq8bPN3/abcnLioCCuEHeGy27E2DZlSBxyA6hQvrFFd4b3BU4MsOv4mkMi0B9ddkDOygDrvtdRhaFBBSzd0AkjyAswxgOyLGGdZieKrx2soa+CCEseiZ6hjzVvotXxejeqb+/+l6UZj3K/12/GU8/kqz4ZPTzLjswcVz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763570820; c=relaxed/simple;
-	bh=0xLkFu3uiKHeufhwFRrEKuhWGUjK/Zc7ICOSmHpmYFs=;
+	s=arc-20240116; t=1763571455; c=relaxed/simple;
+	bh=3qbmBlDOhBqpexe2KgI2APMs04wdSfYxDR78bi2WaDA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=chWI5ygoY/OLnF/hnbW9dhzGQ/bWxCpPHsk4a/V5zfeFVDaQLUWEcbzyDiSC/u1zNm5kDw2zjxTDNE/8N40VhgOKD0lR0JAOu9d8Crj0nUU/NrSZ/ok7s7eXgyQmzIr95MZQkDVtuNZSCj+LW25wES3av+khVhltpUwtWTknEn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=AEU38NiH; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=ixQN/QVKK0REsrL0nga12jUROawPmsC5637qmm9TMzSNDL/p+RQZjeoh5fDphC+urJzx6m4Dm5NfkBttamfjkQW2egrtpjEcC+dCcnJeEbH4KmuIkhUoV1gSdOtnPtyxAwnINvJtPG49zTXdtaJuYxkVZvTyMCsBGq+IEesxeDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=EtYaJXC9; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AEU38NiH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D8BC4CEF5
-	for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 16:46:59 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AEU38NiH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1763570817;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3MZQMEyTMoJJe5B6+/49BuW6c9r2k3u2lv8xbzmwcJI=;
-	b=AEU38NiHP7to5gfFGyw7G3EHoZxPUnwds6ET5h6ZWF/lVs5wVCX5FN2bY2moGtdnVY86Ji
-	DKGibSDnJLoGDvT10ceevu0zl8sAPTErhvGilkmyWDdJlZhamGMa5y09NvwmokAbCbeKqE
-	+ZKdBzHFmLNKGzx+fACfgPEcOc525Pw=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3d4e69b4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-	for <llvm@lists.linux.dev>;
-	Wed, 19 Nov 2025 16:46:57 +0000 (UTC)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7c6e9538945so576492a34.1
-        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 08:46:57 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXBU0W20q1H52buM2LAGTvzIkvQvSdfWD/bWRAFomfRQYxbfQPgRDxOM9lRueAgrTKIebRr@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyf3yAbYk75H7ulGio1wHKy8ut6IrVE/Z3xCfcg2oVBC9E+BNcT
-	XNAl4kgpqbcCJEbxUxvULMN47Mk8A5V1ZGtQADO53eW2n5JiwrB9JYEbC5DhbnZrEGFYEv35kTm
-	xwY0CcBnL9ZeBWf7OKihVyB6orwsr8zU=
-X-Google-Smtp-Source: AGHT+IGojZcTh0K4+4JFRFqF58UTXS5CNSGxA5ZrvnRwlgAfjWt1k4AmVJZdufTl0VMncRxTw03BC0aT5sARgwwsdoA=
-X-Received: by 2002:a05:6808:4448:b0:450:cf2d:c11c with SMTP id
- 5614622812f47-450f0fc8bb0mr1433626b6e.12.1763570816214; Wed, 19 Nov 2025
- 08:46:56 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="EtYaJXC9"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b737cd03d46so654232966b.0
+        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 08:57:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1763571451; x=1764176251; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5xr7znsz2E58DjiH4TrOVRBZvkxR+ArNemRIj4DQcU=;
+        b=EtYaJXC9yFhhaYkxkkxzhYseGzQIJjOT6BCHM9Ezu0EXytT9/b2KvIohPcuOjEAR5K
+         C8og2839Ml2flusmI65PgfjlGHXKEJfzeA2k6cJ1bGQF+EbXEyIRmM2B63T9Q2PYFpwe
+         dbA6hmuK3p7xy6A9F1l3agQSG6EuSmfa+pM2c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763571451; x=1764176251;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e5xr7znsz2E58DjiH4TrOVRBZvkxR+ArNemRIj4DQcU=;
+        b=ZQTSU0xtCd2EUvpkua5z7WaGgHjMNWNnAxYZJa3tF0mzoicaGYJofCss8Tyle/og6E
+         O7/hJtmGjjSzlOcbLvc6R2Q6dlljPIv3GxVkKOAyHgpQHb4L6h17zVWzC321bCGc4YQt
+         XH/obkJHoGS48QD30DzrfACSbtQ3yHxDvnR2D/uN6gheoSjXCpEULPhdjr3gRhjEhJ4n
+         sgjhNiQPMAyHc5iUv4JjRMIvlmSrt9yXAkhZSmZl7hFP2yH964rOMZGPFXUzfx+m/Of4
+         tJZ+ujSv83FeBqSxIcGQ3sJtsBt9vgVxuYYFV2RCv6zNnLVDWXNmHHFkPlwUs3y+ygB4
+         wSkw==
+X-Forwarded-Encrypted: i=1; AJvYcCWEUArOm3GOGjNMSBGD2HM0sQyIvQwPNO7Ot9v76ZQM6zvEcnZ7Qt8xFF+1CnPr2ramOL5K@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy7yAV3mdYtvBsnoveNY2N5SqOx3QesU4Tox9XM0AkQyD4JgphI
+	SnpEVp7iN8OW10UTBtoM6iGjpSMWWal0t41emAIuxVyOs92xXuK3grtX2oR/Ej19DvP/T5ZZF5u
+	bjqA1Tp6vBg==
+X-Gm-Gg: ASbGncsehde9PjGg8wGgYOl1RVMYHjUSQol22VeMy/pYf+0fotVW53Yqn0PZayqpHyW
+	0iy9AbWOcDBRu4r/1IL4FyhuXIROlBSafvLvRQ8AawyUJWcEv4aU9BVupXhPoSg00c5NpM1YwIu
+	vA5brQiB/PjANeWQlNK+jkKODy5YSK+/DZ1tBJASNt5abZmLc3k+MMOzLc2spLDFqotMfPssVlv
+	CUmnuk44LXybq5PU5LxbAE/c85VSBn1xBhdmTLSmZL110n6uah/Com9wScm+uvEUGua6gwyNT8z
+	+7zt4Qg5WB+98RNUT+GWt1ny7WJMlJ8eFIidyjNa0hu0rbKXMYi6vuv2nUG8e/c2ka7haFycddK
+	uYjK1XTP+fKdO1d6LFfy0S9qasIiZXOIzQl33SLiRdPwmqQggKmIA5qfDg8j64ypqlRzM6YPMf+
+	io8jhMOP4uU1XVBYORBChnAUSvqg5VsCtkXzD2HbAHd127NuCZnQaAr/MLuXGCGbNzK9zeTNs=
+X-Google-Smtp-Source: AGHT+IFXdk0h0wLKvJICsC4PwDHqFWmhHx8uWHlNaCJYaur01aDEBFrk26CJ0/U5eko5tKdMh+VhAg==
+X-Received: by 2002:a17:906:6a10:b0:b73:8bd4:8fb with SMTP id a640c23a62f3a-b738bd40df4mr1674516966b.42.1763571451388;
+        Wed, 19 Nov 2025 08:57:31 -0800 (PST)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b73a5d77a03sm765204266b.63.2025.11.19.08.57.30
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Nov 2025 08:57:30 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b73669bdcd2so984931766b.2
+        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 08:57:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU+5QFtxI98/aam1loU/j1qdoEbxsKh5OC8ZGlAVjUi9VrnFwH8YvvBxceJkEpKBBlAU25e@lists.linux.dev
+X-Received: by 2002:a17:906:478d:b0:b71:9c99:7b8a with SMTP id
+ a640c23a62f3a-b7367bc6b95mr1993595766b.49.1763571449725; Wed, 19 Nov 2025
+ 08:57:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,59 +70,36 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20251118170240.689299-2-Jason@zx2c4.com> <202511192000.TLYrcg0Z-lkp@intel.com>
- <CAHk-=wj9+OtEku8u9vfEUzMe5LMN-j5VjkDoo-KyKrcjN0oxrA@mail.gmail.com>
-In-Reply-To: <CAHk-=wj9+OtEku8u9vfEUzMe5LMN-j5VjkDoo-KyKrcjN0oxrA@mail.gmail.com>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Wed, 19 Nov 2025 17:46:44 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pvgyot-PJDbWu1saYagEYutddc_B9qNHf-MZ-vkw4zoQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bkX0Uk7FoCtwK4HB0XGwfz2L8ZkD_zXRpQAc3ZV0_HqFHiIeZlwsy8i_Xc
-Message-ID: <CAHmME9pvgyot-PJDbWu1saYagEYutddc_B9qNHf-MZ-vkw4zoQ@mail.gmail.com>
+ <CAHk-=wj9+OtEku8u9vfEUzMe5LMN-j5VjkDoo-KyKrcjN0oxrA@mail.gmail.com> <CAHmME9pvgyot-PJDbWu1saYagEYutddc_B9qNHf-MZ-vkw4zoQ@mail.gmail.com>
+In-Reply-To: <CAHmME9pvgyot-PJDbWu1saYagEYutddc_B9qNHf-MZ-vkw4zoQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 19 Nov 2025 08:57:13 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whjG-B517DxHm5rSE0S76n+fHMdnJdqFg9VTvx6-HgGRA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkxxp7Yy44j171fiA9Z2Xle-tZAZS12NBySFcI47avzcJvVuC9gPT3eA3A
+Message-ID: <CAHk-=whjG-B517DxHm5rSE0S76n+fHMdnJdqFg9VTvx6-HgGRA@mail.gmail.com>
 Subject: Re: [PATCH libcrypto 2/2] crypto: chacha20poly1305: statically check
  fixed array lengths
-To: Linus Torvalds <torvalds@linux-foundation.org>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc: kernel test robot <lkp@intel.com>, Eric Biggers <ebiggers@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
 	Kees Cook <kees@kernel.org>, linux-crypto@vger.kernel.org, llvm@lists.linux.dev, 
 	oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hey Linus,
-
-On Wed, Nov 19, 2025 at 5:29=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Wed, 19 Nov 2025 at 08:47, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
->  On Wed, 19 Nov 2025 at 04:46, kernel test robot <lkp@intel.com> wrote:
-> >
-> > >> drivers/net/wireguard/cookie.c:193:2: warning: array argument is too=
- small; contains 31 elements, callee requires at least 32 [-Warray-bounds]
+> > Hmm. Is this a compiler bug?
 >
-> Hmm. Is this a compiler bug?
+> It's not. It's a 0day test bot bug! My original patch had in it some
+> commentary about what a bug would look like when it's caught by the
+> compiler. In order to provoke that compiler output, I mentioned in the
+> commit message that this diff will produce such and such result:
 
-It's not. It's a 0day test bot bug! My original patch had in it some
-commentary about what a bug would look like when it's caught by the
-compiler. In order to provoke that compiler output, I mentioned in the
-commit message that this diff will produce such and such result:
+Lol, ok.
 
-diff --git a/drivers/net/wireguard/cookie.h b/drivers/net/wireguard/cookie.=
-h
-index c4bd61ca03f2..2839c46029f8 100644
---- a/drivers/net/wireguard/cookie.h
-+++ b/drivers/net/wireguard/cookie.h
-@@ -13,7 +13,7 @@ struct wg_peer;
+I sometimes actively just whitespace-damage my "what about this"
+patches to make sure people don't just blindly apply them without
+thinking about them and actually look at them.
 
- struct cookie_checker {
-        u8 secret[NOISE_HASH_LEN];
--       u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN];
-+       u8 cookie_encryption_key[NOISE_SYMMETRIC_KEY_LEN - 1];
-        u8 message_mac1_key[NOISE_SYMMETRIC_KEY_LEN];
-        u64 secret_birthdate;
-        struct rw_semaphore secret_lock;
+Maybe that's a good policy in general, so that the bots don't do the same ;)
 
-It looks like the 0day test bot just went through the email and
-applied all the `diff --git ...` hunks, without taking into account
-the context area above where the actual patches start.
-
-So, if anything, this test bot output is showing that the compiler
-feature works as intended.
-
-Jason
+            Linus
