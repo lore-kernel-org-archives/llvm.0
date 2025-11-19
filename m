@@ -1,72 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D14C340A67;
-	Wed, 19 Nov 2025 09:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82377344057;
+	Wed, 19 Nov 2025 09:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763544871; cv=none; b=dJGkRl8COcoBpQSIxlv3p+M4fvQ2Jvxo4AIxAJDZFNVrhL/xIoRhFQ8xc/HaehyfY0zYA6/GmSyHolKiZyGYfXAaZDTk8DsEvJR/fh6SCvMRicBOTgMBXQCYnxrKdbPCdwyuF3hMB8Y31ssEjtqoF8K/svrtnJBXtqpKEM7Dlmc=
+	t=1763546072; cv=none; b=EaEn4huRWBwohpkmZom8N4Ue5NBxumI698tcpZivr9lT+00N8EptpNqnmRa3Lle8ZUlAw+7fPhozdRAhlcI/z39UkhMx2ub0aSYhnssJAk+bNneG7I6msBtgHLtSC45A6ddNRjwmaYAwewoijMMlu/doNVLimOWsPc8Jv4CJoqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763544871; c=relaxed/simple;
-	bh=rt1dK5mUjJCU+oDDyz7ttJ0ljVGuDFtw09KBx+xqZ0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PqZN8fbKUciSoNJHrbjTtxtnIdXaFRbkOBqqOR7Urjneo9tvipS5zC7+w4IGQGypB4Ve4ovFNFVrlf/Z4LskqoXZDHGgXh8aoO/DxvCserwdMGz+JJoYYQU8oG+2FDlcDF9KfM9MbCptLxdsn2KyXmHuyRghyEkURUJjSimATS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bqmNHyZL; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1763546072; c=relaxed/simple;
+	bh=z2TWP4jUGjsyaNtUefTFGo4oseDca+8u0WpqNMed2Xw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kvhHeWsA2GGVgPWubDvhJWe4ZNuNZO7tRpX1PZljtT06o+M04vRUPyrzMTv241gfVcWNGdMOFNU2QIRfAx5dAJeZr3Hj9xoqeEHXdPiX1PaQZdKwSZ07ZNHjpz1OWnLYABGZBLrsFE36qzsqn+M2jHfXuvAI4Eli/dlLso+QgJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V7WKN05f; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bqmNHyZL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V7WKN05f"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763544869; x=1795080869;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rt1dK5mUjJCU+oDDyz7ttJ0ljVGuDFtw09KBx+xqZ0M=;
-  b=bqmNHyZLGWuv2dWXr8j/UAqvT0ZRToi1gOS8/nu1C4X2Qt3s3DvoRLwb
-   RGxkF8mmKDxpd7MR1pzyU1cAHbDbGBukjmZnhd1VFu8QDt4Hd5XX7uEd+
-   d1FLhg+qu8oomTxCR9RX6IzstCLlJZB3/CdbhuNqBRtzUj+/sxShpi6pm
-   +g5NlVVCezBTfei3LjQCRc2N5LGrWh8Fkzy6jXUFsTLRI57zORqgJPdUz
-   Jlaow7H0x+mLlIB9OSJhi2w+WhLMInOQ+uy9PCkd5yp3VK59UD2yjM9Mv
-   10wNaGudwJ2ZeevqvXM5fn0jZZ0zVnURTi5fDjaKzsbncHakJ4tQJ/fVv
-   w==;
-X-CSE-ConnectionGUID: o0iHMRPGQFa1Tu/Uuakijg==
-X-CSE-MsgGUID: MvGVrJO/QJCZoj+87Bq/IQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="77038024"
+  t=1763546070; x=1795082070;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=z2TWP4jUGjsyaNtUefTFGo4oseDca+8u0WpqNMed2Xw=;
+  b=V7WKN05f+GplyNBI8ESFRXzp/iQr+pEHYwYIL9lknis/NgG6Nw6lnbaM
+   /nriwz2bajR5YDGO1t1sLZJRbk8KA57SELCJrfGcr24mntwn+6al1KVZe
+   f5ieRtNm9jOAJ4NwBYTFVHDTLt6ePmceQHwno065WFGRDLZavpdgx8jpd
+   B0gBVdegr/o2TLIQg5A958mjZ68V85AUZJm390iXom5E9QwPi0YXMFyYv
+   QaUtpC+XH+YT11xrK2gliett7MwgU278/6NtMBte0GjL6cRnnNqPOyo21
+   qo7D1rGGs2Z60lXTzL/+lWs69AA4j6dFOAQsUHcD4X6adCKYbddWkIqi2
+   Q==;
+X-CSE-ConnectionGUID: GwLDBoM0R/+qJ4Tktzx94A==
+X-CSE-MsgGUID: 5tdFNLylSOubgqZSkTPetA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="91057082"
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="77038024"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 01:34:29 -0800
-X-CSE-ConnectionGUID: NA1UNjAUR0SNiQW3iAbJ3Q==
-X-CSE-MsgGUID: jwnvvV7wQUGSssZm4Fikrg==
+   d="scan'208";a="91057082"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 01:54:28 -0800
+X-CSE-ConnectionGUID: yOIF8ZUhQRSTcny4CCVT8w==
+X-CSE-MsgGUID: kkPR3wzLStKg9Ni08IjELg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="190805313"
+   d="scan'208";a="195485850"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 19 Nov 2025 01:34:25 -0800
+  by orviesa004.jf.intel.com with ESMTP; 19 Nov 2025 01:54:28 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vLeZz-0002fL-0w;
-	Wed, 19 Nov 2025 09:34:23 +0000
-Date: Wed, 19 Nov 2025 17:33:31 +0800
+	id 1vLetN-0002h5-0w;
+	Wed, 19 Nov 2025 09:54:25 +0000
+Date: Wed, 19 Nov 2025 17:54:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>,
-	linux-cxl@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, Gregory Price <gourry@gourry.net>,
-	Robert Richter <rrichter@amd.com>,
-	Cheatham Benjamin <benjamin.cheatham@amd.com>,
-	"Fabio M . De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Subject: Re: [PATCH 4/4 v6] cxl/test: Simulate an x86 Low Memory Hole for
- tests
-Message-ID: <202511191640.3qEkK2oZ-lkp@intel.com>
-References: <20251118194321.1773484-5-fabio.m.de.francesco@linux.intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:vmx/sgx2_pferr_intercept 9/9]
+ arch/x86/kvm/vmx/vmx.c:5213:17: error: call to undeclared function
+ 'IS_ENABLED_'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202511191755.QwebkOuA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,131 +63,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251118194321.1773484-5-fabio.m.de.francesco@linux.intel.com>
 
-Hi Fabio,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 7ec9db66cc552f2f8a6779c16d01a2a01eccedde]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/cxl-core-Change-match_-_by_range-signatures/20251119-034652
-base:   7ec9db66cc552f2f8a6779c16d01a2a01eccedde
-patch link:    https://lore.kernel.org/r/20251118194321.1773484-5-fabio.m.de.francesco%40linux.intel.com
-patch subject: [PATCH 4/4 v6] cxl/test: Simulate an x86 Low Memory Hole for tests
-config: powerpc64-randconfig-001-20251119 (https://download.01.org/0day-ci/archive/20251119/202511191640.3qEkK2oZ-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251119/202511191640.3qEkK2oZ-lkp@intel.com/reproduce)
+tree:   https://github.com/sean-jc/linux vmx/sgx2_pferr_intercept
+head:   8a7add4d5d370361f93bd73f26aa92f198250ce5
+commit: 8a7add4d5d370361f93bd73f26aa92f198250ce5 [9/9] KVM: VMX: Always reflect SGX EPCM #PFs back into the guest
+config: x86_64-randconfig-013-20251119 (https://download.01.org/0day-ci/archive/20251119/202511191755.QwebkOuA-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251119/202511191755.QwebkOuA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511191640.3qEkK2oZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511191755.QwebkOuA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/cxl/core/region.c:892:9: error: call to undeclared function '__platform_region_matches_cxld'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     892 |         return platform_region_matches_cxld(p, cxld);
-         |                ^
-   drivers/cxl/core/platform_quirks.h:48:38: note: expanded from macro 'platform_region_matches_cxld'
-      48 | #define platform_region_matches_cxld DECLARE_TESTABLE(platform_region_matches_cxld)
-         |                                      ^
-   drivers/cxl/core/platform_quirks.h:46:29: note: expanded from macro 'DECLARE_TESTABLE'
-      46 | #define DECLARE_TESTABLE(x) __##x
-         |                             ^
-   <scratch space>:63:1: note: expanded from here
-      63 | __platform_region_matches_cxld
-         | ^
-   drivers/cxl/core/region.c:892:9: note: did you mean 'platform_region_matches_cxld'?
-   drivers/cxl/core/platform_quirks.h:48:38: note: expanded from macro 'platform_region_matches_cxld'
-      48 | #define platform_region_matches_cxld DECLARE_TESTABLE(platform_region_matches_cxld)
-         |                                      ^
-   drivers/cxl/core/platform_quirks.h:46:29: note: expanded from macro 'DECLARE_TESTABLE'
-      46 | #define DECLARE_TESTABLE(x) __##x
-         |                             ^
-   <scratch space>:63:1: note: expanded from here
-      63 | __platform_region_matches_cxld
-         | ^
-   drivers/cxl/core/platform_quirks.h:31:1: note: 'platform_region_matches_cxld' declared here
-      31 | platform_region_matches_cxld(const struct cxl_region_params *p,
-         | ^
->> drivers/cxl/core/region.c:1837:7: error: call to undeclared function '__platform_cxlrd_matches_cxled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1837 |                 if (platform_cxlrd_matches_cxled(cxlrd, cxled))
-         |                     ^
-   drivers/cxl/core/platform_quirks.h:47:38: note: expanded from macro 'platform_cxlrd_matches_cxled'
-      47 | #define platform_cxlrd_matches_cxled DECLARE_TESTABLE(platform_cxlrd_matches_cxled)
-         |                                      ^
-   drivers/cxl/core/platform_quirks.h:46:29: note: expanded from macro 'DECLARE_TESTABLE'
-      46 | #define DECLARE_TESTABLE(x) __##x
-         |                             ^
-   <scratch space>:101:1: note: expanded from here
-     101 | __platform_cxlrd_matches_cxled
-         | ^
-   drivers/cxl/core/region.c:1837:7: note: did you mean 'platform_cxlrd_matches_cxled'?
-   drivers/cxl/core/platform_quirks.h:47:38: note: expanded from macro 'platform_cxlrd_matches_cxled'
-      47 | #define platform_cxlrd_matches_cxled DECLARE_TESTABLE(platform_cxlrd_matches_cxled)
-         |                                      ^
-   drivers/cxl/core/platform_quirks.h:46:29: note: expanded from macro 'DECLARE_TESTABLE'
-      46 | #define DECLARE_TESTABLE(x) __##x
-         |                             ^
-   <scratch space>:101:1: note: expanded from here
-     101 | __platform_cxlrd_matches_cxled
-         | ^
-   drivers/cxl/core/platform_quirks.h:24:1: note: 'platform_cxlrd_matches_cxled' declared here
-      24 | platform_cxlrd_matches_cxled(const struct cxl_root_decoder *cxlrd,
-         | ^
-   drivers/cxl/core/region.c:2056:32: error: call to undeclared function '__platform_cxlrd_matches_cxled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2056 |             resource_size(p->res) && !platform_cxlrd_matches_cxled(cxlrd, cxled)) {
-         |                                       ^
-   drivers/cxl/core/platform_quirks.h:47:38: note: expanded from macro 'platform_cxlrd_matches_cxled'
-      47 | #define platform_cxlrd_matches_cxled DECLARE_TESTABLE(platform_cxlrd_matches_cxled)
-         |                                      ^
-   drivers/cxl/core/platform_quirks.h:46:29: note: expanded from macro 'DECLARE_TESTABLE'
-      46 | #define DECLARE_TESTABLE(x) __##x
-         |                             ^
-   <scratch space>:102:1: note: expanded from here
-     102 | __platform_cxlrd_matches_cxled
-         | ^
-   drivers/cxl/core/region.c:3490:4: error: call to undeclared function '__platform_cxlrd_matches_cxled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3490 |                 (platform_cxlrd_matches_cxled(cxlrd, cxled));
-         |                  ^
-   drivers/cxl/core/platform_quirks.h:47:38: note: expanded from macro 'platform_cxlrd_matches_cxled'
-      47 | #define platform_cxlrd_matches_cxled DECLARE_TESTABLE(platform_cxlrd_matches_cxled)
-         |                                      ^
-   drivers/cxl/core/platform_quirks.h:46:29: note: expanded from macro 'DECLARE_TESTABLE'
-      46 | #define DECLARE_TESTABLE(x) __##x
-         |                             ^
-   <scratch space>:84:1: note: expanded from here
-      84 | __platform_cxlrd_matches_cxled
-         | ^
-   4 errors generated.
+>> arch/x86/kvm/vmx/vmx.c:5213:17: error: call to undeclared function 'IS_ENABLED_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5213 |                 WARN_ON_ONCE(!IS_ENABLED_(CONFIG_X86_SGX_KVM) ||
+         |                               ^
+>> arch/x86/kvm/vmx/vmx.c:5213:29: error: use of undeclared identifier 'CONFIG_X86_SGX_KVM'
+    5213 |                 WARN_ON_ONCE(!IS_ENABLED_(CONFIG_X86_SGX_KVM) ||
+         |                                           ^
+   2 errors generated.
 
 
-vim +/__platform_region_matches_cxld +892 drivers/cxl/core/region.c
+vim +/IS_ENABLED_ +5213 arch/x86/kvm/vmx/vmx.c
 
-384e624bb211b4 Dan Williams          2022-06-07  872  
-c43521b9db7f5e Dave Jiang            2025-11-06  873  static bool spa_maps_hpa(const struct cxl_region_params *p,
-0f6f1982cb28ab Dave Jiang            2025-10-10  874  			 const struct range *range)
-0ec9849b63338d Dave Jiang            2025-02-26  875  {
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  876  	struct cxl_decoder *cxld;
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  877  
-0ec9849b63338d Dave Jiang            2025-02-26  878  	if (!p->res)
-0ec9849b63338d Dave Jiang            2025-02-26  879  		return false;
-0ec9849b63338d Dave Jiang            2025-02-26  880  
-0ec9849b63338d Dave Jiang            2025-02-26  881  	/*
-8d27dd0b219f00 Dave Jiang            2025-11-06  882  	 * The extended linear cache region is constructed by a 1:1 ratio
-8d27dd0b219f00 Dave Jiang            2025-11-06  883  	 * where the SPA maps equal amounts of DRAM and CXL HPA capacity with
-8d27dd0b219f00 Dave Jiang            2025-11-06  884  	 * CXL decoders at the high end of the SPA range.
-0ec9849b63338d Dave Jiang            2025-02-26  885  	 */
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  886  	if (p->res->start + p->cache_size == range->start &&
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  887  	    p->res->end == range->end)
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  888  		return true;
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  889  
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  890  	cxld = container_of(range, struct cxl_decoder, hpa_range);
-7c15a3666e848d Fabio M. De Francesco 2025-11-18  891  
-7c15a3666e848d Fabio M. De Francesco 2025-11-18 @892  	return platform_region_matches_cxld(p, cxld);
-0ec9849b63338d Dave Jiang            2025-02-26  893  }
-0ec9849b63338d Dave Jiang            2025-02-26  894  
+  5195	
+  5196	static int vmx_handle_page_fault(struct kvm_vcpu *vcpu, u32 error_code)
+  5197	{
+  5198		unsigned long cr2 = vmx_get_exit_qual(vcpu);
+  5199	
+  5200		if (vcpu->arch.apf.host_apf_flags)
+  5201			goto handle_pf;
+  5202	
+  5203		/* When using EPT, KVM intercepts #PF only to detect illegal GPAs. */
+  5204		WARN_ON_ONCE(enable_ept && !allow_smaller_maxphyaddr);
+  5205	
+  5206		/*
+  5207		 * On SGX2 hardware, EPCM violations are delivered as #PF with the SGX
+  5208		 * flag set in the error code (SGX1 harware generates #GP(0)).  EPCM
+  5209		 * violations have nothing to do with shadow paging and can never be
+  5210		 * resolved by KVM; always reflect them into the guest.
+  5211		 */
+  5212		if (error_code & PFERR_SGX_MASK) {
+> 5213			WARN_ON_ONCE(!IS_ENABLED_(CONFIG_X86_SGX_KVM) ||
+  5214				     !cpu_feature_enabled(X86_FEATURE_SGX2));
+  5215			if (guest_cpu_cap_has(vcpu, X86_FEATURE_SGX2))
+  5216				kvm_fixup_and_inject_pf_error(vcpu, cr2, error_code);
+  5217			else
+  5218				kvm_inject_gp(vcpu, 0);
+  5219			return 1;
+  5220		}
+  5221	
+  5222		/*
+  5223		 * If EPT is enabled, fixup and inject the #PF.  KVM intercepts #PFs
+  5224		 * only to set PFERR_RSVD as appropriate (hardware won't set RSVD due
+  5225		 * to the GPA being legal with respect to host.MAXPHYADDR).
+  5226		 */
+  5227		if (enable_ept) {
+  5228			kvm_fixup_and_inject_pf_error(vcpu, cr2, error_code);
+  5229			return 1;
+  5230		}
+  5231	
+  5232	handle_pf:
+  5233		return kvm_handle_page_fault(vcpu, error_code, cr2, NULL, 0);
+  5234	}
+  5235	
 
 -- 
 0-DAY CI Kernel Test Service
