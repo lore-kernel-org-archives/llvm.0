@@ -1,135 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82377344057;
-	Wed, 19 Nov 2025 09:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11DE02848B2;
+	Wed, 19 Nov 2025 11:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763546072; cv=none; b=EaEn4huRWBwohpkmZom8N4Ue5NBxumI698tcpZivr9lT+00N8EptpNqnmRa3Lle8ZUlAw+7fPhozdRAhlcI/z39UkhMx2ub0aSYhnssJAk+bNneG7I6msBtgHLtSC45A6ddNRjwmaYAwewoijMMlu/doNVLimOWsPc8Jv4CJoqM=
+	t=1763550519; cv=none; b=NbywpyBmh8+CjyoEEZuyk5xpXsZdhBaQuO0LUmPJVQWGZqDu87OjubNV1h6ve67qkjhIH2PiBbEfm7LK5b5rXObYqXc48IbiJGuOO2Zg3FhdL41aH5S7qUvr5laYbQb7GRYSnqBwGppauHOwBjb1C24Glz4tkFDU+hnrBUJ7pvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763546072; c=relaxed/simple;
-	bh=z2TWP4jUGjsyaNtUefTFGo4oseDca+8u0WpqNMed2Xw=;
+	s=arc-20240116; t=1763550519; c=relaxed/simple;
+	bh=jJEmVum0dDiCNvr6c3MECCPWN3vcD0YuwGWwYkc+wlg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kvhHeWsA2GGVgPWubDvhJWe4ZNuNZO7tRpX1PZljtT06o+M04vRUPyrzMTv241gfVcWNGdMOFNU2QIRfAx5dAJeZr3Hj9xoqeEHXdPiX1PaQZdKwSZ07ZNHjpz1OWnLYABGZBLrsFE36qzsqn+M2jHfXuvAI4Eli/dlLso+QgJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V7WKN05f; arc=none smtp.client-ip=192.198.163.7
+	 Content-Disposition; b=YLtddmOXsOuZs1c4x0rgHPLrD2zy3we7VuNY4IbLyFVmdu6S8c9YBzKTk/whPfJDPQq2kN+sw4Xv49U7+Kv4hUxL4BPsYtLaIkziUCE7hVCGbnn9ar2xeDRUgPflWogSObj6r6FynG4EQefZhO8KonEQ2Ae2Gf1G5LqeDZ45b4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZEFCsIkC; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V7WKN05f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZEFCsIkC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763546070; x=1795082070;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z2TWP4jUGjsyaNtUefTFGo4oseDca+8u0WpqNMed2Xw=;
-  b=V7WKN05f+GplyNBI8ESFRXzp/iQr+pEHYwYIL9lknis/NgG6Nw6lnbaM
-   /nriwz2bajR5YDGO1t1sLZJRbk8KA57SELCJrfGcr24mntwn+6al1KVZe
-   f5ieRtNm9jOAJ4NwBYTFVHDTLt6ePmceQHwno065WFGRDLZavpdgx8jpd
-   B0gBVdegr/o2TLIQg5A958mjZ68V85AUZJm390iXom5E9QwPi0YXMFyYv
-   QaUtpC+XH+YT11xrK2gliett7MwgU278/6NtMBte0GjL6cRnnNqPOyo21
-   qo7D1rGGs2Z60lXTzL/+lWs69AA4j6dFOAQsUHcD4X6adCKYbddWkIqi2
-   Q==;
-X-CSE-ConnectionGUID: GwLDBoM0R/+qJ4Tktzx94A==
-X-CSE-MsgGUID: 5tdFNLylSOubgqZSkTPetA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="91057082"
+  t=1763550518; x=1795086518;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jJEmVum0dDiCNvr6c3MECCPWN3vcD0YuwGWwYkc+wlg=;
+  b=ZEFCsIkC/DCtF7xjscpGD+vs3C6qSFo6i6OA0bwFgM1Yrg3YulvFrtLp
+   k6lWu81rWERe/EyXxe6tohd5a7tBmt2omM2YCWAys4yd8srev/u9plRx0
+   hlEnNMmlF/TIx4ufD+PzOOrMoTBqkIHWVK4k0PD8RSkdfhusuvqc2ie0x
+   aZKVwkPLzSKidbmHxM/XfGPd2jEseM+1mNSIvV3ATknoOlIqRIgZtakni
+   P80ckNvvU3Wbn8SlZlMDM4LfJ9irJXCudKR1b2/4dDqCMt4eOOSIiyGxi
+   wlW78cI8Ls1skr44LIulLw7D+h3yFx9A/6J4MLhgoGqhTq4HWotVn8W9P
+   A==;
+X-CSE-ConnectionGUID: DJh94awSTAaAbgXgVXFARg==
+X-CSE-MsgGUID: 9NTlDNw9QySMxKEf1P82RQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="65485170"
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="91057082"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 01:54:28 -0800
-X-CSE-ConnectionGUID: yOIF8ZUhQRSTcny4CCVT8w==
-X-CSE-MsgGUID: kkPR3wzLStKg9Ni08IjELg==
+   d="scan'208";a="65485170"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 03:08:37 -0800
+X-CSE-ConnectionGUID: 2OnT7ekkT72t5q6W193GCw==
+X-CSE-MsgGUID: aws9RjHuSZemLDy91cbIFQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,315,1754982000"; 
-   d="scan'208";a="195485850"
+   d="scan'208";a="195976270"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 19 Nov 2025 01:54:28 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 19 Nov 2025 03:08:36 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vLetN-0002h5-0w;
-	Wed, 19 Nov 2025 09:54:25 +0000
-Date: Wed, 19 Nov 2025 17:54:20 +0800
+	id 1vLg38-0002nh-05;
+	Wed, 19 Nov 2025 11:08:34 +0000
+Date: Wed, 19 Nov 2025 19:08:01 +0800
 From: kernel test robot <lkp@intel.com>
 To: Sean Christopherson <seanjc@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:vmx/sgx2_pferr_intercept 9/9]
- arch/x86/kvm/vmx/vmx.c:5213:17: error: call to undeclared function
- 'IS_ENABLED_'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202511191755.QwebkOuA-lkp@intel.com>
+Subject: [sean-jc:x86/irq_no_destmap 15/15] arch/x86/kvm/x86.c:6737:22:
+ error: use of undeclared identifier 'MAX_NR_RESERVED_IOAPIC_PINS'
+Message-ID: <202511191945.u0PgkMti-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/sean-jc/linux vmx/sgx2_pferr_intercept
-head:   8a7add4d5d370361f93bd73f26aa92f198250ce5
-commit: 8a7add4d5d370361f93bd73f26aa92f198250ce5 [9/9] KVM: VMX: Always reflect SGX EPCM #PFs back into the guest
-config: x86_64-randconfig-013-20251119 (https://download.01.org/0day-ci/archive/20251119/202511191755.QwebkOuA-lkp@intel.com/config)
+tree:   https://github.com/sean-jc/linux x86/irq_no_destmap
+head:   3cfcdb969c5e028836857656081f6e1b537f12e6
+commit: 3cfcdb969c5e028836857656081f6e1b537f12e6 [15/15] KVM: x86: Bury ioapic.h definitions behind CONFIG_KVM_IOAPIC
+config: x86_64-randconfig-075-20251119 (https://download.01.org/0day-ci/archive/20251119/202511191945.u0PgkMti-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251119/202511191755.QwebkOuA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251119/202511191945.u0PgkMti-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511191755.QwebkOuA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511191945.u0PgkMti-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/vmx/vmx.c:5213:17: error: call to undeclared function 'IS_ENABLED_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5213 |                 WARN_ON_ONCE(!IS_ENABLED_(CONFIG_X86_SGX_KVM) ||
-         |                               ^
->> arch/x86/kvm/vmx/vmx.c:5213:29: error: use of undeclared identifier 'CONFIG_X86_SGX_KVM'
-    5213 |                 WARN_ON_ONCE(!IS_ENABLED_(CONFIG_X86_SGX_KVM) ||
-         |                                           ^
-   2 errors generated.
+>> arch/x86/kvm/x86.c:6737:22: error: use of undeclared identifier 'MAX_NR_RESERVED_IOAPIC_PINS'
+    6737 |                 if (cap->args[0] > MAX_NR_RESERVED_IOAPIC_PINS)
+         |                                    ^
+   1 error generated.
 
 
-vim +/IS_ENABLED_ +5213 arch/x86/kvm/vmx/vmx.c
+vim +/MAX_NR_RESERVED_IOAPIC_PINS +6737 arch/x86/kvm/x86.c
 
-  5195	
-  5196	static int vmx_handle_page_fault(struct kvm_vcpu *vcpu, u32 error_code)
-  5197	{
-  5198		unsigned long cr2 = vmx_get_exit_qual(vcpu);
-  5199	
-  5200		if (vcpu->arch.apf.host_apf_flags)
-  5201			goto handle_pf;
-  5202	
-  5203		/* When using EPT, KVM intercepts #PF only to detect illegal GPAs. */
-  5204		WARN_ON_ONCE(enable_ept && !allow_smaller_maxphyaddr);
-  5205	
-  5206		/*
-  5207		 * On SGX2 hardware, EPCM violations are delivered as #PF with the SGX
-  5208		 * flag set in the error code (SGX1 harware generates #GP(0)).  EPCM
-  5209		 * violations have nothing to do with shadow paging and can never be
-  5210		 * resolved by KVM; always reflect them into the guest.
-  5211		 */
-  5212		if (error_code & PFERR_SGX_MASK) {
-> 5213			WARN_ON_ONCE(!IS_ENABLED_(CONFIG_X86_SGX_KVM) ||
-  5214				     !cpu_feature_enabled(X86_FEATURE_SGX2));
-  5215			if (guest_cpu_cap_has(vcpu, X86_FEATURE_SGX2))
-  5216				kvm_fixup_and_inject_pf_error(vcpu, cr2, error_code);
-  5217			else
-  5218				kvm_inject_gp(vcpu, 0);
-  5219			return 1;
-  5220		}
-  5221	
-  5222		/*
-  5223		 * If EPT is enabled, fixup and inject the #PF.  KVM intercepts #PFs
-  5224		 * only to set PFERR_RSVD as appropriate (hardware won't set RSVD due
-  5225		 * to the GPA being legal with respect to host.MAXPHYADDR).
-  5226		 */
-  5227		if (enable_ept) {
-  5228			kvm_fixup_and_inject_pf_error(vcpu, cr2, error_code);
-  5229			return 1;
-  5230		}
-  5231	
-  5232	handle_pf:
-  5233		return kvm_handle_page_fault(vcpu, error_code, cr2, NULL, 0);
-  5234	}
-  5235	
+5bb064dcdeb7ab drivers/kvm/x86.c  Zhang Xiantao       2007-11-18  6715  
+e5d83c74a5800c arch/x86/kvm/x86.c Paolo Bonzini       2017-02-16  6716  int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6717  			    struct kvm_enable_cap *cap)
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6718  {
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6719  	int r;
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6720  
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6721  	if (cap->flags)
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6722  		return -EINVAL;
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6723  
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6724  	switch (cap->cap) {
+6d8491910fcd33 arch/x86/kvm/x86.c Oliver Upton        2022-03-01  6725  	case KVM_CAP_DISABLE_QUIRKS2:
+6d8491910fcd33 arch/x86/kvm/x86.c Oliver Upton        2022-03-01  6726  		r = -EINVAL;
+bd7d5362b4c4ac arch/x86/kvm/x86.c Yan Zhao            2025-02-24  6727  		if (cap->args[0] & ~kvm_caps.supported_quirks)
+6d8491910fcd33 arch/x86/kvm/x86.c Oliver Upton        2022-03-01  6728  			break;
+6d8491910fcd33 arch/x86/kvm/x86.c Oliver Upton        2022-03-01  6729  		fallthrough;
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6730  	case KVM_CAP_DISABLE_QUIRKS:
+bd7d5362b4c4ac arch/x86/kvm/x86.c Yan Zhao            2025-02-24  6731  		kvm->arch.disabled_quirks |= cap->args[0] & kvm_caps.supported_quirks;
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6732  		r = 0;
+90de4a1875180f arch/x86/kvm/x86.c Nadav Amit          2015-04-13  6733  		break;
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6734  	case KVM_CAP_SPLIT_IRQCHIP: {
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6735  		mutex_lock(&kvm->lock);
+b053b2aef25d00 arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6736  		r = -EINVAL;
+b053b2aef25d00 arch/x86/kvm/x86.c Steve Rutherford    2015-07-29 @6737  		if (cap->args[0] > MAX_NR_RESERVED_IOAPIC_PINS)
+b053b2aef25d00 arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6738  			goto split_irqchip_unlock;
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6739  		r = -EEXIST;
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6740  		if (irqchip_in_kernel(kvm))
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6741  			goto split_irqchip_unlock;
+557abc40d12135 arch/x86/kvm/x86.c Paolo Bonzini       2016-06-13  6742  		if (kvm->created_vcpus)
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6743  			goto split_irqchip_unlock;
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6744  		/* Pairs with irqchip_in_kernel. */
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6745  		smp_wmb();
+49776faf93f807 arch/x86/kvm/x86.c Radim Krčmář        2016-12-16  6746  		kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
+b053b2aef25d00 arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6747  		kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
+320af55a930f30 arch/x86/kvm/x86.c Sean Christopherson 2022-03-11  6748  		kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_ABSENT);
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6749  		r = 0;
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6750  split_irqchip_unlock:
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6751  		mutex_unlock(&kvm->lock);
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6752  		break;
+49df6397edfc5a arch/x86/kvm/x86.c Steve Rutherford    2015-07-29  6753  	}
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6754  	case KVM_CAP_X2APIC_API:
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6755  		r = -EINVAL;
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6756  		if (cap->args[0] & ~KVM_X2APIC_API_VALID_FLAGS)
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6757  			break;
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6758  
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6759  		if (cap->args[0] & KVM_X2APIC_API_USE_32BIT_IDS)
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6760  			kvm->arch.x2apic_format = true;
+c519265f2aa348 arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6761  		if (cap->args[0] & KVM_X2APIC_API_DISABLE_BROADCAST_QUIRK)
+c519265f2aa348 arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6762  			kvm->arch.x2apic_broadcast_quirk_disabled = true;
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6763  
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6764  		r = 0;
+3713131345fbea arch/x86/kvm/x86.c Radim Krčmář        2016-07-12  6765  		break;
+4d5422cea3b61f arch/x86/kvm/x86.c Wanpeng Li          2018-03-12  6766  	case KVM_CAP_X86_DISABLE_EXITS:
+4d5422cea3b61f arch/x86/kvm/x86.c Wanpeng Li          2018-03-12  6767  		r = -EINVAL;
+c829ccd4d9dc4a arch/x86/kvm/x86.c Sean Christopherson 2024-11-27  6768  		if (cap->args[0] & ~kvm_get_allowed_disable_exits())
+4d5422cea3b61f arch/x86/kvm/x86.c Wanpeng Li          2018-03-12  6769  			break;
+4d5422cea3b61f arch/x86/kvm/x86.c Wanpeng Li          2018-03-12  6770  
+04cd8f8628d88d arch/x86/kvm/x86.c Sean Christopherson 2024-11-27  6771  		mutex_lock(&kvm->lock);
+04cd8f8628d88d arch/x86/kvm/x86.c Sean Christopherson 2024-11-27  6772  		if (kvm->created_vcpus)
+04cd8f8628d88d arch/x86/kvm/x86.c Sean Christopherson 2024-11-27  6773  			goto disable_exits_unlock;
+6f0f2d5ef895d6 arch/x86/kvm/x86.c Tom Lendacky        2023-02-09  6774  
+
+:::::: The code at line 6737 was first introduced by commit
+:::::: b053b2aef25d00773fa6762dcd4b7f5c9c42d171 KVM: x86: Add EOI exit bitmap inference
+
+:::::: TO: Steve Rutherford <srutherford@google.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
