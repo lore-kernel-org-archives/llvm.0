@@ -1,74 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A182E9EBB;
-	Wed, 19 Nov 2025 20:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7103625C6EE;
+	Wed, 19 Nov 2025 21:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763584482; cv=none; b=FtVck68Di/B0U20d7CjwgIgrPFasOkV9m0k9wagshtZxMeFjc5KR5eNbS8RGhP594yPjwsi3ahXpdIkA9QYKdwkqGA1FF4P4k0GqLwmUgweVAoUwrqNv4qcKd91ZLZCQUaLq4JXvylvUVdCVBX15033AQpVlnPuZSyICFPxIdGY=
+	t=1763587605; cv=none; b=uLQPDwthFSGdqfJkHIfNtVsctgoQ3lHGIWg0ch9RRJ4W/Ph1puP21ngFfuTMEx/zeaZ36dRdSS8onfY/iN/F1YWvGiFJRGWyejtEh/AjNfUEzkpBJ3KGAGGzFORmoqb8h52bSIpikoI1AOHY+pIcmCUsLshllFqsMn8tlzraxAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763584482; c=relaxed/simple;
-	bh=qewXocdKo9cLRXB0u7E4iV5rncB/pe/qAOBWdTkGlpM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rwhF1ORVG7X2XdivT0HRj3ZOaRcs0TY409pS0ZrKTsacEJrcFwT0EDVj+7MqZv245QR7CWMapK/rk2zRI56jJ+lqq4fa+R6urgPTH1qL17YsY5r0in9LPaydX3cCPzl7V3C4Iu04L2+j3dZaeZ7ny5XD5isepl2ZRObz8XUQYEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V8IhV5Yz; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1763587605; c=relaxed/simple;
+	bh=VXpb8c6Eyu0LfzAhaSbbq/3u6RZ8AeVIN2gukefPNcU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=I9QzxC7+WdcnrZSiU2vqEJ069NP4YlO0pXpRXG5H0TWHu1mKbDmIay7WKoF2j/riklrWIUT8y/HHuEheXHVdsLDboBNNISjHvJ8kwKWa0oXwdT2daaI6e+qhTK4U4KnQOJ8WwmqX2RTqaa6eiX2jv/s1aaMkOjg7kn/bYKSv9PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hoOglBXt; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V8IhV5Yz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hoOglBXt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763584481; x=1795120481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qewXocdKo9cLRXB0u7E4iV5rncB/pe/qAOBWdTkGlpM=;
-  b=V8IhV5Yz3TAgQjv/8wB8ep17gegepkRiASEsXc82AhQIKZybcJKLg+Zz
-   HaEbZBcyR9m9RL0pfxlwCOke569Bour6Gywoi/lMPZexBfMBzuMrVjhhW
-   0LhDJ/xepUnJR/eS/RzhIFXqWgLDf/MHRlu5z5xZ2Fb7DLKacEEBnUrJZ
-   XZ/mWcFeSC38MItDApLX4fAO1V9GLnpk6+GbGED+vlwacQQtkIRptb3B5
-   62dDl/4PT7nXy+Jz1snYnzvxfPBCWuUcYzuYpOVm44sKwVZg0JMVe2Fxu
-   FO42kHw9AV5D/ifYnAKkmuicXqhZCzj/4xbWVoeBWmy8WdktAv8VPzNz7
-   Q==;
-X-CSE-ConnectionGUID: eJwnfLceTBOZBYotW8JFFQ==
-X-CSE-MsgGUID: 6mrTelpXTra7RuTiuOqRzQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65798445"
+  t=1763587604; x=1795123604;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VXpb8c6Eyu0LfzAhaSbbq/3u6RZ8AeVIN2gukefPNcU=;
+  b=hoOglBXtGOkmRXpfMrR0iffGYSDdUxxlUTB1VUjbDnpBGuW6ZpHi9AaV
+   V2L5lSwSKNYkJhYUFOFjT3bLYiMluTDfR+NBNvncnwGVepI+qTmRHMjos
+   o5BjH9EjCwWGqiTYiblc5aoF9u88zCOYzHYf+J1mLVA5ju1QDWB2uJHzE
+   ck5E6JqlHxfs8YvU3AfJ5GUngulkO9OWwQXrPw/xq2eAcomlmGCJ02nyW
+   b4gYKBY93Z9oUAeXHKrEsSJgHHfo2QuEPtSz5KCvjyd0klpBuguXQD2oM
+   vuua7jmbAIsGitVW3ZHIL+zqMiQ6i2ejrdmF2eGb2/chRsWtURsHf+jDE
+   A==;
+X-CSE-ConnectionGUID: U74kVOmwSYSHZI9NAR127Q==
+X-CSE-MsgGUID: BvEbItiDRRGXhQrun0N9NA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="88302639"
 X-IronPort-AV: E=Sophos;i="6.19,316,1754982000"; 
-   d="scan'208";a="65798445"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 12:34:41 -0800
-X-CSE-ConnectionGUID: CN8Juv0BSfO7B4DVJs2Nww==
-X-CSE-MsgGUID: 243fnx0sSK+yPpa3iYBPZA==
+   d="scan'208";a="88302639"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 13:26:44 -0800
+X-CSE-ConnectionGUID: jeeDDt4ZQMux4XyBKTBL3g==
+X-CSE-MsgGUID: VR3E+WemQ9aDrw18UJDh4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,316,1754982000"; 
-   d="scan'208";a="195273752"
+   d="scan'208";a="191198315"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 19 Nov 2025 12:34:37 -0800
+  by orviesa007.jf.intel.com with ESMTP; 19 Nov 2025 13:26:42 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vLosr-0003IB-36;
-	Wed, 19 Nov 2025 20:34:33 +0000
-Date: Thu, 20 Nov 2025 04:34:33 +0800
+	id 1vLphH-0003L5-0P;
+	Wed, 19 Nov 2025 21:26:39 +0000
+Date: Thu, 20 Nov 2025 05:26:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chris Brandt <chris.brandt@renesas.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Hien Huynh <hien.huynh.px@renesas.com>,
-	Nghia Vo <nghia.vo.zn@renesas.com>,
-	Hugo Villeneuve <hugo@hugovil.com>
+To: Balbir Singh <balbirs@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Chris Brandt <chris.brandt@renesas.com>
-Subject: Re: [PATCH v5 1/2] clk: renesas: rzg2l: Remove DSI clock rate
- restrictions
-Message-ID: <202511200435.SrjxVc9k-lkp@intel.com>
-References: <20251119022744.1599235-2-chris.brandt@renesas.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 169/175] ld.lld: error: undefined symbol:
+ shmem_uncharge
+Message-ID: <202511200534.o4hsMNEt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,45 +63,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251119022744.1599235-2-chris.brandt@renesas.com>
 
-Hi Chris,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on dd30a345f284e0d9b1755e3538f8257cf4deb79f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Brandt/clk-renesas-rzg2l-Remove-DSI-clock-rate-restrictions/20251119-103032
-base:   dd30a345f284e0d9b1755e3538f8257cf4deb79f
-patch link:    https://lore.kernel.org/r/20251119022744.1599235-2-chris.brandt%40renesas.com
-patch subject: [PATCH v5 1/2] clk: renesas: rzg2l: Remove DSI clock rate restrictions
-config: loongarch-randconfig-001-20251119 (https://download.01.org/0day-ci/archive/20251120/202511200435.SrjxVc9k-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251120/202511200435.SrjxVc9k-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   102494e6776f316b6cf2924976681d790f278cf1
+commit: 9a655bd0773b41af6d8515502de102544f3ec4c1 [169/175] mm-huge_memoryc-introduce-folio_split_unmapped-v2
+config: i386-buildonly-randconfig-002-20251119 (https://download.01.org/0day-ci/archive/20251120/202511200534.o4hsMNEt-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251120/202511200534.o4hsMNEt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511200435.SrjxVc9k-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511200534.o4hsMNEt-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/pmdomain/renesas/rcar-gen4-sysc.c:9:
->> include/linux/clk/renesas.h:44:52: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-      44 | static inline void rzg2l_cpg_dsi_div_set_divider(u8, int target) { }
-         |                                                    ^
-   1 warning generated.
-
-
-vim +44 include/linux/clk/renesas.h
-
-    40	
-    41	#ifdef CONFIG_CLK_RZG2L
-    42	void rzg2l_cpg_dsi_div_set_divider(u8 divider, int target);
-    43	#else
-  > 44	static inline void rzg2l_cpg_dsi_div_set_divider(u8, int target) { }
-    45	#endif
-    46	
+>> ld.lld: error: undefined symbol: shmem_uncharge
+   >>> referenced by huge_memory.c:4053 (mm/huge_memory.c:4053)
+   >>>               mm/huge_memory.o:(__folio_split) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
