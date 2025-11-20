@@ -1,55 +1,55 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEB935F8BE
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72DC368286
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651691; cv=none; b=FLzNHxeU2cK7VgEtZqCC1OBYecHjmYXJBv214Oj8tpucSZDRn1PonliwKZAeB4GO+9iyAOX3NVQPrXxZsFalmYi+zTYNoCzo1FU6NyMvXGSoGhOr5mVyNEpNiiZxBA+5maIc/IFBk+xqdoGWTccMJvE5o+tTYP3U2359WFJceks=
+	t=1763651694; cv=none; b=QchsqU+CBg50SHaoyYUVMRrtdvatrZYBWxMJSN19Ft2eqvyz7mZkZZaVPjw+91Zhi4k7idgGxMvINAWlhHiYBqbKbzhfmQ7quPhJrfNGMiwr7Lo0ehdWx37cVYaQYN4KcR9cS35n3cWVvXiqqW0s17q9so9F/PVuQyn5CV639GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651691; c=relaxed/simple;
-	bh=MaE5l+AqrMjS7K//1QeYAACzT6Fy5m0AjpyxcYL4QiM=;
+	s=arc-20240116; t=1763651694; c=relaxed/simple;
+	bh=6YW+vfkhd/mpRT7uuYTC0KMQbCDsf4nYiMWcZd+SpAA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=IOlPIySE6swmHvSIqtoJsOwh2Nz8bQ+ax+1DAtDeJfIn1xg4lTMPpczYkP5XQN8ZyEijpVRUw8j0zdL/NwAelMGgvlriFFPLhe0M9/LHqzSzE0uNHKT8vAAeEtLmseAR95aLEBgh+2qUsy6LBag6WHwYUn6FkfSubm9ZxXzH/74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ghcw1ttE; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=JpUiibgV40J1hl5ZStAJpkcp6R42VKXsL531FYKxEABjtgxkoTZF2DxyoTcFaZ4FfVQ+xBg6mkTgTYfao3/0Jun636BTUWreb5hEeBTFq+UfSXjkM38SXny4Npm9Xf+RxHtmgbqp9XwPwxHbd8ohKGbi8gvD1hu1/xcjHscsmgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aRf0tIkn; arc=none smtp.client-ip=209.85.221.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ghcw1ttE"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779b3749a8so8959015e9.1
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:14:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aRf0tIkn"
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-42b30184be7so505402f8f.2
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:14:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651640; x=1764256440; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763651660; x=1764256460; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HgjuR0JZV1+VngIgriWbdPjvpOAl4EFzPqRDosg857o=;
-        b=Ghcw1ttE7eoY6UWmzVyCKk37/k9Rhpo9f4e4SN+vmy6ZuxNzgrR1OZwmXzjG8hzeub
-         M58QW/AFoji6isY9/i5iC3UjqrxFE/y8oOqC+oSgommflj42Ro147ubhGsRbD9QaTsv8
-         cbrRr5xWxCUYFYozfzXOZRYlb6aCkCS6aPV/V/vLj9w4KyG88VgjCy6obNsb0g+1dq0j
-         yFJE2QaCKZ8+B5AwjrkgFiOrjvftHZQWAwzF67ssQTlG+52skhHTSx1fq+Ky3mRTnpx9
-         E4Nq+k1E7RPJq5Npje6qUdJmMja+W5CvAN/uFjXMFuvDjYwI8L7ofWkg505Lqep0pJmY
-         //xA==
+        bh=YGVDTZeKU8HtP6Bp5mRJ8rt3G3nq7YHNLnBPvMXXBAk=;
+        b=aRf0tIknAvlxP4L+neSZvE+8joLPfR8NjvR2txQdxP93URsYXCyP1OzznDohB2oIzZ
+         w+f81WKtnNLea5oP+p8HdUrR58IM1ay9ljwSFRCfju6bk8+Hl1dHburBVQEKLCXcz4Je
+         t7P41FzeAlvlEhdJgJz20TVuP1xXz3wgB6ug8lc0BNkWgBNCOP81BulHnrNafnFYq4wH
+         +Hl6fUJV7njRZuPRR2Oq8KY4k9z2q1UWGhbqhpv4lJ4MdHzf4IK7xmZX+o7c1KM+F2iY
+         PVhyFMFpYzc4XYzfOHv+i2+WB+3gJyQ2bkYrlG7mHwEJVTB835UV8ZCoORLfD11/6Gwn
+         gd5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651640; x=1764256440;
+        d=1e100.net; s=20230601; t=1763651660; x=1764256460;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HgjuR0JZV1+VngIgriWbdPjvpOAl4EFzPqRDosg857o=;
-        b=Qpt/qUkQ+UVKGdmhFZUUatRkarvTI48/TsXyrLOWGrXPRX7CsRKVrJ2M0c0hn621Eb
-         hLA8A1kb8m99RBbbTAFpRvpqse5xuqvJzrro2MeXlEjl5JT2NnKS+1PLgYaPcWzPDJWy
-         BhidA05FXhb/g6Ld9RZSTHqRoasKIflA/sGrioZqTzOcLiU+PEmVO2s76WFZ6PNal4HH
-         c+x6EiZAbuKQqJL9FFzXfz4Sgb9wQ+wlR8lRYzA19F/GGuOuSaP5pJoYcRFe/7zq7jou
-         qXoOzT91Cdx1miaCS8TdH6BJv2WXfl39FRxkSINVpBNJJaQkZ4Qa4uSEVMWqijMf7THR
-         I4YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTF3RApVa3qRb6cUQDqzE46hKB78UBjn4g2SBcE/gjhhe0b8yjmlXOJnh9HvFfG4v54GeR@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyq9iZqQ3kmVLfRaedKnxdNBcDq+pYp1VvmGEa/fsfsgStn2dFj
-	Ksw0xW/5FmZa5j6DAA4n4zg4TOVEyLjzaAyACsXWJSQU4v3qjDOu35hOtVn5so+BxMPu2pqtj+9
-	fsw==
-X-Google-Smtp-Source: AGHT+IF2aIy5uJ1uuqxRYjSIgT4bedDXfZYzgPHvJori0jZhXgoGDLMbVkn5vne6KQXGjLCKsfL+o0afdA==
-X-Received: from wmqt6.prod.google.com ([2002:a05:600c:1986:b0:477:14b1:69d7])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:5490:b0:477:7f4a:44ba
- with SMTP id 5b1f17b1804b1-477babc222emr30289485e9.4.1763651640249; Thu, 20
- Nov 2025 07:14:00 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:58 +0100
+        bh=YGVDTZeKU8HtP6Bp5mRJ8rt3G3nq7YHNLnBPvMXXBAk=;
+        b=P6T4spXuHMqigcBTRct4K0ZCw6WxFvAC6BjWntHIMMo/afGJayY00uwn9c2TWh48Yd
+         e0Y74nVqmXKTxhUtOy67R+5sb0RV8QX2oH41iaRA4WVZRxuUQP31XBitjmwPM7tOyyun
+         cdJlAkOtzpD7IdJJndnaZ2eM91cjLrDGe9WylIrFTbtWjMHlOpZll1xsiIDUpmSvoU0I
+         0LBb9qmbFZr41LpY9Cau4Jgyvn/v3hjZsFlOOAEotabO+ZhZQf74kssQRUzT6cxXW7Ve
+         DLbZD3alBYlyi3/0qwkcHHuLczKFAJw27ImxRmDiSD/vccTRhSm32r1G13pFl32VnARb
+         ga1g==
+X-Forwarded-Encrypted: i=1; AJvYcCXrOIzPHdyvTijrLHH5o5DkvyKvt13blylrt2KiH4zs0qxspPdgZwQxgV8MZ2rFMRBs5J51@lists.linux.dev
+X-Gm-Message-State: AOJu0YzJ9aTpXPBV3+FEqiTnj7yFU7RbE8W1i27pk9elt2YvCVniXcHp
+	ATOqaYce14RuDQ9ColA6D7NjQ5KvukQvF3o3g3l5XjA3nLr3OJAWrBaVtU7g5N/JFASIyd6nhqY
+	9Uw==
+X-Google-Smtp-Source: AGHT+IFQTWafreV6PpxtXgnfYqg/qQzIwFP62DiWx3258dQlAUbophifEYpA3WmSJ8qPzpQTnBFvuJ4JAg==
+X-Received: from wrxm13.prod.google.com ([2002:a05:6000:8d:b0:429:c854:2a08])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:208a:b0:42b:3aca:5a86
+ with SMTP id ffacd0b85a97d-42cbb2b1e57mr3064595f8f.57.1763651660166; Thu, 20
+ Nov 2025 07:14:20 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:10:00 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-34-elver@google.com>
-Subject: [PATCH v4 33/35] security/tomoyo: Enable context analysis
+Message-ID: <20251120151033.3840508-36-elver@google.com>
+Subject: [PATCH v4 35/35] sched: Enable context analysis for core.c and fair.c
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -84,683 +84,836 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
 	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org, 
+	Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-
-Enable context analysis for security/tomoyo.
 
 This demonstrates a larger conversion to use Clang's context
 analysis. The benefit is additional static checking of locking rules,
 along with better documentation.
 
-Tomoyo makes use of several synchronization primitives, yet its clear
-design made it relatively straightforward to enable context analysis.
-
-One notable finding was:
-
-  security/tomoyo/gc.c:664:20: error: reading variable 'write_buf' requires holding mutex '&tomoyo_io_buffer::io_sem'
-    664 |                 is_write = head->write_buf != NULL;
-
-For which Tetsuo writes:
-
-  "Good catch. This should be data_race(), for tomoyo_write_control()
-   might concurrently update head->write_buf from non-NULL to non-NULL
-   with head->io_sem held."
+Notably, kernel/sched contains sufficiently complex synchronization
+patterns, and application to core.c & fair.c demonstrates that the
+latest Clang version has become powerful enough to start applying this
+to more complex subsystems (with some modest annotations and changes).
 
 Signed-off-by: Marco Elver <elver@google.com>
-Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
 ---
 v4:
 * Rename capability -> context analysis.
 
-v2:
+v3:
 * New patch.
 ---
- security/tomoyo/Makefile  |  2 +
- security/tomoyo/common.c  | 52 ++++++++++++++++++++++++--
- security/tomoyo/common.h  | 77 ++++++++++++++++++++-------------------
- security/tomoyo/domain.c  |  1 +
- security/tomoyo/environ.c |  1 +
- security/tomoyo/file.c    |  5 +++
- security/tomoyo/gc.c      | 28 ++++++++++----
- security/tomoyo/mount.c   |  2 +
- security/tomoyo/network.c |  3 ++
- 9 files changed, 122 insertions(+), 49 deletions(-)
+ include/linux/sched.h                    |   6 +-
+ include/linux/sched/signal.h             |   4 +-
+ include/linux/sched/task.h               |   5 +-
+ include/linux/sched/wake_q.h             |   3 +
+ kernel/sched/Makefile                    |   3 +
+ kernel/sched/core.c                      |  89 ++++++++++++------
+ kernel/sched/fair.c                      |   9 +-
+ kernel/sched/sched.h                     | 110 +++++++++++++++--------
+ scripts/context-analysis-suppression.txt |   1 +
+ 9 files changed, 162 insertions(+), 68 deletions(-)
 
-diff --git a/security/tomoyo/Makefile b/security/tomoyo/Makefile
-index 55c67b9846a9..e3c0f853aa3b 100644
---- a/security/tomoyo/Makefile
-+++ b/security/tomoyo/Makefile
-@@ -1,4 +1,6 @@
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index b469878de25c..9088cbda6915 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2108,9 +2108,9 @@ static inline int _cond_resched(void)
+ 	_cond_resched();			\
+ })
+ 
+-extern int __cond_resched_lock(spinlock_t *lock);
+-extern int __cond_resched_rwlock_read(rwlock_t *lock);
+-extern int __cond_resched_rwlock_write(rwlock_t *lock);
++extern int __cond_resched_lock(spinlock_t *lock) __must_hold(lock);
++extern int __cond_resched_rwlock_read(rwlock_t *lock) __must_hold_shared(lock);
++extern int __cond_resched_rwlock_write(rwlock_t *lock) __must_hold(lock);
+ 
+ #define MIGHT_RESCHED_RCU_SHIFT		8
+ #define MIGHT_RESCHED_PREEMPT_MASK	((1U << MIGHT_RESCHED_RCU_SHIFT) - 1)
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index a63f65aa5bdd..a22248aebcf9 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -738,10 +738,12 @@ static inline int thread_group_empty(struct task_struct *p)
+ 		(thread_group_leader(p) && !thread_group_empty(p))
+ 
+ extern struct sighand_struct *lock_task_sighand(struct task_struct *task,
+-						unsigned long *flags);
++						unsigned long *flags)
++	__acquires(&task->sighand->siglock);
+ 
+ static inline void unlock_task_sighand(struct task_struct *task,
+ 						unsigned long *flags)
++	__releases(&task->sighand->siglock)
+ {
+ 	spin_unlock_irqrestore(&task->sighand->siglock, *flags);
+ }
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index 525aa2a632b2..2acf9e1c4b0b 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -214,15 +214,18 @@ static inline struct vm_struct *task_stack_vm_area(const struct task_struct *t)
+  * write_lock_irq(&tasklist_lock), neither inside nor outside.
+  */
+ static inline void task_lock(struct task_struct *p)
++	__acquires(&p->alloc_lock)
+ {
+ 	spin_lock(&p->alloc_lock);
+ }
+ 
+ static inline void task_unlock(struct task_struct *p)
++	__releases(&p->alloc_lock)
+ {
+ 	spin_unlock(&p->alloc_lock);
+ }
+ 
+-DEFINE_GUARD(task_lock, struct task_struct *, task_lock(_T), task_unlock(_T))
++DEFINE_LOCK_GUARD_1(task_lock, struct task_struct, task_lock(_T->lock), task_unlock(_T->lock))
++DECLARE_LOCK_GUARD_1_ATTRS(task_lock, __assumes_ctx_guard(_T->alloc_lock), /* */)
+ 
+ #endif /* _LINUX_SCHED_TASK_H */
+diff --git a/include/linux/sched/wake_q.h b/include/linux/sched/wake_q.h
+index 0f28b4623ad4..765bbc3d54be 100644
+--- a/include/linux/sched/wake_q.h
++++ b/include/linux/sched/wake_q.h
+@@ -66,6 +66,7 @@ extern void wake_up_q(struct wake_q_head *head);
+ /* Spin unlock helpers to unlock and call wake_up_q with preempt disabled */
+ static inline
+ void raw_spin_unlock_wake(raw_spinlock_t *lock, struct wake_q_head *wake_q)
++	__releases(lock)
+ {
+ 	guard(preempt)();
+ 	raw_spin_unlock(lock);
+@@ -77,6 +78,7 @@ void raw_spin_unlock_wake(raw_spinlock_t *lock, struct wake_q_head *wake_q)
+ 
+ static inline
+ void raw_spin_unlock_irq_wake(raw_spinlock_t *lock, struct wake_q_head *wake_q)
++	__releases(lock)
+ {
+ 	guard(preempt)();
+ 	raw_spin_unlock_irq(lock);
+@@ -89,6 +91,7 @@ void raw_spin_unlock_irq_wake(raw_spinlock_t *lock, struct wake_q_head *wake_q)
+ static inline
+ void raw_spin_unlock_irqrestore_wake(raw_spinlock_t *lock, unsigned long flags,
+ 				     struct wake_q_head *wake_q)
++	__releases(lock)
+ {
+ 	guard(preempt)();
+ 	raw_spin_unlock_irqrestore(lock, flags);
+diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
+index 8ae86371ddcd..b1f1a367034f 100644
+--- a/kernel/sched/Makefile
++++ b/kernel/sched/Makefile
+@@ -1,5 +1,8 @@
  # SPDX-License-Identifier: GPL-2.0
-+CONTEXT_ANALYSIS := y
+ 
++CONTEXT_ANALYSIS_core.o := y
++CONTEXT_ANALYSIS_fair.o := y
 +
- obj-y = audit.o common.o condition.o domain.o environ.o file.o gc.o group.o load_policy.o memory.o mount.o network.o realpath.o securityfs_if.o tomoyo.o util.o
+ # The compilers are complaining about unused variables inside an if(0) scope
+ # block. This is daft, shut them up.
+ ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index f754a60de848..ebfd107d17af 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -395,6 +395,8 @@ static atomic_t sched_core_count;
+ static struct cpumask sched_core_mask;
  
- targets += builtin-policy.h
-diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
-index 0f78898bce09..86ce56c32d37 100644
---- a/security/tomoyo/common.c
-+++ b/security/tomoyo/common.c
-@@ -268,6 +268,7 @@ static void tomoyo_io_printf(struct tomoyo_io_buffer *head, const char *fmt,
-  */
- static void tomoyo_io_printf(struct tomoyo_io_buffer *head, const char *fmt,
- 			     ...)
-+	__must_hold(&head->io_sem)
+ static void sched_core_lock(int cpu, unsigned long *flags)
++	__context_unsafe(/* acquires multiple */)
++	__acquires(&runqueues.__lock) /* overapproximation */
  {
- 	va_list args;
- 	size_t len;
-@@ -416,8 +417,9 @@ static void tomoyo_print_name_union_quoted(struct tomoyo_io_buffer *head,
-  *
-  * Returns nothing.
-  */
--static void tomoyo_print_number_union_nospace
--(struct tomoyo_io_buffer *head, const struct tomoyo_number_union *ptr)
-+static void
-+tomoyo_print_number_union_nospace(struct tomoyo_io_buffer *head, const struct tomoyo_number_union *ptr)
-+	__must_hold(&head->io_sem)
- {
- 	if (ptr->group) {
- 		tomoyo_set_string(head, "@");
-@@ -466,6 +468,7 @@ static void tomoyo_print_number_union_nospace
-  */
- static void tomoyo_print_number_union(struct tomoyo_io_buffer *head,
- 				      const struct tomoyo_number_union *ptr)
-+	__must_hold(&head->io_sem)
- {
- 	tomoyo_set_space(head);
- 	tomoyo_print_number_union_nospace(head, ptr);
-@@ -664,6 +667,7 @@ static int tomoyo_set_mode(char *name, const char *value,
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_write_profile(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	char *data = head->write_buf;
- 	unsigned int i;
-@@ -719,6 +723,7 @@ static int tomoyo_write_profile(struct tomoyo_io_buffer *head)
-  * Caller prints functionality's name.
-  */
- static void tomoyo_print_config(struct tomoyo_io_buffer *head, const u8 config)
-+	__must_hold(&head->io_sem)
- {
- 	tomoyo_io_printf(head, "={ mode=%s grant_log=%s reject_log=%s }\n",
- 			 tomoyo_mode[config & 3],
-@@ -734,6 +739,7 @@ static void tomoyo_print_config(struct tomoyo_io_buffer *head, const u8 config)
-  * Returns nothing.
-  */
- static void tomoyo_read_profile(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	u8 index;
- 	struct tomoyo_policy_namespace *ns =
-@@ -852,6 +858,7 @@ static bool tomoyo_same_manager(const struct tomoyo_acl_head *a,
-  */
- static int tomoyo_update_manager_entry(const char *manager,
- 				       const bool is_delete)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	struct tomoyo_manager e = { };
- 	struct tomoyo_acl_param param = {
-@@ -883,6 +890,8 @@ static int tomoyo_update_manager_entry(const char *manager,
-  * Caller holds tomoyo_read_lock().
-  */
- static int tomoyo_write_manager(struct tomoyo_io_buffer *head)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	char *data = head->write_buf;
+ 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
+ 	int t, i = 0;
+@@ -405,6 +407,8 @@ static void sched_core_lock(int cpu, unsigned long *flags)
+ }
  
-@@ -901,6 +910,7 @@ static int tomoyo_write_manager(struct tomoyo_io_buffer *head)
-  * Caller holds tomoyo_read_lock().
-  */
- static void tomoyo_read_manager(struct tomoyo_io_buffer *head)
-+	__must_hold_shared(&tomoyo_ss)
+ static void sched_core_unlock(int cpu, unsigned long *flags)
++	__context_unsafe(/* releases multiple */)
++	__releases(&runqueues.__lock) /* overapproximation */
  {
- 	if (head->r.eof)
- 		return;
-@@ -927,6 +937,7 @@ static void tomoyo_read_manager(struct tomoyo_io_buffer *head)
-  * Caller holds tomoyo_read_lock().
+ 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
+ 	int t;
+@@ -629,6 +633,7 @@ EXPORT_SYMBOL(__trace_set_current_state);
   */
- static bool tomoyo_manager(void)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	struct tomoyo_manager *ptr;
- 	const char *exe;
-@@ -981,6 +992,8 @@ static struct tomoyo_domain_info *tomoyo_find_domain_by_qid
-  */
- static bool tomoyo_select_domain(struct tomoyo_io_buffer *head,
- 				 const char *data)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	unsigned int pid;
- 	struct tomoyo_domain_info *domain = NULL;
-@@ -1051,6 +1064,7 @@ static bool tomoyo_same_task_acl(const struct tomoyo_acl_info *a,
-  * Caller holds tomoyo_read_lock().
-  */
- static int tomoyo_write_task(struct tomoyo_acl_param *param)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	int error = -EINVAL;
  
-@@ -1079,6 +1093,7 @@ static int tomoyo_write_task(struct tomoyo_acl_param *param)
-  * Caller holds tomoyo_read_lock().
-  */
- static int tomoyo_delete_domain(char *domainname)
-+	__must_hold_shared(&tomoyo_ss)
+ void raw_spin_rq_lock_nested(struct rq *rq, int subclass)
++	__context_unsafe()
  {
- 	struct tomoyo_domain_info *domain;
- 	struct tomoyo_path_info name;
-@@ -1118,6 +1133,7 @@ static int tomoyo_delete_domain(char *domainname)
- static int tomoyo_write_domain2(struct tomoyo_policy_namespace *ns,
- 				struct list_head *list, char *data,
- 				const bool is_delete)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	struct tomoyo_acl_param param = {
- 		.ns = ns,
-@@ -1162,6 +1178,8 @@ const char * const tomoyo_dif[TOMOYO_MAX_DOMAIN_INFO_FLAGS] = {
-  * Caller holds tomoyo_read_lock().
-  */
- static int tomoyo_write_domain(struct tomoyo_io_buffer *head)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	char *data = head->write_buf;
- 	struct tomoyo_policy_namespace *ns;
-@@ -1223,6 +1241,7 @@ static int tomoyo_write_domain(struct tomoyo_io_buffer *head)
-  */
- static bool tomoyo_print_condition(struct tomoyo_io_buffer *head,
- 				   const struct tomoyo_condition *cond)
-+	__must_hold(&head->io_sem)
- {
- 	switch (head->r.cond_step) {
- 	case 0:
-@@ -1364,6 +1383,7 @@ static bool tomoyo_print_condition(struct tomoyo_io_buffer *head,
-  */
- static void tomoyo_set_group(struct tomoyo_io_buffer *head,
- 			     const char *category)
-+	__must_hold(&head->io_sem)
- {
- 	if (head->type == TOMOYO_EXCEPTIONPOLICY) {
- 		tomoyo_print_namespace(head);
-@@ -1383,6 +1403,7 @@ static void tomoyo_set_group(struct tomoyo_io_buffer *head,
-  */
- static bool tomoyo_print_entry(struct tomoyo_io_buffer *head,
- 			       struct tomoyo_acl_info *acl)
-+	__must_hold(&head->io_sem)
- {
- 	const u8 acl_type = acl->type;
- 	bool first = true;
-@@ -1588,6 +1609,8 @@ static bool tomoyo_print_entry(struct tomoyo_io_buffer *head,
-  */
- static bool tomoyo_read_domain2(struct tomoyo_io_buffer *head,
- 				struct list_head *list)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	list_for_each_cookie(head->r.acl, list) {
- 		struct tomoyo_acl_info *ptr =
-@@ -1608,6 +1631,8 @@ static bool tomoyo_read_domain2(struct tomoyo_io_buffer *head,
-  * Caller holds tomoyo_read_lock().
-  */
- static void tomoyo_read_domain(struct tomoyo_io_buffer *head)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	if (head->r.eof)
- 		return;
-@@ -1686,6 +1711,7 @@ static int tomoyo_write_pid(struct tomoyo_io_buffer *head)
-  * using read()/write() interface rather than sysctl() interface.
-  */
- static void tomoyo_read_pid(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	char *buf = head->write_buf;
- 	bool global_pid = false;
-@@ -1746,6 +1772,8 @@ static const char *tomoyo_group_name[TOMOYO_MAX_GROUP] = {
-  * Caller holds tomoyo_read_lock().
-  */
- static int tomoyo_write_exception(struct tomoyo_io_buffer *head)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	const bool is_delete = head->w.is_delete;
- 	struct tomoyo_acl_param param = {
-@@ -1787,6 +1815,8 @@ static int tomoyo_write_exception(struct tomoyo_io_buffer *head)
-  * Caller holds tomoyo_read_lock().
-  */
- static bool tomoyo_read_group(struct tomoyo_io_buffer *head, const int idx)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	struct tomoyo_policy_namespace *ns =
- 		container_of(head->r.ns, typeof(*ns), namespace_list);
-@@ -1846,6 +1876,7 @@ static bool tomoyo_read_group(struct tomoyo_io_buffer *head, const int idx)
-  * Caller holds tomoyo_read_lock().
-  */
- static bool tomoyo_read_policy(struct tomoyo_io_buffer *head, const int idx)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	struct tomoyo_policy_namespace *ns =
- 		container_of(head->r.ns, typeof(*ns), namespace_list);
-@@ -1906,6 +1937,8 @@ static bool tomoyo_read_policy(struct tomoyo_io_buffer *head, const int idx)
-  * Caller holds tomoyo_read_lock().
-  */
- static void tomoyo_read_exception(struct tomoyo_io_buffer *head)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	struct tomoyo_policy_namespace *ns =
- 		container_of(head->r.ns, typeof(*ns), namespace_list);
-@@ -2097,6 +2130,7 @@ static void tomoyo_patternize_path(char *buffer, const int len, char *entry)
-  * Returns nothing.
-  */
- static void tomoyo_add_entry(struct tomoyo_domain_info *domain, char *header)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	char *buffer;
- 	char *realpath = NULL;
-@@ -2301,6 +2335,7 @@ static __poll_t tomoyo_poll_query(struct file *file, poll_table *wait)
-  * @head: Pointer to "struct tomoyo_io_buffer".
-  */
- static void tomoyo_read_query(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	struct list_head *tmp;
- 	unsigned int pos = 0;
-@@ -2362,6 +2397,7 @@ static void tomoyo_read_query(struct tomoyo_io_buffer *head)
-  * Returns 0 on success, -EINVAL otherwise.
-  */
- static int tomoyo_write_answer(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	char *data = head->write_buf;
- 	struct list_head *tmp;
-@@ -2401,6 +2437,7 @@ static int tomoyo_write_answer(struct tomoyo_io_buffer *head)
-  * Returns version information.
-  */
- static void tomoyo_read_version(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	if (!head->r.eof) {
- 		tomoyo_io_printf(head, "2.6.0");
-@@ -2449,6 +2486,7 @@ void tomoyo_update_stat(const u8 index)
-  * Returns nothing.
-  */
- static void tomoyo_read_stat(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	u8 i;
- 	unsigned int total = 0;
-@@ -2493,6 +2531,7 @@ static void tomoyo_read_stat(struct tomoyo_io_buffer *head)
-  * Returns 0.
-  */
- static int tomoyo_write_stat(struct tomoyo_io_buffer *head)
-+	__must_hold(&head->io_sem)
- {
- 	char *data = head->write_buf;
- 	u8 i;
-@@ -2717,6 +2756,8 @@ ssize_t tomoyo_read_control(struct tomoyo_io_buffer *head, char __user *buffer,
-  * Caller holds tomoyo_read_lock().
-  */
- static int tomoyo_parse_policy(struct tomoyo_io_buffer *head, char *line)
-+	__must_hold_shared(&tomoyo_ss)
-+	__must_hold(&head->io_sem)
- {
- 	/* Delete request? */
- 	head->w.is_delete = !strncmp(line, "delete ", 7);
-@@ -2969,8 +3010,11 @@ void __init tomoyo_load_builtin_policy(void)
- 				break;
- 			*end = '\0';
- 			tomoyo_normalize_line(start);
--			head.write_buf = start;
--			tomoyo_parse_policy(&head, start);
-+			/* head is stack-local and not shared. */
-+			context_unsafe(
-+				head.write_buf = start;
-+				tomoyo_parse_policy(&head, start);
-+			);
- 			start = end + 1;
- 		}
- 	}
-diff --git a/security/tomoyo/common.h b/security/tomoyo/common.h
-index 0e8e2e959aef..2ff05653743c 100644
---- a/security/tomoyo/common.h
-+++ b/security/tomoyo/common.h
-@@ -827,13 +827,13 @@ struct tomoyo_io_buffer {
- 		bool is_delete;
- 	} w;
- 	/* Buffer for reading.                  */
--	char *read_buf;
-+	char *read_buf		__guarded_by(&io_sem);
- 	/* Size of read buffer.                 */
--	size_t readbuf_size;
-+	size_t readbuf_size	__guarded_by(&io_sem);
- 	/* Buffer for writing.                  */
--	char *write_buf;
-+	char *write_buf		__guarded_by(&io_sem);
- 	/* Size of write buffer.                */
--	size_t writebuf_size;
-+	size_t writebuf_size	__guarded_by(&io_sem);
- 	/* Type of this interface.              */
- 	enum tomoyo_securityfs_interface_index type;
- 	/* Users counter protected by tomoyo_io_buffer_list_lock. */
-@@ -922,6 +922,35 @@ struct tomoyo_task {
- 	struct tomoyo_domain_info *old_domain_info;
- };
+ 	raw_spinlock_t *lock;
  
-+/********** External variable definitions. **********/
+@@ -654,6 +659,7 @@ void raw_spin_rq_lock_nested(struct rq *rq, int subclass)
+ }
+ 
+ bool raw_spin_rq_trylock(struct rq *rq)
++	__context_unsafe()
+ {
+ 	raw_spinlock_t *lock;
+ 	bool ret;
+@@ -695,15 +701,16 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
+ 	raw_spin_rq_lock(rq1);
+ 	if (__rq_lockp(rq1) != __rq_lockp(rq2))
+ 		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
++	else
++		__acquire_ctx_guard(__rq_lockp(rq2)); /* fake acquire */
+ 
+ 	double_rq_clock_clear_update(rq1, rq2);
+ }
+ 
+ /*
+- * __task_rq_lock - lock the rq @p resides on.
++ * ___task_rq_lock - lock the rq @p resides on.
+  */
+-struct rq *__task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+-	__acquires(rq->lock)
++struct rq *___task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+ {
+ 	struct rq *rq;
+ 
+@@ -726,9 +733,7 @@ struct rq *__task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+ /*
+  * task_rq_lock - lock p->pi_lock and lock the rq @p resides on.
+  */
+-struct rq *task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+-	__acquires(p->pi_lock)
+-	__acquires(rq->lock)
++struct rq *_task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+ {
+ 	struct rq *rq;
+ 
+@@ -2463,6 +2468,7 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
+  */
+ static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
+ 				   struct task_struct *p, int new_cpu)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	lockdep_assert_rq_held(rq);
+ 
+@@ -2509,6 +2515,7 @@ struct set_affinity_pending {
+  */
+ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
+ 				 struct task_struct *p, int dest_cpu)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	/* Affinity changed (again). */
+ 	if (!is_cpu_allowed(p, dest_cpu))
+@@ -2545,6 +2552,12 @@ static int migration_cpu_stop(void *data)
+ 	 */
+ 	flush_smp_call_function_queue();
+ 
++	/*
++	 * We may change the underlying rq, but the locks held will
++	 * appropriately be "transferred" when switching.
++	 */
++	context_unsafe_alias(rq);
 +
-+extern bool tomoyo_policy_loaded;
-+extern int tomoyo_enabled;
-+extern const char * const tomoyo_condition_keyword
-+[TOMOYO_MAX_CONDITION_KEYWORD];
-+extern const char * const tomoyo_dif[TOMOYO_MAX_DOMAIN_INFO_FLAGS];
-+extern const char * const tomoyo_mac_keywords[TOMOYO_MAX_MAC_INDEX
-+					      + TOMOYO_MAX_MAC_CATEGORY_INDEX];
-+extern const char * const tomoyo_mode[TOMOYO_CONFIG_MAX_MODE];
-+extern const char * const tomoyo_path_keyword[TOMOYO_MAX_PATH_OPERATION];
-+extern const char * const tomoyo_proto_keyword[TOMOYO_SOCK_MAX];
-+extern const char * const tomoyo_socket_keyword[TOMOYO_MAX_NETWORK_OPERATION];
-+extern const u8 tomoyo_index2category[TOMOYO_MAX_MAC_INDEX];
-+extern const u8 tomoyo_pn2mac[TOMOYO_MAX_PATH_NUMBER_OPERATION];
-+extern const u8 tomoyo_pnnn2mac[TOMOYO_MAX_MKDEV_OPERATION];
-+extern const u8 tomoyo_pp2mac[TOMOYO_MAX_PATH2_OPERATION];
-+extern struct list_head tomoyo_condition_list;
-+extern struct list_head tomoyo_domain_list;
-+extern struct list_head tomoyo_name_list[TOMOYO_MAX_HASH];
-+extern struct list_head tomoyo_namespace_list;
-+extern struct mutex tomoyo_policy_lock;
-+extern struct srcu_struct tomoyo_ss;
-+extern struct tomoyo_domain_info tomoyo_kernel_domain;
-+extern struct tomoyo_policy_namespace tomoyo_kernel_namespace;
-+extern unsigned int tomoyo_memory_quota[TOMOYO_MAX_MEMORY_STAT];
-+extern unsigned int tomoyo_memory_used[TOMOYO_MAX_MEMORY_STAT];
-+extern struct lsm_blob_sizes tomoyo_blob_sizes;
+ 	raw_spin_lock(&p->pi_lock);
+ 	rq_lock(rq, &rf);
+ 
+@@ -2654,6 +2667,8 @@ int push_cpu_stop(void *arg)
+ 	if (!lowest_rq)
+ 		goto out_unlock;
+ 
++	lockdep_assert_rq_held(lowest_rq);
 +
- /********** Function prototypes. **********/
+ 	// XXX validate p is still the highest prio task
+ 	if (task_rq(p) == rq) {
+ 		move_queued_task_locked(rq, lowest_rq, p);
+@@ -2899,8 +2914,7 @@ void release_user_cpus_ptr(struct task_struct *p)
+  */
+ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flags *rf,
+ 			    int dest_cpu, unsigned int flags)
+-	__releases(rq->lock)
+-	__releases(p->pi_lock)
++	__releases(__rq_lockp(rq), &p->pi_lock)
+ {
+ 	struct set_affinity_pending my_pending = { }, *pending = NULL;
+ 	bool stop_pending, complete = false;
+@@ -3055,8 +3069,7 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
+ 					 struct affinity_context *ctx,
+ 					 struct rq *rq,
+ 					 struct rq_flags *rf)
+-	__releases(rq->lock)
+-	__releases(p->pi_lock)
++	__releases(__rq_lockp(rq), &p->pi_lock)
+ {
+ 	const struct cpumask *cpu_allowed_mask = task_cpu_possible_mask(p);
+ 	const struct cpumask *cpu_valid_mask = cpu_active_mask;
+@@ -4348,29 +4361,30 @@ static bool __task_needs_rq_lock(struct task_struct *p)
+  */
+ int task_call_func(struct task_struct *p, task_call_f func, void *arg)
+ {
+-	struct rq *rq = NULL;
+ 	struct rq_flags rf;
+ 	int ret;
  
- bool tomoyo_address_matches_group(const bool is_ipv6, const __be32 *address,
-@@ -969,10 +998,10 @@ const struct tomoyo_path_info *tomoyo_path_matches_group
- int tomoyo_check_open_permission(struct tomoyo_domain_info *domain,
- 				 const struct path *path, const int flag);
- void tomoyo_close_control(struct tomoyo_io_buffer *head);
--int tomoyo_env_perm(struct tomoyo_request_info *r, const char *env);
-+int tomoyo_env_perm(struct tomoyo_request_info *r, const char *env) __must_hold_shared(&tomoyo_ss);
- int tomoyo_execute_permission(struct tomoyo_request_info *r,
--			      const struct tomoyo_path_info *filename);
--int tomoyo_find_next_domain(struct linux_binprm *bprm);
-+			      const struct tomoyo_path_info *filename) __must_hold_shared(&tomoyo_ss);
-+int tomoyo_find_next_domain(struct linux_binprm *bprm) __must_hold_shared(&tomoyo_ss);
- int tomoyo_get_mode(const struct tomoyo_policy_namespace *ns, const u8 profile,
- 		    const u8 index);
- int tomoyo_init_request_info(struct tomoyo_request_info *r,
-@@ -1000,6 +1029,7 @@ int tomoyo_socket_listen_permission(struct socket *sock);
- int tomoyo_socket_sendmsg_permission(struct socket *sock, struct msghdr *msg,
- 				     int size);
- int tomoyo_supervisor(struct tomoyo_request_info *r, const char *fmt, ...)
-+	__must_hold_shared(&tomoyo_ss)
- 	__printf(2, 3);
- int tomoyo_update_domain(struct tomoyo_acl_info *new_entry, const int size,
- 			 struct tomoyo_acl_param *param,
-@@ -1059,7 +1089,7 @@ void tomoyo_print_ulong(char *buffer, const int buffer_len,
- 			const unsigned long value, const u8 type);
- void tomoyo_put_name_union(struct tomoyo_name_union *ptr);
- void tomoyo_put_number_union(struct tomoyo_number_union *ptr);
--void tomoyo_read_log(struct tomoyo_io_buffer *head);
-+void tomoyo_read_log(struct tomoyo_io_buffer *head) __must_hold(&head->io_sem);
- void tomoyo_update_stat(const u8 index);
- void tomoyo_warn_oom(const char *function);
- void tomoyo_write_log(struct tomoyo_request_info *r, const char *fmt, ...)
-@@ -1067,35 +1097,6 @@ void tomoyo_write_log(struct tomoyo_request_info *r, const char *fmt, ...)
- void tomoyo_write_log2(struct tomoyo_request_info *r, int len, const char *fmt,
- 		       va_list args) __printf(3, 0);
+ 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
  
--/********** External variable definitions. **********/
--
--extern bool tomoyo_policy_loaded;
--extern int tomoyo_enabled;
--extern const char * const tomoyo_condition_keyword
--[TOMOYO_MAX_CONDITION_KEYWORD];
--extern const char * const tomoyo_dif[TOMOYO_MAX_DOMAIN_INFO_FLAGS];
--extern const char * const tomoyo_mac_keywords[TOMOYO_MAX_MAC_INDEX
--					      + TOMOYO_MAX_MAC_CATEGORY_INDEX];
--extern const char * const tomoyo_mode[TOMOYO_CONFIG_MAX_MODE];
--extern const char * const tomoyo_path_keyword[TOMOYO_MAX_PATH_OPERATION];
--extern const char * const tomoyo_proto_keyword[TOMOYO_SOCK_MAX];
--extern const char * const tomoyo_socket_keyword[TOMOYO_MAX_NETWORK_OPERATION];
--extern const u8 tomoyo_index2category[TOMOYO_MAX_MAC_INDEX];
--extern const u8 tomoyo_pn2mac[TOMOYO_MAX_PATH_NUMBER_OPERATION];
--extern const u8 tomoyo_pnnn2mac[TOMOYO_MAX_MKDEV_OPERATION];
--extern const u8 tomoyo_pp2mac[TOMOYO_MAX_PATH2_OPERATION];
--extern struct list_head tomoyo_condition_list;
--extern struct list_head tomoyo_domain_list;
--extern struct list_head tomoyo_name_list[TOMOYO_MAX_HASH];
--extern struct list_head tomoyo_namespace_list;
--extern struct mutex tomoyo_policy_lock;
--extern struct srcu_struct tomoyo_ss;
--extern struct tomoyo_domain_info tomoyo_kernel_domain;
--extern struct tomoyo_policy_namespace tomoyo_kernel_namespace;
--extern unsigned int tomoyo_memory_quota[TOMOYO_MAX_MEMORY_STAT];
--extern unsigned int tomoyo_memory_used[TOMOYO_MAX_MEMORY_STAT];
--extern struct lsm_blob_sizes tomoyo_blob_sizes;
--
- /********** Inlined functions. **********/
+-	if (__task_needs_rq_lock(p))
+-		rq = __task_rq_lock(p, &rf);
++	if (__task_needs_rq_lock(p)) {
++		struct rq *rq = __task_rq_lock(p, &rf);
  
- /**
-@@ -1104,6 +1105,7 @@ extern struct lsm_blob_sizes tomoyo_blob_sizes;
-  * Returns index number for tomoyo_read_unlock().
-  */
- static inline int tomoyo_read_lock(void)
-+	__acquires_shared(&tomoyo_ss)
- {
- 	return srcu_read_lock(&tomoyo_ss);
- }
-@@ -1116,6 +1118,7 @@ static inline int tomoyo_read_lock(void)
-  * Returns nothing.
-  */
- static inline void tomoyo_read_unlock(int idx)
-+	__releases_shared(&tomoyo_ss)
- {
- 	srcu_read_unlock(&tomoyo_ss, idx);
- }
-diff --git a/security/tomoyo/domain.c b/security/tomoyo/domain.c
-index 5f9ccab26e9a..5b7989ad85bf 100644
---- a/security/tomoyo/domain.c
-+++ b/security/tomoyo/domain.c
-@@ -611,6 +611,7 @@ struct tomoyo_domain_info *tomoyo_assign_domain(const char *domainname,
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_environ(struct tomoyo_execve *ee)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	struct tomoyo_request_info *r = &ee->r;
- 	struct linux_binprm *bprm = ee->bprm;
-diff --git a/security/tomoyo/environ.c b/security/tomoyo/environ.c
-index 7f0a471f19b2..bcb05910facc 100644
---- a/security/tomoyo/environ.c
-+++ b/security/tomoyo/environ.c
-@@ -32,6 +32,7 @@ static bool tomoyo_check_env_acl(struct tomoyo_request_info *r,
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_audit_env_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	return tomoyo_supervisor(r, "misc env %s\n",
- 				 r->param.environ.name->name);
-diff --git a/security/tomoyo/file.c b/security/tomoyo/file.c
-index 8f3b90b6e03d..e9b67dbb38e7 100644
---- a/security/tomoyo/file.c
-+++ b/security/tomoyo/file.c
-@@ -164,6 +164,7 @@ static bool tomoyo_get_realpath(struct tomoyo_path_info *buf, const struct path
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_audit_path_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	return tomoyo_supervisor(r, "file %s %s\n", tomoyo_path_keyword
- 				 [r->param.path.operation],
-@@ -178,6 +179,7 @@ static int tomoyo_audit_path_log(struct tomoyo_request_info *r)
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_audit_path2_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	return tomoyo_supervisor(r, "file %s %s %s\n", tomoyo_mac_keywords
- 				 [tomoyo_pp2mac[r->param.path2.operation]],
-@@ -193,6 +195,7 @@ static int tomoyo_audit_path2_log(struct tomoyo_request_info *r)
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_audit_mkdev_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	return tomoyo_supervisor(r, "file %s %s 0%o %u %u\n",
- 				 tomoyo_mac_keywords
-@@ -210,6 +213,7 @@ static int tomoyo_audit_mkdev_log(struct tomoyo_request_info *r)
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_audit_path_number_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	const u8 type = r->param.path_number.operation;
- 	u8 radix;
-@@ -572,6 +576,7 @@ static int tomoyo_update_path2_acl(const u8 perm,
-  */
- static int tomoyo_path_permission(struct tomoyo_request_info *r, u8 operation,
- 				  const struct tomoyo_path_info *filename)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	int error;
+-	/*
+-	 * At this point the task is pinned; either:
+-	 *  - blocked and we're holding off wakeups	 (pi->lock)
+-	 *  - woken, and we're holding off enqueue	 (rq->lock)
+-	 *  - queued, and we're holding off schedule	 (rq->lock)
+-	 *  - running, and we're holding off de-schedule (rq->lock)
+-	 *
+-	 * The called function (@func) can use: task_curr(), p->on_rq and
+-	 * p->__state to differentiate between these states.
+-	 */
+-	ret = func(p, arg);
++		/*
++		 * At this point the task is pinned; either:
++		 *  - blocked and we're holding off wakeups	 (pi->lock)
++		 *  - woken, and we're holding off enqueue	 (rq->lock)
++		 *  - queued, and we're holding off schedule	 (rq->lock)
++		 *  - running, and we're holding off de-schedule (rq->lock)
++		 *
++		 * The called function (@func) can use: task_curr(), p->on_rq and
++		 * p->__state to differentiate between these states.
++		 */
++		ret = func(p, arg);
  
-diff --git a/security/tomoyo/gc.c b/security/tomoyo/gc.c
-index 026e29ea3796..8e2008863af8 100644
---- a/security/tomoyo/gc.c
-+++ b/security/tomoyo/gc.c
-@@ -23,11 +23,10 @@ static inline void tomoyo_memory_free(void *ptr)
- 	tomoyo_memory_used[TOMOYO_MEMORY_POLICY] -= ksize(ptr);
- 	kfree(ptr);
- }
--
--/* The list for "struct tomoyo_io_buffer". */
--static LIST_HEAD(tomoyo_io_buffer_list);
- /* Lock for protecting tomoyo_io_buffer_list. */
- static DEFINE_SPINLOCK(tomoyo_io_buffer_list_lock);
-+/* The list for "struct tomoyo_io_buffer". */
-+static __guarded_by(&tomoyo_io_buffer_list_lock) LIST_HEAD(tomoyo_io_buffer_list);
+-	if (rq)
+ 		rq_unlock(rq, &rf);
++	} else {
++		ret = func(p, arg);
++	}
  
- /**
-  * tomoyo_struct_used_by_io_buffer - Check whether the list element is used by /sys/kernel/security/tomoyo/ users or not.
-@@ -385,6 +384,7 @@ static inline void tomoyo_del_number_group(struct list_head *element)
-  */
- static void tomoyo_try_to_gc(const enum tomoyo_policy_id type,
- 			     struct list_head *element)
-+	__must_hold(&tomoyo_policy_lock)
+ 	raw_spin_unlock_irqrestore(&p->pi_lock, rf.flags);
+ 	return ret;
+@@ -5046,6 +5060,8 @@ void balance_callbacks(struct rq *rq, struct balance_callback *head)
+ 
+ static inline void
+ prepare_lock_switch(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
++	__releases(__rq_lockp(rq))
++	__acquires(__rq_lockp(this_rq()))
  {
  	/*
- 	 * __list_del_entry() guarantees that the list element became no longer
-@@ -484,6 +484,7 @@ static void tomoyo_try_to_gc(const enum tomoyo_policy_id type,
-  */
- static void tomoyo_collect_member(const enum tomoyo_policy_id id,
- 				  struct list_head *member_list)
-+	__must_hold(&tomoyo_policy_lock)
+ 	 * Since the runqueue lock will be released by the next
+@@ -5059,9 +5075,15 @@ prepare_lock_switch(struct rq *rq, struct task_struct *next, struct rq_flags *rf
+ 	/* this is a valid case when another task releases the spinlock */
+ 	rq_lockp(rq)->owner = next;
+ #endif
++	/*
++	 * Model the rq reference switcheroo.
++	 */
++	__release(__rq_lockp(rq));
++	__acquire(__rq_lockp(this_rq()));
+ }
+ 
+ static inline void finish_lock_switch(struct rq *rq)
++	__releases(__rq_lockp(rq))
  {
- 	struct tomoyo_acl_head *member;
- 	struct tomoyo_acl_head *tmp;
-@@ -504,6 +505,7 @@ static void tomoyo_collect_member(const enum tomoyo_policy_id id,
-  * Returns nothing.
-  */
- static void tomoyo_collect_acl(struct list_head *list)
-+	__must_hold(&tomoyo_policy_lock)
+ 	/*
+ 	 * If we are tracking spinlock dependencies then we have to
+@@ -5117,6 +5139,7 @@ static inline void kmap_local_sched_in(void)
+ static inline void
+ prepare_task_switch(struct rq *rq, struct task_struct *prev,
+ 		    struct task_struct *next)
++	__must_hold(__rq_lockp(rq))
  {
- 	struct tomoyo_acl_info *acl;
- 	struct tomoyo_acl_info *tmp;
-@@ -627,8 +629,11 @@ static int tomoyo_gc_thread(void *unused)
- 			if (head->users)
- 				continue;
- 			list_del(&head->list);
--			kfree(head->read_buf);
--			kfree(head->write_buf);
-+			/* Safe destruction because no users are left. */
-+			context_unsafe(
-+				kfree(head->read_buf);
-+				kfree(head->write_buf);
-+			);
- 			kfree(head);
- 		}
- 		spin_unlock(&tomoyo_io_buffer_list_lock);
-@@ -656,11 +661,18 @@ void tomoyo_notify_gc(struct tomoyo_io_buffer *head, const bool is_register)
- 		head->users = 1;
- 		list_add(&head->list, &tomoyo_io_buffer_list);
- 	} else {
--		is_write = head->write_buf != NULL;
-+		/*
-+		 * tomoyo_write_control() can concurrently update write_buf from
-+		 * a non-NULL to new non-NULL pointer with io_sem held.
-+		 */
-+		is_write = data_race(head->write_buf != NULL);
- 		if (!--head->users) {
- 			list_del(&head->list);
--			kfree(head->read_buf);
--			kfree(head->write_buf);
-+			/* Safe destruction because no users are left. */
-+			context_unsafe(
-+				kfree(head->read_buf);
-+				kfree(head->write_buf);
-+			);
- 			kfree(head);
- 		}
+ 	kcov_prepare_switch(prev);
+ 	sched_info_switch(rq, prev, next);
+@@ -5148,7 +5171,7 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
+  * because prev may have moved to another CPU.
+  */
+ static struct rq *finish_task_switch(struct task_struct *prev)
+-	__releases(rq->lock)
++	__releases(__rq_lockp(this_rq()))
+ {
+ 	struct rq *rq = this_rq();
+ 	struct mm_struct *mm = rq->prev_mm;
+@@ -5236,7 +5259,7 @@ static struct rq *finish_task_switch(struct task_struct *prev)
+  * @prev: the thread we just switched away from.
+  */
+ asmlinkage __visible void schedule_tail(struct task_struct *prev)
+-	__releases(rq->lock)
++	__releases(__rq_lockp(this_rq()))
+ {
+ 	/*
+ 	 * New tasks start with FORK_PREEMPT_COUNT, see there and
+@@ -5268,6 +5291,7 @@ asmlinkage __visible void schedule_tail(struct task_struct *prev)
+ static __always_inline struct rq *
+ context_switch(struct rq *rq, struct task_struct *prev,
+ 	       struct task_struct *next, struct rq_flags *rf)
++	__releases(__rq_lockp(rq))
+ {
+ 	prepare_task_switch(rq, prev, next);
+ 
+@@ -5948,6 +5972,7 @@ static void prev_balance(struct rq *rq, struct task_struct *prev,
+  */
+ static inline struct task_struct *
+ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	const struct sched_class *class;
+ 	struct task_struct *p;
+@@ -6040,6 +6065,7 @@ static void queue_core_balance(struct rq *rq);
+ 
+ static struct task_struct *
+ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	struct task_struct *next, *p, *max = NULL;
+ 	const struct cpumask *smt_mask;
+@@ -6339,6 +6365,7 @@ static bool steal_cookie_task(int cpu, struct sched_domain *sd)
+ }
+ 
+ static void sched_core_balance(struct rq *rq)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	struct sched_domain *sd;
+ 	int cpu = cpu_of(rq);
+@@ -6484,6 +6511,7 @@ static inline void sched_core_cpu_dying(unsigned int cpu) {}
+ 
+ static struct task_struct *
+ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	return __pick_next_task(rq, prev, rf);
+ }
+@@ -8141,6 +8169,12 @@ static int __balance_push_cpu_stop(void *arg)
+ 	struct rq_flags rf;
+ 	int cpu;
+ 
++	/*
++	 * We may change the underlying rq, but the locks held will
++	 * appropriately be "transferred" when switching.
++	 */
++	context_unsafe_alias(rq);
++
+ 	raw_spin_lock_irq(&p->pi_lock);
+ 	rq_lock(rq, &rf);
+ 
+@@ -8168,6 +8202,7 @@ static DEFINE_PER_CPU(struct cpu_stop_work, push_work);
+  * effective when the hotplug motion is down.
+  */
+ static void balance_push(struct rq *rq)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	struct task_struct *push_task = rq->curr;
+ 
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 5b752324270b..b8cebd1f1f4d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -2876,6 +2876,7 @@ static int preferred_group_nid(struct task_struct *p, int nid)
+ }
+ 
+ static void task_numa_placement(struct task_struct *p)
++	__context_unsafe(/* conditional locking */)
+ {
+ 	int seq, nid, max_nid = NUMA_NO_NODE;
+ 	unsigned long max_faults = 0;
+@@ -4803,7 +4804,8 @@ static inline unsigned long cfs_rq_load_avg(struct cfs_rq *cfs_rq)
+ 	return cfs_rq->avg.load_avg;
+ }
+ 
+-static int sched_balance_newidle(struct rq *this_rq, struct rq_flags *rf);
++static int sched_balance_newidle(struct rq *this_rq, struct rq_flags *rf)
++	__must_hold(__rq_lockp(this_rq));
+ 
+ static inline unsigned long task_util(struct task_struct *p)
+ {
+@@ -6229,6 +6231,7 @@ static bool distribute_cfs_runtime(struct cfs_bandwidth *cfs_b)
+  * used to track this state.
+  */
+ static int do_sched_cfs_period_timer(struct cfs_bandwidth *cfs_b, int overrun, unsigned long flags)
++	__must_hold(&cfs_b->lock)
+ {
+ 	int throttled;
+ 
+@@ -8714,6 +8717,7 @@ static void set_cpus_allowed_fair(struct task_struct *p, struct affinity_context
+ 
+ static int
+ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	if (sched_fair_runnable(rq))
+ 		return 1;
+@@ -8867,6 +8871,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+ 
+ struct task_struct *
+ pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	struct sched_entity *se;
+ 	struct task_struct *p;
+@@ -8953,6 +8958,7 @@ pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf
+ }
+ 
+ static struct task_struct *__pick_next_task_fair(struct rq *rq, struct task_struct *prev)
++	__must_hold(__rq_lockp(rq))
+ {
+ 	return pick_next_task_fair(rq, prev, NULL);
+ }
+@@ -12784,6 +12790,7 @@ static inline void nohz_newidle_balance(struct rq *this_rq) { }
+  *   > 0 - success, new (fair) tasks present
+  */
+ static int sched_balance_newidle(struct rq *this_rq, struct rq_flags *rf)
++	__must_hold(__rq_lockp(this_rq))
+ {
+ 	unsigned long next_balance = jiffies + HZ;
+ 	int this_cpu = this_rq->cpu;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index adfb6e3409d7..2d4b9ba30d58 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1350,8 +1350,13 @@ static inline bool is_migration_disabled(struct task_struct *p)
+ 
+ DECLARE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+ 
++static __always_inline struct rq *__this_rq(void)
++{
++	return this_cpu_ptr(&runqueues);
++}
++
+ #define cpu_rq(cpu)		(&per_cpu(runqueues, (cpu)))
+-#define this_rq()		this_cpu_ptr(&runqueues)
++#define this_rq()		__this_rq()
+ #define task_rq(p)		cpu_rq(task_cpu(p))
+ #define cpu_curr(cpu)		(cpu_rq(cpu)->curr)
+ #define raw_rq()		raw_cpu_ptr(&runqueues)
+@@ -1396,6 +1401,7 @@ static inline raw_spinlock_t *rq_lockp(struct rq *rq)
+ }
+ 
+ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
++	__returns_ctx_guard(rq_lockp(rq)) /* alias them */
+ {
+ 	if (rq->core_enabled)
+ 		return &rq->core->__lock;
+@@ -1492,6 +1498,7 @@ static inline raw_spinlock_t *rq_lockp(struct rq *rq)
+ }
+ 
+ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
++	__returns_ctx_guard(rq_lockp(rq)) /* alias them */
+ {
+ 	return &rq->__lock;
+ }
+@@ -1534,32 +1541,42 @@ static inline bool rt_group_sched_enabled(void)
+ #endif /* !CONFIG_RT_GROUP_SCHED */
+ 
+ static inline void lockdep_assert_rq_held(struct rq *rq)
++	__assumes_ctx_guard(__rq_lockp(rq))
+ {
+ 	lockdep_assert_held(__rq_lockp(rq));
+ }
+ 
+-extern void raw_spin_rq_lock_nested(struct rq *rq, int subclass);
+-extern bool raw_spin_rq_trylock(struct rq *rq);
+-extern void raw_spin_rq_unlock(struct rq *rq);
++extern void raw_spin_rq_lock_nested(struct rq *rq, int subclass)
++	__acquires(__rq_lockp(rq));
++
++extern bool raw_spin_rq_trylock(struct rq *rq)
++	__cond_acquires(true, __rq_lockp(rq));
++
++extern void raw_spin_rq_unlock(struct rq *rq)
++	__releases(__rq_lockp(rq));
+ 
+ static inline void raw_spin_rq_lock(struct rq *rq)
++	__acquires(__rq_lockp(rq))
+ {
+ 	raw_spin_rq_lock_nested(rq, 0);
+ }
+ 
+ static inline void raw_spin_rq_lock_irq(struct rq *rq)
++	__acquires(__rq_lockp(rq))
+ {
+ 	local_irq_disable();
+ 	raw_spin_rq_lock(rq);
+ }
+ 
+ static inline void raw_spin_rq_unlock_irq(struct rq *rq)
++	__releases(__rq_lockp(rq))
+ {
+ 	raw_spin_rq_unlock(rq);
+ 	local_irq_enable();
+ }
+ 
+ static inline unsigned long _raw_spin_rq_lock_irqsave(struct rq *rq)
++	__acquires(__rq_lockp(rq))
+ {
+ 	unsigned long flags;
+ 
+@@ -1570,6 +1587,7 @@ static inline unsigned long _raw_spin_rq_lock_irqsave(struct rq *rq)
+ }
+ 
+ static inline void raw_spin_rq_unlock_irqrestore(struct rq *rq, unsigned long flags)
++	__releases(__rq_lockp(rq))
+ {
+ 	raw_spin_rq_unlock(rq);
+ 	local_irq_restore(flags);
+@@ -1818,17 +1836,15 @@ static inline void rq_repin_lock(struct rq *rq, struct rq_flags *rf)
+ 	rq->clock_update_flags |= rf->clock_update_flags;
+ }
+ 
+-extern
+-struct rq *__task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+-	__acquires(rq->lock);
++#define __task_rq_lock(...) __acquire_ret(___task_rq_lock(__VA_ARGS__), __rq_lockp(__ret))
++extern struct rq *___task_rq_lock(struct task_struct *p, struct rq_flags *rf) __acquires_ret;
+ 
+-extern
+-struct rq *task_rq_lock(struct task_struct *p, struct rq_flags *rf)
+-	__acquires(p->pi_lock)
+-	__acquires(rq->lock);
++#define task_rq_lock(...) __acquire_ret(_task_rq_lock(__VA_ARGS__), __rq_lockp(__ret))
++extern struct rq *_task_rq_lock(struct task_struct *p, struct rq_flags *rf)
++	__acquires(&p->pi_lock) __acquires_ret;
+ 
+ static inline void __task_rq_unlock(struct rq *rq, struct rq_flags *rf)
+-	__releases(rq->lock)
++	__releases(__rq_lockp(rq))
+ {
+ 	rq_unpin_lock(rq, rf);
+ 	raw_spin_rq_unlock(rq);
+@@ -1836,8 +1852,7 @@ static inline void __task_rq_unlock(struct rq *rq, struct rq_flags *rf)
+ 
+ static inline void
+ task_rq_unlock(struct rq *rq, struct task_struct *p, struct rq_flags *rf)
+-	__releases(rq->lock)
+-	__releases(p->pi_lock)
++	__releases(__rq_lockp(rq), &p->pi_lock)
+ {
+ 	rq_unpin_lock(rq, rf);
+ 	raw_spin_rq_unlock(rq);
+@@ -1848,44 +1863,45 @@ DEFINE_LOCK_GUARD_1(task_rq_lock, struct task_struct,
+ 		    _T->rq = task_rq_lock(_T->lock, &_T->rf),
+ 		    task_rq_unlock(_T->rq, _T->lock, &_T->rf),
+ 		    struct rq *rq; struct rq_flags rf)
++DECLARE_LOCK_GUARD_1_ATTRS(task_rq_lock, __assumes_ctx_guard(_T->pi_lock), /* */)
+ 
+ static inline void rq_lock_irqsave(struct rq *rq, struct rq_flags *rf)
+-	__acquires(rq->lock)
++	__acquires(__rq_lockp(rq))
+ {
+ 	raw_spin_rq_lock_irqsave(rq, rf->flags);
+ 	rq_pin_lock(rq, rf);
+ }
+ 
+ static inline void rq_lock_irq(struct rq *rq, struct rq_flags *rf)
+-	__acquires(rq->lock)
++	__acquires(__rq_lockp(rq))
+ {
+ 	raw_spin_rq_lock_irq(rq);
+ 	rq_pin_lock(rq, rf);
+ }
+ 
+ static inline void rq_lock(struct rq *rq, struct rq_flags *rf)
+-	__acquires(rq->lock)
++	__acquires(__rq_lockp(rq))
+ {
+ 	raw_spin_rq_lock(rq);
+ 	rq_pin_lock(rq, rf);
+ }
+ 
+ static inline void rq_unlock_irqrestore(struct rq *rq, struct rq_flags *rf)
+-	__releases(rq->lock)
++	__releases(__rq_lockp(rq))
+ {
+ 	rq_unpin_lock(rq, rf);
+ 	raw_spin_rq_unlock_irqrestore(rq, rf->flags);
+ }
+ 
+ static inline void rq_unlock_irq(struct rq *rq, struct rq_flags *rf)
+-	__releases(rq->lock)
++	__releases(__rq_lockp(rq))
+ {
+ 	rq_unpin_lock(rq, rf);
+ 	raw_spin_rq_unlock_irq(rq);
+ }
+ 
+ static inline void rq_unlock(struct rq *rq, struct rq_flags *rf)
+-	__releases(rq->lock)
++	__releases(__rq_lockp(rq))
+ {
+ 	rq_unpin_lock(rq, rf);
+ 	raw_spin_rq_unlock(rq);
+@@ -1896,18 +1912,24 @@ DEFINE_LOCK_GUARD_1(rq_lock, struct rq,
+ 		    rq_unlock(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
++DECLARE_LOCK_GUARD_1_ATTRS(rq_lock, __assumes_ctx_guard(__rq_lockp(_T)), /* */);
++
+ DEFINE_LOCK_GUARD_1(rq_lock_irq, struct rq,
+ 		    rq_lock_irq(_T->lock, &_T->rf),
+ 		    rq_unlock_irq(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
++DECLARE_LOCK_GUARD_1_ATTRS(rq_lock_irq, __assumes_ctx_guard(__rq_lockp(_T)), /* */);
++
+ DEFINE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
+ 		    rq_lock_irqsave(_T->lock, &_T->rf),
+ 		    rq_unlock_irqrestore(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
+-static inline struct rq *this_rq_lock_irq(struct rq_flags *rf)
+-	__acquires(rq->lock)
++DECLARE_LOCK_GUARD_1_ATTRS(rq_lock_irqsave, __assumes_ctx_guard(__rq_lockp(_T)), /* */);
++
++#define this_rq_lock_irq(...) __acquire_ret(_this_rq_lock_irq(__VA_ARGS__), __rq_lockp(__ret))
++static inline struct rq *_this_rq_lock_irq(struct rq_flags *rf) __acquires_ret
+ {
+ 	struct rq *rq;
+ 
+@@ -2908,8 +2930,13 @@ static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2)
+ #define DEFINE_LOCK_GUARD_2(name, type, _lock, _unlock, ...)				\
+ __DEFINE_UNLOCK_GUARD(name, type, _unlock, type *lock2; __VA_ARGS__)			\
+ static inline class_##name##_t class_##name##_constructor(type *lock, type *lock2)	\
++	__no_context_analysis							\
+ { class_##name##_t _t = { .lock = lock, .lock2 = lock2 }, *_T = &_t;			\
+   _lock; return _t; }
++#define DECLARE_LOCK_GUARD_2_ATTRS(_name, _lock, _unlock)				\
++static inline class_##_name##_t class_##_name##_constructor(lock_##_name##_t *_T1,	\
++							    lock_##_name##_t *_T2) _lock; \
++static inline void class_##_name##_destructor(class_##_name##_t *_T) _unlock
+ 
+ static inline bool rq_order_less(struct rq *rq1, struct rq *rq2)
+ {
+@@ -2937,7 +2964,8 @@ static inline bool rq_order_less(struct rq *rq1, struct rq *rq2)
+ 	return rq1->cpu < rq2->cpu;
+ }
+ 
+-extern void double_rq_lock(struct rq *rq1, struct rq *rq2);
++extern void double_rq_lock(struct rq *rq1, struct rq *rq2)
++	__acquires(__rq_lockp(rq1), __rq_lockp(rq2));
+ 
+ #ifdef CONFIG_PREEMPTION
+ 
+@@ -2950,9 +2978,8 @@ extern void double_rq_lock(struct rq *rq1, struct rq *rq2);
+  * also adds more overhead and therefore may reduce throughput.
+  */
+ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
+-	__releases(this_rq->lock)
+-	__acquires(busiest->lock)
+-	__acquires(this_rq->lock)
++	__must_hold(__rq_lockp(this_rq))
++	__acquires(__rq_lockp(busiest))
+ {
+ 	raw_spin_rq_unlock(this_rq);
+ 	double_rq_lock(this_rq, busiest);
+@@ -2969,12 +2996,16 @@ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
+  * regardless of entry order into the function.
+  */
+ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
+-	__releases(this_rq->lock)
+-	__acquires(busiest->lock)
+-	__acquires(this_rq->lock)
++	__must_hold(__rq_lockp(this_rq))
++	__acquires(__rq_lockp(busiest))
+ {
+-	if (__rq_lockp(this_rq) == __rq_lockp(busiest) ||
+-	    likely(raw_spin_rq_trylock(busiest))) {
++	if (__rq_lockp(this_rq) == __rq_lockp(busiest)) {
++		__acquire(__rq_lockp(busiest)); /* already held */
++		double_rq_clock_clear_update(this_rq, busiest);
++		return 0;
++	}
++
++	if (likely(raw_spin_rq_trylock(busiest))) {
+ 		double_rq_clock_clear_update(this_rq, busiest);
+ 		return 0;
  	}
-diff --git a/security/tomoyo/mount.c b/security/tomoyo/mount.c
-index 2755971f50df..322dfd188ada 100644
---- a/security/tomoyo/mount.c
-+++ b/security/tomoyo/mount.c
-@@ -28,6 +28,7 @@ static const char * const tomoyo_mounts[TOMOYO_MAX_SPECIAL_MOUNT] = {
-  * Returns 0 on success, negative value otherwise.
+@@ -2997,6 +3028,8 @@ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
+  * double_lock_balance - lock the busiest runqueue, this_rq is locked already.
   */
- static int tomoyo_audit_mount_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
+ static inline int double_lock_balance(struct rq *this_rq, struct rq *busiest)
++	__must_hold(__rq_lockp(this_rq))
++	__acquires(__rq_lockp(busiest))
  {
- 	return tomoyo_supervisor(r, "file mount %s %s %s 0x%lX\n",
- 				 r->param.mount.dev->name,
-@@ -78,6 +79,7 @@ static int tomoyo_mount_acl(struct tomoyo_request_info *r,
- 			    const char *dev_name,
- 			    const struct path *dir, const char *type,
- 			    unsigned long flags)
-+	__must_hold_shared(&tomoyo_ss)
+ 	lockdep_assert_irqs_disabled();
+ 
+@@ -3004,14 +3037,17 @@ static inline int double_lock_balance(struct rq *this_rq, struct rq *busiest)
+ }
+ 
+ static inline void double_unlock_balance(struct rq *this_rq, struct rq *busiest)
+-	__releases(busiest->lock)
++	__releases(__rq_lockp(busiest))
  {
- 	struct tomoyo_obj_info obj = { };
- 	struct path path;
-diff --git a/security/tomoyo/network.c b/security/tomoyo/network.c
-index 8dc61335f65e..cfc2a019de1e 100644
---- a/security/tomoyo/network.c
-+++ b/security/tomoyo/network.c
-@@ -363,6 +363,7 @@ int tomoyo_write_unix_network(struct tomoyo_acl_param *param)
- static int tomoyo_audit_net_log(struct tomoyo_request_info *r,
- 				const char *family, const u8 protocol,
- 				const u8 operation, const char *address)
-+	__must_hold_shared(&tomoyo_ss)
+ 	if (__rq_lockp(this_rq) != __rq_lockp(busiest))
+ 		raw_spin_rq_unlock(busiest);
++	else
++		__release(__rq_lockp(busiest)); /* fake release */
+ 	lock_set_subclass(&__rq_lockp(this_rq)->dep_map, 0, _RET_IP_);
+ }
+ 
+ static inline void double_lock(spinlock_t *l1, spinlock_t *l2)
++	__acquires(l1, l2)
  {
- 	return tomoyo_supervisor(r, "network %s %s %s %s\n", family,
- 				 tomoyo_proto_keyword[protocol],
-@@ -377,6 +378,7 @@ static int tomoyo_audit_net_log(struct tomoyo_request_info *r,
-  * Returns 0 on success, negative value otherwise.
+ 	if (l1 > l2)
+ 		swap(l1, l2);
+@@ -3021,6 +3057,7 @@ static inline void double_lock(spinlock_t *l1, spinlock_t *l2)
+ }
+ 
+ static inline void double_lock_irq(spinlock_t *l1, spinlock_t *l2)
++	__acquires(l1, l2)
+ {
+ 	if (l1 > l2)
+ 		swap(l1, l2);
+@@ -3030,6 +3067,7 @@ static inline void double_lock_irq(spinlock_t *l1, spinlock_t *l2)
+ }
+ 
+ static inline void double_raw_lock(raw_spinlock_t *l1, raw_spinlock_t *l2)
++	__acquires(l1, l2)
+ {
+ 	if (l1 > l2)
+ 		swap(l1, l2);
+@@ -3039,6 +3077,7 @@ static inline void double_raw_lock(raw_spinlock_t *l1, raw_spinlock_t *l2)
+ }
+ 
+ static inline void double_raw_unlock(raw_spinlock_t *l1, raw_spinlock_t *l2)
++	__releases(l1, l2)
+ {
+ 	raw_spin_unlock(l1);
+ 	raw_spin_unlock(l2);
+@@ -3048,6 +3087,8 @@ DEFINE_LOCK_GUARD_2(double_raw_spinlock, raw_spinlock_t,
+ 		    double_raw_lock(_T->lock, _T->lock2),
+ 		    double_raw_unlock(_T->lock, _T->lock2))
+ 
++DECLARE_LOCK_GUARD_2_ATTRS(double_raw_spinlock, __assumes_ctx_guard(_T1) __assumes_ctx_guard(_T2), /* */);
++
+ /*
+  * double_rq_unlock - safely unlock two runqueues
+  *
+@@ -3055,13 +3096,12 @@ DEFINE_LOCK_GUARD_2(double_raw_spinlock, raw_spinlock_t,
+  * you need to do so manually after calling.
   */
- static int tomoyo_audit_inet_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
+ static inline void double_rq_unlock(struct rq *rq1, struct rq *rq2)
+-	__releases(rq1->lock)
+-	__releases(rq2->lock)
++	__releases(__rq_lockp(rq1), __rq_lockp(rq2))
  {
- 	char buf[128];
- 	int len;
-@@ -402,6 +404,7 @@ static int tomoyo_audit_inet_log(struct tomoyo_request_info *r)
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_audit_unix_log(struct tomoyo_request_info *r)
-+	__must_hold_shared(&tomoyo_ss)
- {
- 	return tomoyo_audit_net_log(r, "unix", r->param.unix_network.protocol,
- 				    r->param.unix_network.operation,
+ 	if (__rq_lockp(rq1) != __rq_lockp(rq2))
+ 		raw_spin_rq_unlock(rq2);
+ 	else
+-		__release(rq2->lock);
++		__release(__rq_lockp(rq2)); /* fake release */
+ 	raw_spin_rq_unlock(rq1);
+ }
+ 
+diff --git a/scripts/context-analysis-suppression.txt b/scripts/context-analysis-suppression.txt
+index df25c3d07a5b..fd8951d06706 100644
+--- a/scripts/context-analysis-suppression.txt
++++ b/scripts/context-analysis-suppression.txt
+@@ -26,6 +26,7 @@ src:*include/linux/refcount.h=emit
+ src:*include/linux/rhashtable.h=emit
+ src:*include/linux/rwlock*.h=emit
+ src:*include/linux/rwsem.h=emit
++src:*include/linux/sched*=emit
+ src:*include/linux/seqlock*.h=emit
+ src:*include/linux/spinlock*.h=emit
+ src:*include/linux/srcu*.h=emit
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
