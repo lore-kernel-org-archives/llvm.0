@@ -1,60 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2694330E83D;
-	Thu, 20 Nov 2025 23:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D129530F526
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 23:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763682702; cv=none; b=i2AQ2MUDcrN2PL6/P9UK629TKsMyl4nB3ZseyHVUlH3kw6awLUIYn2afbTEaBYkR9xHtGp71xrUKjlglNy5YabsttvuJciNbxSnNHMit/IbyfZg4Wlr2/2JmO1Vm9+3Ap5oiwWVr2iKV25+0f2pLTykv2W6HgWZCWS9arbosQCw=
+	t=1763682722; cv=none; b=nX5Up3ezQpsEAuIe8JIAFkTo58SdvAzebK6dkE4JijK+atUTRQkEz9dZs86iy+SmC2+Ic5ROYm9hsKBHL8AWXUPI9HYOPRdg2m09tbQG9E5lrx8RI9myYmJQlUrpoxbS7AGM+QdAlzzKc7s7hyDLn2iSJU7AKuXRdj7qUhcJQwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763682702; c=relaxed/simple;
-	bh=tfY9iskeCWBEPoDuh3STSI+ptArsUMIrmkwQetAgPYc=;
+	s=arc-20240116; t=1763682722; c=relaxed/simple;
+	bh=j63KK1bea0KAW/i3SO0yLLlf6m4fWGvrLEtlDWsN5z8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TP/SQyl6qbHfdsxAmj0qILOuC0xglIofLlPqzDV+vzq0051bfTQuohkfGhHvxIDAkLM3hLNUeip0jk9eZEN5DvC0yHF3xlZwvDXLL6aps0MLBvrDC10k8DyjMMVqWtbrlPQN6honwnhNRv6QQfodwIN79zmTnSORmlGvRwcSji0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VbJ9ftP1; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=TU64YhDiC92RfZ8J9WeEXpq2ATyubfXHbSVIS5F46yA1p5O66xMf8BPDWfOsyrB0DgVlwUPZQMUpEFKGFpCXXbbnV8ZJ0F4WFVvTGow5ZNVHMody5hCLx3dm1sUmCHSv12fYzzqubKXdRAbk/J5ij3Suou5FYioTgAdjGX/4vBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=elC1J0Pt; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VbJ9ftP1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763682700; x=1795218700;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tfY9iskeCWBEPoDuh3STSI+ptArsUMIrmkwQetAgPYc=;
-  b=VbJ9ftP1XLXDBNToTj3DJr6nkJBxXUUJhqEAYOt9mGa5/MRZHcXpOq38
-   l/dMKpHcoRi0bGm/+qUB814Ew2w28njQTea38LoIVxOqvXexc7OSuJ+hF
-   OOgRyKKJ+9BcwiyZ6scAvgdOjDi1CbajfC6ikViuI2vSPFe738GolZms+
-   XahcYEewCk9REF8Fm5jX9wfXNMwxG2CdjcamGd8xaGu8ewlIKivgVFREn
-   NRl0qXz4wbPFVF21K5RXO4pelyhxHnbHU0ulr/P9lFsEnU30Z3B35tn2V
-   33Yx/msTkw3PEJADgcqaO1VdrUKdLnbhR+ijiE/P/J+dt9489GXIYQYN+
-   Q==;
-X-CSE-ConnectionGUID: E8Ki4YFCTV2orxqdbtGAVg==
-X-CSE-MsgGUID: LfLOMTtxQcS0zo3nM2UpXw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="53342210"
-X-IronPort-AV: E=Sophos;i="6.20,214,1758610800"; 
-   d="scan'208";a="53342210"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 15:51:39 -0800
-X-CSE-ConnectionGUID: Q21C/DXmSxq7XtVz+zHzJA==
-X-CSE-MsgGUID: vZa6fhBESJ2C2RPoucBVDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,214,1758610800"; 
-   d="scan'208";a="195998889"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 20 Nov 2025 15:51:38 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vMER5-0004jL-2f;
-	Thu, 20 Nov 2025 23:51:35 +0000
-Date: Fri, 21 Nov 2025 07:51:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lyude Paul <lyude@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v14 04/16] irq & spin_lock: Add counted interrupt
- disabling/enabling
-Message-ID: <202511210742.8iW087m6-lkp@intel.com>
-References: <20251120214616.14386-5-lyude@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="elC1J0Pt"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-477632d9326so9220555e9.1
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763682718; x=1764287518; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9kvXa3Vdh1ip8zUpCqHWE2klTiidAnZMSHg4scU75Q=;
+        b=elC1J0PtqQDd7KQJAkUCvJNrbsCBDVSbcFDCucsDMwLGx7hBbJ5jCHCNCJ1SMnc8ya
+         ZdyE+T9O4qSrbgTPbni5blYZTyPch7odB27gGONGoKHUysfn/UfHS/fjPJt59lJHcU14
+         SAv98er+pw1znDDbK3JCReGlYj2NemkHybcttbReuyntUJo0pn768CiLIT+iJ1IxXHs5
+         G2Zz5hdDN2E5eUiMnzJ7CFniXKM3N5HCKQ3rmnz1emH19mpD7BI2Niy99dZsnouWjpF3
+         owWzyQ05sS+RdLCj4Nr6Hb5K9P04pxOc0MfK4XbEde6rpwuf1+YBw1vIlz44/uRdl7xl
+         5k1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763682718; x=1764287518;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=J9kvXa3Vdh1ip8zUpCqHWE2klTiidAnZMSHg4scU75Q=;
+        b=RxWqDKB2TJBm39FnNkKLcyHE8wF3s5JBTsb/rCynlEBJihiGLc0bkC0u5WcNRZ3OwG
+         B0Uaz1Bh6yjKPJt+1GmRqO1wnQP7rUta73/OTOcsdMtUHUZjB8WeF7KozQTRFgk5faH2
+         U5l1WQt6gc/dWTsVUVPj4YR7a82c60BYs9HF5uGqFCCY9jYRPLGOBqZ28XkAGiZXBdhm
+         J2eDajcTDW/ZV+4zYFXDaGHoMhZW5JXU0za6lzGkMHGFVZRqohJmsO6/FWuOP+N9Oicc
+         azzq0InfRcla3OOqopTIS6Q3dasmO4lbqGnzZufAAIQIthvKgnMDdG8pT/N9aBXGrSBE
+         BTsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3Ne1IcE5D0ZkDgM1gXuE4jgcFq8pY6CqxMYMuL3juagq2gYz5IsTGPtCBRAlUk1fTJImM@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz3rf+NwiXy7AaB/Gx+002YN6uv3C2vwRC9duKL824YeiDdzOFt
+	jf5/duaKnKYljn5Vac2OzDdbeKF12c7DxhmBjPUWCSgRS6FihT2kVak1m3DQ+dNJZw==
+X-Gm-Gg: ASbGncuwuhnMwHrTUPYdYJzKyanoY0DqKCjkh3xytO2HHe5wTvAyNkksE+EpjvJGWOL
+	W6pS/DccB7HFj5VIhQETYn9MASMpUuxwMq5R4j+aNOpbbZwsdmGS3okNeT8fuVQdUD24GK5h6tg
+	KeJIoDN4fdzoOLWGJwEt0dFFzy5wqJZ2ekLOdarOkNYBO+qmgW4U6KkSoc4Dd5v/00ww4aeDuh4
+	dvZ8ugCsnPTTRsvhxwuc5aLInusq60NIsU0WHIYV/zDREvShL01sYaGyCRsi9ZkEak/vBrd/VMV
+	iu6/Og8u/Ns6d4E0gvM7XAA8ynPl6xlnQ52f5607VsW+7pJadY4eWYzSdnL9/TGI5JykLidpR5X
+	ubVRyzL3cLmCWE22AfFSsc3ftVazWAewoiOZEi/HQkSAtgWD8msfTKsdNx67Q3JEu71FN5HDM7d
+	Z/0ANt6kJvTinUN7TNzjFxYqPBFtjCeo5tbXFjrSF9YQODwZOYKyLU9ANgrcE=
+X-Google-Smtp-Source: AGHT+IHBj+lRJ2Qie5tQgt4+bdQcT9clHmhVuJ221UEaEkB+U77QKJJ8z44sTbdZcE/IcTJPd+pPPw==
+X-Received: by 2002:a05:600c:1909:b0:477:b642:9dc6 with SMTP id 5b1f17b1804b1-477c020137fmr3256875e9.34.1763682717840;
+        Thu, 20 Nov 2025 15:51:57 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:3b7e:2c14:f733:1774])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a97213b8sm72914765e9.1.2025.11.20.15.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 15:51:56 -0800 (PST)
+Date: Fri, 21 Nov 2025 00:51:48 +0100
+From: Marco Elver <elver@google.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Chris Li <sparse@chrisli.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Subject: Re: [PATCH v4 02/35] compiler-context-analysis: Add infrastructure
+ for Context Analysis with Clang
+Message-ID: <aR-plHrWDMqRRlcI@elver.google.com>
+References: <20251120145835.3833031-2-elver@google.com>
+ <20251120145835.3833031-4-elver@google.com>
+ <CAHk-=whyKteNtcLON-gScv6tu8ssvKWdNw-k371ufDrjOv374g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,151 +114,484 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251120214616.14386-5-lyude@redhat.com>
+In-Reply-To: <CAHk-=whyKteNtcLON-gScv6tu8ssvKWdNw-k371ufDrjOv374g@mail.gmail.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-Hi Lyude,
+On Thu, Nov 20, 2025 at 10:14AM -0800, Linus Torvalds wrote:
+> On Thu, 20 Nov 2025 at 07:13, Marco Elver <elver@google.com> wrote:
+[..]
+> > +#if defined(WARN_CONTEXT_ANALYSIS)
+> 
+> Note the 400+ added lines to this header...
+> 
+[..]
+> Please let's *not* do it this way, where the header contents basically
+> get enabled or not based on a compiler flag, but then everybody
+> includes this 400+ line file whether they need it or not.
 
-kernel test robot noticed the following build errors:
+Note, there are a good amount of kernel-doc comments in there, so we
+have 125 real code lines.
 
-[auto build test ERROR on e5d330e13f67d574f683c052c9a342814fd8fa39]
+% cloc include/linux/compiler-context-analysis.h
+       1 text file.
+       1 unique file.
+       0 files ignored.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lyude-Paul/preempt-Introduce-HARDIRQ_DISABLE_BITS/20251121-055548
-base:   e5d330e13f67d574f683c052c9a342814fd8fa39
-patch link:    https://lore.kernel.org/r/20251120214616.14386-5-lyude%40redhat.com
-patch subject: [PATCH v14 04/16] irq & spin_lock: Add counted interrupt disabling/enabling
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251121/202511210742.8iW087m6-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210742.8iW087m6-lkp@intel.com/reproduce)
+github.com/AlDanial/cloc v 2.06  T=0.01 s (97.1 files/s, 41646.9 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C/C++ Header                     1             37            267            125
+-------------------------------------------------------------------------------
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511210742.8iW087m6-lkp@intel.com/
+> Can we please just make the header file *itself* not have any
+> conditionals, and what happens is that the header file is included (or
+> not) using a pattern something like
+> 
+>    -include $(srctree)/include/linux/$(context-analysis-header)
+> 
+> instead.
+> 
+> IOW, we'd have three different header files entirely: the "no context
+> analysis", the "sparse" and the "clang context analysis" header, and
+> instead of having a "-DWARN_CONTEXT_ANALYSIS" define, we'd just
+> include the appropriate header automatically.
+> 
+> We already use that "-include" pattern for <linux/kconfig.h> and
+> <linux/compiler-version.h>. It's probably what we should have done for
+> <linux/compiler.h> and friends too.
+> 
+> The reason I react to things like this is that I've actually seen just
+> the parsing of header files being a surprisingly big cost in build
+> times. People think that optimizations are expensive, and yes, some of
+> them really are, but when a lot of the code we parse is never actually
+> *used*, but just hangs out in header files that gets included by
+> everybody, the parsing overhead tends to be noticeable. There's a
+> reason why most C compilers end up integrating the C pre-processor: it
+> avoids parsing and tokenizing things multiple times.
+> 
+> The other reason is that I often use "git grep" for looking up
+> definitions of things, and when there are multiple definitions of the
+> same thing, I actually find it much more informative when they are in
+> two different files than when I see two different definitions (or
+> declarations) in the same file and then I have to go look at what the
+> #ifdef condition is. In contrast, when it's something where there are
+> per-architecture definitions, you *see* that, because the grep results
+> come from different header files.
+> 
+> I dunno. This is not a huge deal, but I do think that it would seem to
+> be much simpler and more straightforward to treat this as a kind of "N
+> different baseline header files" than as "include this one header file
+> in everything, and then we'll have #ifdef's for the configuration".
+> 
+> Particularly when that config is not even a global config, but a per-file one.
+> 
+> Hmm? Maybe there's some reason why this suggestion is very
+> inconvenient, but please at least consider it.
 
-All error/warnings (new ones prefixed by >>):
+Fair points; I gave this a shot, as a patch on top so we can skip the
+Sparse version.
 
-   In file included from arch/arm/kernel/asm-offsets.c:13:
-   In file included from include/linux/sched.h:37:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:16:
->> arch/arm/include/asm/smp.h:15:3: error: "<asm/smp.h> included in non-SMP build"
-      15 | # error "<asm/smp.h> included in non-SMP build"
-         |   ^
-   In file included from arch/arm/kernel/asm-offsets.c:13:
-   In file included from include/linux/sched.h:37:
-   In file included from include/linux/spinlock.h:64:
-   In file included from include/linux/lockdep.h:14:
->> include/linux/smp.h:198:9: warning: 'raw_smp_processor_id' macro redefined [-Wmacro-redefined]
-     198 | #define raw_smp_processor_id()                  0
-         |         ^
-   arch/arm/include/asm/smp.h:18:9: note: previous definition is here
-      18 | #define raw_smp_processor_id() (current_thread_info()->cpu)
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+Reduced version below:
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C/C++ Header                     1             26            189             80
+-------------------------------------------------------------------------------
 
+My suspicion (or I'm doing it wrong): there really isn't all that much
+we can conditionally -include, because we need at least the no-op stubs
+everywhere regardless because of annotations provided by common headers
+(spinlock, mutex, rcu, etc. etc.).
 
-vim +15 arch/arm/include/asm/smp.h
+If we assume that in the common case we need the no-op macros
+everywhere, thus every line in <linux/compiler-context-analysis.h> is
+required in the common case with the below version, the below experiment
+should be be close to what we can achieve.
 
-^1da177e4c3f41 include/asm-arm/smp.h      Linus Torvalds 2005-04-16  13  
-^1da177e4c3f41 include/asm-arm/smp.h      Linus Torvalds 2005-04-16  14  #ifndef CONFIG_SMP
-4baa9922430662 arch/arm/include/asm/smp.h Russell King   2008-08-02 @15  # error "<asm/smp.h> included in non-SMP build"
-^1da177e4c3f41 include/asm-arm/smp.h      Linus Torvalds 2005-04-16  16  #endif
-^1da177e4c3f41 include/asm-arm/smp.h      Linus Torvalds 2005-04-16  17  
+However, it might still be worthwhile for the code organization aspect?
 
+Thoughts?
+
+Thanks,
+-- Marco
+
+------ >8 ------
+
+From: Marco Elver <elver@google.com>
+Date: Thu, 20 Nov 2025 22:37:52 +0100
+Subject: [PATCH] compiler-context-analysis: Move Clang definitions to separate
+ header
+
+In the interest of improving compile-times, it makes sense to move the
+conditionally enabled definitions when the analysis is enabled to a
+separate file and include it only with -include.
+
+A very unscientific comparison, on a system with 72 CPUs; before:
+
+  125.67 wallclock secs = ( 5681.04 usr secs + 367.63 sys secs / 4815.83% CPU )
+
+After:
+
+  125.61 wallclock secs = ( 5684.80 usr secs + 366.53 sys secs / 4817.95% CPU )
+
+[ Work in progress - with this version, there is no measurable
+  difference in compile times. ]
+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ Documentation/dev-tools/context-analysis.rst  |  10 +-
+ .../linux/compiler-context-analysis-clang.h   | 144 ++++++++++++++++++
+ include/linux/compiler-context-analysis.h     | 136 +----------------
+ scripts/Makefile.context-analysis             |   3 +-
+ 4 files changed, 153 insertions(+), 140 deletions(-)
+ create mode 100644 include/linux/compiler-context-analysis-clang.h
+
+diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+index e53f089d0c52..71b9c5e57eb4 100644
+--- a/Documentation/dev-tools/context-analysis.rst
++++ b/Documentation/dev-tools/context-analysis.rst
+@@ -99,10 +99,7 @@ Keywords
+ ~~~~~~~~
+ 
+ .. kernel-doc:: include/linux/compiler-context-analysis.h
+-   :identifiers: context_guard_struct
+-                 token_context_guard token_context_guard_instance
+-                 __guarded_by __pt_guarded_by
+-                 __must_hold
++   :identifiers: __must_hold
+                  __must_not_hold
+                  __acquires
+                  __cond_acquires
+@@ -119,6 +116,11 @@ Keywords
+                  __acquire_shared_ret
+                  context_unsafe
+                  __context_unsafe
++
++.. kernel-doc:: include/linux/compiler-context-analysis-clang.h
++   :identifiers: __guarded_by __pt_guarded_by
++                 context_guard_struct
++                 token_context_guard token_context_guard_instance
+                  disable_context_analysis enable_context_analysis
+ 
+ .. note::
+diff --git a/include/linux/compiler-context-analysis-clang.h b/include/linux/compiler-context-analysis-clang.h
+new file mode 100644
+index 000000000000..534a41a25596
+--- /dev/null
++++ b/include/linux/compiler-context-analysis-clang.h
+@@ -0,0 +1,144 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Macros and attributes for compiler-based static context analysis that map to
++ * Clang's "Thread Safety Analysis".
++ */
++
++#ifndef _LINUX_COMPILER_CONTEXT_ANALYSIS_CLANG_H
++#define _LINUX_COMPILER_CONTEXT_ANALYSIS_CLANG_H
++
++#ifndef WARN_CONTEXT_ANALYSIS
++#error "This header should not be included"
++#endif
++
++/*
++ * These attributes define new context guard (Clang: capability) types.
++ * Internal only.
++ */
++#define __ctx_guard_type(name)			__attribute__((capability(#name)))
++#define __reentrant_ctx_guard			__attribute__((reentrant_capability))
++#define __acquires_ctx_guard(...)		__attribute__((acquire_capability(__VA_ARGS__)))
++#define __acquires_shared_ctx_guard(...)	__attribute__((acquire_shared_capability(__VA_ARGS__)))
++#define __try_acquires_ctx_guard(ret, var)	__attribute__((try_acquire_capability(ret, var)))
++#define __try_acquires_shared_ctx_guard(ret, var) __attribute__((try_acquire_shared_capability(ret, var)))
++#define __releases_ctx_guard(...)		__attribute__((release_capability(__VA_ARGS__)))
++#define __releases_shared_ctx_guard(...)	__attribute__((release_shared_capability(__VA_ARGS__)))
++#define __assumes_ctx_guard(...)		__attribute__((assert_capability(__VA_ARGS__)))
++#define __assumes_shared_ctx_guard(...)	__attribute__((assert_shared_capability(__VA_ARGS__)))
++#define __returns_ctx_guard(var)		__attribute__((lock_returned(var)))
++
++/*
++ * The below are used to annotate code being checked. Internal only.
++ */
++#define __excludes_ctx_guard(...)		__attribute__((locks_excluded(__VA_ARGS__)))
++#define __requires_ctx_guard(...)		__attribute__((requires_capability(__VA_ARGS__)))
++#define __requires_shared_ctx_guard(...)	__attribute__((requires_shared_capability(__VA_ARGS__)))
++
++/**
++ * __guarded_by - struct member and globals attribute, declares variable
++ *                only accessible within active context
++ *
++ * Declares that the struct member or global variable is only accessible within
++ * the context entered by the given context guard. Read operations on the data
++ * require shared access, while write operations require exclusive access.
++ *
++ * .. code-block:: c
++ *
++ *	struct some_state {
++ *		spinlock_t lock;
++ *		long counter __guarded_by(&lock);
++ *	};
++ */
++#define __guarded_by(...)		__attribute__((guarded_by(__VA_ARGS__)))
++
++/**
++ * __pt_guarded_by - struct member and globals attribute, declares pointed-to
++ *                   data only accessible within active context
++ *
++ * Declares that the data pointed to by the struct member pointer or global
++ * pointer is only accessible within the context entered by the given context
++ * guard. Read operations on the data require shared access, while write
++ * operations require exclusive access.
++ *
++ * .. code-block:: c
++ *
++ *	struct some_state {
++ *		spinlock_t lock;
++ *		long *counter __pt_guarded_by(&lock);
++ *	};
++ */
++#define __pt_guarded_by(...)		__attribute__((pt_guarded_by(__VA_ARGS__)))
++
++/**
++ * context_guard_struct() - declare or define a context guard struct
++ * @name: struct name
++ *
++ * Helper to declare or define a struct type that is also a context guard.
++ *
++ * .. code-block:: c
++ *
++ *	context_guard_struct(my_handle) {
++ *		int foo;
++ *		long bar;
++ *	};
++ *
++ *	struct some_state {
++ *		...
++ *	};
++ *	// ... declared elsewhere ...
++ *	context_guard_struct(some_state);
++ *
++ * Note: The implementation defines several helper functions that can acquire
++ * and release the context guard.
++ */
++#define context_guard_struct(name, ...)								\
++	struct __ctx_guard_type(name) __VA_ARGS__ name;							\
++	static __always_inline void __acquire_ctx_guard(const struct name *var)				\
++		__attribute__((overloadable)) __no_context_analysis __acquires_ctx_guard(var) { }	\
++	static __always_inline void __acquire_shared_ctx_guard(const struct name *var)			\
++		__attribute__((overloadable)) __no_context_analysis __acquires_shared_ctx_guard(var) { } \
++	static __always_inline bool __try_acquire_ctx_guard(const struct name *var, bool ret)		\
++		__attribute__((overloadable)) __no_context_analysis __try_acquires_ctx_guard(1, var)	\
++	{ return ret; }											\
++	static __always_inline bool __try_acquire_shared_ctx_guard(const struct name *var, bool ret)	\
++		__attribute__((overloadable)) __no_context_analysis __try_acquires_shared_ctx_guard(1, var) \
++	{ return ret; }											\
++	static __always_inline void __release_ctx_guard(const struct name *var)				\
++		__attribute__((overloadable)) __no_context_analysis __releases_ctx_guard(var) { }	\
++	static __always_inline void __release_shared_ctx_guard(const struct name *var)			\
++		__attribute__((overloadable)) __no_context_analysis __releases_shared_ctx_guard(var) { } \
++	static __always_inline void __assume_ctx_guard(const struct name *var)				\
++		__attribute__((overloadable)) __assumes_ctx_guard(var) { }				\
++	static __always_inline void __assume_shared_ctx_guard(const struct name *var)			\
++		__attribute__((overloadable)) __assumes_shared_ctx_guard(var) { }			\
++	struct name
++
++/**
++ * disable_context_analysis() - disables context analysis
++ *
++ * Disables context analysis. Must be paired with a later
++ * enable_context_analysis().
++ */
++#define disable_context_analysis()				\
++	__diag_push();						\
++	__diag_ignore_all("-Wunknown-warning-option", "")	\
++	__diag_ignore_all("-Wthread-safety", "")		\
++	__diag_ignore_all("-Wthread-safety-pointer", "")
++
++/**
++ * enable_context_analysis() - re-enables context analysis
++ *
++ * Re-enables context analysis. Must be paired with a prior
++ * disable_context_analysis().
++ */
++#define enable_context_analysis() __diag_pop()
++
++/**
++ * __no_context_analysis - function attribute, disables context analysis
++ *
++ * Function attribute denoting that context analysis is disabled for the
++ * whole function. Prefer use of `context_unsafe()` where possible.
++ */
++#define __no_context_analysis	__attribute__((no_thread_safety_analysis))
++
++#endif /* _LINUX_COMPILER_CONTEXT_ANALYSIS_CLANG_H */
+diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
+index 03056f87a86f..33ad367fef3f 100644
+--- a/include/linux/compiler-context-analysis.h
++++ b/include/linux/compiler-context-analysis.h
+@@ -6,140 +6,7 @@
+ #ifndef _LINUX_COMPILER_CONTEXT_ANALYSIS_H
+ #define _LINUX_COMPILER_CONTEXT_ANALYSIS_H
+ 
+-#if defined(WARN_CONTEXT_ANALYSIS)
+-
+-/*
+- * These attributes define new context guard (Clang: capability) types.
+- * Internal only.
+- */
+-# define __ctx_guard_type(name)			__attribute__((capability(#name)))
+-# define __reentrant_ctx_guard			__attribute__((reentrant_capability))
+-# define __acquires_ctx_guard(...)		__attribute__((acquire_capability(__VA_ARGS__)))
+-# define __acquires_shared_ctx_guard(...)	__attribute__((acquire_shared_capability(__VA_ARGS__)))
+-# define __try_acquires_ctx_guard(ret, var)	__attribute__((try_acquire_capability(ret, var)))
+-# define __try_acquires_shared_ctx_guard(ret, var) __attribute__((try_acquire_shared_capability(ret, var)))
+-# define __releases_ctx_guard(...)		__attribute__((release_capability(__VA_ARGS__)))
+-# define __releases_shared_ctx_guard(...)	__attribute__((release_shared_capability(__VA_ARGS__)))
+-# define __assumes_ctx_guard(...)		__attribute__((assert_capability(__VA_ARGS__)))
+-# define __assumes_shared_ctx_guard(...)	__attribute__((assert_shared_capability(__VA_ARGS__)))
+-# define __returns_ctx_guard(var)		__attribute__((lock_returned(var)))
+-
+-/*
+- * The below are used to annotate code being checked. Internal only.
+- */
+-# define __excludes_ctx_guard(...)		__attribute__((locks_excluded(__VA_ARGS__)))
+-# define __requires_ctx_guard(...)		__attribute__((requires_capability(__VA_ARGS__)))
+-# define __requires_shared_ctx_guard(...)	__attribute__((requires_shared_capability(__VA_ARGS__)))
+-
+-/**
+- * __guarded_by - struct member and globals attribute, declares variable
+- *                only accessible within active context
+- *
+- * Declares that the struct member or global variable is only accessible within
+- * the context entered by the given context guard. Read operations on the data
+- * require shared access, while write operations require exclusive access.
+- *
+- * .. code-block:: c
+- *
+- *	struct some_state {
+- *		spinlock_t lock;
+- *		long counter __guarded_by(&lock);
+- *	};
+- */
+-# define __guarded_by(...)		__attribute__((guarded_by(__VA_ARGS__)))
+-
+-/**
+- * __pt_guarded_by - struct member and globals attribute, declares pointed-to
+- *                   data only accessible within active context
+- *
+- * Declares that the data pointed to by the struct member pointer or global
+- * pointer is only accessible within the context entered by the given context
+- * guard. Read operations on the data require shared access, while write
+- * operations require exclusive access.
+- *
+- * .. code-block:: c
+- *
+- *	struct some_state {
+- *		spinlock_t lock;
+- *		long *counter __pt_guarded_by(&lock);
+- *	};
+- */
+-# define __pt_guarded_by(...)		__attribute__((pt_guarded_by(__VA_ARGS__)))
+-
+-/**
+- * context_guard_struct() - declare or define a context guard struct
+- * @name: struct name
+- *
+- * Helper to declare or define a struct type that is also a context guard.
+- *
+- * .. code-block:: c
+- *
+- *	context_guard_struct(my_handle) {
+- *		int foo;
+- *		long bar;
+- *	};
+- *
+- *	struct some_state {
+- *		...
+- *	};
+- *	// ... declared elsewhere ...
+- *	context_guard_struct(some_state);
+- *
+- * Note: The implementation defines several helper functions that can acquire
+- * and release the context guard.
+- */
+-# define context_guard_struct(name, ...)								\
+-	struct __ctx_guard_type(name) __VA_ARGS__ name;							\
+-	static __always_inline void __acquire_ctx_guard(const struct name *var)				\
+-		__attribute__((overloadable)) __no_context_analysis __acquires_ctx_guard(var) { }	\
+-	static __always_inline void __acquire_shared_ctx_guard(const struct name *var)			\
+-		__attribute__((overloadable)) __no_context_analysis __acquires_shared_ctx_guard(var) { } \
+-	static __always_inline bool __try_acquire_ctx_guard(const struct name *var, bool ret)		\
+-		__attribute__((overloadable)) __no_context_analysis __try_acquires_ctx_guard(1, var)	\
+-	{ return ret; }											\
+-	static __always_inline bool __try_acquire_shared_ctx_guard(const struct name *var, bool ret)	\
+-		__attribute__((overloadable)) __no_context_analysis __try_acquires_shared_ctx_guard(1, var) \
+-	{ return ret; }											\
+-	static __always_inline void __release_ctx_guard(const struct name *var)				\
+-		__attribute__((overloadable)) __no_context_analysis __releases_ctx_guard(var) { }	\
+-	static __always_inline void __release_shared_ctx_guard(const struct name *var)			\
+-		__attribute__((overloadable)) __no_context_analysis __releases_shared_ctx_guard(var) { } \
+-	static __always_inline void __assume_ctx_guard(const struct name *var)				\
+-		__attribute__((overloadable)) __assumes_ctx_guard(var) { }				\
+-	static __always_inline void __assume_shared_ctx_guard(const struct name *var)			\
+-		__attribute__((overloadable)) __assumes_shared_ctx_guard(var) { }			\
+-	struct name
+-
+-/**
+- * disable_context_analysis() - disables context analysis
+- *
+- * Disables context analysis. Must be paired with a later
+- * enable_context_analysis().
+- */
+-# define disable_context_analysis()				\
+-	__diag_push();						\
+-	__diag_ignore_all("-Wunknown-warning-option", "")	\
+-	__diag_ignore_all("-Wthread-safety", "")		\
+-	__diag_ignore_all("-Wthread-safety-pointer", "")
+-
+-/**
+- * enable_context_analysis() - re-enables context analysis
+- *
+- * Re-enables context analysis. Must be paired with a prior
+- * disable_context_analysis().
+- */
+-# define enable_context_analysis() __diag_pop()
+-
+-/**
+- * __no_context_analysis - function attribute, disables context analysis
+- *
+- * Function attribute denoting that context analysis is disabled for the
+- * whole function. Prefer use of `context_unsafe()` where possible.
+- */
+-# define __no_context_analysis	__attribute__((no_thread_safety_analysis))
+-
+-#else /* !WARN_CONTEXT_ANALYSIS */
+-
++#if !defined(WARN_CONTEXT_ANALYSIS)
+ # define __ctx_guard_type(name)
+ # define __reentrant_ctx_guard
+ # define __acquires_ctx_guard(...)
+@@ -168,7 +35,6 @@
+ # define disable_context_analysis()
+ # define enable_context_analysis()
+ # define __no_context_analysis
+-
+ #endif /* WARN_CONTEXT_ANALYSIS */
+ 
+ /**
+diff --git a/scripts/Makefile.context-analysis b/scripts/Makefile.context-analysis
+index cd3bb49d3f09..6f94b555af14 100644
+--- a/scripts/Makefile.context-analysis
++++ b/scripts/Makefile.context-analysis
+@@ -2,7 +2,8 @@
+ 
+ context-analysis-cflags := -DWARN_CONTEXT_ANALYSIS		\
+ 	-fexperimental-late-parse-attributes -Wthread-safety	\
+-	-Wthread-safety-pointer -Wthread-safety-beta
++	-Wthread-safety-pointer -Wthread-safety-beta		\
++	-include $(srctree)/include/linux/compiler-context-analysis-clang.h
+ 
+ ifndef CONFIG_WARN_CONTEXT_ANALYSIS_ALL
+ context-analysis-cflags += --warning-suppression-mappings=$(srctree)/scripts/context-analysis-suppression.txt
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0.rc2.455.g230fcf2819-goog
