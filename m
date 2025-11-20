@@ -1,55 +1,55 @@
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from mail-lf1-f74.google.com (mail-lf1-f74.google.com [209.85.167.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD0E36B068
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3E5361DB6
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651698; cv=none; b=h+hIqo+v2x0B4X/Gc9X2+3CXBDQHkYM/C0U33zpLtJsuxGOgkSiO4yscyIb2WkEQjjwW8RHoeGg5XZ8FaLL55s/EbXI43lHhqLPo20auGm9k7ZVRIk+N3ruF3ORHgENBSjDQoAaNbEAsJJMDMDy2nHAiexDdmNDiO6i8LetXHIw=
+	t=1763651935; cv=none; b=eYDzFd2YaC3/iBuYSlDsiwmal8XnfYjCSUengemIjNKCL9zREqFffHyn0NPbbn1x/wxS9kdakhTZVy/ZPEGVMtvfii5DWwPk7osO/+reBnJryPTWxsDKRQZRw+TSZdWItvPr2oFLGX7OQ/g2mTw7MRVxliNIPJ89CMd/LywrIdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651698; c=relaxed/simple;
-	bh=VJAnDnupr6osGjX7SKazhkLQaNmio3T71ETMJ88MCCs=;
+	s=arc-20240116; t=1763651935; c=relaxed/simple;
+	bh=EwfXd6yRg4bFKtUUrXe0W+ENNOKQmqy6Ot7CBhxbXoQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jI698daMEMSLW8bRCqHSWvsXLNly93+i1S2wZIwowL3L2iRqadx5+WShEL391kR97a1i/544qnySbck1TjkLkEXDqDnriAJlm6tZQOxfrln+AYyRWXHmqqIvkHjfQW2Ib60f6Ci2aPRfvJoKziOfhznBgGNWXnhrCvNNxv/VCi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l47s/I5f; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=RwsHNl5e+txtNcQcB5PIUNjfuK3q1F8SYMKOcBR1kqpH4w4wjTsP7Q+OxlcKVomSAreIAkqqssU92L0ubz7OeMSPngfIGwQLZ7QGd10r7ayaiF24H2wlVFotB32jrsShJyGxz73A2hEIqqlXgH5C/IiXoa3EswviKIzLqTsj5xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YtR/OvNs; arc=none smtp.client-ip=209.85.167.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l47s/I5f"
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-429c5da68e5so544299f8f.1
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:14:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YtR/OvNs"
+Received: by mail-lf1-f74.google.com with SMTP id 2adb3069b0e04-57b9c463726so574123e87.1
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:18:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651655; x=1764256455; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763651928; x=1764256728; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4pKPAxAMb/xt3eYfYDMHUG0PZ5TfjoAzjHvbIiVoEA=;
-        b=l47s/I5f/r2TVE6juLJMQCOGeAvHLTt1aAhOZQNOogoHIXAk4D57PPnPstKIiTaoar
-         1pNClUkJI+FEZVEjfbxnu13TPyLEFMoTTNufj3SuMGmRfw2lkGIRF7+tq00k//mAAo2G
-         BnUPnw2aX251luhRP3y+IkZzH7ZndFAg1/itQvw8sMmN6ify8ZRXED5/Mafi/UL4Y5at
-         QmjV3xBxyB30rkumS2aT5yzi9nX2qknIDtt/5gDmAVH580Y1TNcvZ7YYPfa3jInNZ7H3
-         793pQla9Ugfed+7x3BCEksizv9d0Uti2DEme8zbYxvduHxzXxITBBMWo9LGpr5G4LSwc
-         wNyg==
+        bh=sW5aRQBUT1YS/p7X2M8vu94/jdaGEDQWZc189ONsN2k=;
+        b=YtR/OvNsNY2ezenXj+tDEdOlt1ErExItMDXcW8xCGfcu+V/eEP5GzLs0XEviEb8WS3
+         amRGgTj8bM4WvwbM2Cn3/X5b74SePufRFeHIfv1g7PfxB82mCAEU4wTidnb476g5o6Jg
+         Wvwy8Q1wPzVt+trAbiDH/MwyWtS8sBbngTvJ7+BuLkyeG5dO605TM2i4QcEXn/R8Dyy9
+         XmgLe9iWdTJSF8HwSGe4ZYo18wZb1bOnyG/5nldrDDFNS7nxdCCHQYizJEk2elFYdC8P
+         7ExsCNik14bJQb5zCX5O3fS0SktCVW7P81PdeSqfExeh640voT5kab3QAGwvIvjg2vHD
+         mNnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651655; x=1764256455;
+        d=1e100.net; s=20230601; t=1763651928; x=1764256728;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4pKPAxAMb/xt3eYfYDMHUG0PZ5TfjoAzjHvbIiVoEA=;
-        b=i6RlYvxMo8a2XiAm/GUEvHO9hzBCe8T5yHPYJbMsV4pts+aw9u98CLag/5i+QeDQkx
-         TgLETuzWCJ6sd0nanwjZthXRomHm/vz1Ndqj0/Co0yyUB8JoJQWcvO1vLr/Rx+veEDpq
-         56fbYh9YPlpOxz4ExAw7zQB48DIxtdG2mHPZXKRbLh8N43rtAUK8hpDaBuyaVkrkmw21
-         xKyRzlwTc+4qphC3O06k1ausWh9cM5NzbhJ5PlyFBfWhuLErlkP0lSeI1set6UG50mks
-         /WYb/eXjiVvU/+yMAgGSgndhhIJI0+eyH3eQlKa99TKz6OoMUZU9kqNNmSz+H2deGUMl
-         Qmcg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7nl+grKeaW2r+ocBFxkZvJycV66naiKV2kNhT8i5TTBpq2G/GvVFg661g6C9ark/Bcg57@lists.linux.dev
-X-Gm-Message-State: AOJu0YzzXGAZ/pMU5ioJU4a3PNnIwunNbKhehwYqC/Lx94GF9yyhyGwh
-	65E42i7H6HiDeVOFWKyIjb1V6MEIJBnYMdslyZ/MGMz51Tbw2RxBBern1rimhZjnYW++bv6DJ0a
-	6Kg==
-X-Google-Smtp-Source: AGHT+IFqcHBKgR0gW0/Eo/3sCwe08l4FABFq65GtQBUvSXkcpOED/X6M6Z0vvwbHQZfiyYHdho6VSOJOWw==
-X-Received: from wrdk8.prod.google.com ([2002:adf:b348:0:b0:42b:30da:e035])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:adf:e987:0:b0:429:58f:26f
- with SMTP id ffacd0b85a97d-42cba7696b1mr2716676f8f.24.1763651655219; Thu, 20
- Nov 2025 07:14:15 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:59 +0100
+        bh=sW5aRQBUT1YS/p7X2M8vu94/jdaGEDQWZc189ONsN2k=;
+        b=htvRmMsHGThJ0EGe5E745vZInH9w+ATGpmjJhO3tJQBFN6JjH65fuNsWzq7fKSoSc8
+         8SCUfdV6EQ8VeLrUA8lvjmM4ZMrr/lTj9nCMwewXy0OO1hXz8AgxyMM+XLDozRpbUaCl
+         enV3iBqyn0GzHdUvFLFrRBsRj1+Wtq5jh1CyRVbErfkTLYnBWwoaCvzU0VQx7Ewilj7K
+         qDmnhH4nABy9yTmFc08Humx0A654V38SCrmEZYfOwW6oqsKno7Pj6GwkyCrgP+K7K0iz
+         tLtS87NuxdXwy/bcE5nMI0V0GWbTWa7orhyfHPXgmwFLNRxg8tfP7DADwBUE7tWC1+zw
+         Nj+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXVnplFqrFrfUXmTDpiPtsBJGx/xu1i3Uo51suTSpYcqISg2kiwmZElpsXpHEXyPddwSwsS@lists.linux.dev
+X-Gm-Message-State: AOJu0YyZMPkynlKbLk0WkQUKMZtpXgepstFCjMwwUE/xzVqOnkO5FMQg
+	kjcBfpizJ0utRN+T0Ibq7Qd730/WBMIZqJTu9e0kA5LY+a5kfHIuoZgiGw1TfKkaGt6E5NyvYH3
+	ATw==
+X-Google-Smtp-Source: AGHT+IER1f7gc9WQ7LnpbrPIA/y0BLZGbO4bUsdn+Ne1pOxE592x9Yu2PvTpMRh0Noc8+8JrQHGkxnvByA==
+X-Received: from wrsz10.prod.google.com ([2002:a5d:4c8a:0:b0:42b:3a01:7808])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:adf:f290:0:b0:42b:3e0a:64b7
+ with SMTP id ffacd0b85a97d-42cb9a560c2mr2413997f8f.53.1763651508025; Thu, 20
+ Nov 2025 07:11:48 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:32 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-35-elver@google.com>
-Subject: [PATCH v4 34/35] crypto: Enable context analysis
+Message-ID: <20251120151033.3840508-8-elver@google.com>
+Subject: [PATCH v4 07/35] lockdep: Annotate lockdep assertions for context analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,340 +87,64 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Enable context analysis for crypto subsystem.
+Clang's context analysis can be made aware of functions that assert that
+locks are held.
 
-This demonstrates a larger conversion to use Clang's context
-analysis. The benefit is additional static checking of locking rules,
-along with better documentation.
-
-Note the use of the __acquire_ret macro how to define an API where a
-function returns a pointer to an object (struct scomp_scratch) with a
-lock held. Additionally, the analysis only resolves aliases where the
-analysis unambiguously sees that a variable was not reassigned after
-initialization, requiring minor code changes.
+Presence of these annotations causes the analysis to assume the context
+guard is held after calls to the annotated function, and avoid false
+positives with complex control-flow; for example, where not all
+control-flow paths in a function require a held lock, and therefore
+marking the function with __must_hold(..) is inappropriate.
 
 Signed-off-by: Marco Elver <elver@google.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: linux-crypto@vger.kernel.org
 ---
 v4:
 * Rename capability -> context analysis.
 
 v3:
-* Rebase - make use of __acquire_ret macro for new functions.
-* Initialize variables once where we want the analysis to recognize aliases.
-
-v2:
-* New patch.
+* __assert -> __assume rename
 ---
- crypto/Makefile                     |  2 ++
- crypto/acompress.c                  |  6 +++---
- crypto/algapi.c                     |  2 ++
- crypto/api.c                        |  1 +
- crypto/crypto_engine.c              |  2 +-
- crypto/drbg.c                       |  5 +++++
- crypto/internal.h                   |  2 +-
- crypto/proc.c                       |  3 +++
- crypto/scompress.c                  | 24 ++++++++++++------------
- include/crypto/internal/acompress.h |  7 ++++---
- include/crypto/internal/engine.h    |  2 +-
- 11 files changed, 35 insertions(+), 21 deletions(-)
+ include/linux/lockdep.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/crypto/Makefile b/crypto/Makefile
-index e430e6e99b6a..2e2560310e5a 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -3,6 +3,8 @@
- # Cryptographic API
- #
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 67964dc4db95..2c99a6823161 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -282,16 +282,16 @@ extern void lock_unpin_lock(struct lockdep_map *lock, struct pin_cookie);
+ 	do { WARN_ON_ONCE(debug_locks && !(cond)); } while (0)
  
-+CONTEXT_ANALYSIS := y
-+
- obj-$(CONFIG_CRYPTO) += crypto.o
- crypto-y := api.o cipher.o
+ #define lockdep_assert_held(l)		\
+-	lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
++	do { lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD); __assume_ctx_guard(l); } while (0)
  
-diff --git a/crypto/acompress.c b/crypto/acompress.c
-index be28cbfd22e3..25df368df098 100644
---- a/crypto/acompress.c
-+++ b/crypto/acompress.c
-@@ -449,8 +449,8 @@ int crypto_acomp_alloc_streams(struct crypto_acomp_streams *s)
- }
- EXPORT_SYMBOL_GPL(crypto_acomp_alloc_streams);
+ #define lockdep_assert_not_held(l)	\
+ 	lockdep_assert(lockdep_is_held(l) != LOCK_STATE_HELD)
  
--struct crypto_acomp_stream *crypto_acomp_lock_stream_bh(
--	struct crypto_acomp_streams *s) __acquires(stream)
-+struct crypto_acomp_stream *_crypto_acomp_lock_stream_bh(
-+	struct crypto_acomp_streams *s)
- {
- 	struct crypto_acomp_stream __percpu *streams = s->streams;
- 	int cpu = raw_smp_processor_id();
-@@ -469,7 +469,7 @@ struct crypto_acomp_stream *crypto_acomp_lock_stream_bh(
- 	spin_lock(&ps->lock);
- 	return ps;
- }
--EXPORT_SYMBOL_GPL(crypto_acomp_lock_stream_bh);
-+EXPORT_SYMBOL_GPL(_crypto_acomp_lock_stream_bh);
+ #define lockdep_assert_held_write(l)	\
+-	lockdep_assert(lockdep_is_held_type(l, 0))
++	do { lockdep_assert(lockdep_is_held_type(l, 0)); __assume_ctx_guard(l); } while (0)
  
- void acomp_walk_done_src(struct acomp_walk *walk, int used)
- {
-diff --git a/crypto/algapi.c b/crypto/algapi.c
-index e604d0d8b7b4..abc9333327d4 100644
---- a/crypto/algapi.c
-+++ b/crypto/algapi.c
-@@ -244,6 +244,7 @@ EXPORT_SYMBOL_GPL(crypto_remove_spawns);
+ #define lockdep_assert_held_read(l)	\
+-	lockdep_assert(lockdep_is_held_type(l, 1))
++	do { lockdep_assert(lockdep_is_held_type(l, 1)); __assume_shared_ctx_guard(l); } while (0)
  
- static void crypto_alg_finish_registration(struct crypto_alg *alg,
- 					   struct list_head *algs_to_put)
-+	__must_hold(&crypto_alg_sem)
- {
- 	struct crypto_alg *q;
+ #define lockdep_assert_held_once(l)		\
+ 	lockdep_assert_once(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+@@ -389,10 +389,10 @@ extern int lockdep_is_held(const void *);
+ #define lockdep_assert(c)			do { } while (0)
+ #define lockdep_assert_once(c)			do { } while (0)
  
-@@ -299,6 +300,7 @@ static struct crypto_larval *crypto_alloc_test_larval(struct crypto_alg *alg)
+-#define lockdep_assert_held(l)			do { (void)(l); } while (0)
++#define lockdep_assert_held(l)			__assume_ctx_guard(l)
+ #define lockdep_assert_not_held(l)		do { (void)(l); } while (0)
+-#define lockdep_assert_held_write(l)		do { (void)(l); } while (0)
+-#define lockdep_assert_held_read(l)		do { (void)(l); } while (0)
++#define lockdep_assert_held_write(l)		__assume_ctx_guard(l)
++#define lockdep_assert_held_read(l)		__assume_shared_ctx_guard(l)
+ #define lockdep_assert_held_once(l)		do { (void)(l); } while (0)
+ #define lockdep_assert_none_held_once()	do { } while (0)
  
- static struct crypto_larval *
- __crypto_register_alg(struct crypto_alg *alg, struct list_head *algs_to_put)
-+	__must_hold(&crypto_alg_sem)
- {
- 	struct crypto_alg *q;
- 	struct crypto_larval *larval;
-diff --git a/crypto/api.c b/crypto/api.c
-index 5724d62e9d07..05629644a688 100644
---- a/crypto/api.c
-+++ b/crypto/api.c
-@@ -57,6 +57,7 @@ EXPORT_SYMBOL_GPL(crypto_mod_put);
- 
- static struct crypto_alg *__crypto_alg_lookup(const char *name, u32 type,
- 					      u32 mask)
-+	__must_hold_shared(&crypto_alg_sem)
- {
- 	struct crypto_alg *q, *alg = NULL;
- 	int best = -2;
-diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
-index 18e1689efe12..1653a4bf5b31 100644
---- a/crypto/crypto_engine.c
-+++ b/crypto/crypto_engine.c
-@@ -453,8 +453,8 @@ struct crypto_engine *crypto_engine_alloc_init_and_set(struct device *dev,
- 	snprintf(engine->name, sizeof(engine->name),
- 		 "%s-engine", dev_name(dev));
- 
--	crypto_init_queue(&engine->queue, qlen);
- 	spin_lock_init(&engine->queue_lock);
-+	crypto_init_queue(&engine->queue, qlen);
- 
- 	engine->kworker = kthread_run_worker(0, "%s", engine->name);
- 	if (IS_ERR(engine->kworker)) {
-diff --git a/crypto/drbg.c b/crypto/drbg.c
-index dbe4c8bb5ceb..9684d952fdfd 100644
---- a/crypto/drbg.c
-+++ b/crypto/drbg.c
-@@ -231,6 +231,7 @@ static inline unsigned short drbg_sec_strength(drbg_flag_t flags)
-  */
- static int drbg_fips_continuous_test(struct drbg_state *drbg,
- 				     const unsigned char *entropy)
-+	__must_hold(&drbg->drbg_mutex)
- {
- 	unsigned short entropylen = drbg_sec_strength(drbg->core->flags);
- 	int ret = 0;
-@@ -1061,6 +1062,7 @@ static inline int __drbg_seed(struct drbg_state *drbg, struct list_head *seed,
- static inline int drbg_get_random_bytes(struct drbg_state *drbg,
- 					unsigned char *entropy,
- 					unsigned int entropylen)
-+	__must_hold(&drbg->drbg_mutex)
- {
- 	int ret;
- 
-@@ -1075,6 +1077,7 @@ static inline int drbg_get_random_bytes(struct drbg_state *drbg,
- }
- 
- static int drbg_seed_from_random(struct drbg_state *drbg)
-+	__must_hold(&drbg->drbg_mutex)
- {
- 	struct drbg_string data;
- 	LIST_HEAD(seedlist);
-@@ -1132,6 +1135,7 @@ static bool drbg_nopr_reseed_interval_elapsed(struct drbg_state *drbg)
-  */
- static int drbg_seed(struct drbg_state *drbg, struct drbg_string *pers,
- 		     bool reseed)
-+	__must_hold(&drbg->drbg_mutex)
- {
- 	int ret;
- 	unsigned char entropy[((32 + 16) * 2)];
-@@ -1368,6 +1372,7 @@ static inline int drbg_alloc_state(struct drbg_state *drbg)
- static int drbg_generate(struct drbg_state *drbg,
- 			 unsigned char *buf, unsigned int buflen,
- 			 struct drbg_string *addtl)
-+	__must_hold(&drbg->drbg_mutex)
- {
- 	int len = 0;
- 	LIST_HEAD(addtllist);
-diff --git a/crypto/internal.h b/crypto/internal.h
-index b9afd68767c1..8fbe0226d48e 100644
---- a/crypto/internal.h
-+++ b/crypto/internal.h
-@@ -61,8 +61,8 @@ enum {
- /* Maximum number of (rtattr) parameters for each template. */
- #define CRYPTO_MAX_ATTRS 32
- 
--extern struct list_head crypto_alg_list;
- extern struct rw_semaphore crypto_alg_sem;
-+extern struct list_head crypto_alg_list __guarded_by(&crypto_alg_sem);
- extern struct blocking_notifier_head crypto_chain;
- 
- int alg_test(const char *driver, const char *alg, u32 type, u32 mask);
-diff --git a/crypto/proc.c b/crypto/proc.c
-index 82f15b967e85..5fb9fe86d023 100644
---- a/crypto/proc.c
-+++ b/crypto/proc.c
-@@ -19,17 +19,20 @@
- #include "internal.h"
- 
- static void *c_start(struct seq_file *m, loff_t *pos)
-+	__acquires_shared(&crypto_alg_sem)
- {
- 	down_read(&crypto_alg_sem);
- 	return seq_list_start(&crypto_alg_list, *pos);
- }
- 
- static void *c_next(struct seq_file *m, void *p, loff_t *pos)
-+	__must_hold_shared(&crypto_alg_sem)
- {
- 	return seq_list_next(p, &crypto_alg_list, pos);
- }
- 
- static void c_stop(struct seq_file *m, void *p)
-+	__releases_shared(&crypto_alg_sem)
- {
- 	up_read(&crypto_alg_sem);
- }
-diff --git a/crypto/scompress.c b/crypto/scompress.c
-index 1a7ed8ae65b0..7aee1d50e148 100644
---- a/crypto/scompress.c
-+++ b/crypto/scompress.c
-@@ -28,8 +28,8 @@
- struct scomp_scratch {
- 	spinlock_t	lock;
- 	union {
--		void	*src;
--		unsigned long saddr;
-+		void	*src __guarded_by(&lock);
-+		unsigned long saddr __guarded_by(&lock);
- 	};
- };
- 
-@@ -38,8 +38,8 @@ static DEFINE_PER_CPU(struct scomp_scratch, scomp_scratch) = {
- };
- 
- static const struct crypto_type crypto_scomp_type;
--static int scomp_scratch_users;
- static DEFINE_MUTEX(scomp_lock);
-+static int scomp_scratch_users __guarded_by(&scomp_lock);
- 
- static cpumask_t scomp_scratch_want;
- static void scomp_scratch_workfn(struct work_struct *work);
-@@ -67,6 +67,7 @@ static void crypto_scomp_show(struct seq_file *m, struct crypto_alg *alg)
- }
- 
- static void crypto_scomp_free_scratches(void)
-+	__context_unsafe(/* frees @scratch */)
- {
- 	struct scomp_scratch *scratch;
- 	int i;
-@@ -101,7 +102,7 @@ static void scomp_scratch_workfn(struct work_struct *work)
- 		struct scomp_scratch *scratch;
- 
- 		scratch = per_cpu_ptr(&scomp_scratch, cpu);
--		if (scratch->src)
-+		if (context_unsafe(scratch->src))
- 			continue;
- 		if (scomp_alloc_scratch(scratch, cpu))
- 			break;
-@@ -111,6 +112,7 @@ static void scomp_scratch_workfn(struct work_struct *work)
- }
- 
- static int crypto_scomp_alloc_scratches(void)
-+	__context_unsafe(/* allocates @scratch */)
- {
- 	unsigned int i = cpumask_first(cpu_possible_mask);
- 	struct scomp_scratch *scratch;
-@@ -139,7 +141,8 @@ static int crypto_scomp_init_tfm(struct crypto_tfm *tfm)
- 	return ret;
- }
- 
--static struct scomp_scratch *scomp_lock_scratch(void) __acquires(scratch)
-+#define scomp_lock_scratch(...) __acquire_ret(_scomp_lock_scratch(__VA_ARGS__), &__ret->lock)
-+static struct scomp_scratch *_scomp_lock_scratch(void) __acquires_ret
- {
- 	int cpu = raw_smp_processor_id();
- 	struct scomp_scratch *scratch;
-@@ -159,7 +162,7 @@ static struct scomp_scratch *scomp_lock_scratch(void) __acquires(scratch)
- }
- 
- static inline void scomp_unlock_scratch(struct scomp_scratch *scratch)
--	__releases(scratch)
-+	__releases(&scratch->lock)
- {
- 	spin_unlock(&scratch->lock);
- }
-@@ -171,8 +174,6 @@ static int scomp_acomp_comp_decomp(struct acomp_req *req, int dir)
- 	bool src_isvirt = acomp_request_src_isvirt(req);
- 	bool dst_isvirt = acomp_request_dst_isvirt(req);
- 	struct crypto_scomp *scomp = *tfm_ctx;
--	struct crypto_acomp_stream *stream;
--	struct scomp_scratch *scratch;
- 	unsigned int slen = req->slen;
- 	unsigned int dlen = req->dlen;
- 	struct page *spage, *dpage;
-@@ -232,13 +233,12 @@ static int scomp_acomp_comp_decomp(struct acomp_req *req, int dir)
- 		} while (0);
- 	}
- 
--	stream = crypto_acomp_lock_stream_bh(&crypto_scomp_alg(scomp)->streams);
-+	struct crypto_acomp_stream *stream = crypto_acomp_lock_stream_bh(&crypto_scomp_alg(scomp)->streams);
- 
- 	if (!src_isvirt && !src) {
--		const u8 *src;
-+		struct scomp_scratch *scratch = scomp_lock_scratch();
-+		const u8 *src = scratch->src;
- 
--		scratch = scomp_lock_scratch();
--		src = scratch->src;
- 		memcpy_from_sglist(scratch->src, req->src, 0, slen);
- 
- 		if (dir)
-diff --git a/include/crypto/internal/acompress.h b/include/crypto/internal/acompress.h
-index 2d97440028ff..9a3f28baa804 100644
---- a/include/crypto/internal/acompress.h
-+++ b/include/crypto/internal/acompress.h
-@@ -191,11 +191,12 @@ static inline bool crypto_acomp_req_virt(struct crypto_acomp *tfm)
- void crypto_acomp_free_streams(struct crypto_acomp_streams *s);
- int crypto_acomp_alloc_streams(struct crypto_acomp_streams *s);
- 
--struct crypto_acomp_stream *crypto_acomp_lock_stream_bh(
--	struct crypto_acomp_streams *s) __acquires(stream);
-+#define crypto_acomp_lock_stream_bh(...) __acquire_ret(_crypto_acomp_lock_stream_bh(__VA_ARGS__), &__ret->lock);
-+struct crypto_acomp_stream *_crypto_acomp_lock_stream_bh(
-+		struct crypto_acomp_streams *s) __acquires_ret;
- 
- static inline void crypto_acomp_unlock_stream_bh(
--	struct crypto_acomp_stream *stream) __releases(stream)
-+	struct crypto_acomp_stream *stream) __releases(&stream->lock)
- {
- 	spin_unlock_bh(&stream->lock);
- }
-diff --git a/include/crypto/internal/engine.h b/include/crypto/internal/engine.h
-index f19ef376833f..6a1d27880615 100644
---- a/include/crypto/internal/engine.h
-+++ b/include/crypto/internal/engine.h
-@@ -45,7 +45,7 @@ struct crypto_engine {
- 
- 	struct list_head	list;
- 	spinlock_t		queue_lock;
--	struct crypto_queue	queue;
-+	struct crypto_queue	queue __guarded_by(&queue_lock);
- 	struct device		*dev;
- 
- 	struct kthread_worker           *kworker;
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
