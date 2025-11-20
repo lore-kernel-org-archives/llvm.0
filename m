@@ -1,57 +1,55 @@
 Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933C0358D22
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACC935970F
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651589; cv=none; b=IXPni1GoKeMfrZdoLybh8+oFQK6aZG0iaVj6QzWXXpfXaX/vtyGt/eDlphF9RFN6+W0TrtPNbZ9K1RUM8BAd98v33c2zHWSoJalwN4qtscl3Nk0MuF+vZ+BCnnZpjQRBiuwCAteR1TyY6P7XyVb1PPQS8tQ9rp1vvaGKgrfg+20=
+	t=1763651590; cv=none; b=ffNvDRSUN7oorglg8NR/t+s1mXxO8bOQ//7JAuSag3RRcbPSDBrFVlGkWNYXZDJH08dHs7QrrR4HytwURMoo29+1SUYj6e9/UbX+8ZiygB1wmYpjTTsU7a5tftTaMjQUBJP7oV9pSVc/nqnORWCCBPoOWoGkTHfX0mqiYDBTUac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651589; c=relaxed/simple;
-	bh=07zfwwibr87pzthwGbH+0Y0kGO/abbdb5ZEhTTNkhyA=;
+	s=arc-20240116; t=1763651590; c=relaxed/simple;
+	bh=r7WIw2CSAQ4tWG1OZ75salml9To1eme5D14M43qpmeA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BUZDB5b5XqesG4NGa4kpoxva8Akn5F1rvKmk2o9IKj1zin8Q5er30WT6tJobqZgVCOYEUHFABPtBeZp0wh2PquqfbrmixVP3y6cvbFv8x32cxjiFROI7V2vjWyQGTD/amdt/QfwKJYOQl9gMQ6TzML6iBw+ZCQeSf4H9EhNLykI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4Fo0OuRY; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=ZRlmT4ir2KFPm43GN/DV+sIaXav1Gb9EuQk6YQBGMieANsHsxwFeL8KpPkGADoAe8pzgl8FPm2vIj5nlg+6a8WrQhxikr2Jrlaz5z6u/Py7Q4VV4hT4HP2s2VaR5ZMriDpgDBwNthJwvUWLvPkaxeTcc6MT9ikSeTfFMWDbAm5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hWbo/Gvh; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4Fo0OuRY"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779393221aso5900835e9.2
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:13:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hWbo/Gvh"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779da35d27so12433505e9.3
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:12:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651580; x=1764256380; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LTo30xRtk3dNAYk+WcMlGzrXIDi8Fd3AcvMY0oMy4/o=;
-        b=4Fo0OuRYmgGgL8XR7EhCOLg6OWSPlyjhVd4+rk+ywD8F1in/ZMoWSE3b7Tz5Cb3FAe
-         57QpFXpgU6kOH0lNkimnQhKI4R4AZZzn3cnRuWLKmtO6NfA/AFuaQDSjNGDxH5AnZo6T
-         VS1r1cxdGqRikWYwT+ydCBUNXcPJAA8Kbz0pkmyWCoFyEW2IjSeK2hqhccIYX/KUx68g
-         oX+z3mes5gtxoDzojGucJTdrjcE0sPVGqtwJMDzOiEt+XLc8j9R/uyqn+PkRSPbp6l6w
-         ZRPb0HWuDzqAd3RjGtyLU6j2Re07eECKrV/MpUl9wmpYKzuHhtsUhqvKmYmw8elXoT59
-         k0og==
+        d=google.com; s=20230601; t=1763651570; x=1764256370; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nc/agqhZHpBZo5pQd3t3SIT1Qnduk/rx/3xksUJM3vo=;
+        b=hWbo/GvhcR6ZJEG4kZbA4qSOykvxw+ORoY5u19YX0A/4cResBR0z0PUfyRXTYR1SE4
+         imCJh6Z37UwEEsC+YDYot3R1F9ktenQw87cXb2nmEqc6hiTj8rc/96KuxQ4h/GJ0uWUe
+         ia6hCvpcgZJ0xEIXlrP0VDf/b1gY79CeCjgwrpGbw4Uz1pVlHqE0XBbKKiVI8LJYArb8
+         fnhL2Rhr3BkxdDwox9te+btoKIJsj/yc81G1mualbkt/bGkzOX3amzzgzBbimB1BBfhM
+         oUvAYcRaUFdd1kUbvxebLH7KCLhDZac1bOxU8gQ5XMaR5bKvKvDIgxO+a1k6vZ7I7/Wd
+         gViw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651580; x=1764256380;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LTo30xRtk3dNAYk+WcMlGzrXIDi8Fd3AcvMY0oMy4/o=;
-        b=wF6w9cVcXSJIjjMy2McgiQsbX1pqa5fgABmZ0aamEq8/L69uOH3hVSktxJtUR0QmhF
-         NNA/1ppAZhTacT862gHoBCXYfBqNUsyN3JC4MTVJQ5CPv3q48CtKSYV64dp5K2mCY3st
-         7pJBXVk+niv0EV46HF1WKoveY+C6cTmtXsfldvdhk9rEd4Azc+51GS5GmWX3MqGRWX5o
-         HcET5a1cv3v5XLxBnkFtWnvkuaoBHRDtJST7AFqP79EvBE3RjnJBtKEXlaK46zVaUA11
-         AIFG2bYrWqK/5rjNZQZgApbqBKiGteOgaeoivS5O99Oj6yKUB9wCc4bEAo0Thlki/y3l
-         GPEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqWDBXs2ioGurxiaW8BKQw7GXOHV0XXufy0neRhi6V7+GPfTo6JORP9uNIVDBILcyifPMa@lists.linux.dev
-X-Gm-Message-State: AOJu0YyPtax39NCByEpDUMJbVscDubZ0FyFMPDwpD5zi3Q8y4sF4Qe7K
-	VWkYIEPCGUlxueUdc8+fJbSM2a3c9j0+lnzYLBTxb8gSIlGFSuag9h0mdeDyEzhr8bBDZyXpDQu
-	LXA==
-X-Google-Smtp-Source: AGHT+IFrGgNPktKG3H23bhC9w6XQyJEAaYXs0SazZ2yQkYIVJL1b09kjJ5fLN+jez2xgS5LZ8SbpXS+XSg==
-X-Received: from wmqo14.prod.google.com ([2002:a05:600c:4fce:b0:46e:1e57:dbd6])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4ec6:b0:46e:32dd:1b1a
- with SMTP id 5b1f17b1804b1-477babc1fcfmr26767175e9.7.1763651580311; Thu, 20
- Nov 2025 07:13:00 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:43 +0100
+        d=1e100.net; s=20230601; t=1763651570; x=1764256370;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nc/agqhZHpBZo5pQd3t3SIT1Qnduk/rx/3xksUJM3vo=;
+        b=RPmBr2RP1gkFIAdmt1AZXNsl2+o96wP2p74NkmLEQWAQHRO8d/bSmjfzs51OlHhJ2z
+         I9z9GLa/lwO4SGPZef8vyw6dEWjgzhIh1AtLrCW2/mSkojF/1BNvtvBLtyp9/hIDuWan
+         k547ycbd09WLyMSrgVNqKbs9T+CBFdKT/BUkJeBxB1Eq/bK7it5GlKFtBuSCvnMblREW
+         2Yh1/HhTmIO/nJKMR/5BcXBBtNqgD6YczbJekPMbfnqKSBR0dQjaJ1A2ByMOS5jAJZvs
+         2J+2QrPt18+nuQsP7i6d6pcR5w33+8iJaGgbinOBCXZ7ijxfO+W2BzlSG24zZCcKDgmQ
+         QUew==
+X-Forwarded-Encrypted: i=1; AJvYcCV6SMlZYsCEKQjDctSGt5RFEStZOzvv9rEy6O7YFNii0Ows2chDpVP+CNA+OTbpEUv8QVXo@lists.linux.dev
+X-Gm-Message-State: AOJu0YxRBzMTaQyyd9kB/uZrRjZ09Tlf2uis4I5GWrwGU3Cax0xCCDUI
+	QDByUTXeIAeqleKue2DTD2ZeM6cLqD/wHJhnFYXz6yVdE1I+6xzfkALL0/kguIuJxRRBsVC0fl9
+	Czw==
+X-Google-Smtp-Source: AGHT+IEEaNMCstTJqOLR6fdO3p0rd5Vx9GNO1jJ07YubqwQoWR7BvLPGZfMoQILzZHDOemuyFlxyBYdKgQ==
+X-Received: from wmd10.prod.google.com ([2002:a05:600c:604a:b0:477:9c68:bd6])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:3590:b0:46e:761b:e7ff
+ with SMTP id 5b1f17b1804b1-477b8c92773mr32595725e9.28.1763651569512; Thu, 20
+ Nov 2025 07:12:49 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:41 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-19-elver@google.com>
-Subject: [PATCH v4 18/35] locking/local_lock: Include missing headers
+Message-ID: <20251120151033.3840508-17-elver@google.com>
+Subject: [PATCH v4 16/35] kref: Add context-analysis annotations
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -88,49 +86,34 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Including <linux/local_lock.h> into an empty TU will result in the
-compiler complaining:
-
-./include/linux/local_lock.h: In function =E2=80=98class_local_lock_irqsave=
-_constructor=E2=80=99:
-./include/linux/local_lock_internal.h:95:17: error: implicit declaration of=
- function =E2=80=98local_irq_save=E2=80=99; <...>
-   95 |                 local_irq_save(flags);                          \
-      |                 ^~~~~~~~~~~~~~
-
-As well as (some architectures only, such as 'sh'):
-
-./include/linux/local_lock_internal.h: In function =E2=80=98local_lock_acqu=
-ire=E2=80=99:
-./include/linux/local_lock_internal.h:33:20: error: =E2=80=98current=E2=80=
-=99 undeclared (first use in this function)
-   33 |         l->owner =3D current;
-
-Include missing headers to allow including local_lock.h where the
-required headers are not otherwise included.
+Mark functions that conditionally acquire the passed lock.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- include/linux/local_lock_internal.h | 2 ++
+ include/linux/kref.h | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock=
-_internal.h
-index a4dc479157b5..9f6cb32f04b0 100644
---- a/include/linux/local_lock_internal.h
-+++ b/include/linux/local_lock_internal.h
-@@ -4,7 +4,9 @@
- #endif
-=20
- #include <linux/percpu-defs.h>
-+#include <linux/irqflags.h>
- #include <linux/lockdep.h>
-+#include <asm/current.h>
-=20
- #ifndef CONFIG_PREEMPT_RT
-=20
---=20
+diff --git a/include/linux/kref.h b/include/linux/kref.h
+index 88e82ab1367c..9bc6abe57572 100644
+--- a/include/linux/kref.h
++++ b/include/linux/kref.h
+@@ -81,6 +81,7 @@ static inline int kref_put(struct kref *kref, void (*release)(struct kref *kref)
+ static inline int kref_put_mutex(struct kref *kref,
+ 				 void (*release)(struct kref *kref),
+ 				 struct mutex *mutex)
++	__cond_acquires(true, mutex)
+ {
+ 	if (refcount_dec_and_mutex_lock(&kref->refcount, mutex)) {
+ 		release(kref);
+@@ -102,6 +103,7 @@ static inline int kref_put_mutex(struct kref *kref,
+ static inline int kref_put_lock(struct kref *kref,
+ 				void (*release)(struct kref *kref),
+ 				spinlock_t *lock)
++	__cond_acquires(true, lock)
+ {
+ 	if (refcount_dec_and_lock(&kref->refcount, lock)) {
+ 		release(kref);
+-- 
 2.52.0.rc1.455.g30608eb744-goog
 
