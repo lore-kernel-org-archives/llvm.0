@@ -1,55 +1,55 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041FE2E1EFD
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE9234A79B
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763650987; cv=none; b=eMv8qd43/zQMLQ3TZRs63OhD2IY6qR52oy6AGOKNPCUu6srFaKd8KjO7gG2/Sg+ronMNsbQJ217YQCsLyALU3+T0UoRB/9fkqFW8IgwqoXehaVGChRUfoSdypBp1ffGyDZqCVPaeISgI64AzSOJ6dp7xNIlDCNKmlrfUBd4s2wI=
+	t=1763650989; cv=none; b=j9uwjBDMlBAB3sX9j8WHOKmKvb9YFyEG0Dc/Vk35C9tIHwqLwYBAWsrTs2oEgvcEMuy1niFrHRkEBP/OXrexXUgnHxDo/bEkbAyBQYX/BrvTRsqsM7INcRjA8wX09diWIM/YKDwVJIMdbqvwuvspRZf0Yu87GFNpGc7IAUvu8cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763650987; c=relaxed/simple;
-	bh=tTGjUHrfXR5isY+lSEFNNwASkyVwRARVzePML9vCCTo=;
+	s=arc-20240116; t=1763650989; c=relaxed/simple;
+	bh=RlAtbvGe2o7GLZNK2osXwConM8SMxqUIfv+xbK8o9+E=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OfrxLHF/1FFAiPSlLVAiAPii1nuUbLTUEXudgq3g2q3njsiT2zWB6y1L/gZQVFRsi+GWSGcnv56N9JKUFg4esukagerzyxpD71r+cC+NJ9aN8EhtTnvUn6iBVUoDV22QDetRFNTFuceKSEnOCrIx4ooa89lV1Prruuqukr/mSng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vhbCjJvF; arc=none smtp.client-ip=209.85.208.74
+	 To:Cc:Content-Type; b=GR6cPrpwYgGLATKZmAaOLmmhO4057t+TtRfRVRSkadBfrvgZ7ZZnYiOL9mcr3IdLXxQZn1EPkaIBghG+TMcyLsGhlFIY/0vEAl4KjlFFlZ8rtY/kb4EwclMdWHXjzChkYVxa88J04ntbUS5r/OTBz+bIUfdJOKpmLkxje9r/CZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hpNMRxSv; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vhbCjJvF"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-64165abd7ffso1295537a12.0
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:03:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hpNMRxSv"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-47106a388cfso6314045e9.0
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:02:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763650979; x=1764255779; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763650976; x=1764255776; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QTNBohfvQLfYyJiWHtGyLx9FZqAAISthRH9eXaAWBIw=;
-        b=vhbCjJvFvcDIeAsPwwfm9jEUQ9JO3R+HNL0dBJ0RFOPW8opS9Hwi+apXo4yttuzXEt
-         U3ZUxAOVKfUoatPKnvS5YNiYbhpwLfZr4Z15eP4WEwvPtHJQyojx28FgqzVVB/8Z9uDw
-         KKvKEDIngObLViUiZXLTeqmZnoZmXUlvWq1ATEaMUygziJjuht0UOLNthfhmOa+bRG9p
-         k5+PImj6MgmebjkmuiGuxiRR/C/nOOQieRWsshsWf0rfcbvEmzdVpmK8uwq1PSJbPpUo
-         c3tUQgIjZ+8nJ38qsMy5JgktVPLG5Z1+tTCVy82ofS2DVWrFI8jHtNA/F9pas/h1AlL9
-         f/HQ==
+        bh=zAJGdoX03+Z7kHA10F2BJAYl/c1vU7j8o14tItuzLUc=;
+        b=hpNMRxSv3uSpYGWppdLrBrTKxjZudNDvJ8ywvXfUEbMr4zRZojGWE9sflkG4kgwetf
+         DoETqj05OmtM6+Vi8q0DZy5iY5iWs8+sJh0ulgNM7yTQHO9LRXtWMI3N6IdYx91nOuIJ
+         lBwhXbdETWDaADn+vO2XFSPhMA7pNnULGaQD4D4WzgpiJIz4Fpjc3mqU26nPV/5JPqqC
+         SOMllNWJR2vySGc/jixUjAuva0kGTpfjk/C2dsolsyJ2y7L0IIFChqJSuiEvTyrqanAd
+         ty+0zCxsBVFMrAVSxmUgJ5jfV4ZWChJsOO3CSXpsjsa5MY8F4SHcT5EMhkf+g0ZwyPb2
+         1KLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763650979; x=1764255779;
+        d=1e100.net; s=20230601; t=1763650976; x=1764255776;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QTNBohfvQLfYyJiWHtGyLx9FZqAAISthRH9eXaAWBIw=;
-        b=GocFFz72BzIUEVDTogIzVqB4eFAPquutUhpiafCnY1kUs/3qwgSJkeyndbI4h7RdnP
-         MTyBZ25UJCg/1IZFvTxQhBDZCqWx43T/8iTjxpoxPKUxaEYvwu40006nlAHIbxjy+GMr
-         8YcNEa0kSGqmNGpkHzMuUUKyYr7YC/Sa5VWkCAXT6032pPpdbqKpj9xLaBauEuVSl5Ro
-         Vsy+S04O0YUi/VCEK9StJr8Mp93db4LA/pj8VdTm17eHlLfYELX0GN5e22Ky6off41Gj
-         Zug324jhQ8UR2gus+aiqTkcE7YFica5KMIP6Olm6+mwQoJ9BpNATYlwcjPI5KtxmhvEq
-         c/+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUWzte15tUYPRTEK3gJD1UWBpBs4dF4BwdHsMgjXjxJ5iNJ/dHQs0dc4WBR3/lVvsvEiGln@lists.linux.dev
-X-Gm-Message-State: AOJu0YyROx/MpUFn/vF9MZPhuLHd92ldtC5ErbFdNYxxkS3uli6msHzV
-	ZXgiJ5DQ+7Wn3QE+U8nmQmeuvb6kRIqJ4tfrFB3iIM8j60rMy2zN6Vm5TTtp2VWpnZOWND7QtwA
-	Iyw==
-X-Google-Smtp-Source: AGHT+IF9OaX/QGeSo05eKeUEdCvjlZVpqfgwLf4/MHL/rv8J5uT/4osVo9PFxwafA3Q6L9NfftMIvUQ5OA==
-X-Received: from edb10.prod.google.com ([2002:a05:6402:238a:b0:643:5f58:caa7])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:268d:b0:640:b1cf:f800
- with SMTP id 4fb4d7f45d1cf-6453d084770mr1885049a12.4.1763650978915; Thu, 20
- Nov 2025 07:02:58 -0800 (PST)
-Date: Thu, 20 Nov 2025 15:49:07 +0100
+        bh=zAJGdoX03+Z7kHA10F2BJAYl/c1vU7j8o14tItuzLUc=;
+        b=kWBS9NdUPH8kogHEv2uIXGdwY66kw67b9iAiC3TV0+pG2FV29I+Ow8Yx6/d7cqPB7S
+         C3vSPC87xrzb6dYBCLtm9JhqjASMaG53pVuJZ9sH8zYtzrsmbHyHgPLrJYT+rBwDxVhO
+         PJgh/f58zkBXtL/Ojs+p6J2WddCIT5N1wAE3mmpSrgnH7puLqwy8ZaFiLihTxv2rOhkq
+         4JgRu/b2m4HNMlswXdZ3/Ogns6uPZAydbIdWzlOtURejykT9WJ6Y2ph8Xn2nwqHCLKP2
+         qOeHpjPCg211dbXgg4MdwrQzQ3ryBp+P2A2FIRr6uOpIuQ/Yi5HwtpuOI/7M3e7KdYWi
+         CEHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXmzRo1Vfodyf4IVtXRVOm38R3AlEippUU92siMXc7D//B8mU8cJWbxjEYnHB1WS5+Nmwek@lists.linux.dev
+X-Gm-Message-State: AOJu0Yytk5ru76YxpzyoyAs0diHU0A6rnEUdSZ4N667zXeXCFlqIQ9eU
+	WoUfE1BMRSgtBa1qWvdj038YWnNJo/XnIrGz9oiKNJAqRNwgW1VmOse3ARiCkYYKfn58ChyKgJZ
+	Zmg==
+X-Google-Smtp-Source: AGHT+IFIYsn75+II8LsVddaa6qNKEfaR+cAEgpbzcwe6Py2Tl/ywj/JLpQudo1QVKMjc586QGSbi0kmLJg==
+X-Received: from wmot8.prod.google.com ([2002:a05:600c:4508:b0:477:a4d4:607a])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:1d05:b0:477:54cd:200a
+ with SMTP id 5b1f17b1804b1-477b8a518f4mr26264575e9.6.1763650976118; Thu, 20
+ Nov 2025 07:02:56 -0800 (PST)
+Date: Thu, 20 Nov 2025 15:49:06 +0100
 In-Reply-To: <20251120145835.3833031-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120145835.3833031-7-elver@google.com>
-Subject: [PATCH v4 05/35] checkpatch: Warn about context_unsafe() without comment
+Message-ID: <20251120145835.3833031-6-elver@google.com>
+Subject: [PATCH v4 04/35] Documentation: Add documentation for Compiler-Based
+ Context Analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,36 +88,187 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Warn about applications of context_unsafe() without a comment, to
-encourage documenting the reasoning behind why it was deemed safe.
+Adds documentation in Documentation/dev-tools/context-analysis.rst, and
+adds it to the index.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v4:
 * Rename capability -> context analysis.
-* Avoid nested if.
----
- scripts/checkpatch.pl | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 92669904eecc..a5db6b583b88 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -6722,6 +6722,13 @@ sub process {
- 			}
- 		}
- 
-+# check for context_unsafe without a comment.
-+		if ($line =~ /\bcontext_unsafe\b/ &&
-+		    !ctx_has_comment($first_line, $linenr)) {
-+			WARN("CONTEXT_UNSAFE",
-+			     "context_unsafe without comment\n" . $herecurr);
-+		}
+v2:
+* Remove cross-reference to Sparse, since we plan to remove Sparse
+  support anyway.
+* Mention __no_context_analysis should be avoided.
+---
+ Documentation/dev-tools/context-analysis.rst | 145 +++++++++++++++++++
+ Documentation/dev-tools/index.rst            |   1 +
+ 2 files changed, 146 insertions(+)
+ create mode 100644 Documentation/dev-tools/context-analysis.rst
+
+diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+new file mode 100644
+index 000000000000..a15436e288fd
+--- /dev/null
++++ b/Documentation/dev-tools/context-analysis.rst
+@@ -0,0 +1,145 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. Copyright (C) 2025, Google LLC.
 +
- # check of hardware specific defines
- 		if ($line =~ m@^.\s*\#\s*if.*\b(__i386__|__powerpc64__|__sun__|__s390x__)\b@ && $realfile !~ m@include/asm-@) {
- 			CHK("ARCH_DEFINES",
++.. _context-analysis:
++
++Compiler-Based Context Analysis
++===============================
++
++Context Analysis is a language extension, which enables statically checking
++that required contexts are active (or inactive) by acquiring and releasing
++user-definable "context guards". An obvious application is lock-safety checking
++for the kernel's various synchronization primitives (each of which represents a
++"context guard"), and checking that locking rules are not violated.
++
++The Clang compiler currently supports the full set of context analysis
++features. To enable for Clang, configure the kernel with::
++
++    CONFIG_WARN_CONTEXT_ANALYSIS=y
++
++The feature requires Clang 22 or later.
++
++The analysis is *opt-in by default*, and requires declaring which modules and
++subsystems should be analyzed in the respective `Makefile`::
++
++    CONTEXT_ANALYSIS_mymodule.o := y
++
++Or for all translation units in the directory::
++
++    CONTEXT_ANALYSIS := y
++
++It is possible to enable the analysis tree-wide, however, which will result in
++numerous false positive warnings currently and is *not* generally recommended::
++
++    CONFIG_WARN_CONTEXT_ANALYSIS_ALL=y
++
++Programming Model
++-----------------
++
++The below describes the programming model around using context guard types.
++
++.. note::
++   Enabling context analysis can be seen as enabling a dialect of Linux C with
++   a Context System. Some valid patterns involving complex control-flow are
++   constrained (such as conditional acquisition and later conditional release
++   in the same function).
++
++Context analysis is a way to specify permissibility of operations to depend on
++context guards being held (or not held). Typically we are interested in
++protecting data and code in a critical section by requiring a specific context
++to be active, for example by holding a specific lock. The analysis ensures that
++callers cannot perform an operation without the required context being active.
++
++Context guards are associated with named structs, along with functions that
++operate on struct instances to acquire and release the associated context
++guard.
++
++Context guards can be held either exclusively or shared. This mechanism allows
++assigning more precise privileges when a context is active, typically to
++distinguish where a thread may only read (shared) or also write (exclusive) to
++data guarded within a context.
++
++The set of contexts that are actually active in a given thread at a given point
++in program execution is a run-time concept. The static analysis works by
++calculating an approximation of that set, called the context environment. The
++context environment is calculated for every program point, and describes the
++set of contexts that are statically known to be active, or inactive, at that
++particular point. This environment is a conservative approximation of the full
++set of contexts that will actually be active in a thread at run-time.
++
++More details are also documented `here
++<https://clang.llvm.org/docs/ThreadSafetyAnalysis.html>`_.
++
++.. note::
++   Clang's analysis explicitly does not infer context guards acquired or
++   released by inline functions. It requires explicit annotations to (a) assert
++   that it's not a bug if a context guard is released or acquired, and (b) to
++   retain consistency between inline and non-inline function declarations.
++
++Supported Kernel Primitives
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++.. Currently the following synchronization primitives are supported:
++
++For context guards with an initialization function (e.g., `spin_lock_init()`),
++calling this function before initializing any guarded members or globals
++prevents the compiler from issuing warnings about unguarded initialization.
++
++Lockdep assertions, such as `lockdep_assert_held()`, inform the compiler's
++context analysis that the associated synchronization primitive is held after
++the assertion. This avoids false positives in complex control-flow scenarios
++and encourages the use of Lockdep where static analysis is limited. For
++example, this is useful when a function doesn't *always* require a lock, making
++`__must_hold()` inappropriate.
++
++Keywords
++~~~~~~~~
++
++.. kernel-doc:: include/linux/compiler-context-analysis.h
++   :identifiers: context_guard_struct
++                 token_context_guard token_context_guard_instance
++                 __guarded_by __pt_guarded_by
++                 __must_hold
++                 __must_not_hold
++                 __acquires
++                 __cond_acquires
++                 __releases
++                 __must_hold_shared
++                 __acquires_shared
++                 __cond_acquires_shared
++                 __releases_shared
++                 __acquire
++                 __release
++                 __cond_lock
++                 __acquire_shared
++                 __release_shared
++                 __cond_lock_shared
++                 __acquire_ret
++                 __acquire_shared_ret
++                 context_unsafe
++                 __context_unsafe
++                 disable_context_analysis enable_context_analysis
++
++.. note::
++   The function attribute `__no_context_analysis` is reserved for internal
++   implementation of context guard types, and should be avoided in normal code.
++
++Background
++----------
++
++Clang originally called the feature `Thread Safety Analysis
++<https://clang.llvm.org/docs/ThreadSafetyAnalysis.html>`_, with some keywords
++and documentation still using the thread-safety-analysis-only terminology. This
++was later changed and the feature became more flexible, gaining the ability to
++define custom "capabilities". Its foundations can be found in `Capability
++Systems <https://www.cs.cornell.edu/talc/papers/capabilities.pdf>`_, used to
++specify the permissibility of operations to depend on some "capability" being
++held (or not held).
++
++Because the feature is not just able to express capabilities related to
++synchronization primitives, and "capability" is already overloaded in the
++kernel, the naming chosen for the kernel departs from Clang's initial "Thread
++Safety" and "capability" nomenclature; we refer to the feature as "Context
++Analysis" to avoid confusion. The internal implementation still makes
++references to Clang's terminology in a few places, such as `-Wthread-safety`
++being the warning option that also still appears in diagnostic messages.
+diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
+index 4b8425e348ab..d864b3da4cc7 100644
+--- a/Documentation/dev-tools/index.rst
++++ b/Documentation/dev-tools/index.rst
+@@ -21,6 +21,7 @@ Documentation/process/debugging/index.rst
+    checkpatch
+    clang-format
+    coccinelle
++   context-analysis
+    sparse
+    kcov
+    gcov
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
