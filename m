@@ -1,55 +1,55 @@
 Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87035341AC5
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:13:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EA835CBB4
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651654; cv=none; b=cCzMA4BiV4Dw8tBaTJaXKGItMBW+e5orD7TUErIHxyGS4sxK+OxSGb+gJ/cMJ4SfG0ssNtPbnLbdXRLrGv/fNsIvBroAxOSJalN0VHazK1ueP/6HPcFmiatr1Qpshfyo7MRVAwoTAuRvqwHZ7hW3tqKrj/tHrqh0dwzocrDqUUQ=
+	t=1763651662; cv=none; b=m8aOc7Te2IqQzjIjDjtw68o0N3fr2Lro8jrqqenuhdCQ9nrSCHkOu+zisxIbSODJN/R8L5ENzqqMYTyQJB4MuBzH4t8Eocv4YS/XPseTHm29PWQvdimcUejCpxrpDxAN8BJRuPt1xIqIUL+sAC1UUeLkAg+6Ef7Zk21oHUmdp+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651654; c=relaxed/simple;
-	bh=yQGcXxXaYdZ5kiCIpIMXgPxTJIXhYJPCbcz+VxA3nLc=;
+	s=arc-20240116; t=1763651662; c=relaxed/simple;
+	bh=JghkiwHvBvL6JcsywiEEh15XJk0LP4WSUGT+cTqq5kc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MOA9CExn/10f/jd0uJMR8WIKsS64n2tvCLOkLAVCc9zgtR4fH3+w7Hw69IwilPUwA5figHt1CG3HIlnXCoGIK1qCiHe69z135JUOMpC4cHGgKiUM1QI0hq7bz507rxCFZlwWKzs0IxboWY/WAGd36yYmceSB7NYMQUjXyBx6hI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JgYJfS30; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=N0y2Q7h+RUsUVGFEtK6WNbxZdyS0xZbiZDPAoqQjRXHP1rJ6OZsV2mS59kZkYcGytsEnOS92BM5Jx3Mo53k7pBa7Q/3arctVa9h+7IXOmu64I3Sbq4IwTTSQ4ZpMYV37mOlGYwvgXtxlAfYh/rOJbRWxeq52lFgCy4QJ2GWPLoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OgU8sMhA; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JgYJfS30"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47106720618so9426435e9.1
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:13:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OgU8sMhA"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47106720618so9428065e9.1
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:13:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651624; x=1764256424; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763651635; x=1764256435; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P9dnEf98rT3yxtmvLOfZj9VjyyDpDqGX8DLsl5ZbgJ0=;
-        b=JgYJfS30XM6oTXKXoErWGP2jXcEVnq8dwRAY6iJtLfcRHES9px9lVS3EG6Yd5IECL7
-         tBDYNLsaUz6M6ACC+Y02F4UFha7qHebkqbPIModIsFSO6yxM2+5FF+d7CvutmtJcTY8A
-         IVRGYSWBD/eQry/v1Tawp18RVfDDK9DREOE/NJNMVMPeR/BVO6XUDIJSiz+eYgrHNaUK
-         gE98/O2nzja4SF5NmRghx/iKHLWd9g/D+gKXGMsd62iTw0YTIb5UMUZmNuDMV8RasOw8
-         04TOiCPkB5+ebdwwYTNnNsF2L3vrBrpWgy3B7eMAuA3V2n17giTVi+Gz2bLYNm37g173
-         POLQ==
+        bh=Im5hsj1DltxV90KwIidFCTn0DS8FZncDFP7kTqaMpC0=;
+        b=OgU8sMhAkOTeyQyDVY5VIMSTIzmgPq5py407duDi7ciMV7sCUZ8lqnGJ7gORV+zkUQ
+         58ZT30G6d9BJJAqqdL8CpUBFPCTSweW9XYLe3/+7dM6gcmpAtqCaG1KbKcOgs2fjZQxR
+         lyzT5iPhLAh49T13I5ugZtLVDQpr47BUxWddxuLto2gZuE2tHDjUopvyvS7CL4avQCxB
+         C+DgUUXIyMSi+GugaZlIN5310eVZ68971LKnDMV4OabMJBAF+dCSXtAyXv9SlICqWCY5
+         0egrk3IiAT7Ia5IFAZ9lq6lbtgopixYEp5830367t91AhCF3aAmp0O6ebgIGgcqQTKg4
+         TbNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651624; x=1764256424;
+        d=1e100.net; s=20230601; t=1763651635; x=1764256435;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P9dnEf98rT3yxtmvLOfZj9VjyyDpDqGX8DLsl5ZbgJ0=;
-        b=uaJ5nOCnCR4eE1mPnhnRA1lyqq20LU/KCzRlSoYr11g9s3X8mrQNLZ3FrHfAH9Rij/
-         c3/zRoBAopWla2s87QTbwOZL3HChKxIQkbSWjRtEAXC+TJeaNqJrYk/siuUzNuPIshGk
-         nPNZBRzq/Nk25qqaBhyjZtDHKvMIAVJDIYvAk+0/4yEyb97reAs2jHUVDt6OwofhQtp+
-         GHva/owxkvqBDjhKlMYZlF246hhH2OQeCh8zCdf9TYGBuZ0/c8Xz6rRfPTChchQb0WqX
-         fVCTuS/U+t+l1VoLNnUiUxks8XOxb4rI9ZvvbEzie0Updp8TPZhQIGTalSehDxoBJCYa
-         IehA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCIo2G2PlY/Ib3A+unfNi4UT1yGhkYo8vagI77iJirHb6Mj1ZGH57nSASwOdZWgWzyO4V+@lists.linux.dev
-X-Gm-Message-State: AOJu0YwZJMGHnE0JFYrWkqzt+h9UAiJsmGBdm8jFTd2m8tzG6eU5Uoml
-	nWIUnaj/OuXe1tQ7ImUGVMB59aJSNZCdtbxd+CcYf5WLpX4So+m/SkFyU3sIEUbIRhXWx3YUtJE
-	oEA==
-X-Google-Smtp-Source: AGHT+IFzrSwtwY7miOmNK7LYeHpXeHuMSiPUb/wnjFTBiV4tGaze/1FaluK98MtjxDYipw+SZftzMsNxWw==
-X-Received: from wmpq6.prod.google.com ([2002:a05:600c:3306:b0:477:9976:8214])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:b95:b0:471:21:554a
- with SMTP id 5b1f17b1804b1-477b9dd716fmr25371575e9.13.1763651623805; Thu, 20
- Nov 2025 07:13:43 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:54 +0100
+        bh=Im5hsj1DltxV90KwIidFCTn0DS8FZncDFP7kTqaMpC0=;
+        b=DIGGy+cyFL8WsvlVdBE4dYRmpy3WosAbF6fqjekozWMz7lTpIdoUyZtfkA4GvRkw6f
+         ZI2OzgBm3ft7j7NCDP5ziI53zEg1eehGi0fFjQfjNyuVtCnB7ouw6NU/1udA3bA0VZg5
+         Jid4rpxggiIzaqCfpy1PLVAkmKLdvmPaIfT3ohD86zbT9649b/anolswcnp4o9kHR+lb
+         jRCU6Ld3n9UefwDS/ypaoovmQ6LnmoWJt/tZz5/JCxgz0+iLfu5y4+l9CdgR79TvQAl6
+         nDzXQVcNjQckXqcnobWmLoXI2iM2aUKNnzXv790lv/RcfcL1vOaxNpyC5bH85zZz2G+v
+         7jlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUe99w4xwomB4GlEKmgK6VfYzlvi8+8L8JWX8Vt//HdnSF4i80OrS0A4kTOpouUEdIUuisI@lists.linux.dev
+X-Gm-Message-State: AOJu0YyRpRNOF1OIJWR9ADRFLF3b+YaqU7r3xiPRco3U/x8LYj/N27J0
+	Ah3t+W6eqnIZ6iy5Y9qzkrKIepqowxIO736NJGMCUB9/A+cFGYQ5TQrdNm4OvR7Q2+u55D1EAoF
+	yXQ==
+X-Google-Smtp-Source: AGHT+IE0txFyfqWr7t8p06ZvcBdzNhQeJVfQ06tB7yPqhvYYx4yW0lw4v6t9Cn2mD+Uk9FOLbPP2gAnnVA==
+X-Received: from wmd10.prod.google.com ([2002:a05:600c:604a:b0:477:9c68:bd6])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:1c1b:b0:471:c72:c7f8
+ with SMTP id 5b1f17b1804b1-477b9e1cbfbmr31262875e9.21.1763651635197; Thu, 20
+ Nov 2025 07:13:55 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:57 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-30-elver@google.com>
-Subject: [PATCH v4 29/35] kcsan: Enable context analysis
+Message-ID: <20251120151033.3840508-33-elver@google.com>
+Subject: [PATCH v4 32/35] printk: Move locking annotation to printk.c
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,106 +87,62 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Enable context analysis for the KCSAN subsystem.
+With Sparse support gone, Clang is a bit more strict and warns:
+
+./include/linux/console.h:492:50: error: use of undeclared identifier 'console_mutex'
+  492 | extern void console_list_unlock(void) __releases(console_mutex);
+
+Since it does not make sense to make console_mutex itself global, move
+the annotation to printk.c. Context analysis remains disabled for
+printk.c.
+
+This is needed to enable context analysis for modules that include
+<linux/console.h>.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
-v4:
-* Rename capability -> context analysis.
-
-v3:
+v2:
 * New patch.
 ---
- kernel/kcsan/Makefile |  2 ++
- kernel/kcsan/report.c | 11 ++++++++---
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ include/linux/console.h | 4 ++--
+ kernel/printk/printk.c  | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
-index a45f3dfc8d14..824f30c93252 100644
---- a/kernel/kcsan/Makefile
-+++ b/kernel/kcsan/Makefile
-@@ -1,4 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
-+CONTEXT_ANALYSIS := y
-+
- KCSAN_SANITIZE := n
- KCOV_INSTRUMENT := n
- UBSAN_SANITIZE := n
-diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-index e95ce7d7a76e..11a48b78f8d1 100644
---- a/kernel/kcsan/report.c
-+++ b/kernel/kcsan/report.c
-@@ -116,6 +116,7 @@ static DEFINE_RAW_SPINLOCK(report_lock);
-  * been reported since (now - KCSAN_REPORT_ONCE_IN_MS).
+diff --git a/include/linux/console.h b/include/linux/console.h
+index 031a58dc2b91..1eb3c9d9d6ae 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -488,8 +488,8 @@ static inline bool console_srcu_read_lock_is_held(void)
+ extern int console_srcu_read_lock(void);
+ extern void console_srcu_read_unlock(int cookie);
+ 
+-extern void console_list_lock(void) __acquires(console_mutex);
+-extern void console_list_unlock(void) __releases(console_mutex);
++extern void console_list_lock(void);
++extern void console_list_unlock(void);
+ 
+ extern struct hlist_head console_list;
+ 
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 5aee9ffb16b9..7646952a92f1 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -245,6 +245,7 @@ int devkmsg_sysctl_set_loglvl(const struct ctl_table *table, int write,
+  * For console list or console->flags updates
   */
- static bool rate_limit_report(unsigned long frame1, unsigned long frame2)
-+	__must_hold(&report_lock)
- {
- 	struct report_time *use_entry = &report_times[0];
- 	unsigned long invalid_before;
-@@ -366,6 +367,7 @@ static int sym_strcmp(void *addr1, void *addr2)
- 
- static void
- print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
-+	__must_hold(&report_lock)
- {
- 	stack_trace_print(stack_entries, num_entries, 0);
- 	if (reordered_to)
-@@ -373,6 +375,7 @@ print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long
- }
- 
- static void print_verbose_info(struct task_struct *task)
-+	__must_hold(&report_lock)
- {
- 	if (!task)
- 		return;
-@@ -389,6 +392,7 @@ static void print_report(enum kcsan_value_change value_change,
- 			 const struct access_info *ai,
- 			 struct other_info *other_info,
- 			 u64 old, u64 new, u64 mask)
-+	__must_hold(&report_lock)
- {
- 	unsigned long reordered_to = 0;
- 	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
-@@ -496,6 +500,7 @@ static void print_report(enum kcsan_value_change value_change,
- }
- 
- static void release_report(unsigned long *flags, struct other_info *other_info)
-+	__releases(&report_lock)
+ void console_list_lock(void)
++	__acquires(&console_mutex)
  {
  	/*
- 	 * Use size to denote valid/invalid, since KCSAN entirely ignores
-@@ -507,13 +512,11 @@ static void release_report(unsigned long *flags, struct other_info *other_info)
- 
- /*
-  * Sets @other_info->task and awaits consumption of @other_info.
-- *
-- * Precondition: report_lock is held.
-- * Postcondition: report_lock is held.
+ 	 * In unregister_console() and console_force_preferred_locked(),
+@@ -269,6 +270,7 @@ EXPORT_SYMBOL(console_list_lock);
+  * Counterpart to console_list_lock()
   */
- static void set_other_info_task_blocking(unsigned long *flags,
- 					 const struct access_info *ai,
- 					 struct other_info *other_info)
-+	__must_hold(&report_lock)
+ void console_list_unlock(void)
++	__releases(&console_mutex)
  {
- 	/*
- 	 * We may be instrumenting a code-path where current->state is already
-@@ -572,6 +575,7 @@ static void set_other_info_task_blocking(unsigned long *flags,
- static void prepare_report_producer(unsigned long *flags,
- 				    const struct access_info *ai,
- 				    struct other_info *other_info)
-+	__must_not_hold(&report_lock)
- {
- 	raw_spin_lock_irqsave(&report_lock, *flags);
- 
-@@ -603,6 +607,7 @@ static void prepare_report_producer(unsigned long *flags,
- static bool prepare_report_consumer(unsigned long *flags,
- 				    const struct access_info *ai,
- 				    struct other_info *other_info)
-+	__cond_acquires(true, &report_lock)
- {
- 
- 	raw_spin_lock_irqsave(&report_lock, *flags);
+ 	mutex_unlock(&console_mutex);
+ }
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
