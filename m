@@ -1,91 +1,180 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E295D344042;
-	Thu, 20 Nov 2025 16:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF5332C94A
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 18:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763656902; cv=none; b=mGmSZQ1Y3nzN03Sn8rSz8a6CqGeS63GD8hJjZBVx1B3uSXKOHvA++eNP4BVC2lc0tpahPPOM5igGDls1QNOwCEZvx1NP4GheynZSegYI3fvbaBI7xzgZQm6GL6Pk42ROu5wE50jibpKIfx3blmIlwp0TF0sUxDdMvCaER4jtRiM=
+	t=1763662807; cv=none; b=YemVg8bsiddpGcUUciAJXrK02wCveJuByBogN3yV1XfpULP4CkTW/qGS+bkBeILCVp2fW/jisaAz4Fv7fnEfSKQmgkrxfQveKH/qtnRZWwimTl0S9B+1yImLySo9S0Yxsr36baNkKcGvtVdOQyV4FEhd5qE1xSHl9fyyjavAzkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763656902; c=relaxed/simple;
-	bh=Q4wph/mMZjjd77B72cncj35YfQ2DBSpBOYDGuwtCsi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=J1UqDSGafJLgmmUTlSAZ9HL42/RXdoBojE/dtkF29eYjRfdHZVyV47OenJaIWAy4OtuvxSGa468++2g+UWTWng068/FJIgtALltaTGDT22C0DVQl9/TWgvAEf3iBQIJX4y0f95jk85uX+ZtZrtxiPLP2owi5hbDKvIMzGLTP3YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FNVS1lEr; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763662807; c=relaxed/simple;
+	bh=wecZEUleM2pVH/ldG6VyoxAP3Tx+t9JIJBh2fst1eeo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oM4TTpzvEZxfmbiNi3foQQOaOA2+hpdQ0JUx7xmNPdkli/LOSyvLNfA7U3/e/EDFhCEP9cMHChiKiBUr8CmWh8UMtT4ehfyxas3YqoLJxAoo+qnYfYtVfN1OYd+ai/DDRZ/OGM/Qz+ynfhGWtC+UyojHil5X0QHVPJUX41/cjPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=H37dZsRM; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FNVS1lEr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763656901; x=1795192901;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q4wph/mMZjjd77B72cncj35YfQ2DBSpBOYDGuwtCsi0=;
-  b=FNVS1lEroDU/49GMKXPwjNz+hQDDggRvA5eFlkeeIw2N+rVFZA1KL4YN
-   qZvL0ITaeSJez3qK+vq0lQeOkwYB/oFWbRGMiQiWYPT0i9ZwrrI7M532r
-   IYm+nTHrPq3RX4yvHsOA/XwyT56m854k8ruotR3Uup+9HGtf9EltM26jb
-   aAPz6i+ffspPzqddJVK0dGzAm/2bYKvFUh4mALxsmJr7taHO5CnSdMSLD
-   /BmE/f8UFJILs7zKmjUEAxXo+ggHayhO89xsTVL3aqiJRTv8BVk79DQlb
-   gwkI3Jt4HQ+worr+cJL2EFg32xoCrTvCdq3zs0WJgXAjNIOvyRPeZ2qLP
-   Q==;
-X-CSE-ConnectionGUID: h0WNmTdZQXO8X5YkYG/Ahg==
-X-CSE-MsgGUID: RBRsZX/VSEq+WfW+qKa5NA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="65822674"
-X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
-   d="scan'208";a="65822674"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 08:41:40 -0800
-X-CSE-ConnectionGUID: yddx26sQTD+fr7hr+owRjA==
-X-CSE-MsgGUID: sok7ZA0CT2O1OL3LHsbXiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
-   d="scan'208";a="222363181"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Nov 2025 08:41:39 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vM7iy-0004HR-2W;
-	Thu, 20 Nov 2025 16:41:36 +0000
-Date: Fri, 21 Nov 2025 00:41:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>
-Subject: [linux-next:master 9676/10599] ld.lld: error: undefined symbol:
- rust_build_error
-Message-ID: <202511210055.RUsFNku1-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="H37dZsRM"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5959da48139so1196264e87.1
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 10:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1763662802; x=1764267602; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+BPfdnrOHpw/8tC+sL0oorkp9gKYtrunKdRWYzTn+GA=;
+        b=H37dZsRMk/GhI/UC6/4BsDUOkbHKtk8jUDnPxh5Bb3uP/orWu1TsDj+crVVZ844nv7
+         k8Jxj8+gM+wJg2vNv6BGquQa2GkEfnzWbgfaNP7+mW/GFGmtMR1Eq8ivXUC5Wtxv9C20
+         sFHuPMGJQzvRenRkkJT97VX6FQrwADwBGugjs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763662802; x=1764267602;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+BPfdnrOHpw/8tC+sL0oorkp9gKYtrunKdRWYzTn+GA=;
+        b=sR4o7JbmnFetgdCTVQjd1xMgav0/JxAYbiCUhdcyt6enhdPs4bUHK04dei436f2AP5
+         W7IUgiwBR4LXFeR8bJO0o5zcbzik8XhJLIXeKVz6kYckXHCLS8XjrnvWca+mwDAaYoTj
+         L4gg0BIRnKesDpYZG0F8xdWWT2vmhzqP/mplmkaP1jShu+McS7RcM86TBQ1fTf5mCOIi
+         4wjEM/Jf34KXEGcUeFXVGnj9cWSQwUUw+skGVN4m9VYtWcvVCsL/aPdCyagV0pX9UUIb
+         iwrp5dbhJ9Qw/Mn398eAik3YLVZExyA2jExk/FpSCI369kkKZiTIWF50fnFy7dnNLa/X
+         pfZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuwBEuPWFMeNpNB1pmOIsYW5BlHLh8wWCPRjtlUj/bWC/BOogyLibD1EWF33dah/HhmDPU@lists.linux.dev
+X-Gm-Message-State: AOJu0YxfnmRpwX3v/zqhvSBbnVm5ACPhzyS5xAD5Q6hAjM44msIOCM2d
+	OSfrHvBEPEkOIZmTKv6npaztKUs5oTZMviNXwrFL8vwRGBpDKm7oQvnHLICaIjRyw1WflRav/KL
+	nFcqoRZg=
+X-Gm-Gg: ASbGncs4s79i5cbGfhVM2IhDwfhYBlEnphN4Kc5+qyc38ISTKqqRB46D7IZyWBxHpSl
+	wtRcHa2S5YNlzu/Yazpq1nk119M0qLJWnHE8RLegxlUuwPU5Ab4T+CTEfBH/LBCmACc5dou0xgn
+	Mdzc1HpHoQiphoCabk+TWriL25ILbMeQjoqUHFGTZrfXVVZnCmKVVLsVwEyc8FIrqC1/p4fjGZ3
+	fLT/IRmTQkrgxxqQ0A9Hoo9ip8BvOHIfF0Uyb+kfwMjdneSa0JQnYolZJP4zN2Ww/dBo3MrTF4B
+	g3s/RzATEmNB6mqaMRpo16KnDZ/iQoIFax7gwjKhY+Y1CFiBJBIvN3jKbjWMENVEiWv0ZGPBbuY
+	hYIoV8MTJ9owYQBBlyafbFOSLjeWXzdRYJQwXh069jMc02YSQXV2L2pdGg4awIV6lPLpYrKnHys
+	amvx/xF4MyqEwgObjXZrCo+vxL7AgaFZqTQ85KjKoGGESmHdl87COkJyFn/L8v4lbK
+X-Google-Smtp-Source: AGHT+IFAjdVTI/TKVmnIVEanvbKSKTfS/TmMwHtsChGDN9uW1OwHOybMpEaVA7ZRQUzWtDTpHV7o5A==
+X-Received: by 2002:a05:6512:3ba0:b0:591:ec0d:3014 with SMTP id 2adb3069b0e04-5969e318f12mr1397067e87.48.1763662802295;
+        Thu, 20 Nov 2025 10:20:02 -0800 (PST)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37cc6bbdfcfsm6521031fa.34.2025.11.20.10.20.01
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Nov 2025 10:20:01 -0800 (PST)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-37a3d86b773so10710281fa.0
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 10:20:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVBpo5d1cS/2bjzhQ6DAf2SZoeuaoP9E+q+7N+NTzS+SOkDw8mzqz1Xrjm9izYt0TRiUwGK@lists.linux.dev
+X-Received: by 2002:a17:907:7f0a:b0:b70:b71a:a5ae with SMTP id
+ a640c23a62f3a-b7654fe9b97mr482177966b.44.1763662490181; Thu, 20 Nov 2025
+ 10:14:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251120145835.3833031-2-elver@google.com> <20251120145835.3833031-4-elver@google.com>
+In-Reply-To: <20251120145835.3833031-4-elver@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 20 Nov 2025 10:14:34 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whyKteNtcLON-gScv6tu8ssvKWdNw-k371ufDrjOv374g@mail.gmail.com>
+X-Gm-Features: AWmQ_bk-my8wSL6P8yRhTUREdDraem8VrQQmjD7uS2S9oN6T2mRX46ftlS1ytQU
+Message-ID: <CAHk-=whyKteNtcLON-gScv6tu8ssvKWdNw-k371ufDrjOv374g@mail.gmail.com>
+Subject: Re: [PATCH v4 02/35] compiler-context-analysis: Add infrastructure
+ for Context Analysis with Clang
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>, 
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Triplett <josh@joshtriplett.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
-commit: 01e345e82ec3a5a7edeb9fa0dcb7fd4b0e5c534e [9676/10599] rust: num: add Bounded integer wrapping type
-config: loongarch-randconfig-6002-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/reproduce)
+On Thu, 20 Nov 2025 at 07:13, Marco Elver <elver@google.com> wrote:
+>
+> --- a/include/linux/compiler-context-analysis.h
+> +++ b/include/linux/compiler-context-analysis.h
+> @@ -6,27 +6,465 @@
+>  #ifndef _LINUX_COMPILER_CONTEXT_ANALYSIS_H
+>  #define _LINUX_COMPILER_CONTEXT_ANALYSIS_H
+>
+> +#if defined(WARN_CONTEXT_ANALYSIS)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511210055.RUsFNku1-lkp@intel.com/
+Note the 400+ added lines to this header...
 
-All errors (new ones prefixed by >>):
+And then note how the header gets used:
 
->> ld.lld: error: undefined symbol: rust_build_error
-   >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-   >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u8, 1>>::from_expr) in archive vmlinux.a
-   >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-   >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u32, 4>>::from_expr) in archive vmlinux.a
-   >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-   >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u16, 8>>::from_expr) in archive vmlinux.a
+> +++ b/scripts/Makefile.context-analysis
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +context-analysis-cflags := -DWARN_CONTEXT_ANALYSIS             \
+> +       -fexperimental-late-parse-attributes -Wthread-safety    \
+> +       -Wthread-safety-pointer -Wthread-safety-beta
+> +
+> +export CFLAGS_CONTEXT_ANALYSIS := $(context-analysis-cflags)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please let's *not* do it this way, where the header contents basically
+get enabled or not based on a compiler flag, but then everybody
+includes this 400+ line file whether they need it or not.
+
+Can we please just make the header file *itself* not have any
+conditionals, and what happens is that the header file is included (or
+not) using a pattern something like
+
+   -include $(srctree)/include/linux/$(context-analysis-header)
+
+instead.
+
+IOW, we'd have three different header files entirely: the "no context
+analysis", the "sparse" and the "clang context analysis" header, and
+instead of having a "-DWARN_CONTEXT_ANALYSIS" define, we'd just
+include the appropriate header automatically.
+
+We already use that "-include" pattern for <linux/kconfig.h> and
+<linux/compiler-version.h>. It's probably what we should have done for
+<linux/compiler.h> and friends too.
+
+The reason I react to things like this is that I've actually seen just
+the parsing of header files being a surprisingly big cost in build
+times. People think that optimizations are expensive, and yes, some of
+them really are, but when a lot of the code we parse is never actually
+*used*, but just hangs out in header files that gets included by
+everybody, the parsing overhead tends to be noticeable. There's a
+reason why most C compilers end up integrating the C pre-processor: it
+avoids parsing and tokenizing things multiple times.
+
+The other reason is that I often use "git grep" for looking up
+definitions of things, and when there are multiple definitions of the
+same thing, I actually find it much more informative when they are in
+two different files than when I see two different definitions (or
+declarations) in the same file and then I have to go look at what the
+#ifdef condition is. In contrast, when it's something where there are
+per-architecture definitions, you *see* that, because the grep results
+come from different header files.
+
+I dunno. This is not a huge deal, but I do think that it would seem to
+be much simpler and more straightforward to treat this as a kind of "N
+different baseline header files" than as "include this one header file
+in everything, and then we'll have #ifdef's for the configuration".
+
+Particularly when that config is not even a global config, but a per-file one.
+
+Hmm? Maybe there's some reason why this suggestion is very
+inconvenient, but please at least consider it.
+
+              Linus
