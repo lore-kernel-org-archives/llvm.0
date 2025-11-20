@@ -1,159 +1,325 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27CD4503B
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 05:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B882FF645;
+	Thu, 20 Nov 2025 08:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763615074; cv=none; b=CdQWwgbkXA6VC2wjB/VARSGVwTo1+AoGOKCWsC1HE/ilbi2sjVckCmpMXD+keBfUL1pWcgSWiyteGKhELeOLIW58nYoX+B2sJ7qILPTTm7omhRPofPxxhyxJMh1YHHwt50mHknFisDKF64H5WlsdISisGH5JQBBjXYmIntxLq4w=
+	t=1763628111; cv=none; b=t2H0d+0TTbL9XTYSW5N5HO0oxMzEZH8V/4r/6yy5S5xRKr741DhS54NH47fHWq/R43Y2GMOJSB1IjmFS7EUVVdfIXqhmkCtKep0l3WCT6hmTF6ltFB6Us3PaqU3dI2V3d09qKuzgzHdOt/zRpirVdKvYwiM8S0WxeqS5oi2Gz7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763615074; c=relaxed/simple;
-	bh=bk1F7lxOAbLVWQoXSdnzvnLRCge3t6S5LAhXQgT9YgY=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=XJwohBVgM4GVbMWBXPWFUi/Ab4BqmSSyEoFHNsNWp9Z7KTCMskihHdOWcVX2n6+sY48yzHAOmrIHTPLdzcewYpmGD8L1/Qr03lgDKTwuWTnKVi9NZMGoLikF811bvdYz1wNTvhyuwbJ+zF6SGM74MFULymVldxD83sWhlzNcg5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UOYPTNL4; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1763628111; c=relaxed/simple;
+	bh=cqxl+IyOWcKo/tRDHpPMwN3FlYVqmhu45UPNVMkoDmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WyxRnGuO0OEZmj0hozO621J3waG3Qmnz1kGTcmxPjYZmJ8DL8JqSxeFepTDqHAoTLkWjrjCBaZL61iGM628k2AFqFj0z//XKrn5WgAbFWGI6L0yKzVBlIDCmdc6xXTceiSw8h30kG8S+FZs/uD+H02vhIYtR30/cw2fGViZYKiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XaWGx2ln; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UOYPTNL4"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-429c82bf86bso248274f8f.1
-        for <llvm@lists.linux.dev>; Wed, 19 Nov 2025 21:04:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763615071; x=1764219871; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=J2ZkCnf5ylAcQjAFa3QNlVX2TckxAQ2S+HyALq/DyeM=;
-        b=UOYPTNL4wDxtda+EGU62SeBTFtvbQ5x0/Vaiix7LFpZOHYMnjPWA/QlNhw+GA2CdEm
-         01BN4rDeLQfXbNVZGY9SGUHsaWPBOuXYcC7uz4FE9Qw+tLdAVsoFEYMOgnFrwlj2zqVw
-         1Yums0NQcMWz1C7/OE2yzwmGFW1T+UyXOgEcE2l4FUnv6yJj/d/KgnF4xGS+e6Hvy3To
-         ZTICFA0qClSGUNRJmebBgcHlyHO/bS19lll8X0ow57MQolXxq8xRTbdeiLWtMpmRo68D
-         q+g1GHjoxkfNuYPKkO9DypU5ubwKEIVYYBoBSDJGMK2ckkn65Q66NHm77CrxNX5W4R2N
-         oXDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763615071; x=1764219871;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J2ZkCnf5ylAcQjAFa3QNlVX2TckxAQ2S+HyALq/DyeM=;
-        b=IcUG5Is5uA5qSVsmo/IL4POv4SbagqAGhphoCSzcAOQpdzy1dJUgkESNAqjw2ED+M3
-         jXL1zSEAjQdZA9zzA+zK2fYLCbnPC1tJoknfVdY5wpRcDjTYlLMzplQK7LOrIs+d/Sd2
-         YBKBQpZUKctBYrs2Sqd4sv/RFML6YroowxvJQrfs38OWLRSU2RTQBKA4zzNV1GoGugjp
-         5MNczz2P+mU7cPwqYvaaUvK7OMWDmaam/1bGUBf/ZvEAFgr6Kjhx50ecGcLN2SR7E4P2
-         jOlSTDQH5KOH9Fl40+Ntd2hDO1DRcPqo+2o1tsQCh57ZMLk4LAuZas3M3skhpE4kOAut
-         T2/A==
-X-Gm-Message-State: AOJu0Yw1XQPxEsqog0XPacQl8II/A93A37EO2t9hdXHiUwE9UfUdgbC0
-	Tg/1FMYvsWRArfhiabDAuHPFO6DxfqwLlkmzDZGg3efRbbSzYTLr4Ciq7P9MPPG2jG3NbFVllry
-	UonqF
-X-Gm-Gg: ASbGnctsDtqQ0D4AJ1tYa+89iDVJByVue6wjw6Roi0XJ+v/6Ho04CX6SuAOe0TzEJk5
-	Kg5eIMxSFK5jnPO1hPE8u4FuK8APLaQoJYIkpWbbGLXl1MKqp/cSOQzjeYV9AKVrjfc0gTMgzII
-	GufAVI3ZwpaFaWjArXLuc9bC8H7gY4uLC+HBG5XQ2MKQoIFBnmYj2fsGMg/GUa4HFHHd4Uhf6Uz
-	EWqtgcmnhem5DGEb5m7ErL6zGHRvOw+FW8ddNizfMHzd/ZwYxYu4B1vGnkngB//93o5WRH5pHDS
-	siiH6Xfq6WpPhFTdBy9K8+hUFMQgd1u7+caY5GQe9xd4Jz/kal+9Aw0W4n0awOSPX8tkYCOJgq3
-	kAhbdxOMy//fswDXard4WmOfESZdS+LaOyx1WcgD0mlb4CENYlOPv5V0+ucq3vlfwbLuZsbTgVw
-	fn537x719xM9ncWFN2yhpTsuE+OPaeh0r6uSmzXpF9u1O4hwaagvTnISCFzg==
-X-Google-Smtp-Source: AGHT+IF4TYHrIEgkmddR7+xtO1rH2Mqd0nhpy5rvdl31+jv8Z7uOiLY64hB4Mv3gM7U6df3X9hagrA==
-X-Received: by 2002:a05:6000:4006:b0:429:cce9:9b76 with SMTP id ffacd0b85a97d-42cb9a5595emr1138422f8f.50.1763615071113;
-        Wed, 19 Nov 2025 21:04:31 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f3635bsm2983069f8f.17.2025.11.19.21.04.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 21:04:29 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Thu, 20 Nov 2025 05:04:29 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1733050262.3851.1763615069939@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-22-init-14314-g3c52f536902b: Failure on
- arm
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XaWGx2ln"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763628109; x=1795164109;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cqxl+IyOWcKo/tRDHpPMwN3FlYVqmhu45UPNVMkoDmI=;
+  b=XaWGx2lnUZEemYLb3em3zyX1ct+4ZPBHrEN4Jj5c2H9ZKIz/TnbW/kWs
+   +IJ6Vn9mbalPA856yhf0ZsnrWd+pI6uUIHoXBNLvhIbu4hf+8K2eUZSdz
+   FEtIjH7r5gc8Voyp7v85tN1qzxPkHVXPQMeI3qJ4ishICDdOiSwF9D/cV
+   Z4ohInCwU8phO64tQaD4yyIjauJCHkbVozGzkOmZV0eTDjRt5icuMtU4U
+   ngXAWa6si6rfQfek8Ws4voHdmWpQGGNOHgnpRsHxvtitmtirhjY5t+VYB
+   /P0Hsy2FmptlXg01+qG5VpmIz/ZoS80sSMNccJyYTqrxkYptOmiwT5Iyp
+   Q==;
+X-CSE-ConnectionGUID: 5gVi0nEsSuCp5h40fGFlmA==
+X-CSE-MsgGUID: bB7TyQ2dR0CVVvc+u6FWng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="68295795"
+X-IronPort-AV: E=Sophos;i="6.19,317,1754982000"; 
+   d="scan'208";a="68295795"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 00:41:47 -0800
+X-CSE-ConnectionGUID: nyAeXKxYQR+eXBe+0BjcFg==
+X-CSE-MsgGUID: 4rYd4p4vQ3K97EKMM0T3ug==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 20 Nov 2025 00:41:45 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vM0EY-0003mb-2B;
+	Thu, 20 Nov 2025 08:41:42 +0000
+Date: Thu, 20 Nov 2025 16:40:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lucas Zampieri <lzampier@redhat.com>, linux-input@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lucas Zampieri <lzampier@redhat.com>, linux-kernel@vger.kernel.org,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] HID: input: Add support for multiple batteries
+ per device
+Message-ID: <202511201651.tkKTEKpn-lkp@intel.com>
+References: <20251119143005.1513531-2-lzampier@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_3850_1023125889.1763615069145"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251119143005.1513531-2-lzampier@redhat.com>
 
-------=_Part_3850_1023125889.1763615069145
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Lucas,
 
-Dear contributor,
+kernel test robot noticed the following build errors:
 
-Our automatic CI has detected problems related to your patch(es). Please fi=
-nd some details below.
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on dtor-input/for-linus linus/master v6.18-rc6 next-20251119]
+[cannot apply to dtor-input/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In tcwg_kernel/llvm-master-arm-next-allmodconfig, after:
-  | commit llvmorg-22-init-14314-g3c52f536902b
-  | Author: Tuomas K=C3=A4rn=C3=A4 <tuomas.karna@intel.com>
-  | Date:   Wed Nov 12 12:24:23 2025 +0200
-  |=20
-  |     [MLIR][XeGPU][TransformOps] Add insert_prefetch op (#167356)
-  |    =20
-  |     Adds `transform.xegpu.insert_prefetch` transform op that inserts
-  |     `xegpu.prefetch_nd` ops for the given `Value` in an `scf.for` loop.
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Zampieri/HID-input-Add-support-for-multiple-batteries-per-device/20251119-223834
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20251119143005.1513531-2-lzampier%40redhat.com
+patch subject: [PATCH v3 1/1] HID: input: Add support for multiple batteries per device
+config: um-defconfig (https://download.01.org/0day-ci/archive/20251120/202511201651.tkKTEKpn-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251120/202511201651.tkKTEKpn-lkp@intel.com/reproduce)
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 36179
-  | # linux build successful:
-  | all
-  | # First few build errors in logs:
-  |=20
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 36179
-  | # linux build successful:
-  | all
-  | # linux boot successful:
-  | boot
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511201651.tkKTEKpn-lkp@intel.com/
 
-Used configuration :
- tcwg_kernel/llvm-master-arm-next-allmodconfig
+All errors (new ones prefixed by >>):
 
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-212=
-3. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolc=
-hain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<=
---------------------------
-
-The information below contains the details of the failures, and the ways to=
- reproduce a debug environment:
+>> drivers/hid/hid-input.c:1550:4: error: call to undeclared function 'hidinput_update_battery'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1550 |                         hidinput_update_battery(bat, usage->hid, value);
+         |                         ^
+   1 error generated.
 
 
+vim +/hidinput_update_battery +1550 drivers/hid/hid-input.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-ne=
-xt-allmodconfig-build/411/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-ne=
-xt-allmodconfig-build/410/artifact/artifacts
+  1536	
+  1537	void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct hid_usage *usage, __s32 value)
+  1538	{
+  1539		struct input_dev *input;
+  1540		struct hid_report *report = field->report;
+  1541		unsigned *quirks = &hid->quirks;
+  1542	
+  1543		if (!usage->type)
+  1544			return;
+  1545	
+  1546		if (usage->type == EV_PWR) {
+  1547			struct hid_battery *bat = hidinput_find_battery(hid, report->id);
+  1548	
+  1549			if (bat)
+> 1550				hidinput_update_battery(bat, usage->hid, value);
+  1551			return;
+  1552		}
+  1553	
+  1554		if (!field->hidinput)
+  1555			return;
+  1556	
+  1557		input = field->hidinput->input;
+  1558	
+  1559		if (usage->hat_min < usage->hat_max || usage->hat_dir) {
+  1560			int hat_dir = usage->hat_dir;
+  1561			if (!hat_dir)
+  1562				hat_dir = (value - usage->hat_min) * 8 / (usage->hat_max - usage->hat_min + 1) + 1;
+  1563			if (hat_dir < 0 || hat_dir > 8) hat_dir = 0;
+  1564			input_event(input, usage->type, usage->code    , hid_hat_to_axis[hat_dir].x);
+  1565			input_event(input, usage->type, usage->code + 1, hid_hat_to_axis[hat_dir].y);
+  1566			return;
+  1567		}
+  1568	
+  1569		/*
+  1570		 * Ignore out-of-range values as per HID specification,
+  1571		 * section 5.10 and 6.2.25, when NULL state bit is present.
+  1572		 * When it's not, clamp the value to match Microsoft's input
+  1573		 * driver as mentioned in "Required HID usages for digitizers":
+  1574		 * https://msdn.microsoft.com/en-us/library/windows/hardware/dn672278(v=vs.85).asp
+  1575		 *
+  1576		 * The logical_minimum < logical_maximum check is done so that we
+  1577		 * don't unintentionally discard values sent by devices which
+  1578		 * don't specify logical min and max.
+  1579		 */
+  1580		if ((field->flags & HID_MAIN_ITEM_VARIABLE) &&
+  1581		    field->logical_minimum < field->logical_maximum) {
+  1582			if (field->flags & HID_MAIN_ITEM_NULL_STATE &&
+  1583			    (value < field->logical_minimum ||
+  1584			     value > field->logical_maximum)) {
+  1585				dbg_hid("Ignoring out-of-range value %x\n", value);
+  1586				return;
+  1587			}
+  1588			value = clamp(value,
+  1589				      field->logical_minimum,
+  1590				      field->logical_maximum);
+  1591		}
+  1592	
+  1593		switch (usage->hid) {
+  1594		case HID_DG_ERASER:
+  1595			report->tool_active |= !!value;
+  1596	
+  1597			/*
+  1598			 * if eraser is set, we must enforce BTN_TOOL_RUBBER
+  1599			 * to accommodate for devices not following the spec.
+  1600			 */
+  1601			if (value)
+  1602				hid_report_set_tool(report, input, BTN_TOOL_RUBBER);
+  1603			else if (report->tool != BTN_TOOL_RUBBER)
+  1604				/* value is off, tool is not rubber, ignore */
+  1605				return;
+  1606			else if (*quirks & HID_QUIRK_NOINVERT &&
+  1607				 !test_bit(BTN_TOUCH, input->key)) {
+  1608				/*
+  1609				 * There is no invert to release the tool, let hid_input
+  1610				 * send BTN_TOUCH with scancode and release the tool after.
+  1611				 */
+  1612				hid_report_release_tool(report, input, BTN_TOOL_RUBBER);
+  1613				return;
+  1614			}
+  1615	
+  1616			/* let hid-input set BTN_TOUCH */
+  1617			break;
+  1618	
+  1619		case HID_DG_INVERT:
+  1620			report->tool_active |= !!value;
+  1621	
+  1622			/*
+  1623			 * If invert is set, we store BTN_TOOL_RUBBER.
+  1624			 */
+  1625			if (value)
+  1626				hid_report_set_tool(report, input, BTN_TOOL_RUBBER);
+  1627			else if (!report->tool_active)
+  1628				/* tool_active not set means Invert and Eraser are not set */
+  1629				hid_report_release_tool(report, input, BTN_TOOL_RUBBER);
+  1630	
+  1631			/* no further processing */
+  1632			return;
+  1633	
+  1634		case HID_DG_INRANGE:
+  1635			report->tool_active |= !!value;
+  1636	
+  1637			if (report->tool_active) {
+  1638				/*
+  1639				 * if tool is not set but is marked as active,
+  1640				 * assume ours
+  1641				 */
+  1642				if (!report->tool)
+  1643					report->tool = usage->code;
+  1644	
+  1645				/* drivers may have changed the value behind our back, resend it */
+  1646				hid_report_set_tool(report, input, report->tool);
+  1647			} else {
+  1648				hid_report_release_tool(report, input, usage->code);
+  1649			}
+  1650	
+  1651			/* reset tool_active for the next event */
+  1652			report->tool_active = false;
+  1653	
+  1654			/* no further processing */
+  1655			return;
+  1656	
+  1657		case HID_DG_TIPSWITCH:
+  1658			report->tool_active |= !!value;
+  1659	
+  1660			/* if tool is set to RUBBER we should ignore the current value */
+  1661			if (report->tool == BTN_TOOL_RUBBER)
+  1662				return;
+  1663	
+  1664			break;
+  1665	
+  1666		case HID_DG_TIPPRESSURE:
+  1667			if (*quirks & HID_QUIRK_NOTOUCH) {
+  1668				int a = field->logical_minimum;
+  1669				int b = field->logical_maximum;
+  1670	
+  1671				if (value > a + ((b - a) >> 3)) {
+  1672					input_event(input, EV_KEY, BTN_TOUCH, 1);
+  1673					report->tool_active = true;
+  1674				}
+  1675			}
+  1676			break;
+  1677	
+  1678		case HID_UP_PID | 0x83UL: /* Simultaneous Effects Max */
+  1679			dbg_hid("Maximum Effects - %d\n",value);
+  1680			return;
+  1681	
+  1682		case HID_UP_PID | 0x7fUL:
+  1683			dbg_hid("PID Pool Report\n");
+  1684			return;
+  1685		}
+  1686	
+  1687		switch (usage->type) {
+  1688		case EV_KEY:
+  1689			if (usage->code == 0) /* Key 0 is "unassigned", not KEY_UNKNOWN */
+  1690				return;
+  1691			break;
+  1692	
+  1693		case EV_REL:
+  1694			if (usage->code == REL_WHEEL_HI_RES ||
+  1695			    usage->code == REL_HWHEEL_HI_RES) {
+  1696				hidinput_handle_scroll(usage, input, value);
+  1697				return;
+  1698			}
+  1699			break;
+  1700	
+  1701		case EV_ABS:
+  1702			if ((field->flags & HID_MAIN_ITEM_RELATIVE) &&
+  1703			    usage->code == ABS_VOLUME) {
+  1704				int count = abs(value);
+  1705				int direction = value > 0 ? KEY_VOLUMEUP : KEY_VOLUMEDOWN;
+  1706				int i;
+  1707	
+  1708				for (i = 0; i < count; i++) {
+  1709					input_event(input, EV_KEY, direction, 1);
+  1710					input_sync(input);
+  1711					input_event(input, EV_KEY, direction, 0);
+  1712					input_sync(input);
+  1713				}
+  1714				return;
+  1715	
+  1716			} else if (((*quirks & HID_QUIRK_X_INVERT) && usage->code == ABS_X) ||
+  1717				   ((*quirks & HID_QUIRK_Y_INVERT) && usage->code == ABS_Y))
+  1718				value = field->logical_maximum - value;
+  1719			break;
+  1720		}
+  1721	
+  1722		/*
+  1723		 * Ignore reports for absolute data if the data didn't change. This is
+  1724		 * not only an optimization but also fixes 'dead' key reports. Some
+  1725		 * RollOver implementations for localized keys (like BACKSLASH/PIPE; HID
+  1726		 * 0x31 and 0x32) report multiple keys, even though a localized keyboard
+  1727		 * can only have one of them physically available. The 'dead' keys
+  1728		 * report constant 0. As all map to the same keycode, they'd confuse
+  1729		 * the input layer. If we filter the 'dead' keys on the HID level, we
+  1730		 * skip the keycode translation and only forward real events.
+  1731		 */
+  1732		if (!(field->flags & (HID_MAIN_ITEM_RELATIVE |
+  1733		                      HID_MAIN_ITEM_BUFFERED_BYTE)) &&
+  1734				      (field->flags & HID_MAIN_ITEM_VARIABLE) &&
+  1735		    usage->usage_index < field->maxusage &&
+  1736		    value == field->value[usage->usage_index])
+  1737			return;
+  1738	
+  1739		/* report the usage code as scancode if the key status has changed */
+  1740		if (usage->type == EV_KEY &&
+  1741		    (!test_bit(usage->code, input->key)) == value)
+  1742			input_event(input, EV_MSC, MSC_SCAN, usage->hid);
+  1743	
+  1744		input_event(input, usage->type, usage->code, value);
+  1745	
+  1746		if ((field->flags & HID_MAIN_ITEM_RELATIVE) &&
+  1747		    usage->type == EV_KEY && value) {
+  1748			input_sync(input);
+  1749			input_event(input, usage->type, usage->code, 0);
+  1750		}
+  1751	}
+  1752	
 
-Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/i=
-nteresting-commits/-/raw/master/llvm/sha1/3c52f536902b1f4096e25e0e73bc3c263=
-55cbf40/tcwg_kernel/llvm-master-arm-next-allmodconfig/reproduction_instruct=
-ions.txt
-
-Full commit : https://github.com/llvm/llvm-project/commit/3c52f536902b1f409=
-6e25e0e73bc3c26355cbf40
-------=_Part_3850_1023125889.1763615069145--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
