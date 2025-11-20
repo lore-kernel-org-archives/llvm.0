@@ -1,55 +1,55 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62102E7657
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E1F3587AF
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763650992; cv=none; b=RqB1SwX/3KtyJUxtZJFcc33SVpqGetyr3TGvygyeFhryxP/ceb5ECNBTOjGQfJgTGxtYPk0zRw3lE/WO+A4W9qtBkQPNI9qYJ967s5PDNR5SsFv2au4993eLzWxgZiC7db/zDNOI9/Gl1o47BzRsw3jxWIhvWVQRr3DihVduIcU=
+	t=1763651508; cv=none; b=YfGttezd28pwsqtrBzMxgkpTswRjrMZJoxHYC/K0Ic4fAA74/6AKJ46md9u/tomhZRaij6kZuE3+GxHlBElHlUOOJX3cSaezpCY4nKLGL119xKPnxsvN1e+DJT0AFF5QkbdttZmFnxl8ymKd/xw4GISeNvmB6W+J878yaD9mCBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763650992; c=relaxed/simple;
-	bh=eBDUdyy/+hf0zNW0yP0X5FX5kRPqZGLn6VJLXyEfqFo=;
+	s=arc-20240116; t=1763651508; c=relaxed/simple;
+	bh=kPQ7Y4ibZ70noLRvRuj0t3W6aiDQGYUeUC0Oe4+OJBw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PMlZgBT5xTYfopNZoyi73z/ScJH4GPsfz+kNVdR9OYu+Li348GUDMH1BN7rHyfdDauACnfsqSYU76m27XB0+UDT2RPvwgnyF4sFzNNiFnzvrVd+JSSJFbOLNjjoBibwqJUNK1Ya2T7wcssoLW4PCMr3n5dg42cf8gnQBi/Tar9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Oy7F7cPt; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=UI3EBD4VucrJajHz7OqX6glCryceqUnVNzcnvPUkf4909RftUzE/Cw23MrbVbulOhHnDuFhJfBT/iYHLRWrrPj2817L3fYucedFbEo8kQ0UheD+HMN5TqyuQ5CiZ3ZShrdIdRWzRgAGsonxOYebjz03v7xn8pYw16M7IDTn8D7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zE8wZExF; arc=none smtp.client-ip=209.85.218.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Oy7F7cPt"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779da35d27so12324075e9.3
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:02:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zE8wZExF"
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b735eea0bddso89968566b.2
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:11:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763650973; x=1764255773; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763651496; x=1764256296; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lIkqaT4GZQQ8I2xtRoztfiZr8q25ife+cBqIcslh3gQ=;
-        b=Oy7F7cPt1Qz6CTmCWSs6/ExDGXhtpDzQofKx9XTNOxuV4qapCLPtsmVpeSnXuHaodi
-         9uXj1ckbzRb+AJ8Gif1NejX82hpTpjoYYvLaCyigUG0KwM669gS7tD1k83pXGKw00Rlw
-         fvjPd+ipKZ/rQssEslnf0ErPyQLVHO4xSZFd7rox8T6WrUWLkOXDnmFYXar7tsmklB37
-         z4H1bm8K6c4Ewdiw8jhtLFQuhA5MphP5W0rDRYS4kB/DUaXZBiy9sAFRMWm2nhoNwJhL
-         BUXZzH8NkuqgU91HGw77ztykfkeBt1I6OQ8drbFHbfd+r3wQZgOeY+jOjz3eA+mFfyDs
-         pRkQ==
+        bh=aQzgcISd2vbQZXtJWGq+JJNhDcvZ3ay3Xv8naW52gEo=;
+        b=zE8wZExF4ddIpUcQD7z4l4p0Td2guPvyovlGr2X4slm9ANrWGgi21oYrnUgUUpCyGR
+         xBcIS1Px/EGPP5FzfNweVZfjD+g8ckKP66jA7jqx8SnWso6dmzQh61r2Rosh2pAKJfag
+         fwTV7bJZhr2ozX7woDY2Cd/3qKpjdu02MD1D1OxHyR2itAI0b5qEUXx7ACFMNnsM6bby
+         HaWYb+LxV/LP0zd1ioRRuYpWTxDsk8lrLxUAqwWEIcFpa1I+adGYNXDpQIcZRmEhKIBJ
+         2TYEGT/EDgSKNh2J1QGPeO2yX+DzM7DUHaEZwZqI4LcRzZfDkX/lJGIYPbwDR8v68Ix6
+         NS1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763650973; x=1764255773;
+        d=1e100.net; s=20230601; t=1763651496; x=1764256296;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lIkqaT4GZQQ8I2xtRoztfiZr8q25ife+cBqIcslh3gQ=;
-        b=U0rXKPxSVe5TqWNtNiDjygprmoI26mtKb5TIkQNxwh7gpBExkKd6Flk7ZxHJcekmtO
-         99MP6wbQdUe1EJaa1GqN/M2M0EkD+kRB/zG29BOQJeZQdzlM262Q9TMslw/AZ+k+LSNu
-         /zIYJTX8TH+Md5qn7ZoX6FRv9blMOHL+QFxtL5+BXq2gK+T/lXJwuDuocQDRH9S4hCdU
-         46MbOmETFzPrc7ZAeObs/S3HUEV1fyq74al+0eb2fRIjuaodmM3BqpkoYE4MxmRMpnal
-         mAxrfsvLwLEx9Ir/Ml5eN+ootQGsJ4j3RggZNmCc5X7dsWY2BNzeLY1z5zYA2pE2PQKG
-         C/1A==
-X-Forwarded-Encrypted: i=1; AJvYcCW4IBckmZDUKULdnnoykDikwOFNqj8Yh7NMe7CDaPfyWXqJsLN1E1+rpY8UiDAJfQSbn6fi@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBVr37OtL9XwWCMjV/ynIFQWfAI3t0IvS1SWB9uBAX9MbBOWKJ
-	RW8rz0osrHvwqIYYVfzrUybuPJUtqzTnas68U5+qoHpwWIEvw3AjUY8uzEw2uQPBkykd6O82JOg
-	OzQ==
-X-Google-Smtp-Source: AGHT+IE7SKgiCw/02hArGI9zujP0xPyrpw65qFKPWhHBeestq9lQVOSID1Bw6HemoDi2xS2ktBePcnke9A==
-X-Received: from wmrm14.prod.google.com ([2002:a05:600c:37ce:b0:46e:4c7c:5162])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:470d:b0:477:9cdb:e32e
- with SMTP id 5b1f17b1804b1-477b8a50e80mr28447795e9.9.1763650973180; Thu, 20
- Nov 2025 07:02:53 -0800 (PST)
-Date: Thu, 20 Nov 2025 15:49:05 +0100
+        bh=aQzgcISd2vbQZXtJWGq+JJNhDcvZ3ay3Xv8naW52gEo=;
+        b=JuB5C+pt7j0RJBx0Q3Utp8LnV8qmi4cZkbJKnEgCYCnm+IGU7S/j4yfAkcIbG2RGj1
+         JnGvS42lScl+ach84cRKeB00QwoShBKO335LeFJcovVDyInPKF0OzSeWDKaQk+yNZoSA
+         g5F3uUDkDPwVExhAaxFgmjVNzNmjhgKz5oUTW1a3Q+Zk3yT28A/bMPmChNY3nAsSojJR
+         iEZ9m/72WwCmGD6RvTAsskGlpBmCIIiErd7dyC5tS4HC5o34v1pvPTFvIXseyYyss34M
+         NmVsanU7v9YssBkF9V/EUvI2OHfpN28Vl+r75T51TKzUuo+4xbA49SQsYgixKBfPSwZk
+         cBpw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWAGv3/PwjPVFgZiQ6rHHuFWodtvEh1DOeZzEVJcXzBulAhsSsjpGGqKepsepow4C6/Mh5@lists.linux.dev
+X-Gm-Message-State: AOJu0YwoJd7+sI3NRpvzBgDlKk+CbhvcklXnDFCjiRdswagW1XXhCbGy
+	OyuOeNjwKliujUyobAniSBj1LoTtYTBQHz8zoizjW1TBPu+qLCQ20mmxImUkj0IJidbGyA9PMTx
+	b1Q==
+X-Google-Smtp-Source: AGHT+IHtFDUbBCcz68B5yl4+E7U+1inKytiJmjNdpXX9LnNqAnRdSUSbK1o8WJIs9ZzP1T0fmeAlZls5iQ==
+X-Received: from ejbrp28.prod.google.com ([2002:a17:906:d97c:b0:b72:41e4:7558])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:9812:b0:b6d:5b4d:7277
+ with SMTP id a640c23a62f3a-b76550b65a3mr361991766b.0.1763651495821; Thu, 20
+ Nov 2025 07:11:35 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:31 +0100
 In-Reply-To: <20251120145835.3833031-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120145835.3833031-5-elver@google.com>
-Subject: [PATCH v4 03/35] compiler-context-analysis: Add test stub
+Message-ID: <20251120151033.3840508-7-elver@google.com>
+Subject: [PATCH v4 06/35] cleanup: Basic compatibility with context analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,81 +87,122 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add a simple test stub where we will add common supported patterns that
-should not generate false positive of each new supported context guard.
+Introduce basic compatibility with cleanup.h infrastructure: introduce
+DECLARE_LOCK_GUARD_*_ATTRS() helpers to add attributes to constructors
+and destructors respectively.
+
+Note: Due to the scoped cleanup helpers used for lock guards wrapping
+acquire and release around their own constructors/destructors that store
+pointers to the passed locks in a separate struct, we currently cannot
+accurately annotate *destructors* which lock was released. While it's
+possible to annotate the constructor to say which lock was acquired,
+that alone would result in false positives claiming the lock was not
+released on function return.
+
+Instead, to avoid false positives, we can claim that the constructor
+"assumes" that the taken lock is held via __assumes_ctx_guard().
+
+This will ensure we can still benefit from the analysis where scoped
+guards are used to protect access to guarded variables, while avoiding
+false positives. The only downside are false negatives where we might
+accidentally lock the same lock again:
+
+	raw_spin_lock(&my_lock);
+	...
+	guard(raw_spinlock)(&my_lock);  // no warning
+
+Arguably, lockdep will immediately catch issues like this.
+
+While Clang's analysis supports scoped guards in C++ [1], there's no way
+to apply this to C right now. Better support for Linux's scoped guard
+design could be added in future if deemed critical.
+
+[1] https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#scoped-context
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v4:
 * Rename capability -> context analysis.
----
- lib/Kconfig.debug           | 14 ++++++++++++++
- lib/Makefile                |  3 +++
- lib/test_context-analysis.c | 18 ++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 lib/test_context-analysis.c
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 696e2a148a15..0c499d22407c 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2833,6 +2833,20 @@ config LINEAR_RANGES_TEST
+v3:
+* Add *_ATTRS helpers instead of implicit __assumes_cap (suggested by Peter)
+* __assert -> __assume rename
+---
+ include/linux/cleanup.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
+index 2573585b7f06..4f5e9ea02f54 100644
+--- a/include/linux/cleanup.h
++++ b/include/linux/cleanup.h
+@@ -274,16 +274,21 @@ const volatile void * __must_check_fn(const volatile void *val)
  
- 	  If unsure, say N.
+ #define DEFINE_CLASS(_name, _type, _exit, _init, _init_args...)		\
+ typedef _type class_##_name##_t;					\
++typedef _type lock_##_name##_t;						\
+ static inline void class_##_name##_destructor(_type *p)			\
++	__no_context_analysis						\
+ { _type _T = *p; _exit; }						\
+ static inline _type class_##_name##_constructor(_init_args)		\
++	__no_context_analysis						\
+ { _type t = _init; return t; }
  
-+config CONTEXT_ANALYSIS_TEST
-+	bool "Compiler context-analysis warnings test"
-+	depends on EXPERT
-+	help
-+	  This builds the test for compiler-based context analysis. The test
-+	  does not add executable code to the kernel, but is meant to test that
-+	  common patterns supported by the analysis do not result in false
-+	  positive warnings.
-+
-+	  When adding support for new context guards, it is strongly recommended
-+	  to add supported patterns to this test.
-+
-+	  If unsure, say N.
-+
- config CMDLINE_KUNIT_TEST
- 	tristate "KUnit test for cmdline API" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index 1ab2c4be3b66..59ed5f881bcb 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -329,4 +329,7 @@ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ #define EXTEND_CLASS(_name, ext, _init, _init_args...)			\
++typedef lock_##_name##_t lock_##_name##ext##_t;			\
+ typedef class_##_name##_t class_##_name##ext##_t;			\
+ static inline void class_##_name##ext##_destructor(class_##_name##_t *p)\
+ { class_##_name##_destructor(p); }					\
+ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
++	__no_context_analysis \
+ { class_##_name##_t t = _init; return t; }
  
- obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
+ #define CLASS(_name, var)						\
+@@ -461,12 +466,14 @@ _label:									\
+  */
  
-+CONTEXT_ANALYSIS_test_context-analysis.o := y
-+obj-$(CONFIG_CONTEXT_ANALYSIS_TEST) += test_context-analysis.o
+ #define __DEFINE_UNLOCK_GUARD(_name, _type, _unlock, ...)		\
++typedef _type lock_##_name##_t;						\
+ typedef struct {							\
+ 	_type *lock;							\
+ 	__VA_ARGS__;							\
+ } class_##_name##_t;							\
+ 									\
+ static inline void class_##_name##_destructor(class_##_name##_t *_T)	\
++	__no_context_analysis						\
+ {									\
+ 	if (!__GUARD_IS_ERR(_T->lock)) { _unlock; }			\
+ }									\
+@@ -475,6 +482,7 @@ __DEFINE_GUARD_LOCK_PTR(_name, &_T->lock)
+ 
+ #define __DEFINE_LOCK_GUARD_1(_name, _type, _lock)			\
+ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
++	__no_context_analysis 						\
+ {									\
+ 	class_##_name##_t _t = { .lock = l }, *_T = &_t;		\
+ 	_lock;								\
+@@ -483,6 +491,7 @@ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
+ 
+ #define __DEFINE_LOCK_GUARD_0(_name, _lock)				\
+ static inline class_##_name##_t class_##_name##_constructor(void)	\
++	__no_context_analysis						\
+ {									\
+ 	class_##_name##_t _t = { .lock = (void*)1 },			\
+ 			 *_T __maybe_unused = &_t;			\
+@@ -490,6 +499,14 @@ static inline class_##_name##_t class_##_name##_constructor(void)	\
+ 	return _t;							\
+ }
+ 
++#define DECLARE_LOCK_GUARD_0_ATTRS(_name, _lock, _unlock)		\
++static inline class_##_name##_t class_##_name##_constructor(void) _lock;\
++static inline void class_##_name##_destructor(class_##_name##_t *_T) _unlock;
 +
- subdir-$(CONFIG_FORTIFY_SOURCE) += test_fortify
-diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
-new file mode 100644
-index 000000000000..68f075dec0e0
---- /dev/null
-+++ b/lib/test_context-analysis.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Compile-only tests for common patterns that should not generate false
-+ * positive errors when compiled with Clang's context analysis.
-+ */
++#define DECLARE_LOCK_GUARD_1_ATTRS(_name, _lock, _unlock)		\
++static inline class_##_name##_t class_##_name##_constructor(lock_##_name##_t *_T) _lock;\
++static inline void class_##_name##_destructor(class_##_name##_t *_T) _unlock;
 +
-+#include <linux/build_bug.h>
-+
-+/*
-+ * Test that helper macros work as expected.
-+ */
-+static void __used test_common_helpers(void)
-+{
-+	BUILD_BUG_ON(context_unsafe(3) != 3); /* plain expression */
-+	BUILD_BUG_ON(context_unsafe((void)2; 3) != 3); /* does not swallow semi-colon */
-+	BUILD_BUG_ON(context_unsafe((void)2, 3) != 3); /* does not swallow commas */
-+	context_unsafe(do { } while (0)); /* works with void statements */
-+}
+ #define DEFINE_LOCK_GUARD_1(_name, _type, _lock, _unlock, ...)		\
+ __DEFINE_CLASS_IS_CONDITIONAL(_name, false);				\
+ __DEFINE_UNLOCK_GUARD(_name, _type, _unlock, __VA_ARGS__)		\
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
