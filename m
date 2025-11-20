@@ -1,55 +1,55 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184B2363C60
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3078236215D
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651624; cv=none; b=QE2GpipDvjxVm+MlcjjO3aKW6sfuOBE8H1vS+FlGjy2BNL6fqCF8YehvKfllpsQfsbgHFC0Kxh0qBq9z2F2eBemkBDms9U8A4RGEA/QglZd7hEuvuKUretwRLl+kkyN8LXCgYeGmStS61MfDsi1jmAGc5mUWJ/EBQjaBJYZlNYw=
+	t=1763651627; cv=none; b=C+bwGThy7HRO6jPrdayl5czCabscpxIGaPWU22OhNksXaX2RDAt8ZleZMAA/c65zl7zqOpc4N2ZWf9ogTwXucqSKuMQYw9mZNGTqnCNXqu0qYqf+e5hHc2vFFRLvEiyPc1RdcwiIyUU60KARLdGrORmVNwKOM21fcnItRhQrCFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651624; c=relaxed/simple;
-	bh=uf1gzv7z8skOrRT4+VFvC3of+qZ1MAXWLNFNhiBTmcE=;
+	s=arc-20240116; t=1763651627; c=relaxed/simple;
+	bh=ns3DYUnt32Y6bCDTYyQa3OW5L2DdvIEspeWXpXn2KHo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PNZZN4p9NN4e5AFBRe614QYtBYdGMpv/QHm25qfTjXIPIUiV4EIrPjBoQwkxDTg8fbbTBWNgD55pv2jjyqp2QdrC5+yXq3h/ItQOARGtWJTfrm0Jvis+EIRm8xWQufFpXwwS/Js32fJTCAHIhxPAKpg8v6x9e0QwDycHx5oBZeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=URwlXLIF; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=X7SsMIMQ8lF88DnpIszBs0QNiIuMmtuy2yJlIa9NnOIcU7GxLREI65jIKLd5ESgAd+OFUYmZTqrl/6xZMqCEF3Zf1YNof36KNk9z7xi1rjfSt0ncr+GxSP9nTaQFboichZsJ4cOgcf33bZJQf4VxlMjMzu7Ua0qQu1ojM9rYIDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hMlgd7C/; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="URwlXLIF"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779b3749a8so8953945e9.1
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:13:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hMlgd7C/"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4775e00b16fso6917305e9.2
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:13:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651599; x=1764256399; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763651589; x=1764256389; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FM+v7kmKwxv6mQJTQvhb3JUsaW+ES8Jzb95oMtr52Zo=;
-        b=URwlXLIFUXLOnWyPDQUyXF9inv3dIFudc2jppzZzDRgBg37++UXEdnyDZw8XHADuwG
-         lkkyeUTPtE8vdaJ7OPfE91YRIRxnsjyDkaTtt7GPitQlFrxMLaU06wv6WpVEiAxRNAEj
-         L94b0KhsleM9jXEJ6W+vxsyM2MJ1nDqg6DwetdalT25Owd9Hyz7+hIRx4SmJO2nPnIce
-         snVTMdNSoEW8kj1zoKFhVpXpendsTR2I1Ai/tDI1SgQuUHROIBbjoqm22AB8larig2BK
-         DCVDYRDYNUu9+ORcYIVNT0KVpGqehLCSGTu0manaCNIDT3Nw8CCpq++fWJ3nqZ+8lANU
-         8R2Q==
+        bh=dkmPbZNSmdMyreEK/bsAoZcLQrwuNTqttZsMG2m8BsQ=;
+        b=hMlgd7C/aZ44Pp+mZi7ZrCwDQrp067snXdqL6Q8Ioce0p7mXJVhnk7vN/vkTFQWixB
+         jA4qIWPbVC4qnJEYcXUMpoeHbe4cRzGHJUncqTSkM8IGdQs6oeJ5ZQ6UZm1hD8jrHPu2
+         AtYvyjr6mP2S4X+0HQCnzUh/A1rTAhsg3cPaXYmvPdgGmn8vxEUh76oA4dVW34GdUOJ9
+         RtDAzXYtVompqRisxWGEWhwdllii6aipf3oD8YqjmOF+O4hknVpQgxzjJDXwpHGZ4MfJ
+         Gv2GXNV3TzRgVpLRhrOLUA2OGanmsC7stFyUR+R8l7zQmbHnbThjugyWvAhRGaT8d7d0
+         J+7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651599; x=1764256399;
+        d=1e100.net; s=20230601; t=1763651589; x=1764256389;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FM+v7kmKwxv6mQJTQvhb3JUsaW+ES8Jzb95oMtr52Zo=;
-        b=PezJGy0RM3AN1+ne4u6VOHX6drs7o/D1ECWnJE4/PyjAvZEcOVD1pA6HL6zYgXh8YI
-         zGZ178QqLMka2Us+DfzfgXqA/yRmku47StDJmrNiTLT8wwhPXvVkWeDOgyRCr+kbLUsP
-         aogkI0idbYVPzaWJXzhgtK8EmdSDUlPbCmKe1O3d5Xx/sHoVsz6TjEVy/i677grXG5Jb
-         XfEpOKwxpeEVxgKxvr2oa+7Pc4/FJnLlJiCEhvuy3mHeRnA8wwEwwLMriB9ptm0ZbhBZ
-         SsMt7nAMLWbXebymYGsf58sysyXcp50pyj1ztRSDZEnnMVwNu/QhDOh/KcZgpRvTMVrb
-         rmHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+0LWINPLJiHSYKzjarlgU7cJ31nb9XC4905VyLm6qIuxBesU3bKMXVAgEywDn8TjqAL3D@lists.linux.dev
-X-Gm-Message-State: AOJu0YyxvnhlLpVzc1O5ChPOINjaegD+XYCDaa1V42HQ8SnRqgF7+WtI
-	vWwdnPdci4825RoQZ+5AZUjcpMgVSTWxnPCLu3kz0BUT0Ytif2Tc0pDz6Unc2fBH9r33H5N+FPg
-	Wkg==
-X-Google-Smtp-Source: AGHT+IFa8gcAYDmSbcN98uTmCv7ow2f9WIs4txwLFz3cf4q2hwFdJRSgsIcTcuSjJZmiASAfOgD6nIwlVA==
-X-Received: from wmgi8.prod.google.com ([2002:a05:600c:2d88:b0:475:d94e:4d5d])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:458e:b0:46e:396b:f5ae
- with SMTP id 5b1f17b1804b1-477bac0cfb5mr29573045e9.16.1763651595671; Thu, 20
- Nov 2025 07:13:15 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:47 +0100
+        bh=dkmPbZNSmdMyreEK/bsAoZcLQrwuNTqttZsMG2m8BsQ=;
+        b=d7aZHjpIch/ppGaqjVd72ijqyPUU2gwXxO2d37l8hU9lGCtC3mzSAT3VvqPdjgdmrQ
+         BRDJeG+NPgyO9J8J/6zkH6TR/M7lA2r3/oiikpTXloe7Pvd0tkVvamCRMRqzR8K95Y20
+         6QH1HYKpYo+DNDjUw6m4hb/VUTI9dCNRFwTxSEwCPrAJOu158J32H4H1VJzbf8F+jcLS
+         7ET3atcsIubt9LtF+DDPo7A1BcVwxWUhT/TpQZUbM8t1PQQ7pVQVXpb0zDyZQa0sgpmp
+         eQIBXBXIwbmMWBfW/clJtpLwi96HzUG66tsmfFjOckePrrxeJrXd+9IF9QArTf2UtLw6
+         W+wg==
+X-Forwarded-Encrypted: i=1; AJvYcCW6s0S8/CyyN+QW2HQG9dwUHwMjGN4J6TfyIg/EY/tUjyjuk0UxCTyC7Dg/3Hg6zs4WH4xe@lists.linux.dev
+X-Gm-Message-State: AOJu0YzbE1BX4+0syfOLm9EJsRAgdRYPERQXyeB5YUCD7f+OFrzP2dNM
+	gyxvF+SMpLzmXZs3jts9fwVqEiYIH9zfRH3wW4qS73mSiwVkc99MzPIGnpf+fXCcuS34KsNrdtV
+	KJA==
+X-Google-Smtp-Source: AGHT+IGjVSl0FdI0t6xZXRZ+yy/GRkabtVizenWIxxXTwOEj/5OduqGLfCIaX9FytZisvT/Qka2tQFBDyw==
+X-Received: from wmbbd8.prod.google.com ([2002:a05:600c:1f08:b0:470:fd92:351d])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:1987:b0:45d:d97c:236c
+ with SMTP id 5b1f17b1804b1-477b8a8a5damr33381975e9.21.1763651588400; Thu, 20
+ Nov 2025 07:13:08 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:45 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-23-elver@google.com>
-Subject: [PATCH v4 22/35] compiler-context-analysis: Remove Sparse support
+Message-ID: <20251120151033.3840508-21-elver@google.com>
+Subject: [PATCH v4 20/35] locking/ww_mutex: Support Clang's context analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,287 +87,239 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Remove Sparse support as discussed at [1].
+Add support for Clang's context analysis for ww_mutex.
 
-The kernel codebase is still scattered with numerous places that try to
-appease Sparse's context tracking ("annotation for sparse", "fake out
-sparse", "work around sparse", etc.). Eventually, as more subsystems
-enable Clang's context analysis, these places will show up and need
-adjustment or removal of the workarounds altogether.
+The programming model for ww_mutex is subtly more complex than other
+locking primitives when using ww_acquire_ctx. Encoding the respective
+pre-conditions for ww_mutex lock/unlock based on ww_acquire_ctx state
+using Clang's context analysis makes incorrect use of the API harder.
 
-Link: https://lore.kernel.org/all/20250207083335.GW7145@noisy.programming.kicks-ass.net/ [1]
-Link: https://lore.kernel.org/all/Z6XTKTo_LMj9KmbY@elver.google.com/ [2]
-Cc: Chris Li <sparse@chrisli.org>
-Cc: "Luc Van Oostenryck" <luc.vanoostenryck@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v4:
 * Rename capability -> context analysis.
 
+v3:
+* __assert -> __assume rename
+
 v2:
 * New patch.
 ---
- Documentation/dev-tools/sparse.rst        | 19 -----
- include/linux/compiler-context-analysis.h | 85 +++++++----------------
- include/linux/rcupdate.h                  | 15 +---
- 3 files changed, 28 insertions(+), 91 deletions(-)
+ Documentation/dev-tools/context-analysis.rst |  3 +-
+ include/linux/ww_mutex.h                     | 22 +++++--
+ lib/test_context-analysis.c                  | 69 ++++++++++++++++++++
+ 3 files changed, 87 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/dev-tools/sparse.rst b/Documentation/dev-tools/sparse.rst
-index dc791c8d84d1..37b20170835d 100644
---- a/Documentation/dev-tools/sparse.rst
-+++ b/Documentation/dev-tools/sparse.rst
-@@ -53,25 +53,6 @@ sure that bitwise types don't get mixed up (little-endian vs big-endian
- vs cpu-endian vs whatever), and there the constant "0" really _is_
- special.
+diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+index 8737de63a707..2936666651f3 100644
+--- a/Documentation/dev-tools/context-analysis.rst
++++ b/Documentation/dev-tools/context-analysis.rst
+@@ -81,7 +81,8 @@ Supported Kernel Primitives
  
--Using sparse for lock checking
--------------------------------
--
--The following macros are undefined for gcc and defined during a sparse
--run to use the "context" tracking feature of sparse, applied to
--locking.  These annotations tell sparse when a lock is held, with
--regard to the annotated function's entry and exit.
--
--__must_hold - The specified lock is held on function entry and exit.
--
--__acquires - The specified lock is held on function exit, but not entry.
--
--__releases - The specified lock is held on function entry, but not exit.
--
--If the function enters and exits without the lock held, acquiring and
--releasing the lock inside the function in a balanced way, no
--annotation is needed.  The three annotations above are for cases where
--sparse would otherwise report a context imbalance.
--
- Getting sparse
- --------------
+ Currently the following synchronization primitives are supported:
+ `raw_spinlock_t`, `spinlock_t`, `rwlock_t`, `mutex`, `seqlock_t`,
+-`bit_spinlock`, RCU, SRCU (`srcu_struct`), `rw_semaphore`, `local_lock_t`.
++`bit_spinlock`, RCU, SRCU (`srcu_struct`), `rw_semaphore`, `local_lock_t`,
++`ww_mutex`.
  
-diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
-index 935e59089d75..6990cab7a4a9 100644
---- a/include/linux/compiler-context-analysis.h
-+++ b/include/linux/compiler-context-analysis.h
-@@ -250,57 +250,32 @@ static inline void _context_unsafe_alias(void **p) { }
- 	extern const struct __ctx_guard_##ctx *name
+ For context guards with an initialization function (e.g., `spin_lock_init()`),
+ calling this function before initializing any guarded members or globals
+diff --git a/include/linux/ww_mutex.h b/include/linux/ww_mutex.h
+index 45ff6f7a872b..f6253e8ba9af 100644
+--- a/include/linux/ww_mutex.h
++++ b/include/linux/ww_mutex.h
+@@ -44,7 +44,7 @@ struct ww_class {
+ 	unsigned int is_wait_die;
+ };
+ 
+-struct ww_mutex {
++context_guard_struct(ww_mutex) {
+ 	struct WW_MUTEX_BASE base;
+ 	struct ww_acquire_ctx *ctx;
+ #ifdef DEBUG_WW_MUTEXES
+@@ -52,7 +52,7 @@ struct ww_mutex {
+ #endif
+ };
+ 
+-struct ww_acquire_ctx {
++context_guard_struct(ww_acquire_ctx) {
+ 	struct task_struct *task;
+ 	unsigned long stamp;
+ 	unsigned int acquired;
+@@ -107,6 +107,7 @@ struct ww_acquire_ctx {
+  */
+ static inline void ww_mutex_init(struct ww_mutex *lock,
+ 				 struct ww_class *ww_class)
++	__assumes_ctx_guard(lock)
+ {
+ 	ww_mutex_base_init(&lock->base, ww_class->mutex_name, &ww_class->mutex_key);
+ 	lock->ctx = NULL;
+@@ -141,6 +142,7 @@ static inline void ww_mutex_init(struct ww_mutex *lock,
+  */
+ static inline void ww_acquire_init(struct ww_acquire_ctx *ctx,
+ 				   struct ww_class *ww_class)
++	__acquires(ctx) __no_context_analysis
+ {
+ 	ctx->task = current;
+ 	ctx->stamp = atomic_long_inc_return_relaxed(&ww_class->stamp);
+@@ -179,6 +181,7 @@ static inline void ww_acquire_init(struct ww_acquire_ctx *ctx,
+  * data structures.
+  */
+ static inline void ww_acquire_done(struct ww_acquire_ctx *ctx)
++	__releases(ctx) __acquires_shared(ctx) __no_context_analysis
+ {
+ #ifdef DEBUG_WW_MUTEXES
+ 	lockdep_assert_held(ctx);
+@@ -196,6 +199,7 @@ static inline void ww_acquire_done(struct ww_acquire_ctx *ctx)
+  * mutexes have been released with ww_mutex_unlock.
+  */
+ static inline void ww_acquire_fini(struct ww_acquire_ctx *ctx)
++	__releases_shared(ctx) __no_context_analysis
+ {
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ 	mutex_release(&ctx->first_lock_dep_map, _THIS_IP_);
+@@ -245,7 +249,8 @@ static inline void ww_acquire_fini(struct ww_acquire_ctx *ctx)
+  *
+  * A mutex acquired with this function must be released with ww_mutex_unlock.
+  */
+-extern int /* __must_check */ ww_mutex_lock(struct ww_mutex *lock, struct ww_acquire_ctx *ctx);
++extern int /* __must_check */ ww_mutex_lock(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
++	__cond_acquires(0, lock) __must_hold(ctx);
+ 
+ /**
+  * ww_mutex_lock_interruptible - acquire the w/w mutex, interruptible
+@@ -278,7 +283,8 @@ extern int /* __must_check */ ww_mutex_lock(struct ww_mutex *lock, struct ww_acq
+  * A mutex acquired with this function must be released with ww_mutex_unlock.
+  */
+ extern int __must_check ww_mutex_lock_interruptible(struct ww_mutex *lock,
+-						    struct ww_acquire_ctx *ctx);
++						    struct ww_acquire_ctx *ctx)
++	__cond_acquires(0, lock) __must_hold(ctx);
+ 
+ /**
+  * ww_mutex_lock_slow - slowpath acquiring of the w/w mutex
+@@ -305,6 +311,7 @@ extern int __must_check ww_mutex_lock_interruptible(struct ww_mutex *lock,
+  */
+ static inline void
+ ww_mutex_lock_slow(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
++	__acquires(lock) __must_hold(ctx) __no_context_analysis
+ {
+ 	int ret;
+ #ifdef DEBUG_WW_MUTEXES
+@@ -342,6 +349,7 @@ ww_mutex_lock_slow(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
+ static inline int __must_check
+ ww_mutex_lock_slow_interruptible(struct ww_mutex *lock,
+ 				 struct ww_acquire_ctx *ctx)
++	__cond_acquires(0, lock) __must_hold(ctx)
+ {
+ #ifdef DEBUG_WW_MUTEXES
+ 	DEBUG_LOCKS_WARN_ON(!ctx->contending_lock);
+@@ -349,10 +357,11 @@ ww_mutex_lock_slow_interruptible(struct ww_mutex *lock,
+ 	return ww_mutex_lock_interruptible(lock, ctx);
+ }
+ 
+-extern void ww_mutex_unlock(struct ww_mutex *lock);
++extern void ww_mutex_unlock(struct ww_mutex *lock) __releases(lock);
+ 
+ extern int __must_check ww_mutex_trylock(struct ww_mutex *lock,
+-					 struct ww_acquire_ctx *ctx);
++					 struct ww_acquire_ctx *ctx)
++	__cond_acquires(true, lock) __must_hold(ctx);
+ 
+ /***
+  * ww_mutex_destroy - mark a w/w mutex unusable
+@@ -363,6 +372,7 @@ extern int __must_check ww_mutex_trylock(struct ww_mutex *lock,
+  * this function is called.
+  */
+ static inline void ww_mutex_destroy(struct ww_mutex *lock)
++	__must_not_hold(lock)
+ {
+ #ifndef CONFIG_PREEMPT_RT
+ 	mutex_destroy(&lock->base);
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 74eca21f7aaa..522769c9586d 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -14,6 +14,7 @@
+ #include <linux/seqlock.h>
+ #include <linux/spinlock.h>
+ #include <linux/srcu.h>
++#include <linux/ww_mutex.h>
  
  /*
-- * Common keywords for static context analysis. Both Clang's "capability
-- * analysis" and Sparse's "context tracking" are currently supported.
-- */
--#ifdef __CHECKER__
--
--/* Sparse context/lock checking support. */
--# define __must_hold(x)		__attribute__((context(x,1,1)))
--# define __must_not_hold(x)
--# define __acquires(x)		__attribute__((context(x,0,1)))
--# define __cond_acquires(ret, x) __attribute__((context(x,0,-1)))
--# define __releases(x)		__attribute__((context(x,1,0)))
--# define __acquire(x)		__context__(x,1)
--# define __release(x)		__context__(x,-1)
--# define __cond_lock(x, c)	((c) ? ({ __acquire(x); 1; }) : 0)
--/* For Sparse, there's no distinction between exclusive and shared locks. */
--# define __must_hold_shared	__must_hold
--# define __acquires_shared	__acquires
--# define __cond_acquires_shared __cond_acquires
--# define __releases_shared	__releases
--# define __acquire_shared	__acquire
--# define __release_shared	__release
--# define __cond_lock_shared	__cond_acquire
--
--#else /* !__CHECKER__ */
-+ * Common keywords for static context analysis.
-+ */
- 
- /**
-  * __must_hold() - function attribute, caller must hold exclusive context guard
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the caller must hold the given context
-- * guard instance @x exclusively.
-+ * guard instance(s) exclusively.
-  */
--# define __must_hold(x)		__requires_ctx_guard(x)
-+#define __must_hold(...)	__requires_ctx_guard(__VA_ARGS__)
- 
- /**
-  * __must_not_hold() - function attribute, caller must not hold context guard
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the caller must not hold the given context
-- * guard instance @x.
-+ * guard instance(s).
-  */
--# define __must_not_hold(x)	__excludes_ctx_guard(x)
-+#define __must_not_hold(...)	__excludes_ctx_guard(__VA_ARGS__)
- 
- /**
-  * __acquires() - function attribute, function acquires context guard exclusively
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the function acquires the given context
-- * guard instance @x exclusively, but does not release it.
-+ * guard instance(s) exclusively, but does not release them.
-  */
--# define __acquires(x)		__acquires_ctx_guard(x)
-+#define __acquires(...)		__acquires_ctx_guard(__VA_ARGS__)
- 
- /*
-  * Clang's analysis does not care precisely about the value, only that it is
-@@ -327,17 +302,16 @@ static inline void _context_unsafe_alias(void **p) { }
-  *
-  * @ret may be one of: true, false, nonzero, 0, nonnull, NULL.
-  */
--# define __cond_acquires(ret, x) __cond_acquires_impl_##ret(x)
-+#define __cond_acquires(ret, x) __cond_acquires_impl_##ret(x)
- 
- /**
-  * __releases() - function attribute, function releases a context guard exclusively
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the function releases the given context
-- * guard instance @x exclusively. The associated context must be active on
-+ * guard instance(s) exclusively. The associated context(s) must be active on
-  * entry.
-  */
--# define __releases(x)		__releases_ctx_guard(x)
-+#define __releases(...)		__releases_ctx_guard(__VA_ARGS__)
- 
- /**
-  * __acquire() - function to acquire context guard exclusively
-@@ -345,7 +319,7 @@ static inline void _context_unsafe_alias(void **p) { }
-  *
-  * No-op function that acquires the given context guard instance @x exclusively.
-  */
--# define __acquire(x)		__acquire_ctx_guard(x)
-+#define __acquire(x)		__acquire_ctx_guard(x)
- 
- /**
-  * __release() - function to release context guard exclusively
-@@ -353,7 +327,7 @@ static inline void _context_unsafe_alias(void **p) { }
-  *
-  * No-op function that releases the given context guard instance @x.
-  */
--# define __release(x)		__release_ctx_guard(x)
-+#define __release(x)		__release_ctx_guard(x)
- 
- /**
-  * __cond_lock() - function that conditionally acquires a context guard
-@@ -371,25 +345,23 @@ static inline void _context_unsafe_alias(void **p) { }
-  *
-  *	#define spin_trylock(l) __cond_lock(&lock, _spin_trylock(&lock))
-  */
--# define __cond_lock(x, c)	__try_acquire_ctx_guard(x, c)
-+#define __cond_lock(x, c)	__try_acquire_ctx_guard(x, c)
- 
- /**
-  * __must_hold_shared() - function attribute, caller must hold shared context guard
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the caller must hold the given context
-- * guard instance @x with shared access.
-+ * guard instance(s) with shared access.
-  */
--# define __must_hold_shared(x)	__requires_shared_ctx_guard(x)
-+#define __must_hold_shared(...)	__requires_shared_ctx_guard(__VA_ARGS__)
- 
- /**
-  * __acquires_shared() - function attribute, function acquires context guard shared
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the function acquires the given
-- * context guard instance @x with shared access, but does not release it.
-+ * context guard instance(s) with shared access, but does not release them.
-  */
--# define __acquires_shared(x)	__acquires_shared_ctx_guard(x)
-+#define __acquires_shared(...)	__acquires_shared_ctx_guard(__VA_ARGS__)
- 
- /**
-  * __cond_acquires_shared() - function attribute, function conditionally
-@@ -398,23 +370,22 @@ static inline void _context_unsafe_alias(void **p) { }
-  * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the function conditionally acquires the
-- * given context guard instance @x with shared access, but does not release it. The
-- * function return value @ret denotes when the context guard is acquired.
-+ * given context guard instance @x with shared access, but does not release it.
-+ * The function return value @ret denotes when the context guard is acquired.
-  *
-  * @ret may be one of: true, false, nonzero, 0, nonnull, NULL.
-  */
--# define __cond_acquires_shared(ret, x) __cond_acquires_impl_##ret(x, _shared)
-+#define __cond_acquires_shared(ret, x) __cond_acquires_impl_##ret(x, _shared)
- 
- /**
-  * __releases_shared() - function attribute, function releases a
-  *                       context guard shared
-- * @x: context guard instance pointer
-  *
-  * Function attribute declaring that the function releases the given context
-- * guard instance @x with shared access. The associated context must be active
-- * on entry.
-+ * guard instance(s) with shared access. The associated context(s) must be
-+ * active on entry.
-  */
--# define __releases_shared(x)	__releases_shared_ctx_guard(x)
-+#define __releases_shared(...)	__releases_shared_ctx_guard(__VA_ARGS__)
- 
- /**
-  * __acquire_shared() - function to acquire context guard shared
-@@ -423,7 +394,7 @@ static inline void _context_unsafe_alias(void **p) { }
-  * No-op function that acquires the given context guard instance @x with shared
-  * access.
-  */
--# define __acquire_shared(x)	__acquire_shared_ctx_guard(x)
-+#define __acquire_shared(x)	__acquire_shared_ctx_guard(x)
- 
- /**
-  * __release_shared() - function to release context guard shared
-@@ -432,7 +403,7 @@ static inline void _context_unsafe_alias(void **p) { }
-  * No-op function that releases the given context guard instance @x with shared
-  * access.
-  */
--# define __release_shared(x)	__release_shared_ctx_guard(x)
-+#define __release_shared(x)	__release_shared_ctx_guard(x)
- 
- /**
-  * __cond_lock_shared() - function that conditionally acquires a context guard shared
-@@ -445,9 +416,7 @@ static inline void _context_unsafe_alias(void **p) { }
-  * shared access, if the boolean expression @c is true. The result of @c is the
-  * return value.
-  */
--# define __cond_lock_shared(x, c) __try_acquire_shared_ctx_guard(x, c)
--
--#endif /* __CHECKER__ */
-+#define __cond_lock_shared(x, c) __try_acquire_shared_ctx_guard(x, c)
- 
- /**
-  * __acquire_ret() - helper to acquire context guard of return value
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 5cddb9019a99..dd12e738e073 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -1219,20 +1219,7 @@ rcu_head_after_call_rcu(struct rcu_head *rhp, rcu_callback_t f)
- extern int rcu_expedited;
- extern int rcu_normal;
- 
--DEFINE_LOCK_GUARD_0(rcu,
--	do {
--		rcu_read_lock();
--		/*
--		 * sparse doesn't call the cleanup function,
--		 * so just release immediately and don't track
--		 * the context. We don't need to anyway, since
--		 * the whole point of the guard is to not need
--		 * the explicit unlock.
--		 */
--		__release(RCU);
--	} while (0),
--	rcu_read_unlock())
--
-+DEFINE_LOCK_GUARD_0(rcu, rcu_read_lock(), rcu_read_unlock())
- DECLARE_LOCK_GUARD_0_ATTRS(rcu, __acquires_shared(RCU), __releases_shared(RCU))
- 
- #endif /* __LINUX_RCUPDATE_H */
+  * Test that helper macros work as expected.
+@@ -523,3 +524,71 @@ static void __used test_local_trylock(void)
+ 		local_unlock(&test_local_trylock_data.lock);
+ 	}
+ }
++
++static DEFINE_WD_CLASS(ww_class);
++
++struct test_ww_mutex_data {
++	struct ww_mutex mtx;
++	int counter __guarded_by(&mtx);
++};
++
++static void __used test_ww_mutex_init(struct test_ww_mutex_data *d)
++{
++	ww_mutex_init(&d->mtx, &ww_class);
++	d->counter = 0;
++}
++
++static void __used test_ww_mutex_lock_noctx(struct test_ww_mutex_data *d)
++{
++	if (!ww_mutex_lock(&d->mtx, NULL)) {
++		d->counter++;
++		ww_mutex_unlock(&d->mtx);
++	}
++
++	if (!ww_mutex_lock_interruptible(&d->mtx, NULL)) {
++		d->counter++;
++		ww_mutex_unlock(&d->mtx);
++	}
++
++	if (ww_mutex_trylock(&d->mtx, NULL)) {
++		d->counter++;
++		ww_mutex_unlock(&d->mtx);
++	}
++
++	ww_mutex_lock_slow(&d->mtx, NULL);
++	d->counter++;
++	ww_mutex_unlock(&d->mtx);
++
++	ww_mutex_destroy(&d->mtx);
++}
++
++static void __used test_ww_mutex_lock_ctx(struct test_ww_mutex_data *d)
++{
++	struct ww_acquire_ctx ctx;
++
++	ww_acquire_init(&ctx, &ww_class);
++
++	if (!ww_mutex_lock(&d->mtx, &ctx)) {
++		d->counter++;
++		ww_mutex_unlock(&d->mtx);
++	}
++
++	if (!ww_mutex_lock_interruptible(&d->mtx, &ctx)) {
++		d->counter++;
++		ww_mutex_unlock(&d->mtx);
++	}
++
++	if (ww_mutex_trylock(&d->mtx, &ctx)) {
++		d->counter++;
++		ww_mutex_unlock(&d->mtx);
++	}
++
++	ww_mutex_lock_slow(&d->mtx, &ctx);
++	d->counter++;
++	ww_mutex_unlock(&d->mtx);
++
++	ww_acquire_done(&ctx);
++	ww_acquire_fini(&ctx);
++
++	ww_mutex_destroy(&d->mtx);
++}
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
