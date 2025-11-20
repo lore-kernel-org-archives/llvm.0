@@ -1,166 +1,272 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68020274670
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D7F3B2BA
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 16:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763653640; cv=none; b=JX6KWaa5tDBrBE5mfVh47wAtJ4Q7tJQiHIYVbX0tYx/5G6I9VVcvXlVn52ye7vwhSQkWvn9aDdEVJ1Y4Kyu7DctRkeSq7dPrALp0DZiYR7IKx8pe/3lxhRFEptD4ZJGErbS2HTtTJJ47j3FoGbzjPjRLBGC6JFYVe9DfV31sMxI=
+	t=1763656651; cv=none; b=uhTPDaQdJndjmKWpr6WxeCw5uGp/K0VPuQHGwu9VCdHHJ84mX9we3o7hfE1uRDJHNl6N5bBwuf/ICtKNLfbalB/EVbAgD6m9lYMCZt1U8ziNndAJB7GVBn1gsBHin14xpCnk/vIdjq/DKVl0yd7fGZvcnlOzP8/NgneWN1Ie72Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763653640; c=relaxed/simple;
-	bh=fye3AZuoM3MY1Tz4HAOVHOUHFM3gKLLTxRseoQbW+N0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U1cvYwZNQtdWCwDb39rwwNaUmejTN2M9Vj9eJw2APPPEyxfU8yKIebWmILkiWQoEK7aje5QfKTtbNF9h1iA62ZfaNymOGkqtcs8U1r0plx3eUYmP6trcWP6Eo5hyHdnHIbghhS5p1JatMKl4cIEmZxJb7/scgdmpO3IJGczrsxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YottEY93; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763656651; c=relaxed/simple;
+	bh=ikZZTlmcvvgaeRuhpKBwP55qPBNe+u4ZLfVXPYvtcZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O2kJAsXzhhSHsy+1K6jrGnX5PcQv1gCDOzXp4vyjRBTswyUt8Qk8y7hMZFuAgSEq5pAlMEXpR1AC8WVGIuI6U3YuvNc5Eufiit/D8PrcGEAQzgNN6xynxPusgpQoEp+tWCzpTia5TpuJmXydUsbbzv94Mn70Wt6UWcwcEtSCKYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=FygshPq5; arc=none smtp.client-ip=185.125.25.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YottEY93"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11EC0C19423
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763653640;
-	bh=fye3AZuoM3MY1Tz4HAOVHOUHFM3gKLLTxRseoQbW+N0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YottEY93Je4nZAgnNlo0w9GKUwDIPTailYenlS+H7PYphbe5I28PpmhSvKxeRR3LL
-	 SM25kuRroSMx2BoKZyJ76Nlxnt+/+hEBlGbwtRzbtMoV5Oxiqp2hGU4U+GWtog2Ayl
-	 iCqDd6kccZWSh5QihkyJZdCNWlJ7gVnd4oIMrpGrlk9tCTCEhaYvSXvwKepzQJShCr
-	 qV8y0iCyXWfyzuh5nS2lDVz5iYNGYsqRkRBy6uIp1Hy2ocFkzQ5Hf96GHhJ8G7EdAd
-	 d7xmIz7pNEZ29gD7Xci0H6aiQ4hKoctsb/LU2bz97rWV2KuqdMDMcNp/FvgfgoKY54
-	 h2uMh5Krdk/7A==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-37a3d86b773so9063601fa.0
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:47:19 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXzj+SVR7+9hy+z/GgbGzaNVPxvwzH00RFSWhAC2WVpulaeyG7V6xnFyShzQlW3azQaV9Jg@lists.linux.dev
-X-Gm-Message-State: AOJu0YzsdYa0fadVJ/LgYepnZblmWWKduY7m/ApYNAWh4SCf4nPbAP1S
-	DWx0bDrmNYE5RuWOhvekdN7HHiVyRMIj2ckeBPE8wpbrXDeC06xxGAEQQdbcJoLpx3z7IjsMSH2
-	kFp/6ocZLN8h+dt82ucG1Xcf/9vEZAIg=
-X-Google-Smtp-Source: AGHT+IFLwwadZwuu2sPQ3ZiG1Mo0cAQBZuxvMu/HZu78XoA8ljwI7xU83U207bJ6EewOofYSGLspUI7OdFJXxN9iTxI=
-X-Received: by 2002:a2e:b742:0:b0:37a:4736:83b6 with SMTP id
- 38308e7fff4ca-37cc67bd5dfmr8940411fa.44.1763653638309; Thu, 20 Nov 2025
- 07:47:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="FygshPq5"
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dC2fJ0JsMzlg6;
+	Thu, 20 Nov 2025 16:42:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1763653335;
+	bh=bK5R4FWeryYY7Dzvx1ZNaz58dfr5FQOYKvQc4SGZ4YM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FygshPq5IlSlaXB1OLnU88u1OtCo/xcWUxfMvs71UOoduLLFVoXOeHiyDK+tRMw0l
+	 hu+p5NjGJ+xoeATGrs1fPTBCGdZ4sUGKHCE0B7eOrmuKt04DyNFr6rYj+MuoAJEM++
+	 c0Ct4rf06JBSY1HTX38a+2Zi8SuATscH9CjsvXO4=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dC2fG24dwzXmx;
+	Thu, 20 Nov 2025 16:42:14 +0100 (CET)
+Date: Thu, 20 Nov 2025 16:42:13 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev, Daniel Verkamp <dverkamp@chromium.org>, 
+	Jeff Xu <jeffxu@chromium.org>, =?utf-8?B?VGhpw6liYXVk?= Weksteen <tweek@google.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH RFC 0/4] landlock: add LANDLOCK_SCOPE_MEMFD_EXEC execution
+Message-ID: <20251120.KuoC9rol6aht@digikod.net>
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+ <20250918.io7too8ain7A@digikod.net>
+ <878qhy2lch.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251117-b4-sev-gcov-objtool-v1-1-54f7790d54df@google.com>
- <CAMj1kXH8Yg+eeySUxJ7nRTm=nQWx5Tj4XirBjVrqXB-0Qn1=sA@mail.gmail.com>
- <CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com>
- <CA+i-1C2-DtH326ppTx6V_yJ3HX-H0b5i9GNnXb0Q5mUF-Kexdg@mail.gmail.com> <DEDHST3BOZVN.O39PP5JRRFTX@google.com>
-In-Reply-To: <DEDHST3BOZVN.O39PP5JRRFTX@google.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 20 Nov 2025 16:47:07 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEsTrdEJRrv_+KVpOJpmEu7XbcpzXaz2e3d7QewbRnf5Q@mail.gmail.com>
-X-Gm-Features: AWmQ_bnsXV7h-FlZPTiKx7cfTLo3Txj-MtHaniNIQCfOpylZtSs3x9sbpoza13Q
-Message-ID: <CAMj1kXEsTrdEJRrv_+KVpOJpmEu7XbcpzXaz2e3d7QewbRnf5Q@mail.gmail.com>
-Subject: Re: [PATCH] x86/sev: Disable GCOV on noinstr object
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <878qhy2lch.fsf@gmail.com>
+X-Infomaniak-Routing: alpha
 
-On Thu, 20 Nov 2025 at 12:41, Brendan Jackman <jackmanb@google.com> wrote:
->
-> On Mon Nov 17, 2025 at 12:37 PM UTC, Brendan Jackman wrote:
-> > On Mon, 17 Nov 2025 at 12:52, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >>
-> >> On Mon, 17 Nov 2025 at 12:40, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >> >
-> >> > On Mon, 17 Nov 2025 at 12:11, Brendan Jackman <jackmanb@google.com> =
-wrote:
-> >> > >
-> >> > > With Debian clang version 19.1.7 (3+build5) there are calls to
-> >> > > kasan_check_write() from __sev_es_nmi_complete, which violates noi=
-nstr.
-> >> > > Fix it by disabling GCOV for the noinstr object, as has been done =
-for
-> >> > > previous such instrumentation issues.
-> >> > >
-> >> > > Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> >> > > ---
-> >> > > Details:
-> >> > >
-> >> > >  - =E2=9D=AF=E2=9D=AF  clang --version
-> >> > >    Debian clang version 19.1.7 (3+build5)
-> >> > >    Target: x86_64-pc-linux-gnu
-> >> > >    Thread model: posix
-> >> > >    InstalledDir: /usr/lib/llvm-19/bin
-> >> > >
-> >> > >  - Compiling from tip/master at 6f85aad74a70d
-> >> > >
-> >> > >  - Kernel config:
-> >> > >
-> >> > >    https://gist.githubusercontent.com/bjackman/bbfdf4ec2e1dfd0e186=
-57174f0537e2c/raw/a88dcc6567d14c69445e7928a7d5dfc23ca9f619/gistfile0.txt
-> >> > >
-> >> > > Note I also get this error:
-> >> > >
-> >> > > vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3b: relocation to=
- !ENDBR: machine_kexec_prepare+0x810
-> >> > >
-> >> > > That one's a total mystery to me. I guess it's better to "fix" the=
- SEV
-> >> > > one independently rather than waiting until I know how to fix them=
- both.
-> >> > > ---
-> >> > >  arch/x86/coco/sev/Makefile | 3 +++
-> >> > >  1 file changed, 3 insertions(+)
-> >> > >
-> >> > > diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Makefi=
-le
-> >> > > index 3b8ae214a6a64de6bb208eb3b7c8bf12007ccc2c..d2ceae587b6c30b2fb=
-17209a7426e7893dea988c 100644
-> >> > > --- a/arch/x86/coco/sev/Makefile
-> >> > > +++ b/arch/x86/coco/sev/Makefile
-> >> > > @@ -8,3 +8,6 @@ UBSAN_SANITIZE_noinstr.o        :=3D n
-> >> > >  # GCC may fail to respect __no_sanitize_address or __no_kcsan whe=
-n inlining
-> >> > >  KASAN_SANITIZE_noinstr.o       :=3D n
-> >> > >  KCSAN_SANITIZE_noinstr.o       :=3D n
-> >> > > +
-> >> > > +# Clang 19 and older may fail to respect __no_sanitize_address wh=
-en inlining
-> >> > > +GCOV_PROFILE_noinstr.o         :=3D n
-> >> > >
-> >> >
-> >> > After Thomas dug into this issue a while ago, I meant to follow up
-> >> > with a fix, or at least something to start the discussion.
-> >> >
-> >> > TL;DR there is nothing wrong with either compiler (as far as this
-> >> > issue is concerned)
-> >> >
-> >> > The issue is that KASAN/KCSAN enabled builds use a version of
-> >> > set_bit() that unconditionally inserts a call to
-> >>
-> >> instrument_atomic_write(), which calls the KASAN/KCSAN intrinsics
-> >> directly, and these are usually only called by compiler generated
-> >> code.
-> >>
-> >> This completely defeats the noinstr per-function annotation, given
-> >> that each compilation unit only incorporates a single version of
-> >> set_bit(), which is the instrumented version unless instrumentation is
-> >> disabled for the entire file.
-> >>
-> >> For the short term, we could avoid this by using arch___set_bit()
-> >> directly in the SEV code that triggers this issue today. But for the
-> >> longer term, we should get write of those explicit calls to
-> >> instrumentation intrinsics, as this is fundamentally incompatible with
-> >> per-function overrides.
-> >>
-> >> https://lore.kernel.org/all/8734aqulch.ffs@tglx/T/#u
+On Sun, Sep 28, 2025 at 05:37:02PM -0600, Abhinav Saxena wrote:
+> Thanks for the detailed reply Mickaël!
+> 
+> Mickaël Salaün <mic@digikod.net> writes:
+> 
+> > Thanks for this patch series Abhinav!  The code looks good overall, but
+> > we should clarify the design.  Sorry for the delayed response, it is on
+> > my radar now.
+
+Please feel free to ping me after two weeks without answer, I might miss
+some emails.
+
 > >
-> > Ah, yes thank you I think you are right. My GCOV "fix" seems to be
-> > bogus, it probably just hides the issue with incidental changes.
->
-> On the other hand, I guess the intermediate workaround of just disabling
-> it at the compilation unit still makes sense here, right?
->
-> i.e. my patch is still dumb but should we start by just doing
-> K{A,C}ASAN_SANITIZE_noinstr.o :=3D n instead?
+> > CCing Jeff and Daniel
+> >
+> > On Sat, Jul 19, 2025 at 05:13:10AM -0600, Abhinav Saxena wrote:
+> >> This patch series introduces LANDLOCK_SCOPE_MEMFD_EXEC, a new Landlock
+> >> scoping mechanism that restricts execution of anonymous memory file
+> >> descriptors (memfd) created via memfd_create(2). This addresses security
+> >> gaps where processes can bypass W^X policies and execute arbitrary code
+> >> through anonymous memory objects.
+> >> 
+> >> Fixes: <https://github.com/landlock-lsm/linux/issues/37>
+> >> 
+> >> SECURITY PROBLEM
+> >> `=============='
+> >> 
+> >> Current Landlock filesystem restrictions do not cover memfd objects,
+> >> allowing processes to:
+> >> 
+> >> 1. Read-to-execute bypass: Create writable memfd, inject code,
+> >>    then execute via mmap(PROT_EXEC) or direct execve()
+> >> 2. Anonymous execution: Execute code without touching the filesystem via
+> >>    execve(“/proc/self/fd/N”) where N is a memfd descriptor
+> >
+> >> 3. Cross-domain access violations: Pass memfd between processes to
+> >>    bypass domain restrictions
+> >
+> > Landlock only restricts access at open time, which is a useful property.
+> > This enables to create more restricted sandboxes but still get access to
+> > outside resources via trusted processes.  If the process passing the FDs
+> > is not trusted, the sandboxed process could just ask to execute
+> > arbitrary code outside the sandbox anyway.
+> >
+> > However, the Landlock scopes are designed to block IPC from within a
+> > sandbox to outside the sandbox.  We could have a new scope to forbid a
+> > sandbox process to receive or inherit file descriptors, but that would
+> > be a different and generic feature.  For compatibility reasons, this
+> > might not be easy to implement and I think there are more important
+> > features to implement before that.
+> >
+> > Thinking more about it, restricting memfd should not be a “scoped” flag
+> > because the semantic is not the same, but we should have a new ruleset
+> > property instead, something like “ruleset.denied” with a related
+> > LANDLOCK_DENY_EXECUTE_MEMFD flag.  This flag will only have an impact on
+> > newly created memfd from a sandboxed process with this restriction at
+> > creation time. This could be implemented with hook_file_alloc_security()
+> > by checking if the file is indeed a memfd and checking inode->i_mode for
+> > executability bits (which would imply MFD_NOEXEC_SEAL).
+> >
+> 
+> Thanks for the clarification! So if I understood correctly we are
+> proposing adding a `denied` field to the `landlock_ruleset_attr` struct
+> 
+> struct landlock_ruleset_attr {
+>     __u64 handled_access_fs;
+>     __u64 handled_access_net;
+>     __u64 scoped;
+>     __u64 denied;              /* New field */
+> };
+> 
+> which allows memfd_create() to be allowed by default unless
+> LANDLOCK_DENY_EXECUTE_MEMFD bit is set.
 
-Disabling per file results in the non-instrumented header to be
-#include'd, and so we never call the instrument_read/write explicitly.
-So yes, this is a reasonable short-term fix.
+Yes
+
+> Also it seems Thiébaud
+> Weksteen’s patch[1] will land, and maybe we can use
+> security_inode_init_security_anon instead? What do you think?
+
+Definitely, and this patch is now merged in -next.
+
+> 
+> Apologies for my ignorance, do we have to wait till his patch has
+> landed into Linus’s tree?
+
+As long as you explain this dependency in the commit message and point
+to the patch (as a comment, after a "---" line), we're good.
+
+> 
+> >> 
+> >> These scenarios can occur in sandboxed environments where filesystem
+> >> access is restricted but memfd creation remains possible.
+> >> 
+> >> IMPLEMENTATION
+> >> `============'
+> >> 
+> >> The implementation adds hierarchical execution control through domain
+> >> scoping:
+> >> 
+> >> Core Components:
+> >> - is_memfd_file(): Reliable memfd detection via “memfd:” dentry prefix
+> >> - domain_is_scoped(): Cross-domain hierarchy checking (moved to domain.c)
+> >> - LSM hooks: mmap_file, file_mprotect, bprm_creds_for_exec
+> >> - Creation-time restrictions: hook_file_alloc_security
+> >> 
+> >> Security Matrix:
+> >> Execution decisions follow domain hierarchy rules preventing both
+> >> same-domain bypass attempts and cross-domain access violations while
+> >> preserving legitimate hierarchical access patterns.
+> >> 
+> >> Domain Hierarchy with LANDLOCK_SCOPE_MEMFD_EXEC:
+> >> `============================================='
+> >> 
+> >> Root (no domain) - No restrictions
+> >>   |
+> >>   +– Domain A [SCOPE_MEMFD_EXEC] Layer 1
+> >>   |     +– memfd_A (tagged with Domain A as creator)
+> >>   |     |
+> >>   |     +– Domain A1 (child) [NO SCOPE] Layer 2
+> >>   |     |     +– Inherits Layer 1 restrictions from parent
+> >>   |     |     +– memfd_A1 (can create, inherits restrictions)
+> >>   |     |     +– Domain A1a [SCOPE_MEMFD_EXEC] Layer 3
+> >>   |     |           +– memfd_A1a (tagged with Domain A1a)
+> >>   |     |
+> >>   |     +– Domain A2 (child) [SCOPE_MEMFD_EXEC] Layer 2
+> >>   |           +– memfd_A2 (tagged with Domain A2 as creator)
+> >>   |           +– CANNOT access memfd_A1 (different subtree)
+> >>   |
+> >>   +– Domain B [SCOPE_MEMFD_EXEC] Layer 1
+> >>         +– memfd_B (tagged with Domain B as creator)
+> >>         +– CANNOT access ANY memfd from Domain A subtree
+> >> 
+> >> Execution Decision Matrix:
+> >> `======================'
+> >> Executor->  |  A  | A1 | A1a | A2 | B  | Root
+> >> Creator     |     |    |     |    |    |
+> >> ————|—–|—-|—–|—-|—-|—–
+> >> Domain A    |  X  | X  | X   | X  | X  |  Y
+> >> Domain A1   |  Y  | X  | X   | X  | X  |  Y
+> >> Domain A1a  |  Y  | Y  | X   | X  | X  |  Y
+> >> Domain A2   |  Y  | X  | X   | X  | X  |  Y
+> >> Domain B    |  X  | X  | X   | X  | X  |  Y
+> >> Root        |  Y  | Y  | Y   | Y  | Y  |  Y
+> >> 
+> >> Legend: Y = Execution allowed, X = Execution denied
+> >
+> > Because checks should not be related to scopes, this will be much
+> > simpler.
+> >
+> >> 
+> >> Scenarios Covered:
+> >> - Direct mmap(PROT_EXEC) on memfd files
+> >> - Two-stage mmap(PROT_READ) + mprotect(PROT_EXEC) bypass attempts
+> >> - execve("/proc/self/fd/N") anonymous execution
+> >> - execveat() and fexecve() file descriptor execution
+> >> - Cross-process memfd inheritance and IPC passing
+> >> 
+> >> TESTING
+> >> `====='
+> >> 
+> >> All patches have been validated with:
+> >> - scripts/checkpatch.pl –strict (clean)
+> >> - Selftests covering same-domain restrictions, cross-domain 
+> >>   hierarchy enforcement, and regular file isolation
+> >> - KUnit tests for memfd detection edge cases
+> >
+> > Thanks for all these tests!
+> >
+> >> 
+> >> DISCLAIMER
+> >> `========'
+> >> 
+> >> My understanding of Landlock scoping semantics may be limited, but this
+> >> implementation reflects my current understanding based on available
+> >> documentation and code analysis. I welcome feedback and corrections
+> >> regarding the scoping logic and domain hierarchy enforcement.
+> >> 
+> >> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> >> —
+> >> Abhinav Saxena (4):
+> >>       landlock: add LANDLOCK_SCOPE_MEMFD_EXEC scope
+> >>       landlock: implement memfd detection
+> >>       landlock: add memfd exec LSM hooks and scoping
+> >>       selftests/landlock: add memfd execution tests
+> >> 
+> >>  include/uapi/linux/landlock.h                      |   5 +
+> >>  security/landlock/.kunitconfig                     |   1 +
+> >>  security/landlock/audit.c                          |   4 +
+> >>  security/landlock/audit.h                          |   1 +
+> >>  security/landlock/cred.c                           |  14 -
+> >>  security/landlock/domain.c                         |  67 ++++
+> >>  security/landlock/domain.h                         |   4 +
+> >>  security/landlock/fs.c                             | 405 ++++++++++++++++++++-
+> >>  security/landlock/limits.h                         |   2 +-
+> >>  security/landlock/task.c                           |  67 —-
+> >>  …/selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++
+> >>  11 files changed, 812 insertions(+), 83 deletions(-)
+> >> —
+> >> base-commit: 5b74b2eff1eeefe43584e5b7b348c8cd3b723d38
+> >> change-id: 20250716-memfd-exec-ac0d582018c3
+> >> 
+> >> Best regards,
+> >> – 
+> >> Abhinav Saxena <xandfury@gmail.com>
+> >> 
+> >> 
+> 
+> Best,
+> Abhinav
+> 
+> [1] - <https://lore.kernel.org/all/20250918020434.1612137-1-tweek@google.com/>
+
