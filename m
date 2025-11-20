@@ -1,55 +1,55 @@
 Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0872C35970F
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C3E35A127
+	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 15:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651571; cv=none; b=nGRUdtqIfmDFutFHriTuiRV189o2LjG/lR2G8rLDVpRE21m6DbsPAUI6cv5UIKsdPFbJ9pzGb0dPhA9Gu6frY+zoFar085Kzz69bOFwDChQ+kfZV+wYh4y/72bRH6K8UhBapLHquk5NuhZLKmPO2GhlwQBIL4kZ/LvM+2WjCAF8=
+	t=1763651581; cv=none; b=dh81zqCZOoEcvpF7q/VcANmljK/q0ocYTsQP2Q0Q+NcBadYpHBHnaTMGZE81QjPx70iRYTh7Q6837YUl4AHg/K35Wra8NVRYXQbnB/AbGkvyQ1DnKIRlLpOY9Xv6pyhcKc2qc9PR7UECBbS5+Q1bR0D7yGhARTcCTmhu8GDtzx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651571; c=relaxed/simple;
-	bh=JsRVhDxMTESFNC0k9j5iAV1EVftZ5NwIrNhmhZrLX5Q=;
+	s=arc-20240116; t=1763651581; c=relaxed/simple;
+	bh=7UPhXVoQzb0nHVZ/E5WnJmrxexsYTFwM9dm+H6EnW5w=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RHGVbECMroXAa5kz9aBF6JcE1zqnodNyB74B1mF4xCvd5Qj8lru2LPd1647ThREL/rAOPuJk15j8bn3dS0Ia6aJPINWNTmb3aP0jRpxfFqkfy4jlwZ8juRtRSKhmUduhz/R3D6KcwzpC99CvSml1QS6YZs4SnT82u9ibXM1a/CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E4R1BrUY; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=vCLdTG4OTOoRZ6eeP9QKVCEeGwm/WnKCyh2zO80gJ51iEW28+woDLLtiAQxgqwkZdTFHlAM/o6LWGxF8vWf8acHJvsvzEK9nG3/rBJiWDQpYnRF4Ygk3FrtXUOPR202CbkKpD7y+E09kfKdLFTYoYvtuedxfT/7Y4+hqQrwk8M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O6hM03/j; arc=none smtp.client-ip=209.85.221.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E4R1BrUY"
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-42b3ed2c3e3so1087906f8f.1
-        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:12:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O6hM03/j"
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-42b2b9c7ab6so460321f8f.2
+        for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 07:12:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651543; x=1764256343; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763651552; x=1764256352; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YhzmKujL7bNVWf02jAjaSOrp3urplpV1YekSTYKrBiM=;
-        b=E4R1BrUYt5Xphwd1+ORb472P98Dhzw7W43beq9aINMRM/W35ZIam+wPpkoDz8b93nZ
-         x1oDFhQcf3ZqIbeHUcNwohvmkImxlN5+UchLKUy4vscU2QHy2lN2YTAFRkZF4MR6DEYv
-         RAhqkJPX9x3V0Pf67KKcsIYb7n3vNJ2QfnVz2amNESmP+3Qvnbo+D3BIr+6UpOzxzOmm
-         wEBRUA7LrKwjjAtd2sGdk0hNDbxCL78AYnLPcjrs+xtoolu13pflHcld+ip5Gci/u5RQ
-         qLBGdHb/zErcH9NdZa8op4QaTYOj9uiHuvbRaD/piyiEdWJRPdO1/RMQurUPvpr3s/MO
-         s+LA==
+        bh=Ln7UVfCWiCp9IlXxOO2xIWRuRprEYh3pWr1qQfgYpRY=;
+        b=O6hM03/jdt7RNir9rb1YbMnEOD5WL7md7J1AgD/nGa+VYXtsGLnUvTRuQD5EBSFlSG
+         e0TH7APoAsOmEKoLrMidP5O8OLuiFp9LTioZSRaSX65NmfexbSguhxZmH1k/C6s+ZnRG
+         cJxlgHV2s5riZz795XEh0wu5ideihD/us1KVH7EKssfzSsJfMOc7Pe4QkNPgn4AeVPWb
+         3x1u3dwMw2F/M8z/cUApdHKcJcxRtzFxxIlgDfWUqYNSeTRWn+MRJ/FfIaYERdYyf9Q8
+         jzVKWahdb/6KilFne0oJmrNHArm36/3ORaqPijbHBHquRvNczN762TGmtb3tuNHU8NSW
+         x50g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651543; x=1764256343;
+        d=1e100.net; s=20230601; t=1763651552; x=1764256352;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YhzmKujL7bNVWf02jAjaSOrp3urplpV1YekSTYKrBiM=;
-        b=X8QxUClzgV6GS+2fGgMTK8vqf5pPAycDy7N2i1rtPJjdGO07iUnD0GFpyMKN08Dt04
-         VZP5CnqZ0FecE/OH9fGP/QRnSImFZTBDD9Vd2sWE8o8+7rTIj/ll0PYFHPF0Bfh/P/Y3
-         PejTI0PPo3leYt8uHj+3Zzy26vX7g6ZlbrGrILS2DCYh/SGvRf1WrOh31j9cngahhB4W
-         I/V5WDE74Ru7BTZPV+ROx2IhQsTXnd2MFrBaZQnRYOx9xDI8sH4ZUYdlnRlIQpNwSPqe
-         mg492fNU/VUtKz/r3dE1km8heY2CIkgwT6+y+aIs92N5mAgU2yzJMW5G+EnFYtGnmQdK
-         lY+w==
-X-Forwarded-Encrypted: i=1; AJvYcCU/MWFMN4UFHtDa3qlBQzEQhGDtfvoA0dhHXHwq8r3kolhL8lQuAHcblibfagsN3EZG1hPR@lists.linux.dev
-X-Gm-Message-State: AOJu0YzRJLxIPYUf35J4yMlO1Hk0wukcv+qN+LVpTEaHifdaG0tMDuiy
-	ON1jH2pOTfWAcSeyxsV+OMpowN0QE/ANWDboAhajLwN9pEYMVQdgNWFMeG43wEu+7I8NX/6Il/k
-	I5w==
-X-Google-Smtp-Source: AGHT+IFL0EI2FVZUMy6GZbaXFPeZWxMdszC7G+QJPxJYJ5Tt54juOMlly5lP2pxtgOuHE3Qi1fA/jEG3bQ==
+        bh=Ln7UVfCWiCp9IlXxOO2xIWRuRprEYh3pWr1qQfgYpRY=;
+        b=CPzRggzazrWY/dWYld3jMTJeZTqZnaUPBW67jhSDwgmx+J5XZFypK2Qhikpjiq06uR
+         dhTknP2p3K3MtZKI0uZYmcdgarUtztAxtVoo4Z8q+tODDBR/9E1gHHfFxvrda7CB6JpX
+         2PhVf/6rTRoT8YVWMS6TIll0lIQ2Qimpf/7361bebGFJeTnyxm2p2r1qQY0rrlRsrDMi
+         Gd8PAE1Na/Ka92BhjVgYj58QbZxECmbXDJVu5QiOwNiYUiATtvjXdeEL2wt2WUH2vyGz
+         UieOBJHIXFWGKJiDuuGPgPtQiC8o4g1yUB+HJflRfb/FbAwE/EkdFXBwnaFg1SdXNpVt
+         6/qg==
+X-Forwarded-Encrypted: i=1; AJvYcCVHmuV4WVe+0zuMrJJYJ9ha1ozNvjK3ceZiep/CH+2Xr9dHOAS8SU5hRgY0CYAiYjzWxWsv@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx6JAeseuXpZPHRJDp+HKAREojA97lNJZvvmvQxxQot87Cq7qV3
+	VIDofPWaL27mDWwo9GrWaM0A3pDvyaROu01IcBrAKTDd9iJoKEXrVMx9aN39mnNKQHHjTI9zhLX
+	q3w==
+X-Google-Smtp-Source: AGHT+IGEIThrt25p8iFaAeOhASluQ3+/NjEt1IOMSXAcPjrVxIIVxtBuFT8+DlrUkxM3iN/ogjkjO7OQog==
 X-Received: from wrs17.prod.google.com ([2002:a05:6000:651:b0:42b:328d:1994])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:2287:b0:42b:3bd2:b2f8
- with SMTP id ffacd0b85a97d-42cb9a603f4mr3376737f8f.46.1763651542984; Thu, 20
- Nov 2025 07:12:22 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:37 +0100
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:2c05:b0:42b:4267:83d5
+ with SMTP id ffacd0b85a97d-42cb9a11c12mr2935283f8f.8.1763651552168; Thu, 20
+ Nov 2025 07:12:32 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:39 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-13-elver@google.com>
-Subject: [PATCH v4 12/35] bit_spinlock: Include missing <asm/processor.h>
+Message-ID: <20251120151033.3840508-15-elver@google.com>
+Subject: [PATCH v4 14/35] rcu: Support Clang's context analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,35 +87,407 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Including <linux/bit_spinlock.h> into an empty TU will result in the
-compiler complaining:
+Improve the existing annotations to properly support Clang's context
+analysis.
 
-./include/linux/bit_spinlock.h:34:4: error: call to undeclared function 'cpu_relax'; <...>
-   34 |                         cpu_relax();
-      |                         ^
-1 error generated.
+The old annotations distinguished between RCU, RCU_BH, and RCU_SCHED;
+however, to more easily be able to express that "hold the RCU read lock"
+without caring if the normal, _bh(), or _sched() variant was used we'd
+have to remove the distinction of the latter variants: change the _bh()
+and _sched() variants to also acquire "RCU".
 
-Include <asm/processor.h> to allow including bit_spinlock.h where
-<asm/processor.h> is not otherwise included.
+When (and if) we introduce context guards to denote more generally that
+"IRQ", "BH", "PREEMPT" contexts are disabled, it would make sense to
+acquire these instead of RCU_BH and RCU_SCHED respectively.
+
+The above change also simplified introducing __guarded_by support, where
+only the "RCU" context guard needs to be held: introduce __rcu_guarded,
+where Clang's context analysis warns if a pointer is dereferenced
+without any of the RCU locks held, or updated without the appropriate
+helpers.
+
+The primitives rcu_assign_pointer() and friends are wrapped with
+context_unsafe(), which enforces using them to update RCU-protected
+pointers marked with __rcu_guarded.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- include/linux/bit_spinlock.h | 2 ++
- 1 file changed, 2 insertions(+)
+v3:
+* Properly support reentrancy via new compiler support.
 
-diff --git a/include/linux/bit_spinlock.h b/include/linux/bit_spinlock.h
-index c0989b5b0407..59e345f74b0e 100644
---- a/include/linux/bit_spinlock.h
-+++ b/include/linux/bit_spinlock.h
-@@ -7,6 +7,8 @@
- #include <linux/atomic.h>
- #include <linux/bug.h>
+v2:
+* Reword commit message and point out reentrancy caveat.
+---
+ Documentation/dev-tools/context-analysis.rst |  2 +-
+ include/linux/rcupdate.h                     | 77 ++++++++++++------
+ lib/test_context-analysis.c                  | 85 ++++++++++++++++++++
+ 3 files changed, 139 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+index a3d925ce2df4..05164804a92a 100644
+--- a/Documentation/dev-tools/context-analysis.rst
++++ b/Documentation/dev-tools/context-analysis.rst
+@@ -81,7 +81,7 @@ Supported Kernel Primitives
  
-+#include <asm/processor.h>  /* for cpu_relax() */
+ Currently the following synchronization primitives are supported:
+ `raw_spinlock_t`, `spinlock_t`, `rwlock_t`, `mutex`, `seqlock_t`,
+-`bit_spinlock`.
++`bit_spinlock`, RCU.
+ 
+ For context guards with an initialization function (e.g., `spin_lock_init()`),
+ calling this function before initializing any guarded members or globals
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index c5b30054cd01..5cddb9019a99 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -31,6 +31,16 @@
+ #include <asm/processor.h>
+ #include <linux/context_tracking_irq.h>
+ 
++token_context_guard(RCU, __reentrant_ctx_guard);
++token_context_guard_instance(RCU, RCU_SCHED);
++token_context_guard_instance(RCU, RCU_BH);
 +
- /*
-  *  bit-based spin_lock()
-  *
++/*
++ * A convenience macro that can be used for RCU-protected globals or struct
++ * members; adds type qualifier __rcu, and also enforces __guarded_by(RCU).
++ */
++#define __rcu_guarded __rcu __guarded_by(RCU)
++
+ #define ULONG_CMP_GE(a, b)	(ULONG_MAX / 2 >= (a) - (b))
+ #define ULONG_CMP_LT(a, b)	(ULONG_MAX / 2 < (a) - (b))
+ 
+@@ -425,7 +435,8 @@ static inline void rcu_preempt_sleep_check(void) { }
+ 
+ // See RCU_LOCKDEP_WARN() for an explanation of the double call to
+ // debug_lockdep_rcu_enabled().
+-static inline bool lockdep_assert_rcu_helper(bool c)
++static inline bool lockdep_assert_rcu_helper(bool c, const struct __ctx_guard_RCU *ctx)
++	__assumes_shared_ctx_guard(RCU) __assumes_shared_ctx_guard(ctx)
+ {
+ 	return debug_lockdep_rcu_enabled() &&
+ 	       (c || !rcu_is_watching() || !rcu_lockdep_current_cpu_online()) &&
+@@ -438,7 +449,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+  * Splats if lockdep is enabled and there is no rcu_read_lock() in effect.
+  */
+ #define lockdep_assert_in_rcu_read_lock() \
+-	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_lock_map)))
++	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_lock_map), RCU))
+ 
+ /**
+  * lockdep_assert_in_rcu_read_lock_bh - WARN if not protected by rcu_read_lock_bh()
+@@ -448,7 +459,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+  * actual rcu_read_lock_bh() is required.
+  */
+ #define lockdep_assert_in_rcu_read_lock_bh() \
+-	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_bh_lock_map)))
++	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_bh_lock_map), RCU_BH))
+ 
+ /**
+  * lockdep_assert_in_rcu_read_lock_sched - WARN if not protected by rcu_read_lock_sched()
+@@ -458,7 +469,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+  * instead an actual rcu_read_lock_sched() is required.
+  */
+ #define lockdep_assert_in_rcu_read_lock_sched() \
+-	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_sched_lock_map)))
++	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_sched_lock_map), RCU_SCHED))
+ 
+ /**
+  * lockdep_assert_in_rcu_reader - WARN if not within some type of RCU reader
+@@ -476,17 +487,17 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+ 	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_lock_map) &&			\
+ 					       !lock_is_held(&rcu_bh_lock_map) &&		\
+ 					       !lock_is_held(&rcu_sched_lock_map) &&		\
+-					       preemptible()))
++					       preemptible(), RCU))
+ 
+ #else /* #ifdef CONFIG_PROVE_RCU */
+ 
+ #define RCU_LOCKDEP_WARN(c, s) do { } while (0 && (c))
+ #define rcu_sleep_check() do { } while (0)
+ 
+-#define lockdep_assert_in_rcu_read_lock() do { } while (0)
+-#define lockdep_assert_in_rcu_read_lock_bh() do { } while (0)
+-#define lockdep_assert_in_rcu_read_lock_sched() do { } while (0)
+-#define lockdep_assert_in_rcu_reader() do { } while (0)
++#define lockdep_assert_in_rcu_read_lock() __assume_shared_ctx_guard(RCU)
++#define lockdep_assert_in_rcu_read_lock_bh() __assume_shared_ctx_guard(RCU_BH)
++#define lockdep_assert_in_rcu_read_lock_sched() __assume_shared_ctx_guard(RCU_SCHED)
++#define lockdep_assert_in_rcu_reader() __assume_shared_ctx_guard(RCU)
+ 
+ #endif /* #else #ifdef CONFIG_PROVE_RCU */
+ 
+@@ -506,11 +517,11 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+ #endif /* #else #ifdef __CHECKER__ */
+ 
+ #define __unrcu_pointer(p, local)					\
+-({									\
++context_unsafe(								\
+ 	typeof(*p) *local = (typeof(*p) *__force)(p);			\
+ 	rcu_check_sparse(p, __rcu);					\
+-	((typeof(*p) __force __kernel *)(local)); 			\
+-})
++	((typeof(*p) __force __kernel *)(local)) 			\
++)
+ /**
+  * unrcu_pointer - mark a pointer as not being RCU protected
+  * @p: pointer needing to lose its __rcu property
+@@ -586,7 +597,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+  * other macros that it invokes.
+  */
+ #define rcu_assign_pointer(p, v)					      \
+-do {									      \
++context_unsafe(							      \
+ 	uintptr_t _r_a_p__v = (uintptr_t)(v);				      \
+ 	rcu_check_sparse(p, __rcu);					      \
+ 									      \
+@@ -594,7 +605,7 @@ do {									      \
+ 		WRITE_ONCE((p), (typeof(p))(_r_a_p__v));		      \
+ 	else								      \
+ 		smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+-} while (0)
++)
+ 
+ /**
+  * rcu_replace_pointer() - replace an RCU pointer, returning its old value
+@@ -861,9 +872,10 @@ do {									      \
+  * only when acquiring spinlocks that are subject to priority inheritance.
+  */
+ static __always_inline void rcu_read_lock(void)
++	__acquires_shared(RCU)
+ {
+ 	__rcu_read_lock();
+-	__acquire(RCU);
++	__acquire_shared(RCU);
+ 	rcu_lock_acquire(&rcu_lock_map);
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+ 			 "rcu_read_lock() used illegally while idle");
+@@ -891,11 +903,12 @@ static __always_inline void rcu_read_lock(void)
+  * See rcu_read_lock() for more information.
+  */
+ static inline void rcu_read_unlock(void)
++	__releases_shared(RCU)
+ {
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+ 			 "rcu_read_unlock() used illegally while idle");
+ 	rcu_lock_release(&rcu_lock_map); /* Keep acq info for rls diags. */
+-	__release(RCU);
++	__release_shared(RCU);
+ 	__rcu_read_unlock();
+ }
+ 
+@@ -914,9 +927,11 @@ static inline void rcu_read_unlock(void)
+  * was invoked from some other task.
+  */
+ static inline void rcu_read_lock_bh(void)
++	__acquires_shared(RCU) __acquires_shared(RCU_BH)
+ {
+ 	local_bh_disable();
+-	__acquire(RCU_BH);
++	__acquire_shared(RCU);
++	__acquire_shared(RCU_BH);
+ 	rcu_lock_acquire(&rcu_bh_lock_map);
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+ 			 "rcu_read_lock_bh() used illegally while idle");
+@@ -928,11 +943,13 @@ static inline void rcu_read_lock_bh(void)
+  * See rcu_read_lock_bh() for more information.
+  */
+ static inline void rcu_read_unlock_bh(void)
++	__releases_shared(RCU) __releases_shared(RCU_BH)
+ {
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+ 			 "rcu_read_unlock_bh() used illegally while idle");
+ 	rcu_lock_release(&rcu_bh_lock_map);
+-	__release(RCU_BH);
++	__release_shared(RCU_BH);
++	__release_shared(RCU);
+ 	local_bh_enable();
+ }
+ 
+@@ -952,9 +969,11 @@ static inline void rcu_read_unlock_bh(void)
+  * rcu_read_lock_sched() was invoked from an NMI handler.
+  */
+ static inline void rcu_read_lock_sched(void)
++	__acquires_shared(RCU) __acquires_shared(RCU_SCHED)
+ {
+ 	preempt_disable();
+-	__acquire(RCU_SCHED);
++	__acquire_shared(RCU);
++	__acquire_shared(RCU_SCHED);
+ 	rcu_lock_acquire(&rcu_sched_lock_map);
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+ 			 "rcu_read_lock_sched() used illegally while idle");
+@@ -962,9 +981,11 @@ static inline void rcu_read_lock_sched(void)
+ 
+ /* Used by lockdep and tracing: cannot be traced, cannot call lockdep. */
+ static inline notrace void rcu_read_lock_sched_notrace(void)
++	__acquires_shared(RCU) __acquires_shared(RCU_SCHED)
+ {
+ 	preempt_disable_notrace();
+-	__acquire(RCU_SCHED);
++	__acquire_shared(RCU);
++	__acquire_shared(RCU_SCHED);
+ }
+ 
+ /**
+@@ -973,22 +994,27 @@ static inline notrace void rcu_read_lock_sched_notrace(void)
+  * See rcu_read_lock_sched() for more information.
+  */
+ static inline void rcu_read_unlock_sched(void)
++	__releases_shared(RCU) __releases_shared(RCU_SCHED)
+ {
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+ 			 "rcu_read_unlock_sched() used illegally while idle");
+ 	rcu_lock_release(&rcu_sched_lock_map);
+-	__release(RCU_SCHED);
++	__release_shared(RCU_SCHED);
++	__release_shared(RCU);
+ 	preempt_enable();
+ }
+ 
+ /* Used by lockdep and tracing: cannot be traced, cannot call lockdep. */
+ static inline notrace void rcu_read_unlock_sched_notrace(void)
++	__releases_shared(RCU) __releases_shared(RCU_SCHED)
+ {
+-	__release(RCU_SCHED);
++	__release_shared(RCU_SCHED);
++	__release_shared(RCU);
+ 	preempt_enable_notrace();
+ }
+ 
+ static __always_inline void rcu_read_lock_dont_migrate(void)
++	__acquires_shared(RCU)
+ {
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RCU))
+ 		migrate_disable();
+@@ -996,6 +1022,7 @@ static __always_inline void rcu_read_lock_dont_migrate(void)
+ }
+ 
+ static inline void rcu_read_unlock_migrate(void)
++	__releases_shared(RCU)
+ {
+ 	rcu_read_unlock();
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RCU))
+@@ -1041,10 +1068,10 @@ static inline void rcu_read_unlock_migrate(void)
+  * ordering guarantees for either the CPU or the compiler.
+  */
+ #define RCU_INIT_POINTER(p, v) \
+-	do { \
++	context_unsafe( \
+ 		rcu_check_sparse(p, __rcu); \
+ 		WRITE_ONCE(p, RCU_INITIALIZER(v)); \
+-	} while (0)
++	)
+ 
+ /**
+  * RCU_POINTER_INITIALIZER() - statically initialize an RCU protected pointer
+@@ -1206,4 +1233,6 @@ DEFINE_LOCK_GUARD_0(rcu,
+ 	} while (0),
+ 	rcu_read_unlock())
+ 
++DECLARE_LOCK_GUARD_0_ATTRS(rcu, __acquires_shared(RCU), __releases_shared(RCU))
++
+ #endif /* __LINUX_RCUPDATE_H */
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 77e599a9281b..f18b7252646d 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -7,6 +7,7 @@
+ #include <linux/bit_spinlock.h>
+ #include <linux/build_bug.h>
+ #include <linux/mutex.h>
++#include <linux/rcupdate.h>
+ #include <linux/seqlock.h>
+ #include <linux/spinlock.h>
+ 
+@@ -277,3 +278,87 @@ static void __used test_bit_spin_lock(struct test_bit_spinlock_data *d)
+ 		bit_spin_unlock(3, &d->bits);
+ 	}
+ }
++
++/*
++ * Test that we can mark a variable guarded by RCU, and we can dereference and
++ * write to the pointer with RCU's primitives.
++ */
++struct test_rcu_data {
++	long __rcu_guarded *data;
++};
++
++static void __used test_rcu_guarded_reader(struct test_rcu_data *d)
++{
++	rcu_read_lock();
++	(void)rcu_dereference(d->data);
++	rcu_read_unlock();
++
++	rcu_read_lock_bh();
++	(void)rcu_dereference(d->data);
++	rcu_read_unlock_bh();
++
++	rcu_read_lock_sched();
++	(void)rcu_dereference(d->data);
++	rcu_read_unlock_sched();
++}
++
++static void __used test_rcu_guard(struct test_rcu_data *d)
++{
++	guard(rcu)();
++	(void)rcu_dereference(d->data);
++}
++
++static void __used test_rcu_guarded_updater(struct test_rcu_data *d)
++{
++	rcu_assign_pointer(d->data, NULL);
++	RCU_INIT_POINTER(d->data, NULL);
++	(void)unrcu_pointer(d->data);
++}
++
++static void wants_rcu_held(void)	__must_hold_shared(RCU)       { }
++static void wants_rcu_held_bh(void)	__must_hold_shared(RCU_BH)    { }
++static void wants_rcu_held_sched(void)	__must_hold_shared(RCU_SCHED) { }
++
++static void __used test_rcu_lock_variants(void)
++{
++	rcu_read_lock();
++	wants_rcu_held();
++	rcu_read_unlock();
++
++	rcu_read_lock_bh();
++	wants_rcu_held_bh();
++	rcu_read_unlock_bh();
++
++	rcu_read_lock_sched();
++	wants_rcu_held_sched();
++	rcu_read_unlock_sched();
++}
++
++static void __used test_rcu_lock_reentrant(void)
++{
++	rcu_read_lock();
++	rcu_read_lock();
++	rcu_read_lock_bh();
++	rcu_read_lock_bh();
++	rcu_read_lock_sched();
++	rcu_read_lock_sched();
++
++	rcu_read_unlock_sched();
++	rcu_read_unlock_sched();
++	rcu_read_unlock_bh();
++	rcu_read_unlock_bh();
++	rcu_read_unlock();
++	rcu_read_unlock();
++}
++
++static void __used test_rcu_assert_variants(void)
++{
++	lockdep_assert_in_rcu_read_lock();
++	wants_rcu_held();
++
++	lockdep_assert_in_rcu_read_lock_bh();
++	wants_rcu_held_bh();
++
++	lockdep_assert_in_rcu_read_lock_sched();
++	wants_rcu_held_sched();
++}
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
