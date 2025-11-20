@@ -1,272 +1,91 @@
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D7F3B2BA
-	for <llvm@lists.linux.dev>; Thu, 20 Nov 2025 16:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E295D344042;
+	Thu, 20 Nov 2025 16:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763656651; cv=none; b=uhTPDaQdJndjmKWpr6WxeCw5uGp/K0VPuQHGwu9VCdHHJ84mX9we3o7hfE1uRDJHNl6N5bBwuf/ICtKNLfbalB/EVbAgD6m9lYMCZt1U8ziNndAJB7GVBn1gsBHin14xpCnk/vIdjq/DKVl0yd7fGZvcnlOzP8/NgneWN1Ie72Q=
+	t=1763656902; cv=none; b=mGmSZQ1Y3nzN03Sn8rSz8a6CqGeS63GD8hJjZBVx1B3uSXKOHvA++eNP4BVC2lc0tpahPPOM5igGDls1QNOwCEZvx1NP4GheynZSegYI3fvbaBI7xzgZQm6GL6Pk42ROu5wE50jibpKIfx3blmIlwp0TF0sUxDdMvCaER4jtRiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763656651; c=relaxed/simple;
-	bh=ikZZTlmcvvgaeRuhpKBwP55qPBNe+u4ZLfVXPYvtcZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O2kJAsXzhhSHsy+1K6jrGnX5PcQv1gCDOzXp4vyjRBTswyUt8Qk8y7hMZFuAgSEq5pAlMEXpR1AC8WVGIuI6U3YuvNc5Eufiit/D8PrcGEAQzgNN6xynxPusgpQoEp+tWCzpTia5TpuJmXydUsbbzv94Mn70Wt6UWcwcEtSCKYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=FygshPq5; arc=none smtp.client-ip=185.125.25.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1763656902; c=relaxed/simple;
+	bh=Q4wph/mMZjjd77B72cncj35YfQ2DBSpBOYDGuwtCsi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=J1UqDSGafJLgmmUTlSAZ9HL42/RXdoBojE/dtkF29eYjRfdHZVyV47OenJaIWAy4OtuvxSGa468++2g+UWTWng068/FJIgtALltaTGDT22C0DVQl9/TWgvAEf3iBQIJX4y0f95jk85uX+ZtZrtxiPLP2owi5hbDKvIMzGLTP3YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FNVS1lEr; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="FygshPq5"
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dC2fJ0JsMzlg6;
-	Thu, 20 Nov 2025 16:42:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1763653335;
-	bh=bK5R4FWeryYY7Dzvx1ZNaz58dfr5FQOYKvQc4SGZ4YM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FygshPq5IlSlaXB1OLnU88u1OtCo/xcWUxfMvs71UOoduLLFVoXOeHiyDK+tRMw0l
-	 hu+p5NjGJ+xoeATGrs1fPTBCGdZ4sUGKHCE0B7eOrmuKt04DyNFr6rYj+MuoAJEM++
-	 c0Ct4rf06JBSY1HTX38a+2Zi8SuATscH9CjsvXO4=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dC2fG24dwzXmx;
-	Thu, 20 Nov 2025 16:42:14 +0100 (CET)
-Date: Thu, 20 Nov 2025 16:42:13 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Abhinav Saxena <xandfury@gmail.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev, Daniel Verkamp <dverkamp@chromium.org>, 
-	Jeff Xu <jeffxu@chromium.org>, =?utf-8?B?VGhpw6liYXVk?= Weksteen <tweek@google.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: Re: [PATCH RFC 0/4] landlock: add LANDLOCK_SCOPE_MEMFD_EXEC execution
-Message-ID: <20251120.KuoC9rol6aht@digikod.net>
-References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
- <20250918.io7too8ain7A@digikod.net>
- <878qhy2lch.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FNVS1lEr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763656901; x=1795192901;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q4wph/mMZjjd77B72cncj35YfQ2DBSpBOYDGuwtCsi0=;
+  b=FNVS1lEroDU/49GMKXPwjNz+hQDDggRvA5eFlkeeIw2N+rVFZA1KL4YN
+   qZvL0ITaeSJez3qK+vq0lQeOkwYB/oFWbRGMiQiWYPT0i9ZwrrI7M532r
+   IYm+nTHrPq3RX4yvHsOA/XwyT56m854k8ruotR3Uup+9HGtf9EltM26jb
+   aAPz6i+ffspPzqddJVK0dGzAm/2bYKvFUh4mALxsmJr7taHO5CnSdMSLD
+   /BmE/f8UFJILs7zKmjUEAxXo+ggHayhO89xsTVL3aqiJRTv8BVk79DQlb
+   gwkI3Jt4HQ+worr+cJL2EFg32xoCrTvCdq3zs0WJgXAjNIOvyRPeZ2qLP
+   Q==;
+X-CSE-ConnectionGUID: h0WNmTdZQXO8X5YkYG/Ahg==
+X-CSE-MsgGUID: RBRsZX/VSEq+WfW+qKa5NA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="65822674"
+X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
+   d="scan'208";a="65822674"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 08:41:40 -0800
+X-CSE-ConnectionGUID: yddx26sQTD+fr7hr+owRjA==
+X-CSE-MsgGUID: sok7ZA0CT2O1OL3LHsbXiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
+   d="scan'208";a="222363181"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 20 Nov 2025 08:41:39 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vM7iy-0004HR-2W;
+	Thu, 20 Nov 2025 16:41:36 +0000
+Date: Fri, 21 Nov 2025 00:41:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexandre Courbot <acourbot@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>
+Subject: [linux-next:master 9676/10599] ld.lld: error: undefined symbol:
+ rust_build_error
+Message-ID: <202511210055.RUsFNku1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <878qhy2lch.fsf@gmail.com>
-X-Infomaniak-Routing: alpha
 
-On Sun, Sep 28, 2025 at 05:37:02PM -0600, Abhinav Saxena wrote:
-> Thanks for the detailed reply Mickaël!
-> 
-> Mickaël Salaün <mic@digikod.net> writes:
-> 
-> > Thanks for this patch series Abhinav!  The code looks good overall, but
-> > we should clarify the design.  Sorry for the delayed response, it is on
-> > my radar now.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
+commit: 01e345e82ec3a5a7edeb9fa0dcb7fd4b0e5c534e [9676/10599] rust: num: add Bounded integer wrapping type
+config: loongarch-randconfig-6002-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/reproduce)
 
-Please feel free to ping me after two weeks without answer, I might miss
-some emails.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511210055.RUsFNku1-lkp@intel.com/
 
-> >
-> > CCing Jeff and Daniel
-> >
-> > On Sat, Jul 19, 2025 at 05:13:10AM -0600, Abhinav Saxena wrote:
-> >> This patch series introduces LANDLOCK_SCOPE_MEMFD_EXEC, a new Landlock
-> >> scoping mechanism that restricts execution of anonymous memory file
-> >> descriptors (memfd) created via memfd_create(2). This addresses security
-> >> gaps where processes can bypass W^X policies and execute arbitrary code
-> >> through anonymous memory objects.
-> >> 
-> >> Fixes: <https://github.com/landlock-lsm/linux/issues/37>
-> >> 
-> >> SECURITY PROBLEM
-> >> `=============='
-> >> 
-> >> Current Landlock filesystem restrictions do not cover memfd objects,
-> >> allowing processes to:
-> >> 
-> >> 1. Read-to-execute bypass: Create writable memfd, inject code,
-> >>    then execute via mmap(PROT_EXEC) or direct execve()
-> >> 2. Anonymous execution: Execute code without touching the filesystem via
-> >>    execve(“/proc/self/fd/N”) where N is a memfd descriptor
-> >
-> >> 3. Cross-domain access violations: Pass memfd between processes to
-> >>    bypass domain restrictions
-> >
-> > Landlock only restricts access at open time, which is a useful property.
-> > This enables to create more restricted sandboxes but still get access to
-> > outside resources via trusted processes.  If the process passing the FDs
-> > is not trusted, the sandboxed process could just ask to execute
-> > arbitrary code outside the sandbox anyway.
-> >
-> > However, the Landlock scopes are designed to block IPC from within a
-> > sandbox to outside the sandbox.  We could have a new scope to forbid a
-> > sandbox process to receive or inherit file descriptors, but that would
-> > be a different and generic feature.  For compatibility reasons, this
-> > might not be easy to implement and I think there are more important
-> > features to implement before that.
-> >
-> > Thinking more about it, restricting memfd should not be a “scoped” flag
-> > because the semantic is not the same, but we should have a new ruleset
-> > property instead, something like “ruleset.denied” with a related
-> > LANDLOCK_DENY_EXECUTE_MEMFD flag.  This flag will only have an impact on
-> > newly created memfd from a sandboxed process with this restriction at
-> > creation time. This could be implemented with hook_file_alloc_security()
-> > by checking if the file is indeed a memfd and checking inode->i_mode for
-> > executability bits (which would imply MFD_NOEXEC_SEAL).
-> >
-> 
-> Thanks for the clarification! So if I understood correctly we are
-> proposing adding a `denied` field to the `landlock_ruleset_attr` struct
-> 
-> struct landlock_ruleset_attr {
->     __u64 handled_access_fs;
->     __u64 handled_access_net;
->     __u64 scoped;
->     __u64 denied;              /* New field */
-> };
-> 
-> which allows memfd_create() to be allowed by default unless
-> LANDLOCK_DENY_EXECUTE_MEMFD bit is set.
+All errors (new ones prefixed by >>):
 
-Yes
+>> ld.lld: error: undefined symbol: rust_build_error
+   >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
+   >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u8, 1>>::from_expr) in archive vmlinux.a
+   >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
+   >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u32, 4>>::from_expr) in archive vmlinux.a
+   >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
+   >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u16, 8>>::from_expr) in archive vmlinux.a
 
-> Also it seems Thiébaud
-> Weksteen’s patch[1] will land, and maybe we can use
-> security_inode_init_security_anon instead? What do you think?
-
-Definitely, and this patch is now merged in -next.
-
-> 
-> Apologies for my ignorance, do we have to wait till his patch has
-> landed into Linus’s tree?
-
-As long as you explain this dependency in the commit message and point
-to the patch (as a comment, after a "---" line), we're good.
-
-> 
-> >> 
-> >> These scenarios can occur in sandboxed environments where filesystem
-> >> access is restricted but memfd creation remains possible.
-> >> 
-> >> IMPLEMENTATION
-> >> `============'
-> >> 
-> >> The implementation adds hierarchical execution control through domain
-> >> scoping:
-> >> 
-> >> Core Components:
-> >> - is_memfd_file(): Reliable memfd detection via “memfd:” dentry prefix
-> >> - domain_is_scoped(): Cross-domain hierarchy checking (moved to domain.c)
-> >> - LSM hooks: mmap_file, file_mprotect, bprm_creds_for_exec
-> >> - Creation-time restrictions: hook_file_alloc_security
-> >> 
-> >> Security Matrix:
-> >> Execution decisions follow domain hierarchy rules preventing both
-> >> same-domain bypass attempts and cross-domain access violations while
-> >> preserving legitimate hierarchical access patterns.
-> >> 
-> >> Domain Hierarchy with LANDLOCK_SCOPE_MEMFD_EXEC:
-> >> `============================================='
-> >> 
-> >> Root (no domain) - No restrictions
-> >>   |
-> >>   +– Domain A [SCOPE_MEMFD_EXEC] Layer 1
-> >>   |     +– memfd_A (tagged with Domain A as creator)
-> >>   |     |
-> >>   |     +– Domain A1 (child) [NO SCOPE] Layer 2
-> >>   |     |     +– Inherits Layer 1 restrictions from parent
-> >>   |     |     +– memfd_A1 (can create, inherits restrictions)
-> >>   |     |     +– Domain A1a [SCOPE_MEMFD_EXEC] Layer 3
-> >>   |     |           +– memfd_A1a (tagged with Domain A1a)
-> >>   |     |
-> >>   |     +– Domain A2 (child) [SCOPE_MEMFD_EXEC] Layer 2
-> >>   |           +– memfd_A2 (tagged with Domain A2 as creator)
-> >>   |           +– CANNOT access memfd_A1 (different subtree)
-> >>   |
-> >>   +– Domain B [SCOPE_MEMFD_EXEC] Layer 1
-> >>         +– memfd_B (tagged with Domain B as creator)
-> >>         +– CANNOT access ANY memfd from Domain A subtree
-> >> 
-> >> Execution Decision Matrix:
-> >> `======================'
-> >> Executor->  |  A  | A1 | A1a | A2 | B  | Root
-> >> Creator     |     |    |     |    |    |
-> >> ————|—–|—-|—–|—-|—-|—–
-> >> Domain A    |  X  | X  | X   | X  | X  |  Y
-> >> Domain A1   |  Y  | X  | X   | X  | X  |  Y
-> >> Domain A1a  |  Y  | Y  | X   | X  | X  |  Y
-> >> Domain A2   |  Y  | X  | X   | X  | X  |  Y
-> >> Domain B    |  X  | X  | X   | X  | X  |  Y
-> >> Root        |  Y  | Y  | Y   | Y  | Y  |  Y
-> >> 
-> >> Legend: Y = Execution allowed, X = Execution denied
-> >
-> > Because checks should not be related to scopes, this will be much
-> > simpler.
-> >
-> >> 
-> >> Scenarios Covered:
-> >> - Direct mmap(PROT_EXEC) on memfd files
-> >> - Two-stage mmap(PROT_READ) + mprotect(PROT_EXEC) bypass attempts
-> >> - execve("/proc/self/fd/N") anonymous execution
-> >> - execveat() and fexecve() file descriptor execution
-> >> - Cross-process memfd inheritance and IPC passing
-> >> 
-> >> TESTING
-> >> `====='
-> >> 
-> >> All patches have been validated with:
-> >> - scripts/checkpatch.pl –strict (clean)
-> >> - Selftests covering same-domain restrictions, cross-domain 
-> >>   hierarchy enforcement, and regular file isolation
-> >> - KUnit tests for memfd detection edge cases
-> >
-> > Thanks for all these tests!
-> >
-> >> 
-> >> DISCLAIMER
-> >> `========'
-> >> 
-> >> My understanding of Landlock scoping semantics may be limited, but this
-> >> implementation reflects my current understanding based on available
-> >> documentation and code analysis. I welcome feedback and corrections
-> >> regarding the scoping logic and domain hierarchy enforcement.
-> >> 
-> >> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> >> —
-> >> Abhinav Saxena (4):
-> >>       landlock: add LANDLOCK_SCOPE_MEMFD_EXEC scope
-> >>       landlock: implement memfd detection
-> >>       landlock: add memfd exec LSM hooks and scoping
-> >>       selftests/landlock: add memfd execution tests
-> >> 
-> >>  include/uapi/linux/landlock.h                      |   5 +
-> >>  security/landlock/.kunitconfig                     |   1 +
-> >>  security/landlock/audit.c                          |   4 +
-> >>  security/landlock/audit.h                          |   1 +
-> >>  security/landlock/cred.c                           |  14 -
-> >>  security/landlock/domain.c                         |  67 ++++
-> >>  security/landlock/domain.h                         |   4 +
-> >>  security/landlock/fs.c                             | 405 ++++++++++++++++++++-
-> >>  security/landlock/limits.h                         |   2 +-
-> >>  security/landlock/task.c                           |  67 —-
-> >>  …/selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++
-> >>  11 files changed, 812 insertions(+), 83 deletions(-)
-> >> —
-> >> base-commit: 5b74b2eff1eeefe43584e5b7b348c8cd3b723d38
-> >> change-id: 20250716-memfd-exec-ac0d582018c3
-> >> 
-> >> Best regards,
-> >> – 
-> >> Abhinav Saxena <xandfury@gmail.com>
-> >> 
-> >> 
-> 
-> Best,
-> Abhinav
-> 
-> [1] - <https://lore.kernel.org/all/20250918020434.1612137-1-tweek@google.com/>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
