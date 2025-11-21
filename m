@@ -1,126 +1,108 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF4133A6E6
-	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 09:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89EA33E34D
+	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 09:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763715981; cv=none; b=Rmb9AHUdy1vLAyJO4InZ/v0PDUEfElVx5zNKlC+dOOR3IE/9hMHux/dFGaGWoxZNtG3FzFKjwIL9ULlj/E0yTnM+PKw/x9115FIiN4HHPXuztbltQRJuzAU46zSxkOr2UMT5qUbraLEzI9VqvR1tq74B1+k5l6PcNUXxJv32Asg=
+	t=1763716093; cv=none; b=mXWjOpNtOFKfoDhKh4YSwCxevf/H3qCvW/ilLfaR2Mddz8XHOxrqlY+iBlTYtaAhnQLNlvOuxUBegpFDOpFuIt7p163J6lHmBqK0//7bmE2/OIBmzfIq9o86T0WX4TuWMe4GMU0iWay1ikAdO7tHWhbrf8IGTqhJ1BReIQqsGWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763715981; c=relaxed/simple;
-	bh=zOKtgqF4HJ8j8T0d2/Slahffx8Cb+tioUsRQW7/Z8ac=;
+	s=arc-20240116; t=1763716093; c=relaxed/simple;
+	bh=uBP0W7YNdO57kJqyfbG/oxzENxCPSzspfFTSGKkz7BQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Zu0nxnUb8dFbPH3ZyWSsXTVvLW6o0HIVutO7RiWQ0EvHOjvd+s6mc3cVD8HDR+qKW3mDsy0giRb38wff1SKWXzHua8A82WGcL9Q4uDpYPdS0+A7WXEIR3mv9Vc0lMzJf5f4ZlgYCMQTRzyDaSLUztG7Nu411OmmKvTgxkZ1N0cY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MBFBGKAw; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=H0Tgy8xBRIB4uNtmpayE/YiLYllhMm93Jy2UTRV2WJlObB74NtSSBDEINKo3RUq3EYF/xtIlBKHXtsy5/zaHU5zkQABVX4Uj/eMIWSmw00RkX+n32ypUyzRFpwh/SAfG5SFQ+5vL9zfZ0eoBiwVShuqoiMoV9KWULupD4bqc+Qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=34yPio0k; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MBFBGKAw"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477b8a667bcso22050375e9.2
-        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 01:06:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="34yPio0k"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-477563a0c75so9915755e9.1
+        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 01:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763715978; x=1764320778; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1763716090; x=1764320890; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WeU48TgMuKpFqa0P1KRY9QRCZS9h5NtO6feKcbkigT4=;
-        b=MBFBGKAwUqVsbVLtvMaPXOnfqCb3v8Z2RJPprtUUt8SgxfUI/54fHR4vC+L5MAAgAB
-         thyePECBtnsvkFbaLz0RlCUFosM6d8g6c+kECOlnZORh+E/wdySmpSZ9dkmlR+9DrkvB
-         B1V7BNu/eS6pMC2hGh4ob6Nq2ywd02UXfnRVnvJ3aIXbXo6xwFoHAdnfyINA2Obz9AFc
-         0fujdO89DrQ0Xb6ptKWwRm32qkyWGPFLsG6lffO8p57lsODK9Ej63ONgIZffrUc4ZJn+
-         5kZVNOJgExI3p0IAVMUcEko6i92gdrpcBTb7I7WKYP6r5zXNxjAVYFH4bW4Mify2RMQb
-         w9Dg==
+        bh=al+Nw9pptU9WC9PnBGXiDkOKAM9ETnNOvRMBFz/7sF8=;
+        b=34yPio0kFqRHqQwwad8gqFHLAianNO+vbPq7n8d7sq/n47j5puE/3t/QS9O5L3S2d7
+         xSVVU3h5Z+4n2Swy25fMG3Iya4CdxLbXs4s6BBWc+OoIVreI0ak6Ba1cBT7gwoQrO7Kl
+         Fp8ag38Au07fBCtpf3Dvd82rEqpHQA278turQTQouLbLGLOCj4dQni3w0L06o+vKnm7Y
+         foQsIdLtjJdbAqgLWuA918BLq9JGQeWIRFbCgbzxf59lDgQGaF8o/Lv4TEGcPYONFe/S
+         M10u2rHC8AMJLpHGmTFxJP8BaQ68W9AhhRuvY2jXYLuJioDDA3g6/mogYioc9hOIMxUT
+         sb8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763715978; x=1764320778;
+        d=1e100.net; s=20230601; t=1763716090; x=1764320890;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WeU48TgMuKpFqa0P1KRY9QRCZS9h5NtO6feKcbkigT4=;
-        b=Azo7IKWMbagl0NvVam4sqljbxjHMveWWY/YvR0E3EY1nruFxujJhsppCSp5Wg+AfqH
-         ruWX80Wsqo5VqirnAl677AGQDnkdwU6OG2lgozdw+rZ82s19KPrB+/TOC654B/bbYObK
-         nqoC5iSUrONTUh3Ba4Hiajpo7N+LlB7EvjJTWbE+9qnahA3/p+XUsYZEZIstPCvP6LtY
-         9OEKaLjIezOjDde8x/IvPS40b1mBF2qOAdihMLB8nW8rHImo2/zad4N/gCiTuwmBCc7A
-         NcDaslxeEE9JYYrN12gjQMf3cl7iMAi/yX0Qd6JXmTKyIKhMBe5dzzh9iOeeS7zaS8ht
-         Pvbw==
-X-Forwarded-Encrypted: i=1; AJvYcCWuoSDq3v7swsfomdXmKMn6JHuAIt4ZF63Ggv/8EXmPaO2jiSoMJbX/0KA/M/JXruriAIma@lists.linux.dev
-X-Gm-Message-State: AOJu0YxcItv5+7URN2g0kPV4/vnqon2b0D811M6O9qT6YDp8PW7/7MJU
-	2s9gTwNloEG9CaHZY1HvGoZjNbWf/CJADnnkRHm6hIkMy2JpfrvmC2OBMRLCr0gPtQ+O6gPeNRA
-	+ZiyNZp0l08WgSI5Gzg==
-X-Google-Smtp-Source: AGHT+IFi7Ro1buxMIwDHBU/1xLrbCnmwLUuJ2VcQkx7Dd6IbA9c6A9kXuy8l8eT1op8NAQZWhgpRwC85Zxzg+Ts=
-X-Received: from wmfv21.prod.google.com ([2002:a05:600c:15d5:b0:477:9fba:50e4])
+        bh=al+Nw9pptU9WC9PnBGXiDkOKAM9ETnNOvRMBFz/7sF8=;
+        b=pODQiEpSDUi0mWNWQisx8tQSDnQPrV+V7XFHuAHpQDwywepf7BmwQ0XDRKYai0/TMP
+         cGeReccGLIJ3sbVEvWU6r4nQLBmG+Bb99j2yFKZ9VRt3hvq3n+eH2L1BHjaYE89To2LT
+         TlXn4jTm4UvE4pFZxvrFRhEI0563pu+b01kYN/qASGK7fbDWoVZtTpyQRTEmiwCKcgfr
+         7/41uymF2fKIOCN7LJYnX1OVhoTKXuJQtlIP9aO+RPxiBzK3hiuVaGjDnxODcro9MTTv
+         DoPTCz9oFkW81qZb6CJYZf/c9jajJmQ3h0EHxz9MNVpg8lBLyrSkC7kdNNRM6aUkdY+k
+         OT2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUS6ksGZnsnj9X4gRtnSBzggiFexkg1Xmx6JHdk4QAfK3/pOO82jtO32JOl6WpxYjTHJksO@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxcd/lYW/ubLfmT8f5gYnLXplz9JPcVWXxSFunam+cm+xc4Ay5B
+	5EANznCN/JFS/nqyOlqzoFU3byResNrA1Pm8qX+Cbe9y2da3jbDJmkHr8qcK4l1JABL8PgDsZ0W
+	q/0CqSABrupSsLbNeLg==
+X-Google-Smtp-Source: AGHT+IEdrDcqbH7vAlZv1Rn1uYyJ5HQB5sQCRxjZt52n+6AQMlVKXOnSQHUlYVs8jycmYRM0JYcUHwiCmoajA+c=
+X-Received: from wmbjd14.prod.google.com ([2002:a05:600c:68ce:b0:474:979d:a20d])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:8b16:b0:477:fad:acd9 with SMTP id 5b1f17b1804b1-477c0203605mr15423305e9.34.1763715978389;
- Fri, 21 Nov 2025 01:06:18 -0800 (PST)
-Date: Fri, 21 Nov 2025 09:06:17 +0000
-In-Reply-To: <202511210649.lhQnt194-lkp@intel.com>
+ 2002:a05:600c:45cf:b0:477:7d94:5d0e with SMTP id 5b1f17b1804b1-477c01eb9b2mr15025395e9.27.1763716090113;
+ Fri, 21 Nov 2025 01:08:10 -0800 (PST)
+Date: Fri, 21 Nov 2025 09:08:09 +0000
+In-Reply-To: <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-References: <202511210649.lhQnt194-lkp@intel.com>
-Message-ID: <aSAriWs68Hlng-nS@google.com>
-Subject: Re: [linux-next:master 2964/10599] error[E0609]: no field `dev` on
- type `drm_gem_object`
+References: <202511210055.RUsFNku1-lkp@intel.com> <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com>
+Message-ID: <aSAr-aA2U26lr3iI@google.com>
+Subject: Re: [linux-next:master 9676/10599] ld.lld: error: undefined symbol: rust_build_error
 From: Alice Ryhl <aliceryhl@google.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Lyude Paul <lyude@redhat.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+To: Alexandre Courbot <acourbot@nvidia.com>
+Cc: kernel test robot <lkp@intel.com>, Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev
 Content-Type: text/plain; charset="utf-8"
 
-On Fri, Nov 21, 2025 at 06:47:35AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
-> commit: d3917368ebc5cd89d7d08eab4673e5c4c73ff42f [2964/10599] rust: drm/gem: Remove Object.dev
-> config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/archive/20251121/202511210649.lhQnt194-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210649.lhQnt194-lkp@intel.com/reproduce)
+On Fri, Nov 21, 2025 at 03:13:16PM +0900, Alexandre Courbot wrote:
+> On Fri Nov 21, 2025 at 1:41 AM JST, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
+> > commit: 01e345e82ec3a5a7edeb9fa0dcb7fd4b0e5c534e [9676/10599] rust: num: add Bounded integer wrapping type
+> > config: loongarch-randconfig-6002-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/config)
+> > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511210055.RUsFNku1-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >>> ld.lld: error: undefined symbol: rust_build_error
+> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
+> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u8, 1>>::from_expr) in archive vmlinux.a
+> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
+> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u32, 4>>::from_expr) in archive vmlinux.a
+> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
+> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u16, 8>>::from_expr) in archive vmlinux.a
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511210649.lhQnt194-lkp@intel.com/
+> Mmm, I don't like this. The expressions that are failing are extremely
+> simple, for instance:
 > 
-> All errors (new ones prefixed by >>):
+>     Bounded::<u8, 1>::from_expr(1)
 > 
-> >> error[E0609]: no field `dev` on type `drm_gem_object`
->    --> rust/kernel/drm/gem/mod.rs:231:57
->    |
->    231 |         unsafe { drm::Device::from_raw((*self.as_raw()).dev) }
->    |                                                         ^^^ unknown field
->    |
->    = note: available field is: `_address`
+> So if the compiler is unable to assess that this won't fail, this might
+> be a deal-breaker for `from_expr` and we might need to remove it. :(
+> 
+> This would also mean a lot more runtime checks when working with
+> bitfields and registers. Or can we assume that this is a compiler
+> problem on this particular architecture?
 
-I tried reproducing this on commit d3917368ebc5, but I got this error
-instead:
-
-	error[E0432]: unresolved imports `core::sync::atomic::AtomicI64`, `core::sync::atomic::AtomicU64`
-	  --> <linux>/rust/kernel/debugfs/traits.rs:12:27
-	   |
-	12 |     AtomicI16, AtomicI32, AtomicI64, AtomicI8, AtomicIsize, AtomicU16, AtomicU32, AtomicU64,
-	   |                           ^^^^^^^^^ no `AtomicI64` in `sync::atomic`              ^^^^^^^^^ no `AtomicU64` in `sync::atomic`
-	   |
-	help: a similar name exists in the module
-	   |
-	12 |     AtomicI16, AtomicI32, AtomicI32, AtomicI8, AtomicIsize, AtomicU16, AtomicU32, AtomicU64,
-	   |                           ~~~~~~~~~
-	help: a similar name exists in the module
-	   |
-	12 |     AtomicI16, AtomicI32, AtomicI64, AtomicI8, AtomicIsize, AtomicU16, AtomicU32, AtomicU32,
-	   |                                                                                   ~~~~~~~~~
-	
-	error[E0560]: struct `bindings::drm_gem_object_funcs` has no field named `vmap`
-	   --> <linux>/rust/kernel/drm/gem/mod.rs:188:9
-	    |
-	188 |         vmap: None,
-	    |         ^^^^ `bindings::drm_gem_object_funcs` does not have this field
-	    |
-	    = note: available fields are: `kernel_vmap`
-	
-	error: aborting due to 2 previous errors
-
-This was with ARCH=um SUBARCH=i386 in my make invocation and the
-provided config.
-
-Perhaps this config is just not working in general?
+Yeah, it sounds like from_expr() isn't going to work.
 
 Alice
