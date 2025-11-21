@@ -1,108 +1,138 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89EA33E34D
-	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 09:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38B0340A4C;
+	Fri, 21 Nov 2025 09:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763716093; cv=none; b=mXWjOpNtOFKfoDhKh4YSwCxevf/H3qCvW/ilLfaR2Mddz8XHOxrqlY+iBlTYtaAhnQLNlvOuxUBegpFDOpFuIt7p163J6lHmBqK0//7bmE2/OIBmzfIq9o86T0WX4TuWMe4GMU0iWay1ikAdO7tHWhbrf8IGTqhJ1BReIQqsGWg=
+	t=1763717572; cv=none; b=LH9eFnwKfFa2Gr76AUDczTaRsvJLNr4tzy8wOoIyaitS0sZuQZ3wILJ3HQemOLNY4lPhXy3Mz3TLmGbRkG8WQOjDwNEgcFuJIzfVveTcGKyWpmgZYCpv2j5TrdIXziwvfdHJnkoMbjl3lzUOFfJVpaJIteT8XeeCldHfwtm8X6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763716093; c=relaxed/simple;
-	bh=uBP0W7YNdO57kJqyfbG/oxzENxCPSzspfFTSGKkz7BQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=H0Tgy8xBRIB4uNtmpayE/YiLYllhMm93Jy2UTRV2WJlObB74NtSSBDEINKo3RUq3EYF/xtIlBKHXtsy5/zaHU5zkQABVX4Uj/eMIWSmw00RkX+n32ypUyzRFpwh/SAfG5SFQ+5vL9zfZ0eoBiwVShuqoiMoV9KWULupD4bqc+Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=34yPio0k; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1763717572; c=relaxed/simple;
+	bh=l0iVDv5nFWY3QUxvbihYT4S0RzKGXIL9T+AtTGVBS/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QaxXHr0N7ekXru7EyRRxir9AhzTaxds63K/OyYoQzYxWWE+niCeRi0iQkBQEhdCokrF207xBuB36hyNAtdHHF7QMDpDkj7qT96262JSRNsmL45BubiXFErgZrvoJZzPhqQ3rOjeMv0YADjt7ujwx1MNKDsMfIOGU7RTbavMDHBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LRy8STgY; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="34yPio0k"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-477563a0c75so9915755e9.1
-        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 01:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763716090; x=1764320890; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=al+Nw9pptU9WC9PnBGXiDkOKAM9ETnNOvRMBFz/7sF8=;
-        b=34yPio0kFqRHqQwwad8gqFHLAianNO+vbPq7n8d7sq/n47j5puE/3t/QS9O5L3S2d7
-         xSVVU3h5Z+4n2Swy25fMG3Iya4CdxLbXs4s6BBWc+OoIVreI0ak6Ba1cBT7gwoQrO7Kl
-         Fp8ag38Au07fBCtpf3Dvd82rEqpHQA278turQTQouLbLGLOCj4dQni3w0L06o+vKnm7Y
-         foQsIdLtjJdbAqgLWuA918BLq9JGQeWIRFbCgbzxf59lDgQGaF8o/Lv4TEGcPYONFe/S
-         M10u2rHC8AMJLpHGmTFxJP8BaQ68W9AhhRuvY2jXYLuJioDDA3g6/mogYioc9hOIMxUT
-         sb8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763716090; x=1764320890;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=al+Nw9pptU9WC9PnBGXiDkOKAM9ETnNOvRMBFz/7sF8=;
-        b=pODQiEpSDUi0mWNWQisx8tQSDnQPrV+V7XFHuAHpQDwywepf7BmwQ0XDRKYai0/TMP
-         cGeReccGLIJ3sbVEvWU6r4nQLBmG+Bb99j2yFKZ9VRt3hvq3n+eH2L1BHjaYE89To2LT
-         TlXn4jTm4UvE4pFZxvrFRhEI0563pu+b01kYN/qASGK7fbDWoVZtTpyQRTEmiwCKcgfr
-         7/41uymF2fKIOCN7LJYnX1OVhoTKXuJQtlIP9aO+RPxiBzK3hiuVaGjDnxODcro9MTTv
-         DoPTCz9oFkW81qZb6CJYZf/c9jajJmQ3h0EHxz9MNVpg8lBLyrSkC7kdNNRM6aUkdY+k
-         OT2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUS6ksGZnsnj9X4gRtnSBzggiFexkg1Xmx6JHdk4QAfK3/pOO82jtO32JOl6WpxYjTHJksO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxcd/lYW/ubLfmT8f5gYnLXplz9JPcVWXxSFunam+cm+xc4Ay5B
-	5EANznCN/JFS/nqyOlqzoFU3byResNrA1Pm8qX+Cbe9y2da3jbDJmkHr8qcK4l1JABL8PgDsZ0W
-	q/0CqSABrupSsLbNeLg==
-X-Google-Smtp-Source: AGHT+IEdrDcqbH7vAlZv1Rn1uYyJ5HQB5sQCRxjZt52n+6AQMlVKXOnSQHUlYVs8jycmYRM0JYcUHwiCmoajA+c=
-X-Received: from wmbjd14.prod.google.com ([2002:a05:600c:68ce:b0:474:979d:a20d])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:45cf:b0:477:7d94:5d0e with SMTP id 5b1f17b1804b1-477c01eb9b2mr15025395e9.27.1763716090113;
- Fri, 21 Nov 2025 01:08:10 -0800 (PST)
-Date: Fri, 21 Nov 2025 09:08:09 +0000
-In-Reply-To: <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LRy8STgY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763717570; x=1795253570;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l0iVDv5nFWY3QUxvbihYT4S0RzKGXIL9T+AtTGVBS/0=;
+  b=LRy8STgYGKr+7KuoxYBEM4u7Q8iI78yUyJssGaTjs5CNtE01NeqYrAuX
+   BjnKLEBDXTo206dFUMdYRQQ+b2mtoW4bSSOOZz8f4AuIhSGAFCkiG/3Gh
+   6loY25bzGuaxHjnxJhiJnlPqEdmNuDaQfw8WSoA8tQvWpwB8ZomhMufmc
+   H4GPHFi92aQRe0RjpayCnR876QBlaQgSQ7GNO9EXvMA8f7kLIQEi+jDUb
+   U2rxHqfB52Ls3sQMCKdP+rP01ttFp7DoSmwjT8FSgrBMyBB4C8eA6x396
+   hnF8i+IYU0HGEYsRVQMVvfG+akF0b6cpdDMoybjXKG8vwAM9c40emSb0j
+   A==;
+X-CSE-ConnectionGUID: 1xGmDUnpQBSwaJJKdewNCw==
+X-CSE-MsgGUID: AmpdhCkYTs+N+9XaEvKSSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="83197118"
+X-IronPort-AV: E=Sophos;i="6.20,215,1758610800"; 
+   d="scan'208";a="83197118"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 01:32:40 -0800
+X-CSE-ConnectionGUID: KUZzFNpCQbafCgnIhpuJug==
+X-CSE-MsgGUID: GdxlwKZZS1uLhhHWmVc9CQ==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 21 Nov 2025 01:32:38 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vMNVL-0005Ar-2T;
+	Fri, 21 Nov 2025 09:32:35 +0000
+Date: Fri, 21 Nov 2025 17:31:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiwei Bie <tiwei.btw@antgroup.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Johannes Berg <johannes.berg@intel.com>
+Subject: error[E0609]: no field `name` on type `pci_driver`
+Message-ID: <202511211732.sS8sQiq7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <202511210055.RUsFNku1-lkp@intel.com> <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com>
-Message-ID: <aSAr-aA2U26lr3iI@google.com>
-Subject: Re: [linux-next:master 9676/10599] ld.lld: error: undefined symbol: rust_build_error
-From: Alice Ryhl <aliceryhl@google.com>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: kernel test robot <lkp@intel.com>, Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Nov 21, 2025 at 03:13:16PM +0900, Alexandre Courbot wrote:
-> On Fri Nov 21, 2025 at 1:41 AM JST, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
-> > commit: 01e345e82ec3a5a7edeb9fa0dcb7fd4b0e5c534e [9676/10599] rust: num: add Bounded integer wrapping type
-> > config: loongarch-randconfig-6002-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/config)
-> > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511210055.RUsFNku1-lkp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >>> ld.lld: error: undefined symbol: rust_build_error
-> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u8, 1>>::from_expr) in archive vmlinux.a
-> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u32, 4>>::from_expr) in archive vmlinux.a
-> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u16, 8>>::from_expr) in archive vmlinux.a
-> 
-> Mmm, I don't like this. The expressions that are failing are extremely
-> simple, for instance:
-> 
->     Bounded::<u8, 1>::from_expr(1)
-> 
-> So if the compiler is unable to assess that this won't fail, this might
-> be a deal-breaker for `from_expr` and we might need to remove it. :(
-> 
-> This would also mean a lot more runtime checks when working with
-> bitfields and registers. Or can we assume that this is a compiler
-> problem on this particular architecture?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fd95357fd8c6778ac7dea6c57a19b8b182b6e91f
+commit: a0e2cb6a90634f3dc80f16e882a683ee5761b0b0 um: Add VFIO-based virtual PCI driver
+date:   7 months ago
+config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/archive/20251121/202511211732.sS8sQiq7-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511211732.sS8sQiq7-lkp@intel.com/reproduce)
 
-Yeah, it sounds like from_expr() isn't going to work.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511211732.sS8sQiq7-lkp@intel.com/
 
-Alice
+All errors (new ones prefixed by >>):
+
+>> error[E0609]: no field `name` on type `pci_driver`
+   --> rust/kernel/pci.rs:42:27
+   |
+   42 |             (*pdrv.get()).name = name.as_char_ptr();
+   |                           ^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `probe` on type `pci_driver`
+   --> rust/kernel/pci.rs:43:27
+   |
+   43 |             (*pdrv.get()).probe = Some(Self::probe_callback);
+   |                           ^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `remove` on type `pci_driver`
+   --> rust/kernel/pci.rs:44:27
+   |
+   44 |             (*pdrv.get()).remove = Some(Self::remove_callback);
+   |                           ^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `id_table` on type `pci_driver`
+   --> rust/kernel/pci.rs:45:27
+   |
+   45 |             (*pdrv.get()).id_table = T::ID_TABLE.as_ptr();
+   |                           ^^^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `vendor` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:371:35
+   |
+   371 |         unsafe { (*self.as_raw()).vendor }
+   |                                   ^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `device` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:377:35
+   |
+   377 |         unsafe { (*self.as_raw()).device }
+   |                                   ^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `dev` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:462:58
+   |
+   462 |         let dev = unsafe { addr_of_mut!((*self.as_raw()).dev) };
+   |                                                          ^^^ unknown field
+   |
+   = note: available field is: `_address`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
