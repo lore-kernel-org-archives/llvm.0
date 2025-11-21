@@ -1,138 +1,178 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B6E30275B
-	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 19:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4703026ED4E
+	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 19:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763754029; cv=none; b=OMFEfcX6ufRVrdle892r4P3dCZudrBHzo/81JZ/VY5RJd/TH67P34DSyLHPs2i5sLi6marYtzoKY4lwoid58HZC93n+TmHP5k+mbRMaU7Y1LJpgXBHN6O91oC5Wwy+82QLMWBeY1IeCnx1LFVN71CF8gCzf+Dqnquxd8pN++n8k=
+	t=1763754404; cv=none; b=bowjDVozQ7/Xk3IDP6sS7+EZG42hd6o62CwX+io5C+R/qp8gTWjJkINkowy3lqMdnMuNI4kd4c5DZGex0WNkSf+78KXsYK+yx2GjLRbYev9N+eYTc0FUVN2v6bHZUAZMZ9rmGlKart2ltjVsEU/1Db+YSSyjg8ndJHUex4ww5qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763754029; c=relaxed/simple;
-	bh=sY+GLnH/NB6QUi9wxr+aVON0cHdYrC+5LV2ZVdrO4kc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=JVg8QcyRlP7G9VEiZfkhp7Rn5ztGqY8FNt5iu3PmR/K4/3SWZQPhnbNYXeytJSM6qe5m8RGPoYf1xBoiFokw7KT+GRze5UqQ0vMM+zpJzjq63YinnL2RGRezUd3ZEMbDCyVpPCpA1f1rd15VhlMIKAOakX2OfKzlBxomQ/0mVTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C6wBoMQ5; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1763754404; c=relaxed/simple;
+	bh=yUuMHZhtam+fWQpdtjevcS7n36pGZwwGi8DKaiYIIvw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ao9/5cXSXh9RvxvJL7qhijEmekGiwcVam3uHDJBN2qns8uXkwldl+CXa7R4sYfLOmbyxENoSpKCcoOyLhyn4tIsNDMR02SlGmEHyXnEm9cQW1fGMsrxic/mPs9ypu/EIWZhKTKknQdJMTkE4zINm1xzvi+P7wl6n70tszkn5clk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DxrMrBnY; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C6wBoMQ5"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3436e9e3569so5126119a91.2
-        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 11:40:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DxrMrBnY"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b739b3fc2a0so350278066b.3
+        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 11:46:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763754027; x=1764358827; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5ObV+Zk4UGl+OHKUlzzzuAGKm0snV0PrXsMvOzsuqro=;
-        b=C6wBoMQ5wPgopvlSzWrhwr7d5SAnaZffda/zS/XpgNVk976BbXgV97HN21Sp1xS1H8
-         EC5FwWrCIV7TzAm/iUDYbXuoybG6myqcQv/LDM7C73rmfj6GIJMj4rQtjaiWBz9I0QxU
-         /fBRwMo6QgGAQQe7RCmJ62bluGr6Hn9ALqbExACQ8sxOq9UU/PbCSZ1xqjDmndV68jBz
-         8VGiRYMa6dAl++iBQivKE5kgNxdlSdOuEFl8TwrxQjGUQN5SImiQI1G0otczsde6n+wi
-         AuogWShY6QEWnrKpXzrfVHcl6nxoCklSMGi+ysUfTCUnEretMWxNhkr9KiN+J3kZUOH2
-         k2LA==
+        d=google.com; s=20230601; t=1763754400; x=1764359200; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3n1zfzwkLtLkmv960SYF4qIg8dCLJqHxMdIvlW/MVpE=;
+        b=DxrMrBnYLCq0QmS7k61Q4L6d8oN4NC9h6ypMtSKM3Igr76U3cMzs0sHag9IcnjS4uV
+         an3Bd56LZbZbuZ0sFQ+TfCoc6Pm5FUKMluqfm7cjByDLWgmHQhoKGGyJariyE9CWWDYo
+         OLbafCysZ4drq5xvo2bsGamc17XCgXMgQ+x5U11sXJU6/xR2g1QWv4Upo3lqg1StYc3X
+         Kuz+zuxGHW1K27z193urjvF/hEjt+34hvzLWpHtXFctROXJ6JJLBK88jdo38PxO87zzV
+         Rn7++i+OxvdaBGr+DubuxmUIyzA5By0mnQvtbFlVVxgIDzUpQLEbDoNtH/FbqWcVRSbU
+         VX3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763754027; x=1764358827;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5ObV+Zk4UGl+OHKUlzzzuAGKm0snV0PrXsMvOzsuqro=;
-        b=EDe696K2hhwQ9JizQBQpjt2HJrZWCf84/78NhZQfi7Ah/596qR2n8BAemLyHcasru2
-         qzUp/hmQHN3xFWmMCggTORd0xc4KJ/SLcnUeCqGjE9v2NKbfx7PGoEBgDFDUaSCPa9iW
-         7hFfKclLO4wVySqOrJgYfJfzp+MlQUPWTaO71XNEYTSJrMMRHNaMxyyJo+0AljGfgMwB
-         aDya3IHj4Iz3+RT90PEJGSgYi6fP8Zur6vdlIAILC2QlzJ+6HJnzPQIM9fkTwI6iYKl8
-         YAngaE5PoBMSQFtcy+PlF0s9jgL9CYTZA/KIs2qTql/qQ9/RlF/v+A/0rQRQxHqNgnAW
-         4Ebg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3+TSvbrczGFq6A55Knu/0WwY4WleCB3M5ai4nNlNTJHIr48Al1gI/H4/w+vXqQp4vnenV@lists.linux.dev
-X-Gm-Message-State: AOJu0YwoYyqVMkmB/v7cbgNNeyCiG1pxI4rZcRIp3SibBtoAynYAxSbi
-	mktgHNkx0BOw9Q1LnIFevm3Jv99aQMmty9H0c3ydZhIK2bH2Lx6PzOCI+W7M6iXPBa/d4ekWlty
-	l
-X-Google-Smtp-Source: AGHT+IHYGh5zV/fY6RILJsIKpbvv1F1nIeTXt6YbFfyOedqnc8pj8XMUszI38AOKmYkoqII6p7rKJtxK2Q==
-X-Received: from pjbch15.prod.google.com ([2002:a17:90a:f40f:b0:33b:9e06:6b9])
- (user=morbo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:274c:b0:32b:9506:1780
- with SMTP id 98e67ed59e1d1-34733e60873mr4100051a91.9.1763754026636; Fri, 21
- Nov 2025 11:40:26 -0800 (PST)
-Date: Fri, 21 Nov 2025 19:39:44 +0000
-In-Reply-To: <20251121193957.1655580-1-morbo@google.com>
+        d=1e100.net; s=20230601; t=1763754400; x=1764359200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3n1zfzwkLtLkmv960SYF4qIg8dCLJqHxMdIvlW/MVpE=;
+        b=eAXYEjLPTQZbtDCqwCRGt2/PgXmxT/0LgnmVDrUFSgKyn1Sqilfjslsk6951NiQP5l
+         k7mz2nZ/SUNasaobLF8sKt/uoWd5/eMO793io3PM6QVl/UZAMvUDMYKOJ0av6HUd94Dt
+         SCDATfxte1Y5TQ8A6Rxiuaq/Ht/GF+sBiqLpMfJw5Jzr7iCRj6D9dt1eV6uNIFK5X81T
+         hjpC+kEPeV2/sY4SfkrwVMwAq+Nyw783o4Py2yppXLBcSnTxdx2kKOrVd4hJpTQiNS7l
+         /L7WuI6Q651tRCl6pEK5r61M/O1+XXDc/5UZZbM5V7N0UXFYqpo1RbiHwz+ziG9r9u7e
+         6Vfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWVEm7sbsl7vN8jmQ6zw/1RStLtedQIeGEUvhpaWL+idg1wH8V2lK/lQgzz8pYVlCQ59Khv@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz9WqsLd0MUpgNF9a9PouhwupJYxxwiLKyygaIsfOnANo76Eely
+	4RpkVqylTZrMzZSJ4qeAiD1yNY6/nwuBo9UJ1IApoWKBPNGW/ij7dE6SiAvaXEgK3zwtdOqPgDF
+	LLl0DapikA+tr2/TymCAmQbPfv5BjcuTG7zNhi8E=
+X-Gm-Gg: ASbGncuuUKqPqH7225Dm5zPgyQxtKH6/2yQ+Z9K6Ev+JrgeY1oy9NkvIXtu2xScc6lg
+	xL3wf+p5PLNQu8UH/RIGWPGS3xY7GLuyO/pBf36bdMa0m71CwxPXmMI3QRo/2OF6jAQC2HNT5/V
+	zKDHiClh9+zZhjTRlWo2VN6SV17BtDWOVZ0SEpG9Vbf3i0/k8UqMAIZtEEPjKjlDyy8PWLfoO6r
+	iKh5rZ0H+cgCp9WF6f4lBBfC9atznQ0FfCsEBgApJLdx/HjJnNng+LV7CvGklDGPEamcpYjk/pB
+	ryc=
+X-Google-Smtp-Source: AGHT+IHyGNwFxSOsJVHNF9rBcAbH6iyf9ovr7WPCBabxzYOfhXb/7KvRkBvNpN6IUsxw4XRIqODC6kJJnpdcIfMRBbI=
+X-Received: by 2002:a17:907:9449:b0:b73:8e7d:4fa3 with SMTP id
+ a640c23a62f3a-b76717076dbmr362946666b.32.1763754400259; Fri, 21 Nov 2025
+ 11:46:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251121193957.1655580-1-morbo@google.com>
-X-Mailer: git-send-email 2.52.0.rc2.455.g230fcf2819-goog
-Message-ID: <20251121193957.1655580-3-morbo@google.com>
-Subject: [PATCH 2/2] memblock: annotate struct memblock_type with __counted_by_ptr
+MIME-Version: 1.0
+References: <20251121193957.1655580-1-morbo@google.com> <20251121193957.1655580-2-morbo@google.com>
+In-Reply-To: <20251121193957.1655580-2-morbo@google.com>
 From: Bill Wendling <morbo@google.com>
+Date: Fri, 21 Nov 2025 11:46:23 -0800
+X-Gm-Features: AWmQ_bmeMC8hpTDqlITfeIZJQkkK-IBh1b3rq_uwnqwXHiE_zh-zaWgX9rzYzq4
+Message-ID: <CAGG=3QXOTNaYJMNVB_6p4OF58=u5GFgZ05FAwOLRWGfuqLo_2Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] Compiler Attributes: Add __counted_by_ptr macro
 To: linux-kernel@vger.kernel.org
-Cc: Bill Wendling <morbo@google.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Marc Herbert <Marc.Herbert@linux.intel.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
-	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	"=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, John Stultz <jstultz@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev
+Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Marc Herbert <Marc.Herbert@linux.intel.com>, 
+	Uros Bizjak <ubizjak@gmail.com>, Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, Jan Hendrik Farr <kernel@jfarr.cc>, Qing Zhao <qing.zhao@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Add the '__counted_by_ptr' attribute to the 'regions' field of 'struct
-memblock_type'. The 'regions' field is an array of 'struct
-memblock_region' and its size is tracked by the 'max' field, which
-represents the total number of allocated regions.
+On Fri, Nov 21, 2025 at 11:40=E2=80=AFAM Bill Wendling <morbo@google.com> w=
+rote:
+>
+> Clang and GCC are expanding the '__counted_by' attribute to support
+> pointers in structs. Clang has support for it since version 21. This
+> requires defining a separate macro, '__counted_by_ptr', because, while
+> the attribute has the same name for both a pointer and a flexible array
+> member, minimal compiler versions need to catch up.
+>
+> The effect of this feature is the same as for __counted_by on flexible
+> array members. It provides hardening the ability to perform run-time
+> bounds checking on otherwise unknown-size pointers.
+>
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Marc Herbert <Marc.Herbert@linux.intel.com>
+> Cc: Uros Bizjak <ubizjak@gmail.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Jeff Xu <jeffxu@chromium.org>
+> Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
+> Cc: Shakeel Butt <shakeel.butt@linux.dev>
+> Cc: "Thomas Wei=C3=9Fschuh" <thomas.weissschuh@linutronix.de>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Brian Gerst <brgerst@gmail.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+>  include/linux/compiler_types.h | 11 +++++++++++
+>  init/Kconfig                   |  5 +++++
+>  2 files changed, 16 insertions(+)
+>
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
+s.h
+> index 0a1b9598940d..2b0251bb951c 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -351,6 +351,17 @@ struct ftrace_likely_data {
+>  # define __assume(expr)
+>  #endif
+>
+> +/*
+> + * Optional: only supported since clang >=3D 21
+> + *
+> + * clang: https://github.com/llvm/llvm-project/pull/137250
+> + */
+> +#ifdef CONFIG_CC_HAS_COUNTED_BY_FOR_POINTER
+> +#define __counted_by_ptr(member)       __attribute__((__counted_by__(mem=
+ber)))
+> +#else
+> +#define __counted_by_ptr(member)
+> +#endif
+> +
+>  /*
+>   * Optional: only supported since gcc >=3D 15
+>   * Optional: only supported since clang >=3D 18
+> diff --git a/init/Kconfig b/init/Kconfig
+> index cab3ad28ca49..298c94c4c1b1 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -139,6 +139,11 @@ config CC_HAS_COUNTED_BY
+>         # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
+>         default y if CC_IS_GCC && GCC_VERSION >=3D 150100
+>
+> +config CC_HAS_COUNTED_BY_ON_POINTERS
+> +       bool
+> +       # Needs clang 21.1.0 or higher.
+> +       default y if CC_IS_CLANG && CLANG_VERSION >=3D 210100
+> +
+I mistakenly left out GCC from here. I'll roll that in with v2.
 
-This annotation allows the Kernel Address Sanitizer (KASAN) to detect
-out-of-bounds accesses to the 'regions' array.
+-bw
 
-Cc: Kees Cook <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Marc Herbert <Marc.Herbert@linux.intel.com>
-Cc: Uros Bizjak <ubizjak@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Jeff Xu <jeffxu@chromium.org>
-Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: "Thomas Wei=C3=9Fschuh" <thomas.weissschuh@linutronix.de>
-Cc: John Stultz <jstultz@google.com>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-hardening@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Signed-off-by: Bill Wendling <morbo@google.com>
----
- include/linux/memblock.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index 221118b5a16e..ba7f7c999a45 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -91,7 +91,7 @@ struct memblock_type {
- 	unsigned long cnt;
- 	unsigned long max;
- 	phys_addr_t total_size;
--	struct memblock_region *regions;
-+	struct memblock_region *regions __counted_by_ptr(max);
- 	char *name;
- };
-=20
---=20
-2.52.0.rc2.455.g230fcf2819-goog
-
+>  config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+>         def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring=
+__)) =3D { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
+>
+> --
+> 2.52.0.rc2.455.g230fcf2819-goog
+>
