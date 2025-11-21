@@ -1,103 +1,178 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774DF757EA
-	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 15:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7462BEFF1;
+	Fri, 21 Nov 2025 15:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763739014; cv=none; b=AePvgqvsFSUELT/9zI/J/DPGC0jxW0lrxfl8DbQ2koFaDW/bC6R6dHqNG8Y1YgQtqdsz7L/4M+Xpw3IzQJNqRiTaZsZmUu5CZ736FQb5FvNsoWKTJMKqZOsKy9Ezob1ZFyc74TJBMobE8VWZz06QXsq8EFKdniKZw+By4Tsb3jU=
+	t=1763740146; cv=none; b=AbUZJso5uBGM2puuBbuNGYGhIjn98dD9I9+MgnFJ2QPnKSbyWqk0McLh4Knr80ZrrqikngYfMJRFAKgoE4CUgHwqemPIQD8Q8twiK0hiTWUB/VIhJyo8NmndER1kMRiewEK3ky+P6zIhSBNNt0FPxQRc14EkoatHjdHFr88I/e8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763739014; c=relaxed/simple;
-	bh=+7JaZ904HEfoToTNqFXnfKLDp6L6QuFWgSLqJgbr5TQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hzNVpidto6/7Bvp1qE3I8e/rE6z9PgWmJvMK7zVh6goWREl9XOzT+xTjDyOadXf7w+JCkreokjVUIhpZwMwBJt4dUyEqVUQbPRuGBfHEZtz/YhK6LKBjdv6vbsoXp1c0Vr5ei+aPn0ilq1B49O6uR+2twPiPFeMsFqu/JIARN30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YqoMjkJc; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763740146; c=relaxed/simple;
+	bh=I+eZM8y4822ZhQguud4i5d0RspiKKU1aFhvwdNevmxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JFUdlmvP4llTdI4e3U+IyhvnBLX+BmXJK+tL8rHbuO7CqRRXmAWX7l90dBBo6YQBzGnwViPxwLoX1wbkvG09W5LkGCTMKYIJRAaIk4K61pEdjeLrP/nigm1jxIONI8QzKAIforLIu/WXKLx+5bbdqV40+xFwo4N/8uy+TiM9ucw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nJqb0F6Q; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YqoMjkJc"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-bceaaed0514so125627a12.3
-        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 07:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763739013; x=1764343813; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u2mvpQ6p+JPlOzBY+YV20bR1O2Kxu26V2VO57Tqxgmw=;
-        b=YqoMjkJcQmOpixTis7YMtlbAnXVE9ONzJiVPJIaBljg88IpaDZnQRd2mUR4/2iz8wD
-         e2JsOuSeEa/0anccj/aixx3ANF6BswjX+oEd0mBzeHInmZnxbgZxEbc21IO/d7paOiHV
-         I9bbYgm9/92pA2qkMGBB6K7k2xjY2gCTYB507oitFV/pbx9QgHDzchI9alJ47b3t5cRS
-         faN2pnZPH4qPWz4fX0kg+l/jtf+o6vk0Kv6jUC7/E3LAQKnMpv81KEXVor3d1PhGlxFp
-         /n5ALPsVYx/U5f7qmOZu44SBR1xPTdyB4mUPiAscNcpVUmXh8momHvDGZ0421nzQVsPK
-         K1vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763739013; x=1764343813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=u2mvpQ6p+JPlOzBY+YV20bR1O2Kxu26V2VO57Tqxgmw=;
-        b=rI2qmSy2dRQoCE2lxtgVB0Qb/p+pWqeIqKOtSH2Y1azz1dOthZ90+4JzHmsdrvkdr/
-         w+LvNe3jQ2jvfwnT/zxQrulqpMWeoPtA+MxaRFfB+8ZjyOOihXvcqdaTfbMeZyoqUdG1
-         dJ7AldmXGod2qqjaU6w/U7UZrfcTwNHaVs5ocnHRVIxx4RbK8UL/4AoFIrHeg7z8+ql4
-         dd0Dg2o3tb5I7iUptyyTPmxSmGu2PMA8YuwK8h0xBYpcbi8B3DVXSm3C60bm734aEUcZ
-         wPbd9A3y320jN3qPPksnm1ZyKcRYZvbSOSiEtIwOgC4SLdyRWu5Ow801HUqdebwfjIZm
-         r7gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHhwUD/PpI6biGzL/MecjT63pIAEdzaFLxWWaYGG3YlQGsBxL0kCeVU98wqYfEwyVcuYq5@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy2vdnrZ17fOj5MsFcPf/oYWzzwBG+Q+PK5dCZ2a8kn4O1bQKRb
-	H8KGR8JQ8Hf1fFzJhIK3EH8qnvXjkrvI6dsblheRuPHEQOOjhFSqzaoWNWpGDVy4HtT6Q9/+j5P
-	7buOzE1MRHh+203rTg1EjFS56WwOuABs=
-X-Gm-Gg: ASbGncuRdqwpF7AoeVooxDzaV55KBkkMR9KCkRZywIPo0vFGHNC5CGnVmD0VeXBQdZM
-	cqSLKAz0k76I1YriOkgYUXqegJRsrOHJYRQ6fP80/MYQLtYfy4PKD3el/abotmEf6zFx1h2G4LO
-	kNCYGcz5IrWvdd3HpHupS9FJ+hJJuveaGpTrCCITqRD0b/pg2XEauwziZ2beIt3Sljxom/NVgDZ
-	G7ZGYGudGG8l7r5O7pB5dg4QTQ0sFuLJcEHaobfmB6Hfmt+rvP/adP04bnGoBfVzmZ11ht3uBup
-	eHvxULsOtff8Zns6QRRJQ95AfrI6p9jGZDbLubSRp/UsEDIrZD77OZyWbuRMCbq3sk59uPO2L/a
-	xL41QDxTNeU7Xfg==
-X-Google-Smtp-Source: AGHT+IEJNAec/VNO4xmyIScwh5VSum2fjqj0VWiV0z8Z2rPyySBfGlVQDrqDGlOu5guG9erl3rYIIaqy5jHoUUeIwG8=
-X-Received: by 2002:a05:7022:441c:b0:119:e56b:c3f5 with SMTP id
- a92af1059eb24-11c9f38e94fmr464472c88.5.1763739012499; Fri, 21 Nov 2025
- 07:30:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nJqb0F6Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763740144; x=1795276144;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I+eZM8y4822ZhQguud4i5d0RspiKKU1aFhvwdNevmxw=;
+  b=nJqb0F6QwGH9O/wb+5ywpP7gxSb559FXg/QfhPIysG/YUTgt8X6p+pDF
+   IiXVsMaOxO0Ivu0PmBZ3bKyzl097cXUEwY1OHGgBCRUL4UnEVVuMLs1IJ
+   K0yeLVCVYmG832YgF+ckozZSiKgyf+xO1ajaxuk1yHPA8OrBf9agwY57A
+   5JkLClF4ZH2zOnh81Ywr3u7vnDJGSJG/6MxxbMb5Eqr9coKMArztQWb0u
+   ItZc2lGsODOZRzCUUi4EMgaW7Wr9nqIgJDs9ztgRprb3Gb8PKfiQHzlhq
+   2beZsaHZ37B4V2Sm+DqO/DYzxcnAUikFvZAu4gJeP5EFvnR7wRAJukJxS
+   g==;
+X-CSE-ConnectionGUID: ss9mA8BoS46FdGGktqlceQ==
+X-CSE-MsgGUID: 7vyvmEbTTI+s+5KYm+GXMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="69702099"
+X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
+   d="scan'208";a="69702099"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 07:49:03 -0800
+X-CSE-ConnectionGUID: os19VIQmS+WQt9HVXi79qQ==
+X-CSE-MsgGUID: lfxCkzQeT+eS4DRpKuSLHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
+   d="scan'208";a="191022926"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 21 Nov 2025 07:49:02 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vMTNa-0006YF-2B;
+	Fri, 21 Nov 2025 15:48:58 +0000
+Date: Fri, 21 Nov 2025 23:48:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Marek Vasut <marek.vasut+renesas@mailbox.org>
+Subject: [linusw-nomadik:b4/mcde-drm-regression-thirdfix 4/4]
+ drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:552:34: error: use of
+ undeclared identifier 'state'
+Message-ID: <202511212319.aUKKl3Vq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202511210055.RUsFNku1-lkp@intel.com> <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com>
- <aSAr-aA2U26lr3iI@google.com> <DEEEZRYSYSS0.28PPK371D100F@nvidia.com>
- <aSBy3HQ9Z-h2LbB8@google.com> <CANiq72=P8AS_XeMdkakuGeTQ5SGb4wvH8qyVoY32FR+PLQu+zQ@mail.gmail.com>
- <20251121143008.2f5acc33.gary@garyguo.net> <DEEH8WPYR4KA.1WUYP0D5F9TYA@nvidia.com>
-In-Reply-To: <DEEH8WPYR4KA.1WUYP0D5F9TYA@nvidia.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 21 Nov 2025 16:30:00 +0100
-X-Gm-Features: AWmQ_bmPKo7Yv7lG7AzLgke0QOCQSypk_ziJ4woRpErZhoidpeodemRVc_AkWUE
-Message-ID: <CANiq72kqX8Ua7NFHUwLBW1Gpb-Ewh2wHnWmXH6SUQBUyrrSdbg@mail.gmail.com>
-Subject: Re: [linux-next:master 9676/10599] ld.lld: error: undefined symbol: rust_build_error
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: Gary Guo <gary@garyguo.net>, Alice Ryhl <aliceryhl@google.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Trevor Gross <tmgross@umich.edu>, Miguel Ojeda <ojeda@kernel.org>, kernel test robot <lkp@intel.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Nov 21, 2025 at 4:27=E2=80=AFPM Alexandre Courbot <acourbot@nvidia.=
-com> wrote:
->
->     CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
->
-> I don't know whether this "CC" setting also affects Rust, but assuming
-> it does, we can very well imagine that at least one of
-> `from_expr`/`fits_within` does not get inlined, causing the compiler to
-> not be able to satisfy the `build_assert`.
->
-> If that's true, then this is an oversight of mine rather than a
-> fundamental problem, and could affect all architectures. I'll try to
-> reproduce the issue locally to test this theory.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git b4/mcde-drm-regression-thirdfix
+head:   3e64b03a4bf2f67f43046af7e41c197df9fd6efb
+commit: 3e64b03a4bf2f67f43046af7e41c197df9fd6efb [4/4] RFT: drm/rcar-du: Modify custom commit tail
+config: arm-randconfig-003-20251121 (https://download.01.org/0day-ci/archive/20251121/202511212319.aUKKl3Vq-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511212319.aUKKl3Vq-lkp@intel.com/reproduce)
 
-Yes, it does affect Rust, i.e. we use the same levels for both.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511212319.aUKKl3Vq-lkp@intel.com/
 
-Would `inline(always)` work?
+All errors (new ones prefixed by >>):
 
-Cheers,
-Miguel
+>> drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:552:34: error: use of undeclared identifier 'state'
+     552 |         drm_encoder_bridge_disable(dev, state);
+         |                                         ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:553:39: error: use of undeclared identifier 'state'
+     553 |         drm_encoder_bridge_post_disable(dev, state);
+         |                                              ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:554:24: error: use of undeclared identifier 'state'
+     554 |         drm_crtc_disable(dev, state);
+         |                               ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:555:53: error: use of undeclared identifier 'state'
+     555 |         drm_atomic_helper_update_legacy_modeset_state(dev, state);
+         |                                                            ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:556:48: error: use of undeclared identifier 'state'
+     556 |         drm_atomic_helper_calc_timestamping_constants(state);
+         |                                                       ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:557:25: error: use of undeclared identifier 'state'
+     557 |         drm_crtc_set_mode(dev, state);
+         |                                ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:563:23: error: use of undeclared identifier 'state'
+     563 |         drm_crtc_enable(dev, state);
+         |                              ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:564:37: error: use of undeclared identifier 'state'
+     564 |         drm_encoder_bridge_pre_enable(dev, state);
+         |                                            ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:565:33: error: use of undeclared identifier 'state'
+     565 |         drm_encoder_bridge_enable(dev, state);
+         |                                        ^~~~~
+   drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c:566:43: error: use of undeclared identifier 'state'
+     566 |         drm_atomic_helper_commit_writebacks(dev, state);
+         |                                                  ^~~~~
+   10 errors generated.
+
+
+vim +/state +552 drivers/gpu/drm/renesas/rcar-du/rcar_du_kms.c
+
+   516	
+   517	static void rcar_du_atomic_commit_tail(struct drm_atomic_state *old_state)
+   518	{
+   519		struct drm_device *dev = old_state->dev;
+   520		struct rcar_du_device *rcdu = to_rcar_du_device(dev);
+   521		struct drm_crtc_state *crtc_state;
+   522		struct drm_crtc *crtc;
+   523		unsigned int i;
+   524	
+   525		/*
+   526		 * Store RGB routing to DPAD0 and DPAD1, the hardware will be configured
+   527		 * when starting the CRTCs.
+   528		 */
+   529		rcdu->dpad1_source = -1;
+   530	
+   531		for_each_new_crtc_in_state(old_state, crtc, crtc_state, i) {
+   532			struct rcar_du_crtc_state *rcrtc_state =
+   533				to_rcar_crtc_state(crtc_state);
+   534			struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
+   535	
+   536			if (rcrtc_state->outputs & BIT(RCAR_DU_OUTPUT_DPAD0))
+   537				rcdu->dpad0_source = rcrtc->index;
+   538	
+   539			if (rcrtc_state->outputs & BIT(RCAR_DU_OUTPUT_DPAD1))
+   540				rcdu->dpad1_source = rcrtc->index;
+   541		}
+   542	
+   543		/*
+   544		 * Apply the atomic update.
+   545		 *
+   546		 * We need special ordering to make sure the CRTC disabled last
+   547		 * and enabled first. We do this with modified versions of the
+   548		 * common modeset_disables/enables functions.
+   549		 */
+   550	
+   551		/* Variant of drm_atomic_helper_commit_modeset_disables() */
+ > 552		drm_encoder_bridge_disable(dev, state);
+   553		drm_encoder_bridge_post_disable(dev, state);
+   554		drm_crtc_disable(dev, state);
+   555		drm_atomic_helper_update_legacy_modeset_state(dev, state);
+   556		drm_atomic_helper_calc_timestamping_constants(state);
+   557		drm_crtc_set_mode(dev, state);
+   558	
+   559		drm_atomic_helper_commit_planes(dev, old_state,
+   560						DRM_PLANE_COMMIT_ACTIVE_ONLY);
+   561	
+   562		/* Variant of drm_atomic_helper_commit_modeset_enables() */
+   563		drm_crtc_enable(dev, state);
+   564		drm_encoder_bridge_pre_enable(dev, state);
+   565		drm_encoder_bridge_enable(dev, state);
+   566		drm_atomic_helper_commit_writebacks(dev, state);
+   567	
+   568		drm_atomic_helper_commit_hw_done(old_state);
+   569		drm_atomic_helper_wait_for_flip_done(dev, old_state);
+   570	
+   571		drm_atomic_helper_cleanup_planes(dev, old_state);
+   572	}
+   573	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
