@@ -1,82 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EB2338932;
-	Fri, 21 Nov 2025 07:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB94633A02B;
+	Fri, 21 Nov 2025 08:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763711919; cv=none; b=lffJU22lS851udwidzfmzttZQ5cL8aujserscolQGC3Q/M0qDi71JrMjRmez7xbij/sRC0JFhCDV80G6m0hqOOEB613Fgju/7bkicIPgsWstAPb1k0hykq58nCqpHxYyUqR9EUj7Ff8kqkKoJuEEPWxXFcb4Lkav6rhQmxaUJhU=
+	t=1763713176; cv=none; b=MKysj1MvFncbls81G2COgOUIk+PaCODcVNwuAb3bFe9/hL7oQNRYwT01Pcr2Bhg3L6FUqlfik04nJWPyoiNmxgZCB1jynFc4xnvsSodp9+Hx046g1V1e4Xei+52PQuq4+L5MJ46Kbl722cO44YJj9LdAaDqVTUZdiF5D65ROJOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763711919; c=relaxed/simple;
-	bh=AB2Q4F7MHO42MsOSJmeXRb7cAV7Fu3VrcSzA4mqdjBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Syw+89U+71tjPB1JvlygewM5X+LJZFx/Dbw798AqlmDT2m3hakPkPZB6jFcMoU2vAQ8VwiRf5nq8OU1Qw6nwXSaX3WEgki8g0Iv0uFB1PWmb3+ioaFrMQEpG0mbr218eLErH4kY0SPFru3ogbWxI69OV0e1Sh94VRnOp6V4kMmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cVWES19G; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1763713176; c=relaxed/simple;
+	bh=WeVw2cCpWAsE+cWVQTJqe+lGXQDau9BLYcHjtMMTsuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PVKr4jF2LsvSlB7sXr422H7hyEpguWCVDRbtHq3xQujzCCDuuDHqPP8tZxl1YZqc8ciDFAirDbCbBjNsu97+CeSO/KXBKfS3K0K3aYijtFFsJMAWwHmOHjQizt6xBWpP3r8B0K/xuiuSvbYhqwCqqENF23zKnga4SBhj2ABwVyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f9ZhtGZE; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cVWES19G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f9ZhtGZE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763711916; x=1795247916;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AB2Q4F7MHO42MsOSJmeXRb7cAV7Fu3VrcSzA4mqdjBw=;
-  b=cVWES19GiRBLcP71zEu7sKZl3fanMSkrQVlMvhVQ3ahEsD3WBRglMjw7
-   KXFiwzfdsi+RkKXPKmiuOpBzH31t5XPHDDRjVxulTRmvU9FmxDhAGzIlA
-   KpjfxF3geUh0YaHiJ3uB1Cli2vggDkKLH1qIAYsJueOcpZNCIw/hneXq3
-   6BMSw2fbvM9MbGwbvWp93IqGRfRULZgemsZ2PrHAp/PZaruYw74WK+Nc8
-   xoLnWme8+3PLeeS/zvqgy5ldFgWHpgNz5P9plyIeMXn/3yVemnvC7OliN
-   3e8uCY6oOpQ9rWt+PcHNh0EwD/SCmw7FNva/0jYWS4EGtOxKpmOk4DHTG
-   Q==;
-X-CSE-ConnectionGUID: hmFu/V4/TBmZcOb4LSEmFw==
-X-CSE-MsgGUID: VAzrYg3NQQytWNdnfvkPVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="69413043"
+  t=1763713173; x=1795249173;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WeVw2cCpWAsE+cWVQTJqe+lGXQDau9BLYcHjtMMTsuY=;
+  b=f9ZhtGZEDDPiq3zG71qpcKtjt+9FocNBqzvTSu3iMfwEgWmXbesY3Au1
+   H2G9DhJ0xMmn3zCTI9akLk8odE40PVepXZPrsxLl79H53dkiIdf20oy1y
+   AY70M4/iMHris+sRCXizutRbMNkNfNI0hh43vjHrCqBvS4svhZ5CcD5E9
+   d4XPSqNehVWnopQGDYFrBNJ4lsJ9WvUjgn76BSZ5DDOVPtL1zWk617lGJ
+   OAEkU0eRGzRijKd6CeQb1IpA11eewQ8yuQRTSNasTUbPHh7npoN0Wwvuc
+   zENLD+lnKwGAs9vUYxJ24yoYqU+NbgfdpqJwj6d+Q12jqvsbyEw5R8r1u
+   A==;
+X-CSE-ConnectionGUID: awZZfwjRRmq5vxxm/tA37g==
+X-CSE-MsgGUID: 3lOfUzlmTn2ac7qRHjYRyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="65832240"
 X-IronPort-AV: E=Sophos;i="6.20,215,1758610800"; 
-   d="scan'208";a="69413043"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 23:58:36 -0800
-X-CSE-ConnectionGUID: 1cJQW2g6Q86m1an8yc7BDw==
-X-CSE-MsgGUID: hj7cxYB9SGuQ64Wp2Q/e3g==
+   d="scan'208";a="65832240"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 00:19:33 -0800
+X-CSE-ConnectionGUID: HTBF3ikrSh2Ahc3R5u9vEw==
+X-CSE-MsgGUID: nl3biUymQHaIUQATLHU5NQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,215,1758610800"; 
-   d="scan'208";a="190913439"
+   d="scan'208";a="190844894"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 20 Nov 2025 23:58:29 -0800
+  by orviesa006.jf.intel.com with ESMTP; 21 Nov 2025 00:19:32 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vMM2E-00055v-1T;
-	Fri, 21 Nov 2025 07:58:26 +0000
-Date: Fri, 21 Nov 2025 15:57:45 +0800
+	id 1vMMMZ-00056J-30;
+	Fri, 21 Nov 2025 08:19:27 +0000
+Date: Fri, 21 Nov 2025 16:18:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Colberg <pcolberg@redhat.com>, Danilo Krummrich <dakr@kernel.org>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>, Zhi Wang <zhiw@nvidia.com>,
-	Peter Colberg <pcolberg@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH 7/8] rust: pci: add physfn(), to return PF device for VF
- device
-Message-ID: <202511211511.hUcSTiSF-lkp@intel.com>
-References: <20251119-rust-pci-sriov-v1-7-883a94599a97@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/single_direct_ops_ci 11/11]
+ kernel/bpf/trampoline.c:331:9: error: call to undeclared function
+ 'direct_ops_del'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202511211659.KNKOM3Kt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,37 +63,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251119-rust-pci-sriov-v1-7-883a94599a97@redhat.com>
 
-Hi Peter,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on e4addc7cc2dfcc19f1c8c8e47f3834b22cb21559]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Colberg/rust-pci-add-is_virtfn-to-check-for-VFs/20251120-062302
-base:   e4addc7cc2dfcc19f1c8c8e47f3834b22cb21559
-patch link:    https://lore.kernel.org/r/20251119-rust-pci-sriov-v1-7-883a94599a97%40redhat.com
-patch subject: [PATCH 7/8] rust: pci: add physfn(), to return PF device for VF device
-config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/archive/20251121/202511211511.hUcSTiSF-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511211511.hUcSTiSF-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/single_direct_ops_ci
+head:   60a0e23f31d3e7eb62bf1ff14f9efef8de96ac0d
+commit: 60a0e23f31d3e7eb62bf1ff14f9efef8de96ac0d [11/11] bpf, x86: Use single ftrace_ops for direct calls
+config: s390-randconfig-002-20251121 (https://download.01.org/0day-ci/archive/20251121/202511211659.KNKOM3Kt-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511211659.KNKOM3Kt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511211511.hUcSTiSF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511211659.KNKOM3Kt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0609]: no field `__bindgen_anon_1` on type `bindings::pci_dev`
-   --> rust/kernel/pci.rs:546:40
-   |
-   546 |         Ok(unsafe { &*(*self.as_raw()).__bindgen_anon_1.physfn.cast() })
-   |                                        ^^^^^^^^^^^^^^^^ unknown field
-   |
-   = note: available field is: `_address`
+>> kernel/bpf/trampoline.c:331:9: error: call to undeclared function 'direct_ops_del'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     331 |                 ret = direct_ops_del(tr->fops, tr->ip, old_addr);
+         |                       ^
+   kernel/bpf/trampoline.c:331:9: note: did you mean 'direct_ops_free'?
+   kernel/bpf/trampoline.c:281:13: note: 'direct_ops_free' declared here
+     281 | static void direct_ops_free(struct bpf_trampoline *tr) { }
+         |             ^
+>> kernel/bpf/trampoline.c:345:9: error: call to undeclared function 'direct_ops_mod'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     345 |                 ret = direct_ops_mod(tr->fops, tr->ip, new_addr, lock_direct_mutex);
+         |                       ^
+   kernel/bpf/trampoline.c:345:9: note: did you mean 'direct_ops_free'?
+   kernel/bpf/trampoline.c:281:13: note: 'direct_ops_free' declared here
+     281 | static void direct_ops_free(struct bpf_trampoline *tr) { }
+         |             ^
+>> kernel/bpf/trampoline.c:367:9: error: call to undeclared function 'direct_ops_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     367 |                 ret = direct_ops_add(tr->fops, tr->ip, new_addr);
+         |                       ^
+   kernel/bpf/trampoline.c:367:9: note: did you mean 'direct_ops_free'?
+   kernel/bpf/trampoline.c:281:13: note: 'direct_ops_free' declared here
+     281 | static void direct_ops_free(struct bpf_trampoline *tr) { }
+         |             ^
+   3 errors generated.
+
+
+vim +/direct_ops_del +331 kernel/bpf/trampoline.c
+
+   324	
+   325	static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
+   326	{
+   327		void *ip = tr->func.addr;
+   328		int ret;
+   329	
+   330		if (tr->func.ftrace_managed)
+ > 331			ret = direct_ops_del(tr->fops, tr->ip, old_addr);
+   332		else
+   333			ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
+   334	
+   335		return ret;
+   336	}
+   337	
+   338	static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_addr,
+   339				 bool lock_direct_mutex)
+   340	{
+   341		void *ip = tr->func.addr;
+   342		int ret;
+   343	
+   344		if (tr->func.ftrace_managed) {
+ > 345			ret = direct_ops_mod(tr->fops, tr->ip, new_addr, lock_direct_mutex);
+   346		} else {
+   347			ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, new_addr);
+   348		}
+   349		return ret;
+   350	}
+   351	
+   352	/* first time registering */
+   353	static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+   354	{
+   355		void *ip = tr->func.addr;
+   356		unsigned long faddr;
+   357		int ret;
+   358	
+   359		faddr = ftrace_location((unsigned long)ip);
+   360		if (faddr) {
+   361			if (!tr->fops)
+   362				return -ENOTSUPP;
+   363			tr->func.ftrace_managed = true;
+   364		}
+   365	
+   366		if (tr->func.ftrace_managed) {
+ > 367			ret = direct_ops_add(tr->fops, tr->ip, new_addr);
+   368		} else {
+   369			ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
+   370		}
+   371	
+   372		return ret;
+   373	}
+   374	
 
 -- 
 0-DAY CI Kernel Test Service
