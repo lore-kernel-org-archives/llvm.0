@@ -1,135 +1,102 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF02C2E8B9D
-	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 14:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0178230264
+	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 14:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763734241; cv=none; b=Br4Gj37/WQJWw9tpdUtTLXq1C//0nOiYvOn2w7p5qSdjuG/i8hPIh9wperxF9hI+SvYzL6yuDvA5wG4sJ9Pl09b59lhoW2L9D74yKbh2Sl/TDNMwleUH2q+jOtk1CAA4C/2LgJwiNHEJmq8BBv6yCoQOrq1+SSwfQYT7TDDA1wI=
+	t=1763734792; cv=none; b=s9UkBFl4XCDTtuby4BdAx8ohpt27rISzMF/S/oQuwPNMX1rJ7PQPjpEgpD8yzl6OijFx7JAdYl/NMxFU1iczU1jKqOu8FvicEt8bNYZZHj8SkZBekfEPHc3Kt/O9kzC3gRysAMbFeVGw4ps+gc6CoEYSvVzbuidpqKFgxQhKQlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763734241; c=relaxed/simple;
-	bh=rXOw+c8UTUZEjbuo8mLuqnRZrzETuRIQOR3eztUrTlE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Yb2qtemn1/gLKEmaQEEb8qoPW+4Pdi2YU4xFEfyegC5bNNSJqbPVvB40VS5lrp/3Fj4mSg0DJLKRE4ci0XfMGJyr6YPmyhAcrCLCJWNTXvXZaGCFFserfSQkRYxT/6K1cRfaDZj02l/+07JiQkzxtFECZcKCyeakFuEeZWuvBgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zrJ/WmuB; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1763734792; c=relaxed/simple;
+	bh=eDgGR2698tto8NFZ+hJd3nj8gq8RooSAULJN2tTkTHU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nC6sMyEyPm+bShBxbOd8ufk+NQQ56s0iAKGNFLJyYlM1hBCcT1YvbXCjncr9vHbpmoY7XLOn4ytgfXGff+tHE6wsEKC8qkeRl9eKNFwRshkSyejO2hKVksFoppkhqrkjWFdSzw+LX23N7HBATHCmINFBZMsbFXtweFj1/rzn84o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XNMScjcU; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zrJ/WmuB"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4776079ada3so17816535e9.1
-        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 06:10:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XNMScjcU"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b9a5f4435adso192639a12.3
+        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 06:19:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763734238; x=1764339038; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bBOaWzj421YsoP6L9S3tWnW5T/nwInlX1XYaAFMoacs=;
-        b=zrJ/WmuBZ2YAxfctLCbPrpyAkeBhsw08cVetyibQ1UoFOk2Rg5hn7l2G1nitNB3Q0M
-         WPUhxQCxnHSYizS79pD8TG2s33aWCgahTjUjyBgwcuF8Cj+aaKXypRUAReqO00Bj0RvT
-         fUXI7WRkcwHdFHW1S1tzA0nYckxLxxJqAa64nKsJ/t4bCwHBQvI38FOYKrMQvkJJrDUM
-         o4fYl+uivVNJ5wJf6yLTFufH2OdVlKPio3Wk310JC+C3ituoWyqWIrsoB7mdZxRVrO3A
-         WeKDfN9xtAd6+zZda5vCqT8ZWeXWT0K/YMNJeiobLWXprTaRPrNmTc1jt3hFZvmlKdhj
-         Jadg==
+        d=gmail.com; s=20230601; t=1763734790; x=1764339590; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eDgGR2698tto8NFZ+hJd3nj8gq8RooSAULJN2tTkTHU=;
+        b=XNMScjcUfszzWxxVofpQ9Zp06nWI7TTBG2F4HaqpWGtGZ+IFuhSTmwtwOC340kVsHl
+         YyaNbzVr7NoKk8NypylyzxcWLfkSXFS0WcCqpPEHIKWBaGTsy8L/j0T0bPLsd9ubk5+w
+         XZ0XDZivmzzFTjHuneaCpqc6mglLP69LuuUg1fNUdoqU8bTYCkH/QRVLPBUs0beLirOZ
+         bHXqy6VRkodm6jDdrgElQfcaCMv2ReUM2Muo07izP2slVFb2XxCAJrYPAdw0EmnX4mUu
+         LRhTl3DU/rX8ftbP0nfNaGsy4BscBjg4WARQXYZ6e3+VrBHoVNK/e6H1fij2lUitBRY0
+         VZ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763734238; x=1764339038;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bBOaWzj421YsoP6L9S3tWnW5T/nwInlX1XYaAFMoacs=;
-        b=mAXLwDWr3nOc5Uux2zGYKTRVDEwhakgHVaLolLPWd9FlMiZoWXLVsEnPQB/7CrkJJB
-         DvmaFpyXlDSLWs83QcvPDUsx/NYA0qeNnTi0dcynxRr1PIeQ15lan/dxoDRtbaUzfWfk
-         jwE2jzlkGfM9d4sQXbeFd4qHZ2AmB2tuWSGwb11DBVVGDUpILQDYnG029XyeuwR7lk1Y
-         HczDmakvtClrk/OxeFqF5cHAHNSgQtp+Rznu1ZZteyl1TbTSoQ81LrwT3cN9uc2OV9C+
-         Mdg6vYS7+QH4hmUu5CRBYbE/HioXtMjrtNCn2g2Q+k2CYRtGLhPzE3bls+zAaJjonXIf
-         CBLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXt0To4s6n8BkXjSQddextldb6rMkc0dPXocjMg/QfFZ2ld5KkAkRgFY9gSmUdDIrQKOiTa@lists.linux.dev
-X-Gm-Message-State: AOJu0YyEMDOcU2dHOIlbdrNh0AJTVynudC0ANYydXDTzS47ocA8rpenE
-	q302XH0wd6iC78T/qE8XLxIwmBj9hcvp5LS/r9nZqBY6bCMSpmRUjxvh9dlZiJb8fpNed81Te0+
-	b2CCYcBp9QeiGB32/7g==
-X-Google-Smtp-Source: AGHT+IHiDz9TgYsNAoHhZq0D92Mp48pVcUKJIgrn4QbzYH5pIa8WFeVjC4TFWqkndvp4qmNx9YBKpGrorFWApAU=
-X-Received: from wmbjd14.prod.google.com ([2002:a05:600c:68ce:b0:474:979d:a20d])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:35ce:b0:477:6d96:b3e5 with SMTP id 5b1f17b1804b1-477c016c071mr33656395e9.7.1763734238173;
- Fri, 21 Nov 2025 06:10:38 -0800 (PST)
-Date: Fri, 21 Nov 2025 14:10:36 +0000
-In-Reply-To: <DEEEZRYSYSS0.28PPK371D100F@nvidia.com>
+        d=1e100.net; s=20230601; t=1763734790; x=1764339590;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=eDgGR2698tto8NFZ+hJd3nj8gq8RooSAULJN2tTkTHU=;
+        b=jlFiURnbaMMkfMw5X6DcCZzQ9563/AfmoRgdZQnuEKgCK5T0fVkhAG8mG5W9wZXBfQ
+         M7ahzY2JG7pzxs6KHuvnd799PQPUFr7o6RnmUqY4kb5WW1TsqnTyCjaPxzIhOruNcrfH
+         KVuGlqlICsvsC2K5GCnlKqWqCNHv86dTElBuXZMBEhPdb0I2rsxiFJQQuFAIljcq0T1j
+         jZ3w42IEJRpHRkExbmf4vvfXlpaYDpvPVZbxBlJTFRyc6zy/BW58gGKq/ETGib8pR2Gx
+         YShvatDRHnUM4xPqgZafyvjtD8rA0L9+fgO1P9u5T8S1ELZnC6Qg461LGCoPMBgp8iX2
+         91AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXySTMnb3kjmg6t9b/y2AGyErO2XOrJpfgtBnp2lTN4UqvSzHDOxNSPX7zBMV2PJQ6gsOZC@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzubm2sxMOEjOV+Z93ZuTWuo5lZsCoBIEUd7GLscaXtCnLc73PD
+	8e1h5gHhd6las15/M43gncQyHu7hAIB11+eSzl5J41NkCu4RsBl1zMq96HhbSrBAdICSj1RXShh
+	gyktI4NyfqT6aT9Khe4wQeIqrCQ2wwaw=
+X-Gm-Gg: ASbGncuzbnx6n+ArcJylTdxo2Yb1t6ftnyOA3HdqCnvYA+iy0eEo4AZUZ22tnbqXfxP
+	0MCUhUuC/+7UGyJvM02BfhBYUHFdMEZz6yRhwETZvV3pSoKzAq76Hz2H7F4oBcN9Xs5a9XtDcd6
+	m/kD4pwV/ZbvlksRdK5Vsg4fSlgltJo6c3ov0AbzA2qGfcxFgSmqgn8ZBAX9fq1OOPJVf16LlAk
+	+3tjFhBJXO6jQa8+LDslJHtDbArehKsdLTlBH/yEYwwbBncRjtchupvwOIwk783sjOHSvbX1RCa
+	dACZ8LcYCV/1weCEHm0JpbJhN3TnpJej8JmPmzgWTcwTFkukS65lbLFsQKGMtJrMLER1fV5h4hC
+	EU3y6q8ed4ZVzrA==
+X-Google-Smtp-Source: AGHT+IFabn2V1L94xcIH5eoxTMFF1/UMezy9Yu1wD416Wcn/cGAJMQeSVxtMH9RV2wwhe7BQFQrqvwuCetmQ+JnuRFc=
+X-Received: by 2002:a05:7022:ea46:10b0:119:e55a:95a1 with SMTP id
+ a92af1059eb24-11c9d8678famr565479c88.3.1763734790123; Fri, 21 Nov 2025
+ 06:19:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <202511210055.RUsFNku1-lkp@intel.com> <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com>
  <aSAr-aA2U26lr3iI@google.com> <DEEEZRYSYSS0.28PPK371D100F@nvidia.com>
-Message-ID: <aSBy3HQ9Z-h2LbB8@google.com>
+In-Reply-To: <DEEEZRYSYSS0.28PPK371D100F@nvidia.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 21 Nov 2025 15:19:37 +0100
+X-Gm-Features: AWmQ_bkQkGrI7jHz10jepK4vORe9hiqm8jjK8bT5eggMyhBFXXmFRvhTXCi-cMs
+Message-ID: <CANiq72kBT1kUc6by6-v1LMKa-WnhOgNbFMLDWoAO8Kg=dpboQw@mail.gmail.com>
 Subject: Re: [linux-next:master 9676/10599] ld.lld: error: undefined symbol: rust_build_error
-From: Alice Ryhl <aliceryhl@google.com>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+To: Alexandre Courbot <acourbot@nvidia.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Trevor Gross <tmgross@umich.edu>
+Cc: Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 10:41:46PM +0900, Alexandre Courbot wrote:
-> On Fri Nov 21, 2025 at 6:08 PM JST, Alice Ryhl wrote:
-> > On Fri, Nov 21, 2025 at 03:13:16PM +0900, Alexandre Courbot wrote:
-> >> On Fri Nov 21, 2025 at 1:41 AM JST, kernel test robot wrote:
-> >> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> >> > head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
-> >> > commit: 01e345e82ec3a5a7edeb9fa0dcb7fd4b0e5c534e [9676/10599] rust: num: add Bounded integer wrapping type
-> >> > config: loongarch-randconfig-6002-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/config)
-> >> > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> >> > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-> >> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210055.RUsFNku1-lkp@intel.com/reproduce)
-> >> >
-> >> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> >> > the same patch/commit), kindly add following tags
-> >> > | Reported-by: kernel test robot <lkp@intel.com>
-> >> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511210055.RUsFNku1-lkp@intel.com/
-> >> >
-> >> > All errors (new ones prefixed by >>):
-> >> >
-> >> >>> ld.lld: error: undefined symbol: rust_build_error
-> >> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-> >> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u8, 1>>::from_expr) in archive vmlinux.a
-> >> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-> >> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u32, 4>>::from_expr) in archive vmlinux.a
-> >> >    >>> referenced by build_assert.rs:83 (rust/kernel/build_assert.rs:83)
-> >> >    >>>               rust/doctests_kernel_generated.o:(<kernel::num::bounded::Bounded<u16, 8>>::from_expr) in archive vmlinux.a
-> >> 
-> >> Mmm, I don't like this. The expressions that are failing are extremely
-> >> simple, for instance:
-> >> 
-> >>     Bounded::<u8, 1>::from_expr(1)
-> >> 
-> >> So if the compiler is unable to assess that this won't fail, this might
-> >> be a deal-breaker for `from_expr` and we might need to remove it. :(
-> >> 
-> >> This would also mean a lot more runtime checks when working with
-> >> bitfields and registers. Or can we assume that this is a compiler
-> >> problem on this particular architecture?
-> >
-> > Yeah, it sounds like from_expr() isn't going to work.
-> 
-> It would be a pity but we can replace `from_expr` with an unsafe
-> `new_unchecked` for these cases where the caller is absolutely sure of
-> their input. I have tried on bitfield/Nova and the result is not too
-> bad.
-> 
-> Still, this is a bummer - it is much better to have the compiler
-> validate safety properties than relying on a SAFETY comment.
-
-This kind of thing is why I keep saying build_error() is too fragile to
-be used at all.
-
+On Fri, Nov 21, 2025 at 2:41=E2=80=AFPM Alexandre Courbot <acourbot@nvidia.=
+com> wrote:
+>
 > I notice that loongarch is a Tier 2 Rust platform, but I suppose that's
 > not an excuse to let it not build? ^_^;
 
-What Tier upstream Rust uses for the target is irrelevant for us IMO.
+x86_64, arm64 and riscv64 should be kept working, and I also
+build-test loongarch64, including for stable kernels.
 
-Or at least, it may be relevant in the "add this target to Linux?"
-discussion. But once we added it, it's not relevant anymore.
+arm32 and UML are the ones that are best-effort (on my side at least)
+so we play catch up as time allows, but loongarch64 so far should
+always build and it would be sad to drop that.
 
-> If I had to bet I'd wager that in this case the "shift left then back
-> right" technique to check the bounds is not working well. I will try to
-> find an alternative, but meanwhile we should probably remove
-> `from_expr`. I will send a patch to that effect unless told otherwise.
+I don't see this in my tests (though I see another issue for
+loongarch64; I will send a few emails), so it may depend on the
+config.
 
-Alice
+Cc'ing our toolchain experts and the loongarch maintainers.
+
+Cheers,
+Miguel
