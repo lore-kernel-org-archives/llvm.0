@@ -1,231 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CD9303A19;
-	Fri, 21 Nov 2025 19:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C678248F77
+	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 19:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763753855; cv=none; b=s9aIuqdnLPoTV5PeP0v1ET6Y0BsEzGya1ks1r+9lvcaAGwYzRiAB8hcFCxI+fW56J4yUa21GI411WSMaujo9TEbG1dA914FTMo7ckVd0+ExriPrpwQ3MoF1MyzFD6F3Bi/eAgRVD63bKlO4wYy2PqMVg4KUqH5WW8uhADcXtyT8=
+	t=1763754009; cv=none; b=Vo3ch4vuHiE65qLEe+9TBYwbxD57pmpf9snPXtt4CxBwrXb/irFnT1GmUXcjx4JDg9Jd/vn9Uxseogyz0/fKW0cwaYK8OIaNSsHwtb9E+DC5AbgICm4v/E45VrAneVby3AaZAVTpN3TiMhI9V2mtqOLqBu2o5T+HBrRO6ueb5fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763753855; c=relaxed/simple;
-	bh=c/kUaZct+5DF3X6s+tdMpvtLtl3qJC9wCyP+dO9VKOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLMJYRQiQ8xfhyqOsJ7QHLd5Q3qmlia5WWpT1OROeSm/Xo1vaW8tjWRpiijruPDzaL6AwgxagG2IW1j6MImztjTTFkkmk82B8442tEo2HfDLZPEO2ankcR+5JT6NjCwyNKBhascgrcGogn+i03TAuZdsTzzGwvt4yeUE7gI7T5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PyEFhc+x; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763754009; c=relaxed/simple;
+	bh=uyjlPQjCUIP3tN/i8tzIaK5s2tBhsnrdcDrEmNw41BA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=eJsVJ+BB5fADYE4gNYaq5H3yeCyuqFKkuOpFy5M7RUbqgSNSvaXMAG42leRA0x4t1HMSw91EcVYItlh1YVYOGHC8EAINlQs7QYKUGTHPM8beBeHkcUf5C0rHFIuJpo3y8NuM2oSgN0dpyrhm3uhMDLDVDQOfhMJa9WN3fzv4u+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZYzBwJuh; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PyEFhc+x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763753854; x=1795289854;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c/kUaZct+5DF3X6s+tdMpvtLtl3qJC9wCyP+dO9VKOw=;
-  b=PyEFhc+x0rv05ig72VkdTTadc1GtMJjVDCt2hHDQBJyN6Z3PCbHUqjfu
-   HnR2+6s1zyP9+CVDVzXiUAQYmtnqyYRo2vlchDy5afz+dt3O5dAsLjcLq
-   oSMk+zlRobd/jwUAYIfGqLXjYMK7L0RQYxn1+i3r5JASNdZ7NFvr7mvL5
-   9LNjs0udkI2B31rnPO5bWHNUr/OIdpXTrEfP5GCJ8bgVAaRtVrm+yoNOW
-   7fqvT93okMT431NpX4Npoe7UJWYjUsn+ST4qYTWc0YRxRbEy3e0XVH/vr
-   GoE/94FmZWp+ItCnQf79n6wgPRV8KDDj2u9RPFsA3fNXguaZuXgDld1jO
-   w==;
-X-CSE-ConnectionGUID: ygIM/IYTQo2HKCD+3WRHZg==
-X-CSE-MsgGUID: WXTyEDhmSvqi0vc2WqEGXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="77326881"
-X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
-   d="scan'208";a="77326881"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 11:37:34 -0800
-X-CSE-ConnectionGUID: auhbB6yQQqaIUE5NzNsH0Q==
-X-CSE-MsgGUID: dqgowte1STu1wuyxJxtFkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
-   d="scan'208";a="191072710"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 21 Nov 2025 11:37:31 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vMWwh-0006nX-38;
-	Fri, 21 Nov 2025 19:37:27 +0000
-Date: Sat, 22 Nov 2025 03:36:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-	brgl@bgdev.pl, linus.walleij@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andy@kernel.org,
-	p.zabel@pengutronix.de, linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org, bartosz.golaszewski@linaro.org,
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH v2] spi: cs42l43: Use actual ACPI firmware node for chip
- selects
-Message-ID: <202511220309.nzj2045b-lkp@intel.com>
-References: <20251120105907.1373797-1-ckeepax@opensource.cirrus.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZYzBwJuh"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7bf5cdef41dso5695841b3a.0
+        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 11:40:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763754007; x=1764358807; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MVJsPQnIVZajk+lHlfDveIvLKD+85UYee4pfqF03cLk=;
+        b=ZYzBwJuhCl9niWyGd794wzVg9RiazixB82LTy3jl3mlKY2su1zOviYBbre0HkEqaWH
+         F/mdkeRPIun8CS2Az1Cl/yQesJvR6GlBvFYvJK8w7VIHBgWlp7FJv9OR4VZL0557UNcR
+         IqQC2u7abjEumqVoPbI+WC1HEJOy7SUUYsVqtH8t+cYpx1RSinm2Y4e1QaTEiXrTWUpB
+         5bum1Rkz6XOkLtBYh8rC8nH7wt3qKjB3KSckoJe4uiOYS95FjXDbeh/lXd8GS5dJN/20
+         2XPQnLYZ/U8B7XkHsG9vFBLwR+P8pTDuCcbMRHL2mEloDRXpD0qZlgK4uFIhemd0w305
+         0qXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763754007; x=1764358807;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MVJsPQnIVZajk+lHlfDveIvLKD+85UYee4pfqF03cLk=;
+        b=JQaxrxb6Vm0/tzos5NnhyIKhQdyQP4vUT3CIbbh7VZeUmHTFsYepfB9pYttFOx/xmk
+         rIXnWbVoYN6g7DuUCuw7JEq2Vv+wks0Vdrvv4k0TdWE613pTjsVvbCR1FotJA3nRvMRZ
+         OZOgS+eEI0R/KBWrjewF1XYKUdIke4Sgv1lfp9V6An3/uYnbKlnm4lBv3X+6XYyyQO0u
+         3X7YFNtlblpM2aZG5XwnbURwirjyX85B2Dftpe1h2NRQ2Th+7kc562cVt21OtYozHacv
+         gcdHMyoV4QY5yY+aF5WX9SDvGyDw4/vay77owiRVZINPluqwzV9PK0AfnozFpP4I6gQJ
+         nOAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVo9++wo9tFEL+X3N16XtpobgMbFyfRgFCBiLXLrSiUhLofx+HKzWk6INrglqPuwcPlKQvY@lists.linux.dev
+X-Gm-Message-State: AOJu0YweqXeYmQIvWLKfEeWU3FcdcA4Kyomnmsc6mjsEszPntYrxKfqH
+	ipPdgVsdN5b5ROyFbfqZlCiCSWjAabR0ZB3VQLQZwbYMMnwzu7/wK+MZNyfXxz6On+tc45JyjG1
+	M
+X-Google-Smtp-Source: AGHT+IHarLcIknxetIYeUvDf3MVSiAq41e5Mrh95YVro6zYarTxgqBJdpBdWXVnAePgCSrupRn3actC+TQ==
+X-Received: from pfbfa5.prod.google.com ([2002:a05:6a00:2d05:b0:781:26f4:7855])
+ (user=morbo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:158a:b0:35d:1bcd:6882
+ with SMTP id adf61e73a8af0-36150ea818emr3944453637.23.1763754006657; Fri, 21
+ Nov 2025 11:40:06 -0800 (PST)
+Date: Fri, 21 Nov 2025 19:39:42 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251120105907.1373797-1-ckeepax@opensource.cirrus.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.rc2.455.g230fcf2819-goog
+Message-ID: <20251121193957.1655580-1-morbo@google.com>
+Subject: [PATCH 0/2] Add __counted_by_ptr macro
+From: Bill Wendling <morbo@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Bill Wendling <morbo@google.com>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Charles,
+These patches add the __counted_by_ptr macro and then uses it in
+mm/memblock.h. The name of the __counted_by_ptr attribute is the same as
+__counted_by, but two different macros are needed, because of feature
+skew in GCC and clang. Once the minmum versions of the compilers support
+'counted_by' on both flexible array members and pointers in structs,
+this macro will become obsolete.
 
-kernel test robot noticed the following build errors:
+Bill Wendling (2):
+  Compiler Attributes: Add __counted_by_ptr macro
+  memblock: annotate struct memblock_type with __counted_by_ptr
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on linus/master v6.18-rc6 next-20251121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Keepax/spi-cs42l43-Use-actual-ACPI-firmware-node-for-chip-selects/20251120-190613
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20251120105907.1373797-1-ckeepax%40opensource.cirrus.com
-patch subject: [PATCH v2] spi: cs42l43: Use actual ACPI firmware node for chip selects
-config: i386-randconfig-004-20251121 (https://download.01.org/0day-ci/archive/20251122/202511220309.nzj2045b-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511220309.nzj2045b-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511220309.nzj2045b-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/spi/spi-cs42l43.c:376:28: error: incompatible pointer types initializing 'const struct software_node *' with an expression of type 'struct fwnode_handle *' [-Werror,-Wincompatible-pointer-types]
-     376 |                         SOFTWARE_NODE_REFERENCE(fwnode, 0, GPIO_ACTIVE_LOW),
-         |                                                 ^~~~~~
-   include/linux/property.h:370:10: note: expanded from macro 'SOFTWARE_NODE_REFERENCE'
-     370 |         .node = _ref_,                                          \
-         |                 ^~~~~
-   1 error generated.
-
-
-vim +376 drivers/spi/spi-cs42l43.c
-
-   312	
-   313	static int cs42l43_spi_probe(struct platform_device *pdev)
-   314	{
-   315		struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
-   316		struct cs42l43_spi *priv;
-   317		struct fwnode_handle *fwnode = dev_fwnode(cs42l43->dev);
-   318		struct fwnode_handle *xu_fwnode __free(fwnode_handle) = cs42l43_find_xu_node(fwnode);
-   319		int nsidecars = 0;
-   320		int spkid = -EINVAL;
-   321		int ret;
-   322	
-   323		priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-   324		if (!priv)
-   325			return -ENOMEM;
-   326	
-   327		priv->ctlr = devm_spi_alloc_host(&pdev->dev, sizeof(*priv->ctlr));
-   328		if (!priv->ctlr)
-   329			return -ENOMEM;
-   330	
-   331		spi_controller_set_devdata(priv->ctlr, priv);
-   332	
-   333		priv->dev = &pdev->dev;
-   334		priv->regmap = cs42l43->regmap;
-   335	
-   336		priv->ctlr->prepare_message = cs42l43_prepare_message;
-   337		priv->ctlr->prepare_transfer_hardware = cs42l43_prepare_transfer_hardware;
-   338		priv->ctlr->unprepare_transfer_hardware = cs42l43_unprepare_transfer_hardware;
-   339		priv->ctlr->transfer_one = cs42l43_transfer_one;
-   340		priv->ctlr->set_cs = cs42l43_set_cs;
-   341		priv->ctlr->max_transfer_size = cs42l43_spi_max_length;
-   342		priv->ctlr->mode_bits = SPI_3WIRE | SPI_MODE_X_MASK;
-   343		priv->ctlr->flags = SPI_CONTROLLER_HALF_DUPLEX;
-   344		priv->ctlr->bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16) |
-   345						 SPI_BPW_MASK(32);
-   346		priv->ctlr->min_speed_hz = CS42L43_SPI_ROOT_HZ /
-   347					   cs42l43_clock_divs[ARRAY_SIZE(cs42l43_clock_divs) - 1];
-   348		priv->ctlr->max_speed_hz = CS42L43_SPI_ROOT_HZ / cs42l43_clock_divs[0];
-   349		priv->ctlr->use_gpio_descriptors = true;
-   350		priv->ctlr->auto_runtime_pm = true;
-   351	
-   352		ret = devm_pm_runtime_enable(priv->dev);
-   353		if (ret)
-   354			return ret;
-   355	
-   356		pm_runtime_idle(priv->dev);
-   357	
-   358		regmap_write(priv->regmap, CS42L43_TRAN_CONFIG6, CS42L43_FIFO_SIZE - 1);
-   359		regmap_write(priv->regmap, CS42L43_TRAN_CONFIG7, CS42L43_FIFO_SIZE - 1);
-   360	
-   361		// Disable Watchdog timer and enable stall
-   362		regmap_write(priv->regmap, CS42L43_SPI_CONFIG3, 0);
-   363		regmap_write(priv->regmap, CS42L43_SPI_CONFIG4, CS42L43_SPI_STALL_ENA_MASK);
-   364	
-   365		if (is_of_node(fwnode)) {
-   366			fwnode = fwnode_get_named_child_node(fwnode, "spi");
-   367			ret = devm_add_action_or_reset(priv->dev, cs42l43_release_of_node, fwnode);
-   368			if (ret)
-   369				return ret;
-   370		}
-   371	
-   372		fwnode_property_read_u32(xu_fwnode, "01fa-sidecar-instances", &nsidecars);
-   373	
-   374		if (nsidecars) {
-   375			struct software_node_ref_args args[] = {
- > 376				SOFTWARE_NODE_REFERENCE(fwnode, 0, GPIO_ACTIVE_LOW),
-   377				SOFTWARE_NODE_REFERENCE(&swnode_gpio_undefined),
-   378			};
-   379			struct property_entry props[] = {
-   380				PROPERTY_ENTRY_REF_ARRAY_LEN("cs-gpios", args, ARRAY_SIZE(args)),
-   381				{ }
-   382			};
-   383	
-   384			ret = fwnode_property_read_u32(xu_fwnode, "01fa-spk-id-val", &spkid);
-   385			if (!ret) {
-   386				dev_dbg(priv->dev, "01fa-spk-id-val = %d\n", spkid);
-   387			} else if (ret != -EINVAL) {
-   388				return dev_err_probe(priv->dev, ret, "Failed to get spk-id-val\n");
-   389			} else {
-   390				ret = cs42l43_get_speaker_id_gpios(priv, &spkid);
-   391				if (ret < 0)
-   392					return dev_err_probe(priv->dev, ret,
-   393							     "Failed to get spk-id-gpios\n");
-   394			}
-   395	
-   396			ret = device_create_managed_software_node(&priv->ctlr->dev, props, NULL);
-   397			if (ret)
-   398				return dev_err_probe(priv->dev, ret, "Failed to add swnode\n");
-   399		} else {
-   400			device_set_node(&priv->ctlr->dev, fwnode);
-   401		}
-   402	
-   403		ret = devm_spi_register_controller(priv->dev, priv->ctlr);
-   404		if (ret)
-   405			return dev_err_probe(priv->dev, ret,
-   406					     "Failed to register SPI controller\n");
-   407	
-   408		if (nsidecars) {
-   409			struct spi_board_info *ampl_info;
-   410			struct spi_board_info *ampr_info;
-   411	
-   412			ampl_info = cs42l43_create_bridge_amp(priv, "cs35l56-left", 0, spkid);
-   413			if (!ampl_info)
-   414				return -ENOMEM;
-   415	
-   416			ampr_info = cs42l43_create_bridge_amp(priv, "cs35l56-right", 1, spkid);
-   417			if (!ampr_info)
-   418				return -ENOMEM;
-   419	
-   420			if (!spi_new_device(priv->ctlr, ampl_info))
-   421				return dev_err_probe(priv->dev, -ENODEV,
-   422						     "Failed to create left amp slave\n");
-   423	
-   424			if (!spi_new_device(priv->ctlr, ampr_info))
-   425				return dev_err_probe(priv->dev, -ENODEV,
-   426						     "Failed to create right amp slave\n");
-   427		}
-   428	
-   429		return 0;
-   430	}
-   431	
+ include/linux/compiler_types.h | 11 +++++++++++
+ include/linux/memblock.h       |  2 +-
+ init/Kconfig                   |  5 +++++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0.rc2.455.g230fcf2819-goog
+
