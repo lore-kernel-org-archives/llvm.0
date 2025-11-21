@@ -1,147 +1,176 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC9126F2A1;
-	Fri, 21 Nov 2025 18:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E5726E71E
+	for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 18:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763748505; cv=none; b=qpoYV5jjjJsPBlWUFdYpNjDBxnydB0Te7dZfjmC6il0vAsCFxs26eZ4p7pXRZ/uVvoHc4+aJe5G3GjKFotbySV5WHiisLDlWnX4mt7385pM75a3KLImvXuX3v3DXcoWpOOQr8JjqBLUn169FStW1alp2Nyo6EvVPa/WenJJpYYY=
+	t=1763749684; cv=none; b=m52KexCeF1iNpxcS7MwC2sfuh19gGRJ1Rdq3sAffZnk3rTP1enBwsQqjqWakEnPveTqRAMF/MqrXmDcaQ821ac2Dm03sNAs1sYYeVoUmRAYKBM5nQMSZcV8mMnbOnkug/mjzaQd6fKDfi9neGJYDI2Lmxf7VS8N5Zy+t4Jfaer8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763748505; c=relaxed/simple;
-	bh=Rqzf1u36v+Fn3pFvdEKJ3si42YdU9CY2oTNiKex1Z1E=;
+	s=arc-20240116; t=1763749684; c=relaxed/simple;
+	bh=eiNvpKMX+RHgtZkQ1+h3XWmFyZEgmHdrngHRg+aKUCk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UqbLWEroO7JUNcN21KDeZZfgMLvNR9S1BiMjKrdHEhe35nQAyg4wiEW6SFFg05dfcGMWWjZn3R+t6eFzGqg5+U9C5JMeshTb6YzzG2V5hhdhjFP1dFnVCwN3nMgPViozJSwYZ53b21rl6rllJgLnQeV4Y0gz0MuHYB+YRs1kP+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SOvQU55g; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type:Content-Disposition; b=SnPBAm+npn621pLG2yr0ZUnKtAqLtlH7F1gLcwKFkjGxTIpem8GrN9NSLP/11crrmQKhZB6V9xhuEQS2ZOKWT3ICfndjRbTk4X25+KtNjWqCj9BKrb5G6vjC/31v4UP0mhFCNl7Dw8YQ1JVo+yYp4UyUUV3Cagk66oMuZSas7N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WPc4+UbP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SOvQU55g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763748503; x=1795284503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rqzf1u36v+Fn3pFvdEKJ3si42YdU9CY2oTNiKex1Z1E=;
-  b=SOvQU55gXQWJ1s8UBywf9rd/Rq/WBH5+xqJFSFnPc87lLHByIr0h5kBX
-   BvSC+JrlHx2N24LmIGYGPwhumB90ibXlNxqfHywxzgMYf1XPVAHo+V13r
-   NrpTfEWJXKFh5eiuszS1B1i1zACONS7PuLU1V2Wl3avBs/t3m8y0vQeA5
-   /n/Rv6YUCMs5xAOu2CI0AnJ+eigG9cmAEK535MQ4Ok4pdpJ9xRllpJfxH
-   V37OpfSRca0TzhdpPVqPAVaEDyHxWH8oMisxT3B5wyrDe0R0M/CjwbPMk
-   HeIMzr4rTZIjjV3laM04No0FtuvE2I9tDAlDTsupK5IQXQW1UWAHqdjTv
-   Q==;
-X-CSE-ConnectionGUID: e+HrgJ72RoatwCMQOszFmA==
-X-CSE-MsgGUID: qx6x/4QiR6Ozym3kER1rVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="77210420"
-X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
-   d="scan'208";a="77210420"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 10:08:22 -0800
-X-CSE-ConnectionGUID: OGPKsRdfSqeat4kp4O8W4A==
-X-CSE-MsgGUID: znsec5FOQVinlKu5tecIbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
-   d="scan'208";a="190941786"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 21 Nov 2025 10:08:17 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vMVYN-0006gN-1o;
-	Fri, 21 Nov 2025 18:08:15 +0000
-Date: Sat, 22 Nov 2025 02:07:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ma Ke <make24@iscas.ac.cn>, andrew@lunn.ch, olteanv@gmail.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, florian.fainelli@broadcom.com,
-	stephen@networkplumber.org, robh@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, Ma Ke <make24@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: Fix error handling in dsa_port_parse_of
-Message-ID: <202511220109.1PvI00Sr-lkp@intel.com>
-References: <20251121035130.16020-1-make24@iscas.ac.cn>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WPc4+UbP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763749681;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9F1gVEfkmOU4VbBNqbz6au89HcS75XiMRWvgttvUABM=;
+	b=WPc4+UbPP73I2EwUEh1FZ/j/Cg606m8OVShbJ15eHQrmUtzH3PEYSxEAJWEAboFBzk8eoj
+	GCj5KPIzem70+f/IUqTqroD149NqX6CWhrUP+W1sFI7pmM8uPL1AGQ/4KZUhAVMEk/KrKE
+	O5m02Q4CrXCUw0CXH5Q9Ig3m9rEPjeg=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-52-jB_h-tHbPfuC9vSzG709uA-1; Fri, 21 Nov 2025 13:27:58 -0500
+X-MC-Unique: jB_h-tHbPfuC9vSzG709uA-1
+X-Mimecast-MFC-AGG-ID: jB_h-tHbPfuC9vSzG709uA_1763749677
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ee0995fa85so77804911cf.1
+        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 10:27:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763749677; x=1764354477;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9F1gVEfkmOU4VbBNqbz6au89HcS75XiMRWvgttvUABM=;
+        b=RUNROaX/4TTkYwqYt5rbTdCLShfl61D9OTm1a6XQX1qQP1FvLGLXgdnTxeNLs77xQJ
+         6ssQyXRvHwfkXmWIo8VzwWmj3IKkC7Qa1QV3qVawaZ5SlXkrQr5ALBcEkzJDppHPnxBJ
+         pcHb0/Lk7TWSxR0AQpYOCmb0z9rq8wvy9W9JMZQg3tlJPx+zIxiiH+h9QE+jC2pJaR0J
+         sbneNsQ6Gclxjtam8X5yh11bQcuEQbAX8Hg8jKbPwPesXP0624Akzk9gjWSUg9r79Gtx
+         Eaz6LGldyxFy+5jkrxiSMj5JkU8oxFs6uqesDXB+hOizdWHiGXocKG27VzfHUP9X8nfc
+         lC9A==
+X-Forwarded-Encrypted: i=1; AJvYcCWgww3mtrVrG2NGe+YCU1TvsHejDaGg5DVK0XK+eAHa3HRK0KxU9iYHB4I4Pocg0P+HJrR5@lists.linux.dev
+X-Gm-Message-State: AOJu0YxA+XSC/48yRG39zCrcQG1Bu9qqMrdb69FbVQMUbk3fy0Kngc9A
+	e4DnYIh55bLAP9Fclx4klYeVmB9pwxXRKgqiF0rdxn0HWi6eTrkMNP3cxDmtXyu3glvuOtu1P7n
+	XbVFo768cFYTn6mE5odzi5czq8SRPHPEnzq1oTGhCdUBxo0YIEWJ9NuI=
+X-Gm-Gg: ASbGncsyhD0Doqawi7zkzETmNBcRyO1afGib1ruTnQX0aQC2yS1fDXyLMF8QgiPzsGE
+	CcCBUX7PxKepIjdVYqfpXw3h3ePQLnZ3TRAW+ILeR0asA5ffuCk/5mcMC+LBoBNPCHwcgUTHB4S
+	Ftu0u6uGBq7ttqR/o+bUsKZIvOleAvwDbT7MsYLYgCHM5O7jS9REV84JkaIue3ONoR2AJYyN6HH
+	0AA5FmOMuIqAb2m9R/NIfO/JnHL9zIQL7a9qQaKK5fzE/YhF8nhlIc8GUGoz2sVxuPFVI/kRUs1
+	HZXWoHGLdedUbjntCZ4V8cMP6aktGonmTMfpPsrqJ6egKZkSSw/VV9UQl6j21hzuqiBQRpBBQpQ
+	Ah7yl/jVH6w==
+X-Received: by 2002:a05:622a:155:b0:4ed:da56:7a96 with SMTP id d75a77b69052e-4ee58af100cmr45387571cf.60.1763749677512;
+        Fri, 21 Nov 2025 10:27:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFkOzQWoZuQdAiXMy2SX7/W3kkLRTcNrhy9ckhF61k6Ze2u2Lmzw86pdU9Kf7yewixDrfgpEg==
+X-Received: by 2002:a05:622a:155:b0:4ed:da56:7a96 with SMTP id d75a77b69052e-4ee58af100cmr45387001cf.60.1763749676867;
+        Fri, 21 Nov 2025 10:27:56 -0800 (PST)
+Received: from localhost ([2607:f2c0:b141:ac00:2fb1:d1df:b122:3b2c])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4ee48d571d0sm41831021cf.12.2025.11.21.10.27.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Nov 2025 10:27:56 -0800 (PST)
+Date: Fri, 21 Nov 2025 13:27:55 -0500
+From: Peter Colberg <pcolberg@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>, Zhi Wang <zhiw@nvidia.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH 1/8] rust: pci: add is_virtfn(), to check for VFs
+Message-ID: <aSCvKy64s-LBrM85@earendel>
+Mail-Followup-To: kernel test robot <lkp@intel.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>, Zhi Wang <zhiw@nvidia.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>
+References: <20251119-rust-pci-sriov-v1-1-883a94599a97@redhat.com>
+ <202511211008.jgLuTcrQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <202511211008.jgLuTcrQ-lkp@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: H1Qf7H9-7r204XU3qkej8bgVZLn_s6YFSji2MF4AVRU_1763749677
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251121035130.16020-1-make24@iscas.ac.cn>
 
-Hi Ma,
+On Fri, Nov 21, 2025 at 11:00:32AM +0800, kernel test robot wrote:
+> Hi Peter,
+> 
+> kernel test robot noticed the following build errors:
 
-kernel test robot noticed the following build errors:
+This appears to be a generic issue with UML, unrelated to this series.
 
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main linus/master v6.18-rc6 next-20251121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General/topic/CONFIG_UML.20maybe.20broken.3F/with/558611169
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/net-dsa-Fix-error-handling-in-dsa_port_parse_of/20251121-115449
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20251121035130.16020-1-make24%40iscas.ac.cn
-patch subject: [PATCH] net: dsa: Fix error handling in dsa_port_parse_of
-config: i386-randconfig-004-20251121 (https://download.01.org/0day-ci/archive/20251122/202511220109.1PvI00Sr-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511220109.1PvI00Sr-lkp@intel.com/reproduce)
+Thanks,
+Peter
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511220109.1PvI00Sr-lkp@intel.com/
+> 
+> [auto build test ERROR on e4addc7cc2dfcc19f1c8c8e47f3834b22cb21559]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Colberg/rust-pci-add-is_virtfn-to-check-for-VFs/20251120-062302
+> base:   e4addc7cc2dfcc19f1c8c8e47f3834b22cb21559
+> patch link:    https://lore.kernel.org/r/20251119-rust-pci-sriov-v1-1-883a94599a97%40redhat.com
+> patch subject: [PATCH 1/8] rust: pci: add is_virtfn(), to check for VFs
+> config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/archive/20251121/202511211008.jgLuTcrQ-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511211008.jgLuTcrQ-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511211008.jgLuTcrQ-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> error[E0599]: no method named `is_virtfn` found for struct `bindings::pci_dev` in the current scope
+>    --> rust/kernel/pci.rs:415:35
+>    |
+>    415 |         unsafe { (*self.as_raw()).is_virtfn() != 0 }
+>    |                                   ^^^^^^^^^ method not found in `pci_dev`
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
 
-All errors (new ones prefixed by >>):
-
->> net/dsa/dsa.c:1265:15: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'struct device *' [-Werror,-Wincompatible-pointer-types]
-    1265 |                         put_device(conduit);
-         |                                    ^~~~~~~
-   include/linux/device.h:1181:32: note: passing argument to parameter 'dev' here
-    1181 | void put_device(struct device *dev);
-         |                                ^
-   1 error generated.
-
-
-vim +1265 net/dsa/dsa.c
-
-  1243	
-  1244	static int dsa_port_parse_of(struct dsa_port *dp, struct device_node *dn)
-  1245	{
-  1246		struct device_node *ethernet = of_parse_phandle(dn, "ethernet", 0);
-  1247		const char *name = of_get_property(dn, "label", NULL);
-  1248		bool link = of_property_read_bool(dn, "link");
-  1249		int err;
-  1250	
-  1251		dp->dn = dn;
-  1252	
-  1253		if (ethernet) {
-  1254			struct net_device *conduit;
-  1255			const char *user_protocol;
-  1256	
-  1257			conduit = of_find_net_device_by_node(ethernet);
-  1258			of_node_put(ethernet);
-  1259			if (!conduit)
-  1260				return -EPROBE_DEFER;
-  1261	
-  1262			user_protocol = of_get_property(dn, "dsa-tag-protocol", NULL);
-  1263			err = dsa_port_parse_cpu(dp, conduit, user_protocol);
-  1264			if (err) {
-> 1265				put_device(conduit);
-  1266				return err;
-  1267			}
-  1268	
-  1269			return 0;
-  1270		}
-  1271	
-  1272		if (link)
-  1273			return dsa_port_parse_dsa(dp);
-  1274	
-  1275		return dsa_port_parse_user(dp, name);
-  1276	}
-  1277	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
