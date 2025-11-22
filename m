@@ -1,61 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739451DF271;
-	Sat, 22 Nov 2025 02:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974681DE8AE;
+	Sat, 22 Nov 2025 03:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763779879; cv=none; b=OsIP4Hty0mR2LIM1Buql3m+Wmd16BfIhE8X5u4QcmuQZS88TJ3/QFo/MbTeE7uvQ2v9P2LGmVSaRXf+m1w90tc/WrjQVvACNuwYOQz2DBCRm852MtrVCDfng0+8YoMLGadSvSB0U60ciu2qphOGRtXIRO7IPcHyPhL18C2qAgRA=
+	t=1763782343; cv=none; b=cPpO7zyzwSkS6MuPb34rc3gbleXNsWa5COe9W9UcySX1yeX/8pYp13400mUX/14g20aaxF75qK4/+Q2vLdVQd2SjTJC8Q+LVUAvF/W0YXEs0XPfC9jPgAHyEQv2Af+9vUL5GVe/AXRrvuJwmxfz89rc8mo/zglf+3vMqqBFZOWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763779879; c=relaxed/simple;
-	bh=44O1P9Kh+X2x5t8v4+evMnRC0Cq949l+h+wDWdkLXP0=;
+	s=arc-20240116; t=1763782343; c=relaxed/simple;
+	bh=fKZ3mFx0QkPhKj75Tr3yl0HRKoY0BsGVZcLqDCBeIvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YyFsfHQ5+vQA6toZPXfk29P33zhaaPKx9ywlg22uuL/fgs4Jg2iMPE2izezAlACqQL4/YInIfgYGrq8222k7ETZwwxaW/UjhIiGdyHM7vHeAoUbwcBQIFJ1Jfl22NFHrlPj7G1kljI3+HALnfhFkIoBOfJRJuK6PC4fPwutEIOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TMf2v9Q9; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=r6J66INbm2fSSS2R7sTPLw0VaDuJpZ2pRIdHDmZB4Kwnu08xYBEmWBO/HTxNh93NDYxc6F5+sbjqw2cTaegsr/JjIaehygIGipCZYAg1HLa9aHji92ZM/9sfp/NgWkJESINhOWus9KBjioftw1XEmj8pOsgA3/OobmgpEIb8Uu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLG3ytoI; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TMf2v9Q9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLG3ytoI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763779877; x=1795315877;
+  t=1763782342; x=1795318342;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=44O1P9Kh+X2x5t8v4+evMnRC0Cq949l+h+wDWdkLXP0=;
-  b=TMf2v9Q9x0enMG6NPwlNeSfHk3Sx/eTtP4JEL+OFx5qmWOkp4Ne1cyff
-   GhIqXRdjSO9DBn6RwPdMobmer/F/Rh5uzu6Pu6Cqtf/2uuW9ib3E1/0+K
-   9hXQc8MZoOU9kw199k37ZQrEQL2eyel0leS69ayYF4mEoUxeDBVc+8ZUE
-   6rbBIP52PopvsWHYhoAnr13W8MH4rComiUFv7RVQ7RqfDd7IM8xgjnCdP
-   ci194C4O60KVLLSQUo8k/Rjrik4KT8GOM4c5qesYdzRiv76XWQ0BB7Ctm
-   d4GHOK3qUAPP41DAzqilXAYOeK4DS5wjc3qWwKdV9MuLWDxpxK4vr+OFg
-   g==;
-X-CSE-ConnectionGUID: qT/UvWo/R+iWitZvxz6GfQ==
-X-CSE-MsgGUID: t8OLna2BR5Ggy/UnWpV95Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="65958257"
+  bh=fKZ3mFx0QkPhKj75Tr3yl0HRKoY0BsGVZcLqDCBeIvg=;
+  b=XLG3ytoIP2xLIpSVL8GOWf0snX4BHoAKBT9RNzJ9n1rA23ao+7boIG1J
+   zuB1nRICwvWJ0qo5A0AFLh7vOGvQ5r928wiXEOAF2HelwzUan9OKt8Lhd
+   l8fdTJSXEvNVbXdO+jK10gP1VZ+eqP96XKLhAOz4OxdELnr3LJ7zAvLqu
+   HxOGkbJZAnKPmqyjf81wRb2Jqx+hmgg3YobB1+MB1QCJFb1JhZpdnvMxH
+   2HA+pMdIxNxWn/SDZRJpGrDDBpFdqvVFpXv3o1qWWIVo7Ro6ARH4J0+97
+   RhAqzCta+5H9fRuYZsxpTOxU+kNfqcH7Ovryk/B2ikU7CcqnjrehkZuGE
+   w==;
+X-CSE-ConnectionGUID: e8KOd7AHSfG38bk4nSXTlw==
+X-CSE-MsgGUID: 1FMZQEu0TfK4OV6klTZ8AQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="83267352"
 X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="65958257"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 18:51:17 -0800
-X-CSE-ConnectionGUID: 2kwv1t9yTrGE31s3BvdbsA==
-X-CSE-MsgGUID: MZS4OgLYSSesOeGk6pBC4Q==
+   d="scan'208";a="83267352"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 19:32:22 -0800
+X-CSE-ConnectionGUID: 7lZqQ4GUToqhSsntBH1YHg==
+X-CSE-MsgGUID: KVXY2BD3S662ZDaZ9LHvnQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="196789971"
+   d="scan'208";a="196326365"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 21 Nov 2025 18:51:15 -0800
+  by orviesa004.jf.intel.com with ESMTP; 21 Nov 2025 19:32:18 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vMdiS-00075z-19;
-	Sat, 22 Nov 2025 02:51:12 +0000
-Date: Sat, 22 Nov 2025 10:50:55 +0800
+	id 1vMeMB-00077P-2j;
+	Sat, 22 Nov 2025 03:32:15 +0000
+Date: Sat, 22 Nov 2025 11:31:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yu Kuai <yukuai@fnnas.com>, axboe@kernel.dk,
-	linux-block@vger.kernel.org, tj@kernel.org, nilay@linux.ibm.com,
-	ming.lei@redhat.com, bvanassche@acm.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, yukuai@fnnas.com
-Subject: Re: [PATCH v2 4/9] blk-mq-debugfs: warn about possible deadlock
-Message-ID: <202511221056.dAY0duWw-lkp@intel.com>
-References: <20251121062829.1433332-5-yukuai@fnnas.com>
+To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>, marcel@holtmann.org,
+	luiz.dentz@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+	amitkumar.karwar@nxp.com, sherry.sun@nxp.com, dmitrii.lebed@nxp.com,
+	neeraj.sanjaykale@nxp.com
+Subject: Re: [PATCH v1 05/11] Bluetooth: btnxpuart: Add TLS host hello
+ handshake implementation
+Message-ID: <202511221150.4Zd49lpF-lkp@intel.com>
+References: <20251118142025.1982263-6-neeraj.sanjaykale@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,70 +67,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251121062829.1433332-5-yukuai@fnnas.com>
+In-Reply-To: <20251118142025.1982263-6-neeraj.sanjaykale@nxp.com>
 
-Hi Yu,
+Hi Neeraj,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on axboe/for-next]
-[also build test ERROR on linus/master v6.18-rc6 next-20251121]
+[auto build test WARNING on bluetooth/master]
+[also build test WARNING on bluetooth-next/master linus/master v6.18-rc6 next-20251121]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/blk-mq-debugfs-factor-out-a-helper-to-register-debugfs-for-all-rq_qos/20251121-143315
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/20251121062829.1433332-5-yukuai%40fnnas.com
-patch subject: [PATCH v2 4/9] blk-mq-debugfs: warn about possible deadlock
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20251122/202511221056.dAY0duWw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221056.dAY0duWw-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/Bluetooth-btnxpuart-Add-firmware-metadata-parsing-for-secure-interface/20251118-223605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/20251118142025.1982263-6-neeraj.sanjaykale%40nxp.com
+patch subject: [PATCH v1 05/11] Bluetooth: btnxpuart: Add TLS host hello handshake implementation
+config: arm-randconfig-001-20251122 (https://download.01.org/0day-ci/archive/20251122/202511221150.4Zd49lpF-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221150.4Zd49lpF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511221056.dAY0duWw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511221150.4Zd49lpF-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> block/blk-mq-debugfs.c:628:30: error: no member named 'blkcg_mutex' in 'struct request_queue'
-     628 |         lockdep_assert_not_held(&q->blkcg_mutex);
-         |                                  ~  ^
-   include/linux/lockdep.h:393:49: note: expanded from macro 'lockdep_assert_not_held'
-     393 | #define lockdep_assert_not_held(l)              do { (void)(l); } while (0)
-         |                                                             ^
-   1 error generated.
+>> drivers/bluetooth/btnxpuart.c:438:29: warning: field host_hello within 'struct nxp_tls_host_hello_payload::(anonymous at drivers/bluetooth/btnxpuart.c:436:2)' is less aligned than 'struct nxp_tls_host_hello' and is usually due to 'struct nxp_tls_host_hello_payload::(anonymous at drivers/bluetooth/btnxpuart.c:436:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     438 |                 struct nxp_tls_host_hello host_hello;
+         |                                           ^
+   drivers/bluetooth/btnxpuart.c:1828:1: warning: unused label 'free_skb' [-Wunused-label]
+    1828 | free_skb:
+         | ^~~~~~~~~
+   2 warnings generated.
 
 
-vim +628 block/blk-mq-debugfs.c
+vim +438 drivers/bluetooth/btnxpuart.c
 
-   612	
-   613	static void debugfs_create_files(struct request_queue *q, struct dentry *parent,
-   614					 void *data,
-   615					 const struct blk_mq_debugfs_attr *attr)
-   616	{
-   617		/*
-   618		 * Creating new debugfs entries with queue freezed has the risk of
-   619		 * deadlock.
-   620		 */
-   621		WARN_ON_ONCE(q->mq_freeze_depth != 0);
-   622		/*
-   623		 * debugfs_mutex should not be nested under other locks that can be
-   624		 * grabbed while queue is frozen.
-   625		 */
-   626		lockdep_assert_not_held(&q->elevator_lock);
-   627		lockdep_assert_not_held(&q->rq_qos_mutex);
- > 628		lockdep_assert_not_held(&q->blkcg_mutex);
-   629	
-   630		if (IS_ERR_OR_NULL(parent))
-   631			return;
-   632	
-   633		for (; attr->name; attr++)
-   634			debugfs_create_file_aux(attr->name, attr->mode, parent,
-   635					    (void *)attr, data, &blk_mq_debugfs_fops);
-   636	}
-   637	
+   434	
+   435	union nxp_tls_host_hello_payload {
+   436		struct {
+   437			u8 msg_type;
+ > 438			struct nxp_tls_host_hello host_hello;
+   439		} __packed;
+   440		u8 buf[113];
+   441	};
+   442	
 
 -- 
 0-DAY CI Kernel Test Service
