@@ -1,120 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974681DE8AE;
-	Sat, 22 Nov 2025 03:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB11036D506
+	for <llvm@lists.linux.dev>; Sat, 22 Nov 2025 04:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763782343; cv=none; b=cPpO7zyzwSkS6MuPb34rc3gbleXNsWa5COe9W9UcySX1yeX/8pYp13400mUX/14g20aaxF75qK4/+Q2vLdVQd2SjTJC8Q+LVUAvF/W0YXEs0XPfC9jPgAHyEQv2Af+9vUL5GVe/AXRrvuJwmxfz89rc8mo/zglf+3vMqqBFZOWc=
+	t=1763787555; cv=none; b=ryCxJSk/vDOrWrUdNCcDAfembJtN8/Owj4vCGxCIUefkVs7ib2lCxysZY1ItxQlTlyvBwpuloSELoK8bo/2ZCYCdiIRvl0lSo2WGUUxLLR6xMdUz03QZoTve/KBWZIVTrYc9wkDPgE1rGrE3TuxoHoXAGm2OOWnY0TVPS4WOgYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763782343; c=relaxed/simple;
-	bh=fKZ3mFx0QkPhKj75Tr3yl0HRKoY0BsGVZcLqDCBeIvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r6J66INbm2fSSS2R7sTPLw0VaDuJpZ2pRIdHDmZB4Kwnu08xYBEmWBO/HTxNh93NDYxc6F5+sbjqw2cTaegsr/JjIaehygIGipCZYAg1HLa9aHji92ZM/9sfp/NgWkJESINhOWus9KBjioftw1XEmj8pOsgA3/OobmgpEIb8Uu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLG3ytoI; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLG3ytoI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763782342; x=1795318342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fKZ3mFx0QkPhKj75Tr3yl0HRKoY0BsGVZcLqDCBeIvg=;
-  b=XLG3ytoIP2xLIpSVL8GOWf0snX4BHoAKBT9RNzJ9n1rA23ao+7boIG1J
-   zuB1nRICwvWJ0qo5A0AFLh7vOGvQ5r928wiXEOAF2HelwzUan9OKt8Lhd
-   l8fdTJSXEvNVbXdO+jK10gP1VZ+eqP96XKLhAOz4OxdELnr3LJ7zAvLqu
-   HxOGkbJZAnKPmqyjf81wRb2Jqx+hmgg3YobB1+MB1QCJFb1JhZpdnvMxH
-   2HA+pMdIxNxWn/SDZRJpGrDDBpFdqvVFpXv3o1qWWIVo7Ro6ARH4J0+97
-   RhAqzCta+5H9fRuYZsxpTOxU+kNfqcH7Ovryk/B2ikU7CcqnjrehkZuGE
-   w==;
-X-CSE-ConnectionGUID: e8KOd7AHSfG38bk4nSXTlw==
-X-CSE-MsgGUID: 1FMZQEu0TfK4OV6klTZ8AQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="83267352"
-X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="83267352"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 19:32:22 -0800
-X-CSE-ConnectionGUID: 7lZqQ4GUToqhSsntBH1YHg==
-X-CSE-MsgGUID: KVXY2BD3S662ZDaZ9LHvnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="196326365"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 21 Nov 2025 19:32:18 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vMeMB-00077P-2j;
-	Sat, 22 Nov 2025 03:32:15 +0000
-Date: Sat, 22 Nov 2025 11:31:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>, marcel@holtmann.org,
-	luiz.dentz@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	amitkumar.karwar@nxp.com, sherry.sun@nxp.com, dmitrii.lebed@nxp.com,
-	neeraj.sanjaykale@nxp.com
-Subject: Re: [PATCH v1 05/11] Bluetooth: btnxpuart: Add TLS host hello
- handshake implementation
-Message-ID: <202511221150.4Zd49lpF-lkp@intel.com>
-References: <20251118142025.1982263-6-neeraj.sanjaykale@nxp.com>
+	s=arc-20240116; t=1763787555; c=relaxed/simple;
+	bh=7SzEtoD3Q2SJNKtinN/vaZ2Gu8lnZev6twaNqAR+dDk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EBtFwjSo5GNFbEsIi+RiWM+BZb020kaNgINKestjraIz1ipUKBLA6c7hhPsI2sS67wyeUu9995JzbRBeYsjY5ayA9UohcvVsR0VZxdGQQxR///SpByRjRw35Eh02oeJYCmkKmyhRry8+n4OEju32xcjCvz4eaZS1RIpBaPVwG0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id A5B841607B4;
+	Sat, 22 Nov 2025 04:51:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id C6BA130;
+	Sat, 22 Nov 2025 04:51:20 +0000 (UTC)
+Message-ID: <f1d2bb84df85237f23ebf6e0f3dfecfd72d615b6.camel@perches.com>
+Subject: Re: [PATCH v5 3/4] checkpatch: Suggest kmalloc_obj family for
+ sizeof allocations
+From: Joe Perches <joe@perches.com>
+To: Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Cc: Andy Whitcroft <apw@canonical.com>, Dwaipayan Ray
+ <dwaipayanray1@gmail.com>,  Lukas Bulwahn <lukas.bulwahn@gmail.com>, Randy
+ Dunlap <rdunlap@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,  Przemek
+ Kitszel <przemyslaw.kitszel@intel.com>, "Gustavo A. R. Silva"
+ <gustavoars@kernel.org>, Linus Torvalds	 <torvalds@linux-foundation.org>,
+ Matthew Wilcox <willy@infradead.org>,  Christoph Lameter	 <cl@linux.com>,
+ Marco Elver <elver@google.com>, Vegard Nossum	 <vegard.nossum@oracle.com>,
+ Pekka Enberg <penberg@kernel.org>, David Rientjes	 <rientjes@google.com>,
+ Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton	
+ <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+ Harry Yoo <harry.yoo@oracle.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt	 <justinstitt@google.com>, Jann Horn <jannh@google.com>, Greg
+ Kroah-Hartman	 <gregkh@linuxfoundation.org>, Sasha Levin
+ <sashal@kernel.org>, 	linux-mm@kvack.org, Nathan Chancellor
+ <nathan@kernel.org>, Peter Zijlstra	 <peterz@infradead.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>,  Jonathan Corbet	
+ <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>, Yafang Shao	
+ <laoar.shao@gmail.com>, Tony Ambardar <tony.ambardar@gmail.com>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, Jan Hendrik Farr <kernel@jfarr.cc>,
+ Alexander Potapenko	 <glider@google.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
+ llvm@lists.linux.dev
+Date: Fri, 21 Nov 2025 20:51:19 -0800
+In-Reply-To: <20251122014304.3417954-3-kees@kernel.org>
+References: <20251122014258.do.018-kees@kernel.org>
+	 <20251122014304.3417954-3-kees@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251118142025.1982263-6-neeraj.sanjaykale@nxp.com>
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: C6BA130
+X-Stat-Signature: y1e6wye49h55e9yihtz99bqq8wccka44
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+Sr1JQ+437w6kkX38ORxtyNSi2FQhscRU=
+X-HE-Tag: 1763787080-150056
+X-HE-Meta: U2FsdGVkX1+M0hbju6B4R0TNwI2E2iep66FeX6Que0tNsb+p8wMZ25hWgq/0Vg70NWm4auf2lfTvdpVhLVnfB1hBlf5wFSevwBSyC6wNObgGWMSG0iH9DzDUrYTNDo1mwj53A3UlpMDs/Z2ciaydLxUjMSIkc3wYa0yAFskiGr3Tq2v2v12WwDKOLviXDa9mthgm8+7cSFMGd5Waqo5a6wL6Mgv1Le1Mknb+2EzvfPlMA8grKHD5zYIb6mFlNhPbNWs5Ml0iBRYXn8u6C5HyT5LVyPiZlIL+x5IRaAH/Pm0+Q/OzWQjOGYlSjR+teOoC
 
-Hi Neeraj,
+On Fri, 2025-11-21 at 17:42 -0800, Kees Cook wrote:
+> To support shifting away from sized allocation towards typed
+> allocations, suggest the kmalloc_obj family of macros when a sizeof() is
+> present in the argument lists.
+[]
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+[]
+> @@ -7258,17 +7258,42 @@ sub process {
+>  			    "Prefer $3(sizeof(*$1)...) over $3($4...)\n" . $herecurr);
+>  		}
+> =20
+> -# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_array/=
+kvmalloc_array/kvcalloc/kcalloc
+> +# check for (kv|k)[mz]alloc that could be kmalloc_obj/kvmalloc_obj/kzall=
+oc_obj/kvzalloc_obj
 
-kernel test robot noticed the following build warnings:
+There are _way_ too many of these existing uses to suggest this change
+in existing files so please add '&& !$file' to these tests
 
-[auto build test WARNING on bluetooth/master]
-[also build test WARNING on bluetooth-next/master linus/master v6.18-rc6 next-20251121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/Bluetooth-btnxpuart-Add-firmware-metadata-parsing-for-secure-interface/20251118-223605
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20251118142025.1982263-6-neeraj.sanjaykale%40nxp.com
-patch subject: [PATCH v1 05/11] Bluetooth: btnxpuart: Add TLS host hello handshake implementation
-config: arm-randconfig-001-20251122 (https://download.01.org/0day-ci/archive/20251122/202511221150.4Zd49lpF-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221150.4Zd49lpF-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511221150.4Zd49lpF-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/bluetooth/btnxpuart.c:438:29: warning: field host_hello within 'struct nxp_tls_host_hello_payload::(anonymous at drivers/bluetooth/btnxpuart.c:436:2)' is less aligned than 'struct nxp_tls_host_hello' and is usually due to 'struct nxp_tls_host_hello_payload::(anonymous at drivers/bluetooth/btnxpuart.c:436:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     438 |                 struct nxp_tls_host_hello host_hello;
-         |                                           ^
-   drivers/bluetooth/btnxpuart.c:1828:1: warning: unused label 'free_skb' [-Wunused-label]
-    1828 | free_skb:
-         | ^~~~~~~~~
-   2 warnings generated.
-
-
-vim +438 drivers/bluetooth/btnxpuart.c
-
-   434	
-   435	union nxp_tls_host_hello_payload {
-   436		struct {
-   437			u8 msg_type;
- > 438			struct nxp_tls_host_hello host_hello;
-   439		} __packed;
-   440		u8 buf[113];
-   441	};
-   442	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +		if ($perl_version_ok &&
+> +		    defined $stat &&
+> +		    $stat =3D~ /^\+\s*($Lval)\s*\=3D\s*(?:$balanced_parens)?\s*((?:kv|=
+k)[mz]alloc)\s*\(\s*($FuncArg)\s*,/) {
+> +			my $oldfunc =3D $3;
+> +			my $a1 =3D $4;
+> +			my $newfunc =3D "kmalloc_obj";
+> +			$newfunc =3D "kvmalloc_obj" if ($oldfunc eq "kvmalloc");
+> +			$newfunc =3D "kvzalloc_obj" if ($oldfunc eq "kvzalloc");
+> +			$newfunc =3D "kzalloc_obj" if ($oldfunc eq "kzalloc");
+> +
+> +			if ($a1 =3D~ s/^sizeof\s*\S\(?([^\)]*)\)?$/$1/) {
+> +				my $cnt =3D statement_rawlines($stat);
+> +				my $herectx =3D get_stat_here($linenr, $cnt, $here);
+> +
+> +				if (WARN("ALLOC_WITH_SIZEOF",
+> +					 "Prefer $newfunc over $oldfunc with sizeof\n" . $herectx) &&
+> +				    $cnt =3D=3D 1 &&
+> +				    $fix) {
+> +					$fixed[$fixlinenr] =3D~ s/\b($Lval)\s*\=3D\s*(?:$balanced_parens)?\=
+s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*,/$1 =3D $newfunc($a1,/;
+> +				}
+> +			}
+> +		}
+> +
+> +
+> +# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_objs/k=
+vmalloc_objs/kzalloc_objs/kvzalloc_objs
+>  		if ($perl_version_ok &&
+>  		    defined $stat &&
+>  		    $stat =3D~ /^\+\s*($Lval)\s*\=3D\s*(?:$balanced_parens)?\s*((?:kv|=
+k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)\s*,/) {
+>  			my $oldfunc =3D $3;
+>  			my $a1 =3D $4;
+>  			my $a2 =3D $10;
+> -			my $newfunc =3D "kmalloc_array";
+> -			$newfunc =3D "kvmalloc_array" if ($oldfunc eq "kvmalloc");
+> -			$newfunc =3D "kvcalloc" if ($oldfunc eq "kvzalloc");
+> -			$newfunc =3D "kcalloc" if ($oldfunc eq "kzalloc");
+> +			my $newfunc =3D "kmalloc_objs";
+> +			$newfunc =3D "kvmalloc_objs" if ($oldfunc eq "kvmalloc");
+> +			$newfunc =3D "kvzalloc_objs" if ($oldfunc eq "kvzalloc");
+> +			$newfunc =3D "kzalloc_objs" if ($oldfunc eq "kzalloc");
+>  			my $r1 =3D $a1;
+>  			my $r2 =3D $a2;
+>  			if ($a1 =3D~ /^sizeof\s*\S/) {
+> @@ -7284,7 +7309,9 @@ sub process {
+>  					 "Prefer $newfunc over $oldfunc with multiply\n" . $herectx) &&
+>  				    $cnt =3D=3D 1 &&
+>  				    $fix) {
+> -					$fixed[$fixlinenr] =3D~ s/\b($Lval)\s*\=3D\s*(?:$balanced_parens)?\=
+s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' =3D ' . "$=
+newfunc(" . trim($r1) . ', ' . trim($r2)/e;
+> +					my $sized =3D trim($r2);
+> +					$sized =3D~ s/^sizeof\s*\S\(?([^\)]*)\)?$/$1/;
+> +					$fixed[$fixlinenr] =3D~ s/\b($Lval)\s*\=3D\s*(?:$balanced_parens)?\=
+s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' =3D ' . "$=
+newfunc(" . $sized . ', ' . trim($r1)/e;
+>  				}
+>  			}
+>  		}
