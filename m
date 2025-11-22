@@ -1,38 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DC129D28F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3232C11C9;
 	Sat, 22 Nov 2025 01:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763775785; cv=none; b=egQpV0FR55Wemfof2xbRWjFtzKiEoS5k2ekLDBJnzrpsAfxBuejCHoswX8Ldc2XsN7/nvOnR/LQTgl8eegwbQUCVdOSu0d3fZvo8l1v3EAnIMFw5dvsSqGfBoU74tLMKfpXkUyiCRunhV3XEIqv3vEZW8cNCtPhAQcpXR26hyb8=
+	t=1763775786; cv=none; b=FRgUXg0ZWWqyxS7kAaMySijqOTUs4PI6g/crQ2OWht7nFONksbQtIJveWbykDsGCBeGDpMQ9hIjcL/CQA5UnFSg8aq0s6rNw/ucAgOlxhrH78T3I7r5eRJzpeMO9z8+j/aACxMdf8Ol8e59dyp0yIql0yycZm9dq1jjC2NJ8uuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763775785; c=relaxed/simple;
-	bh=+af9Qrl81jzQeC8vw0DiKskxnHYHklRLaViyotNOrs8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WxftCPycn6MdssRi8O7TB08FikM6qDDeFX23yD2B8p6yIqk21flly2ukoOIeZ14J0YAgnePvhjNiorb4rqEmgxLONj5SJ7LVggrLDth2KHUJOG8FP+VHieZauzAumYmCFwjLUtf1LRC4recNEU/p94NUtCL5R/uY5UUmv7Z45ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ut/vgIOd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763775786; c=relaxed/simple;
+	bh=b0N2+6axFL60SmL5qq5mSm+WP+EAAIDcygJAHAmKD64=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pDSVU57Jndq3s4vbYZm7v2ZkMBoDr8ipubuXjX68S5a9Bautx1f/OMNDCh7tsOrOfSGRN14fcJBuO8FmlAIhgjVohrhNko0ytBuaY32QzJka0kSIajPD1+b/NIRfPh9ZbuG9sHi+GYPAvZE/EcLuTO1TRcE4bNTNck/iKlUC4Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XBkGrH6X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ut/vgIOd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42879C4CEF1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XBkGrH6X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C603C4AF0D;
 	Sat, 22 Nov 2025 01:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1763775785;
-	bh=+af9Qrl81jzQeC8vw0DiKskxnHYHklRLaViyotNOrs8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ut/vgIOdn9MIzV/rf1IxTxbVnSgS9e4p/4JDkKH6Ttyw2xh8qWROfZrRa6re07wQB
-	 7SD8h59GPGZ3R4KcKAAkLFEsgbssGufG7lc+4/hU4MMThVIFJHAAs0QIjDHHVnq+JZ
-	 Kqj8mh4UTV6+9dKfeD6d++C+lU6CVK5vz/VK814AfArFk8VGTu6Is3xCVMB4WnVt8O
-	 J02kTYAhcLCYSzmh8XTvtt5M6GgGCpc0l5Myx0zPetaQ2ACat0Tihv2HyFBSUIRS9w
-	 9RdCWBP0aB08rzsv9lXKKukwLvyrCki4976g8/MPdUxc8EwnNLH3+d/2ScRwJQEAl8
-	 DowxFCRPFYzOA==
+	bh=b0N2+6axFL60SmL5qq5mSm+WP+EAAIDcygJAHAmKD64=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XBkGrH6XQV0rAAPjG07QkiTblZA7Dosnd9q4wS/SttoChQxGFDGEtw3c/+uSX9ZuY
+	 Zx2mkX5+8Vvd3F+p4coxqRU6MmDRdnFZDnhD0K/ihwUfthtQp1OB+lkHvPlOyJiblo
+	 qDiXXQYy33Qn/1cpWVT3qVw/hVt97FJ8DzLC7F4wYtNXuieC8+sRJeu1hTlocj9SXc
+	 8B0tPAW1xtUp1DmjAiTPz+VwljWcYJ1RgJBrMY0uJ63/17zj3HYzaGGTYLhMwVIt4r
+	 c16bOa/gcSLIh7SSrtuBBAw4dQJX11bYYPtbqk3gFpMeDvjQFVN8tOEBQZgIN2D0Pa
+	 DOcl4A+6IXPTg==
 From: Kees Cook <kees@kernel.org>
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: Kees Cook <kees@kernel.org>,
-	Andy Whitcroft <apw@canonical.com>,
-	Joe Perches <joe@perches.com>,
-	Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
@@ -68,99 +63,59 @@ Cc: Kees Cook <kees@kernel.org>,
 	linux-hardening@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v5 3/4] checkpatch: Suggest kmalloc_obj family for sizeof allocations
-Date: Fri, 21 Nov 2025 17:42:59 -0800
-Message-Id: <20251122014304.3417954-3-kees@kernel.org>
+Subject: [PATCH v5 0/4] slab: Introduce kmalloc_obj() and family
+Date: Fri, 21 Nov 2025 17:42:56 -0800
+Message-Id: <20251122014258.do.018-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251122014258.do.018-kees@kernel.org>
-References: <20251122014258.do.018-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3354; i=kees@kernel.org; h=from:subject; bh=+af9Qrl81jzQeC8vw0DiKskxnHYHklRLaViyotNOrs8=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmKosp3epdrijLyCujd4PaQXXXunBN/fZo0p7z7gojn2 8se50/vKGVhEONikBVTZAmyc49z8XjbHu4+VxFmDisTyBAGLk4BmMimSkaGiYzhbomvJug35Ogl n12+4vI7AZuW9obj9xKOsNxu/jXVh5Hhf0E2e7Swoq/0hKn3vdeVOiq2NR9izjS7t9KnZePheXX 8AA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1730; i=kees@kernel.org; h=from:subject:message-id; bh=b0N2+6axFL60SmL5qq5mSm+WP+EAAIDcygJAHAmKD64=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmKoko3Vx3sM6x9fsUtUvjBdZOr2T63v3zR+eRSkRXIv f5jmfftjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIkYKjAyTHHeOCn7oMaEkqul welvZ0wv6WtTfMs5fc0ubUupSt5lxxgZZh0OOdHlxfcnVN1s53SZWb4/bcREDX+7xZ43SV1a+cq TDwA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-To support shifting away from sized allocation towards typed
-allocations, suggest the kmalloc_obj family of macros when a sizeof() is
-present in the argument lists.
+Hi,
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Andy Whitcroft <apw@canonical.com>
-Cc: Joe Perches <joe@perches.com>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- scripts/checkpatch.pl | 39 +++++++++++++++++++++++++++++++++------
- 1 file changed, 33 insertions(+), 6 deletions(-)
+Here's a refresh and update on the kmalloc_obj() API proposal for
+discussion here and at LPC[1]. Please see patch 2 for the bulk of the
+details. And note that this is obviously not v6.19 material! :)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index d58ca9655ab7..a8cdfb502ccc 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7258,17 +7258,42 @@ sub process {
- 			    "Prefer $3(sizeof(*$1)...) over $3($4...)\n" . $herecurr);
- 		}
- 
--# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_array/kvmalloc_array/kvcalloc/kcalloc
-+# check for (kv|k)[mz]alloc that could be kmalloc_obj/kvmalloc_obj/kzalloc_obj/kvzalloc_obj
-+		if ($perl_version_ok &&
-+		    defined $stat &&
-+		    $stat =~ /^\+\s*($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*,/) {
-+			my $oldfunc = $3;
-+			my $a1 = $4;
-+			my $newfunc = "kmalloc_obj";
-+			$newfunc = "kvmalloc_obj" if ($oldfunc eq "kvmalloc");
-+			$newfunc = "kvzalloc_obj" if ($oldfunc eq "kvzalloc");
-+			$newfunc = "kzalloc_obj" if ($oldfunc eq "kzalloc");
-+
-+			if ($a1 =~ s/^sizeof\s*\S\(?([^\)]*)\)?$/$1/) {
-+				my $cnt = statement_rawlines($stat);
-+				my $herectx = get_stat_here($linenr, $cnt, $here);
-+
-+				if (WARN("ALLOC_WITH_SIZEOF",
-+					 "Prefer $newfunc over $oldfunc with sizeof\n" . $herectx) &&
-+				    $cnt == 1 &&
-+				    $fix) {
-+					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*,/$1 = $newfunc($a1,/;
-+				}
-+			}
-+		}
-+
-+
-+# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_objs/kvmalloc_objs/kzalloc_objs/kvzalloc_objs
- 		if ($perl_version_ok &&
- 		    defined $stat &&
- 		    $stat =~ /^\+\s*($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)\s*,/) {
- 			my $oldfunc = $3;
- 			my $a1 = $4;
- 			my $a2 = $10;
--			my $newfunc = "kmalloc_array";
--			$newfunc = "kvmalloc_array" if ($oldfunc eq "kvmalloc");
--			$newfunc = "kvcalloc" if ($oldfunc eq "kvzalloc");
--			$newfunc = "kcalloc" if ($oldfunc eq "kzalloc");
-+			my $newfunc = "kmalloc_objs";
-+			$newfunc = "kvmalloc_objs" if ($oldfunc eq "kvmalloc");
-+			$newfunc = "kvzalloc_objs" if ($oldfunc eq "kvzalloc");
-+			$newfunc = "kzalloc_objs" if ($oldfunc eq "kzalloc");
- 			my $r1 = $a1;
- 			my $r2 = $a2;
- 			if ($a1 =~ /^sizeof\s*\S/) {
-@@ -7284,7 +7309,9 @@ sub process {
- 					 "Prefer $newfunc over $oldfunc with multiply\n" . $herectx) &&
- 				    $cnt == 1 &&
- 				    $fix) {
--					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' = ' . "$newfunc(" . trim($r1) . ', ' . trim($r2)/e;
-+					my $sized = trim($r2);
-+					$sized =~ s/^sizeof\s*\S\(?([^\)]*)\)?$/$1/;
-+					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' = ' . "$newfunc(" . $sized . ', ' . trim($r1)/e;
- 				}
- 			}
- 		}
+The tree-wide patch for conversions is here:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=dev/v6.18-rc6/alloc_obj/v5&id=f79ee96ad6a3cafdb274fe15d3ae067724e72327
+
+Thanks!
+
+-Kees
+
+[1] https://lpc.events/event/19/contributions/2136/
+
+ v5:
+  - switch to using assignment with type as first argument (Linus)
+  - fix various comment, commit log, and kern-docs (Randy, Miguel)
+  - renamed flex_counter internal helpers with "__" prefix (Przemek)
+ v4: https://lore.kernel.org/lkml/20250315025852.it.568-kees@kernel.org/
+ v3: https://lore.kernel.org/lkml/20240822231324.make.666-kees@kernel.org/
+ v2: https://lore.kernel.org/lkml/20240807235433.work.317-kees@kernel.org/
+ v1: https://lore.kernel.org/lkml/20240719192744.work.264-kees@kernel.org/
+
+Kees Cook (4):
+  compiler_types: Introduce __flex_counter() and family
+  slab: Introduce kmalloc_obj() and family
+  checkpatch: Suggest kmalloc_obj family for sizeof allocations
+  coccinelle: Add kmalloc_objs conversion script
+
+ scripts/checkpatch.pl                     |  39 ++++-
+ scripts/coccinelle/api/kmalloc_objs.cocci | 168 +++++++++++++++++++++
+ Documentation/process/deprecated.rst      |  42 ++++++
+ include/linux/compiler_types.h            |  31 ++++
+ include/linux/overflow.h                  |  40 +++++
+ include/linux/slab.h                      | 172 ++++++++++++++++++++++
+ 6 files changed, 486 insertions(+), 6 deletions(-)
+ create mode 100644 scripts/coccinelle/api/kmalloc_objs.cocci
+
 -- 
 2.34.1
 
