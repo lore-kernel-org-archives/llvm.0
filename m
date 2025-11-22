@@ -1,58 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44972227E83;
-	Sat, 22 Nov 2025 17:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF6B296BD7;
+	Sat, 22 Nov 2025 18:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763833754; cv=none; b=BEm+xSUgTrjvSDMLw8HczdMjVujEMfgzTtesdXbcC2LNCWA2WFeLIQ9fKcdUmIBhaikDqGunT+5I95prVuQZ3Fw8WyCUnxssZMZ4wmeJEG7+eG3hIXpO7mArhNTozye8zvnzguPgZw89LLrJaagnK3vOp3OH5BzxwMRfEh/7epo=
+	t=1763836879; cv=none; b=AwihFedzUvjy7DE+wW6atXDlyPdZEDwlGKHbtV92SnEe5ckUh5Q7HN98Erygbgda+YLVy5IyPnNTX54ieykLzem4XhikbkacKpwSuCIjJuR975qg7UF0d/Nym6xb0bxilwbfWGeXzQoTSrLeo8cdFn+91/hLdMnBvjPymoQBId4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763833754; c=relaxed/simple;
-	bh=YUur6DbwKTKWFOrhDPHTes0/J1kDIJkq4u0+VBq/R0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Lf+exWY4uetlaAGWrlbJuVepZjs6eBGgipvfVA++3KNmFmTulIGwoSr0Jcb8uGOVeY65mHIjN7P9gamsJAxs+1kgBT+n3iQteauP5vEOmGW/VAIHTVKzXeESVzZKSyilnBvlgmalv2sTBkelHvaeC5dcByMbTJBvA5OnxrMmNAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WdkkdI8b; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1763836879; c=relaxed/simple;
+	bh=uh6fba18pbvtcVMxyxzgPBWrZ9i8/1sGN1sD1sLq4co=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=maFq6NCt8XICbUwirB2LXlVnrSIsB4HqxQBXOTrn46ESvKLXAjXgXAPvjWUqTXkR7os41Nhp/7g0fohFcyfweKNiM6yj8YWTFbn2AkP2i19bWQEX6w09tzS24TiTrHva7mUHTR5CouYIc4UxBD/oCrp0mK61KPy4fw6GxW3D5qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=doKBJKeY; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WdkkdI8b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="doKBJKeY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763833752; x=1795369752;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YUur6DbwKTKWFOrhDPHTes0/J1kDIJkq4u0+VBq/R0w=;
-  b=WdkkdI8bcBhb+loY6jQ8DVSPQnwyNV7SInb4rJHsOn9BQq22gdhEU0L6
-   wph9vRvqPcQhUTscZ4/UE5X9km+P4yHXHf02t/76EZDQIgYnnIuGM6qVy
-   oL2Sf3eYQSXmueAq8qHiQMO8JSk3fzHzsyD2dTJ96IiF2PDkzjcZc4B4U
-   tvPHPpFGVDwxSaBNzIkRVw9t9ERRlz0UBW8VFltNvpy9aiPh+bqrtoQLn
-   lEaE7rGWbpp2nZArmZ1pWcwc6SzgbObjuCd2FOIuXJQlyiqg/S6w4tqqI
-   5F+h43YYQ1cBvn9koIHNfQ4kuTxggGN9eQQDP6yoIf4mAnilk1ulbj8Sp
+  t=1763836877; x=1795372877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uh6fba18pbvtcVMxyxzgPBWrZ9i8/1sGN1sD1sLq4co=;
+  b=doKBJKeYivAY6e9PMOe8PjitnkFTgFeVZLUWoEp4vnT4eMUabXwelSZ5
+   XWNYDD5X9qwY8SlwZ5U1gbXqNFIkQItsLTPipvxTL53fNw+k7obDVS+CD
+   80l2HKAlnsByuOZhPAUwue9kHoZiFq+m4OVfg4aNF3jZOfQBemCKxGiOJ
+   7JyfDjDIGLFOlvklKfIBMn9//Zz+nY1TtIWjEykdtiduFwCE6uOOXn5uL
+   mdslEu8qBjrAn5hqFE0hKgD39lhbup1s8Rq7nJ1cJ0PYVX039Jowjzy8x
+   jrnZ66U5JaR5fd0vRX+UC4yS/EegISX3JDJaRgeHSkZwEXJC8IDGx6VPn
    A==;
-X-CSE-ConnectionGUID: O8Yu3tq9TQew3dbi5hHLTQ==
-X-CSE-MsgGUID: OMJguwdrS+qLjEIS/o964Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11621"; a="76586306"
-X-IronPort-AV: E=Sophos;i="6.20,218,1758610800"; 
-   d="scan'208";a="76586306"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2025 09:49:11 -0800
-X-CSE-ConnectionGUID: molzxrzFQ2a2AjxpgrLA9w==
-X-CSE-MsgGUID: hJUvlbifRG2JF/9gsvWIQA==
+X-CSE-ConnectionGUID: +CNXs3yWS6CmYsVkFCPW8g==
+X-CSE-MsgGUID: P2dgl8rsSMi98/7dtBTfJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11621"; a="53469226"
+X-IronPort-AV: E=Sophos;i="6.20,219,1758610800"; 
+   d="scan'208";a="53469226"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2025 10:41:17 -0800
+X-CSE-ConnectionGUID: GX2RLIrLT5qBDBNYgcnDaQ==
+X-CSE-MsgGUID: IZMZCRR/Q2yDT+wCNFSm3g==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,219,1758610800"; 
+   d="scan'208";a="191637140"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Nov 2025 09:49:10 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 22 Nov 2025 10:41:13 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vMrjP-0007jT-1n;
-	Sat, 22 Nov 2025 17:49:07 +0000
-Date: Sun, 23 Nov 2025 01:48:15 +0800
+	id 1vMsXn-0007l7-1R;
+	Sat, 22 Nov 2025 18:41:11 +0000
+Date: Sun, 23 Nov 2025 02:40:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Manikandan Muralidharan <manikandan.m@microchip.com>,
+	Dharma Balasubiramani <dharma.b@microchip.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 955/957] fs/bcachefs/btree/iter.h:387:3:
- error: call to undeclared function 'trace_and_count'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202511230110.7BnaTkH2-lkp@intel.com>
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: Re: [PATCH 5/8] drm/atmel-hlcdc: use devm_drm_of_get_bridge()
+Message-ID: <202511230240.NYBAiUV4-lkp@intel.com>
+References: <20251121-lcd_cleanup_mainline-v1-5-2587e6fe4d67@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,105 +74,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251121-lcd_cleanup_mainline-v1-5-2587e6fe4d67@microchip.com>
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   018e946b823e2a10e054aa0516e254e060af3fd5
-commit: e90865a4bd9471b154779be27f4e4a8ebce69d02 [955/957] bcachefs: move count_event() to sb/counters.h
-config: hexagon-randconfig-002-20251122 (https://download.01.org/0day-ci/archive/20251123/202511230110.7BnaTkH2-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251123/202511230110.7BnaTkH2-lkp@intel.com/reproduce)
+Hi Ludovic,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ludovic-Desroches/drm-atmel-hlcdc-use-managed-device-resources-for-the-display-controller/20251121-231107
+base:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
+patch link:    https://lore.kernel.org/r/20251121-lcd_cleanup_mainline-v1-5-2587e6fe4d67%40microchip.com
+patch subject: [PATCH 5/8] drm/atmel-hlcdc: use devm_drm_of_get_bridge()
+config: arm-randconfig-001-20251123 (https://download.01.org/0day-ci/archive/20251123/202511230240.NYBAiUV4-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251123/202511230240.NYBAiUV4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511230110.7BnaTkH2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511230240.NYBAiUV4-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/data/ec.c:7:
-   In file included from fs/bcachefs/alloc/accounting.h:5:
-   In file included from fs/bcachefs/btree/update.h:5:
->> fs/bcachefs/btree/iter.h:387:3: error: call to undeclared function 'trace_and_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     387 |                 trace_and_count(trans->c, trans_restart_injected, trans, ip);
-         |                 ^
->> fs/bcachefs/btree/iter.h:387:29: error: use of undeclared identifier 'trans_restart_injected'; did you mean 'trace_trans_restart_injected'?
-     387 |                 trace_and_count(trans->c, trans_restart_injected, trans, ip);
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~
-         |                                           trace_trans_restart_injected
-   fs/bcachefs/debug/trace.h:959:1: note: 'trace_trans_restart_injected' declared here
-     959 | DEFINE_EVENT(transaction_event, trans_restart_injected,
-         | ^
-   include/linux/tracepoint.h:608:2: note: expanded from macro 'DEFINE_EVENT'
-     608 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/linux/tracepoint.h:481:2: note: expanded from macro 'DECLARE_TRACE_EVENT'
-     481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-         |         ^
-   include/linux/tracepoint.h:409:2: note: expanded from macro '__DECLARE_TRACE'
-     409 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto))
-         |         ^
-   include/linux/tracepoint.h:385:21: note: expanded from macro '__DECLARE_TRACE_COMMON'
-     385 |         static inline void trace_##name(proto)                          \
-         |                            ^
-   <scratch space>:127:1: note: expanded from here
-     127 | trace_trans_restart_injected
-         | ^
-   2 errors generated.
---
-   In file included from fs/bcachefs/init/fs.c:12:
-   In file included from fs/bcachefs/alloc/backpointers.h:7:
->> fs/bcachefs/btree/iter.h:387:3: error: call to undeclared function 'trace_and_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     387 |                 trace_and_count(trans->c, trans_restart_injected, trans, ip);
-         |                 ^
->> fs/bcachefs/btree/iter.h:387:29: error: use of undeclared identifier 'trans_restart_injected'; did you mean 'trace_trans_restart_injected'?
-     387 |                 trace_and_count(trans->c, trans_restart_injected, trans, ip);
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~
-         |                                           trace_trans_restart_injected
-   fs/bcachefs/debug/trace.h:959:1: note: 'trace_trans_restart_injected' declared here
-     959 | DEFINE_EVENT(transaction_event, trans_restart_injected,
-         | ^
-   include/linux/tracepoint.h:608:2: note: expanded from macro 'DEFINE_EVENT'
-     608 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/linux/tracepoint.h:481:2: note: expanded from macro 'DECLARE_TRACE_EVENT'
-     481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-         |         ^
-   include/linux/tracepoint.h:409:2: note: expanded from macro '__DECLARE_TRACE'
-     409 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto))
-         |         ^
-   include/linux/tracepoint.h:385:21: note: expanded from macro '__DECLARE_TRACE_COMMON'
-     385 |         static inline void trace_##name(proto)                          \
-         |                            ^
-   <scratch space>:127:1: note: expanded from here
-     127 | trace_trans_restart_injected
-         | ^
-   fs/bcachefs/init/fs.c:1123:25: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-    1123 |             c->opts.block_size > PAGE_SIZE) {
-         |             ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   1 warning and 2 errors generated.
+>> drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_output.c:100:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     100 |         if (bridge) {
+         |             ^~~~~~
+   drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_output.c:106:9: note: uninitialized use occurs here
+     106 |         return ret;
+         |                ^~~
+   drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_output.c:100:2: note: remove the 'if' if its condition is always true
+     100 |         if (bridge) {
+         |         ^~~~~~~~~~~
+   drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_output.c:75:9: note: initialize the variable 'ret' to silence this warning
+      75 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +/trace_and_count +387 fs/bcachefs/btree/iter.h
+vim +100 drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_output.c
 
-e5af273fcefb13 fs/bcachefs/btree_iter.h Kent Overstreet 2021-07-25  382  
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  383  static inline int trans_maybe_inject_restart(struct btree_trans *trans, unsigned long ip)
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  384  {
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  385  #ifdef CONFIG_BCACHEFS_INJECT_TRANSACTION_RESTARTS
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  386  	if (!(ktime_get_ns() & ~(~0ULL << min(63, (10 + trans->restart_count_this_trans))))) {
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23 @387  		trace_and_count(trans->c, trans_restart_injected, trans, ip);
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  388  		return btree_trans_restart_ip(trans,
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  389  					BCH_ERR_transaction_restart_fault_inject, ip);
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  390  	}
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  391  #endif
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  392  	return 0;
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  393  }
-9cf6b84b71adb9 fs/bcachefs/btree_iter.h Kent Overstreet 2024-09-23  394  
-
-:::::: The code at line 387 was first introduced by commit
-:::::: 9cf6b84b71adb97f3c19476ebb5a42228fad89b5 bcachefs: CONFIG_BCACHEFS_INJECT_TRANSACTION_RESTARTS
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+b6e075c3cb6e57d Peter Rosin       2018-08-25   67  
+6bee9b78a7a5ea2 Boris Brezillon   2017-05-18   68  static int atmel_hlcdc_attach_endpoint(struct drm_device *dev, int endpoint)
+17a8e03e7e97d34 Boris Brezillon   2016-01-06   69  {
+b6e075c3cb6e57d Peter Rosin       2018-08-25   70  	struct atmel_hlcdc_rgb_output *output;
+b6e075c3cb6e57d Peter Rosin       2018-08-25   71  	struct device_node *ep;
+17a8e03e7e97d34 Boris Brezillon   2016-01-06   72  	struct drm_bridge *bridge;
+ec29c94011469e7 Ludovic Desroches 2025-11-21   73  	struct atmel_hlcdc_dc *dc = dev->dev_private;
+ec29c94011469e7 Ludovic Desroches 2025-11-21   74  	struct drm_crtc *crtc = dc->crtc;
+17a8e03e7e97d34 Boris Brezillon   2016-01-06   75  	int ret;
+1a396789f65a227 Boris Brezillon   2015-01-06   76  
+524bfe4ade6dbed Ludovic Desroches 2025-11-21   77  	bridge = devm_drm_of_get_bridge(dev->dev, dev->dev->of_node, 0, endpoint);
+524bfe4ade6dbed Ludovic Desroches 2025-11-21   78  	if (IS_ERR(bridge))
+524bfe4ade6dbed Ludovic Desroches 2025-11-21   79  		return PTR_ERR(bridge);
+6bee9b78a7a5ea2 Boris Brezillon   2017-05-18   80  
+e38758ed5aece5d Ludovic Desroches 2025-11-21   81  	output = drmm_simple_encoder_alloc(dev, struct atmel_hlcdc_rgb_output,
+e38758ed5aece5d Ludovic Desroches 2025-11-21   82  					   encoder, DRM_MODE_ENCODER_NONE);
+e38758ed5aece5d Ludovic Desroches 2025-11-21   83  	if (IS_ERR(output))
+e38758ed5aece5d Ludovic Desroches 2025-11-21   84  		return PTR_ERR(output);
+e38758ed5aece5d Ludovic Desroches 2025-11-21   85  
+e38758ed5aece5d Ludovic Desroches 2025-11-21   86  	ep = of_graph_get_endpoint_by_regs(dev->dev->of_node, 0, endpoint);
+e38758ed5aece5d Ludovic Desroches 2025-11-21   87  	if (!ep)
+e38758ed5aece5d Ludovic Desroches 2025-11-21   88  		return -ENODEV;
+b6e075c3cb6e57d Peter Rosin       2018-08-25   89  
+b6e075c3cb6e57d Peter Rosin       2018-08-25   90  	output->bus_fmt = atmel_hlcdc_of_bus_fmt(ep);
+b6e075c3cb6e57d Peter Rosin       2018-08-25   91  	of_node_put(ep);
+b6e075c3cb6e57d Peter Rosin       2018-08-25   92  	if (output->bus_fmt < 0) {
+3379655524e613e Eslam Khafagy     2025-08-14   93  		drm_err(dev, "endpoint %d: invalid bus width\n", endpoint);
+17a8e03e7e97d34 Boris Brezillon   2016-01-06   94  		return -EINVAL;
+b6e075c3cb6e57d Peter Rosin       2018-08-25   95  	}
+1a396789f65a227 Boris Brezillon   2015-01-06   96  
+1a396789f65a227 Boris Brezillon   2015-01-06   97  
+ec29c94011469e7 Ludovic Desroches 2025-11-21   98  	output->encoder.possible_crtcs = drm_crtc_mask(crtc);
+17a8e03e7e97d34 Boris Brezillon   2016-01-06   99  
+17a8e03e7e97d34 Boris Brezillon   2016-01-06 @100  	if (bridge) {
+a25b988ff83f3ca Laurent Pinchart  2020-02-26  101  		ret = drm_bridge_attach(&output->encoder, bridge, NULL, 0);
+17a8e03e7e97d34 Boris Brezillon   2016-01-06  102  		if (!ret)
+17a8e03e7e97d34 Boris Brezillon   2016-01-06  103  			return 0;
+17a8e03e7e97d34 Boris Brezillon   2016-01-06  104  	}
+1a396789f65a227 Boris Brezillon   2015-01-06  105  
+1a396789f65a227 Boris Brezillon   2015-01-06  106  	return ret;
+1a396789f65a227 Boris Brezillon   2015-01-06  107  }
+1a396789f65a227 Boris Brezillon   2015-01-06  108  
 
 -- 
 0-DAY CI Kernel Test Service
