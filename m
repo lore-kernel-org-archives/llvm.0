@@ -1,264 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E9936D4E3;
-	Sat, 22 Nov 2025 07:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1F526ED58
+	for <llvm@lists.linux.dev>; Sat, 22 Nov 2025 07:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763796164; cv=none; b=WzOcufCEd+6BoRM7Ja64QP9LOuqRp6aDrDVLJd07Uzkb5Ih9+D6tO/52N12oX/fkhv1vCHUSo5f99VoTDJA7NvLN1kuWhQzvvAvTMKuY0Kmc/03oIu/8wsW9B9KKjcIuO6ggTs1F5xG5tU73nywgJCOWw2te6zMcJB1kTzyo/bg=
+	t=1763797055; cv=none; b=RjwbfU8sJp/ECkC6aT6kanZEq9zCIvZngtasJjUFuQxxQzy8ekZsNPO0GVqx8YoEopEjhmH+HB3AFP3ouGZuM4j2e9aJy/6gSfl0wblJz+BvkIEh+OizLwcmNJSwBw5fDT1LdLr/jLV0VUJDjdn/JO5LXczLYA9pJxFArjLxA+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763796164; c=relaxed/simple;
-	bh=vBhdd+mBUybqT0N8LSQYvdjovoKws9IXj9E7SnuzvtE=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lZaAbdhIGWNYqzevpuGzytF1ywud07sABh2tllOMAX7nGsQyzwlKZQVnXWNneZ2kiRpW1Xz9SP1hirZSQQGTsA2T6AeSg9tVOjhUG+PBjIMiU3HQoQFfWqvXn3mnZZZFBkEBzflUoXqOz18Eblbrictfc2qCR/BbcKuN07q8qXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fk2am8zr; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763797055; c=relaxed/simple;
+	bh=3koCjdXkvafnpT6jEVh1wZykoAgCZIwu7REyUgD2Vzw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K3QZn0GHLL27OpDbIjnC7EIW909lemJdbocygplkMot//ODFpLlL+APToOLoV0yliytQMXDGaJIZ9NPMuf1on7CLTyxPWBmmPLDRU/76WjqdWWdJBtKJ8Kh53Byjbu9ZDwtMJERdmVF6lWnJs9svYVyAHdt70k2uwlQilv23mA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w5B6lW7r; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fk2am8zr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763796162; x=1795332162;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=vBhdd+mBUybqT0N8LSQYvdjovoKws9IXj9E7SnuzvtE=;
-  b=Fk2am8zrZpVixbQKyR/6B52GfxgNbrTsUCwphqh7svJVzeLkwP8ZlDyt
-   B6mCPJQ7oNARXCP69w4NL1lS9gagXm5EQo0wi9J1mJYY4pUEN6WopNQir
-   GK3nLU3OZm+Jv0S/FjRvCtcQMEPRLFnTFd2rm32pPZvOxahFcBbvdXftJ
-   c9Obti3vp6j5ADWE4x1iEUr6WUOuKjxi9jCqY0cvW3DHcqG64RTZ/dI98
-   oD8NanUxQLlBqhF0Du2PNseIjUSC2vR+4zycS1keDRwIFAoba/b2V5tcu
-   pvp5AgzaBheQd5O/2COaB7jstncs26xkoMEIzWdKLbq42ea3OwK/Onmu6
-   Q==;
-X-CSE-ConnectionGUID: 934bX7pIS+SbClhtOENz2A==
-X-CSE-MsgGUID: uFzZ4QjyThGZImp7aEz2yQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="83272572"
-X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="83272572"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 23:22:41 -0800
-X-CSE-ConnectionGUID: TmgWtRtdTaaR5L/vTCOh5g==
-X-CSE-MsgGUID: Pr6D6oc7Sq2hkrf6eVtCyw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="192660280"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 21 Nov 2025 23:22:40 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vMhx7-0007FL-2Y;
-	Sat, 22 Nov 2025 07:22:37 +0000
-Date: Sat, 22 Nov 2025 15:21:47 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [android-common:android16-6.12 0/1] Unable to generate bindings:
- clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has
- incomplete type 'struct rq_list'
-Message-ID: <202511221532.nBTygcY8-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w5B6lW7r"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8824ce9812cso31026156d6.0
+        for <llvm@lists.linux.dev>; Fri, 21 Nov 2025 23:37:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763797053; x=1764401853; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yV4GqWospvbrtUSnzynHACYrA/GyrRRftwngY7+lrAE=;
+        b=w5B6lW7r2NdC5EVXIjLIUERsRvZsja1fCkmAutz/HzCFHPnbppHSxmqGrfCXvERj0S
+         dJ+3j5yU8rOA3uwBdui9Eu7cfN0WYUkDKBYJc449IAhfRCB08ZYEZrUoW/WIeiKVRosL
+         mFTYxPIEuYT5PTF3NHhS2ffDnSnZFxoMdFaGnaHFx4b4ChMnU9B0chboUfci1fv+8LLt
+         MqeRpGj8ibb6nUD8xAV7Fp6ypVXcpvJTzp0YPkjhcB3zcXD7IwtI5CL9gZ9b7MCeVoC6
+         qBetTpKO7ffHzagkQSUOwaCtIH2Sfl3e+LqazDFzVqvqYiWOLi7AGWHAUiNlj4WO3n45
+         SGeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763797053; x=1764401853;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yV4GqWospvbrtUSnzynHACYrA/GyrRRftwngY7+lrAE=;
+        b=H1yT342SzcCowOUBIoWX03aGnDo64NlWl2NpX3BYcTuuiRVOhtdvEbP+kYhhwY5MSw
+         ZwdrzS6u1WhWL77zmtaNWrZkyR8jbvBY2ZyxRZ6dWbdXK+n4LUlSBNR/v8jP6TyIdDCg
+         ezqMbYPHfwA4oVLOgpAILaRL84nGu6S+m92rgPtPNgT/w0Py4RBAUcVxiSIOAB9JSWE9
+         UaEEQ4VwmTfZmCiiWkY8hqM18h6IgH6yaUd7nbjl4w5DF6klPITw/8lkAHFv8nh+BF5D
+         XEYTqb0o5cQdy0BkXtwz4dgV2MsyhZ4YvuUugv8MrAgi/bg5JiKei5xhx5St5U7m0n7H
+         Ekmg==
+X-Forwarded-Encrypted: i=1; AJvYcCVK+Wo6cnmCTXZZvCm+PjFxT/6ZKP1TaT3Iq/XSzwcpy11lKCsZfpve+ieh1ezjDMLGHZ4Y@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxfpz6Zyq8S4IFJeIqNg/HEy01NlxgRTLKHgjtn3ObgZwa0F3Ew
+	PqVQ94ZTCiXvBAYW8nt1UoIoeifll+fgDjJFjihZiQRHG11zQDh2kS1n1k2qOTfMPh4Q6TbOtUl
+	otGlFSnLqMZ1yMZ6ULymkMe3PTtgvBaNCsGVqbEEz
+X-Gm-Gg: ASbGnctQhfZ0Dvb8q1pJNw9GJwaf502HI9bvTJSZpDoNWLtjWBrXIkr0zgSTTFRcFNS
+	vOtfca1Om/470UK6UzBO/UAq6X25JOqR4d7uFIvH796lg1vLm1XJjdef5mddXzvtxHTXbsvQqkL
+	/W91ASMYau5uc9jMrPuc+pV2x8neRquZPwpaNqGG+vCf4JS9qybRBoSSFiSgSzT++weehCnlysz
+	47BpfZaol7XIjYAJpgxKrmojgZzjZwfRfdpMPpTn+sFlVgZn/tJ+9VB4hWvPi5dkTwUTg==
+X-Google-Smtp-Source: AGHT+IEwPIhiknra0CXPiFnVyqZAHRThMZsJsztbTCo4AfutieyYvGR3bpwXMchvz+kxSR4Q3Mnt+sZgr0hoy96Q86E=
+X-Received: by 2002:a05:6214:c84:b0:87c:a721:42f1 with SMTP id
+ 6a1803df08f44-8847c535a4emr66056936d6.52.1763797052760; Fri, 21 Nov 2025
+ 23:37:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202511210649.lhQnt194-lkp@intel.com> <aSAriWs68Hlng-nS@google.com>
+ <CANiq72mzcvFrTXkgqcJVVrmSy-Z=69oz31KxuQicinmaodCyBQ@mail.gmail.com>
+In-Reply-To: <CANiq72mzcvFrTXkgqcJVVrmSy-Z=69oz31KxuQicinmaodCyBQ@mail.gmail.com>
+From: David Gow <davidgow@google.com>
+Date: Sat, 22 Nov 2025 15:37:20 +0800
+X-Gm-Features: AWmQ_bkowa1YrvmpJ0yRoKpk1URLnjI6MEucWtYOXgHxKfz0TJsKMQ2PLm0k-k4
+Message-ID: <CABVgOSn7bkTY=H_xOXWUjaN3xcenoKnEj7zd1=C0UKwBQBSMDg@mail.gmail.com>
+Subject: Re: [linux-next:master 2964/10599] error[E0609]: no field `dev` on
+ type `drm_gem_object`
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, kernel test robot <lkp@intel.com>, Lyude Paul <lyude@redhat.com>, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Danilo Krummrich <dakr@kernel.org>, 
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Robin Murphy <robin.murphy@arm.com>, Andreas Hindborg <a.hindborg@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-TO: cros-kernel-buildreports@googlegroups.com
+On Fri, 21 Nov 2025 at 23:26, Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Fri, Nov 21, 2025 at 10:06=E2=80=AFAM Alice Ryhl <aliceryhl@google.com=
+> wrote:
+> >
+> > Perhaps this config is just not working in general?
+>
+> For context (copying myself from another recent thread):
+>
+>     x86_64, arm64 and riscv64 should be kept working, and I also
+>     build-test loongarch64, including for stable kernels.
+>
+>     arm32 and UML are the ones that are best-effort (on my side at least)
+>     so we play catch up as time allows, but loongarch64 so far should
+>     always build and it would be sad to drop that.
+>
 
-tree:   https://android.googlesource.com/kernel/common android16-6.12
-head:   c1902e025e9f61d6df517052ea698b429b1f6589
-commit: 24f685a927c5a41df01d66069493bee40a5fb60e [0/1] UPSTREAM: block: add a rq_list type
-config: x86_64-randconfig-001-20251122 (https://download.01.org/0day-ci/archive/20251122/202511221532.nBTygcY8-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221532.nBTygcY8-lkp@intel.com/reproduce)
+The short answer for UML is that 64-bit should be working (though
+unless it breaks the KUnit configs, it's very much best-effort), and
+32-bit is much more likely to break. A lot of that is due to general
+32-bit issues which probably affect arm32 as well, but there
+definitely could be some UML-specific ones as well.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511221532.nBTygcY8-lkp@intel.com/
+The issue you're seeing with the Atomic{U,I}64 types, though, has a
+fix which should land in 6.19:
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=3Df7=
+4cf399e02e24c544b0bd4b1fe8fa2c5ae30b18
 
-All errors (new ones prefixed by >>):
 
-   |                              ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   271 |                 rl->head = rl->head->rq_next;
-   |                 ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   271 |                 rl->head = rl->head->rq_next;
-   |                            ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   272 |                 if (!rl->head)
-   |                      ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   273 |                         rl->tail = NULL;
-   |                         ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
-   282 |         return rl->head;
-   |                ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:21:
-   In file included from rust/helpers/mman.c:3:
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-   159 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-   |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
-   137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-   |                     ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:160:9: warning: division by zero is undefined [-Wdivision-by-zero]
-   160 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-   |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
-   137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-   |                     ^ ~~~~~~~~~~~~~~~~~
-   2 warnings and 18 errors generated.
-   make[3]: *** [rust/Makefile:431: rust/helpers/helpers.o] Error 1 shuffle=4150035346
-   include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
->> Unable to generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
---
-   make[3]: *** [rust/Makefile:332: rust/bindings/bindings_helpers_generated.rs] Error 1 shuffle=4150035346
-   make[3]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
-   include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
->> Unable to generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
+> Relatedly, on my tests, I have also been seeing in UML:
+>
+>    RUSTC L rust/kernel.o - due to target missing
+> error[E0425]: cannot find function `dma_set_mask` in crate `bindings`
+>      --> rust/kernel/dma.rs:47:38
+>       |
+>    47 |         to_result(unsafe {
+> bindings::dma_set_mask(self.as_ref().as_raw(), mask.value()) })
+>       |                                      ^^^^^^^^^^^^ help: a
+> function with a similar name exists: `xa_set_mark`
+>       |
+>      ::: /__w/quick/quick/linux/rust/bindings/bindings_generated.rs:24761=
+:5
+>       |
+> 24761 |     pub fn xa_set_mark(arg1: *mut xarray, index: ffi::c_ulong,
+> arg2: xa_mark_t);
+>       |     -------------------------------------------------------------=
+---------------
+> similarly named function `xa_set_mark` defined here
+>
+> error[E0425]: cannot find function `dma_set_coherent_mask` in crate `bind=
+ings`
+>      --> rust/kernel/dma.rs:64:38
+>       |
+>    64 |         to_result(unsafe {
+> bindings::dma_set_coherent_mask(self.as_ref().as_raw(), mask.value())
+> })
+>       |                                      ^^^^^^^^^^^^^^^^^^^^^
+> help: a function with a similar name exists: `dma_coherent_ok`
+>       |
+>      ::: /__w/quick/quick/linux/rust/bindings/bindings_generated.rs:51489=
+:5
+>       |
+> 51489 |     pub fn dma_coherent_ok(dev: *mut device, phys:
+> phys_addr_t, size: usize) -> bool_;
+>       |     -------------------------------------------------------------=
+---------------------
+> similarly named function `dma_coherent_ok` defined here
+>
+> error[E0425]: cannot find function `dma_map_sgtable` in crate `bindings`
+>     --> rust/kernel/scatterlist.rs:212:23
+>      |
+>  212 |               bindings::dma_map_sgtable(dev.as_raw(),
+> sgt.as_ptr(), dir.into(), 0)
+>      |                         ^^^^^^^^^^^^^^^ help: a function with a
+> similar name exists: `dma_unmap_sgtable`
+>      |
+>     ::: /__w/quick/quick/linux/rust/bindings/bindings_helpers_generated.r=
+s:1339:5
+>      |
+> 1339 | /     pub fn dma_unmap_sgtable(
+> 1340 | |         dev: *mut device,
+> 1341 | |         sgt: *mut sg_table,
+> 1342 | |         dir: dma_data_direction,
+> 1343 | |         attrs: ffi::c_ulong,
+> 1344 | |     );
+>      | |______- similarly named function `dma_unmap_sgtable` defined here
+>
+> error[E0425]: cannot find function `dma_max_mapping_size` in crate `bindi=
+ngs`
+>    --> rust/kernel/scatterlist.rs:356:52
+>     |
+> 356 |         let max_segment =3D match unsafe {
+> bindings::dma_max_mapping_size(dev.as_raw()) } {
+>     |
+> ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
+>
+> Cc'ing David amd UML maintainers and Rust DMA team so that they are aware=
+.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Hmm... this is interesting. There have been a bunch of issues from the
+last ~day or so on UML which seem to come from things which are
+missing in bindgen bindings, including some KUnit struct members, and
+some to do with `vmap` members in DRM structs. The latter is a
+somewhat nasty incompatibility with a hack to avoid conflicts with
+libpcap on UML, but I'm yet to reproduce the others (including this
+DMA one you mention).
+
+Certainly, I can see dma_set_mask and dma_max_mapping_size in
+`bindings` here, so I don't know why they'd be missing.
+
+Cheers,
+-- David
