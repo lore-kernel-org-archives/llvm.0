@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A9027B34C;
-	Sat, 22 Nov 2025 11:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2135204583;
+	Sat, 22 Nov 2025 13:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763809448; cv=none; b=A+Q7obrGC6HZS26wmUvYKvwujg//XKbeS29wfpOEyaEeW6x1znws0Snx+z0FYS6OX0BeInIDyu42W/mAXNQT57IRVjB7+tlBEsF//ZHRIlWqev8r/w/okLBoFYXztRARVrqMD+QXxBjfTH+L9J3sDfM/clg/xrslxTqfR/nOfyk=
+	t=1763819448; cv=none; b=RRG3OBqYjEXoJPa20lTnjwMLpsqZ1RBrHUwcepkq3t7r6MWqNKiFcKEsyHFnb5I+JyZpqVBr9c9ntTcrDtduYYpADPDa/JCF8XLTDfWu9c6HgT9po+Q7qlOGc6s3BMyWsl87LD16JcSmXFjToaFaSxJZuVr/qhE+tFBYA1pxQZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763809448; c=relaxed/simple;
-	bh=fr6TYfA9ke42ULzPksMgAJfvqCTcwtV5RLJDcDTeJQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dCG0WzNLkDYMqKxQQ/h1bk6JjU3l/RcVaxk4q6Xq30WP7fiJWuo/gFBSTkX+s50J3FQdcFS5ovo8/XMPxm3/KoI9Cj/U2LMoavCY/BZ9Skqt0OFstyA1UxLAp52nX+nedE7RcmVgJMcG7YH8lgC5oawtDUI43KX4G7cYviHPc3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cfzFzObT; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1763819448; c=relaxed/simple;
+	bh=5uHIYXs6hKc0/G6gf077IjVTcvUcqthDxaSh4N0B7A0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PtMbxZBhVrkueJMJoZvoHfrw0WD+yhiwFZxizXtUYAVp5M9Ed6O0Va9zNOHw3+yQ5FqTPFatHtesktMVB8nV+72kcz3CIJsyvosPUz6FIsh88S2G9hGCbDmrRmXK82WY3fj40g31May0RGWCcUV4wR1OSqtytSUoq/DOmFGsu/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UbK7YXBc; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cfzFzObT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UbK7YXBc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763809446; x=1795345446;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fr6TYfA9ke42ULzPksMgAJfvqCTcwtV5RLJDcDTeJQU=;
-  b=cfzFzObT8R6M/0DNKG8e7xmjxCaVsQrx3fXowfkisv1VpYLC75+N5Aro
-   HRR2cTvQpXP3PUKhB5euCNAhSj5X6lutovG6snMN8hWNf0raGpGJr3gX1
-   ZHQPAShsinEe9Gi7uMGZadq1ZdLFTcE5Z57/JI5kaPR9BvCWXuM3yF2Wx
-   ZrpEyNH36Ju6LCgCb8mVY0Yup6RujTpftg4Ndj+VtFU65ZAr9Pceb8Z8m
-   p3QNdEPQeqIxO0VMYhApOxPFDXC6WY2UUmgKy214SKVtnbxBqt7l0N43B
-   rjSl2B+EqUE8CQQmRKdHPPAXX8wW1rc1i/0MLQBghUpsNjcjc0QbjqG94
-   A==;
-X-CSE-ConnectionGUID: sGn2zwVAS/a+TkjMEjae7Q==
-X-CSE-MsgGUID: M1Js4NNGRy24U3HLekzJhw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="91368770"
+  t=1763819447; x=1795355447;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5uHIYXs6hKc0/G6gf077IjVTcvUcqthDxaSh4N0B7A0=;
+  b=UbK7YXBcg6iZlg9GF5YOwuKOK0ae6ktCsh+d7FpTF9WuHOd+ksfNRZNe
+   5Ha+QiZLDTNhpdXcGt0ntCbn8bwHvh01rLKUilmZYF/31mobcmZxVEAdy
+   c8+c2Fy0fs00xwOnXtg5OtWyhJEjKRxVjVFDhknL973ilPBIuST9t/mNw
+   d0L2I/kz+srwwui14CBsJrvtasKsbHEYZJNlGuPIKzyjcIEEE4WgCyG/U
+   J85ewdDcI2aWhChx55A9CxVZST6fCdg2rKkeSqi/M0D/cu0FiVGhBzKyb
+   6w1O6fO3PlHkp+6/MAbLC3nMQl8HFpx/OGtPpSFpb/fD5nGJxqAmvvGMp
+   w==;
+X-CSE-ConnectionGUID: hFaYMTdxQee6bjfOasHgAA==
+X-CSE-MsgGUID: V3sF3T2tT2mqsvbrzoIhLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11621"; a="65080094"
 X-IronPort-AV: E=Sophos;i="6.20,218,1758610800"; 
-   d="scan'208";a="91368770"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2025 03:04:06 -0800
-X-CSE-ConnectionGUID: h3AlV2dYRNW2ADFN0d1rwQ==
-X-CSE-MsgGUID: ewSiDoWNTUSt/RVkjZyeQQ==
+   d="scan'208";a="65080094"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2025 05:50:46 -0800
+X-CSE-ConnectionGUID: 8MYHAAF5QeKDLY2fmws1Jg==
+X-CSE-MsgGUID: SfpbS6vlQCm5aGhmCFP72g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,218,1758610800"; 
-   d="scan'208";a="191778344"
+   d="scan'208";a="222874520"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 22 Nov 2025 03:04:03 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 22 Nov 2025 05:50:45 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vMlPM-0007QZ-24;
-	Sat, 22 Nov 2025 11:04:00 +0000
-Date: Sat, 22 Nov 2025 19:03:40 +0800
+	id 1vMo0g-0007Yh-2g;
+	Sat, 22 Nov 2025 13:50:42 +0000
+Date: Sat, 22 Nov 2025 21:49:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>, marcel@holtmann.org,
-	luiz.dentz@gmail.com
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	amitkumar.karwar@nxp.com, sherry.sun@nxp.com, dmitrii.lebed@nxp.com,
-	neeraj.sanjaykale@nxp.com
-Subject: Re: [PATCH v1 07/11] Bluetooth: btnxpuart: Add device authentication
-Message-ID: <202511221835.jzKFsvPM-lkp@intel.com>
-References: <20251118142025.1982263-8-neeraj.sanjaykale@nxp.com>
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:uffd+guestmemfd/v1 4/5]
+ arch/x86/kvm/../../../virt/kvm/guest_memfd.c:376:10: error: use of
+ undeclared identifier 'VM_FAULT_USERFAULTFD'
+Message-ID: <202511222133.qIuQVc3r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,107 +63,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251118142025.1982263-8-neeraj.sanjaykale@nxp.com>
 
-Hi Neeraj,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bluetooth/master]
-[also build test WARNING on bluetooth-next/master linus/master v6.18-rc6 next-20251121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/Bluetooth-btnxpuart-Add-firmware-metadata-parsing-for-secure-interface/20251118-223605
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20251118142025.1982263-8-neeraj.sanjaykale%40nxp.com
-patch subject: [PATCH v1 07/11] Bluetooth: btnxpuart: Add device authentication
-config: arm-randconfig-001-20251122 (https://download.01.org/0day-ci/archive/20251122/202511221835.jzKFsvPM-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221835.jzKFsvPM-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git uffd+guestmemfd/v1
+head:   37911e172b33e52e4e224da52775c714483c8a90
+commit: bf20f42e7ef8a03b1df8aca27e5159b87f7d40ea [4/5] guest_memfd: add support for userfaultfd minor mode
+config: x86_64-randconfig-075-20251122 (https://download.01.org/0day-ci/archive/20251122/202511222133.qIuQVc3r-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511222133.qIuQVc3r-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511221835.jzKFsvPM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511222133.qIuQVc3r-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/bluetooth/btnxpuart.c:459:29: warning: field host_hello within 'struct nxp_tls_host_hello_payload::(anonymous at drivers/bluetooth/btnxpuart.c:457:2)' is less aligned than 'struct nxp_tls_host_hello' and is usually due to 'struct nxp_tls_host_hello_payload::(anonymous at drivers/bluetooth/btnxpuart.c:457:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     459 |                 struct nxp_tls_host_hello host_hello;
-         |                                           ^
->> drivers/bluetooth/btnxpuart.c:513:32: warning: field host_finished within 'struct nxp_tls_host_finished_payload::(anonymous at drivers/bluetooth/btnxpuart.c:511:2)' is less aligned than 'struct nxp_tls_host_finished' and is usually due to 'struct nxp_tls_host_finished_payload::(anonymous at drivers/bluetooth/btnxpuart.c:511:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     513 |                 struct nxp_tls_host_finished host_finished;
-         |                                              ^
-   2 warnings generated.
+>> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:376:10: error: use of undeclared identifier 'VM_FAULT_USERFAULTFD'
+     376 |                 return VM_FAULT_USERFAULTFD;
+         |                        ^
+   1 error generated.
 
 
-vim +513 drivers/bluetooth/btnxpuart.c
+vim +/VM_FAULT_USERFAULTFD +376 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
 
-   455	
-   456	union nxp_tls_host_hello_payload {
-   457		struct {
-   458			u8 msg_type;
- > 459			struct nxp_tls_host_hello host_hello;
-   460		} __packed;
-   461		u8 buf[113];
-   462	};
-   463	
-   464	struct nxp_tls_device_info {
-   465		__le16 chip_id;
-   466		__le16 device_flags;
-   467		u8 reserved[4];
-   468		u8 uuid[NXP_DEVICE_UUID_LEN];
-   469	};
-   470	
-   471	struct nxp_tls_signature {
-   472		u8 sig[64];        /* P-256 ECDSA signature, two points */
-   473	};
-   474	
-   475	struct nxp_tls_finished {
-   476		u8 verify_data[32];
-   477	};
-   478	
-   479	struct nxp_tls_device_hello {
-   480		struct nxp_tls_message_hdr hdr;
-   481		__le32 reserved;
-   482		u8 random[32];
-   483		u8 pubkey[NXP_TLS_ECDH_PUBLIC_KEY_SIZE];
-   484		/* Encrypted portion */
-   485		struct {
-   486			struct nxp_tls_device_info device_info;
-   487			struct nxp_tls_signature device_handshake_sig;   /* TLS Certificate Verify */
-   488			struct nxp_tls_finished device_finished;
-   489		} enc;
-   490		u8 auth_tag[NXP_ENC_AUTH_TAG_SIZE];   /* Auth tag for the encrypted portion */
-   491	};
-   492	
-   493	struct nxp_tls_data_add {
-   494		u8 version;        /* NXP_TLS_VERSION */
-   495		u8 reserved[5];    /* zeroes */
-   496		__le16 len;
-   497	};
-   498	
-   499	struct nxp_tls_host_finished {
-   500		struct nxp_tls_message_hdr hdr;
-   501		__le32 reserved;
-   502		/* Encrypted portion */
-   503		struct {
-   504			struct nxp_tls_signature reserved2;
-   505			struct nxp_tls_finished host_finished;
-   506		} enc;
-   507		u8 auth_tag[NXP_ENC_AUTH_TAG_SIZE];   /* Auth tag for the encrypted portion */
-   508	};
-   509	
-   510	union nxp_tls_host_finished_payload {
-   511		struct {
-   512			u8 msg_type;
- > 513			struct nxp_tls_host_finished host_finished;
-   514		} __packed;
-   515		u8 buf[125];
-   516	};
-   517	
+   350	
+   351	static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
+   352	{
+   353		struct inode *inode = file_inode(vmf->vma->vm_file);
+   354		struct folio *folio;
+   355		vm_fault_t ret = VM_FAULT_LOCKED;
+   356	
+   357		if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+   358			return VM_FAULT_SIGBUS;
+   359	
+   360		if (!((u64)inode->i_private & GUEST_MEMFD_FLAG_INIT_SHARED))
+   361			return VM_FAULT_SIGBUS;
+   362	
+   363		folio = kvm_gmem_get_folio(inode, vmf->pgoff);
+   364		if (IS_ERR(folio)) {
+   365			int err = PTR_ERR(folio);
+   366	
+   367			if (err == -EAGAIN)
+   368				return VM_FAULT_RETRY;
+   369	
+   370			return vmf_error(err);
+   371		}
+   372	
+   373		if (userfaultfd_minor(vmf->vma)) {
+   374			folio_unlock(folio);
+   375			folio_put(folio);
+ > 376			return VM_FAULT_USERFAULTFD;
+   377		}
+   378	
+   379		if (WARN_ON_ONCE(folio_test_large(folio))) {
+   380			ret = VM_FAULT_SIGBUS;
+   381			goto out_folio;
+   382		}
+   383	
+   384		if (!folio_test_uptodate(folio)) {
+   385			clear_highpage(folio_page(folio, 0));
+   386			kvm_gmem_mark_prepared(folio);
+   387		}
+   388	
+   389		vmf->page = folio_file_page(folio, vmf->pgoff);
+   390	
+   391	out_folio:
+   392		if (ret != VM_FAULT_LOCKED) {
+   393			folio_unlock(folio);
+   394			folio_put(folio);
+   395		}
+   396	
+   397		return ret;
+   398	}
+   399	
 
 -- 
 0-DAY CI Kernel Test Service
