@@ -1,478 +1,193 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010013.outbound.protection.outlook.com [52.101.201.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4522C11F1;
-	Sat, 22 Nov 2025 01:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763775786; cv=none; b=axXZDKMhIUsy3Ez/gg5+ClYQrWAMAgzfn9QcmWiWNP7zDumFf0tjgJ/GciDKvcZLEOCCgSJvc0FPp9FP4QOWf571WdwrJbC9+TFLowxOGH55YIZm1lgCRcTn1vSars6nE292BwCDU8x+un/ldlkbgGfwKL29KZiCbHXzvbXzvPY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763775786; c=relaxed/simple;
-	bh=FcVar3XxCqm2ZJVsBh/RSi2lBnjq1avyQFtaa1b+fYo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XjtfvM2j/XrbUY2KZ4oJinj+MR+aW8QphfBAE9mCFeUKSHYEV5fj4qMvxyBqsCdAeomCb6Y/wdBGj2y/v0kpqXDdLrn+aN0902JCnRy3SQ1DFO15wpHAUxXLv9ipQAEhkA43ocw9ymoEFVeX2M7lapsKoQnl0pwwVZFqYN9aq88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bf1Lrxck; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A576189F43;
+	Sat, 22 Nov 2025 02:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763777588; cv=fail; b=Y64KtPLW7qOsghTWD+7x9bTrddXQfV7j4+e5J3Sx11sMJVN8xoOobE6E3dq9YT4pnwXTt8PtCtcdeF55SefWDNEefM48C10al8l8+yEuL9HHtlLckSJojoa/Ts5QO1pIlu5jpF9tyQU2HEBHX0mbyftJt+N/0IApai3wnYKAKTE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763777588; c=relaxed/simple;
+	bh=FM6To0UH5vGdKPcuTWH7sNZNBtwQvKCC5Uf255SVuLQ=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=eGaXaU7fSS4lQcOzFnyXF7rTNxxsdCu6FmAZ0BrRdU6nr/enrFJf5E62uG4aEU4v24vgWBqe3gLmC6z8TIPINqKBrbBT0/2n01h2Jk0tx/ZI0VbsTI3u4dIEz7KTQ4/r9aCWb4H0tEEjGaKhi+x+u7GaWwRF1/+64yELvhRt1BU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=c7QnSHy3; arc=fail smtp.client-ip=52.101.201.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bf1Lrxck"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A2DC4AF0B;
-	Sat, 22 Nov 2025 01:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763775785;
-	bh=FcVar3XxCqm2ZJVsBh/RSi2lBnjq1avyQFtaa1b+fYo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bf1LrxckvPXcFurZMJJlnfu5zjFswMMQGWAbumWk6UsfZ7OboCY4EhE7R+istWA1w
-	 TwcO39KJQSeOW+SvaWN0fgn6tHYgCC/Aete+PJ6RXDDOcJTUpefAfZAJa613DUJMMl
-	 ON4T9HItaqB1mnLwkCDphaEPucYYhzkV8wzII+OTARGClOijkyT/OgkqeZJ5ilwfOd
-	 y3uX+NjjYr/IKCtAV+v4+RyvU+WanfP3OL5wDsWQwMSY26I7/NcuLZ0OMsvHyZ+8PU
-	 rhSkmOk7hSp2azZSQKRQnxWn/im2hpmyJgHJ8rfeNa9uCqIRTn08JY7aWG/2MwDeyJ
-	 +JpVQ5+s8vTng==
-From: Kees Cook <kees@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Kees Cook <kees@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-mm@kvack.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
-Date: Fri, 21 Nov 2025 17:42:58 -0800
-Message-Id: <20251122014304.3417954-2-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251122014258.do.018-kees@kernel.org>
-References: <20251122014258.do.018-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="c7QnSHy3"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RYphoNLRjoqmthfmvSR5iOjck6+BSQtxy+emnO1cZ018ANIZPTSmQRYKeaM6qnpwY1rt0gzS0iLsigVjaEVOiLZSH4GChcJOIYqQFJb9QfhHsda9MZsgAt4AXoVGKsVlrbSWkzgOtWbEqwvgq7ycDXSO+Wa+2eIO4qKlCQXig0kSQYUflSr9TeyeogMZNY3Q7GOIXsP+fVVOaSjlWoX7fKpoEtbOPavhHiFaMSeGz0Ic2gOoms8UPm5gAwv/z4XNFiFa0eCg6iMy8dmq2t6MeTLW2KRftFDiQSH935df/BmChsM6CoK9/N9lDp0yL0FvKLXpdOOF40oIX/Y+WoM35w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gA04uZ5TKfzSSM5MDfTxmAypnQdH+SZz1Et67dK9W4g=;
+ b=MGj5sSFbtEFJdCfaf9wOZzi+ckpxtO4JQJbpE2PxfUawSlCVGTkC2XIriWpSmY1/sK4uKiLZx4qqdSyhTiEZswpecYAH5auOheaxurQmNdKdjLVeWCJFq062CCXcLe+Xl613EYqA+kPcF4MkpdF/jfkBG2zzlWH4wOYZ7oEW9lOGWYHqpgWZwGHD8c8541g46aLPF2l8nFNBa8k1fCm5/nG8VMp3idZJcLpbQLtfPtCVy2tHpHPFcGhIoyXW/vFsIQcxqu+XSxg7aztgNm2wYf3k0d7RfoYuTFLeqYdYlPU60GKVT0dF42NInDbbtjo/vrgcJGfV40aKzJjaHMbpVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gA04uZ5TKfzSSM5MDfTxmAypnQdH+SZz1Et67dK9W4g=;
+ b=c7QnSHy3qikI0B9rZ1NqxlolDPcx2gt1MfCthCZl5UYubogf8SDw5+m0QB5hYSAKyqRXDoXjvX5GOvrox57Ub2DAe9gnM+LQhIqu7AnkaXsTqQ5Etvb9kHWSm93E91dVUJLjq6u/0IKlYqpUTiy9IcU8BUJbyCwnvOVnfCDWmRK/iv1+Z6SapjH+dO33Bi1+rkd56KbwalBlY9fgZ/42PnUyRN3VMEiapT6Kmut56hhbsASp+fvx6NJ+HhBcAd+QAdsqnsURXUfhBGcGLlLayAfdRvX+VmARhNj4pSts2Mcus/BaAIdA8WONJ73b/BijMoj+e2CNHp+zj+cIb5zhsQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com (2603:10b6:610:28::18)
+ by CH3PR12MB9456.namprd12.prod.outlook.com (2603:10b6:610:1c2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.14; Sat, 22 Nov
+ 2025 02:12:59 +0000
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::7de1:4fe5:8ead:5989]) by CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::7de1:4fe5:8ead:5989%6]) with mapi id 15.20.9343.009; Sat, 22 Nov 2025
+ 02:12:57 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 22 Nov 2025 11:12:51 +0900
+Message-Id: <DEEUYUOAEZU3.1J1HM2YQ10EX1@nvidia.com>
+Cc: "Gary Guo" <gary@garyguo.net>, "Alice Ryhl" <aliceryhl@google.com>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Trevor Gross"
+ <tmgross@umich.edu>, "Miguel Ojeda" <ojeda@kernel.org>, "kernel test robot"
+ <lkp@intel.com>, <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>
+Subject: Re: [linux-next:master 9676/10599] ld.lld: error: undefined symbol:
+ rust_build_error
+From: "Alexandre Courbot" <acourbot@nvidia.com>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Alexandre Courbot"
+ <acourbot@nvidia.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <202511210055.RUsFNku1-lkp@intel.com>
+ <DEE5GDTBSJ5O.KGQ3AG72NF30@nvidia.com> <aSAr-aA2U26lr3iI@google.com>
+ <DEEEZRYSYSS0.28PPK371D100F@nvidia.com> <aSBy3HQ9Z-h2LbB8@google.com>
+ <CANiq72=P8AS_XeMdkakuGeTQ5SGb4wvH8qyVoY32FR+PLQu+zQ@mail.gmail.com>
+ <20251121143008.2f5acc33.gary@garyguo.net>
+ <DEEH8WPYR4KA.1WUYP0D5F9TYA@nvidia.com>
+ <CANiq72kqX8Ua7NFHUwLBW1Gpb-Ewh2wHnWmXH6SUQBUyrrSdbg@mail.gmail.com>
+In-Reply-To: <CANiq72kqX8Ua7NFHUwLBW1Gpb-Ewh2wHnWmXH6SUQBUyrrSdbg@mail.gmail.com>
+X-ClientProxiedBy: TY4PR01CA0104.jpnprd01.prod.outlook.com
+ (2603:1096:405:378::9) To CH2PR12MB3990.namprd12.prod.outlook.com
+ (2603:10b6:610:28::18)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17532; i=kees@kernel.org; h=from:subject; bh=FcVar3XxCqm2ZJVsBh/RSi2lBnjq1avyQFtaa1b+fYo=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmKosq6MQ6SGdx72BP2qcurX1wkcPfhmZaMClUOLr9ak 89PIhd2lLIwiHExyIopsgTZuce5eLxtD3efqwgzh5UJZAgDF6cATOTnC0aG7VutnYSzSi1unp5p bv2z6+2Ovamt87Zd3b+47onLN/XLExkZNrT3Tp4cvsuyOU/bd/WshX7vQwLU2Sblb18afmK5jvJ WNgA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3990:EE_|CH3PR12MB9456:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83d93b74-6bfc-4da1-428c-08de296ca74c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|10070799003|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eWtOQ1RVY3YweU1ORzZiL2FOMVVCZ3hqeGlzS1h3MUlLdU1TU2pkaCs3MmJq?=
+ =?utf-8?B?TmtFY0dPOFJtcDlZNlNnTGNnR1lDbkhaMlhrOStkZlFNNWVoUEYvMUZjeDYy?=
+ =?utf-8?B?Um84bWlEL2VOT253VG8rTHdiaGE4MFFheSsrZWFGRExKeTkvaVJNT3ZCeHR6?=
+ =?utf-8?B?azgxYlpoYjA3cFBQUDVsN2gvSng0U2FhejMvRG9PNVVFUVdWT0tvWE0vQ0Ix?=
+ =?utf-8?B?SFdnTHQzVC9tZDF0VUtpQlp1WDNqcUd4MGhSd21qaTZ5Ly9tWTFtOG5LMW1p?=
+ =?utf-8?B?UTVCKytSREQ0YkJqeGdTbjdiWEo2UmNxL0dFcDY3cnJtVVlpRTIyWmVYMWVn?=
+ =?utf-8?B?OFVlUE9jOTJnbWMzZEZqeXhVOU45VUZyMkdZUjB3R0dHbCtyVVpRLzdFNWtS?=
+ =?utf-8?B?SEZCdXpmZXdvSi9HT2NYRFNjYXB3eTllbXlUam54RGtFalV3QXhUZG5VUDZj?=
+ =?utf-8?B?K0lXZFVJbVlESXc5ZUpuaG9PSlZDNmNaaTBqc1ZQSmtJRk5DVnl4YS95bEEy?=
+ =?utf-8?B?ZXVaTDh3ZG5Yc3RCbWl1MHVadWdJWEg3MGt2MmZKWXRsdmQ3eTQ2VWJIQVNQ?=
+ =?utf-8?B?eFlERWFoZWM5YU5nRHczM0oyZEo4M2tpMGJkMmNYampQNkMrSmpMcStJbVdx?=
+ =?utf-8?B?d2RrODBGcU5xUnVWbXExN0FZaG9iaUJYYzJoTWRUamRYR1d0Z0ZEVHRITy80?=
+ =?utf-8?B?VGYvdTJ6K1d0b2Q1VHk0Vjh3NVpacFhRc3VFNTEwTXplbzB2MG9CUHB3SDF5?=
+ =?utf-8?B?R0tSNEl6Y2RxVDhCY0tGWjZMM093bnhscnhKcHdZSnBPK0F5ODVpajVwTEJR?=
+ =?utf-8?B?ekNheFlnSUx1RWNQczd6MFFjMFRMdzVyK1NYN0p3dzlTKzZ0T2x6UUV4Nmhn?=
+ =?utf-8?B?dmtwSHlyZGdxdjFyS1Awdm1McitGcnh2SGQ3ckNIR2t0N2E2WGc4cVRVYlRv?=
+ =?utf-8?B?R3N1WTZ3NVlJTHRzU1BzcGR1ME1qRTNKZmJtSStML1ptNVV4a1V3MGF1cWVB?=
+ =?utf-8?B?aFBORUtaSzNRNjA0aUFTZFZSdk5lQ2tHbFNJVXZ5T1NrS3MvL00xa0ZWN2FO?=
+ =?utf-8?B?dzRvbjRXNmNzdkZIMFlQMU9UZG5TOTdXd3FxRzgydHlCeGpFOFZvZFdwbStS?=
+ =?utf-8?B?c1ZFNDJ1bkJVYnJ4dlRwQnJlY3pKV0pPbTVIOU1RZjFLZHlYVnpMYyt0ZnlE?=
+ =?utf-8?B?NndwNnpaN3IwTGpQTXgwY0p5OXlzYmVZTWFQOVRVNFZpMGpCQnNlSStXc2Vn?=
+ =?utf-8?B?V2d1OUdQalBrREZ0MGFQaEl1a0RIRThLSHpSVStGNURnMkRXL0NzdkFTUEFG?=
+ =?utf-8?B?OFJtc3l0Y0VEZ1RIZGVRRU12ckN3TlQzWFJGeWg5S1JUeGdCQWpyU2NPdXpR?=
+ =?utf-8?B?eTBCVEJpd1JHL0gzeXBNU3Y1RS9BMkpLMUdOVmo2eVQ2ZXdQeG5tZDhBT1FB?=
+ =?utf-8?B?MGdDSURKeUJGTzloOTc0amVMMDREdlJSeTNibW5zV01hdk5HS3F4Vjc5VXVY?=
+ =?utf-8?B?Tk4ycWxNaWpZajgvYmdRbmxhSGFmRHRXcC91alVEdFJxaVNITGlJSjRRR1RV?=
+ =?utf-8?B?OG9uOW90YXpzNVNES1RzVmpIYlFJZUZaS2wyV0xJSC9mS1hYTW1sTXhGVFF1?=
+ =?utf-8?B?YUppa085bUVGMkNsM295MmdWYkVjTXh3bEtrdVF4aC9UWXB0RDVlT0NVK2dX?=
+ =?utf-8?B?cndrWjVnd2l2VGxNbE4xdHJvS0FvL2d6WWgza1doendxREQzL0NHV1lUY1VV?=
+ =?utf-8?B?SXRidjFiUVNIcjVaWU9KYmhFME85YXQyaDNzblNRMVN2OTk4MldoQUxMUXY4?=
+ =?utf-8?B?VCsvZklkK3RuM0JueVN0WXljclgzOUZ4Ym5jdzRBZHg0UlFYYm9VblBjUDJH?=
+ =?utf-8?B?ekdja2RzSUxrS1ZtWVlaa3VwcGtEc0cwL0J4RFAvRzdPVWIrT2lFMmFLTUxF?=
+ =?utf-8?Q?WHHxcD8YRsDKkJaNlwv2p1DP1XLWo0me?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QXV0TEdJOGN4VUVQaXlzaE5EeWl0VnZRTGdLU2kreUIvR1NsWDBTdkh4cEhI?=
+ =?utf-8?B?dURNOXJlYVE5V09FeXZlK3EwL1hRUXFsc0RqZ3YwZDBtaVp5VFpwc0k2bU5q?=
+ =?utf-8?B?aURVbnRESnpGVDY1YUVNdXoxNk82eVMrdUQ1NVpkUUhQeHQzRW0wRnNIaXJF?=
+ =?utf-8?B?NXNQQ1VqVnpPcDV4RUh0WXR3VC9hVDNnS0QydmZCZ0FlakYrMk5FVHpZNEhH?=
+ =?utf-8?B?ZHlsdXZEcy81ZHFZbmR0N2F3dEVBZnVPZTd4N1ZvaXJKN2FNcjZCbW8rc20r?=
+ =?utf-8?B?VnpkdXhubFZwTGNldEtHVUJLUDZ4eTA0R2pKbXZMOFVOMHhRdStma3R5bmVT?=
+ =?utf-8?B?Y0dHc3NVd1NRV3BZU202SnhDVUlJQUZ4czVUOWZRSjI3cWFIUVJ0M3paWGtN?=
+ =?utf-8?B?Z1VaR01jOWFINmltSVpuQzJaK0NHL1B6TkUzVFNIZ0txdTBKeHAzNlZ5U21V?=
+ =?utf-8?B?S3QvQUQ0c0xWeGhYczgzVFp5OHQrVVdDL3g2TDBTeGdsUkFrUzYrOWZIOXh6?=
+ =?utf-8?B?Nzh3bnJ6MHpMbG5QcG0xQ0JKbTFrbkVjWFdONVBrMmhsRndaMmp5NkIxb1VI?=
+ =?utf-8?B?b0RKeWppZE9MK2hBSWxXRzM5V1hZWG1QTkVJUyt1T0g3OVdWS0VRWDJlUCtq?=
+ =?utf-8?B?OEdDOW5mZjRiMXo1a2FiUWZneHlDak1YV05nWHRCVllBaFpGSXV2bjQ2aHZB?=
+ =?utf-8?B?UnBrN0w3blN2QUk0ZW1COVRlalhuRW1CWTRCUUNEOFYwT3I3WnA3djNSKzFZ?=
+ =?utf-8?B?N3FKWFRUT0NNaXlXSjRXaHIzRmRDQlc3eUFaT04yYjR3bDhJbEsvUkVheHJl?=
+ =?utf-8?B?NkI1S0p0L0FkNjVVcVhFdk8yNlBtVHYzQWN2SDdMOGI4NmE1TzNiNFlnMFc2?=
+ =?utf-8?B?UUxoMmpUTEVsSEZZV1ByaGNBdlFaRHRseWhJUFRzUDZuS1loRE5MOU5rYUpY?=
+ =?utf-8?B?clF4dTlCNEQ0OWREang5ZVJRTTNKZnZhUE9DcDJndUNMd0dWUUh3bis1a0s3?=
+ =?utf-8?B?TVhxdFJUQnVmWVdONjJ5UzcyTHNYbnVYOTdJeUdaY3hEUDF6ZFZYWHkxT2ZD?=
+ =?utf-8?B?SkxXNTF4b2lIQXZ4czUxVHBVL1Bqb1JuOGkrYmdMeGMxUFNvbDBOQjRxRVlk?=
+ =?utf-8?B?UWVwbmRxR0hzZ1hRUWNBUEpwSkhxVldJSDc4eHdIUml3clNySVY1MGZwT2h6?=
+ =?utf-8?B?RzVLRk9tVkYreDhGTm9vcXZ1aENFck5SWUdmenNUUURmNTNVMUQxTEpiSHl2?=
+ =?utf-8?B?TVU1bXRpM09zTUVtU2RMc0hIcFJyUEYvLy9TbE1mQVd5dDU1SUpqTklmSVZp?=
+ =?utf-8?B?dlA3TVowVmMyenBQVVRzajNmVjlsZHZwUmVrNkYwUkltVHg2UmtlQ2p4NTRE?=
+ =?utf-8?B?ZkhlVFhJZm4wbXB1cWlxOEZuRFAyVmRuRTR2UnU5ZzUzVDRJbnR1SU85ZVNs?=
+ =?utf-8?B?Qzl0czN0L1N1RitTQ1JraVlPUU9rL3hVdU1ndEozeVlmWUdHVDFpNmNoMzRQ?=
+ =?utf-8?B?eTREMnk3NndpdENLWWNQekVyc0p0YXIwQWxNTnk1OStPVjNkOUh1SjUxeEp6?=
+ =?utf-8?B?dVJpanJxVHJQS3FQbjFNYll3d05idU5PRzNTMUxXbmw4bEFvYXA0RHF1NmZ1?=
+ =?utf-8?B?dC9VTlZQZUh4dnRiL3lhTS9seGY5eUdDSjZYdVh2YmU0eFllWDRWbG1rRUZx?=
+ =?utf-8?B?RUkzWEU5Rkw0VG9hTXlFQ25nZy85S0MyYTdxbktpQ1AwVk9ybVZGU1VvNFBv?=
+ =?utf-8?B?MjVMcGpnZXVMWUkyQ3Jqdy95Wlp5eUlReWVmaHByNXBTNFRJV3lQTnFkWkFt?=
+ =?utf-8?B?YlNwWEVFcnl0VjZHd0tJWFQ1MW5zWkxzcityWCttOU5BOEh2Z3ArZm4vdlEz?=
+ =?utf-8?B?S2JLcHB4aCtiem1kMjY5R09OVjFKZDlJSXlsblNTNjF4ZDZxbDdkZkdzNGoy?=
+ =?utf-8?B?QVYvMTZ1T1Z0VHc2MEE0b2VuMGJPS2ZwaDJ3QktMOXdpNXkzWTc2S0xWajVo?=
+ =?utf-8?B?ZldYT1IzdC9NdzA2NzJ6TmFTWFFOSnlEdnJZV2YwcjF2NkdNNFJ3S1JGY2hM?=
+ =?utf-8?B?MXJSUThHUDlmWmNMMnVpRUFJOExaNWtudHR2SnowRGYrclpmRzQ2V0ZVaG9X?=
+ =?utf-8?B?d0RFL01kQjZZUy9lTWRQYnFpRjgyTFo5MGI4SVI4WUNnWkhlOEFGbUhUOE54?=
+ =?utf-8?Q?CKwxwAkQWaShG5BSUcd9DkbJDGrldRcoIkXIhwNqi6Gl?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83d93b74-6bfc-4da1-428c-08de296ca74c
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3990.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2025 02:12:57.5516
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bKodgPXGe/493kmau+FiMBJ6TVWhM3Kst/ipeKdknDHU8gbXO3UyU/GzQ3Ph/e+0Wkb3qydFdywAOOBvN10OnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9456
 
-Introduce type-aware kmalloc-family helpers to replace the common
-idioms for single, array, and flexible object allocations:
+On Sat Nov 22, 2025 at 12:30 AM JST, Miguel Ojeda wrote:
+> On Fri, Nov 21, 2025 at 4:27=E2=80=AFPM Alexandre Courbot <acourbot@nvidi=
+a.com> wrote:
+>>
+>>     CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
+>>
+>> I don't know whether this "CC" setting also affects Rust, but assuming
+>> it does, we can very well imagine that at least one of
+>> `from_expr`/`fits_within` does not get inlined, causing the compiler to
+>> not be able to satisfy the `build_assert`.
+>>
+>> If that's true, then this is an oversight of mine rather than a
+>> fundamental problem, and could affect all architectures. I'll try to
+>> reproduce the issue locally to test this theory.
+>
+> Yes, it does affect Rust, i.e. we use the same levels for both.
+>
+> Would `inline(always)` work?
 
-	ptr = kmalloc(sizeof(*ptr), gfp);
-	ptr = kmalloc(sizeof(struct some_obj_name), gfp);
-	ptr = kzalloc(sizeof(*ptr), gfp);
-	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
-	ptr = kcalloc(count, sizeof(*ptr), gfp);
-	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
+I've repro'd the issue locally using the very helpful script mentioned
+in the report, and confirmed that `#[inline(always)]` fixes the problem!
 
-These become, respectively:
-
-	ptr = kmalloc_obj(*ptr, gfp);
-	ptr = kmalloc_obj(*ptr, gfp);
-	ptr = kzalloc_obj(*ptr, gfp);
-	ptr = kmalloc_objs(*ptr, count, gfp);
-	ptr = kzalloc_objs(*ptr, count, gfp);
-	ptr = kmalloc_flex(*ptr, flex_member, count, gfp);
-
-Beyond the other benefits outlined below, the primary ergonomic benefit
-is the elimination of needing "sizeof" nor the type name, and the
-enforcement of assignment types (they do not return "void *", but rather
-a pointer to the type of the first argument). The type name _can_ be
-used, though, in the case where an assignment is indirect (e.g. via
-"return").
-
-These each return the newly allocated pointer to the type (which may be
-NULL on failure). For cases where the total size of the allocation is
-needed, the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz()
-family of macros can be used. For example:
-
-	size = struct_size(ptr, flex_member, count);
-	ptr = kmalloc(size, gfp);
-
-becomes:
-
-	ptr = kmalloc_flex_sz(*ptr, flex_member, count, gfp, &size);
-
-With the *_sz() helpers, it becomes possible to do bounds checking of
-the final size to make sure no arithmetic overflow has happened that
-exceeds the storage size of the target size variable. E.g. it was possible
-before to end up wrapping an allocation size and not noticing, there by
-allocating too small a size. (Most of Linux's exposure on that particular
-problem is via newly written code as we already did bulk conversions[1],
-but we continue to have a steady stream of patches catching additional
-cases[2] that would just go away with this API.)
-
-Internal introspection of the allocated type now becomes possible,
-allowing for future alignment-aware choices to be made by the allocator
-and future hardening work that can be type sensitive. For example,
-adding __alignof(*ptr) as an argument to the internal allocators so that
-appropriate/efficient alignment choices can be made, or being able to
-correctly choose per-allocation offset randomization within a bucket
-that does not break alignment requirements.
-
-For the flexible array helpers, the internal use of __flex_counter()
-allows for automatically setting the counter member of a struct's flexible
-array member when it has been annotated with __counted_by(), avoiding
-any missed early size initializations while __counted_by() annotations
-are added to the kernel. Additionally, this also checks for "too large"
-allocations based on the type size of the counter variable. For example:
-
-	if (count > type_max(ptr->flex_count))
-		fail...;
-	size = struct_size(ptr, flex_member, count);
-	ptr = kmalloc(size, gfp);
-	ptr->flex_count = count;
-
-becomes (n.b. unchanged from earlier example):
-
-	ptr = kmalloc_flex_sz(*ptr, flex_member, count, gfp, &size);
-	ptr->flex_count = count;
-
-Note that manual initialization of the flexible array counter is still
-required (at some point) after allocation as not all compiler versions
-support the __counted_by annotation yet. But doing it internally makes
-sure they cannot be missed when __counted_by _is_ available, meaning
-that the bounds checker will not trip due to the lack of "early enough"
-initializations that used to work before enabling the stricter bounds
-checking. For example:
-
-	ptr = kmalloc_flex(*ptr, flex_member, count);
-	fill(ptr->flex, count);
-	ptr->flex_count = count;
-
-This works correctly before adding a __counted_by annotation (since
-nothing is checking ptr->flex accesses against ptr->flex_count). After
-adding the annotation, the bounds sanitizer would trip during fill()
-because ptr->flex_count wasn't set yet. But with kmalloc_flex() setting
-ptr->flex_count internally at allocation time, the existing code works
-without needing to move the ptr->flex_count assignment before the call
-to fill(). (This has been a stumbling block for __counted_by adoption.)
-
-Replacing all existing simple code patterns found via Coccinelle[3]
-shows what could be replaced immediately (also saving roughly 1000 lines):
-
- 7863 files changed, 19639 insertions(+), 20692 deletions(-)
-
-This would take us from 24085 k*alloc assignments to 7467:
-
-$ git grep ' = kv\?[mzcv]alloc\(\|_array\)(' | wc -l
-24085
-$ git reset --hard HEAD^
-HEAD is now at 8bccc91e6cdf treewide: kmalloc_obj conversion
-$ git grep ' = kv\?[mzcv]alloc\(\|_array\)(' | wc -l
-7467
-
-This treewide change could be done at the end of the merge window just
-before -rc1 is released (as is common for treewide changes). Handling
-this API change in backports to -stable should be possible without much
-hassle by backporting the __flex_counter() patch and this patch, while
-taking conversions as-needed.
-
-The impact on my bootable testing image size (with the treewide patch
-applied) is tiny. With both GCC 13 (no __counted_by support) and GCC 15
-(with __counted_by) the images are actually very slightly smaller:
-
-$ size -G gcc-boot/vmlinux.gcc*
-      text       data        bss      total filename
-  29975593   21527689   16601200   68104482 gcc-boot/vmlinux.gcc13-before
-  29969263   21528663   16601112   68099038 gcc-boot/vmlinux.gcc13-after
-  30555626   21291299   17086620   68933545 gcc-boot/vmlinux.gcc15-before
-  30550144   21292039   17086540   68928723 gcc-boot/vmlinux.gcc15-after
-
-Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b08fc5277aaa1d8ea15470d38bf36f19dfb0e125 [1]
-Link: https://lore.kernel.org/all/?q=s%3Akcalloc+-s%3ARe%3A [2]
-Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_objs.cocci [3]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sasha Levin <sashal@kernel.org>
-Cc: linux-mm@kvack.org
----
- Documentation/process/deprecated.rst |  42 +++++++
- include/linux/slab.h                 | 172 +++++++++++++++++++++++++++
- 2 files changed, 214 insertions(+)
-
-diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-index 1f7f3e6c9cda..eb72b75f5419 100644
---- a/Documentation/process/deprecated.rst
-+++ b/Documentation/process/deprecated.rst
-@@ -372,3 +372,45 @@ The helper must be used::
- 			DECLARE_FLEX_ARRAY(struct type2, two);
- 		};
- 	};
-+
-+Open-coded kmalloc assignments for struct objects
-+-------------------------------------------------
-+Performing open-coded kmalloc()-family allocation assignments prevents
-+the kernel (and compiler) from being able to examine the type of the
-+variable being assigned, which limits any related introspection that
-+may help with alignment, wrap-around, or additional hardening. The
-+kmalloc_obj()-family of macros provide this introspection, which can be
-+used for the common code patterns for single, array, and flexible object
-+allocations. For example, these open coded assignments::
-+
-+	ptr = kmalloc(sizeof(*ptr), gfp);
-+	ptr = kmalloc(sizeof(struct the_type_of_ptr_obj), gfp);
-+	ptr = kzalloc(sizeof(*ptr), gfp);
-+	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
-+	ptr = kcalloc(count, sizeof(*ptr), gfp);
-+	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
-+
-+become, respectively::
-+
-+	ptr = kmalloc_obj(*ptr, gfp);
-+	ptr = kzalloc_obj(*ptr, gfp);
-+	ptr = kmalloc_objs(*ptr, count, gfp);
-+	ptr = kzalloc_objs(*ptr, count, gfp);
-+	ptr = kmalloc_flex(*ptr, flex_member, count, gfp);
-+
-+For the cases where the total size of the allocation is also needed,
-+the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz() family of
-+macros can be used. For example, converting these assignments::
-+
-+	total_size = struct_size(ptr, flex_member, count);
-+	ptr = kmalloc(total_size, gfp);
-+
-+becomes::
-+
-+	ptr = kmalloc_flex_sz(*ptr, flex_member, count, gfp, &total_size);
-+
-+If `ptr->flex_member` is annotated with __counted_by(), the allocation
-+will automatically fail if `count` is larger than the maximum
-+representable value that can be stored in the counter member associated
-+with `flex_member`. Similarly, the allocation will fail if the total
-+size of the allocation exceeds the maximum value `*total_size` can hold.
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index cf443f064a66..1c5219d79cf1 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -12,6 +12,7 @@
- #ifndef _LINUX_SLAB_H
- #define	_LINUX_SLAB_H
- 
-+#include <linux/bug.h>
- #include <linux/cache.h>
- #include <linux/gfp.h>
- #include <linux/overflow.h>
-@@ -965,6 +966,177 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
- void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node);
- #define kmalloc_nolock(...)			alloc_hooks(kmalloc_nolock_noprof(__VA_ARGS__))
- 
-+#define __alloc_objs(ALLOC, VAR, COUNT, SIZE)				\
-+({									\
-+	size_t __obj_size = size_mul(sizeof(VAR), COUNT);		\
-+	const typeof(_Generic(SIZE,					\
-+			void *: (size_t *)NULL,				\
-+			default: SIZE)) __size_ptr = (SIZE);		\
-+	typeof(VAR) *__obj_ptr = NULL;					\
-+	/* Does the total size fit in the *SIZE variable? */		\
-+	if (!WARN_ON_ONCE(__size_ptr && __obj_size > type_max(*__size_ptr))) \
-+		__obj_ptr = ALLOC;					\
-+	if (!__obj_ptr)							\
-+		__obj_size = 0;						\
-+	if (__size_ptr)							\
-+		*__size_ptr = __obj_size;				\
-+	__obj_ptr;							\
-+})
-+
-+#define __alloc_flex(ALLOC, VAR, FAM, COUNT, SIZE)			\
-+({									\
-+	const size_t __count = (COUNT);					\
-+	size_t __obj_size = struct_size_t(typeof(VAR), FAM, __count);	\
-+	/* "*SIZE = ...;" below is unbuildable when SIZE is "NULL" */	\
-+	const typeof(_Generic(SIZE,					\
-+			void *: (size_t *)NULL,				\
-+			default: SIZE)) __size_ptr = (SIZE);		\
-+	typeof(VAR) *__obj_ptr = NULL;					\
-+	if (!WARN_ON_ONCE(!__can_set_flex_counter(__obj_ptr->FAM, __count)) && \
-+	    !WARN_ON_ONCE(__size_ptr && __obj_size > type_max(*__size_ptr))) \
-+		__obj_ptr = ALLOC;					\
-+	if (__obj_ptr) {						\
-+		__set_flex_counter(__obj_ptr->FAM, __count);		\
-+	} else {							\
-+		__obj_size = 0;						\
-+	}								\
-+	if (__size_ptr)							\
-+		*__size_ptr = __obj_size;				\
-+	__obj_ptr;							\
-+})
-+
-+/**
-+ * kmalloc_obj - Allocate a single instance of the given structure
-+ * @VAR: Variable or type to allocate.
-+ * @FLAGS: GFP flags for the allocation.
-+ *
-+ * Returns: newly allocated pointer to a @VAR on success, NULL on failure.
-+ */
-+#define kmalloc_obj(VAR, FLAGS)				\
-+	__alloc_objs(kmalloc(__obj_size, FLAGS), VAR, 1, NULL)
-+
-+/**
-+ * kmalloc_obj_sz - Allocate a single instance of the given structure and
-+ *		 store total size
-+ * @VAR: Variable or type to allocate.
-+ * @FLAGS: GFP flags for the allocation.
-+ * @SIZE: Pointer to variable to hold the total allocation size.
-+ *
-+ * Returns: newly allocated pointer to @VAR on success, NULL on failure.
-+ * If @SIZE is non-NULL, the allocation will immediately fail if the total
-+ * allocation size is larger than what the type of *@SIZE can represent.
-+ * If @SIZE is non-NULL, *@SIZE is set to either allocation size on success,
-+ * or 0 on failure.
-+ */
-+#define kmalloc_obj_sz(VAR, FLAGS, SIZE)		\
-+	__alloc_objs(kmalloc(__obj_size, FLAGS), VAR, 1, SIZE)
-+
-+/**
-+ * kmalloc_objs - Allocate an array of the given structure
-+ * @VAR: Variable or type to allocate an array of.
-+ * @COUNT: How many elements in the array.
-+ * @FLAGS: GFP flags for the allocation.
-+ *
-+ * Returns: newly allocated pointer to array of @VAR on success, NULL on
-+ * failure.
-+ */
-+#define kmalloc_objs(VAR, COUNT, FLAGS)			\
-+	__alloc_objs(kmalloc(__obj_size, FLAGS), VAR, COUNT, NULL)
-+
-+/**
-+ * kmalloc_objs_sz - Allocate an array of the given structure and store
-+ *		     total size
-+ * @VAR: Variable or type to allocate an array of.
-+ * @COUNT: How many elements in the array.
-+ * @FLAGS: GFP flags for the allocation.
-+ * @SIZE: Pointer to variable to hold the total allocation size.
-+ *
-+ * Returns: newly allocated pointer to array of @VAR on success, NULL on
-+ * failure. If @SIZE is non-NULL, the allocation will immediately fail if
-+ * the total allocation size is larger than what the type of *@SIZE can
-+ * represent. If @SIZE is non-NULL, *@SIZE is set to either allocation size
-+ * on success, or 0 on failure.
-+ */
-+#define kmalloc_objs_sz(VAR, COUNT, FLAGS, SIZE)	\
-+	__alloc_objs(kmalloc(__obj_size, FLAGS), VAR, COUNT, SIZE)
-+
-+/**
-+ * kmalloc_flex - Allocate a single instance of the given flexible structure
-+ * @VAR: Variable or type to allocate, along with its flexible array member.
-+ * @FAM: The name of the flexible array member of the structure.
-+ * @COUNT: How many flexible array member elements are desired.
-+ * @FLAGS: GFP flags for the allocation.
-+ *
-+ * Returns: newly allocated pointer to @VAR on success, NULL on failure.
-+ * If @FAM has been annotated with __counted_by(), the allocation will
-+ * immediately fail if @COUNT is larger than what the type of the struct's
-+ * counter variable can represent.
-+ */
-+#define kmalloc_flex(VAR, FAM, COUNT, FLAGS)		\
-+	__alloc_flex(kmalloc(__obj_size, FLAGS), VAR, FAM, COUNT, NULL)
-+
-+/**
-+ * kmalloc_flex_sz - Allocate a single instance of the given flexible
-+ *		     structure and store total size
-+ * @VAR: Variable or type to allocate, along with its flexible array member.
-+ * @FAM: The name of the flexible array member of the structure.
-+ * @COUNT: How many flexible array member elements are desired.
-+ * @FLAGS: GFP flags for the allocation.
-+ * @SIZE: Pointer to variable to hold the total allocation size.
-+ *
-+ * Returns: newly allocated pointer to @VAR on success, NULL on failure.
-+ * If @FAM has been annotated with __counted_by(), the allocation will
-+ * immediately fail if @COUNT is larger than what the type of the struct's
-+ * counter variable can represent. If @SIZE is non-NULL, the allocation
-+ * will immediately fail if the total allocation size is larger than what
-+ * the type of *@SIZE can represent. If @SIZE is non-NULL, *@SIZE is set
-+ * to either allocation size on success, or 0 on failure.
-+ */
-+#define kmalloc_flex_sz(VAR, FAM, COUNT, FLAGS, SIZE)	\
-+	__alloc_flex(kmalloc(__obj_size, FLAGS), VAR, FAM, COUNT, SIZE)
-+
-+/* All kzalloc aliases for kmalloc_(obj|objs|fam)(|_sz). */
-+#define kzalloc_obj(P, FLAGS)				\
-+	__alloc_objs(kzalloc(__obj_size, FLAGS), P, 1, NULL)
-+#define kzalloc_obj_sz(P, FLAGS, SIZE)			\
-+	__alloc_objs(kzalloc(__obj_size, FLAGS), P, 1, SIZE)
-+#define kzalloc_objs(P, COUNT, FLAGS)			\
-+	__alloc_objs(kzalloc(__obj_size, FLAGS), P, COUNT, NULL)
-+#define kzalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
-+	__alloc_objs(kzalloc(__obj_size, FLAGS), P, COUNT, SIZE)
-+#define kzalloc_flex(P, FAM, COUNT, FLAGS)		\
-+	__alloc_flex(kzalloc(__obj_size, FLAGS), P, FAM, COUNT, NULL)
-+#define kzalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
-+	__alloc_flex(kzalloc(__obj_size, FLAGS), P, FAM, COUNT, SIZE)
-+
-+/* All kvmalloc aliases for kmalloc_(obj|objs|fam)(|_sz). */
-+#define kvmalloc_obj(P, FLAGS)				\
-+	__alloc_objs(kvmalloc(__obj_size, FLAGS), P, 1, NULL)
-+#define kvmalloc_obj_sz(P, FLAGS, SIZE)			\
-+	__alloc_objs(kvmalloc(__obj_size, FLAGS), P, 1, SIZE)
-+#define kvmalloc_objs(P, COUNT, FLAGS)			\
-+	__alloc_objs(kvmalloc(__obj_size, FLAGS), P, COUNT, NULL)
-+#define kvmalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
-+	__alloc_objs(kvmalloc(__obj_size, FLAGS), P, COUNT, SIZE)
-+#define kvmalloc_flex(P, FAM, COUNT, FLAGS)		\
-+	__alloc_flex(kvmalloc(__obj_size, FLAGS), P, FAM, COUNT, NULL)
-+#define kvmalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
-+	__alloc_flex(kvmalloc(__obj_size, FLAGS), P, FAM, COUNT, SIZE)
-+
-+/* All kvzalloc aliases for kmalloc_(obj|objs|fam)(|_sz). */
-+#define kvzalloc_obj(P, FLAGS)				\
-+	__alloc_objs(kvzalloc(__obj_size, FLAGS), P, 1, NULL)
-+#define kvzalloc_obj_sz(P, FLAGS, SIZE)			\
-+	__alloc_objs(kvzalloc(__obj_size, FLAGS), P, 1, SIZE)
-+#define kvzalloc_objs(P, COUNT, FLAGS)			\
-+	__alloc_objs(kvzalloc(__obj_size, FLAGS), P, COUNT, NULL)
-+#define kvzalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
-+	__alloc_objs(kvzalloc(__obj_size, FLAGS), P, COUNT, SIZE)
-+#define kvzalloc_flex(P, FAM, COUNT, FLAGS)		\
-+	__alloc_flex(kvzalloc(__obj_size, FLAGS), P, FAM, COUNT, NULL)
-+#define kvzalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
-+	__alloc_flex(kvzalloc(__obj_size, FLAGS), P, FAM, COUNT, SIZE)
-+
- #define kmem_buckets_alloc(_b, _size, _flags)	\
- 	alloc_hooks(__kmalloc_node_noprof(PASS_BUCKET_PARAMS(_size, _b), _flags, NUMA_NO_NODE))
- 
--- 
-2.34.1
-
+Preparing a patch. :)
