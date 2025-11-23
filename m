@@ -1,100 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77F429CB4D;
-	Sun, 23 Nov 2025 14:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC17727472
+	for <llvm@lists.linux.dev>; Sun, 23 Nov 2025 18:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763908902; cv=none; b=sfwmLBvV4UD0rpXSAfMS+qUuaAc+KS9Dw2J3Y3b1Zf91g7oB00P3oQOOIaCwUaOrqizvnj+xjeoxhN6yYL2IKvZpVMdJEsYpyRvzv4Nt6KKNBqfJC+SxMpk+8GFCKdN+bxkxIosbfPsOxbX+vYLMoE17+tQo+GB9WNJwMh4y/Xg=
+	t=1763922370; cv=none; b=h1zshS4CNxihMouW0n50Q1eFt2KTsl1IzRhtFkz7kpbUMUqnvOhtT9ZHo98vVcyE0UMMlmeaLiwKXer+aBb7E6Oy22MyTRLgsToluwQY8bHx2+KgEBPYucaNuPLQo4qPFcPYllAPX52A7zZ2dMxuzZQyVEepQC49Ie+ya4HBp+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763908902; c=relaxed/simple;
-	bh=cjtamlHrgBFSGU8VVw4BwB4lSpExyX71gRaDeHdMr7Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pJz6WRjbFVKOplo3EcFjLmXVt6kofr0VHKpRkCLlykBc2f7UoRdJUbK9vdnK83fAP0Zr/rGyF6SkgUEniWVwIEh4+HF/cLgjNUo+l4rQ6OofuqFA+Yj8rL8s40uxblDrrZIWMoObpThr8f4g3sddAgUdRPpZMV2LLITtHmThCIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K71aN2t2; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763922370; c=relaxed/simple;
+	bh=W1WInrZdod/pGOfdHqhFH+p4im7ZgANDIO0VEZjJ+ww=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XwjSe+dslMdjax3kWlvoODk/axJMfHRtK/ZRgKK/u/7GSKgQTKMYL8jLkBgMIFRlC7HsHNpXgMYGaWOmZ/KRp+YljUE5W0Tn/3DmY2FHtQtYKrgizzQpc79unt0Lpv1NlAwfKuMqZSg4Sho3ivbN9tjPKmDjr7dzakXcbhF940I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ifTeg2kQ; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K71aN2t2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763908901; x=1795444901;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cjtamlHrgBFSGU8VVw4BwB4lSpExyX71gRaDeHdMr7Y=;
-  b=K71aN2t2/vqWVX2qofK6PABBGSxpLzJppKjqZOaI4gax/1u4SX4YG58p
-   xvvTOFEvLBnM3xpnH2p9sRszCYd0mC+2K4OpsRlcpqDfE6+cKAe1wHpz1
-   NhuozAX7IpSOxKKch23JoPUk0D7T5HIwK6h4KbtHuK+Yr9FMHl3l0Zejy
-   ENR/ZiFp4REu3dtDMfEiDrlB0nmK3PgGHo5pw2ONJQlBjhJzsICM4xaLj
-   jXetiy6QneA9T3BuAtBD+HKtDiSPlBuvysRQ0/peO8yfPpi+9z+I6he1A
-   3qRKL6BvtMSg8TuRxZ31ezEUISLyE8aEgozqNbOUfmJL8bOhBDq1DhS3H
-   Q==;
-X-CSE-ConnectionGUID: R7hr/1U4QP2SKVvu95aSDQ==
-X-CSE-MsgGUID: A3a9mz+XQNCp1SuDXT6O/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="65819218"
-X-IronPort-AV: E=Sophos;i="6.20,221,1758610800"; 
-   d="scan'208";a="65819218"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2025 06:41:40 -0800
-X-CSE-ConnectionGUID: XZU5uejhS0yHe17ZN7m3BA==
-X-CSE-MsgGUID: sn0hYTfcT+ajJyqdtwm28g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,221,1758610800"; 
-   d="scan'208";a="196273968"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 23 Nov 2025 06:41:39 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vNBHU-0008Jn-1N;
-	Sun, 23 Nov 2025 14:41:36 +0000
-Date: Sun, 23 Nov 2025 22:41:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ebiggers:more-at-least-decorations-v1 7/9]
- include/crypto/poly1305.h:62:19: error: use of undeclared identifier
- 'at_least'
-Message-ID: <202511232202.VHb5ebGB-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ifTeg2kQ"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1763922364;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=p88zTGcneeVkeEymviXLaW2rR8NcRq8Hspl2QfLX5ZM=;
+	b=ifTeg2kQmUuivZPPwqhRJXU9HSwXKSJrOlb0CpIBX1O4dgym+JhIEJTJSXLdeYj4IMGOK+
+	5julahzav9eZVoaipdKgmuf2fROHSF3/62cHPcOEjgWoByxnSgf7q6jB6kpUgQIXWMfLH2
+	+VEx4Lef8ITJ2uEQBYZr6Ncb66RBtL4=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Eric Biggers <ebiggers@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] lib/crypto: blake2b: Limit frame size workaround to GCC
+Date: Sun, 23 Nov 2025 19:25:17 +0100
+Message-ID: <20251123182515.548471-3-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git more-at-least-decorations-v1
-head:   da707520ed1dbaed0ef9666f7adfac8910423a1f
-commit: fb3cc420c064f330263417ab3ceeb27095d918c6 [7/9] lib/crypto: poly1305: Add at_least decoration to fixed-size array params
-config: hexagon-randconfig-002-20251123 (https://download.01.org/0day-ci/archive/20251123/202511232202.VHb5ebGB-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251123/202511232202.VHb5ebGB-lkp@intel.com/reproduce)
+The GCC regression only affected i386 and has been fixed since GCC 12.2.
+However, modern GCC versions still generate large stack frames on other
+architectures (e.g., 3440 bytes for blake2b_compress_generic() on m68k
+with GCC 15.1.0). Clang handles these functions efficiently and should
+work fine with the default warning threshold.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511232202.VHb5ebGB-lkp@intel.com/
+Limit the frame size workaround to GCC only.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+Changes in v2:
+- Restrict frame size workaround to GCC independent of its version or
+  the architecture
+- Update patch title and description
+- Link to v1: https://lore.kernel.org/lkml/20251122105530.441350-2-thorsten.blum@linux.dev/
+---
+ lib/crypto/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-   In file included from lib/crypto/poly1305.c:10:
-   In file included from include/crypto/internal/poly1305.h:9:
->> include/crypto/poly1305.h:62:19: error: use of undeclared identifier 'at_least'
-      62 |                    const u8 key[at_least POLY1305_KEY_SIZE]);
-         |                                 ^
-   1 error generated.
-
-
-vim +/at_least +62 include/crypto/poly1305.h
-
-    60	
-    61	void poly1305_init(struct poly1305_desc_ctx *desc,
-  > 62			   const u8 key[at_least POLY1305_KEY_SIZE]);
-    63	void poly1305_update(struct poly1305_desc_ctx *desc,
-    64			     const u8 *src, unsigned int nbytes);
-    65	void poly1305_final(struct poly1305_desc_ctx *desc, u8 *digest);
-    66	
-
+diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
+index b5346cebbb55..95a48393ffb4 100644
+--- a/lib/crypto/Makefile
++++ b/lib/crypto/Makefile
+@@ -33,7 +33,9 @@ obj-$(CONFIG_CRYPTO_LIB_GF128MUL)		+= gf128mul.o
+ 
+ obj-$(CONFIG_CRYPTO_LIB_BLAKE2B) += libblake2b.o
+ libblake2b-y := blake2b.o
++ifeq ($(CONFIG_CC_IS_GCC),y)
+ CFLAGS_blake2b.o := -Wframe-larger-than=4096 #  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105930
++endif # CONFIG_CC_IS_GCC
+ ifeq ($(CONFIG_CRYPTO_LIB_BLAKE2B_ARCH),y)
+ CFLAGS_blake2b.o += -I$(src)/$(SRCARCH)
+ libblake2b-$(CONFIG_ARM) += arm/blake2b-neon-core.o
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.1
+
