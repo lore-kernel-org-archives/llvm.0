@@ -1,115 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADCE32ED21;
-	Mon, 24 Nov 2025 21:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928792F2915;
+	Mon, 24 Nov 2025 22:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764021002; cv=none; b=OQjb3V/UbijLUIoH44piutld0KYk4BQmskdBDiIMiAgW6hHrr8J8TM97XLq2gFCFojj9kBYdSJ2FtVZiby4DKLsWtMk+bGTVIuH6q2VevrLEVjxMC7nSevSGrzquEI9xV6bhBePqeMrri/gT2LaSVevdtsex9JIM/BKl06a0nJE=
+	t=1764022429; cv=none; b=uANfdKrTar5vH8wWs2M/DkcUDjZXdhW0Doyd+G44s082v9hzMMCYzO6GJBjcpi5xOu0RACjAC90NaJZ4dNsF9kt2ESvVdHxq/vmFXkaL3vWqMP9AXl7ODfPdErrETp+5b1KEOy3u8uU71FxnhlQkfW65smhYbed64gEulSdtGT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764021002; c=relaxed/simple;
-	bh=RXREYcS3eD9QLzWOuycj1YtfjQVIS/r94kQe1cH/yZ8=;
+	s=arc-20240116; t=1764022429; c=relaxed/simple;
+	bh=GlcTQKIA4IKU/Qd7Z1l+tzgId/p55bDR4o+xEBrnMKQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sNXyaBHuvrRHVy7gNrDspO+BSsyypUYZaC6aUzftKKGOwpMEvQFvy5tJCu47/w4DT0+Ke7zhVYf2zN4kJXSWwKtynKvv8p7n2xNDu+spD1BIvScUBfCftpDLr+Z/XYKpF7SRBReDSH/RnlS/uPesdC/DZJlb0lXCzrFSAvXO+CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lg3mWYHU; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=qz/IC60YOAMx4qrnC30Zwo8GFO4urJIdB+qJ/eab4QIa6r01rA2YznzQIt9QpUGnsWrno3nmWJ243tL4iRcYPXAaNhr0iZD/aTPHRt296Z2Hpu9SQryfmmlnbK1910ZObQveWtEOfU3aaXsSwngs8QgJIack3lGe3aauQuMU4VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QDdVbqYz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lg3mWYHU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1119C4CEF1;
-	Mon, 24 Nov 2025 21:50:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QDdVbqYz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A593EC4CEF1;
+	Mon, 24 Nov 2025 22:13:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764021000;
-	bh=RXREYcS3eD9QLzWOuycj1YtfjQVIS/r94kQe1cH/yZ8=;
+	s=k20201202; t=1764022428;
+	bh=GlcTQKIA4IKU/Qd7Z1l+tzgId/p55bDR4o+xEBrnMKQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lg3mWYHUHm+9sQe0h0IVVvf46zbWO/OKPf1vaPwDN2Re0d81XGYko10tNsXGhBJr3
-	 4gZWIMWKu+2AhwVzSsVRrl8PKBSmz5mCqQR6dvytAXHUzKJuZy8Tb2R7b91w+015H0
-	 LdwPoXWiJgl/t4YPGdLx2cBcb2FplZ/rM5i1yq/S3cF5cbqW63qKXbaNxxLKpMd7s5
-	 cAsfJkUm4oR1MRGYCOsyip4ZPMP96+6VEJoV8rDWJhcnR5akI1ol/v9o/THTGoBHqj
-	 QjAxOZg0kJW2wJClUpjBtMm9oqVSwupJO1crsUY4BBZlSNl5W0Fac1tkIfu1CIc/BU
-	 fgbiBfdDHsAgA==
-Date: Mon, 24 Nov 2025 13:50:00 -0800
-From: Kees Cook <kees@kernel.org>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
-Message-ID: <202511241347.AF6790AFB@keescook>
-References: <20251122014258.do.018-kees@kernel.org>
- <20251122014304.3417954-2-kees@kernel.org>
- <CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
- <202511241119.C547DEF80@keescook>
- <aSTKLsRNiEKtDqPI@casper.infradead.org>
- <202511241317.516BDE7B@keescook>
- <aSTRsIUPeT5EC5An@casper.infradead.org>
+	b=QDdVbqYzR8DzzDXGpA3UahGGE6mHOaSPb/y32/lJGoQFMIqovTAvtbHPW705rDOrg
+	 Qxcuc4p9U4ZlWWMhm8SaqQ779Mq/mepHf4qHUAFtGhV7jbhtz/xVRn7hDLXg2ulDr6
+	 iGpp4qT8fr/VNIQqk4JuXXhOGM2gFDNJIYC4hNzUAKE55ikDhx9mWiXEMtueQZl2tE
+	 JPItYrU6MhuvtBI3mLgT/EV/SPbLvr8azoCLrrZEmpV+jrHOSnU920rdKZ5sq2mEfM
+	 SIVSPCB9MUPesSS9n+79vTVro2/KPZ9R1fItB4yeT34IkUQwjRpnpgSZ/kCJhI5jZi
+	 48dbefTsI0b/Q==
+Date: Mon, 24 Nov 2025 15:13:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-serial@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [tty:tty-next 27/37] drivers/tty/vt/keyboard.c:1712:7: error:
+ cannot jump from this asm goto statement to one of its possible targets
+Message-ID: <20251124221343.GA2953435@ax162>
+References: <202511241835.EA8lShgH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aSTRsIUPeT5EC5An@casper.infradead.org>
+In-Reply-To: <202511241835.EA8lShgH-lkp@intel.com>
 
-On Mon, Nov 24, 2025 at 09:44:16PM +0000, Matthew Wilcox wrote:
-> On Mon, Nov 24, 2025 at 01:20:21PM -0800, Kees Cook wrote:
-> > Yes, -Wconversion (W=3) is mind-blowingly noisy, unfortunately.
+On Mon, Nov 24, 2025 at 06:25:26PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-next
+> head:   da218406dd50e0ac96bb383de4edd208286efe70
+> commit: bfb24564b5fd8625ce5c007f274cabdc3b570969 [27/37] tty: vt/keyboard: use __free()
+> config: powerpc-randconfig-002-20251124 (https://download.01.org/0day-ci/archive/20251124/202511241835.EA8lShgH-lkp@intel.com/config)
+> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241835.EA8lShgH-lkp@intel.com/reproduce)
 > 
-> This third one is interesting.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511241835.EA8lShgH-lkp@intel.com/
 > 
-> include/linux/jump_label.h:126:44: error: conversion to ‘long unsigned int’ from ‘s32’ {aka ‘int’} may change the sign of the result [-Werror=sign-conversion]
->   126 |         return (unsigned long)&entry->code + entry->code;
+> All errors (new ones prefixed by >>):
 > 
-> static inline unsigned long jump_entry_code(const struct jump_entry *entry)
-> {
->         return (unsigned long)&entry->code + entry->code;
-> }
-> 
-> The warning is ... not the best phrased, but in terms of divining the
-> programmer's intent, I genuinely don't know if this code is supposed
-> to zero-extend or sign-extend the s32 to unsigned long.  I know what it
-> *does*, but I don't know if it was *supposed to do that*.
+> >> drivers/tty/vt/keyboard.c:1712:7: error: cannot jump from this asm goto statement to one of its possible targets
+>                    if (put_user(asize, &a->kb_cnt))
+>                        ^
+>    arch/powerpc/include/asm/uaccess.h:67:5: note: expanded from macro 'put_user'
+>                      __put_user(x, _pu_addr) : -EFAULT;                    \
+>                      ^
+>    arch/powerpc/include/asm/uaccess.h:49:3: note: expanded from macro '__put_user'
+>                    __put_user_size_goto(__pu_val, __pu_addr, __pu_size, __pu_failed);      \
+>                    ^
+>    arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+>            case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+>                    ^
+>    arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+>            asm goto(                                       \
+>            ^
+>    drivers/tty/vt/keyboard.c:1736:7: note: possible target of asm goto statement
+>                    if (put_user(asize, &a->kb_cnt))
+>                        ^
+>    arch/powerpc/include/asm/uaccess.h:67:5: note: expanded from macro 'put_user'
+>                      __put_user(x, _pu_addr) : -EFAULT;                    \
+>                      ^
+>    arch/powerpc/include/asm/uaccess.h:53:9: note: expanded from macro '__put_user'
+>                                                                    \
+>                                                                    ^
+>    drivers/tty/vt/keyboard.c:1692:33: note: jump exits scope of variable with __attribute__((cleanup))
+>                    struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
+>                                                  ^
+>    drivers/tty/vt/keyboard.c:1722:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+>                    void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
+>                                        ^
 
-This is my core frustration with C: we have SO many things where we have
-ambiguous intent. Yes, C may do exactly 1 thing with a given construct,
-but it isn't clear that the author's intent matches what actually
-happens.
+Previously reported:
 
-> So I wuold be
-> in favour of enabling this warning ... if we have a small army of people
-> on tap to get the kernel to build.  There's 374 lines of errors to fix
-> from the header files included by scripts/mod/devicetable-offsets.s alone.
+  https://lore.kernel.org/202509091702.Oc7eCRDw-lkp@intel.com/
 
-I'm for it, but that is a LONG road. I have so many other hills to die
-on first. ;)
+My suggested workaround in that thread is still applicable if it would
+be acceptable as a formal patch:
 
--- 
-Kees Cook
+  https://lore.kernel.org/20250909215342.GA2456480@ax162/
+
+Cheers,
+Nathan
