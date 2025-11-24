@@ -1,64 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A60F1D5154;
-	Mon, 24 Nov 2025 08:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A913A2FDC3D;
+	Mon, 24 Nov 2025 09:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763972878; cv=none; b=lGu6ZUph30ufxJ+YmQm8DmuAnDztRhKXMS3VSpnedJgUyNKjw4ySG9/IsBBsg/eM/s8XxCgw7Cqy3q1Fy7AtHayds8ycY1Tr/3KFpZDPjoM481VRsVJ0zVEUDq0VSwSZZumjKdije9fZRI2ZUPs+t1PpoLm9lOBe51JCS3+j3GQ=
+	t=1763975523; cv=none; b=LZwtbO5no/skbCScqXaOPtvOiLkyCZnzOE9oJ2ENLmgb2bCvKhKF+1G9LFyO+SuACpsR/EN6iOKe/cjpwu7QsyzgQwq+K0FEE1WdaQe9GRALXvfB1ITK6NaAkhvo3cWk82L6WBQaF+K/5GOqt5mjpwgnjhUXXx/UTb3sRr3qK/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763972878; c=relaxed/simple;
-	bh=xRG4t4eEnDZ8Y5Lv5GHg9KMatGlfUd5zhnpFVcA3Xso=;
+	s=arc-20240116; t=1763975523; c=relaxed/simple;
+	bh=JZ1Z4/QnQVPhEFTln3m2EJJsROkmTWU2PBNucVOqwAE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NGIuXFax2kB9B/2o8gjcpzrP3xmJxRndxNWzLFJICOvuMnyh/3wdhjm/l/DMrr6ishHghiaYfbuJ/xZ+S7gXnBTBBHSrVRFCJ9+k8ZYgGK9qnaVktD9JKLyEFiVDqMsLzfzOLbBNCrLF0WRWtTseuRjzKtNl9MSzBtm9NZE2rqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OnLzcKJT; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=ccofPD+5temhW/nGdGlb4kXhAg6TGeOkW6iqx4RIRchIZUo55dGMXTOCKRm5ZLBgt9+tUNOHBEOfJs/84XIihZhJwJ4otMfLtWsgjrbWsAEnc3qb7SbCqE+19ND7S4JdFy/fjSiNisbP7R8MwUsikX0N1MQ2ruKrppgHwwF9+Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cnEjXpaN; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OnLzcKJT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cnEjXpaN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763972877; x=1795508877;
+  t=1763975521; x=1795511521;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xRG4t4eEnDZ8Y5Lv5GHg9KMatGlfUd5zhnpFVcA3Xso=;
-  b=OnLzcKJTfM2mzZSoHNHtJnE9jsY1KlUkWycdNzSZcXZNloPhquJMyf8M
-   OeNUITlZUkIaim/ss4JSlGBzBs5anYUSG7+qmoM45nhxqEht21x6pZH/1
-   eBD7R894WGwQWBUlzMl5cqLRdgdw1wC2qZadzYb9qP9HyyDciT1pA9ItA
-   icQFpsxhTrijAA63b3Oy1fAgYnGVMgCqDf6gArUHQTQiu9nIPpygaH+KD
-   +VANFLkFa4kzef+IljPruhiWa7RqU46yrWriMvQ9i+bJXVT7PYOgY4u7j
-   qVnYDlZ+jsHfJbo3Lmc2qSsjSao3aIHucnS1GYes4A3TK2JzNY7oyJYsk
+  bh=JZ1Z4/QnQVPhEFTln3m2EJJsROkmTWU2PBNucVOqwAE=;
+  b=cnEjXpaN/yhFVVkYz/PuNASGKA8wVF8luo+oyy/0GqDsGUf94m5EFRWE
+   uGAyeHkcnf4UqgeojnrW4/hpodwFBuK0hidfVvEl40ikWnpll8QVX4ovH
+   6VPcmpsJZn7m0vtccnbJaBVYZIQYloqIbkxLsTGi5eli3OU7dE4WmAcFI
+   9B6F5IjPRTOmiG3J6aHh06haGzbeRuO6W+rwIURuWGguxh9agz+MP5nQt
+   REhBspGgyvUbw34pGZI2oM3wMvq8O1Ssp9OuNSdnJpMgFIbz02gTMCoj8
+   tu8kAni+Vp2iS2D7820BxD8vCz3aCPeHvkYmvBXQHRrQZ4dC1BdfQcuWr
    Q==;
-X-CSE-ConnectionGUID: MpvBpVZ3Qjiz1/c5AHKASw==
-X-CSE-MsgGUID: RyqahnPyT4+KahPfHMo8NA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="65996224"
+X-CSE-ConnectionGUID: krq3F3AyQR6Co0FXarS//A==
+X-CSE-MsgGUID: /QD682qhSna7qAs3c6e2kA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="69834118"
 X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
-   d="scan'208";a="65996224"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 00:27:56 -0800
-X-CSE-ConnectionGUID: /obRCkK6Rh67VxEPSyC4ew==
-X-CSE-MsgGUID: p3bdAIJmQ/q5ICmSET1XGA==
+   d="scan'208";a="69834118"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 01:12:00 -0800
+X-CSE-ConnectionGUID: X+SqEPu/SluvpeRGpfBFfw==
+X-CSE-MsgGUID: JyoJQTK+Qt2mwuXyrsAuuA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
-   d="scan'208";a="215619003"
+   d="scan'208";a="196732320"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Nov 2025 00:27:54 -0800
+  by orviesa004.jf.intel.com with ESMTP; 24 Nov 2025 01:11:57 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vNRvL-000000000Wb-3KTr;
-	Mon, 24 Nov 2025 08:27:51 +0000
-Date: Mon, 24 Nov 2025 16:27:40 +0800
+	id 1vNSby-000000000YL-1mMV;
+	Mon, 24 Nov 2025 09:11:54 +0000
+Date: Mon, 24 Nov 2025 17:11:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eslam Khafagy <eslam.medhat1993@gmail.com>, linus.walleij@linaro.org,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Eslam Khafagy <eslam.medhat1993@gmail.com>
-Subject: Re: [PATCH RESEND] drm: pl111: replace dev_* print functions with
- drm_* variants
-Message-ID: <202511241619.k8AiBZLh-lkp@intel.com>
-References: <20251122004951.567753-1-eslam.medhat1993@gmail.com>
+To: Sameeksha Sankpal <sameekshasankpal@gmail.com>, vaibhav.sr@gmail.com,
+	mgreer@animalcreek.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, johan@kernel.org,
+	elder@kernel.org, gregkh@linuxfoundation.org,
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Sameeksha Sankpal <sameekshasankpal@gmail.com>
+Subject: Re: [PATCH] staging: greybus: audio_manager: make envp[] static const
+Message-ID: <202511241614.lkKJF5B6-lkp@intel.com>
+References: <20251122083814.49753-1-sameekshasankpal@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,57 +67,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251122004951.567753-1-eslam.medhat1993@gmail.com>
+In-Reply-To: <20251122083814.49753-1-sameekshasankpal@gmail.com>
 
-Hi Eslam,
+Hi Sameeksha,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.18-rc7 next-20251121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on staging/staging-testing]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eslam-Khafagy/drm-pl111-replace-dev_-print-functions-with-drm_-variants/20251122-085225
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20251122004951.567753-1-eslam.medhat1993%40gmail.com
-patch subject: [PATCH RESEND] drm: pl111: replace dev_* print functions with drm_* variants
-config: arm-nhk8815_defconfig (https://download.01.org/0day-ci/archive/20251124/202511241619.k8AiBZLh-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241619.k8AiBZLh-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sameeksha-Sankpal/staging-greybus-audio_manager-make-envp-static-const/20251122-163906
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20251122083814.49753-1-sameekshasankpal%40gmail.com
+patch subject: [PATCH] staging: greybus: audio_manager: make envp[] static const
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251124/202511241614.lkKJF5B6-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241614.lkKJF5B6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511241619.k8AiBZLh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511241614.lkKJF5B6-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/pl111/pl111_nomadik.c:7:
->> drivers/gpu/drm/pl111/pl111_nomadik.h:11:32: warning: declaration of 'struct drm_device' will not be visible outside of this function [-Wvisibility]
-      11 | void pl111_nomadik_init(struct drm_device *dev);
-         |                                ^
->> drivers/gpu/drm/pl111/pl111_nomadik.c:12:32: warning: declaration of 'struct drm_device' will not be visible outside of this function [-Wvisibility]
-      12 | void pl111_nomadik_init(struct drm_device *dev)
-         |                                ^
-   drivers/gpu/drm/pl111/pl111_nomadik.c:12:6: error: conflicting types for 'pl111_nomadik_init'
-      12 | void pl111_nomadik_init(struct drm_device *dev)
-         |      ^
-   drivers/gpu/drm/pl111/pl111_nomadik.h:11:6: note: previous declaration is here
-      11 | void pl111_nomadik_init(struct drm_device *dev);
-         |      ^
-   drivers/gpu/drm/pl111/pl111_nomadik.c:34:2: error: call to undeclared function 'drm_info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      34 |         drm_info(dev, "set Nomadik PMU mux to CLCD mode\n");
-         |         ^
-   2 warnings and 2 errors generated.
+>> drivers/staging/greybus/audio_manager_module.c:163:3: error: initializer element is not a compile-time constant
+     163 |                 name_string,
+         |                 ^~~~~~~~~~~
+>> drivers/staging/greybus/audio_manager_module.c:181:46: error: passing 'const char *const[7]' to parameter of type 'char **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     181 |         kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
+         |                                                     ^~~~
+   include/linux/kobject.h:216:10: note: passing argument to parameter 'envp' here
+     216 |                         char *envp[]);
+         |                               ^
+   2 errors generated.
 
 
-vim +11 drivers/gpu/drm/pl111/pl111_nomadik.h
+vim +163 drivers/staging/greybus/audio_manager_module.c
 
-    10	
-  > 11	void pl111_nomadik_init(struct drm_device *dev);
-    12	
+8db00736d365b7 Svetlin Ankov     2016-01-13  152  
+8db00736d365b7 Svetlin Ankov     2016-01-13  153  static void send_add_uevent(struct gb_audio_manager_module *module)
+8db00736d365b7 Svetlin Ankov     2016-01-13  154  {
+8db00736d365b7 Svetlin Ankov     2016-01-13  155  	char name_string[128];
+8db00736d365b7 Svetlin Ankov     2016-01-13  156  	char vid_string[64];
+8db00736d365b7 Svetlin Ankov     2016-01-13  157  	char pid_string[64];
+d0af1bd5f6f449 Pankaj Bharadiya  2016-10-16  158  	char intf_id_string[64];
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  159  	char ip_devices_string[64];
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  160  	char op_devices_string[64];
+8db00736d365b7 Svetlin Ankov     2016-01-13  161  
+c78cfcfa51fa58 Sameeksha Sankpal 2025-11-22  162  	static const char * const envp[] = {
+8db00736d365b7 Svetlin Ankov     2016-01-13 @163  		name_string,
+8db00736d365b7 Svetlin Ankov     2016-01-13  164  		vid_string,
+8db00736d365b7 Svetlin Ankov     2016-01-13  165  		pid_string,
+d0af1bd5f6f449 Pankaj Bharadiya  2016-10-16  166  		intf_id_string,
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  167  		ip_devices_string,
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  168  		op_devices_string,
+8db00736d365b7 Svetlin Ankov     2016-01-13  169  		NULL
+8db00736d365b7 Svetlin Ankov     2016-01-13  170  	};
+8db00736d365b7 Svetlin Ankov     2016-01-13  171  
+8db00736d365b7 Svetlin Ankov     2016-01-13  172  	snprintf(name_string, 128, "NAME=%s", module->desc.name);
+8db00736d365b7 Svetlin Ankov     2016-01-13  173  	snprintf(vid_string, 64, "VID=%d", module->desc.vid);
+8db00736d365b7 Svetlin Ankov     2016-01-13  174  	snprintf(pid_string, 64, "PID=%d", module->desc.pid);
+d0af1bd5f6f449 Pankaj Bharadiya  2016-10-16  175  	snprintf(intf_id_string, 64, "INTF_ID=%d", module->desc.intf_id);
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  176  	snprintf(ip_devices_string, 64, "I/P DEVICES=0x%X",
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  177  		 module->desc.ip_devices);
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  178  	snprintf(op_devices_string, 64, "O/P DEVICES=0x%X",
+a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  179  		 module->desc.op_devices);
+8db00736d365b7 Svetlin Ankov     2016-01-13  180  
+8db00736d365b7 Svetlin Ankov     2016-01-13 @181  	kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
+8db00736d365b7 Svetlin Ankov     2016-01-13  182  }
+8db00736d365b7 Svetlin Ankov     2016-01-13  183  
 
 -- 
 0-DAY CI Kernel Test Service
