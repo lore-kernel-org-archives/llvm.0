@@ -1,133 +1,244 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368B136D4EC
-	for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 20:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D142BE7A1;
+	Mon, 24 Nov 2025 20:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764015375; cv=none; b=Rv3LNLz0wvsFxokbxKoMBXVpXhO6LDFN0raB5AkmNxbxowufaDTbVgLniopBj/c6VpC9mwTOFyfj9eJZmanm+kSf2ESPoU+qAWAxvzXUz4d0w9ay78TGqWyVu7HvR3QDfCtuo5ejWVVTTMeF6UTF/kbD4V1uzikYGW1hUxwTsYU=
+	t=1764016739; cv=none; b=F5Rg5Pyxl1gNPsi6cj/jpIzoVNJUOr08f0GDDFrxzsgdgJzYljDKjFXEm6MAkjtDf2hhVi57s8AzpXQoksUtot4MnxlDNJWvqyN11nwlIzxHGFoxWrcH7GQ9TAThdjLc80L40mJNyTNtTZf506Ii1/e+lciSmrNhrbNWhIe4X/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764015375; c=relaxed/simple;
-	bh=R4tPolCNS6+DjWLqZWJbOBpny9B2bt9yL0gYsMUMpqI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=evOweTQzej3Opz1MsB1GIkmEC3H3RSXKpVXqvJ60uCDwVya0NoTKP8ZpRKzwWTHyN/+3p1Nwv61gJ0Wgsh8T1wdjnM+ZI1g+NEJl5uz/S9Df4MlavYVpqJc/W/REwDhhGFUBA/ztVNhatKYiVlpvTvKDwOZ5zT8QqJfMrn6Po5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JAigIzyM; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1764016739; c=relaxed/simple;
+	bh=JLdIJ7QZP3U00BhhJOkbi1WT14KAskMlSFeurQ7aMlg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OfBAsYBc+AazTE5zYQokqCmcWq+TwxcZS2UBij9Z3jLBNogwIYfEDlcGlHVP9caqgRDdtYIlehTamHGqYq5SspmP2T0fmwXdvB0bTIw/FxKcwAJo1eNZjNX5qmKLwpyz+5yP1D1B3d05MHXMN2Tuxqrj/p26lXpXD/OUBavs++U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evZkZ5Us; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JAigIzyM"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-644fcafdce9so7285844a12.1
-        for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 12:16:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764015372; x=1764620172; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z06KotmtsfB1UWZ1tUPQjTnpS7Gb0kLa+slh5Hjs72I=;
-        b=JAigIzyM4rXqnEDDCoFvaQ/LZHm8VhnmYG7moxTHeAoqY1jdELbGs3NY5Wgx5RpjtI
-         H3lXwgEaPCw9pYQzZQifBuIqFlZmOalM12kKUJ6QnWTS/5tZGvT+qdmGeedvN9rMx7tZ
-         GzYwqQpaEH393/3a40rZg7n5Usgv0OKyWywDvd8yFXGJ5QgqXzUWsnZDaNcAJ++jr9AN
-         w0yuFsMJxVdthvxiZJw1+G8gyc9vFqcp31w6KZLQs5l89lV5BmthfKVLIOKtudASrfkw
-         EIEUnCd/BFRTLbYKE6m5N1l+xRNRIOjMEGz+zp1ZGMbGB4aPLQ61+dMZAYe+joitawVN
-         EXRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764015372; x=1764620172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Z06KotmtsfB1UWZ1tUPQjTnpS7Gb0kLa+slh5Hjs72I=;
-        b=vSBeVixivyTM0Q06GmWAOLiZ2AdmoEutRR0mXUHMffcQGbEJ7vh6um3QmkFgcnE+sA
-         w8q6Xq4WD9+9Uefh7ReklnjvTJtU27SSHrTajPuF9hYn63+D0TsV3j9l268YoXGcT43e
-         sxXmLZiptUrMCrjNH3KeyjNgNLYbkAx8pOQHW/6/3HK5HcujUHR2XTlKyEC9IrhP1mOK
-         P3Eye0IGhh8GTPkw4KMuL38LY+cbxWnVuUBfBTe7LzxEN7HyNXM+PRg0WBY0p8ZfGS2s
-         mcLBS9qOScbpj6QByLTEbjJcTWlp2Q6wMEMJtSplB2abZ4Zu44cR88u00fsRAqPtNYob
-         4ilA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6ohofMgMctSV9LkAznTJ/6HFmQgqQmXXZF8cd3cUdtqmZ9tKzY4TJM2Tgh9dtBqus8frX@lists.linux.dev
-X-Gm-Message-State: AOJu0YwG+AfXKcS1wMQ9gQkVltDilXn1OQe1JZimpEJD5yOUvk0u+xkQ
-	rtKMbfejgCKohhxMU88YXb0IX3rDa693fvs4sgL3MD6hoKxolw8GYYZCz82NdWyvAIQOrq+qLlq
-	D8dFCUceWklbJWT8J1VyWJMnTwTG/nIIYyt0Dxl4=
-X-Gm-Gg: ASbGncvsrZo/PaY2nFeF+HK8S53P1Tfd2vpUioYWUsUKbwCyjE1VMRpz29MPGJYMPXQ
-	UjLUGtRaoVBuWcIVFznBvaZcMgyHwglRe6nvibVOo3KSJ1Eq8eGY10uNY3Rb8eWi9Na1gjpYIj+
-	EGhnUFe7Px3S+VLf6MUR1wGy0Hkq3w9kb1C7WRSwcm6TPNPrb0+8IOHhvx6WOaIM+VVat9jefHl
-	OfbUrI7Id52A96UinzPgiDtLIb0XOp4jJaFeP/pQIYdnPItp10p1bUjvyy+3M8BdUP+8RepbVqQ
-	WL0=
-X-Google-Smtp-Source: AGHT+IH8BTSWpESlDk+bVNYpCBTYerkjXtzYduYOQ1ee5rVed6iH0r8+tbGf7UdNFGD02PcNrfkSjNuIBLo4OJtxfSA=
-X-Received: by 2002:a17:907:7e96:b0:b6d:7b77:ff33 with SMTP id
- a640c23a62f3a-b76c53c0a57mr10512666b.19.1764015372261; Mon, 24 Nov 2025
- 12:16:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evZkZ5Us"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8EBC4CEF1;
+	Mon, 24 Nov 2025 20:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764016738;
+	bh=JLdIJ7QZP3U00BhhJOkbi1WT14KAskMlSFeurQ7aMlg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=evZkZ5UskrSLOHY1/mNMNWBXcNJsOx/pv8d25Cq5RbPbYFU+mewNWmC4bIco+jJ4w
+	 yzzy0LoaIeOAP3NdBCrb6CiIFZRtSQu3gkC8dlLBksOtGyoPGpLel4GpJBhQjoZMM5
+	 kmwhK7dZueujrAMnNGDV2VKcaEdYEWJ5MfLT1CQhbfL+0QUM2dRF4jur40/ZFOp9sO
+	 dLpkAp8Vkk5OnKyuaIbMjwlXDEo1yDdarWroTIOTqsFrFXaQBpicKQLLWJm04gHgR2
+	 gHUC3FJqEIWa74F6D+HX775twAOiLFzrPXDfaWPtbpUvggCxxszPeBXAFANkjviinZ
+	 5f5828/aSw2VQ==
+Date: Mon, 24 Nov 2025 12:38:57 -0800
+From: Kees Cook <kees@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marco Elver <elver@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
+Message-ID: <202511241119.C547DEF80@keescook>
+References: <20251122014258.do.018-kees@kernel.org>
+ <20251122014304.3417954-2-kees@kernel.org>
+ <CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251121193957.1655580-1-morbo@google.com> <20251121193957.1655580-3-morbo@google.com>
- <202511211525.05CB7E1AEC@keescook> <20251122141614.80f1a845cd694b1b470107ca@linux-foundation.org>
- <202511241117.CBE8ADC2@keescook>
-In-Reply-To: <202511241117.CBE8ADC2@keescook>
-From: Bill Wendling <morbo@google.com>
-Date: Mon, 24 Nov 2025 12:15:54 -0800
-X-Gm-Features: AWmQ_bmKteXP34og9YzGqC2nViwRnhBfRt6gIUL5VMXxuRtXI7wduxj48bhexM4
-Message-ID: <CAGG=3QVwhA8yca4hQD1q7c6TgPL0dT5RODpdpBHSw2yuh1x7oQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] memblock: annotate struct memblock_type with __counted_by_ptr
-To: Kees Cook <kees@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Marc Herbert <Marc.Herbert@linux.intel.com>, 
-	Uros Bizjak <ubizjak@gmail.com>, Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
 
-On Mon, Nov 24, 2025 at 11:19=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
->
-> On Sat, Nov 22, 2025 at 02:16:14PM -0800, Andrew Morton wrote:
-> > On Fri, 21 Nov 2025 16:30:43 -0800 Kees Cook <kees@kernel.org> wrote:
-> >
-> > > On Fri, Nov 21, 2025 at 07:39:44PM +0000, Bill Wendling wrote:
-> > > > Add the '__counted_by_ptr' attribute to the 'regions' field of 'str=
-uct
-> > > > memblock_type'. The 'regions' field is an array of 'struct
-> > > > memblock_region' and its size is tracked by the 'max' field, which
-> > > > represents the total number of allocated regions.
-> > >
-> > > As part of any counted_by annotation patch, there needs to be discuss=
-ion
-> > > in the commit log about how it's been shown to be a safe annotation
-> > > to make. e.g. in this case, if all allocations of "regions" have a
-> > > corresponding "max" assignment, etc. If just "git grep" can't find th=
-em
-> > > all, using something like Coccinelle or CodeQL to search for struct
-> > > memblock_type::regions assignments can work.
-> >
-> > How is anyone to know these things?  I can't find anything about this
-> > in include/ or Documentation/ or in the relevant commits.
-> >
-> > There should be a comment at the __counted_by() definition site, please=
-.
-> >
-> > And possibly write a Documentation/ file then change checkpatch to
-> > direct people to that file if they add a counted_by?
->
-> This is a fair point, yes. The documentation and discussions around
-> counted_by are very big in my mind (and for Bill), so it was mostly a
-> consolidation/reminder and some extra detail on prior solutions, but
-> for anyone new to that annotation, we should have collected common
-> guidance. I will write something up.
->
-Good point. I'll add documentation for these attributes both in
-Documentation/ and at the macro site. The frustrating thing is that
-we're likely to have at least one other macro flavor (something like
-"__counted_by_expr"), though that's the only foreseeable one. All of
-these macros are wrappers around the same attribute because of
-compiler skew.
+I extracted -- from your kind and loving feedback :) -- a number of
+specific concerns you seem to have about this proposal:
 
--bw
+- You don't like the additional ..._sz set of helpers.
+- Alignment isn't taken into account.
+- You found the ...set_flex_counter() usage unreadable.
+
+To me, it seems like the primary issue with this patch is that it
+probably needs to be at least 2 patches if not more, where we can
+iterate on each aspect.
+
+The area of _agreement_, I think, is that type-based allocation is
+a good idea. You even recently used it as an example in an unrelated
+thread[1] discussing variable declarations in the middle of functions,
+and used (a form of) this API proposal, which I whole-heartedly agree
+with. i.e. that once we have type-based allocators, we can do things like:
+
+  __auto_type var = alloc_obj(struct whatever, gfp);
+
+So, taking each issue in turn...
+
+On Sat, Nov 22, 2025 at 11:53:33AM -0800, Linus Torvalds wrote:
+> In particular, I intensely dislike that horrendous 'SIZE' parameter to
+> those helper macros
+> [...]
+> The argument for that horror is also just silly:
+>
+> On Fri, 21 Nov 2025 at 17:43, Kees Cook <kees@kernel.org> wrote:
+> >
+> > These each return the newly allocated pointer to the type (which may be
+> > NULL on failure). For cases where the total size of the allocation is
+> > needed, the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz()
+> > family of macros can be used. For example:
+> >
+> >         size = struct_size(ptr, flex_member, count);
+> >         ptr = kmalloc(size, gfp);
+> >
+> > becomes:
+> >
+> >         ptr = kmalloc_flex_sz(*ptr, flex_member, count, gfp, &size);
+> 
+> That thing is ACTIVELY WORSE than the code it replaces.
+> 
+> One of them makes sense and is legible toi a normal human.
+> 
+> The other does not.
+> 
+> The alleged advantage is apparently that you can do it on one line,
+> but when that one line is just horrible garbage, that is not an
+> advantyage at all.
+> 
+> And the impact of that crazy SIZE on the macro expansions makes the
+> whole thing entirely illegible.
+> 
+> I will not merge anything this broken.
+> 
+> The whole "limit to pre-defined size" argument is also just crazy,
+> because now the SIZE parameter suddenly gets a second meaning. EVEN
+> WORSE.
+
+(Size calculation)
+
+The benefit is not that it is done in one line, but rather than the size
+calculations (which there is no exception handling for) gets built into
+the allocation so that wrapping and truncations get communicated back
+to the caller in the only way we have available: returning NULL from
+the allocation.
+
+I'm not sure what you mean by "limit to pre-defined size". There's no
+such design in those helpers, except from the perspective of "detect
+and refuse to truncate overflows into too-small storage". Is that what
+you meant?
+
+The persistent problem we have over and over in Linux is the lack of
+feedback from overflowed arithmetic. This is being worked on[2] at the
+same time, but I'm trying to find a way that we can get at "normal"
+error handling, since just exploding if an overflow happens isn't a very
+friendly way to deal with such conditions, but C doesn't give us much to
+work with. If it's _part_ of the allocation, though, we have a natural
+way to say "but you can't store 1024 into a u8".
+
+For code like:
+
+	u8 size;
+	...
+	size = struct_size(ptr, flex_member, count);
+	ptr = kmalloc(size, gfp);
+
+While struct_size() is designed to deal with overflows beyond SIZE_MAX,
+it can't do anything about truncation of its return value since it has
+no visibility into the lvalue type. So this code pattern happily
+truncates, allocates too little memory, and then usually does stuff like
+runs a for-loop based on "count" instead of "size" and walks right off
+the end of the heap allocation, clobbering whatever follows it.
+
+If we have a clean way to build the size into the allocation, then we
+can report back a NULL allocation when something goes wrong with the
+calculation or the storage of the calculation.
+
+Now, an alternative could be to keep the allocation and the size reporting
+separate with some kind of __must_check "give me the size of this thing"
+function, but I don't really like this because it feels much less
+ergonomic to me:
+
+	u8 size;
+	...
+	__auto_type ptr = kmalloc_flex(struct whatever, counter, count, gfp);
+	if (flex_size(ptr, counter, &size)) {
+		kfree(ptr);
+		return -EINVAL;
+	}
+
+> [...]
+> Because once you give that "alloc_obj()" an actual type, it should
+> take the alignment of the type into account too.
+
+(Alignment)
+
+Sure, but that's the whole point of trying to switch to type-based
+allocation: so that we CAN get at the alignment. That would be a "next
+step" approach in my mind, since we could bucketize allocations by type
+(or alignment), instead of by size. But that's more of a follow-on, in
+my opinion. I'd like to get some agreement on the exposed interface for
+this API first, and then move to enhancing the internals to take
+advantage of the new information.
+
+> I also think this part:
+> 
+> +       typeof(VAR) *__obj_ptr = NULL;                                  \
+> +       if (!WARN_ON_ONCE(!__can_set_flex_counter(__obj_ptr->FAM, __count)) && \
+> 
+> absolutely needs to die.  You just set __obj_ptr to NULL, and then you
+> use __obj_ptr->FAM. Now, it so happens that __can_set_flex_counter()
+> only cares about the *type*, but dammit, this kind of code sequence is
+> simply not acceptable, and it needs to make that *explicit* by using
+> sane syntax like perhaps just spelling that out, using VAR, not that
+> NULL value.
+> 
+> IOW. making it use something like "typeof(VAR.FAM)" might work. Not
+> that crazy garbage.
+
+(set_flex_counter)
+
+I get your objection. We have other places where we do "((TYPE *)NULL)->member"
+explicitly to get at types, but I see what you mean that is feels very
+wrong to see the "->" after setting something to NULL in that it's
+separated from the NULL-ness.
+
+One of the reasons for using __obj_ptr was because "VAR" may be a type
+and not a variable, so "VAR.FAM" isn't possible. Doing it the following
+way seemed uglier to me than using __obj_ptr->FAM:
+
+	if (!WARN_ON_ONCE(!__can_set_flex_counter(((typeof(VAR) *)NULL)->FAM, __count)) &&
+
+since we literally already have "((typeof(VAR) *)NULL)" with __obj_ptr.
+
+But perhaps much of this could be collapsed into the
+__can_set_flex_counter() helper instead.
+
+What do you think?
+
+-Kees
+
+[1] https://lore.kernel.org/all/CAHk-=wiCOTW5UftUrAnvJkr6769D29tF7Of79gUjdQHS_TkF5A@mail.gmail.com/
+[2] https://github.com/llvm/llvm-project/pull/148914
+
+-- 
+Kees Cook
