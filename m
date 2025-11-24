@@ -1,103 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A652BEC57;
-	Mon, 24 Nov 2025 18:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B29231A543
+	for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 18:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764009404; cv=none; b=RWaFZDVtCKZEZDXFKFyV5qmXZjm85pgt9S3AF9N6A2GaRx2+pn/SeKu5WDCUQF0pPXOlRDHP68/bC0EmOO3DzGJBw5t0jSlYZ3RCJRvAHDtLudThYYojxtiET40Gd7VjprJDnqD6UfvJIEQ6KOsT1ad8WJOQLJ6uosSDVOmMCfA=
+	t=1764009824; cv=none; b=baaxxuLFqTCxTxiLqC5mRU/A+/cO5r0K1RdFLYJMun6/P+LpgRjAa9EFC0VYK3XQGFk/0OhuoQFWhhh8xefewQQvq4UJB6e0Gw2O6hGIZQWPxH5GMWvq27+cHSAyk6Utpn3frwoZZgjbTYmScOwAFBl2PFbHW8PUcc+fXBo6OEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764009404; c=relaxed/simple;
-	bh=jMxics1T7D2zTTTxC0vYNoJLPcTUUbdGJ0mccHHyjHI=;
+	s=arc-20240116; t=1764009824; c=relaxed/simple;
+	bh=LXtoF+aRO9OG8tgJk/Vy4h6gs94oaYjsrQDAgVwnba0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ue3BNbmShXrEJYOpM8so6cepCwNWTe4pAgYSPhsE22DLwqMfVW2GNry3NK98EsQu5A1lS9vTxrdCeoYmdexoqNI1mBqnpWWB3VW+HcFH+cywSLNMFjj7oLlpEVrsc2zZLFQDAWf3S4GfXWbstERmLDH5P7IBKFPBCFxz57aVT0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y1fSJT7H; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nr/I1o9ZDDGoebC8uTH5p0BsNms0VuayHZLL/px6s4A0KG4m0c1ZIwWq8xokPDWgsJJjZuss+pCyDC+Pc3FZ3kkFDX7ESCZDqXO2hhxqIXAKR9TIzZlb6cfQcPjgP2b8gXijpRTG4cW5wmyVQijb+JrbZ/iE8yYf6nVtcqenios=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cOOda/kb; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1fSJT7H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A174C4CEF1;
-	Mon, 24 Nov 2025 18:36:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764009403;
-	bh=jMxics1T7D2zTTTxC0vYNoJLPcTUUbdGJ0mccHHyjHI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y1fSJT7HmKhn2wr95Fzte+w0fDStdZ19Koc4ocZ9w9Lv1ZKt3nVWLGlA26AZcYIBd
-	 XKfwmqWPffprf14DmbfY6Hm5j/1/ejPGlDlwNuFIRw1N0GPXXidPvbRI1kZRjDkUst
-	 lxlN7EigtVgqc+fIfhuxCNIlYXK4ef8i04srNtF1wifrLNEVNM+NR7SpOAcbdGrg7v
-	 hihOY/jKZ7DoINdso0BUTLv4L5A9BvRRkePHheh15RSGNoF7D2cJfXEluSf/P5lGfT
-	 f4QtlDZ7HjBA/60fv0OV4KvirM84SvnkcqHiqUqHjnG8bEuDjFwXa/TWHaZHPowV6h
-	 Vynb3itZkcYog==
-Date: Mon, 24 Nov 2025 11:36:34 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Asuna Yang <spriteovo@gmail.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nicolas Schier <nsc@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Vivian Wang <wangruikang@iscas.ac.cn>,
-	Han Gao <rabenda.cn@gmail.com>,
-	Jason Montleon <jmontleo@redhat.com>,
-	Conor Dooley <conor@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 3/4] rust: add a Kconfig function to test for support
- of bindgen options
-Message-ID: <20251124183634.GA1084995@ax162>
-References: <20251124-gcc-rust-v4-v4-0-4e06e07421ae@gmail.com>
- <20251124-gcc-rust-v4-v4-3-4e06e07421ae@gmail.com>
- <CANiq72k=XXRR6pw0Uhk89dmRHFYan6WzJhnDTC0T5oMYAaNnZw@mail.gmail.com>
- <ef617970-5539-400a-8717-dd96e82bf271@gmail.com>
- <CANiq72nDpBodFh5Zqy2p9jwWyfAiY6KcEEyugHeMDEmOR6Rogw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cOOda/kb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764009822; x=1795545822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LXtoF+aRO9OG8tgJk/Vy4h6gs94oaYjsrQDAgVwnba0=;
+  b=cOOda/kbMrndDh+clF77950RC+9NByWmu9XoI1kVRyMyNqcm7xgm+hOg
+   ZspZNbVoECJq0PklpBizOTymt89p2PNYTCezbIkgR5rTdR0QTfzdy4PtL
+   gEAhnQgvyCVYxw7JaeDekVCAEuxZOx2ipXdXcxE8QIrZWG42ldT7bcYWe
+   7I8yNQvvW1O9pvv4qTD3it8qBAyQX6knqBVIVyiWtkrZ7lE8qrGAj2RHd
+   yP3PBMdkPcqCRV2lwcxW1Xp9k5xDLFtsEMvDdQxk5WDay0eerZHmxRajw
+   31htFY4wLa+IHFKEWavxT1l0cko2pfxqZ5KMKvK+a9iuW6stb4saA6kmy
+   w==;
+X-CSE-ConnectionGUID: CjawCIDbSWmUZeTPhHhkQw==
+X-CSE-MsgGUID: IlfenRJKRJ2xX6qGp2ZSrA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="88667321"
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="88667321"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 10:43:41 -0800
+X-CSE-ConnectionGUID: 97zqQHQuSiOpoCmV509mHA==
+X-CSE-MsgGUID: FrpfCr9oTw2Kmy1suvDsZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="192648941"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.5])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 10:43:39 -0800
+Date: Mon, 24 Nov 2025 20:43:37 +0200
+From: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>
+To: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+Cc: "idryomov@gmail.com" <idryomov@gmail.com>, Xiubo Li <xiubli@redhat.com>,
+	"justinstitt@google.com" <justinstitt@google.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+	"morbo@google.com" <morbo@google.com>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>
+Subject: Re: [PATCH v1 1/1] ceph: Amend checking to fix `make W=1` build
+ breakage
+Message-ID: <aSSnWaDHK5Yyq_Ae@smile.fi.intel.com>
+References: <20251110144404.369928-1-andriy.shevchenko@linux.intel.com>
+ <9f7339a71c281e9f9e5b1ff34f7c277f62c89a69.camel@ibm.com>
+ <aRJASMinnNnUVc3Z@smile.fi.intel.com>
+ <c2805e34c4054bfa3308af0d18712e412f024ed6.camel@ibm.com>
+ <aSR1FU6uCqpOUFeb@smile.fi.intel.com>
+ <82c49caff875cc131951a7e5d59ecb45efbb9224.camel@ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72nDpBodFh5Zqy2p9jwWyfAiY6KcEEyugHeMDEmOR6Rogw@mail.gmail.com>
+In-Reply-To: <82c49caff875cc131951a7e5d59ecb45efbb9224.camel@ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Mon, Nov 24, 2025 at 04:08:36AM +0100, Miguel Ojeda wrote:
-> On Mon, Nov 24, 2025 at 3:42 AM Asuna Yang <spriteovo@gmail.com> wrote:
-> >
-> > I will separate them into two functions in the next revision,
-> > `bindgen-option` and `bindgen-backend-option` (or `bindgen-cc-option`?
-> > Which one do you prefer?).
+On Mon, Nov 24, 2025 at 05:47:04PM +0000, Viacheslav Dubeyko wrote:
+> On Mon, 2025-11-24 at 17:09 +0200, andriy.shevchenko@linux.intel.com wrote:
+> > On Mon, Nov 10, 2025 at 08:42:13PM +0000, Viacheslav Dubeyko wrote:
+> > > On Mon, 2025-11-10 at 21:43 +0200, andriy.shevchenko@linux.intel.com wrote:
+
+...
+
+> > > I think we can take the patch as it. It looks good. Probably, it makes sense to
+> > > take a deeper look in the code on our side.
+> > > 
+> > > Reviewed-by: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+> > 
+> > Thanks, can this be applied? My builds are still broken.
 > 
-> If we don't need `bindgen-option` (the normal one I mean) so far,
-> perhaps we should skip it. On the other hand, `rustc-option-yn` is
-> there and is not used either (it was added for consistency). Up to the
-> Kbuild team, I guess.
+> The patchset has been applied on testing branch already [1].
 
-I do not have a strong preference one way or the other. These macros
-tend to be low maintenance and do not take up much space regardless so
-preemptively adding it so that it is ready for use in the future is no
-big deal in my opinion.
+Thanks for the information. The Linux Next still has no that branch in.
+I recommend to write Stephen a message to include your testing branch or
+something like that into Linux Next, so it will get more test coverage.
 
-> As for the name, no strong preference. `bindgen-backend-option` sounds
-> good, but `bindgen-cc-option` is more consistent with `cc-option` and
-> probably easier to understand for people new to `bindgen`, and anyway
-> the flags we pass there wouldn't make sense if the backend is not a C
-> compiler.
+> Ilya, when are we planning to send this patchset upstream?
 
-Yeah, I think either one sort of requires knowledge of bindgen to know
-the difference between a flag to bindgen and a flag to the C compiler
-behind bindgen so no strong preference from my side (Nicolas may feel
-differently).
+> [1] https://github.com/ceph/ceph-client.git
 
-Cheers,
-Nathan
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
