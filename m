@@ -1,44 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8B3299AB4;
-	Mon, 24 Nov 2025 05:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A60F1D5154;
+	Mon, 24 Nov 2025 08:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763963954; cv=none; b=UjY9/wUHX5HsWv6Xa0ghWWeeg3I/4VuBTDb4ODfHC5pjcrqTorJMDNoPCHl9idxDMvDKuYp4yw9dY8Lsyh0y2poZBIgmFdRYvAx1jOjCyBqrC1vieZ75mS8GUfRhkjZD8DZpusdBBIcxXa3nhhlTH/+7r8Fxep41RR0xWgK9xLA=
+	t=1763972878; cv=none; b=lGu6ZUph30ufxJ+YmQm8DmuAnDztRhKXMS3VSpnedJgUyNKjw4ySG9/IsBBsg/eM/s8XxCgw7Cqy3q1Fy7AtHayds8ycY1Tr/3KFpZDPjoM481VRsVJ0zVEUDq0VSwSZZumjKdije9fZRI2ZUPs+t1PpoLm9lOBe51JCS3+j3GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763963954; c=relaxed/simple;
-	bh=9Kp2XSAO7hnwd2eaJfptvyOOHPe26HdjZ6qO1Ax435Q=;
+	s=arc-20240116; t=1763972878; c=relaxed/simple;
+	bh=xRG4t4eEnDZ8Y5Lv5GHg9KMatGlfUd5zhnpFVcA3Xso=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ny+lknu1oCdKr0UndanvSENm4c/nJSatzew1tmMBubeWHxeBCusS1231W6IxTPHtU7jx3nmE3aLKZgHGfPe3vR66WVxrtiELrNTWHkJYda5faknMgSFSKmkWeIy4A4L6QYbSpOjg9hLA/UsRiEXMDTe4c+NgGLlr87n1XQQlvtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3CKN0uz; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=NGIuXFax2kB9B/2o8gjcpzrP3xmJxRndxNWzLFJICOvuMnyh/3wdhjm/l/DMrr6ishHghiaYfbuJ/xZ+S7gXnBTBBHSrVRFCJ9+k8ZYgGK9qnaVktD9JKLyEFiVDqMsLzfzOLbBNCrLF0WRWtTseuRjzKtNl9MSzBtm9NZE2rqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OnLzcKJT; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3CKN0uz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E03C4CEF1;
-	Mon, 24 Nov 2025 05:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763963954;
-	bh=9Kp2XSAO7hnwd2eaJfptvyOOHPe26HdjZ6qO1Ax435Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S3CKN0uzZV6J6u0UpKVPBeM3gWS6VhVTR+wqE86peb2K2KDfkWCh3eVLDj1HT9cFW
-	 V3rVAEL+ADV/SE8/f0p/TP9t1E4fI9fHRIHmKj0OrPqrctO7Lyyvud8n17Q6rOh6o5
-	 yKZxTlxPAVMp5PIESXwekNuZYNIY7R5KHbSIIj18Xy05syoa8QThvgMhcKs0765XPL
-	 3MSBGGMTzIlZYixBASmWU+vXr8stLuouAXY2l/aTQucFCu9NS++cTZjsgbBj36e4P7
-	 EsJx2UJuWl81Efu+PJ5tU9b6selvp2NRvBpQPyD2bn46LsyANb3ekTqsIknnPzDHTP
-	 918sxkORS9FXg==
-Date: Mon, 24 Nov 2025 11:25:32 +0530
-From: Naveen N Rao <naveen@kernel.org>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Michael Ellerman <mpe@ellerman.id.au>, linux-trace-kernel@vger.kernel.org, 
-	Mark Rutland <mark.rutland@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev, Maryam Moghadas <maryammo@ca.ibm.com>
-Subject: Re: [PATCH 3/3] powerpc64/ftrace: workaround clang recording GEP in
- __patchable_function_entries
-Message-ID: <sjheprnafkraauotmi2fwjz6l6fha5te7jdp74t4zfh3jvs2if@vjpey276fsti>
-References: <20251108210405.2375472-1-hbathini@linux.ibm.com>
- <20251108210405.2375472-4-hbathini@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OnLzcKJT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763972877; x=1795508877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xRG4t4eEnDZ8Y5Lv5GHg9KMatGlfUd5zhnpFVcA3Xso=;
+  b=OnLzcKJTfM2mzZSoHNHtJnE9jsY1KlUkWycdNzSZcXZNloPhquJMyf8M
+   OeNUITlZUkIaim/ss4JSlGBzBs5anYUSG7+qmoM45nhxqEht21x6pZH/1
+   eBD7R894WGwQWBUlzMl5cqLRdgdw1wC2qZadzYb9qP9HyyDciT1pA9ItA
+   icQFpsxhTrijAA63b3Oy1fAgYnGVMgCqDf6gArUHQTQiu9nIPpygaH+KD
+   +VANFLkFa4kzef+IljPruhiWa7RqU46yrWriMvQ9i+bJXVT7PYOgY4u7j
+   qVnYDlZ+jsHfJbo3Lmc2qSsjSao3aIHucnS1GYes4A3TK2JzNY7oyJYsk
+   Q==;
+X-CSE-ConnectionGUID: MpvBpVZ3Qjiz1/c5AHKASw==
+X-CSE-MsgGUID: RyqahnPyT4+KahPfHMo8NA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="65996224"
+X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
+   d="scan'208";a="65996224"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 00:27:56 -0800
+X-CSE-ConnectionGUID: /obRCkK6Rh67VxEPSyC4ew==
+X-CSE-MsgGUID: p3bdAIJmQ/q5ICmSET1XGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
+   d="scan'208";a="215619003"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 24 Nov 2025 00:27:54 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vNRvL-000000000Wb-3KTr;
+	Mon, 24 Nov 2025 08:27:51 +0000
+Date: Mon, 24 Nov 2025 16:27:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eslam Khafagy <eslam.medhat1993@gmail.com>, linus.walleij@linaro.org,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Eslam Khafagy <eslam.medhat1993@gmail.com>
+Subject: Re: [PATCH RESEND] drm: pl111: replace dev_* print functions with
+ drm_* variants
+Message-ID: <202511241619.k8AiBZLh-lkp@intel.com>
+References: <20251122004951.567753-1-eslam.medhat1993@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,18 +67,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251108210405.2375472-4-hbathini@linux.ibm.com>
+In-Reply-To: <20251122004951.567753-1-eslam.medhat1993@gmail.com>
 
-On Sun, Nov 09, 2025 at 02:34:05AM +0530, Hari Bathini wrote:
-> Support for -fpatchable-function-entry on ppc64le was added in Clang
-> with [1]. However, when no prefix NOPs are specified - as is the case
-> with CONFIG_PPC_FTRACE_OUT_OF_LINE - the first NOP is emitted at LEP,
-> but Clang records the Global Entry Point (GEP) unlike GCC which does
-> record the Local Entry Point (LEP). Issue [2] has been raised to align
-> Clang's behavior with GCC. As a temporary workaround to ensure ftrace
+Hi Eslam,
 
-Any reason to put in a "temporary" workaround rather than waiting for 
-this to be fixed?
+kernel test robot noticed the following build warnings:
 
-- Naveen
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v6.18-rc7 next-20251121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Eslam-Khafagy/drm-pl111-replace-dev_-print-functions-with-drm_-variants/20251122-085225
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20251122004951.567753-1-eslam.medhat1993%40gmail.com
+patch subject: [PATCH RESEND] drm: pl111: replace dev_* print functions with drm_* variants
+config: arm-nhk8815_defconfig (https://download.01.org/0day-ci/archive/20251124/202511241619.k8AiBZLh-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241619.k8AiBZLh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511241619.k8AiBZLh-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/pl111/pl111_nomadik.c:7:
+>> drivers/gpu/drm/pl111/pl111_nomadik.h:11:32: warning: declaration of 'struct drm_device' will not be visible outside of this function [-Wvisibility]
+      11 | void pl111_nomadik_init(struct drm_device *dev);
+         |                                ^
+>> drivers/gpu/drm/pl111/pl111_nomadik.c:12:32: warning: declaration of 'struct drm_device' will not be visible outside of this function [-Wvisibility]
+      12 | void pl111_nomadik_init(struct drm_device *dev)
+         |                                ^
+   drivers/gpu/drm/pl111/pl111_nomadik.c:12:6: error: conflicting types for 'pl111_nomadik_init'
+      12 | void pl111_nomadik_init(struct drm_device *dev)
+         |      ^
+   drivers/gpu/drm/pl111/pl111_nomadik.h:11:6: note: previous declaration is here
+      11 | void pl111_nomadik_init(struct drm_device *dev);
+         |      ^
+   drivers/gpu/drm/pl111/pl111_nomadik.c:34:2: error: call to undeclared function 'drm_info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      34 |         drm_info(dev, "set Nomadik PMU mux to CLCD mode\n");
+         |         ^
+   2 warnings and 2 errors generated.
+
+
+vim +11 drivers/gpu/drm/pl111/pl111_nomadik.h
+
+    10	
+  > 11	void pl111_nomadik_init(struct drm_device *dev);
+    12	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
