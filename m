@@ -1,209 +1,313 @@
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEF2301709
-	for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 12:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E37C309DBD;
+	Mon, 24 Nov 2025 13:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763988692; cv=none; b=Ecs83jI/1SrFWu+23lEgeqpg68Y4CD5vUhglrvCMBAY+gnSpsOvWR2Ic4GsbAWVozh7Zl3w9LwlxbeT6lhgjHww+G/wfVAhYBrDaI7l6iAAvSt2OztO5qzXqy1nzEvOH6tcCPc3WnlwrubMat0yCuxRu3Xu3xVR8phMUCP/cmgk=
+	t=1763991993; cv=none; b=MV4cJSaymxMPsr8H51/ST738JO+/NB2zhMGh/GLKLlK0qcJuTBkj++wK3HvfzP+LBuLORzSWUIFCmnPz97Qek3O33pX/AoP3QGUDdX+yWza3O90LMuYMQ4Bg5A4co3ng8ZADtrzXRwiEzXVCPUhFM83YIoCPhEx3I/8cnOAYpSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763988692; c=relaxed/simple;
-	bh=lesd533+sfnnf15FLEZxLveMR1rfn+YOX16oTy+1DcY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=mdRjkl0fn9nfgZE9qD4faW1Fiwb+UC1AwUh7YVEWuf8f2nEd/J/LszYMEPOjxQTgKfFfpzGPC8eS1SLcFcOdcxCle7FKJvNpWxTqlhACtNepv6R6eSRxfoJpaRv/gIemzClCsO0B4FAoKdzll+WXDHc1/PchR5gwC8jLKeXHQV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=HG1Eed+i; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1763991993; c=relaxed/simple;
+	bh=nz10a0rTJn6UPGCk99TiKY7Kkq8fanT3n4HMf2cfq0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kcEMtMPwmRvUFFTISE5yTp33INvlr2i9g3Jb9nVDxlTAx7MQdbwYFqBQMp+cv48awtL79f58/AbJiWg3Zyjdzn4jOVKj+iYDXov1stM5JBe7of6r5RgW7TcX+sh/aI0TzSM3/fAuPiBV+zPON3IJ8QlW4EixyIfJS6iiMYHMmpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EJ4hgsPN; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="HG1Eed+i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1763988628; x=1764593428; i=markus.elfring@web.de;
-	bh=FhQgIdmKbTQxoKI+nq85UeEN0e9sut2QP9anR5RMr8E=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=HG1Eed+iGkLo16kbTvJK/fO14URJ29t01j8kdnXmZRixq7u14EbHNThSdodLu/FE
-	 s1psod1fZwGk6+TkQwCZVSywKPEPfR89BbR7031Nn6VNs3kYNveT+yX6+lTqiY0VR
-	 acAUREN0HFGomC2AdTHSBFsAYET1BaFT5UNYw2ClnBg3QCAVIUmf7w6I0shmXrJ30
-	 idvGtjC+tjnyFLZgr8zIb//Rri9hasLKjn5i1+BjUx0C3JAhYVPKV8YRm+UiBcl7N
-	 +iDtGfQV0S/HtD/fEDH+m5mENOCoUftXPMSJE7cN35UR9HMN0pdzxKr5O/v7NX4zL
-	 j923h8XNCqfejx03ZA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.92.241]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MLAVa-1vfb8g1ZNi-00Rj9L; Mon, 24
- Nov 2025 13:50:28 +0100
-Message-ID: <71d406fb-9fb1-44a9-912a-7a0d270b9577@web.de>
-Date: Mon, 24 Nov 2025 13:50:23 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EJ4hgsPN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763991991; x=1795527991;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nz10a0rTJn6UPGCk99TiKY7Kkq8fanT3n4HMf2cfq0c=;
+  b=EJ4hgsPNnttk17k826JSxCw/ajMRx2+jTdOTZV/+PHdxhVx/FkO5dMEv
+   /rNPlc9M/UGHcGCUsWuA9IjUeoZvDXk5OHPNWzKcaB+LWgpINDWMXwnI4
+   +d25xdRdZFWPmWuWjFfLcmIsL3BE4PLOTai604IdJYfWPptMI9iED2CVM
+   6j++Ne6XGBKbvd7/Ls8p03F5vSam/lpE6MzKSWtxxB/oDd+MDEK9KXn8E
+   yKkYjZnKifoVk4bAaYn/D6JsOZnJwoNeaaMRwoiatpaqSWMa/6EO8IV30
+   +xf8hR+YNzIR7aNDcDAjVDv5A3QKWsGbbo8LD1CuT02uviaLzszoNiD2H
+   w==;
+X-CSE-ConnectionGUID: 3HVUYuazStiS3mKHeED5vA==
+X-CSE-MsgGUID: 5hRYXz96SpqwY5v+9MosFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="65927797"
+X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
+   d="scan'208";a="65927797"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 05:46:30 -0800
+X-CSE-ConnectionGUID: ebiqtoWcQ52Mgi8mDczUeA==
+X-CSE-MsgGUID: p2EE+g4dSmCN4gt3H7iefA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
+   d="scan'208";a="197462795"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1f7de368ad0d) ([10.211.93.152])
+  by orviesa005.jf.intel.com with ESMTP; 24 Nov 2025 05:46:29 -0800
+Received: from kbuild by 1f7de368ad0d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vNWtf-000000000FN-0elq;
+	Mon, 24 Nov 2025 13:46:27 +0000
+Date: Mon, 24 Nov 2025 14:45:40 +0100
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:cifs-cleanup 1/12] fs/smb/client/cifsproto.h:221:57:
+ error: unknown type name 'FILE_DIRECTORY_INFO'
+Message-ID: <202511241403.TOtRrW21-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Kees Cook <kees@kernel.org>, cocci@inria.fr,
- linux-hardening@vger.kernel.org, linux-mm@kvack.org,
- Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>
-Cc: LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
- llvm@lists.linux.dev, Alexander Lobakin <aleksander.lobakin@intel.com>,
- Alexander Potapenko <glider@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Bill Wendling <morbo@google.com>,
- Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Harry Yoo <harry.yoo@oracle.com>, Jakub Kicinski <kuba@kernel.org>,
- Jan Hendrik Farr <kernel@jfarr.cc>, Jann Horn <jannh@google.com>,
- Jonathan Corbet <corbet@lwn.net>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
- Justin Stitt <justinstitt@google.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Marco Elver <elver@google.com>, Matthew Wilcox <willy@infradead.org>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Pekka Enberg <penberg@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Randy Dunlap <rdunlap@infradead.org>,
- Roman Gushchin <roman.gushchin@linux.dev>, Sasha Levin <sashal@kernel.org>,
- Tony Ambardar <tony.ambardar@gmail.com>,
- Vegard Nossum <vegard.nossum@oracle.com>, Vlastimil Babka <vbabka@suse.cz>,
- Yafang Shao <laoar.shao@gmail.com>
-References: <20251122014304.3417954-4-kees@kernel.org>
-Subject: Re: [cocci] [PATCH v5 4/4] coccinelle: Add kmalloc_objs conversion
- script
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20251122014304.3417954-4-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:amsw7UHqOOQu1W5nt8hwneDl1fOvyTGxaKbM/EvmWg36soK67jd
- NVzD/JFRQsE0ej5GzqAq1hrGR1oQ8nlsAf72fRjlHkFo7IftOxVdsV0XQ9BRvbDDGDe7KyK
- i4HOZGwF3BFySJvKFKdQ9UVTYA6ylOHAlIcJ8JNlgNFxheFoVetTSLKXum3Hirf9fGX9OSx
- JNfJAONi4B9Exo5tB2Ihw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:gFNAj9rDq0E=;O0N9q9zOXIeNoPvY7WCp5zB7aZw
- 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
- R7dzVIYFj5JrZ0+My9hvasRPbIDNUTdNye/8iK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Finds and converts sized kmalloc-family of allocations into the
-> typed kmalloc_obj-family of allocations.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git cifs-cleanup
+head:   04f6c96ee8167c25e3e8403da23a09e8b926e88b
+commit: aa358cceaf202eadae85a42a3e34e941628a68fa [1/12] cifs: Do some preparation prior to organising the function declarations
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251124/202511241403.TOtRrW21-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241403.TOtRrW21-lkp@intel.com/reproduce)
 
-See also:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.18-rc7#n94
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511241403.TOtRrW21-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+         |                                                         ^
+   fs/smb/client/cifsproto.h:100:58: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     100 | extern int cifs_send_recv(const unsigned int xid, struct cifs_ses *ses,
+         |                                                          ^
+   fs/smb/client/cifsproto.h:104:62: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     104 | extern int compound_send_recv(const unsigned int xid, struct cifs_ses *ses,
+         |                                                              ^
+   fs/smb/client/cifsproto.h:109:62: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     109 | extern int SendReceive(const unsigned int /* xid */ , struct cifs_ses *,
+         |                                                              ^
+   fs/smb/client/cifsproto.h:113:60: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     113 | extern int SendReceiveNoRsp(const unsigned int xid, struct cifs_ses *ses,
+         |                                                            ^
+   fs/smb/client/cifsproto.h:115:33: warning: declaration of 'struct mid_q_entry' will not be visible outside of this function [-Wvisibility]
+     115 | int cifs_sync_mid_result(struct mid_q_entry *mid, struct TCP_Server_Info *server);
+         |                                 ^
+   fs/smb/client/cifsproto.h:116:54: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     116 | extern struct mid_q_entry *cifs_setup_request(struct cifs_ses *,
+         |                                                      ^
+   fs/smb/client/cifsproto.h:129:13: warning: declaration of 'struct cifs_credits' will not be visible outside of this function [-Wvisibility]
+     129 |                                  struct cifs_credits *credits);
+         |                                         ^
+   fs/smb/client/cifsproto.h:135:15: error: incomplete definition of type 'struct TCP_Server_Info'
+     135 |         return server->ops->send_cancel ?
+         |                ~~~~~~^
+   fs/smb/client/cifsproto.h:99:15: note: forward declaration of 'struct TCP_Server_Info'
+      99 | extern struct TCP_Server_Info *cifs_pick_channel(struct cifs_ses *ses);
+         |               ^
+   fs/smb/client/cifsproto.h:136:11: error: incomplete definition of type 'struct TCP_Server_Info'
+     136 |                                 server->ops->send_cancel(server, rqst, mid) : 0;
+         |                                 ~~~~~~^
+   fs/smb/client/cifsproto.h:99:15: note: forward declaration of 'struct TCP_Server_Info'
+      99 | extern struct TCP_Server_Info *cifs_pick_channel(struct cifs_ses *ses);
+         |               ^
+   fs/smb/client/cifsproto.h:140:63: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     140 | extern int SendReceive2(const unsigned int /* xid */ , struct cifs_ses *,
+         |                                                               ^
+   fs/smb/client/cifsproto.h:145:11: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     145 |                         struct cifs_tcon *ptcon,
+         |                                ^
+   fs/smb/client/cifsproto.h:162:43: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     162 | extern bool is_size_safe_to_change(struct cifsInodeInfo *cifsInode, __u64 eof,
+         |                                           ^
+   fs/smb/client/cifsproto.h:164:36: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     164 | extern void cifs_update_eof(struct cifsInodeInfo *cifsi, loff_t offset,
+         |                                    ^
+   fs/smb/client/cifsproto.h:166:46: warning: declaration of 'struct cifs_io_subrequest' will not be visible outside of this function [-Wvisibility]
+     166 | void cifs_write_subrequest_terminated(struct cifs_io_subrequest *wdata, ssize_t result);
+         |                                              ^
+   fs/smb/client/cifsproto.h:167:55: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     167 | extern struct cifsFileInfo *find_writable_file(struct cifsInodeInfo *, int);
+         |                                                       ^
+   fs/smb/client/cifsproto.h:168:42: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     168 | extern int cifs_get_writable_file(struct cifsInodeInfo *cifs_inode,
+         |                                          ^
+   fs/smb/client/cifsproto.h:171:42: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     171 | extern int cifs_get_writable_path(struct cifs_tcon *tcon, const char *name,
+         |                                          ^
+   fs/smb/client/cifsproto.h:174:55: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     174 | extern struct cifsFileInfo *find_readable_file(struct cifsInodeInfo *, bool);
+         |                                                       ^
+   fs/smb/client/cifsproto.h:175:42: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     175 | extern int cifs_get_readable_path(struct cifs_tcon *tcon, const char *name,
+         |                                          ^
+   fs/smb/client/cifsproto.h:177:42: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     177 | extern int cifs_get_hardlink_path(struct cifs_tcon *tcon, struct inode *inode,
+         |                                          ^
+   fs/smb/client/cifsproto.h:187:21: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     187 |                             const struct cifs_tcon *, int /* length of
+         |                                          ^
+   fs/smb/client/cifsproto.h:190:12: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     190 |                                 struct cifs_ses *ses,
+         |                                        ^
+   fs/smb/client/cifsproto.h:194:58: warning: declaration of 'struct cifs_ses' will not be visible outside of this function [-Wvisibility]
+     194 | extern int CIFS_SessSetup(const unsigned int xid, struct cifs_ses *ses,
+         |                                                          ^
+   fs/smb/client/cifsproto.h:201:42: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     201 | extern void cifs_set_oplock_level(struct cifsInodeInfo *cinode, __u32 oplock);
+         |                                          ^
+   fs/smb/client/cifsproto.h:202:35: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     202 | extern int cifs_get_writer(struct cifsInodeInfo *cinode);
+         |                                   ^
+   fs/smb/client/cifsproto.h:203:36: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     203 | extern void cifs_put_writer(struct cifsInodeInfo *cinode);
+         |                                    ^
+   fs/smb/client/cifsproto.h:204:43: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     204 | extern void cifs_done_oplock_break(struct cifsInodeInfo *cinode);
+         |                                           ^
+   fs/smb/client/cifsproto.h:210:47: warning: declaration of 'struct cifs_fid' will not be visible outside of this function [-Wvisibility]
+     210 | struct cifsFileInfo *cifs_new_fileinfo(struct cifs_fid *fid, struct file *file,
+         |                                               ^
+   fs/smb/client/cifsproto.h:217:56: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     217 | void cifs_fill_uniqueid(struct super_block *sb, struct cifs_fattr *fattr);
+         |                                                        ^
+   fs/smb/client/cifsproto.h:218:45: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     218 | extern void cifs_unix_basic_to_fattr(struct cifs_fattr *fattr,
+         |                                             ^
+   fs/smb/client/cifsproto.h:221:43: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     221 | extern void cifs_dir_info_to_fattr(struct cifs_fattr *, FILE_DIRECTORY_INFO *,
+         |                                           ^
+>> fs/smb/client/cifsproto.h:221:57: error: unknown type name 'FILE_DIRECTORY_INFO'
+     221 | extern void cifs_dir_info_to_fattr(struct cifs_fattr *, FILE_DIRECTORY_INFO *,
+         |                                                         ^
+   fs/smb/client/cifsproto.h:223:60: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     223 | extern int cifs_fattr_to_inode(struct inode *inode, struct cifs_fattr *fattr,
+         |                                                            ^
+   fs/smb/client/cifsproto.h:226:18: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     226 |                                struct cifs_fattr *fattr);
+         |                                       ^
+   fs/smb/client/cifsproto.h:229:11: warning: declaration of 'struct cifs_open_info_data' will not be visible outside of this function [-Wvisibility]
+     229 |                         struct cifs_open_info_data *data, struct super_block *sb, int xid,
+         |                                ^
+   fs/smb/client/cifsproto.h:230:17: warning: declaration of 'struct cifs_fid' will not be visible outside of this function [-Wvisibility]
+     230 |                         const struct cifs_fid *fid);
+         |                                      ^
+   fs/smb/client/cifsproto.h:233:19: warning: declaration of 'struct cifs_open_info_data' will not be visible outside of this function [-Wvisibility]
+     233 |                                        struct cifs_open_info_data *data,
+         |                                               ^
+   fs/smb/client/cifsproto.h:244:59: warning: declaration of 'struct smb_sid' will not be visible outside of this function [-Wvisibility]
+     244 | extern int sid_to_id(struct cifs_sb_info *cifs_sb, struct smb_sid *psid,
+         |                                                           ^
+   fs/smb/client/cifsproto.h:245:12: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     245 |                                 struct cifs_fattr *fattr, uint sidtype);
+         |                                        ^
+   fs/smb/client/cifsproto.h:247:17: warning: declaration of 'struct cifs_fattr' will not be visible outside of this function [-Wvisibility]
+     247 |                               struct cifs_fattr *fattr, struct inode *inode,
+         |                                      ^
+   fs/smb/client/cifsproto.h:249:41: warning: declaration of 'struct cifs_fid' will not be visible outside of this function [-Wvisibility]
+     249 |                               const char *path, const struct cifs_fid *pfid);
+         |                                                              ^
+   fs/smb/client/cifsproto.h:255:18: warning: declaration of 'struct cifs_fid' will not be visible outside of this function [-Wvisibility]
+     255 |                                 const struct cifs_fid *pfid, u32 *plen, u32 info);
+         |                                              ^
+   fs/smb/client/cifsproto.h:262:48: warning: declaration of 'struct smb_ace' will not be visible outside of this function [-Wvisibility]
+     262 | extern unsigned int setup_authusers_ACE(struct smb_ace *pace);
+         |                                                ^
+   fs/smb/client/cifsproto.h:263:51: warning: declaration of 'struct smb_ace' will not be visible outside of this function [-Wvisibility]
+     263 | extern unsigned int setup_special_mode_ACE(struct smb_ace *pace,
+         |                                                   ^
+   fs/smb/client/cifsproto.h:266:57: warning: declaration of 'struct smb_ace' will not be visible outside of this function [-Wvisibility]
+     266 | extern unsigned int setup_special_user_owner_ACE(struct smb_ace *pace);
+         |                                                         ^
+   fs/smb/client/cifsproto.h:277:34: warning: declaration of 'struct cifs_mount_ctx' will not be visible outside of this function [-Wvisibility]
+     277 | void cifs_mount_put_conns(struct cifs_mount_ctx *mnt_ctx);
+         |                                  ^
+   fs/smb/client/cifsproto.h:278:35: warning: declaration of 'struct cifs_mount_ctx' will not be visible outside of this function [-Wvisibility]
+     278 | int cifs_mount_get_session(struct cifs_mount_ctx *mnt_ctx);
+         |                                   ^
+   fs/smb/client/cifsproto.h:279:32: warning: declaration of 'struct cifs_mount_ctx' will not be visible outside of this function [-Wvisibility]
+     279 | int cifs_is_path_remote(struct cifs_mount_ctx *mnt_ctx);
+         |                                ^
+   fs/smb/client/cifsproto.h:280:32: warning: declaration of 'struct cifs_mount_ctx' will not be visible outside of this function [-Wvisibility]
+     280 | int cifs_mount_get_tcon(struct cifs_mount_ctx *mnt_ctx);
+         |                                ^
+   fs/smb/client/cifsproto.h:284:49: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     284 | extern void cifs_mark_open_files_invalid(struct cifs_tcon *tcon);
+         |                                                 ^
+   fs/smb/client/cifsproto.h:285:51: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     285 | extern void cifs_reopen_persistent_handles(struct cifs_tcon *tcon);
+         |                                                   ^
+   fs/smb/client/cifsproto.h:289:16: warning: declaration of 'struct cifsLockInfo' will not be visible outside of this function [-Wvisibility]
+     289 |                                     struct cifsLockInfo **conf_lock,
+         |                                            ^
+   fs/smb/client/cifsproto.h:291:42: warning: declaration of 'struct cifs_fid' will not be visible outside of this function [-Wvisibility]
+     291 | extern void cifs_add_pending_open(struct cifs_fid *fid,
+         |                                          ^
+   fs/smb/client/cifsproto.h:293:14: warning: declaration of 'struct cifs_pending_open' will not be visible outside of this function [-Wvisibility]
+     293 |                                   struct cifs_pending_open *open);
+         |                                          ^
+   fs/smb/client/cifsproto.h:294:49: warning: declaration of 'struct cifs_fid' will not be visible outside of this function [-Wvisibility]
+     294 | extern void cifs_add_pending_open_locked(struct cifs_fid *fid,
+         |                                                 ^
+   fs/smb/client/cifsproto.h:296:14: warning: declaration of 'struct cifs_pending_open' will not be visible outside of this function [-Wvisibility]
+     296 |                                          struct cifs_pending_open *open);
+         |                                                 ^
+   fs/smb/client/cifsproto.h:297:42: warning: declaration of 'struct cifs_pending_open' will not be visible outside of this function [-Wvisibility]
+     297 | extern void cifs_del_pending_open(struct cifs_pending_open *open);
+         |                                          ^
+   fs/smb/client/cifsproto.h:300:12: warning: declaration of 'struct cifs_deferred_close' will not be visible outside of this function [-Wvisibility]
+     300 |                                 struct cifs_deferred_close **dclose);
+         |                                        ^
+   fs/smb/client/cifsproto.h:303:12: warning: declaration of 'struct cifs_deferred_close' will not be visible outside of this function [-Wvisibility]
+     303 |                                 struct cifs_deferred_close *dclose);
+         |                                        ^
+   fs/smb/client/cifsproto.h:307:45: warning: declaration of 'struct cifsInodeInfo' will not be visible outside of this function [-Wvisibility]
+     307 | extern void cifs_close_deferred_file(struct cifsInodeInfo *cifs_inode);
+         |                                             ^
+   fs/smb/client/cifsproto.h:309:50: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     309 | extern void cifs_close_all_deferred_files(struct cifs_tcon *cifs_tcon);
+         |                                                  ^
+   fs/smb/client/cifsproto.h:311:51: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     311 | void cifs_close_deferred_file_under_dentry(struct cifs_tcon *cifs_tcon,
+         |                                                   ^
+   fs/smb/client/cifsproto.h:322:34: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     322 | extern void cifs_put_tcon(struct cifs_tcon *tcon, enum smb3_tcon_ref_trace trace);
+         |                                  ^
+   fs/smb/client/cifsproto.h:331:42: warning: declaration of 'struct cifsLockInfo' will not be visible outside of this function [-Wvisibility]
+     331 | extern void cifs_del_lock_waiters(struct cifsLockInfo *lock);
+         |                                          ^
+   fs/smb/client/cifsproto.h:333:54: warning: declaration of 'struct cifs_tcon' will not be visible outside of this function [-Wvisibility]
+     333 | int cifs_tree_connect(const unsigned int xid, struct cifs_tcon *tcon);
 
 
-=E2=80=A6
-> +++ b/scripts/coccinelle/api/kmalloc_objs.cocci
-> @@ -0,0 +1,168 @@
-=E2=80=A6
-> +// Comments:
-=E2=80=A6
+vim +/FILE_DIRECTORY_INFO +221 fs/smb/client/cifsproto.h
 
-* Please omit such an empty information line.
+1bd5bbcb653177 fs/cifs/cifsproto.h       Steve French       2006-09-28  208  
+d46b0da7a33dd8 fs/cifs/cifsproto.h       Dave Wysochanski   2019-10-23  209  extern void cifs_down_write(struct rw_semaphore *sem);
+76894f3e2f7117 fs/cifs/cifsproto.h       Paulo Alcantara    2022-10-03  210  struct cifsFileInfo *cifs_new_fileinfo(struct cifs_fid *fid, struct file *file,
+76894f3e2f7117 fs/cifs/cifsproto.h       Paulo Alcantara    2022-10-03  211  				       struct tcon_link *tlink, __u32 oplock,
+76894f3e2f7117 fs/cifs/cifsproto.h       Paulo Alcantara    2022-10-03  212  				       const char *symlink_target);
+f6f1f1790775fb fs/cifs/cifsproto.h       Al Viro            2021-03-18  213  extern int cifs_posix_open(const char *full_path, struct inode **inode,
+6d5786a34d98bf fs/cifs/cifsproto.h       Pavel Shilovsky    2012-06-20  214  			   struct super_block *sb, int mode,
+6d5786a34d98bf fs/cifs/cifsproto.h       Pavel Shilovsky    2012-06-20  215  			   unsigned int f_flags, __u32 *oplock, __u16 *netfid,
+6d5786a34d98bf fs/cifs/cifsproto.h       Pavel Shilovsky    2012-06-20  216  			   unsigned int xid);
+4065c802da7484 fs/cifs/cifsproto.h       Jeff Layton        2010-05-17  217  void cifs_fill_uniqueid(struct super_block *sb, struct cifs_fattr *fattr);
+cc0bad7552308e fs/cifs/cifsproto.h       Jeff Layton        2009-06-25  218  extern void cifs_unix_basic_to_fattr(struct cifs_fattr *fattr,
+cc0bad7552308e fs/cifs/cifsproto.h       Jeff Layton        2009-06-25  219  				     FILE_UNIX_BASIC_INFO *info,
+cc0bad7552308e fs/cifs/cifsproto.h       Jeff Layton        2009-06-25  220  				     struct cifs_sb_info *cifs_sb);
+c052e2b423f3ea fs/cifs/cifsproto.h       Shirish Pargaonkar 2012-09-28 @221  extern void cifs_dir_info_to_fattr(struct cifs_fattr *, FILE_DIRECTORY_INFO *,
+c052e2b423f3ea fs/cifs/cifsproto.h       Shirish Pargaonkar 2012-09-28  222  					struct cifs_sb_info *);
+e4b61f3b1c67f5 fs/smb/client/cifsproto.h Bharath SM         2024-02-29  223  extern int cifs_fattr_to_inode(struct inode *inode, struct cifs_fattr *fattr,
+e4b61f3b1c67f5 fs/smb/client/cifsproto.h Bharath SM         2024-02-29  224  			       bool from_readdir);
+cc0bad7552308e fs/cifs/cifsproto.h       Jeff Layton        2009-06-25  225  extern struct inode *cifs_iget(struct super_block *sb,
+cc0bad7552308e fs/cifs/cifsproto.h       Jeff Layton        2009-06-25  226  			       struct cifs_fattr *fattr);
+cc0bad7552308e fs/cifs/cifsproto.h       Jeff Layton        2009-06-25  227  
 
-* Would a field like =E2=80=9CKeywords=E2=80=9D become helpful?
+:::::: The code at line 221 was first introduced by commit
+:::::: c052e2b423f3eabe9f3f32e60744afa5cf26f6b9 cifs: obtain file access during backup intent lookup (resend)
 
+:::::: TO: Shirish Pargaonkar <shirishpargaonkar@gmail.com>
+:::::: CC: Steve French <smfrench@gmail.com>
 
-> +virtual patch
-
-Will additional operation modes become relevant after clarification of imp=
-lementation details?
-
-
-=E2=80=A6
-> +def alloc_array(name):
-> +	func =3D "FAILED_RENAME"
-> +	if name =3D=3D "kmalloc_array":
-> +		func =3D "kmalloc_objs"
-=E2=80=A6
-
-* I suggest to avoid duplicate variable assignments.
-
-* How do you think about to collaborate with the Python data structure =E2=
-=80=9Cdictionary=E2=80=9D?
-
-
-=E2=80=A6
-> +type TYPE;
-> +TYPE *P;
-> +TYPE INST;
-> +expression VAR;
-> +expression GFP;
-=E2=80=A6
-
-Such repetition of SmPL key words can eventually be also avoided.
-
-Regards,
-Markus
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
