@@ -1,62 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8276072628;
-	Mon, 24 Nov 2025 18:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C007731A7FF
+	for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 18:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764010357; cv=none; b=TUvZ2hOdh92jgohKmC6/qGcwpqldIL/CmQ0lBXR3c7cRpTVYEfQEnlfrP4WqlF8k0N8WRQ80Z2rQLMFvLpD5jGIA06OtBidhXKaoszx9wvfsMtz39QuOf1kMhXDDgb4kJYn3wWbwb0AaIjmm6lxjUqfjXfGvaSaRzlZk40SPCTE=
+	t=1764010711; cv=none; b=omtjPgo2akFz6BaFbXiZmQNoBqGSxT3EfiAKECZLd/CK5gzF6kuvO2M6x4KnoIXAEctp5BGvnw2yS7hx88vbXu81bmu5uzYlypXAupmlwIqA9sqjwGhVGfa08J9IBV0KBQ25xdBIEyW+d4eb+EDOL+VEM5fX6vK30b1kiOzE2Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764010357; c=relaxed/simple;
-	bh=wnqYvZ4LMMuouYLTGXsXY8l4D27WCxXD1X9V+Y1A4iI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EJkR7pYkFLYB17yyBULhxN/DT3SsitB7mLUOm5sGlA54O3yW87tNG00oNkfFyYMJwxOJTlLBfSJF5ReUGEPj546QwG3p4fiG+xfa1S9+/67TtZYuSHXrpzBTXi5N0aLCQEURDjlxD0SIbOTjictxF3xZcY8ZA8kdCCMul91hGLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nAuiD0dj; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764010711; c=relaxed/simple;
+	bh=zFdNVV0jn5E5G65Xthdrt9zFFxdKKVR50LKSwwLzc9w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nLyM4o9JtHBHwYu0W6lDZ3OSvgQnFJlxV7KW+447MM3VXX00HB4g8QZupEfZFC6NIDRTxPG5JdEPsQ4G4h5OIVfzG24ave3PUC14xFpvKH7YjYaMaN+MbWhiMnS/AQh7Ra5LCXrbYVl3To/ebYTfogFtCB2h2qKN+VfOH4egSbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PICKOpzx; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nAuiD0dj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PICKOpzx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764010357; x=1795546357;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wnqYvZ4LMMuouYLTGXsXY8l4D27WCxXD1X9V+Y1A4iI=;
-  b=nAuiD0dj9pnl03mRQRczH3upGNFcVPj4Yt/BSyvbB0zUUv7EQlLeB4Jo
-   qbkdhu/RJLfyrzMzQeyI5bXUOcMnDnwsn5aX/O1UGuT06ri6MoytpoTRz
-   gNt29EjrX0f+fGm4fmnNhdS5OTH+UqjZVpxL/X1d6SfInsL6/m1DZ6uM4
-   brMMDWSoSWn6Vz95wwVPIegHSkBV9fKNWahZgyWrbdhY2A6ZMca6WnK2L
-   fSxGeXLCEqOVT4EUcE5gHYR1vQMr6k6TCY1gP3ugd5Zvq2NeOWaH+T6hG
-   yMQeN8hrEHa0ybZqZR6veqH115SBZZE4piRRWtFCSwwCkLT9SV8XkSYab
+  t=1764010710; x=1795546710;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zFdNVV0jn5E5G65Xthdrt9zFFxdKKVR50LKSwwLzc9w=;
+  b=PICKOpzxezk3jGb/xHGASOAJ19Z0SmZhXOepWrrqa9auhRBaOFIb1VUy
+   HsMgZ/H0JplXMHTH+9PZ6cxpmPf6PjBo3Ftljj/7sb7g+KggS8KpTr52S
+   EAwJZXV1tZRY98BnNcFK2384DWdHXUrGBExB4lAfJAdZTWThdsl/8aPAu
+   pJhBxsjrKlEVbTLfBOTds0G5eaUcVc55EsyiT/KoeWbFv7ZzpheBwzXGj
+   tFJmQ1JUxlxb7pW09UF73P+1ss6uiVjs2O8UZKCFVjA42BHGfoZgPaqnY
+   pGtgdLjbi/RStNO0CB0es65DBZzNHFbFAzFTmOzxCqXOI8CkPtMtc5nZw
    Q==;
-X-CSE-ConnectionGUID: oG7ZyEiMQS2UqKzTKQtdpw==
-X-CSE-MsgGUID: ZMJnS7XXTFq61Fz9Fw1iFg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="69635311"
+X-CSE-ConnectionGUID: 9saueWqvRoKP8N1cCquZIQ==
+X-CSE-MsgGUID: NcBEXFKIRB+V4v9lxp1FUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="69882219"
 X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
-   d="scan'208";a="69635311"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 10:52:37 -0800
-X-CSE-ConnectionGUID: sUO1jVoySnK04vMMPI+tvQ==
-X-CSE-MsgGUID: YJ9zdHIxRbqKwxuEf/a/7Q==
+   d="scan'208";a="69882219"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 10:58:29 -0800
+X-CSE-ConnectionGUID: UYK5U28QTR2lQkyXiGmwTw==
+X-CSE-MsgGUID: 9F/x9o02SVysBTh6YrcJ1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
-   d="scan'208";a="229698796"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 24 Nov 2025 10:52:34 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vNbfs-0000000012b-1An9;
-	Mon, 24 Nov 2025 18:52:32 +0000
-Date: Tue, 25 Nov 2025 02:51:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Siva Reddy Kallam <siva.kallam@broadcom.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>,
-	Usman Ansari <usman.ansari@broadcom.com>
-Subject: [rdma-rdma:wip/leon-for-next 38/54]
- drivers/infiniband/hw/bng_re/bng_fw.c:278:2: error: call to undeclared
- function 'prefetch'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202511250215.VMVtdDPm-lkp@intel.com>
+   d="scan'208";a="196856728"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.5])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 10:58:27 -0800
+Date: Mon, 24 Nov 2025 20:58:24 +0200
+From: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>
+To: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+Cc: Xiubo Li <xiubli@redhat.com>,
+	"justinstitt@google.com" <justinstitt@google.com>,
+	"ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"morbo@google.com" <morbo@google.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"idryomov@gmail.com" <idryomov@gmail.com>,
+	"nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>
+Subject: Re: [PATCH v1 1/1] ceph: Amend checking to fix `make W=1` build
+ breakage
+Message-ID: <aSSq0K-YqjthuJAg@smile.fi.intel.com>
+References: <20251110144404.369928-1-andriy.shevchenko@linux.intel.com>
+ <9f7339a71c281e9f9e5b1ff34f7c277f62c89a69.camel@ibm.com>
+ <aRJASMinnNnUVc3Z@smile.fi.intel.com>
+ <c2805e34c4054bfa3308af0d18712e412f024ed6.camel@ibm.com>
+ <aSR1FU6uCqpOUFeb@smile.fi.intel.com>
+ <82c49caff875cc131951a7e5d59ecb45efbb9224.camel@ibm.com>
+ <aSSnWaDHK5Yyq_Ae@smile.fi.intel.com>
+ <1ab8c386d50d024d0deb8a8c2fee501aae30909b.camel@ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,49 +74,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1ab8c386d50d024d0deb8a8c2fee501aae30909b.camel@ibm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git wip/leon-for-next
-head:   4022c7b6342a4d9a97e1e974e27efca95e79ed20
-commit: 23669ca628b3c39dc3cc43a5b4b93b4b5ab4d58c [38/54] RDMA/bng_re: Add infrastructure for enabling Firmware channel
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251125/202511250215.VMVtdDPm-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251125/202511250215.VMVtdDPm-lkp@intel.com/reproduce)
+On Mon, Nov 24, 2025 at 06:49:26PM +0000, Viacheslav Dubeyko wrote:
+> On Mon, 2025-11-24 at 20:43 +0200, andriy.shevchenko@linux.intel.com wrote:
+> > On Mon, Nov 24, 2025 at 05:47:04PM +0000, Viacheslav Dubeyko wrote:
+> > > On Mon, 2025-11-24 at 17:09 +0200, andriy.shevchenko@linux.intel.com wrote:
+> > > > On Mon, Nov 10, 2025 at 08:42:13PM +0000, Viacheslav Dubeyko wrote:
+> > > > > On Mon, 2025-11-10 at 21:43 +0200, andriy.shevchenko@linux.intel.com wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511250215.VMVtdDPm-lkp@intel.com/
+...
 
-All errors (new ones prefixed by >>):
+> > > > > I think we can take the patch as it. It looks good. Probably, it makes sense to
+> > > > > take a deeper look in the code on our side.
+> > > > > 
+> > > > > Reviewed-by: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+> > > > 
+> > > > Thanks, can this be applied? My builds are still broken.
+> > > 
+> > > The patchset has been applied on testing branch already [1].
+> > 
+> > Thanks for the information. The Linux Next still has no that branch in.
+> > I recommend to write Stephen a message to include your testing branch or
+> > something like that into Linux Next, so it will get more test coverage.
+> 
+> It's not my personal branch. :) It's the branch that receives all new patches
+> for CephFS kernel client and, usually, it is used for internal testing by Ceph
+> team.
 
->> drivers/infiniband/hw/bng_re/bng_fw.c:278:2: error: call to undeclared function 'prefetch'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     278 |         prefetch(bng_re_get_qe(hwq, sw_cons, NULL));
-         |         ^
-   1 error generated.
+Exactly, that's why my proposal. I would not recommend to do the same for
+a (semi-)private branches.
 
+> Ilya gathers all patches from there and sends it upstream. So, we need to
+> ping Ilya. :)
 
-vim +/prefetch +278 drivers/infiniband/hw/bng_re/bng_fw.c
-
-   266	
-   267	static irqreturn_t bng_re_creq_irq(int irq, void *dev_instance)
-   268	{
-   269		struct bng_re_rcfw *rcfw = dev_instance;
-   270		struct bng_re_creq_ctx *creq;
-   271		struct bng_re_hwq *hwq;
-   272		u32 sw_cons;
-   273	
-   274		creq = &rcfw->creq;
-   275		hwq = &creq->hwq;
-   276		/* Prefetch the CREQ element */
-   277		sw_cons = HWQ_CMP(hwq->cons, hwq);
- > 278		prefetch(bng_re_get_qe(hwq, sw_cons, NULL));
-   279	
-   280		tasklet_schedule(&creq->creq_tasklet);
-   281	
-   282		return IRQ_HANDLED;
-   283	}
-   284	
+> > > Ilya, when are we planning to send this patchset upstream?
+> > 
+> > > [1] https://github.com/ceph/ceph-client.git  
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
