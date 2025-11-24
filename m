@@ -1,149 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D964120468E;
-	Mon, 24 Nov 2025 11:18:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2B526E706
+	for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 11:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763983092; cv=none; b=Zk9tr4jXaRsdEB9kbOuXSocKgPMpNYTo1wPERT+1cD0g25kpOydpbP7gDtOq4IlK8bVzeTP260/JS/A9U7W4hIY+h9zqAYryl0t9zkMAPm5AuHMLuUUDuLbUnXfCENr+BfpexF1Evs8XPdN5pSm5/Iuw8IfbceeH/FHDB4OlRR8=
+	t=1763985143; cv=none; b=QYmr1Wa/lZ6QSs9P22S/J0foqwv3Fzn8FsK2DBv8NlV2vS6UCtdoobAwOcssdYuDYHQYHaqBkam5t0wHHA/tJ1EullOSmObHpcQks29g16LS+ywVC0idPBWm+SU6ZOY3wlpiQlKnRftKXKJ4orQ/b+2I3WiAonHkfSdD1VcBLkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763983092; c=relaxed/simple;
-	bh=g2k0HIWVBCP/Z5Z+Ar3iArnKsREQveJAkzo9sQ13H0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NfaQFnRViHxwYGtXdPpI6O1EyIiA4+FXZr8ZdJrXwh28KCuQQsaK8ywy7DwyfEFBp5fIVIyFLxshwJs1X4nt3ubT6JQxBwqnuCvmoaKSNN7OMJa+dn4bN4yLrPz++FhQuglyMncdMl5U09CaI8dZ9a1supJrEFsFDZbztFm1emg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z/T2obyv; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763985143; c=relaxed/simple;
+	bh=IqG+DV4NrwGJCOdIBfno2lZLBUhF0xGQ4uDp+0dQan4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lEQroWW8QksuddIkbAQhlyTc/zPy4HAY/KxvzzBwY2SOeCjZWghyeJlu0FK7+MRTaBqQeoF0Zy+my9ojJ0IlAG07cs4tai2XH+tKdMOk7cHAW4n4zA4CQP0q83jjqGGiHEakXkZUILwiXFFfT4uVNhh5LwPjkvjy5+dt1M9ZGYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PfeHPnih; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z/T2obyv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763983090; x=1795519090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=g2k0HIWVBCP/Z5Z+Ar3iArnKsREQveJAkzo9sQ13H0w=;
-  b=Z/T2obyv3lEjNSNvtnnI9kuzRdHNH9387H+Y85ejOO5uItnWx3yKTBsU
-   boiegGW0CWjelnUBanrai608WlV3xlaiLlTZvGYRq3SS0njpLVEYIM5bx
-   CSIME0vToGooDL5O/ku/EwAsOgW1iO09bHL3U8HLtj+cC792ienKTRjpp
-   YGxwsuSmGG+nB8vxkD+o1Ue8z+wMenwoBQvtPttMtcdXwNySUhKwVgWSd
-   7mmgu24G+l7G9t3xazjAtRza17Do76gPO+BRXoJMtLen03ZhYWv0vRdDT
-   PFkO0ddvuHYjUuXGNxm0S189lL4pqkjFFvyCg1kklbSmXhg9U6d5rg7N0
-   Q==;
-X-CSE-ConnectionGUID: j6R0elKPSVi5t8W+hurpdw==
-X-CSE-MsgGUID: GjPMaKhLQZakcxFRVG3lug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="76304703"
-X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
-   d="scan'208";a="76304703"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 03:18:09 -0800
-X-CSE-ConnectionGUID: FGIlfosDS4OWW9ZPYajbUA==
-X-CSE-MsgGUID: 8b2BkIz4Sm+dndLr+i0vlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
-   d="scan'208";a="192548015"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 24 Nov 2025 03:18:05 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vNUa0-000000000dl-1FMD;
-	Mon, 24 Nov 2025 11:18:00 +0000
-Date: Mon, 24 Nov 2025 19:17:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eslam Khafagy <eslam.medhat1993@gmail.com>, linus.walleij@linaro.org,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Eslam Khafagy <eslam.medhat1993@gmail.com>
-Subject: Re: [PATCH RESEND] drm: pl111: replace dev_* print functions with
- drm_* variants
-Message-ID: <202511241828.LSkH7pqE-lkp@intel.com>
-References: <20251122004951.567753-1-eslam.medhat1993@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PfeHPnih"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763985140;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JInlF7Bgy1bECHBfhtuCrfIbn0BRlPMHQmPJ1HJFo+U=;
+	b=PfeHPnih0++7Nn/2+pRLDPf/IWexTH8RO1c83fxktRZWjklqkPOQdhANQkkuh2ci5WxwGo
+	eLGdDdbYvsNgDUoCSYqH3e8d+rVKRME8mTdUm+GYyLdD/Rvlu4RkR05aGWOC1yJmSoZkMv
+	z1WGAihIxuqHZiBfUqWKT5MlXDsnSUM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-526-wvV9y3YIPMC-a2QNnpkKOQ-1; Mon,
+ 24 Nov 2025 06:52:19 -0500
+X-MC-Unique: wvV9y3YIPMC-a2QNnpkKOQ-1
+X-Mimecast-MFC-AGG-ID: wvV9y3YIPMC-a2QNnpkKOQ_1763985138
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 230181801230
+	for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 11:52:18 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 63EE918004D8;
+	Mon, 24 Nov 2025 11:52:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 3 of 137): Test report for master
+ (6.18.0-rc6, upstream-mainline, 1af5c1d3)
+Date: Mon, 24 Nov 2025 11:52:17 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com, ftjahjad@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251122004951.567753-1-eslam.medhat1993@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <01280.125112406521900308@us-mta-526.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: -f1VjdTiXw0kanWdrEwVVFNwjL4-SZidb1yGugC3omY_1763985138
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eslam,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.18-rc7 next-20251121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eslam-Khafagy/drm-pl111-replace-dev_-print-functions-with-drm_-variants/20251122-085225
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20251122004951.567753-1-eslam.medhat1993%40gmail.com
-patch subject: [PATCH RESEND] drm: pl111: replace dev_* print functions with drm_* variants
-config: arm-nhk8815_defconfig (https://download.01.org/0day-ci/archive/20251124/202511241828.LSkH7pqE-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241828.LSkH7pqE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511241828.LSkH7pqE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/pl111/pl111_nomadik.c:7:
-   drivers/gpu/drm/pl111/pl111_nomadik.h:11:32: warning: declaration of 'struct drm_device' will not be visible outside of this function [-Wvisibility]
-      11 | void pl111_nomadik_init(struct drm_device *dev);
-         |                                ^
-   drivers/gpu/drm/pl111/pl111_nomadik.c:12:32: warning: declaration of 'struct drm_device' will not be visible outside of this function [-Wvisibility]
-      12 | void pl111_nomadik_init(struct drm_device *dev)
-         |                                ^
->> drivers/gpu/drm/pl111/pl111_nomadik.c:12:6: error: conflicting types for 'pl111_nomadik_init'
-      12 | void pl111_nomadik_init(struct drm_device *dev)
-         |      ^
-   drivers/gpu/drm/pl111/pl111_nomadik.h:11:6: note: previous declaration is here
-      11 | void pl111_nomadik_init(struct drm_device *dev);
-         |      ^
->> drivers/gpu/drm/pl111/pl111_nomadik.c:34:2: error: call to undeclared function 'drm_info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      34 |         drm_info(dev, "set Nomadik PMU mux to CLCD mode\n");
-         |         ^
-   2 warnings and 2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/pl111_nomadik_init +12 drivers/gpu/drm/pl111/pl111_nomadik.c
+Kernel information:
+    Commit message: Merge tag 'timers-urgent-2025-11-23' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tip/tip
 
-   > 7	#include "pl111_nomadik.h"
-     8	
-     9	#define PMU_CTRL_OFFSET 0x0000
-    10	#define PMU_CTRL_LCDNDIF BIT(26)
-    11	
-  > 12	void pl111_nomadik_init(struct drm_device *dev)
-    13	{
-    14		struct regmap *pmu_regmap;
-    15	
-    16		/*
-    17		 * Just bail out of this is not found, we could be running
-    18		 * multiplatform on something else than Nomadik.
-    19		 */
-    20		pmu_regmap =
-    21			syscon_regmap_lookup_by_compatible("stericsson,nomadik-pmu");
-    22		if (IS_ERR(pmu_regmap))
-    23			return;
-    24	
-    25		/*
-    26		 * This bit in the PMU controller multiplexes the two graphics
-    27		 * blocks found in the Nomadik STn8815. The other one is called
-    28		 * MDIF (Master Display Interface) and gets muxed out here.
-    29		 */
-    30		regmap_update_bits(pmu_regmap,
-    31				   PMU_CTRL_OFFSET,
-    32				   PMU_CTRL_LCDNDIF,
-    33				   0);
-  > 34		drm_info(dev, "set Nomadik PMU mux to CLCD mode\n");
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2174631340
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2174631340_x86_64_kernel-debug_kcidb_tool_20073026_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [RHEL10.0] blktests throtl failed
+            URL: https://issues.redhat.com/browse/RHEL-66783
+            Affected tests:
+                Storage - blktests - throtl [s390x]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/command [x86_64]
+    Reboot test [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
