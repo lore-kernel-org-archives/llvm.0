@@ -1,64 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A913A2FDC3D;
-	Mon, 24 Nov 2025 09:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A34A24A043;
+	Mon, 24 Nov 2025 10:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763975523; cv=none; b=LZwtbO5no/skbCScqXaOPtvOiLkyCZnzOE9oJ2ENLmgb2bCvKhKF+1G9LFyO+SuACpsR/EN6iOKe/cjpwu7QsyzgQwq+K0FEE1WdaQe9GRALXvfB1ITK6NaAkhvo3cWk82L6WBQaF+K/5GOqt5mjpwgnjhUXXx/UTb3sRr3qK/0=
+	t=1763978701; cv=none; b=e6OHgIW0BSYE2llyW3d/eTqqHe+FLanG6/38ClfOT+Sx39tIeiV0eQofFqy+4PZqfyblr8zvEO3wFUwUSxVGqGWxIRjSiyLUC5vZREEfTPlyyYhfJzKHV3rvzHzb1vCr81d4dYW8l2aTRCxfCh4l+ypalO/c4vq4DnrEhfrXvSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763975523; c=relaxed/simple;
-	bh=JZ1Z4/QnQVPhEFTln3m2EJJsROkmTWU2PBNucVOqwAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ccofPD+5temhW/nGdGlb4kXhAg6TGeOkW6iqx4RIRchIZUo55dGMXTOCKRm5ZLBgt9+tUNOHBEOfJs/84XIihZhJwJ4otMfLtWsgjrbWsAEnc3qb7SbCqE+19ND7S4JdFy/fjSiNisbP7R8MwUsikX0N1MQ2ruKrppgHwwF9+Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cnEjXpaN; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1763978701; c=relaxed/simple;
+	bh=OugCfz/qvZZOiB0DPe/fAHh+3Od4xnh9uePeSNANJ4g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sKk9e/ak/5as6a7g6ZyU+x7mcOIfYQf6zdvzn2FGyCfVk47e+9c4oXx4e9mxW3AaEa3gHyqLwD5cr1mMe0EcpYL6Xw+JET4PEgYvGWpR685HAKQCYljbejtRJRfNFcMAdxw+XBDQqrustNm0pViVtHyIHXCGz63op7Fgwf9kJ88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hIXPX4S9; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cnEjXpaN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hIXPX4S9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763975521; x=1795511521;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JZ1Z4/QnQVPhEFTln3m2EJJsROkmTWU2PBNucVOqwAE=;
-  b=cnEjXpaN/yhFVVkYz/PuNASGKA8wVF8luo+oyy/0GqDsGUf94m5EFRWE
-   uGAyeHkcnf4UqgeojnrW4/hpodwFBuK0hidfVvEl40ikWnpll8QVX4ovH
-   6VPcmpsJZn7m0vtccnbJaBVYZIQYloqIbkxLsTGi5eli3OU7dE4WmAcFI
-   9B6F5IjPRTOmiG3J6aHh06haGzbeRuO6W+rwIURuWGguxh9agz+MP5nQt
-   REhBspGgyvUbw34pGZI2oM3wMvq8O1Ssp9OuNSdnJpMgFIbz02gTMCoj8
-   tu8kAni+Vp2iS2D7820BxD8vCz3aCPeHvkYmvBXQHRrQZ4dC1BdfQcuWr
+  t=1763978701; x=1795514701;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OugCfz/qvZZOiB0DPe/fAHh+3Od4xnh9uePeSNANJ4g=;
+  b=hIXPX4S9W4UhhRYDPnHUmI2MmWzkdCjCnydsbsqZs1nSOBrVM6JdXimo
+   yZqm2v/0dWU1wrD9/E88Ab5kXCk9PKTlHrP03COBHXMRvWitdzebUi/QF
+   hXbO3qU+vdKF6M+6IijPfkbCQ4277sHU8SYzkLCDmBiXQ/hVhwCAlnD4I
+   CxZZzSGKipv8FPj80VZQynq6YkG8bKCptKbVZWPF4LN+zxmsGmHihD6+m
+   TQ9YpIHdEkKABhQaAq8c1PZ9yfmcWqPOJCRzLuKXGAXpUhbJmzx7OlVJM
+   0gNlYA7FyPO7/NBkzJeg78cyzEiMHG3mTqs8CQiR+EdYnq7lbngEramDN
    Q==;
-X-CSE-ConnectionGUID: krq3F3AyQR6Co0FXarS//A==
-X-CSE-MsgGUID: /QD682qhSna7qAs3c6e2kA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="69834118"
+X-CSE-ConnectionGUID: sZLDFXISTPugUTzlCXSqQQ==
+X-CSE-MsgGUID: WMw7nRS2RT6VRuC2zGDf8g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11622"; a="65669157"
 X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
-   d="scan'208";a="69834118"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 01:12:00 -0800
-X-CSE-ConnectionGUID: X+SqEPu/SluvpeRGpfBFfw==
-X-CSE-MsgGUID: JyoJQTK+Qt2mwuXyrsAuuA==
+   d="scan'208";a="65669157"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 02:05:00 -0800
+X-CSE-ConnectionGUID: /iv/yDxYT1eNfeuEVHlyhQ==
+X-CSE-MsgGUID: UaRwTaJ9Ts6R1T57f1qzWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,222,1758610800"; 
-   d="scan'208";a="196732320"
+   d="scan'208";a="191450124"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 24 Nov 2025 01:11:57 -0800
+  by orviesa006.jf.intel.com with ESMTP; 24 Nov 2025 02:04:58 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vNSby-000000000YL-1mMV;
-	Mon, 24 Nov 2025 09:11:54 +0000
-Date: Mon, 24 Nov 2025 17:11:14 +0800
+	id 1vNTRI-000000000aP-0uhW;
+	Mon, 24 Nov 2025 10:04:56 +0000
+Date: Mon, 24 Nov 2025 18:04:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sameeksha Sankpal <sameekshasankpal@gmail.com>, vaibhav.sr@gmail.com,
-	mgreer@animalcreek.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, johan@kernel.org,
-	elder@kernel.org, gregkh@linuxfoundation.org,
-	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Sameeksha Sankpal <sameekshasankpal@gmail.com>
-Subject: Re: [PATCH] staging: greybus: audio_manager: make envp[] static const
-Message-ID: <202511241614.lkKJF5B6-lkp@intel.com>
-References: <20251122083814.49753-1-sameekshasankpal@gmail.com>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [chanwoo-extcon:extcon-testing 9/9]
+ drivers/extcon/extcon-s2m.c:15:10: fatal error:
+ 'linux/mfd/samsung/s2mu005.h' file not found
+Message-ID: <202511241812.6tbQFtTJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,75 +63,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251122083814.49753-1-sameekshasankpal@gmail.com>
 
-Hi Sameeksha,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on staging/staging-testing]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sameeksha-Sankpal/staging-greybus-audio_manager-make-envp-static-const/20251122-163906
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20251122083814.49753-1-sameekshasankpal%40gmail.com
-patch subject: [PATCH] staging: greybus: audio_manager: make envp[] static const
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251124/202511241614.lkKJF5B6-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241614.lkKJF5B6-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-testing
+head:   925e04713b380ad2b73ffcf2ece5ee1bfaa2689f
+commit: 925e04713b380ad2b73ffcf2ece5ee1bfaa2689f [9/9] extcon: add support for Samsung S2M series PMIC extcon devices
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20251124/202511241812.6tbQFtTJ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241812.6tbQFtTJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511241614.lkKJF5B6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511241812.6tbQFtTJ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/staging/greybus/audio_manager_module.c:163:3: error: initializer element is not a compile-time constant
-     163 |                 name_string,
-         |                 ^~~~~~~~~~~
->> drivers/staging/greybus/audio_manager_module.c:181:46: error: passing 'const char *const[7]' to parameter of type 'char **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     181 |         kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
-         |                                                     ^~~~
-   include/linux/kobject.h:216:10: note: passing argument to parameter 'envp' here
-     216 |                         char *envp[]);
-         |                               ^
-   2 errors generated.
+>> drivers/extcon/extcon-s2m.c:15:10: fatal error: 'linux/mfd/samsung/s2mu005.h' file not found
+      15 | #include <linux/mfd/samsung/s2mu005.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +163 drivers/staging/greybus/audio_manager_module.c
+vim +15 drivers/extcon/extcon-s2m.c
 
-8db00736d365b7 Svetlin Ankov     2016-01-13  152  
-8db00736d365b7 Svetlin Ankov     2016-01-13  153  static void send_add_uevent(struct gb_audio_manager_module *module)
-8db00736d365b7 Svetlin Ankov     2016-01-13  154  {
-8db00736d365b7 Svetlin Ankov     2016-01-13  155  	char name_string[128];
-8db00736d365b7 Svetlin Ankov     2016-01-13  156  	char vid_string[64];
-8db00736d365b7 Svetlin Ankov     2016-01-13  157  	char pid_string[64];
-d0af1bd5f6f449 Pankaj Bharadiya  2016-10-16  158  	char intf_id_string[64];
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  159  	char ip_devices_string[64];
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  160  	char op_devices_string[64];
-8db00736d365b7 Svetlin Ankov     2016-01-13  161  
-c78cfcfa51fa58 Sameeksha Sankpal 2025-11-22  162  	static const char * const envp[] = {
-8db00736d365b7 Svetlin Ankov     2016-01-13 @163  		name_string,
-8db00736d365b7 Svetlin Ankov     2016-01-13  164  		vid_string,
-8db00736d365b7 Svetlin Ankov     2016-01-13  165  		pid_string,
-d0af1bd5f6f449 Pankaj Bharadiya  2016-10-16  166  		intf_id_string,
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  167  		ip_devices_string,
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  168  		op_devices_string,
-8db00736d365b7 Svetlin Ankov     2016-01-13  169  		NULL
-8db00736d365b7 Svetlin Ankov     2016-01-13  170  	};
-8db00736d365b7 Svetlin Ankov     2016-01-13  171  
-8db00736d365b7 Svetlin Ankov     2016-01-13  172  	snprintf(name_string, 128, "NAME=%s", module->desc.name);
-8db00736d365b7 Svetlin Ankov     2016-01-13  173  	snprintf(vid_string, 64, "VID=%d", module->desc.vid);
-8db00736d365b7 Svetlin Ankov     2016-01-13  174  	snprintf(pid_string, 64, "PID=%d", module->desc.pid);
-d0af1bd5f6f449 Pankaj Bharadiya  2016-10-16  175  	snprintf(intf_id_string, 64, "INTF_ID=%d", module->desc.intf_id);
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  176  	snprintf(ip_devices_string, 64, "I/P DEVICES=0x%X",
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  177  		 module->desc.ip_devices);
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  178  	snprintf(op_devices_string, 64, "O/P DEVICES=0x%X",
-a9234bfd6cec44 Vaibhav Agarwal   2016-03-30  179  		 module->desc.op_devices);
-8db00736d365b7 Svetlin Ankov     2016-01-13  180  
-8db00736d365b7 Svetlin Ankov     2016-01-13 @181  	kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
-8db00736d365b7 Svetlin Ankov     2016-01-13  182  }
-8db00736d365b7 Svetlin Ankov     2016-01-13  183  
+  > 15	#include <linux/mfd/samsung/s2mu005.h>
+    16	#include <linux/of.h>
+    17	#include <linux/platform_device.h>
+    18	#include <linux/power_supply.h>
+    19	#include <linux/regmap.h>
+    20	
 
 -- 
 0-DAY CI Kernel Test Service
