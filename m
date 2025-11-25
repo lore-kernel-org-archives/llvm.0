@@ -1,181 +1,226 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFDF1EA65
-	for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 01:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764034343; cv=none; b=kLx3RBNs5kevmK7QUQfFfdZf9aaO+0M5cVk8/3Tvnp5l+Vl1uK+myKlkkwMJ+MXpemEtEdns8+g/N9YQUDN3CBcszpKWG3QqPsWw3TaeYF7pc6UBAY0TY/IuMhhJyfBDXwSrTmrVBP+wE4LFo9f1OsTxLl8xna+4F2cY52SRTDk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764034343; c=relaxed/simple;
-	bh=YqWh9GzlQ+M85xmWJJAhz65Uv8DVVpNHfkEVeveBRMw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J4PKBFyQV/GInhRy5ZGUK25DbXPJkBlvN/Df1kXx+QORaeiad5VcM9tinDj9QUFil5n3npcFe+HskQJdevistczW182QkOjJNYgO86lD5sxZ91yNzZMBpxlpc22DoaX9ssnLuHXyCDJcblL7j9fSG+ShMbiV146uv66L96iN8pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=J6fqUukM; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EBC1D8DFB;
+	Tue, 25 Nov 2025 02:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764037716; cv=fail; b=dPAE7PyCv/lQfLk+zyMav0EEyJiwt9uL7+bSkGHArSOdtJwAX5/NSTQEbyrD+KKNZt9qNcUvkB50lstIUdEXe9C53sSpZfGUihA2f/UZqV6A4vaOgPID2hsQ33RvoEohdT8K1Km4vGA+BYIQOhwpgiO+QBcodYk9UTW2YnukZig=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764037716; c=relaxed/simple;
+	bh=sHzmEeY0m6/8gbSy5q1XET+JlFGYfFo7Nr7ibwgYNTA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=HZyb3fzqjYujR9zRzoo2lXctt4w1nUbX66ytHN7kKtlkougOxMUQJjPtS4dCmUnQ+RLrhnlAC9EQGZUiPZRf0Jt1qZdRrpVlXJo6r795qki3RjnZM7CVPDFwzM4kRBUHd8fT7N4EcRDSBKPNaq4OekjWUWe2o1mxAEik4oBcsgk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D3KWVdPX; arc=fail smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="J6fqUukM"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b73b24f1784so372583266b.0
-        for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 17:32:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1764034339; x=1764639139; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tqKMRjrSvi+tqRWkNIWke9++rsIS8F7SgGKQGWYYtJA=;
-        b=J6fqUukMfVYl87POcz0n4p0N8zgU5d5Rks0z57z/bV4JqZj29z07Uom2lO42QJTSXc
-         FcKPMHYMSaSD6oa1Mo8GCNZPb2WslShNIX2rIedBnQhJvBP5ca7etV4ItqxMLuDiQezG
-         FmF+wQUtGeMoC/Gpl+nwOQdgEZno52qAzkNW0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764034339; x=1764639139;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tqKMRjrSvi+tqRWkNIWke9++rsIS8F7SgGKQGWYYtJA=;
-        b=onpHLA4f1A593eqF6PAH7meDq7FQIcM9edOgF3Bon1kdSSSGH3ZfPUe2/wHDIxpOTy
-         VQB0rxhVAIgqgzkzVB2d/Z32+kV43xYU6+aqmEytfEs0Q5JVW47y52TgIPfneee/yw4Q
-         mlJqhixBa27sacc1EHrBlPUaYXklgSy4Z63urr5Bqa8+W7/ZEIR+/LnwrZvoM+mAjFCA
-         K50rGlhsWF2bonP5dhYoOR/eqe3iRwMNfGX4Oyd59drxPZ8f0CkfVU3NhcuyxJKcY8aL
-         E/a0UGi0uhFrrFrXIUx/Xw+EtZ3zd/en1HmS+2GJQ1t23AZha/bmV0uZSlqqFJbJokHw
-         kpwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSqgVsj2eO6iaqzPKGH7rVneCRu/ggb9/WOOa6o9rvjDBLhAIW5mzqmmKo1UDQvmfPVrUO@lists.linux.dev
-X-Gm-Message-State: AOJu0YwAi3ZXiYmBx8aX7573ZzXXVqCEYfzyuPmyqy0ydt3Xprb7aqXT
-	RWfrSgQVx3+eXyna60EFDB5VDVOKcPdEFiTVTJS9SDn6ov619JInT6PUVkK7YOYlP2Caj8t8A5A
-	bPfmDWV4=
-X-Gm-Gg: ASbGnct6IOZUNReaXq+Nx2kv8KM1+/XD9sjsr7EfjIeiWT5HdR5L5KJR02pTy6jaW2T
-	Bdj4usnkLBxDsy84i5ZzT1cOzcRDTfdIQRZGi70FhchSEB9ej5pMBTy4sVLgy4Rnj0jRM2S14ko
-	GuCizzi/NzZ3avdCwjCtYQsZ8G3jGHH1aH4f9TUlmNzMVrltlTsKLd1mdRQrz3idTlLjnhx+ykD
-	fRzyy3+hn8j6LS8bPC9i4fRfyugpQ7QOMkShAsp1obDnRUbEezUmWa/Um9cCltRnzeHNmAD+tKm
-	q84PWUsRw5kRcg51OMmVhx6TGRNfAOd90+uKxVANiQH5W6q296BPvcsXDak9CNfpHwdyRDmPOIE
-	+1GP40hX96kNC3vMdC/Ovv3HaheJWLlXXiIWXMnl/gImYxNaFVlnNeSCZUiY1V5T8DbJfw6Pi9a
-	8j7IlBBRV6gr/EbgFWAtCzl9wmqACZErV0BwXNj3x/H/QEoNWLiTkqZLo6yGaLGIZJV+SFzpY=
-X-Google-Smtp-Source: AGHT+IGBdh9Pvr3PABWammf7Biq94pWMg5yEFDr+pqgMurNQbQNlngcqitgW6T9IuU2O+cK2D1NZ8Q==
-X-Received: by 2002:a17:907:1b14:b0:b76:3472:52df with SMTP id a640c23a62f3a-b766edb87fcmr1468951266b.10.1764034339237;
-        Mon, 24 Nov 2025 17:32:19 -0800 (PST)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7655038011sm1445248566b.62.2025.11.24.17.32.18
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 17:32:18 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-64320b9bb4bso1558309a12.0
-        for <llvm@lists.linux.dev>; Mon, 24 Nov 2025 17:32:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU6ejDJ+I/YdUpI6x+V7Y8uWWMIDXAM35n3OkzFZKK18mv6Xr/ndAVn4zIL/TUblCV3PBox@lists.linux.dev
-X-Received: by 2002:a17:906:f20b:b0:b76:b791:b58f with SMTP id
- a640c23a62f3a-b76b791b623mr277396466b.0.1764033941841; Mon, 24 Nov 2025
- 17:25:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D3KWVdPX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764037714; x=1795573714;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=sHzmEeY0m6/8gbSy5q1XET+JlFGYfFo7Nr7ibwgYNTA=;
+  b=D3KWVdPXfHeRAg6gb5jo/5C0YANELL834QfSXrDVI2MFnM5mG7sOfJq2
+   nPzcdIV0Yp2C7osMzrP+bag0uhSg1xtYLMSwAVwQT/CQvWO1IkeRGJj9R
+   OmRg3Fx52cu/fYtaSY80aSWb4WMjcIp4bZ5jqHwMNnyscTdq3UyT+j+hC
+   IvG6cVkDg+Hk1ASx/iE5WTS/oAvPsQ3hNZfYSu2XSvZJQVV/8egytmWXt
+   DJZuTLcrPCktDB7oOKflC53crGYPjZb4hVCqQUUPdICl8VFmZd0FjGM4O
+   42QZmys6cLiPRPLjsyCQR1ega6oEAY20vqXNA7DcbTPdw67NagPe7PxAP
+   g==;
+X-CSE-ConnectionGUID: qZ/sOms8SsGHWztdCV3QQw==
+X-CSE-MsgGUID: W4Xcrq+fSbazLkXPddALFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="83441932"
+X-IronPort-AV: E=Sophos;i="6.20,224,1758610800"; 
+   d="scan'208";a="83441932"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 18:28:34 -0800
+X-CSE-ConnectionGUID: ikLyDofDQY6LNFuMoTSMiw==
+X-CSE-MsgGUID: yZQwDP/jQtG5Oek7RD+gXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,224,1758610800"; 
+   d="scan'208";a="196795037"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 18:28:33 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Mon, 24 Nov 2025 18:28:32 -0800
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29 via Frontend Transport; Mon, 24 Nov 2025 18:28:32 -0800
+Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.36) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Mon, 24 Nov 2025 18:28:32 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GFuKFwIopinx17BxkKYiePz9QaBwksFTYfkssUPZcPeDJKBPVkbmlHcJy6fSgXhER4yjPXtOTMoM4V+WCNarVTnnxnSx0FEiLzeKfiFx1PI7XPq+LkcWFLcKE4xy0tC9Rnja3PrqJQNqkiC5cB13C/382iQQBElcT0QAxekrVzE72fAqmgkDvdNs/ZwCe+NjiI0lrvQqHZAQAa1VU1h7fEkJaM/TycLNe/UVAF3c1tXnPn29XkNBO6exnfAX0SJ5FlYIYF16pJXudoORqkRqnY8KYJHWpXJfgCJ9oE0dQaXqgUen/RXkv5qVIvI7bssYZeKNb8Dp/P+OCpV+RZ1P2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YA65fme9hELvGn5h/lkuw5mMsHQDFNZ+dvNBUWPq3Bc=;
+ b=d/UHp9S3AjqaJoLdAA2jbQqvca/W4zT4cT+0/Tf3zvpOJMY5lbzUTy9val6tiUOmJ9EZgsSq0f9pkNW9BzC3Y2sKQKplv1zdkjs92C5moKYFTenE8mp9GGAhmgmX2qkWEnQFnecvpkg6FtdfufAvquryJckev37tArn297swvcX/0xVV95WRlAIg2BgpDatyjsLsTAoFBrC9qZaQdvv+wVS3IdudzKRH/yX428z9A5l6PJ2AaQ3DE8vg/NWk6MHrZOGKejgPQ8MP7tGjtS3wf/sy2NAKhn20Tm0Cn8Ra5KX2BEgVClcu4ia8vVZFDOQeZ9K0YqUtC2B+iMU5Dexk+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
+ by CH3PR11MB7895.namprd11.prod.outlook.com (2603:10b6:610:12f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Tue, 25 Nov
+ 2025 02:28:25 +0000
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::edb2:a242:e0b8:5ac9]) by MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::edb2:a242:e0b8:5ac9%5]) with mapi id 15.20.9343.016; Tue, 25 Nov 2025
+ 02:28:25 +0000
+Date: Tue, 25 Nov 2025 10:28:15 +0800
+From: Philip Li <philip.li@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+CC: kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, Ingo Molnar <mingo@kernel.org>, "Peter Zijlstra (Intel)"
+	<peterz@infradead.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	<linuxppc-dev@lists.ozlabs.org>, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [tip:core/rseq 25/39] include/linux/rseq_entry.h:132:3: error:
+ invalid operand for instruction
+Message-ID: <aSUUPxIo3XSyhwAd@rli9-mobl>
+References: <202511250134.i0Jm8d7I-lkp@intel.com>
+ <874iqji6n1.ffs@tglx>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <874iqji6n1.ffs@tglx>
+X-ClientProxiedBy: SG2PR04CA0158.apcprd04.prod.outlook.com (2603:1096:4::20)
+ To MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251122014258.do.018-kees@kernel.org> <20251122014304.3417954-2-kees@kernel.org>
- <CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
- <202511241119.C547DEF80@keescook> <CAHk-=wikqnc16e7yUTJuqnc5f4rL+y_-JpRzCLRu9WPnt3nmiQ@mail.gmail.com>
- <202511241612.6CF90E9@keescook>
-In-Reply-To: <202511241612.6CF90E9@keescook>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 24 Nov 2025 17:25:25 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh7jG7vUqY2JjkJmjxOYzXR+iUARN6W908pCVfmyprSvg@mail.gmail.com>
-X-Gm-Features: AWmQ_bmW9etMzrFCL9DwpEr0x6CUkdioyCuxtdBlodJu1UMrkK3czrKtVUGlZJ8
-Message-ID: <CAHk-=wh7jG7vUqY2JjkJmjxOYzXR+iUARN6W908pCVfmyprSvg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
-To: Kees Cook <kees@kernel.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>, "Gustavo A . R . Silva" <gustavoars@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org, 
-	Randy Dunlap <rdunlap@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>, Vegard Nossum <vegard.nossum@oracle.com>, 
-	Harry Yoo <harry.yoo@oracle.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>, Yafang Shao <laoar.shao@gmail.com>, 
-	Tony Ambardar <tony.ambardar@gmail.com>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Potapenko <glider@google.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB5963:EE_|CH3PR11MB7895:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b6b4993-2270-41bd-b492-08de2bca4fa6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?/bUTcMtU0QgPGsLv69E3CXQCNDjlDAJep7PKFMNBNMp/IvwUvotVNdfUivTM?=
+ =?us-ascii?Q?omSDNydOrhFLfG2NZLV4e7nnapfrY0wmzoa3N26RKT3AQoNLc/9wGQVNlyBf?=
+ =?us-ascii?Q?lmzPHT6+RhojD7Tlf6yxfVYwjZHOxQIRUz31i+uaKAprR8MzAcVfvEh2KRRs?=
+ =?us-ascii?Q?r1paBPb/8n/jK478qQwwv+1AZaiQDhT3AdBqIKj3B2b9gAOSufkDtTJfBX3e?=
+ =?us-ascii?Q?/vNjis2+mjz5c9XBVvkfCeGJYyeB/x9Zt6mNl1sa+k+VPCHwt44v4iZ3nb1W?=
+ =?us-ascii?Q?CobwFQHqWlv6ObZGP/OLFcCIE2aujx0rpt/YI1/BnMXlndE7f09AxfIOeo4D?=
+ =?us-ascii?Q?AZJH7Ooj1CxOHYfqJ/mW40v4rrGl9mCBLBK5oQougim8b+ZSABruygz7Q/GC?=
+ =?us-ascii?Q?su2pPakkNlWS9IRcglr2/fxBYZ2mJ3h04BVYRi7+mDjrCVuPhGwxOrbP5uhz?=
+ =?us-ascii?Q?bpWxCG7EjK3FM5NStXOlhUGqRuquhsZx54HGOXAfThF6wlpFJ4+EnGtDkG30?=
+ =?us-ascii?Q?BVGO4c8luJX35huyAofSIYYicx4Lqa+JsKipwTRw47HfbFJ99UvDNC/40Pjs?=
+ =?us-ascii?Q?2FUU9K0y8Tx6rYXm7gqUUj/9ZjeNjhPonZBIYYRYEceghJNZVPMtq1jzo33n?=
+ =?us-ascii?Q?lO1EnWGNOtzKfvYwWSPnVrixZ/5DMknEm4ku5HB3b38Mpa9ys+H1JUA1OODC?=
+ =?us-ascii?Q?xuJp1czmK/kQ+YxaeazQzsY15SMxf5FH2TajBvvSDW/RZuel5N50NbvNVFqj?=
+ =?us-ascii?Q?JbXpU55iiOExbQWvCpSdmmzepmgceK8a97t9PMo7lymma+vtACxjvAMjelwj?=
+ =?us-ascii?Q?yp95rIWlIeg8PHGow0uGvputSpisVbj60w2aipQY9JhorxE+AjuybOZD04xi?=
+ =?us-ascii?Q?Ue4gYv5oepbIZ0Y61iAmhz5XOIgV9hP/caOp80VVn3rOLhxHiPU/Py7A/qHL?=
+ =?us-ascii?Q?tLtMye9FgHv9delKmcuPHekC9uiZ5Chia5i1tcpmhCFBJrw2IEh0Ugv4lCey?=
+ =?us-ascii?Q?OGXs9EpViepu8YivfRlpGRCUEJuC6P3IyQGpgG9fWgoBhIl8k1Jj/XOuXKwA?=
+ =?us-ascii?Q?6PC4fxAOo1AjDXJ6+rawo16J1JPRJqfJbuX4fBL1L+VZ5NVipBSTz0wsgf4q?=
+ =?us-ascii?Q?oS/0QV/2V+ohhIvAwOwFrD0OBlXwIf0B7AaokjTBAsEdVsnedoGB9CtHBZJH?=
+ =?us-ascii?Q?0O+FcaJY2xUuizbk+dslWCsIACDr7NIUX1nA0hz5YZR9i+fakzDG7Hj7AGOg?=
+ =?us-ascii?Q?anBghfgJoLMGIEGr4iwhld6ZVBWfG7C1FegRfuM37bPXx+3KQTbonjrpqoW1?=
+ =?us-ascii?Q?Akxvrq4Cx3gRCnQnrpX3nzhY0PzchInUqGKnPnZnYHDn+NiI2DN+pA5SpfEJ?=
+ =?us-ascii?Q?mBIilzy5tUEsALYheaU7iGeCOwe6rIHNZWYe7uLOECfWROuiLxV0EjclouGb?=
+ =?us-ascii?Q?+P3YgvTDVYznqjfIhhkuTddTamKh9f25MAo0oWJbT+o/Wf902iBAYQ=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Lex490FBmteS/KMmP/uPAxQP3IOwIXk/3dmBIa+IY1mquT/lret9z4J4LFbR?=
+ =?us-ascii?Q?oHHFx1AcWETW3moU6FvaDMRGaQwB+Cyo17EcpC7MB++Hli2K1NbzOnbuQduO?=
+ =?us-ascii?Q?nDLnFqjV4c5vCX7n1yZhfau8r4Cw/G98QBkPn2rb2f5j6DLQexrOEtoGPbUi?=
+ =?us-ascii?Q?G6CjyWOzEINVX9PfobR1P4XTdO5v1A64qsvRLFbUOzpmGYsMocxqUqTC/olv?=
+ =?us-ascii?Q?T18tvf6d9iGNfX3IIijiumDmTMOXVNvx8GdQ59YElJPYQ79DuEu+mhLCYWWT?=
+ =?us-ascii?Q?fo3B+7VFacl5QqDZc12TQvDqFDzHeFfU99AoFSFNHri8vf4ZwUtNKx2L6U/o?=
+ =?us-ascii?Q?zkPSwvPhfX/5sgQuCqMy06JVaSKmEsc4LahOc1kExYTwCfT+waXYiT4bDGmX?=
+ =?us-ascii?Q?a90Ml8pIr2RmfQM85P3Gp5nbhlSr2fai1FhXyBlX3tVYMiZ8ikvFhBIXvdVA?=
+ =?us-ascii?Q?4atyzOA4fgtz1Neb+NyEEdZru1HsM07yqDU8Rzw//6+S8uGNUH/NJIZp4K+u?=
+ =?us-ascii?Q?6+yHyePHA4ecLc4RMGoFTfs7DAlW7Ya2OHNtK6IMH2CaoofxN8mdBBolpFGT?=
+ =?us-ascii?Q?I4byYPZHE7e8p/muYwhUBb+lThLSUHC0Q4xW2ohQR7pfyPMJN3kG34imj0KB?=
+ =?us-ascii?Q?oJEdtHTg2rggmygUjR5tQDEovqCNN9aGsI19s3nc6zbnBefcOXer60M7s8Ln?=
+ =?us-ascii?Q?njM+drq8Sbqb31sPhiAZxh49ntsCclPtFI95xO4XcbEkTGd8I/lAXS0L/m0B?=
+ =?us-ascii?Q?o4xYmtCsENB89+FCSjLE25xOt4lWihljAHQC06CssByqNl504oo45MkpWXke?=
+ =?us-ascii?Q?bkqEFeKVohfpW+WbxPcB9JheCuZJFQ4P9jBwPBa1akZFzA6lR9yiZhYGmtWS?=
+ =?us-ascii?Q?VBrcEJe3N8eH+4CFWBLzTc2wsf3mXTXItXg0GFtuoxQo0i0DC+oharLEA1LM?=
+ =?us-ascii?Q?6pD1PWNCU+z96Vluo9lxaEdsLAN2QoPWS6ztYQdkf5bbVM+upzDKWqBAqQDY?=
+ =?us-ascii?Q?KePtwAyrbMYrMw8iUyqvGsyjGaC/HrLSynimQ41SFg5POjOcPjxS0oBqR/Oq?=
+ =?us-ascii?Q?S3Iu35+E5TNl6oi0QtxLGhGQjf3ikgItlKB0a/leMTJavVr9YJL3pLJy9wm2?=
+ =?us-ascii?Q?ixGqQA3U4DsLGR8P4M7nSYuxTIXYupZqTkAuLZJo4My1ma08b6ZQIb9GhjsZ?=
+ =?us-ascii?Q?FJ3eFUXGrC5rlpBkYGMMwkMhLylc9vcXl6OXttbLteQsmEZ0UCg3lObUUAF7?=
+ =?us-ascii?Q?3gl7AtBzy3NZ09ShCm2WbPGstulyN/LAlalzmHtAc3no7CkNtJvAdZcVhGYo?=
+ =?us-ascii?Q?lG0/xQ6XvNnNloDYrSYIUXekvtjDxm/IrjRfY6Ca4hAIa5XqL/aOg6YZqJ9W?=
+ =?us-ascii?Q?aLC7cnWBZNmVFYkTGDz23ie8c5tyB7yquKlFTzi1568JEwCSU1f2CMoR43mQ?=
+ =?us-ascii?Q?LTomxcWtAr7IGfBBw2ifUhW17Y0iaynHuQPWMN0XPeUWpQsa7E9+i2n0r/eV?=
+ =?us-ascii?Q?YZCqPR7qiLBAlkhyBMaPU2JsbhQZZlKrpDWVko6r4+sbISnZGmWEeV6pDm8k?=
+ =?us-ascii?Q?uh/vHVY0rgUZ7gB1BdU4eOVbLi4Z6moeaN0boDLF?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b6b4993-2270-41bd-b492-08de2bca4fa6
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 02:28:25.4645
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NjcCngSv5dAnbD8LCLFae8NwivXTKbaeoWi1tEvDbDttVU7o1oS+yKIqvXjmw6P0Gppelxz9wn5GHFu0MqCWAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7895
+X-OriginatorOrg: intel.com
 
-On Mon, 24 Nov 2025 at 16:29, Kees Cook <kees@kernel.org> wrote:
->
-> On Mon, Nov 24, 2025 at 01:35:12PM -0800, Linus Torvalds wrote:
-> > Those macros are illegible. And 99% of all users DO NOT WANT ANY OF
-> > THAT COMPLEXITY.
->
-> Okay, I think you're saying "I don't want the common helpers to include
-> the infrastructure for supporting the ..._sz() variants"?
+On Mon, Nov 24, 2025 at 08:15:46PM +0100, Thomas Gleixner wrote:
+> On Tue, Nov 25 2025 at 01:37, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/rseq
+> > head:   21782b3a5cd40892cb2995aa1ec3e74dd1112f1d
+> > commit: abc850e7616c91ebaa3f5ba3617ab0a104d45039 [25/39] rseq: Provide and use rseq_update_user_cs()
+> > config: powerpc-randconfig-002-20251124 (https://download.01.org/0day-ci/archive/20251125/202511250134.i0Jm8d7I-lkp@intel.com/config)
+> > compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251125/202511250134.i0Jm8d7I-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511250134.i0Jm8d7I-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    In file included from kernel/rseq.c:75:
+> >>> include/linux/rseq_entry.h:132:3: error: invalid operand for instruction
+> >                    unsafe_get_user(start_ip, &ucs->start_ip, efault);
+> >                    ^
+> >    include/linux/uaccess.h:606:2: note: expanded from macro 'unsafe_get_user'
+> >            arch_unsafe_get_user(x, ptr, local_label);      \
+> >            ^
+> >    arch/powerpc/include/asm/uaccess.h:458:2: note: expanded from macro 'arch_unsafe_get_user'
+> >            __get_user_size_goto(__gu_val, __gu_addr, sizeof(*(p)), e); \
+> >            ^
+> >    arch/powerpc/include/asm/uaccess.h:282:2: note: expanded from macro '__get_user_size_goto'
+> >            __get_user_size_allowed(x, ptr, size, __gus_retval);    \
+> >            ^
+> >    arch/powerpc/include/asm/uaccess.h:273:10: note: expanded from macro '__get_user_size_allowed'
+> >            case 8: __get_user_asm2(x, (u64 __user *)ptr, retval);  break;  \
+> >                    ^
+> >    arch/powerpc/include/asm/uaccess.h:256:4: note: expanded from macro '__get_user_asm2'
+> >                    "       li %1+1,0\n"                    \
+> >                     ^
+> >    <inline asm>:7:5: note: instantiated into assembly here
+> >            li 31+1,0
+> 
+> Definitely not a problem of tip core/rseq. It just ends up in
+> __get_user_asm2() and then the compiler gets unhappy about the PowerPC
+> inline assembly for whatever reason.
 
-I don't want the macros to expand the code more than necessary,
-because that just makes everything worse (including very much my build
-times - which have gotten worse over the years, but historically my
-build environment got faster at an even higher rate - that is no
-longer true).
+Thanks, got it, I will configure the bot to avoid sending further report
+for this.
 
-I also want the macros to be somewhat understandable.
-
-Yes, we have some macros that are works of art because they are *so*
-obscure and are fundamentally hard to understand because they play
-games with really really subtle language semantics.
-
-And then I enjoy them and appreciate the insanity of them. I still
-think our __is_constexpr() macro is truly a wonder, but we do have 40
-lines of comment (!) for that one strange macro.
-
-But this was not *that* kind of hard-to-understand macro. This was
-just overly complicated.
-
-> Fair enough. Looking at the treewide change I prepared[1], it's less
-> than 1% of those mechanical replacements:
-
-Yeah, I did some numbers on my simple version, and just the three
-simple ones were the majority of cases by far.
-
-I also believe that when we're doing more complicated size
-calculations (ie the whole "struct_size()" patterns), then the
-advantage of merging them with the allocation itself is questionable,
-simply because it takes two different pieces and makes them one
-*compilcated* piece.
-
-Doing
-
-        size = struct_size(ptr, flex_member, count);
-        ptr = kmalloc(size, gfp);
-
-is basically two fairly straightforward things and easy to understand.
-You can *scan* that code, and each piece is simple enough that it
-makes intuitive sense.
-
-No, 'struct_size()' isn't exactly a very intuitive thing, but written
-that way it's also not very surprising or complicated to parse at a
-glance.
-
-In contrast,
-
-        ptr = kmalloc_flex_sz(*ptr, flex_member, count, gfp, &size);
-
-does *not* make intuitive sense, I believe. Now you have five
-different arguments, and it's actually somewhat hard to parse, and
-there are odd semantics.
-
-In contrast, the simple versions that take
-
-        ptr = kmalloc(sizeof(*ptr), gfp);
-
-and turn it into
-
-        ptr = kmalloc_obj(*ptr, gfp);
-
-actually become *simpler* to read and understand.
-
-Yes, there are some other advantages to the combined version (ie that
-whole thing where 'kmalloc_obj()' now returns a proper _type_ - type
-safety is always good, and avoiding void pointers is a real thing),
-but I do think that the major advantage is "simpler to read".
-
-Because in the end, simple code that does what you intuitively expect
-it to do, is good code, and hopefully less buggy.
-
-             Linus
+> 
+> Thanks,
+> 
+>         tglx
+>  
+> 
+> 
