@@ -1,367 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0599F1F9F7A;
-	Tue, 25 Nov 2025 22:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E7E232785;
+	Tue, 25 Nov 2025 23:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764111286; cv=none; b=s7PfnRvNyyAhMk0ywwWr9YRCu0reqBXw1dtAIF4OvdfqKxwEwri5ZN8H9y4szNwfaCqpDZ7rnPlMeBINtZZBm6MA6cJJCvW1NViHM32sRuADwXapbppXPcYavIibQM1Rb5C92lrwiaG0RMqc36I4fn4MwhZem/OiQPwN8lkKOlc=
+	t=1764111986; cv=none; b=NlT4jo+xlxw/hfhDejAgo4W8Bsa/A8qmF2NkUrzIQKTr3aisZh2N0kiI/jOdUDF2uFfBmHZm635E0nnaEQ5LEpVcgASTQwUcKZup+m3vprMTF1V2h4qLihks6LGJJ1QW01LS1ECjLhvYmUs3Ulauu7BWSo/vB8+4MLH9Wu6MaQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764111286; c=relaxed/simple;
-	bh=S9CohV3WfyjsUpzsiQrOOpbeG/bubQXmxtesOUEle0s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WflK5QXyiiXeaRkaQpmvDqpXgrFhjz6iO3cJg9wlgjbnaRVFH/pHcMQ9TFtx8MbKNOoydhBdCEBnsMscGcWABmomAp3pr42rjBVa/Iakwi7Qv1zRe2NMGu27GO/rxDjEOvetNStBuS7/7C2DzyaIc0M7sU/IUjzmjvy/+Fj/5xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cviqIa9B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764111986; c=relaxed/simple;
+	bh=sWSWUTcUrvjLihdWCIUAE7/dfEu+dklBzKN7wTeOaWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i3IkbwES9v1LIBg32mr/0S2AHeR1fPLG5R4IWFw7b4NtpHoWSpYosTOoBbzdU1g9XKpmiTdHlTvml853F/7QBCj7heCcoUSoYnSK9bAdJOT/2tTAUjOLwKyM29kH6L7fBoNlaA0WKNzNFJMRunUbI09Y7/lrhHdYzuoTibaSgbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c5dlBX6v; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cviqIa9B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D9FC4CEF1;
-	Tue, 25 Nov 2025 22:54:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764111285;
-	bh=S9CohV3WfyjsUpzsiQrOOpbeG/bubQXmxtesOUEle0s=;
-	h=From:Date:Subject:To:Cc:From;
-	b=cviqIa9BGbcTWPGqY8LQMxLy+m+tweNHvZXJOmvezINxxUmi3NJ7v2hNyW4fGGipG
-	 i1kZrZsk/7pMZ/2G7bDuARXmZAyTlwMEKK8rUtrXo9JjBTfpgceEkHjrH5OBVz0SSv
-	 D5lhIb7wQPf96YnvP+DuZbYQSdoTqHv0lCbo0ntBPvbDaJDrB693dsZu0Zchtc6Icr
-	 6TvwN6eYjzu9GB0zT2aznwanfrtTZKKj6nyO8BHQA3LcFvwqQMrPyXFasdqy5pqMPS
-	 urZklCN6o+ecXkZ3jjzgEknrWyvEEfs4Y9cc8vgSk73nqpkiK/a+hZG44KfzGzrcqF
-	 qlUV+jL1iAm1g==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 25 Nov 2025 15:54:37 -0700
-Subject: [PATCH] tty: vt/keyboard: Split apart vt_do_diacrit()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c5dlBX6v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764111985; x=1795647985;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sWSWUTcUrvjLihdWCIUAE7/dfEu+dklBzKN7wTeOaWE=;
+  b=c5dlBX6vnL435cVGMb6oKx9FIyKTI0pyM4iYzzveNnqmzPAAhwIrQljO
+   F+OIUEe86GjFvI3//Vzb+p+hRAdYcWLDDT9b8drg00lwcH5QPg8d3syES
+   pXRjK51ANNkgWPMc8lo0MGGo7937iroeHlW2GzG7PEeX5KwmFiudBkrWM
+   EqlRpXwyosyb8VOmd3lKhUeVO5UylMgVmSmBTzbbsTmjY4WyqCobiZHx9
+   qZOj4hrsRjn9NnunehTwJed/DVlT/wPzoYp4n45Hc5VAo/eAAf2K2gZSz
+   5OyQh77WPUngetCL8Y/ouzI+hEmUKRo+EELh9pHY/jbPTq7IKyfuGnA89
+   g==;
+X-CSE-ConnectionGUID: r6KCaSKAR7SxRwwSHmeUEw==
+X-CSE-MsgGUID: 8ciu7xwRShGgBJgwpezSxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="91629584"
+X-IronPort-AV: E=Sophos;i="6.20,226,1758610800"; 
+   d="scan'208";a="91629584"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 15:06:24 -0800
+X-CSE-ConnectionGUID: ZgIOq6YbRaqnv5w1AEyzdQ==
+X-CSE-MsgGUID: uwUeonIuSGaFK0QIFdIQmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,226,1758610800"; 
+   d="scan'208";a="196933440"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 25 Nov 2025 15:06:22 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vO272-000000002Lt-08D8;
+	Tue, 25 Nov 2025 23:06:20 +0000
+Date: Wed, 26 Nov 2025 07:05:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Dmitry Baryshkov <lumag@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: drivers/gpu/drm/bridge/ssd2825.c:484:13: warning: stack frame size
+ (20088) exceeds limit (8192) in 'ssd2825_bridge_atomic_pre_enable'
+Message-ID: <202511260654.WytXohFH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251125-tty-vt-keyboard-wa-clang-scope-check-error-v1-1-f5a5ea55c578@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKwzJmkC/yXNUQrCMBCE4auUfXbBBIPgVcSHdDO1sdKUTVotp
- Xc36uMHw/wbZWhEpkuzkWKJOaaxwhwakt6Pd3AM1WSP1hljHZey8lJ4wNomr4FfnuVZh5wlTWD
- pIQNDNSm3OAUXzsF1FlQPJ0UX37/Y9fZ3ntsHpHwLtO8f2SuI9Y4AAAA=
-X-Change-ID: 20251125-tty-vt-keyboard-wa-clang-scope-check-error-be4d5d7d5f2e
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9562; i=nathan@kernel.org;
- h=from:subject:message-id; bh=S9CohV3WfyjsUpzsiQrOOpbeG/bubQXmxtesOUEle0s=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJlqxptd9p7+2rdcVDrOs9rtWRl78QTd3eKM7SdOppz1u
- l/9YX5dRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI7jeMDL0n/kkcXuDxQ/v4
- 86WTjZwr15xKLUtbtuVgTEtWdqx+RQ8jw9q0nKXp9SqmO2Y0+Vdoxcz3OOZhtvaFjeicfUsdcxl
- S+AA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After commit bfb24564b5fd ("tty: vt/keyboard: use __free()"), builds
-using asm goto for put_user() and get_user() with a version of clang
-older than 17 error with:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   30f09200cc4aefbd8385b01e41bde2e4565a6f0e
+commit: 55023abe6a2921a8916b623c24208e1971b88729 drm: bridge: Add support for Solomon SSD2825 RGB/DSI bridge
+date:   4 months ago
+config: x86_64-randconfig-071-20251126 (https://download.01.org/0day-ci/archive/20251126/202511260654.WytXohFH-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511260654.WytXohFH-lkp@intel.com/reproduce)
 
-  drivers/tty/vt/keyboard.c:1709:7: error: cannot jump from this asm goto statement to one of its possible targets
-                  if (put_user(asize, &a->kb_cnt))
-                      ^
-  ...
-  arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
-          asm goto(                                                       \
-          ^
-  drivers/tty/vt/keyboard.c:1687:7: note: possible target of asm goto statement
-                  if (put_user(asize, &a->kb_cnt))
-                      ^
-  ...
-  arch/arm64/include/asm/uaccess.h:342:2: note: expanded from macro '__raw_put_user'
-          __rpu_failed:                                                   \
-          ^
-  drivers/tty/vt/keyboard.c:1697:23: note: jump exits scope of variable with __attribute__((cleanup))
-                  void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
-                                      ^
-  drivers/tty/vt/keyboard.c:1671:33: note: jump bypasses initialization of variable with __attribute__((cleanup))
-                  struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
-                                                ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511260654.WytXohFH-lkp@intel.com/
 
-Prior to a fix to clang's scope checker in clang 17 [1], all labels in a
-function were validated as potential targets of all asm gotos in a
-function, regardless of whether they actually were a target of an asm
-goto call, resulting in false positive errors about skipping over
-variables marked with the cleanup attribute.
+All warnings (new ones prefixed by >>):
 
-To workaround this error, split up the bodies of the case statements in
-vt_do_diacrit() into their own functions so that the scope checker does
-not trip up on the multiple instances of __free().
+>> drivers/gpu/drm/bridge/ssd2825.c:484:13: warning: stack frame size (20088) exceeds limit (8192) in 'ssd2825_bridge_atomic_pre_enable' [-Wframe-larger-than]
+     484 | static void ssd2825_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+         |             ^
+   1 warning generated.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202509091702.Oc7eCRDw-lkp@intel.com/
-Closes: https://lore.kernel.org/oe-kbuild-all/202511241835.EA8lShgH-lkp@intel.com/
-Link: https://github.com/llvm/llvm-project/commit/f023f5cdb2e6c19026f04a15b5a935c041835d14 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/tty/vt/keyboard.c | 221 ++++++++++++++++++++++++----------------------
- 1 file changed, 115 insertions(+), 106 deletions(-)
 
-diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
-index d65fc60dd7be..3538d54d6a6a 100644
---- a/drivers/tty/vt/keyboard.c
-+++ b/drivers/tty/vt/keyboard.c
-@@ -1649,134 +1649,143 @@ int __init kbd_init(void)
- 
- /* Ioctl support code */
- 
--/**
-- *	vt_do_diacrit		-	diacritical table updates
-- *	@cmd: ioctl request
-- *	@udp: pointer to user data for ioctl
-- *	@perm: permissions check computed by caller
-- *
-- *	Update the diacritical tables atomically and safely. Lock them
-- *	against simultaneous keypresses
-- */
--int vt_do_diacrit(unsigned int cmd, void __user *udp, int perm)
-+static int vt_do_kdgkbdiacr(void __user *udp)
- {
--	int asize;
--
--	switch (cmd) {
--	case KDGKBDIACR:
--	{
--		struct kbdiacrs __user *a = udp;
--		int i;
-+	struct kbdiacrs __user *a = udp;
-+	int i, asize;
- 
--		struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
--								  GFP_KERNEL);
--		if (!dia)
--			return -ENOMEM;
-+	struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
-+							  GFP_KERNEL);
-+	if (!dia)
-+		return -ENOMEM;
- 
--		/* Lock the diacriticals table, make a copy and then
--		   copy it after we unlock */
--		scoped_guard(spinlock_irqsave, &kbd_event_lock) {
--			asize = accent_table_size;
--			for (i = 0; i < asize; i++) {
--				dia[i].diacr = conv_uni_to_8bit(accent_table[i].diacr);
--				dia[i].base = conv_uni_to_8bit(accent_table[i].base);
--				dia[i].result = conv_uni_to_8bit(accent_table[i].result);
--			}
-+	/* Lock the diacriticals table, make a copy and then
-+	   copy it after we unlock */
-+	scoped_guard(spinlock_irqsave, &kbd_event_lock) {
-+		asize = accent_table_size;
-+		for (i = 0; i < asize; i++) {
-+			dia[i].diacr = conv_uni_to_8bit(accent_table[i].diacr);
-+			dia[i].base = conv_uni_to_8bit(accent_table[i].base);
-+			dia[i].result = conv_uni_to_8bit(accent_table[i].result);
- 		}
--
--		if (put_user(asize, &a->kb_cnt))
--			return -EFAULT;
--		if (copy_to_user(a->kbdiacr, dia, asize * sizeof(struct kbdiacr)))
--			return -EFAULT;
--		return 0;
- 	}
--	case KDGKBDIACRUC:
--	{
--		struct kbdiacrsuc __user *a = udp;
- 
--		void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
--							GFP_KERNEL);
--		if (buf == NULL)
--			return -ENOMEM;
-+	if (put_user(asize, &a->kb_cnt))
-+		return -EFAULT;
-+	if (copy_to_user(a->kbdiacr, dia, asize * sizeof(struct kbdiacr)))
-+		return -EFAULT;
-+	return 0;
-+}
- 
--		/* Lock the diacriticals table, make a copy and then
--		   copy it after we unlock */
--		scoped_guard(spinlock_irqsave, &kbd_event_lock) {
--			asize = accent_table_size;
--			memcpy(buf, accent_table, asize * sizeof(struct kbdiacruc));
--		}
-+static int vt_do_kdgkbdiacruc(void __user *udp)
-+{
-+	struct kbdiacrsuc __user *a = udp;
-+	int asize;
- 
--		if (put_user(asize, &a->kb_cnt))
--			return -EFAULT;
--		if (copy_to_user(a->kbdiacruc, buf, asize * sizeof(struct kbdiacruc)))
--			return -EFAULT;
-+	void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
-+						GFP_KERNEL);
-+	if (buf == NULL)
-+		return -ENOMEM;
- 
--		return 0;
-+	/* Lock the diacriticals table, make a copy and then
-+	   copy it after we unlock */
-+	scoped_guard(spinlock_irqsave, &kbd_event_lock) {
-+		asize = accent_table_size;
-+		memcpy(buf, accent_table, asize * sizeof(struct kbdiacruc));
- 	}
- 
--	case KDSKBDIACR:
--	{
--		struct kbdiacrs __user *a = udp;
--		struct kbdiacr __free(kfree) *dia = NULL;
--		unsigned int ct;
--		int i;
-+	if (put_user(asize, &a->kb_cnt))
-+		return -EFAULT;
-+	if (copy_to_user(a->kbdiacruc, buf, asize * sizeof(struct kbdiacruc)))
-+		return -EFAULT;
- 
--		if (!perm)
--			return -EPERM;
--		if (get_user(ct, &a->kb_cnt))
--			return -EFAULT;
--		if (ct >= MAX_DIACR)
--			return -EINVAL;
-+	return 0;
-+}
- 
--		if (ct) {
--			dia = memdup_array_user(a->kbdiacr,
--						ct, sizeof(struct kbdiacr));
--			if (IS_ERR(dia))
--				return PTR_ERR(dia);
--		}
-+static int vt_do_kdskbdiacr(void __user *udp, int perm)
-+{
-+	struct kbdiacrs __user *a = udp;
-+	struct kbdiacr __free(kfree) *dia = NULL;
-+	unsigned int ct;
-+	int i;
- 
--		guard(spinlock_irqsave)(&kbd_event_lock);
--		accent_table_size = ct;
--		for (i = 0; i < ct; i++) {
--			accent_table[i].diacr =
--					conv_8bit_to_uni(dia[i].diacr);
--			accent_table[i].base =
--					conv_8bit_to_uni(dia[i].base);
--			accent_table[i].result =
--					conv_8bit_to_uni(dia[i].result);
--		}
-+	if (!perm)
-+		return -EPERM;
-+	if (get_user(ct, &a->kb_cnt))
-+		return -EFAULT;
-+	if (ct >= MAX_DIACR)
-+		return -EINVAL;
- 
--		return 0;
-+	if (ct) {
-+		dia = memdup_array_user(a->kbdiacr,
-+					ct, sizeof(struct kbdiacr));
-+		if (IS_ERR(dia))
-+			return PTR_ERR(dia);
- 	}
- 
--	case KDSKBDIACRUC:
--	{
--		struct kbdiacrsuc __user *a = udp;
--		unsigned int ct;
--		void __free(kfree) *buf = NULL;
-+	guard(spinlock_irqsave)(&kbd_event_lock);
-+	accent_table_size = ct;
-+	for (i = 0; i < ct; i++) {
-+		accent_table[i].diacr =
-+				conv_8bit_to_uni(dia[i].diacr);
-+		accent_table[i].base =
-+				conv_8bit_to_uni(dia[i].base);
-+		accent_table[i].result =
-+				conv_8bit_to_uni(dia[i].result);
-+	}
- 
--		if (!perm)
--			return -EPERM;
-+	return 0;
-+}
- 
--		if (get_user(ct, &a->kb_cnt))
--			return -EFAULT;
-+static int vt_do_kdskbdiacruc(void __user *udp, int perm)
-+{
-+	struct kbdiacrsuc __user *a = udp;
-+	unsigned int ct;
-+	void __free(kfree) *buf = NULL;
- 
--		if (ct >= MAX_DIACR)
--			return -EINVAL;
-+	if (!perm)
-+		return -EPERM;
- 
--		if (ct) {
--			buf = memdup_array_user(a->kbdiacruc,
--						ct, sizeof(struct kbdiacruc));
--			if (IS_ERR(buf))
--				return PTR_ERR(buf);
--		}
--		guard(spinlock_irqsave)(&kbd_event_lock);
--		if (ct)
--			memcpy(accent_table, buf,
--					ct * sizeof(struct kbdiacruc));
--		accent_table_size = ct;
--		return 0;
-+	if (get_user(ct, &a->kb_cnt))
-+		return -EFAULT;
-+
-+	if (ct >= MAX_DIACR)
-+		return -EINVAL;
-+
-+	if (ct) {
-+		buf = memdup_array_user(a->kbdiacruc,
-+					ct, sizeof(struct kbdiacruc));
-+		if (IS_ERR(buf))
-+			return PTR_ERR(buf);
- 	}
-+	guard(spinlock_irqsave)(&kbd_event_lock);
-+	if (ct)
-+		memcpy(accent_table, buf,
-+				ct * sizeof(struct kbdiacruc));
-+	accent_table_size = ct;
-+	return 0;
-+}
-+
-+/**
-+ *	vt_do_diacrit		-	diacritical table updates
-+ *	@cmd: ioctl request
-+ *	@udp: pointer to user data for ioctl
-+ *	@perm: permissions check computed by caller
-+ *
-+ *	Update the diacritical tables atomically and safely. Lock them
-+ *	against simultaneous keypresses
-+ */
-+int vt_do_diacrit(unsigned int cmd, void __user *udp, int perm)
-+{
-+	switch (cmd) {
-+	case KDGKBDIACR:
-+		return vt_do_kdgkbdiacr(udp);
-+	case KDGKBDIACRUC:
-+		return vt_do_kdgkbdiacruc(udp);
-+	case KDSKBDIACR:
-+		return vt_do_kdskbdiacr(udp, perm);
-+	case KDSKBDIACRUC:
-+		return vt_do_kdskbdiacruc(udp, perm);
- 	}
- 	return 0;
- }
+vim +/ssd2825_bridge_atomic_pre_enable +484 drivers/gpu/drm/bridge/ssd2825.c
 
----
-base-commit: da218406dd50e0ac96bb383de4edd208286efe70
-change-id: 20251125-tty-vt-keyboard-wa-clang-scope-check-error-be4d5d7d5f2e
+   483	
+ > 484	static void ssd2825_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+   485						     struct drm_atomic_state *state)
+   486	{
+   487		struct ssd2825_priv *priv = bridge_to_ssd2825(bridge);
+   488		struct mipi_dsi_device *dsi_dev = priv->output.dev;
+   489		const struct drm_crtc_state *crtc_state;
+   490		const struct drm_display_mode *mode;
+   491		struct drm_connector *connector;
+   492		struct drm_crtc *crtc;
+   493		u32 input_bus_flags = bridge->timings->input_bus_flags;
+   494		u16 flags = 0, config;
+   495		u8 pixel_format;
+   496		int ret;
+   497	
+   498		/* Power Sequence */
+   499		ret = clk_prepare_enable(priv->tx_clk);
+   500		if (ret)
+   501			dev_err(priv->dev, "error enabling tx_clk (%d)\n", ret);
+   502	
+   503		ret = regulator_bulk_enable(ARRAY_SIZE(ssd2825_supplies), priv->supplies);
+   504		if (ret)
+   505			dev_err(priv->dev, "error enabling regulators (%d)\n", ret);
+   506	
+   507		usleep_range(1000, 2000);
+   508	
+   509		ssd2825_hw_reset(priv);
+   510	
+   511		/* Perform SW reset */
+   512		ssd2825_write_reg(priv, SSD2825_OPERATION_CTRL_REG, 0x0100);
+   513	
+   514		/* Set pixel format */
+   515		switch (dsi_dev->format) {
+   516		case MIPI_DSI_FMT_RGB565:
+   517			pixel_format = 0x00;
+   518			break;
+   519		case MIPI_DSI_FMT_RGB666_PACKED:
+   520			pixel_format = 0x01;
+   521			break;
+   522		case MIPI_DSI_FMT_RGB666:
+   523			pixel_format = 0x02;
+   524			break;
+   525		case MIPI_DSI_FMT_RGB888:
+   526		default:
+   527			pixel_format = 0x03;
+   528			break;
+   529		}
+   530	
+   531		connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
+   532		crtc = drm_atomic_get_new_connector_state(state, connector)->crtc;
+   533		crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
+   534		mode = &crtc_state->adjusted_mode;
+   535	
+   536		/* Set panel timings */
+   537		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_1,
+   538				  ((mode->vtotal - mode->vsync_end) << 8) |
+   539				  (mode->htotal - mode->hsync_end));
+   540		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_2,
+   541				  ((mode->vtotal - mode->vsync_start) << 8) |
+   542				  (mode->htotal - mode->hsync_start));
+   543		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_3,
+   544				  ((mode->vsync_start - mode->vdisplay) << 8) |
+   545				  (mode->hsync_start - mode->hdisplay));
+   546		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_4, mode->hdisplay);
+   547		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_5, mode->vdisplay);
+   548	
+   549		if (mode->flags & DRM_MODE_FLAG_PHSYNC)
+   550			flags |= SSD2825_HSYNC_HIGH;
+   551	
+   552		if (mode->flags & DRM_MODE_FLAG_PVSYNC)
+   553			flags |= SSD2825_VSYNC_HIGH;
+   554	
+   555		if (dsi_dev->mode_flags & MIPI_DSI_MODE_VIDEO)
+   556			flags |= SSD2825_NON_BURST_EV;
+   557	
+   558		if (input_bus_flags & DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE)
+   559			flags |= SSD2825_PCKL_HIGH;
+   560	
+   561		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_6, flags | pixel_format);
+   562		ssd2825_write_reg(priv, SSD2825_LANE_CONFIGURATION_REG, dsi_dev->lanes - 1);
+   563		ssd2825_write_reg(priv, SSD2825_TEST_REG, 0x0004);
+   564	
+   565		/* Call PLL configuration */
+   566		ssd2825_setup_pll(priv, mode);
+   567	
+   568		usleep_range(10000, 11000);
+   569	
+   570		config = SSD2825_CONF_REG_HS | SSD2825_CONF_REG_CKE | SSD2825_CONF_REG_DCS |
+   571			 SSD2825_CONF_REG_ECD | SSD2825_CONF_REG_EOT;
+   572	
+   573		if (dsi_dev->mode_flags & MIPI_DSI_MODE_LPM)
+   574			config &= ~SSD2825_CONF_REG_HS;
+   575	
+   576		if (dsi_dev->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
+   577			config &= ~SSD2825_CONF_REG_EOT;
+   578	
+   579		/* Initial DSI configuration register set */
+   580		ssd2825_write_reg(priv, SSD2825_CONFIGURATION_REG, config);
+   581		ssd2825_write_reg(priv, SSD2825_VC_CTRL_REG, 0);
+   582	
+   583		if (priv->output.panel)
+   584			drm_panel_enable(priv->output.panel);
+   585	}
+   586	
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
