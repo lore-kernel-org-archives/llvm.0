@@ -1,118 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902142D7DD9;
-	Tue, 25 Nov 2025 07:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2983E2ECD14
+	for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 09:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764056328; cv=none; b=mJxIAym0J3CfdbrUCNlMNdC3Nr/I0GVAwywreFZJylwnwaNsUdGKuzTSO+DINA8ueYUVvcGBnqAMgfewdqytC7Rw3FTBlZC/S/cVZJ3eeh4MwQ81DDcWrBGA9br9TiLviWu+w2anoDJFe4iVYDSQdyFpkoC0JHW4pvuAgv82U6Q=
+	t=1764064540; cv=none; b=NSfyOJplW5SqCfvQG1x8DLvZ/7WHrasdapRnSWFMbS2rNcxNnjiDBmOtxOaq8s2bIqby48egTUu77AjLN0li8HLF0UHU4CW+ap6eVOyUCsKJkPRivjGyxHIOFLHjGpgldrOGTvmLlDgi0l+noBzlGlCD/47Ua4wfpbIKrjN3TRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764056328; c=relaxed/simple;
-	bh=V446la7lPJcpR4QJvyHjkwF5F2AFxzrJ0W2j6ahgRHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xm/W19cyPbp9rlmcz4KTTzsJ3Te0+9T6QJZjOsNho6SjWJFC4m6emki02I6hcT8OinO6TPKU+ns4w12uY0LJ3vWSWlwMohHMNA2XMG9XQPBGCI3pHg2bthYdIrKIGFpPSm1pQptomyIJ5bwruCqC0rmoeKpzc3d5G9b9Hpp8OBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gy3jEZ6G; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764064540; c=relaxed/simple;
+	bh=Dwcca4dnHFctZkmvR6GMwS56c8m05S1Y/8RyxtVVm0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iGtqH72AbR3BflvNxbFP+vFYFNnMPSYST/UJ3Xz18ZnF0cQzJInJ1PkCrbZVSslDlo8l/UYkHwStyw6ncAbOgwrkiiSwu5R/zyztz8nwAjgILTbBNbVdZf3oX3sTpgKdvCHsDutJPSDgixXrwrIiDemlQ/JwoKqs5mnq/2DhlhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=kIlaniXI; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gy3jEZ6G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312EAC4CEF1;
-	Tue, 25 Nov 2025 07:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764056328;
-	bh=V446la7lPJcpR4QJvyHjkwF5F2AFxzrJ0W2j6ahgRHI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Gy3jEZ6GGZG2+oYYBtMo5H8l2Cm8oY0NhDnhxHYpLnqN/GwaE2MZUDoHOFFlkhWzC
-	 Vjb/u/SwMq51pdfaE6nrYFGlNXMVRKyLIZkaG9N4xR7G/bewrsB1G5rxfJcYwSH8Lg
-	 ei7pT19+gv400Y1myjfV1y+rkZ9oQyiVa1NbeAUcu8EJqLOoAD7JyVg3eVc3oVHG7Q
-	 KqzHDTVAGWkHHMxYgeeUKABly272YQr3dcIb9uUjenxZSx1rlvVzMLe1TkJhnmUYSs
-	 OU2BD1ETmngg6y2Msqlg42+5bNNSmqkPVR0jhOr3rNWhRYg60S7TF1/vrjFUJMO10K
-	 /qJGrmrPhYCvQ==
-Message-ID: <897c6ba7-e27d-4170-be56-4d0f544bfa42@kernel.org>
-Date: Tue, 25 Nov 2025 08:38:40 +0100
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="kIlaniXI"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vNplm-005nBp-00; Tue, 25 Nov 2025 10:55:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector1; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
+	bh=JNK+Nit6qW7snTRE3aPUTZIzBp+Trk2B0GCjSq1nxR0=; b=kIlaniXIEULWKng+YNCjyG39FB
+	RPuogoQbi/pmgusKLrxau6PhBPWms2UrqXN+ewkthoLzKXbRlW6vNK8rwgLuQGpjvJDOT3ZwsYgPG
+	C4/urF1jr0lepp1pHa4fk4Q33/t2jnYqz8Usvx69iIaApbYNPRxiEwZxMzahOopLslRBYIZcns9Gp
+	/NcueZk89Zl/CTU39w6fXu29AupdbnbuPAsPtpgCiaEYuq6g21cBZFR77N7TSt4cCwtnrM/8Sc9Oz
+	BFpH2en6YoMWT1AdzvCCwypghYPCkXSuMh0Cf+y5siSq+z7oQtIMazTox+CXti0AU5RohQlJ6VjM0
+	rdTHp2Ag==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vNpll-0005FE-A3; Tue, 25 Nov 2025 10:55:33 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vNplX-00AW4O-BL; Tue, 25 Nov 2025 10:55:19 +0100
+Date: Tue, 25 Nov 2025 09:55:16 +0000
+From: david laight <david.laight@runbox.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Xiubo Li <xiubli@redhat.com>, Ilya Dryomov
+ <idryomov@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] ceph: Amend checking to fix `make W=1` build
+ breakage
+Message-ID: <20251125095516.40a3d57c@pumpkin>
+In-Reply-To: <20251110144404.369928-1-andriy.shevchenko@linux.intel.com>
+References: <20251110144404.369928-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [tip:core/rseq 25/39] include/linux/rseq_entry.h:132:3: error:
- invalid operand for instruction
-To: Thomas Gleixner <tglx@linutronix.de>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org, Ingo Molnar
- <mingo@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linuxppc-dev@lists.ozlabs.org, Nathan Chancellor <nathan@kernel.org>
-References: <202511250134.i0Jm8d7I-lkp@intel.com> <874iqji6n1.ffs@tglx>
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Content-Language: fr-FR
-In-Reply-To: <874iqji6n1.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 10 Nov 2025 15:44:04 +0100
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-
-Le 24/11/2025 à 20:15, Thomas Gleixner a écrit :
-> On Tue, Nov 25 2025 at 01:37, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/rseq
->> head:   21782b3a5cd40892cb2995aa1ec3e74dd1112f1d
->> commit: abc850e7616c91ebaa3f5ba3617ab0a104d45039 [25/39] rseq: Provide and use rseq_update_user_cs()
->> config: powerpc-randconfig-002-20251124 (https://download.01.org/0day-ci/archive/20251125/202511250134.i0Jm8d7I-lkp@intel.com/config)
->> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251125/202511250134.i0Jm8d7I-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202511250134.i0Jm8d7I-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>     In file included from kernel/rseq.c:75:
->>>> include/linux/rseq_entry.h:132:3: error: invalid operand for instruction
->>                     unsafe_get_user(start_ip, &ucs->start_ip, efault);
->>                     ^
->>     include/linux/uaccess.h:606:2: note: expanded from macro 'unsafe_get_user'
->>             arch_unsafe_get_user(x, ptr, local_label);      \
->>             ^
->>     arch/powerpc/include/asm/uaccess.h:458:2: note: expanded from macro 'arch_unsafe_get_user'
->>             __get_user_size_goto(__gu_val, __gu_addr, sizeof(*(p)), e); \
->>             ^
->>     arch/powerpc/include/asm/uaccess.h:282:2: note: expanded from macro '__get_user_size_goto'
->>             __get_user_size_allowed(x, ptr, size, __gus_retval);    \
->>             ^
->>     arch/powerpc/include/asm/uaccess.h:273:10: note: expanded from macro '__get_user_size_allowed'
->>             case 8: __get_user_asm2(x, (u64 __user *)ptr, retval);  break;  \
->>                     ^
->>     arch/powerpc/include/asm/uaccess.h:256:4: note: expanded from macro '__get_user_asm2'
->>                     "       li %1+1,0\n"                    \
->>                      ^
->>     <inline asm>:7:5: note: instantiated into assembly here
->>             li 31+1,0
+> In a few cases the code compares 32-bit value to a SIZE_MAX derived
+> constant which is much higher than that value on 64-bit platforms,
+> Clang, in particular, is not happy about this
 > 
-> Definitely not a problem of tip core/rseq. It just ends up in
-> __get_user_asm2() and then the compiler gets unhappy about the PowerPC
-> inline assembly for whatever reason.
+> fs/ceph/snap.c:377:10: error: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>   377 |         if (num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+>       |             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fix this by casting to size_t. Note, that possible replacement of SIZE_MAX
+> by U32_MAX may lead to the behaviour changes on the corner cases.
 
-I see it is a CLANG build.
+Did you really read the code?
+The test itself needs moving into ceph_create_snap_context().
+Possibly by using kmalloc_array() to do the multiply.
 
-CLANG might be less flexible, can you test with following change ?
+But in any case are large values sane at all?
+Allocating very large kernel memory blocks isn't a good idea at all.
 
-diff --git a/arch/powerpc/include/asm/uaccess.h 
-b/arch/powerpc/include/asm/uaccess.h
-index 4f5a46a77fa2..33d5f7ade254 100644
---- a/arch/powerpc/include/asm/uaccess.h
-+++ b/arch/powerpc/include/asm/uaccess.h
-@@ -253,7 +253,7 @@ __gus_failed:								\
-  		".section .fixup,\"ax\"\n"		\
-  		"4:	li %0,%3\n"			\
-  		"	li %1,0\n"			\
--		"	li %1+1,0\n"			\
-+		"	li %L1,0\n"			\
-  		"	b 3b\n"				\
-  		".previous\n"				\
-  		EX_TABLE(1b, 4b)			\
+In fact this does a kmalloc(... GFP_NOFS) which is pretty likely to
+fail for even moderate sized requests. I bet it fails 64k (order 4?)
+on a regular basis.
 
+Perhaps all three value that get added to make 'num' need 'sanity limits'
+that mean a large allocation just can't happen.
 
-Thanks
-Christophe
+	David
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  fs/ceph/snap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ceph/snap.c b/fs/ceph/snap.c
+> index c65f2b202b2b..521507ea8260 100644
+> --- a/fs/ceph/snap.c
+> +++ b/fs/ceph/snap.c
+> @@ -374,7 +374,7 @@ static int build_snap_context(struct ceph_mds_client *mdsc,
+>  
+>  	/* alloc new snap context */
+>  	err = -ENOMEM;
+> -	if (num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+> +	if ((size_t)num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+>  		goto fail;
+>  	snapc = ceph_create_snap_context(num, GFP_NOFS);
+>  	if (!snapc)
+
