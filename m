@@ -1,48 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF231D61A3;
-	Tue, 25 Nov 2025 23:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA011DDC2C;
+	Tue, 25 Nov 2025 23:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764113978; cv=none; b=YBL10qOvq3IBxFFEB1ycm/236Px58XUCp9s4nfCRa6htLZkOTfmYlhOfne6RHP9UkVWpah3PQ4G9OkQLSXuUztfOaB2XOZ7FnwGs4mNjH/WHiJtc6QJ8ew1wtCEp5nohfSBf8Takk05BGzotucazDaXk/lto/0ESXqVyq/r/tkg=
+	t=1764115050; cv=none; b=YM8wOo1Eobnp3a2zdoKc9pgIHq6cI9CjGNdcT2zwAWvf6QT5iLAkaoptQ4x18ObVyr+WZMt4CPxNxL/W3dDvpnDguhQ5l9wjBcUq48OMoBtNv7o+jy5ELIoKbJTAb1rYUztZomaoxPekoW00VM4eSZUZM5VjB0uIqEAHWU7zSAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764113978; c=relaxed/simple;
-	bh=ClFBMXYAL6JxWmmn/i2/+qJdyEpLGoepwkN+oBGG9O0=;
+	s=arc-20240116; t=1764115050; c=relaxed/simple;
+	bh=E7Vhxuxnd5dJfb3+F6Sp1aDAooveiAzLlYqO8i1/WjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ROMhPVmeYTFGEioRiQ7oBCsI/0wMQMydbbdeZ+Sm/5c9g02c0ga0taxB0mwtuAgtHLEYLlPEWRuIxuSd2Uwn0bt82LKMKcfCa16yH4jC3BbKOXn3sXsHwc4iYxqeLzAQToTgAurKrMdZff91AHuDNMNHkhIlpo/FQw8B+XUt97o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fo9Y0U51; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ovsm/Vzu0TtNO+K4WurtKFgSu8JpHg1rUpGSgVL/tdlF1Kpmy1L/lAzJNAjhdYwqD560jebXpKywnxAhRSNKdPSBe42xQYoeqlqePNu6Ek3lL42LGC9IRDAbqLFiYMk45TSgBspdWJtOL7pQS+CWHxZJ/j1j49VV+cxHczSUlO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gf0ajQpz; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fo9Y0U51"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5A87C4CEF1;
-	Tue, 25 Nov 2025 23:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764113978;
-	bh=ClFBMXYAL6JxWmmn/i2/+qJdyEpLGoepwkN+oBGG9O0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fo9Y0U510eeY9Owy5sGr6cr6Y8LIZtk/qgaHOEkt1FA5sqyU/AwFQzNCrlJHiwCVj
-	 pyWyscKsYOUdIL6gEvVCwm1YmMnwXcY6PtaJR+nO2YNNiHhL1hYAzWUdkHjO8Gq9PH
-	 v1kqzY3nW8957I1Aa//pCdWq6F/FRcWd6DxFwUcaYDEA5c7P/2ywGEOzM9BU5qJCYL
-	 epQKHgTyNxeUTKhkIEEaFYwbUVP+F7ckvkP5uRS41aPB/l3dYirWZ07zSj+mFt59iS
-	 Gun7GEjwwRFArz8pAlSDHgjihN6ycWPQwBR97ogkMJo5Sr8CW+HLawe/GQXrC4zg4g
-	 CQpMuCTT31hcw==
-Date: Tue, 25 Nov 2025 16:39:33 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [tip:core/rseq 25/39] include/linux/rseq_entry.h:132:3: error:
- invalid operand for instruction
-Message-ID: <20251125233933.GA1102709@ax162>
-References: <202511250134.i0Jm8d7I-lkp@intel.com>
- <874iqji6n1.ffs@tglx>
- <897c6ba7-e27d-4170-be56-4d0f544bfa42@kernel.org>
- <20251125231834.GA4012217@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gf0ajQpz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764115047; x=1795651047;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E7Vhxuxnd5dJfb3+F6Sp1aDAooveiAzLlYqO8i1/WjU=;
+  b=Gf0ajQpzrcCuGclMWJsINoLoeQNRpd4FVclvBrKQKRUXbyavP3IThl9P
+   pEMAuBa7peYIUuuuilQlGBe4G/5po7ORHpjjGMiwFUzFmeeoAO/+kaD4c
+   h4bzOYWJrdzRsLldY6HGpJC2SyTRQCa7tdlB69X3gUVUyhFv1xrcqVU5/
+   QgTEwymJn5Y/QlwsJ4gnAXER0StRUIwXBG4SozBLtLD0sAk5K4YPcNLFo
+   S7Y+H+wx3p9uvsafDoOKcXk/fyAbaw8sKGXnzzIZtG3kBNUkEpPuC6AR8
+   vI3IKLL48lLMMGn/sF96DG+uiIX8IzIFCITyJ0JnV9+npCCB44pcu/H/B
+   Q==;
+X-CSE-ConnectionGUID: 5nkrvonuSPCe+1UvMlkeiw==
+X-CSE-MsgGUID: jv3M0yklSM2yAjkWdlbGlA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="66305318"
+X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
+   d="scan'208";a="66305318"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 15:57:26 -0800
+X-CSE-ConnectionGUID: /6d2zgObRySKi6hiZ4qTgQ==
+X-CSE-MsgGUID: h3doMYfGSZq97NwrlfMlhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
+   d="scan'208";a="192041245"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 25 Nov 2025 15:57:23 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vO2uP-000000002Mz-185N;
+	Tue, 25 Nov 2025 23:57:21 +0000
+Date: Wed, 26 Nov 2025 07:56:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tonghao Zhang <tonghao@bamaicloud.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tonghao Zhang <tonghao@bamaicloud.com>,
+	Jay Vosburgh <jv@jvosburgh.net>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: Re: [PATCH net-next v1 4/5] net: bonding: add the
+ READ_ONCE/WRITE_ONCE for outside lock accessing
+Message-ID: <202511260755.PsI0heoq-lkp@intel.com>
+References: <20251125084451.11632-5-tonghao@bamaicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,18 +70,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251125231834.GA4012217@ax162>
+In-Reply-To: <20251125084451.11632-5-tonghao@bamaicloud.com>
 
-On Tue, Nov 25, 2025 at 04:18:34PM -0700, Nathan Chancellor wrote:
-> That avoids the error for me. I notice that this does not reproduce
-> beyond clang-16 for me so I am going to bisect LLVM to see what fixes
-> this error.
+Hi Tonghao,
 
-Oh, it is because of commit e2ffa15b9baa ("kbuild: Disable
-CC_HAS_ASM_GOTO_OUTPUT on clang < 17"). Prior to that change, all
-supported versions of clang would use the CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-blocks in arch/powerpc/include/asm/uaccess.h, whereas now clang-15 and
-clang-16 will use the variants without asm goto with outputs.
+kernel test robot noticed the following build errors:
 
-Cheers,
-Nathan
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tonghao-Zhang/net-bonding-use-workqueue-to-make-sure-peer-notify-updated-in-lacp-mode/20251125-164825
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20251125084451.11632-5-tonghao%40bamaicloud.com
+patch subject: [PATCH net-next v1 4/5] net: bonding: add the READ_ONCE/WRITE_ONCE for outside lock accessing
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251126/202511260755.PsI0heoq-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511260755.PsI0heoq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511260755.PsI0heoq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/bonding/bond_main.c:1207:2: error: unterminated function-like macro invocation
+    1207 |         WRITE_ONCE(bond->send_peer_notif,
+         |         ^
+   include/asm-generic/rwonce.h:58:9: note: macro 'WRITE_ONCE' defined here
+      58 | #define WRITE_ONCE(x, val)                                              \
+         |         ^
+>> drivers/net/bonding/bond_main.c:6585:37: error: expected '}'
+    6585 | MODULE_IMPORT_NS("NETDEV_INTERNAL");
+         |                                     ^
+   drivers/net/bonding/bond_main.c:1206:1: note: to match this '{'
+    1206 | {
+         | ^
+   2 errors generated.
+
+
+vim +1207 drivers/net/bonding/bond_main.c
+
+  1203	
+  1204	/* Peer notify update handler. Holds only RTNL */
+  1205	static void bond_peer_notify_reset(struct bonding *bond)
+  1206	{
+> 1207		WRITE_ONCE(bond->send_peer_notif,
+  1208			   bond->params.num_peer_notif *
+  1209			   max(1, bond->params.peer_notif_delay);
+  1210	}
+  1211	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
