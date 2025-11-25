@@ -1,78 +1,57 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB412E645;
-	Tue, 25 Nov 2025 11:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557D3254AFF
+	for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 12:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764071699; cv=none; b=mLIJggQM0cGL131ZPgapYsub7ljz5/lgrkyX9eFsSm+UDH4a0Kz/Wo9eqheelva0cZ46Xc3e+9IWU3n5AkkAKSrLLhL5t2vrVrB9Pq9j+zafPZtgYVUXmkjxZO2JwZgvswtO2YX35BNArtlSNY5hqklm2X38oz5j9sUqZIvLdRA=
+	t=1764072362; cv=none; b=MSwHpmLVmFMTGdmMCkXfxk/hz/rHuz6pvWuPLlJ/J+OGAbI2/ruwDqRIOCa8nTnG/L8g4hGXjYM7lBOw2t28wMBY3nANDD1pRbgOR0RYISVVuKHPrUYwxd+xQoCrVwslcRy32F4AT6W5C2rGaZ08gTMGVLf8OIjGQR2foLyhJkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764071699; c=relaxed/simple;
-	bh=BPWfFIUTpCxOb1fWxTd/JDnjJ3ZqgKBG+StcP6J882c=;
+	s=arc-20240116; t=1764072362; c=relaxed/simple;
+	bh=UF+A5wzFCeNiTZ1bxSFjWsz3Q0pRPQgsicXcxlit6cc=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WXHcDjQSg9NH5fkKbbMbF9RS93iXfcbUwMuQ1a8lFD8iL2Gkjn9cfGzojK8AwwbIxsgt5rrN+wQMSbWc2WzIug3CmpU+g4lfVnsg7jsySY3xizY147mlpAe0ZeolBtdTf4+w2pnwbHH44c30Hpy6oJdyJUXpQgt9xUPzAkHkzis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=EsKve/ru; arc=none smtp.client-ip=185.226.149.37
+	 MIME-Version:Content-Type; b=pPgi/ATakQ05pPX07vWuItDtL4V+zzY940ujMU9wu4VUjcfqlijgXtq/AgCRVlNU0TEKUj78ZYiE8ht52IoGro52tvWL9HRmboVMXLuz4JXMj41HjQm3pzb/Pyfea9ZUcEaBo6bKoUwA+kgdbROBbrxYEAWROAFIa2FnYmzNrSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=S6EBpEmx; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="EsKve/ru"
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="S6EBpEmx"
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight@runbox.com>)
-	id 1vNrd0-006AiM-St; Tue, 25 Nov 2025 12:54:38 +0100
+	id 1vNrnw-0065JK-UQ; Tue, 25 Nov 2025 13:05:56 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
 	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
-	bh=nh1yNsaA292fV48gsHMIHyahU+adY0Wr/dx1SDRWz+0=; b=EsKve/ruDXUky0Bwr9Xi1Sg5vp
-	7NtQbfQbv8jtsD9obrDBg+F/qyUUADAC+gcoummm2LjVYk07NWvAosJ0qNxceq/6T+r9w7/IwbD1R
-	0ntJ/uvks7vKhNaWoxjV/HGAiC3R+uQFHH0Uhd+KSlgYGy33sleRXhSgpUMuP4ZeWI44IA/0s0QKk
-	/NuPzCOz9OoQ8/RWcaZSdoJKqlqO+bP10xlt0FX9+WTE4OwahixrhZyy7XIamoaaAbLiyklRLZBo6
-	3FpwZghadJ9jkY1cdf8PTNqTLV0flKUCWz6KsHaMucyoIhuJ1A/h4Y1F4toewDR0c+nmvu+UbUBtQ
-	e3mKoqAg==;
+	bh=YnfimGH31nyRXt64WZIw1dHDCPxGLzpBIw6iod9dyCc=; b=S6EBpEmxcVSLZyYFbjEHkluR3f
+	EVrrqxgTzQZQmCk9DTNBQN+GhrNLKlziO5Cd36gt5AGRjFK9xLlGy4C30GDhgnfwjKOYwZdJJjhTt
+	UounXywRoQ2JmHulphBUsGAKeNk44PjoNK7oc0EC2ArlshnPC1TK6sgnLNWbAvUHTXrtcjOvieDFo
+	pozqyPIFbTHoNcGRAM6nKIdXwyJdD2q9gjRAmOR5l/9z0pW1mFoDUQRivY5sktiCRUoqkPJzyiTkd
+	oo58wqPRfC6lWjhGv6tiEkQG6h7P/yz0naaoZx/G4K911EN1cOaHrBTNKp8p3COBAsmbSEmSM6HQx
+	5YrEKS5g==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight@runbox.com>)
-	id 1vNrcy-0006lj-Dg; Tue, 25 Nov 2025 12:54:36 +0100
+	id 1vNrnv-0007lA-ID; Tue, 25 Nov 2025 13:05:55 +0100
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1vNrcl-00C0XM-Jr; Tue, 25 Nov 2025 12:54:23 +0100
-Date: Tue, 25 Nov 2025 11:54:19 +0000
+	id 1vNrnl-00C2Cg-8t; Tue, 25 Nov 2025 13:05:45 +0100
+Date: Tue, 25 Nov 2025 12:05:43 +0000
 From: david laight <david.laight@runbox.com>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Kees Cook
- <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter
- <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David Rientjes
- <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton
- <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>, "Gustavo A . R . Silva"
- <gustavoars@kernel.org>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Jann Horn <jannh@google.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin
- <sashal@kernel.org>, linux-mm@kvack.org, Randy Dunlap
- <rdunlap@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Vegard Nossum
- <vegard.nossum@oracle.com>, Harry Yoo <harry.yoo@oracle.com>, Nathan
- Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Jonathan Corbet
- <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>, Yafang Shao
- <laoar.shao@gmail.com>, Tony Ambardar <tony.ambardar@gmail.com>, Alexander
- Lobakin <aleksander.lobakin@intel.com>, Jan Hendrik Farr <kernel@jfarr.cc>,
- Alexander Potapenko <glider@google.com>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
-Message-ID: <20251125115419.304dd2a9@pumpkin>
-In-Reply-To: <aSUB1qrfhXp3suGn@casper.infradead.org>
-References: <20251122014258.do.018-kees@kernel.org>
-	<20251122014304.3417954-2-kees@kernel.org>
-	<CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
-	<202511241119.C547DEF80@keescook>
-	<aSTKLsRNiEKtDqPI@casper.infradead.org>
-	<202511241317.516BDE7B@keescook>
-	<aSTRsIUPeT5EC5An@casper.infradead.org>
-	<CAHk-=wgn-2ieKtaHAXLLge1UFckLKa88vo3XOdLz+fP+DLpHGA@mail.gmail.com>
-	<aSUB1qrfhXp3suGn@casper.infradead.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Xiubo Li <xiubli@redhat.com>, Ilya Dryomov
+ <idryomov@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] ceph: Amend checking to fix `make W=1` build
+ breakage
+Message-ID: <20251125120543.49107d8d@pumpkin>
+In-Reply-To: <aSWCJhA3cNSEIUir@smile.fi.intel.com>
+References: <20251110144404.369928-1-andriy.shevchenko@linux.intel.com>
+	<20251125095516.40a3d57c@pumpkin>
+	<aSWCJhA3cNSEIUir@smile.fi.intel.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -83,99 +62,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 25 Nov 2025 01:09:42 +0000
-Matthew Wilcox <willy@infradead.org> wrote:
+On Tue, 25 Nov 2025 12:17:10 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> On Mon, Nov 24, 2025 at 03:30:19PM -0800, Linus Torvalds wrote:
-> > That all a very standard thing in assembly programming, which this is
-> > all about. 'entry' is a signed offset from its own address.  
-> 
-> I used to be an assembly programmer ... 28 years ago.  I've mostly put
-> that world out of my mind (and being able to write a 20,000 instruction
-> ARM32 program entirely in assembly is just not that useful an
-> accomplishment to put on my CV).  Anyway, this isn't the point ...
-> 
-> > > The warning is ... not the best phrased, but in terms of divining the
-> > > programmer's intent, I genuinely don't know if this code is supposed
-> > > to zero-extend or sign-extend the s32 to unsigned long.  
+> On Tue, Nov 25, 2025 at 09:55:16AM +0000, david laight wrote:
+> > On Mon, 10 Nov 2025 15:44:04 +0100
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >   
+> > > In a few cases the code compares 32-bit value to a SIZE_MAX derived
+> > > constant which is much higher than that value on 64-bit platforms,
+> > > Clang, in particular, is not happy about this
+> > > 
+> > > fs/ceph/snap.c:377:10: error: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+> > >   377 |         if (num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+> > >       |             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > 
+> > > Fix this by casting to size_t. Note, that possible replacement of SIZE_MAX
+> > > by U32_MAX may lead to the behaviour changes on the corner cases.  
 > > 
-> > What?
+> > Did you really read the code?  
+> 
+> I read the piece that prevents builds. The exercise on how to fix this properly
+> is delegated to the authors and maintainers.
+> 
+> > The test itself needs moving into ceph_create_snap_context().
+> > Possibly by using kmalloc_array() to do the multiply.
 > > 
-> > A signed value gets sign-extended when cast to a larger type. That's
-> > how all of this always works. Casting a signed value to 'unsigned
-> > long' will set the high bits in the result.
+> > But in any case are large values sane at all?
+> > Allocating very large kernel memory blocks isn't a good idea at all.
 > > 
-> > That's pretty much the *definition* of a signed value. It gets
-> > sign-extended when used, and then obviously it becomes a large
-> > unsigned value, but this is how two's complement addition
-> > fundamentally works.  
-> 
-> Yes, agreed.
-> 
-> > So honestly, what's the problem with this code?
+> > In fact this does a kmalloc(... GFP_NOFS) which is pretty likely to
+> > fail for even moderate sized requests. I bet it fails 64k (order 4?)
+> > on a regular basis.
 > > 
-> > The warning makes no sense, and is garbage. Are we not allowed to add
-> > signed integers to unsigned 64-bit values now, because that addition
-> > involves that cast of a signed 32-bit entry to an unsigned 64-bit one?
-> > 
-> > There is NO WAY that warning is valid, it's; not *ever* something we
-> > should enable, and the fact that you people are discussing it as such
-> > is just crazy.
-> > 
-> > That code would not be improved at all by adding another cast (to
-> > first cast that s32 to 'long', in order to then add it to 'unsigned
-> > long').
-> > 
-> > Imagine how many other places you add integers to 'unsigned long'.
-> > EVERY SINGLE ONE of those places involves sign-extending the integer
-> > and then doing arithmetic in unsigned.  
+> > Perhaps all three value that get added to make 'num' need 'sanity limits'
+> > that mean a large allocation just can't happen.  
 > 
-> I have bad news.  Rust requires it.
-> 
-> fn add(base: u64, off: i32) -> u64 {
->     base + off
-> }
-> 
-> error[E0308]: mismatched types
->  --> add.rs:2:12  
->   |
-> 2 |     base + off
->   |            ^^^ expected `u64`, found `i32`
-> 
-> error[E0277]: cannot add `i32` to `u64`
->  --> add.rs:2:10  
->   |
-> 2 |     base + off
->   |          ^ no implementation for `u64 + i32`
->   |
->   = help: the trait `Add<i32>` is not implemented for `u64`
->   = help: the following other types implement trait `Add<Rhs>`:
->             <u64 as Add>
->             <u64 as Add<&u64>>
->             <&'a u64 as Add<u64>>
->             <&u64 as Add<&u64>>
-> 
-> so the Rust language people have clearly decided that this is too
-> complicated for your average programmer to figure out, and you need
-> explicit casts to make it work.
+> Nice, can you send a followup to fix all that in a better way?
+> (I don't care about the fix as long as it doesn't break my builds)
 > 
 
-Jeepers...
-As I've found looking at min_t() you can't trust kernel programmers
-(never mind 'average' ones) to use the correct cast.
-It wouldn't surprise be if the casts cause more bugs that the automatic
-conversions that C does.
-
-It wouldn't be as bad if there were separate 'casts' for widening and narrowing.
-You also need the compiler to be doing 'value tracking' rather than just
-looking at the types.
-If I do:
-	int len = read(.....);
-	if (len < 0)
-		return -1;
-	if (len > sizeof (...))
-		...
-then -Wsign-compare complains, but a statically_true(len >= 0) is fine.
+Perhaps -Wtautological-constant-out-of-range-compare should just be delegated
+to W=2 like (IIRC) -Wtype-bounds has been which is pretty much the same test.
 
 	David
-
