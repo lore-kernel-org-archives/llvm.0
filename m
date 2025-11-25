@@ -1,159 +1,129 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4809A2F5A01
-	for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 22:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0801F1DF75B
+	for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 22:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764110616; cv=none; b=SIjuhjY8JMMbp9Ln9/OtqK6aftbp9hRV0RzLXkJo5Gjd1dmxi7MbMsdWkQvTi/Ojq8+8V5tuKL4O9mLbK9UOg7a5N+zpL8Z8TWJaDcXCkGFH4lJsaZ+RWvlFjPK/nsZKavEQV+v/VaK51z9pCl1AkkjxsQ2eVvYZiUR5rSyzTQA=
+	t=1764110851; cv=none; b=ZnXsrB/OF7HfzwWZxd+ymy3alubxdVv6YKgVrI6crr3wgRx7RlW5gicqU7PEM48xY9EZ1r7dq+NVAv+eQtmtqBOu6Gyr761MFeZ+dZIG14b2EryKjdsFhlUw3SKSzZh1zlrvxUp/Z3Xqgp33bxEVVKpYF44NVIrk0LXuEAO6Mi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764110616; c=relaxed/simple;
-	bh=/Nhl3mIYXGJHHFjg3EygYmeUeSdJR0DpH9MQd/PCEXE=;
+	s=arc-20240116; t=1764110851; c=relaxed/simple;
+	bh=jsL4T2UPDPxhD8xl6D8pYITWdOgOn16n1Vvm+6LuL64=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pg19WPFtGyxP3n4dO60+tfTS6hu+vZ6adHnmY6UwV1PJniS6nCnKzYtph9YmT6JRSPRfUSvNNPanuQ8XkVlFJEKSflfkcBVK+lm8KkaLd2Mopswr+sQvmiguT7mL5OF6gFFNoOfijJiT6/RV/WOe3tjswry/miOQsV+rgbAeOHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ncjjpsp9; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=i8xYgHmDTS0E/3vjo2ZHIYh5nRHL8h6OGGGXZi+bka1jrlFbJ5NllVCKcvGMA9C3R01fnyMhlmXMxHjoTxeewivCFxRExaVVeUQq+7Rqh81F7w0U98IZcYIzl2rIFcn09+GLIByttAQL5PkQYFjPfeGQqYHxALeER9LONkwuInE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cwjYPwXm; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ncjjpsp9"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29558061c68so80902545ad.0
-        for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 14:43:34 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cwjYPwXm"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-37a2dced861so2664241fa.1
+        for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 14:47:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764110613; x=1764715413; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cVMrUcori1mIamaeJyLOiP2EJku4pRClbvk7rP/G8rw=;
-        b=Ncjjpsp96KoT9L1PGUJ3sfWJv175Cp66jOzQMtu9q8RJU6zzNvh02ZQ8Yagea5hiOe
-         e1x5UXP9fbaOAphHOIwueYXqAj1nVaWdxdIALzfADfZfMVthV+0AhEVPwNR9RozMvj+C
-         pQTrqHKNRUA1LXnziJsk8D3bvokYH+8u15GU1jCx9FfAanu1A/5hNgs9pD/PhdwPfDli
-         BThTZlrXzPp1nkd40JPTwn7mb0RUyBt6j3I8IvQ1+ozm7N/dTVucpFXnuB8pah4sdgW6
-         rCToMkdrmp9sUjaNsw0PMq0H0TJZQBV7BMOTNEQ140eIrQ0EhAfEbwkVeAgVe2nSIzz7
-         UO6w==
+        d=linux-foundation.org; s=google; t=1764110847; x=1764715647; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PICSSTOVtSfieJ36Y7geN1Ip3ZesP7jblQQJyY8Iec8=;
+        b=cwjYPwXm9eRubhIPOoIQ5wIQEbcl/SQZUntFp4mPajc9vzs4/pZES7WNLpBjtc9sy/
+         TNYiejtSj/S3oTtcfmSVXrfgRSmuYTKYwFJ0QWpPaLPDI/UjLM43E3iuHWkJaf2ac68f
+         iQKgPbBo3g2t9lyTJkQb6wb8ry4YcUnnD9Vew=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764110613; x=1764715413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cVMrUcori1mIamaeJyLOiP2EJku4pRClbvk7rP/G8rw=;
-        b=BVD7uwZ1d3EvPxsVnke3izIRtx1G73WA55Ilxr0okCBX4XqmTmMOS7SSNQDeU5YgQG
-         246AX3Sp9YfFxFJHGQ3zgvSs5tRpS/Ry9MrDO3JRqAgqjvoiyr7zvwjGA8o4S491NYWc
-         Dn8ftYkcxfKCMFE3KfkKIdPLJFB8xQcVm+lh9lMFP2CQGlhteIOa0YuctxU2ZlDQn52P
-         iiRiR1er6mw6Aym4hJlSluIzviIGrUyxKHjIiFfyqcSCMUGOhvou/DfOkZI1W+sFRxdT
-         uEYdGAbd9N67Q1Y0rca+0q729SsRhhcg1SgC7WC/yePx0FVq29bzg0KaNr55az7wxChD
-         fRFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZUMRZLV6KIm2v02vpmXlpnRL0bN7MGjZs2i2q6ECcg4QoMEXkwuUOAtenKOHAOEt0xVu5@lists.linux.dev
-X-Gm-Message-State: AOJu0YxyWW636MLKBsufCTmEJdDrxR9nAuK5icKngt90BodGdCDNZNHR
-	oWXIumwVjeDIYxNSzr/JD3PKXl3q4dwH5sYuuOx/V4hqEEVAi3U71ymKT2bnpduxxShNOO2vWC4
-	Z6XCrnJpqgY8j432TdMOCcfjbclGB0Ro=
-X-Gm-Gg: ASbGnctGbEeCO2j6IiiXuTI+cfK+eEU1DXXNYPvgTJNFoC1vpucEcj5lR7B6gv1Cfqd
-	CV3700RkSt2V/rz7Y/lOZZh/i/GSqpvV+/A7o4wVSsICnGJpWNtCWI2/iCYZskBuKlchkX7pjv0
-	cNTw7Gp3j6I2dY5s/GwvlQwD1jHxlaSMwCe8CsjaG/J5vUy7lHIvz4m+QUxqLrF25R/OelkZzj8
-	mtS50oGeayyo7rr0WylmHTE0OIObMxE7Yt39xa4M44u7Vhecswv4yU1+lO+dnk+OrWKA15GGLoR
-	aeknUPRJz6I=
-X-Google-Smtp-Source: AGHT+IEIXW0bJtFY6fBiBfGeQC5yH/czaAj2wo9rlJL3fHEdtl/Tr3I/+PPIwGRCv6tUVuOs4JGXiZrhojYZTOuidXU=
-X-Received: by 2002:a17:90b:4b84:b0:340:ba29:d3b6 with SMTP id
- 98e67ed59e1d1-34733e6c89fmr17055678a91.6.1764110613389; Tue, 25 Nov 2025
- 14:43:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764110847; x=1764715647;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PICSSTOVtSfieJ36Y7geN1Ip3ZesP7jblQQJyY8Iec8=;
+        b=htzqr3PYpkLBRZu/mqVvLP1V/oReUPmBceKCrOYHe0ZE/4UGchPNN3VYinxILNMH4w
+         rF9WaACmFfB5Rrx2HlosUkMkvikpQ4s0TqQ035A9/Q4GrEnS53YWxt4Y67p9XX6su3yt
+         sJskuV+b0YzD/9QhFDSPcQzRWXdegPrtx+zHSacZvKiNs/3MH/yasEFwO/fR+rHnm1Fm
+         u8NbBEJqkghrXc2uXw3UGY//geg/xJ383xRMSpKQqk/HZMaYuwLk6Fj96SWToJNUpsgo
+         /EZ4Rth56OzlHL6+BeBp1wg8bZijGpZu3mN1vosjgGrnXpGxyVt9/7nV2N22iNlmMLk2
+         UgJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUTw31metBk0/fYfEFj2RPhqAV/QvXlBSIxT2yQ7ruwsNa/nFVVkAc9zhvsxwVDejgjagD4@lists.linux.dev
+X-Gm-Message-State: AOJu0YzMUEQ5SPeiETb1xJMXWpXp+jr2OiEQnrggkmFYJ6PtaG43YRim
+	yLQ4P9x7k0C6JvbpLebbiXsLEn3Ed9gtZMchNAxQvlOW034TMRWbXmVihlTE/yNCvhmmO/RX64y
+	cNxmtaoE=
+X-Gm-Gg: ASbGncu5LXimQpMLvcJCJfuP/ydQP6J89FMeAeLle8PG95I1ba+PH0hl9HIA0m+n57V
+	RgaqQtzMaTboVL2lWlTztbBolod56XHV9ljQHa7I0ZMd9sDtqxeJvb2po+3u5Fv16P0diqgeULP
+	JVffhbtYSR+XiU0veDyYC1rUJcKHmccoT++WBU1Tcd8EFrfL08M3h6Nkp7dCQCKLl+2qpUBpDsh
+	RKeqNEzV2lyci3x/bbRetBRyo/lv1CNKrfHQuF+iwcgkPurA2aHCa9vkrfPhkt3bSlStOtXdPQx
+	gBl7NZTJpTy3XvzGLpMK6jTq4vbwhOykN4GtyCxwgMXvFPqnN9LSMDnD0rm2ctlT6CJN4lP80lb
+	1nCOjdp6cc8eC7wW83C4/8rLq/CUquji0IYQUVS/NwjFsCIwCiCXOYbwEO6edzZoCud4TkEu96P
+	WVSqLIY5cIJrCzdkluB3lQAfkQxWJ3qTDa8uWKoS/3Ejc2UcoINk3Vn2toVkiuNheN
+X-Google-Smtp-Source: AGHT+IECv3p2DiINyARJ+prCaOuvKnVLO8DUeI98pJW2SpqX61LOdYNGDYhTnZC3QQZTFvckoiR/hg==
+X-Received: by 2002:a05:651c:1507:b0:37b:986a:fc1 with SMTP id 38308e7fff4ca-37cc83963f0mr60060821fa.22.1764110845937;
+        Tue, 25 Nov 2025 14:47:25 -0800 (PST)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db75705sm5492252e87.15.2025.11.25.14.47.24
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Nov 2025 14:47:24 -0800 (PST)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-37a2dced861so2663831fa.1
+        for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 14:47:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUYkIwyA12Bdxt9eVBB+g6CEmVZRboi7LewvJk08uiprmYA0/n30jTnSFU5IgGDn4SBoPza@lists.linux.dev
+X-Received: by 2002:a17:906:d553:b0:b04:48b5:6ea5 with SMTP id
+ a640c23a62f3a-b766ef1d27emr2056801766b.17.1764110497696; Tue, 25 Nov 2025
+ 14:41:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251119043739.1860428-1-hoyeon.lee@suse.com>
-In-Reply-To: <20251119043739.1860428-1-hoyeon.lee@suse.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 25 Nov 2025 14:43:20 -0800
-X-Gm-Features: AWmQ_bnRM1RtbO-FP8JP9v9A4ffp0WSyeJFZokaOzGcZKQJuatArGzGeKGqHx-s
-Message-ID: <CAEf4Bzbjbd-_3d2rpL1D72hngwNbSAbyPQDOn9fv0X4zpEcCCw@mail.gmail.com>
-Subject: Re: [bpf-next] selftests/bpf: propagate LLVM toolchain into
- runqslower sub-make
-To: Hoyeon Lee <hoyeon.lee@suse.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+References: <20251122014258.do.018-kees@kernel.org> <20251122014304.3417954-2-kees@kernel.org>
+ <CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
+ <CAHk-=wjxj---dy5haOvNXjg_Xz-mDQciGL7OnJnpJpjYD9Moog@mail.gmail.com> <b7804333-6030-4bfd-8e0b-4479f87060ce@suse.cz>
+In-Reply-To: <b7804333-6030-4bfd-8e0b-4479f87060ce@suse.cz>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 25 Nov 2025 14:41:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi6nqPAveRPjrH_=ombtpz00G--RH9_MyC38PzsDHcb0A@mail.gmail.com>
+X-Gm-Features: AWmQ_bnHmATmDGg6MkJpXYuB1__YO7XbeBdtXEi7jxM1H4BelwLZXehOF1vhEBg
+Message-ID: <CAHk-=wi6nqPAveRPjrH_=ombtpz00G--RH9_MyC38PzsDHcb0A@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Kees Cook <kees@kernel.org>, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>, "Gustavo A . R . Silva" <gustavoars@kernel.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org, 
+	Randy Dunlap <rdunlap@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Matthew Wilcox <willy@infradead.org>, Vegard Nossum <vegard.nossum@oracle.com>, 
+	Harry Yoo <harry.yoo@oracle.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>, Yafang Shao <laoar.shao@gmail.com>, 
+	Tony Ambardar <tony.ambardar@gmail.com>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
+	Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Potapenko <glider@google.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 18, 2025 at 8:38=E2=80=AFPM Hoyeon Lee <hoyeon.lee@suse.com> wr=
-ote:
+On Tue, 25 Nov 2025 at 10:56, Vlastimil Babka <vbabka@suse.cz> wrote:
 >
-> The runqslower build invokes a nested make, but the selected LLVM
+> >     #define kmalloc_verify(type) \
+> >         BUILD_BUG_ON_ZERO(__alignof__(type) > ARCH_KMALLOC_MINALIGN)
+>
+> So AFAIU this would be too pessimistic. I'm not sure if the alignment rules
+> can be sensibly encoded in build time checks. Perhaps yes, in a similar way
+> that we have compile-time size bucket selection via __kmalloc_index().
 
-I think runqslower in kernel repo has long since served its purpose.
-There is no point in maintaining its Makefile. The tool itself lives
-in BCC repo. Its original purpose was to show real-world BPF-based
-tooling end-to-end setup and implementation. BPF, libbpf, entire BPF
-ecosystem has evolved and grown, I think we can remove runqslower now.
-Do you mind just sending a patch dropping it instead?
+So I wouldn't worry about it over-much: it's actually pretty unusual
+that we have any odd alignment rules for anything that we would
+allocate with kmalloc.
 
-pw-bot: cr
+And I don't think a 'kmalloc_obj()' case needs to necessarily *handle*
+such unusual cases, I just want this to be *detected*.
 
+IOW, what I worry about would be people who use the simple object
+allocator mistakenly on auto-pilot.
 
-> toolchain (via LLVM=3D-<version>) is not propagated. This causes the
-> sub-make to call the system-default 'clang' and 'llvm-strip' even when
-> a specific LLVM version is intended.
->
->     # LLVM=3D-20 V=3D1 make -C tools/testing/selftests/bpf
->     ...
->     make -C tools/bpf/runqslower ...
->     clang -g -O2 --target=3Dbpfel -I... -c runqslower.bpf.c -o runqslower=
-.bpf.o && \
->           llvm-strip -g runqslower.bpf.o
->     /bin/sh: 1: clang: not found
->
->     (expected: clang-20 and llvm-strip-20)
->
-> Propagate CLANG and LLVM_STRIP to the sub-make to ensure LLVM version
-> consistency across all builds.
->
-> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> ---
->  tools/testing/selftests/bpf/Makefile | 1 +
->  tools/testing/selftests/lib.mk       | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 34ea23c63bd5..79ab69920dca 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -306,6 +306,7 @@ endif
->
->  $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT=
-)
->         $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower      =
-      \
-> +                   CLANG=3D$(CLANG) LLVM_STRIP=3D$(LLVM_STRIP)          =
-          \
->                     OUTPUT=3D$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=3D$(VMLINUX=
-_BTF)     \
->                     BPFTOOL_OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/          =
-        \
->                     BPFOBJ_OUTPUT=3D$(BUILD_DIR)/libbpf/                 =
-        \
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib=
-.mk
-> index a448fae57831..f14255b2afbd 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -8,6 +8,7 @@ LLVM_SUFFIX :=3D $(LLVM)
->  endif
->
->  CLANG :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-> +LLVM_STRIP :=3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
->
->  CLANG_TARGET_FLAGS_arm          :=3D arm-linux-gnueabi
->  CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
-> --
-> 2.51.1
->
->
+So if it errors out about "you're trying to use the simple model for
+an object that requires non-simple alignment", that is perfectly fine.
+Those cases can - and do - use more specialized allocators.
+
+Yes, yes, in a perfect world we'd just handle that case automatically,
+but it really is fairly rare, so forcing people to then use some more
+involved interface for those cases is maybe not optimal, but it's
+perfectly ok.
+
+              Linus
