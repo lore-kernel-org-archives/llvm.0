@@ -1,113 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E144727B34F;
-	Tue, 25 Nov 2025 22:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4809A2F5A01
+	for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 22:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764108872; cv=none; b=Q+G2VEHLVjNB+4Rjc2I8ZEREn4JVA7WGY91v44/9VPrOJvqC06ZJcYTfxsMNIIGPaibcrhoTyEfK1dHSZWf22kloFZmx4AsKQ+SG2xWbgYEgKpGp8Ja6Bb/C54v4WiJLeh4+DskBgaqCdQqtgfQOgIDqBapAzU5ga85dzjAIjhs=
+	t=1764110616; cv=none; b=SIjuhjY8JMMbp9Ln9/OtqK6aftbp9hRV0RzLXkJo5Gjd1dmxi7MbMsdWkQvTi/Ojq8+8V5tuKL4O9mLbK9UOg7a5N+zpL8Z8TWJaDcXCkGFH4lJsaZ+RWvlFjPK/nsZKavEQV+v/VaK51z9pCl1AkkjxsQ2eVvYZiUR5rSyzTQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764108872; c=relaxed/simple;
-	bh=7VbNqwAxa2N0OP450xn7XUR+uM75sQSKDCch+WQswe4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RTHSMvw0gRUewX+lffBrNOx+ScG+rXNFNL8yKNIZuZ0N8IiPU+hopOBIfFRA0jmiMDiTHUWdkwpWfPz70Z/TgvuzJu/k2gZvVu+6f1n8bvxS035xWSzEhKHaX6Gq50pGwB743/DnQYzCp+682KBm6ZvcK0m4SWo0cVtsydkGK+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Df1krrSE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764110616; c=relaxed/simple;
+	bh=/Nhl3mIYXGJHHFjg3EygYmeUeSdJR0DpH9MQd/PCEXE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pg19WPFtGyxP3n4dO60+tfTS6hu+vZ6adHnmY6UwV1PJniS6nCnKzYtph9YmT6JRSPRfUSvNNPanuQ8XkVlFJEKSflfkcBVK+lm8KkaLd2Mopswr+sQvmiguT7mL5OF6gFFNoOfijJiT6/RV/WOe3tjswry/miOQsV+rgbAeOHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ncjjpsp9; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Df1krrSE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4934C4CEF1;
-	Tue, 25 Nov 2025 22:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764108871;
-	bh=7VbNqwAxa2N0OP450xn7XUR+uM75sQSKDCch+WQswe4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Df1krrSEl3wdi2zNkUX7BEUpByp1N0DkH67EmheG0nQTPU1K6QVPOjYURtZmQEVf2
-	 Om6EaatlGCObsv+mtwolZCm/oWWd5+YaF+fJcQlGWvPOG53eW00U1qnx+pqdhlPFZ2
-	 T0OkyH1dsaP//A5UIuy/Nfh7FuBFgAvCBGsakOFtjRbAyUzbS00tpQZstQmndUeQi1
-	 rks0VOxbNjPVQO7wt0IODVHXzU2CgssjlaqosZE1YAuLNKsolaL/2eooC17cf2Zdf3
-	 NOazRzGudmlC1s+nrylXWcIwSeahH3vPHjkFmpSCAUIfLzzUJOtoGfYY7Z8lC3Tgvy
-	 NefcgkB6u6xmg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 25 Nov 2025 15:14:23 -0700
-Subject: [PATCH] drm/mediatek: mtk_hdmi_v2: Fix return type of
- mtk_hdmi_v2_tmds_char_rate_valid()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ncjjpsp9"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29558061c68so80902545ad.0
+        for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 14:43:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764110613; x=1764715413; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cVMrUcori1mIamaeJyLOiP2EJku4pRClbvk7rP/G8rw=;
+        b=Ncjjpsp96KoT9L1PGUJ3sfWJv175Cp66jOzQMtu9q8RJU6zzNvh02ZQ8Yagea5hiOe
+         e1x5UXP9fbaOAphHOIwueYXqAj1nVaWdxdIALzfADfZfMVthV+0AhEVPwNR9RozMvj+C
+         pQTrqHKNRUA1LXnziJsk8D3bvokYH+8u15GU1jCx9FfAanu1A/5hNgs9pD/PhdwPfDli
+         BThTZlrXzPp1nkd40JPTwn7mb0RUyBt6j3I8IvQ1+ozm7N/dTVucpFXnuB8pah4sdgW6
+         rCToMkdrmp9sUjaNsw0PMq0H0TJZQBV7BMOTNEQ140eIrQ0EhAfEbwkVeAgVe2nSIzz7
+         UO6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764110613; x=1764715413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cVMrUcori1mIamaeJyLOiP2EJku4pRClbvk7rP/G8rw=;
+        b=BVD7uwZ1d3EvPxsVnke3izIRtx1G73WA55Ilxr0okCBX4XqmTmMOS7SSNQDeU5YgQG
+         246AX3Sp9YfFxFJHGQ3zgvSs5tRpS/Ry9MrDO3JRqAgqjvoiyr7zvwjGA8o4S491NYWc
+         Dn8ftYkcxfKCMFE3KfkKIdPLJFB8xQcVm+lh9lMFP2CQGlhteIOa0YuctxU2ZlDQn52P
+         iiRiR1er6mw6Aym4hJlSluIzviIGrUyxKHjIiFfyqcSCMUGOhvou/DfOkZI1W+sFRxdT
+         uEYdGAbd9N67Q1Y0rca+0q729SsRhhcg1SgC7WC/yePx0FVq29bzg0KaNr55az7wxChD
+         fRFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZUMRZLV6KIm2v02vpmXlpnRL0bN7MGjZs2i2q6ECcg4QoMEXkwuUOAtenKOHAOEt0xVu5@lists.linux.dev
+X-Gm-Message-State: AOJu0YxyWW636MLKBsufCTmEJdDrxR9nAuK5icKngt90BodGdCDNZNHR
+	oWXIumwVjeDIYxNSzr/JD3PKXl3q4dwH5sYuuOx/V4hqEEVAi3U71ymKT2bnpduxxShNOO2vWC4
+	Z6XCrnJpqgY8j432TdMOCcfjbclGB0Ro=
+X-Gm-Gg: ASbGnctGbEeCO2j6IiiXuTI+cfK+eEU1DXXNYPvgTJNFoC1vpucEcj5lR7B6gv1Cfqd
+	CV3700RkSt2V/rz7Y/lOZZh/i/GSqpvV+/A7o4wVSsICnGJpWNtCWI2/iCYZskBuKlchkX7pjv0
+	cNTw7Gp3j6I2dY5s/GwvlQwD1jHxlaSMwCe8CsjaG/J5vUy7lHIvz4m+QUxqLrF25R/OelkZzj8
+	mtS50oGeayyo7rr0WylmHTE0OIObMxE7Yt39xa4M44u7Vhecswv4yU1+lO+dnk+OrWKA15GGLoR
+	aeknUPRJz6I=
+X-Google-Smtp-Source: AGHT+IEIXW0bJtFY6fBiBfGeQC5yH/czaAj2wo9rlJL3fHEdtl/Tr3I/+PPIwGRCv6tUVuOs4JGXiZrhojYZTOuidXU=
+X-Received: by 2002:a17:90b:4b84:b0:340:ba29:d3b6 with SMTP id
+ 98e67ed59e1d1-34733e6c89fmr17055678a91.6.1764110613389; Tue, 25 Nov 2025
+ 14:43:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251125-drm-mediatek-hdmi-v2-wifpts-v1-1-a6c7582cf69a@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAD4qJmkC/yXMwQqDMAwA0F+RnA3YQpTtV4YHNVGzUSdN5wbiv
- 6+bx3d5O5hEFYNrsUOUTU2fS4YrCxjmbpkElbPBV56c84QcAwZh7ZI8cOaguHl867gmQ66bnsg
- 1VFcXyMMaZdTPf7+1p+3V32VIvxKO4wujpQxhfwAAAA==
-X-Change-ID: 20251125-drm-mediatek-hdmi-v2-wifpts-d67b55175609
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: David Airlie <airlied@gmail.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
- CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org, 
- linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2369; i=nathan@kernel.org;
- h=from:subject:message-id; bh=7VbNqwAxa2N0OP450xn7XUR+uM75sQSKDCch+WQswe4=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJlqWi4sKa6RlUEHX+YYpj68/Dzl/capfHcDFkntCmZWv
- JVgzXqzo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEwkfwfDP532ctkJ97YxMU4T
- kFlRncgS/Ehp3yTJ0K0FEYFnMuZdNmP4K/ND99HBGU/M7q1OOuUzLXXTnU0xWcfPr1eexiCzuPv
- yGR4A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20251119043739.1860428-1-hoyeon.lee@suse.com>
+In-Reply-To: <20251119043739.1860428-1-hoyeon.lee@suse.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 25 Nov 2025 14:43:20 -0800
+X-Gm-Features: AWmQ_bnRM1RtbO-FP8JP9v9A4ffp0WSyeJFZokaOzGcZKQJuatArGzGeKGqHx-s
+Message-ID: <CAEf4Bzbjbd-_3d2rpL1D72hngwNbSAbyPQDOn9fv0X4zpEcCCw@mail.gmail.com>
+Subject: Re: [bpf-next] selftests/bpf: propagate LLVM toolchain into
+ runqslower sub-make
+To: Hoyeon Lee <hoyeon.lee@suse.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When building with -Wincompatible-function-pointer-types-strict, a
-warning designed to catch kernel control flow integrity (kCFI) issues at
-build time, there is an instance in the new HDMI v2 drm/mediatek code:
+On Tue, Nov 18, 2025 at 8:38=E2=80=AFPM Hoyeon Lee <hoyeon.lee@suse.com> wr=
+ote:
+>
+> The runqslower build invokes a nested make, but the selected LLVM
 
-  drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:1331:31: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(const struct drm_bridge *, const struct drm_display_mode *, unsigned long long)' with an expression of type 'int (const struct drm_bridge *, const struct drm_display_mode *, unsigned long long)' [-Werror,-Wincompatible-function-pointer-types-strict]
-   1331 |         .hdmi_tmds_char_rate_valid = mtk_hdmi_v2_hdmi_tmds_char_rate_valid,
-        |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I think runqslower in kernel repo has long since served its purpose.
+There is no point in maintaining its Makefile. The tool itself lives
+in BCC repo. Its original purpose was to show real-world BPF-based
+tooling end-to-end setup and implementation. BPF, libbpf, entire BPF
+ecosystem has evolved and grown, I think we can remove runqslower now.
+Do you mind just sending a patch dropping it instead?
 
-While 'int' and 'enum drm_mode_status' are ABI compatible, hence no
-regular warning from -Wincompatible-function-pointer-types, the mismatch
-will trigger a kCFI violation when mtk_hdmi_v2_tmds_char_rate_valid() is
-called indirectly.
+pw-bot: cr
 
-Update the return type of mtk_hdmi_v2_tmds_char_rate_valid() to be 'enum
-drm_mode_status' to clear up the warning and kCFI violation.
 
-Fixes: 8d0f79886273 ("drm/mediatek: Introduce HDMI/DDC v2 for MT8195/MT8188")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/mediatek/mtk_hdmi_v2.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c b/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c
-index c272e1e74b7d..454b8b93b834 100644
---- a/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c
-+++ b/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c
-@@ -1120,9 +1120,10 @@ static void mtk_hdmi_v2_hpd_disable(struct drm_bridge *bridge)
- 	mtk_hdmi_v2_disable(hdmi);
- }
- 
--static int mtk_hdmi_v2_hdmi_tmds_char_rate_valid(const struct drm_bridge *bridge,
--						 const struct drm_display_mode *mode,
--						 unsigned long long tmds_rate)
-+static enum drm_mode_status
-+mtk_hdmi_v2_hdmi_tmds_char_rate_valid(const struct drm_bridge *bridge,
-+				      const struct drm_display_mode *mode,
-+				      unsigned long long tmds_rate)
- {
- 	if (mode->clock < MTK_HDMI_V2_CLOCK_MIN)
- 		return MODE_CLOCK_LOW;
-
----
-base-commit: a846505a193d7492ad3531e33cacfca31e4bcdd1
-change-id: 20251125-drm-mediatek-hdmi-v2-wifpts-d67b55175609
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+> toolchain (via LLVM=3D-<version>) is not propagated. This causes the
+> sub-make to call the system-default 'clang' and 'llvm-strip' even when
+> a specific LLVM version is intended.
+>
+>     # LLVM=3D-20 V=3D1 make -C tools/testing/selftests/bpf
+>     ...
+>     make -C tools/bpf/runqslower ...
+>     clang -g -O2 --target=3Dbpfel -I... -c runqslower.bpf.c -o runqslower=
+.bpf.o && \
+>           llvm-strip -g runqslower.bpf.o
+>     /bin/sh: 1: clang: not found
+>
+>     (expected: clang-20 and llvm-strip-20)
+>
+> Propagate CLANG and LLVM_STRIP to the sub-make to ensure LLVM version
+> consistency across all builds.
+>
+> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 1 +
+>  tools/testing/selftests/lib.mk       | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index 34ea23c63bd5..79ab69920dca 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -306,6 +306,7 @@ endif
+>
+>  $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT=
+)
+>         $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower      =
+      \
+> +                   CLANG=3D$(CLANG) LLVM_STRIP=3D$(LLVM_STRIP)          =
+          \
+>                     OUTPUT=3D$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=3D$(VMLINUX=
+_BTF)     \
+>                     BPFTOOL_OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/          =
+        \
+>                     BPFOBJ_OUTPUT=3D$(BUILD_DIR)/libbpf/                 =
+        \
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib=
+.mk
+> index a448fae57831..f14255b2afbd 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -8,6 +8,7 @@ LLVM_SUFFIX :=3D $(LLVM)
+>  endif
+>
+>  CLANG :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+> +LLVM_STRIP :=3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+>
+>  CLANG_TARGET_FLAGS_arm          :=3D arm-linux-gnueabi
+>  CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
+> --
+> 2.51.1
+>
+>
