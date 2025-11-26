@@ -1,301 +1,135 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012052.outbound.protection.outlook.com [40.93.195.52])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E40285060
-	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 00:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764118205; cv=fail; b=V6qBXrYpxsV35xta+CRpWDu44ZWpJq1Zlkeff+NMZRxJpkI0W4CPrJ4HFjia94swp4mf1BIWlg4laOYD7OxJH47VYwC219z6BTgFXTndY9TiX958ibbVl345T4cKGt3wGzGXQM3+1oXaeA3omv3PG/o+PIR0tl1Nr866yEmB0NY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764118205; c=relaxed/simple;
-	bh=fQqceDYv9/GP6MeaT9FYVd1fkV5spXOB7Ei5m+/el7U=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Yeq734bxZ2aMctf8N6CwC14OIz707LHhJOUDX8qntWjAeiSjkFnNJCArkLXLNp2suXbp1zYMlrcI0Yi5L1mRPPM+YHx17dEc4t/nIq2pykTzj0HYk69gPYRdkAH1HEp29nC90KU7QjKr42ui9lqwdP6oEuuBmGtu1FrXwC7atnE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dCvvq2tB; arc=fail smtp.client-ip=40.93.195.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B0630DD3F;
+	Wed, 26 Nov 2025 03:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764128331; cv=none; b=MGNjxiQNBnt3wxjAKC/Si9kVesfcdN6d1xiZ7Fu5+tIIWm3f9xz6CWZkeZ88wwJq62lOsbrrPFhdgxBJagpFPTcRi9xSjrHFpiPXWgNxzF/QCF3uxjbbHEdFWQdsGhVz5fIXdl2PzTh5SMj8ZzsllF5U3+wOi5rKC2+umLVCqac=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764128331; c=relaxed/simple;
+	bh=vAkEMonUDt9Lx6WG94p1cDBrRgahkfC4sYAgtrbDRrg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=I7iO1lqPmJksqLkv1/22YDMFaIjGaVzFffc3Oi6/p2keZY3Pv8oeWHb4gjSjtCClkrzKl1Eiatg9qkZHQ8cHgnIjzjgKAlPFwOTiB9hdC1jB7V8szzQjl0VizWeutoiCkOOr33+39cZBa7nCiNi8aLtMA8p4fBYBej9dX5spvbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BG9wQMe8; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dCvvq2tB"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v30qzTz65dPbVkdEVMezU8AuFpOwU/yoxbI6vCaoYadpLguP5Jza25udzGlGMBvVH2MroWCYeweIkrx2xdMRoGfEdd/faSj0+xSaBIWH+ukY6qrTOpApswqdu9Pxqhu4z9PMs4kchznMDfvcDibZvV2w8SqefRDN6VSQmAeEAaCBi6KIdQFPQwzdy9SaREM7dz1rP08gkx9KSz0omYVYRLVchPH2ISeh3m+F+ZQARSgpLDADATa+igNgEo2XRCc9JeTm50nMwo4QvQvfvxzlF/EgeOz15wltEm+FORofPcxYkWTtIafjml0QXURZPGL0AmuxIL/+G06+pzO0mwGYeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LIuCm8ryFyfbZUY6bVsEX8wN1WxZp9wbzzdhK7/hrPM=;
- b=Q2I0Vx8hubS67mQSvTqQJN3eDApxNucnWW0MBUAS3Oeojz+WzUEKXA3ZayKbMSQAtRNDHyAZJcSbJM3wm8TKvHnvY7mIih298z+MFWj4C9OV8fBIQbQ6Z562TaN7kvA7nJfGIiALkxkywj2lO2i2m1QgE5iuzncu7SgHMwvluRlTHkMlFkANEjLitzAfOYH3wOYzXsiVd9LYqCmkDA9Yn6uPgA+gF6R8ckkxmNRXj1usLVoN+Ko8X/owH+b2e+w44fQ2F+N1Hur7QwvxeMg9aGpj+UOQ8jX03zCFzmfluvcJMlKlAXG7pk+1lb+OuUDy80rlIBAiGgy+eyClbFXwjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LIuCm8ryFyfbZUY6bVsEX8wN1WxZp9wbzzdhK7/hrPM=;
- b=dCvvq2tBBJZ9f2/m7oD44N+jn3pyUb2Q7iOpqq2UuUjIcZX4eStH+QVjrfr62wf+wyxpa50kvO5f0ROp0x/zVVwjXZe5GK2OANnWAssm3yYIu4AbzBkIrugfFEzFwlb8x6k9fyvOqnYY1VDYHvRF2YSr7uwQP5OnSOEWAVXOF3x9MhdWOXnp6AXAk18iBKIt3nOmztkHmCmoKT/N9h7YwKQ0Krmm+BffC5l1ETdkXF7IZbrLYGkLEunMUXqe3IQu3jMjkAwLBriEYiLJhnPGVYSG0D52FJ5wuKNQbl+K00q2FrtWVReIdMEhbgTIgZdEr/fwE4KCKyiGugixUYKm/g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM3PR12MB9416.namprd12.prod.outlook.com (2603:10b6:0:4b::8) by
- CYYPR12MB9015.namprd12.prod.outlook.com (2603:10b6:930:c8::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.17; Wed, 26 Nov 2025 00:50:00 +0000
-Received: from DM3PR12MB9416.namprd12.prod.outlook.com
- ([fe80::8cdd:504c:7d2a:59c8]) by DM3PR12MB9416.namprd12.prod.outlook.com
- ([fe80::8cdd:504c:7d2a:59c8%7]) with mapi id 15.20.9343.016; Wed, 26 Nov 2025
- 00:50:00 +0000
-Message-ID: <861bca05-1964-4539-ac69-f3afc82bfe99@nvidia.com>
-Date: Tue, 25 Nov 2025 16:49:15 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/4] slab: Introduce kmalloc_obj() and family
-To: Matthew Wilcox <willy@infradead.org>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
- David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jann Horn <jannh@google.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
- Randy Dunlap <rdunlap@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Vegard Nossum <vegard.nossum@oracle.com>, Harry Yoo <harry.yoo@oracle.com>,
- Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
- Yafang Shao <laoar.shao@gmail.com>, Tony Ambardar <tony.ambardar@gmail.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Potapenko <glider@google.com>,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-References: <20251122014258.do.018-kees@kernel.org>
- <20251122014304.3417954-2-kees@kernel.org>
- <CAHk-=wiNnECns4B3qxRsCykkHwzovT+3wG738fUhq5E+3Lxxbg@mail.gmail.com>
- <202511241119.C547DEF80@keescook> <aSTKLsRNiEKtDqPI@casper.infradead.org>
- <202511241317.516BDE7B@keescook> <aSTRsIUPeT5EC5An@casper.infradead.org>
- <CAHk-=wgn-2ieKtaHAXLLge1UFckLKa88vo3XOdLz+fP+DLpHGA@mail.gmail.com>
- <aSUB1qrfhXp3suGn@casper.infradead.org>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <aSUB1qrfhXp3suGn@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0055.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::30) To DM3PR12MB9416.namprd12.prod.outlook.com
- (2603:10b6:0:4b::8)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BG9wQMe8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764128330; x=1795664330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vAkEMonUDt9Lx6WG94p1cDBrRgahkfC4sYAgtrbDRrg=;
+  b=BG9wQMe8lLenRaq6X/Va4ZMY0wvKQUaEwmbQUGjPij/I2cDxF4/eZgrC
+   bZ/mSWOFZgOyVABuB1ucEsBsXbIC150hYnFf0Ca8bjIyhAJbZISAIfkyp
+   TlpKjxmHokHMyyKP7oRVuBh0gcY3t18IwS8vFU9evp6OGG4FWAcIPaC70
+   D+EIrh5lF/IGNNLOAR3zEwqMzQFmkm4kh4d/X70UntCtTnrAXkbkNxkZf
+   oF7+B/CF/Ls4YRSEGR5pFKbAH1OWNTBxUpzRUctnmIzKMXPchoGK0vQWN
+   1FjjONnY1mJHqBcCSO8W3zJDbKQk09UfdUwhZZaRXbcsmwxWPX+Rohhc2
+   w==;
+X-CSE-ConnectionGUID: Xp1qfNaJQaqae424NaOnfA==
+X-CSE-MsgGUID: UX+UmSgrRYmaPEPay/RxfQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="65865774"
+X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
+   d="scan'208";a="65865774"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 19:38:50 -0800
+X-CSE-ConnectionGUID: AGT9bCDwQleTKYt7SeOVZA==
+X-CSE-MsgGUID: VxmX6gDtScKQB0pUe3T2iA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
+   d="scan'208";a="197300645"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1f7de368ad0d) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 25 Nov 2025 19:38:49 -0800
+Received: from kbuild by 1f7de368ad0d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vO6Mg-000000000d3-0VAH;
+	Wed, 26 Nov 2025 03:38:46 +0000
+Date: Wed, 26 Nov 2025 04:37:53 +0100
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:randomize-kstack-siphash 1/1]
+ arch/x86/include/asm/entry-common.h:95:2: error: call to undeclared function
+ 'choose_random_kstack_offset'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202511260422.Q4byvNJU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM3PR12MB9416:EE_|CYYPR12MB9015:EE_
-X-MS-Office365-Filtering-Correlation-Id: bef19c01-0293-42cc-8b96-08de2c85ba28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cTM5RVg3SUc1SGpJZHBHYWJkVmJSNUhJSElqTTN0QUZLUmtiMXdiRWlndklq?=
- =?utf-8?B?Zno0UzV4NmJvUWdBdU9vU3RxaGk0bzZPTzRlUTU3UlltenBMZ0Q0dC9oTmg1?=
- =?utf-8?B?d1dsSXVWbTVIK0UxQ3kzcFZSK1V4RlVQeURMT3kwYUVlQ1ZiVm04b29ZeVp1?=
- =?utf-8?B?RGkvbWJIRWxJUVg5cWtPM25VbkJSWmxuR3ZWRVlTVDN4NnNLNEx2WVQvY2Y3?=
- =?utf-8?B?WG90cWNuZVBOQTVtS1dBdFl3VHpjSVd3WjRVV3h5NXJiUktObnM1ZEFJMDNY?=
- =?utf-8?B?M25pZ0x3anNwaG5CdDBZQzRRSkJLYWRqbnJtSFZOcTFhM0F2c2U3RFJlaytY?=
- =?utf-8?B?RDlPdU4zaUJ2RlJTUktkVHNyL20ya3IxeUgzOVdwRkE5dGlTNmV1Qy9sU0or?=
- =?utf-8?B?SnBRUGhmYkNUZnU0RzkrZU84aXhaSUwzaTBOMExYeDN2RzBzc0NvUzBpd1pQ?=
- =?utf-8?B?eE1vT2w3Y1FtOVdqNVA4eUhBUDdzV054aFd6YjRzWVRmSUMxazA1N2lCcEFN?=
- =?utf-8?B?UExHSno1bVNjdEtDQjRiY1lhdjJWZW1VQ1VnUHkyZEdjZENtZDUyanFiZ3Vu?=
- =?utf-8?B?TmlHWjhhLzFna2xFZ200YXpteG1hdG9wWk9SYmEwSXU2ZTYxaEJsMWFtN3oz?=
- =?utf-8?B?bWJNUkhndWtMdVN3LzZ1MFd5MG9xcE9nZ3lnODFOTWR2NUJIOTgxVEpqLzF5?=
- =?utf-8?B?SDFqcFFyUUVPY2t6d0tMYW9ReXk1NlU2NE9rUVZIQ3pOQjlHOEMxdUZpLzhR?=
- =?utf-8?B?eUlpMEo2b0tWZkE4aktaOHp4dklkSWJLcHBnRjErcFYxMElZQ3g4d2wvWXg4?=
- =?utf-8?B?MCtzc3lzVHVpUWhReGtPTWZyUjluTVlQZVYwWGpEcVlMSEZ2TGZIdHRseERx?=
- =?utf-8?B?dFpiSGt4K2VuZXlHOUtaWXJ2dGxUeGo5Snp0T2JZRG50MFRmbzFDZTFXNEp1?=
- =?utf-8?B?RFN5TkpXMFpSSFVTZENDbTUxSG5tLzNkbmRMaHZRdHRiL29NTzBiR3U4UzBM?=
- =?utf-8?B?ZmRmaXJGQzBHQklYQjhHZ2pvQlZPYThPcVNBaUlLRW01eGdBaGJ5TXowZm1z?=
- =?utf-8?B?Qnp4QXlPY0N0dEF1eWVFTlV3ZWhucmVlN1h2dk11dFJFZys1YXZqb3pIeXpL?=
- =?utf-8?B?RzRpRFBxTkcxYkVUSEVoVit5T1pBS213bi83ME9ZNzBac1BGUDJWU2FwZWNz?=
- =?utf-8?B?cUJIczdyN000ZmFQK1ZiSG5qRHRaeEpjTkVwQ0RIVFhQcCtMUm9UdUY3OXVI?=
- =?utf-8?B?bnVEYUFmMkxVOHBnbnpoOEgwR1ZvNU8zRHdlV1cyMmg2UTJoQlhsUVZzUERT?=
- =?utf-8?B?Y0dFUjVOMW40eklNQk9vOGJaZUdSSkhNV2hRZEt5MnNkODYvLzhhNXdwWldC?=
- =?utf-8?B?S2NIWXQxWW5MbUo5MzNnZFNmTk9xSUtMYlV6cW9GMUMxT0tQVkhVZ1pYSVNR?=
- =?utf-8?B?MUswT1ZXaVFSdWFRWEVlOS80dXpIR3ljeHhnWUs0Q1cwa3hQMmQ0YVBhQ281?=
- =?utf-8?B?S0hnWUZNa3lmOEFmWUFiUWZuaW9PUW9hZWFBdzd2d0pQcUdYbnB4RTJVU2VZ?=
- =?utf-8?B?bnk3aXQ0MEE3R21tTElEWEhURHlYUjFRcXU2cjFNbHB6ZUYvcUYxNkpFWFZq?=
- =?utf-8?B?MTRtR2l2M2VXWGNZZVQyMElSZVVqMVBsUDNFRmF5SjJoL0lFd2RJZnBlbWMx?=
- =?utf-8?B?bFBmOHFQQWg5OEdNUTQzdDJJSzE3aFRjNW1hclhXZkQ1cGwvNHRyV1h5UUJZ?=
- =?utf-8?B?MWg1dDhnN0ludkVJTHhEajJoTWQyUjNjQ2JFdDZVcnRiZmx5UzByYS8rZ05Y?=
- =?utf-8?B?RnFLdWU3SEVQTm9HOVZSV0dNTG5CTFhmRE96VXZrak1CbE9WT01wUVIzWFpV?=
- =?utf-8?B?Z1VsMXE2WHNtMkdQUTdGMFhrZ3BxaHlqQUVMNzBNWmVVUXNrZVhLTVFTakRj?=
- =?utf-8?Q?gaqjEibINRFQVpppdPR0VgWnLYsnwRt+?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PR12MB9416.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZVhJaGJ3UUZBTHFJWGkxRmt3b1NTalBjNkhVcWJBZ2Z6Q0puY3h4enlCT2FP?=
- =?utf-8?B?ZmJYK3RPcTVhQ29RSFdVSUVhQzBtMzFyNzlQMG5Nb2pVK1VSY2tJYmZMV0ln?=
- =?utf-8?B?ekgxK2VuamEwbUladzZEQzNSYmRRWVhjbkFrTFo0K09ta3lYWmFyUFVYdWox?=
- =?utf-8?B?QVBxQ3ZoU0tIaTlJdXllSGlRbHRnWnJCZWkzamxRdWo3N21lUXdHbm45bUFR?=
- =?utf-8?B?L1FlNzlJVEx2S2VRK3pET2pwSzVIYldRS1cvbHZmMS9EZlJqYWlBZmRGbkp3?=
- =?utf-8?B?TU4zRDdyckE2a25Gd2tLb2ZIRHJKZ09KUFlSWUVOdy9wOUhHUjNicTg0WXgy?=
- =?utf-8?B?aXpUa2NXQk5vVUYrTHFaeHdRampoeEoxTVJqQ25DWktYd08vTk5XWHh4WDN5?=
- =?utf-8?B?aTNEdGZZUTM0NEdremt1R0RUcmNjQndQWGtUSE9FQ05MYW9KbHVLVXZIZUZi?=
- =?utf-8?B?c0dZbFF3ZmM5bzdRUTVkNUpPcEVRSndwZFBhYUtQV2Q0bVZyRmVUSXZ5aGhD?=
- =?utf-8?B?UFd2N0RORWNzV1VrbzB3WHBGbGh0N3c3VTlBL0RpNFpMRklKZ1NuNXBtbkQw?=
- =?utf-8?B?bGVvY1lWMXVuVmpRdVZKVGtxM1NDdEtFRFdsb21VNjJpNDNaRHllLzh2SVNJ?=
- =?utf-8?B?QkJUVE1TTDhhZzI2QjBFdzFvTFNDSHhGQnhOeGdNa0lQdGMvSy83bk15UXV4?=
- =?utf-8?B?MS95Q1ltUkpKZFprZXhXb2xINlN0QllpUFZHRnU1bTNsbUdkNzUyK2dWeXM4?=
- =?utf-8?B?UEdWcEpQa2luSzhQbEt3OExKbXdrdE9xRkphK2FnaXAyQlJRc1ZjeFFZTGg5?=
- =?utf-8?B?U0ZsRXdXZ3BaTHpiRUQ2QmlDWW91TEt5aFlHYzY0SjNJZDU0SUMrM21yTGxQ?=
- =?utf-8?B?VVJ5cEN3OUgyY2M4T3NSZ3ZwK2RWUTZHWHFxbE9UZ0FFYmlzbEo0R1Z0UVNy?=
- =?utf-8?B?SUJLdGUxekpDeVNDaVZrSldsT2ZhdWdhTmEwci8weXA0ZnRESU5Ba2dicUUz?=
- =?utf-8?B?a2FLamMxNmZYbmxHRXc5SXFRRVhXQndEaXMwYUxIVy8zYldqbDJKZXdCRmJP?=
- =?utf-8?B?aDJOK3YwSG1GRFI0Nk8yQ3FON3RiOFRWTUkzS3E3N0VDa3I3bWtnVHA2MVU2?=
- =?utf-8?B?SytKa3ByV2tUS3oxcDBaT1U5Q2hPM0pFUkV4N1Q4UEQrdjNMalNmejdNQ1Uz?=
- =?utf-8?B?K1NhaDNQTzVxaDJhSnVwVHB2algyZFFhZXZycVBJR2dUN0xEcDhaaktJQVZi?=
- =?utf-8?B?bng1ZWZKeGVnNFgzYWJmdDM4SjQ0SSs4cmxVNUFMY2E0cHBlVG9FajhoNDcv?=
- =?utf-8?B?N0FweTZQY0c5VkgyVWt4MEdTa0Q5Uk1FYzVzTTNtWVo3bis1WUFFc3p0b2hu?=
- =?utf-8?B?MjJ1bEs0RTVQN2MyaVROR2JhcFVFbUdUdWdpSCtVekF2cUZPOEtvbk5udUVs?=
- =?utf-8?B?NGJ3WkhxdXFLbHdvbDdlZ1EvOCtJMUlOSEQwUWhMcHNNSHBIdVFqbDBWcDNU?=
- =?utf-8?B?Z2xldFUrLzFCdkY1M3UyZ0Y1amgvQ3lsZlVTb3pjNFhOWExIRVRHWGVjNVpE?=
- =?utf-8?B?RW9zS0dhWnBzeWZNZVlJSWJrU3NGb21ieHpCd1FuUGpYNDUyVnVzSnNQQ2JJ?=
- =?utf-8?B?M1lDaEVaUjdGUTB2ZU91Nkw5N25GSnYxUVNzdHFSaGlEU0JoZUVYamJrZmZC?=
- =?utf-8?B?a2hONDJjYjJNUko0OGVrbmphTnMya3FScnYrcU15UldqdWwwQkVpZGpyQzJ3?=
- =?utf-8?B?K0FRUEVWbVFzTVM1eHVGTmZwbG15Z3h4cW9RTUxLeTZkdm5paW1vbUVEOGhw?=
- =?utf-8?B?bDY0eEhYU0ExalJ4dVZlOGdTcThha3c4eFp1d0gyREVtN2poSG5hWDJqM0Vk?=
- =?utf-8?B?WndNeTdmTGt4bU14MHVzTkg0OCt0clpEUjdzMG5WcGt3cDRJYno1RzBCdnNT?=
- =?utf-8?B?U0t5RkMwV0NkMnUyY2hMNEdTMTBxbG1LcEJzSVAxZHFaRE1YK3ZPdVRJb1d1?=
- =?utf-8?B?TnNWTHZLWkFpSytldlpkaXh3a1J3ZlRyeG16MHJsK1pyUDFsOFRmRHBUTWJE?=
- =?utf-8?B?ekxEQnlRS0dQditpM3g0YnVKZWJHVUY1bXdFVmJvTnVUMzNMQkdaWFFyeUlh?=
- =?utf-8?Q?Kur/aS/n8MEPoiRbkUbZbJx2/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bef19c01-0293-42cc-8b96-08de2c85ba28
-X-MS-Exchange-CrossTenant-AuthSource: DM3PR12MB9416.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2025 00:50:00.1233
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VMLkwZQ+/hVcgOev5Pwawbscmn+TUK111Mp6kH3e+j3xsh2Y4DTdJ4PqMCRxoKqGj32rgETGmpsL6xSwIqHcUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB9015
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 11/24/25 5:09 PM, Matthew Wilcox wrote:
-> On Mon, Nov 24, 2025 at 03:30:19PM -0800, Linus Torvalds wrote:
-...
->> Imagine how many other places you add integers to 'unsigned long'.
->> EVERY SINGLE ONE of those places involves sign-extending the integer
->> and then doing arithmetic in unsigned.
-> 
-> I have bad news.  Rust requires it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git randomize-kstack-siphash
+head:   0783912db6e30339d55a5dc7eb6a696b440bedb3
+commit: 0783912db6e30339d55a5dc7eb6a696b440bedb3 [1/1] HACK: use siphash to generate kstack offset per-task
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251126/202511260422.Q4byvNJU-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511260422.Q4byvNJU-lkp@intel.com/reproduce)
 
-Well, yes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511260422.Q4byvNJU-lkp@intel.com/
 
-But the pain is front-loaded, so it's not like we have to go back and
-retrofit anything.
+All errors (new ones prefixed by >>):
 
-And I also want to tweak the characterization of that, below, because
-I suspect this is unevenly understood, so far:
-
-> 
-> fn add(base: u64, off: i32) -> u64 {
->     base + off
-> }
-> 
-> error[E0308]: mismatched types
->  --> add.rs:2:12
->   |
-> 2 |     base + off
->   |            ^^^ expected `u64`, found `i32`
-> 
-> error[E0277]: cannot add `i32` to `u64`
->  --> add.rs:2:10
->   |
-> 2 |     base + off
->   |          ^ no implementation for `u64 + i32`
->   |
->   = help: the trait `Add<i32>` is not implemented for `u64`
->   = help: the following other types implement trait `Add<Rhs>`:
->             <u64 as Add>
->             <u64 as Add<&u64>>
->             <&'a u64 as Add<u64>>
->             <&u64 as Add<&u64>>
-> 
-> so the Rust language people have clearly decided that this is too
-> complicated for your average programmer to figure out, and you need
-> explicit casts to make it work.
+   In file included from arch/x86/entry/syscall_64.c:8:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:12:
+>> arch/x86/include/asm/entry-common.h:95:2: error: call to undeclared function 'choose_random_kstack_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      95 |         choose_random_kstack_offset(rdtsc());
+         |         ^
+>> arch/x86/entry/syscall_64.c:89:2: error: call to undeclared function 'add_random_kstack_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      89 |         add_random_kstack_offset();
+         |         ^
+   2 errors generated.
+--
+   In file included from arch/x86/entry/entry_fred.c:12:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:12:
+>> arch/x86/include/asm/entry-common.h:95:2: error: call to undeclared function 'choose_random_kstack_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      95 |         choose_random_kstack_offset(rdtsc());
+         |         ^
+   1 error generated.
 
 
-A couple of key points, though:
+vim +/choose_random_kstack_offset +95 arch/x86/include/asm/entry-common.h
 
-a) There are many other, better options than casts (Rust's "as"
-keyword).
+fe950f6020338c Kees Cook       2021-04-01   84  
+fe950f6020338c Kees Cook       2021-04-01   85  	/*
+6db1208bf95b4c Kees Cook       2024-06-19   86  	 * This value will get limited by KSTACK_OFFSET_MAX(), which is 10
+6db1208bf95b4c Kees Cook       2024-06-19   87  	 * bits. The actual entropy will be further reduced by the compiler
+6db1208bf95b4c Kees Cook       2024-06-19   88  	 * when applying stack alignment constraints (see cc_stack_align4/8 in
+fe950f6020338c Kees Cook       2021-04-01   89  	 * arch/x86/Makefile), which will remove the 3 (x86_64) or 2 (ia32)
+fe950f6020338c Kees Cook       2021-04-01   90  	 * low bits from any entropy chosen here.
+fe950f6020338c Kees Cook       2021-04-01   91  	 *
+6db1208bf95b4c Kees Cook       2024-06-19   92  	 * Therefore, final stack offset entropy will be 7 (x86_64) or
+6db1208bf95b4c Kees Cook       2024-06-19   93  	 * 8 (ia32) bits.
+fe950f6020338c Kees Cook       2021-04-01   94  	 */
+6db1208bf95b4c Kees Cook       2024-06-19  @95  	choose_random_kstack_offset(rdtsc());
+2f8f173413f1cb Pawan Gupta     2025-08-14   96  
+2f8f173413f1cb Pawan Gupta     2025-08-14   97  	/* Avoid unnecessary reads of 'x86_ibpb_exit_to_user' */
+2f8f173413f1cb Pawan Gupta     2025-08-14   98  	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
+2f8f173413f1cb Pawan Gupta     2025-08-14   99  	    this_cpu_read(x86_ibpb_exit_to_user)) {
+2f8f173413f1cb Pawan Gupta     2025-08-14  100  		indirect_branch_prediction_barrier();
+2f8f173413f1cb Pawan Gupta     2025-08-14  101  		this_cpu_write(x86_ibpb_exit_to_user, false);
+2f8f173413f1cb Pawan Gupta     2025-08-14  102  	}
+167fd210ec0555 Thomas Gleixner 2020-07-23  103  }
+167fd210ec0555 Thomas Gleixner 2020-07-23  104  #define arch_exit_to_user_mode_prepare arch_exit_to_user_mode_prepare
+167fd210ec0555 Thomas Gleixner 2020-07-23  105  
 
-In fact, Rust doesn't actually require casts here, but it does require
-something to explicitly declare the programmer's intentions.
+:::::: The code at line 95 was first introduced by commit
+:::::: 6db1208bf95b4c091897b597c415e11edeab2e2d randomize_kstack: Remove non-functional per-arch entropy filtering
 
-b) Rust doesn't do this because programmers are too dumb to figure it
-out. On the contrary, programmers are required to specify exactly what
-they want, in the first place.
+:::::: TO: Kees Cook <kees@kernel.org>
+:::::: CC: Kees Cook <kees@kernel.org>
 
-Some examples, using Matthew's example as a starting point:
-
-// u64 add operations:
-//   +                          - panics on overflow (debug), wraps (release)
-//   wrapping_add(u64)          - always wraps
-//   wrapping_add_signed(i64)   - always wraps, accepts signed offset
-//   checked_add(u64)           - returns Option, None on overflow
-//   checked_add_signed(i64)    - returns Option, None on overflow
-//   saturating_add(u64)        - clamps to u64::MAX
-//   saturating_add_signed(i64) - clamps to 0 or u64::MAX
-//   overflowing_add(u64)       - returns (result, bool)
-//   overflowing_add_signed(i64)- returns (result, bool)
-//   strict_add(u64)            - always panics on overflow (even release)
-//   unchecked_add(u64)         - UB on overflow (unsafe, for optimization)
-//   carrying_add(u64, bool)    - multi-word arithmetic, returns (result, carry)
-
-// 1. Wrapping: overflow/underflow wraps around (address arithmetic)
-fn add_wrapping(base: u64, off: i32) -> u64 {
-    base.wrapping_add_signed(i64::from(off))
-}
-
-// 2. Checked: returns None on overflow/underflow
-fn add_checked(base: u64, off: i32) -> Option<u64> {
-    base.checked_add_signed(i64::from(off))
-}
-
-// 3. Saturating: clamps to 0 or u64::MAX
-fn add_saturating(base: u64, off: i32) -> u64 {
-    base.saturating_add_signed(i64::from(off))
-}
-
-// 4. Overflowing: returns (result, did_overflow)
-fn add_overflowing(base: u64, off: i32) -> (u64, bool) {
-    base.overflowing_add_signed(i64::from(off))
-}
-
-fn main() {
-    let base: u64 = 0x100;
-    let off: i32 = -0x200;
-
-    println!("base=0x{:x}, off={} (underflow case)", base, off);
-    println!("wrapping:    0x{:x}", add_wrapping(base, off));
-    println!("checked:     {:?}", add_checked(base, off));
-    println!("saturating:  0x{:x}", add_saturating(base, off));
-    println!("overflowing: {:?}", add_overflowing(base, off));
-}
-
-// Output:
-base=0x100, off=-512 (underflow case)
-wrapping:    0xffffffffffffff00
-checked:     None
-saturating:  0x0
-overflowing: (18446744073709551360, true)
-
-
-thanks,
 -- 
-John Hubbard
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
