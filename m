@@ -1,122 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCCC33E36F;
-	Wed, 26 Nov 2025 16:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2089E30BBB3
+	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 16:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764174132; cv=none; b=S7Bwt78n+f6C5nTz08i4R/YRvAF4U4159KXfO/2F13OXO1RO+SqPSgxML8EvjhUzlczY8/KuO3vgQx5NV2OBm5p0BNcj7swqGRJRNv2aNxlHW9HWwNEG22t6JCjaTxzBq/3Y1RWpPr2ANao2a3HKpSkjgr9EmDr2cTHlsDX5t08=
+	t=1764174670; cv=none; b=oGfFW/CoudIJJFqQkePERIWMG9S+cTnZ/ihy+LrCK5Uvh/WCt9rByDiArL3HO83hSeaxFB3MFW4OeymbKu9l6PCM+72he9fHl6bPYpJTsISV8hI4BRmM6QQRWiqAnNFc5ESnKrXXw3bbX6AybybspJq+LHDpyklvdTI+49+yVnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764174132; c=relaxed/simple;
-	bh=zw6BhefijnLG+S4eYXFq6rpx+ApEO8bQGmGoFyuX9rc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nd8FV8MeGS/nK3UAum8wVuypO5bneJgYlCuioYnF1vvooXnTiLG6IBAEw26EDXv4APoTQkGcxwUDxkXvqbUVRbYLt5CXUpTJZGZkIZlGSBdVpTgUYHuJpGAoYpbJmNX6SlauklM6wU/Nzt+GHAfp5qyfl+ukain3+ZLv4+N7UpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TSu8ck4g; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764174670; c=relaxed/simple;
+	bh=JUk+V7+BC+lkMoAifGFTRedw6UOHlW97lAtjujuGo3Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u0GBKm946ewG5QEnnZqLod0/AEkTvnUQNa5hP0zxatB8ZNx9tYd97UXv/Pt1APVhu+IRErd8c5c4IpRWsjrDoh/mH3kqDpXA+Dm935/MN3j1Ebrxr3CUIVhmX+8kgbhXc0Wq1uyktyKTsUQ7YnNuWl8pLmWPitXIKTKU0TZii0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzvjDQDN; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TSu8ck4g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764174131; x=1795710131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zw6BhefijnLG+S4eYXFq6rpx+ApEO8bQGmGoFyuX9rc=;
-  b=TSu8ck4gI9rrRFC/m7lOYkDSHVZ8kJF/K7R3J6fjsNW/oq2V6klNBOte
-   4VD8XhD0A4GviKExxEBvQDHMsor3oFydQuXsGY9b0RqRrJKik9yitCccJ
-   DrLVZI4IYaVCtqWPrLXM6FJMcvhg1IJXPn0rQjonmhNwsjNUdNy/Vhjir
-   pgW0g3a5VIsvDuO1fSX3jKYNmDLipqHnhCgsMinI2vsyMptP+7NG5vBGX
-   aBYQOziGZMvvICGlc8015a+EdoZDMUiCNHHYFjmDHYZE7+KxThKL0hUca
-   oiIHBImy0O7/KId/cPQwYCV9qBa0qb4clWPiMHRmW9hvKwKKoiijpNnMc
-   g==;
-X-CSE-ConnectionGUID: drrw9B7SQI+7bKRyEE7Oeg==
-X-CSE-MsgGUID: cQdeDFa/TyW3COkmxhfqgA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="66293163"
-X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208";a="66293163"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 08:22:08 -0800
-X-CSE-ConnectionGUID: HgtPmpJvShehwcNKjUKPFA==
-X-CSE-MsgGUID: 8y8gb/ZMRsqrzURpBQN1ug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208";a="197313626"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Nov 2025 08:22:07 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOIHN-0000000036b-1JlB;
-	Wed, 26 Nov 2025 16:22:05 +0000
-Date: Thu, 27 Nov 2025 00:21:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 4/5] guest_memfd: add support for userfaultfd minor
- mode
-Message-ID: <202511270012.rGTVhLaw-lkp@intel.com>
-References: <20251125183840.2368510-5-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzvjDQDN"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-340ba29d518so4438532a91.3
+        for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 08:31:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764174667; x=1764779467; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
+        b=kzvjDQDN/mPRBaW/3ojKZ9KEpUlOZnEMhwqAkEWvIOuiHZUWw4D9uMPeCL95+6GpCv
+         N/H3YI1ZqqgNS5hajaF+0h7/xW+DSiUFFO6eS86mC1+Sw1jCU0UK3QiOgqRfuLTW9suG
+         F0LHu6VeuwNGeEanzCuyzsglyz4W+3gJ5JUWy3OyJG63nmscTH76YeLKbuRBzViTiVB2
+         g/EuLcT5htdQUZH0TpONkZr3gxbChaNDaxcN/0JkOXFW9UXVJ+8leNyXuSVa/PYVPbNN
+         iRaGThNLJNVbVqJwelgPz7LX1Ft9ERU82oOfe+oWlAICOcOxyp7ssqmM0Rhw0rQQ84IL
+         OHfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764174667; x=1764779467;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
+        b=glMqTlOJZBg/Sr/hwJUgyhSSWoxbbMMD/lS70H6kDKCLAlvFk7z56eymUZN4ZM8E1e
+         BUcJXwj3fQEFg/QXZaJbouYRsftCsRzPpzGdHStYGa9xSvVMUEzh7sme4/PU3VFXu+Dz
+         DYmX2QYA62cUuVYmZEr2dly1uJKj1u4kArhmmUyvcY8wi/LfeeBPyI8igExc0NFEv7W5
+         CWud45lz3/Aqn6Sc2KCyLkFtOxp1vKuKDFRw6tFFWvKNLwNnqz8DZIigaG5KirmGKkWC
+         n6GeWatpgWT/iR+vmUMLSwH2n302RpTIJDP1JOy3akXBVAy1joIFDXCzIx4VuM615Fot
+         5A1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXC/MEmzfYHZsL0sUFzkbN3+W2yEUN88eUcNVFvibVnhE6wVTP9ckzqMswN4HAyOTt6/6wk@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz+woqadI/rN4BinUccwvNTiyT8BaPoCmKpTimaoPS+m3P/pDqm
+	GhUmQAyZ0uHLJLVGGd/4kDN7XzqdYhjov31WezSpUkddRzgCqvGKHX+7
+X-Gm-Gg: ASbGncvLDG3Rrwd1RzVMB0ycvRGgneSICalEDhMn/5XsjdTFwSnj84G5FpbKc8+CWu5
+	6cNuHskZa7j/nIkteXimDmNWvuvKo+hwktpp2h4a2uDU2tKEylPYBCNzyQ0JJzqLSlZhdeH9hks
+	vC38Pqd/37eV1iNhoPuDbtuzuHHbsxqmQNCLo+ymTBcQwQPPxbGJR62atmoUIuGcpipb8LZ/Kqs
+	KFPAojmf87ofk4f2hRTvkjnw9YHnAj2juqkjb2jrzkf4HKZv669zbzO/6dKmEp5KnYsL/8/oFAs
+	3N+5w3H6YnTIc1Jy5MwGHNrIW47riMizeHgg3l/ojTNZyatZTi6IGOPZovFTY8SVblujh43dtgD
+	9EWcZS17YJbuGg+LkviK8TsKAs3x74akhXhxs+U4k7BdwNFEJxe/D4m7UhEzdFXJae0t7ruAb/F
+	O7psAeE8O332fT4ri8sTy5d+Jo7QzTZg==
+X-Google-Smtp-Source: AGHT+IHYlOs7ib3WRoxz+IosxSmgFDE9P7H1+e8rCoPRGJ8hqrHc7dD/TBxgldig3bre3IVxR56yzg==
+X-Received: by 2002:a17:90b:2247:b0:340:f05a:3ed3 with SMTP id 98e67ed59e1d1-3475ed5141bmr7678530a91.17.1764174666979;
+        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd760fae9e2sm19829401a12.31.2025.11.26.08.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>,
+	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Subject: [PATCH] selftests: mptcp: initialize raw_addr to Null
+Date: Wed, 26 Nov 2025 22:00:46 +0530
+Message-ID: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251125183840.2368510-5-rppt@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Mike,
+The "void *raw_addr" is left uninitialized when else path is
+followed raising below warning.
 
-kernel test robot noticed the following build errors:
+mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
+      uninitialized whenever 'if' condition is false
+      [-Wsometimes-uninitialized]
 
-[auto build test ERROR on 6a23ae0a96a600d1d12557add110e0bb6e32730c]
+so the fix is to assign *raw_addr to NULL to suppress the warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Rapoport/userfaultfd-move-vma_can_userfault-out-of-line/20251126-024059
-base:   6a23ae0a96a600d1d12557add110e0bb6e32730c
-patch link:    https://lore.kernel.org/r/20251125183840.2368510-5-rppt%40kernel.org
-patch subject: [PATCH v2 4/5] guest_memfd: add support for userfaultfd minor mode
-config: x86_64-randconfig-011-20251126 (https://download.01.org/0day-ci/archive/20251127/202511270012.rGTVhLaw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270012.rGTVhLaw-lkp@intel.com/reproduce)
+Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+---
+compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
+compilation cmd used:
+	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511270012.rGTVhLaw-lkp@intel.com/
+this maybe also be false positive. But somehow clang - 21.1.5
+triggering this.
 
-All errors (new ones prefixed by >>):
+---
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:401:22: error: redefinition of 'kvm_gmem_get_folio'
-     401 | static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t pgoff)
-         |                      ^
-   arch/x86/kvm/../../../virt/kvm/guest_memfd.c:100:22: note: previous definition is here
-     100 | static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
-         |                      ^
-   1 error generated.
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+index 404a77bf366a..cdb81e0d08ad 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+@@ -1248,8 +1248,8 @@ void xdisconnect(int fd)
+ {
+ 	socklen_t addrlen = sizeof(struct sockaddr_storage);
+ 	struct sockaddr_storage addr, empty;
++	void *raw_addr = NULL;
+ 	int msec_sleep = 10;
+-	void *raw_addr;
+ 	int i, cmdlen;
+ 	char cmd[128];
 
+--
+2.52.0
 
-vim +/kvm_gmem_get_folio +401 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
-
-   399	
-   400	#ifdef CONFIG_USERFAULTFD
- > 401	static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t pgoff)
-   402	{
-   403		struct folio *folio;
-   404	
-   405		folio = kvm_gmem_get_folio(inode, pgoff);
-   406		if (IS_ERR_OR_NULL(folio))
-   407			return folio;
-   408	
-   409		if (!folio_test_uptodate(folio)) {
-   410			clear_highpage(folio_page(folio, 0));
-   411			kvm_gmem_mark_prepared(folio);
-   412		}
-   413	
-   414		return folio;
-   415	}
-   416	#endif
-   417	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
