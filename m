@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67A11F419A;
-	Wed, 26 Nov 2025 12:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72339257844;
+	Wed, 26 Nov 2025 13:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764161275; cv=none; b=JGwk8z7z13q0TYZtZzIk62+22EwY2DkTpj4nLEJZtCv1FD2BdeSskR7rpOEuDXOYolZGjf2wyHUmB0SsiQcrFmuoEQCK7y+U47ztbWgHItAJLHnucVN716Xggfxigm6awQrgahDNxngdgl8jRvjqdnomfnqrKMpReVRUufw8ke0=
+	t=1764162600; cv=none; b=rStRwPikUxxhh3BBY4xWO/yBqoW6uYp7qNFtHqueezadZZK4TcYGj3VPouqsN2cR/wcbEXsjYfu/KxZByRMvQmsi8i9ZXS2lllE/YHi+ijY58gzTX9XsqE+YKXBzDFsrjBq57FP3sV3FY97rqTyhcPBY4Mx+4BNjbXCsU2Sk0e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764161275; c=relaxed/simple;
-	bh=mCOTTsADR2bzj1PyZQv8CIQiWFMT6GRnekgWFM29eQU=;
+	s=arc-20240116; t=1764162600; c=relaxed/simple;
+	bh=0UcnrwIM9SHl7Sc2Z0gF+3/DOntjk2qlPnZ/m4yZnp4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=caPddj4HM9nbL3Jdul2/PdThc2MCY66bu43Jhl/E5f7nbSz9fizF8Q/qVYcFyQ6jOCn319W+bK1iq2N5FZaOpx/L0hn1ULdmr7BnpfNjXo6Vn16LgjiZ4KFlARCIG4seCAlYYXX3nJdnRobPwqKWSA0n90MucukO8pQiSR4/7HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X++f6BFQ; arc=none smtp.client-ip=198.175.65.11
+	 Content-Disposition; b=pHHL1qW6hEcbOTgCwK+Wi2IauZDv6Xzz2qp/Slg5TtdS7vdDLeWxgVRQ5rIDNHuaVEADMTd/QKNtWFN6CbFzID8BooEGPjoNyUrp5YQDnGB5mbyuQ10OJfDqSMQaYgPUzfUmF/UP2mHK6nkTRXUEPh++pNXCReBRvHiIkCjco28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sv/4ye/5; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X++f6BFQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sv/4ye/5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764161273; x=1795697273;
+  t=1764162597; x=1795698597;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mCOTTsADR2bzj1PyZQv8CIQiWFMT6GRnekgWFM29eQU=;
-  b=X++f6BFQcGwpNZhqbShIqmxvfdUdXRai1BbOJ1GF+BP/8fB8wRdZnOpo
-   dnAwiVENs9OlIkrtf/UW72qkRbR/s7vm6+YT+dDNpN2U2xp4tIjyEqMsh
-   BCmWskeJl8Ck3BE/umtMcl8AHL9jEiUU+wUNSEutnn8IPNCDehyymLZIV
-   Tork1D6Qc/ZCorKOwczDA5wdb3tIVEdT0Tpjlfj0OzVe4synksXlm1TQQ
-   o0bt9XtNhzPxWjU7Ms9jBcpYDqVdtnTyKI1tzyTY//kkZBL8EegRpLsoh
-   fVfkFTykn+c+PKvUQfc+U2zYrvledXaNqYK3E/uCb2R0LXB/VQIzUWIJA
-   w==;
-X-CSE-ConnectionGUID: ZN+Uwlk2TPayVSRAfPkuNQ==
-X-CSE-MsgGUID: W8DmhRe+R6+xkkofdCLFmQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="76521248"
+  bh=0UcnrwIM9SHl7Sc2Z0gF+3/DOntjk2qlPnZ/m4yZnp4=;
+  b=Sv/4ye/5Q7/nmenzoUVNxn20FWvqKasHZWCubZ5ThEMzBQoBzp3WXKEC
+   dLB+KUl3fvqt+6r6BT9ZoWyq5qsqmwBGD5XVvymfGF/TeNfgMxcdRZWgO
+   uga13IqjY6xIU6m1VslAT8yCcrwUgwvnilw2Z1HAuFZg415ELYeRH4c6i
+   vRpiKIh/AcOmkQPyo90v6w6zlAJ188uw97M+a4Uj19JM5Y2r9qcL3/grv
+   O1M5CcL09Gsft7JxkcaGnPp0itZS+XPcCtUnsmdSxo7kBnZCtDmjIPaJg
+   rl4GtEwGI5I/dnig1X+eeeS1TEo1m5ue/TCTfxr+2CVNcspNA7/P7vQpb
+   A==;
+X-CSE-ConnectionGUID: mX/ewZgtSy6bhbrL09ugZw==
+X-CSE-MsgGUID: mspIY0pkQ5mxgXo/RWAvXg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="76883868"
 X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208";a="76521248"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 04:47:53 -0800
-X-CSE-ConnectionGUID: lsqypLh7Tqeb0j1HSK85Vw==
-X-CSE-MsgGUID: pImxAFPOS6uMq8vdGKFzQw==
+   d="scan'208";a="76883868"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 05:09:55 -0800
+X-CSE-ConnectionGUID: clVZqZ+jTz2XI7IXD9eoUg==
+X-CSE-MsgGUID: 9wKPUv6zTkGRuDWphSPEag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,228,1758610800"; 
-   d="scan'208";a="230186919"
+   d="scan'208";a="193171799"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 26 Nov 2025 04:47:51 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 26 Nov 2025 05:09:54 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOEw0-000000002pH-25yV;
-	Wed, 26 Nov 2025 12:47:48 +0000
-Date: Wed, 26 Nov 2025 20:47:30 +0800
+	id 1vOFHL-000000002t3-2Zlo;
+	Wed, 26 Nov 2025 13:09:51 +0000
+Date: Wed, 26 Nov 2025 21:09:43 +0800
 From: kernel test robot <lkp@intel.com>
 To: Gregory Price <gourry@gourry.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Gregory Price <gourry@gourry.net>
-Subject: [gourryinverse:movable_gigantic 1/1] mm/hugetlb.c:1842:6: warning:
- no previous prototype for function 'init_new_hugetlb_folio'
-Message-ID: <202511262018.dNZmp9is-lkp@intel.com>
+Subject: [gourryinverse:movable_gigantic 1/1] mm/hugetlb.c:505:9: error:
+ incomplete definition of type 'struct hugetlb_cgroup'
+Message-ID: <202511262147.qCAsmUek-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,20 +66,42 @@ Content-Disposition: inline
 tree:   https://github.com/gourryinverse/linux movable_gigantic
 head:   ba138827f6a776a1b329ebd87f3510e2d45302bd
 commit: ba138827f6a776a1b329ebd87f3510e2d45302bd [1/1] mm, hugetlb: implement movable_gigantic_pages sysctl
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20251126/202511262018.dNZmp9is-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511262018.dNZmp9is-lkp@intel.com/reproduce)
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251126/202511262147.qCAsmUek-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511262147.qCAsmUek-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511262018.dNZmp9is-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511262147.qCAsmUek-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
+   mm/hugetlb.c:497:56: warning: declaration of 'struct hugetlb_cgroup' will not be visible outside of this function [-Wvisibility]
+     497 | static void record_hugetlb_cgroup_uncharge_info(struct hugetlb_cgroup *h_cg,
+         |                                                        ^
+>> mm/hugetlb.c:505:9: error: incomplete definition of type 'struct hugetlb_cgroup'
+     505 |                         &h_cg->rsvd_hugepage[hstate_index(h)];
+         |                          ~~~~^
+   mm/hugetlb.c:497:56: note: forward declaration of 'struct hugetlb_cgroup'
+     497 | static void record_hugetlb_cgroup_uncharge_info(struct hugetlb_cgroup *h_cg,
+         |                                                        ^
+   mm/hugetlb.c:506:19: error: incomplete definition of type 'struct hugetlb_cgroup'
+     506 |                 nrg->css = &h_cg->css;
+         |                             ~~~~^
+   mm/hugetlb.c:497:56: note: forward declaration of 'struct hugetlb_cgroup'
+     497 | static void record_hugetlb_cgroup_uncharge_info(struct hugetlb_cgroup *h_cg,
+         |                                                        ^
+   mm/hugetlb.c:517:16: error: incomplete definition of type 'struct hugetlb_cgroup'
+     517 |                 css_get(&h_cg->css);
+         |                          ~~~~^
+   mm/hugetlb.c:497:56: note: forward declaration of 'struct hugetlb_cgroup'
+     497 | static void record_hugetlb_cgroup_uncharge_info(struct hugetlb_cgroup *h_cg,
+         |                                                        ^
+   mm/hugetlb.c:580:42: warning: declaration of 'struct hugetlb_cgroup' will not be visible outside of this function [-Wvisibility]
      580 |                      long to, struct hstate *h, struct hugetlb_cgroup *cg,
          |                                                        ^
-   mm/hugetlb.c:587:39: error: incompatible pointer types passing 'struct hugetlb_cgroup *' to parameter of type 'struct hugetlb_cgroup *' [-Werror,-Wincompatible-pointer-types]
+>> mm/hugetlb.c:587:39: error: incompatible pointer types passing 'struct hugetlb_cgroup *' to parameter of type 'struct hugetlb_cgroup *' [-Werror,-Wincompatible-pointer-types]
      587 |                 record_hugetlb_cgroup_uncharge_info(cg, h, map, nrg);
          |                                                     ^~
    mm/hugetlb.c:497:72: note: passing argument to parameter 'h_cg' here
@@ -109,7 +131,7 @@ All warnings (new ones prefixed by >>):
    mm/hugetlb.c:605:33: note: passing argument to parameter 'h_cg' here
      605 |                                      struct hugetlb_cgroup *h_cg,
          |                                                             ^
-   mm/hugetlb.c:909:4: error: call to undeclared function 'hugetlb_cgroup_uncharge_file_region'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> mm/hugetlb.c:909:4: error: call to undeclared function 'hugetlb_cgroup_uncharge_file_region'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      909 |                         hugetlb_cgroup_uncharge_file_region(
          |                         ^
    mm/hugetlb.c:930:4: error: call to undeclared function 'hugetlb_cgroup_uncharge_file_region'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
@@ -124,24 +146,36 @@ All warnings (new ones prefixed by >>):
    mm/hugetlb.c:1097:15: warning: declaration of 'struct hugetlb_cgroup' will not be visible outside of this function [-Wvisibility]
     1097 |                                           struct hugetlb_cgroup *h_cg,
          |                                                  ^
-   mm/hugetlb.c:1287:3: error: call to undeclared function 'resv_map_put_hugetlb_cgroup_uncharge_info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   mm/hugetlb.c:1107:9: error: incomplete definition of type 'struct hugetlb_cgroup'
+    1107 |                         &h_cg->rsvd_hugepage[hstate_index(h)];
+         |                          ~~~~^
+   mm/hugetlb.c:1097:15: note: forward declaration of 'struct hugetlb_cgroup'
+    1097 |                                           struct hugetlb_cgroup *h_cg,
+         |                                                  ^
+   mm/hugetlb.c:1109:24: error: incomplete definition of type 'struct hugetlb_cgroup'
+    1109 |                 resv_map->css = &h_cg->css;
+         |                                  ~~~~^
+   mm/hugetlb.c:1097:15: note: forward declaration of 'struct hugetlb_cgroup'
+    1097 |                                           struct hugetlb_cgroup *h_cg,
+         |                                                  ^
+>> mm/hugetlb.c:1287:3: error: call to undeclared function 'resv_map_put_hugetlb_cgroup_uncharge_info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     1287 |                 resv_map_put_hugetlb_cgroup_uncharge_info(reservations);
          |                 ^
    mm/hugetlb.c:1287:3: note: did you mean 'resv_map_set_hugetlb_cgroup_uncharge_info'?
    mm/hugetlb.c:1096:1: note: 'resv_map_set_hugetlb_cgroup_uncharge_info' declared here
     1096 | resv_map_set_hugetlb_cgroup_uncharge_info(struct resv_map *resv_map,
          | ^
-   mm/hugetlb.c:1479:18: error: call to undeclared function 'hugetlb_cgroup_from_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> mm/hugetlb.c:1479:18: error: call to undeclared function 'hugetlb_cgroup_from_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     1479 |         VM_BUG_ON_FOLIO(hugetlb_cgroup_from_folio(folio), folio);
          |                         ^
    mm/hugetlb.c:1479:18: note: did you mean 'get_obj_cgroup_from_folio'?
-   include/linux/memcontrol.h:1792:34: note: 'get_obj_cgroup_from_folio' declared here
-    1792 | static inline struct obj_cgroup *get_obj_cgroup_from_folio(struct folio *folio)
-         |                                  ^
-   mm/hugetlb.c:1480:18: error: call to undeclared function 'hugetlb_cgroup_from_folio_rsvd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   include/linux/memcontrol.h:1689:20: note: 'get_obj_cgroup_from_folio' declared here
+    1689 | struct obj_cgroup *get_obj_cgroup_from_folio(struct folio *folio);
+         |                    ^
+>> mm/hugetlb.c:1480:18: error: call to undeclared function 'hugetlb_cgroup_from_folio_rsvd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     1480 |         VM_BUG_ON_FOLIO(hugetlb_cgroup_from_folio_rsvd(folio), folio);
          |                         ^
-   mm/hugetlb.c:1483:6: error: call to undeclared function 'hstate_is_gigantic_no_runtime'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> mm/hugetlb.c:1483:6: error: call to undeclared function 'hstate_is_gigantic_no_runtime'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     1483 |         if (hstate_is_gigantic_no_runtime(h))
          |             ^
    mm/hugetlb.c:1474:6: warning: no previous prototype for function 'remove_hugetlb_folio' [-Wmissing-prototypes]
@@ -161,186 +195,122 @@ All warnings (new ones prefixed by >>):
    mm/hugetlb.c:1545:6: error: call to undeclared function 'hstate_is_gigantic_no_runtime'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     1545 |         if (hstate_is_gigantic_no_runtime(h))
          |             ^
-   mm/hugetlb.c:1807:2: error: call to undeclared function 'hugetlb_cgroup_uncharge_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> mm/hugetlb.c:1807:2: error: call to undeclared function 'hugetlb_cgroup_uncharge_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     1807 |         hugetlb_cgroup_uncharge_folio(hstate_index(h),
          |         ^
-   mm/hugetlb.c:1807:2: note: did you mean 'mem_cgroup_uncharge_folios'?
-   include/linux/memcontrol.h:1153:20: note: 'mem_cgroup_uncharge_folios' declared here
-    1153 | static inline void mem_cgroup_uncharge_folios(struct folio_batch *folios)
-         |                    ^
-   mm/hugetlb.c:1809:2: error: call to undeclared function 'hugetlb_cgroup_uncharge_folio_rsvd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1809 |         hugetlb_cgroup_uncharge_folio_rsvd(hstate_index(h),
-         |         ^
-   mm/hugetlb.c:1847:2: error: call to undeclared function 'set_hugetlb_cgroup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1847 |         set_hugetlb_cgroup(folio, NULL);
-         |         ^
-   mm/hugetlb.c:1848:2: error: call to undeclared function 'set_hugetlb_cgroup_rsvd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1848 |         set_hugetlb_cgroup_rsvd(folio, NULL);
-         |         ^
->> mm/hugetlb.c:1842:6: warning: no previous prototype for function 'init_new_hugetlb_folio' [-Wmissing-prototypes]
-    1842 | void init_new_hugetlb_folio(struct folio *folio)
-         |      ^
-   mm/hugetlb.c:1842:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1842 | void init_new_hugetlb_folio(struct folio *folio)
-         | ^
-         | static 
->> mm/hugetlb.c:1954:6: warning: no previous prototype for function 'prep_and_add_allocated_folios' [-Wmissing-prototypes]
-    1954 | void prep_and_add_allocated_folios(struct hstate *h,
-         |      ^
-   mm/hugetlb.c:1954:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1954 | void prep_and_add_allocated_folios(struct hstate *h,
-         | ^
-         | static 
-   mm/hugetlb.c:1984:2: error: call to undeclared function 'for_each_node_mask_to_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1984 |         for_each_node_mask_to_alloc(next_node, nr_nodes, node, nodes_allowed) {
-         |         ^
-   mm/hugetlb.c:1984:71: error: expected ';' after expression
-    1984 |         for_each_node_mask_to_alloc(next_node, nr_nodes, node, nodes_allowed) {
-         |                                                                              ^
-         |                                                                              ;
    fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   9 warnings and 20 errors generated.
+   7 warnings and 20 errors generated.
 
 
-vim +/init_new_hugetlb_folio +1842 mm/hugetlb.c
+vim +505 mm/hugetlb.c
 
-d3d99fcc4e28f1 Oscar Salvador          2021-05-04  1841  
-ecd6703f64d76e Hui Zhu                 2025-11-06 @1842  void init_new_hugetlb_folio(struct folio *folio)
-b7ba30c679ed1e Andi Kleen              2008-07-23  1843  {
-d99e3140a4d33e Matthew Wilcox (Oracle  2024-03-21  1844) 	__folio_set_hugetlb(folio);
-de656ed376c4cb Sidhartha Kumar         2022-11-01  1845  	INIT_LIST_HEAD(&folio->lru);
-de656ed376c4cb Sidhartha Kumar         2022-11-01  1846  	hugetlb_set_folio_subpool(folio, NULL);
-de656ed376c4cb Sidhartha Kumar         2022-11-01  1847  	set_hugetlb_cgroup(folio, NULL);
-de656ed376c4cb Sidhartha Kumar         2022-11-01  1848  	set_hugetlb_cgroup_rsvd(folio, NULL);
-d3d99fcc4e28f1 Oscar Salvador          2021-05-04  1849  }
-d3d99fcc4e28f1 Oscar Salvador          2021-05-04  1850  
-c0d0381ade7988 Mike Kravetz            2020-04-01  1851  /*
-c0d0381ade7988 Mike Kravetz            2020-04-01  1852   * Find and lock address space (mapping) in write mode.
-c0d0381ade7988 Mike Kravetz            2020-04-01  1853   *
-6e8cda4c2c87b2 Matthew Wilcox (Oracle  2024-04-12  1854)  * Upon entry, the folio is locked which means that folio_mapping() is
-336bf30eb76580 Mike Kravetz            2020-11-13  1855   * stable.  Due to locking order, we can only trylock_write.  If we can
-336bf30eb76580 Mike Kravetz            2020-11-13  1856   * not get the lock, simply return NULL to caller.
-c0d0381ade7988 Mike Kravetz            2020-04-01  1857   */
-6e8cda4c2c87b2 Matthew Wilcox (Oracle  2024-04-12  1858) struct address_space *hugetlb_folio_mapping_lock_write(struct folio *folio)
-c0d0381ade7988 Mike Kravetz            2020-04-01  1859  {
-6e8cda4c2c87b2 Matthew Wilcox (Oracle  2024-04-12  1860) 	struct address_space *mapping = folio_mapping(folio);
-c0d0381ade7988 Mike Kravetz            2020-04-01  1861  
-c0d0381ade7988 Mike Kravetz            2020-04-01  1862  	if (!mapping)
-c0d0381ade7988 Mike Kravetz            2020-04-01  1863  		return mapping;
-c0d0381ade7988 Mike Kravetz            2020-04-01  1864  
-c0d0381ade7988 Mike Kravetz            2020-04-01  1865  	if (i_mmap_trylock_write(mapping))
-c0d0381ade7988 Mike Kravetz            2020-04-01  1866  		return mapping;
-c0d0381ade7988 Mike Kravetz            2020-04-01  1867  
-c0d0381ade7988 Mike Kravetz            2020-04-01  1868  	return NULL;
-c0d0381ade7988 Mike Kravetz            2020-04-01  1869  }
-c0d0381ade7988 Mike Kravetz            2020-04-01  1870  
-4a25f995bd5984 Kefeng Wang             2025-09-10  1871  static struct folio *alloc_buddy_hugetlb_folio(int order, gfp_t gfp_mask,
-4a25f995bd5984 Kefeng Wang             2025-09-10  1872  		int nid, nodemask_t *nmask, nodemask_t *node_alloc_noretry)
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1873  {
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1874) 	struct folio *folio;
-f60858f9d327c4 Mike Kravetz            2019-09-23  1875  	bool alloc_try_hard = true;
-f96efd585b8d84 Joe Jin                 2007-07-15  1876  
-f60858f9d327c4 Mike Kravetz            2019-09-23  1877  	/*
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1878) 	 * By default we always try hard to allocate the folio with
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1879) 	 * __GFP_RETRY_MAYFAIL flag.  However, if we are allocating folios in
-f60858f9d327c4 Mike Kravetz            2019-09-23  1880  	 * a loop (to adjust global huge page counts) and previous allocation
-f60858f9d327c4 Mike Kravetz            2019-09-23  1881  	 * failed, do not continue to try hard on the same node.  Use the
-f60858f9d327c4 Mike Kravetz            2019-09-23  1882  	 * node_alloc_noretry bitmap to manage this state information.
-f60858f9d327c4 Mike Kravetz            2019-09-23  1883  	 */
-f60858f9d327c4 Mike Kravetz            2019-09-23  1884  	if (node_alloc_noretry && node_isset(nid, *node_alloc_noretry))
-f60858f9d327c4 Mike Kravetz            2019-09-23  1885  		alloc_try_hard = false;
-f60858f9d327c4 Mike Kravetz            2019-09-23  1886  	if (alloc_try_hard)
-f60858f9d327c4 Mike Kravetz            2019-09-23  1887  		gfp_mask |= __GFP_RETRY_MAYFAIL;
-2b21624fc23277 Mike Kravetz            2022-09-16  1888  
-e7a446030bdaf6 Oscar Salvador          2025-04-11  1889  	folio = (struct folio *)__alloc_frozen_pages(gfp_mask, order, nid, nmask);
-2b21624fc23277 Mike Kravetz            2022-09-16  1890  
-f60858f9d327c4 Mike Kravetz            2019-09-23  1891  	/*
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1892) 	 * If we did not specify __GFP_RETRY_MAYFAIL, but still got a
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1893) 	 * folio this indicates an overall state change.  Clear bit so
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1894) 	 * that we resume normal 'try hard' allocations.
-f60858f9d327c4 Mike Kravetz            2019-09-23  1895  	 */
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1896) 	if (node_alloc_noretry && folio && !alloc_try_hard)
-f60858f9d327c4 Mike Kravetz            2019-09-23  1897  		node_clear(nid, *node_alloc_noretry);
-f60858f9d327c4 Mike Kravetz            2019-09-23  1898  
-f60858f9d327c4 Mike Kravetz            2019-09-23  1899  	/*
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1900) 	 * If we tried hard to get a folio but failed, set bit so that
-f60858f9d327c4 Mike Kravetz            2019-09-23  1901  	 * subsequent attempts will not try as hard until there is an
-f60858f9d327c4 Mike Kravetz            2019-09-23  1902  	 * overall state change.
-f60858f9d327c4 Mike Kravetz            2019-09-23  1903  	 */
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1904) 	if (node_alloc_noretry && !folio && alloc_try_hard)
-f60858f9d327c4 Mike Kravetz            2019-09-23  1905  		node_set(nid, *node_alloc_noretry);
-f60858f9d327c4 Mike Kravetz            2019-09-23  1906  
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1907) 	if (!folio) {
-19fc1a7e8b2b3b Sidhartha Kumar         2022-11-29  1908  		__count_vm_event(HTLB_BUDDY_PGALLOC_FAIL);
-19fc1a7e8b2b3b Sidhartha Kumar         2022-11-29  1909  		return NULL;
-19fc1a7e8b2b3b Sidhartha Kumar         2022-11-29  1910  	}
-19fc1a7e8b2b3b Sidhartha Kumar         2022-11-29  1911  
-19fc1a7e8b2b3b Sidhartha Kumar         2022-11-29  1912  	__count_vm_event(HTLB_BUDDY_PGALLOC);
-f6a8dd98a2ce7a Matthew Wilcox (Oracle  2024-04-02  1913) 	return folio;
-63b4613c3f0d4b Nishanth Aravamudan     2007-10-16  1914  }
-63b4613c3f0d4b Nishanth Aravamudan     2007-10-16  1915  
-cf54f310d0d313 Yu Zhao                 2024-08-13  1916  static struct folio *only_alloc_fresh_hugetlb_folio(struct hstate *h,
-f60858f9d327c4 Mike Kravetz            2019-09-23  1917  		gfp_t gfp_mask, int nid, nodemask_t *nmask,
-f60858f9d327c4 Mike Kravetz            2019-09-23  1918  		nodemask_t *node_alloc_noretry)
-0c397daea1d456 Michal Hocko            2018-01-31  1919  {
-7f325a8d25631e Sidhartha Kumar         2022-11-29  1920  	struct folio *folio;
-4a25f995bd5984 Kefeng Wang             2025-09-10  1921  	int order = huge_page_order(h);
-0c397daea1d456 Michal Hocko            2018-01-31  1922  
-4fe2a8107f332a Kefeng Wang             2025-09-10  1923  	if (nid == NUMA_NO_NODE)
-4fe2a8107f332a Kefeng Wang             2025-09-10  1924  		nid = numa_mem_id();
-4fe2a8107f332a Kefeng Wang             2025-09-10  1925  
-4a25f995bd5984 Kefeng Wang             2025-09-10  1926  	if (order_is_gigantic(order))
-4a25f995bd5984 Kefeng Wang             2025-09-10  1927  		folio = alloc_gigantic_folio(order, gfp_mask, nid, nmask);
-0c397daea1d456 Michal Hocko            2018-01-31  1928  	else
-4a25f995bd5984 Kefeng Wang             2025-09-10  1929  		folio = alloc_buddy_hugetlb_folio(order, gfp_mask, nid, nmask,
-4a25f995bd5984 Kefeng Wang             2025-09-10  1930  						  node_alloc_noretry);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1931  	if (folio)
-dd4d324bc02c7b Kefeng Wang             2025-09-10  1932  		init_new_hugetlb_folio(folio);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1933  	return folio;
-d67e32f26713c3 Mike Kravetz            2023-10-18  1934  }
-d67e32f26713c3 Mike Kravetz            2023-10-18  1935  
-af0fb9df784174 Michal Hocko            2018-01-31  1936  /*
-902020f027457d Kefeng Wang             2025-09-10  1937   * Common helper to allocate a fresh hugetlb folio. All specific allocators
-902020f027457d Kefeng Wang             2025-09-10  1938   * should use this function to get new hugetlb folio
-d67e32f26713c3 Mike Kravetz            2023-10-18  1939   *
-902020f027457d Kefeng Wang             2025-09-10  1940   * Note that returned folio is 'frozen':  ref count of head page and all tail
-902020f027457d Kefeng Wang             2025-09-10  1941   * pages is zero, and the accounting must be done in the caller.
-af0fb9df784174 Michal Hocko            2018-01-31  1942   */
-d67e32f26713c3 Mike Kravetz            2023-10-18  1943  static struct folio *alloc_fresh_hugetlb_folio(struct hstate *h,
-6584a14a377d08 Oscar Salvador          2024-05-16  1944  		gfp_t gfp_mask, int nid, nodemask_t *nmask)
-b2261026825ed3 Joonsoo Kim             2013-09-11  1945  {
-19fc1a7e8b2b3b Sidhartha Kumar         2022-11-29  1946  	struct folio *folio;
-d67e32f26713c3 Mike Kravetz            2023-10-18  1947  
-902020f027457d Kefeng Wang             2025-09-10  1948  	folio = only_alloc_fresh_hugetlb_folio(h, gfp_mask, nid, nmask, NULL);
-902020f027457d Kefeng Wang             2025-09-10  1949  	if (folio)
-902020f027457d Kefeng Wang             2025-09-10  1950  		hugetlb_vmemmap_optimize_folio(h, folio);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1951  	return folio;
-d67e32f26713c3 Mike Kravetz            2023-10-18  1952  }
-d67e32f26713c3 Mike Kravetz            2023-10-18  1953  
-ecd6703f64d76e Hui Zhu                 2025-11-06 @1954  void prep_and_add_allocated_folios(struct hstate *h,
-d67e32f26713c3 Mike Kravetz            2023-10-18  1955  				   struct list_head *folio_list)
-d67e32f26713c3 Mike Kravetz            2023-10-18  1956  {
-d67e32f26713c3 Mike Kravetz            2023-10-18  1957  	unsigned long flags;
-d67e32f26713c3 Mike Kravetz            2023-10-18  1958  	struct folio *folio, *tmp_f;
-d67e32f26713c3 Mike Kravetz            2023-10-18  1959  
-79359d6d24df2f Mike Kravetz            2023-10-18  1960  	/* Send list for bulk vmemmap optimization processing */
-79359d6d24df2f Mike Kravetz            2023-10-18  1961  	hugetlb_vmemmap_optimize_folios(h, folio_list);
-79359d6d24df2f Mike Kravetz            2023-10-18  1962  
-d67e32f26713c3 Mike Kravetz            2023-10-18  1963  	/* Add all new pool pages to free lists in one lock cycle */
-d67e32f26713c3 Mike Kravetz            2023-10-18  1964  	spin_lock_irqsave(&hugetlb_lock, flags);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1965  	list_for_each_entry_safe(folio, tmp_f, folio_list, lru) {
-4094d3434b25a1 Kefeng Wang             2025-09-10  1966  		account_new_hugetlb_folio(h, folio);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1967  		enqueue_hugetlb_folio(h, folio);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1968  	}
-d67e32f26713c3 Mike Kravetz            2023-10-18  1969  	spin_unlock_irqrestore(&hugetlb_lock, flags);
-d67e32f26713c3 Mike Kravetz            2023-10-18  1970  }
-d67e32f26713c3 Mike Kravetz            2023-10-18  1971  
+075a61d07a8eca Mina Almasry  2020-04-01  495  
+075a61d07a8eca Mina Almasry  2020-04-01  496  /* Helper that records hugetlb_cgroup uncharge info. */
+075a61d07a8eca Mina Almasry  2020-04-01  497  static void record_hugetlb_cgroup_uncharge_info(struct hugetlb_cgroup *h_cg,
+075a61d07a8eca Mina Almasry  2020-04-01  498  						struct hstate *h,
+075a61d07a8eca Mina Almasry  2020-04-01  499  						struct resv_map *resv,
+075a61d07a8eca Mina Almasry  2020-04-01  500  						struct file_region *nrg)
+075a61d07a8eca Mina Almasry  2020-04-01  501  {
+075a61d07a8eca Mina Almasry  2020-04-01  502  #ifdef CONFIG_CGROUP_HUGETLB
+075a61d07a8eca Mina Almasry  2020-04-01  503  	if (h_cg) {
+075a61d07a8eca Mina Almasry  2020-04-01  504  		nrg->reservation_counter =
+075a61d07a8eca Mina Almasry  2020-04-01 @505  			&h_cg->rsvd_hugepage[hstate_index(h)];
+075a61d07a8eca Mina Almasry  2020-04-01  506  		nrg->css = &h_cg->css;
+d85aecf2844ff0 Miaohe Lin    2021-03-24  507  		/*
+d85aecf2844ff0 Miaohe Lin    2021-03-24  508  		 * The caller will hold exactly one h_cg->css reference for the
+d85aecf2844ff0 Miaohe Lin    2021-03-24  509  		 * whole contiguous reservation region. But this area might be
+d85aecf2844ff0 Miaohe Lin    2021-03-24  510  		 * scattered when there are already some file_regions reside in
+d85aecf2844ff0 Miaohe Lin    2021-03-24  511  		 * it. As a result, many file_regions may share only one css
+d85aecf2844ff0 Miaohe Lin    2021-03-24  512  		 * reference. In order to ensure that one file_region must hold
+d85aecf2844ff0 Miaohe Lin    2021-03-24  513  		 * exactly one h_cg->css reference, we should do css_get for
+d85aecf2844ff0 Miaohe Lin    2021-03-24  514  		 * each file_region and leave the reference held by caller
+d85aecf2844ff0 Miaohe Lin    2021-03-24  515  		 * untouched.
+d85aecf2844ff0 Miaohe Lin    2021-03-24  516  		 */
+d85aecf2844ff0 Miaohe Lin    2021-03-24  517  		css_get(&h_cg->css);
+075a61d07a8eca Mina Almasry  2020-04-01  518  		if (!resv->pages_per_hpage)
+075a61d07a8eca Mina Almasry  2020-04-01  519  			resv->pages_per_hpage = pages_per_huge_page(h);
+075a61d07a8eca Mina Almasry  2020-04-01  520  		/* pages_per_hpage should be the same for all entries in
+075a61d07a8eca Mina Almasry  2020-04-01  521  		 * a resv_map.
+075a61d07a8eca Mina Almasry  2020-04-01  522  		 */
+075a61d07a8eca Mina Almasry  2020-04-01  523  		VM_BUG_ON(resv->pages_per_hpage != pages_per_huge_page(h));
+075a61d07a8eca Mina Almasry  2020-04-01  524  	} else {
+075a61d07a8eca Mina Almasry  2020-04-01  525  		nrg->reservation_counter = NULL;
+075a61d07a8eca Mina Almasry  2020-04-01  526  		nrg->css = NULL;
+075a61d07a8eca Mina Almasry  2020-04-01  527  	}
+075a61d07a8eca Mina Almasry  2020-04-01  528  #endif
+075a61d07a8eca Mina Almasry  2020-04-01  529  }
+075a61d07a8eca Mina Almasry  2020-04-01  530  
+d85aecf2844ff0 Miaohe Lin    2021-03-24  531  static void put_uncharge_info(struct file_region *rg)
+d85aecf2844ff0 Miaohe Lin    2021-03-24  532  {
+d85aecf2844ff0 Miaohe Lin    2021-03-24  533  #ifdef CONFIG_CGROUP_HUGETLB
+d85aecf2844ff0 Miaohe Lin    2021-03-24  534  	if (rg->css)
+d85aecf2844ff0 Miaohe Lin    2021-03-24  535  		css_put(rg->css);
+d85aecf2844ff0 Miaohe Lin    2021-03-24  536  #endif
+d85aecf2844ff0 Miaohe Lin    2021-03-24  537  }
+d85aecf2844ff0 Miaohe Lin    2021-03-24  538  
+a9b3f867404b35 Mina Almasry  2020-04-01  539  static bool has_same_uncharge_info(struct file_region *rg,
+a9b3f867404b35 Mina Almasry  2020-04-01  540  				   struct file_region *org)
+a9b3f867404b35 Mina Almasry  2020-04-01  541  {
+a9b3f867404b35 Mina Almasry  2020-04-01  542  #ifdef CONFIG_CGROUP_HUGETLB
+0739eb437f3d39 Baolin Wang   2021-11-05  543  	return rg->reservation_counter == org->reservation_counter &&
+a9b3f867404b35 Mina Almasry  2020-04-01  544  	       rg->css == org->css;
+a9b3f867404b35 Mina Almasry  2020-04-01  545  
+a9b3f867404b35 Mina Almasry  2020-04-01  546  #else
+a9b3f867404b35 Mina Almasry  2020-04-01  547  	return true;
+a9b3f867404b35 Mina Almasry  2020-04-01  548  #endif
+a9b3f867404b35 Mina Almasry  2020-04-01  549  }
+a9b3f867404b35 Mina Almasry  2020-04-01  550  
+a9b3f867404b35 Mina Almasry  2020-04-01  551  static void coalesce_file_region(struct resv_map *resv, struct file_region *rg)
+a9b3f867404b35 Mina Almasry  2020-04-01  552  {
+3259914f8cab1b XU pengfei    2022-09-14  553  	struct file_region *nrg, *prg;
+a9b3f867404b35 Mina Almasry  2020-04-01  554  
+a9b3f867404b35 Mina Almasry  2020-04-01  555  	prg = list_prev_entry(rg, link);
+a9b3f867404b35 Mina Almasry  2020-04-01  556  	if (&prg->link != &resv->regions && prg->to == rg->from &&
+a9b3f867404b35 Mina Almasry  2020-04-01  557  	    has_same_uncharge_info(prg, rg)) {
+a9b3f867404b35 Mina Almasry  2020-04-01  558  		prg->to = rg->to;
+a9b3f867404b35 Mina Almasry  2020-04-01  559  
+a9b3f867404b35 Mina Almasry  2020-04-01  560  		list_del(&rg->link);
+d85aecf2844ff0 Miaohe Lin    2021-03-24  561  		put_uncharge_info(rg);
+a9b3f867404b35 Mina Almasry  2020-04-01  562  		kfree(rg);
+a9b3f867404b35 Mina Almasry  2020-04-01  563  
+7db5e7b67e3e8d Wei Yang      2020-10-13  564  		rg = prg;
+a9b3f867404b35 Mina Almasry  2020-04-01  565  	}
+a9b3f867404b35 Mina Almasry  2020-04-01  566  
+a9b3f867404b35 Mina Almasry  2020-04-01  567  	nrg = list_next_entry(rg, link);
+a9b3f867404b35 Mina Almasry  2020-04-01  568  	if (&nrg->link != &resv->regions && nrg->from == rg->to &&
+a9b3f867404b35 Mina Almasry  2020-04-01  569  	    has_same_uncharge_info(nrg, rg)) {
+a9b3f867404b35 Mina Almasry  2020-04-01  570  		nrg->from = rg->from;
+a9b3f867404b35 Mina Almasry  2020-04-01  571  
+a9b3f867404b35 Mina Almasry  2020-04-01  572  		list_del(&rg->link);
+d85aecf2844ff0 Miaohe Lin    2021-03-24  573  		put_uncharge_info(rg);
+a9b3f867404b35 Mina Almasry  2020-04-01  574  		kfree(rg);
+a9b3f867404b35 Mina Almasry  2020-04-01  575  	}
+a9b3f867404b35 Mina Almasry  2020-04-01  576  }
+a9b3f867404b35 Mina Almasry  2020-04-01  577  
+2103cf9c3f3ba0 Peter Xu      2021-03-12  578  static inline long
+84448c8ecd9a13 Jakob Koschel 2022-04-28  579  hugetlb_resv_map_add(struct resv_map *map, struct list_head *rg, long from,
+2103cf9c3f3ba0 Peter Xu      2021-03-12  580  		     long to, struct hstate *h, struct hugetlb_cgroup *cg,
+2103cf9c3f3ba0 Peter Xu      2021-03-12  581  		     long *regions_needed)
+2103cf9c3f3ba0 Peter Xu      2021-03-12  582  {
+2103cf9c3f3ba0 Peter Xu      2021-03-12  583  	struct file_region *nrg;
+2103cf9c3f3ba0 Peter Xu      2021-03-12  584  
+2103cf9c3f3ba0 Peter Xu      2021-03-12  585  	if (!regions_needed) {
+2103cf9c3f3ba0 Peter Xu      2021-03-12  586  		nrg = get_file_region_entry_from_cache(map, from, to);
+2103cf9c3f3ba0 Peter Xu      2021-03-12 @587  		record_hugetlb_cgroup_uncharge_info(cg, h, map, nrg);
+84448c8ecd9a13 Jakob Koschel 2022-04-28  588  		list_add(&nrg->link, rg);
+2103cf9c3f3ba0 Peter Xu      2021-03-12  589  		coalesce_file_region(map, nrg);
+2103cf9c3f3ba0 Peter Xu      2021-03-12  590  	} else
+2103cf9c3f3ba0 Peter Xu      2021-03-12  591  		*regions_needed += 1;
+2103cf9c3f3ba0 Peter Xu      2021-03-12  592  
+2103cf9c3f3ba0 Peter Xu      2021-03-12  593  	return to - from;
+2103cf9c3f3ba0 Peter Xu      2021-03-12  594  }
+2103cf9c3f3ba0 Peter Xu      2021-03-12  595  
 
-:::::: The code at line 1842 was first introduced by commit
-:::::: ecd6703f64d76ee4fc8cc2205bfb892d3bb9f538 mm/hugetlb: extract sysfs into hugetlb_sysfs.c
+:::::: The code at line 505 was first introduced by commit
+:::::: 075a61d07a8eca2fe980acd94105ed5d6429c55d hugetlb_cgroup: add accounting for shared mappings
 
-:::::: TO: Hui Zhu <zhuhui@kylinos.cn>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+:::::: TO: Mina Almasry <almasrymina@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
