@@ -1,130 +1,157 @@
-Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2089E30BBB3
-	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 16:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C36430EF75;
+	Wed, 26 Nov 2025 16:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764174670; cv=none; b=oGfFW/CoudIJJFqQkePERIWMG9S+cTnZ/ihy+LrCK5Uvh/WCt9rByDiArL3HO83hSeaxFB3MFW4OeymbKu9l6PCM+72he9fHl6bPYpJTsISV8hI4BRmM6QQRWiqAnNFc5ESnKrXXw3bbX6AybybspJq+LHDpyklvdTI+49+yVnA=
+	t=1764176122; cv=none; b=naJmi694Mu+c6nmyFej+AMtHOGAjN8oFFnNa6OCPlED2TUJ/TQC58cY8DcI9X32i+XKxrz0fiOcNaKvzj9l/TSM3fJwggLtJr2APpNvjwG24Jqa0lf2F5JC8/35LO7JLA595O0JMiX+qXW51r9Qz5abhb8qxvq2S4euw+Q9NSoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764174670; c=relaxed/simple;
-	bh=JUk+V7+BC+lkMoAifGFTRedw6UOHlW97lAtjujuGo3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u0GBKm946ewG5QEnnZqLod0/AEkTvnUQNa5hP0zxatB8ZNx9tYd97UXv/Pt1APVhu+IRErd8c5c4IpRWsjrDoh/mH3kqDpXA+Dm935/MN3j1Ebrxr3CUIVhmX+8kgbhXc0Wq1uyktyKTsUQ7YnNuWl8pLmWPitXIKTKU0TZii0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzvjDQDN; arc=none smtp.client-ip=209.85.216.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764176122; c=relaxed/simple;
+	bh=t6dQaMcFstDQXYR4H7vfqmgdXjeJ9mqjp2aG+oOBJVA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YkvN1ni9NfOSBkq+Ss6Ya2Q1gsjdEyxjR1P0+V9RIH4AKtmLMiCld6XOhi1jS5dTVsTLJVuu61texlmiN4Ijd7N+6jfvhC1+kuST9UrDByAK+trllKXfxh39HGhWJeeGSaAc8AJeQig8q0RXO4s2f7dsvA+np0ms3EjNBlt/TvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S090ngv+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzvjDQDN"
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-340ba29d518so4438532a91.3
-        for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 08:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764174667; x=1764779467; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
-        b=kzvjDQDN/mPRBaW/3ojKZ9KEpUlOZnEMhwqAkEWvIOuiHZUWw4D9uMPeCL95+6GpCv
-         N/H3YI1ZqqgNS5hajaF+0h7/xW+DSiUFFO6eS86mC1+Sw1jCU0UK3QiOgqRfuLTW9suG
-         F0LHu6VeuwNGeEanzCuyzsglyz4W+3gJ5JUWy3OyJG63nmscTH76YeLKbuRBzViTiVB2
-         g/EuLcT5htdQUZH0TpONkZr3gxbChaNDaxcN/0JkOXFW9UXVJ+8leNyXuSVa/PYVPbNN
-         iRaGThNLJNVbVqJwelgPz7LX1Ft9ERU82oOfe+oWlAICOcOxyp7ssqmM0Rhw0rQQ84IL
-         OHfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764174667; x=1764779467;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
-        b=glMqTlOJZBg/Sr/hwJUgyhSSWoxbbMMD/lS70H6kDKCLAlvFk7z56eymUZN4ZM8E1e
-         BUcJXwj3fQEFg/QXZaJbouYRsftCsRzPpzGdHStYGa9xSvVMUEzh7sme4/PU3VFXu+Dz
-         DYmX2QYA62cUuVYmZEr2dly1uJKj1u4kArhmmUyvcY8wi/LfeeBPyI8igExc0NFEv7W5
-         CWud45lz3/Aqn6Sc2KCyLkFtOxp1vKuKDFRw6tFFWvKNLwNnqz8DZIigaG5KirmGKkWC
-         n6GeWatpgWT/iR+vmUMLSwH2n302RpTIJDP1JOy3akXBVAy1joIFDXCzIx4VuM615Fot
-         5A1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXC/MEmzfYHZsL0sUFzkbN3+W2yEUN88eUcNVFvibVnhE6wVTP9ckzqMswN4HAyOTt6/6wk@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz+woqadI/rN4BinUccwvNTiyT8BaPoCmKpTimaoPS+m3P/pDqm
-	GhUmQAyZ0uHLJLVGGd/4kDN7XzqdYhjov31WezSpUkddRzgCqvGKHX+7
-X-Gm-Gg: ASbGncvLDG3Rrwd1RzVMB0ycvRGgneSICalEDhMn/5XsjdTFwSnj84G5FpbKc8+CWu5
-	6cNuHskZa7j/nIkteXimDmNWvuvKo+hwktpp2h4a2uDU2tKEylPYBCNzyQ0JJzqLSlZhdeH9hks
-	vC38Pqd/37eV1iNhoPuDbtuzuHHbsxqmQNCLo+ymTBcQwQPPxbGJR62atmoUIuGcpipb8LZ/Kqs
-	KFPAojmf87ofk4f2hRTvkjnw9YHnAj2juqkjb2jrzkf4HKZv669zbzO/6dKmEp5KnYsL/8/oFAs
-	3N+5w3H6YnTIc1Jy5MwGHNrIW47riMizeHgg3l/ojTNZyatZTi6IGOPZovFTY8SVblujh43dtgD
-	9EWcZS17YJbuGg+LkviK8TsKAs3x74akhXhxs+U4k7BdwNFEJxe/D4m7UhEzdFXJae0t7ruAb/F
-	O7psAeE8O332fT4ri8sTy5d+Jo7QzTZg==
-X-Google-Smtp-Source: AGHT+IHYlOs7ib3WRoxz+IosxSmgFDE9P7H1+e8rCoPRGJ8hqrHc7dD/TBxgldig3bre3IVxR56yzg==
-X-Received: by 2002:a17:90b:2247:b0:340:f05a:3ed3 with SMTP id 98e67ed59e1d1-3475ed5141bmr7678530a91.17.1764174666979;
-        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd760fae9e2sm19829401a12.31.2025.11.26.08.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: netdev@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Shuah Khan <shuah@kernel.org>,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH] selftests: mptcp: initialize raw_addr to Null
-Date: Wed, 26 Nov 2025 22:00:46 +0530
-Message-ID: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S090ngv+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB98C4CEF7;
+	Wed, 26 Nov 2025 16:55:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764176121;
+	bh=t6dQaMcFstDQXYR4H7vfqmgdXjeJ9mqjp2aG+oOBJVA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=S090ngv+Xbhos+RtW6FAhhF2zD8GG1Mg9v5UzfySDdEoipkzc+1XqAcSh2YoYJfAW
+	 iS0srhh3ZlxBSHoV8+ybImfU6P/zpjOAes/KkpyMPCjlxRvSjYpNHtdCrIsoNxSDNI
+	 216nzH29D9Q6fOPPOM8x1pE6w5V1+ogJnMEjBHz4o5hcFRk5nyLzV1JtHWRqbaW7GE
+	 Q1PHawcGquKBStZ9XfMfSKLmlXjOfclrwofD5mubdgm5CmBsCQQsJZ9sZbli4jJyg4
+	 LkAUiOSYjYqT00U5z0Y65WO9lZTbtGo4IHllfsTLwzHstwHZzOV/ayqc3gWxzNSyDC
+	 Gy3JUAT3XAhOQ==
+Message-ID: <795a8f3c-eff7-46d9-9175-a4ebe3f9ffd8@kernel.org>
+Date: Wed, 26 Nov 2025 17:55:14 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] selftests: mptcp: initialize raw_addr to Null
+Content-Language: en-GB, fr-BE
+To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The "void *raw_addr" is left uninitialized when else path is
-followed raising below warning.
+Hi Ankit,
 
-mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
-      uninitialized whenever 'if' condition is false
-      [-Wsometimes-uninitialized]
+On 26/11/2025 17:30, Ankit Khushwaha wrote:
+> The "void *raw_addr" is left uninitialized when else path is
+> followed raising below warning.
+> 
+> mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
+>       uninitialized whenever 'if' condition is false
+>       [-Wsometimes-uninitialized]
+> 
+> so the fix is to assign *raw_addr to NULL to suppress the warning.
 
-so the fix is to assign *raw_addr to NULL to suppress the warning.
+Thank you for having shared this patch!
+> Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+> ---
+> compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
+> compilation cmd used:
+> 	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
+> 
+> this maybe also be false positive. But somehow clang - 21.1.5
+> triggering this.
 
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
----
-compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
-compilation cmd used:
-	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
+I confirm this, I can reproduce the warning with Clang 21.
 
-this maybe also be false positive. But somehow clang - 21.1.5
-triggering this.
+It is indeed a false positive, because the code does that:
 
----
- tools/testing/selftests/net/mptcp/mptcp_connect.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-index 404a77bf366a..cdb81e0d08ad 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-@@ -1248,8 +1248,8 @@ void xdisconnect(int fd)
- {
- 	socklen_t addrlen = sizeof(struct sockaddr_storage);
- 	struct sockaddr_storage addr, empty;
-+	void *raw_addr = NULL;
- 	int msec_sleep = 10;
--	void *raw_addr;
- 	int i, cmdlen;
- 	char cmd[128];
+  if (addr.ss_family == AF_INET)
+          raw_addr = &(((struct sockaddr_in *)&addr)->sin_addr);
+  else if (addr.ss_family == AF_INET6)
+          raw_addr = &(((struct sockaddr_in6 *)&addr)->sin6_addr);
+  else
+          xerror("bad family");
 
---
-2.52.0
+
+"xerror()" calls "exit(1)", so "raw_addr" is never used uninitialized.
+
+I'm not sure why Clang 21 reports that now, and not before, but well,
+the modification you did in the selftests doesn't hurt:
+
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
+
+@Net maintainers: this patch can be applied in 'net' directly.
+
+
+@Antik: next time, please specify the target (net/net-next) in the
+subject, see [1]. No need to send a new version (except if the Net
+maintainers prefer), this patch can be applied on top of "net" without
+conflicts.
+
+[1] https://docs.kernel.org/process/maintainer-netdev.html
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
