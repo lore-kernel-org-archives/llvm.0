@@ -1,157 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C36430EF75;
-	Wed, 26 Nov 2025 16:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E7030DEBE;
+	Wed, 26 Nov 2025 18:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764176122; cv=none; b=naJmi694Mu+c6nmyFej+AMtHOGAjN8oFFnNa6OCPlED2TUJ/TQC58cY8DcI9X32i+XKxrz0fiOcNaKvzj9l/TSM3fJwggLtJr2APpNvjwG24Jqa0lf2F5JC8/35LO7JLA595O0JMiX+qXW51r9Qz5abhb8qxvq2S4euw+Q9NSoM=
+	t=1764180438; cv=none; b=luJtC5/hJPGIaqCyQPmBfZ8wNJtr4Qh4vFvZqVPcSjIXDRw5aytW102mx56mH972WctGJQWRX7vox8udiSIjQbYyfbCj0YEF9iz7+juYphh/96PzstXChCkWf7yLtCKPcr7CO7PkG83cjKdyu3qWWfUCnsWnxg4g9QzzPL4aTL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764176122; c=relaxed/simple;
-	bh=t6dQaMcFstDQXYR4H7vfqmgdXjeJ9mqjp2aG+oOBJVA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YkvN1ni9NfOSBkq+Ss6Ya2Q1gsjdEyxjR1P0+V9RIH4AKtmLMiCld6XOhi1jS5dTVsTLJVuu61texlmiN4Ijd7N+6jfvhC1+kuST9UrDByAK+trllKXfxh39HGhWJeeGSaAc8AJeQig8q0RXO4s2f7dsvA+np0ms3EjNBlt/TvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S090ngv+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764180438; c=relaxed/simple;
+	bh=ZxPVD2OX+mWyP8KER+7TTW6fM/MAUm90+J80CBazzDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u2SGUBTA1XE0adApFPeGcdXgguylhF5AxGm+C81AsYj74koMftHPGPcXH5x0SL9pPf8sz8dOgiUHOnWvTzIsxn5siJXoEVZTK4PelApAPmwrhr1S4FXHeubh7A91sXKD0h8ScW6dWTMi2jGAMbAFnSEqvosfGliDvqoxFx6UEGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vhf2rmyr; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S090ngv+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB98C4CEF7;
-	Wed, 26 Nov 2025 16:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764176121;
-	bh=t6dQaMcFstDQXYR4H7vfqmgdXjeJ9mqjp2aG+oOBJVA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S090ngv+Xbhos+RtW6FAhhF2zD8GG1Mg9v5UzfySDdEoipkzc+1XqAcSh2YoYJfAW
-	 iS0srhh3ZlxBSHoV8+ybImfU6P/zpjOAes/KkpyMPCjlxRvSjYpNHtdCrIsoNxSDNI
-	 216nzH29D9Q6fOPPOM8x1pE6w5V1+ogJnMEjBHz4o5hcFRk5nyLzV1JtHWRqbaW7GE
-	 Q1PHawcGquKBStZ9XfMfSKLmlXjOfclrwofD5mubdgm5CmBsCQQsJZ9sZbli4jJyg4
-	 LkAUiOSYjYqT00U5z0Y65WO9lZTbtGo4IHllfsTLwzHstwHZzOV/ayqc3gWxzNSyDC
-	 Gy3JUAT3XAhOQ==
-Message-ID: <795a8f3c-eff7-46d9-9175-a4ebe3f9ffd8@kernel.org>
-Date: Wed, 26 Nov 2025 17:55:14 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vhf2rmyr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764180437; x=1795716437;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZxPVD2OX+mWyP8KER+7TTW6fM/MAUm90+J80CBazzDI=;
+  b=Vhf2rmyrw0q9mxSzAZyQEIfuFAIJ7eUjXrf5hK7p7d3EB0Mm96DI/X9+
+   vJXYltRIkGZuaqArSYGDyfMsQHkryuEnj/v6yuqn4WU8cFwSiB/f4GdGQ
+   UkZKprLancr8RiH1YknZgWOoXjgtNy4nZKPCkEMULsGg3OcxYw3RvBZh9
+   QSeM0FNxpl9XnKwVK693HcwP/2tZ4thOnqUroqEyZc0upRuOIxBUvCTxB
+   LEFv8QHnNUmqLLzOe7WsZTW798Rn0gbwiQcoFCmpscWmiK9YNCI1i6jPk
+   Z1xYZysDqzfOCyhLrpCHBT3HSVjEJdL+G/pYkoO0oTbuIwLjE4DyAbY9x
+   A==;
+X-CSE-ConnectionGUID: dOAQXEmsTUeJ+ZB0bF20XA==
+X-CSE-MsgGUID: QPhTu1WDSrua20EQwVcg0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="65412765"
+X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
+   d="scan'208";a="65412765"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 10:07:16 -0800
+X-CSE-ConnectionGUID: k/fLjEWGQQq0kjdeccpQHA==
+X-CSE-MsgGUID: 1Ys4OkOBRJ2TYAKR0MgXIg==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 26 Nov 2025 10:07:13 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOJv5-000000003Dx-1cf2;
+	Wed, 26 Nov 2025 18:07:11 +0000
+Date: Thu, 27 Nov 2025 02:06:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Hajnoczi <stefanha@redhat.com>, linux-block@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-kernel@vger.kernel.org,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Mike Christie <michael.christie@oracle.com>,
+	Jens Axboe <axboe@kernel.dk>, linux-nvme@lists.infradead.org,
+	Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
+	linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	Stefan Hajnoczi <stefanha@redhat.com>
+Subject: Re: [PATCH 3/4] block: add IOC_PR_READ_KEYS ioctl
+Message-ID: <202511270125.CJ6M2RHv-lkp@intel.com>
+References: <20251126163600.583036-4-stefanha@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH] selftests: mptcp: initialize raw_addr to Null
-Content-Language: en-GB, fr-BE
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251126163600.583036-4-stefanha@redhat.com>
 
-Hi Ankit,
+Hi Stefan,
 
-On 26/11/2025 17:30, Ankit Khushwaha wrote:
-> The "void *raw_addr" is left uninitialized when else path is
-> followed raising below warning.
-> 
-> mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
->       uninitialized whenever 'if' condition is false
->       [-Wsometimes-uninitialized]
-> 
-> so the fix is to assign *raw_addr to NULL to suppress the warning.
+kernel test robot noticed the following build warnings:
 
-Thank you for having shared this patch!
-> Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-> ---
-> compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
-> compilation cmd used:
-> 	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
-> 
-> this maybe also be false positive. But somehow clang - 21.1.5
-> triggering this.
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on axboe/for-next jejb-scsi/for-next linus/master v6.18-rc7 next-20251126]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I confirm this, I can reproduce the warning with Clang 21.
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Hajnoczi/scsi-sd-reject-invalid-pr_read_keys-num_keys-values/20251127-003756
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20251126163600.583036-4-stefanha%40redhat.com
+patch subject: [PATCH 3/4] block: add IOC_PR_READ_KEYS ioctl
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20251127/202511270125.CJ6M2RHv-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270125.CJ6M2RHv-lkp@intel.com/reproduce)
 
-It is indeed a false positive, because the code does that:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511270125.CJ6M2RHv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> block/ioctl.c:443:21: warning: result of comparison of constant 2305843009213693951 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     443 |         if (inout.num_keys > -sizeof(*keys_info) / sizeof(keys_info->keys[0]))
+         |             ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-  if (addr.ss_family == AF_INET)
-          raw_addr = &(((struct sockaddr_in *)&addr)->sin_addr);
-  else if (addr.ss_family == AF_INET6)
-          raw_addr = &(((struct sockaddr_in6 *)&addr)->sin6_addr);
-  else
-          xerror("bad family");
+vim +443 block/ioctl.c
 
+   426	
+   427	static int blkdev_pr_read_keys(struct block_device *bdev, blk_mode_t mode,
+   428			struct pr_read_keys __user *arg)
+   429	{
+   430		const struct pr_ops *ops = bdev->bd_disk->fops->pr_ops;
+   431		struct pr_keys *keys_info __free(kfree) = NULL;
+   432		struct pr_read_keys inout;
+   433		int ret;
+   434	
+   435		if (!blkdev_pr_allowed(bdev, mode))
+   436			return -EPERM;
+   437		if (!ops || !ops->pr_read_keys)
+   438			return -EOPNOTSUPP;
+   439	
+   440		if (copy_from_user(&inout, arg, sizeof(inout)))
+   441			return -EFAULT;
+   442	
+ > 443		if (inout.num_keys > -sizeof(*keys_info) / sizeof(keys_info->keys[0]))
+   444			return -EINVAL;
+   445	
+   446		size_t keys_info_len = struct_size(keys_info, keys, inout.num_keys);
+   447	
+   448		keys_info = kzalloc(keys_info_len, GFP_KERNEL);
+   449		if (!keys_info)
+   450			return -ENOMEM;
+   451	
+   452		keys_info->num_keys = inout.num_keys;
+   453	
+   454		ret = ops->pr_read_keys(bdev, keys_info);
+   455		if (ret)
+   456			return ret;
+   457	
+   458		/* Copy out individual keys */
+   459		u64 __user *keys_ptr = u64_to_user_ptr(inout.keys_ptr);
+   460		u32 num_copy_keys = min(inout.num_keys, keys_info->num_keys);
+   461		size_t keys_copy_len = num_copy_keys * sizeof(keys_info->keys[0]);
+   462	
+   463		if (copy_to_user(keys_ptr, keys_info->keys, keys_copy_len))
+   464			return -EFAULT;
+   465	
+   466		/* Copy out the arg struct */
+   467		inout.generation = keys_info->generation;
+   468		inout.num_keys = keys_info->num_keys;
+   469	
+   470		if (copy_to_user(arg, &inout, sizeof(inout)))
+   471			return -EFAULT;
+   472		return ret;
+   473	}
+   474	
 
-"xerror()" calls "exit(1)", so "raw_addr" is never used uninitialized.
-
-I'm not sure why Clang 21 reports that now, and not before, but well,
-the modification you did in the selftests doesn't hurt:
-
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-
-
-@Net maintainers: this patch can be applied in 'net' directly.
-
-
-@Antik: next time, please specify the target (net/net-next) in the
-subject, see [1]. No need to send a new version (except if the Net
-maintainers prefer), this patch can be applied on top of "net" without
-conflicts.
-
-[1] https://docs.kernel.org/process/maintainer-netdev.html
-
-Cheers,
-Matt
 -- 
-Sponsored by the NGI0 Core fund.
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
