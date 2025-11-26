@@ -1,188 +1,654 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5B9275114
-	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 05:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C90288520
+	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 07:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764135737; cv=none; b=cAZNFINIQCCU+rM7LUna4flGZVM4eH97TxxHAzWUUKZcT6zsXV3exLUHwyi5qDIZw6SWgGmJeHkUj3Bjug22wZ3ci4n/mjF3BCH2qOQ4OhOwsyL9rxBlb8LaIIvtFqPcRv6UgHQXr46Q8kB7nrx3J4aYJ+q+MoGVyicXyDrSrdE=
+	t=1764142462; cv=none; b=dQHnf+fEV0sxRW+uLlh1zITKIlXegvs54BF2lLTj54ZlRq8k7mu0Hhz2uSCZBDCei+5RghhOQ8odUlzHv/tkAOkKhVELtXM+BFoGGfEKxUaK8LDPwN+NqVHRZHke3jPUN23cXk2W4VAM7Wea5OT9LTZLYL3+hdxydVeddeDHz1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764135737; c=relaxed/simple;
-	bh=eb/bvIu6avztDFMnMWiQoigfcv0pOCMmj02G1YK7fI8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=pM5J9ianepMkW+mfZWt36gcLS1YPg/x4bBQX5uCGHmszNB7DVUYt6hNTHpAHSXTZuBkyFxn7VoDig3ImWHFU6+PPjhVdtJhoLpykgaPQV5SvdDNX0UK+qYYvhtR29UBdnbY1Ze/RcwOYVHvBW52bqDSVSqeuQz2yRYiBSZVBe4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eOPy6usK; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1764142462; c=relaxed/simple;
+	bh=HZHGEbWf4duCcAC2IFhVoTDYI22CIbFxeNitmSzTs0E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o394M/XHT933eofolRcGTbNOPLn/xhdvEKxXHbBmBCGwqyQp3xGIWD/91rExPPR+3GuwNkOAnwXOoa7NKjJY3srJEHjZe3XEa3wH5Hoko3sckm8ekgjhq9gcuQZUVHJQi5x8WqsLjeCWLQkoL2LhiNjaRt5oNkWlAMdufrH7aAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BOzs3KWx; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eOPy6usK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764135733;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=iTf28j0gNUzu0EFENl0vjyWOpxr9Gb+S2U8n3TyRRAU=;
-	b=eOPy6usKLvvsfB0P2GnPW5A/Alzk93mZc0zaADjCV/pM3AW9FxqOlFejW7incwQFtULkBM
-	TNXKrUWjaGlmsOnpA0s5jF1y10dtU+4WwudunmlkgdbyBsSc1rbrcR3GNuoooLZENxW6Vk
-	3Dxr6P7iDYLIY7xXWUsYOT+YK8qtT/c=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-8-jl0z6uc4NbGBYQtMyaR1lA-1; Wed,
- 26 Nov 2025 00:42:10 -0500
-X-MC-Unique: jl0z6uc4NbGBYQtMyaR1lA-1
-X-Mimecast-MFC-AGG-ID: jl0z6uc4NbGBYQtMyaR1lA_1764135727
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 04C69180047F
-	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 05:42:07 +0000 (UTC)
-Received: from [172.20.50.79] (unknown [10.30.44.138])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 80AAA19560A2;
-	Wed, 26 Nov 2025 05:42:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 110): Test report for master
- (6.18.0-rc7, upstream-mainline, 30f09200)
-Date: Wed, 26 Nov 2025 05:42:06 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BOzs3KWx"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-47774d3536dso4238335e9.0
+        for <llvm@lists.linux.dev>; Tue, 25 Nov 2025 23:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1764142458; x=1764747258; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPEFWx+aW9QC/nVK0x1/EOh/U5whRCkAn5X7jEbwW2g=;
+        b=BOzs3KWxqi6SisxkBuV5vXutmnWK6g2aIKq+T4etmjvaPeG3Zkb27J25YS+Y/EyMOK
+         LrccwEYzGYpxwc9eTCA9ixKdTYhJVcATbmpz05tDqwfY727o+jfSTPDtJ9RAKp38FIWa
+         PmOc5lqF3JL+m3AZFpWITXD74Nmv/E7PBV8A32KZHOP74py8qBj6UbTdVTot2dIk428w
+         U25rsBYs1LQbq/0uUXKmHkR8qJ2bipNDfqZrOwVgQ2+nzDyCVBf7pS4NjdizEmWJ4J10
+         pYJ9nSDSfSClg5DHhPhKCBfz1PboI4h9ZIscI4dPitNbcaTBhqkqnstYAp38zWmOcDOr
+         Bzbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764142458; x=1764747258;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sPEFWx+aW9QC/nVK0x1/EOh/U5whRCkAn5X7jEbwW2g=;
+        b=gZzQGp4hw09a6hopUlsV+Jqm6P7paplYj194Xw4TG3d8Nr1a0Z8qA3Z4TZdjSsD04g
+         qzTHfc5diy2PT7bqDlxQVfKEVWUb3cMZkA4BN1/5cldywwUfou4+PSbyvryKbxT3lrAt
+         77o4SdROWtNJ4vnONsACWmNkX1+d5Apt/WPZYnMnUFi8a4XCRWLvZ1CaJxn8WFEnOiH/
+         3f78eSDRHZ2siWPyw96xOBX7NvJkAWmGBUo/IyaxorwPlFGIq2MdKtLfaXeyrksTezI2
+         S+gPJuRfhj72fZKq/NjQmC3qPzTz8L5tTKCUWSNZs0XQfTqyrQ9ZBXA+yW17ClBxshmR
+         I3Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCVG7+NvDylYuPJ8FjTEYz+uBtRpm807wA0LqUFonuuvyQGW0c9anIF3oAtRCxs4d0OkSXEO@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx70R/LCfOdnlxvhrhYpuC+BzR5OMDtvOVHQ79Rs9Ig50J/aT19
+	v2QM1tmtimgr/FH1hqw5bdeAjWqzrv7NBzHTke3n52SN2GtQmdA5KSG56uyDzMp31i4=
+X-Gm-Gg: ASbGncsq5A2bN9qJbxbloEOkswLPeXB3Y87WWMxWrS9KlD59oilqklxpHydqL2hklIy
+	UbSos8gdYIzxWL2/DDhy112uhadjofzRruB36CbEwJPMfGgdejVlS5ECG1dpRxT3gonqTmzyLNt
+	halC62RSHan5UeFu6F8yDtdB8r7vlb1Kk9wMdxWmeGVDGIqoQmbxUad0/Ou4anWqx5lmLeZsT2C
+	GcFAtgm/RWMElFAzClVSeo6viRYAsjdkV/6VmZMziizt/asL4wIEy1rbc85bIgAasbPUeQST7EV
+	rVjdLhIJrsrmat+gz1KnAIES5P1F7DhsRkjBcHxl5NTvC94kDD5mTrIb+4gXQR1C3LI5Vcml0EW
+	5hPcwUXWbDJEC81wcW+A7D0TIfdG4LZ5C+itl3pto60k6C436SE1RsrAVnIv+JO3gaepChbOtjw
+	hUVUH5uSO9yqxyE4OHWIqb6kuDSRn+KFV+p19vrWS+FLlVJiOD/g==
+X-Google-Smtp-Source: AGHT+IExbNcMrZ8ihgVaZHsrCfvACWEaSJvBZnWNl9nlwlY/Qjpy6FU6zmaHua6tMjGBUq1Hvlg8Yg==
+X-Received: by 2002:a7b:cbd3:0:b0:477:991c:a17c with SMTP id 5b1f17b1804b1-477b9ea90b7mr161854985e9.6.1764142458142;
+        Tue, 25 Nov 2025 23:34:18 -0800 (PST)
+Received: from F15.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3476a5603bdsm1603290a91.8.2025.11.25.23.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 23:34:17 -0800 (PST)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org
+Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] tools: bpf: remove runqslower tool
+Date: Wed, 26 Nov 2025 16:33:00 +0900
+Message-ID: <20251126073308.365432-3-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <66978.125112600421000136@us-mta-8.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: OmKdR50DtghKRFs0pZJCyVVzRFUi3axN5G49KAxKz18_1764135727
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+runqslower was added in commit 9c01546d26d2 ("tools/bpf: Add runqslower
+tool to tools/bpf") as a BCC port to showcase early BPF CO-RE + libbpf
+workflows. runqslower continues to live in BCC (libbpf-tools), so there
+is no need to keep building and maintaining it.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+Drop tools/bpf/runqslower and remove all build hooks in tools/bpf and
+selftests accordingly.
 
+Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+---
+ tools/bpf/Makefile                            |  13 +-
+ tools/bpf/runqslower/.gitignore               |   2 -
+ tools/bpf/runqslower/Makefile                 |  91 ----------
+ tools/bpf/runqslower/runqslower.bpf.c         | 106 -----------
+ tools/bpf/runqslower/runqslower.c             | 171 ------------------
+ tools/bpf/runqslower/runqslower.h             |  13 --
+ tools/testing/selftests/bpf/.gitignore        |   1 -
+ tools/testing/selftests/bpf/Makefile          |  14 --
+ .../selftests/bpf/test_bpftool_build.sh       |   4 -
+ 9 files changed, 3 insertions(+), 412 deletions(-)
+ delete mode 100644 tools/bpf/runqslower/.gitignore
+ delete mode 100644 tools/bpf/runqslower/Makefile
+ delete mode 100644 tools/bpf/runqslower/runqslower.bpf.c
+ delete mode 100644 tools/bpf/runqslower/runqslower.c
+ delete mode 100644 tools/bpf/runqslower/runqslower.h
 
-Kernel information:
-    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/arm64/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2179073679
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2179073679_x86_64_kernel-debug
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_aarch64_kernel_kcidb_tool_20090729_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL btrfs:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_x86_64_kernel_kcidb_tool_20090733_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL btrfs:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-        xfstests - cifsv3.11
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_x86_64_kernel_kcidb_tool_20090733_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL cifs:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-        xfstests - ext4
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_aarch64_kernel_kcidb_tool_20090729_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL ext4:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_x86_64_kernel_kcidb_tool_20090733_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL ext4:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-        xfstests - nfsv4.2
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_x86_64_kernel_kcidb_tool_20090733_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL nfs4:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-        xfstests - xfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_aarch64_kernel_kcidb_tool_20090729_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL xfs:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2179073679_x86_64_kernel_kcidb_tool_20090733_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL xfs:install_xfstests
-                       =E2=9D=8C FAIL exit_code
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - bpf_test_progs [x86_64]
-                kselftests upstream - net [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [x86_64]
-    /distribution/command [x86_64]
-    /test/misc/machineinfo [x86_64]
-    Boot test [x86_64]
-    CKI/restraint [x86_64]
-    Reboot test [x86_64]
-    SELinux Custom Module Setup [x86_64]
-    Storage - blktests - throtl [x86_64]
-    Storage - blktests - ublk [x86_64]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+index 062bbd6cd048..fd2585af1252 100644
+--- a/tools/bpf/Makefile
++++ b/tools/bpf/Makefile
+@@ -32,7 +32,7 @@ FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
+ FEATURE_DISPLAY = libbfd
+ 
+ check_feat := 1
+-NON_CHECK_FEAT_TARGETS := clean bpftool_clean runqslower_clean resolve_btfids_clean
++NON_CHECK_FEAT_TARGETS := clean bpftool_clean resolve_btfids_clean
+ ifdef MAKECMDGOALS
+ ifeq ($(filter-out $(NON_CHECK_FEAT_TARGETS),$(MAKECMDGOALS)),)
+   check_feat := 0
+@@ -70,7 +70,7 @@ $(OUTPUT)%.lex.o: $(OUTPUT)%.lex.c
+ 
+ PROGS = $(OUTPUT)bpf_jit_disasm $(OUTPUT)bpf_dbg $(OUTPUT)bpf_asm
+ 
+-all: $(PROGS) bpftool runqslower
++all: $(PROGS) bpftool
+ 
+ $(OUTPUT)bpf_jit_disasm: CFLAGS += -DPACKAGE='bpf_jit_disasm'
+ $(OUTPUT)bpf_jit_disasm: $(OUTPUT)bpf_jit_disasm.o
+@@ -86,7 +86,7 @@ $(OUTPUT)bpf_exp.lex.c: $(OUTPUT)bpf_exp.yacc.c
+ $(OUTPUT)bpf_exp.yacc.o: $(OUTPUT)bpf_exp.yacc.c
+ $(OUTPUT)bpf_exp.lex.o: $(OUTPUT)bpf_exp.lex.c
+ 
+-clean: bpftool_clean runqslower_clean resolve_btfids_clean
++clean: bpftool_clean resolve_btfids_clean
+ 	$(call QUIET_CLEAN, bpf-progs)
+ 	$(Q)$(RM) -r -- $(OUTPUT)*.o $(OUTPUT)bpf_jit_disasm $(OUTPUT)bpf_dbg \
+ 	       $(OUTPUT)bpf_asm $(OUTPUT)bpf_exp.yacc.* $(OUTPUT)bpf_exp.lex.*
+@@ -112,12 +112,6 @@ bpftool_install:
+ bpftool_clean:
+ 	$(call descend,bpftool,clean)
+ 
+-runqslower:
+-	$(call descend,runqslower)
+-
+-runqslower_clean:
+-	$(call descend,runqslower,clean)
+-
+ resolve_btfids:
+ 	$(call descend,resolve_btfids)
+ 
+@@ -125,5 +119,4 @@ resolve_btfids_clean:
+ 	$(call descend,resolve_btfids,clean)
+ 
+ .PHONY: all install clean bpftool bpftool_install bpftool_clean \
+-	runqslower runqslower_clean \
+ 	resolve_btfids resolve_btfids_clean
+diff --git a/tools/bpf/runqslower/.gitignore b/tools/bpf/runqslower/.gitignore
+deleted file mode 100644
+index ffdb70230c8b..000000000000
+--- a/tools/bpf/runqslower/.gitignore
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-/.output
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+deleted file mode 100644
+index 78a436c4072e..000000000000
+--- a/tools/bpf/runqslower/Makefile
++++ /dev/null
+@@ -1,91 +0,0 @@
+-# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+-include ../../scripts/Makefile.include
+-
+-OUTPUT ?= $(abspath .output)/
+-
+-BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
+-DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bootstrap/bpftool
+-BPFTOOL ?= $(DEFAULT_BPFTOOL)
+-BPF_TARGET_ENDIAN ?= --target=bpf
+-LIBBPF_SRC := $(abspath ../../lib/bpf)
+-BPFOBJ_OUTPUT := $(OUTPUT)libbpf/
+-BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
+-BPF_DESTDIR := $(BPFOBJ_OUTPUT)
+-BPF_INCLUDE := $(BPF_DESTDIR)/include
+-INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
+-CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
+-CFLAGS += $(EXTRA_CFLAGS)
+-LDFLAGS += $(EXTRA_LDFLAGS)
+-LDLIBS += -lelf -lz
+-
+-# Try to detect best kernel BTF source
+-KERNEL_REL := $(shell uname -r)
+-VMLINUX_BTF_PATHS := $(if $(O),$(O)/vmlinux)		\
+-	$(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux) \
+-	../../../vmlinux /sys/kernel/btf/vmlinux	\
+-	/boot/vmlinux-$(KERNEL_REL)
+-VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
+-					  $(wildcard $(VMLINUX_BTF_PATHS))))
+-
+-ifneq ($(V),1)
+-MAKEFLAGS += --no-print-directory
+-submake_extras := feature_display=0
+-endif
+-
+-.DELETE_ON_ERROR:
+-
+-.PHONY: all clean runqslower libbpf_hdrs
+-all: runqslower
+-
+-runqslower: $(OUTPUT)/runqslower
+-
+-clean:
+-	$(call QUIET_CLEAN, runqslower)
+-	$(Q)$(RM) -r $(BPFOBJ_OUTPUT) $(BPFTOOL_OUTPUT)
+-	$(Q)$(RM) $(OUTPUT)*.o $(OUTPUT)*.d
+-	$(Q)$(RM) $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
+-	$(Q)$(RM) $(OUTPUT)runqslower
+-	$(Q)$(RM) -r .output
+-
+-libbpf_hdrs: $(BPFOBJ)
+-
+-$(OUTPUT)/runqslower: $(OUTPUT)/runqslower.o $(BPFOBJ)
+-	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
+-
+-$(OUTPUT)/runqslower.o: runqslower.h $(OUTPUT)/runqslower.skel.h	      \
+-			$(OUTPUT)/runqslower.bpf.o | libbpf_hdrs
+-
+-$(OUTPUT)/runqslower.bpf.o: $(OUTPUT)/vmlinux.h runqslower.h | libbpf_hdrs
+-
+-$(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+-	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+-
+-$(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+-	$(QUIET_GEN)$(CLANG) -g -O2 $(BPF_TARGET_ENDIAN) $(INCLUDES)	      \
+-		 -c $(filter %.c,$^) -o $@ &&				      \
+-	$(LLVM_STRIP) -g $@
+-
+-$(OUTPUT)/%.o: %.c | $(OUTPUT)
+-	$(QUIET_CC)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
+-
+-$(OUTPUT) $(BPFOBJ_OUTPUT) $(BPFTOOL_OUTPUT):
+-	$(QUIET_MKDIR)mkdir -p $@
+-
+-$(OUTPUT)/vmlinux.h: $(VMLINUX_BTF_PATH) | $(OUTPUT) $(BPFTOOL)
+-ifeq ($(VMLINUX_H),)
+-	$(Q)if [ ! -e "$(VMLINUX_BTF_PATH)" ] ; then \
+-		echo "Couldn't find kernel BTF; set VMLINUX_BTF to"	       \
+-			"specify its location." >&2;			       \
+-		exit 1;\
+-	fi
+-	$(QUIET_GEN)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@
+-else
+-	$(Q)cp "$(VMLINUX_H)" $@
+-endif
+-
+-$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(BPFOBJ_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(BPFOBJ_OUTPUT) \
+-		    DESTDIR=$(BPFOBJ_OUTPUT) prefix= $(abspath $@) install_headers
+-
+-$(DEFAULT_BPFTOOL): | $(BPFTOOL_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT) bootstrap
+diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
+deleted file mode 100644
+index fced54a3adf6..000000000000
+--- a/tools/bpf/runqslower/runqslower.bpf.c
++++ /dev/null
+@@ -1,106 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2019 Facebook
+-#include "vmlinux.h"
+-#include <bpf/bpf_helpers.h>
+-#include "runqslower.h"
+-
+-#define TASK_RUNNING 0
+-#define BPF_F_CURRENT_CPU 0xffffffffULL
+-
+-const volatile __u64 min_us = 0;
+-const volatile pid_t targ_pid = 0;
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
+-	__uint(map_flags, BPF_F_NO_PREALLOC);
+-	__type(key, int);
+-	__type(value, u64);
+-} start SEC(".maps");
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+-	__uint(key_size, sizeof(u32));
+-	__uint(value_size, sizeof(u32));
+-} events SEC(".maps");
+-
+-/* record enqueue timestamp */
+-__always_inline
+-static int trace_enqueue(struct task_struct *t)
+-{
+-	u32 pid = t->pid;
+-	u64 *ptr;
+-
+-	if (!pid || (targ_pid && targ_pid != pid))
+-		return 0;
+-
+-	ptr = bpf_task_storage_get(&start, t, 0,
+-				   BPF_LOCAL_STORAGE_GET_F_CREATE);
+-	if (!ptr)
+-		return 0;
+-
+-	*ptr = bpf_ktime_get_ns();
+-	return 0;
+-}
+-
+-SEC("tp_btf/sched_wakeup")
+-int handle__sched_wakeup(u64 *ctx)
+-{
+-	/* TP_PROTO(struct task_struct *p) */
+-	struct task_struct *p = (void *)ctx[0];
+-
+-	return trace_enqueue(p);
+-}
+-
+-SEC("tp_btf/sched_wakeup_new")
+-int handle__sched_wakeup_new(u64 *ctx)
+-{
+-	/* TP_PROTO(struct task_struct *p) */
+-	struct task_struct *p = (void *)ctx[0];
+-
+-	return trace_enqueue(p);
+-}
+-
+-SEC("tp_btf/sched_switch")
+-int handle__sched_switch(u64 *ctx)
+-{
+-	/* TP_PROTO(bool preempt, struct task_struct *prev,
+-	 *	    struct task_struct *next)
+-	 */
+-	struct task_struct *prev = (struct task_struct *)ctx[1];
+-	struct task_struct *next = (struct task_struct *)ctx[2];
+-	struct runq_event event = {};
+-	u64 *tsp, delta_us;
+-	u32 pid;
+-
+-	/* ivcsw: treat like an enqueue event and store timestamp */
+-	if (prev->__state == TASK_RUNNING)
+-		trace_enqueue(prev);
+-
+-	pid = next->pid;
+-
+-	/* For pid mismatch, save a bpf_task_storage_get */
+-	if (!pid || (targ_pid && targ_pid != pid))
+-		return 0;
+-
+-	/* fetch timestamp and calculate delta */
+-	tsp = bpf_task_storage_get(&start, next, 0, 0);
+-	if (!tsp)
+-		return 0;   /* missed enqueue */
+-
+-	delta_us = (bpf_ktime_get_ns() - *tsp) / 1000;
+-	if (min_us && delta_us <= min_us)
+-		return 0;
+-
+-	event.pid = pid;
+-	event.delta_us = delta_us;
+-	bpf_get_current_comm(&event.task, sizeof(event.task));
+-
+-	/* output */
+-	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU,
+-			      &event, sizeof(event));
+-
+-	bpf_task_storage_delete(&start, next);
+-	return 0;
+-}
+-
+-char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
+deleted file mode 100644
+index 83c5993a139a..000000000000
+--- a/tools/bpf/runqslower/runqslower.c
++++ /dev/null
+@@ -1,171 +0,0 @@
+-// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+-// Copyright (c) 2019 Facebook
+-#include <argp.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <time.h>
+-#include <bpf/libbpf.h>
+-#include <bpf/bpf.h>
+-#include "runqslower.h"
+-#include "runqslower.skel.h"
+-
+-struct env {
+-	pid_t pid;
+-	__u64 min_us;
+-	bool verbose;
+-} env = {
+-	.min_us = 10000,
+-};
+-
+-const char *argp_program_version = "runqslower 0.1";
+-const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
+-const char argp_program_doc[] =
+-"runqslower    Trace long process scheduling delays.\n"
+-"              For Linux, uses eBPF, BPF CO-RE, libbpf, BTF.\n"
+-"\n"
+-"This script traces high scheduling delays between tasks being\n"
+-"ready to run and them running on CPU after that.\n"
+-"\n"
+-"USAGE: runqslower [-p PID] [min_us]\n"
+-"\n"
+-"EXAMPLES:\n"
+-"    runqslower         # trace run queue latency higher than 10000 us (default)\n"
+-"    runqslower 1000    # trace run queue latency higher than 1000 us\n"
+-"    runqslower -p 123  # trace pid 123 only\n";
+-
+-static const struct argp_option opts[] = {
+-	{ "pid", 'p', "PID", 0, "Process PID to trace"},
+-	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
+-	{},
+-};
+-
+-static error_t parse_arg(int key, char *arg, struct argp_state *state)
+-{
+-	static int pos_args;
+-	int pid;
+-	long long min_us;
+-
+-	switch (key) {
+-	case 'v':
+-		env.verbose = true;
+-		break;
+-	case 'p':
+-		errno = 0;
+-		pid = strtol(arg, NULL, 10);
+-		if (errno || pid <= 0) {
+-			fprintf(stderr, "Invalid PID: %s\n", arg);
+-			argp_usage(state);
+-		}
+-		env.pid = pid;
+-		break;
+-	case ARGP_KEY_ARG:
+-		if (pos_args++) {
+-			fprintf(stderr,
+-				"Unrecognized positional argument: %s\n", arg);
+-			argp_usage(state);
+-		}
+-		errno = 0;
+-		min_us = strtoll(arg, NULL, 10);
+-		if (errno || min_us <= 0) {
+-			fprintf(stderr, "Invalid delay (in us): %s\n", arg);
+-			argp_usage(state);
+-		}
+-		env.min_us = min_us;
+-		break;
+-	default:
+-		return ARGP_ERR_UNKNOWN;
+-	}
+-	return 0;
+-}
+-
+-int libbpf_print_fn(enum libbpf_print_level level,
+-		    const char *format, va_list args)
+-{
+-	if (level == LIBBPF_DEBUG && !env.verbose)
+-		return 0;
+-	return vfprintf(stderr, format, args);
+-}
+-
+-void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
+-{
+-	const struct runq_event *e = data;
+-	struct tm *tm;
+-	char ts[32];
+-	time_t t;
+-
+-	time(&t);
+-	tm = localtime(&t);
+-	strftime(ts, sizeof(ts), "%H:%M:%S", tm);
+-	printf("%-8s %-16s %-6d %14llu\n", ts, e->task, e->pid, e->delta_us);
+-}
+-
+-void handle_lost_events(void *ctx, int cpu, __u64 lost_cnt)
+-{
+-	printf("Lost %llu events on CPU #%d!\n", lost_cnt, cpu);
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	static const struct argp argp = {
+-		.options = opts,
+-		.parser = parse_arg,
+-		.doc = argp_program_doc,
+-	};
+-	struct perf_buffer *pb = NULL;
+-	struct runqslower_bpf *obj;
+-	int err;
+-
+-	err = argp_parse(&argp, argc, argv, 0, NULL, NULL);
+-	if (err)
+-		return err;
+-
+-	libbpf_set_print(libbpf_print_fn);
+-
+-	/* Use libbpf 1.0 API mode */
+-	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+-
+-	obj = runqslower_bpf__open();
+-	if (!obj) {
+-		fprintf(stderr, "failed to open and/or load BPF object\n");
+-		return 1;
+-	}
+-
+-	/* initialize global data (filtering options) */
+-	obj->rodata->targ_pid = env.pid;
+-	obj->rodata->min_us = env.min_us;
+-
+-	err = runqslower_bpf__load(obj);
+-	if (err) {
+-		fprintf(stderr, "failed to load BPF object: %d\n", err);
+-		goto cleanup;
+-	}
+-
+-	err = runqslower_bpf__attach(obj);
+-	if (err) {
+-		fprintf(stderr, "failed to attach BPF programs\n");
+-		goto cleanup;
+-	}
+-
+-	printf("Tracing run queue latency higher than %llu us\n", env.min_us);
+-	printf("%-8s %-16s %-6s %14s\n", "TIME", "COMM", "PID", "LAT(us)");
+-
+-	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64,
+-			      handle_event, handle_lost_events, NULL, NULL);
+-	err = libbpf_get_error(pb);
+-	if (err) {
+-		pb = NULL;
+-		fprintf(stderr, "failed to open perf buffer: %d\n", err);
+-		goto cleanup;
+-	}
+-
+-	while ((err = perf_buffer__poll(pb, 100)) >= 0)
+-		;
+-	printf("Error polling perf buffer: %d\n", err);
+-
+-cleanup:
+-	perf_buffer__free(pb);
+-	runqslower_bpf__destroy(obj);
+-
+-	return err != 0;
+-}
+diff --git a/tools/bpf/runqslower/runqslower.h b/tools/bpf/runqslower/runqslower.h
+deleted file mode 100644
+index 4f70f07200c2..000000000000
+--- a/tools/bpf/runqslower/runqslower.h
++++ /dev/null
+@@ -1,13 +0,0 @@
+-/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+-#ifndef __RUNQSLOWER_H
+-#define __RUNQSLOWER_H
+-
+-#define TASK_COMM_LEN 16
+-
+-struct runq_event {
+-	char task[TASK_COMM_LEN];
+-	__u64 delta_us;
+-	pid_t pid;
+-};
+-
+-#endif /* __RUNQSLOWER_H */
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index be1ee7ba7ce0..e091809f07a0 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -32,7 +32,6 @@ test_cpp
+ /cpuv4
+ /host-tools
+ /tools
+-/runqslower
+ /bench
+ /veristat
+ /sign-file
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f00587d4ede6..79f9f96d153f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -127,7 +127,6 @@ TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
+ TEST_GEN_PROGS_EXTENDED = \
+ 	bench \
+ 	flow_dissector_load \
+-	runqslower \
+ 	test_cpp \
+ 	test_lirc_mode2_user \
+ 	veristat \
+@@ -209,8 +208,6 @@ HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
+ endif
+ HOST_BPFOBJ := $(HOST_BUILD_DIR)/libbpf/libbpf.a
+ RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
+-RUNQSLOWER_OUTPUT := $(BUILD_DIR)/runqslower/
+-
+ VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
+ 		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
+ 		     ../../../../vmlinux				\
+@@ -304,17 +301,6 @@ TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
+ USE_BOOTSTRAP := "bootstrap/"
+ endif
+ 
+-$(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	       \
+-		    OUTPUT=$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=$(VMLINUX_BTF)     \
+-		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
+-		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
+-		    BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR)		       \
+-		    BPF_TARGET_ENDIAN=$(BPF_TARGET_ENDIAN)		       \
+-		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
+-		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' &&	       \
+-		    cp $(RUNQSLOWER_OUTPUT)runqslower $@
+-
+ TEST_GEN_PROGS_EXTENDED += $(TRUNNER_BPFTOOL)
+ 
+ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
+diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
+index 1453a53ed547..b03a87571592 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_build.sh
++++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
+@@ -90,10 +90,6 @@ echo -e "... through kbuild\n"
+ 
+ if [ -f ".config" ] ; then
+ 	make_and_clean tools/bpf
+-	## "make tools/bpf" sets $(OUTPUT) to ...tools/bpf/runqslower for
+-	## runqslower, but the default (used for the "clean" target) is .output.
+-	## Let's make sure we clean runqslower's directory properly.
+-	make -C tools/bpf/runqslower OUTPUT=${KDIR_ROOT_DIR}/tools/bpf/runqslower/ clean
+ 
+ 	## $OUTPUT is overwritten in kbuild Makefile, and thus cannot be passed
+ 	## down from toplevel Makefile to bpftool's Makefile.
+-- 
+2.52.0
 
