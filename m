@@ -1,118 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432AB29D27E;
-	Wed, 26 Nov 2025 07:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80EBA28DF07;
+	Wed, 26 Nov 2025 07:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764142784; cv=none; b=PfrX6ttp0iN6rCzPvZKREzIcKK9o3vwbeyhZgcm7qpYR6egMeDn/IvlDNlVg8NwakR8Ef9KwOs9+G4nbwptVJENH49zeJH1n7R/ZX4vx9GoLIAQPD9DCL42xST8rUo6j5c6pZSPFjpGhBH6LbSGMkQT1gsKOZGClOjQi402NYYM=
+	t=1764143885; cv=none; b=fQTN8Kr3cGa7yahxmU4rCZ/maUSAvwNQXxacjfMAmAeuXO9WPjWXV88vDgHp3f154QdVfewJ7lxY3XchrjMBKGi/Xhwu0JSVZCoxV2aPSAgsXjvWaca31RMWfLq9lgT39bw0tfqK++jXqtCTNVyCx4BIPYrjVWpamurk7z0SMwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764142784; c=relaxed/simple;
-	bh=EMct42WoiiGjcksMl7vwP//cvhacHtrR+zrVyuvWuGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n7Q8M3Gguvxmhf2eZFOhdpg1mCbdbMzQqrf7Y79fiSdyuM7xHtEG76EDZYy0C7OrlSU+gE2ajqzTI37Uv8cKgLB/HoQiztbfD6t/5aH2Ow0a2DI/cfbQhxlQ/YwT14n87H3kbQCogNiZLuaEM68Fbbi08FuWCPLumKDxNGgcOmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GhLPpFNV; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764143885; c=relaxed/simple;
+	bh=TLRzos+G5nktJBYQEE4hvX7mJuXSl8xJvHDBeMRlLj4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uzfH0XsyRIPeYM6LUgUv0tCATa2mREtLbcrX/osP9FQdWOmGLguiuRnOq742MkuBSVw0oLekqhbs7vY+rCN2TAYSVTXOX2Q1qrXPtUYrXDcbVRnsFZka1+RUFQTdWVAdYcJtRG0JBef0NpWtd//Za4KIvM3XwmPsUsOnqMIPQSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XDdwGEo1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GhLPpFNV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764142784; x=1795678784;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EMct42WoiiGjcksMl7vwP//cvhacHtrR+zrVyuvWuGI=;
-  b=GhLPpFNVgOverOCUQfJGJCSkLsHbY8xqZVaP+7fgRIoy5kDDlWeH8zSx
-   fsDwRTTU1VioNK3pJhS5bH3x/aApBEpixA3ejB3YWJjsuRSrzE8fHmau8
-   hsaTx6bMI7QU79dcISQDdFxLqkPxngUO3zO9gBP6c36RQn3C9DMRKqakp
-   kcXldyFQKpFpvz+w4QkbnMQKVLklZX8DqMJb3unRYTdW5LFy1dVXn0YSg
-   i7o5xvt2kNF1RNEjjoYprOohTS3BmLREZAtVQe4Uc/UqP02EX5wvsHE45
-   RVxKI/vgkxKAT1Tgz4dxeclyUKpUCnf27/buelwASbJq/4fLFV33NxVqm
-   A==;
-X-CSE-ConnectionGUID: WzWekZHTTQeeVy5LgPBhtg==
-X-CSE-MsgGUID: AsTLveWPQx+RAeZR2yWhDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="83563494"
-X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
-   d="scan'208";a="83563494"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 23:39:43 -0800
-X-CSE-ConnectionGUID: U+ariKqbS4mjldTk3ROtsw==
-X-CSE-MsgGUID: LJpZH5gTQ9ah/6mzKzzK6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
-   d="scan'208";a="193297094"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 25 Nov 2025 23:39:37 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOA7i-000000002bl-41Uh;
-	Wed, 26 Nov 2025 07:39:34 +0000
-Date: Wed, 26 Nov 2025 15:38:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
-	Amit Sunil Dhamne <amitsd@google.com>
-Subject: Re: [PATCH 5/6] power: supply: max77759: add charger driver
-Message-ID: <202511261521.hSYp4ttf-lkp@intel.com>
-References: <20251123-max77759-charger-v1-5-6b2e4b8f7f54@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XDdwGEo1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E93CC113D0;
+	Wed, 26 Nov 2025 07:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764143884;
+	bh=TLRzos+G5nktJBYQEE4hvX7mJuXSl8xJvHDBeMRlLj4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=XDdwGEo1lLv6bSaf7r6iY2zJYWB5estti8dNDMVjX+96L0PKD2l3z01RrUhbR/HhC
+	 HR2iPN0HMHQGodeDjB7COlL2wJag01qC9c+oBK7PeotNE0LUOhxgKJyAJdWxbne7Kl
+	 ti6cmb+oPm24frjdy41PRGpxMWv7PPmGjeSJOUKxtGO1gALokb+6ekNY7q4gAkNA5d
+	 9g/fxaMKL31Np+0sXHf1Z5cfRzT5Fm3nIBaMjdEiLXytA4K1QyoJMjCHCYv4etmmrh
+	 tUQCF55lg8JupNHAhYbSZfBTn42FaScK7OUP3g8i19hY4DjVEP8VQbACWXLVoMTiH7
+	 Q6r9D2+HBmHgg==
+Content-Type: multipart/mixed; boundary="===============7516842318733721634=="
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251123-max77759-charger-v1-5-6b2e4b8f7f54@google.com>
+Message-Id: <67d85605b603942683e285ed0f88d463fd85bfe0972b92e787c15891c0b1e32c@mail.kernel.org>
+In-Reply-To: <20251126073308.365432-3-hoyeon.lee@suse.com>
+References: <20251126073308.365432-3-hoyeon.lee@suse.com>
+Subject: Re: [PATCH] tools: bpf: remove runqslower tool
+From: bot+bpf-ci@kernel.org
+To: hoyeon.lee@suse.com,bpf@vger.kernel.org
+Cc: hoyeon.lee@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,tony.ambardar@gmail.com,charlie@rivosinc.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 26 Nov 2025 07:58:03 +0000 (UTC)
 
-Hi Amit,
+--===============7516842318733721634==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index bac22265e..4e8d32318 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
-[auto build test ERROR on 39f90c1967215375f7d87b81d14b0f3ed6b40c29]
+[ ... ]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-power-supply-Add-Maxim-MAX77759-charger/20251123-163840
-base:   39f90c1967215375f7d87b81d14b0f3ed6b40c29
-patch link:    https://lore.kernel.org/r/20251123-max77759-charger-v1-5-6b2e4b8f7f54%40google.com
-patch subject: [PATCH 5/6] power: supply: max77759: add charger driver
-config: um-randconfig-001-20251126 (https://download.01.org/0day-ci/archive/20251126/202511261521.hSYp4ttf-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511261521.hSYp4ttf-lkp@intel.com/reproduce)
+> @@ -209,8 +208,6 @@ HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
+>  endif
+>  HOST_BPFOBJ := $(HOST_BUILD_DIR)/libbpf/libbpf.a
+>  RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
+> -RUNQSLOWER_OUTPUT := $(BUILD_DIR)/runqslower/
+> -
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511261521.hSYp4ttf-lkp@intel.com/
+The commit removes the RUNQSLOWER_OUTPUT variable definition here, but
+the variable is still referenced later in the file. Around line 232 in
+the MAKE_DIRS assignment, the undefined variable RUNQSLOWER_OUTPUT
+remains in the list:
 
-All errors (new ones prefixed by >>):
+MAKE_DIRS := $(sort $(BUILD_DIR)/libbpf $(HOST_BUILD_DIR)/libbpf \
+               $(BUILD_DIR)/bpftool $(HOST_BUILD_DIR)/bpftool \
+               $(HOST_BUILD_DIR)/resolve_btfids \
+               $(RUNQSLOWER_OUTPUT) $(INCLUDE_DIR))
 
-   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `max77759_charger_probe':
->> max77759_charger.c:(.ltext+0x27b): undefined reference to `devm_regulator_register'
-   /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `enable_usb_otg':
->> max77759_charger.c:(.ltext+0x983): undefined reference to `rdev_get_drvdata'
-   /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `disable_usb_otg':
-   max77759_charger.c:(.ltext+0x9c3): undefined reference to `rdev_get_drvdata'
-   /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `usb_otg_status':
-   max77759_charger.c:(.ltext+0xa06): undefined reference to `rdev_get_drvdata'
-   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+Should this reference be removed from MAKE_DIRS to complete the
+cleanup?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19696291804
+
+--===============7516842318733721634==--
