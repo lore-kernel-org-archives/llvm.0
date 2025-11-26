@@ -1,313 +1,667 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED4B2E7198
-	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 08:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A23A2FC877
+	for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 09:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764145010; cv=none; b=BXo/oyIyoj3ZM3QOFgb2mD58CD6HVRc8idcQmOvmtCaKkXTZQLFrIOiuMYKlmbN8IHYGHSq552qr73wxI4o8cS3wQrwOiFoTuAvLQg0U3zbk49JnceNi3Sogkukb9edwqdMbJyzNlDVpnOx/dv/ihUG2vAxP6G925VTR3y/gc6o=
+	t=1764149957; cv=none; b=FV1sU6J5Z/ZUi5uWtRImSu5qUu2KrmQpGx/lY9oS9Psoeh4V/LJT1aJtr1heWyiVv0PB5oyGAY7KIRV7cY96+WiB+m3d/niO0B0UrrIMY62o2vzAebD9/UqVOuirhjo3XHG76N8BvYS6W6/K8HmnowBOpeO66PXuRzfP4sG4EB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764145010; c=relaxed/simple;
-	bh=a4R5utwOxhqF51n2TJ39WizmznuZrWsPT687TxSYO5I=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Q3HCedJIR4eeMaQSB322R15lVY1KoKyr26dyXfJg9YRI0cgiTQUubbxzZKb5dD7NSXU4EGWUZiniVxXLqZXL/Nk3YGtXnAAzTkUerIJ6TS/ck9+69TKk9UYBOtaVizmtbr8VLlNdqF0XSkEn2w7DFeOoxTFKGO0MrF7PCK5aGL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HBNj+yz5; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1764149957; c=relaxed/simple;
+	bh=om+eQqL4kIiy2lNyumb4grIHb6MIzuA653l+7ULEiR0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XhvDjiPK1rEEeqCF+0yoYfSqYOeMeW4/4xB1ob0L4IfNWPvqQsoWyG0AXiwGoRoHZdVK4aoBZs2IC5EnZSNbeToRMq8+P4rPnSOl3kXcZPeqrMhEcz9FdYh4tlhSPpAy43IFMVH6sWfV2Z/XVvGqx//C7eHxetIFmNewex6B+Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IAKqP8y3; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HBNj+yz5"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42b31c610fcso5463910f8f.0
-        for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 00:16:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IAKqP8y3"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477b5e0323bso3507895e9.0
+        for <llvm@lists.linux.dev>; Wed, 26 Nov 2025 01:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764145005; x=1764749805; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bp9MLuEnCAUFdYVbUXEufH3fIXvI9LKM5pxdbbBUQjc=;
-        b=HBNj+yz5ePeteJQtTe2rV5UhK061BnRV+LJoXn3OwqZ70n2L1FEz0NUIwyhmCgqYdF
-         PdzJObwJJ3XGe8AgUd9AxEBCWaIhRcm5aKpUh+QxCwkzl4W1UqKu0USKHyNr/G/vmbQI
-         wSRm0doEfHo92TisZnjEn/iTWb508k/fx62oKhHPRMF7WyQaqxstlh2b7okd8H+VER2D
-         SpQD/iVH3mKGqBBpFlKc4cKLuVgKfv/0wSSeUY2yac0XMWgCK4+WE5sNIAj3fGJ1qrqB
-         qcKH3DMmv9FcVzyXiYsghkZ0E+IEvGyylbBMUm+kwzBnb/7sYbTpig6aNRSadJ7NP0mj
-         0M0A==
+        d=suse.com; s=google; t=1764149946; x=1764754746; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x+6xmd0GzT9/AUTeRYJ6kJi+uUQG7cdNszXI28WYXXs=;
+        b=IAKqP8y31RLpghP9K3/f6TThTOx3Z85J1Di6i2AN6m7GlHQ86/MQmYFem3mV9ggSOX
+         zhRrpTgykGrVZR6sznxYPB06duiPgre2AuKlqcfc7cfoW0Fq1FB09Oi5/5yRh8ieRxcu
+         mlfOrTaz2N2RuIkh/yMcrK6v+rqesind2Sd6pgjlOVrrY5rlT6EG/UnVed6ucpvk5aGd
+         VgIEeux98ATpFsBLqfE0LDYBk5+IFoBm0Y5R1kPR4aPptp9Jde1dNn+PIsZryyKfVce/
+         SybNdgNDcFzpmUyjLbjrqk5nzBCSn45FWqdEqVhIsNVEb+wOZoQYqLTaI48vn/wA+xw4
+         m6Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764145005; x=1764749805;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bp9MLuEnCAUFdYVbUXEufH3fIXvI9LKM5pxdbbBUQjc=;
-        b=rTqL+gP1uvNWK+iow4d65L4YB5PV0+udcXykLAxo/ExBNQb8y/63Uji33luXFK+L4T
-         w0EXi/TMuKNMZAcwmny4KMZt/jAPGpk4M1HKQ43x10JVac7fFfzoE+q34zyyDScBnhWL
-         qLTXbuciF0uau3RfAMpl1gKXbyuMrGag+mfjmWEyV2NVjr+pSF+tFqjiXmtEWzEp9ksR
-         hh8fSCIp4M0DMyaNHvNjT/V0edy/aG8sQHK23Jx1e8jtOFK+syA1HxicJCe6tphXGZi/
-         vAJONlceUnziYE3xmfjmup7I7IUXOGVaGfmIhlA1zIpzraiUQr1VteGp3e2ntslxMbb9
-         LKlg==
-X-Gm-Message-State: AOJu0Yw1bP2IQHNKhkkzqUXMZjuWi1JLUArBjainTziiMWf56rA93zBJ
-	gm5uPmyOLg6wzHS57cmK9+36B6gGXUN4pO0et1HwQw1H3VJFL7QycvJEX8w7WcBIikA=
-X-Gm-Gg: ASbGncuPJ2pxqIp3pK2r8eOCz5a+ecuoOB3IYlmKmVsKEaSiqkVgte7O6aDRn0avvoI
-	zF9793QetaTQsnHIVUTTmBBPgs3Lf/1nhnx9QiXYp/inA71yBa/Ht5MYPf4Ox4WQhU7ejiCoFim
-	v2JUqwq2drWuaLPtuTwbtD2ZiEeke8tHzE2OfbN9ZJaPjIYYzq6ewQnV6clTD4vx3Mie9AljFjS
-	rG2qRZCbX/NWmoHmHS7xyQQIMiHjv02orMdIId92vJaf4Bu83YRmz105Up4JlZmZ6muMjkVsoDF
-	N2jCna9NARWam9ZsLYexFnVT16D8dY3akamcuO9ADa9l05cZoq3HWtla+xeoKGBLpiZlKmAJsWR
-	xj0GXNUkWGWDdzpFRAGlDNdzQJyFoL5g5oP3wVBdMxqH8aY+bvKhGTVb9vOG+cJBqBPcgmuh4S4
-	uKsq0vLOXOT3Xz6E1x1wIIMlpGyL2P2rqfF/BmjKZ3+Hxaq00RN059cdqFFbFc41ptIM8fdCU=
-X-Google-Smtp-Source: AGHT+IHPPfQKrVboPz1++lYiC4EA1oPm3zhA5dF9BHMldPdu8tlp/OGFZ0pC6pgoFDldMkA1lJlt8g==
-X-Received: by 2002:a05:6000:430d:b0:429:ba48:4d6 with SMTP id ffacd0b85a97d-42e0f1fc42dmr5591695f8f.10.1764145005002;
-        Wed, 26 Nov 2025 00:16:45 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:3d9:2080:91ba:3a5e:334:4534? ([2a01:e0a:3d9:2080:91ba:3a5e:334:4534])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f3635bsm39543011f8f.17.2025.11.26.00.16.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Nov 2025 00:16:44 -0800 (PST)
-Message-ID: <f41cb5f2-1702-499e-81d9-8ce74537bf3f@linaro.org>
-Date: Wed, 26 Nov 2025 09:16:43 +0100
+        d=1e100.net; s=20230601; t=1764149946; x=1764754746;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x+6xmd0GzT9/AUTeRYJ6kJi+uUQG7cdNszXI28WYXXs=;
+        b=Jmgapu0lMcs+ydVlKrFMZfwSexpWCIDIDF+vz/YXaWjlbvq6yJIJtuYxtm5Y5eFjOH
+         qhhRHNvI85e1bjCNpY2A1RW34xqp1eikcLyssOZ0UAHHiKE+vW9rF+s3Qx/9napp+VMf
+         y8qc/zOPHdpraojZpcU1xRJm/kYLJ8hU7o4JpruZxt7CPTDlrzb77CfpIqsdbQbd/bwk
+         r0XgeBmp5TWt+Qge1fSpfMg+cOmFgrXhtxPCAxEwNft76TBtk7Wd2mVX/OAQFe57kz3V
+         DVrOqw+Uc4zrmZL5fSbZ9sE4piFGrYQyEN91aK+CE6OdUlmc98tR61ywxDSMj51DN3nF
+         KgRw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/Ft0ovugH1JlJxKznZJY6/cJ5xZ9cDFNyWuykZmSD4Y6Ji13bp9PFDl19o7qIYWCB8bRp@lists.linux.dev
+X-Gm-Message-State: AOJu0YyJLW3w8yXFHURHFCorPsz4iRQMWhSC/vx/bNLi8isKS67GV4oV
+	/JfM0iAaxXNY1C4lCNtxZuUZPf9rXFdax0rVnaMEOFS7XGy4gq29CnhBpNzD1DX+2IA=
+X-Gm-Gg: ASbGnctelaGXVYL2AU8keRfWtwwY2dApiOodMY+PoQ5yw31C6QBmosm66uDKPMMGelb
+	c5qRyo39emmd5zQuzMFtYIFjV+yt8+eAsFB7vGnIkaGTlPDxVv9ft6/KEMSXrenEY5aZxS31Z6o
+	Hniob8iS5lhfL16qliGXzTFm+SZVJIZfONksFqSo+vQUcFSLXwVFa2RoUNtn2cL8kU7E+VmemWL
+	Mv0CXn5joXNEEfwLOpXGeMjJqDVgXnEdXCK2wNCzHWSDk8PR4jusnXAtg6mkxKI4I6YWUSWJRb3
+	c0nYpoRDSd6X6J+KzqZ8UkxV637N5W5aFQ4YCsvNXAdMFPfH+p/IgYeUlwo50hw4jEzKfZCc6pT
+	TRh+N3zlXRPzYM8eEuZfvXaG77XoC1RHM/wBoyj/wohxhYR2nLSPgl036JMEq5qyCeHXeWIU49s
+	PXBlb5SuKTtArxX0EDS9OeC07/RoAGop7Sjjzpp63akF4xOF2uNQ==
+X-Google-Smtp-Source: AGHT+IFhc5zZMh6wyGVDrg/kJjyoGsNNaAWNYZw1h4de4FZXAZS6SfLYWJk0bi/L5azz/8iO79YgQQ==
+X-Received: by 2002:a05:600c:2e4c:b0:477:9890:4528 with SMTP id 5b1f17b1804b1-477b9ea31e9mr141585845e9.2.1764149946038;
+        Wed, 26 Nov 2025 01:39:06 -0800 (PST)
+Received: from F15.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3476a7a5d4asm1952757a91.11.2025.11.26.01.39.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 01:39:05 -0800 (PST)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org
+Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v2] tools: bpf: remove runqslower tool
+Date: Wed, 26 Nov 2025 18:38:11 +0900
+Message-ID: <20251126093821.373291-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH REGRESSION] drm/panel: simple: restore connector_type
- fallback
-To: kernel test robot <lkp@intel.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Jessica Zhang <jesszhan0024@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Anusha Srivatsa <asrivats@redhat.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20251121-lcd_panel_connector_type_fix-v1-1-fdbbef34a1a4@microchip.com>
- <202511230354.nHRvfjDz-lkp@intel.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <202511230354.nHRvfjDz-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+runqslower was added in commit 9c01546d26d2 "tools/bpf: Add runqslower
+tool to tools/bpf" as a BCC port to showcase early BPF CO-RE + libbpf
+workflows. runqslower continues to live in BCC (libbpf-tools), so there
+is no need to keep building and maintaining it.
 
-On 11/22/25 21:26, kernel test robot wrote:
-> Hi Ludovic,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on 88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ludovic-Desroches/drm-panel-simple-restore-connector_type-fallback/20251121-212613
-> base:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
-> patch link:    https://lore.kernel.org/r/20251121-lcd_panel_connector_type_fix-v1-1-fdbbef34a1a4%40microchip.com
-> patch subject: [PATCH REGRESSION] drm/panel: simple: restore connector_type fallback
-> config: arm-randconfig-002-20251123 (https://download.01.org/0day-ci/archive/20251123/202511230354.nHRvfjDz-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251123/202511230354.nHRvfjDz-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511230354.nHRvfjDz-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/gpu/drm/panel/panel-simple.c:648:7: warning: variable 'panel' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->       648 |         case DRM_MODE_CONNECTOR_eDP:
->           |              ^~~~~~~~~~~~~~~~~~~~~~
->     include/uapi/drm/drm_mode.h:417:33: note: expanded from macro 'DRM_MODE_CONNECTOR_eDP'
->       417 | #define DRM_MODE_CONNECTOR_eDP          14
->           |                                         ^~
->     drivers/gpu/drm/panel/panel-simple.c:749:6: note: uninitialized use occurs here
->       749 |         if (panel->ddc)
->           |             ^~~~~
->     drivers/gpu/drm/panel/panel-simple.c:615:28: note: initialize the variable 'panel' to silence this warning
->       615 |         struct panel_simple *panel;
->           |                                   ^
->           |                                    = NULL
->     1 warning generated.
-> 
-> 
-> vim +/panel +648 drivers/gpu/drm/panel/panel-simple.c
-> 
-> 47c08262f34e1c Maxime Ripard     2025-06-26  611
-> 47c08262f34e1c Maxime Ripard     2025-06-26  612  static struct panel_simple *panel_simple_probe(struct device *dev)
-> 280921de7241ee Thierry Reding    2013-08-30  613  {
-> 47c08262f34e1c Maxime Ripard     2025-06-26  614  	const struct panel_desc *desc;
-> 280921de7241ee Thierry Reding    2013-08-30  615  	struct panel_simple *panel;
-> b8a2948fa2b3a5 Sean Paul         2019-07-11  616  	struct display_timing dt;
-> 0fe1564bd61642 Sam Ravnborg      2019-12-07  617  	struct device_node *ddc;
-> 9f069c6fbc7266 Sam Ravnborg      2020-07-26  618  	int connector_type;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  619  	u32 bus_flags;
-> 280921de7241ee Thierry Reding    2013-08-30  620  	int err;
-> 280921de7241ee Thierry Reding    2013-08-30  621
-> 47c08262f34e1c Maxime Ripard     2025-06-26  622  	desc = panel_simple_get_desc(dev);
-> 47c08262f34e1c Maxime Ripard     2025-06-26  623  	if (IS_ERR(desc))
-> 47c08262f34e1c Maxime Ripard     2025-06-26  624  		return ERR_CAST(desc);
-> 47c08262f34e1c Maxime Ripard     2025-06-26  625
-> 9f069c6fbc7266 Sam Ravnborg      2020-07-26  626  	connector_type = desc->connector_type;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  627  	/* Catch common mistakes for panels. */
-> 9f069c6fbc7266 Sam Ravnborg      2020-07-26  628  	switch (connector_type) {
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  629  	case 0:
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  630  		dev_warn(dev, "Specify missing connector_type\n");
-> 9f069c6fbc7266 Sam Ravnborg      2020-07-26  631  		connector_type = DRM_MODE_CONNECTOR_DPI;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  632  		break;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  633  	case DRM_MODE_CONNECTOR_LVDS:
-> c4715837b02393 Laurent Pinchart  2020-06-30  634  		WARN_ON(desc->bus_flags &
-> c4715837b02393 Laurent Pinchart  2020-06-30  635  			~(DRM_BUS_FLAG_DE_LOW |
-> c4715837b02393 Laurent Pinchart  2020-06-30  636  			  DRM_BUS_FLAG_DE_HIGH |
-> c4715837b02393 Laurent Pinchart  2020-06-30  637  			  DRM_BUS_FLAG_DATA_MSB_TO_LSB |
-> c4715837b02393 Laurent Pinchart  2020-06-30  638  			  DRM_BUS_FLAG_DATA_LSB_TO_MSB));
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  639  		WARN_ON(desc->bus_format != MEDIA_BUS_FMT_RGB666_1X7X3_SPWG &&
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  640  			desc->bus_format != MEDIA_BUS_FMT_RGB888_1X7X4_SPWG &&
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  641  			desc->bus_format != MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA);
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  642  		WARN_ON(desc->bus_format == MEDIA_BUS_FMT_RGB666_1X7X3_SPWG &&
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  643  			desc->bpc != 6);
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  644  		WARN_ON((desc->bus_format == MEDIA_BUS_FMT_RGB888_1X7X4_SPWG ||
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  645  			 desc->bus_format == MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA) &&
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  646  			desc->bpc != 8);
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  647  		break;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26 @648  	case DRM_MODE_CONNECTOR_eDP:
-> 5f04e7ce392db9 Douglas Anderson  2021-09-14  649  		dev_warn(dev, "eDP panels moved to panel-edp\n");
-> 5f04e7ce392db9 Douglas Anderson  2021-09-14  650  		err = -EINVAL;
-> 5f04e7ce392db9 Douglas Anderson  2021-09-14  651  		goto free_ddc;
+Drop tools/bpf/runqslower and remove all build hooks in tools/bpf and
+selftests accordingly.
 
-The error is legitimate, here we'll try to access panel->ddc, but the panel isn't allocated.
+Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+---
+Changes in V2:
+- remove RUNQSLOWER_OUTPUT variable from selftests/bpf Makefile
 
-Please fix this.
+ tools/bpf/Makefile                            |  13 +-
+ tools/bpf/runqslower/.gitignore               |   2 -
+ tools/bpf/runqslower/Makefile                 |  91 ----------
+ tools/bpf/runqslower/runqslower.bpf.c         | 106 -----------
+ tools/bpf/runqslower/runqslower.c             | 171 ------------------
+ tools/bpf/runqslower/runqslower.h             |  13 --
+ tools/testing/selftests/bpf/.gitignore        |   1 -
+ tools/testing/selftests/bpf/Makefile          |  16 +-
+ .../selftests/bpf/test_bpftool_build.sh       |   4 -
+ 9 files changed, 4 insertions(+), 413 deletions(-)
+ delete mode 100644 tools/bpf/runqslower/.gitignore
+ delete mode 100644 tools/bpf/runqslower/Makefile
+ delete mode 100644 tools/bpf/runqslower/runqslower.bpf.c
+ delete mode 100644 tools/bpf/runqslower/runqslower.c
+ delete mode 100644 tools/bpf/runqslower/runqslower.h
 
-Neil
-
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  652  	case DRM_MODE_CONNECTOR_DSI:
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  653  		if (desc->bpc != 6 && desc->bpc != 8)
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  654  			dev_warn(dev, "Expected bpc in {6,8} but got: %u\n", desc->bpc);
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  655  		break;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  656  	case DRM_MODE_CONNECTOR_DPI:
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  657  		bus_flags = DRM_BUS_FLAG_DE_LOW |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  658  			    DRM_BUS_FLAG_DE_HIGH |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  659  			    DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  660  			    DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  661  			    DRM_BUS_FLAG_DATA_MSB_TO_LSB |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  662  			    DRM_BUS_FLAG_DATA_LSB_TO_MSB |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  663  			    DRM_BUS_FLAG_SYNC_SAMPLE_POSEDGE |
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  664  			    DRM_BUS_FLAG_SYNC_SAMPLE_NEGEDGE;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  665  		if (desc->bus_flags & ~bus_flags)
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  666  			dev_warn(dev, "Unexpected bus_flags(%d)\n", desc->bus_flags & ~bus_flags);
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  667  		if (!(desc->bus_flags & bus_flags))
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  668  			dev_warn(dev, "Specify missing bus_flags\n");
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  669  		if (desc->bus_format == 0)
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  670  			dev_warn(dev, "Specify missing bus_format\n");
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  671  		if (desc->bpc != 6 && desc->bpc != 8)
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  672  			dev_warn(dev, "Expected bpc in {6,8} but got: %u\n", desc->bpc);
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  673  		break;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  674  	default:
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  675  		dev_warn(dev, "Specify a valid connector_type: %d\n", desc->connector_type);
-> 9f069c6fbc7266 Sam Ravnborg      2020-07-26  676  		connector_type = DRM_MODE_CONNECTOR_DPI;
-> ddb8e853dc8507 Sam Ravnborg      2020-07-26  677  		break;
-> 1185c406f11a49 Laurent Pinchart  2020-06-30  678  	}
-> c4715837b02393 Laurent Pinchart  2020-06-30  679
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  680  	panel = devm_drm_panel_alloc(dev, struct panel_simple, base,
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  681  				     &panel_simple_funcs, connector_type);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  682  	if (IS_ERR(panel))
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  683  		return ERR_CAST(panel);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  684
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  685  	panel->desc = desc;
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  686
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  687  	panel->supply = devm_regulator_get(dev, "power");
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  688  	if (IS_ERR(panel->supply))
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  689  		return ERR_CAST(panel->supply);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  690
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  691  	panel->enable_gpio = devm_gpiod_get_optional(dev, "enable",
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  692  						     GPIOD_OUT_LOW);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  693  	if (IS_ERR(panel->enable_gpio))
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  694  		return dev_err_cast_probe(dev, panel->enable_gpio,
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  695  					  "failed to request GPIO\n");
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  696
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  697  	err = of_drm_get_panel_orientation(dev->of_node, &panel->orientation);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  698  	if (err) {
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  699  		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, err);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  700  		return ERR_PTR(err);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  701  	}
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  702
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  703  	ddc = of_parse_phandle(dev->of_node, "ddc-i2c-bus", 0);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  704  	if (ddc) {
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  705  		panel->ddc = of_find_i2c_adapter_by_node(ddc);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  706  		of_node_put(ddc);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  707
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  708  		if (!panel->ddc)
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  709  			return ERR_PTR(-EPROBE_DEFER);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  710  	}
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  711
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  712  	if (!of_device_is_compatible(dev->of_node, "panel-dpi") &&
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  713  	    !of_get_display_timing(dev->of_node, "panel-timing", &dt))
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  714  		panel_simple_parse_panel_timing_node(dev, panel, &dt);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  715
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  716  	if (desc->connector_type == DRM_MODE_CONNECTOR_LVDS) {
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  717  		/* Optional data-mapping property for overriding bus format */
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  718  		err = panel_simple_override_nondefault_lvds_datamapping(dev, panel);
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  719  		if (err)
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  720  			goto free_ddc;
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  721  	}
-> 2803eb4aeb2702 Ludovic Desroches 2025-11-21  722
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  723  	dev_set_drvdata(dev, panel);
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  724
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  725  	/*
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  726  	 * We use runtime PM for prepare / unprepare since those power the panel
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  727  	 * on and off and those can be very slow operations. This is important
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  728  	 * to optimize powering the panel on briefly to read the EDID before
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  729  	 * fully enabling the panel.
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  730  	 */
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  731  	pm_runtime_enable(dev);
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  732  	pm_runtime_set_autosuspend_delay(dev, 1000);
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  733  	pm_runtime_use_autosuspend(dev);
-> 3235b0f20a0a41 Douglas Anderson  2021-04-16  734
-> 0fe1564bd61642 Sam Ravnborg      2019-12-07  735  	err = drm_panel_of_backlight(&panel->base);
-> d9e74da2f1fc42 Alexander Stein   2022-06-21  736  	if (err) {
-> d9e74da2f1fc42 Alexander Stein   2022-06-21  737  		dev_err_probe(dev, err, "Could not find backlight\n");
-> 70e12560126685 Douglas Anderson  2021-04-23  738  		goto disable_pm_runtime;
-> d9e74da2f1fc42 Alexander Stein   2022-06-21  739  	}
-> 0fe1564bd61642 Sam Ravnborg      2019-12-07  740
-> c3ee8c65f63799 Bernard Zhao      2020-08-01  741  	drm_panel_add(&panel->base);
-> 280921de7241ee Thierry Reding    2013-08-30  742
-> 921c41e509746a Maxime Ripard     2025-06-26  743  	return panel;
-> 280921de7241ee Thierry Reding    2013-08-30  744
-> 70e12560126685 Douglas Anderson  2021-04-23  745  disable_pm_runtime:
-> a596fcd9cbc781 Douglas Anderson  2021-05-17  746  	pm_runtime_dont_use_autosuspend(dev);
-> 70e12560126685 Douglas Anderson  2021-04-23  747  	pm_runtime_disable(dev);
-> 280921de7241ee Thierry Reding    2013-08-30  748  free_ddc:
-> 5f04e7ce392db9 Douglas Anderson  2021-09-14  749  	if (panel->ddc)
-> 280921de7241ee Thierry Reding    2013-08-30  750  		put_device(&panel->ddc->dev);
-> 280921de7241ee Thierry Reding    2013-08-30  751
-> 921c41e509746a Maxime Ripard     2025-06-26  752  	return ERR_PTR(err);
-> 280921de7241ee Thierry Reding    2013-08-30  753  }
-> 280921de7241ee Thierry Reding    2013-08-30  754
-> 
+diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+index 062bbd6cd048..fd2585af1252 100644
+--- a/tools/bpf/Makefile
++++ b/tools/bpf/Makefile
+@@ -32,7 +32,7 @@ FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
+ FEATURE_DISPLAY = libbfd
+ 
+ check_feat := 1
+-NON_CHECK_FEAT_TARGETS := clean bpftool_clean runqslower_clean resolve_btfids_clean
++NON_CHECK_FEAT_TARGETS := clean bpftool_clean resolve_btfids_clean
+ ifdef MAKECMDGOALS
+ ifeq ($(filter-out $(NON_CHECK_FEAT_TARGETS),$(MAKECMDGOALS)),)
+   check_feat := 0
+@@ -70,7 +70,7 @@ $(OUTPUT)%.lex.o: $(OUTPUT)%.lex.c
+ 
+ PROGS = $(OUTPUT)bpf_jit_disasm $(OUTPUT)bpf_dbg $(OUTPUT)bpf_asm
+ 
+-all: $(PROGS) bpftool runqslower
++all: $(PROGS) bpftool
+ 
+ $(OUTPUT)bpf_jit_disasm: CFLAGS += -DPACKAGE='bpf_jit_disasm'
+ $(OUTPUT)bpf_jit_disasm: $(OUTPUT)bpf_jit_disasm.o
+@@ -86,7 +86,7 @@ $(OUTPUT)bpf_exp.lex.c: $(OUTPUT)bpf_exp.yacc.c
+ $(OUTPUT)bpf_exp.yacc.o: $(OUTPUT)bpf_exp.yacc.c
+ $(OUTPUT)bpf_exp.lex.o: $(OUTPUT)bpf_exp.lex.c
+ 
+-clean: bpftool_clean runqslower_clean resolve_btfids_clean
++clean: bpftool_clean resolve_btfids_clean
+ 	$(call QUIET_CLEAN, bpf-progs)
+ 	$(Q)$(RM) -r -- $(OUTPUT)*.o $(OUTPUT)bpf_jit_disasm $(OUTPUT)bpf_dbg \
+ 	       $(OUTPUT)bpf_asm $(OUTPUT)bpf_exp.yacc.* $(OUTPUT)bpf_exp.lex.*
+@@ -112,12 +112,6 @@ bpftool_install:
+ bpftool_clean:
+ 	$(call descend,bpftool,clean)
+ 
+-runqslower:
+-	$(call descend,runqslower)
+-
+-runqslower_clean:
+-	$(call descend,runqslower,clean)
+-
+ resolve_btfids:
+ 	$(call descend,resolve_btfids)
+ 
+@@ -125,5 +119,4 @@ resolve_btfids_clean:
+ 	$(call descend,resolve_btfids,clean)
+ 
+ .PHONY: all install clean bpftool bpftool_install bpftool_clean \
+-	runqslower runqslower_clean \
+ 	resolve_btfids resolve_btfids_clean
+diff --git a/tools/bpf/runqslower/.gitignore b/tools/bpf/runqslower/.gitignore
+deleted file mode 100644
+index ffdb70230c8b..000000000000
+--- a/tools/bpf/runqslower/.gitignore
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-/.output
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+deleted file mode 100644
+index 78a436c4072e..000000000000
+--- a/tools/bpf/runqslower/Makefile
++++ /dev/null
+@@ -1,91 +0,0 @@
+-# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+-include ../../scripts/Makefile.include
+-
+-OUTPUT ?= $(abspath .output)/
+-
+-BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
+-DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bootstrap/bpftool
+-BPFTOOL ?= $(DEFAULT_BPFTOOL)
+-BPF_TARGET_ENDIAN ?= --target=bpf
+-LIBBPF_SRC := $(abspath ../../lib/bpf)
+-BPFOBJ_OUTPUT := $(OUTPUT)libbpf/
+-BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
+-BPF_DESTDIR := $(BPFOBJ_OUTPUT)
+-BPF_INCLUDE := $(BPF_DESTDIR)/include
+-INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
+-CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
+-CFLAGS += $(EXTRA_CFLAGS)
+-LDFLAGS += $(EXTRA_LDFLAGS)
+-LDLIBS += -lelf -lz
+-
+-# Try to detect best kernel BTF source
+-KERNEL_REL := $(shell uname -r)
+-VMLINUX_BTF_PATHS := $(if $(O),$(O)/vmlinux)		\
+-	$(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux) \
+-	../../../vmlinux /sys/kernel/btf/vmlinux	\
+-	/boot/vmlinux-$(KERNEL_REL)
+-VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
+-					  $(wildcard $(VMLINUX_BTF_PATHS))))
+-
+-ifneq ($(V),1)
+-MAKEFLAGS += --no-print-directory
+-submake_extras := feature_display=0
+-endif
+-
+-.DELETE_ON_ERROR:
+-
+-.PHONY: all clean runqslower libbpf_hdrs
+-all: runqslower
+-
+-runqslower: $(OUTPUT)/runqslower
+-
+-clean:
+-	$(call QUIET_CLEAN, runqslower)
+-	$(Q)$(RM) -r $(BPFOBJ_OUTPUT) $(BPFTOOL_OUTPUT)
+-	$(Q)$(RM) $(OUTPUT)*.o $(OUTPUT)*.d
+-	$(Q)$(RM) $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
+-	$(Q)$(RM) $(OUTPUT)runqslower
+-	$(Q)$(RM) -r .output
+-
+-libbpf_hdrs: $(BPFOBJ)
+-
+-$(OUTPUT)/runqslower: $(OUTPUT)/runqslower.o $(BPFOBJ)
+-	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
+-
+-$(OUTPUT)/runqslower.o: runqslower.h $(OUTPUT)/runqslower.skel.h	      \
+-			$(OUTPUT)/runqslower.bpf.o | libbpf_hdrs
+-
+-$(OUTPUT)/runqslower.bpf.o: $(OUTPUT)/vmlinux.h runqslower.h | libbpf_hdrs
+-
+-$(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+-	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+-
+-$(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+-	$(QUIET_GEN)$(CLANG) -g -O2 $(BPF_TARGET_ENDIAN) $(INCLUDES)	      \
+-		 -c $(filter %.c,$^) -o $@ &&				      \
+-	$(LLVM_STRIP) -g $@
+-
+-$(OUTPUT)/%.o: %.c | $(OUTPUT)
+-	$(QUIET_CC)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
+-
+-$(OUTPUT) $(BPFOBJ_OUTPUT) $(BPFTOOL_OUTPUT):
+-	$(QUIET_MKDIR)mkdir -p $@
+-
+-$(OUTPUT)/vmlinux.h: $(VMLINUX_BTF_PATH) | $(OUTPUT) $(BPFTOOL)
+-ifeq ($(VMLINUX_H),)
+-	$(Q)if [ ! -e "$(VMLINUX_BTF_PATH)" ] ; then \
+-		echo "Couldn't find kernel BTF; set VMLINUX_BTF to"	       \
+-			"specify its location." >&2;			       \
+-		exit 1;\
+-	fi
+-	$(QUIET_GEN)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@
+-else
+-	$(Q)cp "$(VMLINUX_H)" $@
+-endif
+-
+-$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(BPFOBJ_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(BPFOBJ_OUTPUT) \
+-		    DESTDIR=$(BPFOBJ_OUTPUT) prefix= $(abspath $@) install_headers
+-
+-$(DEFAULT_BPFTOOL): | $(BPFTOOL_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT) bootstrap
+diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
+deleted file mode 100644
+index fced54a3adf6..000000000000
+--- a/tools/bpf/runqslower/runqslower.bpf.c
++++ /dev/null
+@@ -1,106 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2019 Facebook
+-#include "vmlinux.h"
+-#include <bpf/bpf_helpers.h>
+-#include "runqslower.h"
+-
+-#define TASK_RUNNING 0
+-#define BPF_F_CURRENT_CPU 0xffffffffULL
+-
+-const volatile __u64 min_us = 0;
+-const volatile pid_t targ_pid = 0;
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
+-	__uint(map_flags, BPF_F_NO_PREALLOC);
+-	__type(key, int);
+-	__type(value, u64);
+-} start SEC(".maps");
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+-	__uint(key_size, sizeof(u32));
+-	__uint(value_size, sizeof(u32));
+-} events SEC(".maps");
+-
+-/* record enqueue timestamp */
+-__always_inline
+-static int trace_enqueue(struct task_struct *t)
+-{
+-	u32 pid = t->pid;
+-	u64 *ptr;
+-
+-	if (!pid || (targ_pid && targ_pid != pid))
+-		return 0;
+-
+-	ptr = bpf_task_storage_get(&start, t, 0,
+-				   BPF_LOCAL_STORAGE_GET_F_CREATE);
+-	if (!ptr)
+-		return 0;
+-
+-	*ptr = bpf_ktime_get_ns();
+-	return 0;
+-}
+-
+-SEC("tp_btf/sched_wakeup")
+-int handle__sched_wakeup(u64 *ctx)
+-{
+-	/* TP_PROTO(struct task_struct *p) */
+-	struct task_struct *p = (void *)ctx[0];
+-
+-	return trace_enqueue(p);
+-}
+-
+-SEC("tp_btf/sched_wakeup_new")
+-int handle__sched_wakeup_new(u64 *ctx)
+-{
+-	/* TP_PROTO(struct task_struct *p) */
+-	struct task_struct *p = (void *)ctx[0];
+-
+-	return trace_enqueue(p);
+-}
+-
+-SEC("tp_btf/sched_switch")
+-int handle__sched_switch(u64 *ctx)
+-{
+-	/* TP_PROTO(bool preempt, struct task_struct *prev,
+-	 *	    struct task_struct *next)
+-	 */
+-	struct task_struct *prev = (struct task_struct *)ctx[1];
+-	struct task_struct *next = (struct task_struct *)ctx[2];
+-	struct runq_event event = {};
+-	u64 *tsp, delta_us;
+-	u32 pid;
+-
+-	/* ivcsw: treat like an enqueue event and store timestamp */
+-	if (prev->__state == TASK_RUNNING)
+-		trace_enqueue(prev);
+-
+-	pid = next->pid;
+-
+-	/* For pid mismatch, save a bpf_task_storage_get */
+-	if (!pid || (targ_pid && targ_pid != pid))
+-		return 0;
+-
+-	/* fetch timestamp and calculate delta */
+-	tsp = bpf_task_storage_get(&start, next, 0, 0);
+-	if (!tsp)
+-		return 0;   /* missed enqueue */
+-
+-	delta_us = (bpf_ktime_get_ns() - *tsp) / 1000;
+-	if (min_us && delta_us <= min_us)
+-		return 0;
+-
+-	event.pid = pid;
+-	event.delta_us = delta_us;
+-	bpf_get_current_comm(&event.task, sizeof(event.task));
+-
+-	/* output */
+-	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU,
+-			      &event, sizeof(event));
+-
+-	bpf_task_storage_delete(&start, next);
+-	return 0;
+-}
+-
+-char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
+deleted file mode 100644
+index 83c5993a139a..000000000000
+--- a/tools/bpf/runqslower/runqslower.c
++++ /dev/null
+@@ -1,171 +0,0 @@
+-// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+-// Copyright (c) 2019 Facebook
+-#include <argp.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <time.h>
+-#include <bpf/libbpf.h>
+-#include <bpf/bpf.h>
+-#include "runqslower.h"
+-#include "runqslower.skel.h"
+-
+-struct env {
+-	pid_t pid;
+-	__u64 min_us;
+-	bool verbose;
+-} env = {
+-	.min_us = 10000,
+-};
+-
+-const char *argp_program_version = "runqslower 0.1";
+-const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
+-const char argp_program_doc[] =
+-"runqslower    Trace long process scheduling delays.\n"
+-"              For Linux, uses eBPF, BPF CO-RE, libbpf, BTF.\n"
+-"\n"
+-"This script traces high scheduling delays between tasks being\n"
+-"ready to run and them running on CPU after that.\n"
+-"\n"
+-"USAGE: runqslower [-p PID] [min_us]\n"
+-"\n"
+-"EXAMPLES:\n"
+-"    runqslower         # trace run queue latency higher than 10000 us (default)\n"
+-"    runqslower 1000    # trace run queue latency higher than 1000 us\n"
+-"    runqslower -p 123  # trace pid 123 only\n";
+-
+-static const struct argp_option opts[] = {
+-	{ "pid", 'p', "PID", 0, "Process PID to trace"},
+-	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
+-	{},
+-};
+-
+-static error_t parse_arg(int key, char *arg, struct argp_state *state)
+-{
+-	static int pos_args;
+-	int pid;
+-	long long min_us;
+-
+-	switch (key) {
+-	case 'v':
+-		env.verbose = true;
+-		break;
+-	case 'p':
+-		errno = 0;
+-		pid = strtol(arg, NULL, 10);
+-		if (errno || pid <= 0) {
+-			fprintf(stderr, "Invalid PID: %s\n", arg);
+-			argp_usage(state);
+-		}
+-		env.pid = pid;
+-		break;
+-	case ARGP_KEY_ARG:
+-		if (pos_args++) {
+-			fprintf(stderr,
+-				"Unrecognized positional argument: %s\n", arg);
+-			argp_usage(state);
+-		}
+-		errno = 0;
+-		min_us = strtoll(arg, NULL, 10);
+-		if (errno || min_us <= 0) {
+-			fprintf(stderr, "Invalid delay (in us): %s\n", arg);
+-			argp_usage(state);
+-		}
+-		env.min_us = min_us;
+-		break;
+-	default:
+-		return ARGP_ERR_UNKNOWN;
+-	}
+-	return 0;
+-}
+-
+-int libbpf_print_fn(enum libbpf_print_level level,
+-		    const char *format, va_list args)
+-{
+-	if (level == LIBBPF_DEBUG && !env.verbose)
+-		return 0;
+-	return vfprintf(stderr, format, args);
+-}
+-
+-void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
+-{
+-	const struct runq_event *e = data;
+-	struct tm *tm;
+-	char ts[32];
+-	time_t t;
+-
+-	time(&t);
+-	tm = localtime(&t);
+-	strftime(ts, sizeof(ts), "%H:%M:%S", tm);
+-	printf("%-8s %-16s %-6d %14llu\n", ts, e->task, e->pid, e->delta_us);
+-}
+-
+-void handle_lost_events(void *ctx, int cpu, __u64 lost_cnt)
+-{
+-	printf("Lost %llu events on CPU #%d!\n", lost_cnt, cpu);
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	static const struct argp argp = {
+-		.options = opts,
+-		.parser = parse_arg,
+-		.doc = argp_program_doc,
+-	};
+-	struct perf_buffer *pb = NULL;
+-	struct runqslower_bpf *obj;
+-	int err;
+-
+-	err = argp_parse(&argp, argc, argv, 0, NULL, NULL);
+-	if (err)
+-		return err;
+-
+-	libbpf_set_print(libbpf_print_fn);
+-
+-	/* Use libbpf 1.0 API mode */
+-	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+-
+-	obj = runqslower_bpf__open();
+-	if (!obj) {
+-		fprintf(stderr, "failed to open and/or load BPF object\n");
+-		return 1;
+-	}
+-
+-	/* initialize global data (filtering options) */
+-	obj->rodata->targ_pid = env.pid;
+-	obj->rodata->min_us = env.min_us;
+-
+-	err = runqslower_bpf__load(obj);
+-	if (err) {
+-		fprintf(stderr, "failed to load BPF object: %d\n", err);
+-		goto cleanup;
+-	}
+-
+-	err = runqslower_bpf__attach(obj);
+-	if (err) {
+-		fprintf(stderr, "failed to attach BPF programs\n");
+-		goto cleanup;
+-	}
+-
+-	printf("Tracing run queue latency higher than %llu us\n", env.min_us);
+-	printf("%-8s %-16s %-6s %14s\n", "TIME", "COMM", "PID", "LAT(us)");
+-
+-	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64,
+-			      handle_event, handle_lost_events, NULL, NULL);
+-	err = libbpf_get_error(pb);
+-	if (err) {
+-		pb = NULL;
+-		fprintf(stderr, "failed to open perf buffer: %d\n", err);
+-		goto cleanup;
+-	}
+-
+-	while ((err = perf_buffer__poll(pb, 100)) >= 0)
+-		;
+-	printf("Error polling perf buffer: %d\n", err);
+-
+-cleanup:
+-	perf_buffer__free(pb);
+-	runqslower_bpf__destroy(obj);
+-
+-	return err != 0;
+-}
+diff --git a/tools/bpf/runqslower/runqslower.h b/tools/bpf/runqslower/runqslower.h
+deleted file mode 100644
+index 4f70f07200c2..000000000000
+--- a/tools/bpf/runqslower/runqslower.h
++++ /dev/null
+@@ -1,13 +0,0 @@
+-/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+-#ifndef __RUNQSLOWER_H
+-#define __RUNQSLOWER_H
+-
+-#define TASK_COMM_LEN 16
+-
+-struct runq_event {
+-	char task[TASK_COMM_LEN];
+-	__u64 delta_us;
+-	pid_t pid;
+-};
+-
+-#endif /* __RUNQSLOWER_H */
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index be1ee7ba7ce0..e091809f07a0 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -32,7 +32,6 @@ test_cpp
+ /cpuv4
+ /host-tools
+ /tools
+-/runqslower
+ /bench
+ /veristat
+ /sign-file
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f00587d4ede6..c102922365f5 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -127,7 +127,6 @@ TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
+ TEST_GEN_PROGS_EXTENDED = \
+ 	bench \
+ 	flow_dissector_load \
+-	runqslower \
+ 	test_cpp \
+ 	test_lirc_mode2_user \
+ 	veristat \
+@@ -209,8 +208,6 @@ HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
+ endif
+ HOST_BPFOBJ := $(HOST_BUILD_DIR)/libbpf/libbpf.a
+ RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
+-RUNQSLOWER_OUTPUT := $(BUILD_DIR)/runqslower/
+-
+ VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
+ 		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
+ 		     ../../../../vmlinux				\
+@@ -232,7 +229,7 @@ $(notdir $(TEST_GEN_PROGS) $(TEST_KMODS)				\
+ MAKE_DIRS := $(sort $(BUILD_DIR)/libbpf $(HOST_BUILD_DIR)/libbpf	\
+ 	       $(BUILD_DIR)/bpftool $(HOST_BUILD_DIR)/bpftool		\
+ 	       $(HOST_BUILD_DIR)/resolve_btfids				\
+-	       $(RUNQSLOWER_OUTPUT) $(INCLUDE_DIR))
++	       $(INCLUDE_DIR))
+ $(MAKE_DIRS):
+ 	$(call msg,MKDIR,,$@)
+ 	$(Q)mkdir -p $@
+@@ -304,17 +301,6 @@ TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
+ USE_BOOTSTRAP := "bootstrap/"
+ endif
+ 
+-$(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	       \
+-		    OUTPUT=$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=$(VMLINUX_BTF)     \
+-		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
+-		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
+-		    BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR)		       \
+-		    BPF_TARGET_ENDIAN=$(BPF_TARGET_ENDIAN)		       \
+-		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
+-		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' &&	       \
+-		    cp $(RUNQSLOWER_OUTPUT)runqslower $@
+-
+ TEST_GEN_PROGS_EXTENDED += $(TRUNNER_BPFTOOL)
+ 
+ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
+diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
+index 1453a53ed547..b03a87571592 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_build.sh
++++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
+@@ -90,10 +90,6 @@ echo -e "... through kbuild\n"
+ 
+ if [ -f ".config" ] ; then
+ 	make_and_clean tools/bpf
+-	## "make tools/bpf" sets $(OUTPUT) to ...tools/bpf/runqslower for
+-	## runqslower, but the default (used for the "clean" target) is .output.
+-	## Let's make sure we clean runqslower's directory properly.
+-	make -C tools/bpf/runqslower OUTPUT=${KDIR_ROOT_DIR}/tools/bpf/runqslower/ clean
+ 
+ 	## $OUTPUT is overwritten in kbuild Makefile, and thus cannot be passed
+ 	## down from toplevel Makefile to bpftool's Makefile.
+-- 
+2.52.0
 
