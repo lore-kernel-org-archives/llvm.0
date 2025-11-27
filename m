@@ -1,59 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0371FF7C7;
-	Wed, 26 Nov 2025 22:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8302882A7;
+	Thu, 27 Nov 2025 01:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764196468; cv=none; b=cMDOfeXcG8IybiuwHV3rTSVXJyrvqVy9NOSqOBm5YeEn3RtAqRgEsan7TI0KWOuHaQzo6r6AglNVObxDPB2nq8fMxwmeBCRemL+UQklK8vK83hJ8Ck/pzcOag5+94+bh5LpKFvIMROZJqhvBMzbqU/zOvdK/vxKgoGgRm54AtWg=
+	t=1764205539; cv=none; b=dIfLysFmpkmCDbPx3kMc6oH9vVS2UByB51o2Xgd1gCYdlLyoz63Lqu7cTQAXdk2Dld7FGntbs2Fn/kAFQBgsIaJYVp5Mwn4N5YZonui8rmA76DdvD91pJqdgCaS5naN96TJ8WOdWXzH5OJKjr3owN4bYdtd81rejjJiy4wO32qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764196468; c=relaxed/simple;
-	bh=3tsd/18QVXDKN2vmEYwXTtosJ8PTpLYYjlTwm2VjzdU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p7HEN2Ju+mKafitm+mhdy8D61ODdcSaUDIcVEOxQq2u3cHQ7bDMNNkaIsN9rFVIwHtcD7QgTr1Ht2Scj5l+xwjmclQ1M5mXIWc/7q98Hpmb4PJM5y3vMWvQA3bGDvvsjkfjRxzqYWL93dtkLMxOy45GClZw/0US+attBcx9r2Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SEWtpJjO; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1764205539; c=relaxed/simple;
+	bh=WZ0WKykRJQw4J/W4spMQxkjY/MdBH3bIVjZr9mxhDN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WG0o0tpxsm9VqGfoWwxwb45XcJSCjIVihpSPnV3zUuHe3pQ1bJ7xtrviczHfR9xbLCKAmnhsQuYFgUncRnzGtWIUwIvNeihaWuUHKqJohXGWc46j1witm2NTruHXbGU1FkYMRXe/bzDjryeq7DcDVK8xJyQAG2XffWtkqEsE9n4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PjIHumLt; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SEWtpJjO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PjIHumLt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764196466; x=1795732466;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3tsd/18QVXDKN2vmEYwXTtosJ8PTpLYYjlTwm2VjzdU=;
-  b=SEWtpJjO8EBd5KUpKA/aO3ow/idexLNt+vTbk2+LAu9C1a3AJdEnMhGY
-   U7AVo07zj4vuGKnT2tVfXOY4TsFIWfuh37AFiqxZOD+CXaOghZdWCHwmE
-   vS6DvP+BHLYX9GF6I+ZrTMIp8ylw/he9+B+d/dMBYp4r48yGIvkq2hDVJ
-   WqynZYB5QHgjkzQbfof6VeySUbAlcyZZjSvF+7CrwMwbjoQwqDSQrPRJE
-   0d3vR4jqDn8z3GHu2ksUidwuNcwWyvKfPVxGe2doPZzX5DNBWQoYLaBkh
-   DXZY9mFZ4T+Bj09MIDx5UX/TbTBX/igW1QxrIG+yaQqjTByFN9L2j+dYL
-   g==;
-X-CSE-ConnectionGUID: P/ukgT3mR2qx83nkixX8ig==
-X-CSE-MsgGUID: WgoTHDlcS26fUreZOaSufA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="66135087"
+  t=1764205538; x=1795741538;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WZ0WKykRJQw4J/W4spMQxkjY/MdBH3bIVjZr9mxhDN0=;
+  b=PjIHumLtLo90X6uCG/l/rQwjy1YIFnvypg5AQnnxLSCqOFTDwlsXa8Nl
+   iHw611fsGeYuBpWtDF/Ymes5N8YVlWYuHpguLbQTW0frWgPlT7lDRpg62
+   UVMFqToj9ULzEtgFr9kUXifdVsSeccalkKKQuCHBj6z8BS+WHRJBKhArX
+   u/MaoHoID+bi81Xf++fX1U+wO5f+H4l8p7dr1DJyZ59IZr/Yonci10sRV
+   VX7GqWytQzCLoRKsMEGcp+6YMev8WNazcTraducP81phcrSxRSa8OzG9S
+   bmVkzY21EeaVwE/RKR5u/V5H0MQP3KIIdxqJYSCO3x3pYumgZsCo23uHS
+   A==;
+X-CSE-ConnectionGUID: rlkgbB7WRGy9Zy5cV7yrZg==
+X-CSE-MsgGUID: Y4L/LbwkRSSSxjrUsLoLgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="70112313"
 X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
-   d="scan'208";a="66135087"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 14:34:26 -0800
-X-CSE-ConnectionGUID: IBrMk1HDQnC5phZt9CmM6A==
-X-CSE-MsgGUID: 0qy5YB24SH2Shq2HafNHoA==
+   d="scan'208";a="70112313"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 17:05:37 -0800
+X-CSE-ConnectionGUID: ymgDICuaTi+tFFCtw1/gvw==
+X-CSE-MsgGUID: Gh5MCfipTmWFGtvG6Dg4aw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
-   d="scan'208";a="197395565"
+   d="scan'208";a="224047470"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Nov 2025 14:34:25 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 26 Nov 2025 17:05:32 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOO5f-000000003QL-0MSB;
-	Wed, 26 Nov 2025 22:34:23 +0000
-Date: Thu, 27 Nov 2025 06:33:34 +0800
+	id 1vOQRt-000000003WX-3mtV;
+	Thu, 27 Nov 2025 01:05:29 +0000
+Date: Thu, 27 Nov 2025 09:04:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:for-kernelci 2/4] drivers/char/random.c:570:1: error: call to
- undeclared function 'arch_cmpxchg64_local'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202511270626.hCGshYma-lkp@intel.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
+	David Kaplan <david.kaplan@amd.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>
+Subject: Re: [PATCH v5 4/9] x86/vmscape: Move mitigation selection to a
+ switch()
+Message-ID: <202511270829.xMEXUXCW-lkp@intel.com>
+References: <20251126-vmscape-bhb-v5-4-02d66e423b00@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,86 +73,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251126-vmscape-bhb-v5-4-02d66e423b00@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   36c8d6393fcd1f917beed0c0b3cbd2969cfda4c4
-commit: 93d36d27a0ec6d3d42148038c6e3d50a443c8a16 [2/4] random: Use a lockless fast path for get_random_uXX()
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20251127/202511270626.hCGshYma-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270626.hCGshYma-lkp@intel.com/reproduce)
+Hi Pawan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 6a23ae0a96a600d1d12557add110e0bb6e32730c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawan-Gupta/x86-bhi-x86-vmscape-Move-LFENCE-out-of-clear_bhb_loop/20251127-061843
+base:   6a23ae0a96a600d1d12557add110e0bb6e32730c
+patch link:    https://lore.kernel.org/r/20251126-vmscape-bhb-v5-4-02d66e423b00%40linux.intel.com
+patch subject: [PATCH v5 4/9] x86/vmscape: Move mitigation selection to a switch()
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251127/202511270829.xMEXUXCW-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270829.xMEXUXCW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511270626.hCGshYma-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511270829.xMEXUXCW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/char/random.c:570:1: error: call to undeclared function 'arch_cmpxchg64_local'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     570 | DEFINE_BATCHED_ENTROPY(u8)
-         | ^
-   drivers/char/random.c:552:6: note: expanded from macro 'DEFINE_BATCHED_ENTROPY'
-     552 |         if (cmpxchg64_local(&batch->posgen, next, next - 1) != next - 1) {      \
-         |             ^
-   include/linux/atomic/atomic-instrumented.h:4998:2: note: expanded from macro 'cmpxchg64_local'
-    4998 |         raw_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
+>> arch/x86/kernel/cpu/bugs.c:3260:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+    3260 |         }
          |         ^
-   include/linux/atomic/atomic-arch-fallback.h:399:29: note: expanded from macro 'raw_cmpxchg64_local'
-     399 | #define raw_cmpxchg64_local arch_cmpxchg64_local
-         |                             ^
-   drivers/char/random.c:571:1: error: call to undeclared function 'arch_cmpxchg64_local'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     571 | DEFINE_BATCHED_ENTROPY(u16)
-         | ^
-   drivers/char/random.c:552:6: note: expanded from macro 'DEFINE_BATCHED_ENTROPY'
-     552 |         if (cmpxchg64_local(&batch->posgen, next, next - 1) != next - 1) {      \
-         |             ^
-   include/linux/atomic/atomic-instrumented.h:4998:2: note: expanded from macro 'cmpxchg64_local'
-    4998 |         raw_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:399:29: note: expanded from macro 'raw_cmpxchg64_local'
-     399 | #define raw_cmpxchg64_local arch_cmpxchg64_local
-         |                             ^
-   drivers/char/random.c:572:1: error: call to undeclared function 'arch_cmpxchg64_local'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     572 | DEFINE_BATCHED_ENTROPY(u32)
-         | ^
-   drivers/char/random.c:552:6: note: expanded from macro 'DEFINE_BATCHED_ENTROPY'
-     552 |         if (cmpxchg64_local(&batch->posgen, next, next - 1) != next - 1) {      \
-         |             ^
-   include/linux/atomic/atomic-instrumented.h:4998:2: note: expanded from macro 'cmpxchg64_local'
-    4998 |         raw_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:399:29: note: expanded from macro 'raw_cmpxchg64_local'
-     399 | #define raw_cmpxchg64_local arch_cmpxchg64_local
-         |                             ^
-   drivers/char/random.c:573:1: error: call to undeclared function 'arch_cmpxchg64_local'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     573 | DEFINE_BATCHED_ENTROPY(u64)
-         | ^
-   drivers/char/random.c:552:6: note: expanded from macro 'DEFINE_BATCHED_ENTROPY'
-     552 |         if (cmpxchg64_local(&batch->posgen, next, next - 1) != next - 1) {      \
-         |             ^
-   include/linux/atomic/atomic-instrumented.h:4998:2: note: expanded from macro 'cmpxchg64_local'
-    4998 |         raw_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:399:29: note: expanded from macro 'raw_cmpxchg64_local'
-     399 | #define raw_cmpxchg64_local arch_cmpxchg64_local
-         |                             ^
-   4 errors generated.
+   1 warning generated.
 
 
-vim +/arch_cmpxchg64_local +570 drivers/char/random.c
+vim +3260 arch/x86/kernel/cpu/bugs.c
 
-3092adcef3ffd2 Jason A. Donenfeld 2022-05-15  569  
-585cd5fe9f7378 Jason A. Donenfeld 2022-09-28 @570  DEFINE_BATCHED_ENTROPY(u8)
-a890d1c657ecba Jason A. Donenfeld 2022-10-05  571  DEFINE_BATCHED_ENTROPY(u16)
-a890d1c657ecba Jason A. Donenfeld 2022-10-05  572  DEFINE_BATCHED_ENTROPY(u32)
-a890d1c657ecba Jason A. Donenfeld 2022-10-05  573  DEFINE_BATCHED_ENTROPY(u64)
-3655adc7089da4 Jason A. Donenfeld 2022-02-11  574  
-
-:::::: The code at line 570 was first introduced by commit
-:::::: 585cd5fe9f7378601b1d4915ad6e9088333b5e5e random: add 8-bit and 16-bit batches
-
-:::::: TO: Jason A. Donenfeld <Jason@zx2c4.com>
-:::::: CC: Jason A. Donenfeld <Jason@zx2c4.com>
+556c1ad666ad90 Pawan Gupta  2025-08-14  3231  
+556c1ad666ad90 Pawan Gupta  2025-08-14  3232  static void __init vmscape_select_mitigation(void)
+556c1ad666ad90 Pawan Gupta  2025-08-14  3233  {
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3234  	if (!boot_cpu_has_bug(X86_BUG_VMSCAPE)) {
+556c1ad666ad90 Pawan Gupta  2025-08-14  3235  		vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
+556c1ad666ad90 Pawan Gupta  2025-08-14  3236  		return;
+556c1ad666ad90 Pawan Gupta  2025-08-14  3237  	}
+556c1ad666ad90 Pawan Gupta  2025-08-14  3238  
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3239  	if ((vmscape_mitigation == VMSCAPE_MITIGATION_AUTO) &&
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3240  	    !should_mitigate_vuln(X86_BUG_VMSCAPE))
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3241  		vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3242  
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3243  	switch (vmscape_mitigation) {
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3244  	case VMSCAPE_MITIGATION_NONE:
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3245  		break;
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3246  
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3247  	case VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER:
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3248  		if (!boot_cpu_has(X86_FEATURE_IBPB))
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3249  			vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3250  		break;
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3251  
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3252  	case VMSCAPE_MITIGATION_AUTO:
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3253  		if (boot_cpu_has(X86_FEATURE_IBPB))
+556c1ad666ad90 Pawan Gupta  2025-08-14  3254  			vmscape_mitigation = VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER;
+5799d5d8a6c877 David Kaplan 2025-09-12  3255  		else
+5799d5d8a6c877 David Kaplan 2025-09-12  3256  			vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3257  		break;
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3258  
+0091dd36e9ee51 Pawan Gupta  2025-11-26  3259  	default:
+5799d5d8a6c877 David Kaplan 2025-09-12 @3260  	}
+556c1ad666ad90 Pawan Gupta  2025-08-14  3261  }
+556c1ad666ad90 Pawan Gupta  2025-08-14  3262  
 
 -- 
 0-DAY CI Kernel Test Service
