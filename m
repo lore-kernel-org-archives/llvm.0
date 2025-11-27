@@ -1,178 +1,376 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF2D18FDDE
-	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 13:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D987627F18B;
+	Thu, 27 Nov 2025 14:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764251572; cv=none; b=lbVUTwQipxlqwX0zU+5wBuPbHvc7Y39nFiW5AnDoEVf09VcL6ozbaZb+6ubC+ZroGudieae69HoxY+9IjyZpbw7+Te/zL7TL7VnUaCnwDKvA35LSbQfDGa6nXO1uz84Sicu6dzSmU95zRweAgn7D+AxfcRldakfQXsiIZnf7lrI=
+	t=1764254995; cv=none; b=IelKqfYpBB9xWW4/iyHaijBGwze24ivZl0JMlZZfqbwG2b3h7aEuJu4SngJKrpb3VC4TDkPJBe9Mp/HR6KnEBzZMdq9VpO1GVj0Y/TmqsPmQrf4HxL5qWtraaPZExQyOow4quGhpt2IvsEIDOYTdrJeRk3FtD8FUH9YULy9UaHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764251572; c=relaxed/simple;
-	bh=AA0eyjIx0yehNxo/E/5axe4dWMJkeEgXsy6bX1rofAw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VD+Gz+JzalPqbW57FVMfEYSMn2vuNmbnuNznzrB6LuzNlaeSHURU7A1vBkUtpwnTAXcInAB5fUWYGR1D+2dFMS8myZJNcGt4wrPUvwwNy5yQa1D2CKgb3FYXZcfepXBZJdHwit7WS4t9LEBSkau7VkdTGu5ZuwXa1S4aupMJor0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-657a6028fbbso333566eaf.3
-        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 05:52:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764251569; x=1764856369;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m/HhN7PweXDCoHADbAO01OSEGdFHLn6AnoNvGrA1vak=;
-        b=pZd1fPzUB972q1w6P9GxnvfZ/5EuI1XvxNm8J7bUrAZfmDxhRXfDtn3fXnKROvP+c5
-         d10OhMPmpU0YSsgEPl97aXep/Am6Dfc3a6VrtoWzZiCyyM0hEQEv3dihUHUNzZINoZAZ
-         FgT0W1qNyb6iJaO/o9d5lOeFC3KQR8O45PlydxehQ6PGkFvU3wXJbt/ocUFeK7gCYDK7
-         T1nkycul/WJGjjoTVOhaGWcAQkiEtrxocJt+ZtujnTU+dLLQyqDVta6Z+nn49H4Q72jN
-         pio2qdS0vwFc3jFRYWDv3HSY6Yc3K6Fat8ipGX1ane9zs4pHh63ipiQ30bezse67xxOP
-         C9bw==
-X-Forwarded-Encrypted: i=1; AJvYcCVh7bzxn4R7AJdNPl2YCLBJ9kqH767eCOafA0j2aHUp0VCrR+tpYG8nWaWqUQU6zhBX6JV3@lists.linux.dev
-X-Gm-Message-State: AOJu0YyRwn0tx6K6otLMiblzb7x8uRwl5HkS/Y97+dhxMUMLHjK0L9tx
-	rnwaI2mvrPd0ddsQP0IHPCNkmchqnH1i82KvTlAWDyv2wKfo+nqfqCUDCKZ5MhTp
-X-Gm-Gg: ASbGncsp/XxXGd1AUZQp5sC3dY6CmlTl3OOcm/E/mCzOztzKllmbCMLwGRslU38pQRE
-	L84z51gFlJk1rZlBCy9DXNA4O/CnFnuH+6weRNJCHcuzq9ItaWggTxrxatnVO96+eVnh/UxGtGN
-	uIpb/8D1T0u9nTuVPhJv2owEQ/sP1jGIt5hjdJECq7wLDE1cQh9xoctDULkvsYHDzCkkH5KahNE
-	9pCvZyPWW2v/oNqJqSQLbj7hkPn8qwEIdIxPOZaNZYZRa+po/1q9rQ/CvL6adxIHEkT20R4/7TJ
-	76epHTxXl/5gAawnAXfwUfX9oXKpMqitkiXO+yNjYNiZkrwQY47RrcZH/ekIr2haxzfoj43tMyl
-	L82Q64korLDYivKwgsZygS1n7xAYcNpypz3RrOGojIWdBYwe0uUQSNHutlAiNVL9inoyBLD/AZf
-	09FcEFZEkSOCChubeTmgYL4K8wTxYn1aO+Q8Wy/3dlHuI3VQQiHZ6O
-X-Google-Smtp-Source: AGHT+IEY1PcNA5Xw3Y9Hd1YrGuOnlrcshpILLGpuars23nwp2xyeZY1ZKcUIc6Q94Fmfsrj0gol+9A==
-X-Received: by 2002:a05:6808:3448:b0:450:4628:e3f2 with SMTP id 5614622812f47-4514e7a4293mr4385452b6e.42.1764251569410;
-        Thu, 27 Nov 2025 05:52:49 -0800 (PST)
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com. [209.85.167.175])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-659332cdb20sm290612eaf.2.2025.11.27.05.52.48
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Nov 2025 05:52:49 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-450154aa53fso334475b6e.2
-        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 05:52:48 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV3gYH41jGqj/hV9UOaqvIxTzY7ch5mMibxMZi3+CTd9PLlhls0WTlFQcu9P3/kzhojhVLC@lists.linux.dev
-X-Received: by 2002:a05:6102:291f:b0:5db:ebb4:fde3 with SMTP id
- ada2fe7eead31-5e224274604mr3094319137.16.1764251214244; Thu, 27 Nov 2025
- 05:46:54 -0800 (PST)
+	s=arc-20240116; t=1764254995; c=relaxed/simple;
+	bh=8rbYXMJ/hJ7cEW5zgrnHPgV0bxewRwQbEFcf01xOEvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cXDKz23FNvhxjBJu0puyzkxqMjMsryEIlUxYgP2OP4GrzJ1toH46L7FTAa0TvM4uj+87jnarEDJ2swuPtB3GC4PuStf66pGShg9voP/wyRvFpoUIKp8nqDmXceR73yY23RKIr7iRGu8OGrYWX9XuPEsyxRkULx72O13aJvMNpgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qo3UvmQG; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qo3UvmQG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764254992; x=1795790992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8rbYXMJ/hJ7cEW5zgrnHPgV0bxewRwQbEFcf01xOEvQ=;
+  b=Qo3UvmQGu6JBr8pEd3PDZSD8/2Hcli2pb8iI2p0Cv7Ake/ZVXSr0oU/C
+   RvwIT1jVFxz6IlBXyY8puQ/gSB+X5MQ8IF+3QlHGvvORNnsbMhOSHgkmd
+   hb8hE6YeugyjXdCInRcHt25dS50kaWxPiprVrhcfyFy6izu8znczexDaH
+   gVUatHLIFoi0oReXO/plfY1pt/hW68mZauLlxFTG1ATjFsrKZ1I74ZamO
+   jlZaiC2bm9D+Ke1TP2bpkxWY8DGEZ4EL4CKwZhOLvjD+GY+Ti7JgmoG7r
+   tWcoghsPJP+u5tWGcPLsHsjDxzIW/CTjwjgzHvxqtl/7Ydeeu0yZYgBFd
+   A==;
+X-CSE-ConnectionGUID: VL83j3XURoWrGDdF39HARg==
+X-CSE-MsgGUID: l1cc62nBQNewXm+4nDhvCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="88945694"
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="88945694"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 06:49:51 -0800
+X-CSE-ConnectionGUID: ZvGpGi2YR/OIWJQTJ7W/XQ==
+X-CSE-MsgGUID: 7iQSOpnqRZqHe8GrZYRqiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="192508889"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 27 Nov 2025 06:49:48 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOdJZ-000000004sT-2ArO;
+	Thu, 27 Nov 2025 14:49:45 +0000
+Date: Thu, 27 Nov 2025 22:49:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>,
+	rostedt@goodmis.org, mhiramat@kernel.org, corbet@lwn.net,
+	shuah@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Subject: Re: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols
+ and :entry/:exit
+Message-ID: <202511272254.BX8oUzwu-lkp@intel.com>
+References: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251126182257.157439-4-krzysztof.kozlowski@oss.qualcomm.com>
- <20251126182257.157439-6-krzysztof.kozlowski@oss.qualcomm.com>
- <CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com>
- <dbb94fb1-2f78-4bd2-9254-c435ab3325c0@oss.qualcomm.com> <0e90817e-1c05-4fa3-a6fd-8e755608a2c9@oss.qualcomm.com>
- <CAMuHMdX2qv2YBbvkM8tkSTWDPe-paMp5=fdv=4tGKheTseK9Pw@mail.gmail.com> <ebb0d41c-1836-42d1-8406-ead97c4d6886@oss.qualcomm.com>
-In-Reply-To: <ebb0d41c-1836-42d1-8406-ead97c4d6886@oss.qualcomm.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 27 Nov 2025 14:46:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUF9nTRkOOi+KnH2ATsFdTWMCtohWZQ1T_vhB=cf_42Yg@mail.gmail.com>
-X-Gm-Features: AWmQ_bmuZJ1L1xbNpDXxY3ptFDbRDwAIihpcjmcYa3Px9900l5_objftbJng000
-Message-ID: <CAMuHMdUF9nTRkOOi+KnH2ATsFdTWMCtohWZQ1T_vhB=cf_42Yg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] i2c: rcar: Fix Wvoid-pointer-to-enum-cast warning
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-i2c@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
 
-Hi Krzysztof,
+Hi Seokwoo,
 
-On Thu, 27 Nov 2025 at 14:42, Krzysztof Kozlowski
-<krzysztof.kozlowski@oss.qualcomm.com> wrote:
-> On 27/11/2025 13:52, Geert Uytterhoeven wrote:
-> > On Thu, 27 Nov 2025 at 12:48, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@oss.qualcomm.com> wrote:
-> >> On 27/11/2025 12:42, Krzysztof Kozlowski wrote:
-> >>>>> --- a/drivers/i2c/busses/i2c-rcar.c
-> >>>>> +++ b/drivers/i2c/busses/i2c-rcar.c
-> >>>>> @@ -1141,7 +1141,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
-> >>>>>         if (IS_ERR(priv->io))
-> >>>>>                 return PTR_ERR(priv->io);
-> >>>>>
-> >>>>> -       priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-> >>>>> +       priv->devtype = (kernel_ulong_t)of_device_get_match_data(dev);
-> >>>>
-> >>>> Any specific reason you picked "kernel_ulong_t" instead of "unsigned long"?
-> >>>> The former seems to be the least common option.
-> >>>
-> >>> As I wrote in the first patch, because to my knowledge it is the
-> >
-> > I don't see that written in the first patch; it has the same patch description
-> > as the other patches in the series (mutatis mutandis)?
->
-> https://lore.kernel.org/all/20251126182257.157439-4-krzysztof.kozlowski@oss.qualcomm.com/
->
-> I meant that brief statement in the patch changelog.
+kernel test robot noticed the following build errors:
 
-Sorry, I had missed that, as I don't read patches for foreign hardware,
-and had just b4-am'ed the series, and compared the two commits.
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.18-rc7 next-20251127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> >>> preferred form for holding driver data which are in general pointers. We
-> >>> do not store pointers as unsigned long. It is also already used for the
-> >>> driver data types - see include/linux/mod_devicetable.h.
-> >>
-> >> ... and in case it is still not obvious: I do not cast here to final
-> >> type, because that cast is the reason for the warning.
-> >>
-> >> I cast to an intermediary type to help compiler suppressing the warning
-> >
-> > I know...
-> >
-> >> - to integer representing the pointer. Unsigned long is not representing
-> >> pointers in the kernel. Integer type representing the pointer is
-> >
-> > "unsigned long" indeed does not represent a pointer, but in the Linux
-> > kernel, it is guaranteed to be the same size as a pointer.
-> >
-> > '"unsigned long" is superior'
-> > https://lore.kernel.org/CAHk-=wj2OHy-5e+srG1fy+ZU00TmZ1NFp6kFLbVLMXHe7A1d-g@mail.gmail.com
-> > (he doesn't seem to have said anything about kernel_ulong_t)
->
-> Yes, that was again comparing to uintptr_t, so we both agree.
->
-> >> kernel_ulong_t, I think.
-> >
-> > include/linux/mod_devicetable.h:typedef unsigned long kernel_ulong_t;
-> >
-> > IIRC, it was introduced originally because "unsigned long" might have
-> > a different size in userspace.  Nowadays (for x32), uapi uses
-> > __kernel_ulong_t, though.
->
-> Maybe, but if you look at the data structures all have kernel_ulong_t,
-> so this fits the logic I was following here - I cast to the type which
-> is both representing pointer and is already used for driver data,
-> because this match data serves similar purpose as mentioned driver data.
->
-> I don't mind casting via unsigned long, but:
-> 1. these are old and trivial issues,
-> 2. they are quite annoying when people want to compile test with W=1,
-> 3. I was trying to fix them (although not sure if for I2C) already,
-> 4. and some others probably as well were trying to fix them,
-> so how many people need to send them and debate before we fix them finally?
->
-> unsigned long vs kernel_ulong_t is a nit-style discussion IMO, unless we
-> have here more concrete arguments, e.g. statement from Linus that
-> kernel_ulong_t is wrong.
->
-> If maintainers of this code want unsigned long, please apply the patch
-> and fix directly, but for the sake, let's get it merged...
+url:    https://github.com/intel-lab-lkp/linux/commits/Seokwoo-Chung-Ryan/docs-tracing-fprobe-Document-list-filters-and-entry-exit/20251127-024245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20251126184110.72241-3-seokwoo.chung130%40gmail.com
+patch subject: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols and :entry/:exit
+config: x86_64-randconfig-001-20251127 (https://download.01.org/0day-ci/archive/20251127/202511272254.BX8oUzwu-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511272254.BX8oUzwu-lkp@intel.com/reproduce)
 
-Sure, let's get it fixed!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511272254.BX8oUzwu-lkp@intel.com/
 
-Gr{oetje,eeting}s,
+All errors (new ones prefixed by >>):
 
-                        Geert
+>> kernel/trace/trace_fprobe.c:1284:1: error: function definition is not allowed here
+    1284 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1514:1: error: function definition is not allowed here
+    1514 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1531:1: error: function definition is not allowed here
+    1531 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1536:1: error: function definition is not allowed here
+    1536 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1546:1: error: function definition is not allowed here
+    1546 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1574:1: error: function definition is not allowed here
+    1574 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1610:1: error: function definition is not allowed here
+    1610 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1655:1: error: function definition is not allowed here
+    1655 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1684:1: error: function definition is not allowed here
+    1684 | {
+         | ^
+>> kernel/trace/trace_fprobe.c:1702:15: error: use of undeclared identifier 'init_fprobe_trace_early'
+    1702 | core_initcall(init_fprobe_trace_early);
+         |               ^
+>> kernel/trace/trace_fprobe.c:1702:15: error: use of undeclared identifier 'init_fprobe_trace_early'
+>> kernel/trace/trace_fprobe.c:1702:40: error: expected '}'
+    1702 | core_initcall(init_fprobe_trace_early);
+         |                                        ^
+   kernel/trace/trace_fprobe.c:1175:1: note: to match this '{'
+    1175 | {
+         | ^
+   12 errors generated.
+
+
+vim +1284 kernel/trace/trace_fprobe.c
+
+08c9306fc2e32b Masami Hiramatsu (Google  2023-08-23  1281) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1282) static int trace_fprobe_create_internal(int argc, const char *argv[],
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1283) 					struct traceprobe_parse_context *ctx)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06 @1284) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1285) 	/*
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1286) 	 * Argument syntax:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1287) 	 *  - Add fentry probe:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1288) 	 *      f[:[GRP/][EVENT]] [MOD:]KSYM [FETCHARGS]
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1289) 	 *  - Add fexit probe:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1290) 	 *      f[N][:[GRP/][EVENT]] [MOD:]KSYM%return [FETCHARGS]
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1291) 	 *  - Add tracepoint probe:
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1292) 	 *      t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1293) 	 *
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1294) 	 * Fetch args:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1295) 	 *  $retval	: fetch return value
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1296) 	 *  $stack	: fetch stack address
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1297) 	 *  $stackN	: fetch Nth entry of stack (N:0-)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1298) 	 *  $argN	: fetch Nth argument (N:1-)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1299) 	 *  $comm       : fetch current task comm
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1300) 	 *  @ADDR	: fetch memory at ADDR (ADDR should be in kernel)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1301) 	 *  @SYM[+|-offs] : fetch memory at SYM +|- offs (SYM is a data symbol)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1302) 	 * Dereferencing memory fetch:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1303) 	 *  +|-offs(ARG) : fetch memory at ARG +|- offs address.
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1304) 	 * Alias name of args:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1305) 	 *  NAME=FETCHARG : set NAME as alias of FETCHARG.
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1306) 	 * Type of args:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1307) 	 *  FETCHARG:TYPE : use TYPE instead of unsigned long.
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1308) 	 */
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1309) 	struct trace_fprobe *tf __free(free_trace_fprobe) = NULL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1310) 	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1311) 	struct module *mod __free(module_put) = NULL;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1312) 	const char **new_argv __free(kfree) = NULL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1313) 	char *parsed_nofilter __free(kfree) = NULL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1314) 	char *parsed_filter __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1315) 	char *symbol __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1316) 	char *ebuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1317) 	char *gbuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1318) 	char *sbuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1319) 	char *abuf __free(kfree) = NULL;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1320) 	char *dbuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1321) 	int i, new_argc = 0, ret = 0;
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1322) 	bool is_tracepoint = false;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1323) 	bool list_mode = false;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1324) 	bool is_return = false;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1325) 
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1326) 	if ((argv[0][0] != 'f' && argv[0][0] != 't') || argc < 2)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1327) 		return -ECANCELED;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1328) 
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1329) 	if (argv[0][0] == 't') {
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1330) 		is_tracepoint = true;
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1331) 		group = TRACEPOINT_EVENT_SYSTEM;
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1332) 	}
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1333) 
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1334) 	if (argv[0][1] != '\0') {
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1335) 		if (argv[0][1] != ':') {
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1336) 			trace_probe_log_set_index(0);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1337) 			trace_probe_log_err(1, BAD_MAXACT);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1338) 			return -EINVAL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1339) 		}
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1340) 		event = &argv[0][2];
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1341) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1342) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1343) 	trace_probe_log_set_index(1);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1344) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1345) 	/* Parse spec early (single vs list, suffix, base symbol) */
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1346) 	ret = parse_fprobe_spec(argv[1], is_tracepoint, &symbol, &is_return,
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1347) 			&list_mode, &parsed_filter, &parsed_nofilter);
+08c9306fc2e32b Masami Hiramatsu (Google  2023-08-23  1348) 	if (ret < 0)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1349) 		return -EINVAL;
+08c9306fc2e32b Masami Hiramatsu (Google  2023-08-23  1350) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1351) 	for (i = 2; i < argc; i++) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1352) 		char *tmp = strstr(argv[i], "$retval");
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1353) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1354) 		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1355) 			if (is_tracepoint) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1356) 				trace_probe_log_set_index(i);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1357) 				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1358) 				return -EINVAL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1359) 			}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1360) 			is_return = true;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1361) 			break;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1362) 		}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1363) 	}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1364) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1365) 	trace_probe_log_set_index(0);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1366) 	if (event) {
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1367) 		gbuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1368) 		if (!gbuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1369) 			return -ENOMEM;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1370) 		ret = traceprobe_parse_event_name(&event, &group, gbuf,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1371) 						  event - argv[0]);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1372) 		if (ret)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1373) 			return -EINVAL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1374) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1375) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1376) 	if (!event) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1377) 		/*
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1378) 		 * Event name rules:
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1379) 		 * - For list/wildcard: require explicit [GROUP/]EVENT
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1380) 		 * - For single literal: autogenerate symbol__entry/symbol__exit
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1381) 		 */
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1382) 		if (list_mode || has_wildcard(symbol)) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1383) 			trace_probe_log_err(0, NO_GROUP_NAME);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1384) 			return -EINVAL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1385) 		}
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1386) 		ebuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1387) 		if (!ebuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1388) 			return -ENOMEM;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1389) 		/* Make a new event name */
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1390) 		if (is_tracepoint)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1391) 			snprintf(ebuf, MAX_EVENT_NAME_LEN, "%s%s",
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1392) 				 isdigit(*symbol) ? "_" : "", symbol);
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1393) 		else
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1394) 			snprintf(ebuf, MAX_EVENT_NAME_LEN, "%s__%s", symbol,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1395) 				 is_return ? "exit" : "entry");
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1396) 		sanitize_event_name(ebuf);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1397) 		event = ebuf;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1398) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1399) 
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1400) 	if (is_return)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1401) 		ctx->flags |= TPARG_FL_RETURN;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1402) 	else
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1403) 		ctx->flags |= TPARG_FL_FENTRY;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1404) 
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1405) 	ctx->funcname = NULL;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1406) 	if (is_tracepoint) {
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1407) 		/* Get tracepoint and lock its module until the end of the registration. */
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1408) 		struct tracepoint *tpoint;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1409) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1410) 		ctx->flags |= TPARG_FL_TPOINT;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1411) 		mod = NULL;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1412) 		tpoint = find_tracepoint(symbol, &mod);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1413) 		if (tpoint) {
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1414) 			sbuf = kmalloc(KSYM_NAME_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1415) 			if (!sbuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1416) 				return -ENOMEM;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1417) 			ctx->funcname = kallsyms_lookup((unsigned long)tpoint->probestub,
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1418) 							NULL, NULL, NULL, sbuf);
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1419) 		}
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1420) 	}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1421) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1422) 	if (!list_mode && !has_wildcard(symbol) && !is_tracepoint)
+e3d6e1b9a34c74 Masami Hiramatsu (Google  2025-04-01  1423) 		ctx->funcname = symbol;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1424) 
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1425) 	abuf = kmalloc(MAX_BTF_ARGS_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1426) 	if (!abuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1427) 		return -ENOMEM;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1428) 	argc -= 2; argv += 2;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1429) 	new_argv = traceprobe_expand_meta_args(argc, argv, &new_argc,
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1430) 					       abuf, MAX_BTF_ARGS_LEN, ctx);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1431) 	if (IS_ERR(new_argv))
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1432) 		return PTR_ERR(new_argv);
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1433) 	if (new_argv) {
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1434) 		argc = new_argc;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1435) 		argv = new_argv;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1436) 	}
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1437) 	if (argc > MAX_TRACE_ARGS) {
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1438) 		trace_probe_log_set_index(2);
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1439) 		trace_probe_log_err(0, TOO_MANY_ARGS);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1440) 		return -E2BIG;
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1441) 	}
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1442) 
+d9b15224dd8ff8 Ye Bin                    2024-03-22  1443  	ret = traceprobe_expand_dentry_args(argc, argv, &dbuf);
+d9b15224dd8ff8 Ye Bin                    2024-03-22  1444  	if (ret)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1445) 		return ret;
+d9b15224dd8ff8 Ye Bin                    2024-03-22  1446  
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1447) 	/* setup a probe */
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1448) 	tf = alloc_trace_fprobe(group, event, symbol, argc, is_return, is_tracepoint);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1449) 	if (IS_ERR(tf)) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1450) 		ret = PTR_ERR(tf);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1451) 		/* This must return -ENOMEM, else there is a bug */
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1452) 		WARN_ON_ONCE(ret != -ENOMEM);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1453) 		return ret;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1454) 	}
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1455) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1456) 	/* carry list parsing result into tf */
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1457) 	if (!is_tracepoint) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1458) 		tf->list_mode = list_mode;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1459) 		if (parsed_filter) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1460) 			tf->filter = kstrdup(parsed_filter, GFP_KERNEL);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1461) 			if (!tf->filter)
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1462) 				return -ENOMEM;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1463) 		}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1464) 		if (parsed_nofilter) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1465) 			tf->nofilter = kstrdup(parsed_nofilter, GFP_KERNEL);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1466) 			if (!tf->nofilter)
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1467) 				return -ENOMEM;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1468) 		}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1469) 	}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1470) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1471) 	/* parse arguments */
+73f35080477e89 Mikel Rychliski           2024-09-30  1472  	for (i = 0; i < argc; i++) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1473) 		trace_probe_log_set_index(i + 2);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1474) 		ctx->offset = 0;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1475) 		ret = traceprobe_parse_probe_arg(&tf->tp, i, argv[i], ctx);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1476) 		if (ret)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1477) 			return ret;	/* This can be -ENOMEM */
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1478) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1479) 
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1480) 	if (is_return && tf->tp.entry_arg) {
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1481) 		tf->fp.entry_handler = trace_fprobe_entry_handler;
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1482) 		tf->fp.entry_data_size = traceprobe_get_entry_data_size(&tf->tp);
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1483) 		if (ALIGN(tf->fp.entry_data_size, sizeof(long)) > MAX_FPROBE_DATA_SIZE) {
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1484) 			trace_probe_log_set_index(2);
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1485) 			trace_probe_log_err(0, TOO_MANY_EARGS);
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1486) 			return -E2BIG;
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1487) 		}
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1488) 	}
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1489) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1490) 	ret = traceprobe_set_print_fmt(&tf->tp,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1491) 			is_return ? PROBE_PRINT_RETURN : PROBE_PRINT_NORMAL);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1492) 	if (ret < 0)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1493) 		return ret;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1494) 
+2db832ec9090d3 Masami Hiramatsu (Google  2025-04-01  1495) 	ret = register_trace_fprobe_event(tf);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1496) 	if (ret) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1497) 		trace_probe_log_set_index(1);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1498) 		if (ret == -EILSEQ)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1499) 			trace_probe_log_err(0, BAD_INSN_BNDRY);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1500) 		else if (ret == -ENOENT)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1501) 			trace_probe_log_err(0, BAD_PROBE_ADDR);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1502) 		else if (ret != -ENOMEM && ret != -EEXIST)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1503) 			trace_probe_log_err(0, FAIL_REG_PROBE);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1504) 		return -EINVAL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1505) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1506) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1507) 	/* 'tf' is successfully registered. To avoid freeing, assign NULL. */
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1508) 	tf = NULL;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1509) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1510) 	return 0;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1511) }
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1512) 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
