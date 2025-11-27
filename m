@@ -1,70 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8302882A7;
-	Thu, 27 Nov 2025 01:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF9224886A;
+	Thu, 27 Nov 2025 02:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764205539; cv=none; b=dIfLysFmpkmCDbPx3kMc6oH9vVS2UByB51o2Xgd1gCYdlLyoz63Lqu7cTQAXdk2Dld7FGntbs2Fn/kAFQBgsIaJYVp5Mwn4N5YZonui8rmA76DdvD91pJqdgCaS5naN96TJ8WOdWXzH5OJKjr3owN4bYdtd81rejjJiy4wO32qU=
+	t=1764209502; cv=none; b=ak3p1GqUl840kem/TiussWHM3ckBBh9E/hEyeikZGEUCiam5GytSuHflI6rDz0q3jGhqV5ChJfoYYcCLrRBDpjEWwDgBm4IleqYcx0Ao6/nVxCEoslto56EZSgR0Jg1xS4/d/rAk6XwkY5lrS1QMFLwXCohZkU3SzXGdub1G+sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764205539; c=relaxed/simple;
-	bh=WZ0WKykRJQw4J/W4spMQxkjY/MdBH3bIVjZr9mxhDN0=;
+	s=arc-20240116; t=1764209502; c=relaxed/simple;
+	bh=5E01bNotG3ZMjR0/19DqpOfft1W17AahjuYPghUyM6g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WG0o0tpxsm9VqGfoWwxwb45XcJSCjIVihpSPnV3zUuHe3pQ1bJ7xtrviczHfR9xbLCKAmnhsQuYFgUncRnzGtWIUwIvNeihaWuUHKqJohXGWc46j1witm2NTruHXbGU1FkYMRXe/bzDjryeq7DcDVK8xJyQAG2XffWtkqEsE9n4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PjIHumLt; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=e/FnreVLDta4DbI4S4ju0feSKmj7JjMPfHKpSWNr1zr1d0YJUnrdhZfkvL6HoiUpfHOdZdqWrLyl9QCcCpYe5wOsi9fn40mHpIba3HfUyPNFES++tqBBW4YFiXYYZocOofcFVBk22H5AHUUWaLmEgMisV2P/5BejENEV7VCP+Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e+UikvWS; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PjIHumLt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e+UikvWS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764205538; x=1795741538;
+  t=1764209500; x=1795745500;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WZ0WKykRJQw4J/W4spMQxkjY/MdBH3bIVjZr9mxhDN0=;
-  b=PjIHumLtLo90X6uCG/l/rQwjy1YIFnvypg5AQnnxLSCqOFTDwlsXa8Nl
-   iHw611fsGeYuBpWtDF/Ymes5N8YVlWYuHpguLbQTW0frWgPlT7lDRpg62
-   UVMFqToj9ULzEtgFr9kUXifdVsSeccalkKKQuCHBj6z8BS+WHRJBKhArX
-   u/MaoHoID+bi81Xf++fX1U+wO5f+H4l8p7dr1DJyZ59IZr/Yonci10sRV
-   VX7GqWytQzCLoRKsMEGcp+6YMev8WNazcTraducP81phcrSxRSa8OzG9S
-   bmVkzY21EeaVwE/RKR5u/V5H0MQP3KIIdxqJYSCO3x3pYumgZsCo23uHS
-   A==;
-X-CSE-ConnectionGUID: rlkgbB7WRGy9Zy5cV7yrZg==
-X-CSE-MsgGUID: Y4L/LbwkRSSSxjrUsLoLgw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="70112313"
+  bh=5E01bNotG3ZMjR0/19DqpOfft1W17AahjuYPghUyM6g=;
+  b=e+UikvWS4Y3fS588pYO1k2N5ciSK23kiR1t6DrkywPw1C3DhZ+lERatv
+   KqlZCnr97tee9AKURztEe18h770BZrf5G1yBTRFFusCd5UJXI1v+2Nffu
+   TX45sGS+0lW80UB1eMeIH9hA1Y/9AR3zR1urI6QCj8UyeDUXygFLdl6wM
+   8RfSvOZeRr2OsMiT2h3gWG/WEJnztGu3Xl17JrshCaYZhBmnpzJUcPOx+
+   Iaz39lcALiPR289im/kNRUUq02PzihB1Cgomjkpz/Tg7u8HO+lIkwN7lb
+   9n18wTgxGaFAuMqjsGqrKnSwJFRlELSnXN36YMp6fKSyYDWKNYogieMIe
+   Q==;
+X-CSE-ConnectionGUID: G9jSyrL0TAS5KooekTZmPw==
+X-CSE-MsgGUID: Hbia3dz1StCVXngskS8p2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="65964924"
 X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
-   d="scan'208";a="70112313"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 17:05:37 -0800
-X-CSE-ConnectionGUID: ymgDICuaTi+tFFCtw1/gvw==
-X-CSE-MsgGUID: Gh5MCfipTmWFGtvG6Dg4aw==
+   d="scan'208";a="65964924"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 18:11:38 -0800
+X-CSE-ConnectionGUID: BX/zon0+RU+n3nZmXdtKCQ==
+X-CSE-MsgGUID: PaujO7HXSFa7jualy7EUMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
-   d="scan'208";a="224047470"
+   d="scan'208";a="192232103"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 26 Nov 2025 17:05:32 -0800
+  by orviesa006.jf.intel.com with ESMTP; 26 Nov 2025 18:11:36 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOQRt-000000003WX-3mtV;
-	Thu, 27 Nov 2025 01:05:29 +0000
-Date: Thu, 27 Nov 2025 09:04:41 +0800
+	id 1vORTp-000000003ZV-3AyR;
+	Thu, 27 Nov 2025 02:11:33 +0000
+Date: Thu, 27 Nov 2025 10:11:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
-	David Kaplan <david.kaplan@amd.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>
+To: Brian Masney <bmasney@redhat.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <mripard@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>
-Subject: Re: [PATCH v5 4/9] x86/vmscape: Move mitigation selection to a
- switch()
-Message-ID: <202511270829.xMEXUXCW-lkp@intel.com>
-References: <20251126-vmscape-bhb-v5-4-02d66e423b00@linux.intel.com>
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Brian Masney <bmasney@redhat.com>
+Subject: Re: [PATCH 2/2] clk: microchip: core: allow driver to be compiled
+ with COMPILE_TEST
+Message-ID: <202511270924.0uDTpEE9-lkp@intel.com>
+References: <20251125-clk-microchip-fixes-v1-2-6c1f5573d1b9@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,69 +67,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251126-vmscape-bhb-v5-4-02d66e423b00@linux.intel.com>
+In-Reply-To: <20251125-clk-microchip-fixes-v1-2-6c1f5573d1b9@redhat.com>
 
-Hi Pawan,
+Hi Brian,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 6a23ae0a96a600d1d12557add110e0bb6e32730c]
+[auto build test ERROR on 92fd6e84175befa1775e5c0ab682938eca27c0b2]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawan-Gupta/x86-bhi-x86-vmscape-Move-LFENCE-out-of-clear_bhb_loop/20251127-061843
-base:   6a23ae0a96a600d1d12557add110e0bb6e32730c
-patch link:    https://lore.kernel.org/r/20251126-vmscape-bhb-v5-4-02d66e423b00%40linux.intel.com
-patch subject: [PATCH v5 4/9] x86/vmscape: Move mitigation selection to a switch()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251127/202511270829.xMEXUXCW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270829.xMEXUXCW-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/clk-microchip-core-remove-duplicate-determine_rate-on-pic32_sclk_ops/20251126-035403
+base:   92fd6e84175befa1775e5c0ab682938eca27c0b2
+patch link:    https://lore.kernel.org/r/20251125-clk-microchip-fixes-v1-2-6c1f5573d1b9%40redhat.com
+patch subject: [PATCH 2/2] clk: microchip: core: allow driver to be compiled with COMPILE_TEST
+config: loongarch-randconfig-001-20251127 (https://download.01.org/0day-ci/archive/20251127/202511270924.0uDTpEE9-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270924.0uDTpEE9-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511270829.xMEXUXCW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511270924.0uDTpEE9-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/cpu/bugs.c:3260:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
-    3260 |         }
-         |         ^
-   1 warning generated.
+>> drivers/clk/microchip/clk-core.c:12:10: fatal error: 'asm/traps.h' file not found
+      12 | #include <asm/traps.h>
+         |          ^~~~~~~~~~~~~
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for TSM
+   Depends on [n]: VIRT_DRIVERS [=n]
+   Selected by [y]:
+   - PCI_TSM [=y] && PCI [=y]
 
 
-vim +3260 arch/x86/kernel/cpu/bugs.c
+vim +12 drivers/clk/microchip/clk-core.c
 
-556c1ad666ad90 Pawan Gupta  2025-08-14  3231  
-556c1ad666ad90 Pawan Gupta  2025-08-14  3232  static void __init vmscape_select_mitigation(void)
-556c1ad666ad90 Pawan Gupta  2025-08-14  3233  {
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3234  	if (!boot_cpu_has_bug(X86_BUG_VMSCAPE)) {
-556c1ad666ad90 Pawan Gupta  2025-08-14  3235  		vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
-556c1ad666ad90 Pawan Gupta  2025-08-14  3236  		return;
-556c1ad666ad90 Pawan Gupta  2025-08-14  3237  	}
-556c1ad666ad90 Pawan Gupta  2025-08-14  3238  
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3239  	if ((vmscape_mitigation == VMSCAPE_MITIGATION_AUTO) &&
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3240  	    !should_mitigate_vuln(X86_BUG_VMSCAPE))
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3241  		vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3242  
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3243  	switch (vmscape_mitigation) {
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3244  	case VMSCAPE_MITIGATION_NONE:
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3245  		break;
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3246  
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3247  	case VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER:
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3248  		if (!boot_cpu_has(X86_FEATURE_IBPB))
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3249  			vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3250  		break;
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3251  
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3252  	case VMSCAPE_MITIGATION_AUTO:
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3253  		if (boot_cpu_has(X86_FEATURE_IBPB))
-556c1ad666ad90 Pawan Gupta  2025-08-14  3254  			vmscape_mitigation = VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER;
-5799d5d8a6c877 David Kaplan 2025-09-12  3255  		else
-5799d5d8a6c877 David Kaplan 2025-09-12  3256  			vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3257  		break;
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3258  
-0091dd36e9ee51 Pawan Gupta  2025-11-26  3259  	default:
-5799d5d8a6c877 David Kaplan 2025-09-12 @3260  	}
-556c1ad666ad90 Pawan Gupta  2025-08-14  3261  }
-556c1ad666ad90 Pawan Gupta  2025-08-14  3262  
+ce6e1188465998 Purna Chandra Mandal 2016-05-13 @12  #include <asm/traps.h>
+ce6e1188465998 Purna Chandra Mandal 2016-05-13  13  
 
 -- 
 0-DAY CI Kernel Test Service
