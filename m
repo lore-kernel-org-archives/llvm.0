@@ -1,87 +1,87 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB7132B9B8
-	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 11:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8A9329E4A
+	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 11:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764243742; cv=none; b=r4ApRQ/cOl0T5sHhtn6wW2Xsf+lSVuHvK7MkSe+fGUnLztZJdSdzbFObQuoXoVARRPln9mXYC8W/vDi4PSNxUmvJFcOeavsZ0v3Ab4YeYTdr7E/RrnN5Tce2ontg4CbNCbwTwE4H2lZZbobV6x0Q28D3J/mdrIpIeOD1dEcXOas=
+	t=1764244088; cv=none; b=pg77XzUdagmdQpL2Gp+f1A1qcI3NGSxO5a1ivb5oKIU5xMCeO1azGg8bGre54qa6xdrYr71A48vNrdNNJ1rKmZ5BvOObVTjKv3FQmiQbHfXFIINcw1PpdeK9cGpBgZ5Axzbv6p6uXvZ97at1LWNbH5SseneF6rsCwabBXo8y1gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764243742; c=relaxed/simple;
-	bh=GtE72Ankb4nUu2YrFan7jIWAfAtl5cnT0r2NZt+paZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GFryvBbkmULH2Dkrrts+ce0ia/zltdyGNDs++L7H5nXg87okKYn9RlUVdoBw8vjLM2gPAFDDjE10BjjlJjdnnCp/4Sth+jwXiDJ0qNjFd9rv+fMuWFsGlcUbNjZYK5EOoDSDzmfh8hSSJjlQoMMGmr7WPqyCmu24/gafGJmMhuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IRkc8HwR; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SF2ypuMH; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1764244088; c=relaxed/simple;
+	bh=nKkbcqfYG3LHG04a4RygWErz9v8LS6PmuMbISXn6AZo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ZvtpIN3iALDAHpdijqeZNJQOsi7CHoGaa2stlTwFVhqBiVrNvm4bqy8VoBOTn5syg+fEBqO7mDIr8MpIS0I5fbT9Rr6p2OFJajaTbAT46i0ucGEhmue5D+CXqvPC643HtFhlCGaRMiee29tpSuPrQ7VZS1wAj/ez6qPlMTBzvAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ir8pvPzj; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=e2h+dtcK; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IRkc8HwR";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SF2ypuMH"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ARA3blG848568
-	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 11:42:20 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ir8pvPzj";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="e2h+dtcK"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ARBVXn9721976
+	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 11:48:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/92bqtvgAxvIabGbLUTwTlYWV1H5f0gHUXTStPmWSTg=; b=IRkc8HwRf5t7IjA0
-	RO3qR4JTom9HCGU4kHWfC6UTBxTo28ohnb89ooAe58qMUN75GeLNPD9951+i26Ep
-	ttU/L5I03AxHOKkdT/TtKr4xz5maA6x4iCN5jOPA+ERGodQwVV9kYEQzTG+++fH0
-	rLvRPW1h/eFLAhCPjsWKEOW6Y+ktEAElJe+CmEppq2CyTSh1AOqpLmUWQOs4613p
-	Zzs9JNDvZnCg6eG/RyjT1fAh8SwsnpQAX0PU5WXMMeZ3LU/M1vbhuoIU4/GD6h/z
-	Y5LVuqMQ2Wz1qa+4GaIda0HnGsT+dXUg27SPBC7zz/th62uhUdwk6OyZgvK14mNw
-	bVTM/w==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4apmjd88jk-1
+	fIhJipMQ82A8oHOXTJVIJ6g6TYjckyt6+XKNV8hShGU=; b=Ir8pvPzjvFpmI3Qj
+	0jIZnpxA3DEwegMteN8JROxPskNkQc3lQnleuAnXf9CHemvf/7w7Osz664I3c5yI
+	5EQEQrHBUijbciNdQNdnhZYfyLTBubdqssdAfd7/XE4HOu380ZFGtT03cOIihB/C
+	A2LPYNczLg4j8v5EflWz7Kz9jv1XW5/ratAuI48hyL2KeMkvNWnnoz+LJSTSgp/P
+	ZohEIzqALKyjdbBsHFZaf2W7JDGJn3QF8xtx/bSuKRJW5jvg9Y1z7bNQYfbglXqF
+	HF5B0bNkjzTmwy+y26sGQgv62N5clU4enjYbHBLPLks0jgrGdlY4Fv6a/Hx0GIjY
+	I+nyQQ==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4apnud811a-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 11:42:20 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8b1d8f56e24so176227185a.2
-        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 03:42:19 -0800 (PST)
+	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 11:48:05 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ee04f4c632so11650901cf.3
+        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 03:48:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764243738; x=1764848538; darn=lists.linux.dev;
+        d=oss.qualcomm.com; s=google; t=1764244085; x=1764848885; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
+         :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/92bqtvgAxvIabGbLUTwTlYWV1H5f0gHUXTStPmWSTg=;
-        b=SF2ypuMH+xVb+4hgKujB2Rw3s9RlVz2sIvXP3lQglzQTlnNxcLSBl2wKj0okDU+yL4
-         wMDuwN+NgOET0y0YQ9yiJxgXGPt0g7rXvWemIQV5xPamPsWxMqRFea7BA+25izIjh6z5
-         Mp0NUxgmuS50TS6K5OiV5GxShLRg2vhFxcDZKydXJ5K8YI1CuEuBcdIO+z9FoAEAw8Ls
-         j7WV0u7fCt0ZIw2Ks0Q+wT2qpWhEP/S3bx6VJLi8QK0E2rTB1cVxUnplRjRb91kL/tLG
-         bebL8BywQrtYH6TG/LPXbXTOrnqa5hddlwqqg6MyXMS8sghcNNJpG7StM4GTxAs7MJZQ
-         ktrg==
+        bh=fIhJipMQ82A8oHOXTJVIJ6g6TYjckyt6+XKNV8hShGU=;
+        b=e2h+dtcKBj+avxzcj1k4MJcrfxOaJy2wu041QCCRf7JT65lPOB2h+BySlBEm/0CW2c
+         FB4HZsM3Rnk6sQwK9hG2Q06+1/JhsESZWplFvrGLDWI8MqRU95TVsPNs6Ismdz3ERTqH
+         J9k4UHrIYWZvX5+Up+dYXqS2JgrnXRJsma9eABukDS0OJ5fMPra74Z1vrdh6tJwxx/Lq
+         jG60wHq9Je6X2AAya9jysXM7WCpRh2QOfizAFI07kMqO6SC5AkFwutgQkuN1tkusfsHw
+         0ZNj4mxx3Ucz5ZWYx0fXNrUwoMFBqYmoyXgUUmdKmXu3V4ushcKZU3WLqZ/nsSukLA5I
+         Ad0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764243738; x=1764848538;
+        d=1e100.net; s=20230601; t=1764244085; x=1764848885;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
+         :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/92bqtvgAxvIabGbLUTwTlYWV1H5f0gHUXTStPmWSTg=;
-        b=gKCEP4W+awyaczmLVEAKhyeLKzKwkxdZ52yScQQG/svanjsVqFmrnT94PN1IE9wPOc
-         kCQLjbQU9T+FoeyAoD+2o0pks8gN9TLZ66kX2NjD9JYWQiZf7rnDCQSC2YvLV8+OXz9P
-         1JG8hcV4tQTNT62q2HgVE20cRafAVv5OgKQUDlH4hnT1v9FCf3P2w3mM4YyGiLvJcFzC
-         7sv+kDxlH2FPhpjF1XEDmCCcVoQyr0UaxFVYi4cXkRISBn1JoDi3FF4fS+JGb0XLF5in
-         8oE/VryQplr4oP/kMDdMhftGOYRrwQbzBQFD0MFV3h7rR18s150Vwgad/6BHg53oX95x
-         u3Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCVIjxheOe9+3r5r/0stk6Cz4Dkba3BtvA37jv10aygesPDQAr6GGU3NP3tuA6dgQ067jJtK@lists.linux.dev
-X-Gm-Message-State: AOJu0YygBXTU/MXdwBRCZy00YN5bFgXQVJ+xCgMKVqnllxVAj7su51T4
-	iSJNTsE/6nvxHFCg1a4P7NVM4v/NRBH140VBN6K1fKapOWl2ojuB+Rur29hbGohgWbjhaLdlO/C
-	7j6+mEHnFFwkueuQPjKunAdmGOvukwxuM4lFXLdheZfsWdqVLD0btUldB
-X-Gm-Gg: ASbGnctL8jqPVDYjWPr6pihlJpvIbSYqdGfoDjvjaUHAJ9ZzxN+OXFw2XvcjrnVXpQ4
-	ywYDW4SgTmzl6coEoMt8xmbMWMNnqyCYMjZqV8dNdxTu5EvAXbJsoMsTOso8UMlF+dWXLku9GTk
-	D9DYPLkaIlpzuauc3VUiWnEM5cGW+bMiJaxAD1mm7RifpApiJrKFGf0hUwaN5KkigzyMoBQocmv
-	WqPbv4HhuPABFKAmkpCTn9T1Ya0s2ce0ULtZi/8ppdpbTdt1f2qYWqaknydWOtGRAKSBM59yn4S
-	9jmxURneS2Q/+0f0wTm6CSSfLXB/oCBxvDpdn61+9wNi64bX8pkjVsNJgEUC9IUlFx1WbtO7H84
-	oHZoBO16tGj3MPuiPDRWCc2crNT/MZ1bmBilKhw==
-X-Received: by 2002:a05:620a:4402:b0:8a3:f8c2:5ee4 with SMTP id af79cd13be357-8b4ebd821bemr1333097685a.37.1764243738290;
-        Thu, 27 Nov 2025 03:42:18 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHLHuJkpysrZAeyvEty4uFC8IBgU2xb/kZ57e2oHNqTYOlrQ2/iZ42+5b2yAz3us3STsiX/Pw==
-X-Received: by 2002:a05:620a:4402:b0:8a3:f8c2:5ee4 with SMTP id af79cd13be357-8b4ebd821bemr1333094185a.37.1764243737838;
-        Thu, 27 Nov 2025 03:42:17 -0800 (PST)
+        bh=fIhJipMQ82A8oHOXTJVIJ6g6TYjckyt6+XKNV8hShGU=;
+        b=Ka1FTWNbmGUmhJ8irZyyWqCXRB1vjfjtm57NqWbczb8sbRj16YCMFSExardezhnhfH
+         85gPfaNdAwIGXlOtF4KN2Mt8lpHuiZQy4W/KIGf82aRbjXtWfZaYdjmo/m5n751nA7n3
+         toqkeJAOIY+Slrr7KdUexk1+7YTGse0VzTpRNrqYi1xzpzuzO2k56Y9gDoc5GxTEKxcL
+         VF7JoJki4P+7ginOVrLzRtVUqLBOWE7pWO4RfjSQBHKMO7vmrPlL8CSnO0dw3aDfI52j
+         XsRk2LPbP4KiZaPp4H5MDspP0pFbKPt+Q+xXo8g72QxD/Y8WMHSlDpAM0Pqkwrpzrvik
+         I+Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMVeI5biJIf7Fg0j+JN+PMArgo6HVpzYx0T9f/hJJY4rVdF0xmx86BfamLymRsO9LrVLp9@lists.linux.dev
+X-Gm-Message-State: AOJu0YwAPnNmQljrbjkLB67HDblHsm+kbGWP9gPNjUtgremg9/cNp89T
+	SWCA1q8xojhiMrHpRLr5UoLGWeupnGmDvyL0tgHdLRIt0/mIKjAS5GjOgGh0pSCMmLVEs081Uio
+	rWP6D1PljkctUj2BS+uMyyAFeah92e+51ceu+v4mO3SsvTFrbfv0Cjc/E
+X-Gm-Gg: ASbGnctYNXFwyXD4xsiLEDE5bm2vksxKalspNLJBvfxfqaz4wd/N8yjXgXIXNASSNJw
+	/TyDTkdlvg2djljE7mYh0G1JCYNcS+mnJieW7g/7YKQYJpIpspkPXUnDx4kvc7ypz5PeQX82vBW
+	vf9ZtjITJk/RXI5DVMHh3pa4+IcX785eDsPscz1sFZxwLuurMAiNRz7FAW7TvsELEBjIGNrFvRW
+	6c+/23lmxaS4FBqj8YwmYdsa2ooGbDD+oCx78XV+AI4HnIucWD9tT9N4hWIo5fbxB3R7SI4Whwc
+	21wJaqES7HYdt+kFklYxZkUucBM1hdHHKF6v1vGW1yQye2utUcMFrnH+oZs2uYm4l7K7WXyOaxn
+	LcK5APAUOZ4/KGJG2A6Jqxr/hkjqYRXR81WUtOg==
+X-Received: by 2002:a05:622a:c8:b0:4ec:d893:a0fc with SMTP id d75a77b69052e-4ee58a850fdmr327423641cf.4.1764244084753;
+        Thu, 27 Nov 2025 03:48:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFnK3g/Js45TQqWNMcc2jVyW7gCrAWjZ1laKZXs6iAR7ymEJl4EhBft8ZMZWlF9n0vQcP/u6Q==
+X-Received: by 2002:a05:622a:c8:b0:4ec:d893:a0fc with SMTP id d75a77b69052e-4ee58a850fdmr327423421cf.4.1764244084319;
+        Thu, 27 Nov 2025 03:48:04 -0800 (PST)
 Received: from [192.168.1.29] ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f5a48c7bsm137242466b.64.2025.11.27.03.42.16
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64751050a63sm1383268a12.24.2025.11.27.03.48.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Nov 2025 03:42:17 -0800 (PST)
-Message-ID: <dbb94fb1-2f78-4bd2-9254-c435ab3325c0@oss.qualcomm.com>
-Date: Thu, 27 Nov 2025 12:42:15 +0100
+        Thu, 27 Nov 2025 03:48:03 -0800 (PST)
+Message-ID: <0e90817e-1c05-4fa3-a6fd-8e755608a2c9@oss.qualcomm.com>
+Date: Thu, 27 Nov 2025 12:48:01 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -90,6 +90,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 3/3] i2c: rcar: Fix Wvoid-pointer-to-enum-cast warning
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 To: Geert Uytterhoeven <geert@linux-m68k.org>
 Cc: Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
@@ -107,7 +108,7 @@ Cc: Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>,
 References: <20251126182257.157439-4-krzysztof.kozlowski@oss.qualcomm.com>
  <20251126182257.157439-6-krzysztof.kozlowski@oss.qualcomm.com>
  <CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+ <dbb94fb1-2f78-4bd2-9254-c435ab3325c0@oss.qualcomm.com>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@oss.qualcomm.com; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -153,73 +154,64 @@ Autocrypt: addr=krzysztof.kozlowski@oss.qualcomm.com; keydata=
  v+PKIVf+zFKuh0At/TN/618e/QVlZPbMeNSp3S3ieMP9Q6y4gw5CfgiDRJ2K9g99m6Rvlx1q
  wom6QbU06ltbvJE2K9oKd9nPp1NrBfBdEhX8oOwdCLJXEq83vdtOEqE42RxfYta4P3by0BHp
  cwzYbmi/Et7T2+47PN9NZAOyb771QoVr8A==
-In-Reply-To: <CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com>
+In-Reply-To: <dbb94fb1-2f78-4bd2-9254-c435ab3325c0@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: peWBkPmzEe3U6ZOfXuZAwanvL2wF4xOd
-X-Proofpoint-ORIG-GUID: peWBkPmzEe3U6ZOfXuZAwanvL2wF4xOd
-X-Authority-Analysis: v=2.4 cv=OPcqHCaB c=1 sm=1 tr=0 ts=6928391c cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=Iax6wTeSMpqzYiZSKl48GQ==:17
+X-Proofpoint-GUID: A9bairXj9jz71s2RfPsbglkW_7bgtZyV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI3MDA4NyBTYWx0ZWRfX2iQjhlTBbfhJ
+ u0pVrGtwCLeAFHm6oA5GoZnUUTA0PU0/HO3GTqSk+xWtd5q9rj95AfzC0H1tH5JFWTfW4GBCkuC
+ MY8LNVWmjLzDJSS7aOQl0x5RXV0oVrV98J6pB59fA0458Ze1BEtlllt0v19NO1C1sg+BdNBjaqS
+ ziuvbKkliFwRm08IR3osZFwU1gJoGTw1KJs5WUgMF5Ip2mHcjPXQ63Vrp7Os2tZjJu1QwFUBbJH
+ U+f3y1QLmbuG9uq89rQRC2o+WHxrDWoYQqOH7dTFmsEgpgRMepa5Zri6B9Qwn2nzKcr1zt1UO75
+ x775dswvIjSOvSCOfVVBo6hmokZMeCTovvaeNU5fWgeeaT5JNmwqysb2fsGZYAK0a0zV5wBicaK
+ DX5LAkvuBbKKdyVRPIihErBDoqxnbA==
+X-Proofpoint-ORIG-GUID: A9bairXj9jz71s2RfPsbglkW_7bgtZyV
+X-Authority-Analysis: v=2.4 cv=MKNtWcZl c=1 sm=1 tr=0 ts=69283a75 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=Iax6wTeSMpqzYiZSKl48GQ==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=l25Wfm-L5A7WpkZik0gA:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI3MDA4NiBTYWx0ZWRfXz7vmAJZaE18Z
- 8OJbrhA5q5Wwwqkn1sN/eqmXwGYM2O9DZ2z6EUaw3C4Ey3aGrY3XphIJ9mZj42XjRnLLaEb1pdP
- 7GiFrsAQFHO13dg1zoq/acGXlVCPT15xsBXCKkBK9+xszBS4TNe6H3bFeq8e2/OhA4hurbeNeJZ
- 524OnUliJ4R9A56i5De5nS/oepSRUUjfLhthGjBduMV0iq82r8eoGoGEMj//P0J2ZO46q+D2gy/
- 9IuIiAySixTISkhXQeWxd2CBtCMVAxIei58K+xAfOukDlPJF5BVf8oOInw21abiU1d0hFkMg3+5
- GpqNnRogGJR4kYMu7w0e78G4vInTAo9zhbGhz6qgU4bDobnFnxcQfswD+ULie+UzUz5Zt+xe/cv
- 0tSHL3LTtrSj4RJj3PI7nNR+1Zv0NA==
+ a=VkNPw1HP01LnGYTKEx00:22 a=BwDcOSWodqSW4K7DrzcA:9 a=QEXdDO2ut3YA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-25_02,2025-11-26_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015
- spamscore=0 malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ priorityscore=1501 adultscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
+ spamscore=0 suspectscore=0 malwarescore=0 impostorscore=0 bulkscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511270086
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511270087
 
-On 27/11/2025 10:02, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Wed, 26 Nov 2025 at 19:23, Krzysztof Kozlowski
-> <krzysztof.kozlowski@oss.qualcomm.com> wrote:
->> 'i2c_types' is an enum, thus cast of pointer on 64-bit compile test with
->> clang and W=1 causes:
+On 27/11/2025 12:42, Krzysztof Kozlowski wrote:
 >>
->>   i2c-rcar.c:1144:18: error: cast to smaller integer type 'enum rcar_i2c_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+>> =
+>>> --- a/drivers/i2c/busses/i2c-rcar.c
+>>> +++ b/drivers/i2c/busses/i2c-rcar.c
+>>> @@ -1141,7 +1141,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
+>>>         if (IS_ERR(priv->io))
+>>>                 return PTR_ERR(priv->io);
+>>>
+>>> -       priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
+>>> +       priv->devtype = (kernel_ulong_t)of_device_get_match_data(dev);
 >>
->> One of the discussions in 2023 on LKML suggested warning is not suitable
->> for kernel.  Nothing changed in this regard since that time, so assume
->> the warning will stay and we want to have warnings-free builds.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+>> Any specific reason you picked "kernel_ulong_t" instead of "unsigned long"?
+>> The former seems to be the least common option.
 > 
-> Thanks for your patch!
+> As I wrote in the first patch, because to my knowledge it is the
+> preferred form for holding driver data which are in general pointers. We
+> do not store pointers as unsigned long. It is also already used for the
+> driver data types - see include/linux/mod_devicetable.h.
+
+... and in case it is still not obvious: I do not cast here to final
+type, because that cast is the reason for the warning.
+
+I cast to an intermediary type to help compiler suppressing the warning
+- to integer representing the pointer. Unsigned long is not representing
+pointers in the kernel. Integer type representing the pointer is
+kernel_ulong_t, I think.
+
+Once you have integer type representing the pointer, you do not need
+further casts to enum.
+
 > 
-> =
->> --- a/drivers/i2c/busses/i2c-rcar.c
->> +++ b/drivers/i2c/busses/i2c-rcar.c
->> @@ -1141,7 +1141,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
->>         if (IS_ERR(priv->io))
->>                 return PTR_ERR(priv->io);
->>
->> -       priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
->> +       priv->devtype = (kernel_ulong_t)of_device_get_match_data(dev);
-> 
-> Any specific reason you picked "kernel_ulong_t" instead of "unsigned long"?
-> The former seems to be the least common option.
-
-As I wrote in the first patch, because to my knowledge it is the
-preferred form for holding driver data which are in general pointers. We
-do not store pointers as unsigned long. It is also already used for the
-driver data types - see include/linux/mod_devicetable.h.
-
-> FWIW, the most common option is "uintptr_t", which torvalds doesn't like...
-
-Because it is discouraged in the kernel.
-
-https://lore.kernel.org/all/2023081004-lapped-handbag-0324@gregkh/
 
 
 Best regards,
