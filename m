@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6868729ACD7;
-	Thu, 27 Nov 2025 21:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FDD27B34E;
+	Thu, 27 Nov 2025 23:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764278197; cv=none; b=hi7P636js+0M+Bk2tLzDgpvrZwl5WlRPoxX6Ul9YtZLRNwi+vpyDYSJC7N/XZS8Q67BuxJrNDooSmeoYZqijxtUzQ5rPbhbJoctHj5b+LO0mvHZEzqIynQybw9jWlgmnQV9Rw6lqHzn2EhZrTjR8uG5oBaY80P9hUGHJdedSYSs=
+	t=1764284507; cv=none; b=EHJ/K0Qpn5Kzv7hyEpLy79Tud8NAzxuV8/slYgSyzoLuiaXUuA330i8Yh5ujsqMJmKLfx4DCaGCCJ3G/ggbAvCp6rMtp9uUpOPkm5HPQTNn3o3BxYQsHA108PiL8MHWSMhhjoEAcJx7kkZ85T3BQxFXObRJRLMsJBGL4OoINoz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764278197; c=relaxed/simple;
-	bh=neIg4/UrNIFPZj3GFDmJU4G/zUf2VCq3c7srWF3tzf8=;
+	s=arc-20240116; t=1764284507; c=relaxed/simple;
+	bh=c2j4bEB4sIjbWg4ks4HGdoAa7FErabBhxhSRuXPDFL8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=De7xKGkEKjZhbC6ZrHFMR872BtpAJ533tbtmDtq8O2yYWggH/ahtgZey3rhAkXxELpMME80ie3O2PCPesYaGmjGeLmRpHYopvmeslPmaNJtgqSCj/cNhXnOta4hciYLK4U69Bf26J5C+7WZTYixTMBUnAaLUyiQJ2Nown7KFiRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OKGD1kXA; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=f7efPp/dRxTMcQdduY7+xEKjkTryrnYM9Dw4fFJL8mV9yvE/irX/xQUm9fFKxj0kN1FBzRPPdvgkl0FTh8gLW7/di4aUkuUhzhldia65kCaWKVZWWhJQoB6BOwqmRJQ1jCrcgt7EuhFKzpwr8t7vSBnbplefDSe81ldUXKk1xKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TJdgzJPS; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OKGD1kXA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TJdgzJPS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764278195; x=1795814195;
+  t=1764284505; x=1795820505;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=neIg4/UrNIFPZj3GFDmJU4G/zUf2VCq3c7srWF3tzf8=;
-  b=OKGD1kXAS5pGfF95IRZXnlE0acagNNpnAIgAFOVHwa+xUH+dwKNuDEwz
-   kT3gXGSUdiWxVpRJZlRBvkdEUX4nW9EArKAuqHOrtqaEEqYuy5tLqwCto
-   akBDjRnfPOR6wfn7xHA1Hf1DaiN1oNr5RCICpblMygaQ7uhmeTKK2FQDS
-   B3ZM1xxQYitAdmfHVYtsCFfhZl6vWJKqGnjM5gnsBTFRTAP7piHaonO35
-   cJs1v6gc3KsrfXYlZTdxVAgxdPJngiWftKhhR8pCQdBKy79dQG+4sgoml
-   EN7D/lunxPIUuHOAMnHxJ5DqQ2uHyUxrY5gpgjDnXE3OSS9cwAyhhevnm
+  bh=c2j4bEB4sIjbWg4ks4HGdoAa7FErabBhxhSRuXPDFL8=;
+  b=TJdgzJPSESnB8KWVH8FtDbm4pAjzobCsl/i+W+WFZJ45YVUr3dRCDZHm
+   1n+NDgfAyG5QAeG47gEtTl6hjyoG9GxajRdnCGfiiUuygyvG5mhm+mZXZ
+   E3bDja0O2/21pnf29CehML3UqcRqpb4SR7sUNfswZJ/lFqwEv4lK4eqCT
+   7Mj7PjiQNg+uikoUISF2tYaFr5G+2AkojG3stGSbbSPonujiBxkgnIP3G
+   dYZPX8VCI1W0KjNCx1ZpTdlTRlLefY43m4ANmdxWmKBN6AP629yN6zk5+
+   hgGyOZozQqu+upyGzG0rR1mEm6/XOCBT+hWPtNv9ByGH4/UK0P8yrS1TN
    w==;
-X-CSE-ConnectionGUID: I3YLT3E0TKSRcY3OvKp3aA==
-X-CSE-MsgGUID: OYg9yVbBTUSNDCvPpyWl5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66354078"
+X-CSE-ConnectionGUID: qNsVPUuXQKWzUyJixeeY9A==
+X-CSE-MsgGUID: rfGeVQnlTMeGeXlfjBxn3Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="70185854"
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="66354078"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 13:16:35 -0800
-X-CSE-ConnectionGUID: 1Y51xhXIRSu8O3aM1pVNuw==
-X-CSE-MsgGUID: GxJ9SFcwQr6sysxpw/hhMQ==
+   d="scan'208";a="70185854"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 15:01:45 -0800
+X-CSE-ConnectionGUID: uR9+DpvhR6+L0zYQQNYICw==
+X-CSE-MsgGUID: NDBQDO7DQTSBuIfuVoEy7g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="193110608"
+   d="scan'208";a="193421937"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Nov 2025 13:16:34 -0800
+  by orviesa008.jf.intel.com with ESMTP; 27 Nov 2025 15:01:43 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOjLr-000000005h1-1At8;
-	Thu, 27 Nov 2025 21:16:31 +0000
-Date: Fri, 28 Nov 2025 05:15:47 +0800
+	id 1vOkzd-000000005om-02xB;
+	Thu, 27 Nov 2025 23:01:41 +0000
+Date: Fri, 28 Nov 2025 07:01:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oliver Upton <oupton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marc Zyngier <maz@kernel.org>
-Subject: [linux-next:master 11230/12398] arch/arm64/kvm/ptdump.c:49:10:
- error: statement expression not allowed at file scope
-Message-ID: <202511280532.8GWko1r4-lkp@intel.com>
+To: Chuck Lever <chuck.lever@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [cel:nfsv3-xdrgen 60/75] fs/nfsd/nfs2acl.c:177:10: error: no member
+ named 'access' in 'struct nfsd3_accessargs'
+Message-ID: <202511280658.xSZMMz2E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,152 +62,147 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   ef68bf704646690aba5e81c2f7be8d6ef13d7ad8
-commit: 81e9fe5c6f25dda9090697deee6f7aa8ac7ea84a [11230/12398] KVM: arm64: Teach ptdump about FEAT_XNX permissions
-config: arm64-randconfig-002-20251128 (https://download.01.org/0day-ci/archive/20251128/202511280532.8GWko1r4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511280532.8GWko1r4-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsv3-xdrgen
+head:   d6deccd7892291215036a5d70a688a2ccf230b15
+commit: 2d303c4ac8b0e06b053ef4258525fa113324c050 [60/75] NFSD: Use xdrgen XDR functions for NFSv3 ACCESS procedure
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251128/202511280658.xSZMMz2E-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511280658.xSZMMz2E-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511280532.8GWko1r4-lkp@intel.com/
-
-Note: the linux-next/master HEAD ef68bf704646690aba5e81c2f7be8d6ef13d7ad8 builds fine.
-      It may have been fixed somewhere.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511280658.xSZMMz2E-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/arm64/kvm/ptdump.c:49:10: error: statement expression not allowed at file scope
-      49 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b00),
-         |                           ^
-   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
-     114 |         ({                                                              \
-         |         ^
-   arch/arm64/kvm/ptdump.c:54:10: error: statement expression not allowed at file scope
-      54 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b01),
-         |                           ^
-   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
-     114 |         ({                                                              \
-         |         ^
-   arch/arm64/kvm/ptdump.c:59:10: error: statement expression not allowed at file scope
-      59 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b10),
-         |                           ^
-   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
-     114 |         ({                                                              \
-         |         ^
-   arch/arm64/kvm/ptdump.c:64:10: error: statement expression not allowed at file scope
-      64 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b11),
-         |                           ^
-   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
-     114 |         ({                                                              \
-         |         ^
->> arch/arm64/kvm/ptdump.c:101:18: error: invalid application of 'sizeof' to an incomplete type 'const struct ptdump_prot_bits[]'
-     101 |         for (i = 0; i < ARRAY_SIZE(stage2_pte_bits); i++)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   arch/arm64/kvm/ptdump.c:107:18: error: invalid application of 'sizeof' to an incomplete type 'const struct ptdump_prot_bits[]'
-     107 |                 level[i].num    = ARRAY_SIZE(stage2_pte_bits);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   6 errors generated.
+>> fs/nfsd/nfs2acl.c:177:10: error: no member named 'access' in 'struct nfsd3_accessargs'
+     177 |                         argp->access);
+         |                         ~~~~  ^
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:42:26: note: expanded from macro 'dfprintk'
+      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
+         |                                        ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:34:57: note: expanded from macro '__sunrpc_printk'
+      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
+         |                                                             ^~~~~~~~~~~
+   include/linux/kernel.h:276:26: note: expanded from macro 'trace_printk'
+     276 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                        ^~~~~~~~~~~
+   include/linux/kernel.h:287:37: note: expanded from macro 'do_trace_printk'
+     287 |         __trace_printk_check_format(fmt, ##args);                       \
+         |                                            ^~~~
+   include/linux/kernel.h:239:40: note: expanded from macro '__trace_printk_check_format'
+     239 |                 ____trace_printk_check_format(fmt, ##args);             \
+         |                                                      ^~~~
+>> fs/nfsd/nfs2acl.c:177:10: error: no member named 'access' in 'struct nfsd3_accessargs'
+     177 |                         argp->access);
+         |                         ~~~~  ^
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:42:26: note: expanded from macro 'dfprintk'
+      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
+         |                                        ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:34:57: note: expanded from macro '__sunrpc_printk'
+      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
+         |                                                             ^~~~~~~~~~~
+   include/linux/kernel.h:276:26: note: expanded from macro 'trace_printk'
+     276 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                        ^~~~~~~~~~~
+   include/linux/kernel.h:290:50: note: expanded from macro 'do_trace_printk'
+     290 |                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+         |                                                                ^~~~
+>> fs/nfsd/nfs2acl.c:177:10: error: no member named 'access' in 'struct nfsd3_accessargs'
+     177 |                         argp->access);
+         |                         ~~~~  ^
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:42:26: note: expanded from macro 'dfprintk'
+      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
+         |                                        ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:34:57: note: expanded from macro '__sunrpc_printk'
+      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
+         |                                                             ^~~~~~~~~~~
+   include/linux/kernel.h:276:26: note: expanded from macro 'trace_printk'
+     276 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                        ^~~~~~~~~~~
+   include/linux/kernel.h:292:36: note: expanded from macro 'do_trace_printk'
+     292 |                 __trace_printk(_THIS_IP_, fmt, ##args);                 \
+         |                                                  ^~~~
+>> fs/nfsd/nfs2acl.c:180:8: error: no member named 'access' in 'struct nfsd3_accessres'
+     180 |         resp->access = argp->access;
+         |         ~~~~  ^
+   fs/nfsd/nfs2acl.c:180:23: error: no member named 'access' in 'struct nfsd3_accessargs'
+     180 |         resp->access = argp->access;
+         |                        ~~~~  ^
+>> fs/nfsd/nfs2acl.c:181:8: error: no member named 'status' in 'struct nfsd3_accessres'
+     181 |         resp->status = nfsd_access(rqstp, &resp->fh, &resp->access, NULL);
+         |         ~~~~  ^
+   fs/nfsd/nfs2acl.c:181:54: error: no member named 'access' in 'struct nfsd3_accessres'
+     181 |         resp->status = nfsd_access(rqstp, &resp->fh, &resp->access, NULL);
+         |                                                       ~~~~  ^
+   fs/nfsd/nfs2acl.c:182:12: error: no member named 'status' in 'struct nfsd3_accessres'
+     182 |         if (resp->status != nfs_ok)
+         |             ~~~~  ^
+   fs/nfsd/nfs2acl.c:184:8: error: no member named 'status' in 'struct nfsd3_accessres'
+     184 |         resp->status = fh_getattr(&resp->fh, &resp->stat);
+         |         ~~~~  ^
+>> fs/nfsd/nfs2acl.c:184:46: error: no member named 'stat' in 'struct nfsd3_accessres'
+     184 |         resp->status = fh_getattr(&resp->fh, &resp->stat);
+         |                                               ~~~~  ^
+   fs/nfsd/nfs2acl.c:234:40: error: no member named 'access' in 'struct nfsd3_accessargs'
+     234 |         if (xdr_stream_decode_u32(xdr, &args->access) < 0)
+         |                                         ~~~~  ^
+   fs/nfsd/nfs2acl.c:280:37: error: no member named 'status' in 'struct nfsd3_accessres'
+     280 |         if (!svcxdr_encode_stat(xdr, resp->status))
+         |                                      ~~~~  ^
+   fs/nfsd/nfs2acl.c:282:16: error: no member named 'status' in 'struct nfsd3_accessres'
+     282 |         switch (resp->status) {
+         |                 ~~~~  ^
+   fs/nfsd/nfs2acl.c:284:58: error: no member named 'stat' in 'struct nfsd3_accessres'
+     284 |                 if (!svcxdr_encode_fattr(rqstp, xdr, &resp->fh, &resp->stat))
+         |                                                                  ~~~~  ^
+   fs/nfsd/nfs2acl.c:286:40: error: no member named 'access' in 'struct nfsd3_accessres'
+     286 |                 if (xdr_stream_encode_u32(xdr, resp->access) < 0)
+         |                                                ~~~~  ^
+   15 errors generated.
 
 
-vim +49 arch/arm64/kvm/ptdump.c
+vim +177 fs/nfsd/nfs2acl.c
 
-    27	
-    28	static const struct ptdump_prot_bits stage2_pte_bits[] = {
-    29		{
-    30			.mask	= PTE_VALID,
-    31			.val	= PTE_VALID,
-    32			.set	= " ",
-    33			.clear	= "F",
-    34		},
-    35		{
-    36			.mask	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R,
-    37			.val	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R,
-    38			.set	= "R",
-    39			.clear	= " ",
-    40		},
-    41		{
-    42			.mask	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
-    43			.val	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
-    44			.set	= "W",
-    45			.clear	= " ",
-    46		},
-    47		{
-    48			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
-  > 49			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b00),
-    50			.set	= "px ux ",
-    51		},
-    52		{
-    53			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
-    54			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b01),
-    55			.set	= "PXNux ",
-    56		},
-    57		{
-    58			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
-    59			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b10),
-    60			.set	= "PXNUXN",
-    61		},
-    62		{
-    63			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
-    64			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b11),
-    65			.set	= "px UXN",
-    66		},
-    67		{
-    68			.mask	= KVM_PTE_LEAF_ATTR_LO_S2_AF,
-    69			.val	= KVM_PTE_LEAF_ATTR_LO_S2_AF,
-    70			.set	= "AF",
-    71			.clear	= "  ",
-    72		},
-    73		{
-    74			.mask	= PMD_TYPE_MASK,
-    75			.val	= PMD_TYPE_SECT,
-    76			.set	= "BLK",
-    77			.clear	= "   ",
-    78		},
-    79	};
-    80	
-    81	static int kvm_ptdump_visitor(const struct kvm_pgtable_visit_ctx *ctx,
-    82				      enum kvm_pgtable_walk_flags visit)
-    83	{
-    84		struct ptdump_pg_state *st = ctx->arg;
-    85		struct ptdump_state *pt_st = &st->ptdump;
-    86	
-    87		note_page(pt_st, ctx->addr, ctx->level, ctx->old);
-    88	
-    89		return 0;
-    90	}
-    91	
-    92	static int kvm_ptdump_build_levels(struct ptdump_pg_level *level, u32 start_lvl)
-    93	{
-    94		u32 i;
-    95		u64 mask;
-    96	
-    97		if (WARN_ON_ONCE(start_lvl >= KVM_PGTABLE_LAST_LEVEL))
-    98			return -EINVAL;
-    99	
-   100		mask = 0;
- > 101		for (i = 0; i < ARRAY_SIZE(stage2_pte_bits); i++)
-   102			mask |= stage2_pte_bits[i].mask;
-   103	
-   104		for (i = start_lvl; i < KVM_PGTABLE_MAX_LEVELS; i++) {
-   105			snprintf(level[i].name, sizeof(level[i].name), "%u", i);
-   106	
-   107			level[i].num	= ARRAY_SIZE(stage2_pte_bits);
-   108			level[i].bits	= stage2_pte_bits;
-   109			level[i].mask	= mask;
-   110		}
-   111	
-   112		return 0;
-   113	}
-   114	
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  166  
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  167  /*
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  168   * Check file access
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  169   */
+a6beb73272b4c0 Christoph Hellwig   2017-05-08  170  static __be32 nfsacld_proc_access(struct svc_rqst *rqstp)
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  171  {
+a6beb73272b4c0 Christoph Hellwig   2017-05-08  172  	struct nfsd3_accessargs *argp = rqstp->rq_argp;
+a6beb73272b4c0 Christoph Hellwig   2017-05-08  173  	struct nfsd3_accessres *resp = rqstp->rq_resp;
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  174  
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  175  	dprintk("nfsd: ACCESS(2acl)   %s 0x%x\n",
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  176  			SVCFH_fmt(&argp->fh),
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22 @177  			argp->access);
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  178  
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  179  	fh_copy(&resp->fh, &argp->fh);
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22 @180  	resp->access = argp->access;
+f0af22101d9072 Chuck Lever         2020-10-01 @181  	resp->status = nfsd_access(rqstp, &resp->fh, &resp->access, NULL);
+f0af22101d9072 Chuck Lever         2020-10-01  182  	if (resp->status != nfs_ok)
+f0af22101d9072 Chuck Lever         2020-10-01  183  		goto out;
+f0af22101d9072 Chuck Lever         2020-10-01 @184  	resp->status = fh_getattr(&resp->fh, &resp->stat);
+f0af22101d9072 Chuck Lever         2020-10-01  185  out:
+cc028a10a48c3c Chuck Lever         2020-10-02  186  	return rpc_success;
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  187  }
+a257cdd0e21796 Andreas Gruenbacher 2005-06-22  188  
+
+:::::: The code at line 177 was first introduced by commit
+:::::: a257cdd0e2179630d3201c32ba14d7fcb3c3a055 [PATCH] NFSD: Add server support for NFSv3 ACLs.
+
+:::::: TO: Andreas Gruenbacher <agruen@suse.de>
+:::::: CC: Trond Myklebust <Trond.Myklebust@netapp.com>
 
 -- 
 0-DAY CI Kernel Test Service
