@@ -1,207 +1,365 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1380B1E5B64
-	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 02:59:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9AA2D8DC3;
+	Thu, 27 Nov 2025 04:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764212364; cv=none; b=Gy+bnbLyQjYn4fpiH09dn7X9WOODGrNrzf0TORqNR7puD0o+4CpAFWsDcF3iAqf/+BNLnwl91IFTNLuisCcMLBFLowg4ffJlFxEb2JWeQOnbWYZaeZ2H7Ys4eJ9FCgD4AHbxlLN6b7Cw1D5tWyY0yzcunnMiMjFA2F29CqVCV2U=
+	t=1764218746; cv=none; b=D+zyI5Trq+Ixbi3MloPJXXKHLmXihj+vzEkFcfC4WSOuG7vThSbUoONYEdynFaUZLwX13ysM0uCHBx2JiSv0h/ADou1IsgNfhQ3hVQhHISYVI9BBEihCCkuFPSgf5PEzPWLCCzl/dIjCIQNAaO3h0PSIYeYXYzPOEd0NMpd62BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764212364; c=relaxed/simple;
-	bh=l5vJIz9FULB3IF3xyJAkYtHjoO6hxxwgV77NWFGRO90=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DzsMz8Wd6OD80fLVDsAGyIDTH4GrOBhrCzpDDFFBu2hcKWIGHbNK5mS5hspjQs9rUYIpk0PngTFVX2z6ufRupWOTXw2ppDQdw25OZzlmv2Kx09QNCyiFg6knej7RCAE8jQZjtQWqH1ZqL/A9VHGQ46C299qPLXlIGXYSL3lF1z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=YcRNjqtM; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1764218746; c=relaxed/simple;
+	bh=4e4sMz2bnqizuw+OPTIyMs0kkAhZGNAZBHr1dhXHttY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PTfRYcDevgiBazVGuIB1q/IHo1G4daCODBUGIRfnpRTmLLrMeyunq5WWpBJEDJUq43a8crO8xtIOD/CpCk1AeTehU9ZLsbeadMwD3iUvuMeWncSNIAx5nposcRZSiTHO8R7xHH1L/zb294exojTtGlh6n6tQJ5vLQQ7zjCl+VUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WDA7THmT; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="YcRNjqtM"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=487isU40MkNp22UnH8AvXx5D+tWDbOieleqkxAJexI0=;
-	b=YcRNjqtMl/UunOCOv/oESBegCWwQHLambAX+0EY/y0ACug73VmxqhVPVwUyjkiwd9il62Of30
-	50+K6GuuyfItCkK1T6GIGBGyhuY6q8K5Cb1VFHAKkFEZYpgvSQDwHvJnm8DKBeVT4fSr3LMkYNW
-	Vrv9zRFVuTNnfc6xdfBL0LM=
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4dH1LY0xp7zLlXj;
-	Thu, 27 Nov 2025 10:57:25 +0800 (CST)
-Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 322261402C4;
-	Thu, 27 Nov 2025 10:59:13 +0800 (CST)
-Received: from kwepemq100008.china.huawei.com (7.202.195.91) by
- dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 27 Nov 2025 10:59:13 +0800
-Received: from DESKTOP-DKE2JV6.huawei.com (10.67.110.146) by
- kwepemq100008.china.huawei.com (7.202.195.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 27 Nov 2025 10:59:12 +0800
-From: Liyuan Pang <pangliyuan1@huawei.com>
-To: <linux@armlinux.org.uk>, <nathan@kernel.org>,
-	<nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
-	<justinstitt@google.com>, <nico@fluxnic.net>, <will@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <xieyuanbin1@huawei.com>, <wanqian10@huawei.com>,
-	Liyuan Pang <pangliyuan1@huawei.com>
-Subject: [PATCH] ARM: fix input-only operand modification in load_unaligned_zeropad()
-Date: Thu, 27 Nov 2025 10:58:48 +0800
-Message-ID: <20251127025848.363992-1-pangliyuan1@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WDA7THmT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764218742; x=1795754742;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4e4sMz2bnqizuw+OPTIyMs0kkAhZGNAZBHr1dhXHttY=;
+  b=WDA7THmTaNnCSuGEt1Mp6jiBVr5hiSqxfg2c8XGHbqZjEI5xyiYCZZhY
+   grx7OjdnAQDJWdprw4Iw2ahIDb74A9Rw+h+dMpinrFeSwFfKXWwSOlrvg
+   jtf0c4UG/5Tb5veh2wOzwE6bRmSgrAzFyyVZkLep03zRCo3kDk0fnKi9g
+   MWl/btnnJQ9fHR7KWm0s1pOXwZyHffLPEk9Z+3HL0iTaUtcoCDYFeKdq6
+   swYR6h7MGFirF7mfsLFAA9+C8qzo/c9lk5cBwoWorJIh1lktNqxf++N2+
+   0QPqheaoXVvtRoZdJqv4/rpj6Ah/wjstpYZKT/mVBlLLQ+7j/NoKgeHK9
+   Q==;
+X-CSE-ConnectionGUID: OJCrIN+RSB2PaQTKWSvSiQ==
+X-CSE-MsgGUID: frsmxaM/Rm+fo5663qq54Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="66295429"
+X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
+   d="scan'208";a="66295429"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 20:45:36 -0800
+X-CSE-ConnectionGUID: QWcRPFYTTPy85Nlx4MIpxg==
+X-CSE-MsgGUID: H7yOKsQATq6Q19A1+lAvAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
+   d="scan'208";a="192786005"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1f7de368ad0d) ([10.211.93.152])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Nov 2025 20:45:34 -0800
+Received: from kbuild by 1f7de368ad0d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOTsq-000000001c9-0gxr;
+	Thu, 27 Nov 2025 04:45:32 +0000
+Date: Thu, 27 Nov 2025 05:45:20 +0100
+From: kernel test robot <lkp@intel.com>
+To: David Wei <dw@davidwei.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Nikolay Aleksandrov <razor@blackwall.org>
+Subject: [cilium:pr/netkit-iouring7 2/3] net/core/netdev-genl.c:1133:32:
+ error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_QUEUE_TYPE'; did
+ you mean 'NETDEV_A_QSTATS_QUEUE_TYPE'?
+Message-ID: <202511270549.5KXYjtmP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemq100008.china.huawei.com (7.202.195.91)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In the inline assembly inside load_unaligned_zeropad(), the "addr" is
-constrained as input-only operand. The compiler assumes that on exit
-from the asm statement these operands contain the same values as they
-had before executing the statement, but when kernel page fault happened,
-the assembly fixup code "bic %2 %2, #0x3" modify the value of "addr",
-which may lead to an unexpected behavior.
+tree:   https://github.com/cilium/linux.git pr/netkit-iouring7
+head:   b0485a3422c57df789879678c6373976fb2bd3e0
+commit: 6218b42846f66ccd2de5a208da7fc61390e7d15c [2/3] net: Implement netdev_nl_queue_create_doit
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251127/202511270549.5KXYjtmP-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511270549.5KXYjtmP-lkp@intel.com/reproduce)
 
-Use a temporary variable "tmp" to handle it, instead of modifying the
-input-only operand, just like what arm64's load_unaligned_zeropad()
-does.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511270549.5KXYjtmP-lkp@intel.com/
 
-Fixes: b9a50f74905a ("ARM: 7450/1: dcache: select DCACHE_WORD_ACCESS for little-endian ARMv6+ CPUs")
+All errors (new ones prefixed by >>):
 
-Co-developed-by: Xie Yuanbin <xieyuanbin1@huawei.com>
-Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
-Signed-off-by: Liyuan Pang <pangliyuan1@huawei.com>
----
-Found this problem in linux-6.1.158 with default
-multi_v7_defconfig and setting:
-CONFIG_PREEMPT=y
-CONFIG_DEBUG_ATOMIC_SLEEP=y
-CONFIG_KFENCE=y
-Compiler: Debian clang version 21.1.6 (2)
-Test case:
-```c
+>> net/core/netdev-genl.c:1133:32: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_QUEUE_TYPE'; did you mean 'NETDEV_A_QSTATS_QUEUE_TYPE'?
+    1133 |         if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_QUEUE_TYPE) ||
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                       NETDEV_A_QSTATS_QUEUE_TYPE
+   include/net/genetlink.h:170:58: note: expanded from macro 'GENL_REQ_ATTR_CHECK'
+     170 |         NL_REQ_ATTR_CHECK(__info->extack, NULL, __info->attrs, (attr)); \
+         |                                                                 ^
+   include/linux/netlink.h:201:16: note: expanded from macro 'NL_REQ_ATTR_CHECK'
+     201 |         u32 __attr = (type);                                    \
+         |                       ^
+   include/uapi/linux/netdev.h:170:2: note: 'NETDEV_A_QSTATS_QUEUE_TYPE' declared here
+     170 |         NETDEV_A_QSTATS_QUEUE_TYPE,
+         |         ^
+>> net/core/netdev-genl.c:1134:32: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_SRC_IFINDEX'; did you mean 'NETDEV_A_QUEUE_IFINDEX'?
+    1134 |             GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_SRC_IFINDEX) ||
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                       NETDEV_A_QUEUE_IFINDEX
+   include/net/genetlink.h:170:58: note: expanded from macro 'GENL_REQ_ATTR_CHECK'
+     170 |         NL_REQ_ATTR_CHECK(__info->extack, NULL, __info->attrs, (attr)); \
+         |                                                                 ^
+   include/linux/netlink.h:201:16: note: expanded from macro 'NL_REQ_ATTR_CHECK'
+     201 |         u32 __attr = (type);                                    \
+         |                       ^
+   include/uapi/linux/netdev.h:156:2: note: 'NETDEV_A_QUEUE_IFINDEX' declared here
+     156 |         NETDEV_A_QUEUE_IFINDEX,
+         |         ^
+   net/core/netdev-genl.c:1135:32: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID'; did you mean 'NETDEV_A_QSTATS_QUEUE_ID'?
+    1135 |             GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID) ||
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                       NETDEV_A_QSTATS_QUEUE_ID
+   include/net/genetlink.h:170:58: note: expanded from macro 'GENL_REQ_ATTR_CHECK'
+     170 |         NL_REQ_ATTR_CHECK(__info->extack, NULL, __info->attrs, (attr)); \
+         |                                                                 ^
+   include/linux/netlink.h:201:16: note: expanded from macro 'NL_REQ_ATTR_CHECK'
+     201 |         u32 __attr = (type);                                    \
+         |                       ^
+   include/uapi/linux/netdev.h:171:2: note: 'NETDEV_A_QSTATS_QUEUE_ID' declared here
+     171 |         NETDEV_A_QSTATS_QUEUE_ID,
+         |         ^
+   net/core/netdev-genl.c:1136:32: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_DST_IFINDEX'; did you mean 'NETDEV_A_QUEUE_IFINDEX'?
+    1136 |             GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_DST_IFINDEX))
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                       NETDEV_A_QUEUE_IFINDEX
+   include/net/genetlink.h:170:58: note: expanded from macro 'GENL_REQ_ATTR_CHECK'
+     170 |         NL_REQ_ATTR_CHECK(__info->extack, NULL, __info->attrs, (attr)); \
+         |                                                                 ^
+   include/linux/netlink.h:201:16: note: expanded from macro 'NL_REQ_ATTR_CHECK'
+     201 |         u32 __attr = (type);                                    \
+         |                       ^
+   include/uapi/linux/netdev.h:156:2: note: 'NETDEV_A_QUEUE_IFINDEX' declared here
+     156 |         NETDEV_A_QUEUE_IFINDEX,
+         |         ^
+   net/core/netdev-genl.c:1139:38: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_SRC_IFINDEX'; did you mean 'NETDEV_A_QUEUE_IFINDEX'?
+    1139 |         src_ifidx = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_SRC_IFINDEX]);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             NETDEV_A_QUEUE_IFINDEX
+   include/uapi/linux/netdev.h:156:2: note: 'NETDEV_A_QUEUE_IFINDEX' declared here
+     156 |         NETDEV_A_QUEUE_IFINDEX,
+         |         ^
+   net/core/netdev-genl.c:1140:36: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID'; did you mean 'NETDEV_A_QSTATS_QUEUE_ID'?
+    1140 |         src_qid = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID]);
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                           NETDEV_A_QSTATS_QUEUE_ID
+   include/uapi/linux/netdev.h:171:2: note: 'NETDEV_A_QSTATS_QUEUE_ID' declared here
+     171 |         NETDEV_A_QSTATS_QUEUE_ID,
+         |         ^
+   net/core/netdev-genl.c:1141:38: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_DST_IFINDEX'; did you mean 'NETDEV_A_QUEUE_IFINDEX'?
+    1141 |         dst_ifidx = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_DST_IFINDEX]);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             NETDEV_A_QUEUE_IFINDEX
+   include/uapi/linux/netdev.h:156:2: note: 'NETDEV_A_QUEUE_IFINDEX' declared here
+     156 |         NETDEV_A_QUEUE_IFINDEX,
+         |         ^
+   net/core/netdev-genl.c:1142:35: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_QUEUE_TYPE'; did you mean 'NETDEV_A_QSTATS_QUEUE_TYPE'?
+    1142 |         q_type = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_QUEUE_TYPE]);
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                          NETDEV_A_QSTATS_QUEUE_TYPE
+   include/uapi/linux/netdev.h:170:2: note: 'NETDEV_A_QSTATS_QUEUE_TYPE' declared here
+     170 |         NETDEV_A_QSTATS_QUEUE_TYPE,
+         |         ^
+   net/core/netdev-genl.c:1226:17: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID'; did you mean 'NETDEV_A_QSTATS_QUEUE_ID'?
+    1226 |                                 info->attrs[NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID]);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             NETDEV_A_QSTATS_QUEUE_ID
+   include/linux/netlink.h:150:70: note: expanded from macro 'NL_SET_BAD_ATTR'
+     150 | #define NL_SET_BAD_ATTR(extack, attr) NL_SET_BAD_ATTR_POLICY(extack, attr, NULL)
+         |                                                                      ^
+   include/linux/netlink.h:145:25: note: expanded from macro 'NL_SET_BAD_ATTR_POLICY'
+     145 |                 (extack)->bad_attr = (attr);            \
+         |                                       ^
+   include/uapi/linux/netdev.h:171:2: note: 'NETDEV_A_QSTATS_QUEUE_ID' declared here
+     171 |         NETDEV_A_QSTATS_QUEUE_ID,
+         |         ^
+   net/core/netdev-genl.c:1231:15: error: no member named 'peer' in 'struct netdev_rx_queue'
+    1231 |         if (src_rxq->peer) {
+         |             ~~~~~~~  ^
+   net/core/netdev-genl.c:1239:15: error: no member named 'peer' in 'struct netdev_rx_queue'
+    1239 |         if (tmp_rxq->peer && tmp_rxq->peer->dev != src_dev) {
+         |             ~~~~~~~  ^
+   net/core/netdev-genl.c:1239:32: error: no member named 'peer' in 'struct netdev_rx_queue'
+    1239 |         if (tmp_rxq->peer && tmp_rxq->peer->dev != src_dev) {
+         |                              ~~~~~~~  ^
+   net/core/netdev-genl.c:1246:59: error: too many arguments to function call, expected 1, have 2
+    1246 |         err = dst_dev->queue_mgmt_ops->ndo_queue_create(dst_dev, &dst_qid);
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          ^~~~~~~~
+   net/core/netdev-genl.c:1254:2: error: call to undeclared function 'netdev_rx_queue_peer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1254 |         netdev_rx_queue_peer(src_dev, src_rxq, dst_rxq);
+         |         ^
+   net/core/netdev-genl.c:1256:19: error: use of undeclared identifier 'NETDEV_A_QUEUE_PAIR_DST_QUEUE_ID'; did you mean 'NETDEV_A_QSTATS_QUEUE_ID'?
+    1256 |         nla_put_u32(rsp, NETDEV_A_QUEUE_PAIR_DST_QUEUE_ID, dst_qid);
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                          NETDEV_A_QSTATS_QUEUE_ID
+   include/uapi/linux/netdev.h:171:2: note: 'NETDEV_A_QSTATS_QUEUE_ID' declared here
+     171 |         NETDEV_A_QSTATS_QUEUE_ID,
+--
+>> net/core/netdev_queues.c:30:9: error: call to undeclared function 'netdev_rx_queue_leased'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      30 |         return netdev_rx_queue_leased(dev, idx) ||
+         |                ^
+>> net/core/netdev_queues.c:31:9: error: call to undeclared function 'xsk_get_pool_from_qid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      31 |                xsk_get_pool_from_qid(dev, idx);
+         |                ^
+   2 errors generated.
 
-int main()
-{
-	int ret;
-	char path[4096] = "/tmp";
 
-	for (size_t i = 0; i < 2044; ++i) {
-		strcat(path, "/x");
-		ret = mkdir(path, 0755);
-		assert(ret == 0 || errno == EEXIST);
-	}
-	strcat(path, "/xx");
+vim +1133 net/core/netdev-genl.c
 
-	assert(strlen(path) == 4095);
+  1122	
+  1123	int netdev_nl_queue_create_doit(struct sk_buff *skb, struct genl_info *info)
+  1124	{
+  1125		struct netdev_rx_queue *src_rxq, *dst_rxq, *tmp_rxq;
+  1126		u32 src_ifidx, src_qid, dst_ifidx, dst_qid, q_type;
+  1127		struct net_device *src_dev, *dst_dev;
+  1128		netdevice_tracker dev_tracker;
+  1129		struct sk_buff *rsp;
+  1130		int err = 0;
+  1131		void *hdr;
+  1132	
+> 1133		if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_QUEUE_TYPE) ||
+> 1134		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_SRC_IFINDEX) ||
+  1135		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID) ||
+  1136		    GENL_REQ_ATTR_CHECK(info, NETDEV_A_QUEUE_PAIR_DST_IFINDEX))
+  1137			return -EINVAL;
+  1138	
+  1139		src_ifidx = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_SRC_IFINDEX]);
+  1140		src_qid = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID]);
+  1141		dst_ifidx = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_DST_IFINDEX]);
+  1142		q_type = nla_get_u32(info->attrs[NETDEV_A_QUEUE_PAIR_QUEUE_TYPE]);
+  1143	
+  1144		if (q_type != NETDEV_QUEUE_TYPE_RX) {
+  1145			NL_SET_ERR_MSG(info->extack, "Only binding of RX queue supported");
+  1146			return -EINVAL;
+  1147		}
+  1148		if (dst_ifidx == src_ifidx) {
+  1149			NL_SET_ERR_MSG(info->extack,
+  1150				       "Destination driver cannot be same as source driver");
+  1151			return -EINVAL;
+  1152		}
+  1153	
+  1154		rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+  1155		if (!rsp)
+  1156			return -ENOMEM;
+  1157	
+  1158		hdr = genlmsg_iput(rsp, info);
+  1159		if (!hdr) {
+  1160			err = -EMSGSIZE;
+  1161			goto err_genlmsg_free;
+  1162		}
+  1163	
+  1164		/* Locking order is always from the virtual to the physical device
+  1165		 * since this is also the same order when applications open the
+  1166		 * memory provider later on.
+  1167		 */
+  1168		dst_dev = netdev_get_by_index_lock(genl_info_net(info), dst_ifidx);
+  1169		if (!dst_dev) {
+  1170			err = -ENODEV;
+  1171			goto err_genlmsg_free;
+  1172		}
+  1173		if (dst_dev->dev.parent) {
+  1174			err = -EINVAL;
+  1175			NL_SET_ERR_MSG(info->extack,
+  1176				       "Destination device is not a virtual device");
+  1177			goto err_unlock_dst_dev;
+  1178		}
+  1179		if (!dst_dev->queue_mgmt_ops ||
+  1180		    !dst_dev->queue_mgmt_ops->ndo_queue_create) {
+  1181			err = -EOPNOTSUPP;
+  1182			NL_SET_ERR_MSG(info->extack,
+  1183				       "Destination driver does not support queue management operations");
+  1184			goto err_unlock_dst_dev;
+  1185		}
+  1186		if (dst_dev->real_num_rx_queues < 1) {
+  1187			err = -EINVAL;
+  1188			NL_SET_ERR_MSG(info->extack,
+  1189				       "Destination device must have at least one real RX queue");
+  1190			goto err_unlock_dst_dev;
+  1191		}
+  1192	
+  1193		src_dev = netdev_get_by_index(genl_info_net(info), src_ifidx,
+  1194					      &dev_tracker, GFP_KERNEL);
+  1195		if (!src_dev) {
+  1196			err = -ENODEV;
+  1197			goto err_unlock_dst_dev;
+  1198		}
+  1199		if (!src_dev->dev.parent) {
+  1200			err = -EINVAL;
+  1201			NL_SET_ERR_MSG(info->extack,
+  1202				       "Source device is a virtual device");
+  1203			goto err_unlock_dst_dev_src_dev_put;
+  1204		}
+  1205		if (!netif_device_present(src_dev)) {
+  1206			err = -ENODEV;
+  1207			NL_SET_ERR_MSG(info->extack,
+  1208				       "Source device has been removed from the system");
+  1209			goto err_unlock_dst_dev_src_dev_put;
+  1210		}
+  1211		if (!src_dev->queue_mgmt_ops) {
+  1212			err = -EOPNOTSUPP;
+  1213			NL_SET_ERR_MSG(info->extack,
+  1214				       "Source driver does not support queue management operations");
+  1215			goto err_unlock_dst_dev_src_dev_put;
+  1216		}
+  1217	
+  1218		src_dev = netdev_put_lock(src_dev, &dev_tracker);
+  1219		if (!src_dev) {
+  1220			err = -ENODEV;
+  1221			goto err_unlock_dst_dev;
+  1222		}
+  1223		if (src_qid >= src_dev->real_num_rx_queues) {
+  1224			err = -ERANGE;
+  1225			NL_SET_BAD_ATTR(info->extack,
+  1226					info->attrs[NETDEV_A_QUEUE_PAIR_SRC_QUEUE_ID]);
+  1227			goto err_unlock_src_dev;
+  1228		}
+  1229	
+  1230		src_rxq = __netif_get_rx_queue(src_dev, src_qid);
+  1231		if (src_rxq->peer) {
+  1232			err = -EBUSY;
+  1233			NL_SET_ERR_MSG(info->extack,
+  1234				       "Source device queue is already bound");
+  1235			goto err_unlock_src_dev;
+  1236		}
+  1237	
+  1238		tmp_rxq = __netif_get_rx_queue(dst_dev, dst_dev->real_num_rx_queues - 1);
+  1239		if (tmp_rxq->peer && tmp_rxq->peer->dev != src_dev) {
+  1240			err = -EOPNOTSUPP;
+  1241			NL_SET_ERR_MSG(info->extack,
+  1242				       "Binding multiple queues from different source devices not supported");
+  1243			goto err_unlock_src_dev;
+  1244		}
+  1245	
+  1246		err = dst_dev->queue_mgmt_ops->ndo_queue_create(dst_dev, &dst_qid);
+  1247		if (err) {
+  1248			NL_SET_ERR_MSG(info->extack,
+  1249				       "Destination device is unable to create a new queue");
+  1250			goto err_unlock_src_dev;
+  1251		}
+  1252	
+  1253		dst_rxq = __netif_get_rx_queue(dst_dev, dst_qid);
+  1254		netdev_rx_queue_peer(src_dev, src_rxq, dst_rxq);
+  1255	
+  1256		nla_put_u32(rsp, NETDEV_A_QUEUE_PAIR_DST_QUEUE_ID, dst_qid);
+  1257		genlmsg_end(rsp, hdr);
+  1258	
+  1259		netdev_unlock(src_dev);
+  1260		netdev_unlock(dst_dev);
+  1261	
+  1262		return genlmsg_reply(rsp, info);
+  1263	
+  1264	err_unlock_dst_dev_src_dev_put:
+  1265		netdev_put(src_dev, &dev_tracker);
+  1266		goto err_unlock_dst_dev;
+  1267	err_unlock_src_dev:
+  1268		netdev_unlock(src_dev);
+  1269	err_unlock_dst_dev:
+  1270		netdev_unlock(dst_dev);
+  1271	err_genlmsg_free:
+  1272		nlmsg_free(rsp);
+  1273		return err;
+  1274	}
+  1275	
 
-	while (1) {
-		FILE *fp = fopen(path, "wb+");
-
-		if (!fp) {
-			perror("open failed:");
-			exit(1);
-		}
-		fclose(fp);
-	}
-	return 0;
-}
-```
-Soon, file open operations will unexpectedly fail
-with -EISDIR error, even if the file does exist.
-```Log:
-root@(none):/# /root/a.out
-[   39.994968] BUG: sleeping function called from invalid context at mm/memory.c:5323
-[   39.995203] in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 62, name: a.out
-[   39.995531] preempt_count: 0, expected: 0
-[   39.995682] RCU nest depth: 1, expected: 0
-[   39.996039] CPU: 0 PID: 62 Comm: a.out Not tainted 6.1.158 #2
-[   39.996299] Hardware name: Generic DT based system
-[   39.996620]  unwind_backtrace from show_stack+0x10/0x14
-[   39.997241]  show_stack from dump_stack_lvl+0x38/0x44
-[   39.997460]  dump_stack_lvl from __might_resched+0x15c/0x170
-[   39.997624]  __might_resched from lock_mm_and_find_vma+0x80/0x178
-[   39.997785]  lock_mm_and_find_vma from do_page_fault+0x13c/0x33c
-[   39.998151]  do_page_fault from do_DataAbort+0x3c/0xb4
-[   39.998289]  do_DataAbort from __dabt_svc+0x4c/0x80
-[   39.998506] Exception stack(0xf8bd1d88 to 0xf8bd1dd0)
-[   39.998769] 1d80:                   c2ec4e58 c2eb1e88 00000000 00000080 eed39740 00000001
-[   39.999113] 1da0: 00007fff c1c21288 eedf1ffd 80808080 fefefeff f8bd1e80 2f2f2f2f f8bd1dd8
-[   39.999919] 1dc0: c0501bac c0501bfc 60000013 ffffffff
-[   40.000128]  __dabt_svc from link_path_walk+0x12c/0x49c
-[   40.000254]  link_path_walk from path_openat+0x80/0xb80
-[   40.000337]  path_openat from do_filp_open+0x84/0x118
-[   40.000622]  do_filp_open from do_sys_openat2+0x98/0x18c
-[   40.000727]  do_sys_openat2 from sys_openat+0x80/0xa0
-[   40.000908]  sys_openat from ret_fast_syscall+0x0/0x54
-[   40.001048] Exception stack(0xf8bd1fa8 to 0xf8bd1ff0)
-[   40.001304] 1fa0:                   00000000 00000000 ffffff9c bea0bd30 00000242 000001b6
-[   40.001644] 1fc0: 00000000 00000000 00000242 00000142 00027529 00000002 00000002 00000000
-[   40.001961] 1fe0: 00000001 bea0bc40 0006d0e8 0006d178
-open failed:: Is a directory
-```
-The warning was caused by another issue:
-Link: https://lore.kernel.org/20251126090505.3057219-1-wozizhi@huaweicloud.com
-which is unrelated to this patch. Please ignore it.
-
-The reason is that, in link_path_walk:
-1. Before calling hash_name(), the @name variable store in r8 and
-the address is 0xeead0ffd, which points to the string "xx".
-2. During the execution of hash_name()->load_unaligned_zeropad(),
-loading unsigned long from 0xeead0ffd triggers a page fault on
-address 0xeead1000, then in fixup code "bic r8, r8, #0x3" change
-r8's value to 0xeead0ffc.
-3. After hash_name() returns, subsequent code continues to use r8
-as the address of @name which is now the incorrect address 0xeead0ffc
-pointing to the string "/xx".
-4. Finally, in open_last_lookups, following check fails because
-nd->last.name is now "/xx" instead of "xx".
-```
-		if (unlikely(nd->last.name[nd->last.len]))
-			return ERR_PTR(-EISDIR);
-```
-
- arch/arm/include/asm/word-at-a-time.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm/include/asm/word-at-a-time.h b/arch/arm/include/asm/word-at-a-time.h
-index f9a3897b06e7..5023f98d8293 100644
---- a/arch/arm/include/asm/word-at-a-time.h
-+++ b/arch/arm/include/asm/word-at-a-time.h
-@@ -67,7 +67,7 @@ static inline unsigned long find_zero(unsigned long mask)
-  */
- static inline unsigned long load_unaligned_zeropad(const void *addr)
- {
--	unsigned long ret, offset;
-+	unsigned long ret, tmp;
- 
- 	/* Load word from unaligned pointer addr */
- 	asm(
-@@ -75,9 +75,9 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
- 	"2:\n"
- 	"	.pushsection .text.fixup,\"ax\"\n"
- 	"	.align 2\n"
--	"3:	and	%1, %2, #0x3\n"
--	"	bic	%2, %2, #0x3\n"
--	"	ldr	%0, [%2]\n"
-+	"3:	bic	%1, %2, #0x3\n"
-+	"	ldr	%0, [%1]\n"
-+	"	and	%1, %2, #0x3\n"
- 	"	lsl	%1, %1, #0x3\n"
- #ifndef __ARMEB__
- 	"	lsr	%0, %0, %1\n"
-@@ -90,7 +90,7 @@ static inline unsigned long load_unaligned_zeropad(const void *addr)
- 	"	.align	3\n"
- 	"	.long	1b, 3b\n"
- 	"	.popsection"
--	: "=&r" (ret), "=&r" (offset)
-+	: "=&r" (ret), "=&r" (tmp)
- 	: "r" (addr), "Qo" (*(unsigned long *)addr));
- 
- 	return ret;
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
