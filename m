@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196222C08C0;
-	Thu, 27 Nov 2025 20:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6868729ACD7;
+	Thu, 27 Nov 2025 21:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764273711; cv=none; b=j51O/41Yd7EBdzciuRt9jlxvd+yK851V+teRQWV8zHICVjuJPbvE3QeKpzPupOKtS3a7zoyEJ4phLnd3zOMH+xWgh6mhe48F6avp2ef9iHOazSETaDJvAGcQ+yrnJNWMs37cM7sm3q1aIa/4I7nY6MsBTst/JRKwnJiqWx1C49w=
+	t=1764278197; cv=none; b=hi7P636js+0M+Bk2tLzDgpvrZwl5WlRPoxX6Ul9YtZLRNwi+vpyDYSJC7N/XZS8Q67BuxJrNDooSmeoYZqijxtUzQ5rPbhbJoctHj5b+LO0mvHZEzqIynQybw9jWlgmnQV9Rw6lqHzn2EhZrTjR8uG5oBaY80P9hUGHJdedSYSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764273711; c=relaxed/simple;
-	bh=NhLtvRlgRkk8b/SUPoYrU3x8hszh3kUTrFE2znwJD3s=;
+	s=arc-20240116; t=1764278197; c=relaxed/simple;
+	bh=neIg4/UrNIFPZj3GFDmJU4G/zUf2VCq3c7srWF3tzf8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oKEecwOhcuOixbgp0wWj0wYvuixBWkXk8FTrU0+dWOdKa5r0ALFK/Lnrw4AKc6OALbsT0b6x05kQv7DuRb820ySKD8vninyTiaCOnAfpHsXTeXdVsVuXQ4QCgwnvV1TAiQx4hV4SEnNutXb3fFKxdQs7wpAt7Xs0ZRoIcw6VbLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QbrkSNf6; arc=none smtp.client-ip=198.175.65.14
+	 Content-Disposition; b=De7xKGkEKjZhbC6ZrHFMR872BtpAJ533tbtmDtq8O2yYWggH/ahtgZey3rhAkXxELpMME80ie3O2PCPesYaGmjGeLmRpHYopvmeslPmaNJtgqSCj/cNhXnOta4hciYLK4U69Bf26J5C+7WZTYixTMBUnAaLUyiQJ2Nown7KFiRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OKGD1kXA; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QbrkSNf6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OKGD1kXA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764273710; x=1795809710;
+  t=1764278195; x=1795814195;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NhLtvRlgRkk8b/SUPoYrU3x8hszh3kUTrFE2znwJD3s=;
-  b=QbrkSNf6haRlHcrfuqe/1/oTZzu3aq7Xt5BcVSalqy5UtxZWSqZt+lXN
-   F9o1f0K75QVlmMm/Ccc16ikqCQUA6J4SHI7dhsI75qsa05wFqu89nlsf9
-   ETcnUl7H3Ozv/SmyFlC8V+TRwbm5/ZQeSz9iMf2WGEpzHQBX32SzLUI8I
-   oE0WUbFmEb8UKscJ8TOyrDXyZLNi1lsf0sK5dG2b8fPCRXvaa7IX/3Yrz
-   3jzA4OyCKUq9DJFaU+9RlfGQbix7yUFjI0EStgfjTGL3fHERdWB2HxLSC
-   HN0hhj9fi9o3bGCsmB+45jJJ6sigBvgc6YIIpiI2qaNhi1YQSyWeGXmjU
-   g==;
-X-CSE-ConnectionGUID: Dg8s/fkwRdys1dnVeTsiCw==
-X-CSE-MsgGUID: gRKjA5BNRuaAT3ILDpMidQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="70186367"
-X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="70186367"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 12:01:47 -0800
-X-CSE-ConnectionGUID: suzrXYCwQfyuC9hx1oy0pw==
-X-CSE-MsgGUID: usD33ZY6RI++hLZif8paqw==
+  bh=neIg4/UrNIFPZj3GFDmJU4G/zUf2VCq3c7srWF3tzf8=;
+  b=OKGD1kXAS5pGfF95IRZXnlE0acagNNpnAIgAFOVHwa+xUH+dwKNuDEwz
+   kT3gXGSUdiWxVpRJZlRBvkdEUX4nW9EArKAuqHOrtqaEEqYuy5tLqwCto
+   akBDjRnfPOR6wfn7xHA1Hf1DaiN1oNr5RCICpblMygaQ7uhmeTKK2FQDS
+   B3ZM1xxQYitAdmfHVYtsCFfhZl6vWJKqGnjM5gnsBTFRTAP7piHaonO35
+   cJs1v6gc3KsrfXYlZTdxVAgxdPJngiWftKhhR8pCQdBKy79dQG+4sgoml
+   EN7D/lunxPIUuHOAMnHxJ5DqQ2uHyUxrY5gpgjDnXE3OSS9cwAyhhevnm
+   w==;
+X-CSE-ConnectionGUID: I3YLT3E0TKSRcY3OvKp3aA==
+X-CSE-MsgGUID: OYg9yVbBTUSNDCvPpyWl5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66354078"
+X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
+   d="scan'208";a="66354078"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 13:16:35 -0800
+X-CSE-ConnectionGUID: 1Y51xhXIRSu8O3aM1pVNuw==
+X-CSE-MsgGUID: GxJ9SFcwQr6sysxpw/hhMQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="197781320"
-Received: from igk-lkp-server01.igk.intel.com (HELO 1f7de368ad0d) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 27 Nov 2025 12:01:45 -0800
-Received: from kbuild by 1f7de368ad0d with local (Exim 4.98.2)
+X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
+   d="scan'208";a="193110608"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 27 Nov 2025 13:16:34 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOiBS-000000001pl-2i8F;
-	Thu, 27 Nov 2025 20:01:42 +0000
-Date: Thu, 27 Nov 2025 21:00:58 +0100
+	id 1vOjLr-000000005h1-1At8;
+	Thu, 27 Nov 2025 21:16:31 +0000
+Date: Fri, 28 Nov 2025 05:15:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Wei <dw@davidwei.uk>
+To: Oliver Upton <oupton@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: [cilium:pr/netkit-iouring6 2/2] net/core/netdev_rx_queue.c:21:6:
- warning: no previous prototype for function 'netdev_rx_queue_peer'
-Message-ID: <202511272127.HJ4NxkVL-lkp@intel.com>
+	Marc Zyngier <maz@kernel.org>
+Subject: [linux-next:master 11230/12398] arch/arm64/kvm/ptdump.c:49:10:
+ error: statement expression not allowed at file scope
+Message-ID: <202511280532.8GWko1r4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,127 +63,152 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/cilium/linux.git pr/netkit-iouring6
-head:   7bfb4fc5f460441d05b483647e4f4c59c4afaeb1
-commit: 7bfb4fc5f460441d05b483647e4f4c59c4afaeb1 [2/2] net: Implement netdev_nl_bind_queue_doit
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251127/202511272127.HJ4NxkVL-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ef68bf704646690aba5e81c2f7be8d6ef13d7ad8
+commit: 81e9fe5c6f25dda9090697deee6f7aa8ac7ea84a [11230/12398] KVM: arm64: Teach ptdump about FEAT_XNX permissions
+config: arm64-randconfig-002-20251128 (https://download.01.org/0day-ci/archive/20251128/202511280532.8GWko1r4-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511272127.HJ4NxkVL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511280532.8GWko1r4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511272127.HJ4NxkVL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511280532.8GWko1r4-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the linux-next/master HEAD ef68bf704646690aba5e81c2f7be8d6ef13d7ad8 builds fine.
+      It may have been fixed somewhere.
 
->> net/core/netdev_rx_queue.c:21:6: warning: no previous prototype for function 'netdev_rx_queue_peer' [-Wmissing-prototypes]
-      21 | void netdev_rx_queue_peer(struct net_device *src_dev,
-         |      ^
-   net/core/netdev_rx_queue.c:21:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      21 | void netdev_rx_queue_peer(struct net_device *src_dev,
-         | ^
-         | static 
->> net/core/netdev_rx_queue.c:34:6: warning: no previous prototype for function 'netdev_rx_queue_unpeer' [-Wmissing-prototypes]
-      34 | void netdev_rx_queue_unpeer(struct net_device *src_dev,
-         |      ^
-   net/core/netdev_rx_queue.c:34:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      34 | void netdev_rx_queue_unpeer(struct net_device *src_dev,
-         | ^
-         | static 
-   net/core/netdev_rx_queue.c:55:11: error: no member named 'peer' in 'struct netdev_rx_queue'
-      55 |         if (rxq->peer) {
-         |             ~~~  ^
-   net/core/netdev_rx_queue.c:58:14: error: no member named 'peer' in 'struct netdev_rx_queue'
-      58 |                 rxq = rxq->peer;
-         |                       ~~~  ^
->> net/core/netdev_rx_queue.c:66:1: warning: no previous prototype for function 'netif_get_rx_queue_peer_locked' [-Wmissing-prototypes]
-      66 | netif_get_rx_queue_peer_locked(struct net_device **dev, unsigned int *rxq_idx)
-         | ^
-   net/core/netdev_rx_queue.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      65 | struct netdev_rx_queue *
-         | ^
-         | static 
->> net/core/netdev_rx_queue.c:81:6: warning: no previous prototype for function 'netif_put_rx_queue_peer_locked' [-Wmissing-prototypes]
-      81 | void netif_put_rx_queue_peer_locked(struct net_device *orig_dev,
-         |      ^
-   net/core/netdev_rx_queue.c:81:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      81 | void netif_put_rx_queue_peer_locked(struct net_device *orig_dev,
-         | ^
-         | static 
-   4 warnings and 2 errors generated.
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/kvm/ptdump.c:49:10: error: statement expression not allowed at file scope
+      49 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b00),
+         |                           ^
+   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
+     114 |         ({                                                              \
+         |         ^
+   arch/arm64/kvm/ptdump.c:54:10: error: statement expression not allowed at file scope
+      54 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b01),
+         |                           ^
+   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
+     114 |         ({                                                              \
+         |         ^
+   arch/arm64/kvm/ptdump.c:59:10: error: statement expression not allowed at file scope
+      59 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b10),
+         |                           ^
+   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
+     114 |         ({                                                              \
+         |         ^
+   arch/arm64/kvm/ptdump.c:64:10: error: statement expression not allowed at file scope
+      64 |                 .val    = FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b11),
+         |                           ^
+   include/linux/bitfield.h:114:2: note: expanded from macro 'FIELD_PREP'
+     114 |         ({                                                              \
+         |         ^
+>> arch/arm64/kvm/ptdump.c:101:18: error: invalid application of 'sizeof' to an incomplete type 'const struct ptdump_prot_bits[]'
+     101 |         for (i = 0; i < ARRAY_SIZE(stage2_pte_bits); i++)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   arch/arm64/kvm/ptdump.c:107:18: error: invalid application of 'sizeof' to an incomplete type 'const struct ptdump_prot_bits[]'
+     107 |                 level[i].num    = ARRAY_SIZE(stage2_pte_bits);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   6 errors generated.
 
 
-vim +/netdev_rx_queue_peer +21 net/core/netdev_rx_queue.c
+vim +49 arch/arm64/kvm/ptdump.c
 
-    20	
-  > 21	void netdev_rx_queue_peer(struct net_device *src_dev,
-    22				  struct netdev_rx_queue *src_rxq,
-    23				  struct netdev_rx_queue *dst_rxq)
-    24	{
-    25		netdev_assert_locked(src_dev);
-    26		netdev_assert_locked(dst_rxq->dev);
     27	
-    28		netdev_hold(src_dev, &src_rxq->lease_tracker, GFP_KERNEL);
-    29	
-    30		WRITE_ONCE(src_rxq->lease, dst_rxq);
-    31		WRITE_ONCE(dst_rxq->lease, src_rxq);
-    32	}
-    33	
-  > 34	void netdev_rx_queue_unpeer(struct net_device *src_dev,
-    35				    struct netdev_rx_queue *src_rxq,
-    36				    struct netdev_rx_queue *dst_rxq)
-    37	{
-    38		WARN_ON_ONCE(READ_ONCE(dst_rxq->dev->reg_state) != NETREG_UNREGISTERING);
-    39	
-    40		netdev_assert_locked(dst_rxq->dev);
-    41		netdev_assert_locked(src_dev);
-    42	
-    43		WRITE_ONCE(src_rxq->lease, NULL);
-    44		WRITE_ONCE(dst_rxq->lease, NULL);
-    45	
-    46		netdev_put(src_dev, &src_rxq->lease_tracker);
-    47	}
-    48	
-    49	static struct netdev_rx_queue *
-    50	__netif_get_rx_queue_peer(struct net_device **dev, unsigned int *rxq_idx)
-    51	{
-    52		struct net_device *orig_dev = *dev;
-    53		struct netdev_rx_queue *rxq = __netif_get_rx_queue(orig_dev, *rxq_idx);
-    54	
-  > 55		if (rxq->peer) {
-    56			if (orig_dev->dev.parent)
-    57				return NULL;
-    58			rxq = rxq->peer;
-    59			*rxq_idx = get_netdev_rx_queue_index(rxq);
-    60			*dev = rxq->dev;
-    61		}
-    62		return rxq;
-    63	}
-    64	
-    65	struct netdev_rx_queue *
-  > 66	netif_get_rx_queue_peer_locked(struct net_device **dev, unsigned int *rxq_idx)
-    67	{
-    68		struct net_device *orig_dev = *dev;
-    69		struct netdev_rx_queue *rxq;
-    70	
-    71		/* Locking order is always from the virtual to the physical device
-    72		 * see netdev_nl_bind_queue_doit().
-    73		 */
-    74		netdev_ops_assert_locked(orig_dev);
-    75		rxq = __netif_get_rx_queue_peer(dev, rxq_idx);
-    76		if (rxq && orig_dev != *dev)
-    77			netdev_lock(*dev);
-    78		return rxq;
-    79	}
+    28	static const struct ptdump_prot_bits stage2_pte_bits[] = {
+    29		{
+    30			.mask	= PTE_VALID,
+    31			.val	= PTE_VALID,
+    32			.set	= " ",
+    33			.clear	= "F",
+    34		},
+    35		{
+    36			.mask	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R,
+    37			.val	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R,
+    38			.set	= "R",
+    39			.clear	= " ",
+    40		},
+    41		{
+    42			.mask	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
+    43			.val	= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
+    44			.set	= "W",
+    45			.clear	= " ",
+    46		},
+    47		{
+    48			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
+  > 49			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b00),
+    50			.set	= "px ux ",
+    51		},
+    52		{
+    53			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
+    54			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b01),
+    55			.set	= "PXNux ",
+    56		},
+    57		{
+    58			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
+    59			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b10),
+    60			.set	= "PXNUXN",
+    61		},
+    62		{
+    63			.mask	= KVM_PTE_LEAF_ATTR_HI_S2_XN,
+    64			.val	= FIELD_PREP(KVM_PTE_LEAF_ATTR_HI_S2_XN, 0b11),
+    65			.set	= "px UXN",
+    66		},
+    67		{
+    68			.mask	= KVM_PTE_LEAF_ATTR_LO_S2_AF,
+    69			.val	= KVM_PTE_LEAF_ATTR_LO_S2_AF,
+    70			.set	= "AF",
+    71			.clear	= "  ",
+    72		},
+    73		{
+    74			.mask	= PMD_TYPE_MASK,
+    75			.val	= PMD_TYPE_SECT,
+    76			.set	= "BLK",
+    77			.clear	= "   ",
+    78		},
+    79	};
     80	
-  > 81	void netif_put_rx_queue_peer_locked(struct net_device *orig_dev,
-    82					    struct net_device *dev)
+    81	static int kvm_ptdump_visitor(const struct kvm_pgtable_visit_ctx *ctx,
+    82				      enum kvm_pgtable_walk_flags visit)
     83	{
-    84		if (orig_dev != dev)
-    85			netdev_unlock(dev);
-    86	}
-    87	
+    84		struct ptdump_pg_state *st = ctx->arg;
+    85		struct ptdump_state *pt_st = &st->ptdump;
+    86	
+    87		note_page(pt_st, ctx->addr, ctx->level, ctx->old);
+    88	
+    89		return 0;
+    90	}
+    91	
+    92	static int kvm_ptdump_build_levels(struct ptdump_pg_level *level, u32 start_lvl)
+    93	{
+    94		u32 i;
+    95		u64 mask;
+    96	
+    97		if (WARN_ON_ONCE(start_lvl >= KVM_PGTABLE_LAST_LEVEL))
+    98			return -EINVAL;
+    99	
+   100		mask = 0;
+ > 101		for (i = 0; i < ARRAY_SIZE(stage2_pte_bits); i++)
+   102			mask |= stage2_pte_bits[i].mask;
+   103	
+   104		for (i = start_lvl; i < KVM_PGTABLE_MAX_LEVELS; i++) {
+   105			snprintf(level[i].name, sizeof(level[i].name), "%u", i);
+   106	
+   107			level[i].num	= ARRAY_SIZE(stage2_pte_bits);
+   108			level[i].bits	= stage2_pte_bits;
+   109			level[i].mask	= mask;
+   110		}
+   111	
+   112		return 0;
+   113	}
+   114	
 
 -- 
 0-DAY CI Kernel Test Service
