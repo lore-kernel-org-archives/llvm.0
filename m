@@ -1,127 +1,135 @@
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8272BE032
-	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 09:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839B32D7DF3;
+	Thu, 27 Nov 2025 09:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764234161; cv=none; b=E1TTXi2MNozPRCx9+SioAaZCDIcNhtCXeW70Z07FNWyYh0c2bUJ94sgQp+n3O77drY+WDLaAPZfSmSUOL9qopfwtXZaUsfFzeyuBue+uPxCd/Ha1AxTEWHwXmyXurpGb5SP8ek6BOCIl9WXJY3h640JbWdhHoePyXzgm9CpXhUw=
+	t=1764235513; cv=none; b=Col4a5kACwETRomGjlMjxm0WUjbTeKn0arTY9oQ891gmhmm90AUfzFYvKl0/Vape86ceacRFbDg89D2FfrS8fzzV764B9TwRunXjfNnTJ+dE5KPdd+513sniIrcLeKnRkYBkOPDuyRbTQasnGF1SRI8+VjnR5GtCYMxa4owkwBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764234161; c=relaxed/simple;
-	bh=wBnN8Y419gYK57sA8+xqXwDBtmsISzDIBeFML/t6rWQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ITtRkbj1wRbtt95LzePTNYb6YVtaGptHo4ut/em2zJutmizRotdCZCFATdwDkje8o2nIgxaBT4/fbnzfzhOtpcAjCbIun7rAQ2ANBxkbrSYLp9u75seZHkkzpcQZFPL0HXvBk+8JpCoXU4votZTuOQyYdtlGP7MfTcTANWjs3nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-935134ef989so381516241.3
-        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 01:02:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764234158; x=1764838958;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YSY12wujyQqkN0s0ZCmyYYswJOo3iF7QtRvGpJcpmMY=;
-        b=bEg0w7cEs7NQD+WHxw+JJCdtrzRigbVROc37Jf/mKxB9pqKoyRGFi2CnlQqCsEROO+
-         dvsBpomQwTOyIqN7aCTIM7MwYTQ6bFI7gUrDFyVkAzuNY6E01SOZLCjwqKfuBZioSXwn
-         qrUJobWVv7C8wsmy45WwXK4ezU9GcpIujQz7j3zNOxsXZdp3zvZEI8rm1wl3sE6+U/+M
-         MAXID482PJ+4LR1wGF+CG2q206xfgI6sf9J6uBhzAl7qefyolbhXf4WCV+dvHDI53OvE
-         ogPdKnDrNtk1lPkQmB95TZzSi7TJbAVQBVBKCh7beFxreJEvYYNDSJ+7xO0lVw5jdhJD
-         +llg==
-X-Forwarded-Encrypted: i=1; AJvYcCVtWYJAHB8BULjEz+old6Pj3OHL+4e2j6Ijk7gm17aUIn2aFmCvsrI7zivZfD+EtKsDmV7g@lists.linux.dev
-X-Gm-Message-State: AOJu0YxZ7K5tHnF8DICuj0Ri3/iEDjfLIofvuQC9eInvCdoyi/iciWwk
-	8BTV/lJijQKPvoG+M7Efce5WwDjPQLE3bfObZbmKGhmdTaNWkN2W2lVQ2lFnQKMq
-X-Gm-Gg: ASbGnctKwvyVCwGPMPgK/PZQ4LK13iQt51MtblHT/rSRTn7EDIao6TF7NZ0w5MCrG9L
-	sGBZvJOKAQXsb1vGJDLvG2bvbIJR4hrp65qJ1EH6lhpqvGy2qgrUymSvmD3q9UKKD08fUqgixsl
-	Mq1AcO5r43bZHxVCkE/8yg55XLaSRzHmK66uPxDIDyn1pIIqoxC4ITgZ6uwcMzjiuMlgNaBBVz1
-	g5ec3x2DMj5LIEOg0clEo9QgppQ9cbYPNLbDH4ezywF9OxSfyroR49P7F2Iubuck26sMh8oxW/g
-	zLtpA5oWbjqaCF31iYIBYRRADIT6Frf95k1heNKbEVxzA0Z2QBqib+P2JKMu0PQ0MEZNjtjh9Ni
-	2m180oZ1PjXzQMQr/gUl53TjuLkwRsxMEWADQ2Gw179T+XUei1LxCGPtavj2Owi0OYboPxK5pCO
-	Iaweze8IA21HskJBFH5CVwsdzXl2WY4u/St0Xirw/zIBuArMWaBxQtfWaZKpo=
-X-Google-Smtp-Source: AGHT+IFEQPUJhr75mrIT8d/AUV94DcjdDMD4vnqWVIp4nBBlDcydWfr74ksL3UWrZlmoNUl5sj/+gQ==
-X-Received: by 2002:a05:6102:b06:b0:5df:ae62:fc25 with SMTP id ada2fe7eead31-5e1de00dcbemr7573780137.8.1764234158043;
-        Thu, 27 Nov 2025 01:02:38 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5e24d94f2d2sm296441137.8.2025.11.27.01.02.37
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Nov 2025 01:02:37 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-5e18598b9b1so448401137.0
-        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 01:02:37 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWWpdkebiVgObrXwepSDRTg/lFdqlOPAQBXxYfosOiYXUD/KvJlSgYsy5a6DVthVhF1kMp2@lists.linux.dev
-X-Received: by 2002:a67:e108:0:b0:5df:c33d:6e54 with SMTP id
- ada2fe7eead31-5e1de0099d7mr8404976137.3.1764234157141; Thu, 27 Nov 2025
- 01:02:37 -0800 (PST)
+	s=arc-20240116; t=1764235513; c=relaxed/simple;
+	bh=4kHDwtBoKeq4CzQVsg540iQXr0GbZmTfHhbXN9Au/pM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=azyqtChggJRV7tjHQn/yr6ZDcbfcMp0FM6AAv7LOJOIA3wglUSMoQYLkqmaPny9HpBhsKRV88MXTmirFG7OLWOoKpbVCLROHnrlUGUfETCk8mL+C3e9Yx1bX2NOYKRUcO4YrtzgLq51HOQfjA+pw9bnnPe/MSqREjfshA1Hp/cU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TSAcX1jq; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TSAcX1jq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764235512; x=1795771512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4kHDwtBoKeq4CzQVsg540iQXr0GbZmTfHhbXN9Au/pM=;
+  b=TSAcX1jqB5CNlec2qpBHGiymREV33EB2VoHcdvLf9UOgeM+6vZlpfclP
+   EHAdBTiTC6WwPUlMwhq7LiIrWwPm4pXVqyD9SYJDcuV5RXwKZNK+X2gTD
+   ptzdAflUliEaOdJE45CSRXsGJ55NT3LavIIFCokh1Ph9TMHjyfDmpWQmC
+   +dlOx8nHYHhbhlnz69AgpaIbSEzsaw+paSdvk1K1qJasb7ZuCF9CN6uTY
+   dIWn5jtyQgRobX22xqjD3BMAFstmhsoRq4tcPDNi8lAZi5AdTp4/itIQp
+   bFcp7AeIuR3w2w0h/r30WMhyPWDwgZiEujGMqqPBN2JyjtAhhsnrqD/5a
+   Q==;
+X-CSE-ConnectionGUID: nGWNGhnOQYK5SPvrbMPr4A==
+X-CSE-MsgGUID: Q58KbtdVQk2mx1tm3VTDgg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="66226406"
+X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
+   d="scan'208";a="66226406"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 01:25:11 -0800
+X-CSE-ConnectionGUID: kUZXdJ63QX6yEcqQIX0p2g==
+X-CSE-MsgGUID: XqqtLnzJTPuBFfm3LtZT9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
+   d="scan'208";a="193000714"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 27 Nov 2025 01:25:09 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOYFP-000000004CL-2gJp;
+	Thu, 27 Nov 2025 09:25:07 +0000
+Date: Thu, 27 Nov 2025 17:24:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] dma-buf: add no-op stubs when CONFIG_DMA_SHARED_BUFFER
+ is disabled
+Message-ID: <202511271739.cjidjUdn-lkp@intel.com>
+References: <6202945f4af2d10e0fb6602b25ff9cb454c1ee85.1764229204.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251126182257.157439-4-krzysztof.kozlowski@oss.qualcomm.com> <20251126182257.157439-6-krzysztof.kozlowski@oss.qualcomm.com>
-In-Reply-To: <20251126182257.157439-6-krzysztof.kozlowski@oss.qualcomm.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 27 Nov 2025 10:02:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com>
-X-Gm-Features: AWmQ_bmLgGar4dfe4FpC2atA-pkz10WbT4MOeIioGse4jPHnHaBNPYet7pQnslE
-Message-ID: <CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] i2c: rcar: Fix Wvoid-pointer-to-enum-cast warning
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-i2c@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6202945f4af2d10e0fb6602b25ff9cb454c1ee85.1764229204.git.viresh.kumar@linaro.org>
 
-Hi Krzysztof,
+Hi Viresh,
 
-On Wed, 26 Nov 2025 at 19:23, Krzysztof Kozlowski
-<krzysztof.kozlowski@oss.qualcomm.com> wrote:
-> 'i2c_types' is an enum, thus cast of pointer on 64-bit compile test with
-> clang and W=1 causes:
->
->   i2c-rcar.c:1144:18: error: cast to smaller integer type 'enum rcar_i2c_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
->
-> One of the discussions in 2023 on LKML suggested warning is not suitable
-> for kernel.  Nothing changed in this regard since that time, so assume
-> the warning will stay and we want to have warnings-free builds.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+kernel test robot noticed the following build warnings:
 
-Thanks for your patch!
+[auto build test WARNING on sailus-media-tree/master]
+[also build test WARNING on linus/master v6.18-rc7 next-20251127]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-=
-> --- a/drivers/i2c/busses/i2c-rcar.c
-> +++ b/drivers/i2c/busses/i2c-rcar.c
-> @@ -1141,7 +1141,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
->         if (IS_ERR(priv->io))
->                 return PTR_ERR(priv->io);
->
-> -       priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-> +       priv->devtype = (kernel_ulong_t)of_device_get_match_data(dev);
+url:    https://github.com/intel-lab-lkp/linux/commits/Viresh-Kumar/dma-buf-add-no-op-stubs-when-CONFIG_DMA_SHARED_BUFFER-is-disabled/20251127-154307
+base:   git://linuxtv.org/sailus/media_tree.git master
+patch link:    https://lore.kernel.org/r/6202945f4af2d10e0fb6602b25ff9cb454c1ee85.1764229204.git.viresh.kumar%40linaro.org
+patch subject: [PATCH] dma-buf: add no-op stubs when CONFIG_DMA_SHARED_BUFFER is disabled
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251127/202511271739.cjidjUdn-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511271739.cjidjUdn-lkp@intel.com/reproduce)
 
-Any specific reason you picked "kernel_ulong_t" instead of "unsigned long"?
-The former seems to be the least common option.
-FWIW, the most common option is "uintptr_t", which torvalds doesn't like...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511271739.cjidjUdn-lkp@intel.com/
 
->         init_waitqueue_head(&priv->wait);
->
->         adap = &priv->adap;
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+   In file included from io_uring/io_uring.c:101:
+   In file included from io_uring/zcrx.h:6:
+>> include/linux/dma-buf.h:660:51: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     660 | dma_buf_map_attachment(struct dma_buf_attachment *, enum dma_data_direction)
+         |                                                   ^
+   include/linux/dma-buf.h:660:76: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     660 | dma_buf_map_attachment(struct dma_buf_attachment *, enum dma_data_direction)
+         |                                                                            ^
+   include/linux/dma-buf.h:665:72: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     665 | static inline void dma_buf_unmap_attachment(struct dma_buf_attachment *,
+         |                                                                        ^
+   include/linux/dma-buf.h:666:27: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     666 |                                             struct sg_table *,
+         |                                                              ^
+   include/linux/dma-buf.h:667:33: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     667 |                                             enum dma_data_direction) { }
+         |                                                                    ^
+   include/linux/dma-buf.h:695:48: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     695 | static inline int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
+         |                                                ^
+   include/linux/dma-buf.h:695:73: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     695 | static inline int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
+         |                                                                         ^
+   include/linux/dma-buf.h:696:24: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     696 |                                unsigned long)
+         |                                             ^
+   8 warnings generated.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+vim +660 include/linux/dma-buf.h
+
+   658	
+   659	static inline struct sg_table *
+ > 660	dma_buf_map_attachment(struct dma_buf_attachment *, enum dma_data_direction)
+   661	{
+   662		return NULL;
+   663	}
+   664	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
