@@ -1,190 +1,218 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423AF312830;
-	Thu, 27 Nov 2025 09:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E50532720F
+	for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 09:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764235518; cv=none; b=iJe9+rokewSaY8IUODpp7BbqzL1O4Vq+yXUIAreFWgJF2768oiPHkcXVdcKcUiXTsv4s8iGepY4QtuNrVKv2ss38nNGtbJaaIHQ3J4XFi6oFEghZmxfjTZGOq0An5a3iFtCPqYpKi6blApNQ3SQn1kp3QdC2+awM5pvQBZ6b+/E=
+	t=1764235607; cv=none; b=bKhovPlN+4RBuJ3DvAPAzWQyDG5eDWBlUNjaiZ/VF0TmPIT3gHhrNLiYKj6KrBT5wymgeNI6UmqyNKTmGBiG7WOoPkRAZkTYpEcTp/R3WBgl/oX/VlukQniYtlfHYxsxRALluGxPj6pUFfiQtrJQSHgh5rUZdXnhkfrxUoMBxLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764235518; c=relaxed/simple;
-	bh=KK9nzEbpI9PD/rQsiJtia1oCOmSytQ0R3vQ+5NXjJmA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhRZDkGmM45oaPCHwvt9S6zkF7MD/h2Tm/SIaFnHIRnbpLLRA0AEAGoN70lpLtizoOHoqln9lvlpi8g6wuSHE+bh/DiB9Cm+h4guy1llVZQNPSXhtb+zWnGH2sB26AQIFagLiraa80b1UUi/QCFZp+GnwEqpl/cug9zn4yVwxmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lvSSc+o3; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764235607; c=relaxed/simple;
+	bh=C6kdk0Dg2C29yDAiQZ8YMZTqJPyJ/x8DSwdutbl0s8U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RGZgLF3Z81cBABuJsBrlQbaos3gD3SxUGPxowikhmD8yxRiYbozqibOWUUXo8RJQqe49oiVEQj5UyzHuKsQRCkVW3thRuiehZN/xy5ElyiJPX92XNza4RIpXNPJaxzsaGRD2881GBaotHOg1F/wFHYtI1pUFHuQVfWoXxVLbZ8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wCkJtX1K; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lvSSc+o3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764235517; x=1795771517;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KK9nzEbpI9PD/rQsiJtia1oCOmSytQ0R3vQ+5NXjJmA=;
-  b=lvSSc+o3V2GbIKEQIrvKumIqGT5K0d75EMfBgFhu/PPpxX4AbRuyZ5Te
-   5bi6btljrwW3RGt80lZAWo4YurAcu47Gf8Xi/b6C12PkAi9114CFk096L
-   2hbGwX7cS9Rzb6l6R5JVn4lMIPXRJLUCCHxx/M3yF3+0u99ol5LcMlbI8
-   6uoQeNVvhJhxbjnczKRUFYdxwShRbbhzbHdl5a8bhtvhxDv8LzFG5b2PF
-   z0mdPu/vC1MPSxcLEmQ4er0lPmR3kmZ1tVv82+P+kLkLeT01Il80/jum6
-   Q72EzQXEaDvnmRqhg1Rg96HG7Gati4jPOC64dsujJITEsWSvsyQELsYjr
-   g==;
-X-CSE-ConnectionGUID: bf3sasWlSrysCHVxcY3dqw==
-X-CSE-MsgGUID: 4wFpCavnRlKdWTe35gt4UQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="66226408"
-X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
-   d="scan'208";a="66226408"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 01:25:16 -0800
-X-CSE-ConnectionGUID: URawlKB/TjiX1FSy99cnMQ==
-X-CSE-MsgGUID: STAbKrqQRdezH2EW5Q2Vqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
-   d="scan'208";a="193000716"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Nov 2025 01:25:10 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOYFP-000000004CN-2qrR;
-	Thu, 27 Nov 2025 09:25:07 +0000
-Date: Thu, 27 Nov 2025 17:24:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-	x86@kernel.org, linux-hyperv@vger.kernel.org,
-	virtualization@lists.linux.dev, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Juergen Gross <jgross@suse.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v4 21/21] x86/pvlocks: Move paravirt spinlock functions
- into own header
-Message-ID: <202511271747.smpLdjsz-lkp@intel.com>
-References: <20251127070844.21919-22-jgross@suse.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wCkJtX1K"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4ee2014c228so5708871cf.2
+        for <llvm@lists.linux.dev>; Thu, 27 Nov 2025 01:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764235604; x=1764840404; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s8iiqKmH/z9kE/SnNqbzFpQLfR8PO57PoBMzANf8MjM=;
+        b=wCkJtX1Keft1T+aYxQcb3zAuPgfNduMe9NcgqOPy0vTuBsJmKbqz2ri/Oeke/N8u+6
+         EYZSeTntCqbWZULlLMJfqcVe57CyXbtt/JRP3lirTCwD/qTxwrG3YICWUO7wiRx6+h0U
+         VOygzJKpnI0V6Xo4XVhkkRM0eDvOeAdeWLUsleax4Ko+6XcKLeRu7rZpiSg6u+zkZDZP
+         vR78xLsqyYyTwZAs+RekEFO2FmDMX7ATjeUjr9wVoHCVwC6jP/M6YWrLFIIy80jONKWw
+         hViRD+N+64ITkXHd1+CwDjTm/rs9JRkrRVZNZwTSAh+l98yHPngMsPVDjYxzAW0j1P9r
+         E34w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764235604; x=1764840404;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s8iiqKmH/z9kE/SnNqbzFpQLfR8PO57PoBMzANf8MjM=;
+        b=viy0ErFliiCEAoXAIfi1VU2aGQbbz/C4aSEfztd5iw7tWDQIi/wph12SrgU/ksZJ2u
+         KJEJlz3Sgfugvfs3+XPlJtJabtvqH58JRbuWwVv4zyG1sRDLoeVQrAAtjtJSTlRwzzcj
+         6gORXGZVioPDZx1i3vb6XLAHyusKF42ZlYR4wYXFF+70nsn96nDTqck3UTDz+SMStmsc
+         axBp1hWRSBa4LcxEGbT/aNdt+rJufc7qiHkkEoQxES24QRp3giIdNcn98iuuyUVfgZxI
+         FEfoaphPIJqRT4tqQjWbB99T1YHCc/LQbTWqcnaBfdj3LxhBAGYoUsFaIFUKgrAFt4iv
+         dyfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWrsm6KG++bUOJGM7Hv+grtwYz1XlQ6TIjrGg81gc8xQ3TQimT4ewlOa5rxNvd8a4SM22L3@lists.linux.dev
+X-Gm-Message-State: AOJu0YwpC5x6qGdgoIkahWrxfhTOl4GIQpCOVpo76xuuA20OLqYSA1K0
+	NayyracWTJbWZYOalURu9Kkw5kYmSxLKeYpfW6ClixZAvhaded5zHmk9DkV/mpRFcDasBaxLX2Q
+	ADf1MdaTO7mq+CCqpvjn0R+5xRR/+TmrnEhu4RJBx
+X-Gm-Gg: ASbGncuz1K7cLRs8un5hFCs3vTsnP/5ZKO/hc70prQ6VcdHWoMey/qYcGUh0NWpwvoq
+	fpiPwQXItL163xJoCkecrISVKlW5lsBew08wGw9IeNhuD0W3L3+P16f5/UygkUXmyEcyTLOryXk
+	aU/6upQLJY+4vBk8TgjnmbBa7uCBBxovg6VkPLnEDC5HYI8kEBtGPhUZclArlBFyS8ytSd/rJEF
+	1LYPWsBF7mQErQyZ/j1gYjGa+7MWfs0w1OnAW0tnuvjYc0n/rfDF7tQq+OJtoF8853QbA==
+X-Google-Smtp-Source: AGHT+IEkT5sCukaPzIaA+NLZWrr9JoV2OMXXL4LmCmPyzPL4gvLMcSKdyRa5hEdOBEyE9aeaeW9w9HzvquWVNQAXvGA=
+X-Received: by 2002:ac8:5f06:0:b0:4ee:219e:e74 with SMTP id
+ d75a77b69052e-4efbdb254demr133247771cf.77.1764235603711; Thu, 27 Nov 2025
+ 01:26:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251127070844.21919-22-jgross@suse.com>
+References: <202511210858.uwVivgvn-lkp@intel.com> <84b74435-5aad-4c15-aea5-db87b4a6bf11@kernel.org>
+ <CANiq72mCd7FVO0Btsvct5Dy67TkBJd=QJgnPvLMn9d43Vy0YnA@mail.gmail.com>
+In-Reply-To: <CANiq72mCd7FVO0Btsvct5Dy67TkBJd=QJgnPvLMn9d43Vy0YnA@mail.gmail.com>
+From: David Gow <davidgow@google.com>
+Date: Thu, 27 Nov 2025 17:26:31 +0800
+X-Gm-Features: AWmQ_bkv4jFqUVeh8Qet3Ka4JTmk4vo1-CieIBCvvBE5E8ixD9z_QhWmpogPjVE
+Message-ID: <CABVgOS=SFM7Po-Xyf0nyT=np8fKNJzuHSBeyw+m4dL1vivq1WA@mail.gmail.com>
+Subject: Re: [linux-next:master 4806/10599] error[E0560]: struct
+ `bindings::kernel_param_ops` has no field named `get`
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Daniel Gomez <da.gomez@kernel.org>, kernel test robot <lkp@intel.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Benno Lossin <lossin@kernel.org>, linux-modules@vger.kernel.org, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, linux-um <linux-um@lists.infradead.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000007f74ec0644901cf4"
 
-Hi Juergen,
+--0000000000007f74ec0644901cf4
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-kernel test robot noticed the following build errors:
+On Wed, 26 Nov 2025 at 21:50, Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Wed, Nov 26, 2025 at 2:41=E2=80=AFPM Daniel Gomez <da.gomez@kernel.org=
+> wrote:
+> >
+> > On 21/11/2025 01.24, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-ne=
+xt.git master
+> > > head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
+> > > commit: 0b08fc292842a13aa496413b48c1efb83573b8c6 [4806/10599] rust: i=
+ntroduce module_param module
+> > > config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/a=
+rchive/20251121/202511210858.uwVivgvn-lkp@intel.com/config)
+> > > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-proje=
+ct 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+> > > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/a=
+rchive/20251121/202511210858.uwVivgvn-lkp@intel.com/reproduce)
+> >
+> > We can't reproduce this.
+> >
+> > If anyone cares, please let us know how to reproduce it.
+> >
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/sched/core kvm/queue kvm/next linus/master v6.18-rc7]
-[cannot apply to kvm/linux-next next-20251127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks -- this does sit in the category of things I care about (at
+least in theory), but also can't reproduce.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Juergen-Gross/x86-paravirt-Remove-not-needed-includes-of-paravirt-h/20251127-152054
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20251127070844.21919-22-jgross%40suse.com
-patch subject: [PATCH v4 21/21] x86/pvlocks: Move paravirt spinlock functions into own header
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251127/202511271747.smpLdjsz-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511271747.smpLdjsz-lkp@intel.com/reproduce)
+It looks like this affects random struct fields in bindings:: (I've
+seen other 0day reports with other structs and fields). If anyone has
+any idea what's going on, suggestions are welcome.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511271747.smpLdjsz-lkp@intel.com/
+Cheers,
+-- David
 
-All errors (new ones prefixed by >>):
+--0000000000007f74ec0644901cf4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
->> arch/x86/kernel/alternative.c:2373:2: error: call to undeclared function 'paravirt_set_cap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2373 |         paravirt_set_cap();
-         |         ^
-   arch/x86/kernel/alternative.c:2373:2: note: did you mean 'paravirt_ret0'?
-   arch/x86/include/asm/paravirt-base.h:23:15: note: 'paravirt_ret0' declared here
-      23 | unsigned long paravirt_ret0(void);
-         |               ^
-   1 error generated.
-
-
-vim +/paravirt_set_cap +2373 arch/x86/kernel/alternative.c
-
-270a69c4485d7d arch/x86/kernel/alternative.c  Peter Zijlstra            2023-02-08  2344  
-9a0b5817ad97bb arch/i386/kernel/alternative.c Gerd Hoffmann             2006-03-23  2345  void __init alternative_instructions(void)
-9a0b5817ad97bb arch/i386/kernel/alternative.c Gerd Hoffmann             2006-03-23  2346  {
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2347  	u64 ibt;
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2348  
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2349  	int3_selftest();
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2350  
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2351  	/*
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2352  	 * The patching is not fully atomic, so try to avoid local
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2353  	 * interruptions that might execute the to be patched code.
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2354  	 * Other CPUs are not running.
-7457c0da024b18 arch/x86/kernel/alternative.c  Peter Zijlstra            2019-05-03  2355  	 */
-8f4e956b313dcc arch/i386/kernel/alternative.c Andi Kleen                2007-07-22  2356  	stop_nmi();
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2357  
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2358  	/*
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2359  	 * Don't stop machine check exceptions while patching.
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2360  	 * MCEs only happen when something got corrupted and in this
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2361  	 * case we must do something about the corruption.
-32b1cbe380417f arch/x86/kernel/alternative.c  Marco Ammon               2019-09-02  2362  	 * Ignoring it is worse than an unlikely patching race.
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2363  	 * Also machine checks tend to be broadcast and if one CPU
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2364  	 * goes into machine check the others follow quickly, so we don't
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2365  	 * expect a machine check to cause undue problems during to code
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2366  	 * patching.
-123aa76ec0cab5 arch/x86/kernel/alternative.c  Andi Kleen                2009-02-12  2367  	 */
-8f4e956b313dcc arch/i386/kernel/alternative.c Andi Kleen                2007-07-22  2368  
-4e6292114c7412 arch/x86/kernel/alternative.c  Juergen Gross             2021-03-11  2369  	/*
-f7af6977621a41 arch/x86/kernel/alternative.c  Juergen Gross             2023-12-10  2370  	 * Make sure to set (artificial) features depending on used paravirt
-f7af6977621a41 arch/x86/kernel/alternative.c  Juergen Gross             2023-12-10  2371  	 * functions which can later influence alternative patching.
-4e6292114c7412 arch/x86/kernel/alternative.c  Juergen Gross             2021-03-11  2372  	 */
-4e6292114c7412 arch/x86/kernel/alternative.c  Juergen Gross             2021-03-11 @2373  	paravirt_set_cap();
-4e6292114c7412 arch/x86/kernel/alternative.c  Juergen Gross             2021-03-11  2374  
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2375  	/* Keep CET-IBT disabled until caller/callee are patched */
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2376  	ibt = ibt_save(/*disable*/ true);
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2377  
-931ab63664f02b arch/x86/kernel/alternative.c  Peter Zijlstra            2022-10-27  2378  	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
-1d7e707af44613 arch/x86/kernel/alternative.c  Mike Rapoport (Microsoft  2025-01-26  2379) 			__cfi_sites, __cfi_sites_end, true);
-026211c40b0554 arch/x86/kernel/alternative.c  Kees Cook                 2025-09-03  2380  	cfi_debug = false;
-931ab63664f02b arch/x86/kernel/alternative.c  Peter Zijlstra            2022-10-27  2381  
-7508500900814d arch/x86/kernel/alternative.c  Peter Zijlstra            2021-10-26  2382  	/*
-7508500900814d arch/x86/kernel/alternative.c  Peter Zijlstra            2021-10-26  2383  	 * Rewrite the retpolines, must be done before alternatives since
-7508500900814d arch/x86/kernel/alternative.c  Peter Zijlstra            2021-10-26  2384  	 * those can rewrite the retpoline thunks.
-7508500900814d arch/x86/kernel/alternative.c  Peter Zijlstra            2021-10-26  2385  	 */
-1d7e707af44613 arch/x86/kernel/alternative.c  Mike Rapoport (Microsoft  2025-01-26  2386) 	apply_retpolines(__retpoline_sites, __retpoline_sites_end);
-1d7e707af44613 arch/x86/kernel/alternative.c  Mike Rapoport (Microsoft  2025-01-26  2387) 	apply_returns(__return_sites, __return_sites_end);
-7508500900814d arch/x86/kernel/alternative.c  Peter Zijlstra            2021-10-26  2388  
-a82b26451de126 arch/x86/kernel/alternative.c  Peter Zijlstra (Intel     2025-06-03  2389) 	its_fini_core();
-a82b26451de126 arch/x86/kernel/alternative.c  Peter Zijlstra (Intel     2025-06-03  2390) 
-e81dc127ef6988 arch/x86/kernel/alternative.c  Thomas Gleixner           2022-09-15  2391  	/*
-ab9fea59487d8b arch/x86/kernel/alternative.c  Peter Zijlstra            2025-02-07  2392  	 * Adjust all CALL instructions to point to func()-10, including
-ab9fea59487d8b arch/x86/kernel/alternative.c  Peter Zijlstra            2025-02-07  2393  	 * those in .altinstr_replacement.
-e81dc127ef6988 arch/x86/kernel/alternative.c  Thomas Gleixner           2022-09-15  2394  	 */
-e81dc127ef6988 arch/x86/kernel/alternative.c  Thomas Gleixner           2022-09-15  2395  	callthunks_patch_builtin_calls();
-e81dc127ef6988 arch/x86/kernel/alternative.c  Thomas Gleixner           2022-09-15  2396  
-ab9fea59487d8b arch/x86/kernel/alternative.c  Peter Zijlstra            2025-02-07  2397  	apply_alternatives(__alt_instructions, __alt_instructions_end);
-ab9fea59487d8b arch/x86/kernel/alternative.c  Peter Zijlstra            2025-02-07  2398  
-be0fffa5ca894a arch/x86/kernel/alternative.c  Peter Zijlstra            2023-06-22  2399  	/*
-be0fffa5ca894a arch/x86/kernel/alternative.c  Peter Zijlstra            2023-06-22  2400  	 * Seal all functions that do not have their address taken.
-be0fffa5ca894a arch/x86/kernel/alternative.c  Peter Zijlstra            2023-06-22  2401  	 */
-1d7e707af44613 arch/x86/kernel/alternative.c  Mike Rapoport (Microsoft  2025-01-26  2402) 	apply_seal_endbr(__ibt_endbr_seal, __ibt_endbr_seal_end);
-ed53a0d971926e arch/x86/kernel/alternative.c  Peter Zijlstra            2022-03-08  2403  
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2404  	ibt_restore(ibt);
-ebebe30794d38c arch/x86/kernel/alternative.c  Pawan Gupta               2025-05-03  2405  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+Dxz3AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHZtY3XkWtC2
+e2Idfk+0JyK7BLzzMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBo
+hqjbVaHxZoT6HHUuwQcTlbgXpuVi59bQPrSwb/6Pn1t3h3SLeuUCvOYpoQjxlWy/FexsPW+nWS0I
+PUmWpt6sxbIRTKPfb7cPk32XezfnA0jexucybiXzkZKTrbI7zoMOzDIWpTKYZAonB9Zzi7Dso4An
+ZOtz/E3yhdR/q1MK30d5fiCS0vorEd0Oy8Jzcc7TJ2HGMzEEXiFFvVrJYJHvfYOeXE4ywAG6YWO0
+x78+bXeB9vkeWHhOYKyYXuAXrnHASddEICg1QlJCHDAISMC1Wn/tjqTMTt3sDAe+dhi9V1FEGTbG
+g9PxPVP4huJEMIBu/MWNMzHfiW4E7eCHVPrmtX7CFDlMik7qsgQBbO5h6EcxBamhIflfMgoISsRJ
+Vyll2E5BNVwkNstMgU3WMg5yIaQcuGFgFnMTrQcaLEEFPV3cCP9pgXovYDirnB7FKNdCZNHfeBY1
+HEXJ2jIPDP6nWSbYoRry0TvPgxh5ZeM5+sc1L7kY75C8U4FV3t4qdC+p7rgqfAggdvDPa5BJbTRg
+KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
+IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
+Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg5LXBbVwJviFHaG7sd1NMdeLa/KMU
+naVDj9iq5y+s09MwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
+MTI3MDkyNjQ0WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
+AQEBBQAEggEAVHDyUQgDfm2klAOfnDAqPBl+Yc6L5AM49NAME17UhB6D/zvdtSrQIpeR+mHH67l7
+l5WjBdX2HzuxLQ80nC8Wui4M8OzGGmRhlMUHHlW+JcyrHC6AdzsJGowzC97LpRd2QN9Zy7HZO82Q
+SWrKmwdxrbt7I1t0SdJgLUM5t6gYTB2MkiQds/snyGcK9th3wKl/oxCQHdJsz/afh/YNRMGQbsXm
+NOw0c/mI+XsFKWaiGdhf4l5NhGCAKJt6jv7gr0CNBkkFpuJyzMp60iLggElen+0feroJa9SOUbkZ
+rq3+fDNFAVk5+1V5433w0kTN7vcWVPNT4XjpRdgdufDAy9HZSA==
+--0000000000007f74ec0644901cf4--
