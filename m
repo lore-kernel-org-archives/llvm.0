@@ -1,72 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC0072606;
-	Fri, 28 Nov 2025 02:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF3F2AEE4;
+	Fri, 28 Nov 2025 03:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764298377; cv=none; b=tvrqXjmStsFp17C5aRu6slEIpIBJdFBm7m0CwsRNP3XyOoNVESlgEcDhEbEqhJbUfSGAkZ5FB1Bi0F80LsSurP+vt6udzAkTenyPaWRHGKB7TpKTn2+zs+ATJa2INAzHTsQMvNAPUJDam0xvI6Ov4L9VVQwRfm0WJGlcEIDeN6M=
+	t=1764300472; cv=none; b=Lo2SYoOu12cLyn4CvrgSEqtHTh/VBGo2Rgo+Cg0pu5eIMADRR6vNHKiVxf+Jd54a5OGx1GF7FAzCyx+SHStSnwQGiLIMNhK+xUVvUyt+8opTuVZVJjNKFkZ58M9dH+iSFvV9Pw6rhyLlNoAyUsrzbDt8G2n4XKOhY1f/2BZ5cWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764298377; c=relaxed/simple;
-	bh=kN8f8ocFg/9iq69/nMOZcevqnWg1yZnJ/G3yn1vCZBg=;
+	s=arc-20240116; t=1764300472; c=relaxed/simple;
+	bh=bL7R1sPB35UMIRFSKgSootUfsdYsQLhKiDreJ8A29Bs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hDnacae3yaa6QmlIUQYrHReFU4KXDdrsXg/OycKBPGgsXrGPqZyd8dP2rdG+m84UWA5BETAi8rZofcOhLvn+IDthJxHcvVRSjQUFOJIBw3uPbFZ9aLDv20muazCoe3GX2PDSG1WN8pyGxdmrjbjlQV9WhbZzMrHTIkhkwx4kfq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jwuXKnvl; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyYYEbbLW/TaHxBVbv0cz/pNGoNd2mMKSkRshWiV1UH10gj7wcZ7QBCfk6V3GRfmBVydEdCy6rmHzTu/SOX4op8JnGnHN/9wGtADcxj3Egpd+UNQzogkfVSPI4IhRKf/FOXu5bo64ijQ3+Od8BbF3/rRnCJx4BtzCzVRTBBuG/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ViBUbKRA; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jwuXKnvl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ViBUbKRA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764298376; x=1795834376;
+  t=1764300472; x=1795836472;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kN8f8ocFg/9iq69/nMOZcevqnWg1yZnJ/G3yn1vCZBg=;
-  b=jwuXKnvlSlYpwdsuRSo+7bN42FuZxdo8v1XcRvX+LAUqP2Z5DOoKwUWY
-   ft2QcllrmyWPSe1Q0v542t4ySUaih99I6R4ozr/2bxZ0sh5XG35FlZzlq
-   PSuPO0PATYv8StFflhzaJqGto1fMjB56d/8yXlixH0qhGs6VEz12HDFQI
-   rnn/7G8ir8zeEBuLWw0kp0TAoKhBzuJzfYFirBE8/NuR2l5brVzavcHAP
-   kzaKO/ilA8FEVdV4jeZX2XS9xpQBOik53rxOwIGXW0Nj8NALLQmRCD92X
-   0EopTGl/PnPkoZPJID0aKj0wg+Um61PY18EW94lwosBgnSGfKvwvGKsTg
-   Q==;
-X-CSE-ConnectionGUID: l+A8K494SYKtNABICvZnVg==
-X-CSE-MsgGUID: oPvnla8aQoKmy+JFXQ8New==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66281695"
+  bh=bL7R1sPB35UMIRFSKgSootUfsdYsQLhKiDreJ8A29Bs=;
+  b=ViBUbKRA2tL+R+Gn0R+x3pBMJK4RVAq3fHcrdKvQnM7McORS2CxUSiV5
+   QgGsnEVGzQc7YHptdP4aWTQaLBtaOfqUcbhAP0ZlV4aAVnJkg6JO6ff5U
+   H+kXruhbs5LNqL+9LQiq190X/mJf9xwopjE+XymPs7qn8NG9tSm5FKrMc
+   y/lI7Zrk7Ger06T0nf/LAsunG4kRPOMJ1zT680lgEQNnyPKQK6J3Rbnvr
+   URmQmQw+HCN0yw1QmgS67JBMxaQ5654mPY4X71nB2+4jRvE9MDPX6bjge
+   /WDuuMOXHg9ppPiGVcKyKNcpynbiJBogbxSmm+PgWEewPGTSy7Q9E3gU0
+   w==;
+X-CSE-ConnectionGUID: W/Ty+SlZTB28eYUIR9GcTw==
+X-CSE-MsgGUID: DzRUM/5mRHGtd2eTRz01zQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="88980906"
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="66281695"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 18:52:55 -0800
-X-CSE-ConnectionGUID: kHmaFFJtSrCUNitANqQ8Mg==
-X-CSE-MsgGUID: OVGbIM/SSGC2110517cZ5w==
+   d="scan'208";a="88980906"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 19:27:51 -0800
+X-CSE-ConnectionGUID: irUJX32mTeylTqOkkk53bA==
+X-CSE-MsgGUID: cVGX9mwjROemAM6/s/HuqA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="193159342"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Nov 2025 18:52:51 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+   d="scan'208";a="198314704"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1f7de368ad0d) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 27 Nov 2025 19:27:49 -0800
+Received: from kbuild by 1f7de368ad0d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOobI-000000005xN-3R8H;
-	Fri, 28 Nov 2025 02:52:48 +0000
-Date: Fri, 28 Nov 2025 10:52:00 +0800
+	id 1vOp99-000000001vF-1Img;
+	Fri, 28 Nov 2025 03:27:47 +0000
+Date: Fri, 28 Nov 2025 04:27:17 +0100
 From: kernel test robot <lkp@intel.com>
-To: Anna Maniscalco <anna.maniscalco2000@gmail.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
-	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Antonino Maniscalco <antomani103@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Anna Maniscalco <anna.maniscalco2000@gmail.com>
-Subject: Re: [PATCH] drm/msm: Fix a7xx per pipe register programming
-Message-ID: <202511281253.rIkrIiqt-lkp@intel.com>
-References: <20251127-gras_nc_mode_fix-v1-1-5c0cf616401f@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 4/5] guest_memfd: add support for userfaultfd minor
+ mode
+Message-ID: <202511280435.kT9zhWyV-lkp@intel.com>
+References: <20251125183840.2368510-5-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,108 +63,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251127-gras_nc_mode_fix-v1-1-5c0cf616401f@gmail.com>
+In-Reply-To: <20251125183840.2368510-5-rppt@kernel.org>
 
-Hi Anna,
+Hi Mike,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 7bc29d5fb6faff2f547323c9ee8d3a0790cd2530]
+[auto build test ERROR on 6a23ae0a96a600d1d12557add110e0bb6e32730c]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anna-Maniscalco/drm-msm-Fix-a7xx-per-pipe-register-programming/20251127-074833
-base:   7bc29d5fb6faff2f547323c9ee8d3a0790cd2530
-patch link:    https://lore.kernel.org/r/20251127-gras_nc_mode_fix-v1-1-5c0cf616401f%40gmail.com
-patch subject: [PATCH] drm/msm: Fix a7xx per pipe register programming
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251128/202511281253.rIkrIiqt-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511281253.rIkrIiqt-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Rapoport/userfaultfd-move-vma_can_userfault-out-of-line/20251126-024059
+base:   6a23ae0a96a600d1d12557add110e0bb6e32730c
+patch link:    https://lore.kernel.org/r/20251125183840.2368510-5-rppt%40kernel.org
+patch subject: [PATCH v2 4/5] guest_memfd: add support for userfaultfd minor mode
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251128/202511280435.kT9zhWyV-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511280435.kT9zhWyV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511281253.rIkrIiqt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511280435.kT9zhWyV-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/adreno/a6xx_gpu.c:984:35: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
-     984 |                         if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
-         |                                                        ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/adreno/a6xx_gpu.c:984:35: note: place parentheses around the '==' expression to silence this warning
-     984 |                         if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
-         |                                                        ^ ~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/adreno/a6xx_gpu.c:984:35: note: place parentheses around the & expression to evaluate it first
-     984 |                         if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   1 warning generated.
+>> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:401:22: error: redefinition of 'kvm_gmem_get_folio'
+     401 | static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t pgoff)
+         |                      ^
+   arch/x86/kvm/../../../virt/kvm/guest_memfd.c:100:22: note: previous definition is here
+     100 | static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+         |                      ^
+   1 error generated.
 
 
-vim +984 drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+vim +/kvm_gmem_get_folio +401 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
 
-   931	
-   932	static void a7xx_patch_pwrup_reglist(struct msm_gpu *gpu)
-   933	{
-   934		struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-   935		struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-   936		const struct adreno_reglist_list *reglist;
-   937		const struct adreno_reglist_pipe_list *pipe_reglist;
-   938		void *ptr = a6xx_gpu->pwrup_reglist_ptr;
-   939		struct cpu_gpu_lock *lock = ptr;
-   940		u32 *dest = (u32 *)&lock->regs[0];
-   941		u32 pipe_reglist_count = 0;
-   942		int i;
-   943	
-   944		lock->gpu_req = lock->cpu_req = lock->turn = 0;
-   945	
-   946		reglist = adreno_gpu->info->a6xx->ifpc_reglist;
-   947		lock->ifpc_list_len = reglist->count;
-   948	
-   949		/*
-   950		 * For each entry in each of the lists, write the offset and the current
-   951		 * register value into the GPU buffer
-   952		 */
-   953		for (i = 0; i < reglist->count; i++) {
-   954			*dest++ = reglist->regs[i];
-   955			*dest++ = gpu_read(gpu, reglist->regs[i]);
-   956		}
-   957	
-   958		reglist = adreno_gpu->info->a6xx->pwrup_reglist;
-   959		lock->preemption_list_len = reglist->count;
-   960	
-   961		for (i = 0; i < reglist->count; i++) {
-   962			*dest++ = reglist->regs[i];
-   963			*dest++ = gpu_read(gpu, reglist->regs[i]);
-   964		}
-   965	
-   966		/*
-   967		 * The overall register list is composed of
-   968		 * 1. Static IFPC-only registers
-   969		 * 2. Static IFPC + preemption registers
-   970		 * 3. Dynamic IFPC + preemption registers (ex: perfcounter selects)
-   971		 *
-   972		 * The first two lists are static. Size of these lists are stored as
-   973		 * number of pairs in ifpc_list_len and preemption_list_len
-   974		 * respectively. With concurrent binning, Some of the perfcounter
-   975		 * registers being virtualized, CP needs to know the pipe id to program
-   976		 * the aperture inorder to restore the same. Thus, third list is a
-   977		 * dynamic list with triplets as
-   978		 * (<aperture, shifted 12 bits> <address> <data>), and the length is
-   979		 * stored as number for triplets in dynamic_list_len.
-   980		 */
-   981		pipe_reglist = adreno_gpu->info->a6xx->pipe_reglist;
-   982		for (u32 pipe_id = PIPE_BR; pipe_id <= PIPE_BV; pipe_id++) {
-   983			for (i = 0; i < pipe_reglist->count; i++) {
- > 984				if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
-   985					continue;
-   986				*dest++ = A7XX_CP_APERTURE_CNTL_HOST_PIPE(pipe_id);
-   987				*dest++ = pipe_reglist->regs[i].offset;
-   988				*dest++ = a7xx_read_pipe(gpu, pipe_id,
-   989							 pipe_reglist->regs[i].offset);
-   990				pipe_reglist_count++;
-   991			}
-   992		}
-   993		lock->dynamic_list_len = pipe_reglist_count;
-   994	}
-   995	
+   399	
+   400	#ifdef CONFIG_USERFAULTFD
+ > 401	static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t pgoff)
+   402	{
+   403		struct folio *folio;
+   404	
+   405		folio = kvm_gmem_get_folio(inode, pgoff);
+   406		if (IS_ERR_OR_NULL(folio))
+   407			return folio;
+   408	
+   409		if (!folio_test_uptodate(folio)) {
+   410			clear_highpage(folio_page(folio, 0));
+   411			kvm_gmem_mark_prepared(folio);
+   412		}
+   413	
+   414		return folio;
+   415	}
+   416	#endif
+   417	
 
 -- 
 0-DAY CI Kernel Test Service
