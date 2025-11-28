@@ -1,62 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E97F1F0E29;
-	Fri, 28 Nov 2025 01:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E892522B6;
+	Fri, 28 Nov 2025 01:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764294593; cv=none; b=gAGymAzdwkoQ660T+eYregyO82Qv/Rg2jypbLG04nAz3nQv+kZiPi5Kt9oup2OYrgE9KI5ZN3dNcJGevvf4LEeVSGo44zan+w20JBsRs8px2C9MNs9Tf7EEQhoaFHRFtSi+gEfAYTbbRrC7G8j9dJ7dGLLfjkgGFJbMLVBAO0o8=
+	t=1764294594; cv=none; b=QK+oU420lks3BGy6P+byQUinemwzE2i5cq1dUlChrY/+/MAz6/i/h140htScObSsq5kCM+KNNvL2qJ3YOeJm4eqMGCvGicUUQECFIiKSG9IeOOlu/w8PbQFB0/Ir5Qfd0P44Og3JNRvTS/V3GTbLz32t8Y4A2gNIE2xKXdT6zQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764294593; c=relaxed/simple;
-	bh=Ezjf5cOt8h0dpJHTgbnsIsUwiE2lnG6zvSzKN3xPY98=;
+	s=arc-20240116; t=1764294594; c=relaxed/simple;
+	bh=FptZF3h/cDUsKwn+A9U5fwifWphXmv0RNUXkDtC+2ls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E2ck5C1BeL1IzMdJO7WCp74MIlu2+Q08WYSNwwqUu0WIfZonm77JDNI7tkk7tffkaeq+7PHJojA4o2Zp6wI6avhbgMh2rq1kRuJ7U1bb1z/4ePhaercQ9l/kkc+urZHAMrUYqX2xMHXyYJ5IxNqah5hL3fHWXf231oJ86Qaq16U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKNqitI2; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=iF1mvNFQJ+jASqStJEK4dwSNtLAgxY95hGE6nbbCyPpxCYe06zukEHJ9h37Ne29f3p9UiqcahJ4m+8bYo1to3SdX0ULRc0pmByzOYlDgzK6eKmXE/26IMtT+q51AGREEdTNQ9IMeUPkRFW9IKj1lOC7mmeTSDOrVxgwfDeNuoWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CQ/VpPx/; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKNqitI2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CQ/VpPx/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764294591; x=1795830591;
+  t=1764294592; x=1795830592;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ezjf5cOt8h0dpJHTgbnsIsUwiE2lnG6zvSzKN3xPY98=;
-  b=oKNqitI2s3A2Iuc6RaDA9aWTWG9564gtg67uRxn8eaer43xSry0kBpRR
-   AelpFwwiMyVaWipOePiX9idlg0tXrMsf8BgaQkxCOQWOWSo3bk8zlUB6i
-   3c3PV6hVmZdc50T8c3uKZ+5p7QZzANzs0tH4eaC/BLtLjCvljnLY6IniC
-   LbafMyKo8AUcxkbBa6MTnrKhOHwQtucX440mmOmF9GTfSPkOgzVFcbFDS
-   rspZMjOX9OCbMD6T8nk0QRhXoGqCMcBjdctWi4hP97KiQTi0V6sNzN8vW
-   ENuEHQFAup3RIJv+QPAOIQtkPEnSJ+Qz/Dac+uVvGG8JJr2mrre2dBmrO
-   w==;
-X-CSE-ConnectionGUID: GJ6ca5tuQv2zneHjaNBN2w==
-X-CSE-MsgGUID: OtsatBL3Rx6Yz6OoxQHA/w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="70193056"
+  bh=FptZF3h/cDUsKwn+A9U5fwifWphXmv0RNUXkDtC+2ls=;
+  b=CQ/VpPx/drQbCZDF/NcpXHXabOOAMu/g/iM5UtpMBhZ2D2iLdSW/s/tE
+   HDSykq+s3y77uwSykMFOXXGzb9nkxtZEo3eYr9KzB4JN7t3quZCs9MmQ0
+   bJz0Rp8U98d10+ohxnwZlOW3c3w3Zb7YN0mv2ugG6+yJpXM0PRbf248qp
+   IBOFtWcarhKXnnPLOK+coBpuzhZUbLNX7gY/TUPR85y/IpL+Rf/yJommy
+   vMJqHOI/F1FMfQx81xGKX+zXt8F57ocWCzM8msUAUSbqDLzqHtzBTWIwN
+   kuARPHIBBzwWeKmn0XoSZkn5X9u0CNc2daAIgX7f1J5BMnbrLAx0LeIKq
+   Q==;
+X-CSE-ConnectionGUID: hNdVMBfPTvSLcMKnuiTVJQ==
+X-CSE-MsgGUID: 2rA+H+oHRfK2u5Wu5iZNtA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="70193061"
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="70193056"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 17:49:50 -0800
-X-CSE-ConnectionGUID: UlmQkNXWT2SsmK62YWUM/g==
-X-CSE-MsgGUID: oP+W/LHYSwCcz5Hhqvqx9w==
+   d="scan'208";a="70193061"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 17:49:51 -0800
+X-CSE-ConnectionGUID: agImw1F6QE2Zil+IHsYxvg==
+X-CSE-MsgGUID: p3lRvPusQ2Wn6x3O8dOzBw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="224047453"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 27 Nov 2025 17:49:48 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+   d="scan'208";a="192604399"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1f7de368ad0d) ([10.211.93.152])
+  by orviesa010.jf.intel.com with ESMTP; 27 Nov 2025 17:49:49 -0800
+Received: from kbuild by 1f7de368ad0d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOncI-000000005uP-0xIY;
+	id 1vOncI-000000001u5-1oJv;
 	Fri, 28 Nov 2025 01:49:46 +0000
-Date: Fri, 28 Nov 2025 09:48:53 +0800
+Date: Fri, 28 Nov 2025 02:48:58 +0100
 From: kernel test robot <lkp@intel.com>
-To: Alex Markuze <amarkuze@redhat.com>, ceph-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, idryomov@gmail.com,
-	linux-fsdevel@vger.kernel.org, amarkuze@redhat.com,
-	vdubeyko@redhat.com
-Subject: Re: [PATCH 1/3] ceph: handle InodeStat v8 versioned field in reply
- parsing
-Message-ID: <202511280915.HZ1rLMsq-lkp@intel.com>
-References: <20251127134620.2035796-2-amarkuze@redhat.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 3/5] mm: introduce VM_FAULT_UFFD_MINOR fault reason
+Message-ID: <202511280257.T9fSJoDF-lkp@intel.com>
+References: <20251125183840.2368510-4-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,242 +62,266 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251127134620.2035796-2-amarkuze@redhat.com>
+In-Reply-To: <20251125183840.2368510-4-rppt@kernel.org>
 
-Hi Alex,
+Hi Mike,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on ceph-client/for-linus]
-[also build test WARNING on linus/master v6.18-rc7 next-20251127]
-[cannot apply to ceph-client/testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 6a23ae0a96a600d1d12557add110e0bb6e32730c]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Markuze/ceph-handle-InodeStat-v8-versioned-field-in-reply-parsing/20251127-214928
-base:   https://github.com/ceph/ceph-client.git for-linus
-patch link:    https://lore.kernel.org/r/20251127134620.2035796-2-amarkuze%40redhat.com
-patch subject: [PATCH 1/3] ceph: handle InodeStat v8 versioned field in reply parsing
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251128/202511280915.HZ1rLMsq-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511280915.HZ1rLMsq-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Rapoport/userfaultfd-move-vma_can_userfault-out-of-line/20251126-024059
+base:   6a23ae0a96a600d1d12557add110e0bb6e32730c
+patch link:    https://lore.kernel.org/r/20251125183840.2368510-4-rppt%40kernel.org
+patch subject: [PATCH v2 3/5] mm: introduce VM_FAULT_UFFD_MINOR fault reason
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251128/202511280257.T9fSJoDF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511280257.T9fSJoDF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511280915.HZ1rLMsq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511280257.T9fSJoDF-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/ceph/mds_client.c:237:7: warning: variable 'v8_struct_v' set but not used [-Wunused-but-set-variable]
-     237 |                         u8 v8_struct_v, v8_struct_compat;
-         |                            ^
->> fs/ceph/mds_client.c:237:20: warning: variable 'v8_struct_compat' set but not used [-Wunused-but-set-variable]
-     237 |                         u8 v8_struct_v, v8_struct_compat;
-         |                                         ^
-   2 warnings generated.
+   In file included from fs/dax.c:30:
+   In file included from include/trace/events/fs_dax.h:208:
+   In file included from include/trace/define_trace.h:132:
+   In file included from include/trace/trace_events.h:256:
+>> include/trace/events/fs_dax.h:50:3: error: expected expression
+      50 |                 __print_flags(__entry->result, "|", VM_FAULT_RESULT_TRACE)
+         |                 ^
+   include/trace/stages/stage3_trace_output.h:70:16: note: expanded from macro '__print_flags'
+      70 |                         { flag_array, { -1, NULL }};                    \
+         |                                     ^
+   In file included from fs/dax.c:30:
+   In file included from include/trace/events/fs_dax.h:208:
+   In file included from include/trace/define_trace.h:132:
+   In file included from include/trace/trace_events.h:256:
+   include/trace/events/fs_dax.h:134:3: error: expected expression
+     134 |                 __print_flags(__entry->result, "|", VM_FAULT_RESULT_TRACE)
+         |                 ^
+   include/trace/stages/stage3_trace_output.h:70:16: note: expanded from macro '__print_flags'
+      70 |                         { flag_array, { -1, NULL }};                    \
+         |                                     ^
+   2 errors generated.
+--
+   In file included from fs/f2fs/super.c:41:
+   In file included from include/trace/events/f2fs.h:2407:
+   In file included from include/trace/define_trace.h:132:
+   In file included from include/trace/trace_events.h:256:
+>> include/trace/events/f2fs.h:1436:3: error: expected expression
+    1436 |                 __print_flags(__entry->ret, "|", VM_FAULT_RESULT_TRACE))
+         |                 ^
+   include/trace/stages/stage3_trace_output.h:70:16: note: expanded from macro '__print_flags'
+      70 |                         { flag_array, { -1, NULL }};                    \
+         |                                     ^
+   1 error generated.
 
 
-vim +/v8_struct_v +237 fs/ceph/mds_client.c
+vim +50 include/trace/events/fs_dax.h
 
-    97	
-    98	/*
-    99	 * parse individual inode info
-   100	 */
-   101	static int parse_reply_info_in(void **p, void *end,
-   102				       struct ceph_mds_reply_info_in *info,
-   103				       u64 features)
-   104	{
-   105		int err = 0;
-   106		u8 struct_v = 0;
-   107	
-   108		if (features == (u64)-1) {
-   109			u32 struct_len;
-   110			u8 struct_compat;
-   111			ceph_decode_8_safe(p, end, struct_v, bad);
-   112			ceph_decode_8_safe(p, end, struct_compat, bad);
-   113			/* struct_v is expected to be >= 1. we only understand
-   114			 * encoding with struct_compat == 1. */
-   115			if (!struct_v || struct_compat != 1)
-   116				goto bad;
-   117			ceph_decode_32_safe(p, end, struct_len, bad);
-   118			ceph_decode_need(p, end, struct_len, bad);
-   119			end = *p + struct_len;
-   120		}
-   121	
-   122		ceph_decode_need(p, end, sizeof(struct ceph_mds_reply_inode), bad);
-   123		info->in = *p;
-   124		*p += sizeof(struct ceph_mds_reply_inode) +
-   125			sizeof(*info->in->fragtree.splits) *
-   126			le32_to_cpu(info->in->fragtree.nsplits);
-   127	
-   128		ceph_decode_32_safe(p, end, info->symlink_len, bad);
-   129		ceph_decode_need(p, end, info->symlink_len, bad);
-   130		info->symlink = *p;
-   131		*p += info->symlink_len;
-   132	
-   133		ceph_decode_copy_safe(p, end, &info->dir_layout,
-   134				      sizeof(info->dir_layout), bad);
-   135		ceph_decode_32_safe(p, end, info->xattr_len, bad);
-   136		ceph_decode_need(p, end, info->xattr_len, bad);
-   137		info->xattr_data = *p;
-   138		*p += info->xattr_len;
-   139	
-   140		if (features == (u64)-1) {
-   141			/* inline data */
-   142			ceph_decode_64_safe(p, end, info->inline_version, bad);
-   143			ceph_decode_32_safe(p, end, info->inline_len, bad);
-   144			ceph_decode_need(p, end, info->inline_len, bad);
-   145			info->inline_data = *p;
-   146			*p += info->inline_len;
-   147			/* quota */
-   148			err = parse_reply_info_quota(p, end, info);
-   149			if (err < 0)
-   150				goto out_bad;
-   151			/* pool namespace */
-   152			ceph_decode_32_safe(p, end, info->pool_ns_len, bad);
-   153			if (info->pool_ns_len > 0) {
-   154				ceph_decode_need(p, end, info->pool_ns_len, bad);
-   155				info->pool_ns_data = *p;
-   156				*p += info->pool_ns_len;
-   157			}
-   158	
-   159			/* btime */
-   160			ceph_decode_need(p, end, sizeof(info->btime), bad);
-   161			ceph_decode_copy(p, &info->btime, sizeof(info->btime));
-   162	
-   163			/* change attribute */
-   164			ceph_decode_64_safe(p, end, info->change_attr, bad);
-   165	
-   166			/* dir pin */
-   167			if (struct_v >= 2) {
-   168				ceph_decode_32_safe(p, end, info->dir_pin, bad);
-   169			} else {
-   170				info->dir_pin = -ENODATA;
-   171			}
-   172	
-   173			/* snapshot birth time, remains zero for v<=2 */
-   174			if (struct_v >= 3) {
-   175				ceph_decode_need(p, end, sizeof(info->snap_btime), bad);
-   176				ceph_decode_copy(p, &info->snap_btime,
-   177						 sizeof(info->snap_btime));
-   178			} else {
-   179				memset(&info->snap_btime, 0, sizeof(info->snap_btime));
-   180			}
-   181	
-   182			/* snapshot count, remains zero for v<=3 */
-   183			if (struct_v >= 4) {
-   184				ceph_decode_64_safe(p, end, info->rsnaps, bad);
-   185			} else {
-   186				info->rsnaps = 0;
-   187			}
-   188	
-   189			if (struct_v >= 5) {
-   190				u32 alen;
-   191	
-   192				ceph_decode_32_safe(p, end, alen, bad);
-   193	
-   194				while (alen--) {
-   195					u32 len;
-   196	
-   197					/* key */
-   198					ceph_decode_32_safe(p, end, len, bad);
-   199					ceph_decode_skip_n(p, end, len, bad);
-   200					/* value */
-   201					ceph_decode_32_safe(p, end, len, bad);
-   202					ceph_decode_skip_n(p, end, len, bad);
-   203				}
-   204			}
-   205	
-   206			/* fscrypt flag -- ignore */
-   207			if (struct_v >= 6)
-   208				ceph_decode_skip_8(p, end, bad);
-   209	
-   210			info->fscrypt_auth = NULL;
-   211			info->fscrypt_auth_len = 0;
-   212			info->fscrypt_file = NULL;
-   213			info->fscrypt_file_len = 0;
-   214			if (struct_v >= 7) {
-   215				ceph_decode_32_safe(p, end, info->fscrypt_auth_len, bad);
-   216				if (info->fscrypt_auth_len) {
-   217					info->fscrypt_auth = kmalloc(info->fscrypt_auth_len,
-   218								     GFP_KERNEL);
-   219					if (!info->fscrypt_auth)
-   220						return -ENOMEM;
-   221					ceph_decode_copy_safe(p, end, info->fscrypt_auth,
-   222							      info->fscrypt_auth_len, bad);
-   223				}
-   224				ceph_decode_32_safe(p, end, info->fscrypt_file_len, bad);
-   225				if (info->fscrypt_file_len) {
-   226					info->fscrypt_file = kmalloc(info->fscrypt_file_len,
-   227								     GFP_KERNEL);
-   228					if (!info->fscrypt_file)
-   229						return -ENOMEM;
-   230					ceph_decode_copy_safe(p, end, info->fscrypt_file,
-   231							      info->fscrypt_file_len, bad);
-   232				}
-   233			}
-   234	
-   235			/* struct_v 8 added a versioned field - skip it */
-   236			if (struct_v >= 8) {
- > 237				u8 v8_struct_v, v8_struct_compat;
-   238				u32 v8_struct_len;
-   239	
-   240				ceph_decode_8_safe(p, end, v8_struct_v, bad);
-   241				ceph_decode_8_safe(p, end, v8_struct_compat, bad);
-   242				ceph_decode_32_safe(p, end, v8_struct_len, bad);
-   243				ceph_decode_skip_n(p, end, v8_struct_len, bad);
-   244			}
-   245	
-   246			*p = end;
-   247		} else {
-   248			/* legacy (unversioned) struct */
-   249			if (features & CEPH_FEATURE_MDS_INLINE_DATA) {
-   250				ceph_decode_64_safe(p, end, info->inline_version, bad);
-   251				ceph_decode_32_safe(p, end, info->inline_len, bad);
-   252				ceph_decode_need(p, end, info->inline_len, bad);
-   253				info->inline_data = *p;
-   254				*p += info->inline_len;
-   255			} else
-   256				info->inline_version = CEPH_INLINE_NONE;
-   257	
-   258			if (features & CEPH_FEATURE_MDS_QUOTA) {
-   259				err = parse_reply_info_quota(p, end, info);
-   260				if (err < 0)
-   261					goto out_bad;
-   262			} else {
-   263				info->max_bytes = 0;
-   264				info->max_files = 0;
-   265			}
-   266	
-   267			info->pool_ns_len = 0;
-   268			info->pool_ns_data = NULL;
-   269			if (features & CEPH_FEATURE_FS_FILE_LAYOUT_V2) {
-   270				ceph_decode_32_safe(p, end, info->pool_ns_len, bad);
-   271				if (info->pool_ns_len > 0) {
-   272					ceph_decode_need(p, end, info->pool_ns_len, bad);
-   273					info->pool_ns_data = *p;
-   274					*p += info->pool_ns_len;
-   275				}
-   276			}
-   277	
-   278			if (features & CEPH_FEATURE_FS_BTIME) {
-   279				ceph_decode_need(p, end, sizeof(info->btime), bad);
-   280				ceph_decode_copy(p, &info->btime, sizeof(info->btime));
-   281				ceph_decode_64_safe(p, end, info->change_attr, bad);
-   282			}
-   283	
-   284			info->dir_pin = -ENODATA;
-   285			/* info->snap_btime and info->rsnaps remain zero */
-   286		}
-   287		return 0;
-   288	bad:
-   289		err = -EIO;
-   290	out_bad:
-   291		return err;
-   292	}
-   293	
+282a8e0391c377 Ross Zwisler            2017-02-22    9  
+282a8e0391c377 Ross Zwisler            2017-02-22   10  DECLARE_EVENT_CLASS(dax_pmd_fault_class,
+f42003917b4569 Dave Jiang              2017-02-22   11  	TP_PROTO(struct inode *inode, struct vm_fault *vmf,
+f42003917b4569 Dave Jiang              2017-02-22   12  		pgoff_t max_pgoff, int result),
+f42003917b4569 Dave Jiang              2017-02-22   13  	TP_ARGS(inode, vmf, max_pgoff, result),
+282a8e0391c377 Ross Zwisler            2017-02-22   14  	TP_STRUCT__entry(
+282a8e0391c377 Ross Zwisler            2017-02-22   15  		__field(unsigned long, ino)
+282a8e0391c377 Ross Zwisler            2017-02-22   16  		__field(unsigned long, vm_start)
+282a8e0391c377 Ross Zwisler            2017-02-22   17  		__field(unsigned long, vm_end)
+bfbe71109fa40e Lorenzo Stoakes         2025-06-18   18  		__field(vm_flags_t, vm_flags)
+282a8e0391c377 Ross Zwisler            2017-02-22   19  		__field(unsigned long, address)
+282a8e0391c377 Ross Zwisler            2017-02-22   20  		__field(pgoff_t, pgoff)
+282a8e0391c377 Ross Zwisler            2017-02-22   21  		__field(pgoff_t, max_pgoff)
+282a8e0391c377 Ross Zwisler            2017-02-22   22  		__field(dev_t, dev)
+282a8e0391c377 Ross Zwisler            2017-02-22   23  		__field(unsigned int, flags)
+282a8e0391c377 Ross Zwisler            2017-02-22   24  		__field(int, result)
+282a8e0391c377 Ross Zwisler            2017-02-22   25  	),
+282a8e0391c377 Ross Zwisler            2017-02-22   26  	TP_fast_assign(
+282a8e0391c377 Ross Zwisler            2017-02-22   27  		__entry->dev = inode->i_sb->s_dev;
+282a8e0391c377 Ross Zwisler            2017-02-22   28  		__entry->ino = inode->i_ino;
+f42003917b4569 Dave Jiang              2017-02-22   29  		__entry->vm_start = vmf->vma->vm_start;
+f42003917b4569 Dave Jiang              2017-02-22   30  		__entry->vm_end = vmf->vma->vm_end;
+f42003917b4569 Dave Jiang              2017-02-22   31  		__entry->vm_flags = vmf->vma->vm_flags;
+d8a849e1bc1237 Dave Jiang              2017-02-22   32  		__entry->address = vmf->address;
+d8a849e1bc1237 Dave Jiang              2017-02-22   33  		__entry->flags = vmf->flags;
+d8a849e1bc1237 Dave Jiang              2017-02-22   34  		__entry->pgoff = vmf->pgoff;
+282a8e0391c377 Ross Zwisler            2017-02-22   35  		__entry->max_pgoff = max_pgoff;
+282a8e0391c377 Ross Zwisler            2017-02-22   36  		__entry->result = result;
+282a8e0391c377 Ross Zwisler            2017-02-22   37  	),
+282a8e0391c377 Ross Zwisler            2017-02-22   38  	TP_printk("dev %d:%d ino %#lx %s %s address %#lx vm_start "
+282a8e0391c377 Ross Zwisler            2017-02-22   39  			"%#lx vm_end %#lx pgoff %#lx max_pgoff %#lx %s",
+282a8e0391c377 Ross Zwisler            2017-02-22   40  		MAJOR(__entry->dev),
+282a8e0391c377 Ross Zwisler            2017-02-22   41  		MINOR(__entry->dev),
+282a8e0391c377 Ross Zwisler            2017-02-22   42  		__entry->ino,
+282a8e0391c377 Ross Zwisler            2017-02-22   43  		__entry->vm_flags & VM_SHARED ? "shared" : "private",
+282a8e0391c377 Ross Zwisler            2017-02-22   44  		__print_flags(__entry->flags, "|", FAULT_FLAG_TRACE),
+282a8e0391c377 Ross Zwisler            2017-02-22   45  		__entry->address,
+282a8e0391c377 Ross Zwisler            2017-02-22   46  		__entry->vm_start,
+282a8e0391c377 Ross Zwisler            2017-02-22   47  		__entry->vm_end,
+282a8e0391c377 Ross Zwisler            2017-02-22   48  		__entry->pgoff,
+282a8e0391c377 Ross Zwisler            2017-02-22   49  		__entry->max_pgoff,
+282a8e0391c377 Ross Zwisler            2017-02-22  @50  		__print_flags(__entry->result, "|", VM_FAULT_RESULT_TRACE)
+282a8e0391c377 Ross Zwisler            2017-02-22   51  	)
+282a8e0391c377 Ross Zwisler            2017-02-22   52  )
+282a8e0391c377 Ross Zwisler            2017-02-22   53  
+282a8e0391c377 Ross Zwisler            2017-02-22   54  #define DEFINE_PMD_FAULT_EVENT(name) \
+282a8e0391c377 Ross Zwisler            2017-02-22   55  DEFINE_EVENT(dax_pmd_fault_class, name, \
+f42003917b4569 Dave Jiang              2017-02-22   56  	TP_PROTO(struct inode *inode, struct vm_fault *vmf, \
+282a8e0391c377 Ross Zwisler            2017-02-22   57  		pgoff_t max_pgoff, int result), \
+f42003917b4569 Dave Jiang              2017-02-22   58  	TP_ARGS(inode, vmf, max_pgoff, result))
+282a8e0391c377 Ross Zwisler            2017-02-22   59  
+282a8e0391c377 Ross Zwisler            2017-02-22   60  DEFINE_PMD_FAULT_EVENT(dax_pmd_fault);
+282a8e0391c377 Ross Zwisler            2017-02-22   61  DEFINE_PMD_FAULT_EVENT(dax_pmd_fault_done);
+282a8e0391c377 Ross Zwisler            2017-02-22   62  
+653b2ea3396fda Ross Zwisler            2017-02-22   63  DECLARE_EVENT_CLASS(dax_pmd_load_hole_class,
+f42003917b4569 Dave Jiang              2017-02-22   64  	TP_PROTO(struct inode *inode, struct vm_fault *vmf,
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   65) 		struct folio *zero_folio,
+653b2ea3396fda Ross Zwisler            2017-02-22   66  		void *radix_entry),
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   67) 	TP_ARGS(inode, vmf, zero_folio, radix_entry),
+653b2ea3396fda Ross Zwisler            2017-02-22   68  	TP_STRUCT__entry(
+653b2ea3396fda Ross Zwisler            2017-02-22   69  		__field(unsigned long, ino)
+bfbe71109fa40e Lorenzo Stoakes         2025-06-18   70  		__field(vm_flags_t, vm_flags)
+653b2ea3396fda Ross Zwisler            2017-02-22   71  		__field(unsigned long, address)
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   72) 		__field(struct folio *, zero_folio)
+653b2ea3396fda Ross Zwisler            2017-02-22   73  		__field(void *, radix_entry)
+653b2ea3396fda Ross Zwisler            2017-02-22   74  		__field(dev_t, dev)
+653b2ea3396fda Ross Zwisler            2017-02-22   75  	),
+653b2ea3396fda Ross Zwisler            2017-02-22   76  	TP_fast_assign(
+653b2ea3396fda Ross Zwisler            2017-02-22   77  		__entry->dev = inode->i_sb->s_dev;
+653b2ea3396fda Ross Zwisler            2017-02-22   78  		__entry->ino = inode->i_ino;
+f42003917b4569 Dave Jiang              2017-02-22   79  		__entry->vm_flags = vmf->vma->vm_flags;
+f42003917b4569 Dave Jiang              2017-02-22   80  		__entry->address = vmf->address;
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   81) 		__entry->zero_folio = zero_folio;
+653b2ea3396fda Ross Zwisler            2017-02-22   82  		__entry->radix_entry = radix_entry;
+653b2ea3396fda Ross Zwisler            2017-02-22   83  	),
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   84) 	TP_printk("dev %d:%d ino %#lx %s address %#lx zero_folio %p "
+653b2ea3396fda Ross Zwisler            2017-02-22   85  			"radix_entry %#lx",
+653b2ea3396fda Ross Zwisler            2017-02-22   86  		MAJOR(__entry->dev),
+653b2ea3396fda Ross Zwisler            2017-02-22   87  		MINOR(__entry->dev),
+653b2ea3396fda Ross Zwisler            2017-02-22   88  		__entry->ino,
+653b2ea3396fda Ross Zwisler            2017-02-22   89  		__entry->vm_flags & VM_SHARED ? "shared" : "private",
+653b2ea3396fda Ross Zwisler            2017-02-22   90  		__entry->address,
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   91) 		__entry->zero_folio,
+653b2ea3396fda Ross Zwisler            2017-02-22   92  		(unsigned long)__entry->radix_entry
+653b2ea3396fda Ross Zwisler            2017-02-22   93  	)
+653b2ea3396fda Ross Zwisler            2017-02-22   94  )
+653b2ea3396fda Ross Zwisler            2017-02-22   95  
+653b2ea3396fda Ross Zwisler            2017-02-22   96  #define DEFINE_PMD_LOAD_HOLE_EVENT(name) \
+653b2ea3396fda Ross Zwisler            2017-02-22   97  DEFINE_EVENT(dax_pmd_load_hole_class, name, \
+f42003917b4569 Dave Jiang              2017-02-22   98  	TP_PROTO(struct inode *inode, struct vm_fault *vmf, \
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26   99) 		struct folio *zero_folio, void *radix_entry), \
+c93012d849c9e3 Matthew Wilcox (Oracle  2024-03-26  100) 	TP_ARGS(inode, vmf, zero_folio, radix_entry))
+653b2ea3396fda Ross Zwisler            2017-02-22  101  
+653b2ea3396fda Ross Zwisler            2017-02-22  102  DEFINE_PMD_LOAD_HOLE_EVENT(dax_pmd_load_hole);
+653b2ea3396fda Ross Zwisler            2017-02-22  103  DEFINE_PMD_LOAD_HOLE_EVENT(dax_pmd_load_hole_fallback);
+282a8e0391c377 Ross Zwisler            2017-02-22  104  
+a9c42b33ed8096 Ross Zwisler            2017-05-08  105  DECLARE_EVENT_CLASS(dax_pte_fault_class,
+a9c42b33ed8096 Ross Zwisler            2017-05-08  106  	TP_PROTO(struct inode *inode, struct vm_fault *vmf, int result),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  107  	TP_ARGS(inode, vmf, result),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  108  	TP_STRUCT__entry(
+a9c42b33ed8096 Ross Zwisler            2017-05-08  109  		__field(unsigned long, ino)
+bfbe71109fa40e Lorenzo Stoakes         2025-06-18  110  		__field(vm_flags_t, vm_flags)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  111  		__field(unsigned long, address)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  112  		__field(pgoff_t, pgoff)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  113  		__field(dev_t, dev)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  114  		__field(unsigned int, flags)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  115  		__field(int, result)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  116  	),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  117  	TP_fast_assign(
+a9c42b33ed8096 Ross Zwisler            2017-05-08  118  		__entry->dev = inode->i_sb->s_dev;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  119  		__entry->ino = inode->i_ino;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  120  		__entry->vm_flags = vmf->vma->vm_flags;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  121  		__entry->address = vmf->address;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  122  		__entry->flags = vmf->flags;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  123  		__entry->pgoff = vmf->pgoff;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  124  		__entry->result = result;
+a9c42b33ed8096 Ross Zwisler            2017-05-08  125  	),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  126  	TP_printk("dev %d:%d ino %#lx %s %s address %#lx pgoff %#lx %s",
+a9c42b33ed8096 Ross Zwisler            2017-05-08  127  		MAJOR(__entry->dev),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  128  		MINOR(__entry->dev),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  129  		__entry->ino,
+a9c42b33ed8096 Ross Zwisler            2017-05-08  130  		__entry->vm_flags & VM_SHARED ? "shared" : "private",
+a9c42b33ed8096 Ross Zwisler            2017-05-08  131  		__print_flags(__entry->flags, "|", FAULT_FLAG_TRACE),
+a9c42b33ed8096 Ross Zwisler            2017-05-08  132  		__entry->address,
+a9c42b33ed8096 Ross Zwisler            2017-05-08  133  		__entry->pgoff,
+a9c42b33ed8096 Ross Zwisler            2017-05-08  134  		__print_flags(__entry->result, "|", VM_FAULT_RESULT_TRACE)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  135  	)
+a9c42b33ed8096 Ross Zwisler            2017-05-08  136  )
+a9c42b33ed8096 Ross Zwisler            2017-05-08  137  
+a9c42b33ed8096 Ross Zwisler            2017-05-08  138  #define DEFINE_PTE_FAULT_EVENT(name) \
+a9c42b33ed8096 Ross Zwisler            2017-05-08  139  DEFINE_EVENT(dax_pte_fault_class, name, \
+a9c42b33ed8096 Ross Zwisler            2017-05-08  140  	TP_PROTO(struct inode *inode, struct vm_fault *vmf, int result), \
+a9c42b33ed8096 Ross Zwisler            2017-05-08  141  	TP_ARGS(inode, vmf, result))
+a9c42b33ed8096 Ross Zwisler            2017-05-08  142  
+a9c42b33ed8096 Ross Zwisler            2017-05-08  143  DEFINE_PTE_FAULT_EVENT(dax_pte_fault);
+a9c42b33ed8096 Ross Zwisler            2017-05-08  144  DEFINE_PTE_FAULT_EVENT(dax_pte_fault_done);
+678c9fd0430a14 Ross Zwisler            2017-05-08  145  DEFINE_PTE_FAULT_EVENT(dax_load_hole);
+71eab6dfd91eab Jan Kara                2017-11-01  146  DEFINE_PTE_FAULT_EVENT(dax_insert_pfn_mkwrite_no_entry);
+71eab6dfd91eab Jan Kara                2017-11-01  147  DEFINE_PTE_FAULT_EVENT(dax_insert_pfn_mkwrite);
+a9c42b33ed8096 Ross Zwisler            2017-05-08  148  
+d14a3f48a152b7 Ross Zwisler            2017-05-08  149  DECLARE_EVENT_CLASS(dax_writeback_range_class,
+d14a3f48a152b7 Ross Zwisler            2017-05-08  150  	TP_PROTO(struct inode *inode, pgoff_t start_index, pgoff_t end_index),
+d14a3f48a152b7 Ross Zwisler            2017-05-08  151  	TP_ARGS(inode, start_index, end_index),
+d14a3f48a152b7 Ross Zwisler            2017-05-08  152  	TP_STRUCT__entry(
+d14a3f48a152b7 Ross Zwisler            2017-05-08  153  		__field(unsigned long, ino)
+d14a3f48a152b7 Ross Zwisler            2017-05-08  154  		__field(pgoff_t, start_index)
+d14a3f48a152b7 Ross Zwisler            2017-05-08  155  		__field(pgoff_t, end_index)
+d14a3f48a152b7 Ross Zwisler            2017-05-08  156  		__field(dev_t, dev)
+d14a3f48a152b7 Ross Zwisler            2017-05-08  157  	),
+d14a3f48a152b7 Ross Zwisler            2017-05-08  158  	TP_fast_assign(
+d14a3f48a152b7 Ross Zwisler            2017-05-08  159  		__entry->dev = inode->i_sb->s_dev;
+d14a3f48a152b7 Ross Zwisler            2017-05-08  160  		__entry->ino = inode->i_ino;
+d14a3f48a152b7 Ross Zwisler            2017-05-08  161  		__entry->start_index = start_index;
+d14a3f48a152b7 Ross Zwisler            2017-05-08  162  		__entry->end_index = end_index;
+d14a3f48a152b7 Ross Zwisler            2017-05-08  163  	),
+d14a3f48a152b7 Ross Zwisler            2017-05-08  164  	TP_printk("dev %d:%d ino %#lx pgoff %#lx-%#lx",
+d14a3f48a152b7 Ross Zwisler            2017-05-08  165  		MAJOR(__entry->dev),
+d14a3f48a152b7 Ross Zwisler            2017-05-08  166  		MINOR(__entry->dev),
+d14a3f48a152b7 Ross Zwisler            2017-05-08  167  		__entry->ino,
+d14a3f48a152b7 Ross Zwisler            2017-05-08  168  		__entry->start_index,
+d14a3f48a152b7 Ross Zwisler            2017-05-08  169  		__entry->end_index
+d14a3f48a152b7 Ross Zwisler            2017-05-08  170  	)
+d14a3f48a152b7 Ross Zwisler            2017-05-08  171  )
+d14a3f48a152b7 Ross Zwisler            2017-05-08  172  
+d14a3f48a152b7 Ross Zwisler            2017-05-08  173  #define DEFINE_WRITEBACK_RANGE_EVENT(name) \
+d14a3f48a152b7 Ross Zwisler            2017-05-08  174  DEFINE_EVENT(dax_writeback_range_class, name, \
+d14a3f48a152b7 Ross Zwisler            2017-05-08  175  	TP_PROTO(struct inode *inode, pgoff_t start_index, pgoff_t end_index),\
+d14a3f48a152b7 Ross Zwisler            2017-05-08  176  	TP_ARGS(inode, start_index, end_index))
+d14a3f48a152b7 Ross Zwisler            2017-05-08  177  
+d14a3f48a152b7 Ross Zwisler            2017-05-08  178  DEFINE_WRITEBACK_RANGE_EVENT(dax_writeback_range);
+d14a3f48a152b7 Ross Zwisler            2017-05-08  179  DEFINE_WRITEBACK_RANGE_EVENT(dax_writeback_range_done);
+d14a3f48a152b7 Ross Zwisler            2017-05-08  180  
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  181  TRACE_EVENT(dax_writeback_one,
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  182  	TP_PROTO(struct inode *inode, pgoff_t pgoff, pgoff_t pglen),
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  183  	TP_ARGS(inode, pgoff, pglen),
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  184  	TP_STRUCT__entry(
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  185  		__field(unsigned long, ino)
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  186  		__field(pgoff_t, pgoff)
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  187  		__field(pgoff_t, pglen)
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  188  		__field(dev_t, dev)
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  189  	),
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  190  	TP_fast_assign(
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  191  		__entry->dev = inode->i_sb->s_dev;
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  192  		__entry->ino = inode->i_ino;
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  193  		__entry->pgoff = pgoff;
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  194  		__entry->pglen = pglen;
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  195  	),
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  196  	TP_printk("dev %d:%d ino %#lx pgoff %#lx pglen %#lx",
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  197  		MAJOR(__entry->dev),
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  198  		MINOR(__entry->dev),
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  199  		__entry->ino,
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  200  		__entry->pgoff,
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  201  		__entry->pglen
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  202  	)
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  203  )
+f9bc3a07539bc8 Ross Zwisler            2017-05-08  204  
+282a8e0391c377 Ross Zwisler            2017-02-22  205  #endif /* _TRACE_FS_DAX_H */
+282a8e0391c377 Ross Zwisler            2017-02-22  206  
+282a8e0391c377 Ross Zwisler            2017-02-22  207  /* This part must be outside protection */
+282a8e0391c377 Ross Zwisler            2017-02-22 @208  #include <trace/define_trace.h>
 
 -- 
 0-DAY CI Kernel Test Service
