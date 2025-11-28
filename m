@@ -1,63 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04A281724;
-	Fri, 28 Nov 2025 02:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC0072606;
+	Fri, 28 Nov 2025 02:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764297714; cv=none; b=LH7JNdzI4OsJ9ZkPHbI88GNwK+zMbfZhedvvfKzVkb5ErRyy7MT8TPLG9Mf4/NqUtQo/kOi4XjNGHKljWOlsUHY/LJ1VBhnjcIGuOqtnAvjJTAdVpOA7Br8Pf4hKV/D9TOueZ929eAHgnVZ+oGaEHVjLSSVm0OHuvBGdESDA0Zo=
+	t=1764298377; cv=none; b=tvrqXjmStsFp17C5aRu6slEIpIBJdFBm7m0CwsRNP3XyOoNVESlgEcDhEbEqhJbUfSGAkZ5FB1Bi0F80LsSurP+vt6udzAkTenyPaWRHGKB7TpKTn2+zs+ATJa2INAzHTsQMvNAPUJDam0xvI6Ov4L9VVQwRfm0WJGlcEIDeN6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764297714; c=relaxed/simple;
-	bh=JrreKOGy8fVi0NuOuKgyab2Zvd9rEWjrB41J9wje3dg=;
+	s=arc-20240116; t=1764298377; c=relaxed/simple;
+	bh=kN8f8ocFg/9iq69/nMOZcevqnWg1yZnJ/G3yn1vCZBg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5SDwuJr6dr+IU4Rr8DwzihlGiOzxjJjDL1+rjcPDUcltCkL+19XRJ7X/0OvFzr6FPh6FL36kN/m2hQE1VX+GPLNlS1TNsZLv/aXAEtrIy00zqMMR9KRUrSbZBT1ravXxdB0CruvTGbIRnzHaQB57rYQgKm+aWjGIejVV+flJ2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jn4cm4TZ; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=hDnacae3yaa6QmlIUQYrHReFU4KXDdrsXg/OycKBPGgsXrGPqZyd8dP2rdG+m84UWA5BETAi8rZofcOhLvn+IDthJxHcvVRSjQUFOJIBw3uPbFZ9aLDv20muazCoe3GX2PDSG1WN8pyGxdmrjbjlQV9WhbZzMrHTIkhkwx4kfq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jwuXKnvl; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jn4cm4TZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jwuXKnvl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764297713; x=1795833713;
+  t=1764298376; x=1795834376;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JrreKOGy8fVi0NuOuKgyab2Zvd9rEWjrB41J9wje3dg=;
-  b=jn4cm4TZTdvcmCvx9Wgrn8xrNC//FbBw9dP+0vrw7vywD42RJm8f3IfP
-   UFxenq+6lEdOVCrCeK2zgLOhr1aliHJctZH+4bAjyvTC0QAv11MIQgogg
-   kGltXmgeg35IVZtExEmjemTm7cNZSWhzaEwNOpz0qrj0kNly8qN7LyU5P
-   0bbs4Fxque5oiJty8cUMpjs5EiwBePYPThsPk+zAKhYyw2u31EBO9WttI
-   a3GZZPQWDVdtz91fwHtadWihA8XQuc+zX4pw1IHYo+lzJFeEQ2QgBYESN
-   nnrTMSBzfRobHovb7n0LbtiNrsqCyU9dStZMf15lXzBDbfMAxSdJAou50
-   A==;
-X-CSE-ConnectionGUID: CswZzy2qRj+W5/g14oljEQ==
-X-CSE-MsgGUID: 7YYN9mBPQ1iNNUFr7hfUYA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66296060"
+  bh=kN8f8ocFg/9iq69/nMOZcevqnWg1yZnJ/G3yn1vCZBg=;
+  b=jwuXKnvlSlYpwdsuRSo+7bN42FuZxdo8v1XcRvX+LAUqP2Z5DOoKwUWY
+   ft2QcllrmyWPSe1Q0v542t4ySUaih99I6R4ozr/2bxZ0sh5XG35FlZzlq
+   PSuPO0PATYv8StFflhzaJqGto1fMjB56d/8yXlixH0qhGs6VEz12HDFQI
+   rnn/7G8ir8zeEBuLWw0kp0TAoKhBzuJzfYFirBE8/NuR2l5brVzavcHAP
+   kzaKO/ilA8FEVdV4jeZX2XS9xpQBOik53rxOwIGXW0Nj8NALLQmRCD92X
+   0EopTGl/PnPkoZPJID0aKj0wg+Um61PY18EW94lwosBgnSGfKvwvGKsTg
+   Q==;
+X-CSE-ConnectionGUID: l+A8K494SYKtNABICvZnVg==
+X-CSE-MsgGUID: oPvnla8aQoKmy+JFXQ8New==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66281695"
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="66296060"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 18:41:52 -0800
-X-CSE-ConnectionGUID: yTwd8rZATgm/rWBAoESr/w==
-X-CSE-MsgGUID: oKevCgOSR/Ov00lsm3JErw==
+   d="scan'208";a="66281695"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 18:52:55 -0800
+X-CSE-ConnectionGUID: kHmaFFJtSrCUNitANqQ8Mg==
+X-CSE-MsgGUID: OVGbIM/SSGC2110517cZ5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="198463500"
+   d="scan'208";a="193159342"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 27 Nov 2025 18:41:48 -0800
+  by orviesa009.jf.intel.com with ESMTP; 27 Nov 2025 18:52:51 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vOoQd-000000005w5-1Rq6;
-	Fri, 28 Nov 2025 02:41:47 +0000
-Date: Fri, 28 Nov 2025 10:41:17 +0800
+	id 1vOobI-000000005xN-3R8H;
+	Fri, 28 Nov 2025 02:52:48 +0000
+Date: Fri, 28 Nov 2025 10:52:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Osama Abdelkader <osama.abdelkader@gmail.com>, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	smostafa@google.com
+To: Anna Maniscalco <anna.maniscalco2000@gmail.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Antonino Maniscalco <antomani103@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Osama Abdelkader <osama.abdelkader@gmail.com>
-Subject: Re: [PATCH] arm64: Remove unreachable break after die
-Message-ID: <202511281049.oCzxmRVJ-lkp@intel.com>
-References: <20251126222620.215245-1-osama.abdelkader@gmail.com>
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Anna Maniscalco <anna.maniscalco2000@gmail.com>
+Subject: Re: [PATCH] drm/msm: Fix a7xx per pipe register programming
+Message-ID: <202511281253.rIkrIiqt-lkp@intel.com>
+References: <20251127-gras_nc_mode_fix-v1-1-5c0cf616401f@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,165 +75,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251126222620.215245-1-osama.abdelkader@gmail.com>
+In-Reply-To: <20251127-gras_nc_mode_fix-v1-1-5c0cf616401f@gmail.com>
 
-Hi Osama,
+Hi Anna,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on linus/master v6.18-rc7 next-20251127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 7bc29d5fb6faff2f547323c9ee8d3a0790cd2530]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Osama-Abdelkader/arm64-Remove-unreachable-break-after-die/20251127-062758
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20251126222620.215245-1-osama.abdelkader%40gmail.com
-patch subject: [PATCH] arm64: Remove unreachable break after die
-config: arm64-randconfig-001-20251128 (https://download.01.org/0day-ci/archive/20251128/202511281049.oCzxmRVJ-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b3428bb966f1de8aa48375ffee0eba04ede133b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511281049.oCzxmRVJ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Anna-Maniscalco/drm-msm-Fix-a7xx-per-pipe-register-programming/20251127-074833
+base:   7bc29d5fb6faff2f547323c9ee8d3a0790cd2530
+patch link:    https://lore.kernel.org/r/20251127-gras_nc_mode_fix-v1-1-5c0cf616401f%40gmail.com
+patch subject: [PATCH] drm/msm: Fix a7xx per pipe register programming
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251128/202511281253.rIkrIiqt-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511281253.rIkrIiqt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511281049.oCzxmRVJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511281253.rIkrIiqt-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:862:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     862 |         [ESR_ELx_EC_DABT_CUR]           = "DABT (current EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:863:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     863 |         [ESR_ELx_EC_SP_ALIGN]           = "SP Alignment",
-         |                                           ^~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:864:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     864 |         [ESR_ELx_EC_MOPS]               = "MOPS",
-         |                                           ^~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:865:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     865 |         [ESR_ELx_EC_FP_EXC32]           = "FP (AArch32)",
-         |                                           ^~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:866:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     866 |         [ESR_ELx_EC_FP_EXC64]           = "FP (AArch64)",
-         |                                           ^~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:867:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     867 |         [ESR_ELx_EC_GCS]                = "Guarded Control Stack",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:868:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     868 |         [ESR_ELx_EC_SERROR]             = "SError",
-         |                                           ^~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:869:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     869 |         [ESR_ELx_EC_BREAKPT_LOW]        = "Breakpoint (lower EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:870:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     870 |         [ESR_ELx_EC_BREAKPT_CUR]        = "Breakpoint (current EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:871:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     871 |         [ESR_ELx_EC_SOFTSTP_LOW]        = "Software Step (lower EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:872:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     872 |         [ESR_ELx_EC_SOFTSTP_CUR]        = "Software Step (current EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:873:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     873 |         [ESR_ELx_EC_WATCHPT_LOW]        = "Watchpoint (lower EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:874:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     874 |         [ESR_ELx_EC_WATCHPT_CUR]        = "Watchpoint (current EL)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:875:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     875 |         [ESR_ELx_EC_BKPT32]             = "BKPT (AArch32)",
-         |                                           ^~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:876:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     876 |         [ESR_ELx_EC_VECTOR32]           = "Vector catch (AArch32)",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:877:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     877 |         [ESR_ELx_EC_BRK64]              = "BRK (AArch64)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
-     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
-         |                                           ^~~~~~~~~~~~~~~~~
->> arch/arm64/kernel/traps.c:1007:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    1007 |         case BUG_TRAP_TYPE_WARN:
-         |         ^
-   arch/arm64/kernel/traps.c:1007:2: note: insert 'break;' to avoid fall-through
-    1007 |         case BUG_TRAP_TYPE_WARN:
-         |         ^
-         |         break; 
-   45 warnings generated.
+>> drivers/gpu/drm/msm/adreno/a6xx_gpu.c:984:35: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
+     984 |                         if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
+         |                                                        ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/adreno/a6xx_gpu.c:984:35: note: place parentheses around the '==' expression to silence this warning
+     984 |                         if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
+         |                                                        ^ ~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/adreno/a6xx_gpu.c:984:35: note: place parentheses around the & expression to evaluate it first
+     984 |                         if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +1007 arch/arm64/kernel/traps.c
+vim +984 drivers/gpu/drm/msm/adreno/a6xx_gpu.c
 
-9fb7410f955f7a Dave P Martin    2015-07-24  1000  
-6adfdc5e2ef9c7 Ada Couprie Diaz 2025-07-07  1001  int bug_brk_handler(struct pt_regs *regs, unsigned long esr)
-9fb7410f955f7a Dave P Martin    2015-07-24  1002  {
-9fb7410f955f7a Dave P Martin    2015-07-24  1003  	switch (report_bug(regs->pc, regs)) {
-9fb7410f955f7a Dave P Martin    2015-07-24  1004  	case BUG_TRAP_TYPE_BUG:
-0f2cb928a1547a Mark Rutland     2022-09-13  1005  		die("Oops - BUG", regs, esr);
-9fb7410f955f7a Dave P Martin    2015-07-24  1006  
-9fb7410f955f7a Dave P Martin    2015-07-24 @1007  	case BUG_TRAP_TYPE_WARN:
-9fb7410f955f7a Dave P Martin    2015-07-24  1008  		break;
-9fb7410f955f7a Dave P Martin    2015-07-24  1009  
-9fb7410f955f7a Dave P Martin    2015-07-24  1010  	default:
-9fb7410f955f7a Dave P Martin    2015-07-24  1011  		/* unknown/unrecognised bug trap type */
-9fb7410f955f7a Dave P Martin    2015-07-24  1012  		return DBG_HOOK_ERROR;
-9fb7410f955f7a Dave P Martin    2015-07-24  1013  	}
-9fb7410f955f7a Dave P Martin    2015-07-24  1014  
-9fb7410f955f7a Dave P Martin    2015-07-24  1015  	/* If thread survives, skip over the BUG instruction and continue: */
-6436beeee5721a Julien Thierry   2017-10-25  1016  	arm64_skip_faulting_instruction(regs, AARCH64_INSN_SIZE);
-9fb7410f955f7a Dave P Martin    2015-07-24  1017  	return DBG_HOOK_HANDLED;
-9fb7410f955f7a Dave P Martin    2015-07-24  1018  }
-9fb7410f955f7a Dave P Martin    2015-07-24  1019  
+   931	
+   932	static void a7xx_patch_pwrup_reglist(struct msm_gpu *gpu)
+   933	{
+   934		struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+   935		struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+   936		const struct adreno_reglist_list *reglist;
+   937		const struct adreno_reglist_pipe_list *pipe_reglist;
+   938		void *ptr = a6xx_gpu->pwrup_reglist_ptr;
+   939		struct cpu_gpu_lock *lock = ptr;
+   940		u32 *dest = (u32 *)&lock->regs[0];
+   941		u32 pipe_reglist_count = 0;
+   942		int i;
+   943	
+   944		lock->gpu_req = lock->cpu_req = lock->turn = 0;
+   945	
+   946		reglist = adreno_gpu->info->a6xx->ifpc_reglist;
+   947		lock->ifpc_list_len = reglist->count;
+   948	
+   949		/*
+   950		 * For each entry in each of the lists, write the offset and the current
+   951		 * register value into the GPU buffer
+   952		 */
+   953		for (i = 0; i < reglist->count; i++) {
+   954			*dest++ = reglist->regs[i];
+   955			*dest++ = gpu_read(gpu, reglist->regs[i]);
+   956		}
+   957	
+   958		reglist = adreno_gpu->info->a6xx->pwrup_reglist;
+   959		lock->preemption_list_len = reglist->count;
+   960	
+   961		for (i = 0; i < reglist->count; i++) {
+   962			*dest++ = reglist->regs[i];
+   963			*dest++ = gpu_read(gpu, reglist->regs[i]);
+   964		}
+   965	
+   966		/*
+   967		 * The overall register list is composed of
+   968		 * 1. Static IFPC-only registers
+   969		 * 2. Static IFPC + preemption registers
+   970		 * 3. Dynamic IFPC + preemption registers (ex: perfcounter selects)
+   971		 *
+   972		 * The first two lists are static. Size of these lists are stored as
+   973		 * number of pairs in ifpc_list_len and preemption_list_len
+   974		 * respectively. With concurrent binning, Some of the perfcounter
+   975		 * registers being virtualized, CP needs to know the pipe id to program
+   976		 * the aperture inorder to restore the same. Thus, third list is a
+   977		 * dynamic list with triplets as
+   978		 * (<aperture, shifted 12 bits> <address> <data>), and the length is
+   979		 * stored as number for triplets in dynamic_list_len.
+   980		 */
+   981		pipe_reglist = adreno_gpu->info->a6xx->pipe_reglist;
+   982		for (u32 pipe_id = PIPE_BR; pipe_id <= PIPE_BV; pipe_id++) {
+   983			for (i = 0; i < pipe_reglist->count; i++) {
+ > 984				if (pipe_reglist->regs[i].pipe & BIT(pipe_id) == 0)
+   985					continue;
+   986				*dest++ = A7XX_CP_APERTURE_CNTL_HOST_PIPE(pipe_id);
+   987				*dest++ = pipe_reglist->regs[i].offset;
+   988				*dest++ = a7xx_read_pipe(gpu, pipe_id,
+   989							 pipe_reglist->regs[i].offset);
+   990				pipe_reglist_count++;
+   991			}
+   992		}
+   993		lock->dynamic_list_len = pipe_reglist_count;
+   994	}
+   995	
 
 -- 
 0-DAY CI Kernel Test Service
