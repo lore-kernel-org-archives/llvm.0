@@ -1,152 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DAA2D47FF;
-	Fri, 28 Nov 2025 06:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1905D2F0C66
+	for <llvm@lists.linux.dev>; Fri, 28 Nov 2025 08:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764312787; cv=none; b=eW361oItsNQv88qqLyXh2dxxtAqPOkkZH/FrY9mkXdo88eH4Rqp6zSykualKyM+sgjNm+Mmxb0xkVY/dNLvqGISoLog3pvm3DDaiFqZeV30Lm+AQuhAekS68/4VAbkQDq8wg0nkL2R1/Qj5VGnhkZD2/6D91wWNg8o3CAHeQ8N8=
+	t=1764318779; cv=none; b=ZXWoYLn9RW5Xy/BeZoja44ECPPzIQBBKeHUfoifHOqkMEq8ijx/w7CZW76n9lgk/kmtlFB1f6+q2EfYYhLsIAQYH1JjqhSfZcSb/de5itvjT8Oz2gjtESh7Rmacvwn1vHjfqJR2FkQmT8qkndKwNHrZz6ATamIgpIHl22OSmIlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764312787; c=relaxed/simple;
-	bh=52HsZi08fiFu45/47LAmhAN1wfgi9SKT1OBT8cKT3RU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MnEihskZsLqEzRw/SFA+lxKGHyvhJxu3sDdgbCo4PNeZejZBsDYkbZmUkDqzhPyd4v/DVChaXXqmT4zhGLBZ/BAvi/j1I8rBZGldVHHlOOwa9jBU0OUnFLyZTRcPKtvDaMUvA35x0zXMWVHYdMvMfqZB/UoXh2hWDcovR0m4Whk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V4vdqgCC; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764318779; c=relaxed/simple;
+	bh=GZe/v+f21miE6jwGDxB0JgNCt2b8HMHU3iLRJlILIbM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Cs8U0pUx0JxFcIXGgpRLMHWJta96sCn3fm89oS5ySAJVngJ1ous1/UsfoBN3DTKEh89ECCfJZhgxBSkmVsgTxAigFu0k0NoBIrLsTFJ6sx/VyQJWG1uShiHhbY3m7E290VD9WOecZKz2sC/MQtjjn6uXL0lSRBFk8WKO8yKOB/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nzlVfA/3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i3c6Kh98; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V4vdqgCC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764312785; x=1795848785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=52HsZi08fiFu45/47LAmhAN1wfgi9SKT1OBT8cKT3RU=;
-  b=V4vdqgCCzSGBwHIW+ua/ejyKCN0kaZUUwIjolx43LuKlklElFS+HBbJU
-   B4/xAJPnTTEVsFs3FI+y6IBLPkkN1ycI4X+LiL2LY/1W37vAD3vZ6fp6p
-   VpUDkXsOJkqBXT07YShXMMpsLCq6sIMUddVQdojl0ECznbVvL8p/5XhSz
-   nxFPkfiLAun1pA6qqwYk9YPIb3bg1WMn3+L0gFx5MWABw7xtEfuhkMKH2
-   zo3/qQIhSgXkNYeqe7KPPeztzTAlN8hMWu8KfHMxCuUvFIsrXVcdMYLyX
-   OUTrrvpxwHWa5iMp8Lc42FwJsBmmyRGwHkWFcubVvhn3qSK2zcOErhAPc
-   w==;
-X-CSE-ConnectionGUID: enZ5SPwCQBmNZQI0mrK+4A==
-X-CSE-MsgGUID: 3YKOaxHjQuSVzSsDvIccug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66060802"
-X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="66060802"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 22:53:02 -0800
-X-CSE-ConnectionGUID: 2B9FMwjjSKO246VAYGX8Pw==
-X-CSE-MsgGUID: Y2HU9546ROKHBi0g+ZAXpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="198506457"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 27 Nov 2025 22:53:00 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOsLh-0000000067L-4A0e;
-	Fri, 28 Nov 2025 06:52:57 +0000
-Date: Fri, 28 Nov 2025 14:52:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jordan Niethe <jniethe@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 6/6] mm: Remove device private pages from the
- physical address space
-Message-ID: <202511281438.x8ovUgeA-lkp@intel.com>
-References: <20251128044146.80050-7-jniethe@nvidia.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nzlVfA/3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i3c6Kh98"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id BDA2F7A0091;
+	Fri, 28 Nov 2025 03:32:55 -0500 (EST)
+Received: from phl-imap-17 ([10.202.2.105])
+  by phl-compute-04.internal (MEProxy); Fri, 28 Nov 2025 03:32:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1764318775;
+	 x=1764405175; bh=kogOAsk7EHkBu4pG8vuz1bS7JaOBQWLpoPmvg+ym7YE=; b=
+	nzlVfA/3OZQIuywd76bGz8JzFboPENe5gbbTlfz2HUXVglJowS9gHVykTGxJh5WF
+	gQBzGQBiZiqx9ig3c7rEx4XBZ1tFHH04tAImabugQVsp92Bk7Pv8LjRlvXd+o53K
+	mkF+1xRfZ7e6zOcpNMoONrUF+H7wJnEyp4HonbgYMmjvmvd/Kll0SmL4EOfiRBex
+	eLQaVEChSI+kGFcM0gDwMR3arwBv+eEtgKY1ItROz28hSXLAQ9BGRifreDeeQDSY
+	LltwJEVYroKpEOHUQS38JG93mRRjnsfiwvmcNX6Q6wLqPf6UAR5qRtO42tK085t7
+	JQqRn0eWeNJ4VTTLjL7GuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764318775; x=
+	1764405175; bh=kogOAsk7EHkBu4pG8vuz1bS7JaOBQWLpoPmvg+ym7YE=; b=i
+	3c6Kh983lrsY70zS0DQt5mFiy7/v1taLdNQjD9CoCiBbdu79IjCWiBOw4Y8R3LrM
+	99GZW3IN63UX2iZV+9mEV4P3UWBMLSzRO9hvGToU6mdUj+h3SKdDLla/kfBc0Mjd
+	brvgkYIx0ywqJXmq5rRko7Gru5lDi3C4BU3om2I1mqHeE4Y73eGzjdxVewZtO21S
+	1Lph6c2SG2FGEoM+c7DGDOIOTRPPE1R41h9rlelUKjyiMtZlDcZFiW0f69hzLhdJ
+	7hGBzbKSw68R5NU9HQkY2I1onQF/w/EJoWQo1qm1F/WjMOYmokhyFairT08/YC8s
+	A+Bqro5pcUiLDTmELRUWg==
+X-ME-Sender: <xms:Nl4paZJRaokGWEiUjINohNKSJ3PEZLvn4zXqbgQ0EhmbojOB0iSy3w>
+    <xme:Nl4paf-6tLElgdqLoNbVfZ0m8CPzsTOL8eZwOFf1uwyeM2QVf1G0uMSF5kr9HYfWc
+    aoNd5CEHD9MSBCXJ2aCIQtITNuwoSeBkc-XdgfiT11ilv8uO-jyHg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgeelgedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopegstghmqdhkvghrnhgvlhdqfhgvvggusggrtghkqdhlihhsthessg
+    hrohgruggtohhmrdgtohhmpdhrtghpthhtoheprhhjuhhisegsrhhorggutghomhdrtgho
+    mhdprhgtphhtthhopehssghrrghnuggvnhessghrohgruggtohhmrdgtohhmpdhrtghpth
+    htohepghgvvghrthdorhgvnhgvshgrshesghhlihguvghrrdgsvgdprhgtphhtthhopehm
+    rghgnhhushdruggrmhhmsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhitghkrdguvg
+    hsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhs
+    thhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgoh
+    hoghhlvgdrtghomhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdho
+    rhhg
+X-ME-Proxy: <xmx:N14paShGrSc5yuHL98XPEheExHzuIVkudNwsBRs2A4b2fvUegpIY-g>
+    <xmx:N14paZ8skgNynHVvH-Sz_vBlIfFZnviHaNZmmGop4P9xLqmr8vDSaQ>
+    <xmx:N14pafIr149nS7jLJTB_xQ17EOf-xpTIGNud5jS0H8NdXihDORCw7A>
+    <xmx:N14paSZa5xNxbw-aeAWFKYObqF3QBTiFTS3nuaSvmBmn5MtfbLORzg>
+    <xmx:N14paWuDWqIE-gqMREuO9tqUfj1g3p39BG4OXBAuOrMW8QUF2ZsPLkD1>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E485AC40054; Fri, 28 Nov 2025 03:32:54 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251128044146.80050-7-jniethe@nvidia.com>
+X-ThreadId: A9H3E49GtQH-
+Date: Fri, 28 Nov 2025 09:32:34 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Ray Jui" <rjui@broadcom.com>,
+ "Scott Branden" <sbranden@broadcom.com>,
+ "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
+ "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "Magnus Damm" <magnus.damm@gmail.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>, llvm@lists.linux.dev
+Message-Id: <8ee7495b-4b6f-4ee8-82e0-a236d0be5c32@app.fastmail.com>
+In-Reply-To: 
+ <CAMuHMdUF9nTRkOOi+KnH2ATsFdTWMCtohWZQ1T_vhB=cf_42Yg@mail.gmail.com>
+References: <20251126182257.157439-4-krzysztof.kozlowski@oss.qualcomm.com>
+ <20251126182257.157439-6-krzysztof.kozlowski@oss.qualcomm.com>
+ <CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com>
+ <dbb94fb1-2f78-4bd2-9254-c435ab3325c0@oss.qualcomm.com>
+ <0e90817e-1c05-4fa3-a6fd-8e755608a2c9@oss.qualcomm.com>
+ <CAMuHMdX2qv2YBbvkM8tkSTWDPe-paMp5=fdv=4tGKheTseK9Pw@mail.gmail.com>
+ <ebb0d41c-1836-42d1-8406-ead97c4d6886@oss.qualcomm.com>
+ <CAMuHMdUF9nTRkOOi+KnH2ATsFdTWMCtohWZQ1T_vhB=cf_42Yg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] i2c: rcar: Fix Wvoid-pointer-to-enum-cast warning
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Jordan,
+On Thu, Nov 27, 2025, at 14:46, Geert Uytterhoeven wrote:
+> On Thu, 27 Nov 2025 at 14:42, Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com> wrote:
+>>
+>> >> kernel_ulong_t, I think.
+>> >
+>> > include/linux/mod_devicetable.h:typedef unsigned long kernel_ulong_t;
+>> >
+>> > IIRC, it was introduced originally because "unsigned long" might have
+>> > a different size in userspace.  Nowadays (for x32), uapi uses
+>> > __kernel_ulong_t, though.
+>>
+>> Maybe, but if you look at the data structures all have kernel_ulong_t,
+>> so this fits the logic I was following here - I cast to the type which
+>> is both representing pointer and is already used for driver data,
+>> because this match data serves similar purpose as mentioned driver data.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+It is rather inconsistent: The __kernel_ulong_t type is used in
+include/uapi/ in places where x32 uses the 64-bit ABI, as the idea
+was to not have to do (much) type conversion there. This of course
+failed overall because any ioctl still has to be converted.
 
-[auto build test WARNING on e1afacb68573c3cd0a3785c6b0508876cd3423bc]
+The kernel_ulong_t as far as I can tell was only meant to be
+used in include/linux/mod_devicetable.h, with the idea of being
+able to interpret 64-bit kernel modules from a 32-bit module
+loader in userspace. I don't think the latest kmod actually uses
+it that way any more.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Niethe/mm-hmm-Add-flag-to-track-device-private-PFNs/20251128-124406
-base:   e1afacb68573c3cd0a3785c6b0508876cd3423bc
-patch link:    https://lore.kernel.org/r/20251128044146.80050-7-jniethe%40nvidia.com
-patch subject: [RFC PATCH 6/6] mm: Remove device private pages from the physical address space
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20251128/202511281438.x8ovUgeA-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b3428bb966f1de8aa48375ffee0eba04ede133b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251128/202511281438.x8ovUgeA-lkp@intel.com/reproduce)
+>> I don't mind casting via unsigned long, but:
+>> 1. these are old and trivial issues,
+>> 2. they are quite annoying when people want to compile test with W=1,
+>> 3. I was trying to fix them (although not sure if for I2C) already,
+>> 4. and some others probably as well were trying to fix them,
+>> so how many people need to send them and debate before we fix them finally?
+>>
+>> unsigned long vs kernel_ulong_t is a nit-style discussion IMO, unless we
+>> have here more concrete arguments, e.g. statement from Linus that
+>> kernel_ulong_t is wrong.
+>>
+>> If maintainers of this code want unsigned long, please apply the patch
+>> and fix directly, but for the sake, let's get it merged...
+>
+> Sure, let's get it fixed!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511281438.x8ovUgeA-lkp@intel.com/
+Agreed. I don't mind the use of kernel_ulong_t here either, since it's
+adjacent to the module device table entries, but I would also pick
+'unsigned long' or 'uintptr_t' instead.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/s390/purgatory/purgatory.c:10:
-   In file included from include/linux/kexec.h:18:
-   In file included from include/linux/vmcore_info.h:6:
-   In file included from include/linux/elfcore.h:11:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:33:
->> include/linux/memremap.h:142:2: warning: field '' with variable sized type 'union dev_pagemap::(anonymous at include/linux/memremap.h:142:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-     142 |         union {
-         |         ^
-   1 warning generated.
-
-
-vim +142 include/linux/memremap.h
-
-514caf23a70fd69 Christoph Hellwig   2019-06-26  107  
-9476df7d80dfc42 Dan Williams        2016-01-15  108  /**
-9476df7d80dfc42 Dan Williams        2016-01-15  109   * struct dev_pagemap - metadata for ZONE_DEVICE mappings
-4b94ffdc4163bae Dan Williams        2016-01-15  110   * @altmap: pre-allocated/reserved memory for vmemmap allocations
-5c2c2587b13235b Dan Williams        2016-01-15  111   * @ref: reference count that pins the devm_memremap_pages() mapping
-b80892ca022e9eb Christoph Hellwig   2021-10-28  112   * @done: completion for @ref
-0c32c9f7a58e773 John Groves         2024-02-05  113   * @type: memory type: see MEMORY_* above in memremap.h
-514caf23a70fd69 Christoph Hellwig   2019-06-26  114   * @flags: PGMAP_* flags to specify defailed behavior
-c4386bd8ee3a921 Joao Martins        2022-01-14  115   * @vmemmap_shift: structural definition of how the vmemmap page metadata
-c4386bd8ee3a921 Joao Martins        2022-01-14  116   *      is populated, specifically the metadata page order.
-c4386bd8ee3a921 Joao Martins        2022-01-14  117   *	A zero value (default) uses base pages as the vmemmap metadata
-c4386bd8ee3a921 Joao Martins        2022-01-14  118   *	representation. A bigger value will set up compound struct pages
-c4386bd8ee3a921 Joao Martins        2022-01-14  119   *	of the requested order value.
-1e240e8d4a7d922 Christoph Hellwig   2019-06-26  120   * @ops: method table
-f894ddd5ff01d3b Christoph Hellwig   2020-03-16  121   * @owner: an opaque pointer identifying the entity that manages this
-f894ddd5ff01d3b Christoph Hellwig   2020-03-16  122   *	instance.  Used by various helpers to make sure that no
-f894ddd5ff01d3b Christoph Hellwig   2020-03-16  123   *	foreign ZONE_DEVICE memory is accessed.
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  124   * @nr_range: number of ranges to be mapped. Always == 1 for
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  125   *	MEMORY_DEVICE_PRIVATE.
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  126   * @range: range to be mapped when nr_range == 1. Used as an output param for
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  127   *	MEMORY_DEVICE_PRIVATE.
-b7b3c01b191596d Dan Williams        2020-10-13  128   * @ranges: array of ranges to be mapped when nr_range > 1
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  129   * @nr_pages: number of pages requested to be mapped for MEMORY_DEVICE_PRIVATE.
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  130   * @pages: array of nr_pages initialized for MEMORY_DEVICE_PRIVATE.
-9476df7d80dfc42 Dan Williams        2016-01-15  131   */
-9476df7d80dfc42 Dan Williams        2016-01-15  132  struct dev_pagemap {
-e7744aa25cffe26 Logan Gunthorpe     2017-12-29  133  	struct vmem_altmap altmap;
-b80892ca022e9eb Christoph Hellwig   2021-10-28  134  	struct percpu_ref ref;
-24917f6b1041a73 Christoph Hellwig   2019-06-26  135  	struct completion done;
-5042db43cc26f51 Jérôme Glisse       2017-09-08  136  	enum memory_type type;
-514caf23a70fd69 Christoph Hellwig   2019-06-26  137  	unsigned int flags;
-c4386bd8ee3a921 Joao Martins        2022-01-14  138  	unsigned long vmemmap_shift;
-1e240e8d4a7d922 Christoph Hellwig   2019-06-26  139  	const struct dev_pagemap_ops *ops;
-f894ddd5ff01d3b Christoph Hellwig   2020-03-16  140  	void *owner;
-b7b3c01b191596d Dan Williams        2020-10-13  141  	int nr_range;
-b7b3c01b191596d Dan Williams        2020-10-13 @142  	union {
-b7b3c01b191596d Dan Williams        2020-10-13  143  		struct range range;
-06919d226d01132 Gustavo A. R. Silva 2022-09-03  144  		DECLARE_FLEX_ARRAY(struct range, ranges);
-b7b3c01b191596d Dan Williams        2020-10-13  145  	};
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  146  	unsigned long nr_pages;
-31ff70a0ab1c747 Jordan Niethe       2025-11-28  147  	struct page *pages;
-9476df7d80dfc42 Dan Williams        2016-01-15  148  };
-9476df7d80dfc42 Dan Williams        2016-01-15  149  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
