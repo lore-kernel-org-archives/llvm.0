@@ -1,84 +1,230 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ECE7404E
-	for <llvm@lists.linux.dev>; Sat, 29 Nov 2025 12:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556D626738D;
+	Sat, 29 Nov 2025 16:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764420416; cv=none; b=c2Q4rkkMl0zPKzVMm4P3PnVmrlWeu0KsKwqVqdg6swCD9p2rfDlGHOppOqgPK2i8shv8bd1PkO887gZPkDc5LOT66aSssaKqH6H7nKG18V7LEOBW2t+pqpZ8Y4MZ2gKH684FXU76A/fPpCkOm9uBsP81BwmCIq7hMVIjZ/i8jzg=
+	t=1764435504; cv=none; b=YvcQVe8HwopS6LYFq3Z+BlBzFMS7oLY9/ZsWHhXeBdNEoZl5AghOcAI6bawkWOHLq6K98ylCI6ae2u7KcSqQ4et4+1gKxaQNaA6UNzZfECUFX76Dbrs9NG+TebZJuQowSd8oEsSGZ7bzVDYf0kYFVfpZrKP02sgy7sewVShHa4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764420416; c=relaxed/simple;
-	bh=jNmYIaV75YSSo0pmPTP7ijrP/T2kkl259HD2++Nrdxg=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:Date:
-	 Message-ID:Content-Type; b=WKnoaNDSklLrxveCTEsSGeZ3BEgv94WOsV3zMvfB3Xh0a6uRE4gVTf2BIbbt0JBQF7UjgFfbpzgVvxMOIqv3J8Da2ny23lTgODMHOXH7cHW5SW46UTz7enaLciJd2kRtyZ3ounUqR/vFbjTTT8x0gsVlIUnm/t5+Jl5yZkaQuiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eZyr09Cv; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1764435504; c=relaxed/simple;
+	bh=pW5UrQwSVFwM/jP1/sOOsumOV5VJnPtB2fuzc/HkqS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MZkai6O98hgdvJVo0jmWQfjPLXbKKVLwaxjVARJg1+Xy2yZR13YZhkIaIVuC0raGmcaFrM2hZ8EODtVq2SOsV0lTOpFKjGW0ca9KkBkwzL9+M9hRDxybnWFwSzua5bkidiJKguEPkD8tjQLczrVdSedpbl0OkOfQVjR2h2WSuL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cdVTcbS3; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eZyr09Cv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764420412;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jNmYIaV75YSSo0pmPTP7ijrP/T2kkl259HD2++Nrdxg=;
-	b=eZyr09CvdFhmI4q46EwHFEpcZ435JjfAb7Z0/VszxXvPQ6vRQ7ZkzEO1QWYcxGt0y7if7T
-	XbX8pEdNzfHn8uQtzmD3QAeEB5IJjMWqJkUg8qyIiCbAUoVtJRX7e4MawVB/yjfHqiogJC
-	jmYNPf5zNaFGu3VWZVfbLtQPa0K1g3E=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-32-FDx1AIjjN3m8rmVHq5iw1g-1; Sat,
- 29 Nov 2025 07:46:50 -0500
-X-MC-Unique: FDx1AIjjN3m8rmVHq5iw1g-1
-X-Mimecast-MFC-AGG-ID: FDx1AIjjN3m8rmVHq5iw1g_1764420409
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 81A6D180045C;
-	Sat, 29 Nov 2025 12:46:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.14])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 11808180035F;
-	Sat, 29 Nov 2025 12:46:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <202511291414.IgkEFchx-lkp@intel.com>
-References: <202511291414.IgkEFchx-lkp@intel.com> <800328.1764325145@warthog.procyon.org.uk>
-To: kernel test robot <lkp@intel.com>
-Cc: dhowells@redhat.com, llvm@lists.linux.dev,
-    oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3] afs: Fix delayed allocation of a cell's anonymous key
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cdVTcbS3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764435502; x=1795971502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pW5UrQwSVFwM/jP1/sOOsumOV5VJnPtB2fuzc/HkqS8=;
+  b=cdVTcbS3Q5WjuJXwzmbiaFp4Moz/W7jmW3aEHr1L4JvsCyLLVjEhelEl
+   TAiC9aTqYSnCBrwo4hTZWJVzXRevOZ78ByCtRBladVjUxFwxT/OW0pmX3
+   0k7J4Fmeg6OHPBnrprO90ShfR+RkeE4n3tNd4qChn7FPa9hQADbjTiiDR
+   /ndo56eeg+N7/dBxVegaPQ6bly/rcz7neG0uZ2wwbWMeu9+zIgkS9ijks
+   89CYyGt1Zian7mgyU380cWV6SoZR4JJ942uFdGyyV4Mpg08H/e2KPe3HJ
+   Dj1PbW1H46jJvJ229kDAdwIbCs8+URijh0VZCs8c9mWa5LDOMI0yNhXD/
+   Q==;
+X-CSE-ConnectionGUID: 5QBHwfc+Raau6WYHmMcdfA==
+X-CSE-MsgGUID: fP7c7nJiScm8PulHhU2YZg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11628"; a="89075318"
+X-IronPort-AV: E=Sophos;i="6.20,236,1758610800"; 
+   d="scan'208";a="89075318"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2025 08:58:22 -0800
+X-CSE-ConnectionGUID: If1lwWeQRb+7b+R4MEMF3w==
+X-CSE-MsgGUID: bFijp0h0RleO5AY6Teeh3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,236,1758610800"; 
+   d="scan'208";a="198619031"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 29 Nov 2025 08:58:20 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vPOH4-000000007Ov-0fRZ;
+	Sat, 29 Nov 2025 16:58:18 +0000
+Date: Sun, 30 Nov 2025 00:57:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 14/16] crypto: qat - add support for zstd
+Message-ID: <202511300007.jf6qGfjm-lkp@intel.com>
+References: <20251128191531.1703018-15-giovanni.cabiddu@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Sat, 29 Nov 2025 12:46:46 +0000
-Message-ID: <1221451.1764420406@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: _62NSFudtXGFlx6EfVFNiU1OT3bNP2YvnMe1Ogf4K6w_1764420409
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1221450.1764420406.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251128191531.1703018-15-giovanni.cabiddu@intel.com>
 
-kernel test robot <lkp@intel.com> wrote:
+Hi Giovanni,
 
-> >> fs/afs/security.c:29:6: warning: variable 'key' is used uninitialized =
-whenever 'if' condition is false [-Wsometimes-uninitialized]
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-This is already fixed by:
+[auto build test WARNING on ebbdf6466b30e3b37f3b360826efd21f0633fb9e]
 
-=09commit 9eef1d98eeda3745df35839190b7d4a4adea656
-=09afs: Fix uninit var in afs_alloc_anon_key()
+url:    https://github.com/intel-lab-lkp/linux/commits/Giovanni-Cabiddu/crypto-zstd-fix-double-free-in-per-CPU-stream-cleanup/20251128-222112
+base:   ebbdf6466b30e3b37f3b360826efd21f0633fb9e
+patch link:    https://lore.kernel.org/r/20251128191531.1703018-15-giovanni.cabiddu%40intel.com
+patch subject: [RFC PATCH 14/16] crypto: qat - add support for zstd
+config: i386-buildonly-randconfig-003 (https://download.01.org/0day-ci/archive/20251130/202511300007.jf6qGfjm-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251130/202511300007.jf6qGfjm-lkp@intel.com/reproduce)
 
-Thanks,
-David
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511300007.jf6qGfjm-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/crypto/intel/qat/qat_common/qat_comp_zstd_utils.c:104:17: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     103 |                                 pr_debug("[%s]: qat zstd sequence overflow (seqs_idx:%lu, out_seqs_capacity:%lu, lz4s_buff_size:%u)\n",
+         |                                                                                      ~~~
+         |                                                                                      %zu
+     104 |                                          __func__, seqs_idx, out_seqs_capacity, lz4s_buff_size);
+         |                                                    ^~~~~~~~
+   include/linux/printk.h:636:26: note: expanded from macro 'pr_debug'
+     636 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |                          ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                                   ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/crypto/intel/qat/qat_common/qat_comp_zstd_utils.c:104:27: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     103 |                                 pr_debug("[%s]: qat zstd sequence overflow (seqs_idx:%lu, out_seqs_capacity:%lu, lz4s_buff_size:%u)\n",
+         |                                                                                                             ~~~
+         |                                                                                                             %zu
+     104 |                                          __func__, seqs_idx, out_seqs_capacity, lz4s_buff_size);
+         |                                                              ^~~~~~~~~~~~~~~~~
+   include/linux/printk.h:636:26: note: expanded from macro 'pr_debug'
+     636 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |                          ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                                   ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +104 drivers/crypto/intel/qat/qat_common/qat_comp_zstd_utils.c
+
+    14	
+    15	/*
+    16	 * Implement the same algorithm as the QAT ZSTD sequence producer plugin,
+    17	 * to decode LZ4s formatted data into ZSTD_Sequence format.
+    18	 */
+    19	size_t qat_alg_dec_lz4s(ZSTD_Sequence *out_seqs, size_t out_seqs_capacity,
+    20				unsigned char *lz4s_buff, unsigned int lz4s_buff_size,
+    21				unsigned char *literals, unsigned int *lit_len)
+    22	{
+    23		unsigned char *end_ip = lz4s_buff + lz4s_buff_size;
+    24		unsigned int hist_literal_len = 0;
+    25		unsigned char *ip = lz4s_buff;
+    26		size_t seqs_idx = 0;
+    27	
+    28		*lit_len = 0;
+    29	
+    30		if (!lz4s_buff_size)
+    31			return 0;
+    32	
+    33		while (ip < end_ip) {
+    34			size_t length = 0;
+    35			size_t offset = 0;
+    36			size_t literal_len = 0, match_len = 0;
+    37	
+    38			/* get literal length */
+    39			unsigned const token = *ip++;
+    40	
+    41			length = token >> ML_BITS;
+    42			if (length == RUN_MASK) {
+    43				unsigned int s;
+    44	
+    45				do {
+    46					s = *ip++;
+    47					length += s;
+    48				} while (s == 255);
+    49			}
+    50	
+    51			literal_len = length;
+    52	
+    53			{
+    54				u8 *start = ip;
+    55				u8 *dest = literals;
+    56				u8 *dest_end = literals + length;
+    57	
+    58				do {
+    59					__builtin_memcpy(dest, start, QAT_ZSTD_LIT_COPY_LEN);
+    60					dest += QAT_ZSTD_LIT_COPY_LEN;
+    61					start += QAT_ZSTD_LIT_COPY_LEN;
+    62				} while (dest < dest_end);
+    63			}
+    64	
+    65			literals += length;
+    66			*lit_len += length;
+    67	
+    68			ip += length;
+    69			if (ip == end_ip) { /* Meet the end of the LZ4 sequence */
+    70				literal_len += hist_literal_len;
+    71				out_seqs[seqs_idx].litLength = literal_len;
+    72				out_seqs[seqs_idx].offset = offset;
+    73				out_seqs[seqs_idx].matchLength = match_len;
+    74				break;
+    75			}
+    76	
+    77			/* get matchPos */
+    78			offset = le16_to_cpu(*(__le16 *)ip);
+    79			ip += 2;
+    80	
+    81			/* get match length */
+    82			length = token & ML_MASK;
+    83			if (length == ML_MASK) {
+    84				unsigned int s;
+    85	
+    86				do {
+    87					s = *ip++;
+    88					length += s;
+    89				} while (s == 255);
+    90			}
+    91			if (length != 0) {
+    92				length += LZ4MINMATCH;
+    93				match_len = (unsigned short)length;
+    94				literal_len += hist_literal_len;
+    95	
+    96				/* update ZSTD_Sequence */
+    97				out_seqs[seqs_idx].offset = offset;
+    98				out_seqs[seqs_idx].litLength = literal_len;
+    99				out_seqs[seqs_idx].matchLength = match_len;
+   100				hist_literal_len = 0;
+   101				++seqs_idx;
+   102				if (seqs_idx >= (out_seqs_capacity - 1)) {
+   103					pr_debug("[%s]: qat zstd sequence overflow (seqs_idx:%lu, out_seqs_capacity:%lu, lz4s_buff_size:%u)\n",
+ > 104						 __func__, seqs_idx, out_seqs_capacity, lz4s_buff_size);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
