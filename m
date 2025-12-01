@@ -1,116 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB3A21A447;
-	Mon,  1 Dec 2025 20:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB8936D50A;
+	Mon,  1 Dec 2025 20:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764620614; cv=none; b=T9cC45k6NFTRmw/JCj1qqd02ejrCtBn60xsqruFCIcyirNzoQui/eJ5f+j/vBNbL4ODp0wasS9f9y3J4yV4gXI6T/guhRBIwguyfsAys43L2Zl8JpmarFoZ9j9Kqd9zN7pUz7KvIXu8CxLV6nqvqkEkVB/sk2Y0k5YL+XeumDGM=
+	t=1764621098; cv=none; b=Xl5KwARuBZTT0oMt9vqPNktvqoAKF3MNc1nkjzGs875Im2TvDy5PG1dkp+UNUzjkgcFLuVGDJ4YKvglOvhSjzYkzix642zMVZTWsTZSu6wdtkMHmSbg6uDEPLbLkYF5RRpItbg3R/7wKDT+gIjRFgAldjB4b0mYkue7PZd1VNXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764620614; c=relaxed/simple;
-	bh=QggAT6MMTWOS3pjCWycWyPnxE1D+eh+mGZMtYCFxq00=;
+	s=arc-20240116; t=1764621098; c=relaxed/simple;
+	bh=FQ3pZ8DZew4MZtKz6TIyMvbg23wpdd3rgF3FO1enbqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X/4nvS5tuOd76h+E79k9R2xxhfoRalk3afqE6GNwqbByFhv94wpMwZIsEUINjJRd9p3vXo2+pmjHs3vg/1zimClWF3NlXzT5jDC2Di2MmLkPXDPJ9W2MKiELtBClQClpryJJcsZiZQQqQ+dv4+tFT1gxgcGneTVtAaYNPSkNRSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=horVFvIo; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ORhYgChDH5nvrHBAp0U1B6RWKYdqnE/IzpWLbAreYCR5SLjKrFZbKOs6VFGkY43MRPlKxHdlvaiF2/yct8LwjKIa2J6t8xT1BhN1W+Q6/00rLMhtdfo2FzOCJOeBlePEe/9xmn7bXFMNrEcyvZ0wy8uanpcFW84XdnVjbAEJCII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fiXF2nej; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="horVFvIo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD18C4CEF1;
-	Mon,  1 Dec 2025 20:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764620614;
-	bh=QggAT6MMTWOS3pjCWycWyPnxE1D+eh+mGZMtYCFxq00=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=horVFvIokfSCf+ijIoUNLTLRWZrDwyfPmvUcI+UgUwahcT955K2gofTwadUsWZXxx
-	 EgtrGBEbRbUelB3V0sF4OqHVBl00v7u+iY4n2rYSjBKyH/6f1d/9sNLhaEaiwBv3w9
-	 7FxAfzpymYHs3a7h3OpAtkdW27+W9Mq4S79vv5VV0rSERxdvYxKM22L2q14mgr39p2
-	 w0sU1BWVHCBpPhNf4kEx/WTodJ/ZCzJt80ov/fxKWMXfqRq66jHN60m4u/n9TwbK0L
-	 kEAiCxjNw0qkvfyzJq0fkk//bdOG/dfQFEfjja60bsqGaDcpXHycU2Ouc7yZkdMf1P
-	 wHQKPRHBA9XuA==
-Date: Mon, 1 Dec 2025 13:23:29 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexandre Chartre <alexandre.chartre@oracle.com>
-Cc: linux-kernel@vger.kernel.org, mingo@kernel.org, jpoimboe@kernel.org,
-	peterz@infradead.org, david.laight.linux@gmail.com,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 11/30] objtool: Trace instruction state changes during
- function validation
-Message-ID: <20251201202329.GA3225984@ax162>
-References: <20251121095340.464045-1-alexandre.chartre@oracle.com>
- <20251121095340.464045-12-alexandre.chartre@oracle.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fiXF2nej"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764621096; x=1796157096;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FQ3pZ8DZew4MZtKz6TIyMvbg23wpdd3rgF3FO1enbqU=;
+  b=fiXF2nejv6MgXOCMRzg3NjZtPe5uwHAvNbO2dgC/7VGqAuujGLA5x8sp
+   BmHhgQPI+Gj91J66jlDXBZ4nfEXHhsMX/+aZSAn5wTeOE5Zx/pOmz15zJ
+   E8lTnFmJcHPXGBHH4wOQAmOX6NcJ755EzN383Gs4q3fVQ7EJlh3inLY98
+   1KPMiliLxnc0xGVwlkLzeb6AOFS5B1W0Aqdgn6P3ucU0tUphXg5Fujw3h
+   kQEVz3WYAA86m1KGV/Z6H3Eb98xahH8t6hHnEq9eul/NV2FASYF8OPg+D
+   g3/yxgTXtE0oOtndr2zV1xUDxlkcxkJ1DCMYtiqETytQ1shpPL0M/Nzdn
+   g==;
+X-CSE-ConnectionGUID: Toz4L2p3RLa9EOU2MWhWog==
+X-CSE-MsgGUID: URO7ZmdNRQ+bPSGepRvrLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="66651134"
+X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
+   d="scan'208";a="66651134"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 12:31:35 -0800
+X-CSE-ConnectionGUID: czKx/aigQSSZF3PjaEUaBQ==
+X-CSE-MsgGUID: xzQ2aqJmTZuDmFPBG90uhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
+   d="scan'208";a="199298618"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 01 Dec 2025 12:31:35 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vQAYV-0000000097N-3ijP;
+	Mon, 01 Dec 2025 20:31:31 +0000
+Date: Tue, 2 Dec 2025 04:31:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Swaraj Gaikwad <swarajgaikwad1925@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC] mm/memblock: Fix reserve_mem allocation overlapping
+ KHO scratch regions
+Message-ID: <202512020406.fLEkXsNR-lkp@intel.com>
+References: <20251130172939.574999-1-swarajgaikwad1925@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251121095340.464045-12-alexandre.chartre@oracle.com>
+In-Reply-To: <20251130172939.574999-1-swarajgaikwad1925@gmail.com>
 
-Hi Alexandre,
+Hi Swaraj,
 
-On Fri, Nov 21, 2025 at 10:53:21AM +0100, Alexandre Chartre wrote:
-> During function validation, objtool maintains a per-instruction state,
-> in particular to track call frame information. When tracing validation,
-> print any instruction state changes.
-> 
-> Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-I am seeing a segfault after this change in -next as commit fcb268b47a2f
-("objtool: Trace instruction state changes during function validation")
-when building allmodconfig with clang 21.1.6 [1] (I did not check
-earlier versions).
+[auto build test ERROR on 2178727587e1eaa930b8266377119ed6043067df]
 
-  $ clang --version | head -1
-  ClangBuiltLinux clang version 21.1.6 (https://github.com/llvm/llvm-project.git a832a5222e489298337fbb5876f8dcaf072c5cca)
+url:    https://github.com/intel-lab-lkp/linux/commits/Swaraj-Gaikwad/mm-memblock-Fix-reserve_mem-allocation-overlapping-KHO-scratch-regions/20251130-200138
+base:   2178727587e1eaa930b8266377119ed6043067df
+patch link:    https://lore.kernel.org/r/20251130172939.574999-1-swarajgaikwad1925%40gmail.com
+patch subject: [PATCH RFC] mm/memblock: Fix reserve_mem allocation overlapping KHO scratch regions
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251202/202512020406.fLEkXsNR-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512020406.fLEkXsNR-lkp@intel.com/reproduce)
 
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean allmodconfig drivers/scsi/qla2xxx/qla2xxx.o
-  make[7]: *** [scripts/Makefile.build:503: drivers/scsi/qla2xxx/qla2xxx.o] Error 139
-  ...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512020406.fLEkXsNR-lkp@intel.com/
 
-  $ ld.lld -m elf_x86_64 --fatal-warnings -z noexecstack -r -o drivers/scsi/qla2xxx/qla2xxx.o @drivers/scsi/qla2xxx/qla2xxx.mod
+All errors (new ones prefixed by >>):
 
-  $ tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --cfi --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --no-unreachable --link --module drivers/scsi/qla2xxx/qla2xxx.o
-  fish: Job 1, 'tools/objtool/objtool --hacks=j…' terminated by signal SIGSEGV (Address boundary error)
+>> mm/memblock.c:2692:18: error: use of undeclared identifier 'kho_scratch_cnt'
+    2692 |         for (i = 0; i < kho_scratch_cnt; i++) {
+         |                         ^
+>> mm/memblock.c:2693:19: error: use of undeclared identifier 'kho_scratch'
+    2693 |                 scratch_start = kho_scratch[i].addr;
+         |                                 ^
+   mm/memblock.c:2694:17: error: use of undeclared identifier 'kho_scratch'
+    2694 |                 scratch_end = kho_scratch[i].addr + kho_scratch[i].size;
+         |                               ^
+   mm/memblock.c:2694:39: error: use of undeclared identifier 'kho_scratch'
+    2694 |                 scratch_end = kho_scratch[i].addr + kho_scratch[i].size;
+         |                                                     ^
+   4 errors generated.
 
-If there is any other information I can provide or patches I can test, I
-am more than happy to do so.
 
-[1]: https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-21.1.6-x86_64.tar.xz
+vim +/kho_scratch_cnt +2692 mm/memblock.c
 
-Cheers,
-Nathan
+  2627	
+  2628	/*
+  2629	 * Parse reserve_mem=nn:align:name
+  2630	 */
+  2631	static int __init reserve_mem(char *p)
+  2632	{
+  2633		phys_addr_t start, size, align, tmp;
+  2634		char *name;
+  2635		char *oldp;
+  2636		int len;
+  2637	
+  2638		if (!p)
+  2639			return -EINVAL;
+  2640	
+  2641		/* Check if there's room for more reserved memory */
+  2642		if (reserved_mem_count >= RESERVE_MEM_MAX_ENTRIES)
+  2643			return -EBUSY;
+  2644	
+  2645		oldp = p;
+  2646		size = memparse(p, &p);
+  2647		if (!size || p == oldp)
+  2648			return -EINVAL;
+  2649	
+  2650		if (*p != ':')
+  2651			return -EINVAL;
+  2652	
+  2653		align = memparse(p+1, &p);
+  2654		if (*p != ':')
+  2655			return -EINVAL;
+  2656	
+  2657		/*
+  2658		 * memblock_phys_alloc() doesn't like a zero size align,
+  2659		 * but it is OK for this command to have it.
+  2660		 */
+  2661		if (align < SMP_CACHE_BYTES)
+  2662			align = SMP_CACHE_BYTES;
+  2663	
+  2664		name = p + 1;
+  2665		len = strlen(name);
+  2666	
+  2667		/* name needs to have length but not too big */
+  2668		if (!len || len >= RESERVE_MEM_NAME_SIZE)
+  2669			return -EINVAL;
+  2670	
+  2671		/* Make sure that name has text */
+  2672		for (p = name; *p; p++) {
+  2673			if (!isspace(*p))
+  2674				break;
+  2675		}
+  2676		if (!*p)
+  2677			return -EINVAL;
+  2678	
+  2679		/* Make sure the name is not already used */
+  2680		if (reserve_mem_find_by_name(name, &start, &tmp))
+  2681			return -EBUSY;
+  2682	
+  2683		/* Pick previous allocations up from KHO if available */
+  2684		if (reserve_mem_kho_revive(name, size, align))
+  2685			return 1;
+  2686	
+  2687		phys_addr_t scratch_start, scratch_end;
+  2688		phys_addr_t curr_start_addr = 0;
+  2689		phys_addr_t alloc_end_addr = MEMBLOCK_ALLOC_ACCESSIBLE;
+  2690		unsigned int i;
+  2691	
+> 2692		for (i = 0; i < kho_scratch_cnt; i++) {
+> 2693			scratch_start = kho_scratch[i].addr;
+  2694			scratch_end = kho_scratch[i].addr + kho_scratch[i].size;
+  2695			alloc_end_addr = scratch_start;
+  2696			if (alloc_end_addr > curr_start_addr) {
+  2697				start = memblock_phys_alloc_range(size, align, curr_start_addr, alloc_end_addr);
+  2698				if (start)
+  2699					break;
+  2700			}
+  2701	   curr_start_addr = scratch_end;
+  2702		}
+  2703		if (!start)
+  2704			return -ENOMEM;
+  2705	
+  2706		reserved_mem_add(start, size, name);
+  2707	
+  2708		return 1;
+  2709	}
+  2710	__setup("reserve_mem=", reserve_mem);
+  2711	
 
-# bad: [95cb2fd6ce0ad61af54191fe5ef271d7177f9c3a] Add linux-next specific files for 20251201
-# good: [e69c7c175115c51c7f95394fc55425a395b3af59] Merge tag 'timers_urgent_for_v6.18_rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-git bisect start '95cb2fd6ce0ad61af54191fe5ef271d7177f9c3a' 'e69c7c175115c51c7f95394fc55425a395b3af59'
-# good: [87d5c4addc7e535618586e7205191a7f402288ba] Merge branch 'master' of https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good 87d5c4addc7e535618586e7205191a7f402288ba
-# good: [a4ad48eac682ccdc21e2f16b8f27abbf615d8d3d] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git
-git bisect good a4ad48eac682ccdc21e2f16b8f27abbf615d8d3d
-# bad: [b99f4ac0a6c7ccf37be14f5ef61b160b1c8a74b0] Merge branch 'driver-core-next' of https://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
-git bisect bad b99f4ac0a6c7ccf37be14f5ef61b160b1c8a74b0
-# bad: [24cefd05bbf969c95fff3733da174e8a352c1cb2] Merge branch 'master' of https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-git bisect bad 24cefd05bbf969c95fff3733da174e8a352c1cb2
-# bad: [4fa1e8d3340bc660d72a21fc8d4c566045e488fc] Merge branch into tip/master: 'timers/clocksource'
-git bisect bad 4fa1e8d3340bc660d72a21fc8d4c566045e488fc
-# good: [51446852de95594c02d6b3b700e15b7c886534d6] Merge branch into tip/master: 'core/bugs'
-git bisect good 51446852de95594c02d6b3b700e15b7c886534d6
-# good: [b032713af9475274762fa664ca2705372b414215] Merge branch into tip/master: 'locking/core'
-git bisect good b032713af9475274762fa664ca2705372b414215
-# good: [9929dffce5ed7e2988e0274f4db98035508b16d9] perf/x86/intel: Fix and clean up intel_pmu_drain_arch_pebs() type use
-git bisect good 9929dffce5ed7e2988e0274f4db98035508b16d9
-# bad: [59bfa6408214b6533d8691715cf5459e89b45b89] objtool: Build with disassembly can fail when including bdf.h
-git bisect bad 59bfa6408214b6533d8691715cf5459e89b45b89
-# bad: [350c7ab8577a32c101a097f4c072220d9ce64f3b] objtool: Improve tracing of alternative instructions
-git bisect bad 350c7ab8577a32c101a097f4c072220d9ce64f3b
-# good: [0bb080ba6469a573bc85122153d931334d10a173] objtool: Disassemble instruction on warning or backtrace
-git bisect good 0bb080ba6469a573bc85122153d931334d10a173
-# bad: [fcb268b47a2f4a497fdb40ef24bb9e06488b7213] objtool: Trace instruction state changes during function validation
-git bisect bad fcb268b47a2f4a497fdb40ef24bb9e06488b7213
-# good: [de0248fbbf999d0fd3ca2aa5ba515ab78703d129] objtool: Record symbol name max length
-git bisect good de0248fbbf999d0fd3ca2aa5ba515ab78703d129
-# good: [70589843b36fee0c6e73632469da4e5fd11f0968] objtool: Add option to trace function validation
-git bisect good 70589843b36fee0c6e73632469da4e5fd11f0968
-# first bad commit: [fcb268b47a2f4a497fdb40ef24bb9e06488b7213] objtool: Trace instruction state changes during function validation
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
