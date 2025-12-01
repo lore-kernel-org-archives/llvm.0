@@ -1,136 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807831F30BB;
-	Mon,  1 Dec 2025 18:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0A9337BBB;
+	Mon,  1 Dec 2025 18:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764612570; cv=none; b=GFQQtuifgqyGodf3eLOqIGl5HoKjIzFynDw9ebsRKw4UnuFejaoId3bp3BVYaRoTz2IlUkzA8Gscs5x9SoZLxUOLALJIoXsKNnIIMAG6yBasyMe5540qrhY+GOSeRMv29HoO+OYvRvTDHyjvuUkR4bRxVCZGtyAYfDkoC4NlJEk=
+	t=1764612812; cv=none; b=jAutgTTRwYMCXjSIUu9lhV2G70iQwTdjhIvbsadpfdPV5MNvUWPZzP2RAHKl/zj9Fw3I7aLe2nkBi34NZlYcmdLjf5+3/1oJHMr+tg0myHxXOA954pGul6x1eD1CxNRFx7zcckchKsaof19oUVD36Dlb3i5M1SRJPHo0rnMiJA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764612570; c=relaxed/simple;
-	bh=czpaDkwx/fqLcPEGE2z448AC6pP+AxvJ8ZlklgA/Y7M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DYyj7EdoZk+8nSpUXmoUJyti/nQWf/cyFskmvBVRHnrobHXcG9hTQ4XOVRXX6LmqdQBUi/K876tQr9Hxrcmd9/di5LlgIC66YB+Oq2lGyrCogL755qBCY6saHx/pMspPdunnCei9k1Ab/kgK8UQrp+SGaDQyrktlzaJGHDpzn+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J7Xds/II; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764612812; c=relaxed/simple;
+	bh=4yXgY+I7vgg70Wnm0/5VRGKpJOtv2f+8DC+xGkvvEcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jvKalx0N0/z36s2nYONh5R8yhunom0GPzg7M3TWNfVAHQVpzCw62I2ROFOd6KX5uRdR4KoIooaRTdj/Fl/Vbg/45fRAfNKcgJkevUnj1mMjuyHm5sgRyRHqBCuHaKp3lwfcgLMMB/eMcl+KtvMNreLK/f0hY5dFjjn0KaUJZCbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E+LLKs29; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J7Xds/II"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E308C4CEF1;
-	Mon,  1 Dec 2025 18:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764612570;
-	bh=czpaDkwx/fqLcPEGE2z448AC6pP+AxvJ8ZlklgA/Y7M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J7Xds/II13x55G5fPxNzYAGzX5H1FXmTyayMyKC8xY1rrWMGJQfNV/KgTamAQdxP/
-	 RysGsT5ON2bLRDsBNpJXL6rRqhUAF6B9gY+Pr1I9rvRlCPbDF7t3plzkBc9OOpB5NE
-	 EvL/ElDk/SJPfi/knpQ3T7kVCHYBv82QyDfDCltlB/j71P9ZQsrslLUgrMw1opE6qx
-	 Vb+BgI17fsgrT3qgVgeLV4/XXk2u1PY3qukzeMCFEzuO1t+2Mm4GpzmO4Qzj0tnrLF
-	 gD/w+fMs6kD3andMo+uXTo1soZZgV/6ylmlvbQIfhu/RQ32gN+4RFD/yCWisMRouX+
-	 DD+1rxt+VRKmA==
-Date: Mon, 1 Dec 2025 18:09:25 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Brian Masney <bmasney@redhat.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	claudiu.beznea@tuxon.dev
-Subject: Re: [PATCH 2/2] clk: microchip: core: allow driver to be compiled
- with COMPILE_TEST
-Message-ID: <20251201-outpour-defame-49a3c68a362b@spud>
-References: <20251125-clk-microchip-fixes-v1-2-6c1f5573d1b9@redhat.com>
- <202511270924.0uDTpEE9-lkp@intel.com>
- <aS3X9VXVlKNQyDoz@redhat.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+LLKs29"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764612811; x=1796148811;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4yXgY+I7vgg70Wnm0/5VRGKpJOtv2f+8DC+xGkvvEcI=;
+  b=E+LLKs29SmhmP7vXF8shvvrb8j+hyiCI7ww1p/niv4HTb6fYNfuh4Iiy
+   xM4lQ5VDDOLnKuwemwjlt2dPIyMyRc01HWTsoQ73uYJurqZGFNsiZYDRW
+   Z+Dnl0nPa09HG+le57E57mjgWhgTyWmJKCBbO2FBvYueXlC+xDay4yfLn
+   jW1po3KbL62ZnXBDfBWrky22hHmF8b8/k0gUGvDAT4YpD5sbJEgn3krEa
+   Q4Gz7M5nlteL0hgyfuyliy6PEZBVsLqF5mNeDghVpU6mcjgRb39EhSJ9z
+   3GFMe6LZHq4xUo92BBO1GIT6iWLmUKWnOSO9KUHB2960Mvmm6SsaejbNO
+   A==;
+X-CSE-ConnectionGUID: N/WC2aeJSbKkQxVfecQdTw==
+X-CSE-MsgGUID: bWRmDMwTSzydmuwzreG6WQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="65749880"
+X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
+   d="scan'208";a="65749880"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 10:13:28 -0800
+X-CSE-ConnectionGUID: 26WTxcWUSfqPD8gFkeO1SQ==
+X-CSE-MsgGUID: tjwbhVdiSQGoLYOBD6KaJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
+   d="scan'208";a="199077181"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 01 Dec 2025 10:13:26 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vQ8Oq-0000000091l-2OOg;
+	Mon, 01 Dec 2025 18:13:24 +0000
+Date: Tue, 2 Dec 2025 02:13:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>
+Subject: error[E0609]: no field `id_table` on type `pci_driver`
+Message-ID: <202512020235.XKIERYQ4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1Z5vusTeHna7+I5B"
-Content-Disposition: inline
-In-Reply-To: <aS3X9VXVlKNQyDoz@redhat.com>
-
-
---1Z5vusTeHna7+I5B
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 01, 2025 at 01:01:25PM -0500, Brian Masney wrote:
-> On Thu, Nov 27, 2025 at 10:11:12AM +0800, kernel test robot wrote:
-> > Hi Brian,
-> >=20
-> > kernel test robot noticed the following build errors:
-> >=20
-> > [auto build test ERROR on 92fd6e84175befa1775e5c0ab682938eca27c0b2]
-> >=20
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/clk=
--microchip-core-remove-duplicate-determine_rate-on-pic32_sclk_ops/20251126-=
-035403
-> > base:   92fd6e84175befa1775e5c0ab682938eca27c0b2
-> > patch link:    https://lore.kernel.org/r/20251125-clk-microchip-fixes-v=
-1-2-6c1f5573d1b9%40redhat.com
-> > patch subject: [PATCH 2/2] clk: microchip: core: allow driver to be com=
-piled with COMPILE_TEST
-> > config: loongarch-randconfig-001-20251127 (https://download.01.org/0day=
--ci/archive/20251127/202511270924.0uDTpEE9-lkp@intel.com/config)
-> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project=
- 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20251127/202511270924.0uDTpEE9-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511270924.0uDTpEE9-l=
-kp@intel.com/
-> >=20
-> > All errors (new ones prefixed by >>):
-> >=20
-> > >> drivers/clk/microchip/clk-core.c:12:10: fatal error: 'asm/traps.h' f=
-ile not found
-> >       12 | #include <asm/traps.h>
-> >          |          ^~~~~~~~~~~~~
-> >    1 error generated.
-> >=20
-> > Kconfig warnings: (for reference only)
-> >    WARNING: unmet direct dependencies detected for TSM
-> >    Depends on [n]: VIRT_DRIVERS [=3Dn]
-> >    Selected by [y]:
-> >    - PCI_TSM [=3Dy] && PCI [=3Dy]
-> >=20
-> >=20
-> > vim +12 drivers/clk/microchip/clk-core.c
-> >=20
-> > ce6e1188465998 Purna Chandra Mandal 2016-05-13 @12  #include <asm/traps=
-=2Eh>
-> > ce6e1188465998 Purna Chandra Mandal 2016-05-13  13 =20
->=20
-> I only build tested this on arm64. I'll post a v2.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7d0a66e4bb9081d75c82ec4957c50034cb0ea449
+commit: 1bd8b6b2c5d38d9881d59928b986eacba40f9da8 rust: pci: add basic PCI device / driver abstractions
+date:   12 months ago
+config: arm64-randconfig-001-20251202 (https://download.01.org/0day-ci/archive/20251202/202512020235.XKIERYQ4-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b3428bb966f1de8aa48375ffee0eba04ede133b7)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512020235.XKIERYQ4-lkp@intel.com/reproduce)
 
-MIPS I believe is where this is used.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512020235.XKIERYQ4-lkp@intel.com/
 
-Hmm, I think this is in a MAINTAINERS blind spot, Claudiu not CCed on
-it. We should probably do something about that. Can you CC him on v2?
+All errors (new ones prefixed by >>):
 
-Cheers,
-Conor.
+>> error[E0609]: no field `name` on type `pci_driver`
+   --> rust/kernel/pci.rs:32:27
+   |
+   32 |             (*pdrv.get()).name = name.as_char_ptr();
+   |                           ^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `probe` on type `pci_driver`
+   --> rust/kernel/pci.rs:33:27
+   |
+   33 |             (*pdrv.get()).probe = Some(Self::probe_callback);
+   |                           ^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `remove` on type `pci_driver`
+   --> rust/kernel/pci.rs:34:27
+   |
+   34 |             (*pdrv.get()).remove = Some(Self::remove_callback);
+   |                           ^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `id_table` on type `pci_driver`
+   --> rust/kernel/pci.rs:35:27
+   |
+   35 |             (*pdrv.get()).id_table = T::ID_TABLE.as_ptr();
+   |                           ^^^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `dev` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:57:76
+   |
+   57 |         let dev = unsafe { device::Device::get_device(addr_of_mut!((*pdev).dev)) };
+   |                                                                            ^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `dev` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:255:68
+   |
+   255 |         unsafe { container_of!(self.0.as_raw(), bindings::pci_dev, dev) as _ }
+   |                                                                    ^^^
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `vendor` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:261:35
+   |
+   261 |         unsafe { (*self.as_raw()).vendor }
+   |                                   ^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
+--
+>> error[E0609]: no field `device` on type `bindings::pci_dev`
+   --> rust/kernel/pci.rs:267:35
+   |
+   267 |         unsafe { (*self.as_raw()).device }
+   |                                   ^^^^^^ unknown field
+   |
+   = note: available field is: `_address`
 
-Also, I *hate* the name of this driver, far too generic and seeing
-patches for it always jumpscares me.
-
---1Z5vusTeHna7+I5B
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaS3Z1QAKCRB4tDGHoIJi
-0jJ2AP9ZKP/2TuR4mdDhAQc9QlnLEqxM2ElPEz+SjFT5IOTMpwEAut8G0Hxpfyis
-DoF+qWvA9ut2E43BpXx0i+30GPGYpgs=
-=ft9m
------END PGP SIGNATURE-----
-
---1Z5vusTeHna7+I5B--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
