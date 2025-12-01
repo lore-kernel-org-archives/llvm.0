@@ -1,96 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F0436D50A;
-	Mon,  1 Dec 2025 20:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB3A21A447;
+	Mon,  1 Dec 2025 20:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764620498; cv=none; b=WB6njZ41vpKB3K1isSzpLp1j7whwOuub0hq0TMe27De+xmJ2UmNEH9HynJNIjjVKl3592o5EawXLKfhW3PMMeSIPtM41NDDx+spwP4Y0DWs5Z3tw+LTtRBau185YCL5exPyaoEZs2QfmhRDoenbP8Tct/vKahAQgZ6IiHN5sixg=
+	t=1764620614; cv=none; b=T9cC45k6NFTRmw/JCj1qqd02ejrCtBn60xsqruFCIcyirNzoQui/eJ5f+j/vBNbL4ODp0wasS9f9y3J4yV4gXI6T/guhRBIwguyfsAys43L2Zl8JpmarFoZ9j9Kqd9zN7pUz7KvIXu8CxLV6nqvqkEkVB/sk2Y0k5YL+XeumDGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764620498; c=relaxed/simple;
-	bh=62lh+tbV3n/nhaIWuR60JUPQpx285BxC2pJgdd+LAaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GiBBejrfYjSSrQwXuPv4nSN6sIy1tWY+I0EC+0U6kGQkAaCkTgFdFb0tR7iXlxjn9lALXlgvZcCDLdTMpTD3Cbcukj8L066RgAgsq48FA7ppj1pji4Kjxy09KXj4Yj1m+16PzCe6Rwo9JeEdP9/rOp9Cs6nJgIUfzkSYsVpgaXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OpkjSkBO; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764620614; c=relaxed/simple;
+	bh=QggAT6MMTWOS3pjCWycWyPnxE1D+eh+mGZMtYCFxq00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/4nvS5tuOd76h+E79k9R2xxhfoRalk3afqE6GNwqbByFhv94wpMwZIsEUINjJRd9p3vXo2+pmjHs3vg/1zimClWF3NlXzT5jDC2Di2MmLkPXDPJ9W2MKiELtBClQClpryJJcsZiZQQqQ+dv4+tFT1gxgcGneTVtAaYNPSkNRSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=horVFvIo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OpkjSkBO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764620496; x=1796156496;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=62lh+tbV3n/nhaIWuR60JUPQpx285BxC2pJgdd+LAaE=;
-  b=OpkjSkBOkqjpFsU4YwkQc4ZddtiZ4ggVNmBHQ0D3g1HGJWmNpclkk2Sl
-   /oB9UVG9iCb6G8b75WXYA7rNYx/hsk6OfrtPxRPonOiSEcaS/Yp1v6qEm
-   HQfRBGmPdm/dnwUg+661HeHtdRUpzKPaeFrirognzYGuWNSpOiPyRwyNi
-   tKGfl5mpIZ9oOEnAm/oqd+KCvlQAlKq7PcT1wKG+qomUIdk5HU26KEej+
-   9FgDowcPtlneLQApGENnns5D8Yq1AbPxn3iHXbe0h32xAslSHR+86pPBE
-   86X7bIaJdG4n2Oz8xgOoG3xO1eHEGo/3Ob7lgnfkuWQdAB11pX2DXmQOm
-   g==;
-X-CSE-ConnectionGUID: UoLu0MUMTq2PmhcpRv8wrw==
-X-CSE-MsgGUID: vkyo6FVZQFO7AM6MMCcqNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="70189421"
-X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
-   d="scan'208";a="70189421"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 12:21:35 -0800
-X-CSE-ConnectionGUID: C+2Hj+sZRum+J0i0L1lpUw==
-X-CSE-MsgGUID: crN4YeCvQvu4nw2tW/GB1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
-   d="scan'208";a="224867858"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 01 Dec 2025 12:21:34 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQAOp-0000000096r-1GFw;
-	Mon, 01 Dec 2025 20:21:31 +0000
-Date: Tue, 2 Dec 2025 04:20:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Benno Lossin <lossin@kernel.org>
-Subject: [linux-next:master 4752/13171] error[E0609]: no field
- `__bindgen_anon_1` on type `bindings::kernel_param`
-Message-ID: <202512020454.Tf36WHw5-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="horVFvIo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD18C4CEF1;
+	Mon,  1 Dec 2025 20:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764620614;
+	bh=QggAT6MMTWOS3pjCWycWyPnxE1D+eh+mGZMtYCFxq00=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=horVFvIokfSCf+ijIoUNLTLRWZrDwyfPmvUcI+UgUwahcT955K2gofTwadUsWZXxx
+	 EgtrGBEbRbUelB3V0sF4OqHVBl00v7u+iY4n2rYSjBKyH/6f1d/9sNLhaEaiwBv3w9
+	 7FxAfzpymYHs3a7h3OpAtkdW27+W9Mq4S79vv5VV0rSERxdvYxKM22L2q14mgr39p2
+	 w0sU1BWVHCBpPhNf4kEx/WTodJ/ZCzJt80ov/fxKWMXfqRq66jHN60m4u/n9TwbK0L
+	 kEAiCxjNw0qkvfyzJq0fkk//bdOG/dfQFEfjja60bsqGaDcpXHycU2Ouc7yZkdMf1P
+	 wHQKPRHBA9XuA==
+Date: Mon, 1 Dec 2025 13:23:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexandre Chartre <alexandre.chartre@oracle.com>
+Cc: linux-kernel@vger.kernel.org, mingo@kernel.org, jpoimboe@kernel.org,
+	peterz@infradead.org, david.laight.linux@gmail.com,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 11/30] objtool: Trace instruction state changes during
+ function validation
+Message-ID: <20251201202329.GA3225984@ax162>
+References: <20251121095340.464045-1-alexandre.chartre@oracle.com>
+ <20251121095340.464045-12-alexandre.chartre@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251121095340.464045-12-alexandre.chartre@oracle.com>
 
-Hi Andreas,
+Hi Alexandre,
 
-FYI, the error/warning still remains.
+On Fri, Nov 21, 2025 at 10:53:21AM +0100, Alexandre Chartre wrote:
+> During function validation, objtool maintains a per-instruction state,
+> in particular to track call frame information. When tracing validation,
+> print any instruction state changes.
+> 
+> Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   95cb2fd6ce0ad61af54191fe5ef271d7177f9c3a
-commit: 0b08fc292842a13aa496413b48c1efb83573b8c6 [4752/13171] rust: introduce module_param module
-config: arm64-randconfig-001-20251202 (https://download.01.org/0day-ci/archive/20251202/202512020454.Tf36WHw5-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b3428bb966f1de8aa48375ffee0eba04ede133b7)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512020454.Tf36WHw5-lkp@intel.com/reproduce)
+I am seeing a segfault after this change in -next as commit fcb268b47a2f
+("objtool: Trace instruction state changes during function validation")
+when building allmodconfig with clang 21.1.6 [1] (I did not check
+earlier versions).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512020454.Tf36WHw5-lkp@intel.com/
+  $ clang --version | head -1
+  ClangBuiltLinux clang version 21.1.6 (https://github.com/llvm/llvm-project.git a832a5222e489298337fbb5876f8dcaf072c5cca)
 
-All errors (new ones prefixed by >>):
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean allmodconfig drivers/scsi/qla2xxx/qla2xxx.o
+  make[7]: *** [scripts/Makefile.build:503: drivers/scsi/qla2xxx/qla2xxx.o] Error 139
+  ...
 
->> error[E0609]: no field `__bindgen_anon_1` on type `bindings::kernel_param`
-   --> rust/kernel/module_param.rs:78:46
-   |
-   78 |         let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>()) };
-   |                                              ^^^^^^^^^^^^^^^^ unknown field
-   |
-   = note: available field is: `_address`
+  $ ld.lld -m elf_x86_64 --fatal-warnings -z noexecstack -r -o drivers/scsi/qla2xxx/qla2xxx.o @drivers/scsi/qla2xxx/qla2xxx.mod
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  $ tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --cfi --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --no-unreachable --link --module drivers/scsi/qla2xxx/qla2xxx.o
+  fish: Job 1, 'tools/objtool/objtool --hacks=j…' terminated by signal SIGSEGV (Address boundary error)
+
+If there is any other information I can provide or patches I can test, I
+am more than happy to do so.
+
+[1]: https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-21.1.6-x86_64.tar.xz
+
+Cheers,
+Nathan
+
+# bad: [95cb2fd6ce0ad61af54191fe5ef271d7177f9c3a] Add linux-next specific files for 20251201
+# good: [e69c7c175115c51c7f95394fc55425a395b3af59] Merge tag 'timers_urgent_for_v6.18_rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect start '95cb2fd6ce0ad61af54191fe5ef271d7177f9c3a' 'e69c7c175115c51c7f95394fc55425a395b3af59'
+# good: [87d5c4addc7e535618586e7205191a7f402288ba] Merge branch 'master' of https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect good 87d5c4addc7e535618586e7205191a7f402288ba
+# good: [a4ad48eac682ccdc21e2f16b8f27abbf615d8d3d] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git
+git bisect good a4ad48eac682ccdc21e2f16b8f27abbf615d8d3d
+# bad: [b99f4ac0a6c7ccf37be14f5ef61b160b1c8a74b0] Merge branch 'driver-core-next' of https://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
+git bisect bad b99f4ac0a6c7ccf37be14f5ef61b160b1c8a74b0
+# bad: [24cefd05bbf969c95fff3733da174e8a352c1cb2] Merge branch 'master' of https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+git bisect bad 24cefd05bbf969c95fff3733da174e8a352c1cb2
+# bad: [4fa1e8d3340bc660d72a21fc8d4c566045e488fc] Merge branch into tip/master: 'timers/clocksource'
+git bisect bad 4fa1e8d3340bc660d72a21fc8d4c566045e488fc
+# good: [51446852de95594c02d6b3b700e15b7c886534d6] Merge branch into tip/master: 'core/bugs'
+git bisect good 51446852de95594c02d6b3b700e15b7c886534d6
+# good: [b032713af9475274762fa664ca2705372b414215] Merge branch into tip/master: 'locking/core'
+git bisect good b032713af9475274762fa664ca2705372b414215
+# good: [9929dffce5ed7e2988e0274f4db98035508b16d9] perf/x86/intel: Fix and clean up intel_pmu_drain_arch_pebs() type use
+git bisect good 9929dffce5ed7e2988e0274f4db98035508b16d9
+# bad: [59bfa6408214b6533d8691715cf5459e89b45b89] objtool: Build with disassembly can fail when including bdf.h
+git bisect bad 59bfa6408214b6533d8691715cf5459e89b45b89
+# bad: [350c7ab8577a32c101a097f4c072220d9ce64f3b] objtool: Improve tracing of alternative instructions
+git bisect bad 350c7ab8577a32c101a097f4c072220d9ce64f3b
+# good: [0bb080ba6469a573bc85122153d931334d10a173] objtool: Disassemble instruction on warning or backtrace
+git bisect good 0bb080ba6469a573bc85122153d931334d10a173
+# bad: [fcb268b47a2f4a497fdb40ef24bb9e06488b7213] objtool: Trace instruction state changes during function validation
+git bisect bad fcb268b47a2f4a497fdb40ef24bb9e06488b7213
+# good: [de0248fbbf999d0fd3ca2aa5ba515ab78703d129] objtool: Record symbol name max length
+git bisect good de0248fbbf999d0fd3ca2aa5ba515ab78703d129
+# good: [70589843b36fee0c6e73632469da4e5fd11f0968] objtool: Add option to trace function validation
+git bisect good 70589843b36fee0c6e73632469da4e5fd11f0968
+# first bad commit: [fcb268b47a2f4a497fdb40ef24bb9e06488b7213] objtool: Trace instruction state changes during function validation
