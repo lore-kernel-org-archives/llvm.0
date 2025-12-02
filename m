@@ -1,64 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4685227BA4;
-	Tue,  2 Dec 2025 02:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA098460;
+	Tue,  2 Dec 2025 05:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764641515; cv=none; b=u5DIewiyJwQEo15ddqvRAFXiWe3dy2VCyoOGkJejo6BfPABBycv3AKlWJgp/zVcqQP6XwUEYvHvo1JVk9jx9qoz6OqhKyPHjZxu7Jpx72nxzPnBhPjNRB5z33ZoZ0P4P9fdxdYypkggSc5UxoJrjgu7iNLZRBFzAvQhvjnxuSXo=
+	t=1764652861; cv=none; b=DTyTjGojJBRoLuErjYO9lgiCzrgtKUZBAVR6T0TmCZZK87V3claUnn1+6XoNVBUdQs7iFtrk/NmcHFScOh6NJaUIiS/7r+s3fxVqk+3KAa33tqaKEvmHhhHL9BK14FsJ+vR904JIPmMRZEJo6s+3tVYQ2uVNTQ/CEoy57U8V3eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764641515; c=relaxed/simple;
-	bh=KIkcSZmsCKYG8A4wN0Pyyzwu9+pOmTVUsNzJylJYrVA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=awRFiEUSIHVAWdAUvL2W6CNTHfQ1S5HHwSvapNAZap8bZLozzL1gA9Q3Fo+RXsdlgHZbDRnbOB2cl17m6fkjmHW+RwX1XkijQmZhC2Jc2I/jytI4VFxB1U6lXntZKht7GtET/OX6yJqIz6DYnmflEuNPvZZvJ+NEbUXWdmYh5+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YO0J/I9u; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1764652861; c=relaxed/simple;
+	bh=TrsiHmkhIUFBoupzjEJ72BEcfrXZ5o8pDPL1Jg0VIQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XRe8823rbPnamdhi8HIbbQCR8sUE+GN6/YjjXPDPrFslq3wqb9yPTyY6CsNhrfLxevXsJn7HvnT13lDFJ01AFJdIJvXn6T0Hm8ExQ27rp1Msx5sldJghFD9KT/1XjKJbLhez10DM9y1oBm3JMaNzA4rpEMs4pzTZVmoMhWgwR9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H5JEQdVI; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YO0J/I9u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H5JEQdVI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764641514; x=1796177514;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KIkcSZmsCKYG8A4wN0Pyyzwu9+pOmTVUsNzJylJYrVA=;
-  b=YO0J/I9uLtl6IzPqbY0cjWo/PyXnFExwIPlKgjPP5njFdgdWWbXSEjNh
-   ok+/tbaWVWYhms/CfGBe/vuZIZq+BkFXzH4/XWdB9O2eJN0BAadQX21w5
-   ys/K9Yh4ArwoKopugecilKpnoi3Ml6yDwT/uSZ3ebfYASNhZgnvnrTcHi
-   U6rt2ODFPdGu+8otrJ1dM/RlvS46NJ1oZHjL6L1hq3QmkykREU0CbpN5W
-   2cvPMvWJ77vB1VcNCA2MPkt3HSoVv8O6kq6g2Ry5cTJvkWb9/FSToCJE3
-   1Pi9xjRK8zuBq1q4GwxE+k31EQpnu0OhDwUmiVcPY/NwBVfAGx1wc4OEx
-   Q==;
-X-CSE-ConnectionGUID: rXk6KAMQTGqKn6D75gD0Xg==
-X-CSE-MsgGUID: rbjwEomgS8qg7E+ZW6ggjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="65599150"
-X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
-   d="scan'208";a="65599150"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 18:11:53 -0800
-X-CSE-ConnectionGUID: Xo9G9SzhQM+5oQ7Hn/QcKA==
-X-CSE-MsgGUID: dT73CrKDS1ulWOmgP/2gJg==
+  t=1764652860; x=1796188860;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TrsiHmkhIUFBoupzjEJ72BEcfrXZ5o8pDPL1Jg0VIQg=;
+  b=H5JEQdVIssgKz3P0ma2q60Vm2TIeSQf4BUDofRA8QJ4y/uSk1gKNAjk0
+   7FVmLa0C6X4JN5Q4YG//0cnv/g3HfCxrj/IWQMtLpSjp83i04OZyNkdNz
+   81ekO9FazpkjoVMCOEKrO4Ov56Dyom384TuT9n8eyTv5ZCtMBIMQUftY1
+   BqU0PaI82u4Z3gBF3sUozTl/r0Gu+DyG89lBzeJ09BcfvbrW3QSO9K1yV
+   ueKxMcTzp9Hl4JTwxbD7lanUyM53bomoweHyAv1CFPWRfRYfzccwDVZ95
+   6dfhtvt5X+r96y+gJs5JZWj6x1y7iTKOUAR1pbtNkjFMNE7SrTSR9xTLM
+   A==;
+X-CSE-ConnectionGUID: DC9sdiMrRv62720zG6C+QQ==
+X-CSE-MsgGUID: PpaPKoNwTw+KUCullphgSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="76929608"
+X-IronPort-AV: E=Sophos;i="6.20,242,1758610800"; 
+   d="scan'208";a="76929608"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 21:20:58 -0800
+X-CSE-ConnectionGUID: lSaAhxqHTuiRq40zAWgVWw==
+X-CSE-MsgGUID: wS49jXBxQo2+mNtOfRz9VQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
-   d="scan'208";a="199171437"
+X-IronPort-AV: E=Sophos;i="6.20,242,1758610800"; 
+   d="scan'208";a="199397331"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 01 Dec 2025 18:11:50 -0800
+  by orviesa005.jf.intel.com with ESMTP; 01 Dec 2025 21:20:57 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vQFro-000000009Jp-0COB;
-	Tue, 02 Dec 2025 02:11:48 +0000
-Date: Tue, 2 Dec 2025 10:10:51 +0800
+	id 1vQIoo-000000009Qr-3qkc;
+	Tue, 02 Dec 2025 05:20:54 +0000
+Date: Tue, 2 Dec 2025 13:20:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: joakim.zhang@cixtech.com, lgirdwood@gmail.com, broonie@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	perex@perex.cz, tiwai@suse.com, linux-sound@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cix-kernel-upstream@cixtech.com,
-	Joakim Zhang <joakim.zhang@cixtech.com>
-Subject: Re: [PATCH v3 3/3] ALSA: hda: add CIX IPBLOQ HDA controller support
-Message-ID: <202512020919.sEEAZ5w1-lkp@intel.com>
-References: <20251201105700.832715-4-joakim.zhang@cixtech.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2025-12-01 5/13]
+ sound/soc/mediatek/mt8189/mt8189-nau8825.c:347:34: error: incompatible
+ pointer types passing 'struct snd_soc_dapm_context **' to parameter of type
+ 'struct snd_soc_dapm_context *'; remove &
+Message-ID: <202512021328.U7z2nhVN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,101 +63,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251201105700.832715-4-joakim.zhang@cixtech.com>
 
-Hi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on tiwai-sound/for-linus linus/master v6.18 next-20251201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/joakim-zhang-cixtech-com/ALSA-hda-dt-bindings-add-CIX-IPBLOQ-HDA-controller-support/20251201-185859
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20251201105700.832715-4-joakim.zhang%40cixtech.com
-patch subject: [PATCH v3 3/3] ALSA: hda: add CIX IPBLOQ HDA controller support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251202/202512020919.sEEAZ5w1-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512020919.sEEAZ5w1-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux sound-cleanup-2025-12-01
+head:   a5568a9bacc493dbb1465f3b850acf8595553013
+commit: 80cf25a8c974d41d5dec39864570b0e1a3b3b997 [5/13] ASoC: soc-dapm: add snd_soc_dapm_alloc()
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251202/202512021328.U7z2nhVN-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512021328.U7z2nhVN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512020919.sEEAZ5w1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512021328.U7z2nhVN-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/hda/controllers/cix-ipbloq.c:224:31: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744071293632512 to 1879048192 [-Wconstant-conversion]
-     224 |         chip->bus.core.addr_offset = CIX_IPBLOQ_SKY1_ADDR_HOST_TO_HDAC_OFFSET;
-         |                                    ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/hda/controllers/cix-ipbloq.c:23:51: note: expanded from macro 'CIX_IPBLOQ_SKY1_ADDR_HOST_TO_HDAC_OFFSET'
-      23 | #define CIX_IPBLOQ_SKY1_ADDR_HOST_TO_HDAC_OFFSET        (-0x90000000ULL)
-         |                                                          ^~~~~~~~~~~~~~
-   1 warning generated.
+>> sound/soc/mediatek/mt8189/mt8189-nau8825.c:347:34: error: incompatible pointer types passing 'struct snd_soc_dapm_context **' to parameter of type 'struct snd_soc_dapm_context *'; remove & [-Werror,-Wincompatible-pointer-types]
+     347 |         ret = snd_soc_dapm_new_controls(&card->dapm, mt8189_dumb_spk_widgets,
+         |                                         ^~~~~~~~~~~
+   include/sound/soc-dapm.h:648:60: note: passing argument to parameter 'dapm' here
+     648 | int snd_soc_dapm_new_controls(struct snd_soc_dapm_context *dapm,
+         |                                                            ^
+   sound/soc/mediatek/mt8189/mt8189-nau8825.c:424:34: error: incompatible pointer types passing 'struct snd_soc_dapm_context **' to parameter of type 'struct snd_soc_dapm_context *'; remove & [-Werror,-Wincompatible-pointer-types]
+     424 |         ret = snd_soc_dapm_new_controls(&card->dapm, mt8189_headset_widgets,
+         |                                         ^~~~~~~~~~~
+   include/sound/soc-dapm.h:648:60: note: passing argument to parameter 'dapm' here
+     648 | int snd_soc_dapm_new_controls(struct snd_soc_dapm_context *dapm,
+         |                                                            ^
+   2 errors generated.
 
 
-vim +224 sound/hda/controllers/cix-ipbloq.c
+vim +347 sound/soc/mediatek/mt8189/mt8189-nau8825.c
 
-   180	
-   181	static int cix_ipbloq_hda_create(struct cix_ipbloq_hda *hda,
-   182					 struct snd_card *card,
-   183					 unsigned int driver_caps)
-   184	{
-   185		static const struct snd_device_ops ops = {
-   186			.dev_disconnect = cix_ipbloq_hda_dev_disconnect,
-   187			.dev_free = cix_ipbloq_hda_dev_free,
-   188		};
-   189		struct azx *chip;
-   190		int err;
-   191	
-   192		chip = &hda->chip;
-   193		chip->card = card;
-   194		chip->ops = &cix_ipbloq_hda_ops;
-   195		chip->driver_caps = driver_caps;
-   196		chip->driver_type = driver_caps & 0xff;
-   197		chip->dev_index = 0;
-   198		chip->single_cmd = 0;
-   199		chip->codec_probe_mask = -1;
-   200		chip->align_buffer_size = 1;
-   201		chip->jackpoll_interval = msecs_to_jiffies(CIX_IPBLOQ_JACKPOLL_DEFAULT_TIME_MS);
-   202		mutex_init(&chip->open_mutex);
-   203		INIT_LIST_HEAD(&chip->pcm_list);
-   204	
-   205		/*
-   206		 * HD-audio controllers appear pretty inaccurate about the update-IRQ timing.
-   207		 * The IRQ is issued before actually the data is processed. So use stream
-   208		 * link position by default instead of dma position buffer.
-   209		 */
-   210		chip->get_position[0] = chip->get_position[1] = azx_get_pos_lpib;
-   211	
-   212		err = azx_bus_init(chip, NULL);
-   213		if (err < 0) {
-   214			dev_err(hda->dev, "failed to init bus, err = %d\n", err);
-   215			return err;
-   216		}
-   217	
-   218		/* RIRBSTS.RINTFL cannot be cleared, cause interrupt storm */
-   219		chip->bus.core.polling_mode = 1;
-   220		chip->bus.core.not_use_interrupts = 1;
-   221	
-   222		chip->bus.core.aligned_mmio = 1;
-   223		chip->bus.core.dma_stop_delay = 100;
- > 224		chip->bus.core.addr_offset = CIX_IPBLOQ_SKY1_ADDR_HOST_TO_HDAC_OFFSET;
-   225	
-   226		chip->bus.jackpoll_in_suspend = 1;
-   227	
-   228		err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, chip, &ops);
-   229		if (err < 0) {
-   230			dev_err(card->dev, "failed to create device, err = %d\n", err);
-   231			return err;
-   232		}
-   233	
-   234		return 0;
-   235	}
-   236	
+d218ea171430e4 Cyril Chao 2025-10-31  341  
+d218ea171430e4 Cyril Chao 2025-10-31  342  static int mt8189_dumb_amp_init(struct snd_soc_pcm_runtime *rtd)
+d218ea171430e4 Cyril Chao 2025-10-31  343  {
+d218ea171430e4 Cyril Chao 2025-10-31  344  	struct snd_soc_card *card = rtd->card;
+d218ea171430e4 Cyril Chao 2025-10-31  345  	int ret;
+d218ea171430e4 Cyril Chao 2025-10-31  346  
+d218ea171430e4 Cyril Chao 2025-10-31 @347  	ret = snd_soc_dapm_new_controls(&card->dapm, mt8189_dumb_spk_widgets,
+d218ea171430e4 Cyril Chao 2025-10-31  348  					ARRAY_SIZE(mt8189_dumb_spk_widgets));
+d218ea171430e4 Cyril Chao 2025-10-31  349  	if (ret) {
+d218ea171430e4 Cyril Chao 2025-10-31  350  		dev_err(rtd->dev, "unable to add Dumb Speaker dapm, ret %d\n", ret);
+d218ea171430e4 Cyril Chao 2025-10-31  351  		return ret;
+d218ea171430e4 Cyril Chao 2025-10-31  352  	}
+d218ea171430e4 Cyril Chao 2025-10-31  353  
+d218ea171430e4 Cyril Chao 2025-10-31  354  	ret = snd_soc_add_card_controls(card, mt8189_dumb_spk_controls,
+d218ea171430e4 Cyril Chao 2025-10-31  355  					ARRAY_SIZE(mt8189_dumb_spk_controls));
+d218ea171430e4 Cyril Chao 2025-10-31  356  	if (ret) {
+d218ea171430e4 Cyril Chao 2025-10-31  357  		dev_err(rtd->dev, "unable to add Dumb card controls, ret %d\n", ret);
+d218ea171430e4 Cyril Chao 2025-10-31  358  		return ret;
+d218ea171430e4 Cyril Chao 2025-10-31  359  	}
+d218ea171430e4 Cyril Chao 2025-10-31  360  
+d218ea171430e4 Cyril Chao 2025-10-31  361  	return 0;
+d218ea171430e4 Cyril Chao 2025-10-31  362  }
+d218ea171430e4 Cyril Chao 2025-10-31  363  
+
+:::::: The code at line 347 was first introduced by commit
+:::::: d218ea171430e49412804efb794942dd121a8032 ASoC: mediatek: mt8189: add machine driver with nau8825
+
+:::::: TO: Cyril Chao <Cyril.Chao@mediatek.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
