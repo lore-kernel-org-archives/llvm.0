@@ -1,173 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7F819E819;
-	Tue,  2 Dec 2025 00:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63BA7262E;
+	Tue,  2 Dec 2025 01:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764636291; cv=none; b=N+0rxs9K0G0giXjGxpfZVOBE7Fmobw9nD/xgFdpunaxyPt2c0IK+snMzxFLjbPO1HjaBDxMGSQG5jnLFs6Ng54WFMV628fOmFH1sR7eAV7JN1wDjBSfo3u+hEHaetRwlu7h0rNEx+kdwXpK1Ec6DpYFl1mN2VeA03S/6Ejc8ipA=
+	t=1764639061; cv=none; b=LrWmqFEt61pkG4uuEDKicfpSkg9P8/BjWsqjDWMxPv0u8+i1UknNll7bxXMJ4xNjIGwcHG9xr0D6NawuC7dYGPz+LLg7OKPMLVRcPCXAFHieKyNeL/BgDlNsbi7vgZUrChdJcR0U556IlxOrWjbllJxR833xwhSo1kTsacK4cEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764636291; c=relaxed/simple;
-	bh=JWkRiQHaY0taksXJV9Te5hrv5XxA9RnCc3J+jp9nZKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XNXx+Ek+iaUa/PLvjdCg/hnOIKjoBxj8IPGWASsnr3TfviD9IkCNSyfJgdD+LTXVdiXVDGbSnXlf3pnB9UgbOagDLY+tFTmC7gFa2yyIxeY3o5U3wwruUFVIkIpGtpr2FMfWadzV4xngA792LfUA/4fGxNwmUC8xBck2sc3cKsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SpK0gN0A; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764639061; c=relaxed/simple;
+	bh=Coq1iWndgqWSxg9ZfQ6m7gAPBsStohlWSWaBiqak+lk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZJRAI4oHNd3imBzWA3RGZvcRUeF49jNVk9QnDRGsO4Xe60Naw1//rxaPw4MkrzrZMJpJXMsGVliIi4EFnxs0jAENtPWhaaNWcpPPiblMcHUZ/we4L7KGCR3woUxisHcCX1F3KMJ1CwsmFq6CV9EcH57bDVSPwFpZwxN6LEeNT1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hK+gWVf1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SpK0gN0A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764636290; x=1796172290;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JWkRiQHaY0taksXJV9Te5hrv5XxA9RnCc3J+jp9nZKg=;
-  b=SpK0gN0AptwSAK0+4MrpPNZzYf2hiO9nT8ZliPfGMIGpzdlG4OH2J52U
-   08TUyUJcLyr0FdcfzoZCL/kZx4deaGhIdYpSIvnjhbmkZgwq6u4UPtmUC
-   8vGaVj1FN2dw2iFWz1VCHM3whikkjU3orqvdhcIQ0hSeopY03A6Acsukr
-   ndj/fYaZ/3YJeD3OtDGWyLj4XZKjZt6j9Kp6QvXVA7HTIc3D8rPZ1vFRI
-   66OJYC/SPssplEa780PcEGHG6yZtCfbR9mHeqG/HrPSWdqTm/g01AqUZX
-   FQCdYdKlOR9ugfEqgupcwsBdL2IdNyBWrsIJqhTZC+pnxovHaEMzBi45s
-   w==;
-X-CSE-ConnectionGUID: idfdiTMcSci6WYxdkTy+dA==
-X-CSE-MsgGUID: HHjN4ItnRpiUzM158+xLjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="76912571"
-X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
-   d="scan'208";a="76912571"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 16:44:48 -0800
-X-CSE-ConnectionGUID: 7Bd5vMjtRUGY+tQDLb15lw==
-X-CSE-MsgGUID: mPupN3h8SBigqePJqtcJGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,241,1758610800"; 
-   d="scan'208";a="193498845"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 01 Dec 2025 16:44:46 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQEVX-000000009GV-25Uv;
-	Tue, 02 Dec 2025 00:44:43 +0000
-Date: Tue, 2 Dec 2025 08:44:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2025-12-01 12/13]
- sound/soc/sti/uniperif_reader.c:422:2: error: member reference base type
- 'int (struct snd_soc_dai *, unsigned int, unsigned int, int, int)' is not a
- structure or union
-Message-ID: <202512020812.JIZvBt74-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hK+gWVf1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 967D2C4CEF1;
+	Tue,  2 Dec 2025 01:31:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764639061;
+	bh=Coq1iWndgqWSxg9ZfQ6m7gAPBsStohlWSWaBiqak+lk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hK+gWVf1lZxYl9/1aPidJa0Zf0i/vln3sXQQkMs4Gp1oBT0wG9+0g7wvlN++9bV5S
+	 8YtdZ8WQJbssrJ6jQeTt996S7hsPJuPMK4uLV5QxPLA46E12UPWDFx2b66siVcXj4C
+	 2gDdTdQ6BMJ2ShKUnqiGQCcFbnZVRs3vHnaVFv20maK0VUlN1Os7K8CWoHt7ipYK+K
+	 AlDu40xZTfMuqU9Wxk4FNX/JGR16x7Qpgomsw8vDwjIdsEU2lba5mYHO8/AMogF9rt
+	 J7EthLbznxvDd91I8CQeigQcY9FiML0kJjh5MILvexPel7BxAd7fn/5qiyxtacdrQZ
+	 bRox/seoNjSQQ==
+Date: Mon, 1 Dec 2025 17:30:59 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alexandre Chartre <alexandre.chartre@oracle.com>, 
+	linux-kernel@vger.kernel.org, mingo@kernel.org, peterz@infradead.org, 
+	david.laight.linux@gmail.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 11/30] objtool: Trace instruction state changes during
+ function validation
+Message-ID: <vlam452zory73y4nvtgl63ofr3yrguguda63qsns3k6r7sgsey@2xhf3fbc5pkx>
+References: <20251121095340.464045-1-alexandre.chartre@oracle.com>
+ <20251121095340.464045-12-alexandre.chartre@oracle.com>
+ <20251201202329.GA3225984@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251201202329.GA3225984@ax162>
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2025-12-01
-head:   a5568a9bacc493dbb1465f3b850acf8595553013
-commit: 37f1f58e36152e534fc127762820579e3a28ea85 [12/13] hoge
-config: i386-buildonly-randconfig-003-20251202 (https://download.01.org/0day-ci/archive/20251202/202512020812.JIZvBt74-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512020812.JIZvBt74-lkp@intel.com/reproduce)
+On Mon, Dec 01, 2025 at 01:23:29PM -0700, Nathan Chancellor wrote:
+> Hi Alexandre,
+> 
+> On Fri, Nov 21, 2025 at 10:53:21AM +0100, Alexandre Chartre wrote:
+> > During function validation, objtool maintains a per-instruction state,
+> > in particular to track call frame information. When tracing validation,
+> > print any instruction state changes.
+> > 
+> > Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
+> 
+> I am seeing a segfault after this change in -next as commit fcb268b47a2f
+> ("objtool: Trace instruction state changes during function validation")
+> when building allmodconfig with clang 21.1.6 [1] (I did not check
+> earlier versions).
+> 
+>   $ clang --version | head -1
+>   ClangBuiltLinux clang version 21.1.6 (https://github.com/llvm/llvm-project.git a832a5222e489298337fbb5876f8dcaf072c5cca)
+> 
+>   $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean allmodconfig drivers/scsi/qla2xxx/qla2xxx.o
+>   make[7]: *** [scripts/Makefile.build:503: drivers/scsi/qla2xxx/qla2xxx.o] Error 139
+>   ...
+> 
+>   $ ld.lld -m elf_x86_64 --fatal-warnings -z noexecstack -r -o drivers/scsi/qla2xxx/qla2xxx.o @drivers/scsi/qla2xxx/qla2xxx.mod
+> 
+>   $ tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --cfi --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --no-unreachable --link --module drivers/scsi/qla2xxx/qla2xxx.o
+>   fish: Job 1, 'tools/objtool/objtool --hacks=j…' terminated by signal SIGSEGV (Address boundary error)
+> 
+> If there is any other information I can provide or patches I can test, I
+> am more than happy to do so.
+> 
+> [1]: https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-21.1.6-x86_64.tar.xz
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512020812.JIZvBt74-lkp@intel.com/
+Objtool is overflowing the stack due to the large number of jumps it has
+to follow in that code, thanks to kasan.  The above mentioned patch
 
-All errors (new ones prefixed by >>):
+  fcb268b47a2f ("objtool: Trace instruction state changes during function validation")
 
->> sound/soc/sti/uniperif_reader.c:422:2: error: member reference base type 'int (struct snd_soc_dai *, unsigned int, unsigned int, int, int)' is not a structure or union
-     421 |         .set_tdm_slot                   = sti_uniperiph_set_tdm_slot
-         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     422 |         .auto_selectable_formats        = &uni_selectable_formats,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/sti/uniperif_reader.c:422:30: error: use of undeclared identifier 'uni_selectable_formats'; did you mean 'ui_selectable_formats'?
-     422 |         .auto_selectable_formats        = &uni_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~
-         |                                            ui_selectable_formats
-   sound/soc/sti/uniperif_reader.c:404:18: note: 'ui_selectable_formats' declared here
-     404 | static const u64 ui_selectable_formats =
-         |                  ^
-   2 errors generated.
---
->> sound/soc/sti/uniperif_player.c:1060:2: error: member reference base type 'int (struct snd_soc_dai *, unsigned int, unsigned int, int, int)' is not a structure or union
-    1059 |         .set_tdm_slot                   = sti_uniperiph_set_tdm_slot
-         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1060 |         .auto_selectable_formats        = &uni_selectable_formats,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> sound/soc/uniphier/aio-cpu.c:464:30: error: use of undeclared identifier 'uniphier_dai_selectable_formats'; did you mean 'uniphier_aio_selectable_formats'?
-     464 |         .auto_selectable_formats        = &uniphier_dai_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                            uniphier_aio_selectable_formats
-   sound/soc/uniphier/aio-cpu.c:448:18: note: 'uniphier_aio_selectable_formats' declared here
-     448 | static const u64 uniphier_aio_selectable_formats =
-         |                  ^
-   1 error generated.
---
->> sound/soc/sunxi/sun4i-i2s.c:1113:18: error: array initializer must be an initializer list
-    1113 | static const u64 sun4i_i2s_selectable_formats[] =
-         |                  ^
->> sound/soc/sunxi/sun4i-i2s.c:1123:2: error: expected identifier or '('
-    1123 |         SND_SOC_POSSIBLE_DAIFMT_DSP_A   |
-         |         ^
-   include/sound/soc-dai.h:50:41: note: expanded from macro 'SND_SOC_POSSIBLE_DAIFMT_DSP_A'
-      50 | #define SND_SOC_POSSIBLE_DAIFMT_DSP_A           (1 << SND_SOC_DAI_FORMAT_DSP_A)
-         |                                                  ^
->> sound/soc/sunxi/sun4i-i2s.c:1123:2: error: expected ')'
-   include/sound/soc-dai.h:50:41: note: expanded from macro 'SND_SOC_POSSIBLE_DAIFMT_DSP_A'
-      50 | #define SND_SOC_POSSIBLE_DAIFMT_DSP_A           (1 << SND_SOC_DAI_FORMAT_DSP_A)
-         |                                                  ^
-   sound/soc/sunxi/sun4i-i2s.c:1123:2: note: to match this '('
-   include/sound/soc-dai.h:50:40: note: expanded from macro 'SND_SOC_POSSIBLE_DAIFMT_DSP_A'
-      50 | #define SND_SOC_POSSIBLE_DAIFMT_DSP_A           (1 << SND_SOC_DAI_FORMAT_DSP_A)
-         |                                                 ^
->> sound/soc/sunxi/sun4i-i2s.c:1123:31: error: expected ';' after top level declarator
-    1123 |         SND_SOC_POSSIBLE_DAIFMT_DSP_A   |
-         |                                      ^
-         |                                      ;
->> sound/soc/sunxi/sun4i-i2s.c:1135:33: error: invalid application of 'sizeof' to an incomplete type 'const u64[]' (aka 'const unsigned long long[]')
-    1135 |         .num_auto_selectable_formats    = ARRAY_SIZE(sun4i_i2s_selectable_formats),
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   5 errors generated.
+added a 328-byte struct to the stack in validate_insn() which
+drastically increased the amount of stack size needed.
 
+I suppose we could hack a fix by making it a static local variable, like
+below.
 
-vim +422 sound/soc/sti/uniperif_reader.c
+Or, objtool could setrlimit(RLIMIT_STACK) to 16MB?
 
-   399	
-   400	/*
-   401	 * Select below from Sound Card, not Auto
-   402	 *	SND_SOC_DAIFMT_CBx_CFx
-   403	 */
-   404	static const u64 ui_selectable_formats =
-   405		SND_SOC_POSSIBLE_DAIFMT_I2S	|
-   406		SND_SOC_POSSIBLE_DAIFMT_RIGHT_J	|
-   407		SND_SOC_POSSIBLE_DAIFMT_LEFT_J	|
-   408		SND_SOC_POSSIBLE_DAIFMT_NB_NF	|
-   409		SND_SOC_POSSIBLE_DAIFMT_NB_IF	|
-   410		SND_SOC_POSSIBLE_DAIFMT_IB_NF	|
-   411		SND_SOC_POSSIBLE_DAIFMT_IB_IF;
-   412	
-   413	static const struct snd_soc_dai_ops uni_reader_dai_ops = {
-   414		.startup			= uni_reader_startup,
-   415		.shutdown			= uni_reader_shutdown,
-   416		.prepare			= uni_reader_prepare,
-   417		.probe				= sti_uniperiph_dai_probe,
-   418		.trigger			= uni_reader_trigger,
-   419		.hw_params			= sti_uniperiph_dai_hw_params,
-   420		.set_fmt			= sti_uniperiph_dai_set_fmt,
-   421		.set_tdm_slot			= sti_uniperiph_set_tdm_slot
- > 422		.auto_selectable_formats	= &uni_selectable_formats,
-   423		.num_auto_selectable_formats	= 1,
-   424	};
-   425	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index a02f8db75827..206b8589d82b 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3678,7 +3678,7 @@ static int validate_insn(struct objtool_file *file, struct symbol *func,
+ 			 bool *dead_end)
+ {
+ 	/* prev_state is not used if there is no disassembly support */
+-	struct insn_state prev_state __maybe_unused;
++	static struct insn_state prev_state __maybe_unused;
+ 	struct alternative *alt;
+ 	u8 visited;
+ 	int ret;
