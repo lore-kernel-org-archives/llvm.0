@@ -1,157 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649A925785E;
-	Tue,  2 Dec 2025 10:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA98130DD1F;
+	Tue,  2 Dec 2025 10:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764669985; cv=none; b=WxqP47tsStnz9qpDjcZdmx9WEIIFq1/FiSe5N0fIaQOuoTFyyAqeQvmuvnYN6x0MsBxiKllSkwrXtauwpiXCVa2SwlukPjS/9V8IYqARX96qd2N9gfEdCeWzavoRLBjzlur4V2ZnIwOoAt/SVthHU0fLuY7zKekZ7NwisXAyRz4=
+	t=1764671141; cv=none; b=AZc5Q4tS5DFNS4hJUoeg41bTzoJ4SxjhUFAKIY4z3GMXaHxUgEwHW1o/+JVGQ3TFetHGq8PLIpCp14XnPaKfH/8mp9dAPdgq1IGPcmyMG5JQT/aV85bKhLbJP+xv9l7+NZx/F4F6gchqLWVPezdM0m3xbzOctUYi2d3GOXediqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764669985; c=relaxed/simple;
-	bh=oQlaqUeREC8Pc2NqxB4xgOj6FQuw9eUxeGBxZjH6Sgc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nZzdbWLv309oE5wIGiSyYi/N21PrdLtM9hNjUClUCfIxfvwg4fR8WAxrPwGnGnXAQkXsZUJqKLN1JLAXAQzSt9ECQ2WJC0igAUW+5+N+OmxdB343iF/+ygKtpblv3DAK2adgXqTXeT5edt/CGEmDSZG6yM0xQ9QsMNCY8ZUWwmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JzwXiHP6; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764671141; c=relaxed/simple;
+	bh=8lTZU/HyfdYlDG92zJ38DX14b1y2rKJApb/uX5eJd7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Bza2ZO+HuHSj4HwK//8NF0ksZXICxf6i8xDX+681Jlo8gVOSDI9a7lHPtn6OnBcrSZ/bt+nFu3GGFuwDqTGmTYQ/oVzYR0ec9h5GGav7T8Sa88h7m95eWA6tCf0A1Pzuj0PAPcBlRwDtYDh+5IMVvdHPwFluTywHMCYnIxl127g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=UuQHiFMH; arc=none smtp.client-ip=178.154.239.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JzwXiHP6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764669983; x=1796205983;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oQlaqUeREC8Pc2NqxB4xgOj6FQuw9eUxeGBxZjH6Sgc=;
-  b=JzwXiHP6zTkWrmWvrI6DDuSsD197Il5BaRTHLokTrp6woMvrLVj30Sgo
-   NZMp1OWx9/3zIDFtYndkWMQyJeMQOKM18X58mHb3J39Xt8NL1/51S9EMC
-   yXQ2ZWddGtENCPjpAecLhWuzHB/WvJFuDLl2WBBtE7BcOZikgnfVcaEtl
-   tSRYEzrDgs74e95j5bBHYsLv/TSm3n6JPiZeFoceDLVWZH91rteKnqjLl
-   EE7MZHpDCJPmlGEZ4kpu2BnyQvkbScH8Tdl02zO5CkFsqVvPrq3PIeugM
-   S0GEciSTgDuy3qzMmMS11z+51rzaBVWsUuH28x5/po19ZyVC/g+HpZ04e
-   A==;
-X-CSE-ConnectionGUID: cQGaicewTGacMxVnydajtg==
-X-CSE-MsgGUID: gqAKoyE/Rha8s5ZftEGDCQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="69223299"
-X-IronPort-AV: E=Sophos;i="6.20,242,1758610800"; 
-   d="scan'208";a="69223299"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 02:06:21 -0800
-X-CSE-ConnectionGUID: PITpErWwRNmDgKnxiyeQcw==
-X-CSE-MsgGUID: 4OdsEXdETKmHXxBiAj8Kiw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,242,1758610800"; 
-   d="scan'208";a="217680052"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Dec 2025 02:06:15 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQNGv-000000009fR-1YFs;
-	Tue, 02 Dec 2025 10:06:13 +0000
-Date: Tue, 2 Dec 2025 18:06:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marco Felsch <m.felsch@pengutronix.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
-	Liu Ying <victor.liu@nxp.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Marco Felsch <m.felsch@pengutronix.de>
-Subject: Re: [PATCH v6 2/3] drm/bridge: imx: Add i.MX93 parallel display
- format configuration support
-Message-ID: <202512021733.cIbkorvY-lkp@intel.com>
-References: <20251201-v6-18-topic-imx93-parallel-display-v6-2-7b056e1e5b1e@pengutronix.de>
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="UuQHiFMH"
+Received: from mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net [IPv6:2a02:6b8:c1e:489c:0:640:8d6b:0])
+	by forward500b.mail.yandex.net (Yandex) with ESMTPS id EC209C1890;
+	Tue, 02 Dec 2025 13:20:24 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id HKgXvG9LOa60-BR37yYN1;
+	Tue, 02 Dec 2025 13:20:23 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1764670823;
+	bh=hJjZl1M4yR3D6+GLX+gICtn9USEgkFcjGTBhKcErVaM=;
+	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+	b=UuQHiFMHy0lrgJoYO5juGN005t4YcebpWupZaILDT+tDo5u4SNckezySSIPWLXA2w
+	 p6kVWMVZ+km4hoqVxurGKQYZ1042SrlYjnnrDn2iGYv0YbahDgaYQBkvW+lejkxoZx
+	 upqI85RHy7nFlmWrNDOz3jm7YcLHxSneINC/k9Ps=
+Authentication-Results: mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+Date: Tue, 2 Dec 2025 13:20:16 +0300
+From: Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>
+To: kernel test robot <lkp@intel.com>
+Cc: rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, lossin@kernel.org, lyude@redhat.com,
+ ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+ gary@garyguo.net, a.hindborg@kernel.org, aliceryhl@google.com,
+ tmgross@umich.edu, dakr@kernel.org, peterz@infradead.org, mingo@redhat.com,
+ will@kernel.org, longman@redhat.com, felipe_life@live.com,
+ daniel@sedlak.dev, daniel.almeida@collabora.com,
+ thomas.hellstrom@linux.intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 5/6] rust: ww_mutex: add Mutex, AcquireCtx and
+ MutexGuard
+Message-ID: <20251202132016.653e1fa0@nimda.home>
+In-Reply-To: <202512020943.whFrDsXx-lkp@intel.com>
+References: <20251201102855.4413-6-work@onurozkan.dev>
+	<202512020943.whFrDsXx-lkp@intel.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251201-v6-18-topic-imx93-parallel-display-v6-2-7b056e1e5b1e@pengutronix.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Marco,
+On Tue, 2 Dec 2025 09:49:34 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build errors:
+> Hi Onur,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on tip/locking/core]
+> [also build test ERROR on rust/rust-next linus/master v6.18
+> next-20251201] [If your patch is applied to the wrong git tree,
+> kindly drop us a note. And when submitting patch, we suggest to use
+> '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:
+> https://github.com/intel-lab-lkp/linux/commits/Onur-zkan/rust-add-C-wrappers-for-ww_mutex-inline-functions/20251201-184152
+> base:   tip/locking/core patch link:
+> https://lore.kernel.org/r/20251201102855.4413-6-work%40onurozkan.dev
+> patch subject: [PATCH v8 5/6] rust: ww_mutex: add Mutex, AcquireCtx
+> and MutexGuard config: arm64-randconfig-001-20251202
+> (https://download.01.org/0day-ci/archive/20251202/202512020943.whFrDsXx-lkp@intel.com/config)
+> compiler: clang version 22.0.0git
+> (https://github.com/llvm/llvm-project
+> b3428bb966f1de8aa48375ffee0eba04ede133b7) rustc: rustc 1.88.0
+> (6b00bc388 2025-06-23) reproduce (this is a W=1 build):
+> (https://download.01.org/0day-ci/archive/20251202/202512020943.whFrDsXx-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new
+> version of the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes:
+> https://lore.kernel.org/oe-kbuild-all/202512020943.whFrDsXx-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> error[E0609]: no field `ww_class` on type `ww_acquire_ctx`
+>    --> rust/kernel/sync/lock/ww_mutex/acquire_ctx.rs:110:41
+>    |
+>    110 |         let class_ptr = unsafe { (*ctx).ww_class };
+>    |                                         ^^^^^^^^ unknown field
+>    |
+>    = note: available field is: `_address`
+> --
+> >> error[E0609]: no field `ww_class` on type `ww_acquire_ctx`
+>    --> rust/kernel/sync/lock/ww_mutex.rs:252:49
+>    |
+>    252 |             let ctx_class = unsafe { (*ctx_ptr).ww_class };
+>    |                                                 ^^^^^^^^ unknown
+> field |
+>    = note: available field is: `_address`
+> 
 
-[auto build test ERROR on 3a8660878839faadb4f1a6dd72c3179c1df56787]
+I got a different error:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marco-Felsch/dt-bindings-soc-imx93-media-blk-ctrl-Add-PDFC-subnode-to-schema-and-example/20251202-011707
-base:   3a8660878839faadb4f1a6dd72c3179c1df56787
-patch link:    https://lore.kernel.org/r/20251201-v6-18-topic-imx93-parallel-display-v6-2-7b056e1e5b1e%40pengutronix.de
-patch subject: [PATCH v6 2/3] drm/bridge: imx: Add i.MX93 parallel display format configuration support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251202/202512021733.cIbkorvY-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512021733.cIbkorvY-lkp@intel.com/reproduce)
+  CLIPPY L rust/kernel.o
+error[E0583]: file not found for module `lock_set`
+  --> rust/kernel/sync/lock/ww_mutex.rs:27:1
+   |
+27 | mod lock_set;
+   | ^^^^^^^^^^^^^
+   |
+   = help: to create the module `lock_set`, create file
+  "rust/kernel/sync/lock/ww_mutex/lock_set.rs" or
+  "rust/kernel/sync/lock/ww_mutex/lock_set/mod.rs" = note: if there is
+  a `mod lock_set` elsewhere in the crate already, import it with `use
+  crate::...` instead
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512021733.cIbkorvY-lkp@intel.com/
+I will fix this in the next version. It only appears in the 5th
+patch of the series.
 
-All errors (new ones prefixed by >>):
+But I have no idea about the "no field `ww_class`" error yet. We have
+this [1] change so I assume something didn't work properly with the
+bindgen generation? I will look more into that later.
 
->> drivers/gpu/drm/bridge/imx/imx93-pdfc.c:55:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      55 |                 val = FORMAT_RGB888_TO_RGB888;
-         |                       ^
-   drivers/gpu/drm/bridge/imx/imx93-pdfc.c:21:34: note: expanded from macro 'FORMAT_RGB888_TO_RGB888'
-      21 | #define FORMAT_RGB888_TO_RGB888         FIELD_PREP(PARALLEL_DISP_FORMAT, 0)
-         |                                         ^
-   1 error generated.
+[1]: https://github.com/intel-lab-lkp/linux/commit/23ba7e6a3f593455a
 
-
-vim +/FIELD_PREP +55 drivers/gpu/drm/bridge/imx/imx93-pdfc.c
-
-    42	
-    43	static void imx93_pdfc_bridge_atomic_enable(struct drm_bridge *bridge,
-    44						    struct drm_atomic_state *state)
-    45	{
-    46		struct imx93_pdfc *pdfc = bridge->driver_private;
-    47		const struct drm_bridge_state *bridge_state;
-    48		unsigned int mask = PARALLEL_DISP_FORMAT;
-    49		unsigned int val;
-    50	
-    51		bridge_state = drm_atomic_get_new_bridge_state(state, bridge);
-    52	
-    53		switch (bridge_state->output_bus_cfg.format) {
-    54		case MEDIA_BUS_FMT_RGB888_1X24:
-  > 55			val = FORMAT_RGB888_TO_RGB888;
-    56			if (pdfc->phy_bus_width == 18) {
-    57				/*
-    58				 * Can be valid if physical bus limitation exist,
-    59				 * therefore use dev_dbg().
-    60				 */
-    61				dev_dbg(pdfc->dev, "Truncate two LSBs from each color\n");
-    62				val = FORMAT_RGB888_TO_RGB666;
-    63			}
-    64			break;
-    65		case MEDIA_BUS_FMT_RGB666_1X18:
-    66			val = FORMAT_RGB888_TO_RGB666;
-    67			break;
-    68		case MEDIA_BUS_FMT_RGB565_1X16:
-    69			val = FORMAT_RGB565_TO_RGB565;
-    70			break;
-    71		}
-    72	
-    73		regmap_update_bits(pdfc->regmap, pdfc->disp_mux_reg_off, mask, val);
-    74	}
-    75	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-Onur
