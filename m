@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612402F9C37;
-	Tue,  2 Dec 2025 22:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644FC2F691E;
+	Tue,  2 Dec 2025 22:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764714603; cv=none; b=scXpyKVx8GYRhsJVrb1wmXm5cdazmP7h9Fx383uScDKxqKUCxKWCur53QQtkdShNLSRMqvDujRoMPZx4nrWr/841EIJ4knLdu7sXrcR+RpUcwtnLXCA7lsAOieuTrpq8DVgMeLuu2ojDm4HkTK5HeeFl52lF+tLYV6KpZkaWAbQ=
+	t=1764715198; cv=none; b=HtunkMyxvBTAmn1J+U6ApFnjmAzbaNvH19Ev2bg+COB/f0zVRmyzPeTe/XIPfTSaup+kLmyevGWdWCV9XFcIh6AthIKxKsIW+bRbfrNANHywVzOjAnV/W2WX8k3CUE26Q1NESSGne5LzokRTtIjUoX3mYSx+EdMNrsPp4Kxj8Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764714603; c=relaxed/simple;
-	bh=Tzm85UWzBGZBLCaGdXzjQsCeqTMM+dsj8Uofxue8lK4=;
+	s=arc-20240116; t=1764715198; c=relaxed/simple;
+	bh=+SjM1flRY/Z51zs6rgWVpHQCCxdEgknM1em4IkfKLKE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LCX1lTClZVMAVqWVD66ZNqLFZp/Ds1QGJ721TZsxua6+l7n0euaikUAVxM2ctup10MmTHuGSxWTYT+m9pO2Ku58IjpxQOCpn4nJHcqMkBdyMVfxCUlsyftxGpdUiGzKxA1MOvFQZKtd7DRC5n6KUgzZx8JXhqEIxY1spP/mO83E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BilQRweQ; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=VP4TxqHzmlSbPYemdwQnpUgMY7HCFiVNiXPf710FXtJf+yn9SRzDdWLQ/+W5Y4EyG1tcc/LVfra8de5T7uJq9Qfob9w8nVhcb/vicGnJ/YuSuXlGDIvDYN55odppHqBwOP/PrQrSswoi0NftAp3Byh9xvTbVAcCrwzU14whhpPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bXf32Jql; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BilQRweQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bXf32Jql"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764714601; x=1796250601;
+  t=1764715196; x=1796251196;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tzm85UWzBGZBLCaGdXzjQsCeqTMM+dsj8Uofxue8lK4=;
-  b=BilQRweQIxO4P1efxNFZfcQ3zCJC+QTQ8svmIuL67uLSxfJdkgX3LNdP
-   8EJ3K6yYq5Dd4NYRE82z3E1MlPLrPMAOW/4f0dV/EkDF5YT0wD0114M6o
-   mhbpMYIzugFJDe+taUxp0Z32t0p8Btrl5JQagTCYpy4DzlGYVFvj4uesc
-   ROcWY3ukPqbGzVvKOUN9V4J3GKRALMTova2uqHTusBSeiEBfWJR0sMnUW
-   y55TcDwQwAMm0+FkhEfrbskJMMnc8+Dx9mEtcsrvxKP+VC4fBmSMifyx6
-   PZ2CNBuOYtTQMA5WfXttcUkz0vJ8BEyOCspvK91Fwie/Oh5YNhXCz62jK
-   w==;
-X-CSE-ConnectionGUID: 7uVhpaDUSXGaY++2r2I0mw==
-X-CSE-MsgGUID: 9G4EeGYpT1yzHIeCrQeJQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="66734303"
+  bh=+SjM1flRY/Z51zs6rgWVpHQCCxdEgknM1em4IkfKLKE=;
+  b=bXf32JqlTly9690bVNKV5vgDmZ2JKsVdBdEEIKBqV1D1Q/gPKvC4WqJa
+   fo6VgRXRU2Kh5c0WSzQyWXJV/xpv1q8vAjX/28LMhWa/GZa0GzlDNFKFQ
+   uaAKeCMAm63mfvB6pLbe63xiokTU/ITg3hHwkwYWJX9Qs+cvfwqGZWDxv
+   xgCUGvxcXCHTPu8hPbQ2lbEKqwrBtqYt0gnTS34Llh/wUIAaufSztXiJO
+   S36iZRgfQ45G6pfH8jpdWPNnxuDU6MKuGoO8Hc+qg5p6/HabCeFYf3IWs
+   BWC9mKM0LMM2JYO/vpDvVU7ZdL5/X+vxTnHWyGhlaP7+cM0nGvHvTwEOX
+   g==;
+X-CSE-ConnectionGUID: LI5Fe8VUTeiXOLX7JEsQHw==
+X-CSE-MsgGUID: tcKZinujRzyO9qZZ8tTQmQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="65704537"
 X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="66734303"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 14:28:55 -0800
-X-CSE-ConnectionGUID: GVHmDmGyTw6yrPiHMea7Pw==
-X-CSE-MsgGUID: sKSSSVIeRhWjaviZcNY+gA==
+   d="scan'208";a="65704537"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 14:39:56 -0800
+X-CSE-ConnectionGUID: 95UkkLGCQIiErJO7p47vRw==
+X-CSE-MsgGUID: GzoSna9KT1yend62gn+Wig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="217847435"
+   d="scan'208";a="194497264"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Dec 2025 14:28:54 -0800
+  by orviesa007.jf.intel.com with ESMTP; 02 Dec 2025 14:39:54 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vQYrb-00000000AGP-3Sr9;
-	Tue, 02 Dec 2025 22:28:51 +0000
-Date: Wed, 3 Dec 2025 06:28:30 +0800
+	id 1vQZ2G-00000000AGv-1TKx;
+	Tue, 02 Dec 2025 22:39:52 +0000
+Date: Wed, 3 Dec 2025 06:38:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 13063/13171] Warning:
- drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:244 struct __packed
- mtk_mfg_opp_entry { __le32 freq_khz; __le32 voltage_core; __le32
- voltage_sram; __le32 posdiv; __le32 voltage_margin; __le32 power_mw; };
- error: Cannot parse struct or union!
-Message-ID: <202512030622.oPwuphyX-lkp@intel.com>
+Subject: [morimoto:renesas-lts/v6.18.0-2025-12-01-x5h-ironhide 22/36]
+ drivers/mailbox/mailbox.c:416:31: error: use of undeclared identifier
+ '__free_kfree'; did you mean '__free_pages'?
+Message-ID: <202512030638.sri4f2Ie-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,21 +63,148 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   47b7b5e32bb7264b51b89186043e1ada4090b558
-commit: e4f12451cc6431b08c454cb0d71f158f119d3dfe [13063/13171] Merge branch 'next' of https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251203/202512030622.oPwuphyX-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512030622.oPwuphyX-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux renesas-lts/v6.18.0-2025-12-01-x5h-ironhide
+head:   bac3dde4cf6e6a52813b70720d6fbd385a9cb4c0
+commit: a38f29304a2545aeef3d38033e6a76fea04178d4 [22/36] mailbox: add new {fw/of}_xlate_with_name()
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251203/202512030638.sri4f2Ie-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512030638.sri4f2Ie-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512030622.oPwuphyX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512030638.sri4f2Ie-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Warning: drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:244 struct __packed mtk_mfg_opp_entry { __le32 freq_khz; __le32 voltage_core; __le32 voltage_sram; __le32 posdiv; __le32 voltage_margin; __le32 power_mw; }; error: Cannot parse struct or union!
+>> drivers/mailbox/mailbox.c:416:31: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
+     416 |         const char **mbox_name_array __free(kfree) = kcalloc(index + 1, sizeof(char *), GFP_KERNEL);
+         |                                      ^
+   include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+     213 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^
+   <scratch space>:55:1: note: expanded from here
+      55 | __free_kfree
+         | ^
+   include/linux/gfp.h:382:13: note: '__free_pages' declared here
+     382 | extern void __free_pages(struct page *page, unsigned int order);
+         |             ^
+>> drivers/mailbox/mailbox.c:416:31: error: 'cleanup' function '__free_pages' must take 1 parameter
+     416 |         const char **mbox_name_array __free(kfree) = kcalloc(index + 1, sizeof(char *), GFP_KERNEL);
+         |                                      ^
+   include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+     213 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^
+   <scratch space>:55:1: note: expanded from here
+      55 | __free_kfree
+         | ^
+   drivers/mailbox/mailbox.c:416:47: error: call to undeclared function 'kcalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     416 |         const char **mbox_name_array __free(kfree) = kcalloc(index + 1, sizeof(char *), GFP_KERNEL);
+         |                                                      ^
+>> drivers/mailbox/mailbox.c:416:15: error: incompatible integer to pointer conversion initializing 'const char **' with an expression of type 'int' [-Wint-conversion]
+     416 |         const char **mbox_name_array __free(kfree) = kcalloc(index + 1, sizeof(char *), GFP_KERNEL);
+         |                      ^                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
+
+
+vim +416 drivers/mailbox/mailbox.c
+
+   367	
+   368	/**
+   369	 * mbox_request_channel - Request a mailbox channel.
+   370	 * @cl: Identity of the client requesting the channel.
+   371	 * @index: Index of mailbox specifier in 'mboxes' property.
+   372	 *
+   373	 * The Client specifies its requirements and capabilities while asking for
+   374	 * a mailbox channel. It can't be called from atomic context.
+   375	 * The channel is exclusively allocated and can't be used by another
+   376	 * client before the owner calls mbox_free_channel.
+   377	 * After assignment, any packet received on this channel will be
+   378	 * handed over to the client via the 'rx_callback'.
+   379	 * The framework holds reference to the client, so the mbox_client
+   380	 * structure shouldn't be modified until the mbox_free_channel returns.
+   381	 *
+   382	 * Return: Pointer to the channel assigned to the client if successful.
+   383	 *		ERR_PTR for request failure.
+   384	 */
+   385	struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+   386	{
+   387		struct fwnode_reference_args fwspec;
+   388		struct fwnode_handle *fwnode;
+   389		struct mbox_controller *mbox;
+   390		struct of_phandle_args spec;
+   391		struct mbox_chan *chan;
+   392		struct device *dev;
+   393		const char *mbox_name;
+   394		unsigned int i;
+   395		int ret;
+   396	
+   397		dev = cl->dev;
+   398		if (!dev) {
+   399			pr_debug("No owner device\n");
+   400			return ERR_PTR(-ENODEV);
+   401		}
+   402	
+   403		fwnode = dev_fwnode(dev);
+   404		if (!fwnode) {
+   405			dev_dbg(dev, "No owner fwnode\n");
+   406			return ERR_PTR(-ENODEV);
+   407		}
+   408	
+   409		ret = fwnode_property_get_reference_args(fwnode, "mboxes", "#mbox-cells",
+   410							 0, index, &fwspec);
+   411		if (ret) {
+   412			dev_err(dev, "%s: can't parse \"%s\" property\n", __func__, "mboxes");
+   413			return ERR_PTR(ret);
+   414		}
+   415	
+ > 416		const char **mbox_name_array __free(kfree) = kcalloc(index + 1, sizeof(char *), GFP_KERNEL);
+   417		if (!mbox_name_array)
+   418			return ERR_PTR(-ENOMEM);
+   419	
+   420		mbox_name = NULL;
+   421		ret = fwnode_property_read_string_array(fwnode, "mbox-names", mbox_name_array, index + 1);
+   422		if (ret > 0)
+   423			mbox_name = mbox_name_array[index];
+   424	
+   425		spec.np = to_of_node(fwspec.fwnode);
+   426		spec.args_count = fwspec.nargs;
+   427		for (i = 0; i < spec.args_count; i++)
+   428			spec.args[i] = fwspec.args[i];
+   429	
+   430		scoped_guard(mutex, &con_mutex) {
+   431			chan = ERR_PTR(-EPROBE_DEFER);
+   432			list_for_each_entry(mbox, &mbox_cons, node) {
+   433				if (device_match_fwnode(mbox->dev, fwspec.fwnode)) {
+   434					if (mbox_name && mbox->fw_xlate_with_name)
+   435						chan = mbox->fw_xlate_with_name(mbox, &fwspec, mbox_name);
+   436					else if (mbox->fw_xlate)
+   437						chan = mbox->fw_xlate(mbox, &fwspec);
+   438					else if (mbox_name && mbox->of_xlate_with_name)
+   439						chan = mbox->of_xlate_with_name(mbox, &spec, mbox_name);
+   440					else if (mbox->of_xlate)
+   441						chan = mbox->of_xlate(mbox, &spec);
+   442	
+   443					if (!IS_ERR(chan))
+   444						break;
+   445				}
+   446			}
+   447	
+   448			fwnode_handle_put(fwspec.fwnode);
+   449	
+   450			if (IS_ERR(chan))
+   451				return chan;
+   452	
+   453			ret = __mbox_bind_client(chan, cl);
+   454			if (ret)
+   455				chan = ERR_PTR(ret);
+   456		}
+   457	
+   458		return chan;
+   459	}
+   460	EXPORT_SYMBOL_GPL(mbox_request_channel);
+   461	
 
 -- 
 0-DAY CI Kernel Test Service
