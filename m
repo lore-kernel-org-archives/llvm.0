@@ -1,147 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584FBBA3F;
-	Wed,  3 Dec 2025 00:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E064A42AA6
+	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 00:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764720779; cv=none; b=YlLsJNzAIivpM1wRvy9UUxNSTsFURIvmyJWXczBh0sPFA7L/G4C+3vrCcxw6Nb8pRtcZTJKWCWQtPH+VbSku8hR/2tIX8wdk7rTp+lCRLk9B+x6HW98ORAHNBNe0yr7IhCh2gHQQIMfAVB8oV8S+NroPBA7mOFpuE8U1mWtnbgY=
+	t=1764721930; cv=none; b=GHR3njtb6UGSKK62qv53mxAkbRvn9AjF+mbTo9uBWHmJ3sm/4jKD37ybx4dPHltgXpnj8KQECdJElwvXIHqJbO+J909IMTduzBe2Psr/mekqwonG21/gLMeVGxWpq9PAzVYTDFPI2iif8FrPmYEb4uQfugEM6zWUDiMAVxvPgK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764720779; c=relaxed/simple;
-	bh=Xpx15788iOselgFqHlsWrPegDcIlu5w6+75OLdugedU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ci2E/d8R6bqCw83FI2vyX8hI+Sw1iMcD8GniKehypEtAmX44OSv+7AwPVH4La6b7rvM5X1+3jiYy4JXC0XkSuNl89KZ3lvDJyRKEGEwTTJzGtFaAo0LHpLwtacE3/Gzy9zsvUyd9LnKXgf1Qip6oXdX2hIIrOBRmsSCVEfq8HAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kU8Y2bEJ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764721930; c=relaxed/simple;
+	bh=Y4mbz3m0txXAadPPor6I9EVae/Hv7ZibF0HlfLN78gU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=dPV9mnBo/BFN8TEiwrA2jpLjgYv8uPOM1fuIsxS58U2+K9+soslpQ9DRGAVQcYAFwkGtKgpgXufGn7NTi0xj4TyS0dnA0mg2LE3oEhaDTw7WHJcq541app5czeTDpJKprjGv0fO+Nc4YFVlMV4U9hv+it2lrROr2mrRy9swUlrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HrZTaoa3; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kU8Y2bEJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764720778; x=1796256778;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xpx15788iOselgFqHlsWrPegDcIlu5w6+75OLdugedU=;
-  b=kU8Y2bEJVWLVtj3oFn0QKu5lHOn6vClOSSvUK89cFZLhBdmI3jCqg9N2
-   V3dyL49W7DdRhT5JTDwOVr+vFyWfQAc2n0fIk/+t/jiDWN0qRLUUASJb8
-   Qru8LLcWc459147mTJAsIKy3EGxVnaft7fsRyS0A7JmXH+dPTI6ZuFAEv
-   iO4yef1FiljH31zydIHioARJFHF8VDuwkNbnSjb2rY2tPAy63d9kjE9xZ
-   RyXn43zPw5XeuUeQjD54fHxgYXlhS/4EYjpR4M7SJgACE5RyTSzJA0vxa
-   yQz8Vmp8xiJUbers32VnzoN/M/+hmj7FdKFMxRgE26YOhrgPjBqu4ZRuX
-   A==;
-X-CSE-ConnectionGUID: PvY/u11FQhW+hgHnrbm2xQ==
-X-CSE-MsgGUID: ZxA/l3TeRcaDQMXcosHU7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="66427011"
-X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="66427011"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 16:12:57 -0800
-X-CSE-ConnectionGUID: sRmz7F3KSiG+7NKPlnfoCg==
-X-CSE-MsgGUID: BYgwzL0/SaWy4WBVCDe3MA==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Dec 2025 16:12:56 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQaUI-00000000AJl-1kQM;
-	Wed, 03 Dec 2025 00:12:54 +0000
-Date: Wed, 3 Dec 2025 08:12:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit
- (1024) in 'hmac_setkey_ahash'
-Message-ID: <202512030801.YJaB0zQK-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HrZTaoa3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764721926;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HI9+lQD2VyQvG3utKj7JMRa8HpugvI5sp0OXlmildnY=;
+	b=HrZTaoa3tVkeo/0D4VdOK72WqvD7DXfHF/orGu2RSZKQdW9YxAjsTnx4Ldc64jb3OFv6Rv
+	u7wvu+BtErKCGn7gZhWLAZcnAHb0efwOD6dytEhA/j5VdsxnstQEnvjQQEK9B30Rtlq2Pn
+	M4ljPEs4J4sGK/Ogwyr0N21ND4kClCo=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-653-4-MzoF_0P7awhu_4nidJkg-1; Tue,
+ 02 Dec 2025 19:32:05 -0500
+X-MC-Unique: 4-MzoF_0P7awhu_4nidJkg-1
+X-Mimecast-MFC-AGG-ID: 4-MzoF_0P7awhu_4nidJkg_1764721925
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BD328195605F
+	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 00:32:04 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 57712195608E;
+	Wed,  3 Dec 2025 00:32:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0,
+ upstream-mainline, d61f1cc5)
+Date: Wed, 03 Dec 2025 00:32:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <12211.125120219320501221@us-mta-653.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: XiBoJHRx9qu7DjSlAgHyecu9IjQwyoSPnoU79B3v-RU_1764721925
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Herbert,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d61f1cc5db799f4e44a63418b2dc19396787427b
-commit: c3103416d5217655d707d9417aaf66f184e3d72f crypto: hmac - Add ahash support
-date:   7 months ago
-config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20251203/202512030801.YJaB0zQK-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 734a912d0f025559fcf76bde9aaaeb0383c1625a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512030801.YJaB0zQK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512030801.YJaB0zQK-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit (1024) in 'hmac_setkey_ahash' [-Wframe-larger-than]
-     251 | static int hmac_setkey_ahash(struct crypto_ahash *parent,
-         |            ^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/hmac_setkey_ahash +251 crypto/hmac.c
+Kernel information:
+    Commit message: Merge tag 'x86_cpu_for_6.19-rc1' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/tip/tip
 
-   250	
- > 251	static int hmac_setkey_ahash(struct crypto_ahash *parent,
-   252				     const u8 *inkey, unsigned int keylen)
-   253	{
-   254		struct ahash_hmac_ctx *tctx = crypto_ahash_ctx(parent);
-   255		struct crypto_ahash *fb = crypto_ahash_fb(tctx->hash);
-   256		int ds = crypto_ahash_digestsize(parent);
-   257		int bs = crypto_ahash_blocksize(parent);
-   258		int ss = crypto_ahash_statesize(parent);
-   259		HASH_REQUEST_ON_STACK(req, fb);
-   260		u8 *opad = &tctx->pads[ss];
-   261		u8 *ipad = &tctx->pads[0];
-   262		int err, i;
-   263	
-   264		if (fips_enabled && (keylen < 112 / 8))
-   265			return -EINVAL;
-   266	
-   267		ahash_request_set_callback(req, 0, NULL, NULL);
-   268	
-   269		if (keylen > bs) {
-   270			ahash_request_set_virt(req, inkey, ipad, keylen);
-   271			err = crypto_ahash_digest(req);
-   272			if (err)
-   273				goto out_zero_req;
-   274	
-   275			keylen = ds;
-   276		} else
-   277			memcpy(ipad, inkey, keylen);
-   278	
-   279		memset(ipad + keylen, 0, bs - keylen);
-   280		memcpy(opad, ipad, bs);
-   281	
-   282		for (i = 0; i < bs; i++) {
-   283			ipad[i] ^= HMAC_IPAD_VALUE;
-   284			opad[i] ^= HMAC_OPAD_VALUE;
-   285		}
-   286	
-   287		ahash_request_set_virt(req, ipad, NULL, bs);
-   288		err = crypto_ahash_init(req) ?:
-   289		      crypto_ahash_update(req) ?:
-   290		      crypto_ahash_export(req, ipad);
-   291	
-   292		ahash_request_set_virt(req, opad, NULL, bs);
-   293		err = err ?:
-   294		      crypto_ahash_init(req) ?:
-   295		      crypto_ahash_update(req) ?:
-   296		      crypto_ahash_export(req, opad);
-   297	
-   298	out_zero_req:
-   299		HASH_REQUEST_ZERO(req);
-   300		return err;
-   301	}
-   302	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2192406491
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2192406491_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
