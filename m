@@ -1,101 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9A02EFDAF;
-	Wed,  3 Dec 2025 23:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B032A285C80
+	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 23:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764803555; cv=none; b=KKDcoRdwAxKxSmNzoNL/oCoX3jjknl+vgR2sgcdzpfJfDTCaNYsLVzRVNPdXmVGIBfPROfgABGLWWjLrpmYaGAf+Dye4U/m/19Trz3ALe+AOAd6OvdACNhVv5/hKYrSoJCfPAaUEX7azGaA3ZvYueT0FRNtolAAHoOiz73JP1Oo=
+	t=1764804190; cv=none; b=nSEg3eDvQltJZAXkq/Kx0lhw4t2O4TnyIFs2nY4HOWlHtkeOItd2CwlrlpCuGp4DA/BYLVQHSWYrpweIxU7S7vd8axtWOxSHmZWwxYVGdbUCbtJGfWOV982i5MTYB2ti+vmQRBlh+NB1/dVod8I6hJHHxdsUIyUj+AdM3cgaMS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764803555; c=relaxed/simple;
-	bh=ZPhrI7MQmYmzyNZKm22NDPTdDlwCRn0ToFC4Np+3dp8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O0jO/4mboFLg+R3GVZdqSLTsj868ABsYAFDbLSSk27WHzJr52a/E8mNcTFLV1lHvyrf7Rl5q4mmaYejeGLgM7aGf5jqxy8sbChs9msvY2tQNKNtUy5E1WdVITIFp/urHwS0xLZ/0xUZrk2Zjvjvy7vsRT2dQnfvjSx1Ck2BRwIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ECzRbUgV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764804190; c=relaxed/simple;
+	bh=d57rm70cdrX/csmFHXg0ZVF4aK3pCdDQBcCAOvi78J8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QR+qykUlGoTZKz/3eWAhmNDx9svpj1AsLK8qiZ8Vm1DEBN8LJXim1OKaSxxLzTsmxoy0lPSjnvR9EdxXUCnbgPb/viCDWJeowMiDSh2uRMy2smEP0gUtUj60XMBPJDGLGLzXpHVjFbXXgLd9cw5XsVcUjGHjwB9/vITW+n3eoJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SpUQRzuH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ECzRbUgV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902DBC4CEF5;
-	Wed,  3 Dec 2025 23:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764803554;
-	bh=ZPhrI7MQmYmzyNZKm22NDPTdDlwCRn0ToFC4Np+3dp8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ECzRbUgVFXorY0hMDmTNqLr5IhX4IhFOBUqyTHrrZfjh2reDMkbKUjcYvDC2pyaqI
-	 uKSGmkeqyC/a7wDkblFIVtyLEdS27sug4U8ux09jwZTHCYCNmtbxnpE3DVv7q2LDi6
-	 B77fX3Io8g2a3BUlYVzNFTy1S1FHA/d8xXXNJdOqjJn20HByJZ687QFMay7OjyJJgT
-	 xgFyK8C6Ytj/XEG36LYEoWq6QWwSEw1YC+cyXq8CdGkTgcmjNK1r+o3IUwtDb2F7C3
-	 +Gj57ItT49/fVfUd2NST/8ny+9JMNohAlT6MxME8vdNk8sUcvYFsZSr1OuY4Skry/G
-	 7g7EmfZDRiP9g==
-Date: Wed, 3 Dec 2025 15:12:34 -0800
-From: Kees Cook <kees@kernel.org>
-To: Joe Perches <joe@perches.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Andy Whitcroft <apw@canonical.com>,
-	Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Christoph Lameter <cl@linux.com>, Marco Elver <elver@google.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Harry Yoo <harry.yoo@oracle.com>, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 3/4] checkpatch: Suggest kmalloc_obj family for sizeof
- allocations
-Message-ID: <202512031511.ACA8A5DB0@keescook>
-References: <20251122014258.do.018-kees@kernel.org>
- <20251122014304.3417954-3-kees@kernel.org>
- <f1d2bb84df85237f23ebf6e0f3dfecfd72d615b6.camel@perches.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SpUQRzuH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764804186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uPoar1P300DxuKyBnpCWtvm0kRrqfHdIQTOl95/zjmc=;
+	b=SpUQRzuHu1A6ma6IP+QkKL/lWsRgO8v+0rztVB+C7vmwhLVQA2BraL6wdbX8rk1jY6JQLu
+	pWXr60ATUcIoEyZyL988NqGD9ZxnXYsBlLMf/6mLjcQpirHluNXJ9nOHo4zp9W+fCOKslb
+	RgKlKCnRb81/+WMVAecTnJYiB2d9TX8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-323-eCU3X_WsNMmMCjY00iiIbQ-1; Wed,
+ 03 Dec 2025 18:23:05 -0500
+X-MC-Unique: eCU3X_WsNMmMCjY00iiIbQ-1
+X-Mimecast-MFC-AGG-ID: eCU3X_WsNMmMCjY00iiIbQ_1764804184
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 697D41956088
+	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 23:23:04 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D3338180035A;
+	Wed,  3 Dec 2025 23:23:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0,
+ upstream-mainline, 51ab33fc)
+Date: Wed, 03 Dec 2025 23:23:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f1d2bb84df85237f23ebf6e0f3dfecfd72d615b6.camel@perches.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <50915.125120318230500245@us-mta-323.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: -5yEhq7_pgXKaLEtXXPsz2sUcudED4eQdnGVnNFSFrM_1764804184
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 08:51:19PM -0800, Joe Perches wrote:
-> On Fri, 2025-11-21 at 17:42 -0800, Kees Cook wrote:
-> > To support shifting away from sized allocation towards typed
-> > allocations, suggest the kmalloc_obj family of macros when a sizeof() is
-> > present in the argument lists.
-> []
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> []
-> > @@ -7258,17 +7258,42 @@ sub process {
-> >  			    "Prefer $3(sizeof(*$1)...) over $3($4...)\n" . $herecurr);
-> >  		}
-> >  
-> > -# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_array/kvmalloc_array/kvcalloc/kcalloc
-> > +# check for (kv|k)[mz]alloc that could be kmalloc_obj/kvmalloc_obj/kzalloc_obj/kvzalloc_obj
-> 
-> There are _way_ too many of these existing uses to suggest this change
-> in existing files so please add '&& !$file' to these tests
+Hi, we tested your kernel and here are the results:
 
-The goal would be to also do the proposed treewide change which gets
-the vast majority of them converted.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
--- 
-Kees Cook
+
+Kernel information:
+    Commit message: Merge tag 'livepatching-for-6.19' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/livepatching/livepatching
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2194935672
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2194935672_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
