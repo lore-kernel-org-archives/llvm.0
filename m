@@ -1,150 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91972E8B78;
-	Wed,  3 Dec 2025 22:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9A02EFDAF;
+	Wed,  3 Dec 2025 23:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764801895; cv=none; b=jp9KM4W168hxkNmmnx4CMw6qKCZNZuAArsNLeTX34TxywuVu8pX6nrV9t329Gxugsm6rZyEmyT86bYSCyCpXYRdXwouU67Ry+FLv0c6SJVw7uqEoUYwQyz00vo4h81cfONJVdQ3LjeKGpYdKqO0BuqJhP5Ghx8xu5ayJQNq+9Hw=
+	t=1764803555; cv=none; b=KKDcoRdwAxKxSmNzoNL/oCoX3jjknl+vgR2sgcdzpfJfDTCaNYsLVzRVNPdXmVGIBfPROfgABGLWWjLrpmYaGAf+Dye4U/m/19Trz3ALe+AOAd6OvdACNhVv5/hKYrSoJCfPAaUEX7azGaA3ZvYueT0FRNtolAAHoOiz73JP1Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764801895; c=relaxed/simple;
-	bh=4Uj9vmf5W51Hq1VXIv7uGJ3HGRMZgiH69aSNHXLBM/A=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=n9DUVADVslJ3ddEwf8LJXOy7yRIJSGASL+mh9KAmgyS8q2L6w6uUO7pyojdQa8KrzLdzGdhYIbIa1xYK8GRuRaq/qzlAWRpGIVmLmdmXo0KG9LvjTIETl0GEhwfMLXMmItzn2BJOtoY91FgKIt6u87nfZIs3QL+d3cqCc0yjXUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=teBeR5Jm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764803555; c=relaxed/simple;
+	bh=ZPhrI7MQmYmzyNZKm22NDPTdDlwCRn0ToFC4Np+3dp8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0jO/4mboFLg+R3GVZdqSLTsj868ABsYAFDbLSSk27WHzJr52a/E8mNcTFLV1lHvyrf7Rl5q4mmaYejeGLgM7aGf5jqxy8sbChs9msvY2tQNKNtUy5E1WdVITIFp/urHwS0xLZ/0xUZrk2Zjvjvy7vsRT2dQnfvjSx1Ck2BRwIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ECzRbUgV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="teBeR5Jm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415DAC4CEF5;
-	Wed,  3 Dec 2025 22:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1764801894;
-	bh=4Uj9vmf5W51Hq1VXIv7uGJ3HGRMZgiH69aSNHXLBM/A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=teBeR5JmucF/aVSYNvWbrQMxjrj1aDFVSGSjka5MJN9DX0cUY+g95fXVemCkWQs4J
-	 WZX7YA1tTnhHEeqTo0FPPHuBnn9BsXt1fON1Xmf/qYeRu98AVU3ZazEGFtzaW39WX2
-	 1lw6h+xbEkpLRCsPYdKxugGHQ9rVC3K+9b9NQOW8=
-Date: Wed, 3 Dec 2025 14:44:53 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Feng Tang <feng.tang@linux.alibaba.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>, Petr Mladek <pmladek@suse.com>
-Subject: Re: [linux-next:master 9966/13055] kernel/watchdog.c:74:22:
- warning: unused variable 'hardlockup_si_mask'
-Message-Id: <20251203144453.be34d189c5e6668ce2da06b3@linux-foundation.org>
-In-Reply-To: <202512030920.NFKtekA7-lkp@intel.com>
-References: <202512030920.NFKtekA7-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ECzRbUgV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902DBC4CEF5;
+	Wed,  3 Dec 2025 23:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764803554;
+	bh=ZPhrI7MQmYmzyNZKm22NDPTdDlwCRn0ToFC4Np+3dp8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ECzRbUgVFXorY0hMDmTNqLr5IhX4IhFOBUqyTHrrZfjh2reDMkbKUjcYvDC2pyaqI
+	 uKSGmkeqyC/a7wDkblFIVtyLEdS27sug4U8ux09jwZTHCYCNmtbxnpE3DVv7q2LDi6
+	 B77fX3Io8g2a3BUlYVzNFTy1S1FHA/d8xXXNJdOqjJn20HByJZ687QFMay7OjyJJgT
+	 xgFyK8C6Ytj/XEG36LYEoWq6QWwSEw1YC+cyXq8CdGkTgcmjNK1r+o3IUwtDb2F7C3
+	 +Gj57ItT49/fVfUd2NST/8ny+9JMNohAlT6MxME8vdNk8sUcvYFsZSr1OuY4Skry/G
+	 7g7EmfZDRiP9g==
+Date: Wed, 3 Dec 2025 15:12:34 -0800
+From: Kees Cook <kees@kernel.org>
+To: Joe Perches <joe@perches.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Andy Whitcroft <apw@canonical.com>,
+	Dwaipayan Ray <dwaipayanray1@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Christoph Lameter <cl@linux.com>, Marco Elver <elver@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Harry Yoo <harry.yoo@oracle.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 3/4] checkpatch: Suggest kmalloc_obj family for sizeof
+ allocations
+Message-ID: <202512031511.ACA8A5DB0@keescook>
+References: <20251122014258.do.018-kees@kernel.org>
+ <20251122014304.3417954-3-kees@kernel.org>
+ <f1d2bb84df85237f23ebf6e0f3dfecfd72d615b6.camel@perches.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1d2bb84df85237f23ebf6e0f3dfecfd72d615b6.camel@perches.com>
 
-On Wed, 3 Dec 2025 09:05:30 +0800 kernel test robot <lkp@intel.com> wrote:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   47b7b5e32bb7264b51b89186043e1ada4090b558
-> commit: a9af76a78760717361cccc884dc649e30db61c8b [9966/13055] watchdog: add sys_info sysctls to dump sys info on system lockup
-> config: powerpc64-randconfig-002-20251203 (https://download.01.org/0day-ci/archive/20251203/202512030920.NFKtekA7-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 734a912d0f025559fcf76bde9aaaeb0383c1625a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512030920.NFKtekA7-lkp@intel.com/reproduce)
+On Fri, Nov 21, 2025 at 08:51:19PM -0800, Joe Perches wrote:
+> On Fri, 2025-11-21 at 17:42 -0800, Kees Cook wrote:
+> > To support shifting away from sized allocation towards typed
+> > allocations, suggest the kmalloc_obj family of macros when a sizeof() is
+> > present in the argument lists.
+> []
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+> > @@ -7258,17 +7258,42 @@ sub process {
+> >  			    "Prefer $3(sizeof(*$1)...) over $3($4...)\n" . $herecurr);
+> >  		}
+> >  
+> > -# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_array/kvmalloc_array/kvcalloc/kcalloc
+> > +# check for (kv|k)[mz]alloc that could be kmalloc_obj/kvmalloc_obj/kzalloc_obj/kvzalloc_obj
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512030920.NFKtekA7-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> kernel/watchdog.c:74:22: warning: unused variable 'hardlockup_si_mask' [-Wunused-variable]
->       74 | static unsigned long hardlockup_si_mask;
->          |                      ^~~~~~~~~~~~~~~~~~
->    1 warning generated.
+> There are _way_ too many of these existing uses to suggest this change
+> in existing files so please add '&& !$file' to these tests
 
-I'm testing the appended patch but it needs checking please.
+The goal would be to also do the proposed treewide change which gets
+the vast majority of them converted.
 
-The comment for hardlockup_si_mask says
-
- * bitmask to control what kinds of system info to be printed when
- * hard lockup is detected, it could be task, memory, lock etc.
- * Refer include/linux/sys_info.h for detailed bit definition.
-
-but the variable depends on "COUNTS_HRTIMER".  The comment doesn't
-mention hrtimers and I don't see why it should.  Not sure what's going
-on here.
-
-
-
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: kernel/watchdog.c: fix unused var warning
-Date: Wed Dec  3 02:34:40 PM PST 2025
-
->> kernel/watchdog.c:74:22: warning: unused variable 'hardlockup_si_mask' [-Wunused-variable]
-      74 | static unsigned long hardlockup_si_mask;
-         |                      ^~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-Fixes: a9af76a78760 ("watchdog: add sys_info sysctls to dump sys info on system lockup")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202512030920.NFKtekA7-lkp@intel.com/
-Link: https://lkml.kernel.org/r/202512030920.NFKtekA7-lkp@intel.com
-Cc: Feng Tang <feng.tang@linux.alibaba.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- kernel/watchdog.c |   16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
-
---- a/kernel/watchdog.c~kernel-watchdogc-fix-unused-var-warning
-+++ a/kernel/watchdog.c
-@@ -66,13 +66,6 @@ int __read_mostly sysctl_hardlockup_all_
- unsigned int __read_mostly hardlockup_panic =
- 			IS_ENABLED(CONFIG_BOOTPARAM_HARDLOCKUP_PANIC);
- 
--/*
-- * bitmasks to control what kinds of system info to be printed when
-- * hard lockup is detected, it could be task, memory, lock etc.
-- * Refer include/linux/sys_info.h for detailed bit definition.
-- */
--static unsigned long hardlockup_si_mask;
--
- #ifdef CONFIG_SYSFS
- 
- static unsigned int hardlockup_count;
-@@ -135,6 +128,13 @@ __setup("nmi_watchdog=", hardlockup_pani
- 
- #if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
- 
-+/*
-+ * bitmask to control what kinds of system info to be printed when
-+ * hard lockup is detected, it could be task, memory, lock etc.
-+ * Refer include/linux/sys_info.h for detailed bit definition.
-+ */
-+static unsigned long hardlockup_si_mask;
-+
- static DEFINE_PER_CPU(atomic_t, hrtimer_interrupts);
- static DEFINE_PER_CPU(int, hrtimer_interrupts_saved);
- static DEFINE_PER_CPU(bool, watchdog_hardlockup_warned);
-@@ -1250,6 +1250,7 @@ static const struct ctl_table watchdog_s
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
-+#if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
- 	{
- 		.procname	= "hardlockup_sys_info",
- 		.data		= &hardlockup_si_mask,
-@@ -1257,6 +1258,7 @@ static const struct ctl_table watchdog_s
- 		.mode		= 0644,
- 		.proc_handler	= sysctl_sys_info_handler,
- 	},
-+#endif
- #ifdef CONFIG_SMP
- 	{
- 		.procname	= "hardlockup_all_cpu_backtrace",
-_
-
+-- 
+Kees Cook
