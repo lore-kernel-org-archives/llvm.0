@@ -1,120 +1,167 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C669D2D3A69
-	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 23:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624DF2E1EE0;
+	Wed,  3 Dec 2025 23:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764804328; cv=none; b=qs4XCh58KRvtwpaKsFrGSTNyrM8X/iJLhUR4Uj/S/JvT43e4AfMHzUqdkZky3bXbsN8v7nxPWfQgrIEXo1awEy7VC5YK6nD+zcKn/6Uj+nwCQrcjXVVEHOndvjGzbKJolFJ3PKgbFvxq8rvXA2LPiiHnZ18sFphDYWTLGuYSols=
+	t=1764804637; cv=none; b=gsOnaSWDiMlPS6iSbxMW0kjATWffNvrnMeLf9+KbBYT4s9BhoyAUlw523cVC91b9GVCAIO97GbyqbHICofHS2d6RfcSAeTpyVLiwckGC32pHBbSzIbwUIGcbLJFQUd7rP44SmV6/+1v1M0Omw3nGg7dHj3QdXdk9Pdq4cAxYEIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764804328; c=relaxed/simple;
-	bh=a6uoVhNguoRPRGf5uoEhquoFovSI0B7deZMJWzTJLAU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cDPKYTTQyRpDuM9vmhbfL2gTql62i1CgAcpNk8+81CQ/kT3xFjEFuLpEPm43vmvFlJv7n/tuSdJxZ8Xv3LSDoWtWNWR5zubvA7CrAGs2fEuY88c8Qw2zVVOZqVhl18G4+C+boiSQziZcRRexszS6kE8Soz++jqQyC0xKZoyjGRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lxk4qoDS; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1764804637; c=relaxed/simple;
+	bh=+af9Qrl81jzQeC8vw0DiKskxnHYHklRLaViyotNOrs8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tBAzT8EOWth7TeNKrdEzWttpFXpMLXmRh7K+gXUzqXpHuNpOXwPqzfQHkUC3gLyGA+zSVVFzRuqDu8kDXVmZSWjbwxSGMBnSe0Rw7MhZ4HkjcwTr4yUEmP94NJ1C5bH1upOJXKYgF8RCoMfpO+29SCfTADdbz//CXdjSEIp+MVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TTSGKzFD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lxk4qoDS"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-644fbd758b3so4098a12.0
-        for <llvm@lists.linux.dev>; Wed, 03 Dec 2025 15:25:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764804325; x=1765409125; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6uoVhNguoRPRGf5uoEhquoFovSI0B7deZMJWzTJLAU=;
-        b=lxk4qoDSnIHCruePdxXZosLuqutaHRzPje3Yi7qNDj2gaeVoRyGVaVGIv7hMyOn5qy
-         FRzvOqn5CRN6Ba1HCZGKJxII4gZimpFlN324HomKNxIikuIPID3thgDX9KGpqoW9LhB9
-         x6haOOWOQwKE2CDOZL0ozbdw60/VcJnTyvmTWshmJ+vXHr+F5gLBU/JrF0et8UgXBTLo
-         Ws+CNhr5OXMbRmjQY2pwXuJ6KVhOfwRz04fZtjCfTWoE4kXCeBXNgtU7+gd2UAQB6X+I
-         lOCm5OBqEg/zmlPIit4kxMQuuiSXdoN8P1/fxFGen7To/7HonT0r8b9YexDDUFC4T8w2
-         YmlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764804325; x=1765409125;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a6uoVhNguoRPRGf5uoEhquoFovSI0B7deZMJWzTJLAU=;
-        b=LCl6XYGjC/+W+Fz148NGv3+yz+R4SP63+56ihE9w0Bskvv5qyy9WQBmhEIdf5dTIjX
-         tV706UU7T3MpHR1C+0SUpfllve/zlW9bbJvW2OqHyXLwiHOf0QH1ISWtsn6Ex1aD4OG9
-         7TevDmD6r2Vmp8hblcXFwa7aa2xkenR1//KK8mhVsVHZPIs0xzt/tXdV793a9W1BbBDW
-         u7riS1yRmXsAPaxcMhV2XWigh4iiLkPrjeIJrEGIV3qcaVLDInNQ66ZeX+gXPVbuO8VB
-         V9UCkRGrwJgrfB/OftfndfaeZoObDN3aRWYxm7J8n/0YUwgJZHnDv6RGjsWP9ecezq7i
-         Aeog==
-X-Forwarded-Encrypted: i=1; AJvYcCWf4bby2mNIybYUZC1UmG9FXEASUwsOANYdIGLb1eYw0gHEblfiaF+eJZR/GKUZtqj0yaDs@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywo7neZPHYtuKnW9ZS6Xa8F8rhx1xc6yIzMOE+u2vVpbACYH/dA
-	CvxGv4e6K2P6ftK9qaid2z/CjB4VUXfXpPBDh4SgDDXNZLsy+qRD5IwogG3fIBoXQwFFHMz2a+q
-	G1CW+rfvpYjzB+UerxwCgjHcHWxKTxUU9ZQpyvQpM
-X-Gm-Gg: ASbGncuAykd770gpHETMeqfa+n3yDOFm0eeJw6zrdQ9cDgwgH/9fKicbc1vWJKYA1g4
-	n7m7TFfOCI7EeYBBcD2mFLoJgRgO6UiXFx6CfweEmdFwykudGwSXo4t0vJyxCzrraHLP8ZM6R+N
-	41EX4Gz8kgCmY9k75Ek9MXNetmyGeV/PlJgZuzfhOpRvF2Aj7FdM0O2GJbPh5yLarb8pOVzctlJ
-	XqMk9mcKC2fRPk2xRHbNvEi2rhCrspqFTrsqRNp+H852IwQw9k4hPIVhG90XnsVx2KSwV5zSLw/
-	sA6K5AK8EZ8gGTRZLXeFWbrC
-X-Google-Smtp-Source: AGHT+IEXEQTgoa3Tuakna4skmZg2pw/mrECwMwVvdW0fQYVmXvi58ZGexwzvZpC2XAuu5b911WZjF7TrDbbogWoEqU4=
-X-Received: by 2002:aa7:cf02:0:b0:640:8f9c:af3a with SMTP id
- 4fb4d7f45d1cf-647a7728a14mr14606a12.6.1764804325007; Wed, 03 Dec 2025
- 15:25:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TTSGKzFD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB03C4CEFB;
+	Wed,  3 Dec 2025 23:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764804637;
+	bh=+af9Qrl81jzQeC8vw0DiKskxnHYHklRLaViyotNOrs8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TTSGKzFDZcQCzCkHsA0QD/1UM2l83yGCYfNGL2ubDFhu5/qeOqXuKKuQqZE7chn1+
+	 wQUHvKKZWhk93Crwejf1aRATHApj/RIA9T9v2yzKOIfpvzYXlCiX3vuLOg/sG31hSz
+	 JJnA1bl6492zszZWShNQLqIaQkToFRRiUTlckUtfHB6cy1MqEx8EV1bexU9WfrMzer
+	 f/j5Ey+0A5xveVQFv+1s1JAg4qLKxoY3aUF2o4hgNPxf/Z8P7HaTzq4N80gCluMTsU
+	 5iqc0SENnfMz0CvtMWuNavf+s6+0x7XcoVJKjYZM88aWE2M3c4wF5DMMeTylnovfG7
+	 06TNKJfZlbo1w==
+From: Kees Cook <kees@kernel.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Kees Cook <kees@kernel.org>,
+	Andy Whitcroft <apw@canonical.com>,
+	Joe Perches <joe@perches.com>,
+	Dwaipayan Ray <dwaipayanray1@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Christoph Lameter <cl@linux.com>,
+	Marco Elver <elver@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jann Horn <jannh@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-mm@kvack.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v6 2/5] checkpatch: Suggest kmalloc_obj family for sizeof allocations
+Date: Wed,  3 Dec 2025 15:30:32 -0800
+Message-Id: <20251203233036.3212363-2-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251203233029.it.641-kees@kernel.org>
+References: <20251203233029.it.641-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251202-inline-helpers-v1-0-879dae33a66a@google.com>
- <20251202-inline-helpers-v1-4-879dae33a66a@google.com> <20251203212558.GB3060476@ax162>
-In-Reply-To: <20251203212558.GB3060476@ax162>
-From: Matthew Maurer <mmaurer@google.com>
-Date: Wed, 3 Dec 2025 15:25:13 -0800
-X-Gm-Features: AWmQ_bmE-9G2UW0Equri3aRgg0NngGho89_DAwKEs6T1gQOz1p2ws5lgLkHiDf4
-Message-ID: <CAGSQo00bG7QF+u2WJQwMTiq6iGATcSfaAurkkppykkn+yTL-TQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] build: rust: provide an option to inline C helpers
- into Rust
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	nouveau@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3354; i=kees@kernel.org; h=from:subject; bh=+af9Qrl81jzQeC8vw0DiKskxnHYHklRLaViyotNOrs8=; b=owGbwMvMwCVmps19z/KJym7G02pJDJkGJyTv9C7XFGXkFdC7we0hu+rcOSf++jRpTnn3BRHPt 5c9zp/eUcrCIMbFICumyBJk5x7n4vG2Pdx9riLMHFYmkCEMXJwCMBGxyQx/xV2+miz81fON7f6+ 2KR5uzQO/j8lw/ym6/hE8ZyDycs+bWNkOPDaslVXY7uKeBQvU9LTrE1t+e7ZKwP3vRKdUnPn5tI /fAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-> I am just curious, why would someone want (or not) to do this? This help
-> text does not really indicate the point of the option, just what it
-> does. Is it just the standard tradeoffs with inlining (potential
-> improvements in performance due to better optimization opportunities
-> versus text size increase and icache pressure) or something else?
+To support shifting away from sized allocation towards typed
+allocations, suggest the kmalloc_obj family of macros when a sizeof() is
+present in the argument lists.
 
-The main situations where someone would want this off are:
-* Not using `clang` (should already be covered in config logic)
-* Out of tree module build without the whole kernel build tree (the
-`.bc` file produced here would need to be shipped to your out-of-tree
-module build environment - it essentially becomes like a header file
-for purposes of building an out-of-tree / DKMS Rust module)
-* Don't have matching `rustc` and `clang` LLVM (kind of covered in
-config logic - if anyone is using a non-release version of LLVM, the
-config may indicate them as compatible incorrectly).
-* Requires out-of-tree / DKMS Rust modules to build with the same LLVM
-revision as the kernel was built with - may be a packaging concern
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Andy Whitcroft <apw@canonical.com>
+Cc: Joe Perches <joe@perches.com>
+Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ scripts/checkpatch.pl | 39 +++++++++++++++++++++++++++++++++------
+ 1 file changed, 33 insertions(+), 6 deletions(-)
 
-While the usual inlining tradeoffs apply, all of these functions have
-been explicitly marked `static inline`, which indicates those
-tradeoffs have already been thought through.
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index d58ca9655ab7..a8cdfb502ccc 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7258,17 +7258,42 @@ sub process {
+ 			    "Prefer $3(sizeof(*$1)...) over $3($4...)\n" . $herecurr);
+ 		}
+ 
+-# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_array/kvmalloc_array/kvcalloc/kcalloc
++# check for (kv|k)[mz]alloc that could be kmalloc_obj/kvmalloc_obj/kzalloc_obj/kvzalloc_obj
++		if ($perl_version_ok &&
++		    defined $stat &&
++		    $stat =~ /^\+\s*($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*,/) {
++			my $oldfunc = $3;
++			my $a1 = $4;
++			my $newfunc = "kmalloc_obj";
++			$newfunc = "kvmalloc_obj" if ($oldfunc eq "kvmalloc");
++			$newfunc = "kvzalloc_obj" if ($oldfunc eq "kvzalloc");
++			$newfunc = "kzalloc_obj" if ($oldfunc eq "kzalloc");
++
++			if ($a1 =~ s/^sizeof\s*\S\(?([^\)]*)\)?$/$1/) {
++				my $cnt = statement_rawlines($stat);
++				my $herectx = get_stat_here($linenr, $cnt, $here);
++
++				if (WARN("ALLOC_WITH_SIZEOF",
++					 "Prefer $newfunc over $oldfunc with sizeof\n" . $herectx) &&
++				    $cnt == 1 &&
++				    $fix) {
++					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*,/$1 = $newfunc($a1,/;
++				}
++			}
++		}
++
++
++# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_objs/kvmalloc_objs/kzalloc_objs/kvzalloc_objs
+ 		if ($perl_version_ok &&
+ 		    defined $stat &&
+ 		    $stat =~ /^\+\s*($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)\s*,/) {
+ 			my $oldfunc = $3;
+ 			my $a1 = $4;
+ 			my $a2 = $10;
+-			my $newfunc = "kmalloc_array";
+-			$newfunc = "kvmalloc_array" if ($oldfunc eq "kvmalloc");
+-			$newfunc = "kvcalloc" if ($oldfunc eq "kvzalloc");
+-			$newfunc = "kcalloc" if ($oldfunc eq "kzalloc");
++			my $newfunc = "kmalloc_objs";
++			$newfunc = "kvmalloc_objs" if ($oldfunc eq "kvmalloc");
++			$newfunc = "kvzalloc_objs" if ($oldfunc eq "kvzalloc");
++			$newfunc = "kzalloc_objs" if ($oldfunc eq "kzalloc");
+ 			my $r1 = $a1;
+ 			my $r2 = $a2;
+ 			if ($a1 =~ /^sizeof\s*\S/) {
+@@ -7284,7 +7309,9 @@ sub process {
+ 					 "Prefer $newfunc over $oldfunc with multiply\n" . $herectx) &&
+ 				    $cnt == 1 &&
+ 				    $fix) {
+-					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' = ' . "$newfunc(" . trim($r1) . ', ' . trim($r2)/e;
++					my $sized = trim($r2);
++					$sized =~ s/^sizeof\s*\S\(?([^\)]*)\)?$/$1/;
++					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' = ' . "$newfunc(" . $sized . ', ' . trim($r1)/e;
+ 				}
+ 			}
+ 		}
+-- 
+2.34.1
 
-I think that if we had a reliable signal of "`clang` and `rustc` use
-compatible bitcode", turning this on by default would be reasonable.
-As-is, we have a mostly-reliable signal, so defaulting it to off seems
-reasonable so that people don't get surprise miscompilations if they
-use a `clang` or `rustc` which are not using precisely a
-release-boundary LLVM version. People who know their toolchain story
-for x-lang is squared away can turn it on.
-
->
-> Cheers,
-> Nathan
