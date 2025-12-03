@@ -1,47 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887F634D4EE;
-	Wed,  3 Dec 2025 16:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7BF34AB17;
+	Wed,  3 Dec 2025 16:50:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764780605; cv=none; b=ekvoec/YTbucQzZTKAA/RqP3D8M73FVrXFkxNPsgF8Ly0Dxe017PJotWdb/vI2jYnMCkgn82wBTHAu4zGM1fGNj/lwQz+5XHOdGuWNOg+vYofdEUpdZpkyxOhcfJ4DM2SfJBJYJC6Z8K+Ceq0AAfrRnoAu2N6KQ/OUl1U+Gki1I=
+	t=1764780608; cv=none; b=qes9WxCWfa2lLDkvEdNpballckiiIJUNO+QcGghrDVwNV+WG4hZzXwugGDfkkNKl3liMd2SG3kDSrmiVQcdSJ7j0TaeKc0ZmowMcNHzDQTw7cXBZs/AaGqUBiH/itPxrDIS0Q7gApaNemw7aO1vBribph/+fp3B6vcjOIhg01MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764780605; c=relaxed/simple;
-	bh=WE/MGjDXYkfLp/ASxbUyC53LMNdsfobdCP7BxApY2r0=;
+	s=arc-20240116; t=1764780608; c=relaxed/simple;
+	bh=Jme4OIMFQWmcFaNdH5RpMFIgiX8Pu9xb+81Duw4/IsM=;
 	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=EElDUL3RfuRreLUxRAIL05tuFUHZ3JKqDsMFVHHnSl2cMaZiKd5RGy6/uzZIDNi5H9pNGriCnXDbd9zTXoFf+MevG9ncoDDR6aOU88Pm79CYxEl20gmw+rHnV5O6LlZeRhFcn+YLWEYHzhqNcxN49p/PiSKd8llonN9DtoHcL0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOSDsoBa; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=gIj04PKbCy8ygL6xaQmhFtmx6Wj9enaJKIYf0NBlRn1u1broVMPqgQAQg7IgZAtJV/fTZ8+6k3sL6spiwMopLOrKO1rqFpRbLHh6CHMZIdBWmO0qnEx7HVykoodME90/EzCBjDv4ABBPrbTgu0n2U+RqCrGBACGE7AJWyiiqzkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SamwXuUi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOSDsoBa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21D4C4CEF5;
-	Wed,  3 Dec 2025 16:50:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SamwXuUi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA68AC116B1;
+	Wed,  3 Dec 2025 16:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764780604;
-	bh=WE/MGjDXYkfLp/ASxbUyC53LMNdsfobdCP7BxApY2r0=;
+	s=k20201202; t=1764780606;
+	bh=Jme4OIMFQWmcFaNdH5RpMFIgiX8Pu9xb+81Duw4/IsM=;
 	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=kOSDsoBa4+of4dbFUeN3S+S0nuqVts/bOkUwD16XwQbjzVTj+NhYD0LIkxhGFWfm0
-	 LHzLg4Lifd5kiuroMAtL4WmHEdGD+YAL3dHVIa7frayQuQO71IkhZzMpkHsQYrudGo
-	 ZlVONlj3lmqwTjyJqgLLB35t9c7ZMyWsyknuCS2O1NBjhbCVPNc7XGO/rDPZz4YlPb
-	 HjRpjmwl1C+zTO2EuQw4+DSnaDLHt1+DmRmzvS8nCUZfN+X+tUal9mwxUFTnzp19x8
-	 C1DhWNMXK9YLwFFuFv46gAZaGCczke3v0ca5vq8FgRWm7Nu9Fwf++Fnfn5BSsNGTDM
-	 QevwICvNEOOFw==
+	b=SamwXuUiWG/1X+14lMHPvEvek41+DUPIbPDnGWPW8ECbAL4lora+cI70tyJZjP0S9
+	 EShT2i0wAr8VLsTA/P26OxUXFqIy1l62ayOcTVK0/ocaD43FXdFlqxEpx7rd1eSekF
+	 5s8KIlkgWtNSG+9w/lCz/zMFiHIYCWO88wNtNJsAdb9/35tz++3qKCKXHa+CO9ziC/
+	 X/0d20DQ8Rbi4HVy5UlE1ads94ra5SGOyzmY7aofzcr+9yLazJk/r80ZhAIMlDPxEw
+	 fYfgpnX1URWjGE62qrwV06j6Cp+WdmW1JC9w+IIqEiIb1JCioXj3DTzPoYfOXbl7qa
+	 DeMGmdQ961OtA==
 From: Mark Brown <broonie@kernel.org>
 To: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>, Heiko Stuebner <heiko@sntech.de>, 
- Nathan Chancellor <nathan@kernel.org>, 
+ Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
  llvm@lists.linux.dev, 
  Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-In-Reply-To: <20251203141644.106459-2-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20251203141644.106459-2-krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH] ASoC: rockchip: Fix Wvoid-pointer-to-enum-cast warning
- (again)
-Message-Id: <176478060152.99790.2704238708778622367.b4-ty@kernel.org>
-Date: Wed, 03 Dec 2025 16:50:01 +0000
+In-Reply-To: <20251203140611.87191-2-krzysztof.kozlowski@oss.qualcomm.com>
+References: <20251203140611.87191-2-krzysztof.kozlowski@oss.qualcomm.com>
+Subject: Re: [PATCH] ASoC: codecs: nau8325: Silence uninitialized variables
+ warnings
+Message-Id: <176478060449.99790.11642224793852548654.b4-ty@kernel.org>
+Date: Wed, 03 Dec 2025 16:50:04 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,15 +50,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-88d78
 
-On Wed, 03 Dec 2025 15:16:45 +0100, Krzysztof Kozlowski wrote:
-> 'version' is an enum, thus cast of pointer on 64-bit compile test with
-> clang W=1 causes:
+On Wed, 03 Dec 2025 15:06:12 +0100, Krzysztof Kozlowski wrote:
+> clang W=1 builds warn:
 > 
->   rockchip_pdm.c:583:17: error: cast to smaller integer type 'enum rk_pdm_version' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+>   nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
 > 
-> This was already fixed in commit 49a4a8d12612 ("ASoC: rockchip: Fix
-> Wvoid-pointer-to-enum-cast warning") but then got bad in
-> commit 9958d85968ed ("ASoC: Use device_get_match_data()").
+> which are false positive, because the variables will be always
+> initialized when used (guarded by mclk_max!=0 check).  However
+> initializing them upfront makes the code more obvious and easier, plus
+> it silences the warning.
 > 
 > [...]
 
@@ -70,8 +68,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: rockchip: Fix Wvoid-pointer-to-enum-cast warning (again)
-      commit: 57d508b5f718730f74b11e0dc9609ac7976802d1
+[1/1] ASoC: codecs: nau8325: Silence uninitialized variables warnings
+      commit: 2c7e5e17c05f1d5e10e63e1baff2b362cd08dcd6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
