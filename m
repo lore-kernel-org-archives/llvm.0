@@ -1,25 +1,64 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23592329394;
-	Wed,  3 Dec 2025 15:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA51323417
+	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 15:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764776988; cv=none; b=FdtbQwv/2nzSyjzmpjrn+VYyELEWuSLT4PtlbyDzzxpuGaXNVSfOeJhEndHi8/Oi9X/xUfHz6C+WVgsQxw0HHdP1wtaCEbxXKXVPvhC6HT8IEuxMOCyeIxoQvsTkHuZrywD80DjgbNqilwKCUY1ueVIgf6L6uS+DWmB4gjnr/zg=
+	t=1764777562; cv=none; b=bmjjfOmlI/vqMib4rI1Lv2qX7tN8jeOJHuOfr/044e/+kqMfzE1NMSeopNQZpj/T27CeIuEAtoQmCDAclxBVOqoyZMb1m26moOBmjHm6Nwgj/z5Fx767o6SRLJra6i+HC/hKLBZoBEtZORCKMMtqqtwEl5MevdJRxNmS6krEG4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764776988; c=relaxed/simple;
-	bh=O9kytA0BZ9FXMyGNk8qiouCqe9HWVGIJIkYFlw65JR8=;
+	s=arc-20240116; t=1764777562; c=relaxed/simple;
+	bh=iakk/Jr76m1kJL5Np9IbPtoAP3+T1JvteiA3kLHZ94M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SrSFC1yroQEbNJQB/4WQm6ylQS7vgrgcCqjloxOc7lrbA3xjGAVhXdZINdVq47SpWtBMTh/g4oERWcn/i1SP8x9qE8azAOdF3RDNMafe0edXYBx0FX8jmftDJRFe3BYxvlirBbgDy1uQLTIqGUQgLLxmZV1y1G0wLuyMDBrRwbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35F2A339;
-	Wed,  3 Dec 2025 07:49:37 -0800 (PST)
-Received: from [10.57.45.67] (unknown [10.57.45.67])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A35FC3F59E;
-	Wed,  3 Dec 2025 07:49:39 -0800 (PST)
-Message-ID: <a917aded-4404-4b63-8d2c-96aa8b84f81f@arm.com>
-Date: Wed, 3 Dec 2025 15:49:31 +0000
+	 In-Reply-To:Content-Type; b=SYKDMguguSCL1qqLxY46s4HQcQiYYnsI4tPq2DxpvKg2mS1cOunLdxmUAxkH+NBR7asksAI+n6Z3ymlheYdiYpj3a6BzrG7GFJ1Dk5JSrZWAOkLjhOVKCpC+3vlb1TGxufChPPPHO6PCZNUfdtbVWil9qdvGdSz0T5l+IxNWZXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=fail smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Rc1gCzos; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Rc1gCzos"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7c7bfba3996so3811707a34.0
+        for <llvm@lists.linux.dev>; Wed, 03 Dec 2025 07:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1764777560; x=1765382360; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V34xiYHMBhlRprMCQ3/uOloSz9kB9mYUn7HTGoE0360=;
+        b=Rc1gCzosqHzGjQ3fqnI33a51Yt2ScL9yRDDXkEHTynOfacrtEcsxM2WdHAZy7DRjHH
+         N9vYF5RD6ZC/DBxGOlG8FEvNozj7G0ZGJBoHmLdL4JQ5JlOm9HvRgKr+UvY/7p2DlwkZ
+         I59u5CkxSijR7MsA1go5LVCmGQLVVh/KUBmCU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764777560; x=1765382360;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V34xiYHMBhlRprMCQ3/uOloSz9kB9mYUn7HTGoE0360=;
+        b=mpE9kAEVaWs5s+sD66BXVO5wSZDpDQGNLCveRENfWXp/Cnu9ZeIjgnwJtZmsdK6W5p
+         tKEXf8itNqFrr1JYpaeClC2m4rYPHG3/Mc1G3j+2PRDZMU8T24JwNiyDYbVYQZXLIEdz
+         WSeLFcohaxeT6DgJKvtr8twcL4jqbQqj4R/rZhCVYw2C0dcCJ8mUV3yL98QqF6Xeq+AA
+         YAuW0yzh5Ak2zDaMBFBeqlnlo3KJTd5vK6OvWPQrUFCjgpTSTyPQm3ppa+Dp61NDd9Ls
+         GIzPkpzFNOebVjFo0fxOweqwvKhr0F1KQA/8WibkycrLl1bVx6MgUrSHwjMqymbedA0Y
+         VEkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUX9OxmSe1TGtaD+33RIan7UFKA9KzSWzikKmqqqnkS18OLiXyydvM8cl0+wnVJM2yQQc62@lists.linux.dev
+X-Gm-Message-State: AOJu0YwVlurarG2z6Mkjuhze+MS4AahHNzz1IWLh1TN1vWE4CJC83FU9
+	NiGrJO9wFMRKrVZjwl/TmnVLY4vYg0z3ICibA9NsGFrF2WvnjpEoN74JY/b5RIz/m1Q=
+X-Gm-Gg: ASbGncsfidSZLrRo77zETLml3Xrz91mL8r64a7AM68aj1MzhNcVR3wwx4B4hr0Em4w9
+	POulixun+aJ8KjEtGrdMNgelrtjM2koKO6JvnrqUKhm3kwTeD6gPadnlQn8hFyJYr7lK++UoFYZ
+	vDLy+5Mz18NOFcXkIhFUEgfRBRnwrKSSLiFkJZTZDmU6STsmtMCipHcprZIIH+7tiVULtqf4feq
+	bEkVLBOFfsjcBIh90llQ6HpPdbQ1Lb7nQi+CExxJfH7dDFIkdoLBoj0T74kIf73RubarGueyZJp
+	vBzD4rSsAuS1U1LPcEQWdHbTDOi+fPLH/jXhPEi5T46z0G/iniyBcsdYCikSoD3bx87aTFnsp8b
+	LCvY5i3hbM+opsGQPazP9445krkOTlk9FNKO4al7RjZg+/9Xs79Eux9CIRsXM5NZ4qrbj3Ywgbf
+	xsOvZVs3IYzGeMBW2qaqtFfAs=
+X-Google-Smtp-Source: AGHT+IHZKqU6OwoL05VlFhrm59ANsB5LDQOaT2yu73WegIU0kb05V6z7peIr7y7gMgvG/jBK7FYjzQ==
+X-Received: by 2002:a05:6830:4389:b0:7bc:6cc3:a624 with SMTP id 46e09a7af769-7c94dd09ab0mr1682360a34.32.1764777560172;
+        Wed, 03 Dec 2025 07:59:20 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c90f5fedbbsm8945257a34.10.2025.12.03.07.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Dec 2025 07:59:19 -0800 (PST)
+Message-ID: <a5a1d7bf-04b0-43fb-8f93-781c3534d8fd@linuxfoundation.org>
+Date: Wed, 3 Dec 2025 08:59:18 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -27,110 +66,79 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/3] iommu/arm-smmu-v3: Add device-tree support for
- CMDQV driver
-To: Ashish Mhetre <amhetre@nvidia.com>, will@kernel.org, nicolinc@nvidia.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- thierry.reding@gmail.com, jonathanh@nvidia.com, vdumpa@nvidia.com,
- jgg@ziepe.ca, linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-tegra@vger.kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
- joro@8bytes.org, robh@kernel.org, kernel test robot <lkp@intel.com>
-References: <20251201163219.3237266-2-amhetre@nvidia.com>
- <202512031601.IpliwbHW-lkp@intel.com>
- <47684b91-7c0f-4260-abfd-2795fdaa2b31@nvidia.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <47684b91-7c0f-4260-abfd-2795fdaa2b31@nvidia.com>
+Subject: Re: [PATCH v2] selftests/seccomp: fix pointer type mismatch in UPROBE
+ test
+To: Nirbhay Sharma <nirbhay.lkd@gmail.com>, Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, khalid@kernel.org,
+ david.hunter.linux@gmail.com, Jiri Olsa <olsajiri@gmail.com>,
+ sam@gentoo.org, shuah <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <aP0-k3vlEEWNUtF8@krava>
+ <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+ <8e1ff2f1-b45e-4b1f-b545-d433e277607f@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <8e1ff2f1-b45e-4b1f-b545-d433e277607f@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2025-12-03 11:04 am, Ashish Mhetre wrote:
+On 11/25/25 04:20, Nirbhay Sharma wrote:
 > 
-> On 12/3/2025 2:05 PM, kernel test robot wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> Hi Ashish,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on next-20251201]
->> [also build test ERROR on v6.18]
->> [cannot apply to robh/for-next linus/master v6.18 v6.18-rc7 v6.18-rc6]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Ashish-Mhetre/ 
->> iommu-arm-smmu-v3-Add-device-tree-support-for-CMDQV- 
->> driver/20251202-003517
->> base:   next-20251201
->> patch link:    https://lore.kernel.org/r/20251201163219.3237266-2- 
->> amhetre%40nvidia.com
->> patch subject: [PATCH V3 1/3] iommu/arm-smmu-v3: Add device-tree 
->> support for CMDQV driver
->> config: arm64-allmodconfig (https://download.01.org/0day-ci/ 
->> archive/20251203/202512031601.IpliwbHW-lkp@intel.com/config)
->> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project 
->> cd708029e0b2869e80abe31ddb175f7c35361f90)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ 
->> archive/20251203/202512031601.IpliwbHW-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new 
->> version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202512031601.IpliwbHW- 
->> lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> ld.lld: error: duplicate symbol: init_module
->>     >>> defined at arm-smmu-v3.c
->>     >>>            drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.o: 
->> (init_module)
->>     >>> defined at tegra241-cmdqv.c
->>     >>>            drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.o: 
->> (.init.text+0x4)
->> -- 
->>>> ld.lld: error: duplicate symbol: cleanup_module
->>     >>> defined at arm-smmu-v3.c
->>     >>>            drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.o: 
->> (cleanup_module)
->>     >>> defined at tegra241-cmdqv.c
->>     >>>            drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.o: 
->> (.exit.text+0x4)
 > 
-> Hi Nic, Robin,
+> On 10/26/25 2:42 PM, Nirbhay Sharma wrote:
+>> Fix compilation error in UPROBE_setup caused by pointer type mismatch
+>> in the ternary expression when compiled with -fcf-protection. The
+>> probed_uprobe function pointer has the __attribute__((nocf_check))
+>> attribute, which causes the conditional operator to fail when combined
+>> with the regular probed_uretprobe function pointer:
+>>
+>>    seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional
+>>    expression [-Wincompatible-pointer-types]
+>>
+>> Cast both function pointers to 'const void *' to match the expected
+>> parameter type of get_uprobe_offset(), resolving the type mismatch
+>> while preserving the function selection logic.
+>>
+>> This error appears with compilers that enable Control Flow Integrity
+>> (CFI) protection via -fcf-protection, such as Clang 19.1.2 (default
+>> on Fedora).
+>>
+>> Signed-off-by: Nirbhay Sharma <nirbhay.lkd@gmail.com>
+>> ---
+>>   tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> index 874f17763536..e13ffe18ef95 100644
+>> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> @@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
+>>           ASSERT_GE(bit, 0);
+>>       }
+>> -    offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+>> +    offset = get_uprobe_offset(variant->uretprobe ?
+>> +        (const void *)probed_uretprobe : (const void *)probed_uprobe);
+>>       ASSERT_GE(offset, 0);
+>>       if (variant->uretprobe)
 > 
-> How do you suggest fixing this? Is it fine to compile tegra241-cmdqv as 
-> separate module
-> and export tegra241_cmdqv_probe() to fix this warning?
-
-As Jon just pointed out, the issue is using module_platform_driver(), 
-which is unnecessary anyway since this is not a driver; nor is it even a 
-module, it's just some extra code that can be included in the 
-arm_smmu_v3 driver, and will be integral to the arm_smmu_v3.ko module if 
-built as a such.
-
-You could sanity-check the compatible of the phandle target in 
-tegra_cmdqv_dt_probe() if you feel like you should do more than just 
-blindly trust the DT, but either way trying to register a dummy platform 
-driver that won't bind to anything is pointless.
-
-> I am using GCC compiler and was not able to reproduce this with W=1 build.
-
-This will be happening with CONFIG_ARM_SMMU_V3=m.
-
-Thanks,
-Robin.
-
+> Hi all,
 > 
-> Thanks,
-> Ashish Mhetre
+> I'm following up on this patch that fixes the pointer type mismatch in
+> UPROBE_setup when building with -fcf-protection. It resolves the
+> incompatible-pointer-types error seen with Clang 19.
 > 
->> -- 
->> 0-DAY CI Kernel Test Service
->> https://github.com/intel/lkp-tests/wiki
+> Please let me know if there are any comments or some changes needed.
+> 
+
+Hi Kees,
+
+Is it okay to take this patch through my tree?
+
+thanks,
+-- Shuah
 
