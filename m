@@ -1,63 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A6C14AD20;
-	Wed,  3 Dec 2025 03:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EE22627EC;
+	Wed,  3 Dec 2025 03:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764733576; cv=none; b=L3c3X5k5j6VDg6H42AM1t4fGGEHwM1kIfESJR4Ny8sNVt7dVvLS/FK6ZWCSdjgiU+44rPNeu7aQ6VSvT34SQktKxfpd/aDBhCr8BOghgI9ZSUTfQvWZtUcc/dPXofJN3y/1+fem11yGX9aLeEfJr2pkLHKt8SaHWBeU2rC08TYU=
+	t=1764734295; cv=none; b=lzd7ZEOqVJcBSxVnZaklOJBlPi5tXRp2ciD8emYtQIJA3S+3sRNyXAZ2JQif36gvN95rcWePZzg+O+YKd2HSGDmo17eBDB9V8rpXVNjAu4a1c5ZlvKrtxwCJ+w6SyAED2rk8g8pYOzBXiHv8NHjpkjPVQliPAVOGjqNhoCdP6Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764733576; c=relaxed/simple;
-	bh=Zw01VMIJSuTBcOHvzK3T3px//j+RS/aHvaVxL3azliA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ViJOopTOLmE2kqZPhoTJHEkJMrypWpw0fVZ+hHTcD9ec/PAj+16QnfvGw3shg6cP3ncsI+8w5zZJI9qLS67a1/y+fqWRoAsDK1Ab6niXZsLu//W6podztIw8sTF4uV7J+auObR6hqN3S/XV+SrkOKzydQwHR1i/0TtCbl+0c5IQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQKqXfgE; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1764734295; c=relaxed/simple;
+	bh=J8QX9n8Nk1pNILx+taP2RUbXj5dh456BJusKWzlc+m8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MGXzPa4DXaN6Zshp8g96jd+E82a+qFLHLvs/aZpU9jYU+5filIBvUWcC8eIGtUII0lPANuQmZP0PAAj02ZgwptM9EQ0T3BJVS6QexXd6avzwsuyxuFcIeI3TMtYtO9uJW/+yrfPy7w694Lmm1opOheiZmkr5z+NGVI+QWjO3BOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yw7ZUXHU; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQKqXfgE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yw7ZUXHU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764733573; x=1796269573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zw01VMIJSuTBcOHvzK3T3px//j+RS/aHvaVxL3azliA=;
-  b=cQKqXfgEimW7OK2rEko+HzGh/Pxe+u3E3yjopiWntTEVm75qL2Wx+7LI
-   maqFfVpSsYDQQU40YoRv9Jtq8ro/V7bkIgWtuUhPWis/J3S/HldueQ+L+
-   ZVnQO0uEVbfeZQJfCJqqwP6V9mGvNLWmTOTRsl99dYheE08f7JX8P2TYH
-   r/4Tdnl/7lY5DpenYOqsRHuYfyX4f4t59aFDzb3YefWj02LFZJQh/cP7Y
-   2WoLSPUVA55BTRC/BzlFjw20aPnPZ+Eo+ncRX/CWfpE2lb41jssdlQNBv
-   qzWxEIZEzOh8n4DIonXxGD1c3JH1BZ5XKrNnCCy3jphfQqoe9J6K+o9aJ
-   g==;
-X-CSE-ConnectionGUID: BQ/8uuAzSUmACZQKBBnM5Q==
-X-CSE-MsgGUID: /lh4WAaPQ4GFCaTMbwQ8rQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="66884911"
+  t=1764734294; x=1796270294;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J8QX9n8Nk1pNILx+taP2RUbXj5dh456BJusKWzlc+m8=;
+  b=Yw7ZUXHUsxft/P/zmnNQ5wGO33DfUUN26FWXHEwGxnhpIgsyOCkp5p8H
+   Nfm12HqxYd+0SQOGa0ZJO7SX3QXMJwZ8kQUCF3qOELnB3QlYHiNsTNvwy
+   XgWM1KZ3/Z8GqDEUfxT/XkToO8IbSoLcJaul+R2I80EklwqunKncPQGOL
+   X6BjRhs9EaMebKsP8op8cU8vLI1J+/PUeFrXggoj8+DQpsFEgbM4rX07J
+   9NmyFY8s6Vn24lelGYh1RzbAA6zfks3DU2H0KFmAhtDZXlKAvJCRx0uO1
+   7TwWoLrLoVxR6u6lHstpfrxu2W6NKTOkeP51WudXzL2+ecUVnSedTUlaI
+   Q==;
+X-CSE-ConnectionGUID: n3zRcJtGQtKtglPnJHBCKg==
+X-CSE-MsgGUID: +5nWHK/mSPG2g4OX4rU1Ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="70577437"
 X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="66884911"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 19:46:13 -0800
-X-CSE-ConnectionGUID: J8f8GMFXTxCq8y5/TGHTjA==
-X-CSE-MsgGUID: q+fo0rYBSdieFER7JNu8cQ==
+   d="scan'208";a="70577437"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 19:58:13 -0800
+X-CSE-ConnectionGUID: YLTxVTOlTcqlqIKmSK6C4A==
+X-CSE-MsgGUID: uWv3V0+DR1ifTgdaRaQ4vw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="193843758"
+   d="scan'208";a="198730890"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 02 Dec 2025 19:46:11 -0800
+  by orviesa003.jf.intel.com with ESMTP; 02 Dec 2025 19:58:11 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vQdoe-00000000AWf-0PZ3;
-	Wed, 03 Dec 2025 03:46:08 +0000
-Date: Wed, 3 Dec 2025 11:45:26 +0800
+	id 1vQe0G-00000000AXJ-3GFP;
+	Wed, 03 Dec 2025 03:58:08 +0000
+Date: Wed, 3 Dec 2025 11:57:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nilesh Javali <njavali@marvell.com>, martin.petersen@oracle.com
+To: Dave Airlie <airlied@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com,
-	agurumurthy@marvell.com, sdeodhar@marvell.com, emilne@redhat.com,
-	jmeneghi@redhat.com
-Subject: Re: [PATCH 03/12] qla2xxx: Add load flash firmware mailbox support
- for 28xxx
-Message-ID: <202512031128.XsuvzBv1-lkp@intel.com>
-References: <20251202054444.1711778-4-njavali@marvell.com>
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [geert-renesas-drivers:master 13/54]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:2668:18: error: no member named
+ 'discovery_bin' in 'struct amdgpu_mman'
+Message-ID: <202512031131.3SHPwR3x-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,174 +64,169 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251202054444.1711778-4-njavali@marvell.com>
 
-Hi Nilesh,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on e6965188f84a7883e6a0d3448e86b0cf29b24dfc]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nilesh-Javali/qla2xxx-Add-Speed-in-SFP-print-information/20251202-140943
-base:   e6965188f84a7883e6a0d3448e86b0cf29b24dfc
-patch link:    https://lore.kernel.org/r/20251202054444.1711778-4-njavali%40marvell.com
-patch subject: [PATCH 03/12] qla2xxx: Add load flash firmware mailbox support for 28xxx
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251203/202512031128.XsuvzBv1-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512031128.XsuvzBv1-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
+head:   997d056cf6640ed0a7e540650b94ae0c48d06b5b
+commit: 6d0165b3a934a81e4c646c51fb650329af2f76da [13/54] Merge remote-tracking branch 'drm/drm-next' into renesas-drivers
+config: powerpc64-randconfig-002-20251203 (https://download.01.org/0day-ci/archive/20251203/202512031131.3SHPwR3x-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 734a912d0f025559fcf76bde9aaaeb0383c1625a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512031131.3SHPwR3x-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512031128.XsuvzBv1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512031131.3SHPwR3x-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/scsi/qla2xxx/qla_init.c:8490:28: warning: variable 'fragment' set but not used [-Wunused-but-set-variable]
-    8490 |         uint templates, segments, fragment;
-         |                                   ^
-   In file included from drivers/scsi/qla2xxx/qla_init.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:12:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/x86/include/asm/timex.h:6:
-   In file included from arch/x86/include/asm/tsc.h:11:
-   In file included from arch/x86/include/asm/msr.h:11:
-   In file included from arch/x86/include/asm/cpumask.h:5:
-   In file included from include/linux/cpumask.h:12:
-   In file included from include/linux/bitmap.h:13:
-   In file included from include/linux/string.h:382:
-   include/linux/fortify-string.h:580:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-     580 |                         __read_overflow2_field(q_size_field, size);
-         |                         ^
-   2 warnings generated.
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:2668:18: error: no member named 'discovery_bin' in 'struct amdgpu_mman'
+    2668 |                 if (adev->mman.discovery_bin)
+         |                     ~~~~~~~~~~ ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CAN_DEV
+   Depends on [n]: NETDEVICES [=n] && CAN [=y]
+   Selected by [y]:
+   - CAN [=y] && NET [=y]
 
 
-vim +/fragment +8490 drivers/scsi/qla2xxx/qla_init.c
+vim +2668 drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
 
-  8482	
-  8483	static int
-  8484	qla28xx_load_fw_template(scsi_qla_host_t *vha, uint32_t faddr)
-  8485	{
-  8486		struct qla_hw_data *ha = vha->hw;
-  8487		struct fwdt *fwdt = ha->fwdt;
-  8488		struct req_que *req = ha->req_q_map[0];
-  8489		uint32_t risc_size, risc_attr = 0;
-> 8490		uint templates, segments, fragment;
-  8491		uint32_t *dcode;
-  8492		ulong dlen;
-  8493		int rval;
-  8494		uint j;
-  8495	
-  8496		dcode = (uint32_t *)req->ring;
-  8497		segments = FA_RISC_CODE_SEGMENTS;
-  8498	
-  8499		for (j = 0; j < segments; j++) {
-  8500			rval = qla24xx_read_flash_data(vha, dcode, faddr, 10);
-  8501			if (rval) {
-  8502				ql_log(ql_log_fatal, vha, 0x01a1,
-  8503				       "-> Failed to read flash addr + size .\n");
-  8504				return QLA_FUNCTION_FAILED;
-  8505			}
-  8506	
-  8507			risc_size = be32_to_cpu((__force __be32)dcode[3]);
-  8508	
-  8509			if (risc_attr == 0)
-  8510				risc_attr = be32_to_cpu((__force __be32)dcode[9]);
-  8511	
-  8512			dlen = ha->fw_transfer_size >> 2;
-  8513			for (fragment = 0; risc_size; fragment++) {
-  8514				if (dlen > risc_size)
-  8515					dlen = risc_size;
-  8516	
-  8517				faddr += dlen;
-  8518				risc_size -= dlen;
-  8519			}
-  8520		}
-  8521	
-  8522		templates = (risc_attr & BIT_9) ? 2 : 1;
-  8523	
-  8524		ql_dbg(ql_dbg_init, vha, 0x01a1, "-> templates = %u\n", templates);
-  8525	
-  8526		for (j = 0; j < templates; j++, fwdt++) {
-  8527			vfree(fwdt->template);
-  8528			fwdt->template = NULL;
-  8529			fwdt->length = 0;
-  8530	
-  8531			dcode = (uint32_t *)req->ring;
-  8532	
-  8533			rval = qla24xx_read_flash_data(vha, dcode, faddr, 7);
-  8534			if (rval) {
-  8535				ql_log(ql_log_fatal, vha, 0x01a2,
-  8536				    "-> Unable to read template size.\n");
-  8537				goto failed;
-  8538			}
-  8539	
-  8540			risc_size = be32_to_cpu((__force __be32)dcode[2]);
-  8541			ql_dbg(ql_dbg_init, vha, 0x01a3,
-  8542			    "-> fwdt%u template array at %#x (%#x dwords)\n",
-  8543			    j, faddr, risc_size);
-  8544			if (!risc_size || !~risc_size) {
-  8545				ql_dbg(ql_dbg_init, vha, 0x01a4,
-  8546				    "-> fwdt%u failed to read array\n", j);
-  8547				goto failed;
-  8548			}
-  8549	
-  8550			/* skip header and ignore checksum */
-  8551			faddr += 7;
-  8552			risc_size -= 8;
-  8553	
-  8554			ql_dbg(ql_dbg_init, vha, 0x01a5,
-  8555			    "-> fwdt%u template allocate template %#x words...\n",
-  8556			    j, risc_size);
-  8557			fwdt->template = vmalloc(risc_size * sizeof(*dcode));
-  8558			if (!fwdt->template) {
-  8559				ql_log(ql_log_warn, vha, 0x01a6,
-  8560				    "-> fwdt%u failed allocate template.\n", j);
-  8561				goto failed;
-  8562			}
-  8563	
-  8564			dcode = fwdt->template;
-  8565			rval = qla24xx_read_flash_data(vha, dcode, faddr, risc_size);
-  8566	
-  8567			if (rval || !qla27xx_fwdt_template_valid(dcode)) {
-  8568				ql_log(ql_log_warn, vha, 0x01a7,
-  8569				    "-> fwdt%u failed template validate (rval %x)\n",
-  8570				    j, rval);
-  8571				goto failed;
-  8572			}
-  8573	
-  8574			dlen = qla27xx_fwdt_template_size(dcode);
-  8575			ql_dbg(ql_dbg_init, vha, 0x01a7,
-  8576			    "-> fwdt%u template size %#lx bytes (%#lx words)\n",
-  8577			    j, dlen, dlen / sizeof(*dcode));
-  8578			if (dlen > risc_size * sizeof(*dcode)) {
-  8579				ql_log(ql_log_warn, vha, 0x01a8,
-  8580				    "-> fwdt%u template exceeds array (%-lu bytes)\n",
-  8581				    j, dlen - risc_size * sizeof(*dcode));
-  8582				goto failed;
-  8583			}
-  8584	
-  8585			fwdt->length = dlen;
-  8586			ql_dbg(ql_dbg_init, vha, 0x01a9,
-  8587			    "-> fwdt%u loaded template ok\n", j);
-  8588	
-  8589			faddr += risc_size + 1;
-  8590		}
-  8591	
-  8592		return QLA_SUCCESS;
-  8593	
-  8594	failed:
-  8595		vfree(fwdt->template);
-  8596		fwdt->template = NULL;
-  8597		fwdt->length = 0;
-  8598	
-  8599		return QLA_SUCCESS;
-  8600	}
-  8601	
+25263da37693c7 Alex Deucher      2022-07-19  2623  
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2624  /**
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2625   * amdgpu_device_parse_gpu_info_fw - parse gpu info firmware
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2626   *
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2627   * @adev: amdgpu_device pointer
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2628   *
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2629   * Parses the asic configuration parameters specified in the gpu info
+a567db808ec948 Randy Dunlap      2024-11-27  2630   * firmware and makes them available to the driver for use in configuring
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2631   * the asic.
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2632   * Returns 0 on success, -EINVAL on failure.
+e3ecdffac9ccdb Alex Deucher      2018-03-15  2633   */
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2634  static int amdgpu_device_parse_gpu_info_fw(struct amdgpu_device *adev)
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2635  {
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2636  	const char *chip_name;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2637  	int err;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2638  	const struct gpu_info_firmware_header_v1_0 *hdr;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2639  
+ab4fe3e1f910a7 Huang Rui         2017-06-05  2640  	adev->firmware.gpu_info_fw = NULL;
+ab4fe3e1f910a7 Huang Rui         2017-06-05  2641  
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2642  	switch (adev->asic_type) {
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2643  	default:
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2644  		return 0;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2645  	case CHIP_VEGA10:
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2646  		chip_name = "vega10";
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2647  		break;
+3f76dcedb30383 Alex Deucher      2017-09-01  2648  	case CHIP_VEGA12:
+3f76dcedb30383 Alex Deucher      2017-09-01  2649  		chip_name = "vega12";
+3f76dcedb30383 Alex Deucher      2017-09-01  2650  		break;
+2d2e5e7e530722 Alex Deucher      2017-05-09  2651  	case CHIP_RAVEN:
+54f78a7655e207 Alex Deucher      2020-05-15  2652  		if (adev->apu_flags & AMD_APU_IS_RAVEN2)
+54c4d17e98db7a Feifei Xu         2018-01-04  2653  			chip_name = "raven2";
+54f78a7655e207 Alex Deucher      2020-05-15  2654  		else if (adev->apu_flags & AMD_APU_IS_PICASSO)
+741deade2a704a Alex Deucher      2018-09-13  2655  			chip_name = "picasso";
+54c4d17e98db7a Feifei Xu         2018-01-04  2656  		else
+2d2e5e7e530722 Alex Deucher      2017-05-09  2657  			chip_name = "raven";
+2d2e5e7e530722 Alex Deucher      2017-05-09  2658  		break;
+65e60f6e06e55e Le Ma             2019-07-09  2659  	case CHIP_ARCTURUS:
+65e60f6e06e55e Le Ma             2019-07-09  2660  		chip_name = "arcturus";
+65e60f6e06e55e Le Ma             2019-07-09  2661  		break;
+42b325e5ec3965 Xiaojie Yuan      2018-12-17  2662  	case CHIP_NAVI12:
+9e2096baab9add Lijo Lazar        2025-10-10  2663  		if (adev->discovery.bin)
+514678da56da08 Alex Deucher      2025-07-30  2664  			return 0;
+42b325e5ec3965 Xiaojie Yuan      2018-12-17  2665  		chip_name = "navi12";
+42b325e5ec3965 Xiaojie Yuan      2018-12-17  2666  		break;
+fa819e3a7c1ee9 Alex Deucher      2025-06-27  2667  	case CHIP_CYAN_SKILLFISH:
+7fa666ab07ba9e Alex Deucher      2025-11-26 @2668  		if (adev->mman.discovery_bin)
+7fa666ab07ba9e Alex Deucher      2025-11-26  2669  			return 0;
+fa819e3a7c1ee9 Alex Deucher      2025-06-27  2670  		chip_name = "cyan_skillfish";
+fa819e3a7c1ee9 Alex Deucher      2025-06-27  2671  		break;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2672  	}
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2673  
+a777c9d70adce6 Yang Wang         2024-05-30  2674  	err = amdgpu_ucode_request(adev, &adev->firmware.gpu_info_fw,
+ea5d49349894a7 Mario Limonciello 2024-12-03  2675  				   AMDGPU_UCODE_OPTIONAL,
+a777c9d70adce6 Yang Wang         2024-05-30  2676  				   "amdgpu/%s_gpu_info.bin", chip_name);
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2677  	if (err) {
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2678  		dev_err(adev->dev,
+a777c9d70adce6 Yang Wang         2024-05-30  2679  			"Failed to get gpu_info firmware \"%s_gpu_info.bin\"\n",
+a777c9d70adce6 Yang Wang         2024-05-30  2680  			chip_name);
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2681  		goto out;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2682  	}
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2683  
+ab4fe3e1f910a7 Huang Rui         2017-06-05  2684  	hdr = (const struct gpu_info_firmware_header_v1_0 *)adev->firmware.gpu_info_fw->data;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2685  	amdgpu_ucode_print_gpu_info_hdr(&hdr->header);
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2686  
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2687  	switch (hdr->version_major) {
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2688  	case 1:
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2689  	{
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2690  		const struct gpu_info_firmware_v1_0 *gpu_info_fw =
+ab4fe3e1f910a7 Huang Rui         2017-06-05  2691  			(const struct gpu_info_firmware_v1_0 *)(adev->firmware.gpu_info_fw->data +
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2692  								le32_to_cpu(hdr->header.ucode_array_offset_bytes));
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2693  
+cc375d8c524895 Tianci.Yin        2020-06-03  2694  		/*
+a567db808ec948 Randy Dunlap      2024-11-27  2695  		 * Should be dropped when DAL no longer needs it.
+cc375d8c524895 Tianci.Yin        2020-06-03  2696  		 */
+cc375d8c524895 Tianci.Yin        2020-06-03  2697  		if (adev->asic_type == CHIP_NAVI12)
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2698  			goto parse_soc_bounding_box;
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2699  
+b5ab16bf64347e Alex Deucher      2017-05-11  2700  		adev->gfx.config.max_shader_engines = le32_to_cpu(gpu_info_fw->gc_num_se);
+b5ab16bf64347e Alex Deucher      2017-05-11  2701  		adev->gfx.config.max_cu_per_sh = le32_to_cpu(gpu_info_fw->gc_num_cu_per_sh);
+b5ab16bf64347e Alex Deucher      2017-05-11  2702  		adev->gfx.config.max_sh_per_se = le32_to_cpu(gpu_info_fw->gc_num_sh_per_se);
+b5ab16bf64347e Alex Deucher      2017-05-11  2703  		adev->gfx.config.max_backends_per_se = le32_to_cpu(gpu_info_fw->gc_num_rb_per_se);
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2704  		adev->gfx.config.max_texture_channel_caches =
+b5ab16bf64347e Alex Deucher      2017-05-11  2705  			le32_to_cpu(gpu_info_fw->gc_num_tccs);
+b5ab16bf64347e Alex Deucher      2017-05-11  2706  		adev->gfx.config.max_gprs = le32_to_cpu(gpu_info_fw->gc_num_gprs);
+b5ab16bf64347e Alex Deucher      2017-05-11  2707  		adev->gfx.config.max_gs_threads = le32_to_cpu(gpu_info_fw->gc_num_max_gs_thds);
+b5ab16bf64347e Alex Deucher      2017-05-11  2708  		adev->gfx.config.gs_vgt_table_depth = le32_to_cpu(gpu_info_fw->gc_gs_table_depth);
+b5ab16bf64347e Alex Deucher      2017-05-11  2709  		adev->gfx.config.gs_prim_buffer_depth = le32_to_cpu(gpu_info_fw->gc_gsprim_buff_depth);
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2710  		adev->gfx.config.double_offchip_lds_buf =
+b5ab16bf64347e Alex Deucher      2017-05-11  2711  			le32_to_cpu(gpu_info_fw->gc_double_offchip_lds_buffer);
+b5ab16bf64347e Alex Deucher      2017-05-11  2712  		adev->gfx.cu_info.wave_front_size = le32_to_cpu(gpu_info_fw->gc_wave_size);
+51fd0370677733 Hawking Zhang     2017-06-09  2713  		adev->gfx.cu_info.max_waves_per_simd =
+51fd0370677733 Hawking Zhang     2017-06-09  2714  			le32_to_cpu(gpu_info_fw->gc_max_waves_per_simd);
+51fd0370677733 Hawking Zhang     2017-06-09  2715  		adev->gfx.cu_info.max_scratch_slots_per_cu =
+51fd0370677733 Hawking Zhang     2017-06-09  2716  			le32_to_cpu(gpu_info_fw->gc_max_scratch_slots_per_cu);
+51fd0370677733 Hawking Zhang     2017-06-09  2717  		adev->gfx.cu_info.lds_size = le32_to_cpu(gpu_info_fw->gc_lds_size);
+48321c3dde79f7 Harry Wentland    2019-05-07  2718  		if (hdr->version_minor >= 1) {
+35c2e91059cbef Hawking Zhang     2018-06-13  2719  			const struct gpu_info_firmware_v1_1 *gpu_info_fw =
+35c2e91059cbef Hawking Zhang     2018-06-13  2720  				(const struct gpu_info_firmware_v1_1 *)(adev->firmware.gpu_info_fw->data +
+35c2e91059cbef Hawking Zhang     2018-06-13  2721  									le32_to_cpu(hdr->header.ucode_array_offset_bytes));
+35c2e91059cbef Hawking Zhang     2018-06-13  2722  			adev->gfx.config.num_sc_per_sh =
+35c2e91059cbef Hawking Zhang     2018-06-13  2723  				le32_to_cpu(gpu_info_fw->num_sc_per_sh);
+35c2e91059cbef Hawking Zhang     2018-06-13  2724  			adev->gfx.config.num_packer_per_sc =
+35c2e91059cbef Hawking Zhang     2018-06-13  2725  				le32_to_cpu(gpu_info_fw->num_packer_per_sc);
+35c2e91059cbef Hawking Zhang     2018-06-13  2726  		}
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2727  
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2728  parse_soc_bounding_box:
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2729  		/*
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2730  		 * soc bounding box info is not integrated in disocovery table,
+258620d0b36f5a Alex Deucher      2020-05-28  2731  		 * we always need to parse it from gpu info firmware if needed.
+ec51d3facd3eb2 Xiaojie Yuan      2019-09-11  2732  		 */
+48321c3dde79f7 Harry Wentland    2019-05-07  2733  		if (hdr->version_minor == 2) {
+48321c3dde79f7 Harry Wentland    2019-05-07  2734  			const struct gpu_info_firmware_v1_2 *gpu_info_fw =
+48321c3dde79f7 Harry Wentland    2019-05-07  2735  				(const struct gpu_info_firmware_v1_2 *)(adev->firmware.gpu_info_fw->data +
+48321c3dde79f7 Harry Wentland    2019-05-07  2736  									le32_to_cpu(hdr->header.ucode_array_offset_bytes));
+48321c3dde79f7 Harry Wentland    2019-05-07  2737  			adev->dm.soc_bounding_box = &gpu_info_fw->soc_bounding_box;
+48321c3dde79f7 Harry Wentland    2019-05-07  2738  		}
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2739  		break;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2740  	}
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2741  	default:
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2742  		dev_err(adev->dev,
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2743  			"Unsupported gpu_info table %d\n", hdr->header.ucode_version);
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2744  		err = -EINVAL;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2745  		goto out;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2746  	}
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2747  out:
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2748  	return err;
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2749  }
+e2a75f88c3ad4b Alex Deucher      2017-04-27  2750  
+
+:::::: The code at line 2668 was first introduced by commit
+:::::: 7fa666ab07ba9e08f52f357cb8e1aad753e83ac6 drm/amdgpu: fix cyan_skillfish2 gpu info fw handling
+
+:::::: TO: Alex Deucher <alexander.deucher@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 -- 
 0-DAY CI Kernel Test Service
