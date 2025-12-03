@@ -1,268 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FC82D7D59;
-	Wed,  3 Dec 2025 13:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCAB21B918
+	for <llvm@lists.linux.dev>; Wed,  3 Dec 2025 14:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764769299; cv=none; b=Ydf4yddq7C/V7cFRrU9rP2o5BR2h/Li+tjKzsYu/8QP5p5uIeHJEBQBio5QvFwc84YNdl71gLoqGvK/kxGKfzh5LmIeMNLGnSnkYCjRyKGDvjM3Qhm1bTk5lXpxm3sLsW9LmeVkPu6+fRnW129TwMwogb7GfVdTl5A5ZL38kYws=
+	t=1764770794; cv=none; b=knVr8Tdf4pwU01QeEMtCoE0YxHFnt0HMz2PwBTFmFSKo+h2bhTuq3OM1IefUCUKfGwX2VWZ6H3PsqbdqK2RDhm9TUMsJX4SNwr5DsKcfqldZgB67d/UQ8zKze5fJi2sEo4KSV92VaSbchYsi2q3HLsa5j3/tx7Zyn1FZ8FGWDl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764769299; c=relaxed/simple;
-	bh=E/g3wInh/DFFiwFYxFmgRXPAmGOr+na4KqgR0X1Lyp8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ezXZwKMp33svzQhJBPywgsagUiDh89iKDwe+bnJHOoqixxJ+Gv41GbuynofMPVwVZAGFrEAMSpcwPwM77xJIdC2jHrk9iMOx+bA9dKmLQwCo/cmlJrHzVGOoEs9isUyHvS/jiKYkbxsp4wE3cVB4AFiBYEUYg8ImxuyfIhjqoKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lR3tsP7C; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764770794; c=relaxed/simple;
+	bh=ULORD3Nee9iQt6IG5z5ND4VmHm+dsifxczAT6/IsbVU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pzSk3ag8Y05XbDllmK8zMfmfToAWgnvaR7FVP6hview3A7qLBoZV5A/KvY9vZmL05O3o9EiDRXd++nu0o4gi9OdaTDoFdnuxC3PjdzJ928QIUXFpJr4yNNGxiXWji84C6CcBPvi5t3YrANQqh/oJK69O7fU7PppZek74M7ATWVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=XtVkBttU; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=GfktfrCm; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lR3tsP7C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764769298; x=1796305298;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E/g3wInh/DFFiwFYxFmgRXPAmGOr+na4KqgR0X1Lyp8=;
-  b=lR3tsP7CSl4uGXOu0XusNhK3/V6crCUbbxKahPuKOIGDO5euOp1TRbai
-   gNcuzKgr4knUeQSmBhAkWpA3x0hGIQDmaoGtYoUAH130oQgCyyMs+aBYk
-   hNIweqlNpaU5Z7GYpQE2rSyTPARtWYbV11KdE3XDG/BHWbRdjfO+vG0qK
-   GinB6UZPj0p60oKDBYkDRzapn+WXZTd0XO76D8I1UTQiNST2fvzTGvUot
-   nt0p9mDFPh6/gbi2JMHYgqnuQbuvZISyf/YAlNM03jB6U8pGLD3Ywsj6b
-   lvcIxPz2LC9cXRrlH4BsOcDoJXqKpaeGEniteWBRbWwF23q9h1gCWyRWO
-   g==;
-X-CSE-ConnectionGUID: BJxD0sCoQY2A/Mmy50heTA==
-X-CSE-MsgGUID: eJoqWQXcShCzyoGkO67/JA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="77869278"
-X-IronPort-AV: E=Sophos;i="6.20,246,1758610800"; 
-   d="scan'208";a="77869278"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 05:41:38 -0800
-X-CSE-ConnectionGUID: 4HIVObFaQn+K4UOVG1Ot2A==
-X-CSE-MsgGUID: hJ44hkv6SZ6djC0YoNEG+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,246,1758610800"; 
-   d="scan'208";a="194576523"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 03 Dec 2025 05:41:36 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQn6r-00000000B1V-49UM;
-	Wed, 03 Dec 2025 13:41:33 +0000
-Date: Wed, 3 Dec 2025 21:40:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nico Pache <npache@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v13 mm-new 07/16] khugepaged: introduce
- collapse_max_ptes_none helper function
-Message-ID: <202512032107.44KoCA71-lkp@intel.com>
-References: <20251201174627.23295-8-npache@redhat.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="XtVkBttU";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="GfktfrCm"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B3BReP71968405
+	for <llvm@lists.linux.dev>; Wed, 3 Dec 2025 14:06:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=YUOiQ+4tRELv6WOPEPoKfZ0qRhT6spqTIFQ
+	UmRxj4gU=; b=XtVkBttU/VErFv7rMCFAUD7QY0m/9kah7KTLM0Pzk6wHEEpWkKx
+	NWJa4X3j55fEBgLmeeVEYVqKM2juJ59s+zBYgvNp/sGNrJMJaV6Bfc6/AySV5FRw
+	xvQ8rlW/DFVEM0AhzRPvtsBVnPCxv/kETk+peSdXPje7tXa8S5b4RwXBpl9z2mW/
+	742KNUZRYO0/KlDXzh4QyoysYHGW9sB+VSXnHsKGRT1W9wdXOG+xMUvYEERMCkfm
+	toObCEFMd9K8XHDZNSEGVim0cI0gD/SLm+cqtVa11nKUhwSu+i57xANg2VoV8+BB
+	fMym8WFz+pD+OORobG8MmbMr8Wuo7Bh14fA==
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4atmbtgcy6-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Wed, 03 Dec 2025 14:06:32 +0000 (GMT)
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-937213d39a5so8324342241.2
+        for <llvm@lists.linux.dev>; Wed, 03 Dec 2025 06:06:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1764770791; x=1765375591; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YUOiQ+4tRELv6WOPEPoKfZ0qRhT6spqTIFQUmRxj4gU=;
+        b=GfktfrCmNQMh5CDVYl9uUG2eXchVCWKdWnBgjKgRiX49eHrfIbyDhiDtBzOFZxoYD+
+         tXRb6Dp9c2WvE9gOfsAT6nv+KaLRKSldPYtbEN1NnFJ2n7g6XbIwpiglkxdpegwE2q4M
+         yLJC4d+9BlD/yraMdByYv3EBiowxV7OVFBXx9LUbsdUnwNdIdfExRxDFHKwm55u01ayM
+         z/ITgdwqFFBj7StC//72olC2BjTSCim751ED7KXSFUJj2ldZZrJc51OKwQh2fMxsE3S/
+         kGP4jCgDzp/TPJ+x/Ep9TWverR0udvay1dyICn+PgZqF02XLe48ADnVDYFfVJf9mPXC5
+         GKYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764770791; x=1765375591;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YUOiQ+4tRELv6WOPEPoKfZ0qRhT6spqTIFQUmRxj4gU=;
+        b=CIh8lVrSH5BUwkk6oRhjP4ixIJwYPygACfosHBuSZN2QjRlpN3c5qnmmFQJAHE6s4a
+         FGYd4H4TD3nP2VDEcddPDJ2eTdvYjX7iAxGpQZUx4foPtyXYcCxe0ds2k3TivTWRo6c7
+         Atj5UX+DpvKHlU4tfRyJv8A63Yfm8hK4fQr9zGTbsjRUXq1pyy8AbXcfyBFlySw96jQY
+         aLgzCNMrLmD2gGxn0bFikwh1XtyPqITATp2RUrsXvkFaMfBbs4Nu85KcIQ/zY6pxuVnj
+         61585g0csmogLt5+mFhw7GMRhcdwidEQsJ1M9sTwSV44b6/0F1z4AIA9zLjmRs1jUJLK
+         ilxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnx8G2uvtYYzonZjUF/5PKrrxUEfVCmvLHo0f5a1YROElDYvkVq8NqrWB2CDbgvZtoA9o1@lists.linux.dev
+X-Gm-Message-State: AOJu0YwgX0f21K0RlFHYuiD+oM9pb6E2JJmBzXLpJo4G3EbjcXpBmXCd
+	V1bVa2Ie423zs8sqwaBw9Hlw/AhfIwZ3u3CEiffjuoW2d70HOHyxIrwusgK0AIrEXi3unMA8Hj8
+	1xqNnqmKjiAzeGY51EUcylUR1XYngxlnk6qETbo/NzNnluztUve6C2m5y
+X-Gm-Gg: ASbGncuLfcayRgRSse66QIzpT894vVoxDN1U9EK8x50ZsM9dxyKbk5B3ubM0q2TN+gp
+	A0pK8HXdFRiVr2yGXnxPEYqzwWjEU55PtOakfEA4sigVjslv1E5zNEvNZmaDBOvGmjWb4xa0TsP
+	9r+7R5kz3zxUm6at3rU2AdUcyAL6k+WKafx+aUoO59x4NMUxgj21rtJZBrz6Fev7GM0GV1w4KXN
+	tNZYWXxys5OC7tzklxVzmAPCqkNC4z8g0LpRjyIVsjvvY686N1HZR5pA0T9qa7jJ9Zs5q+cABV9
+	7oGfBPMLDO4FP0zWhzPi1ZHc2YZu5RuePE80kpRv9kpil0rWLftKlLY/dZ/u9mUcQzqUg3WiE82
+	VxrUfC15mByhwB7TMHMHU8sjSqA==
+X-Received: by 2002:a05:6102:3f08:b0:5db:25b5:9b4f with SMTP id ada2fe7eead31-5e48e336a73mr729333137.26.1764770789988;
+        Wed, 03 Dec 2025 06:06:29 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH/Ehkc5vdz4n+xhETW2nUztusFVbDphsyvPLJ9Tv1PMzZwViPNNdecsSwshFOFC+SeK3YFng==
+X-Received: by 2002:a05:6102:3f08:b0:5db:25b5:9b4f with SMTP id ada2fe7eead31-5e48e336a73mr729134137.26.1764770788498;
+        Wed, 03 Dec 2025 06:06:28 -0800 (PST)
+Received: from quoll ([178.197.195.159])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792a8ccbf3sm52590115e9.12.2025.12.03.06.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 06:06:27 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-sound@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH] ASoC: codecs: nau8325: Silence uninitialized variables warnings
+Date: Wed,  3 Dec 2025 15:06:12 +0100
+Message-ID: <20251203140611.87191-2-krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251201174627.23295-8-npache@redhat.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1419; i=krzysztof.kozlowski@oss.qualcomm.com;
+ h=from:subject; bh=ULORD3Nee9iQt6IG5z5ND4VmHm+dsifxczAT6/IsbVU=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpMEPT2hovVVp8ix4DQsWVMCa+egexZ4u26M7Nx
+ t2vT6lvEr2JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaTBD0wAKCRDBN2bmhouD
+ 17RlEACFWTHmhEw+KG1nxyfifW2dapBHHiRzk06E6asHMNjeI7PMuStEij5EF8PdpUgs7JfW0sf
+ iEqU/DmzX/fMBRXA/vg3d8rHcpBVdHJrK8lnUKvXRh0XLEp8zZCd/YPmhwBuheP+oUjor9hzmwO
+ C2ccYrEYrlmYDz8QOKqOL9TuY+W5R3tVloVi8I58pDO/vLPpC+pFuW2tRvxqPXhf7VCaSPAA67F
+ Wn3o4ybfQpfP6cGXHPg4mlyPWRyMg1OATOTJjVHGUfDvYcpTWEA8SoTktHSDKN/GcU9Fpw0sh93
+ kjj3qSexXhfJCKFb55ht9Kzqb4gqmsgUlx+5XRWuYU5mnFo9j8sdYpmF4THSwyBDDu6btQyI/wP
+ 4Hb/DGtcx+5SQ8H6HUfrmbDgEoNB6pslnEfY+W5DfWfCaow30yBlXC03a4Dq4vGiRgthJwoFKor
+ +rVeGHoWSQQ9nOLCjHNyNcVdFWREqTzvSOWnoZJ+CTPTmcodk5Lm6A+qbdsOb+AX8+GEBA4G87v
+ xRoOGNY2tfafpzVPK6sQimj72Rrp5DnLE15e2DY6zeJwsfeuYaIjhhj5ngIo2N/72I6XY2MGm5U
+ +1hDBnDJZ1NWpFdZoklqIbPmipY/FtztM9mKbd+p3J5HYvIipPZTh++mWtXcQrt8gB0LummFnLH y8PZYX7VK4xje/Q==
+X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=KNBXzVFo c=1 sm=1 tr=0 ts=693043e8 cx=c_pps
+ a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=FPK7cjBCgYbqzSTDLBmM0Q==:17
+ a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=uI0rWgL3eINdTr64SRQA:9 a=TOPH6uDL9cOC6tEoww4z:22
+X-Proofpoint-GUID: A9dgUoMEalCxFdmM3WYKsTxKrnOOgA1i
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAzMDExMiBTYWx0ZWRfX4oU20IS0ru8f
+ 55E86BULdFkqPA42M3g4OPIZ1AeS0h/QzLj1vZOsG1LeR/+l7pvxJi78RQcm/N8Nq0YDYY+cfn+
+ XkCd4JYJIAsRaaNypGPNzCBEBwWuNRTmvGycDnq5vKAl9o0oW36lxndggqrTsPjNycSaMZLcgDe
+ 6aXwIsUe/knlDpHTRHtcuHMigBAaHQAXrxeW4NFM5H5snUVHsCzxj1Il/MNaKUj1krdf70dRzv6
+ iTbPzO+zHB7+aKuluIfiie1X4lkawMHckrwzqfrqc5h7P6hpzrbP05Do54euzG6DRgiT+Y0KWfh
+ p+fn9t3/QbwCC8lrvtlLUvbeiaPjwsI//1e14Rm4fCMnLgoXss1AS6N438OUjhpWxvgPK9jkBY8
+ aERH+EBbbA59b03cPwGVVYOQOuJzOw==
+X-Proofpoint-ORIG-GUID: A9dgUoMEalCxFdmM3WYKsTxKrnOOgA1i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-03_01,2025-11-27_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ bulkscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2512030112
 
-Hi Nico,
+clang W=1 builds warn:
 
-kernel test robot noticed the following build warnings:
+  nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20251203]
-[cannot apply to linus/master v6.18]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+which are false positive, because the variables will be always
+initialized when used (guarded by mclk_max!=0 check).  However
+initializing them upfront makes the code more obvious and easier, plus
+it silences the warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nico-Pache/khugepaged-rename-hpage_collapse_-to-collapse_/20251202-015150
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20251201174627.23295-8-npache%40redhat.com
-patch subject: [PATCH v13 mm-new 07/16] khugepaged: introduce collapse_max_ptes_none helper function
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251203/202512032107.44KoCA71-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512032107.44KoCA71-lkp@intel.com/reproduce)
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+ sound/soc/codecs/nau8325.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512032107.44KoCA71-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/khugepaged.c:593:6: warning: variable '_pte' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     593 |         if (max_ptes_none == -EINVAL)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-   mm/khugepaged.c:724:25: note: uninitialized use occurs here
-     724 |         release_pte_pages(pte, _pte, compound_pagelist);
-         |                                ^~~~
-   mm/khugepaged.c:593:2: note: remove the 'if' if its condition is always false
-     593 |         if (max_ptes_none == -EINVAL)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     594 |                 goto out;
-         |                 ~~~~~~~~
-   mm/khugepaged.c:588:13: note: initialize the variable '_pte' to silence this warning
-     588 |         pte_t *_pte;
-         |                    ^
-         |                     = NULL
-   1 warning generated.
-
-
-vim +593 mm/khugepaged.c
-
-   580	
-   581	static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
-   582			unsigned long start_addr, pte_t *pte, struct collapse_control *cc,
-   583			unsigned int order, struct list_head *compound_pagelist)
-   584	{
-   585		struct page *page = NULL;
-   586		struct folio *folio = NULL;
-   587		unsigned long addr = start_addr;
-   588		pte_t *_pte;
-   589		int none_or_zero = 0, shared = 0, result = SCAN_FAIL, referenced = 0;
-   590		const unsigned long nr_pages = 1UL << order;
-   591		int max_ptes_none = collapse_max_ptes_none(order, !cc->is_khugepaged);
-   592	
- > 593		if (max_ptes_none == -EINVAL)
-   594			goto out;
-   595	
-   596		for (_pte = pte; _pte < pte + nr_pages;
-   597		     _pte++, addr += PAGE_SIZE) {
-   598			pte_t pteval = ptep_get(_pte);
-   599			if (pte_none_or_zero(pteval)) {
-   600				++none_or_zero;
-   601				if (!userfaultfd_armed(vma) &&
-   602				    (!cc->is_khugepaged ||
-   603				     none_or_zero <= max_ptes_none)) {
-   604					continue;
-   605				} else {
-   606					result = SCAN_EXCEED_NONE_PTE;
-   607					count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
-   608					goto out;
-   609				}
-   610			}
-   611			if (!pte_present(pteval)) {
-   612				result = SCAN_PTE_NON_PRESENT;
-   613				goto out;
-   614			}
-   615			if (pte_uffd_wp(pteval)) {
-   616				result = SCAN_PTE_UFFD_WP;
-   617				goto out;
-   618			}
-   619			page = vm_normal_page(vma, addr, pteval);
-   620			if (unlikely(!page) || unlikely(is_zone_device_page(page))) {
-   621				result = SCAN_PAGE_NULL;
-   622				goto out;
-   623			}
-   624	
-   625			folio = page_folio(page);
-   626			VM_BUG_ON_FOLIO(!folio_test_anon(folio), folio);
-   627	
-   628			/* See collapse_scan_pmd(). */
-   629			if (folio_maybe_mapped_shared(folio)) {
-   630				++shared;
-   631				/*
-   632				 * TODO: Support shared pages without leading to further
-   633				 * mTHP collapses. Currently bringing in new pages via
-   634				 * shared may cause a future higher order collapse on a
-   635				 * rescan of the same range.
-   636				 */
-   637				if (is_mthp_order(order) || (cc->is_khugepaged &&
-   638				    shared > khugepaged_max_ptes_shared)) {
-   639					result = SCAN_EXCEED_SHARED_PTE;
-   640					count_vm_event(THP_SCAN_EXCEED_SHARED_PTE);
-   641					goto out;
-   642				}
-   643			}
-   644	
-   645			if (folio_test_large(folio)) {
-   646				struct folio *f;
-   647	
-   648				/*
-   649				 * Check if we have dealt with the compound page
-   650				 * already
-   651				 */
-   652				list_for_each_entry(f, compound_pagelist, lru) {
-   653					if (folio == f)
-   654						goto next;
-   655				}
-   656			}
-   657	
-   658			/*
-   659			 * We can do it before folio_isolate_lru because the
-   660			 * folio can't be freed from under us. NOTE: PG_lock
-   661			 * is needed to serialize against split_huge_page
-   662			 * when invoked from the VM.
-   663			 */
-   664			if (!folio_trylock(folio)) {
-   665				result = SCAN_PAGE_LOCK;
-   666				goto out;
-   667			}
-   668	
-   669			/*
-   670			 * Check if the page has any GUP (or other external) pins.
-   671			 *
-   672			 * The page table that maps the page has been already unlinked
-   673			 * from the page table tree and this process cannot get
-   674			 * an additional pin on the page.
-   675			 *
-   676			 * New pins can come later if the page is shared across fork,
-   677			 * but not from this process. The other process cannot write to
-   678			 * the page, only trigger CoW.
-   679			 */
-   680			if (folio_expected_ref_count(folio) != folio_ref_count(folio)) {
-   681				folio_unlock(folio);
-   682				result = SCAN_PAGE_COUNT;
-   683				goto out;
-   684			}
-   685	
-   686			/*
-   687			 * Isolate the page to avoid collapsing an hugepage
-   688			 * currently in use by the VM.
-   689			 */
-   690			if (!folio_isolate_lru(folio)) {
-   691				folio_unlock(folio);
-   692				result = SCAN_DEL_PAGE_LRU;
-   693				goto out;
-   694			}
-   695			node_stat_mod_folio(folio,
-   696					NR_ISOLATED_ANON + folio_is_file_lru(folio),
-   697					folio_nr_pages(folio));
-   698			VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
-   699			VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
-   700	
-   701			if (folio_test_large(folio))
-   702				list_add_tail(&folio->lru, compound_pagelist);
-   703	next:
-   704			/*
-   705			 * If collapse was initiated by khugepaged, check that there is
-   706			 * enough young pte to justify collapsing the page
-   707			 */
-   708			if (cc->is_khugepaged &&
-   709			    (pte_young(pteval) || folio_test_young(folio) ||
-   710			     folio_test_referenced(folio) ||
-   711			     mmu_notifier_test_young(vma->vm_mm, addr)))
-   712				referenced++;
-   713		}
-   714	
-   715		if (unlikely(cc->is_khugepaged && !referenced)) {
-   716			result = SCAN_LACK_REFERENCED_PAGE;
-   717		} else {
-   718			result = SCAN_SUCCEED;
-   719			trace_mm_collapse_huge_page_isolate(folio, none_or_zero,
-   720							    referenced, result);
-   721			return result;
-   722		}
-   723	out:
-   724		release_pte_pages(pte, _pte, compound_pagelist);
-   725		trace_mm_collapse_huge_page_isolate(folio, none_or_zero,
-   726						    referenced, result);
-   727		return result;
-   728	}
-   729	
-
+diff --git a/sound/soc/codecs/nau8325.c b/sound/soc/codecs/nau8325.c
+index 3bfdb448f8bd..e651263a9812 100644
+--- a/sound/soc/codecs/nau8325.c
++++ b/sound/soc/codecs/nau8325.c
+@@ -386,7 +386,8 @@ static int nau8325_clksrc_choose(struct nau8325 *nau8325,
+ 				 const struct nau8325_srate_attr **srate_table,
+ 				 int *n1_sel, int *mult_sel, int *n2_sel)
+ {
+-	int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
++	int i, j, mclk, ratio;
++	int mclk_max = 0, ratio_sel = 0, n2_max = 0;
+ 
+ 	if (!nau8325->mclk || !nau8325->fs)
+ 		goto proc_err;
+@@ -408,7 +409,6 @@ static int nau8325_clksrc_choose(struct nau8325 *nau8325,
+ 	}
+ 
+ 	/* Get MCLK_SRC through 1/N, Multiplier, and then 1/N2. */
+-	mclk_max = 0;
+ 	for (i = 0; i < ARRAY_SIZE(mclk_n1_div); i++) {
+ 		for (j = 0; j < ARRAY_SIZE(mclk_n3_mult); j++) {
+ 			mclk = nau8325->mclk << mclk_n3_mult[j].param;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
