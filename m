@@ -1,140 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA680255F3F;
-	Wed,  3 Dec 2025 21:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91972E8B78;
+	Wed,  3 Dec 2025 22:44:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764798605; cv=none; b=LhbwL5LpZnpajClu20zKPXXDKPkJ3IuN4CjsXE4Gz+2ldhUsD1sXXZecwUazZobRsuQ6Cpsj35QcNo6mmQ1elMs76auKpvSmpU1Xpt/FffV9aF+R9wVJLaf9CTnNghdAiJSfP0VdznnyYF3dHmUkoYRbK4l+glB9CzlBhxMHAfU=
+	t=1764801895; cv=none; b=jp9KM4W168hxkNmmnx4CMw6qKCZNZuAArsNLeTX34TxywuVu8pX6nrV9t329Gxugsm6rZyEmyT86bYSCyCpXYRdXwouU67Ry+FLv0c6SJVw7uqEoUYwQyz00vo4h81cfONJVdQ3LjeKGpYdKqO0BuqJhP5Ghx8xu5ayJQNq+9Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764798605; c=relaxed/simple;
-	bh=a1vLDrWJiWB9iwEznxpMPNyicMp53/pifzezjHaUACA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ryzf0fzvHXTz6EWLYbMl9AqjVBM/XZ0S1XZkf6bKksaxEgkbG2/b+H/Idm8VVUt4WdAkbFqM4PNeWhcDZxLcDr4z6BYjj7mLV8dKAy/vhFp2k1gHanxRUd5aBAoW6Hik8pRBSVUEzxhAhhfjvysDHUFkhb9y2wr5TCC0opLHlxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMtayfUt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764801895; c=relaxed/simple;
+	bh=4Uj9vmf5W51Hq1VXIv7uGJ3HGRMZgiH69aSNHXLBM/A=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=n9DUVADVslJ3ddEwf8LJXOy7yRIJSGASL+mh9KAmgyS8q2L6w6uUO7pyojdQa8KrzLdzGdhYIbIa1xYK8GRuRaq/qzlAWRpGIVmLmdmXo0KG9LvjTIETl0GEhwfMLXMmItzn2BJOtoY91FgKIt6u87nfZIs3QL+d3cqCc0yjXUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=teBeR5Jm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMtayfUt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD61C4CEF5;
-	Wed,  3 Dec 2025 21:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764798603;
-	bh=a1vLDrWJiWB9iwEznxpMPNyicMp53/pifzezjHaUACA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AMtayfUt8x34iV1IHXV/aKOfK1qW3tFwnFnywHK/kIhGFa4MBVQohMSIBMdImD0NX
-	 1e7gw9OssTKurhvi1S7tC8XZjrk+VYkevOJr97DnFYKZgWN9r6cdLNFE+E0bDpdVKc
-	 qu/HtjM2QAQN+lCs5K91pDUhzTuDorfPQPuG5/XF3IFI31hPkr85FsTOx7pyUdjSE2
-	 mgy7qaE4fEZX1K8Q/WfkmCfn/1w3Yy/SCJaBvqLiG6gX26Awmz7F3hcv//ukboYyi2
-	 ejD5L+JDt7ympbunnM4uMhakfDKxml3JwuS9zYcqARM6KxzDBQ7Seu8pVV4sW4+C4m
-	 M4uLbIS9SjG/A==
-Date: Wed, 3 Dec 2025 14:49:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ASoC: codecs: nau8325: Silence uninitialized variables
- warnings
-Message-ID: <20251203214958.GC3060476@ax162>
-References: <20251203140611.87191-2-krzysztof.kozlowski@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="teBeR5Jm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415DAC4CEF5;
+	Wed,  3 Dec 2025 22:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1764801894;
+	bh=4Uj9vmf5W51Hq1VXIv7uGJ3HGRMZgiH69aSNHXLBM/A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=teBeR5JmucF/aVSYNvWbrQMxjrj1aDFVSGSjka5MJN9DX0cUY+g95fXVemCkWQs4J
+	 WZX7YA1tTnhHEeqTo0FPPHuBnn9BsXt1fON1Xmf/qYeRu98AVU3ZazEGFtzaW39WX2
+	 1lw6h+xbEkpLRCsPYdKxugGHQ9rVC3K+9b9NQOW8=
+Date: Wed, 3 Dec 2025 14:44:53 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Feng Tang <feng.tang@linux.alibaba.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Linux Memory Management List
+ <linux-mm@kvack.org>, Petr Mladek <pmladek@suse.com>
+Subject: Re: [linux-next:master 9966/13055] kernel/watchdog.c:74:22:
+ warning: unused variable 'hardlockup_si_mask'
+Message-Id: <20251203144453.be34d189c5e6668ce2da06b3@linux-foundation.org>
+In-Reply-To: <202512030920.NFKtekA7-lkp@intel.com>
+References: <202512030920.NFKtekA7-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251203140611.87191-2-krzysztof.kozlowski@oss.qualcomm.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
+On Wed, 3 Dec 2025 09:05:30 +0800 kernel test robot <lkp@intel.com> wrote:
 
-On Wed, Dec 03, 2025 at 03:06:12PM +0100, Krzysztof Kozlowski wrote:
-> clang W=1 builds warn:
-
-For the record, W=1 is irrelevant here, this warning occurs in a default
-build as well. I only mention that because I think some maintainers
-mentally downplay W=1 patches (I know Mark already picked this up).
--Wuninitialized and -Wsometimes-uninitialized should always appear,
-regardless of W=1.
-
->   nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   47b7b5e32bb7264b51b89186043e1ada4090b558
+> commit: a9af76a78760717361cccc884dc649e30db61c8b [9966/13055] watchdog: add sys_info sysctls to dump sys info on system lockup
+> config: powerpc64-randconfig-002-20251203 (https://download.01.org/0day-ci/archive/20251203/202512030920.NFKtekA7-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 734a912d0f025559fcf76bde9aaaeb0383c1625a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512030920.NFKtekA7-lkp@intel.com/reproduce)
 > 
-> which are false positive, because the variables will be always
-> initialized when used (guarded by mclk_max!=0 check).  However
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512030920.NFKtekA7-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/watchdog.c:74:22: warning: unused variable 'hardlockup_si_mask' [-Wunused-variable]
+>       74 | static unsigned long hardlockup_si_mask;
+>          |                      ^~~~~~~~~~~~~~~~~~
+>    1 warning generated.
 
-Right, which I pointed out on another report:
+I'm testing the appended patch but it needs checking please.
 
-  https://lore.kernel.org/all/20251201191052.GA2727778@ax162/
+The comment for hardlockup_si_mask says
 
-> initializing them upfront makes the code more obvious and easier, plus
-> it silences the warning.
+ * bitmask to control what kinds of system info to be printed when
+ * hard lockup is detected, it could be task, memory, lock etc.
+ * Refer include/linux/sys_info.h for detailed bit definition.
 
-I get silencing the warning to avoid breaking the build but I think the
-warning is flagging that this code is dodgy.
+but the variable depends on "COUNTS_HRTIMER".  The comment doesn't
+mention hrtimers and I don't see why it should.  Not sure what's going
+on here.
 
-If we remove the known dead code as the solution to the original
-problem:
 
-diff --git a/sound/soc/codecs/nau8325.c b/sound/soc/codecs/nau8325.c
-index 3bfdb448f8bd..e060a8950940 100644
---- a/sound/soc/codecs/nau8325.c
-+++ b/sound/soc/codecs/nau8325.c
-@@ -426,11 +426,6 @@ static int nau8325_clksrc_choose(struct nau8325 *nau8325,
- 			}
- 		}
- 	}
--	if (mclk_max) {
--		*n2_sel = n2_max;
--		ratio = ratio_sel;
--		goto proc_done;
--	}
+
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: kernel/watchdog.c: fix unused var warning
+Date: Wed Dec  3 02:34:40 PM PST 2025
+
+>> kernel/watchdog.c:74:22: warning: unused variable 'hardlockup_si_mask' [-Wunused-variable]
+      74 | static unsigned long hardlockup_si_mask;
+         |                      ^~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+Fixes: a9af76a78760 ("watchdog: add sys_info sysctls to dump sys info on system lockup")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512030920.NFKtekA7-lkp@intel.com/
+Link: https://lkml.kernel.org/r/202512030920.NFKtekA7-lkp@intel.com
+Cc: Feng Tang <feng.tang@linux.alibaba.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ kernel/watchdog.c |   16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+--- a/kernel/watchdog.c~kernel-watchdogc-fix-unused-var-warning
++++ a/kernel/watchdog.c
+@@ -66,13 +66,6 @@ int __read_mostly sysctl_hardlockup_all_
+ unsigned int __read_mostly hardlockup_panic =
+ 			IS_ENABLED(CONFIG_BOOTPARAM_HARDLOCKUP_PANIC);
  
- proc_err:
- 	dev_dbg(nau8325->dev, "The MCLK %d is invalid. It can't get MCLK_SRC of 256/400/500 FS (%d)",
-
-Then we get the following warnings with W=1:
-
-  sound/soc/codecs/nau8325.c:389:35: error: variable 'ratio_sel' set but not used [-Werror,-Wunused-but-set-variable]
-    389 |         int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
-        |                                          ^
-  sound/soc/codecs/nau8325.c:389:46: error: variable 'n2_max' set but not used [-Werror,-Wunused-but-set-variable]
-    389 |         int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
-        |                                                     ^
-
-So then we remove these variables:
-
-diff --git a/sound/soc/codecs/nau8325.c b/sound/soc/codecs/nau8325.c
-index e060a8950940..86725912a014 100644
---- a/sound/soc/codecs/nau8325.c
-+++ b/sound/soc/codecs/nau8325.c
-@@ -386,7 +386,7 @@ static int nau8325_clksrc_choose(struct nau8325 *nau8325,
- 				 const struct nau8325_srate_attr **srate_table,
- 				 int *n1_sel, int *mult_sel, int *n2_sel)
- {
--	int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
-+	int i, j, mclk, mclk_max, ratio;
+-/*
+- * bitmasks to control what kinds of system info to be printed when
+- * hard lockup is detected, it could be task, memory, lock etc.
+- * Refer include/linux/sys_info.h for detailed bit definition.
+- */
+-static unsigned long hardlockup_si_mask;
+-
+ #ifdef CONFIG_SYSFS
  
- 	if (!nau8325->mclk || !nau8325->fs)
- 		goto proc_err;
-@@ -418,10 +418,8 @@ static int nau8325_clksrc_choose(struct nau8325 *nau8325,
- 			if (ratio != NAU8325_MCLK_FS_RATIO_NUM &&
- 			    (mclk_max < mclk || i > *n1_sel)) {
- 				mclk_max = mclk;
--				n2_max = *n2_sel;
- 				*n1_sel = i;
- 				*mult_sel = j;
--				ratio_sel = ratio;
- 				goto proc_done;
- 			}
- 		}
+ static unsigned int hardlockup_count;
+@@ -135,6 +128,13 @@ __setup("nmi_watchdog=", hardlockup_pani
+ 
+ #if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
+ 
++/*
++ * bitmask to control what kinds of system info to be printed when
++ * hard lockup is detected, it could be task, memory, lock etc.
++ * Refer include/linux/sys_info.h for detailed bit definition.
++ */
++static unsigned long hardlockup_si_mask;
++
+ static DEFINE_PER_CPU(atomic_t, hrtimer_interrupts);
+ static DEFINE_PER_CPU(int, hrtimer_interrupts_saved);
+ static DEFINE_PER_CPU(bool, watchdog_hardlockup_warned);
+@@ -1250,6 +1250,7 @@ static const struct ctl_table watchdog_s
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
++#if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
+ 	{
+ 		.procname	= "hardlockup_sys_info",
+ 		.data		= &hardlockup_si_mask,
+@@ -1257,6 +1258,7 @@ static const struct ctl_table watchdog_s
+ 		.mode		= 0644,
+ 		.proc_handler	= sysctl_sys_info_handler,
+ 	},
++#endif
+ #ifdef CONFIG_SMP
+ 	{
+ 		.procname	= "hardlockup_all_cpu_backtrace",
+_
 
-Then there are no warnings but was it intentional that these variables
-were unused? I was hoping the original author would be able to answer
-that. At the very least, it seems better to remove the known dead code
-than leave it around for the compiler to clean up.
-
-Cheers,
-Nathan
