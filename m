@@ -1,156 +1,94 @@
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8127D3277B8;
-	Wed,  3 Dec 2025 16:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764779023; cv=pass; b=bh76HQIJKy4CEbTcS2bSk0Z83XW0JpW4w/Lo55V+hrrIqw/gDgEexBTfvwC1kAhPZX0YxGn0SufESDakYLFH1yES6Y0N1OGpjjBE6UNZpZtU+rGZwCvLIQgYStt6F8NIStTlPxTQYMxr4vZAlT/z0C1PItIT5Twu3hh7OyQiuW0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764779023; c=relaxed/simple;
-	bh=AgU6gFpwsobo1glwGaBKe/j34OdWgBCKsQmCYiKCgi4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mFAYQODvOSLQrHzojQOs8+6m7i3XjW7or/mtcqTdvb6wbwnCjQ8Blu4/0C4i98BtWVXVxUSd8z+G2K7xbVpaea0boyvYmHWncmxESB7ctTEpQqjo4KJ4uSX3QDWTuXwAZC1EcmrPMl1QSrPhxcLwBNgy1zUJR885lWIkc3M0cr0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de; spf=none smtp.mailfrom=iokpp.de; dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=S/bclzZ4; dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b=XHedW1jf; arc=pass smtp.client-ip=85.215.255.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iokpp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iokpp.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887F634D4EE;
+	Wed,  3 Dec 2025 16:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764780605; cv=none; b=ekvoec/YTbucQzZTKAA/RqP3D8M73FVrXFkxNPsgF8Ly0Dxe017PJotWdb/vI2jYnMCkgn82wBTHAu4zGM1fGNj/lwQz+5XHOdGuWNOg+vYofdEUpdZpkyxOhcfJ4DM2SfJBJYJC6Z8K+Ceq0AAfrRnoAu2N6KQ/OUl1U+Gki1I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764780605; c=relaxed/simple;
+	bh=WE/MGjDXYkfLp/ASxbUyC53LMNdsfobdCP7BxApY2r0=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=EElDUL3RfuRreLUxRAIL05tuFUHZ3JKqDsMFVHHnSl2cMaZiKd5RGy6/uzZIDNi5H9pNGriCnXDbd9zTXoFf+MevG9ncoDDR6aOU88Pm79CYxEl20gmw+rHnV5O6LlZeRhFcn+YLWEYHzhqNcxN49p/PiSKd8llonN9DtoHcL0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOSDsoBa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="S/bclzZ4";
-	dkim=permerror (0-bit key) header.d=iokpp.de header.i=@iokpp.de header.b="XHedW1jf"
-ARC-Seal: i=1; a=rsa-sha256; t=1764779004; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=VOq2EcfupwL15ph0upZ8yUpYh8Lc/upjOzqNgaUlHXv01oi2+13gVoXLqYwLJrZ0VF
-    sY/B6ZxW3CI3zJTtb4hlDT7QtWjtF02vzqxwYaRBhmJPLea71LYZ9tpH15Y99TCv3In5
-    Rd47PB7hx/1hMN6KwearCDy7sy6vXyHgZrRByQT2AN6TAhOHUHclWAQvWe8+gRiPzeB1
-    8qCTPx84MqLHeNzJNliDrrcVqHufHONf8sQJKxJ/OfgXgvxNkhGXBlyjgjg12mwnOtbD
-    hF0O50bs3NMVtgcK8hdqfZQN3gXHZnrFoIz183MD7W+XQZOnEzXqCy9T/hmrWunlviKV
-    z1Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764779004;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=+CX5l/3isfMmE9SgsHes2OD1Y2tTNqM+qL2iJH/Takc=;
-    b=A6gxDCITemx4Wk6yJYz4CvEWcSHzKtR7WMjWTzDI1PtCjFc+wwjQBDAEOEILxJQ34r
-    AhjDAvrhzcDYIbvhyJFev/MbsohfpxB+d4BaOEBMejhQN2umOvN20cVQprlw+suW09Bz
-    +6u3ehuhp8W1a/DlV1d5Be7Q2E9bX1vcpUgGp9N/x5O9ZYAcpp0EPThfoFWBA4EeJTDa
-    /M9DMK+hLzqZPJlIHmf0Qn6bdtqxbYqWLQlzIoAvXSFISsgs0WrAwJCCLEBY5ZAmrO/y
-    X8Iy6lZpCvUmzrlyuWstHs2kzeGXf81reEFZb7ETzBe3DWdwnWZLbLaLPzFH+Mvd0hbF
-    26rw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764779004;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=+CX5l/3isfMmE9SgsHes2OD1Y2tTNqM+qL2iJH/Takc=;
-    b=S/bclzZ4QHGLAEpEdX25Y7KqVUnT9UC4KHsUZmlu3j5bljpYzTMvsTLZUk1uRjoOpd
-    gclil0wnTEv6dw0QDKBKyR+0b2MnZWWK8l69heHd0k2EoMLVFeh5rr6YEHLEatDyd7En
-    iUPkKb/amqW+UPEout37ykkeev6osZxh7cB8wG23AblbLBcVGvJW4unIpDWGnuJOH/CO
-    c/LTwOTfNvrsG6lqTyYhU2NFDs0F4CyfDC2Oo73BTIAiSEb92Svnkugt6ToejwAGKwDS
-    Xrx5mLxuo3s39izZkmABHQQ+NslBLCiQlJVW3ntJDJPC4dUM3RQnaVYk3Rk1UyjZKM+R
-    zosw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764779004;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=+CX5l/3isfMmE9SgsHes2OD1Y2tTNqM+qL2iJH/Takc=;
-    b=XHedW1jf0Mr2uLZbj7jZILLwwC3tX6Rvk/cuYC8xM3D+iXubsSJGyiGu5XjbE0ojg5
-    xWp+O9rqEwfo56mRfmCw==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSe9tgBDSDt0V0DBslXBtZUxPOub3IZqk"
-Received: from [10.176.235.211]
-    by smtp.strato.de (RZmta 54.0.0 AUTH)
-    with ESMTPSA id zd76761B3GNNNqR
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 3 Dec 2025 17:23:23 +0100 (CET)
-Message-ID: <fff872d022550536f05c181ad58577889af0b5ef.camel@iokpp.de>
-Subject: Re: [PATCH] scsi: ufs: core: Fix link error when CONFIG_RPMB=m
-From: Bean Huo <beanhuo@iokpp.de>
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>, 
- avri.altman@sandisk.com, Bart Van Assche <bvanassche@acm.org>, Alim Akhtar
- <alim.akhtar@samsung.com>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- can.guo@oss.qualcomm.com, Bean Huo <beanhuo@micron.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 03 Dec 2025 17:23:22 +0100
-In-Reply-To: <98ac8e0b-6027-4f6d-b5cf-b9ad9c856ecf@app.fastmail.com>
-References: <20251130151508.3076994-1-beanhuo@iokpp.de>
-	 <202512031316.SvDwnvhy-lkp@intel.com>
-	 <98ac8e0b-6027-4f6d-b5cf-b9ad9c856ecf@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2.1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOSDsoBa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21D4C4CEF5;
+	Wed,  3 Dec 2025 16:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764780604;
+	bh=WE/MGjDXYkfLp/ASxbUyC53LMNdsfobdCP7BxApY2r0=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=kOSDsoBa4+of4dbFUeN3S+S0nuqVts/bOkUwD16XwQbjzVTj+NhYD0LIkxhGFWfm0
+	 LHzLg4Lifd5kiuroMAtL4WmHEdGD+YAL3dHVIa7frayQuQO71IkhZzMpkHsQYrudGo
+	 ZlVONlj3lmqwTjyJqgLLB35t9c7ZMyWsyknuCS2O1NBjhbCVPNc7XGO/rDPZz4YlPb
+	 HjRpjmwl1C+zTO2EuQw4+DSnaDLHt1+DmRmzvS8nCUZfN+X+tUal9mwxUFTnzp19x8
+	 C1DhWNMXK9YLwFFuFv46gAZaGCczke3v0ca5vq8FgRWm7Nu9Fwf++Fnfn5BSsNGTDM
+	 QevwICvNEOOFw==
+From: Mark Brown <broonie@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251203141644.106459-2-krzysztof.kozlowski@oss.qualcomm.com>
+References: <20251203141644.106459-2-krzysztof.kozlowski@oss.qualcomm.com>
+Subject: Re: [PATCH] ASoC: rockchip: Fix Wvoid-pointer-to-enum-cast warning
+ (again)
+Message-Id: <176478060152.99790.2704238708778622367.b4-ty@kernel.org>
+Date: Wed, 03 Dec 2025 16:50:01 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-88d78
 
-On Wed, 2025-12-03 at 15:39 +0100, Arnd Bergmann wrote:
-> On Wed, Dec 3, 2025, at 07:15, kernel test robot wrote:
-> >=20
-> > All errors (new ones prefixed by >>):
-> >=20
-> > > > drivers/ufs/core/ufs-rpmb.c:135:5: error: redefinition of
-> > > > 'ufs_rpmb_probe'
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 135 | int ufs_rpmb_probe(struct ufs_hba =
-*hba)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=
-=A0=C2=A0 ^
-> > =C2=A0=C2=A0=C2=A0 drivers/ufs/core/ufshcd-priv.h:445:19: note: previou=
-s definition is here
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 445 | static inline int ufs_rpmb_probe(s=
-truct ufs_hba *hba)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 ^
-> > > > drivers/ufs/core/ufs-rpmb.c:234:6: error: redefinition of
-> > > > 'ufs_rpmb_remove'
->=20
-> The declaration and definitio are inconsistent: the former is inside of
-> an #ifdef block, the latter is not. I think either way works, but it
-> needs to be the same for both.
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0 Arnd
+On Wed, 03 Dec 2025 15:16:45 +0100, Krzysztof Kozlowski wrote:
+> 'version' is an enum, thus cast of pointer on 64-bit compile test with
+> clang W=1 causes:
+> 
+>   rockchip_pdm.c:583:17: error: cast to smaller integer type 'enum rk_pdm_version' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> 
+> This was already fixed in commit 49a4a8d12612 ("ASoC: rockchip: Fix
+> Wvoid-pointer-to-enum-cast warning") but then got bad in
+> commit 9958d85968ed ("ASoC: Use device_get_match_data()").
+> 
+> [...]
 
+Applied to
 
-Hi Arnd,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-I was reviewing the kernel test robot output regarding the ufs_rpmb_probe a=
-nd
-ufs_rpmb_remove redefinition errors, and I wanted to clarify my understandi=
-ng
+Thanks!
 
-From what I see in the source:
+[1/1] ASoC: rockchip: Fix Wvoid-pointer-to-enum-cast warning (again)
+      commit: 57d508b5f718730f74b11e0dc9609ac7976802d1
 
-  =20
-   #if IS_ENABLED(CONFIG_RPMB)
-   int ufs_rpmb_probe(struct ufs_hba *hba);
-   void ufs_rpmb_remove(struct ufs_hba *hba);
-   #else
-   static inline int ufs_rpmb_probe(struct ufs_hba *hba) { return 0; }
-   static inline void ufs_rpmb_remove(struct ufs_hba *hba) { }
-   #endif
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-my understanding is that if CONFIG_RPMB=3Dn, compilation goes into the #els=
-e
-branch, which emits static inline stubs, so ufs-rpmb.c should not be compil=
-ed at
-all because of ufshcd-core-$(CONFIG_RPMB) +=3D ufs-rpmb.o in the Makefile.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-However, the robot reported redefinition errors, which suggests that the
-header=E2=80=99s #else branch is being included while ufs-rpmb.c is also be=
-ing compiled.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-I=E2=80=99m wondering if I=E2=80=99m missing something about the robot=E2=
-=80=99s build logic.
-
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Bean
-
+Mark
 
