@@ -1,120 +1,100 @@
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB2C21D3CC;
-	Wed,  3 Dec 2025 20:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9C4244692;
+	Wed,  3 Dec 2025 20:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764793929; cv=none; b=bElPdYyi47TsN+isaWMv+5Kqb8A1xvjuW+4lzlRZhP8rdQbr15eaqCtjgjYSM/QqlEm0AuhdWuDySd/+9yn8WwhcH3+pZCK4sB2dhObtH+WZWHJiuAm3fC8SG2hcOs3pUQ/NmvASwL1jfTFNotOa4kq2z14SuAKBjQPC7Ah8vFQ=
+	t=1764793957; cv=none; b=qrjuOmBcF8cBjD89UPNOAPj0qJPnvHWkqQE97txXSMxBbvgEHNzTQg3W+L4RfkXvwg4nBHcGJgkfnHxNA5pviN8YDD8PnTNYIqDl/iATnS3in7dUQkztAfgbX0L/OIzDpMvItzQEoDu0SPPLN7rurHOK6GoymhC9NiBupPwi6wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764793929; c=relaxed/simple;
-	bh=YPK0k64dOD+3zdePS5bfGvkTs7O9+oH6iFliF5oYG1g=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=lknYRB8f8HxqMJX9QpiJmHVABU4S9UcIDUCHPKc/hRKXgXzHye/+HPIJFA2GEYxafWaRB4/lGGlFJMoXl/LyxuhYVW0dQKG8Vx75yyEQAtAwnYAteTBBA97QjrIdKSPI7/KJPmf5ymZj5wviCgPc4WVdxLQ8bFdVT/LJayIH1NA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=YZIEfJ0j; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GXVMH1ej; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1764793957; c=relaxed/simple;
+	bh=tsSaRr99CRPI1+FO8kt26rUX633ovCV5eBM115B8HsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XUK8kEgoS9w6/tz/nsyxZFzTh3kvKaREYa5aGi2dI/SjNNHJ/5ka9eArbdtJJ6RAK/RUhtHzJjlyaQbHm6sivOshKBSI7LxnAMnzknzso53rySVJz+gaBdcmu51n8WthnasdqqujseTJeLomrlCdcFfHQfAeQjSM6bRVbhmNLb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XWb9zYmG; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="YZIEfJ0j";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GXVMH1ej"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 0921314000C1;
-	Wed,  3 Dec 2025 15:32:06 -0500 (EST)
-Received: from phl-imap-17 ([10.202.2.105])
-  by phl-compute-04.internal (MEProxy); Wed, 03 Dec 2025 15:32:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1764793926;
-	 x=1764880326; bh=EDURVxXoZBPQNYYglcnxiR31l3E2zyZboYhovndqQB4=; b=
-	YZIEfJ0jFBvXkxHM82barl97u1LyBFpWOPBy51/mHlyai6cIGgLIT2nGVRKTb8PA
-	uVAi4xeMA1H9/A9rv/3j+iYFllHrsyqXvq2jGnVFzDvVukELrTi1PJ478jRzRfBP
-	TSsB+dGO6dVlsM1L1Zt+hBl1n7yyYo1p1iUlc1OhnVakb7dgBuL0S5zWZ50ogA9D
-	Kbali2jW3akgTLY/MdpdfW6E/gg+iI17WlvNatIPuDElccR5xKebHN95l6omOz5g
-	eEew/F+0VdMFuc/8dVrAio5YJgTMI/9vxAuoXscgEaM3SeaaNFHP92CeIRYt2Nk4
-	Y41VqbaLi6aRKtlzRIBDrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764793926; x=
-	1764880326; bh=EDURVxXoZBPQNYYglcnxiR31l3E2zyZboYhovndqQB4=; b=G
-	XVMH1ejcaTMHcRghQB9XIRTJ5JJDGOjCbL3vyRmewIrBIYyc71EAf+hYK7kMfD68
-	xMCHlD+JM7KSsrTjswEgu4xpjJH0kIAvMAKi6JOytbtjOwHaAk4LXRGd56NDjSQP
-	AOQCvKp8eaFT7ZKXNbHIfhECjV9QlprbEldwDRWnwf03+/U8co7zXwHnZ0A+LiLu
-	jk9OaC4+5DW/D+3/+hwxeQJGsSF98vh2U3P1Clw5IEO+LPGxHE4A9h3hp2p7OZ0t
-	tE7cwhypvZ/yhE3b8r+QEkuOIiEuQaVwfcgc+v6h7oITOfTz0B1hef3d5CBSIVzu
-	Ov4xYkI6deB4F/PkR09iQ==
-X-ME-Sender: <xms:RZ4waeCqutWcs4Da-UvyeISHoV7MHs7KrN-R_bkToiMpo1IeFScH7g>
-    <xme:RZ4waTXVDlgNpKWB264iuHRwVQCvAcDqdWdV7mcX9zVnMn2JMdcTHxxWy2L5uCuMX
-    pHJZj8oKghcp602wyN2YQ0OWc8g6mbN5WOPr7BzO7CqFFVOSlFMe_qE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhguuceu
-    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
-    epvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleejnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguse
-    grrhhnuggsrdguvgdpnhgspghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopegsvhgrnhgrshhstghhvgesrggtmhdrohhrghdprhgtphhtthhopehlkh
-    hpsehinhhtvghlrdgtohhmpdhrtghpthhtohepsggvrghnhhhuohesihhokhhpphdruggv
-    pdhrtghpthhtohepjhgvjhgssehlihhnuhigrdhisghmrdgtohhmpdhrtghpthhtoheplh
-    hlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohgvqdhksghuihhl
-    ugdqrghllheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopegsvggrnhhhuh
-    hosehmihgtrhhonhdrtghomhdprhgtphhtthhopehmrghrthhinhdrphgvthgvrhhsvghn
-    sehorhgrtghlvgdrtghomhdprhgtphhtthhopegtrghnrdhguhhosehoshhsrdhquhgrlh
-    gtohhmmhdrtghomh
-X-ME-Proxy: <xmx:RZ4waeLw6DPpBTuCITfU2W7r57zH4mOCxu1F_2rBlX9Bp047RC5qMA>
-    <xmx:RZ4waWQtrbH--7wJrp6aJWak047p6NT5taidkNmWmHmrNzXePV_vxQ>
-    <xmx:RZ4waWJA6VQ-do_0GpDkDasa6WmmU8Urduv9iScCfu3IMEa5EMxozg>
-    <xmx:RZ4waZ8VR7p0eNPz443PYKYsSs-sz-S5jAxsLe54ZChRQ0eDVPdTyA>
-    <xmx:Rp4wafXsRp85s4E50cif_LlunKj1Fyq6TUrzoWnU0tH-lZOAFB_UlW7d>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 290D4C4006B; Wed,  3 Dec 2025 15:32:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XWb9zYmG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764793955; x=1796329955;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tsSaRr99CRPI1+FO8kt26rUX633ovCV5eBM115B8HsM=;
+  b=XWb9zYmGmNrasY5HrKUz2T0DgH9omRg1KuXtZEwTIWnVNI3Ny4s4n6pD
+   SbcETkuFR0jZka2piXdGWrrmsthFzkK1cdFvY6Cf9iydDjqI3XdG+b1VW
+   ibdyF3Bwo4pcjphAm+piopKTAk4O3fhcEoS5cSkfa3L/73cLuBCmLU3mg
+   TGjhHwFFW4XHltU+ynxox5QOVW0u45Sh/E7fDa+ORg6PxUWSUlqZ6fCfz
+   9oopRFuc34bYAshtUtK+rLICUWX1a606QRVywit4XPIw/IPp6H8pQahDd
+   lROBc1LVE68e03Q73fX4WN4uoddHMo5LKwZ+9dnb8hkJL79OIMQBu0eqx
+   g==;
+X-CSE-ConnectionGUID: xddys36zSteZxGIVcElXUw==
+X-CSE-MsgGUID: quplq3A9TwWMVgQhVK/uCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="77482831"
+X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
+   d="scan'208";a="77482831"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 12:32:34 -0800
+X-CSE-ConnectionGUID: HDhMarZ1QxGHZfzz+a1Jmg==
+X-CSE-MsgGUID: iGAmmzcsRoOgwvduB7pe2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
+   d="scan'208";a="199737567"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 03 Dec 2025 12:32:31 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vQtWX-00000000D7d-0yuD;
+	Wed, 03 Dec 2025 20:32:29 +0000
+Date: Thu, 4 Dec 2025 04:31:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mikhail Lobanov <m.lobanov@rosa.ru>,
+	"David S. Miller" <davem@davemloft.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Mikhail Lobanov <m.lobanov@rosa.ru>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, David Bauer <mail@david-bauer.net>,
+	James Chapman <jchapman@katalix.com>, linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: Re: [PATCH net-next v6] l2tp: fix double dst_release() on
+ sk_dst_cache race
+Message-ID: <202512040433.TgRZXwYf-lkp@intel.com>
+References: <20251202180545.18974-1-m.lobanov@rosa.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ALO74ngA5rV3
-Date: Wed, 03 Dec 2025 21:31:44 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Bean Huo" <beanhuo@iokpp.de>, "kernel test robot" <lkp@intel.com>,
- avri.altman@sandisk.com, "Bart Van Assche" <bvanassche@acm.org>,
- "Alim Akhtar" <alim.akhtar@samsung.com>,
- "James E.J. Bottomley" <jejb@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, can.guo@oss.qualcomm.com,
- "Bean Huo" <beanhuo@micron.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <4eaccff9-a89d-4d0e-afbf-95e9996f9049@app.fastmail.com>
-In-Reply-To: <fff872d022550536f05c181ad58577889af0b5ef.camel@iokpp.de>
-References: <20251130151508.3076994-1-beanhuo@iokpp.de>
- <202512031316.SvDwnvhy-lkp@intel.com>
- <98ac8e0b-6027-4f6d-b5cf-b9ad9c856ecf@app.fastmail.com>
- <fff872d022550536f05c181ad58577889af0b5ef.camel@iokpp.de>
-Subject: Re: [PATCH] scsi: ufs: core: Fix link error when CONFIG_RPMB=m
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251202180545.18974-1-m.lobanov@rosa.ru>
 
-On Wed, Dec 3, 2025, at 17:23, Bean Huo wrote:
-> On Wed, 2025-12-03 at 15:39 +0100, Arnd Bergmann wrote:
->
-> However, the robot reported redefinition errors, which suggests that t=
-he
-> header=E2=80=99s #else branch is being included while ufs-rpmb.c is al=
-so being compiled.
->
-> I=E2=80=99m wondering if I=E2=80=99m missing something about the robot=
-=E2=80=99s build logic.
->
+Hi Mikhail,
 
-It took me a while as well, but I found the link to the patch that
-was tested now, as this was the one that changed IS_ENABLED()
-to IS_BUILTIN(), and that went wrong with CONFIG_RPMB=3Dm.
+kernel test robot noticed the following build errors:
 
-    Arnd
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mikhail-Lobanov/l2tp-fix-double-dst_release-on-sk_dst_cache-race/20251203-021549
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20251202180545.18974-1-m.lobanov%40rosa.ru
+patch subject: [PATCH net-next v6] l2tp: fix double dst_release() on sk_dst_cache race
+config: x86_64-buildonly-randconfig-002-20251203 (https://download.01.org/0day-ci/archive/20251204/202512040433.TgRZXwYf-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251204/202512040433.TgRZXwYf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512040433.TgRZXwYf-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "ip_options_build" [net/l2tp/l2tp_core.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
