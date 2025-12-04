@@ -1,99 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B7D2586C2
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 04:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E600C1FBC92;
+	Thu,  4 Dec 2025 05:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764823330; cv=none; b=UqD9UAu/rwx65+cQEPpLxVFVcGM2X9PtHW2jgpGVPv08QNu+6/YJXJ56lFlmUopoS5ErSPjfS1Q+rmFMIZZFy0Q8SdqE1F1mTK04hyboqZMnchGk/zASy7AQ8TpM4VsqrdjOt8EdkC8KSsRaGCPnVxqz60cyhaSZM0QTjGPfLuA=
+	t=1764827755; cv=none; b=DFg64nQro5z2xYsQWVGUhV+XOAb1xoKN5znyIa+6wTnWwgPDWRyLntss7087szqjehPxE7f/5Liimw6PPO2vCzUid6o9idp9YRByMNgBDFB7C0Rt8/17fENIiqyPFyC3pcGcqiC0Q5gusd65vLqWnZQnEeorAESzHnUAub2Qfck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764823330; c=relaxed/simple;
-	bh=C/qsmsvQK7uD5gb/XVNnvAzmQb7ar+NihFHrBoqz6Oo=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PBN94O6V9fBf7EMAoQAojQdWyNCdX9QxRXoqZRxU0C2DFQoGjAEMh0YP4pP80k7dRtPWUiYKmFNR93wfYaMompRssAEFjvIuALFaKCt7hRP0iQDcvajQwDQs/6vHK1lKAaNLki9jnGu95JO3LHm//CzYKJD6PyOcL3vFi05D0vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gTVn+gg7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1764827755; c=relaxed/simple;
+	bh=opH+YP4Sv9nSGcUPmQnt0fYSXNrsfTVkE+MNkAOOBjA=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ttPzDvnWKSvEqys9fQR5Ty3SN0uxxk2ch13KcYNj2uP4a7FW6SrZPrza1wj/FyEI7iGG7li+KAuSl7ZyS+qJHutIez25mw+U8y7tlJlAka0MEVA+8WFwAeqI2hBSWm+N4JqXYk4AAxB4Vp0Gdxj/DTlFyclhZXbTtq66ThsMmgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QhRj+z0H; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gTVn+gg7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764823327;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DVN4zvWJV15zPos8sMpI30P73H41L1M0hKZE0I/JWCI=;
-	b=gTVn+gg7z1u9Al9rtFgmM9tQ8D3uQ+l83bdZclj8HhBR1NrO2uzhkdATvGBSQYLVy6tih/
-	qKTQmqoq3IL8zJyD4p1CBxPVdRl3w4vDPdBwECnwdkH1ioi4ahHT2yoY98yRk1z8tuOr9b
-	ASuRBit5Tofw9gs+tKd+ywQrAIwAmGg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-568-zWOogcZaMLa5U7qS2xy9wQ-1; Wed,
- 03 Dec 2025 23:42:06 -0500
-X-MC-Unique: zWOogcZaMLa5U7qS2xy9wQ-1
-X-Mimecast-MFC-AGG-ID: zWOogcZaMLa5U7qS2xy9wQ_1764823325
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0B5F019560A1
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 04:42:05 +0000 (UTC)
-Received: from [172.20.50.79] (unknown [10.30.44.138])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9092B19560B4;
-	Thu,  4 Dec 2025 04:42:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0,
- upstream-mainline, 8f7aa3d3)
-Date: Thu, 04 Dec 2025 04:42:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QhRj+z0H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764827754; x=1796363754;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=opH+YP4Sv9nSGcUPmQnt0fYSXNrsfTVkE+MNkAOOBjA=;
+  b=QhRj+z0HIJYl8Pmzxxy70Ju9cCgyNY3yrsjl9KAebT/zxLB1KDVBsafa
+   B5PKgzHwpkFOIAlSRxEMh16eAYfIMJpRr4/FcWwQRHSz0jG/bsAIuWywv
+   2hF5hRRGLuSqDWgaD4ksAuEvWvlZncOdHy7gmfODY+VPVdng0myR8ApIS
+   5Ahi6+Kaqb9TabGjHA+PcNHgbZ1N7C4ZA9oRz70mVWIC3/OpXB02QAKhx
+   R+LIyf6hlsF+zQV9siPFQyZmInmsktjMFTt+klmhZJS0PiYyVfFlft/wm
+   w6oRVwHHIh/u5D0I3yfbDnu7p7ibjHePOdFbskd3a97zigjZfV1BEpnc2
+   Q==;
+X-CSE-ConnectionGUID: q1nDXeEdSRe0FBDQ/8J/8w==
+X-CSE-MsgGUID: DI2juIoUQsSaXc9JrgU2dg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="92317175"
+X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
+   d="scan'208";a="92317175"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 21:55:53 -0800
+X-CSE-ConnectionGUID: UOXwLNZ+Q3eR5iyOPY8ktw==
+X-CSE-MsgGUID: IXdsKBlTQXSj1bBDyaWqkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
+   d="scan'208";a="195000420"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 03 Dec 2025 21:55:52 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vR2Jh-00000000DVF-1YF8;
+	Thu, 04 Dec 2025 05:55:49 +0000
+Date: Thu, 4 Dec 2025 13:55:30 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [driver-core:driver-core-testing 1/1] rust/helpers/pci.c:36:2:
+ error: call to undeclared function 'pci_free_irq_vectors'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202512041312.RzmYhovr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <38466.125120323420600112@us-mta-568.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 52MNJkcthg1VCbxBz0i-odmanf7-QSFY5Xv3t1geAXY_1764823325
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: devel@driverdev.osuosl.org
+TO: Danilo Krummrich <dakr@kernel.org>
+CC: Alice Ryhl <aliceryhl@google.com>
+CC: Joel Fernandes <joelagnelf@nvidia.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git driver-core-testing
+head:   473b9f331718267815649cd93801da832200db71
+commit: 473b9f331718267815649cd93801da832200db71 [1/1] rust: pci: fix build failure when CONFIG_PCI_MSI is disabled
+config: um-randconfig-002-20251204 (https://download.01.org/0day-ci/archive/20251204/202512041312.RzmYhovr-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 734a912d0f025559fcf76bde9aaaeb0383c1625a)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251204/202512041312.RzmYhovr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512041312.RzmYhovr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> rust/helpers/pci.c:36:2: error: call to undeclared function 'pci_free_irq_vectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> Unable to generate bindings: clang diagnosed error: rust/helpers/pci.c:36:2: error: call to undeclared function 'pci_free_irq_vectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+--
+   make[3]: *** [rust/Makefile:384: rust/bindings/bindings_helpers_generated.rs] Error 1 shuffle=1269886895
+   make[3]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
+   In file included from rust/helpers/helpers.c:40:
+>> rust/helpers/pci.c:36:2: error: call to undeclared function 'pci_free_irq_vectors'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   36 |         pci_free_irq_vectors(dev);
+   |         ^
+   rust/helpers/pci.c:36:2: note: did you mean 'pci_alloc_irq_vectors'?
+   include/linux/pci.h:2161:1: note: 'pci_alloc_irq_vectors' declared here
+   2161 | pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+   | ^
+   1 error generated.
+   make[3]: *** [rust/Makefile:495: rust/helpers/helpers.o] Error 1 shuffle=1269886895
+   make[3]: Target 'rust/' not remade because of errors.
+   make[2]: *** [Makefile:1286: prepare] Error 2 shuffle=1269886895
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1269886895
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1269886895
+   make: Target 'prepare' not remade because of errors.
 
 
-Kernel information:
-    Commit message: Merge tag 'net-next-6.19' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/netdev/net-next
+vim +/pci_free_irq_vectors +36 rust/helpers/pci.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2195262665
+    33	
+    34	void rust_helper_pci_free_irq_vectors(struct pci_dev *dev)
+    35	{
+  > 36		pci_free_irq_vectors(dev);
+    37	}
+    38	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2195262665_x86_64_kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
