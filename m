@@ -1,121 +1,147 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D60233C1AA
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 12:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B81333F39C;
+	Thu,  4 Dec 2025 12:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764851617; cv=none; b=cHsl80Yh01i28ZbeycafLsP/XgTfqxEvPCpLRCcSGJtZ6Ag6uNqQGSapUGQcfoWm9q+DUHjD0dGuE8QQkd2oOKSoPEuSsv74rUc+GDITp7OhiGMyhapDfJOViLY2PoC7wHiqozw7KWvA3qBMFO5TRzfSo5c3JnxmRSntLfhjLBU=
+	t=1764851961; cv=none; b=md7igJmD9QdF4skX3yBVohWArVNtQJBnXGpi8ArVwm7yI5t0iPdJ7SE2Mocps21IpfvXyyLH3fGA17qlxxmZgFnRd/4EZpA0xWzs1s1o5/ppsKONkkmMKFusFn5/kOBkoco4E0mkOaWG/E3CfYTSiRyFinPycBQHQHk6CPR7W7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764851617; c=relaxed/simple;
-	bh=WfZZkVUD2KIfkMnmL+8RiPfvk8m+CchCTc2u15cbG9Y=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=QKQ4L3pkG+R/pQrImli5wTNafTDKEIpnjgXwfKFW3RkpJ9zgdfLd1o6ZhO7X0UV5saPnYZsWtvmjZyP5oUwnnJKqWw6dlHzMsqIb2+F7PTv6HnnVL15PlQWYl+7tTQu+P/b8+Ii/MEF50WWXNRWzHwr4grDZwWNYkweEl5NctK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=InCbvbAK; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764851961; c=relaxed/simple;
+	bh=T/Z/KiPxQewZXZY5z0blh9avwE3+TBceinDrbSRFXIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mgIUPeww6KgftV3chkZP5s/BBiP1cs9E/e9Tk9LEeFRzy+87OUDL3Koy3oNTZVnyuMPHeVV0+OhGWJ+uRNxhfg2+eebpQdHabo5W1vK0sH7ey0zTGk83r8A8j5Uji+UzzCZafKmWrjrvx0fYI36vVdRuwJLuexYaRdczKhvUhzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GplumZ8R; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InCbvbAK"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-78a6c7ac38fso9535207b3.0
-        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 04:33:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764851611; x=1765456411; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1LSBGLPlqRHWA6FHsfup0TF1aoJUDnhVkqy0ECtK4a0=;
-        b=InCbvbAKYHA0RlJlHGvD9rLVQi4NqqyNmWOGFQQZEudrvL6QttwpogRP4VYrcYqVR6
-         lmpQ8sbech+8Y0ZjeQ+4BMsfKtpjYlB7xddno6vkApMBxOwSbQsgqMmzmmps3UPIeQ3Z
-         zU6gfIsC3+a5d6AxyJ9bERtMEi5+BZ2ZDChnDN/CR95NBNdn2sRMprvAgiq2szx+LEN/
-         wvgndOoSkulLp36FUk8mTihav9ISAyhk/XOSY3flhro+iCxlqbqdmHafbMPVjssxr2qV
-         5UXhLvKkQU5IRwp1utDhQUQNdZaOF/2cE3RXWIAfOhTiFQXPbBtUqIe1ji2VcSgmwqpw
-         TwOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764851611; x=1765456411;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1LSBGLPlqRHWA6FHsfup0TF1aoJUDnhVkqy0ECtK4a0=;
-        b=jv8sbnMTsNWxEYwMbY0nRAz/n9F8lt5jQx3ULSKaQeXuS5qZG0TsiNwoFz/JFmiBq3
-         yMUhvSKZhveNtjSoxhGk6KzSx7IRDfHmJpqnxMCSGUuooiv6RbvcB4hQweRxuCY5APrQ
-         zbHfwNx9hdek+v4FiiDA4iI3X21DLEAxtwrXbVgqMfe9nR4RlqbdW2y2l5fODcGyfTCE
-         Ey/dn7qf6TK/AAp8rS0HdOH8H1i8v2MAFj7Pc/4rx9jL2ULDlZpKAsKBpOA2O2Mmas7W
-         kROxC0+G+9Dbse4ewQi9b+Q/KEDKFiJdjtfpfjbdRJ7bfmhmhoeRl5BDdMtqBY/ysPwp
-         GdYw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1jg0ZkbXzfyLQOqyLFVS5yC4uHop+hq5BoMYaNWYw+mcf4yDlQ34sKNOgU8XvNgb47Z+C@lists.linux.dev
-X-Gm-Message-State: AOJu0YyKbsZ6pSGtWW7VlCwPyHCsm2DM3GqUrCRJ59szqWJiSJ369ZM3
-	AiJzQ3/BWzNARY9BjzP0v5XH7TJiUCUZpas1SNaPeu9TZN+YoSEoA6J/
-X-Gm-Gg: ASbGncuq9nXPuiLsBvbvxzAPbOx1TAtyqKzyMEJwUZEYjnH6GcHRmCOrq1ccm3CQzQS
-	3Gp0581pzWtdiRkDy1HZvhi7qOP2Phg8MU2MsyA7FewHoDG0Nf72gHAIj9H6oX52jNE9ePppgmS
-	sSD5flJ0oWJkjniwy8Jpwy95DX+p0zrmzMhezcJGbp6rFo06OjmGHyhTNWYzBfYXllah8V8YuLY
-	B32SFw0kKCTcADG7l+ZK3dxUDv9BemO0H16HlMmkb0p6Jj8TkD60cY+QMx4wjgorSShz3iGizxQ
-	AFnX0d9cxzO7b0auNe5ZGyFRg9WC7rlqi8DJszK+DhEH0FFb8FMSC46o0Ol7hhIZFvKhKrvijYm
-	E9/z9yLGwWq10qRVYEPLqrnOqpTuryKstqmX2KDyEsb/brDUfJF2U/l07isODsMQ4h3bmNSjyDG
-	2cJdADDNcKZm8pQW+py1GrFIKdcZzp+JWvliui53wMjmX42k87mW8=
-X-Google-Smtp-Source: AGHT+IHBUEbYkxJaVsA/zBTgJe8/H/sEcBnHGISwxVU3+cajLhUyQv9YXSpqaHkdOjyO4eiZ0/Xsyg==
-X-Received: by 2002:a05:690c:6c0c:b0:78a:6dc9:8801 with SMTP id 00721157ae682-78c0c285f98mr45923627b3.51.1764851611217;
-        Thu, 04 Dec 2025 04:33:31 -0800 (PST)
-Received: from [192.168.1.209] (89.208.240.37.16clouds.com. [89.208.240.37])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78c1b4d22bbsm4914897b3.21.2025.12.04.04.33.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Dec 2025 04:33:30 -0800 (PST)
-From: Asuna Yang <spriteovo@gmail.com>
-X-Google-Original-From: Asuna Yang <SpriteOvO@gmail.com>
-Message-ID: <9687109b-dc93-4535-848c-e5f22aeb8e9d@gmail.com>
-Date: Thu, 4 Dec 2025 20:33:22 +0800
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GplumZ8R"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=89lu85i9iy0uktaUJpKiLn2xYKgVihXHfm6nPHuJVes=; b=GplumZ8RG+7r6/RPRCpIzWalST
+	NTK1VlmdgSv0o+Os8U5TzCte9QhrImE8ky577kp1+pdEzf2iGrChGjDqxoyy/0vpTHDXW6R358Y9v
+	4s9he+SA95cAcvXPvfP0YBsWkdxh0OLAIa4ikICD1C0FM1/6YmeS3FnRMnDkvQ903kDIFoZLEjGcp
+	critL25nfa75jdtZxsYk6dpxMjznn1ANNnAC9Ogdkx8FUpBItwRRjQD0bFgXGIIjXqqlNXTcUgBjk
+	Ky9P+0Q88jUy3RAcc358iN4ZHT3zQHEAuAbNqWod1N2S9oE+SwhJGOJtsxAOvpKdBk3IC30t+MUo2
+	ndsqrLVA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vR8bz-00000004BHZ-3Shg;
+	Thu, 04 Dec 2025 12:39:08 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C5A3D3004F8; Thu, 04 Dec 2025 13:39:06 +0100 (CET)
+Date: Thu, 4 Dec 2025 13:39:06 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Antoni Boucher <bouanto@zoho.com>,
+	Emilio Cobos =?iso-8859-1?Q?=C1lvarez?= <emilio@crisal.io>,
+	Arthur Cohen <arthur.cohen@embecosm.com>,
+	Gary Guo <gary@garyguo.net>, Alice Ryhl <aliceryhl@google.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uladzislau Rezki <urezki@gmail.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
+	nouveau@lists.freedesktop.org, Matthew Maurer <mmaurer@google.com>
+Subject: Re: [PATCH 4/4] build: rust: provide an option to inline C helpers
+ into Rust
+Message-ID: <20251204123906.GL2528459@noisy.programming.kicks-ass.net>
+References: <20251202-inline-helpers-v1-0-879dae33a66a@google.com>
+ <20251202-inline-helpers-v1-4-879dae33a66a@google.com>
+ <20251204100725.GF2528459@noisy.programming.kicks-ass.net>
+ <aTFhFXCqvy7nmDOp@google.com>
+ <20251204111124.GJ2528459@noisy.programming.kicks-ass.net>
+ <CANiq72=r+Fmu0uuNF=6x36GWWQZGZk9gApnMZxakJavviwG+ug@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/4] rust: add a Kconfig function to test for support
- of bindgen options
-To: Vivian Wang <wangruikang@iscas.ac.cn>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Jonathan Corbet <corbet@lwn.net>, Jason Montleon <jmontleo@redhat.com>,
- Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
-References: <20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com>
- <20251204-gcc-rust-v5-v5-3-2d4f20d86c24@gmail.com>
- <1a6bb8cd-cc08-458f-a6f6-cdfefd327320@iscas.ac.cn>
-Content-Language: en-US
-In-Reply-To: <1a6bb8cd-cc08-458f-a6f6-cdfefd327320@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=r+Fmu0uuNF=6x36GWWQZGZk9gApnMZxakJavviwG+ug@mail.gmail.com>
 
-On 12/4/25 5:06 PM, Vivian Wang wrote:
-
->> +
->> +# $(bindgen-backend-option,<flag>)
->> +# Return y if bindgen backend supports <flag>, n otherwise
->> +# For now, the backend refers only to libclang, so more specifically, this function tests whether the given flag is recognized by the libclang used by bindgen.
->> +bindgen-backend-option = $(success,trap "rm -f .tmp_$$.h" EXIT; touch .tmp_$$.h; $(BINDGEN) .tmp_$$.h -- --target=$(BINDGEN_TARGET) $(1))
->>
-> Can probably be simplified down to:
+On Thu, Dec 04, 2025 at 12:57:31PM +0100, Miguel Ojeda wrote:
+> On Thu, Dec 4, 2025 at 12:11 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > Right. Earlier I also proposed using libclang to parse the C header and
+> > inject that. This might be a little simpler, in that..
 > 
-> $(BINDGEN) /dev/null -- -x c --target=$(BINDGEN_TARGET) $(1)
+> Yeah, that would be closer to the `bindgen` route in that `libclang`
+> gets already involved.
 > 
+> > ... if you build rustc against libclang they are necessarily from the
+> > same LLVM build.
+> 
+> So currently there are 3 "LLVMs" that get involved:
+> 
+>   - The one Clang uses (in LLVM=1 builds).
 
-bindgen is sensitive to file extensions. If the file is not .h or .hpp, 
-it complains:
+Well, being on Debian, I'm more likely to be using LLVM=-22 (or whatever
+actual version is required, 22 just being the latest shipped by Debian
+at this point in time).
 
-panicked at bindgen/ir/context.rs:562:15:
-libclang error; possible causes include:
-- Invalid flag syntax
-- Unrecognized flags
-- Invalid flag arguments
-- File I/O errors
-- Host vs. target architecture mismatch
+>   - The one `rustc` uses (the LLVM backend).
+>   - The one `bindgen` uses (via libclang).
+
+These are not necessarily the same? That is, is not bindgen part of the
+rustc project and so would be built against the same LLVM?
+
+> If that is all done within `rustc` (so no `bindgen`), then there may
+> still be `rustc` vs. Clang mismatches, which are harder to resolve in
+> the Rust side at least (it is easier to pick another Clang version to
+> match).
+> 
+> For those using builds from distros, that shouldn't be a problem.
+> Others using external `rustc` builds, e.g. from `rustup` (e.g. for
+> testing different Rust versions) it would be harder.
+
+Make rust part of LLVM and get them all built and distributed
+together... such that LLVM=-23 will get me a coherent set of tools.
+
+/me runs like crazeh ;-)
+
+> There is also the question about GCC. A deeper integration into
+> `rustc` would ideally need to have a way (perhaps depending on the
+> backend picked?) to support GCC builds properly (to read the header
+> and flags as expected, as you mention).
+
+Right, so the backend that spits out C could obviously just pass through
+any C headers. But otherwise, inlining C headers (and inline functions)
+would be something that is independent of the C files. At the end of the
+day all that really matters is the architecture C ABI.
+
+That is, if rustc inlines a C function from a header, it doesn't matter
+it used libclang to do so, even if the C files are then compiled with
+GCC.
+
+> And finally there is the question of what GCC Rust would do in such a
+> case. Things have substantially changed on the GCC Rust in the last
+> years, and they are now closer to build the kernel, thus I think their
+> side of things is getting important to consider too.
+> 
+> Cc'ing Emilio (`bindgen`), Antoni (GCC backend) and Arthur (GCC Rust)
+> so that they are in the loop -- context at:
+
+Right, so clearly GCC has the capability to parse C headers :-) So I
+would imagine their Rust front-end would be able to hand off C headers
+and get back IR much like LLVM based projects can using libclang.
+
+
