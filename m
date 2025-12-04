@@ -1,138 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25332DEA68;
-	Thu,  4 Dec 2025 11:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FFC31329D
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 11:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764848837; cv=none; b=fkS+dlYtVSO0UIlqt2VfOtqhT7bFWihe3zd9EhH+/SE6AoqsPNdc4H0cw0BAlTbIvXT01hP9EWfrE/811htY0hcZVsbqsBSW3sLlMrbftYnq94r+TYSvE6iDIv/HOpTZZws51OCpsskSkHxR5wl/imPy8zjvqWUB+yXrhIP5WOc=
+	t=1764849466; cv=none; b=n//ngHxfnk3NxegsRe8GdbXVzNDI9iTeKo992mXGF689LGQuM3BfzDSwIpDkFFVXTZGaWMPa7hnMyYOlNxWhnkxhIeztWMNFwsmPt29US7NgsRErZDZE3PbAbSm/RLpUR3PLC31ia80DwHsQFDEqqO09JJcYGr5wrtDf77AN2HE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764848837; c=relaxed/simple;
-	bh=RU/WFzv9G/hmGUffdDyIy3D1oRokOdlnN0/YJZWY0Lc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PKPUnlE1KdK6g56qSLjREeI5kkIVdkk7fFl+B+rN9e0GNmrtjxbZ1xbHIFLEFQ6Df78vaUsTpiI+80CWA5/OGzVC86qQWxUwZ+nvCr1ninln+46ioM+oKpd/Fg5I1WCPyUdmCPs7iwzp0CYZgtpx/SAnsg/R1u7xc9yjZqpGj3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cW6S/WPI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764849466; c=relaxed/simple;
+	bh=pphVR1kisW1rn59IwFVxryo0TAPKvUFI46MwfIkrRm8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KX7Nx/wzdlljtAPKDV5fYT/iOn5ntUIEsSFKcqM/7LXBU6aJNu9dNwrmGdlNbfYq+7B+IiP/och9YgtHTlnieN0TtZDGBugcDPY88aHEWuIpBggASGrnnOvi/Bcbf6v40LVdsahfKpbFEgmtboaKWs5KB2brScQIrm9wd9/3HkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SBYt4qyf; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cW6S/WPI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02CEC4CEFB;
-	Thu,  4 Dec 2025 11:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764848836;
-	bh=RU/WFzv9G/hmGUffdDyIy3D1oRokOdlnN0/YJZWY0Lc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=cW6S/WPIlZTF4qxRNQl5qWXtKIO8nYmhD6pjw6lyyPOTXWOECt1q1zZXKK2ncANCo
-	 3YMJ5ciA0xASVWigP0NDgbR34kTVZe5oy66SxzRba5X0+OA4XOY/NAdLSA7hz8+7Tl
-	 FMcsxDdr+5qsyGeRq9oTEtMlL72i9/J3JW/2MLCbyRFpxEKtn27ttEPOorhrYRIuc+
-	 cggSFWx1L3zG8GY0rOPETLrZiRemuCSxBAC4T/siIPxUSNxBZAOaecJTstyg2r3zjE
-	 lC9d1ifWaMOrznCRRAZplGk+iHD0TCZAlODKp2pBZWj3rY+lvZuwMuohx0Ek+tGpIP
-	 8uVcpspfcAAsg==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Oliver Sang <oliver.sang@intel.com>, Daniel Gomez <da.gomez@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Benno Lossin <lossin@kernel.org>,
- oliver.sang@intel.com
-Subject: Re: [linux-next:master 4752/13171] error[E0609]: no field
- `__bindgen_anon_1` on type `bindings::kernel_param`
-In-Reply-To: <aTEi3KUUkPVGS3ix@xsang-OptiPlex-9020>
-References: <202512020454.Tf36WHw5-lkp@intel.com>
- <3447801b-95f7-4368-a433-e79669b5d22e@kernel.org>
- <lBhfqvej6RgECA1JyZ0zOpPTpcVF5ALMyOHAKGmHvM8HTxdqgCqEFn1xpvUGcCTJ31qM1Fptxl0DLLHcHZJo4g==@protonmail.internalid>
- <aTEi3KUUkPVGS3ix@xsang-OptiPlex-9020>
-Date: Thu, 04 Dec 2025 12:47:05 +0100
-Message-ID: <87fr9qwjt2.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SBYt4qyf"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7ab689d3fa0so83025b3a.0
+        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 03:57:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764849463; x=1765454263; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jy74VhsBG2iXSHso83Jci8BnfjXIZJpeGjIa5hx2ujU=;
+        b=SBYt4qyfIrvD621N0CTw9sWykx4uilKxwyBWSMDUG4JqJMncYtO9WDJKhx8p/95AB9
+         JXrDtsNFtVcGHOp4QZctj+/Eq3jtoIYsvvu+LTM8q1eWlpM7padYOD/oCOP7ce3Y3+wf
+         krn4XTV3cNXW9be/2DH0t0J/TMrJzgeTjMPJ+l16TXkl7heZSJ7FSK8cRnDEn4ElmnZi
+         WrrLs45sE49HF48DqcIfD+sX+pdPRNXBzYhd/h7753CfisNjv1Ixhf/HcxyBkkTtpoML
+         VauNhmwiXAjPIelKmbewmNXc6IA8RG7jWdmVkcK/nDOeFNO7vPDg+kjXFXTF1k8z/J7A
+         bh3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764849463; x=1765454263;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jy74VhsBG2iXSHso83Jci8BnfjXIZJpeGjIa5hx2ujU=;
+        b=E54S1yPE6j2UHMetzQPQIp9k8s4PNtmNZRhrtKTId6qZt7P6vzervAb9e9wajZcLcU
+         ZOVPQ5IpNZK/B2WHSi88GkcunlwYBPUsR1WF0WsXm7ePxUek4/KjZM1oS0UBhmemNPym
+         t/OcCyDqzQLycpbjtBvH9mwRRJpbx9uYuRxpbBKpmqLxIcvdl+nWzkMp8uJk6oCajfor
+         NhtjkQpoHBo6yTjP5sYotpuPRdFEWmJ6i/HgXqdmZWDlhvx4T9RfLv9EtL5IMY4GVxjp
+         Y8fGCwV0vc7NXpllR2X0xtYmg5TMLGBumprQZ0VlOdO31TMDcpj0Chah5T33YPPLyhCr
+         PlRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUB4grPU1BuaYB7UfDcBdXSSqanl0jboqDgZsOPrsxhBuw2rCNuNhUsG5ogJAQsIYUVBs9X@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxx48KL9Wz9IvQSqEg/rdU2B3jfbhgJg8fOAap9AtpcWSq0zvRg
+	snsOmAqs4riKl6jPIrtD5riNP+TOcuw2pdekBX/BHZnKPrDEOoa3/DAMjB50RNjiCnylyWeEYt9
+	koH4kKT8XiWd9Er9nhuxJvvB38TLgA64=
+X-Gm-Gg: ASbGncsP+QWgqNS3v9xGRzrAkt3Gcwu/cy87UeMB230tqGhftQgb3J7ODDz1cTAZPf/
+	zWA3fRejW+z+p8Q4vwkcXtqJEjnT78VTNkRuJRMdX/azSFTfwv0cqPCTR9MKXncyo5bVRfJsfQ0
+	ZiYkG6UiGLdIRM9i/1R7fnV5m9MjlxHe6TBUCA9nQ9NR6OLgUwEIvCzmLWzosRi90jFbQar1Of9
+	AYx78UHyRs59KWZum+oq5eD97GmEt97euVrAxQfB/eIiS2P347O3i1u6oLzv5f+ag4q5w7fTf0N
+	G49ccNh9cuTwWk2mLVQ12MuSlgoONCcwEx5TdN4Hi/7rPiVIdivWWMLT4Dl1lOdTw7cyg0cYqaQ
+	WhjeUlZJz03mhfA==
+X-Google-Smtp-Source: AGHT+IGeyoDrjBm9pUlwr3L1lIhuYxiVR/nMKBo3Q8beIteuq1z76e1BQfFIgP3nnV9ieQFXYxZbKA8xY2mkFTTQZGc=
+X-Received: by 2002:a05:7022:49a:b0:11b:98e8:624e with SMTP id
+ a92af1059eb24-11df25f6eb3mr3361650c88.4.1764849463230; Thu, 04 Dec 2025
+ 03:57:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20251202-inline-helpers-v1-0-879dae33a66a@google.com>
+ <20251202-inline-helpers-v1-4-879dae33a66a@google.com> <20251204100725.GF2528459@noisy.programming.kicks-ass.net>
+ <aTFhFXCqvy7nmDOp@google.com> <20251204111124.GJ2528459@noisy.programming.kicks-ass.net>
+In-Reply-To: <20251204111124.GJ2528459@noisy.programming.kicks-ass.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 4 Dec 2025 12:57:31 +0100
+X-Gm-Features: AWmQ_bndz8ZZuXxUaBe-jxDMfOtEPNEq7y8MIf5_IqbpeKBzcbrA6kGhc4U4gvc
+Message-ID: <CANiq72=r+Fmu0uuNF=6x36GWWQZGZk9gApnMZxakJavviwG+ug@mail.gmail.com>
+Subject: Re: [PATCH 4/4] build: rust: provide an option to inline C helpers
+ into Rust
+To: Peter Zijlstra <peterz@infradead.org>, Antoni Boucher <bouanto@zoho.com>, 
+	=?UTF-8?Q?Emilio_Cobos_=C3=81lvarez?= <emilio@crisal.io>, 
+	Arthur Cohen <arthur.cohen@embecosm.com>, Gary Guo <gary@garyguo.net>
+Cc: Alice Ryhl <aliceryhl@google.com>, Josh Triplett <josh@joshtriplett.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
+	nouveau@lists.freedesktop.org, Matthew Maurer <mmaurer@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Oliver,
-
-"Oliver Sang" <oliver.sang@intel.com> writes:
-
-> hi, Daniel Gomez,
+On Thu, Dec 4, 2025 at 12:11=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> On Tue, Dec 02, 2025 at 10:02:02PM +0100, Daniel Gomez wrote:
->>
->>
->> On 01/12/2025 21.20, kernel test robot wrote:
->> > Hi Andreas,
->> >
->> > FYI, the error/warning still remains.
->> >
->> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> > head:   95cb2fd6ce0ad61af54191fe5ef271d7177f9c3a
->> > commit: 0b08fc292842a13aa496413b48c1efb83573b8c6 [4752/13171] rust: introduce module_param module
->> > config: arm64-randconfig-001-20251202 (https://download.01.org/0day-ci/archive/20251202/202512020454.Tf36WHw5-lkp@intel.com/config)
->> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b3428bb966f1de8aa48375ffee0eba04ede133b7)
->> > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
->> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251202/202512020454.Tf36WHw5-lkp@intel.com/reproduce)
->> >
->> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> > the same patch/commit), kindly add following tags
->> > | Reported-by: kernel test robot <lkp@intel.com>
->> > | Closes: https://lore.kernel.org/oe-kbuild-all/202512020454.Tf36WHw5-lkp@intel.com/
->> >
->> > All errors (new ones prefixed by >>):
->> >
->> >>> error[E0609]: no field `__bindgen_anon_1` on type `bindings::kernel_param`
->> >    --> rust/kernel/module_param.rs:78:46
->> >    |
->> >    78 |         let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<T>>()) };
->> >    |                                              ^^^^^^^^^^^^^^^^ unknown field
->> >    |
->> >    = note: available field is: `_address`
->> >
->>
->> I can't replicate this issue either.
->>
->> I've added these patches to fix other unrelated build issues, so, I'm not sure
->> how 0day ended up skipping them? Perhaps it uses head 95cb2fd6c? + bisect?
->>
->> a74b6c0e53a6d um: Don't rename vmap to kernel_vmap
->> f74cf399e02e2 rust: debugfs: Replace the usage of Rust native atomics
->> 013f912eb5fa7 rust: sync: atomic: Implement Debug for Atomic<Debug>
->> 14e9a18b07ec4 rust: sync: atomic: Make Atomic*Ops pub(crate)
->>
->> My testing branch:
->> https://git.kernel.org/pub/scm/linux/kernel/git/da.gomez/linux.git/log/?h=20251202-0day-test-0b08fc292842-with-fixes
->>
->> FWIW, this is what I've tried:
->>
->> rustc --version --verbose
->> rustc 1.88.0 (6b00bc388 2025-06-23)
->> binary: rustc
->> commit-hash: 6b00bc3880198600130e1cf62b8f8a93494488cc
->> commit-date: 2025-06-23
->> host: x86_64-unknown-linux-gnu
->> release: 1.88.0
->> LLVM version: 20.1.5
->>
->> bindgen --version --verbose
->> bindgen 0.72.1
->
-> sorry for false positive. we confirmed this is an issue caused by a bug in
-> bindgen - https://github.com/rust-lang/rust-bindgen/issues/3264
->
-> we used 0.72.0 when saw the issues. now we upgraded to 0.72.1 as you used, now
-> issue disappears.
+> Right. Earlier I also proposed using libclang to parse the C header and
+> inject that. This might be a little simpler, in that..
 
-Thanks for confirming!
+Yeah, that would be closer to the `bindgen` route in that `libclang`
+gets already involved.
 
-While we could see from the config that you were using bindgen 0.72.0,
-it was not clear to us where you get this bindgen from. Obtaining
-bindgen does not seem to be part of the reproducer instructions (or
-maybe I am not looking in the right place?).
+> ... if you build rustc against libclang they are necessarily from the
+> same LLVM build.
 
-If I understand correctly, this issue manifested only when building
-bindgen 0.72.0 with clang-22-git. Building this was next on our list in
-trying to reproduce, but getting to that conclusion took a while.
+So currently there are 3 "LLVMs" that get involved:
 
-Anyway, I want to ask if you can include directions for obtaining or
-building bindgen in your reproducer instructions?
+  - The one Clang uses (in LLVM=3D1 builds).
+  - The one `rustc` uses (the LLVM backend).
+  - The one `bindgen` uses (via libclang).
 
-Best regards,
-Andreas Hindborg
+If that is all done within `rustc` (so no `bindgen`), then there may
+still be `rustc` vs. Clang mismatches, which are harder to resolve in
+the Rust side at least (it is easier to pick another Clang version to
+match).
 
+For those using builds from distros, that shouldn't be a problem.
+Others using external `rustc` builds, e.g. from `rustup` (e.g. for
+testing different Rust versions) it would be harder.
+
+But I mean, anything approach that gets us into a better position is
+welcome and I think requiring people to match LLVM everywhere should
+be easier now that distributions are starting to enable Rust (even
+Debian).
+
+We have been talking about this since the very beginning of the
+project -- e.g. I remember Wedson and I talking to Josh et al. about
+improving the situation here (in particular, talking about integrating
+a solution into `rustc` directly) long before Rust was merged into the
+kernel. Even on things like a `rustc cc` or `cImport` like Zig (but
+Zig moved on the other direction since then), which I recall Gary
+having opinions about too.
+
+There is also the question about GCC. A deeper integration into
+`rustc` would ideally need to have a way (perhaps depending on the
+backend picked?) to support GCC builds properly (to read the header
+and flags as expected, as you mention).
+
+And finally there is the question of what GCC Rust would do in such a
+case. Things have substantially changed on the GCC Rust in the last
+years, and they are now closer to build the kernel, thus I think their
+side of things is getting important to consider too.
+
+Cc'ing Emilio (`bindgen`), Antoni (GCC backend) and Arthur (GCC Rust)
+so that they are in the loop -- context at:
+
+    https://lore.kernel.org/rust-for-linux/20251204111124.GJ2528459@noisy.p=
+rogramming.kicks-ass.net/
+
+Cheers,
+Miguel
