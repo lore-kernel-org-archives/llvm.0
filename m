@@ -1,117 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F642D8DC2;
-	Wed,  3 Dec 2025 23:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13589136672
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 01:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764805184; cv=none; b=basufEQqilsnASylJZSjJgJUmtVvn2rv/45+UX6VgTGJZ3OlA2+9MjHf4j+ehjHIwrZ77uR0DMIjiO4JVjvtIFertgP/kG7KiBIb4DhdhDOecoW0iDVqOj7YOORKTEBqfFD99qeFgUqM1+g4cqpLzONFEgBmKnW7MzpbmCdCGno=
+	t=1764812591; cv=none; b=ZaDZOIGQjRu+Stt+qUkNCPCrbbsRHU00gNQvIDcgzHaMNF0zdXOhDxqHOuIuIjSvNgkTHzjmyA8+660As5gPH5UYFrSygv1QGiCDoyIGUVqAwAXkBtWmCaye0MACXOSZIslQw1GOfnCPHz67Vur6xD3p9jwyqWIuAkUNp0M8094=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764805184; c=relaxed/simple;
-	bh=ZWLqSmDBDfW+rgzqFS7MWwINI8oCKiSfDIzM9Jzm7ek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOe0RBnvtIYeBWGSeE0WUbMqW5vSUhetY1J3TUOVcxzYSQUVECyeKuV4PR80E9UsTXx5xxignbJsPf4dUlMMwHh3lc5RG3hKOSzmKiA38jic7A9sejJ1AgaL0bnlUuddAiACGr6TFlIy4whOPdhCTGHhRw8AsJaCyx5aQYXvoqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S3OQbjCw; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764812591; c=relaxed/simple;
+	bh=y+hlVAiZ0xP7N3hu7ytHtwk25gJd9ZeI48y5FZpxPhc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=C36P3CDTc/nCbY26JvJsgFoKw+wmdUvs7tSRnK9iSn/Kowbf3GeITXOuVgr78BbOnmcFzzrkZoXbGkCHmn/a1am//LoT3w2NUwEjOJuhvcD9EsrHpZOKe84lwFtAu7AzvrXn5GrxraXjd0inIl8NyA6vGnrkfGNCsAcgcjo79lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NJVKL140; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S3OQbjCw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764805183; x=1796341183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZWLqSmDBDfW+rgzqFS7MWwINI8oCKiSfDIzM9Jzm7ek=;
-  b=S3OQbjCwUBtl6BtOdz8F+RbtUusrogb3wiX0GaCVJkonhPDPJyt45CrG
-   Lp4zcCtszIk9Y2PYqq71XK3Cn63oa9SIAw/sfK48KhoT9sLEQYpM0g9bp
-   o2iZ+BDjs9gXD1lOS2rAdDH6eG1khuEa2hVYFQUdXYUpuS9PcIw6obH5i
-   B3d1z6bXzlspLEhWIiCaS8w5j/ZCcrcXKanolTzc3lupEPWV7w4hnRkY3
-   Q17E4uGbDns0lhLb65CIR+Zm4yjWdPSpVJkvuyN4HDpl9FCvi4/H2nsEh
-   4BfabHxxUgou9Lif+WXvb2HJayu0V+UfCmL4wrdT0itmGTUjZTtcSk1q2
-   w==;
-X-CSE-ConnectionGUID: z/TW88lsTESeYY8eJxur3g==
-X-CSE-MsgGUID: E7EW253PTQG022WTdzda+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="70666202"
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="70666202"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 15:39:41 -0800
-X-CSE-ConnectionGUID: bQ0gcs9HQhSRVdQrh5rP3A==
-X-CSE-MsgGUID: 1t0Fj5MWT62jsg71igA5cw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 03 Dec 2025 15:39:40 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQwRd-00000000DHh-1VTq;
-	Wed, 03 Dec 2025 23:39:37 +0000
-Date: Thu, 4 Dec 2025 07:39:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC net-next 09/15] net: stmmac: rk: use rk_encode_wm16()
- for RMII clock
-Message-ID: <202512040705.bipjEIV8-lkp@intel.com>
-References: <E1vQ5FQ-0000000GNwH-37za@rmk-PC.armlinux.org.uk>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NJVKL140"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764812584;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=//l8GH0b0jxfgHSTYjWSJVqQQiDQsPaEoa+HMfTSMHc=;
+	b=NJVKL140kDYAZVe+FU9vtmxpAgLActyxr2nVgR9FYOllL72wUhT/zdxkuabEZGNhQkiIOp
+	KDWvLd7j0NEH0/7lZOpZxy9o4025uqKtjzLyPq/SBrbjapU7SDwA3Voyar82YbwToofd5t
+	86m9StwtQEUw6CNHklhi+BhteBW6K30=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-9b04YPGPMzinOb1ITimvMw-1; Wed,
+ 03 Dec 2025 20:43:02 -0500
+X-MC-Unique: 9b04YPGPMzinOb1ITimvMw-1
+X-Mimecast-MFC-AGG-ID: 9b04YPGPMzinOb1ITimvMw_1764812582
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3097F1956095
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 01:43:02 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 99BB9180045B;
+	Thu,  4 Dec 2025 01:43:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0,
+ upstream-mainline, b6d99331)
+Date: Thu, 04 Dec 2025 01:43:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1vQ5FQ-0000000GNwH-37za@rmk-PC.armlinux.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <99072.125120320430300262@us-mta-657.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: hDJOeoqodCS5BNxpmn080hOIh6kuMG7morXtRUf8NhI_1764812582
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Russell,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-rk-add-GMAC_CLK_xx-constants-simplify-RGMII-definitions/20251202-025335
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/E1vQ5FQ-0000000GNwH-37za%40rmk-PC.armlinux.org.uk
-patch subject: [PATCH RFC net-next 09/15] net: stmmac: rk: use rk_encode_wm16() for RMII clock
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251204/202512040705.bipjEIV8-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251204/202512040705.bipjEIV8-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512040705.bipjEIV8-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c:498:39: error: variable has incomplete type 'const struct rk_reg_speed_data'
-     498 | static const struct rk_reg_speed_data rk3308_reg_speed_data = {
-         |                                       ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c:498:21: note: forward declaration of 'struct rk_reg_speed_data'
-     498 | static const struct rk_reg_speed_data rk3308_reg_speed_data = {
-         |                     ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c:893:9: error: use of undeclared identifier 'RK3528_GMAC0_CLK_RMII_DIV2'
-     893 |                              RK3528_GMAC0_CLK_RMII_DIV2);
-         |                              ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/RK3528_GMAC0_CLK_RMII_DIV2 +893 drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+Kernel information:
+    Commit message: Merge tag 'linux_kselftest-kunit-6.19-rc1' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
-1725f0eb37d621 David Wu 2025-03-19  884  
-1725f0eb37d621 David Wu 2025-03-19  885  static void rk3528_set_to_rmii(struct rk_priv_data *bsp_priv)
-1725f0eb37d621 David Wu 2025-03-19  886  {
-1725f0eb37d621 David Wu 2025-03-19  887  	if (bsp_priv->id == 1)
-1725f0eb37d621 David Wu 2025-03-19  888  		regmap_write(bsp_priv->grf, RK3528_VPU_GRF_GMAC_CON5,
-1725f0eb37d621 David Wu 2025-03-19  889  			     RK3528_GMAC1_PHY_INTF_SEL_RMII);
-1725f0eb37d621 David Wu 2025-03-19  890  	else
-1725f0eb37d621 David Wu 2025-03-19  891  		regmap_write(bsp_priv->grf, RK3528_VO_GRF_GMAC_CON,
-1725f0eb37d621 David Wu 2025-03-19  892  			     RK3528_GMAC0_PHY_INTF_SEL_RMII |
-1725f0eb37d621 David Wu 2025-03-19 @893  			     RK3528_GMAC0_CLK_RMII_DIV2);
-1725f0eb37d621 David Wu 2025-03-19  894  }
-1725f0eb37d621 David Wu 2025-03-19  895  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2195092210
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2195092210_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
