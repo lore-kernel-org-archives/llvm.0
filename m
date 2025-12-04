@@ -1,102 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB18F307AC5
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 09:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD7A14A8E
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 09:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764839158; cv=none; b=ihM/P4EghUS/kawTYtGRCcqz3uRcPkdUUs4d6IlC3ZyCbSlbmwdn7kuvc/zZPinHwbZBPkgj651ycntiNkn262BAd9ddosQS8VReVULmahb/wxn0GnuvgXxSHk+83d6rCUbAeZocZ6BiW/tIVb14HWbmfaQHNkMoem6scZ5UAR4=
+	t=1764839198; cv=none; b=USf4qy6Uxceva519mDHKTJF907fLiSW1iry8JXbyVOQtyDnT21k/LZd8XJ3imC6k3+hfpncj8GZJ0pDPCjBdNFQVzoqpamg3wc6vF0MF23Gna58AY9BOlJ5IGC39Jsxe6jW+G75YTOcMzXiHsjgRrEKZi/9i7wH4EQ1z8COggtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764839158; c=relaxed/simple;
-	bh=GCL5jXS0EWcBqxkM9ix5SqD/peOH1ocZzOuyjFc7+/8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LTwQdPOH3NESTt07O9BdDtZHYc/xyGrzo4GEoY694RVvc6KU4CMTShinQQRPOWjrhKMrJs3Vt+9Wf6DgV120w73xXC7FCLT/Kvy05s6QD/BtL8A0vIUbDetO8OcGLMPBL1NuLNmwKoNyHIKb0Z5O3J0I2gnP3+m7zwhJ3WD2nas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsLKGmut; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsLKGmut"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E01C2BC86
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 09:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764839158;
-	bh=GCL5jXS0EWcBqxkM9ix5SqD/peOH1ocZzOuyjFc7+/8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bsLKGmut2lytHh1imaA0AWD9JMeYW1e0Ut+9Qkb0ckmMhe/+KdOmXxhlte2mqSZOE
-	 2vezaEOHp8q+OiImruutQFB4+bPLz/6kGNkGBSwdkIPbDI5i1w1gx1SZu6ozx39ru4
-	 PGFLkSHe/ROqnsPAcbWkAGcJAXhaKo4XfcmkQtr8DMugBrk6qRcStyiSe3xv/kXSBE
-	 LqPXpgTSETypsAaEvrrqJDLs/iWW7aCP/WEh4hU7g9Q/i3tWCweoN+2h9WEmj5o7sj
-	 OH4rnTpDJgNBFRIj78Z8HVxn3JxXl9AIv1I9oy/vR6XR0aqY5ZYvkKgMKtXsUR/+if
-	 MVigyJerVIv3Q==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5943d20f352so771546e87.0
-        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 01:05:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUE2wkn2nRSGPrWT6eCdgAo8F8mUwQX673U0sJJ+KdinlfUUAKucXYakePyTyJHew1yS0nA@lists.linux.dev
-X-Gm-Message-State: AOJu0YxQYoJTu2O3yb77FmzxRoKjuvih2RsDpgQENP67HGpO+4bwsx82
-	cwBCKK5LP6wZ4PQRquqF66IWYLQzrKiU/EHkQQmqGP0CC2/IzbDlJ5Y9geVwoNF2YqRIZ+b0Lkd
-	dasLn7SA8g+DxkGkBp6ICq7OeI3CfM+Q=
-X-Google-Smtp-Source: AGHT+IEGK9HunF3J8NKfW8zNwREws0bdp4j+4ft/E55sPoVqyzuQASL+rCBKvzFwZAD5noNNAckZ+zFsDWX0d382A8w=
-X-Received: by 2002:a05:6512:4028:b0:594:314d:fa8d with SMTP id
- 2adb3069b0e04-597d3f90ff1mr2042098e87.26.1764839156715; Thu, 04 Dec 2025
- 01:05:56 -0800 (PST)
+	s=arc-20240116; t=1764839198; c=relaxed/simple;
+	bh=y5lRhbplovhxS8wXZdgJehPPhVuxa9eyvYlnoEEqbEI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=END606cYcKDxoRyYTIU7BKzGE6SkyqgPVdPj7XatKyjEHCLrVmh4GZh46JyrBkoYz64WC6oDtLI5J+SiZtde4Y5AKydD+suWogOzQHgJDxgDh48G2i56ta+Mh/HK0D481c1+9+FL97gYE0ka8fd9qWO7I9C8yc/ZyKH/bIrQiOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from [192.168.0.107] (unknown [114.241.82.59])
+	by APP-01 (Coremail) with SMTP id qwCowAAnwdD+TjFpm+0MAw--.960S2;
+	Thu, 04 Dec 2025 17:06:06 +0800 (CST)
+Message-ID: <1a6bb8cd-cc08-458f-a6f6-cdfefd327320@iscas.ac.cn>
+Date: Thu, 4 Dec 2025 17:06:05 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251203190652.144076-1-ebiggers@kernel.org>
-In-Reply-To: <20251203190652.144076-1-ebiggers@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 4 Dec 2025 10:05:45 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHkm=vgeymc6qSGtJRfY5AjhJhYJ7+ZD0OFdLw12vFE4w@mail.gmail.com>
-X-Gm-Features: AWmQ_blLg6vIT1RB55E509U8ahXy3IsX69zlpaht5KNbncen2voJD3i-7TizW2s
-Message-ID: <CAMj1kXHkm=vgeymc6qSGtJRfY5AjhJhYJ7+ZD0OFdLw12vFE4w@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2b: Roll up BLAKE2b round loop on 32-bit
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"Jason A . Donenfeld" <Jason@zx2c4.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, David Laight <david.laight@runbox.com>, 
-	David Sterba <dsterba@suse.com>, llvm@lists.linux.dev, linux-btrfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/4] rust: add a Kconfig function to test for support
+ of bindgen options
+To: Asuna Yang <spriteovo@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Jonathan Corbet <corbet@lwn.net>, Jason Montleon <jmontleo@redhat.com>,
+ Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
+References: <20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com>
+ <20251204-gcc-rust-v5-v5-3-2d4f20d86c24@gmail.com>
+Content-Language: en-US
+From: Vivian Wang <wangruikang@iscas.ac.cn>
+In-Reply-To: <20251204-gcc-rust-v5-v5-3-2d4f20d86c24@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qwCowAAnwdD+TjFpm+0MAw--.960S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWUWr4rtFWrCry7tw1fJFb_yoW8Xw1fpr
+	yvkF1q9rW8J3W8Aw17CFW0qF13ua1xtrWfW34kt347JrW7Xw40gaySkr47try8CFWv9ry2
+	vF4F9as09F4UCw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+	8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxUVhL0UUUUU
+X-CM-SenderInfo: pzdqw2pxlnt03j6l2u1dvotugofq/
 
-On Wed, 3 Dec 2025 at 20:09, Eric Biggers <ebiggers@kernel.org> wrote:
+
+On 12/4/25 15:54, Asuna Yang wrote:
+> From: Asuna Yang <spriteovo@gmail.com>
 >
-> BLAKE2b has a state of 16 64-bit words.  Add the message data in and
-> there are 32 64-bit words.  With the current code where all the rounds
-> are unrolled to enable constant-folding of the blake2b_sigma values,
-> this results in a very large code size on 32-bit kernels, including a
-> recurring issue where gcc uses a large amount of stack.
+> Add a new `bindgen-backend-option` Kconfig function to test whether the
+> bindgen backend supports a given flag.
 >
-> There's just not much benefit to this unrolling when the code is already
-> so large.  Let's roll up the rounds when !CONFIG_64BIT.  Then, remove
-> the now-unnecessary override of the stack frame size warning.
+> A subsequent commit will use this function to test for RISC-V extension
+> flags.
 >
-> Code size improvements for blake2b_compress_generic():
->
->                   Size before (bytes)    Size after (bytes)
->                   -------------------    ------------------
->     i386, gcc           27584                 3632
->     i386, clang         18208                 3248
->     arm32, gcc          19912                 2860
->     arm32, clang        21336                 3344
->
-> Running the BLAKE2b benchmark on a !CONFIG_64BIT kernel on an x86_64
-> processor shows a 16384B throughput change of 351 => 340 MB/s (gcc) or
-> 442 MB/s => 375 MB/s (clang).  So clearly not much of a slowdown either.
-> But also that microbenchmark also effectively disregards cache usage,
-> which is important in practice and is far better in the smaller code.
->
-> Note: If we rolled up the loop on x86_64 too, the change would be
-> 7024 bytes => 1584 bytes and 1960 MB/s => 1396 MB/s (gcc), or
-> 6848 bytes => 1696 bytes and 1920 MB/s => 1263 MB/s (clang).
-> Maybe still worth it, though not quite as clearly beneficial.
->
-> Fixes: 91d689337fe8 ("crypto: blake2b - add blake2b generic implementation")
-> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+> Signed-off-by: Asuna Yang <SpriteOvO@gmail.com>
 > ---
->  lib/crypto/Makefile  |  1 -
->  lib/crypto/blake2b.c | 25 +++++++++++++------------
->  2 files changed, 13 insertions(+), 13 deletions(-)
+>  scripts/Kconfig.include | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
+> diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+> index d42042b6c9e2..5d4d29eed0b3 100644
+> --- a/scripts/Kconfig.include
+> +++ b/scripts/Kconfig.include
+> @@ -78,3 +78,8 @@ rustc-llvm-version := $(shell,$(srctree)/scripts/rustc-llvm-version.sh $(RUSTC))
+>  # If you are testing for unstable features, consider testing RUSTC_VERSION
+>  # instead, as features may have different completeness while available.
+>  rustc-option = $(success,trap "rm -rf .tmp_$$" EXIT; mkdir .tmp_$$; $(RUSTC) $(1) --crate-type=rlib /dev/null --out-dir=.tmp_$$ -o .tmp_$$/tmp.rlib)
+> +
+> +# $(bindgen-backend-option,<flag>)
+> +# Return y if bindgen backend supports <flag>, n otherwise
+> +# For now, the backend refers only to libclang, so more specifically, this function tests whether the given flag is recognized by the libclang used by bindgen.
+> +bindgen-backend-option = $(success,trap "rm -f .tmp_$$.h" EXIT; touch .tmp_$$.h; $(BINDGEN) .tmp_$$.h -- --target=$(BINDGEN_TARGET) $(1))
+>
+Can probably be simplified down to:
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+$(BINDGEN) /dev/null -- -x c --target=$(BINDGEN_TARGET) $(1)
+
