@@ -1,97 +1,114 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0765933032D
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 08:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E198B24E016;
+	Thu,  4 Dec 2025 08:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764836803; cv=none; b=NsLWUKu2o5/7UfKQ7jKJG/w3/aByP9o1hv1r0NQ3wq7Wuooickl6p3iz1+3+Cn2kGoGtYxwbiHDwie7unmCpGgscRu6kC380brAcokS50e7RXmDlzpORT1C14iekIIWRrygmDlIJcx0+EWXQGWGeD6jByKx+Cw3ZAD+gqq78/ss=
+	t=1764838503; cv=none; b=EpZTps02MGVGWmc/R5sBec8dBbL89R25lKoXCrIrf7lDlU9fQbXCwCN3kY25U0EqYAREjYSxOLLB2VcY3dcSid0PLgYQUh7IbPOlnZ9aYI7Ch+t+imSd2u34krXBXRx/aZQcrF/hgroquxgSWhbUvkcHExZ5PlMLMNH98cb3YFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764836803; c=relaxed/simple;
-	bh=5nYFVp69QLdOo49fMh37kOqCk58/nQX82HtuIDyE89o=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LE6o7DxBg1pIevgCf9I3EnEjf4ZfgGFpl6069fknSR1G/s/fH7O4Np7ifKkNRcGclAacJrkJqY4g/R94DcpOcVAHDLuqqEnD3MB4vzfTXaCoYQs8LrTHjBy17Q+soPrm+vEUCXwqpRG2FcQTK5LtPv3BmnZpOwjIQuUfkoXEJX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ETbgg32d; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764838503; c=relaxed/simple;
+	bh=ev6wOxwKmhmG7bwlZxZwcWiDotdwEQDBc8PTEeQKiGU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IaVlAX0a2rjA2IXKlSAdpTj13t0loajxWXP1SmVeI17MmmC93gwpWyaNQyq8YpAS2EzUHDtLG8kIIVA6naBGzCkOmF2JeCkLyCw/Jn+RIcXDQh8RguqGpGhukC/ae/DixlFQrR2yVy7ZX8pWZTPqiiBwggsvubwyz24IlQtefqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=n1Fmcq1O; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ETbgg32d"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-78aa642f306so6226847b3.2
-        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 00:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764836798; x=1765441598; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VEV9l3fSrsq44TPrk2Pd9zy/qdoP+RNvY5XPGpJtMhE=;
-        b=ETbgg32daDg46gzhqA8WP5EW+oZCURKQ6/BgYMdkOTiGBhg1CO6dudTv6kK/CdnCKk
-         6U440vjKE/cxq0FiTOmIAJFa1U3uxryaSIu7lyfFnUnPiWlyA1z+WqHyDz2afWdjalTV
-         6D2ZAKYEBM5OLLzQV1Y09yaHvGqd4gMi2V4NSA7S89z8+ClDdwm0taWWT+06FvUcRwCf
-         3fyvnd7B5LEyBnJ1SV4PBTgKsgZcHJxvm450Zgrlks/jhLgJrpdeWma7xFVoW0jnkVz9
-         jTRnixIOt8VooP1houqSkOg3asD8BKk69x9nHxXf3LdGOuICcYemAe11ZVDeU4UvMYUY
-         3Hzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764836798; x=1765441598;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VEV9l3fSrsq44TPrk2Pd9zy/qdoP+RNvY5XPGpJtMhE=;
-        b=uWMzVt3LmGFiIZS0OHct6SMThNrYUGvAnBWkdWgiO/RX4crdCJQvI9GgfAn3OS4M74
-         zutO/Krr0Zf1+g8jlGKJREpq2GwkbWWu9g7GkEA++CeiSwnQKv7fQl2ZM/x2oPXl9e84
-         1tPjx6cirkMp4RxGGGzzwEf7FmAzOsB5YIn/hggKAbJEOK8OthGg2WZtqx8jhaJRWhQ1
-         iyUwvQigJ817IiDFufDMaOmJL2rXtU+iUIKn/hYIILvVFVCATl0hOux3foR6Qt/vu87i
-         iJyqsSV+N2SzEGN/0hYfYSdKqqbKV73EURBeR1rkUVun5v1v9Z4YK0LBTaGCEo/FgXPy
-         3ALA==
-X-Forwarded-Encrypted: i=1; AJvYcCXB1VUcQ7bKdv05WjcOjKmazVHhwIHax1cpUk8LPzSJWgtyYes/d/meeeawck+fBJDJxjDR@lists.linux.dev
-X-Gm-Message-State: AOJu0YxH1TM2CzIFe+AnZkvuWJXIgofoc9wMHs5Iqd9SVll4Q+stJ+gZ
-	24EFpYVq6G6Qxt5SAImmwS22tyr0Wx8U7YgQkFnLbQrtRAEtuEgK2r/6
-X-Gm-Gg: ASbGncvh9Na69ScHOfHfOLt1honXViz9UwyTYOHL6YqUwn1OcIQiFh++r70XAg1+hVW
-	S6UfX6+Ly1ais1SMSVtt8X9Na7ZqQGSAq4OoHJxhZOO9pELODJWnDg1wpsZJ1pBu0W75QDYISeQ
-	GkRHNJNC38pZCxgnzon+/IGeBrx8rxkt3H2DDEuEzjRBNDAFjIHht4qG88NzfwK+lCNYSger9ka
-	iHlmEEBHayIZZdm93iyc1NS24syYX49kT8Ote8RBiShk7dLPIqDbOCD1TArzfEQiHoYocgKQC8T
-	qiHAzF6XHSPa1ZA2j6jKQni27Vk1e4o2XAX26b73+ou15kNLS2fGn9y0zGIjOW06DF5V6KtivGm
-	vQG8f4jgw4/oKxciTcb87IVC1CjIRRL7NoGR4Ia9UYE3PfjaPTeUohj1Z78kaj3NkBE9EH9aQBm
-	lvOIGXTEtD52aU2ar+efx5G83cD2ylCyJcMRucRcxm
-X-Google-Smtp-Source: AGHT+IEToPXaJNU3FPitOhzv7XRD5fMJv3RarJ69HwAUtDs8DEKyQvLYwMwVPCfHblHOk8hTaaSfgg==
-X-Received: by 2002:a05:690c:6f06:b0:788:e1b:5ec5 with SMTP id 00721157ae682-78c18956f0emr15033157b3.70.1764836798216;
-        Thu, 04 Dec 2025 00:26:38 -0800 (PST)
-Received: from [192.168.1.209] (89.208.240.37.16clouds.com. [89.208.240.37])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78c1b4ae534sm3349687b3.3.2025.12.04.00.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Dec 2025 00:26:37 -0800 (PST)
-From: Asuna Yang <spriteovo@gmail.com>
-X-Google-Original-From: Asuna Yang <SpriteOvO@gmail.com>
-Message-ID: <74cf3591-fe3d-4005-a5af-269e4c806d9f@gmail.com>
-Date: Thu, 4 Dec 2025 16:26:28 +0800
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="n1Fmcq1O"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=1ZKEvWFqVXW3ANMXU8thFViT+wrQQ/PtkxsPiuQj5uA=; b=n1Fmcq1Ozcb1gZNwIwt7tfRmcb
+	6np3a9hJ2mNuV0iDdqz4vOjj8nB7hr6wPMYVcRAqwYqBJ/JYSg74MYNtYY6v7QOF6NWVH+Bm1jfjZ
+	+3QSmdaLpOIdEBz9MhaV6ERwPjIwH9bzMBwG2Dsh3ocb+kM42BG640wLyfrUvZ6wVY06s2aoSVr6r
+	ygMGl/Yg9Q1jwjZeqy7qoOX9MxbbcqqYExtP5uc6u05Q+BZc1iJzDq8h7ORVWT1xjQuCsEbJxex+L
+	cDBWaOpNmzXuQIftV0tJE5yg2rPGn3y5hOIeN0UrM7PJRPGi+1xTjhfqIpsJX7J2hDo9FNmRRCFnB
+	oI8a0szw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vR4FA-00000003fDj-3C2R;
+	Thu, 04 Dec 2025 07:59:17 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 0DB523004F8; Thu, 04 Dec 2025 09:54:36 +0100 (CET)
+Date: Thu, 4 Dec 2025 09:54:35 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Miguel Ojeda <ojeda@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Marco Elver <elver@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	linux-hardening@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	John Hubbard <jhubbard@nvidia.com>, Joe Perches <joe@perches.com>,
+	Christoph Lameter <cl@linux.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Harry Yoo <harry.yoo@oracle.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 3/5] compiler_types: Introduce __flex_counter() and
+ family
+Message-ID: <20251204085435.GC2528459@noisy.programming.kicks-ass.net>
+References: <20251203233029.it.641-kees@kernel.org>
+ <20251203233036.3212363-3-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/4] EDITME: RISC-V: re-enable gcc + rust builds
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Jonathan Corbet <corbet@lwn.net>, Jason Montleon <jmontleo@redhat.com>,
- Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor@kernel.org>,
- Vivian Wang <wangruikang@iscas.ac.cn>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
-References: <20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251203233036.3212363-3-kees@kernel.org>
 
-Please ignore the "EDITME" in the title, I forgot to remove it from `b4 
---edit-cover`.
+On Wed, Dec 03, 2025 at 03:30:33PM -0800, Kees Cook wrote:
+> Introduce __flex_counter() which wraps __builtin_counted_by_ref(),
+> as newly introduced by GCC[1] and Clang[2]. Use of __flex_counter()
+> allows access to the counter member of a struct's flexible array member
+> when it has been annotated with __counted_by().
+> 
+> Introduce typeof_flex_counter(), overflows_flex_counter_type(), and
+> __set_flex_counter() to provide the needed _Generic() wrappers to get
+> sane results out of __flex_counter().
+> 
+> For example, with:
+> 
+> 	struct foo {
+> 		int counter;
+> 		short array[] __counted_by(counter);
+> 	} *p;
+> 
+> __flex_counter(p->array) will resolve to: &p->counter
+> 
+> typeof_flex_counter(p->array) will resolve to "int". (If p->array was not
+> annotated, it would resolve to "size_t".)
+
+Uhh, how will this interact with the proposed extension of
+__counted_by() to normal pointer types?
+
+Because the moment we have __counted_by() on pointers (remember, you
+promised to rename __counted_by_ptr() to __counted_by() once GCC-16
+releases) using __flex_counter() on a ptr thing makes absolutely no
+sense.
+
+So perhaps just name this thing __counter_of() or something?
