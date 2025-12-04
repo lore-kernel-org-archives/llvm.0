@@ -1,158 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8283090D2;
-	Thu,  4 Dec 2025 06:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB2D30DEA9
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 07:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764831538; cv=none; b=CI/xh8Wkr0KVXS5GeA21hiGfz9p+PsK8xxWVRnJOHKwbE3js1wfUHoyqLHaoa9HVXhrRbeC7FtI1pi7jvFVEVkP2ijX5zw70WxdBoqULUsiT8Xuwjd/Pmp+Obd8Zhzt/9zNdJ8hN8PYN41xKJlSQ4hfEkrHVMUIvlQjsyWUJjeQ=
+	t=1764834924; cv=none; b=lcnYeJxgtbj4w+crwdsjw8tPZhupoZv0CePnbWPuiTjwWkRKwoch2yR+59TmCtq3SUN7oxNBTaG6EqRg0A7/Bi9P14hEXICHsJ00lNeCVN9+B535CvfXoJZYKHtP63DgcTUO/Lok57635r/X0XHPqd45PAm518wHUVbXa8b47Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764831538; c=relaxed/simple;
-	bh=CwkJdgz50qSuUgZU5wgKBfmfG4Q3PN/e8pN3Tb7C8is=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OCBnhJ1urBNUZBkuH+nrZL0DD6owGRHIHbTtngjHGACyGRabwxzkwAT5IJqm5az6swG46HFte0f+DUcO3Rvwfm3EjguuhoS3WhoPscq+28Ztt+tjS6CmDXTW4dEQgmIUIxDieHpskxi1+A8NFSeARb7Q8mm06EE7om9S9ewktSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdYtOK7E; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764834924; c=relaxed/simple;
+	bh=3qpxref+fIz2xXinhbe3sx3733zbNSv6/Z2ffSx178M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k5d2qtYYO6i2L0LoRRcGZcrzFdGKptNySdkGMRCj0yQbnV1ndc2v3Tnsn52ZcQIHTVgxXZdOUkG3QLNQFqClnyUdsblpNUt4EEbXIZMjGIKmDIPuNd4slg/axjS+1YynpWQd7T1lptBHkMIkAfb6rcc/2PuEX4qf5zhZkskM+Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKYbjn76; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdYtOK7E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764831537; x=1796367537;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CwkJdgz50qSuUgZU5wgKBfmfG4Q3PN/e8pN3Tb7C8is=;
-  b=TdYtOK7EKgzBvCfUkhCuA5sRc40QZNaUdRhOzTXiYpJSJrkQy671iBgf
-   qennxJOjOLwsQqiHLdRy1c++6e9ZF23F1aeJfYcs+vfqODGReKqro5j7u
-   n37AAl1OCA63EynS6J2K6e0mEnWEXNPLp1rFBPA81OIqS6CYHbsGRN2EJ
-   aXyvY0prNrliQDP5D/+q90Vgcagzy1i2WK+tihLoq6oAUUs6mbb9irW2/
-   r3VZ76TJFco9yaXRxvxRoTpBoFbsDu18Ozgm8nMowryD0BhhaNnMJRv0p
-   u5TFlD80vAGHLw4C31L+3wcMRztxvzsP140n13dK9FsiKycSf44MyCo5g
-   A==;
-X-CSE-ConnectionGUID: pruDVej8TdWS9GRk7I/gYQ==
-X-CSE-MsgGUID: k/pkYzCmQ1e7QbMUMPD2WA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="84442928"
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="84442928"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 22:58:54 -0800
-X-CSE-ConnectionGUID: gr/QgrVHQXyv/1SjRaCe2Q==
-X-CSE-MsgGUID: OcEjOCZ7QiadSSXYA4AF2w==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 03 Dec 2025 22:58:53 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vR3Ig-00000000DX5-3rho;
-	Thu, 04 Dec 2025 06:58:50 +0000
-Date: Thu, 4 Dec 2025 14:58:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2025-12-03 15/16]
- sound/soc/img/img-i2s-in.c:388:31: error: expected ';' at end of declaration
-Message-ID: <202512041440.gykRQDyW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKYbjn76"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-594330147efso523304e87.2
+        for <llvm@lists.linux.dev>; Wed, 03 Dec 2025 23:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764834920; x=1765439720; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9GoQPHU9Mpip9gR91Y3C4UfAkxVzcGqXTOlsYo71eKE=;
+        b=KKYbjn76OOW47rh+zJ6ZWceEz2bf+LUM0/q/jjrO7K9UIwwI1y4dibwOZ8wUO//OKa
+         XLGKfv0oL0eznPt05kJcIF7YFxeSpfmv9RJ4GvGv2vW/VbtVLR/HrHfA1/sO8+HJKqit
+         /TGCPhiwzDF3vyGZDOJmLEl1fKKP+jsKOW3019HfKygBqqoPbQ1XSlzD3UnOJ8GUXQLj
+         iWjfX2hu2Z2trj7dj0UM3nVQcVRPDoOyFfm6mEv/UrksKIf2iI+0JMV+IrycmZQwfjwe
+         sazBG/t/bT4XFNoUa6SEBhOCda0NaYfF+r8dlfuS9hiPL5Cd66/ooCJsOCHjS6iQGByn
+         9M+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764834920; x=1765439720;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9GoQPHU9Mpip9gR91Y3C4UfAkxVzcGqXTOlsYo71eKE=;
+        b=t/xdaxd/63hWwVvr+bmsXr1rgLDzUCHT2MIzOhN3vHY4jzdfeJiimGeVaGjlmqGz9d
+         Sp58roZu3jIszHXPx9v558zt7tIh2u7WX3sUcPOYSC6NG0NuILSlxKNjbc62ArfVb9lo
+         SEQejiyS0iKLCxJNTz9erf0eaotRhXbb8F5lsts9nK0ib/bLKBsRM4R3bZX/QyYhV448
+         r8dFpmNnh51ahbdql9zHXX4jauAzw+M8IZ13+S49Xx6lxFcjXum2IEpQ+4JynTOBtiRD
+         s7WleVAHXTsRaQS4pvdRlNBpH7xFlFsQWiNdDaLr6bg7mVKYnPTJbu2G7WMOdX6wO0bb
+         r+jg==
+X-Forwarded-Encrypted: i=1; AJvYcCUj19qlvc1DIFtJxXswrQVTpf413xUUdNE4sRkfHwGu/m7XMKIWUaDB7+LzQLnPOci91NDW@lists.linux.dev
+X-Gm-Message-State: AOJu0YwEDA708UCxCbPN8mNhN8zGd5M4o+UFd+jVHYPbcmXCEc5FHGfy
+	8XoQTaVnAq75IhNMYav9GCI1Wm/q4N14E3IWYjkaHXJEaH5Gb//qGeBB
+X-Gm-Gg: ASbGncsvABy1OrIOmNSHg0/IZ9lBYLH93Dnp7VwLjDoqAHM7ZMPUM9K4WGP7CpxK6rc
+	eDC7YdAZ4aGfD5MVK6u94LpLv6py9K5msb8Jnl+8iVCgl8DhPFE+zCjDYKOXoZGJPcQHyq/5spk
+	cLHlQogsQmmK2nBDrXCzwxVofCNekgmDkvWdUIc+/Zoi5SJ2y8KyDg4EW1hZCLxE1jSU1/IxbJ1
+	nfXibddHBo3mAWpYto9apPHWh2WYVd6ZZf5IL0Tdwl7La6InDvDom+azu++3nYHqz6l7vL0fwT6
+	POMjEdNZH33pC6hYysVXvJZVPksJweCPjU4AmcGBjay3i+xrlumDjj9Si2w5j9L6gmO01YdQrk8
+	QhWawApHlD/F+mOLCxJyxoH95tPOm7Z1Fp4wXrLgHHXJcLJukwz++BCyqEjuFZMxdWmGvHA==
+X-Google-Smtp-Source: AGHT+IHbKKwv3Cd14fMbRlzVZpxoDoNXbiyghddISZDjVQeIjBR6wf7cZ5tNAwGCF94LJdZf6RcGDg==
+X-Received: by 2002:a05:6512:3f14:b0:594:27fb:e7f5 with SMTP id 2adb3069b0e04-597d3feb5f1mr1891895e87.42.1764834919370;
+        Wed, 03 Dec 2025 23:55:19 -0800 (PST)
+Received: from minun.felixc.at ([2a01:4f9:6b:1cc4::2])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-597d7c28019sm239190e87.69.2025.12.03.23.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 23:55:18 -0800 (PST)
+From: Asuna Yang <spriteovo@gmail.com>
+X-Google-Original-From: Asuna Yang <SpriteOvO@gmail.com>
+Subject: [PATCH v5 0/4] EDITME: RISC-V: re-enable gcc + rust builds
+Date: Thu, 04 Dec 2025 08:54:50 +0100
+Message-Id: <20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEo+MWkC/x3MTQqAIBBA4avIrBvwJzddJVqIjjYbCy0JwrsnL
+ b/Fey9UKkwVFvFCocaVjzxgJwF+dzkRchgGLbVVWs6YvMdy1wubReeip0BGkTMwirNQ5Oe/rVv
+ vH4A+U+BdAAAA
+X-Change-ID: 20251204-gcc-rust-v5-aafcede31ea3
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Jonathan Corbet <corbet@lwn.net>, Jason Montleon <jmontleo@redhat.com>, 
+ Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor@kernel.org>, 
+ Vivian Wang <wangruikang@iscas.ac.cn>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+ Asuna Yang <SpriteOvO@gmail.com>, Asuna Yang <spriteovo@gmail.com>
+X-Mailer: b4 0.14.3
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2025-12-03
-head:   48371bd5c0566cfc8e9d81b48b39c9e355eafdc1
-commit: bc3f6d1fbadd3a9fc48804d41967912f6a0e35f3 [15/16] hoge
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251204/202512041440.gykRQDyW-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251204/202512041440.gykRQDyW-lkp@intel.com/reproduce)
+Previous v4 patch:
+https://lore.kernel.org/rust-for-linux/20251124-gcc-rust-v4-v4-0-4e06e07421ae@gmail.com/T/#t
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512041440.gykRQDyW-lkp@intel.com/
+Compared to v4, this v5:
+- Placed `include Makefile.rust` under `ifdef need-compiler` branch. From my local testing, this did not cause any issues.
+- The Kconfig function now only tests backend flags and has been renamed to `bindgen-option`, without depending on environment variable. Added a comment explaining the meaning of "backend".
+- Improved the wording of commit messages and provided further details.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Asuna Yang <SpriteOvO@gmail.com>
+---
+Asuna Yang (4):
+      rust: export BINDGEN_TARGET from a separate Makefile
+      rust: generate a fatal error if BINDGEN_TARGET is undefined
+      rust: add a Kconfig function to test for support of bindgen options
+      RISC-V: handle extension configs for bindgen, re-enable gcc + rust builds
 
->> sound/soc/img/img-i2s-in.c:388:31: error: expected ';' at end of declaration
-     388 |         SND_SOC_POSSIBLE_DAIFMT_IB_IF,
-         |                                      ^
-         |                                      ;
->> sound/soc/img/img-i2s-in.c:395:2: error: member reference base type 'int (struct snd_soc_dai *, unsigned int)' is not a structure or union
-     394 |         .set_fmt        = img_i2s_in_set_fmt
-         |                           ~~~~~~~~~~~~~~~~~~
-     395 |         .auto_selectable_formats        = &img_i2s_in_selectable_formats,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
->> sound/soc/img/img-i2s-out.c:406:2: error: member reference base type 'int (struct snd_soc_dai *, unsigned int)' is not a structure or union
-     405 |         .set_fmt        = img_i2s_out_set_fmt
-         |                           ~~~~~~~~~~~~~~~~~~~
-     406 |         .auto_selectable_formats        = &img_i2s_out_selectable_formats,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> sound/soc/img/img-parallel-out.c:199:2: error: member reference base type 'int (struct snd_soc_dai *, unsigned int)' is not a structure or union
-     198 |         .set_fmt        = img_prl_out_set_fmt
-         |                           ~~~~~~~~~~~~~~~~~~~
-     199 |         .auto_selectable_formats        = &img_prl_selectable_formats,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> sound/soc/mediatek/mt8186/mt8186-dai-pcm.c:353:30: error: use of undeclared identifier 't9015_dai_selectable_formats'; did you mean 'ssi_dai_selectable_formats'?
-     353 |         .auto_selectable_formats        = &t9015_dai_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                            ssi_dai_selectable_formats
-   sound/soc/mediatek/mt8186/mt8186-dai-pcm.c:340:18: note: 'ssi_dai_selectable_formats' declared here
-     340 | static const u64 ssi_dai_selectable_formats =
-         |                  ^
-   1 error generated.
---
->> sound/soc/mediatek/mt8195/mt8195-dai-etdm.c:2511:30: error: use of undeclared identifier 'mtk_dai_selectable_formats'; did you mean 'ssi_dai_selectable_formats'?
-    2511 |         .auto_selectable_formats        = &mtk_dai_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                            ssi_dai_selectable_formats
-   sound/soc/mediatek/mt8195/mt8195-dai-etdm.c:2493:18: note: 'ssi_dai_selectable_formats' declared here
-    2493 | static const u64 ssi_dai_selectable_formats =
-         |                  ^
-   sound/soc/mediatek/mt8195/mt8195-dai-etdm.c:2523:30: error: use of undeclared identifier 'mtk_dai_selectable_formats'; did you mean 'ssi_dai_selectable_formats'?
-    2523 |         .auto_selectable_formats        = &mtk_dai_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                            ssi_dai_selectable_formats
-   sound/soc/mediatek/mt8195/mt8195-dai-etdm.c:2493:18: note: 'ssi_dai_selectable_formats' declared here
-    2493 | static const u64 ssi_dai_selectable_formats =
-         |                  ^
-   sound/soc/mediatek/mt8195/mt8195-dai-etdm.c:2536:30: error: use of undeclared identifier 'mtk_dai_selectable_formats'; did you mean 'ssi_dai_selectable_formats'?
-    2536 |         .auto_selectable_formats        = &mtk_dai_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                            ssi_dai_selectable_formats
-   sound/soc/mediatek/mt8195/mt8195-dai-etdm.c:2493:18: note: 'ssi_dai_selectable_formats' declared here
-    2493 | static const u64 ssi_dai_selectable_formats =
-         |                  ^
-   3 errors generated.
+ Documentation/rust/arch-support.rst |  2 +-
+ Makefile                            |  3 ++-
+ arch/riscv/Kconfig                  | 35 ++++++++++++++++++++++++++++++++++-
+ rust/Makefile                       | 11 ++---------
+ scripts/Kconfig.include             |  5 +++++
+ scripts/Makefile.rust               | 14 ++++++++++++++
+ 6 files changed, 58 insertions(+), 12 deletions(-)
+---
+base-commit: 559e608c46553c107dbba19dae0854af7b219400
+change-id: 20251204-gcc-rust-v5-aafcede31ea3
 
-
-vim +388 sound/soc/img/img-i2s-in.c
-
-   381	
-   382	static const u64 img_i2s_in_selectable_formats =
-   383		SND_SOC_POSSIBLE_DAIFMT_I2S	|
-   384		SND_SOC_POSSIBLE_DAIFMT_LEFT_J	|
-   385		SND_SOC_POSSIBLE_DAIFMT_NB_NF	|
-   386		SND_SOC_POSSIBLE_DAIFMT_NB_IF	|
-   387		SND_SOC_POSSIBLE_DAIFMT_IB_NF	|
- > 388		SND_SOC_POSSIBLE_DAIFMT_IB_IF,
-   389	
-   390	static const struct snd_soc_dai_ops img_i2s_in_dai_ops = {
-   391		.probe		= img_i2s_in_dai_probe,
-   392		.trigger	= img_i2s_in_trigger,
-   393		.hw_params	= img_i2s_in_hw_params,
-   394		.set_fmt	= img_i2s_in_set_fmt
- > 395		.auto_selectable_formats	= &img_i2s_in_selectable_formats,
-   396		.num_auto_selectable_formats	= 1,
-   397	};
-   398	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Asuna Yang <SpriteOvO@gmail.com>
+
