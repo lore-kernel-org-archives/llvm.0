@@ -1,145 +1,94 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DBC340A46
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 13:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558C4314B9F
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 13:26:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764854138; cv=none; b=RRx89jVbj6dIahh48VfNzu5+Dy/7BZY7+gCEbS60DKrpaOsEv4Y9lcX4TQsKVTVBXE0wSQRw54tlrN57gIHLl8i5iOFTg/Tqor+OcqhcKrGUtHuCmeNeiZFYU17NW029VoUgw8te25GLUa8/ury6Cyiik8TfGN3m1wtol0AXRyM=
+	t=1764854799; cv=none; b=t1suk04gc2i5f9NEtc7HYqMsheZ2dIj2AInW4E4bwcxQzVAZ4rfgY0J05+iqk8TQ/uDvhgqzN3GXJm7Xtl3+PJ7S/IgYrBPiC7X5jNF32qn7X+YuP/NgzMAC/4V1mS2Xw8ZUbS1AJn2ynmeiSBq0aQFN0KS6J7jWJWqyaSuLY+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764854138; c=relaxed/simple;
-	bh=Wny4M191Yr6Td48Z53labtwrelyi+1dAudOVsu2AK4M=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=b5X21ABYGYYB2rPI/pfybzrkIDuOBgkomxnB+qYxu8NeYFBWjZg9pcEB/B64KfNiPHQS6Lv3ptfv+DVFSjo7G81FzJHZOHfGhoW2R+HTJIBGkvfIdCKf4ytk0MweXom2YDUYEWBDUGt8mKDeZpssNxSHkQIGi9cmTa7g6ZY5Qms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X7BpHehB; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1764854799; c=relaxed/simple;
+	bh=2MwlNczNZit1CagROWXg9y4FC8jkaNGyodCcIkwwmE4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R+3GPgegMAjsOXz9qs/OZm0yFLmrrKmeIY87DOvwp9w491vFirOYOo/YV13YniiaOO4LUbzqtVBOI40ioieqCVLbiKFjsAIUuHpr9cMnnqbZFFt9UzdLg+7CDd7P1ez99CsgNjObOzCl08xCDhfeLjr4tovuX42M5MfqtQLPcec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wv1qcM6M; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X7BpHehB"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779edba8f3so5976495e9.3
-        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 05:15:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wv1qcM6M"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-297f2c718a8so1388025ad.3
+        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 05:26:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764854135; x=1765458935; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wny4M191Yr6Td48Z53labtwrelyi+1dAudOVsu2AK4M=;
-        b=X7BpHehBpPOLq+9f0+hyt039sgEcqQeOZ5FtwWDYSJb6i1gN/E4FP9gpg0Dd7kj/Ja
-         edW97cA5+TrGOwC3S94xvzGeC9r4JmjHfdP6U0Pl2K6LMvnMOee8Z20NNGROVJpuUNSm
-         mX0ZBeFSaO3mDmOVBEwTJDi3oBXy7atw9Az4rw4NdpXATv6+/qo4b7BvNdL2rNGWKzY0
-         hUxRYxE0uhFiX8Ti2O1FFQ3w5pJMmQKwSdC4VXfoFz/xkGtK+TpM3KDU5w5zgaFiRKcW
-         PHH4zc9j37qVI1WcSQ40KuychRUc174hB4qxhvA7ZyEjvWAPKaDKIu1fqyqbcf8kDIuh
-         AgYg==
+        d=gmail.com; s=20230601; t=1764854797; x=1765459597; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2MwlNczNZit1CagROWXg9y4FC8jkaNGyodCcIkwwmE4=;
+        b=Wv1qcM6MjJ+LHBvxfZO0dCDlBzQLJcm6zZBuPc4/HJp6DinT0CAG3d8htmJESv9Nev
+         rP/EwuLa5l0GfW9LxZawlOtWZ5OCRdLW9XxQJQZ3EgJ4AixwSuHfQ6pMEgcbuBqPKqE6
+         qSZBum4AnqfRDkcvKsLprhzAEUccC5g+IcRqkjtYOY4ds64ZlAdVkQGFn6yW+1qzX8L+
+         F+2QCsKA/zXJE2mGOmKj68rm4ateTGSEYxurCWlxmJi6OT1DlQY3j0Y1o0hSjf5L0faE
+         yRuWFSrERyL4ux2E3Ku64Qr4jjmVCNosBAcn68IS9Nb6fQD/94MeHdvg+IjZDvLljWaD
+         P+rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764854135; x=1765458935;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Wny4M191Yr6Td48Z53labtwrelyi+1dAudOVsu2AK4M=;
-        b=hQy1y+5we0o9MZCZOWDPxgT6EURWrucT5MzSfQ8zi/L1On0boWpaUI5J9DesdgRTdt
-         xGAcTQPBCaQZB4asM7aJLLgYfeEb4IzWs6BkxL2b30rFNlhk7uVUzuyVTo/ZfesSs5/A
-         D+BK8jJZ6+4lN9nXFqPYA9bcphH3rhQGc20kXTjLfeLQg1Fm0Y9xzh2DH9aonXs2iu2k
-         fv7ckftJKkWsjiCBiajErTYWH5qDX9Ha+e5vsoS6hDDj71KmTpZhRooIDluE71j9VqQM
-         eSOlrQKtiI/6sQF3Ht1oYyHb4U7sqAJh8Ter2Y7dvkT3Tt+Sov+KLmOevHlMqRjOqs+D
-         LusA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgy6WH9g0XzXF2CSztvMupCmYgItb90fmabxxX6gRFoVDJjXUa+ubeR5zUHGKM6+TMVrpj@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxkcm349qHI6f6DLMaN0AHg5ClJbR6OibZJkLEXfjqHZ5itfFXe
-	cH8gq0wod4TspcUM7nBw7/l8a6YVAQ844xjTibymycNyFcQ8rSQ+KCm6FWJ8uYjsZE1rxoHFKFv
-	iGzMKK63Lkh4SJ2dB2A==
-X-Google-Smtp-Source: AGHT+IHhq1jpZSgsrG7+u70UeMI118GpL4lyrcZgSJfzAV0BpquOo2d1tIrYUXW40rz39aPBfrTMkT06vKIZZ8M=
-X-Received: from wmbjj12.prod.google.com ([2002:a05:600c:6a0c:b0:470:fd92:351d])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4e89:b0:477:55c9:c3ea with SMTP id 5b1f17b1804b1-4792af485a4mr64437335e9.35.1764854135213;
- Thu, 04 Dec 2025 05:15:35 -0800 (PST)
-Date: Thu, 4 Dec 2025 13:15:34 +0000
-In-Reply-To: <dd5856a8-e120-4884-8828-9d0c9edc60f0@crisal.io>
+        d=1e100.net; s=20230601; t=1764854797; x=1765459597;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2MwlNczNZit1CagROWXg9y4FC8jkaNGyodCcIkwwmE4=;
+        b=CuIETzBXwt8MQJUV1jg8enQdLD/Qq3VTOeHWGvIJVRgBYDt8MCTQzqxP9YKv5lB9kZ
+         +64XuTFm3GQzD0X/fSRaOOOTf8dNxt9A97idX7E3tBQLJkhr6Qbvn0acfZA3sO3bGcK8
+         PhjVKd2Gcbke6p92m43uA7sd8TVxvYK2Px+LjwGQUE0A88JwQ8etySwArVa5tDxDWEey
+         yUlvLf93l+2Cf5iBLuG+F7dVBbiZ+sb+dhMVjMGUnCdYUsrFqmmUVTnxWqEfMUkpAkiZ
+         qQmdq1IjcCdmbnlLFPtiLL4KgQKNsi2s26hOHi0Fb/O3a/LzRXSw8+N017EJrPBy0D8p
+         v7FA==
+X-Gm-Message-State: AOJu0YzalbzeFssXVbvmhKchfUBbxrh2m3HBvhjYWUl1kPvCztBfycA9
+	NlJjYfhgg+eGJaJL5MswANHWvsvBoQtoZp8i5CPba4GBYO9vMK52uTJWPEfvMnAnHt29S/lVdkz
+	jyGnGIO+umxXIfdfZAfjCCbDcde4ZuSv5tt40
+X-Gm-Gg: ASbGncu81UekFGs+U9VnLd4oQoVb4KUa8CLVGNali2yX67OTAVaye1HtXpCpiV5qTzX
+	PUoORc4Ed5hOGXUSR7Z8lsU1iiIe+bMJu32jOT752RV3TOPdT6KPUVNGyYtjwHOk5PxW2zWnrTM
+	4e7BmtvZusHGPmhFnGoVZgTh//ah0cwbZtEeIgB+HyI2UK41W/wRROjrhBCIUrzLnKsUCzmfQHB
+	SAyGQ07tdTBi59kLyX/GKb4jlFnIejVRefWOrIyHjNQPKr1ug2atd4tZBKkG0b/Hx9APbMROXoV
+	aSUayV5JQM0FqtVZSM2YSaUndPPPeoCSuDUnhi6tw5339eZIz4pAMJUrfrmKaNY75PTOKQVBAUB
+	aYHSP+7RJYH/KDg==
+X-Google-Smtp-Source: AGHT+IFkJD+DGO6SEi8eVbQHE+C+M36qt+oWEXzjnmJxhj0YxfChQ5D9Z/v70vnY4t28lT0MINzvfeRfwdUbmXNvdlw=
+X-Received: by 2002:a05:7300:df0a:b0:2a4:3593:2c0a with SMTP id
+ 5a478bee46e88-2ab92e85242mr3780570eec.3.1764854797548; Thu, 04 Dec 2025
+ 05:26:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251202-inline-helpers-v1-0-879dae33a66a@google.com>
- <20251202-inline-helpers-v1-4-879dae33a66a@google.com> <20251204100725.GF2528459@noisy.programming.kicks-ass.net>
- <aTFhFXCqvy7nmDOp@google.com> <20251204111124.GJ2528459@noisy.programming.kicks-ass.net>
- <CANiq72=r+Fmu0uuNF=6x36GWWQZGZk9gApnMZxakJavviwG+ug@mail.gmail.com> <dd5856a8-e120-4884-8828-9d0c9edc60f0@crisal.io>
-Message-ID: <aTGJdlwMRxGg2iZ1@google.com>
-Subject: Re: [PATCH 4/4] build: rust: provide an option to inline C helpers
- into Rust
-From: Alice Ryhl <aliceryhl@google.com>
-To: "Emilio Cobos =?utf-8?Q?=C3=81lvarez?=" <emilio@crisal.io>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Antoni Boucher <bouanto@zoho.com>, Arthur Cohen <arthur.cohen@embecosm.com>, 
-	Gary Guo <gary@garyguo.net>, Josh Triplett <josh@joshtriplett.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	nouveau@lists.freedesktop.org, Matthew Maurer <mmaurer@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20251203024451.GA1766218@ax162>
+In-Reply-To: <20251203024451.GA1766218@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 4 Dec 2025 14:26:24 +0100
+X-Gm-Features: AWmQ_bmGl8u79mT4fs4x-BNMMRxcRBWCEfv35-xpdMiZ0cjqmDh-6FDGNgxbT4A
+Message-ID: <CANiq72mpvn78+6NmiMr8vhtnsgQpbbfw6jfhp8B-Pc=dHk-jTA@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 21.1.7 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 04, 2025 at 01:49:28PM +0100, Emilio Cobos =C3=81lvarez wrote:
-> On 12/4/25 12:57 PM, Miguel Ojeda wrote:
-> > On Thu, Dec 4, 2025 at 12:11=E2=80=AFPM Peter Zijlstra <peterz@infradea=
-d.org> wrote:
-> > >=20
-> > > Right. Earlier I also proposed using libclang to parse the C header a=
-nd
-> > > inject that. This might be a little simpler, in that..
-> >=20
-> > Yeah, that would be closer to the `bindgen` route in that `libclang`
-> > gets already involved.
->=20
-> Yeah, so... there are existing tools (c2rust [0] being the actively
-> maintained one IIUC) that in theory could do something like that (transla=
-te
-> the bodies of the functions from C to Rust so that rustc could consume th=
-em
-> directly rather than via LLVM LTO).
->=20
-> I think the intended use case is more "translate a whole C project into
-> rust", but it could be interesting to test how well / poorly it performs
-> with the kernel helpers / with a single header translated to Rust.
->=20
-> I personally haven't tried it because for work I need to deal with C++,
-> which means that automatic translation to Rust is a lot harder / probably
-> impossible in general. So for Firefox we end up relying on bindgen +
-> cross-language LTO for this kind of thing, and it works well for us.
->=20
-> If I'm understanding correctly, it seems the kernel needs this extra bit =
-of
-> help (__always_inline) to push LLVM to inline C functions into rust, whic=
-h
-> is a bit unfortunate... But this approach seems sensible to me, for now a=
-t
-> least.
->=20
-> FWIW Bindgen recently gained an option to generate inline functions [1],
-> which could help avoid at least the bindgen ifdef in the patch series?
->=20
-> Anyways, it might be interesting to give c2rust a go on the kernel helper=
-s
-> if nobody has done so, and see how well / poorly it works in practice? Of
-> course probably introducing a new dependency would be kind of a pain, but
-> could be a good data point for pushing into adding something like it buil=
-t
-> into rustc...
+On Wed, Dec 3, 2025 at 3:44=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> I have built and uploaded LLVM 21.1.7 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
+>
+> If there are any issues found, please let us know via email or
+> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+> opportunity to get them fixed in main and backported before the 21.x
+> series is no longer supported.
 
-I already tried c2rust as an alternative to this patch. It works okay
-for many functions, but it's missing support for some features such as
-asm goto, though this is fixable. But a larger issue is that some things
-simply do not translate to Rust right now. For example:
+As usual, I did a quick QEMU-test with Rust enabled:
 
-* Atomics use the Ir operand.
-* static_branch uses the i operand.
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-neither of which translate directly to Rust.
+Thanks!
 
-Alice
+Cheers,
+Miguel
