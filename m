@@ -1,126 +1,106 @@
-Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay-b02.edpnet.be (relay-b02.edpnet.be [212.71.1.222])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5FB31C597
-	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 20:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BE731D366
+	for <llvm@lists.linux.dev>; Thu,  4 Dec 2025 20:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.71.1.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764881421; cv=none; b=IUnSyIBr7WcIgag3miVg97GMMoscDWffIK0fTkz7Zey6YQ04cQ346ns7kPyDdS3qurQ7dghfuUzELxbklATa2GB+/+nesJPrv/ONutUW3CwJ+FkR6+PjfK+wntuVfl8cSjbXSo8SZV6rho9DxmECG31nk3gDuD0E6u68rhRlM7o=
+	t=1764881422; cv=none; b=Fkq4GGKhFBtrwQ6VQ1JOAvpbK3CJsEv6+49DNynGcVf3CU3Tu8zHDGAtgDfOII9axi1zxVFJMveh/uk1V96kXuzK4ASsQ9TdCmoYvZmXYewh5STEvwWao3XO0vK7i3cevKH2ta/6vGGdogPsiVUYYw7yrKqrDjM5MVoXJVRYxCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764881421; c=relaxed/simple;
-	bh=QdxSdzVzK5xrxxMWmz/dhJgRurzJ2W+fjhM9MUROI4E=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NI74MJNdbJUmv6gXws0VI+ImCpkDza3X8BSmQrZdcjj1i6OHdZY+fbghDbbG5WDBNo/7ivcPO73oXuiJYsiQNtvLRCx0+g0sNkirRSJ+u2kV5gF366N+j+KL3C2H24J3Bt5Dn5NJlLAXYTBLZ0DisGXQdCljWXF0pFx0E897ZC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kE0AhA3O; arc=none smtp.client-ip=209.85.210.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kE0AhA3O"
-Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-7c70268301aso1176354a34.3
-        for <llvm@lists.linux.dev>; Thu, 04 Dec 2025 12:50:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764881415; x=1765486215; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jfhXtjVpMYWte58x/PC24J5XI6+isvfw/8Zcbl9+DZA=;
-        b=kE0AhA3OMrbtxkyPoM68XwhaKe0Lzz1j0YruqXEy65gqQ0BhW8RPE7WT/dgNt6+O0r
-         FITuuoRhsTPupkV1oTLioSEkEbQ3B0RWcOpuZ+93BqEY1NNjxA0mr6Hu4E058GzCsbp2
-         2dgUdSTUPXgC1/5ClYNL2XyYHQr4ux25HUt6320wLFhs2COd5VQ55z6ANYn4+HpHR/bk
-         MgQSTAGfwo9EiIPrsGp12b3NGleTF293mBdwAR0/rh7K7fleQbjqOOfuouMqqIjKlunP
-         Jjr7qbzg1+dnTsiN1DBrwfa4LQWCqdGodzeuYWqSLz51xqgGfUY/9A5cOyCS2Yuafeyj
-         6swg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764881415; x=1765486215;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jfhXtjVpMYWte58x/PC24J5XI6+isvfw/8Zcbl9+DZA=;
-        b=qhkDDwaD3f5bGC4gACjVimfJDFEgT42Oc/ssOmDLUlL2det8UPZewGHHU15fErKAWz
-         2C9vZXYLvkhYyG/OF1Ln6vKO8yMBUPKBdqORiST7WX55lbGAuwzpQ/P30ZLNjhZzFtb8
-         iz35BNxDByHKHoDD972KXeoVvK8FqhT01Rd7I3IlaoUC5njikpQcm6txiwqSl6neapGW
-         nr4u56FpTm8yW9GGbKG9gj2WJZeIm1T9vofBp8QdQoFpsWRUfLOracGDk2NXnXByqdx1
-         CuipG2IazTEj3ZsI4i0qMmJLbLKrWsr4GVA4AbFoDHpkPtlt3dHJVXJqV9Es/VUfy+bZ
-         HGKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWjwJjRIY6pU3JZ38oG+Rei5cO1UHijU5HTsqlDVmNu2XWI353bz14gIR5uBWEItQ2Z0Vcx@lists.linux.dev
-X-Gm-Message-State: AOJu0YyK7r5cGn7Kqy8jba47S3lSgGSbi68v3fHfp15AIFxMIJGbnhAY
-	LfrIpIPqzdp+pSuPnkp/p9bXVYww3zfdWF+x0am8jR9aUGfPE3CaU10bixbzBIXOh6cjUbAxjVH
-	o5G13TH2PNjJwh7epzWITd/eq1w==
-X-Google-Smtp-Source: AGHT+IHKRkFsm1qvW8FHQgUBY9rowKQV8LQD4wg/pfFAOzqqCDtedAh9KEfVk/fSu+irJi0QEI5yC6OCMXP8ByDcyQ==
-X-Received: from ilbbb7.prod.google.com ([2002:a05:6e02:7:b0:433:56ba:b9cb])
- (user=justinstitt job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1184:b0:450:c0c4:3728 with SMTP id 5614622812f47-4536e428247mr3791671b6e.30.1764881415297;
- Thu, 04 Dec 2025 12:50:15 -0800 (PST)
-Date: Thu, 04 Dec 2025 12:50:11 -0800
+	s=arc-20240116; t=1764881422; c=relaxed/simple;
+	bh=zPefufmPXCTHKeEHe4dmfRQUNsQhoP/ZN+dyz7Jdti8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rmH4QUUMNPSallbMwYGGUN39q/5GCTsSIiosdxgJmOQcSQ6GfXiBE3Ushy21XAYWVvVRt1MDc0mdQPiwr+uRZ7axgcHPwhzBPWLh+Q0B859IsdJOaf4nd8RT2r/bXmIfhH5lctqQmRKDYAo2mR+1d28/08BsQ0f4jNkQ/TK8Yjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=edpnet.be; spf=pass smtp.mailfrom=edpnet.be; arc=none smtp.client-ip=212.71.1.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=edpnet.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=edpnet.be
+Received: from [192.168.177.80] (213.219.165.243.bro01.dyn.edpnet.net [213.219.165.243]) by relay-b02.edpnet.be with ESMTP id VOhoZgEPRUhcN1kR; Thu, 04 Dec 2025 21:37:17 +0100 (CET)
+X-Barracuda-Envelope-From: janpieter.sollie@edpnet.be
+X-Barracuda-Effective-Source-IP: 213.219.165.243.bro01.dyn.edpnet.net[213.219.165.243]
+X-Barracuda-Apparent-Source-IP: 213.219.165.243
+Message-ID: <ddf5f151-852a-4678-8857-0b72fa058e27@edpnet.be>
+Date: Thu, 4 Dec 2025 21:37:11 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAAP0MWkC/42NQQ7CIBBFr9LM2jGAlUZXvYfpQmBsJ6nQADaah
- ruLPYHL95L//gaJIlOCa7NBpJUTB19BHhqw092PhOwqgxLqLDrVomnRzuwivjz7jDb4lHHJETt
- y5qKFsSfjoM6XSA9+7+nbUHnilEP87E+r/Nk/oqtEibqzrdNKGG10P4YwznS04QlDKeULzWUJn sEAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764881414; l=1644;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=QdxSdzVzK5xrxxMWmz/dhJgRurzJ2W+fjhM9MUROI4E=; b=xsVQAx0YLXTKT8wTYbzwnSITaZIYSGNlnwQWqZJic5nR3ojchC2UaEVQCaQ7cnY5/r5sGShFg
- e7G0a5kMKZmDg9asmBU5U2THu+tB9937IvPJlrFBxjct0SSPaHwhSq/
-X-Mailer: b4 0.12.3
-Message-ID: <20251204-b4-clidr-unint-const-ptr-v1-1-95161315ad92@google.com>
-Subject: [PATCH 6.1.y RESEND] KVM: arm64: silence -Wuninitialized-const-pointer
- warning
-From: Justin Stitt <justinstitt@google.com>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Christopher Covington <cov@codeaurora.org>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [koverstreet-bcachefs:pr/992 2/2] ERROR: modpost:
+ "curve25519_generic" [lib/crypto/libcurve25519.ko] undefined!
+To: kernel test robot <lkp@intel.com>,
+ Kent Overstreet <kent.overstreet@linux.dev>
+X-ASG-Orig-Subj: Re: [koverstreet-bcachefs:pr/992 2/2] ERROR: modpost:
+ "curve25519_generic" [lib/crypto/libcurve25519.ko] undefined!
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <202512031412.agZspLiJ-lkp@intel.com>
+Content-Language: en-US
+From: Janpieter Sollie <janpieter.sollie@edpnet.be>
+Autocrypt: addr=janpieter.sollie@edpnet.be; keydata=
+ xsBNBFhRXM0BCADnifwYnfbhQtJso1eeT+fjEDJh8OY5rwfvAbOhHyy003MJ82svXPmM/hUS
+ C6hZjkE4kR7k2O2r+Ev6abRSlM6s6rJ/ZftmwOA7E8vdSkrFDNqRYL7P18+Iq/jM/t/6lsZv
+ O+YcjF/gGmzfOCZ5AByQyLGmh5ZI3vpqJarXskrfi1QiZFeCG4H5WpMInml6NzeTpwFMdJaM
+ JCr3BwnCyR+zeev7ROEWyVRcsj8ufW8ZLOrML9Q5QVjH7tkwzoedOc5UMv80uTaA5YaC1GcZ
+ 57dAna6S1KWy5zx8VaHwXBwbXhDHWvZP318um2BxeTZbl21yXJrUMbYpaoLJzA5ZaoCFABEB
+ AAHNLUphbnBpZXRlciBTb2xsaWUgPGphbnBpZXRlci5zb2xsaWVAZWRwbmV0LmJlPsLAjgQT
+ AQgAOAIbIwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBGBBYpsrUd7LDG6rUrFUjEUPH5Jb
+ BQJoLGc9AAoJELFUjEUPH5JbD6YH/2l+WeHN3Hi7EB/IpyOWG21xHuXEGSwTUhqj496kAcYw
+ 3UDpDny/4KCqsxVU1IJBSyo43fDDZCf5ueQk3Lwn0dcpdSxxpbejZpYW87il6bR4SEh4gjFb
+ ZpCC400If5Fjan0BgPXhTOC67h/SuyhMbv3rgrCLEaQWfj2gblLPOQkaXGPqcZWYN4rrQYHQ
+ IiyMFFbxPvWBZZL1UQKb2ch+agA40UCZiffw9vxc2xrXu+5fZ03dmKuJ40xOFGdFLzynaxkO
+ C5MEgv5e/soHMfK/kuh4b8rU0lBFnlF3OlH5Pv3GLHlrQo+4OkEgUnxr6m5Wd+3ejsxnMMCV
+ 3qVis2JZEYzOwU0EaCxqtwEQAOfQzQMy61HqB1NL4rWCCI3fG131Da4iyMceOuMntmZx9Eom
+ thdZRiunLffjMcN7aBcgr4wCh2tNar0hpUkkPpnM/Lat+avTZBkaSmuSF52ukmkVZLEE+jPy
+ 33hTWkc+k2pJ91XvLVU9axtd33XDBL6bP2oNmG+QF8hfN7QzukWzI52EdzF+DYgt08te875a
+ bopdtZa/csYO51uqGg5zBjixylZ48pB9o5lWM6h1HSlBoHGBHh3u2ptxyxqTGQYOX+MRQEJE
+ lLV7ydJSWmm+3cSza3z2BtwyfjKUPzgHXQEBhPQdTalH4cZeJQGi3Zxhy4iQBGpvg1nWmsd2
+ //x0FRSHkZtzTVaTCTuf0kHhqiQ8a50B6YDJiTC5koH0hp72Fz2SQoFBcDpUFkNzBWngJu9o
+ 1LBGd69c7AvOgMYZxDWwvDyb2sUfPJX0V4f+jJUjffO1K+PTrtnq2gpHKjBZHgGUvG4w36Ju
+ y5BFr7TDDRt5rZGN26Tcs4Nq4EZTjyE6QuJOtA5iyJQo3ZwqQ5d9apyStPBJC1CnBZCokCbR
+ rIbLgqe+mCgXhQngj3QZUZn8qmDB2VHEDmSdkJ4A9qKyiof9uRhmAH287uQ/i342xuUM8raS
+ /RGFQaNCV2bBGKqflpS9l1BKGyevk2MUw/IGKJOYfXYc6L5RoPLSlkseBdSpABEBAAHCwHwE
+ GAEIACYWIQRgQWKbK1Heywxuq1KxVIxFDx+SWwUCaCxqtwIbDAUJCWYBgAAKCRCxVIxFDx+S
+ W62eB/0SdagAw65x1IEwtEbdo4qxTL/a2iShsMvFOZYt/UE8fDTMkyTJFlDnxHDJqiHR0yHp
+ t41+CGxt5z8xhd+4HE+NdQJD2rjvvk5A2C8baOQYv8Mb5I4iDjSuYJWjrAwjCo25oHo7CtoM
+ d2jhn3+L1BO8/VY+AjdVXpGqPzor6Q/c5XAfUsgA2/2VEUpXLp8xKr7v/Gn08zUqaT+W90Qj
+ vK1gwYv7sQ4X0w7kzf3sgQvN64cjo0jVsC3EG1AfdLtc+213+3dzDLqomtWtqoxmnrqxoMdv
+ e2PL2byHDAtzeWGGM38JB4H6A0VlvUyGqgAnRS/UyOLPpqNYbi1lPemVHZsk
+In-Reply-To: <202512031412.agZspLiJ-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Barracuda-Connect: 213.219.165.243.bro01.dyn.edpnet.net[213.219.165.243]
+X-Barracuda-Start-Time: 1764880637
+X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1173
+X-Barracuda-BRTS-Status: 1
+X-ASG-Debug-ID: 1764880637-214fdf551823b30001-z8pkLo
+X-Barracuda-Spam-Score: 0.40
+X-Barracuda-Spam-Status: No, SCORE=0.40 using global scores of TAG_LEVEL=10.0 QUARANTINE_LEVEL=10.0 KILL_LEVEL=7.0 test= 
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.125474
+	Rule breakdown below
+	  pts rule name              description
+	 ---- ---------------------- --------------------------------------------------
+	 0.40 BSF_SC0_SA085b         Custom Rule SA085b
 
-A new warning in Clang 22 [1] complains that @clidr passed to
-get_clidr_el1() is an uninitialized const pointer. get_clidr_el1()
-doesn't really care since it casts away the const-ness anyways.
 
-Silence the warning by initializing the struct.
 
-This patch won't apply to anything past v6.1 as this code section was
-reworked in Commit 7af0c2534f4c ("KVM: arm64: Normalize cache
-configuration"). There is no upstream equivalent so this patch only
-needs to be applied (stable only) to 6.1.
+Op 3/12/2025 om 07:27 schreef kernel test robot:
+> tree:   https://github.com/koverstreet/bcachefs pr/992
+> head:   39aff98c65bacc4dcd96c8ac030646bca1bfb183
+> commit: 39aff98c65bacc4dcd96c8ac030646bca1bfb183 [2/2] Merge branch 'master' of https://github.com/koverstreet/bcachefs into HEAD
+> config: i386-randconfig-017-20251203 (https://download.01.org/0day-ci/archive/20251203/202512031412.agZspLiJ-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512031412.agZspLiJ-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512031412.agZspLiJ-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>
+>>> ERROR: modpost: "curve25519_generic" [lib/crypto/libcurve25519.ko] undefined!
 
-Cc: stable@vger.kernel.org
-Fixes: 7c8c5e6a9101e ("arm64: KVM: system register handling")
-Link: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e [1]
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Resending this with Nathan's RB tag, an updated commit log and better
-recipients from checkpatch.pl.
-
-I've also sent a similar patch resend for 5.15
----
- arch/arm64/kvm/sys_regs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index f4a7c5abcbca..d7ebd7387221 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -2948,7 +2948,7 @@ int kvm_sys_reg_table_init(void)
- {
- 	bool valid = true;
- 	unsigned int i;
--	struct sys_reg_desc clidr;
-+	struct sys_reg_desc clidr = {0};
- 
- 	/* Make sure tables are unique and in order. */
- 	valid &= check_sysreg_table(sys_reg_descs, ARRAY_SIZE(sys_reg_descs), false);
-
----
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
-change-id: 20250724-b4-clidr-unint-const-ptr-7edb960bc3bd
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
-
+Fixed by reverting to vanilla v6.18 in lib/crypto/Kconfig
