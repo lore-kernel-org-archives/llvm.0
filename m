@@ -1,97 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE680305048;
-	Fri,  5 Dec 2025 08:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C6E23B60A
+	for <llvm@lists.linux.dev>; Fri,  5 Dec 2025 08:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764922074; cv=none; b=iQDyyBo8+Z+RUl4iihp7V2IGz1Kfna95X2Culq7cvoH4aWZl3hJO3d8fiUXN8d8TLECcazg4PO9S1Ruf2pJ8P/okhQ60XqLHEabDggOzDM6BX8Lr1sR8uUZqZnUkKSPWw4PKFLz0DxSbr5EoOsEf4AU/Ac/0/Cq3c23i84Qh+z0=
+	t=1764923455; cv=none; b=hZvLF6jJrQ0INdIsvJuOQ+eqJO9s9ouy9ZS41H4wBsmvsjeqqnHuFjZjfi66u7PSiUZDvXRSiamfmt4ognjeW3PRvw8KfTOM1NPelylPdnKLvKvIcsLJWXIX9sblfE5zz+Imkv24oCigsJ6aIV7UGSJB6VpCnKPh+O7o6k8dqwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764922074; c=relaxed/simple;
-	bh=w7i8YV/Q7VLTEjh++9d6HBmXUidy4ymy38cw7m7QT9g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sFSYdWrEwIT9C1s9FWTfv2io09P6AUjcZtzU3I8MRt2F7gnhsr6+Ipeg1utKDiPzmXq1KSSAxuRKBjt6vUTcy/gg6Ct67wa2ZN4+IeQU9uD0+PUArbTVPVqRF/m0CyLbZGMddsUmAck6rvG5U2ocDiFXsMh3vGyKCOeW/CVvbBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E6iuByfY; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764923455; c=relaxed/simple;
+	bh=/HKbrueeav0hfVFCXbRIEc+ezn+SuJvusACsWP8Bipg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DzFtj8tHYizhwquRavzFMVOYVDsTL5aDfZ+0O16BmXDWvEHSjcddii0du+5vAennaBH/2LazgGy0ImOrAVFPMYEXetkaAQt93EO12Q8ygBAG83jHYGoGMlhSdBpQxA6iPF4mCgpliS5mly90rCrgQDW1zU/QgNojUJ1AcsHewNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYaLG5r2; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E6iuByfY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764922062; x=1796458062;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w7i8YV/Q7VLTEjh++9d6HBmXUidy4ymy38cw7m7QT9g=;
-  b=E6iuByfY7DFmXlFcL+MJSMxbqT2/GCWbemhY5I0SpeqR94A5o/jY2Mtu
-   MhpZrVDg2vhBlzzlz8MU7+s0FyP2S43WdFmmkuKC+DFmMkTcu9P7l32se
-   19vFEWIih1Xe7Ks+xyarr626f5p2UeQGHGnkgRFa+v8B2zSiRMkfz6n82
-   DLA3ove4sm9h8tVCPfLdYf3EMKazt2YDg373zlaX9vHI2JPpPyT3P3ujL
-   t7zNirVytzsDnpC/JnG1VRQ4zRe8lICfxH/YY/EH2O8b4+ByRvwsMPBAP
-   lq1WaoPjn7VFa68bI10tAnDEKqKmn1QuQOqAT2VVKXGbhF7DQqnGpFI+Y
-   w==;
-X-CSE-ConnectionGUID: 6u1nT0PtQ+usflww8k1S5Q==
-X-CSE-MsgGUID: GDtkJZF1S92v1gsiBJIbqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="78064468"
-X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
-   d="scan'208";a="78064468"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 00:07:33 -0800
-X-CSE-ConnectionGUID: IHPX/qmqQ6iBteuCT/ndIw==
-X-CSE-MsgGUID: 1NRSFAQ5SyOlvRUWfi9bSw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 05 Dec 2025 00:07:33 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vRQqh-00000000Em5-2zvj;
-	Fri, 05 Dec 2025 08:07:31 +0000
-Date: Fri, 5 Dec 2025 16:06:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joel Granados <joel.granados@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [joel-granados:jag/no-macro-conv 24/25] ld.lld: error: undefined
- symbol: proc_int_u2k_conv_uop
-Message-ID: <202512051658.DpsgfQp3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYaLG5r2"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b76b5afdf04so274271666b.1
+        for <llvm@lists.linux.dev>; Fri, 05 Dec 2025 00:30:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764923445; x=1765528245; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=V+dVo2JNAn7MsrQQRK8VE52kJO6dog4ObFIZQRBPJw8=;
+        b=XYaLG5r2bqG3+0iI4PFdZLY0Bh5bVaoeJE6zPBgj4pSVZC4csMHgRPwB2Q2RBX52kg
+         svPsCQtTWNSzwoZfGIYkDVJi2TxhSbMo1Vd0eMDw5YCJsf4l4l//kber/oUxuyyVotcZ
+         RI/dZ/P/qI9JhWS/rh00A42Atp/KDKkKAihPpaOfC5U0HYmi0SYN8LbdUB8ebxLSwd3e
+         lSfx5jqjgDeIyvVsqdudFTZOR8KtK4PnIkEcDeOhgoUs8f2gCuRLJ0RfkEgfOsTe6ddP
+         LjxbWqWBxoXV96oIRetrir4zDA1u3lOG5FUbCUxIMN9hnM7ZywR3gR/Lbuj5GKvtHVK1
+         PgMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764923445; x=1765528245;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V+dVo2JNAn7MsrQQRK8VE52kJO6dog4ObFIZQRBPJw8=;
+        b=VCGtAWhmeQ0F3Iq9D8wLVnwyJ0655yNfxU8ADKH0TR7rym9dudnCP7WpoGbW2D12uV
+         AVflCwkR0PaRyiu1FuMqfYKbIIgwmQLmF/TEjoUr82hRWKjSW8Ubeg5mODuDtxoh2T61
+         g++mJdNj/nEoAOHVqKxrKjA8ddeWldJGr6xxPM+wNFkUz8O8hNRuTPxksFWrDfz6CoGz
+         TrFTnZaYJmQEZzHUfYhEwCEjl7Ps87RIJTE1uNraUv/Taoemb8ZXoEM4laqM0GMegzP/
+         Qb8S88zeavNdnhmyepgoytvmsJ6U+mNnKqG1kooSblLiT4seGMxDrLDVzk/l1kPnD2fo
+         8Uew==
+X-Forwarded-Encrypted: i=1; AJvYcCVxfcGrJaChrUi0sY1UpV6OHQyR0Mzi56ZV6ARImE0gL/8fJEeeuC3Kfyo37eEJYUNC+3U2@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz/9nf9UlUItln+3jvOziS5DSOmv5OfSfw+FR1aqZX3NOH4KEjW
+	RgqeBP3sQIr+U5uSF74d09zZUlQnAHkPvnsyM8nZj/H3HwBV+6L2NQ1GxaUZcaaW43Szk+r1Ai1
+	mPEud9NEmr6MKlHGHfguxP478pvja8EA=
+X-Gm-Gg: ASbGncsmouLu8/B6RsrufRNzT5BYi35sRO3d+ft+65wELdwnIde+ENHmW3/oDJmKrWI
+	lQdVUaYWPXES0Rz8izWHFE91px5u87zDYAHLM3Kwjw6jNkah4+1do80Fx8GAqZm3TzsifJ2UiWA
+	S8dHGNgDkJXGe8Cpq5gNZwDQn7ZOKli3VVpUo6SvyadCvlXgGnjq9dnCcdgZ0UfCuUVmEZtgDvV
+	Z75ip8VmyxqqhBezRIkneRpK5bPo7eetmvWEquppBgAS2aKJbIVrj1ZptQJaYou6X3ZYw==
+X-Google-Smtp-Source: AGHT+IHyhPhO5ji1Udtkp6jlBiDNdS1nJUTysDiG/BFsQGzVGkOYuq8S0+wdBeVac/yGVlo5iFM2k5xQ7B6Gl1w0/Sw=
+X-Received: by 2002:a17:907:3fa1:b0:b76:5b73:75fb with SMTP id
+ a640c23a62f3a-b79dbe72a9emr795463366b.9.1764923445456; Fri, 05 Dec 2025
+ 00:30:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250813131007.343402-1-linux.amoon@gmail.com>
+In-Reply-To: <20250813131007.343402-1-linux.amoon@gmail.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Fri, 5 Dec 2025 14:00:29 +0530
+X-Gm-Features: AQt7F2qxbYSQuCXsYlo3s2RghAVsnJFzDr1A7ezZUPavGedOu8ugG3TEr0d0Qp4
+Message-ID: <CANAwSgRqFsRvCzrK7NXfqa91xhQLLVU_u2irLBBrRcpiK9gGkA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/7] Exynos Thermal code improvement
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Cc: Mateusz Majewski <m.majewski2@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joel.granados/linux.git jag/no-macro-conv
-head:   60075afc9fabecdb5b1015df21a05df3b2d50562
-commit: 71c0b361117fe4d62c3c9ebe9a0893d137af3aea [24/25] sysctl: Remove INT converter macros and add explicit functions
-config: x86_64-buildonly-randconfig-005-20251205 (https://download.01.org/0day-ci/archive/20251205/202512051658.DpsgfQp3-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512051658.DpsgfQp3-lkp@intel.com/reproduce)
+Hi All,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512051658.DpsgfQp3-lkp@intel.com/
+On Wed, 13 Aug 2025 at 18:40, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> Hi All,
+>
+> This patch series is a rework of my previous patch series [1],
+> where the code changes were not adequately justified.
+>
+> In this new series, I have improved the commit subject
+> and commit message to better explain the changes.
+>
+> v7: Integrated my RFC patch which improves the IRQ framework
+>     for all the SoC link below.
+>     [6] https://lore.kernel.org/all/20250616163831.8138-1-linux.amoon@gmail.com/
+>
+> v6: Add new patch to use devm_clk_get_enabled
+>     and Fix few typo in subject as suggested by Daniel.
+> v5: Drop the guard mutex patch
+> v4: Tried to address Lukasz review comments.
+>
+> I dont have any Arm64 device the test and verify
+> Tested on 32 bit Arch Odroid U3 amd XU4 SoC boards.
+> Build with clang with W=1 enable.
+>
+> Please sare the feedback on this.
 
-All errors (new ones prefixed by >>):
+Can you review the first 5 patches of this series?
+Do you want me to resend
 
->> ld.lld: error: undefined symbol: proc_int_u2k_conv_uop
-   >>> referenced by jiffies.c:115 (kernel/time/jiffies.c:115)
-   >>>               kernel/time/jiffies.o:(do_proc_int_conv_jiffies) in archive vmlinux.a
-   >>> referenced by jiffies.c:125 (kernel/time/jiffies.c:125)
-   >>>               kernel/time/jiffies.o:(do_proc_int_conv_userhz_jiffies) in archive vmlinux.a
-   >>> referenced by jiffies.c:145 (kernel/time/jiffies.c:145)
-   >>>               kernel/time/jiffies.o:(do_proc_int_conv_ms_jiffies) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: proc_int_k2u_conv_kop
-   >>> referenced by jiffies.c:120 (kernel/time/jiffies.c:120)
-   >>>               kernel/time/jiffies.o:(do_proc_int_conv_jiffies) in archive vmlinux.a
-   >>> referenced by jiffies.c:135 (kernel/time/jiffies.c:135)
-   >>>               kernel/time/jiffies.o:(do_proc_int_conv_userhz_jiffies) in archive vmlinux.a
-   >>> referenced by jiffies.c:155 (kernel/time/jiffies.c:155)
-   >>>               kernel/time/jiffies.o:(do_proc_int_conv_ms_jiffies) in archive vmlinux.a
-   >>> referenced 1 more times
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+-Anand
