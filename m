@@ -1,99 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D11D32B997
-	for <llvm@lists.linux.dev>; Fri,  5 Dec 2025 13:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1780E185B48;
+	Fri,  5 Dec 2025 14:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764942791; cv=none; b=ghg97TCzuMfButy8H1X7KEfyxbQdcMireLTq/+9ZKopoTpt/8Be3XqfJE3QXu+T2XD+OIXpk8LowW36iKjar24PaNXXFO/ddyREO9bdwZT95SWyNCo3xj7biKKh85ffhfUohhTHWdfsomXMqyFms5JEydR1eZgtwr9ElPiT7bog=
+	t=1764944226; cv=none; b=qrXCoBOJNgp/zF8wG4DoXydeqimQW/o6OsVcxfbIdJOmFWvtLuUppsKpdERtid0wvoBfe0+Qyo3GReii2w4ET67RpvdGdK4kxwJQGwtfiRClkPuiT6ar3gTwq1McWAe/WB+OXnjvHpmxzGUtAXmF0B82jh7nYet+MIvCjt/jb/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764942791; c=relaxed/simple;
-	bh=FXA4hWR1dNEaiXCJ2gnwtzwqVJs6mmWDav/Hjs6xpHY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UnEVys5tM5Xn/fIWXHfusSFXn3KV1jaBrXiLl0riZ0BT3G6zWOTfcmylqSdMAMDZn2iSF3XS72xdFbcUSm5S47XnjgfXwLtMFbu+bIA4MF7RC2tQ4IGgpI6HOi8/d/Iv9pLIyK7kC60kQKfTv6rZeB5oSkZyDu0khF7FU0XH4j0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TkbT9jlj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1764944226; c=relaxed/simple;
+	bh=OKCW5cDl1+0RGMsHm7AvZSsrkSH8zbzs/RY3A2Fhwys=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Jh8OyB+Se/K42KwNA0T0D2kfPeSayR78DNr3IRH4DS7Kl9SPvtw4g5qYrXPPI+hFjd0RaxNO8eKELbpmokMTq0iP7NPr4EQZ+ybS3w0g/smG2GZxPZZ93+TAJpNeldx7g2Bp/LFH5J8K//PM0Q0ruFSh6FzxKJ/svYwF9L17ATQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=YP8j3FNJ; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TkbT9jlj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764942787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GrOkmdhHa64rpKtPauQuxN7r3rHgyeHQxmrRINipChU=;
-	b=TkbT9jljE42c2LPUKchP4YQhf3eXzoDxergXMpmKxzip6Qxue9mIMBBna0HHDWbPxPTICl
-	SlDmsRfNHb0Op9dbnQWMQUvvOazfh6wpiGEWhHVX0r5HPpRxxrG36oXpSgBnQ+yPftjKur
-	NVRGt7da2/7PGN38k/ZCbO7BnQMyCB8=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-645-KzNhpO-xNP-5dbqJ0VnHgg-1; Fri,
- 05 Dec 2025 08:53:06 -0500
-X-MC-Unique: KzNhpO-xNP-5dbqJ0VnHgg-1
-X-Mimecast-MFC-AGG-ID: KzNhpO-xNP-5dbqJ0VnHgg_1764942785
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0DE57195608F
-	for <llvm@lists.linux.dev>; Fri,  5 Dec 2025 13:53:05 +0000 (UTC)
-Received: from [172.20.50.79] (unknown [10.30.44.138])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 95C57180044F;
-	Fri,  5 Dec 2025 13:53:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0,
- upstream-mainline, 43dfc13c)
-Date: Fri, 05 Dec 2025 13:53:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="YP8j3FNJ"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vRWcB-0041WR-OL; Fri, 05 Dec 2025 15:16:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector2; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
+	bh=Fy+YJPeJ4mI8qzgXHembqRChAk+0MsyrPaoiU7cZm54=; b=YP8j3FNJlHy87EcfeYDWLKs4yP
+	34duV/JXVGGbByC3nkUUXtTXX5KSDl/yNrdoFpL6SpLKCz4u0QhQ2BFZnpzuLnp/U/RFtApoiaqnS
+	o2RRC0i+nWYU67Vq547TKCCEEkcSS+a+dbEz1BM+mt4fIqb0yf+htgudcccVGh2LqrrBEkSS6ssw2
+	uqDP82IaLdwajns12/5g0AvCCj/K/GdqOl1WP2aNFRSHVqxyFs8p4i0jtnm7bj8pe9z7w6U/9n64e
+	sz4O4IVfAXAE9tNqxKKosPTZwRzeBRYuBoacL08fFK35m05+TUH2riQ8Z8pzKgqCGQOMUwwo5quA3
+	K+zUR5MQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vRWcA-0001DL-LW; Fri, 05 Dec 2025 15:16:54 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vRWc3-0033Iy-9e; Fri, 05 Dec 2025 15:16:47 +0100
+Date: Fri, 5 Dec 2025 14:16:44 +0000
+From: david laight <david.laight@runbox.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, Ard
+ Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Thorsten Blum
+ <thorsten.blum@linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, David Sterba
+ <dsterba@suse.com>, llvm@lists.linux.dev, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] lib/crypto: blake2b: Roll up BLAKE2b round loop on
+ 32-bit
+Message-ID: <20251205141644.313404db@pumpkin>
+In-Reply-To: <20251203190652.144076-1-ebiggers@kernel.org>
+References: <20251203190652.144076-1-ebiggers@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <15780.125120508530600186@us-mta-645.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 0bEcxOCScGHo8l1K24fX-DAwOi4qYcDiKRHsbuhmSbk_1764942785
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On Wed,  3 Dec 2025 11:06:52 -0800
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+> BLAKE2b has a state of 16 64-bit words.  Add the message data in and
+> there are 32 64-bit words.  With the current code where all the rounds
+> are unrolled to enable constant-folding of the blake2b_sigma values,
+> this results in a very large code size on 32-bit kernels, including a
+> recurring issue where gcc uses a large amount of stack.
+> 
+> There's just not much benefit to this unrolling when the code is already
+> so large.  Let's roll up the rounds when !CONFIG_64BIT.  Then, remove
+> the now-unnecessary override of the stack frame size warning.
+> 
+> Code size improvements for blake2b_compress_generic():
+> 
+>                   Size before (bytes)    Size after (bytes)
+>                   -------------------    ------------------
+>     i386, gcc           27584                 3632
+>     i386, clang         18208                 3248
+>     arm32, gcc          19912                 2860
+>     arm32, clang        21336                 3344
+> 
+> Running the BLAKE2b benchmark on a !CONFIG_64BIT kernel on an x86_64
+> processor shows a 16384B throughput change of 351 => 340 MB/s (gcc) or
+> 442 MB/s => 375 MB/s (clang).  So clearly not much of a slowdown either.
+> But also that microbenchmark also effectively disregards cache usage,
+> which is important in practice and is far better in the smaller code.
 
+Any idea how many clocks those are for each G() ?
+That number would give an idea of the actual 'quality' of the code.
 
-Kernel information:
-    Commit message: Merge tag 'pci-v6.19-changes' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/pci/pci
+A quick count shows 14 alu operations with a register dependency
+chain length of 12.
+So however hard you try G() will take 12 clocks (on 64bit) provided
+all the instructions have no extra result latency (probably true).
+That means there is plenty of time for two memory reads for each of the
+m[*b2b_sigma++] accesses (including the increment).
+On x86-64 there aren't enough registers to hold all of v[], so there also
+need to be another 4 reads and writes for each G().
+Total 8 memory reads, 4 memory writes and 12 alu clocks - shouldn't be
+too hard to get that to run in 12 clocks.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2197426676
+Because of the long register dependency chain there will be gains from
+running two G() in parallel.
+I don't think you'll get two to run in 12 clocks on x86-64.
+While two reads and a write can be done in each clock on later cpu it
+definitely needs a 'following wind'.
+Arm-64 is another matter, that should be able to hold all of v[] in
+registers throughout.
+(Although the memcpy(v, ctx->h, 64) probably needs replacing with 8
+separate assignments.)
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2197426676_x86_64_kernel-debug
+Note that executing two G() in parallel probably requires the source
+interleave the instructions for the two G() rather than relying on the
+cpu's 'out of order execution' to do all the work
+(Intel cpu might manage it...).
 
+While all that is a lot of changes to get right, I suspect that just:
+	const u8 *b2b_sigma = blake2b_sigma[0];
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+#define G(a, b, c, d) \
+	a += b + m[b2b_sigma[0]];
+	...
+	a += b + m[b2b_sigma[1]];
+	b2b_sigma += 2;
+	...
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+will remove almost all the benefit from unrolling the 'ROUND' loop.
+Especially since the loop termination condition can use b2b_sigma.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Everything except x86 will also benefit from multiplying all of
+blake2b_sigma by 8 and doing *(u64 *)((u8)m + b2b_sigma[0]) for
+the accesses.
+
+32bit is another matter entirely.
+I think gcc can handle u64 as either a pair of 32bit values or as
+a register-pair (so pairs of simode ops, or single dimode ones).
+The code seems better if you stop it doing the latter, but breathe
+on something that joins up the two parts and you are stuck with it.
+
+I can't help thinking that swapping the order of the bit-pairs in the
+index to v[] would make it easier to write ROUND() as a real loop.
+The code size (and I-cache) reduction might make up for any losses,
+especially since the code is really memory limited (because of the
+accesses to v[]) rather than alu limited - so a few more alu
+instructions may make little difference.
+
+	David
 
