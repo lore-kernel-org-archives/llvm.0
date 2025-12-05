@@ -1,190 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF2378F2E;
-	Fri,  5 Dec 2025 05:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EF73FFD;
+	Fri,  5 Dec 2025 05:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764911143; cv=none; b=HGm2RtxgF22uttnalgJUBd31Xi+jnhiYrCCdF7smxM0KIZzQw3flR9Ga7p8rxBicRjQ2DQWJVgKU2AS5j0r3ZAOGRRQKkV5tVUgRIYPHAW5itOpGjb8cB/2L1fXULQ/TyWVHannuxCAMTQ6JMruvzqYmjqX1FP3K0yZYy/4U2ZQ=
+	t=1764911943; cv=none; b=Ivu6tJDfRt+wcLekOX2pDTRQg4kIs8Gtk/M9QUreK2dJ29xjR+eE9Q8riVM3BoWNBD0FN5VmrRsXc4r4JgVTo3yX7EY2nz0+MmrhXCq0f5exW3AHpnRB2aJW1uvEKJV4l/k8GP5S37bCHzSwoOlf1tnhtc6szuzBuURJJ1CB0sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764911143; c=relaxed/simple;
-	bh=ONwT4dJ8vrsFPPa33jduMzaQRuPORhk3QQYmMZPBe88=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q7hALwPs7jo1oagWAQl5RV+yOKSxGcioRI9zpp+QeX9aUPbVFDc5lc5gNe23XoEWx6WgI41ULRljkWKZDAIWQ4iBrKFmlvC1jzWhp9X04NZRkmEpWuhv1TKUR/MqOT9gSRacUAC4t8WWf5TZYgENOo+CFQSWkjsyqpuOCl/b1i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hv46VaZr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764911943; c=relaxed/simple;
+	bh=+Cd+8pVYVsP79D8v2dIbSAcD5y4RsPXkPEGmi3y+wiw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dEZFhcePGPkLDnB3ReRS6O+ZEQDxvLg442zg/QRfM1yjn5Q01mZcsmZJx855NkpLnIy10ilTk6RAPjfh6bncP039BQYEfgz7zQT2RUKM+hOesTuFRKF2Yz9tx8eOQZ9TVNIdrC/NOtbam5eD7H708u3mbZOSQoeHkM61efGHjiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A3TxryQk; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hv46VaZr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEED4C4CEF1;
-	Fri,  5 Dec 2025 05:05:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764911143;
-	bh=ONwT4dJ8vrsFPPa33jduMzaQRuPORhk3QQYmMZPBe88=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hv46VaZrhakZWAuAg+EBqLARnXJsP1ypdRAionvLU6nWeqCS1qheCuxeDr4ArlcYL
-	 DPtLQuHDTaNOKgf4yGDGzr4ofxZvK/9oBysl8u4lL3v80yfpNZt8rv4KfxPXuHBcjU
-	 verKlb+611ALgJBGnD431hKR88Q/8aUh41BPkT8avlM37j/dbtxLY4YphCOLdCBwTu
-	 vH2BQUVQCoUj1ngsfLxrx+A6YM9JCZFw0C6JPNjFEldJtxb4DyX6qGS/9ddsPRqUn9
-	 Bennugml6CXO3lKLhn7vouWvnq6ZsI88O8dA5rWVCxvfZauO2/5jtdTW2McdXF9CQt
-	 suxRaokWHd0+g==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	David Laight <david.laight@runbox.com>,
-	David Sterba <dsterba@suse.com>,
-	llvm@lists.linux.dev,
-	linux-btrfs@vger.kernel.org,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v2] lib/crypto: blake2b: Roll up BLAKE2b round loop on 32-bit
-Date: Thu,  4 Dec 2025 21:03:30 -0800
-Message-ID: <20251205050330.89704-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A3TxryQk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764911942; x=1796447942;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Cd+8pVYVsP79D8v2dIbSAcD5y4RsPXkPEGmi3y+wiw=;
+  b=A3TxryQk/NubG77XUiI2hlB3poO9xRTxTEY5AHyrbaiVCiaCdT+7nag4
+   +uLoeG9YFTnsMvpDvUb6cwY+j+ncJXeQo/oy8xQgY9E4Ot7OyiWVrXbIP
+   ngXwe1vXYdHScXc2lc/faadvtdPJAwh2/9b/l3/a7P+3WAVIznhPSN6qe
+   3SGwJv/kJbSA5TCVhccysa676+35+IgkprimTNctZQL78ANOnszm3jWdD
+   F7nJPgHEYHHHUqMX444XSz9xtkabfvhKgbxSaYMhYWOVVVKgRXDHT1vhn
+   Xwnygtm3IwiA+ITKLQ5tzQvZSMsKm8rh1qlXlp9+w/TVwXK6YWcdmGAT3
+   Q==;
+X-CSE-ConnectionGUID: 7TYquzScTjWkVX2mIlRnDw==
+X-CSE-MsgGUID: k8nJkc2jQACB7t36yLBHKA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="70792838"
+X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
+   d="scan'208";a="70792838"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 21:19:01 -0800
+X-CSE-ConnectionGUID: HeNA/ZQbRjm2iBoQF06plQ==
+X-CSE-MsgGUID: Tx2GMpVjQcmn10YdevZWKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
+   d="scan'208";a="232557545"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 04 Dec 2025 21:19:00 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vRODZ-00000000Ee1-0W6u;
+	Fri, 05 Dec 2025 05:18:57 +0000
+Date: Fri, 5 Dec 2025 13:18:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	tzimmermann@suse.de, ville.syrjala@linux.intel.com,
+	Jani Nikula <jani.nikula@intel.com>
+Subject: Re: [PATCH v2 14/25] drm/vblank: pass vblank to
+ drm_vblank_count_and_time()
+Message-ID: <202512051216.oxayTqRt-lkp@intel.com>
+References: <2d2d9b12117be566ac63b9e67b79e50de4924ecc.1764845757.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d2d9b12117be566ac63b9e67b79e50de4924ecc.1764845757.git.jani.nikula@intel.com>
 
-BLAKE2b has a state of 16 64-bit words.  Add the message data in and
-there are 32 64-bit words.  With the current code where all the rounds
-are unrolled to enable constant-folding of the blake2b_sigma values,
-this results in a very large code size on 32-bit kernels, including a
-recurring issue where gcc uses a large amount of stack.
+Hi Jani,
 
-There's just not much benefit to this unrolling when the code is already
-so large.  Let's roll up the rounds when !CONFIG_64BIT.
+kernel test robot noticed the following build warnings:
 
-To avoid having to duplicate the code, just write code once using a
-loop, and conditionally use 'unrolled_full' from <linux/unroll.h>.
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm-i915/for-linux-next drm-tip/drm-tip linus/master next-20251204]
+[cannot apply to drm-i915/for-linux-next-fixes v6.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Then, fold the now-unneeded ROUND() macro into the loop.  Finally, also
-remove the now-unneeded override of the stack frame size warning.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-vblank-Unexport-drm_wait_one_vblank/20251204-195701
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/2d2d9b12117be566ac63b9e67b79e50de4924ecc.1764845757.git.jani.nikula%40intel.com
+patch subject: [PATCH v2 14/25] drm/vblank: pass vblank to drm_vblank_count_and_time()
+config: i386-buildonly-randconfig-002-20251205 (https://download.01.org/0day-ci/archive/20251205/202512051216.oxayTqRt-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512051216.oxayTqRt-lkp@intel.com/reproduce)
 
-Code size improvements for blake2b_compress_generic():
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512051216.oxayTqRt-lkp@intel.com/
 
-                  Size before (bytes)    Size after (bytes)
-                  -------------------    ------------------
-    i386, gcc           27584                 3632
-    i386, clang         18208                 3248
-    arm32, gcc          19912                 2860
-    arm32, clang        21336                 3344
+All warnings (new ones prefixed by >>):
 
-Running the BLAKE2b benchmark on a !CONFIG_64BIT kernel on an x86_64
-processor shows a 16384B throughput change of 351 => 340 MB/s (gcc) or
-442 MB/s => 375 MB/s (clang).  So clearly not much of a slowdown either.
-But also that microbenchmark also effectively disregards cache usage,
-which is important in practice and is far better in the smaller code.
+>> Warning: drivers/gpu/drm/drm_vblank.c:956 function parameter 'vblank' not described in 'drm_vblank_crtc_count_and_time'
 
-Note: If we rolled up the loop on x86_64 too, the change would be
-7024 bytes => 1584 bytes and 1960 MB/s => 1396 MB/s (gcc), or
-6848 bytes => 1696 bytes and 1920 MB/s => 1263 MB/s (clang).
-Maybe still worth it, though not quite as clearly beneficial.
-
-Fixes: 91d689337fe8 ("crypto: blake2b - add blake2b generic implementation")
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
----
- lib/crypto/Makefile  |  1 -
- lib/crypto/blake2b.c | 44 ++++++++++++++++++++------------------------
- 2 files changed, 20 insertions(+), 25 deletions(-)
-
-diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index b5346cebbb55..330ab65b29c4 100644
---- a/lib/crypto/Makefile
-+++ b/lib/crypto/Makefile
-@@ -31,11 +31,10 @@ obj-$(CONFIG_CRYPTO_LIB_GF128MUL)		+= gf128mul.o
- 
- ################################################################################
- 
- obj-$(CONFIG_CRYPTO_LIB_BLAKE2B) += libblake2b.o
- libblake2b-y := blake2b.o
--CFLAGS_blake2b.o := -Wframe-larger-than=4096 #  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105930
- ifeq ($(CONFIG_CRYPTO_LIB_BLAKE2B_ARCH),y)
- CFLAGS_blake2b.o += -I$(src)/$(SRCARCH)
- libblake2b-$(CONFIG_ARM) += arm/blake2b-neon-core.o
- endif # CONFIG_CRYPTO_LIB_BLAKE2B_ARCH
- 
-diff --git a/lib/crypto/blake2b.c b/lib/crypto/blake2b.c
-index 09c6d65d8a6e..581b7f8486fa 100644
---- a/lib/crypto/blake2b.c
-+++ b/lib/crypto/blake2b.c
-@@ -12,10 +12,11 @@
- #include <linux/bug.h>
- #include <linux/export.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/string.h>
-+#include <linux/unroll.h>
- #include <linux/types.h>
- 
- static const u8 blake2b_sigma[12][16] = {
- 	{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 },
- 	{ 14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3 },
-@@ -71,35 +72,30 @@ blake2b_compress_generic(struct blake2b_ctx *ctx,
- 	d = ror64(d ^ a, 16); \
- 	c += d; \
- 	b = ror64(b ^ c, 63); \
- } while (0)
- 
--#define ROUND(r) do { \
--	G(r, 0, v[0], v[ 4], v[ 8], v[12]); \
--	G(r, 1, v[1], v[ 5], v[ 9], v[13]); \
--	G(r, 2, v[2], v[ 6], v[10], v[14]); \
--	G(r, 3, v[3], v[ 7], v[11], v[15]); \
--	G(r, 4, v[0], v[ 5], v[10], v[15]); \
--	G(r, 5, v[1], v[ 6], v[11], v[12]); \
--	G(r, 6, v[2], v[ 7], v[ 8], v[13]); \
--	G(r, 7, v[3], v[ 4], v[ 9], v[14]); \
--} while (0)
--		ROUND(0);
--		ROUND(1);
--		ROUND(2);
--		ROUND(3);
--		ROUND(4);
--		ROUND(5);
--		ROUND(6);
--		ROUND(7);
--		ROUND(8);
--		ROUND(9);
--		ROUND(10);
--		ROUND(11);
--
-+#ifdef CONFIG_64BIT
-+		/*
-+		 * Unroll the rounds loop to enable constant-folding of the
-+		 * blake2b_sigma values.  Seems worthwhile on 64-bit kernels.
-+		 * Not worthwhile on 32-bit kernels because the code size is
-+		 * already so large there due to BLAKE2b using 64-bit words.
-+		 */
-+		unrolled_full
-+#endif
-+		for (int r = 0; r < 12; r++) {
-+			G(r, 0, v[0], v[4], v[8], v[12]);
-+			G(r, 1, v[1], v[5], v[9], v[13]);
-+			G(r, 2, v[2], v[6], v[10], v[14]);
-+			G(r, 3, v[3], v[7], v[11], v[15]);
-+			G(r, 4, v[0], v[5], v[10], v[15]);
-+			G(r, 5, v[1], v[6], v[11], v[12]);
-+			G(r, 6, v[2], v[7], v[8], v[13]);
-+			G(r, 7, v[3], v[4], v[9], v[14]);
-+		}
- #undef G
--#undef ROUND
- 
- 		for (i = 0; i < 8; ++i)
- 			ctx->h[i] ^= v[i] ^ v[i + 8];
- 
- 		data += BLAKE2B_BLOCK_SIZE;
-
-base-commit: 3f9f0252130e7dd60d41be0802bf58f6471c691d
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
