@@ -1,67 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB503225760;
-	Fri,  5 Dec 2025 04:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4A52C029A;
+	Fri,  5 Dec 2025 04:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764909243; cv=none; b=dB8kZ0mCTT4GPSq54TxLLyRSIhasVxFACj/hfXBKhKgvCTuTCLYwTQPAJKGrwyURYuVYtzj+VYwuUcc1EtsYf6er9y29EbS/6r4xmy+IIhiZtQMMA7vfkqmVgMzEXHABn4lCPWTCY+eSp9qq7V4Mgu64NCD/P8s2/AFCoN7KVBQ=
+	t=1764909901; cv=none; b=j3iqD+GQofNASq/kDqua0A0y3egjXAuMWw27122/vmMbcXx+NiCYtWUpubM5ztKSwG08AWQVhqYERgDJkKSm0U8XYNevK+ZQ6CIrEPDA63EPpv2I7TpGxWMJK+HwbjOQKvObZPvSkCRHOsgwDDv0qdRm/OStV7hokDpKGPm7Zp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764909243; c=relaxed/simple;
-	bh=uvNop/61wZWb1qbOjf2+BxB4b3V7SWP+mpy4JmXFPk4=;
+	s=arc-20240116; t=1764909901; c=relaxed/simple;
+	bh=qhMCFBXZYfAQ1YzPVCa0uf16JHBx0R79cVDubR+LZKg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mbh6LWmtSQ6oz2eXW5AOIOTZZpNJ8X6zqqZYsUcLreRexDHL7l+9JemEc2v2bfBc5UeYWVKSXPoUtjFY91BH9D3Q6zxpok8SjD20+iziRf80r3DrEOyNcMeTudIViuD8BwGWvRhTIStcTwqwlOSPD5CYjvceVXP25vjgBUSx1l4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SCyvCkxH; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=shRwGfMc1MH530edJbqT75z6okF1SWMrxDNlQBrnbypLC63silSeSg9xW9DLyor0k0f1DEd+4kY/sDFSoG94X0uf0NlZtIbKGNIW6G3WCQqTVUPmAPl1tV3rdGnnVxMNptVAEKFQKUjML9FUKZnDN1nAb1M62OYrwPwKy+dWu+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=muH+F3tx; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SCyvCkxH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="muH+F3tx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764909242; x=1796445242;
+  t=1764909899; x=1796445899;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=uvNop/61wZWb1qbOjf2+BxB4b3V7SWP+mpy4JmXFPk4=;
-  b=SCyvCkxHZNd4O/0oQbpk4URzBiFMx3sdLOD1Tc/iOjSFmsY6932/1LVK
-   cITOFrMvHdTLTk/s803eiBr7TRJVqf00RZQsLvo+nH2lsRRMLqvIEh+JK
-   aNHVHlYn+7Lq0r7ZXnA9htLIw5UDSZYfdFuSrmdOuF40AnimnubNNwWRo
-   kAtufJUYTJPQoKI2ZbpEM1w4bOSEOLckorD9+g4n1ZDTCMZr6KF+pdKFq
-   2FMh1B1OIhMo5W4bx8GNeaTtkZ4NS+Vz5I7lSH2IL5/TfNTuwiMlBNgvl
-   QwlmQMEIrwHXv+bnAHHVHqbkQc3228+Fc3bGLiW21J7P1yDkvIzxND106
-   A==;
-X-CSE-ConnectionGUID: YmhcZjM/R1K97W/YsVo9dw==
-X-CSE-MsgGUID: STP3KT2wS+aXbXY/jjACSA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="70790468"
+  bh=qhMCFBXZYfAQ1YzPVCa0uf16JHBx0R79cVDubR+LZKg=;
+  b=muH+F3tx6zM7iB4FbGQJn+kOksRQLFuS1k3/iUz13+azq/ymP9lxL/fa
+   9V54dhkVPERbMMHMmwJzmwCrlxfSUPdO62qSnlKLJjGEyVuz7vu/bVtlT
+   ncMtHmUSr+4mGqAPu9HRGerrTVHgmEwOMvRKcX44XMjXcRRrGMzdb9Aiv
+   yTqZvMSQHb6ex5E+8VZKO89e7f3CPc52q9nkuV0jzs6G8mYyZ0X0Q8mIA
+   99eTJL/8x63VUbDQY07x0ZLcezbs4MPQgMuzvP0+MXngHthMvANM01iTB
+   fxcYNn1o2YYYE0cxaeWyVLOjSmuWqA6VY/YSCjnbkq4a4Xzoo4AaITDTz
+   Q==;
+X-CSE-ConnectionGUID: bpftoWqDRHK3imvl/Fj6KQ==
+X-CSE-MsgGUID: ipJIoRUYQ4uYaRhBlJn9Tw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="70791067"
 X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
-   d="scan'208";a="70790468"
+   d="scan'208";a="70791067"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 20:34:01 -0800
-X-CSE-ConnectionGUID: J+DagLs/RICSWdPP1WrjAQ==
-X-CSE-MsgGUID: QnRLQlv0TZOBWolRgBDNiw==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 20:44:59 -0800
+X-CSE-ConnectionGUID: ea7GKDgmT8mZTselO4mGNw==
+X-CSE-MsgGUID: rdjnMboDSWybNHAlfQkJJw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
-   d="scan'208";a="200318239"
+   d="scan'208";a="200321059"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 04 Dec 2025 20:33:56 -0800
+  by orviesa005.jf.intel.com with ESMTP; 04 Dec 2025 20:44:56 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vRNVx-00000000Eal-3Le1;
-	Fri, 05 Dec 2025 04:33:53 +0000
-Date: Fri, 5 Dec 2025 12:33:45 +0800
+	id 1vRNgc-00000000Ebt-2I0Z;
+	Fri, 05 Dec 2025 04:44:54 +0000
+Date: Fri, 5 Dec 2025 12:44:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>,
-	robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
-	robh@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
-	konrad.dybcio@oss.qualcomm.com, bjorn.andersson@oss.qualcomm.com,
-	bod@kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
-	charan.kalla@oss.qualcomm.com, prakash.gupta@oss.qualcomm.com,
-	vikash.garodia@oss.qualcomm.com
+To: Jani Nikula <jani.nikula@intel.com>, intel-xe@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, vijayanand.jitta@oss.qualcomm.com
-Subject: Re: [PATCH v2 3/3] of: Respect #{iommu,msi}-cells in maps
-Message-ID: <202512051124.ot03fX1c-lkp@intel.com>
-References: <20251204095530.8627-4-vijayanand.jitta@oss.qualcomm.com>
+	jani.nikula@intel.com
+Subject: Re: [PATCH 3/4] drm/{i915, xe}/stolen: move stolen memory handling
+ to display parent interface
+Message-ID: <202512051220.m3NhvHcT-lkp@intel.com>
+References: <cc2125f57b98401ea47746ad4784bb4bc6b198c2.1764868989.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,61 +65,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251204095530.8627-4-vijayanand.jitta@oss.qualcomm.com>
+In-Reply-To: <cc2125f57b98401ea47746ad4784bb4bc6b198c2.1764868989.git.jani.nikula@intel.com>
 
-Hi Vijayanand,
+Hi Jani,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on xen-tip/linux-next]
-[also build test ERROR on v6.18]
-[cannot apply to robh/for-next pci/next pci/for-linus linus/master next-20251204]
+[auto build test ERROR on drm-tip/drm-tip]
+[cannot apply to drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-xe/drm-xe-next linus/master v6.18 next-20251204]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vijayanand-Jitta/of-Add-convenience-wrappers-for-of_map_id/20251204-180719
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
-patch link:    https://lore.kernel.org/r/20251204095530.8627-4-vijayanand.jitta%40oss.qualcomm.com
-patch subject: [PATCH v2 3/3] of: Respect #{iommu,msi}-cells in maps
-config: i386-buildonly-randconfig-001-20251205 (https://download.01.org/0day-ci/archive/20251205/202512051124.ot03fX1c-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-i915-fbc-let-to_intel_display-do-its-generic-magic/20251205-012659
+base:   https://gitlab.freedesktop.org/drm/tip.git drm-tip
+patch link:    https://lore.kernel.org/r/cc2125f57b98401ea47746ad4784bb4bc6b198c2.1764868989.git.jani.nikula%40intel.com
+patch subject: [PATCH 3/4] drm/{i915, xe}/stolen: move stolen memory handling to display parent interface
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251205/202512051220.m3NhvHcT-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512051124.ot03fX1c-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512051220.m3NhvHcT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512051124.ot03fX1c-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512051220.m3NhvHcT-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:31:
-   In file included from include/linux/cpufreq.h:17:
->> include/linux/of.h:918:1: error: expected identifier or '('
-     918 | {
-         | ^
+>> drivers/gpu/drm/i915/display/intel_fbc.c:1011:11: error: call to undeclared function 'i915_gem_stolen_node_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1011 |         offset = i915_gem_stolen_node_offset(fbc->compressed_fb) / (4 * 1024);
+         |                  ^
+   drivers/gpu/drm/i915/display/intel_fbc.c:1011:11: note: did you mean 'intel_parent_stolen_node_offset'?
+   drivers/gpu/drm/i915/display/intel_parent.h:41:5: note: 'intel_parent_stolen_node_offset' declared here
+      41 | u32 intel_parent_stolen_node_offset(struct intel_display *display, struct intel_stolen_node *node);
+         |     ^
    1 error generated.
-   make[3]: *** [scripts/Makefile.build:182: kernel/sched/rq-offsets.s] Error 1 shuffle=4056561518
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1280: prepare0] Error 2 shuffle=4056561518
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=4056561518
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=4056561518
-   make: Target 'prepare' not remade because of errors.
 
 
-vim +918 include/linux/of.h
+vim +/i915_gem_stolen_node_offset +1011 drivers/gpu/drm/i915/display/intel_fbc.c
 
-0384e8c6c6fa49 Pantelis Antoniou 2015-01-21  914  
-c56888c32d643b Robin Murphy      2025-12-04  915  static inline int of_map_id(const struct device_node *np, u32 id, const char *map_name,
-c56888c32d643b Robin Murphy      2025-12-04  916  			    const char *cells_name, const char *map_mask_name,
-c56888c32d643b Robin Murphy      2025-12-04  917  			    struct of_map_id_arg *arg);
-2a6db719c92dbf Nipun Gupta       2018-09-10 @918  {
-2a6db719c92dbf Nipun Gupta       2018-09-10  919  	return -EINVAL;
-2a6db719c92dbf Nipun Gupta       2018-09-10  920  }
-2a6db719c92dbf Nipun Gupta       2018-09-10  921  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28   998  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28   999  static void fbc_sys_cache_enable(const struct intel_fbc *fbc)
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1000  {
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1001  	struct intel_display *display = fbc->display;
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1002  	struct sys_cache_cfg *sys_cache = &display->fbc.sys_cache;
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1003  	int range, offset;
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1004  	u32 cfg;
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1005  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1006  	if (!HAS_FBC_SYS_CACHE(display))
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1007  		return;
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1008  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1009  	range = fbc_sys_cache_limit(display) / (64 * 1024);
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1010  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28 @1011  	offset = i915_gem_stolen_node_offset(fbc->compressed_fb) / (4 * 1024);
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1012  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1013  	cfg = FBC_SYS_CACHE_TAG_USE_RES_SPACE | FBC_SYS_CACHEABLE_RANGE(range) |
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1014  	      FBC_SYS_CACHE_START_BASE(offset);
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1015  
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1016  	mutex_lock(&sys_cache->lock);
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1017  	/* update sys cache config only if sys cache is unassigned */
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1018  	if (sys_cache->id == FBC_SYS_CACHE_ID_NONE)
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1019  		fbc_sys_cache_update_config(display, cfg, fbc->id);
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1020  	mutex_unlock(&sys_cache->lock);
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1021  }
+0b806d62fd5f59 Vinod Govindapillai 2025-11-28  1022  
 
 -- 
 0-DAY CI Kernel Test Service
