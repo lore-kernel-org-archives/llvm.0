@@ -1,115 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6668431B11E;
-	Fri,  5 Dec 2025 09:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C0B314B94;
+	Fri,  5 Dec 2025 10:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764928550; cv=none; b=O4fl742nDNGr6VQZJ6TjgBqbv+Mhpr0IvhtJtxBLr/2CrQTseihUWZ3nqMrlFMvSaAOuBnUYBqaaqJzftAAXPZQezRUNn2P05f8hLUn5zuxahhn+gjl+xHGmglkrwYV0ouYnLSoq4QmE1g40DBrKm06zog87q9XbZj3ByCnMoWE=
+	t=1764931414; cv=none; b=Hvhf3hBVqO9qcN36RzjuiaJJzf7s7pnOAczr9SdWmxZy8B2AbYxlMLq6x0Y2/CNRzh3rGU3xZvxcz0uhk+aG0NIA3k1pmTY4lnR2XIkWiyq+oPv9IRztd0z+la8Zfr+m+CJes+6iMCjO2ejVe2uEcg2Am2IoCWIHQcXf8Uco15c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764928550; c=relaxed/simple;
-	bh=eQcvofA5/i6F3yeN81r21V15GmbWxJ3Ch+IAs5hJX/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fU+jd/3FQgKp2hxgmsSrq6xSIT3H8p3IvvijOwYUAGAx3ej3wdsay6/vEKXPdbJDilyrZmfC1du0J61p1dpM1YTeDiIncp63kdkbV1TRZ1GSlQTGeLnYtW3p29dIo2PRZUMurvyjj/XUrgTRP70VQ9R0MiHeEQfKg/a1urkM8JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZChswqrB; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764931414; c=relaxed/simple;
+	bh=+hg8bBBecEhPSH6e6ao4YrpMhbUMTAcKd45O1DQZdgg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LaygNpjuBrXffKOqB4by3FQT2WnI4k3Oc8lzYKHDcoRbYPsOq65tKhDl8znvLMgEGBBh02B3BhyZjo8dKY2yXSaerRZbty9oUwn1xZzjgrcSMi51gm1btmHRabp2vHXOt83bcuDnDBpA+NfV84wKH1T75H8USvdwsRYqTLxeE1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t7VMu9Ur; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZChswqrB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764928546; x=1796464546;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eQcvofA5/i6F3yeN81r21V15GmbWxJ3Ch+IAs5hJX/c=;
-  b=ZChswqrBY60OD2mD0+vm6Lub2u6UKVqnLzfR5VGbSl5mpEqB43fAXTuN
-   bXaS4xFjnGfhBSN92V5CFD1AzSxxaQgM+EeSv7cT+lciNq3fyySIqysA9
-   wkZnhHrQIU8K5XYiFl26oJOWPAUCQvEoBLypBGUw0cUOiAzqk3WouEscq
-   dTAfjTL8j3YjVSNFmQB+wrmayc0u3a3BhVREIn2u1cILUVt4aEyex9laH
-   VMKim4ld3FiruW8pXofyApUc2o1e/c/4vTYRF/y8csdDBEnwF3Ya+RWLK
-   pdsuIlu9q6uzNe0XKdjMdZUQU5cscqJ/nbjve3jiD0m3p20agGEdAfSru
-   g==;
-X-CSE-ConnectionGUID: d4q6olR2T56Zf2Cw9BtKqw==
-X-CSE-MsgGUID: MtrfQ6sjQTC4j9czpyPvcQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="70811103"
-X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
-   d="scan'208";a="70811103"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 01:55:40 -0800
-X-CSE-ConnectionGUID: pusVzaMERzeoiK+G+tUCgQ==
-X-CSE-MsgGUID: ZIkYCspeRxubYpnKrr9OWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,251,1758610800"; 
-   d="scan'208";a="194907167"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 05 Dec 2025 01:55:38 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vRSXI-00000000Eqr-1zy7;
-	Fri, 05 Dec 2025 09:55:36 +0000
-Date: Fri, 5 Dec 2025 17:55:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Takahiro Itazuri <itazur@amazon.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] KVM: pfncache: Use vmap() for guest_memfd pages
- without direct map
-Message-ID: <202512051702.JVgyDZnV-lkp@intel.com>
-References: <20251203144159.6131-3-itazur@amazon.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t7VMu9Ur"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B524C4CEF1;
+	Fri,  5 Dec 2025 10:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764931412;
+	bh=+hg8bBBecEhPSH6e6ao4YrpMhbUMTAcKd45O1DQZdgg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=t7VMu9UrUqEAdr3zFCJy357yNQyiEy10K4swo4WmCileB72Cc4/6SURKIslYfJbTX
+	 aKh626xNRLc+/z5dC+8aKwOZnPCy5MF+aFwJQSpc0+bdYvaeS2hAJsR6XrSPAouYd8
+	 k8wVc+T2qaL4Ohsl3wZY09+o0mzlX80Z/Ah4vqjGMhHVcJcN9ShW7KpUahfbppc8RF
+	 jj2pbVYv+5M8qeV1r+XOxQCa1U7fkD9uZKfKveDYCjN2pGZQwmBo8gChgWfuaMy+BA
+	 74W+amIkEauzLbGXfEW744WyzhP4D7k7bWr8tS0+3UVPvxx4N/jkcjd+qhWOy7Tfwe
+	 CWiDqPVpMLu9A==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: Philip Li <philip.li@intel.com>, Miguel Ojeda
+ <miguel.ojeda.sandonis@gmail.com>
+Cc: Daniel Gomez <da.gomez@kernel.org>, Oliver Sang <oliver.sang@intel.com>,
+ kernel
+ test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Benno Lossin <lossin@kernel.org>, Nathan
+ Chancellor <nathan@kernel.org>
+Subject: Re: [linux-next:master 4752/13171] error[E0609]: no field
+ `__bindgen_anon_1` on type `bindings::kernel_param`
+In-Reply-To: <aTIuMwbnGHRWrS9X@rli9-mobl>
+References: <202512020454.Tf36WHw5-lkp@intel.com>
+ <3447801b-95f7-4368-a433-e79669b5d22e@kernel.org>
+ <lBhfqvej6RgECA1JyZ0zOpPTpcVF5ALMyOHAKGmHvM8HTxdqgCqEFn1xpvUGcCTJ31qM1Fptxl0DLLHcHZJo4g==@protonmail.internalid>
+ <aTEi3KUUkPVGS3ix@xsang-OptiPlex-9020>
+ <87fr9qwjt2.fsf@t14s.mail-host-address-is-not-set>
+ <f2320396-4509-4591-983c-6eb96db85663@kernel.org>
+ <CANiq72mNQDN5cAi9XEo5X48ZNMjDoe3xkAeskFPcSjuhBCXwvg@mail.gmail.com>
+ <pSndtrQS0CVdjpKHPwropf0h0SLk9DiwQwWu6pGGj7MEQZpbLkBctjfbcbmdn7tk4IyZWZUE1UgrktBDmJrPHQ==@protonmail.internalid>
+ <aTIuMwbnGHRWrS9X@rli9-mobl>
+Date: Fri, 05 Dec 2025 11:43:21 +0100
+Message-ID: <87cy4tw6nq.fsf@t14s.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251203144159.6131-3-itazur@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Takahiro,
+"Philip Li" <philip.li@intel.com> writes:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+> On Thu, Dec 04, 2025 at 01:24:03PM +0100, Miguel Ojeda wrote:
+>> On Thu, Dec 4, 2025 at 12:59=E2=80=AFPM Daniel Gomez <da.gomez@kernel.or=
+g> wrote:
+>> >
+>> > + Any reason to use an unreleased clang version for this reports? Sinc=
+e clang-22
+>> > is not officially released yet, issues seen with it seem lower priorit=
+y than
+>> > those reproduced with stable, released versions. Does it make sense to=
+ act
+>> > on these kind of "bleeding edge" reports, or should we wait until they=
+'re
+>> > confirmed on a stable release? Does 0day test both?
+>>
+>> Some people in the kernel regularly test with unreleased compilers
+>> (all GCC, Clang and Rust) in order to fix issues before those
+>> compilers get actually released, e.g. ClangBuiltLinux for LLVM, I do
+>> it for `rustc`, several people for GCC, etc.
+>>
+>> So I guess the idea is similar for kernel test robot? There is value
+>> on doing that, and whether one should act depends -- if it is close to
+>> the release of the compiler, then it makes sense to try to figure out
+>> what is breaking so that the compiler has a chance to fix it.
+>> Otherwise, if nobody tries, we would get quite broken compilers (for
+>> the kernel use case at least).
+>
+> thanks, the bot tests multiple versions of compiler for both gcc and clan=
+g.
+> For clang, low confidence ones will only be sent to llvm mailing list for
+> check firstly, and for other issues, we will cc llvm mailing list who also
+> monitor this closely and help check in case there's issue in latest compi=
+ler.
+>
+>>
+>> It is also why I think having at least a basic kernel build on the
+>> upstream CIs of the compilers is a good idea (it already showed value
+>> in upstream Rust and perhaps we should talk about it again in LPC for
+>> Clang).
+>>
+>> But, yeah, the reports can be confusing and reacting to them properly
+>> does take time and effort (e.g. I need sometimes to bisect the
+>> compiler etc.).
+>>
+>> Does LKP try the bleeding edge versions only if a stable compiler
+>> built successfully? That could perhaps help.
+>
+> For bleeding edge, the bot regularly builds and use latest code now.
+>
+>>
+>> Andreas also suggested yesterday in our meeting to have such bleeding
+>> edge reports perhaps more clearly marked or similar.
+>
+> Probably we can mark rust issue as low confidence when it occurs on non
+> released compiler, so it will not be directly sent to developer before it
+> is further checked?
 
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on kvm/next mst-vhost/linux-next linus/master v6.18 next-20251205]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Would it be possible to still send the report, but to inject a line to
+the report stating it is marked as low confidence due to X and Y
+(unreleased compiler etc.)?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Takahiro-Itazuri/KVM-pfncache-Use-kvm_gmem_get_pfn-for-guest_memfd-backed-memslots/20251203-224344
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20251203144159.6131-3-itazur%40amazon.com
-patch subject: [RFC PATCH 2/2] KVM: pfncache: Use vmap() for guest_memfd pages without direct map
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251205/202512051702.JVgyDZnV-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512051702.JVgyDZnV-lkp@intel.com/reproduce)
+I think it is still valuable to get the reports, but it would be nice to
+know we don't need to scramble all hands on deck immediately.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512051702.JVgyDZnV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/events/intel/core.c:17:
->> include/linux/kvm_host.h:634:9: error: call to undeclared function 'mapping_no_direct_map'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     634 |                mapping_no_direct_map(slot->gmem.file->f_mapping);
-         |                ^
-   1 error generated.
+I guess one could also just read the report more carefully to learn
+that an unreleased compiler was used. But seeing this at a glance would
+be great.
 
 
-vim +/mapping_no_direct_map +634 include/linux/kvm_host.h
+Best regards,
+Andreas Hindborg
 
-   630	
-   631	static inline bool kvm_slot_no_direct_map(const struct kvm_memory_slot *slot)
-   632	{
-   633		return slot && kvm_slot_has_gmem(slot) &&
- > 634		       mapping_no_direct_map(slot->gmem.file->f_mapping);
-   635	}
-   636	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
