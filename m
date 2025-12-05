@@ -1,153 +1,116 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1780E185B48;
-	Fri,  5 Dec 2025 14:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCD22367D5;
+	Fri,  5 Dec 2025 14:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764944226; cv=none; b=qrXCoBOJNgp/zF8wG4DoXydeqimQW/o6OsVcxfbIdJOmFWvtLuUppsKpdERtid0wvoBfe0+Qyo3GReii2w4ET67RpvdGdK4kxwJQGwtfiRClkPuiT6ar3gTwq1McWAe/WB+OXnjvHpmxzGUtAXmF0B82jh7nYet+MIvCjt/jb/o=
+	t=1764944577; cv=none; b=V1FFrmLjp1Rw5KUEkmpN/ujdNdxXohDD6NKqME3iNo29K5R9pH1sNqLzWsQx9aq5YfKu/DSihod+VU7tC3SlooN44LxLGKYt/6zejf64k5Nx6UGE+vuVa+xcqvClZzbNOh7wSDYc4hlvkmYzK9hywHD26B7oGf8yTEpUXMX0j/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764944226; c=relaxed/simple;
-	bh=OKCW5cDl1+0RGMsHm7AvZSsrkSH8zbzs/RY3A2Fhwys=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jh8OyB+Se/K42KwNA0T0D2kfPeSayR78DNr3IRH4DS7Kl9SPvtw4g5qYrXPPI+hFjd0RaxNO8eKELbpmokMTq0iP7NPr4EQZ+ybS3w0g/smG2GZxPZZ93+TAJpNeldx7g2Bp/LFH5J8K//PM0Q0ruFSh6FzxKJ/svYwF9L17ATQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=YP8j3FNJ; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
+	s=arc-20240116; t=1764944577; c=relaxed/simple;
+	bh=q+tBDgWevp++ehnFpn2sjIn3HSrTRq3bDnmM847iVnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aGDXRS6+OKrRYm4JkuVXLjI7PW6ehRjxMfUgwk9KAzrZwVqrqsv7lXEDRTM1hvuz7SPCWiOCyEFnlM69XfR7NwyVf3xFcuNHL4cDRH4ITmWiLzokT6FgtU58ah5D+kVRaEuFkUeq+R4KoOxKz2E92uHwjGJ/S6u8yrABiDfEK7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g2MYA5Pl; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="YP8j3FNJ"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <david.laight@runbox.com>)
-	id 1vRWcB-0041WR-OL; Fri, 05 Dec 2025 15:16:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-	 s=selector2; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
-	bh=Fy+YJPeJ4mI8qzgXHembqRChAk+0MsyrPaoiU7cZm54=; b=YP8j3FNJlHy87EcfeYDWLKs4yP
-	34duV/JXVGGbByC3nkUUXtTXX5KSDl/yNrdoFpL6SpLKCz4u0QhQ2BFZnpzuLnp/U/RFtApoiaqnS
-	o2RRC0i+nWYU67Vq547TKCCEEkcSS+a+dbEz1BM+mt4fIqb0yf+htgudcccVGh2LqrrBEkSS6ssw2
-	uqDP82IaLdwajns12/5g0AvCCj/K/GdqOl1WP2aNFRSHVqxyFs8p4i0jtnm7bj8pe9z7w6U/9n64e
-	sz4O4IVfAXAE9tNqxKKosPTZwRzeBRYuBoacL08fFK35m05+TUH2riQ8Z8pzKgqCGQOMUwwo5quA3
-	K+zUR5MQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <david.laight@runbox.com>)
-	id 1vRWcA-0001DL-LW; Fri, 05 Dec 2025 15:16:54 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vRWc3-0033Iy-9e; Fri, 05 Dec 2025 15:16:47 +0100
-Date: Fri, 5 Dec 2025 14:16:44 +0000
-From: david laight <david.laight@runbox.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, Ard
- Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, Thorsten Blum
- <thorsten.blum@linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, David Sterba
- <dsterba@suse.com>, llvm@lists.linux.dev, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] lib/crypto: blake2b: Roll up BLAKE2b round loop on
- 32-bit
-Message-ID: <20251205141644.313404db@pumpkin>
-In-Reply-To: <20251203190652.144076-1-ebiggers@kernel.org>
-References: <20251203190652.144076-1-ebiggers@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g2MYA5Pl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764944574; x=1796480574;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q+tBDgWevp++ehnFpn2sjIn3HSrTRq3bDnmM847iVnM=;
+  b=g2MYA5PlSFC5nMG7ll6ShiTvFaPk8KyfQ0dC3Pa3WoMtohg5SJlEsX3I
+   vjBKBnz5acQwAXNHrw0KgdWObdE2ynyoLKYgdrhSzr7NSxw3Oy2h0KIjn
+   M7GQZGkpsa0dmapdi440Xp6L98uKyiBiXhQ64LzRFx1rHadiGRdUIUOmG
+   NIx3Eor00RrI86qOpg+hZCX9w+IODJ9MSK+vj+AL3+W58tvkThvbtHM/U
+   fstdjafv+hwPJ2zDdgOQIE6CMBx7ZzBHQbg27yXk8ZBoOuFUjimJwcwuo
+   NY7fHjC0Ba6hLqGJ6pI6+R2oo9pmb0oseDfX34tfnZPIQP5CSNZjQdQPD
+   Q==;
+X-CSE-ConnectionGUID: auzCX49kQAmy+f2hiY55+A==
+X-CSE-MsgGUID: CKGOCYkIRA2TVYoLWxeCVA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="78328470"
+X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
+   d="scan'208";a="78328470"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 06:22:51 -0800
+X-CSE-ConnectionGUID: s9ZYal9aSIu9Wq7Fu5Mcqg==
+X-CSE-MsgGUID: GV9enmlMQCibXRvIwZm5sA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
+   d="scan'208";a="199491288"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 05 Dec 2025 06:22:51 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vRWhs-00000000F4D-01Aj;
+	Fri, 05 Dec 2025 14:22:48 +0000
+Date: Fri, 5 Dec 2025 22:22:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 2/2] netconsole: Plug to dynamic configfs item
+Message-ID: <202512052219.nHgf3wdu-lkp@intel.com>
+References: <20251202-configfs_netcon-v1-2-b4738ead8ee8@debian.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251202-configfs_netcon-v1-2-b4738ead8ee8@debian.org>
 
-On Wed,  3 Dec 2025 11:06:52 -0800
-Eric Biggers <ebiggers@kernel.org> wrote:
+Hi Breno,
 
-> BLAKE2b has a state of 16 64-bit words.  Add the message data in and
-> there are 32 64-bit words.  With the current code where all the rounds
-> are unrolled to enable constant-folding of the blake2b_sigma values,
-> this results in a very large code size on 32-bit kernels, including a
-> recurring issue where gcc uses a large amount of stack.
-> 
-> There's just not much benefit to this unrolling when the code is already
-> so large.  Let's roll up the rounds when !CONFIG_64BIT.  Then, remove
-> the now-unnecessary override of the stack frame size warning.
-> 
-> Code size improvements for blake2b_compress_generic():
-> 
->                   Size before (bytes)    Size after (bytes)
->                   -------------------    ------------------
->     i386, gcc           27584                 3632
->     i386, clang         18208                 3248
->     arm32, gcc          19912                 2860
->     arm32, clang        21336                 3344
-> 
-> Running the BLAKE2b benchmark on a !CONFIG_64BIT kernel on an x86_64
-> processor shows a 16384B throughput change of 351 => 340 MB/s (gcc) or
-> 442 MB/s => 375 MB/s (clang).  So clearly not much of a slowdown either.
-> But also that microbenchmark also effectively disregards cache usage,
-> which is important in practice and is far better in the smaller code.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Any idea how many clocks those are for each G() ?
-That number would give an idea of the actual 'quality' of the code.
+[auto build test ERROR on e538109ac71d801d26776af5f3c54f548296c29c]
 
-A quick count shows 14 alu operations with a register dependency
-chain length of 12.
-So however hard you try G() will take 12 clocks (on 64bit) provided
-all the instructions have no extra result latency (probably true).
-That means there is plenty of time for two memory reads for each of the
-m[*b2b_sigma++] accesses (including the increment).
-On x86-64 there aren't enough registers to hold all of v[], so there also
-need to be another 4 reads and writes for each G().
-Total 8 memory reads, 4 memory writes and 12 alu clocks - shouldn't be
-too hard to get that to run in 12 clocks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/configfs-add-kernel-space-item-registration-API/20251202-233234
+base:   e538109ac71d801d26776af5f3c54f548296c29c
+patch link:    https://lore.kernel.org/r/20251202-configfs_netcon-v1-2-b4738ead8ee8%40debian.org
+patch subject: [PATCH RFC 2/2] netconsole: Plug to dynamic configfs item
+config: hexagon-randconfig-001-20251205 (https://download.01.org/0day-ci/archive/20251205/202512052219.nHgf3wdu-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512052219.nHgf3wdu-lkp@intel.com/reproduce)
 
-Because of the long register dependency chain there will be gains from
-running two G() in parallel.
-I don't think you'll get two to run in 12 clocks on x86-64.
-While two reads and a write can be done in each clock on later cpu it
-definitely needs a 'following wind'.
-Arm-64 is another matter, that should be able to hold all of v[] in
-registers throughout.
-(Although the memcpy(v, ctx->h, 64) probably needs replacing with 8
-separate assignments.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512052219.nHgf3wdu-lkp@intel.com/
 
-Note that executing two G() in parallel probably requires the source
-interleave the instructions for the two G() rather than relying on the
-cpu's 'out of order execution' to do all the work
-(Intel cpu might manage it...).
+All error/warnings (new ones prefixed by >>):
 
-While all that is a lot of changes to get right, I suspect that just:
-	const u8 *b2b_sigma = blake2b_sigma[0];
+>> drivers/net/netconsole.c:231:1: warning: non-void function does not return a value [-Wreturn-type]
+     231 | }
+         | ^
+>> drivers/net/netconsole.c:1892:10: error: no member named 'group' in 'struct netconsole_target'
+    1892 |         if (nt->group.cg_item.ci_dentry)
+         |             ~~  ^
+   drivers/net/netconsole.c:1893:33: error: no member named 'group' in 'struct netconsole_target'
+    1893 |                 configfs_unregister_item(&nt->group.cg_item);
+         |                                           ~~  ^
+   1 warning and 2 errors generated.
 
-#define G(a, b, c, d) \
-	a += b + m[b2b_sigma[0]];
-	...
-	a += b + m[b2b_sigma[1]];
-	b2b_sigma += 2;
-	...
 
-will remove almost all the benefit from unrolling the 'ROUND' loop.
-Especially since the loop termination condition can use b2b_sigma.
+vim +1892 drivers/net/netconsole.c
 
-Everything except x86 will also benefit from multiplying all of
-blake2b_sigma by 8 and doing *(u64 *)((u8)m + b2b_sigma[0]) for
-the accesses.
+  1888	
+  1889	/* Cleanup netpoll for given target (from boot/module param) and free it */
+  1890	static void free_param_target(struct netconsole_target *nt)
+  1891	{
+> 1892		if (nt->group.cg_item.ci_dentry)
+  1893			configfs_unregister_item(&nt->group.cg_item);
+  1894		netpoll_cleanup(&nt->np);
+  1895		kfree(nt);
+  1896	}
+  1897	
 
-32bit is another matter entirely.
-I think gcc can handle u64 as either a pair of 32bit values or as
-a register-pair (so pairs of simode ops, or single dimode ones).
-The code seems better if you stop it doing the latter, but breathe
-on something that joins up the two parts and you are stuck with it.
-
-I can't help thinking that swapping the order of the bit-pairs in the
-index to v[] would make it easier to write ROUND() as a real loop.
-The code size (and I-cache) reduction might make up for any losses,
-especially since the code is really memory limited (because of the
-accesses to v[]) rather than alu limited - so a few more alu
-instructions may make little difference.
-
-	David
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
