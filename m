@@ -1,62 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748341E32CF;
-	Sat,  6 Dec 2025 08:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B9D19F137;
+	Sat,  6 Dec 2025 09:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765009495; cv=none; b=iuqG7SyH54wqBCVRB6XqyviWwpMBoHnPXoioou87y+wOe9MxFyZfY44jB0pAxJMhEVQGDCab/WGTJd7aRL/rLt/ScNPVq9iFJUe//6xQfs9SYGU38ytntV3tjkK3dKIj4PkkFzBp2ib4+eEtKg8IJwmZGWYrMi050995MsUm4Zs=
+	t=1765012615; cv=none; b=ax7/jMYpP6k5JwYdb2J43SE671dA66nQk1ql2ZSM2mdYu3qhiyL9aNAR0IqOGymIzoyUjFHsRQj0gOnjAAHHF+9r3G5InvfeRh47kg7Jqer7jr/m2KQY8emzv6U7pVakPItvWiQzYTeCYWmz5oC4bmo8wSWGlz8hjCXNH5FU5Bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765009495; c=relaxed/simple;
-	bh=WtEGE7fL567/h0x8PpSbS4j7e/EbI43FIG6m5IoZAo0=;
+	s=arc-20240116; t=1765012615; c=relaxed/simple;
+	bh=f4A7HZt6xxxoj73/dHXF82jyzlxLHb1ioXERDO66CuI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PotJQ70aDTgygNJClKf++i1cYL64pnc7OMklL9iv7dHc8+CLMjXATUf9v/con/6QAIPmA5ueMNVhzcmhDCZ949vPjVBto8e6rjPPbNXDN0+O9pJiSYbvTg1S7FRHEAUzehgasa85VazoHoDQsgqsWIGHhtbsow8AKb7JEyzNmH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O7rNuOgX; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=hISOTVIjjYKOXGagnMoav4llhatGiCVFtEWg78rmMGmhoTMbUZRU4+q56TO9zX4bJoTlv7xL+6/KQFTHbIwpHmSSiP5bADJjKRqHLgSYqNQwuZjz6Of16SL7KNRa4ZFNXcKcR2fLh2R7nD8Agf/C2pkKv/S0gSmxlyuJnkDNPSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=msVEcRoB; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O7rNuOgX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="msVEcRoB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765009493; x=1796545493;
+  t=1765012613; x=1796548613;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WtEGE7fL567/h0x8PpSbS4j7e/EbI43FIG6m5IoZAo0=;
-  b=O7rNuOgXqSSoxf9hi58S7Ln0Q9jlkMF55Z4dFUggnkrU2My1MtkUXkzO
-   yE/pjAfp5UlnhlCEHW1EJMaYtRXk9MMYps7y8S0hagONNotmOcggvG8mg
-   pKwOxParBuCzgr+b/Ygmb2KLo9rGxfCzL65S8ZYSGU0twyNEn/7GMDxjp
-   JWSY5HQfTO2SzSkyf7mDbPZqEbVUcBJDX9yd40718vWTgVebX/FAhPsS2
-   keKjksT669BbD13TOoUOYChXcd/kCn7FrG1QVNzi+SAv1xaQQdkOovD95
-   f6OT63Jvx8T1tNXmcyhd9XWDg0PYSfl/AxNOapl+jnEIynL13He43kfmi
-   Q==;
-X-CSE-ConnectionGUID: vID2CcZnQw2zEVBjgsOjfQ==
-X-CSE-MsgGUID: XCbPXLkWRgy/O9qCo7X2Hw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="66995946"
+  bh=f4A7HZt6xxxoj73/dHXF82jyzlxLHb1ioXERDO66CuI=;
+  b=msVEcRoBjFpc81gfI96YJDVMFZ9Sa3XvBYF1HRAwmOClqRrT9TxV91L9
+   E3fmsjQc+MgZQxd3u++uyOMR/biSNn1a0nkmlHBlFNHIYAf/+NWuMHS3T
+   rzoGMvK//ADf3JXa9OI8/955nSWegA8jPjaE+PJp3Q+LMLrWyRVt1rmje
+   NgWNnc5l4C5VgN2+CiZ1iZY2sgTO3RsIONM5hD8y0C5bsTdAjziOZ52xp
+   qahH/G7l8r59ZurDLR0jrHUJfQKYpDdI9umzKIsV4cmmSMrAPrEF6HhHC
+   gj3+EotBmoW+i/EZHkmfrRYtQlsA+eQnE+G1FT4IYLvE90lgXT/o+vmwJ
+   A==;
+X-CSE-ConnectionGUID: 8iPZSfurStSe9Lux2XXhWw==
+X-CSE-MsgGUID: mexv11CzTL+vcbSLxg3AvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="70888188"
 X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
-   d="scan'208";a="66995946"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2025 00:24:53 -0800
-X-CSE-ConnectionGUID: cPSGPkpHQpyr6GqxmNcTUQ==
-X-CSE-MsgGUID: PGURLv9cSRmDLakk/rZ24Q==
+   d="scan'208";a="70888188"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2025 01:16:52 -0800
+X-CSE-ConnectionGUID: 1hidD0lbRfOTbJwlmuYTUA==
+X-CSE-MsgGUID: kSFV82Q/T8qu8c0VwphBvQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
-   d="scan'208";a="199664874"
+   d="scan'208";a="200635545"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 06 Dec 2025 00:24:49 -0800
+  by orviesa005.jf.intel.com with ESMTP; 06 Dec 2025 01:16:50 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vRnax-00000000G1Z-0v4o;
-	Sat, 06 Dec 2025 08:24:47 +0000
-Date: Sat, 6 Dec 2025 16:24:02 +0800
+	id 1vRoPH-00000000G2T-3w6n;
+	Sat, 06 Dec 2025 09:16:47 +0000
+Date: Sat, 6 Dec 2025 17:16:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
+To: Changwoo Min <changwoo@igalia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Daniel Zahka <daniel.zahka@gmail.com>,
-	Eric Dumazet <edumazet@google.com>
-Subject: unifdef: usr/include/linux/psp.h.tmp: 9: unterminated string literal
- (#if line 6 depth 1)
-Message-ID: <202512061623.6whyyAn8-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Subject: unifdef: usr/include/linux/energy_model.h.tmp: 9: unterminated
+ string literal (#if line 6 depth 1)
+Message-ID: <202512061750.CczWYsf5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,179 +67,220 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   416f99c3b16f582a3fc6d64a1f77f39d94b76de5
-commit: 00c94ca2b99e6610e483f92e531b319eeaed94aa psp: base PSP device support
-date:   3 months ago
-config: sparc64-randconfig-001-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061623.6whyyAn8-lkp@intel.com/config)
+commit: bd26631ccdfd11701fa29e665a7f041875ba9423 PM: EM: Add em.yaml and autogen files
+date:   6 weeks ago
+config: arm64-randconfig-003-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061750.CczWYsf5-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6d8714b52375b3b7a7f269cd1ec4cc73baece38b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061623.6whyyAn8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061750.CczWYsf5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512061623.6whyyAn8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512061750.CczWYsf5-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   unifdef: usr/include/drm/qaic_accel.h.tmp: 10: unterminated string literal (#if line 7 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/dpll.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/map_to_14segment.h.tmp: 101: unterminated string literal (#if line 10 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/sound/asound.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/qaic_accel.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netfilter_bridge/ebt_limit.h.tmp: 7: unterminated string literal (#if line 2 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/map_to_14segment.h] Error 1 shuffle=859361486
-   unifdef: usr/include/drm/asahi_drm.h.tmp: 10: unterminated string literal (#if line 7 depth 1)
+   unifdef: usr/include/linux/mptcp_pm.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/asahi_drm.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/cdrom.h.tmp: 845: unterminated string literal (#if line 834 depth 2)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_limit.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/mptcp_pm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/toshiba.h.tmp: 29: unterminated string literal (#if line 22 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/cdrom.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/dm-ioctl.h.tmp: 14: unterminated string literal (#if line 9 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/toshiba.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/map_to_7segment.h.tmp: 83: unterminated string literal (#if line 6 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/dm-ioctl.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/coff.h.tmp: 177: unterminated string literal (#if line 14 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/map_to_7segment.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netfilter_bridge/ebt_arpreply.h.tmp: 11: unterminated string literal (#if line 2 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/coff.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/user_events.h.tmp: 14: unterminated string literal (#if line 8 depth 1)
+   unifdef: usr/include/linux/android/binder_netlink.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
    unifdef: output may be truncated
-   unifdef: usr/include/linux/input.h.tmp: 20: unterminated string literal (#if line 9 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/input.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/user_events.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/ila.h.tmp: 8: unterminated string literal (#if line 4 depth 1)
-   unifdef: output may be truncated
-   unifdef: usr/include/drm/drm.h.tmp: 69: unterminated string literal (#if line 68 depth 2)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ila.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/drm.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/if_hippi.h.tmp: 102: unterminated string literal (#if line 83 depth 3)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/if_hippi.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/wireguard.h.tmp: 138: unterminated string literal (#if line 135 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/wireguard.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/tipc_config.h.tmp: 173: unterminated string literal (#if line 172 depth 2)
-   unifdef: output may be truncated
-   unifdef: usr/include/drm/radeon_drm.h.tmp: 36: unterminated string literal (#if line 33 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/tipc_config.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/radeon_drm.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/if_pppox.h.tmp: 148: unterminated string literal (#if line 141 depth 2)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/if_pppox.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/vmcore.h.tmp: 7: unterminated string literal (#if line 2 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/vmcore.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/patchkey.h.tmp: 15: unterminated string literal (#if line 14 depth 1)
-   unifdef: output may be truncated
-   unifdef: usr/include/sound/asound.h.tmp: 1258: unterminated string literal (#if line 8 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/patchkey.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/sound/asound.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/netfilter_ipv6/ip6_tables.h.tmp: 162: unterminated string literal (#if line 16 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_ipv6/ip6_tables.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/gtp.h.tmp: 5: unterminated string literal (#if line 2 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/gtp.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/erspan.h.tmp: 40: unterminated string literal (#if line 23 depth 2)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/erspan.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/msdos_fs.h.tmp: 58: unterminated string literal (#if line 2 depth 1)
-   unifdef: output may be truncated
-   unifdef: usr/include/linux/cycx_cfm.h.tmp: 25: unterminated string literal (#if line 19 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/msdos_fs.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/cycx_cfm.h] Error 1 shuffle=859361486
-   unifdef: usr/include/drm/ivpu_accel.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/ivpu_accel.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/icmp.h.tmp: 127: unterminated string literal (#if line 120 depth 2)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/icmp.h] Error 1 shuffle=859361486
-   unifdef: usr/include/drm/xe_drm.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
-   unifdef: output may be truncated
-   unifdef: usr/include/linux/fscrypt.h.tmp: 55: unterminated string literal (#if line 8 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/xe_drm.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/fscrypt.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/ioam6.h.tmp: 126: unterminated string literal (#if line 41 depth 2)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ioam6.h] Error 1 shuffle=859361486
-   unifdef: usr/include/drm/omap_drm.h.tmp: 24: unterminated string literal (#if line 21 depth 1)
-   unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/omap_drm.h] Error 1 shuffle=859361486
-   unifdef: usr/include/drm/drm_mode.h.tmp: 30: unterminated string literal (#if line 27 depth 1)
-   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_arpreply.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/android/binder_netlink.h] Error 1 shuffle=2912882599
    unifdef: usr/include/linux/openvswitch.h.tmp: 42: unterminated string literal (#if line 21 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/drm_mode.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/nl80211.h.tmp: 45: unterminated string literal (#if line 1 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/openvswitch.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/nbd-netlink.h.tmp: 22: unterminated string literal (#if line 19 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/openvswitch.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/nl80211.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/media/raspberrypi/pisp_fe_config.h.tmp: 13: unterminated string literal (#if line 8 depth 1)
+   unifdef: usr/include/drm/armada_drm.h.tmp: 13: unterminated string literal (#if line 10 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/media/raspberrypi/pisp_fe_config.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/devlink.h.tmp: 18: unterminated string literal (#if line 13 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/nbd-netlink.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/armada_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/patchkey.h.tmp: 15: unterminated string literal (#if line 14 depth 1)
    unifdef: output may be truncated
->> unifdef: usr/include/linux/psp.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/patchkey.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/thermal.h.tmp: 22: unterminated string literal (#if line 2 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/devlink.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/psp.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/atmdev.h.tmp: 202: unterminated string literal (#if line 7 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/thermal.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/scsi/fc/fc_els.h.tmp: 164: unterminated string literal (#if line 8 depth 1)
    unifdef: output may be truncated
+   unifdef: usr/include/linux/netfilter/x_tables.h.tmp: 103: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/scsi/fc/fc_els.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter/x_tables.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/nouveau_drm.h.tmp: 30: unterminated string literal (#if line 25 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/nouveau_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/if_hippi.h.tmp: 102: unterminated string literal (#if line 83 depth 3)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/if_hippi.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/panthor_drm.h.tmp: 6: unterminated string literal (#if line 3 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/panthor_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/scsi/fc/fc_fs.h.tmp: 136: unterminated string literal (#if line 8 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/scsi/fc/fc_fs.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netfilter_ipv6/ip6_tables.h.tmp: 162: unterminated string literal (#if line 16 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_ipv6/ip6_tables.h] Error 1 shuffle=2912882599
    unifdef: usr/include/linux/hsi/cs-protocol.h.tmp: 18: unterminated string literal (#if line 11 depth 1)
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/atmdev.h] Error 1 shuffle=859361486
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/hsi/cs-protocol.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/qemu_fw_cfg.h.tmp: 7: unterminated string literal (#if line 2 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/hsi/cs-protocol.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/msm_drm.h.tmp: 28: unterminated string literal (#if line 25 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/qemu_fw_cfg.h] Error 1 shuffle=859361486
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/msm_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/smc.h.tmp: 33: unterminated string literal (#if line 12 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/smc.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netdev.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netdev.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netfilter_bridge/ebt_mark_t.h.tmp: 22: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/netfilter_bridge/ebt_among.h.tmp: 63: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/comedi.h.tmp: 16: unterminated string literal (#if line 10 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/l2tp.h.tmp: 199: unterminated string literal (#if line 8 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/comedi.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_mark_t.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_among.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netfilter_bridge/ebt_nflog.h.tmp: 10: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/l2tp.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_nflog.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/ip_vs.h.tmp: 299: unterminated string literal (#if line 7 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ip_vs.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/qxl_drm.h.tmp: 27: unterminated string literal (#if line 24 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/qxl_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/drm_mode.h.tmp: 30: unterminated string literal (#if line 27 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/drm_mode.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/fscrypt.h.tmp: 55: unterminated string literal (#if line 8 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/fscrypt.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/ivpu_accel.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/ivpu_accel.h] Error 1 shuffle=2912882599
+>> unifdef: usr/include/linux/energy_model.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/energy_model.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/ipv6.h.tmp: 126: unterminated string literal (#if line 119 depth 2)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/vmcore.h.tmp: 7: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ipv6.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/rocket_accel.h.tmp: 8: unterminated string literal (#if line 5 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/vmcore.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/tegra_drm.h.tmp: 7: unterminated string literal (#if line 4 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/rocket_accel.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/tegra_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/gtp.h.tmp: 5: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/ethtool_netlink_generated.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/gtp.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ethtool_netlink_generated.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/vc4_drm.h.tmp: 27: unterminated string literal (#if line 24 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/vc4_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/target_core_user.h.tmp: 10: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/target_core_user.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/taskstats.h.tmp: 277: unterminated string literal (#if line 17 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/nfs.h.tmp: 36: unterminated string literal (#if line 8 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/taskstats.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/omap_drm.h.tmp: 24: unterminated string literal (#if line 21 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/linux/wireguard.h.tmp: 138: unterminated string literal (#if line 135 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/nfs.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/omap_drm.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/wireguard.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/msdos_fs.h.tmp: 58: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
    unifdef: usr/include/linux/seg6_genl.h.tmp: 5: unterminated string literal (#if line 2 depth 1)
    unifdef: output may be truncated
-   unifdef: usr/include/linux/ndctl.h.tmp: 132: unterminated string literal (#if line 13 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/msdos_fs.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/seg6_genl.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/panfrost_drm.h.tmp: 9: unterminated string literal (#if line 6 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/seg6_genl.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ndctl.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/nfc.h.tmp: 27: unterminated string literal (#if line 21 depth 1)
+   unifdef: usr/include/linux/coda.h.tmp: 748: unterminated string literal (#if line 59 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/nfc.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/netfilter_bridge/ebt_nat.h.tmp: 13: unterminated string literal (#if line 2 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/panfrost_drm.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/coda.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/radeon_drm.h.tmp: 36: unterminated string literal (#if line 33 depth 1)
    unifdef: output may be truncated
-   unifdef: usr/include/linux/cyclades.h.tmp: 6: unterminated string literal (#if line 3 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/radeon_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/amdgpu_drm.h.tmp: 35: unterminated string literal (#if line 32 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_nat.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/cyclades.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/media/raspberrypi/pisp_be_config.h.tmp: 13: unterminated string literal (#if line 8 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/amdgpu_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/pps.h.tmp: 28: unterminated string literal (#if line 23 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/media/raspberrypi/pisp_be_config.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/tcp.h.tmp: 55: unterminated string literal (#if line 30 depth 2)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/pps.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/erspan.h.tmp: 40: unterminated string literal (#if line 23 depth 2)
    unifdef: output may be truncated
-   unifdef: usr/include/linux/dccp.h.tmp: 32: unterminated string literal (#if line 25 depth 2)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/erspan.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/if_pppox.h.tmp: 148: unterminated string literal (#if line 141 depth 2)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/if_pppox.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/exynos_drm.h.tmp: 19: unterminated string literal (#if line 16 depth 1)
+   unifdef: output may be truncated
+   unifdef: usr/include/drm/virtgpu_drm.h.tmp: 27: unterminated string literal (#if line 24 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/exynos_drm.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/virtgpu_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/nl80211.h.tmp: 45: unterminated string literal (#if line 1 depth 1)
    unifdef: output may be truncated
    unifdef: usr/include/linux/batman_adv.h.tmp: 10: unterminated string literal (#if line 7 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/tcp.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/dccp.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/batman_adv.h] Error 1 shuffle=859361486
-   unifdef: usr/include/linux/netfilter_bridge/ebt_limit.h.tmp: 7: unterminated string literal (#if line 2 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/batman_adv.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/nl80211.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/cycx_cfm.h.tmp: 25: unterminated string literal (#if line 19 depth 1)
    unifdef: output may be truncated
-   unifdef: usr/include/linux/netfilter_bridge/ebt_stp.h.tmp: 24: unterminated string literal (#if line 2 depth 1)
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/cycx_cfm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/netfilter_bridge/ebt_mark_m.h.tmp: 15: unterminated string literal (#if line 2 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_limit.h] Error 1 shuffle=859361486
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_stp.h] Error 1 shuffle=859361486
-   unifdef: usr/include/rdma/siw-abi.h.tmp: 11: unterminated string literal (#if line 6 depth 1)
+   unifdef: usr/include/linux/videodev2.h.tmp: 2407: unterminated string literal (#if line 57 depth 1)
    unifdef: output may be truncated
-   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/rdma/siw-abi.h] Error 1 shuffle=859361486
-   make[3]: Target '__headers' not remade because of errors.
-   make[2]: *** [Makefile:1380: headers] Error 2 shuffle=859361486
-   <stdin>:1519:2: warning: syscall clone3 not implemented [-W#warnings]
-    1519 | #warning syscall clone3 not implemented
-         |  ^
-   1 warning generated.
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=859361486
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=859361486
-   make: Target 'prepare' not remade because of errors.
+   unifdef: usr/include/linux/ioam6.h.tmp: 126: unterminated string literal (#if line 41 depth 2)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/netfilter_bridge/ebt_mark_m.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/videodev2.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/kfd_ioctl.h.tmp: 623: unterminated string literal (#if line 23 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ioam6.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/ip.h.tmp: 95: unterminated string literal (#if line 88 depth 2)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/kfd_ioctl.h] Error 1 shuffle=2912882599
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/linux/ip.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/drm/pvr_drm.h.tmp: 7: unterminated string literal (#if line 4 depth 1)
+   unifdef: output may be truncated
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/drm/pvr_drm.h] Error 1 shuffle=2912882599
+   unifdef: usr/include/linux/qemu_fw_cfg.h.tmp: 7: unterminated string literal (#if line 2 depth 1)
+   unifdef: output may be truncated
 
 -- 
 0-DAY CI Kernel Test Service
