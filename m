@@ -1,126 +1,98 @@
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440B223A9BE
-	for <llvm@lists.linux.dev>; Sat,  6 Dec 2025 18:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F49070808
+	for <llvm@lists.linux.dev>; Sat,  6 Dec 2025 19:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765045033; cv=none; b=IEgKQftWH0wkMoNTbp131jnz+o4JXw2QmHf/WCa9W8OyiBh3qGj+EjbM2svYWA2e340eXP3gfnje1XIC3iELmQYmfSbyf4cdVwh5+MJwZcE0rPwb767sC2frLMeS7fkkZe8Nm7qCKBJ4eVWZjxcE3MXu2xzlNsV5KLJO4wnhQ5k=
+	t=1765049590; cv=none; b=bKC0AulcHJ1JgLIhbsSDY6P2pOj7xlSLCJdVbaVejhGyMMIgXSObKNbHb/PBVW7TnLUTyt5AUvI52IUL5kBZT2fst10QGnbBrnWvuNtzksJUY7asZd2CH91Y8DMQ9oAys4WJR9Wxr6stx1HoFgqdXKceo0uDq25+arWbJ5fhbEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765045033; c=relaxed/simple;
-	bh=XDyLb4pfrbhH+H5hbDPdb5NwRxG4IzhCGeuKBK5USQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CiySPqohXvhAhFbFXkhn/UZMYI8rbaKOrUouTRE12GAtSXjANjTA7uCO0H/5BMJahavX9Xn6hILChJKHAqlxL0gzBmnPiM8Z9FoafwNr/saRXhiuVeDQbPxddzTpV8o/4HSONgRlt9QWeFimgFn5eZG0irrECanCxgJ7mkRHqsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from [192.168.0.116] (unknown [114.241.82.59])
-	by APP-03 (Coremail) with SMTP id rQCowAB3_tALczRp1lJkAw--.48747S2;
-	Sun, 07 Dec 2025 02:16:45 +0800 (CST)
-Message-ID: <35bacd20-c7e8-4a3f-be79-aa52701fc257@iscas.ac.cn>
-Date: Sun, 7 Dec 2025 02:16:43 +0800
+	s=arc-20240116; t=1765049590; c=relaxed/simple;
+	bh=Pj4w9UX/5vftYsIvB+o6C7JwL8amilQ+NUDd9YlwFzA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QlD7VgwSTmv12krkcLQmOk79gqE2C/1ksEbM4AxeIuZixUAIRt7JXzAYutR/dd+HDumDT4Ot3Ri7OfPTmqclAWZRqJDxCsiIGruz2lj8fMfR3AYNT6rFJzFP4a9vkfnNGy44qNXZHdDI1LP0UfXubUlrobr273ZnocExjg0KDsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HREPfvre; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HREPfvre"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765049586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=91ua5Y5EyiOC7LNUEMgw4cFc6KoMUrL7dWxnZk9+cUI=;
+	b=HREPfvre4BER0VNYVHoU9PcjPY/mnosKCbZlNXS7zDmbKp2j+iD1US6eAqL3YwSacQdKQt
+	Bh1HrjJmgaMIyDGz0mi7AJYKb9MIKj6gedLFs+w1OwoH3QO2Z34V3tRfbCZ26PvmlRiMWq
+	vJ3MLh2hfLOVMxhjZIxRu6E+c2iCo/E=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-38-4vAWEvTfOKWjDDSDtvM0bA-1; Sat,
+ 06 Dec 2025 14:33:05 -0500
+X-MC-Unique: 4vAWEvTfOKWjDDSDtvM0bA-1
+X-Mimecast-MFC-AGG-ID: 4vAWEvTfOKWjDDSDtvM0bA_1765049584
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EB5CA1800358
+	for <llvm@lists.linux.dev>; Sat,  6 Dec 2025 19:33:03 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 953AC180045B;
+	Sat,  6 Dec 2025 19:33:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0,
+ upstream-mainline, f468cf53)
+Date: Sat, 06 Dec 2025 19:33:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/4] rust: add a Kconfig function to test for support
- of bindgen options
-To: Asuna Yang <spriteovo@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Jonathan Corbet <corbet@lwn.net>, Jason Montleon <jmontleo@redhat.com>,
- Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
-References: <20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com>
- <20251204-gcc-rust-v5-v5-3-2d4f20d86c24@gmail.com>
- <1a6bb8cd-cc08-458f-a6f6-cdfefd327320@iscas.ac.cn>
- <9687109b-dc93-4535-848c-e5f22aeb8e9d@gmail.com>
-Content-Language: en-US
-From: Vivian Wang <wangruikang@iscas.ac.cn>
-In-Reply-To: <9687109b-dc93-4535-848c-e5f22aeb8e9d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAB3_tALczRp1lJkAw--.48747S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr17JFWUCryrJw43XF1DWrg_yoW8AFyxpF
-	18Wa1jva1kJ3W8t34v9Fy0qF15Kw18WrW2k3s5W342van8Ww1kKr1IyF1ak393XFy0vr42
-	vFsrKF90yan09aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvmb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
-	8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-	MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-	UI43ZEXa7IUneBT5UUUUU==
-X-CM-SenderInfo: pzdqw2pxlnt03j6l2u1dvotugofq/
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <34050.125120614330500147@us-mta-38.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 9DdL9TrVohY1S9yKtxCzHu7vX9toVhV7to5aRyavNfM_1765049584
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-On 12/4/25 20:33, Asuna Yang wrote:
-> On 12/4/25 5:06 PM, Vivian Wang wrote:
->
->>> +
->>> +# $(bindgen-backend-option,<flag>)
->>> +# Return y if bindgen backend supports <flag>, n otherwise
->>> +# For now, the backend refers only to libclang, so more
->>> specifically, this function tests whether the given flag is
->>> recognized by the libclang used by bindgen.
->>> +bindgen-backend-option = $(success,trap "rm -f .tmp_$$.h" EXIT;
->>> touch .tmp_$$.h; $(BINDGEN) .tmp_$$.h -- --target=$(BINDGEN_TARGET)
->>> $(1))
->>>
->> Can probably be simplified down to:
->>
->> $(BINDGEN) /dev/null -- -x c --target=$(BINDGEN_TARGET) $(1)
->>
->
-> bindgen is sensitive to file extensions. If the file is not .h or
-> .hpp, it complains:
->
-> panicked at bindgen/ir/context.rs:562:15:
-> libclang error; possible causes include:
-> - Invalid flag syntax
-> - Unrecognized flags
-> - Invalid flag arguments
-> - File I/O errors
-> - Host vs. target architecture mismatch 
+Kernel information:
+    Commit message: Merge tag 'bitmap-for-6.19' of github.com:/norov/linux
 
-That's so weird... I can't reproduce this if i pass -x c to bindgen,
-like this:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2199970920
 
-$ bindgen --version
-bindgen 0.72.1
-$ bindgen /dev/null
-panicked at /build/rust-bindgen-unwrapped-0.72.1-vendor/bindgen-0.72.1/ir/context.rs:562:15:
-libclang error; possible causes include:
-- Invalid flag syntax
-- Unrecognized flags
-- Invalid flag arguments
-- File I/O errors
-- Host vs. target architecture mismatch
-If you encounter an error missing from this list, please file an issue or a PR!
-$ bindgen /dev/null -- -x c
-Failed to run rustfmt: No such file or directory (os error 2) (non-fatal, continuing)
-/* automatically generated by rust-bindgen 0.72.1 */
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2199970920_x86_64_kernel-debug
 
-The -x argument should explicitly tell (lib)clang what language the file
-is without needing an extension. I don't know why it's not working for
-you...
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
