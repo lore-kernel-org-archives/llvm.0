@@ -1,73 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DB9219A8D;
-	Sat,  6 Dec 2025 03:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD902611E;
+	Sat,  6 Dec 2025 04:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764991181; cv=none; b=OLYvh/vYc3Z1fhSvDmzEug7/m5ATgdWeil3cuBFi/IdfmPvW5+Ea5PBUG/FwIauG5qlmsHkmMa0NMdtpiv0uCoQ8wbKw1qvfygDBnwd8lVD9ZLzxO2iCUwVakZdOvOGY2JjpCDa0KyAP10140cGIokK7SsYtofXZ6Z+Iunf373k=
+	t=1764996405; cv=none; b=ES+CI/oZp9iD8BAiWosOr77goG9T1RD76yqj9LpJkoHHJLEUpdP9vKCo5zTeDhNulOmysBH9uOlhuy2if1+UW454VuOndmgCFygL4QAFClbFH7oAAjCKzT5jLrkcJIO8yjFvY+sYfHPCR0f4RFnIe8qKRY+GIK10PSbWKD25e5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764991181; c=relaxed/simple;
-	bh=5gH637Pes04sa8dca3MnyEjtJ4p46PyN8XeJW2eyJ/s=;
+	s=arc-20240116; t=1764996405; c=relaxed/simple;
+	bh=0/OFQQ1evWTB8rK2UtfDgnk9iVMhRHz6Lo1vbaODj7M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NQhGosp/88+CzVf8wGC0Hx4EmgHpNLPziSebD7S7lhbFlIp5ChtSG7XCgXHBNbtOQK5ywepqPhrOD+Rd6sbgRyx5Z2u1Wjm5XO5NzqFdocTz8/Ucll79b/YwkS0IzgiFCdqOX9ScyuYbQDcPy0EMBOQgc9K8+rQWiLfDuvFqNFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CnMDbKvd; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=VHPUgb5EU69PXaUeH5aWwBz8uqZ6sHOy5ixf72fVuKmzdYXM7qWJgI/IKhMkxeovQ6jfbHJVjS01I4OyNyfeF5xdGOoLaolQURXcZh6sk3YoSvJP+2JdPBjE6fvy3r7fl9g6AzoEO1nUmiiBa2vzroPWGgWrs+TqfUhsj1xDgag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PUSumxIU; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CnMDbKvd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PUSumxIU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764991180; x=1796527180;
+  t=1764996403; x=1796532403;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5gH637Pes04sa8dca3MnyEjtJ4p46PyN8XeJW2eyJ/s=;
-  b=CnMDbKvdj7xr8AzrQU4FY6goGCK6jt/RItH/KUNAx5koWrcpioy05AJm
-   871fAcY9xh1CVp2CfcaN+j0G8+8SMeEy/M10kJiNzEDeImGPUwEqHKS9O
-   ySNun+t2COlzhXx/YGVrSKGJdaikuU/0EuI8CghmdQuioUQazXeGNWJJe
-   ceOzSzgjGOr4alGXjDv/rqrLBEMNlprqpsfYKhOdr3vwU3kYKCXnWtygC
-   V71gtrCfXKsOAsjOOrcsdt10ASqvMy0RNNexUJNTYsBIhoHPPoIywsxU/
-   V6PXXduhpZgGPmXRotoE9k5XPcVCfEMqABzlhDXV13nsmkHm1wiA6VdYL
+  bh=0/OFQQ1evWTB8rK2UtfDgnk9iVMhRHz6Lo1vbaODj7M=;
+  b=PUSumxIUbQTjpkiBB0WQrDCNdqZhCujoDVYsvznSavEVs2AI0glzdCUo
+   gXLgXFOq3qhe1XQLAyMbk2UWpjfBjfitzsTRje2/giYhf28KZIlPpCDJk
+   yvjEkdxlJswYRD01UOdG80BApH2QUSqns3b4oc7E1bFTsvDqXU3fiYpbn
+   b16WaiDFS3Bj9Agl2s5t51LxyT1zjg9hU6rb4p4zJJEqlTvU68r79qDfH
+   XnR5CcqN0dw/EQ2ja7Q+o86kCRPwCSGhKyx/JGUb4CgL2WePS/9zcLGV7
+   LgVfRFGOyFimZ9FOUX5BGemQi7Y+U7pOdCkF20WPY5g4cpm5SYqvnZThz
    g==;
-X-CSE-ConnectionGUID: QGVhZ4VeQXuFkEYY0ZsBkg==
-X-CSE-MsgGUID: 5Ubya6PGTzO4Zgz5BT+2PA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="70877764"
-X-IronPort-AV: E=Sophos;i="6.20,253,1758610800"; 
-   d="scan'208";a="70877764"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 19:19:40 -0800
-X-CSE-ConnectionGUID: /FlQIMuHQ6WB1l5Y0IpOnA==
-X-CSE-MsgGUID: 1rZPUzLrShiRQVuphcTEzw==
+X-CSE-ConnectionGUID: 56ZFf3//SvyECxeJaBCqRQ==
+X-CSE-MsgGUID: BHhANHMXRyWrFQnSepXKQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="70647715"
+X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
+   d="scan'208";a="70647715"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 20:46:42 -0800
+X-CSE-ConnectionGUID: bLCFu+86SBSWq0DTMpHGIQ==
+X-CSE-MsgGUID: xb3xY/zMRWCGLVwNVeCjNA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,253,1758610800"; 
-   d="scan'208";a="199929287"
+X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
+   d="scan'208";a="218817889"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 05 Dec 2025 19:19:36 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 05 Dec 2025 20:46:38 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vRipZ-00000000Fob-2I6r;
-	Sat, 06 Dec 2025 03:19:33 +0000
-Date: Sat, 6 Dec 2025 11:18:45 +0800
+	id 1vRkBo-00000000FrN-1VtG;
+	Sat, 06 Dec 2025 04:46:36 +0000
+Date: Sat, 6 Dec 2025 12:45:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jian Hu <jian.hu@amlogic.com>, Jerome Brunet <jbrunet@baylibre.com>,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Chuan Liu <chuan.liu@amlogic.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	robh+dt <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jian Hu <jian.hu@amlogic.com>,
-	devicetree <devicetree@vger.kernel.org>,
-	linux-clk <linux-clk@vger.kernel.org>,
-	linux-amlogic <linux-amlogic@lists.infradead.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v6 4/5] clk: meson: t7: add support for the T7 SoC PLL
- clock
-Message-ID: <202512061054.wsIzRCCd-lkp@intel.com>
-References: <20251204053635.1234150-5-jian.hu@amlogic.com>
+	kent.overstreet@linux.dev, vbabka@suse.cz, harry.yoo@oracle.com,
+	da.gomez@kernel.org, jonathanh@nvidia.com,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH 1/1] alloc_tag: skip rcu barrier on module unload if
+ profiling was not enabled
+Message-ID: <202512061204.aGmmZds2-lkp@intel.com>
+References: <20251204220957.360838-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,43 +67,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251204053635.1234150-5-jian.hu@amlogic.com>
+In-Reply-To: <20251204220957.360838-1-surenb@google.com>
 
-Hi Jian,
+Hi Suren,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on linus/master v6.18 next-20251205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 3f43be96f919cc611dcb2a4e38dd464831f4513e]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jian-Hu/dt-bindings-clock-add-Amlogic-T7-PLL-clock-controller/20251204-135351
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20251204053635.1234150-5-jian.hu%40amlogic.com
-patch subject: [PATCH v6 4/5] clk: meson: t7: add support for the T7 SoC PLL clock
-config: arm64-randconfig-003-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061054.wsIzRCCd-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/alloc_tag-skip-rcu-barrier-on-module-unload-if-profiling-was-not-enabled/20251205-061310
+base:   3f43be96f919cc611dcb2a4e38dd464831f4513e
+patch link:    https://lore.kernel.org/r/20251204220957.360838-1-surenb%40google.com
+patch subject: [PATCH 1/1] alloc_tag: skip rcu barrier on module unload if profiling was not enabled
+config: riscv-randconfig-001-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061204.aGmmZds2-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061054.wsIzRCCd-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061204.aGmmZds2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512061054.wsIzRCCd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512061204.aGmmZds2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: meson_clk_mpll_ops
-   >>> referenced by t7-pll.c
-   >>>               drivers/clk/meson/t7-pll.o:(.compoundliteral.51) in archive vmlinux.a
-   >>> referenced by t7-pll.c
-   >>>               drivers/clk/meson/t7-pll.o:(.compoundliteral.59) in archive vmlinux.a
-   >>> referenced by t7-pll.c
-   >>>               drivers/clk/meson/t7-pll.o:(.compoundliteral.67) in archive vmlinux.a
-   >>> referenced 1 more times
-   >>> did you mean: meson_clk_pll_ops
-   >>> defined in: vmlinux.a(drivers/clk/meson/clk-pll.o)
+>> lib/codetag.c:37:13: warning: unused variable 'flush_rcu_on_module_unload' [-Wunused-variable]
+      37 | static bool flush_rcu_on_module_unload;
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/flush_rcu_on_module_unload +37 lib/codetag.c
+
+    34	
+    35	static DEFINE_MUTEX(codetag_lock);
+    36	static LIST_HEAD(codetag_types);
+  > 37	static bool flush_rcu_on_module_unload;
+    38	
 
 -- 
 0-DAY CI Kernel Test Service
