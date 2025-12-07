@@ -1,226 +1,235 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10CA2D0C84
-	for <llvm@lists.linux.dev>; Sun,  7 Dec 2025 16:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF4D1E32CF;
+	Sun,  7 Dec 2025 21:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765125672; cv=none; b=O2J8I0EffCm5F6QrBEaRuNQJ+52P/0RzrG4wS8mvdTasznWrnnMQ/9+PPI3kD5FYxiTQk8syrQvTKBmYV30sCJ6VaTIIdiwufEU9rNFXJsLK8Q2bBwbd0sLBm5V5l46fFLhh8wGE+XuELG5ZpSiuo0XKwOTzzENa1U27z1lGz38=
+	t=1765143876; cv=none; b=Nz2rrKhiQKngM9kXwp9tbC788N7EITkagj7g8Gnli+mywGgK+XTaCLZEixFpiAZdUetXNq3NKcUcFDEqCHtYHFK+ycZ435i1Rfrn4O3pKR1Lk65JYZek/Gt+UE+xickYcwNZWQs1MBPvejBYgBVm78tXu/0MxQazId+DVODmqFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765125672; c=relaxed/simple;
-	bh=PpPAV95Hz35dkTAIqyT24tsT/63onM3eEAua4pxdi7E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fFbvZ4kw0knvdAZLG914GTr8y6pyjj0dm6prf90WkRo95tpEG15ZBdJTbhX/s0UeGKHRCIUe8hVmwS9tJn+v6CEJPMvHW9IZa4aZwHvmPnCxjz/tpfdkdocmd86sc1RHt4aAQuH6MLp5xqhWGplhRovyk9JPBm0jMy8IKTCHFWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBjbXWlL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765143876; c=relaxed/simple;
+	bh=JvyZtEKoSI6CE8USEiD9CU9o6P3cr8k3Y2BPcGj9LzI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WpoXYrd+o+G25l9o9a8UgqDyhVYgt+pqJG95w5aJTSCOqDKyKFtdu4gjTUJb+zo4tvz2059UhBcF1IeP9VsejgG5p4Na/CDLCWQ2ubw6CGfHH4P6yayQySFtufLI43IHD2+w+Aeyz3KETxcikvZ9B1hm2Ip6UftB/8EztmT9j1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EF9x45i1; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBjbXWlL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A65C19422
-	for <llvm@lists.linux.dev>; Sun,  7 Dec 2025 16:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765125672;
-	bh=PpPAV95Hz35dkTAIqyT24tsT/63onM3eEAua4pxdi7E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SBjbXWlLWPHTfpFBML3W5qAILPxJ/rgMzXxWCqGsNWGYV5htkgu+6PEC0as3kT7u/
-	 4PyQgVZKRxGEMw5CS9UtboCvyv13n/uKHcA4rc9Q8L1715HDY9aw31OMg5acPL7lsM
-	 zZTro/tzNVfrDc8l4cEch0UcbyNbHXlA83CXN0Q+5g/VeM7NxAsfrheW/WXdZbuqsB
-	 ujvrThYUsKoItz2EUQ7oFFxBdZ37CGnJKyeizGW/iJ7ZZQe9Smf/Deva780oQMM8DD
-	 3AUXAe/JEKV7zWgK34MD/nxdGg/LHs5CwgPMXx2QA0Q3PBgi+5EOkFWMlvT+016VNV
-	 md1Ldxrlme7Zg==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5959d9a8eceso4027265e87.3
-        for <llvm@lists.linux.dev>; Sun, 07 Dec 2025 08:41:12 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWBBig4b9J87Ef/CIuCCwGZzjmteedoUUdV/tFoAfoqdzN7Rzjkok7ZkphhqlObJK+vsxSn@lists.linux.dev
-X-Gm-Message-State: AOJu0Yylwo/B2qfEZdEtuTODgtEs0NSiWBLSEuuIOISRoUvNlHDTadd6
-	uwPu9VkQrsknqGOQje22P2kA+aDRs0iHK1l1uUsRE1TkWCCjlg4XlfbpRP8wHhPlxYDdVF5KIPI
-	6Da+nFmBgN//+EUWIZh/7Ub7XYkIuYa4=
-X-Google-Smtp-Source: AGHT+IERW5kozrhRzKdtKVZvlS+Xsgj6/JKxC5zsFMhdyCt1N+XKuwoO8mCsp5g7ImgH/flXQ/EzYexQY4SGIIIoD+U=
-X-Received: by 2002:a05:6512:12c8:b0:595:90f9:b9c2 with SMTP id
- 2adb3069b0e04-5987437987cmr1835532e87.4.1765125670672; Sun, 07 Dec 2025
- 08:41:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EF9x45i1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765143875; x=1796679875;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JvyZtEKoSI6CE8USEiD9CU9o6P3cr8k3Y2BPcGj9LzI=;
+  b=EF9x45i1wdCvVCKfr79TDMzbKGvpHcA4czCJHGySrK2akPhE9+lF1osx
+   JH4Ap4m8njO66YfWnRzBvzE2Ugzk1EWnI295TEbkBv9UhoztEH7X410sA
+   B+kTOd9zuDY+NEiaSVnvilGyOheLl2HIwMP8y6kkQnwrNNECzJ25Jq9ar
+   pBkA2/Kx2idVwOY1VCa658XtdlL4oHMKy46Cbj4OrNLxb2i5He1ok6gFe
+   KtDhP7AYOJwDFnRH2Qp5HzvqpibsWIdlgWs6TOx04ZcsmecxVqxTH5ZZ8
+   ptBsL/+fz3OdSQOSYpUrWP4p2SmGIZurUg0NjMP8pMa1gcxWVffdqQ2ve
+   w==;
+X-CSE-ConnectionGUID: JNY+1Y8zSqWshb5u6ph4XA==
+X-CSE-MsgGUID: X5RtnejbSw2DIqRHqtkJoA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="66987553"
+X-IronPort-AV: E=Sophos;i="6.20,257,1758610800"; 
+   d="scan'208";a="66987553"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2025 13:44:32 -0800
+X-CSE-ConnectionGUID: SHEEhTe6RM6LwDiAZFu1tw==
+X-CSE-MsgGUID: ab4RQSsuSfKPlK69J086tw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,257,1758610800"; 
+   d="scan'208";a="195682180"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Dec 2025 13:44:31 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vSMYO-00000000Jf9-43ai;
+	Sun, 07 Dec 2025 21:44:28 +0000
+Date: Mon, 8 Dec 2025 05:43:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:alternative-macro 3/8] include/linux/gfp.h:450:6: error:
+ expected ')'
+Message-ID: <202512080500.2s1wXYcK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251117-b4-sev-gcov-objtool-v1-1-54f7790d54df@google.com>
- <CAMj1kXH8Yg+eeySUxJ7nRTm=nQWx5Tj4XirBjVrqXB-0Qn1=sA@mail.gmail.com>
- <CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com>
- <CA+i-1C2-DtH326ppTx6V_yJ3HX-H0b5i9GNnXb0Q5mUF-Kexdg@mail.gmail.com>
- <DEDHST3BOZVN.O39PP5JRRFTX@google.com> <CAMj1kXEsTrdEJRrv_+KVpOJpmEu7XbcpzXaz2e3d7QewbRnf5Q@mail.gmail.com>
- <DERNCQGNRITE.139O331ACPKZ9@google.com>
-In-Reply-To: <DERNCQGNRITE.139O331ACPKZ9@google.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sun, 7 Dec 2025 17:40:59 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGKe2KsLxaRKmQi75s54y0d9VC1QEFwGfB5zCY8tjjGVA@mail.gmail.com>
-X-Gm-Features: AQt7F2p9rWYOfV-xWjd_Iwu2fOZ8F2VG8fxR8BtNzoxC3UGv29gWa36dqTOsrNw
-Message-ID: <CAMj1kXGKe2KsLxaRKmQi75s54y0d9VC1QEFwGfB5zCY8tjjGVA@mail.gmail.com>
-Subject: Re: [PATCH] x86/sev: Disable GCOV on noinstr object
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, 7 Dec 2025 at 03:59, Brendan Jackman <jackmanb@google.com> wrote:
->
-> On Thu Nov 20, 2025 at 3:47 PM UTC, Ard Biesheuvel wrote:
-> > On Thu, 20 Nov 2025 at 12:41, Brendan Jackman <jackmanb@google.com> wro=
-te:
-> >>
-> >> On Mon Nov 17, 2025 at 12:37 PM UTC, Brendan Jackman wrote:
-> >> > On Mon, 17 Nov 2025 at 12:52, Ard Biesheuvel <ardb@kernel.org> wrote=
-:
-> >> >>
-> >> >> On Mon, 17 Nov 2025 at 12:40, Ard Biesheuvel <ardb@kernel.org> wrot=
-e:
-> >> >> >
-> >> >> > On Mon, 17 Nov 2025 at 12:11, Brendan Jackman <jackmanb@google.co=
-m> wrote:
-> >> >> > >
-> >> >> > > With Debian clang version 19.1.7 (3+build5) there are calls to
-> >> >> > > kasan_check_write() from __sev_es_nmi_complete, which violates =
-noinstr.
-> >> >> > > Fix it by disabling GCOV for the noinstr object, as has been do=
-ne for
-> >> >> > > previous such instrumentation issues.
-> >> >> > >
-> >> >> > > Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> >> >> > > ---
-> >> >> > > Details:
-> >> >> > >
-> >> >> > >  - =E2=9D=AF=E2=9D=AF  clang --version
-> >> >> > >    Debian clang version 19.1.7 (3+build5)
-> >> >> > >    Target: x86_64-pc-linux-gnu
-> >> >> > >    Thread model: posix
-> >> >> > >    InstalledDir: /usr/lib/llvm-19/bin
-> >> >> > >
-> >> >> > >  - Compiling from tip/master at 6f85aad74a70d
-> >> >> > >
-> >> >> > >  - Kernel config:
-> >> >> > >
-> >> >> > >    https://gist.githubusercontent.com/bjackman/bbfdf4ec2e1dfd0e=
-18657174f0537e2c/raw/a88dcc6567d14c69445e7928a7d5dfc23ca9f619/gistfile0.txt
-> >> >> > >
-> >> >> > > Note I also get this error:
-> >> >> > >
-> >> >> > > vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3b: relocation=
- to !ENDBR: machine_kexec_prepare+0x810
-> >> >> > >
-> >> >> > > That one's a total mystery to me. I guess it's better to "fix" =
-the SEV
-> >> >> > > one independently rather than waiting until I know how to fix t=
-hem both.
-> >> >> > > ---
-> >> >> > >  arch/x86/coco/sev/Makefile | 3 +++
-> >> >> > >  1 file changed, 3 insertions(+)
-> >> >> > >
-> >> >> > > diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Mak=
-efile
-> >> >> > > index 3b8ae214a6a64de6bb208eb3b7c8bf12007ccc2c..d2ceae587b6c30b=
-2fb17209a7426e7893dea988c 100644
-> >> >> > > --- a/arch/x86/coco/sev/Makefile
-> >> >> > > +++ b/arch/x86/coco/sev/Makefile
-> >> >> > > @@ -8,3 +8,6 @@ UBSAN_SANITIZE_noinstr.o        :=3D n
-> >> >> > >  # GCC may fail to respect __no_sanitize_address or __no_kcsan =
-when inlining
-> >> >> > >  KASAN_SANITIZE_noinstr.o       :=3D n
-> >> >> > >  KCSAN_SANITIZE_noinstr.o       :=3D n
-> >> >> > > +
-> >> >> > > +# Clang 19 and older may fail to respect __no_sanitize_address=
- when inlining
-> >> >> > > +GCOV_PROFILE_noinstr.o         :=3D n
-> >> >> > >
-> >> >> >
-> >> >> > After Thomas dug into this issue a while ago, I meant to follow u=
-p
-> >> >> > with a fix, or at least something to start the discussion.
-> >> >> >
-> >> >> > TL;DR there is nothing wrong with either compiler (as far as this
-> >> >> > issue is concerned)
-> >> >> >
-> >> >> > The issue is that KASAN/KCSAN enabled builds use a version of
-> >> >> > set_bit() that unconditionally inserts a call to
-> >> >>
-> >> >> instrument_atomic_write(), which calls the KASAN/KCSAN intrinsics
-> >> >> directly, and these are usually only called by compiler generated
-> >> >> code.
-> >> >>
-> >> >> This completely defeats the noinstr per-function annotation, given
-> >> >> that each compilation unit only incorporates a single version of
-> >> >> set_bit(), which is the instrumented version unless instrumentation=
- is
-> >> >> disabled for the entire file.
-> >> >>
-> >> >> For the short term, we could avoid this by using arch___set_bit()
-> >> >> directly in the SEV code that triggers this issue today. But for th=
-e
-> >> >> longer term, we should get write of those explicit calls to
-> >> >> instrumentation intrinsics, as this is fundamentally incompatible w=
-ith
-> >> >> per-function overrides.
-> >> >>
-> >> >> https://lore.kernel.org/all/8734aqulch.ffs@tglx/T/#u
-> >> >
-> >> > Ah, yes thank you I think you are right. My GCOV "fix" seems to be
-> >> > bogus, it probably just hides the issue with incidental changes.
-> >>
-> >> On the other hand, I guess the intermediate workaround of just disabli=
-ng
-> >> it at the compilation unit still makes sense here, right?
-> >>
-> >> i.e. my patch is still dumb but should we start by just doing
-> >> K{A,C}ASAN_SANITIZE_noinstr.o :=3D n instead?
-> >
-> > Disabling per file results in the non-instrumented header to be
-> > #include'd, and so we never call the instrument_read/write explicitly.
-> > So yes, this is a reasonable short-term fix.
->
-> Oh, and we've actually already got K{A,C}SAN_SANITIZE_noinstr.o :=3D n.
->
-> Ah, I see what's going on here: gcov is injecting instrumentation
-> into kasan_check_write(), which causes it to get out-of-lined even
-> though it's just `return true`:
->
->
->         =E2=9D=AF=E2=9D=AF  objdump --disassemble=3Dkasan_check_write ./a=
-rch/x86/coco/sev/noinstr.o
->
->         ./arch/x86/coco/sev/noinstr.o:     file format elf64-x86-64
->
->
->         Disassembly of section .text:
->
->         0000000000000010 <kasan_check_write>:
->           10:   48 ff 05 00 00 00 00    incq   0x0(%rip)        # 17 <kas=
-an_check_write+0x7>
->           17:   2e e9 00 00 00 00       cs jmp 1d <kasan_check_write+0xd>
->
->         Disassembly of section .noinstr.text:
->
->
-> It's the same thing going on with these ones:
->
->         vmlinux.o: warning: objtool: do_syscall_64+0x2c3: call to unwind_=
-reset_info() leaves .noinstr.text section
->         vmlinux.o: warning: objtool: do_int80_emulation+0x311: call to un=
-wind_reset_info() leaves .noinstr.text section
->         vmlinux.o: warning: objtool: fred_int80_emulation+0x2df: call to =
-unwind_reset_info() leaves .noinstr.text section
->         vmlinux.o: warning: objtool: __do_fast_syscall_32+0x22a: call to =
-unwind_reset_info() leaves .noinstr.text section
->         vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0xc4: cal=
-l to unwind_reset_info() leaves .noinstr.text section
->
->
->
-> Obvious fix is that we start writing __always_inline even for the stub
-> functions. Seems a bit yucky but I guess it's technically the only
-> correct thing to do?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git alternative-macro
+head:   161065454fa1b06980ecf2610f26819235eb6ffa
+commit: a1a0378deeaf70bc733141e6decd369495938079 [3/8] objtool: Rename C ANNOTATE_REACHABLE to ANNOTATE_REACHABLE_LABEL
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251208/202512080500.2s1wXYcK-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251208/202512080500.2s1wXYcK-lkp@intel.com/reproduce)
 
-Either that or a macro. But I think it is always reasonable to replace
-inline with __always_inline if there are cases where the compiler
-ignores it, and this results in build issues.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512080500.2s1wXYcK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+     312 |         WARN_ON_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && in_nmi());
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1538:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:374:2: error: expected ')'
+     374 |         WARN_ON_ONCE(in_nmi());
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1538:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:389:2: error: expected ')'
+     389 |         WARN_ON_ONCE(idx & ~0x1);
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1538:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:433:2: error: expected ')'
+     433 |         WARN_ON_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && in_nmi());
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1538:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:449:2: error: expected ')'
+     449 |         WARN_ON_ONCE(idx & ~0x1);
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1538:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:474:2: error: expected ')'
+     474 |         WARN_ON_ONCE(idx & ~0x1);
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1538:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:475:2: error: expected ')'
+     475 |         WARN_ON_ONCE(in_nmi());
+         |         ^
+   include/asm-generic/bug.h:122:3: note: expanded from macro 'WARN_ON_ONCE'
+     122 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   In file included from arch/loongarch/kernel/asm-offsets.c:11:
+   In file included from include/linux/mm.h:7:
+>> include/linux/gfp.h:450:6: error: expected ')'
+     450 |         if (WARN_ON(!order || !(gfp & __GFP_COMP)))
+         |             ^
+   include/asm-generic/bug.h:112:3: note: expanded from macro 'WARN_ON'
+     112 |                 __WARN_FLAGS(#condition,                                \
+         |                 ^
+   arch/loongarch/include/asm/bug.h:47:49: note: expanded from macro '__WARN_FLAGS'
+      47 |         __BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
+         |                                                        ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/loongarch/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1283: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +450 include/linux/gfp.h
+
+041d3a8cdc18dc3 Michal Nazarewicz 2011-12-29  443  
+e98337d11bbdfa3 Yu Zhao           2024-08-13  444  #ifdef CONFIG_CONTIG_ALLOC
+e98337d11bbdfa3 Yu Zhao           2024-08-13  445  static inline struct folio *folio_alloc_gigantic_noprof(int order, gfp_t gfp,
+e98337d11bbdfa3 Yu Zhao           2024-08-13  446  							int nid, nodemask_t *node)
+e98337d11bbdfa3 Yu Zhao           2024-08-13  447  {
+e98337d11bbdfa3 Yu Zhao           2024-08-13  448  	struct page *page;
+e98337d11bbdfa3 Yu Zhao           2024-08-13  449  
+e98337d11bbdfa3 Yu Zhao           2024-08-13 @450  	if (WARN_ON(!order || !(gfp & __GFP_COMP)))
+e98337d11bbdfa3 Yu Zhao           2024-08-13  451  		return NULL;
+e98337d11bbdfa3 Yu Zhao           2024-08-13  452  
+e98337d11bbdfa3 Yu Zhao           2024-08-13  453  	page = alloc_contig_pages_noprof(1 << order, gfp, nid, node);
+e98337d11bbdfa3 Yu Zhao           2024-08-13  454  
+e98337d11bbdfa3 Yu Zhao           2024-08-13  455  	return page ? page_folio(page) : NULL;
+e98337d11bbdfa3 Yu Zhao           2024-08-13  456  }
+e98337d11bbdfa3 Yu Zhao           2024-08-13  457  #else
+e98337d11bbdfa3 Yu Zhao           2024-08-13  458  static inline struct folio *folio_alloc_gigantic_noprof(int order, gfp_t gfp,
+e98337d11bbdfa3 Yu Zhao           2024-08-13  459  							int nid, nodemask_t *node)
+e98337d11bbdfa3 Yu Zhao           2024-08-13  460  {
+e98337d11bbdfa3 Yu Zhao           2024-08-13  461  	return NULL;
+e98337d11bbdfa3 Yu Zhao           2024-08-13  462  }
+e98337d11bbdfa3 Yu Zhao           2024-08-13  463  #endif
+e98337d11bbdfa3 Yu Zhao           2024-08-13  464  /* This should be paired with folio_put() rather than free_contig_range(). */
+e98337d11bbdfa3 Yu Zhao           2024-08-13  465  #define folio_alloc_gigantic(...) alloc_hooks(folio_alloc_gigantic_noprof(__VA_ARGS__))
+e98337d11bbdfa3 Yu Zhao           2024-08-13  466  
+
+:::::: The code at line 450 was first introduced by commit
+:::::: e98337d11bbdfa3e3f0fb99aa93e40f97549e0cd mm/contig_alloc: support __GFP_COMP
+
+:::::: TO: Yu Zhao <yuzhao@google.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
