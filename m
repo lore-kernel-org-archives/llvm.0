@@ -1,161 +1,226 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F093B8D41;
-	Sun,  7 Dec 2025 15:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10CA2D0C84
+	for <llvm@lists.linux.dev>; Sun,  7 Dec 2025 16:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765122065; cv=none; b=ZiH3SqKcQaCaXTUQUSTUrHPhfBkMIEyL9bKHWUzpCs/ZZLTYrdTSlm1s2WoTTa5aO85rHjdWRPK/didljs/PKQr9IPLiwfWa5uhYC1Oz+o5XPYCS+hW+HHfaCVDbIYWdCAwH0cGkwxFpNrqriGok3eNmJQEuhVNkFReKCV6hOXU=
+	t=1765125672; cv=none; b=O2J8I0EffCm5F6QrBEaRuNQJ+52P/0RzrG4wS8mvdTasznWrnnMQ/9+PPI3kD5FYxiTQk8syrQvTKBmYV30sCJ6VaTIIdiwufEU9rNFXJsLK8Q2bBwbd0sLBm5V5l46fFLhh8wGE+XuELG5ZpSiuo0XKwOTzzENa1U27z1lGz38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765122065; c=relaxed/simple;
-	bh=InePeH95Ih9ns54fIn2nOeaz2xhMALPrQmRHfJwmh5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qtIYKLvtydYGY6ttHP3Atzxt1BbgJUm/7yV5xBy9MuDUlqAz17gyRIhPu5sMOFmEg8eaLrCpVwm0a4PUpTu7ZST6ujstuyyChAEpcF3SbpbRCIdIfJsG45NcfthBSGfh58QuogATr0OFctRdoxF0tQFVBo1GAUptoB4ibe3Rd/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RTaz4hpf; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765125672; c=relaxed/simple;
+	bh=PpPAV95Hz35dkTAIqyT24tsT/63onM3eEAua4pxdi7E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fFbvZ4kw0knvdAZLG914GTr8y6pyjj0dm6prf90WkRo95tpEG15ZBdJTbhX/s0UeGKHRCIUe8hVmwS9tJn+v6CEJPMvHW9IZa4aZwHvmPnCxjz/tpfdkdocmd86sc1RHt4aAQuH6MLp5xqhWGplhRovyk9JPBm0jMy8IKTCHFWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBjbXWlL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RTaz4hpf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765122062; x=1796658062;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=InePeH95Ih9ns54fIn2nOeaz2xhMALPrQmRHfJwmh5A=;
-  b=RTaz4hpfvvMUhxLkFBXyNHXOt7mb13rXxRvMm+LCG2rTIIV+487OhNge
-   IjZc5mseJFr/zb3P1erR/B0cRgv7cTB48kD8aYs0eqFpcpnWmJu7BwMd5
-   So1aTUzw6dHYhu8PQvBNtimJ/eLNBtM/mS+3HnIomrPfEUtmk4xXZnGJW
-   vYoY9LjnSgyhaKwi1YItFpE9JhDbdKEi8YAUnP5NFVFn8K1EWGxvlA8eU
-   o/G+rorAH37AnCVEAkmXkIGbH7s8qgysdb0SU+dWHzomBIGqBiN7ypCm7
-   RtKwPXJDZ8QZ2PpyonhXes8ksvrT3CoeifA1ETeoqpNYwOOX5RMuWW+zA
-   g==;
-X-CSE-ConnectionGUID: byUOM/cKQJCa+IpcDhAS0g==
-X-CSE-MsgGUID: 79Zrd3QkR6Gavshc4N48Fw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="67119957"
-X-IronPort-AV: E=Sophos;i="6.20,256,1758610800"; 
-   d="scan'208";a="67119957"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2025 07:41:00 -0800
-X-CSE-ConnectionGUID: //7gNd4+S9myi8EciuNmMw==
-X-CSE-MsgGUID: 3gikd7QxQzqvLPY8LKmENA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,256,1758610800"; 
-   d="scan'208";a="195751834"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 07 Dec 2025 07:40:59 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vSGsa-00000000JIP-2Bu0;
-	Sun, 07 Dec 2025 15:40:56 +0000
-Date: Sun, 7 Dec 2025 23:39:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anatoly Stepanov <stepanov.anatoly@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 3/5] kernel: introduce general hq-lock support
-Message-ID: <202512072334.p6FnpvnH-lkp@intel.com>
-References: <20251206062106.2109014-4-stepanov.anatoly@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBjbXWlL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A65C19422
+	for <llvm@lists.linux.dev>; Sun,  7 Dec 2025 16:41:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765125672;
+	bh=PpPAV95Hz35dkTAIqyT24tsT/63onM3eEAua4pxdi7E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SBjbXWlLWPHTfpFBML3W5qAILPxJ/rgMzXxWCqGsNWGYV5htkgu+6PEC0as3kT7u/
+	 4PyQgVZKRxGEMw5CS9UtboCvyv13n/uKHcA4rc9Q8L1715HDY9aw31OMg5acPL7lsM
+	 zZTro/tzNVfrDc8l4cEch0UcbyNbHXlA83CXN0Q+5g/VeM7NxAsfrheW/WXdZbuqsB
+	 ujvrThYUsKoItz2EUQ7oFFxBdZ37CGnJKyeizGW/iJ7ZZQe9Smf/Deva780oQMM8DD
+	 3AUXAe/JEKV7zWgK34MD/nxdGg/LHs5CwgPMXx2QA0Q3PBgi+5EOkFWMlvT+016VNV
+	 md1Ldxrlme7Zg==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5959d9a8eceso4027265e87.3
+        for <llvm@lists.linux.dev>; Sun, 07 Dec 2025 08:41:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWBBig4b9J87Ef/CIuCCwGZzjmteedoUUdV/tFoAfoqdzN7Rzjkok7ZkphhqlObJK+vsxSn@lists.linux.dev
+X-Gm-Message-State: AOJu0Yylwo/B2qfEZdEtuTODgtEs0NSiWBLSEuuIOISRoUvNlHDTadd6
+	uwPu9VkQrsknqGOQje22P2kA+aDRs0iHK1l1uUsRE1TkWCCjlg4XlfbpRP8wHhPlxYDdVF5KIPI
+	6Da+nFmBgN//+EUWIZh/7Ub7XYkIuYa4=
+X-Google-Smtp-Source: AGHT+IERW5kozrhRzKdtKVZvlS+Xsgj6/JKxC5zsFMhdyCt1N+XKuwoO8mCsp5g7ImgH/flXQ/EzYexQY4SGIIIoD+U=
+X-Received: by 2002:a05:6512:12c8:b0:595:90f9:b9c2 with SMTP id
+ 2adb3069b0e04-5987437987cmr1835532e87.4.1765125670672; Sun, 07 Dec 2025
+ 08:41:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251206062106.2109014-4-stepanov.anatoly@huawei.com>
+References: <20251117-b4-sev-gcov-objtool-v1-1-54f7790d54df@google.com>
+ <CAMj1kXH8Yg+eeySUxJ7nRTm=nQWx5Tj4XirBjVrqXB-0Qn1=sA@mail.gmail.com>
+ <CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com>
+ <CA+i-1C2-DtH326ppTx6V_yJ3HX-H0b5i9GNnXb0Q5mUF-Kexdg@mail.gmail.com>
+ <DEDHST3BOZVN.O39PP5JRRFTX@google.com> <CAMj1kXEsTrdEJRrv_+KVpOJpmEu7XbcpzXaz2e3d7QewbRnf5Q@mail.gmail.com>
+ <DERNCQGNRITE.139O331ACPKZ9@google.com>
+In-Reply-To: <DERNCQGNRITE.139O331ACPKZ9@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sun, 7 Dec 2025 17:40:59 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGKe2KsLxaRKmQi75s54y0d9VC1QEFwGfB5zCY8tjjGVA@mail.gmail.com>
+X-Gm-Features: AQt7F2p9rWYOfV-xWjd_Iwu2fOZ8F2VG8fxR8BtNzoxC3UGv29gWa36dqTOsrNw
+Message-ID: <CAMj1kXGKe2KsLxaRKmQi75s54y0d9VC1QEFwGfB5zCY8tjjGVA@mail.gmail.com>
+Subject: Re: [PATCH] x86/sev: Disable GCOV on noinstr object
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Anatoly,
+On Sun, 7 Dec 2025 at 03:59, Brendan Jackman <jackmanb@google.com> wrote:
+>
+> On Thu Nov 20, 2025 at 3:47 PM UTC, Ard Biesheuvel wrote:
+> > On Thu, 20 Nov 2025 at 12:41, Brendan Jackman <jackmanb@google.com> wro=
+te:
+> >>
+> >> On Mon Nov 17, 2025 at 12:37 PM UTC, Brendan Jackman wrote:
+> >> > On Mon, 17 Nov 2025 at 12:52, Ard Biesheuvel <ardb@kernel.org> wrote=
+:
+> >> >>
+> >> >> On Mon, 17 Nov 2025 at 12:40, Ard Biesheuvel <ardb@kernel.org> wrot=
+e:
+> >> >> >
+> >> >> > On Mon, 17 Nov 2025 at 12:11, Brendan Jackman <jackmanb@google.co=
+m> wrote:
+> >> >> > >
+> >> >> > > With Debian clang version 19.1.7 (3+build5) there are calls to
+> >> >> > > kasan_check_write() from __sev_es_nmi_complete, which violates =
+noinstr.
+> >> >> > > Fix it by disabling GCOV for the noinstr object, as has been do=
+ne for
+> >> >> > > previous such instrumentation issues.
+> >> >> > >
+> >> >> > > Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> >> >> > > ---
+> >> >> > > Details:
+> >> >> > >
+> >> >> > >  - =E2=9D=AF=E2=9D=AF  clang --version
+> >> >> > >    Debian clang version 19.1.7 (3+build5)
+> >> >> > >    Target: x86_64-pc-linux-gnu
+> >> >> > >    Thread model: posix
+> >> >> > >    InstalledDir: /usr/lib/llvm-19/bin
+> >> >> > >
+> >> >> > >  - Compiling from tip/master at 6f85aad74a70d
+> >> >> > >
+> >> >> > >  - Kernel config:
+> >> >> > >
+> >> >> > >    https://gist.githubusercontent.com/bjackman/bbfdf4ec2e1dfd0e=
+18657174f0537e2c/raw/a88dcc6567d14c69445e7928a7d5dfc23ca9f619/gistfile0.txt
+> >> >> > >
+> >> >> > > Note I also get this error:
+> >> >> > >
+> >> >> > > vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3b: relocation=
+ to !ENDBR: machine_kexec_prepare+0x810
+> >> >> > >
+> >> >> > > That one's a total mystery to me. I guess it's better to "fix" =
+the SEV
+> >> >> > > one independently rather than waiting until I know how to fix t=
+hem both.
+> >> >> > > ---
+> >> >> > >  arch/x86/coco/sev/Makefile | 3 +++
+> >> >> > >  1 file changed, 3 insertions(+)
+> >> >> > >
+> >> >> > > diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Mak=
+efile
+> >> >> > > index 3b8ae214a6a64de6bb208eb3b7c8bf12007ccc2c..d2ceae587b6c30b=
+2fb17209a7426e7893dea988c 100644
+> >> >> > > --- a/arch/x86/coco/sev/Makefile
+> >> >> > > +++ b/arch/x86/coco/sev/Makefile
+> >> >> > > @@ -8,3 +8,6 @@ UBSAN_SANITIZE_noinstr.o        :=3D n
+> >> >> > >  # GCC may fail to respect __no_sanitize_address or __no_kcsan =
+when inlining
+> >> >> > >  KASAN_SANITIZE_noinstr.o       :=3D n
+> >> >> > >  KCSAN_SANITIZE_noinstr.o       :=3D n
+> >> >> > > +
+> >> >> > > +# Clang 19 and older may fail to respect __no_sanitize_address=
+ when inlining
+> >> >> > > +GCOV_PROFILE_noinstr.o         :=3D n
+> >> >> > >
+> >> >> >
+> >> >> > After Thomas dug into this issue a while ago, I meant to follow u=
+p
+> >> >> > with a fix, or at least something to start the discussion.
+> >> >> >
+> >> >> > TL;DR there is nothing wrong with either compiler (as far as this
+> >> >> > issue is concerned)
+> >> >> >
+> >> >> > The issue is that KASAN/KCSAN enabled builds use a version of
+> >> >> > set_bit() that unconditionally inserts a call to
+> >> >>
+> >> >> instrument_atomic_write(), which calls the KASAN/KCSAN intrinsics
+> >> >> directly, and these are usually only called by compiler generated
+> >> >> code.
+> >> >>
+> >> >> This completely defeats the noinstr per-function annotation, given
+> >> >> that each compilation unit only incorporates a single version of
+> >> >> set_bit(), which is the instrumented version unless instrumentation=
+ is
+> >> >> disabled for the entire file.
+> >> >>
+> >> >> For the short term, we could avoid this by using arch___set_bit()
+> >> >> directly in the SEV code that triggers this issue today. But for th=
+e
+> >> >> longer term, we should get write of those explicit calls to
+> >> >> instrumentation intrinsics, as this is fundamentally incompatible w=
+ith
+> >> >> per-function overrides.
+> >> >>
+> >> >> https://lore.kernel.org/all/8734aqulch.ffs@tglx/T/#u
+> >> >
+> >> > Ah, yes thank you I think you are right. My GCOV "fix" seems to be
+> >> > bogus, it probably just hides the issue with incidental changes.
+> >>
+> >> On the other hand, I guess the intermediate workaround of just disabli=
+ng
+> >> it at the compilation unit still makes sense here, right?
+> >>
+> >> i.e. my patch is still dumb but should we start by just doing
+> >> K{A,C}ASAN_SANITIZE_noinstr.o :=3D n instead?
+> >
+> > Disabling per file results in the non-instrumented header to be
+> > #include'd, and so we never call the instrument_read/write explicitly.
+> > So yes, this is a reasonable short-term fix.
+>
+> Oh, and we've actually already got K{A,C}SAN_SANITIZE_noinstr.o :=3D n.
+>
+> Ah, I see what's going on here: gcov is injecting instrumentation
+> into kasan_check_write(), which causes it to get out-of-lined even
+> though it's just `return true`:
+>
+>
+>         =E2=9D=AF=E2=9D=AF  objdump --disassemble=3Dkasan_check_write ./a=
+rch/x86/coco/sev/noinstr.o
+>
+>         ./arch/x86/coco/sev/noinstr.o:     file format elf64-x86-64
+>
+>
+>         Disassembly of section .text:
+>
+>         0000000000000010 <kasan_check_write>:
+>           10:   48 ff 05 00 00 00 00    incq   0x0(%rip)        # 17 <kas=
+an_check_write+0x7>
+>           17:   2e e9 00 00 00 00       cs jmp 1d <kasan_check_write+0xd>
+>
+>         Disassembly of section .noinstr.text:
+>
+>
+> It's the same thing going on with these ones:
+>
+>         vmlinux.o: warning: objtool: do_syscall_64+0x2c3: call to unwind_=
+reset_info() leaves .noinstr.text section
+>         vmlinux.o: warning: objtool: do_int80_emulation+0x311: call to un=
+wind_reset_info() leaves .noinstr.text section
+>         vmlinux.o: warning: objtool: fred_int80_emulation+0x2df: call to =
+unwind_reset_info() leaves .noinstr.text section
+>         vmlinux.o: warning: objtool: __do_fast_syscall_32+0x22a: call to =
+unwind_reset_info() leaves .noinstr.text section
+>         vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0xc4: cal=
+l to unwind_reset_info() leaves .noinstr.text section
+>
+>
+>
+> Obvious fix is that we start writing __always_inline even for the stub
+> functions. Seems a bit yucky but I guess it's technically the only
+> correct thing to do?
+>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/locking/core]
-[also build test WARNING on tip/x86/core arnd-asm-generic/master v6.18]
-[cannot apply to linus/master next-20251205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anatoly-Stepanov/kernel-introduce-Hierarchical-Queued-spinlock/20251206-070428
-base:   tip/locking/core
-patch link:    https://lore.kernel.org/r/20251206062106.2109014-4-stepanov.anatoly%40huawei.com
-patch subject: [RFC PATCH v2 3/5] kernel: introduce general hq-lock support
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251207/202512072334.p6FnpvnH-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251207/202512072334.p6FnpvnH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512072334.p6FnpvnH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/locking/qspinlock.c:423:
->> kernel/locking/hqlock_core.h:611:17: warning: variable 'node_tail' set but not used [-Wunused-but-set-variable]
-     611 |         u16 node_head, node_tail;
-         |                        ^
-   1 warning generated.
-
-
-vim +/node_tail +611 kernel/locking/hqlock_core.h
-
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  597  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  598  static inline void handoff_remote(struct qspinlock *lock,
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  599  						struct numa_qnode *qnode,
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  600  						u32 tail, int handoff_info)
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  601  {
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  602  	struct numa_queue *next_queue = NULL;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  603  	struct mcs_spinlock *mcs_head = NULL;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  604  	struct numa_qnode *qhead = NULL;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  605  	u16 lock_id = qnode->lock_id;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  606  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  607  	struct lock_metadata *lock_meta = get_meta(lock_id);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  608  	struct numa_queue *queue = get_local_queue(qnode);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  609  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  610  	u16 next_node_id;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06 @611  	u16 node_head, node_tail;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  612  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  613  	node_tail = READ_ONCE(lock_meta->tail_node);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  614  	node_head = READ_ONCE(lock_meta->head_node);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  615  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  616  	/*
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  617  	 * 'handoffs_not_head > 0' means at the head of NUMA-level queue we have a node
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  618  	 * which is heavily loaded and has performed a remote handoff upon reaching the threshold.
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  619  	 *
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  620  	 * Perform handoff to the head instead of next node in the NUMA-level queue,
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  621  	 * if handoffs_not_head >= nr_online_nodes
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  622  	 * (It means other contended nodes have been taking the lock at least once after the head one)
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  623  	 */
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  624  	u16 handoffs_not_head = READ_ONCE(queue->handoffs_not_head);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  625  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  626  	if (handoff_info > 0 && (handoffs_not_head < nr_online_nodes)) {
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  627  		next_node_id = handoff_info;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  628  		if (node_head != qnode->numa_node)
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  629  			handoffs_not_head++;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  630  	} else {
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  631  		if (!node_head) {
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  632  			/* If we're here - we have defintely other node-contenders, let's wait */
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  633  			next_node_id = smp_cond_load_relaxed(&lock_meta->head_node, (VAL));
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  634  		} else {
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  635  			next_node_id = node_head;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  636  		}
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  637  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  638  		handoffs_not_head = 0;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  639  	}
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  640  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  641  	next_queue = get_queue(lock_id, next_node_id);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  642  	WRITE_ONCE(next_queue->handoffs_not_head, handoffs_not_head);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  643  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  644  	qhead = READ_ONCE(next_queue->head);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  645  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  646  	mcs_head = (void *) qhead;
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  647  
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  648  	/* arch_mcs_spin_unlock_contended implies smp-barrier */
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  649  	arch_mcs_spin_unlock_contended(&mcs_head->locked);
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  650  }
-1b1736c3ff9c9f Anatoly Stepanov 2025-12-06  651  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Either that or a macro. But I think it is always reasonable to replace
+inline with __always_inline if there are cases where the compiler
+ignores it, and this results in build issues.
