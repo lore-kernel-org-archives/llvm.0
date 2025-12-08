@@ -1,60 +1,60 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8A111CA9
-	for <llvm@lists.linux.dev>; Mon,  8 Dec 2025 16:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C703F9FB
+	for <llvm@lists.linux.dev>; Mon,  8 Dec 2025 16:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765209759; cv=none; b=AEedezQfGj8hunQZVr/iBJYq9i5VGANHs/pqsvc5R56KssJHXzZhtUTsPkocWmfmM4ErH5GsUPeAU8TEmypo4KxK2YOj78r5Ru8I/Rr6HRN5LApSium7rEr4yOgbxx5PbL0M2dNCn7800uMEbbPPVKvBMZtW3MaPrQrJdtTPuUg=
+	t=1765210150; cv=none; b=Yv6r0XzEed628CzWRZFieQ+y1uusU/aa5ZvVlfHdVplsyu4ysyrLOU/6MLZsmuYq7RSpA4Nl1ml1dIerfH15NHPb9NusJc7yDKm3IqiAu6XPRVj/lKkOmyxPDxidDiy2yMDFEkn5sqOJ4Qym9tVxVPrpJyzEUtxh4D4Ag9fuL68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765209759; c=relaxed/simple;
-	bh=DzPsR1mDwmEcWdwuZ/163CVRnrrwXa29xjlaasoG/K0=;
+	s=arc-20240116; t=1765210150; c=relaxed/simple;
+	bh=5wq/pG9NjW/Xc3CZ8gT2muSpid7LybWAcae+d1HITLs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kIjLyHq7yi6MVozbqYARudXp2WHdqyYP0GodSs8yrgL728sIp7suIQQBCkW5EIkO4BXIgoUZbtOrEQpYG1tT4EKt4/0/DC8Y57hachegcIVyC2vrteGHSBGT7aC5f03gLuHIjLxGbiDhfZ2A0DJtKnJ3pfv9E87WEvfl4sFnKT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Mc/JUntA; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=BvLyIQJ4E+CM/+mS+3x/ecJbHq6AZrbZAUzmVj3hN0MvL8htLgMFT5eo6dKefhCh8TXcrU5+YCPjiynwJR6oOJf9diTBDO4egpHBaDCNu2wSvdcT2KaeZdr9mPDP476P73xWawEcT5E0wEfJRMlE+2vM8lDcIoXkXgzRoQOFDmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=giBTBVFx; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Mc/JUntA"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8CxQWL021443;
-	Mon, 8 Dec 2025 16:02:14 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="giBTBVFx"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B86DSJx014598;
+	Mon, 8 Dec 2025 16:08:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=gJvuvq
-	YZAgxlLUAE6Fwul06tJ0nrEzvgoC4NvPNaZPE=; b=Mc/JUntAtkolDIayUvofNT
-	/Z47uBofo7NCecwE/3XCmZ6az8Mx67etGfYzx+5yBt8loilmCf5/UImr8DKBlypE
-	u3TPgytO4XghhpAPZU2sKtMkq3n2wS1S67vEZb5nEF2j5ZqBAaC3BjSJvHswlZ+N
-	oqgo1edMJ30GA07RQwy/h90VQpgkmhJultLrETfqA40gnTH/3yg5u45tRkkke7az
-	DwVawEOgD55MsjSPq8oa/4e3Gia7huX1AJiGOz68d1qe8+u4CEv9BexVYp/qK2lb
-	kx91wvXNLP0JbmOvFO6qHr3XVeA/BJTSBBx338+3TEWoOxJJRgThlPvd5mD9vpNA
+	:message-id:mime-version:references:subject:to; s=pp1; bh=iilKg1
+	8ysnmI4ONROC9vF2l+9+u4XZIiuBwCGpbDEgg=; b=giBTBVFxTzhTFiCP2XdhJ1
+	CR1fit3AmQJqI1y/nNr9hb/jKW8odZM3EIt4kn8IZzIhiIEkSxG0B+FtE9/VbFG+
+	SKzws/a+lV/js3DYIyJFKhnYTRa2INkCaqC9ROuPmj8lMQLcBy2DJFzhHxVibtCz
+	nz1aodxs3vMaK/+IvpPNcaw6BFgjBYFMi+m3yHpzU/WaqsJVKhSHpp/QZhcW0IqZ
+	KB2TGtD1VgXPx/jfIYcJvwKcQYGAPfxLCF/gGABxFhEQRBf89K440C52bGRJ2TGn
+	L9WRBVUM5OSCoAtTU2gfGPE5BZukphlVXUe0S4e3UU3J5CO1KrnY8SKffhdpQeSw
 	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4av9wvgcff-1
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4avc5383fe-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:02:14 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8Cl6eh026782;
-	Mon, 8 Dec 2025 16:02:13 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4aw1h0x50u-1
+	Mon, 08 Dec 2025 16:08:53 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8FdFEG001998;
+	Mon, 8 Dec 2025 16:08:52 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4aw11j6a7h-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:02:13 +0000
+	Mon, 08 Dec 2025 16:08:52 +0000
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B8G29Wj42402068
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B8G8nEX55836948
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Dec 2025 16:02:09 GMT
+	Mon, 8 Dec 2025 16:08:49 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 88A5920043;
-	Mon,  8 Dec 2025 16:02:09 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2C60E20043;
+	Mon,  8 Dec 2025 16:08:49 +0000 (GMT)
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 90BEF20040;
-	Mon,  8 Dec 2025 16:02:07 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3C4D220040;
+	Mon,  8 Dec 2025 16:08:47 +0000 (GMT)
 Received: from [9.43.1.23] (unknown [9.43.1.23])
 	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  8 Dec 2025 16:02:07 +0000 (GMT)
-Message-ID: <8141c6eb-f2b7-4a19-b637-af699bb8d5c4@linux.ibm.com>
-Date: Mon, 8 Dec 2025 21:32:06 +0530
+	Mon,  8 Dec 2025 16:08:47 +0000 (GMT)
+Message-ID: <874f8ec4-4f3f-402d-a9f2-4267d37a5bc9@linux.ibm.com>
+Date: Mon, 8 Dec 2025 21:38:46 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,7 +62,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] powerpc64: make clang cross-build friendly
+Subject: Re: [PATCH 3/3] powerpc64/ftrace: workaround clang recording GEP in
+ __patchable_function_entries
 To: Naveen N Rao <naveen@kernel.org>
 Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         Madhavan Srinivasan <maddy@linux.ibm.com>,
@@ -74,71 +75,52 @@ Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev,
         Maryam Moghadas <maryammo@ca.ibm.com>
 References: <20251108210405.2375472-1-hbathini@linux.ibm.com>
- <20251108210405.2375472-2-hbathini@linux.ibm.com>
- <rtnn6dd6y3refo7myc4crzmrunbuyabr2ewlyk7oe4yx3f2rl2@wzoyvsucfeyf>
+ <20251108210405.2375472-4-hbathini@linux.ibm.com>
+ <sjheprnafkraauotmi2fwjz6l6fha5te7jdp74t4zfh3jvs2if@vjpey276fsti>
 Content-Language: en-US
 From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <rtnn6dd6y3refo7myc4crzmrunbuyabr2ewlyk7oe4yx3f2rl2@wzoyvsucfeyf>
+In-Reply-To: <sjheprnafkraauotmi2fwjz6l6fha5te7jdp74t4zfh3jvs2if@vjpey276fsti>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3VoYZ8OBYWh4UKYG15cGMyvtUlt8UbYU
-X-Proofpoint-ORIG-GUID: 3VoYZ8OBYWh4UKYG15cGMyvtUlt8UbYU
-X-Authority-Analysis: v=2.4 cv=AdS83nXG c=1 sm=1 tr=0 ts=6936f686 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAyMCBTYWx0ZWRfX9VNsTMEkm0V3
+ acsg7v1LTpLHtW9U1nkuRwh/sSfQ49XoY6HPI2267UdlTK7KkOM1vN7aRVq9IzbGlxSDf7iFNgr
+ VYgv/k7Mstt68u3/Xa2UlCWSyYER6IDKDxjItOVdT7MBzN0kfY7j7DGbWUEbSHuKUZw8cqMN4RM
+ VPRqb+diMMxpw2/3aXXfQvA7+IFN+HAdnCVOETLOz3iMTZ32DCpoUc/yJHsFV831aE9WN0tBgA/
+ 3CL06XiUmzNVWu92c+MAzm1zgZuWnyY+RbPodBqI0NJUqHc2xHExyZJ2KRN0ahJN/eX8KIaO4h9
+ LJWQL3o4+7mOQM7tuy46q+MvJ883LTsrtzmr0A2W6W2+Ugw0a74+N5aqwKlId8ywLIS3hlaiZO0
+ VVD6jffw16hRmjvkomzbisHCbFlmRA==
+X-Authority-Analysis: v=2.4 cv=S/DUAYsP c=1 sm=1 tr=0 ts=6936f815 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VnNF1IyMAAAA:8 a=9ecn0eQcEfoHkOsjxl0A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAwMCBTYWx0ZWRfX20e1KMPfjCzU
- sl1Tls4Skrmeb8cKZrsTRMO82pcOBFOy2K7eaqqzNwgfJxiADrmBb8NqkNw+k8ZVHCDG694L4jJ
- CEkZUevYquiDMYLX1+KSvM0wd5WcEylRDOxRo2G+h5HvYQHv80eYsI14E9GA0Jf16LC3VUmjHuc
- rd/NF48SiutBsbtVVCOcFks53nIG7JMsN2YVnDiFyOp4Fx/+Rf+EGxg9u7DjCVLaN/hU4MsM+aa
- ZPwkO+N6ccEk8by9KSTMq1EVi6GuV6WGgLIqyIOe5hwTA7oy0DnvYKJ7ZikEfWFNC19mqQBYfYr
- Vv3fcotaJ6bZ+AqcbAL7xFQlZ7kFss01JFKy9zrmEtcI8jm/uXRvqp5+hrJ8UOdcGmyUKzDeUtX
- u1h+L3DDvtN1zMnOgRSYLvbSNUNrEA==
+ a=cFmaXs7E2_rN6eu18uoA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: nQw_vPY9gvYZw9Fvk4z581Q2D8Yku0B-
+X-Proofpoint-GUID: nQw_vPY9gvYZw9Fvk4z581Q2D8Yku0B-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-06_02,2025-12-04_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 malwarescore=0 impostorscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 bulkscore=0 priorityscore=1501
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512060000
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512060020
 
-Thanks for the review, Naveen.
 
-On 24/11/25 11:19 am, Naveen N Rao wrote:
-> On Sun, Nov 09, 2025 at 02:34:03AM +0530, Hari Bathini wrote:
->> ARCH_USING_PATCHABLE_FUNCTION_ENTRY depends on toolchain support for
->> -fpatchable-function-entry option. The current script that checks
->> for this support only handles GCC. Rename the script and extend it
->> to detect support for -fpatchable-function-entry with Clang as well,
->> allowing clean cross-compilation with Clang toolchains.
->>
->> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
->> ---
->>   arch/powerpc/Kconfig                                         | 5 +++--
->>   ...-function-entry.sh => check-fpatchable-function-entry.sh} | 0
->>   2 files changed, 3 insertions(+), 2 deletions(-)
->>   rename arch/powerpc/tools/{gcc-check-fpatchable-function-entry.sh => check-fpatchable-function-entry.sh} (100%)
->>
->> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> index 325c1171894d..dfb62e211c92 100644
->> --- a/arch/powerpc/Kconfig
->> +++ b/arch/powerpc/Kconfig
->> @@ -568,8 +568,9 @@ config ARCH_USING_PATCHABLE_FUNCTION_ENTRY
->>   	depends on FUNCTION_TRACER && (PPC32 || PPC64_ELF_ABI_V2)
->>   	depends on $(cc-option,-fpatchable-function-entry=2)
->>   	def_bool y if PPC32
->> -	def_bool $(success,$(srctree)/arch/powerpc/tools/gcc-check-fpatchable-function-entry.sh $(CC) -mlittle-endian) if PPC64 && CPU_LITTLE_ENDIAN
->> -	def_bool $(success,$(srctree)/arch/powerpc/tools/gcc-check-fpatchable-function-entry.sh $(CC) -mbig-endian) if PPC64 && CPU_BIG_ENDIAN
->> +	def_bool $(success,$(srctree)/arch/powerpc/tools/check-fpatchable-function-entry.sh $(CC) -mlittle-endian) if PPC64 && CPU_LITTLE_ENDIAN && CC_IS_GCC
->> +	def_bool $(success,$(srctree)/arch/powerpc/tools/check-fpatchable-function-entry.sh $(CC) -target ppc64le -mlittle-endian) if PPC64 && CPU_LITTLE_ENDIAN && CC_IS_CLANG
+
+On 24/11/25 11:25 am, Naveen N Rao wrote:
+> On Sun, Nov 09, 2025 at 02:34:05AM +0530, Hari Bathini wrote:
+>> Support for -fpatchable-function-entry on ppc64le was added in Clang
+>> with [1]. However, when no prefix NOPs are specified - as is the case
+>> with CONFIG_PPC_FTRACE_OUT_OF_LINE - the first NOP is emitted at LEP,
+>> but Clang records the Global Entry Point (GEP) unlike GCC which does
+>> record the Local Entry Point (LEP). Issue [2] has been raised to align
+>> Clang's behavior with GCC. As a temporary workaround to ensure ftrace
 > 
-> Can you instead pass $(CLANG_FLAGS) to retain the same command across
-> gcc/clang?
+> Any reason to put in a "temporary" workaround rather than waiting for
+> this to be fixed?
 
-Should work, I guess.
-But do I need to test for any additional clang flags that
-may interfere with what we are trying to check here?
+Pushing for this temporary workaround as the fix ETA for clang is not
+available at the moment and the temporary workaround is likely
+harmless even on a clang version with the fix included..
 
 - Hari
