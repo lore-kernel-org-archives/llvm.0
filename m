@@ -1,126 +1,97 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C703F9FB
-	for <llvm@lists.linux.dev>; Mon,  8 Dec 2025 16:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0882E5437;
+	Mon,  8 Dec 2025 16:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765210150; cv=none; b=Yv6r0XzEed628CzWRZFieQ+y1uusU/aa5ZvVlfHdVplsyu4ysyrLOU/6MLZsmuYq7RSpA4Nl1ml1dIerfH15NHPb9NusJc7yDKm3IqiAu6XPRVj/lKkOmyxPDxidDiy2yMDFEkn5sqOJ4Qym9tVxVPrpJyzEUtxh4D4Ag9fuL68=
+	t=1765211190; cv=none; b=ki/14jjs+BPYEMFL8rYv6/bUPlkCGqpQpS5S6vGKtJy9T2WMfdf1dEHTPHSlYuuXt2WE88lkisltDxJ1qVySWZF/oHk4BhtN9Mu7ZG2233ZVFyDXZnqETzSzuHpAQcm0QyKB+d+4g0UwXgrqOOQbg50+TxQb9eH3caLD4F+fAHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765210150; c=relaxed/simple;
-	bh=5wq/pG9NjW/Xc3CZ8gT2muSpid7LybWAcae+d1HITLs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BvLyIQJ4E+CM/+mS+3x/ecJbHq6AZrbZAUzmVj3hN0MvL8htLgMFT5eo6dKefhCh8TXcrU5+YCPjiynwJR6oOJf9diTBDO4egpHBaDCNu2wSvdcT2KaeZdr9mPDP476P73xWawEcT5E0wEfJRMlE+2vM8lDcIoXkXgzRoQOFDmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=giBTBVFx; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1765211190; c=relaxed/simple;
+	bh=KVuj2x7GaG5xyxCXNTE09TCfDYelRFBr39ud6i5fUf4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OSlmG1Qy5xzE0ipU15bNlD/EL55FbLkB2uyb1hLMZMUrvQ9twZge2QT6tiuQHLfDRDiAAn1LVL61cE/jsxv+asUdu2DgSwuwXon4cezQL7LcBwen2hCiTk7G2cZpHGQexeeA/OyErFgRRiUA1NtRfGbr+/20vl469a0WeGXcPFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fr8GB7Ak; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="giBTBVFx"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5B86DSJx014598;
-	Mon, 8 Dec 2025 16:08:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=iilKg1
-	8ysnmI4ONROC9vF2l+9+u4XZIiuBwCGpbDEgg=; b=giBTBVFxTzhTFiCP2XdhJ1
-	CR1fit3AmQJqI1y/nNr9hb/jKW8odZM3EIt4kn8IZzIhiIEkSxG0B+FtE9/VbFG+
-	SKzws/a+lV/js3DYIyJFKhnYTRa2INkCaqC9ROuPmj8lMQLcBy2DJFzhHxVibtCz
-	nz1aodxs3vMaK/+IvpPNcaw6BFgjBYFMi+m3yHpzU/WaqsJVKhSHpp/QZhcW0IqZ
-	KB2TGtD1VgXPx/jfIYcJvwKcQYGAPfxLCF/gGABxFhEQRBf89K440C52bGRJ2TGn
-	L9WRBVUM5OSCoAtTU2gfGPE5BZukphlVXUe0S4e3UU3J5CO1KrnY8SKffhdpQeSw
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4avc5383fe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:08:53 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5B8FdFEG001998;
-	Mon, 8 Dec 2025 16:08:52 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4aw11j6a7h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Dec 2025 16:08:52 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5B8G8nEX55836948
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Dec 2025 16:08:49 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2C60E20043;
-	Mon,  8 Dec 2025 16:08:49 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3C4D220040;
-	Mon,  8 Dec 2025 16:08:47 +0000 (GMT)
-Received: from [9.43.1.23] (unknown [9.43.1.23])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  8 Dec 2025 16:08:47 +0000 (GMT)
-Message-ID: <874f8ec4-4f3f-402d-a9f2-4267d37a5bc9@linux.ibm.com>
-Date: Mon, 8 Dec 2025 21:38:46 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fr8GB7Ak"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765211189; x=1796747189;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KVuj2x7GaG5xyxCXNTE09TCfDYelRFBr39ud6i5fUf4=;
+  b=Fr8GB7AkOaTy/ZtZcyrERGa4oHTmrC8HdjumgVFYcPzaSq00Pf16iLPO
+   Xg7Nghq+8Hvr2qSidf7SycMuuJBYyT8Xexc4NPfq/9Z/RwCojRKiPZkMf
+   LddJJxXXpIsyLyZ4mPDpLwvqC1EYHjbKNN0VYYrPxE/8Z6Woh+fbcnMGE
+   Ur99PWBy0U+p/grGTzWTtwwhyJ1RkMYfSI3TKGWVbl0btejjg2Tj9KpoU
+   TDEG9zHpDzMr7RZov6uR2kpn82pvSF9KlL2r9qrGwNmg90aeWuQkQSJuQ
+   ZuQLRCRzmwbZXR+Z84p9Uj/LNQvBj6AKguC2mQw9NGYUnjWkHvmvhDhvK
+   w==;
+X-CSE-ConnectionGUID: XljPGEq0QQeuLtfdIW9dUg==
+X-CSE-MsgGUID: hpkyhU/0Rxqt7I1z2JWyUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11636"; a="67234790"
+X-IronPort-AV: E=Sophos;i="6.20,259,1758610800"; 
+   d="scan'208";a="67234790"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 08:26:28 -0800
+X-CSE-ConnectionGUID: EAQ7FV6NSH2NnWU7lqHa6g==
+X-CSE-MsgGUID: XefRYCUARO28Lpfl9z+9EA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,259,1758610800"; 
+   d="scan'208";a="200421708"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.47])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 08:26:27 -0800
+Date: Mon, 8 Dec 2025 18:26:24 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+	Kees Cook <kees@kernel.org>
+Subject: Re: kernel/trace/bpf_trace.c:475:35: warning: diagnostic behavior
+ may be improved by adding the 'format(printf, 2, 0)' attribute to the
+ declaration of '____bpf_seq_printf'
+Message-ID: <aTb8MDNm2KiOpJTl@smile.fi.intel.com>
+References: <202512061425.x0qTt9ww-lkp@intel.com>
+ <aTRWuMNDMyjM6OYu@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] powerpc64/ftrace: workaround clang recording GEP in
- __patchable_function_entries
-To: Naveen N Rao <naveen@kernel.org>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-trace-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev,
-        Maryam Moghadas <maryammo@ca.ibm.com>
-References: <20251108210405.2375472-1-hbathini@linux.ibm.com>
- <20251108210405.2375472-4-hbathini@linux.ibm.com>
- <sjheprnafkraauotmi2fwjz6l6fha5te7jdp74t4zfh3jvs2if@vjpey276fsti>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <sjheprnafkraauotmi2fwjz6l6fha5te7jdp74t4zfh3jvs2if@vjpey276fsti>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAyMCBTYWx0ZWRfX9VNsTMEkm0V3
- acsg7v1LTpLHtW9U1nkuRwh/sSfQ49XoY6HPI2267UdlTK7KkOM1vN7aRVq9IzbGlxSDf7iFNgr
- VYgv/k7Mstt68u3/Xa2UlCWSyYER6IDKDxjItOVdT7MBzN0kfY7j7DGbWUEbSHuKUZw8cqMN4RM
- VPRqb+diMMxpw2/3aXXfQvA7+IFN+HAdnCVOETLOz3iMTZ32DCpoUc/yJHsFV831aE9WN0tBgA/
- 3CL06XiUmzNVWu92c+MAzm1zgZuWnyY+RbPodBqI0NJUqHc2xHExyZJ2KRN0ahJN/eX8KIaO4h9
- LJWQL3o4+7mOQM7tuy46q+MvJ883LTsrtzmr0A2W6W2+Ugw0a74+N5aqwKlId8ywLIS3hlaiZO0
- VVD6jffw16hRmjvkomzbisHCbFlmRA==
-X-Authority-Analysis: v=2.4 cv=S/DUAYsP c=1 sm=1 tr=0 ts=6936f815 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=cFmaXs7E2_rN6eu18uoA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: nQw_vPY9gvYZw9Fvk4z581Q2D8Yku0B-
-X-Proofpoint-GUID: nQw_vPY9gvYZw9Fvk4z581Q2D8Yku0B-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-06_02,2025-12-04_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 clxscore=1015 impostorscore=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 spamscore=0 bulkscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512060020
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aTRWuMNDMyjM6OYu@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-
-
-On 24/11/25 11:25 am, Naveen N Rao wrote:
-> On Sun, Nov 09, 2025 at 02:34:05AM +0530, Hari Bathini wrote:
->> Support for -fpatchable-function-entry on ppc64le was added in Clang
->> with [1]. However, when no prefix NOPs are specified - as is the case
->> with CONFIG_PPC_FTRACE_OUT_OF_LINE - the first NOP is emitted at LEP,
->> but Clang records the Global Entry Point (GEP) unlike GCC which does
->> record the Local Entry Point (LEP). Issue [2] has been raised to align
->> Clang's behavior with GCC. As a temporary workaround to ensure ftrace
+On Sat, Dec 06, 2025 at 06:15:56PM +0200, Andy Shevchenko wrote:
+> On Sat, Dec 06, 2025 at 02:44:24PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   f19b84186d297063a1006ca9e1c8597f77a75581
+> > commit: 6b2c1e30ad6846624d935a7ea98dae60458126b8 seq_file: Mark binary printing functions with __printf() attribute
+> > date:   8 months ago
+> > config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251206/202512061425.x0qTt9ww-lkp@intel.com/config)
+> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061425.x0qTt9ww-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202512061425.x0qTt9ww-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
 > 
-> Any reason to put in a "temporary" workaround rather than waiting for
-> this to be fixed?
+> Not an expert in BPF, but the compiler recommendation to add __printf(1, 0)
+> sounds reasonable to me. Anybody to confirm that and/or send a patch?
 
-Pushing for this temporary workaround as the fix ETA for clang is not
-available at the moment and the temporary workaround is likely
-harmless even on a clang version with the fix included..
+FWIW, I just sent a patch
+https://lore.kernel.org/r/20251208161800.2902699-2-andriy.shevchenko@linux.intel.com
 
-- Hari
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
