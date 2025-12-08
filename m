@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BCC31327A;
-	Mon,  8 Dec 2025 11:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938FD224D6;
+	Mon,  8 Dec 2025 12:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765193227; cv=none; b=BNdA00NEZj9SUEGWqZtcdNcnRg9R2dTqxWvHbvKcJPv6OEIXvdvXW6t9iIW49R9TJR4OFck5onmQAx8B3rYtJyM3aGUoX7WaYZ85rGtu5hSVYIzOEz7n1br4TxJKqLQcrY34GLJ7Thy8jyYVBxRtaUgZiHT7uuWuy4maPtoAEcM=
+	t=1765195690; cv=none; b=JwQ5YVedQuP3LROPX3fP/Q0eqGf6cNQpqTvagJES5OBZFlXmYi252rBhQadnIyK0ZNrV8sVc5X0Z9zbkmlmN7DxeIrVtEk7YIpaK6YwmgcSH9xCq6zzKUBvnN1i8XKBzmp/vl7zcEfA+9lAHfBkktEFrm9bQcbLDBrWgktfgmxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765193227; c=relaxed/simple;
-	bh=o8EpAk0ISY56gp9mxbstBeDyrLfeaDG/5sjZgHKsAY0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uxJTMGW1zflWX8TbFyey5GlX4aPe+RCvKSEeewrgln7HHtXFV5UXAmKfivWsOdtMwAx2JatMBbNhllrsAwoCdCWj1cDSPxo9IOacemBD1dL9TGM1vLEdZzEUSZONlEx1Dse/K+AHhZSQCnVTArXOUoyVO+hRcy3jErBcmUxaqA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TaWt/QFU; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1765195690; c=relaxed/simple;
+	bh=6lLM4kv6uoEq2E1MNZZZuauSNtK3L1hPhYSD+obOpSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hYCRl1gh72u7i9qcF0uQBbqnt/Dh1WQyRljCRo1Cw0h/qVWCRmSFPuy6HtrEIrgYF2rdgz4AvQ9vE2gJlcYM7oKcAH0fOIhgAc490KBgSFcRdv7gaX8SqDe6i07T1ofyfE/hHO9aPEYBtHVERlBavRuNGxEwP3z9p67pdl1bxBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JP6y753Q; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TaWt/QFU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JP6y753Q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765193226; x=1796729226;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o8EpAk0ISY56gp9mxbstBeDyrLfeaDG/5sjZgHKsAY0=;
-  b=TaWt/QFUTwfzmSUcLJYOVJEIOtHKCINWV6Xie4h0MUey9Fl2zuaoWnGQ
-   jgb469py7wGEDnYqiLLn/bj1pI9dr1Rz5GuAj+xKLuRcJs6klid9mdKjK
-   CgBmA2smP4CURvZKyjlyiY2+rcHBRwYaGUzP/dmO3dsLyHFoXainnCCWu
-   gcULonJzRgnLAC9RFV5tLFEgEgsx9DT/Eum1I3U205tE7cSkN7XQHOFkJ
-   /AIhRkSdscGR8dVtfsE4AC/UmJRXuL42oHGR8JiLB/is9/bb9xZFfUrnP
-   bWRNf1JRt0KJZ3Ei4mU/lVxCVGK8xpNUtakSlS6PZQBNNHoP3zwqWhiD2
-   w==;
-X-CSE-ConnectionGUID: MdDcIhZQRPa8wVguXgaSPw==
-X-CSE-MsgGUID: eOr5OtT6Rpy/pDX1MbeV/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="78249127"
+  t=1765195688; x=1796731688;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6lLM4kv6uoEq2E1MNZZZuauSNtK3L1hPhYSD+obOpSk=;
+  b=JP6y753QQqWBdVPaInrIXnLh4qnMi2WXSyqqSK2ptq18VDcNQIuw7Ir4
+   AY018XfeWG8vI1j90W9T6lZ/B68DYFkNVlqGMRBr9mnPPAaROTDQOWcAj
+   3kIwlr/oIPHay6+kl01pjUYf/quk9XiVXbcyT8YJU6H7/nPkI8aBmHt3u
+   fUBE2nff6+71E5O+7ZOzWxceZHvTjA568AW3lkTCrZR+EC75BdKMAYmYl
+   8Xtzxp85P67hNy5GdS2mtQJZOtuxKmJoT3YsTCv7/FJGFhCF+HrWSLk2k
+   fNesHvifI0HnerZ0v2g1sxBx2hpSbmwSKXaiNrICWHfKO766YbCHAIoeD
+   A==;
+X-CSE-ConnectionGUID: cs5yrSlkRjKOaTTs7AAnDQ==
+X-CSE-MsgGUID: C7Rl/GacSOmIx9/3H3v1Xg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="66318095"
 X-IronPort-AV: E=Sophos;i="6.20,258,1758610800"; 
-   d="scan'208";a="78249127"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 03:27:05 -0800
-X-CSE-ConnectionGUID: zP14OahgSmaENafTGW6T1w==
-X-CSE-MsgGUID: MyjMDi6PQF27ugBtcrrGcA==
+   d="scan'208";a="66318095"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 04:08:08 -0800
+X-CSE-ConnectionGUID: s/eJmeAcRZ62oUDptcorDw==
+X-CSE-MsgGUID: LVAA6ifFT6+az/Jjt8E2iw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,258,1758610800"; 
-   d="scan'208";a="195810991"
+   d="scan'208";a="194976726"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Dec 2025 03:26:58 -0800
+  by orviesa006.jf.intel.com with ESMTP; 08 Dec 2025 04:08:06 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vSZOJ-000000000BR-2eV1;
-	Mon, 08 Dec 2025 11:26:55 +0000
-Date: Mon, 8 Dec 2025 19:26:28 +0800
+	id 1vSa27-000000000G9-2VC2;
+	Mon, 08 Dec 2025 12:08:03 +0000
+Date: Mon, 8 Dec 2025 20:07:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhi Wang <zhiw@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 1/7] rust: pci: expose sriov_get_totalvfs() helper
-Message-ID: <202512081949.0BiprpYL-lkp@intel.com>
-References: <20251206124208.305963-2-zhiw@nvidia.com>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 13538/13721] mm/kasan/common.c:601:14: error: use
+ of undeclared identifier 'KASAN_VMALLOC_KEEP_TAG'
+Message-ID: <202512081926.ICUawXRm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,41 +63,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251206124208.305963-2-zhiw@nvidia.com>
 
-Hi Zhi,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.18 next-20251208]
-[cannot apply to drm-nova/nova-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhi-Wang/rust-pci-expose-sriov_get_totalvfs-helper/20251206-205118
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20251206124208.305963-2-zhiw%40nvidia.com
-patch subject: [RFC 1/7] rust: pci: expose sriov_get_totalvfs() helper
-config: x86_64-randconfig-071-20251208 (https://download.01.org/0day-ci/archive/20251208/202512081949.0BiprpYL-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251208/202512081949.0BiprpYL-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   82bcd04d124a4d84580ea4a8ba6b120db5f512e7
+commit: 6b83afdcfa935db4f836906ca7f0fcafdca8d229 [13538/13721] kasan: unpoison vms[area] addresses with a common tag
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20251208/202512081926.ICUawXRm-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251208/202512081926.ICUawXRm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512081949.0BiprpYL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512081926.ICUawXRm-lkp@intel.com/
+
+Note: the linux-next/master HEAD 82bcd04d124a4d84580ea4a8ba6b120db5f512e7 builds fine.
+      It may have been fixed somewhere.
 
 All errors (new ones prefixed by >>):
 
->> error[E0425]: cannot find function `pci_sriov_get_totalvfs` in crate `bindings`
-   --> rust/kernel/pci.rs:521:38
-   |
-   521 |         let vfs = unsafe { bindings::pci_sriov_get_totalvfs(self.as_raw()) };
-   |                                      ^^^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
+   In file included from mm/kasan/common.c:17:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/um/include/asm/dma.h:5:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> mm/kasan/common.c:601:14: error: use of undeclared identifier 'KASAN_VMALLOC_KEEP_TAG'
+     601 |         if (flags & KASAN_VMALLOC_KEEP_TAG) {
+         |                     ^
+   mm/kasan/common.c:615:49: error: use of undeclared identifier 'KASAN_VMALLOC_KEEP_TAG'
+     615 |                         __kasan_unpoison_vmalloc(addr, size, flags | KASAN_VMALLOC_KEEP_TAG);
+         |                                                                      ^
+   1 warning and 2 errors generated.
+
+
+vim +/KASAN_VMALLOC_KEEP_TAG +601 mm/kasan/common.c
+
+   586	
+   587	#ifdef CONFIG_KASAN_VMALLOC
+   588	void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms,
+   589					 kasan_vmalloc_flags_t flags)
+   590	{
+   591		unsigned long size;
+   592		void *addr;
+   593		int area;
+   594		u8 tag;
+   595	
+   596		/*
+   597		 * If KASAN_VMALLOC_KEEP_TAG was set at this point, all vms[] pointers
+   598		 * would be unpoisoned with the KASAN_TAG_KERNEL which would disable
+   599		 * KASAN checks down the line.
+   600		 */
+ > 601		if (flags & KASAN_VMALLOC_KEEP_TAG) {
 
 -- 
 0-DAY CI Kernel Test Service
