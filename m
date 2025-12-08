@@ -1,135 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626B4259CAF;
-	Mon,  8 Dec 2025 03:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8C525B2FA
+	for <llvm@lists.linux.dev>; Mon,  8 Dec 2025 03:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765163091; cv=none; b=dtPYmehCBbK2T8l2cgxZVBXaNEak4XPjemu1dlfJ1SVetaLCDCHVo1vC7fdRAj/Ip1Q9zekdTUDCPFEgOYg017UHLM+qTS+LbOPa6VFITHVjN5b88MtwI7MDVP8YYY+oa70BiR27KAqSlPvSvNZLrCPrSKRi2oNLHU+k4U5QFRA=
+	t=1765166113; cv=none; b=o37Mu8r2bkoPnElzGVOaWqcrrUcauRBSyVgdXUfCJqlBw4cjiDw1ZRDPqU1mhaV3+WgvUt8XepL+5pR5BqlqI9JfJHr1f0ufEthbTAO5qJVPkx0lNwDD+TpzHYHaCNeJoBdoWCs8dOIFRO5MUCTZ0z5fK1SRW7OICEhUFG9PTaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765163091; c=relaxed/simple;
-	bh=VtOK1EBRkJsxGXnW4s7lGPtINpp/sA1eK4PYbFO1fwc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHjzasycmIi2SE2VpSVoqVr7xRccAgIstYNZUy2llW0JI0su5Cq3snDk9TlxdV//cHOf4mMhoiZ376avmnl1iibfHPhszwqdUFFXZO8hcLOLw+PTGO0qr8J27fZVqi6YlnXY2Z8m9+wvceXjIV3A7vDDXO2XQsgxDDjgbkpMjiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iowg71T9; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765166113; c=relaxed/simple;
+	bh=UCxR/7LSxyi4Iy5GKgmJ81emIYUJoNbm2QG+ygYrVTo=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=RjK9ix8ukbXy6tEbLXqkyOLg6WtjNSJGeRoB+AhpIN+dKoVD4r7sYBDtJ3zZad1pIlcO1n3trRpE81QGRrZgvfvURuPtZ7v/hs41DR1WeBfR6K+4vcEzWl1yJssS7/WI40RMcg3jfp05ayjdJf04ANIgVWQtERNPKNwDRBuw3EA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BsumN8No; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iowg71T9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765163090; x=1796699090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VtOK1EBRkJsxGXnW4s7lGPtINpp/sA1eK4PYbFO1fwc=;
-  b=iowg71T9YgBNYlp7bw4YTUk3oC8HoZdqgeefR/K7NDLc4lsedMrsbibC
-   LGFZg5SunjrX4SrN4CSRiRj5i27R9NQnMeLql63VKhGvH8vID6QvwVqju
-   B3Mdn/8V4yatys+zm8ePFcFRiSPStMCF6VTwynfEV7wnDwZVQQlaHoEuI
-   8ADRa0ur8wAs0cym9q4CuyJRfKxH804uFYtr1ykCPpYeQjcVkjvDyG5TW
-   fG5IQNQMwsvDvTRnbqgVxSD2OIWXPAS33hC6q2QCKoIL+xwOdPJ8x2rLx
-   rOqGNvCAeRfjdsPfueNe+ihA2ZdgoB8eXssR5H9onM2/PTBYpMuy2rFrv
-   A==;
-X-CSE-ConnectionGUID: bY8I9yFQReG6avUWeOkg1A==
-X-CSE-MsgGUID: S6p+7thgT7i+3RvFEaJkLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="92581806"
-X-IronPort-AV: E=Sophos;i="6.20,258,1758610800"; 
-   d="scan'208";a="92581806"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2025 19:04:49 -0800
-X-CSE-ConnectionGUID: KDECnqanSV+libfVdYMICw==
-X-CSE-MsgGUID: 4YeACLpgS/WcCJF93mXHLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,258,1758610800"; 
-   d="scan'208";a="196091344"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Dec 2025 19:04:47 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vSRYK-00000000JsT-3nW5;
-	Mon, 08 Dec 2025 03:04:44 +0000
-Date: Mon, 8 Dec 2025 11:04:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dharanitharan R <dharanitharan725@gmail.com>,
-	syzbot+5dd615f890ddada54057@syzkaller.appspotmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dharanitharan R <dharanitharan725@gmail.com>
-Subject: Re: [PATCH] net: atm: lec: add pre_send validation to avoid
- uninitialized
-Message-ID: <202512081042.Zx4NasDJ-lkp@intel.com>
-References: <20251207041453.8302-1-dharanitharan725@gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BsumN8No"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-477bf34f5f5so31543115e9.0
+        for <llvm@lists.linux.dev>; Sun, 07 Dec 2025 19:55:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1765166110; x=1765770910; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=296SilC65z4XmTA3U66AfDXBjMYNo7gMqVbqMuOL8EU=;
+        b=BsumN8NorNiAWetCo7DWGBh5iuDNv4wUDN+2s7KKcG/F/0vlJ0zqZ7bh/jQ9/h3A5z
+         pc4XcEUVJ8l0zkcbyqk0eRd37QCINDtFQE4rRPdGV60CUk89u5UQ+3GFH6fJZk07TINx
+         GX5rPnj0+lI4iUTa/HXo5h1/CxfkmdoYKEzf4sn5VOiD99SCp+hHq+VG6kqjMYI4hghC
+         E1PXCBHxtsHiKIY1SBZ2cNjvyjscpQl84W7iEryaktVEEuCEhHsKbXkSY7Oo2fo5lQ0D
+         7gXOv2+exHQeKjyhjjquHeBoET909hhR+dyh3iLPQ02UXI9yVjwCvzQ9quZW1hmy3pPR
+         3m3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765166110; x=1765770910;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=296SilC65z4XmTA3U66AfDXBjMYNo7gMqVbqMuOL8EU=;
+        b=cgUcv1eQQlI00ekKtc/yHLBYWl/CN7XEmojnCir2au8fQtGnZ6AhNWo4ztPW4ffM9t
+         NKIfPQ/NnMXpWIZ5sLGugExPO4qXCO28e6fWW963YZuShUwqA0OrHUvMGMxnqAND7KZs
+         JptPYrBRavuK/rpQKcK33k08hOyXiaFo+9fhPIW0/0kXezdYvQba5QuDV6GyQcDj7dOu
+         fAxl6pm3mqd4U7aNZhUpt7FqVpvaKjSW17pesLLs3TDziUcCHc63Sd07O/gxSIZanJb4
+         /CMIqbzRYA1c6o28gsJq/MEzyCpN6Cz4p/Kr9qHNMRcoWoZBcHA2oLw/Vn9AlAWKeMxc
+         1MZg==
+X-Gm-Message-State: AOJu0YzFfsv3bf7geYYC5q/dL5uHv689wfy32IstRfu/YIof70P7JqTX
+	POa1IWxA2XXnDbkko18FX6901MidSqAvtJ8jRRzcIFmllIUmygXPkAWT2/X4Gq18imlj4282VM9
+	cU6De
+X-Gm-Gg: ASbGncubUT1UH0hk8ierFNFuPSarfsHV/pbjcbJI1VZGRo12ArlKNXztFpYVczpjkMJ
+	0agYJz8cSQWKC/I3Sj/OKmppak3ozTXqEjYq7i502jS2tUVIcO8dKRJmWUHVqy4eRYHP4cOIq+j
+	7Lv4iweTj3WPDyj+aQT+aXhNZgdOKaFThJf/8Tlz/MBE5zEUrn4rOmUulytr62HAYH+QmTjmGXH
+	nU0bNFba18wm0vr8nvCAILYhBIPJR/0sv0Fi5TGILRRiLLBlo2eOMe+My8wybfKYNvGTK+HW4To
+	qqbfsg8bcBEOVlJT3fJ1yrGzbTCH9BZrx0lmR0whhQ0uJbdJnJLUKaJQdo3v7X154f5O54lsuC4
+	e/Tn0AFpOZ4CGoQJgobsXoJ8Q+j3kmhGpP9N5pXYlJEhclG486fgX+aOzuWFDbEYxvqziU4m67Z
+	b/v2j4sKP2226WwFw0wRZajyARzLOgSkKKOpd0X5tzjVXNhSYayBwrcqv6SH5nMGUC6bR6
+X-Google-Smtp-Source: AGHT+IGhrJJoo9kx/8ibaBAmSemAZzFLaQVXICIiopL2d4aI21Zq7e7LXDLSkyKj3gLTExe1SGn1Jw==
+X-Received: by 2002:a05:600c:4588:b0:477:7b9a:bb07 with SMTP id 5b1f17b1804b1-47939e46162mr77076875e9.35.1765166109998;
+        Sun, 07 Dec 2025 19:55:09 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479311ed466sm214322215e9.13.2025.12.07.19.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Dec 2025 19:55:09 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Mon, 8 Dec 2025 03:55:08 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1316820319.13253.1765166109507@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.18-rc6-688-gcd41d3420ef6: Failure on arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251207041453.8302-1-dharanitharan725@gmail.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_13251_938346033.1765166108816"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-mainline-allyesconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Dharanitharan,
+------=_Part_13251_938346033.1765166108816
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build warnings:
+Dear contributor,
 
-[auto build test WARNING on net/main]
-[also build test WARNING on net-next/main linus/master horms-ipvs/master v6.18 next-20251205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dharanitharan-R/net-atm-lec-add-pre_send-validation-to-avoid-uninitialized/20251207-121647
-base:   net/main
-patch link:    https://lore.kernel.org/r/20251207041453.8302-1-dharanitharan725%40gmail.com
-patch subject: [PATCH] net: atm: lec: add pre_send validation to avoid uninitialized
-config: arm64-randconfig-002-20251208 (https://download.01.org/0day-ci/archive/20251208/202512081042.Zx4NasDJ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251208/202512081042.Zx4NasDJ-lkp@intel.com/reproduce)
+In tcwg_kernel/llvm-master-arm-mainline-allyesconfig, after:
+  | commit v6.18-rc6-688-gcd41d3420ef6
+  | Author: Jaroslav Kysela <perex@perex.cz>
+  | Date:   Wed Nov 26 10:16:35 2025 +0100
+  | 
+  |     ASoC: nau8325: add missing build config
+  |     
+  |     This configuration was missing from the initial commit.
+  |     
+  |     Found by Jiri Benc <jbenc@redhat.com>
+  | ... 6 lines of the commit log omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512081042.Zx4NasDJ-lkp@intel.com/
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23374
+  | # First few build errors in logs:
+  | # 00:26:11 sound/soc/codecs/nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
+  | # 00:26:11 sound/soc/codecs/nau8325.c:431:11: error: variable 'ratio_sel' is uninitialized when used here [-Werror,-Wuninitialized]
+  | # 00:26:11 make[5]: *** [scripts/Makefile.build:287: sound/soc/codecs/nau8325.o] Error 1
+  | # 00:33:22 make[4]: *** [scripts/Makefile.build:556: sound/soc/codecs] Error 2
+  | # 00:34:29 make[3]: *** [scripts/Makefile.build:556: sound/soc] Error 2
+  | # 00:34:29 make[2]: *** [scripts/Makefile.build:556: sound] Error 2
+  | # 00:56:16 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:2010: .] Error 2
+  | # 00:56:16 make: *** [Makefile:248: __sub-make] Error 2
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23454
+  | # linux build successful:
+  | all
 
-All warnings (new ones prefixed by >>):
+Used configuration :
+ tcwg_kernel/llvm-master-arm-mainline-allyesconfig
 
->> net/atm/lec.c:506:2: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     506 |         mesg = (struct atmlec_msg *)skb->data;
-         |         ^
-   net/atm/lec.c:503:4: note: previous statement is here
-     503 |    if (!pskb_may_pull(skb, msg_size))
-         |    ^
-   1 warning generated.
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-2135. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +/if +506 net/atm/lec.c
 
-   491	
-   492	static int lec_atm_pre_send(struct atm_vcc *vcc, struct sk_buff *skb)
-   493	{
-   494		struct atmlec_msg *mesg;
-   495		u32 sizeoftlvs;
-   496		unsigned int msg_size = sizeof(struct atmlec_msg);
-   497	
-   498		/* Must contain the base message */
-   499		if (skb->len < msg_size)
-   500			return -EINVAL;
-   501	
-   502	   /* Must have at least msg_size bytes in linear data */
-   503	   if (!pskb_may_pull(skb, msg_size))
-   504	   	return -EINVAL;
-   505	
- > 506		mesg = (struct atmlec_msg *)skb->data;
-   507	   sizeoftlvs = mesg->sizeoftlvs;
-   508	
-   509	   /* Validate TLVs if present */
-   510	   if (sizeoftlvs && !pskb_may_pull(skb, msg_size + sizeoftlvs))
-   511	       return -EINVAL;
-   512	
-   513	   return 0;
-   514	}
-   515	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allyesconfig-build/372/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-mainline-allyesconfig-build/371/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/cd41d3420ef658b2ca902d7677536ec8e25b610a/tcwg_kernel/llvm-master-arm-mainline-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/commit/cd41d3420ef658b2ca902d7677536ec8e25b610a
+------=_Part_13251_938346033.1765166108816--
