@@ -1,62 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D837302165;
-	Tue,  9 Dec 2025 18:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B1D3A1DB;
+	Wed, 10 Dec 2025 01:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765306688; cv=none; b=Ouo1BagrZAfUrKS2DWuq/GMydoO6vuxxrPTCMR4UpnbN9N5PU8kFhM3NpIIbxLuLdN2F9ratoOCtAOcFV70Zs5UIHXPfj6BTUoQwumi2Z4caUizW8tJYfZQ07d1CjJqsXX+rVCVmPE/Ya9SQuN1TLTkrMLa3iqM1P/Mxv2o75mg=
+	t=1765330593; cv=none; b=Bmn3f/zuW50AtlcPimov/btpaiIqdFlHvMyNOOvaz2WlJ2EVCRr4qf73CVLqhSg+xas8S45upFJDBDYTwDyVyIplG/Sd3zdYQtgSmz+bdgSVHDaC8NPZMfnVb0E+1vmhRvPW3IeUDlIiup6knXj+mpkoLJy5cdCTM8F9uo5Plyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765306688; c=relaxed/simple;
-	bh=mFbT4lH79yDTHUyS7wtXasTGzShbkPr6lyhSnS1BMmQ=;
+	s=arc-20240116; t=1765330593; c=relaxed/simple;
+	bh=K5odEHdQx6AReGW+bBKxgqCvZEHkimJ7Bft2ZBOGO04=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k/84SReapAUJIbYF1OjTgA/RxyxJQ37/PuFil9gdLdfHt2Lihxs/7Twgbhwgr1YbEKMRMPlAeCgNhvWIUa4zmNEQWCAetne7qsGuQk+gMDN5TLuoY1Ks1O+tmb+DW6YZbE+vSO5KjBGryZegnzsd5W32q4cVbYVYGbz1D2YBCSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WnLe8j/K; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=cX4OZPDPFspLiJ7lucN4/YLF6BUQPlsWfuRqwlaeMcPc7tlF6j7jXtjaKy9csPpJ/UPys6LvmgYdMIFnvlWzak+0ii6KKW4CALSVtYXR8PgsM3Neo5owiBM9cUP/lvvbbDhLwWzotJKV0y8AsDDQcET5Ay2LDAwQMiw088y+Www=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ngZplvnY; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WnLe8j/K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ngZplvnY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765306687; x=1796842687;
+  t=1765330592; x=1796866592;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=mFbT4lH79yDTHUyS7wtXasTGzShbkPr6lyhSnS1BMmQ=;
-  b=WnLe8j/KKGFzFji6KBbsr+H9Zagq+ZPuTsurQKuAowQAlHITc8ME4oV3
-   OCDHM6N07130MjAHY6SlohpB186AZA0k9nZfO/hfLhVUH3M8lpJidlZTs
-   nSjsAyTGKY54nn1xX/EplAPXo9C2zaT8Qfi61Lq9T6Vx302LqgAysbWO5
-   j4/+sDaVw/+mXJk4rwXvAOiTRHvk3VQhrMgRG/UKxxUkGOx/KJy+P3Hpz
-   xxzD7H9Sc1EDQko4PNyMPNTqXv0w0tOQWV0TPoA1/far8eJdHzHlSK+fQ
-   /6RXLewOM54nQVwPwPgNqrluskre/g3we+7MwTL1g51fUAEPAv86SOCR8
-   w==;
-X-CSE-ConnectionGUID: UOF4Tt1QQTCB1VMREM5yZA==
-X-CSE-MsgGUID: WeR9WOL7RWql01A9UcUW3Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="67157899"
+  bh=K5odEHdQx6AReGW+bBKxgqCvZEHkimJ7Bft2ZBOGO04=;
+  b=ngZplvnYu5qEV3cF/a+P8g4XZt87o6ScddjE9JZYAl/Wm3C1eLWbxqT9
+   KQ3wH6pe0sv3QyrWUGNeVMgDt/5+w7qkbjmELSCMOCqUFEzlc9C2tQK1e
+   AgLDlWGLfU9PSG+1mymZ+eUN3JNpEb/cJR9AYO7HKsCyWEpoub6EgAoIE
+   sqz4YI/ZVcsYrKuTDWPb+H2EAbWfa6fR2aruhLa8txZVCkgyScqBszqQb
+   x08tnHz1+e1E7DRm1yhz/wmI3MldKnTh+ZOGwCmRU95hqsPBhBZidGhnE
+   TsojI9PaGV/P1EANKBMAL71oUxsCbt406iu2JSKIuH5Rbiq5Yo30jt4G0
+   Q==;
+X-CSE-ConnectionGUID: kkF9+9FZSKaw6BrAQ4oCDw==
+X-CSE-MsgGUID: DuyjVtR8Siy9JylcBXlIGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="84711127"
 X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="67157899"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 10:58:06 -0800
-X-CSE-ConnectionGUID: YNsiv4mCTE6VKJ2rfASCMg==
-X-CSE-MsgGUID: 79TPHIPMQIapKyEBbxu36Q==
+   d="scan'208";a="84711127"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 17:36:31 -0800
+X-CSE-ConnectionGUID: Fx1f0ymTQfWL7CWfi6FUOg==
+X-CSE-MsgGUID: kGC7calUTMCwMTiPO6GqVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="200727249"
+   d="scan'208";a="201303730"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Dec 2025 10:58:03 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 09 Dec 2025 17:36:27 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vT2uP-000000002B7-0M9u;
-	Tue, 09 Dec 2025 18:58:01 +0000
-Date: Wed, 10 Dec 2025 02:57:34 +0800
+	id 1vT97x-000000002Uv-1ixI;
+	Wed, 10 Dec 2025 01:36:25 +0000
+Date: Wed, 10 Dec 2025 09:36:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: "ping.gao" <ping.gao@samsung.com>, jh80.chung@samsung.com,
-	ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Wang Liang <wangliang74@huawei.com>, chuck.lever@oracle.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, brauner@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"ping.gao" <ping.gao@samsung.com>
-Subject: Re: [PATCH] mmc: dw_mmc: Use pre_request & post_request_end helper
-Message-ID: <202512100224.drEVwdNL-lkp@intel.com>
-References: <20251209064910.3643039-1-ping.gao@samsung.com>
+	kernel-tls-handshake@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, yuehaibing@huawei.com,
+	zhangchangzhong@huawei.com, wangliang74@huawei.com
+Subject: Re: [PATCH net] net/handshake: Fix null-ptr-deref in
+ handshake_complete()
+Message-ID: <202512100952.cr9q1lGr-lkp@intel.com>
+References: <20251209115852.3827876-1-wangliang74@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,84 +68,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251209064910.3643039-1-ping.gao@samsung.com>
+In-Reply-To: <20251209115852.3827876-1-wangliang74@huawei.com>
 
-Hi ping.gao,
+Hi Wang,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on ulf-hansson-mmc-mirror/next v6.18 next-20251209]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ping-gao/mmc-dw_mmc-Use-pre_request-post_request_end-helper/20251209-144626
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251209064910.3643039-1-ping.gao%40samsung.com
-patch subject: [PATCH] mmc: dw_mmc: Use pre_request & post_request_end helper
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251210/202512100224.drEVwdNL-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wang-Liang/net-handshake-Fix-null-ptr-deref-in-handshake_complete/20251209-194006
+base:   net/main
+patch link:    https://lore.kernel.org/r/20251209115852.3827876-1-wangliang74%40huawei.com
+patch subject: [PATCH net] net/handshake: Fix null-ptr-deref in handshake_complete()
+config: arm-mps2_defconfig (https://download.01.org/0day-ci/archive/20251210/202512100952.cr9q1lGr-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512100224.drEVwdNL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512100952.cr9q1lGr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512100224.drEVwdNL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512100952.cr9q1lGr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/mmc/host/dw_mmc.c:1902:49: error: no member named 'drv_dat' in 'struct dw_mci'
-    1902 |         const struct dw_mci_drv_data *drv_data = host->drv_dat
-         |                                                  ~~~~  ^
->> drivers/mmc/host/dw_mmc.c:1904:2: error: expected expression
-    1904 |         WARN_ON(host->cmd || host->data);
-         |         ^
-   include/asm-generic/bug.h:109:29: note: expanded from macro 'WARN_ON'
-     109 | #define WARN_ON(condition) ({                                           \
-         |                             ^
-   2 errors generated.
+>> net/handshake/netlink.c:110:3: error: cannot jump from this goto statement to its label
+     110 |                 goto out_status;
+         |                 ^
+   net/handshake/netlink.c:114:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     114 |         FD_PREPARE(fdf, O_CLOEXEC, sock->file);
+         |                    ^
+   net/handshake/netlink.c:104:3: error: cannot jump from this goto statement to its label
+     104 |                 goto out_status;
+         |                 ^
+   net/handshake/netlink.c:114:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     114 |         FD_PREPARE(fdf, O_CLOEXEC, sock->file);
+         |                    ^
+   net/handshake/netlink.c:100:3: error: cannot jump from this goto statement to its label
+     100 |                 goto out_status;
+         |                 ^
+   net/handshake/netlink.c:114:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     114 |         FD_PREPARE(fdf, O_CLOEXEC, sock->file);
+         |                    ^
+   3 errors generated.
 
 
-vim +1902 drivers/mmc/host/dw_mmc.c
+vim +110 net/handshake/netlink.c
 
-  1895	
-  1896	static void dw_mci_request_end(struct dw_mci *host, struct mmc_request *mrq)
-  1897		__releases(&host->lock)
-  1898		__acquires(&host->lock)
-  1899	{
-  1900		struct dw_mci_slot *slot;
-  1901		struct mmc_host	*prev_mmc = host->slot->mmc;
-> 1902		const struct dw_mci_drv_data *drv_data = host->drv_dat
-  1903	
-> 1904		WARN_ON(host->cmd || host->data);
-  1905	
-  1906		host->slot->mrq = NULL;
-  1907		host->mrq = NULL;
-  1908		if (!list_empty(&host->queue)) {
-  1909			slot = list_entry(host->queue.next,
-  1910					  struct dw_mci_slot, queue_node);
-  1911			list_del(&slot->queue_node);
-  1912			dev_vdbg(host->dev, "list not empty: %s is next\n",
-  1913				 mmc_hostname(slot->mmc));
-  1914			host->state = STATE_SENDING_CMD;
-  1915			dw_mci_start_request(host, slot);
-  1916		} else {
-  1917			dev_vdbg(host->dev, "list empty\n");
-  1918	
-  1919			if (host->state == STATE_SENDING_CMD11)
-  1920				host->state = STATE_WAITING_CMD11_DONE;
-  1921			else
-  1922				host->state = STATE_IDLE;
-  1923		}
-  1924	
-  1925		spin_unlock(&host->lock);
-  1926		mmc_request_done(prev_mmc, mrq);
-  1927		if (drv_data && drv_data->post_request_end)
-  1928			drv_data->post_request_end(host);
-  1929		spin_lock(&host->lock);
-  1930	}
-  1931	
+    89	
+    90	int handshake_nl_accept_doit(struct sk_buff *skb, struct genl_info *info)
+    91	{
+    92		struct net *net = sock_net(skb->sk);
+    93		struct handshake_net *hn = handshake_pernet(net);
+    94		struct handshake_req *req = NULL;
+    95		struct socket *sock;
+    96		int class, err;
+    97	
+    98		err = -EOPNOTSUPP;
+    99		if (!hn)
+   100			goto out_status;
+   101	
+   102		err = -EINVAL;
+   103		if (GENL_REQ_ATTR_CHECK(info, HANDSHAKE_A_ACCEPT_HANDLER_CLASS))
+   104			goto out_status;
+   105		class = nla_get_u32(info->attrs[HANDSHAKE_A_ACCEPT_HANDLER_CLASS]);
+   106	
+   107		err = -EAGAIN;
+   108		req = handshake_req_next(hn, class);
+   109		if (!req)
+ > 110			goto out_status;
+   111	
+   112		sock = req->hr_sk->sk_socket;
+   113	
+   114		FD_PREPARE(fdf, O_CLOEXEC, sock->file);
+   115		if (fdf.err) {
+   116			err = fdf.err;
+   117			goto out_complete;
+   118		}
+   119	
+   120		get_file(sock->file); /* FD_PREPARE() consumes a reference. */
+   121		err = req->hr_proto->hp_accept(req, info, fd_prepare_fd(fdf));
+   122		if (err)
+   123			goto out_complete; /* Automatic cleanup handles fput */
+   124	
+   125		trace_handshake_cmd_accept(net, req, req->hr_sk, fd_prepare_fd(fdf));
+   126		fd_publish(fdf);
+   127		return 0;
+   128	
+   129	out_complete:
+   130		handshake_complete(req, -EIO, NULL);
+   131	out_status:
+   132		trace_handshake_cmd_accept_err(net, req, NULL, err);
+   133		return err;
+   134	}
+   135	
 
 -- 
 0-DAY CI Kernel Test Service
