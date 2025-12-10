@@ -1,273 +1,256 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C65F325735
-	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 13:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0192FF171;
+	Wed, 10 Dec 2025 16:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765375133; cv=none; b=jt92bNg02JMFyFUHX1l2m8YpmAejf34V93rP+H47H62f+SnuEZ7LgloJeBeIW9rfrdETxqE/HZyrwO8+03q7+kvOBxvukrqQ0vno9jEnMnrwXErrUOl5jJ4kikNDywMnoeUFCPIWTbWXrnWJGFZKvjMzCnjTaZ2mZbk1DNChQzs=
+	t=1765382502; cv=none; b=nbCgGcoC5BrsXtLKhLWQlbtREAmgMUJYMxZOtgsJvgNsZAVsI13XR/rGbKs6K1xaI7RNU03YePb25bZNaS+tzE8cjd7GBZdWPD1Vpcarr/AODzMfBKkUangkPTDnw+dBFMWmq+hi/W9hEGWhqJx4df4zZtAwfTgQHVec+mANPbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765375133; c=relaxed/simple;
-	bh=/JzziIh37MwT/Lfc9x2Hc7McrdTQf1fNaek9/J7N4B4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Nd3mc/U9LdrHwLxNQi/Rwy1GlLHPrr6uouVBwod8LBcln9oobH+GnHqBTSPqFMO8SfFFm3uWcJbLHTNQ53v3LuqoBlZ896jnF/dRSYnhrUyPdpfs3W3DwS0YMPgRdzsDfVf4uSWq2Zqv6/Wq1yjL9534CzZnIbTVhIEy0vRwzgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=ikrjS9wn; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1765382502; c=relaxed/simple;
+	bh=DMqnhMd8zxOKRREuez4JnKUznfDswO5OTMuAf/gTpxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aa3Y2KDak2GAI4SPEdXugCn8SJspsf4Y+PbnT9N+Bu9rkQyVrE3y+nS1VwFx6P2G2V8NXVf9btHhH7bv4jQpHjlVudWZBp6invAd+QFR7UBjHrsndaGW8IBHIVKhUmJQfaRxY1RD2gI0cxZ1FChXUBGF7mvOsElD6JVlXB8QDGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ebIBBVZ2; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="ikrjS9wn"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 92CC64441A;
-	Wed, 10 Dec 2025 13:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1765375124;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NFTzSy6FXFZbxrTvw84HxQJWfiUUGwmuc4pWf0PrSYI=;
-	b=ikrjS9wnllx6lvLrWk5y5uI86Y9rXEB6BMOdoK1CR0y47zqbfnkvsshIeu29oraAuQ3Eh6
-	AVlMsTil4uvj6UjulZFUZQVFdWZm0iQF85ZuO4b9blatYCShMHocIf3tlXQRXD66XPUrb6
-	Ph80YiSUX4y6MMnE+F5Gbmr7HpjeCxih1+w4vAYnSiNRj8yWZdJ4ch8bTaXf4KtD8taDCq
-	Wny8vIc3AQ27BZiZyHevvTDdXH4GXrxkayliaWXB7UEwF8h65qrPYfSIRFrQdsLB+mxOUO
-	hpVpgXgkLQI54IZ8a7rReHjzh2lStJICSRFXINtLdqSbR1miaVJUhkgTARQ0oA==
-From: Guillaume Tucker <gtucker@gtucker.io>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org,
-	workflows@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>,
-	Guillaume Tucker <gtucker@gtucker.io>
-Subject: [PATCH v1 2/2] Documentation: dev-tools: add container.rst page
-Date: Wed, 10 Dec 2025 14:58:29 +0100
-Message-ID: <97fb956ee0d303c8e41f4266f25ebadc9ce295d7.1765374789.git.gtucker@gtucker.io>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1765374789.git.gtucker@gtucker.io>
-References: <cover.1765374789.git.gtucker@gtucker.io>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ebIBBVZ2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765382493; x=1796918493;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DMqnhMd8zxOKRREuez4JnKUznfDswO5OTMuAf/gTpxk=;
+  b=ebIBBVZ2peeMqKXkP3iiKjhHFCMi9e8sdKSIF9xM0LLQ28oeQJZavBfx
+   ZArHv1en0fNY7wqvTYpbXbf59+uyAfHfEIDJkNIftzgQex3QEW/02vuDV
+   X7OsEBG7jVETCCVGDe8PXoIjRAG4oQkySvMFV98Ale5znRUWgLsr0JVOt
+   fL5Ip9fIglAcnegxALoy2buyY2AFpx238ygfH+czhJ/pxbl4NmMBJ/zjt
+   U3sCGSG0dk2YVnhak2Q0aran432LuVEAJHyrAelI7fPLQrEQ9Dc7YE5Rj
+   gAhq9VrlsaYwIrb3uv0szIMnKNCXEohph3RRNQqEJjQef7Ge+DohmJM87
+   g==;
+X-CSE-ConnectionGUID: uP0NobfTQImkQ1VfR3ZnMA==
+X-CSE-MsgGUID: e0Ex/uLgSuqzlDpEMwwOew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="67243287"
+X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
+   d="scan'208";a="67243287"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 08:01:30 -0800
+X-CSE-ConnectionGUID: eP10MpgoT5W1ZvjbyujEiA==
+X-CSE-MsgGUID: W0ozWpdNQmG38ShByCNc3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
+   d="scan'208";a="196451198"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 10 Dec 2025 08:01:24 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vTMd0-000000003LZ-1ng0;
+	Wed, 10 Dec 2025 16:01:22 +0000
+Date: Thu, 11 Dec 2025 00:00:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+	sakari.ailus@linux.intel.com, krzk+dt@kernel.org, robh@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+	Elgin Perumbilly <elgin.perumbilly@siliconsignals.io>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>, Hans de Goede <hansg@kernel.org>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Dongcheng Yan <dongcheng.yan@intel.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+	Jingjing Xiong <jingjing.xiong@intel.com>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] media: i2c: add os05b10 image sensor driver
+Message-ID: <202512102347.N5BM3QL7-lkp@intel.com>
+References: <20251209100017.302518-3-himanshu.bhavani@siliconsignals.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvdeiudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepifhuihhllhgruhhmvgcuvfhutghkvghruceoghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhoqeenucggtffrrghtthgvrhhnpedvgfevuedtteeiudduffetgedtkeeigfegffdvledutdeviedvkeegleetkeefudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhtlhgrsgdrtghomhenucfkphepvddttddumeekiedumeegrgegtdemkeeivddtmeejkegrsgemkehfkedumedvkeeludemgegsvgegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeegrgegtdemkeeivddtmeejkegrsgemkehfkedumedvkeeludemgegsvgegpdhhvghlohepshhtrghrughushhtrdhlrghnpdhmrghilhhfrhhomhepghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhopdhqihgupeelvdevveeigeeggedutedpmhhouggvpehsmhhtphhouhhtpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrt
- ghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgsuhhilhgusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghuthhomhgrthgvugdqthgvshhtihhngheslhhishhtshdrhihotghtohhprhhojhgvtghtrdhorhhg
-X-GND-State: clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209100017.302518-3-himanshu.bhavani@siliconsignals.io>
 
-Add a dev-tools/container.rst documentation page for the
-scripts/container tool.  This covers the basic usage with additional
-information about environment variables and user IDs.  It also
-includes a number of practical examples with a reference to the
-experimental kernel.org toolchain images.
+Hi Himanshu,
 
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
----
- Documentation/dev-tools/container.rst | 175 ++++++++++++++++++++++++++
- Documentation/dev-tools/index.rst     |   1 +
- 2 files changed, 176 insertions(+)
- create mode 100644 Documentation/dev-tools/container.rst
+kernel test robot noticed the following build warnings:
 
-diff --git a/Documentation/dev-tools/container.rst b/Documentation/dev-tools/container.rst
-new file mode 100644
-index 000000000000..2a56f256f648
---- /dev/null
-+++ b/Documentation/dev-tools/container.rst
-@@ -0,0 +1,175 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2025 Guillaume Tucker
-+
-+====================
-+Containerized Builds
-+====================
-+
-+The ``container`` tool can be used to run any command in the kernel source tree
-+from within a container.  Doing so facilitates reproducing builds across
-+various platforms, for example when a test bot has reported an issue which
-+requires a specific version of a compiler or an external test suite.  While
-+this can already be done by users who are familiar with containers, having a
-+dedicated tool in the kernel tree lowers the barrier to entry by solving common
-+problems once and for all (e.g. user id management).  It also makes it easier
-+to share an exact command line leading to a particular result.  The main use
-+case is likely to be kernel builds but virtually anything can be run: KUnit,
-+checkpatch etc. provided a suitable image is available.
-+
-+
-+Options
-+=======
-+
-+Command line syntax::
-+
-+  scripts/container [OPTION]... CMD...
-+
-+Available options:
-+
-+``-e, --env-file ENV_FILE``
-+
-+    Path to an environment file to load in the container.
-+
-+``-g, --gid GID``
-+
-+    Group id to use inside the container.
-+
-+``-i, --image IMAGE``
-+
-+    Container image, default is ``gcc``.
-+
-+``-r, --runtime RUNTIME``
-+
-+    Container runtime, default is ``docker``.  Supported runtimes: ``docker``,
-+    ``podman``.
-+
-+``-u, --uid UID``
-+
-+    User id to use inside the container.  If the ``-g`` option is not
-+    specified, the user id will also be used for the group id.
-+
-+``-v, --verbose``
-+
-+    Enable verbose output.
-+
-+``-h, --help``
-+
-+    Show the help message and exit.
-+
-+
-+Usage
-+=====
-+
-+It's entirely up to the user to choose which image to use and the ``CMD``
-+arguments are passed directly as an arbitrary command line to run in the
-+container.  The tool will take care of mounting the source tree as the current
-+working directory and adjust the user and group id as needed.
-+
-+The container images are provided by the user and selected via the ``-i``
-+option.  They will typically include a compiler toolchain to build the kernel
-+and as such, the default image tag is set to ``gcc`` to give a convenient way
-+of running builds.  Any local image with a GCC compiler toolchain could be
-+tagged as ``gcc`` to make it point to it.  For example::
-+
-+  docker tag my-user/gcc:15 gcc
-+
-+The container runtime can be selected with the ``-r`` option, which can be
-+either Docker or Podman.  Support for other runtimes may be added later
-+depending on their popularity among users.
-+
-+
-+Environment Variables
-+=====================
-+
-+Environment variables are not propagated to the container so they have to be
-+either defined in the image itself or via the ``-e`` option using an
-+environment file.  In some cases it makes more sense to have them defined in
-+the Containerfile used to create the image.  For example, a Clang-only compiler
-+toolchain image would most likely have ``LLVM=1`` defined.  The local
-+environment file is more useful for user-specific variables during development.
-+
-+Please note that ``make`` options can still be passed on the command line, so
-+while this can't be done as the first argument needs to be the executable::
-+
-+  scripts/container INSTALL_MOD_STRIP=1 make modules_install
-+
-+this will work::
-+
-+  scripts/container make modules_install INSTALL_MOD_STRIP=1
-+
-+
-+User IDs
-+========
-+
-+This is an area where the behaviour will vary slightly depending on the
-+container runtime.  The goal is to run commands as the user invoking the tool.
-+With Podman, a namespace is created to map the current user id to a different
-+one in the container (1000 by default).  With Docker, while this is also
-+possible with recent versions it requires a special feature to be enabled in
-+the daemon so it's not used here for simplicity.  Instead, the container is run
-+with the current user id directly.  In both cases, this will provide the same
-+file permissions for the kernel source tree mounted as a volume.  The only
-+difference is that when using Docker without a namespace, the user id may not
-+be the same as the default one set in the image.
-+
-+Say, we're using an image which sets up a default user with id 1000 and the
-+current user calling the ``container`` tool has id 1234.  The kernel source
-+tree was checked out by this same user so the files belong to user 1234.  With
-+Podman, the container will be running as user id 1000 with a mapping to id 1234
-+so that the files from the mounted volume appear to belong to id 1000 inside
-+the container.  With Docker and no namespace, the container will be running
-+with user id 1234 which can access the files in the volume but not in the user
-+1000 home directory.  This shouldn't be an issue when running commands only in
-+the kernel tree but it is worth highlighting here as it might matter for
-+special corner cases.
-+
-+
-+Examples
-+========
-+
-+The shortest example is to run a basic kernel build using Docker and the
-+default ``gcc`` image::
-+
-+  scripts/container -- make defconfig
-+  scripts/container -- make -j$(nproc)
-+
-+.. note::
-+
-+   When running a command with options within the container, it should be
-+   separated with a double dash ``--`` to not confuse them with the
-+   ``container`` tool options.  Simple make targets with no options don't
-+   strictly require the double dashes e.g.::
-+
-+     scripts/container make mrproper
-+
-+To run ``checkpatch.pl`` in a ``patches`` directory with a generic image::
-+
-+  scripts/container -i perl:slim-trixie scripts/checkpatch.pl patches/*
-+
-+To build using the TuxMake Clang image::
-+
-+  scripts/container -i tuxmake/x86_64_korg-clang -- make LLVM=1 -j$(nproc)
-+
-+The examples below refer to ``kernel.org`` images which are based on the
-+`kernel.org compiler toolchains
-+<https://mirrors.edge.kernel.org/pub/tools/>`__.  These aren't (yet) available
-+in any public registry but users can build their own locally instead using this
-+`experimental repository <https://gitlab.com/gtucker/korg-containers>`__ by
-+running ``make PREFIX=kernel.org/``.
-+
-+To build just ``bzImage`` using Clang::
-+
-+  scripts/container -i kernel.org/clang -- make bzImage -j$(nproc)
-+
-+To run KUnit::
-+
-+  scripts/container -i kernel.org/gcc:kunit -- \
-+      tools/testing/kunit/kunit.py \
-+          run \
-+          --arch=x86_64 \
-+          --cross_compile=x86_64-linux-
-+
-+To build the HTML documentation, which requires the ``kdocs`` image built with
-+``make PREFIX=kernel.org/ extra`` as it's not a compiler toolchain::
-+
-+  scripts/container -i kernel.org/kdocs make htmldocs
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 4b8425e348ab..527a0e4cf2ed 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -38,6 +38,7 @@ Documentation/process/debugging/index.rst
-    gpio-sloppy-logic-analyzer
-    autofdo
-    propeller
-+   container
- 
- 
- .. only::  subproject and html
+[auto build test WARNING on sailus-media-tree/master]
+[also build test WARNING on robh/for-next linus/master v6.18 next-20251210]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Himanshu-Bhavani/dt-bindings-media-i2c-Add-os05b10-sensor/20251209-180746
+base:   git://linuxtv.org/sailus/media_tree.git master
+patch link:    https://lore.kernel.org/r/20251209100017.302518-3-himanshu.bhavani%40siliconsignals.io
+patch subject: [PATCH 2/2] media: i2c: add os05b10 image sensor driver
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20251210/202512102347.N5BM3QL7-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512102347.N5BM3QL7-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512102347.N5BM3QL7-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/i2c/os05b10.c:19:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/media/i2c/os05b10.c:986:44: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     986 |                               "failed to initialize CCI: %d\n", ret);
+         |                                                                 ^~~
+   drivers/media/i2c/os05b10.c:972:9: note: initialize the variable 'ret' to silence this warning
+     972 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
+
+
+vim +/ret +986 drivers/media/i2c/os05b10.c
+
+   967	
+   968	static int os05b10_probe(struct i2c_client *client)
+   969	{
+   970		struct os05b10 *os05b10;
+   971		unsigned int xclk_freq;
+   972		int ret;
+   973	
+   974		os05b10 = devm_kzalloc(&client->dev, sizeof(*os05b10), GFP_KERNEL);
+   975		if (!os05b10)
+   976			return -ENOMEM;
+   977	
+   978		os05b10->client = client;
+   979		os05b10->dev = &client->dev;
+   980	
+   981		v4l2_i2c_subdev_init(&os05b10->sd, client, &os05b10_subdev_ops);
+   982	
+   983		os05b10->cci = devm_cci_regmap_init_i2c(client, 16);
+   984		if (IS_ERR(os05b10->cci))
+   985			return dev_err_probe(os05b10->dev, PTR_ERR(os05b10->cci),
+ > 986				      "failed to initialize CCI: %d\n", ret);
+   987	
+   988		/* Get system clock (xclk) */
+   989		os05b10->xclk = devm_v4l2_sensor_clk_get(os05b10->dev, NULL);
+   990		if (IS_ERR(os05b10->xclk))
+   991			return dev_err_probe(os05b10->dev, PTR_ERR(os05b10->xclk),
+   992					     "failed to get xclk\n");
+   993	
+   994		xclk_freq = clk_get_rate(os05b10->xclk);
+   995		if (xclk_freq != OS05B10_XCLK_FREQ)
+   996			return dev_err_probe(os05b10->dev, -EINVAL,
+   997					     "xclk frequency not supported: %d Hz\n",
+   998					     xclk_freq);
+   999	
+  1000		ret = os05b10_get_regulators(os05b10);
+  1001		if (ret)
+  1002			return dev_err_probe(os05b10->dev, ret, "failed to get regulators\n");
+  1003	
+  1004		ret = os05b10_parse_endpoint(os05b10);
+  1005		if (ret) {
+  1006			dev_err(os05b10->dev, "failed to parse endpoint configuration\n");
+  1007			return ret;
+  1008		}
+  1009	
+  1010		os05b10->reset_gpio = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
+  1011		if (IS_ERR(os05b10->reset_gpio))
+  1012			return dev_err_probe(os05b10->dev, PTR_ERR(os05b10->reset_gpio),
+  1013					     "failed to get reset GPIO\n");
+  1014	
+  1015		ret = os05b10_power_on(os05b10->dev);
+  1016		if (ret)
+  1017			return ret;
+  1018	
+  1019		ret = os05b10_identify_module(os05b10);
+  1020		if (ret)
+  1021			goto error_power_off;
+  1022	
+  1023		/* This needs the pm runtime to be registered. */
+  1024		ret = os05b10_init_controls(os05b10);
+  1025		if (ret)
+  1026			goto error_power_off;
+  1027	
+  1028		/* Initialize subdev */
+  1029		os05b10->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+  1030		os05b10->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+  1031		os05b10->sd.internal_ops = &os05b10_internal_ops;
+  1032		os05b10->pad.flags = MEDIA_PAD_FL_SOURCE;
+  1033	
+  1034		ret = media_entity_pads_init(&os05b10->sd.entity, 1, &os05b10->pad);
+  1035		if (ret) {
+  1036			dev_err_probe(os05b10->dev, ret, "failed to init entity pads\n");
+  1037			goto error_handler_free;
+  1038		}
+  1039	
+  1040		os05b10->sd.state_lock = os05b10->handler.lock;
+  1041		ret = v4l2_subdev_init_finalize(&os05b10->sd);
+  1042		if (ret < 0) {
+  1043			dev_err_probe(os05b10->dev, ret, "subdev init error\n");
+  1044			goto error_media_entity;
+  1045		}
+  1046	
+  1047		pm_runtime_set_active(os05b10->dev);
+  1048		pm_runtime_enable(os05b10->dev);
+  1049	
+  1050		ret = v4l2_async_register_subdev_sensor(&os05b10->sd);
+  1051		if (ret < 0) {
+  1052			dev_err_probe(os05b10->dev, ret,
+  1053				      "failed to register os05b10 sub-device\n");
+  1054			goto error_subdev_cleanup;
+  1055		}
+  1056	
+  1057		pm_runtime_idle(os05b10->dev);
+  1058	
+  1059		return 0;
+  1060	
+  1061	error_subdev_cleanup:
+  1062		v4l2_subdev_cleanup(&os05b10->sd);
+  1063		pm_runtime_disable(os05b10->dev);
+  1064		pm_runtime_set_suspended(os05b10->dev);
+  1065	
+  1066	error_media_entity:
+  1067		media_entity_cleanup(&os05b10->sd.entity);
+  1068	
+  1069	error_handler_free:
+  1070		v4l2_ctrl_handler_free(os05b10->sd.ctrl_handler);
+  1071	
+  1072	error_power_off:
+  1073		os05b10_power_off(os05b10->dev);
+  1074	
+  1075		return ret;
+  1076	}
+  1077	
+
 -- 
-2.47.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
