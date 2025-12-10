@@ -1,78 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0192FF171;
-	Wed, 10 Dec 2025 16:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671E22FFFB2
+	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 16:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765382502; cv=none; b=nbCgGcoC5BrsXtLKhLWQlbtREAmgMUJYMxZOtgsJvgNsZAVsI13XR/rGbKs6K1xaI7RNU03YePb25bZNaS+tzE8cjd7GBZdWPD1Vpcarr/AODzMfBKkUangkPTDnw+dBFMWmq+hi/W9hEGWhqJx4df4zZtAwfTgQHVec+mANPbw=
+	t=1765383509; cv=none; b=fl30QefRQceaCuSvtk5nvJd6caPOsQhuOrRoKpSsILIQ4U1ojk9Q2baF3Lj2XpQyE3OxN1STiNn0WtSSxpyuaWeYA5PXD/wwUVmVjlNERxF1T3OXaEnY1FcgQOILablczPuL+D7SmRB8AsM4wrpLHykZECEu+qB7GSgaKgjkw2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765382502; c=relaxed/simple;
-	bh=DMqnhMd8zxOKRREuez4JnKUznfDswO5OTMuAf/gTpxk=;
+	s=arc-20240116; t=1765383509; c=relaxed/simple;
+	bh=8fukvFVHvNsSJut9kyMPtVjty3xkgDR42FqSOIyq0Vs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aa3Y2KDak2GAI4SPEdXugCn8SJspsf4Y+PbnT9N+Bu9rkQyVrE3y+nS1VwFx6P2G2V8NXVf9btHhH7bv4jQpHjlVudWZBp6invAd+QFR7UBjHrsndaGW8IBHIVKhUmJQfaRxY1RD2gI0cxZ1FChXUBGF7mvOsElD6JVlXB8QDGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ebIBBVZ2; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=mB+gD7v3IZSVIeXZTTx12yWSvtjp9FeAmd22vS6ToL0kAlsukozsd5CQPKsKXhPRAaWiY1W7GUN6YLLhNZcEBt6owpkJJ/nIkMXoWeX1HKxu26Z3lR4CfWDwSQ6xE0yHwZHT2lXO6dYjjpESFwzIpSXzqQXpF820S/BahkiFtZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O2W+DHu+; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ebIBBVZ2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765382493; x=1796918493;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DMqnhMd8zxOKRREuez4JnKUznfDswO5OTMuAf/gTpxk=;
-  b=ebIBBVZ2peeMqKXkP3iiKjhHFCMi9e8sdKSIF9xM0LLQ28oeQJZavBfx
-   ZArHv1en0fNY7wqvTYpbXbf59+uyAfHfEIDJkNIftzgQex3QEW/02vuDV
-   X7OsEBG7jVETCCVGDe8PXoIjRAG4oQkySvMFV98Ale5znRUWgLsr0JVOt
-   fL5Ip9fIglAcnegxALoy2buyY2AFpx238ygfH+czhJ/pxbl4NmMBJ/zjt
-   U3sCGSG0dk2YVnhak2Q0aran432LuVEAJHyrAelI7fPLQrEQ9Dc7YE5Rj
-   gAhq9VrlsaYwIrb3uv0szIMnKNCXEohph3RRNQqEJjQef7Ge+DohmJM87
-   g==;
-X-CSE-ConnectionGUID: uP0NobfTQImkQ1VfR3ZnMA==
-X-CSE-MsgGUID: e0Ex/uLgSuqzlDpEMwwOew==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="67243287"
-X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
-   d="scan'208";a="67243287"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 08:01:30 -0800
-X-CSE-ConnectionGUID: eP10MpgoT5W1ZvjbyujEiA==
-X-CSE-MsgGUID: W0ozWpdNQmG38ShByCNc3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
-   d="scan'208";a="196451198"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 10 Dec 2025 08:01:24 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vTMd0-000000003LZ-1ng0;
-	Wed, 10 Dec 2025 16:01:22 +0000
-Date: Thu, 11 Dec 2025 00:00:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
-	sakari.ailus@linux.intel.com, krzk+dt@kernel.org, robh@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
-	Elgin Perumbilly <elgin.perumbilly@siliconsignals.io>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>, Hans de Goede <hansg@kernel.org>,
-	Mehdi Djait <mehdi.djait@linux.intel.com>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-	Dongcheng Yan <dongcheng.yan@intel.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
-	Jingjing Xiong <jingjing.xiong@intel.com>,
-	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: i2c: add os05b10 image sensor driver
-Message-ID: <202512102347.N5BM3QL7-lkp@intel.com>
-References: <20251209100017.302518-3-himanshu.bhavani@siliconsignals.io>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O2W+DHu+"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-477b91680f8so77529005e9.0
+        for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 08:18:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1765383506; x=1765988306; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5R7EEgKhSIj0MssK61oG5hvlzLQojw/c9iQ7wtMJnfU=;
+        b=O2W+DHu+AKoFzR7Hspv8YXhmVmVa4LDRe455nXs87Kw/CN8Wf21xFZEX6wuMlsN/jq
+         NPq80hGe6snK1gSppavQHN6N79kv8SE26UO4y5rEu3nx0Eko4z6sKABBqUwKzvI2epiD
+         D+ra446/Uiqd0ULFpjoVwYcEV4OYAatuuxByYIP32U+GNftbCpUlzgRCb5FegyG+C7ag
+         lGhgCp1cSuwP2fC703YLjX4qBEA1kkFCZ+m9ij9w+UFM80TCyCHiZpQUPSzqDaMVkRHM
+         c1ZkTP91UfPKaMqtZGQ7mWHxoP80x6SoUv8Z/O6pfwA2C4wJZ06l1DAXp3z+DLUXhypq
+         IkOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765383506; x=1765988306;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5R7EEgKhSIj0MssK61oG5hvlzLQojw/c9iQ7wtMJnfU=;
+        b=JwdWw4kcDuFvR1vBoDOJ1dPtdAsbtZj+/pdk3Ksv8qA9bzjIFCNbSMFiJWssfn1xjI
+         /YooeN8TxlzTy9MUc1qopzIB4ktdCmc1Ee+1ANnJtbcIU2ZYtwsEu5NjCHMSwnlRNhyz
+         MGTGLayJUzTChpOhY4ZqGwQZ7eav+nTQlxITt9wlp4uM4UTGZjQznkjK2yiojGyBYlaJ
+         4DQolMeuYbi6V5sGKP/oDClzFlq9lhHPU/XsMKRGVVTkVA8W5rCm3o3mLkczY4Gd7sda
+         CyklcHAAWkng+ZLwiY7UmByej1z+IEEyNs8FenJN42yCl5PmC+tXVhyxZnPfZqcdKboU
+         LxJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVPLHtNPoTnfx23UNkwDP32MWzVTcWBXLwFmKPKoZCnFzoJaQFfNg2EK/h9yDH7vf+t/VV1@lists.linux.dev
+X-Gm-Message-State: AOJu0YybmBxWmZOm4+S4tNQtDLmyYgywBGKsOkfsTRMPoQ397YAn08ng
+	j2mDVJXDkgU5MwFhy3tCRxirTaTnkHDqkt/DUiHvkIU9pVT9XGcInvSAB+oCR35Hrw==
+X-Gm-Gg: ASbGncuMZSbbw/zd8358SytoQHqzYsxBbBgloQQqTn8L62nZejXLcXa/dXen/yvjetO
+	Wasucp5PvVECvgor9Hvqmp8KFBoc0P7zb+X5bbgvtKLpbA5zKeLozb/afQHlljdI0ptvyB+jpQ1
+	rC+mS81MXoMEJZW3+OJtVum7lqiPGvwY4z5Mfsjemg95AlnRb3XecO/vaVnKKz459DMI2o+UFw4
+	au1Xqs+Kyl4iTW7b9hEKGRYojnSFdWDpmQHsUp2oPWWaRs8MGi3ZQybFOaYtHc6OfnBAnq0Y2CD
+	kSD4jiPNmzbn3p3RUiO/u//syS/n6VHaW5rMnWJ0zBD/secAsNyG+fQtuDHhbv2STNfEcPAwlAW
+	LJO+LKLRSonRsBgH0D8yR1LIy/CBMcU9h4F21+EtB+3EXfo5Sdks86KFLEg0R5sfOD2H2F/y3lI
+	GE0V/vRYFMNQ8nZRt9sXkOJOzF4mUILCilrSd5dylfOQwhSsA=
+X-Google-Smtp-Source: AGHT+IE5gG+0fezF5tzXHFusF2dBV52zxvrbxnDDqwGYfilnFo0IcpTyJU4lWfuQsZFtfQAM3eL7LQ==
+X-Received: by 2002:a05:600c:687:b0:46e:59bd:f7d3 with SMTP id 5b1f17b1804b1-47a83cc5528mr15763325e9.20.1765383505415;
+        Wed, 10 Dec 2025 08:18:25 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:edfc:ec3:194e:c3b3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a7d3a75a3sm45109085e9.6.2025.12.10.08.18.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Dec 2025 08:18:24 -0800 (PST)
+Date: Wed, 10 Dec 2025 17:18:16 +0100
+From: Marco Elver <elver@google.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Chris Li <sparse@chrisli.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Subject: Re: [PATCH v4 00/35] Compiler-Based Context- and Locking-Analysis
+Message-ID: <aTmdSMuP0LUAdfO_@elver.google.com>
+References: <20251120145835.3833031-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,176 +111,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251209100017.302518-3-himanshu.bhavani@siliconsignals.io>
+In-Reply-To: <20251120145835.3833031-2-elver@google.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-Hi Himanshu,
+All,
 
-kernel test robot noticed the following build warnings:
+On Thu, Nov 20, 2025 at 03:49PM +0100, Marco Elver wrote:
+> Context Analysis is a language extension, which enables statically
+> checking that required contexts are active (or inactive) by acquiring
+> and releasing user-definable "context guards". An obvious application is
+> lock-safety checking for the kernel's various synchronization primitives
+> (each of which represents a "context guard"), and checking that locking
+> rules are not violated.
+[...] 
+> A Clang version that supports `-Wthread-safety-pointer` and the new
+> alias-analysis of context-guard pointers is required (from this version
+> onwards):
+> 
+> 	https://github.com/llvm/llvm-project/commit/7ccb5c08f0685d4787f12c3224a72f0650c5865e
+> 
+> The minimum required release version will be Clang 22.
+> 
+> This series is also available at this Git tree:
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/melver/linux.git/log/?h=ctx-analysis/dev
+[...] 
 
-[auto build test WARNING on sailus-media-tree/master]
-[also build test WARNING on robh/for-next linus/master v6.18 next-20251210]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I realize that I sent this series at the end of the last release cycle,
+and now we're in the merge window, along with LPC going on -- so it
+wasn't the best timing (however, it might be something to discuss at
+LPC, too :-) .. I'm attending virtually, however :-/).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Himanshu-Bhavani/dt-bindings-media-i2c-Add-os05b10-sensor/20251209-180746
-base:   git://linuxtv.org/sailus/media_tree.git master
-patch link:    https://lore.kernel.org/r/20251209100017.302518-3-himanshu.bhavani%40siliconsignals.io
-patch subject: [PATCH 2/2] media: i2c: add os05b10 image sensor driver
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20251210/202512102347.N5BM3QL7-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512102347.N5BM3QL7-lkp@intel.com/reproduce)
+How to proceed?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512102347.N5BM3QL7-lkp@intel.com/
+I'll be preparing a rebased and retested version of all this when
+v6.19-rc1 is out. One outstanding recommendation from Linus was to
+investigate compile-times, but as-is, it's unclear there's any notable
+overhead per brief investigation: https://lore.kernel.org/all/aR-plHrWDMqRRlcI@elver.google.com/
 
-All warnings (new ones prefixed by >>):
+From what I can tell most of this has to go through the locking tree,
+given the potential for conflict there. However, it is possible to split
+this up as follows:
 
-   In file included from drivers/media/i2c/os05b10.c:19:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/media/i2c/os05b10.c:986:44: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     986 |                               "failed to initialize CCI: %d\n", ret);
-         |                                                                 ^~~
-   drivers/media/i2c/os05b10.c:972:9: note: initialize the variable 'ret' to silence this warning
-     972 |         int ret;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+Batch 1:
 
+>   compiler_types: Move lock checking attributes to
+>     compiler-context-analysis.h
+>   compiler-context-analysis: Add infrastructure for Context Analysis
+>     with Clang
+>   compiler-context-analysis: Add test stub
+>   Documentation: Add documentation for Compiler-Based Context Analysis
+>   checkpatch: Warn about context_unsafe() without comment
+>   cleanup: Basic compatibility with context analysis
+>   lockdep: Annotate lockdep assertions for context analysis
+>   locking/rwlock, spinlock: Support Clang's context analysis
+>   compiler-context-analysis: Change __cond_acquires to take return value
+>   locking/mutex: Support Clang's context analysis
+>   locking/seqlock: Support Clang's context analysis
+>   bit_spinlock: Include missing <asm/processor.h>
+>   bit_spinlock: Support Clang's context analysis
+>   rcu: Support Clang's context analysis
+>   srcu: Support Clang's context analysis
+>   kref: Add context-analysis annotations
+>   locking/rwsem: Support Clang's context analysis
+>   locking/local_lock: Include missing headers
+>   locking/local_lock: Support Clang's context analysis
+>   locking/ww_mutex: Support Clang's context analysis
+>   debugfs: Make debugfs_cancellation a context guard struct
+>   compiler-context-analysis: Remove Sparse support
+>   compiler-context-analysis: Remove __cond_lock() function-like helper
+>   compiler-context-analysis: Introduce header suppressions
+>   compiler: Let data_race() imply disabled context analysis
+>   MAINTAINERS: Add entry for Context Analysis
 
-vim +/ret +986 drivers/media/i2c/os05b10.c
+Batch 2: Everything below this can wait for the initial support in
+mainline, at which point subsystem maintainers can pick them up if
+deemed appropriate.
 
-   967	
-   968	static int os05b10_probe(struct i2c_client *client)
-   969	{
-   970		struct os05b10 *os05b10;
-   971		unsigned int xclk_freq;
-   972		int ret;
-   973	
-   974		os05b10 = devm_kzalloc(&client->dev, sizeof(*os05b10), GFP_KERNEL);
-   975		if (!os05b10)
-   976			return -ENOMEM;
-   977	
-   978		os05b10->client = client;
-   979		os05b10->dev = &client->dev;
-   980	
-   981		v4l2_i2c_subdev_init(&os05b10->sd, client, &os05b10_subdev_ops);
-   982	
-   983		os05b10->cci = devm_cci_regmap_init_i2c(client, 16);
-   984		if (IS_ERR(os05b10->cci))
-   985			return dev_err_probe(os05b10->dev, PTR_ERR(os05b10->cci),
- > 986				      "failed to initialize CCI: %d\n", ret);
-   987	
-   988		/* Get system clock (xclk) */
-   989		os05b10->xclk = devm_v4l2_sensor_clk_get(os05b10->dev, NULL);
-   990		if (IS_ERR(os05b10->xclk))
-   991			return dev_err_probe(os05b10->dev, PTR_ERR(os05b10->xclk),
-   992					     "failed to get xclk\n");
-   993	
-   994		xclk_freq = clk_get_rate(os05b10->xclk);
-   995		if (xclk_freq != OS05B10_XCLK_FREQ)
-   996			return dev_err_probe(os05b10->dev, -EINVAL,
-   997					     "xclk frequency not supported: %d Hz\n",
-   998					     xclk_freq);
-   999	
-  1000		ret = os05b10_get_regulators(os05b10);
-  1001		if (ret)
-  1002			return dev_err_probe(os05b10->dev, ret, "failed to get regulators\n");
-  1003	
-  1004		ret = os05b10_parse_endpoint(os05b10);
-  1005		if (ret) {
-  1006			dev_err(os05b10->dev, "failed to parse endpoint configuration\n");
-  1007			return ret;
-  1008		}
-  1009	
-  1010		os05b10->reset_gpio = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
-  1011		if (IS_ERR(os05b10->reset_gpio))
-  1012			return dev_err_probe(os05b10->dev, PTR_ERR(os05b10->reset_gpio),
-  1013					     "failed to get reset GPIO\n");
-  1014	
-  1015		ret = os05b10_power_on(os05b10->dev);
-  1016		if (ret)
-  1017			return ret;
-  1018	
-  1019		ret = os05b10_identify_module(os05b10);
-  1020		if (ret)
-  1021			goto error_power_off;
-  1022	
-  1023		/* This needs the pm runtime to be registered. */
-  1024		ret = os05b10_init_controls(os05b10);
-  1025		if (ret)
-  1026			goto error_power_off;
-  1027	
-  1028		/* Initialize subdev */
-  1029		os05b10->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-  1030		os05b10->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-  1031		os05b10->sd.internal_ops = &os05b10_internal_ops;
-  1032		os05b10->pad.flags = MEDIA_PAD_FL_SOURCE;
-  1033	
-  1034		ret = media_entity_pads_init(&os05b10->sd.entity, 1, &os05b10->pad);
-  1035		if (ret) {
-  1036			dev_err_probe(os05b10->dev, ret, "failed to init entity pads\n");
-  1037			goto error_handler_free;
-  1038		}
-  1039	
-  1040		os05b10->sd.state_lock = os05b10->handler.lock;
-  1041		ret = v4l2_subdev_init_finalize(&os05b10->sd);
-  1042		if (ret < 0) {
-  1043			dev_err_probe(os05b10->dev, ret, "subdev init error\n");
-  1044			goto error_media_entity;
-  1045		}
-  1046	
-  1047		pm_runtime_set_active(os05b10->dev);
-  1048		pm_runtime_enable(os05b10->dev);
-  1049	
-  1050		ret = v4l2_async_register_subdev_sensor(&os05b10->sd);
-  1051		if (ret < 0) {
-  1052			dev_err_probe(os05b10->dev, ret,
-  1053				      "failed to register os05b10 sub-device\n");
-  1054			goto error_subdev_cleanup;
-  1055		}
-  1056	
-  1057		pm_runtime_idle(os05b10->dev);
-  1058	
-  1059		return 0;
-  1060	
-  1061	error_subdev_cleanup:
-  1062		v4l2_subdev_cleanup(&os05b10->sd);
-  1063		pm_runtime_disable(os05b10->dev);
-  1064		pm_runtime_set_suspended(os05b10->dev);
-  1065	
-  1066	error_media_entity:
-  1067		media_entity_cleanup(&os05b10->sd.entity);
-  1068	
-  1069	error_handler_free:
-  1070		v4l2_ctrl_handler_free(os05b10->sd.ctrl_handler);
-  1071	
-  1072	error_power_off:
-  1073		os05b10_power_off(os05b10->dev);
-  1074	
-  1075		return ret;
-  1076	}
-  1077	
+>   kfence: Enable context analysis
+>   kcov: Enable context analysis
+>   kcsan: Enable context analysis
+>   stackdepot: Enable context analysis
+>   rhashtable: Enable context analysis
+>   printk: Move locking annotation to printk.c
+>   security/tomoyo: Enable context analysis
+>   crypto: Enable context analysis
+>   sched: Enable context analysis for core.c and fair.c
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+	-- Marco
