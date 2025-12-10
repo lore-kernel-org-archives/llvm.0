@@ -1,59 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9013430F819;
-	Wed, 10 Dec 2025 19:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EFD4C97;
+	Wed, 10 Dec 2025 19:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765393552; cv=none; b=fbs3KEP5Ld2GiO03XxIH02+ruBKVkaMTF4bRB01TlG9Hde7FSGd3L2m1+y3YNDGNAmLmbTXmEzCvOO9CCuedIzTF1T3qCxzrowfWv4uhFWbRVufrqbxw6PBKAmCOLYVEHt/XujJ3h4IysK0l+nD3ykDJz7/fRh24ln7ChkIswDw=
+	t=1765395015; cv=none; b=PWPTVRW/4SIOxiwe3VG3zYa1HP4PMwkXGSzcx8c7N3kYj85QqzazGQMJHPACd6HmjNxxG2y0H921XvXDhaNu/Oy+wBpN3bAwbROoAnXvSpIiea+SM1vTEcBSU7UcGGFcrZvD03CW+p/ZgmrDXLGBEL+IWrT9/30J4uTNt9PPX7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765393552; c=relaxed/simple;
-	bh=n78qlbqQHpkIUeQyBoHky8FhLodpbFzebUW4mrVXKIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VuUUpO0I1KCfuRarNu/AuGFsTAqQQVl2gUoKOR5gX4tnSeaQXFVryjBMO22KhT1Tox7yZxCLJp2TXTv7eisWKcLaVhZlJPEvnwjtM5h5Xbykxikx29IhmAE4vxwpeCr36iBuDpnglspJA4sgeo045aMzaprxOvWv6wnZUMv7j7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jWwrYQjI; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765395015; c=relaxed/simple;
+	bh=wKF686z/TTZ0M0cwuNcTeYSd3TG3XU8P9T75njPV6Xk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h0ohxQdj+fLrjVHdnjqrAW7BJIj0Lay8J4mIY3yfTAedeW1aCDbiYr8J8If/JibZB/PPTiirzvcuQHhQqbctlm7zwmHhr1l378u+eFhMNMG9FQMXHFlqYU0aJSgFJmGlt0pnJ1/FuUCQVhbc0ljAYavl6gf+3R3SOWZGm9xk2EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJrAU1X3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jWwrYQjI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765393551; x=1796929551;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n78qlbqQHpkIUeQyBoHky8FhLodpbFzebUW4mrVXKIE=;
-  b=jWwrYQjImKQTYYnflxB705JJle4mLQs5Xn8U1JGmRa6cWW1K0OPeZ/s/
-   pkatVM/WWWj8E4dyAW3aHS7J+wElSyiVFG4Gg0VKdABz8/kOOD39WnBV5
-   VpZF1rCDr4iQz/3gBYQ2+Kxtd/swaEHq0V6wSyBS9On/o9+aMKGADDHAI
-   UZgIi+Ht2uC0d/3uG8exFtUSnRyZm/P6EHgTWjfRgh2GbZfC8yanWu708
-   4yOfqQ5Q7crMMH5LSibws9conUeqAodZkjvgM4L/nyP/VP0pLl0R9/mEf
-   eeO0nKfUOQyUPEL7o9gYclnkKwL9S6+vs5U/ywGb4Do9hk6rtcrxCVh//
-   Q==;
-X-CSE-ConnectionGUID: Rt/ElUiCRDepsPNWqfbANA==
-X-CSE-MsgGUID: PNdwdfTDTEWdZ1Zp1d+3BQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="54917255"
-X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
-   d="scan'208";a="54917255"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 11:05:49 -0800
-X-CSE-ConnectionGUID: ChtIockPST25A9NhysPqfw==
-X-CSE-MsgGUID: BNJL/5+1Q9GHoOrK10qYRQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
-   d="scan'208";a="196876794"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 10 Dec 2025 11:05:47 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vTPVR-000000003fN-2kLL;
-	Wed, 10 Dec 2025 19:05:45 +0000
-Date: Thu, 11 Dec 2025 03:05:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 563/1112]
- fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof'
- to an incomplete type 'struct dump_iter'
-Message-ID: <202512110258.0KOGju5g-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJrAU1X3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34116C4CEF1;
+	Wed, 10 Dec 2025 19:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765395014;
+	bh=wKF686z/TTZ0M0cwuNcTeYSd3TG3XU8P9T75njPV6Xk=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=pJrAU1X3dwv9WO/sd8c4TbJnH3ZERsI5Lwa3My/RHkL6gqLQctt28UJ7+Z1rRd8JZ
+	 4XeJSVIlLqoRICZl2gN/IoAFAFtcvl+nGhLTOkYmVmHytit/DLzL/guQEXzROMAAiT
+	 P6tqNXFYf1AN/PZiR1xTpSwUrS1j1YT0zKg7QvIBNpV24/+zMv3FmjCqUACBmox8j9
+	 qFLBrslJvNc5Pt4FFYbmQU2aQzsZoruwJCOVV82lDFlFcIxlDT4YQFr57f8X5LsWKM
+	 al3x5A2w+Z1a7nZmJV7hvkIV9SQ0WwA/R1/RCSXHAXSUMdzo5XGGUByxqMF950Jsjk
+	 8vGbvPMnwEpVg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id D5BE5CE0C93; Wed, 10 Dec 2025 11:30:11 -0800 (PST)
+Date: Wed, 10 Dec 2025 11:30:11 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Chris Li <sparse@chrisli.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Subject: Re: [PATCH v4 14/35] rcu: Support Clang's context analysis
+Message-ID: <98453e19-7df2-43cb-8f05-87632f360028@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20251120145835.3833031-2-elver@google.com>
+ <20251120151033.3840508-7-elver@google.com>
+ <20251120151033.3840508-15-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,225 +82,436 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251120151033.3840508-15-elver@google.com>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   c584fbbbf2e8eb98b64af4c5ea5d02d549dd4e4d
-commit: da7a6f67bdb81c87b94b7e549f55fb1b3298fc83 [563/1112] bcachefs: kill CONFIG_BCACHEFS_ASYNC_OBJECT_LISTS
-config: arm-randconfig-003-20251211 (https://download.01.org/0day-ci/archive/20251211/202512110258.0KOGju5g-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512110258.0KOGju5g-lkp@intel.com/reproduce)
+On Thu, Nov 20, 2025 at 04:09:39PM +0100, Marco Elver wrote:
+> Improve the existing annotations to properly support Clang's context
+> analysis.
+> 
+> The old annotations distinguished between RCU, RCU_BH, and RCU_SCHED;
+> however, to more easily be able to express that "hold the RCU read lock"
+> without caring if the normal, _bh(), or _sched() variant was used we'd
+> have to remove the distinction of the latter variants: change the _bh()
+> and _sched() variants to also acquire "RCU".
+> 
+> When (and if) we introduce context guards to denote more generally that
+> "IRQ", "BH", "PREEMPT" contexts are disabled, it would make sense to
+> acquire these instead of RCU_BH and RCU_SCHED respectively.
+> 
+> The above change also simplified introducing __guarded_by support, where
+> only the "RCU" context guard needs to be held: introduce __rcu_guarded,
+> where Clang's context analysis warns if a pointer is dereferenced
+> without any of the RCU locks held, or updated without the appropriate
+> helpers.
+> 
+> The primitives rcu_assign_pointer() and friends are wrapped with
+> context_unsafe(), which enforces using them to update RCU-protected
+> pointers marked with __rcu_guarded.
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512110258.0KOGju5g-lkp@intel.com/
+Good reminder!  I had lost track of this series.
 
-All errors (new ones prefixed by >>):
+My big questions here are:
 
->> fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof' to an incomplete type 'struct dump_iter'
-      64 |         i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
-         |                     ^     ~~~~~~~~~~~~~~~~~~
-   include/linux/slab.h:1041:52: note: expanded from macro 'kzalloc'
-    1041 | #define kzalloc(...)                            alloc_hooks(kzalloc_noprof(__VA_ARGS__))
-         |                                                                            ^~~~~~~~~~~
-   include/linux/alloc_tag.h:253:31: note: expanded from macro 'alloc_hooks'
-     253 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:239:9: note: expanded from macro 'alloc_hooks_tag'
-     239 |         typeof(_do_alloc) _res;                                         \
-         |                ^~~~~~~~~
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
->> fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof' to an incomplete type 'struct dump_iter'
-      64 |         i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
-         |                     ^     ~~~~~~~~~~~~~~~~~~
-   include/linux/slab.h:1041:52: note: expanded from macro 'kzalloc'
-    1041 | #define kzalloc(...)                            alloc_hooks(kzalloc_noprof(__VA_ARGS__))
-         |                                                                            ^~~~~~~~~~~
-   include/linux/alloc_tag.h:253:31: note: expanded from macro 'alloc_hooks'
-     253 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:243:10: note: expanded from macro 'alloc_hooks_tag'
-     243 |                 _res = _do_alloc;                                       \
-         |                        ^~~~~~~~~
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
->> fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof' to an incomplete type 'struct dump_iter'
-      64 |         i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
-         |                     ^     ~~~~~~~~~~~~~~~~~~
-   include/linux/slab.h:1041:52: note: expanded from macro 'kzalloc'
-    1041 | #define kzalloc(...)                            alloc_hooks(kzalloc_noprof(__VA_ARGS__))
-         |                                                                            ^~~~~~~~~~~
-   include/linux/alloc_tag.h:253:31: note: expanded from macro 'alloc_hooks'
-     253 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:246:10: note: expanded from macro 'alloc_hooks_tag'
-     246 |                 _res = _do_alloc;                                       \
-         |                        ^~~~~~~~~
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
->> fs/bcachefs/debug/async_objs.c:69:3: error: incomplete definition of type 'struct dump_iter'
-      69 |         i->from = POS_MIN;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:70:3: error: incomplete definition of type 'struct dump_iter'
-      70 |         i->iter = 0;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:71:3: error: incomplete definition of type 'struct dump_iter'
-      71 |         i->c    = container_of(list, struct bch_fs, async_objs[list->idx]);
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:72:3: error: incomplete definition of type 'struct dump_iter'
-      72 |         i->list = list;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:73:3: error: incomplete definition of type 'struct dump_iter'
-      73 |         i->buf  = PRINTBUF;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
-      62 |         struct dump_iter *i;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:81:33: error: incomplete definition of type 'struct dump_iter'
-      81 |         struct async_obj_list *list = i->list;
-         |                                       ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:84:3: error: incomplete definition of type 'struct dump_iter'
-      84 |         i->ubuf = buf;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:85:3: error: incomplete definition of type 'struct dump_iter'
-      85 |         i->size = size;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:86:3: error: incomplete definition of type 'struct dump_iter'
-      86 |         i->ret  = 0;
-         |         ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:90:51: error: incomplete definition of type 'struct dump_iter'
-      90 |         fast_list_for_each_from(&list->list, iter, obj, i->iter) {
-         |                                                         ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:90:51: error: incomplete definition of type 'struct dump_iter'
-      90 |         fast_list_for_each_from(&list->list, iter, obj, i->iter) {
-         |                                                         ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
->> fs/bcachefs/debug/async_objs.c:91:9: error: call to undeclared function 'bch2_debugfs_flush_buf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      91 |                 ret = bch2_debugfs_flush_buf(i);
-         |                       ^
-   fs/bcachefs/debug/async_objs.c:95:9: error: incomplete definition of type 'struct dump_iter'
-      95 |                 if (!i->size)
-         |                      ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:98:23: error: incomplete definition of type 'struct dump_iter'
-      98 |                 list->obj_to_text(&i->buf, i->c, obj);
-         |                                    ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:98:31: error: incomplete definition of type 'struct dump_iter'
-      98 |                 list->obj_to_text(&i->buf, i->c, obj);
-         |                                            ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fs/bcachefs/debug/async_objs.c:99:4: error: incomplete definition of type 'struct dump_iter'
-      99 |                 i->iter = iter.pos;
-         |                 ~^
-   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
-      80 |         struct dump_iter *i = file->private_data;
-         |                ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+o	What about RCU readers using (say) preempt_disable() instead
+	of rcu_read_lock_sched()?
 
+o	What about RCU readers using local_bh_disable() instead of
+	rcu_read_lock_sched()?
 
-vim +64 fs/bcachefs/debug/async_objs.c
+And keeping in mind that such readers might start in assembly language.
 
-41e51769b8a649 fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   58  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   59  static int bch2_async_obj_list_open(struct inode *inode, struct file *file)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   60  {
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   61  	struct async_obj_list *list = inode->i_private;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @62  	struct dump_iter *i;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   63  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @64  	i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   65  	if (!i)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   66  		return -ENOMEM;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   67  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   68  	file->private_data = i;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @69  	i->from = POS_MIN;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   70  	i->iter	= 0;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   71  	i->c	= container_of(list, struct bch_fs, async_objs[list->idx]);
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   72  	i->list	= list;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   73  	i->buf	= PRINTBUF;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   74  	return 0;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   75  }
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   76  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   77  static ssize_t bch2_async_obj_list_read(struct file *file, char __user *buf,
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   78  					size_t size, loff_t *ppos)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   79  {
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @80  	struct dump_iter *i = file->private_data;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   81  	struct async_obj_list *list = i->list;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   82  	ssize_t ret = 0;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   83  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   84  	i->ubuf = buf;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   85  	i->size	= size;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   86  	i->ret	= 0;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   87  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   88  	struct genradix_iter iter;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   89  	void *obj;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   90  	fast_list_for_each_from(&list->list, iter, obj, i->iter) {
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @91  		ret = bch2_debugfs_flush_buf(i);
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   92  		if (ret)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   93  			return ret;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   94  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   95  		if (!i->size)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   96  			break;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   97  
-43b6a46d5d95bf fs/bcachefs/async_objs.c Kent Overstreet 2025-07-10   98  		list->obj_to_text(&i->buf, i->c, obj);
-90221f7301320b fs/bcachefs/async_objs.c Kent Overstreet 2025-07-10   99  		i->iter = iter.pos;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  100  	}
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  101  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  102  	if (i->buf.allocation_failure)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  103  		ret = -ENOMEM;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  104  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  105  	if (!ret)
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  106  		ret = bch2_debugfs_flush_buf(i);
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  107  
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  108  	return ret ?: i->ret;
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  109  }
-0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  110  
+One reasonable approach is to require such readers to use something like
+rcu_dereference_all() or rcu_dereference_all_check(), which could then
+have special dispensation to instead rely on run-time checks.
 
-:::::: The code at line 64 was first introduced by commit
-:::::: 0499a82b18b5ddee0d97d2cfcae0c0120f858c1f bcachefs: Async object debugging
+Another more powerful approach would be to make this facility also
+track preemption, interrupt, NMI, and BH contexts.
 
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+Either way could be a significant improvement over what we have now.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thoughts?
+
+							Thanx, Paul
+
+> ---
+> v3:
+> * Properly support reentrancy via new compiler support.
+> 
+> v2:
+> * Reword commit message and point out reentrancy caveat.
+> ---
+>  Documentation/dev-tools/context-analysis.rst |  2 +-
+>  include/linux/rcupdate.h                     | 77 ++++++++++++------
+>  lib/test_context-analysis.c                  | 85 ++++++++++++++++++++
+>  3 files changed, 139 insertions(+), 25 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+> index a3d925ce2df4..05164804a92a 100644
+> --- a/Documentation/dev-tools/context-analysis.rst
+> +++ b/Documentation/dev-tools/context-analysis.rst
+> @@ -81,7 +81,7 @@ Supported Kernel Primitives
+>  
+>  Currently the following synchronization primitives are supported:
+>  `raw_spinlock_t`, `spinlock_t`, `rwlock_t`, `mutex`, `seqlock_t`,
+> -`bit_spinlock`.
+> +`bit_spinlock`, RCU.
+>  
+>  For context guards with an initialization function (e.g., `spin_lock_init()`),
+>  calling this function before initializing any guarded members or globals
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index c5b30054cd01..5cddb9019a99 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -31,6 +31,16 @@
+>  #include <asm/processor.h>
+>  #include <linux/context_tracking_irq.h>
+>  
+> +token_context_guard(RCU, __reentrant_ctx_guard);
+> +token_context_guard_instance(RCU, RCU_SCHED);
+> +token_context_guard_instance(RCU, RCU_BH);
+> +
+> +/*
+> + * A convenience macro that can be used for RCU-protected globals or struct
+> + * members; adds type qualifier __rcu, and also enforces __guarded_by(RCU).
+> + */
+> +#define __rcu_guarded __rcu __guarded_by(RCU)
+> +
+>  #define ULONG_CMP_GE(a, b)	(ULONG_MAX / 2 >= (a) - (b))
+>  #define ULONG_CMP_LT(a, b)	(ULONG_MAX / 2 < (a) - (b))
+>  
+> @@ -425,7 +435,8 @@ static inline void rcu_preempt_sleep_check(void) { }
+>  
+>  // See RCU_LOCKDEP_WARN() for an explanation of the double call to
+>  // debug_lockdep_rcu_enabled().
+> -static inline bool lockdep_assert_rcu_helper(bool c)
+> +static inline bool lockdep_assert_rcu_helper(bool c, const struct __ctx_guard_RCU *ctx)
+> +	__assumes_shared_ctx_guard(RCU) __assumes_shared_ctx_guard(ctx)
+>  {
+>  	return debug_lockdep_rcu_enabled() &&
+>  	       (c || !rcu_is_watching() || !rcu_lockdep_current_cpu_online()) &&
+> @@ -438,7 +449,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+>   * Splats if lockdep is enabled and there is no rcu_read_lock() in effect.
+>   */
+>  #define lockdep_assert_in_rcu_read_lock() \
+> -	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_lock_map)))
+> +	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_lock_map), RCU))
+>  
+>  /**
+>   * lockdep_assert_in_rcu_read_lock_bh - WARN if not protected by rcu_read_lock_bh()
+> @@ -448,7 +459,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+>   * actual rcu_read_lock_bh() is required.
+>   */
+>  #define lockdep_assert_in_rcu_read_lock_bh() \
+> -	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_bh_lock_map)))
+> +	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_bh_lock_map), RCU_BH))
+>  
+>  /**
+>   * lockdep_assert_in_rcu_read_lock_sched - WARN if not protected by rcu_read_lock_sched()
+> @@ -458,7 +469,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+>   * instead an actual rcu_read_lock_sched() is required.
+>   */
+>  #define lockdep_assert_in_rcu_read_lock_sched() \
+> -	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_sched_lock_map)))
+> +	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_sched_lock_map), RCU_SCHED))
+>  
+>  /**
+>   * lockdep_assert_in_rcu_reader - WARN if not within some type of RCU reader
+> @@ -476,17 +487,17 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+>  	WARN_ON_ONCE(lockdep_assert_rcu_helper(!lock_is_held(&rcu_lock_map) &&			\
+>  					       !lock_is_held(&rcu_bh_lock_map) &&		\
+>  					       !lock_is_held(&rcu_sched_lock_map) &&		\
+> -					       preemptible()))
+> +					       preemptible(), RCU))
+>  
+>  #else /* #ifdef CONFIG_PROVE_RCU */
+>  
+>  #define RCU_LOCKDEP_WARN(c, s) do { } while (0 && (c))
+>  #define rcu_sleep_check() do { } while (0)
+>  
+> -#define lockdep_assert_in_rcu_read_lock() do { } while (0)
+> -#define lockdep_assert_in_rcu_read_lock_bh() do { } while (0)
+> -#define lockdep_assert_in_rcu_read_lock_sched() do { } while (0)
+> -#define lockdep_assert_in_rcu_reader() do { } while (0)
+> +#define lockdep_assert_in_rcu_read_lock() __assume_shared_ctx_guard(RCU)
+> +#define lockdep_assert_in_rcu_read_lock_bh() __assume_shared_ctx_guard(RCU_BH)
+> +#define lockdep_assert_in_rcu_read_lock_sched() __assume_shared_ctx_guard(RCU_SCHED)
+> +#define lockdep_assert_in_rcu_reader() __assume_shared_ctx_guard(RCU)
+>  
+>  #endif /* #else #ifdef CONFIG_PROVE_RCU */
+>  
+> @@ -506,11 +517,11 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+>  #endif /* #else #ifdef __CHECKER__ */
+>  
+>  #define __unrcu_pointer(p, local)					\
+> -({									\
+> +context_unsafe(								\
+>  	typeof(*p) *local = (typeof(*p) *__force)(p);			\
+>  	rcu_check_sparse(p, __rcu);					\
+> -	((typeof(*p) __force __kernel *)(local)); 			\
+> -})
+> +	((typeof(*p) __force __kernel *)(local)) 			\
+> +)
+>  /**
+>   * unrcu_pointer - mark a pointer as not being RCU protected
+>   * @p: pointer needing to lose its __rcu property
+> @@ -586,7 +597,7 @@ static inline bool lockdep_assert_rcu_helper(bool c)
+>   * other macros that it invokes.
+>   */
+>  #define rcu_assign_pointer(p, v)					      \
+> -do {									      \
+> +context_unsafe(							      \
+>  	uintptr_t _r_a_p__v = (uintptr_t)(v);				      \
+>  	rcu_check_sparse(p, __rcu);					      \
+>  									      \
+> @@ -594,7 +605,7 @@ do {									      \
+>  		WRITE_ONCE((p), (typeof(p))(_r_a_p__v));		      \
+>  	else								      \
+>  		smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+> -} while (0)
+> +)
+>  
+>  /**
+>   * rcu_replace_pointer() - replace an RCU pointer, returning its old value
+> @@ -861,9 +872,10 @@ do {									      \
+>   * only when acquiring spinlocks that are subject to priority inheritance.
+>   */
+>  static __always_inline void rcu_read_lock(void)
+> +	__acquires_shared(RCU)
+>  {
+>  	__rcu_read_lock();
+> -	__acquire(RCU);
+> +	__acquire_shared(RCU);
+>  	rcu_lock_acquire(&rcu_lock_map);
+>  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+>  			 "rcu_read_lock() used illegally while idle");
+> @@ -891,11 +903,12 @@ static __always_inline void rcu_read_lock(void)
+>   * See rcu_read_lock() for more information.
+>   */
+>  static inline void rcu_read_unlock(void)
+> +	__releases_shared(RCU)
+>  {
+>  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+>  			 "rcu_read_unlock() used illegally while idle");
+>  	rcu_lock_release(&rcu_lock_map); /* Keep acq info for rls diags. */
+> -	__release(RCU);
+> +	__release_shared(RCU);
+>  	__rcu_read_unlock();
+>  }
+>  
+> @@ -914,9 +927,11 @@ static inline void rcu_read_unlock(void)
+>   * was invoked from some other task.
+>   */
+>  static inline void rcu_read_lock_bh(void)
+> +	__acquires_shared(RCU) __acquires_shared(RCU_BH)
+>  {
+>  	local_bh_disable();
+> -	__acquire(RCU_BH);
+> +	__acquire_shared(RCU);
+> +	__acquire_shared(RCU_BH);
+>  	rcu_lock_acquire(&rcu_bh_lock_map);
+>  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+>  			 "rcu_read_lock_bh() used illegally while idle");
+> @@ -928,11 +943,13 @@ static inline void rcu_read_lock_bh(void)
+>   * See rcu_read_lock_bh() for more information.
+>   */
+>  static inline void rcu_read_unlock_bh(void)
+> +	__releases_shared(RCU) __releases_shared(RCU_BH)
+>  {
+>  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+>  			 "rcu_read_unlock_bh() used illegally while idle");
+>  	rcu_lock_release(&rcu_bh_lock_map);
+> -	__release(RCU_BH);
+> +	__release_shared(RCU_BH);
+> +	__release_shared(RCU);
+>  	local_bh_enable();
+>  }
+>  
+> @@ -952,9 +969,11 @@ static inline void rcu_read_unlock_bh(void)
+>   * rcu_read_lock_sched() was invoked from an NMI handler.
+>   */
+>  static inline void rcu_read_lock_sched(void)
+> +	__acquires_shared(RCU) __acquires_shared(RCU_SCHED)
+>  {
+>  	preempt_disable();
+> -	__acquire(RCU_SCHED);
+> +	__acquire_shared(RCU);
+> +	__acquire_shared(RCU_SCHED);
+>  	rcu_lock_acquire(&rcu_sched_lock_map);
+>  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+>  			 "rcu_read_lock_sched() used illegally while idle");
+> @@ -962,9 +981,11 @@ static inline void rcu_read_lock_sched(void)
+>  
+>  /* Used by lockdep and tracing: cannot be traced, cannot call lockdep. */
+>  static inline notrace void rcu_read_lock_sched_notrace(void)
+> +	__acquires_shared(RCU) __acquires_shared(RCU_SCHED)
+>  {
+>  	preempt_disable_notrace();
+> -	__acquire(RCU_SCHED);
+> +	__acquire_shared(RCU);
+> +	__acquire_shared(RCU_SCHED);
+>  }
+>  
+>  /**
+> @@ -973,22 +994,27 @@ static inline notrace void rcu_read_lock_sched_notrace(void)
+>   * See rcu_read_lock_sched() for more information.
+>   */
+>  static inline void rcu_read_unlock_sched(void)
+> +	__releases_shared(RCU) __releases_shared(RCU_SCHED)
+>  {
+>  	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+>  			 "rcu_read_unlock_sched() used illegally while idle");
+>  	rcu_lock_release(&rcu_sched_lock_map);
+> -	__release(RCU_SCHED);
+> +	__release_shared(RCU_SCHED);
+> +	__release_shared(RCU);
+>  	preempt_enable();
+>  }
+>  
+>  /* Used by lockdep and tracing: cannot be traced, cannot call lockdep. */
+>  static inline notrace void rcu_read_unlock_sched_notrace(void)
+> +	__releases_shared(RCU) __releases_shared(RCU_SCHED)
+>  {
+> -	__release(RCU_SCHED);
+> +	__release_shared(RCU_SCHED);
+> +	__release_shared(RCU);
+>  	preempt_enable_notrace();
+>  }
+>  
+>  static __always_inline void rcu_read_lock_dont_migrate(void)
+> +	__acquires_shared(RCU)
+>  {
+>  	if (IS_ENABLED(CONFIG_PREEMPT_RCU))
+>  		migrate_disable();
+> @@ -996,6 +1022,7 @@ static __always_inline void rcu_read_lock_dont_migrate(void)
+>  }
+>  
+>  static inline void rcu_read_unlock_migrate(void)
+> +	__releases_shared(RCU)
+>  {
+>  	rcu_read_unlock();
+>  	if (IS_ENABLED(CONFIG_PREEMPT_RCU))
+> @@ -1041,10 +1068,10 @@ static inline void rcu_read_unlock_migrate(void)
+>   * ordering guarantees for either the CPU or the compiler.
+>   */
+>  #define RCU_INIT_POINTER(p, v) \
+> -	do { \
+> +	context_unsafe( \
+>  		rcu_check_sparse(p, __rcu); \
+>  		WRITE_ONCE(p, RCU_INITIALIZER(v)); \
+> -	} while (0)
+> +	)
+>  
+>  /**
+>   * RCU_POINTER_INITIALIZER() - statically initialize an RCU protected pointer
+> @@ -1206,4 +1233,6 @@ DEFINE_LOCK_GUARD_0(rcu,
+>  	} while (0),
+>  	rcu_read_unlock())
+>  
+> +DECLARE_LOCK_GUARD_0_ATTRS(rcu, __acquires_shared(RCU), __releases_shared(RCU))
+> +
+>  #endif /* __LINUX_RCUPDATE_H */
+> diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+> index 77e599a9281b..f18b7252646d 100644
+> --- a/lib/test_context-analysis.c
+> +++ b/lib/test_context-analysis.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/bit_spinlock.h>
+>  #include <linux/build_bug.h>
+>  #include <linux/mutex.h>
+> +#include <linux/rcupdate.h>
+>  #include <linux/seqlock.h>
+>  #include <linux/spinlock.h>
+>  
+> @@ -277,3 +278,87 @@ static void __used test_bit_spin_lock(struct test_bit_spinlock_data *d)
+>  		bit_spin_unlock(3, &d->bits);
+>  	}
+>  }
+> +
+> +/*
+> + * Test that we can mark a variable guarded by RCU, and we can dereference and
+> + * write to the pointer with RCU's primitives.
+> + */
+> +struct test_rcu_data {
+> +	long __rcu_guarded *data;
+> +};
+> +
+> +static void __used test_rcu_guarded_reader(struct test_rcu_data *d)
+> +{
+> +	rcu_read_lock();
+> +	(void)rcu_dereference(d->data);
+> +	rcu_read_unlock();
+> +
+> +	rcu_read_lock_bh();
+> +	(void)rcu_dereference(d->data);
+> +	rcu_read_unlock_bh();
+> +
+> +	rcu_read_lock_sched();
+> +	(void)rcu_dereference(d->data);
+> +	rcu_read_unlock_sched();
+> +}
+> +
+> +static void __used test_rcu_guard(struct test_rcu_data *d)
+> +{
+> +	guard(rcu)();
+> +	(void)rcu_dereference(d->data);
+> +}
+> +
+> +static void __used test_rcu_guarded_updater(struct test_rcu_data *d)
+> +{
+> +	rcu_assign_pointer(d->data, NULL);
+> +	RCU_INIT_POINTER(d->data, NULL);
+> +	(void)unrcu_pointer(d->data);
+> +}
+> +
+> +static void wants_rcu_held(void)	__must_hold_shared(RCU)       { }
+> +static void wants_rcu_held_bh(void)	__must_hold_shared(RCU_BH)    { }
+> +static void wants_rcu_held_sched(void)	__must_hold_shared(RCU_SCHED) { }
+> +
+> +static void __used test_rcu_lock_variants(void)
+> +{
+> +	rcu_read_lock();
+> +	wants_rcu_held();
+> +	rcu_read_unlock();
+> +
+> +	rcu_read_lock_bh();
+> +	wants_rcu_held_bh();
+> +	rcu_read_unlock_bh();
+> +
+> +	rcu_read_lock_sched();
+> +	wants_rcu_held_sched();
+> +	rcu_read_unlock_sched();
+> +}
+> +
+> +static void __used test_rcu_lock_reentrant(void)
+> +{
+> +	rcu_read_lock();
+> +	rcu_read_lock();
+> +	rcu_read_lock_bh();
+> +	rcu_read_lock_bh();
+> +	rcu_read_lock_sched();
+> +	rcu_read_lock_sched();
+> +
+> +	rcu_read_unlock_sched();
+> +	rcu_read_unlock_sched();
+> +	rcu_read_unlock_bh();
+> +	rcu_read_unlock_bh();
+> +	rcu_read_unlock();
+> +	rcu_read_unlock();
+> +}
+> +
+> +static void __used test_rcu_assert_variants(void)
+> +{
+> +	lockdep_assert_in_rcu_read_lock();
+> +	wants_rcu_held();
+> +
+> +	lockdep_assert_in_rcu_read_lock_bh();
+> +	wants_rcu_held_bh();
+> +
+> +	lockdep_assert_in_rcu_read_lock_sched();
+> +	wants_rcu_held_sched();
+> +}
+> -- 
+> 2.52.0.rc1.455.g30608eb744-goog
+> 
