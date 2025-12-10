@@ -1,295 +1,286 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06262328625
-	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 17:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9013430F819;
+	Wed, 10 Dec 2025 19:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765387814; cv=none; b=A53qPBGH24Y2W3v5/gabfCh54XWVPz96Oh2OHkMMr8WylanyS2Wtar9Ode7kHC8RPC0wsx0JNA0TnytV45oN1ZsacjKvc7Zjgy/DIkvso6hmqhnpZFXL/a+eziLHOuN23jZWMb5utFJbI9VxtaPEIxmpD0XBZFg36X1EpxdT0Ys=
+	t=1765393552; cv=none; b=fbs3KEP5Ld2GiO03XxIH02+ruBKVkaMTF4bRB01TlG9Hde7FSGd3L2m1+y3YNDGNAmLmbTXmEzCvOO9CCuedIzTF1T3qCxzrowfWv4uhFWbRVufrqbxw6PBKAmCOLYVEHt/XujJ3h4IysK0l+nD3ykDJz7/fRh24ln7ChkIswDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765387814; c=relaxed/simple;
-	bh=LMaezUJWZi8w9+psRoT2CJOKvmM8RmxmTEKWOhg42fQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QEjKe7efixQae9Xsme1SJms7rNJ74tWaGkX0WKgVW80yLGe+XUkRpx7pdULSEM2mcw+kbaIhBSb1+q28hzB1UJvw+yvpnJttGgDslJwhAba9Zm9cFRkpNHgMKHsoyd+hR1oQPJGRNZQXjzn6e9hh7oGfWR21jiLLmzgWjt0TSB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=bff9AUQ6; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1765393552; c=relaxed/simple;
+	bh=n78qlbqQHpkIUeQyBoHky8FhLodpbFzebUW4mrVXKIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VuUUpO0I1KCfuRarNu/AuGFsTAqQQVl2gUoKOR5gX4tnSeaQXFVryjBMO22KhT1Tox7yZxCLJp2TXTv7eisWKcLaVhZlJPEvnwjtM5h5Xbykxikx29IhmAE4vxwpeCr36iBuDpnglspJA4sgeo045aMzaprxOvWv6wnZUMv7j7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jWwrYQjI; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="bff9AUQ6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1765387809; x=1765647009;
-	bh=lY9fE4khm8TKePDz5X4aC5hOywz6v3YeXyq28VGtz8g=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=bff9AUQ6oevu1qmq4awuQxoIpaVMBvgWcsrkovnFdMLLnKhFnUAmFyidjfDgyvHe0
-	 3M+9lDnYM56Ifcsfm8YJHY4kunEYYxx4B3eqknKTYzC90GMoxesWB/vM2z5YTTgnlG
-	 OwF9x6HqTwCREXSowqU+JpDm/q+L85JSm63BxpFVdj3APlRs2kyqFLbGiLQpZwrFBG
-	 bhdKnEsiWTo2Pdwtf0mz4JPCpeXzqJVBC0Z3hUXFC5fmTu1J620kB3ztHCNyFivZME
-	 Sc4eqgZlfsssXT7B0EHb+HkkhLusIRaALPc610UuPoh1fkiWsyzVtTZbEVLRh9UpmH
-	 NGkFThngFKhag==
-Date: Wed, 10 Dec 2025 17:30:05 +0000
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
-Subject: [PATCH v7 12/15] x86/kasan: Handle UD1 for inline KASAN reports
-Message-ID: <13fa5da13adf927abbb7dd85d19fbaa8e4fadc84.1765386422.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1765386422.git.m.wieczorretman@pm.me>
-References: <cover.1765386422.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 7032ee222089e9740a5e84130b4a9493439885f2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jWwrYQjI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765393551; x=1796929551;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n78qlbqQHpkIUeQyBoHky8FhLodpbFzebUW4mrVXKIE=;
+  b=jWwrYQjImKQTYYnflxB705JJle4mLQs5Xn8U1JGmRa6cWW1K0OPeZ/s/
+   pkatVM/WWWj8E4dyAW3aHS7J+wElSyiVFG4Gg0VKdABz8/kOOD39WnBV5
+   VpZF1rCDr4iQz/3gBYQ2+Kxtd/swaEHq0V6wSyBS9On/o9+aMKGADDHAI
+   UZgIi+Ht2uC0d/3uG8exFtUSnRyZm/P6EHgTWjfRgh2GbZfC8yanWu708
+   4yOfqQ5Q7crMMH5LSibws9conUeqAodZkjvgM4L/nyP/VP0pLl0R9/mEf
+   eeO0nKfUOQyUPEL7o9gYclnkKwL9S6+vs5U/ywGb4Do9hk6rtcrxCVh//
+   Q==;
+X-CSE-ConnectionGUID: Rt/ElUiCRDepsPNWqfbANA==
+X-CSE-MsgGUID: PNdwdfTDTEWdZ1Zp1d+3BQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="54917255"
+X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
+   d="scan'208";a="54917255"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 11:05:49 -0800
+X-CSE-ConnectionGUID: ChtIockPST25A9NhysPqfw==
+X-CSE-MsgGUID: BNJL/5+1Q9GHoOrK10qYRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
+   d="scan'208";a="196876794"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 10 Dec 2025 11:05:47 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vTPVR-000000003fN-2kLL;
+	Wed, 10 Dec 2025 19:05:45 +0000
+Date: Thu, 11 Dec 2025 03:05:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:bcachefs-testing 563/1112]
+ fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof'
+ to an incomplete type 'struct dump_iter'
+Message-ID: <202512110258.0KOGju5g-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   c584fbbbf2e8eb98b64af4c5ea5d02d549dd4e4d
+commit: da7a6f67bdb81c87b94b7e549f55fb1b3298fc83 [563/1112] bcachefs: kill CONFIG_BCACHEFS_ASYNC_OBJECT_LISTS
+config: arm-randconfig-003-20251211 (https://download.01.org/0day-ci/archive/20251211/202512110258.0KOGju5g-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512110258.0KOGju5g-lkp@intel.com/reproduce)
 
-Inline KASAN on x86 should do tag mismatch reports by passing the
-metadata through the UD1 instruction and the faulty address through RDI,
-a scheme that's already used by UBSan and is easy to extend.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512110258.0KOGju5g-lkp@intel.com/
 
-The current LLVM way of passing KASAN software tag mode metadata is done
-using the INT3 instruction. However that should be changed because it
-doesn't align to how the kernel already handles UD1 for similar use
-cases. Since inline software tag-based KASAN doesn't work on x86 due to
-missing compiler support it can be fixed and the INT3 can be changed to
-UD1 at the same time.
+All errors (new ones prefixed by >>):
 
-Add a kasan component to the #UD decoding and handling functions.
-
-Make part of that hook - which decides whether to die or recover from a
-tag mismatch - arch independent to avoid duplicating a long comment on
-both x86 and arm64 architectures.
-
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v7:
-- Redo the #UD handling that's based on Peter Zijlstra WARN() patches.
-- Rename kasan_inline.c -> kasan_sw_tags.c (Alexander)
-
-Changelog v6:
-- Change the whole patch from using INT3 to UD1.
-
-Changelog v5:
-- Add die to argument list of kasan_inline_recover() in
-  arch/arm64/kernel/traps.c.
-
-Changelog v4:
-- Make kasan_handler() a stub in a header file. Remove #ifdef from
-  traps.c.
-- Consolidate the "recover" comment into one place.
-- Make small changes to the patch message.
-
- MAINTAINERS                  |  2 +-
- arch/x86/include/asm/bug.h   |  1 +
- arch/x86/include/asm/kasan.h | 20 ++++++++++++++++++++
- arch/x86/kernel/traps.c      | 13 ++++++++++++-
- arch/x86/mm/Makefile         |  2 ++
- arch/x86/mm/kasan_sw_tags.c  | 19 +++++++++++++++++++
- include/linux/kasan.h        | 23 +++++++++++++++++++++++
- 7 files changed, 78 insertions(+), 2 deletions(-)
- create mode 100644 arch/x86/mm/kasan_sw_tags.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a591598cc4b5..ff1c036ae39f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13421,7 +13421,7 @@ S:=09Maintained
- B:=09https://bugzilla.kernel.org/buglist.cgi?component=3DSanitizers&produc=
-t=3DMemory%20Management
- F:=09Documentation/dev-tools/kasan.rst
- F:=09arch/*/include/asm/*kasan*.h
--F:=09arch/*/mm/kasan_init*
-+F:=09arch/*/mm/kasan_*
- F:=09include/linux/kasan*.h
- F:=09lib/Kconfig.kasan
- F:=09mm/kasan/
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index 83b0fb38732d..eb733ac14598 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -32,6 +32,7 @@
- #define BUG_UD1=09=09=090xfffd
- #define BUG_UD1_UBSAN=09=090xfffc
- #define BUG_UD1_WARN=09=090xfffb
-+#define BUG_UD1_KASAN=09=090xfffa
- #define BUG_UDB=09=09=090xffd6
- #define BUG_LOCK=09=090xfff0
-=20
-diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-index eab12527ed7f..6e083d45770d 100644
---- a/arch/x86/include/asm/kasan.h
-+++ b/arch/x86/include/asm/kasan.h
-@@ -6,6 +6,24 @@
- #include <linux/kasan-tags.h>
- #include <linux/types.h>
- #define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
-+
-+/*
-+ * LLVM ABI for reporting tag mismatches in inline KASAN mode.
-+ * On x86 the UD1 instruction is used to carry metadata in the ECX registe=
-r
-+ * to the KASAN report. ECX is used to differentiate KASAN from UBSan when
-+ * decoding the UD1 instruction.
-+ *
-+ * SIZE refers to how many bytes the faulty memory access
-+ * requested.
-+ * WRITE bit, when set, indicates the access was a write, otherwise
-+ * it was a read.
-+ * RECOVER bit, when set, should allow the kernel to carry on after
-+ * a tag mismatch. Otherwise die() is called.
-+ */
-+#define KASAN_ECX_RECOVER=090x20
-+#define KASAN_ECX_WRITE=09=090x10
-+#define KASAN_ECX_SIZE_MASK=090x0f
-+#define KASAN_ECX_SIZE(ecx)=09(1 << ((ecx) & KASAN_ECX_SIZE_MASK))
- #define KASAN_SHADOW_SCALE_SHIFT 3
-=20
- /*
-@@ -34,10 +52,12 @@
- #define __tag_shifted(tag)=09=09FIELD_PREP(GENMASK_ULL(60, 57), tag)
- #define __tag_reset(addr)=09=09(sign_extend64((u64)(addr), 56))
- #define __tag_get(addr)=09=09=09((u8)FIELD_GET(GENMASK_ULL(60, 57), (u64)a=
-ddr))
-+void kasan_inline_handler(struct pt_regs *regs, unsigned int metadata, u64=
- addr);
- #else
- #define __tag_shifted(tag)=09=090UL
- #define __tag_reset(addr)=09=09(addr)
- #define __tag_get(addr)=09=09=090
-+static inline void kasan_inline_handler(struct pt_regs *regs, unsigned int=
- metadata, u64 addr) { }
- #endif /* CONFIG_KASAN_SW_TAGS */
-=20
- #ifdef CONFIG_64BIT
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index cb324cc1fd99..e55e5441fc83 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -102,6 +102,7 @@ __always_inline int is_valid_bugaddr(unsigned long addr=
-)
-  * FineIBT:      f0 75 f9                lock jne . - 6
-  * UBSan{0}:     67 0f b9 00             ud1    (%eax),%eax
-  * UBSan{10}:    67 0f b9 40 10          ud1    0x10(%eax),%eax
-+ * KASAN:        48 0f b9 41 XX          ud1    0xXX(%rcx),%reg
-  * static_call:  0f b9 cc                ud1    %esp,%ecx
-  * __WARN_trap:  67 48 0f b9 3a          ud1    (%edx),%reg
-  *
-@@ -190,6 +191,10 @@ __always_inline int decode_bug(unsigned long addr, s32=
- *imm, int *len)
- =09=09addr +=3D 1;
- =09=09if (rm =3D=3D 0)=09=09/* (%eax) */
- =09=09=09type =3D BUG_UD1_UBSAN;
-+=09=09if (rm =3D=3D 1) {=09=09/* (%ecx) */
-+=09=09=09type =3D BUG_UD1_KASAN;
-+=09=09=09*imm +=3D reg << 8;
-+=09=09}
- =09=09break;
-=20
- =09case 2: *imm =3D *(s32 *)addr;
-@@ -399,7 +404,7 @@ static inline void handle_invalid_op(struct pt_regs *re=
-gs)
-=20
- static noinstr bool handle_bug(struct pt_regs *regs)
- {
--=09unsigned long addr =3D regs->ip;
-+=09unsigned long kasan_addr, addr =3D regs->ip;
- =09bool handled =3D false;
- =09int ud_type, ud_len;
- =09s32 ud_imm;
-@@ -454,6 +459,12 @@ static noinstr bool handle_bug(struct pt_regs *regs)
- =09=09}
- =09=09break;
-=20
-+=09case BUG_UD1_KASAN:
-+=09=09kasan_addr =3D (u64)pt_regs_val(regs, ud_imm >> 8);
-+=09=09kasan_inline_handler(regs, ud_imm, kasan_addr);
-+=09=09handled =3D true;
-+=09=09break;
-+
- =09default:
- =09=09break;
- =09}
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index 5b9908f13dcf..b562963a866e 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -36,7 +36,9 @@ obj-$(CONFIG_PTDUMP)=09=09+=3D dump_pagetables.o
- obj-$(CONFIG_PTDUMP_DEBUGFS)=09+=3D debug_pagetables.o
-=20
- KASAN_SANITIZE_kasan_init_$(BITS).o :=3D n
-+KASAN_SANITIZE_kasan_sw_tags.o :=3D n
- obj-$(CONFIG_KASAN)=09=09+=3D kasan_init_$(BITS).o
-+obj-$(CONFIG_KASAN_SW_TAGS)=09+=3D kasan_sw_tags.o
-=20
- KMSAN_SANITIZE_kmsan_shadow.o=09:=3D n
- obj-$(CONFIG_KMSAN)=09=09+=3D kmsan_shadow.o
-diff --git a/arch/x86/mm/kasan_sw_tags.c b/arch/x86/mm/kasan_sw_tags.c
-new file mode 100644
-index 000000000000..93b63be584fd
---- /dev/null
-+++ b/arch/x86/mm/kasan_sw_tags.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/kasan.h>
-+#include <linux/kdebug.h>
-+
-+void kasan_inline_handler(struct pt_regs *regs, unsigned int metadata, u64=
- addr)
-+{
-+=09u64 pc =3D regs->ip;
-+=09bool recover =3D metadata & KASAN_ECX_RECOVER;
-+=09bool write =3D metadata & KASAN_ECX_WRITE;
-+=09size_t size =3D KASAN_ECX_SIZE(metadata);
-+
-+=09if (user_mode(regs))
-+=09=09return;
-+
-+=09if (!kasan_report((void *)addr, size, write, pc))
-+=09=09return;
-+
-+=09kasan_die_unless_recover(recover, "Oops - KASAN", regs, metadata, die);
-+}
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index 5cb21b90a2ec..03e263fb9fa1 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -669,4 +669,27 @@ void kasan_non_canonical_hook(unsigned long addr);
- static inline void kasan_non_canonical_hook(unsigned long addr) { }
- #endif /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
-=20
-+#ifdef CONFIG_KASAN_SW_TAGS
-+/*
-+ * The instrumentation allows to control whether we can proceed after
-+ * a crash was detected. This is done by passing the -recover flag to
-+ * the compiler. Disabling recovery allows to generate more compact
-+ * code.
-+ *
-+ * Unfortunately disabling recovery doesn't work for the kernel right
-+ * now. KASAN reporting is disabled in some contexts (for example when
-+ * the allocator accesses slab object metadata; this is controlled by
-+ * current->kasan_depth). All these accesses are detected by the tool,
-+ * even though the reports for them are not printed.
-+ *
-+ * This is something that might be fixed at some point in the future.
-+ */
-+static inline void kasan_die_unless_recover(bool recover, char *msg, struc=
-t pt_regs *regs,
-+=09unsigned long err, void die_fn(const char *str, struct pt_regs *regs, l=
-ong err))
-+{
-+=09if (!recover)
-+=09=09die_fn(msg, regs, err);
-+}
-+#endif
-+
- #endif /* LINUX_KASAN_H */
---=20
-2.52.0
+>> fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof' to an incomplete type 'struct dump_iter'
+      64 |         i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
+         |                     ^     ~~~~~~~~~~~~~~~~~~
+   include/linux/slab.h:1041:52: note: expanded from macro 'kzalloc'
+    1041 | #define kzalloc(...)                            alloc_hooks(kzalloc_noprof(__VA_ARGS__))
+         |                                                                            ^~~~~~~~~~~
+   include/linux/alloc_tag.h:253:31: note: expanded from macro 'alloc_hooks'
+     253 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:239:9: note: expanded from macro 'alloc_hooks_tag'
+     239 |         typeof(_do_alloc) _res;                                         \
+         |                ^~~~~~~~~
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+>> fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof' to an incomplete type 'struct dump_iter'
+      64 |         i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
+         |                     ^     ~~~~~~~~~~~~~~~~~~
+   include/linux/slab.h:1041:52: note: expanded from macro 'kzalloc'
+    1041 | #define kzalloc(...)                            alloc_hooks(kzalloc_noprof(__VA_ARGS__))
+         |                                                                            ^~~~~~~~~~~
+   include/linux/alloc_tag.h:253:31: note: expanded from macro 'alloc_hooks'
+     253 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:243:10: note: expanded from macro 'alloc_hooks_tag'
+     243 |                 _res = _do_alloc;                                       \
+         |                        ^~~~~~~~~
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+>> fs/bcachefs/debug/async_objs.c:64:14: error: invalid application of 'sizeof' to an incomplete type 'struct dump_iter'
+      64 |         i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
+         |                     ^     ~~~~~~~~~~~~~~~~~~
+   include/linux/slab.h:1041:52: note: expanded from macro 'kzalloc'
+    1041 | #define kzalloc(...)                            alloc_hooks(kzalloc_noprof(__VA_ARGS__))
+         |                                                                            ^~~~~~~~~~~
+   include/linux/alloc_tag.h:253:31: note: expanded from macro 'alloc_hooks'
+     253 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:246:10: note: expanded from macro 'alloc_hooks_tag'
+     246 |                 _res = _do_alloc;                                       \
+         |                        ^~~~~~~~~
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+>> fs/bcachefs/debug/async_objs.c:69:3: error: incomplete definition of type 'struct dump_iter'
+      69 |         i->from = POS_MIN;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:70:3: error: incomplete definition of type 'struct dump_iter'
+      70 |         i->iter = 0;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:71:3: error: incomplete definition of type 'struct dump_iter'
+      71 |         i->c    = container_of(list, struct bch_fs, async_objs[list->idx]);
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:72:3: error: incomplete definition of type 'struct dump_iter'
+      72 |         i->list = list;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:73:3: error: incomplete definition of type 'struct dump_iter'
+      73 |         i->buf  = PRINTBUF;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:62:9: note: forward declaration of 'struct dump_iter'
+      62 |         struct dump_iter *i;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:81:33: error: incomplete definition of type 'struct dump_iter'
+      81 |         struct async_obj_list *list = i->list;
+         |                                       ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:84:3: error: incomplete definition of type 'struct dump_iter'
+      84 |         i->ubuf = buf;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:85:3: error: incomplete definition of type 'struct dump_iter'
+      85 |         i->size = size;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:86:3: error: incomplete definition of type 'struct dump_iter'
+      86 |         i->ret  = 0;
+         |         ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:90:51: error: incomplete definition of type 'struct dump_iter'
+      90 |         fast_list_for_each_from(&list->list, iter, obj, i->iter) {
+         |                                                         ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:90:51: error: incomplete definition of type 'struct dump_iter'
+      90 |         fast_list_for_each_from(&list->list, iter, obj, i->iter) {
+         |                                                         ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+>> fs/bcachefs/debug/async_objs.c:91:9: error: call to undeclared function 'bch2_debugfs_flush_buf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      91 |                 ret = bch2_debugfs_flush_buf(i);
+         |                       ^
+   fs/bcachefs/debug/async_objs.c:95:9: error: incomplete definition of type 'struct dump_iter'
+      95 |                 if (!i->size)
+         |                      ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:98:23: error: incomplete definition of type 'struct dump_iter'
+      98 |                 list->obj_to_text(&i->buf, i->c, obj);
+         |                                    ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:98:31: error: incomplete definition of type 'struct dump_iter'
+      98 |                 list->obj_to_text(&i->buf, i->c, obj);
+         |                                            ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fs/bcachefs/debug/async_objs.c:99:4: error: incomplete definition of type 'struct dump_iter'
+      99 |                 i->iter = iter.pos;
+         |                 ~^
+   fs/bcachefs/debug/async_objs.c:80:9: note: forward declaration of 'struct dump_iter'
+      80 |         struct dump_iter *i = file->private_data;
+         |                ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
+vim +64 fs/bcachefs/debug/async_objs.c
+
+41e51769b8a649 fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   58  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   59  static int bch2_async_obj_list_open(struct inode *inode, struct file *file)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   60  {
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   61  	struct async_obj_list *list = inode->i_private;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @62  	struct dump_iter *i;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   63  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @64  	i = kzalloc(sizeof(struct dump_iter), GFP_KERNEL);
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   65  	if (!i)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   66  		return -ENOMEM;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   67  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   68  	file->private_data = i;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @69  	i->from = POS_MIN;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   70  	i->iter	= 0;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   71  	i->c	= container_of(list, struct bch_fs, async_objs[list->idx]);
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   72  	i->list	= list;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   73  	i->buf	= PRINTBUF;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   74  	return 0;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   75  }
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   76  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   77  static ssize_t bch2_async_obj_list_read(struct file *file, char __user *buf,
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   78  					size_t size, loff_t *ppos)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   79  {
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @80  	struct dump_iter *i = file->private_data;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   81  	struct async_obj_list *list = i->list;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   82  	ssize_t ret = 0;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   83  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   84  	i->ubuf = buf;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   85  	i->size	= size;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   86  	i->ret	= 0;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   87  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   88  	struct genradix_iter iter;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   89  	void *obj;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   90  	fast_list_for_each_from(&list->list, iter, obj, i->iter) {
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  @91  		ret = bch2_debugfs_flush_buf(i);
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   92  		if (ret)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   93  			return ret;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   94  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   95  		if (!i->size)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   96  			break;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21   97  
+43b6a46d5d95bf fs/bcachefs/async_objs.c Kent Overstreet 2025-07-10   98  		list->obj_to_text(&i->buf, i->c, obj);
+90221f7301320b fs/bcachefs/async_objs.c Kent Overstreet 2025-07-10   99  		i->iter = iter.pos;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  100  	}
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  101  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  102  	if (i->buf.allocation_failure)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  103  		ret = -ENOMEM;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  104  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  105  	if (!ret)
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  106  		ret = bch2_debugfs_flush_buf(i);
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  107  
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  108  	return ret ?: i->ret;
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  109  }
+0499a82b18b5dd fs/bcachefs/async_objs.c Kent Overstreet 2025-04-21  110  
+
+:::::: The code at line 64 was first introduced by commit
+:::::: 0499a82b18b5ddee0d97d2cfcae0c0120f858c1f bcachefs: Async object debugging
+
+:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
