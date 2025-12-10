@@ -1,118 +1,133 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2FF221299
-	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 09:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3221931355B;
+	Wed, 10 Dec 2025 10:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765358054; cv=none; b=R42XoKJsIuZjDpEMY8rJy5wA+AcP8yqhg+yNNdHF3vM/PwaYF/qZya+XDke1gsE/dRdKTiJRqYQsvWKIOznnrIL4RuNu0oohNB74if9nJJU3F1zDzgVa6/7K0MMrxksrK7BFXTFlv3SZkT+eMDDJ/rjA9Po2BWaFsQOsS4otKMw=
+	t=1765362803; cv=none; b=Vh11J79+hxZCmUb74whCvIAl9FM9x3IEBYYt71y/2KIVVE9OhOQoy50IO4KK26c3iK4u7SW+dnS9C+XmTDBAHECU/FEJHdFbr36Gi0Xj6SolGQDqieTWKE9kaf7rsVAU9CDPAhnN09JGqRmHP///GOcEfkaOLd+rGAIFqGcqahI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765358054; c=relaxed/simple;
-	bh=qA8etQBYMVx7IE9HjB0d2PDyzFeEHh6dA5fDZxxGkug=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=r/Lo737ZaqtQ9czFBHfRPyou5ma00CkOuM/Rp4xbA/CRtv1gF0d1shVJZbcwtkOujR53fclXtcI69nFhBrxuS8nry79zeuNjcsPYUo+slLnLcZBQDKa7DDnQ7GviDIOAGg3dvg5uu7R2d+5BGVfazVG4NRJTmwwb8Mu7uVzEGCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JDVY/ks4; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+	s=arc-20240116; t=1765362803; c=relaxed/simple;
+	bh=UsUj9GaciPRcxYu/CgXCrlWKO8WaP9unf5EfzHxcuR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vjvmyb6zBzFtHeTcShVKvG2BJSLsDNCGJJC4o95AkA68/TZpBUgOtfMFaytDBqc77gS/O483iZANXnfStfqjbwE11/LzgkaTvb/9rL3zYoLomBuaKHl2XJyabwubdAK3AEe3GjGWg6s4IRtxBShKnJSXtqPI4y2A/KfT/hwI9Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DmW162tb; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JDVY/ks4"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29809acd049so148158595ad.3
-        for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 01:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765358052; x=1765962852; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gJ+diNdvdoAjNwW4/UoG9jb3p4kgQF7Wid7xBQKDtGQ=;
-        b=JDVY/ks4o4akJXKyXf4mMaeabL3PXxqvpQM4hTQ4mWAsbu+KIkdRLsbTIj0DJ6FnZa
-         gmKi6254BW4ax5Udk151dcQUklH2Q8RwZi/j8x6aahkxPDfeeRWS6p8qHyFzl78e4pAp
-         +PUfZ0FQn2vitd3P2zAMrwhr/bCHU238u3UWsp+O2lcL9T4HpKNiEEMgvjhRkOQ5y9hh
-         V+611bTnHELGRNIbu1gc2KaE+3xlnySgsKuz9D/woFcYZOKh/OxFUeuIRY0frnjQKiZ5
-         Gp3o3vwZfi82Dd5QaabXpZ1vdSEdRwgwXFbjHbTM+jrNQrj8wRexnw5MD+GBZdAFtfrS
-         KFIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765358052; x=1765962852;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gJ+diNdvdoAjNwW4/UoG9jb3p4kgQF7Wid7xBQKDtGQ=;
-        b=dxzwwQ5D5dN7IJ+2PapJsOq4+GRHT8i+CJAg8a/sMqtsqHtN2xL3PXOLus5qiNUvde
-         pxXHpTVT44OlLKRkxS/DkyFWZier+9YRxssANwNl6ZAqZj56jX8ay8GSJW6xL58l+p8t
-         r4ywTxdqeCP4fQ5i7c++CQlyjJyCwecY/6dpq0sk46n+MsR1C9dV1jLYbDBKiOT+2p74
-         AgWbIQ2ah4HJe4OXvT+OipKdxjeF1I1yw0DGOF6WyAJKD4F5GqyU2Qt3Ieeh3xV0t97u
-         AEJ2QW0LatgF6r4fnAWkMMceeIPNvAnL/YFduvP7xvFEMtlm5bdpPWhMgyLEQjjT8tBg
-         g+jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhsYLRERs3zQHb1vRyxVDh1Q5WnJHUl2KHt39ovApBSiqjUWzna7eDKIOnLVa4LY/qrAf+@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBRyC8VSiYc+wAyP1dKkH2EfaoofXeP/eKZbXsEkAbaDbWCnhz
-	EB+oCMbg53seSNnufU87lp5XfZ//81wN5FbdI1li4EQjXwaO9uHZhCo7zLCAmVz6zRvpimdNogO
-	ZfQ==
-X-Google-Smtp-Source: AGHT+IEu6z3l2QX6KuLU3Q6OFfDJ0FX6A27zVmwG9FygHINtFnYd4ff1NV1/k8xr34jkmCShD9fTkvGN/A==
-X-Received: from plij11.prod.google.com ([2002:a17:903:380b:b0:290:28e2:ce65])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d482:b0:295:4d97:84fc
- with SMTP id d9443c01a7336-29ec2484bcemr16730975ad.32.1765358052034; Wed, 10
- Dec 2025 01:14:12 -0800 (PST)
-Date: Wed, 10 Dec 2025 17:14:08 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DmW162tb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765362796; x=1796898796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UsUj9GaciPRcxYu/CgXCrlWKO8WaP9unf5EfzHxcuR4=;
+  b=DmW162tbk/0K8Wrqj8mv+rTQVQGkZgSSqSCBOWrbtYgsTobHiNQpsKRv
+   TJTt2qjQGTJYieyLx0zpWec6A9JvUJaI1/X3xNPupunlf2y+xq0viXr1r
+   UnO/VmqmD+Y4qhG20J+DM5FA6567zKQ9qunkpGIrTx+MfgHP2PthrdiUQ
+   C8e9QYJyOlRXDlOeSaoBzfwjvx7k+Dt9QxnQuu0GvfefMc4/fMcFPyvRM
+   zKPsuCBL46eofrjTuVmW8dgGyAcSOjisscZ4EiVzx6tg9LU+cnbiSk+k0
+   sYDNlHdpZOgpqO7CNsCmJxrZg/6VJF8TYoz5Ae4lXcOD0hPdclQoNZlpf
+   g==;
+X-CSE-ConnectionGUID: Otxl9bf5SAeOL/gmN+K/sQ==
+X-CSE-MsgGUID: /+A7M2PVShu6zu+ii0fjkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="67369056"
+X-IronPort-AV: E=Sophos;i="6.20,263,1758610800"; 
+   d="scan'208";a="67369056"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 02:33:10 -0800
+X-CSE-ConnectionGUID: mYpdlAPeTtqFXJ1tQ+N4Mw==
+X-CSE-MsgGUID: P/3vIOoTRM2XfABqfIH5EA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,263,1758610800"; 
+   d="scan'208";a="196540256"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 10 Dec 2025 02:33:08 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vTHVK-0000000035d-0tXD;
+	Wed, 10 Dec 2025 10:33:06 +0000
+Date: Wed, 10 Dec 2025 18:32:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans de Goede <johannes.goede@oss.qualcomm.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bryan O'Donoghue <bod@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hans de Goede <johannes.goede@oss.qualcomm.com>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	linux-media@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 4/5] media: ipu-bridge: Add DMI quirk for Dell XPS
+ laptops with upside down sensors
+Message-ID: <202512101804.4fea2mY1-lkp@intel.com>
+References: <20251209160621.6854-5-johannes.goede@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.52.0.223.gf5cc29aaa4-goog
-Message-ID: <20251210091408.3781445-1-wakel@google.com>
-Subject: [PATCH] selftests/mm: Fix thread state check in uffd-unit-tests
-From: Wake Liu <wakel@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Wake Liu <wakel@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209160621.6854-5-johannes.goede@oss.qualcomm.com>
 
-In the thread_state_get() function, the logic to find the thread's state
-character was using `sizeof(header) - 1` to calculate the offset from
-the "State:\t" string.
+Hi Hans,
 
-The `header` variable is a `const char *` pointer. `sizeof()` on a
-pointer returns the size of the pointer itself, not the length of the
-string literal it points to. This makes the code's behavior dependent
-on the architecture's pointer size.
+kernel test robot noticed the following build errors:
 
-This bug was identified on a 32-bit ARM build (`gsi_tv_arm`) for
-Android, running on an ARMv8-based device, compiled with Clang 19.0.1.
+[auto build test ERROR on linus/master]
+[also build test ERROR on next-20251210]
+[cannot apply to v6.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On this 32-bit architecture, `sizeof(char *)` is 4. The expression
-`sizeof(header) - 1` resulted in an incorrect offset of 3, causing the
-test to read the wrong character from `/proc/[tid]/status` and fail.
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/media-ov02c10-Fix-bayer-pattern-change-after-default-vflip-change/20251210-001230
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20251209160621.6854-5-johannes.goede%40oss.qualcomm.com
+patch subject: [PATCH 4/5] media: ipu-bridge: Add DMI quirk for Dell XPS laptops with upside down sensors
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20251210/202512101804.4fea2mY1-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512101804.4fea2mY1-lkp@intel.com/reproduce)
 
-On 64-bit architectures, `sizeof(char *)` is 8, so the expression
-coincidentally evaluates to 7, which matches the length of "State:\t".
-This is why the bug likely remained hidden on 64-bit builds.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512101804.4fea2mY1-lkp@intel.com/
 
-To fix this and make the code portable and correct across all
-architectures, this patch replaces `sizeof(header) - 1` with
-`strlen(header)`. The `strlen()` function correctly calculates the
-string's length, ensuring the correct offset is always used.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Wake Liu <wakel@google.com>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> drivers/media/pci/intel/ipu-bridge.c:277:16: error: call to undeclared function 'acpi_dev_hid_match'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     277 |         if (dmi_id && acpi_dev_hid_match(adev, dmi_id->driver_data))
+         |                       ^
+   1 error generated.
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index f4807242c5b2..6f5e404a446c 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -1317,7 +1317,7 @@ static thread_state thread_state_get(pid_t tid)
- 		p = strstr(tmp, header);
- 		if (p) {
- 			/* For example, "State:\tD (disk sleep)" */
--			c = *(p + sizeof(header) - 1);
-+			c = *(p + strlen(header));
- 			return c == 'D' ?
- 			    THR_STATE_UNINTERRUPTIBLE : THR_STATE_UNKNOWN;
- 		}
+
+vim +/acpi_dev_hid_match +277 drivers/media/pci/intel/ipu-bridge.c
+
+   270	
+   271	static u32 ipu_bridge_parse_rotation(struct acpi_device *adev,
+   272					     struct ipu_sensor_ssdb *ssdb)
+   273	{
+   274		const struct dmi_system_id *dmi_id;
+   275	
+   276		dmi_id = dmi_first_match(upside_down_sensor_dmi_ids);
+ > 277		if (dmi_id && acpi_dev_hid_match(adev, dmi_id->driver_data))
+   278			return 180;
+   279	
+   280		switch (ssdb->degree) {
+   281		case IPU_SENSOR_ROTATION_NORMAL:
+   282			return 0;
+   283		case IPU_SENSOR_ROTATION_INVERTED:
+   284			return 180;
+   285		default:
+   286			dev_warn(ADEV_DEV(adev),
+   287				 "Unknown rotation %d. Assume 0 degree rotation\n",
+   288				 ssdb->degree);
+   289			return 0;
+   290		}
+   291	}
+   292	
+
 -- 
-2.52.0.223.gf5cc29aaa4-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
