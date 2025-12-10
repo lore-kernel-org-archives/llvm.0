@@ -1,67 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C90223DE7;
-	Wed, 10 Dec 2025 01:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2092459DD;
+	Wed, 10 Dec 2025 01:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765330595; cv=none; b=qKT37zi1j/jEvO+FXj4ORvJyBXeEJuSMt5FSReLXf8YAEaIMudRNHakAp732L/orvlLLV43JTXeeC78zakFxI/dqYLRz62kLPf/tfTlBvfP095A9OI3EzXAF1EmKVDDVDTjzODnY9cFmVQgziYBOVBZiNpggo2F5zQiLH5hn8gM=
+	t=1765331917; cv=none; b=f+4nNzNgnxrMi1LuTsKIPHq/qCJKulbGdOkfJW2/FL0iqWuBFYYeMhjGfPUsOdB11yVBA/ByoZOBYwrQ0iwq/66FzxKO2isHfP+KcgS+V3SXeKhPhPxanYH6FrgxDKMMu+DefGRDTRW8kIyMtoEqxjZ+DLxoS9079rF4DGIJNAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765330595; c=relaxed/simple;
-	bh=uSDeJjyIQS8Egw5OHsCLIaafNV3WCKJ/9T3J2/OTVzw=;
+	s=arc-20240116; t=1765331917; c=relaxed/simple;
+	bh=fCX7xujzSpfm9sIREyOPWYr8OrY/3aRU3D1fSBZfF/Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aTJ9nPGzUJmFYl7V5HDkPS3W4/9EJSva9e+foRKAcfXmCy++0a6RQzSxIDNeHMEim8fgylk/Ye3iwvMGrN0TwJ85EMZfeKTK4uEpgirsEHnL1Vjxl3dCZmwGZyjSCgNFKTii+Wbw30IGNPKpuCOeOJzi1losyMjZk6Osm1oArOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QmLk0fh3; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=RNLdM4HR6BGUGfiRMfJTkdtCxGaF2HrqAzJouK1pCpPYi7CIBQiqGSEyvlHa2LqGAzpL/fHmK7ovfxw3vYHZxb4x9kwxlof2kiKykLcYdSlJTlSvicoLgUnz5wTp40XX0S41iEcIg62kQDuPUmgwBkh4cxCcq4uaDXdHN9vgSnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XoIy2SxT; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QmLk0fh3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XoIy2SxT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765330594; x=1796866594;
+  t=1765331916; x=1796867916;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=uSDeJjyIQS8Egw5OHsCLIaafNV3WCKJ/9T3J2/OTVzw=;
-  b=QmLk0fh3XqNZHZmZ3HBmjEpAS9SXhDfJ48vLgQMiHTgbMblvTeQeb2Yn
-   hNypRKLly4Nr4KLGZPDokHXVU++KU0tljMlnn7sWoiSI7feGwvM6Lc4eY
-   VVcSbOyNZUS4+6n96lyuRQHGiDYcoA7G759F68at7t0T0Ec+9Bt9UCI/e
-   EDku4gczrSX8rfnratckjUjs06JkoUSJJ7J7G7Fqn9B6E6c4UnIVK+dWs
-   i30m4jzitZ7Yhvk4nWPEh8l7mfES2RtY21QpnaZUu0THyIcq4qWiwElAq
-   iZ1nh0sghlzF7DWwkdrWPsgKnbVJdEL50Qh+9Fht/Pu1wbypPviCi1Xpd
+  bh=fCX7xujzSpfm9sIREyOPWYr8OrY/3aRU3D1fSBZfF/Y=;
+  b=XoIy2SxTOknmGmEuzFRc+5axjl/v8veDA12xAKImuQikmwtUUg+8CsLh
+   sYY5yqUyQFX6or7vwYQGJSWuCul+4b4eO6MecNB3yBSPBeBKdkH8c3ND9
+   I+1p9++F6hcQPoDMKTBSXbPNZvnV1dhYuU4tgCKYXy0ILaf18Py8U7fia
+   pZ6Mpx5ITwNIV+CS85CVBKloQ3GL8lcW8jeIBvBuBF5XbjqKsKuP9avIf
+   cDrh3BzD9qDvkrfOp9VQotxApBCGEeIuXCHXXHTudCwlnpM8yX+0VaWCv
+   zLCtva0J+3luBVeIHZ8QNGis1UEdo1UjVDAKm9uWARRxwAQtG/32H7suH
    Q==;
-X-CSE-ConnectionGUID: tRcwACH9Ro6TLoOup6PJvA==
-X-CSE-MsgGUID: jfzjLMqnTnSX4BDMIdKdqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="84711132"
+X-CSE-ConnectionGUID: QXU1qOYdQYSiFqyWXu+zHw==
+X-CSE-MsgGUID: ZAbgOSc3THOAFJppj39D7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="89951052"
 X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="84711132"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 17:36:32 -0800
-X-CSE-ConnectionGUID: cnOgj/h8THab7ux0gRDrTw==
-X-CSE-MsgGUID: TIzBoRUfRaGjipsGCM573A==
+   d="scan'208";a="89951052"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 17:58:35 -0800
+X-CSE-ConnectionGUID: hZMr/NYOTmGfGFh16KbqWA==
+X-CSE-MsgGUID: 4omt8EB4QlyPfxSfYyumXg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="201303729"
+   d="scan'208";a="196371829"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 09 Dec 2025 17:36:27 -0800
+  by orviesa007.jf.intel.com with ESMTP; 09 Dec 2025 17:58:33 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vT97x-000000002Ur-1Se8;
-	Wed, 10 Dec 2025 01:36:25 +0000
-Date: Wed, 10 Dec 2025 09:35:54 +0800
+	id 1vT9TK-000000002Xx-386X;
+	Wed, 10 Dec 2025 01:58:30 +0000
+Date: Wed, 10 Dec 2025 09:58:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen Ridong <chenridong@huaweicloud.com>, hannes@cmpxchg.org,
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
-	muchun.song@linux.dev, akpm@linux-foundation.org,
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com,
-	david@kernel.org, zhengqi.arch@bytedance.com,
-	lorenzo.stoakes@oracle.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cgroups@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, lujialin4@huawei.com,
-	chenridong@huaweicloud.com
-Subject: Re: [PATCH -next 2/2] memcg: remove mem_cgroup_size()
-Message-ID: <202512100939.F1LEdUev-lkp@intel.com>
-References: <20251209130251.1988615-3-chenridong@huaweicloud.com>
+To: Heiko Carstens <hca@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 6/9] s390/bug: Implement __WARN_printf()
+Message-ID: <202512100917.tlpUz0UA-lkp@intel.com>
+References: <20251209121701.1856271-7-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,104 +66,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251209130251.1988615-3-chenridong@huaweicloud.com>
+In-Reply-To: <20251209121701.1856271-7-hca@linux.ibm.com>
 
-Hi Chen,
+All warnings (new ones prefixed by >>):
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20251209]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Ridong/memcg-move-mem_cgroup_usage-memcontrol-v1-c/20251209-211854
-base:   next-20251209
-patch link:    https://lore.kernel.org/r/20251209130251.1988615-3-chenridong%40huaweicloud.com
-patch subject: [PATCH -next 2/2] memcg: remove mem_cgroup_size()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251210/202512100939.F1LEdUev-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512100939.F1LEdUev-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512100939.F1LEdUev-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/vmscan.c:2488:49: error: incomplete definition of type 'struct mem_cgroup'
-    2488 |                 unsigned long usage = page_counter_read(&memcg->memory);
-         |                                                          ~~~~~^
-   include/linux/mm_types.h:36:8: note: forward declaration of 'struct mem_cgroup'
-      36 | struct mem_cgroup;
-         |        ^
-   1 error generated.
+>> lib/bug.c:187:22: warning: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '__warn_printf' [-Wmissing-format-attribute]
+     176 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
+         | __attribute__((format(printf, 1, 0))) 
+     177 | {
+     178 |         if (!fmt)
+     179 |                 return;
+     180 | 
+     181 | #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
+     182 |         if (regs) {
+     183 |                 struct arch_va_list _args;
+     184 |                 va_list *args = __warn_args(&_args, regs);
+     185 | 
+     186 |                 if (args) {
+     187 |                         vprintk(fmt, *args);
+         |                                           ^
+   lib/bug.c:176:13: note: '__warn_printf' declared here
+     176 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
+         |             ^
+   1 warning generated.
 
 
-vim +2488 mm/vmscan.c
+vim +187 lib/bug.c
 
-  2450	
-  2451	static unsigned long apply_proportional_protection(struct mem_cgroup *memcg,
-  2452			struct scan_control *sc, unsigned long scan)
-  2453	{
-  2454		unsigned long min, low;
-  2455	
-  2456		mem_cgroup_protection(sc->target_mem_cgroup, memcg, &min, &low);
-  2457	
-  2458		if (min || low) {
-  2459			/*
-  2460			 * Scale a cgroup's reclaim pressure by proportioning
-  2461			 * its current usage to its memory.low or memory.min
-  2462			 * setting.
-  2463			 *
-  2464			 * This is important, as otherwise scanning aggression
-  2465			 * becomes extremely binary -- from nothing as we
-  2466			 * approach the memory protection threshold, to totally
-  2467			 * nominal as we exceed it.  This results in requiring
-  2468			 * setting extremely liberal protection thresholds. It
-  2469			 * also means we simply get no protection at all if we
-  2470			 * set it too low, which is not ideal.
-  2471			 *
-  2472			 * If there is any protection in place, we reduce scan
-  2473			 * pressure by how much of the total memory used is
-  2474			 * within protection thresholds.
-  2475			 *
-  2476			 * There is one special case: in the first reclaim pass,
-  2477			 * we skip over all groups that are within their low
-  2478			 * protection. If that fails to reclaim enough pages to
-  2479			 * satisfy the reclaim goal, we come back and override
-  2480			 * the best-effort low protection. However, we still
-  2481			 * ideally want to honor how well-behaved groups are in
-  2482			 * that case instead of simply punishing them all
-  2483			 * equally. As such, we reclaim them based on how much
-  2484			 * memory they are using, reducing the scan pressure
-  2485			 * again by how much of the total memory used is under
-  2486			 * hard protection.
-  2487			 */
-> 2488			unsigned long usage = page_counter_read(&memcg->memory);
-  2489			unsigned long protection;
-  2490	
-  2491			/* memory.low scaling, make sure we retry before OOM */
-  2492			if (!sc->memcg_low_reclaim && low > min) {
-  2493				protection = low;
-  2494				sc->memcg_low_skipped = 1;
-  2495			} else {
-  2496				protection = min;
-  2497			}
-  2498	
-  2499			/* Avoid TOCTOU with earlier protection check */
-  2500			usage = max(usage, protection);
-  2501	
-  2502			scan -= scan * protection / (usage + 1);
-  2503	
-  2504			/*
-  2505			 * Minimally target SWAP_CLUSTER_MAX pages to keep
-  2506			 * reclaim moving forwards, avoiding decrementing
-  2507			 * sc->priority further than desirable.
-  2508			 */
-  2509			scan = max(scan, SWAP_CLUSTER_MAX);
-  2510		}
-  2511		return scan;
-  2512	}
-  2513	
+7664c5a1da4711b Jeremy Fitzhardinge 2006-12-08  175  
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  176  static void __warn_printf(const char *fmt, struct pt_regs *regs)
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  177  {
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  178  	if (!fmt)
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  179  		return;
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  180  
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  181  #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  182  	if (regs) {
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  183  		struct arch_va_list _args;
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  184  		va_list *args = __warn_args(&_args, regs);
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  185  
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  186  		if (args) {
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07 @187  			vprintk(fmt, *args);
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  188  			return;
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  189  		}
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  190  	}
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  191  #endif
+5c47b7f3d1a9d75 Peter Zijlstra      2025-06-07  192  
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  193  	printk("%s", fmt);
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  194  }
+d292dbb5640c5b7 Peter Zijlstra      2025-06-02  195  
 
 -- 
 0-DAY CI Kernel Test Service
