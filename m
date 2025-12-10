@@ -1,161 +1,188 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853072EB5C4
-	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 19:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113B72C15BC
+	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 21:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765396313; cv=none; b=gL2Jks8Zw6Q6AENasXJ3WDgmVLfoLRYH0Kiy2ijhTU6AjtMgAXYoBAH0hKGFpesHI0s3sDby7IdanJUN5sUIMb2Joe1QnyilsI8QyWSGg2JbUb4oGB01fjJ8wRTkxEckEIM03zUnH+1n73pomaaTPRc9NLRpeFNhYj9EG2EW7nA=
+	t=1765403452; cv=none; b=fLMWGUnFlm/uk0/GKH0aqUTUJdFhPQtZRzqi38XHA6OYO3/ErJS6uidpkhfjb4p7GCNyXMP1m16vRUjmlk7UFhlNp51ziUh1qw6Xi6C2RoY6y9/uTVAGiMWohkJglEmmPSzZnMQw93EsovvFa+FiZYhzJobX6Ep7uLk7v+yW/r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765396313; c=relaxed/simple;
-	bh=bVuknIZ9II+t7Y3vHavpbYMhqsjqBVWHocKRkXQCVXU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=UxVZpQ/mmDRtkBBXbfSQzTYeCKE7UznKsavuLI5gp0KMBtNY1TbG9gkKStfGLkonZLBOOvYb66r/IJBFCw1jJKr9uCce4xD3EsrIjqkDcn7GJ9Y9nVqh4GFhz256z5B4gK3X9RMdMdo/EZXUxN72Jt3FCg0cHFpOy8t0x63vjzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h16+2q/a; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1765403452; c=relaxed/simple;
+	bh=eg7NOYB72vuAjlC7Jtq7lDutOvbdb3fL5OXCKTdJXIM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u86Q9LzJzePATLfJ0mnj3i9EvjD+VIcO6FJOlNAADmW/1PgqwIexmwHv/w+ca9kfUxUFGND4HIZh3ftyoxz+UOvlWpBz0z4gPv21syUl35721l7tTgWck4bZghF2f5UmMMEU58exeko5Y2varfdL8whbCGXwaIRURRpih02jxCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bJVqYnlf; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h16+2q/a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765396310;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AgTacFvON8EG6QFjOtITInXZzOpTjY+dV5wDUO7hRQw=;
-	b=h16+2q/axxfiaSH9cAj6FVOs9WU1hvhs9e8PdAsWgNq2wIWQziyMEqqUTTVCKYdpz4iNzw
-	RmaXRxVaMN0CA/gSqHmghfwHeuG/cuNkwWN2Es8h//05YWk3j7ALqSENE/ibVMmMdc/mbI
-	eDB/u/VGTwTiqH4EJbtnJhbi9TIEZVA=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-444-DUrl4OUxPVKrPgln_yIMkQ-1; Wed, 10 Dec 2025 14:51:49 -0500
-X-MC-Unique: DUrl4OUxPVKrPgln_yIMkQ-1
-X-Mimecast-MFC-AGG-ID: DUrl4OUxPVKrPgln_yIMkQ_1765396309
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8b6963d163eso50011485a.3
-        for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 11:51:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bJVqYnlf"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7bab7c997eeso333581b3a.0
+        for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 13:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1765403449; x=1766008249; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KCsZw6r2H+GxT2oqUVKFZFncfDO2e0BQEMkV3Qsj/LU=;
+        b=bJVqYnlf8ZbcZKYBgBaHUe8iasn1UHd9NCBWAcGYjCkCTXTXNdphEEkx9+TlY8MRT2
+         5GFpvXAs/EGgTaQwKFo8EYRZI+H6ZeB+NqAEllp92NN3UAhtE/2IyLiam4j8wchns3pM
+         0+YkRZjzkMW0ssIWIqBq6ycifnC6bwWnVyXRTihjcHw2vbx00gvSdnTC8xFmwOJU1EZu
+         YJVhjEea8V9dkWumph3mZBYU4ZeOnSQIu8RBwa1sY4BjYS/UTgVAlUAc334lUG+mePK8
+         tBkwcM4nDwp6q87SvwZcfCAZCVFqkxIKCncprIvZ3KJBgdp3XLeGriOPtJDIwN9Pa0Jf
+         V9vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765396309; x=1766001109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AgTacFvON8EG6QFjOtITInXZzOpTjY+dV5wDUO7hRQw=;
-        b=n53trCnw1xUNpx/OlVwdRmDT/ZKeTYcuYfb1LVHekpMI8v1Zv7lntGEOC7hn31BPae
-         irVekqfnO59PoKH/JW1AyscYrGJVbwaXO5oyu8kqQitOdmWaSaebgYZ2FbPfoVUy9Lmd
-         ErLA8ODb7PSMqhn/kk2UxxWOA4Pou8rLTlhICy1GyNxZJHP8nGPyEfa8VMFBk9l0aDTV
-         pLlXXV+hmvllZRx+HD8LMheGrkpUFG8pRdQaTDwn3tx4+RHh0JVgrEud3H8Tu5IT6Xi9
-         LJvOXGE5xYpQ/rF7wQdk7WK9QZdIgC9/eAwdyyB+kkm+QmD3RAATjrOg1rIWDS9bUh8x
-         G/7g==
-X-Forwarded-Encrypted: i=1; AJvYcCVg61BOjnNZfag1leTqCOIr8REjQdH628ks6bHcIBHolYNWrOqC7eX4AvVeHtF5tdIPTtJC@lists.linux.dev
-X-Gm-Message-State: AOJu0YzoDnNGCqSro8wI4Bh2b5Ljx6SdjdZXouh97p1QWNvZnL2qJRSw
-	C3YtsUFzWhOKi0zNm01aRwlG6qVA7WZUFOigv6a+y2Eo2UPi+p2RvpKClxmBsQghXDXSjy0AnJ4
-	GaGRcFe9psrZTkKbn140weo6wTbSMTEpdYBYSEQ4jVMLJtKErF8cqb1Q=
-X-Gm-Gg: ASbGncvveF74BwJ3wzmdYpW0ELHWzcVGykuxUWathoqqg2Os8CweOXLfnMCpd8YEq2X
-	afLoNKZQEoQiF4xBzm+jM36qNuYOYPsSFus99Ag+ktgRRnuYMxMdg72JewscoCYjfkaUvYboysb
-	ANXUOUU6UFp6dqo/EDITr2ZhBSPWUYKOVmUAwevRWPOvSJyRAMaWY0wCPFVpMJRvJvm2e/gf8ik
-	9B6eHcHO9dxWp49K3e/TvlcuGSFKM6dMgqNekEc7TvvCZ7QcVtfY7Z2dRj/S/NpiXnOA/39cwy8
-	bLnksXfgvXJOO6GlMfHMlpjWusJOYM0eI/UkEEp6MQz7+zUpE7WqBe5ra0ifCL9gcFd30pqDUcS
-	t+C8=
-X-Received: by 2002:a05:620a:298e:b0:8b2:faa3:4c77 with SMTP id af79cd13be357-8ba38319803mr555740185a.0.1765396308663;
-        Wed, 10 Dec 2025 11:51:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE8yx8A+CBHx6Z8LCFOIAJuCthOtds6H4ec7oH3JAGsNI6sRNuSA+X8f8s93mX3FffFUDJBGw==
-X-Received: by 2002:a05:620a:298e:b0:8b2:faa3:4c77 with SMTP id af79cd13be357-8ba38319803mr555734385a.0.1765396308095;
-        Wed, 10 Dec 2025 11:51:48 -0800 (PST)
-Received: from x1.local ([142.188.210.156])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8886ef16adcsm4356536d6.46.2025.12.10.11.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Dec 2025 11:51:47 -0800 (PST)
-Date: Wed, 10 Dec 2025 14:51:46 -0500
-From: Peter Xu <peterx@redhat.com>
-To: Wake Liu <wakel@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/mm: Fix thread state check in uffd-unit-tests
-Message-ID: <aTnPUmEMwymsWHyV@x1.local>
-References: <20251210091408.3781445-1-wakel@google.com>
+        d=1e100.net; s=20230601; t=1765403449; x=1766008249;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KCsZw6r2H+GxT2oqUVKFZFncfDO2e0BQEMkV3Qsj/LU=;
+        b=stdv+A+0QuNm59IXLFmHwVPyBgfhjAGSSRzXQ8g01EakAXjPAmfpaqNW64YVMH1diw
+         HOVO50iLrucz9N2KJ/tguWDGlfapVPtiY7sVJPLK6WkbGRQJnOJzHpJ7xftSO5uFx/HH
+         7f38535PSSXfbIdqj3UTFjslNYJIXEn+9uyTaOFVyiEyLHBqMTnwp14C7wTInhyqJvkT
+         jrZs0xGN95E616ai+LlFj0JWTSadQPR9nyQeLt7cP1gQU2B/DR32Gp0nicQ9XU8XFhqw
+         CHno3sUlR1edbppM5ZClQGI9c+ZbiqUTMdQN7aKvbmRtSyrdKyiXKyUYeVFYUotFTRke
+         Za7g==
+X-Forwarded-Encrypted: i=1; AJvYcCVzdeMv3mDM7IrAAJ1OqP5PQDsWx6PPJeXCAfWCw5lfj9AKZ2Q9BL035GQC6IgaAOSbiCg8@lists.linux.dev
+X-Gm-Message-State: AOJu0YzA1/t5i7komhaB44GgXm6hBcwfXQzk+9Be1a+ci9YLqMSel5nC
+	AhejvyyFlOIKJbYnwcl2u8J2xx0J1Am7EsRc5vRpfTB9ty99IdGuzMd/1YmvVk+hBPtE0TR+cFm
+	MkTaXKUsr+6CAZ60qGiO7CzQFSf1YKS01wzz+s55f
+X-Gm-Gg: ASbGnct8pgy5gc6PfFl62RJCKhXjOMVr7nHlKvdbtb+knclw2eWxoQvBmCz6/jrtuWE
+	R39NJraNcpMxuB/nDnSGfWLikk8It5Jj5qGwjNlGvwFEvREp8JKCtZIcPHjaos/gUKd56t2uUef
+	+zmUWxIEp5bT8guhWyVq6xtPaWMSGRLLQ4wWdY+vZuOjuvcZO95p7JQqcmoAMyd+CGL0AtRhMUa
+	tH/zbQQ5QnWgfclqCm/Fc8LwZA8xmnTz5sKHjqxx1F6lPNLRLOlKch/ehsPusxX3uxeQeISvIc0
+	hwfGO3t6L6obsDbyZXzgVgK6zZQ=
+X-Google-Smtp-Source: AGHT+IHcqqK/RTKOSxZWEANFuU3c8u73aLDpG+WRToaBe7OD17Ln70WBODyf5Ae5mb8izrjo+C8lI0krQmOvZa0lPLM=
+X-Received: by 2002:a05:7022:b9c:b0:11e:1bc:bd9c with SMTP id
+ a92af1059eb24-11f296cbd83mr2505193c88.28.1765403448696; Wed, 10 Dec 2025
+ 13:50:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20251210091408.3781445-1-wakel@google.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 2NtwA9PRoMV6rO6iSPPruVQ3mVlebXw3rYt3Bdh3pN8_1765396309
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
+ <20251120151033.3840508-15-elver@google.com> <98453e19-7df2-43cb-8f05-87632f360028@paulmck-laptop>
+In-Reply-To: <98453e19-7df2-43cb-8f05-87632f360028@paulmck-laptop>
+From: Marco Elver <elver@google.com>
+Date: Wed, 10 Dec 2025 22:50:11 +0100
+X-Gm-Features: AQt7F2rgWALnmd_GDAhG6zPIDGFcnPDoNGOr0zzF94TJ0iWpe4L1lGnI4olCNso
+Message-ID: <CANpmjNNsR_+Mx=H6+4zxJHwpRuM7vKUakS8X+edBD521=w4y_g@mail.gmail.com>
+Subject: Re: [PATCH v4 14/35] rcu: Support Clang's context analysis
+To: paulmck@kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Chris Li <sparse@chrisli.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>, 
+	Eric Dumazet <edumazet@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Johannes Berg <johannes.berg@intel.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Dec 10, 2025 at 05:14:08PM +0800, Wake Liu wrote:
-> In the thread_state_get() function, the logic to find the thread's state
-> character was using `sizeof(header) - 1` to calculate the offset from
-> the "State:\t" string.
-> 
-> The `header` variable is a `const char *` pointer. `sizeof()` on a
-> pointer returns the size of the pointer itself, not the length of the
-> string literal it points to. This makes the code's behavior dependent
-> on the architecture's pointer size.
-> 
-> This bug was identified on a 32-bit ARM build (`gsi_tv_arm`) for
-> Android, running on an ARMv8-based device, compiled with Clang 19.0.1.
-> 
-> On this 32-bit architecture, `sizeof(char *)` is 4. The expression
-> `sizeof(header) - 1` resulted in an incorrect offset of 3, causing the
-> test to read the wrong character from `/proc/[tid]/status` and fail.
-> 
-> On 64-bit architectures, `sizeof(char *)` is 8, so the expression
-> coincidentally evaluates to 7, which matches the length of "State:\t".
-> This is why the bug likely remained hidden on 64-bit builds.
-> 
-> To fix this and make the code portable and correct across all
-> architectures, this patch replaces `sizeof(header) - 1` with
-> `strlen(header)`. The `strlen()` function correctly calculates the
-> string's length, ensuring the correct offset is always used.
-> 
-> Signed-off-by: Wake Liu <wakel@google.com>
+On Wed, 10 Dec 2025 at 20:30, Paul E. McKenney <paulmck@kernel.org> wrote:
+> On Thu, Nov 20, 2025 at 04:09:39PM +0100, Marco Elver wrote:
+> > Improve the existing annotations to properly support Clang's context
+> > analysis.
+> >
+> > The old annotations distinguished between RCU, RCU_BH, and RCU_SCHED;
+> > however, to more easily be able to express that "hold the RCU read lock"
+> > without caring if the normal, _bh(), or _sched() variant was used we'd
+> > have to remove the distinction of the latter variants: change the _bh()
+> > and _sched() variants to also acquire "RCU".
+> >
+> > When (and if) we introduce context guards to denote more generally that
+> > "IRQ", "BH", "PREEMPT" contexts are disabled, it would make sense to
+> > acquire these instead of RCU_BH and RCU_SCHED respectively.
 
-Oops, thanks for spotting it.  It was an accident the size of array is 8
-here.. What I should have meant was:
+ ^
 
-	const char header[] = "State:\t";
+> > The above change also simplified introducing __guarded_by support, where
+> > only the "RCU" context guard needs to be held: introduce __rcu_guarded,
+> > where Clang's context analysis warns if a pointer is dereferenced
+> > without any of the RCU locks held, or updated without the appropriate
+> > helpers.
+> >
+> > The primitives rcu_assign_pointer() and friends are wrapped with
+> > context_unsafe(), which enforces using them to update RCU-protected
+> > pointers marked with __rcu_guarded.
+> >
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Good reminder!  I had lost track of this series.
+>
+> My big questions here are:
+>
+> o       What about RCU readers using (say) preempt_disable() instead
+>         of rcu_read_lock_sched()?
 
-That should also work with sizeof().  But your fix works, so it's all fine.
+The infrastructure that is being built up in this series will be able
+to support this, it's "just" a matter of enhancing our various
+interfaces/macros to use the right annotations, and working out which
+kinds of contexts we want to support. There are the obvious
+candidates, which this series is being applied to, as a starting
+point, but longer-term there are other kinds of context rules that can
+be checked with this context analysis. However, I think we have to
+start somewhere.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+> o       What about RCU readers using local_bh_disable() instead of
+>         rcu_read_lock_sched()?
+
+Same as above; this requires adding the necessary annotations to the
+BH-disabling/enabling primitives.
+
+> And keeping in mind that such readers might start in assembly language.
+
+We can handle this by annotating the C functions invoked from assembly
+with attributes like  __must_hold_shared(RCU) or
+__releases_shared(RCU) (if the callee is expected to release the RCU
+read lock / re-enable preemption / etc.) or similar.
+
+> One reasonable approach is to require such readers to use something like
+> rcu_dereference_all() or rcu_dereference_all_check(), which could then
+> have special dispensation to instead rely on run-time checks.
+
+Agree. The current infrastructure encourages run-time checks where the
+static analysis cannot be helped sufficiently otherwise (see patch:
+"lockdep: Annotate lockdep assertions for context analysis").
+
+> Another more powerful approach would be to make this facility also
+> track preemption, interrupt, NMI, and BH contexts.
+>
+> Either way could be a significant improvement over what we have now.
+>
+> Thoughts?
+
+The current infrastructure is powerful enough to allow for tracking
+more contexts, such as interrupt, NMI, and BH contexts, and as I
+hinted above, would be nice to eventually get to!  But I think this is
+also a question of how much do we want to front-load for this to be
+useful, and what should incrementally be enhanced while the baseline
+infrastructure is already available.
+
+I think the current series is the baseline required support to be
+useful to a large fraction of "normal" code in the kernel.
+
+On a whole, my strategy was to get to a point where maintainers and
+developers can start using context analysis where appropriate, but at
+the same time build up and incrementally add more supported contexts
+in parallel. There's also a good chance that, once baseline support
+lands, more interested parties contribute and things progress faster
+(or so I'd hope :-)).
 
 Thanks,
-
-> ---
->  tools/testing/selftests/mm/uffd-unit-tests.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index f4807242c5b2..6f5e404a446c 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -1317,7 +1317,7 @@ static thread_state thread_state_get(pid_t tid)
->  		p = strstr(tmp, header);
->  		if (p) {
->  			/* For example, "State:\tD (disk sleep)" */
-> -			c = *(p + sizeof(header) - 1);
-> +			c = *(p + strlen(header));
->  			return c == 'D' ?
->  			    THR_STATE_UNINTERRUPTIBLE : THR_STATE_UNKNOWN;
->  		}
-> -- 
-> 2.52.0.223.gf5cc29aaa4-goog
-> 
-
--- 
-Peter Xu
-
+-- Marco
