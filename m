@@ -1,132 +1,118 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A332D9EC9
-	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 07:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2FF221299
+	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 09:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765353235; cv=none; b=K/4Ql1KGu8cILao1ioByZoQWIfSsLLNtqi8lXYndy4sRcOgAw0kp1TIAgKF8AviHkzsl4zmCM5QsKiqowZfi5hGOoZ1oPx4zaXtTeoR9622cgIMZJsWtM4QzEah8MxaKxvZ206/ehqHRMkgi46oBIk7t8NRtX21n3Ho+D71nsRw=
+	t=1765358054; cv=none; b=R42XoKJsIuZjDpEMY8rJy5wA+AcP8yqhg+yNNdHF3vM/PwaYF/qZya+XDke1gsE/dRdKTiJRqYQsvWKIOznnrIL4RuNu0oohNB74if9nJJU3F1zDzgVa6/7K0MMrxksrK7BFXTFlv3SZkT+eMDDJ/rjA9Po2BWaFsQOsS4otKMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765353235; c=relaxed/simple;
-	bh=D/+seJG//nC/P4iPB6ZizEmDXJnST4bMlgf1OqxUW98=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HQRAy1Dy4nk28yAcJdgl2Mku7tpvSpDUUI2KeIb0F23JP4rMPfJHczWP3jdVDEBkjTLQF7rxPXQ/Ouecu/nKHex3oHFwMP1SvJIrGuMiZVSd1VebnKZ/+AzbhsUrYCOWJusFOgGSMN+39gL+cyMO9DdGln9f7hXuzD5ugyTfgI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r+KmwjZE; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1765358054; c=relaxed/simple;
+	bh=qA8etQBYMVx7IE9HjB0d2PDyzFeEHh6dA5fDZxxGkug=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=r/Lo737ZaqtQ9czFBHfRPyou5ma00CkOuM/Rp4xbA/CRtv1gF0d1shVJZbcwtkOujR53fclXtcI69nFhBrxuS8nry79zeuNjcsPYUo+slLnLcZBQDKa7DDnQ7GviDIOAGg3dvg5uu7R2d+5BGVfazVG4NRJTmwwb8Mu7uVzEGCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JDVY/ks4; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r+KmwjZE"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-477632d9326so43700925e9.1
-        for <llvm@lists.linux.dev>; Tue, 09 Dec 2025 23:53:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JDVY/ks4"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29809acd049so148158595ad.3
+        for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 01:14:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765353231; x=1765958031; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAfe5xpVHnGY2Zbu61+EcStytc/6fH+jNqtQ9R31Tiw=;
-        b=r+KmwjZEnNPNl5W+TLqSOATvJioukPq2Mb83UMoh6YcmRKdmgsvTiNj6yqE80YHJqX
-         7FJvKW/f8T7AcZRdcJlwQNOGwVGCoEy7I9DqBeBfrsN+nNoc2l28neL3G8d/8e6VHznt
-         A4/DHSxSxhmfVVzuglb6DJ1lJ6scCXZEVEGpnqTacWL0uC3J/DhneXBKZ5bTILUEBj2D
-         u1magg4HseKJTnF1Mkm5//tI4tCjc77EpBJmV0QfrUqPiX9FhW9Im3tSMs47rZnr7+KS
-         i7PxfjeJDA5XKinXrEfbn14PB7I8Kd6CAUKP92nx34PcmxJNS7zvsYdUched+P8hhucw
-         OO+A==
+        d=google.com; s=20230601; t=1765358052; x=1765962852; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gJ+diNdvdoAjNwW4/UoG9jb3p4kgQF7Wid7xBQKDtGQ=;
+        b=JDVY/ks4o4akJXKyXf4mMaeabL3PXxqvpQM4hTQ4mWAsbu+KIkdRLsbTIj0DJ6FnZa
+         gmKi6254BW4ax5Udk151dcQUklH2Q8RwZi/j8x6aahkxPDfeeRWS6p8qHyFzl78e4pAp
+         +PUfZ0FQn2vitd3P2zAMrwhr/bCHU238u3UWsp+O2lcL9T4HpKNiEEMgvjhRkOQ5y9hh
+         V+611bTnHELGRNIbu1gc2KaE+3xlnySgsKuz9D/woFcYZOKh/OxFUeuIRY0frnjQKiZ5
+         Gp3o3vwZfi82Dd5QaabXpZ1vdSEdRwgwXFbjHbTM+jrNQrj8wRexnw5MD+GBZdAFtfrS
+         KFIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765353231; x=1765958031;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FAfe5xpVHnGY2Zbu61+EcStytc/6fH+jNqtQ9R31Tiw=;
-        b=PhjoJCyAqJ9LpM1T5uNdSTFE0U7nq3N56mYU/0Rq84QeX4+C9DGkhuf6IYcMjlNUJ4
-         TfR4Di+cw1QTcumTbL9sD5HihMWuUixvoK1ZnSfWmh0uy1HGXTvSwzEd0kYqt7j5kUYe
-         jfWun6M0lgQDancmDoJp7AKaw+nWmcM8ijqSdJ9/EGVvNqGxBH6GBOm7Z5V5Zyt959Vn
-         ouKLJCH0Wyqh+CGYXv6ELp+XgJL323vqtKE9wDd8eJngPCHxvmxPfyG3uKr2Dhax3EKP
-         Qg9um08EZNL+H+Vml3LvS+fy252vQxzsnVEn4AlSBVtGwYz6Ipqleb+m3ABhnBCBvcbh
-         opMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUcEpxP6nnn4Hd3rdQnqGcaxb79sho8OW/acverBWjUevOplgD8u2X6EnRe5flGN4pHkMQN@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx4lvYLv3Dh9vvmQg4MhUg5W3cqDs7YlFrGTISEjPyxatso8XTs
-	665x8NZNs6O2Ox7/zYSX+zn44voQ7MFtG4xu04je+r2z8MclJqeZHFXJ73hXHoSRtHA=
-X-Gm-Gg: ASbGncsexzUVIvicw+O/jehxSc09rLdaKWtO9eHUfo0gWORItXClMkjiIar/Sr+W7HR
-	WIxgeYmMI6bYN2D3Gr30rKv9X/p3Vn+2+LS7VIc+4fLTpud6RT0uYFqCQnNw0XsK711A0iDgc9x
-	r//2Ta1FtBHXQM8yBtwJphf7OJ0tJdsTcut+1Y5a74OeJVLf4QIms1s2g1MXfImulYmVzmqX5Zh
-	z8umHKQtaRD5jrRzwuYuCy2Wmu0ULJWdUVd4qzhzTuBmjVJgmYNPoiTNvOII0OUBd9rDJPZgIPI
-	DJtWi+hTaZQ3ttnOuqJ51mlrYoPRVO00seR3AEDSA8BTiQnPcr1yPHDT9YJgajnT8zIEfkCbJDT
-	OorfRvzGRZouuSGYQH3LEbi6f2iijreTQez0VOBu4QwPYYEUE0LZalhHppgtlEUaxWMnP5bvOkB
-	8Wc7K4HLI673UV8+5w
-X-Google-Smtp-Source: AGHT+IFAxc9+MiZJUAUnbNcL1F+kG7TAkmzsOeTPbtUzhYDn8Z09MPKEdiLthnyruYWc8ighlEwehQ==
-X-Received: by 2002:a05:600c:1c8e:b0:46f:b327:ecfb with SMTP id 5b1f17b1804b1-47a83814448mr11849975e9.9.1765353231153;
-        Tue, 09 Dec 2025 23:53:51 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a82d5239asm30321475e9.15.2025.12.09.23.53.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 23:53:49 -0800 (PST)
-Date: Wed, 10 Dec 2025 10:53:45 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-hardening@vger.kernel.org,
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
-	llvm@lists.linux.dev
-Subject: Re: [bug report] clk: visconti: Add support common clock driver and
- reset driver
-Message-ID: <aTknCZRscyltxAri@stanley.mountain>
-References: <aTgetqy8BGerPGTl@stanley.mountain>
- <20251210073611.GC1147766@ax162>
+        d=1e100.net; s=20230601; t=1765358052; x=1765962852;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gJ+diNdvdoAjNwW4/UoG9jb3p4kgQF7Wid7xBQKDtGQ=;
+        b=dxzwwQ5D5dN7IJ+2PapJsOq4+GRHT8i+CJAg8a/sMqtsqHtN2xL3PXOLus5qiNUvde
+         pxXHpTVT44OlLKRkxS/DkyFWZier+9YRxssANwNl6ZAqZj56jX8ay8GSJW6xL58l+p8t
+         r4ywTxdqeCP4fQ5i7c++CQlyjJyCwecY/6dpq0sk46n+MsR1C9dV1jLYbDBKiOT+2p74
+         AgWbIQ2ah4HJe4OXvT+OipKdxjeF1I1yw0DGOF6WyAJKD4F5GqyU2Qt3Ieeh3xV0t97u
+         AEJ2QW0LatgF6r4fnAWkMMceeIPNvAnL/YFduvP7xvFEMtlm5bdpPWhMgyLEQjjT8tBg
+         g+jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUhsYLRERs3zQHb1vRyxVDh1Q5WnJHUl2KHt39ovApBSiqjUWzna7eDKIOnLVa4LY/qrAf+@lists.linux.dev
+X-Gm-Message-State: AOJu0YwBRyC8VSiYc+wAyP1dKkH2EfaoofXeP/eKZbXsEkAbaDbWCnhz
+	EB+oCMbg53seSNnufU87lp5XfZ//81wN5FbdI1li4EQjXwaO9uHZhCo7zLCAmVz6zRvpimdNogO
+	ZfQ==
+X-Google-Smtp-Source: AGHT+IEu6z3l2QX6KuLU3Q6OFfDJ0FX6A27zVmwG9FygHINtFnYd4ff1NV1/k8xr34jkmCShD9fTkvGN/A==
+X-Received: from plij11.prod.google.com ([2002:a17:903:380b:b0:290:28e2:ce65])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d482:b0:295:4d97:84fc
+ with SMTP id d9443c01a7336-29ec2484bcemr16730975ad.32.1765358052034; Wed, 10
+ Dec 2025 01:14:12 -0800 (PST)
+Date: Wed, 10 Dec 2025 17:14:08 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251210073611.GC1147766@ax162>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.223.gf5cc29aaa4-goog
+Message-ID: <20251210091408.3781445-1-wakel@google.com>
+Subject: [PATCH] selftests/mm: Fix thread state check in uffd-unit-tests
+From: Wake Liu <wakel@google.com>
+To: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Wake Liu <wakel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Dec 10, 2025 at 04:36:11PM +0900, Nathan Chancellor wrote:
-> Hey Dan,
-> 
-> On Tue, Dec 09, 2025 at 04:05:58PM +0300, Dan Carpenter wrote:
-> > Hello Kernel Hardenning developers,
-> > 
-> > Commit b4cbe606dc36 ("clk: visconti: Add support common clock driver
-> > and reset driver") from Oct 25, 2021 (linux-next), leads to the
-> > question:
-> > 
-> > drivers/clk/visconti/clkc.c
-> >     187 struct visconti_clk_provider *visconti_init_clk(struct device *dev,
-> >     188                                                 struct regmap *regmap,
-> >     189                                                 unsigned long nr_clks)
-> >     190 {
-> >     191         struct visconti_clk_provider *ctx;
-> >     192         int i;
-> >     193 
-> >     194         ctx = devm_kzalloc(dev, struct_size(ctx, clk_data.hws, nr_clks), GFP_KERNEL);
-> >     195         if (!ctx)
-> >     196                 return ERR_PTR(-ENOMEM);
-> >     197 
-> >     198         for (i = 0; i < nr_clks; ++i)
-> > --> 199                 ctx->clk_data.hws[i] = ERR_PTR(-ENOENT);
-> >     200         ctx->clk_data.num = nr_clks;
-> > 
-> > ctx->clk_data.hws[] is __counted_by() ctx->clk_data.num.  Don't we have to
-> > set the .num before we fill initialize the array?  Or does the checker
-> 
-> Yes, it looks like line 200 needs to be moved above line 198.
-> 
-> > code allow us to access the array when the counted by variable is zero?
-> 
-> Nope, I just had to fix an instance where num is one and hws[0] is being
-> accessed:
-> 
->   https://lore.kernel.org/20251124-exynos-clkout-fix-ubsan-bounds-error-v1-1-224a5282514b@kernel.org/
-> 
-> I suspect there will eventually be a report on real hardware when
-> CONFIG_UBSAN_BOUNDS is enabled and GCC 15 is used to build the running
-> kernel, which is the first version that supports __counted_by(). How did
-> you find this? A new smatch check?
+In the thread_state_get() function, the logic to find the thread's state
+character was using `sizeof(header) - 1` to calculate the offset from
+the "State:\t" string.
 
-Yeah, but it was a bug in my check.  I need to add __counted_by()
-support to Sparse.  If I had that, it would easy enough to add a
-warning for places which access the array before setting the counted
-by variable.
+The `header` variable is a `const char *` pointer. `sizeof()` on a
+pointer returns the size of the pointer itself, not the length of the
+string literal it points to. This makes the code's behavior dependent
+on the architecture's pointer size.
 
-regards,
-carpenter
+This bug was identified on a 32-bit ARM build (`gsi_tv_arm`) for
+Android, running on an ARMv8-based device, compiled with Clang 19.0.1.
+
+On this 32-bit architecture, `sizeof(char *)` is 4. The expression
+`sizeof(header) - 1` resulted in an incorrect offset of 3, causing the
+test to read the wrong character from `/proc/[tid]/status` and fail.
+
+On 64-bit architectures, `sizeof(char *)` is 8, so the expression
+coincidentally evaluates to 7, which matches the length of "State:\t".
+This is why the bug likely remained hidden on 64-bit builds.
+
+To fix this and make the code portable and correct across all
+architectures, this patch replaces `sizeof(header) - 1` with
+`strlen(header)`. The `strlen()` function correctly calculates the
+string's length, ensuring the correct offset is always used.
+
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/mm/uffd-unit-tests.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index f4807242c5b2..6f5e404a446c 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -1317,7 +1317,7 @@ static thread_state thread_state_get(pid_t tid)
+ 		p = strstr(tmp, header);
+ 		if (p) {
+ 			/* For example, "State:\tD (disk sleep)" */
+-			c = *(p + sizeof(header) - 1);
++			c = *(p + strlen(header));
+ 			return c == 'D' ?
+ 			    THR_STATE_UNINTERRUPTIBLE : THR_STATE_UNKNOWN;
+ 		}
+-- 
+2.52.0.223.gf5cc29aaa4-goog
 
