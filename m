@@ -1,38 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8E61DE8A4
-	for <llvm@lists.linux.dev>; Wed, 10 Dec 2025 07:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F262FE04C;
+	Wed, 10 Dec 2025 07:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765351563; cv=none; b=nu0BYGbfH2vanz9SuJM872WiHJkwpedH1YT8+5agIA6duEIAjoN+rXVLmrBKFVLIGGXOlTjO3EPTGOPLLOCOxZXOR2m7U/GYXkqYPllHsysoY/JGZCaX8hBYl7T21QEfBt9pFfpwAFD/Q5s9P7WfdSeUlLDDPBers8Wy4nQMCMk=
+	t=1765352175; cv=none; b=jlzbivCudwIRJmKTTm50HmIoJbVexkQGLHV16ZNdtha8l0uSOLbIFpGXntvngCK+gdyEVOzVpLHjoM2+br4L38vMyJh8VPxHgaT6VKStYhLnfyeFd6fTLeCJ+7uteCVjrB7u1K7Kb5c597CrKE/z2aWXQV2XDWyCzH9vneyrh9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765351563; c=relaxed/simple;
-	bh=lQI/9Q2cv4AdiXY2ZIlLo+Ong+f/9atNTWuWgvqSpj8=;
+	s=arc-20240116; t=1765352175; c=relaxed/simple;
+	bh=iUppsHmKIPYLCGiMvoqzAZrUDsfo/tr0nQIA84KdW+g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GmeO7oQ8s7ppzMOhWelCPSHRRn1SOTvHALyvX7mXpa4ieT5dVQvYrXq4KPywiVdvvdLHbTzacoPy4fNNl16q9FgxWn/b56OSYfAP6ZpkcsYKhVQNqzseCNpYsNZYnkgsSxGYi9ffHBtrakCrzzxKS9lZmV2xjYhOZRUfl6TESoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDoKpA/W; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rb9JX/JoD321wWH/lGTH3ihoZ1NStBCGI2l686tK17mJkO9+TwGSxpFl7j06+lhfEuiKFsH1mifkodHJDrbFDg01JJMeC0GtTsjOR/1eaDsPEDjynx75V0/vK8yGrL+FBdIZnbKXK6WDh0qW4+Qpc8rnBObgViKqxWJ5VziFgl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R50whwEd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDoKpA/W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BDFC4CEF1;
-	Wed, 10 Dec 2025 07:26:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R50whwEd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FCFC116B1;
+	Wed, 10 Dec 2025 07:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765351562;
-	bh=lQI/9Q2cv4AdiXY2ZIlLo+Ong+f/9atNTWuWgvqSpj8=;
+	s=k20201202; t=1765352175;
+	bh=iUppsHmKIPYLCGiMvoqzAZrUDsfo/tr0nQIA84KdW+g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DDoKpA/WVvQhqzCyNkKoHroTU2BB27yjUuS1iKNLKME7/nSqPQFGXbfwy3VrrkuOo
-	 vetKagThE87Kl/XlleHUNcHu3rFT48hHD3G/Eec7+cc1fR+D5KZgEapDSdnzEGmQPT
-	 m1nlBhrMzb/tLPwm2KhxjO/eOjzC7Ar5DfLalxbZkrj7Di62e8Kop82OPSiymDdZuh
-	 HVG3ZrlietsXEiRMEw7HU1payqR7do0TsM/SO9N+DeaIAuT+eBZ5aoPirXw/aSP8Eq
-	 p123WkWwmqfDrNWR4YXB1pDvloiBBHTlCcobpNgWV0UfwUArCMQng2Z82SE0pOfew+
-	 n5QRX/ME9XQVw==
-Date: Wed, 10 Dec 2025 16:25:59 +0900
+	b=R50whwEdf3s4QkMMgzINqP5trAK0feQtUqBRP5vmQNBVuQHIotIsBP+qEIBZFr6V5
+	 LLuHl2Ghoa0cQsrqMYEYfim/KWnJbVXukuzfGjml5f00+IPJ8NXaNJUeR+qQ6tr9E9
+	 BWAs+xJ2yg6qBnLO9TJ3l1mI6yqSnuzDt7Pjsi3XkQVdrG0tgfcMXtR9tMKplpSGwg
+	 RufmvSl+dU+QpEEFem65R/y+JEOuIYWBG762oZeIMh+lqKDJSgFKH6U6IFPTpWGNdk
+	 G5hPx5YPMjrzY5SATQ6mIsWM5dXqWDHSE8IM5BA04RfrMBW6sdHmgzPRonxVV38mes
+	 xK3xV9tSho9eQ==
+Date: Wed, 10 Dec 2025 16:36:11 +0900
 From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] v6.18-rc6-688-gcd41d3420ef6: Failure on arm
-Message-ID: <20251210072559.GB1147766@ax162>
-References: <1316820319.13253.1765166109507@jenkins.jenkins>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-hardening@vger.kernel.org,
+	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
+	llvm@lists.linux.dev
+Subject: Re: [bug report] clk: visconti: Add support common clock driver and
+ reset driver
+Message-ID: <20251210073611.GC1147766@ax162>
+References: <aTgetqy8BGerPGTl@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,49 +44,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1316820319.13253.1765166109507@jenkins.jenkins>
+In-Reply-To: <aTgetqy8BGerPGTl@stanley.mountain>
 
-On Mon, Dec 08, 2025 at 03:55:08AM +0000, ci_notify@linaro.org wrote:
-> Dear contributor,
+Hey Dan,
+
+On Tue, Dec 09, 2025 at 04:05:58PM +0300, Dan Carpenter wrote:
+> Hello Kernel Hardenning developers,
 > 
-> Our automatic CI has detected problems related to your patch(es). Please find some details below.
+> Commit b4cbe606dc36 ("clk: visconti: Add support common clock driver
+> and reset driver") from Oct 25, 2021 (linux-next), leads to the
+> question:
 > 
-> In tcwg_kernel/llvm-master-arm-mainline-allyesconfig, after:
->   | commit v6.18-rc6-688-gcd41d3420ef6
->   | Author: Jaroslav Kysela <perex@perex.cz>
->   | Date:   Wed Nov 26 10:16:35 2025 +0100
->   | 
->   |     ASoC: nau8325: add missing build config
->   |     
->   |     This configuration was missing from the initial commit.
->   |     
->   |     Found by Jiri Benc <jbenc@redhat.com>
->   | ... 6 lines of the commit log omitted.
+> drivers/clk/visconti/clkc.c
+>     187 struct visconti_clk_provider *visconti_init_clk(struct device *dev,
+>     188                                                 struct regmap *regmap,
+>     189                                                 unsigned long nr_clks)
+>     190 {
+>     191         struct visconti_clk_provider *ctx;
+>     192         int i;
+>     193 
+>     194         ctx = devm_kzalloc(dev, struct_size(ctx, clk_data.hws, nr_clks), GFP_KERNEL);
+>     195         if (!ctx)
+>     196                 return ERR_PTR(-ENOMEM);
+>     197 
+>     198         for (i = 0; i < nr_clks; ++i)
+> --> 199                 ctx->clk_data.hws[i] = ERR_PTR(-ENOENT);
+>     200         ctx->clk_data.num = nr_clks;
 > 
-> Produces Failure:
->   | Results changed to
->   | # reset_artifacts:
->   | -10
->   | # build_abe binutils:
->   | -9
->   | # build_kernel_llvm:
->   | -5
->   | # build_abe qemu:
->   | -2
->   | # linux_n_obj:
->   | 23374
->   | # First few build errors in logs:
->   | # 00:26:11 sound/soc/codecs/nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
->   | # 00:26:11 sound/soc/codecs/nau8325.c:431:11: error: variable 'ratio_sel' is uninitialized when used here [-Werror,-Wuninitialized]
+> ctx->clk_data.hws[] is __counted_by() ctx->clk_data.num.  Don't we have to
+> set the .num before we fill initialize the array?  Or does the checker
 
-Should be hidden with
+Yes, it looks like line 200 needs to be moved above line 198.
 
-  https://git.kernel.org/broonie/c/2c7e5e17c05f1d5e10e63e1baff2b362cd08dcd6
+> code allow us to access the array when the counted by variable is zero?
 
-but I am still not convinced that is a correct fix (but I don't really
-care to push further on it).
+Nope, I just had to fix an instance where num is one and hws[0] is being
+accessed:
 
-  https://lore.kernel.org/20251203214958.GC3060476@ax162/
+  https://lore.kernel.org/20251124-exynos-clkout-fix-ubsan-bounds-error-v1-1-224a5282514b@kernel.org/
+
+I suspect there will eventually be a report on real hardware when
+CONFIG_UBSAN_BOUNDS is enabled and GCC 15 is used to build the running
+kernel, which is the first version that supports __counted_by(). How did
+you find this? A new smatch check? It would be nice if the compilers
+could flag this but I guess it is probably harder to do this in a
+generic way.
 
 Cheers,
 Nathan
