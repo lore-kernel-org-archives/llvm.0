@@ -1,65 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B1D3A1DB;
-	Wed, 10 Dec 2025 01:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C90223DE7;
+	Wed, 10 Dec 2025 01:36:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765330593; cv=none; b=Bmn3f/zuW50AtlcPimov/btpaiIqdFlHvMyNOOvaz2WlJ2EVCRr4qf73CVLqhSg+xas8S45upFJDBDYTwDyVyIplG/Sd3zdYQtgSmz+bdgSVHDaC8NPZMfnVb0E+1vmhRvPW3IeUDlIiup6knXj+mpkoLJy5cdCTM8F9uo5Plyo=
+	t=1765330595; cv=none; b=qKT37zi1j/jEvO+FXj4ORvJyBXeEJuSMt5FSReLXf8YAEaIMudRNHakAp732L/orvlLLV43JTXeeC78zakFxI/dqYLRz62kLPf/tfTlBvfP095A9OI3EzXAF1EmKVDDVDTjzODnY9cFmVQgziYBOVBZiNpggo2F5zQiLH5hn8gM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765330593; c=relaxed/simple;
-	bh=K5odEHdQx6AReGW+bBKxgqCvZEHkimJ7Bft2ZBOGO04=;
+	s=arc-20240116; t=1765330595; c=relaxed/simple;
+	bh=uSDeJjyIQS8Egw5OHsCLIaafNV3WCKJ/9T3J2/OTVzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cX4OZPDPFspLiJ7lucN4/YLF6BUQPlsWfuRqwlaeMcPc7tlF6j7jXtjaKy9csPpJ/UPys6LvmgYdMIFnvlWzak+0ii6KKW4CALSVtYXR8PgsM3Neo5owiBM9cUP/lvvbbDhLwWzotJKV0y8AsDDQcET5Ay2LDAwQMiw088y+Www=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ngZplvnY; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=aTJ9nPGzUJmFYl7V5HDkPS3W4/9EJSva9e+foRKAcfXmCy++0a6RQzSxIDNeHMEim8fgylk/Ye3iwvMGrN0TwJ85EMZfeKTK4uEpgirsEHnL1Vjxl3dCZmwGZyjSCgNFKTii+Wbw30IGNPKpuCOeOJzi1losyMjZk6Osm1oArOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QmLk0fh3; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ngZplvnY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QmLk0fh3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765330592; x=1796866592;
+  t=1765330594; x=1796866594;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=K5odEHdQx6AReGW+bBKxgqCvZEHkimJ7Bft2ZBOGO04=;
-  b=ngZplvnYu5qEV3cF/a+P8g4XZt87o6ScddjE9JZYAl/Wm3C1eLWbxqT9
-   KQ3wH6pe0sv3QyrWUGNeVMgDt/5+w7qkbjmELSCMOCqUFEzlc9C2tQK1e
-   AgLDlWGLfU9PSG+1mymZ+eUN3JNpEb/cJR9AYO7HKsCyWEpoub6EgAoIE
-   sqz4YI/ZVcsYrKuTDWPb+H2EAbWfa6fR2aruhLa8txZVCkgyScqBszqQb
-   x08tnHz1+e1E7DRm1yhz/wmI3MldKnTh+ZOGwCmRU95hqsPBhBZidGhnE
-   TsojI9PaGV/P1EANKBMAL71oUxsCbt406iu2JSKIuH5Rbiq5Yo30jt4G0
+  bh=uSDeJjyIQS8Egw5OHsCLIaafNV3WCKJ/9T3J2/OTVzw=;
+  b=QmLk0fh3XqNZHZmZ3HBmjEpAS9SXhDfJ48vLgQMiHTgbMblvTeQeb2Yn
+   hNypRKLly4Nr4KLGZPDokHXVU++KU0tljMlnn7sWoiSI7feGwvM6Lc4eY
+   VVcSbOyNZUS4+6n96lyuRQHGiDYcoA7G759F68at7t0T0Ec+9Bt9UCI/e
+   EDku4gczrSX8rfnratckjUjs06JkoUSJJ7J7G7Fqn9B6E6c4UnIVK+dWs
+   i30m4jzitZ7Yhvk4nWPEh8l7mfES2RtY21QpnaZUu0THyIcq4qWiwElAq
+   iZ1nh0sghlzF7DWwkdrWPsgKnbVJdEL50Qh+9Fht/Pu1wbypPviCi1Xpd
    Q==;
-X-CSE-ConnectionGUID: kkF9+9FZSKaw6BrAQ4oCDw==
-X-CSE-MsgGUID: DuyjVtR8Siy9JylcBXlIGA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="84711127"
+X-CSE-ConnectionGUID: tRcwACH9Ro6TLoOup6PJvA==
+X-CSE-MsgGUID: jfzjLMqnTnSX4BDMIdKdqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="84711132"
 X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="84711127"
+   d="scan'208";a="84711132"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 17:36:31 -0800
-X-CSE-ConnectionGUID: Fx1f0ymTQfWL7CWfi6FUOg==
-X-CSE-MsgGUID: kGC7calUTMCwMTiPO6GqVw==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 17:36:32 -0800
+X-CSE-ConnectionGUID: cnOgj/h8THab7ux0gRDrTw==
+X-CSE-MsgGUID: TIzBoRUfRaGjipsGCM573A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,262,1758610800"; 
-   d="scan'208";a="201303730"
+   d="scan'208";a="201303729"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
   by fmviesa004.fm.intel.com with ESMTP; 09 Dec 2025 17:36:27 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vT97x-000000002Uv-1ixI;
+	id 1vT97x-000000002Ur-1Se8;
 	Wed, 10 Dec 2025 01:36:25 +0000
-Date: Wed, 10 Dec 2025 09:36:05 +0800
+Date: Wed, 10 Dec 2025 09:35:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wang Liang <wangliang74@huawei.com>, chuck.lever@oracle.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, brauner@kernel.org
+To: Chen Ridong <chenridong@huaweicloud.com>, hannes@cmpxchg.org,
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
+	muchun.song@linux.dev, akpm@linux-foundation.org,
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com,
+	david@kernel.org, zhengqi.arch@bytedance.com,
+	lorenzo.stoakes@oracle.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel-tls-handshake@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, yuehaibing@huawei.com,
-	zhangchangzhong@huawei.com, wangliang74@huawei.com
-Subject: Re: [PATCH net] net/handshake: Fix null-ptr-deref in
- handshake_complete()
-Message-ID: <202512100952.cr9q1lGr-lkp@intel.com>
-References: <20251209115852.3827876-1-wangliang74@huawei.com>
+	cgroups@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, lujialin4@huawei.com,
+	chenridong@huaweicloud.com
+Subject: Re: [PATCH -next 2/2] memcg: remove mem_cgroup_size()
+Message-ID: <202512100939.F1LEdUev-lkp@intel.com>
+References: <20251209130251.1988615-3-chenridong@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,99 +70,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251209115852.3827876-1-wangliang74@huawei.com>
+In-Reply-To: <20251209130251.1988615-3-chenridong@huaweicloud.com>
 
-Hi Wang,
+Hi Chen,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net/main]
+[auto build test ERROR on next-20251209]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wang-Liang/net-handshake-Fix-null-ptr-deref-in-handshake_complete/20251209-194006
-base:   net/main
-patch link:    https://lore.kernel.org/r/20251209115852.3827876-1-wangliang74%40huawei.com
-patch subject: [PATCH net] net/handshake: Fix null-ptr-deref in handshake_complete()
-config: arm-mps2_defconfig (https://download.01.org/0day-ci/archive/20251210/202512100952.cr9q1lGr-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Ridong/memcg-move-mem_cgroup_usage-memcontrol-v1-c/20251209-211854
+base:   next-20251209
+patch link:    https://lore.kernel.org/r/20251209130251.1988615-3-chenridong%40huaweicloud.com
+patch subject: [PATCH -next 2/2] memcg: remove mem_cgroup_size()
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251210/202512100939.F1LEdUev-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512100952.cr9q1lGr-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512100939.F1LEdUev-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512100952.cr9q1lGr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512100939.F1LEdUev-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/handshake/netlink.c:110:3: error: cannot jump from this goto statement to its label
-     110 |                 goto out_status;
-         |                 ^
-   net/handshake/netlink.c:114:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     114 |         FD_PREPARE(fdf, O_CLOEXEC, sock->file);
-         |                    ^
-   net/handshake/netlink.c:104:3: error: cannot jump from this goto statement to its label
-     104 |                 goto out_status;
-         |                 ^
-   net/handshake/netlink.c:114:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     114 |         FD_PREPARE(fdf, O_CLOEXEC, sock->file);
-         |                    ^
-   net/handshake/netlink.c:100:3: error: cannot jump from this goto statement to its label
-     100 |                 goto out_status;
-         |                 ^
-   net/handshake/netlink.c:114:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     114 |         FD_PREPARE(fdf, O_CLOEXEC, sock->file);
-         |                    ^
-   3 errors generated.
+>> mm/vmscan.c:2488:49: error: incomplete definition of type 'struct mem_cgroup'
+    2488 |                 unsigned long usage = page_counter_read(&memcg->memory);
+         |                                                          ~~~~~^
+   include/linux/mm_types.h:36:8: note: forward declaration of 'struct mem_cgroup'
+      36 | struct mem_cgroup;
+         |        ^
+   1 error generated.
 
 
-vim +110 net/handshake/netlink.c
+vim +2488 mm/vmscan.c
 
-    89	
-    90	int handshake_nl_accept_doit(struct sk_buff *skb, struct genl_info *info)
-    91	{
-    92		struct net *net = sock_net(skb->sk);
-    93		struct handshake_net *hn = handshake_pernet(net);
-    94		struct handshake_req *req = NULL;
-    95		struct socket *sock;
-    96		int class, err;
-    97	
-    98		err = -EOPNOTSUPP;
-    99		if (!hn)
-   100			goto out_status;
-   101	
-   102		err = -EINVAL;
-   103		if (GENL_REQ_ATTR_CHECK(info, HANDSHAKE_A_ACCEPT_HANDLER_CLASS))
-   104			goto out_status;
-   105		class = nla_get_u32(info->attrs[HANDSHAKE_A_ACCEPT_HANDLER_CLASS]);
-   106	
-   107		err = -EAGAIN;
-   108		req = handshake_req_next(hn, class);
-   109		if (!req)
- > 110			goto out_status;
-   111	
-   112		sock = req->hr_sk->sk_socket;
-   113	
-   114		FD_PREPARE(fdf, O_CLOEXEC, sock->file);
-   115		if (fdf.err) {
-   116			err = fdf.err;
-   117			goto out_complete;
-   118		}
-   119	
-   120		get_file(sock->file); /* FD_PREPARE() consumes a reference. */
-   121		err = req->hr_proto->hp_accept(req, info, fd_prepare_fd(fdf));
-   122		if (err)
-   123			goto out_complete; /* Automatic cleanup handles fput */
-   124	
-   125		trace_handshake_cmd_accept(net, req, req->hr_sk, fd_prepare_fd(fdf));
-   126		fd_publish(fdf);
-   127		return 0;
-   128	
-   129	out_complete:
-   130		handshake_complete(req, -EIO, NULL);
-   131	out_status:
-   132		trace_handshake_cmd_accept_err(net, req, NULL, err);
-   133		return err;
-   134	}
-   135	
+  2450	
+  2451	static unsigned long apply_proportional_protection(struct mem_cgroup *memcg,
+  2452			struct scan_control *sc, unsigned long scan)
+  2453	{
+  2454		unsigned long min, low;
+  2455	
+  2456		mem_cgroup_protection(sc->target_mem_cgroup, memcg, &min, &low);
+  2457	
+  2458		if (min || low) {
+  2459			/*
+  2460			 * Scale a cgroup's reclaim pressure by proportioning
+  2461			 * its current usage to its memory.low or memory.min
+  2462			 * setting.
+  2463			 *
+  2464			 * This is important, as otherwise scanning aggression
+  2465			 * becomes extremely binary -- from nothing as we
+  2466			 * approach the memory protection threshold, to totally
+  2467			 * nominal as we exceed it.  This results in requiring
+  2468			 * setting extremely liberal protection thresholds. It
+  2469			 * also means we simply get no protection at all if we
+  2470			 * set it too low, which is not ideal.
+  2471			 *
+  2472			 * If there is any protection in place, we reduce scan
+  2473			 * pressure by how much of the total memory used is
+  2474			 * within protection thresholds.
+  2475			 *
+  2476			 * There is one special case: in the first reclaim pass,
+  2477			 * we skip over all groups that are within their low
+  2478			 * protection. If that fails to reclaim enough pages to
+  2479			 * satisfy the reclaim goal, we come back and override
+  2480			 * the best-effort low protection. However, we still
+  2481			 * ideally want to honor how well-behaved groups are in
+  2482			 * that case instead of simply punishing them all
+  2483			 * equally. As such, we reclaim them based on how much
+  2484			 * memory they are using, reducing the scan pressure
+  2485			 * again by how much of the total memory used is under
+  2486			 * hard protection.
+  2487			 */
+> 2488			unsigned long usage = page_counter_read(&memcg->memory);
+  2489			unsigned long protection;
+  2490	
+  2491			/* memory.low scaling, make sure we retry before OOM */
+  2492			if (!sc->memcg_low_reclaim && low > min) {
+  2493				protection = low;
+  2494				sc->memcg_low_skipped = 1;
+  2495			} else {
+  2496				protection = min;
+  2497			}
+  2498	
+  2499			/* Avoid TOCTOU with earlier protection check */
+  2500			usage = max(usage, protection);
+  2501	
+  2502			scan -= scan * protection / (usage + 1);
+  2503	
+  2504			/*
+  2505			 * Minimally target SWAP_CLUSTER_MAX pages to keep
+  2506			 * reclaim moving forwards, avoiding decrementing
+  2507			 * sc->priority further than desirable.
+  2508			 */
+  2509			scan = max(scan, SWAP_CLUSTER_MAX);
+  2510		}
+  2511		return scan;
+  2512	}
+  2513	
 
 -- 
 0-DAY CI Kernel Test Service
