@@ -1,56 +1,58 @@
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD952ECE83
-	for <llvm@lists.linux.dev>; Thu, 11 Dec 2025 08:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0734929A312
+	for <llvm@lists.linux.dev>; Thu, 11 Dec 2025 08:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765442184; cv=none; b=WXH7tKefrh9xDaLOxBcN9sBqUKLNjvSvbK+2qAoVt3sLCH5+5h/TYV6e2y8+4ZRTJDvuCHDXs1fU/Zl9txtONtJxAGLh8sk9f5WNiU30Ohtu1FL9qii3eNoath+n07yUOOt2HHuejRctrUO+L+eMCAqDXqF9aTW+wOjq+LMIBpM=
+	t=1765442309; cv=none; b=k/Ir0DJo1MAUWAxUI9Gm3povJElFXpeQXh+6ur1CmpiUbcL0QyborCj75AH7QqyoCHknFBLxE/8PAoON7oAI/RIdeKcI6DTqTR8xlL6ukrg4J2KJ8Lmk5T78FJPG/rir0PSvVXo6xutYDWPDY8z3yYk6QeNnsxGO3Nk5Ailmeks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765442184; c=relaxed/simple;
-	bh=jIjz/T6XpRYaNC3hsiIb9b3/QNntAWKPTgoywF8YqQc=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Gu1qEHenNtVyVLEUp6pv6ETRwCJyJTngv+c3AkFkUDm0dQ8NY1La/XFfEe2WXFNpd35+MXorZeaLGrCwpDR/PpnbxOIqD17Dnvdx9qduS3VmAsgsYhOjZn/lwizZLhSpZvyTWstkMMGVdb1OxJM+JL+rRFYzn06Msx5cIrosASk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=cfmjfs6o; arc=none smtp.client-ip=162.62.57.64
+	s=arc-20240116; t=1765442309; c=relaxed/simple;
+	bh=86jM6/8ayfHPNKCYQQ/v+Gxswje4pbMb7uGQHheHd4c=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=gTtaDbA33V49qQJ18RK87osgHlyVFNyiCRemTF0hI3QGWgsd33/rlD7IMrggR/QMWzFiqAsbionW0NR0GMePyynU35YTBhXs/i31/8FyKlekmKLBcJ9bhYyZxOxSFTJH6oI7pEyo6Dk+CDOo+d/RhY/KanPotH3yiL4s/J+07mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=oIL8l3dv; arc=none smtp.client-ip=162.62.57.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="cfmjfs6o"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="oIL8l3dv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765442177;
-	bh=jIjz/T6XpRYaNC3hsiIb9b3/QNntAWKPTgoywF8YqQc=;
-	h=From:To:Cc:Subject:Date;
-	b=cfmjfs6o89Ecu7jJEsJSXBeV+9N5/Wh7W8oljUczqkDMx7B4+Bo2rLXRspE98GRGs
-	 rPA46mlhAkB2SfMj+3JpGiw3uw+u4NdvwKHakrDqpKMSBsfBYrP5DadUv495rxE0t7
-	 zQN1OuXQZi6AYtvxenjGeCDoALFr7HYfjUnishfk=
+	s=s201512; t=1765442299;
+	bh=zDJ4Agqgm0IgPliNwt9ogn6DK+Rs7gCySxS9/AzULK8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=oIL8l3dvTxgXucqd2WlTqhjPxriGxnabCnvDyidw+tG95IX3c+NptJCJ/2CsfBq98
+	 xJArecSv/7KSfZz+B78wbKI14HhIqrS9OZ6TW7mvG4AizqHDaet13dx1sDbUFonnDq
+	 l0SeW56jMe6Id8Ku/oS0hVS3dSJcmBlyGhG92fE0=
 Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
-	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
-	id 90CB5886; Thu, 11 Dec 2025 16:36:12 +0800
-X-QQ-mid: xmsmtpt1765442172tkbnxe2lr
-Message-ID: <tencent_3739CFB7F300BEAEBB928A0EB8D1C6875C09@qq.com>
-X-QQ-XMAILINFO: M2SvzgchpLqfgv8fprE0lPiF/BquZ0eVzy2GXfXxxnnaudwql3MZ2GSIVdEAmA
-	 gvn3l4V/woNF9JksyUvQKetGA5GH9HVgptowwHZIPa83/jQ35eC0iiFDHLLQ9Ay0tW901/AtsBkm
-	 4jFPOak+iw7F7ViQUEUGmTqhBEMMUf76IOEPK9cf0a9ph28PeH8IZ/4me9L0Tm748SWfsj3x56Gs
-	 z2HUOR7s8hCgIklPsdzJjgh4WZi4ucGz+U0FY6HIqBNXNvd0snL7IfswI+el5NBHDxwu7XWpL/4o
-	 g5E5ix1VIXnmNihNTV8MKT6cnSGo8MMYkIMNx0B3rCh9BykV5BmfVXYOuGISnHgp5A3vEucDcqRu
-	 9IPX+Bs6gVfq41OIB0+3fUwCnfWb4a1pUTSTlnb4mytkJPn5buDjHuCqAWzk5TTs0dYoQDF0o5hl
-	 dQsJJvp/O6F/z8gnGpB/WCDgrCSidFsOfMQSOM3Qygvh24Hjkw0OYaTUA0LLejbVwVfdCHixcMqU
-	 oCdhn2Ld0jPzQIHKoNYQC/sdn9/K+x+IBJpZaHFlwKyxQGZn/v7uFpMXS8ZED+2eSewL40IPd8wl
-	 tmhx8sV2X9+vnSh0aZHX1WVxjDAPFPhfWOLwAl2kOH4wZErT/zA8/Y+xdRHUUMQQYFVJ+Fd7ZSW6
-	 z6pDzRBWq1dko8KG+G0p6jZE+K7JbRiksZY5T/DOY1kXI5cJhYcwFW2H05y3DLnpUqYcjk7VMPo1
-	 wAPxjFjS7efMtSWdEzFNz2tqs6zCvX72olADczeXesJgKjbJFjAg6H9fCSiCfLTH6Kl2BOBNp3tb
-	 wbINt4B/FCvKHfbguTkIVBsn6t0ekggWeJqJjgxefYmD9lFqo2oxoASx53krY41i+gzArwYSuVCI
-	 udNZw0wYpaIdA9d+bxUzjOaIBjkz0VliYJKF2jDYLFtUXlkkLaFkrzpUnzBw07VD/qXOKox1isjs
-	 mFuW45SGkGHepCs+fxUGVCBxFu+vZRRaqUAzlHY7QMYj4QkjyqqzRYO2iUZVy/xf+rB783IfPPoW
-	 cj9EHCzmpF4BceCFfvhO8ldSuDbxTYpRJAsfXJeB1u10JB3V6ToBRMhRBR3+Qin69mdkx/poZIKJ
-	 kKIcuIvO28W3zcXzsMjzDCSf4ggw==
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
+	id 98F2F61A; Thu, 11 Dec 2025 16:38:15 +0800
+X-QQ-mid: xmsmtpt1765442295tlnjc9yz3
+Message-ID: <tencent_348CCFBB269D37E7FD7D11741116B171CB0A@qq.com>
+X-QQ-XMAILINFO: NZSml8PQdeKA9C/wv1ou5+KuyIg96s2waQuBjc517SWlxQfXhoeAAavj3syLmY
+	 /ZctY03wPWwjT9KZMJPLllDLSTWsnAZGHFX/E4M6DkwFFoqix2PFxVoroqBwtkVBnSi3swY5P5Z8
+	 cFfBuAfLwpewDAtrN/7BlCxDGqNTJhu12ORSh859+6ubM6c05Xpo4hk5WoynNtx6HtYwE8WL81OZ
+	 Enb7xemSJhwUR5GKmNVXF00H7N49hTc4EZmqUYPk+UY/nPIrs14c7/RzjoT3yHMQPhNiSW0FKDjA
+	 tAycSpW7636IfQzOmglfdN1m3ad9UPg4kTDPZgoW9QqpcXUiJzwYm9I8YbKOpdoG+BCVlfCxY2V5
+	 ENimuGZM5M289X7NgyyI4UgxnMiBJmlk1BXhsLt8G2gHjfa/WnULBPQVFPirajz3Taiz/longMUx
+	 dwO9f8pQs51BNyiCaltv0dJTha0JDc7TvUsGpfCpQIHGDDW871hYh3ELshi1cCrMj5/28njkUftR
+	 7nKHlTb3zhdNqA25FOE2CbzhuhcMOljTkg3jzNP9CYBGwUtjJt+J9W+/ARxaBxlWtYc3mG0Jjb6G
+	 tUeoyAuqFXQn22aIH8OIfF3MehdXVXaVoSAgSjQEYXKKg0IWSZzsMlME3ghmJoGHXMGMv60NL52J
+	 n4mz/s/x3TUwWcz9hzPPCUG9Yqp4yGMLxGKgmcmwkECSkTCIDhVVae5BE2+32jtiJQ/yWQCIqvDp
+	 9/eGjEYHEu24kZAWxGy+xJHkr+YsNi/vMjjOXGPoQ8l9W8eO2qGDUvt4r9BcrS6k3EIU62SUf0Y9
+	 p1gUYGBDdeKLDwKvV0ep6du+Fm9XlvZIAvy3RH+uSOC2A9WsFUVNiUhRUOy7jXQ3wPmTAap6OxHW
+	 btTRhpUe4q+GCihdvjaexrN7jxbqBgxjuTgQxraqn4mJE7c8c+eJEq67EnYaOSE4qTo50u7/OEca
+	 1CfZGySC23W6fEK/nosJRegmFHYba6tnY+fHXcEBuDx4thOIw5aIsfAkbXICKaggGeZrwou1Sm4o
+	 hmNfXjwdOmVRF2Koje4/pYBnXDnp5vX+QmsJ5MpJ3dU7wlTvRXMdTEbbb3x/t7eCadqLUaY+8A1K
+	 EQGjHJW0ms2rKLfZF9W1Bl79J7TLNmPtN3yWu6
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
 From: Yuwen Chen <ywen.chen@foxmail.com>
-To: andrealmeid@igalia.com,
-	akpm@linux-foundation.org
-Cc: edliaw@google.com,
+To: ywen.chen@foxmail.com
+Cc: akpm@linux-foundation.org,
+	andrealmeid@igalia.com,
 	dave@stgolabs.net,
 	dbueso@suse.de,
 	dvhart@infradead.org,
+	edliaw@google.com,
 	hpa@linux.intel.com,
 	justinstitt@google.com,
 	kernel-team@android.com,
@@ -66,10 +68,12 @@ Cc: edliaw@google.com,
 	shuah@kernel.org,
 	tglx@linutronix.de,
 	usama.anjum@collabora.com
-Subject: [PATCH 0/3] selftests/futex: fix the issue of abnormal test results caused by thread timing
-Date: Thu, 11 Dec 2025 16:36:12 +0800
-X-OQ-MSGID: <20251211083612.1795685-1-ywen.chen@foxmail.com>
+Subject: [PATCH 1/3] selftests/futex: reduce array declarations in the requeue_single
+Date: Thu, 11 Dec 2025 16:38:13 +0800
+X-OQ-MSGID: <20251211083813.1795854-1-ywen.chen@foxmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <tencent_3739CFB7F300BEAEBB928A0EB8D1C6875C09@qq.com>
+References: <tencent_3739CFB7F300BEAEBB928A0EB8D1C6875C09@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,15 +82,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On the Android arm32 platform, when performing the futex_requeue test, it will
-most likely return a failure. The specific reason is detailed in a commit[1]
-previously submitted by Edward Liaw. However, this commit cannot perfectly
-solve the problem. This is because using a barrier does not guarantee that
-the child thread will wait on futex_wait.
+In the requeue_single function, the variable "waits" only uses
+one element. There is no need to use an array.
 
-This series of patches attempts to solve this problem by checking whether
-the child thread is in a sleeping state. This is because when the child thread
-goes to sleep, it indicates that it is waiting for the futex lock.
+Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+---
+ tools/testing/selftests/futex/functional/futex_requeue.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Link: https://lore.kernel.org/all/20240918231102.234253-1-edliaw@google.com/
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index 69e2555b60399..1807465de2144 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -33,7 +33,7 @@ TEST(requeue_single)
+ {
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
++	pthread_t waiter;
+ 	int res;
+ 
+ 	f1 = &_f1;
+@@ -41,7 +41,7 @@ TEST(requeue_single)
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+-	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
++	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+ 		ksft_exit_fail_msg("pthread_create failed\n");
+ 
+ 	usleep(WAKE_WAIT_US);
+-- 
+2.34.1
 
