@@ -1,205 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D69283FF0;
-	Thu, 11 Dec 2025 08:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD952ECE83
+	for <llvm@lists.linux.dev>; Thu, 11 Dec 2025 08:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765441794; cv=none; b=QwQdw3l84G6FzoK9Fd7KyXMq+u+UfR+A7lH7e6BSpvsUgHGTBc5hsmfUiKGfk9h/U3VGAFMxSjCDmZe9yK6Wvd4lV5EGJwXSoQJOcGA/kGIrC9LSur+27VdJggAnRnnRQhtDhcPbYc8/8jSKOPG6pQrGBW12wt4ycP1yj1XqNs0=
+	t=1765442184; cv=none; b=WXH7tKefrh9xDaLOxBcN9sBqUKLNjvSvbK+2qAoVt3sLCH5+5h/TYV6e2y8+4ZRTJDvuCHDXs1fU/Zl9txtONtJxAGLh8sk9f5WNiU30Ohtu1FL9qii3eNoath+n07yUOOt2HHuejRctrUO+L+eMCAqDXqF9aTW+wOjq+LMIBpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765441794; c=relaxed/simple;
-	bh=oZk62VQRQiT5+0VX7ZHg9OxApmN3iEZ3qWothA1myos=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmIzzGhUWQbEUInMpP7KkC2Qj96st27AgLuMuRft5dqQPs/uOz4BCwXWIEv+7tbZNM9lTpvhYIYRWBguhBbDf64OLqpyb5nJ5Pv1/P5y8EBYGyJY+/pEVABO3Ntd92V2EP5aWlAEaKbGw5A/KJucubhMmMoPSsMcyQ5csOxm3t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WK/epPi7; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765442184; c=relaxed/simple;
+	bh=jIjz/T6XpRYaNC3hsiIb9b3/QNntAWKPTgoywF8YqQc=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Gu1qEHenNtVyVLEUp6pv6ETRwCJyJTngv+c3AkFkUDm0dQ8NY1La/XFfEe2WXFNpd35+MXorZeaLGrCwpDR/PpnbxOIqD17Dnvdx9qduS3VmAsgsYhOjZn/lwizZLhSpZvyTWstkMMGVdb1OxJM+JL+rRFYzn06Msx5cIrosASk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=cfmjfs6o; arc=none smtp.client-ip=162.62.57.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WK/epPi7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765441793; x=1796977793;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oZk62VQRQiT5+0VX7ZHg9OxApmN3iEZ3qWothA1myos=;
-  b=WK/epPi79asIvbBvS+M9P85uPZ21iYbHhEAFiu0VS2Kuzg+DB5Xxgn1O
-   eJGdbaSqnolfk7Al4caeqM7h8nQPqVnG3dcz8nq2tNIkZU2HWcKQOGPm6
-   NolPb0iYM6wAgel/rVcTEGOwTZ2KRhCCzC8fvFuUIyxuMNjBRv0k29UOw
-   WImtAmwzU7N9QS1apwv/oL3Kqe00nKJkXbjnK+SKrRqpTpsyBoXosSg18
-   hvSIoO+jDQ7mDICt0VBZY7N/W9DddJul17Knpa6++/bcrLM7CfE55UA5+
-   CUgQwF9uWKi28e7LUGcwGMox4h+s5rhVkkomgw7k4lKkaicqGZ/U1MSY+
-   A==;
-X-CSE-ConnectionGUID: OswPAYGPRDGy//y7gZwoQw==
-X-CSE-MsgGUID: yXfMFUOuRrKPh85pW7iTAg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="67305595"
-X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="67305595"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 00:29:51 -0800
-X-CSE-ConnectionGUID: 3O2abcG3S4u1FyeKWKOjPQ==
-X-CSE-MsgGUID: 0bXA4y8vRLSLU557QTbnnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="201220538"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 11 Dec 2025 00:29:49 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vTc3W-000000004PN-2OZw;
-	Thu, 11 Dec 2025 08:29:46 +0000
-Date: Thu, 11 Dec 2025 16:28:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	Eric Biggers <ebiggers@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-fscrypt@vger.kernel.org
-Subject: Re: [PATCH 8/9] blk-crypto: optimize data unit alignment checking
-Message-ID: <202512111625.7vv9PN6b-lkp@intel.com>
-References: <20251210152343.3666103-9-hch@lst.de>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="cfmjfs6o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1765442177;
+	bh=jIjz/T6XpRYaNC3hsiIb9b3/QNntAWKPTgoywF8YqQc=;
+	h=From:To:Cc:Subject:Date;
+	b=cfmjfs6o89Ecu7jJEsJSXBeV+9N5/Wh7W8oljUczqkDMx7B4+Bo2rLXRspE98GRGs
+	 rPA46mlhAkB2SfMj+3JpGiw3uw+u4NdvwKHakrDqpKMSBsfBYrP5DadUv495rxE0t7
+	 zQN1OuXQZi6AYtvxenjGeCDoALFr7HYfjUnishfk=
+Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id 90CB5886; Thu, 11 Dec 2025 16:36:12 +0800
+X-QQ-mid: xmsmtpt1765442172tkbnxe2lr
+Message-ID: <tencent_3739CFB7F300BEAEBB928A0EB8D1C6875C09@qq.com>
+X-QQ-XMAILINFO: M2SvzgchpLqfgv8fprE0lPiF/BquZ0eVzy2GXfXxxnnaudwql3MZ2GSIVdEAmA
+	 gvn3l4V/woNF9JksyUvQKetGA5GH9HVgptowwHZIPa83/jQ35eC0iiFDHLLQ9Ay0tW901/AtsBkm
+	 4jFPOak+iw7F7ViQUEUGmTqhBEMMUf76IOEPK9cf0a9ph28PeH8IZ/4me9L0Tm748SWfsj3x56Gs
+	 z2HUOR7s8hCgIklPsdzJjgh4WZi4ucGz+U0FY6HIqBNXNvd0snL7IfswI+el5NBHDxwu7XWpL/4o
+	 g5E5ix1VIXnmNihNTV8MKT6cnSGo8MMYkIMNx0B3rCh9BykV5BmfVXYOuGISnHgp5A3vEucDcqRu
+	 9IPX+Bs6gVfq41OIB0+3fUwCnfWb4a1pUTSTlnb4mytkJPn5buDjHuCqAWzk5TTs0dYoQDF0o5hl
+	 dQsJJvp/O6F/z8gnGpB/WCDgrCSidFsOfMQSOM3Qygvh24Hjkw0OYaTUA0LLejbVwVfdCHixcMqU
+	 oCdhn2Ld0jPzQIHKoNYQC/sdn9/K+x+IBJpZaHFlwKyxQGZn/v7uFpMXS8ZED+2eSewL40IPd8wl
+	 tmhx8sV2X9+vnSh0aZHX1WVxjDAPFPhfWOLwAl2kOH4wZErT/zA8/Y+xdRHUUMQQYFVJ+Fd7ZSW6
+	 z6pDzRBWq1dko8KG+G0p6jZE+K7JbRiksZY5T/DOY1kXI5cJhYcwFW2H05y3DLnpUqYcjk7VMPo1
+	 wAPxjFjS7efMtSWdEzFNz2tqs6zCvX72olADczeXesJgKjbJFjAg6H9fCSiCfLTH6Kl2BOBNp3tb
+	 wbINt4B/FCvKHfbguTkIVBsn6t0ekggWeJqJjgxefYmD9lFqo2oxoASx53krY41i+gzArwYSuVCI
+	 udNZw0wYpaIdA9d+bxUzjOaIBjkz0VliYJKF2jDYLFtUXlkkLaFkrzpUnzBw07VD/qXOKox1isjs
+	 mFuW45SGkGHepCs+fxUGVCBxFu+vZRRaqUAzlHY7QMYj4QkjyqqzRYO2iUZVy/xf+rB783IfPPoW
+	 cj9EHCzmpF4BceCFfvhO8ldSuDbxTYpRJAsfXJeB1u10JB3V6ToBRMhRBR3+Qin69mdkx/poZIKJ
+	 kKIcuIvO28W3zcXzsMjzDCSf4ggw==
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+From: Yuwen Chen <ywen.chen@foxmail.com>
+To: andrealmeid@igalia.com,
+	akpm@linux-foundation.org
+Cc: edliaw@google.com,
+	dave@stgolabs.net,
+	dbueso@suse.de,
+	dvhart@infradead.org,
+	hpa@linux.intel.com,
+	justinstitt@google.com,
+	kernel-team@android.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	luto@mit.edu,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	tglx@linutronix.de,
+	usama.anjum@collabora.com
+Subject: [PATCH 0/3] selftests/futex: fix the issue of abnormal test results caused by thread timing
+Date: Thu, 11 Dec 2025 16:36:12 +0800
+X-OQ-MSGID: <20251211083612.1795685-1-ywen.chen@foxmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251210152343.3666103-9-hch@lst.de>
+Content-Transfer-Encoding: 8bit
 
-Hi Christoph,
+On the Android arm32 platform, when performing the futex_requeue test, it will
+most likely return a failure. The specific reason is detailed in a commit[1]
+previously submitted by Edward Liaw. However, this commit cannot perfectly
+solve the problem. This is because using a barrier does not guarantee that
+the child thread will wait on futex_wait.
 
-kernel test robot noticed the following build errors:
+This series of patches attempts to solve this problem by checking whether
+the child thread is in a sleeping state. This is because when the child thread
+goes to sleep, it indicates that it is waiting for the futex lock.
 
-[auto build test ERROR on axboe/for-next]
-[also build test ERROR on jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev linus/master next-20251211]
-[cannot apply to tytso-ext4/dev v6.18]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Link: https://lore.kernel.org/all/20240918231102.234253-1-edliaw@google.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/fscrypt-keep-multiple-bios-in-flight-in-fscrypt_zeroout_range_inline_crypt/20251211-002354
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/20251210152343.3666103-9-hch%40lst.de
-patch subject: [PATCH 8/9] blk-crypto: optimize data unit alignment checking
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251211/202512111625.7vv9PN6b-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111625.7vv9PN6b-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512111625.7vv9PN6b-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> block/blk-merge.c:332:35: error: no member named 'bi_crypt_context' in 'struct bio'
-     332 |                 struct bio_crypt_ctx *bc = bio->bi_crypt_context;
-         |                                            ~~~  ^
-   1 error generated.
-
-
-vim +332 block/blk-merge.c
-
-   310	
-   311	/**
-   312	 * bio_split_io_at - check if and where to split a bio
-   313	 * @bio:  [in] bio to be split
-   314	 * @lim:  [in] queue limits to split based on
-   315	 * @segs: [out] number of segments in the bio with the first half of the sectors
-   316	 * @max_bytes: [in] maximum number of bytes per bio
-   317	 *
-   318	 * Find out if @bio needs to be split to fit the queue limits in @lim and a
-   319	 * maximum size of @max_bytes.  Returns a negative error number if @bio can't be
-   320	 * split, 0 if the bio doesn't have to be split, or a positive sector offset if
-   321	 * @bio needs to be split.
-   322	 */
-   323	int bio_split_io_at(struct bio *bio, const struct queue_limits *lim,
-   324			unsigned *segs, unsigned max_bytes)
-   325	{
-   326		struct bio_vec bv, bvprv, *bvprvp = NULL;
-   327		unsigned nsegs = 0, bytes = 0, gaps = 0;
-   328		struct bvec_iter iter;
-   329		unsigned len_align_mask = lim->dma_alignment;
-   330	
-   331		if (bio_has_crypt_ctx(bio)) {
- > 332			struct bio_crypt_ctx *bc = bio->bi_crypt_context;
-   333	
-   334			len_align_mask |= (bc->bc_key->crypto_cfg.data_unit_size - 1);
-   335		}
-   336	
-   337		bio_for_each_bvec(bv, bio, iter) {
-   338			if (bv.bv_offset & len_align_mask)
-   339				return -EINVAL;
-   340	
-   341			/*
-   342			 * If the queue doesn't support SG gaps and adding this
-   343			 * offset would create a gap, disallow it.
-   344			 */
-   345			if (bvprvp) {
-   346				if (bvec_gap_to_prev(lim, bvprvp, bv.bv_offset))
-   347					goto split;
-   348				gaps |= bvec_seg_gap(bvprvp, &bv);
-   349			}
-   350	
-   351			if (nsegs < lim->max_segments &&
-   352			    bytes + bv.bv_len <= max_bytes &&
-   353			    bv.bv_offset + bv.bv_len <= lim->max_fast_segment_size) {
-   354				nsegs++;
-   355				bytes += bv.bv_len;
-   356			} else {
-   357				if (bvec_split_segs(lim, &bv, &nsegs, &bytes,
-   358						lim->max_segments, max_bytes))
-   359					goto split;
-   360			}
-   361	
-   362			bvprv = bv;
-   363			bvprvp = &bvprv;
-   364		}
-   365	
-   366		*segs = nsegs;
-   367		bio->bi_bvec_gap_bit = ffs(gaps);
-   368		return 0;
-   369	split:
-   370		if (bio->bi_opf & REQ_ATOMIC)
-   371			return -EINVAL;
-   372	
-   373		/*
-   374		 * We can't sanely support splitting for a REQ_NOWAIT bio. End it
-   375		 * with EAGAIN if splitting is required and return an error pointer.
-   376		 */
-   377		if (bio->bi_opf & REQ_NOWAIT)
-   378			return -EAGAIN;
-   379	
-   380		*segs = nsegs;
-   381	
-   382		/*
-   383		 * Individual bvecs might not be logical block aligned. Round down the
-   384		 * split size so that each bio is properly block size aligned, even if
-   385		 * we do not use the full hardware limits.
-   386		 *
-   387		 * It is possible to submit a bio that can't be split into a valid io:
-   388		 * there may either be too many discontiguous vectors for the max
-   389		 * segments limit, or contain virtual boundary gaps without having a
-   390		 * valid block sized split. A zero byte result means one of those
-   391		 * conditions occured.
-   392		 */
-   393		bytes = ALIGN_DOWN(bytes, bio_split_alignment(bio, lim));
-   394		if (!bytes)
-   395			return -EINVAL;
-   396	
-   397		/*
-   398		 * Bio splitting may cause subtle trouble such as hang when doing sync
-   399		 * iopoll in direct IO routine. Given performance gain of iopoll for
-   400		 * big IO can be trival, disable iopoll when split needed.
-   401		 */
-   402		bio_clear_polled(bio);
-   403		bio->bi_bvec_gap_bit = ffs(gaps);
-   404		return bytes >> SECTOR_SHIFT;
-   405	}
-   406	EXPORT_SYMBOL_GPL(bio_split_io_at);
-   407	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
