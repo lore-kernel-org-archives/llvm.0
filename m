@@ -1,58 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14A8225390;
-	Thu, 11 Dec 2025 05:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D69283FF0;
+	Thu, 11 Dec 2025 08:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765431645; cv=none; b=aRJMQENRrG5uuOppnBVr12NLJ+cUJfZJ0MVoqTAp7kFMMxBiPUWrljHAlKC/mLV3wpNQZap5yDeEeEcYEc4SZcYN6vkEItHwMu91m0OBllCNHAPSOqQAF4F+9+x/dR9bxHeRMLD5DgZ4uGrUv2ObqUeQQVOafdxqtfNB4YnVGQQ=
+	t=1765441794; cv=none; b=QwQdw3l84G6FzoK9Fd7KyXMq+u+UfR+A7lH7e6BSpvsUgHGTBc5hsmfUiKGfk9h/U3VGAFMxSjCDmZe9yK6Wvd4lV5EGJwXSoQJOcGA/kGIrC9LSur+27VdJggAnRnnRQhtDhcPbYc8/8jSKOPG6pQrGBW12wt4ycP1yj1XqNs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765431645; c=relaxed/simple;
-	bh=QCM+hMCucFhEQpywdHG/UmvptFHJAYvcfquvUIC9I6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ssj1ajfK2eEhhRlBUGqQ+tg5j+yw2Ul+Cq7mTUB58YDx2xK1QNHgM1L87OABJHqmryjtBg3S4os74hLK6R5V7nGBXABI86/Se+ISTkPSSZNe/kZWan6rfvWRv0x3N6T/hSRvrlFdPHAotBO/pqxmSrcxQ2uLTkmrhwstpuEdU80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d2Tr/NOT; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1765441794; c=relaxed/simple;
+	bh=oZk62VQRQiT5+0VX7ZHg9OxApmN3iEZ3qWothA1myos=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lmIzzGhUWQbEUInMpP7KkC2Qj96st27AgLuMuRft5dqQPs/uOz4BCwXWIEv+7tbZNM9lTpvhYIYRWBguhBbDf64OLqpyb5nJ5Pv1/P5y8EBYGyJY+/pEVABO3Ntd92V2EP5aWlAEaKbGw5A/KJucubhMmMoPSsMcyQ5csOxm3t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WK/epPi7; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d2Tr/NOT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WK/epPi7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765431641; x=1796967641;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QCM+hMCucFhEQpywdHG/UmvptFHJAYvcfquvUIC9I6c=;
-  b=d2Tr/NOTNa6l9Fv6//2pn/BQl1UpLRyLDJw2xDofMId6afdVhu3pLs1M
-   ieJVF3ZqXmk4RidfaLz09jqlq6jKfp5MSMO39GEPH/xZbHwFWRRo2dPvl
-   k+gpAUhT5L9o53tT1juKRTSKYBjDAYZCEfu2PXX+u9RXWRq4/uW/3yJ+j
-   orSdavZhvR2jsKF3vEF39eugsGYwmVJotU8j8k9+AugApuVuj6upBs3O7
-   ePflU0mreVWbVElG/UU4q3LIdlfVe3FfsEubik/HfLqWGlCJpiTWUjNQo
-   TZCjFPFnicK4W3N49t1+UzjyyYzHM3TTXf8olBqeiiUR2AjDVxxDP+oaP
-   w==;
-X-CSE-ConnectionGUID: xD++0uDyRmGfqgAjZpMeLQ==
-X-CSE-MsgGUID: 7YRu8Vz8TKm/aGLESOfgmw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="84817137"
+  t=1765441793; x=1796977793;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oZk62VQRQiT5+0VX7ZHg9OxApmN3iEZ3qWothA1myos=;
+  b=WK/epPi79asIvbBvS+M9P85uPZ21iYbHhEAFiu0VS2Kuzg+DB5Xxgn1O
+   eJGdbaSqnolfk7Al4caeqM7h8nQPqVnG3dcz8nq2tNIkZU2HWcKQOGPm6
+   NolPb0iYM6wAgel/rVcTEGOwTZ2KRhCCzC8fvFuUIyxuMNjBRv0k29UOw
+   WImtAmwzU7N9QS1apwv/oL3Kqe00nKJkXbjnK+SKrRqpTpsyBoXosSg18
+   hvSIoO+jDQ7mDICt0VBZY7N/W9DddJul17Knpa6++/bcrLM7CfE55UA5+
+   CUgQwF9uWKi28e7LUGcwGMox4h+s5rhVkkomgw7k4lKkaicqGZ/U1MSY+
+   A==;
+X-CSE-ConnectionGUID: OswPAYGPRDGy//y7gZwoQw==
+X-CSE-MsgGUID: yXfMFUOuRrKPh85pW7iTAg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="67305595"
 X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="84817137"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 21:40:40 -0800
-X-CSE-ConnectionGUID: EaJfNjl4RACp/PN0NJTU2Q==
-X-CSE-MsgGUID: m3wWc/wBQCGS/qPJJL2HSA==
+   d="scan'208";a="67305595"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 00:29:51 -0800
+X-CSE-ConnectionGUID: 3O2abcG3S4u1FyeKWKOjPQ==
+X-CSE-MsgGUID: 0bXA4y8vRLSLU557QTbnnQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="201630349"
+   d="scan'208";a="201220538"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 10 Dec 2025 21:40:39 -0800
+  by orviesa004.jf.intel.com with ESMTP; 11 Dec 2025 00:29:49 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vTZPo-000000004Eh-3te5;
-	Thu, 11 Dec 2025 05:40:36 +0000
-Date: Thu, 11 Dec 2025 13:39:55 +0800
+	id 1vTc3W-000000004PN-2OZw;
+	Thu, 11 Dec 2025 08:29:46 +0000
+Date: Thu, 11 Dec 2025 16:28:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-pie-v3 12/16] error[E0425]: cannot find function
- `kunit_get_current_test` in crate `$crate::bindings`
-Message-ID: <202512111300.sL1upN1Q-lkp@intel.com>
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-fscrypt@vger.kernel.org
+Subject: Re: [PATCH 8/9] blk-crypto: optimize data unit alignment checking
+Message-ID: <202512111625.7vv9PN6b-lkp@intel.com>
+References: <20251210152343.3666103-9-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,153 +65,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251210152343.3666103-9-hch@lst.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3
-head:   a8811acb11ba01eb88a548d40735773355424255
-commit: 3ba70776dd9c02b64ba2b9dd8541be5da1126f4e [12/16] x86: Use PIE codegen for the core kernel
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251211/202512111300.sL1upN1Q-lkp@intel.com/config)
+Hi Christoph,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe/for-next]
+[also build test ERROR on jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev linus/master next-20251211]
+[cannot apply to tytso-ext4/dev v6.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/fscrypt-keep-multiple-bios-in-flight-in-fscrypt_zeroout_range_inline_crypt/20251211-002354
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
+patch link:    https://lore.kernel.org/r/20251210152343.3666103-9-hch%40lst.de
+patch subject: [PATCH 8/9] blk-crypto: optimize data unit alignment checking
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251211/202512111625.7vv9PN6b-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111300.sL1upN1Q-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111625.7vv9PN6b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512111300.sL1upN1Q-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512111625.7vv9PN6b-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> warning: unused import: `super::bindings_helper::*`
-   --> rust/bindings/lib.rs:49:13
-   |
-   49 |     pub use super::bindings_helper::*;
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` on by default
---
->> warning: unused import: `super::bindings_raw::*`
-   --> rust/bindings/lib.rs:62:9
-   |
-   62 |     use super::bindings_raw::*;
-   |         ^^^^^^^^^^^^^^^^^^^^^^
---
->> error[E0425]: cannot find function `kunit_get_current_test` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:68:57
-   |
-   68  |             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
-   |                                                         ^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:551:9
-   |
-   551 |         assert_eq!(Some(0), b.next_zero_bit(0));
-   |         --------------------------------------- in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `__kunit_do_failed_assertion` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:133:35
-   |
-   133 |                 $crate::bindings::__kunit_do_failed_assertion(
-   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:551:9
-   |
-   551 |         assert_eq!(Some(0), b.next_zero_bit(0));
-   |         --------------------------------------- in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `kunit_get_current_test` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:68:57
-   |
-   68  |             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
-   |                                                         ^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:552:9
-   |
-   552 |         assert_eq!(None, b.last_bit());
-   |         ------------------------------ in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `__kunit_do_failed_assertion` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:133:35
-   |
-   133 |                 $crate::bindings::__kunit_do_failed_assertion(
-   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:552:9
-   |
-   552 |         assert_eq!(None, b.last_bit());
-   |         ------------------------------ in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `kunit_get_current_test` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:68:57
-   |
-   68  |             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
-   |                                                         ^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/alloc/allocator.rs:289:9
-   |
-   289 |         assert!(ta.is_aligned_to(128));
-   |         ------------------------------ in this macro invocation
-   |
-   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `assert` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `kunit_get_current_test` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:68:57
-   |
-   68  |             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
-   |                                                         ^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:556:9
-   |
-   556 |         assert_eq!(Some(17), b.next_bit(0));
-   |         ----------------------------------- in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `__kunit_do_failed_assertion` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:133:35
-   |
-   133 |                 $crate::bindings::__kunit_do_failed_assertion(
-   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:556:9
-   |
-   556 |         assert_eq!(Some(17), b.next_bit(0));
-   |         ----------------------------------- in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `kunit_get_current_test` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:68:57
-   |
-   68  |             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
-   |                                                         ^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:557:9
-   |
-   557 |         assert_eq!(Some(17), b.next_bit(17));
-   |         ------------------------------------ in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `__kunit_do_failed_assertion` in crate `$crate::bindings`
-   --> rust/kernel/kunit.rs:133:35
-   |
-   133 |                 $crate::bindings::__kunit_do_failed_assertion(
-   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: rust/kernel/bitmap.rs:557:9
-   |
-   557 |         assert_eq!(Some(17), b.next_bit(17));
-   |         ------------------------------------ in this macro invocation
-   |
-   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
-..
+>> block/blk-merge.c:332:35: error: no member named 'bi_crypt_context' in 'struct bio'
+     332 |                 struct bio_crypt_ctx *bc = bio->bi_crypt_context;
+         |                                            ~~~  ^
+   1 error generated.
+
+
+vim +332 block/blk-merge.c
+
+   310	
+   311	/**
+   312	 * bio_split_io_at - check if and where to split a bio
+   313	 * @bio:  [in] bio to be split
+   314	 * @lim:  [in] queue limits to split based on
+   315	 * @segs: [out] number of segments in the bio with the first half of the sectors
+   316	 * @max_bytes: [in] maximum number of bytes per bio
+   317	 *
+   318	 * Find out if @bio needs to be split to fit the queue limits in @lim and a
+   319	 * maximum size of @max_bytes.  Returns a negative error number if @bio can't be
+   320	 * split, 0 if the bio doesn't have to be split, or a positive sector offset if
+   321	 * @bio needs to be split.
+   322	 */
+   323	int bio_split_io_at(struct bio *bio, const struct queue_limits *lim,
+   324			unsigned *segs, unsigned max_bytes)
+   325	{
+   326		struct bio_vec bv, bvprv, *bvprvp = NULL;
+   327		unsigned nsegs = 0, bytes = 0, gaps = 0;
+   328		struct bvec_iter iter;
+   329		unsigned len_align_mask = lim->dma_alignment;
+   330	
+   331		if (bio_has_crypt_ctx(bio)) {
+ > 332			struct bio_crypt_ctx *bc = bio->bi_crypt_context;
+   333	
+   334			len_align_mask |= (bc->bc_key->crypto_cfg.data_unit_size - 1);
+   335		}
+   336	
+   337		bio_for_each_bvec(bv, bio, iter) {
+   338			if (bv.bv_offset & len_align_mask)
+   339				return -EINVAL;
+   340	
+   341			/*
+   342			 * If the queue doesn't support SG gaps and adding this
+   343			 * offset would create a gap, disallow it.
+   344			 */
+   345			if (bvprvp) {
+   346				if (bvec_gap_to_prev(lim, bvprvp, bv.bv_offset))
+   347					goto split;
+   348				gaps |= bvec_seg_gap(bvprvp, &bv);
+   349			}
+   350	
+   351			if (nsegs < lim->max_segments &&
+   352			    bytes + bv.bv_len <= max_bytes &&
+   353			    bv.bv_offset + bv.bv_len <= lim->max_fast_segment_size) {
+   354				nsegs++;
+   355				bytes += bv.bv_len;
+   356			} else {
+   357				if (bvec_split_segs(lim, &bv, &nsegs, &bytes,
+   358						lim->max_segments, max_bytes))
+   359					goto split;
+   360			}
+   361	
+   362			bvprv = bv;
+   363			bvprvp = &bvprv;
+   364		}
+   365	
+   366		*segs = nsegs;
+   367		bio->bi_bvec_gap_bit = ffs(gaps);
+   368		return 0;
+   369	split:
+   370		if (bio->bi_opf & REQ_ATOMIC)
+   371			return -EINVAL;
+   372	
+   373		/*
+   374		 * We can't sanely support splitting for a REQ_NOWAIT bio. End it
+   375		 * with EAGAIN if splitting is required and return an error pointer.
+   376		 */
+   377		if (bio->bi_opf & REQ_NOWAIT)
+   378			return -EAGAIN;
+   379	
+   380		*segs = nsegs;
+   381	
+   382		/*
+   383		 * Individual bvecs might not be logical block aligned. Round down the
+   384		 * split size so that each bio is properly block size aligned, even if
+   385		 * we do not use the full hardware limits.
+   386		 *
+   387		 * It is possible to submit a bio that can't be split into a valid io:
+   388		 * there may either be too many discontiguous vectors for the max
+   389		 * segments limit, or contain virtual boundary gaps without having a
+   390		 * valid block sized split. A zero byte result means one of those
+   391		 * conditions occured.
+   392		 */
+   393		bytes = ALIGN_DOWN(bytes, bio_split_alignment(bio, lim));
+   394		if (!bytes)
+   395			return -EINVAL;
+   396	
+   397		/*
+   398		 * Bio splitting may cause subtle trouble such as hang when doing sync
+   399		 * iopoll in direct IO routine. Given performance gain of iopoll for
+   400		 * big IO can be trival, disable iopoll when split needed.
+   401		 */
+   402		bio_clear_polled(bio);
+   403		bio->bi_bvec_gap_bit = ffs(gaps);
+   404		return bytes >> SECTOR_SHIFT;
+   405	}
+   406	EXPORT_SYMBOL_GPL(bio_split_io_at);
+   407	
 
 -- 
 0-DAY CI Kernel Test Service
