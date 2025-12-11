@@ -1,60 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A75301480;
-	Thu, 11 Dec 2025 08:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF9B2D7DC3;
+	Thu, 11 Dec 2025 09:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765443053; cv=none; b=lVD9eDkzWqc1eQF0lRQ65murD/RDJxfLpgYBoiIDfXiya32KUDqD6Fhw4Diz0gYWf/LWcmgnfvK6iKGwd2jCdYhDNvmlPJ0Xy/FgTz/MiscudB9syJ7LaHCT8BPiMsSuv1H1SmJN4/uSS+T2TPRIiSnAI+loHZ601FBWEJ/VoX4=
+	t=1765446953; cv=none; b=Kw6eEiRluVNAM7ysl0Xv/ebDsm5m41Yv2lC6uqEBfTwCULDsV124XpjEHw4ozf6o+3dh1YG/KtaQ/YnbM0vyIpCUc9Q8Z6sM8J1S9h2qYW0Ww3E1oYntlAgLV0VTcdSg4/e9KP6iqddMIDVjgGw2dfIjADcdAxDN6I/Qi45LD4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765443053; c=relaxed/simple;
-	bh=al99j6p0cDAh5F30IQJcCGcwOmWRWrs7RhVjRTAhYQo=;
+	s=arc-20240116; t=1765446953; c=relaxed/simple;
+	bh=9lSRlga72l9+gIoIAFVVo5cVfTqtz+9+i4a8Tut3XNw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NNSvu4k264tDF6R/kp6H/5dSpv8Zwx5XHffYpg1u1De6sFW3dYPI8ncwQhX5D+R0scVo2Oez+pQsGavk2OiRq42SuiS5se2tj+cjclViVPgs6bMIzd140yl0rGn0DVGf5SbU2gztgI1n5aMswd/hQ4zpmW8bSSJ7XgX8azip+YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JVD/DNTh; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=S4375qIbcn6/CgfHynRFjAwPCcvNJXWVsc0ccX0rZoSI73A0788mfoltXjDxaBmWDIIzQFSravpSLhwGeZIPB1strTfz5w+yb1eEt05jKbhDjbCKQXlWDWcpGpcZ8AW3l1MaRNw9b2BFp0E5HIuM+kidgA6JdUO8n8uZVoFkis4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=E3bZKCI1; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JVD/DNTh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765443051; x=1796979051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=al99j6p0cDAh5F30IQJcCGcwOmWRWrs7RhVjRTAhYQo=;
-  b=JVD/DNTh6jTayx5mOVfHgBYXCsl7avaMxChvDhZO0SI+II+ulrsK7u84
-   /NsQrZP9/nCiR+nN6NDHQBRr1cVngI29ed9Z/vP5GQxN04w8cFSQhboDC
-   y8Hl53LGqU2sQRIaMMtIU/f/RQZz/m+oEY/LVpk0C++WShMTswte1i/0e
-   Lk/NtFdRHOKKZ1uUuleEu3bG5BI+yZ2rrb1hIPgzdjjCTVECm3K+AYPj8
-   xW2YlSg7KlLKNUbXF20eAo7Hmmxmnt8hRJ5JeRngPTzNZoJRqtQpPxVRR
-   3dEMpXFrXgL7GtdXUPXKE0SEgt6/H5zON865DwxoPs9SWiI37LmWA4RS5
-   g==;
-X-CSE-ConnectionGUID: oJMCg/kdQxOP2QOftviDhw==
-X-CSE-MsgGUID: WR+4B/71Qv+fFtn3iS4qCA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="92900913"
-X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="92900913"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 00:50:51 -0800
-X-CSE-ConnectionGUID: tZhMugYAS3qduxAYwdBuPQ==
-X-CSE-MsgGUID: ryDETTF9To+XS61m19t5MQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="201169662"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 11 Dec 2025 00:50:49 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vTcNr-000000004Qr-2kI1;
-	Thu, 11 Dec 2025 08:50:47 +0000
-Date: Thu, 11 Dec 2025 16:50:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Enze Li <lienze@kylinos.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/2] mm/damon/auto-tuning: introduce DAMON-based
- auto-tunning module
-Message-ID: <202512111604.B1hpFdVs-lkp@intel.com>
-References: <20251209145026.3263754-2-lienze@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="E3bZKCI1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=6WhymY9DTx4lwYH2yf2+tZtBM6CKMmmYYDOh50+lOZo=; b=E3bZKCI1ZZXvnG0+gAKKjTRe88
+	LDQhz432e77NUYPNQQnmOHIWVO75MWPvr+x9ii68maqX/F62HbYRmLDcK9GnRB3g2hCqIlCL1j90u
+	m956FTwbPf8++wE5dZatnhW5YgU7HRVcZYJvhtfJkX7EGXEyA/vhdvAxzQDui+P7LA/NobcKpZEWn
+	mCV2u3O0fxZKBdjE8/9IO7ypAIf+PQI4Y+d+TeggMyq3EiRF7Ltrowsn0AY9bpVjEHVBe3MnLCr82
+	uMOArrHQRtzlLPKJrj4S4qkLHV2+GWAHKrDfPnPMJXuULb9wLKbzCe1Ukoo7LCvMNsrowOCD1pN5C
+	/h/oVIJA==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vTcWn-0000000Eibk-2SDe;
+	Thu, 11 Dec 2025 09:00:02 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id DB9BD300566; Thu, 11 Dec 2025 10:55:16 +0100 (CET)
+Date: Thu, 11 Dec 2025 10:55:16 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Marco Elver <elver@google.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Chris Li <sparse@chrisli.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context
+ analysis
+Message-ID: <20251211095516.GO3707837@noisy.programming.kicks-ass.net>
+References: <20251120145835.3833031-2-elver@google.com>
+ <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,220 +85,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251209145026.3263754-2-lienze@kylinos.cn>
+In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 
-Hi Enze,
+On Thu, Nov 20, 2025 at 04:09:31PM +0100, Marco Elver wrote:
+> Introduce basic compatibility with cleanup.h infrastructure: introduce
+> DECLARE_LOCK_GUARD_*_ATTRS() helpers to add attributes to constructors
+> and destructors respectively.
+> 
+> Note: Due to the scoped cleanup helpers used for lock guards wrapping
+> acquire and release around their own constructors/destructors that store
+> pointers to the passed locks in a separate struct, we currently cannot
+> accurately annotate *destructors* which lock was released. While it's
+> possible to annotate the constructor to say which lock was acquired,
+> that alone would result in false positives claiming the lock was not
+> released on function return.
+> 
+> Instead, to avoid false positives, we can claim that the constructor
+> "assumes" that the taken lock is held via __assumes_ctx_guard().
+> 
+> This will ensure we can still benefit from the analysis where scoped
+> guards are used to protect access to guarded variables, while avoiding
+> false positives. The only downside are false negatives where we might
+> accidentally lock the same lock again:
+> 
+> 	raw_spin_lock(&my_lock);
+> 	...
+> 	guard(raw_spinlock)(&my_lock);  // no warning
+> 
+> Arguably, lockdep will immediately catch issues like this.
+> 
+> While Clang's analysis supports scoped guards in C++ [1], there's no way
+> to apply this to C right now. Better support for Linux's scoped guard
+> design could be added in future if deemed critical.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Enze-Li/mm-damon-auto-tuning-introduce-DAMON-based-auto-tunning-module/20251210-025514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20251209145026.3263754-2-lienze%40kylinos.cn
-patch subject: [RFC PATCH 1/2] mm/damon/auto-tuning: introduce DAMON-based auto-tunning module
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251211/202512111604.B1hpFdVs-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111604.B1hpFdVs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512111604.B1hpFdVs-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/damon/auto-tuning.c:155:21: warning: variable 'adjust_priority' is uninitialized when used here [-Wuninitialized]
-     155 |                 adjust_priority = adjust_priority * decay_factor / 10;
-         |                                   ^~~~~~~~~~~~~~~
-   mm/damon/auto-tuning.c:134:31: note: initialize the variable 'adjust_priority' to silence this warning
-     134 |         unsigned long adjust_priority, metric;
-         |                                      ^
-         |                                       = 0
->> mm/damon/auto-tuning.c:283:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     283 |         if (!damon_initialized()) {
-         |             ^~~~~~~~~~~~~~~~~~~~
-   mm/damon/auto-tuning.c:291:9: note: uninitialized use occurs here
-     291 |         return err;
-         |                ^~~
-   mm/damon/auto-tuning.c:283:2: note: remove the 'if' if its condition is always true
-     283 |         if (!damon_initialized()) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/damon/auto-tuning.c:281:9: note: initialize the variable 'err' to silence this warning
-     281 |         int err;
-         |                ^
-         |                 = 0
-   2 warnings generated.
-
-
-vim +/adjust_priority +155 mm/damon/auto-tuning.c
-
-   130	
-   131	static bool _damon_auto_tuning_wmarks(struct damon_ctx *c, struct damos *s,
-   132					      struct damon_target *t)
-   133	{
-   134		unsigned long adjust_priority, metric;
-   135		int min = damon_targets_priority_min(c);
-   136		int max = damon_targets_priority_max(c);
-   137		int nr_targets = damon_nr_targets(c);
-   138		int decay_factor = max_nr_targets - nr_targets;
-   139	
-   140		metric = global_zone_page_state(NR_FREE_PAGES) * 1000 /
-   141			 totalram_pages();
-   142	
-   143		/*
-   144		 * We are now ready to start adjusting the watermarks based on
-   145		 * priority.  The goal is to set each target's watermark above the
-   146		 * system's high watermark (to prevent it from triggering system-wide
-   147		 * actions) and below its initial memory capacity, as determined by
-   148		 * its importance.
-   149		 */
-   150		pr_debug("%s: metric=%ld\n", __func__, metric);
-   151		/* TODO: Here, we need to use the system's high watermark value, and
-   152		 * will temporarily substitute it with 100.
-   153		 */
-   154		if (nr_targets < max_nr_targets)
- > 155			adjust_priority = adjust_priority * decay_factor / 10;
-   156		adjust_priority = (t->priority - min) * (metric - 100) / (max - min) + 100;
-   157	
-   158		s->wmarks.high = adjust_priority;
-   159		s->wmarks.mid = adjust_priority;
-   160		s->wmarks.low = 0;
-   161		return true;
-   162	}
-   163	
-   164	static bool damon_auto_tuning_wmarks(struct damon_ctx *c)
-   165	{
-   166		struct damon_target *t;
-   167		struct damos *s, *next;
-   168		struct damos_filter *f;
-   169	
-   170		damon_for_each_target(t, c) {
-   171			if (c->ops.target_valid && c->ops.target_valid(t)) {
-   172				damon_for_each_scheme_safe(s, next, c) {
-   173					damos_for_each_core_filter(f, s) {
-   174						if (damon_target_filter_match(c, f, t)) {
-   175							pr_debug("%s: priority=%d(idx=%d)\n",
-   176								 __func__, t->priority,
-   177								 f->target_idx);
-   178							_damon_auto_tuning_wmarks(c, s, t);
-   179						}
-   180					}
-   181				}
-   182			}
-   183		}
-   184		damon_targets_print_info(c);
-   185		return true;
-   186	}
-   187	
-   188	static bool damon_targets_auto_tuning_tick(struct damon_ctx *c,
-   189						   bool init_wmarks)
-   190	{
-   191		int nr_targets = 0;
-   192		unsigned long cur_jiffies = jiffies;
-   193		static unsigned long last_jiffies;
-   194	
-   195		if (last_jiffies != 0) {
-   196			if (time_is_after_jiffies(last_jiffies + 5 * HZ))
-   197				return false;
-   198		}
-   199	
-   200		pr_debug("%s %ld %ld\n", __func__, cur_jiffies, last_jiffies + 5 * HZ);
-   201		last_jiffies = cur_jiffies;
-   202	
-   203		/*
-   204		 * Any change in the number of targets necessitates a recalibration of
-   205		 * the per-task watermarks.
-   206		 */
-   207		nr_targets = damon_nr_targets(auto_ctx);
-   208		if (auto_targets != nr_targets) {
-   209			damon_auto_tuning_wmarks(auto_ctx);
-   210			auto_targets = nr_targets;
-   211		}
-   212	
-   213		if (max_nr_targets < auto_targets)
-   214			max_nr_targets = auto_targets;
-   215	
-   216		return true;
-   217	}
-   218	
-   219	static bool damon_targets_auto_tuning_init(struct damon_ctx *c)
-   220	{
-   221		struct damon_target *t;
-   222		struct damos *s, *next, *new_scheme;
-   223		struct damos_filter *new_filter;
-   224		int i = 0;
-   225	
-   226		init_auto_tuning = true;
-   227		auto_ctx = c;
-   228	
-   229		damon_for_each_scheme_safe(s, next, c)
-   230			damon_destroy_scheme(s);
-   231	
-   232		damon_for_each_target(t, c) {
-   233			new_scheme = damon_auto_tuning_new_scheme();
-   234			if (!new_scheme)
-   235				return -ENOMEM;
-   236	
-   237			new_filter = damos_new_filter(DAMOS_FILTER_TYPE_TARGET, true, true);
-   238			if (!new_filter)
-   239				return -ENOMEM;
-   240			new_filter->target_idx = i++;
-   241	
-   242			damos_add_filter(new_scheme, new_filter);
-   243			damon_add_scheme(c, new_scheme);
-   244	
-   245			pr_info("\t add scheme %d\n", auto_targets);
-   246			auto_targets++;
-   247		}
-   248	
-   249		max_nr_targets = auto_targets;
-   250	
-   251		damon_targets_print_info(c);
-   252		damon_auto_tuning_wmarks(c);
-   253		damon_targets_print_info(c);
-   254	
-   255		return true;
-   256	}
-   257	
-   258	static bool damon_targets_priority_enabled(struct damon_ctx *c)
-   259	{
-   260		struct damon_target *t;
-   261	
-   262		damon_for_each_target(t, c)
-   263			if (t->priority > 0)
-   264				return true;
-   265		return false;
-   266	}
-   267	
-   268	bool kdamond_targets_auto_tuning(struct damon_ctx *c)
-   269	{
-   270		if (damon_targets_priority_enabled(c)) {
-   271			if (!init_auto_tuning)
-   272				damon_targets_auto_tuning_init(c);
-   273			else
-   274				damon_targets_auto_tuning_tick(c, false);
-   275		}
-   276		return false;
-   277	}
-   278	
-   279	static int __init damon_auto_tuning_init(void)
-   280	{
-   281		int err;
-   282	
- > 283		if (!damon_initialized()) {
-   284			err = -ENOMEM;
-   285			goto out;
-   286		}
-   287		init_metric = global_zone_page_state(NR_FREE_PAGES) * 1000 /
-   288			      totalram_pages();
-   289		pr_info("%s init_metric=%ld\n", __func__,  init_metric);
-   290	out:
-   291		return err;
-   292	}
-   293	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Moo, so the alias analysis didn't help here?
