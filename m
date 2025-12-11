@@ -1,82 +1,61 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7030D2D978D;
-	Thu, 11 Dec 2025 12:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA822E540D;
+	Thu, 11 Dec 2025 12:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765456010; cv=none; b=i7P5wNHCUd5+SAGWpOJCRdNbVYZUOkwBjBGsPGcbgAHyi1kugZlxlZTJHi2I+5SjCKrHUbL0UUGKBqXUWbSXiv3nNocxx8i0uX5oi6DQA/VDzEbumvzx/5onTGzmrZvKenBGtBiwWgWj9uAfAduJ4VD07rPCUIp3NDIrJKBZWY8=
+	t=1765456084; cv=none; b=O2QxLkdbyzytyK24ullNuTITk2G4Sw20HV4TXRW23YLR8x/eFezrKgSsTVoYXpR1I5OiZBbo+Q0vkPHpUcP7o+9MXo2aocJI/WPkCtSzRBuMJIt031YhYJquIh+F297paqr4gRRxKUvg3lnHwa7V1aaIjr81DJgvfa6Jh8Zu/8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765456010; c=relaxed/simple;
-	bh=k+xRpM4Z1Oucbie7O6S+5dCH8+G8rGP3jsUF9Izc83s=;
+	s=arc-20240116; t=1765456084; c=relaxed/simple;
+	bh=he0+dkLeHdg0N5RCMR3gbFmD2nJSj7YERowHpWY9q/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQVgO++frOEaHFCbrvRGcWtsu7MwMR3pBlxd3HU2+CPkARX2lMazt90HcUk1QuQPXELkEz3RcrJt++YK3A04GvahM69yedyflqNLCrHi65wVbNWtXPdcNWuBK1YkZb0oJLGiIjQ2kOaVP/UgXzzt8W+xgC6OniFyjHmh7nLYlCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K0YdkMUJ; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZBUUV4PK4geFVmQpJRmWk82fZQ+cwcH5YLZa5r5Uj97OQtofNCxYenRVjmIXY9Dpuv023Mz45PvhhejRsi3AF3njbwtQEJFLmXeNvmV1PPtfEmRp1oGJ9WQNKAVO9tdk7Id8Qs/Umq31zaee267L/38vAwI1JSmY2TN4mh9qCUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yme36KJ0; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K0YdkMUJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=TvaOJBAIvNxAg3dFoJJOVlV+NfsswdVw/SLF3Bn6Td0=; b=K0YdkMUJPOvWjO/lZj5urNguxm
-	ZAiBii+Ae2fBpzdAfhrQzMGnUP3OjzC9L9mkrVvZjWEQfpAlquZ++ph67woSYii/zBMmEHvUQvUwV
-	xzs6+MQ7OffQfjNrP9FO5P+EazF/4oqKTpptXPWWYxOTha9knM9dDMsotyDXKr+nKvwfSHhl3uQxc
-	yM6eQewjA5dor1BxkERq6vqwKUckiZb1Lc2G/5lSdOV2RBYn9tqjrefNrpKqtnduWuALuI4pgaRBT
-	XEHR80cmqPsAni9JZK/UPwxwegbKAnsh7vy0FTdUaPzJdezsXecMJ09nNIv88zolGW5szyo7rHJk6
-	mfgk/OeA==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vTetE-0000000EuI9-0zph;
-	Thu, 11 Dec 2025 11:31:20 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9A28A30301A; Thu, 11 Dec 2025 13:26:36 +0100 (CET)
-Date: Thu, 11 Dec 2025 13:26:36 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Chris Li <sparse@chrisli.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org
-Subject: Re: [PATCH v4 16/35] kref: Add context-analysis annotations
-Message-ID: <20251211122636.GI3911114@noisy.programming.kicks-ass.net>
-References: <20251120145835.3833031-2-elver@google.com>
- <20251120151033.3840508-7-elver@google.com>
- <20251120151033.3840508-17-elver@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yme36KJ0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765456082; x=1796992082;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=he0+dkLeHdg0N5RCMR3gbFmD2nJSj7YERowHpWY9q/0=;
+  b=Yme36KJ0kffSvAL8y4pZwS9xfywZWcBI/cwiwohQn+OAv1u8dVkD0k9n
+   pBnpWtH2vyJT3Tv8GmAjS+4rfYADnY8/OKi0/n5MyHFdtFX60fgJDf76T
+   hGaMUE5+GxVxR9TvqD32B+DONw2IK4kTDcMM/BLxy46itRCNXqzY6W9Lw
+   Q/Llmb2FMQNf2CKJAQyh9PkW3oCdLAGlbtnvV2IaoNQqVhismPICGAGl+
+   tKCBYsq0hFYmQHAFt/4NVsQtCvKZvNry1qIs5TUQ8JQNwNNBPpR371RUX
+   m+4h0HHH/Uj941dTqO0qg4GlV83rLntKpnxeQPonGvJO2vPM/u/JsLxNN
+   w==;
+X-CSE-ConnectionGUID: mT8jnmOHRECvzs897SbJvA==
+X-CSE-MsgGUID: FyZ9r1kiTuKmkDGoMa7GNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="54983666"
+X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
+   d="scan'208";a="54983666"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 04:28:02 -0800
+X-CSE-ConnectionGUID: Yp5JWb4QRam9plaRu7HMkQ==
+X-CSE-MsgGUID: GLKy5C46QNqBGUU+LU3WoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
+   d="scan'208";a="196054267"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 11 Dec 2025 04:28:00 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vTfm1-000000004dJ-1MFv;
+	Thu, 11 Dec 2025 12:27:57 +0000
+Date: Thu, 11 Dec 2025 20:27:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pycode <pycode42@gmail.com>, Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] Removed unused variable
+Message-ID: <202512111949.7OSsjLSn-lkp@intel.com>
+References: <aTnfSQJ4QsfwTSf0@raspberrypi>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,40 +64,255 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251120151033.3840508-17-elver@google.com>
+In-Reply-To: <aTnfSQJ4QsfwTSf0@raspberrypi>
 
-On Thu, Nov 20, 2025 at 04:09:41PM +0100, Marco Elver wrote:
-> Mark functions that conditionally acquire the passed lock.
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  include/linux/kref.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/linux/kref.h b/include/linux/kref.h
-> index 88e82ab1367c..9bc6abe57572 100644
-> --- a/include/linux/kref.h
-> +++ b/include/linux/kref.h
-> @@ -81,6 +81,7 @@ static inline int kref_put(struct kref *kref, void (*release)(struct kref *kref)
->  static inline int kref_put_mutex(struct kref *kref,
->  				 void (*release)(struct kref *kref),
->  				 struct mutex *mutex)
-> +	__cond_acquires(true, mutex)
->  {
->  	if (refcount_dec_and_mutex_lock(&kref->refcount, mutex)) {
->  		release(kref);
-> @@ -102,6 +103,7 @@ static inline int kref_put_mutex(struct kref *kref,
->  static inline int kref_put_lock(struct kref *kref,
->  				void (*release)(struct kref *kref),
->  				spinlock_t *lock)
-> +	__cond_acquires(true, lock)
->  {
->  	if (refcount_dec_and_lock(&kref->refcount, lock)) {
->  		release(kref);
-> -- 
-> 2.52.0.rc1.455.g30608eb744-goog
-> 
+Hi Pycode,
 
-Note that both use the underlying refcount_dec_and_*lock() functions.
-Its a bit sad that annotation those isn't sufficient. These are inline
-functions after all, the compiler should be able to see through all that.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v6.18 next-20251211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pycode/Removed-unused-variable/20251211-050134
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/aTnfSQJ4QsfwTSf0%40raspberrypi
+patch subject: [PATCH] Removed unused variable
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251211/202512111949.7OSsjLSn-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111949.7OSsjLSn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512111949.7OSsjLSn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/nfs/flexfilelayout/flexfilelayoutdev.c:182:48: error: use of undeclared identifier 'ret'; did you mean 'net'?
+     182 |         dprintk("%s ERROR: returning %d\n", __func__, ret);
+         |                                                       ^~~
+         |                                                       net
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                                   ^
+   include/linux/sunrpc/debug.h:42:26: note: expanded from macro 'dfprintk'
+      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
+         |                                        ^
+   include/linux/sunrpc/debug.h:34:57: note: expanded from macro '__sunrpc_printk'
+      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
+         |                                                             ^
+   include/linux/kernel.h:276:26: note: expanded from macro 'trace_printk'
+     276 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                        ^
+   include/linux/kernel.h:287:37: note: expanded from macro 'do_trace_printk'
+     287 |         __trace_printk_check_format(fmt, ##args);                       \
+         |                                            ^
+   include/linux/kernel.h:239:40: note: expanded from macro '__trace_printk_check_format'
+     239 |                 ____trace_printk_check_format(fmt, ##args);             \
+         |                                                      ^
+   fs/nfs/flexfilelayout/flexfilelayoutdev.c:52:14: note: 'net' declared here
+      52 |         struct net *net = server->nfs_client->cl_net;
+         |                     ^
+>> fs/nfs/flexfilelayout/flexfilelayoutdev.c:182:48: error: use of undeclared identifier 'ret'; did you mean 'net'?
+     182 |         dprintk("%s ERROR: returning %d\n", __func__, ret);
+         |                                                       ^~~
+         |                                                       net
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                                   ^
+   include/linux/sunrpc/debug.h:42:26: note: expanded from macro 'dfprintk'
+      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
+         |                                        ^
+   include/linux/sunrpc/debug.h:34:57: note: expanded from macro '__sunrpc_printk'
+      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
+         |                                                             ^
+   include/linux/kernel.h:276:26: note: expanded from macro 'trace_printk'
+     276 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                        ^
+   include/linux/kernel.h:290:50: note: expanded from macro 'do_trace_printk'
+     290 |                 __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+         |                                                                ^
+   fs/nfs/flexfilelayout/flexfilelayoutdev.c:52:14: note: 'net' declared here
+      52 |         struct net *net = server->nfs_client->cl_net;
+         |                     ^
+>> fs/nfs/flexfilelayout/flexfilelayoutdev.c:182:48: error: use of undeclared identifier 'ret'; did you mean 'net'?
+     182 |         dprintk("%s ERROR: returning %d\n", __func__, ret);
+         |                                                       ^~~
+         |                                                       net
+   include/linux/sunrpc/debug.h:25:28: note: expanded from macro 'dprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |                                   ^
+   include/linux/sunrpc/debug.h:42:26: note: expanded from macro 'dfprintk'
+      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
+         |                                        ^
+   include/linux/sunrpc/debug.h:34:57: note: expanded from macro '__sunrpc_printk'
+      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
+         |                                                             ^
+   include/linux/kernel.h:276:26: note: expanded from macro 'trace_printk'
+     276 |                 do_trace_printk(fmt, ##__VA_ARGS__);    \
+         |                                        ^
+   include/linux/kernel.h:292:36: note: expanded from macro 'do_trace_printk'
+     292 |                 __trace_printk(_THIS_IP_, fmt, ##args);                 \
+         |                                                  ^
+   fs/nfs/flexfilelayout/flexfilelayoutdev.c:52:14: note: 'net' declared here
+      52 |         struct net *net = server->nfs_client->cl_net;
+         |                     ^
+   3 errors generated.
+
+
+vim +182 fs/nfs/flexfilelayout/flexfilelayoutdev.c
+
+d67ae825a59d63 Tom Haynes       2014-12-11   39  
+d67ae825a59d63 Tom Haynes       2014-12-11   40  /* Decode opaque device data and construct new_ds using it */
+d67ae825a59d63 Tom Haynes       2014-12-11   41  struct nfs4_ff_layout_ds *
+d67ae825a59d63 Tom Haynes       2014-12-11   42  nfs4_ff_alloc_deviceid_node(struct nfs_server *server, struct pnfs_device *pdev,
+d67ae825a59d63 Tom Haynes       2014-12-11   43  			    gfp_t gfp_flags)
+d67ae825a59d63 Tom Haynes       2014-12-11   44  {
+d67ae825a59d63 Tom Haynes       2014-12-11   45  	struct xdr_stream stream;
+d67ae825a59d63 Tom Haynes       2014-12-11   46  	struct xdr_buf buf;
+4b7c3b4c673d40 Anna Schumaker   2025-06-30   47  	struct folio *scratch;
+d67ae825a59d63 Tom Haynes       2014-12-11   48  	struct list_head dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11   49  	struct nfs4_pnfs_ds_addr *da;
+d67ae825a59d63 Tom Haynes       2014-12-11   50  	struct nfs4_ff_layout_ds *new_ds = NULL;
+d67ae825a59d63 Tom Haynes       2014-12-11   51  	struct nfs4_ff_ds_version *ds_versions = NULL;
+6b9785dc8b13d9 Jeff Layton      2025-04-10   52  	struct net *net = server->nfs_client->cl_net;
+d67ae825a59d63 Tom Haynes       2014-12-11   53  	u32 mp_count;
+d67ae825a59d63 Tom Haynes       2014-12-11   54  	u32 version_count;
+d67ae825a59d63 Tom Haynes       2014-12-11   55  	__be32 *p;
+07df4d912b7c38 Pycode           2025-12-10   56  	int i = -ENOMEM;
+d67ae825a59d63 Tom Haynes       2014-12-11   57  
+d67ae825a59d63 Tom Haynes       2014-12-11   58  	/* set up xdr stream */
+4b7c3b4c673d40 Anna Schumaker   2025-06-30   59  	scratch = folio_alloc(gfp_flags, 0);
+d67ae825a59d63 Tom Haynes       2014-12-11   60  	if (!scratch)
+d67ae825a59d63 Tom Haynes       2014-12-11   61  		goto out_err;
+d67ae825a59d63 Tom Haynes       2014-12-11   62  
+d67ae825a59d63 Tom Haynes       2014-12-11   63  	new_ds = kzalloc(sizeof(struct nfs4_ff_layout_ds), gfp_flags);
+d67ae825a59d63 Tom Haynes       2014-12-11   64  	if (!new_ds)
+d67ae825a59d63 Tom Haynes       2014-12-11   65  		goto out_scratch;
+d67ae825a59d63 Tom Haynes       2014-12-11   66  
+d67ae825a59d63 Tom Haynes       2014-12-11   67  	nfs4_init_deviceid_node(&new_ds->id_node,
+d67ae825a59d63 Tom Haynes       2014-12-11   68  				server,
+d67ae825a59d63 Tom Haynes       2014-12-11   69  				&pdev->dev_id);
+d67ae825a59d63 Tom Haynes       2014-12-11   70  	INIT_LIST_HEAD(&dsaddrs);
+d67ae825a59d63 Tom Haynes       2014-12-11   71  
+d67ae825a59d63 Tom Haynes       2014-12-11   72  	xdr_init_decode_pages(&stream, &buf, pdev->pages, pdev->pglen);
+4b7c3b4c673d40 Anna Schumaker   2025-06-30   73  	xdr_set_scratch_folio(&stream, scratch);
+d67ae825a59d63 Tom Haynes       2014-12-11   74  
+d67ae825a59d63 Tom Haynes       2014-12-11   75  	/* multipath count */
+d67ae825a59d63 Tom Haynes       2014-12-11   76  	p = xdr_inline_decode(&stream, 4);
+d67ae825a59d63 Tom Haynes       2014-12-11   77  	if (unlikely(!p))
+d67ae825a59d63 Tom Haynes       2014-12-11   78  		goto out_err_drain_dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11   79  	mp_count = be32_to_cpup(p);
+d67ae825a59d63 Tom Haynes       2014-12-11   80  	dprintk("%s: multipath ds count %d\n", __func__, mp_count);
+d67ae825a59d63 Tom Haynes       2014-12-11   81  
+d67ae825a59d63 Tom Haynes       2014-12-11   82  	for (i = 0; i < mp_count; i++) {
+d67ae825a59d63 Tom Haynes       2014-12-11   83  		/* multipath ds */
+6b9785dc8b13d9 Jeff Layton      2025-04-10   84  		da = nfs4_decode_mp_ds_addr(net, &stream, gfp_flags);
+d67ae825a59d63 Tom Haynes       2014-12-11   85  		if (da)
+d67ae825a59d63 Tom Haynes       2014-12-11   86  			list_add_tail(&da->da_node, &dsaddrs);
+d67ae825a59d63 Tom Haynes       2014-12-11   87  	}
+d67ae825a59d63 Tom Haynes       2014-12-11   88  	if (list_empty(&dsaddrs)) {
+d67ae825a59d63 Tom Haynes       2014-12-11   89  		dprintk("%s: no suitable DS addresses found\n",
+d67ae825a59d63 Tom Haynes       2014-12-11   90  			__func__);
+d67ae825a59d63 Tom Haynes       2014-12-11   91  		goto out_err_drain_dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11   92  	}
+d67ae825a59d63 Tom Haynes       2014-12-11   93  
+d67ae825a59d63 Tom Haynes       2014-12-11   94  	/* version count */
+d67ae825a59d63 Tom Haynes       2014-12-11   95  	p = xdr_inline_decode(&stream, 4);
+d67ae825a59d63 Tom Haynes       2014-12-11   96  	if (unlikely(!p))
+d67ae825a59d63 Tom Haynes       2014-12-11   97  		goto out_err_drain_dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11   98  	version_count = be32_to_cpup(p);
+d67ae825a59d63 Tom Haynes       2014-12-11   99  	dprintk("%s: version count %d\n", __func__, version_count);
+d67ae825a59d63 Tom Haynes       2014-12-11  100  
+6396bb221514d2 Kees Cook        2018-06-12  101  	ds_versions = kcalloc(version_count,
+6396bb221514d2 Kees Cook        2018-06-12  102  			      sizeof(struct nfs4_ff_ds_version),
+d67ae825a59d63 Tom Haynes       2014-12-11  103  			      gfp_flags);
+d67ae825a59d63 Tom Haynes       2014-12-11  104  	if (!ds_versions)
+d67ae825a59d63 Tom Haynes       2014-12-11  105  		goto out_scratch;
+d67ae825a59d63 Tom Haynes       2014-12-11  106  
+d67ae825a59d63 Tom Haynes       2014-12-11  107  	for (i = 0; i < version_count; i++) {
+d67ae825a59d63 Tom Haynes       2014-12-11  108  		/* 20 = version(4) + minor_version(4) + rsize(4) + wsize(4) +
+d67ae825a59d63 Tom Haynes       2014-12-11  109  		 * tightly_coupled(4) */
+d67ae825a59d63 Tom Haynes       2014-12-11  110  		p = xdr_inline_decode(&stream, 20);
+d67ae825a59d63 Tom Haynes       2014-12-11  111  		if (unlikely(!p))
+d67ae825a59d63 Tom Haynes       2014-12-11  112  			goto out_err_drain_dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11  113  		ds_versions[i].version = be32_to_cpup(p++);
+d67ae825a59d63 Tom Haynes       2014-12-11  114  		ds_versions[i].minor_version = be32_to_cpup(p++);
+940261a195080c Anna Schumaker   2022-06-17  115  		ds_versions[i].rsize = nfs_io_size(be32_to_cpup(p++),
+940261a195080c Anna Schumaker   2022-06-17  116  						   server->nfs_client->cl_proto);
+940261a195080c Anna Schumaker   2022-06-17  117  		ds_versions[i].wsize = nfs_io_size(be32_to_cpup(p++),
+940261a195080c Anna Schumaker   2022-06-17  118  						   server->nfs_client->cl_proto);
+d67ae825a59d63 Tom Haynes       2014-12-11  119  		ds_versions[i].tightly_coupled = be32_to_cpup(p);
+d67ae825a59d63 Tom Haynes       2014-12-11  120  
+d67ae825a59d63 Tom Haynes       2014-12-11  121  		if (ds_versions[i].rsize > NFS_MAX_FILE_IO_SIZE)
+d67ae825a59d63 Tom Haynes       2014-12-11  122  			ds_versions[i].rsize = NFS_MAX_FILE_IO_SIZE;
+d67ae825a59d63 Tom Haynes       2014-12-11  123  		if (ds_versions[i].wsize > NFS_MAX_FILE_IO_SIZE)
+d67ae825a59d63 Tom Haynes       2014-12-11  124  			ds_versions[i].wsize = NFS_MAX_FILE_IO_SIZE;
+d67ae825a59d63 Tom Haynes       2014-12-11  125  
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  126  		/*
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  127  		 * check for valid major/minor combination.
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  128  		 * currently we support dataserver which talk:
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  129  		 *   v3, v4.0, v4.1, v4.2
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  130  		 */
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  131  		if (!((ds_versions[i].version == 3 && ds_versions[i].minor_version == 0) ||
+a7878ca140084e Tigran Mkrtchyan 2017-04-04  132  			(ds_versions[i].version == 4 && ds_versions[i].minor_version < 3))) {
+d67ae825a59d63 Tom Haynes       2014-12-11  133  			dprintk("%s: [%d] unsupported ds version %d-%d\n", __func__,
+d67ae825a59d63 Tom Haynes       2014-12-11  134  				i, ds_versions[i].version,
+d67ae825a59d63 Tom Haynes       2014-12-11  135  				ds_versions[i].minor_version);
+d67ae825a59d63 Tom Haynes       2014-12-11  136  			goto out_err_drain_dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11  137  		}
+d67ae825a59d63 Tom Haynes       2014-12-11  138  
+d67ae825a59d63 Tom Haynes       2014-12-11  139  		dprintk("%s: [%d] vers %u minor_ver %u rsize %u wsize %u coupled %d\n",
+d67ae825a59d63 Tom Haynes       2014-12-11  140  			__func__, i, ds_versions[i].version,
+d67ae825a59d63 Tom Haynes       2014-12-11  141  			ds_versions[i].minor_version,
+d67ae825a59d63 Tom Haynes       2014-12-11  142  			ds_versions[i].rsize,
+d67ae825a59d63 Tom Haynes       2014-12-11  143  			ds_versions[i].wsize,
+d67ae825a59d63 Tom Haynes       2014-12-11  144  			ds_versions[i].tightly_coupled);
+d67ae825a59d63 Tom Haynes       2014-12-11  145  	}
+d67ae825a59d63 Tom Haynes       2014-12-11  146  
+d67ae825a59d63 Tom Haynes       2014-12-11  147  	new_ds->ds_versions = ds_versions;
+d67ae825a59d63 Tom Haynes       2014-12-11  148  	new_ds->ds_versions_cnt = version_count;
+d67ae825a59d63 Tom Haynes       2014-12-11  149  
+6b9785dc8b13d9 Jeff Layton      2025-04-10  150  	new_ds->ds = nfs4_pnfs_ds_add(net, &dsaddrs, gfp_flags);
+d67ae825a59d63 Tom Haynes       2014-12-11  151  	if (!new_ds->ds)
+d67ae825a59d63 Tom Haynes       2014-12-11  152  		goto out_err_drain_dsaddrs;
+d67ae825a59d63 Tom Haynes       2014-12-11  153  
+d67ae825a59d63 Tom Haynes       2014-12-11  154  	/* If DS was already in cache, free ds addrs */
+d67ae825a59d63 Tom Haynes       2014-12-11  155  	while (!list_empty(&dsaddrs)) {
+d67ae825a59d63 Tom Haynes       2014-12-11  156  		da = list_first_entry(&dsaddrs,
+d67ae825a59d63 Tom Haynes       2014-12-11  157  				      struct nfs4_pnfs_ds_addr,
+d67ae825a59d63 Tom Haynes       2014-12-11  158  				      da_node);
+d67ae825a59d63 Tom Haynes       2014-12-11  159  		list_del_init(&da->da_node);
+d67ae825a59d63 Tom Haynes       2014-12-11  160  		kfree(da->da_remotestr);
+d67ae825a59d63 Tom Haynes       2014-12-11  161  		kfree(da);
+d67ae825a59d63 Tom Haynes       2014-12-11  162  	}
+d67ae825a59d63 Tom Haynes       2014-12-11  163  
+4b7c3b4c673d40 Anna Schumaker   2025-06-30  164  	folio_put(scratch);
+d67ae825a59d63 Tom Haynes       2014-12-11  165  	return new_ds;
+d67ae825a59d63 Tom Haynes       2014-12-11  166  
+d67ae825a59d63 Tom Haynes       2014-12-11  167  out_err_drain_dsaddrs:
+d67ae825a59d63 Tom Haynes       2014-12-11  168  	while (!list_empty(&dsaddrs)) {
+d67ae825a59d63 Tom Haynes       2014-12-11  169  		da = list_first_entry(&dsaddrs, struct nfs4_pnfs_ds_addr,
+d67ae825a59d63 Tom Haynes       2014-12-11  170  				      da_node);
+d67ae825a59d63 Tom Haynes       2014-12-11  171  		list_del_init(&da->da_node);
+d67ae825a59d63 Tom Haynes       2014-12-11  172  		kfree(da->da_remotestr);
+d67ae825a59d63 Tom Haynes       2014-12-11  173  		kfree(da);
+d67ae825a59d63 Tom Haynes       2014-12-11  174  	}
+d67ae825a59d63 Tom Haynes       2014-12-11  175  
+d67ae825a59d63 Tom Haynes       2014-12-11  176  	kfree(ds_versions);
+d67ae825a59d63 Tom Haynes       2014-12-11  177  out_scratch:
+4b7c3b4c673d40 Anna Schumaker   2025-06-30  178  	folio_put(scratch);
+d67ae825a59d63 Tom Haynes       2014-12-11  179  out_err:
+d67ae825a59d63 Tom Haynes       2014-12-11  180  	kfree(new_ds);
+d67ae825a59d63 Tom Haynes       2014-12-11  181  
+d67ae825a59d63 Tom Haynes       2014-12-11 @182  	dprintk("%s ERROR: returning %d\n", __func__, ret);
+d67ae825a59d63 Tom Haynes       2014-12-11  183  	return NULL;
+d67ae825a59d63 Tom Haynes       2014-12-11  184  }
+d67ae825a59d63 Tom Haynes       2014-12-11  185  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
