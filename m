@@ -1,69 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65E31F03EF;
-	Thu, 11 Dec 2025 03:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC532D0C84;
+	Thu, 11 Dec 2025 03:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765424377; cv=none; b=ij8MW5TK5cuNpCoPusPd3JlJKbSvQc7WBlbRbNwLQA5/gBGpGc0xuj1dXq56NmgkMWaeh6QR4pCr+rMdkONZf7cZ8vuxR0RC+z8gZveDpjnMOv6+zWIRodeCneV1lBkeE4jM7X1rtCfBxqjMDSDUyEMlNQyelS/5C8NKQO9+SSg=
+	t=1765425156; cv=none; b=axbzCvndElQrXdFWJc145MrcyYS1I7qR0KAYHV8ibJ9wPcynIaT4TvPeB1+jrvuIBrJjsoOUb0JK0xdHNNO70gruvb0Xiz/+RvtW2xgdMfx/BNJjqWtC8yvYsp4/Zekqxe7hKr9VI9/hFp4WvUyx8FbrkuW4HynR2BPXBdI57CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765424377; c=relaxed/simple;
-	bh=9iFkj9fmwXAiOWzmsonuaEiNWfOnTU8YW2LHDNjWfMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AgKHvvBoYvcYooUPvn5qUjDk2/92aFVu48axq6br5xoH9NU/ECXSH9T4fWpQt1xBv2qIeyvd/XL6tCuzHrtKVY/5ScMaQWS9KXkY7XM1ZteSI6yry/z1Kp6XQfKw552aUnHiJM5Ge1SLqm8/3OcTc3O5/j6NV80/SCbdeqLBCT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mZrUQe1H; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1765425156; c=relaxed/simple;
+	bh=ZAAtV+VGLogv/+RlVSEu0skrx/+aZ8Me0QY/NpEhXiw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CJN5uydwsxpC3Pg8+SeBBK+onK9ddBrBgP1Vlz9SmRRGSdjjTkwQNcM4hnx5ezYNMMQBFoSK4zpSYiW9mY+P9pwS9U+xU6uFnI49ZfDf/CHhOLvScBBOYyfA02fAMS2ZT4dBWc2XK2WRA3UnMyajhbZalYQG40y7FIlBGl+bMcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jNSfUa0l; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mZrUQe1H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jNSfUa0l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765424376; x=1796960376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9iFkj9fmwXAiOWzmsonuaEiNWfOnTU8YW2LHDNjWfMk=;
-  b=mZrUQe1HKhWZT3uao9TWgbl1mf6RN9xu59x3RIYdeK7kZscwS2O+jIYj
-   8yqxfrBe7epRhLehbypMDy8/y3jyEMd2re4PSRxd2qITw/Wq/gcW+roE7
-   yCHFITPsWkTVuZfrbiTFyJ0ejdQtyt6juHVGLfuIUJAUT/rUjy3UncJ1n
-   6mWbsOga1pUhGROjv8oRtghpX8pyS5ycpJKiXp8pFe2XIiKDF1BOGpivy
-   lFMw2QnYcCiKXhQ63YowOd8o0saMX8SUXXicOuUAnQ/mfZxG5CP5zysw0
-   Z620XTotjZI9aJjhCL7k2i0oKc2/IsJXdSZE4OKJeG0kXgvtlI8EK6bFQ
-   g==;
-X-CSE-ConnectionGUID: SAPYAxK+QMicJtKUnXpF5g==
-X-CSE-MsgGUID: QAIldOQzRr2izzcLqtxjdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="78768452"
+  t=1765425155; x=1796961155;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZAAtV+VGLogv/+RlVSEu0skrx/+aZ8Me0QY/NpEhXiw=;
+  b=jNSfUa0lpdcczOnJylKMVEuandYxu4xNJ/gLAI3B4U0Ce3pS/i9+KVDC
+   zTDIMWqNzrlRQ9aAGc98ACqRddl+kMaVDb8PkWIhaBVc0dQXnC49TwJcj
+   GZKor0E+08JSy1QMgca5bMNhGisw6kLCV1rAAHrJEY3Jfmx7+ZXvpjMGz
+   wspD1Hsogp/wa/404uWrmTSf2b5XbEd5SX4XgjiQfu4H8+CIxTDhhXGxO
+   efbWsa0puDqLw7ynegDCfV223PUx1birSASFQgTIVgxOr2JcMGA4xK1+D
+   /AOo3SWcusF6Sa3Yok77X0wPyHCJEjxaMaBmY8WP7NzBHk1+ODtiK6gCd
+   Q==;
+X-CSE-ConnectionGUID: VEGY4pbFREqCpc09dPmp6A==
+X-CSE-MsgGUID: ZtBfrk5gQRaAq+JNlzdLMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="71250555"
 X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="78768452"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 19:39:35 -0800
-X-CSE-ConnectionGUID: cVuFd+0CS0CKH3ZuLmmJAw==
-X-CSE-MsgGUID: TIOzoKyrQU+wSxyz6qkpfQ==
+   d="scan'208";a="71250555"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 19:52:32 -0800
+X-CSE-ConnectionGUID: n/hWlA02SqWUwxeHuKLKkQ==
+X-CSE-MsgGUID: kKBNEIGkQy2cEjMWL19FxQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,265,1758610800"; 
-   d="scan'208";a="227344222"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Dec 2025 19:39:30 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 10 Dec 2025 19:52:31 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vTXWa-0000000046j-0awK;
-	Thu, 11 Dec 2025 03:39:28 +0000
-Date: Thu, 11 Dec 2025 11:38:46 +0800
+	id 1vTXjB-0000000047Z-0QaO;
+	Thu, 11 Dec 2025 03:52:29 +0000
+Date: Thu, 11 Dec 2025 11:51:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	dri-devel@lists.freedesktop.org, himal.prasad.ghimiray@intel.com,
-	apopple@nvidia.com, airlied@gmail.com,
-	Simona Vetter <simona.vetter@ffwll.ch>, felix.kuehling@amd.com,
-	Matthew Brost <matthew.brost@intel.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	dakr@kernel.org, "Mrozek, Michal" <michal.mrozek@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Subject: Re: [PATCH v3 21/22] drm/pagemap, drm/xe: Support destination
- migration over interconnect
-Message-ID: <202512111107.hyCaihdX-lkp@intel.com>
-References: <20251210110742.107575-22-thomas.hellstrom@linux.intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-pie-v3 12/16] lib/asn1_decoder.o: warning: objtool:
+ asn1_ber_decoder+0x1e8: can't find switch jump table
+Message-ID: <202512111159.Sx5UHhMX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,99 +59,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251210110742.107575-22-thomas.hellstrom@linux.intel.com>
 
-Hi Thomas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-tip/drm-tip]
-[cannot apply to drm-xe/drm-xe-next drm-misc/drm-misc-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master daeinki-drm-exynos/exynos-drm-next v6.18 next-20251210]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Hellstr-m/drm-xe-svm-Fix-a-debug-printout/20251210-191243
-base:   https://gitlab.freedesktop.org/drm/tip.git drm-tip
-patch link:    https://lore.kernel.org/r/20251210110742.107575-22-thomas.hellstrom%40linux.intel.com
-patch subject: [PATCH v3 21/22] drm/pagemap, drm/xe: Support destination migration over interconnect
-config: arm-randconfig-004-20251211 (https://download.01.org/0day-ci/archive/20251211/202512111107.hyCaihdX-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 6ec8c4351cfc1d0627d1633b02ea787bd29c77d8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111107.hyCaihdX-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3
+head:   a8811acb11ba01eb88a548d40735773355424255
+commit: 3ba70776dd9c02b64ba2b9dd8541be5da1126f4e [12/16] x86: Use PIE codegen for the core kernel
+config: x86_64-buildonly-randconfig-003-20251210 (https://download.01.org/0day-ci/archive/20251211/202512111159.Sx5UHhMX-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512111159.Sx5UHhMX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512111107.hyCaihdX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512111159.Sx5UHhMX-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/xe/xe_migrate.c:2052:34: error: use of undeclared identifier 'XE_INTERCONNECT_P2P'
-    2052 |                                        sram_addr[i].proto == XE_INTERCONNECT_P2P);
-         |                                                              ^~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> lib/asn1_decoder.o: warning: objtool: asn1_ber_decoder+0x1e8: can't find switch jump table
+--
+>> lib/maple_tree.o: warning: objtool: mas_empty_area_rev+0x473: can't find switch jump table
+--
+>> kernel/cpu.o: warning: objtool: mitigations_parse_cmdline+0xc1: can't find switch jump table
+--
+>> block/blk-merge.o: warning: objtool: bio_split_to_limits+0x60: can't find switch jump table
+--
+>> block/blk-core.o: warning: objtool: errno_to_blk_status+0x27: can't find switch jump table
+--
+>> block/blk-settings.o: warning: objtool: blk_validate_limits+0xa9d: can't find switch jump table
+--
+>> block/blk-mq.o: warning: objtool: blk_mq_submit_bio+0x4ba: can't find switch jump table
+--
+>> block/blk-integrity.o: warning: objtool: blk_get_meta_cap+0x1d0: can't find switch jump table
+--
+>> block/bio-integrity-auto.o: warning: objtool: bi_offload_capable+0x3b: can't find switch jump table
+--
+>> mm/huge_memory.o: warning: objtool: split_huge_pages_write+0x288: can't find switch jump table
+--
+>> mm/gup_test.o: warning: objtool: gup_test_ioctl+0x4c: can't find switch jump table
+..
 
-
-vim +/XE_INTERCONNECT_P2P +2052 drivers/gpu/drm/xe/xe_migrate.c
-
-  2019	
-  2020	static void build_pt_update_batch_sram(struct xe_migrate *m,
-  2021					       struct xe_bb *bb, u32 pt_offset,
-  2022					       struct drm_pagemap_addr *sram_addr,
-  2023					       u32 size, int level)
-  2024	{
-  2025		u16 pat_index = tile_to_xe(m->tile)->pat.idx[XE_CACHE_WB];
-  2026		u64 gpu_page_size = 0x1ull << xe_pt_shift(level);
-  2027		u32 ptes;
-  2028		int i = 0;
-  2029	
-  2030		xe_tile_assert(m->tile, PAGE_ALIGNED(size));
-  2031	
-  2032		ptes = DIV_ROUND_UP(size, gpu_page_size);
-  2033		while (ptes) {
-  2034			u32 chunk = min(MAX_PTE_PER_SDI, ptes);
-  2035	
-  2036			if (!level)
-  2037				chunk = ALIGN_DOWN(chunk, PAGE_SIZE / XE_PAGE_SIZE);
-  2038	
-  2039			bb->cs[bb->len++] = MI_STORE_DATA_IMM | MI_SDI_NUM_QW(chunk);
-  2040			bb->cs[bb->len++] = pt_offset;
-  2041			bb->cs[bb->len++] = 0;
-  2042	
-  2043			pt_offset += chunk * 8;
-  2044			ptes -= chunk;
-  2045	
-  2046			while (chunk--) {
-  2047				u64 addr = sram_addr[i].addr;
-  2048				u64 pte;
-  2049	
-  2050				xe_tile_assert(m->tile, sram_addr[i].proto ==
-  2051					       DRM_INTERCONNECT_SYSTEM ||
-> 2052					       sram_addr[i].proto == XE_INTERCONNECT_P2P);
-  2053				xe_tile_assert(m->tile, addr);
-  2054				xe_tile_assert(m->tile, PAGE_ALIGNED(addr));
-  2055	
-  2056	again:
-  2057				pte = m->q->vm->pt_ops->pte_encode_addr(m->tile->xe,
-  2058									addr, pat_index,
-  2059									level, false, 0);
-  2060				bb->cs[bb->len++] = lower_32_bits(pte);
-  2061				bb->cs[bb->len++] = upper_32_bits(pte);
-  2062	
-  2063				if (gpu_page_size < PAGE_SIZE) {
-  2064					addr += XE_PAGE_SIZE;
-  2065					if (!PAGE_ALIGNED(addr)) {
-  2066						chunk--;
-  2067						goto again;
-  2068					}
-  2069					i++;
-  2070				} else {
-  2071					i += gpu_page_size / PAGE_SIZE;
-  2072				}
-  2073			}
-  2074		}
-  2075	}
-  2076	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CAN_DEV
+   Depends on [n]: NETDEVICES [=n] && CAN [=y]
+   Selected by [y]:
+   - CAN [=y] && NET [=y]
+   WARNING: unmet direct dependencies detected for OF_GPIO
+   Depends on [n]: GPIOLIB [=y] && OF [=n] && HAS_IOMEM [=y]
+   Selected by [y]:
+   - GPIO_TB10X [=y] && GPIOLIB [=y] && HAS_IOMEM [=y] && (ARC_PLAT_TB10X || COMPILE_TEST [=y])
 
 -- 
 0-DAY CI Kernel Test Service
