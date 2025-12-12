@@ -1,114 +1,89 @@
-Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FF879CF
-	for <llvm@lists.linux.dev>; Fri, 12 Dec 2025 04:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE9729D26D;
+	Fri, 12 Dec 2025 05:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765513842; cv=none; b=bhSTxeAuUwAb5ZBuJ6X786vO2FkHiiSvgjnfhkKsOHd8i2f5ZRM5beOFMgdYYQjlAgr3auB8Vi9ltPT42CWeGYbXYVHqxWHn0p3gAEz1NfdlAxTRZVphU7+2MDEhVH8Puxi/eX4MaaVe8Bec1qmT2ktaS+HdFOgHQHyRfrGmFZY=
+	t=1765518872; cv=none; b=JsQvutyqvcxbWRyERYk8bHA7yktaIFk4Y/m6v+k6hmc8K0DB0e6tF9H8MWT3exCbPgJUz4z1uMrHhwT0Vp2H+vhBnKgj1Hbo15w2m7gEDcOjTxOhUXBeBlpL6qyC/1R2M4StvGddUAyFfUtIMEvx56YyFdTUemIilvstyvLWXVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765513842; c=relaxed/simple;
-	bh=G4U9g3m1Y8+FQFjUgsitU6Hw75sM90WYd7apsdyDX24=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=Ip0wbGE44W7/5HcU/fXJsWZHkQmIgpGUa06nfIr/H5QNQKR4pu7BbYuA/v+cvxc3y4BnY9xWAX/CsCMwBnhx4XvzLWPFec3HMwggkyjgnFL1j1x6tBxt5olST6PEbqXDf67kqFZG61LIUBcPQDNPQ6V+7zoWU0NMjQP7AV5reHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=fquwB5u4; arc=none smtp.client-ip=203.205.221.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1765518872; c=relaxed/simple;
+	bh=cdcoy/ylZqdFLf/FLYgDK9gISpuHcHDqocqci8DSTdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=q4TJ4ahpm2yDJRqTaaD7oRe/6QSXHvG70aK2PwM+JHprIn50y9h4vr89T0Iy0Uj1Rcs0BGK6ixX8OfmXcQmzDFdhRh98atiZcduz76y4F+lUJ6jXKLnOsbd4Ksps1YQjoK6YR41bmTU+2j2xz1oh91902i1kGQRxw0Bjx7UR19c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jq1WRODw; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="fquwB5u4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765513836;
-	bh=5rYXFUzmHwfYdKhXjiWDBeziZId8xfDekbig16I89Lo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fquwB5u4GWdXmm0qyA5awrI6KsVsmWQ5/hof6SrwOIm4g0bGqUJ7CvnuNx1lB6P40
-	 sRpcpJ5CT0PMIVH7TeYYqQS9dgXCDFioQJRn0bJeX5h61QjrA6LybK0VY6pmoVhC1h
-	 2FOzn6eqk+wA2M4ooBZUqJ2mqfmY56qykwGFrLqQ=
-Received: from meizu-Precision-3660-casey.meizu.com ([14.21.33.152])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 79634099; Fri, 12 Dec 2025 12:30:22 +0800
-X-QQ-mid: xmsmtpt1765513822tlj8iqyn8
-Message-ID: <tencent_735CA2D4910E781E7F514A7DED34A5CE2E0A@qq.com>
-X-QQ-XMAILINFO: M/NR0wiIuy705yfgz/SkL340sPsOUypR2JHIZQK78pRc0GyQugDkP9SqaATtdX
-	 nktxim17+bA4Pd+IEPDAq/B5V2DNjady/0XMkCFl4eR9/acOBB/B/QBU3olIZOfwT+i8AZLEcKS3
-	 P80GeaN+vaYj/I8oC2W6Cht+Qoa+WhwzfCqkHOekxu/r1rCFwcdPBL0RF3Ew3tv+mYXsSi8BCnZt
-	 Xvl2lvBZ6WJeibFEYo7EbAN37JQNQgFyQpDuKRIG1QDKg8Vr3oEGXch89/btFtRI+XfKuCLemY8e
-	 5Ea4QBvw6lYIXwwKf6bn8NMIs0L7lNwf5aOQONOc2jM2dIIOkp7NM6W0tCE8seTqmAatVnHXDPSk
-	 6rG1Zjp1PFO15ED29V4XUUPca3FUzYxVbKVWMt9NrXZBarTLwExm4q2xKm1HCPLys4FnJce/mH2v
-	 roCj6eUDN9zzfxc/dzmk1Jus177Qz6vJe35f30asazZGHBiJkyk+Znw8+Lki+GLCSYOD98vpMeHL
-	 mZzypm/+6w6T8f/G/1yIKLOr7W15VCHkwBFXOmtZY8Bc1j0czBfIqw2X2uW0FE92PoWg5Gg7ITsz
-	 MZmDxOpvNRpEZnFyExCvM0SFRpcvRTqPhC2JWQybFQtwJ5luUlE+P5faaR5tzq956HGWAfabwpsi
-	 MXmCPwW17G/91ulDRrlBwcXCUlaXuctpgos5K1fjp9WvleouNGudn9+t1NcIDLxA4hSakDVoEhER
-	 IeT8myQ+96eTUO9aCS3jO4W3wCq+JFOiRVJl9v9I2RlT1bR9J7191jtFvDDU00zbxvfADQsf3iqk
-	 SuU/D7m6XC1oOd/1Q6gVxYOkbJXo5RzNRlhnXuUy+ZsnvnH7JZ7Ksr3TcNDLiLGbtSz3ZtrOi6L7
-	 dFPPRwaV5mRnK/hTBv4CmQBPCOTYmF4vrVlhKyYTh7PoRvwoUrdHFWdizOcjXAY3Hf9RqXWHQpz7
-	 AxqrilNXq1+rPqPG1s6rVv5R6/20fjlD6mKgyvn9get7HQ5pG/wh2CXBmbHeEoYFf3u7UgUbnN2g
-	 qhv0ZalppyrumgtPu2lw57/8utXiS7tvFvLwWhT14mkD0jk4MEmmdlFBXsKyc9VcMgG2RJo5eVUh
-	 UTmot60eIMDkiFcgVq3ZnJjHHiOLyC/D4jLpjkHo9SOhYmNws=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-From: Licay <licayy@foxmail.com>
-To: ywen.chen@foxmail.com
-Cc: akpm@linux-foundation.org,
-	andrealmeid@igalia.com,
-	dave@stgolabs.net,
-	dbueso@suse.de,
-	dvhart@infradead.org,
-	edliaw@google.com,
-	hpa@linux.intel.com,
-	justinstitt@google.com,
-	kernel-team@android.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	luto@mit.edu,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
-	shuah@kernel.org,
-	tglx@linutronix.de,
-	usama.anjum@collabora.com,
-	Licay <licayy@outlook.com>
-Subject: Re: [PATCH 3/3] selftests/futex: fix the issue of abnormal test results caused by thread timing
-Date: Fri, 12 Dec 2025 12:30:20 +0800
-X-OQ-MSGID: <20251212043020.640438-1-licayy@foxmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <tencent_3739CFB7F300BEAEBB928A0EB8D1C6875C09@qq.com>
-References: <tencent_3739CFB7F300BEAEBB928A0EB8D1C6875C09@qq.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jq1WRODw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765518871; x=1797054871;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cdcoy/ylZqdFLf/FLYgDK9gISpuHcHDqocqci8DSTdQ=;
+  b=Jq1WRODwKJV+xfxJgq6FUadjHqMgkCq7Wp2P32f27xqySRELZ7PXkrTb
+   fMBORvQlY1X27EziUHyyYMFRt4FPXA4fHDH1bnviVWCS5LZsCcrEk02bF
+   OD8gYQ+H7Jy3OuZRoJdaBnrWxPk1GKpWBnL2nTQv1oERmsQ81oc2WcKsh
+   vSyau8GJhk7ZlqKl5llzCmuxrxhlJ0xjnJv5KIzc2sbb1jjXZ6QuvupAW
+   Apu7bZcUNaLNX787bpUJuv7EkrhsBb+QiTkDpCgsShKRbMzLkweTEdPZV
+   xcUMHg0s5Tt+F2Fg74yTmZ4jy6DQFdoZ/zVaNf9rJpBThmUiIX37QbYBx
+   w==;
+X-CSE-ConnectionGUID: OJKwq8WdQyaad3M4JTwvcg==
+X-CSE-MsgGUID: Tu9nsTYSRdexreySblnWWA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11639"; a="71376206"
+X-IronPort-AV: E=Sophos;i="6.21,141,1763452800"; 
+   d="scan'208";a="71376206"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2025 21:54:30 -0800
+X-CSE-ConnectionGUID: 2ECIpUtlS06nmniSMBRjYg==
+X-CSE-MsgGUID: upT922VTT/yKPiS/8R+ang==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,141,1763452800"; 
+   d="scan'208";a="197481592"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 11 Dec 2025 21:54:29 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vTw6k-000000005d1-3m1O;
+	Fri, 12 Dec 2025 05:54:26 +0000
+Date: Fri, 12 Dec 2025 13:54:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
+Subject: Warning: drivers/accel/ethosu/ethosu_gem.c:674 function parameter
+ 'data' not described in 'ethosu_gem_cmdstream_create'
+Message-ID: <202512121333.p47Cgn9e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Licay <licayy@outlook.com>
+Hi Rob,
 
-Hi Ywen,
+First bad commit (maybe != root cause):
 
-Thanks for the patch! I have a few suggestions to improve it:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d358e5254674b70f34c847715ca509e46eb81e6f
+commit: 5a5e9c0228e613f0ef2a58b9782d7c0ea8f1e58b accel: Add Arm Ethos-U NPU driver
+date:   7 weeks ago
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251212/202512121333.p47Cgn9e-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251212/202512121333.p47Cgn9e-lkp@intel.com/reproduce)
 
-1. Avoid Parsing /proc
-   The current approach uses get_thread_state() to read /proc/$pid/status, which isn't very reliable.
-   A better way would be to have waiterfn directly signal when it's ready using atomic operations.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512121333.p47Cgn9e-lkp@intel.com/
 
-2. Use Atomic Counting Instead of Polling Thread State
-   Before entering futex_wait, waiterfn can atomically increment a counter. The parent thread then just waits for this counter to reach the expected value.
-   This is much simpler and avoids the overhead of checking /proc repeatedly.
+All warnings (new ones prefixed by >>):
 
-3. Use Standard Atomic Types
-   Replace the custom READ_ONCE/WRITE_ONCE macros with standard <stdatomic.h> types like atomic_int.
-   It's cleaner and more portable across different platforms.
+>> Warning: drivers/accel/ethosu/ethosu_gem.c:674 function parameter 'data' not described in 'ethosu_gem_cmdstream_create'
 
-Here's the basic idea:
-- Add a global atomic_int ready_count variable
-- In waiterfn: atomic_fetch_add(&ready_count, 1) right before futex_wait()
-- Parent thread: spin-wait until atomic_load(&ready_count) reaches the expected value
-
-This approach is much cleaner - no /proc dependency, simpler logic, and better performance.
-
-Best regards,
-Licay
-Signed-off-by: Licay <licayy@outlook.com>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
