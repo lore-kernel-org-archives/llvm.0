@@ -1,168 +1,229 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E0029B778;
-	Fri, 12 Dec 2025 09:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9548314A77
+	for <llvm@lists.linux.dev>; Fri, 12 Dec 2025 09:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765532647; cv=none; b=N6FB9RZAYoeUu0tC4eMewXsNI8vsoPXJLPssaatSUuD4l26M1MnK04G7r3Qkzn9PMGLc3qpKEwo8udIOCCgppvP51T5LXT/+wAc5DTq6P/4/uQ3PeKath1nLoME+CA8LM+0K6rSe6/lNTWN4QOqMG6oEty6jWCxsrgj7UlWyieE=
+	t=1765533137; cv=none; b=U4PsmeHA/Qu7DlYvuLKRP2LsGDbOTO7pOVSRZHPoQm93g11tIHglALsi1yTn6CU+f1DoFgAK2OxN19ATDC1JI1QLg3/RYa8QfqFojModOGiIqnQKPGEDjD7VoUupO5PGjkb5bCQpukfXt4YaNB3rl5Td5jEDcrxVotmpt6Tu1+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765532647; c=relaxed/simple;
-	bh=4LWJL0kQo4ufWh3QF9lrNK39CoU3j+zGv+hTqrvNy4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f6LvGSl9c50HtaHA/fGrYRFRqCyAM00hBTe6XaLmgOmSatudg8AZXsXVBRxwOcizZRpFQr9r9B2Z9FnOHDtdmHwvPntNNN2f2vYfyVRTEQUBB6NOJFu7BNeb5EKS/q3tuwLB33T60yiiPOFK9UD5ZC0dfdPisaXob8RLSnp7YIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Ur4V8SWv; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1765533137; c=relaxed/simple;
+	bh=wd2Z6efbqufpP7G3N1lZl/XpO1ytleQJeiOm4A1JGW8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XIla7fCTl4g+P9ZackR44MS0/3GJYhifyx9z3wzlsLEY0ZwqIPPu5p71/T/KhTrZgVzS03Oi7+F8ozq4QUY0/r4XGciwK1dcVSGrUhinkboqKZvya63tWmKOYdWeJL2IlQC9sxL2fGGV9eV1WD1sKkCoLA8QFzPsQ7EvG1B7gwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=odnWSBUf; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ur4V8SWv"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=J0s9Z/Nw7eH3J6mljMw45LY45lUZplaK/cGrdA/YkXU=; b=Ur4V8SWvfQ6bSD1Jimbf2HVssZ
-	qtgtHbkdLRensVt0bGd9gmnk/6zpXiAQtBkoWUfgwj4Bf/1keaOG6pYGijSTHKAdKaLFq2VZYbFRA
-	hQ5a0RAvYfnxCKTYdyOPpUiIlu4T6yPz6EeldvhXavFMh83NzCTTWjQ0QSmqfAcLMgExspdRiuu5s
-	BCFQ5Us9cj0ZfN9IYbcwtcnFZDXYb59kyvH8kVVPhxxLkfxE2EPtxm4CVlUKWo7JOzF42LHRLV+VF
-	vLvu3eTnH3zISwXdT9whryYHXL8nvHtiIVOsIgPDjAPaaAgTfdwEXYqdH/6qEhUzMqg86r9b9ud4/
-	/tVR2YOQ==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vTypH-0000000GQ2D-3yf4;
-	Fri, 12 Dec 2025 08:48:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2F0AD30041D; Fri, 12 Dec 2025 10:43:52 +0100 (CET)
-Date: Fri, 12 Dec 2025 10:43:52 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Chris Li <sparse@chrisli.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org
-Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context
- analysis
-Message-ID: <20251212094352.GL3911114@noisy.programming.kicks-ass.net>
-References: <20251120145835.3833031-2-elver@google.com>
- <20251120151033.3840508-7-elver@google.com>
- <20251211121659.GH3911114@noisy.programming.kicks-ass.net>
- <CANpmjNOmAYFj518rH0FdPp=cqK8EeKEgh1ok_zFUwHU5Fu92=w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="odnWSBUf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1765533095; x=1766137895; i=markus.elfring@web.de;
+	bh=Dtv5YfVKWvqekBEDQEStEZlHajPn42BPyX8iEnS+i08=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=odnWSBUfgMRmsvInVSTnqxmiKv50/9tu1hWtc8/ESkw0BYHKSnH6UObMb/vUKEJ5
+	 kHQLpkIKjLWiQt41jDI4uU5jGMCXdVzjgLCtNwjMW5ZlEOiQKnYe41RQ3wS7PM+n+
+	 PHC/biHyKx5PZgn0GPOW0Zfxoirck9VzsTKQ0B2vntK9PPsb2TRaLOylJq9jQvnXd
+	 5OoG+UTmgNpw0O68r/3L3SUX4mGKBD70myrF/lh752a9rRfaiPbXSdTu/nc6GrtpW
+	 wgs/Lp8Z6hEpAvI7xiyI2GAczzAt/+t6/dr1JF+Mwf70wCe1KsrxlniJfS8z4+HzP
+	 JeVrW0FR8l0oGtrxxg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.180]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MV2OY-1vdEx70kqM-00L8R7; Fri, 12
+ Dec 2025 10:51:35 +0100
+Message-ID: <b4023748-453c-433d-b3ce-45cf42d74889@web.de>
+Date: Fri, 12 Dec 2025 10:51:21 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNOmAYFj518rH0FdPp=cqK8EeKEgh1ok_zFUwHU5Fu92=w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [cocci] [PATCH v5 4/4] coccinelle: Add kmalloc_objs conversion
+ script
+To: Kees Cook <kees@kernel.org>, cocci@inria.fr,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org
+Cc: Julia Lawall <Julia.Lawall@inria.fr>,
+ Nicolas Palix <nicolas.palix@imag.fr>, LKML <linux-kernel@vger.kernel.org>,
+ linux-doc@vger.kernel.org, llvm@lists.linux.dev,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Bill Wendling <morbo@google.com>,
+ Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Harry Yoo <harry.yoo@oracle.com>, Jakub Kicinski <kuba@kernel.org>,
+ Jan Hendrik Farr <kernel@jfarr.cc>, Jann Horn <jannh@google.com>,
+ Jonathan Corbet <corbet@lwn.net>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+ Justin Stitt <justinstitt@google.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Marco Elver <elver@google.com>, Matthew Wilcox <willy@infradead.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Pekka Enberg <penberg@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Sasha Levin <sashal@kernel.org>,
+ Tony Ambardar <tony.ambardar@gmail.com>,
+ Vegard Nossum <vegard.nossum@oracle.com>, Vlastimil Babka <vbabka@suse.cz>,
+ Yafang Shao <laoar.shao@gmail.com>
+References: <20251122014304.3417954-4-kees@kernel.org>
+ <71d406fb-9fb1-44a9-912a-7a0d270b9577@web.de>
+ <202512111352.387A339CE@keescook>
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <202512111352.387A339CE@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:PhTgDphTssUyrodhgTCx7Tqtgufwo1sjpK9UJ5w9XqTxKWfOXaU
+ O/cJ2ZnIYWd2plns2xNoLZ6Wu5a+3zBgF7aOQyD3Tl0erfE6h9xUo4DOItCvDl61epaLFQS
+ RGlAqFD4gmTcyOD5b/81KM3BDkbHlK7xY5VE8ie6O6ZPc6tLhETNiLSaeX3GrZeV6DAenKL
+ EiUOldJE6L0VHbBDRAIGw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:fFhpdpeAcsw=;6MaFvpcyAnAkj21LKn1f+O6CLgf
+ 68MvHrNv8ihyEl/R2OKjsoao1o08hx1JaXFa4ud8Q2YTwnx84U4MHvVOhpQyEBlKcUkWidpas
+ P1foz+hrs4UcOEKh3uKNTq1zLQ6imE83p/Cs5JZPrhcHAmd4A//nxq3mKj9aASY5r1FWZ5no1
+ Erx3aBK0VcGwcMNWJh79zVjoLREezJRUL/uKXoW4eHQN/E+a7sjhH6u59brQ8dyyS26B858di
+ HX6par/D8KiHegmtnXNVKwhtcRoqfraedBWD37VVaCZgehkScPpVvYHGD27fHGNoUg9iZfN3e
+ wBy2J8c3Vpyn/pccOnJoqhfDqORjqzy3vVOeRr7HxjvQCw9mGp+yLOSqO1rxOQI4oMXg+mfTp
+ Ogbb8Zk2gaHRgPVTGKVNO1C/2HjUbWbbDJgtDh6lxZvNQmpDGhEHu+c4mp7T3U2c2QzqdWHmU
+ Sifh7/Y5ZLKut8s8jIamElqEYkMMKa0ckV6J/MAOZ7UFo1xmcXpcanKzV9wrjbREGiV+f4vvh
+ ZpZFGm7hzBe7DVB+yVr0bXeLAHxu7Q7t0KHhCKrnzbWqkemTPQuHGeB7Q7CGF755dOiFCTKTQ
+ SdfsBFw526CksvZtmrGqnRL+OH12cH7R60zX/BTI2RrJK2gVaHoOIjn7G4ZEjpWqdWolscGWi
+ cdCMZS5KSZ82Az5R7Pl4AyH7VmpFiLuVaoNHibzeJ4/rFdLqG2zbDOgw1mxlSglMTa7Qeww+g
+ dIi513HvrQ7vIsyKcf7o+S0cvJIqTOn+v5qiK96ARmX5gTd7m4fCse8k4lkTkNIeCCJ58qqER
+ EiRoG49yvXdhDAzKj1v18zmHnyAembSB9aXAUHLMJOqOIqdqgcnh34snRX/jK4+Ak64Q8vaEo
+ CM7fuVtHCmFqu0+BTjdfw5RhpbWx+bUy1hU+9B+Bp7+tyWa0DsXD2gMYnuqCKui6iw/N9ZP9Z
+ ZqT6sCzEDgy6AjvbYPr+LCVzx7iS3tSmyQoW5j6ptSM4TlZw8nxyK+/68GBu45x+olIUaMmAb
+ qOCRYWDGtX3J7fk9b5w5zpQiNTHAR33EMAOSm1Tf3Sk0tdmEwBqffiAlhp+9kZno0rnxqZQ7/
+ +9nLMu8ZPYYcGVfBuTIqXiWklHc5H9J3dQqVB759HRKRGwaKXcMoz6Jq9H9+Zwz9gqQftGDRQ
+ tbq+KjlCHv7eiYswmVNvSEY8O73lAqy78ZKFqP2Bsd4jH4R54KVkHSAY8uY/7+a5nymOLUnG8
+ +PSHoMLz36JUYPWbZ1Muh0IKBDe+9s+K/B5pa9b7ERFhh/n6J2s2hoRvrB8vq9OUh2LNGzyix
+ UiT1iZ80VNZ6E8hY87r+rXg5ZrBOXz5x9gUmyxvt45ecFlforGpfcKQ8p/091jJSpkL/XoLrj
+ VY5cKUPxl69LUrKjDpdrQBWzS5ezQw8dL6tjO9d683g+BbFcFlfpQQ3zGKn4MoN7bzuJEzLkS
+ Vu1cD7MNjSWJtwx8Ry2EXADGBIxDWH9RG2dXrzA8RuHPnVCItMsN5osf9P8ueVRsqURBAAtQJ
+ 5MLjNiNMJPgr23twx0hCutrAbiSm8YbgDbSvq0fkPL4pguXc6QJgysYFSqMPwUx+rB8sJ8TzZ
+ z7jpTGc6yRWZ+0hKiN8hPe2MWyhABFqfEXNwGwo/dwuyH3p5i3T2I2GgaX96hFejporEbUGG2
+ D8vRRKkue+asdOXTt081Mt5m076nTx3cpAK8zG8T5b8WP0zowB9hHHkVdlaqbqt84inbEMlRD
+ P9YfsRzUZTz5Fu3Aww3EdpDOfcrOMpbd82dU1XkddI9zEbO1CPPFSI9oGpwubzU33UPGkEcc4
+ rHBkNJZxrEHT/noJIobUOmKVDzHIxfJpsQjLtfI/XqKhmNNP48h0go9VIniR9Cnwd5O8qzj9T
+ g3GOSTgehcA3F3Nek8UzUrCYz92PODoYmcxP9v1TBD6R/K3Ffc+BoUOwJeWna9ORSB9bcTO0q
+ nf/dwJZTv5BdN/vYObTzXeab3hZ+iuAppco8OkTdPEWbGEbdQ/k8NEOeP9JQTTpSdJtdYPEW+
+ PfPG1kK1mhA4lz3hlZsmbmlXHI2pu24apFfmHqMnzHzULhOoIDWQk9gIdETRXZXMZ/yrZbP0B
+ qbpYeVHpyNYHvChGYZ77J6o11iHmUYsmnl+qXDAqdfbnvQPwD2iwy7uMLIb7VLNwt3hqjy+fj
+ Znj53bbBhi+f2spt7j43rqQ76Ug/e+5ID7ReowCDBpO2vCE3hMiEe+d3dxoFXwp7HTqNDMP+1
+ rjEhd+/P8X+w3eczSTzBMkuK7pGyJBfiqKi1w48PJugw3ELIohtEATiph/Q7SNtDLnsSQUGfu
+ 7gXBSBRV5zKZluHGOuMD3wQRmyvKdN/jWQ/0Fvvli2WRqPQtp20DNhc0FnZjM9NC2qGOanJjx
+ XxAmarqHbmI68ujmqWSGi7qF6xIetD1Bj1ZpihUuS25+++o6f9MnbPgFBA1YnawvzNFiszDFR
+ jiYUhVhxNdMS51HFtmLa+Fkon9bKgyQ5VHRnV9YowNZam+HOPCUlOMRzt1Le5cY10kEUVQviV
+ n5FIxwu+ym9sxWE5k2XaN31n9T8o9c9wCbvDhqREEjF0dszaGBWToT7ginh9Dl7MfsOQ4Fzzl
+ kITcVRZ/gtSvilh+oj4t23TwEatCPmPZAk9uVUtGlrK6KPS1ClytGxx+T5AtcM22vuvHGiWV6
+ xdCHFphNhwZaVBXOUIA5Om3Zoxr4bLI4/Pz/R92HNi/xLItNzmRjoIkMEh4Xv1h7A9lyxaMIL
+ aOFVmZSdN2msuXSpG3ZoIiEzdWnem8hNGlwxTQYw5bAHodn0ln06Qb+BqLiV8Cruh5hBBSaX/
+ v+DmFAGG+1SoGkHixE25+XZvawmq/yScQPryaSbQHN4xEhONepmmUAPmVAy2WonCokczHMqqC
+ fiQlqVaOxlM3GFJLBCw1YYGPMZR/jEzEpUa7vFo2IEq/GxQNZj4yxqLG2edhNheoOTp1zl/5R
+ ZRWT3u7xr9QfcP4CYf4gGytwQtKFyOpbYZFi619+yQiWcTl87JTnW0ps4dEu+tCEGupPssUIO
+ pu7j79FDbHMp7/wP8z6KUASaWOVePZmF+UOprmepYbRl3FQrUKeVwZmfWBgiMzHS40eMAjfO8
+ 7frSmsLbej3fw7B8WmyyjbdNSulkwmZu4MO4lS2Sb8/4Xy3xJTIlAlzgBRKE/1AJOTfV3iIv7
+ sQ/xPmMRSYjFlbJW60Hvo2Mwq+pL2MMvwO1jN3Gxh3ITNwFkakV8qeUfxQu7TlPnIusYatkVV
+ v18D9p3yffuUDgY9ZXsTRjKBaqeWw0RzrjGLF0dIInWMyXFfa+p2D9oYiY3BWrr3iVz6sY69+
+ FdnWLQZB0WhC64KWQr0SSd2WtAEYZs4kLJijm23dWVfcU6CCUcenw3SQ6IvrRNThPCH4pRwwk
+ yuYP71gGUN2dCzXEtVJG+W9mh7HqpGD4JB06n+hDyYA+x5nI4/xqqzVxp1sBKJZ+cYCGAgwt5
+ oHPYVncHwf8TuPGqa/1e709eGnJqFX2qZg5L7GMQ5qHOS59QrDi1vgsjjnhzFtK3fp1mxT34T
+ rxWDKT7cC72apFeh/SgjKiI9fJ0hA2iDSXi4o3MLncPSH0a7WsneEGN9fcULqAsObjFbc3+qR
+ TMBfP++iGRpPZPR+Hw9oiNvDvMZeu84rg3PeAFub9crD/0Qfv1VtzbP05xhkh/ZUUwHmaqMZo
+ Rc/o9rb8hLrTHTr0paEvx+UXjAQJdtM4qXG9UzbtWEkhauQ5JV1bFGcnyUY9wwk2WCL5wTEQ/
+ 7hOw+rfbPx+gtYILrEVfO7qrIe9jQkRbA511OreIq9yhbJHwyPRa5NF+Sfa4odvkbv3MIsQ4C
+ 3myXAqKuhDwGN3Vp7fP8YJZVKiOX6Cws+fzjTg4TpgzRs/H7+vIIyIn38+3+mQcMfY+qVTrFU
+ WRDv7uKOzlPSJm715SlR4KYlmNAMlQeytyq+L50Mg63YLDePl6ngXeLDLiUxJNGb+wr5FLmID
+ onawLCssCLA4HFLDtzwz3bmB6C6hsGUsEPsJC2hZwd4egX4JfjpEH7gKRtHWNu8UPNI4RFhUw
+ 2XHRRcvhJLsJ2w8qgSD45aXiMg43Oymdm7gpheh88PVnxRjL3yRI9UF4mBEBCoD+bZ4xmmtLU
+ VbQwp1L9WNXHHRhFyXoB/GGIw0/XGhtOwpj4yK1l5glXvZHR0mEw1HcOdStj0mBwM4BbHlJL0
+ yzUlMb2Ehd9MwCYRYDlXbbTAHCMa5RrR4gf9r59eBvUMLLwaGV7Mgzj/+aiUcHY+hNsMTwCEi
+ CuWXgAFGgIEuuqsYCBTx186/H5QAKO21qRhUfGqdYcUI7l43YLvkrd+mjZTFc23/5z9biyeaD
+ 8G7q3PgDF+8vQImjvXmJdXSSeOwDRtdIqG2U4oZ42YruZWhhWSvXzp+64HA0sYfoXto6ESKtN
+ P9qN9KcOZ7ykGMzDeufY6pLmshA7IWdyyH4TCicb9x6puv4lTepaLs/3IATxmSfzRwO6HXvAu
+ CYLXL67lclvqLkNgeOBCJsjyTOuztZj0Zk/q9xWmk9l+Gy9IVkn6+14EOeXSpItntWPcYWrJx
+ QA+ClPyr6puvFI+X+DX4SsNHWpCPwgF+972TMoq0aJvgnq6GVhSel4GC7FL1923BXNjMTCAFO
+ Fy+SO45qSugWu4Zl/DOaSR/Ytl7lWAhU5thoocseafCI7DKoAs63beqB1+vPaaecq6Lpis/Yj
+ HGw9HJIUeUMvIiRfBjmMW4mm/BCWbnKBCOHrFxJ3krTU9fTdCzdf55rsfY7NP7uWyJQV2kZrk
+ EMfDgGSgEqyTL1rsfcFepJy9WUcGCrU+8KIQ8hD06r21K6VH4m4oD/zaSkxWmaMNpYw1ly8dX
+ EaPiT4VHZNZHdxxwGZxiFsSs3qBWIawp4oHqJsI7C2k+3RFUQ0VXLLij1hOMTxT0KFHIkbXQY
+ 6JYZQvBgeD4lBGbY3yUqgh9uLaJyn7S1GMfjEzKnbsVZerSGgl7Rui3HdYrTJTvXT0x9+ky9C
+ /3B+bPfxRAWKZ+iNBuuZ+WKHDBlD20nc+aI7FBObVng0H90eJWrTpvmNfBeFsF6Qf+jtxG7Ko
+ +/l5mmOA+kg4stl5L0WuS0El6X5DsQzu4/zfI3xcBZgemQTeHFL67/fFuK/2njD8ePkdKZR48
+ wpty3sCEflEiW/LfcO1+z/1nMklLaiyL1IKlPYX9kEHvUhlgDbQzRcvQ+lza+TQqmmZdUj16P
+ jtBNOANA=
 
-On Thu, Dec 11, 2025 at 02:19:28PM +0100, Marco Elver wrote:
-> On Thu, 11 Dec 2025 at 13:17, Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Thu, Nov 20, 2025 at 04:09:31PM +0100, Marco Elver wrote:
-> > > Introduce basic compatibility with cleanup.h infrastructure: introduce
-> > > DECLARE_LOCK_GUARD_*_ATTRS() helpers to add attributes to constructors
-> > > and destructors respectively.
-> > >
-> > > Note: Due to the scoped cleanup helpers used for lock guards wrapping
-> > > acquire and release around their own constructors/destructors that store
-> > > pointers to the passed locks in a separate struct, we currently cannot
-> > > accurately annotate *destructors* which lock was released. While it's
-> > > possible to annotate the constructor to say which lock was acquired,
-> > > that alone would result in false positives claiming the lock was not
-> > > released on function return.
-> > >
-> > > Instead, to avoid false positives, we can claim that the constructor
-> > > "assumes" that the taken lock is held via __assumes_ctx_guard().
-> 
-> 
-> > Moo, so the alias analysis didn't help here?
-> 
-> Unfortunately no, because intra-procedural alias analysis for these
-> kinds of diagnostics is infeasible. The compiler can only safely
-> perform alias analysis for local variables that do not escape the
-> function. The layers of wrapping here make this a bit tricky.
-> 
-> The compiler (unlike before) is now able to deal with things like:
-> {
->     spinlock_t *lock_scope __attribute__((cleanup(spin_unlock))) = &lock;
->     spin_lock(&lock);  // lock through &lock
->     ... critical section ...
-> }  // unlock through lock_scope (alias -> &lock)
-> 
-> > What is the scope of this __assumes_ctx stuff? The way it is used in the
-> > lock initializes seems to suggest it escapes scope. But then something
-> > like:
-> 
-> It escapes scope.
-> 
-> >         scoped_guard (mutex, &foo) {
-> >                 ...
-> >         }
-> >         // context analysis would still assume foo held
-> >
-> > is somewhat sub-optimal, no?
-> 
-> Correct. We're trading false negatives over false positives at this
-> point, just to get things to compile cleanly.
+>> See also:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/process/submitting-patches.rst?h=3Dv6.18-rc7#n94
+>=20
+> "Describe your changes in imperative mood"
+>=20
+> I guess I can try rewording this, =E2=80=A6
 
-Right, and this all 'works' right up to the point someone sticks a
-must_not_hold somewhere.
+I became curious once more how another improved change descrition can look=
+ like.
 
-> > > Better support for Linux's scoped guard design could be added in
-> > > future if deemed critical.
-> >
-> > I would think so, per the above I don't think this is 'right'.
-> 
-> It's not sound, but we'll avoid false positives for the time being.
-> Maybe we can wrangle the jigsaw of macros to let it correctly acquire
-> and then release (via a 2nd cleanup function), it might be as simple
-> as marking the 'constructor' with the right __acquires(..), and then
-> have a 2nd __attribute__((cleanup)) variable that just does a no-op
-> release via __release(..) so we get the already supported pattern
-> above.
 
-Right, like I mentioned in my previous email; it would be lovely if at
-the very least __always_inline would get a *very* early pass such that
-the above could be resolved without inter-procedural bits. I really
-don't consider an __always_inline as another procedure.
+>>> +virtual patch
+>>
+>> Will additional operation modes become relevant after clarification of =
+implementation details?
+>=20
+> I am not interested in other modes; if people want to contribute them,
+> they are welcome. :)
 
-Because as I already noted yesterday, cleanup is now all
-__always_inline, and as such *should* all end up in the one function.
+Will development interests eventually grow accordingly?
 
-But yes, if we can get a magical mash-up of __cleanup and __release (let
-it be knows as __release_on_cleanup ?) that might also work I suppose.
-But I vastly prefer __always_inline actually 'working' ;-)
+
+>> =E2=80=A6
+>>> +def alloc_array(name):
+>>> +	func =3D "FAILED_RENAME"
+>>> +	if name =3D=3D "kmalloc_array":
+>>> +		func =3D "kmalloc_objs"
+>> =E2=80=A6
+>>
+>> * I suggest to avoid duplicate variable assignments.
+>>
+>> * How do you think about to collaborate with the Python data structure =
+=E2=80=9Cdictionary=E2=80=9D?
+>=20
+> I wanted the stderr warning when there was no match, but to return
+> "FAILED_RENAME" in such a case.
+
+Such a data processing result can be achieved also by a more appropriate a=
+lgorithm,
+can't it?
+
+
+>                                 Using a dictionary was basically the
+> same length as the elif stack. If you have an alternative, I'm happy to
+> replace it with what you come up with.
+
+Is there a need for further case distinctions?
+
+
+>> =E2=80=A6
+>>> +type TYPE;
+>>> +TYPE *P;
+>>> +TYPE INST;
+>>> +expression VAR;
+>>> +expression GFP;
+>> =E2=80=A6
+>>
+>> Such repetition of SmPL key words can eventually be also avoided.
+>=20
+> That is true, but I like having them separated -- I find it more
+> readable that way.
+
+Under which circumstances would you become used also to more succinct SmPL=
+ code?
+
+Regards,
+Markus
