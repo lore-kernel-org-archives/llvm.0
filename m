@@ -1,86 +1,59 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04C11E4BE;
-	Fri, 12 Dec 2025 11:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607E428469A;
+	Fri, 12 Dec 2025 14:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765537793; cv=none; b=CvZ5qFE/LKt3GAyn6wQtI14CWjhDh6Vm3qj04XltygyyVLgmD2UmHKOm0SY8KebCn4bVYqODdeRLpJfUCtB8Odxwm2ASZAEiNwjuSunC4KKwLhWyV2O4f3Dwk5tTGDqJl5KVyudQzBgFBgGfY4lhP7gDbseW86mMSrN1jN9Rt7I=
+	t=1765549323; cv=none; b=mMwbHgWT3SjTT9Qb0umXF6amrn4xSgSX7aq1w6XSzCu3tI7LlunUkReoqbLWilsARV/rFLQjG88PqFBYMl+g0jLQ2Uh41YgMMB3nt0LZHgJoN3GmaURSuRWu53WH4/X3RuRmUw3byWmsTpTmUfrCvbKFqzvr6q2XkWGRGQIwnLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765537793; c=relaxed/simple;
-	bh=NJWANmLDFLgh9uv0VNdg/DhT7Pjr8ENeFuaRLEpVcLg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BKv0vZnZEzj8XcvwWQjvVkx8JF5hw+sHxCBymbWc6XoU5+K0s7y3j6fxoYDumQrg0Cv1qpg/zY3a4Mg24Go4IWW5QIsjSRxfJ9aQIly/NLrYAldLIDFpfY8L0DFVixUNnvxfVBd/G/ybHChrE3ohYHM6t5K7xWbvfbac2KYoxGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=h0RqJPJB; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1765549323; c=relaxed/simple;
+	bh=liM84Nb2aA8l19AwpljS4wtIU7rtYhD0WXSCvrV5NWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qwBTk+gmfr4A5ipEmJaqg4ZuU6E+hNdviY8Qvsn0Hc0kThS8C4QmkzSZ2aT77DieI4VuzXkyl/mTboRDptRSPyUvG28w38LBHwOe7kNaQQZbiWeSmKB4SUm83WlMSUh5WhbPDgnYaMliUtI7LBPmL6P51gmBoqjJf3+tD3wLwSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bXjdLGQ/; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="h0RqJPJB"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=sAhBWDHUpHF5PVStWIyQEDmT8IbGgPASZMaiPzih1nU=; b=h0RqJPJB3EslZXH+NrQY8Oawml
-	xVZKoRMlILjKuWofLcV230Ra6sSrB2+xJvvgUEbp5EFV/Ksdl7n8uO/wv7F0hgMeWOXRU+OD2v1g6
-	YTKEG10gwSh9bsJkLhxckP/d9wbsNQ6ayLlXDhf9hOmuRnj+WLStfaeCkHyhmMouC5a1H04FluZox
-	r6CS1zDV7kB+xQmqonG5Xik2CYfRMXdrWt5KAW/Un4rc/os3/oSKhHMXr/E94yHUZ9ZNmv3taEqmo
-	3yjzq0lkadR8xVmJOPsHrod0+96Cr641yagkt0pGVO0wgWglc8UyMpb3Fhnw4TDxwjAf9cwJOj3Ec
-	NuZNKjag==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vU0A9-0000000GVlg-2EQb;
-	Fri, 12 Dec 2025 10:14:13 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C422A30057C; Fri, 12 Dec 2025 12:09:28 +0100 (CET)
-Date: Fri, 12 Dec 2025 12:09:28 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Chris Li <sparse@chrisli.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org
-Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context
- analysis
-Message-ID: <20251212110928.GP3911114@noisy.programming.kicks-ass.net>
-References: <20251120145835.3833031-2-elver@google.com>
- <20251120151033.3840508-7-elver@google.com>
- <20251211121659.GH3911114@noisy.programming.kicks-ass.net>
- <CANpmjNOmAYFj518rH0FdPp=cqK8EeKEgh1ok_zFUwHU5Fu92=w@mail.gmail.com>
- <20251212094352.GL3911114@noisy.programming.kicks-ass.net>
- <CANpmjNP=s33L6LgYWHygEuLtWTq-s2n4yFDvvGcF3HjbGH+hqw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bXjdLGQ/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765549321; x=1797085321;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=liM84Nb2aA8l19AwpljS4wtIU7rtYhD0WXSCvrV5NWM=;
+  b=bXjdLGQ/uHbEj3PFgVIv47tdubt3Hbr2R8UUP8Pbaceg3cOxnIchVBOJ
+   rbpsG5saEwvMv2LforAZsALMGd9dE+crjmkgpwC5PRNOhMfebFXMne1aH
+   U2gVEkUR6H2ZWkFfZ4MSuyLm0ea+8ypvPUFxtrT8SWES09f1UMlb967cG
+   uzwDLft3gnWCuTEf2erCx205RvQYX5KAMLZCzLo8InsX7MldVxjsOE0F3
+   cvwpu+XIZ+qHDl3JiymP/9U/uymz2qkj4dC7wHPTMQ8C5PcOgwNqF/DPv
+   ciYbP2vDKU1bzo7lEQoJtEEQTQlVMeU1eCvggnMQ3IpbsNeMd8qGssUSB
+   w==;
+X-CSE-ConnectionGUID: vtiLsMvKTPe32KGINqIRNw==
+X-CSE-MsgGUID: dycsmnzzQXGq0QKQNq0dFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11640"; a="67624559"
+X-IronPort-AV: E=Sophos;i="6.21,143,1763452800"; 
+   d="scan'208";a="67624559"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2025 06:22:00 -0800
+X-CSE-ConnectionGUID: irkOBfTLQeWYfDTVJnJrcA==
+X-CSE-MsgGUID: APtOmKBUSQ6nanvDaPlM4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,143,1763452800"; 
+   d="scan'208";a="197003276"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 12 Dec 2025 06:21:59 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vU41t-0000000069T-1Ka9;
+	Fri, 12 Dec 2025 14:21:57 +0000
+Date: Fri, 12 Dec 2025 22:21:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: drivers/perf/apple_m1_cpu_pmu.c:404:7: warning: variable 'user' set
+ but not used
+Message-ID: <202512122259.IXHvifS1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -89,63 +62,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNP=s33L6LgYWHygEuLtWTq-s2n4yFDvvGcF3HjbGH+hqw@mail.gmail.com>
 
-On Fri, Dec 12, 2025 at 11:15:29AM +0100, Marco Elver wrote:
-> On Fri, 12 Dec 2025 at 10:43, Peter Zijlstra <peterz@infradead.org> wrote:
-> [..]
-> > > Correct. We're trading false negatives over false positives at this
-> > > point, just to get things to compile cleanly.
-> >
-> > Right, and this all 'works' right up to the point someone sticks a
-> > must_not_hold somewhere.
-> >
-> > > > > Better support for Linux's scoped guard design could be added in
-> > > > > future if deemed critical.
-> > > >
-> > > > I would think so, per the above I don't think this is 'right'.
-> > >
-> > > It's not sound, but we'll avoid false positives for the time being.
-> > > Maybe we can wrangle the jigsaw of macros to let it correctly acquire
-> > > and then release (via a 2nd cleanup function), it might be as simple
-> > > as marking the 'constructor' with the right __acquires(..), and then
-> > > have a 2nd __attribute__((cleanup)) variable that just does a no-op
-> > > release via __release(..) so we get the already supported pattern
-> > > above.
-> >
-> > Right, like I mentioned in my previous email; it would be lovely if at
-> > the very least __always_inline would get a *very* early pass such that
-> > the above could be resolved without inter-procedural bits. I really
-> > don't consider an __always_inline as another procedure.
-> >
-> > Because as I already noted yesterday, cleanup is now all
-> > __always_inline, and as such *should* all end up in the one function.
-> >
-> > But yes, if we can get a magical mash-up of __cleanup and __release (let
-> > it be knows as __release_on_cleanup ?) that might also work I suppose.
-> > But I vastly prefer __always_inline actually 'working' ;-)
-> 
-> The truth is that __always_inline working in this way is currently
-> infeasible. Clang and LLVM's architecture simply disallow this today:
-> the semantic analysis that -Wthread-safety does happens over the AST,
-> whereas always_inline is processed by early passes in the middle-end
-> already within LLVM's pipeline, well after semantic analysis. There's
-> a complexity budget limit for semantic analysis (type checking,
-> warnings, assorted other errors), and path-sensitive &
-> intra-procedural analysis over the plain AST is outside that budget.
-> Which is why tools like clang-analyzer exist (symbolic execution),
-> where it's possible to afford that complexity since that's not
-> something that runs for a normal compile.
-> 
-> I think I've pushed the current version of Clang's -Wthread-safety
-> already far beyond what folks were thinking is possible (a variant of
-> alias analysis), but even my healthy disregard for the impossible
-> tells me that making path-sensitive intra-procedural analysis even if
-> just for __always_inline functions is quite possibly a fool's errand.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   187d0801404f415f22c0b31531982c7ea97fa341
+commit: 75ecffc361bbc85696c084f3d3c73eb207386e3f drivers/perf: apple_m1: Refactor event select/filter configuration
+date:   9 months ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251212/202512122259.IXHvifS1-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251212/202512122259.IXHvifS1-lkp@intel.com/reproduce)
 
-Well, I had to propose it. Gotta push the envelope :-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512122259.IXHvifS1-lkp@intel.com/
 
-> So either we get it to work with what we have, or give up.
+All warnings (new ones prefixed by >>):
 
-So I think as is, we can start. But I really do want the cleanup thing
-sorted, even if just with that __release_on_cleanup mashup or so.
+         |                                         ^~~~~~~~~~~~~
+   include/linux/bits.h:34:2: note: expanded from macro 'GENMASK'
+      34 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:162:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     162 |         [M1_PMU_PERFCTR_UNKNOWN_f7]                             = ONLY_2_4_6,
+         |                                                                   ^~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:27:22: note: expanded from macro 'ONLY_2_4_6'
+      27 | #define ONLY_2_4_6                      (BIT(2) | BIT(4) | BIT(6))
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
+     132 |         [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
+         |                                                                   ^~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
+      25 | #define ANY_BUT_0_1                     GENMASK(9, 2)
+         |                                         ^~~~~~~~~~~~~
+   include/linux/bits.h:34:2: note: expanded from macro 'GENMASK'
+      34 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:163:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     163 |         [M1_PMU_PERFCTR_UNKNOWN_f8]                             = ONLY_2_TO_7,
+         |                                                                   ^~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:26:23: note: expanded from macro 'ONLY_2_TO_7'
+      26 | #define ONLY_2_TO_7                     GENMASK(7, 2)
+         |                                         ^~~~~~~~~~~~~
+   include/linux/bits.h:34:2: note: expanded from macro 'GENMASK'
+      34 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
+     132 |         [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
+         |                                                                   ^~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
+      25 | #define ANY_BUT_0_1                     GENMASK(9, 2)
+         |                                         ^~~~~~~~~~~~~
+   include/linux/bits.h:34:2: note: expanded from macro 'GENMASK'
+      34 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:164:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     164 |         [M1_PMU_PERFCTR_UNKNOWN_fd]                             = ONLY_2_4_6,
+         |                                                                   ^~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:27:22: note: expanded from macro 'ONLY_2_4_6'
+      27 | #define ONLY_2_4_6                      (BIT(2) | BIT(4) | BIT(6))
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
+     132 |         [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
+         |                                                                   ^~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
+      25 | #define ANY_BUT_0_1                     GENMASK(9, 2)
+         |                                         ^~~~~~~~~~~~~
+   include/linux/bits.h:34:2: note: expanded from macro 'GENMASK'
+      34 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:169:32: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     169 |         [PERF_COUNT_HW_CPU_CYCLES]              = M1_PMU_PERFCTR_CORE_ACTIVE_CYCLE,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:168:2: note: previous initialization is here
+     168 |         PERF_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:44:34: note: expanded from macro 'PERF_MAP_ALL_UNSUPPORTED'
+      44 |         [0 ... PERF_COUNT_HW_MAX - 1] = HW_OP_UNSUPPORTED
+         |                                         ^~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:39:28: note: expanded from macro 'HW_OP_UNSUPPORTED'
+      39 | #define HW_OP_UNSUPPORTED               0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:170:34: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     170 |         [PERF_COUNT_HW_INSTRUCTIONS]            = M1_PMU_PERFCTR_INST_ALL,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:168:2: note: previous initialization is here
+     168 |         PERF_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:44:34: note: expanded from macro 'PERF_MAP_ALL_UNSUPPORTED'
+      44 |         [0 ... PERF_COUNT_HW_MAX - 1] = HW_OP_UNSUPPORTED
+         |                                         ^~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:39:28: note: expanded from macro 'HW_OP_UNSUPPORTED'
+      39 | #define HW_OP_UNSUPPORTED               0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:171:40: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     171 |         [PERF_COUNT_HW_BRANCH_INSTRUCTIONS]     = M1_PMU_PERFCTR_INST_BRANCH,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:168:2: note: previous initialization is here
+     168 |         PERF_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:44:34: note: expanded from macro 'PERF_MAP_ALL_UNSUPPORTED'
+      44 |         [0 ... PERF_COUNT_HW_MAX - 1] = HW_OP_UNSUPPORTED
+         |                                         ^~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:39:28: note: expanded from macro 'HW_OP_UNSUPPORTED'
+      39 | #define HW_OP_UNSUPPORTED               0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:172:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     172 |         [PERF_COUNT_HW_BRANCH_MISSES]           = M1_PMU_PERFCTR_BRANCH_MISPRED_NONSPEC,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/apple_m1_cpu_pmu.c:168:2: note: previous initialization is here
+     168 |         PERF_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:44:34: note: expanded from macro 'PERF_MAP_ALL_UNSUPPORTED'
+      44 |         [0 ... PERF_COUNT_HW_MAX - 1] = HW_OP_UNSUPPORTED
+         |                                         ^~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:39:28: note: expanded from macro 'HW_OP_UNSUPPORTED'
+      39 | #define HW_OP_UNSUPPORTED               0xFFFF
+         |                                         ^~~~~~
+>> drivers/perf/apple_m1_cpu_pmu.c:404:7: warning: variable 'user' set but not used [-Wunused-but-set-variable]
+     404 |         bool user, kernel;
+         |              ^
+   drivers/perf/apple_m1_cpu_pmu.c:404:13: warning: variable 'kernel' set but not used [-Wunused-but-set-variable]
+     404 |         bool user, kernel;
+         |                    ^
+   drivers/perf/apple_m1_cpu_pmu.c:405:5: warning: variable 'evt' set but not used [-Wunused-but-set-variable]
+     405 |         u8 evt;
+         |            ^
+   39 warnings generated.
+
+
+vim +/user +404 drivers/perf/apple_m1_cpu_pmu.c
+
+75ecffc361bbc8 Oliver Upton 2025-03-05  400  
+a639027a1be1d6 Marc Zyngier 2022-02-08  401  /* arm_pmu backend */
+a639027a1be1d6 Marc Zyngier 2022-02-08  402  static void m1_pmu_enable_event(struct perf_event *event)
+a639027a1be1d6 Marc Zyngier 2022-02-08  403  {
+a639027a1be1d6 Marc Zyngier 2022-02-08 @404  	bool user, kernel;
+a639027a1be1d6 Marc Zyngier 2022-02-08  405  	u8 evt;
+a639027a1be1d6 Marc Zyngier 2022-02-08  406  
+a639027a1be1d6 Marc Zyngier 2022-02-08  407  	evt = event->hw.config_base & M1_PMU_CFG_EVENT;
+a639027a1be1d6 Marc Zyngier 2022-02-08  408  	user = event->hw.config_base & M1_PMU_CFG_COUNT_USER;
+a639027a1be1d6 Marc Zyngier 2022-02-08  409  	kernel = event->hw.config_base & M1_PMU_CFG_COUNT_KERNEL;
+a639027a1be1d6 Marc Zyngier 2022-02-08  410  
+a639027a1be1d6 Marc Zyngier 2022-02-08  411  	m1_pmu_disable_counter_interrupt(event->hw.idx);
+a639027a1be1d6 Marc Zyngier 2022-02-08  412  	m1_pmu_disable_counter(event->hw.idx);
+a639027a1be1d6 Marc Zyngier 2022-02-08  413  	isb();
+a639027a1be1d6 Marc Zyngier 2022-02-08  414  
+75ecffc361bbc8 Oliver Upton 2025-03-05  415  	m1_pmu_configure_counter(event->hw.idx, event->hw.config_base);
+a639027a1be1d6 Marc Zyngier 2022-02-08  416  	m1_pmu_enable_counter(event->hw.idx);
+a639027a1be1d6 Marc Zyngier 2022-02-08  417  	m1_pmu_enable_counter_interrupt(event->hw.idx);
+a639027a1be1d6 Marc Zyngier 2022-02-08  418  	isb();
+a639027a1be1d6 Marc Zyngier 2022-02-08  419  }
+a639027a1be1d6 Marc Zyngier 2022-02-08  420  
+
+:::::: The code at line 404 was first introduced by commit
+:::::: a639027a1be1d68437e1c2cac6ed16306c84ab3c drivers/perf: Add Apple icestorm/firestorm CPU PMU driver
+
+:::::: TO: Marc Zyngier <maz@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
