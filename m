@@ -1,152 +1,210 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED7129AB02
-	for <llvm@lists.linux.dev>; Fri, 12 Dec 2025 10:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB9F2F0C46;
+	Fri, 12 Dec 2025 10:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765534569; cv=none; b=rD8eJhKoG4HXO3QvLR+oYrRX4e7Q3ARobUNVdAZuCg5h3sksdFgEdGpEe+gxkNF5DM5xlsPH+G+Ed0MQEuf2Cekpv2nU2WIz3mp7XQJ6EThgRqnM1D3hQi553gkeOS5bqtY2UNu7y7e+aaMJUqRbeiHu385vITJhShIN8k31KSU=
+	t=1765535811; cv=none; b=c6BE+hqGdbCBt3LF8cf69aH3gkDt+L3Q28nfkUFQzc8iYvsqhqc3M/MTxQkoC135u+rWIjzxOTzgmUYG+gYLmpL3VNv65zcwNWhneznziHMAZCibXnddU1Oz/fYD4hog3jKo0l0cRAeMye6/i2sN6unV0kb5oHP3GDYn4ydBnI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765534569; c=relaxed/simple;
-	bh=Yy8AVUr1WzoEhC0gwViTyIIecU1pDeO+TdO72jBT6kg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=upW/oLr6nZwED4QWsWAro8eLE1Yya3YMd0tNe7RMYte3W+3CiTILWVX2ab3KiJiwQBuDrTYMEJZiBa0FM36qHsjG9WX0VMMHQJqHBnfPqcVqq56/xTyyieK5TBCZSlVnX54ZH3iyeSc9qdLG5HKEYpJC14JeAhvVwFRajeaOz3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l3r/LGHu; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1765535811; c=relaxed/simple;
+	bh=r/JpO5LBVsw6I8J2SFBcm1AOo6uAqwkMlwHyl6tSzUg=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=s4BeI35W7s/nMQN83WuTU9NUOzlEo5nKfeTKP8kScX+Mjue95AkJJiXsOOqSMzFOpXb61/k7nIys8hoJz3YFhR7vx4y+gdKsw141H14oSW9a+NEFytkeG44AxnL+GCpGBf8Wu5SEDFKYFL50qAzAC2335sYvBuUGQ3D/09pPZLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fkuuwx17; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l3r/LGHu"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-bc0d7255434so698532a12.0
-        for <llvm@lists.linux.dev>; Fri, 12 Dec 2025 02:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765534567; x=1766139367; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yy8AVUr1WzoEhC0gwViTyIIecU1pDeO+TdO72jBT6kg=;
-        b=l3r/LGHuxZYcWMDdOzQ1A5piTSyXI//RBM52dccBQlXu9m3TqOBweOeNHdkq5/Ly/j
-         /kOF6fzDkpcJ187XhP7QEM4Viuy14o13Ptqtg5MuopYVUFv+3phOZd+N5GUsWwMNUYbM
-         r+iQAKWKfg+NnZNud8rLN9RXpTNDIGRaoC26jSE3a87ihUFfrr5IPP2FhhZ5ad/n30N8
-         cNh6s16NcMohO49Nq/T/PgEUGGFTIZXZgaMv9zp7y4LhTGXJRW10FhQqhJhIvuthhNi9
-         eoAHeQH6jp+r+1fri99FljlarLNp5cx34aCvNuiZIuvFbn7Oe6f0FBpnN7g44u5ZfKL8
-         9vsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765534567; x=1766139367;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yy8AVUr1WzoEhC0gwViTyIIecU1pDeO+TdO72jBT6kg=;
-        b=oX6V/HxR+1n03NDzlNogeRcgILuL75pb5AD24LTwiJMCAFdUp2ZqXKgSD/QtEFsUnP
-         R2ZACtGZuAYnHp52wBRdeQXncFwSKgb1F1LCUMkxrmwJhtPHYQJUxDFcQ+Ub5jdTUm9h
-         ggR81toRZbbNvYLULQg5CxzqALBsSS4fAtxTHPyeqEBgczmcMKpERZFNuPfpk73FZ7j8
-         jZdYr00hKl/naTQRKjyQL5Vx8VSsE14K+Js6eDwa4QmmGyvLV56RiRMFkLD5HBJcAE6V
-         fDMuMIM3u107Znemk2EXEgF2cg69DsPjLhtyYNvtjpFtvuCY8tfm6eGSBhuaIA86Kx12
-         k6qw==
-X-Forwarded-Encrypted: i=1; AJvYcCX4gRztxt1Q0kWGTCJLClZNiIkPtQGUAJCdBc0KJxmLpXOwQtFAUMPnchw18E3dAo05C5cX@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3q9dto9hUtu6eV8F0AwHiunPrBwlXsCKUzXFnJnSDjud+AaIS
-	vLpoJuHBHCbHa2i5dTMTRTV7Q4BE+uK1JiHIdqKH9Hl+T1k4LKp3AWb6IDMoQqX9lHfafrZwOIQ
-	9fQ7ILiiDpXEr0pAHsq871Hy5OgY+ZCaXm1LlntZC
-X-Gm-Gg: AY/fxX4oxEC7tG+lO4FHAJ3GUXKjB2uzRbErmYzGV4SPZCMgtOK378BXsVTa1vpOYN/
-	yd8ABBpoPrzak3SGpULHLl83RWsQEm3E8+xPWX1Y9pIFUsJNiS9Tez7qw5pN7Agy+FbrbirI/ub
-	uEAkUTVmg2jpUjqW4mDmg1BIlgeqFwKmWNXPtMsmZwnXarU90awEBU9uHZgJx1fOoUL19Sc06FE
-	aZ9Vsj7jMRm03wG/Ydpq6zZi+cV1bNg8pbqOsHPUpOIzKpTy76gRyLt5TTk1kTNE6s+MCmmaSxx
-	QITTRbz4ZTTYRdF1JlJRv1dkD27PKVsVAv8rVQ==
-X-Google-Smtp-Source: AGHT+IH8fq53xzz4VEeZIfjpPn2aDZft0vSRUPpE08Jgar7Bwxv93jAlmI/oD2Bc5sYJ04yKuPnrNx+rDd5kmEFlwB8=
-X-Received: by 2002:a05:7300:2aa5:b0:2ab:ca55:89b4 with SMTP id
- 5a478bee46e88-2ac303f2fbcmr872533eec.43.1765534566419; Fri, 12 Dec 2025
- 02:16:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fkuuwx17"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765535809; x=1797071809;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=r/JpO5LBVsw6I8J2SFBcm1AOo6uAqwkMlwHyl6tSzUg=;
+  b=fkuuwx17Vxx9CSeyJIM94PRuGQ+R+4+v1RVDoV45H12Y6mklPoxtY6tn
+   Gkbklx+8EQq42rT926uXgiTZC2ur66zfnPjY4rhes0MQbmDWv2vfyDaFA
+   /I/3sYAT6JhsAa9pvx46UL3qdirDcQ3Hnxjx+cKu53Uo+GF1UgVfMOZSq
+   7M4LJnNzMVrCMvRCvlg40TSd49fKydwf4RpqQfY44Zrmw1QQ+GtjbOid+
+   18CMjmT35NYO63hC+rc6aGV6+UgVqgG+o93lVkx/1ZOjZtfiaqXLjp+r4
+   GoBDF4FeL5VUehUuYJMA1qcoCSjeZ5P7wCxBapS/7N+XfrAzZIIHYhDo0
+   A==;
+X-CSE-ConnectionGUID: 1xJaVmbySqGwEBsOnKGOJw==
+X-CSE-MsgGUID: yTLc1Z7NR+StDVMlZ+8qOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11639"; a="93002403"
+X-IronPort-AV: E=Sophos;i="6.21,143,1763452800"; 
+   d="scan'208";a="93002403"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2025 02:36:48 -0800
+X-CSE-ConnectionGUID: WhjZ29N1TCq9O0k8+6TP4A==
+X-CSE-MsgGUID: bDfOdrAgQXKSj/989crzfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,143,1763452800"; 
+   d="scan'208";a="197110495"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 12 Dec 2025 02:36:47 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vU0Vw-000000005wI-38di;
+	Fri, 12 Dec 2025 10:36:44 +0000
+Date: Fri, 12 Dec 2025 18:36:31 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: drivers/infiniband/hw/ionic/ionic_datapath.c:902:18: warning:
+ conditional expression between different enumeration types ('enum
+ ionic_v1_op' and 'enum ionic_v2_op')
+Message-ID: <202512121854.oGIYNm5i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
- <20251211121659.GH3911114@noisy.programming.kicks-ass.net>
- <CANpmjNOmAYFj518rH0FdPp=cqK8EeKEgh1ok_zFUwHU5Fu92=w@mail.gmail.com> <20251212094352.GL3911114@noisy.programming.kicks-ass.net>
-In-Reply-To: <20251212094352.GL3911114@noisy.programming.kicks-ass.net>
-From: Marco Elver <elver@google.com>
-Date: Fri, 12 Dec 2025 11:15:29 +0100
-X-Gm-Features: AQt7F2qb9ENq_mtkRfqCrKNBJnxHOwKNFDuSBIrcF4bjbeWckbG0712gmoUp-Ao
-Message-ID: <CANpmjNP=s33L6LgYWHygEuLtWTq-s2n4yFDvvGcF3HjbGH+hqw@mail.gmail.com>
-Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context analysis
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, 
-	Will Deacon <will@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Chris Li <sparse@chrisli.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Bart Van Assche <bvanassche@acm.org>, Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>, 
-	Eric Dumazet <edumazet@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Johannes Berg <johannes.berg@intel.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
-	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
-	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 12 Dec 2025 at 10:43, Peter Zijlstra <peterz@infradead.org> wrote:
-[..]
-> > Correct. We're trading false negatives over false positives at this
-> > point, just to get things to compile cleanly.
->
-> Right, and this all 'works' right up to the point someone sticks a
-> must_not_hold somewhere.
->
-> > > > Better support for Linux's scoped guard design could be added in
-> > > > future if deemed critical.
-> > >
-> > > I would think so, per the above I don't think this is 'right'.
-> >
-> > It's not sound, but we'll avoid false positives for the time being.
-> > Maybe we can wrangle the jigsaw of macros to let it correctly acquire
-> > and then release (via a 2nd cleanup function), it might be as simple
-> > as marking the 'constructor' with the right __acquires(..), and then
-> > have a 2nd __attribute__((cleanup)) variable that just does a no-op
-> > release via __release(..) so we get the already supported pattern
-> > above.
->
-> Right, like I mentioned in my previous email; it would be lovely if at
-> the very least __always_inline would get a *very* early pass such that
-> the above could be resolved without inter-procedural bits. I really
-> don't consider an __always_inline as another procedure.
->
-> Because as I already noted yesterday, cleanup is now all
-> __always_inline, and as such *should* all end up in the one function.
->
-> But yes, if we can get a magical mash-up of __cleanup and __release (let
-> it be knows as __release_on_cleanup ?) that might also work I suppose.
-> But I vastly prefer __always_inline actually 'working' ;-)
+CC: linux-kernel@vger.kernel.org
+TO: Abhijit Gangurde <abhijit.gangurde@amd.com>
+CC: Leon Romanovsky <leon@kernel.org>
+CC: Allen Hubbe <allen.hubbe@amd.com>
 
-The truth is that __always_inline working in this way is currently
-infeasible. Clang and LLVM's architecture simply disallow this today:
-the semantic analysis that -Wthread-safety does happens over the AST,
-whereas always_inline is processed by early passes in the middle-end
-already within LLVM's pipeline, well after semantic analysis. There's
-a complexity budget limit for semantic analysis (type checking,
-warnings, assorted other errors), and path-sensitive &
-intra-procedural analysis over the plain AST is outside that budget.
-Which is why tools like clang-analyzer exist (symbolic execution),
-where it's possible to afford that complexity since that's not
-something that runs for a normal compile.
+Hi Abhijit,
 
-I think I've pushed the current version of Clang's -Wthread-safety
-already far beyond what folks were thinking is possible (a variant of
-alias analysis), but even my healthy disregard for the impossible
-tells me that making path-sensitive intra-procedural analysis even if
-just for __always_inline functions is quite possibly a fool's errand.
+First bad commit (maybe != root cause):
 
-So either we get it to work with what we have, or give up.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d358e5254674b70f34c847715ca509e46eb81e6f
+commit: 6603fbf158e9a34eb0961579becee377c1efa1ee RDMA/ionic: Add Makefile/Kconfig to kernel build environment
+date:   3 months ago
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251212/202512121854.oGIYNm5i-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251212/202512121854.oGIYNm5i-lkp@intel.com/reproduce)
 
-Thanks,
--- Marco
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512121854.oGIYNm5i-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/infiniband/hw/ionic/ionic_datapath.c:902:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     902 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:905:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     905 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND_IMM);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:909:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     909 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND_INV);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:946:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     946 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:949:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     949 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND_IMM);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:978:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     978 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, RDMA_READ);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:983:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     983 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, RDMA_WRITE);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:986:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+     986 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, RDMA_WRITE_IMM);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:1023:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+    1023 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, ATOMIC_CS);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:1031:18: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+    1031 |                 wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, ATOMIC_FA);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:1066:17: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+    1066 |         wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, LOCAL_INV);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:1101:17: warning: conditional expression between different enumeration types ('enum ionic_v1_op' and 'enum ionic_v2_op') [-Wenum-compare-conditional]
+    1101 |         wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, REG_MR);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/ionic/ionic_datapath.c:13:17: note: expanded from macro 'IONIC_OP'
+      13 |         ((version) < 2 ? IONIC_V1_OP_##opname : IONIC_V2_OP_##opname)
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~
+   12 warnings generated.
+
+
+vim +902 drivers/infiniband/hw/ionic/ionic_datapath.c
+
+b83c62055b6faa Abhijit Gangurde 2025-09-03  885  
+b83c62055b6faa Abhijit Gangurde 2025-09-03  886  static int ionic_prep_send(struct ionic_qp *qp,
+b83c62055b6faa Abhijit Gangurde 2025-09-03  887  			   const struct ib_send_wr *wr)
+b83c62055b6faa Abhijit Gangurde 2025-09-03  888  {
+b83c62055b6faa Abhijit Gangurde 2025-09-03  889  	struct ionic_ibdev *dev = to_ionic_ibdev(qp->ibqp.device);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  890  	struct ionic_sq_meta *meta;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  891  	struct ionic_v1_wqe *wqe;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  892  
+b83c62055b6faa Abhijit Gangurde 2025-09-03  893  	meta = &qp->sq_meta[qp->sq.prod];
+b83c62055b6faa Abhijit Gangurde 2025-09-03  894  	wqe = ionic_queue_at_prod(&qp->sq);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  895  
+b83c62055b6faa Abhijit Gangurde 2025-09-03  896  	ionic_prep_sq_wqe(qp, wqe);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  897  
+b83c62055b6faa Abhijit Gangurde 2025-09-03  898  	meta->ibop = IB_WC_SEND;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  899  
+b83c62055b6faa Abhijit Gangurde 2025-09-03  900  	switch (wr->opcode) {
+b83c62055b6faa Abhijit Gangurde 2025-09-03  901  	case IB_WR_SEND:
+b83c62055b6faa Abhijit Gangurde 2025-09-03 @902  		wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  903  		break;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  904  	case IB_WR_SEND_WITH_IMM:
+b83c62055b6faa Abhijit Gangurde 2025-09-03  905  		wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND_IMM);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  906  		wqe->base.imm_data_key = wr->ex.imm_data;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  907  		break;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  908  	case IB_WR_SEND_WITH_INV:
+b83c62055b6faa Abhijit Gangurde 2025-09-03  909  		wqe->base.op = IONIC_OP(dev->lif_cfg.rdma_version, SEND_INV);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  910  		wqe->base.imm_data_key =
+b83c62055b6faa Abhijit Gangurde 2025-09-03  911  			cpu_to_be32(wr->ex.invalidate_rkey);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  912  		break;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  913  	default:
+b83c62055b6faa Abhijit Gangurde 2025-09-03  914  		return -EINVAL;
+b83c62055b6faa Abhijit Gangurde 2025-09-03  915  	}
+b83c62055b6faa Abhijit Gangurde 2025-09-03  916  
+b83c62055b6faa Abhijit Gangurde 2025-09-03  917  	return ionic_prep_common(qp, wr, meta, wqe);
+b83c62055b6faa Abhijit Gangurde 2025-09-03  918  }
+b83c62055b6faa Abhijit Gangurde 2025-09-03  919  
+
+:::::: The code at line 902 was first introduced by commit
+:::::: b83c62055b6faabb444b2f8f3355420927cc39fd RDMA/ionic: Register device ops for datapath
+
+:::::: TO: Abhijit Gangurde <abhijit.gangurde@amd.com>
+:::::: CC: Leon Romanovsky <leon@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
