@@ -1,62 +1,64 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144712F0671;
-	Sat, 13 Dec 2025 09:59:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B902F60DD;
+	Sat, 13 Dec 2025 10:11:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765619972; cv=none; b=AsjGO81lReYVRWaoJx5mPMypxeLTzUVFNhfcbei1xEH5KuwIe5fO44Yivy2oo7Crkdn7N4yAL0WkVlWTRRmQ593kLqzVInup4JITB4HYwQ4KZ7vUxUQUJXrgZJkjIJHT1hTdQ2Mn3CGeYkRaHJS6Wuf60/Zfir6P6vdQ9+NQVLM=
+	t=1765620696; cv=none; b=bQA7zyqgUwfxz5XHe+YR4Y4bLhqjQi2Ek6zhBL+P4r8MJFjQdPUJM0wnYiDg7ABRTq4AsiiUhWVyUZcFVhXtqx+xxBwsyEzfq+26aEHuHHhpe6+927gDk2CKsMr2be42YI71RboRTBBjnT0RRi8UfJWjR9iUiWpczMW2++poUI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765619972; c=relaxed/simple;
-	bh=8GOIjRocUiEIWyd+eL5zJJo2Xo7vkZH3TwnWoiwRtno=;
+	s=arc-20240116; t=1765620696; c=relaxed/simple;
+	bh=CZ0nbq+TNEdlal6qWlcjS6ghxXVLkuG29vXwxsczpXE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oqLWJG+nzEy1/+sds3hs5abUSZzbUNAzg6QzAgLh7SkY2luHpgmptlx2BoKvbSQBq7UivIi1/YcwcPKNh8J3+99iXSSpO9J3hewyBLz37QOL7NBGwLYwOenzoln2bncS0huiIICrYlcWv9xT00kgxh9xl2DJnCTL1pwdKX9DOnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hglVM12Q; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjjQ7OW4NgaQCl6B1PSsLNzMgv7LXVfl7g8VmfefWOeNi1+800WfcQ2V8Hn1JkCQkrZasUCHWhxFNxkl4TNtpkhI5MD2qEGzvwbL2q/19SHZjV7ehQI5VcylE3qdVBJfOXzL19vkHUjwWjPCXJqwCQdRVlnWdd79Tl1n25sUL5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L7g4osZS; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hglVM12Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L7g4osZS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765619971; x=1797155971;
+  t=1765620694; x=1797156694;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8GOIjRocUiEIWyd+eL5zJJo2Xo7vkZH3TwnWoiwRtno=;
-  b=hglVM12QiHt+o6wJC5eqNmyB6xTWTa/Nfnbcxb2Nv99OtrpESkiLCrob
-   8gUq86GBVyK/hncSd1W9uzc6PzFQhriO4JNh83eBi76RFpdZ8UJKZrvVZ
-   l56W5s+M60vEM2waDWThnYyujBqJCf8WvGIkZ0iL+xia9j91C9JzIgzJs
-   k+8osJRwt9FfFaRTE96P6j/DvRL9eTkT2PBl8FY5CiOLL5sGSh7xGuR+L
-   RDtbyJOH7PMrXc5u6PfxxP0SbxZGP9yo5pL/hsE4ko3nMEIvsTPi9wYS8
-   mDayBzlW6pbPY9TRXha7Vty5pM9aa71I7W55ChouSVMVGEbcyyjdfIyK2
-   w==;
-X-CSE-ConnectionGUID: BW0RH5hSShOHmnZzTV61+g==
-X-CSE-MsgGUID: brCVS+N9TtO+5fEY2lWf5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11640"; a="71455429"
+  bh=CZ0nbq+TNEdlal6qWlcjS6ghxXVLkuG29vXwxsczpXE=;
+  b=L7g4osZS4TtmnxFO+HYvosBQPu7DZA9lMguVXhGg1S1ZQw7QxkwiIhXD
+   vtiU7zw6ISCYEe7bet7LoMNspZ2KnTGj/LFkWFgCgKSRXHWopGnJ6WpWX
+   LvQ8joYWhdUyokd3gmoeetMMBcqYfqYrUEX/VZ61rkCaJKeGmx1EHinla
+   HaFWIp0Wc358oMTmNDJ/h6letCwMjRwhfE/W5BjVYvnt5xPCCGdrrgbQn
+   ZDPpCDKHoy9LzHG5QLexLSj09G+3PbPRnFFvsa0xqW77X0lBc2nkqdurE
+   F4m6RNX2xqeKoQcX52YjJwIz2dE/dohjLg7hq2odhBk08R3QpOUA2yZ7E
+   Q==;
+X-CSE-ConnectionGUID: ttW1KWxgRhyqPQHVNdJG+A==
+X-CSE-MsgGUID: 9neBOHAqQSGqE2HITimPSg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11640"; a="71456386"
 X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
-   d="scan'208";a="71455429"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 01:59:30 -0800
-X-CSE-ConnectionGUID: OnnAYDYNSViihYV4UYhH6A==
-X-CSE-MsgGUID: PnQDvqAAQPecxV+uk+al8Q==
+   d="scan'208";a="71456386"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 02:11:31 -0800
+X-CSE-ConnectionGUID: b0ctH/KrRUSaT01kkNxKSw==
+X-CSE-MsgGUID: rjbF0X8iS1+LSKVj5U9vFQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
-   d="scan'208";a="197353574"
+   d="scan'208";a="197050364"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 13 Dec 2025 01:59:28 -0800
+  by orviesa009.jf.intel.com with ESMTP; 13 Dec 2025 02:11:29 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vUMPN-000000007TV-3hxF;
-	Sat, 13 Dec 2025 09:59:25 +0000
-Date: Sat, 13 Dec 2025 17:59:05 +0800
+	id 1vUMb0-000000007U9-2hay;
+	Sat, 13 Dec 2025 10:11:26 +0000
+Date: Sat, 13 Dec 2025 18:10:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maarten Lankhorst <dev@lankhorst.se>, intel-xe@lists.freedesktop.org
+To: Osama Abdelkader <osama.abdelkader@gmail.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Maarten Lankhorst <dev@lankhorst.se>
-Subject: Re: [CI-ONLY PATCH v2 11/12] PREEMPT_RT injection
-Message-ID: <202512131724.vg8wGsP4-lkp@intel.com>
-References: <20251212143504.973839-25-dev@lankhorst.se>
+	Osama Abdelkader <osama.abdelkader@gmail.com>
+Subject: Re: [PATCH] arm64: hw_breakpoint: warn on invalid breakpoint length
+Message-ID: <202512131730.89TvJc2D-lkp@intel.com>
+References: <20251212205230.84606-1-osama.abdelkader@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,87 +67,166 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251212143504.973839-25-dev@lankhorst.se>
+In-Reply-To: <20251212205230.84606-1-osama.abdelkader@gmail.com>
 
-Hi Maarten,
+Hi Osama,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-tip/drm-tip]
-[also build test ERROR on linus/master next-20251212]
-[cannot apply to drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-xe/drm-xe-next v6.18]
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on arm-perf/for-next/perf linus/master v6.18 next-20251212]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maarten-Lankhorst/drm-i915-display-Fix-intel_lpe_audio_irq_handler-for-PREEMPT-RT/20251213-023952
-base:   https://gitlab.freedesktop.org/drm/tip.git drm-tip
-patch link:    https://lore.kernel.org/r/20251212143504.973839-25-dev%40lankhorst.se
-patch subject: [CI-ONLY PATCH v2 11/12] PREEMPT_RT injection
-config: i386-buildonly-randconfig-005-20251213 (https://download.01.org/0day-ci/archive/20251213/202512131724.vg8wGsP4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251213/202512131724.vg8wGsP4-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Osama-Abdelkader/arm64-hw_breakpoint-warn-on-invalid-breakpoint-length/20251213-045501
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20251212205230.84606-1-osama.abdelkader%40gmail.com
+patch subject: [PATCH] arm64: hw_breakpoint: warn on invalid breakpoint length
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251213/202512131730.89TvJc2D-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251213/202512131730.89TvJc2D-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512131724.vg8wGsP4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512131730.89TvJc2D-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/ttm/tests/ttm_bo_test.c:225:13: error: incompatible pointer types passing 'struct rt_mutex *' to parameter of type 'struct mutex *' [-Werror,-Wincompatible-pointer-types]
-     225 |         mutex_lock(&bo->base.resv->lock.base);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mutex.h:168:44: note: expanded from macro 'mutex_lock'
-     168 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
-         |                                            ^~~~
-   include/linux/mutex.h:160:45: note: passing argument to parameter 'lock' here
-     160 | extern void mutex_lock_nested(struct mutex *lock, unsigned int subclass);
-         |                                             ^
-   drivers/gpu/drm/ttm/tests/ttm_bo_test.c:231:15: error: incompatible pointer types passing 'struct rt_mutex *' to parameter of type 'struct mutex *' [-Werror,-Wincompatible-pointer-types]
-     231 |         mutex_unlock(&bo->base.resv->lock.base);
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mutex.h:224:40: note: passing argument to parameter 'lock' here
-     224 | extern void mutex_unlock(struct mutex *lock);
-         |                                        ^
-   2 errors generated.
+   arch/arm64/kernel/hw_breakpoint.c:483:17: warning: missing terminating '"' character [-Winvalid-pp-token]
+     483 |                         pr_warn_once("hw_breakpoint: invalid AArch64 breakpoint length %d,
+         |                                      ^
+   arch/arm64/kernel/hw_breakpoint.c:484:24: warning: missing terminating '"' character [-Winvalid-pp-token]
+     484 |                                 fixing to 4 bytes\n", hw->ctrl.len);
+         |                                                    ^
+>> arch/arm64/kernel/hw_breakpoint.c:483:4: error: unterminated function-like macro invocation
+     483 |                         pr_warn_once("hw_breakpoint: invalid AArch64 breakpoint length %d,
+         |                         ^
+   include/linux/printk.h:669:9: note: macro 'pr_warn_once' defined here
+     669 | #define pr_warn_once(fmt, ...)                                  \
+         |         ^
+>> arch/arm64/kernel/hw_breakpoint.c:1014:2: error: expected '}'
+    1014 | }
+         |  ^
+   arch/arm64/kernel/hw_breakpoint.c:476:52: note: to match this '{'
+     476 |                 } else if (hw->ctrl.len != ARM_BREAKPOINT_LEN_4) {
+         |                                                                  ^
+>> arch/arm64/kernel/hw_breakpoint.c:1014:2: error: expected '}'
+    1014 | }
+         |  ^
+   arch/arm64/kernel/hw_breakpoint.c:471:47: note: to match this '{'
+     471 |         if (hw->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
+         |                                                      ^
+>> arch/arm64/kernel/hw_breakpoint.c:1014:2: error: expected '}'
+    1014 | }
+         |  ^
+   arch/arm64/kernel/hw_breakpoint.c:417:1: note: to match this '{'
+     417 | {
+         | ^
+   2 warnings and 4 errors generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for I2C_K1
-   Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && OF [=n]
-   Selected by [y]:
-   - MFD_SPACEMIT_P1 [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && I2C [=y]
 
+vim +483 arch/arm64/kernel/hw_breakpoint.c
 
-vim +225 drivers/gpu/drm/ttm/tests/ttm_bo_test.c
-
-995279d280d1ef5 Karolina Stolarek 2023-11-29  210  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  211  static void ttm_bo_reserve_interrupted(struct kunit *test)
-995279d280d1ef5 Karolina Stolarek 2023-11-29  212  {
-995279d280d1ef5 Karolina Stolarek 2023-11-29  213  	struct ttm_buffer_object *bo;
-995279d280d1ef5 Karolina Stolarek 2023-11-29  214  	struct task_struct *task;
-995279d280d1ef5 Karolina Stolarek 2023-11-29  215  	int err;
-995279d280d1ef5 Karolina Stolarek 2023-11-29  216  
-588c4c8d58c413b Karolina Stolarek 2024-06-12  217  	bo = ttm_bo_kunit_init(test, test->priv, BO_SIZE, NULL);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  218  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  219  	task = kthread_create(threaded_ttm_bo_reserve, bo, "ttm-bo-reserve");
-995279d280d1ef5 Karolina Stolarek 2023-11-29  220  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  221  	if (IS_ERR(task))
-995279d280d1ef5 Karolina Stolarek 2023-11-29  222  		KUNIT_FAIL(test, "Couldn't create ttm bo reserve task\n");
-995279d280d1ef5 Karolina Stolarek 2023-11-29  223  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  224  	/* Take a lock so the threaded reserve has to wait */
-995279d280d1ef5 Karolina Stolarek 2023-11-29 @225  	mutex_lock(&bo->base.resv->lock.base);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  226  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  227  	wake_up_process(task);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  228  	msleep(20);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  229  	err = kthread_stop(task);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  230  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  231  	mutex_unlock(&bo->base.resv->lock.base);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  232  
-995279d280d1ef5 Karolina Stolarek 2023-11-29  233  	KUNIT_ASSERT_EQ(test, err, -ERESTARTSYS);
-995279d280d1ef5 Karolina Stolarek 2023-11-29  234  }
-995279d280d1ef5 Karolina Stolarek 2023-11-29  235  #endif /* IS_BUILTIN(CONFIG_DRM_TTM_KUNIT_TEST) */
-995279d280d1ef5 Karolina Stolarek 2023-11-29  236  
+   410	
+   411	/*
+   412	 * Construct an arch_hw_breakpoint from a perf_event.
+   413	 */
+   414	static int arch_build_bp_info(struct perf_event *bp,
+   415				      const struct perf_event_attr *attr,
+   416				      struct arch_hw_breakpoint *hw)
+   417	{
+   418		/* Type */
+   419		switch (attr->bp_type) {
+   420		case HW_BREAKPOINT_X:
+   421			hw->ctrl.type = ARM_BREAKPOINT_EXECUTE;
+   422			break;
+   423		case HW_BREAKPOINT_R:
+   424			hw->ctrl.type = ARM_BREAKPOINT_LOAD;
+   425			break;
+   426		case HW_BREAKPOINT_W:
+   427			hw->ctrl.type = ARM_BREAKPOINT_STORE;
+   428			break;
+   429		case HW_BREAKPOINT_RW:
+   430			hw->ctrl.type = ARM_BREAKPOINT_LOAD | ARM_BREAKPOINT_STORE;
+   431			break;
+   432		default:
+   433			return -EINVAL;
+   434		}
+   435	
+   436		/* Len */
+   437		switch (attr->bp_len) {
+   438		case HW_BREAKPOINT_LEN_1:
+   439			hw->ctrl.len = ARM_BREAKPOINT_LEN_1;
+   440			break;
+   441		case HW_BREAKPOINT_LEN_2:
+   442			hw->ctrl.len = ARM_BREAKPOINT_LEN_2;
+   443			break;
+   444		case HW_BREAKPOINT_LEN_3:
+   445			hw->ctrl.len = ARM_BREAKPOINT_LEN_3;
+   446			break;
+   447		case HW_BREAKPOINT_LEN_4:
+   448			hw->ctrl.len = ARM_BREAKPOINT_LEN_4;
+   449			break;
+   450		case HW_BREAKPOINT_LEN_5:
+   451			hw->ctrl.len = ARM_BREAKPOINT_LEN_5;
+   452			break;
+   453		case HW_BREAKPOINT_LEN_6:
+   454			hw->ctrl.len = ARM_BREAKPOINT_LEN_6;
+   455			break;
+   456		case HW_BREAKPOINT_LEN_7:
+   457			hw->ctrl.len = ARM_BREAKPOINT_LEN_7;
+   458			break;
+   459		case HW_BREAKPOINT_LEN_8:
+   460			hw->ctrl.len = ARM_BREAKPOINT_LEN_8;
+   461			break;
+   462		default:
+   463			return -EINVAL;
+   464		}
+   465	
+   466		/*
+   467		 * On AArch64, we only permit breakpoints of length 4, whereas
+   468		 * AArch32 also requires breakpoints of length 2 for Thumb.
+   469		 * Watchpoints can be of length 1, 2, 4 or 8 bytes.
+   470		 */
+   471		if (hw->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
+   472			if (is_compat_bp(bp)) {
+   473				if (hw->ctrl.len != ARM_BREAKPOINT_LEN_2 &&
+   474				    hw->ctrl.len != ARM_BREAKPOINT_LEN_4)
+   475					return -EINVAL;
+   476			} else if (hw->ctrl.len != ARM_BREAKPOINT_LEN_4) {
+   477				/*
+   478				 * Some tools (e.g. perf) incorrectly assume that
+   479				 * breakpoints should be sizeof(long). This is wrong
+   480				 * for AArch64 where breakpoints must be 4 bytes.
+   481				 * Warn the user and fix up the parameter.
+   482				 */
+ > 483				pr_warn_once("hw_breakpoint: invalid AArch64 breakpoint length %d,
+ > 484					fixing to 4 bytes\n", hw->ctrl.len);
+   485				hw->ctrl.len = ARM_BREAKPOINT_LEN_4;
+   486			}
+   487		}
+   488	
+   489		/* Address */
+   490		hw->address = attr->bp_addr;
+   491	
+   492		/*
+   493		 * Privilege
+   494		 * Note that we disallow combined EL0/EL1 breakpoints because
+   495		 * that would complicate the stepping code.
+   496		 */
+   497		if (arch_check_bp_in_kernelspace(hw))
+   498			hw->ctrl.privilege = AARCH64_BREAKPOINT_EL1;
+   499		else
+   500			hw->ctrl.privilege = AARCH64_BREAKPOINT_EL0;
+   501	
+   502		/* Enabled? */
+   503		hw->ctrl.enabled = !attr->disabled;
+   504	
+   505		return 0;
+   506	}
+   507	
 
 -- 
 0-DAY CI Kernel Test Service
