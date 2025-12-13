@@ -1,233 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B902F60DD;
-	Sat, 13 Dec 2025 10:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D9A301007;
+	Sat, 13 Dec 2025 10:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765620696; cv=none; b=bQA7zyqgUwfxz5XHe+YR4Y4bLhqjQi2Ek6zhBL+P4r8MJFjQdPUJM0wnYiDg7ABRTq4AsiiUhWVyUZcFVhXtqx+xxBwsyEzfq+26aEHuHHhpe6+927gDk2CKsMr2be42YI71RboRTBBjnT0RRi8UfJWjR9iUiWpczMW2++poUI4=
+	t=1765623508; cv=none; b=DN1dcXJZ+ATJfS1dbIAs/y1RhaJ0c+yyP6P70L51jxtY6FtIVuiMeFHLU35Ks2GJ/ssdNx71GSMMdnb8XX+GAJiwl67Eh9Yc4oBh4u5+MfZAvy303q2dI3uOQbHGw81BymdeDIvb9gK2zbyIcwUYGEzCNVDRaamQqJ8ZDyiZJKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765620696; c=relaxed/simple;
-	bh=CZ0nbq+TNEdlal6qWlcjS6ghxXVLkuG29vXwxsczpXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mjjQ7OW4NgaQCl6B1PSsLNzMgv7LXVfl7g8VmfefWOeNi1+800WfcQ2V8Hn1JkCQkrZasUCHWhxFNxkl4TNtpkhI5MD2qEGzvwbL2q/19SHZjV7ehQI5VcylE3qdVBJfOXzL19vkHUjwWjPCXJqwCQdRVlnWdd79Tl1n25sUL5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L7g4osZS; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765623508; c=relaxed/simple;
+	bh=Ucl3OPnHpTM6oU8v9dwhOz9vILAPPYr9o2OmUxvb5Qc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gSA35H5wWUppv4C322dk5vWDNksJ1vuaVnXK7sOpHnlE8bdhVbCmc+fGvhAi8WhfZ+BOQRJASwgrL53RPyLQ3AKF0uF5LJ1Q9Yx8ZQJ0l5mVmXmpo3cD8AKFgGbbjT8b3ei2UAgWqN3QMUJl21rlhgZ6ViiNzjAbsM8uBYmr4dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SU7c01Fj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L7g4osZS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765620694; x=1797156694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CZ0nbq+TNEdlal6qWlcjS6ghxXVLkuG29vXwxsczpXE=;
-  b=L7g4osZS4TtmnxFO+HYvosBQPu7DZA9lMguVXhGg1S1ZQw7QxkwiIhXD
-   vtiU7zw6ISCYEe7bet7LoMNspZ2KnTGj/LFkWFgCgKSRXHWopGnJ6WpWX
-   LvQ8joYWhdUyokd3gmoeetMMBcqYfqYrUEX/VZ61rkCaJKeGmx1EHinla
-   HaFWIp0Wc358oMTmNDJ/h6letCwMjRwhfE/W5BjVYvnt5xPCCGdrrgbQn
-   ZDPpCDKHoy9LzHG5QLexLSj09G+3PbPRnFFvsa0xqW77X0lBc2nkqdurE
-   F4m6RNX2xqeKoQcX52YjJwIz2dE/dohjLg7hq2odhBk08R3QpOUA2yZ7E
-   Q==;
-X-CSE-ConnectionGUID: ttW1KWxgRhyqPQHVNdJG+A==
-X-CSE-MsgGUID: 9neBOHAqQSGqE2HITimPSg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11640"; a="71456386"
-X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
-   d="scan'208";a="71456386"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 02:11:31 -0800
-X-CSE-ConnectionGUID: b0ctH/KrRUSaT01kkNxKSw==
-X-CSE-MsgGUID: rjbF0X8iS1+LSKVj5U9vFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
-   d="scan'208";a="197050364"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 13 Dec 2025 02:11:29 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vUMb0-000000007U9-2hay;
-	Sat, 13 Dec 2025 10:11:26 +0000
-Date: Sat, 13 Dec 2025 18:10:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Osama Abdelkader <osama.abdelkader@gmail.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Osama Abdelkader <osama.abdelkader@gmail.com>
-Subject: Re: [PATCH] arm64: hw_breakpoint: warn on invalid breakpoint length
-Message-ID: <202512131730.89TvJc2D-lkp@intel.com>
-References: <20251212205230.84606-1-osama.abdelkader@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SU7c01Fj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B50DC4CEF7;
+	Sat, 13 Dec 2025 10:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765623508;
+	bh=Ucl3OPnHpTM6oU8v9dwhOz9vILAPPYr9o2OmUxvb5Qc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=SU7c01FjXKiM+eeefYYCv06yZ59yc2IkIf9mMec5Ya3pUfS1QOkb0I37fwLJ0xSFs
+	 73IzHqHT8egUpSInuUP7b+4v0GMd9X2Ke1Waieub8mHNNkRqUw6cHIMqzVQKjG1aDW
+	 RmpoBZDkHNI0PVBDczktGs856V8g+bceox75iTfaYD+8ze78smKGdmxBdYlBygOM9d
+	 7gziIc8GXjsV1az4zMaYkVPg+sRgtxlkSIEUlHPextvUhy3Pw2/PpVGd2W+ApcJlZe
+	 ouTZn7K8h/BFanlbXohAOaNtqlnpNT90VjCShVZMX4rvw1lIRVxWwFrqlECvulIUsF
+	 yfsfxbdHHzlUA==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] drm/amd/display: Address -Wframe-larger-than with
+ clang-22
+Date: Sat, 13 Dec 2025 19:58:09 +0900
+Message-Id: <20251213-dml-dcn30-avoid-clang-frame-larger-than-v1-0-dd3d74b76a17@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251212205230.84606-1-osama.abdelkader@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMFGPWkC/yWNywrCMBBFf6XM2oE8VKi/Ii6myaSOpKlMahFK/
+ 92oywPnnrtBZRWucOk2UF6lylwa2EMH4U5lZJTYGJxxJ+usxzhljKF4g7TOEjHkZmFSmhgz6ci
+ KSxuiP1OK/tjb3gzQak/lJO/f0/X25/oaHhyWbx72/QNqdHdMiwAAAA==
+X-Change-ID: 20251213-dml-dcn30-avoid-clang-frame-larger-than-36afd349190b
+To: Austin Zheng <austin.zheng@amd.com>, Jun Lei <jun.lei@amd.com>, 
+ Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+ Rodrigo Siqueira <siqueira@igalia.com>, 
+ Alex Deucher <alexander.deucher@amd.com>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1158; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Ucl3OPnHpTM6oU8v9dwhOz9vILAPPYr9o2OmUxvb5Qc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJm2bhccWGtvP/5seSEpl0M4+qX73BSetX2ddftnW8htM
+ otKv8LRUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACZibMfIsPL35r1KElxeVo1K
+ HKxyz000jicIFYndiJrY2rBSrCVmMcM/o0r+8y68svN4mtLE/73Qlp0362VNx9flrwKnRxV6G29
+ iBwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Osama,
+Hi all,
 
-kernel test robot noticed the following build errors:
+This series addresses a new instance of -Wframe-larger-than in
+drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c with
+clang-22 (current main). This is similar to previous fixes that I have
+done in other dml folders such as:
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on arm-perf/for-next/perf linus/master v6.18 next-20251212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  a3fef74b1d48 ("drm/amd/display: Reduce number of arguments of dml32_CalculatePrefetchSchedule()")
+  c4be0ac987f2 ("drm/amd/display: Reduce number of arguments of dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport()")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Osama-Abdelkader/arm64-hw_breakpoint-warn-on-invalid-breakpoint-length/20251213-045501
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20251212205230.84606-1-osama.abdelkader%40gmail.com
-patch subject: [PATCH] arm64: hw_breakpoint: warn on invalid breakpoint length
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251213/202512131730.89TvJc2D-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251213/202512131730.89TvJc2D-lkp@intel.com/reproduce)
+This was done fairly mechanically, so let me know if there are any
+issues, as it has only been build tested.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512131730.89TvJc2D-lkp@intel.com/
+---
+Nathan Chancellor (2):
+      drm/amd/display: Reduce number of arguments of dcn30's CalculatePrefetchSchedule()
+      drm/amd/display: Reduce number of arguments of dcn30's CalculateWatermarksAndDRAMSpeedChangeSupport()
 
-All errors (new ones prefixed by >>):
+ .../amd/display/dc/dml/dcn30/display_mode_vba_30.c | 545 ++++++---------------
+ 1 file changed, 139 insertions(+), 406 deletions(-)
+---
+base-commit: f24e96d69f5b9eb0f3b9c49e53c385c50729edfd
+change-id: 20251213-dml-dcn30-avoid-clang-frame-larger-than-36afd349190b
 
-   arch/arm64/kernel/hw_breakpoint.c:483:17: warning: missing terminating '"' character [-Winvalid-pp-token]
-     483 |                         pr_warn_once("hw_breakpoint: invalid AArch64 breakpoint length %d,
-         |                                      ^
-   arch/arm64/kernel/hw_breakpoint.c:484:24: warning: missing terminating '"' character [-Winvalid-pp-token]
-     484 |                                 fixing to 4 bytes\n", hw->ctrl.len);
-         |                                                    ^
->> arch/arm64/kernel/hw_breakpoint.c:483:4: error: unterminated function-like macro invocation
-     483 |                         pr_warn_once("hw_breakpoint: invalid AArch64 breakpoint length %d,
-         |                         ^
-   include/linux/printk.h:669:9: note: macro 'pr_warn_once' defined here
-     669 | #define pr_warn_once(fmt, ...)                                  \
-         |         ^
->> arch/arm64/kernel/hw_breakpoint.c:1014:2: error: expected '}'
-    1014 | }
-         |  ^
-   arch/arm64/kernel/hw_breakpoint.c:476:52: note: to match this '{'
-     476 |                 } else if (hw->ctrl.len != ARM_BREAKPOINT_LEN_4) {
-         |                                                                  ^
->> arch/arm64/kernel/hw_breakpoint.c:1014:2: error: expected '}'
-    1014 | }
-         |  ^
-   arch/arm64/kernel/hw_breakpoint.c:471:47: note: to match this '{'
-     471 |         if (hw->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
-         |                                                      ^
->> arch/arm64/kernel/hw_breakpoint.c:1014:2: error: expected '}'
-    1014 | }
-         |  ^
-   arch/arm64/kernel/hw_breakpoint.c:417:1: note: to match this '{'
-     417 | {
-         | ^
-   2 warnings and 4 errors generated.
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
-
-vim +483 arch/arm64/kernel/hw_breakpoint.c
-
-   410	
-   411	/*
-   412	 * Construct an arch_hw_breakpoint from a perf_event.
-   413	 */
-   414	static int arch_build_bp_info(struct perf_event *bp,
-   415				      const struct perf_event_attr *attr,
-   416				      struct arch_hw_breakpoint *hw)
-   417	{
-   418		/* Type */
-   419		switch (attr->bp_type) {
-   420		case HW_BREAKPOINT_X:
-   421			hw->ctrl.type = ARM_BREAKPOINT_EXECUTE;
-   422			break;
-   423		case HW_BREAKPOINT_R:
-   424			hw->ctrl.type = ARM_BREAKPOINT_LOAD;
-   425			break;
-   426		case HW_BREAKPOINT_W:
-   427			hw->ctrl.type = ARM_BREAKPOINT_STORE;
-   428			break;
-   429		case HW_BREAKPOINT_RW:
-   430			hw->ctrl.type = ARM_BREAKPOINT_LOAD | ARM_BREAKPOINT_STORE;
-   431			break;
-   432		default:
-   433			return -EINVAL;
-   434		}
-   435	
-   436		/* Len */
-   437		switch (attr->bp_len) {
-   438		case HW_BREAKPOINT_LEN_1:
-   439			hw->ctrl.len = ARM_BREAKPOINT_LEN_1;
-   440			break;
-   441		case HW_BREAKPOINT_LEN_2:
-   442			hw->ctrl.len = ARM_BREAKPOINT_LEN_2;
-   443			break;
-   444		case HW_BREAKPOINT_LEN_3:
-   445			hw->ctrl.len = ARM_BREAKPOINT_LEN_3;
-   446			break;
-   447		case HW_BREAKPOINT_LEN_4:
-   448			hw->ctrl.len = ARM_BREAKPOINT_LEN_4;
-   449			break;
-   450		case HW_BREAKPOINT_LEN_5:
-   451			hw->ctrl.len = ARM_BREAKPOINT_LEN_5;
-   452			break;
-   453		case HW_BREAKPOINT_LEN_6:
-   454			hw->ctrl.len = ARM_BREAKPOINT_LEN_6;
-   455			break;
-   456		case HW_BREAKPOINT_LEN_7:
-   457			hw->ctrl.len = ARM_BREAKPOINT_LEN_7;
-   458			break;
-   459		case HW_BREAKPOINT_LEN_8:
-   460			hw->ctrl.len = ARM_BREAKPOINT_LEN_8;
-   461			break;
-   462		default:
-   463			return -EINVAL;
-   464		}
-   465	
-   466		/*
-   467		 * On AArch64, we only permit breakpoints of length 4, whereas
-   468		 * AArch32 also requires breakpoints of length 2 for Thumb.
-   469		 * Watchpoints can be of length 1, 2, 4 or 8 bytes.
-   470		 */
-   471		if (hw->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
-   472			if (is_compat_bp(bp)) {
-   473				if (hw->ctrl.len != ARM_BREAKPOINT_LEN_2 &&
-   474				    hw->ctrl.len != ARM_BREAKPOINT_LEN_4)
-   475					return -EINVAL;
-   476			} else if (hw->ctrl.len != ARM_BREAKPOINT_LEN_4) {
-   477				/*
-   478				 * Some tools (e.g. perf) incorrectly assume that
-   479				 * breakpoints should be sizeof(long). This is wrong
-   480				 * for AArch64 where breakpoints must be 4 bytes.
-   481				 * Warn the user and fix up the parameter.
-   482				 */
- > 483				pr_warn_once("hw_breakpoint: invalid AArch64 breakpoint length %d,
- > 484					fixing to 4 bytes\n", hw->ctrl.len);
-   485				hw->ctrl.len = ARM_BREAKPOINT_LEN_4;
-   486			}
-   487		}
-   488	
-   489		/* Address */
-   490		hw->address = attr->bp_addr;
-   491	
-   492		/*
-   493		 * Privilege
-   494		 * Note that we disallow combined EL0/EL1 breakpoints because
-   495		 * that would complicate the stepping code.
-   496		 */
-   497		if (arch_check_bp_in_kernelspace(hw))
-   498			hw->ctrl.privilege = AARCH64_BREAKPOINT_EL1;
-   499		else
-   500			hw->ctrl.privilege = AARCH64_BREAKPOINT_EL0;
-   501	
-   502		/* Enabled? */
-   503		hw->ctrl.enabled = !attr->disabled;
-   504	
-   505		return 0;
-   506	}
-   507	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
