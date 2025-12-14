@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65806165F1A;
-	Sun, 14 Dec 2025 06:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDD0DF6C;
+	Sun, 14 Dec 2025 07:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765694570; cv=none; b=hWh505v2HHFkTLgQzKMPm6TTallrJ11IFVLv0Nb8ACL1cOr1PRQL/4WiepdTzIZwvcQs1vQyjh9TNeiT5hDXXW4FZDQOBqeQ5iWznD2okAax2/DW7e6+yr1z3mxxx7fw007cN4rjUgVoUIEm5GnKpKq+ER83f4LSYsiURSciVDo=
+	t=1765695901; cv=none; b=k1IYPK6M3ZLmQLbULr5SvHI4C5SKEfqN5wH17BPbnWEnp1zi+myNOhoIIAZKXvr6pGWPhTV533W3LiOFM2stZJIJ66JJXusPQOEbAiqNx1dxlbMJqELW6T25vSSA8bXKzAL8utqZXNoZiHLVgwLffIH+VX1s3gvcQtIITr+sCaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765694570; c=relaxed/simple;
-	bh=wAf5W5h78Is4CrvkqVhtNy+sxagjVh0nv54EXPIwSKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KnaIgK02a5mHUg4WKXGloW3wwe3/02JibERybScOr7zqJafC/uf2TmssO0P1tqT8x2u48+64xUgW0HlAsOO4IgtI9hE8wmnAv8e186SkFkdABV6GGOTy1naWvpNXe5jQyIm0wJn/sRi+uVkT3flufrso5ZadVOUSfYkgOQ9kV9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d0seXmzx; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1765695901; c=relaxed/simple;
+	bh=GfwxxOSwzyvFnQ5afsRR3VlveZeXQIAa03uDaclA4CA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mRNJa48C4sXZvbgoAf2PyQQStgGenhyP0HsgW7BX3l6fICDu23lmGoRSEdpTN86vz1PMQ8LIrZkLU7vXp+lHUIu+kg3Ff1yhUOSC7I5EnY6cjGpnBNOxLtunqPQxN5ZdQLbr5V0tWANCy2xKJx1nFYyvzx6lqczRJn2FlcWJtRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AiQs8e/Z; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d0seXmzx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AiQs8e/Z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765694569; x=1797230569;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wAf5W5h78Is4CrvkqVhtNy+sxagjVh0nv54EXPIwSKg=;
-  b=d0seXmzxc6WS2mLcIfA2LkJXtRGdGI5YWkrpgbnLIJBgDsxCJxC/LEzv
-   v49ZZt1u48nxs6b655anN6+5OPkJ6wttGEkMvCtvSusNouGcQYfKMwZjY
-   BYpy3vVT+2c7bNF76WSyYCAecaic5lQqqkF+rSvH4ycegQB5tiytInNjq
-   2cQKTBIVUO+TcaD1Yz9mmV1kyU5mMGfqzTL/y/GUU/9fW0aG+AKn/2/KO
-   rfRZ+Urv5RR2rFNjb841UCf3IJD5rtMJcu+Dum826TeJKPRZola4q4SSQ
-   CBn1OF1tqoyU13HIYZ4MtAvzWtjQCe9ndZ/x2p4ode1aj6FWjAcmrjQ/Z
-   g==;
-X-CSE-ConnectionGUID: trt2AKw7S/uMFDpsRuTmcQ==
-X-CSE-MsgGUID: r4sMaUJgT76SQfr2bM7Tng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="66806804"
+  t=1765695900; x=1797231900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GfwxxOSwzyvFnQ5afsRR3VlveZeXQIAa03uDaclA4CA=;
+  b=AiQs8e/ZyTQyncw7Y623KFzVduPMlzHIYH94uWu5yLevCW1kbSvBhhOT
+   EiTnrG4GNT//Znbh+tYQPRynjBDGOEiw/ZJLct7Bwf5eYECCCt/BSt3Wr
+   MVUBtp7t/PD/Hz2vbaIqn0AnTA8bT+uQuAPhmGz/V4/GLCXEy4gyn+t3p
+   wMCFrjuUG3+iL40EgZH/J5s43Xre7kRCqWeZfc4MgejSbelP51nBfO84x
+   AIdaIemYWdlvzuNraWAE7/NRJpkii6P5Vut1cwEi5+7pFCIduQGFQLy93
+   8H57OzgxRfCEIleSMckAZ8H/vWtsDWf/4NaTk+wzVWelAjPZ/audqP2hE
+   w==;
+X-CSE-ConnectionGUID: 4dEBYaWfTT+7uQZOQATbmg==
+X-CSE-MsgGUID: BH7/hW3jTuWcYTGY8a03oA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="70215574"
 X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="66806804"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 22:42:48 -0800
-X-CSE-ConnectionGUID: Ck9U0PGVSHORFhjq+QR0FQ==
-X-CSE-MsgGUID: TB+Ta9ioTouVAp12P7+6RQ==
+   d="scan'208";a="70215574"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 23:04:57 -0800
+X-CSE-ConnectionGUID: OvKNAgylR12JaFEkCEXcVQ==
+X-CSE-MsgGUID: s6FEQgL2STmrpLpq6ecGWQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="197728163"
+   d="scan'208";a="228114818"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 13 Dec 2025 22:42:46 -0800
+  by orviesa002.jf.intel.com with ESMTP; 13 Dec 2025 23:04:55 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vUfoa-000000008gz-3AlI;
-	Sun, 14 Dec 2025 06:42:44 +0000
-Date: Sun, 14 Dec 2025 14:42:11 +0800
+	id 1vUgA0-000000008np-1Blw;
+	Sun, 14 Dec 2025 07:04:52 +0000
+Date: Sun, 14 Dec 2025 15:04:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] btrfs: add an ASSERT() to catch ordered extents with
- incorrect csums
-Message-ID: <202512141434.ZwLWwwtR-lkp@intel.com>
-References: <7ad76db98d300c3fedc73433aa343b654399cc2d.1765521720.git.wqu@suse.com>
+To: Ming Lei <ming.lei@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+	Nilay Shroff <nilay@linux.ibm.com>
+Subject: arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size (2152)
+ exceeds limit (2048) in 'ubd_device_release'
+Message-ID: <202512141455.Q3mvffdN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,58 +64,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7ad76db98d300c3fedc73433aa343b654399cc2d.1765521720.git.wqu@suse.com>
 
-Hi Qu,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on kdave/for-next]
-[also build test WARNING on linus/master v6.19-rc1 next-20251212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-add-an-ASSERT-to-catch-ordered-extents-with-incorrect-csums/20251212-144720
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/7ad76db98d300c3fedc73433aa343b654399cc2d.1765521720.git.wqu%40suse.com
-patch subject: [PATCH] btrfs: add an ASSERT() to catch ordered extents with incorrect csums
-config: i386-buildonly-randconfig-004-20251213 (https://download.01.org/0day-ci/archive/20251214/202512141434.ZwLWwwtR-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141434.ZwLWwwtR-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
+commit: 98e68f67020ce30e1a4d8e2d05d85a453738dfb8 block: prevent adding/deleting disk during updating nr_hw_queues
+date:   7 months ago
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20251214/202512141455.Q3mvffdN-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141455.Q3mvffdN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512141434.ZwLWwwtR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512141455.Q3mvffdN-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/btrfs/inode.c:3089:12: warning: function 'oe_csum_bytes' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-    3089 | static u64 oe_csum_bytes(struct btrfs_ordered_extent *oe)
-         |            ^~~~~~~~~~~~~
-   1 warning generated.
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size (2152) exceeds limit (2048) in 'ubd_device_release' [-Wframe-larger-than]
+     780 | static void ubd_device_release(struct device *dev)
+         |             ^
+   13 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for I2C_K1
-   Depends on [n]: I2C [=m] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && OF [=n]
-   Selected by [m]:
-   - MFD_SPACEMIT_P1 [=m] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && I2C [=m]
 
+vim +/ubd_device_release +780 arch/um/drivers/ubd_kern.c
 
-vim +/oe_csum_bytes +3089 fs/btrfs/inode.c
+^1da177e4c3f41 Linus Torvalds     2005-04-16  779  
+2e3f5251ac7168 Jeff Dike          2007-05-06 @780  static void ubd_device_release(struct device *dev)
+2e3f5251ac7168 Jeff Dike          2007-05-06  781  {
+5bee35e5389f45 Tiwei Bie          2024-11-05  782  	struct ubd *ubd_dev = container_of(dev, struct ubd, pdev.dev);
+2e3f5251ac7168 Jeff Dike          2007-05-06  783  
+4e6da0fe8058df Richard Weinberger 2017-11-26  784  	blk_mq_free_tag_set(&ubd_dev->tag_set);
+2e3f5251ac7168 Jeff Dike          2007-05-06  785  	*ubd_dev = ((struct ubd) DEFAULT_UBD);
+2e3f5251ac7168 Jeff Dike          2007-05-06  786  }
+2e3f5251ac7168 Jeff Dike          2007-05-06  787  
 
-  3088	
-> 3089	static u64 oe_csum_bytes(struct btrfs_ordered_extent *oe)
-  3090	{
-  3091		struct btrfs_ordered_sum *sum;
-  3092		u64 ret = 0;
-  3093	
-  3094		list_for_each_entry(sum, &oe->list, list)
-  3095			ret += sum->len;
-  3096		return ret;
-  3097	}
-  3098	
+:::::: The code at line 780 was first introduced by commit
+:::::: 2e3f5251ac716879df6b6271f243f657c6e02e9a uml: drivers get release methods
+
+:::::: TO: Jeff Dike <jdike@addtoit.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
