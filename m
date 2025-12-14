@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDD0DF6C;
-	Sun, 14 Dec 2025 07:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3435422B8B0;
+	Sun, 14 Dec 2025 13:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765695901; cv=none; b=k1IYPK6M3ZLmQLbULr5SvHI4C5SKEfqN5wH17BPbnWEnp1zi+myNOhoIIAZKXvr6pGWPhTV533W3LiOFM2stZJIJ66JJXusPQOEbAiqNx1dxlbMJqELW6T25vSSA8bXKzAL8utqZXNoZiHLVgwLffIH+VX1s3gvcQtIITr+sCaI=
+	t=1765720635; cv=none; b=bL5nDAlu3+VHHbuKLBig3m4BeCt8/I632zO/wSyuXNMcuLhF1L0ZsDY8sKgdyCt9oOYw8K9LOIhBcPskotbEN2xMFxs3VM9bGmHnm9dtQbWbV7izzGxjXljGYg/CzINzv/JGhThHAI1FOYM8d8FWyYjukbhlTrxy4XK+XvvdTRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765695901; c=relaxed/simple;
-	bh=GfwxxOSwzyvFnQ5afsRR3VlveZeXQIAa03uDaclA4CA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mRNJa48C4sXZvbgoAf2PyQQStgGenhyP0HsgW7BX3l6fICDu23lmGoRSEdpTN86vz1PMQ8LIrZkLU7vXp+lHUIu+kg3Ff1yhUOSC7I5EnY6cjGpnBNOxLtunqPQxN5ZdQLbr5V0tWANCy2xKJx1nFYyvzx6lqczRJn2FlcWJtRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AiQs8e/Z; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1765720635; c=relaxed/simple;
+	bh=47FI8FzhZoHaiTUkgbM+Ay1LRJsi66rzGcAZkUpB8Ss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R77XVPwJNyPjSERxx0fVMIQTwP6GL2uyXPmfGI3/N1plqO6jjWrr0A+D3SqzXtyul1+qWSWNyQmnyhGN7Go3E3pCN4DgSLZPnlNw21BxG2AvShLdetY4I3Pt5q7OKDidsGfDoh5iN5+XEcP0IhoiaIjWPdA4i6p0DbxD0HqnPpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Myvz2V0N; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AiQs8e/Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Myvz2V0N"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765695900; x=1797231900;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GfwxxOSwzyvFnQ5afsRR3VlveZeXQIAa03uDaclA4CA=;
-  b=AiQs8e/ZyTQyncw7Y623KFzVduPMlzHIYH94uWu5yLevCW1kbSvBhhOT
-   EiTnrG4GNT//Znbh+tYQPRynjBDGOEiw/ZJLct7Bwf5eYECCCt/BSt3Wr
-   MVUBtp7t/PD/Hz2vbaIqn0AnTA8bT+uQuAPhmGz/V4/GLCXEy4gyn+t3p
-   wMCFrjuUG3+iL40EgZH/J5s43Xre7kRCqWeZfc4MgejSbelP51nBfO84x
-   AIdaIemYWdlvzuNraWAE7/NRJpkii6P5Vut1cwEi5+7pFCIduQGFQLy93
-   8H57OzgxRfCEIleSMckAZ8H/vWtsDWf/4NaTk+wzVWelAjPZ/audqP2hE
+  t=1765720634; x=1797256634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=47FI8FzhZoHaiTUkgbM+Ay1LRJsi66rzGcAZkUpB8Ss=;
+  b=Myvz2V0NKH5X17tTf+4Bop4iJ5STV6dXCIPo4/TxG3eiUp9RsMJvtj02
+   9e2U3TSMBybroTnlJ8yic24DTdkBsTvzdZMdqLtB9LOGRr8Wqvp/F1dTM
+   9k44EBAky5x43Wxv0Gthh5HJpEtsICNszGMPFxp8CNPKvFU5dEiKC+oMm
+   FCjS++kmomCIggJDnQJ83sx5+zhcZnP+DDtxJ4s3W0sBg5La04+d4GTBA
+   8vIEboN6Q0jqtyO1cqh9G4MM3+G0zg1nyTK7LloPBLUhi/V6OFFHUHUGK
+   cmUp0ZWxsKcSi69Cn6jSSgDUjvFxOzNbNgU+qWT5qAgaDqf364YfghwUP
    w==;
-X-CSE-ConnectionGUID: 4dEBYaWfTT+7uQZOQATbmg==
-X-CSE-MsgGUID: BH7/hW3jTuWcYTGY8a03oA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="70215574"
-X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="70215574"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 23:04:57 -0800
-X-CSE-ConnectionGUID: OvKNAgylR12JaFEkCEXcVQ==
-X-CSE-MsgGUID: s6FEQgL2STmrpLpq6ecGWQ==
+X-CSE-ConnectionGUID: Us+75KHZQ/i1U5g0nA5PBA==
+X-CSE-MsgGUID: MrwNmH+kSBCghJC98AOKTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11642"; a="77958158"
+X-IronPort-AV: E=Sophos;i="6.21,148,1763452800"; 
+   d="scan'208";a="77958158"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2025 05:57:13 -0800
+X-CSE-ConnectionGUID: MZUY+RLhSnSSh267D27QqQ==
+X-CSE-MsgGUID: U3KHfN5mQKu3FSHuQwHx5w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="228114818"
+X-IronPort-AV: E=Sophos;i="6.21,148,1763452800"; 
+   d="scan'208";a="202021934"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 13 Dec 2025 23:04:55 -0800
+  by orviesa004.jf.intel.com with ESMTP; 14 Dec 2025 05:57:12 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vUgA0-000000008np-1Blw;
-	Sun, 14 Dec 2025 07:04:52 +0000
-Date: Sun, 14 Dec 2025 15:04:33 +0800
+	id 1vUmaz-0000000093Z-1rCU;
+	Sun, 14 Dec 2025 13:57:09 +0000
+Date: Sun, 14 Dec 2025 21:56:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-	Nilay Shroff <nilay@linux.ibm.com>
-Subject: arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size (2152)
- exceeds limit (2048) in 'ubd_device_release'
-Message-ID: <202512141455.Q3mvffdN-lkp@intel.com>
+To: Lance Yang <lance.yang@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 3/3] mm/khugepaged: skip redundant IPI in
+ collapse_huge_page()
+Message-ID: <202512142105.NXwq6dfP-lkp@intel.com>
+References: <20251213080038.10917-4-lance.yang@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,120 +63,206 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251213080038.10917-4-lance.yang@linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
-commit: 98e68f67020ce30e1a4d8e2d05d85a453738dfb8 block: prevent adding/deleting disk during updating nr_hw_queues
-date:   7 months ago
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20251214/202512141455.Q3mvffdN-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141455.Q3mvffdN-lkp@intel.com/reproduce)
+Hi Lance,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20251212]
+[cannot apply to tip/x86/core arnd-asm-generic/master linus/master v6.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lance-Yang/mm-tlb-allow-architectures-to-skip-redundant-TLB-sync-IPIs/20251213-160431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20251213080038.10917-4-lance.yang%40linux.dev
+patch subject: [PATCH RFC 3/3] mm/khugepaged: skip redundant IPI in collapse_huge_page()
+config: loongarch-randconfig-001-20251214 (https://download.01.org/0day-ci/archive/20251214/202512142105.NXwq6dfP-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512142105.NXwq6dfP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512141455.Q3mvffdN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512142105.NXwq6dfP-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/um/drivers/ubd_kern.c:26:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/um/drivers/ubd_kern.c:26:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/um/drivers/ubd_kern.c:26:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size (2152) exceeds limit (2048) in 'ubd_device_release' [-Wframe-larger-than]
-     780 | static void ubd_device_release(struct device *dev)
-         |             ^
-   13 warnings generated.
+>> mm/khugepaged.c:1185:7: error: call to undeclared function 'tlb_table_flush_implies_ipi_broadcast'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1185 |         if (!tlb_table_flush_implies_ipi_broadcast())
+         |              ^
+   1 error generated.
 
 
-vim +/ubd_device_release +780 arch/um/drivers/ubd_kern.c
+vim +/tlb_table_flush_implies_ipi_broadcast +1185 mm/khugepaged.c
 
-^1da177e4c3f41 Linus Torvalds     2005-04-16  779  
-2e3f5251ac7168 Jeff Dike          2007-05-06 @780  static void ubd_device_release(struct device *dev)
-2e3f5251ac7168 Jeff Dike          2007-05-06  781  {
-5bee35e5389f45 Tiwei Bie          2024-11-05  782  	struct ubd *ubd_dev = container_of(dev, struct ubd, pdev.dev);
-2e3f5251ac7168 Jeff Dike          2007-05-06  783  
-4e6da0fe8058df Richard Weinberger 2017-11-26  784  	blk_mq_free_tag_set(&ubd_dev->tag_set);
-2e3f5251ac7168 Jeff Dike          2007-05-06  785  	*ubd_dev = ((struct ubd) DEFAULT_UBD);
-2e3f5251ac7168 Jeff Dike          2007-05-06  786  }
-2e3f5251ac7168 Jeff Dike          2007-05-06  787  
-
-:::::: The code at line 780 was first introduced by commit
-:::::: 2e3f5251ac716879df6b6271f243f657c6e02e9a uml: drivers get release methods
-
-:::::: TO: Jeff Dike <jdike@addtoit.com>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+  1090	
+  1091	static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+  1092				      int referenced, int unmapped,
+  1093				      struct collapse_control *cc)
+  1094	{
+  1095		LIST_HEAD(compound_pagelist);
+  1096		pmd_t *pmd, _pmd;
+  1097		pte_t *pte;
+  1098		pgtable_t pgtable;
+  1099		struct folio *folio;
+  1100		spinlock_t *pmd_ptl, *pte_ptl;
+  1101		int result = SCAN_FAIL;
+  1102		struct vm_area_struct *vma;
+  1103		struct mmu_notifier_range range;
+  1104	
+  1105		VM_BUG_ON(address & ~HPAGE_PMD_MASK);
+  1106	
+  1107		/*
+  1108		 * Before allocating the hugepage, release the mmap_lock read lock.
+  1109		 * The allocation can take potentially a long time if it involves
+  1110		 * sync compaction, and we do not need to hold the mmap_lock during
+  1111		 * that. We will recheck the vma after taking it again in write mode.
+  1112		 */
+  1113		mmap_read_unlock(mm);
+  1114	
+  1115		result = alloc_charge_folio(&folio, mm, cc);
+  1116		if (result != SCAN_SUCCEED)
+  1117			goto out_nolock;
+  1118	
+  1119		mmap_read_lock(mm);
+  1120		result = hugepage_vma_revalidate(mm, address, true, &vma, cc);
+  1121		if (result != SCAN_SUCCEED) {
+  1122			mmap_read_unlock(mm);
+  1123			goto out_nolock;
+  1124		}
+  1125	
+  1126		result = find_pmd_or_thp_or_none(mm, address, &pmd);
+  1127		if (result != SCAN_SUCCEED) {
+  1128			mmap_read_unlock(mm);
+  1129			goto out_nolock;
+  1130		}
+  1131	
+  1132		if (unmapped) {
+  1133			/*
+  1134			 * __collapse_huge_page_swapin will return with mmap_lock
+  1135			 * released when it fails. So we jump out_nolock directly in
+  1136			 * that case.  Continuing to collapse causes inconsistency.
+  1137			 */
+  1138			result = __collapse_huge_page_swapin(mm, vma, address, pmd,
+  1139							     referenced);
+  1140			if (result != SCAN_SUCCEED)
+  1141				goto out_nolock;
+  1142		}
+  1143	
+  1144		mmap_read_unlock(mm);
+  1145		/*
+  1146		 * Prevent all access to pagetables with the exception of
+  1147		 * gup_fast later handled by the ptep_clear_flush and the VM
+  1148		 * handled by the anon_vma lock + PG_lock.
+  1149		 *
+  1150		 * UFFDIO_MOVE is prevented to race as well thanks to the
+  1151		 * mmap_lock.
+  1152		 */
+  1153		mmap_write_lock(mm);
+  1154		result = hugepage_vma_revalidate(mm, address, true, &vma, cc);
+  1155		if (result != SCAN_SUCCEED)
+  1156			goto out_up_write;
+  1157		/* check if the pmd is still valid */
+  1158		vma_start_write(vma);
+  1159		result = check_pmd_still_valid(mm, address, pmd);
+  1160		if (result != SCAN_SUCCEED)
+  1161			goto out_up_write;
+  1162	
+  1163		anon_vma_lock_write(vma->anon_vma);
+  1164	
+  1165		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, address,
+  1166					address + HPAGE_PMD_SIZE);
+  1167		mmu_notifier_invalidate_range_start(&range);
+  1168	
+  1169		pmd_ptl = pmd_lock(mm, pmd); /* probably unnecessary */
+  1170		/*
+  1171		 * This removes any huge TLB entry from the CPU so we won't allow
+  1172		 * huge and small TLB entries for the same virtual address to
+  1173		 * avoid the risk of CPU bugs in that area.
+  1174		 *
+  1175		 * Parallel GUP-fast is fine since GUP-fast will back off when
+  1176		 * it detects PMD is changed.
+  1177		 */
+  1178		_pmd = pmdp_collapse_flush(vma, address, pmd);
+  1179		spin_unlock(pmd_ptl);
+  1180		mmu_notifier_invalidate_range_end(&range);
+  1181		/*
+  1182		 * Skip the second IPI if the TLB flush above already synchronized
+  1183		 * with concurrent GUP-fast via broadcast IPIs.
+  1184		 */
+> 1185		if (!tlb_table_flush_implies_ipi_broadcast())
+  1186			tlb_remove_table_sync_one();
+  1187	
+  1188		pte = pte_offset_map_lock(mm, &_pmd, address, &pte_ptl);
+  1189		if (pte) {
+  1190			result = __collapse_huge_page_isolate(vma, address, pte, cc,
+  1191							      &compound_pagelist);
+  1192			spin_unlock(pte_ptl);
+  1193		} else {
+  1194			result = SCAN_NO_PTE_TABLE;
+  1195		}
+  1196	
+  1197		if (unlikely(result != SCAN_SUCCEED)) {
+  1198			if (pte)
+  1199				pte_unmap(pte);
+  1200			spin_lock(pmd_ptl);
+  1201			BUG_ON(!pmd_none(*pmd));
+  1202			/*
+  1203			 * We can only use set_pmd_at when establishing
+  1204			 * hugepmds and never for establishing regular pmds that
+  1205			 * points to regular pagetables. Use pmd_populate for that
+  1206			 */
+  1207			pmd_populate(mm, pmd, pmd_pgtable(_pmd));
+  1208			spin_unlock(pmd_ptl);
+  1209			anon_vma_unlock_write(vma->anon_vma);
+  1210			goto out_up_write;
+  1211		}
+  1212	
+  1213		/*
+  1214		 * All pages are isolated and locked so anon_vma rmap
+  1215		 * can't run anymore.
+  1216		 */
+  1217		anon_vma_unlock_write(vma->anon_vma);
+  1218	
+  1219		result = __collapse_huge_page_copy(pte, folio, pmd, _pmd,
+  1220						   vma, address, pte_ptl,
+  1221						   &compound_pagelist);
+  1222		pte_unmap(pte);
+  1223		if (unlikely(result != SCAN_SUCCEED))
+  1224			goto out_up_write;
+  1225	
+  1226		/*
+  1227		 * The smp_wmb() inside __folio_mark_uptodate() ensures the
+  1228		 * copy_huge_page writes become visible before the set_pmd_at()
+  1229		 * write.
+  1230		 */
+  1231		__folio_mark_uptodate(folio);
+  1232		pgtable = pmd_pgtable(_pmd);
+  1233	
+  1234		spin_lock(pmd_ptl);
+  1235		BUG_ON(!pmd_none(*pmd));
+  1236		pgtable_trans_huge_deposit(mm, pmd, pgtable);
+  1237		map_anon_folio_pmd_nopf(folio, pmd, vma, address);
+  1238		spin_unlock(pmd_ptl);
+  1239	
+  1240		folio = NULL;
+  1241	
+  1242		result = SCAN_SUCCEED;
+  1243	out_up_write:
+  1244		mmap_write_unlock(mm);
+  1245	out_nolock:
+  1246		if (folio)
+  1247			folio_put(folio);
+  1248		trace_mm_collapse_huge_page(mm, result == SCAN_SUCCEED, result);
+  1249		return result;
+  1250	}
+  1251	
 
 -- 
 0-DAY CI Kernel Test Service
