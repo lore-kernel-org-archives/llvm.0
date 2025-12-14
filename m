@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6CC21772A;
-	Sun, 14 Dec 2025 02:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65806165F1A;
+	Sun, 14 Dec 2025 06:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765679084; cv=none; b=tjTaVa3Lp6f0BS51Lf/wIKfcm4UpWzn+W4N71O2azZwcN/ElErN6TkW6Yu4iPVNf3E5YPe+9RwyseMK6bH9RN3kk+SssirqRtSIRot63Vr2UlA9C7QD3RwgPyto0bDrRHNO6iAr9N9c/bD37FysuuE35oX0fciDAK9k8bGNDfcg=
+	t=1765694570; cv=none; b=hWh505v2HHFkTLgQzKMPm6TTallrJ11IFVLv0Nb8ACL1cOr1PRQL/4WiepdTzIZwvcQs1vQyjh9TNeiT5hDXXW4FZDQOBqeQ5iWznD2okAax2/DW7e6+yr1z3mxxx7fw007cN4rjUgVoUIEm5GnKpKq+ER83f4LSYsiURSciVDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765679084; c=relaxed/simple;
-	bh=svZGnGb1z0M8JDuDzoFyvS666dKdyR/v6OisOICLuUE=;
+	s=arc-20240116; t=1765694570; c=relaxed/simple;
+	bh=wAf5W5h78Is4CrvkqVhtNy+sxagjVh0nv54EXPIwSKg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zc7bQMgCbZnj6ICPn7sB9ufeyHzNI/BRF8taAstZ31Z8jkr2W0JdtHdCVYYFEyi6mzAsW4uGaj/CdRugv+bLObV5Yo4r9ZNc7pV1trV7rrCVeb78YoVY0gumqRlxooJvMFG95w7kUCC7ojbuXXOkfg1VRl69Tk/wDaZ9QIE2dCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KV32Hfan; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=KnaIgK02a5mHUg4WKXGloW3wwe3/02JibERybScOr7zqJafC/uf2TmssO0P1tqT8x2u48+64xUgW0HlAsOO4IgtI9hE8wmnAv8e186SkFkdABV6GGOTy1naWvpNXe5jQyIm0wJn/sRi+uVkT3flufrso5ZadVOUSfYkgOQ9kV9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d0seXmzx; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KV32Hfan"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d0seXmzx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765679083; x=1797215083;
+  t=1765694569; x=1797230569;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=svZGnGb1z0M8JDuDzoFyvS666dKdyR/v6OisOICLuUE=;
-  b=KV32Hfan6NieDxx1PQSRP9Ftb7aIq3+vNeUwwpHTUGiCl6gmCTa1yyMr
-   rxVvYShH68iH+BmntVDgCxgVv5fvxQGwKfD97aztr25Tb7iPj7aErU33C
-   5gLey1+gRWgfCLO2I41+9vrL2Kvkr1d8HAeY5pTXkLhfuotxERUgqPEPq
-   hBwoGoWWHzDeUj39+zeMulxuh6QqJ+P5NiGV8dhmJg8ra19DRKOvwhJ27
-   NZJ7LK+6bi6kIHzPl/LZIDAZkReFbyucmLMKCmJw1cJaCk23p6N3CNG3L
-   doPmz+56PPCdeBvY2SYY5MY49DdaH5cfeKW4NZE13sGmnUmjFOf3gvnQN
+  bh=wAf5W5h78Is4CrvkqVhtNy+sxagjVh0nv54EXPIwSKg=;
+  b=d0seXmzxc6WS2mLcIfA2LkJXtRGdGI5YWkrpgbnLIJBgDsxCJxC/LEzv
+   v49ZZt1u48nxs6b655anN6+5OPkJ6wttGEkMvCtvSusNouGcQYfKMwZjY
+   BYpy3vVT+2c7bNF76WSyYCAecaic5lQqqkF+rSvH4ycegQB5tiytInNjq
+   2cQKTBIVUO+TcaD1Yz9mmV1kyU5mMGfqzTL/y/GUU/9fW0aG+AKn/2/KO
+   rfRZ+Urv5RR2rFNjb841UCf3IJD5rtMJcu+Dum826TeJKPRZola4q4SSQ
+   CBn1OF1tqoyU13HIYZ4MtAvzWtjQCe9ndZ/x2p4ode1aj6FWjAcmrjQ/Z
    g==;
-X-CSE-ConnectionGUID: L56f86/yT9a1LDxFT3uBsw==
-X-CSE-MsgGUID: A2YVY7quROeLKJW4SfXLcA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="93106933"
+X-CSE-ConnectionGUID: trt2AKw7S/uMFDpsRuTmcQ==
+X-CSE-MsgGUID: r4sMaUJgT76SQfr2bM7Tng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="66806804"
 X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="93106933"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 18:24:42 -0800
-X-CSE-ConnectionGUID: 7yFpZs+kRhG0dlb5+WLBGw==
-X-CSE-MsgGUID: VZYezyg6RQ+QrteEdSNYYw==
+   d="scan'208";a="66806804"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 22:42:48 -0800
+X-CSE-ConnectionGUID: Ck9U0PGVSHORFhjq+QR0FQ==
+X-CSE-MsgGUID: TB+Ta9ioTouVAp12P7+6RQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,147,1763452800"; 
-   d="scan'208";a="197925139"
+   d="scan'208";a="197728163"
 Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Dec 2025 18:24:39 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 13 Dec 2025 22:42:46 -0800
 Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vUbmn-000000008TV-1guk;
-	Sun, 14 Dec 2025 02:24:37 +0000
-Date: Sun, 14 Dec 2025 10:23:45 +0800
+	id 1vUfoa-000000008gz-3AlI;
+	Sun, 14 Dec 2025 06:42:44 +0000
+Date: Sun, 14 Dec 2025 14:42:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matthew Maurer <mmaurer@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Matthew Maurer <mmaurer@google.com>
-Subject: Re: [PATCH 3/3] rust: Support deriving `AsBytes`/`FromBytes` on
- bindgen types
-Message-ID: <202512141048.FYhaUWwX-lkp@intel.com>
-References: <20251212-transmute-v1-3-9b28e06c6508@google.com>
+To: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] btrfs: add an ASSERT() to catch ordered extents with
+ incorrect csums
+Message-ID: <202512141434.ZwLWwwtR-lkp@intel.com>
+References: <7ad76db98d300c3fedc73433aa343b654399cc2d.1765521720.git.wqu@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,35 +63,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251212-transmute-v1-3-9b28e06c6508@google.com>
+In-Reply-To: <7ad76db98d300c3fedc73433aa343b654399cc2d.1765521720.git.wqu@suse.com>
 
-Hi Matthew,
+Hi Qu,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 008d3547aae5bc86fac3eda317489169c3fda112]
+[auto build test WARNING on kdave/for-next]
+[also build test WARNING on linus/master v6.19-rc1 next-20251212]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Maurer/rust-transmute-Support-transmuting-slices-of-AsBytes-FromBytes-types/20251213-074604
-base:   008d3547aae5bc86fac3eda317489169c3fda112
-patch link:    https://lore.kernel.org/r/20251212-transmute-v1-3-9b28e06c6508%40google.com
-patch subject: [PATCH 3/3] rust: Support deriving `AsBytes`/`FromBytes` on bindgen types
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251214/202512141048.FYhaUWwX-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-add-an-ASSERT-to-catch-ordered-extents-with-incorrect-csums/20251212-144720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/7ad76db98d300c3fedc73433aa343b654399cc2d.1765521720.git.wqu%40suse.com
+patch subject: [PATCH] btrfs: add an ASSERT() to catch ordered extents with incorrect csums
+config: i386-buildonly-randconfig-004-20251213 (https://download.01.org/0day-ci/archive/20251214/202512141434.ZwLWwwtR-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141048.FYhaUWwX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512141434.ZwLWwwtR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512141048.FYhaUWwX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512141434.ZwLWwwtR-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error[E0463]: can't find crate for `core`
-   |
-   = note: the `target` target may not be installed
-   = help: consider downloading the target with `rustup target add target`
-   = help: consider building the standard library from source with `cargo build -Zbuild-std`
+>> fs/btrfs/inode.c:3089:12: warning: function 'oe_csum_bytes' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+    3089 | static u64 oe_csum_bytes(struct btrfs_ordered_extent *oe)
+         |            ^~~~~~~~~~~~~
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for I2C_K1
+   Depends on [n]: I2C [=m] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && OF [=n]
+   Selected by [m]:
+   - MFD_SPACEMIT_P1 [=m] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && I2C [=m]
+
+
+vim +/oe_csum_bytes +3089 fs/btrfs/inode.c
+
+  3088	
+> 3089	static u64 oe_csum_bytes(struct btrfs_ordered_extent *oe)
+  3090	{
+  3091		struct btrfs_ordered_sum *sum;
+  3092		u64 ret = 0;
+  3093	
+  3094		list_for_each_entry(sum, &oe->list, list)
+  3095			ret += sum->len;
+  3096		return ret;
+  3097	}
+  3098	
 
 -- 
 0-DAY CI Kernel Test Service
