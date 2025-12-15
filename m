@@ -1,118 +1,215 @@
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.48])
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D796E29B777
-	for <llvm@lists.linux.dev>; Mon, 15 Dec 2025 07:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B578F5B21A
+	for <llvm@lists.linux.dev>; Mon, 15 Dec 2025 09:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765785044; cv=none; b=hEl4nrOh8VsWKYKiY4Mxo5iSARMS+S3Rvw6UgDEf7Ep4IT47mAK3zA7S42GsO1LU442zcdTbZRd0oaIdQj6G4ZZNhjLOgRG3hrwKd5Ow3QqQv8p5tQ4Og4b194jwUP5du8XTDobmCtZpJ2gev0a3raN8d8app4YAgBsVu0tqoD4=
+	t=1765791051; cv=none; b=q+h59ItFCzeRbV/36GF/lVCR620bxnJxPFr6QYbGbdOyKhSBvB33emRM1OWikXdiokvson+gQ7q5m9QzS4lfF5f6Vr5ssNDZLVfdEXxM75UZdafCQj2VfGPVjomEjDwlJMu9Nex+Y8ChBuD/wTHeby9kYDCTIrCSuEEp+mtlDMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765785044; c=relaxed/simple;
-	bh=/t6y+LLkEm0+PJbWMQGt3yyosJD+7yPGOE7FL8ZFe7I=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=mbwN0S+3ZDCi7YlEJJWoL0qJqCXJGsXjD3NbSKGoUn1yKMaxb1SsXltKdC3Q4/84RsoCtogoRL3QBPc/pPUTL5VcLLVHmMkPPmVbHQ2leaGreoNVT+kAI+0hsUV74QSpZgMoYV8IF+wx70NPIpwsQLuVkGAQBGb5oVMGugmQVfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=cnN+fZ/E; arc=none smtp.client-ip=43.163.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1765791051; c=relaxed/simple;
+	bh=swqRlMoAO3NvcCoEm7GKISvmasPoc2eXkU2/fm394BE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Et2RHTyav6N00hJ7Dkscbr1LCHPJqFbpaoSfTcGslE1fO3TYHWxwkhsSmNqme7t6K8wAgDhiAe213jqzEeCUi3BzIimE6mNomGCX0V++b2nzaW7hr/JOE02DOy9b821zKVylyMcHtgIhk4eei+AThj7QbJkBDrQp8rIbb/ag4/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=pnErKi7r; arc=none smtp.client-ip=178.154.239.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="cnN+fZ/E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765785038;
-	bh=4xcvZkMSC5YYucheJfe/1rsYZuLJHZE4HNCoGvQIDdg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cnN+fZ/EW/K8LVeUn4JVaw2ckLb+hpmJjRSCLl4lcpJO3mGzaAlWJ5ltq3LykGivS
-	 3dsxX16tUk8y9RsLHFGFl0RteX5Mc1MTZBs6TlEsRdk95jsbfSK7j0i+4kAZG3M2W0
-	 xU08GqmrhJTuDEvmrAuODrYb+gY3ga5XcF53OeEU=
-Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id CA1348BD; Mon, 15 Dec 2025 15:50:33 +0800
-X-QQ-mid: xmsmtpt1765785033ts5k3cip7
-Message-ID: <tencent_38F3843C852F8CAECF22386E81F151D7A207@qq.com>
-X-QQ-XMAILINFO: OIJV+wUmQOUAMBbWgg84slbqoSWobcgrLE+46aQRwPoL0BDReItOde3M67niEU
-	 x6m6Tm1nVoTi4dT4ag0dVy7mijd4oaouH2lhxBk6+JLHxirh0pLgjvuIQJii2Dkh5jADCgdrfqDE
-	 W3xhDjm4Z2777mPbx76j6e5w4yrQGjSeIYlxAknS5VPALAeHNbpHlCunE36IOzVIPHARCOrTG7VA
-	 sb/OV+NmugoNosuoOWGXLWuAxrxKfYVNph0q9vUwMUq6oxE78cXlXlNJEUHVSaG322XFPI8BG2eG
-	 sqTgCGp03j1qqBszDijxfoFLqYF7Qd5gmRG6P3okTueMt0RPxhNuGxSISDuQxVVks60ZKOflbO2O
-	 dIvRMk77dN9LFM5+dPj3OaftxSheRKLKrl4qe3P7VBIm7x9DhvyriOW2dAmIW2RhnH5aODz2LXj/
-	 ol2/OVHNlEnIvCNiCCtGadfuFI6C6BopYRx5yfXAKzhqdbFlnGvrJ5yk6T4fX+pWEp2Vjr3bAJD5
-	 bFpkujRWSxqWkP6twQoZ6yvSScmtk7fpeCREI1HivfqbXqlU72M5mPuZCVJXUYSWamOFpgQb/Mjm
-	 8Pxc1D3E3PMkBbywT3YeYi3KdJ/EBIFLfvt1pUuSLQvbUgFc+SANxOMu/PkQrWBTwDwUUWylvc62
-	 EFnmRfeXG5wxkkUCxrk5BjEdvYmj5XSfPuzICsOihIi495cgZQ0I1IfAfwWVSNqdSG8aF8mon4wA
-	 ZCIVn5gCzy6LifVUv9OKS68HhrCK66Rqw1imNXos35PO6OpybQZRGb9zXT/9qqr97dc5pEtNylq3
-	 spPTmc87csQzTXqixUorJ3j4MPH4Q+9HhGt/UprWIYsziI3W9IHYTLmOpsLlg27pEBp9nWMVbNjQ
-	 qiThZBtRFnSQIfisige/kpX/W+8TbLvzl9F5AlkKrTnoVTePyf5Dt8sBGP4hJvzWc8lF43/BTh2B
-	 YQW73QrcybwSZlFiXXXF0uEpxKEdW3TKrNVdfAS2d+wUWNnoXhuNDw0WF2cRH9y2XLjnFusx9LMr
-	 zpj/wNncPzwVDwbALa1jFwwNT5pa2bedCuVrQm7NrObvRSKCIqCoFVrR3u0h4ZnBDLfkVeDA==
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From: Yuwen Chen <ywen.chen@foxmail.com>
-To: licayy@foxmail.com
-Cc: akpm@linux-foundation.org,
-	andrealmeid@igalia.com,
-	dave@stgolabs.net,
-	dbueso@suse.de,
-	dvhart@infradead.org,
-	edliaw@google.com,
-	hpa@linux.intel.com,
-	justinstitt@google.com,
-	kernel-team@android.com,
-	licayy@outlook.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	luto@mit.edu,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
-	shuah@kernel.org,
-	tglx@linutronix.de,
-	usama.anjum@collabora.com,
-	ywen.chen@foxmail.com
-Subject: Re: [PATCH 3/3] selftests/futex: fix the issue of abnormal test results caused by thread timing
-Date: Mon, 15 Dec 2025 15:50:33 +0800
-X-OQ-MSGID: <20251215075033.2467995-1-ywen.chen@foxmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <tencent_735CA2D4910E781E7F514A7DED34A5CE2E0A@qq.com>
-References: <tencent_735CA2D4910E781E7F514A7DED34A5CE2E0A@qq.com>
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="pnErKi7r"
+Received: from mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net [IPv6:2a02:6b8:c24:1698:0:640:befc:0])
+	by forward500b.mail.yandex.net (Yandex) with ESMTPS id 4BDA0C026A;
+	Mon, 15 Dec 2025 12:24:14 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 9OPpYE5LtiE0-E5fX9gQU;
+	Mon, 15 Dec 2025 12:24:13 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1765790653;
+	bh=kprlpmhDORKZihgrcnjt54NlN/3ATtQKhKSPmCXRgxU=;
+	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+	b=pnErKi7r/pJ6EEz4IpoCH+Ck5x1TXYefWSUcsAA1a24sJ/0h0LFUXMDT60+PlrDa0
+	 oqkV/IXHtDkV5Qk+gjBVXuv1HW31jrpzfdg58OrbPnl9XZ3g5YRZlrltVe32bZwj/F
+	 uvkfCjASOqj6tKOrspotkEOXN1rdzxXN9YIZ2Bh0=
+Authentication-Results: mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+Date: Mon, 15 Dec 2025 12:24:07 +0300
+From: Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
+ workflows@vger.kernel.org, llvm@lists.linux.dev, Arnd Bergmann
+ <arnd@arndb.de>
+Subject: Re: [PATCH v1 1/2] scripts: add tool to run containerized builds
+Message-ID: <20251215122407.720d65bf@nimda>
+In-Reply-To: <97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
+References: <cover.1765374789.git.gtucker@gtucker.io>
+	<97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-on Fri, 12 Dec 2025 12:30:20 +0800, Licay wrote:
-> 1. Avoid Parsing /proc
->    The current approach uses get_thread_state() to read /proc/$pid/status, which isn't very reliable.
->    A better way would be to have waiterfn directly signal when it's ready using atomic operations.
+Hi Guillaume,
 
-I haven't found a better way to check whether a process has entered the
-sleep state without using the proc interface for the time being. The kernel
-probably doesn't provide a system call to obtain whether a process has
-entered the sleep state.
+Excellent work! Just one note from my side so far:
 
-> 2. Use Atomic Counting Instead of Polling Thread State
->    Before entering futex_wait, waiterfn can atomically increment a counter. The parent thread then just waits for this counter to reach the expected value.
->    This is much simpler and avoids the overhead of checking /proc repeatedly.
+On Wed, 10 Dec 2025 14:58:28 +0100
+Guillaume Tucker <gtucker@gtucker.io> wrote:
 
-Using atomic instructions does not guarantee that the process is waiting in futex_wait.
+> Add a 'scripts/container' tool written in Python to run any command in
+> the source tree from within a container.  This can typically be used
+> to call 'make' with a compiler toolchain image to run reproducible
+> builds but any arbitrary command can be run too.  Only Docker and
+> Podman are supported for this initial version.
+> 
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Link:
+> https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io/
+> Signed-off-by: Guillaume Tucker <gtucker@gtucker.io> ---
+>  scripts/container | 112
+> ++++++++++++++++++++++++++++++++++++++++++++++ 1 file changed, 112
+> insertions(+) create mode 100755 scripts/container
+> 
+> diff --git a/scripts/container b/scripts/container
+> new file mode 100755
+> index 000000000000..74644ac33685
+> --- /dev/null
+> +++ b/scripts/container
+> @@ -0,0 +1,112 @@
+> +#!/bin/env python3
 
-> 3. Use Standard Atomic Types
->    Replace the custom READ_ONCE/WRITE_ONCE macros with standard <stdatomic.h> types like atomic_int.
->    It's cleaner and more portable across different platforms.
+By default, this will not work on NixOS because /bin/env is
+not a valid path.
 
-Only two operations, atomic_set and atomic_read, are used here. Using
-WRITE_ONCE and READ_ONCE can avoid introducing too many dependencies.
+It will fail like this:
 
-> Here's the basic idea:
-> - Add a global atomic_int ready_count variable
-> - In waiterfn: atomic_fetch_add(&ready_count, 1) right before futex_wait()
-> - Parent thread: spin-wait until atomic_load(&ready_count) reaches the expected value
+	$ cat something
+	#!/bin/env python3
+	
+	$ ./something
+	zsh: ./something: bad interpreter: /bin/env: no such file or
+	directory
 
-Similarly, using atomic_inc before futex_wait does not guarantee that
-the thread has reached the futex_wait execution point.
+Is there a reason for not using /usr/bin/env?
 
-Thank you very much for your reply.
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright (C) 2025 Guillaume Tucker
+> +
+> +"""Containerized builds"""
+> +
+> +import argparse
+> +import logging
+> +import os
+> +import subprocess
+> +import sys
+> +
+> +
+> +def get_logger(verbose):
+> +    """Set up a logger with the appropriate level"""
+> +    logger = logging.getLogger('container')
+> +    handler = logging.StreamHandler()
+> +    handler.setFormatter(logging.Formatter(
+> +        fmt='[container {levelname}] {message}', style='{'
+> +    ))
+> +    logger.addHandler(handler)
+> +    logger.setLevel(logging.DEBUG if verbose is True else
+> logging.INFO)
+> +    return logger
+> +
+> +
+> +def run_docker(args):
+> +    """Run a command in a Docker container"""
+> +    uid = args.uid or os.getuid()
+> +    gid = args.gid or args.uid or os.getgid()
+> +    cmd = [
+> +        'docker', 'run',
+> +        '--interactive',
+> +        '--volume', f'{os.getcwd()}:/src',
+> +        '--workdir', '/src',
+> +        '--user', f'{uid}:{gid}'
+> +    ]
+> +    if args.env_file:
+> +        cmd += ['--env-file', args.env_file]
+> +    cmd.append(args.image)
+> +    cmd += args.cmd
+> +    return subprocess.call(cmd)
+> +
+> +
+> +def run_podman(args):
+> +    """Run a command in a Podman container"""
+> +    uid = args.uid or 1000
+> +    gid = args.gid or args.uid or 1000
+> +    cmd = [
+> +        'podman', 'run',
+> +        '--interactive',
+> +        '--volume', f'{os.getcwd()}:/src',
+> +        '--workdir', '/src',
+> +        '--userns', f'keep-id:uid={uid},gid={gid}',
+> +    ]
+> +    if args.env_file:
+> +        cmd += ['--env-file', args.env_file]
+> +    cmd.append(args.image)
+> +    cmd += args.cmd
+> +    return subprocess.call(cmd)
+> +
+> +
+> +def main(args):
+> +    """Main entry point for the container tool"""
+> +    logger = get_logger(args.verbose)
+> +    logger.debug("runtime=%s, image=%s", args.runtime, args.image)
+> +    runtimes = {
+> +        'docker': run_docker,
+> +        'podman': run_podman,
+> +    }
+> +    handler = runtimes.get(args.runtime)
+> +    if not handler:
+> +        logger.error("Unknown container runtime: %s", args.runtime)
+> +        return 1
+> +    try:
+> +        return handler(args)
+> +    except KeyboardInterrupt:
+> +        logger.error("aborted")
+> +        return 1
+> +
+> +
+> +if __name__ == '__main__':
+> +    parser = argparse.ArgumentParser("Containerized builds")
+> +    parser.add_argument(
+> +        '-e', '--env-file',
+> +        help="Path to an environment file to load in the container."
+> +    )
+> +    parser.add_argument(
+> +        '-g', '--gid',
+> +        help="Group ID to use inside the container."
+> +    )
+> +    parser.add_argument(
+> +        '-i', '--image', default='gcc',
+> +        help="Container image, default is gcc."
+> +    )
+> +    parser.add_argument(
+> +        '-r', '--runtime', choices=['docker', 'podman'],
+> default='docker',
+> +        help="Container runtime, default is docker."
+> +    )
+> +    parser.add_argument(
+> +        '-u', '--uid',
+> +        help="User ID to use inside the container.  If the -g option
+> is not"
+> +        "specified, the user ID will also be used for the group ID."
+> +    )
+> +    parser.add_argument(
+> +        '-v', '--verbose', action='store_true',
+> +        help="Enable verbose output."
+> +    )
+> +    parser.add_argument(
+> +        'cmd', nargs='+',
+> +        help="Command to run in the container"
+> +    )
+> +    sys.exit(main(parser.parse_args(sys.argv[1:])))
 
+-Onur
