@@ -1,128 +1,114 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F892D47E2
-	for <llvm@lists.linux.dev>; Mon, 15 Dec 2025 10:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B43312819;
+	Mon, 15 Dec 2025 11:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765793732; cv=none; b=Bpp7wm6LBlgf3eNo+EipdgYsV+zYyY6OMOr/jnP3wb9/3AtXtlFiohpwr8aaLiEcsdTFXF+HxFz7H7PfE+W20UDkqtP1O6EYvY25nsh8TMpxHBzmAlbKsuUrqEi8836t+ayIVtw0/y4uk7CkLa9LNmZ+ujsMgs5ds8b9O27Hqb8=
+	t=1765797840; cv=none; b=fRFQkU1omORJxFnu6Byo1J8BRipmq8jo0/Zh/AOwpqHUFZu65d3AJ8oxAZ3gupxbWWdLQSnbIkMeVTr4D/L1ZyeGhT2z4r6o4CnWEP6/dBETfqPdaP04bqDCvkHEkHm8PDeksdwXWX/kE1gjsGcEqVLw69XfG+jkmxChph1E36k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765793732; c=relaxed/simple;
-	bh=JPOmklmMLYq6mP2PbfIgSF2coLORCWmQ8LDixgtTFaM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ekhgIu8F15ddVZDyaD9gupM78xNVtjTcU57Oa5JNn2npcJcSwLZvf3ihyDA0Cy6/u7OYCa6Xbcg/lXvg9nEp3CSz+BR2UHOzy1k2k7BpJR84jHE1Ae1htVSiAhXm3pQs5dKLyVb0HyvZEnJegDTU0juWLoUI+9k02l2k0YOIZ5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=YLW4iXxI; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1765797840; c=relaxed/simple;
+	bh=lP5M/h8i3RU8FWBPHXbkD6Ak8tUSX62HiWC5oG4my7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pRhmz+h/aFL3pRfYwvDsFVZvu5g60GxQS2QSCD+aKb/DSfD0gm2/qhaRXS8K9nzKTcOJs/FT2vTN2SZFwPMq+JvvCEJ0ZGbzlp5zHnPrIzhdieBN0oNZ9W3rnz3jbQWcjj2BSnQZgeduIulwTbo/JOoUXe5uIGKgOMgSmrF/ecU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MTYKegOf; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="YLW4iXxI"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 213DF1FD00;
-	Mon, 15 Dec 2025 10:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1765793722;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1JE0MkyDh2OFDvU6yHj6+8uC5VbEASap+Thy0bCIdkI=;
-	b=YLW4iXxI/yLOfN8JL4Rb2Jyge5Xo7AiRFi6sXITSQSUMznzMLVo6Xxj1LxMgByEjbKr25J
-	nTG3D86yb6Qn2z2rBV85ckCeDTA6viRpQTL/OD1zn3fFE6yEzqQtoz0/KsJf0W95RZLcAJ
-	xx2RkEieF05eJAOt/yiZGIqbnujhrp502V8OKwXoKJ4M2q89Evh4Tup6gd8trtNzg1BACH
-	/T5QR0jGtq7F9MnMml9cyIuXrazDFeXvhJWvqQoX3DmWfXgoCYHLpNaiDn11MjXquNLuFE
-	h1CFw72ByaKopa4iAHO07cPViuT11E7AUm6IkhLpOJ7MmIXwVJLHtS3UqeXmdQ==
-Message-ID: <31937c2c-23b5-471d-abcb-188721e995d8@gtucker.io>
-Date: Mon, 15 Dec 2025 11:15:19 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MTYKegOf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765797839; x=1797333839;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lP5M/h8i3RU8FWBPHXbkD6Ak8tUSX62HiWC5oG4my7Q=;
+  b=MTYKegOf6B3ilW7iTvXXW4q0n1rgR9fVpRcdosb5Fc8+K+bI6mdmZ8zZ
+   rpYB4t4cQUaQNEV0nCLE1vCD8cDL1IK10c3jrWaZGwZoMsiOMC5brkpdR
+   alj3z4nxmj8dU0sDwrRewHMplSo70cOdxQ+uRMYWB8f1aRf/6oPhhbkmT
+   yyB4Y3r1G2brPeoO9vuoDyf0cGtNypXb59Lq5VyWdeqP7cKTHqpQTFC89
+   cVGtrA8Q5ytMOKVOdiJdWjDe7ngEJnbvVYuNStGM/0JzOpAzq+CahAAW/
+   UJw7pHBP46ntecgr2Y0RzuAlnItv0qVvjE+Tef1UJNeSWvO/ifyXhTkYJ
+   Q==;
+X-CSE-ConnectionGUID: g13mJrPrRdCNtnx+pY6D+g==
+X-CSE-MsgGUID: RStL1PoyS0CCevpqj6DmhA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11642"; a="78402427"
+X-IronPort-AV: E=Sophos;i="6.21,150,1763452800"; 
+   d="scan'208";a="78402427"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 03:23:58 -0800
+X-CSE-ConnectionGUID: Bnx+FklITVm11gQa5xYNcg==
+X-CSE-MsgGUID: 4IoYhcPLTTKLMg3Wyc4S+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,150,1763452800"; 
+   d="scan'208";a="197316607"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by fmviesa007.fm.intel.com with ESMTP; 15 Dec 2025 03:23:56 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vV6gE-000000002dE-0l0h;
+	Mon, 15 Dec 2025 11:23:54 +0000
+Date: Mon, 15 Dec 2025 12:22:55 +0100
+From: kernel test robot <lkp@intel.com>
+To: Prithvi Tambewagh <activprithvi@gmail.com>,
+	syzbot+c818e5c4559444f88aa0@syzkaller.appspotmail.com,
+	jlbec@evilplan.org, joseph.qi@linux.alibaba.com, mark@fasheh.com,
+	heming.zhao@suse.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com,
+	Prithvi Tambewagh <activprithvi@gmail.com>
+Subject: Re: Syzbot test for v3: ocfs2: fix kernel BUG in ocfs2_write_block
+Message-ID: <202512151240.MwIXYwyy-lkp@intel.com>
+References: <20251214192047.34811-1-activprithvi@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] scripts: add tool to run containerized builds
-To: =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
- workflows@vger.kernel.org, llvm@lists.linux.dev,
- Arnd Bergmann <arnd@arndb.de>
-References: <cover.1765374789.git.gtucker@gtucker.io>
- <97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
- <20251215122407.720d65bf@nimda>
-Content-Language: en-US
-From: Guillaume Tucker <gtucker@gtucker.io>
-In-Reply-To: <20251215122407.720d65bf@nimda>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefieehgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnhephfetteduleegjeehjeegffduvdeuueevhfdvueekueegtedvudevkeevkeefffegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddttddumeekiedumeegrgegtdemkeeivddtmeejkegrsgemkehfkedumedvkeeludemgegsvgegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeegrgegtdemkeeivddtmeejkegrsgemkehfkedumedvkeeludemgegsvgegpdhhvghloheplgfkrfggieemvddttddumeekiedumeegrgegtdemkeeivddtmeejkegrsgemkehfkedumedvkeeludemgegsvgegngdpmhgrihhlfhhrohhmpehgthhutghkvghrsehgthhutghkvghrrdhiohdpqhhiugepvddufeffhfduhffftddtpdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepfihorhhksehonhhurhhoiihkrghnrdguvghvpdhrt
- ghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhksghuihhlugesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251214192047.34811-1-activprithvi@gmail.com>
 
-Hi Onur,
+Hi Prithvi,
 
-On 15/12/2025 10:24 am, Onur Özkan wrote:
-> Hi Guillaume,
-> 
-> Excellent work! Just one note from my side so far:
+kernel test robot noticed the following build errors:
 
-Thanks for the review!
+[auto build test ERROR on 24172e0d79900908cf5ebf366600616d29c9b417]
 
-> On Wed, 10 Dec 2025 14:58:28 +0100
-> Guillaume Tucker<gtucker@gtucker.io> wrote:
-> 
->> Add a 'scripts/container' tool written in Python to run any command in
->> the source tree from within a container.  This can typically be used
->> to call 'make' with a compiler toolchain image to run reproducible
->> builds but any arbitrary command can be run too.  Only Docker and
->> Podman are supported for this initial version.
->>
->> Cc: Nathan Chancellor<nathan@kernel.org>
->> Cc: Miguel Ojeda<ojeda@kernel.org>
->> Link:
->> https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4- 
->> a7965c19ac4e@gtucker.io/
->> Signed-off-by: Guillaume Tucker<gtucker@gtucker.io> ---
->>   scripts/container | 112
->> ++++++++++++++++++++++++++++++++++++++++++++++ 1 file changed, 112
->> insertions(+) create mode 100755 scripts/container
->>
->> diff --git a/scripts/container b/scripts/container
->> new file mode 100755
->> index 000000000000..74644ac33685
->> --- /dev/null
->> +++ b/scripts/container
->> @@ -0,0 +1,112 @@
->> +#!/bin/env python3
-> By default, this will not work on NixOS because /bin/env is
-> not a valid path.
-> 
-> It will fail like this:
-> 
-> 	$ cat something
-> 	#!/bin/env python3
-> 	
-> 	$ ./something
-> 	zsh: ./something: bad interpreter: /bin/env: no such file or
-> 	directory
-> 
-> Is there a reason for not using /usr/bin/env?
+url:    https://github.com/intel-lab-lkp/linux/commits/Prithvi-Tambewagh/Syzbot-test-for-v3-ocfs2-fix-kernel-BUG-in-ocfs2_write_block/20251215-032310
+base:   24172e0d79900908cf5ebf366600616d29c9b417
+patch link:    https://lore.kernel.org/r/20251214192047.34811-1-activprithvi%40gmail.com
+patch subject: Syzbot test for v3: ocfs2: fix kernel BUG in ocfs2_write_block
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251215/202512151240.MwIXYwyy-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251215/202512151240.MwIXYwyy-lkp@intel.com/reproduce)
 
-Ah sorry, my bad.  I initially started writing this as a shell script
-using /bin/sh and typed it wrong when changing to Python.  So I'll
-fix it in v2, thanks for flagging this (pylint didn't...).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512151240.MwIXYwyy-lkp@intel.com/
 
-Another change I want to make is to drop the default image as 'gcc'
-doesn't really help.  If the user hasn't set a custom tag, it will
-pull some generic image from docker.io which won't have all the tools
-needed to build a kernel.  So making the -i option required or
-turning it into a positional argument would be better than some
-implicit behaviour.  I'll start a separate thread with Konstantin and
-Arnd about hosting kernel.org toolchain container images as having
-that should make the tool much more useful and we might set valid
-default values e.g. kernel.org/gcc.
+All errors (new ones prefixed by >>):
 
-Cheers,
-Guillaume
+>> fs/ocfs2/slot_map.c:48:31: error: expected ';' after top level declarator
+      48 |                                           struct buffer_head *bh)
+         |                                                                  ^
+         |                                                                  ;
+   1 error generated.
 
+
+vim +48 fs/ocfs2/slot_map.c
+
+    42	
+    43	
+    44	static int __ocfs2_node_num_to_slot(struct ocfs2_slot_info *si,
+    45					    unsigned int node_num);
+    46	
+    47	static int ocfs2_validate_slot_map_block(struct super_block *sb,
+  > 48						  struct buffer_head *bh)
+    49	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
