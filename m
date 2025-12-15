@@ -1,159 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B800230E0E7;
-	Mon, 15 Dec 2025 12:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C852D480E
+	for <llvm@lists.linux.dev>; Mon, 15 Dec 2025 13:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765802882; cv=none; b=R3VSLMnWx30ZEH7XfHPtScDi09sNl1yjquWmjrN7CMgEYJd69PacfpXZZnD6THwJbjwctxj1BadWaYoseeYe0yyCmDA6XcqAAOsrT8/YIZQk4WuJmUXqjd7C4I5s5/BsyDd0VRvh9YMZkTCSEOgbaH7Q+u4DfkziUEzKrtPZ+7E=
+	t=1765804225; cv=none; b=EkbhdozDblhUKm+/XnKiaDb2slmC9t45QhjXNphlSh4FV5x5ngMiMhcWe2RcO6wchuTlgJB86AHrJal/2Pntf+Ob4clm64DYWtLyY62fDy45GbPxwvdFEBjNC7sc1mfKngN7CEmEqRv2PNciYAZfcMhwMCLM3R70arqnj/Uz+jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765802882; c=relaxed/simple;
-	bh=GiURxdW2gtGjcWEyDceYKzgOQ7sjMsMvFnMMR57IukU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1RVQiI2aXyc6vpos32WoCz+a0W4b99izZf0T+E95h3q6F7mz2xtQa0s0uY81e5kgYGAlByuF1zHN1VwxEZ8krF7UVJrFMf4xCZuqKExB2Y55lSuvvoJPsEZi2s1lvdFbEHJWVjENh8UItNS+zSzCrz0KR4wcaLt0pa2oiACk1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gVJCRAGT; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765804225; c=relaxed/simple;
+	bh=BM/PVPr4BUoxQ98yubiOVvCOB+UxL8diHIpcrjRnF1s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PnePyMDe99WqvjIx8pYKWMxags0Bx49ZZLO0V0WdpDTnDIL606QozoovyNbdg7LidOImGmt+9GOMbqUZfsmuK1excYunccwRgl3kx6ICaiB4prdC9XX/dr2TgFfjC08vhNqzYsEUKozjXJpQDc0WiV4ADsoJj+QfEICfwUqHwCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6A9fzxF; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gVJCRAGT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765802881; x=1797338881;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GiURxdW2gtGjcWEyDceYKzgOQ7sjMsMvFnMMR57IukU=;
-  b=gVJCRAGTItoDEUGmTk9y6v4E1hyxdwbI8rNb2Ul4o3p64VauksoN9teI
-   VvnUJwms9CxRstIHLB1+ZfCCvHuv+qHeMP9QAyRissD89i4sXTJrw3pTM
-   sqMrNDrvzGADX87PTd/tRblbwAl63rJQbvmIF+c4Ef3yGH2lmFMLCGSjZ
-   dIWYusI+I0eYkCrAm6mkyzRbJuIQtHvnfi1iVoOG5o/A4s1u5oEtPQnMx
-   QzvpwdtnQ1xAxcHTQOJuRSfjVHfJWSssNYdykYMbSxq2f0XXkYGGxM9/P
-   CwkFqZA0b+pa5ZRtQ7hPpX6eL9NWinhpiv/kTf7XWfwmngZdkIaGVbIsl
-   w==;
-X-CSE-ConnectionGUID: 5a1mFunqTS6BA0ZIcJIUlQ==
-X-CSE-MsgGUID: h2toqx05TT+P83oIYWM5Cg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="71333766"
-X-IronPort-AV: E=Sophos;i="6.21,150,1763452800"; 
-   d="scan'208";a="71333766"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 04:48:01 -0800
-X-CSE-ConnectionGUID: 0KDjCnORQQSgwY/Jzquhng==
-X-CSE-MsgGUID: q3yMw4Z3QBCKzRRTG7sPiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,150,1763452800"; 
-   d="scan'208";a="201898841"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by orviesa003.jf.intel.com with ESMTP; 15 Dec 2025 04:47:57 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vV7zW-000000002e8-3Lxa;
-	Mon, 15 Dec 2025 12:47:54 +0000
-Date: Mon, 15 Dec 2025 13:47:54 +0100
-From: kernel test robot <lkp@intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	"(maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT))" <x86@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>
-Subject: Re: [PATCH 3/5] firmware: dmi: Read additional information when
- decoding DMI table
-Message-ID: <202512151357.ZGpOppn5-lkp@intel.com>
-References: <20251214185309.152614-4-superm1@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6A9fzxF"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7b9387df58cso5160171b3a.3
+        for <llvm@lists.linux.dev>; Mon, 15 Dec 2025 05:10:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765804224; x=1766409024; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BM/PVPr4BUoxQ98yubiOVvCOB+UxL8diHIpcrjRnF1s=;
+        b=M6A9fzxFmgZk6SQ6KWoAZtymspuoLkLsCUvr31M1A+erQPPNWzXD9d878vKitC8kGL
+         kWP2SxySAypuQ738lq1oouW2MmOKSu6YrdY8A1OOFSj1Yan6YovqOLA/khyEOqAfPcek
+         ZTMF/gZ4h7LuK5mwltIucmU8yyY61a1GSRO/wxjO+RpZS1Fk4dE+BDRqZsAewjqmwxYX
+         eIhHOX7fM1h910YclTk26z4GWher9IAvPbE0/Cb+/ft8qNopx7o2Pl/VKIHxWzWjyocl
+         ICl3agxSNd7f02qKDA8GUeEIkPyw+efD/83nmZbuO6fMmaZZjyFrGuRvKCyK3B0wn2u+
+         EadQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765804224; x=1766409024;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BM/PVPr4BUoxQ98yubiOVvCOB+UxL8diHIpcrjRnF1s=;
+        b=iIzztzGVkQIZKI0/vXFWqN6lcs8qR244gH1MKfcVqz1DaSl0TgIk+/HkDDvK8tKRAI
+         2vO0VOWuwrTfYX2rAm7HE/agWokkyERGi1VY+6t3pOXebm2KuZqrCpvwuS6lIygBL6tO
+         1oyKRxMv0CFfReRybLRhJ/yH82BLNyEer/rWC+0LIxZJlywYKr8A4IF42C5JZ88GYn1g
+         d829xYpVHh360hVw//MBWOMxZ6cB++mcAV+0Sk2Lc5DiEIIjLuvaM651DeC2k+x6y/bC
+         lrxTvM4zJwFTmh5qVnKFT/91HJLAHTU2YRWgEoRZoITGoqRfpdTFAEQYmJgIP5S73V6m
+         p5MA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGYUDdabgK9q9oBKJuA026std9rlTvI/cHHnbd8jBbiVXtoRYyiI6BEuOsmTdWkmnmNb/E@lists.linux.dev
+X-Gm-Message-State: AOJu0YwXjZT0C1ucPArfzgxwS34iXGS2a8F70MYBV5edvOJh6O46X0ae
+	ngaNG2tsKPfw2ZC9i2vppkqlgjxxkx6+YZ8sMyza5TIUjGg/mMoCWqgG
+X-Gm-Gg: AY/fxX72Jvmw6mgYhxr5XzDDjjIcBP3CMFUOtKC9D5B4FRmFusLAwL4zf9DDpWznvcq
+	teI+a2m12B8ckd8FR09rn+1PE0V/d3TfGO9zyNdk6NO1rREOkJyVNRYjFs0abg/DIdEaWcOGNqt
+	lciYR1Ae/NTDvSFRg3LoeqJkolB0mc3bY//Qdz4Y7W/M73/6Mkwc/EGPzSsaGcqSMVmOdAInekW
+	+e42FVsWOP6DfPFYrgcAdq2eX3Wlhm6yImMT3uOxb0/OE55K33o5rA6eT9TwmFQhzxVelVM0FUu
+	NDD+RlejXUi2evCKIJcAXUw3J7LLIBrHYA0HwsfU7fACNkClrkz5vITrhBIEPnMraCxC8f/AnAU
+	CDhMRI66DRgt4jAoachxa0Ol3j2rLobvpbBa022Xe7NpWmeVgeQKdKk+NhNC56YRaMEYIVJGJS+
+	yFLcoGP6A09DKW9DgZ2QK9+RsDYMtfGbw=
+X-Google-Smtp-Source: AGHT+IG3VwDpkA1WmQaMbo19+RTJgzIpgUIvYpPpKARDCY4wBFScDx5yKp0n9nH8m2HxqssodBKlAQ==
+X-Received: by 2002:a05:6a00:b904:b0:7b9:d7c2:fdf6 with SMTP id d2e1a72fcca58-7f6679326b4mr10674588b3a.24.1765804223544;
+        Mon, 15 Dec 2025 05:10:23 -0800 (PST)
+Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f4c22848a7sm12761222b3a.3.2025.12.15.05.10.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Dec 2025 05:10:22 -0800 (PST)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: tglx@linutronix.de,
+	peterz@infradead.org,
+	riel@surriel.com,
+	segher@kernel.crashing.org,
+	david@kernel.org,
+	hpa@zytor.com,
+	arnd@arndb.de,
+	akpm@linux-foundation.org,
+	acme@kernel.org,
+	adrian.hunter@intel.com,
+	agordeev@linux.ibm.com,
+	alex@ghiti.fr,
+	alexander.shishkin@linux.intel.com,
+	andreas@gaisler.com,
+	anshuman.khandual@arm.com,
+	aou@eecs.berkeley.edu,
+	borntraeger@linux.ibm.com,
+	bp@alien8.de,
+	bsegall@google.com,
+	dave.hansen@linux.intel.com,
+	davem@davemloft.net,
+	dietmar.eggemann@arm.com,
+	frederic@kernel.org,
+	gor@linux.ibm.com,
+	hca@linux.ibm.com,
+	irogers@google.com,
+	james.clark@linaro.org,
+	jolsa@kernel.org,
+	juri.lelli@redhat.com,
+	justinstitt@google.com,
+	lorenzo.stoakes@oracle.com,
+	luto@kernel.org,
+	mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com,
+	max.kellermann@ionos.com,
+	mgorman@suse.de,
+	mingo@redhat.com,
+	morbo@google.com,
+	namhyung@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	nysal@linux.ibm.com,
+	palmer@dabbelt.com,
+	paulmck@kernel.org,
+	pjw@kernel.org,
+	rostedt@goodmis.org,
+	ryan.roberts@arm.com,
+	svens@linux.ibm.com,
+	thuth@redhat.com,
+	urezki@gmail.com,
+	vincent.guittot@linaro.org,
+	vschneid@redhat.com,
+	linux@armlinux.org.uk
+Cc: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v5 0/3] Optimize code generation during context switching
+Date: Mon, 15 Dec 2025 21:10:01 +0800
+Message-ID: <20251215131001.1021-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251214190907.184793-1-qq570070308@gmail.com>
+References: <20251214190907.184793-1-qq570070308@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251214185309.152614-4-superm1@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Mario,
+There is some additional testing information that needs to be
+supplemented:
+1.
+On Mon, 15 Dec 2025 03:09:04 +0800, Xie Yuanbin Wrote:
+> 2. Testing config:
+> x86-64: `make x86_64_defconfig` first, then menuconfig setting:
+> CONFIG_HZ=100
+> CONFIG_DEBUG_ENTRY=n
+> CONFIG_X86_DEBUG_FPU=n
+> CONFIG_EXPERT=y
+> CONFIG_MODIFY_LDT_SYSCALL=n
+> CONFIG_STACKPROTECTOR=n
+> CONFIG_BLK_DEV_NVME=y (just for boot)
+>
+> arm64: `make defconfig` first, then menuconfig setting:
+> CONFIG_KVM=n
+> CONFIG_HZ=100
+> CONFIG_SHADOW_CALL_STACK=y
+>
+> arm32: `make multi_v7_defconfig` first, then menuconfig setting:
+> CONFIG_ARCH_OMAP2PLUS_TYPICAL=n
+> CONFIG_HIGHMEM=n
 
-kernel test robot noticed the following build warnings:
+The above is the config for performance test, when testing for size, the
+config is: `make x86_64_defconfig` first, then menuconfig setting:
+CONFIG_SCHED_CORE=y
+CONFIG_NO_HZ_FULL=y
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y (optional)
 
-[auto build test WARNING on tip/master]
-[also build test WARNING on linus/master tip/auto-latest v6.19-rc1 next-20251215]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Enable CONFIG_SCHED_CORE and CONFIG_NO_HZ_FULL to test the modified code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello-AMD/firmware-dmi-Correct-an-indexing-error-in-dmi-h/20251215-025606
-base:   tip/master
-patch link:    https://lore.kernel.org/r/20251214185309.152614-4-superm1%40kernel.org
-patch subject: [PATCH 3/5] firmware: dmi: Read additional information when decoding DMI table
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251215/202512151357.ZGpOppn5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251215/202512151357.ZGpOppn5-lkp@intel.com/reproduce)
+2. When testing with Raspberry Pi 3b, in order to make the test result
+stable, the CPU frequency should be fixed. In detail, setting in
+config.txt:
+```config.txt
+arm_boost=0
+core_freq_fixed=1
+arm_freq=1200
+gpu_freq=250
+sdram_freq=400
+arm_freq_min=1200
+gpu_freq_min=250
+sdram_freq_min=400
+```
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512151357.ZGpOppn5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/firmware/dmi_scan.c:398:14: warning: variable 'strings' set but not used [-Wunused-but-set-variable]
-     398 |         const char *strings;
-         |                     ^
->> drivers/firmware/dmi_scan.c:400:6: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     400 |         int count = 0;
-         |             ^
-   2 warnings generated.
-
-
-vim +/strings +398 drivers/firmware/dmi_scan.c
-
-   395	
-   396	static void __init dmi_save_additional(const struct dmi_additional_info *info)
-   397	{
- > 398		const char *strings;
-   399		const u8 *data;
- > 400		int count = 0;
-   401		int i;
-   402	
-   403		if (!info || info->header.length < 5 + info->count * 5)
-   404			return;
-   405	
-   406		data = info->entries;
-   407		strings = (const char *)(data + info->count * 5);
-   408	
-   409		for (i = 0; i < info->count; i++) {
-   410			u8 entry_length = data[i * 5];
-   411			u8 string_num = data[i * 5 + 4];
-   412			const char *string_ptr;
-   413			char *value;
-   414			int len;
-   415	
-   416			if (entry_length < 5 || string_num == 0)
-   417				continue;
-   418	
-   419			string_ptr = dmi_string_nosave(&info->header, string_num);
-   420			if (!string_ptr || !*string_ptr)
-   421				continue;
-   422	
-   423			len = strlen(string_ptr);
-   424			if (len == 0)
-   425				continue;
-   426	
-   427			value = dmi_alloc(len + 1);
-   428			if (!value)
-   429				continue;
-   430	
-   431			strscpy(value, string_ptr, len + 1);
-   432	
-   433			dmi_save_one_device(DMI_DEV_TYPE_ADDITIONAL, value);
-   434			count++;
-   435		}
-   436	}
-   437	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
