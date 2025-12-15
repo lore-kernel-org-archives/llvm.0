@@ -1,172 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A721FA178;
-	Mon, 15 Dec 2025 00:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D13C2FD679;
+	Mon, 15 Dec 2025 00:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765758840; cv=none; b=NuCA9ek0MQMxDuCZAcvaL0SD+FH3jSasdPlIft4HIGBPTLgGZA6nz8btMFglap+BnR5Uv2qq6r/M4Gb51plly0bzTkh2qPl5BgHxEX+MMACNjEoH9yYMge2+iWdikhMqACi+60HAXDjPMCLPasfUQpCcDkMv0/5gx2Kwn6GA6Sk=
+	t=1765759317; cv=none; b=NSUpgDJaO+EvYqmOVXgZxlFuzbtAqikbBaR+twnnjfJprW/eYlq49Z+RvmYvwY7C39ipgqCJ2XrRkNrwqBF4qtHebgc4tDvRIfD8sht/2VkZoxcAve4LHS2SEmucIuARgNDEbfnBBpNK8j+h25TguI6aa7cVJTNYCD33tTRlmtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765758840; c=relaxed/simple;
-	bh=W7UEBktViqKqMZ+UlfEc0gQrcayQrWzWiKTvbgczJc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N7Gvj7t/0nJLXz3nABrqZGMpC5fuxJ65cgoGL73NARMItkHMfNzIh6PyUM+200o0SnDyRdlpAcz1ugpGDz0eE22a8XqGm5+0Jf1I9ujIuPWoRmfetUEOLYKGnnAUBDNWXE0zL47h+vVFFJHQcWeobizcvRtRO0JeEEfzoPl/i9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IF6shtS8; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765759317; c=relaxed/simple;
+	bh=St94AYLnxj05b+K9sUNH/KOIgDw2f1eAqiAnR2OUrdM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eb1/M+Kc85sa/sWAC+df565drDnC7eycKHy1zZ5LHbozBXe/YI+f5P6bKEot9a13i3199JVSNTF+osnlTIOg4zDXYDspJRd9QUaD1qULVy6OkPy1197BrGWBC9YNQ4tO0P8Szx65aPmKQkBxcly5BRbPMWd+YGi0U/VCrg9fn+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ve0Yd5uq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IF6shtS8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765758839; x=1797294839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=W7UEBktViqKqMZ+UlfEc0gQrcayQrWzWiKTvbgczJc4=;
-  b=IF6shtS8vD7Bs/o9MiOiyVoe1GsruiLqZ1fIX0VGEId5ZSd3zTABS+Pd
-   oKwbT1MeqpLn/eSg1GoYw3XgKco3QnVZ3J23+kkiS0W0XFctBZ/r7SOtT
-   rR6CeUKPS9fHOrY1qXf0w/OCnS2FRMjZcTq0Za7DKNaSbZWMcMsRmazym
-   5/ALL99ySXSd+4jeJfVkf6+2HfAdrl0K/jhCvCd4csud3Jd9hupMF2BMy
-   Q2JuRvoMl5tdKIkvYBdGVZCwFX7xT2ENR7SFDEV2EEkBQIfkkNdkm71Dh
-   4zuxlzubBMjZ6LDpk+KlvnbW1TVOyWgJ3oBjwk5DXYR18LyoBUDfnBeDI
-   w==;
-X-CSE-ConnectionGUID: fRv51KHPRqaCOdW1Ws3/fQ==
-X-CSE-MsgGUID: y6GRSLbWQ06Jk3JeS9hXpw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11642"; a="93138041"
-X-IronPort-AV: E=Sophos;i="6.21,148,1763452800"; 
-   d="scan'208";a="93138041"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2025 16:33:56 -0800
-X-CSE-ConnectionGUID: GsNamjZfR2eMWOjvrQN3oQ==
-X-CSE-MsgGUID: ZEo46AwmQOOPkysYfEV/Hg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,148,1763452800"; 
-   d="scan'208";a="228659225"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Dec 2025 16:33:55 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vUwXA-000000009X1-1xRq;
-	Mon, 15 Dec 2025 00:33:52 +0000
-Date: Mon, 15 Dec 2025 08:33:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Ingo Molnar <mingo@kernel.org>
-Subject: [tip:sched/core 9/16] kernel/sched/ext.c:2434:2: error: call to
- undeclared function 'rq_modified_clear'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202512150831.Cx1NNngn-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ve0Yd5uq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 764E8C4CEF1;
+	Mon, 15 Dec 2025 00:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765759317;
+	bh=St94AYLnxj05b+K9sUNH/KOIgDw2f1eAqiAnR2OUrdM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Ve0Yd5uq+bbANnSUqkwZohka6PXuKwwdfdCX15bzBdfZJY9zcvNLIcdzpCz8Qzugi
+	 bMH2jQxiNuVucGHem0+3IpKoHxZNqAkNr7P9Jgfpi5KUuB5E0F1d+GyQQuLsYCRqPe
+	 +AzH326nOHKqN27EnsJPwlS/gdUI5vTiih0o7+CAUjIy3ln3rFDK5C7nhH5P4LOLkQ
+	 OV5GbT0DJK9Ym6Kosd/9G4sseOTYKY8n95VFMbQtZzUiNub8XP+7KyFOy2OXChwnYQ
+	 bl8rNrkgOk7Md2RbHVZ2/nd0j+0oPKkQrgZO1iIDOIyx5dTkYzzg7QKuRjFfJ0VNkr
+	 8UnFes/tmI4fQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	heiko@sntech.de,
+	nathan@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.18-6.12] ASoC: rockchip: Fix Wvoid-pointer-to-enum-cast warning (again)
+Date: Sun, 14 Dec 2025 19:41:21 -0500
+Message-ID: <20251215004145.2760442-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251215004145.2760442-1-sashal@kernel.org>
+References: <20251215004145.2760442-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-head:   098f3900b035ab94fccd19d77b9ec2b13c300599
-commit: 31ab17f00c810076333c26cb485ec4d778829a76 [9/16] sched/core: Rework sched_class::wakeup_preempt() and rq_modified_*()
-config: i386-buildonly-randconfig-002-20251215 (https://download.01.org/0day-ci/archive/20251215/202512150831.Cx1NNngn-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251215/202512150831.Cx1NNngn-lkp@intel.com/reproduce)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512150831.Cx1NNngn-lkp@intel.com/
+[ Upstream commit 57d508b5f718730f74b11e0dc9609ac7976802d1 ]
 
-All errors (new ones prefixed by >>):
+'version' is an enum, thus cast of pointer on 64-bit compile test with
+clang W=1 causes:
 
-   In file included from kernel/sched/build_policy.c:62:
->> kernel/sched/ext.c:2434:2: error: call to undeclared function 'rq_modified_clear'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2434 |         rq_modified_clear(rq);
-         |         ^
->> kernel/sched/ext.c:2449:20: error: call to undeclared function 'rq_modified_above'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2449 |         if (!force_scx && rq_modified_above(rq, &ext_sched_class))
-         |                           ^
-   2 errors generated.
+  rockchip_pdm.c:583:17: error: cast to smaller integer type 'enum rk_pdm_version' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
+This was already fixed in commit 49a4a8d12612 ("ASoC: rockchip: Fix
+Wvoid-pointer-to-enum-cast warning") but then got bad in
+commit 9958d85968ed ("ASoC: Use device_get_match_data()").
 
-vim +/rq_modified_clear +2434 kernel/sched/ext.c
+Discussion on LKML also pointed out that 'uintptr_t' is not the correct
+type and either 'kernel_ulong_t' or 'unsigned long' should be used,
+with several arguments towards the latter [1].
 
-f0e1a0643a59bf Tejun Heo      2024-06-18  2423  
-67fa319f5fff52 Andrea Righi   2025-10-18  2424  static struct task_struct *
-67fa319f5fff52 Andrea Righi   2025-10-18  2425  do_pick_task_scx(struct rq *rq, struct rq_flags *rf, bool force_scx)
-f0e1a0643a59bf Tejun Heo      2024-06-18  2426  {
-753e2836d139b4 Tejun Heo      2024-09-03  2427  	struct task_struct *prev = rq->curr;
-4c95380701f58b Peter Zijlstra 2025-10-01  2428  	bool keep_prev, kick_idle = false;
-f0e1a0643a59bf Tejun Heo      2024-06-18  2429  	struct task_struct *p;
-f0e1a0643a59bf Tejun Heo      2024-06-18  2430  
-a379fa1e2cae15 Tejun Heo      2025-10-22  2431  	/* see kick_cpus_irq_workfn() */
-987e00035c0e68 Tejun Heo      2025-10-22  2432  	smp_store_release(&rq->scx.kick_sync, rq->scx.kick_sync + 1);
-a379fa1e2cae15 Tejun Heo      2025-10-22  2433  
-4c95380701f58b Peter Zijlstra 2025-10-01 @2434  	rq_modified_clear(rq);
-70d837c3e017a0 Tejun Heo      2025-10-16  2435  
-4c95380701f58b Peter Zijlstra 2025-10-01  2436  	rq_unpin_lock(rq, rf);
-4c95380701f58b Peter Zijlstra 2025-10-01  2437  	balance_one(rq, prev);
-4c95380701f58b Peter Zijlstra 2025-10-01  2438  	rq_repin_lock(rq, rf);
-977b9a00541929 Peter Zijlstra 2025-10-28  2439  	maybe_queue_balance_callback(rq);
-70d837c3e017a0 Tejun Heo      2025-10-16  2440  
-67fa319f5fff52 Andrea Righi   2025-10-18  2441  	/*
-67fa319f5fff52 Andrea Righi   2025-10-18  2442  	 * If any higher-priority sched class enqueued a runnable task on
-67fa319f5fff52 Andrea Righi   2025-10-18  2443  	 * this rq during balance_one(), abort and return RETRY_TASK, so
-67fa319f5fff52 Andrea Righi   2025-10-18  2444  	 * that the scheduler loop can restart.
-67fa319f5fff52 Andrea Righi   2025-10-18  2445  	 *
-67fa319f5fff52 Andrea Righi   2025-10-18  2446  	 * If @force_scx is true, always try to pick a SCHED_EXT task,
-67fa319f5fff52 Andrea Righi   2025-10-18  2447  	 * regardless of any higher-priority sched classes activity.
-67fa319f5fff52 Andrea Righi   2025-10-18  2448  	 */
-67fa319f5fff52 Andrea Righi   2025-10-18 @2449  	if (!force_scx && rq_modified_above(rq, &ext_sched_class))
-4c95380701f58b Peter Zijlstra 2025-10-01  2450  		return RETRY_TASK;
-4c95380701f58b Peter Zijlstra 2025-10-01  2451  
-4c95380701f58b Peter Zijlstra 2025-10-01  2452  	keep_prev = rq->scx.flags & SCX_RQ_BAL_KEEP;
-4c95380701f58b Peter Zijlstra 2025-10-01  2453  	if (unlikely(keep_prev &&
-8fef0a3b17bb25 Tejun Heo      2025-02-25  2454  		     prev->sched_class != &ext_sched_class)) {
-1a7ff7216c8b4d Tejun Heo      2025-04-04  2455  		WARN_ON_ONCE(scx_enable_state() == SCX_ENABLED);
-a6250aa251eaca Tejun Heo      2024-11-09  2456  		keep_prev = false;
-a6250aa251eaca Tejun Heo      2024-11-09  2457  	}
-a6250aa251eaca Tejun Heo      2024-11-09  2458  
-a6250aa251eaca Tejun Heo      2024-11-09  2459  	/*
-a6250aa251eaca Tejun Heo      2024-11-09  2460  	 * If balance_scx() is telling us to keep running @prev, replenish slice
-a6250aa251eaca Tejun Heo      2024-11-09  2461  	 * if necessary and keep running @prev. Otherwise, pop the first one
-a6250aa251eaca Tejun Heo      2024-11-09  2462  	 * from the local DSQ.
-a6250aa251eaca Tejun Heo      2024-11-09  2463  	 */
-a6250aa251eaca Tejun Heo      2024-11-09  2464  	if (keep_prev) {
-7c65ae81ea86a6 Tejun Heo      2024-09-03  2465  		p = prev;
-69120f82282977 Honglei Wang   2025-04-18  2466  		if (!p->scx.slice)
-c0008a5632103e Tejun Heo      2025-09-23  2467  			refill_task_slice_dfl(rcu_dereference_sched(scx_root), p);
-7c65ae81ea86a6 Tejun Heo      2024-09-03  2468  	} else {
-f0e1a0643a59bf Tejun Heo      2024-06-18  2469  		p = first_local_task(rq);
-a6250aa251eaca Tejun Heo      2024-11-09  2470  		if (!p) {
-a6250aa251eaca Tejun Heo      2024-11-09  2471  			if (kick_idle)
-9fc687edf205db Tejun Heo      2025-09-23  2472  				scx_kick_cpu(rcu_dereference_sched(scx_root),
-9fc687edf205db Tejun Heo      2025-09-23  2473  					     cpu_of(rq), SCX_KICK_IDLE);
-f0e1a0643a59bf Tejun Heo      2024-06-18  2474  			return NULL;
-a6250aa251eaca Tejun Heo      2024-11-09  2475  		}
-f0e1a0643a59bf Tejun Heo      2024-06-18  2476  
-f0e1a0643a59bf Tejun Heo      2024-06-18  2477  		if (unlikely(!p->scx.slice)) {
-c0008a5632103e Tejun Heo      2025-09-23  2478  			struct scx_sched *sch = rcu_dereference_sched(scx_root);
-d310fb40096896 Tejun Heo      2025-05-14  2479  
-d310fb40096896 Tejun Heo      2025-05-14  2480  			if (!scx_rq_bypassing(rq) && !sch->warned_zero_slice) {
-c425180d888e7d Honglei Wang   2024-10-10  2481  				printk_deferred(KERN_WARNING "sched_ext: %s[%d] has zero slice in %s()\n",
-c425180d888e7d Honglei Wang   2024-10-10  2482  						p->comm, p->pid, __func__);
-d310fb40096896 Tejun Heo      2025-05-14  2483  				sch->warned_zero_slice = true;
-f0e1a0643a59bf Tejun Heo      2024-06-18  2484  			}
-c0008a5632103e Tejun Heo      2025-09-23  2485  			refill_task_slice_dfl(sch, p);
-f0e1a0643a59bf Tejun Heo      2024-06-18  2486  		}
-7c65ae81ea86a6 Tejun Heo      2024-09-03  2487  	}
-7c65ae81ea86a6 Tejun Heo      2024-09-03  2488  
-f0e1a0643a59bf Tejun Heo      2024-06-18  2489  	return p;
-f0e1a0643a59bf Tejun Heo      2024-06-18  2490  }
-f0e1a0643a59bf Tejun Heo      2024-06-18  2491  
+Link: https://lore.kernel.org/r/CAMuHMdX7t=mabqFE5O-Cii3REMuyaePHmqX+j_mqyrn6XXzsoA@mail.gmail.com/ [1]
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Link: https://patch.msgid.link/20251203141644.106459-2-krzysztof.kozlowski@oss.qualcomm.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-:::::: The code at line 2434 was first introduced by commit
-:::::: 4c95380701f58b8112f0b891de8d160e4199e19d sched/ext: Fold balance_scx() into pick_task_scx()
+LLM Generated explanations, may be completely bogus:
 
-:::::: TO: Peter Zijlstra <peterz@infradead.org>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
+## Summary Analysis
 
+### What the commit fixes
+This is a **build fix** that prevents a compilation error when building
+with clang and W=1:
+```
+error: cast to smaller integer type 'enum rk_pdm_version' from 'const
+void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+```
+
+The issue is that on 64-bit systems, casting directly from `const void
+*` (64 bits) to an enum (typically 32 bits) triggers a truncation
+warning. Using `(unsigned long)` as an intermediate cast avoids this
+because `unsigned long` matches the pointer size.
+
+### Classification
+This falls clearly into the **BUILD FIX** exception category which is
+explicitly allowed for stable trees. Build fixes that prevent
+compilation are critical for users who need to build the kernel.
+
+### Scope and Risk
+- **Change**: Single line - only changing the cast type
+- **Files touched**: 1 file
+- **Risk**: Extremely low - the runtime behavior is identical; only the
+  compile-time representation differs
+- **Functional equivalence**: The value stored in `pdm->version` is the
+  same either way
+
+### Applicability to Stable Trees
+The regressing commit 9958d85968ed went into v6.7-rc1. Therefore:
+- Stable trees **v6.6.y and earlier**: NOT affected (don't have the
+  regression)
+- Stable trees **v6.7.y and later**: Affected and would benefit from
+  this fix
+
+### Stable Criteria Assessment
+| Criterion | Assessment |
+|-----------|------------|
+| Obviously correct | ✓ Yes - standard pattern for void pointer to enum
+cast |
+| Fixes real bug | ✓ Yes - compilation failure |
+| Small scope | ✓ Yes - 1 line change |
+| No new features | ✓ Correct - pure bug fix |
+| Tested | ✓ Accepted by maintainer |
+
+### Additional Factors
+- This is a **regression fix** - the same issue was previously fixed in
+  commit 49a4a8d12612 but regressed
+- LKML discussion confirms `unsigned long` as the appropriate fix
+- Signed off by both author and subsystem maintainer (Mark Brown)
+
+### Risk vs Benefit
+- **Risk**: Near zero - compile-time only change, no runtime behavior
+  modification
+- **Benefit**: Enables compilation with clang W=1 on 64-bit platforms
+
+This is an excellent stable backport candidate. It's a minimal, low-risk
+build fix that allows users to compile the kernel in a common
+configuration. Build fixes are explicitly mentioned as appropriate for
+stable trees, and this one is as safe as they come - a single-line cast
+change with no runtime impact.
+
+**YES**
+
+ sound/soc/rockchip/rockchip_pdm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/rockchip/rockchip_pdm.c b/sound/soc/rockchip/rockchip_pdm.c
+index c1ee470ec6079..c69cdd6f24994 100644
+--- a/sound/soc/rockchip/rockchip_pdm.c
++++ b/sound/soc/rockchip/rockchip_pdm.c
+@@ -580,7 +580,7 @@ static int rockchip_pdm_probe(struct platform_device *pdev)
+ 	if (!pdm)
+ 		return -ENOMEM;
+ 
+-	pdm->version = (enum rk_pdm_version)device_get_match_data(&pdev->dev);
++	pdm->version = (unsigned long)device_get_match_data(&pdev->dev);
+ 	if (pdm->version == RK_PDM_RK3308) {
+ 		pdm->reset = devm_reset_control_get(&pdev->dev, "pdm-m");
+ 		if (IS_ERR(pdm->reset))
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
