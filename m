@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D5E32ED40;
-	Mon, 15 Dec 2025 23:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCAA1A840A;
+	Tue, 16 Dec 2025 01:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765842929; cv=none; b=pbLeefhFdrhjk/5iF2G/DkvBalccflYo78W20+bnX3xSEGHPAJo74Gmu0aiY8OF/bqBg1B0xPK7rcWv8mih+lM1s6q13/C941Bz885ue4fz5q45ig5K22pV2ZNNfsRvgdBmcTQ9qQm0BX2/2Kc7k+ToDA0JWAW3Qt0uNdS34Q90=
+	t=1765849564; cv=none; b=CvNS286+nb7eenWfm+xDu9VWQ0ZXjsdtCV2v+9MT2NGKE2SThwpx/A2H/XN6VCAGCggbe790tySstwXO1WFjTf/WOkVTYwEZMKC7Zz4iJQdAqe85rtb0YZ0wKXTtpj5zQAuNeoLbxs2ebhFJ7CSVAtsZHtTAe4+DB1SbNWida9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765842929; c=relaxed/simple;
-	bh=BjvV+W+NnpMyMEpT0XXNXjftK0JuvfbiZBoT1H/uhOI=;
+	s=arc-20240116; t=1765849564; c=relaxed/simple;
+	bh=1y+AfcF9fj2JCrtn10mqB8ExLsMeg0TPdN4H9QQvPP4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bOiZg2OCpnBX1cIARSnzryw9ZDHdbvhAkuu2kmi6vBRHMeUV+x0UX9ve5XopbC+ykt6wqTYPLCjgCdUt3m0aUvDz8wxFdA/6RaGhy5ILDaP0MGwXcDCyCKWEIoXVs2fPnTbYEa/uYKcvqfL205cPnEaJHEch9dsxYDyDrs9mX8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXW1ga6m; arc=none smtp.client-ip=192.198.163.13
+	 Content-Disposition; b=f6tHm6mwp1newsGdjwKB4ISezBrw+BqQK9PkN21vwkjC8kOb2vWxMVpWCFEFjLNTblJTZcyEGSRm9h3pUrMCE3+oCEToWkDzHeR8gD1m3UBOI+gYLFDSvnz1NsjHrjmmXGlyzAPwllhp39tyQul7MF92483c+kvb+0qn0Wj/vUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbNr2RU2; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXW1ga6m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbNr2RU2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765842927; x=1797378927;
+  t=1765849563; x=1797385563;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BjvV+W+NnpMyMEpT0XXNXjftK0JuvfbiZBoT1H/uhOI=;
-  b=EXW1ga6mGYzTw2Ecran3X8VaX27bLLSsWRyjn64ejDpSgjm9zQrZSpcH
-   FWsvAt0TmEY4bLz13TFpU+059k7HShANUlWk8wgr21NRkJZt2F2jl18up
-   jx3vOJ6Y1ZVK5w1m2OwbN3I4C/GqeiF2GVqtAFpftCURLmg1aoSifKaRJ
-   kWBjs9Ls8Dnxh6ZXUHK8bs2vSt3xhXhrgHP+6irnE/g19jsmNyk++2Q9t
-   +ydoGZMfXSsKXSdlHXKtrE3eIvh2nvDxgLous8d1uHPDXgcoruH6JUyTu
-   JCrdoUPiwoHUr/wHD1/i8crj98aWDPhdHfJjaGUHXSL2ogl534/6NQcTi
-   Q==;
-X-CSE-ConnectionGUID: a4oiol1OQpqd3KyD6m5bdg==
-X-CSE-MsgGUID: t3Pp4ZK8Q56XAmKBA9X90g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="70336259"
-X-IronPort-AV: E=Sophos;i="6.21,151,1763452800"; 
-   d="scan'208";a="70336259"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 15:55:27 -0800
-X-CSE-ConnectionGUID: 1zk8O3ziRg6N25QfcsIgcg==
-X-CSE-MsgGUID: j52csY6uTAqYxVVzZAJ2mg==
+  bh=1y+AfcF9fj2JCrtn10mqB8ExLsMeg0TPdN4H9QQvPP4=;
+  b=kbNr2RU2IeabcSTBmkPu0+sf+CqCs1uDcH6v5Rw9BPLHSZ+xbQ6v3UFT
+   GvrT45i9OovJzOPGyCYYWS3S8p0BRUXYMgkur5tSB7uaC4uaFf++1PHSI
+   UUqo40ire+jLsHc7ET48ddBSbgJu2UsKdqPOQcwhTZXvabCUYd7UXqmaK
+   SZm7+nw8l+4BdafNuxbUyMV2sFu9u4L4jXGoKzWsDdhmFr0yPEg287Enw
+   z05aadbu2IJGLc3JTkbuzHzDpKlYwlSDakEWOAla3andSFcPtyV6ZhHUA
+   45XLNPYBDiWIjmT0H5KXuH8+/HAq7D4B38hlQfPFkUyY4atGzHxEatwak
+   w==;
+X-CSE-ConnectionGUID: vkP0rjX/TX6UAjZgYF6RaQ==
+X-CSE-MsgGUID: KAZL3E4TSGaYtuWH/kXVgg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="66949828"
+X-IronPort-AV: E=Sophos;i="6.21,152,1763452800"; 
+   d="scan'208";a="66949828"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 17:45:58 -0800
+X-CSE-ConnectionGUID: aJ+4myAYTGu0cQy/NbfdmQ==
+X-CSE-MsgGUID: ZhrIK6C5TRyy/DiX1WsbNA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,151,1763452800"; 
-   d="scan'208";a="197135639"
+X-IronPort-AV: E=Sophos;i="6.21,152,1763452800"; 
+   d="scan'208";a="202284957"
 Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 15 Dec 2025 15:55:25 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 15 Dec 2025 17:45:56 -0800
 Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vVIPH-000000000wH-0EpJ;
-	Mon, 15 Dec 2025 23:55:13 +0000
-Date: Tue, 16 Dec 2025 07:54:39 +0800
+	id 1vVK8Q-0000000011u-2GgO;
+	Tue, 16 Dec 2025 01:45:54 +0000
+Date: Tue, 16 Dec 2025 09:45:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: WARNING: modpost: vmlinux: section mismatch in reference:
- __apply_fineibt+0x1a6 (section: .text) -> text_poke_early (section:
- .init.text)
-Message-ID: <202512160706.tc6b0Ytj-lkp@intel.com>
+	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+	Armin Wolf <W_Armin@gmx.de>
+Subject: [rafael-pm:acpi-queue 1/29] Warning: drivers/pci/pci-acpi.c:888
+ function parameter 'root' not described in 'pci_acpi_add_root_pm_notifier'
+Message-ID: <202512160913.bOymxd8S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,30 +64,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
-commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-date:   3 months ago
-config: x86_64-buildonly-randconfig-001-20251216 (https://download.01.org/0day-ci/archive/20251216/202512160706.tc6b0Ytj-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-queue
+head:   e88d169a6053918f230dfc78ee0eff2c2a2ca9bf
+commit: 5194aade5e28559c33f0e11c54f4783dfb162213 [1/29] ACPI: PCI: PM: Rework root bus notification setup
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251216/202512160913.bOymxd8S-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512160706.tc6b0Ytj-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512160913.bOymxd8S-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512160706.tc6b0Ytj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512160913.bOymxd8S-lkp@intel.com/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x1a6 (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x25a (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x381 (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x45e (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x485 (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x5cb (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x7b2 (section: .text) -> text_poke_early (section: .init.text)
-WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x83a (section: .text) -> text_poke_early (section: .init.text)
->> WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x8b1 (section: .text) -> poison_endbr (section: .init.text)
+>> Warning: drivers/pci/pci-acpi.c:888 function parameter 'root' not described in 'pci_acpi_add_root_pm_notifier'
+>> Warning: drivers/pci/pci-acpi.c:888 function parameter 'root' not described in 'pci_acpi_add_root_pm_notifier'
 
 -- 
 0-DAY CI Kernel Test Service
