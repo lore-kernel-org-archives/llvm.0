@@ -1,108 +1,139 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C9C32C309
-	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 10:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E511224166C
+	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 10:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765880211; cv=none; b=PBNZKhfrnUDb3ZKZ3Nj0phGEKHBagwiHM4H4lIssUCI4bxAHxBC+4LPUIE/BYljc7LvKo/He8GH/K0fYhDEU24LFwEiXmvdq8nFjmbKw7PZfOYhnDTV3+Ja+jeFRs7Pi13YeFIHfxD1pt7CGTt/fc6zQ0EsGJ3Bf4EuXZLpq/m8=
+	t=1765880362; cv=none; b=A+yAldaybf5J57cknGmBaey11Mnx9+r4+GuDmaLcMfXK47KzXxVdZDM/ihDmm5YU2dQyNUe9chJyFf/rxZP7LoXx1JP7yehYf0aL5GEPPfdPlaAlw3CPp/2AqpGX29daS3ZrKhliP2tQ17cWhWZJBVOeuwleokdaZv2L8zCtA4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765880211; c=relaxed/simple;
-	bh=inD0vuzY52gOH2nE9ERpF+9ByKT4ccPlPybBeV0pgH8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HCAPyy1eXEKDgFNKZ0ShLi+kpIwOV/HaTUn4X2GqsixMWB73j7wAayOFyMDpRKURT0HzGvWbk7fTCk1C3aAb83F+NjeIlU0SJiPXqOVQttctDae0qJQQf5jgynEgKPAvlagzs+c+PuOKLR1rRqApcPZxpiIWGYq+Jy9AVvyxeN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3AZgIvxY; arc=none smtp.client-ip=209.85.221.74
+	s=arc-20240116; t=1765880362; c=relaxed/simple;
+	bh=rqzltWnFrgLp84UVC2H4fc9hB2x2S7WGCDmakYkZEbE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sJI4OH+VApO3dj+/REDH0DzkyKQ/PTkkmye2aD8gs9W6FINZDEqHb+CC0PbWHhXNcg12cCdZPz1nKzs3rKm6OV5spfeAA6Xua/Mvc+bJ3cQfqcfQwkyR+zPeOCNc0xHWSDvS1g7GV7bnOJLumQQkfxWsC7irBvvnsz/xMyfuar0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l5ZavQyY; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3AZgIvxY"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-43065ad16a8so1420925f8f.1
-        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 02:16:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l5ZavQyY"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7a9c64dfa8aso3538405b3a.3
+        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 02:19:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765880207; x=1766485007; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eBg82DgwaEqXYt7FN7z5QKnLiVSgwPtdomNA9XrlWso=;
-        b=3AZgIvxYt/Z20Befh9WEH9nUcJ5qRVeb8xLz2hIW2iZ7kdsY3MvuNweumqUqizvFHY
-         IEpukkcWUAPPTFqXWDEOIStM/F0mkVZ8CxIU6nBKVtpigRi41ip6OWgdiw6fTw2FUVm6
-         AnMBxvDB8hBRGZ4OOVUV9xN52YMGNL7LlACBJKanfnhx4LToMb+qugyjzMPZpSbud5mB
-         2wayL+i35yQu6xKmqrsyoLHzpEXjuHqk75pg9wg6Zlb+AVcllcDoVRa6b5FddIn1p5xG
-         CPG2DaR1Oh2mHAP1JI1r+uUSN1TvWqfPB3ycz9foR/nKg2XJ8xW0ppxFp1SndONlDusA
-         XzcA==
+        d=google.com; s=20230601; t=1765880360; x=1766485160; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OypqLsil5xBkKa5aVXNNZdJt/nIt7Du6XmfYVCVljvI=;
+        b=l5ZavQyYeQdSrwOQhOjZ22wEvfhDR+PDGU22ZKBoEWlU/utGfYPbkRDvjlbHw/6xHx
+         TPSGlrVOo0QykQQGvNi0SAfCwqRDI5zDWZcTRXbcMKyMXXGjEbWfhGIr00Qvx+OEQGYb
+         UuhsYTp+wgPr2viTHpG4a9Tj9x4XrGR4bOHKiJWGRJ//0C1FtwgBQL4ZiIXS4lRavifI
+         2WLYuuon4OMESBZ+8kET8OO+XXF1AROfYk5eSXkUwWAJrbzd9xLwYvf5NxBya3s20VHb
+         zrpL2ynDQf3ivOgr4urP2XDG8nR4veStzT13A09lyrPqUtzo/JSplln2czs1ysFpc/sE
+         luUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765880207; x=1766485007;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eBg82DgwaEqXYt7FN7z5QKnLiVSgwPtdomNA9XrlWso=;
-        b=Pwm2XfqZdaYltiKjvu2CiUS7Gg0TFnu5mT7Dyxy+QZrhNQYfM6PgUls6UgnRPa0p6d
-         sIL60031fGCiVpGq8iJgxEVVGfIlo6cGfuxj/icERQo2Qb+8fmy3wBNCE0WY1DhqOdjf
-         NYnTFlzad75VUTV42VREY2YSg73tdBnDd5BFmC9ET+yTe2JrxOw3nq0ebru4mdMEHugk
-         Mu4LG+MfnRnIZtRfAucsG+AAZp/qzl7edcUZief3mtBMiIrXzt6cYFedzU+uGRAbeXho
-         0j5IDFDTt5rWLqcEPXaI8CDYo7zBtAIux92yxbE1l4RP4brZaWoJ6IrCE6aeVrRWc4wc
-         dEgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVaSnP6Sga5MoMqgm8y5steUMKoBqge6X9YwevmaW+F4kUEMXHvS7CZix1sEyJOhSqFZJ2@lists.linux.dev
-X-Gm-Message-State: AOJu0YzFDahZsirCUXwbZybn5ccbYRa9lhWGbn1hgitIwszvlPY/sRKN
-	/E3LNmYQGZv4nTZWepibSGTe+l7077iZfRhIBqL+VFY0sutvb9K3zollEOKTOPY0I/xretEe31z
-	qhrDtSu+Iff9kCQ==
-X-Google-Smtp-Source: AGHT+IF8tg4ARFUPauM+RrKtcrJYaCoO/GiRg/I5s8E/PwBQR4bK4eIXW9Jg1Q+cB8/UwyWh9QatXY67S1YaaQ==
-X-Received: from wmbju24.prod.google.com ([2002:a05:600c:56d8:b0:477:7aa2:99cb])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600d:6405:20b0:47a:935f:618e with SMTP id 5b1f17b1804b1-47a935f64d7mr109743655e9.15.1765880207747;
- Tue, 16 Dec 2025 02:16:47 -0800 (PST)
-Date: Tue, 16 Dec 2025 10:16:36 +0000
-In-Reply-To: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
+        d=1e100.net; s=20230601; t=1765880360; x=1766485160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OypqLsil5xBkKa5aVXNNZdJt/nIt7Du6XmfYVCVljvI=;
+        b=QutJERjaJwf/RCrJTeIX7yR8cFVhwqkw3fQhyoTePXqfzPwEhbuHRntjLs+NpoFBwF
+         yUVSHaY7m3FmxnYECxD0PoX3vDmBg5Cz0qjV+hVu6r7ZySOTBS7iq57cDM9uxQPyJyol
+         MrWD+gChfRyU6B6TpxB3sZiQRvTgHd9n1IyGVHDFDrZ//IolKwNtRkLE0UxBAsM3kJHy
+         w1qKIRxTCKnS1BjAkGpIs7fiW2x/d/vfQAadAG3VJndmeXCNDWT97pIqrvSzN1WQ+rT4
+         L7BIWQ7w9qdECVbYsQJOhShUo6UsgGlx8X4v9DPmLtUREp2oNFTKKMzAutd2pM+qvVZh
+         omzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzd1odOA6WlTLcbIFk3YDB14E7m6ehZeIK03rFg+8kZfOpYm5Yhg2iDGdTiwG9CXibQcT7@lists.linux.dev
+X-Gm-Message-State: AOJu0YzC1pleXwHgIkjwcAyabzCWYtHX7uV+Bv10xBdYbukWV7o9l6e/
+	fiVq8uwNgMo/MTgLaLQ8NnatQdZp0Ru0wd8IdcVccWqYl9QqLFUBHD36Wn9zjDjRCXlUyfvq+w+
+	W1PGs0SIKBbClFBU5Jcmk0EAbqM6zgeqo/bIwLFnD
+X-Gm-Gg: AY/fxX53inDahCdUoTJlnPkha4Oa1qkcOec4Wc4r8nHfBbH9Ui93c9hyXaq5sDyYaAR
+	t8OH0i6I0dbOAnIwWuR/xL0fbmUIVPsI0uBV22DiBP35acKsCFDwEskKHeFvls/MSqVuk/K14My
+	gpraHgsdoAU3QKNIVmb3nBgR19gd++pCWEqpuG9byfvMZNJpLZ2TOJaXwWPyRLNTT0TDRoJRnP7
+	GTcxWNnhyXcaCNueLZinHXK1U9lQAajYlpRh3TgR/Olp2eDNmIcXn2k2tvvQ9okVBIATvFGvqso
+	ItHU029LOPUN7jSZFHFEwVteaA==
+X-Google-Smtp-Source: AGHT+IGrJAhLxOHth+LBtxpbfo1ppY/Umm9n5Zak3n253zmmSDe5bimWjONGvVy+0THeTV8Ii7Jy/yTHVWRCGWyKv1w=
+X-Received: by 2002:a05:7022:61a5:b0:11b:9386:a389 with SMTP id
+ a92af1059eb24-11f34c71006mr8757169c88.44.1765880359439; Tue, 16 Dec 2025
+ 02:19:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
-X-Mailer: b4 0.14.2
-Message-ID: <20251216-gcov-inline-noinstr-v3-3-10244d154451@google.com>
-Subject: [PATCH v3 3/3] x86/sev: Disable GCOV on noinstr object
-From: Brendan Jackman <jackmanb@google.com>
-To: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+In-Reply-To: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
+From: Marco Elver <elver@google.com>
+Date: Tue, 16 Dec 2025 11:18:43 +0100
+X-Gm-Features: AQt7F2r-TNi3C2dkEfzWWdFLAvdsJ9j2DX6plsYqvw6Qsd-tzVkmo5-aWx03RSw
+Message-ID: <CANpmjNPTdnReD1rmdyGPvpOqp0N6yc=XMfmdnNdgVrptGTTaVQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Noinstr fixes for K[CA]SAN with GCOV
+To: Brendan Jackman <jackmanb@google.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
 	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Marco Elver <elver@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
 	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
 	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="utf-8"
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With Debian clang version 19.1.7 (3+build5) there are calls to
-kasan_check_write() from __sev_es_nmi_complete, which violates noinstr.
-Fix it by disabling GCOV for the noinstr object, as has been done for
-previous such instrumentation issues.
+On Tue, 16 Dec 2025 at 11:16, Brendan Jackman <jackmanb@google.com> wrote:
+>
+> As discussed in [2], the GCOV+*SAN issue is attacked from two angles:
+> both adding __always_inline to the instrumentation helpers AND disabling
+> GCOV for noinstr.c. Only one or the other of these things is needed to
+> make the build error go away, but they both make sense in their own
+> right and both may serve to prevent other similar errors from cropping
+> up in future.
+>
+> Note I have not annotated !CONFIG_* stubs, only !__SANITIZE_*__ ones.
+> That's because for global settings (i.e. kconfig) it remains a bug to
+> call these stubs from the wrong context and we'd probably like to detect
+> that bug even if it could be eliminated from the current build.
+>
+> Concretely, the above is talking about KMSAN, i.e. stuff like
+> instrument_copy_from_user().
+>
+> Other than that, I think everything in include/linux/instrumented.h is
+> covered now.
+>
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+> Details:
+>
+>  - =E2=9D=AF=E2=9D=AF  clang --version
+>    Debian clang version 19.1.7 (3+build5)
+>    Target: x86_64-pc-linux-gnu
+>    Thread model: posix
+>    InstalledDir: /usr/lib/llvm-19/bin
+>
+>  - Kernel config:
+>
+>    https://gist.githubusercontent.com/bjackman/bbfdf4ec2e1dfd0e18657174f0=
+537e2c/raw/a88dcc6567d14c69445e7928a7d5dfc23ca9f619/gistfile0.txt
+>
+> Note I also get this error:
+>
+> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3b: relocation to !ENDBR=
+: machine_kexec_prepare+0x810
+>
+> That one's a total mystery to me. I guess it's better to "fix" the SEV
+> one independently rather than waiting until I know how to fix them both.
+>
+> Note I also mentioned other similar errors in [0]. Those errors don't
+> exist in Linus' master and I didn't note down where I saw them. Either
+> they have since been fixed, or I observed them in Google's internal
+> codebase where they were instroduced downstream.
+>
+> Changes in v3:
+> - Also fix __kcsan_{dis,en}able_current()
+> - Link to v2: https://lore.kernel.org/r/20251215-gcov-inline-noinstr-v2-0=
+-6f100b94fa99@google.com
 
-Note that this file already disables __SANITIZE_ADDRESS__ and
-__SANITIZE_THREAD__, thus calls like kasan_check_write() ought to be
-nops regardless of GCOV. This has been fixed in other patches. However,
-to avoid any other accidental instrumentation showing up, (and since, in
-principle GCOV is instrumentation and hence should be disabled for
-noinstr code anyway), disable GCOV overall as well.
+Acked-by: Marco Elver <elver@google.com>
 
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- arch/x86/coco/sev/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Makefile
-index 3b8ae214a6a64de6bb208eb3b7c8bf12007ccc2c..b2e9ec2f69014fa3507d40c6c266f1b74d634fcb 100644
---- a/arch/x86/coco/sev/Makefile
-+++ b/arch/x86/coco/sev/Makefile
-@@ -8,3 +8,5 @@ UBSAN_SANITIZE_noinstr.o	:= n
- # GCC may fail to respect __no_sanitize_address or __no_kcsan when inlining
- KASAN_SANITIZE_noinstr.o	:= n
- KCSAN_SANITIZE_noinstr.o	:= n
-+
-+GCOV_PROFILE_noinstr.o		:= n
-
--- 
-2.50.1
-
+Thanks!
