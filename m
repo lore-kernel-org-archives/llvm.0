@@ -1,119 +1,124 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CA0358D2C;
-	Tue, 16 Dec 2025 13:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F5F33A9F0
+	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 14:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765892510; cv=none; b=FZgHWS0fmuCHczt2g2BXfjki5owoDdCVOn/6qUf3S1vS0y9XQMzYj8WrXeokfjX1lr4Re1ZnO6iFJSlVE8RKm+wE4tQq9avHBe59aHKUG0qkS9zF0Qkpe4kdNZIxqlz121RRpjWeKne+uqcyAY7ti8i8Y5fSITmXGLSw740mxs4=
+	t=1765896118; cv=none; b=sEd4scwpjLDRmVLKhaAhgDbr/L6smxakFevVT4suTnCB6pCMFGJxs6pZV0oMgKtb0B6pLF8OfzyJqcJxDDGJKtjP967QCoO+a4RFJI412t6hxK7n+qzQdbcizUVZdsGZUVrYulZFVoPB90+1G1zbXe4yb0UR2BuZMU7CaklgimE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765892510; c=relaxed/simple;
-	bh=gWLCD3iBOBUmWuAt+1zM67Tkj23VTvcGTN7S+MGr/ks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RPqecn0gUX9gVyVjHQzMB3U73teEXvOKockdNz+bVfX3ydDGMM1FJI807xGmQ6IepzO8XLjgtkJdyD3ox4DXJ+qz4xXjh0hofU1GVuoK9vgWibuNjgmkjGab6Cl5JAL7a6IjAIEI8m/nPO6ckdntPrOB7bWxSvGtz9zQIbvJc1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dMWulvkE; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1765896118; c=relaxed/simple;
+	bh=GcmsVh81EPRglScizk3u6c6zc0imNsEO8zBP3X7zTI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pWkfrlxgw2AcPhODXHlVgMHS3nUwzFeJAnkHMuV9gt4lqNO1fTxhDWrpT2UyxaPlKPCEhfd2SLQnIB9Dsm6EywctLi/I5l/rrYXtZrkljDS8F2Ae4CeFDvtGAfYPlrCCjpISp5+uGzFYR8lmJ7vN8EEpHlzrQCUyL5FeHaIAmUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hwRQVC1A; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dMWulvkE"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=3682UGOf9mvj955UPR/gJlxWjdDq8XctSWFz2A093u0=; b=dMWulvkEtlHRfwLzo+fiUy1Rul
-	jjpm7Nh2E3i0jPKr9HMflOZdHLmzPwGROrRfy+9DA6rqyFyOwg/sOMcHP7z1I0KSJNIkPWJ2wBtvb
-	Ab5EX9vtW7XFPbI4t8avQsSZnbwYHlc3xLHwv/1NtPJCLFIMM2yoqbJX0EIdSz3yYrDjgMHG9FMBZ
-	xuG4HBparMxFnq8+KjCFyLlfRplAa3ifZIAEXjq5tFbyaU1w/zO0idGO9PQS93MnJhQKxuk3vQX6n
-	NUXzHndpgSJ6+YIVw3RTr17Z6URMVucWjRkhg5YJiyV6sn66SBQExl7rk/IIt4FKVR/iMv9woMrvX
-	bcL7MGng==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vVVIn-00000003LNo-2njp;
-	Tue, 16 Dec 2025 13:41:21 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0582B30029E; Tue, 16 Dec 2025 14:41:20 +0100 (CET)
-Date: Tue, 16 Dec 2025 14:41:19 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Chris Li <sparse@chrisli.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org
-Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context
- analysis
-Message-ID: <20251216134119.GU3707837@noisy.programming.kicks-ass.net>
-References: <20251120145835.3833031-2-elver@google.com>
- <20251120151033.3840508-7-elver@google.com>
- <20251211121659.GH3911114@noisy.programming.kicks-ass.net>
- <CANpmjNOmAYFj518rH0FdPp=cqK8EeKEgh1ok_zFUwHU5Fu92=w@mail.gmail.com>
- <20251212094352.GL3911114@noisy.programming.kicks-ass.net>
- <CANpmjNP=s33L6LgYWHygEuLtWTq-s2n4yFDvvGcF3HjbGH+hqw@mail.gmail.com>
- <20251212110928.GP3911114@noisy.programming.kicks-ass.net>
- <aUAPbFJSv0alh_ix@elver.google.com>
- <20251216123211.GT3707837@noisy.programming.kicks-ass.net>
- <aUFdRzx1dxRx1Uqa@elver.google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwRQVC1A"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b7355f6ef12so905547266b.3
+        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 06:41:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765896115; x=1766500915; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aKhhZCZ5BMNvuKBSscW4xFg80GIsuJjSxZdB89waxC8=;
+        b=hwRQVC1AX7Gmfv3PvV8ZwvzO3Xot5xcpVHWb4K6lox8jxn1Z3TiaRuKxR3R8Pl/7iW
+         JyZwqv3wVmdHniPkk/GqqaUtny93ZUyF3PreWDJeJ8VdixWFyZ64ydq20WZ/JimaGpd5
+         cW6q4xQypy0a+hYNqCgdWrrX9sHNS3Su3VTWsqxYyPkWydQP2VNv/btWvDZMpVnqlllU
+         vz3RJp4sNC0/7Jp5q3htD62Qg1F9xfitLafiPWGZZhCBmwSgO9XIppMkdtLpGSBdGh5U
+         eDWEY6Eg8wH+eIiQMvwaKsJc+hnqNuHtFjekSa0Q01loJPWR2Fah2USZMW52Bz1Uhcbt
+         GbjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765896115; x=1766500915;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aKhhZCZ5BMNvuKBSscW4xFg80GIsuJjSxZdB89waxC8=;
+        b=I+tVQYjfyVqVprSOXhhEnbIeR3X+5sG3Ky5olEm6f/0D3DDc1zcC5kypRI7/4hBgZO
+         YwaSJ+cLvAawgHIqFGTa/y/wzmWsRQwYb6Lnu2PeCsvaumMZapIa9znrcI7vIi4EgKKv
+         CNMU+n0KPez8x/mff8prA3UKet96OwyRrDO/1ja9xEIY2VIxlWHw46MbHylvk/ivEyjm
+         6Q9w5o8fnlcIXMAnhBTy5WTz9hLGGnNuINFRhzRpEUutjua+MOnIS576RZwabBbcHLIm
+         WTYHOXH7+2TMyVxMbz6genMqCzYhauy1k9uAuV7bQZJONBGyS10E8AH5hqlvnEVmP3ZC
+         clNg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5XY/4rbV6ivdgGXAaBxFvezrG2TOAMHF5a3lDKv8BMeoYW1Eo3Ekijk7oL72RUk2Kf0aC@lists.linux.dev
+X-Gm-Message-State: AOJu0YxH4amxoj0NVuHkCRsxwLiXMC6HTV9TWKEqskoqNVdJZ3THI7i4
+	31LZ3G7m/uCQW6RAh6Ch8SoyGx5NDYxWh/YmiBVZNnXWKg7nvR/gHFnH
+X-Gm-Gg: AY/fxX5p5t8qKl+IVWcqtl1oqQEdcG8YWHckWd4Yx0yjH0jm+EF/iDKg7jN768IZLaL
+	G6H6W6icB2GYAXNyHhF0dLavVoI5Qq1wDcPKc4XbwWr/epalwCRVTGwfYAIeYRhydLTFkPAaM/X
+	yzxjFdZnYBRz9Opadlu2LThxLdDHypzxVeeQ+rLw7C+0OySuMI8gA34Ilvnmstd8jcaE+CHVsHF
+	8VRxi3mCkK+lUEUunYRZtkEJavZYhngHGCn+Gj7+F5qO1g2KmlCPZtUqSFm1zg39kjOFff4a3Ex
+	+nUqc7fEN4HAvz2x9dEdr3EIsgUibiH9oBJ4pT3A6fJ1Zsf75gYCQuTVbmgegWFs++RTu0a5OV+
+	SMUFPv6yX4d0ub2jAlcesyLqgoQJrxZ5R8x9ycksTEEymQoLrPyj1kpsTYs3VnE9HlXbwGxwDrH
+	jH9h2iPJ2FVtb6TsaU+lK5SUQ=
+X-Google-Smtp-Source: AGHT+IG2eeJsem6ZFRGiTw+NwisDAZ+3SHIeXNcmnaxykLecsCuhc1aufmqpuqSo8Y4ftNwLIvjHPA==
+X-Received: by 2002:a17:906:4fc8:b0:b79:f984:1557 with SMTP id a640c23a62f3a-b7d23c5bf6fmr1614360966b.46.1765896114506;
+        Tue, 16 Dec 2025 06:41:54 -0800 (PST)
+Received: from [10.27.99.142] ([193.170.124.198])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7cfa2ebaebsm1717413666b.21.2025.12.16.06.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Dec 2025 06:41:54 -0800 (PST)
+Message-ID: <0705db10-3cbb-4958-a116-112457f9af6c@gmail.com>
+Date: Tue, 16 Dec 2025 15:41:52 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aUFdRzx1dxRx1Uqa@elver.google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: ARMv7 Linux + Rust doesn't boot when compiling with only LLVM=1
+To: Rudraksha Gupta <guptarud@gmail.com>, stable@vger.kernel.org,
+ regressions@lists.linux.dev, rust-for-linux@vger.kernel.org,
+ Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Danilo Krummrich <dakr@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>
+References: <1286af8e-f908-45db-af7c-d9c5d592abfd@gmail.com>
+Content-Language: en-US, de-DE
+From: Christian Schrefl <chrisi.schrefl@gmail.com>
+In-Reply-To: <1286af8e-f908-45db-af7c-d9c5d592abfd@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 16, 2025 at 02:23:19PM +0100, Marco Elver wrote:
-
-> > Also, why do we need this second variable with cleanup; can't the
-> > existing __scoped_seqlock_cleanup() get the __releases_shared()
-> > attribute?
+On 12/14/25 12:54 AM, Rudraksha Gupta wrote:
+> Hello all,
 > 
-> The existing __scoped_seqlock_cleanup() receives &_s (struct ss_tmp *),
-> and we can't refer to the _seqlock from __scoped_seqlock_cleanup(). Even
-> if I create a member seqlock_t* ss_tmp::seqlock and initialize it with
-> _seqlock, the compiler can't track that the member would be an alias of
-> _seqlock. The function __scoped_seqlock_next() does receive _seqlock to
-> effectively release it executes for every loop, so there'd be a "lock
-> imbalance" in the compiler's eyes.
 > 
-> So having the direct alias (even if we cast it to make it work in the
-> single-statement multi-definition, the compiler doesn't care) is
-> required for it to work.
+> I have the following problem: https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2635
+> 
+> 
+> In short, what is happening is the following:
+> 
+> 
+> - The kernel boots and outputs via UART when I build the kernel with the following:
+> 
+> make LLVM=1 ARCH="$arm" CC="${CC:-gcc}"
+> 
+> 
+> - The kernel doesn't boot and there is no output via UART when I build the kernel with the following:
+> 
+> make LLVM=1 ARCH="$arm"
+> 
+> 
+> The only difference being: CC="${CC:-gcc}". Is this expected? I think this was present in the Linux kernel ever since Rust was enabled for ARMv7, and I never encountered it because postmarketOS was originally building the first way.
 
-Right -- it just clicked while I was walking outside. Without actual
-inlining it cannot see through the constructor and track the variable :/
 
-OK, let me stare at this more.
+I've managed to the get the build setup for qemu-armv7. For some reason
+I could not get past the initrd even on kernels that are supposed to work,
+but I think that is unrelated (and not a kernel issue).
+On the linux-next kernel I didn't get any output on the console from qemu so I
+think I've reproduced the issue. Changing CONFIG_RUST=n did not change the behavior.
+
+So I this is almost certainly a LLVM/clang issue and not a Rust issue. I'll try to
+do a bit more digging, but I'm not sure how much I'll get done.
+
+Adding the LLVM and ARM lists to this conversation.
+
+Cheers,
+Christian
