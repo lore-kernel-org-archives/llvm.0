@@ -1,65 +1,65 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082D4EAE7
-	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 13:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1C7354ACC
+	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 13:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765891413; cv=none; b=lm4J03K1tFDcdk6s80sr1klBhEvKZ09m44bE+qhgjTCKMp3/khu+YvjDrvBU4ofvT6GqOvehB8KopfLxjxTKDglxNhgzFEneTTJMGUYAOF811cdixP9ZT9Y8/2D/IaxWQPmNvLCAjwn89OHO/IIL1ukfDfIxgmFkvwiokSX49Sw=
+	t=1765891601; cv=none; b=FnliS6qKkVwW/XpS4mjG6WkwGLSEN0cRXRDrk8WPMbcXhB3F6EwXJfsFQ/PRZcqzI6pXyOFivzmszMebrlFWeWuiwjwqCubHK101KjuW8L6MqSW6u2osS7V1xYpS4WVRLqC8VxHBcK3IHr6xVC5gEuOxZEnJcj4i8RazEZHtfCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765891413; c=relaxed/simple;
-	bh=QV+61qVpdqsPiaPbfd08qHh+TzoR572QyzT9O2x4KLc=;
+	s=arc-20240116; t=1765891601; c=relaxed/simple;
+	bh=XzSmUQ9wBuoAsnnswWznp0kvFEGZQ0Tj3+vUePVVnwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KdcB9wlK++lAxme9QKkaF2v+TsyX7Wai+eXBgt3MqqMLpabBmnSR0c5u760uuR7oaWsg5E9Zp1guStVLWwuf9Cr36ziLROvBeX22V1sB1sjCX6GxNQvS9ApB2FfWh2AEBpiLeI03ps70GS1FlAI54EnxwZRC8zoulo0kAw/emPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jpCG435+; arc=none smtp.client-ip=209.85.128.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=fB19PfZElyXQQihGLPd7tZ6Uh0iYXkSRg2imYOIK3jOi1a+17qGPDKXmAhems2Dk6pEGmGh+d6PsIxRXXtbmG/P0iixKT7DkzvDEafc/Dx7enFZtjBuP7Qzg/GjBZp1yhz1/i/N/Bs7Tf3TCG4ds0rVtNmAgpzDKkJpTStl32No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eov207vj; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jpCG435+"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477bf34f5f5so34810275e9.0
-        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 05:23:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eov207vj"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-647a3bca834so6943877a12.2
+        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 05:26:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765891409; x=1766496209; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1765891597; x=1766496397; darn=lists.linux.dev;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uDxfhRBysj2yPZBzYVVRhpxcjKV0qpQrPWWhDK3SHYM=;
-        b=jpCG435+frHC6rCHCAORx6CV4dmvgGe13/iQFZ/XDkjFU2/4+mqoZEAhXzFuEGw24q
-         knVIZ/6i8Jz7kmxO8Ks7jKqM6CnDrvQo8jSK158Q1RC+ipLtgGzDt8ZKsNm2J9IeWdRd
-         K4cbcHWUDcvxuUeJPpV15tM/6+JNnS0A8BFUM8K7F65pYfq/f6q1QW7fezSnwieR+fx1
-         617u+AxjmLyb9CzbJfpQpMjsyYk2UGfV0NhriustcCRE3iTuPQTRmte2dp9Iy/pz5HM2
-         Ig0dQlqelrIAun3E4MCrTAgnki+ZY+7lT/Q5Cid6UMUsIIccIm1ZgYAxD8sdCGOFr8/j
-         J+LA==
+        bh=3V/ozmG0P6zbhJMhekfGn6dV/6uy4a54Tyfq8of8mrw=;
+        b=eov207vj9ShPbENsAjiYWEcXXWGw1WeKfMTmbIhCXqSKfBfaLWD6Fk5NhtW3c4x7c7
+         eRDgILTUGPNh65mwBXkAqDn78vCySqHh2ezQHhMc6hC+zGkmJiR+wfiUbdr26N8kwsE4
+         0INJ5T6VrYj7oxZCgiqMgFC1qEcZGWP01SfH9iUZmdzs8vUB/Xu9kB6bZ1TdFhnbsCwZ
+         ReEKelyBG5zBURBD+zmPiCfJyGGPnIG+65AybgMgcG6oBcT0XjkeW803EeT7iRcQo6Ey
+         P+XwMmxRSh5r48i6KN28tPgA1BmSz3EYtwjp/7E0PYojSoedgDAkKBxsTkiS8cu1kLbW
+         KXVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765891409; x=1766496209;
+        d=1e100.net; s=20230601; t=1765891597; x=1766496397;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=uDxfhRBysj2yPZBzYVVRhpxcjKV0qpQrPWWhDK3SHYM=;
-        b=dhgIxzlXm5AzocJ/LgorWnG7tf7mUSwl1LnLTl8Kmj3pRT4lSICTiOro5+d1l44ULp
-         uVpo0L1UMB5jK7K5s6uKpl79lnSRB9BEvDOUZkJA3ZDBh9jPMtpIMzgbO1taJ7ujbkPb
-         LvSjiiamTWVhi7uGs543ZMPLgA/JeLxD2Ocoxq06+Jm+xNtM/SZ3f/UxAaJ3jmFS4EIT
-         2TCRS4rga/0V6jOIQa1T6eD4VvYiLnyjoH7dxdMlhR8EJdBL/GErmGJS/y/j9Is9W81W
-         5qeyMef1KCc/QULeo2ODz6C3P5QMSu3T2QJ/fNOd/8YcP02SDnwzA+wUigNDNq2LsN46
-         jl8A==
-X-Forwarded-Encrypted: i=1; AJvYcCW348ADH5OAHNBIXpTtimDu1W2R1XS7iHz9uf1Wmk1CEpW4kPpIMoWbUUVTdqxNmlwJPuh9@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw6rIC4kUdoVravuw8eNiU9teOv2WOHlNDoBLFYPbV/WAXAgmTz
-	CFWfYN+x4+4o/DfNl/gmOJuKHUnLHI5KU29WcVEKrhs0SvrDV137HSSFVdkCF1BnWg==
-X-Gm-Gg: AY/fxX6NJ/e8x5KT7CujUId+O8GYMPnZ+YBswFMPNUIemw7+O+bnyGOyuCXLRsXM6+s
-	FKowPt6LgjVg2pj19SgEUKvd33g/qYcJQUwt8rNooyhLOO97HSnJLK/g+rWr1K9jSOvlm/xyNc5
-	Vvmv0uTittASJJA0IKwGTeo8vsgVLRXtTthItjzQf0MrBNOEMrtvREwf0GyFKVxGeZKk8E1nmoD
-	6ZflTlxRAbI0Oj5r2z3D9FQniXTgpsZK74fCYSkMciBCegL0uh/NSKXZ4ys5vOj/AnH2R4RspTS
-	W2pJsINnHUFtan0lNhY748oTPDZp8aeBmcZeJbVS9YVEmwg+qXpWXb0ZF9lDg+fxKgExNukEf3h
-	Gof2PfJVCrs+fCuhL+Oly+a116P3ICCxOgaTXlhwO+uGFdqGdSDKKi6xWbE1aeCWAl/0q1nSgQr
-	aqLljj2l9/7Kcr5tHw3SPzlImcCYGGZKPu5KGrFHrJvTevdP5N
-X-Google-Smtp-Source: AGHT+IHeQgMekTiUSXYyDxvkGceEMaJToW+cfsdKtACjSuXcP89Hj1YmnWwqaTNfU+el5KGHlOYfZQ==
-X-Received: by 2002:a05:600c:4f90:b0:477:6d96:b3e5 with SMTP id 5b1f17b1804b1-47a8f8ab02bmr133331835e9.7.1765891408469;
-        Tue, 16 Dec 2025 05:23:28 -0800 (PST)
+        bh=3V/ozmG0P6zbhJMhekfGn6dV/6uy4a54Tyfq8of8mrw=;
+        b=hNTieQq4lBVZ5KQVvVa7OIZYkn9xXsg4imUlf/W/BH1ZCB2vFRVXkGR+W5ZP7nQS+6
+         GlYFTTZRw4HInQYSAZs6dNEp7lHa7Y2Lidj11qEmQdc9GQkbPPAyY3Xw5Pf/ni5tCaDq
+         uUKID4UGaPpIyCc8JNp0s22vVbzqpn8/EN9GZNpxSjeXGXyeMXN09blJiWDMJfrpotLY
+         4KwdGXN4Adj3C14Sg55gPOaqBGYCZ1PBM0zhZMNTWOtNfPg+vh4tg68bbl4iJfSIH1qN
+         Z/Pfx7wiZQ+0f2b71B7mc5W+HooqE8irenHNC9Ex3miPpmviuTJF5cyG0IOV6MRPJ3bT
+         dykg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5xEQALaslQF2e/4tdhNjk+osBE45g/APIqKxsjWY1sD9Wos7FYEl8CQuHdaPpCgWN17Ig@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx2v/XzCl1MinwMs0Srte3OCKLLxvNs5kVTuM9uzMPpiuugIilP
+	qvvkU13wohBlH5gIb5UzjjH5w+N/6aQ4w5J/45Brm2NO+FmACcJ4Ly8dgvG6c9LH/w==
+X-Gm-Gg: AY/fxX7rQBkclQtBwNHGxa9B8+hjXrWezdQefBRgB/EraJm40Qb5xPpPgaaWCSf4xkJ
+	YCgvjwmcD40bzenRP18tp9tbz5ukv4PLjuJOkkcXa/CFOlvQ9y/m9fiRt7RpciHNjVaSceSGo5e
+	VL4tGRTr4iyAF8nlEP5odv5FgHJtwioOw6SNHOXAUlgcYWcaAoyg/wg4PwgrdozSuE/saQNEEnW
+	/I/fS8C6MdZz8TU6DPxnDV/7nL6HGejsqZwHtLDFv9ve2W3bKAHq7o7G6WxpC/LTvqVD6O3HBPc
+	aYzyfqoiZ+C4cTdLCmnpunbpw5c9ZyIiWCXypP5DhpyiZFmVMt2tCHAYGdYBZZN1NAKRWziIeWc
+	mqc3XDqRAB95BUzM2+8onwVnYRJ1gBc+zkqSxsYJwMtzbnM1l+cwPd6UWCocPFDaxAzPkE9mxPk
+	IOi4nabzU/aUcnDYqZgWPW8MbP9GosHgqy7vlpWJDFXEU9w1Ez
+X-Google-Smtp-Source: AGHT+IEXN8c4l2W138SpFxaraGM3jOuuGwcwQYafzXlaDOwN/Hd+sEz4uwdMcyiAnZ9D77N2tR3XDg==
+X-Received: by 2002:a17:907:72c7:b0:b6d:9bab:a7ba with SMTP id a640c23a62f3a-b7d23a97591mr1453601666b.42.1765891597176;
+        Tue, 16 Dec 2025 05:26:37 -0800 (PST)
 Received: from elver.google.com ([2a00:79e0:2834:9:ea4c:b2a8:24a4:9ce9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47bd8f86b83sm10764215e9.2.2025.12.16.05.23.25
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7cfa5d0b0dsm1693444566b.67.2025.12.16.05.26.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 05:23:27 -0800 (PST)
-Date: Tue, 16 Dec 2025 14:23:19 +0100
+        Tue, 16 Dec 2025 05:26:36 -0800 (PST)
+Date: Tue, 16 Dec 2025 14:26:28 +0100
 From: Marco Elver <elver@google.com>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
@@ -101,7 +101,7 @@ Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
 	llvm@lists.linux.dev, rcu@vger.kernel.org
 Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context
  analysis
-Message-ID: <aUFdRzx1dxRx1Uqa@elver.google.com>
+Message-ID: <aUFeBHuBJr-Y512D@elver.google.com>
 References: <20251120145835.3833031-2-elver@google.com>
  <20251120151033.3840508-7-elver@google.com>
  <20251211121659.GH3911114@noisy.programming.kicks-ass.net>
@@ -110,7 +110,8 @@ References: <20251120145835.3833031-2-elver@google.com>
  <CANpmjNP=s33L6LgYWHygEuLtWTq-s2n4yFDvvGcF3HjbGH+hqw@mail.gmail.com>
  <20251212110928.GP3911114@noisy.programming.kicks-ass.net>
  <aUAPbFJSv0alh_ix@elver.google.com>
- <20251216123211.GT3707837@noisy.programming.kicks-ass.net>
+ <CANpmjNNm-kbTw46Wh1BJudynHOeLn-Oxew8VuAnCppvV_WtyBw@mail.gmail.com>
+ <20251216122359.GS3707837@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -119,80 +120,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251216123211.GT3707837@noisy.programming.kicks-ass.net>
+In-Reply-To: <20251216122359.GS3707837@noisy.programming.kicks-ass.net>
 User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Tue, Dec 16, 2025 at 01:32PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 15, 2025 at 02:38:52PM +0100, Marco Elver wrote:
+On Tue, Dec 16, 2025 at 01:23PM +0100, Peter Zijlstra wrote:
+> On Mon, Dec 15, 2025 at 04:53:18PM +0100, Marco Elver wrote:
+> > One observation from the rebase: Generally synchronization primitives
+> > do not change much and the annotations are relatively stable, but e.g.
+> > RCU & sched (latter is optional and depends on the sched-enablement
+> > patch) receive disproportionally more changes, and while new
+> > annotations required for v6.19-rc1 were trivial, it does require
+> > compiling with a Clang version that does produce the warnings to
+> > notice.
 > 
-> > Working on rebasing this to v6.19-rc1 and saw this new scoped seqlock
-> > abstraction. For that one I was able to make it work like I thought we
-> > could (below). Some awkwardness is required to make it work in
-> > for-loops, which only let you define variables with the same type.
+> I have:
 > 
-> > 
-> > diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-> > index b5563dc83aba..5162962b4b26 100644
-> > --- a/include/linux/seqlock.h
-> > +++ b/include/linux/seqlock.h
-> > @@ -1249,6 +1249,7 @@ struct ss_tmp {
-> >  };
-> >  
-> >  static __always_inline void __scoped_seqlock_cleanup(struct ss_tmp *sst)
-> > +	__no_context_analysis
-> >  {
-> >  	if (sst->lock)
-> >  		spin_unlock(sst->lock);
-> > @@ -1278,6 +1279,7 @@ extern void __scoped_seqlock_bug(void);
-> >  
-> >  static __always_inline void
-> >  __scoped_seqlock_next(struct ss_tmp *sst, seqlock_t *lock, enum ss_state target)
-> > +	__no_context_analysis
-> >  {
-> >  	switch (sst->state) {
-> >  	case ss_done:
-> > @@ -1320,9 +1322,18 @@ __scoped_seqlock_next(struct ss_tmp *sst, seqlock_t *lock, enum ss_state target)
-> >  	}
-> >  }
-> >  
-> > +/*
-> > + * Context analysis helper to release seqlock at the end of the for-scope; the
-> > + * alias analysis of the compiler will recognize that the pointer @s is is an
-> > + * alias to @_seqlock passed to read_seqbegin(_seqlock) below.
-> > + */
-> > +static __always_inline void __scoped_seqlock_cleanup_ctx(struct ss_tmp **s)
-> > +	__releases_shared(*((seqlock_t **)s)) __no_context_analysis {}
-> > +
-> >  #define __scoped_seqlock_read(_seqlock, _target, _s)			\
-> >  	for (struct ss_tmp _s __cleanup(__scoped_seqlock_cleanup) =	\
-> > -	     { .state = ss_lockless, .data = read_seqbegin(_seqlock) };	\
-> > +	     { .state = ss_lockless, .data = read_seqbegin(_seqlock) }, \
-> > +	     *__UNIQUE_ID(ctx) __cleanup(__scoped_seqlock_cleanup_ctx) = (struct ss_tmp *)_seqlock; \
-> >  	     _s.state != ss_done;					\
-> >  	     __scoped_seqlock_next(&_s, _seqlock, _target))
-> >  
+> Debian clang version 22.0.0 (++20251023025710+3f47a7be1ae6-1~exp5)
 > 
-> I am ever so confused.. where is the __acquire_shared(), in read_seqbegin() ?
+> I've not tried if that is new enough.
 
-Ah this is just a diff on top of this v4 series. The read_seqbegin()
-already had it:
+That's new enough - it's after
+https://github.com/llvm/llvm-project/commit/7ccb5c08f0685d4787f12c3224a72f0650c5865e
+which is the minimum required version.
 
-	static inline unsigned read_seqbegin(const seqlock_t *sl)
-		__acquires_shared(sl) __no_context_analysis
-	{
-
-> Also, why do we need this second variable with cleanup; can't the
-> existing __scoped_seqlock_cleanup() get the __releases_shared()
-> attribute?
-
-The existing __scoped_seqlock_cleanup() receives &_s (struct ss_tmp *),
-and we can't refer to the _seqlock from __scoped_seqlock_cleanup(). Even
-if I create a member seqlock_t* ss_tmp::seqlock and initialize it with
-_seqlock, the compiler can't track that the member would be an alias of
-_seqlock. The function __scoped_seqlock_next() does receive _seqlock to
-effectively release it executes for every loop, so there'd be a "lock
-imbalance" in the compiler's eyes.
-
-So having the direct alias (even if we cast it to make it work in the
-single-statement multi-definition, the compiler doesn't care) is
-required for it to work.
+> > While Clang 22-dev is being tested on CI, I doubt maintainers already
+> > use it, so it's possible we'll see some late warnings due to missing
+> > annotations when things hit -next. This might be an acceptable churn
+> > cost, if we think the outcome is worthwhile. Things should get better
+> > when Clang 22 is released properly, but until then things might be a
+> > little bumpy if there are large changes across the core
+> > synchronization primitives.
+> 
+> Yeah, we'll see how bad it gets, we can always disable it for
+> COMPILE_TEST or so for a while.
