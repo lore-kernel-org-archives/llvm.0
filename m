@@ -1,111 +1,128 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC05A1D9A54
-	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 20:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6973427E05E;
+	Tue, 16 Dec 2025 21:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765917723; cv=none; b=NXqkhBcVWILwtmdlO10VWUdlbmKDbjH3LXu6PokmUmKrfZJBnJoz9IgAXoaDmCPdFHtd5ZrOSKWwEbPvdQ85CLvpaTckPACYDktbnvXw2Iek4HfDkgy/uNF3uYvHttOaLHFLmWvmC+slh9/W+ZLg+Xjl5LB40Ulv3IhWS5Cgy9w=
+	t=1765919105; cv=none; b=qmYwq6xYRQfGGrZkYMKjz+Ez1i2+MOp7KF4tCScoGPH6Aw/TV9YXUGHhhW9OMC2suVGV3/W93iplX4vk0MWZhnmCQP3O7zFN9UjnA9rFyMhydWO+yO4G9Nk0hhHi6UgAtVkWa8HKAoTKdfyacu5temjzSt/85lXZy1JSFG/d3Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765917723; c=relaxed/simple;
-	bh=kYRZPQVIXaPZPvBqjFrVHSe3OQvXSms9kx6HAz+Sc6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RKQwBXfyH3OMl7yL+T8kNVCfDJTXt88a8hMYxOkg5IZI+XRuen7iRG2nGvWC8nP0KYug1dvbOUNIKnFcMAE/3UUPHn1z8b+R5AjZ9jDQO770EVk6baFFeIpDfQ3TU916Ai2dG2FMxUv3/riczipYe2zi3uqvS5TBFyt/CNZfnE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EOSBR9jD; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1765919105; c=relaxed/simple;
+	bh=m50UoVC8/9fEAe/1Qu+odA8aoUz1wiOqahaoXpJBqnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vnk1LcrMUGTX4SjHwTcSwM48yO0uGU19wyOyBKSJj7VCuw6Cr7b9f9+Gh/tGZUXmnbUcJDDbC1CkE7XQspxxceVzttRvGDVDKBzywI+dWImJSH6DxB5J6HRyKcmv+YYN8d/R1vaMjhMwnHiPq3xVJGg3u6VeUqaPauThIU7nnS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H/f3NFlb; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EOSBR9jD"
-Message-ID: <cecb6351-ea9a-4f8a-863a-82c9ef02f012@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765917714;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NI/FBGNehU9YUSYgyB/T6XjjzQJetB/bgxtbGtuRsyA=;
-	b=EOSBR9jDAYi3b1D0UmXpcjapzKWvFni01k2gkpJj7cMWZ5nKYil9hpl5OoaBz8zFEiJ6Pu
-	FficCWLudBTHev9OhiQRCHRtdJD0My8wh2lpkccQ+0NAJGbkW5zDVSrXoMQJPlKnCJqNIp
-	mQpWb8uvFo6YjSIG5D406m+IA6x0XIg=
-Date: Tue, 16 Dec 2025 12:41:44 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H/f3NFlb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765919103; x=1797455103;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m50UoVC8/9fEAe/1Qu+odA8aoUz1wiOqahaoXpJBqnM=;
+  b=H/f3NFlbyNinyGJ/uoNgfIuNVRM9fCprFhnIoqy691fyyClaZxjSRUWF
+   ORhSM7I+POwE9tAfqb07DLIlb+zoLTIROPPe7cKTMSg3eKGct8tUc9Jld
+   x3D2dIq6cHdLZtEO8PiunUNLYjIiVKyknXty9K2/LfPxk4PIpPD72TPwV
+   ZYaoM1IzT0gqlQhfhZrfouM+yHMysC2Cc8cv0gGTzWLkvd+psuN2BvW50
+   rHs2Elr1JmgRupnV05LD+CJCujAvnUPqPQAqZfx+YwaowTS70bF7SieAN
+   5vBIKgABAXrCilx66kBHzQ6uWjvsGbR/yNZ4eky7uYe+t82nGdX2u6lWe
+   A==;
+X-CSE-ConnectionGUID: M9jNDETYS7GKuI1clv6ApA==
+X-CSE-MsgGUID: QKVDewBZTvSrWYm7V/K51g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11644"; a="85438743"
+X-IronPort-AV: E=Sophos;i="6.21,154,1763452800"; 
+   d="scan'208";a="85438743"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 13:05:03 -0800
+X-CSE-ConnectionGUID: n9rpxK+7Q7OtdcvYNcshRw==
+X-CSE-MsgGUID: VdcPtECHTj6qcd0QPMrIDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,154,1763452800"; 
+   d="scan'208";a="198605094"
+Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 16 Dec 2025 13:05:00 -0800
+Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vVcE6-000000003pI-0yvL;
+	Tue, 16 Dec 2025 21:04:58 +0000
+Date: Wed, 17 Dec 2025 05:04:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jan Dabros <jsd@semihalf.com>, Raag Jadav <raag.jadav@intel.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/6] i2c: designware: Combine the init functions
+Message-ID: <202512170400.UH367tpF-lkp@intel.com>
+References: <20251216131442.8464-5-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
- with raw binary output
-To: kernel test robot <lkp@intel.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alan Maguire <alan.maguire@oracle.com>, Donglin Peng <dolinux.peng@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
- dwarves@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org
-References: <20251127185242.3954132-5-ihor.solodrai@linux.dev>
- <202512061213.85NHVN2W-lkp@intel.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <202512061213.85NHVN2W-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251216131442.8464-5-heikki.krogerus@linux.intel.com>
 
-On 12/5/25 9:08 PM, kernel test robot wrote:
-> Hi Ihor,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/resolve_btfids-rename-object-btf-field-to-btf_path/20251128-025645
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20251127185242.3954132-5-ihor.solodrai%40linux.dev
-> patch subject: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update with raw binary output
-> config: arm64-randconfig-004-20251205 (https://download.01.org/0day-ci/archive/20251206/202512061213.85NHVN2W-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061213.85NHVN2W-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512061213.85NHVN2W-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: .tmp_vmlinux1.btf.o is incompatible with aarch64elf
-> 
+Hi Heikki,
 
-I was able to reproduce this error.
+kernel test robot noticed the following build errors:
 
-It happens only when cross-compiling with LLVM (which we don't do on
-BPF CI, btw) because of this line in gen-btf.sh:
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on next-20251216]
+[cannot apply to linus/master v6.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	echo "" | ${CC} -c -x c -o ${btf_data} -
+url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/i2c-designware-Remove-useless-driver-specific-option-for-I2C-target/20251216-213313
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20251216131442.8464-5-heikki.krogerus%40linux.intel.com
+patch subject: [PATCH v1 4/6] i2c: designware: Combine the init functions
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251217/202512170400.UH367tpF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251217/202512170400.UH367tpF-lkp@intel.com/reproduce)
 
-The purpose of this command is to produce an "empty" linkable ELF
-file. The .BTF section is objcopied into it, and then it's linked
-into the vmlinux.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512170400.UH367tpF-lkp@intel.com/
 
-Before the changes in this patch, the "empty" ELF was produced with
-objcopy --strip-all on .tmp_vmlinux1, which is a slower operation.
+All errors (new ones prefixed by >>):
 
-ld.lld fails, because ${CC} without the flags is just clang in this
-case, and it emits an ELF for host arch, which of course can't be
-linked. It can be fixed with:
+>> drivers/i2c/busses/i2c-designware-amdisp.c:166:13: error: no member named 'init' in 'struct dw_i2c_dev'
+     166 |         if (i_dev->init)
+         |             ~~~~~  ^
+   drivers/i2c/busses/i2c-designware-amdisp.c:167:10: error: no member named 'init' in 'struct dw_i2c_dev'
+     167 |                 i_dev->init(i_dev);
+         |                 ~~~~~  ^
+   2 errors generated.
 
-	echo "" | ${CC} ${CLANG_FLAGS} -c -x c -o ${btf_data} -
 
-${CLANG_FLAGS} contains a correct clang --target when cross-compiling.
+vim +166 drivers/i2c/busses/i2c-designware-amdisp.c
 
-I'll use this in the upcoming v4 of the series.
+d6263c468a761c Pratap Nirujogi 2025-04-24  156  
+d6263c468a761c Pratap Nirujogi 2025-04-24  157  static int amd_isp_dw_i2c_plat_runtime_resume(struct device *dev)
+d6263c468a761c Pratap Nirujogi 2025-04-24  158  {
+d6263c468a761c Pratap Nirujogi 2025-04-24  159  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+d6263c468a761c Pratap Nirujogi 2025-04-24  160  
+d6263c468a761c Pratap Nirujogi 2025-04-24  161  	if (!i_dev)
+d6263c468a761c Pratap Nirujogi 2025-04-24  162  		return -ENODEV;
+d6263c468a761c Pratap Nirujogi 2025-04-24  163  
+d6263c468a761c Pratap Nirujogi 2025-04-24  164  	if (!i_dev->shared_with_punit)
+d6263c468a761c Pratap Nirujogi 2025-04-24  165  		i2c_dw_prepare_clk(i_dev, true);
+d6263c468a761c Pratap Nirujogi 2025-04-24 @166  	if (i_dev->init)
+d6263c468a761c Pratap Nirujogi 2025-04-24  167  		i_dev->init(i_dev);
+d6263c468a761c Pratap Nirujogi 2025-04-24  168  
+d6263c468a761c Pratap Nirujogi 2025-04-24  169  	return 0;
+d6263c468a761c Pratap Nirujogi 2025-04-24  170  }
+d6263c468a761c Pratap Nirujogi 2025-04-24  171  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
