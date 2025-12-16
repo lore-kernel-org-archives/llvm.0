@@ -1,124 +1,189 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54E6359FA1
-	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 15:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053A3366DD5;
+	Tue, 16 Dec 2025 15:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765898183; cv=none; b=n5x2EKJcKwXt+lEuCK/oRMKRNKn8MDZCe8wvauA2D/1AQIEcZLkS8jezSMMrw9nRxTiCWQ6ALMiChx5+pRHblECfXBsiqSqDJEgfN1T/j5JslvWNgpQIzQPgppYn477XWGb/nj5gOqAidsQVyXycSHUaLnSHyCQFaTQUp0tftiQ=
+	t=1765898897; cv=none; b=PnyRyhDJKUqmpCitZAOjRcUu8S+nAyuZNJbegngFmY7aB1kHouuc2nMuvkkSCYwWofmd5P9564RbXYa6Lxxg82/wfv784xMBkD05MexJyPhUGMvK2N5nC6TkxnSmvz6/Q+dc/npSeqD4zwziRg00KP+2OJBTCM9Wj4hu1MMiCNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765898183; c=relaxed/simple;
-	bh=XydU0zYPi34+6gSjQxNPZvQ3IrEKTjskKmZnjkotDnA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=osAA7ZQfXvE1SSAp5Xyb82ghyWrrgN98UXiiiO0rm2CdvgIEKgdwYRwF2IT482G9xNJMSX7JfqI1JaoulD2nmQwipXx73pZ4SgWzkgEJcnROZAoDJgIf1vIn9NWZuQaEqKkSuduJFt7pARR8Xk0W48xKd44nTadPtngl1g87WE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QgUxIads; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765898897; c=relaxed/simple;
+	bh=sD65R5UGhCtay10P/5W+7TM+UmAjlbjVbXwRe2em6yA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IAdCwvg5BI+HCAJW75v8PVq1ZIWs9EGYu2FQFwn4/EUBL1+5FhmMcN6AgTUuwCMrTJ0DdRFkFQa3b+KNSAUfxxgNUVsX1JqzP/BFWlNmwhTs9AyXiXpLjNnIe2/33hxy4AZANZzb76KDapqkwbCOEM3wWfgIew3sIu2vW9s3jZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mD9XwJ3L; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QgUxIads"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a110548f10so4207435ad.1
-        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 07:16:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765898181; x=1766502981; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Prk++bNPBbw7llSvdyWuyKrdatVuaHMUXvtiIeDQebI=;
-        b=QgUxIads2TrBzccDXsBRGXf+sOdsHDqJTqM+wAb1+cUNhoxxNQQhwY1jZroUthNNlA
-         zJEC6ioFq47n539GP0GXmWqfXgauBp0VQUitOYYUuZcoov4AHCOQ08HGIv/6NGszCjID
-         d/ldOmVJfP6CFb1hX0zHtto7FYNfia4fzPwO1l7jRYI3f7EpMFq+qKQ64AI0QsIEZq39
-         b4DzFzGuBQloiZBJ/Blh9iG/TZsoCT9lB1ggAwdCQZVyS05BFoSAvJLhdf++ULvGcLuW
-         sVRJmez+cm9NAy+Q6hogN/8uCiIJI2JYJkB8MZQBM5MGUXWCXajcW0LjnOTzSu080QvI
-         CHwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765898181; x=1766502981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Prk++bNPBbw7llSvdyWuyKrdatVuaHMUXvtiIeDQebI=;
-        b=gmz+UO/86mH0xBwU/rLMuKr0p9Pk93eME8jg6KA/42dF5Kz5s8HuFqB5Q1ABt6P8ji
-         kZQBN7K9g/5q3Fc0PAD+oqZmGmWGfn/vkfJGvJj2SBgYLyazfd+0JD+JKhP8TtHs3JQN
-         ZaHrbD0h1BRRKR7E4dpOEOFovgJzXPRMMd9pk34aDpgX1J5F7ihokJ4GWa3VDjvCEKTt
-         lP3fOIdWujJQboGakTdMYKpjn4VkW9Tp8Q14c4TVo1Qn38ATduTXjmf5/4imCZNt4n0k
-         3hUnZ1D+BHphMOZp+koTAEKga2PtwBidLqFYyNnFV4UCofpIgaB9fHC1tYOCwj4SrESN
-         bVVg==
-X-Forwarded-Encrypted: i=1; AJvYcCUARY7BpFUKy4qh5TuiFOefK1D1stnzD7KDLRMzEiDNWaFzN0FjW8NSv47c+Zr2Ukie7FNT@lists.linux.dev
-X-Gm-Message-State: AOJu0YwVtqcy4HP/KM9KuOr9tSbOZd/OPD81oOykH19bGA6xiN3bRptP
-	yKrbX6dtKEwY2dWxULsRjcAOO8ilDVgBREH+upjPKAhJ10kSIX7XtaPauP4EuRXif4MsqVh1CRE
-	TUZa+RdB4Yl1RBASNIJzwTCcIgIxsf3g=
-X-Gm-Gg: AY/fxX4ffGvKD03v+70kBYiGEledbkWHEX4efQmZ58wVOOGKLz/y/K9RHIv8jmKd+7R
-	oHOu/lape190iPcjLaS2r5GBWdZKinKIiqaHbHMVSdF0Li58uQABtgMnMkvEklnC6odWYiw3OjC
-	3rCrVXKd4yTBJBEHVItXn15Uhu4LuVjXCt1kxSkB7hiJJI/dD5CTL7abkPEznN0aBcXf2Axa5OK
-	ryeYlRlT06wApO6ThuOIsqYCf8QyUrdiVJiUvNPtXmuZ/FXgjasAC6OZj8flS1A1eQNI8Ez
-X-Google-Smtp-Source: AGHT+IExL4bbWd8dGz3R1du6C5PQxAQFN3higbgXbHR2p3Vd8GWbSJj78l5nGqz1hyDQKAFC7gD/XLUbhsxrspplMLo=
-X-Received: by 2002:a05:7022:698f:b0:119:e56b:c3f1 with SMTP id
- a92af1059eb24-11f34bd3d6cmr7088129c88.1.1765898180806; Tue, 16 Dec 2025
- 07:16:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mD9XwJ3L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765898896; x=1797434896;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sD65R5UGhCtay10P/5W+7TM+UmAjlbjVbXwRe2em6yA=;
+  b=mD9XwJ3Lj01xTNoXj9cQpEmoILV6uN5IVsDZ9H8/DuoaYVgrTIO8qVJt
+   ngZUt5SxDHlXR6Rx3LtKPfDqQFZ0+bCLCfRgyZQlOLLyoBQZ0cJuFvpB2
+   t4H9aspp7UnO7b7qTnOQerWA0BVpabnR8s/BhkNowD5AJEGx4LAbdTjY3
+   Y+aaVsRNgc2dbeoj3QUlj9xa7EWzWgIpuMqoxLRUOohl8bfSuyy6cfRZS
+   0cPKPg/pk0g+C2MyHa0Vcu00/zSAGilLdIsVMGpIOY1RWSXZ9HBF7le9O
+   S/6wWbs/BPdJQfNwNPMhhbM9DTK+VTXfohGJSlawz8jMKSOhLVAX1hqnK
+   w==;
+X-CSE-ConnectionGUID: SsmC/G4jSricaLxoixMr8g==
+X-CSE-MsgGUID: kwIh/x5ERgeI/javikPVeQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11644"; a="79187678"
+X-IronPort-AV: E=Sophos;i="6.21,153,1763452800"; 
+   d="scan'208";a="79187678"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 07:28:15 -0800
+X-CSE-ConnectionGUID: 2xFsI/dBQXKE8DWUTEVNrg==
+X-CSE-MsgGUID: HIgAl8RFQHWXgAdjx3aUnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,153,1763452800"; 
+   d="scan'208";a="202458915"
+Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 16 Dec 2025 07:28:08 -0800
+Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vVWy6-000000003RG-37cv;
+	Tue, 16 Dec 2025 15:28:06 +0000
+Date: Tue, 16 Dec 2025 23:27:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryan Roberts <ryan.roberts@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Jeremy Linton <jeremy.linton@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] randomize_kstack: Unify random source across
+ arches
+Message-ID: <202512162320.WFgo042e-lkp@intel.com>
+References: <20251215163520.1144179-4-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251213-dml-dcn30-avoid-clang-frame-larger-than-v1-0-dd3d74b76a17@kernel.org>
-In-Reply-To: <20251213-dml-dcn30-avoid-clang-frame-larger-than-v1-0-dd3d74b76a17@kernel.org>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Tue, 16 Dec 2025 10:16:09 -0500
-X-Gm-Features: AQt7F2o9ouuY7f1i8nUGZF2nlb34bshqvLmZP02ymrNXjm02AX6gvFlIqpRP0n0
-Message-ID: <CADnq5_PLd_v9n=dHFmAdPcWY2NbbyCocOtE-9CoMX4D1H4sL+w@mail.gmail.com>
-Subject: Re: [PATCH 0/2] drm/amd/display: Address -Wframe-larger-than with clang-22
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Austin Zheng <austin.zheng@amd.com>, Jun Lei <jun.lei@amd.com>, 
-	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Rodrigo Siqueira <siqueira@igalia.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251215163520.1144179-4-ryan.roberts@arm.com>
 
-On Sat, Dec 13, 2025 at 6:04=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hi all,
->
-> This series addresses a new instance of -Wframe-larger-than in
-> drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c with
-> clang-22 (current main). This is similar to previous fixes that I have
-> done in other dml folders such as:
->
->   a3fef74b1d48 ("drm/amd/display: Reduce number of arguments of dml32_Cal=
-culatePrefetchSchedule()")
->   c4be0ac987f2 ("drm/amd/display: Reduce number of arguments of dml32_Cal=
-culateWatermarksMALLUseAndDRAMSpeedChangeSupport()")
->
-> This was done fairly mechanically, so let me know if there are any
-> issues, as it has only been build tested.
+Hi Ryan,
 
-I'll run the patches through CI and if they pass, I'll apply them.
+kernel test robot noticed the following build errors:
 
-Thanks!
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on akpm-mm/mm-everything linus/master v6.19-rc1 next-20251216]
+[cannot apply to kees/for-next/hardening kees/for-next/execve]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Alex
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/prandom-Convert-prandom_u32_state-to-__always_inline/20251216-013546
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20251215163520.1144179-4-ryan.roberts%40arm.com
+patch subject: [PATCH v2 3/3] randomize_kstack: Unify random source across arches
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251216/202512162320.WFgo042e-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512162320.WFgo042e-lkp@intel.com/reproduce)
 
->
-> ---
-> Nathan Chancellor (2):
->       drm/amd/display: Reduce number of arguments of dcn30's CalculatePre=
-fetchSchedule()
->       drm/amd/display: Reduce number of arguments of dcn30's CalculateWat=
-ermarksAndDRAMSpeedChangeSupport()
->
->  .../amd/display/dc/dml/dcn30/display_mode_vba_30.c | 545 ++++++---------=
-------
->  1 file changed, 139 insertions(+), 406 deletions(-)
-> ---
-> base-commit: f24e96d69f5b9eb0f3b9c49e53c385c50729edfd
-> change-id: 20251213-dml-dcn30-avoid-clang-frame-larger-than-36afd349190b
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512162320.WFgo042e-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/svm/svm.c:5509:1: error: redefinition of '__inittest'
+    5509 | module_init(svm_init)
+         | ^
+   include/linux/module.h:132:42: note: expanded from macro 'module_init'
+     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+   include/linux/randomize_kstack.h:86:1: note: previous definition is here
+      86 | late_initcall(random_kstack_init);
+         | ^
+   include/linux/module.h:125:28: note: expanded from macro 'late_initcall'
+     125 | #define late_initcall(fn)               module_init(fn)
+         |                                         ^
+   include/linux/module.h:132:42: note: expanded from macro 'module_init'
+     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+>> arch/x86/kvm/svm/svm.c:5509:1: error: redefinition of 'init_module'
+    5509 | module_init(svm_init)
+         | ^
+   include/linux/module.h:134:6: note: expanded from macro 'module_init'
+     134 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   include/linux/randomize_kstack.h:86:1: note: previous definition is here
+      86 | late_initcall(random_kstack_init);
+         | ^
+   include/linux/module.h:125:28: note: expanded from macro 'late_initcall'
+     125 | #define late_initcall(fn)               module_init(fn)
+         |                                         ^
+   include/linux/module.h:134:6: note: expanded from macro 'module_init'
+     134 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   2 errors generated.
+--
+>> drivers/misc/sgi-xp/xpc_main.c:1285:1: error: redefinition of '__inittest'
+    1285 | module_init(xpc_init);
+         | ^
+   include/linux/module.h:132:42: note: expanded from macro 'module_init'
+     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+   include/linux/randomize_kstack.h:86:1: note: previous definition is here
+      86 | late_initcall(random_kstack_init);
+         | ^
+   include/linux/module.h:125:28: note: expanded from macro 'late_initcall'
+     125 | #define late_initcall(fn)               module_init(fn)
+         |                                         ^
+   include/linux/module.h:132:42: note: expanded from macro 'module_init'
+     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+>> drivers/misc/sgi-xp/xpc_main.c:1285:1: error: redefinition of 'init_module'
+    1285 | module_init(xpc_init);
+         | ^
+   include/linux/module.h:134:6: note: expanded from macro 'module_init'
+     134 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   include/linux/randomize_kstack.h:86:1: note: previous definition is here
+      86 | late_initcall(random_kstack_init);
+         | ^
+   include/linux/module.h:125:28: note: expanded from macro 'late_initcall'
+     125 | #define late_initcall(fn)               module_init(fn)
+         |                                         ^
+   include/linux/module.h:134:6: note: expanded from macro 'module_init'
+     134 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   2 errors generated.
+
+
+vim +/__inittest +5509 arch/x86/kvm/svm/svm.c
+
+6aa8b732ca01c3d drivers/kvm/svm.c Avi Kivity 2006-12-10  5508  
+6aa8b732ca01c3d drivers/kvm/svm.c Avi Kivity 2006-12-10 @5509  module_init(svm_init)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
