@@ -1,184 +1,577 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C557433A9DB
-	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 15:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D77359704
+	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 15:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765900221; cv=none; b=GIxKEwFEO/cL/lxKX/HWE4kIHmbCYBX4BmT3nA+jAa7LGwH6xikjvlAXYJkYWPPK1ltBzFuqJ2q6gLWtuNns8YOryLetSy9NCgwJ3uq4R9j/VwmXqHb4AGhrCVgGJGqbNZfOFh8gm3AK7J/Cb14WKRl8SEEZfe2naFmlPQkYST0=
+	t=1765900681; cv=none; b=aE5StWhdV04TOO2KD5t8eEZd99HxWuJ3zc5wwk5UUxi88gcHe4RXI26lBdhFEY02x8uI8pUeIBS7597imAcELtnT4DURPuEMoUi8B3DTYaqcZoacVRwdOPR7xZPx8usSqYn2Gw2yzv5yhgrf3tmbiQMUQnxemrC1qL9vU7hxr1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765900221; c=relaxed/simple;
-	bh=/J6SJIgVFXi6M7XjQHV29kxITg2wGyGnqWzglUUHx6k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JTaabpar2mCJ99dW1pg9G8yyFDdK5MwCcZm2kTiiDZvlbzcaZjD+bWVPavyhdRhCMu3YqHSTpCZ4NP3LD7gu5XVg/cR0i+Y4+JDEBFI3PluhJKzEcnhxDfGxrJys54qvnsOLyEh8JYF582alxqo4FDoLZKk0SkTmuvuNu8CSqDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qd2sjHK3; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765900681; c=relaxed/simple;
+	bh=chQZ2LVEnswr/hULOSSa1bLHOWkGwRkKoPQ4wPGnFNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kXYg+91f5cc6b9gdBENr06r35xIySjY6BUcG+uuuxqqsxBe3yIHu+R7TT/d0WqL5aaImVUZ833Zf5wBSJaolFykjCoXuaDaxWKS8dZCtz/3B2kCszMFK7y7Su0kEp4bsi9a9HpV9GGqETmG3xHkb+VMzHc63uc69mDeT7Nj5wbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OKxZdgSO; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qd2sjHK3"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7b22ffa2a88so4465490b3a.1
-        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 07:50:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OKxZdgSO"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-477b198f4bcso38684455e9.3
+        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 07:57:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765900219; x=1766505019; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1765900677; x=1766505477; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AezLWqLpD6CrSSZ20H0ppmyNNXbXENPGR4Qr/3w4H5M=;
-        b=Qd2sjHK3E+ymD7eVQ8G8/wp0VMQpnhsTR6Gx3mn9cXWWajaeGb7FzenqGSpbXwPbO2
-         JnanCmw4hyauvUqeQqiD11UAk5GO5ggYXa3yfS4pxD+FuZhxrXeIsHgBvp6BYtuEvOwf
-         HQPZE9Ww9CXuvGcD9gEsbiBrWNWN+wmMGSOhZWOfOk1wv1NSqLAj3ZiPuQjWet1Mzbs9
-         pDFZDsJx78SpW/wAotEyhd3HKCUT2+kJQ6zAZbYmZIY3PeNoIJJni03wrDYMo4cOr8dU
-         Ihx6BMNIfPARYZAUny6lxHr77mS8kFekyomSEohSoaWk0alF1gpo1CbcSAcU1z2JWRPy
-         cs9Q==
+        bh=4T6EEvpkYB8O/dSoH4wvSyTHiJOCpYvJH+j1ElyVX1A=;
+        b=OKxZdgSOCItktaimxsO12oUnQUY9fVsODmKAtD/GvrJyiuCM+8L7aAI9nv1saDX+Mj
+         nzVXsEXk8TMIWUVnXkaTFfl4USBi4P0qEIlqaiWNxc85yg65SGi0VReZiKNPXdGKunh5
+         iuN165kkuUO0rBgmLXtlIa2O56hyol3phrqme1e6Q/h/vh/fU7FUF1XhFzijRlXEIsFu
+         VpYJVbKmcQPd/AROghagSMgToL07Fs8iECxdVphb1w6e8vugeQB4RII+X8AoT1ora2mG
+         07TEplavm4L7PM7OW7Z4HjE7itm53V9LHU0ld+MwdIIyXKopV6qx6aS8/Uqbu73R0Sqp
+         hrNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765900219; x=1766505019;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1765900677; x=1766505477;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=AezLWqLpD6CrSSZ20H0ppmyNNXbXENPGR4Qr/3w4H5M=;
-        b=kNFjUb4pmAjjKwV2Lm1l9sw7igOOmt00FYTfYjO9x9lZmD0a+QcMG4yy4NEk59slJx
-         BS1uc07jIa7Ey5kXvsVx/+xn2990T0VMrsalECrHa3sJsSGc0H2ZfTkCviyJ/uDG0Zoy
-         f2OGYOHjgUDUaDiEKAPtcOEPyIMBJsABmun9+de6YYUkg4QmRRA8EFjL0lUqEiChweCN
-         bcsMjEvMzF6HibuiPRuG5NQTM/gbv8YyoGdirxDVG9Djpg2vAkf0FlMt5B+B5MuH+6In
-         ZAD7wmJoFcyP1bVSLlSW0N4RDXWSwGDQkeFEYJOar7ddSBQllFwcplJntkpeRvS8k3yq
-         1pqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWns/ZujihXP5WGQSFoJA1pSs7zdEHGQHQdyzKRCucznRcqsBUBKEHz4jmhtVpn+zOvMTUq@lists.linux.dev
-X-Gm-Message-State: AOJu0YwV+IXJSzR8CR2+/0TLlce1o+BSoKPdK6aOgTPr0ue7jTxWEJTS
-	que0Pgzzb20OY81D75BPiLvTQ/FzCahowJImeiLrY/7pCr4uqU8+1G+8
-X-Gm-Gg: AY/fxX5YcrtyHqNjlPZViPmi7fBL4UqnzY9KrNkdTVawXx5WeduoJWu+C/WlK8zKNM6
-	DXHnd7QnUIYHVIsjdjEU0PV7MVAlo8gTQo5I3dMzgPbiSbGTspre3vzS9tgy3hvqhb6CVuvT8Ss
-	kB2I9tdCXd4r8qROwqqWIbv22xgkBHYjhjdV9JIExdRLRp0ZD/aa+1n4gi5pirl3FSxubpHuV5/
-	e0qMmL2/1jxk+iFZ80XKl7JFnYMPZQbjd3ws5nizPUdFpiJipnKeS3f+z8j3MzeHOhn/rwh/JeJ
-	ZHe9ncSM0Njv4w8m/EFaQXd0t93SUsimUFplejdRYbl3bDeEFD7IFh44FeF0K4Y1qc09Ge8d81u
-	jfWfKEF5QwxqBZw+04PXIpTQ9WkTRr9Ct2oOxxBAABFxgGDXpVdmim/oqJLC0t24VmRwXKJecUT
-	pYN8ORMpBpW0K0xo1CW6dr3ToiJgUkcfg=
-X-Google-Smtp-Source: AGHT+IEoNHdZ1DEBYEdZ8Fi4jzaSzQZOk4zYX1IY5OzpnLVZluq/HgR2KLlvGI9RonLCmUXvHnMZDA==
-X-Received: by 2002:a05:6a20:258b:b0:366:c321:9fc6 with SMTP id adf61e73a8af0-369afa082a3mr14434795637.48.1765900218667;
-        Tue, 16 Dec 2025 07:50:18 -0800 (PST)
-Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f4c5093a4bsm15829494b3a.50.2025.12.16.07.50.03
+        bh=4T6EEvpkYB8O/dSoH4wvSyTHiJOCpYvJH+j1ElyVX1A=;
+        b=hmkcutVxRNnBuuiOTvQnH5qJGa2p6KYmeeiwl+RF7nZ5EUuwedSaOg8BSjBS8GW1X0
+         xYea0G+8sbnuSvnub7DeHhE/6FEbU2mQ+9QwqFea3KMpLxQHOfE9bYEuzbnoGt9IpAH2
+         TLhfVQqZv6ttM1XStkB+N9+aOAlb94RI8pEY5IaZE2crA7w5Nt5sGQJhH7Fn5JheyfnR
+         8jJL5RC6bQQCzMEUkvmBSDxLAFwtwlCGP5a6MDOq0F3YKT1P7Zuxvpl/aKNnPvBYOtQT
+         APyiIpllhJ4l6MZYykXJNZGDIjUJ2Fg8QchakYRCF6E5aFETd+9ilRPicwpY3Pw/hhhO
+         CoCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWcy57DwiL69dPBNgObIimqNCyzqUiE7mq+N5knKIs/cyfNX8r/fWlBrDMFIqiwRcxs4wPj@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywz0HYVcq/dQWkAITfCvH16El1hRPDE0bHKRgmeE9pHMSFI3bFT
+	IF/jSeM/61KgRlQ3MFiwQtvXOA3ag0prrRG44wq+gcoKvzH8JhVlMWSwtwgWNc8S5A==
+X-Gm-Gg: AY/fxX7kVcL70MLGhvGo9HKs6Mxk2roJh/HOcr5nwgRxS5zJlzf7fsuhYU9wHsRAo92
+	LN4Bm2jyL18eF+VMsPoU56N9pjyYpJhcbQ2MQDNYGNlqJiPrc+B/HBMBxREIkHyydzOgiEpUJob
+	o8W1VYOzESnf65L7aqjElIi/ECI0w0o6/pHPxY3nKwyc5BQT/zJn24IMen6LiBLkn11XQtivBrA
+	r49PFmwUnTX+aOYsgMBCJjE4qitBjPfoSJAObiU/IYrSggODu9kX4GxQbAYoNNi7U8qhRWKpPlb
+	cX3hxTPbIsctupAd1YBU80dfUH7kkPYr5q1dwNmpG89Wp/nOFJ58MFN7NsGkLKfCtjh6GzbuYyq
+	9N+44QtdFMzOKFqzh9VIWhVlUmiVzu/fFs1ORkTh2APaOVGKeWSqiSi2e3QtBuJw8o9OGMs+mfL
+	F6U9VUwZhAhdVqI0ydWbUCpHhWcQrxoiPTpT0UKPXSlt94/hnZ
+X-Google-Smtp-Source: AGHT+IHDdQVZRbKnzvpABseF1CD6bLmsX8k69Taj+EhWj/QwI3tX5DeGEoYL60/CFL6IF5/VTsQYZw==
+X-Received: by 2002:a05:600c:1c1a:b0:475:de12:d3b5 with SMTP id 5b1f17b1804b1-47a8f91601bmr141242195e9.34.1765900676692;
+        Tue, 16 Dec 2025 07:57:56 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:ea4c:b2a8:24a4:9ce9])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-430f7994b58sm18141460f8f.22.2025.12.16.07.57.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 07:50:17 -0800 (PST)
-From: Xie Yuanbin <qq570070308@gmail.com>
-To: tglx@linutronix.de
-Cc: acme@kernel.org,
-	adrian.hunter@intel.com,
-	agordeev@linux.ibm.com,
-	akpm@linux-foundation.org,
-	alex@ghiti.fr,
-	alexander.shishkin@linux.intel.com,
-	andreas@gaisler.com,
-	anshuman.khandual@arm.com,
-	aou@eecs.berkeley.edu,
-	arnd@arndb.de,
-	borntraeger@linux.ibm.com,
-	bp@alien8.de,
-	bsegall@google.com,
-	dave.hansen@linux.intel.com,
-	davem@davemloft.net,
-	david@kernel.org,
-	dietmar.eggemann@arm.com,
-	frederic@kernel.org,
-	gor@linux.ibm.com,
-	hca@linux.ibm.com,
-	hpa@zytor.com,
-	irogers@google.com,
-	james.clark@linaro.org,
-	jolsa@kernel.org,
-	juri.lelli@redhat.com,
-	justinstitt@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux@armlinux.org.uk,
-	llvm@lists.linux.dev,
-	lorenzo.stoakes@oracle.com,
-	luto@kernel.org,
-	mark.rutland@arm.com,
-	mathieu.desnoyers@efficios.com,
-	max.kellermann@ionos.com,
-	mgorman@suse.de,
-	mingo@redhat.com,
-	morbo@google.com,
-	namhyung@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	nysal@linux.ibm.com,
-	palmer@dabbelt.com,
-	paulmck@kernel.org,
-	peterz@infradead.org,
-	pjw@kernel.org,
-	qq570070308@gmail.com,
-	riel@surriel.com,
-	rostedt@goodmis.org,
-	ryan.roberts@arm.com,
-	segher@kernel.crashing.org,
-	sparclinux@vger.kernel.org,
-	svens@linux.ibm.com,
-	thuth@redhat.com,
-	urezki@gmail.com,
-	vincent.guittot@linaro.org,
-	vschneid@redhat.com,
-	x86@kernel.org
-Subject: Re: [PATCH v5 1/3] x86/mm/tlb: Make enter_lazy_tlb() always inline on x86
-Date: Tue, 16 Dec 2025 23:49:51 +0800
-Message-ID: <20251216154951.631-1-qq570070308@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <87345beoq2.ffs@tglx>
-References: <87345beoq2.ffs@tglx>
+        Tue, 16 Dec 2025 07:57:55 -0800 (PST)
+Date: Tue, 16 Dec 2025 16:57:49 +0100
+From: Marco Elver <elver@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Chris Li <sparse@chrisli.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Subject: Re: [PATCH v4 06/35] cleanup: Basic compatibility with context
+ analysis
+Message-ID: <aUGBff8Oko5O8EsP@elver.google.com>
+References: <20251120145835.3833031-2-elver@google.com>
+ <20251120151033.3840508-7-elver@google.com>
+ <20251211121659.GH3911114@noisy.programming.kicks-ass.net>
+ <CANpmjNOmAYFj518rH0FdPp=cqK8EeKEgh1ok_zFUwHU5Fu92=w@mail.gmail.com>
+ <20251212094352.GL3911114@noisy.programming.kicks-ass.net>
+ <CANpmjNP=s33L6LgYWHygEuLtWTq-s2n4yFDvvGcF3HjbGH+hqw@mail.gmail.com>
+ <20251212110928.GP3911114@noisy.programming.kicks-ass.net>
+ <aUAPbFJSv0alh_ix@elver.google.com>
+ <CANpmjNNm-kbTw46Wh1BJudynHOeLn-Oxew8VuAnCppvV_WtyBw@mail.gmail.com>
+ <aUE77hgJa58waFOy@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aUE77hgJa58waFOy@elver.google.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Mon, 15 Dec 2025 16:42:13 +0100, Thomas Gleixner wrote:
-> These Reported-by and Closes tags are just wrong. This is a new patch
-> and the robot reported failures against earlier versions. The robot
-> report is very clear about that:
->
->   "If you fix the issue in a separate patch/commit (i.e. not just a new version of
->    the same patch/commit), kindly add following tags
->      Reported-by:...
->      Closes:..."
->
-> No?
->
-> [...]
->
-> Please move the '#define enter_....' under the inline function. That's
-> way simpler to read.
+On Tue, Dec 16, 2025 at 12:01PM +0100, Marco Elver wrote:
+> On Mon, Dec 15, 2025 at 04:53PM +0100, Marco Elver wrote:
+> [..]
+> > > > So I think as is, we can start. But I really do want the cleanup thing
+> > > > sorted, even if just with that __release_on_cleanup mashup or so.
+> > >
+> > > Working on rebasing this to v6.19-rc1 and saw this new scoped seqlock
+> > > abstraction. For that one I was able to make it work like I thought we
+> > > could (below). Some awkwardness is required to make it work in
+> > > for-loops, which only let you define variables with the same type.
+> > >
+> > > For <linux/cleanup.h> it needs some more thought due to extra levels of
+> > > indirection.
+> > 
+> > For cleanup.h, the problem is that to instantiate we use
+> > "guard(class)(args..)". If it had been designed as "guard(class,
+> > args...)", i.e. just use __VA_ARGS__ explicitly instead of the
+> > implicit 'args...', it might have been possible to add a second
+> > cleanup variable to do the same (with some additional magic to extract
+> > the first arg if one exists). Unfortunately, the use of the current
+> > guard()() idiom has become so pervasive that this is a bigger
+> > refactor. I'm going to leave cleanup.h as-is for now, if we think we
+> > want to give this a go in the current state.
+> 
+> Alright, this can work, but it's not that ergonomic as I'd hoped (see
+> below): we can redefine class_<name>_constructor to append another
+> cleanup variable. With enough documentation, this might be workable.
 
-Thanks for replying, I will improve it in the V6 patch.
+Below is the preview of the complete changes to make the lock guards
+work properly.
 
->> +/*
->> + * Please ignore the name of this function.  It should be called
->> + * switch_to_kernel_thread().
->
-> And why is it not renamed then?
->
->> + *
->> + * enter_lazy_tlb() is a hint from the scheduler that we are entering a
->
-> We enter a kernel thread? AFAIK the metaverse has been canceled.
->
->> + * kernel thread or other context without an mm.  Acceptable implementations
->> + * include doing nothing whatsoever, switching to init_mm, or various clever
->> + * lazy tricks to try to minimize TLB flushes.
->> + *
->> + * The scheduler reserves the right to call enter_lazy_tlb() several times
->> + * in a row.  It will notify us that we're going back to a real mm by
->
-> It will notify us by sending email or what?
+Thanks,
+-- Marco
 
-I didn't write any comments, I just moved its location.
+------ >8 ------
 
-As for the content of the comment, I think it has nothing to do with this
-patch. If the content of the comment needs to be modified, it should be
-modified in another patch?
-
-Thanks!
+diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
+index 2f998bb42c4c..9fe3b0f816c6 100644
+--- a/include/linux/cleanup.h
++++ b/include/linux/cleanup.h
+@@ -516,9 +516,42 @@ static __always_inline class_##_name##_t class_##_name##_constructor(void) \
+ static inline class_##_name##_t class_##_name##_constructor(void) _lock;\
+ static inline void class_##_name##_destructor(class_##_name##_t *_T) _unlock;
+ 
++/*
++ * To support Context Analysis, we need to allow the compiler to see the
++ * acquisition and release of the context lock. However, the "cleanup" helpers
++ * wrap the lock in a struct passed through seperate helper functions, which
++ * hides the lock alias from the compiler (no inter-procedural analysis).
++ *
++ * To make it work, we introduce an explicit alias to the context lock instance
++ * that is "cleaned" up with a separate cleanup helper. This helper is a dummy
++ * function that does nothing at runtime, but has the "_unlock" attribute to
++ * tell the compiler what happens at the end of the scope.
++ *
++ * To generalize the pattern, the WITH_LOCK_GUARD_1_ATTRS() macro should be used
++ * to redefine the constructor, which then also creates the alias variable with
++ * the right "cleanup" attribute, *after* DECLARE_LOCK_GUARD_1_ATTRS() has been
++ * used.
++ *
++ * Example usage:
++ *
++ *   DECLARE_LOCK_GUARD_1_ATTRS(mutex, __acquires(_T), __releases(*(struct mutex **)_T))
++ *   #define class_mutex_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex, _T)
++ *
++ * Note: To support the for-loop based scoped helpers, the auxiliary variable
++ * must be a pointer to the "class" type because it is defined in the same
++ * statement as the guard variable. However, we initialize it with the lock
++ * pointer (despite the type mismatch, the compiler's alias analysis still works
++ * as expected). The "_unlock" attribute receives a pointer to the auxiliary
++ * variable (a double pointer to the class type), and must be cast and
++ * dereferenced appropriately.
++ */
+ #define DECLARE_LOCK_GUARD_1_ATTRS(_name, _lock, _unlock)		\
+ static inline class_##_name##_t class_##_name##_constructor(lock_##_name##_t *_T) _lock;\
+-static inline void class_##_name##_destructor(class_##_name##_t *_T) _unlock;
++static __always_inline void __class_##_name##_cleanup_ctx(class_##_name##_t **_T) \
++	__no_context_analysis _unlock { }
++#define WITH_LOCK_GUARD_1_ATTRS(_name, _T)				\
++	class_##_name##_constructor(_T),				\
++	*__UNIQUE_ID(unlock) __cleanup(__class_##_name##_cleanup_ctx) = (void *)(_T)
+ 
+ #define DEFINE_LOCK_GUARD_1(_name, _type, _lock, _unlock, ...)		\
+ __DEFINE_CLASS_IS_CONDITIONAL(_name, false);				\
+diff --git a/include/linux/local_lock.h b/include/linux/local_lock.h
+index bedcbb33b928..99c06e499375 100644
+--- a/include/linux/local_lock.h
++++ b/include/linux/local_lock.h
+@@ -104,9 +104,13 @@ DEFINE_LOCK_GUARD_1(local_lock_nested_bh, local_lock_t __percpu,
+ 		    local_lock_nested_bh(_T->lock),
+ 		    local_unlock_nested_bh(_T->lock))
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(local_lock, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(local_lock_irq, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(local_lock_irqsave, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(local_lock_nested_bh, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(local_lock, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
++#define class_local_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(local_lock_irq, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
++#define class_local_lock_irq_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock_irq, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(local_lock_irqsave, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
++#define class_local_lock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock_irqsave, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(local_lock_nested_bh, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
++#define class_local_lock_nested_bh_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock_nested_bh, _T)
+ 
+ #endif
+diff --git a/include/linux/mutex.h b/include/linux/mutex.h
+index 8ed48d40007b..06c3f947ea49 100644
+--- a/include/linux/mutex.h
++++ b/include/linux/mutex.h
+@@ -255,9 +255,12 @@ DEFINE_LOCK_GUARD_1(mutex, struct mutex, mutex_lock(_T->lock), mutex_unlock(_T->
+ DEFINE_LOCK_GUARD_1_COND(mutex, _try, mutex_trylock(_T->lock))
+ DEFINE_LOCK_GUARD_1_COND(mutex, _intr, mutex_lock_interruptible(_T->lock), _RET == 0)
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(mutex, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(mutex_try, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(mutex_intr, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(mutex,	__acquires(_T), __releases(*(struct mutex **)_T))
++DECLARE_LOCK_GUARD_1_ATTRS(mutex_try,	__acquires(_T), __releases(*(struct mutex **)_T))
++DECLARE_LOCK_GUARD_1_ATTRS(mutex_intr,	__acquires(_T), __releases(*(struct mutex **)_T))
++#define class_mutex_constructor(_T)	WITH_LOCK_GUARD_1_ATTRS(mutex, _T)
++#define class_mutex_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex_try, _T)
++#define class_mutex_intr_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex_intr, _T)
+ 
+ extern unsigned long mutex_get_owner(struct mutex *lock);
+ 
+diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
+index 0e75e26e8813..8da14a08a4e1 100644
+--- a/include/linux/rwsem.h
++++ b/include/linux/rwsem.h
+@@ -262,17 +262,23 @@ DEFINE_LOCK_GUARD_1(rwsem_read, struct rw_semaphore, down_read(_T->lock), up_rea
+ DEFINE_LOCK_GUARD_1_COND(rwsem_read, _try, down_read_trylock(_T->lock))
+ DEFINE_LOCK_GUARD_1_COND(rwsem_read, _intr, down_read_interruptible(_T->lock), _RET == 0)
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(rwsem_read, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(rwsem_read_try, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(rwsem_read_intr, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_read, __acquires_shared(_T), __releases_shared(*(struct rw_semaphore **)_T))
++#define class_rwsem_read_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_read, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_read_try, __acquires_shared(_T), __releases_shared(*(struct rw_semaphore **)_T))
++#define class_rwsem_read_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_read_try, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_read_intr, __acquires_shared(_T), __releases_shared(*(struct rw_semaphore **)_T))
++#define class_rwsem_read_intr_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_read_intr, _T)
+ 
+ DEFINE_LOCK_GUARD_1(rwsem_write, struct rw_semaphore, down_write(_T->lock), up_write(_T->lock))
+ DEFINE_LOCK_GUARD_1_COND(rwsem_write, _try, down_write_trylock(_T->lock))
+ DEFINE_LOCK_GUARD_1_COND(rwsem_write, _kill, down_write_killable(_T->lock), _RET == 0)
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write_try, __assumes_ctx_lock(_T), /* */)
+-DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write_kill, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write, __acquires(_T), __releases(*(struct rw_semaphore **)_T))
++#define class_rwsem_write_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_write, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write_try, __acquires(_T), __releases(*(struct rw_semaphore **)_T))
++#define class_rwsem_write_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_write_try, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write_kill, __acquires(_T), __releases(*(struct rw_semaphore **)_T))
++#define class_rwsem_write_kill_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_write_kill, _T)
+ 
+ /*
+  * downgrade write lock to read lock
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index 397f4753d10a..41ed884cffc9 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -226,6 +226,7 @@ static inline void task_unlock(struct task_struct *p)
+ }
+ 
+ DEFINE_LOCK_GUARD_1(task_lock, struct task_struct, task_lock(_T->lock), task_unlock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(task_lock, __assumes_ctx_lock(_T->alloc_lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(task_lock, __acquires(&_T->alloc_lock), __releases(&(*(struct task_struct **)_T)->alloc_lock))
++#define class_task_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(task_lock, _T)
+ 
+ #endif /* _LINUX_SCHED_TASK_H */
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 3a45b08ced43..396b8c5d6c1b 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -537,109 +537,132 @@ void free_bucket_spinlocks(spinlock_t *locks);
+ DEFINE_LOCK_GUARD_1(raw_spinlock, raw_spinlock_t,
+ 		    raw_spin_lock(_T->lock),
+ 		    raw_spin_unlock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(raw_spinlock, _try, raw_spin_trylock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_try, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(raw_spinlock_nested, raw_spinlock_t,
+ 		    raw_spin_lock_nested(_T->lock, SINGLE_DEPTH_NESTING),
+ 		    raw_spin_unlock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_nested, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_nested, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_nested_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_nested, _T)
+ 
+ DEFINE_LOCK_GUARD_1(raw_spinlock_irq, raw_spinlock_t,
+ 		    raw_spin_lock_irq(_T->lock),
+ 		    raw_spin_unlock_irq(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irq, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irq, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_irq_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_irq, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(raw_spinlock_irq, _try, raw_spin_trylock_irq(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irq_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irq_try, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_irq_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_irq_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(raw_spinlock_bh, raw_spinlock_t,
+ 		    raw_spin_lock_bh(_T->lock),
+ 		    raw_spin_unlock_bh(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_bh, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_bh, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_bh_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_bh, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(raw_spinlock_bh, _try, raw_spin_trylock_bh(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_bh_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_bh_try, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_bh_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_bh_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(raw_spinlock_irqsave, raw_spinlock_t,
+ 		    raw_spin_lock_irqsave(_T->lock, _T->flags),
+ 		    raw_spin_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(raw_spinlock_irqsave, _try,
+ 			 raw_spin_trylock_irqsave(_T->lock, _T->flags))
+-DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave_try, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_irqsave_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(spinlock, spinlock_t,
+ 		    spin_lock(_T->lock),
+ 		    spin_unlock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(spinlock, _try, spin_trylock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_try, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(spinlock_irq, spinlock_t,
+ 		    spin_lock_irq(_T->lock),
+ 		    spin_unlock_irq(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irq, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irq, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_irq_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_irq, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(spinlock_irq, _try,
+ 			 spin_trylock_irq(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irq_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irq_try, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_irq_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_irq_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(spinlock_bh, spinlock_t,
+ 		    spin_lock_bh(_T->lock),
+ 		    spin_unlock_bh(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_bh, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_bh, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_bh_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_bh, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(spinlock_bh, _try,
+ 			 spin_trylock_bh(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_bh_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_bh_try, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_bh_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_bh_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(spinlock_irqsave, spinlock_t,
+ 		    spin_lock_irqsave(_T->lock, _T->flags),
+ 		    spin_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irqsave, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irqsave, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_irqsave, _T)
+ 
+ DEFINE_LOCK_GUARD_1_COND(spinlock_irqsave, _try,
+ 			 spin_trylock_irqsave(_T->lock, _T->flags))
+-DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irqsave_try, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irqsave_try, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_irqsave_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_irqsave_try, _T)
+ 
+ DEFINE_LOCK_GUARD_1(read_lock, rwlock_t,
+ 		    read_lock(_T->lock),
+ 		    read_unlock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(read_lock, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(read_lock, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_read_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(read_lock, _T)
+ 
+ DEFINE_LOCK_GUARD_1(read_lock_irq, rwlock_t,
+ 		    read_lock_irq(_T->lock),
+ 		    read_unlock_irq(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(read_lock_irq, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(read_lock_irq, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_read_lock_irq_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(read_lock_irq, _T)
+ 
+ DEFINE_LOCK_GUARD_1(read_lock_irqsave, rwlock_t,
+ 		    read_lock_irqsave(_T->lock, _T->flags),
+ 		    read_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+-DECLARE_LOCK_GUARD_1_ATTRS(read_lock_irqsave, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(read_lock_irqsave, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_read_lock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(read_lock_irqsave, _T)
+ 
+ DEFINE_LOCK_GUARD_1(write_lock, rwlock_t,
+ 		    write_lock(_T->lock),
+ 		    write_unlock(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(write_lock, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(write_lock, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_write_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(write_lock, _T)
+ 
+ DEFINE_LOCK_GUARD_1(write_lock_irq, rwlock_t,
+ 		    write_lock_irq(_T->lock),
+ 		    write_unlock_irq(_T->lock))
+-DECLARE_LOCK_GUARD_1_ATTRS(write_lock_irq, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(write_lock_irq, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_write_lock_irq_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(write_lock_irq, _T)
+ 
+ DEFINE_LOCK_GUARD_1(write_lock_irqsave, rwlock_t,
+ 		    write_lock_irqsave(_T->lock, _T->flags),
+ 		    write_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+-DECLARE_LOCK_GUARD_1_ATTRS(write_lock_irqsave, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(write_lock_irqsave, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_write_lock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(write_lock_irqsave, _T)
+ 
+ #undef __LINUX_INSIDE_SPINLOCK_H
+ #endif /* __LINUX_SPINLOCK_H */
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 88f01d6fded8..bb44a0bd7696 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -621,16 +621,21 @@ DEFINE_LOCK_GUARD_1(srcu, struct srcu_struct,
+ 		    _T->idx = srcu_read_lock(_T->lock),
+ 		    srcu_read_unlock(_T->lock, _T->idx),
+ 		    int idx)
+-DECLARE_LOCK_GUARD_1_ATTRS(srcu, __assumes_ctx_lock(_T), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(srcu, __acquires_shared(_T), __releases_shared(*(struct srcu_struct **)_T))
++#define class_srcu_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(srcu, _T)
+ 
+ DEFINE_LOCK_GUARD_1(srcu_fast, struct srcu_struct,
+ 		    _T->scp = srcu_read_lock_fast(_T->lock),
+ 		    srcu_read_unlock_fast(_T->lock, _T->scp),
+ 		    struct srcu_ctr __percpu *scp)
++DECLARE_LOCK_GUARD_1_ATTRS(srcu_fast, __acquires_shared(_T), __releases_shared(*(struct srcu_struct **)_T))
++#define class_srcu_fast_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(srcu_fast, _T)
+ 
+ DEFINE_LOCK_GUARD_1(srcu_fast_notrace, struct srcu_struct,
+ 		    _T->scp = srcu_read_lock_fast_notrace(_T->lock),
+ 		    srcu_read_unlock_fast_notrace(_T->lock, _T->scp),
+ 		    struct srcu_ctr __percpu *scp)
++DECLARE_LOCK_GUARD_1_ATTRS(srcu_fast_notrace, __acquires_shared(_T), __releases_shared(*(struct srcu_struct **)_T))
++#define class_srcu_fast_notrace_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(srcu_fast_notrace, _T)
+ 
+ #endif
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index fab6a19dda02..7c57a6d2f847 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1874,7 +1874,8 @@ DEFINE_LOCK_GUARD_1(task_rq_lock, struct task_struct,
+ 		    _T->rq = task_rq_lock(_T->lock, &_T->rf),
+ 		    task_rq_unlock(_T->rq, _T->lock, &_T->rf),
+ 		    struct rq *rq; struct rq_flags rf)
+-DECLARE_LOCK_GUARD_1_ATTRS(task_rq_lock, __assumes_ctx_lock(_T->pi_lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(task_rq_lock, __acquires(_T->pi_lock), __releases((*(struct task_struct **)_T)->pi_lock))
++#define class_task_rq_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(task_rq_lock, _T)
+ 
+ DEFINE_LOCK_GUARD_1(__task_rq_lock, struct task_struct,
+ 		    _T->rq = __task_rq_lock(_T->lock, &_T->rf),
+@@ -1928,21 +1929,24 @@ DEFINE_LOCK_GUARD_1(rq_lock, struct rq,
+ 		    rq_unlock(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(rq_lock, __assumes_ctx_lock(__rq_lockp(_T)), /* */);
++DECLARE_LOCK_GUARD_1_ATTRS(rq_lock, __acquires(__rq_lockp(_T)), __releases(__rq_lockp(*(struct rq **)_T)));
++#define class_rq_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rq_lock, _T)
+ 
+ DEFINE_LOCK_GUARD_1(rq_lock_irq, struct rq,
+ 		    rq_lock_irq(_T->lock, &_T->rf),
+ 		    rq_unlock_irq(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(rq_lock_irq, __assumes_ctx_lock(__rq_lockp(_T)), /* */);
++DECLARE_LOCK_GUARD_1_ATTRS(rq_lock_irq, __acquires(__rq_lockp(_T)), __releases(__rq_lockp(*(struct rq **)_T)));
++#define class_rq_lock_irq_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rq_lock_irq, _T)
+ 
+ DEFINE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
+ 		    rq_lock_irqsave(_T->lock, &_T->rf),
+ 		    rq_unlock_irqrestore(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
+-DECLARE_LOCK_GUARD_1_ATTRS(rq_lock_irqsave, __assumes_ctx_lock(__rq_lockp(_T)), /* */);
++DECLARE_LOCK_GUARD_1_ATTRS(rq_lock_irqsave, __acquires(__rq_lockp(_T)), __releases(__rq_lockp(*(struct rq **)_T)));
++#define class_rq_lock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rq_lock_irqsave, _T)
+ 
+ #define this_rq_lock_irq(...) __acquire_ret(_this_rq_lock_irq(__VA_ARGS__), __rq_lockp(__ret))
+ static inline struct rq *_this_rq_lock_irq(struct rq_flags *rf) __acquires_ret
+@@ -3075,10 +3079,17 @@ static inline class_##name##_t class_##name##_constructor(type *lock, type *lock
+ 	__no_context_analysis								\
+ { class_##name##_t _t = { .lock = lock, .lock2 = lock2 }, *_T = &_t;			\
+   _lock; return _t; }
+-#define DECLARE_LOCK_GUARD_2_ATTRS(_name, _lock, _unlock)				\
++#define DECLARE_LOCK_GUARD_2_ATTRS(_name, _lock, _unlock1, _unlock2)			\
+ static inline class_##_name##_t class_##_name##_constructor(lock_##_name##_t *_T1,	\
+ 							    lock_##_name##_t *_T2) _lock; \
+-static inline void class_##_name##_destructor(class_##_name##_t *_T) _unlock
++static __always_inline void __class_##_name##_cleanup_ctx1(class_##_name##_t **_T1)	\
++	__no_context_analysis _unlock1 { }						\
++static __always_inline void __class_##_name##_cleanup_ctx2(class_##_name##_t **_T2)	\
++	__no_context_analysis _unlock2 { }
++#define WITH_LOCK_GUARD_2_ATTRS(_name, _T1, _T2)					\
++	class_##_name##_constructor(_T),						\
++	*__UNIQUE_ID(unlock1) __cleanup(__class_##_name##_cleanup_ctx1) = (void *)(_T1),\
++	*__UNIQUE_ID(unlock2) __cleanup(__class_##_name##_cleanup_ctx2) = (void *)(_T2)
+ 
+ static inline bool rq_order_less(struct rq *rq1, struct rq *rq2)
+ {
+@@ -3229,7 +3240,12 @@ DEFINE_LOCK_GUARD_2(double_raw_spinlock, raw_spinlock_t,
+ 		    double_raw_lock(_T->lock, _T->lock2),
+ 		    double_raw_unlock(_T->lock, _T->lock2))
+ 
+-DECLARE_LOCK_GUARD_2_ATTRS(double_raw_spinlock, __assumes_ctx_lock(_T1) __assumes_ctx_lock(_T2), /* */);
++DECLARE_LOCK_GUARD_2_ATTRS(double_raw_spinlock,
++			   __acquires(_T1, _T2),
++			   __releases(*(raw_spinlock_t **)_T1),
++			   __releases(*(raw_spinlock_t **)_T2));
++#define class_double_raw_spinlock_constructor(_T1, _T2) \
++	WITH_LOCK_GUARD_2_ATTRS(double_raw_spinlock, _T1, _T2)
+ 
+ /*
+  * double_rq_unlock - safely unlock two runqueues
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 3f72b1ab2300..1c5a381461fc 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -459,8 +459,9 @@ static void __used test_srcu(struct test_srcu_data *d)
+ 
+ static void __used test_srcu_guard(struct test_srcu_data *d)
+ {
+-	guard(srcu)(&d->srcu);
+-	(void)srcu_dereference(d->data, &d->srcu);
++	{ guard(srcu)(&d->srcu); (void)srcu_dereference(d->data, &d->srcu); }
++	{ guard(srcu_fast)(&d->srcu); (void)srcu_dereference(d->data, &d->srcu); }
++	{ guard(srcu_fast_notrace)(&d->srcu); (void)srcu_dereference(d->data, &d->srcu); }
+ }
+ 
+ struct test_local_lock_data {
