@@ -1,69 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076D2331A44;
-	Tue, 16 Dec 2025 05:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A99427FD6E;
+	Tue, 16 Dec 2025 05:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765861451; cv=none; b=HL8RWMudonQbADDA/h4fvKdfMhf13Js+nlpHA75YJRZrOQcr7AG6HkG0cV7up8qnUV2tk86oqm/nhXdFbLha46kw7ka7bTIkf23ZH+N4PKtfZi610EPakAb+teGkBsBK+PRJwZEigEctTX9lwbGbNhp11xQFoi+Jh+pNKLA3GBk=
+	t=1765863985; cv=none; b=LxXB/DwunNKSpOzP/A7BMrlyFLhO0BvwN0kR8yT0y4CjHPquOpCujVpAElkqyP7nd964aSpd+7q7MqAqOFzsGNAvBmDP6w9LPIsLEcBpLR37Jg2ybv/24mVXycTO00IABH1WE6SO66T4Mt5OHOerILoeGXP5XDz1qm1XLLNz3lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765861451; c=relaxed/simple;
-	bh=cdgOM1zNzJWYAFxEAh5KUXxqD0R1ZNnspaoOHRBoaJM=;
+	s=arc-20240116; t=1765863985; c=relaxed/simple;
+	bh=1XjP0mKFkNYKFLhPRTL97PmYp8Uie7/TKKOaVYmxSU0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PujU/zB9x91GcwCCYMzzJ3XYATqqd5OcqRaVCs/f2OG2mXfpdkIj6A2hlFUXL514nWBUtG+CgSc/rdde77mJxWMpPmyNaMoNEFo2p/uWE30aTcRky7g6uRUOzg9s8fgFBuYHrVmp/IVZ2jEjWqLwwl7T3wN7Ztv8fGiCqoPhK4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fOpHWqe/; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDG0kdzmDzDeyfXAR1HFy3SqRGD5Fo+afsXpDI4dyxabzxjMn390spREuOIFMEYL2Gf0nMmCS/BMwI7FpCP1iRv+JcDfAl0tY0Qd+eWOUEXDkokJv9wp75hxJxtJ4m8X0zHYaokOXB3W4JmiDj4Ts38c1cfnsxtComJkqZobEYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G0qNkHcS; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fOpHWqe/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G0qNkHcS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765861443; x=1797397443;
+  t=1765863980; x=1797399980;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=cdgOM1zNzJWYAFxEAh5KUXxqD0R1ZNnspaoOHRBoaJM=;
-  b=fOpHWqe/EBh40/VdQa/z6PtD20ze+hyr66ZxGYA9ydSeNm36lvwXTSep
-   DwmTvtCcgt/saZ9E5ft2dl9HankiXSSRaL1mYGQYMaR1yVyMxe/JfP1YA
-   /XLaOgIHtrleG994JuIC8hQzyKj5BvBHb/mcOczj6D6mqDKGCFBP2v1NN
-   c3u3nudpNhdacpvOWqOkYDykx3jAwjS2wyg5ZRE8gLf5lGQONXUpybJyx
-   x6LPzmTS9lgYh/2ewmSg8oy8ijg+h0wUkFiNPeLe0EET48AM1w+ywOhKk
-   ZF2FqLVz4Oy19oRXVJI47IevZ2m750k908e3vIljfV88RKisUJgfse03L
-   g==;
-X-CSE-ConnectionGUID: R6oxE42RQR+hBAEz2zTVLA==
-X-CSE-MsgGUID: a8jKikzjQqSgbYgRiCwl1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="90428896"
+  bh=1XjP0mKFkNYKFLhPRTL97PmYp8Uie7/TKKOaVYmxSU0=;
+  b=G0qNkHcSsiTB+tMQ3CtqP461uKGScE014NxaBtNAeem0Vlt6zvgueFhv
+   B3zW1uLDiZwL9lRB1YI3jtvn2b9zIcsF0gnyRzXywbIxGeKsiwghsHdEQ
+   Kd/T1dUvFhUfXW8pGHiRLfdzhRe8kzYvzqmtsSqH07MlqWOv/kagxlxeD
+   QnS+hUabsNrqi1gIEjeSkf9w80D1U5hHOE4awrbWlUNJhwk7XucSxS+qs
+   5aOeTfCA3hgzJxp+8lUFprf2Rm4ylDoNit0NqQpBgWG1ZVU7Bj40QX5+8
+   uSfIuL98HCIFMp6SJuVmRkhbaQ/pWewvMMtMuXvjYLnCWlhXW+2XoF2s2
+   Q==;
+X-CSE-ConnectionGUID: teg+S9UrQoq4ACLWOh8kIA==
+X-CSE-MsgGUID: 4Mdi/sFnTh+Kvv1PUqAjGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="85187792"
 X-IronPort-AV: E=Sophos;i="6.21,152,1763452800"; 
-   d="scan'208";a="90428896"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 21:03:57 -0800
-X-CSE-ConnectionGUID: F+kshmvMTpiLqi7gT6xJGA==
-X-CSE-MsgGUID: f6Xb8iMlTgCFrbdiRHph5g==
+   d="scan'208";a="85187792"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 21:46:06 -0800
+X-CSE-ConnectionGUID: j31l8sBpSmKaE5BQamH7ig==
+X-CSE-MsgGUID: f3jvVeySTViGwe+AHKnECA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,152,1763452800"; 
-   d="scan'208";a="198408906"
+   d="scan'208";a="235326976"
 Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 15 Dec 2025 21:03:52 -0800
+  by orviesa001.jf.intel.com with ESMTP; 15 Dec 2025 21:46:02 -0800
 Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vVNDx-000000001B3-1uyR;
-	Tue, 16 Dec 2025 05:03:49 +0000
-Date: Tue, 16 Dec 2025 13:03:26 +0800
+	id 1vVNsl-000000001Cr-2Ym4;
+	Tue, 16 Dec 2025 05:45:59 +0000
+Date: Tue, 16 Dec 2025 13:45:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhang Qilong <zhangqilong3@huawei.com>, akpm@linux-foundation.org,
-	david@kernel.org, lorenzo.stoakes@oracle.com, corbet@lwn.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com,
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-	baohua@kernel.org, lance.yang@linux.dev, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	wangkefeng.wang@huawei.com, sunnanyong@huawei.com,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhang Qilong <zhangqilong3@huawei.com>
-Subject: Re: [PATCH next 1/2] mm/huge_memory: Implementation of THP COW for
- executable file mmap
-Message-ID: <202512161240.Ej5BIvIk-lkp@intel.com>
-References: <20251215123407.380813-2-zhangqilong3@huawei.com>
+To: Lukas Zapolskas <lukas.zapolskas@arm.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, nd@arm.com,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Lukas Zapolskas <lukas.zapolskas@arm.com>,
+	Ketil Johnsen <ketil.johnsen@arm.com>
+Subject: Re: [PATCH v1 5/5] drm/panthor: Use GROUP_GET_STATE to provide group
+ and queue errors
+Message-ID: <202512161359.YBFqhXuf-lkp@intel.com>
+References: <20251215115457.2137485-6-lukas.zapolskas@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,82 +72,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251215123407.380813-2-zhangqilong3@huawei.com>
+In-Reply-To: <20251215115457.2137485-6-lukas.zapolskas@arm.com>
 
-Hi Zhang,
+Hi Lukas,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on next-20251215]
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on next-20251216]
+[cannot apply to linus/master v6.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Qilong/mm-huge_memory-Implementation-of-THP-COW-for-executable-file-mmap/20251215-204035
-base:   next-20251215
-patch link:    https://lore.kernel.org/r/20251215123407.380813-2-zhangqilong3%40huawei.com
-patch subject: [PATCH next 1/2] mm/huge_memory: Implementation of THP COW for executable file mmap
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251216/202512161240.Ej5BIvIk-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Zapolskas/drm-panthor-Implement-CS_FAULT-propagation-to-userspace/20251215-195920
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20251215115457.2137485-6-lukas.zapolskas%40arm.com
+patch subject: [PATCH v1 5/5] drm/panthor: Use GROUP_GET_STATE to provide group and queue errors
+config: x86_64-buildonly-randconfig-001-20251216 (https://download.01.org/0day-ci/archive/20251216/202512161359.YBFqhXuf-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512161240.Ej5BIvIk-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512161359.YBFqhXuf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512161240.Ej5BIvIk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512161359.YBFqhXuf-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/memory.c:6134:7: error: call to undeclared function 'vma_is_special_huge'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    6134 |                 if (vma_is_special_huge(vma) || vma_is_shmem(vma))
-         |                     ^
-   1 error generated.
+>> drivers/gpu/drm/panthor/panthor_sched.c:3968:37: error: no member named 'fault' in 'struct panthor_group'
+    3968 |         get_state->exception_type = group->fault.exception_type;
+         |                                     ~~~~~  ^
+   drivers/gpu/drm/panthor/panthor_sched.c:3969:34: error: no member named 'fault' in 'struct panthor_group'
+    3969 |         get_state->access_type = group->fault.access_type;
+         |                                  ~~~~~  ^
+   drivers/gpu/drm/panthor/panthor_sched.c:3970:32: error: no member named 'fault' in 'struct panthor_group'
+    3970 |         get_state->source_id = group->fault.source_id;
+         |                                ~~~~~  ^
+   drivers/gpu/drm/panthor/panthor_sched.c:3971:36: error: no member named 'fault' in 'struct panthor_group'
+    3971 |         get_state->valid_address = group->fault.valid_address;
+         |                                    ~~~~~  ^
+   drivers/gpu/drm/panthor/panthor_sched.c:3972:30: error: no member named 'fault' in 'struct panthor_group'
+    3972 |         get_state->address = group->fault.address;
+         |                              ~~~~~  ^
+   5 errors generated.
 
 
-vim +/vma_is_special_huge +6134 mm/memory.c
+vim +3968 drivers/gpu/drm/panthor/panthor_sched.c
 
-  6104	
-  6105	/* `inline' is required to avoid gcc 4.1.2 build error */
-  6106	static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
-  6107	{
-  6108		struct vm_area_struct *vma = vmf->vma;
-  6109		const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
-  6110		vm_fault_t ret;
-  6111	
-  6112		if (vma_is_anonymous(vma)) {
-  6113			if (likely(!unshare) &&
-  6114			    userfaultfd_huge_pmd_wp(vma, vmf->orig_pmd)) {
-  6115				if (userfaultfd_wp_async(vmf->vma))
-  6116					goto split;
-  6117				return handle_userfault(vmf, VM_UFFD_WP);
-  6118			}
-  6119			return do_huge_pmd_wp_page(vmf);
-  6120		}
-  6121	
-  6122		if (vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) {
-  6123			if (vma->vm_ops->huge_fault) {
-  6124				ret = vma->vm_ops->huge_fault(vmf, PMD_ORDER);
-  6125				if (!(ret & VM_FAULT_FALLBACK))
-  6126					return ret;
-  6127			}
-  6128		}
-  6129	
-  6130	
-  6131		if (is_exec_mapping(vma->vm_flags) &&
-  6132		    is_cow_mapping(vma->vm_flags)) {
-  6133			/* Skip special and shmem */
-> 6134			if (vma_is_special_huge(vma) || vma_is_shmem(vma))
-  6135				goto split;
-  6136	
-  6137			ret = do_huge_pmd_exec_cow(vmf);
-  6138			if (!(ret & VM_FAULT_FALLBACK))
-  6139				return ret;
-  6140		}
-  6141	
-  6142	split:
-  6143		/* COW or write-notify handled on pte level: split pmd. */
-  6144		__split_huge_pmd(vma, vmf->pmd, vmf->address, false);
-  6145	
-  6146		return VM_FAULT_FALLBACK;
-  6147	}
-  6148	
+  3938	
+  3939	int panthor_group_get_state(struct panthor_file *pfile,
+  3940				    struct drm_panthor_group_get_state *get_state,
+  3941				    struct drm_panthor_queue_event *events, u32 count)
+  3942	{
+  3943		struct panthor_group_pool *gpool = pfile->groups;
+  3944		struct panthor_device *ptdev = pfile->ptdev;
+  3945		struct panthor_scheduler *sched = ptdev->scheduler;
+  3946		struct panthor_group *group = NULL;
+  3947		u32 fault_count;
+  3948	
+  3949		group = group_from_handle(gpool, get_state->group_handle);
+  3950		if (!group)
+  3951			return -EINVAL;
+  3952	
+  3953		guard(mutex)(&sched->lock);
+  3954	
+  3955		if (group->timedout)
+  3956			get_state->state |= DRM_PANTHOR_GROUP_STATE_TIMEDOUT;
+  3957		if (group->fatal_queues) {
+  3958			get_state->state |= DRM_PANTHOR_GROUP_STATE_FATAL_FAULT;
+  3959			get_state->fatal_queues = group->fatal_queues;
+  3960		}
+  3961		if (group->innocent)
+  3962			get_state->state |= DRM_PANTHOR_GROUP_STATE_INNOCENT;
+  3963		if (group->fault_queues) {
+  3964			get_state->state |= DRM_PANTHOR_GROUP_STATE_QUEUE_FAULT;
+  3965			get_state->fault_queues = group->fault_queues;
+  3966		}
+  3967	
+> 3968		get_state->exception_type = group->fault.exception_type;
+  3969		get_state->access_type = group->fault.access_type;
+  3970		get_state->source_id = group->fault.source_id;
+  3971		get_state->valid_address = group->fault.valid_address;
+  3972		get_state->address = group->fault.address;
+  3973	
+  3974		fault_count = panthor_group_count_faults(sched, group);
+  3975	
+  3976		if (!count && !events) {
+  3977			get_state->faults.count = fault_count;
+  3978			get_state->faults.stride = sizeof(struct drm_panthor_queue_event);
+  3979			goto exit;
+  3980		}
+  3981	
+  3982		panthor_group_get_faults(sched, group, events, min(get_state->faults.count, count));
+  3983	
+  3984	exit:
+  3985		group_put(group);
+  3986		return 0;
+  3987	}
+  3988	
 
 -- 
 0-DAY CI Kernel Test Service
