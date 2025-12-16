@@ -1,251 +1,111 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB659221F13
-	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 19:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC05A1D9A54
+	for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 20:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765914785; cv=none; b=Y1AfVJ54lo4nxtcmays/XN1/x7itvxo1n+2TOmsf3w893vRdHSGOuYcc/tpYBfLQsPcYOIHKHJzUd6tLZYI09IaVpDNTB8bxRhnZ3QQ6/U9wUuMNuKXjzQsgiU5r7sB7fZid9PUmfzIho2RGAjLF0tQrbPzW2BLMNrRz67EdfFE=
+	t=1765917723; cv=none; b=NXqkhBcVWILwtmdlO10VWUdlbmKDbjH3LXu6PokmUmKrfZJBnJoz9IgAXoaDmCPdFHtd5ZrOSKWwEbPvdQ85CLvpaTckPACYDktbnvXw2Iek4HfDkgy/uNF3uYvHttOaLHFLmWvmC+slh9/W+ZLg+Xjl5LB40Ulv3IhWS5Cgy9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765914785; c=relaxed/simple;
-	bh=iyfpfta9T3ygezPPDfJaAAlV1FmCLLJlERf9Bqj3wl0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TmghW5gpXOrJiQWOojxBGxOSSUROG+XLrWMwrSFYuM6yEVLWdXM4pdnLA1cELK7pKmcC8D2Vb4Yu7H8P/owUiGMleJCiQloQZzoC+6B4O2cr2I0V66osKmOyllBUx9NE2NeWd46w/Qf0QZABnErJ7VnIKzabON0Lob8jZBZzbwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=My25HNut; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1765917723; c=relaxed/simple;
+	bh=kYRZPQVIXaPZPvBqjFrVHSe3OQvXSms9kx6HAz+Sc6o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RKQwBXfyH3OMl7yL+T8kNVCfDJTXt88a8hMYxOkg5IZI+XRuen7iRG2nGvWC8nP0KYug1dvbOUNIKnFcMAE/3UUPHn1z8b+R5AjZ9jDQO770EVk6baFFeIpDfQ3TU916Ai2dG2FMxUv3/riczipYe2zi3uqvS5TBFyt/CNZfnE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EOSBR9jD; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="My25HNut"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2a0d0788adaso27212565ad.3
-        for <llvm@lists.linux.dev>; Tue, 16 Dec 2025 11:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765914782; x=1766519582; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pMv6aJNeWeKxyQePqdx7Y+0/5WaZPbWRmp5WC5tFCto=;
-        b=My25HNutXF0fE7SoPVquJ+5XxUFp36d/anOH0kCRShZWUrnFsbkj2sVBT2W2sifhVb
-         UKDvJiwTgRKteVHhl/s3lfS2DfiUpb+96Q6G05fl5BFnQzCkpWwkic37p3fq8xe1zQuG
-         mL8c0uI3ILAwYgG5H/5x8VkKguqdgO8k37wSR1jbHx+60e+wN5Oq7MP1WjpCHtcALeRy
-         OBaG2188EBPpY/p58HVbw1EjZRa++mKDWn8Sqf5oseE+w2f8n+WPefILvlemWWQIyfDi
-         X81Ny6/GUE+AzB16c5d7WUWM3V/2amqPh6ZG1SdEhLI7Oqenr2LvIVCNJ6U5K2ftmS61
-         W/Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765914782; x=1766519582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pMv6aJNeWeKxyQePqdx7Y+0/5WaZPbWRmp5WC5tFCto=;
-        b=XXF4YhzGCt7Dfh1CYbmWXdY0DPnX2Fl64aoQLdZ2MTT3Z2I0r3cKvEwSepB0Mkf3nn
-         Yxm++YRdDEwbE1256j5vM8bAZBkHPpQ3YwV3+m/kF2jtRSveSvm4P2iTjV4DSXZKHY2m
-         2xnOGjd2I7f6ob0D4vr4g7ryENf9P07BhzISdbTZHMpzraDP/5HbYK1lwXsM3z7VdHcD
-         FnB5LdCFMqtwm7fms8fqNXsq87zEz3cwI/Jef423YgBNwj9g6sEUCBCkdF0fWsefnCSq
-         tlDPKP02aQrK0U0UyxDM1zyQntrw22F4b4SnOvShiSdl56He4hUao6HMFd7Dtq82mU+o
-         JkPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXHfk+vHeHHm5jshI2hu517mtrp2Wx2kCtrTVkmIKPhlP/orLmYyGeX+lby93n1wvu2EiYK@lists.linux.dev
-X-Gm-Message-State: AOJu0YzaRiZKFHbKv2FjCyeDiXHyixT9MR4GamDhjnqv3Eu6iiXAAi9N
-	NdYWodj/JsVexE9bJ7it6QXyT3kZrofvq0QGfmVcpBAxEHc1YAGm6KizKSULnsbuI80=
-X-Gm-Gg: AY/fxX7e3tlMnaQERK+yErvbk2w6oS2dFXDmgTTtpYkA8QrePT7yClk2aiHk30OCsYL
-	ApIwH7JIN6UhAh/3nP+flCvFnyyL5V+6+gmYXtgrhG7rVxE4ZPkezSQm9PzXFQVcCLljznB5ofP
-	JWBu0qxQPSR957Djykusb7yKeZBNXc3X+7oL7wQC7Zf+OiNNemin6VtD/+lllB4MaFjgk/SMaBm
-	axgSvXgS3F3GDxerNI9n6+9ShhCpARZwx3cSzQwotoYxiIzxxmFOXsfwVLFK9yB0ejjrYUUO8Ra
-	rY5BI2q4wH6C1+cTCITmWIYN41j1u+r+LsU2QDGYp73VsQefBBB85CyMKgcmG/RoMXqbRnxKOrd
-	SxAJUsahVNjWr1wMd/9H85YVqb1KCLiGUX3pSAl1eBsi8++84XGWLBj1Mso06sdRkJB6itAytki
-	u3Xa0jmQ2nOUfg5dprhdvEEI/QI+Gh
-X-Google-Smtp-Source: AGHT+IFa53l16N+qvvGO5QmppAyhTeWx1VKPEgvjQDDUEOhJfhKgosxMkNqOmyEm3dPYC+8Wd+jHsQ==
-X-Received: by 2002:a17:903:8cc:b0:297:f0a8:e84c with SMTP id d9443c01a7336-29f24386514mr158443655ad.52.1765914782008;
-        Tue, 16 Dec 2025 11:53:02 -0800 (PST)
-Received: from localhost ([2405:201:c00c:2854:178f:356c:b77b:cfc2])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a13825b9a5sm33850025ad.9.2025.12.16.11.53.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 11:53:01 -0800 (PST)
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-To: gregkh@linuxfoundation.org
-Cc: achill@achill.org,
-	akpm@linux-foundation.org,
-	broonie@kernel.org,
-	conor@kernel.org,
-	f.fainelli@gmail.com,
-	hargar@microsoft.com,
-	jonathanh@nvidia.com,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	lkft-triage@lists.linaro.org,
-	patches@kernelci.org,
-	patches@lists.linux.dev,
-	pavel@denx.de,
-	rwarsow@gmx.de,
-	shuah@kernel.org,
-	sr@sladewatkins.com,
-	stable@vger.kernel.org,
-	sudipm.mukherjee@gmail.com,
-	torvalds@linux-foundation.org,
-	dan.carpenter@linaro.org,
-	nathan@kernel.org,
-	llvm@lists.linux.dev,
-	perex@perex.cz,
-	lgirdwood@gmail.com,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH 6.18 000/614] 6.18.2-rc1 review
-Date: Wed, 17 Dec 2025 01:22:55 +0530
-Message-ID: <20251216195255.172999-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251216111401.280873349@linuxfoundation.org>
-References: <20251216111401.280873349@linuxfoundation.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EOSBR9jD"
+Message-ID: <cecb6351-ea9a-4f8a-863a-82c9ef02f012@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1765917714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NI/FBGNehU9YUSYgyB/T6XjjzQJetB/bgxtbGtuRsyA=;
+	b=EOSBR9jDAYi3b1D0UmXpcjapzKWvFni01k2gkpJj7cMWZ5nKYil9hpl5OoaBz8zFEiJ6Pu
+	FficCWLudBTHev9OhiQRCHRtdJD0My8wh2lpkccQ+0NAJGbkW5zDVSrXoMQJPlKnCJqNIp
+	mQpWb8uvFo6YjSIG5D406m+IA6x0XIg=
+Date: Tue, 16 Dec 2025 12:41:44 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update
+ with raw binary output
+To: kernel test robot <lkp@intel.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Alan Maguire <alan.maguire@oracle.com>, Donglin Peng <dolinux.peng@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+ dwarves@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org
+References: <20251127185242.3954132-5-ihor.solodrai@linux.dev>
+ <202512061213.85NHVN2W-lkp@intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <202512061213.85NHVN2W-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-I'm seeing the following allmodconfig and allyesconfig build
-failures on arm, arm64, riscv and x86_64.
+On 12/5/25 9:08 PM, kernel test robot wrote:
+> Hi Ihor,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/resolve_btfids-rename-object-btf-field-to-btf_path/20251128-025645
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20251127185242.3954132-5-ihor.solodrai%40linux.dev
+> patch subject: [PATCH bpf-next v2 4/4] resolve_btfids: change in-place update with raw binary output
+> config: arm64-randconfig-004-20251205 (https://download.01.org/0day-ci/archive/20251206/202512061213.85NHVN2W-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061213.85NHVN2W-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512061213.85NHVN2W-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: .tmp_vmlinux1.btf.o is incompatible with aarch64elf
+> 
 
-## Build error
-sound/soc/codecs/nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
-  430 |                 *n2_sel = n2_max;
-      |                           ^~~~~~
-sound/soc/codecs/nau8325.c:389:52: note: initialize the variable 'n2_max' to silence this warning
-  389 |         int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
-      |                                                           ^
-      |                                                            = 0
-sound/soc/codecs/nau8325.c:431:11: error: variable 'ratio_sel' is uninitialized when used here [-Werror,-Wuninitialized]
-  431 |                 ratio = ratio_sel;
-      |                         ^~~~~~~~~
-sound/soc/codecs/nau8325.c:389:44: note: initialize the variable 'ratio_sel' to silence this warning
-  389 |         int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
-      |                                                   ^
-      |                                                    = 0
-2 errors generated.
-make[6]: *** [scripts/Makefile.build:287: sound/soc/codecs/nau8325.o] Error 1
+I was able to reproduce this error.
 
-First seen on 6.18.2-rc1
-Good: 6.18.1-rc1
-Bad:  6.18.2-rc1
+It happens only when cross-compiling with LLVM (which we don't do on
+BPF CI, btw) because of this line in gen-btf.sh:
 
-And these build regressions also seen on 6.17.13-rc2.
+	echo "" | ${CC} -c -x c -o ${btf_data} -
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The purpose of this command is to produce an "empty" linkable ELF
+file. The .BTF section is objcopied into it, and then it's linked
+into the vmlinux.
 
-## Build
-* kernel: 6.18.2-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-* git commit: 103c79e44ce7c81882928abab98b96517a8bce88
-* git describe: v6.18-645-g103c79e44ce7
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.18.y/build/v6.18-645-g103c79e44ce7
+Before the changes in this patch, the "empty" ELF was produced with
+objcopy --strip-all on .tmp_vmlinux1, which is a slower operation.
 
-## Test Regressions (compared to v6.18-30-g7d4c06f4000f)
-* Build,
-- clang-21-allmodconfig
-- clang-21-allyesconfig
-- clang-nightly-allyesconfig
+ld.lld fails, because ${CC} without the flags is just clang in this
+case, and it emits an ELF for host arch, which of course can't be
+linked. It can be fixed with:
 
-## Metric Regressions (compared to v6.18-30-g7d4c06f4000f)
+	echo "" | ${CC} ${CLANG_FLAGS} -c -x c -o ${btf_data} -
 
-## Test Fixes (compared to v6.18-30-g7d4c06f4000f)
+${CLANG_FLAGS} contains a correct clang --target when cross-compiling.
 
-## Metric Fixes (compared to v6.18-30-g7d4c06f4000f)
-
-## Test result summary
-total: 101371, pass: 83553, fail: 3486, skip: 14332, xfail: 0
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 139 total, 138 passed, 1 failed
-* arm64: 57 total, 51 passed, 6 failed
-* i386: 18 total, 18 passed, 0 failed
-* mips: 34 total, 33 passed, 1 failed
-* parisc: 4 total, 4 passed, 0 failed
-* powerpc: 40 total, 39 passed, 1 failed
-* riscv: 25 total, 24 passed, 1 failed
-* s390: 22 total, 21 passed, 1 failed
-* sh: 5 total, 5 passed, 0 failed
-* sparc: 4 total, 3 passed, 1 failed
-* x86_64: 49 total, 46 passed, 3 failed
-
-## Test suites summary
-* boot
-* commands
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-mincore
-* kselftest-mm
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-mptcp
-* kselftest-openat2
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-rust
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-tc-testing
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-x86
-* kunit
-* kvm-unit-tests
-* lava
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-build-clang
-* log-parser-build-gcc
-* log-parser-test
-* ltp-capability
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-hugetlb
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* perf
-* rcutorture
-* rt-tests-cyclicdeadline
-* rt-tests-pi-stress
-* rt-tests-pmqtest
-* rt-tests-rt-migrate-test
-* rt-tests-signaltest
-
---
-Linaro LKFT
-https://lkft.linaro.org
+I'll use this in the upcoming v4 of the series.
