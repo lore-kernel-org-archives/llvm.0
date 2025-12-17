@@ -1,206 +1,155 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4031125A2B4
-	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 09:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E533234EF1C
+	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 10:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765965430; cv=none; b=qceNqUnpXkT3nF6/0TD/+eTVMMcvfaUCq/8JUZuCAsLJQbZOz5j3rVdiTEsqKJdi1yRuvREcuzpFP+ywn7uSEfyRlo5CgY5UEEb17yEvM4MYuILEu1eBTCdb4cLYPXCSLkoKzNYqJy5Mld5TZ5QqBTC8eWhlz5PngzHrbKjKWBk=
+	t=1765966876; cv=none; b=lUCyQrcy4IgCzAt45D/ylb4Co9XOq6MUDHrXscQzvKO3RqxHKTmAbJFeWAzL3Je2AJ58HbKmQtSJCM0O1uyswM+SHhop1+8AUzDgEPkT+hB958hU/vQD2H+j7WXcHt/H8VhynMzESRhmtNNpe2szHd0TchyJVMI4q21j3qIwe1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765965430; c=relaxed/simple;
-	bh=W5Mf7yseARyeIxH+dG84GJaL6QIkJMqImZvvj8SfcJs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVLw+m25i1le1jqipYTIMKx+Nn11aRV/GMnLlY1Zng4mBU6NcesnoBBo5kW368HX2Az66kFFoFRP80JlPJPHtNo72vZJ/P4HcIerjEseo+CRIi9LNwG+xST6EBbPh4wM0T5dQeC1OmmUoETIA1/kAODVorvYCPwXuCGjLeFSq2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XCA9lwia; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1765966876; c=relaxed/simple;
+	bh=cF083mu3r55SVNE++nE4r8UwPmfojIpwXzIP+N1PTgw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B4A5PP3mmicewhuXr0P4MYigbQn2JQieG5LFqD0P328U1sfpo8q54e+IjPoX7y8brnFE9gjdr3OmyTeC3FBu9Ni6psUBqdBSbGb/EzLozgB59UrkfOfcH9l1mwqu5MYJ6GReRBWzz8VJqJBRR90Cp11E7N0oKI5SVy7nz6qMp6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCogbEx0; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XCA9lwia"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-430f1cd0026so2724319f8f.0
-        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 01:57:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCogbEx0"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7b89c1ce9easo6519358b3a.2
+        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 02:21:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765965425; x=1766570225; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ALtV2lk4dhgucElL8P2GNjpFmTpTID91Qp1ZZ/566WY=;
-        b=XCA9lwia8xjWlBduKhnlT6hb+YPbJwn0IcCON2ItRbw4DQ4F8dOEU39pDJwSr/Le+i
-         jHNUqMcT6trwDY6SjZWR7EgEEgCu8oNOnZHgmxfQOCNLHNV5xgPbLwAxCNLhMH6fgrnw
-         0k6QPdqnWy/niMiyowDYHblimbtgx8zBNDLslDj9gqScwwohPLUX47IoJGrbktmKVHV5
-         zf6hEWchtvi6/1YovOSYsz0RHFLdj9vklf/VrSo/ztbhpj7bFiIeHtwlgl9wWR53EvzM
-         LUpn/EvcvMKLhuvQpPMjPpV36mVbE/Sdi8eU7bV3dA2W9deISyz5rs8ceu+N1v8OulNM
-         16oA==
+        d=gmail.com; s=20230601; t=1765966872; x=1766571672; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nVo0HBOMwKu9ksJmzCZKQPSTIhrU1ZIPJ/ubRTYCNmk=;
+        b=YCogbEx0p4vs6QYXQRoDwzxfNQlg6xcsTYZjkCsKo4owOMUeLDt/rqQVgiEVfjcneg
+         aF2p+cGxyJlyvKm+8JcHpLd5jh2rp4CqLSCR1LhsBPvvp1g8V1QAVlMFMwZWPi2l6TQv
+         wNIDGVBSTCKEup0yrY8EpPvVde92Wp+njWmNqzt7+lCIJMzV8f6dvbRj63bqkBr7w3Fm
+         ftexlVuQmpj0Dnev+vHbi2DdnkqsS1IZuGZ+kKzPzh/O6z79M9UDnm8aIUgY/Ftr61v5
+         9hDim6hKC6oxa0MTcCq/e2muDz1PPnrgPEDHBgkoVjYIVQkpe4VBD88e6nyvEbTs/JJp
+         R7WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765965425; x=1766570225;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ALtV2lk4dhgucElL8P2GNjpFmTpTID91Qp1ZZ/566WY=;
-        b=QbtNWCnDpbB8XaV6Wcf7FteMC/IQWHQEQ7Ih//xO/0GMhWwITZF4Ec2dHFegaoMFlf
-         MKkczRFLJXGs23EZ3XkH9R+YYFK89QbRNBh7FsefCT69n6Hq8G4wR4W+GE3rzs/iirGK
-         mdo0SjwKivRLwyC04BQyBAZKI8jfjGv37OWBmNwFxqDtclwjsXyhF3R/pjZRAqFUxLWw
-         3xTXWJCseEDjAobXvdqycVSJ9fF4gwF2hGQgnBTOEl9U26wFIlMx9sMbY3tFtCBgz8R7
-         5mdSLTJtdE8ERF8ZtzH8BKHqkU6dH6n+MvmlZpWQugV526dty6mZWKKOWNIvDu7HAr+2
-         vUdA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2gNS93GZk/OwquMsK60uQtLudmyF9BnlKaJnUMFXV9SeX631eJ/AwuM35jg/NKJHFNkxw@lists.linux.dev
-X-Gm-Message-State: AOJu0YwRmW7QzQQGpyLNB+8ZG1Aj7tcesEBtB/uInD1W5JLPQvIgyiR9
-	uNnGvwHNRXO2RBGreXte7EC4P73Wwnl0OwV4LPqG3QQF5bW+o0c+hsosX9tMmdHX9r94NFL8pAb
-	rRsAFmDK6x2Z0DxkM6S5NN7n7YdbUN7JjAYEoZgWr
-X-Gm-Gg: AY/fxX7dmbgGOUgynAii66dYIm3ezhodRZppx6RYZQlo7N2VplUtyivdnMZxMEfNJBK
-	mXz5FNW1wB799IYPXUdbHaex1M8qlkNVV1DUBrjvEt21/cmOXpcHkTg/8In0M6g0SzFp6y6xGcB
-	K8IG857/u9ZYlg0hTcr1F2NtNauO9aiZpKBvtr9LvziXRFJax8yGhkkOsV/tihqwFMq+UxhIV+A
-	oRTVcVvcrAXIJyVVHBtLUA4ZQ5UvFqi1lnAOBrS3x4JpCGikRW5Y0LeqC4o38Idkbk13g==
-X-Google-Smtp-Source: AGHT+IHe0EpDSE2rlnkUlEGZ3VEge9khn+TJt9E10ytBVJjq0gppvxESBaZUmPR3wD3QT8PoqUKzjGkbvv2DqA5R+u0=
-X-Received: by 2002:a05:6000:1842:b0:430:f494:6abb with SMTP id
- ffacd0b85a97d-430f4946d6amr11864834f8f.8.1765965425249; Wed, 17 Dec 2025
- 01:57:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1765966872; x=1766571672;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nVo0HBOMwKu9ksJmzCZKQPSTIhrU1ZIPJ/ubRTYCNmk=;
+        b=aI1cDXAQHUBsRpD5Nayed7+JLv2pOs5dE42q2LrSkk9MdNMLwJfgB8jk7v6jRQtUWz
+         8SLx0PWuseoALQYN/B6mrUFvNK1hJA+WzOoqyeLwPyQS6kQNafq9jNGNKFhz5OTS/mi0
+         4puhhOAQbHMgycI2wDs4F4xGgtBbkDrirbmFAr8KDmz/+qi6q3sYKQhfxNwNv8GyyKSw
+         4JGtoQXLVhwZHsbkvPX3zfxlqGIvlplyDU6eEtg+JvIsf+zYgx5comcPAQR5Q/iwrErC
+         F+Uruk9iuIuPzh4QHQtCFjR14VNPDu6GbfSuSXP9eIsBBnAbP9j79nAfwLzQwkNMLv/n
+         1aaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWG4hWk5tmkUiTO8tPH3osbGlhWZAVcMgvmKES+ktQUX/sojWOjyMLBaP+iXWSMXcE4PS60@lists.linux.dev
+X-Gm-Message-State: AOJu0YyHcyN9BqrhLssuapUKr/8rts9Lu+1ofhAEkEB9vdL/AIAHrJxX
+	C++aCn1luiSKicl745vMgymg/mMzGeiMm3DS8coi1uAF/Em1QPgNo6oW
+X-Gm-Gg: AY/fxX4qiOux6BfWW2BkHRoqPYLsKCyvpI2wXa8oDaibPCVcb7OBGbqXlqs7SPiKLF2
+	bbGiG3GDzxusJeIq2lOdsoYnwOnVJtHAlFfJBfu9GJx9uBHZ24c9FUJLVMCOcK0TZ9MqG8AK5HY
+	2tEQS20ZG3vxhZYwxswM8a/wKDsNrUJxmON2DDrOkovJnq08/dg1nH12/fotpe1ihzQ45GhdZmx
+	lJJDwEubFo6pWRbjJNxXScRe2M7IYGB+cjYBh3nGP7Dnx2Ihdz7ylmklg43T7OH81jPKVzheXge
+	84E8Im1cWeZmUG/Mq/kexZAOkZJJIcXD1rRLvlqQdkY4rha81Eq43njHDvxpt/0bf3pIrPOC6rV
+	WxjNpIBUvXTZvboVvOinKzp2m8m7+E6+R/J3XloRVrmAR6nQI8YonK7Lw2es6ll+Er56/VmAwTA
+	/2J2MyTK1qeL/eMzFS2r/ufmwRHTQKj/CZpBtF6SKug3tfLsUSarlpTDxluV84gJl8tg==
+X-Google-Smtp-Source: AGHT+IEKnlxl760/suZ89AobjUICKYa4N99bq8z5k3ImT4XOViJUc86UsaA7/A8wEeEcuyACIfLqtA==
+X-Received: by 2002:a05:7022:158a:b0:119:e569:f276 with SMTP id a92af1059eb24-11f34c035a0mr13548110c88.31.1765966872169;
+        Wed, 17 Dec 2025 02:21:12 -0800 (PST)
+Received: from [192.168.68.65] (104-12-136-65.lightspeed.irvnca.sbcglobal.net. [104.12.136.65])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f43288340sm26457054c88.6.2025.12.17.02.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Dec 2025 02:21:11 -0800 (PST)
+Message-ID: <1910f4b6-db74-4c86-9010-28ab4462c5a7@gmail.com>
+Date: Wed, 17 Dec 2025 02:21:11 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1765374789.git.gtucker@gtucker.io> <97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
-In-Reply-To: <97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
-From: David Gow <davidgow@google.com>
-Date: Wed, 17 Dec 2025 17:56:52 +0800
-X-Gm-Features: AQt7F2oTqtembk-preTyOs_15GU6b4Z2klG1ITK7nRS2fi1pLPL8_IcTYBRaAXU
-Message-ID: <CABVgOS=LD_7gTk+qivoLJpAk0susehrCVdazApQAM=9311M4+w@mail.gmail.com>
-Subject: Re: [Automated-testing] [PATCH v1 1/2] scripts: add tool to run
- containerized builds
-To: gtucker@gtucker.io
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org, 
-	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e593ef064622dd81"
+User-Agent: Mozilla Thunderbird
+Subject: Re: ARMv7 Linux + Rust doesn't boot when compiling with only LLVM=1
+To: Christian Schrefl <chrisi.schrefl@gmail.com>, stable@vger.kernel.org,
+ regressions@lists.linux.dev, rust-for-linux@vger.kernel.org,
+ Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Danilo Krummrich <dakr@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>
+References: <1286af8e-f908-45db-af7c-d9c5d592abfd@gmail.com>
+ <0705db10-3cbb-4958-a116-112457f9af6c@gmail.com>
+Content-Language: en-US
+From: Rudraksha Gupta <guptarud@gmail.com>
+In-Reply-To: <0705db10-3cbb-4958-a116-112457f9af6c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---000000000000e593ef064622dd81
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, 10 Dec 2025 at 21:58, Guillaume Tucker via
-lists.yoctoproject.org <gtucker=gtucker.io@lists.yoctoproject.org>
-wrote:
+On 12/16/25 06:41, Christian Schrefl wrote:
+> On 12/14/25 12:54 AM, Rudraksha Gupta wrote:
+>> Hello all,
+>>
+>>
+>> I have the following problem: https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2635
+>>
+>>
+>> In short, what is happening is the following:
+>>
+>>
+>> - The kernel boots and outputs via UART when I build the kernel with the following:
+>>
+>> make LLVM=1 ARCH="$arm" CC="${CC:-gcc}"
+>>
+>>
+>> - The kernel doesn't boot and there is no output via UART when I build the kernel with the following:
+>>
+>> make LLVM=1 ARCH="$arm"
+>>
+>>
+>> The only difference being: CC="${CC:-gcc}". Is this expected? I think this was present in the Linux kernel ever since Rust was enabled for ARMv7, and I never encountered it because postmarketOS was originally building the first way.
 >
-> Add a 'scripts/container' tool written in Python to run any command in
-> the source tree from within a container.  This can typically be used
-> to call 'make' with a compiler toolchain image to run reproducible
-> builds but any arbitrary command can be run too.  Only Docker and
-> Podman are supported for this initial version.
+> I've managed to the get the build setup for qemu-armv7. For some reason
+> I could not get past the initrd even on kernels that are supposed to work,
+> but I think that is unrelated (and not a kernel issue).
+
+Yep, I just got qemu-arm working to drop into a debug shell for now. I 
+have to look into why other things aren't behaving nicely (but that's a 
+problem for later me :P). For now, it seems to demonstrate the problem 
+nicely:
+
+https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2635#note_521740
+
+
+> On the linux-next kernel I didn't get any output on the console from qemu so I
+> think I've reproduced the issue. Changing CONFIG_RUST=n did not change the behavior.
 >
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Link: https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io/
-> Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
-> ---
+> So I this is almost certainly a LLVM/clang issue and not a Rust issue. I'll try to
+> do a bit more digging, but I'm not sure how much I'll get done.
 
-I gave this a go, and am liking it so far. My only real complaints are
-that the defaults don't totally match my prejudices. :-)
+Did a little more testing in addition to the testing in the gitlab issue 
+mentioned above:
 
-Having a good default container, and perhaps falling back
-automatically to podman if docker isn't running (or just defaulting to
-podman) would make this very convenient for one-line
-tests/reproducers.
+- Removed Rust configs from linux-next/pmos.config -> didn't boot on 
+qemu-arm and my phone
 
--- David
+- Then I removed Rust dependencies from linux-next/APKBUILD -> didn't 
+boot on qemu-arm and my phone
 
---000000000000e593ef064622dd81
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+- used linux-stable instead of linux-next -> booted on qemu-arm to a 
+debug shell
 
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-Dxz3AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHZtY3XkWtC2
-e2Idfk+0JyK7BLzzMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBo
-hqjbVaHxZoT6HHUuwQcTlbgXpuVi59bQPrSwb/6Pn1t3h3SLeuUCvOYpoQjxlWy/FexsPW+nWS0I
-PUmWpt6sxbIRTKPfb7cPk32XezfnA0jexucybiXzkZKTrbI7zoMOzDIWpTKYZAonB9Zzi7Dso4An
-ZOtz/E3yhdR/q1MK30d5fiCS0vorEd0Oy8Jzcc7TJ2HGMzEEXiFFvVrJYJHvfYOeXE4ywAG6YWO0
-x78+bXeB9vkeWHhOYKyYXuAXrnHASddEICg1QlJCHDAISMC1Wn/tjqTMTt3sDAe+dhi9V1FEGTbG
-g9PxPVP4huJEMIBu/MWNMzHfiW4E7eCHVPrmtX7CFDlMik7qsgQBbO5h6EcxBamhIflfMgoISsRJ
-Vyll2E5BNVwkNstMgU3WMg5yIaQcuGFgFnMTrQcaLEEFPV3cCP9pgXovYDirnB7FKNdCZNHfeBY1
-HEXJ2jIPDP6nWSbYoRry0TvPgxh5ZeM5+sc1L7kY75C8U4FV3t4qdC+p7rgqfAggdvDPa5BJbTRg
-KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
-IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgU4E738d3uMcerC6CVXGYsugBWBPK
-YbIAyeBci4Ac1FYwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MjE3MDk1NzA1WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAuVAXlZyytGXtWi2petJ1rOSbw0snC2OTZma9Div1wA9j+mqUjWNjdE+ieQfEVEeD
-eImhecw7r+ZeLRYcvzehwB52yUOY4DZRRFwWNrTw6bc8ph8C4DY+PIy0VjwwLohg6W1NlYXDVumw
-OsSIT+rmnGtnNxNKf1+1qrfEXyzEmUYwPAKnMzWJPz2TElvsdXCSt18M7ly5dR/guXmSdOdmlpfA
-0Kav/ai0KztkVkYnR2FuMX7orwi6JS/Esci5hPo/rVK4L3LowJ9Hvljr5BHOmyl3Ib51hwtyW42u
-YDzhv2/Sjfsdla0a8RaEUiOlHpJWiwbRtXvsmNd1pnk0OBvnNA==
---000000000000e593ef064622dd81--
+linux-stable is built via gcc:
+https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/community/linux-stable/APKBUILD#L179
+
+linux-next is built via clang:
+https://gitlab.postmarketos.org/postmarketOS/pmaports/-/blob/master/device/testing/linux-next/APKBUILD#L68
+
+
+
+>
+> Adding the LLVM and ARM lists to this conversation.
+>
+> Cheers,
+> Christian
