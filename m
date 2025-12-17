@@ -1,124 +1,270 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C91A36D4E5
-	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6D3382BD1
+	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765979620; cv=none; b=km5iSN5mE4qYTG38GN6Tu1ECA5notOShC2G+y51D2HPIHJxRdmFMDIJUEOBi2lkpnYsD2Ox0BDlNOlSPQt4oy6gP6ap0SArxy+Kpz/uwNK7xNhOmhl0s61jsMTkAB7AAh0BvazCvgH43ai46121xQUm3KwDnWFHbCm/hF72vXAo=
+	t=1765979628; cv=none; b=gOVJIC6zx/5Sb3XJz03QvrA2jh1psfc/99Bfc+Yd7kkpHHoHy7FzEztigM4Vm5/O5GkQQpPo9aXhrSis4nWbqPdBOQxPPmH7ISF5bMgBHi/HHjULtR6VOJkUDZLtpEAc3j4r762U9fLmu0x+4UOSj+PCCJwOLmDA7bXaW4YBxPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765979620; c=relaxed/simple;
-	bh=CjnHJLYxh9NIWSmAW0oXG1F9NuoGVt1bcOhX0OTH3WA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DCRi1ZLYumQ9Gd0SisdTh3pRoXlTdvDcUCyFF7zbgxZ72zqolJAEHJIIqY9OcfdU3h+/5m2xV1mtONE0nZvRzcLfp1YyfCUOXA1wIZ68j5SmHXcziXy03nWVC2MX5pRxJ2Kvbcgv0OQb1DdEnkijjl23FmugahrEiKZi/PllgTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0NZgw3Xz; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1765979628; c=relaxed/simple;
+	bh=ymWYLYY2hCVl28DTIf7vb6XCEeATST3CD5cKX1npf2Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GO0RoIjLNR/D58Y3ncA8iVCu6mIeDLAR+SHojsEikt49+B1+wo++QfBSIy7gDM8dfgfROb1ojREcMv2Oi7U7jEVmjW9CNB/La0zafAekARZb88waVatjjchxpBdNiG84BwsF0bFR71y0gtudPTn+DXbp1I/AqQ55pFK9qdQQWPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=izqi1iLA; arc=none smtp.client-ip=209.85.210.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0NZgw3Xz"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477a11d9e67so31321415e9.2
-        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 05:53:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="izqi1iLA"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-7aae5f2633dso6192919b3a.3
+        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 05:53:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765979614; x=1766584414; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GwYQjUeDdM5Nle1IpM5e5V1FvMRCYFAI0uCKIrSa2SQ=;
-        b=0NZgw3XzpWGjFiMYtEHs6a/iw7ecdkS/ilPFBqTZ188tr3ZleePKMms2D8UzL+CMG7
-         XF/Y1bFnEJ/UJoAFqZl6GVPewQAiCzkxTbnXhvcG4LYeIzQijP94O52tu2kUcOmAao1d
-         Uz8yI1FqtKU3jDtuGwDoy+xYdjR9j6wlhhyX/M2mN9t5G7rIP1RzSYxEd36L6fbIQdJq
-         0LtciDSUZlZ0kYwv/7CGKvuueUALhCCIwz6kH3MbSDP4QTPJ3Z8BbBbsGZx8U6YGbjfy
-         TImz/xcf5djhb078kahm+RICOhH6oxDAiCDo8shnTPb+43diBjDhU0yCW4uVwaqJdscN
-         uHvQ==
+        d=linaro.org; s=google; t=1765979625; x=1766584425; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bw6domGQXb5We95z2PGEaiqjLe5ajxqpO51i2VZVJ88=;
+        b=izqi1iLAn7+yQ8m/CIjvRhQNi7uAbAgLNtX0XZcRVXipVSrgF4MgiQkgPh2TQD9498
+         T2K2oe1PUWHifWfh6BSgA06WVgZdhG9ZPry5ruyQKlr84kvbHy+7ZEv/VNKzV/+irUam
+         Ue1nVUt+IzVqwqnwNVN0uiSb2gc9mWCG5gQpwZb01upZ30mbfKa9ZqQXtM8x411ZTB7W
+         FYTiDOfG90pq4HoZ4Yj29ZkyUM/QLh2mxOFTJeoAg1TDEwsZ9u+1caKTZ1PIsWPDQXJo
+         y1yrUgB/ZF2aUJ1ZWMtxXawXR+X2KQJZRm/pzoyFsgtK2b3zOZOMxtgdbGMVpGAP+lG1
+         lCRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765979614; x=1766584414;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GwYQjUeDdM5Nle1IpM5e5V1FvMRCYFAI0uCKIrSa2SQ=;
-        b=U2I4yF8/EPJbc1J5wNT5p0SOlVW1VkqVE0OtzSThAR06JehEUiw3Gsm1+hXjEasegT
-         dvJMdg7pWrrV9WRmiREnPkK9XYK8h+9QUnro0codwIDb+KH+ojME6SxF7Wi6sZIk/Dfh
-         OxX5mWlWE1cS4WOMYuehTUn4h4ktWU/XWu2rmMdVDveEUdpmBNLW850D5SiioBe2BHSd
-         0wH9eW2nJVCcE8DS9Sxiuz1EbD6+OgQjJ6YmOudB9MQnoNB9cKWSDXaCFsUEB5wjbCnK
-         oRyGB9KanHX3OD66QFHVg7LtP1+7ZAFy3l4IvvfGjrXjGn8bqp4vMpcGFHX1NhC9hEz9
-         RXsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXiD5JXgDmMvejGyHXRsKfG0qoeZ1tfGo+iwpQsHyF6Eajc6JSlwrdihgBOeo5WXBVGgMC9@lists.linux.dev
-X-Gm-Message-State: AOJu0YzZ5v4FR8ARee3v+gsGI8V6GXEK5TgENiAJrNM5uD1FLMM4ha2F
-	rVQVoVNSafgZe4h8CYZRzKL62NrS/8DFrjabNcP3vW+5AbAPXqQnvY3u//l765JCaa/jHR5xazc
-	/Bc6vCVVAI5tswQ==
-X-Google-Smtp-Source: AGHT+IEY+zeplp7tJrsWxhjOhVbg/z9HJ2VKN9G1+nCVhTS+SXG8VbzCbUYGsr2pZOH8Zg/AWbnOXNkfLP8NnA==
-X-Received: from wmgp21.prod.google.com ([2002:a05:600c:2055:b0:477:afa:d217])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4f90:b0:477:b0b8:4dd0 with SMTP id 5b1f17b1804b1-47a8f905680mr190102895e9.17.1765979614010;
- Wed, 17 Dec 2025 05:53:34 -0800 (PST)
-Date: Wed, 17 Dec 2025 13:53:33 +0000
-In-Reply-To: <20251216130155.GD3707891@noisy.programming.kicks-ass.net>
+        d=1e100.net; s=20230601; t=1765979625; x=1766584425;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bw6domGQXb5We95z2PGEaiqjLe5ajxqpO51i2VZVJ88=;
+        b=CrB0u7JoI6N2q6XgnrWKY8sGBqTYHbPYF0B4RhcK2+9TqhaYXUOGMkGdayKDcayvhu
+         c8lGn2EUS3giEvIclucXPfk0TEXUbn+vKolHobYKUKsEHB3BZGh+9HpKZpmmxoizgeTq
+         JGCqthhx6WB1zEU5gEagwpywsAt/r0RX5Ss3NC/O5BqTQHeIK0KW37NDiXyzlmMpf5rS
+         4HuUk4GvF82kE2qAwwDBOo5p4Pr2yUOKFCkSlged4oSM5nFWD4kH7Qm1IDE22G8NQMG8
+         6xq9uh9yCa6slS5X2FDxYF+27bfbC7gb9+a6tgOglqTB+MAA+w848k0+TION7duM3ron
+         5KTg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3Nz84K5tJZ/asiOHuiWoqh1G0xBbdNoGMLoGk6wuKYJbP8advKyTCTu6lmLFffbxkmFLK@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz9M3S5KJ4apHyXJdIOHLgt8RmxQDZDzUQ0ce7ZEJnsciPZeF0y
+	oGGBr3aPG5dkdhfh6d3w2YlEnWRWLZuJaZAW/EJRw+sEYsTRGkchashUla6W6rqB3Zs=
+X-Gm-Gg: AY/fxX67l1RRaAC4kK+Bmg2lkV43sLrR8hpiffkLKoHOf6YljZAjkam0J4J3RIPVTtK
+	bw/+alZn6D1orVimd7X+Ty/0SABP9XLYhZM7xWw/Nx783dz5MTbZiBUOugap5C6/McGldSj3Fzo
+	Sw9rBwu0MD50MmsEIrCc2OMIvPreLqc7VkCxj3vLSPb6Yh12coaBZsBd6YBcjN8zdW6PVnWJG2e
+	zIpKe4Bq4fJeD5BjZzR920MHwiVaS06iQ5/GRE21U3vUx0o7BMAJAlVpgBgtufqNBAH0gfZiP5W
+	zbmagQgvrBzTuumZCTHrMmbhVK+v1kWJ5XFlonAZSFFMA+TzkALXOJ/634q88PExwcbNQh1Fa7f
+	b7dyKSG7WPdbBRGic+Fgmn/R/ikXdWOqOOAIyrZYOBNMDjNHSNTUHkICj3NA7vd0q6FFyO5TSWj
+	/+AYO+qBSFv+0IuG48
+X-Google-Smtp-Source: AGHT+IGJjIoNyzEoQRNyQQ0EVpiAF8sJKXpD2h9Vf2anlo2Omut3mjOz22uIu0wg92zvh+eZpb5z9Q==
+X-Received: by 2002:a05:6a20:939d:b0:341:9db0:61f1 with SMTP id adf61e73a8af0-369b433b221mr17001311637.16.1765979625467;
+        Wed, 17 Dec 2025 05:53:45 -0800 (PST)
+Received: from localhost ([2405:201:c00c:2854:ecba:10b1:66e4:448])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34cfd7036e7sm2539893a91.1.2025.12.17.05.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 05:53:44 -0800 (PST)
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+To: gregkh@linuxfoundation.org
+Cc: achill@achill.org,
+	akpm@linux-foundation.org,
+	broonie@kernel.org,
+	conor@kernel.org,
+	f.fainelli@gmail.com,
+	hargar@microsoft.com,
+	jonathanh@nvidia.com,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	lkft-triage@lists.linaro.org,
+	patches@kernelci.org,
+	patches@lists.linux.dev,
+	pavel@denx.de,
+	rwarsow@gmx.de,
+	shuah@kernel.org,
+	sr@sladewatkins.com,
+	stable@vger.kernel.org,
+	sudipm.mukherjee@gmail.com,
+	torvalds@linux-foundation.org,
+	dan.carpenter@linaro.org,
+	nathan@kernel.org,
+	llvm@lists.linux.dev,
+	perex@perex.cz,
+	lgirdwood@gmail.com,
+	Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: [PATCH 6.12 000/354] 6.12.63-rc1 review
+Date: Wed, 17 Dec 2025 19:22:48 +0530
+Message-ID: <20251217135249.422394-1-naresh.kamboju@linaro.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251216111320.896758933@linuxfoundation.org>
+References: <20251216111320.896758933@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
- <20251216-gcov-inline-noinstr-v3-1-10244d154451@google.com> <20251216130155.GD3707891@noisy.programming.kicks-ass.net>
-X-Mailer: aerc 0.21.0
-Message-ID: <DF0JIYFQGFCP.9RDI8V58PFNH@google.com>
-Subject: Re: [PATCH v3 1/3] kasan: mark !__SANITIZE_ADDRESS__ stubs __always_inline
-From: Brendan Jackman <jackmanb@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Brendan Jackman <jackmanb@google.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Marco Elver <elver@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, <kasan-dev@googlegroups.com>, 
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Dec 16, 2025 at 1:01 PM UTC, Peter Zijlstra wrote:
-> On Tue, Dec 16, 2025 at 10:16:34AM +0000, Brendan Jackman wrote:
->> The x86 instrumented bitops in
->> include/asm-generic/bitops/instrumented-non-atomic.h are
->> KASAN-instrumented via explicit calls to instrument_* functions from
->> include/linux/instrumented.h.
->> 
->> This bitops are used from noinstr code in __sev_es_nmi_complete(). This
->> code avoids noinstr violations by disabling __SANITIZE_ADDRESS__ etc for
->> the compilation unit.
+On Tue, 16 Dec 2025 at 16:48, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 >
-> Yeah, so don't do that? That's why we use raw_atomic_*() in things like
-> smp_text_poke_int3_handler().
+> This is the start of the stable review cycle for the 6.12.63 release.
+> There are 354 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 18 Dec 2025 11:12:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.12.63-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.12.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Right, this was what Ard suggested in [0]:
 
-> For the short term, we could avoid this by using arch___set_bit()
-> directly in the SEV code that triggers this issue today. But for the
-> longer term, we should get write of those explicit calls to
-> instrumentation intrinsics, as this is fundamentally incompatible with
-> per-function overrides.
+1.
+I'm seeing the following build failures on s390 due to,
 
-But, I think the longer term solution is actually now coming from what
-Marco described in [1].
+## Build errors:
+arch/s390/include/asm/fpu-insn.h: In function 'fpu_vst':
+arch/s390/include/asm/fpu-insn.h:381:36: error: 'size' undeclared (first use in this function); did you mean 'ksize'?
+  381 |         kmsan_unpoison_memory(vxr, size);
+      |                                    ^~~~
+      |                                    ksize
 
-So in the meantime what's the cleanest fix? Going straight to the arch_*
-calls from SEV seems pretty yucky in its own right. Adding special
-un-instrumented wrappers in bitops.h seems overblown for a temporary
-workaround. Meanwhile, disabling __SANITIZE_ADDRESS__ is something the
-SEV code already relies on as a workaround, so if we can just make that
-workaround work for this case too, it seems like a reasonable way
-forward?
+The commit point to,
+  s390/fpu: Fix false-positive kmsan report in fpu_vstl()
+  [ Upstream commit 14e4e4175b64dd9216b522f6ece8af6997d063b2 ]
 
-Anyway, I don't feel too strongly about this, I'm only pushing back
-for the sake of hysteresis since I already flipflopped a couple of times
-on this fix. If Ard/Marco agree with just using the arch_ functions
-directly I'd be fine with that.
+2.
+The clang-21 allyesconfig builds failed on on arm, arm64, riscv and x86_64
+as it was reported on the 6.18.2-rc1 and 6.17.13-rc2.
 
-And in the meantime, I guess patch 3/3 is OK? As it happens, that will
-already make the current error go away without needing the first 2
-patches. So maybe we should just merge that and be done with it? There's
-probably a good chance no other issues will show up between now and
-whenever Marco's nice compiler support arrives.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[0] https://lore.kernel.org/all/CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com/
-[1] https://lore.kernel.org/all/CANpmjNNc9vRJbD2e5DPPR8SWNSYa=MqTzniARp4UWKBUEdhh_Q@mail.gmail.com/
+## Build
+* kernel: 6.12.63-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+* git commit: f8100cfd690d4b1fd45bdba30428b0eab2980dc0
+* git describe: v6.12.60-537-gf8100cfd690d
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.12.y/build/v6.12.60-537-gf8100cfd690d
+
+## Test Regressions (compared to v6.12.60-182-g4112049d7836)
+  
+* s390, build
+  - gcc-14-allmodconfig
+  - gcc-14-allnoconfig
+  - gcc-14-defconfig
+  - gcc-14-lkftconfig-hardening
+  - gcc-14-tinyconfig
+  - gcc-8-allnoconfig
+  - gcc-8-defconfig-fe40093d
+  - gcc-8-lkftconfig-hardening
+  - gcc-8-tinyconfig
+
+* arm, arm64, riscv, x86_64, build
+  - clang-21-allmodconfig
+  - clang-21-allyesconfig
+
+## Metric Regressions (compared to v6.12.60-182-g4112049d7836)
+
+## Test Fixes (compared to v6.12.60-182-g4112049d7836)
+
+## Metric Fixes (compared to v6.12.60-182-g4112049d7836)
+
+## Test result summary
+total: 84881, pass: 70888, fail: 3200, skip: 10584, xfail: 209
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 139 total, 137 passed, 2 failed
+* arm64: 57 total, 51 passed, 6 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 34 total, 33 passed, 1 failed
+* parisc: 4 total, 4 passed, 0 failed
+* powerpc: 40 total, 39 passed, 1 failed
+* riscv: 25 total, 24 passed, 1 failed
+* s390: 22 total, 12 passed, 10 failed
+* sh: 5 total, 5 passed, 0 failed
+* sparc: 4 total, 3 passed, 1 failed
+* x86_64: 49 total, 46 passed, 3 failed
+
+## Test suites summary
+* boot
+* commands
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-exec
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-mincore
+* kselftest-mm
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-mptcp
+* kselftest-openat2
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-tc-testing
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-x86
+* kunit
+* kvm-unit-tests
+* lava
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-build-clang
+* log-parser-build-gcc
+* log-parser-test
+* ltp-capability
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-hugetlb
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* perf
+* rcutorture
+* rt-tests-cyclicdeadline
+* rt-tests-pi-stress
+* rt-tests-pmqtest
+* rt-tests-rt-migrate-test
+* rt-tests-signaltest
+
+--
+Linaro LKFT
+https://lkft.linaro.org
