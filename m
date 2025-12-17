@@ -1,46 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E9930AAD8;
-	Wed, 17 Dec 2025 06:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB2E345CA1;
+	Wed, 17 Dec 2025 07:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765953036; cv=none; b=iUoK2ma4Nfqvq/Bqj9fGhoq3fgHlFVvM5qWlceqvykjs5ZqWaMuRdg7sZqs6yaSpyVQenjIBQzNA7gPakOExSn0KHqGph7PJwyuViC7DvmrvKeI44aSQ2IzJKSueYguve7VfXDQ7p/m5xyj6XsLmTmBVrBMdPgOXtAE+y4V//V0=
+	t=1765956876; cv=none; b=iMgFW+0z82twK1kpmcPWLzODJgeVHpky1GUlxIX3nMj2lM4R7qPen1PfSgSNldNNunauzobJrPs+Gu1TJxduFYctWZi/3oswBsj7Rtw8iRZ0SQinEc36/8hMGsrXtvtQk6H7xv3vWko4UZaMQmpK1VbUW4LeOKUExZqRbN5EXgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765953036; c=relaxed/simple;
-	bh=enmhooH99Y3PgVtp5N6Fp2tyZL6K7np1XXwGZiSj86Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UfVheuD7/JKTECoQtsynfLOeVN8UtpM83CZgt79V9VgCXYVTYMGvbMmKdEmLzAfNDT4pB1AIpCKt0iosp8kiLR9WqjTCsVxTns1HCkdGBC/hwPkMKDKSQIyBK8v02T2lP/VL3gTKMGKAW+A18EJ/l78xf8CjSBi/snu40vmGmXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BQzR2oZx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765956876; c=relaxed/simple;
+	bh=2z0McsjTOB+P3exuNFKH0/lauyHMHNPjxuqumEYpnPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Yb+uctslbMECUXQl8BaKT7K35Ie4LNADHi19XjuMoqHT5ojfbWc5qqYpxpFuPW486dNzBVX/Jyu/o0fi8h4lPYvGkQnSVEeMJpIWZjIaCM/QE6bwiS4PjUH4qGym80+8p5x6F0lsEQylGd3ySj3IVaOIdSm2AZ/uO1BTJV4W3Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=fail smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XZsuyYOM; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BQzR2oZx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A98C4CEF5;
-	Wed, 17 Dec 2025 06:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1765953035;
-	bh=enmhooH99Y3PgVtp5N6Fp2tyZL6K7np1XXwGZiSj86Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BQzR2oZxhwjSj3UgsWKjaJaF+zR11F+m70hL6LiNs8WsdhuGSN+AyXcxLIeI6RuS6
-	 uT76ivQxQpkT1ZhSK3juynoZ+5NK/3dNJxIIcWJU+oUBvYshF5nc3Mw8k3cjlHUjon
-	 Mjc1OafnkFhVr6spCRdjGuppki+6xV1xpdHOBGPA=
-Date: Wed, 17 Dec 2025 07:30:32 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: achill@achill.org, akpm@linux-foundation.org, broonie@kernel.org,
-	conor@kernel.org, f.fainelli@gmail.com, hargar@microsoft.com,
-	jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-	linux@roeck-us.net, lkft-triage@lists.linaro.org,
-	patches@kernelci.org, patches@lists.linux.dev, pavel@denx.de,
-	rwarsow@gmx.de, shuah@kernel.org, sr@sladewatkins.com,
-	stable@vger.kernel.org, sudipm.mukherjee@gmail.com,
-	torvalds@linux-foundation.org, dan.carpenter@linaro.org,
-	nathan@kernel.org, llvm@lists.linux.dev, perex@perex.cz,
-	lgirdwood@gmail.com,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH 6.18 000/614] 6.18.2-rc1 review
-Message-ID: <2025121719-degrading-drainpipe-fb2e@gregkh>
-References: <20251216111401.280873349@linuxfoundation.org>
- <20251216195255.172999-1-naresh.kamboju@linaro.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XZsuyYOM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765956874; x=1797492874;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2z0McsjTOB+P3exuNFKH0/lauyHMHNPjxuqumEYpnPs=;
+  b=XZsuyYOMD13UTpecO+oRcYiA/lV5NKUJM9v4QVbqbKgOOwv48x3JcK8X
+   kW88pncXxiyy07k5bsHbR031kjQsYp9svlGX5e6jnzWAFh83E8cIfFrdZ
+   awJm6xverWXbb8kPs4jCTA/vmvfE8tef0X6yfQhfZkNQhJVOEKf/O67Lc
+   WDYKj75LoQJs5pasNfDi8hieBb24ul5klpw9oCyJdmPJrJ6QLHrAB5cFe
+   UMtbuKWJxdbd1qmizJrPTco1sMHATngiBCMZrUAZ5ILYgKY63zDzqNhWL
+   xO9BsrlDUV36b24j2QjulV1Salw+31zDd2ylJy8JNwLvmu4itrzGleh2X
+   A==;
+X-CSE-ConnectionGUID: hhbs340RTMaeMC8Fd25ZPQ==
+X-CSE-MsgGUID: 24Wm3QecTo27N4jROxEGTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11644"; a="70466158"
+X-IronPort-AV: E=Sophos;i="6.21,155,1763452800"; 
+   d="scan'208";a="70466158"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 23:34:20 -0800
+X-CSE-ConnectionGUID: CKayANs2Rw6D0QUgkGHKFw==
+X-CSE-MsgGUID: xijq41dUSPiwjI6RGGZ3Jg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,155,1763452800"; 
+   d="scan'208";a="202733148"
+Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 16 Dec 2025 23:34:18 -0800
+Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vVm35-000000000AH-2k25;
+	Wed, 17 Dec 2025 07:34:15 +0000
+Date: Wed, 17 Dec 2025 15:34:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sameeksha Sankpal <sameekshasankpal@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-nonmm-unstable 60/60] ld.lld: error: undefined symbol:
+ envp_init
+Message-ID: <202512171554.G484xf2C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,36 +63,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251216195255.172999-1-naresh.kamboju@linaro.org>
 
-On Wed, Dec 17, 2025 at 01:22:55AM +0530, Naresh Kamboju wrote:
-> I'm seeing the following allmodconfig and allyesconfig build
-> failures on arm, arm64, riscv and x86_64.
-> 
-> ## Build error
-> sound/soc/codecs/nau8325.c:430:13: error: variable 'n2_max' is uninitialized when used here [-Werror,-Wuninitialized]
->   430 |                 *n2_sel = n2_max;
->       |                           ^~~~~~
-> sound/soc/codecs/nau8325.c:389:52: note: initialize the variable 'n2_max' to silence this warning
->   389 |         int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
->       |                                                           ^
->       |                                                            = 0
-> sound/soc/codecs/nau8325.c:431:11: error: variable 'ratio_sel' is uninitialized when used here [-Werror,-Wuninitialized]
->   431 |                 ratio = ratio_sel;
->       |                         ^~~~~~~~~
-> sound/soc/codecs/nau8325.c:389:44: note: initialize the variable 'ratio_sel' to silence this warning
->   389 |         int i, j, mclk, mclk_max, ratio, ratio_sel, n2_max;
->       |                                                   ^
->       |                                                    = 0
-> 2 errors generated.
-> make[6]: *** [scripts/Makefile.build:287: sound/soc/codecs/nau8325.o] Error 1
-> 
-> First seen on 6.18.2-rc1
-> Good: 6.18.1-rc1
-> Bad:  6.18.2-rc1
-> 
-> And these build regressions also seen on 6.17.13-rc2.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   88800d4048f5ffd0dfd05dd82b89affe6b74e55b
+commit: 88800d4048f5ffd0dfd05dd82b89affe6b74e55b [60/60] init: mark envp_init as static
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251217/202512171554.G484xf2C-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251217/202512171554.G484xf2C-lkp@intel.com/reproduce)
 
-Thanks, I'll go queue up the fix for this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512171554.G484xf2C-lkp@intel.com/
 
-greg k-h
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: envp_init
+   >>> referenced by do_mounts_initrd.c
+   >>>               init/do_mounts_initrd.o:(handle_initrd) in archive vmlinux.a
+   >>> referenced by do_mounts_initrd.c
+   >>>               init/do_mounts_initrd.o:(handle_initrd) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
