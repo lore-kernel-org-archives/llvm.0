@@ -1,60 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E0330DD0C;
-	Wed, 17 Dec 2025 21:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1FF32ED4E;
+	Wed, 17 Dec 2025 22:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766006599; cv=none; b=EvozOsloPEWtdbfRWuz1TWoOwiog4MpogHXE9/IzLJEZYCf1Z+Exc29TM1NdKXpqryFpvXhOpzJzq6Y65UhbuYOmOfEohzCV2eK5ic8n5FPN882VhFOuTinNawlW4QICniJVnXeN+YBXo2HofZzcF6VaUTg8Q5pvQix1uMSGJlc=
+	t=1766011643; cv=none; b=JFre6NIdtSUeZERii6Ef2navxjBpg7VDebU/mOmwGB3TfGAng/A5aA9il3mXLIBtPqHEt+8h93SGGzs0Ck/qT7ackwP38XX7V59EsPEhAAL0btRxSlP9EFsnRTcJbG5YPkLWv7qQQY2ycc1bhT4ubC+BMlYQZYjlP0lpF5zuFTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766006599; c=relaxed/simple;
-	bh=sHfxWgN6J1iKIa1mVTbsPjrw/f4RodsQje3FlDnb/w4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cTnzMNUY8VBAI2ohBfnegbY1EBv7K0800P5kcxvY3q/eTammYYJO1fctozaI7yJxhHz/ZAYcbEJu7e3Y0B3k7trKougZAiwnzYn91K9eBCS6S7uSyuWtO/adVm0NQPliIfGjDqZ7JZvOKzoYDgBTMcGLL9vTlMtKY4+H4uL3rhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hrYtqQfC; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1766011643; c=relaxed/simple;
+	bh=uMvkDXWWifBadlcb5XX4iH4olOqgHQRNGlRMtOALKiY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rr8jMWjF2XxjxdXP/eWrcCLgknSrGMlTd/liZQRQlfhsv6CJDjgb855/0TMGDC0Hf1T+6AwQcbTR1NMeGDaQJwb9EcFFRKkQDTQtSVuzE75PjpoZZ/I/l96jhAbQeNkmoFZIOSGhI4nIX5AjoNspmX5CdNFMG3ir17fzPIXdCX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TXHoVhG0; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hrYtqQfC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TXHoVhG0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766006597; x=1797542597;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sHfxWgN6J1iKIa1mVTbsPjrw/f4RodsQje3FlDnb/w4=;
-  b=hrYtqQfChDOApfIzND4I83ClUSblzLAK+oEKI/NXYvZO6BfJdgB8vjnm
-   N3rSnaGvHepdYDvvuNZgBAbrdGdiroQUdesdUUKfiPRxzA7TnW5Wkxy4E
-   WmTdTvJ7n6KUXhVDuTgIqySNRZZCNI4OXxAckeHttUekzkYa3uStvRFg4
-   cMniIne9mb/1lwY3CouNTjMH4AWY/73NW+3zw3GIgg9wdiqALODzHgvhB
-   4Z7GJLVXr3n7xMhsPyIBLAiCH6ykiaOgM2vheLeGvYbdiXitZaNTFeJol
-   Lf090Ip7NMuJXFGf6JNfHOOfW9tLIwI6dJ2NB7VcjtDofHL2+DFU7Evzo
+  t=1766011642; x=1797547642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uMvkDXWWifBadlcb5XX4iH4olOqgHQRNGlRMtOALKiY=;
+  b=TXHoVhG02P//jdTk1M3jOHm7dAQecqRGqNsCmhx1E+lziO0LD1IILtZI
+   mdMCUT3kx3LMJ9bormUhPiHRGqPjeGR6N2wEWeuApbIRe8WIOpCGtfDGZ
+   DoCDXEL94craz1kFkn0RU9rvYqC8l5VzqpGM76kFVn7RR+lAsz48rZyX2
+   6Ka7xWTKTRXynfYrtDLymo2vmFvJQeWyYkTVjuOVXiLOdwcHICLLkRq7D
+   R2HdNz6v+Rc89Dkt2BSMLqR0/IISLe0iMEfY6+u9MPOcJYZdg9NGqFG1x
+   qR3HRR3uXynTBsq8MlrEtjR9wXgBZDYyQqvt7q2Dd3R3mYS9SbKyMFljK
    g==;
-X-CSE-ConnectionGUID: KlvtZkvmSKGnaV2omuJrcQ==
-X-CSE-MsgGUID: S1O750IyS22brR66W9cDGg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11645"; a="79077768"
+X-CSE-ConnectionGUID: RRz+zT5oSLOaVydFgO3qXg==
+X-CSE-MsgGUID: n65sKyeFSRKGFTppQKwp0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11645"; a="70538562"
 X-IronPort-AV: E=Sophos;i="6.21,156,1763452800"; 
-   d="scan'208";a="79077768"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2025 13:23:15 -0800
-X-CSE-ConnectionGUID: kcP9FRGqTUCym5mNABmVxw==
-X-CSE-MsgGUID: 5LNJV1vbTwq1CEPA6X6SDw==
+   d="scan'208";a="70538562"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2025 14:47:21 -0800
+X-CSE-ConnectionGUID: 4IqvSKBeRjaTHp5mwQfnPw==
+X-CSE-MsgGUID: od3DP6+bT+C1HrmT6IgrUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,156,1763452800"; 
-   d="scan'208";a="235825243"
+   d="scan'208";a="229469153"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 17 Dec 2025 13:23:14 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 17 Dec 2025 14:47:18 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vVyzH-000000001G1-1Gf3;
-	Wed, 17 Dec 2025 21:23:11 +0000
-Date: Thu, 18 Dec 2025 05:22:11 +0800
+	id 1vW0Id-000000001Jh-36RN;
+	Wed, 17 Dec 2025 22:47:15 +0000
+Date: Thu, 18 Dec 2025 06:46:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>
+To: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: [brgl:gpio/for-next 4/4] drivers/gpio/gpio-realtek-otto.c:375:14:
- warning: cast to smaller integer type 'unsigned int' from 'const void *'
-Message-ID: <202512180532.2ykNwYAm-lkp@intel.com>
+	netdev@vger.kernel.org,
+	"Yury Norov (NVIDIA)" <yury.norov@gmail.com>
+Subject: Re: [PATCH] i40e: drop useless bitmap_weight() call in
+ i40e_set_rxfh_fields()
+Message-ID: <202512180618.zgXQvXlK-lkp@intel.com>
+References: <20251216002852.334561-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,137 +72,177 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251216002852.334561-1-yury.norov@gmail.com>
 
-Hi Rosen,
+Hi Yury,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-head:   3203d8f573af87d8c967d36e8d5016ef306ff078
-commit: 3203d8f573af87d8c967d36e8d5016ef306ff078 [4/4] gpio: realtek-otto: add COMPILE_TEST
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251218/202512180532.2ykNwYAm-lkp@intel.com/config)
+[auto build test ERROR on tnguy-next-queue/dev-queue]
+[also build test ERROR on tnguy-net-queue/dev-queue linus/master v6.19-rc1 next-20251217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov-NVIDIA/i40e-drop-useless-bitmap_weight-call-in-i40e_set_rxfh_fields/20251216-083033
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+patch link:    https://lore.kernel.org/r/20251216002852.334561-1-yury.norov%40gmail.com
+patch subject: [PATCH] i40e: drop useless bitmap_weight() call in i40e_set_rxfh_fields()
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251218/202512180618.zgXQvXlK-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251218/202512180532.2ykNwYAm-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251218/202512180618.zgXQvXlK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512180532.2ykNwYAm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512180618.zgXQvXlK-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpio/gpio-realtek-otto.c:375:14: warning: cast to smaller integer type 'unsigned int' from 'const void *' [-Wvoid-pointer-to-int-cast]
-     375 |         dev_flags = (unsigned int) device_get_match_data(dev);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3711:19: error: use of undeclared identifier 'flow_id'
+    3711 |         for_each_set_bit(flow_id, flow_pctypes, FLOW_PCTYPES_SIZE) {
+         |                          ^
+>> drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3711:19: error: use of undeclared identifier 'flow_id'
+>> drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3711:19: error: use of undeclared identifier 'flow_id'
+>> drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3711:19: error: use of undeclared identifier 'flow_id'
+>> drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3711:19: error: use of undeclared identifier 'flow_id'
+   drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3712:62: error: use of undeclared identifier 'flow_id'
+    3712 |                 i_setc = (u64)i40e_read_rx_ctl(hw, I40E_GLQF_HASH_INSET(0, flow_id)) |
+         |                                                                            ^
+   drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3713:56: error: use of undeclared identifier 'flow_id'
+    3713 |                          ((u64)i40e_read_rx_ctl(hw, I40E_GLQF_HASH_INSET(1, flow_id)) << 32);
+         |                                                                             ^
+   drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3716:49: error: use of undeclared identifier 'flow_id'
+    3716 |                 i40e_write_rx_ctl(hw, I40E_GLQF_HASH_INSET(0, flow_id),
+         |                                                               ^
+   drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3718:49: error: use of undeclared identifier 'flow_id'
+    3718 |                 i40e_write_rx_ctl(hw, I40E_GLQF_HASH_INSET(1, flow_id),
+         |                                                               ^
+   drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3720:19: error: use of undeclared identifier 'flow_id'
+    3720 |                 hena |= BIT_ULL(flow_id);
+         |                                 ^
+   10 errors generated.
 
 
-vim +375 drivers/gpio/gpio-realtek-otto.c
+vim +/flow_id +3711 drivers/net/ethernet/intel/i40e/i40e_ethtool.c
 
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  357  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  358  static int realtek_gpio_probe(struct platform_device *pdev)
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  359  {
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  360  	struct gpio_generic_chip_config config;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  361  	struct device *dev = &pdev->dev;
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  362  	unsigned long gen_gc_flags;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  363  	unsigned int dev_flags;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  364  	struct gpio_irq_chip *girq;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  365  	struct realtek_gpio_ctrl *ctrl;
-95fa6dbe58f286a Sander Vanheule     2022-04-09  366  	struct resource *res;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  367  	u32 ngpios;
-95fa6dbe58f286a Sander Vanheule     2022-04-09  368  	unsigned int nr_cpus;
-95fa6dbe58f286a Sander Vanheule     2022-04-09  369  	int cpu, err, irq;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  370  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  371  	ctrl = devm_kzalloc(dev, sizeof(*ctrl), GFP_KERNEL);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  372  	if (!ctrl)
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  373  		return -ENOMEM;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  374  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30 @375  	dev_flags = (unsigned int) device_get_match_data(dev);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  376  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  377  	ngpios = REALTEK_GPIO_MAX;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  378  	device_property_read_u32(dev, "ngpios", &ngpios);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  379  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  380  	if (ngpios > REALTEK_GPIO_MAX) {
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  381  		dev_err(&pdev->dev, "invalid ngpios (max. %d)\n",
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  382  			REALTEK_GPIO_MAX);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  383  		return -EINVAL;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  384  	}
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  385  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  386  	ctrl->base = devm_platform_ioremap_resource(pdev, 0);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  387  	if (IS_ERR(ctrl->base))
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  388  		return PTR_ERR(ctrl->base);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  389  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  390  	raw_spin_lock_init(&ctrl->lock);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  391  
-512c5be35223d9b Sander Vanheule     2022-04-09  392  	if (dev_flags & GPIO_PORTS_REVERSED) {
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  393  		gen_gc_flags = 0;
-ee0175b3b44288c Sander Vanheule     2022-08-07  394  		ctrl->bank_read = realtek_gpio_bank_read;
-ee0175b3b44288c Sander Vanheule     2022-08-07  395  		ctrl->bank_write = realtek_gpio_bank_write;
-ee0175b3b44288c Sander Vanheule     2022-08-07  396  		ctrl->line_imr_pos = realtek_gpio_line_imr_pos;
-512c5be35223d9b Sander Vanheule     2022-04-09  397  	} else {
-64f89f6e1f2b7f8 Bartosz Golaszewski 2025-09-17  398  		gen_gc_flags = GPIO_GENERIC_BIG_ENDIAN_BYTE_ORDER;
-ee0175b3b44288c Sander Vanheule     2022-08-07  399  		ctrl->bank_read = realtek_gpio_bank_read_swapped;
-ee0175b3b44288c Sander Vanheule     2022-08-07  400  		ctrl->bank_write = realtek_gpio_bank_write_swapped;
-ee0175b3b44288c Sander Vanheule     2022-08-07  401  		ctrl->line_imr_pos = realtek_gpio_line_imr_pos_swapped;
-512c5be35223d9b Sander Vanheule     2022-04-09  402  	}
-512c5be35223d9b Sander Vanheule     2022-04-09  403  
-7eee64e8be51f9f Bartosz Golaszewski 2025-09-10  404  	config = (struct gpio_generic_chip_config) {
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  405  		.dev = dev,
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  406  		.sz = 4,
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  407  		.dat = ctrl->base + REALTEK_GPIO_REG_DATA,
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  408  		.dirout = ctrl->base + REALTEK_GPIO_REG_DIR,
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  409  		.flags = gen_gc_flags,
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  410  	};
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  411  
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  412  	err = gpio_generic_chip_init(&ctrl->chip, &config);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  413  	if (err) {
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  414  		dev_err(dev, "unable to init generic GPIO");
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  415  		return err;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  416  	}
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  417  
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  418  	ctrl->chip.gc.ngpio = ngpios;
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  419  	ctrl->chip.gc.owner = THIS_MODULE;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  420  
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  421  	irq = platform_get_irq_optional(pdev, 0);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  422  	if (!(dev_flags & GPIO_INTERRUPTS_DISABLED) && irq > 0) {
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  423  		girq = &ctrl->chip.gc.irq;
-a01a40e334996b0 Sander Vanheule     2022-06-12  424  		gpio_irq_chip_set_chip(girq, &realtek_gpio_irq_chip);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  425  		girq->default_type = IRQ_TYPE_NONE;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  426  		girq->handler = handle_bad_irq;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  427  		girq->parent_handler = realtek_gpio_irq_handler;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  428  		girq->num_parents = 1;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  429  		girq->parents = devm_kcalloc(dev, girq->num_parents,
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  430  					sizeof(*girq->parents),	GFP_KERNEL);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  431  		if (!girq->parents)
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  432  			return -ENOMEM;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  433  		girq->parents[0] = irq;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  434  		girq->init_hw = realtek_gpio_irq_init;
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  435  	}
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  436  
-95fa6dbe58f286a Sander Vanheule     2022-04-09  437  	cpumask_clear(&ctrl->cpu_irq_maskable);
-95fa6dbe58f286a Sander Vanheule     2022-04-09  438  
-95fa6dbe58f286a Sander Vanheule     2022-04-09  439  	if ((dev_flags & GPIO_INTERRUPTS_PER_CPU) && irq > 0) {
-95fa6dbe58f286a Sander Vanheule     2022-04-09  440  		ctrl->cpumask_base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-95fa6dbe58f286a Sander Vanheule     2022-04-09  441  		if (IS_ERR(ctrl->cpumask_base))
-95fa6dbe58f286a Sander Vanheule     2022-04-09  442  			return dev_err_probe(dev, PTR_ERR(ctrl->cpumask_base),
-95fa6dbe58f286a Sander Vanheule     2022-04-09  443  				"missing CPU IRQ mask registers");
-95fa6dbe58f286a Sander Vanheule     2022-04-09  444  
-95fa6dbe58f286a Sander Vanheule     2022-04-09  445  		nr_cpus = resource_size(res) / REALTEK_GPIO_PORTS_PER_BANK;
-95fa6dbe58f286a Sander Vanheule     2022-04-09  446  		nr_cpus = min(nr_cpus, num_present_cpus());
-95fa6dbe58f286a Sander Vanheule     2022-04-09  447  
-95fa6dbe58f286a Sander Vanheule     2022-04-09  448  		for (cpu = 0; cpu < nr_cpus; cpu++)
-95fa6dbe58f286a Sander Vanheule     2022-04-09  449  			cpumask_set_cpu(cpu, &ctrl->cpu_irq_maskable);
-95fa6dbe58f286a Sander Vanheule     2022-04-09  450  	}
-95fa6dbe58f286a Sander Vanheule     2022-04-09  451  
-b9dac8251e7e6aa Bartosz Golaszewski 2025-08-26  452  	return devm_gpiochip_add_data(dev, &ctrl->chip.gc, ctrl);
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  453  }
-0d82fb1127fb7cc Sander Vanheule     2021-03-30  454  
-
-:::::: The code at line 375 was first introduced by commit
-:::::: 0d82fb1127fb7cc8287614eb0992acb0583bc323 gpio: Add Realtek Otto GPIO support
-
-:::::: TO: Sander Vanheule <sander@svanheule.net>
-:::::: CC: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+eb0dd6e4a3b3df Carolyn Wyborny  2016-07-27  3614  
+3b32c9932853e1 Slawomir Laba    2022-10-24  3615  #define FLOW_PCTYPES_SIZE 64
+5a28983710b739 Jakub Kicinski   2025-06-14  3616  static int i40e_set_rxfh_fields(struct net_device *netdev,
+5a28983710b739 Jakub Kicinski   2025-06-14  3617  				const struct ethtool_rxfh_fields *nfc,
+5a28983710b739 Jakub Kicinski   2025-06-14  3618  				struct netlink_ext_ack *extack)
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3619  {
+5a28983710b739 Jakub Kicinski   2025-06-14  3620  	struct i40e_netdev_priv *np = netdev_priv(netdev);
+5a28983710b739 Jakub Kicinski   2025-06-14  3621  	struct i40e_vsi *vsi = np->vsi;
+5a28983710b739 Jakub Kicinski   2025-06-14  3622  	struct i40e_pf *pf = vsi->back;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3623  	struct i40e_hw *hw = &pf->hw;
+272cdaf2472ab7 Shannon Nelson   2016-02-17  3624  	u64 hena = (u64)i40e_read_rx_ctl(hw, I40E_PFQF_HENA(0)) |
+272cdaf2472ab7 Shannon Nelson   2016-02-17  3625  		   ((u64)i40e_read_rx_ctl(hw, I40E_PFQF_HENA(1)) << 32);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3626  	DECLARE_BITMAP(flow_pctypes, FLOW_PCTYPES_SIZE);
+eb0dd6e4a3b3df Carolyn Wyborny  2016-07-27  3627  	u64 i_set, i_setc;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3628  
+3b32c9932853e1 Slawomir Laba    2022-10-24  3629  	bitmap_zero(flow_pctypes, FLOW_PCTYPES_SIZE);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3630  
+70756d0a4727fe Ivan Vecera      2023-11-13  3631  	if (test_bit(I40E_FLAG_MFP_ENA, pf->flags)) {
+83d14c595e011f Carolyn Wyborny  2017-06-07  3632  		dev_err(&pf->pdev->dev,
+83d14c595e011f Carolyn Wyborny  2017-06-07  3633  			"Change of RSS hash input set is not supported when MFP mode is enabled\n");
+83d14c595e011f Carolyn Wyborny  2017-06-07  3634  		return -EOPNOTSUPP;
+83d14c595e011f Carolyn Wyborny  2017-06-07  3635  	}
+83d14c595e011f Carolyn Wyborny  2017-06-07  3636  
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3637  	/* RSS does not support anything other than hashing
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3638  	 * to queues on src and dst IPs and ports
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3639  	 */
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3640  	if (nfc->data & ~(RXH_IP_SRC | RXH_IP_DST |
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3641  			  RXH_L4_B_0_1 | RXH_L4_B_2_3))
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3642  		return -EINVAL;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3643  
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3644  	switch (nfc->flow_type) {
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3645  	case TCP_V4_FLOW:
+141d0c9037ca57 Jacob Keller     2025-05-05  3646  		set_bit(LIBIE_FILTER_PCTYPE_NONF_IPV4_TCP, flow_pctypes);
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3647  		if (test_bit(I40E_HW_CAP_MULTI_TCP_UDP_RSS_PCTYPE,
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3648  			     pf->hw.caps))
+141d0c9037ca57 Jacob Keller     2025-05-05  3649  			set_bit(LIBIE_FILTER_PCTYPE_NONF_IPV4_TCP_SYN_NO_ACK,
+3b32c9932853e1 Slawomir Laba    2022-10-24  3650  				flow_pctypes);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3651  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3652  	case TCP_V6_FLOW:
+141d0c9037ca57 Jacob Keller     2025-05-05  3653  		set_bit(LIBIE_FILTER_PCTYPE_NONF_IPV6_TCP, flow_pctypes);
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3654  		if (test_bit(I40E_HW_CAP_MULTI_TCP_UDP_RSS_PCTYPE,
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3655  			     pf->hw.caps))
+141d0c9037ca57 Jacob Keller     2025-05-05  3656  			set_bit(LIBIE_FILTER_PCTYPE_NONF_IPV6_TCP_SYN_NO_ACK,
+3b32c9932853e1 Slawomir Laba    2022-10-24  3657  				flow_pctypes);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3658  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3659  	case UDP_V4_FLOW:
+141d0c9037ca57 Jacob Keller     2025-05-05  3660  		set_bit(LIBIE_FILTER_PCTYPE_NONF_IPV4_UDP, flow_pctypes);
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3661  		if (test_bit(I40E_HW_CAP_MULTI_TCP_UDP_RSS_PCTYPE,
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3662  			     pf->hw.caps)) {
+141d0c9037ca57 Jacob Keller     2025-05-05  3663  			set_bit(LIBIE_FILTER_PCTYPE_NONF_UNICAST_IPV4_UDP,
+3b32c9932853e1 Slawomir Laba    2022-10-24  3664  				flow_pctypes);
+141d0c9037ca57 Jacob Keller     2025-05-05  3665  			set_bit(LIBIE_FILTER_PCTYPE_NONF_MULTICAST_IPV4_UDP,
+3b32c9932853e1 Slawomir Laba    2022-10-24  3666  				flow_pctypes);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3667  		}
+141d0c9037ca57 Jacob Keller     2025-05-05  3668  		hena |= BIT_ULL(LIBIE_FILTER_PCTYPE_FRAG_IPV4);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3669  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3670  	case UDP_V6_FLOW:
+141d0c9037ca57 Jacob Keller     2025-05-05  3671  		set_bit(LIBIE_FILTER_PCTYPE_NONF_IPV6_UDP, flow_pctypes);
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3672  		if (test_bit(I40E_HW_CAP_MULTI_TCP_UDP_RSS_PCTYPE,
+0e8b9fdd40fe65 Ivan Vecera      2023-11-13  3673  			     pf->hw.caps)) {
+141d0c9037ca57 Jacob Keller     2025-05-05  3674  			set_bit(LIBIE_FILTER_PCTYPE_NONF_UNICAST_IPV6_UDP,
+3b32c9932853e1 Slawomir Laba    2022-10-24  3675  				flow_pctypes);
+141d0c9037ca57 Jacob Keller     2025-05-05  3676  			set_bit(LIBIE_FILTER_PCTYPE_NONF_MULTICAST_IPV6_UDP,
+3b32c9932853e1 Slawomir Laba    2022-10-24  3677  				flow_pctypes);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3678  		}
+141d0c9037ca57 Jacob Keller     2025-05-05  3679  		hena |= BIT_ULL(LIBIE_FILTER_PCTYPE_FRAG_IPV6);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3680  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3681  	case AH_ESP_V4_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3682  	case AH_V4_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3683  	case ESP_V4_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3684  	case SCTP_V4_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3685  		if ((nfc->data & RXH_L4_B_0_1) ||
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3686  		    (nfc->data & RXH_L4_B_2_3))
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3687  			return -EINVAL;
+141d0c9037ca57 Jacob Keller     2025-05-05  3688  		hena |= BIT_ULL(LIBIE_FILTER_PCTYPE_NONF_IPV4_OTHER);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3689  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3690  	case AH_ESP_V6_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3691  	case AH_V6_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3692  	case ESP_V6_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3693  	case SCTP_V6_FLOW:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3694  		if ((nfc->data & RXH_L4_B_0_1) ||
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3695  		    (nfc->data & RXH_L4_B_2_3))
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3696  			return -EINVAL;
+141d0c9037ca57 Jacob Keller     2025-05-05  3697  		hena |= BIT_ULL(LIBIE_FILTER_PCTYPE_NONF_IPV6_OTHER);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3698  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3699  	case IPV4_FLOW:
+141d0c9037ca57 Jacob Keller     2025-05-05  3700  		hena |= BIT_ULL(LIBIE_FILTER_PCTYPE_NONF_IPV4_OTHER) |
+141d0c9037ca57 Jacob Keller     2025-05-05  3701  			BIT_ULL(LIBIE_FILTER_PCTYPE_FRAG_IPV4);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3702  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3703  	case IPV6_FLOW:
+141d0c9037ca57 Jacob Keller     2025-05-05  3704  		hena |= BIT_ULL(LIBIE_FILTER_PCTYPE_NONF_IPV6_OTHER) |
+141d0c9037ca57 Jacob Keller     2025-05-05  3705  			BIT_ULL(LIBIE_FILTER_PCTYPE_FRAG_IPV6);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3706  		break;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3707  	default:
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3708  		return -EINVAL;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3709  	}
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3710  
+3b32c9932853e1 Slawomir Laba    2022-10-24 @3711  	for_each_set_bit(flow_id, flow_pctypes, FLOW_PCTYPES_SIZE) {
+3b32c9932853e1 Slawomir Laba    2022-10-24  3712  		i_setc = (u64)i40e_read_rx_ctl(hw, I40E_GLQF_HASH_INSET(0, flow_id)) |
+3b32c9932853e1 Slawomir Laba    2022-10-24  3713  			 ((u64)i40e_read_rx_ctl(hw, I40E_GLQF_HASH_INSET(1, flow_id)) << 32);
+54b5af5a438076 Slawomir Laba    2022-10-24  3714  		i_set = i40e_get_rss_hash_bits(&pf->hw, nfc, i_setc);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3715  
+3b32c9932853e1 Slawomir Laba    2022-10-24  3716  		i40e_write_rx_ctl(hw, I40E_GLQF_HASH_INSET(0, flow_id),
+eb0dd6e4a3b3df Carolyn Wyborny  2016-07-27  3717  				  (u32)i_set);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3718  		i40e_write_rx_ctl(hw, I40E_GLQF_HASH_INSET(1, flow_id),
+eb0dd6e4a3b3df Carolyn Wyborny  2016-07-27  3719  				  (u32)(i_set >> 32));
+3b32c9932853e1 Slawomir Laba    2022-10-24  3720  		hena |= BIT_ULL(flow_id);
+3b32c9932853e1 Slawomir Laba    2022-10-24  3721  	}
+eb0dd6e4a3b3df Carolyn Wyborny  2016-07-27  3722  
+272cdaf2472ab7 Shannon Nelson   2016-02-17  3723  	i40e_write_rx_ctl(hw, I40E_PFQF_HENA(0), (u32)hena);
+272cdaf2472ab7 Shannon Nelson   2016-02-17  3724  	i40e_write_rx_ctl(hw, I40E_PFQF_HENA(1), (u32)(hena >> 32));
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3725  	i40e_flush(hw);
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3726  
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3727  	return 0;
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3728  }
+c7d05ca89f8e40 Jesse Brandeburg 2013-09-11  3729  
 
 -- 
 0-DAY CI Kernel Test Service
