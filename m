@@ -1,67 +1,40 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E533234EF1C
-	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 10:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B176F34A790
+	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765966876; cv=none; b=lUCyQrcy4IgCzAt45D/ylb4Co9XOq6MUDHrXscQzvKO3RqxHKTmAbJFeWAzL3Je2AJ58HbKmQtSJCM0O1uyswM+SHhop1+8AUzDgEPkT+hB958hU/vQD2H+j7WXcHt/H8VhynMzESRhmtNNpe2szHd0TchyJVMI4q21j3qIwe1o=
+	t=1765979575; cv=none; b=lGQuNzFQI+wLVVxJm8r3zZaNlqQX7EkifgDkgaYI4WNYijRVGR+IG+eKyDWQ6fRwj7VjLFhAt5b9LKzGUW7V26QnEQr2heCtwgnNEpVVkdFloBk3VDifvbG0+0aBbg6RM/8XjRzollBSHByjh/q9Zr17sBuCMegIn9P1YTqKJ0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765966876; c=relaxed/simple;
-	bh=cF083mu3r55SVNE++nE4r8UwPmfojIpwXzIP+N1PTgw=;
+	s=arc-20240116; t=1765979575; c=relaxed/simple;
+	bh=mXaxx7BY8tyy/Pfu7PpBSQH3ipOqdYP0Qa/DGtQQeFQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B4A5PP3mmicewhuXr0P4MYigbQn2JQieG5LFqD0P328U1sfpo8q54e+IjPoX7y8brnFE9gjdr3OmyTeC3FBu9Ni6psUBqdBSbGb/EzLozgB59UrkfOfcH9l1mwqu5MYJ6GReRBWzz8VJqJBRR90Cp11E7N0oKI5SVy7nz6qMp6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCogbEx0; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=gvUm4WBwiR8mA7hIrli1v7TFK+zYsSJzQJKfyBsrUqRFxbRxWmIN9Kx52knemFHc8RbtOyzXRzFoH6bheCwmielaQjHw0bqFIAgnminLUsJtf0NvJC7NrwDsJnUrkQs2q/j0wD+Djrs7hHy5pR91BPO6VO3m9D7ny719Va4oGIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=VUKDhmLS; arc=none smtp.client-ip=217.70.178.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCogbEx0"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7b89c1ce9easo6519358b3a.2
-        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 02:21:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765966872; x=1766571672; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nVo0HBOMwKu9ksJmzCZKQPSTIhrU1ZIPJ/ubRTYCNmk=;
-        b=YCogbEx0p4vs6QYXQRoDwzxfNQlg6xcsTYZjkCsKo4owOMUeLDt/rqQVgiEVfjcneg
-         aF2p+cGxyJlyvKm+8JcHpLd5jh2rp4CqLSCR1LhsBPvvp1g8V1QAVlMFMwZWPi2l6TQv
-         wNIDGVBSTCKEup0yrY8EpPvVde92Wp+njWmNqzt7+lCIJMzV8f6dvbRj63bqkBr7w3Fm
-         ftexlVuQmpj0Dnev+vHbi2DdnkqsS1IZuGZ+kKzPzh/O6z79M9UDnm8aIUgY/Ftr61v5
-         9hDim6hKC6oxa0MTcCq/e2muDz1PPnrgPEDHBgkoVjYIVQkpe4VBD88e6nyvEbTs/JJp
-         R7WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765966872; x=1766571672;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nVo0HBOMwKu9ksJmzCZKQPSTIhrU1ZIPJ/ubRTYCNmk=;
-        b=aI1cDXAQHUBsRpD5Nayed7+JLv2pOs5dE42q2LrSkk9MdNMLwJfgB8jk7v6jRQtUWz
-         8SLx0PWuseoALQYN/B6mrUFvNK1hJA+WzOoqyeLwPyQS6kQNafq9jNGNKFhz5OTS/mi0
-         4puhhOAQbHMgycI2wDs4F4xGgtBbkDrirbmFAr8KDmz/+qi6q3sYKQhfxNwNv8GyyKSw
-         4JGtoQXLVhwZHsbkvPX3zfxlqGIvlplyDU6eEtg+JvIsf+zYgx5comcPAQR5Q/iwrErC
-         F+Uruk9iuIuPzh4QHQtCFjR14VNPDu6GbfSuSXP9eIsBBnAbP9j79nAfwLzQwkNMLv/n
-         1aaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWG4hWk5tmkUiTO8tPH3osbGlhWZAVcMgvmKES+ktQUX/sojWOjyMLBaP+iXWSMXcE4PS60@lists.linux.dev
-X-Gm-Message-State: AOJu0YyHcyN9BqrhLssuapUKr/8rts9Lu+1ofhAEkEB9vdL/AIAHrJxX
-	C++aCn1luiSKicl745vMgymg/mMzGeiMm3DS8coi1uAF/Em1QPgNo6oW
-X-Gm-Gg: AY/fxX4qiOux6BfWW2BkHRoqPYLsKCyvpI2wXa8oDaibPCVcb7OBGbqXlqs7SPiKLF2
-	bbGiG3GDzxusJeIq2lOdsoYnwOnVJtHAlFfJBfu9GJx9uBHZ24c9FUJLVMCOcK0TZ9MqG8AK5HY
-	2tEQS20ZG3vxhZYwxswM8a/wKDsNrUJxmON2DDrOkovJnq08/dg1nH12/fotpe1ihzQ45GhdZmx
-	lJJDwEubFo6pWRbjJNxXScRe2M7IYGB+cjYBh3nGP7Dnx2Ihdz7ylmklg43T7OH81jPKVzheXge
-	84E8Im1cWeZmUG/Mq/kexZAOkZJJIcXD1rRLvlqQdkY4rha81Eq43njHDvxpt/0bf3pIrPOC6rV
-	WxjNpIBUvXTZvboVvOinKzp2m8m7+E6+R/J3XloRVrmAR6nQI8YonK7Lw2es6ll+Er56/VmAwTA
-	/2J2MyTK1qeL/eMzFS2r/ufmwRHTQKj/CZpBtF6SKug3tfLsUSarlpTDxluV84gJl8tg==
-X-Google-Smtp-Source: AGHT+IEKnlxl760/suZ89AobjUICKYa4N99bq8z5k3ImT4XOViJUc86UsaA7/A8wEeEcuyACIfLqtA==
-X-Received: by 2002:a05:7022:158a:b0:119:e569:f276 with SMTP id a92af1059eb24-11f34c035a0mr13548110c88.31.1765966872169;
-        Wed, 17 Dec 2025 02:21:12 -0800 (PST)
-Received: from [192.168.68.65] (104-12-136-65.lightspeed.irvnca.sbcglobal.net. [104.12.136.65])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f43288340sm26457054c88.6.2025.12.17.02.21.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 02:21:11 -0800 (PST)
-Message-ID: <1910f4b6-db74-4c86-9010-28ab4462c5a7@gmail.com>
-Date: Wed, 17 Dec 2025 02:21:11 -0800
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="VUKDhmLS"
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+	by mslow3.mail.gandi.net (Postfix) with ESMTP id 8E74C580F11
+	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:51:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D1817442F6;
+	Wed, 17 Dec 2025 13:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1765979474;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mCzvOIL/ojXa/Uw5qaXYYXvUMXlM06Y/DgNBZpse1hw=;
+	b=VUKDhmLSU6gzZJFFvA10VZ65gKeazozxSiIZZQKP9Hzxf+ZERRL5hll4zJ3s5+zhi4LKsb
+	gg1Sb4kJ0r9/d9jKCvQGFsG9c/osw4I0lPPpHTHfb0K+GfLqm2GluPd+v6cyv39ixXFSZ7
+	59GqwfTNbrV33HGFm4n5+Uuoxgo4HNETDazbDRnJPMoFwU4quD6qCpZF78+pZcDUJmWjTW
+	0tcjXYWjX/NclSDOxbrOP0NKEYKmMw5FpyOaaZ8RUtaSbeAZ42eX+PpA0rJqnhAT8iyAr7
+	ucjYEdMULju6PeH8E3Wyk4zdojUMO8fa5sMTBusatYOPdrBkl9PexVeldQvcSA==
+Message-ID: <1bed549b-8586-4108-a1fe-55a41916ac0c@gtucker.io>
+Date: Wed, 17 Dec 2025 14:51:11 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,87 +42,67 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: ARMv7 Linux + Rust doesn't boot when compiling with only LLVM=1
-To: Christian Schrefl <chrisi.schrefl@gmail.com>, stable@vger.kernel.org,
- regressions@lists.linux.dev, rust-for-linux@vger.kernel.org,
- Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc: =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Danilo Krummrich <dakr@kernel.org>,
- Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>
-References: <1286af8e-f908-45db-af7c-d9c5d592abfd@gmail.com>
- <0705db10-3cbb-4958-a116-112457f9af6c@gmail.com>
+Subject: Re: [Automated-testing] [PATCH v1 1/2] scripts: add tool to run
+ containerized builds
+To: David Gow <davidgow@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
+ workflows@vger.kernel.org, llvm@lists.linux.dev,
+ Arnd Bergmann <arnd@arndb.de>
+References: <cover.1765374789.git.gtucker@gtucker.io>
+ <97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
+ <CABVgOS=LD_7gTk+qivoLJpAk0susehrCVdazApQAM=9311M4+w@mail.gmail.com>
 Content-Language: en-US
-From: Rudraksha Gupta <guptarud@gmail.com>
-In-Reply-To: <0705db10-3cbb-4958-a116-112457f9af6c@gmail.com>
+From: Guillaume Tucker <gtucker@gtucker.io>
+In-Reply-To: <CABVgOS=LD_7gTk+qivoLJpAk0susehrCVdazApQAM=9311M4+w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: gtucker@gtucker.io
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdegvdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnhepleevgffhuedtheffjeeluedvffegvefgheetvdegtddvlefhkeevieeiuefffffhnecuffhomhgrihhnpeihohgtthhophhrohhjvggtthdrohhrghdpkhgvrhhnvghlrdhorhhgnecukfhppeektddrvdduhedruddtfedrudelvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeektddrvdduhedruddtfedrudelvddphhgvlhhopegludelvddrudeikedrudefuddrieegngdpmhgrihhlfhhrohhmpehgthhutghkvghrsehgthhutghkvghrrdhiohdpqhhiugepffdukedujeeggedvhfeipdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhug
+ idqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgsuhhilhgusehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-State: clean
+X-GND-Score: -100
 
-On 12/16/25 06:41, Christian Schrefl wrote:
-> On 12/14/25 12:54 AM, Rudraksha Gupta wrote:
->> Hello all,
+Hello David,
+
+On 17/12/2025 10:56 am, David Gow wrote:
+> On Wed, 10 Dec 2025 at 21:58, Guillaume Tucker via
+> lists.yoctoproject.org <gtucker=gtucker.io@lists.yoctoproject.org>
+> wrote:
 >>
+>> Add a 'scripts/container' tool written in Python to run any command in
+>> the source tree from within a container.  This can typically be used
+>> to call 'make' with a compiler toolchain image to run reproducible
+>> builds but any arbitrary command can be run too.  Only Docker and
+>> Podman are supported for this initial version.
 >>
->> I have the following problem: https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2635
->>
->>
->> In short, what is happening is the following:
->>
->>
->> - The kernel boots and outputs via UART when I build the kernel with the following:
->>
->> make LLVM=1 ARCH="$arm" CC="${CC:-gcc}"
->>
->>
->> - The kernel doesn't boot and there is no output via UART when I build the kernel with the following:
->>
->> make LLVM=1 ARCH="$arm"
->>
->>
->> The only difference being: CC="${CC:-gcc}". Is this expected? I think this was present in the Linux kernel ever since Rust was enabled for ARMv7, and I never encountered it because postmarketOS was originally building the first way.
->
-> I've managed to the get the build setup for qemu-armv7. For some reason
-> I could not get past the initrd even on kernels that are supposed to work,
-> but I think that is unrelated (and not a kernel issue).
+>> Cc: Nathan Chancellor <nathan@kernel.org>
+>> Cc: Miguel Ojeda <ojeda@kernel.org>
+>> Link: https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io/
+>> Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
+>> ---
+> 
+> I gave this a go, and am liking it so far. My only real complaints are
+> that the defaults don't totally match my prejudices. :-)
+> 
+> Having a good default container, and perhaps falling back
+> automatically to podman if docker isn't running (or just defaulting to
+> podman) would make this very convenient for one-line
+> tests/reproducers.
 
-Yep, I just got qemu-arm working to drop into a debug shell for now. I 
-have to look into why other things aren't behaving nicely (but that's a 
-problem for later me :P). For now, it seems to demonstrate the problem 
-nicely:
+Many thanks for your feedback, I'm glad that worked for you.
 
-https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2635#note_521740
+Yes, the default 'gcc' image doesn't actually work in practice.  I've
+proposed something else in another email to drop the default for now
+but aim to provide "first-party" container images using kernel.org
+toolchains which may give us some useful default later on.
 
+Then good point about the default container runtime, I'll update the
+logic to automatically look for Docker and Podman - basically iterate
+through the supported runtimes - in the v2.
 
-> On the linux-next kernel I didn't get any output on the console from qemu so I
-> think I've reproduced the issue. Changing CONFIG_RUST=n did not change the behavior.
->
-> So I this is almost certainly a LLVM/clang issue and not a Rust issue. I'll try to
-> do a bit more digging, but I'm not sure how much I'll get done.
-
-Did a little more testing in addition to the testing in the gitlab issue 
-mentioned above:
-
-- Removed Rust configs from linux-next/pmos.config -> didn't boot on 
-qemu-arm and my phone
-
-- Then I removed Rust dependencies from linux-next/APKBUILD -> didn't 
-boot on qemu-arm and my phone
-
-- used linux-stable instead of linux-next -> booted on qemu-arm to a 
-debug shell
-
-linux-stable is built via gcc:
-https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/community/linux-stable/APKBUILD#L179
-
-linux-next is built via clang:
-https://gitlab.postmarketos.org/postmarketOS/pmaports/-/blob/master/device/testing/linux-next/APKBUILD#L68
+Cheers,
+Guillaume
 
 
-
->
-> Adding the LLVM and ARM lists to this conversation.
->
-> Cheers,
-> Christian
