@@ -1,108 +1,124 @@
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B176F34A790
-	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C91A36D4E5
+	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765979575; cv=none; b=lGQuNzFQI+wLVVxJm8r3zZaNlqQX7EkifgDkgaYI4WNYijRVGR+IG+eKyDWQ6fRwj7VjLFhAt5b9LKzGUW7V26QnEQr2heCtwgnNEpVVkdFloBk3VDifvbG0+0aBbg6RM/8XjRzollBSHByjh/q9Zr17sBuCMegIn9P1YTqKJ0k=
+	t=1765979620; cv=none; b=km5iSN5mE4qYTG38GN6Tu1ECA5notOShC2G+y51D2HPIHJxRdmFMDIJUEOBi2lkpnYsD2Ox0BDlNOlSPQt4oy6gP6ap0SArxy+Kpz/uwNK7xNhOmhl0s61jsMTkAB7AAh0BvazCvgH43ai46121xQUm3KwDnWFHbCm/hF72vXAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765979575; c=relaxed/simple;
-	bh=mXaxx7BY8tyy/Pfu7PpBSQH3ipOqdYP0Qa/DGtQQeFQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gvUm4WBwiR8mA7hIrli1v7TFK+zYsSJzQJKfyBsrUqRFxbRxWmIN9Kx52knemFHc8RbtOyzXRzFoH6bheCwmielaQjHw0bqFIAgnminLUsJtf0NvJC7NrwDsJnUrkQs2q/j0wD+Djrs7hHy5pR91BPO6VO3m9D7ny719Va4oGIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=VUKDhmLS; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1765979620; c=relaxed/simple;
+	bh=CjnHJLYxh9NIWSmAW0oXG1F9NuoGVt1bcOhX0OTH3WA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=DCRi1ZLYumQ9Gd0SisdTh3pRoXlTdvDcUCyFF7zbgxZ72zqolJAEHJIIqY9OcfdU3h+/5m2xV1mtONE0nZvRzcLfp1YyfCUOXA1wIZ68j5SmHXcziXy03nWVC2MX5pRxJ2Kvbcgv0OQb1DdEnkijjl23FmugahrEiKZi/PllgTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0NZgw3Xz; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="VUKDhmLS"
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id 8E74C580F11
-	for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 13:51:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D1817442F6;
-	Wed, 17 Dec 2025 13:51:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1765979474;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mCzvOIL/ojXa/Uw5qaXYYXvUMXlM06Y/DgNBZpse1hw=;
-	b=VUKDhmLSU6gzZJFFvA10VZ65gKeazozxSiIZZQKP9Hzxf+ZERRL5hll4zJ3s5+zhi4LKsb
-	gg1Sb4kJ0r9/d9jKCvQGFsG9c/osw4I0lPPpHTHfb0K+GfLqm2GluPd+v6cyv39ixXFSZ7
-	59GqwfTNbrV33HGFm4n5+Uuoxgo4HNETDazbDRnJPMoFwU4quD6qCpZF78+pZcDUJmWjTW
-	0tcjXYWjX/NclSDOxbrOP0NKEYKmMw5FpyOaaZ8RUtaSbeAZ42eX+PpA0rJqnhAT8iyAr7
-	ucjYEdMULju6PeH8E3Wyk4zdojUMO8fa5sMTBusatYOPdrBkl9PexVeldQvcSA==
-Message-ID: <1bed549b-8586-4108-a1fe-55a41916ac0c@gtucker.io>
-Date: Wed, 17 Dec 2025 14:51:11 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0NZgw3Xz"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477a11d9e67so31321415e9.2
+        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 05:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1765979614; x=1766584414; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GwYQjUeDdM5Nle1IpM5e5V1FvMRCYFAI0uCKIrSa2SQ=;
+        b=0NZgw3XzpWGjFiMYtEHs6a/iw7ecdkS/ilPFBqTZ188tr3ZleePKMms2D8UzL+CMG7
+         XF/Y1bFnEJ/UJoAFqZl6GVPewQAiCzkxTbnXhvcG4LYeIzQijP94O52tu2kUcOmAao1d
+         Uz8yI1FqtKU3jDtuGwDoy+xYdjR9j6wlhhyX/M2mN9t5G7rIP1RzSYxEd36L6fbIQdJq
+         0LtciDSUZlZ0kYwv/7CGKvuueUALhCCIwz6kH3MbSDP4QTPJ3Z8BbBbsGZx8U6YGbjfy
+         TImz/xcf5djhb078kahm+RICOhH6oxDAiCDo8shnTPb+43diBjDhU0yCW4uVwaqJdscN
+         uHvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765979614; x=1766584414;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GwYQjUeDdM5Nle1IpM5e5V1FvMRCYFAI0uCKIrSa2SQ=;
+        b=U2I4yF8/EPJbc1J5wNT5p0SOlVW1VkqVE0OtzSThAR06JehEUiw3Gsm1+hXjEasegT
+         dvJMdg7pWrrV9WRmiREnPkK9XYK8h+9QUnro0codwIDb+KH+ojME6SxF7Wi6sZIk/Dfh
+         OxX5mWlWE1cS4WOMYuehTUn4h4ktWU/XWu2rmMdVDveEUdpmBNLW850D5SiioBe2BHSd
+         0wH9eW2nJVCcE8DS9Sxiuz1EbD6+OgQjJ6YmOudB9MQnoNB9cKWSDXaCFsUEB5wjbCnK
+         oRyGB9KanHX3OD66QFHVg7LtP1+7ZAFy3l4IvvfGjrXjGn8bqp4vMpcGFHX1NhC9hEz9
+         RXsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXiD5JXgDmMvejGyHXRsKfG0qoeZ1tfGo+iwpQsHyF6Eajc6JSlwrdihgBOeo5WXBVGgMC9@lists.linux.dev
+X-Gm-Message-State: AOJu0YzZ5v4FR8ARee3v+gsGI8V6GXEK5TgENiAJrNM5uD1FLMM4ha2F
+	rVQVoVNSafgZe4h8CYZRzKL62NrS/8DFrjabNcP3vW+5AbAPXqQnvY3u//l765JCaa/jHR5xazc
+	/Bc6vCVVAI5tswQ==
+X-Google-Smtp-Source: AGHT+IEY+zeplp7tJrsWxhjOhVbg/z9HJ2VKN9G1+nCVhTS+SXG8VbzCbUYGsr2pZOH8Zg/AWbnOXNkfLP8NnA==
+X-Received: from wmgp21.prod.google.com ([2002:a05:600c:2055:b0:477:afa:d217])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:4f90:b0:477:b0b8:4dd0 with SMTP id 5b1f17b1804b1-47a8f905680mr190102895e9.17.1765979614010;
+ Wed, 17 Dec 2025 05:53:34 -0800 (PST)
+Date: Wed, 17 Dec 2025 13:53:33 +0000
+In-Reply-To: <20251216130155.GD3707891@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Automated-testing] [PATCH v1 1/2] scripts: add tool to run
- containerized builds
-To: David Gow <davidgow@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
- workflows@vger.kernel.org, llvm@lists.linux.dev,
- Arnd Bergmann <arnd@arndb.de>
-References: <cover.1765374789.git.gtucker@gtucker.io>
- <97dec58ebe4161027f13f2215ed9da4a43bc8c47.1765374789.git.gtucker@gtucker.io>
- <CABVgOS=LD_7gTk+qivoLJpAk0susehrCVdazApQAM=9311M4+w@mail.gmail.com>
-Content-Language: en-US
-From: Guillaume Tucker <gtucker@gtucker.io>
-In-Reply-To: <CABVgOS=LD_7gTk+qivoLJpAk0susehrCVdazApQAM=9311M4+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdegvdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnhepleevgffhuedtheffjeeluedvffegvefgheetvdegtddvlefhkeevieeiuefffffhnecuffhomhgrihhnpeihohgtthhophhrohhjvggtthdrohhrghdpkhgvrhhnvghlrdhorhhgnecukfhppeektddrvdduhedruddtfedrudelvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeektddrvdduhedruddtfedrudelvddphhgvlhhopegludelvddrudeikedrudefuddrieegngdpmhgrihhlfhhrohhmpehgthhutghkvghrsehgthhutghkvghrrdhiohdpqhhiugepffdukedujeeggedvhfeipdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhug
- idqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgsuhhilhgusehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-State: clean
-X-GND-Score: -100
+Mime-Version: 1.0
+References: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
+ <20251216-gcov-inline-noinstr-v3-1-10244d154451@google.com> <20251216130155.GD3707891@noisy.programming.kicks-ass.net>
+X-Mailer: aerc 0.21.0
+Message-ID: <DF0JIYFQGFCP.9RDI8V58PFNH@google.com>
+Subject: Re: [PATCH v3 1/3] kasan: mark !__SANITIZE_ADDRESS__ stubs __always_inline
+From: Brendan Jackman <jackmanb@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Brendan Jackman <jackmanb@google.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Marco Elver <elver@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, <kasan-dev@googlegroups.com>, 
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello David,
+On Tue Dec 16, 2025 at 1:01 PM UTC, Peter Zijlstra wrote:
+> On Tue, Dec 16, 2025 at 10:16:34AM +0000, Brendan Jackman wrote:
+>> The x86 instrumented bitops in
+>> include/asm-generic/bitops/instrumented-non-atomic.h are
+>> KASAN-instrumented via explicit calls to instrument_* functions from
+>> include/linux/instrumented.h.
+>> 
+>> This bitops are used from noinstr code in __sev_es_nmi_complete(). This
+>> code avoids noinstr violations by disabling __SANITIZE_ADDRESS__ etc for
+>> the compilation unit.
+>
+> Yeah, so don't do that? That's why we use raw_atomic_*() in things like
+> smp_text_poke_int3_handler().
 
-On 17/12/2025 10:56 am, David Gow wrote:
-> On Wed, 10 Dec 2025 at 21:58, Guillaume Tucker via
-> lists.yoctoproject.org <gtucker=gtucker.io@lists.yoctoproject.org>
-> wrote:
->>
->> Add a 'scripts/container' tool written in Python to run any command in
->> the source tree from within a container.  This can typically be used
->> to call 'make' with a compiler toolchain image to run reproducible
->> builds but any arbitrary command can be run too.  Only Docker and
->> Podman are supported for this initial version.
->>
->> Cc: Nathan Chancellor <nathan@kernel.org>
->> Cc: Miguel Ojeda <ojeda@kernel.org>
->> Link: https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io/
->> Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
->> ---
-> 
-> I gave this a go, and am liking it so far. My only real complaints are
-> that the defaults don't totally match my prejudices. :-)
-> 
-> Having a good default container, and perhaps falling back
-> automatically to podman if docker isn't running (or just defaulting to
-> podman) would make this very convenient for one-line
-> tests/reproducers.
+Right, this was what Ard suggested in [0]:
 
-Many thanks for your feedback, I'm glad that worked for you.
+> For the short term, we could avoid this by using arch___set_bit()
+> directly in the SEV code that triggers this issue today. But for the
+> longer term, we should get write of those explicit calls to
+> instrumentation intrinsics, as this is fundamentally incompatible with
+> per-function overrides.
 
-Yes, the default 'gcc' image doesn't actually work in practice.  I've
-proposed something else in another email to drop the default for now
-but aim to provide "first-party" container images using kernel.org
-toolchains which may give us some useful default later on.
+But, I think the longer term solution is actually now coming from what
+Marco described in [1].
 
-Then good point about the default container runtime, I'll update the
-logic to automatically look for Docker and Podman - basically iterate
-through the supported runtimes - in the v2.
+So in the meantime what's the cleanest fix? Going straight to the arch_*
+calls from SEV seems pretty yucky in its own right. Adding special
+un-instrumented wrappers in bitops.h seems overblown for a temporary
+workaround. Meanwhile, disabling __SANITIZE_ADDRESS__ is something the
+SEV code already relies on as a workaround, so if we can just make that
+workaround work for this case too, it seems like a reasonable way
+forward?
 
-Cheers,
-Guillaume
+Anyway, I don't feel too strongly about this, I'm only pushing back
+for the sake of hysteresis since I already flipflopped a couple of times
+on this fix. If Ard/Marco agree with just using the arch_ functions
+directly I'd be fine with that.
 
+And in the meantime, I guess patch 3/3 is OK? As it happens, that will
+already make the current error go away without needing the first 2
+patches. So maybe we should just merge that and be done with it? There's
+probably a good chance no other issues will show up between now and
+whenever Marco's nice compiler support arrives.
 
+[0] https://lore.kernel.org/all/CAMj1kXHiA91hH80tHFCO9QjkkfzEGZ2GJgpHnuKrusKhOULMXA@mail.gmail.com/
+[1] https://lore.kernel.org/all/CANpmjNNc9vRJbD2e5DPPR8SWNSYa=MqTzniARp4UWKBUEdhh_Q@mail.gmail.com/
