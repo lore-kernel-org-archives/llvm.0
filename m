@@ -1,50 +1,67 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021088.outbound.protection.outlook.com [52.101.95.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E20334C1C;
-	Thu, 18 Dec 2025 14:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.88
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766068105; cv=fail; b=tENZka03R4Ja+x89fHRfUShn5hqhmge1qXKe0vTqYnvkKTHR2Q9Olop3XW4xBOhB5e9a00kBCbIg1QXxAloEp4yKUsIcfVoWVa5YjSB11oHico9evc3wf0SiJuLTLHAC0mRlzL2+PqP9kpEqQ0+Svrk6pCXycAcL1YwrOtZzRac=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766068105; c=relaxed/simple;
-	bh=OlZCLgfxyNsP8cfPK6lPg/rM+No0JEfmC4X5i4guSfk=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C22347BA9
+	for <llvm@lists.linux.dev>; Thu, 18 Dec 2025 16:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766074356; cv=none; b=q76iS/ssNi5s8TZppnfjMVzkS5XQS4lpP5RSxMN8mKayDFpnvNQlq66hM/JHUtUInQqj0uPQ/9MKw9PfrzYLHBH8uh5Vm67+03XDH0FIvn1yVoGDrCeHIuNBU51zectOBRT5gsjMVXbIEbGDIXJsHxoNKJZHeCE6zeJLfkWhwpc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766074356; c=relaxed/simple;
+	bh=hILVjo4AUez19jo2pE3nhHEemYOjjDlMPLwgmLQmJjs=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BxMC2fKqOXdoo+CCtNUrT4kbXr+mTn5KMDrlNGnOSRVkPAQdbfiHWE3vdZjl4laztX6Pie3kTlNuefPimwV3HaU81/mzmG/mz6b+Rf+slL9BSeZrUt7Zo5OzGoXsIuhKyCy7/nI7HyCyLx75PCH9VjBE3mrM2xv7Uvjx4zCozI4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=Sckc9RkZ; arc=fail smtp.client-ip=52.101.95.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	 MIME-Version:Content-Type; b=lzUa9S8pABik+f7qVtR6NMYgfJqcAnluBgsicK429mtHkrH9qB9vOa9ykiFwY/QIRmrpXRKaiSuhMR+vNJ9khFbYtcVqFDNyHby1ZF6M5A1UfC+4XBpgkATzKc6MczR+TH3xtBr9t+7A/X0ML/29TvcjgP3HgdTno5w0+JaKSm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dg+ReVJO; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="Sckc9RkZ"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S7Ws13u3K2oJjMYFFtb2e/pg9gIURRzE0eGIHnkJ5VRtOolTiM7r+pavgyzxq0F8RoEkrz+pdqHJUh0r3quPopTkWYpdimIgrRGygsf5H/St02xgS2F01HPw8XRZ7h6uUmnI1+hSyGTB8o+0GHojhdQUbKgAcZGtNcPbUn9dVkp1Xw2JcNUMtqjbM9Q9mdGBVcuBDz0ASKdXhHilxuLq+jrMf+FvTQqgaGV5i98vk6awI2JcvKUo2F90cLGNglTWk3oicuqh8JWsIctVRhxfF61p3WMcnDrXt0drzPZFOwIxjdip9O9fstKuRPkIMlRRy/TTUC69bRAVc18A0B9Cmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B4tHieMKFCKv7Fyf9D/fIdyOkw6lIHTzklRfKbhM7oQ=;
- b=oJpjIsqXH+g0P3o6xm6u5OlQxek+SovcbXt5/ZNhorF73ALlpFW/FD5ywIuVjRZ4GZQvRUepjNLcmtNN76g/G+KItejwpsTx/VmhFTerPsnO9D7TA6MKIJIop0QfpnVnwcMTpj1NMShiUBSNAbGR8b4tPj4wya1LMtu/tmoVPVTeF9xhceEmbxDqT6oO+8ut557XrT/dFBjkZ/fwo/A8wyzyMgc0ummSR56zB2quBXJ2J6ET4+1nJZFlT61ib1h4WLxesBgbHTDO2AeBsLWX2eVb53BtR4w+gX/vKlvKMVZRudQc5t3Q85OfPlVzmIfj5UIsXyjMXL1wLFod4w1GNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B4tHieMKFCKv7Fyf9D/fIdyOkw6lIHTzklRfKbhM7oQ=;
- b=Sckc9RkZN14v6qq6QivvNjYk2ivVNEGmylM3UgyAZYjRrr9hptBntyWRIca4rOhnJMKEOzqyrbHu5E3uYa6eTKA4Lt4JV61bM0qaqWCIkr+PnL+qIbUTIXK9JDldomU/c9Bst6t4i4AOIRdkZWlE8hU0H2wVCfuHFEe65yxDJ9Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO6P265MB6489.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2de::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.8; Thu, 18 Dec
- 2025 14:28:17 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1d18:b0bb:b18e:594b]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1d18:b0bb:b18e:594b%5]) with mapi id 15.20.9434.001; Thu, 18 Dec 2025
- 14:28:16 +0000
-Date: Thu, 18 Dec 2025 14:27:36 +0000
-From: Gary Guo <gary@garyguo.net>
-To: David Laight <david.laight.linux@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dg+ReVJO"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43246af170aso489995f8f.0
+        for <llvm@lists.linux.dev>; Thu, 18 Dec 2025 08:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766074353; x=1766679153; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MWV/1Pvi/LREO51Q4j2bYTzBTPFXYl3JU+RoWaS0a6Q=;
+        b=dg+ReVJOxBQv+wJzLwyWWow87t8d0WfZxAic28KWbhDPG8BUeQM+e5VxQctEawkMCE
+         EWYdfqfwh8LQ1UL5KEc/SSNZfrAyT09QwgRZ3IDhgSLLh3FWRn/4S4tmOO8VThrGC/tx
+         Hu5DqbedIluW1uxSVIrpNqyVO1Q6STDK8KQLlzAWxjQyd+XrXloxe5ZRiWmrhwd5iU3G
+         1O9D6172PdTF0SM72hn1JELuphGA0qd7U9CZzofvNEA3SRiiHduL6r69oyJqGWYKP/cl
+         Eqv06hbfRGyheGh1X2yTOvllmk017CkI6YFAXKFD9ZayBke+DDBMekmNnwx7f3h/OJti
+         zyUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766074353; x=1766679153;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MWV/1Pvi/LREO51Q4j2bYTzBTPFXYl3JU+RoWaS0a6Q=;
+        b=ja1yJyismYfs46PbEUcU5m5Y0ORrqZUkkEvO/9WvoCv7DunmtbSgy0XEXAmj5oTm1e
+         9p7OIzHnwcUW3yzqWsZaL4PNfzCPsev6uxYtBGqZAhGo5Sq9LrcM4Vvj/PVcMVIvhmoJ
+         gaZui4Ri+6+PV4nnoi+jm+aTAOupSn+vk8jAzDEXMemo1fULnpteTmNg+RL0F2Y94wmG
+         fwVzrQLQOMtMyrZhNvOth5AhcXq8gwtNRlhvahHzGWivT8ag5iYqRiMPXzMjP8CkGCH7
+         wdQTjbTrpKdf6yvGnfFPjI1/sy5GjKpnmHKab3D/ZA7G+rXGSutvhchMecc2XSCHSGRC
+         sU6w==
+X-Forwarded-Encrypted: i=1; AJvYcCV7sAaAwtQh8CmiSIDb332ffxOT6TpmTOqVxOsamzutj4Z/kNXOzG0yhsXCwt8HXrq+J+4x@lists.linux.dev
+X-Gm-Message-State: AOJu0Yywc4h7cETkIX5D32HjQ5WM0uxNSzdwbju+q0aKPrcru/c1QiEC
+	1taW2xzJkQFblYZhNokuMTeR40HWpEPzdVWmeijJxyB87cyA1ucu+YcY
+X-Gm-Gg: AY/fxX5pc0sY7K0cOY7aN16ijwfRk61COkHYZiDV1eBzcXMfSFV0NxF6iVWnIa2+nAH
+	uaTgX3eNqJyCkqfmVDMrtIlCLnYeZadiaRnFeR5ZgfPtdDEBZho+pp+pDyBN3h2yljYlFm3h/0e
+	oT3kVy1IBC1UT+DC+/jX+PjxJ56ZjAi1y6vZ15MHu5IyvllhXLQlZzkwZrdqTV49Hn66ZcNs443
+	2KpDXF7ipn3tIyMdnh+NjImELwGHE5j9rgIEEsNFbRv2lcAkvVOuLFs3bclSmjVehDMOl0K3f13
+	BSpCwDhJzxF0/sN4l/DV+Pcj9FxJMtrttRid2aSYvBddbBb4DDHv/Q87fNduMCMWBIPqKar3vm/
+	NVBOBuVhVWBNhXgCNTHo2QN8ANPwNNnOyucXQfV+/vJatPa4InG42Th9PRqS9fYk3liTmEwd+XG
+	TDYMhAWmcTg0bLO6Kl4MtGFtZCeUK5LvpKJN2IY8hz5mZXf8xSIV/f
+X-Google-Smtp-Source: AGHT+IF9IwYAhi8+6w3+wxW3M7gEiPdh7t/1OgDyx7SiDKnto2Pyh4pbz29WYRXhF76RKtErZ/OMCg==
+X-Received: by 2002:a05:6000:18a8:b0:431:de5:93c7 with SMTP id ffacd0b85a97d-4324479535emr4292777f8f.2.1766074352470;
+        Thu, 18 Dec 2025 08:12:32 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432449986f1sm5781954f8f.29.2025.12.18.08.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Dec 2025 08:12:32 -0800 (PST)
+Date: Thu, 18 Dec 2025 16:12:29 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Gary Guo <gary@garyguo.net>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Boqun Feng
  <boqun.feng@gmail.com>, Joel Fernandes <joel@joelfernandes.org>, "Paul E.
  McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org, Nicholas
@@ -66,186 +83,128 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Boqun Feng
  <github@npopov.com>, llvm@lists.linux.dev
 Subject: Re: [RFC PATCH v4 1/4] compiler.h: Introduce ptr_eq() to preserve
  address dependency
-Message-ID: <20251218142736.464b7a4a.gary@garyguo.net>
-In-Reply-To: <20251218090313.33923750@pumpkin>
+Message-ID: <20251218161229.767dafbf@pumpkin>
+In-Reply-To: <20251218142736.464b7a4a.gary@garyguo.net>
 References: <20251218014531.3793471-1-mathieu.desnoyers@efficios.com>
 	<20251218014531.3793471-2-mathieu.desnoyers@efficios.com>
 	<20251218090313.33923750@pumpkin>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0483.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a8::20) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	<20251218142736.464b7a4a.gary@garyguo.net>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB6489:EE_
-X-MS-Office365-Filtering-Correlation-Id: 11fb108d-7735-4e79-ba37-08de3e41af2e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|10070799003|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?QTDsozFAifBzHMgtbpPsLiaEPxhADVNlygKiGyYzkuda2qafeh/eX+uLs/pV?=
- =?us-ascii?Q?H/ymfuQd6jYgZkerq18zhpeUciBwZ8saWQOd3JEfdAs/of8wQF2uH0Lir6Q8?=
- =?us-ascii?Q?6gRezEQxagWwq0WWVrF88cGMPuSSoP3HPGKCbT6RKE6Z8VYpijI+Ndi7kXWY?=
- =?us-ascii?Q?vkd3jprKeRHHXeiunCF1cuZzi+h0YrnGiu+p8ip0WF+DsAMqml95oJOPjNOZ?=
- =?us-ascii?Q?D1gAIZaP77rcLs/ZCtmbwsBdq2pIiT7XRK9NOAMCX+/RVDrECMutrvzQIO0s?=
- =?us-ascii?Q?Gx+Sdm96TMIpAy3lPUVec04kZ0y0rlWII22XRAbmWlefXQFd18ZzoyRuNd/q?=
- =?us-ascii?Q?uWmsz21RssyP+XJohfJuK9E5WtHlXSeSbfcEWHxPHnjeSljUQP4kivYaVcr8?=
- =?us-ascii?Q?RWhWcFoaD1AI+smjzxI5roF3qftvvWNtvFR4aPzNpsBhHZssH53BbYi7COG4?=
- =?us-ascii?Q?eid1hD/tPXpsdhhrclnhK3NK7py4SKDlpB+wa6UnlZPesU1glnaN9Kx8sNMv?=
- =?us-ascii?Q?MAI5SOtbBf2Pz5VIlw3OFkw7xkuypNLS82A3QXNrFCV8AkDVr13DDeTYuBEY?=
- =?us-ascii?Q?7l8LvBOUXB7/eTIf4JZ/xjuX+G2XY1EMxsz1MtGhvb17WKIYvcxAQhHOCTRI?=
- =?us-ascii?Q?n68iE6YmWzQu/N8SY3mCnyxT8hU4SVCYuikD/3x6qtBa4M0J+u9RZnmyb51z?=
- =?us-ascii?Q?p1N3BqpzbnhSJy743zONb8to3WdUtKcahMinAD0uUun8j5Uq/bL6cT3S2h7I?=
- =?us-ascii?Q?sMGN+35cZmYxWQSrIJabJ4wSAVeE6dQ3UH725QqWn/ZGl2HsaFBgauhtMed7?=
- =?us-ascii?Q?EQimE0VIfdFWm9IbO7MJQQReB3FpBFGhou8AQ2bd+uqDzxC0C5BzgegPIChY?=
- =?us-ascii?Q?1iC0XwUhTLg8kt9Rp71JUHnBzeajhaR+Ojir7LwM8AW5NyEksTsHfrncgDX/?=
- =?us-ascii?Q?w3L3a8lMfXZ4l3hJlKIovSv8+ZLYXL722/f0CKjO3TKAeNe8a+Srojng8guN?=
- =?us-ascii?Q?4I+OQij1QMk6ELxB56+DbwUgHEwLMXQrMcMqMtJnInFUZOhDwFNloy3osdVO?=
- =?us-ascii?Q?lMSRSHp+ZRbmY40d2rTmUnIgeWrX4dERL+/JMm5vHPPRUPOthKu2vd4+wWCh?=
- =?us-ascii?Q?09ShSv4X04xWKPYz+ygwrfg0tPopiBl4/GKsVuTaRFHmcY+Dv5zuRsUt7f0R?=
- =?us-ascii?Q?23DZNS9Yi0YnGALFhdNhGkA3aXdXEeHguSe6IvW+9YZBcH/Gg/ilo+aYi5NE?=
- =?us-ascii?Q?rO3EgozFkojXd+/ADjyb3RVko94mPQmGhlpQD3OeA6IMMG+VQVaaWtetRI3W?=
- =?us-ascii?Q?2NflqL3msFiZTg4W1sXjceurni51UuNDYGfLw6esQGOAXarKl5Xp3/Y9CJFo?=
- =?us-ascii?Q?OvePhoQszEMbO6ckdlaTZHRFVeoHdthMhFFvkA9LBXVDLOKMb0R5jPG2GJjw?=
- =?us-ascii?Q?ie3DldD52j/oB5X7/Kw3QVVvmz29DT69?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(10070799003)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?5JQGrdgKFmD85RLtsQ+K7vN/TF0ZMwJSs/4RztSrX+SkhcDHTniWa/d3hcn4?=
- =?us-ascii?Q?vj77uCIs4bDUeLH9znZzNbqZxr6X4T6k+7WrDKf/hhc/j09aygeiiOZ5bQmw?=
- =?us-ascii?Q?Kw7tPTagbJKtk2tDvNDhJ3DiTQx/F24A/IdAumifA6fmt0zv/b6+4UWTE/M4?=
- =?us-ascii?Q?k4VpgCBodUZZXxhq9EJJCIbU6FfC566vJbKSXQuubYirmgZqQ0CiQxmITK/Y?=
- =?us-ascii?Q?4lFNXpS9YAfjqghzCSgBuPlPGERSP5xfPmU+zRJJWjV0oXrlc9Ld9fDR9Us+?=
- =?us-ascii?Q?G/9rP7Dd/MTjypt3j45Yo0nUqzxbyIOpgP4WJlrAYz95CqFoBkki+R+RYp6T?=
- =?us-ascii?Q?zN7aEMbryEVDZFdDIY7Q8kpn6N3jXiqEJlTwlYH4y38/jPkruWStm817uphg?=
- =?us-ascii?Q?kxPjoyK53ulsvR0NtnFfM+msK2RE50XJNQ5uRp1SgkYvOn4oTv/CQ2CyFq3U?=
- =?us-ascii?Q?n5NW3MhdvRWxXrVBXxWQkVRUoV1z5owFyCAzIpSurDkFGHifE60kTkavYgEJ?=
- =?us-ascii?Q?d9diRy1YBUfeFDXkljwUjSXnHgRvgHhM8UWVbIkTws/pCXqwX19OPE+pzIbC?=
- =?us-ascii?Q?89AeVI8z3vRsrKl6UjfVLhyAqtEMKxMtJM1HVKp4UEjbGDD0KaGQ3j/enLTs?=
- =?us-ascii?Q?m/ibGPpKYpECQtWB60pP0WWpehSrzaZzAUDp55IAXpqACD+YL4nROYdDlm6i?=
- =?us-ascii?Q?tUbWHrDw4EjhcP4Nml8S9hx6DwwhGTL5xxZvjthNabBaMywyxaZf++fGZ0K8?=
- =?us-ascii?Q?5NNEKznQOTSStj4Hp/CK0RPTEv165vrq3grfUuVfQ64sbJ5i45/jMaRinMEK?=
- =?us-ascii?Q?PEgLTBmbmGja6eq/FRjCjdjjfhDmHeiQCg9aVAtgzul9vJ5FFWIAVwHTBd3C?=
- =?us-ascii?Q?T/gXf2PEE1PJrLfb3S8UZ5GCm4OgpXu6NTtNx9dnDM9yBzKHSS014oNsxv8u?=
- =?us-ascii?Q?UizKszvSwKYczXKzD0zp7PlZqn15twyL5RlvkB3jXC6LlJUU3xU5CqDQjVN6?=
- =?us-ascii?Q?WGqnuOZYKlU26u5oIQklY0kp6rlU7ojj6ZTXnw9cTvEbWy62D9zPf/5NX1EV?=
- =?us-ascii?Q?WBgdo+xzE4goxBA0IvutOrUNmC0uxF/tAArfGG6kwOtdoQHQ9djhjxk8kbCH?=
- =?us-ascii?Q?FvT+UxG7D+FD0P6IpAf7EP2FgXn4UVx0+T6yq7k/bOneiyU0RjR2O4SrEcT6?=
- =?us-ascii?Q?B1hsDm/M96+tMUSldyIGftnReIurdw30eXJqbHegtMqv0Up1ab4ACHLIpF2F?=
- =?us-ascii?Q?Bmk7X3eU9f6zR+QVX7iK6xRoCeZ2mZYzDjN4FYhZoDiXoO///j3Xwkg+DoTY?=
- =?us-ascii?Q?N9oPdyPgnQ/x5fWUgBaamw2ZZKv7yKjlegl1DaVm6Rhmbyi6MS90yMIP4qKx?=
- =?us-ascii?Q?nYDc7arL4i1JL6+V4SgC1D4VceX0GiyWjn//WRm7pwg4a8wBtbhcrDEa7hW2?=
- =?us-ascii?Q?DWKpmJJhMp6sYcKzwTBSjOyEy3oC7XdNkTJxFD30PRTq+nMxAdQP1DwDbsq7?=
- =?us-ascii?Q?WoQbcb/HgYnihPT5cKXGh2kEU2xgpNVKt4nMhf5H+MoVpDT4tw+Acr8v4bsN?=
- =?us-ascii?Q?wOrZnWF23eQaR9DVHbjAS9uaFdR9N4GVsTPB6w7X?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11fb108d-7735-4e79-ba37-08de3e41af2e
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 14:28:16.7612
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PRhnjltnJ1yXQz/GBb+mz636vIUlPKLQdbZUvLXwegwKFJ5ouo/qYkL+hWAUSmn8KRTe/qSBzrsb2BpzV+6Tkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6489
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 18 Dec 2025 09:03:13 +0000
-David Laight <david.laight.linux@gmail.com> wrote:
+On Thu, 18 Dec 2025 14:27:36 +0000
+Gary Guo <gary@garyguo.net> wrote:
 
-> On Wed, 17 Dec 2025 20:45:28 -0500
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> On Thu, 18 Dec 2025 09:03:13 +0000
+> David Laight <david.laight.linux@gmail.com> wrote:
 > 
-> > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> > index 5b45ea7dff3e..c5ca3b54c112 100644
-> > --- a/include/linux/compiler.h
-> > +++ b/include/linux/compiler.h
-> > @@ -163,6 +163,69 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
-> >  	__asm__ ("" : "=r" (var) : "0" (var))
-> >  #endif
-> >  
-> > +/*
-> > + * Compare two addresses while preserving the address dependencies for
-> > + * later use of the address. It should be used when comparing an address
-> > + * returned by rcu_dereference().
-> > + *
-> > + * This is needed to prevent the compiler CSE and SSA GVN optimizations
-> > + * from using @a (or @b) in places where the source refers to @b (or @a)
-> > + * based on the fact that after the comparison, the two are known to be
-> > + * equal, which does not preserve address dependencies and allows the
-> > + * following misordering speculations:
-> > + *
-> > + * - If @b is a constant, the compiler can issue the loads which depend
-> > + *   on @a before loading @a.
-> > + * - If @b is a register populated by a prior load, weakly-ordered
-> > + *   CPUs can speculate loads which depend on @a before loading @a.
-> > + *
-> > + * The same logic applies with @a and @b swapped.
-> > + *
-> > + * Return value: true if pointers are equal, false otherwise.
-> > + *
-> > + * The compiler barrier() is ineffective at fixing this issue. It does
-> > + * not prevent the compiler CSE from losing the address dependency:
-> > + *
-> > + * int fct_2_volatile_barriers(void)
-> > + * {
-> > + *     int *a, *b;
-> > + *
-> > + *     do {
-> > + *         a = READ_ONCE(p);
-> > + *         asm volatile ("" : : : "memory");
-> > + *         b = READ_ONCE(p);
-> > + *     } while (a != b);
-> > + *     asm volatile ("" : : : "memory");  <-- barrier()
-> > + *     return *b;
-> > + * }
-> > + *
-> > + * With gcc 14.2 (arm64):
-> > + *
-> > + * fct_2_volatile_barriers:
-> > + *         adrp    x0, .LANCHOR0
-> > + *         add     x0, x0, :lo12:.LANCHOR0
-> > + * .L2:
-> > + *         ldr     x1, [x0]  <-- x1 populated by first load.
-> > + *         ldr     x2, [x0]
-> > + *         cmp     x1, x2
-> > + *         bne     .L2
-> > + *         ldr     w0, [x1]  <-- x1 is used for access which should depend on b.
-> > + *         ret
-> > + *
-> > + * On weakly-ordered architectures, this lets CPU speculation use the
-> > + * result from the first load to speculate "ldr w0, [x1]" before
-> > + * "ldr x2, [x0]".
-> > + * Based on the RCU documentation, the control dependency does not
-> > + * prevent the CPU from speculating loads.  
+> > On Wed, 17 Dec 2025 20:45:28 -0500
+> > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> >   
+> > > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> > > index 5b45ea7dff3e..c5ca3b54c112 100644
+> > > --- a/include/linux/compiler.h
+> > > +++ b/include/linux/compiler.h
+> > > @@ -163,6 +163,69 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+> > >  	__asm__ ("" : "=r" (var) : "0" (var))
+> > >  #endif
+> > >  
+> > > +/*
+> > > + * Compare two addresses while preserving the address dependencies for
+> > > + * later use of the address. It should be used when comparing an address
+> > > + * returned by rcu_dereference().
+> > > + *
+> > > + * This is needed to prevent the compiler CSE and SSA GVN optimizations
+> > > + * from using @a (or @b) in places where the source refers to @b (or @a)
+> > > + * based on the fact that after the comparison, the two are known to be
+> > > + * equal, which does not preserve address dependencies and allows the
+> > > + * following misordering speculations:
+> > > + *
+> > > + * - If @b is a constant, the compiler can issue the loads which depend
+> > > + *   on @a before loading @a.
+> > > + * - If @b is a register populated by a prior load, weakly-ordered
+> > > + *   CPUs can speculate loads which depend on @a before loading @a.
+> > > + *
+> > > + * The same logic applies with @a and @b swapped.
+> > > + *
+> > > + * Return value: true if pointers are equal, false otherwise.
+> > > + *
+> > > + * The compiler barrier() is ineffective at fixing this issue. It does
+> > > + * not prevent the compiler CSE from losing the address dependency:
+> > > + *
+> > > + * int fct_2_volatile_barriers(void)
+> > > + * {
+> > > + *     int *a, *b;
+> > > + *
+> > > + *     do {
+> > > + *         a = READ_ONCE(p);
+> > > + *         asm volatile ("" : : : "memory");
+> > > + *         b = READ_ONCE(p);
+> > > + *     } while (a != b);
+> > > + *     asm volatile ("" : : : "memory");  <-- barrier()
+> > > + *     return *b;
+> > > + * }
+> > > + *
+> > > + * With gcc 14.2 (arm64):
+> > > + *
+> > > + * fct_2_volatile_barriers:
+> > > + *         adrp    x0, .LANCHOR0
+> > > + *         add     x0, x0, :lo12:.LANCHOR0
+> > > + * .L2:
+> > > + *         ldr     x1, [x0]  <-- x1 populated by first load.
+> > > + *         ldr     x2, [x0]
+> > > + *         cmp     x1, x2
+> > > + *         bne     .L2
+> > > + *         ldr     w0, [x1]  <-- x1 is used for access which should depend on b.
+> > > + *         ret
+> > > + *
+> > > + * On weakly-ordered architectures, this lets CPU speculation use the
+> > > + * result from the first load to speculate "ldr w0, [x1]" before
+> > > + * "ldr x2, [x0]".
+> > > + * Based on the RCU documentation, the control dependency does not
+> > > + * prevent the CPU from speculating loads.    
+> > 
+> > I'm not sure that example (of something that doesn't work) is really necessary.
+> > The simple example of, given:
+> > 	return a == b ? *a : 0;
+> > the generated code might speculatively dereference 'b' (not a) before returning
+> > zero when the pointers are different.  
 > 
-> I'm not sure that example (of something that doesn't work) is really necessary.
-> The simple example of, given:
-> 	return a == b ? *a : 0;
-> the generated code might speculatively dereference 'b' (not a) before returning
-> zero when the pointers are different.
+> I'm not sure I understand what you're saying.
+> 
+> `b` cannot be speculatively dereferenced by the compiler in code-path
+> where pointers are different, as the compiler cannot ascertain that it is
+> valid.
 
-I'm not sure I understand what you're saying.
+The 'validity' doesn't matter for speculative execution.
 
-`b` cannot be speculatively dereferenced by the compiler in code-path
-where pointers are different, as the compiler cannot ascertain that it is
-valid.
+> The speculative execution on the processor side *does not* matter here as
+> it needs to honour address dependency (unless you're Alpha, which is why we
+> add a `mb()` in each `READ_ONCE`).
 
-The speculative execution on the processor side *does not* matter here as
-it needs to honour address dependency (unless you're Alpha, which is why we
-add a `mb()` in each `READ_ONCE`).
+There isn't an 'address dependency', that is the problem.
+The issue is that 'a == b ? *a : 0' and 'a == b ? *b : 0' always evaluate
+to the same value and the compiler will (effectively) substitute one for the
+other.
+But sometimes you really do care which pointer is speculatively dereferenced
+when the they are different.
+Memory barriers can only enforce the order of the reads of 'a', 'b' and '*a',
+they won't change whether the generated code contains '*a' or '*b'.
 
-Best,
-Gary
+	David
 
 
+> 
+> Best,
+> Gary
+> 
+> 
+> 
 
