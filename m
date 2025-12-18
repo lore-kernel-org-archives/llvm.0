@@ -1,281 +1,242 @@
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020138.outbound.protection.outlook.com [52.101.189.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2822BB17
-	for <llvm@lists.linux.dev>; Thu, 18 Dec 2025 12:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766062221; cv=none; b=WOJc7+uY8VetlmM2PjxojB4qUszXt6egerJrX4j8qJQHqfdfGmUXdNWrrud/3bZWlPWGWOigDA2a/o4xOfjcytcRsPRSg/P/ipuqXboPfCAOX3AtPiR33Dff6//bIRrLgF8u+YSZHuqsQgFJcScm0jWpLfgJPBfHmey0yXFOUsw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766062221; c=relaxed/simple;
-	bh=cb1EYuLPZCGCXdZa0orsidPlMBk7O0+4oMcaMbjHA38=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oPMWQxY4gqUTIcXEuPYQ/y+sWOAsjU9alcYSS7N6pp+c1NpdNMo4XxBt+01uQNDdmZ2EOOYhygsb5jhh8cimPgbH2NeY3+TYJUOIQVrUrkbRq4kqWINDv6uUBu337nD4TFr/XgFu53qcqzhbnIkLCyaCrW2Rwaeu1ayo1nyszN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=M2c1mYol; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4907E342520;
+	Thu, 18 Dec 2025 13:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.138
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766065871; cv=fail; b=H5T2VHPTiXRj5Eqg9bu8fIVWNGEpZeGokF39ykstbzWMCsQ209emybEzTQN/fcWAaZQmgezjho/kUAOQ1uYxORHGo7kTLgquZN+NX6GgQS+LbyCE/9pgc81BN2kCXbywx9TyCKmcXogTcijgGuaHshLxmODyKiRAsVAHcB8Utog=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766065871; c=relaxed/simple;
+	bh=UK3yG7al3tK5BgLzTeY611GGNnuwaNSZgGP9+3zgKJY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=N79rJ5vTb+p26StlltvVnRHanYGna4+i3GB9OemhmRIByFZr5HWR1QujSQUc5HwKo/o8L2og1q1RSk36TlBk6q9W1uirZiC1bXeyLhfs2gzBxlAraUxssRZApDZQR4qsSIPAWuq6u2ickaRq4kaAUSwM9Sk7GhwiUe4dxdEFskk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=ZBHnIH6j; arc=fail smtp.client-ip=52.101.189.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="M2c1mYol"
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id 6622F5813A9
-	for <llvm@lists.linux.dev>; Thu, 18 Dec 2025 12:50:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A87C5443CB;
-	Thu, 18 Dec 2025 12:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1766062209;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hfiV+MXAPfvRTSCJL7TaIGOT2OdBflC/9gc07OtO5hM=;
-	b=M2c1mYolZqchb5R1EW7NiuQUkluBmdcrNYgQiL21FG+gcds4f4ZLFQCnMbSFAlQkrRMDYH
-	yNtH/JqrMo4UORder2YWmQecHheKkVnmqJIn9aBUm4DkKNSNZke/GzBBBAVQvXq1khE5yA
-	Zulr4popkEldBzi51i54mmv+EnZGQMMEVl30Ca23EkwwkcMPivPH0sdeXr4wfBccYe0OxJ
-	lWx8fVgWNZugsuQ/Stf+wo47QqWf9sQgOUqeR01aRTG5JSveaQUNcxmPSjIhqpNvVJA3TY
-	cQmw0WhpMRqcbM0Xb9JNMgkakDwqPaXDQtlGmRL3vzHQO2p1ZGssR3JTp38Qxg==
-From: Guillaume Tucker <gtucker@gtucker.io>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	David Gow <davidgow@google.com>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
-Cc: Guillaume Tucker <gtucker@gtucker.io>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org,
-	workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 2/2] Documentation: dev-tools: add container.rst page
-Date: Thu, 18 Dec 2025 13:49:53 +0100
-Message-ID: <ff8da6b9680ef01ee44f6d0cf89e34dd76abb116.1766061692.git.gtucker@gtucker.io>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1766061692.git.gtucker@gtucker.io>
-References: <cover.1766061692.git.gtucker@gtucker.io>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="ZBHnIH6j"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NuTyqqL64ddx6/PQ9CGibnEwC+gvvxwmnKOlVyq8ojCz5eKm3V1cP3grWqT6vX9grHjw5BSg/2vhGAABvGqpsxWa7PDLpsL+PYBjEfn0jfzW2FV21bv0qf3ij93i/TC7IkgvxJZTItHrx3g0QgHCU3eAipes4V05j3ZphsFhUFSw4fkpjyWUmmrj58LGfZzfCIm3Y5zRhHYryiuXjgo7AKagxuZiEMUO9vorkrwpSujVdHgBNHcM9/Uz1yFYIUOztKO9OnIyr+2cxq3ho1+dwZ0QwceFfAmt/ROL76zpJ0LnJbaSauEz4aEVjNpGbXpkC6GGC+Zwze/ADas/hWnIdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yc825N6T9+7oztOGoWf1LHSmu8zl/K38htVxxLd6kQ0=;
+ b=wCTnjJU6xzojhxI2gf+1RpHzEfjISWkqjcusMgwFCssgKNLQC/KdkGD+ZIhXPwSrKYEgt56a7jU9KjokxkHknt986569ID/F9O6EdvBuwUbfiiVJy1JWpbgxrYXufDUhoLO1lx1kLDzYq/zX6sPRI9Xp+ywYhaRV8l426QlszcpcSB4foiCibMFEgrWnGP2tdk3/lnh8hP31CLQHIEOshK8S75pmYRjOk38K5X+2e4FfZqb+E+YBP+rPpg+5qnqZWhR0QWJiVU+N9LKpwer08SbsVNBKnunims441UDCbTotB6pp6gfGafq+1AmuyKnFgOGwabR0G7neNRs1jm7xjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yc825N6T9+7oztOGoWf1LHSmu8zl/K38htVxxLd6kQ0=;
+ b=ZBHnIH6jxtHQh/oNA1cjFx7XKSs9xewa4tebUPES3y26oG0DSNlMG3tAQ2tt2zhw6V2cd6Xyf/32wyg/1UwDVsHWzyz/+7g6BntUtM75mqjHMoBHJFciYk0NAgm3rcN81tUajTgJS01VE7GUjZk3GZSoO63AQrwZEgxIRBbyhpnF3Yv6eTvmrOyJdaZViSrhALDb/FqnS2p5hT/JMUiH0gukWi5tnrPSLtUfIzELfeFPPJY94OBaUOwdUW1Ay0Xt+5hiJFAOFP+MyqUwiz+l6+iCoz1GrnOXG7AhT8fTa8KurtGicfUvWEcCzo4sEy+SXNIeCy1zDiAt0WQ42y1XWA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT4PR01MB9799.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e6::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.8; Thu, 18 Dec
+ 2025 13:51:05 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%5]) with mapi id 15.20.9434.001; Thu, 18 Dec 2025
+ 13:51:05 +0000
+Message-ID: <cb55e583-395f-4b83-925f-c341c95903c1@efficios.com>
+Date: Thu, 18 Dec 2025 08:51:02 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v4 1/4] compiler.h: Introduce ptr_eq() to preserve
+ address dependency
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Joel Fernandes
+ <joel@joelfernandes.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Alan Stern <stern@rowland.harvard.edu>, John Stultz <jstultz@google.com>,
+ Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com,
+ Mateusz Guzik <mjguzik@gmail.com>,
+ Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, rcu@vger.kernel.org,
+ linux-mm@kvack.org, lkmm@lists.linux.dev, Gary Guo <gary@garyguo.net>,
+ Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
+References: <20251218014531.3793471-1-mathieu.desnoyers@efficios.com>
+ <20251218014531.3793471-2-mathieu.desnoyers@efficios.com>
+ <20251218090313.33923750@pumpkin>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20251218090313.33923750@pumpkin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0077.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:3::13) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdegheegjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnhepheevgfdutdeufefhgfeuleeuffejkeelfefhueffkefgieevheeigeeigfejjeetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhlrggsrdgtohhmnecukfhppedvtddtudemkeeiudemgegrgedtmeekiedvtdemheegiegvmeekfeefrgemfeeffhgumegvieekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemgegrgedtmeekiedvtdemheegiegvmeekfeefrgemfeeffhgumegvieekfedphhgvlhhopehrihhnghhordhlrghnpdhmrghilhhfrhhomhepghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhopdhqihgupeetkeejveehgeegfeevuedpmhhouggvpehsmhhtphhouhhtpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpt
- hhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtthhopeifohhrkhesohhnuhhrohiikhgrnhdruggvvhdprhgtphhtthhopehgthhutghkvghrsehgthhutghkvghrrdhiohdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggv
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT4PR01MB9799:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1bddf70-e45d-458d-762d-08de3e3c7d37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?bnBoTmNOL2ZQdnp3dmdvaEhjRHEyUDJHVkw0a0ZYb2ZnYjNDMExOTjFCR3cr?=
+ =?utf-8?B?UHg4alZGZzB4akZCUkpHOFNuNVo0M1lGaXBOOGprK3ZxL0t5TjFFRUhTdi9a?=
+ =?utf-8?B?cFVxYWwyTDAxdWFJS3R1WXFlck1Jc0hidmFNV3RIejJjZjcrQ01nWlAxd1Rk?=
+ =?utf-8?B?cElmWkpXYVBMbDVLZ0pmY0RuQU55REptbEk0RVFzZkdMM0wyRXZRZ1dibUMv?=
+ =?utf-8?B?bkFzRnZTTituVlNxWXFnQVprbUp4VUJlVmdZMy9MbzVFSWFhZkNROHZ4UWs4?=
+ =?utf-8?B?NzJoYjliTkRieEI2Zi9VcXB2WUNBaFBqbFhhaHEyaFdWUFc2aUlSTlRUWkpG?=
+ =?utf-8?B?YnZ1YkZuUEk1N3hOTWJaRG5BaVo5NHNucE92YXhyd0xHWkFhQ0hzTWluRElF?=
+ =?utf-8?B?dmg4YkJlYjZxcnhDWmtwdVpranlFWDJEZm5ZTExyM2gvemlZMEdWMEZTTHhr?=
+ =?utf-8?B?YlBOaXlzc2U1YlRaVW95cy9PejdPOGNMcFJsSTB1TmlUMnNCaFJ1UlBCc1pM?=
+ =?utf-8?B?dXRDQ0E1VTZDWjFEY084cTFqMUEyV3UrdmtrazZCWjVTbVU4d05qeTA0VVgx?=
+ =?utf-8?B?T1ZJYTlBeGs5c3VtbVlnMjFuclNFK1RqMDM3ZnhJVXVqVnlCTFZCVHo4Nlgv?=
+ =?utf-8?B?K2FnN0xDSWh3SUZiUkY0T1o4MmFaVmxvTXhtTTM3cG1VSTFyS0c0RC9rYXps?=
+ =?utf-8?B?QnpmWmYzUWg3dlhTL2dsYWMrNHhPVytObVlCT3dodER3ZUM2YXF2M2luYjMr?=
+ =?utf-8?B?b3A4Vzk3TW43dnRHZE5yOHNaa0IzbjJjcWZ2OGQwcjdPdnBrSmtvN0o1dE0x?=
+ =?utf-8?B?ZGdLYnVwY2tUcG85d1BqT213VklDc3drK0IxcmZHYUtNUEFkcnlTUHBlWmhQ?=
+ =?utf-8?B?c0o2dTJ0MTYzdGNIVlloL2NHZm9mUlVQeDhnMGdTemdQVTE0UnAraHN3UTVG?=
+ =?utf-8?B?Zm5oRG9WdzlqTmVSaHpmd29kdVZYQ05UaG5zV24ydmtzRURWQk5aUGNBSzJs?=
+ =?utf-8?B?ajZvV2VsUllrbk9UVHhaZFJnMzNON3dRb05DSDE5MkxZOW01U3FpZEtVUi90?=
+ =?utf-8?B?bUlJbG03L0pCZWozb2Q4eHBudDZMK0VtT01WdDZQd3poSk9hYWR6SnE5dXJ4?=
+ =?utf-8?B?c2p4SUFCbzdNZ2p3TVRiWHpVMTI2R3FtNXpLN2tqWWZQbmtjRlU3dXQ0RDJE?=
+ =?utf-8?B?UStZcURJY2lhWnRrb2xDUWVobUgzNTMrblJKejdXc1gzVGV0SlR2bUl5WDNM?=
+ =?utf-8?B?RmFmdFNUNlZOSmZTZEY1VDAxNS9OTWM1ZGxIUTlTby9BVTlJWlBmYkJiVmNV?=
+ =?utf-8?B?aHQ3VVlIZ0JxVytaaHdDdit0WGRRMDArZFV6ejRlaHhMUEtBK1dmNUx0T2di?=
+ =?utf-8?B?d1AvdHZHZXJRWDh2ZEFEcnRoUm5YMUxRUnNNZlBBNjZvdWtZckhYMFdWNTBF?=
+ =?utf-8?B?RnBtaTBKbmdxdGE5YXFTSFozRGpDdlR3Q1VoVEthNUF2djZIVTgrb01NVWVw?=
+ =?utf-8?B?U25CUEtpcW5BYWxvT2pEckZINWZ5NW90eEJOS1kySGp0Q2hjK3pOdFdRRlp3?=
+ =?utf-8?B?OFV6NjJrK1RQYWt5RndXUjduSTVGbXBUUmJtaTJlVTJoSVFtbDB5Q1pEWTFx?=
+ =?utf-8?B?cUk3Vm9qeEJ4L281QXRJMUtVN3lDMTVudXRRV2luR0FnbDhuZmo1cW1VSmlq?=
+ =?utf-8?B?Qld0cUs5SzJRYm8rUEIzdEpJM2k3SnFUZDZaUytwQkFJZW91RlNsOUVpZDgy?=
+ =?utf-8?B?LzRxazBHR3lYWFBtRUZRZEZkSm1adWVja290WFhrbVpiVGg0Vi9scHZ0R1hx?=
+ =?utf-8?B?QVBUZDJvMDVHbjQ0SU9teEt0SGxOOEMybkpnNVhQZnJ0VHMvcDlXRHRjWEhk?=
+ =?utf-8?B?b1JTUm5YQmtuTDNJOFlxRWlDdU9TcXkwSkZIVmVuZlFzMWc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MktoK1ljWVhjcVVoWFhaTW9ZMFRoNSttOGc1MjlLR1hXUE9zcldPK3F0Nnh1?=
+ =?utf-8?B?VzlCSXJSZXl0STRoZVluUVlIMkorcWxMWGRvNmxtQTZKTEpicUk0Mk5RbUt1?=
+ =?utf-8?B?YW5qUGtKS2RPQWFaYU9KbnQwTUZxVEdUcFFDb2VOQzNySWtacm8rVnI3eXEw?=
+ =?utf-8?B?bjg0dExQZ1hGRGtzNlFFRThFbm9oUTNiV0lLWkJYb1lPemhwcS9BenN5Skh3?=
+ =?utf-8?B?M2xIZ251dHJTdzhycWxnK1hPb0hmVnMrL3B2cXZvbHljZjVoWkJ2a2NaWUs4?=
+ =?utf-8?B?WFBjd2o0Q21PZXJiZXpmSDZzZXRSZXJwRWx1RzZncnVZVEhhWG15d0FKZWRN?=
+ =?utf-8?B?Q1pwM1hldkp0dGlpeE92QUovbmdFZlZTa284ajlwc1pkUUV4WEtybTlLYU9F?=
+ =?utf-8?B?c1VtaWI4RDlzNDJxV2lMUFZCUDRBQXRTM2U5bTRuM3hlaW1wZVpMblJiZEpm?=
+ =?utf-8?B?TGtQNzl5MHMvV0MxV0NLaVRaOXJWRlVrdGRJbjJjZkdlSjN5L0cxdUpqUGU5?=
+ =?utf-8?B?MVA5cGNybXIzdTNDekhGb2JRR0FIcnUwbTIzMVpDMis1c1dnTUd0aWgxMkNp?=
+ =?utf-8?B?Q0RiNzBFUWJ0L3FwZ3BvanZKV0gyaGxmaHN1QXhvZU5EVWJzbEpPV2xsU2ph?=
+ =?utf-8?B?emI1TTRvNk5CUDM3bUlIQkxjdmNnZGMrbDJlQUcrRU9vOEs5Sm5ZdFVkandz?=
+ =?utf-8?B?N0Jpa2d0a0pDaS9nbVhzdGpBL3hJZFpHcTdRUWxqUzF0a1QzK1QwSXZ5emZR?=
+ =?utf-8?B?Q0lZdXJFRzVnNEFqSnFzRVZDSnFPb0k1bEFaLzlUZCtHZmpHb0w4RU5VUWVw?=
+ =?utf-8?B?R2ZyTnl2L1dEd21qV2xOMmJiU2hDemJXK043Mkg0a1pmYUpWV3o2dFllMWRM?=
+ =?utf-8?B?YWhEQVpuVnd4LzRmY3hJNENBWS9FQ25vR1NGVDVKZjlWeGh3VFg1MVJYUk9y?=
+ =?utf-8?B?QTJmYTZxdkJCZGorWHh2cDJUTGlRUzlnYW14dHBZbmhGbFNSNGx6N08zUlRo?=
+ =?utf-8?B?V3VrbXkwVzVoUzAxT3hxTXJ3eHRpOFRvd2ZDeFZzU0JJVDYrVGt3R1J4K0Vk?=
+ =?utf-8?B?SjR1VEtOZUx6RTZXZlVRaTVQYTBFaDRUMUREaGd3blo4T1hDSVhaYTZGUndo?=
+ =?utf-8?B?WUVpcEtBZURIOWFRNHFGSmVqV1FGd3locXdhTzVqeTJ2S1FvWHpPOTVnazg1?=
+ =?utf-8?B?S0M3MXp3c0grekxFNHNKMmdLYWZYQTFPc20zWGNlb1lnczJZMW43c3h0QmNu?=
+ =?utf-8?B?MUNTZDNkNmVQcCtqektJTTVEWWxnQkIvVVU5NnNPZ200bmV6VnRMRkpvN2NG?=
+ =?utf-8?B?UUNlUlZWMEpGTlExSWRLYUhqN1Q4ZWNuaDd4dEVyT0NrbGFnQ1V5eFhrL1Ar?=
+ =?utf-8?B?QzY3T2NoQW4zb09WWERmR1B0VGQwam95aFMwSWhPenpIZjRPNlpUU09CN1ZG?=
+ =?utf-8?B?OGhJT0YrNlBVQ09zQ01XZnhsUjd3QVFSQUZvQWJkMW5KclB0ejRZRTZscURy?=
+ =?utf-8?B?WkpXZG8wSXJ1b0JZMWtFVEtSNDJwMmNuZDZNZTNuUjN3akdIQmNmT1BkSG9Y?=
+ =?utf-8?B?Qnl1b1ozUEo4OThYZ0ZsWUs2TWlWOW1EbzJXc211NDM2d1VUb1U2a3VUUlVC?=
+ =?utf-8?B?SHNqL2lrOVhGWGdWMFgyZ1VPV01aTGU1Nzkyc2Y1YTgwbTlTeTFUUGRBcllk?=
+ =?utf-8?B?M3VIZHNZc1hDODBDOU9wYVRCOGdvWER4cVVXSnVIbCtqQVFHTm82YUNBZTZQ?=
+ =?utf-8?B?SFEyNFFMMEpTRkJJSnNUMGRCUG91T3RhQ0tUSzJEOThmREMzOWFWNlBKZ1FY?=
+ =?utf-8?B?VzVGQWhkb0FBNnlUNDN0NjVFQzBRdjZFWXJvMnBlbWk0R0llZmsrbHVicVg1?=
+ =?utf-8?B?aEVUejVFNVpyN3dzL084NFRwMUdZNDJaSVJBengzdUoxQVd3MU9ZaExZT0JT?=
+ =?utf-8?B?eTVrOTRDN3Nvd0FENXFVNzBaZzhJazFvK3owd2NxZjJKOWVUcXp2YnFGQVp2?=
+ =?utf-8?B?dzFWSVNEQkRUZCtQS0xwYmlXQkNSeFpOM2Mzbk9kV2FMR254M3lQelFiRTB5?=
+ =?utf-8?B?bDJBWE0xMW0rTjl4Ly80TGN4aGdMQ3d6ZDFWSDNXeUJNT1ZMK0x0eHNFbS9R?=
+ =?utf-8?B?YTB5QzRiRWs5M3VMMFhabjF6SDB6ZU9iR1kvUlMrR2xEK3B5NXZBNm1yMlhF?=
+ =?utf-8?Q?YeAjx/3qlHgEtfcPtsFu/SU=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1bddf70-e45d-458d-762d-08de3e3c7d37
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 13:51:05.4503
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2fAZNrxiYG0o9ashr+n+86zqwUKshECk0hkrNQaqltom+qJmQvml5y6zCq01hIiQC1yKJhKib+AhdGkdPhiKuabm0OiYw208rEZieJGQtbc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT4PR01MB9799
 
-Add a dev-tools/container.rst documentation page for the
-scripts/container tool.  This covers the basic usage with additional
-information about environment variables and user IDs.  It also
-includes a number of practical examples with a reference to the
-experimental kernel.org toolchain images.
+On 2025-12-18 04:03, David Laight wrote:
+[...]
+>> + *
+>> + * The compiler barrier() is ineffective at fixing this issue. It does
+>> + * not prevent the compiler CSE from losing the address dependency:
+>> + *
+>> + * int fct_2_volatile_barriers(void)
+>> + * {
+>> + *     int *a, *b;
+>> + *
+>> + *     do {
+>> + *         a = READ_ONCE(p);
+>> + *         asm volatile ("" : : : "memory");
+>> + *         b = READ_ONCE(p);
+>> + *     } while (a != b);
+>> + *     asm volatile ("" : : : "memory");  <-- barrier()
+>> + *     return *b;
+>> + * }
+>> + *
+>> + * With gcc 14.2 (arm64):
+>> + *
+>> + * fct_2_volatile_barriers:
+>> + *         adrp    x0, .LANCHOR0
+>> + *         add     x0, x0, :lo12:.LANCHOR0
+>> + * .L2:
+>> + *         ldr     x1, [x0]  <-- x1 populated by first load.
+>> + *         ldr     x2, [x0]
+>> + *         cmp     x1, x2
+>> + *         bne     .L2
+>> + *         ldr     w0, [x1]  <-- x1 is used for access which should depend on b.
+>> + *         ret
+>> + *
+>> + * On weakly-ordered architectures, this lets CPU speculation use the
+>> + * result from the first load to speculate "ldr w0, [x1]" before
+>> + * "ldr x2, [x0]".
+>> + * Based on the RCU documentation, the control dependency does not
+>> + * prevent the CPU from speculating loads.
+> 
+> I'm not sure that example (of something that doesn't work) is really necessary.
+> The simple example of, given:
+> 	return a == b ? *a : 0;
+> the generated code might speculatively dereference 'b' (not a) before returning
+> zero when the pointers are different.
 
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: David Gow <davidgow@google.com>
-Cc: "Onur Özkan" <work@onurozkan.dev>
-Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
----
- Documentation/dev-tools/container.rst | 175 ++++++++++++++++++++++++++
- Documentation/dev-tools/index.rst     |   1 +
- 2 files changed, 176 insertions(+)
- create mode 100644 Documentation/dev-tools/container.rst
+In the past discussion that led to this new API, AFAIU, Linus made it
+clear that this counter example needs to be in a comment:
 
-diff --git a/Documentation/dev-tools/container.rst b/Documentation/dev-tools/container.rst
-new file mode 100644
-index 000000000000..5254feae02c2
---- /dev/null
-+++ b/Documentation/dev-tools/container.rst
-@@ -0,0 +1,175 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+.. Copyright (C) 2025 Guillaume Tucker
-+
-+====================
-+Containerized Builds
-+====================
-+
-+The ``container`` tool can be used to run any command in the kernel source tree
-+from within a container.  Doing so facilitates reproducing builds across
-+various platforms, for example when a test bot has reported an issue which
-+requires a specific version of a compiler or an external test suite.  While
-+this can already be done by users who are familiar with containers, having a
-+dedicated tool in the kernel tree lowers the barrier to entry by solving common
-+problems once and for all (e.g. user id management).  It also makes it easier
-+to share an exact command line leading to a particular result.  The main use
-+case is likely to be kernel builds but virtually anything can be run: KUnit,
-+checkpatch etc. provided a suitable image is available.
-+
-+
-+Options
-+=======
-+
-+Command line syntax::
-+
-+  scripts/container -i IMAGE [OPTION]... CMD...
-+
-+Available options:
-+
-+``-e, --env-file ENV_FILE``
-+
-+    Path to an environment file to load in the container.
-+
-+``-g, --gid GID``
-+
-+    Group id to use inside the container.
-+
-+``-i, --image IMAGE``
-+
-+    Container image name (required).
-+
-+``-r, --runtime RUNTIME``
-+
-+    Container runtime name.  Supported runtimes: ``docker``, ``podman``.
-+
-+    If not specified, the first one found on the system will be used
-+    i.e. Docker if present, otherwise Podman.
-+
-+``-u, --uid UID``
-+
-+    User id to use inside the container.
-+
-+    If the ``-g`` option is not specified, the user id will also be used for
-+    the group id.
-+
-+``-v, --verbose``
-+
-+    Enable verbose output.
-+
-+``-h, --help``
-+
-+    Show the help message and exit.
-+
-+
-+Usage
-+=====
-+
-+It's entirely up to the user to choose which image to use and the ``CMD``
-+arguments are passed directly as an arbitrary command line to run in the
-+container.  The tool will take care of mounting the source tree as the current
-+working directory and adjust the user and group id as needed.
-+
-+The container image which would typically include a compiler toolchain is
-+provided by the user and selected via the ``-i`` option.  The container runtime
-+can be selected with the ``-r`` option, which can be either ``docker`` or
-+``podman``.  If none is specified, the first one found on the system will be
-+used.  Support for other runtimes may be added later depending on their
-+popularity among users.
-+
-+
-+Environment Variables
-+=====================
-+
-+Environment variables are not propagated to the container so they have to be
-+either defined in the image itself or via the ``-e`` option using an
-+environment file.  In some cases it makes more sense to have them defined in
-+the Containerfile used to create the image.  For example, a Clang-only compiler
-+toolchain image may have ``LLVM=1`` defined.  The local environment file is
-+more useful for user-specific variables added during development.
-+
-+Please note that ``make`` options can still be passed on the command line, so
-+while this can't be done since the first argument needs to be the executable::
-+
-+  scripts/container -i tuxmake/korg-clang LLVM=1 make
-+
-+this will work::
-+
-+  scripts/container -i tuxmake/korg-clang make LLVM=1
-+
-+
-+User IDs
-+========
-+
-+This is an area where the behaviour will vary slightly depending on the
-+container runtime.  The goal is to run commands as the user invoking the tool.
-+With Podman, a namespace is created to map the current user id to a different
-+one in the container (1000 by default).  With Docker, while this is also
-+possible with recent versions it requires a special feature to be enabled in
-+the daemon so it's not used here for simplicity.  Instead, the container is run
-+with the current user id directly.  In both cases, this will provide the same
-+file permissions for the kernel source tree mounted as a volume.  The only
-+difference is that when using Docker without a namespace, the user id may not
-+be the same as the default one set in the image.
-+
-+Say, we're using an image which sets up a default user with id 1000 and the
-+current user calling the ``container`` tool has id 1234.  The kernel source
-+tree was checked out by this same user so the files belong to user 1234.  With
-+Podman, the container will be running as user id 1000 with a mapping to id 1234
-+so that the files from the mounted volume appear to belong to id 1000 inside
-+the container.  With Docker and no namespace, the container will be running
-+with user id 1234 which can access the files in the volume but not in the user
-+1000 home directory.  This shouldn't be an issue when running commands only in
-+the kernel tree but it is worth highlighting here as it might matter for
-+special corner cases.
-+
-+
-+Examples
-+========
-+
-+The shortest example is to run a basic kernel build using Docker and a tuxmake
-+Clang image::
-+
-+  scripts/container -i tuxmake/korg-clang -- make LLVM=1 defconfig
-+  scripts/container -i tuxmake/korg-clang -- make LLVM=1 -j$(nproc)
-+
-+.. note::
-+
-+   When running a command with options within the container, it should be
-+   separated with a double dash ``--`` to not confuse them with the
-+   ``container`` tool options.  Plain commands with no options don't strictly
-+   require the double dashes e.g.::
-+
-+     scripts/container -i tuxmake/korg-clang make mrproper
-+
-+To run ``checkpatch.pl`` in a ``patches`` directory with a generic image::
-+
-+  scripts/container -i perl:slim-trixie scripts/checkpatch.pl patches/*
-+
-+The examples below refer to ``kernel.org`` images which are based on the
-+`kernel.org compiler toolchains
-+<https://mirrors.edge.kernel.org/pub/tools/>`__.  These aren't (yet) officially
-+available in any public registry but users can build their own locally instead
-+using this `experimental repository
-+<https://gitlab.com/gtucker/korg-containers>`__ by running ``make
-+PREFIX=kernel.org/``.
-+
-+To build just ``bzImage`` using Clang::
-+
-+  scripts/container -i kernel.org/clang -- make bzImage -j$(nproc)
-+
-+Same with GCC 15 as a particular version tag::
-+
-+  scripts/container -i kernel.org/gcc:15 -- make bzImage -j$(nproc)
-+
-+To run KUnit::
-+
-+  scripts/container -i kernel.org/gcc:kunit -- \
-+      tools/testing/kunit/kunit.py \
-+          run \
-+          --arch=x86_64 \
-+          --cross_compile=x86_64-linux-
-+
-+To build the HTML documentation, which requires the ``kdocs`` image built with
-+``make PREFIX=kernel.org/ extra`` as it's not a compiler toolchain::
-+
-+  scripts/container -i kernel.org/kdocs make htmldocs
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 4b8425e348ab..527a0e4cf2ed 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -38,6 +38,7 @@ Documentation/process/debugging/index.rst
-    gpio-sloppy-logic-analyzer
-    autofdo
-    propeller
-+   container
- 
- 
- .. only::  subproject and html
+https://lore.kernel.org/lkml/CAHk-=wgBgh5U+dyNaN=+XCdcm2OmgSRbcH4Vbtk8i5ZDGwStSA@mail.gmail.com/
+
+This counter-example is what convinced him that this addresses a real
+issue.
+
+Thanks,
+
+Mathieu
+
+
 -- 
-2.47.3
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
