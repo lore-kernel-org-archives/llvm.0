@@ -1,97 +1,106 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5538721019C
-	for <llvm@lists.linux.dev>; Thu, 18 Dec 2025 07:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CD82DA75B;
+	Thu, 18 Dec 2025 08:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766041444; cv=none; b=ocY4ZI/016ymScluvO+5i58zjng8rad0LxtfBY2lYlOeGMjIKB4bmcliQTDjvKimMcO2Mzy4hZI5g7prJqLkxf06tgJqvIZO8UQXcvwRR9x0xW0cyAIBKel84A/x3GfKYFlRELJpWPXWQ8qNwVQxwXuOcE71/RzwYhT9hGfVwmM=
+	t=1766045269; cv=none; b=j9KB94Y6vTpkIfQtq1H4pablF6cwG+62JAAb2lCYrpwvsDyZIWpkgulIAG12foWQ4qPTGQt1orPEDfv/6MFb0DhsBIJ0PntsBM/g2FAfWGIXHrrrDQnxM1uX4CIMeVWhiafrye6PA5lLaIRpo2KIN2pDR0YlZ9Kssh/BWVAG4PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766041444; c=relaxed/simple;
-	bh=NG3Flv7V1JNWQucAPiMPvjdrPT7SVnIc+oED17nZscU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IEu2Us3AMa3nNEu2XTSjvM1U+eHTfJqjH9rdpiN5e10UZKJHEWCIYWe49lHDWFztXf7/NVmonNt97yx24310owyIxHos4kxXM7Lf2+srMIjvE0lRiv8JWVmPHA1r6FfkUoWehgfmQw4Yc52CskaD/c9PBamRjFIPvkj74KZhzZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FCpMvrFy; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1766045269; c=relaxed/simple;
+	bh=14gY+Zc1p3HwVRsTSgMA78u73WvDD7wU1U0G11fiKTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TL9Zagb5uTAp0tYpezc6z4HqPx3XHJuzpo4ULdrFTKzybqXTMYzFbMia9Jf5onyH6mlEyIIuJr1YgJ9qC3559bon9/BXf5F89kFEbD2PaVr7CDk294Wbc4xuv8Lf/C8mlOJeJPeqptw0rwvhjjQdcGq9GXq2vqnUX0CaWpwpCJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLFQO/Tz; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FCpMvrFy"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-37b95f87d64so1793981fa.2
-        for <llvm@lists.linux.dev>; Wed, 17 Dec 2025 23:04:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766041440; x=1766646240; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NG3Flv7V1JNWQucAPiMPvjdrPT7SVnIc+oED17nZscU=;
-        b=FCpMvrFyPQUtECWs9M+ve5vN9NQJ8x/+s6ujY7EVggUxg4gnzyeuxemTeGrur+HxF4
-         mNwtFuh7sWZ1F7rTl8EXIwA9XWJn3qNJz2KlUTkVp/1aypRxV9fjAweUfJ73J/AHtyzQ
-         AIX3v6dOzwgSJKks872FVRz4//oovnjCMgueUKskm+QnbPpkp8UKEG0oB36TbtG84qll
-         1jht08y7wQolMfiFZ68OGhtHBBJkr91RnqkzMeAjqMTyih5pZAgqohAOe315fACkTeak
-         OHG8QCNB7x3UdjhQ3Rl+C/ZRYoCtWaxQ/AdrZ6CReEtgCezFSXGqjjFZ3KwOjL2mM9Om
-         8vMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766041440; x=1766646240;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NG3Flv7V1JNWQucAPiMPvjdrPT7SVnIc+oED17nZscU=;
-        b=kZ5ti1VlwXOYV6L9L2OXA2pAR1cwC+1DBSnJQABvDSF71vpiUcSQ/PusPN6opgZEJ6
-         dATcG4K+g2+5rRI6FMfVVCvUQmqKq7/QYihMY2R1BxOJ9399RJkm/gGQ8ZAuoeuq76kU
-         +LvEla6Lzavr1YgOZ+Aa7b6d9QwpRtVOe9ScEJOVWKyPfYhU12MVWfYfcg9R8cNTeG5h
-         kfKgQM9JBhfx2qUXw4vKwnKFsGm8hKQOousB2fpMhIqOiwvJ5tVAOL4bZpfKfT/s9YiY
-         q9VQxKJbLwjLT13XKEnHVa6a74zEiI5nfWs2owtPWeuSXw9gjx4e7o+BmaEMMzFhkgO4
-         +Hww==
-X-Forwarded-Encrypted: i=1; AJvYcCW7w4pM+M9lOIeRPqQy9VsOoQhj2AtGjwImasyinoWmgzPtteUOBojZpPPf8erdaG2bGiE4@lists.linux.dev
-X-Gm-Message-State: AOJu0YxXxUx35Q7vXbwK+qx/5VxwxWHMkiwBcIDW2NLX25rScuDjh34t
-	j3RHZJRWi0U8SgB+M7Jnj7Rv36bMFmjJz0GokTbFw0EJyn/3AiheHKzwTMfdLy7tmRs11vU/UdK
-	rZ1IeQqcvuLnwkokoYk4Kg3WiA3AK0NPm/9H8bI33
-X-Gm-Gg: AY/fxX7R66OtRseHhrLJO2elBLCM3KcCv73NrFohydToWMpoLufvf7s3fqa8WU00R0c
-	qkVMk1dffaddVESzc6rQdDU6EUMSc6I4C65TVdoulw9VbQPitbkGcahXLs97XICNQxETAZhpbol
-	86ddmYkC/wcPNyQc/EkqIda4+gzVLiiH+h0pzQ1MNwTA94MDva+0yih1DbnbgrZs6lqN4wL1FV+
-	KY5Ba/AL037/nwGqDMO9jwgxONJCV9WoiEzxekCkzJgUJmHuD6fInLVCTHt7yGWG/LuieEPuPbu
-	ksl9MrzZjociYOpqnbAta5P+DzKQ
-X-Google-Smtp-Source: AGHT+IGa6ehysAt1ztbTbddQktMKfUrCu3vaE0KFaPi7hrb5bZr+Y8vH8de83qrbg/8SFAqqSQSjSGQ4/4o9cSJ/80I=
-X-Received: by 2002:a05:651c:e17:b0:37a:2e32:3200 with SMTP id
- 38308e7fff4ca-37fd08a242amr68378951fa.33.1766041439731; Wed, 17 Dec 2025
- 23:03:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLFQO/Tz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766045268; x=1797581268;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=14gY+Zc1p3HwVRsTSgMA78u73WvDD7wU1U0G11fiKTo=;
+  b=HLFQO/TzxvQg++oZruoB9iZu/zKv+fUoBEaeVjP/RrH0m5HVpa7CT2no
+   0X866rsUd1g2pPje2wBmA5XQIPg8EtgoQ9I9TGoYN+lt7lGPskkP581wE
+   Uxjms3aIoLeqzp0QviXE70MDj8liExYWU4r4E/rif02jPtpr0IsxAVLrM
+   jZq7iWkrCEz8fsls0HZOvhWyM0jwJuuh1CiBB5bot8HZGqQkkPg2Coi56
+   v0FX5N4WjLJiabr3aoUaaYqU0YnqwhYgtiPisvv3Omx1Vrso1hynmyuMO
+   o18+egb6EXdB4KDQzxe7Ozl/9LeRY5b/jQvQtzxaNaCNiz4GaPgnLDv8b
+   A==;
+X-CSE-ConnectionGUID: XLB9FNfsRUSxkhTvWjLEKA==
+X-CSE-MsgGUID: AEks0EEQRruNOf9coPtE2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11645"; a="67187775"
+X-IronPort-AV: E=Sophos;i="6.21,156,1763452800"; 
+   d="scan'208";a="67187775"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 00:07:47 -0800
+X-CSE-ConnectionGUID: s0eG5tcXREGumC82roQDkQ==
+X-CSE-MsgGUID: sl+PnTamSgmfVL34L/a1nA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,156,1763452800"; 
+   d="scan'208";a="198599185"
+Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 18 Dec 2025 00:07:46 -0800
+Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vW931-000000001nv-34xy;
+	Thu, 18 Dec 2025 08:07:43 +0000
+Date: Thu, 18 Dec 2025 16:06:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Granados <joel.granados@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [joel-granados:jag/dovec_consolidate 21/24] Warning:
+ kernel/sysctl.c:958 function parameter 'k_ptr_op' not described in
+ 'proc_ulong_k2u_conv_kop'
+Message-ID: <202512181539.YS7kV2m4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251217-revert-scripts-clang-rools-handle-included-c-files-v1-1-def5651446da@kernel.org>
- <20251218001336.GA2451437@ax162>
-In-Reply-To: <20251218001336.GA2451437@ax162>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Thu, 18 Dec 2025 08:03:47 +0100
-X-Gm-Features: AQt7F2qsoLJMYrCrAExz1xhd2YRJehR5Pg82DcCwzCkvH_0u7lE9uhe7avhFjOQ
-Message-ID: <CACT4Y+Z5Mtax6BMtpY6Zj9Zd_1XjphfkMDp_3Wrzo94Pw9=VhA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "scripts/clang-tools: Handle included .c files in gen_compile_commands"
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 18 Dec 2025 at 01:13, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Wed, Dec 17, 2025 at 08:13:43PM +0100, Nicolas Schier wrote:
-> > This reverts commit 9362d34acf91a706c543d919ade3e651b9bd2d6f.
-> >
-> > Dmitry Vyukov reported that commit 9362d34acf91 ("scripts/clang-tools:
-> > Handle included .c files in gen_compile_commands") generates false
-> > entries in some cases for C files that are included in other C files but
-> > not meant for standalone compilation.
-> >
-> > For properly forking clangd, including .c files is discouraged.
-> >
-> > Reported-by: Dmitry Vyukov <dvyukov@google.com>
-> > Closes: https://lore.kernel.org/r/CACT4Y+Z8aCz0XcoJx9XXPHZSZHxGF8Kx9iUbFarhpTSEPDhMfg@mail.gmail.com
-> > Signed-off-by: Nicolas Schier <nsc@kernel.org>
->
-> Acked-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joel.granados/linux.git jag/dovec_consolidate
+head:   96185449a89d542ae186d3a530dfd59920e7773a
+commit: 8ce0559763f13a61d67e832563e660b5891b7b60 [21/24] SQUASH with  proc_ulong_k2u_conv_kop
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251218/202512181539.YS7kV2m4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251218/202512181539.YS7kV2m4-lkp@intel.com/reproduce)
 
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512181539.YS7kV2m4-lkp@intel.com/
 
-Thanks!
+All warnings (new ones prefixed by >>):
+
+   Warning: kernel/sysctl.c:475 function parameter 'u_ptr' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'k_ptr' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'negp' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'k_ptr_op' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:502 function parameter 'u_ptr' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:502 function parameter 'k_ptr' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:502 function parameter 'negp' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:502 function parameter 'u_ptr_op' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:537 function parameter 'negp' not described in 'proc_int_conv'
+   Warning: kernel/sysctl.c:896 function parameter 'negp' not described in 'proc_ulong_conv'
+>> Warning: kernel/sysctl.c:958 function parameter 'k_ptr_op' not described in 'proc_ulong_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'u_ptr' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'k_ptr' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'negp' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:475 function parameter 'k_ptr_op' not described in 'proc_int_k2u_conv_kop'
+   Warning: kernel/sysctl.c:502 function parameter 'u_ptr' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:502 function parameter 'k_ptr' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:502 function parameter 'negp' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:502 function parameter 'u_ptr_op' not described in 'proc_int_u2k_conv_uop'
+   Warning: kernel/sysctl.c:537 function parameter 'negp' not described in 'proc_int_conv'
+   Warning: kernel/sysctl.c:896 function parameter 'negp' not described in 'proc_ulong_conv'
+>> Warning: kernel/sysctl.c:958 function parameter 'k_ptr_op' not described in 'proc_ulong_k2u_conv_kop'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
