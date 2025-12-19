@@ -1,61 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12762149C6F;
-	Fri, 19 Dec 2025 05:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A982D17AE11;
+	Fri, 19 Dec 2025 05:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766121357; cv=none; b=nR4HgiqVE2gXMeyrJUgHt87gpHK5QRdWTd7lNzcCFuzEOFQ/HJss2GQCQh08XwBYbaJ9z8iyNlaerSbZGIm/9y1hYobxk0wpeyNgdCK0nshdahcMdSVO4VZzf/zVD8km/b8Vf8RfU1pEQdoaV/S0ywXPVgvNwYh6cHut095yJZw=
+	t=1766122743; cv=none; b=kt15uAD9OJbYpm41tCwm4YDWzo9ZH1oAPInHzTM9IEOavapTatdYrk2GWlruYk4/LPvf9a+f/hE4QzJTvpd9jIOsyIY1vbvfZWEYkwauxAWE0Fd0wSnIQ8B/qtlDUUHbeNP11uQH5meTCMqMrX54SQQbrZF2didI6iV3IisRS9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766121357; c=relaxed/simple;
-	bh=cFqyeFbB1zVEz+ivYITj2OeUc7Hd+oEnsWJEaRGYWjg=;
+	s=arc-20240116; t=1766122743; c=relaxed/simple;
+	bh=C+aAvcO64a5Zylyj+NYq6rp7D0lJfbztLDlMeJE2wq0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MkXxI6lOWl8IXZPhvOsg8sXhP68ZvCRLc4I7SVDTngr6TVghbMAyqngwifUaH8iixq6zEtmyyQlqO6jWIHaS43QcERVFV9ThwYW2foP9RNJx6bSEoW0LioAR+7XueoC8lii7EdKV2mk8anVxqMUD/H7WrUunudPPbVjqEPCspyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=akgVZUi1; arc=none smtp.client-ip=192.198.163.7
+	 Content-Disposition; b=VGOD3JxfQGlw1y+H25llwn58JhqGaiLQwnDszYS2rDb4p1SP/0k5ySQwRHR47uQVg2yxNzS4zAC5uWoWiI0XkJxxQvrg2RlABL5Tk8ugC1pQh+qHCaAnlgBTjfQBEww3NuHJivYbo7clv//bSVKHBFhzRfYWyFgrcZZ4m/BaEO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cdMrJQ35; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="akgVZUi1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cdMrJQ35"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766121356; x=1797657356;
+  t=1766122740; x=1797658740;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cFqyeFbB1zVEz+ivYITj2OeUc7Hd+oEnsWJEaRGYWjg=;
-  b=akgVZUi1meyAYoatZyECIljZwQC4AkJzkRf8cOlvXIH56HpZKIMOnZFt
-   dzzX8aKJhuTctC77Eo3c6ACU9GaUZZBUTtNXuPl1fbfStZNmV5KnIQs6W
-   MvVn0yBvGkNS2Ln2Jww13SLvUc3rjxIDduI4n9oZJfbfPPFWf7/AEXCbK
-   wsag8kynLiH5I/pDYmlA9SuHb+zGULsbifc77Sa/7RwEZDyHySeaeVcmg
-   n3LFCl6+UECVUM0SOzfD+r3sKxLRKR+kk/vRcPPAn2GEeMUaWw7hkXBD8
-   GiWafdYyiSE6WdcD5VENPX6ypwEBUjzD3rdQjAAWphMxtjm+GgXGocFCj
-   w==;
-X-CSE-ConnectionGUID: aNNxwBtQQEyqiOS88HFxog==
-X-CSE-MsgGUID: FkxHq07lSay+qS4ZzgOp9Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="93556429"
+  bh=C+aAvcO64a5Zylyj+NYq6rp7D0lJfbztLDlMeJE2wq0=;
+  b=cdMrJQ35cJw3wnDH5KwVKAJ8gaHGnR6envX/CdnPXepObMkAfPI1XeRg
+   bnX40D860bKnmlN++6e00ZgMdjy+8VPtdW1+9gL5/7xcBAUWy+5qyMRh7
+   D7941EsTP8o0EUpkcWpq+yUTgdlPz2Lvf9Kyj2b/NiHSCG2jtsfrD6CTl
+   p8RfuCWSA/w/2hmxOWHnbAc5vNFUOT8V4OOiL6p/abnQWvSV5/OnEya/I
+   GJSFSM//4qc+xRIuAJOsIoKey1D7w2W0mVLdiAgfu+J9NqZFGm60vsape
+   xoJ8uUFwXBqWeuzzkn6Y9y0dyeymhdKxpdG0jn9JVakvZJsd4jVW5vM/q
+   Q==;
+X-CSE-ConnectionGUID: NArzaNcSQLWEFlXopE7V2g==
+X-CSE-MsgGUID: 7ao150NoQD2fqhSJcUYamg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="68127347"
 X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
-   d="scan'208";a="93556429"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 21:15:54 -0800
-X-CSE-ConnectionGUID: +zQry788TjetSQu2CUO0Hw==
-X-CSE-MsgGUID: Y6uVMh4hQQOk0iJkU/K5eg==
+   d="scan'208";a="68127347"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 21:38:56 -0800
+X-CSE-ConnectionGUID: dKeS/oMAT/++Gp1LyJ4QBw==
+X-CSE-MsgGUID: bAoDlSHSR2GYW4pY3RNTpg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
-   d="scan'208";a="198372333"
+   d="scan'208";a="198830880"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Dec 2025 21:15:52 -0800
+  by orviesa008.jf.intel.com with ESMTP; 18 Dec 2025 21:38:55 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vWSqE-0000000033Y-2cSe;
-	Fri, 19 Dec 2025 05:15:50 +0000
-Date: Fri, 19 Dec 2025 13:15:28 +0800
+	id 1vWTCW-0000000035Z-277o;
+	Fri, 19 Dec 2025 05:38:52 +0000
+Date: Fri, 19 Dec 2025 13:37:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [pci:controller/dwc 8/8]
- drivers/pci/controller/dwc/pcie-designware-host.c:1175:6: warning: variable
- 'ret' is used uninitialized whenever 'if' condition is true
-Message-ID: <202512191339.583iyg1a-lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-pie-v3 12/15] error[E0425]: cannot find function
+ `__kunit_abort` in crate `$crate::bindings`
+Message-ID: <202512191312.zHjY6jrc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,94 +62,164 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/dwc
-head:   c4a86e6600fa082d6646044fcce2183ad5e52283
-commit: c4a86e6600fa082d6646044fcce2183ad5e52283 [8/8] PCI: dwc: Skip PME_Turn_Off broadcast and L2/L3 transition during suspend if link is not up
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251219/202512191339.583iyg1a-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3
+head:   5ed57ce1a7de9e649ede6b45207ee2f3bdf4cd2f
+commit: 8719a5ceb7c22dc1c37a41c1e921c77d6a59ac1d [12/15] x86: Use PIE codegen for the core kernel
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251219/202512191312.zHjY6jrc-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512191339.583iyg1a-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512191312.zHjY6jrc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512191339.583iyg1a-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512191312.zHjY6jrc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pcie-designware-host.c:1175:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1175 |         if (!dw_pcie_link_up(pci))
-         |             ^~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:1218:9: note: uninitialized use occurs here
-    1218 |         return ret;
-         |                ^~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:1175:2: note: remove the 'if' if its condition is always false
-    1175 |         if (!dw_pcie_link_up(pci))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-    1176 |                 goto stop_link;
-         |                 ~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:1173:9: note: initialize the variable 'ret' to silence this warning
-    1173 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-
-vim +1175 drivers/pci/controller/dwc/pcie-designware-host.c
-
-  1168	
-  1169	int dw_pcie_suspend_noirq(struct dw_pcie *pci)
-  1170	{
-  1171		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-  1172		u32 val;
-  1173		int ret;
-  1174	
-> 1175		if (!dw_pcie_link_up(pci))
-  1176			goto stop_link;
-  1177	
-  1178		/*
-  1179		 * If L1SS is supported, then do not put the link into L2 as some
-  1180		 * devices such as NVMe expect low resume latency.
-  1181		 */
-  1182		if (dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKCTL) & PCI_EXP_LNKCTL_ASPM_L1)
-  1183			return 0;
-  1184	
-  1185		if (pci->pp.ops->pme_turn_off) {
-  1186			pci->pp.ops->pme_turn_off(&pci->pp);
-  1187		} else {
-  1188			ret = dw_pcie_pme_turn_off(pci);
-  1189			if (ret)
-  1190				return ret;
-  1191		}
-  1192	
-  1193		ret = read_poll_timeout(dw_pcie_get_ltssm, val,
-  1194					val == DW_PCIE_LTSSM_L2_IDLE ||
-  1195					val <= DW_PCIE_LTSSM_DETECT_WAIT,
-  1196					PCIE_PME_TO_L2_TIMEOUT_US/10,
-  1197					PCIE_PME_TO_L2_TIMEOUT_US, false, pci);
-  1198		if (ret) {
-  1199			/* Only log message when LTSSM isn't in DETECT or POLL */
-  1200			dev_err(pci->dev, "Timeout waiting for L2 entry! LTSSM: 0x%x\n", val);
-  1201			return ret;
-  1202		}
-  1203	
-  1204		/*
-  1205		 * Per PCIe r6.0, sec 5.3.3.2.1, software should wait at least
-  1206		 * 100ns after L2/L3 Ready before turning off refclock and
-  1207		 * main power. This is harmless when no endpoint is connected.
-  1208		 */
-  1209		udelay(1);
-  1210	
-  1211	stop_link:
-  1212		dw_pcie_stop_link(pci);
-  1213		if (pci->pp.ops->deinit)
-  1214			pci->pp.ops->deinit(&pci->pp);
-  1215	
-  1216		pci->suspended = true;
-  1217	
-  1218		return ret;
-  1219	}
-  1220	EXPORT_SYMBOL_GPL(dw_pcie_suspend_noirq);
-  1221	
+>> error[E0425]: cannot find function `__kunit_abort` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:147:35
+   |
+   147 |                 $crate::bindings::__kunit_abort(kunit_test);
+   |                                   ^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/alloc/allocator.rs:281:17
+   |
+   281 |                 assert!(align.is_power_of_two());
+   |                 -------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `assert` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find value `kunit_unary_assert_format` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:138:44
+   |
+   138 |                     Some($crate::bindings::kunit_unary_assert_format),
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:550:9
+   |
+   550 |         assert_eq!(None, b.next_bit(0));
+   |         ------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find function `__kunit_abort` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:147:35
+   |
+   147 |                 $crate::bindings::__kunit_abort(kunit_test);
+   |                                   ^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:550:9
+   |
+   550 |         assert_eq!(None, b.next_bit(0));
+   |         ------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find value `kunit_unary_assert_format` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:138:44
+   |
+   138 |                     Some($crate::bindings::kunit_unary_assert_format),
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:551:9
+   |
+   551 |         assert_eq!(Some(0), b.next_zero_bit(0));
+   |         --------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find function `__kunit_abort` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:147:35
+   |
+   147 |                 $crate::bindings::__kunit_abort(kunit_test);
+   |                                   ^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:551:9
+   |
+   551 |         assert_eq!(Some(0), b.next_zero_bit(0));
+   |         --------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find value `kunit_unary_assert_format` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:138:44
+   |
+   138 |                     Some($crate::bindings::kunit_unary_assert_format),
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:552:9
+   |
+   552 |         assert_eq!(None, b.last_bit());
+   |         ------------------------------ in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find function `__kunit_abort` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:147:35
+   |
+   147 |                 $crate::bindings::__kunit_abort(kunit_test);
+   |                                   ^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:552:9
+   |
+   552 |         assert_eq!(None, b.last_bit());
+   |         ------------------------------ in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find value `kunit_unary_assert_format` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:138:44
+   |
+   138 |                     Some($crate::bindings::kunit_unary_assert_format),
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:556:9
+   |
+   556 |         assert_eq!(Some(17), b.next_bit(0));
+   |         ----------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find function `__kunit_abort` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:147:35
+   |
+   147 |                 $crate::bindings::__kunit_abort(kunit_test);
+   |                                   ^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:556:9
+   |
+   556 |         assert_eq!(Some(17), b.next_bit(0));
+   |         ----------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find value `kunit_unary_assert_format` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:138:44
+   |
+   138 |                     Some($crate::bindings::kunit_unary_assert_format),
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:557:9
+   |
+   557 |         assert_eq!(Some(17), b.next_bit(17));
+   |         ------------------------------------ in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0425]: cannot find function `__kunit_abort` in crate `$crate::bindings`
+   --> rust/kernel/kunit.rs:147:35
+   |
+   147 |                 $crate::bindings::__kunit_abort(kunit_test);
+   |                                   ^^^^^^^^^^^^^ not found in `$crate::bindings`
+   |
+   ::: rust/kernel/bitmap.rs:557:9
+   |
+   557 |         assert_eq!(Some(17), b.next_bit(17));
+   |         ------------------------------------ in this macro invocation
+   |
+   = note: this error originates in the macro `$crate::kunit_assert` which comes from the expansion of the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+..
 
 -- 
 0-DAY CI Kernel Test Service
