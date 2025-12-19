@@ -1,69 +1,69 @@
-Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B363D339844
-	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 21:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035A025487B
+	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 21:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766180299; cv=none; b=AenSAq6ehGbb+zR4OvDQss1wyEWG8/KUkBshDkRyg6VRb/b0I4iGv60kvfIJpWDfMOfq8mxY6g1ukTU0glmxjimbIo7pg1mNuO6EHtYvV+s2V0QasAQwxmJ0vpvwMtsNDuBGVLv7UViiNmx/OUTqR71gfbLG/1kg9LGADkQhb+Y=
+	t=1766180563; cv=none; b=Smvafi9Rfo7aA8kU9ETcrXDaeeDn5tRHlCx2xX/NfCpgpwKaDR/IF1MbEEx83KtnvsR6ZP07q8rBUrzVkLheccTuxTS+uJ/ULuTjcGuz4BHHdMmUnknYBNvA4oZhsJn/9uOqp4gNBkOwdOe2X/4iD50vFnnUp1NyI1un+3sGctw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766180299; c=relaxed/simple;
-	bh=SBHXkRgMesGUJGSlI+YkckhHJhyJOUbeeY6s/H5FeUc=;
+	s=arc-20240116; t=1766180563; c=relaxed/simple;
+	bh=XXvUIRo6jJ9ogO2QQaUCxttK8WosB2XGObI8UYH72+M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r7HgIs7EHU1emPMsDMuz6qHeUfHbTlAlhQVn35K61XyqzH4JoMc3jSo0dsdO7pG8ayLOYKCgLRZJRCsi2t8Oxk+vvuELgqvs18VJFghhaSlIil2D1XuKAJOIpLRZlPtprfBINX7A7gpCNab7t7TVB60c7p3KddAitk9xdwNhwn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eaUfzkRh; arc=none smtp.client-ip=209.85.216.68
+	 In-Reply-To:Content-Type; b=lRohO8EhladWpIvXj7P2SapDOGAkrYYv1E/cS7u+8JUOx1YR4kK871jBTNsEIhddwvJrYRiesYL7y/oJhX0DswVpH43qLwAmIyg6iu0Pr1u00ukb6SzlIfyH1rBbSgGj4Sqerk3/wjeqVZTAMV6/imoTSOMo1No0PquoGT0Rkk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kh7w7pKJ; arc=none smtp.client-ip=209.85.214.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eaUfzkRh"
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-34c84dc332cso1880908a91.0
-        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 13:38:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kh7w7pKJ"
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-2a0c20ee83dso27393225ad.2
+        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 13:42:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766180296; x=1766785096; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1766180561; x=1766785361; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SBHXkRgMesGUJGSlI+YkckhHJhyJOUbeeY6s/H5FeUc=;
-        b=eaUfzkRhCpIpudgs4lZLIy6HHDxVT8Tmb9XEL+9j68uNfloyWSz2eGdRVpDcUOpcQP
-         JtGxT0G4tRzwOyN5KFdLwlJq1+OjYgsT1JJH2zYs16tpujGEFJVfFOWkvpJJf4TXgZh0
-         y0QNo623IJnLfk8/4dIbdtpxQ7TE9XJ3qPDovLqts5JOXrIQOEhrcgesL81L8q6Jkz3+
-         A4S6ZaJ84KIMhpkgloGR5P6nf1xjZWl3qy47Z4VsY7zJNbWIfP6CnuXEwh6n3qAi/wme
-         e1/DQDVhQEfqXZ29k0XdvqKEsbTq4zmii1yxRugIgvk02/80+K+pJOEYLn4+6scp03Ge
-         2GZQ==
+        bh=xhB1Fco/aAscGV7BUmHv+KRyMsa6iylEkhRycjuIJTw=;
+        b=Kh7w7pKJJWu7Th7HJKxlGLR3zQ3Tzxd5qDv+lHXHhwhAKpxgWAcKRSzdSfGn37z9Fv
+         mFEYWYk2Nl3S7FKyatVe0s2hd71vs866h3a4fhPLyMhL+KFvs8QQk+2UmBzeH+OjalHc
+         MHNH95ZN8ZsFIj5cxuFI64BQIcO0rDy9XWZl1Pa6hV4f/+jcOLoSKIv2I1hlmjPY+nLW
+         GLnct4j11pvA1dzTyUDzHzLm0DUvPzr+F/ff0SKXS/iT8W4x4PPOC7tfpJvloyOILjQ0
+         bPtL4UfLGye9MR8F4S3xgoJvcRFPUZLeHzwNRHclp9lJL6dbmVb+KPQWc4Iio6oPNITj
+         zqzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766180296; x=1766785096;
+        d=1e100.net; s=20230601; t=1766180561; x=1766785361;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SBHXkRgMesGUJGSlI+YkckhHJhyJOUbeeY6s/H5FeUc=;
-        b=svUzfwEL7rUGRaOCOuxdgpSiex0fiJwbp1VikBiDyjZrEzgbcKNnUcjvU/tcJEfJZE
-         xtBGo4l/tq/7faIgChnt1BfRToK3fMB54PeOtLqtAFmLATe/nVCeWZfFv1sm26hobSv7
-         q7jyhKfKd+MlDw3MFDaoutjuTbma4X8NL8syXMSCEU+RypIqSzj57Q9McFlbHQ5DAZbv
-         Hw/o1GdRNkCcwfrsCeOCptoBsyqwxTd45k+/9iNOTGzmkAX6jXxRP01KJQix8eCyfx4r
-         dS7FHOX2lSQBjCJFW5fT6ch/WN53qpCbVkU3yhRBYC4gQ3nw8qtZbpt9vX26jZcIsBub
-         JEkg==
-X-Forwarded-Encrypted: i=1; AJvYcCVaJomyNqZAi3/IC7lOpMmn99shQuPxYhNbiM5Oc2RgeG2nt9XKOnidPaBdzj2LAIn6saY0@lists.linux.dev
-X-Gm-Message-State: AOJu0YyQvUXvkHgKEDrwjpzjXPj3JN+pBK/wLzRbiKor3M42Kc/LpQ7V
-	KVQLHK9CYlMLxAASF5ZwAQ6WErFmXqK6i5+jGFGAVclm7q10QloFHUmH
-X-Gm-Gg: AY/fxX6VUDAE5X5XcT7WEcC6o8Z6y63CKCc/cBnk6Hq8EwgORpCpxrSsLBPfqODTcYU
-	7KwW0WVbBNXsj4R/qydj6RyAOLItmvcs8lR/Hu2LhJyB2SoIuA8Yn9M7yWpMvSQ1MPHua6REKxX
-	4uY6O1CCqOv5Cvrxpq38IhgdTfRA+wh5DEc6saYnd/rnZaCpHElkeCclgDyPw8/y5q7KA+JHhvR
-	kA9Ly42q0YLXnRJGhjO7CiIykfdnt/FcoSwQZFuU4e6Qr0Fgh1rsY3EooPDw5MY7UmpymjWgS4I
-	Vfh/4GW94MKV1bGZCSMpcDG60LiRe/iWIMcN2A8XEOYCVn631ZTxBR23GYzyOQKxVXkmHvejmDT
-	+/Omyxx05f8hRwG+8e3o5BqUr2BMA/mHa+FBMSsBn/JFyZ0vHarJcjj3P9lHiGKmNo2pgKNtj/Q
-	SSzbJhjOyI1XSFnki4+mSWPtKEVGRgUOUBIuCJxt6hyeO6GHMlWI67t5o0vV1ZTU7GLmpLwrYCs
-	iwX4I3v6e32xAiN3LxVNtE6By93OhJyzCzDU7R8HfsiTiGUr9/W0VqPpF3GNUpW0d3Y9a1ymC4L
-	OEo=
-X-Google-Smtp-Source: AGHT+IGivulZwqOvq9TkwT/0JBobQprm3JRJ6VtJUw4ydSXEmlT/iKTWxEeMw8/Q4ZWRYLdEwZEKQQ==
-X-Received: by 2002:a05:7022:e0c:b0:11a:f5e0:dc8 with SMTP id a92af1059eb24-121722f462emr3455845c88.28.1766180295388;
-        Fri, 19 Dec 2025 13:38:15 -0800 (PST)
+        bh=xhB1Fco/aAscGV7BUmHv+KRyMsa6iylEkhRycjuIJTw=;
+        b=ir+BGrRWygek5w4TB1flzUWrsuoSlKLvs21lGkiKYLrwZKh+w6Ab5M8fiIzn5XXcVh
+         czoeLLgmmBT7zfrbTYWfXfvmtQDuAwNA40TOp2he/wob6K2rJ4arQPlO99CLVgi0DwMo
+         C7s55ee3l2AS05OEDFvrE3maJ0/g39oHLKtp6NvMk/AjWU3VnyiqXkbsvdOV7mGZeavH
+         A1lxKkdDSLsPayd5fpdoMtW/UCL7cI9JEq6o0lNA5e7W2wPNFaqrdFsuZjfEVnYq8JsR
+         +z2Vi+yHqa1racZyRVO9ErKN5+NNVo6w3Jg/Sm+dTaXsdTnKJhd9AkMa0/tltVsGVrB3
+         x9hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJAJ/H7osXVNVJ3KnHa0F+LH6ja1FUI6b3xl6hqHIpMewP/+Dl6v80fTBZIK3cs9prjOHX@lists.linux.dev
+X-Gm-Message-State: AOJu0YyOE3Q5NiJzkgP2h8FTQvKI73F0y6cakcuQ48LBiJwTUdRgrgTa
+	adi0F8uzWqHjvLm7qYKS0oOcwp2qLH++xH4lBtKXVqHAttUUPwvV4h8T
+X-Gm-Gg: AY/fxX7AHuYxf3qf2Jr427Vw8oBxI/bnaDL0tz6bLwnTcaj/C3+DF+QyMa1v3ourRTT
+	TZT7/QCFZAzCcLPO1Tr/oqrLVVj9r7dEcoGgsrga1xZwiKt/mHkNSsHEQ39tIkE3SrL5Kfy4Hn4
+	vcT57W6e5ENT6x6IUtevkmXQBoEPaYAZIElhm7FD7Pgs0p11J21BkHvvXZceIdaj9iCu8F8Ucgz
+	gCo7NF4kPKC7V+GqVqCOKN36EiZMLgqzbK3QWIThxKU8NhC5moJ3fOnggnn182OBY7QmLlnY2eZ
+	T1WNzWmcrFXdI6P9vZrMrydS4eOaOUzUwO5peAEDFiMAE0Yy8qYFX1iYVy27Ppw63s16iZ95LNc
+	qGwdKhRHExm/a7c5tKMCcDxFmS0jGc2fX+ktjoXRUnyJaj1lVtI0IaDOFVLZr1Okn/o4BPAn6Wg
+	IfGcC4U6X3KoK9pqql9Rf1a2/9XyEkttM1eKZXRwYbc+1EGUcjN0kcCwBSi5pr/t6LSyF5q29+D
+	Ke/DQ/HWGt2Cg4tuTYrj6rhR/Z99LYdo/VhvqD/qexgSb7W5gqHnqW9jVVJfOdwCawCqoiqAHaY
+	83U=
+X-Google-Smtp-Source: AGHT+IGTM6mjPPfNhqA9HPe48U2bDECheHzAzGuJpcTxojW/wC3VfdWLu4jNEE4Msq7vw7t+QoPUtw==
+X-Received: by 2002:a05:7022:62a9:b0:11b:78e6:8323 with SMTP id a92af1059eb24-121722fd212mr4438541c88.37.1766180561251;
+        Fri, 19 Dec 2025 13:42:41 -0800 (PST)
 Received: from ?IPV6:2a00:79e0:2e7c:8:5874:79f3:80da:a7a3? ([2a00:79e0:2e7c:8:5874:79f3:80da:a7a3])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121724cfd95sm12051531c88.1.2025.12.19.13.38.13
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217254c734sm11636083c88.13.2025.12.19.13.42.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Dec 2025 13:38:14 -0800 (PST)
-Message-ID: <34cda24f-acdc-4049-9869-b666b08897d9@gmail.com>
-Date: Fri, 19 Dec 2025 14:38:12 -0700
+        Fri, 19 Dec 2025 13:42:40 -0800 (PST)
+Message-ID: <9af0d949-45f5-45cd-b49d-d45d53f5d8f6@gmail.com>
+Date: Fri, 19 Dec 2025 14:42:38 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,7 +71,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 23/36] compiler-context-analysis: Remove Sparse support
+Subject: Re: [PATCH v5 24/36] compiler-context-analysis: Remove __cond_lock()
+ function-like helper
 To: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
  Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
  Will Deacon <will@kernel.org>
@@ -103,19 +104,47 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org,
  linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 References: <20251219154418.3592607-1-elver@google.com>
- <20251219154418.3592607-24-elver@google.com>
+ <20251219154418.3592607-25-elver@google.com>
 Content-Language: en-US
 From: Bart Van Assche <bart.vanassche@gmail.com>
-In-Reply-To: <20251219154418.3592607-24-elver@google.com>
+In-Reply-To: <20251219154418.3592607-25-elver@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/19/25 8:40 AM, Marco Elver wrote:
-> Remove Sparse support as discussed at [1].
+>   Documentation/dev-tools/context-analysis.rst  |  2 -
+>   Documentation/mm/process_addrs.rst            |  6 +-
+>   .../net/wireless/intel/iwlwifi/iwl-trans.c    |  4 +-
+>   .../net/wireless/intel/iwlwifi/iwl-trans.h    |  6 +-
+>   .../intel/iwlwifi/pcie/gen1_2/internal.h      |  5 +-
+>   .../intel/iwlwifi/pcie/gen1_2/trans.c         |  4 +-
+>   include/linux/compiler-context-analysis.h     | 31 ----------
+>   include/linux/lockref.h                       |  4 +-
+>   include/linux/mm.h                            | 33 ++--------
+>   include/linux/rwlock.h                        | 11 +---
+>   include/linux/rwlock_api_smp.h                | 14 ++++-
+>   include/linux/rwlock_rt.h                     | 21 ++++---
+>   include/linux/sched/signal.h                  | 14 +----
+>   include/linux/spinlock.h                      | 45 +++++---------
+>   include/linux/spinlock_api_smp.h              | 20 ++++++
+>   include/linux/spinlock_api_up.h               | 61 ++++++++++++++++---
+>   include/linux/spinlock_rt.h                   | 26 ++++----
+>   kernel/signal.c                               |  4 +-
+>   kernel/time/posix-timers.c                    | 13 +---
+>   lib/dec_and_lock.c                            |  8 +--
+>   lib/lockref.c                                 |  1 -
+>   mm/memory.c                                   |  4 +-
+>   mm/pgtable-generic.c                          | 19 +++---
+>   tools/include/linux/compiler_types.h          |  2 -
 
-Kernel patch descriptions should be self-contained. In other words, the
-conclusion from [1] should be summarized in the patch description
-instead of only referring to that discussion with a hyperlink.
+This patch should be split into one patch per subsystem or driver.
+E.g. one patch for the iwlwifi driver, another patch for the mm
+subsystem, one patch for the rwlock primitive, one patch for the
+spinlock primitive, etc.
+
+The tools/include/linux/compiler_types.h change probably should be
+left out because it is user space code instead of kernel code and
+the rest of the series applies to kernel code only.
 
 Thanks,
 
