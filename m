@@ -1,55 +1,55 @@
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E222334FF59
-	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 15:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE53E3502B9
+	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 15:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766159253; cv=none; b=nF2Qn9xwjBtS0ntpFTMGf8Cn05otb7UDm3OruzdVbYl86/WhoKv+xLaxHKSgRCNATk0stDq7fy5eS+Kp0GL60FlRAAPjWYVQFL+4qU4iu5PBPZIBYZvZlD7BoUuhbPnJ/5xL3Itv+clYnhpJjt7+xdYR2W6xY/PQ4RwiFoB0cDo=
+	t=1766159257; cv=none; b=ntILOLlv9A1BVCdM2tg+SH1+PtDPj6HiSFjOn4nkd5yveVcB3zvsxNSZaJWjEttdqigFUe8VWQBPiaDXrdTHrg+lvDhIg76zK3lShctpYvX3dh1pO6z6l68MFmfWwatLnwJCPQlrER5Ybl/Jgk5nCASlBiwfhSr49WyFdvcbOog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766159253; c=relaxed/simple;
-	bh=42FYH4YydcI8JRQNr8EFVNHBN8JBHnU8gH/4zTSZoQU=;
+	s=arc-20240116; t=1766159257; c=relaxed/simple;
+	bh=ZUmludJR9n9iF2nAunUDwV9Tez31e6gUxaaiqIaagnM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=upM2fuXYBrN06BYKe+tukfIswISSnXoYJmhhUdy1AVHF55SZqCQuOqbt9d/o6CeGA4nELPmcCYN+YVdyYxb6JJNE2wusudut5+3bpjFrp260Gi58gFiCJ9u6lHgvi0dX5iNbi5TlufTCvH6RtMp94yfITJv7IKHMiZt/qtu2hHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TqdrQRFu; arc=none smtp.client-ip=209.85.208.73
+	 To:Cc:Content-Type; b=E1+dClcB50hAtg/xUrmEYnWi4Bkvt2oAW+Ci0LUREpGpFH4hWc3eDGolhxjv+lcpNaH42aKc13TXv9J9kf+2YSuvZuXu3LoMqmroUqRnT8+fAjGDy+Mve6p2LjtRXqCPauzqAaoge8mILN2RcqmHYtjhDhtV2I0IRrb4H8L1Hrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lfqwyFDP; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TqdrQRFu"
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-64c90e9b0faso239829a12.0
-        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 07:47:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lfqwyFDP"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-47788165c97so10747845e9.0
+        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 07:47:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766159249; x=1766764049; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1766159253; x=1766764053; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4XK3qzntTZnJieCCKu4A/HzWNSoArWneMhDpC7gb9Kg=;
-        b=TqdrQRFu6WDTTFTORg+LwbybD3MVOS6jeLietY43adJp/aduxNhP++OW4Fkw33OrMM
-         LbjAUOvJCfoJNSEjX76EGljlgB9ajG1C5JMfEdJBtvjC3BIaG1vVumTfNmrW09vU0wKM
-         Kk22L4sQ6/cigsF+K1IDdh+ZOd7rcM1fV9HE60cWpCtUgCBDxQZlKU2QotQ6JDICbUBw
-         ndiQEBzsksX0+p4HaNcsMFZppPPLeFDZI4HfVcyR2cPZ7C61UB4RODIX3Y8SZqpPVJkH
-         F9/5W8g33h2njdBzvNawDNv9ttCeMHnDf5S1gwV4e954biOO7X9TCe1eRbOo8QkJy+7O
-         sWDw==
+        bh=gVYXgtdCpLCQNFVroiaCMxergOmHfVtsDs2aOEVw4MA=;
+        b=lfqwyFDPFWbxuAX810xA83PUC2lhAVGD2UowiSWwrviU9z83H3a+ZjUu3JZUZakH8S
+         9cGHGJiSdQnBVSxDQaYHdIVemnDve/pCULRuXjWHseik8ZiK0hCHb3OoywGb62JLWQAU
+         4SNI9fbjUJIualiBJ903hOgLnF4y+cusyffCnwFHh+q6zpDzktSsli5u6wwoxnrocKOy
+         GMIpqBnY9kKpzjlLlwD4BJEYsCwJ49m2Rc+WtmURBhexqQi3npfhmfD2YDByyvTrDYUn
+         4t/TfVgNm9BPRDCmHTF7+dJQFi0lfoeIoI/Y+Kz/CBtMsJ+EyY07ipgjd6LSrufnRkf+
+         DNRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766159249; x=1766764049;
+        d=1e100.net; s=20230601; t=1766159253; x=1766764053;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4XK3qzntTZnJieCCKu4A/HzWNSoArWneMhDpC7gb9Kg=;
-        b=bdHG7Kk7CZQOuUJp0WJxf8fNY58bCCplUmGCK5fahTbcpDiGnml0M3/wyG8kz9IfLA
-         CR08sQCaIgt2KT8Iq53pGLorVaMUZEFHIgwgd6fEZYVz2yMEuYSDSlg+IoD9uOS/O+Wi
-         tEup4+/QpF1fY61RO7prQhQB9Bv1zfw0DW/6Kk5vN+gOdOd3y1nc8m7dGLpSUXC1vXA6
-         xHO0/WmB40+XBYaYMpsne4Zgg8UWTFRj70J9plqLLZf9XiecffWpek3CYfB0XMG7xcEI
-         pJkbl5OLE4r2fFqpKTPY688OL0KNhKy173TUBR3bIsw7I+iH4jMtbi4VQT/7qB0dcP9R
-         WIDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBj0mEVuFHZ5CuyOYv2xmUS3bCP75Fj8k97UY17B31NptkuFxHCKQ4kxwpDQdXHVOZq73N@lists.linux.dev
-X-Gm-Message-State: AOJu0YxJYtNfQhlSQzfBpgO5Sx1jo7R8hw+RfTms78IOKue4aQ+35XPG
-	HHLd5W152Ax4B3/B4kVd+9IOch3YXx29n/H13L/0gW5FSWqNbD1uFojDlPfD5hyCiIOyMr768eN
-	Fbw==
-X-Google-Smtp-Source: AGHT+IHX5UXwk2F+9TvQVKLp2kAzUS4yz1dfz5S20YIyCpvaeeaogsyAn1dyrJKuFHxwFv13c6Ax3+QEyg==
-X-Received: from edpr3.prod.google.com ([2002:aa7:c143:0:b0:64b:9f62:a079])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:d62:b0:64b:993f:ce06
- with SMTP id 4fb4d7f45d1cf-64b993fd097mr1762424a12.32.1766159249192; Fri, 19
- Dec 2025 07:47:29 -0800 (PST)
-Date: Fri, 19 Dec 2025 16:40:20 +0100
+        bh=gVYXgtdCpLCQNFVroiaCMxergOmHfVtsDs2aOEVw4MA=;
+        b=ckPPpVzk5tqNcxYmJScSfu8CcbuA5dc2EUsuZ7r3MoJUc8S+4qNzA0QSBtRtN+LxHP
+         6KRxZpVCcp5VrmxQA8/v9ogHi0+iVmx49kZPrRTHn3Jofpr0pM2wd90YW0SIwf4x+7Gh
+         sQL5x69FvlJTuexaNuXGvfi6jjrxMgvDLEuKr0rHWIBgKHLGoioIxqgMZnGkDii3ehoE
+         2tRkvlswVvZ9Y0yHg0c+hBSlZmHJic9YjG+ntoHVEcjDH/ZFP68sHZobUEEA61EarNUz
+         vrbKoQRTpdlnl275NYVGEtaKyv++NuJEYBmKEq18NfIvE1BbrdHYUk7MIuqVKZkfoQrC
+         Cpfg==
+X-Forwarded-Encrypted: i=1; AJvYcCWFBZ+O7rWu7+p4MMDyshiLfdW3RGT2acQj/hIeUREV95b+WbTDA+vERwLauZBvuKwLiClX@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzo1IDMsC9UVOsePtGLzhXl8qvTjO2ikEA3mLcXoN478jt2qY2X
+	VxD9LO+hMLhTVsVZ6J7dHxRGaQW53v7aOblzRBxm8wZAE2a4IPIJnxS5OkoIL4RXZAuGl53wK8P
+	/gA==
+X-Google-Smtp-Source: AGHT+IF7X7xFaJ62BwS9IugsWlp3fxNRiUfga93aJgM/MRyd67RIn/H0v7I9tRaoGzfNYwMLbV+sgtE0Nw==
+X-Received: from wmco23.prod.google.com ([2002:a05:600c:a317:b0:475:dca0:4de3])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4e8f:b0:479:3a89:121d
+ with SMTP id 5b1f17b1804b1-47d1959c74fmr31405385e9.36.1766159252991; Fri, 19
+ Dec 2025 07:47:32 -0800 (PST)
+Date: Fri, 19 Dec 2025 16:40:21 +0100
 In-Reply-To: <20251219154418.3592607-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251219154418.3592607-1-elver@google.com>
 X-Mailer: git-send-email 2.52.0.322.g1dd061c0dc-goog
-Message-ID: <20251219154418.3592607-32-elver@google.com>
-Subject: [PATCH v5 31/36] stackdepot: Enable context analysis
+Message-ID: <20251219154418.3592607-33-elver@google.com>
+Subject: [PATCH v5 32/36] rhashtable: Enable context analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -87,126 +87,185 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Enable context analysis for stackdepot.
+Enable context analysis for rhashtable, which was used as an initial
+test as it contains a combination of RCU, mutex, and bit_spinlock usage.
+
+Users of rhashtable now also benefit from annotations on the API, which
+will now warn if the RCU read lock is not held where required.
 
 Signed-off-by: Marco Elver <elver@google.com>
+Cc: Thomas Graf <tgraf@suug.ch>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: linux-crypto@vger.kernel.org
 ---
+v5:
+* Fix annotations for recently modified/added functions.
+
 v4:
 * Rename capability -> context analysis.
 
 v2:
 * Remove disable/enable_context_analysis() around headers.
 ---
- lib/Makefile     |  1 +
- lib/stackdepot.c | 20 ++++++++++++++------
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ include/linux/rhashtable.h | 16 +++++++++++++---
+ lib/Makefile               |  2 ++
+ lib/rhashtable.c           |  5 +++--
+ 3 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 89defefbf6c0..e755eee4e76f 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -250,6 +250,7 @@ obj-$(CONFIG_POLYNOMIAL) += polynomial.o
- # Prevent the compiler from calling builtins like memcmp() or bcmp() from this
- # file.
- CFLAGS_stackdepot.o += -fno-builtin
-+CONTEXT_ANALYSIS_stackdepot.o := y
- obj-$(CONFIG_STACKDEPOT) += stackdepot.o
- KASAN_SANITIZE_stackdepot.o := n
- # In particular, instrumenting stackdepot.c with KMSAN will result in infinite
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index de0b0025af2b..166f50ad8391 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -61,18 +61,18 @@ static unsigned int stack_bucket_number_order;
- /* Hash mask for indexing the table. */
- static unsigned int stack_hash_mask;
+diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
+index 08e664b21f5a..133ccb39137a 100644
+--- a/include/linux/rhashtable.h
++++ b/include/linux/rhashtable.h
+@@ -245,16 +245,17 @@ void *rhashtable_insert_slow(struct rhashtable *ht, const void *key,
+ void rhashtable_walk_enter(struct rhashtable *ht,
+ 			   struct rhashtable_iter *iter);
+ void rhashtable_walk_exit(struct rhashtable_iter *iter);
+-int rhashtable_walk_start_check(struct rhashtable_iter *iter) __acquires(RCU);
++int rhashtable_walk_start_check(struct rhashtable_iter *iter) __acquires_shared(RCU);
  
-+/* The lock must be held when performing pool or freelist modifications. */
-+static DEFINE_RAW_SPINLOCK(pool_lock);
- /* Array of memory regions that store stack records. */
--static void **stack_pools;
-+static void **stack_pools __pt_guarded_by(&pool_lock);
- /* Newly allocated pool that is not yet added to stack_pools. */
- static void *new_pool;
- /* Number of pools in stack_pools. */
- static int pools_num;
- /* Offset to the unused space in the currently used pool. */
--static size_t pool_offset = DEPOT_POOL_SIZE;
-+static size_t pool_offset __guarded_by(&pool_lock) = DEPOT_POOL_SIZE;
- /* Freelist of stack records within stack_pools. */
--static LIST_HEAD(free_stacks);
--/* The lock must be held when performing pool or freelist modifications. */
--static DEFINE_RAW_SPINLOCK(pool_lock);
-+static __guarded_by(&pool_lock) LIST_HEAD(free_stacks);
- 
- /* Statistics counters for debugfs. */
- enum depot_counter_id {
-@@ -291,6 +291,7 @@ EXPORT_SYMBOL_GPL(stack_depot_init);
-  * Initializes new stack pool, and updates the list of pools.
-  */
- static bool depot_init_pool(void **prealloc)
-+	__must_hold(&pool_lock)
+ static inline void rhashtable_walk_start(struct rhashtable_iter *iter)
++	__acquires_shared(RCU)
  {
- 	lockdep_assert_held(&pool_lock);
- 
-@@ -338,6 +339,7 @@ static bool depot_init_pool(void **prealloc)
- 
- /* Keeps the preallocated memory to be used for a new stack depot pool. */
- static void depot_keep_new_pool(void **prealloc)
-+	__must_hold(&pool_lock)
- {
- 	lockdep_assert_held(&pool_lock);
- 
-@@ -357,6 +359,7 @@ static void depot_keep_new_pool(void **prealloc)
-  * the current pre-allocation.
-  */
- static struct stack_record *depot_pop_free_pool(void **prealloc, size_t size)
-+	__must_hold(&pool_lock)
- {
- 	struct stack_record *stack;
- 	void *current_pool;
-@@ -391,6 +394,7 @@ static struct stack_record *depot_pop_free_pool(void **prealloc, size_t size)
- 
- /* Try to find next free usable entry from the freelist. */
- static struct stack_record *depot_pop_free(void)
-+	__must_hold(&pool_lock)
- {
- 	struct stack_record *stack;
- 
-@@ -428,6 +432,7 @@ static inline size_t depot_stack_record_size(struct stack_record *s, unsigned in
- /* Allocates a new stack in a stack depot pool. */
- static struct stack_record *
- depot_alloc_stack(unsigned long *entries, unsigned int nr_entries, u32 hash, depot_flags_t flags, void **prealloc)
-+	__must_hold(&pool_lock)
- {
- 	struct stack_record *stack = NULL;
- 	size_t record_size;
-@@ -486,6 +491,7 @@ depot_alloc_stack(unsigned long *entries, unsigned int nr_entries, u32 hash, dep
+ 	(void)rhashtable_walk_start_check(iter);
  }
  
- static struct stack_record *depot_fetch_stack(depot_stack_handle_t handle)
-+	__must_not_hold(&pool_lock)
- {
- 	const int pools_num_cached = READ_ONCE(pools_num);
- 	union handle_parts parts = { .handle = handle };
-@@ -502,7 +508,8 @@ static struct stack_record *depot_fetch_stack(depot_stack_handle_t handle)
- 		return NULL;
- 	}
+ void *rhashtable_walk_next(struct rhashtable_iter *iter);
+ void *rhashtable_walk_peek(struct rhashtable_iter *iter);
+-void rhashtable_walk_stop(struct rhashtable_iter *iter) __releases(RCU);
++void rhashtable_walk_stop(struct rhashtable_iter *iter) __releases_shared(RCU);
  
--	pool = stack_pools[pool_index];
-+	/* @pool_index either valid, or user passed in corrupted value. */
-+	pool = context_unsafe(stack_pools[pool_index]);
- 	if (WARN_ON(!pool))
- 		return NULL;
+ void rhashtable_free_and_destroy(struct rhashtable *ht,
+ 				 void (*free_fn)(void *ptr, void *arg),
+@@ -325,6 +326,7 @@ static inline struct rhash_lock_head __rcu **rht_bucket_insert(
  
-@@ -515,6 +522,7 @@ static struct stack_record *depot_fetch_stack(depot_stack_handle_t handle)
- 
- /* Links stack into the freelist. */
- static void depot_free_stack(struct stack_record *stack)
-+	__must_not_hold(&pool_lock)
+ static inline unsigned long rht_lock(struct bucket_table *tbl,
+ 				     struct rhash_lock_head __rcu **bkt)
++	__acquires(__bitlock(0, bkt))
  {
  	unsigned long flags;
  
+@@ -337,6 +339,7 @@ static inline unsigned long rht_lock(struct bucket_table *tbl,
+ static inline unsigned long rht_lock_nested(struct bucket_table *tbl,
+ 					struct rhash_lock_head __rcu **bucket,
+ 					unsigned int subclass)
++	__acquires(__bitlock(0, bucket))
+ {
+ 	unsigned long flags;
+ 
+@@ -349,6 +352,7 @@ static inline unsigned long rht_lock_nested(struct bucket_table *tbl,
+ static inline void rht_unlock(struct bucket_table *tbl,
+ 			      struct rhash_lock_head __rcu **bkt,
+ 			      unsigned long flags)
++	__releases(__bitlock(0, bkt))
+ {
+ 	lock_map_release(&tbl->dep_map);
+ 	bit_spin_unlock(0, (unsigned long *)bkt);
+@@ -424,13 +428,14 @@ static inline void rht_assign_unlock(struct bucket_table *tbl,
+ 				     struct rhash_lock_head __rcu **bkt,
+ 				     struct rhash_head *obj,
+ 				     unsigned long flags)
++	__releases(__bitlock(0, bkt))
+ {
+ 	if (rht_is_a_nulls(obj))
+ 		obj = NULL;
+ 	lock_map_release(&tbl->dep_map);
+ 	rcu_assign_pointer(*bkt, (void *)obj);
+ 	preempt_enable();
+-	__release(bitlock);
++	__release(__bitlock(0, bkt));
+ 	local_irq_restore(flags);
+ }
+ 
+@@ -612,6 +617,7 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
+ 	struct rhashtable *ht, const void *key,
+ 	const struct rhashtable_params params,
+ 	const enum rht_lookup_freq freq)
++	__must_hold_shared(RCU)
+ {
+ 	struct rhashtable_compare_arg arg = {
+ 		.ht = ht,
+@@ -666,6 +672,7 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
+ static __always_inline void *rhashtable_lookup(
+ 	struct rhashtable *ht, const void *key,
+ 	const struct rhashtable_params params)
++	__must_hold_shared(RCU)
+ {
+ 	struct rhash_head *he = __rhashtable_lookup(ht, key, params,
+ 						    RHT_LOOKUP_NORMAL);
+@@ -676,6 +683,7 @@ static __always_inline void *rhashtable_lookup(
+ static __always_inline void *rhashtable_lookup_likely(
+ 	struct rhashtable *ht, const void *key,
+ 	const struct rhashtable_params params)
++	__must_hold_shared(RCU)
+ {
+ 	struct rhash_head *he = __rhashtable_lookup(ht, key, params,
+ 						    RHT_LOOKUP_LIKELY);
+@@ -727,6 +735,7 @@ static __always_inline void *rhashtable_lookup_fast(
+ static __always_inline struct rhlist_head *rhltable_lookup(
+ 	struct rhltable *hlt, const void *key,
+ 	const struct rhashtable_params params)
++	__must_hold_shared(RCU)
+ {
+ 	struct rhash_head *he = __rhashtable_lookup(&hlt->ht, key, params,
+ 						    RHT_LOOKUP_NORMAL);
+@@ -737,6 +746,7 @@ static __always_inline struct rhlist_head *rhltable_lookup(
+ static __always_inline struct rhlist_head *rhltable_lookup_likely(
+ 	struct rhltable *hlt, const void *key,
+ 	const struct rhashtable_params params)
++	__must_hold_shared(RCU)
+ {
+ 	struct rhash_head *he = __rhashtable_lookup(&hlt->ht, key, params,
+ 						    RHT_LOOKUP_LIKELY);
+diff --git a/lib/Makefile b/lib/Makefile
+index e755eee4e76f..22d8742bba57 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -50,6 +50,8 @@ lib-$(CONFIG_MIN_HEAP) += min_heap.o
+ lib-y	+= kobject.o klist.o
+ obj-y	+= lockref.o
+ 
++CONTEXT_ANALYSIS_rhashtable.o := y
++
+ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
+ 	 bust_spinlocks.o kasprintf.o bitmap.o scatterlist.o \
+ 	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
+diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+index fde0f0e556f8..6074ed5f66f3 100644
+--- a/lib/rhashtable.c
++++ b/lib/rhashtable.c
+@@ -358,6 +358,7 @@ static int rhashtable_rehash_table(struct rhashtable *ht)
+ static int rhashtable_rehash_alloc(struct rhashtable *ht,
+ 				   struct bucket_table *old_tbl,
+ 				   unsigned int size)
++	__must_hold(&ht->mutex)
+ {
+ 	struct bucket_table *new_tbl;
+ 	int err;
+@@ -392,6 +393,7 @@ static int rhashtable_rehash_alloc(struct rhashtable *ht,
+  * bucket locks or concurrent RCU protected lookups and traversals.
+  */
+ static int rhashtable_shrink(struct rhashtable *ht)
++	__must_hold(&ht->mutex)
+ {
+ 	struct bucket_table *old_tbl = rht_dereference(ht->tbl, ht);
+ 	unsigned int nelems = atomic_read(&ht->nelems);
+@@ -724,7 +726,7 @@ EXPORT_SYMBOL_GPL(rhashtable_walk_exit);
+  * resize events and always continue.
+  */
+ int rhashtable_walk_start_check(struct rhashtable_iter *iter)
+-	__acquires(RCU)
++	__acquires_shared(RCU)
+ {
+ 	struct rhashtable *ht = iter->ht;
+ 	bool rhlist = ht->rhlist;
+@@ -940,7 +942,6 @@ EXPORT_SYMBOL_GPL(rhashtable_walk_peek);
+  * hash table.
+  */
+ void rhashtable_walk_stop(struct rhashtable_iter *iter)
+-	__releases(RCU)
+ {
+ 	struct rhashtable *ht;
+ 	struct bucket_table *tbl = iter->walker.tbl;
 -- 
 2.52.0.322.g1dd061c0dc-goog
 
