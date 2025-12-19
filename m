@@ -1,115 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E96C25EFAE;
-	Fri, 19 Dec 2025 07:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77892E613A;
+	Fri, 19 Dec 2025 08:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766129616; cv=none; b=Z0L/R3xdAw2me/CwjQuBmLuXzhAaF5rppKCrJQ9JZH0oCrT35OA26E42KahkPZhcTmEgqj6yotEmRUCSvQhhTqC7ziRTE3U0d6GK4PKtv31+ihNL+kj2/9CRIPO/lHQIwq6XCUfgourAcxHQjurbM26aDCKZWgZDH6HG72ZfSXA=
+	t=1766131998; cv=none; b=ZqDiu1YL7b/shFJ7CWMqUv0ZMjCa6YN17Cjans1z2KeZF5ODZOPahzjQm7CsnTtIfeYYmdJ2k2wn2vZnC9VBIYdftRSs2/8J3GneLWBeh1LJJNvb969VJfkYwybFaXEkr2PIqDRY/GxV1XOGrUNe6LNLncXTuDfvd0qYlDqbRuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766129616; c=relaxed/simple;
-	bh=f8+G6CVnJp2DBUsfaWCf5DINHDnv28/Brh1CjQS5678=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ObU5Ul/sOvdeWdHJVn6a4KEVrcYGCFhAf51Aah69n0bZxwrWFzLH78NsJGlgYNKaV7i75eXrzWIqK8hLf6EkLOEALqL5UUAdMZAgFMYpAEm9w3RJWWE0vUFoFAsQ1Oxaop3NVl4r77sPJY6xk6pPedOv/BRGqbuI3pue/ghv2Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+S2bAGU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766131998; c=relaxed/simple;
+	bh=r0gi6Pa7RYkDOmLxwP7sAf14xxMtRN2sCVwGszpsTD8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sv5aNjHXIPmVCsc9/kWOAikp0AepMyHX2x+hLywCupHFsEhEmZxCsZG4hj5R8JIvhOq9oNLgxD7ddi0Sn21KS6MFCaOaMxb0oxZk46gq5ip57IJirWPmeKnRmtQ2A2ozLNcKLC5/hTdUhh1o5QyscTv2jB9lLKAw6jV449mlV9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tpE0mTgP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+S2bAGU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF86C4CEF1;
-	Fri, 19 Dec 2025 07:33:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tpE0mTgP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 054CCC4CEF1;
+	Fri, 19 Dec 2025 08:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766129615;
-	bh=f8+G6CVnJp2DBUsfaWCf5DINHDnv28/Brh1CjQS5678=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P+S2bAGU5yOPI6ncR6Hsq8cPmW3M4Yqg506ro+7zmln9tQTIazrjsEYt1+YBl5zHP
-	 T5tyLBVp7D/uFJpY19JFsqZ3pdgwViUoaBXHMPH+mt62otQ+STb42h+x5dyss0VW1F
-	 5/dpDUyvgNdMEnjs7EWMLMw2DVAXN/n+X4FXM8fPbnjVrTnp0+SU43DQMFMMiN+253
-	 1OK5VXRczsdldkhAx6rXyIte+FDktPPwr+04wnqfqaX30/SfFOpOgX0KIquRzLEL6G
-	 HiT3C2w+H+r/n3KOVwGF9K/kAC6ypuhzVRcuGX9l7jZz6+ZLYEw/mcYxUxgB8YD7qP
-	 U+FgPloDdpSrw==
-Date: Fri, 19 Dec 2025 08:33:29 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH 0/2] kbuild: remove gcc's -Wtype-limits
-Message-ID: <aUT_yWin_xslnOFh@derry.ads.avm.de>
-Mail-Followup-To: Vincent Mailhol <mailhol@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org
-References: <20251218-remove_wtype-limits-v1-0-735417536787@kernel.org>
+	s=k20201202; t=1766131997;
+	bh=r0gi6Pa7RYkDOmLxwP7sAf14xxMtRN2sCVwGszpsTD8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=tpE0mTgPIT9GZb7i4tCzc+1kWFUUpEt3N8OCk8gahe8sUIZU+QM5VKaOKMnGm2HF7
+	 LE/93tXVAbbpEfMRCO0TA5nXQSDsvo+kGraLsLIeHAqpCQlvysfBn716wUVfKqjO4X
+	 VqKFhvtW0qFFn8sgJQjYrzL8IDZWQJ+mvYYRgGz0/UXcYHwV38MIeAx3hbgUvd3cD0
+	 yJuls34RHzicXsTGUSjz2orXhjV/biH+Nf5ualKn0NY0nt/cx0NSFzYWgM29o+PfuG
+	 UnDHj8988x5clcZ/qiKVhVZZlGMAcbfNq+L3bnWfkn+pUL5L1iWBR5SB1SgnwjOnGS
+	 JB+jew0Fkl5Og==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BEA0380AA50;
+	Fri, 19 Dec 2025 08:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251218-remove_wtype-limits-v1-0-735417536787@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v8 00/15] Consolidate iommu page table implementations
+ (AMD)
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <176613180577.3684357.2034328332423326144.git-patchwork-notify@kernel.org>
+Date: Fri, 19 Dec 2025 08:10:05 +0000
+References: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: linux-riscv@lists.infradead.org, alex@ghiti.fr, anup@brainfault.org,
+ aou@eecs.berkeley.edu, corbet@lwn.net, iommu@lists.linux.dev,
+ joro@8bytes.org, justinstitt@google.com, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org,
+ palmer@dabbelt.com, pjw@kernel.org, robin.murphy@arm.com, shuah@kernel.org,
+ suravee.suthikulpanit@amd.com, will@kernel.org, aik@amd.com,
+ alejandro.j.jimenez@oracle.com, jgowans@amazon.com, kevin.tian@intel.com,
+ michael.roth@amd.com, pasha.tatashin@soleen.com, patches@lists.linux.dev,
+ skhawaja@google.com, vasant.hegde@amd.com
 
-On Thu, Dec 18, 2025 at 07:50:00PM +0100, Vincent Mailhol wrote:
-> I often read on the mailing list people saying "who cares about W=2
-> builds anyway?". At least I do. Not that I want to fix all of them,
-> but on some occasions, such as new driver submissions, I have often
-> found a couple valid diagnostics in the W=2 output.
-> 
-> That said, the annoying thing is that W=2 is heavily polluted by one
-> warning: -Wtype-limits. Try a gcc W=2 build on any file and see the
-> results for yourself. I suspect this to be the reason why so few
-> people are using W=2.
-> 
-> This series removes gcc's -Wtype-limits in an attempt to make W=2 more
-> useful. Those who do not use W=2 can continue to not use it if they
-> want. Those who, like me, use it form time to time will get an
-> improved experience from the reduced spam.
-> 
-> Extra details on statistics, past attempts and -Wtype-limits
-> alternatives are given in the first patch description.
-> 
-> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
-> ---
-> Vincent Mailhol (2):
->       kbuild: remove gcc's -Wtype-limits
->       kbuild: cleanup local -Wno-type-limits exceptions
-> 
->  drivers/gpu/drm/Makefile | 1 -
->  fs/btrfs/Makefile        | 1 -
->  scripts/Makefile.warn    | 4 +++-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 3e7f562e20ee87a25e104ef4fce557d39d62fa85
-> change-id: 20251205-remove_wtype-limits-c77eb46d09c2
-> 
-> Best regards,
-> -- 
-> Vincent Mailhol <mailhol@kernel.org>
-> 
+Hello:
 
-Thanks for the effort!  (This allows to revert commit dc7fe518b049
-("overflow: Fix -Wtype-limits compilation warnings").)
+This series was applied to riscv/linux.git (fixes)
+by Joerg Roedel <joerg.roedel@amd.com>:
 
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
+On Tue,  4 Nov 2025 14:29:58 -0400 you wrote:
+> [Joerg, can you put this and vtd in linux-next please. The vtd series is still
+> good at v3 thanks]
+> 
+> Currently each of the iommu page table formats duplicates all of the logic
+> to maintain the page table and perform map/unmap/etc operations. There are
+> several different versions of the algorithms between all the different
+> formats. The io-pgtable system provides an interface to help isolate the
+> page table code from the iommu driver, but doesn't provide tools to
+> implement the common algorithms.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v8,01/15] genpt: Generic Page Table base API
+    https://git.kernel.org/riscv/c/7c5b184db714
+  - [v8,02/15] genpt: Add Documentation/ files
+    https://git.kernel.org/riscv/c/ab0b572847ac
+  - [v8,03/15] iommupt: Add the basic structure of the iommu implementation
+    https://git.kernel.org/riscv/c/cdb39d918579
+  - [v8,04/15] iommupt: Add the AMD IOMMU v1 page table format
+    https://git.kernel.org/riscv/c/879ced2bab1b
+  - [v8,05/15] iommupt: Add iova_to_phys op
+    https://git.kernel.org/riscv/c/9d4c274cd7d5
+  - [v8,06/15] iommupt: Add unmap_pages op
+    https://git.kernel.org/riscv/c/7c53f4238aa8
+  - [v8,07/15] iommupt: Add map_pages op
+    https://git.kernel.org/riscv/c/dcd6a011a8d5
+  - [v8,08/15] iommupt: Add read_and_clear_dirty op
+    https://git.kernel.org/riscv/c/4a00f9434891
+  - [v8,09/15] iommupt: Add a kunit test for Generic Page Table
+    https://git.kernel.org/riscv/c/1dd4187f53c3
+  - [v8,10/15] iommupt: Add a mock pagetable format for iommufd selftest to use
+    https://git.kernel.org/riscv/c/e5359dcc617a
+  - [v8,11/15] iommufd: Change the selftest to use iommupt instead of xarray
+    https://git.kernel.org/riscv/c/e93d5945ed5b
+  - [v8,12/15] iommupt: Add the x86 64 bit page table format
+    https://git.kernel.org/riscv/c/aef5de756ea8
+  - [v8,13/15] iommu/amd: Use the generic iommu page table
+    (no matching commit)
+  - [v8,14/15] iommu/amd: Remove AMD io_pgtable support
+    https://git.kernel.org/riscv/c/2fdf6db436e3
+  - [v8,15/15] iommupt: Add a kunit test for the IOMMU implementation
+    https://git.kernel.org/riscv/c/bc5233c0904e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
