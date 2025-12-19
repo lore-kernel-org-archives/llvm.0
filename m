@@ -1,122 +1,478 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B63246BB2;
-	Fri, 19 Dec 2025 14:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CE51D5CDE
+	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 15:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766155215; cv=none; b=OM5JuCC3Po13T3DuazCv0RWK7WvboHt7BcfD/DHkl0Ujj9B2MtUh9MlvlbxIkY4vaO3EM4B3ieOrcIRtcglyubbK2vI2yMXu/IIEi75i7/yU8zjvIe2qOVKSQaD2UDrdn6TcXu5tzudTwfhWOOB8uMje7e2U3OGLDZhgRufJROc=
+	t=1766159113; cv=none; b=kPzWU0s0urxZ+zZEI5a7LPl7i5I6h+6gB3dWCGA3v503OqAu3K6fa7LoCKmMarTZWFQbuRthb4gi7V8rhziBp7nHDMUEPjjOqh/oilftGqH7DZ5KJ4I0E/yNttXKqy3+JYRXxZYj0nKI0QyUs6e91Bw/Po275ab+nXaex/KIozs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766155215; c=relaxed/simple;
-	bh=dMknMa3Hivq2pMycMjsG6oDFoL3FO+gUmfesAjUuvXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TbIYl5Lx1LyYFOCjq9SeMuTH11od6DVP5pD1Dd0RN8llUwJxG2J9CMUasY0RjEcbIfClk2fvQNGc+EgRT3GLF3ZbIo9b9qEF1HNHk5BG9PyBvOy52jCN2kkSAWsSgfoPUHSYrB7zEOz0VAT65A4JcRelSOPqUaVgUbEkfq7uaYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fLiJXxcB; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766159113; c=relaxed/simple;
+	bh=jxRVFkcZ/dQRiG15u55eeTK008jHW8Kue4PgzUH7FSw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=dk+7oHiiYtpQlksNVCm7WDbJmLjfRm7gfVTYbpjjNEDs20NtwzCx42PrszoCMsxIxGXyndXhyJYJzMfbnXJuBSroCyUG4hgiIvivZ76C44rViJhlKOV+td1+17tn/sVDiUbcTjLRKPuFwDIU5o0aqpke1Ov7QYtUr9Lbk1aHzwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HQb6t3JX; arc=none smtp.client-ip=209.85.218.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fLiJXxcB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766155213; x=1797691213;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dMknMa3Hivq2pMycMjsG6oDFoL3FO+gUmfesAjUuvXA=;
-  b=fLiJXxcBScmQgfRsfCIuWc5Hszdk+B35f+T1BOfr0H6kl3E3hMl8bHtL
-   7Yn9RJvEnTdlXJFYEaFJdygVhbBuPPQMBayPP22gJBaJly1O/FVFZpGbd
-   ADGFXtwylP6mpSnsW6/J3yElO4ZmfSkbJ2TRWz8fDXPE5jn9oThUfwU3u
-   J0wrb89IyH7QZG9F+vY1DN8MnOuLZGjDoZauCyOfUC8yiTlKLARTNVH7u
-   g1mcX1eNb3rJOR3Knbx0w2Gs06Wxjw/bkao08Ss6i/gAACPN2OkMTf18k
-   p8cPtRQsFriI7cl8dnKD6UzhULyw84yvLRq53JP9S7sTabgiobk6rvay4
-   A==;
-X-CSE-ConnectionGUID: 7NmFbDqWRl2hx6tFsD/UfQ==
-X-CSE-MsgGUID: SjZ67pICRM68/GWGWbDZgA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71975078"
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="71975078"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 06:40:13 -0800
-X-CSE-ConnectionGUID: R7dI4D1mTtSAQ5O5LlhYmQ==
-X-CSE-MsgGUID: JuMKLH3VSLeTgQqK1CMTiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="199125463"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 19 Dec 2025 06:37:29 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vWbbj-000000003dV-0MvS;
-	Fri, 19 Dec 2025 14:37:27 +0000
-Date: Fri, 19 Dec 2025 22:37:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mark:stacktrace/tests 2/5] ld.lld: error: undefined symbol:
- kunit_kfree
-Message-ID: <202512192201.T9ecWTgW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HQb6t3JX"
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b7a43d7a1d7so187708166b.3
+        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 07:45:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1766159107; x=1766763907; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DevBKjiUQ1DYWG4NWpg0hsHH+Nds87DWeoh34BFlORw=;
+        b=HQb6t3JXRX5BXqXCVp3uKMij3LdrNNZeB5w3koVT+zPxr2vr2k0YmezyiY7gi5SiCr
+         2KoP9CCS+Let0stOzRiCX2GBmRGbXHj5QN5k0wvm+ZI0z3YJv2yeKnaJP1UMsoAVKJQu
+         DGB+RwGBknB+D83kZBqIso0haQW+sdPFH+3uK78RKsi5cGFQ+WcF2a3A3HB6zVayjJsI
+         SUTAhbhmJK+ya+0NG9HyYFWmZ3W/A+Z3bhArQ5DyN6Hi0el2XJV39MczzVRMLzWluiOZ
+         Ih6H11LpMecebebnrT2veTN4VR9QaPOsQ8AkIhW4lQV/1MuDkQzPGFjbv7xes4+5GQf5
+         1DGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766159107; x=1766763907;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DevBKjiUQ1DYWG4NWpg0hsHH+Nds87DWeoh34BFlORw=;
+        b=pbr4fHWrkmuHcTeNlyv18tNCZxOl1CXYlVle5WXeYkAVo9pLCmBTxkUolnptHf4UTq
+         N0c+V2/zBL40x3Itc2BvCkswZXWvy6TK6Z4WK8lZvyLaRonm34jJ81BnGh+ZpU9NuRTj
+         JR0ajWdSH84HnQ7Ts3J/Ta5O2YYELAB2jVU+9DhoDFu+Sz7YiD1EOePGqUd2RdGYtfng
+         B51dV+6A5C3excQTynAHciprV/NDKzZhc81IV1ul2UEds2SXZhV62dnI+T+M3E7C/JCs
+         SSa/wL3udjxTlEhTQTKxM1KgYZjUVd84+1Brg794cvA2pz799c07C/jqy8qm9qc1uDpV
+         hYpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrCzvqEauA0jqkjnUWIl+A+sKSTVHP3FFbxN/88jSiQObfMptyyvKZ5VzRpgVH8mEoMoPs@lists.linux.dev
+X-Gm-Message-State: AOJu0YzO1yrTQxrNsUQVokfn6yAdouQ4X8hPwnls7H1bS2P+G9bavSag
+	yyxR8wb60+rvFKUjxaFwDrrDjuWqK1xC0zsTDuZxe1Ivi6592wVdlWCwBB53M577FxKNi6hkLnj
+	3AA==
+X-Google-Smtp-Source: AGHT+IHtV88uBWdFWDpxHAn+aJGoZ7Ne2Qv7ftKEp6v1rUUmlYkJyqA6HCtPYVARKi6mxF17jdhYcvZpxA==
+X-Received: from edya2.prod.google.com ([2002:aa7:cf02:0:b0:64b:a037:21b4])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:2d08:b0:b72:af1f:af7d
+ with SMTP id a640c23a62f3a-b8036f608aemr336350066b.29.1766159106427; Fri, 19
+ Dec 2025 07:45:06 -0800 (PST)
+Date: Fri, 19 Dec 2025 16:39:49 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.322.g1dd061c0dc-goog
+Message-ID: <20251219154418.3592607-1-elver@google.com>
+Subject: [PATCH v5 00/36] Compiler-Based Context- and Locking-Analysis
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>, 
+	Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Triplett <josh@joshtriplett.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git stacktrace/tests
-head:   9fd0a6b1cdf040215994ff60cdf83b349d5480c4
-commit: 7b244ac0f694315794b60badb50cb146f2f5fc8c [2/5] WIP: lib: add basic stacktrace tests
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251219/202512192201.T9ecWTgW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512192201.T9ecWTgW-lkp@intel.com/reproduce)
+Context Analysis is a language extension, which enables statically
+checking that required contexts are active (or inactive) by acquiring
+and releasing user-definable "context locks". An obvious application is
+lock-safety checking for the kernel's various synchronization primitives
+(each of which represents a "context lock"), and checking that locking
+rules are not violated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512192201.T9ecWTgW-lkp@intel.com/
+The feature requires Clang 22 (unreleased) or later. Clang originally
+called the feature "Thread Safety Analysis" [1]. This was later changed
+and the feature became more flexible, gaining the ability to define
+custom "capabilities". Its foundations can be found in "Capability
+Systems" [2], used to specify the permissibility of operations to depend
+on some "capability" being held (or not held).
 
-All errors (new ones prefixed by >>):
+Because the feature is not just able to express "capabilities" related
+to synchronization primitives, and "capability" is already overloaded in
+the kernel, the naming chosen for the kernel departs from Clang's
+"Thread Safety" and "capability" nomenclature; we refer to the feature
+as "Context Analysis" to avoid confusion. The internal implementation
+still makes references to Clang's terminology in a few places, such as
+`-Wthread-safety` being the warning option that also still appears in
+diagnostic messages.
 
->> ld.lld: error: undefined symbol: kunit_kmalloc_array
-   >>> referenced by test.h:501 (include/kunit/test.h:501)
-   >>>               vmlinux.o:(std_test_init)
---
->> ld.lld: error: undefined symbol: kunit_kfree
-   >>> referenced by stacktrace_kunit.c:47 (lib/tests/stacktrace_kunit.c:47)
-   >>>               vmlinux.o:(std_test_exit)
---
->> ld.lld: error: undefined symbol: kunit_log_append
-   >>> referenced by stacktrace_kunit.c:22 (lib/tests/stacktrace_kunit.c:22)
-   >>>               vmlinux.o:(std_test_exit)
-   >>> referenced by stacktrace_kunit.c:27 (lib/tests/stacktrace_kunit.c:27)
-   >>>               vmlinux.o:(std_test_exit)
-   >>> referenced by stacktrace_kunit.c:245 (lib/tests/stacktrace_kunit.c:245)
-   >>>               vmlinux.o:(test_unwind_reliable)
-   >>> referenced 2 more times
---
->> ld.lld: error: undefined symbol: kunit_binary_ptr_assert_format
-   >>> referenced by stacktrace_kunit.c:259 (lib/tests/stacktrace_kunit.c:259)
-   >>>               vmlinux.o:(test_nounwind)
-   >>> referenced by stacktrace_kunit.c:259 (lib/tests/stacktrace_kunit.c:259)
-   >>>               vmlinux.o:(test_nounwind_tail)
-   >>> referenced by stacktrace_kunit.c:259 (lib/tests/stacktrace_kunit.c:259)
-   >>>               vmlinux.o:(test_nounwind_notail)
-   >>> referenced 6 more times
---
->> ld.lld: error: undefined symbol: __kunit_do_failed_assertion
-   >>> referenced by stacktrace_kunit.c:259 (lib/tests/stacktrace_kunit.c:259)
-   >>>               vmlinux.o:(test_nounwind)
-   >>> referenced by stacktrace_kunit.c:259 (lib/tests/stacktrace_kunit.c:259)
-   >>>               vmlinux.o:(test_nounwind_tail)
-   >>> referenced by stacktrace_kunit.c:259 (lib/tests/stacktrace_kunit.c:259)
-   >>>               vmlinux.o:(test_nounwind_notail)
-   >>> referenced 10 more times
---
->> ld.lld: error: undefined symbol: kunit_fail_assert_format
-   >>> referenced by stacktrace_kunit.c:221 (lib/tests/stacktrace_kunit.c:221)
-   >>>               vmlinux.o:(std_expect_callers_present)
-   >>> referenced by stacktrace_kunit.c:226 (lib/tests/stacktrace_kunit.c:226)
-   >>>               vmlinux.o:(std_expect_callers_present)
+Additional details can be found in the added kernel-doc documentation.
+An LWN article covered v2 of the series: https://lwn.net/Articles/1012990/
+
+ [1] https://clang.llvm.org/docs/ThreadSafetyAnalysis.html
+ [2] https://www.cs.cornell.edu/talc/papers/capabilities.pdf
+
+=== Design ===
+
+Prior art exists in the form of Sparse's Context Tracking. Locking
+annotations on functions already exist sparsely, so the concept of
+analyzing locking rules is not foreign to the kernel's codebase.
+
+However, Clang's analysis is more complete vs. Sparse's, with the
+typical trade-offs in static analysis: improved completeness is
+sacrificed for more possible false positives or additional annotations
+required by the programmer. Numerous options exist to disable or opt out
+certain code from analysis.
+
+This series initially aimed to retain compatibility with Sparse, which
+can provide tree-wide analysis of a subset of the context analysis
+introduced, but it was later decided to drop Sparse compatibility. For
+the most part, the new (and old) keywords used for annotations remain
+the same, and many of the pre-existing annotations remain valid.
+
+One big question is how to enable this feature, given we end up with a
+new dialect of C; two approaches have been considered:
+
+  A. Tree-wide all-or-nothing approach. This approach requires tree-wide
+     changes, adding annotations or selective opt-outs. Making more
+     primitives context-analysis aware increases churn where maintainers
+     are unfamiliar with the feature and the analysis is unable to deal
+     with complex code patterns as-is.
+
+Because we can't change the programming language (even if from one C
+dialect to another) of the kernel overnight, a different approach might
+cause less friction.
+
+  B. A selective, incremental, and much less intrusive approach.
+     Maintainers of subsystems opt in their modules or directories into
+     context analysis (via Makefile):
+
+       CONTEXT_ANALYSIS_foo.o := y	# foo.o only
+       CONTEXT_ANALYSIS := y  		# all TUs
+
+     Most (eventually all) synchronization primitives, and more
+     context locks including ones that track "irq disabled",
+     "preemption" disabled, etc. could be supported.
+
+The approach taken by this series is B. This ensures that only
+subsystems where maintainers are willing to deal with any warnings are
+opted-in. Introducing the feature can be done incrementally, without
+large tree-wide changes and adding numerous opt-outs and annotations to
+the majority of code.
+
+  Note: Bart Van Assche concurrently worked on enabling -Wthread-safety:
+  https://lore.kernel.org/all/20250206175114.1974171-1-bvanassche@acm.org/
+  Bart's work has shown what it might take to go with approach A
+  (tree-wide, restricted to 'mutex' usage). This has shown that the
+  analysis finds real issues when applied to enough subsystems!  We hope
+  this serves as motivation to eventually enable the analysis in as many
+  subsystems as possible, particularly subsystems that are not as easily
+  tested by CI systems and test robots.
+
+=== Initial Uses ===
+
+With this initial series, the following synchronization primitives are
+supported: `raw_spinlock_t`, `spinlock_t`, `rwlock_t`, `mutex`,
+`seqlock_t`, `bit_spinlock`, RCU, SRCU (`srcu_struct`), `rw_semaphore`,
+`local_lock_t`, `ww_mutex`.
+
+To demonstrate use of the feature on real kernel code, the series also
+enables context analysis for the following subsystems:
+
+	* kernel/kcov
+	* kernel/kcsan
+	* kernel/sched/
+	* lib/rhashtable
+	* lib/stackdepot
+	* mm/kfence
+	* security/tomoyo
+    	* crypto/
+
+The initial benefits are static detection of violations of locking
+rules. As more context locks are supported, we would see more static
+checking beyond what regular C can provide, all while remaining easy
+(and quick) to use via the Clang compiler.
+
+  Note: The kernel already provides dynamic analysis tools Lockdep and
+  KCSAN for lock-safety checking and data-race detection respectively.
+  Unlike those, Clang's context analysis is a compile-time static
+  analysis with no runtime impact. The static analysis complements
+  existing dynamic analysis tools, as it may catch some issues before
+  even getting into a running kernel, but is *not* a replacement for
+  whole-kernel testing with the dynamic analysis tools enabled!
+
+=== Appendix ===
+
+A Clang version that supports `-Wthread-safety-pointer` and the new
+alias-analysis of context lock pointers is required (from this version
+onwards):
+
+	https://github.com/llvm/llvm-project/commit/7ccb5c08f0685d4787f12c3224a72f0650c5865e
+
+The minimum required release version will be Clang 22.
+
+This series is also available at this Git tree:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/melver/linux.git/log/?h=ctx-analysis/dev
+
+The feature itself is usable when all patches up to the "MAINTAINERS"
+patch are applied; the subsequent "enablement" patches are optional and
+could be applied by the respective maintainers to their own tree after
+the context analysis infrastructure is available.
+
+=== Changelog ===
+
+v5:
+
+  - Rename "context guard" -> "context lock".
+
+  - Rework cleanup.h support to properly release at scope guard end.
+
+  - Use new cleanup.h helpers to properly support scoped lock guards.
+
+  - Support new scoped_seqlock_read().
+
+  - Also remove include/linux/lockref.h's deprecated use of __cond_lock().
+
+  - Fix invalid __releases/__acquires in um skas/mm_id.h header
+    (transitively included through mm_types.h which is included by
+    subsystems that may want to enable context analysis).
+
+  - Better document Clang's `assert_capability` attribute.
+
+  - Rebase on v6.19-rc1.
+
+v4: https://lore.kernel.org/all/20251120145835.3833031-2-elver@google.com/
+
+  - Rename capability -> context analysis, per Linus's suggestion:
+    https://lore.kernel.org/all/CAHk-=wgd-Wcp0GpYaQnU7S9ci+FvFmaNw1gm75mzf0ZWdNLxvw@mail.gmail.com/
+
+  - Minor fixes.
+
+v3: https://lore.kernel.org/all/20250918140451.1289454-1-elver@google.com/
+
+  - Bump min. Clang version to 22+ (unreleased), which now supports:
+
+	* re-entrancy via __attribute__((reentrant_capability));
+	* basic form of capability alias analysis - which is the
+	  biggest improvement since v2.
+
+    This was the result of conclusions from this discussion:
+    https://lore.kernel.org/all/CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com/
+
+  - Rename __asserts_cap/__assert_cap to __assumes_cap/__assume_cap.
+
+  - Switch to DECLARE_LOCK_GUARD_1_ATTRS().
+
+  - Add __acquire_ret and __acquire_shared_ret helper macros - can be
+    used to define function-like macros that return objects which
+    contains a held capabilities. Works now because of capability alias
+    analysis.
+
+  - Add capability_unsafe_alias() helper, where the analysis rightfully
+    points out we're doing strange things with aliases but we don't
+    care.
+
+  - Support multi-argument attributes.
+
+  - Enable for kernel/sched/{core,fair}.c, kernel/kcsan.
+  - Drop drivers/tty changes (revisit later).
+
+v2: https://lore.kernel.org/all/20250304092417.2873893-1-elver@google.com/
+
+  - Remove Sparse context tracking support - after the introduction of
+    Clang support, so that backports can skip removal of Sparse support.
+
+  - Remove __cond_lock() function-like helper.
+
+  - ww_mutex support.
+
+  - -Wthread-safety-addressof was reworked and committed in upstream
+    Clang as -Wthread-safety-pointer.
+
+  - Make __cond_acquires() and __cond_acquires_shared() take abstract
+    value, since compiler only cares about zero and non-zero.
+
+  - Rename __var_guarded_by to simply __guarded_by. Initially the idea
+    was to be explicit about if the variable itself or the pointed-to
+    data is guarded, but in the long-term, making this shorter might be
+    better.
+
+  - Likewise rename __ref_guarded_by to __pt_guarded_by.
+
+  - Introduce common header warning suppressions - this is a better
+    solution than guarding header inclusions with disable_ +
+    enable_capability_analysis(). Header suppressions are disabled when
+    selecting CONFIG_WARN_CAPABILITY_ANALYSIS_ALL=y. This bumps the
+    minimum Clang version required to 20+.
+
+  - Make the data_race() macro imply disabled capability analysis.
+    Writing capability_unsafe(data_race(..)) is unnecessarily verbose
+    and data_race() on its own already indicates something subtly unsafe
+    is happening.  This change was made after analysis of a finding in
+    security/tomoyo.
+
+  - Enable analysis in the following subsystems as additional examples
+    of larger subsystem. Where it was obvious, the __guarded_by
+    attribute was added to lock-guarded variables to improve coverage.
+
+    	* drivers/tty
+	* security/tomoyo
+    	* crypto/
+
+RFC v1: https://lore.kernel.org/lkml/20250206181711.1902989-1-elver@google.com
+
+Marco Elver (36):
+  compiler_types: Move lock checking attributes to
+    compiler-context-analysis.h
+  compiler-context-analysis: Add infrastructure for Context Analysis
+    with Clang
+  compiler-context-analysis: Add test stub
+  Documentation: Add documentation for Compiler-Based Context Analysis
+  checkpatch: Warn about context_unsafe() without comment
+  cleanup: Basic compatibility with context analysis
+  lockdep: Annotate lockdep assertions for context analysis
+  locking/rwlock, spinlock: Support Clang's context analysis
+  compiler-context-analysis: Change __cond_acquires to take return value
+  locking/mutex: Support Clang's context analysis
+  locking/seqlock: Support Clang's context analysis
+  bit_spinlock: Include missing <asm/processor.h>
+  bit_spinlock: Support Clang's context analysis
+  rcu: Support Clang's context analysis
+  srcu: Support Clang's context analysis
+  kref: Add context-analysis annotations
+  locking/rwsem: Support Clang's context analysis
+  locking/local_lock: Include missing headers
+  locking/local_lock: Support Clang's context analysis
+  locking/ww_mutex: Support Clang's context analysis
+  debugfs: Make debugfs_cancellation a context lock struct
+  um: Fix incorrect __acquires/__releases annotations
+  compiler-context-analysis: Remove Sparse support
+  compiler-context-analysis: Remove __cond_lock() function-like helper
+  compiler-context-analysis: Introduce header suppressions
+  compiler: Let data_race() imply disabled context analysis
+  MAINTAINERS: Add entry for Context Analysis
+  kfence: Enable context analysis
+  kcov: Enable context analysis
+  kcsan: Enable context analysis
+  stackdepot: Enable context analysis
+  rhashtable: Enable context analysis
+  printk: Move locking annotation to printk.c
+  security/tomoyo: Enable context analysis
+  crypto: Enable context analysis
+  sched: Enable context analysis for core.c and fair.c
+
+ Documentation/dev-tools/context-analysis.rst  | 145 +++++
+ Documentation/dev-tools/index.rst             |   1 +
+ Documentation/dev-tools/sparse.rst            |  19 -
+ Documentation/mm/process_addrs.rst            |   6 +-
+ MAINTAINERS                                   |  11 +
+ Makefile                                      |   1 +
+ arch/um/include/shared/skas/mm_id.h           |   5 +-
+ arch/um/kernel/skas/mmu.c                     |  13 +-
+ crypto/Makefile                               |   2 +
+ crypto/acompress.c                            |   6 +-
+ crypto/algapi.c                               |   2 +
+ crypto/api.c                                  |   1 +
+ crypto/crypto_engine.c                        |   2 +-
+ crypto/drbg.c                                 |   5 +
+ crypto/internal.h                             |   2 +-
+ crypto/proc.c                                 |   3 +
+ crypto/scompress.c                            |  24 +-
+ .../net/wireless/intel/iwlwifi/iwl-trans.c    |   4 +-
+ .../net/wireless/intel/iwlwifi/iwl-trans.h    |   6 +-
+ .../intel/iwlwifi/pcie/gen1_2/internal.h      |   5 +-
+ .../intel/iwlwifi/pcie/gen1_2/trans.c         |   4 +-
+ fs/dlm/lock.c                                 |   2 +-
+ include/crypto/internal/acompress.h           |   7 +-
+ include/crypto/internal/engine.h              |   2 +-
+ include/linux/bit_spinlock.h                  |  24 +-
+ include/linux/cleanup.h                       |  50 ++
+ include/linux/compiler-context-analysis.h     | 441 +++++++++++++
+ include/linux/compiler.h                      |   2 +
+ include/linux/compiler_types.h                |  18 +-
+ include/linux/console.h                       |   4 +-
+ include/linux/debugfs.h                       |  12 +-
+ include/linux/kref.h                          |   2 +
+ include/linux/list_bl.h                       |   2 +
+ include/linux/local_lock.h                    |  51 +-
+ include/linux/local_lock_internal.h           |  73 ++-
+ include/linux/lockdep.h                       |  12 +-
+ include/linux/lockref.h                       |   4 +-
+ include/linux/mm.h                            |  33 +-
+ include/linux/mutex.h                         |  38 +-
+ include/linux/mutex_types.h                   |   4 +-
+ include/linux/rcupdate.h                      |  90 +--
+ include/linux/refcount.h                      |   6 +-
+ include/linux/rhashtable.h                    |  16 +-
+ include/linux/rwlock.h                        |  22 +-
+ include/linux/rwlock_api_smp.h                |  43 +-
+ include/linux/rwlock_rt.h                     |  44 +-
+ include/linux/rwlock_types.h                  |  10 +-
+ include/linux/rwsem.h                         |  76 ++-
+ include/linux/sched.h                         |   6 +-
+ include/linux/sched/signal.h                  |  16 +-
+ include/linux/sched/task.h                    |   6 +-
+ include/linux/sched/wake_q.h                  |   3 +
+ include/linux/seqlock.h                       |  38 +-
+ include/linux/seqlock_types.h                 |   5 +-
+ include/linux/spinlock.h                      | 112 +++-
+ include/linux/spinlock_api_smp.h              |  34 +-
+ include/linux/spinlock_api_up.h               | 112 +++-
+ include/linux/spinlock_rt.h                   |  37 +-
+ include/linux/spinlock_types.h                |  10 +-
+ include/linux/spinlock_types_raw.h            |   5 +-
+ include/linux/srcu.h                          |  73 ++-
+ include/linux/srcutiny.h                      |   6 +
+ include/linux/srcutree.h                      |  10 +-
+ include/linux/ww_mutex.h                      |  22 +-
+ kernel/Makefile                               |   2 +
+ kernel/kcov.c                                 |  36 +-
+ kernel/kcsan/Makefile                         |   2 +
+ kernel/kcsan/report.c                         |  11 +-
+ kernel/printk/printk.c                        |   2 +
+ kernel/sched/Makefile                         |   3 +
+ kernel/sched/core.c                           |  89 ++-
+ kernel/sched/fair.c                           |   7 +-
+ kernel/sched/sched.h                          | 126 +++-
+ kernel/signal.c                               |   4 +-
+ kernel/time/posix-timers.c                    |  13 +-
+ lib/Kconfig.debug                             |  44 ++
+ lib/Makefile                                  |   6 +
+ lib/dec_and_lock.c                            |   8 +-
+ lib/lockref.c                                 |   1 -
+ lib/rhashtable.c                              |   5 +-
+ lib/stackdepot.c                              |  20 +-
+ lib/test_context-analysis.c                   | 604 ++++++++++++++++++
+ mm/kfence/Makefile                            |   2 +
+ mm/kfence/core.c                              |  20 +-
+ mm/kfence/kfence.h                            |  14 +-
+ mm/kfence/report.c                            |   4 +-
+ mm/memory.c                                   |   4 +-
+ mm/pgtable-generic.c                          |  19 +-
+ net/ipv4/tcp_sigpool.c                        |   2 +-
+ scripts/Makefile.context-analysis             |  11 +
+ scripts/Makefile.lib                          |  10 +
+ scripts/checkpatch.pl                         |   7 +
+ scripts/context-analysis-suppression.txt      |  33 +
+ security/tomoyo/Makefile                      |   2 +
+ security/tomoyo/common.c                      |  52 +-
+ security/tomoyo/common.h                      |  77 +--
+ security/tomoyo/domain.c                      |   1 +
+ security/tomoyo/environ.c                     |   1 +
+ security/tomoyo/file.c                        |   5 +
+ security/tomoyo/gc.c                          |  28 +-
+ security/tomoyo/mount.c                       |   2 +
+ security/tomoyo/network.c                     |   3 +
+ tools/include/linux/compiler_types.h          |   2 -
+ 103 files changed, 2523 insertions(+), 609 deletions(-)
+ create mode 100644 Documentation/dev-tools/context-analysis.rst
+ create mode 100644 include/linux/compiler-context-analysis.h
+ create mode 100644 lib/test_context-analysis.c
+ create mode 100644 scripts/Makefile.context-analysis
+ create mode 100644 scripts/context-analysis-suppression.txt
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0.322.g1dd061c0dc-goog
