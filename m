@@ -1,176 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B766A2D4B77;
-	Fri, 19 Dec 2025 09:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C252D061D;
+	Fri, 19 Dec 2025 10:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766138231; cv=none; b=bhcATFvtLAzyWo1pyAodzG9L/Kbadr6UotYM/JmCmM3JpAR2BanNFvyG0ZVSbfbjs3MdG8jhfR/+mGKnd9yzWMnhBtXFAG0YF++H4HVyCMfAFe6jrcOvlETqOfYh/OtpJEKIeWmtsJiffAgaSMLkqjpuONwub9INHGb4xjsAqo0=
+	t=1766138852; cv=none; b=XDqZDo7o6U97uw5u4bjwSQpW4CvKXvJcsWsudN+8xcgywseDey3lw1ZSgubeg6mG1U67y7JhhSdS3H1uzl8krp6HS3I2ofYktgSZr18W08mkX7u1uDR3XMGzOqE2NBzsfOaReHnFDHPI5QFwVXoU6ACLTshv4cqGQClbEVQPy6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766138231; c=relaxed/simple;
-	bh=u89IDNdrVN1pKbu3Ux1Nks5TsvnFdS55bJYVAlc8Vmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=d2I0NHf9E/4JbuVlXBVbhrQwQdywCYFGXjSdCLiDC9LAzXThltabC/aYyIi+wbaaYEfnP0XsqpZ0f12KvPEb4QC+1l/80Oy9zdh3ufyd8BA6nULLvTWz3klqE55ofqj5KyvLa0RfTEfglKbCIQg8yksJJgOLBnd9AhFEfqjdjkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jzrZeYeu; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766138852; c=relaxed/simple;
+	bh=vHbCNHPepXvcPrXcbr6Mra7Oz2w4onzdgVlqRgM1Slc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A34/moLwn3NzNF7xsXIpnBxpsj/5nefrnW7M/8/Nf8cIaUdstdfaA91gkySrqZUiZuma5PAie70SuQ8zU265j/rdJq5v+Cl59GuAHD+6DWWTDeUSW8r2bic8Q8KO/sM4V/vZbBnm0KwPqdom6bD5yApflh/nl0GdBtdwB4iuVeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qj7aBXzL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jzrZeYeu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766138229; x=1797674229;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u89IDNdrVN1pKbu3Ux1Nks5TsvnFdS55bJYVAlc8Vmk=;
-  b=jzrZeYeuD3/ND6kPZhVAT107TR2HBZmPtPkSRfV9mQmIbsyMn2u1eCTP
-   RxIaHNNioTTBQAEw1C3B7ZEOjKJ36apx1hsarxM5qgSBpyVb7pqYGNPgI
-   F+LsEGO06zccW7BLPLrQbMcInOFhCPovEjkcikYZOyxc4hBdX8e4LelwA
-   Z1sD3+T68AOS+llGd3+eQLcc0EMhUUeMUmm039+NonFcJQKK6aogGa52d
-   Ww+bms2mhKTiJ+81Kw6HEf3wBzAoTqJK46sC2oA0bW+fyKMbsBeBJtKZS
-   DtlcdlS5BQ2wnKN4eKOTZkVSUpoaAlHwvRpx70pzLr5aYphpLz/npb8Ux
-   Q==;
-X-CSE-ConnectionGUID: oBOCy7orTTqvLo6Fx/Rubw==
-X-CSE-MsgGUID: tZwPMsVLTGuGUzwzClPmRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="79219290"
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="79219290"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:57:09 -0800
-X-CSE-ConnectionGUID: 0Ue14b+bQUusScmFZuptnw==
-X-CSE-MsgGUID: kblD3U/3TUyAgN69cDlMYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="229862036"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Dec 2025 01:57:07 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vWXEO-000000003Kt-3q9u;
-	Fri, 19 Dec 2025 09:57:04 +0000
-Date: Fri, 19 Dec 2025 17:56:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shuming Fan <shumingf@realtek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 2070/2671] sound/soc/codecs/rt1320-sdw.c:1389:6:
- warning: variable 'ret' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202512191711.wY6XU796-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qj7aBXzL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCC2C4CEF1;
+	Fri, 19 Dec 2025 10:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766138851;
+	bh=vHbCNHPepXvcPrXcbr6Mra7Oz2w4onzdgVlqRgM1Slc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qj7aBXzLy0hlGl7Fkhne8ygw2aEHFon8Q0EcKNyYNZ2nSfUPqVVzse2Ur0Q6HZXwa
+	 cCRUyu6YXinpK8fM5vX6rKsCuHj0NKqAbOM/SvsKLkwvSmtR/OlaGyqP9x5Gvh1Ues
+	 hw6ADrBpnv2a6fZ7S/LaKVX9yZaxb+L7jUPIf7zYWI2ov5joVezIylPTq42qUDNi8C
+	 M+BIwXFPwF+AnkRUvoBuU4lFGQpwXSzCQy3ho3Naj4imsWGneO5bEpdDW0X4O4xkI6
+	 rjtjOBsOP4maBg7SIoJwg3RqE6gj8EPrwihFCyk5h+/fUz5zIUgd2u9lIR1cUX0io8
+	 8z3Csoh1CvgwQ==
+Date: Fri, 19 Dec 2025 15:37:20 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-pci@vger.kernel.org, 
+	Frank Li <Frank.Li@nxp.com>, Shawn Lin <shawn.lin@rock-chips.com>
+Subject: Re: [pci:controller/dwc 8/8]
+ drivers/pci/controller/dwc/pcie-designware-host.c:1175:6: warning: variable
+ 'ret' is used uninitialized whenever 'if' condition is true
+Message-ID: <3xh2gtngbn5ys5qkxnzfdbtolt3pw6clsmulv7qihgi35cmslk@ix2fadma65vk>
+References: <202512191339.583iyg1a-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202512191339.583iyg1a-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
-commit: da1682d5e8b53a51072552844c551b1b784e52c2 [2070/2671] ASoC: rt1320: support calibration and temperature/r0 loading
-config: i386-randconfig-001-20251219 (https://download.01.org/0day-ci/archive/20251219/202512191711.wY6XU796-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512191711.wY6XU796-lkp@intel.com/reproduce)
+On Fri, Dec 19, 2025 at 01:15:28PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/dwc
+> head:   c4a86e6600fa082d6646044fcce2183ad5e52283
+> commit: c4a86e6600fa082d6646044fcce2183ad5e52283 [8/8] PCI: dwc: Skip PME_Turn_Off broadcast and L2/L3 transition during suspend if link is not up
+> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251219/202512191339.583iyg1a-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512191339.583iyg1a-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512191339.583iyg1a-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/pci/controller/dwc/pcie-designware-host.c:1175:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>     1175 |         if (!dw_pcie_link_up(pci))
+>          |             ^~~~~~~~~~~~~~~~~~~~~
+>    drivers/pci/controller/dwc/pcie-designware-host.c:1218:9: note: uninitialized use occurs here
+>     1218 |         return ret;
+>          |                ^~~
+>    drivers/pci/controller/dwc/pcie-designware-host.c:1175:2: note: remove the 'if' if its condition is always false
+>     1175 |         if (!dw_pcie_link_up(pci))
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1176 |                 goto stop_link;
+>          |                 ~~~~~~~~~~~~~~
+>    drivers/pci/controller/dwc/pcie-designware-host.c:1173:9: note: initialize the variable 'ret' to silence this warning
+>     1173 |         int ret;
+>          |                ^
+>          |                 = 0
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512191711.wY6XU796-lkp@intel.com/
+Ammended the commit with the fix.
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+- Mani
 
->> sound/soc/codecs/rt1320-sdw.c:1389:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-1389 |         if (!fw_ready) {
-|             ^~~~~~~~~
-sound/soc/codecs/rt1320-sdw.c:1423:9: note: uninitialized use occurs here
-1423 |         return ret;
-|                ^~~
-sound/soc/codecs/rt1320-sdw.c:1389:2: note: remove the 'if' if its condition is always false
-1389 |         if (!fw_ready) {
-|         ^~~~~~~~~~~~~~~~
-1390 |                 dev_warn(dev, "%s, DSP FW is NOT readyn", __func__);
-|                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1391 |                 goto _exit_;
-|                 ~~~~~~~~~~~~
-1392 |         }
-|         ~
-sound/soc/codecs/rt1320-sdw.c:1368:9: note: initialize the variable 'ret' to silence this warning
-1368 |         int ret;
-|                ^
-|                 = 0
-1 warning generated.
---
->> ERROR: modpost: "__udivdi3" [sound/soc/codecs/snd-soc-rt1320-sdw.ko] undefined!
->> ERROR: modpost: "__umoddi3" [sound/soc/codecs/snd-soc-rt1320-sdw.ko] undefined!
-
-
-vim +1389 sound/soc/codecs/rt1320-sdw.c
-
-  1361	
-  1362	static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, unsigned int r_t0)
-  1363	{
-  1364		struct device *dev = &rt1320->sdw_slave->dev;
-  1365		unsigned int factor = (1 << 22), fw_ready;
-  1366		int l_t0_data[38], r_t0_data[38];
-  1367		unsigned int fw_status_addr;
-  1368		int ret;
-  1369	
-  1370		switch (rt1320->dev_id) {
-  1371		case RT1320_DEV_ID:
-  1372			fw_status_addr = RT1320_DSPFW_STATUS_ADDR;
-  1373			break;
-  1374		case RT1321_DEV_ID:
-  1375			fw_status_addr = RT1321_DSPFW_STATUS_ADDR;
-  1376			break;
-  1377		default:
-  1378			dev_err(dev, "%s: Unknown device ID %d\n", __func__, rt1320->dev_id);
-  1379			return -EINVAL;
-  1380		}
-  1381	
-  1382		regmap_write(rt1320->regmap,
-  1383				SDW_SDCA_CTL(FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23,
-  1384					RT1320_SDCA_CTL_REQ_POWER_STATE, 0), 0x00);
-  1385		rt1320_pde_transition_delay(rt1320, FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23, 0x00);
-  1386	
-  1387		regmap_read(rt1320->regmap, fw_status_addr, &fw_ready);
-  1388		fw_ready &= 0x1;
-> 1389		if (!fw_ready) {
-  1390			dev_warn(dev, "%s, DSP FW is NOT ready\n", __func__);
-  1391			goto _exit_;
-  1392		}
-  1393	
-  1394		rt1320_fw_param_protocol(rt1320, RT1320_GET_PARAM, 3, &l_t0_data[0], sizeof(l_t0_data));
-  1395		rt1320_fw_param_protocol(rt1320, RT1320_GET_PARAM, 4, &r_t0_data[0], sizeof(r_t0_data));
-  1396	
-  1397		l_t0_data[37] = l_t0 * factor;
-  1398		r_t0_data[37] = r_t0 * factor;
-  1399	
-  1400		dev_dbg(dev, "%s, write LR t0=0x%x, 0x%x\n", __func__, l_t0_data[37], r_t0_data[37]);
-  1401	
-  1402		rt1320_fw_param_protocol(rt1320, RT1320_SET_PARAM, 3, &l_t0_data[0], sizeof(l_t0_data));
-  1403		rt1320_fw_param_protocol(rt1320, RT1320_SET_PARAM, 4, &r_t0_data[0], sizeof(r_t0_data));
-  1404		ret = rt1320_check_fw_ready(rt1320);
-  1405		if (ret < 0)
-  1406			dev_err(dev, "%s: Failed to set FW param 3,4!\n", __func__);
-  1407	
-  1408		rt1320->temp_l_calib = l_t0;
-  1409		rt1320->temp_r_calib = r_t0;
-  1410	
-  1411		memset(&l_t0_data[0], 0x00, sizeof(l_t0_data));
-  1412		memset(&r_t0_data[0], 0x00, sizeof(r_t0_data));
-  1413		rt1320_fw_param_protocol(rt1320, RT1320_GET_PARAM, 3, &l_t0_data[0], sizeof(l_t0_data));
-  1414		rt1320_fw_param_protocol(rt1320, RT1320_GET_PARAM, 4, &r_t0_data[0], sizeof(r_t0_data));
-  1415		dev_dbg(dev, "%s, read after writing LR t0=0x%x, 0x%x\n", __func__, l_t0_data[37], r_t0_data[37]);
-  1416	
-  1417	_exit_:
-  1418		regmap_write(rt1320->regmap,
-  1419				SDW_SDCA_CTL(FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23,
-  1420					RT1320_SDCA_CTL_REQ_POWER_STATE, 0), 0x03);
-  1421		rt1320_pde_transition_delay(rt1320, FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23, 0x03);
-  1422	
-  1423		return ret;
-  1424	}
-  1425	
+>    1 warning generated.
+> 
+> 
+> vim +1175 drivers/pci/controller/dwc/pcie-designware-host.c
+> 
+>   1168	
+>   1169	int dw_pcie_suspend_noirq(struct dw_pcie *pci)
+>   1170	{
+>   1171		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>   1172		u32 val;
+>   1173		int ret;
+>   1174	
+> > 1175		if (!dw_pcie_link_up(pci))
+>   1176			goto stop_link;
+>   1177	
+>   1178		/*
+>   1179		 * If L1SS is supported, then do not put the link into L2 as some
+>   1180		 * devices such as NVMe expect low resume latency.
+>   1181		 */
+>   1182		if (dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKCTL) & PCI_EXP_LNKCTL_ASPM_L1)
+>   1183			return 0;
+>   1184	
+>   1185		if (pci->pp.ops->pme_turn_off) {
+>   1186			pci->pp.ops->pme_turn_off(&pci->pp);
+>   1187		} else {
+>   1188			ret = dw_pcie_pme_turn_off(pci);
+>   1189			if (ret)
+>   1190				return ret;
+>   1191		}
+>   1192	
+>   1193		ret = read_poll_timeout(dw_pcie_get_ltssm, val,
+>   1194					val == DW_PCIE_LTSSM_L2_IDLE ||
+>   1195					val <= DW_PCIE_LTSSM_DETECT_WAIT,
+>   1196					PCIE_PME_TO_L2_TIMEOUT_US/10,
+>   1197					PCIE_PME_TO_L2_TIMEOUT_US, false, pci);
+>   1198		if (ret) {
+>   1199			/* Only log message when LTSSM isn't in DETECT or POLL */
+>   1200			dev_err(pci->dev, "Timeout waiting for L2 entry! LTSSM: 0x%x\n", val);
+>   1201			return ret;
+>   1202		}
+>   1203	
+>   1204		/*
+>   1205		 * Per PCIe r6.0, sec 5.3.3.2.1, software should wait at least
+>   1206		 * 100ns after L2/L3 Ready before turning off refclock and
+>   1207		 * main power. This is harmless when no endpoint is connected.
+>   1208		 */
+>   1209		udelay(1);
+>   1210	
+>   1211	stop_link:
+>   1212		dw_pcie_stop_link(pci);
+>   1213		if (pci->pp.ops->deinit)
+>   1214			pci->pp.ops->deinit(&pci->pp);
+>   1215	
+>   1216		pci->suspended = true;
+>   1217	
+>   1218		return ret;
+>   1219	}
+>   1220	EXPORT_SYMBOL_GPL(dw_pcie_suspend_noirq);
+>   1221	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+மணிவண்ணன் சதாசிவம்
