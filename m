@@ -1,149 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985911A23A0;
-	Fri, 19 Dec 2025 23:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E594221F15
+	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 23:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766185699; cv=none; b=X7IgWrIJCFwSr81mEoB8s98ZoKfg2sVNisLaqu40/RpVLdBDAr+7cI0xsWnwroY3MaLcQ86oPN7hahvjQ65VbCdQXUL2aIwYRcBvXVqmFRQWWLU3lcPgwJ/ObmQBuPIgQmvdj3RyPf5XLGe+dZ1UeeqLk+UrS80w1om83wPiaR0=
+	t=1766187100; cv=none; b=HlV0SQQnt+UuUpBzrAu9UhsPDoRiTy5JnMjNN7cMRcD5ulqb70763KM+j0peFjfKwM+/SwK3TpZYVGjZWlciCJOgb1Q45jI5a6uau6JItY0nUl2x8KziefKZUdfIPZ4UJM0NW7z1rwbeiENpcY214YKv175jN8a5QAPPZ8HjccI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766185699; c=relaxed/simple;
-	bh=tdOyM03s/jtraJEdSS4JdOUdLDcBDqG0Tljm9PeXS14=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZuQl1uRG0YnTPgSwPRVEeHUS7KV0DLTJ24QIr8OylCWFW6tMWNMhePkP3ro9y2r2aP30GslD2+69ZZnlmdVZcieAN7Xf7Z5JaoUXxBCM3rkj9e0OR+XzBeAcGbTkxQS4kBIvklF6J0obAqSXqcqaCO+TTegsJDIpxcSWWj8wOso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbcFOd8h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766187100; c=relaxed/simple;
+	bh=kqYAQZ609rJygFWC7CbHOEHNatKsPADzGjHUdHPU3XE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=MgbsxiHmsmiVV8kwYUcwMuaMu/ZTlFIPyma6jTnPbPb/ZxgVilsrsk8X6dC/G6TY4NnxRm1iuIw/kEEH2kukJKYc/UOoOAPpHzF+dorNeCkeZPBPpcCix2iQ3up5SIr/emMIRNMYzG0rM8rkk1fGeMwfGWo/pHl++ctuehaASRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MHeBACN0; arc=none smtp.client-ip=209.85.215.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbcFOd8h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1F8C4CEF1;
-	Fri, 19 Dec 2025 23:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766185698;
-	bh=tdOyM03s/jtraJEdSS4JdOUdLDcBDqG0Tljm9PeXS14=;
-	h=From:Date:Subject:To:Cc:From;
-	b=bbcFOd8htkE7S4BiJO+MThR/8vhNDfwopFI6Eu5KudZE7bpSrr7zSbZLTYxMdKvm3
-	 V+0NeHNPRkBRYyLiubpjAb66AnDGreh6qZHaTGdRq5AgD3dn6sYZc7UPRMEB4AtYb6
-	 DCHv9pEmLJYtMxlXGeKzHQIgc3N0AVTZDfqZd2tBN1pF75WtVxampDUfcaj3N9fTw5
-	 dsrK7Z7JlvnANiL9zo1t7knkEqrAbG9Gam+YdNRok2OpAe57ATfRBNb7sL3c4HuTMY
-	 KisrViE1oiRLqBS4SfRq6tUjOPrq1/wtsJIPYU8ZMVgJPscPLFJsPqdKcgF7S4ulO/
-	 Ui1HJHQ1QaXlQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 19 Dec 2025 16:08:08 -0700
-Subject: [PATCH] ASoC: rt1320: Change return type of rt1320_t0_load() to
- void
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MHeBACN0"
+Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-c05d66dbab2so2355463a12.0
+        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 15:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766187098; x=1766791898; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Xjhz9NvSIj1nkwStS3EsBbpnWvjG3hzX9yFNjSmaNpQ=;
+        b=MHeBACN06JyjWrvGbZS3MVPwRz+tKTK1HXp0H0lG6kzQgKWtKfnqiOCj+qn32sriPw
+         foYPFOyhdCzUKtwFjn2SHb8pYGCG4F7cA2eSRrYBcoCQTz38m4gOYIgoU0YFxPoQ9P6H
+         RehejMN6ciy3t1MtdElugqxz0aWiahucsrxqZFJ/NK0Ag+G0wDRM5xFp7Zz8b9zFAgG4
+         Y0n4wHRmoHb5kmrj0qFExUvZkXh4LMFSL8o02zpYO93avmYVBd+kDGzyEZooes4jxVyX
+         Cqsizrgv/7MM6+yDxBGUQVIlKMJMRz3gI4BypGECZHB12BrQgELAkmMg68XcZI7aG18R
+         POeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766187098; x=1766791898;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xjhz9NvSIj1nkwStS3EsBbpnWvjG3hzX9yFNjSmaNpQ=;
+        b=PHFAjcoIv/AuHaUDUV242POiG9wfaSkNy0WC1tW7FHOwcwFAk6Mk2aCeAUNGupRQbv
+         QqNdvBV8XT7c9C4ECEDcYLeNQCu2Q4Qq+XByYHwdTAbJAillE0ZuqGREfE41mjJTUiir
+         GleiQrzbGHjXQhOsrNn0Y1tTsMhYdOwFjMXlS4Dfaj/whGFm905Yu9nM/HeeDpwaDRuZ
+         09bK1WTzJa47Gjwa9aCXI0KwAgClc8l/VHrK+RmUBaX3mUvWKZT+gJ1sraUH0uMPThZf
+         HsOd70dfBU5iwc7YoJvpDsNhm4sJwKPlFGJBGotjnCiCAmfCi8nAXGxMuL0ExV5Axllk
+         u1QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUrvFwgYYjHPWJjKF8gHmxwj3DeeEt0pil23WBvsWx3ycXsd/u0UDY1ZIzUAWK5pfMgNauo@lists.linux.dev
+X-Gm-Message-State: AOJu0YzO4y1lHpotwQixsgTDWzxdXHapQiIKwTEJN9Tsc1VaQZaO6+jF
+	4qPCxZDLYmTlreeC3b17QKgsVyx+3vDLjkjG+nHaZxvMATFYgoPCaVP3
+X-Gm-Gg: AY/fxX4sJA7HnWmBJ363ZxvRq5gGLCVjSjryx3cnftAsMNa2BN1UF6UeUX+Som+hR+m
+	1NQF4iVFW3/so+1EtfImg2HmoENnb/88XJx+Sx/HxkGTmVaHYepKlahZ2kXlz65dtFRO9viSmQX
+	FeMexUd/4iuWh0XefLoF2U6XV10AAh8KIcO3gb2KynBMWy+eJtcrgqjTizdIKRih1cn96BZF0Dm
+	AH9qfkuQfGOTzWhNXcqcj2/989VtBVokcZaq6Zop2wEZVpdOqvw9sNpdjdVAYBojx/fhBHvTe9s
+	tXD4W8K2MrjdHPMAN4j8anfXcYj1IATg+K9AdWa23selaGyOMws7metFoY6+/nZmjvlbxPxgcym
+	wYXjU3lfH8gUC5HmQEs/h2bBiNolXDOpovBnGv86tY6WO2Zk3YBsC6XCja4HmKR0/YStWbQUCa4
+	7RiuI8yVjlNA9GJEh/TFd0FgDNR3FnpakivN03B2WRc+rcDWgc3y4r1Qplnqyr4K+hsCqbFaahl
+	0e9aclMTWcwgjQ7pK8zjwmDuXRbWz378epZzM0+8nTt8d+mIKtwJtswhw6rWb4r1kdRmLnSFLfU
+	JeM=
+X-Google-Smtp-Source: AGHT+IFD9VEfhTkWGAUJ+KrkgUpiheofAxrSZVwNtEffu0+8gx+hrdlGu9tKXSDKwQO+mDr4xt9mXg==
+X-Received: by 2002:a05:7022:3a83:b0:11c:b397:2657 with SMTP id a92af1059eb24-121722be81emr4954809c88.22.1766180747284;
+        Fri, 19 Dec 2025 13:45:47 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:5874:79f3:80da:a7a3? ([2a00:79e0:2e7c:8:5874:79f3:80da:a7a3])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b05fe99410sm10260116eec.2.2025.12.19.13.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Dec 2025 13:45:46 -0800 (PST)
+Message-ID: <ae957ee5-cb47-433f-b0b3-f4ac8ec7116b@gmail.com>
+Date: Fri, 19 Dec 2025 14:45:45 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+From: Bart Van Assche <bart.vanassche@gmail.com>
+Subject: Re: [PATCH v5 08/36] locking/rwlock, spinlock: Support Clang's
+ context analysis
+To: Peter Zijlstra <peterz@infradead.org>, Marco Elver <elver@google.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+ Will Deacon <will@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+ Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>,
+ Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+ Eric Dumazet <edumazet@google.com>, Frederic Weisbecker
+ <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>,
+ Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Kentaro Takeda <takedakn@nttdata.co.jp>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+ Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+ Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
+ kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org,
+ linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+References: <20251219154418.3592607-1-elver@google.com>
+ <20251219154418.3592607-9-elver@google.com>
+ <17723ae6-9611-4731-905c-60dab9fb7102@acm.org>
+ <CANpmjNO0B_BBse12kAobCRBK0D2pKkSu7pKa5LQAbdzBZa2xcw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CANpmjNO0B_BBse12kAobCRBK0D2pKkSu7pKa5LQAbdzBZa2xcw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251219-rt1320-sdw-avoid-uninit-ret-v1-1-faa3e250ebc4@kernel.org>
-X-B4-Tracking: v=1; b=H4sIANfaRWkC/yXMMQ7CMAwF0KtUnrFUBypRroIYQvMLZkiRnRakq
- ncnwPiWt5LDFE6nZiXDoq5TrpBdQ8M95htYUzWFNnQSpGcrsg8te3pxXCZNPGfNWthQOMoRIyS
- mrj9QHZ6GUd+//Xz52+frA0P5lrRtHzhMBuR/AAAA
-X-Change-ID: 20251219-rt1320-sdw-avoid-uninit-ret-a18efe1ad594
-To: Mark Brown <broonie@kernel.org>, Shuming Fan <shumingf@realtek.com>, 
- Oder Chiou <oder_chiou@realtek.com>, Liam Girdwood <lgirdwood@gmail.com>
-Cc: linux-sound@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3632; i=nathan@kernel.org;
- h=from:subject:message-id; bh=tdOyM03s/jtraJEdSS4JdOUdLDcBDqG0Tljm9PeXS14=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJmut+5vvKRSVJ9806JMepr4O5bwiYc/Kh9zT19lkXd+V
- u+U5YG6HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAizHYM/+xfNi+JLGK5ePxP
- y6Okp8mKc4sf8rBfayrQPmthV3JztwLD/5rJXyvvKsxQb7/3a2biotIvgvL/ezbl5zIXub3avGD
- Xe0YA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Clang warns (or errors with CONFIG_WERROR=y / W=e):
+On 12/19/25 1:02 PM, Marco Elver wrote:
+> On Fri, 19 Dec 2025 at 21:26, Bart Van Assche <bvanassche@acm.org> wrote:
+>> On 12/19/25 7:39 AM, Marco Elver wrote:
+>>> - extern void do_raw_read_lock(rwlock_t *lock) __acquires(lock);
+>>> + extern void do_raw_read_lock(rwlock_t *lock) __acquires_shared(lock);
+>>
+>> Given the "one change per patch" rule, shouldn't the annotation fixes
+>> for rwlock operations be moved into a separate patch?
+>>
+>>> -typedef struct {
+>>> +context_lock_struct(rwlock) {
+>>>        arch_rwlock_t raw_lock;
+>>>    #ifdef CONFIG_DEBUG_SPINLOCK
+>>>        unsigned int magic, owner_cpu;
+>>> @@ -31,7 +31,8 @@ typedef struct {
+>>>    #ifdef CONFIG_DEBUG_LOCK_ALLOC
+>>>        struct lockdep_map dep_map;
+>>>    #endif
+>>> -} rwlock_t;
+>>> +};
+>>> +typedef struct rwlock rwlock_t;
+>>
+>> This change introduces a new globally visible "struct rwlock". Although
+>> I haven't found any existing "struct rwlock" definitions, maybe it's a
+>> good idea to use a more unique name instead.
+> 
+> This doesn't actually introduce a new globally visible "struct
+> rwlock", it's already the case before.
+> An inlined struct definition in a typedef is available by its struct
+> name, so this is not introducing a new name
+> (https://godbolt.org/z/Y1jf66e1M).
 
-  sound/soc/codecs/rt1320-sdw.c:1387:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-   1387 |         if (!fw_ready) {
-        |             ^~~~~~~~~
-  sound/soc/codecs/rt1320-sdw.c:1421:9: note: uninitialized use occurs here
-   1421 |         return ret;
-        |                ^~~
-  sound/soc/codecs/rt1320-sdw.c:1387:2: note: remove the 'if' if its condition is always false
-   1387 |         if (!fw_ready) {
-        |         ^~~~~~~~~~~~~~~~
-   1388 |                 dev_warn(dev, "%s, DSP FW is NOT ready\n", __func__);
-        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1389 |                 goto _exit_;
-        |                 ~~~~~~~~~~~~
-   1390 |         }
-        |         ~
-  sound/soc/codecs/rt1320-sdw.c:1366:9: note: initialize the variable 'ret' to silence this warning
-   1366 |         int ret;
-        |                ^
-        |                 = 0
+Please take another look. The godbolt example follows the pattern
+"typedef struct name { ... } name_t;". The "name" part is missing from
+the rwlock_t definition. This is why I wrote that the above code
+introduces a new global struct name.
 
-The return value of rt1320_t0_load() is never actually used, so it can
-just be eliminated altogether by returning void, clearing up the
-warning.
-
-Fixes: da1682d5e8b5 ("ASoC: rt1320: support calibration and temperature/r0 loading")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202512191711.wY6XU796-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- sound/soc/codecs/rt1320-sdw.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/sound/soc/codecs/rt1320-sdw.c b/sound/soc/codecs/rt1320-sdw.c
-index 9447e742c672..85560455c3e3 100644
---- a/sound/soc/codecs/rt1320-sdw.c
-+++ b/sound/soc/codecs/rt1320-sdw.c
-@@ -1357,13 +1357,12 @@ static void rt1320_vab_preset(struct rt1320_sdw_priv *rt1320)
- 	}
- }
- 
--static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, unsigned int r_t0)
-+static void rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, unsigned int r_t0)
- {
- 	struct device *dev = &rt1320->sdw_slave->dev;
- 	unsigned int factor = (1 << 22), fw_ready;
- 	int l_t0_data[38], r_t0_data[38];
- 	unsigned int fw_status_addr;
--	int ret;
- 
- 	switch (rt1320->dev_id) {
- 	case RT1320_DEV_ID:
-@@ -1374,7 +1373,7 @@ static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, uns
- 		break;
- 	default:
- 		dev_err(dev, "%s: Unknown device ID %d\n", __func__, rt1320->dev_id);
--		return -EINVAL;
-+		return;
- 	}
- 
- 	regmap_write(rt1320->regmap,
-@@ -1399,8 +1398,7 @@ static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, uns
- 
- 	rt1320_fw_param_protocol(rt1320, RT1320_SET_PARAM, 3, &l_t0_data[0], sizeof(l_t0_data));
- 	rt1320_fw_param_protocol(rt1320, RT1320_SET_PARAM, 4, &r_t0_data[0], sizeof(r_t0_data));
--	ret = rt1320_check_fw_ready(rt1320);
--	if (ret < 0)
-+	if (rt1320_check_fw_ready(rt1320) < 0)
- 		dev_err(dev, "%s: Failed to set FW param 3,4!\n", __func__);
- 
- 	rt1320->temp_l_calib = l_t0;
-@@ -1417,8 +1415,6 @@ static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, uns
- 			SDW_SDCA_CTL(FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23,
- 				RT1320_SDCA_CTL_REQ_POWER_STATE, 0), 0x03);
- 	rt1320_pde_transition_delay(rt1320, FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23, 0x03);
--
--	return ret;
- }
- 
- static int rt1320_rae_load(struct rt1320_sdw_priv *rt1320)
-
----
-base-commit: a54fd483d0d5f5f620c48a29c98b013e59009a09
-change-id: 20251219-rt1320-sdw-avoid-uninit-ret-a18efe1ad594
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+Bart.
