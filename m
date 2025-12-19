@@ -1,180 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0CD2417E0;
-	Thu, 18 Dec 2025 22:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616E319DF4F;
+	Fri, 19 Dec 2025 00:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766097110; cv=none; b=uUR1ckXug24YllZr1+zMjOuSzH8fJTQRPG8V8/gByzlJ7aG/u5f3wmiAlYFl0G9MqNIsHeRJAXa1cPLzkEi3u0ft7UMT+Mtcy+qsY+Ubt1bCwyK3zBBUVyUWe3Gsi1ZpvQCBUKhDEGclLX22dbQEBE0fFCopges2PxrtTr/qD20=
+	t=1766104843; cv=none; b=WYz2IpmljNnTHiGsR8ZiAP2hgcubaDJ8NoCzKirQCOAUffIYvFaew0MjFFbFyMemNFaYgDAxerm9NEoxWRed5O4ppD6A6iU4TU5INCstjTDiYK2Zx7XJAdNnmZvdqknSmDVSpRa9HPCH6I8B9q5ki5FhQ8BhPxAMAnMKnfzV41E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766097110; c=relaxed/simple;
-	bh=own/YW+jwQswxII/qxW2HPNWs6Q2EnHJVVXWsC138hA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=V3eZ+7UH3u9tXjcg2mz5hSj42OkD5BPlWkCX+Nji6+yJvEKday4o5P/7a0ywGJTF1lC5//sffS6JCCpOE5ZOhu9pjarjL2iTBpo3VyBp2mdVEudx7TWi8+O7BhDzblS1uZ5nK3s5169hfi9lnbWyVcvRlEOKJBl4Gul9CkFYMO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LQ4S7jWA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766104843; c=relaxed/simple;
+	bh=vxQk63A/fOKnwXCzCiDXgbPKWUi3Hr0AvJ+PmmRsnH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TQ5T9OrgrGXpum9nkrax2XvZlc3wgdLBK9nQFvjcbEeiHFCfiqW6BuMbtL45LG1eOe0z0MYbc1Dmb+gGdSP/yr6T+MVl+eN7i5PV2gLC+8Wt3VDBxoSCXH2hANQ4Fc2Flzbm4iDlLKHW3EiZMP+D+bLdtf/XJK6XMt7di8FUd5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YzqGOUkQ; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LQ4S7jWA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB013C4CEFB;
-	Thu, 18 Dec 2025 22:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766097107;
-	bh=own/YW+jwQswxII/qxW2HPNWs6Q2EnHJVVXWsC138hA=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=LQ4S7jWA2JU3Q4ZOvQsY6EzobdghyZAR6fbE374ejTiDLOvaHBM2/aHcHBBUFgPtH
-	 L4zOEXINKTQ9UokTKcZeyVj1LADNAMaXKgCqOjHqznsTS3f0mpDvTHZDvS+sXUlqAX
-	 A3t1u6iYasV0sB/8JtOaNsSzOQC8U8St1JIkTddw8MdylBhDK2yOntlFn4CvTcM9Kz
-	 JbW/TB1rf6C9rOU1bSaSk9wkxHtsbBk/LuiQn7PS+fkAuGkcqtz1qDDQ8+QzkAbHOC
-	 SSNP7W+3k1qz75yrbWB8PK1+CXIJY9S30KOBO5qpr8H+Crboe/KyLq+amVdWHTRrZS
-	 1QfN7svbNc6wA==
-Message-ID: <480c3c06-7b3c-4150-b347-21057678f619@kernel.org>
-Date: Thu, 18 Dec 2025 23:31:40 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YzqGOUkQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766104840; x=1797640840;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vxQk63A/fOKnwXCzCiDXgbPKWUi3Hr0AvJ+PmmRsnH4=;
+  b=YzqGOUkQaRz4Aau1z9NZTxrVYFNGXN0+FZvHYUwzo1ThmgvwlNLpb+0H
+   kbrBvXuOvjCsIlA2n4u14AA/4UG3fYXNrTsuBCSz11MlI7rCTzi8YDwkg
+   xLhxLI9F6jSF7FB5ecBau9/8CleASfL3pZqUVKr04WSIHrIgzMoY/4F9R
+   nQLogsF3IIPfs9llMshKmxaMf60R5+Kd0EZhyan33MDAThVE/tl5w7Wrh
+   ggTrUu12zC2RF5jV0mg4B3px2h9NS58PtWX3ono1GItBZbkNHfwyBJBjh
+   2sBif0RTDT4wHNJ8PGD7cv2Nm9CovOCFSATuYZsc38r1HKohuYxxg+2LB
+   Q==;
+X-CSE-ConnectionGUID: /quwyQYLSh28a1Zf8RQFmw==
+X-CSE-MsgGUID: Kzilb4M8SYKXKaw+y1bjNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="68143351"
+X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
+   d="scan'208";a="68143351"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 16:40:40 -0800
+X-CSE-ConnectionGUID: gMydyncaQ1OYqLKnujbRDA==
+X-CSE-MsgGUID: pWNg8ZT1RyWxK8z+leCdvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
+   d="scan'208";a="222142888"
+Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 18 Dec 2025 16:40:39 -0800
+Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vWOXs-000000002oT-1Vvm;
+	Fri, 19 Dec 2025 00:40:36 +0000
+Date: Fri, 19 Dec 2025 08:40:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 1917/2322] sound/core/pcm_native.c:3308:6: error:
+ cannot jump from this asm goto statement to one of its possible targets
+Message-ID: <202512190802.i4Jzbcsl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Vincent Mailhol <mailhol@kernel.org>
-Subject: Re: [PATCH 1/2] kbuild: remove gcc's -Wtype-limits
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org
-References: <20251218-remove_wtype-limits-v1-0-735417536787@kernel.org>
- <20251218-remove_wtype-limits-v1-1-735417536787@kernel.org>
- <aURXpAwm-ITVlHMl@stanley.mountain>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <aURXpAwm-ITVlHMl@stanley.mountain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Dan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1058ca9db0edaedcb16480cc74b78ed06f0d1f54
+commit: f3d233daf011abbad2f6ebd0e545b42d2f378a4f [1917/2322] ALSA: pcm: Relax __free() variable declarations
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251219/202512190802.i4Jzbcsl-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512190802.i4Jzbcsl-lkp@intel.com/reproduce)
 
-On 18/12/2025 at 20:36, Dan Carpenter wrote:
-> On Thu, Dec 18, 2025 at 07:50:01PM +0100, Vincent Mailhol wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512190802.i4Jzbcsl-lkp@intel.com/
 
-(...)
+All errors (new ones prefixed by >>):
 
->> With this, remove gcc's -Wtype-limits. People who still want to catch
->> incorrect comparisons between unsigned integers and zero can now use
->> sparse instead.
->>
->> On a side note, clang also has a -Wtype-limits warning but:
->>
->>   * it is not enabled in the kernel at the moment because, contrary to
->>     gcc, clang did not include it under -Wextra.
->>
->>   * it does not warn if the code results from a macro expansion. So,
->>     if activated, it would not cause as much spam as gcc does.
->>
->>   * -Wtype-limits is split into four sub-warnings [3] meaning that if
->>     it were to be activated, we could select which one to keep.
->>
-> 
-> Sounds good.  I like your Sparse check.
-
-Does it mean I have your Reviewed-by?
-
-> Maybe we should enable the Sparse checking as well because it sounds
-> like they are doing a lot of things right.
-
-I am not sure to understand what do you mean by "enable the Sparse checking"?
-The new sparse check I introduced is on by default.
-
-> I think Smatch catches the
-> same bugs that Clang would but it would be good to have multiple
-> implementations.  The -Wtautological-unsigned-enum-zero-compare trips
-> people up because they aren't necessarily expecting enums to be
-> unsigned.
-
-I do not know enough about Smatch, I will let you judge on that one.
-
-
-Concerning clang, here are the statistics:
-
-	$ make -s LLVM=1 CFLAGS_KERNEL="-Wtype-limits" 2>&1 | grep -o '\[-W\S*\]' | sort | uniq -c
-	      2 [-Wtautological-type-limit-compare]
-	     15 [-Wtautological-unsigned-enum-zero-compare]$ make -s LLVM=1 CFLAGS_KERNEL="-Wtype-limits"
-
-(done on a linux v6.19-rc1 defconfig with clang v20.1.8)
-
-Not so many warnings, at least, less than what I would have thought!
-
--Wtautological-unsigned-char-zero-compare and
--Wtautological-unsigned-zero-compare gave zero findings. So those two
-can be enabled, I guess? I am still surprised that
--Wtautological-unsigned-zero-compare gives nothing. I would have
-expected some kind of false positives on that one. No sure if I missed
-something here.
+>> sound/core/pcm_native.c:3308:6: error: cannot jump from this asm goto statement to one of its possible targets
+           if (put_user(result, &_xfern->result))
+               ^
+   arch/riscv/include/asm/uaccess.h:403:3: note: expanded from macro 'put_user'
+                   __put_user((x), __p) :                          \
+                   ^
+   arch/riscv/include/asm/uaccess.h:376:2: note: expanded from macro '__put_user'
+           __put_user_error(__val, __gu_ptr, __pu_err);            \
+           ^
+   arch/riscv/include/asm/uaccess.h:340:2: note: expanded from macro '__put_user_error'
+           __put_user_nocheck(x, ptr, err_label);                  \
+           ^
+   arch/riscv/include/asm/uaccess.h:321:3: note: expanded from macro '__put_user_nocheck'
+                   __put_user_asm("sb", (x), __gu_ptr, label);     \
+                   ^
+   arch/riscv/include/asm/uaccess.h:282:2: note: expanded from macro '__put_user_asm'
+           asm goto(                                               \
+           ^
+   sound/core/pcm_native.c:3295:6: note: possible target of asm goto statement
+           if (put_user(0, &_xfern->result))
+               ^
+   arch/riscv/include/asm/uaccess.h:403:3: note: expanded from macro 'put_user'
+                   __put_user((x), __p) :                          \
+                   ^
+   arch/riscv/include/asm/uaccess.h:376:2: note: expanded from macro '__put_user'
+           __put_user_error(__val, __gu_ptr, __pu_err);            \
+           ^
+   arch/riscv/include/asm/uaccess.h:341:15: note: expanded from macro '__put_user_error'
+           break;                                                  \
+                                                                   ^
+   sound/core/pcm_native.c:3300:8: note: jump exits scope of variable with __attribute__((cleanup))
+           void *bufs __free(kfree) =
+                 ^
+   sound/core/pcm_native.c:3295:6: error: cannot jump from this asm goto statement to one of its possible targets
+           if (put_user(0, &_xfern->result))
+               ^
+   arch/riscv/include/asm/uaccess.h:403:3: note: expanded from macro 'put_user'
+                   __put_user((x), __p) :                          \
+                   ^
+   arch/riscv/include/asm/uaccess.h:376:2: note: expanded from macro '__put_user'
+           __put_user_error(__val, __gu_ptr, __pu_err);            \
+           ^
+   arch/riscv/include/asm/uaccess.h:340:2: note: expanded from macro '__put_user_error'
+           __put_user_nocheck(x, ptr, err_label);                  \
+           ^
+   arch/riscv/include/asm/uaccess.h:321:3: note: expanded from macro '__put_user_nocheck'
+                   __put_user_asm("sb", (x), __gu_ptr, label);     \
+                   ^
+   arch/riscv/include/asm/uaccess.h:282:2: note: expanded from macro '__put_user_asm'
+           asm goto(                                               \
+           ^
+   sound/core/pcm_native.c:3308:6: note: possible target of asm goto statement
+           if (put_user(result, &_xfern->result))
+               ^
+   arch/riscv/include/asm/uaccess.h:403:3: note: expanded from macro 'put_user'
+                   __put_user((x), __p) :                          \
+                   ^
+   arch/riscv/include/asm/uaccess.h:376:2: note: expanded from macro '__put_user'
+           __put_user_error(__val, __gu_ptr, __pu_err);            \
+           ^
+   arch/riscv/include/asm/uaccess.h:341:15: note: expanded from macro '__put_user_error'
+           break;                                                  \
+                                                                   ^
+   sound/core/pcm_native.c:3300:8: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           void *bufs __free(kfree) =
+                 ^
+   2 errors generated.
 
 
-The two -Wtautological-type-limit-compare are:
+vim +3308 sound/core/pcm_native.c
 
-	fs/libfs.c:1640:20: warning: result of comparison 'u64' (aka 'unsigned long long') > 18446744073709551615 is always false [-Wtautological-type-limit-compare]
-	 1640 |             (last_fs_page > (pgoff_t)(~0ULL))) {
-	      |              ~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-	1 warning generated.
-	block/ioctl.c:765:29: warning: result of comparison 'sector_t' (aka 'unsigned long long') > 18446744073709551615 is always false [-Wtautological-type-limit-compare]
-	  765 |                 if (bdev_nr_sectors(bdev) > ~0UL)
-	      |                     ~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~
-	1 warning generated.
+67616feda99e32 Takashi Iwai 2017-08-30  3283  
+67616feda99e32 Takashi Iwai 2017-08-30  3284  static int snd_pcm_xfern_frames_ioctl(struct snd_pcm_substream *substream,
+67616feda99e32 Takashi Iwai 2017-08-30  3285  				      struct snd_xfern __user *_xfern)
+67616feda99e32 Takashi Iwai 2017-08-30  3286  {
+67616feda99e32 Takashi Iwai 2017-08-30  3287  	struct snd_xfern xfern;
+67616feda99e32 Takashi Iwai 2017-08-30  3288  	struct snd_pcm_runtime *runtime = substream->runtime;
+67616feda99e32 Takashi Iwai 2017-08-30  3289  	snd_pcm_sframes_t result;
+67616feda99e32 Takashi Iwai 2017-08-30  3290  
+f0061c18c169f0 Takashi Iwai 2022-09-26  3291  	if (runtime->state == SNDRV_PCM_STATE_OPEN)
+67616feda99e32 Takashi Iwai 2017-08-30  3292  		return -EBADFD;
+67616feda99e32 Takashi Iwai 2017-08-30  3293  	if (runtime->channels > 128)
+67616feda99e32 Takashi Iwai 2017-08-30  3294  		return -EINVAL;
+67616feda99e32 Takashi Iwai 2017-08-30  3295  	if (put_user(0, &_xfern->result))
+67616feda99e32 Takashi Iwai 2017-08-30  3296  		return -EFAULT;
+67616feda99e32 Takashi Iwai 2017-08-30  3297  	if (copy_from_user(&xfern, _xfern, sizeof(xfern)))
+67616feda99e32 Takashi Iwai 2017-08-30  3298  		return -EFAULT;
+67616feda99e32 Takashi Iwai 2017-08-30  3299  
+f3d233daf011ab Takashi Iwai 2025-12-16  3300  	void *bufs __free(kfree) =
+f3d233daf011ab Takashi Iwai 2025-12-16  3301  		memdup_array_user(xfern.bufs, runtime->channels, sizeof(void *));
+67616feda99e32 Takashi Iwai 2017-08-30  3302  	if (IS_ERR(bufs))
+40a024b81d1cba Takashi Iwai 2024-09-02  3303  		return PTR_ERR(bufs);
+67616feda99e32 Takashi Iwai 2017-08-30  3304  	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+67616feda99e32 Takashi Iwai 2017-08-30  3305  		result = snd_pcm_lib_writev(substream, bufs, xfern.frames);
+67616feda99e32 Takashi Iwai 2017-08-30  3306  	else
+67616feda99e32 Takashi Iwai 2017-08-30  3307  		result = snd_pcm_lib_readv(substream, bufs, xfern.frames);
+ebe6976d3634a3 Al Viro      2020-03-19 @3308  	if (put_user(result, &_xfern->result))
+ebe6976d3634a3 Al Viro      2020-03-19  3309  		return -EFAULT;
+67616feda99e32 Takashi Iwai 2017-08-30  3310  	return result < 0 ? result : 0;
+67616feda99e32 Takashi Iwai 2017-08-30  3311  }
+67616feda99e32 Takashi Iwai 2017-08-30  3312  
 
-If I got it correctly, those checks are just meant for the case where
-unsigned long are 32 bits.
+:::::: The code at line 3308 was first introduced by commit
+:::::: ebe6976d3634a311367f72c2402f148ab9f23920 pcm_native: result of put_user() needs to be checked
 
-Because clang does not warn when the code comes from a macro
-expansion, a way to silent these would be to use:
+:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
+:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
 
-	(last_fs_page > type_max(pgoff_t))
-
-in fs/libfs.c and:
-
-	if (bdev_nr_sectors(bdev) > ULONG_MAX)
-
-in block/ioctl.c.
-
-Well, none of those findings were incorrect to begin with, but
-arguably, the code readability can be improved.
-
-So, I would say why not for -Wtautological-type-limit-compare.
-
-
-Concerning the -Wtautological-unsigned-enum-zero-compare, here is a
-representative finding:
-
-	drivers/video/hdmi.c:1099:20: warning: result of comparison of unsigned enum expression < 0 is always false [-Wtautological-unsigned-enum-zero-compare]
-	 1099 |         if (active_aspect < 0 || active_aspect > 0xf)
-	      |             ~~~~~~~~~~~~~ ^ ~
-
-(all the other 14 findings follow the same pattern).
-
-Here, the code just want to check that a value is in range. This is
-the same logic as gcc's -Wtype-limits: something we do *not* want.
-
-So -Wtautological-unsigned-enum-zero-compare will stay disabled.
-
-In conclusion, I agree that we could enable three of clang's
--Wtype-limits sub-warning. But this is not the scope of that series. I
-would rather prefer to have this as a separate series.
-
-
-Yours sincerely,
-Vincent Mailhol
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
