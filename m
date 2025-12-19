@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D3218FDAF;
-	Fri, 19 Dec 2025 22:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985911A23A0;
+	Fri, 19 Dec 2025 23:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766184044; cv=none; b=qmD04eOssYUBEoR5sXU00u33ErBkL+l8ikJF/RrIAiaZv+c7V8VIdV+z/m0KVtmn3HKM/X4iWV69hL3NG3RQcSdksh8PTY4sVYJ7ImTB+wsKnP/Q1heN1u1IMgY2lDwdHm9Zgv8KPPPY2N76kLobbdJD50b8ib0M3bjS6hQVDfw=
+	t=1766185699; cv=none; b=X7IgWrIJCFwSr81mEoB8s98ZoKfg2sVNisLaqu40/RpVLdBDAr+7cI0xsWnwroY3MaLcQ86oPN7hahvjQ65VbCdQXUL2aIwYRcBvXVqmFRQWWLU3lcPgwJ/ObmQBuPIgQmvdj3RyPf5XLGe+dZ1UeeqLk+UrS80w1om83wPiaR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766184044; c=relaxed/simple;
-	bh=uAEpBNv+CmgIxmDyHDHgY/r2XzHv2JsQOvxnxQ6j1fI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=h19Ce6YpYUb50H+Edc4WwLWJdYO28QbSCiiS7bsVk9EQ6bw+0YfzcAwef6+v6ahDyKCXqicVB2zIahN4gBLoybmgktdtnL47oBGq7Qt/sOyTA3K810MwOVGvd88b2QBnBsskMSz/+dvm9TPRNJK+wh90futFhOYuXYphtfdwI0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qi2gCD/z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766185699; c=relaxed/simple;
+	bh=tdOyM03s/jtraJEdSS4JdOUdLDcBDqG0Tljm9PeXS14=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZuQl1uRG0YnTPgSwPRVEeHUS7KV0DLTJ24QIr8OylCWFW6tMWNMhePkP3ro9y2r2aP30GslD2+69ZZnlmdVZcieAN7Xf7Z5JaoUXxBCM3rkj9e0OR+XzBeAcGbTkxQS4kBIvklF6J0obAqSXqcqaCO+TTegsJDIpxcSWWj8wOso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbcFOd8h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qi2gCD/z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18457C113D0;
-	Fri, 19 Dec 2025 22:40:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbcFOd8h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1F8C4CEF1;
+	Fri, 19 Dec 2025 23:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766184044;
-	bh=uAEpBNv+CmgIxmDyHDHgY/r2XzHv2JsQOvxnxQ6j1fI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Qi2gCD/zXBNO6PpRplvsyMGPz4YlZ4NQsZq6oJc4WREI1MKf9btW+c0LqUWho8zCy
-	 fMUJ9C7ItN8pdGW9Gg8DiDfbpfqgCcS0ceHQLNXiPQ1xDlDri08JV54M9xr8hrLRgk
-	 xbKpWZrLZMJaAP7JqFYbI0RPXwx7nswt3hlY7Sp99Ul9uCbLKS6kyqRnA0Mhpep8mN
-	 qgMibLS2l3Fk/tPA5vPv08KDPTLUA9HhCHBEIuCvJN1dU9uux0k8V0nSUmjz4OaiEC
-	 MubUbbeHUPFKXNiwdNWROxW4MWuMXgCraVGscMz47UftT+HOFKoj4U3Sz2V/nftcZL
-	 ibYGLe4brERxg==
-From: Vincent Mailhol <mailhol@kernel.org>
-Date: Fri, 19 Dec 2025 23:39:48 +0100
-Subject: [PATCH v2 4/4] minmax: remove useless cast in __is_nonneg()
+	s=k20201202; t=1766185698;
+	bh=tdOyM03s/jtraJEdSS4JdOUdLDcBDqG0Tljm9PeXS14=;
+	h=From:Date:Subject:To:Cc:From;
+	b=bbcFOd8htkE7S4BiJO+MThR/8vhNDfwopFI6Eu5KudZE7bpSrr7zSbZLTYxMdKvm3
+	 V+0NeHNPRkBRYyLiubpjAb66AnDGreh6qZHaTGdRq5AgD3dn6sYZc7UPRMEB4AtYb6
+	 DCHv9pEmLJYtMxlXGeKzHQIgc3N0AVTZDfqZd2tBN1pF75WtVxampDUfcaj3N9fTw5
+	 dsrK7Z7JlvnANiL9zo1t7knkEqrAbG9Gam+YdNRok2OpAe57ATfRBNb7sL3c4HuTMY
+	 KisrViE1oiRLqBS4SfRq6tUjOPrq1/wtsJIPYU8ZMVgJPscPLFJsPqdKcgF7S4ulO/
+	 Ui1HJHQ1QaXlQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 19 Dec 2025 16:08:08 -0700
+Subject: [PATCH] ASoC: rt1320: Change return type of rt1320_t0_load() to
+ void
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,106 +37,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251219-remove_wtype-limits-v2-4-2e92b3f566c5@kernel.org>
-References: <20251219-remove_wtype-limits-v2-0-2e92b3f566c5@kernel.org>
-In-Reply-To: <20251219-remove_wtype-limits-v2-0-2e92b3f566c5@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org, 
- linux-hardening@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3094; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=uAEpBNv+CmgIxmDyHDHgY/r2XzHv2JsQOvxnxQ6j1fI=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJmuVzxNZFtvnF3k4jDx27zFjimNTiyq3zXCrI4nRH1+V
- dqSvLm1YyILgxgXg6WYIsuyck5uhY5C77BDfy1h5rAygQyRFmlgAAIWBr7cxLxSIx0jPVNtQz1D
- Qx0gk4GLUwCm+qE0w1/pFp3T5387dN47sNlnk0aYYfO5KfZrjk1svKgoPkVqdfY1RoatvjXXS3i
- WnCzmPbUxuFEsZoJjz2mdlXX9B/btOBj4dRYnAA==
-X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
- fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+Message-Id: <20251219-rt1320-sdw-avoid-uninit-ret-v1-1-faa3e250ebc4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIANfaRWkC/yXMMQ7CMAwF0KtUnrFUBypRroIYQvMLZkiRnRakq
+ ncnwPiWt5LDFE6nZiXDoq5TrpBdQ8M95htYUzWFNnQSpGcrsg8te3pxXCZNPGfNWthQOMoRIyS
+ mrj9QHZ6GUd+//Xz52+frA0P5lrRtHzhMBuR/AAAA
+X-Change-ID: 20251219-rt1320-sdw-avoid-uninit-ret-a18efe1ad594
+To: Mark Brown <broonie@kernel.org>, Shuming Fan <shumingf@realtek.com>, 
+ Oder Chiou <oder_chiou@realtek.com>, Liam Girdwood <lgirdwood@gmail.com>
+Cc: linux-sound@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3632; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=tdOyM03s/jtraJEdSS4JdOUdLDcBDqG0Tljm9PeXS14=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJmut+5vvKRSVJ9806JMepr4O5bwiYc/Kh9zT19lkXd+V
+ u+U5YG6HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAizHYM/+xfNi+JLGK5ePxP
+ y6Okp8mKc4sf8rBfayrQPmthV3JztwLD/5rJXyvvKsxQb7/3a2biotIvgvL/ezbl5zIXub3avGD
+ Xe0YA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-The function like macro __is_nonneg() casts its argument to (long long)
-in an attempt to silence -Wtype-limits warnings on unsigned values.
+Clang warns (or errors with CONFIG_WERROR=y / W=e):
 
-But this workaround is incomplete as proven here:
+  sound/soc/codecs/rt1320-sdw.c:1387:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+   1387 |         if (!fw_ready) {
+        |             ^~~~~~~~~
+  sound/soc/codecs/rt1320-sdw.c:1421:9: note: uninitialized use occurs here
+   1421 |         return ret;
+        |                ^~~
+  sound/soc/codecs/rt1320-sdw.c:1387:2: note: remove the 'if' if its condition is always false
+   1387 |         if (!fw_ready) {
+        |         ^~~~~~~~~~~~~~~~
+   1388 |                 dev_warn(dev, "%s, DSP FW is NOT ready\n", __func__);
+        |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1389 |                 goto _exit_;
+        |                 ~~~~~~~~~~~~
+   1390 |         }
+        |         ~
+  sound/soc/codecs/rt1320-sdw.c:1366:9: note: initialize the variable 'ret' to silence this warning
+   1366 |         int ret;
+        |                ^
+        |                 = 0
 
-  $ cat foo.c
-  #include <linux/minmax.h>
+The return value of rt1320_t0_load() is never actually used, so it can
+just be eliminated altogether by returning void, clearing up the
+warning.
 
-  int foo(unsigned int a)
-  {
-  	return __is_nonneg(a);
-  }
-  $ make CFLAGS_KERNEL="-Wtype-limits" foo.o
-    CALL    scripts/checksyscalls.sh
-    DESCEND objtool
-    INSTALL libsubcmd_headers
-    CC      foo.o
-  foo.c: In function 'foo':
-  ./include/linux/minmax.h:68:57: warning: comparison is always true due to limited range of data type [-Wtype-limits]
-     68 | #define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
-        |                                                         ^~
-  ./include/linux/compiler.h:350:50: note: in definition of macro 'statically_true'
-    350 | #define statically_true(x) (__builtin_constant_p(x) && (x))
-        |                                                  ^
-  foo.c:5:16: note: in expansion of macro '__is_nonneg'
-      5 |         return __is_nonneg(a);
-        |                ^~~~~~~~~~~
-  ./include/linux/minmax.h:68:57: warning: comparison is always true due to limited range of data type [-Wtype-limits]
-     68 | #define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
-        |                                                         ^~
-  ./include/linux/compiler.h:350:57: note: in definition of macro 'statically_true'
-    350 | #define statically_true(x) (__builtin_constant_p(x) && (x))
-        |                                                         ^
-  foo.c:5:16: note: in expansion of macro '__is_nonneg'
-      5 |         return __is_nonneg(a);
-        |                ^~~~~~~~~~~
-
-And because -Wtype-limits is now globally disabled, such a workaround
-now becomes useless. Remove the __is_nonneg()'s cast and its related
-comment.
-
-Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+Fixes: da1682d5e8b5 ("ASoC: rt1320: support calibration and temperature/r0 loading")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512191711.wY6XU796-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-Changelog:
+ sound/soc/codecs/rt1320-sdw.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-  v1 -> v2: new patch
+diff --git a/sound/soc/codecs/rt1320-sdw.c b/sound/soc/codecs/rt1320-sdw.c
+index 9447e742c672..85560455c3e3 100644
+--- a/sound/soc/codecs/rt1320-sdw.c
++++ b/sound/soc/codecs/rt1320-sdw.c
+@@ -1357,13 +1357,12 @@ static void rt1320_vab_preset(struct rt1320_sdw_priv *rt1320)
+ 	}
+ }
+ 
+-static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, unsigned int r_t0)
++static void rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, unsigned int r_t0)
+ {
+ 	struct device *dev = &rt1320->sdw_slave->dev;
+ 	unsigned int factor = (1 << 22), fw_ready;
+ 	int l_t0_data[38], r_t0_data[38];
+ 	unsigned int fw_status_addr;
+-	int ret;
+ 
+ 	switch (rt1320->dev_id) {
+ 	case RT1320_DEV_ID:
+@@ -1374,7 +1373,7 @@ static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, uns
+ 		break;
+ 	default:
+ 		dev_err(dev, "%s: Unknown device ID %d\n", __func__, rt1320->dev_id);
+-		return -EINVAL;
++		return;
+ 	}
+ 
+ 	regmap_write(rt1320->regmap,
+@@ -1399,8 +1398,7 @@ static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, uns
+ 
+ 	rt1320_fw_param_protocol(rt1320, RT1320_SET_PARAM, 3, &l_t0_data[0], sizeof(l_t0_data));
+ 	rt1320_fw_param_protocol(rt1320, RT1320_SET_PARAM, 4, &r_t0_data[0], sizeof(r_t0_data));
+-	ret = rt1320_check_fw_ready(rt1320);
+-	if (ret < 0)
++	if (rt1320_check_fw_ready(rt1320) < 0)
+ 		dev_err(dev, "%s: Failed to set FW param 3,4!\n", __func__);
+ 
+ 	rt1320->temp_l_calib = l_t0;
+@@ -1417,8 +1415,6 @@ static int rt1320_t0_load(struct rt1320_sdw_priv *rt1320, unsigned int l_t0, uns
+ 			SDW_SDCA_CTL(FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23,
+ 				RT1320_SDCA_CTL_REQ_POWER_STATE, 0), 0x03);
+ 	rt1320_pde_transition_delay(rt1320, FUNC_NUM_AMP, RT1320_SDCA_ENT_PDE23, 0x03);
+-
+-	return ret;
+ }
+ 
+ static int rt1320_rae_load(struct rt1320_sdw_priv *rt1320)
+
 ---
- include/linux/minmax.h | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+base-commit: a54fd483d0d5f5f620c48a29c98b013e59009a09
+change-id: 20251219-rt1320-sdw-avoid-uninit-ret-a18efe1ad594
 
-diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index a0158db54a04..3e2e3e539ba1 100644
---- a/include/linux/minmax.h
-+++ b/include/linux/minmax.h
-@@ -52,9 +52,6 @@
- /*
-  * Check whether a signed value is always non-negative.
-  *
-- * A cast is needed to avoid any warnings from values that aren't signed
-- * integer types (in which case the result doesn't matter).
-- *
-  * On 64-bit any integer or pointer type can safely be cast to 'long long'.
-  * But on 32-bit we need to avoid warnings about casting pointers to integers
-  * of different sizes without truncating 64-bit values so 'long' or 'long long'
-@@ -65,7 +62,7 @@
-  * but they are handled by the !is_signed_type() case).
-  */
- #if __SIZEOF_POINTER__ == __SIZEOF_LONG_LONG__
--#define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
-+#define __is_nonneg(ux) statically_true((ux) >= 0)
- #else
- #define __is_nonneg(ux) statically_true( \
- 	(typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L)))(ux) >= 0)
-
--- 
-2.51.2
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
