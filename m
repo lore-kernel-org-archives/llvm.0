@@ -1,152 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C252D061D;
-	Fri, 19 Dec 2025 10:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB107324B1D
+	for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 11:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766138852; cv=none; b=XDqZDo7o6U97uw5u4bjwSQpW4CvKXvJcsWsudN+8xcgywseDey3lw1ZSgubeg6mG1U67y7JhhSdS3H1uzl8krp6HS3I2ofYktgSZr18W08mkX7u1uDR3XMGzOqE2NBzsfOaReHnFDHPI5QFwVXoU6ACLTshv4cqGQClbEVQPy6s=
+	t=1766144705; cv=none; b=O4IlLY050a6qeG/0AyzBdb9qTDqa+4+qB58/mEMADnoH6lvfC+F0JPXf4Y7tL9XqeZYKNXq+ikfHzWV7qsHs8MMVnOzQJCal+/kdU4JLOJ5qp0vLrsNchVRCV7I1AphI+odhespGstAwWNZfpnLHoSKZ19QnVtgZbWuQsWKy0R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766138852; c=relaxed/simple;
-	bh=vHbCNHPepXvcPrXcbr6Mra7Oz2w4onzdgVlqRgM1Slc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A34/moLwn3NzNF7xsXIpnBxpsj/5nefrnW7M/8/Nf8cIaUdstdfaA91gkySrqZUiZuma5PAie70SuQ8zU265j/rdJq5v+Cl59GuAHD+6DWWTDeUSW8r2bic8Q8KO/sM4V/vZbBnm0KwPqdom6bD5yApflh/nl0GdBtdwB4iuVeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qj7aBXzL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766144705; c=relaxed/simple;
+	bh=ID4bQttFA8zqpsS/5nate7mn+oSQSb0sOs7DFgvHVT4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=OMqCEB6EggyPe2Bp+d06MyikTkAZTU8dcXEpuIKCujf3kITTAc4DFD8ma46YDeTKHxPSP7RfDcvaFLM/7UCrISIjiq8O6gaTVinHFBi7tLPqCtAXPZCB2n1yKeEfaRTw13/ZCVSBWMMMgBHbHwQu1++zc+g+EMczh3yUwaBWuQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DYslSJJW; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qj7aBXzL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCC2C4CEF1;
-	Fri, 19 Dec 2025 10:07:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766138851;
-	bh=vHbCNHPepXvcPrXcbr6Mra7Oz2w4onzdgVlqRgM1Slc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qj7aBXzLy0hlGl7Fkhne8ygw2aEHFon8Q0EcKNyYNZ2nSfUPqVVzse2Ur0Q6HZXwa
-	 cCRUyu6YXinpK8fM5vX6rKsCuHj0NKqAbOM/SvsKLkwvSmtR/OlaGyqP9x5Gvh1Ues
-	 hw6ADrBpnv2a6fZ7S/LaKVX9yZaxb+L7jUPIf7zYWI2ov5joVezIylPTq42qUDNi8C
-	 M+BIwXFPwF+AnkRUvoBuU4lFGQpwXSzCQy3ho3Naj4imsWGneO5bEpdDW0X4O4xkI6
-	 rjtjOBsOP4maBg7SIoJwg3RqE6gj8EPrwihFCyk5h+/fUz5zIUgd2u9lIR1cUX0io8
-	 8z3Csoh1CvgwQ==
-Date: Fri, 19 Dec 2025 15:37:20 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-pci@vger.kernel.org, 
-	Frank Li <Frank.Li@nxp.com>, Shawn Lin <shawn.lin@rock-chips.com>
-Subject: Re: [pci:controller/dwc 8/8]
- drivers/pci/controller/dwc/pcie-designware-host.c:1175:6: warning: variable
- 'ret' is used uninitialized whenever 'if' condition is true
-Message-ID: <3xh2gtngbn5ys5qkxnzfdbtolt3pw6clsmulv7qihgi35cmslk@ix2fadma65vk>
-References: <202512191339.583iyg1a-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DYslSJJW"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477964c22e0so12865775e9.0
+        for <llvm@lists.linux.dev>; Fri, 19 Dec 2025 03:45:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1766144702; x=1766749502; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BA99OQkf8fASdQggxqsaHMpRUroLp5LCxZSxzPBRDSg=;
+        b=DYslSJJWdB+BSuSTSWDcNybvKS2mgLfakFcs6lW84ZdIL0bHTAh81bngMcwaEfsjLz
+         +cTz8UJKT7proBYgKyV/49m3B0R9yqwaS9yKuE0Q5rKrEKP0xmeTyFPFzQjYnPorQ52K
+         Nn3+wt1IbIo1V8R8fHeMLaZ/7n5hOvUXaisOwmsi/Bmui1NM9f/HT16fkI+ckb87jCD2
+         K4ugYNNQXjuT0KstpXQNLLkQ13PUayAInsy9W6EDnofP13Z6+hj/Dq8fCKlbw0QC+Phf
+         nmd1YN+Rua2kxftJ2OvFGmLr42YYE03MYbLtg5Wo3T91yN8MfYonU2BAW8mxDgpO5VnN
+         yAhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766144702; x=1766749502;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BA99OQkf8fASdQggxqsaHMpRUroLp5LCxZSxzPBRDSg=;
+        b=eU3HP7boa7Y1XhwFEPE58NlWpV/2G6hIonhczTc/gdQGjKD6aZk7Tc/X7ExfpWhqBv
+         vGnMHYJKhsOjrYYheEgGmky/CvdDbO0hbhY0JiT/8gjHSIDx7+ZAs/jGnHE+JGBhUejA
+         hIGGEvlHA76xd11fAfyXLxkZzCA5Tg5RCHz5tpZgJAi4LDsnpUfrdspUq1X7esutGJPh
+         Sx6CqkX0XXFsdG5181BdDZpTW/IZ2sXdeuGkQ8kqX4KBS8ndT62CPDnWEgaq6fb41bVg
+         qTxP6OkTose5EovRJGGLxfjs3+x6ccyqs3TPtEvpEYiXIo9FSV70+2ytKUSZTVbaJ6Dm
+         zr3w==
+X-Forwarded-Encrypted: i=1; AJvYcCWBMwRFgub5YlkVxsmXBupkYx442FbKuqumMEFpmxqoQZofJZ1FIoZz7gdgdaKiSVLijmsX@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPpKmxOcPbTHOERbP7sRBPJwOrXHc9M7HxI98wv4kQrNbrtj4i
+	uY8YboQsciOq7LEY+osIxSPjx759cpVfGD9jO6P8jK/aFWrlNgcq8b4TTSdrXpvr52hdKVHCsRl
+	ReR55j8LazwTjqQ==
+X-Google-Smtp-Source: AGHT+IGtc7uhO57hf3FfKwyr39SXu+GjbYT//uhiOsPmrmuqZlo5zaUrtT9fGuX38gwDNjbsBjrG15h9xjaYqw==
+X-Received: from wmik22.prod.google.com ([2002:a7b:c416:0:b0:47b:e2d9:2e56])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:4746:b0:477:9fa0:7495 with SMTP id 5b1f17b1804b1-47d18be144fmr25540095e9.14.1766144702311;
+ Fri, 19 Dec 2025 03:45:02 -0800 (PST)
+Date: Fri, 19 Dec 2025 11:45:01 +0000
+In-Reply-To: <20251218092439.GL3707891@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202512191339.583iyg1a-lkp@intel.com>
+Mime-Version: 1.0
+References: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
+ <20251216-gcov-inline-noinstr-v3-1-10244d154451@google.com>
+ <20251216130155.GD3707891@noisy.programming.kicks-ass.net>
+ <DF0JIYFQGFCP.9RDI8V58PFNH@google.com> <20251218092439.GL3707891@noisy.programming.kicks-ass.net>
+X-Mailer: aerc 0.21.0
+Message-ID: <DF261MXQUYYU.130N0WZE4DP4U@google.com>
+Subject: Re: [PATCH v3 1/3] kasan: mark !__SANITIZE_ADDRESS__ stubs __always_inline
+From: Brendan Jackman <jackmanb@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Brendan Jackman <jackmanb@google.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Marco Elver <elver@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, <kasan-dev@googlegroups.com>, 
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Dec 19, 2025 at 01:15:28PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/dwc
-> head:   c4a86e6600fa082d6646044fcce2183ad5e52283
-> commit: c4a86e6600fa082d6646044fcce2183ad5e52283 [8/8] PCI: dwc: Skip PME_Turn_Off broadcast and L2/L3 transition during suspend if link is not up
-> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251219/202512191339.583iyg1a-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251219/202512191339.583iyg1a-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512191339.583iyg1a-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/pci/controller/dwc/pcie-designware-host.c:1175:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->     1175 |         if (!dw_pcie_link_up(pci))
->          |             ^~~~~~~~~~~~~~~~~~~~~
->    drivers/pci/controller/dwc/pcie-designware-host.c:1218:9: note: uninitialized use occurs here
->     1218 |         return ret;
->          |                ^~~
->    drivers/pci/controller/dwc/pcie-designware-host.c:1175:2: note: remove the 'if' if its condition is always false
->     1175 |         if (!dw_pcie_link_up(pci))
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
->     1176 |                 goto stop_link;
->          |                 ~~~~~~~~~~~~~~
->    drivers/pci/controller/dwc/pcie-designware-host.c:1173:9: note: initialize the variable 'ret' to silence this warning
->     1173 |         int ret;
->          |                ^
->          |                 = 0
+>> 
+>> So in the meantime what's the cleanest fix? Going straight to the arch_*
+>> calls from SEV seems pretty yucky in its own right.
+>
+> This is what I would do (and have done in the past):
+>
+>  14d3b376b6c3 ("x86/entry, cpumask: Provide non-instrumented variant of cpu_is_offline()")
+>  f5c54f77b07b ("cpumask: Add a x86-specific cpumask_clear_cpu() helper")
 
-Ammended the commit with the fix.
+OK, let's do it this way then.
 
-- Mani
 
->    1 warning generated.
-> 
-> 
-> vim +1175 drivers/pci/controller/dwc/pcie-designware-host.c
-> 
->   1168	
->   1169	int dw_pcie_suspend_noirq(struct dw_pcie *pci)
->   1170	{
->   1171		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->   1172		u32 val;
->   1173		int ret;
->   1174	
-> > 1175		if (!dw_pcie_link_up(pci))
->   1176			goto stop_link;
->   1177	
->   1178		/*
->   1179		 * If L1SS is supported, then do not put the link into L2 as some
->   1180		 * devices such as NVMe expect low resume latency.
->   1181		 */
->   1182		if (dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKCTL) & PCI_EXP_LNKCTL_ASPM_L1)
->   1183			return 0;
->   1184	
->   1185		if (pci->pp.ops->pme_turn_off) {
->   1186			pci->pp.ops->pme_turn_off(&pci->pp);
->   1187		} else {
->   1188			ret = dw_pcie_pme_turn_off(pci);
->   1189			if (ret)
->   1190				return ret;
->   1191		}
->   1192	
->   1193		ret = read_poll_timeout(dw_pcie_get_ltssm, val,
->   1194					val == DW_PCIE_LTSSM_L2_IDLE ||
->   1195					val <= DW_PCIE_LTSSM_DETECT_WAIT,
->   1196					PCIE_PME_TO_L2_TIMEOUT_US/10,
->   1197					PCIE_PME_TO_L2_TIMEOUT_US, false, pci);
->   1198		if (ret) {
->   1199			/* Only log message when LTSSM isn't in DETECT or POLL */
->   1200			dev_err(pci->dev, "Timeout waiting for L2 entry! LTSSM: 0x%x\n", val);
->   1201			return ret;
->   1202		}
->   1203	
->   1204		/*
->   1205		 * Per PCIe r6.0, sec 5.3.3.2.1, software should wait at least
->   1206		 * 100ns after L2/L3 Ready before turning off refclock and
->   1207		 * main power. This is harmless when no endpoint is connected.
->   1208		 */
->   1209		udelay(1);
->   1210	
->   1211	stop_link:
->   1212		dw_pcie_stop_link(pci);
->   1213		if (pci->pp.ops->deinit)
->   1214			pci->pp.ops->deinit(&pci->pp);
->   1215	
->   1216		pci->suspended = true;
->   1217	
->   1218		return ret;
->   1219	}
->   1220	EXPORT_SYMBOL_GPL(dw_pcie_suspend_noirq);
->   1221	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
+>> > For the short term, we could avoid this by using arch___set_bit()
+>
+> arch_set_bit(), right?
 
--- 
-மணிவண்ணன் சதாசிவம்
+I don't think so. Currently the GHCB accessors ar using __set_bit() i.e.
+the non-atomic version. Am I missing something?
