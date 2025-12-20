@@ -1,73 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4C52222C4;
-	Sat, 20 Dec 2025 15:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676CB2857EA;
+	Sat, 20 Dec 2025 15:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766246246; cv=none; b=OmDeRR/WnhpQAg6VfXkKS2GLkEcWoZeLMKfodk9/0NhtcClvDbu7EFXCCsgB2WBdzyyH0MhoJ4esvv47NfxXzvPX2bvQbhwNIp8Wq51iOcseiAFfjmwUQm9Wx3JrWkG4Mbwkz1IrHRsJObcw0CZWzpHZso6AztykFUXf4VNo7xo=
+	t=1766246247; cv=none; b=OhRf2yNjBraGQ7nWi2we2QX9a/xM5v72+VeyvOrNGYV5KE5dI1xgzkk42h9vq7/dXSIkK6LAInaExsSZx83ail/ulY8nQwXjyx4msv+BML6Oh4n7NTmXIZKFy02bTu7avJ6sxCTHTQ5x6gZQxQECVtIUGO8QucgIwWlBxb40MQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766246246; c=relaxed/simple;
-	bh=mvgKR5eBPfsudG+7ydx/1/S0torXhJ+RG9LyOYP6tlY=;
+	s=arc-20240116; t=1766246247; c=relaxed/simple;
+	bh=jA5bxh+GRkZj7og+mtLesOInt0AGzfsQjOpXAMZyscQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qy+FRc0+5+/0ruF1GkSHoJsdO/HtIRmPnm+HNU28sn3Tx1R50ERpfa3ZlFCAIrJ0P5DNZXGcMEDfXJEziW+MkcG7f6uNtPVk01CXRBQd9bVcV2Lz9u+1mwl+CLnfPuE1tfmOu4FmsP5kJTyFFKcTFHuU6ipxkDh/UPBTnzxQmJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NO0H0a5M; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=EbXmxS3TTEQ6Yk0CPIkxR2EiTKxf+KGWQ2rz6OffLiaw60ntEKc7mqRHRqFXSpAbJiEODcCPcuMYjlZu9RCYTSIokuNQCn581lk6MFR99NICTAZ+JRFlYBMPetr3EQV3bb1GhF6XY2gihWUDP90GF9vBqWzW61FVxoajh3BHlI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWygMQ4G; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NO0H0a5M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWygMQ4G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766246245; x=1797782245;
+  t=1766246246; x=1797782246;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=mvgKR5eBPfsudG+7ydx/1/S0torXhJ+RG9LyOYP6tlY=;
-  b=NO0H0a5MsYr0Jer2knJB/bNMZRWdTefJ5sGLsjWkzVgxjqi3DhU88HrO
-   IFmdj2YwPItgBFhYa2FZUxdV7P4fxE86Flod9E3SuYG8/EktIT3DwcaSC
-   1SNcCRWMMJsSEuGZay4U/LMilDxYYdaY+3Wq+nIaT8kwl+tMUtYmXFq7y
-   RnmAOhF/GBVpAlOWFroEcRlDhwPvZCrvwqXHjD86gke1+Wm4HqpgigQzA
-   FfHNwja7NOZdFQTk/FosZc0dMpf4qBvSjQfejHSCxebb+MdZnb/y3EU03
-   ETPm2iqjz7sDCBFPfJJLdL/FH9Qla3U1Z3Dln18mkFbnqnfA/aQP3YaJi
-   w==;
-X-CSE-ConnectionGUID: LHdpQFW5RX6C4LxPNURgkw==
-X-CSE-MsgGUID: STSwLqyDSBqD1riUx1Xdlg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="70748106"
+  bh=jA5bxh+GRkZj7og+mtLesOInt0AGzfsQjOpXAMZyscQ=;
+  b=FWygMQ4Gt9PeBPpEI07adlgV87Ys2JGyZYg9nl0BMaQbsWen5fuWNBN9
+   uvQQQs2C1wQ09x8ofaiGjB1eCjVhYyRMnChOINm/l1WzadCae2OzhQ9WR
+   joPEJ3yo4zazC6QnwjSz1h+ryY/f3NwJh7IvXHUtnn3ryTOT8LhMYruz3
+   LDWE0PGekOwwmAtpkj0ckkw8QgxU08U6FjOpDGWq2eRCmbnvbR07gZRLy
+   +BwIbT+QoOj004naWI4fKgKj83mpJ8/2wRS02JYfNuspheMTsMXknmSos
+   HS2KL1pXEdRLKKNJHzI7PhyJE1SzrAeU1QzeuV+MH6Bdfxhz4PG528sER
+   A==;
+X-CSE-ConnectionGUID: cQS3Yf4mTpWdchvUxCQOCA==
+X-CSE-MsgGUID: tx081292QxuMlpG3dsjhbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="72037341"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="70748106"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 07:57:24 -0800
-X-CSE-ConnectionGUID: OK5FWqYtSzGM3+TRRKERfw==
-X-CSE-MsgGUID: UyYosMaJTDaoOZl/8+B6Nw==
+   d="scan'208";a="72037341"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 07:57:23 -0800
+X-CSE-ConnectionGUID: Sfi4MiTqTr+Jd97WSTFK8Q==
+X-CSE-MsgGUID: +aoLJ/eSQkC3mLn3L03z8Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="199642886"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 20 Dec 2025 07:57:20 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 20 Dec 2025 07:57:20 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vWzKX-000000004nl-31dx;
-	Sat, 20 Dec 2025 15:57:17 +0000
-Date: Sat, 20 Dec 2025 23:57:06 +0800
+	id 1vWzKY-000000004nu-2aof;
+	Sat, 20 Dec 2025 15:57:18 +0000
+Date: Sat, 20 Dec 2025 23:57:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hou Tao <houtao@huaweicloud.com>, linux-kernel@vger.kernel.org
+To: Brandon Brnich <b-brnich@ti.com>, Nas Chung <nas.chung@chipsnmedia.com>,
+	Jackson Lee <jackson.lee@chipsnmedia.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, linux-mm@kvack.org,
-	linux-nvme@lists.infradead.org, Bjorn Helgaas <helgaas@kernel.org>,
-	Logan Gunthorpe <logang@deltatee.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Tejun Heo <tj@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	houtao1@huawei.com
-Subject: Re: [PATCH 03/13] kernfs: add support for get_unmapped_area callback
-Message-ID: <202512202338.qFqw6FI8-lkp@intel.com>
-References: <20251220040446.274991-4-houtao@huaweicloud.com>
+	linux-media@vger.kernel.org, Darren Etheridge <detheridge@ti.com>,
+	Brandon Brnich <b-brnich@ti.com>
+Subject: Re: [PATCH v2] media: chips-media: wave5: Fix Potential Probe
+ Resource Leak
+Message-ID: <202512202300.9OkWzU1c-lkp@intel.com>
+References: <20251216213413.2799499-1-b-brnich@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,80 +67,213 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251220040446.274991-4-houtao@huaweicloud.com>
+In-Reply-To: <20251216213413.2799499-1-b-brnich@ti.com>
 
-Hi Hou,
+Hi Brandon,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus akpm-mm/mm-everything linus/master v6.19-rc1 next-20251219]
-[cannot apply to pci/next pci/for-linus]
+[auto build test ERROR on linuxtv-media-pending/master]
+[also build test ERROR on media-tree/master linus/master v6.19-rc1 next-20251219]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hou-Tao/PCI-P2PDMA-Release-the-per-cpu-ref-of-pgmap-when-vm_insert_page-fails/20251220-121804
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20251220040446.274991-4-houtao%40huaweicloud.com
-patch subject: [PATCH 03/13] kernfs: add support for get_unmapped_area callback
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251220/202512202338.qFqw6FI8-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b324c9f4fa112d61a553bf489b5f4f7ceea05ea8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202338.qFqw6FI8-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Brandon-Brnich/media-chips-media-wave5-Fix-Potential-Probe-Resource-Leak/20251217-053600
+base:   https://git.linuxtv.org/media-ci/media-pending.git master
+patch link:    https://lore.kernel.org/r/20251216213413.2799499-1-b-brnich%40ti.com
+patch subject: [PATCH v2] media: chips-media: wave5: Fix Potential Probe Resource Leak
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251220/202512202300.9OkWzU1c-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202300.9OkWzU1c-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512202338.qFqw6FI8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202300.9OkWzU1c-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/kernfs/file.c:480:9: error: call to undeclared function 'mm_get_unmapped_area'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     480 |         addr = mm_get_unmapped_area(file, uaddr, len, pgoff, flags);
-         |                ^
-   fs/kernfs/file.c:480:9: note: did you mean '__get_unmapped_area'?
-   include/linux/mm.h:3671:1: note: '__get_unmapped_area' declared here
-    3671 | __get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
-         | ^
-   1 error generated.
+>> drivers/media/platform/chips-media/wave5/wave5-vpu.c:344:11: error: no member named 'irq_thread' in 'struct vpu_device'
+     344 |         if (dev->irq_thread) {
+         |             ~~~  ^
+   drivers/media/platform/chips-media/wave5/wave5-vpu.c:345:21: error: no member named 'irq_thread' in 'struct vpu_device'
+     345 |                 kthread_stop(dev->irq_thread);
+         |                              ~~~  ^
+>> drivers/media/platform/chips-media/wave5/wave5-vpu.c:346:12: error: no member named 'irq_sem' in 'struct vpu_device'
+     346 |                 up(&dev->irq_sem);
+         |                     ~~~  ^
+   drivers/media/platform/chips-media/wave5/wave5-vpu.c:347:8: error: no member named 'irq_thread' in 'struct vpu_device'
+     347 |                 dev->irq_thread = NULL;
+         |                 ~~~  ^
+   4 errors generated.
 
 
-vim +/mm_get_unmapped_area +480 fs/kernfs/file.c
+vim +344 drivers/media/platform/chips-media/wave5/wave5-vpu.c
 
-   456	
-   457	static unsigned long kernfs_get_unmapped_area(struct file *file, unsigned long uaddr,
-   458						      unsigned long len, unsigned long pgoff,
-   459						      unsigned long flags)
-   460	{
-   461		struct kernfs_open_file *of = kernfs_of(file);
-   462		const struct kernfs_ops *ops;
-   463		long addr;
-   464	
-   465		if (!(of->kn->flags & KERNFS_HAS_MMAP))
-   466			return -ENODEV;
-   467	
-   468		mutex_lock(&of->mutex);
-   469	
-   470		addr = -ENODEV;
-   471		if (!kernfs_get_active_of(of))
-   472			goto out_unlock;
-   473	
-   474		ops = kernfs_ops(of->kn);
-   475		if (ops->get_unmapped_area) {
-   476			addr = ops->get_unmapped_area(of, uaddr, len, pgoff, flags);
-   477			if (!IS_ERR_VALUE(addr) || addr != -EOPNOTSUPP)
-   478				goto out_put;
-   479		}
- > 480		addr = mm_get_unmapped_area(file, uaddr, len, pgoff, flags);
-   481	
-   482	out_put:
-   483		kernfs_put_active_of(of);
-   484	out_unlock:
-   485		mutex_unlock(&of->mutex);
-   486	
-   487		return addr;
-   488	}
-   489	
+   195	
+   196	static int wave5_vpu_probe(struct platform_device *pdev)
+   197	{
+   198		int ret;
+   199		struct vpu_device *dev;
+   200		const struct wave5_match_data *match_data;
+   201		u32 fw_revision;
+   202	
+   203		match_data = device_get_match_data(&pdev->dev);
+   204		if (!match_data) {
+   205			dev_err(&pdev->dev, "missing device match data\n");
+   206			return -EINVAL;
+   207		}
+   208	
+   209		/* physical addresses limited to 32 bits */
+   210		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+   211		if (ret) {
+   212			dev_err(&pdev->dev, "Failed to set DMA mask: %d\n", ret);
+   213			return ret;
+   214		}
+   215	
+   216		dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+   217		if (!dev)
+   218			return -ENOMEM;
+   219	
+   220		dev->vdb_register = devm_platform_ioremap_resource(pdev, 0);
+   221		if (IS_ERR(dev->vdb_register))
+   222			return PTR_ERR(dev->vdb_register);
+   223		ida_init(&dev->inst_ida);
+   224	
+   225		mutex_init(&dev->dev_lock);
+   226		mutex_init(&dev->hw_lock);
+   227		dev_set_drvdata(&pdev->dev, dev);
+   228		dev->dev = &pdev->dev;
+   229	
+   230		dev->resets = devm_reset_control_array_get_optional_exclusive(&pdev->dev);
+   231		if (IS_ERR(dev->resets)) {
+   232			return dev_err_probe(&pdev->dev, PTR_ERR(dev->resets),
+   233					     "Failed to get reset control\n");
+   234		}
+   235	
+   236		ret = reset_control_deassert(dev->resets);
+   237		if (ret)
+   238			return dev_err_probe(&pdev->dev, ret, "Failed to deassert resets\n");
+   239	
+   240		ret = devm_clk_bulk_get_all(&pdev->dev, &dev->clks);
+   241	
+   242		/* continue without clock, assume externally managed */
+   243		if (ret < 0) {
+   244			dev_warn(&pdev->dev, "Getting clocks, fail: %d\n", ret);
+   245			ret = 0;
+   246		}
+   247		dev->num_clks = ret;
+   248	
+   249		ret = clk_bulk_prepare_enable(dev->num_clks, dev->clks);
+   250		if (ret) {
+   251			dev_err(&pdev->dev, "Enabling clocks, fail: %d\n", ret);
+   252			goto err_reset_assert;
+   253		}
+   254	
+   255		dev->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
+   256		if (!dev->sram_pool)
+   257			dev_warn(&pdev->dev, "sram node not found\n");
+   258	
+   259		dev->sram_size = match_data->sram_size;
+   260	
+   261		dev->product_code = wave5_vdi_read_register(dev, VPU_PRODUCT_CODE_REGISTER);
+   262		ret = wave5_vdi_init(&pdev->dev);
+   263		if (ret < 0) {
+   264			dev_err(&pdev->dev, "wave5_vdi_init, fail: %d\n", ret);
+   265			goto err_clk_dis;
+   266		}
+   267		dev->product = wave5_vpu_get_product_id(dev);
+   268	
+   269		dev->irq = platform_get_irq(pdev, 0);
+   270		if (dev->irq < 0) {
+   271			dev_err(&pdev->dev, "failed to get irq resource, falling back to polling\n");
+   272			hrtimer_setup(&dev->hrtimer, &wave5_vpu_timer_callback, CLOCK_MONOTONIC,
+   273				      HRTIMER_MODE_REL_PINNED);
+   274			dev->worker = kthread_run_worker(0, "vpu_irq_thread");
+   275			if (IS_ERR(dev->worker)) {
+   276				dev_err(&pdev->dev, "failed to create vpu irq worker\n");
+   277				ret = PTR_ERR(dev->worker);
+   278				goto err_vdi_release;
+   279			}
+   280			dev->vpu_poll_interval = vpu_poll_interval;
+   281			kthread_init_work(&dev->work, wave5_vpu_irq_work_fn);
+   282		} else {
+   283			ret = devm_request_threaded_irq(&pdev->dev, dev->irq, NULL,
+   284							wave5_vpu_irq_thread, IRQF_ONESHOT, "vpu_irq", dev);
+   285			if (ret) {
+   286				dev_err(&pdev->dev, "Register interrupt handler, fail: %d\n", ret);
+   287				goto err_enc_unreg;
+   288			}
+   289		}
+   290	
+   291		INIT_LIST_HEAD(&dev->instances);
+   292		ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
+   293		if (ret) {
+   294			dev_err(&pdev->dev, "v4l2_device_register, fail: %d\n", ret);
+   295			goto err_irq_release;
+   296		}
+   297	
+   298		if (match_data->flags & WAVE5_IS_DEC) {
+   299			ret = wave5_vpu_dec_register_device(dev);
+   300			if (ret) {
+   301				dev_err(&pdev->dev, "wave5_vpu_dec_register_device, fail: %d\n", ret);
+   302				goto err_v4l2_unregister;
+   303			}
+   304		}
+   305		if (match_data->flags & WAVE5_IS_ENC) {
+   306			ret = wave5_vpu_enc_register_device(dev);
+   307			if (ret) {
+   308				dev_err(&pdev->dev, "wave5_vpu_enc_register_device, fail: %d\n", ret);
+   309				goto err_dec_unreg;
+   310			}
+   311		}
+   312	
+   313		ret = wave5_vpu_load_firmware(&pdev->dev, match_data->fw_name, &fw_revision);
+   314		if (ret) {
+   315			dev_err(&pdev->dev, "wave5_vpu_load_firmware, fail: %d\n", ret);
+   316			goto err_enc_unreg;
+   317		}
+   318	
+   319		dev_info(&pdev->dev, "Added wave5 driver with caps: %s %s\n",
+   320			 (match_data->flags & WAVE5_IS_ENC) ? "'ENCODE'" : "",
+   321			 (match_data->flags & WAVE5_IS_DEC) ? "'DECODE'" : "");
+   322		dev_info(&pdev->dev, "Product Code:      0x%x\n", dev->product_code);
+   323		dev_info(&pdev->dev, "Firmware Revision: %u\n", fw_revision);
+   324	
+   325		pm_runtime_set_autosuspend_delay(&pdev->dev, 100);
+   326		pm_runtime_use_autosuspend(&pdev->dev);
+   327		pm_runtime_enable(&pdev->dev);
+   328		wave5_vpu_sleep_wake(&pdev->dev, true, NULL, 0);
+   329	
+   330		return 0;
+   331	
+   332	err_enc_unreg:
+   333		if (match_data->flags & WAVE5_IS_ENC)
+   334			wave5_vpu_enc_unregister_device(dev);
+   335	err_dec_unreg:
+   336		if (match_data->flags & WAVE5_IS_DEC)
+   337			wave5_vpu_dec_unregister_device(dev);
+   338	err_v4l2_unregister:
+   339		v4l2_device_unregister(&dev->v4l2_dev);
+   340	err_irq_release:
+   341		if (dev->irq < 0)
+   342			kthread_destroy_worker(dev->worker);
+   343	err_vdi_release:
+ > 344		if (dev->irq_thread) {
+   345			kthread_stop(dev->irq_thread);
+ > 346			up(&dev->irq_sem);
+   347			dev->irq_thread = NULL;
+   348		}
+   349		wave5_vdi_release(&pdev->dev);
+   350	err_clk_dis:
+   351		clk_bulk_disable_unprepare(dev->num_clks, dev->clks);
+   352	err_reset_assert:
+   353		reset_control_assert(dev->resets);
+   354	
+   355		return ret;
+   356	}
+   357	
 
 -- 
 0-DAY CI Kernel Test Service
