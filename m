@@ -1,70 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88602F0C6B;
-	Sat, 20 Dec 2025 19:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6917042049;
+	Sat, 20 Dec 2025 21:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766259528; cv=none; b=TkO7OFXM0qAYdhuzCCBz33cXOBGtDB2qZcoXkSGbJke9Nc7p32SitUeJL8aWM9DFt4Y9WG4B5foNaJJx72obphVdOW53vIKxSAv+HH8KL62cuT5C8H1NWcjuQovBMf++jVm4nY1lKaIT5G9F35IzOkuGK32GIXmb4CaCcdhK6+g=
+	t=1766266492; cv=none; b=pofmxLPJPuyLUkhGcyoQ+oPtkhQTv135bzOf+sECkSUQrD67lFVok/DoaWF4RNDEEcMi3ycpXmUQkftEwoIV8bpMY7BJuTpOiaBTvBWoIH+DCTcW+r6+juY0RqTTj7EWTiC8aAOMeOuwJsJnXtMeNVNylITAjl1nMufbGqfVrTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766259528; c=relaxed/simple;
-	bh=1GWReUGplOwGxcytr02vQVe2hYUxmjhJo00fyQ3IrEk=;
+	s=arc-20240116; t=1766266492; c=relaxed/simple;
+	bh=TPrZbdGURUWVr83ioH21DlxQDqf0527AKNGtmtqm8rE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YK4xzVBTfeB1mODjotZ+IpJGRe/INFVPYRPwwsUTmzke0m0hN8bhlJ8coZL228HXQqm9pJLv3u6Br2mKk7K7CPt09CtlZ8AutrPvzjo0FQBVd4D6CVONnb/N4dz3/9jXJjnXBBoe+lf63NzcvUdKvyEZYCyxoFns+VCBXNT7gz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OA5yoWfK; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tne52PRuIR4ChUEZiCn8p7lFxQUpXU6lS82UzAiuCzAZw4irP0xBH/F6X4tEEh7RI/x+bRuQnzpSjV//LBVtotBr1dcSzs16Gz4uX4s5MpotNf0tLbMUIk4qI+bFEGVoeTLkD913o5WQqadTh79ua1AxLvTk7sMAUt2iBz/KHX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h778bSiB; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OA5yoWfK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h778bSiB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766259526; x=1797795526;
+  t=1766266491; x=1797802491;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1GWReUGplOwGxcytr02vQVe2hYUxmjhJo00fyQ3IrEk=;
-  b=OA5yoWfKMA/E2cMIuvC0PpipRmyVsH6rY4ErUclNEXVWshF/3NDpH7Md
-   x2O5Hs5lIKUIbcK75TE+GwGQkFXi6wWkDWysA1A9DpoP2etDK7Blmusvz
-   rz6UCF5ggk1AOaRx6FLsu8KTM6si5FihsNCTCQP5MPyxfryknirZKKrJw
-   dXzbSHdU+Olt6SeMeCsYBNShj1iV2bHTnonFHbXCuKsE9Damy5fJy+j8v
-   siO64jIPHdXsN/EJipMyYyUoiI6mGMCQmunNLG0HlXQT54C1bZqDt296Y
-   DXIvfbImdrRowfOUfh69rdWvxHjNnlTV8uKZVvzV4k39yR2vnS9o5SB/5
-   Q==;
-X-CSE-ConnectionGUID: aUEv8WVpTtyy1kVW5BbIDA==
-X-CSE-MsgGUID: vxuzAiN+Rx6A0DLmo1DGQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="85599363"
+  bh=TPrZbdGURUWVr83ioH21DlxQDqf0527AKNGtmtqm8rE=;
+  b=h778bSiBJcsbWS7/polYk1NWNkhwK6B3yUp6hzU2rmUXzg4aUr1wY13N
+   s7aiQCRtvuP91a1wd5HkeaHNFAVvs7Oupk1eA6R27YR4Kms1+hzhgXZ9b
+   X3ihWZgGC6ceYXRZtR4wt4sWUxmsv2NXGVsyPCux+mb3DqLvGd2C2vM+H
+   g3kJPcuL3eQe5GvbQ5zTmjgif4ck7ECus3Gl0LJDJ0KyvCMogewyXGo4U
+   xLk1zFKDNcZruVL5eHsB5Gl8oga21vL7Hrqy6h3VWjHS+HK9mTrib7tt6
+   889fNBtn6PgRhTJg84Jr6CoSBPFXzV+nK0AuMlca9OE7HmsDbwG8xNpCU
+   A==;
+X-CSE-ConnectionGUID: AiNiGJMyRraSfPDFaXpn7w==
+X-CSE-MsgGUID: PltDKJWNSdqPYiu/hlXEXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="72032872"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="85599363"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 11:38:46 -0800
-X-CSE-ConnectionGUID: 4UvXX/ZDQCemeNPyxn8PdA==
-X-CSE-MsgGUID: n4ZP9A7dTKKU/y9jQj5Wjw==
+   d="scan'208";a="72032872"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 13:34:50 -0800
+X-CSE-ConnectionGUID: HRAItO7LTgC4bB+OaeLogQ==
+X-CSE-MsgGUID: wi1fM9ZfRKiJiOHsgTvoIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="198907422"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 20 Dec 2025 11:38:42 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+   d="scan'208";a="199416244"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 20 Dec 2025 13:34:48 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vX2ml-0000000054r-2AIJ;
-	Sat, 20 Dec 2025 19:38:39 +0000
-Date: Sun, 21 Dec 2025 03:38:24 +0800
+	id 1vX4b7-000000004mu-261M;
+	Sat, 20 Dec 2025 21:34:45 +0000
+Date: Sat, 20 Dec 2025 22:34:34 +0100
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@google.com>,
-	Mark Rutland <mark.rutland@arm.com>
+To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>, anna-maria@linutronix.de,
+	frederic@kernel.org, tglx@linutronix.de
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Song Liu <song@kernel.org>
-Subject: Re: [PATCHv5 bpf-next 9/9] bpf,x86: Use single ftrace_ops for direct
- calls
-Message-ID: <202512210241.4wuAmCHu-lkp@intel.com>
-References: <20251215211402.353056-10-jolsa@kernel.org>
+	linux-kernel@vger.kernel.org,
+	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>, stable@vger.kernel.org
+Subject: Re: [PATCH] clockevents: add a error handling in
+ tick_broadcast_init_sysfs()
+Message-ID: <202512202225.llvIQzJk-lkp@intel.com>
+References: <20251218090625.557965-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,107 +66,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251215211402.353056-10-jolsa@kernel.org>
+In-Reply-To: <20251218090625.557965-1-lihaoxiang@isrc.iscas.ac.cn>
 
-Hi Jiri,
+Hi Haoxiang,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linus/master v6.16-rc1 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-bpf-Remove-FTRACE_OPS_FL_JMP-ftrace_ops-flag/20251216-052916
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20251215211402.353056-10-jolsa%40kernel.org
-patch subject: [PATCHv5 bpf-next 9/9] bpf,x86: Use single ftrace_ops for direct calls
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20251221/202512210241.4wuAmCHu-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b324c9f4fa112d61a553bf489b5f4f7ceea05ea8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512210241.4wuAmCHu-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Haoxiang-Li/clockevents-add-a-error-handling-in-tick_broadcast_init_sysfs/20251218-170931
+base:   tip/timers/core
+patch link:    https://lore.kernel.org/r/20251218090625.557965-1-lihaoxiang%40isrc.iscas.ac.cn
+patch subject: [PATCH] clockevents: add a error handling in tick_broadcast_init_sysfs()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251220/202512202225.llvIQzJk-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202225.llvIQzJk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512210241.4wuAmCHu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202225.llvIQzJk-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/bpf/trampoline.c:367:9: error: call to undeclared function 'direct_ops_del'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     367 |                 ret = direct_ops_del(tr, old_addr);
-         |                       ^
-   kernel/bpf/trampoline.c:367:9: note: did you mean 'direct_ops_free'?
-   kernel/bpf/trampoline.c:298:13: note: 'direct_ops_free' declared here
-     298 | static void direct_ops_free(struct bpf_trampoline *tr) { }
-         |             ^
->> kernel/bpf/trampoline.c:381:9: error: call to undeclared function 'direct_ops_mod'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     381 |                 ret = direct_ops_mod(tr, new_addr, lock_direct_mutex);
-         |                       ^
-   kernel/bpf/trampoline.c:381:9: note: did you mean 'direct_ops_free'?
-   kernel/bpf/trampoline.c:298:13: note: 'direct_ops_free' declared here
-     298 | static void direct_ops_free(struct bpf_trampoline *tr) { }
-         |             ^
->> kernel/bpf/trampoline.c:404:9: error: call to undeclared function 'direct_ops_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     404 |                 ret = direct_ops_add(tr, new_addr);
-         |                       ^
-   kernel/bpf/trampoline.c:404:9: note: did you mean 'direct_ops_free'?
-   kernel/bpf/trampoline.c:298:13: note: 'direct_ops_free' declared here
-     298 | static void direct_ops_free(struct bpf_trampoline *tr) { }
-         |             ^
-   3 errors generated.
+>> kernel/time/clockevents.c:737:3: error: call to undeclared function 'put_deivce'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     737 |                 put_deivce(&tick_bc_dev);
+         |                 ^
+   kernel/time/clockevents.c:737:3: note: did you mean 'put_device'?
+   include/linux/device.h:1162:6: note: 'put_device' declared here
+    1162 | void put_device(struct device *dev);
+         |      ^
+   1 error generated.
 
 
-vim +/direct_ops_del +367 kernel/bpf/trampoline.c
+vim +/put_deivce +737 kernel/time/clockevents.c
 
-   360	
-   361	static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags,
-   362				     void *old_addr)
-   363	{
-   364		int ret;
-   365	
-   366		if (tr->func.ftrace_managed)
- > 367			ret = direct_ops_del(tr, old_addr);
-   368		else
-   369			ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, NULL);
-   370	
-   371		return ret;
-   372	}
-   373	
-   374	static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags,
-   375				 void *old_addr, void *new_addr,
-   376				 bool lock_direct_mutex)
-   377	{
-   378		int ret;
-   379	
-   380		if (tr->func.ftrace_managed) {
- > 381			ret = direct_ops_mod(tr, new_addr, lock_direct_mutex);
-   382		} else {
-   383			ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr,
-   384							   new_addr);
-   385		}
-   386		return ret;
-   387	}
-   388	
-   389	/* first time registering */
-   390	static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
-   391	{
-   392		void *ip = tr->func.addr;
-   393		unsigned long faddr;
-   394		int ret;
-   395	
-   396		faddr = ftrace_location((unsigned long)ip);
-   397		if (faddr) {
-   398			if (!tr->fops)
-   399				return -ENOTSUPP;
-   400			tr->func.ftrace_managed = true;
-   401		}
-   402	
-   403		if (tr->func.ftrace_managed) {
- > 404			ret = direct_ops_add(tr, new_addr);
-   405		} else {
-   406			ret = bpf_trampoline_update_fentry(tr, 0, NULL, new_addr);
-   407		}
-   408	
-   409		return ret;
-   410	}
-   411	
+   731	
+   732	static __init int tick_broadcast_init_sysfs(void)
+   733	{
+   734		int err = device_register(&tick_bc_dev);
+   735	
+   736		if (err) {
+ > 737			put_deivce(&tick_bc_dev);
+   738			return err;
+   739		}
+   740	
+   741		err = device_create_file(&tick_bc_dev, &dev_attr_current_device);
+   742		return err;
+   743	}
+   744	#else
+   745	static struct tick_device *tick_get_tick_dev(struct device *dev)
+   746	{
+   747		return &per_cpu(tick_cpu_device, dev->id);
+   748	}
+   749	static inline int tick_broadcast_init_sysfs(void) { return 0; }
+   750	#endif
+   751	
 
 -- 
 0-DAY CI Kernel Test Service
