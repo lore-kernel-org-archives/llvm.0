@@ -1,57 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01DC3A1E67;
-	Sat, 20 Dec 2025 15:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4C52222C4;
+	Sat, 20 Dec 2025 15:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766246245; cv=none; b=HbmgkT+UDt9V3LwX6o0YuXnKdyLThzb6Cb2uBUBDsu8XbgutM6pLlkimhcsrMQ9JxZPG1vnsSdMZpzUjuyp8Oar3UPZIluphkgD11vqeGGXGrK/KTqcvg+Ye+ZehKe8MX9vJXd5wsnFQdy/A+BW156OfKxxjfFt3+exQXe3w9dY=
+	t=1766246246; cv=none; b=OmDeRR/WnhpQAg6VfXkKS2GLkEcWoZeLMKfodk9/0NhtcClvDbu7EFXCCsgB2WBdzyyH0MhoJ4esvv47NfxXzvPX2bvQbhwNIp8Wq51iOcseiAFfjmwUQm9Wx3JrWkG4Mbwkz1IrHRsJObcw0CZWzpHZso6AztykFUXf4VNo7xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766246245; c=relaxed/simple;
-	bh=pdthMO3raZUKsso4hMhbUW4BWP/5KpRBApr7hWYNsLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GJ11FH5ouQf641EwaSFcaxxigBDoZQSksKzxnM2XsQ8SSX/LFbvOnd7Uerw7eTuSTgWcG2gDoT4ydPqjyJSOkuJYZ1rKiSavOtRV/FfJg/RIHESzliDM0MRSWBDuG64NnD1njXkYr+X0CPS/4ccLbO4WEZoZ1TbSsHiHi6mUQno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TtcXDMFm; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1766246246; c=relaxed/simple;
+	bh=mvgKR5eBPfsudG+7ydx/1/S0torXhJ+RG9LyOYP6tlY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qy+FRc0+5+/0ruF1GkSHoJsdO/HtIRmPnm+HNU28sn3Tx1R50ERpfa3ZlFCAIrJ0P5DNZXGcMEDfXJEziW+MkcG7f6uNtPVk01CXRBQd9bVcV2Lz9u+1mwl+CLnfPuE1tfmOu4FmsP5kJTyFFKcTFHuU6ipxkDh/UPBTnzxQmJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NO0H0a5M; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TtcXDMFm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NO0H0a5M"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766246244; x=1797782244;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pdthMO3raZUKsso4hMhbUW4BWP/5KpRBApr7hWYNsLs=;
-  b=TtcXDMFmRn5G4PkYGOfVuAFQK7/AlxSTwA01kxPPpvFPHE9hhz+q+y9x
-   7GQN2ITcPxcdRmPCquT1U6/c9I2eiQ3PKoNl949imYhkCyLYlwE4YMJoZ
-   HknQKR2mt6To9U/VYqh6+lx9RTcjg9+yhcmld2Tvf43PdZisxImZzcffd
-   GHGRJxcyt+39LMycxmgxpZQ/BnpXSd5lab1jJCIiUJYKDWrfTOn6olzWv
-   jUHbBC8SMEvmRFtcQUV0k15D2Iv4ijfu6/tg1IrlQe/m4FQKXHiKRFHGx
-   24WGWh0AQVKNrsbAxsBMtsRFbqJd5i2za+yHqq8mBDhqKnqsViJJwhcUc
-   g==;
-X-CSE-ConnectionGUID: LXdJ5MnCRkadwtu1fiQwvQ==
-X-CSE-MsgGUID: x3UjA89HR1ObBmA0cKtOuw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="72037336"
+  t=1766246245; x=1797782245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mvgKR5eBPfsudG+7ydx/1/S0torXhJ+RG9LyOYP6tlY=;
+  b=NO0H0a5MsYr0Jer2knJB/bNMZRWdTefJ5sGLsjWkzVgxjqi3DhU88HrO
+   IFmdj2YwPItgBFhYa2FZUxdV7P4fxE86Flod9E3SuYG8/EktIT3DwcaSC
+   1SNcCRWMMJsSEuGZay4U/LMilDxYYdaY+3Wq+nIaT8kwl+tMUtYmXFq7y
+   RnmAOhF/GBVpAlOWFroEcRlDhwPvZCrvwqXHjD86gke1+Wm4HqpgigQzA
+   FfHNwja7NOZdFQTk/FosZc0dMpf4qBvSjQfejHSCxebb+MdZnb/y3EU03
+   ETPm2iqjz7sDCBFPfJJLdL/FH9Qla3U1Z3Dln18mkFbnqnfA/aQP3YaJi
+   w==;
+X-CSE-ConnectionGUID: LHdpQFW5RX6C4LxPNURgkw==
+X-CSE-MsgGUID: STSwLqyDSBqD1riUx1Xdlg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="70748106"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="72037336"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 07:57:22 -0800
-X-CSE-ConnectionGUID: w0HvEiUCRJi7M0cOKagOYg==
-X-CSE-MsgGUID: /iw0VKOUT5++AKt6Mot8Yw==
+   d="scan'208";a="70748106"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 07:57:24 -0800
+X-CSE-ConnectionGUID: OK5FWqYtSzGM3+TRRKERfw==
+X-CSE-MsgGUID: UyYosMaJTDaoOZl/8+B6Nw==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="199642886"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Dec 2025 07:57:21 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 20 Dec 2025 07:57:20 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vWzKY-000000004o9-3znF;
-	Sat, 20 Dec 2025 15:57:18 +0000
-Date: Sat, 20 Dec 2025 23:57:04 +0800
+	id 1vWzKX-000000004nl-31dx;
+	Sat, 20 Dec 2025 15:57:17 +0000
+Date: Sat, 20 Dec 2025 23:57:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2025-12-16 13/18]
- sound/soc/sti/uniperif_reader.c:422:30: error: use of undeclared identifier
- 'uni_selectable_formats'; did you mean 'ui_selectable_formats'?
-Message-ID: <202512202313.UbJgzqFz-lkp@intel.com>
+To: Hou Tao <houtao@huaweicloud.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, linux-mm@kvack.org,
+	linux-nvme@lists.infradead.org, Bjorn Helgaas <helgaas@kernel.org>,
+	Logan Gunthorpe <logang@deltatee.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Tejun Heo <tj@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	houtao1@huawei.com
+Subject: Re: [PATCH 03/13] kernfs: add support for get_unmapped_area callback
+Message-ID: <202512202338.qFqw6FI8-lkp@intel.com>
+References: <20251220040446.274991-4-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,60 +76,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251220040446.274991-4-houtao@huaweicloud.com>
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2025-12-16
-head:   32531f002d5d3c578d98a699c3f79c082ea4296e
-commit: 44a13cc7bec06a431483d34ac991314ce6656561 [13/18] hoge
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251220/202512202313.UbJgzqFz-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202313.UbJgzqFz-lkp@intel.com/reproduce)
+Hi Hou,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus akpm-mm/mm-everything linus/master v6.19-rc1 next-20251219]
+[cannot apply to pci/next pci/for-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hou-Tao/PCI-P2PDMA-Release-the-per-cpu-ref-of-pgmap-when-vm_insert_page-fails/20251220-121804
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20251220040446.274991-4-houtao%40huaweicloud.com
+patch subject: [PATCH 03/13] kernfs: add support for get_unmapped_area callback
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251220/202512202338.qFqw6FI8-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b324c9f4fa112d61a553bf489b5f4f7ceea05ea8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202338.qFqw6FI8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512202313.UbJgzqFz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202338.qFqw6FI8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/sti/uniperif_reader.c:422:30: error: use of undeclared identifier 'uni_selectable_formats'; did you mean 'ui_selectable_formats'?
-     422 |         .auto_selectable_formats        = &uni_selectable_formats,
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~
-         |                                            ui_selectable_formats
-   sound/soc/sti/uniperif_reader.c:404:18: note: 'ui_selectable_formats' declared here
-     404 | static const u64 ui_selectable_formats =
-         |                  ^
+>> fs/kernfs/file.c:480:9: error: call to undeclared function 'mm_get_unmapped_area'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     480 |         addr = mm_get_unmapped_area(file, uaddr, len, pgoff, flags);
+         |                ^
+   fs/kernfs/file.c:480:9: note: did you mean '__get_unmapped_area'?
+   include/linux/mm.h:3671:1: note: '__get_unmapped_area' declared here
+    3671 | __get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
+         | ^
    1 error generated.
 
 
-vim +422 sound/soc/sti/uniperif_reader.c
+vim +/mm_get_unmapped_area +480 fs/kernfs/file.c
 
-   399	
-   400	/*
-   401	 * Select below from Sound Card, not Auto
-   402	 *	SND_SOC_DAIFMT_CBx_CFx
-   403	 */
-   404	static const u64 ui_selectable_formats =
-   405		SND_SOC_POSSIBLE_DAIFMT_I2S	|
-   406		SND_SOC_POSSIBLE_DAIFMT_RIGHT_J	|
-   407		SND_SOC_POSSIBLE_DAIFMT_LEFT_J	|
-   408		SND_SOC_POSSIBLE_DAIFMT_NB_NF	|
-   409		SND_SOC_POSSIBLE_DAIFMT_NB_IF	|
-   410		SND_SOC_POSSIBLE_DAIFMT_IB_NF	|
-   411		SND_SOC_POSSIBLE_DAIFMT_IB_IF;
-   412	
-   413	static const struct snd_soc_dai_ops uni_reader_dai_ops = {
-   414		.startup			= uni_reader_startup,
-   415		.shutdown			= uni_reader_shutdown,
-   416		.prepare			= uni_reader_prepare,
-   417		.probe				= sti_uniperiph_dai_probe,
-   418		.trigger			= uni_reader_trigger,
-   419		.hw_params			= sti_uniperiph_dai_hw_params,
-   420		.set_fmt			= sti_uniperiph_dai_set_fmt,
-   421		.set_tdm_slot			= sti_uniperiph_set_tdm_slot,
- > 422		.auto_selectable_formats	= &uni_selectable_formats,
-   423		.num_auto_selectable_formats	= 1,
-   424	};
-   425	
+   456	
+   457	static unsigned long kernfs_get_unmapped_area(struct file *file, unsigned long uaddr,
+   458						      unsigned long len, unsigned long pgoff,
+   459						      unsigned long flags)
+   460	{
+   461		struct kernfs_open_file *of = kernfs_of(file);
+   462		const struct kernfs_ops *ops;
+   463		long addr;
+   464	
+   465		if (!(of->kn->flags & KERNFS_HAS_MMAP))
+   466			return -ENODEV;
+   467	
+   468		mutex_lock(&of->mutex);
+   469	
+   470		addr = -ENODEV;
+   471		if (!kernfs_get_active_of(of))
+   472			goto out_unlock;
+   473	
+   474		ops = kernfs_ops(of->kn);
+   475		if (ops->get_unmapped_area) {
+   476			addr = ops->get_unmapped_area(of, uaddr, len, pgoff, flags);
+   477			if (!IS_ERR_VALUE(addr) || addr != -EOPNOTSUPP)
+   478				goto out_put;
+   479		}
+ > 480		addr = mm_get_unmapped_area(file, uaddr, len, pgoff, flags);
+   481	
+   482	out_put:
+   483		kernfs_put_active_of(of);
+   484	out_unlock:
+   485		mutex_unlock(&of->mutex);
+   486	
+   487		return addr;
+   488	}
+   489	
 
 -- 
 0-DAY CI Kernel Test Service
