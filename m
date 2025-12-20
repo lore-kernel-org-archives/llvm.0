@@ -1,59 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046EE1D9A54;
-	Sat, 20 Dec 2025 14:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EDB2D1F7E;
+	Sat, 20 Dec 2025 15:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766242756; cv=none; b=b/K8HD5snhDDn6Zp3lmFO6eLT/xRcyfLIs5MpHKrtXrH4UNcHOyy45qxBQ2xlLgpcB6cZWeZoVGawOzaVohbsRKISH3LFqs0AlJsa+xYUoJc5OSuVr0I7ZiMhA5ZpPvlobtFj9UdhfjjK8efUJGu+8b36lew6GG48jqFYKf4FRo=
+	t=1766242816; cv=none; b=LGr1KKnBUqrXi+OoAcZ5Yw30WEDAB1uXLcLNiJakmdRbRBGke/mIBQFOFizZS7608Skzk+cR8fgo/JE3lWRmEDPcppL//GW7JPGebqU+ap/xG3Cz8CP0tdAZVvZ0gckcj2k57lrkWy1+7CLy4GrnDES2Lzf6/3NyFgLTGXSWD20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766242756; c=relaxed/simple;
-	bh=HfwTzM2N8W7veZx/2FQ+XEG7DuIkth/vqkPQuxlJx2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=anEDHpqxfHfIpYp4I7NTS2EYpygt8q7IesxVHjlTbEqJ0dw5jGeatpO7J0oijO+EDy5PcM5UajjIWpcY0Sz8y5oP7XYq0PoOqexfH+CFTIxcgrkjzWDH2OyGBaN9vmOp+rJIyRZ8P1/hlPn4gmiD+0avnHG5VZK8qXhkiJUtRwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ciuiNrlr; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1766242816; c=relaxed/simple;
+	bh=rGGeCKDnFHL0GTnnxjGkPdlPCh8x4R1AJTq8uQ540Vs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rz6q9AK4eRNOPBcD7OsRxzLk9Q2p/I2JproCvi2MTWj4USbOKllnMF6pkXY87sQQ77un4OBxXt3Vs7UNEZ+RG4zZXx0hUktrBlrBoP0M0CmSUFgwF3zU7Wdh7xQIQbFa7hKpQYT2cWer+03dPyxhCxbPwweHmg/FQ5BReEYse6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QF0k9o1b; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ciuiNrlr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QF0k9o1b"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766242756; x=1797778756;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HfwTzM2N8W7veZx/2FQ+XEG7DuIkth/vqkPQuxlJx2c=;
-  b=ciuiNrlr6UBVjOcjkmBFUFDW/UXdRZ5e73cMhPtHqj9mal0C/zSgTfpv
-   6K8gwG+/qYwhRR5ZJWH2BJM2ps43gPXtnu0BgzBY33UD4wOkOeBrSHshN
-   Hbl6BXu+oWlWvn8MzNX+3eLDKLxgn9LTw+Al03uMg4sZkXm14Pz1IX2Gz
-   dSUJQrtUO501v4yO5kSAJ52YJN4UDYcTJ85TADcYlwzeXL+Yp4HHTcwrf
-   cwO74REhwsjqFQr7KzV/cgyHB+jZJPKEIksW8W+60jBXzQXybh3JOO0Op
-   xBHZwINQAsQcm/6+EGkwQQxXfXvwHrHCoFACObfM3jhzcXtWwD1+vu5/H
-   Q==;
-X-CSE-ConnectionGUID: uyhBVHowS5SUH9WsX5ZctQ==
-X-CSE-MsgGUID: 59fgKQkJRjum33UGObwEFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="78493910"
+  t=1766242816; x=1797778816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rGGeCKDnFHL0GTnnxjGkPdlPCh8x4R1AJTq8uQ540Vs=;
+  b=QF0k9o1b/2B/gp/iT1195Mjmz6pUKfspYKz8A3KSIIm+B6cEWHiyGzXQ
+   kTlloscDIUOmduFQ/xDMeb7yZX6c479b1dmKm+L4LsFSw85vdDX01W7CI
+   7BC42dpFGxvwMQs8x5t2ALxfP97FQT9YdRibKYHD0XGXmwY/hZVa0F130
+   uv9CmEao6i+yhTSn/cop2o5Zaph8CJtMWN4n7KULANFxFNAAmwlQScT4X
+   NNFDpX9skP9PU/OzKz5vOH9t0wh2YrVat7vvJU7dHbvjl2bx8fsOHWJIA
+   MuefHsAhjJvj1Zwnbh01aDAdoBjL8IxjkbWuoJnB9o24e8ldy36is8iw3
+   w==;
+X-CSE-ConnectionGUID: nEdNYBfXSPS9egVlPFiR5Q==
+X-CSE-MsgGUID: Qhj2BEdpSAOSPQ013WlfQg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="72034850"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="78493910"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 06:59:13 -0800
-X-CSE-ConnectionGUID: 82GaXzRHQJqmaeMIAjznzA==
-X-CSE-MsgGUID: KpmoHXnzTluDbV0vacTAig==
+   d="scan'208";a="72034850"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 07:00:15 -0800
+X-CSE-ConnectionGUID: ysKCsu1NS7yg8Gtmsb+gbA==
+X-CSE-MsgGUID: mUb9l548SkiLudHURCvl3A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="203639803"
+   d="scan'208";a="198359998"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 20 Dec 2025 06:59:12 -0800
+  by orviesa010.jf.intel.com with ESMTP; 20 Dec 2025 07:00:12 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vWyQH-000000004hP-0Cao;
-	Sat, 20 Dec 2025 14:59:09 +0000
-Date: Sat, 20 Dec 2025 22:59:07 +0800
+	id 1vWyRF-000000004hf-0nvW;
+	Sat, 20 Dec 2025 15:00:09 +0000
+Date: Sat, 20 Dec 2025 22:59:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+To: yuan linyu <yuanlinyu@honor.com>,
+	Alexander Potapenko <glider@google.com>,
+	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, kasan-dev@googlegroups.com,
+	loongarch@lists.linux.dev
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:hugetlb-init/v0 15/26] arch/powerpc/mm/mem.c:223:19: error:
- use of undeclared identifier 'zone_dma_bits'; did you mean 'zone_dma_limit'?
-Message-ID: <202512202240.GHqlQPrw-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, yuan linyu <yuanlinyu@honor.com>
+Subject: Re: [PATCH v2 2/2] kfence: allow change number of object by early
+ parameter
+Message-ID: <202512202213.aA8qY41g-lkp@intel.com>
+References: <20251218063916.1433615-3-yuanlinyu@honor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,67 +71,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251218063916.1433615-3-yuanlinyu@honor.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git hugetlb-init/v0
-head:   8f1fbf04ce5ef30eb770231992ca055d4f45e5a7
-commit: c4213ce62b5b611f3c28bdd8be9b6f0b15130071 [15/26] powerpc: introduce arch_zone_limits_init()
-config: powerpc-pmac32_defconfig (https://download.01.org/0day-ci/archive/20251220/202512202240.GHqlQPrw-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b324c9f4fa112d61a553bf489b5f4f7ceea05ea8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202240.GHqlQPrw-lkp@intel.com/reproduce)
+Hi yuan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on drm-misc/drm-misc-next linus/master v6.19-rc1 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/yuan-linyu/LoongArch-kfence-avoid-use-CONFIG_KFENCE_NUM_OBJECTS/20251218-144322
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20251218063916.1433615-3-yuanlinyu%40honor.com
+patch subject: [PATCH v2 2/2] kfence: allow change number of object by early parameter
+config: i386-buildonly-randconfig-001-20251219 (https://download.01.org/0day-ci/archive/20251220/202512202213.aA8qY41g-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202213.aA8qY41g-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512202240.GHqlQPrw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202213.aA8qY41g-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/powerpc/mm/mem.c:223:19: error: use of undeclared identifier 'zone_dma_bits'; did you mean 'zone_dma_limit'?
-     223 |                                       1UL << (zone_dma_bits - PAGE_SHIFT));
-         |                                               ^~~~~~~~~~~~~
-         |                                               zone_dma_limit
-   include/linux/minmax.h:105:41: note: expanded from macro 'min'
-     105 | #define min(x, y)       __careful_cmp(min, x, y)
-         |                                               ^
-   include/linux/minmax.h:98:28: note: expanded from macro '__careful_cmp'
-      98 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |                                   ^
-   include/linux/minmax.h:92:28: note: expanded from macro '__careful_cmp_once'
-      92 |         auto ux = (x); auto uy = (y);                   \
-         |                                   ^
-   include/linux/dma-direct.h:15:12: note: 'zone_dma_limit' declared here
-      15 | extern u64 zone_dma_limit;
-         |            ^
-   1 error generated.
+>> mm/kfence/core.c:997:16: warning: variable 'nr_pages_covered' set but not used [-Wunused-but-set-variable]
+     997 |         unsigned long nr_pages_covered, covered_size;
+         |                       ^
+   1 warning generated.
 
 
-vim +223 arch/powerpc/mm/mem.c
+vim +/nr_pages_covered +997 mm/kfence/core.c
 
-   206	
-   207	/*
-   208	 * Zones usage:
-   209	 *
-   210	 * We setup ZONE_DMA to be 31-bits on all platforms and ZONE_NORMAL to be
-   211	 * everything else. GFP_DMA32 page allocations automatically fall back to
-   212	 * ZONE_DMA.
-   213	 *
-   214	 * By using 31-bit unconditionally, we can exploit zone_dma_limit to inform the
-   215	 * generic DMA mapping code.  32-bit only devices (if not handled by an IOMMU
-   216	 * anyway) will take a first dip into ZONE_NORMAL and get otherwise served by
-   217	 * ZONE_DMA.
-   218	 */
-   219	void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
-   220	{
-   221	#ifdef CONFIG_ZONE_DMA
-   222		max_zone_pfns[ZONE_DMA]	= min(max_low_pfn,
- > 223					      1UL << (zone_dma_bits - PAGE_SHIFT));
-   224	#endif
-   225		max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
-   226	#ifdef CONFIG_HIGHMEM
-   227		max_zone_pfns[ZONE_HIGHMEM] = max_pfn;
-   228	#endif
-   229	}
-   230	
+   991	
+   992	static int kfence_init_late(void)
+   993	{
+   994		unsigned long nr_pages_meta = KFENCE_METADATA_SIZE / PAGE_SIZE;
+   995		unsigned long addr = (unsigned long)__kfence_pool;
+   996		unsigned long free_size = __kfence_pool_size;
+ > 997		unsigned long nr_pages_covered, covered_size;
+   998		int err = -ENOMEM;
+   999	
+  1000		kfence_alloc_covered_order = ilog2(__kfence_num_objects) + 2;
+  1001		kfence_alloc_covered_mask = (1 << kfence_alloc_covered_order) - 1;
+  1002		covered_size =  PAGE_ALIGN(KFENCE_COVERED_SIZE);
+  1003		nr_pages_covered = (covered_size / PAGE_SIZE);
+  1004	#ifdef CONFIG_CONTIG_ALLOC
+  1005		struct page *pages;
+  1006	
+  1007		pages = alloc_contig_pages(__kfence_pool_pages, GFP_KERNEL, first_online_node,
+  1008					   NULL);
+  1009		if (!pages)
+  1010			return -ENOMEM;
+  1011	
+  1012		__kfence_pool = page_to_virt(pages);
+  1013		pages = alloc_contig_pages(nr_pages_covered, GFP_KERNEL, first_online_node,
+  1014					   NULL);
+  1015		if (!pages)
+  1016			goto free_pool;
+  1017		alloc_covered = page_to_virt(pages);
+  1018		pages = alloc_contig_pages(nr_pages_meta, GFP_KERNEL, first_online_node,
+  1019					   NULL);
+  1020		if (pages)
+  1021			kfence_metadata_init = page_to_virt(pages);
+  1022	#else
+  1023		if (__kfence_pool_pages > MAX_ORDER_NR_PAGES ||
+  1024		    nr_pages_meta > MAX_ORDER_NR_PAGES) {
+  1025			pr_warn("KFENCE_NUM_OBJECTS too large for buddy allocator\n");
+  1026			return -EINVAL;
+  1027		}
+  1028	
+  1029		__kfence_pool = alloc_pages_exact(__kfence_pool_size, GFP_KERNEL);
+  1030		if (!__kfence_pool)
+  1031			return -ENOMEM;
+  1032	
+  1033		alloc_covered = alloc_pages_exact(covered_size, GFP_KERNEL);
+  1034		if (!alloc_covered)
+  1035			goto free_pool;
+  1036		kfence_metadata_init = alloc_pages_exact(KFENCE_METADATA_SIZE, GFP_KERNEL);
+  1037	#endif
+  1038	
+  1039		if (!kfence_metadata_init)
+  1040			goto free_cover;
+  1041	
+  1042		memzero_explicit(kfence_metadata_init, KFENCE_METADATA_SIZE);
+  1043		addr = kfence_init_pool();
+  1044		if (!addr) {
+  1045			kfence_init_enable();
+  1046			kfence_debugfs_init();
+  1047			return 0;
+  1048		}
+  1049	
+  1050		pr_err("%s failed\n", __func__);
+  1051		free_size = __kfence_pool_size - (addr - (unsigned long)__kfence_pool);
+  1052		err = -EBUSY;
+  1053	
 
 -- 
 0-DAY CI Kernel Test Service
