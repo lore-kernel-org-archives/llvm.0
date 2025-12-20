@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AD218C008;
-	Sat, 20 Dec 2025 19:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A2525D209;
+	Sat, 20 Dec 2025 19:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766258207; cv=none; b=fvpP2NhIqitsel8XVaJqqwAH71Vpt3RgbFgjuF7zRUrd9HDv6xUZ3/LhHgakjRnszaE/wVEMBZSZrIjEo5U4sutUnFLw+yulzAmGChTldiq1cGptGqBXTfrdKtENgRKcaLbIg1CNPkyYgD5dtyWPbv0LNqZCwQZRzUM+Du6yOPY=
+	t=1766258689; cv=none; b=kE1o+322k5BV0MWEmtS15Nkw6FN9SIBrUQeXg2YbvNHq/LRyp86OmawWTv3VAKNeZ6WmaGvprPsQRaAPachGP2GyJ9KR/uIB1VxO4aQGm0sF7z95bxwLUVhgfRe6sjM5kjMTs53qIV17xiarhMe5cDtOeopSEZJ3aTfPDM7zIRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766258207; c=relaxed/simple;
-	bh=stZpjZPpqunZ+0IbHr1vzhvuxDLUSP4KLPBD4yBCR3Q=;
+	s=arc-20240116; t=1766258689; c=relaxed/simple;
+	bh=6TF01ZtrQwz6e8HxJcIxJclHgCUMrtA1YjdJvEh5Qq0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GoMhjS0fc0ZZYbOb8xGgBI5cIY5r8VWBx9THTPDddwoWWILhpRFuU2nK+5SDUEFcXbVHoeoaIgtU3NLtyHtPP/3Itz3DvqvPN8pt588tgWXGfBm/oBc33QNyapripvoV52x8wbx1SYgQD67y8G51m6cYmOHBeAS2O8nStMuFapc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RCsLkDJx; arc=none smtp.client-ip=192.198.163.9
+	 Content-Disposition; b=Ac+T6eTpy0875x2w6b+dLEo3kRJgoLffb0D4cpdsAMszSbV4AMTx+VztfuyvuIxjpN5decLZ4QX7rEGuoT54UmG3EvgdGd0gWvpRTpY6CBPVPEs9xablZdvQPY6KZxBaoWsJt7AMvKypgq6Kyp3AQdigi0ZrdD+PDFW61/RUcds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZX2cVZGr; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RCsLkDJx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZX2cVZGr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766258205; x=1797794205;
+  t=1766258687; x=1797794687;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=stZpjZPpqunZ+0IbHr1vzhvuxDLUSP4KLPBD4yBCR3Q=;
-  b=RCsLkDJxeVcGqY3vvdIeBKaoNlrmzu7Pp07cGmaeVznpEOhvHq+toafJ
-   LwHC/iolkXuVS85SA0zHTtoHWx94PyMXxjXAuXIH8E4N1LZgaNq+NabzL
-   lsRIh5CgLzaAO+i7hNcRpzRKv2zeFqbWs83tDqddSJ5iGPSEcmkHhCaUy
-   BOGP+79gnf3SJ7j4am0j7iImErSAqojZrbPXfHvj6gA6Avsf+Y5IHgDJ5
-   yRVaKpufpTbumh9QExiXz8c+2YYbzrRttUuq8VdQezQlOvX5wHBnkkO3r
-   /jAeCBo4SNlp7pgjnM5ZnMXesDsfJk4qtHPZTgnQYf7Qjhawz1hOq9fFr
-   A==;
-X-CSE-ConnectionGUID: Iio66pGTQRSSUO+HVtJ82Q==
-X-CSE-MsgGUID: YE0eMEH6SEGUeywErBrM9g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="78900167"
+  bh=6TF01ZtrQwz6e8HxJcIxJclHgCUMrtA1YjdJvEh5Qq0=;
+  b=ZX2cVZGrQ7aAef+FpEz43OW0oOYUss6fg+WtEw4JxE/rbS6rxqH8j19z
+   KdkQFaR9dnNgeSQLKl0Sz/gwRlfIDfFvE+A5v20jV4CiEJz/hTigtObIk
+   NBm1r4OCfm25SNR9b9pjDgkFxldZ2FOtvpNgFZ6dyRzCctLddZ8ltgjnx
+   +TtX4HJp0E2X5pUk8N1N9K83/bTamXzhkSNaeM67tegQhAxUPcTv48wsM
+   CO8fNXJ9zr8nbJgVe4CYh/tB3e2tq6or59TFFaekOgw0UaDNGxD365a3A
+   R112kSiLBXLTg4GMsjanR+Ule0cTVehHB0cHWZfQnhVCQOMBj/Ev5pNIG
+   Q==;
+X-CSE-ConnectionGUID: pob2xuB6S5yZYtSogkp+eA==
+X-CSE-MsgGUID: SLOoVXzQQRmgIwFLRs4qvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="79550093"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="78900167"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 11:16:42 -0800
-X-CSE-ConnectionGUID: SNara85hQaKta82KOc1Qlg==
-X-CSE-MsgGUID: rZPNNIubR7W6qihDbZZB3w==
-X-Ironport-Invalid-End-Of-Message: True
+   d="scan'208";a="79550093"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 11:24:47 -0800
+X-CSE-ConnectionGUID: h9GqUWeITNaiGDcxTZoFTw==
+X-CSE-MsgGUID: 2CMvRn82SymoCjtNSXDD/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="199068928"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Dec 2025 11:16:41 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+   d="scan'208";a="230166813"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 20 Dec 2025 11:24:46 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vX2RS-0000000053r-360O;
-	Sat, 20 Dec 2025 19:16:38 +0000
-Date: Sun, 21 Dec 2025 03:16:13 +0800
+	id 1vX2ZH-000000004ki-3aAc;
+	Sat, 20 Dec 2025 19:24:43 +0000
+Date: Sat, 20 Dec 2025 20:24:09 +0100
 From: kernel test robot <lkp@intel.com>
 To: pr-hung <bkedx0000@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [jcmvbkbc-xtensa:pr/26 1/1] drivers/net/netdevsim/fib.c:1502:58:
  error: expected ';' after top level declarator
-Message-ID: <202512210312.oRBuGmMj-lkp@intel.com>
+Message-ID: <202512202042.eE0RgpF8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,16 +65,16 @@ Content-Disposition: inline
 tree:   https://github.com/jcmvbkbc/linux-xtensa pr/26
 head:   0c125b4fcef40ea2c876496f0e3b9b6e74dcebde
 commit: 0c125b4fcef40ea2c876496f0e3b9b6e74dcebde [1/1] Fix potential vulnerability in cloned code (drivers/net/netdevsim/fib.c)
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20251221/202512210312.oRBuGmMj-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 1335a05ab8bc8339ce24be3a9da89d8c3f4e0571)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512210312.oRBuGmMj-lkp@intel.com/reproduce)
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251220/202512202042.eE0RgpF8-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202042.eE0RgpF8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512210312.oRBuGmMj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202042.eE0RgpF8-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
    drivers/net/netdevsim/fib.c:58:21: error: duplicate member 'fib_flush_work'
       58 |         struct work_struct fib_flush_work;
@@ -141,7 +140,7 @@ All error/warnings (new ones prefixed by >>):
 >> drivers/net/netdevsim/fib.c:1527:33: error: extraneous ')' before ';'
     1527 |                                        nsim_fib_rt_ht_params);
          |                                                             ^
->> drivers/net/netdevsim/fib.c:1509:9: warning: expression result unused [-Wunused-value]
+   drivers/net/netdevsim/fib.c:1509:9: warning: expression result unused [-Wunused-value]
     1509 |                                                   fib_flush_work);
          |                                                   ^~~~~~~~~~~~~~
    include/linux/container_of.h:24:36: note: expanded from macro 'container_of'
@@ -167,7 +166,7 @@ vim +1502 drivers/net/netdevsim/fib.c
 0c125b4fcef40e pr-hung      2025-12-18 @1507  	struct nsim_fib_data *data = container_of(work, struct nsim_fib_data,
 0c125b4fcef40e pr-hung      2025-12-18  1508  						  fib_flush_work);
 180a6a3ee60a7c Ido Schimmel 2022-07-28 @1509  						  fib_flush_work);
-180a6a3ee60a7c Ido Schimmel 2022-07-28 @1510  	struct nsim_fib_rt *fib_rt, *fib_rt_tmp;
+180a6a3ee60a7c Ido Schimmel 2022-07-28  1510  	struct nsim_fib_rt *fib_rt, *fib_rt_tmp;
 0c125b4fcef40e pr-hung      2025-12-18 @1511  	struct nsim_fib_rt *fib_rt, *fib_rt_tmp;
 180a6a3ee60a7c Ido Schimmel 2022-07-28  1512  
 0c125b4fcef40e pr-hung      2025-12-18  1513  
