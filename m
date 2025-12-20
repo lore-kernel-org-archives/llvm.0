@@ -1,64 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676CB2857EA;
-	Sat, 20 Dec 2025 15:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF25A2C2372;
+	Sat, 20 Dec 2025 16:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766246247; cv=none; b=OhRf2yNjBraGQ7nWi2we2QX9a/xM5v72+VeyvOrNGYV5KE5dI1xgzkk42h9vq7/dXSIkK6LAInaExsSZx83ail/ulY8nQwXjyx4msv+BML6Oh4n7NTmXIZKFy02bTu7avJ6sxCTHTQ5x6gZQxQECVtIUGO8QucgIwWlBxb40MQY=
+	t=1766247689; cv=none; b=Rpu1uVttSVQK9nfokNagR+AnPmqLYrHbuzfBqhMISLssgOtNKjHc2nx73c5huymliPGY6TAzagKZqo5QfZGmVjwQFAsGI2HCAP1gqf7ygVgcQq6Q5fci8yuA26475YBpgMz/wuUxCOrScop+kOFaKG1UV17KR8/eyHMeiMajBj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766246247; c=relaxed/simple;
-	bh=jA5bxh+GRkZj7og+mtLesOInt0AGzfsQjOpXAMZyscQ=;
+	s=arc-20240116; t=1766247689; c=relaxed/simple;
+	bh=WbBTIG/tn0WWjI8wvXgkY1BWBW0FGCU3Hx3mGTAgvew=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EbXmxS3TTEQ6Yk0CPIkxR2EiTKxf+KGWQ2rz6OffLiaw60ntEKc7mqRHRqFXSpAbJiEODcCPcuMYjlZu9RCYTSIokuNQCn581lk6MFR99NICTAZ+JRFlYBMPetr3EQV3bb1GhF6XY2gihWUDP90GF9vBqWzW61FVxoajh3BHlI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWygMQ4G; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=fXrIKSfSAqmIGERZ20SeCPutjaxnkaPKzCazZ0Y3yvLbMvludA1hmN6l9sUqrtBFCGN8DfuZjRaeJ6tQpiyWy9OsmyddzxbkH3R2smGoewNXzNNcdOBPR/oXjPeTrcRt7Hu7vsg8T48XXGmKVNP+BsQcbWh+xMnT78mR2/LndH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQLNZGFJ; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWygMQ4G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQLNZGFJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766246246; x=1797782246;
+  t=1766247688; x=1797783688;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jA5bxh+GRkZj7og+mtLesOInt0AGzfsQjOpXAMZyscQ=;
-  b=FWygMQ4Gt9PeBPpEI07adlgV87Ys2JGyZYg9nl0BMaQbsWen5fuWNBN9
-   uvQQQs2C1wQ09x8ofaiGjB1eCjVhYyRMnChOINm/l1WzadCae2OzhQ9WR
-   joPEJ3yo4zazC6QnwjSz1h+ryY/f3NwJh7IvXHUtnn3ryTOT8LhMYruz3
-   LDWE0PGekOwwmAtpkj0ckkw8QgxU08U6FjOpDGWq2eRCmbnvbR07gZRLy
-   +BwIbT+QoOj004naWI4fKgKj83mpJ8/2wRS02JYfNuspheMTsMXknmSos
-   HS2KL1pXEdRLKKNJHzI7PhyJE1SzrAeU1QzeuV+MH6Bdfxhz4PG528sER
+  bh=WbBTIG/tn0WWjI8wvXgkY1BWBW0FGCU3Hx3mGTAgvew=;
+  b=BQLNZGFJpUB+MG8/oO/RqKLOMVS1XCnQRlf9mOYfKe8Ym8az3XV8HDUN
+   madnx3eMEyNVTDGCp1XarvQ6L8gm85SpFDw5dnvUklElVNr6yTlz5XeTE
+   FSyq5rsQ+c0c7sPFErJE0emiK3JYAEmbsnxeFZK/uS3yup7ROcxcPfPr8
+   4z/qUWM9BePZc6Pru7G6HIxLaEZ2G2T3fgQ2SjF2GXn5YGJkjq0sU2W80
+   ftJ4dhMhvC79KCYEJf0+C/33UGMx9B9JqXZlST7IJN4lslCM1f76GYS9S
+   YG9SJXsYByK4ptrkNwX7huaR32gkvlmY6WLxVpLB+TstDCyGAakLoSx4S
    A==;
-X-CSE-ConnectionGUID: cQS3Yf4mTpWdchvUxCQOCA==
-X-CSE-MsgGUID: tx081292QxuMlpG3dsjhbg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="72037341"
+X-CSE-ConnectionGUID: ouSeZYh1QCSUVqwvUGaVNQ==
+X-CSE-MsgGUID: ZhHawvlgQ9W6UznMkFOdiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="67375377"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="72037341"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 07:57:23 -0800
-X-CSE-ConnectionGUID: Sfi4MiTqTr+Jd97WSTFK8Q==
-X-CSE-MsgGUID: +aoLJ/eSQkC3mLn3L03z8Q==
+   d="scan'208";a="67375377"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 08:21:27 -0800
+X-CSE-ConnectionGUID: zkpZYfYzRBG4rPX5OIcOaA==
+X-CSE-MsgGUID: QuNw423oS0iz13ZUjxCcMg==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="222604685"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Dec 2025 07:57:20 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 20 Dec 2025 08:21:24 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vWzKY-000000004nu-2aof;
-	Sat, 20 Dec 2025 15:57:18 +0000
-Date: Sat, 20 Dec 2025 23:57:01 +0800
+	id 1vWzhq-000000004rl-2HNp;
+	Sat, 20 Dec 2025 16:21:22 +0000
+Date: Sun, 21 Dec 2025 00:20:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brandon Brnich <b-brnich@ti.com>, Nas Chung <nas.chung@chipsnmedia.com>,
-	Jackson Lee <jackson.lee@chipsnmedia.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: "Rusydi H. Makarim" <rusydi.makarim@kriptograf.id>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, Darren Etheridge <detheridge@ti.com>,
-	Brandon Brnich <b-brnich@ti.com>
-Subject: Re: [PATCH v2] media: chips-media: wave5: Fix Potential Probe
- Resource Leak
-Message-ID: <202512202300.9OkWzU1c-lkp@intel.com>
-References: <20251216213413.2799499-1-b-brnich@ti.com>
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	"Rusydi H. Makarim" <rusydi.makarim@kriptograf.id>
+Subject: Re: [PATCH 2/3] lib/crypto: Initial implementation of Ascon-Hash256
+Message-ID: <202512210037.K5OAaoVa-lkp@intel.com>
+References: <20251215-ascon_hash256-v1-2-24ae735e571e@kriptograf.id>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,213 +70,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251216213413.2799499-1-b-brnich@ti.com>
+In-Reply-To: <20251215-ascon_hash256-v1-2-24ae735e571e@kriptograf.id>
 
-Hi Brandon,
+Hi Rusydi,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linuxtv-media-pending/master]
-[also build test ERROR on media-tree/master linus/master v6.19-rc1 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 92de2d349e02c2dd96d8d1b7016cc78cf80fc085]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Brandon-Brnich/media-chips-media-wave5-Fix-Potential-Probe-Resource-Leak/20251217-053600
-base:   https://git.linuxtv.org/media-ci/media-pending.git master
-patch link:    https://lore.kernel.org/r/20251216213413.2799499-1-b-brnich%40ti.com
-patch subject: [PATCH v2] media: chips-media: wave5: Fix Potential Probe Resource Leak
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251220/202512202300.9OkWzU1c-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202300.9OkWzU1c-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rusydi-H-Makarim/lib-crypto-Add-KUnit-test-vectors-for-Ascon-Hash256/20251215-215114
+base:   92de2d349e02c2dd96d8d1b7016cc78cf80fc085
+patch link:    https://lore.kernel.org/r/20251215-ascon_hash256-v1-2-24ae735e571e%40kriptograf.id
+patch subject: [PATCH 2/3] lib/crypto: Initial implementation of Ascon-Hash256
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251221/202512210037.K5OAaoVa-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512210037.K5OAaoVa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512202300.9OkWzU1c-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512210037.K5OAaoVa-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/platform/chips-media/wave5/wave5-vpu.c:344:11: error: no member named 'irq_thread' in 'struct vpu_device'
-     344 |         if (dev->irq_thread) {
-         |             ~~~  ^
-   drivers/media/platform/chips-media/wave5/wave5-vpu.c:345:21: error: no member named 'irq_thread' in 'struct vpu_device'
-     345 |                 kthread_stop(dev->irq_thread);
-         |                              ~~~  ^
->> drivers/media/platform/chips-media/wave5/wave5-vpu.c:346:12: error: no member named 'irq_sem' in 'struct vpu_device'
-     346 |                 up(&dev->irq_sem);
-         |                     ~~~  ^
-   drivers/media/platform/chips-media/wave5/wave5-vpu.c:347:8: error: no member named 'irq_thread' in 'struct vpu_device'
-     347 |                 dev->irq_thread = NULL;
-         |                 ~~~  ^
-   4 errors generated.
+>> lib/crypto/hash_info.c:35:3: error: use of undeclared identifier 'HASH_ALGO_ASCON_HASH256'
+      35 |         [HASH_ALGO_ASCON_HASH256] = "ascon-hash256",
+         |          ^
+>> lib/crypto/hash_info.c:63:30: error: use of undeclared identifier 'ASCON_HASH256_DIGEST_SIZE'
+      63 |         [HASH_ALGO_ASCON_HASH256] = ASCON_HASH256_DIGEST_SIZE,
+         |                                     ^
+   lib/crypto/hash_info.c:63:3: error: use of undeclared identifier 'HASH_ALGO_ASCON_HASH256'
+      63 |         [HASH_ALGO_ASCON_HASH256] = ASCON_HASH256_DIGEST_SIZE,
+         |          ^
+   3 errors generated.
 
 
-vim +344 drivers/media/platform/chips-media/wave5/wave5-vpu.c
+vim +/HASH_ALGO_ASCON_HASH256 +35 lib/crypto/hash_info.c
 
-   195	
-   196	static int wave5_vpu_probe(struct platform_device *pdev)
-   197	{
-   198		int ret;
-   199		struct vpu_device *dev;
-   200		const struct wave5_match_data *match_data;
-   201		u32 fw_revision;
-   202	
-   203		match_data = device_get_match_data(&pdev->dev);
-   204		if (!match_data) {
-   205			dev_err(&pdev->dev, "missing device match data\n");
-   206			return -EINVAL;
-   207		}
-   208	
-   209		/* physical addresses limited to 32 bits */
-   210		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-   211		if (ret) {
-   212			dev_err(&pdev->dev, "Failed to set DMA mask: %d\n", ret);
-   213			return ret;
-   214		}
-   215	
-   216		dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-   217		if (!dev)
-   218			return -ENOMEM;
-   219	
-   220		dev->vdb_register = devm_platform_ioremap_resource(pdev, 0);
-   221		if (IS_ERR(dev->vdb_register))
-   222			return PTR_ERR(dev->vdb_register);
-   223		ida_init(&dev->inst_ida);
-   224	
-   225		mutex_init(&dev->dev_lock);
-   226		mutex_init(&dev->hw_lock);
-   227		dev_set_drvdata(&pdev->dev, dev);
-   228		dev->dev = &pdev->dev;
-   229	
-   230		dev->resets = devm_reset_control_array_get_optional_exclusive(&pdev->dev);
-   231		if (IS_ERR(dev->resets)) {
-   232			return dev_err_probe(&pdev->dev, PTR_ERR(dev->resets),
-   233					     "Failed to get reset control\n");
-   234		}
-   235	
-   236		ret = reset_control_deassert(dev->resets);
-   237		if (ret)
-   238			return dev_err_probe(&pdev->dev, ret, "Failed to deassert resets\n");
-   239	
-   240		ret = devm_clk_bulk_get_all(&pdev->dev, &dev->clks);
-   241	
-   242		/* continue without clock, assume externally managed */
-   243		if (ret < 0) {
-   244			dev_warn(&pdev->dev, "Getting clocks, fail: %d\n", ret);
-   245			ret = 0;
-   246		}
-   247		dev->num_clks = ret;
-   248	
-   249		ret = clk_bulk_prepare_enable(dev->num_clks, dev->clks);
-   250		if (ret) {
-   251			dev_err(&pdev->dev, "Enabling clocks, fail: %d\n", ret);
-   252			goto err_reset_assert;
-   253		}
-   254	
-   255		dev->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
-   256		if (!dev->sram_pool)
-   257			dev_warn(&pdev->dev, "sram node not found\n");
-   258	
-   259		dev->sram_size = match_data->sram_size;
-   260	
-   261		dev->product_code = wave5_vdi_read_register(dev, VPU_PRODUCT_CODE_REGISTER);
-   262		ret = wave5_vdi_init(&pdev->dev);
-   263		if (ret < 0) {
-   264			dev_err(&pdev->dev, "wave5_vdi_init, fail: %d\n", ret);
-   265			goto err_clk_dis;
-   266		}
-   267		dev->product = wave5_vpu_get_product_id(dev);
-   268	
-   269		dev->irq = platform_get_irq(pdev, 0);
-   270		if (dev->irq < 0) {
-   271			dev_err(&pdev->dev, "failed to get irq resource, falling back to polling\n");
-   272			hrtimer_setup(&dev->hrtimer, &wave5_vpu_timer_callback, CLOCK_MONOTONIC,
-   273				      HRTIMER_MODE_REL_PINNED);
-   274			dev->worker = kthread_run_worker(0, "vpu_irq_thread");
-   275			if (IS_ERR(dev->worker)) {
-   276				dev_err(&pdev->dev, "failed to create vpu irq worker\n");
-   277				ret = PTR_ERR(dev->worker);
-   278				goto err_vdi_release;
-   279			}
-   280			dev->vpu_poll_interval = vpu_poll_interval;
-   281			kthread_init_work(&dev->work, wave5_vpu_irq_work_fn);
-   282		} else {
-   283			ret = devm_request_threaded_irq(&pdev->dev, dev->irq, NULL,
-   284							wave5_vpu_irq_thread, IRQF_ONESHOT, "vpu_irq", dev);
-   285			if (ret) {
-   286				dev_err(&pdev->dev, "Register interrupt handler, fail: %d\n", ret);
-   287				goto err_enc_unreg;
-   288			}
-   289		}
-   290	
-   291		INIT_LIST_HEAD(&dev->instances);
-   292		ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
-   293		if (ret) {
-   294			dev_err(&pdev->dev, "v4l2_device_register, fail: %d\n", ret);
-   295			goto err_irq_release;
-   296		}
-   297	
-   298		if (match_data->flags & WAVE5_IS_DEC) {
-   299			ret = wave5_vpu_dec_register_device(dev);
-   300			if (ret) {
-   301				dev_err(&pdev->dev, "wave5_vpu_dec_register_device, fail: %d\n", ret);
-   302				goto err_v4l2_unregister;
-   303			}
-   304		}
-   305		if (match_data->flags & WAVE5_IS_ENC) {
-   306			ret = wave5_vpu_enc_register_device(dev);
-   307			if (ret) {
-   308				dev_err(&pdev->dev, "wave5_vpu_enc_register_device, fail: %d\n", ret);
-   309				goto err_dec_unreg;
-   310			}
-   311		}
-   312	
-   313		ret = wave5_vpu_load_firmware(&pdev->dev, match_data->fw_name, &fw_revision);
-   314		if (ret) {
-   315			dev_err(&pdev->dev, "wave5_vpu_load_firmware, fail: %d\n", ret);
-   316			goto err_enc_unreg;
-   317		}
-   318	
-   319		dev_info(&pdev->dev, "Added wave5 driver with caps: %s %s\n",
-   320			 (match_data->flags & WAVE5_IS_ENC) ? "'ENCODE'" : "",
-   321			 (match_data->flags & WAVE5_IS_DEC) ? "'DECODE'" : "");
-   322		dev_info(&pdev->dev, "Product Code:      0x%x\n", dev->product_code);
-   323		dev_info(&pdev->dev, "Firmware Revision: %u\n", fw_revision);
-   324	
-   325		pm_runtime_set_autosuspend_delay(&pdev->dev, 100);
-   326		pm_runtime_use_autosuspend(&pdev->dev);
-   327		pm_runtime_enable(&pdev->dev);
-   328		wave5_vpu_sleep_wake(&pdev->dev, true, NULL, 0);
-   329	
-   330		return 0;
-   331	
-   332	err_enc_unreg:
-   333		if (match_data->flags & WAVE5_IS_ENC)
-   334			wave5_vpu_enc_unregister_device(dev);
-   335	err_dec_unreg:
-   336		if (match_data->flags & WAVE5_IS_DEC)
-   337			wave5_vpu_dec_unregister_device(dev);
-   338	err_v4l2_unregister:
-   339		v4l2_device_unregister(&dev->v4l2_dev);
-   340	err_irq_release:
-   341		if (dev->irq < 0)
-   342			kthread_destroy_worker(dev->worker);
-   343	err_vdi_release:
- > 344		if (dev->irq_thread) {
-   345			kthread_stop(dev->irq_thread);
- > 346			up(&dev->irq_sem);
-   347			dev->irq_thread = NULL;
-   348		}
-   349		wave5_vdi_release(&pdev->dev);
-   350	err_clk_dis:
-   351		clk_bulk_disable_unprepare(dev->num_clks, dev->clks);
-   352	err_reset_assert:
-   353		reset_control_assert(dev->resets);
-   354	
-   355		return ret;
-   356	}
-   357	
+    10	
+    11	const char *const hash_algo_name[HASH_ALGO__LAST] = {
+    12		[HASH_ALGO_MD4]		= "md4",
+    13		[HASH_ALGO_MD5]		= "md5",
+    14		[HASH_ALGO_SHA1]	= "sha1",
+    15		[HASH_ALGO_RIPE_MD_160]	= "rmd160",
+    16		[HASH_ALGO_SHA256]	= "sha256",
+    17		[HASH_ALGO_SHA384]	= "sha384",
+    18		[HASH_ALGO_SHA512]	= "sha512",
+    19		[HASH_ALGO_SHA224]	= "sha224",
+    20		[HASH_ALGO_RIPE_MD_128]	= "rmd128",
+    21		[HASH_ALGO_RIPE_MD_256]	= "rmd256",
+    22		[HASH_ALGO_RIPE_MD_320]	= "rmd320",
+    23		[HASH_ALGO_WP_256]	= "wp256",
+    24		[HASH_ALGO_WP_384]	= "wp384",
+    25		[HASH_ALGO_WP_512]	= "wp512",
+    26		[HASH_ALGO_TGR_128]	= "tgr128",
+    27		[HASH_ALGO_TGR_160]	= "tgr160",
+    28		[HASH_ALGO_TGR_192]	= "tgr192",
+    29		[HASH_ALGO_SM3_256]	= "sm3",
+    30		[HASH_ALGO_STREEBOG_256] = "streebog256",
+    31		[HASH_ALGO_STREEBOG_512] = "streebog512",
+    32		[HASH_ALGO_SHA3_256]    = "sha3-256",
+    33		[HASH_ALGO_SHA3_384]    = "sha3-384",
+    34		[HASH_ALGO_SHA3_512]    = "sha3-512",
+  > 35		[HASH_ALGO_ASCON_HASH256] = "ascon-hash256",
+    36	};
+    37	EXPORT_SYMBOL_GPL(hash_algo_name);
+    38	
+    39	const int hash_digest_size[HASH_ALGO__LAST] = {
+    40		[HASH_ALGO_MD4]		= MD5_DIGEST_SIZE,
+    41		[HASH_ALGO_MD5]		= MD5_DIGEST_SIZE,
+    42		[HASH_ALGO_SHA1]	= SHA1_DIGEST_SIZE,
+    43		[HASH_ALGO_RIPE_MD_160]	= RMD160_DIGEST_SIZE,
+    44		[HASH_ALGO_SHA256]	= SHA256_DIGEST_SIZE,
+    45		[HASH_ALGO_SHA384]	= SHA384_DIGEST_SIZE,
+    46		[HASH_ALGO_SHA512]	= SHA512_DIGEST_SIZE,
+    47		[HASH_ALGO_SHA224]	= SHA224_DIGEST_SIZE,
+    48		[HASH_ALGO_RIPE_MD_128]	= RMD128_DIGEST_SIZE,
+    49		[HASH_ALGO_RIPE_MD_256]	= RMD256_DIGEST_SIZE,
+    50		[HASH_ALGO_RIPE_MD_320]	= RMD320_DIGEST_SIZE,
+    51		[HASH_ALGO_WP_256]	= WP256_DIGEST_SIZE,
+    52		[HASH_ALGO_WP_384]	= WP384_DIGEST_SIZE,
+    53		[HASH_ALGO_WP_512]	= WP512_DIGEST_SIZE,
+    54		[HASH_ALGO_TGR_128]	= TGR128_DIGEST_SIZE,
+    55		[HASH_ALGO_TGR_160]	= TGR160_DIGEST_SIZE,
+    56		[HASH_ALGO_TGR_192]	= TGR192_DIGEST_SIZE,
+    57		[HASH_ALGO_SM3_256]	= SM3256_DIGEST_SIZE,
+    58		[HASH_ALGO_STREEBOG_256] = STREEBOG256_DIGEST_SIZE,
+    59		[HASH_ALGO_STREEBOG_512] = STREEBOG512_DIGEST_SIZE,
+    60		[HASH_ALGO_SHA3_256]    = SHA3_256_DIGEST_SIZE,
+    61		[HASH_ALGO_SHA3_384]    = SHA3_384_DIGEST_SIZE,
+    62		[HASH_ALGO_SHA3_512]    = SHA3_512_DIGEST_SIZE,
+  > 63		[HASH_ALGO_ASCON_HASH256] = ASCON_HASH256_DIGEST_SIZE,
 
 -- 
 0-DAY CI Kernel Test Service
