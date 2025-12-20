@@ -1,79 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3251D5CF2;
-	Sat, 20 Dec 2025 14:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488ED257843;
+	Sat, 20 Dec 2025 14:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766239205; cv=none; b=UJ23aXg/7RkxhnNQoTiVF+uneiAIWLGRD2C3zeFTl1QCp9rvOtatubsNUl8FP7Yk0Dw4l6R+zTmoJpzcJVrysj/s2dF7ma8BvgTj/VYO3ABxbi4MJvUlXFpCU47a6Ra9mXQsp2t+nalTCwfhnEZ9zpuaiKqxgvBF+sUcUH6BT7Q=
+	t=1766239869; cv=none; b=PsHTmtpBb1gzmwv7pM7GpHNRUNcVVOycA1nHl4+F0CVLRzOqTxqzDUdYJT7I95T+S7N6en3tPjAW/1+i0cvndSugWv68f34YuzxP3YdMo1Ae57QepF/spKFaUDMDNZq64DTMKGrDzcQgYtQferxXJxpZuhcwvoqYcDiITML7eZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766239205; c=relaxed/simple;
-	bh=+H/npnpo/aHP5YbM3+ZLB+6vTAQkvqdVC9uKXkV2xjY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dJ6MYG7EQQxXB0rBVMXMHx3yVpzOIfwyiVTPrqe9/EjoofsfiZt2fnp19pfM1pLi68LXkLpbky1Lzkmn71ooZz2eOS0D262bYDj3VldG/uiYuiTWSTK0XdEVIiH1ikS1cHR/3f8BNFavjE1vbnwB/UhffbRqlG0Hx4BGeaLp69k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lZ3FIy4U; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1766239869; c=relaxed/simple;
+	bh=tVCLGGKISwGz2fKv0BchnoYvOlaye4WMdrhR/MQ0sEU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=spdxtLYEFNwvNTxbwiAvSOEFc/n468yREAJ/TtLPKHPTyX5bRHZUDEsRMN+bNSbV4n/hk0oeYPJJDYuvtAJxXbhDa5AYSVcbGS4fzVEMcRvOF/oQajxwGnZ5v4ngxxFNPX18q1/RpzrbZWei+TXDN7IRPyNJDRK8h5RghkVlX+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b7BeEfJA; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lZ3FIy4U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b7BeEfJA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766239203; x=1797775203;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+H/npnpo/aHP5YbM3+ZLB+6vTAQkvqdVC9uKXkV2xjY=;
-  b=lZ3FIy4UPHxD3QK4tMDXpXDXRqn+RVyW4HnRu0u2hLiN+g62aAbt0lfu
-   1DsnBCZ3Ib6jC+j7vVyU6371VhdP7wEbDV5uEVEA+KUQAZAT+a59OtwVB
-   ussylQGCEE6BDLxl5IG7ntkSAM9vcjmfjvieQnJLzs18TDz1BWH23im/I
-   r09df/QmR3IoaP1zVxdVw9dKpUsOZO+s4e8UIINtrFphG2Eklig1gjAx3
-   EF6eM0UYXNR1eaNOSJmSE6beV3XfUg5cmWc5R15nViKZmvGmA/ulTYstC
-   SiqHGuFQF3KCLjLHN1eXZ2932kIX9pDWFhfi4TKTWbknENz+hFamzaxQd
+  t=1766239868; x=1797775868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tVCLGGKISwGz2fKv0BchnoYvOlaye4WMdrhR/MQ0sEU=;
+  b=b7BeEfJA4msh/DYHCTNmxBXdNNUay1D8J4q9Gf45uFhhf8R+cRVNfniz
+   iCZBVUXXE5A7ypseXCq+H6wPoNj9Xi/7S4V15LJod33PrCBM0JVFgxW9n
+   /7AKx7s4VJyLlr4nw5wxiju2o5PfOXCp1kBW3N9wTTAkoQr0xkbsfCG4W
+   3x5pD4iH08ypKtO/6hDPdJNZChTUNHVEhD3hAHhjieG1Fh/WfnIhYzX6i
+   BxwqQLiOGKmaLwZWHFiD6U+rRTxl5kJl7vsDFu/cWWbmh44QIwFAlGrpt
+   q442BIBfbRO+XwRVZgiMgCPmyvzGi5EWs3Szex2aKgtxJsvy5CWi4S/+f
    A==;
-X-CSE-ConnectionGUID: 5ueHKRmfQT+OgNl6I66rVA==
-X-CSE-MsgGUID: T/FABtD1S3uhrwW8ruxZnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="71806575"
+X-CSE-ConnectionGUID: rP/2vZjaRLSb2tY1YhdNiQ==
+X-CSE-MsgGUID: bBl9SO4TRn20KAGf9BgOzQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="78892301"
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="71806575"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 06:00:02 -0800
-X-CSE-ConnectionGUID: 8w7HrFL5RDqOfTYJHrs1RQ==
-X-CSE-MsgGUID: t8l+VLJmR8aABKYJ508zcQ==
+   d="scan'208";a="78892301"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 06:11:06 -0800
+X-CSE-ConnectionGUID: l8FsaEglTACmckXU07ugYQ==
+X-CSE-MsgGUID: hoYjPiL6SYK+WVYT8QdxsA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="198256643"
+   d="scan'208";a="236522626"
 Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 20 Dec 2025 05:59:57 -0800
+  by orviesa001.jf.intel.com with ESMTP; 20 Dec 2025 06:11:05 -0800
 Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vWxUv-000000004b5-3nWI;
-	Sat, 20 Dec 2025 13:59:53 +0000
-Date: Sat, 20 Dec 2025 21:59:51 +0800
+	id 1vWxfi-000000004cL-3Q8Z;
+	Sat, 20 Dec 2025 14:11:02 +0000
+Date: Sat, 20 Dec 2025 22:10:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Price <steven.price@arm.com>, kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steven Price <steven.price@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Joey Gouly <joey.gouly@arm.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Christoffer Dall <christoffer.dall@arm.com>,
-	Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev,
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-	Gavin Shan <gshan@redhat.com>,
-	Shanker Donthineni <sdonthineni@nvidia.com>,
-	Alper Gun <alpergun@google.com>,
-	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
-	Emi Kisanuki <fj0570is@fujitsu.com>,
-	Vishal Annapurve <vannapurve@google.com>
-Subject: Re: [PATCH v12 19/46] KVM: arm64: Expose support for private memory
-Message-ID: <202512202152.gapj1OD5-lkp@intel.com>
-References: <20251217101125.91098-20-steven.price@arm.com>
+To: hungkien05 <nguyenhunghnuekt@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jcmvbkbc-xtensa:pr/24 1/1] arch/x86/kvm/emulate.c:1741:2: warning:
+ '/*' within block comment
+Message-ID: <202512202203.DAeqyrft-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,78 +61,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251217101125.91098-20-steven.price@arm.com>
 
-Hi Steven,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.19-rc1 next-20251219]
-[cannot apply to kvmarm/next kvm/queue kvm/next arm64/for-next/core kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Price/kvm-arm64-Include-kvm_emulate-h-in-kvm-arm_psci-h/20251218-030351
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251217101125.91098-20-steven.price%40arm.com
-patch subject: [PATCH v12 19/46] KVM: arm64: Expose support for private memory
-config: arm64-randconfig-001-20251219 (https://download.01.org/0day-ci/archive/20251220/202512202152.gapj1OD5-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b324c9f4fa112d61a553bf489b5f4f7ceea05ea8)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202152.gapj1OD5-lkp@intel.com/reproduce)
+tree:   https://github.com/jcmvbkbc/linux-xtensa pr/24
+head:   dcd699a99ce2f40e50263e0ec438e3b57b133598
+commit: dcd699a99ce2f40e50263e0ec438e3b57b133598 [1/1] Fix potential vulnerability in cloned code (arch/x86/kvm/emulate.c)
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251220/202512202203.DAeqyrft-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202203.DAeqyrft-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512202152.gapj1OD5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202203.DAeqyrft-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/asm-offsets.c:16:
->> include/linux/kvm_host.h:725:45: error: expected identifier or '('
-     725 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-         |                                             ^
->> include/linux/kvm_host.h:725:45: error: expected ')'
-   include/linux/kvm_host.h:725:20: note: to match this '('
-     725 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-         |                    ^
-   arch/arm64/include/asm/kvm_host.h:1465:40: note: expanded from macro 'kvm_arch_has_private_mem'
-    1465 | #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.is_realm)
-         |                                        ^
-   In file included from arch/arm64/kernel/asm-offsets.c:16:
-   include/linux/kvm_host.h:725:20: error: expected ')'
-     725 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-         |                    ^
-   arch/arm64/include/asm/kvm_host.h:1465:45: note: expanded from macro 'kvm_arch_has_private_mem'
-    1465 | #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.is_realm)
-         |                                             ^
-   include/linux/kvm_host.h:725:20: note: to match this '('
-   arch/arm64/include/asm/kvm_host.h:1465:39: note: expanded from macro 'kvm_arch_has_private_mem'
-    1465 | #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.is_realm)
-         |                                       ^
-   3 errors generated.
-   make[3]: *** [scripts/Makefile.build:182: arch/arm64/kernel/asm-offsets.s] Error 1 shuffle=1976660145
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1314: prepare0] Error 2 shuffle=1976660145
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1976660145
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1976660145
-   make: Target 'prepare' not remade because of errors.
+>> arch/x86/kvm/emulate.c:1741:2: warning: '/*' within block comment [-Wcomment]
+    1741 |         /*
+         |         ^
+   arch/x86/kvm/emulate.c:1759:4: error: expected expression
+    1759 |          */
+         |           ^
+   arch/x86/kvm/emulate.c:1760:2: error: expected expression
+    1760 |         if (seg == VCPU_SREG_SS && selector == 3 &&
+         |         ^
+   1 warning and 2 errors generated.
 
 
-vim +725 include/linux/kvm_host.h
+vim +1741 arch/x86/kvm/emulate.c
 
-f481b069e67437 Paolo Bonzini       2015-05-17  723  
-d1e54dd08f163a Fuad Tabba          2025-07-29  724  #ifndef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
-a7800aa80ea4d5 Sean Christopherson 2023-11-13 @725  static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-a7800aa80ea4d5 Sean Christopherson 2023-11-13  726  {
-a7800aa80ea4d5 Sean Christopherson 2023-11-13  727  	return false;
-a7800aa80ea4d5 Sean Christopherson 2023-11-13  728  }
-a7800aa80ea4d5 Sean Christopherson 2023-11-13  729  #endif
-a7800aa80ea4d5 Sean Christopherson 2023-11-13  730  
+dde7e6d12a9ef9 Avi Kivity    2010-07-29  1733  
+2356aaeb2f58f4 Paolo Bonzini 2014-05-15  1734  static int load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+2356aaeb2f58f4 Paolo Bonzini 2014-05-15  1735  				   u16 selector, int seg)
+2356aaeb2f58f4 Paolo Bonzini 2014-05-15  1736  {
+2356aaeb2f58f4 Paolo Bonzini 2014-05-15  1737  	u8 cpl = ctxt->ops->cpl(ctxt);
+33ab91103b3415 Paolo Bonzini 2017-01-12  1738  
+dcd699a99ce2f4 hungkien05    2025-12-17  1739  
+dcd699a99ce2f4 hungkien05    2025-12-17  1740  	/*
+33ab91103b3415 Paolo Bonzini 2017-01-12 @1741  	/*
+33ab91103b3415 Paolo Bonzini 2017-01-12  1742  	 * None of MOV, POP and LSS can load a NULL selector in CPL=3, but
+dcd699a99ce2f4 hungkien05    2025-12-17  1743  	 * None of MOV, POP and LSS can load a NULL selector in CPL=3, but
+dcd699a99ce2f4 hungkien05    2025-12-17  1744  	 * they can load it at CPL<3 (Intel's manual says only LSS can,
+33ab91103b3415 Paolo Bonzini 2017-01-12  1745  	 * they can load it at CPL<3 (Intel's manual says only LSS can,
+33ab91103b3415 Paolo Bonzini 2017-01-12  1746  	 * but it's wrong).
+dcd699a99ce2f4 hungkien05    2025-12-17  1747  	 * but it's wrong).
+dcd699a99ce2f4 hungkien05    2025-12-17  1748  	 *
+33ab91103b3415 Paolo Bonzini 2017-01-12  1749  	 *
+33ab91103b3415 Paolo Bonzini 2017-01-12  1750  	 * However, the Intel manual says that putting IST=1/DPL=3 in
+dcd699a99ce2f4 hungkien05    2025-12-17  1751  	 * However, the Intel manual says that putting IST=1/DPL=3 in
+dcd699a99ce2f4 hungkien05    2025-12-17  1752  	 * an interrupt gate will result in SS=3 (the AMD manual instead
+33ab91103b3415 Paolo Bonzini 2017-01-12  1753  	 * an interrupt gate will result in SS=3 (the AMD manual instead
+33ab91103b3415 Paolo Bonzini 2017-01-12  1754  	 * says it doesn't), so allow SS=3 in __load_segment_descriptor
+dcd699a99ce2f4 hungkien05    2025-12-17  1755  	 * says it doesn't), so allow SS=3 in __load_segment_descriptor
+dcd699a99ce2f4 hungkien05    2025-12-17  1756  	 * and only forbid it here.
+33ab91103b3415 Paolo Bonzini 2017-01-12  1757  	 * and only forbid it here.
+33ab91103b3415 Paolo Bonzini 2017-01-12  1758  	 */
+dcd699a99ce2f4 hungkien05    2025-12-17  1759  	 */
+dcd699a99ce2f4 hungkien05    2025-12-17  1760  	if (seg == VCPU_SREG_SS && selector == 3 &&
+33ab91103b3415 Paolo Bonzini 2017-01-12  1761  	if (seg == VCPU_SREG_SS && selector == 3 &&
+33ab91103b3415 Paolo Bonzini 2017-01-12  1762  	    ctxt->mode == X86EMUL_MODE_PROT64)
+dcd699a99ce2f4 hungkien05    2025-12-17  1763  	    ctxt->mode == X86EMUL_MODE_PROT64)
+dcd699a99ce2f4 hungkien05    2025-12-17  1764  		return emulate_exception(ctxt, GP_VECTOR, 0, true);
+33ab91103b3415 Paolo Bonzini 2017-01-12  1765  		return emulate_exception(ctxt, GP_VECTOR, 0, true);
+33ab91103b3415 Paolo Bonzini 2017-01-12  1766  
+dcd699a99ce2f4 hungkien05    2025-12-17  1767  
+3dc4bc4f6b9265 Nadav Amit    2014-12-25  1768  	return __load_segment_descriptor(ctxt, selector, seg, cpl,
+3dc4bc4f6b9265 Nadav Amit    2014-12-25  1769  					 X86_TRANSFER_NONE, NULL);
+2356aaeb2f58f4 Paolo Bonzini 2014-05-15  1770  }
+2356aaeb2f58f4 Paolo Bonzini 2014-05-15  1771  
+
+:::::: The code at line 1741 was first introduced by commit
+:::::: 33ab91103b3415e12457e3104f0e4517ce12d0f3 KVM: x86: fix emulation of "MOV SS, null selector"
+
+:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
