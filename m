@@ -1,110 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A45828468E;
-	Sun, 21 Dec 2025 13:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5325A1FC101;
+	Sun, 21 Dec 2025 19:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766322124; cv=none; b=a3AqDK/JtdeybdhoSo3AMNp5rbne827gc3r0T6F5C/qPBUyonBzovU/pHlL3W4XB5oslzWrE5v4vo9loWE5obZywFcyDkHcP0BM9A8OIlgCLO71wZxyUgpS+a1jumVMyj79niiVjCodVcXi0olbBiz3J0WwGDB3btXapcQAoe04=
+	t=1766344075; cv=none; b=QMsU+c0QBwgVme9NkRdqFHUbfBMX0C4i/nk0YkH6us+nvGQVneePSWwPpFLCrA7ES3AryRPnwLqZVYKfZpGC/347hpRXV8AN/nASU7Xl/JqWVnoOLpriWnbHfpxOQjqOY5FbUVMvYw2iJQCfKIrngm1whZpR9v2FWzKng70peO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766322124; c=relaxed/simple;
-	bh=IelPuQfpRKpMJVdVfQngugsAIYeDlUYPxZTLwugxbgg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P/K/2Kdt/SLlGDfhjTfu40LjFWSxvBSov90LzlfaPc8kupbqkHJNBy3Oet5e7C8Tqg76YuCilBLc9IpSfVcaW9nxDTes4OcQ7HrxWN06H81G3H74D0LxDxeMY5abfluqACIkPhzvfFvUxUDXhOJv09+tzyPQMZq1f6dyTRukuAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ER1Ik8HC; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766344075; c=relaxed/simple;
+	bh=5qRIeksMsfEJsG09uI0wVp8Q5PSrhw5lrhG/r6Dm2Bo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NgKsaCzpkWfx4/b81+2aoo5xhHeEeSD8rdVSksdW7ddOi3cs2rOeCzGqgrGllXcvwbTTxj0eiqlJ6INYISP7IkNNIOAdZ2W/13noT6POXsJgwYuXvBb4hgMZ4W+HSTsQjqbGvCQok0NKfRXvVOw55cpp2D2PdcYLtX4c/Tjpp28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NJdyQaQE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ER1Ik8HC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766322123; x=1797858123;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IelPuQfpRKpMJVdVfQngugsAIYeDlUYPxZTLwugxbgg=;
-  b=ER1Ik8HCkSNidPJusuCBSOzgpU6+wfTGksbvdFIGtuHm7Y1lcBoU8Y1U
-   aBQ0wiVv1AiQk3LOw8kXVa+sV8tKoHOwQH4upbPYSfcnz/EzZ3LvNPW14
-   pYfC+flf8P7VtLfdd+UO3qVsC7Vv7cbpX+EfKHDtUt5pNjC6A7YIjqrzQ
-   BOPaY4Zfde0tcxKUWxWLtEi+MmzUeDfQ1nplyxjkmj6wtNaGYRnaUjvL0
-   AVjKZ3l9gzQxjgAG4y9M6DouCsxZXRSgIrcIUzWh6QloqdavYB/rIkifo
-   aVdrNYMjnk0i82vHwQetNotFl0MRMraQPY/WXn7vsUyO862uBVx9CvkZC
-   w==;
-X-CSE-ConnectionGUID: cR4vcmhWSiqI5/TT86m8Gg==
-X-CSE-MsgGUID: 51M+95FfRIWs2UDBWZC8iA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68084631"
-X-IronPort-AV: E=Sophos;i="6.21,166,1763452800"; 
-   d="scan'208";a="68084631"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 05:02:02 -0800
-X-CSE-ConnectionGUID: tSMa9SGsQR6X4MkfEPOybw==
-X-CSE-MsgGUID: zpzgTZWNSviZ9bksHBD5rw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,166,1763452800"; 
-   d="scan'208";a="198547878"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by orviesa010.jf.intel.com with ESMTP; 21 Dec 2025 05:02:01 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vXJ4Q-00000000548-17Dx;
-	Sun, 21 Dec 2025 13:01:58 +0000
-Date: Sun, 21 Dec 2025 14:01:10 +0100
-From: kernel test robot <lkp@intel.com>
-To: Vitaliy Filippov <vitalifster@gmail.com>, linux-block@vger.kernel.org,
-	linux-nvme@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vitaliy Filippov <vitalifster@gmail.com>
-Subject: Re: [PATCH] Do not require atomic writes to be power of 2 sized and
- aligned on length boundary
-Message-ID: <202512211420.W7jr2osh-lkp@intel.com>
-References: <20251220173833.71176-1-vitalifster@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJdyQaQE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394FAC4CEFB;
+	Sun, 21 Dec 2025 19:07:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766344074;
+	bh=5qRIeksMsfEJsG09uI0wVp8Q5PSrhw5lrhG/r6Dm2Bo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NJdyQaQE0RKum87djB/p76VFtKzoStwkO6UQuhuJKEO51HPv4aOci1PpiVqRCfo13
+	 6bqbA4/TPkTyB7oFKolG4gZTCbRxHGzpQZAR3xXaN17wp8uTA9g+HgEhCg9ewCByE/
+	 BFWLAFExrSjQIiHg3jBi/ggBBxTmitBuM9Qq+tI3irDy1FeBGJULvOf4VhEWjg0vEj
+	 hE9OM87+RLGyfxP67EjCP6DC4cOBQHfXN/6rKrRA7tzF+NEqnfetjiObV2AZGdJbtZ
+	 nRVdWRWLA8VvW8uzvT1LeObbIP6f8E8Wbh6siljW5LWEjtgwC3/XgDT15OOnufwcb3
+	 y2nIzcR+GtbZg==
+Date: Sun, 21 Dec 2025 19:07:42 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Frank Li <Frank.Li@nxp.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ David Lechner <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-iio@vger.kernel.org,
+ joshua.yeong@starfivetech.com, devicetree@vger.kernel.org,
+ linux@roeck-us.net, Carlos Song <carlos.song@nxp.com>, Adrian Fluturel
+ <fluturel.adrian@gmail.com>
+Subject: Re: [PATCH v12 2/2] iio: magnetometer: Add mmc5633 sensor
+Message-ID: <20251221190742.4162108b@jic23-huawei>
+In-Reply-To: <202512202141.aAwyC19D-lkp@intel.com>
+References: <20251215-i3c_ddr-v12-2-1ae31225b4d9@nxp.com>
+	<202512202141.aAwyC19D-lkp@intel.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251220173833.71176-1-vitalifster@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Vitaliy,
+On Sat, 20 Dec 2025 22:34:47 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> Hi Frank,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on 8f0b4cce4481fb22653697cced8d0d04027cb1e8]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/dt-bindings-trivial-devices-add-MEMSIC-3-axis-magnetometer/20251216-010451
+> base:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> patch link:    https://lore.kernel.org/r/20251215-i3c_ddr-v12-2-1ae31225b4d9%40nxp.com
+> patch subject: [PATCH v12 2/2] iio: magnetometer: Add mmc5633 sensor
+> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251220/202512202141.aAwyC19D-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202141.aAwyC19D-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202512202141.aAwyC19D-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/iio/magnetometer/mmc5633.c:362:2: error: cannot jump from switch statement to this case label  
+>      362 |         default:
+>          |         ^
+>    drivers/iio/magnetometer/mmc5633.c:357:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+>      357 |                 guard(mutex)(&data->mutex);
+>          |                 ^
+>    include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
+>      414 |         CLASS(_name, __UNIQUE_ID(guard))
+>          |                      ^
+>    include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+>      168 |         __PASTE(__UNIQUE_ID_,                                   \
+>          |         ^
+>    include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+>       16 | #define __PASTE(a, b) ___PASTE(a, b)
+>          |                       ^
+>    include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+>       15 | #define ___PASTE(a, b) a##b
+>          |                        ^
+>    <scratch space>:9:1: note: expanded from here
+>        9 | __UNIQUE_ID_guard_966
+>          | ^
+>    1 error generated.
+> 
+> 
+> vim +362 drivers/iio/magnetometer/mmc5633.c
+> 
+>    343	
+>    344	static int mmc5633_write_raw(struct iio_dev *indio_dev,
+>    345				     struct iio_chan_spec const *chan, int val,
+>    346				     int val2, long mask)
+>    347	{
+>    348		struct mmc5633_data *data = iio_priv(indio_dev);
+>    349		int ret;
+>    350	
+>    351		switch (mask) {
+>    352		case IIO_CHAN_INFO_SAMP_FREQ:
+{
+>    353			ret = mmc5633_get_samp_freq_index(data, val, val2);
+>    354			if (ret < 0)
+>    355				return ret;
+>    356	
+>    357			guard(mutex)(&data->mutex);
+>    358	
+>    359			return regmap_update_bits(data->regmap, MMC5633_REG_CTRL1,
+>    360						  MMC5633_CTRL1_BW_MASK,
+>    361						  FIELD_PREP(MMC5633_CTRL1_BW_MASK, ret));
+}
+Needed to add scope for the guard to apply to.
+If this is all that comes up I'll fix it whilst applying.
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v6.19-rc1 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+thanks,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vitaliy-Filippov/Do-not-require-atomic-writes-to-be-power-of-2-sized-and-aligned-on-length-boundary/20251221-014115
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20251220173833.71176-1-vitalifster%40gmail.com
-patch subject: [PATCH] Do not require atomic writes to be power of 2 sized and aligned on length boundary
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251221/202512211420.W7jr2osh-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512211420.W7jr2osh-lkp@intel.com/reproduce)
+Jonathan
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512211420.W7jr2osh-lkp@intel.com/
+>  > 362		default:  
+>    363			return -EINVAL;
+>    364		}
+>    365	}
+>    366	
+> 
 
-All warnings (new ones prefixed by >>):
-
->> fs/read_write.c:1805:9: warning: unused variable 'len' [-Wunused-variable]
-    1805 |         size_t len = iov_iter_count(iter);
-         |                ^~~
-   1 warning generated.
-
-
-vim +/len +1805 fs/read_write.c
-
-c34fc6f26ab86d Prasad Singamsetty 2024-06-20  1802  
-c3be7ebbbce520 John Garry         2024-10-19  1803  int generic_atomic_write_valid(struct kiocb *iocb, struct iov_iter *iter)
-c34fc6f26ab86d Prasad Singamsetty 2024-06-20  1804  {
-c34fc6f26ab86d Prasad Singamsetty 2024-06-20 @1805  	size_t len = iov_iter_count(iter);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
