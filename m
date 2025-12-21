@@ -1,69 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710C62AE68;
-	Sun, 21 Dec 2025 09:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A45828468E;
+	Sun, 21 Dec 2025 13:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766310431; cv=none; b=oYTvfuizGUn1530ZsXyjUX7+CjAVM2JcezN6sWs5IH3EkD9sPJodT+9TudH6TephUtHH74HVUu0jyxRlw8XCItaCow8nHzHfQSwOh8AkhSPD+hyt3VDp2J3YGSWdHUcMRrkuG3c2ck36aLwl3l3IbPvT/DMyW90OXruKtGYioIo=
+	t=1766322124; cv=none; b=a3AqDK/JtdeybdhoSo3AMNp5rbne827gc3r0T6F5C/qPBUyonBzovU/pHlL3W4XB5oslzWrE5v4vo9loWE5obZywFcyDkHcP0BM9A8OIlgCLO71wZxyUgpS+a1jumVMyj79niiVjCodVcXi0olbBiz3J0WwGDB3btXapcQAoe04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766310431; c=relaxed/simple;
-	bh=4rJv5dqd8vQSSuUWkhvYaw7fdGbR4zlzLZporGj9z9g=;
+	s=arc-20240116; t=1766322124; c=relaxed/simple;
+	bh=IelPuQfpRKpMJVdVfQngugsAIYeDlUYPxZTLwugxbgg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ldRtvmYaoPCqjrYhYNbBrxJHDTtDMVdDUcgIDLaNsEO43hyeA3ICfpO5ty0oml+syhHtCYDL9ZddHFeLNZ6lTdWigYc+jiiVBYltToLaSd6rwT+Qv5zJT5+02EI44WiG6C5FtK3VofkSoNrzGFy/pptTTZNEK/j9y48/Khy6Rzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IZA/yq+0; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=P/K/2Kdt/SLlGDfhjTfu40LjFWSxvBSov90LzlfaPc8kupbqkHJNBy3Oet5e7C8Tqg76YuCilBLc9IpSfVcaW9nxDTes4OcQ7HrxWN06H81G3H74D0LxDxeMY5abfluqACIkPhzvfFvUxUDXhOJv09+tzyPQMZq1f6dyTRukuAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ER1Ik8HC; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IZA/yq+0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ER1Ik8HC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766310430; x=1797846430;
+  t=1766322123; x=1797858123;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4rJv5dqd8vQSSuUWkhvYaw7fdGbR4zlzLZporGj9z9g=;
-  b=IZA/yq+0KCpiqnsPPB5kXMm5/qaUQPJ0mrZRApAPoY+EbqbqKrY4vqro
-   lHc9JPjulfcV8FtkU+uHJkQGX1lPZ3ntIAQdVVolgZucwz1yfNfExZWp/
-   WcWSRZu+eQtDPHtuovt0Aih2YY6a3JVDXRUK8pvH6sMTjR2+Rs4l/Ysp3
-   84ja2FsVcBebkWWgJYKpRAc/c8+F9iXAjrdOvnhTqQhLMv0NEULmfFMKD
-   m0ssnvEpTBrrmqN57evbd6lB0hA8BZacPRcqYsPJvDEms+vnujM3Klqrk
-   VPAw5hRjba5yBB4/QaIvOSeONCCjqXDngOyo7EPbtGvLRmt3K7TAVll9Q
-   Q==;
-X-CSE-ConnectionGUID: uHbn3ndDS5qmh/0Y4SDHwg==
-X-CSE-MsgGUID: gkNLP27hRsaL/qRDun/z3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="68246097"
-X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="68246097"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 01:47:09 -0800
-X-CSE-ConnectionGUID: MeU1WLjjRvyTa7CkqD6twQ==
-X-CSE-MsgGUID: CMUSjbIkShmtezCjTP8dpQ==
+  bh=IelPuQfpRKpMJVdVfQngugsAIYeDlUYPxZTLwugxbgg=;
+  b=ER1Ik8HCkSNidPJusuCBSOzgpU6+wfTGksbvdFIGtuHm7Y1lcBoU8Y1U
+   aBQ0wiVv1AiQk3LOw8kXVa+sV8tKoHOwQH4upbPYSfcnz/EzZ3LvNPW14
+   pYfC+flf8P7VtLfdd+UO3qVsC7Vv7cbpX+EfKHDtUt5pNjC6A7YIjqrzQ
+   BOPaY4Zfde0tcxKUWxWLtEi+MmzUeDfQ1nplyxjkmj6wtNaGYRnaUjvL0
+   AVjKZ3l9gzQxjgAG4y9M6DouCsxZXRSgIrcIUzWh6QloqdavYB/rIkifo
+   aVdrNYMjnk0i82vHwQetNotFl0MRMraQPY/WXn7vsUyO862uBVx9CvkZC
+   w==;
+X-CSE-ConnectionGUID: cR4vcmhWSiqI5/TT86m8Gg==
+X-CSE-MsgGUID: 51M+95FfRIWs2UDBWZC8iA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68084631"
+X-IronPort-AV: E=Sophos;i="6.21,166,1763452800"; 
+   d="scan'208";a="68084631"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 05:02:02 -0800
+X-CSE-ConnectionGUID: tSMa9SGsQR6X4MkfEPOybw==
+X-CSE-MsgGUID: zpzgTZWNSviZ9bksHBD5rw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
-   d="scan'208";a="229935926"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 21 Dec 2025 01:47:06 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+X-IronPort-AV: E=Sophos;i="6.21,166,1763452800"; 
+   d="scan'208";a="198547878"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by orviesa010.jf.intel.com with ESMTP; 21 Dec 2025 05:02:01 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXG1n-000000005Vl-21fQ;
-	Sun, 21 Dec 2025 09:47:03 +0000
-Date: Sun, 21 Dec 2025 17:46:40 +0800
+	id 1vXJ4Q-00000000548-17Dx;
+	Sun, 21 Dec 2025 13:01:58 +0000
+Date: Sun, 21 Dec 2025 14:01:10 +0100
 From: kernel test robot <lkp@intel.com>
-To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Jacob Pan <jacob.jun.pan@linux.intel.com>
+To: Vitaliy Filippov <vitalifster@gmail.com>, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH-v3 2/3] genirq: Adaptive Global Software Interrupt
- Moderation (GSIM)
-Message-ID: <202512211737.PVtnFVdB-lkp@intel.com>
-References: <20251217112128.1401896-3-lrizzo@google.com>
+	Vitaliy Filippov <vitalifster@gmail.com>
+Subject: Re: [PATCH] Do not require atomic writes to be power of 2 sized and
+ aligned on length boundary
+Message-ID: <202512211420.W7jr2osh-lkp@intel.com>
+References: <20251220173833.71176-1-vitalifster@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,44 +65,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251217112128.1401896-3-lrizzo@google.com>
+In-Reply-To: <20251220173833.71176-1-vitalifster@gmail.com>
 
-Hi Luigi,
+Hi Vitaliy,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on tip/irq/core]
-[also build test ERROR on linus/master v6.19-rc1]
-[cannot apply to next-20251219]
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on linus/master v6.19-rc1 next-20251219]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-Fixed-Global-Software-Interrupt-Moderation-GSIM/20251217-193249
-base:   tip/irq/core
-patch link:    https://lore.kernel.org/r/20251217112128.1401896-3-lrizzo%40google.com
-patch subject: [PATCH-v3 2/3] genirq: Adaptive Global Software Interrupt Moderation (GSIM)
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251221/202512211737.PVtnFVdB-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512211737.PVtnFVdB-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vitaliy-Filippov/Do-not-require-atomic-writes-to-be-power-of-2-sized-and-aligned-on-length-boundary/20251221-014115
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20251220173833.71176-1-vitalifster%40gmail.com
+patch subject: [PATCH] Do not require atomic writes to be power of 2 sized and aligned on length boundary
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251221/202512211420.W7jr2osh-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512211420.W7jr2osh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512211737.PVtnFVdB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512211420.W7jr2osh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __hexagon_udivdi3
-   >>> referenced by irq_moderation_hook.c
-   >>>               kernel/irq/irq_moderation_hook.o:(irq_moderation_update_epoch) in archive vmlinux.a
-   >>> referenced by irq_moderation_hook.c
-   >>>               kernel/irq/irq_moderation_hook.o:(irq_moderation_update_epoch) in archive vmlinux.a
-   >>> referenced by irq_moderation_hook.c
-   >>>               kernel/irq/irq_moderation_hook.o:(irq_moderation_update_epoch) in archive vmlinux.a
-   >>> referenced 1 more times
-   >>> did you mean: __hexagon_udivsi3
-   >>> defined in: vmlinux.a(arch/hexagon/lib/udivsi3.o)
+>> fs/read_write.c:1805:9: warning: unused variable 'len' [-Wunused-variable]
+    1805 |         size_t len = iov_iter_count(iter);
+         |                ^~~
+   1 warning generated.
+
+
+vim +/len +1805 fs/read_write.c
+
+c34fc6f26ab86d Prasad Singamsetty 2024-06-20  1802  
+c3be7ebbbce520 John Garry         2024-10-19  1803  int generic_atomic_write_valid(struct kiocb *iocb, struct iov_iter *iter)
+c34fc6f26ab86d Prasad Singamsetty 2024-06-20  1804  {
+c34fc6f26ab86d Prasad Singamsetty 2024-06-20 @1805  	size_t len = iov_iter_count(iter);
 
 -- 
 0-DAY CI Kernel Test Service
