@@ -1,155 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0387222F755
-	for <llvm@lists.linux.dev>; Sun, 21 Dec 2025 09:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710C62AE68;
+	Sun, 21 Dec 2025 09:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766309613; cv=none; b=iC3zKI+0jl9vEXqZdm5zvSCO5Sz3HWSKxD8ZIQOd29kdGDGBcx4Umu8LaL4CGUmnN9vmvy5hvjo0sHVWqyypBvtSYjJI7Zj6YCL0JFXI1IPmU0mkGmNVYfVFH77vji1gPFDoJ43YqOkTJ1oTP5pC++i/EnKBr0BITH8Yb8hD90k=
+	t=1766310431; cv=none; b=oYTvfuizGUn1530ZsXyjUX7+CjAVM2JcezN6sWs5IH3EkD9sPJodT+9TudH6TephUtHH74HVUu0jyxRlw8XCItaCow8nHzHfQSwOh8AkhSPD+hyt3VDp2J3YGSWdHUcMRrkuG3c2ck36aLwl3l3IbPvT/DMyW90OXruKtGYioIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766309613; c=relaxed/simple;
-	bh=5rHFOFPYt1fngiWDfhRBTpR1+YsQ6NxKHWoTPVbfors=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MBOa6WM4ZM8xp2Ispd1hMVsxyjGI4eQdmcKW/f6yKniyQzW15a3fqVRSAOYH0LP7vo+wlrWj8hd5LfIIEK7o7DUe5OjPf/k/6tmjs7FNgOhOs5k5bWsnfFfbyf0hI/+XHqjCQlX6sOE5jvYo4Lg+ecUbiEQc66ttQbXv3kKoNkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DMeGg9+C; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1766310431; c=relaxed/simple;
+	bh=4rJv5dqd8vQSSuUWkhvYaw7fdGbR4zlzLZporGj9z9g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ldRtvmYaoPCqjrYhYNbBrxJHDTtDMVdDUcgIDLaNsEO43hyeA3ICfpO5ty0oml+syhHtCYDL9ZddHFeLNZ6lTdWigYc+jiiVBYltToLaSd6rwT+Qv5zJT5+02EI44WiG6C5FtK3VofkSoNrzGFy/pptTTZNEK/j9y48/Khy6Rzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IZA/yq+0; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DMeGg9+C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766309611;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YgjaPgDz6zc8gEAPc6Syw7UX11fzlXpb7k60zQ8Cv+U=;
-	b=DMeGg9+C/5bfP8OT7Cgv5NNhaaNjL05NEBFViaNEk+SQNDizU0rLDOqIZM+IweaY49L1Od
-	FFtzaq7622ThSUopOnlDFLs8XZNNjJIct3UkymHjT8INjQoET102oOVhugfvI/GClAPIfs
-	dSyDL5JYVt/zctlkfSNY46bz2fHVf9Q=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-423-kD09Wh_hN4K_81cmtSxB4w-1; Sun,
- 21 Dec 2025 04:33:29 -0500
-X-MC-Unique: kD09Wh_hN4K_81cmtSxB4w-1
-X-Mimecast-MFC-AGG-ID: kD09Wh_hN4K_81cmtSxB4w_1766309608
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8064A1800365
-	for <llvm@lists.linux.dev>; Sun, 21 Dec 2025 09:33:28 +0000 (UTC)
-Received: from [172.20.50.79] (unknown [10.30.44.138])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3FAB030001A2;
-	Sun, 21 Dec 2025 09:33:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc1,
- upstream-mainline, fa084c35)
-Date: Sun, 21 Dec 2025 09:33:28 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IZA/yq+0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766310430; x=1797846430;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4rJv5dqd8vQSSuUWkhvYaw7fdGbR4zlzLZporGj9z9g=;
+  b=IZA/yq+0KCpiqnsPPB5kXMm5/qaUQPJ0mrZRApAPoY+EbqbqKrY4vqro
+   lHc9JPjulfcV8FtkU+uHJkQGX1lPZ3ntIAQdVVolgZucwz1yfNfExZWp/
+   WcWSRZu+eQtDPHtuovt0Aih2YY6a3JVDXRUK8pvH6sMTjR2+Rs4l/Ysp3
+   84ja2FsVcBebkWWgJYKpRAc/c8+F9iXAjrdOvnhTqQhLMv0NEULmfFMKD
+   m0ssnvEpTBrrmqN57evbd6lB0hA8BZacPRcqYsPJvDEms+vnujM3Klqrk
+   VPAw5hRjba5yBB4/QaIvOSeONCCjqXDngOyo7EPbtGvLRmt3K7TAVll9Q
+   Q==;
+X-CSE-ConnectionGUID: uHbn3ndDS5qmh/0Y4SDHwg==
+X-CSE-MsgGUID: gkNLP27hRsaL/qRDun/z3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="68246097"
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="68246097"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 01:47:09 -0800
+X-CSE-ConnectionGUID: MeU1WLjjRvyTa7CkqD6twQ==
+X-CSE-MsgGUID: CMUSjbIkShmtezCjTP8dpQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="229935926"
+Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 21 Dec 2025 01:47:06 -0800
+Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vXG1n-000000005Vl-21fQ;
+	Sun, 21 Dec 2025 09:47:03 +0000
+Date: Sun, 21 Dec 2025 17:46:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH-v3 2/3] genirq: Adaptive Global Software Interrupt
+ Moderation (GSIM)
+Message-ID: <202512211737.PVtnFVdB-lkp@intel.com>
+References: <20251217112128.1401896-3-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <53849.125122104332900167@us-mta-423.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: -5Ybr9wMG4l6Qx6FwrdCPD0fMunIf_39oKa3__tdrCI_1766309608
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251217112128.1401896-3-lrizzo@google.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Luigi,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on linus/master v6.19-rc1]
+[cannot apply to next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'linux_kselftest-kunit-fixes-6.19-rc3' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-Fixed-Global-Software-Interrupt-Moderation-GSIM/20251217-193249
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20251217112128.1401896-3-lrizzo%40google.com
+patch subject: [PATCH-v3 2/3] genirq: Adaptive Global Software Interrupt Moderation (GSIM)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251221/202512211737.PVtnFVdB-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512211737.PVtnFVdB-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2226280975
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512211737.PVtnFVdB-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
- Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
-            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
-comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
-d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
-medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
-=3D1
-            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
-65900650445969
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-                Boot test [aarch64]
-                Reboot test [aarch64]
-                Storage - blktests - ublk [aarch64]
-                stress: stress-ng - cpu-cache [aarch64]
-                stress: stress-ng - memory [aarch64]
-                xfstests - btrfs [aarch64]
-                xfstests - ext4 [aarch64]
-                xfstests - xfs [aarch64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: __hexagon_udivdi3
+   >>> referenced by irq_moderation_hook.c
+   >>>               kernel/irq/irq_moderation_hook.o:(irq_moderation_update_epoch) in archive vmlinux.a
+   >>> referenced by irq_moderation_hook.c
+   >>>               kernel/irq/irq_moderation_hook.o:(irq_moderation_update_epoch) in archive vmlinux.a
+   >>> referenced by irq_moderation_hook.c
+   >>>               kernel/irq/irq_moderation_hook.o:(irq_moderation_update_epoch) in archive vmlinux.a
+   >>> referenced 1 more times
+   >>> did you mean: __hexagon_udivsi3
+   >>> defined in: vmlinux.a(arch/hexagon/lib/udivsi3.o)
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
