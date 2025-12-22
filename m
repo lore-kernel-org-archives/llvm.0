@@ -1,247 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA8E32E151;
-	Mon, 22 Dec 2025 08:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CB21F91D6
+	for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 08:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766391929; cv=none; b=Z1b01gniXOzD9B2c15QPEX6ac3G0ej9vaKlAxpI6GBfhBOyuN4DD0QwhGZ97vvx3xk58NNyQJOYHu2AEv5KQI1IMohtY3IJKV3eN/zwdczJsVyGCVQ4f0Vxifr6k1+XPsUbYYBrK7qg/dQv3LgnTs1507Vm3si0PN2UG5tnEeJA=
+	t=1766393770; cv=none; b=SBx/phWvVDgLlOFhyyHHrofCiFbK/7KzqrBLo5AqXhqGrB3PrR6mEQwqYsbJ2CwMDjKubfAikGhJdl9uJWT11DYPzgR6Hfh2UoqZu2jZubz0/9uQzSAtcx2FJ9ZsfOETP8IYB0G/WqOeI5n2Tk86pD0BMppqJZJgyn6jQ4jLW2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766391929; c=relaxed/simple;
-	bh=duwcowZ2Tp9bU8jZQF+DTECUctuaZr7skmMWcW9ts+E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dkBEgAobVZwjfP1Pez8R3bmr1xSpzMQwXHcxN9fZ54mOGAwHmdCSBaU1JqnTxKKexwdgY//75WLyoSaNFj3Yicr3Vto7hmusk/ITtrh6i6Q2w5KZScglUN1bsQ/DuhBF1NuX2vJfL/vDvsOj/JVeapt+BQOVH5yOp38JmmMs8j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ixv6V3mu; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766393770; c=relaxed/simple;
+	bh=7JbjUpfRtcJDQTbUr/o8/MBhec59OcUt6gwi4/rdI/Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nmImRifFLetb6Qmg1hLXvCfU5IWmgWlRi+1PLKCI/M6pEiXLpONs8TlvX/7Po2o8avs42tz21sTZFVuFuggBdmOGHVj2D5EAPZs6q8qMa1bEimNSB/t7TIk1FRfL5mDnODzVF2u/rj2/Ba0jkyW0cw0e7cKFtIAdkE1bD8Ouluw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BSiHoiig; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ixv6V3mu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766391927; x=1797927927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=duwcowZ2Tp9bU8jZQF+DTECUctuaZr7skmMWcW9ts+E=;
-  b=ixv6V3muPT+2KL6GWzVXmJA1va5QZjVU9yrlPzkwHkZJdh5MTD8s7K8N
-   PqqFYMYgRE4wAGflgz2VEXzJ5+KoTXrLPloECpVZ8dS/U9hnZbovv5NhS
-   O4TlDdrqhCzOx1V93X7YjNmLur21x/xi7BGrDzNVAmtYkhgFT2EMtnMZs
-   SifhMfx2bQUmgaOc8rKsl8/+6gMmYzUYGluG1/zb2dJLku7Q8k6kizUze
-   MaQkSHa2sHtmHJtmXmK5tdbZ0pO8ZWmj5RIMQ5YwyP9loqv22zX/mv5th
-   SdHql6NFjlwBIRnLqmm6GCewGHzAnaYIHsneKNvGzfwvu7pSy792izDg+
-   Q==;
-X-CSE-ConnectionGUID: +ZTcojU8Qc6doS5V+dSXgA==
-X-CSE-MsgGUID: yDWFiIbBQ/C0AzK/un1Epw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68126230"
-X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="68126230"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 00:25:27 -0800
-X-CSE-ConnectionGUID: vVw6QRdKS7S9OpMKI234Hg==
-X-CSE-MsgGUID: /ik4qapjQF6vb9f0zRb9vA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="203600969"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 22 Dec 2025 00:25:24 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vXbEI-000000000GX-0yVC;
-	Mon, 22 Dec 2025 08:25:22 +0000
-Date: Mon, 22 Dec 2025 16:24:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shawn Lin <shawn.lin@rock-chips.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mmc@vger.kernel.org, Jaehoon Chung <jh80.chung@samsung.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: Re: [PATCH 17/18] mmc: dw_mmc-pltfm: use modern PM macros
-Message-ID: <202512221642.SEMmxjZw-lkp@intel.com>
-References: <1766066445-14144-18-git-send-email-shawn.lin@rock-chips.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSiHoiig"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b7697e8b01aso697412366b.2
+        for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 00:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766393765; x=1766998565; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pwRJY48dxTPs1oTrj8n5Xyh/tYuVrBXkK07zh9sBwxs=;
+        b=BSiHoiigugVY8zRdBZw4mLcFC0zSMXWlzR6DDgMx1T8zDORcIYM6E5UfMj3AjAngEH
+         untj0YloSjVMUs/tku6eurnUOacURnSGoodkR5QutkKbOeKp9PdzQ/hnbP7J7b2aOYFj
+         IXXVX+eCfxGTbRwTrhb/Tcy/meQtwZslEmxUugp2MhHwaOuVv3DAwNlFo/dt5u7qUK81
+         z59sJp1sL++pu1vaY3x/jheavKF677eSjAE98ATM8jRxm/ML4res7SUl+FSGYRBnH/E8
+         nDcmDeOgUTpQizpc+htNj00WqqoM/CQOrpZPx/ZSiXnK7V8G8fIt77r3/lG3TMmlXNlQ
+         VYvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766393765; x=1766998565;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pwRJY48dxTPs1oTrj8n5Xyh/tYuVrBXkK07zh9sBwxs=;
+        b=LqiGfaZ8UoR0mDEKRD0ur+SJ0IUGAhXV5eDWY6zGuOCsyqOk2m2UNL99Fyn6VwkrVa
+         NsLI4T/G0Ly+3DFktUrUvWbmtlCiK2Rag8P5auD3pG/4JAMrSNPqWPdFp90cwiK5ACEL
+         N5ORFFfEH68uN3qI0mXLI++kA4C7C07r2DDzob7CERI8dGETnUQpJjz5osQk++nh4s+v
+         pbZ54e306p1uoNHPnwKR0+B9ryuua5Mn93xKMj69AHZa0iTxFuZc/Dlel60TE0/sIfey
+         5AL2K2Jh+cKcKLiG+yGuyOSTmkAASsASiLmdPRyvawoW7kBi7sVs2/sPgv3/60+mS+3Q
+         fL9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQS8rhNXQI8UPjosSI1FPZYnbIU21uIQhEKPx8IRGEXDc4ojYX/Bw/bRxIFEb95O70rnNl@lists.linux.dev
+X-Gm-Message-State: AOJu0YxysKi/L2cQFQfc1pfE+pC6hA9hsRaH27DkmUk1u1PROtQflzyt
+	uek2Hsrt1FCk+kHGvccaPI7wQskotvy2Eh8oAjvMwFxdDwB0wqmXFZgPR+MIQ6Rt
+X-Gm-Gg: AY/fxX6bBVqrBORDAUPcmgXE83bsT+z+R9OY2dT/k9XRNT+Xm5n9AFXmRuHxBDUDpGN
+	DsqI7j1wHd96Zy1isWPlkDK1vqVuYSPIbOOakF+q3HMOg7RbNjVSa0+lS6LZyciERfNBH6VyzMb
+	Zq+9v1S2VQBb01VKQsJ8FCg9TKTJpjePEP63CqEEBvg0qn/aR3Ctyh7RdULVX7yS9Dp7YUuiVFj
+	Z6KFOkDJEpC2+tgeQj+lsCLtcbR0/NJ/vKJCxSvpMA9XsVY9CTVvXhZc/bSjeygZBxzJhe3w1CY
+	FjNeVWwD6cPWD8R2/GPulGqROZmP2/WUDeduzYful9S8oSuC5oG+72U/ayKTK9dAuSMTdpdYfEk
+	bElHg/AW/XBXsRBfylCN7al4/qD6n/f17QVyDMoYp/BVQNTjP6Q4d3+TVfjb4cg2HhoFF1BCcPR
+	6b7HcbxjufENy9oE/JIyPMFftGwCHL6gEN2R8maJQ7VIozlfGJLcgXeINBUPAeve2r4ue+SbwJk
+	CjNkSYBsYGF+j9069NqwFYiuThnQN4Lu7/sRTnhLCsBTg==
+X-Google-Smtp-Source: AGHT+IF7ALpzL1gY8Ty9xkngtZeIfTvDYqIusKSKXf4paJFRSQtinRQWNbOMeFi5eWxXfYNiL8nLvg==
+X-Received: by 2002:a05:600c:3b07:b0:47a:814c:eea1 with SMTP id 5b1f17b1804b1-47d195917d2mr96907475e9.35.1766386967128;
+        Sun, 21 Dec 2025 23:02:47 -0800 (PST)
+Received: from ?IPV6:2003:df:bf2d:e300:c9b3:3e5c:bfa7:af26? (p200300dfbf2de300c9b33e5cbfa7af26.dip0.t-ipconnect.de. [2003:df:bf2d:e300:c9b3:3e5c:bfa7:af26])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea82f6asm20819355f8f.27.2025.12.21.23.02.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Dec 2025 23:02:46 -0800 (PST)
+Message-ID: <5521e98b-e12d-4af1-adcd-2dc56863f90b@gmail.com>
+Date: Mon, 22 Dec 2025 08:02:44 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1766066445-14144-18-git-send-email-shawn.lin@rock-chips.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] pci: provide pci_free_irq_vectors() stub when CONFIG_PCI
+ is disabled
+To: Liang Jie <buaajxlj@163.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Joel Fernandes <joelagnelf@nvidia.com>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:RUST:Keyword:b(?i:rust)b" <rust-for-linux@vger.kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
+ <llvm@lists.linux.dev>
+Cc: liangjie@lixiang.com, kernel test robot <lkp@intel.com>
+References: <20251222034415.1384223-1-buaajxlj@163.com>
+Content-Language: de-AT-frami
+From: Dirk Behme <dirk.behme@gmail.com>
+In-Reply-To: <20251222034415.1384223-1-buaajxlj@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Shawn,
+On 22.12.25 04:44, Liang Jie wrote:
+> From: Liang Jie <liangjie@lixiang.com>
+> 
+> When building with CONFIG_PCI=n, clang reports:
+> 
+>   In file included from rust/helpers/helpers.c:40:
+>   rust/helpers/pci.c:36:2: error: call to undeclared function 'pci_free_irq_vectors';
+>   ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>           pci_free_irq_vectors(dev);
+>           ^
+>   rust/helpers/pci.c:36:2: note: did you mean 'pci_alloc_irq_vectors'?
+>   include/linux/pci.h:2161:1: note: 'pci_alloc_irq_vectors' declared here
+>   pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+>   ^
+>   1 error generated.
+> 
+> The root cause is that include/linux/pci.h provides inline stubs for
+> pci_alloc_irq_vectors() in the CONFIG_PCI=n fallback, but does not provide
+> any declaration for pci_free_irq_vectors(). As a result, callers that invoke
+> pci_free_irq_vectors() under CONFIG_PCI=n (e.g. Rust PCI helpers) hit an
+> implicit function declaration error with clang.
+> 
+> Fix this by adding a no-op pci_free_irq_vectors() stub to the CONFIG_PCI=n
+> fallback section of include/linux/pci.h, keeping the alloc/free API pair
+> consistent and avoiding implicit declaration build failures.
+> 
+> Fixes: 473b9f331718 ("rust: pci: fix build failure when CONFIG_PCI_MSI is disabled")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202512220740.4Kexm4dW-lkp@intel.com/
+> Signed-off-by: Liang Jie <liangjie@lixiang.com>
+> ---
+>  include/linux/pci.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 864775651c6f..b5cc0c2b9906 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -2210,6 +2210,10 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+>  {
+>  	return -ENOSPC;
+>  }
+> +
+> +static inline void pci_free_irq_vectors(struct pci_dev *dev)
+> +{
+> +}
+>  #endif /* CONFIG_PCI */
+>  
+>  /* Include architecture-dependent settings and functions */
 
-kernel test robot noticed the following build errors:
+We have this from Boqun already
 
-[auto build test ERROR on next-20251218]
-[cannot apply to rockchip/for-next linus/master ulf-hansson-mmc-mirror/next v6.19-rc1 v6.18 v6.18-rc7 v6.19-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://lore.kernel.org/rust-for-linux/20251215025444.65544-1-boqun.feng@gmail.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/mmc-dw_mmc-Check-return-value-of-dma_ops-init-in-resume/20251218-222945
-base:   next-20251218
-patch link:    https://lore.kernel.org/r/1766066445-14144-18-git-send-email-shawn.lin%40rock-chips.com
-patch subject: [PATCH 17/18] mmc: dw_mmc-pltfm: use modern PM macros
-config: hexagon-randconfig-001-20251222 (https://download.01.org/0day-ci/archive/20251222/202512221642.SEMmxjZw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512221642.SEMmxjZw-lkp@intel.com/reproduce)
+?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512221642.SEMmxjZw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/mmc/host/dw_mmc.c:2368:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2368 |                         mci_fifo_writeq(host->fifo_reg, host->part_buf);
-         |                         ^
-   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
-     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
-         |                                         ^
-   drivers/mmc/host/dw_mmc.c:2385:5: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2385 |                                 mci_fifo_writeq(host->fifo_reg, aligned_buf[i]);
-         |                                 ^
-   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
-     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
-         |                                         ^
-   drivers/mmc/host/dw_mmc.c:2393:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2393 |                         mci_fifo_writeq(host->fifo_reg, *pdata++);
-         |                         ^
-   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
-     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
-         |                                         ^
-   drivers/mmc/host/dw_mmc.c:2402:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2402 |                         mci_fifo_writeq(host->fifo_reg, host->part_buf);
-         |                         ^
-   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
-     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
-         |                                         ^
-   drivers/mmc/host/dw_mmc.c:2418:22: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2418 |                                 aligned_buf[i] = mci_fifo_readq(host->fifo_reg);
-         |                                                  ^
-   drivers/mmc/host/dw_mmc.h:453:31: note: expanded from macro 'mci_fifo_readq'
-     453 | #define mci_fifo_readq(__reg)   __raw_readq(__reg)
-         |                                 ^
-   drivers/mmc/host/dw_mmc.c:2431:15: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2431 |                         *pdata++ = mci_fifo_readq(host->fifo_reg);
-         |                                    ^
-   drivers/mmc/host/dw_mmc.h:453:31: note: expanded from macro 'mci_fifo_readq'
-     453 | #define mci_fifo_readq(__reg)   __raw_readq(__reg)
-         |                                 ^
-   drivers/mmc/host/dw_mmc.c:2435:20: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2435 |                 host->part_buf = mci_fifo_readq(host->fifo_reg);
-         |                                  ^
-   drivers/mmc/host/dw_mmc.h:453:31: note: expanded from macro 'mci_fifo_readq'
-     453 | #define mci_fifo_readq(__reg)   __raw_readq(__reg)
-         |                                 ^
->> drivers/mmc/host/dw_mmc.c:3438:5: error: redefinition of 'dw_mci_runtime_suspend'
-    3438 | int dw_mci_runtime_suspend(struct device *dev)
-         |     ^
-   drivers/mmc/host/dw_mmc.h:496:19: note: previous definition is here
-     496 | static inline int dw_mci_runtime_suspend(struct device *device) { return -EOPNOTSUPP; }
-         |                   ^
->> drivers/mmc/host/dw_mmc.c:3456:5: error: redefinition of 'dw_mci_runtime_resume'
-    3456 | int dw_mci_runtime_resume(struct device *dev)
-         |     ^
-   drivers/mmc/host/dw_mmc.h:497:19: note: previous definition is here
-     497 | static inline int dw_mci_runtime_resume(struct device *device) { return -EOPNOTSUPP; }
-         |                   ^
-   9 errors generated.
-
-
-vim +/dw_mci_runtime_suspend +3438 drivers/mmc/host/dw_mmc.c
-
-62ca8034d940439 Shashidhar Hiremath 2012-01-13  3437  
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12 @3438  int dw_mci_runtime_suspend(struct device *dev)
-f95f3850f7a9e1d Will Newton         2011-01-02  3439  {
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3440  	struct dw_mci *host = dev_get_drvdata(dev);
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3441  
-3fc7eaef44dbcbc Shawn Lin           2015-09-16  3442  	if (host->use_dma && host->dma_ops->exit)
-3fc7eaef44dbcbc Shawn Lin           2015-09-16  3443  		host->dma_ops->exit(host);
-3fc7eaef44dbcbc Shawn Lin           2015-09-16  3444  
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3445  	clk_disable_unprepare(host->ciu_clk);
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3446  
-926311cf33618e6 Shawn Lin           2025-12-16  3447  	if (host &&
-6ac3503c447016a Shawn Lin           2025-12-16  3448  	    (mmc_host_can_gpio_cd(host->mmc) ||
-6ac3503c447016a Shawn Lin           2025-12-16  3449  	     !mmc_card_is_removable(host->mmc)))
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3450  		clk_disable_unprepare(host->biu_clk);
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3451  
-f95f3850f7a9e1d Will Newton         2011-01-02  3452  	return 0;
-f95f3850f7a9e1d Will Newton         2011-01-02  3453  }
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3454  EXPORT_SYMBOL(dw_mci_runtime_suspend);
-f95f3850f7a9e1d Will Newton         2011-01-02  3455  
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12 @3456  int dw_mci_runtime_resume(struct device *dev)
-f95f3850f7a9e1d Will Newton         2011-01-02  3457  {
-b23475faed77f6a Jaehoon Chung       2017-06-05  3458  	int ret = 0;
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3459  	struct dw_mci *host = dev_get_drvdata(dev);
-f95f3850f7a9e1d Will Newton         2011-01-02  3460  
-926311cf33618e6 Shawn Lin           2025-12-16  3461  	if (host &&
-6ac3503c447016a Shawn Lin           2025-12-16  3462  	    (mmc_host_can_gpio_cd(host->mmc) ||
-6ac3503c447016a Shawn Lin           2025-12-16  3463  	     !mmc_card_is_removable(host->mmc))) {
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3464  		ret = clk_prepare_enable(host->biu_clk);
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3465  		if (ret)
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3466  			return ret;
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3467  	}
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3468  
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3469  	ret = clk_prepare_enable(host->ciu_clk);
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3470  	if (ret)
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3471  		goto err;
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3472  
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3473  	if (!dw_mci_ctrl_reset(host, SDMMC_CTRL_ALL_RESET_FLAGS)) {
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3474  		clk_disable_unprepare(host->ciu_clk);
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3475  		ret = -ENODEV;
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3476  		goto err;
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3477  	}
-ed24e1ff5ae3d74 Shawn Lin           2016-10-12  3478  
-b99f9a35a19687b Shawn Lin           2025-12-18  3479  	if (host->use_dma && host->dma_ops->init) {
-b99f9a35a19687b Shawn Lin           2025-12-18  3480  		ret = host->dma_ops->init(host);
-b99f9a35a19687b Shawn Lin           2025-12-18  3481  		if (ret)
-b99f9a35a19687b Shawn Lin           2025-12-18  3482  			return ret;
-b99f9a35a19687b Shawn Lin           2025-12-18  3483  	}
-141a712a4eb0963 Seungwon Jeon       2012-05-22  3484  
-524268990e54dab Seungwon Jeon       2013-08-31  3485  	/*
-524268990e54dab Seungwon Jeon       2013-08-31  3486  	 * Restore the initial value at FIFOTH register
-524268990e54dab Seungwon Jeon       2013-08-31  3487  	 * And Invalidate the prev_blksz with zero
-524268990e54dab Seungwon Jeon       2013-08-31  3488  	 */
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3489  	mci_writel(host, FIFOTH, host->fifoth_val);
-524268990e54dab Seungwon Jeon       2013-08-31  3490  	host->prev_blksz = 0;
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3491  
-2eb2944fa7d1470 Doug Anderson       2013-08-31  3492  	/* Put in max timeout */
-2eb2944fa7d1470 Doug Anderson       2013-08-31  3493  	mci_writel(host, TMOUT, 0xFFFFFFFF);
-2eb2944fa7d1470 Doug Anderson       2013-08-31  3494  
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3495  	mci_writel(host, RINTSTS, 0xFFFFFFFF);
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3496  	mci_writel(host, INTMASK, SDMMC_INT_CMD_DONE | SDMMC_INT_DATA_OVER |
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3497  		   SDMMC_INT_TXDR | SDMMC_INT_RXDR |
-fa0c328343c6314 Doug Anderson       2015-02-25  3498  		   DW_MCI_ERROR_FLAGS);
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3499  	mci_writel(host, CTRL, SDMMC_CTRL_INT_ENABLE);
-e61cf1184d72e57 Jaehoon Chung       2011-03-17  3500  
-0e3a22c044478b6 Shawn Lin           2015-08-03  3501  
-926311cf33618e6 Shawn Lin           2025-12-16  3502  	if (host && host->mmc->pm_flags & MMC_PM_KEEP_POWER)
-6ac3503c447016a Shawn Lin           2025-12-16  3503  		dw_mci_set_ios(host->mmc, &host->mmc->ios);
-e9748e0364fe82d Ziyuan Xu           2017-01-17  3504  
-e9748e0364fe82d Ziyuan Xu           2017-01-17  3505  	/* Force setup bus to guarantee available clock output */
-926311cf33618e6 Shawn Lin           2025-12-16  3506  	dw_mci_setup_bus(host, true);
-fa0c328343c6314 Doug Anderson       2015-02-25  3507  
-7c526608d5afb62 Ulf Hansson         2019-09-08  3508  	/* Re-enable SDIO interrupts. */
-6ac3503c447016a Shawn Lin           2025-12-16  3509  	if (sdio_irq_claimed(host->mmc))
-926311cf33618e6 Shawn Lin           2025-12-16  3510  		__dw_mci_enable_sdio_irq(host, 1);
-7c526608d5afb62 Ulf Hansson         2019-09-08  3511  
-926311cf33618e6 Shawn Lin           2025-12-16  3512  	/* Now that host is setup, we can enable card detect */
-fa0c328343c6314 Doug Anderson       2015-02-25  3513  	dw_mci_enable_cd(host);
-fa0c328343c6314 Doug Anderson       2015-02-25  3514  
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3515  	return 0;
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3516  
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3517  err:
-926311cf33618e6 Shawn Lin           2025-12-16  3518  	if (host &&
-6ac3503c447016a Shawn Lin           2025-12-16  3519  	    (mmc_host_can_gpio_cd(host->mmc) ||
-6ac3503c447016a Shawn Lin           2025-12-16  3520  	     !mmc_card_is_removable(host->mmc)))
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3521  		clk_disable_unprepare(host->biu_clk);
-df9bcc2bc0a1f8d Joonyoung Shim      2016-11-25  3522  
-1f5c51d76e8f304 Shawn Lin           2016-10-12  3523  	return ret;
-1f5c51d76e8f304 Shawn Lin           2016-10-12  3524  }
-e9ed8835e990474 Shawn Lin           2016-10-12  3525  EXPORT_SYMBOL(dw_mci_runtime_resume);
-6fe8890d0200ea0 Jaehoon Chung       2011-12-08  3526  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Dirk
