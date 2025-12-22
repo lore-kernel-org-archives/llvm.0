@@ -1,196 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DEA72631;
-	Mon, 22 Dec 2025 17:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C43842AA6;
+	Mon, 22 Dec 2025 17:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766424293; cv=none; b=P9Ddz5wbq7x29z6n9QVfOGT9UdkULgzgOI+gLi3wq1mapkYple3N/d5v1TPoFQobYBqXVeIqMhMc7MQ+dufX1sn9gFOqwfKga9+xjDkQ2+Mr4oXG1ScSOvouSCGsD7by/+TpgtKwuPLmSxZaxj50kdTNUHbmVLtY4G26fageuKE=
+	t=1766425847; cv=none; b=Iqs01rNAoU21L/2P6UtYHupk4nGoplRZt89HxAqYkXYn9kuHdVNrwp2Mcxyto/1hc4nFr7nEyV6LL8jVNheybzF7Kh3sK6X0xxWnoV6745Y73VhmdGKoj4jI62AUq338Kf1Z3GjnoLmE96c+XTzGUsByVu8xpugLFo0zTnmjz+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766424293; c=relaxed/simple;
-	bh=Meh4IFJKwQmWFy7b4k7Ru7HZTrffdNhPM8b0t4yMLHA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MCAhTeMTYtS9PboOViHddtlGb0V+ymyv6UEdYo+eC6ou6ms2slZlZWg407EcymSkGzlFg0hOncvZVoKxbi8CeaYGkxFfupj/a5E5Z/7Wx2YUpwQh+zjxwkwi9T/pLbztECOXIJlyHLlmFVMM7dpPVKXarurQG5UbTm9DAOclmsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LAHloAlD; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766425847; c=relaxed/simple;
+	bh=TaE4TgIrr4He9lFdeyYoAqLDs3cuOBInUm1iz8AuHgQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=r+6fhfqDrAX/UziK+yUMLUddEikZM5G8p3NhO5rKmtFZqncn4Ev/sPB+muEHF49CLKObN9EgWFi9p8ZPDgjOszjcJaKFYgnVsDFgWp98iw9/oHKGMWLT9gsMr03kIn38Rj/1THbUCtLqHzzHiaD5dsQ71e/l67AoKSa0XiY43AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjNACTyM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LAHloAlD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766424292; x=1797960292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Meh4IFJKwQmWFy7b4k7Ru7HZTrffdNhPM8b0t4yMLHA=;
-  b=LAHloAlD48Xvp1XK9c9aoPvFklMaS7dNj5qqCaObfqexGOyfH0gPPnVb
-   q+/wizfDbL0k302MDsXD5IXtOyefGlRCQfGUh97cavrHIS/8opXqNwcaY
-   RJaYsDxMU5LaD7ebNDOTYtMygsH1JGyBKx/FSmDLsKTAxLdr/cqSn+I9n
-   z6PUWMo2GLo5/xYcJOEAANiMTezUiHY7xC8RoOjW0ty/XynOMIVhLd/co
-   wSTHTHq7NIlkiD7aSow1HUvA1zBIDWq90aOoRuErcJ4fIlNqAXGZ9s3H+
-   8YVML6vGfjZAMMR2PLU4TuFWq70MHgaNtkcOaUVUNu8MKy2goiwXWK1n3
-   A==;
-X-CSE-ConnectionGUID: M/WtDLZ4RKuBaixG+zP1ew==
-X-CSE-MsgGUID: GYb/hAdPQtOb1xUAaR8+uw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="93753036"
-X-IronPort-AV: E=Sophos;i="6.21,168,1763452800"; 
-   d="scan'208";a="93753036"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 09:24:50 -0800
-X-CSE-ConnectionGUID: 3D03URhnR7qKeY5xeft+uA==
-X-CSE-MsgGUID: bm0uX86LSyWVPF7HV1Kz9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,168,1763452800"; 
-   d="scan'208";a="199214417"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 22 Dec 2025 09:24:48 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vXjeI-000000000vV-0Dw5;
-	Mon, 22 Dec 2025 17:24:46 +0000
-Date: Tue, 23 Dec 2025 01:23:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joanne Koong <joannelkoong@gmail.com>, miklos@szeredi.hu,
-	axboe@kernel.dk
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bschubert@ddn.com,
-	asml.silence@gmail.com, io-uring@vger.kernel.org,
-	csander@purestorage.com, xiaobing.li@samsung.com,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 19/25] fuse: add io-uring kernel-managed buffer ring
-Message-ID: <202512230043.PJcZViVh-lkp@intel.com>
-References: <20251218083319.3485503-20-joannelkoong@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjNACTyM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63048C4CEF1;
+	Mon, 22 Dec 2025 17:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766425845;
+	bh=TaE4TgIrr4He9lFdeyYoAqLDs3cuOBInUm1iz8AuHgQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=VjNACTyMyohwQlbQ254N+Z7xQo8HRRIUuPkRFlfpn0M6nXxT0bo4g3H/8zr4wSvZZ
+	 zu1G/xK9i+7AXh0p7m8Pmxj3fXBF+meCYzyLZcIaCkAVAlpk2dHusv/KnUpBgQzP8W
+	 SUuhLR+OsXQOd0r7phDaXFlpmcmamJ0lFn09vE8CmC/4Mw15aKHi6LeUIfc5i3Shnt
+	 tTkEafo9p3JTszuVs8pn0kYPen5uYZ/k3wQl0Hkta+ndFhBOCcMHUvfVJAPCpqCZSC
+	 TmjBa54r7qAS9w+T6sUby7e+GWwBkhdih576dhYUWmOZks98DkRI9WexgeF5FSEcTS
+	 ilkaaxRLoedUQ==
+From: Mark Brown <broonie@kernel.org>
+To: Shuming Fan <shumingf@realtek.com>, Oder Chiou <oder_chiou@realtek.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Nathan Chancellor <nathan@kernel.org>
+Cc: linux-sound@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+In-Reply-To: <20251219-rt1320-sdw-avoid-uninit-ret-v1-1-faa3e250ebc4@kernel.org>
+References: <20251219-rt1320-sdw-avoid-uninit-ret-v1-1-faa3e250ebc4@kernel.org>
+Subject: Re: [PATCH] ASoC: rt1320: Change return type of rt1320_t0_load()
+ to void
+Message-Id: <176642584412.925274.11167480957596799795.b4-ty@kernel.org>
+Date: Mon, 22 Dec 2025 17:50:44 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251218083319.3485503-20-joannelkoong@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
-Hi Joanne,
+On Fri, 19 Dec 2025 16:08:08 -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y / W=e):
+> 
+>   sound/soc/codecs/rt1320-sdw.c:1387:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>    1387 |         if (!fw_ready) {
+>         |             ^~~~~~~~~
+>   sound/soc/codecs/rt1320-sdw.c:1421:9: note: uninitialized use occurs here
+>    1421 |         return ret;
+>         |                ^~~
+>   sound/soc/codecs/rt1320-sdw.c:1387:2: note: remove the 'if' if its condition is always false
+>    1387 |         if (!fw_ready) {
+>         |         ^~~~~~~~~~~~~~~~
+>    1388 |                 dev_warn(dev, "%s, DSP FW is NOT ready\n", __func__);
+>         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1389 |                 goto _exit_;
+>         |                 ~~~~~~~~~~~~
+>    1390 |         }
+>         |         ~
+>   sound/soc/codecs/rt1320-sdw.c:1366:9: note: initialize the variable 'ret' to silence this warning
+>    1366 |         int ret;
+>         |                ^
+>         |                 = 0
+> 
+> [...]
 
-kernel test robot noticed the following build warnings:
+Applied to
 
-[auto build test WARNING on axboe/for-next]
-[also build test WARNING on linus/master v6.19-rc2 next-20251219]
-[cannot apply to mszeredi-fuse/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/io_uring-kbuf-refactor-io_buf_pbuf_register-logic-into-generic-helpers/20251218-165107
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/20251218083319.3485503-20-joannelkoong%40gmail.com
-patch subject: [PATCH v2 19/25] fuse: add io-uring kernel-managed buffer ring
-config: um-randconfig-001-20251222 (https://download.01.org/0day-ci/archive/20251223/202512230043.PJcZViVh-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 185f5fd5ce4c65116ca8cf6df467a682ef090499)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512230043.PJcZViVh-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512230043.PJcZViVh-lkp@intel.com/
+[1/1] ASoC: rt1320: Change return type of rt1320_t0_load() to void
+      commit: 9e692bb5412a7b0e6534ba2d7158a57ed4b00658
 
-All warnings (new ones prefixed by >>):
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-   In file included from fs/fuse/dev_uring.c:7:
-   In file included from fs/fuse/fuse_i.h:23:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> fs/fuse/dev_uring.c:704:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     703 |                                     "header_type=%u, header_size=%lu, "
-         |                                                                  ~~~
-         |                                                                  %zu
-     704 |                                     "use_bufring=%d\n", type, header_size,
-         |                                                               ^~~~~~~~~~~
-   include/linux/printk.h:726:46: note: expanded from macro 'pr_info_ratelimited'
-     726 |         printk_ratelimited(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                             ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:706:17: note: expanded from macro 'printk_ratelimited'
-     706 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   fs/fuse/dev_uring.c:743:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     742 |                                     "header_type=%u, header_size=%lu, "
-         |                                                                  ~~~
-         |                                                                  %zu
-     743 |                                     "use_bufring=%d\n", type, header_size,
-         |                                                               ^~~~~~~~~~~
-   include/linux/printk.h:726:46: note: expanded from macro 'pr_info_ratelimited'
-     726 |         printk_ratelimited(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                             ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:706:17: note: expanded from macro 'printk_ratelimited'
-     706 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   3 warnings generated.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-vim +704 fs/fuse/dev_uring.c
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-   670	
-   671	static __always_inline int copy_header_to_ring(struct fuse_ring_ent *ent,
-   672						       enum fuse_uring_header_type type,
-   673						       const void *header,
-   674						       size_t header_size)
-   675	{
-   676		bool use_bufring = ent->queue->use_bufring;
-   677		int err = 0;
-   678	
-   679		if (use_bufring) {
-   680			struct iov_iter iter;
-   681	
-   682			err =  get_kernel_ring_header(ent, type, &iter);
-   683			if (err)
-   684				goto done;
-   685	
-   686			if (copy_to_iter(header, header_size, &iter) != header_size)
-   687				err = -EFAULT;
-   688		} else {
-   689			void __user *ring = get_user_ring_header(ent, type);
-   690	
-   691			if (!ring) {
-   692				err = -EINVAL;
-   693				goto done;
-   694			}
-   695	
-   696			if (copy_to_user(ring, header, header_size))
-   697				err = -EFAULT;
-   698		}
-   699	
-   700	done:
-   701		if (err)
-   702			pr_info_ratelimited("Copying header to ring failed: "
-   703					    "header_type=%u, header_size=%lu, "
- > 704					    "use_bufring=%d\n", type, header_size,
-   705					    use_bufring);
-   706	
-   707		return err;
-   708	}
-   709	
+Thanks,
+Mark
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
