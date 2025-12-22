@@ -1,85 +1,99 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EF923E350
-	for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 09:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC142BD11
+	for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 09:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766394714; cv=none; b=qCpDOJhyTMl3OlWqC28yCLMBd5qH56Ypp5sHCWxKHG7aYaGUCZv3s3u5Ru1Ttqz77W1Zt5/+HfXzxqKNgNMwICo8U+3Lm40ihhF/gS+arYu9jRxciT7RIMNJD1qb8u8NJuglkRSbbB+wyNwvXAJAIjoOp6BsbawUfhi3x3XRBtM=
+	t=1766394998; cv=none; b=Wc882NMyBxKN1R7EJTQnLqBiCE2BvXQVNYDSms5PTv7g4hhQGhN09DMRbMDgagVTbaJvcVfNhEqiB1kN59ZvDozUMm6rfcg5eb+XaWULCD0ORMpXmfizfV75BBWzruS64/Tn473xqBIDodY23jPDAX6LMN8LptX/sn61h7DYoRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766394714; c=relaxed/simple;
-	bh=N9aCVMEl/HTjHPLuPPhGpC4Mtohmk3lLmADEJn/Yi7o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LtcHJvoZM7LP2Dh1BSSRCOtKYVgvl5UF9u9BZ/PVvEhAug4HRpzxgReTTh5VcFkyFQEWwRkYPxlfx6qDdS7A/G0nd4clAgKaBMfaY00Jzf4vhi4/ZknXEyY6BZRfMlVcY100/Ojl6K/UM7c00+9d6vhG+rc7DRlCBe114DZbxFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=GrDhNyBY; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1766394998; c=relaxed/simple;
+	bh=haGYfWEE4ITTLcKZrPLgnQG4wcaylMYFMQEgW1F4h1I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=c1YZlFDxWiXQHcpR6GzeM/jDJtu2qpM2ASrXvKZiY5GLR1LGCj1I5icOTwyMtE3oYD43e5qmLp9K736a7Dk69oI+2PhP4xpRRNuyejsbb/qKw4cp7ENLJtkqTumc429GXBXNJXJHnGkXlYCzN+QZbjYABVEMf7dj7iSwuAc7UHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ct5e2TCT; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="GrDhNyBY"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F1C901F68E;
-	Mon, 22 Dec 2025 09:11:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1766394709;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eKexkeADCmpnATxFKMwqTtjq4nHqFt3WnpfG4v4OE78=;
-	b=GrDhNyBYLEabym01b9mEKJPS+uB1RJGCcf6GJCCoO73NrFbbbLNzX2NUDSpRWzV24kjGlg
-	cLI+PU/iaoHWukyGPUgWquQ9Dn40SnCRvaRIICEEocgGkZjNj8cHHKqnkDimAEQgt0Zqi0
-	wHPCKqzbENWWBbVm7o0o7ajx+Rjy7mpNpfb/EsszGxv4DeL66JxuxTc8BfSgaHxX1SpTqx
-	fNbRg102O6bkqYgBZOYQuHT5N39dpBZokPaz6ncnUuO209FabGUDpRtnEmnICI2eprGwog
-	dzkM0ndCRUVwFDG55xoQXLOpMJmvikcy+OLl+JC8rLBhUeHBeto98YuVbg8MxA==
-Message-ID: <09b3bc78-6c55-4d8c-8d09-9f313454dee3@gtucker.io>
-Date: Mon, 22 Dec 2025 10:11:25 +0100
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ct5e2TCT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Bb
+	DoEgPvTgvABo0pi1IsnoAMMPYLIP6q8/LQxErVjn4=; b=ct5e2TCTcqV3O20tRv
+	77IsAnx1GzJtaVpI5DLC13TYYmaKc9fV47RG+7TG1hXURIz8ZUCj5GHpetlzPKYV
+	2xDRypiCEqVVihfht7MH4Bhzuyqj2h7RUxhPvGdYtw9bZgZY7MFD+Lwsj5snWAfr
+	V9w2JtdpDyygYt/YUoLMeQqHU=
+Received: from hello.company.local (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgA3JqBFDElpDqiJJQ--.24692S2;
+	Mon, 22 Dec 2025 17:15:50 +0800 (CST)
+From: Liang Jie <buaajxlj@163.com>
+To: dirk.behme@gmail.com
+Cc: a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	bhelgaas@google.com,
+	bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com,
+	buaajxlj@163.com,
+	dakr@kernel.org,
+	gary@garyguo.net,
+	joelagnelf@nvidia.com,
+	justinstitt@google.com,
+	liangjie@lixiang.com,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	lossin@kernel.org,
+	morbo@google.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	ojeda@kernel.org,
+	rust-for-linux@vger.kernel.org,
+	tmgross@umich.edu
+Subject: Re: [PATCH] pci: provide pci_free_irq_vectors() stub when CONFIG_PCI is disabled
+Date: Mon, 22 Dec 2025 17:15:49 +0800
+Message-Id: <20251222091549.2333017-1-buaajxlj@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <5521e98b-e12d-4af1-adcd-2dc56863f90b@gmail.com>
+References: <5521e98b-e12d-4af1-adcd-2dc56863f90b@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] scripts: add tool to run containerized builds
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- David Gow <davidgow@google.com>, =?UTF-8?Q?Onur_=C3=96zkan?=
- <work@onurozkan.dev>, Arnd Bergmann <arnd@arndb.de>,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
- workflows@vger.kernel.org, llvm@lists.linux.dev
-References: <cover.1766061692.git.gtucker@gtucker.io>
- <35b951506304b141047812f516fa946a4f1549a1.1766061692.git.gtucker@gtucker.io>
- <3241bbcb-d9c1-49bd-b8a7-610543dfb454@gtucker.io>
- <CANiq72mtqdR0EU9GM6yu1-Rn0V98ZftUA814eY3ue2YH1xdNHw@mail.gmail.com>
-Content-Language: en-GB
-From: Guillaume Tucker <gtucker@gtucker.io>
-Organization: gtucker.io
-In-Reply-To: <CANiq72mtqdR0EU9GM6yu1-Rn0V98ZftUA814eY3ue2YH1xdNHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdehieehgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfhojggtgfesthekredttddvjeenucfhrhhomhepifhuihhllhgruhhmvgcuvfhutghkvghruceoghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhoqeenucggtffrrghtthgvrhhnpeduleegveeuteefffffjeffhfejhfejjeevtdelgefhjeeluedttdfggfdvieeuveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvtddtudemkeeiudemgegrgedtmeekiedvtdemfhhfvghfmeeifhgtudemjeehfhgrmeekvdehkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemgegrgedtmeekiedvtdemfhhfvghfmeeifhgtudemjeehfhgrmeekvdehkedphhgvlhhopeglkffrggeimedvtddtudemkeeiudemgegrgedtmeekiedvtdemfhhfvghfmeeifhgtudemjeehfhgrmeekvdehkegnpdhmrghilhhfrhhomhepghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhopdhqihgupefhudevledtudfhieekgfdpmhhouggvpehsmhhtphhouhhtpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehmihhguhgvlhhojhgvuggrshgrnhguohhnihhss
- ehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvihgughhofiesghhoohhglhgvrdgtohhmpdhrtghpthhtohepfihorhhksehonhhurhhoiihkrghnrdguvghvpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvg
+X-CM-TRANSID:PSgvCgA3JqBFDElpDqiJJQ--.24692S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrJw4DAw43Gw4UZw1DWFWruFg_yoWxXrbEkr
+	sFkr4kWw1DXr1UGa1DtF9Ivrs0qFyDCF4F934jqF13G3W3Jw1fGan3Wr9xWw1aq3yxtrW2
+	ka15A39xXF4IgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUubyPUUUUU==
+X-CM-SenderInfo: pexdtyx0omqiywtou0bp/xtbC5AfA4GlJDEebSQAA36
 
-Hi Miguel,
-
-On 22/12/2025 04:30, Miguel Ojeda wrote:
-> On Sun, Dec 21, 2025 at 9:19 PM Guillaume Tucker <gtucker@gtucker.io> wrote:
->>
->> Another piece of feedback from your v1 review was to add a link to
->> the documentation.  As it's not published yet I just mentioned the
->> section name here in the v2 - but I can anticipate what the final URL
->> will be i.e.:
->>
->>      https://www.kernel.org/doc/html/latest/dev-tools/container
+On 22 Dec 2025 08:02:44 +0100, Dirk Behme wrote:
+> On 22.12.25 04:44, Liang Jie wrote:
+> > From: Liang Jie <liangjie@lixiang.com>
+> > 
+> > When building with CONFIG_PCI=n, clang reports:
+> > 
+> >          ....
+> >
+> >  /* Include architecture-dependent settings and functions */
 > 
-> A docs.kernel.org URL instead may look better?
+> We have this from Boqun already
+> 
+> https://lore.kernel.org/rust-for-linux/20251215025444.65544-1-boqun.feng@gmail.com/
+> 
+> ?
+> 
+> Dirk
 
-Ah yes, good point.  Except right now it's returning HTTP 403...
-Hopefully that's just a temporary technical glitch.
+Hi Dirk,
 
-Cheers,
-Guillaume
+Sorry, I missed Boqun's earlier patch:
+https://lore.kernel.org/rust-for-linux/20251215025444.65544-1-boqun.feng@gmail.com/
+
+It addresses the same issue. Please ignore my patch.
+
+Thanks,
+Liang
 
