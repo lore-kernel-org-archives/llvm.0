@@ -1,262 +1,264 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D99219FC;
-	Mon, 22 Dec 2025 23:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B96F1B3B19;
+	Mon, 22 Dec 2025 23:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766447328; cv=none; b=IX488ilA1ZvpJOtg6XRQHf284pdoVy6HgLX1dYD/4sKCzJdiBUQWwUhSLTNr7h5Pj9WLIMUyCjr63654WeGkg1CVQb0oFlVkQJN5jTRBCU4ajWnGgnNdGh8TPsPAkMV2W+VWYyEjgeBz9LkCIqaJawYyhzeaw5giZ8M+h8dxwPk=
+	t=1766447929; cv=none; b=Mh9a0FKiIziEIwFGJX2rnfjWfaLHLkOsaAJSkmqG3ojzZIyGMkw3F/9o7ZPBntcqgVcaDE12v9niaviAXKmPN4dE7z1prDG9TFuFTW/j/cphmgOtk8ngJbxM7tZy24HUmMH/RkMyz+8j4oQt02PDCKRwY6xD6ABd9baySqnlM4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766447328; c=relaxed/simple;
-	bh=hgSyiFCkU9DJfJ6bL36K8oNJn2T8CKF88/WMh6ggvmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ds7X+Zt7s+zEk53QRGto7ihAebpEICWw4wcRsv4ASYGW80Pb59kKeEjcqk97/xO4sgRHZY1OgZfGJAu/KHmU31myKvVKZf1OpdJy3gDdRul8D+qTIRUdezCJwP6OLlwj7tvJ/C1kXSFu27mqnConCNZ8w2ogVSkhdOV/qK0CfEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hue1qCu/; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1766447929; c=relaxed/simple;
+	bh=KzVR2g280YZkfI3eeA+zGnqzICxm4EfKBt86UW+btdY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=F3eP4p1ay1i0O94yvfwBXx2Z1RxizROsTCfVie2LXCir629r7SB+S2gctmA5exT3O2vpyx/eZawmBjbnqbyNoThzFz+Xa/27LzNSROhcwrcdLJ0jcEAvF3vf+hdsm47dDVRzNrJTdKr6Tt59X4U6sQW7dLkzGV/SKUoEPnJoXMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L9abw7fx; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hue1qCu/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L9abw7fx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766447326; x=1797983326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hgSyiFCkU9DJfJ6bL36K8oNJn2T8CKF88/WMh6ggvmI=;
-  b=hue1qCu/wQxB9hc/r/+quWvJxpIZloPtEQzViQxTloX4LLx2/cb2OU1q
-   yMIEOh3DlxfY9KJ5eGZM+pOPqRaeKenN++hDyyCeD98ve0MWCsNOlkqZX
-   XFv1ruHEdBNYFI/ooBCSYQqOC0rlzCGvc+WwTpqvFKoBUy3TS5HKeUku7
-   P0nYAgyu1Dokynlc8CLVLtd38xaza7fECA2qwF8qjbARBHOC1Jviuo1Fi
-   skzYoyq2K9vhNeIyEBnGNxhwgTBUgLMX748Jl+liW3c8FwpHYuRWc+Th9
-   NkgGIkOGkPp6kIkvgbMlafiud6Avy8TRaTDN3yp9E0gJkXMdr0zUtzGRR
-   w==;
-X-CSE-ConnectionGUID: +OyRfsX8QzG1rJLTb6y3xw==
-X-CSE-MsgGUID: 57F4HlVfQfqJnKg+hFQ22Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="68376397"
+  t=1766447928; x=1797983928;
+  h=date:from:to:cc:subject:message-id;
+  bh=KzVR2g280YZkfI3eeA+zGnqzICxm4EfKBt86UW+btdY=;
+  b=L9abw7fxnHaQRghNN9wVsT7+q5IFbgY4jZ70jVWqw9FFIPYTI0HHJbgd
+   YQLly80BtJlzxLwbWgduVR//h31cdIBjWRkrebR8GhMCmrBuWqiLi2/6y
+   0VWFbOmxGnGcqLKBZkv2DxySzkzAvYGBuFcH+7dTQ5NfjWwhZg6U/Ivr9
+   hzCnjZWDUKgdALQrHQ+GCLqrPuvgH9U9mDeCmRGLFzDgsZ71fOp+LxjVI
+   vsa3qKbq1d2XPND/UoKE88HxOI/rL9TvZ25I3YzrJncMr0LvYGtABcJGQ
+   gMxcIco1axjhhUjmJc8wwccD3IOh1+Ma4EHfQkbT0ej19ZYAsUmzmNrvH
+   A==;
+X-CSE-ConnectionGUID: BLldGcfRR++Am+TxJMMIjw==
+X-CSE-MsgGUID: ftsVkOpWShWDFtRWDFzCxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="79420825"
 X-IronPort-AV: E=Sophos;i="6.21,169,1763452800"; 
-   d="scan'208";a="68376397"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 15:48:46 -0800
-X-CSE-ConnectionGUID: rA39JLW9R1O57ZaRo/y+0w==
-X-CSE-MsgGUID: vSsklKn2SkSxBjIyQbDzdg==
+   d="scan'208";a="79420825"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 15:58:47 -0800
+X-CSE-ConnectionGUID: zO7L59eUTEKGxkmCH/oSKQ==
+X-CSE-MsgGUID: oHt/qga/SjKgHYs/SK6j3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,169,1763452800"; 
-   d="scan'208";a="223120777"
+   d="scan'208";a="237048305"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 22 Dec 2025 15:48:44 -0800
+  by orviesa001.jf.intel.com with ESMTP; 22 Dec 2025 15:58:45 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXpdq-000000001EX-1cF6;
-	Mon, 22 Dec 2025 23:48:42 +0000
-Date: Tue, 23 Dec 2025 07:47:54 +0800
+	id 1vXpnW-000000001F0-3tht;
+	Mon, 22 Dec 2025 23:58:42 +0000
+Date: Tue, 23 Dec 2025 07:58:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <cel@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] NFSD: Add asynchronous write throttling support
-Message-ID: <202512230750.htK4fXlz-lkp@intel.com>
-References: <20251219141105.1247093-3-cel@kernel.org>
+To: Sascha Bischoff <sascha.bischoff@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org
+Subject: [arm-platforms:kvm-arm64/gicv5-full 42/82]
+ arch/arm64/kvm/vgic/vgic-v5-tables.c:385:6: warning: variable 'vmi' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202512230706.u4lubWCl-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219141105.1247093-3-cel@kernel.org>
 
-Hi Chuck,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v6.19-rc2 next-20251219]
-[cannot apply to hch-configfs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chuck-Lever/NFSD-Add-aggressive-write-throttling-control/20251219-221859
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20251219141105.1247093-3-cel%40kernel.org
-patch subject: [RFC PATCH 2/2] NFSD: Add asynchronous write throttling support
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251223/202512230750.htK4fXlz-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/gicv5-full
+head:   1426b88096b597395df4c82f089b87c62bab45da
+commit: a994bc0447523a526e17ae0a62024bf8ef371ce6 [42/82] KVM: arm64: gic-v5: Create, manage, and teardown VMT & VPETs
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251223/202512230706.u4lubWCl-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512230750.htK4fXlz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512230706.u4lubWCl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512230750.htK4fXlz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512230706.u4lubWCl-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/nfsd/vfs.c:1490:4: error: 'break' statement not in loop or switch statement
-    1490 |                         break;
-         |                         ^
-   1 error generated.
+>> arch/arm64/kvm/vgic/vgic-v5-tables.c:385:6: warning: variable 'vmi' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     385 |         if (!vgic_v5_vmt_allocated()) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/vgic/vgic-v5-tables.c:507:6: note: uninitialized use occurs here
+     507 |         if (vmi)
+         |             ^~~
+   arch/arm64/kvm/vgic/vgic-v5-tables.c:385:2: note: remove the 'if' if its condition is always false
+     385 |         if (!vgic_v5_vmt_allocated()) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     386 |                 kvm_err("VMT is not allocated; cannot populate\n");
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     387 |                 ret = -EINVAL;
+         |                 ~~~~~~~~~~~~~~
+     388 |                 goto out_fail;
+         |                 ~~~~~~~~~~~~~~
+     389 |         }
+         |         ~
+   arch/arm64/kvm/vgic/vgic-v5-tables.c:377:20: note: initialize the variable 'vmi' to silence this warning
+     377 |         gicv5_vm_info *vmi;
+         |                           ^
+         |                            = NULL
+   1 warning generated.
 
 
-vim +/break +1490 fs/nfsd/vfs.c
+vim +385 arch/arm64/kvm/vgic/vgic-v5-tables.c
 
-  1389	
-  1390	/**
-  1391	 * nfsd_vfs_write - write data to an already-open file
-  1392	 * @rqstp: RPC execution context
-  1393	 * @fhp: File handle of file to write into
-  1394	 * @nf: An open file matching @fhp
-  1395	 * @offset: Byte offset of start
-  1396	 * @payload: xdr_buf containing the write payload
-  1397	 * @cnt: IN: number of bytes to write, OUT: number of bytes actually written
-  1398	 * @stable: An NFS stable_how value
-  1399	 * @verf: NFS WRITE verifier
-  1400	 *
-  1401	 * Upon return, caller must invoke fh_put on @fhp.
-  1402	 *
-  1403	 * Return values:
-  1404	 *   An nfsstat value in network byte order.
-  1405	 */
-  1406	__be32
-  1407	nfsd_vfs_write(struct svc_rqst *rqstp, struct svc_fh *fhp,
-  1408		       struct nfsd_file *nf, loff_t offset,
-  1409		       const struct xdr_buf *payload, unsigned long *cnt,
-  1410		       int stable, __be32 *verf)
-  1411	{
-  1412		struct nfsd_net		*nn = net_generic(SVC_NET(rqstp), nfsd_net_id);
-  1413		struct file		*file = nf->nf_file;
-  1414		struct super_block	*sb = file_inode(file)->i_sb;
-  1415		struct kiocb		kiocb;
-  1416		struct svc_export	*exp;
-  1417		struct iov_iter		iter;
-  1418		errseq_t		since;
-  1419		__be32			nfserr;
-  1420		int			host_err;
-  1421		unsigned long		exp_op_flags = 0;
-  1422		unsigned int		pflags = current->flags;
-  1423		bool			restore_flags = false;
-  1424		unsigned int		nvecs;
-  1425		int			saved_nr_dirtied_pause = 0;
-  1426		bool			throttle_adjusted = false;
-  1427	
-  1428		trace_nfsd_write_opened(rqstp, fhp, offset, *cnt);
-  1429	
-  1430		if (sb->s_export_op)
-  1431			exp_op_flags = sb->s_export_op->flags;
-  1432	
-  1433		if (test_bit(RQ_LOCAL, &rqstp->rq_flags) &&
-  1434		    !(exp_op_flags & EXPORT_OP_REMOTE_FS)) {
-  1435			/*
-  1436			 * We want throttling in balance_dirty_pages()
-  1437			 * and shrink_inactive_list() to only consider
-  1438			 * the backingdev we are writing to, so that nfs to
-  1439			 * localhost doesn't cause nfsd to lock up due to all
-  1440			 * the client's dirty pages or its congested queue.
-  1441			 */
-  1442			current->flags |= PF_LOCAL_THROTTLE;
-  1443			restore_flags = true;
-  1444		}
-  1445	
-  1446		exp = fhp->fh_export;
-  1447	
-  1448		/*
-  1449		 * If aggressive write throttling is enabled, reduce the per-task
-  1450		 * dirty page limit to throttle NFSD writes more aggressively.
-  1451		 * This helps prevent memory exhaustion when fast network clients
-  1452		 * overwhelm slow storage.
-  1453		 */
-  1454		if (nfsd_aggressive_write_throttle) {
-  1455			saved_nr_dirtied_pause = current->nr_dirtied_pause;
-  1456			current->nr_dirtied_pause = NFSD_AGGRESSIVE_DIRTY_LIMIT;
-  1457			throttle_adjusted = true;
-  1458		}
-  1459	
-  1460		if (!EX_ISSYNC(exp))
-  1461			stable = NFS_UNSTABLE;
-  1462		init_sync_kiocb(&kiocb, file);
-  1463		kiocb.ki_pos = offset;
-  1464		if (likely(!fhp->fh_use_wgather)) {
-  1465			switch (stable) {
-  1466			case NFS_FILE_SYNC:
-  1467				/* persist data and timestamps */
-  1468				kiocb.ki_flags |= IOCB_DSYNC | IOCB_SYNC;
-  1469				break;
-  1470			case NFS_DATA_SYNC:
-  1471				/* persist data only */
-  1472				kiocb.ki_flags |= IOCB_DSYNC;
-  1473				break;
-  1474			}
-  1475		}
-  1476	
-  1477		/*
-  1478		 * If async throttling is enabled, check memory pressure
-  1479		 * before attempting buffered writes. Return -EAGAIN if
-  1480		 * the system is low on memory, allowing NFSD to return
-  1481		 * an NFS error code asking the client to retry later.
-  1482		 *
-  1483		 * Skip this for NFSv2 since it lacks NFSERR_JUKEBOX.
-  1484		 */
-  1485		if (nfsd_async_write_throttle && rqstp->rq_vers >= 3) {
-  1486			host_err =
-  1487				balance_dirty_pages_ratelimited_flags(file->f_mapping,
-  1488								      BDP_ASYNC);
-  1489			if (host_err == -EAGAIN)
-> 1490				break;
-  1491		}
-  1492	
-  1493		nvecs = xdr_buf_to_bvec(rqstp->rq_bvec, rqstp->rq_maxpages, payload);
-  1494	
-  1495		since = READ_ONCE(file->f_wb_err);
-  1496		if (verf)
-  1497			nfsd_copy_write_verifier(verf, nn);
-  1498	
-  1499		switch (nfsd_io_cache_write) {
-  1500		case NFSD_IO_DIRECT:
-  1501			host_err = nfsd_direct_write(rqstp, fhp, nf, nvecs,
-  1502						     cnt, &kiocb);
-  1503			break;
-  1504		case NFSD_IO_DONTCACHE:
-  1505			if (file->f_op->fop_flags & FOP_DONTCACHE)
-  1506				kiocb.ki_flags |= IOCB_DONTCACHE;
-  1507			fallthrough;
-  1508		case NFSD_IO_BUFFERED:
-  1509			iov_iter_bvec(&iter, ITER_SOURCE, rqstp->rq_bvec, nvecs, *cnt);
-  1510			host_err = vfs_iocb_iter_write(file, &kiocb, &iter);
-  1511			if (host_err < 0)
-  1512				break;
-  1513			*cnt = host_err;
-  1514			break;
-  1515		}
-  1516		if (host_err < 0) {
-  1517			commit_reset_write_verifier(nn, rqstp, host_err);
-  1518			goto out_nfserr;
-  1519		}
-  1520		nfsd_stats_io_write_add(nn, exp, *cnt);
-  1521		fsnotify_modify(file);
-  1522		host_err = filemap_check_wb_err(file->f_mapping, since);
-  1523		if (host_err < 0)
-  1524			goto out_nfserr;
-  1525	
-  1526		if (stable && fhp->fh_use_wgather) {
-  1527			host_err = wait_for_concurrent_writes(file);
-  1528			if (host_err < 0)
-  1529				commit_reset_write_verifier(nn, rqstp, host_err);
-  1530		}
-  1531	
-  1532	out_nfserr:
-  1533		if (host_err >= 0) {
-  1534			trace_nfsd_write_io_done(rqstp, fhp, offset, *cnt);
-  1535			nfserr = nfs_ok;
-  1536		} else {
-  1537			trace_nfsd_write_err(rqstp, fhp, offset, host_err);
-  1538			nfserr = nfserrno(host_err);
-  1539		}
-  1540		if (throttle_adjusted)
-  1541			current->nr_dirtied_pause = saved_nr_dirtied_pause;
-  1542		if (restore_flags)
-  1543			current_restore_flags(pflags, PF_LOCAL_THROTTLE);
-  1544		return nfserr;
-  1545	}
-  1546	
+   357	
+   358	/*
+   359	 * Initialise an entry in the VMT based on the index of the VM. We
+   360	 * make the assumption that our VM ID is zero based, and that we can
+   361	 * use it to index into the VMT. We check that the index is in the
+   362	 * allowed range, just in case.
+   363	 *
+   364	 * We allocate:
+   365	 *     * The VM Descriptor
+   366	 *     * The VPE Table
+   367	 *
+   368	 * We set:
+   369	 *     * The VPE ID Bits
+   370	 *
+   371	 * Note: We don't mark the VMTE as valid as this needs to be done by
+   372	 * the hardware..
+   373	 */
+   374	int vgic_v5_vmte_init(struct kvm *kvm)
+   375	{
+   376		struct vmtl2_entry *vmte;
+   377		gicv5_vm_info *vmi;
+   378		void *vmd = NULL, *vpet = NULL;
+   379		void **vped_ptrs = NULL;
+   380		size_t vpet_alloc_size;
+   381		int ret;
+   382		u64 tmp;
+   383		u16 vm_id = vgic_v5_vm_id(kvm);
+   384	
+ > 385		if (!vgic_v5_vmt_allocated()) {
+   386			kvm_err("VMT is not allocated; cannot populate\n");
+   387			ret = -EINVAL;
+   388			goto out_fail;
+   389		}
+   390	
+   391		if (vm_id < 0) {
+   392			kvm_err("Failed to find free vm_id\n");
+   393			return vm_id;
+   394		}
+   395	
+   396		if (vgic_v5_alloc_l2_vmt(kvm)) {
+   397			kvm_err("Failed to make the L2 VMTE valid!\n");
+   398			return -EIO;
+   399		}
+   400	
+   401		ret = vgic_v5_get_l2_vmte(vm_id, &vmte);
+   402		if (ret) {
+   403			kvm_err("Failed to look up VMTE\n");
+   404			return ret;
+   405		}
+   406	
+   407		if (FIELD_GET(GICV5_VMTEL2E_VALID, vmte->val[0])) {
+   408			kvm_err("Attempt to initialize a valid VMTE (0x%x)!\n", vm_id);
+   409			return -EINVAL;
+   410		}
+   411	
+   412		ret = vgic_v5_reset_vmte(vm_id);
+   413		if (ret) {
+   414			kvm_err("Failed to reset VMTE\n");
+   415			return ret;
+   416		}
+   417	
+   418		vmi = kzalloc(sizeof(gicv5_vm_info), GFP_KERNEL);
+   419		if (vmi == NULL) {
+   420			ret = -ENOMEM;
+   421			goto out_fail;
+   422		}
+   423	
+   424		/* Allocate and assign the VM Descriptor, if requested. */
+   425		if (vmt_info->vmd_size != 0) {
+   426			vmd = kzalloc(vmt_info->vmd_size, GFP_KERNEL);
+   427			if (vmd == NULL) {
+   428				kvm_err("Failed to allocate memory for VM Descriptor\n");
+   429				ret = -ENOMEM;
+   430				goto out_fail;
+   431			}
+   432	
+   433			if (!IS_ALIGNED((u64)vmd, vmt_info->vmd_size)) {
+   434				kvm_err("VMD is incorrectly aligned\n");
+   435				ret = -EFAULT;
+   436				goto out_fail;
+   437			}
+   438	
+   439			/* Stash the VA so we can free it later */
+   440			vmi->vmd_base = vmd;
+   441	
+   442			tmp = FIELD_PREP(GICV5_VMTEL2E_VMD_ADDR,
+   443					virt_to_phys(vmd) >>
+   444					GICV5_VMTEL2E_VMD_ADDR_SHIFT);
+   445			WRITE_ONCE(vmte->val[0], cpu_to_le64(tmp));
+   446		}
+   447	
+   448		/*
+   449		 * Allocate and assign the VPE Table.
+   450		 */
+   451		vpet_alloc_size = sizeof(vpe_entry) * vmt_info->max_vpes;
+   452		vpet = kzalloc(vpet_alloc_size, GFP_KERNEL);
+   453		if (vpet == NULL) {
+   454			kvm_err("Failed to allocate memory for VPE Table\n");
+   455			ret = -ENOMEM;
+   456			goto out_fail;
+   457		}
+   458	
+   459		if (!IS_ALIGNED((u64)vpet, vpet_alloc_size)) {
+   460			kvm_err("VPET is incorrectly aligned\n");
+   461			ret = -EFAULT;
+   462			goto out_fail;
+   463		}
+   464	
+   465		/* Stash the VA so we can free it later */
+   466		vmi->vpet_base = vpet;
+   467	
+   468		tmp = FIELD_PREP(GICV5_VMTEL2E_VPET_ADDR,
+   469				virt_to_phys(vpet) >> GICV5_VMTEL2E_VPET_ADDR_SHIFT);
+   470		tmp |= FIELD_PREP(GICV5_VMTEL2E_VPE_ID_BITS, fls(vmt_info->max_vpes) - 1);
+   471		WRITE_ONCE(vmte->val[1], cpu_to_le64(tmp));
+   472	
+   473		vped_ptrs = kzalloc(vmt_info->max_vpes * sizeof(vped_ptrs), GFP_KERNEL);
+   474		if (vped_ptrs == NULL) {
+   475			kvm_err("Failed to allocate memory for VPED tracking\n");
+   476			ret = -ENOMEM;
+   477			goto out_fail;
+   478		}
+   479		vmi->vped_ptrs = vped_ptrs;
+   480	
+   481		if (gicv5_host_ist_caps.irs_non_coherent) {
+   482			if (vmd)
+   483				dcache_clean_inval_poc((unsigned long)vmd,
+   484						       (unsigned long)vmd + vmt_info->vmd_size);
+   485			if (vpet)
+   486				dcache_clean_inval_poc((unsigned long)vpet,
+   487						       (unsigned long)vpet + vpet_alloc_size);
+   488			dcache_clean_poc((unsigned long)vmte,
+   489					 (unsigned long)vmte + sizeof(*vmte));
+   490		} else {
+   491			dsb(ishst);
+   492		}
+   493	
+   494		ret = xa_insert(&vm_info, vm_id, vmi, GFP_KERNEL);
+   495		if (ret)
+   496			goto out_fail;
+   497	
+   498		return 0;
+   499	
+   500	out_fail:
+   501		if (vmd)
+   502			kfree(vmd);
+   503		if (vpet)
+   504			kfree(vpet);
+   505		if (vped_ptrs)
+   506			kfree(vped_ptrs);
+   507		if (vmi)
+   508			kfree(vmi);
+   509	
+   510		vgic_v5_reset_vmte(vm_id);
+   511	
+   512		return ret;
+   513	}
+   514	
 
 -- 
 0-DAY CI Kernel Test Service
