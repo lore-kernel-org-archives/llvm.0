@@ -1,99 +1,147 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC142BD11
-	for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 09:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A055FDA7;
+	Mon, 22 Dec 2025 10:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766394998; cv=none; b=Wc882NMyBxKN1R7EJTQnLqBiCE2BvXQVNYDSms5PTv7g4hhQGhN09DMRbMDgagVTbaJvcVfNhEqiB1kN59ZvDozUMm6rfcg5eb+XaWULCD0ORMpXmfizfV75BBWzruS64/Tn473xqBIDodY23jPDAX6LMN8LptX/sn61h7DYoRE=
+	t=1766397877; cv=none; b=jqTbDyus5dt1agrOIT33iTc2j2NIJpfEH/GmMAM9I/ZFahtv20W0RKutMm0ziWaEmXmx+NVyplEekQ0wCvhDpR2OOmvhZT0oEbBknmBMVM2754CFErledc77VhAjNhF/dU0Z57sjXBxpzpiXM38fRquMSQw1xH7bY53XY9G0888=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766394998; c=relaxed/simple;
-	bh=haGYfWEE4ITTLcKZrPLgnQG4wcaylMYFMQEgW1F4h1I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c1YZlFDxWiXQHcpR6GzeM/jDJtu2qpM2ASrXvKZiY5GLR1LGCj1I5icOTwyMtE3oYD43e5qmLp9K736a7Dk69oI+2PhP4xpRRNuyejsbb/qKw4cp7ENLJtkqTumc429GXBXNJXJHnGkXlYCzN+QZbjYABVEMf7dj7iSwuAc7UHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ct5e2TCT; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1766397877; c=relaxed/simple;
+	bh=J1EZZVCwpTiIbAyrMOpmNy+FRRI8Ai9A8vQMUUkNmH0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TljKWLncv38+gd7xfaFGZdDPg7oK+pYbRMjezEKBZ7uBnvsdfz7SBXxXNvG2rNZsa/S9KtCOh6aAb/brIeHLZgONQjd4T3Pa+kCvivyh5XHIiz86CYc9Fltb4kd4klrIW0m5QlVgxn46y6bRZNfGCZoE1PKI6CNFoXiKmlSQ2LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DX3xwYra; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ct5e2TCT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Bb
-	DoEgPvTgvABo0pi1IsnoAMMPYLIP6q8/LQxErVjn4=; b=ct5e2TCTcqV3O20tRv
-	77IsAnx1GzJtaVpI5DLC13TYYmaKc9fV47RG+7TG1hXURIz8ZUCj5GHpetlzPKYV
-	2xDRypiCEqVVihfht7MH4Bhzuyqj2h7RUxhPvGdYtw9bZgZY7MFD+Lwsj5snWAfr
-	V9w2JtdpDyygYt/YUoLMeQqHU=
-Received: from hello.company.local (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgA3JqBFDElpDqiJJQ--.24692S2;
-	Mon, 22 Dec 2025 17:15:50 +0800 (CST)
-From: Liang Jie <buaajxlj@163.com>
-To: dirk.behme@gmail.com
-Cc: a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	bhelgaas@google.com,
-	bjorn3_gh@protonmail.com,
-	boqun.feng@gmail.com,
-	buaajxlj@163.com,
-	dakr@kernel.org,
-	gary@garyguo.net,
-	joelagnelf@nvidia.com,
-	justinstitt@google.com,
-	liangjie@lixiang.com,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	lkp@intel.com,
-	llvm@lists.linux.dev,
-	lossin@kernel.org,
-	morbo@google.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	ojeda@kernel.org,
-	rust-for-linux@vger.kernel.org,
-	tmgross@umich.edu
-Subject: Re: [PATCH] pci: provide pci_free_irq_vectors() stub when CONFIG_PCI is disabled
-Date: Mon, 22 Dec 2025 17:15:49 +0800
-Message-Id: <20251222091549.2333017-1-buaajxlj@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <5521e98b-e12d-4af1-adcd-2dc56863f90b@gmail.com>
-References: <5521e98b-e12d-4af1-adcd-2dc56863f90b@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DX3xwYra"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766397876; x=1797933876;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J1EZZVCwpTiIbAyrMOpmNy+FRRI8Ai9A8vQMUUkNmH0=;
+  b=DX3xwYraDdOg7VESPHMr33rlqhhNbppdLOtjw1WzT0k1mYAcMNnAhkVk
+   rQStC4xW7BdQeIsHLb0DcXK8TwD/2kRhC/0MZhoHB7xenrd+KebeiO9Zo
+   SxkqvOUhipJLJJTTiQRXOaf5NghgOmwjcz82j4M0aoNKZWbqgxA7ai11E
+   7RcRFMQMSaAGFOQ1TApGjXnrYD3NrhFSNULv7tCxGEZoZFBxEWCUEofjo
+   Mmdnf4qbDMnDN7TX915Jo4igKHm4JD3rPreuamYEP0ZeJ9xGYBLU/aNAe
+   a/8GHxoJ9zWCkhmaca4af9Pijy4tjoMFjhXsrO0gJ46Gts9kHwbCFkmJv
+   g==;
+X-CSE-ConnectionGUID: vV0eway8TG6gy5IAnaL7Ig==
+X-CSE-MsgGUID: s1JxU+D3SbiCj6vbO5pUrg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="71883094"
+X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
+   d="scan'208";a="71883094"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:04:36 -0800
+X-CSE-ConnectionGUID: SENbKwQ2TGuu/Q2AuFUCmg==
+X-CSE-MsgGUID: nfxshazyT4av5RHtxHYyhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
+   d="scan'208";a="222977989"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 22 Dec 2025 02:04:31 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vXcmC-000000000MH-2wzD;
+	Mon, 22 Dec 2025 10:04:28 +0000
+Date: Mon, 22 Dec 2025 18:03:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincent Mailhol <mailhol@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Chris Mason <chris.mason@fusionio.com>,
+	David Sterba <dsterba@suse.com>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	linux-btrfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Vincent Mailhol <mailhol@kernel.org>
+Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
+ is_negative()
+Message-ID: <202512221735.mRV4BZqB-lkp@intel.com>
+References: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgA3JqBFDElpDqiJJQ--.24692S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrJw4DAw43Gw4UZw1DWFWruFg_yoWxXrbEkr
-	sFkr4kWw1DXr1UGa1DtF9Ivrs0qFyDCF4F934jqF13G3W3Jw1fGan3Wr9xWw1aq3yxtrW2
-	ka15A39xXF4IgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUubyPUUUUU==
-X-CM-SenderInfo: pexdtyx0omqiywtou0bp/xtbC5AfA4GlJDEebSQAA36
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 
-On 22 Dec 2025 08:02:44 +0100, Dirk Behme wrote:
-> On 22.12.25 04:44, Liang Jie wrote:
-> > From: Liang Jie <liangjie@lixiang.com>
-> > 
-> > When building with CONFIG_PCI=n, clang reports:
-> > 
-> >          ....
-> >
-> >  /* Include architecture-dependent settings and functions */
-> 
-> We have this from Boqun already
-> 
-> https://lore.kernel.org/rust-for-linux/20251215025444.65544-1-boqun.feng@gmail.com/
-> 
-> ?
-> 
-> Dirk
+Hi Vincent,
 
-Hi Dirk,
+kernel test robot noticed the following build warnings:
 
-Sorry, I missed Boqun's earlier patch:
-https://lore.kernel.org/rust-for-linux/20251215025444.65544-1-boqun.feng@gmail.com/
+[auto build test WARNING on 3e7f562e20ee87a25e104ef4fce557d39d62fa85]
 
-It addresses the same issue. Please ignore my patch.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/kbuild-remove-gcc-s-Wtype-limits/20251220-190509
+base:   3e7f562e20ee87a25e104ef4fce557d39d62fa85
+patch link:    https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-3-24b170af700e%40kernel.org
+patch subject: [PATCH v3 3/3] overflow: Remove is_non_negative() and is_negative()
+config: x86_64-randconfig-161-20251222 (https://download.01.org/0day-ci/archive/20251222/202512221735.mRV4BZqB-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
 
-Thanks,
-Liang
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512221735.mRV4BZqB-lkp@intel.com/
 
+smatch warnings:
+fs/libfs.c:1628 generic_check_addressable() warn: unsigned '*_d' is never less than zero.
+fs/libfs.c:1628 generic_check_addressable() warn: unsigned '_a' is never less than zero.
+mm/vmalloc.c:4708 remap_vmalloc_range_partial() warn: unsigned '*_d' is never less than zero.
+mm/vmalloc.c:4708 remap_vmalloc_range_partial() warn: unsigned '_a' is never less than zero.
+
+vim +1628 fs/libfs.c
+
+1b061d9247f71c Christoph Hellwig   2010-05-26  1613  
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1614  /**
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1615   * generic_check_addressable - Check addressability of file system
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1616   * @blocksize_bits:	log of file system block size
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1617   * @num_blocks:		number of blocks in file system
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1618   *
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1619   * Determine whether a file system with @num_blocks blocks (and a
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1620   * block size of 2**@blocksize_bits) is addressable by the sector_t
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1621   * and page cache of the system.  Return 0 if so and -EFBIG otherwise.
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1622   */
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1623  int generic_check_addressable(unsigned blocksize_bits, u64 num_blocks)
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1624  {
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1625  	u64 last_fs_block = num_blocks - 1;
+25050181b61aa0 Pankaj Raghav       2025-06-30  1626  	u64 last_fs_page, max_bytes;
+25050181b61aa0 Pankaj Raghav       2025-06-30  1627  
+25050181b61aa0 Pankaj Raghav       2025-06-30 @1628  	if (check_shl_overflow(num_blocks, blocksize_bits, &max_bytes))
+25050181b61aa0 Pankaj Raghav       2025-06-30  1629  		return -EFBIG;
+25050181b61aa0 Pankaj Raghav       2025-06-30  1630  
+25050181b61aa0 Pankaj Raghav       2025-06-30  1631  	last_fs_page = (max_bytes >> PAGE_SHIFT) - 1;
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1632  
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1633  	if (unlikely(num_blocks == 0))
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1634  		return 0;
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1635  
+25050181b61aa0 Pankaj Raghav       2025-06-30  1636  	if (blocksize_bits < 9)
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1637  		return -EINVAL;
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1638  
+a33f13efe05192 Joel Becker         2010-08-16  1639  	if ((last_fs_block > (sector_t)(~0ULL) >> (blocksize_bits - 9)) ||
+a33f13efe05192 Joel Becker         2010-08-16  1640  	    (last_fs_page > (pgoff_t)(~0ULL))) {
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1641  		return -EFBIG;
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1642  	}
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1643  	return 0;
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1644  }
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1645  EXPORT_SYMBOL(generic_check_addressable);
+30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1646  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
