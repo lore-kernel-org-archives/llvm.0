@@ -1,149 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6A6309EF0;
-	Mon, 22 Dec 2025 19:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3E3349AF2;
+	Mon, 22 Dec 2025 20:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766433328; cv=none; b=uaX6oqL2/dhOyCd42OTiZ6KLpPgIj5FeB+esc8vIys/veJ0NhKoKA6s+fneZDkFWgnX8Cd0WrbnaXHqTJ+9AirsMNwhWbMaTPMr7+iLHJ4bMrgb3kWkHVVYmda5zj8uMSUPJII0AKgez0qiUVQxJszzvB/dgdvvyvo5xqK4QA4A=
+	t=1766435937; cv=none; b=JEVgw0H7nxavKD3ghNwAdtVVWg+XuVrIpHarcOGEFvjt/DqxgLgUweoF3Y30I2tYWYfnDHu0JiE9jb600U5S7YrEMGXxY/LeCbpTgHl+ipzZb+4ZwEu3pHHKn4GSPS0H2TElfvkG9ATjIAgl0s2AYNZOQ/JFADHZ/pG3SttbP1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766433328; c=relaxed/simple;
-	bh=faxuRQ98w3w3AiTuKAdaMxKF7N4LhPW8CIv8V3TK6l0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SZ3EPEHRyb2ot4pVyfEVBrZQIlcdXpgU791UMSFnhGlt+/4FKQdQ/M4isthGGlY/oGE90gls7WgFs0oIIvV/bRPBKQeS8OK3Hm4e58tcOtmgLkRPsjq+9eklvDjR4mCvXJi/NkQ9cCvUi0B7V0zqvAEpKnea+XOpEUqUBzuPSbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CNn4xAk2; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1766435937; c=relaxed/simple;
+	bh=zYw+QvLhf8X8S4x+JvvxDuYBrz+O3TRVCQYiBMqe4vk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KtHnxE479a6hRi41+okodvurRvboGd5vn6BD3dLwuE22AEByfna4I/1kNywCcVvKnYGG+G81q481cV4tvWKOEsyes+7tXm9iZRd4gXL1GrqNw8nzEWW7Y8pYT3UH8+F6LLn74iNdNcBU4b/pbjdn7v2KaoHILONUlS7NSCG+HSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kBsE7FlQ; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CNn4xAk2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kBsE7FlQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766433327; x=1797969327;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=faxuRQ98w3w3AiTuKAdaMxKF7N4LhPW8CIv8V3TK6l0=;
-  b=CNn4xAk2CQeEEmcccOuSnHFqB9DQvYkjwj+JG4xritc/9TmCPCtrbZxE
-   2lCEKYUBn8NDPiQN5NQZpyvMJxEK3n+TDg6sb8RP5flO+BzJR7PrnQpM5
-   Kr5JUk9Vy64h2e5kQCzALYNZxCZum4Ntjb/a0br4tjsqdhBSwCoJFDFBx
-   cr+57auG/TWEd2yiwyy+SD5WE64PSXQMLQsSUFGadfOhFwnMi1B5+DMX9
-   HwuyGzPYEl0YlbrzA8R4LtSPwYSLxl+dfgjqYF4D2mdpaN5JOykiijcaA
-   2UE5KRVhalrjUE3vNfJy0D2DIklPsqzcR1VMxW4PCbk/pQHeS3a5P1bpr
+  t=1766435936; x=1797971936;
+  h=date:from:to:cc:subject:message-id;
+  bh=zYw+QvLhf8X8S4x+JvvxDuYBrz+O3TRVCQYiBMqe4vk=;
+  b=kBsE7FlQ3SbQevqlrIq5hV4AsRkVAur9d5unb0gLTPQ+XDHoKVg3b7ee
+   zYFikc+NFjijTDEU+TKfeZ13b7OBZ61WvGACQzin1bG17f++yA08ROXVO
+   kdXUZNBlWkYUR4JgRPPAFKC8p0b2A+9zTXiHat+ZFwkS+jPAhR3WE3LHt
+   DgV6zLd4pKnqgjCNIhjScEAC3Q3P6tf5jyr701dH1aegfg8+LbBbiPbe4
+   18EU3gJAdZ1VWTEK/d8ZjvIILFp+mAKmK0KpD7bvjNdvktptTh1GMx3Jm
+   m7Bgh2HGpjq62jZD1CLRRbSJ2dhIha1xkazG/IrudgGduxU1QHhgSxvat
    w==;
-X-CSE-ConnectionGUID: PczTDdMASP66bzybcdroAQ==
-X-CSE-MsgGUID: RlWH+pN0S/OrA62vvqm8fA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="68274158"
+X-CSE-ConnectionGUID: ct925e4cRWuaS1Gjwn0uvA==
+X-CSE-MsgGUID: k8TRFzQzRb6Vmt4Uln00Yg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="85879387"
 X-IronPort-AV: E=Sophos;i="6.21,169,1763452800"; 
-   d="scan'208";a="68274158"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 11:55:27 -0800
-X-CSE-ConnectionGUID: 1xlpX9p5Q2WyLoOdvs0kaw==
-X-CSE-MsgGUID: BmooQDGgRI+OgxdmXGgAKw==
+   d="scan'208";a="85879387"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 12:38:55 -0800
+X-CSE-ConnectionGUID: avNASbzNRL2cjmImx5sC6A==
+X-CSE-MsgGUID: NAKEAbT8RxmX+MK2z0dOBg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,169,1763452800"; 
-   d="scan'208";a="237011330"
+   d="scan'208";a="230267258"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 22 Dec 2025 11:55:21 -0800
+  by orviesa002.jf.intel.com with ESMTP; 22 Dec 2025 12:38:52 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXlzy-0000000013h-24Qj;
-	Mon, 22 Dec 2025 19:55:18 +0000
-Date: Tue, 23 Dec 2025 03:55:07 +0800
+	id 1vXmg2-0000000015V-1y0a;
+	Mon, 22 Dec 2025 20:38:47 +0000
+Date: Tue, 23 Dec 2025 04:38:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vincent Mailhol <mailhol@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Chris Mason <chris.mason@fusionio.com>,
-	David Sterba <dsterba@suse.com>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	linux-btrfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Vincent Mailhol <mailhol@kernel.org>
-Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
- is_negative()
-Message-ID: <202512230342.Lgha2HGH-lkp@intel.com>
-References: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:locking/core 38/39] WARNING: modpost: EXPORT
+ symbol "crypto_larval_alloc" [vmlinux] version generation failed, symbol will
+ not be versioned.
+Message-ID: <202512230401.T9Ks8CSB-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 
-Hi Vincent,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 3e7f562e20ee87a25e104ef4fce557d39d62fa85]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/kbuild-remove-gcc-s-Wtype-limits/20251220-190509
-base:   3e7f562e20ee87a25e104ef4fce557d39d62fa85
-patch link:    https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-3-24b170af700e%40kernel.org
-patch subject: [PATCH v3 3/3] overflow: Remove is_non_negative() and is_negative()
-config: i386-randconfig-141-20251222 (https://download.01.org/0day-ci/archive/20251223/202512230342.Lgha2HGH-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   77b4ebc9e43b02f3c50dab48963d969964ea83ef
+commit: fcd7db8b4bb56af5cb7d0e8f33ab1eef15c43e5e [38/39] crypto: Enable context analysis
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20251223/202512230401.T9Ks8CSB-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 185f5fd5ce4c65116ca8cf6df467a682ef090499)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512230401.T9Ks8CSB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512230342.Lgha2HGH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512230401.T9Ks8CSB-lkp@intel.com/
 
-New smatch warnings:
-block/blk-settings.c:702 blk_stack_atomic_writes_chunk_sectors() warn: unsigned '*_d' is never less than zero.
-block/blk-settings.c:702 blk_stack_atomic_writes_chunk_sectors() warn: unsigned '_a' is never less than zero.
-drivers/nvme/host/core.c:3353 nvme_mps_to_sectors() warn: unsigned '*_d' is never less than zero.
-drivers/nvme/host/core.c:3353 nvme_mps_to_sectors() warn: unsigned '_a' is never less than zero.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Old smatch warnings:
-drivers/nvme/host/core.c:5032 nvme_free_cels() warn: iterator 'i' not incremented
-
-vim +702 block/blk-settings.c
-
-d7f36dc446e894 John Garry 2024-11-18  689  
-63d092d1c1b1f7 John Garry 2025-07-11  690  static void blk_stack_atomic_writes_chunk_sectors(struct queue_limits *t)
-d7f36dc446e894 John Garry 2024-11-18  691  {
-63d092d1c1b1f7 John Garry 2025-07-11  692  	unsigned int chunk_bytes;
-d7f36dc446e894 John Garry 2024-11-18  693  
-63d092d1c1b1f7 John Garry 2025-07-11  694  	if (!t->chunk_sectors)
-63d092d1c1b1f7 John Garry 2025-07-11  695  		return;
-63d092d1c1b1f7 John Garry 2025-07-11  696  
-63d092d1c1b1f7 John Garry 2025-07-11  697  	/*
-63d092d1c1b1f7 John Garry 2025-07-11  698  	 * If chunk sectors is so large that its value in bytes overflows
-63d092d1c1b1f7 John Garry 2025-07-11  699  	 * UINT_MAX, then just shift it down so it definitely will fit.
-63d092d1c1b1f7 John Garry 2025-07-11  700  	 * We don't support atomic writes of such a large size anyway.
-63d092d1c1b1f7 John Garry 2025-07-11  701  	 */
-63d092d1c1b1f7 John Garry 2025-07-11 @702  	if (check_shl_overflow(t->chunk_sectors, SECTOR_SHIFT, &chunk_bytes))
-63d092d1c1b1f7 John Garry 2025-07-11  703  		chunk_bytes = t->chunk_sectors;
-d7f36dc446e894 John Garry 2024-11-18  704  
-d7f36dc446e894 John Garry 2024-11-18  705  	/*
-d7f36dc446e894 John Garry 2024-11-18  706  	 * Find values for limits which work for chunk size.
-d7f36dc446e894 John Garry 2024-11-18  707  	 * b->atomic_write_hw_unit_{min, max} may not be aligned with chunk
-63d092d1c1b1f7 John Garry 2025-07-11  708  	 * size, as the chunk size is not restricted to a power-of-2.
-d7f36dc446e894 John Garry 2024-11-18  709  	 * So we need to find highest power-of-2 which works for the chunk
-d7f36dc446e894 John Garry 2024-11-18  710  	 * size.
-63d092d1c1b1f7 John Garry 2025-07-11  711  	 * As an example scenario, we could have t->unit_max = 16K and
-63d092d1c1b1f7 John Garry 2025-07-11  712  	 * t->chunk_sectors = 24KB. For this case, reduce t->unit_max to a
-63d092d1c1b1f7 John Garry 2025-07-11  713  	 * value aligned with both limits, i.e. 8K in this example.
-d7f36dc446e894 John Garry 2024-11-18  714  	 */
-63d092d1c1b1f7 John Garry 2025-07-11  715  	t->atomic_write_hw_unit_max = min(t->atomic_write_hw_unit_max,
-63d092d1c1b1f7 John Garry 2025-07-11  716  					max_pow_of_two_factor(chunk_bytes));
-d7f36dc446e894 John Garry 2024-11-18  717  
-63d092d1c1b1f7 John Garry 2025-07-11  718  	t->atomic_write_hw_unit_min = min(t->atomic_write_hw_unit_min,
-d7f36dc446e894 John Garry 2024-11-18  719  					  t->atomic_write_hw_unit_max);
-63d092d1c1b1f7 John Garry 2025-07-11  720  	t->atomic_write_hw_max = min(t->atomic_write_hw_max, chunk_bytes);
-63d092d1c1b1f7 John Garry 2025-07-11  721  }
-d7f36dc446e894 John Garry 2024-11-18  722  
+>> WARNING: modpost: EXPORT symbol "crypto_larval_alloc" [vmlinux] version generation failed, symbol will not be versioned.
+Is "crypto_larval_alloc" prototyped in <asm/asm-prototypes.h>?
+>> WARNING: modpost: EXPORT symbol "crypto_alg_tested" [vmlinux] version generation failed, symbol will not be versioned.
+Is "crypto_alg_tested" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "rhashtable_insert_slow" [vmlinux] version generation failed, symbol will not be versioned.
+Is "rhashtable_insert_slow" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "rhashtable_walk_start_check" [vmlinux] version generation failed, symbol will not be versioned.
+Is "rhashtable_walk_start_check" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol will not be versioned.
+Is "stack_depot_save_flags" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "stack_depot_save" [vmlinux] version generation failed, symbol will not be versioned.
+Is "stack_depot_save" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: "rhashtable_insert_slow" [fs/dlm/dlm.ko] has no CRC!
+WARNING: modpost: "rhashtable_walk_start_check" [fs/nfsd/nfsd.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [fs/nfsd/nfsd.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [fs/gfs2/gfs2.ko] has no CRC!
+WARNING: modpost: "rhashtable_walk_start_check" [fs/gfs2/gfs2.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [drivers/net/vxlan/vxlan.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [net/sched/act_ct.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [net/sched/cls_flower.ko] has no CRC!
+WARNING: modpost: "rhashtable_walk_start_check" [net/netlink/netlink_diag.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [net/netfilter/nf_tables.ko] has no CRC!
+WARNING: modpost: "rhashtable_walk_start_check" [net/netfilter/nf_tables.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [net/netfilter/nf_flow_table.ko] has no CRC!
+WARNING: modpost: "rhashtable_walk_start_check" [net/netfilter/nf_flow_table.ko] has no CRC!
+WARNING: modpost: "rhashtable_walk_start_check" [net/sctp/sctp.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [net/sctp/sctp.ko] has no CRC!
+WARNING: modpost: "rhashtable_insert_slow" [net/rds/rds.ko] has no CRC!
 
 -- 
 0-DAY CI Kernel Test Service
