@@ -1,137 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C0F33D4EC;
-	Mon, 22 Dec 2025 10:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B512324677A;
+	Mon, 22 Dec 2025 10:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766399157; cv=none; b=NndvSTaCYgdigbIRBeZ0KuXdrrRDRM6LJ0vgGbYr5eBxBShZVNmDPPtYeXOI2gq3VohY6peNOUMC44i/k7WhYHv0QQaQ1/MVsG/0N04Ewt5d+0r0ooJggNEIA+OdFuJUzbK4UKzWxh6qsTF40Qi8dKi96RsHpkibpvJXLb7eepc=
+	t=1766399764; cv=none; b=d4pWRA0j7klXxT47KNIcyCysbOvrPJDq7hljySU5EHW6VOAdE72mECioYKyshsJFL1B3zxvJn3Q4huhsCa/ibJQHDxV3lgk6kYZWdrkJEqFhnJu/MQLOlBTD1279psI6C1YhPVsZfh6AovNzdByWJg0bW59L8yq0q0Gm0NJDiqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766399157; c=relaxed/simple;
-	bh=62taOR2EI0MqLH+HSIMWwZvEtr5H5VJiNu+vI3TqvDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ijiOdxGVdhxXc5vFjYDL5XdJHjY/TNVqMq2I9hAFLyfNS7nHSpst7JlkljG9XVHEMSkbOksO66+jGvBDpwCtZV96f4mWNKAJ4/82lpzSuXZY2mfH8ggclECTM/Epla+RtcE5yYHBFtfOtQgMOSJIpOpByNFpnBiio2UEU/Z3z1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXUGH507; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1766399764; c=relaxed/simple;
+	bh=Xzd0wqjWz1VIxuTGKbQWvhgmJbwB+JZPD9sdA9lb9I4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=m7vZyHItgQvqOhjrg+z3yc/LfU8jm3l9Nxw/F+ke/rK+bhdvzkeWtfAsIkr5lyYNMM5OuuJW/HDG468UeoIbzfSL/B1aRi/WzVf78dV/WW1AWy6UX4zsDTPpoA5okdXpjjAt5LwPFWbYlGuge6j7tdbfZW6owikNIlolHTXrbgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b/E12IFs; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXUGH507"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b/E12IFs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766399155; x=1797935155;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=62taOR2EI0MqLH+HSIMWwZvEtr5H5VJiNu+vI3TqvDE=;
-  b=EXUGH507ssVqSGPykHptYrKegQItq23E6Lfz35yDRQiFdg1PnXV24++k
-   bbGL7PPWNEgnQQCcW/wtVdqaNOr0m9HpgTGRqGJ+XFqy35fWoexIcjxiN
-   0+xECN1xOIqO7J8LCI3Aea+FbZnXYjCHbtoC+y2Y4GZWKtbKHdYN6Z2Ut
-   y1eJzJGPXIHZa7GoyViVTHsQBAnErC2XeGI2Fd/pOU4BPVadqXIIAiLYt
-   d50aZv7KkCyABQCpSjr2+KPHuAhrpUIMRRhNSc4JkmkbSJ2thabP6AUKl
-   Zwwg82CeR3kwtATporDY7ZsCr/5yQefXjQNMoxDuPDmCkrjsS8ycFYi1j
-   A==;
-X-CSE-ConnectionGUID: mK4qzJu2RKmgNo1YGlpTXg==
-X-CSE-MsgGUID: AJF6DBaEQZKiA/tTXP+cCA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68297227"
+  t=1766399763; x=1797935763;
+  h=date:from:to:cc:subject:message-id;
+  bh=Xzd0wqjWz1VIxuTGKbQWvhgmJbwB+JZPD9sdA9lb9I4=;
+  b=b/E12IFsfSE25yQqwVKYm4S6UWh4HY3BUSDNCI4NAPZi4bvV9WBK1OVJ
+   z2lyOA9wqZ+9Gle/lTAUVhr0u5EYHmGndjbHjY3oLjKnvqI39xSODBGzD
+   3eO5EGOTvrgZqzHuHyF5DBs5xcXnwdev5kJ98PWny0W1dnfad5PoNq8t+
+   Y6IYRNprtr6DZrc9+flN0fxpN8rMxzNDEZrRyFoIHraMF/7P9tCd23Qby
+   h0IX1BENt1DqHP/++u2xqj2w6YNFu5RbLQwxVu3ndpRG19CDlYnUxdWIQ
+   7doae8G/BxyE134TrDAqetC9yy7wXyrBXbTdIk+N4TXAAEuzy2X8bspm0
+   w==;
+X-CSE-ConnectionGUID: ppjTwgtpQj2esg7eSnpDHg==
+X-CSE-MsgGUID: n26I0AowS+qL9KL3+oOReA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="67246357"
 X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="68297227"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:25:54 -0800
-X-CSE-ConnectionGUID: fAWCdZUaR5q2u7vr4ATdJQ==
-X-CSE-MsgGUID: 5u0tkOQdRAmhs1RBOjgFlQ==
+   d="scan'208";a="67246357"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:36:02 -0800
+X-CSE-ConnectionGUID: qr52KHC6SiSXovgDC9/NAw==
+X-CSE-MsgGUID: iIct3sCGQimZBzeh1wFIDg==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
+   d="scan'208";a="203621915"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Dec 2025 02:25:51 -0800
+  by orviesa003.jf.intel.com with ESMTP; 22 Dec 2025 02:36:00 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXd6L-000000000Nt-051A;
-	Mon, 22 Dec 2025 10:25:34 +0000
-Date: Mon, 22 Dec 2025 18:25:04 +0800
+	id 1vXdGg-000000000Oz-0AAK;
+	Mon, 22 Dec 2025 10:35:58 +0000
+Date: Mon, 22 Dec 2025 18:35:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dan Carpenter <error27@gmail.com>,
-	Harsh Kumar Bijlani <quic_hbijlani@quicinc.com>
+To: "lamtung-monash" <lam.nguyentung@monash.edu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jeff Johnson <jjohnson@kernel.org>,
-	Ripan Deuri <quic_rdeuri@quicinc.com>,
-	Vasanthakumar Thiagarajan <vasanthakumar.thiagarajan@oss.qualcomm.com>,
-	Baochen Qiang <baochen.qiang@oss.qualcomm.com>,
-	linux-wireless@vger.kernel.org, ath12k@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] wifi: ath12k: clean up on error in ath12k_dp_setup()
-Message-ID: <202512221824.sz1jZjhH-lkp@intel.com>
-References: <aUOw1J0TU4VgeXj6@stanley.mountain>
+ ceph-devel@vger.kernel.org
+Subject: [ceph-client:pr/29 1/1]
+ arch/powerpc/kvm/../../../virt/kvm/eventfd.c:621:19: error: use of undeclared
+ identifier 'KVM_MAX_IRQ_ROUTES'
+Message-ID: <202512221816.Ezlo8JqW-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aUOw1J0TU4VgeXj6@stanley.mountain>
 
-Hi Dan,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20251217]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/wifi-ath12k-clean-up-on-error-in-ath12k_dp_setup/20251218-154554
-base:   next-20251217
-patch link:    https://lore.kernel.org/r/aUOw1J0TU4VgeXj6%40stanley.mountain
-patch subject: [PATCH next] wifi: ath12k: clean up on error in ath12k_dp_setup()
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251222/202512221824.sz1jZjhH-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512221824.sz1jZjhH-lkp@intel.com/reproduce)
+tree:   https://github.com/ceph/ceph-client.git pr/29
+head:   a0479e90ee5778543f7bcaafd85387c2eea73126
+commit: a0479e90ee5778543f7bcaafd85387c2eea73126 [1/1] Don't accept obviously wrong gsi values via KVM_IRQFD
+config: powerpc-ppc64_defconfig (https://download.01.org/0day-ci/archive/20251222/202512221816.Ezlo8JqW-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 42b3483ac4987cae1bdb632398e8a3ce2dea6633)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512221816.Ezlo8JqW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512221824.sz1jZjhH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512221816.Ezlo8JqW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/ath/ath12k/dp.c:1767:8: error: use of undeclared label 'rhash_destroy'
-                   goto rhash_destroy;
-                        ^
+>> arch/powerpc/kvm/../../../virt/kvm/eventfd.c:621:19: error: use of undeclared identifier 'KVM_MAX_IRQ_ROUTES'
+     621 |         if (args->gsi >= KVM_MAX_IRQ_ROUTES)
+         |                          ^~~~~~~~~~~~~~~~~~
    1 error generated.
 
 
-vim +/rhash_destroy +1767 drivers/net/wireless/ath/ath12k/dp.c
+vim +/KVM_MAX_IRQ_ROUTES +621 arch/powerpc/kvm/../../../virt/kvm/eventfd.c
 
-  1734	
-  1735	int ath12k_dp_alloc(struct ath12k_base *ab)
-  1736	{
-  1737		struct ath12k_dp *dp = &ab->dp;
-  1738		struct hal_srng *srng = NULL;
-  1739		size_t size = 0;
-  1740		u32 n_link_desc = 0;
-  1741		int ret;
-  1742		int i;
-  1743	
-  1744		dp->ab = ab;
-  1745	
-  1746		INIT_LIST_HEAD(&dp->reo_cmd_list);
-  1747		INIT_LIST_HEAD(&dp->reo_cmd_cache_flush_list);
-  1748		INIT_LIST_HEAD(&dp->reo_cmd_update_rx_queue_list);
-  1749		spin_lock_init(&dp->reo_cmd_lock);
-  1750		spin_lock_init(&dp->reo_rxq_flush_lock);
-  1751	
-  1752		dp->reo_cmd_cache_flush_count = 0;
-  1753		dp->idle_link_rbm = ath12k_dp_get_idle_link_rbm(ab);
-  1754	
-  1755		ret = ath12k_wbm_idle_ring_setup(ab, &n_link_desc);
-  1756		if (ret) {
-  1757			ath12k_warn(ab, "failed to setup wbm_idle_ring: %d\n", ret);
-  1758			return ret;
-  1759		}
-  1760	
-  1761		srng = &ab->hal.srng_list[dp->wbm_idle_ring.ring_id];
-  1762	
-  1763		ret = ath12k_dp_link_desc_setup(ab, dp->link_desc_banks,
-  1764						HAL_WBM_IDLE_LINK, srng, n_link_desc);
-  1765		if (ret) {
-  1766			ath12k_warn(ab, "failed to setup link desc: %d\n", ret);
-> 1767			goto rhash_destroy;
+   614	
+   615	int
+   616	kvm_irqfd(struct kvm *kvm, struct kvm_irqfd *args)
+   617	{
+   618		if (args->flags & ~(KVM_IRQFD_FLAG_DEASSIGN | KVM_IRQFD_FLAG_RESAMPLE))
+   619			return -EINVAL;
+   620	
+ > 621		if (args->gsi >= KVM_MAX_IRQ_ROUTES)
+   622			return -EINVAL;
+   623	
+   624		if (args->flags & KVM_IRQFD_FLAG_DEASSIGN)
+   625			return kvm_irqfd_deassign(kvm, args);
+   626	
+   627		return kvm_irqfd_assign(kvm, args);
+   628	}
+   629	
 
 -- 
 0-DAY CI Kernel Test Service
