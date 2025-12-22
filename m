@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C076825F96B;
-	Mon, 22 Dec 2025 07:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DC91DF963;
+	Mon, 22 Dec 2025 07:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766387200; cv=none; b=FxCmgoe/GZgmFiAdCl7E5cZQn1zRhni0xwBgZSqgZlZD8kr/ICURxKgM0DXqoPIEmoS1SbdRBXd96Rz7VxoTmATuNfdo30o0u6KF2UvNdwZUTF83rh2m2+5D+h8LTBr1Dp5a8gYoCsGmxXv3tIHv98NdFIC612/FkR/McCkqSmw=
+	t=1766387967; cv=none; b=jlsVIJWpkrenXMw7a9ctv6yHC9StsN9B+mUFVDA5CMA8Eso6z+i5jmum4+TgUiDI3NzV6tdXDjub3JggtL41oahUOcRJJ2DOEfGs9jsDqQUg2kBULa5u5eXmJLKwi2w4Ff8nyKZtShpJgtTnvS5nNRN96xHd3bGiIxjsjmfExis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766387200; c=relaxed/simple;
-	bh=2zs0LFIg88IFdUxv4hBlvm/8D54f+0+g8bpVNxO1XLU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iCbutkfP7mKCslthxP5kKHIH0tRX6gUbhfOfeGXIc2FTa4DXNIjKkQ/G8/fWLeXAFBNPFsWbi7sh/Q+CvuxtCgaixWsvtV1X5VJFgxshguddGUytp+UN3l+zbLjxi5+LRN9g+AczqyPdGFuIQMFvWi9NYsGN9Q/FZTXGVwLNz+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mbDXbOcl; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1766387967; c=relaxed/simple;
+	bh=Ad6XnwRPyxR4bFIY7uXIjFQxE6Jc/O4cx0gw4HJ2pSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i+zNnIDXL1LaZ41IggsTHFO5jNOlMSI7wSwycXzkDctZfecs2ctATPyUC73Og76Mg03cwlY28rchI1LOjR1coAmxeQfQE3phY2mhJlqlaoSpoHWWXuL9B8kzOJl5J8tf0AgR9u3tLr/m6GpZxFmnJMyLk2GyFGdEC6twBlfHEzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZmkKO9mN; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mbDXbOcl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZmkKO9mN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766387198; x=1797923198;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2zs0LFIg88IFdUxv4hBlvm/8D54f+0+g8bpVNxO1XLU=;
-  b=mbDXbOclultUjgcJkD9PTsY4TklXYeZjo+eOWKjrZQXgY+sk2TRJsXGh
-   QAPHi4/r8FhoQHtCPSxyem462QuBA187Ct7S7KTdlHJj8GFmPHTYEQTLC
-   aWOTCan73RN8/sC3vvtX8o4HhoG8kQ18bFEoXEtvdBSXcQuw/zqYdVHFN
-   ZZBT7f6MSwQyX2V/2Yjj3yFbfCvDlw8H+KuEnSvsRgNygh/sRSsL/LJZz
-   902GEDe0ztsrSAJamgrUrVTuOwymlS+PPhevLF55VSMq2fnljVq5nTP0P
-   nS83AXjlIQjW6jsi8gAOD8walZ0uJ24uQjfWKRhBYKTcT1Ieo1cRvluRj
-   A==;
-X-CSE-ConnectionGUID: 88A6K80jQ567OK8k1MzO0w==
-X-CSE-MsgGUID: oKgjV4cQSLC/hIqxVkrF+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="78558650"
-X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="78558650"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 23:06:16 -0800
-X-CSE-ConnectionGUID: bU6qTGvAQAeQt3z1w9fW4Q==
-X-CSE-MsgGUID: ksDK0cPdSHSifsf/TSAtIQ==
+  t=1766387965; x=1797923965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ad6XnwRPyxR4bFIY7uXIjFQxE6Jc/O4cx0gw4HJ2pSY=;
+  b=ZmkKO9mNhJ+kD9yvKQvz8CXR1lDR9gjooMpNVEeCk96veYJ6bh/+kM5j
+   7vVIvgqPpkvS4DHfv9/a5j4jynuWT5kAOSz4SU3KkBk3ufVnJtSHrZp2V
+   tTYmZ4znqyy3oiKSAKdQdUxTKBDGJDgiuEt5/RFIMebWad7w5uCs69HDU
+   Qhmx6JK/Xg4U0VK5p45o+rf299Ht5RJo8pZ4Lk3FnSGNI1DSlGi0xjy7L
+   fI1vdbCUoLnyql1YMr54hLHvzzdl6k7lnEyNVTWWqEJ1abPdmb5YJ7/75
+   rJIAF1ANSpcB9GgOd494ldrZ/RQ2n0oI8nVuPFYyCvJ39PJaf2qY8EASi
+   w==;
+X-CSE-ConnectionGUID: QOqzVAUzQ0GeLIqiWQssvw==
+X-CSE-MsgGUID: 4IcPuSC3SEGrt3R+dlna2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="68180633"
+X-IronPort-AV: E=Sophos;i="6.20,256,1758610800"; 
+   d="scan'208";a="68180633"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 23:19:25 -0800
+X-CSE-ConnectionGUID: /8G0JR6PRZutp4gqaZDMkA==
+X-CSE-MsgGUID: RwGJ3enqQ4qP8nh/iCWiLA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="199427171"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by orviesa007.jf.intel.com with ESMTP; 21 Dec 2025 23:06:15 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+   d="scan'208";a="199763184"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 21 Dec 2025 23:19:23 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXZzh-000000005OS-076M;
-	Mon, 22 Dec 2025 07:06:13 +0000
-Date: Mon, 22 Dec 2025 08:06:06 +0100
+	id 1vXaBn-000000000CX-2cF1;
+	Mon, 22 Dec 2025 07:18:46 +0000
+Date: Mon, 22 Dec 2025 15:18:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amit Cohen <amcohen@nvidia.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ido Schimmel <idosch@nvidia.com>
-Subject: [jpirko-mlxsw:xdp 18/36] include/net/libeth/xdp.h:1498:42: error:
- too few arguments to function call, expected 2, have 1
-Message-ID: <202512220836.zUwHopuY-lkp@intel.com>
+	linux-mmc@vger.kernel.org, Jaehoon Chung <jh80.chung@samsung.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: Re: [PATCH 14/18] mmc: dw_mmc: Remove unused register access macros
+Message-ID: <202512221531.iVzoDSiK-lkp@intel.com>
+References: <1766066445-14144-15-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,130 +65,166 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1766066445-14144-15-git-send-email-shawn.lin@rock-chips.com>
 
-tree:   https://github.com/jpirko/linux_mlxsw xdp
-head:   2b8b8ddc8690a398f4deb27a032bd473320a6691
-commit: a9594ca8b4dea6c838edd404e1c6cc8f58993015 [18/36] xdp: Pass netdevice to xdp_build_skb_from_buff()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251222/202512220836.zUwHopuY-lkp@intel.com/config)
+Hi Shawn,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20251218]
+[cannot apply to rockchip/for-next linus/master ulf-hansson-mmc-mirror/next v6.19-rc1 v6.18 v6.18-rc7 v6.19-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/mmc-dw_mmc-Check-return-value-of-dma_ops-init-in-resume/20251218-222945
+base:   next-20251218
+patch link:    https://lore.kernel.org/r/1766066445-14144-15-git-send-email-shawn.lin%40rock-chips.com
+patch subject: [PATCH 14/18] mmc: dw_mmc: Remove unused register access macros
+config: hexagon-randconfig-001-20251222 (https://download.01.org/0day-ci/archive/20251222/202512221531.iVzoDSiK-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512220836.zUwHopuY-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512221531.iVzoDSiK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512220836.zUwHopuY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512221531.iVzoDSiK-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/intel/libeth/tx.c:6:
->> include/net/libeth/xdp.h:1498:42: error: too few arguments to function call, expected 2, have 1
-    1498 |         skb = xdp_build_skb_from_buff(&xdp->base);
-         |               ~~~~~~~~~~~~~~~~~~~~~~~           ^
-   include/net/xdp.h:377:17: note: 'xdp_build_skb_from_buff' declared here
-     377 | struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp,
-         |                 ^                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     378 |                                         struct net_device *dev);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/mmc/host/dw_mmc.c:2370:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2370 |                         mci_fifo_writeq(host->fifo_reg, host->part_buf);
+         |                         ^
+   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
+     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
+         |                                         ^
+   drivers/mmc/host/dw_mmc.c:2387:5: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2387 |                                 mci_fifo_writeq(host->fifo_reg, aligned_buf[i]);
+         |                                 ^
+   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
+     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
+         |                                         ^
+   drivers/mmc/host/dw_mmc.c:2395:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2395 |                         mci_fifo_writeq(host->fifo_reg, *pdata++);
+         |                         ^
+   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
+     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
+         |                                         ^
+   drivers/mmc/host/dw_mmc.c:2404:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2404 |                         mci_fifo_writeq(host->fifo_reg, host->part_buf);
+         |                         ^
+   drivers/mmc/host/dw_mmc.h:457:41: note: expanded from macro 'mci_fifo_writeq'
+     457 | #define mci_fifo_writeq(__value, __reg) __raw_writeq(__reg, __value)
+         |                                         ^
+>> drivers/mmc/host/dw_mmc.c:2420:22: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2420 |                                 aligned_buf[i] = mci_fifo_readq(host->fifo_reg);
+         |                                                  ^
+   drivers/mmc/host/dw_mmc.h:453:31: note: expanded from macro 'mci_fifo_readq'
+     453 | #define mci_fifo_readq(__reg)   __raw_readq(__reg)
+         |                                 ^
+   drivers/mmc/host/dw_mmc.c:2433:15: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2433 |                         *pdata++ = mci_fifo_readq(host->fifo_reg);
+         |                                    ^
+   drivers/mmc/host/dw_mmc.h:453:31: note: expanded from macro 'mci_fifo_readq'
+     453 | #define mci_fifo_readq(__reg)   __raw_readq(__reg)
+         |                                 ^
+   drivers/mmc/host/dw_mmc.c:2437:20: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2437 |                 host->part_buf = mci_fifo_readq(host->fifo_reg);
+         |                                  ^
+   drivers/mmc/host/dw_mmc.h:453:31: note: expanded from macro 'mci_fifo_readq'
+     453 | #define mci_fifo_readq(__reg)   __raw_readq(__reg)
+         |                                 ^
+   7 errors generated.
 
 
-vim +1498 include/net/libeth/xdp.h
+vim +/__raw_writeq +2370 drivers/mmc/host/dw_mmc.c
 
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1425  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1426  /**
-5495c58c65aa3d Alexander Lobakin 2025-06-12  1427   * libeth_xdp_run_prog - run XDP program (non-XSk path) and handle all verdicts
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1428   * @xdp: XDP buffer to process
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1429   * @bq: XDP Tx bulk to queue ``XDP_TX`` buffers
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1430   * @fl: driver ``XDP_TX`` bulk flush callback
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1431   *
-5495c58c65aa3d Alexander Lobakin 2025-06-12  1432   * Run the attached XDP program and handle all possible verdicts. XSk has its
-5495c58c65aa3d Alexander Lobakin 2025-06-12  1433   * own version.
-1bb635d3748b71 Alexander Lobakin 2025-06-12  1434   * Prefer using it via LIBETH_XDP_DEFINE_RUN{,_PASS,_PROG}().
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1435   *
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1436   * Return: true if the buffer should be passed up the stack, false if the poll
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1437   * should go to the next buffer.
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1438   */
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1439  #define libeth_xdp_run_prog(xdp, bq, fl)				      \
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1440  	(__libeth_xdp_run_flush(xdp, bq, __libeth_xdp_run_prog,		      \
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1441  				libeth_xdp_tx_queue_bulk,		      \
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1442  				fl) == LIBETH_XDP_PASS)
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1443  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1444  /**
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1445   * __libeth_xdp_run_pass - helper to run XDP program and handle the result
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1446   * @xdp: XDP buffer to process
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1447   * @bq: XDP Tx bulk to queue ``XDP_TX`` frames
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1448   * @napi: NAPI to build an skb and pass it up the stack
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1449   * @rs: onstack libeth RQ stats
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1450   * @md: metadata that should be filled to the XDP buffer
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1451   * @prep: callback for filling the metadata
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1452   * @run: driver wrapper to run XDP program
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1453   * @populate: driver callback to populate an skb with the HW descriptor data
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1454   *
-5495c58c65aa3d Alexander Lobakin 2025-06-12  1455   * Inline abstraction that does the following (non-XSk path):
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1456   * 1) adds frame size and frag number (if needed) to the onstack stats;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1457   * 2) fills the descriptor metadata to the onstack &libeth_xdp_buff
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1458   * 3) runs XDP program if present;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1459   * 4) handles all possible verdicts;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1460   * 5) on ``XDP_PASS`, builds an skb from the buffer;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1461   * 6) populates it with the descriptor metadata;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1462   * 7) passes it up the stack.
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1463   *
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1464   * In most cases, number 2 means just writing the pointer to the HW descriptor
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1465   * to the XDP buffer. If so, please use LIBETH_XDP_DEFINE_RUN{,_PASS}()
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1466   * wrappers to build a driver function.
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1467   */
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1468  static __always_inline void
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1469  __libeth_xdp_run_pass(struct libeth_xdp_buff *xdp,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1470  		      struct libeth_xdp_tx_bulk *bq, struct napi_struct *napi,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1471  		      struct libeth_rq_napi_stats *rs, const void *md,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1472  		      void (*prep)(struct libeth_xdp_buff *xdp,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1473  				   const void *md),
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1474  		      bool (*run)(struct libeth_xdp_buff *xdp,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1475  				  struct libeth_xdp_tx_bulk *bq),
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1476  		      bool (*populate)(struct sk_buff *skb,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1477  				       const struct libeth_xdp_buff *xdp,
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1478  				       struct libeth_rq_napi_stats *rs))
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1479  {
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1480  	struct sk_buff *skb;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1481  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1482  	rs->bytes += xdp->base.data_end - xdp->data;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1483  	rs->packets++;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1484  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1485  	if (xdp_buff_has_frags(&xdp->base))
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1486  		libeth_xdp_buff_stats_frags(rs, xdp);
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1487  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1488  	if (prep && (!__builtin_constant_p(!!md) || md))
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1489  		prep(xdp, md);
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1490  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1491  	if (!bq || !run || !bq->prog)
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1492  		goto build;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1493  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1494  	if (!run(xdp, bq))
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1495  		return;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1496  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1497  build:
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12 @1498  	skb = xdp_build_skb_from_buff(&xdp->base);
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1499  	if (unlikely(!skb)) {
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1500  		libeth_xdp_return_buff_slow(xdp);
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1501  		return;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1502  	}
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1503  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1504  	xdp->data = NULL;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1505  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1506  	if (unlikely(!populate(skb, xdp, rs))) {
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1507  		napi_consume_skb(skb, true);
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1508  		return;
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1509  	}
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1510  
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1511  	napi_gro_receive(napi, skb);
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1512  }
-4c805f7ae1ce61 Alexander Lobakin 2025-06-12  1513  
-
-:::::: The code at line 1498 was first introduced by commit
-:::::: 4c805f7ae1ce61a90121378a5ee1f47b3b870c73 libeth: xdp: add XDP prog run and verdict result handling
-
-:::::: TO: Alexander Lobakin <aleksander.lobakin@intel.com>
-:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
+f95f3850f7a9e1d Will Newton     2011-01-02  2356  
+f95f3850f7a9e1d Will Newton     2011-01-02  2357  static void dw_mci_push_data64(struct dw_mci *host, void *buf, int cnt)
+f95f3850f7a9e1d Will Newton     2011-01-02  2358  {
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2359  	struct mmc_data *data = host->data;
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2360  	int init_cnt = cnt;
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2361  
+34b664a20e2664d James Hogan     2011-06-24  2362  	/* try and push anything in the part_buf */
+34b664a20e2664d James Hogan     2011-06-24  2363  	if (unlikely(host->part_buf_count)) {
+34b664a20e2664d James Hogan     2011-06-24  2364  		int len = dw_mci_push_part_bytes(host, buf, cnt);
+0e3a22c044478b6 Shawn Lin       2015-08-03  2365  
+34b664a20e2664d James Hogan     2011-06-24  2366  		buf += len;
+34b664a20e2664d James Hogan     2011-06-24  2367  		cnt -= len;
+c09fbd7451b7972 Seungwon Jeon   2013-03-25  2368  
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2369  		if (host->part_buf_count == 8) {
+76184ac17edf3c6 Ben Dooks       2015-03-25 @2370  			mci_fifo_writeq(host->fifo_reg,	host->part_buf);
+34b664a20e2664d James Hogan     2011-06-24  2371  			host->part_buf_count = 0;
+34b664a20e2664d James Hogan     2011-06-24  2372  		}
+34b664a20e2664d James Hogan     2011-06-24  2373  	}
+34b664a20e2664d James Hogan     2011-06-24  2374  #ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+34b664a20e2664d James Hogan     2011-06-24  2375  	if (unlikely((unsigned long)buf & 0x7)) {
+34b664a20e2664d James Hogan     2011-06-24  2376  		while (cnt >= 8) {
+34b664a20e2664d James Hogan     2011-06-24  2377  			u64 aligned_buf[16];
+34b664a20e2664d James Hogan     2011-06-24  2378  			int len = min(cnt & -8, (int)sizeof(aligned_buf));
+34b664a20e2664d James Hogan     2011-06-24  2379  			int items = len >> 3;
+34b664a20e2664d James Hogan     2011-06-24  2380  			int i;
+34b664a20e2664d James Hogan     2011-06-24  2381  			/* memcpy from input buffer into aligned buffer */
+34b664a20e2664d James Hogan     2011-06-24  2382  			memcpy(aligned_buf, buf, len);
+34b664a20e2664d James Hogan     2011-06-24  2383  			buf += len;
+34b664a20e2664d James Hogan     2011-06-24  2384  			cnt -= len;
+34b664a20e2664d James Hogan     2011-06-24  2385  			/* push data from aligned buffer into fifo */
+34b664a20e2664d James Hogan     2011-06-24  2386  			for (i = 0; i < items; ++i)
+76184ac17edf3c6 Ben Dooks       2015-03-25  2387  				mci_fifo_writeq(host->fifo_reg,	aligned_buf[i]);
+34b664a20e2664d James Hogan     2011-06-24  2388  		}
+34b664a20e2664d James Hogan     2011-06-24  2389  	} else
+34b664a20e2664d James Hogan     2011-06-24  2390  #endif
+34b664a20e2664d James Hogan     2011-06-24  2391  	{
+34b664a20e2664d James Hogan     2011-06-24  2392  		u64 *pdata = buf;
+0e3a22c044478b6 Shawn Lin       2015-08-03  2393  
+34b664a20e2664d James Hogan     2011-06-24  2394  		for (; cnt >= 8; cnt -= 8)
+76184ac17edf3c6 Ben Dooks       2015-03-25  2395  			mci_fifo_writeq(host->fifo_reg, *pdata++);
+34b664a20e2664d James Hogan     2011-06-24  2396  		buf = pdata;
+34b664a20e2664d James Hogan     2011-06-24  2397  	}
+34b664a20e2664d James Hogan     2011-06-24  2398  	/* put anything remaining in the part_buf */
+34b664a20e2664d James Hogan     2011-06-24  2399  	if (cnt) {
+34b664a20e2664d James Hogan     2011-06-24  2400  		dw_mci_set_part_bytes(host, buf, cnt);
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2401  		/* Push data if we have reached the expected data length */
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2402  		if ((data->bytes_xfered + init_cnt) ==
+cfbeb59c7a818a2 Markos Chandras 2013-03-12  2403  		    (data->blksz * data->blocks))
+76184ac17edf3c6 Ben Dooks       2015-03-25 @2404  			mci_fifo_writeq(host->fifo_reg, host->part_buf);
+f95f3850f7a9e1d Will Newton     2011-01-02  2405  	}
+f95f3850f7a9e1d Will Newton     2011-01-02  2406  }
+f95f3850f7a9e1d Will Newton     2011-01-02  2407  
+f95f3850f7a9e1d Will Newton     2011-01-02  2408  static void dw_mci_pull_data64(struct dw_mci *host, void *buf, int cnt)
+f95f3850f7a9e1d Will Newton     2011-01-02  2409  {
+34b664a20e2664d James Hogan     2011-06-24  2410  #ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+34b664a20e2664d James Hogan     2011-06-24  2411  	if (unlikely((unsigned long)buf & 0x7)) {
+34b664a20e2664d James Hogan     2011-06-24  2412  		while (cnt >= 8) {
+34b664a20e2664d James Hogan     2011-06-24  2413  			/* pull data from fifo into aligned buffer */
+34b664a20e2664d James Hogan     2011-06-24  2414  			u64 aligned_buf[16];
+34b664a20e2664d James Hogan     2011-06-24  2415  			int len = min(cnt & -8, (int)sizeof(aligned_buf));
+34b664a20e2664d James Hogan     2011-06-24  2416  			int items = len >> 3;
+34b664a20e2664d James Hogan     2011-06-24  2417  			int i;
+0e3a22c044478b6 Shawn Lin       2015-08-03  2418  
+34b664a20e2664d James Hogan     2011-06-24  2419  			for (i = 0; i < items; ++i)
+76184ac17edf3c6 Ben Dooks       2015-03-25 @2420  				aligned_buf[i] = mci_fifo_readq(host->fifo_reg);
+76184ac17edf3c6 Ben Dooks       2015-03-25  2421  
+34b664a20e2664d James Hogan     2011-06-24  2422  			/* memcpy from aligned buffer into output buffer */
+34b664a20e2664d James Hogan     2011-06-24  2423  			memcpy(buf, aligned_buf, len);
+34b664a20e2664d James Hogan     2011-06-24  2424  			buf += len;
+34b664a20e2664d James Hogan     2011-06-24  2425  			cnt -= len;
+34b664a20e2664d James Hogan     2011-06-24  2426  		}
+34b664a20e2664d James Hogan     2011-06-24  2427  	} else
+34b664a20e2664d James Hogan     2011-06-24  2428  #endif
+34b664a20e2664d James Hogan     2011-06-24  2429  	{
+34b664a20e2664d James Hogan     2011-06-24  2430  		u64 *pdata = buf;
+0e3a22c044478b6 Shawn Lin       2015-08-03  2431  
+34b664a20e2664d James Hogan     2011-06-24  2432  		for (; cnt >= 8; cnt -= 8)
+76184ac17edf3c6 Ben Dooks       2015-03-25  2433  			*pdata++ = mci_fifo_readq(host->fifo_reg);
+34b664a20e2664d James Hogan     2011-06-24  2434  		buf = pdata;
+f95f3850f7a9e1d Will Newton     2011-01-02  2435  	}
+34b664a20e2664d James Hogan     2011-06-24  2436  	if (cnt) {
+76184ac17edf3c6 Ben Dooks       2015-03-25  2437  		host->part_buf = mci_fifo_readq(host->fifo_reg);
+34b664a20e2664d James Hogan     2011-06-24  2438  		dw_mci_pull_final_bytes(host, buf, cnt);
+34b664a20e2664d James Hogan     2011-06-24  2439  	}
+34b664a20e2664d James Hogan     2011-06-24  2440  }
+34b664a20e2664d James Hogan     2011-06-24  2441  
 
 -- 
 0-DAY CI Kernel Test Service
