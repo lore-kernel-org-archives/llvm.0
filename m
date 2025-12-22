@@ -1,96 +1,117 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C347119992C
-	for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 03:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7BB7260F
+	for <llvm@lists.linux.dev>; Mon, 22 Dec 2025 03:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766374234; cv=none; b=DuAdOPSJcN8w/SEbCtHitNTXuAm3jx7NcZTVVLCk8bZUCYeDxH6lDkrhAyuhcQfDKVKuiZqSRWxFKdvsq/lLOAS+6Jp+IAaRLyrhznfjKqw09a2VZoRt4FiCr2wcDtWY/Qb5cux1F2NJiLj0S9HQLkBM8AOXdtpJZ2roYymG5Tk=
+	t=1766375122; cv=none; b=WOI94oKSgGKzgVN/CplxIC2ljw14g5GqbQR2Z3Z/rncD3CCzhbH0ajxb0xckq8Ov9ufJspI65DyOhdQcPNDx3OJEE29UXkL54yzWhGdZNbho1gtPE6zNPr87to2NlEcSYhfBlDcgVm2KsBfosLssgCBk1NFps4Odvtn5QZif8L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766374234; c=relaxed/simple;
-	bh=0sEgOjWNYiRpYEbqOkuzrHuh+/Ex8OeQWPYb0COe5JM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lboehxYJHebAOKHSlkF5xDkGgcsF2mR7IitCbGXjlR08uj8AK6ge6LYI58ayftvRYVgbHmxQOqwDoV70xU41Ai+jrdplaV8T/QfAvvyEItONrgJFhBCX95jjZAU2OkWHZBe/bt9HBfIi72YA8Y6Tgd6xeuDzHNklLJPK8l81mZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=czJgGe2c; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766375122; c=relaxed/simple;
+	bh=+uoXTRL03MKwDHC5OBmwcKH9tnKh1lf6KoOQ2Ze7Eyg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IVcjEn56yodeOCGEpoh1Ai8Ssgi3PW8bAwqlzPWJvWB8VC1m0uaqPLr11d1vgHbQzOoieVaproAEtCVLyfpzpVFP4yaDk0qiSBoHkSKHcQpJMfFjQHpiP0durheiY9ZrrfX1JsKb5fyYm1mhe1VVBB1GRJzJbrp4hnz3jwGa6eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PYYX2iRA; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="czJgGe2c"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a0abca9769so6911765ad.1
-        for <llvm@lists.linux.dev>; Sun, 21 Dec 2025 19:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766374232; x=1766979032; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=COBSDkeJRHdKZMKtQx7qei9g/N9OMGNmu1xizfhqNYM=;
-        b=czJgGe2cedHSO0H4orPxIJth85xiNdI8bjfs4wJd6pzXYYw3HSgCRnsqFPrzn6tacr
-         bz9ldiZyR6OPfWZPlbOedvYjxah1TIXsOs/JrsmGay0JuTuluBVvgCrFsBrNFHdqscp0
-         fdMN0yoVQo/4OaCTfVkMIOppjEFaIXP/tHvwDDyDtNh+6duSLW3pS+K0dQI7X7n2tzh7
-         EQzXTdHPUvJx+2uNDR7adLRKWxiKhpsZpX2CRFnnIP5NAO4fIUZnbq8BKPmrv03wP6n/
-         b2z4ysPTlgVzmYf3nT8t22LzhOS7/t6HQgLcSIFu61eVOfugZ1m9NCWc3LaY2CVIpM2P
-         kysQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766374232; x=1766979032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=COBSDkeJRHdKZMKtQx7qei9g/N9OMGNmu1xizfhqNYM=;
-        b=OGR4i7fqrE4hizxHQRhPBcjOj9eNhe1ilgD3uAyuQHHqgzn1ICJxtWmKo++/TbLezB
-         I+ibSqFzhIH+FyyEHl+5HZTFUYStv7jyrr7/0eCxGWLuiR2KhHdW1ym+67jpeBi1tPef
-         hG6p+7jHmM4AN9O0jxrg0RyZsZEkSl6BxBeFlPLJ25iGqPmqBi1mFh0DPLlx3TYp8qBp
-         MvXxTd513XH6+140CFCgoOgFTY0VsMUiFaejkEEa236TtB+9Jg5i9kBaTUSYR2pra0fe
-         pTZa5oJpis1EknUliUcQJ45RSGtOaLNOcTgXbM/Gq37iXkmNM1g2vYh74mSy7H+xHsPa
-         9Ucw==
-X-Forwarded-Encrypted: i=1; AJvYcCVX1rt6RpMluj7hzAsM+9unH385AEpXgT2un3MEGpj/12p+PbHaSNKUWcyDj/p+xWJGyMGF@lists.linux.dev
-X-Gm-Message-State: AOJu0YyrbxrI3qm639Gg5TSAlBmCuIGdC7MP+Z52zaI9omwl3zi4LtOQ
-	ufgxgp6JUl1emIQH39WpuqAnYBJzv8ox6qjMWAm24fKwj44otsX5h9PejeYrz73RQlo6reBWqAy
-	WvLgQvsgJ8zbDGbwi9O4kN2F/uUJLjhk=
-X-Gm-Gg: AY/fxX6vrBSY961r+TE54nND2OoSZXsLDPopBlmq36jHaR3vHu3QDUv78AlMD0qn1uC
-	RvMmp7bp6NHSzFywa+sRAsAh88edncNRnaDsMjBcZXTAy4SDsdcyXQULP0wW5yiVoVYRgQt8+WS
-	WYOLQ9AQGbSHSl5AbIbJ5wkXDhBBM5rZG/JIsHdyCo9iTuJFCmQGzpGNrOOr0Z2mgte1RB9FiYK
-	MkZVARY2Yv2Xo01iKPN2zKjJFXnpheTyYaqGtQp1P9VUXkuRSG9dSLHlzhQ4UMRzOU2/0fDp/sv
-	fMh6znOnha8da3GCA1tMrzT85XkG6RhtdprMrKOGoL/XCfYJiRC8WwzhN38eG+MVqHhWygf9mtV
-	lufVvMlLzSwo3nNOH3Aoake0=
-X-Google-Smtp-Source: AGHT+IEwHp7GiTxzNjQa+1kWbGxVcf+HWSVN1hKAodz8N06a/N/cWQQAGQMNADFaWCws3ABO/rPUi3ymBQAn595hUMI=
-X-Received: by 2002:a05:7300:4f9b:b0:2ac:2b5b:a567 with SMTP id
- 5a478bee46e88-2b05ec47be3mr4112576eec.6.1766374231860; Sun, 21 Dec 2025
- 19:30:31 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PYYX2iRA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=aD
+	soqbnVRqZ3rTeQ0tICO+fRzXLll4rw5VNAVTfuN8o=; b=PYYX2iRAJEGzUZaNsp
+	NXaQs5IUj/uPDhmgsVBZlFaA4XeT1Uxi1JvCkVLd+c5qZEMltg81aKhCD/m/cEQJ
+	yo/IuAV0meUfkOhKz1bBIsLNRGu0uHQvtZZfqUZnmG2ZbLrqfRy5fz9ujfbqCCOn
+	DYvF1UrZlipwxUDhBfdYcLY7o=
+Received: from hello.company.local (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgA3H3mSvkhpR3MqIg--.69S2;
+	Mon, 22 Dec 2025 11:44:21 +0800 (CST)
+From: Liang Jie <buaajxlj@163.com>
+To: Bjorn Helgaas <bhelgaas@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list),
+	rust-for-linux@vger.kernel.org (open list:RUST:Keyword:\b(?i:rust)\b),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Cc: liangjie@lixiang.com,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] pci: provide pci_free_irq_vectors() stub when CONFIG_PCI is disabled
+Date: Mon, 22 Dec 2025 11:44:15 +0800
+Message-Id: <20251222034415.1384223-1-buaajxlj@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1766061692.git.gtucker@gtucker.io> <35b951506304b141047812f516fa946a4f1549a1.1766061692.git.gtucker@gtucker.io>
- <3241bbcb-d9c1-49bd-b8a7-610543dfb454@gtucker.io>
-In-Reply-To: <3241bbcb-d9c1-49bd-b8a7-610543dfb454@gtucker.io>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 22 Dec 2025 04:30:19 +0100
-X-Gm-Features: AQt7F2p6PVxe3-97y300_XoLgtbOQwn1v4BhwJSxqspmpx2ZlG3l-w_-sXw1ElM
-Message-ID: <CANiq72mtqdR0EU9GM6yu1-Rn0V98ZftUA814eY3ue2YH1xdNHw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] scripts: add tool to run containerized builds
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgA3H3mSvkhpR3MqIg--.69S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr4kXFyUtw4Dtr1rCw18AFb_yoW8ZFyDp3
+	WDuw4UtrW8JFy7WwsIyw47Crn8W395GryxG3yfWw1Uury2gws7tFs8tr1aqr1xCrs3Ar43
+	JasIgFWF9w1UA3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jSoGQUUUUU=
+X-CM-SenderInfo: pexdtyx0omqiywtou0bp/xtbC-xZBYWlIvpbv9wAA3Y
 
-On Sun, Dec 21, 2025 at 9:19=E2=80=AFPM Guillaume Tucker <gtucker@gtucker.i=
-o> wrote:
->
-> Another piece of feedback from your v1 review was to add a link to
-> the documentation.  As it's not published yet I just mentioned the
-> section name here in the v2 - but I can anticipate what the final URL
-> will be i.e.:
->
->      https://www.kernel.org/doc/html/latest/dev-tools/container
+From: Liang Jie <liangjie@lixiang.com>
 
-A docs.kernel.org URL instead may look better?
+When building with CONFIG_PCI=n, clang reports:
 
-Cheers,
-Miguel
+  In file included from rust/helpers/helpers.c:40:
+  rust/helpers/pci.c:36:2: error: call to undeclared function 'pci_free_irq_vectors';
+  ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+          pci_free_irq_vectors(dev);
+          ^
+  rust/helpers/pci.c:36:2: note: did you mean 'pci_alloc_irq_vectors'?
+  include/linux/pci.h:2161:1: note: 'pci_alloc_irq_vectors' declared here
+  pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+  ^
+  1 error generated.
+
+The root cause is that include/linux/pci.h provides inline stubs for
+pci_alloc_irq_vectors() in the CONFIG_PCI=n fallback, but does not provide
+any declaration for pci_free_irq_vectors(). As a result, callers that invoke
+pci_free_irq_vectors() under CONFIG_PCI=n (e.g. Rust PCI helpers) hit an
+implicit function declaration error with clang.
+
+Fix this by adding a no-op pci_free_irq_vectors() stub to the CONFIG_PCI=n
+fallback section of include/linux/pci.h, keeping the alloc/free API pair
+consistent and avoiding implicit declaration build failures.
+
+Fixes: 473b9f331718 ("rust: pci: fix build failure when CONFIG_PCI_MSI is disabled")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512220740.4Kexm4dW-lkp@intel.com/
+Signed-off-by: Liang Jie <liangjie@lixiang.com>
+---
+ include/linux/pci.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 864775651c6f..b5cc0c2b9906 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2210,6 +2210,10 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+ {
+ 	return -ENOSPC;
+ }
++
++static inline void pci_free_irq_vectors(struct pci_dev *dev)
++{
++}
+ #endif /* CONFIG_PCI */
+ 
+ /* Include architecture-dependent settings and functions */
+-- 
+2.25.1
+
