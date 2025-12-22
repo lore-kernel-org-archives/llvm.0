@@ -1,76 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A055FDA7;
-	Mon, 22 Dec 2025 10:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C0F33D4EC;
+	Mon, 22 Dec 2025 10:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766397877; cv=none; b=jqTbDyus5dt1agrOIT33iTc2j2NIJpfEH/GmMAM9I/ZFahtv20W0RKutMm0ziWaEmXmx+NVyplEekQ0wCvhDpR2OOmvhZT0oEbBknmBMVM2754CFErledc77VhAjNhF/dU0Z57sjXBxpzpiXM38fRquMSQw1xH7bY53XY9G0888=
+	t=1766399157; cv=none; b=NndvSTaCYgdigbIRBeZ0KuXdrrRDRM6LJ0vgGbYr5eBxBShZVNmDPPtYeXOI2gq3VohY6peNOUMC44i/k7WhYHv0QQaQ1/MVsG/0N04Ewt5d+0r0ooJggNEIA+OdFuJUzbK4UKzWxh6qsTF40Qi8dKi96RsHpkibpvJXLb7eepc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766397877; c=relaxed/simple;
-	bh=J1EZZVCwpTiIbAyrMOpmNy+FRRI8Ai9A8vQMUUkNmH0=;
+	s=arc-20240116; t=1766399157; c=relaxed/simple;
+	bh=62taOR2EI0MqLH+HSIMWwZvEtr5H5VJiNu+vI3TqvDE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TljKWLncv38+gd7xfaFGZdDPg7oK+pYbRMjezEKBZ7uBnvsdfz7SBXxXNvG2rNZsa/S9KtCOh6aAb/brIeHLZgONQjd4T3Pa+kCvivyh5XHIiz86CYc9Fltb4kd4klrIW0m5QlVgxn46y6bRZNfGCZoE1PKI6CNFoXiKmlSQ2LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DX3xwYra; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=ijiOdxGVdhxXc5vFjYDL5XdJHjY/TNVqMq2I9hAFLyfNS7nHSpst7JlkljG9XVHEMSkbOksO66+jGvBDpwCtZV96f4mWNKAJ4/82lpzSuXZY2mfH8ggclECTM/Epla+RtcE5yYHBFtfOtQgMOSJIpOpByNFpnBiio2UEU/Z3z1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXUGH507; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DX3xwYra"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXUGH507"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766397876; x=1797933876;
+  t=1766399155; x=1797935155;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=J1EZZVCwpTiIbAyrMOpmNy+FRRI8Ai9A8vQMUUkNmH0=;
-  b=DX3xwYraDdOg7VESPHMr33rlqhhNbppdLOtjw1WzT0k1mYAcMNnAhkVk
-   rQStC4xW7BdQeIsHLb0DcXK8TwD/2kRhC/0MZhoHB7xenrd+KebeiO9Zo
-   SxkqvOUhipJLJJTTiQRXOaf5NghgOmwjcz82j4M0aoNKZWbqgxA7ai11E
-   7RcRFMQMSaAGFOQ1TApGjXnrYD3NrhFSNULv7tCxGEZoZFBxEWCUEofjo
-   Mmdnf4qbDMnDN7TX915Jo4igKHm4JD3rPreuamYEP0ZeJ9xGYBLU/aNAe
-   a/8GHxoJ9zWCkhmaca4af9Pijy4tjoMFjhXsrO0gJ46Gts9kHwbCFkmJv
-   g==;
-X-CSE-ConnectionGUID: vV0eway8TG6gy5IAnaL7Ig==
-X-CSE-MsgGUID: s1JxU+D3SbiCj6vbO5pUrg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="71883094"
+  bh=62taOR2EI0MqLH+HSIMWwZvEtr5H5VJiNu+vI3TqvDE=;
+  b=EXUGH507ssVqSGPykHptYrKegQItq23E6Lfz35yDRQiFdg1PnXV24++k
+   bbGL7PPWNEgnQQCcW/wtVdqaNOr0m9HpgTGRqGJ+XFqy35fWoexIcjxiN
+   0+xECN1xOIqO7J8LCI3Aea+FbZnXYjCHbtoC+y2Y4GZWKtbKHdYN6Z2Ut
+   y1eJzJGPXIHZa7GoyViVTHsQBAnErC2XeGI2Fd/pOU4BPVadqXIIAiLYt
+   d50aZv7KkCyABQCpSjr2+KPHuAhrpUIMRRhNSc4JkmkbSJ2thabP6AUKl
+   Zwwg82CeR3kwtATporDY7ZsCr/5yQefXjQNMoxDuPDmCkrjsS8ycFYi1j
+   A==;
+X-CSE-ConnectionGUID: mK4qzJu2RKmgNo1YGlpTXg==
+X-CSE-MsgGUID: AJF6DBaEQZKiA/tTXP+cCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68297227"
 X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="71883094"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:04:36 -0800
-X-CSE-ConnectionGUID: SENbKwQ2TGuu/Q2AuFUCmg==
-X-CSE-MsgGUID: nfxshazyT4av5RHtxHYyhw==
+   d="scan'208";a="68297227"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:25:54 -0800
+X-CSE-ConnectionGUID: fAWCdZUaR5q2u7vr4ATdJQ==
+X-CSE-MsgGUID: 5u0tkOQdRAmhs1RBOjgFlQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="222977989"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 22 Dec 2025 02:04:31 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 22 Dec 2025 02:25:51 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXcmC-000000000MH-2wzD;
-	Mon, 22 Dec 2025 10:04:28 +0000
-Date: Mon, 22 Dec 2025 18:03:51 +0800
+	id 1vXd6L-000000000Nt-051A;
+	Mon, 22 Dec 2025 10:25:34 +0000
+Date: Mon, 22 Dec 2025 18:25:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vincent Mailhol <mailhol@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Chris Mason <chris.mason@fusionio.com>,
-	David Sterba <dsterba@suse.com>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	linux-btrfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Vincent Mailhol <mailhol@kernel.org>
-Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
- is_negative()
-Message-ID: <202512221735.mRV4BZqB-lkp@intel.com>
-References: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
+To: Dan Carpenter <error27@gmail.com>,
+	Harsh Kumar Bijlani <quic_hbijlani@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jeff Johnson <jjohnson@kernel.org>,
+	Ripan Deuri <quic_rdeuri@quicinc.com>,
+	Vasanthakumar Thiagarajan <vasanthakumar.thiagarajan@oss.qualcomm.com>,
+	Baochen Qiang <baochen.qiang@oss.qualcomm.com>,
+	linux-wireless@vger.kernel.org, ath12k@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH next] wifi: ath12k: clean up on error in ath12k_dp_setup()
+Message-ID: <202512221824.sz1jZjhH-lkp@intel.com>
+References: <aUOw1J0TU4VgeXj6@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,68 +67,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
+In-Reply-To: <aUOw1J0TU4VgeXj6@stanley.mountain>
 
-Hi Vincent,
+Hi Dan,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 3e7f562e20ee87a25e104ef4fce557d39d62fa85]
+[auto build test ERROR on next-20251217]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/kbuild-remove-gcc-s-Wtype-limits/20251220-190509
-base:   3e7f562e20ee87a25e104ef4fce557d39d62fa85
-patch link:    https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-3-24b170af700e%40kernel.org
-patch subject: [PATCH v3 3/3] overflow: Remove is_non_negative() and is_negative()
-config: x86_64-randconfig-161-20251222 (https://download.01.org/0day-ci/archive/20251222/202512221735.mRV4BZqB-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/wifi-ath12k-clean-up-on-error-in-ath12k_dp_setup/20251218-154554
+base:   next-20251217
+patch link:    https://lore.kernel.org/r/aUOw1J0TU4VgeXj6%40stanley.mountain
+patch subject: [PATCH next] wifi: ath12k: clean up on error in ath12k_dp_setup()
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251222/202512221824.sz1jZjhH-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512221824.sz1jZjhH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512221735.mRV4BZqB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512221824.sz1jZjhH-lkp@intel.com/
 
-smatch warnings:
-fs/libfs.c:1628 generic_check_addressable() warn: unsigned '*_d' is never less than zero.
-fs/libfs.c:1628 generic_check_addressable() warn: unsigned '_a' is never less than zero.
-mm/vmalloc.c:4708 remap_vmalloc_range_partial() warn: unsigned '*_d' is never less than zero.
-mm/vmalloc.c:4708 remap_vmalloc_range_partial() warn: unsigned '_a' is never less than zero.
+All errors (new ones prefixed by >>):
 
-vim +1628 fs/libfs.c
+>> drivers/net/wireless/ath/ath12k/dp.c:1767:8: error: use of undeclared label 'rhash_destroy'
+                   goto rhash_destroy;
+                        ^
+   1 error generated.
 
-1b061d9247f71c Christoph Hellwig   2010-05-26  1613  
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1614  /**
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1615   * generic_check_addressable - Check addressability of file system
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1616   * @blocksize_bits:	log of file system block size
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1617   * @num_blocks:		number of blocks in file system
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1618   *
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1619   * Determine whether a file system with @num_blocks blocks (and a
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1620   * block size of 2**@blocksize_bits) is addressable by the sector_t
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1621   * and page cache of the system.  Return 0 if so and -EFBIG otherwise.
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1622   */
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1623  int generic_check_addressable(unsigned blocksize_bits, u64 num_blocks)
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1624  {
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1625  	u64 last_fs_block = num_blocks - 1;
-25050181b61aa0 Pankaj Raghav       2025-06-30  1626  	u64 last_fs_page, max_bytes;
-25050181b61aa0 Pankaj Raghav       2025-06-30  1627  
-25050181b61aa0 Pankaj Raghav       2025-06-30 @1628  	if (check_shl_overflow(num_blocks, blocksize_bits, &max_bytes))
-25050181b61aa0 Pankaj Raghav       2025-06-30  1629  		return -EFBIG;
-25050181b61aa0 Pankaj Raghav       2025-06-30  1630  
-25050181b61aa0 Pankaj Raghav       2025-06-30  1631  	last_fs_page = (max_bytes >> PAGE_SHIFT) - 1;
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1632  
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1633  	if (unlikely(num_blocks == 0))
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1634  		return 0;
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1635  
-25050181b61aa0 Pankaj Raghav       2025-06-30  1636  	if (blocksize_bits < 9)
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1637  		return -EINVAL;
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1638  
-a33f13efe05192 Joel Becker         2010-08-16  1639  	if ((last_fs_block > (sector_t)(~0ULL) >> (blocksize_bits - 9)) ||
-a33f13efe05192 Joel Becker         2010-08-16  1640  	    (last_fs_page > (pgoff_t)(~0ULL))) {
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1641  		return -EFBIG;
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1642  	}
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1643  	return 0;
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1644  }
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1645  EXPORT_SYMBOL(generic_check_addressable);
-30ca22c70e3ef0 Patrick J. LoPresti 2010-07-22  1646  
+
+vim +/rhash_destroy +1767 drivers/net/wireless/ath/ath12k/dp.c
+
+  1734	
+  1735	int ath12k_dp_alloc(struct ath12k_base *ab)
+  1736	{
+  1737		struct ath12k_dp *dp = &ab->dp;
+  1738		struct hal_srng *srng = NULL;
+  1739		size_t size = 0;
+  1740		u32 n_link_desc = 0;
+  1741		int ret;
+  1742		int i;
+  1743	
+  1744		dp->ab = ab;
+  1745	
+  1746		INIT_LIST_HEAD(&dp->reo_cmd_list);
+  1747		INIT_LIST_HEAD(&dp->reo_cmd_cache_flush_list);
+  1748		INIT_LIST_HEAD(&dp->reo_cmd_update_rx_queue_list);
+  1749		spin_lock_init(&dp->reo_cmd_lock);
+  1750		spin_lock_init(&dp->reo_rxq_flush_lock);
+  1751	
+  1752		dp->reo_cmd_cache_flush_count = 0;
+  1753		dp->idle_link_rbm = ath12k_dp_get_idle_link_rbm(ab);
+  1754	
+  1755		ret = ath12k_wbm_idle_ring_setup(ab, &n_link_desc);
+  1756		if (ret) {
+  1757			ath12k_warn(ab, "failed to setup wbm_idle_ring: %d\n", ret);
+  1758			return ret;
+  1759		}
+  1760	
+  1761		srng = &ab->hal.srng_list[dp->wbm_idle_ring.ring_id];
+  1762	
+  1763		ret = ath12k_dp_link_desc_setup(ab, dp->link_desc_banks,
+  1764						HAL_WBM_IDLE_LINK, srng, n_link_desc);
+  1765		if (ret) {
+  1766			ath12k_warn(ab, "failed to setup link desc: %d\n", ret);
+> 1767			goto rhash_destroy;
 
 -- 
 0-DAY CI Kernel Test Service
