@@ -1,129 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227E92D97BB;
-	Tue, 23 Dec 2025 17:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF93145348;
+	Tue, 23 Dec 2025 18:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766512499; cv=none; b=hoYpbtFKS8cnxJnfdpxe20RMHoIvYVSW0RCxb21pdajHACx9Szspzzbg9kPvqiQgz8gyJ/+2jBM+KwIHTXU5Tv7h78oVJ3v0FhNGiHROeoqsLxM+QwspnoQ/X69HWpKXTeVubadCeYBFvveXBclnxBJ/4MoaN/J9+UApOhNGw08=
+	t=1766514008; cv=none; b=e/WUk3fQpr6LCa0Dg5QeIn6YmyLf6L+Wa/TwIHfQ6QhDjjPPzy74PiZ1Jz7XF5NKQxGP0hhu+AGA0PzprykXEc1D8+37wgj18qB/gYEVHOwiICF3jjzKao2pHAkqqNsTrCbDA1gIQmhvCklzcvBMnO192j3HoD99ghJz/rYcy/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766512499; c=relaxed/simple;
-	bh=XLM2fikAcavvgjUlqwc5tL6SD3nCDVnUcFY/V0XJ4HY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kjm9YZj1+JbIgMz5430PX0IWZn0gU4BiwlcMGQeKyYpUdzCej+7J2ILPNgbsutpzkNu99VgHXEDgwSQkAGPjIjxUnW3gliziUeCKxKCUoWQ+uS0W4hC5YURmgyCFjQbi3k3L8WLs66QuxL4zC1rNaiTMGGxemvvKPqeT9QdFS0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWF5rpw4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766514008; c=relaxed/simple;
+	bh=qP8JlGY2zKnl3CsC/Of+DeZQ3W4+/+J2vDf5Z6TRA+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jTIdTPqTn5/KsRZ5pnlo6J88tizW0BmC9IyFhYe/imp0VaQFk9XyYxeREwbsV382vZrMQfFOpZ2zzZc2gsdO8jP1zm7BBpuSMd8WcOkRpvqoGxvrJQfmbUpqyZJpfE49o8ii3vfd82c0RsFE7yBMKrSxx7sgC6/e0e4Im8td4ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMxKOY9d; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWF5rpw4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BCA7C116B1;
-	Tue, 23 Dec 2025 17:54:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMxKOY9d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E3CC113D0;
+	Tue, 23 Dec 2025 18:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766512498;
-	bh=XLM2fikAcavvgjUlqwc5tL6SD3nCDVnUcFY/V0XJ4HY=;
-	h=From:To:Cc:Subject:Date:Reply-To:From;
-	b=ZWF5rpw4IlCT9luOR7eqj2o3IOokxIpGUpbyMj8xqkHECttuE9k6EavV6nDS+ZVkY
-	 V6neOwj5ZMW0aBeqj8CtykSZa6oUhiJCDSjxCkgIzQLDqTkL2XwamdxMxSSOUqhbXU
-	 GvN7QOJZzM32cVy8wf8Bw3OKKyNx9Xzux+9MNgaBVyyHJiv/hQQKhTNd1ETFHkBJkP
-	 U881tHlB8BfyX5fhjtiT/szW7hGDqOWPHREf2K2sJSbFIP6+sXuNkZqlx7KpAbBJcl
-	 d2H7arKE/4aoGztdcX5vwLPKsez9cxuB6f18IRVdr5UPJsXIEAMvuoCd/XAktio7ha
-	 N/gsnsdXUrOpw==
-From: Gary Guo <gary@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] perf symbol: remove Rust symbol workarounds
-Date: Tue, 23 Dec 2025 17:52:10 +0000
-Message-ID: <20251223175216.1353814-1-gary@kernel.org>
-X-Mailer: git-send-email 2.51.2
-Reply-To: Gary Guo <gary@garyguo.net>
+	s=k20201202; t=1766514005;
+	bh=qP8JlGY2zKnl3CsC/Of+DeZQ3W4+/+J2vDf5Z6TRA+E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NMxKOY9dUOVkKpUD0HDDBP9MK2f489JCWoFpsTVXbxe5Kgn3yhXpeGg42ib25um+V
+	 PdQuIeKjNhQcwFjOh3bIv5cJRIov8xHLqRaVEGdvoxOwPdD8ojxoYLDRImtA89AQOc
+	 ycflux+TvZZUlNR6O7thQ3omaHk1bkgmvC6g6w3GGZuWaPOy+TtwjssqLcxY4GjgA1
+	 R/FGzwJdZ7A9sV678eyS8sh7RTrCfMihq7eGgPbCuAaH+qBbD50Z2zi9ChBHgM2bkC
+	 OcpkOWavTWsuuMAky38fyhGyUYc+94dL3v9BtoJzDomdnV0yTbQzeHlRbjXRWNvbyi
+	 /clwe2Qz6dsCQ==
+Date: Tue, 23 Dec 2025 10:20:02 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: hupu <hupu.gm@gmail.com>
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	james.clark@linaro.org, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	justinstitt@google.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC 1/2] perf build: Allow passing extra Clang flags via
+ EXTRA_BPF_FLAGS
+Message-ID: <aUrdUjqVEjJW9VBl@google.com>
+References: <20251223084337.3789-1-hupu.gm@gmail.com>
+ <20251223084337.3789-2-hupu.gm@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251223084337.3789-2-hupu.gm@gmail.com>
 
-From: Gary Guo <gary@garyguo.net>
+Hello,
 
-Due to an off-by-one error introduced in commit 73bbb94466fd ("kallsyms:
-support "big" kernel symbols"), long symbols (which are currently only
-produced by Rust) can have their symbol type being wrongly parsed by
-kernel/kallsyms.c.
+On Tue, Dec 23, 2025 at 04:43:34PM +0800, hupu wrote:
+> Add support for EXTRA_BPF_FLAGS in the eBPF skeleton build, allowing
+> users to pass additional Clang options such as --sysroot or custom
+> include paths when cross-compiling perf.
+> 
+> This is primarily intended for cross-build scenarios where the default
+> host include paths do not match the target kernel version.
+> 
+> Example usage:
+>     make perf ARCH="arm64" EXTRA_BPF_FLAGS="--sysroot=..."
+> 
+> Change history:
+>   v5:
+>     - Update commit message
+>   v4:
+>     - Apply EXTRA_BPF_FLAGS directly to BPF skeleton build command
+>       instead of modifying CLANG_OPTIONS
+>   v3:
+>     - Move the variable description comment to the top of Makefile.perf
+>     - Update commit message
+>   v2:
+>     - Rename EXTRA_CLANG_FLAGS to EXTRA_BPF_FLAGS
+>     - Update commit message
+>   v1:
+>     - Introduce EXTRA_CLANG_FLAGS to allow passing extra Clang options
+> 
+> Signed-off-by: hupu <hupu.gm@gmail.com>
 
-This has been fixed in commit f3f9f42232dee5 ("kallsyms: Fix wrong "big"
-kernel symbol type read from procfs"), and these symbols are now
-reported correctly.
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
 
-Drop the workaround in perf symbol that filter out these symbol types.
+Thanks,
+Namhyung
 
-Specifically, '1' and 'l' can never be generated by nm -- 'u' does
-indicate GNU unique, however such symbols are only generated by G++ for
-C++ templates, and are never generated by LLVM (LLVM generates weak
-symbols in such cases instead). Therefore, the previous occurrence of
-these symbols types must be due to the off-by-error and can be safely
-removed.
-
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Gary Guo <gary@garyguo.net>
----
- tools/perf/util/symbol.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
-
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 814f960fa8f8d..eabb218b4e195 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -106,19 +106,8 @@ static enum dso_binary_type binary_type_symtab[] = {
- 
- static bool symbol_type__filter(char __symbol_type)
- {
--	// Since 'U' == undefined and 'u' == unique global symbol, we can't use toupper there
--	// 'N' is for debugging symbols, 'n' is a non-data, non-code, non-debug read-only section.
--	// According to 'man nm'.
--	// 'N' first seen in:
--	// ffffffff9b35d130 N __pfx__RNCINvNtNtNtCsbDUBuN8AbD4_4core4iter8adapters3map12map_try_foldjNtCs6vVzKs5jPr6_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
--	// a seemingly Rust mangled name
--	// Ditto for '1':
--	// root@x1:~# grep ' 1 ' /proc/kallsyms
--	// ffffffffb098bc00 1 __pfx__RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
--	// ffffffffb098bc10 1 _RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
- 	char symbol_type = toupper(__symbol_type);
--	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B' ||
--	       __symbol_type == 'u' || __symbol_type == 'l' || __symbol_type == 'N' || __symbol_type == '1';
-+	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B';
- }
- 
- static int prefix_underscores_count(const char *str)
-
-base-commit: b927546677c876e26eba308550207c2ddf812a43
--- 
-2.51.2
-
+> ---
+>  tools/perf/Makefile.perf | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index b3f481a626af..8b8647fd4f41 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -35,6 +35,9 @@ include ../scripts/utilities.mak
+>  #
+>  # Define EXTRA_CFLAGS=-m64 or EXTRA_CFLAGS=-m32 as appropriate for cross-builds.
+>  #
+> +# Define EXTRA_BPF_FLAGS="--sysroot=<path>" or other custom include paths for
+> +# cross-compiling BPF skeletons
+> +#
+>  # Define EXCLUDE_EXTLIBS=-lmylib to exclude libmylib from the auto-generated
+>  # EXTLIBS.
+>  #
+> @@ -1250,7 +1253,7 @@ endif
+>  $(SKEL_TMP_OUT)/%.bpf.o: $(OUTPUT)PERF-VERSION-FILE util/bpf_skel/perf_version.h | $(SKEL_TMP_OUT)
+>  $(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/vmlinux.h
+>  	$(QUIET_CLANG)$(CLANG) -g -O2 -fno-stack-protector --target=bpf \
+> -	  $(CLANG_OPTIONS) $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
+> +	  $(CLANG_OPTIONS) $(EXTRA_BPF_FLAGS) $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
+>  	  -include $(OUTPUT)PERF-VERSION-FILE -include util/bpf_skel/perf_version.h \
+>  	  -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
+>  
+> -- 
+> 2.43.0
+> 
