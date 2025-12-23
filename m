@@ -1,248 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0936834F262;
-	Tue, 23 Dec 2025 15:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194A61494C2
+	for <llvm@lists.linux.dev>; Tue, 23 Dec 2025 15:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766503780; cv=none; b=tXp3GZmWhcxdfH+8K+lxrlIPzWrrGxk9R5Dm/4uyZ+oY3Z/s+gqiTR77VGavQtQ6NSaZDH99sGkyL9Kkt2Ivg1MZm8uLYaJyCJ6iCt2GGpvuqVt8HMKZ95cp1idEQDmZGbNXyafqmsBi9yhHIYyxPxG3OwUJEB9cHieWzZoVgmw=
+	t=1766504954; cv=none; b=kz9XJnvQCecyCpyHQFHamZ2ALnXclE5TXl852vU2VxA70tG6HFeYDthBgXZJMCGZSJleyTORtOVx+NpYzNJWKAiQFkb48Wbc/DKjIeXCPtc3rhPNMtw8MnKl2WERUsePx5bxU6ESpEW0Gvj8F+Mj2K5fuK97JqfUtwz3i9ARNBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766503780; c=relaxed/simple;
-	bh=CuLUCLF2D9OlmbHPGcwpLc9XdrPHTvg6uUHWA7dO4hw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rf4bbSdyWY7GJaQ0kP+N9/5HjZYqb9JwBRQRI1V3Sd+fpe0rtxfYANo8FE+/P+IxmdGLco3Lw8J3osgH76ijl/n15Xk1Oj/66DYXXoraVGaBxHlNpNsSAkXBiHi8PkKYcYFtUB+Dch0/Yg79GTcWwdEuDOqP9DKT0CuXN9upFcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KuOaXkj+; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766504954; c=relaxed/simple;
+	bh=FqlmP+kwnhwBT9W+4BU8lDvTOmPOLotOl+cxygzeTW8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KYgoGYeOZIYZdgKIrNVYOvYuv2+erKAX+PnKX7IdCpOB3x2Hza+n+UOnTPo5dDYAyO6Bp74oukies3NMjzwfVHF1+QahZ4R53Pjio5fbVqlvJhNSW5GsRDu6GN7Knhy+koPm8RtRaVklC6q+FyGPCYu63MSyDCSXnpNkw5tpR9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gvZGSaAm; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KuOaXkj+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766503779; x=1798039779;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CuLUCLF2D9OlmbHPGcwpLc9XdrPHTvg6uUHWA7dO4hw=;
-  b=KuOaXkj+cuMb1RFJ42d9edCbdbsHcdRQevuknVZKact2u/2vqpQDmjud
-   dGpBXTKI2Jsl7Wn5y65USKuRC6yjAS8FAqcIe1eULhDEuTrj1Xb3XKNGx
-   IzHd6kfHSYY82Wy7cdOBDnyAILHMnWThNrxny+JEJKnyxHIWZ5PX/2q83
-   J8JauEm4p+6i/wpqaSlY7l2OLrFJxCqsQKdU2OdDbhL58a5aRM8ZC383W
-   kPc+Z0fjIKL0UouaX/eXj9LHSeJNVYx+W3gb/Vi1AupFvGSNnow/9f3o7
-   070cdmwsy69FqZsAp0jKYyyIZKAK/rCdgMRFqO+MiTu/oRVlnvJkiJ4Yg
-   A==;
-X-CSE-ConnectionGUID: x/N3H4iCQj+LtvneTaqohw==
-X-CSE-MsgGUID: qqR+8Sb2S6a2i0cHmgreWg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="79072936"
-X-IronPort-AV: E=Sophos;i="6.21,171,1763452800"; 
-   d="scan'208";a="79072936"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 07:29:37 -0800
-X-CSE-ConnectionGUID: zRTC+q2yS3Kg1LdPAnSe6A==
-X-CSE-MsgGUID: pEiBsqglRf6vYpMfKv6CjQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,171,1763452800"; 
-   d="scan'208";a="199832341"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 23 Dec 2025 07:29:34 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vY4I3-00000000241-28Oj;
-	Tue, 23 Dec 2025 15:27:42 +0000
-Date: Tue, 23 Dec 2025 23:23:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>, ioana.ciornei@nxp.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>,
-	Dan Carpenter <error27@gmail.com>, Su Hui <suhui@nfschina.com>
-Subject: Re: [PATCH] bus: fsl-mc: fix an error handling in fsl_mc_device_add()
-Message-ID: <202512232341.mNsrluKO-lkp@intel.com>
-References: <20251222074958.992911-1-lihaoxiang@isrc.iscas.ac.cn>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gvZGSaAm"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 3AB574E41D50;
+	Tue, 23 Dec 2025 15:49:09 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0387960716;
+	Tue, 23 Dec 2025 15:49:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5A6B610AB0B8A;
+	Tue, 23 Dec 2025 16:49:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1766504947; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=qwNYdPNwkNQfvtXRvdd/5N/fyJbUhxz9upsm5xT0pTc=;
+	b=gvZGSaAmi8tCoDwVPHBrY+XGFfKGE/Mqyq2gyeowWwxUqSfq91TdWiGhf/0nSN+bdWA4K9
+	eIpZu+NkXMBcJXMUPMnvJqhPwehcBXnsPVHIAjs41OsUmxlo54RraaP0m4AUAUGmBSfSqj
+	O5EHOwy02DvWvbNI9h7QgNGxcMXyg+dsU+c9+gC0f525LBjDP1GyQJdSEsOOHvvTZTj/3u
+	JytOyUCwRb3c+4QxTfiHq91vvXbQLkrqXxpKm9fAzhtdCKmZ0C/nIneDwoL/PzRQLmCguT
+	GONpVwbnlZkU0XGt/BM5S3AMqYZEqY9y2SfCvPYj3ah/IrTaXELtYmDEy2otQg==
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Tue, 23 Dec 2025 16:48:49 +0100
+Subject: [PATCH] drm/bridge: rename drm_for_each_bridge_in_chain_scoped()
+ to drm_for_each_bridge_in_chain()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251222074958.992911-1-lihaoxiang@isrc.iscas.ac.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251223-drm-bridge-alloc-getput-for_each_bridge-2-v1-1-0362434ae0eb@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAOC5SmkC/y2N0QqDMAwAf0XyvMCasjH3K2NIbKMGnJVUx0D89
+ xXx8Ti42yCLqWR4VhuYfDVrmgq4SwVh4KkX1FgY6Eo3R+Qx2gdb01gMj2MK2Msyrwt2yRrhMDS
+ nJCTvHsy1b++1QOnNJp3+jtfrve9/RYpr0nsAAAA=
+X-Change-ID: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
+To: Miguel Ojeda <ojeda@kernel.org>, 
+ Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Hui Pu <Hui.Pu@gehealthcare.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ llvm@lists.linux.dev, Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Haoxiang,
+drm_for_each_bridge_in_chain_scoped() was added in commit e46efc6a7d28
+("drm/bridge: add drm_for_each_bridge_in_chain_scoped()") to provide a
+safer alternative to drm_for_each_bridge_in_chain().
 
-kernel test robot noticed the following build errors:
+Following commits converted all users to the _scoped variant.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Finally commit 2f08387a444c ("drm/bridge: remove
+drm_for_each_bridge_in_chain()") removed the old
+drm_for_each_bridge_in_chain() macro.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haoxiang-Li/bus-fsl-mc-fix-an-error-handling-in-fsl_mc_device_add/20251222-155324
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251222074958.992911-1-lihaoxiang%40isrc.iscas.ac.cn
-patch subject: [PATCH] bus: fsl-mc: fix an error handling in fsl_mc_device_add()
-config: x86_64-buildonly-randconfig-001-20251223 (https://download.01.org/0day-ci/archive/20251223/202512232341.mNsrluKO-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512232341.mNsrluKO-lkp@intel.com/reproduce)
+It's time to rename drm_for_each_bridge_in_chain_scoped() back to the
+original name.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512232341.mNsrluKO-lkp@intel.com/
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+ .clang-format                                  | 2 +-
+ drivers/gpu/drm/display/drm_bridge_connector.c | 4 ++--
+ drivers/gpu/drm/drm_atomic.c                   | 2 +-
+ drivers/gpu/drm/drm_bridge.c                   | 2 +-
+ include/drm/drm_bridge.h                       | 5 ++---
+ 5 files changed, 7 insertions(+), 8 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/.clang-format b/.clang-format
+index 2ceca764122f..f2b46d275d30 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -167,7 +167,7 @@ ForEachMacros:
+   - 'drm_connector_for_each_possible_encoder'
+   - 'drm_exec_for_each_locked_object'
+   - 'drm_exec_for_each_locked_object_reverse'
+-  - 'drm_for_each_bridge_in_chain_scoped'
++  - 'drm_for_each_bridge_in_chain'
+   - 'drm_for_each_connector_iter'
+   - 'drm_for_each_crtc'
+   - 'drm_for_each_crtc_reverse'
+diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
+index a2d30cf9e06d..925aca7ae84a 100644
+--- a/drivers/gpu/drm/display/drm_bridge_connector.c
++++ b/drivers/gpu/drm/display/drm_bridge_connector.c
+@@ -139,7 +139,7 @@ static void drm_bridge_connector_hpd_notify(struct drm_connector *connector,
+ 		to_drm_bridge_connector(connector);
+ 
+ 	/* Notify all bridges in the pipeline of hotplug events. */
+-	drm_for_each_bridge_in_chain_scoped(bridge_connector->encoder, bridge) {
++	drm_for_each_bridge_in_chain(bridge_connector->encoder, bridge) {
+ 		if (bridge->funcs->hpd_notify)
+ 			bridge->funcs->hpd_notify(bridge, status);
+ 	}
+@@ -684,7 +684,7 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 	 * detection are available, we don't support hotplug detection at all.
+ 	 */
+ 	connector_type = DRM_MODE_CONNECTOR_Unknown;
+-	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
++	drm_for_each_bridge_in_chain(encoder, bridge) {
+ 		if (!bridge->interlace_allowed)
+ 			connector->interlace_allowed = false;
+ 		if (!bridge->ycbcr_420_allowed)
+diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+index 52738b80ddbe..5b017d36f293 100644
+--- a/drivers/gpu/drm/drm_atomic.c
++++ b/drivers/gpu/drm/drm_atomic.c
+@@ -1468,7 +1468,7 @@ drm_atomic_add_encoder_bridges(struct drm_atomic_state *state,
+ 		       "Adding all bridges for [encoder:%d:%s] to %p\n",
+ 		       encoder->base.id, encoder->name, state);
+ 
+-	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
++	drm_for_each_bridge_in_chain(encoder, bridge) {
+ 		/* Skip bridges that don't implement the atomic state hooks. */
+ 		if (!bridge->funcs->atomic_duplicate_state)
+ 			continue;
+diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
+index db40c26d1cb3..bf39f19bd379 100644
+--- a/drivers/gpu/drm/drm_bridge.c
++++ b/drivers/gpu/drm/drm_bridge.c
+@@ -1582,7 +1582,7 @@ static int encoder_bridges_show(struct seq_file *m, void *data)
+ 	struct drm_printer p = drm_seq_file_printer(m);
+ 	unsigned int idx = 0;
+ 
+-	drm_for_each_bridge_in_chain_scoped(encoder, bridge)
++	drm_for_each_bridge_in_chain(encoder, bridge)
+ 		drm_bridge_debugfs_show_bridge(&p, bridge, idx++, false);
+ 
+ 	return 0;
+diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+index d2683846cc61..cdd631582fe7 100644
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -1473,8 +1473,7 @@ drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
+ }
+ 
+ /**
+- * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
+- *                                       to an encoder
++ * drm_for_each_bridge_in_chain - iterate over all bridges attached to an encoder
+  * @encoder: the encoder to iterate bridges on
+  * @bridge: a bridge pointer updated to point to the current bridge at each
+  *	    iteration
+@@ -1484,7 +1483,7 @@ drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
+  * Automatically gets/puts the bridge reference while iterating, and puts
+  * the reference even if returning or breaking in the middle of the loop.
+  */
+-#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
++#define drm_for_each_bridge_in_chain(encoder, bridge)			\
+ 	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
+ 	     drm_bridge_chain_get_first_bridge(encoder);		\
+ 	     bridge;							\
 
->> drivers/bus/fsl-mc/fsl-mc-bus.c:899:27: error: expected ';' after expression
-     899 |                 put_device(&mc_dev->dev)
-         |                                         ^
-         |                                         ;
-   1 error generated.
+---
+base-commit: e05b08d7d0162cf77fff119367fb1a2d5ab3e669
+change-id: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
 
-
-vim +899 drivers/bus/fsl-mc/fsl-mc-bus.c
-
-   778	
-   779	/*
-   780	 * Add a newly discovered fsl-mc device to be visible in Linux
-   781	 */
-   782	int fsl_mc_device_add(struct fsl_mc_obj_desc *obj_desc,
-   783			      struct fsl_mc_io *mc_io,
-   784			      struct device *parent_dev,
-   785			      struct fsl_mc_device **new_mc_dev)
-   786	{
-   787		int error;
-   788		struct fsl_mc_device *mc_dev = NULL;
-   789		struct fsl_mc_bus *mc_bus = NULL;
-   790		struct fsl_mc_device *parent_mc_dev;
-   791	
-   792		if (dev_is_fsl_mc(parent_dev))
-   793			parent_mc_dev = to_fsl_mc_device(parent_dev);
-   794		else
-   795			parent_mc_dev = NULL;
-   796	
-   797		if (strcmp(obj_desc->type, "dprc") == 0) {
-   798			/*
-   799			 * Allocate an MC bus device object:
-   800			 */
-   801			mc_bus = kzalloc(sizeof(*mc_bus), GFP_KERNEL);
-   802			if (!mc_bus)
-   803				return -ENOMEM;
-   804	
-   805			mutex_init(&mc_bus->scan_mutex);
-   806			mc_dev = &mc_bus->mc_dev;
-   807		} else {
-   808			/*
-   809			 * Allocate a regular fsl_mc_device object:
-   810			 */
-   811			mc_dev = kzalloc(sizeof(*mc_dev), GFP_KERNEL);
-   812			if (!mc_dev)
-   813				return -ENOMEM;
-   814		}
-   815	
-   816		mc_dev->obj_desc = *obj_desc;
-   817		mc_dev->mc_io = mc_io;
-   818		device_initialize(&mc_dev->dev);
-   819		mc_dev->dev.parent = parent_dev;
-   820		mc_dev->dev.bus = &fsl_mc_bus_type;
-   821		mc_dev->dev.release = fsl_mc_device_release;
-   822		mc_dev->dev.type = fsl_mc_get_device_type(obj_desc->type);
-   823		if (!mc_dev->dev.type) {
-   824			error = -ENODEV;
-   825			dev_err(parent_dev, "unknown device type %s\n", obj_desc->type);
-   826			goto error_cleanup_dev;
-   827		}
-   828		dev_set_name(&mc_dev->dev, "%s.%d", obj_desc->type, obj_desc->id);
-   829	
-   830		if (strcmp(obj_desc->type, "dprc") == 0) {
-   831			struct fsl_mc_io *mc_io2;
-   832	
-   833			mc_dev->flags |= FSL_MC_IS_DPRC;
-   834	
-   835			/*
-   836			 * To get the DPRC's ICID, we need to open the DPRC
-   837			 * in get_dprc_icid(). For child DPRCs, we do so using the
-   838			 * parent DPRC's MC portal instead of the child DPRC's MC
-   839			 * portal, in case the child DPRC is already opened with
-   840			 * its own portal (e.g., the DPRC used by AIOP).
-   841			 *
-   842			 * NOTE: There cannot be more than one active open for a
-   843			 * given MC object, using the same MC portal.
-   844			 */
-   845			if (parent_mc_dev) {
-   846				/*
-   847				 * device being added is a child DPRC device
-   848				 */
-   849				mc_io2 = parent_mc_dev->mc_io;
-   850			} else {
-   851				/*
-   852				 * device being added is the root DPRC device
-   853				 */
-   854				if (!mc_io) {
-   855					error = -EINVAL;
-   856					goto error_cleanup_dev;
-   857				}
-   858	
-   859				mc_io2 = mc_io;
-   860			}
-   861	
-   862			error = get_dprc_icid(mc_io2, obj_desc->id, &mc_dev->icid);
-   863			if (error < 0)
-   864				goto error_cleanup_dev;
-   865		} else {
-   866			/*
-   867			 * A non-DPRC object has to be a child of a DPRC, use the
-   868			 * parent's ICID and interrupt domain.
-   869			 */
-   870			mc_dev->icid = parent_mc_dev->icid;
-   871			mc_dev->dma_mask = FSL_MC_DEFAULT_DMA_MASK;
-   872			mc_dev->dev.dma_mask = &mc_dev->dma_mask;
-   873			mc_dev->dev.coherent_dma_mask = mc_dev->dma_mask;
-   874			dev_set_msi_domain(&mc_dev->dev,
-   875					   dev_get_msi_domain(&parent_mc_dev->dev));
-   876		}
-   877	
-   878		/*
-   879		 * Get MMIO regions for the device from the MC:
-   880		 *
-   881		 * NOTE: the root DPRC is a special case as its MMIO region is
-   882		 * obtained from the device tree
-   883		 */
-   884		if (parent_mc_dev && obj_desc->region_count != 0) {
-   885			error = fsl_mc_device_get_mmio_regions(mc_dev,
-   886							       parent_mc_dev);
-   887			if (error < 0)
-   888				goto error_cleanup_dev;
-   889		}
-   890	
-   891		/*
-   892		 * The device-specific probe callback will get invoked by device_add()
-   893		 */
-   894		error = device_add(&mc_dev->dev);
-   895		if (error < 0) {
-   896			dev_err(parent_dev,
-   897				"device_add() failed for device %s: %d\n",
-   898				dev_name(&mc_dev->dev), error);
- > 899			put_device(&mc_dev->dev)
-   900			return error;
-   901		}
-   902	
-   903		dev_dbg(parent_dev, "added %s\n", dev_name(&mc_dev->dev));
-   904	
-   905		*new_mc_dev = mc_dev;
-   906		return 0;
-   907	
-   908	error_cleanup_dev:
-   909		kfree(mc_dev->regions);
-   910		if (mc_bus)
-   911			kfree(mc_bus);
-   912		else
-   913			kfree(mc_dev);
-   914	
-   915		return error;
-   916	}
-   917	EXPORT_SYMBOL_GPL(fsl_mc_device_add);
-   918	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Luca Ceresoli <luca.ceresoli@bootlin.com>
+
