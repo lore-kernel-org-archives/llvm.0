@@ -1,264 +1,318 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B96F1B3B19;
-	Mon, 22 Dec 2025 23:58:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12B113D891;
+	Tue, 23 Dec 2025 01:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766447929; cv=none; b=Mh9a0FKiIziEIwFGJX2rnfjWfaLHLkOsaAJSkmqG3ojzZIyGMkw3F/9o7ZPBntcqgVcaDE12v9niaviAXKmPN4dE7z1prDG9TFuFTW/j/cphmgOtk8ngJbxM7tZy24HUmMH/RkMyz+8j4oQt02PDCKRwY6xD6ABd9baySqnlM4A=
+	t=1766452731; cv=none; b=qrBnQzUSRCy4Ys4Mrvu/OB0eagZihvr56BBwAhIWEM00XOpmGQ0oRCiEB7x3kDSyJW15v7sk5odba0NXKWbJhRVXAkhaT1vIztc5hWvtzG5dUsSY8W3QMgpO2Eb5aNibeCyNk+K1xHMuo+pkXTJCc5mvaaZLmmfAzN33P5YdOlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766447929; c=relaxed/simple;
-	bh=KzVR2g280YZkfI3eeA+zGnqzICxm4EfKBt86UW+btdY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=F3eP4p1ay1i0O94yvfwBXx2Z1RxizROsTCfVie2LXCir629r7SB+S2gctmA5exT3O2vpyx/eZawmBjbnqbyNoThzFz+Xa/27LzNSROhcwrcdLJ0jcEAvF3vf+hdsm47dDVRzNrJTdKr6Tt59X4U6sQW7dLkzGV/SKUoEPnJoXMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L9abw7fx; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1766452731; c=relaxed/simple;
+	bh=MgkW2R9lnTeSxYxmms0jpSDguy/EHETG6PKO7HWLO38=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBnGWywVXWHGn4HbkAxisWZmKzAw8Cd5xUcxPmeFLfpO6NYlIR9HtE060YoEMKxgQxh9VnpuyTehDF8hgWeeG34LyMZn9zJeKWhT6Z6t6akXJcQON/0zb/QCG3MuCNkIb/o2YAu5Eq79zWa9JDTGy2NyHFqmxHZ3RDXULoLarYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bY3ctldO; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L9abw7fx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bY3ctldO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766447928; x=1797983928;
-  h=date:from:to:cc:subject:message-id;
-  bh=KzVR2g280YZkfI3eeA+zGnqzICxm4EfKBt86UW+btdY=;
-  b=L9abw7fxnHaQRghNN9wVsT7+q5IFbgY4jZ70jVWqw9FFIPYTI0HHJbgd
-   YQLly80BtJlzxLwbWgduVR//h31cdIBjWRkrebR8GhMCmrBuWqiLi2/6y
-   0VWFbOmxGnGcqLKBZkv2DxySzkzAvYGBuFcH+7dTQ5NfjWwhZg6U/Ivr9
-   hzCnjZWDUKgdALQrHQ+GCLqrPuvgH9U9mDeCmRGLFzDgsZ71fOp+LxjVI
-   vsa3qKbq1d2XPND/UoKE88HxOI/rL9TvZ25I3YzrJncMr0LvYGtABcJGQ
-   gMxcIco1axjhhUjmJc8wwccD3IOh1+Ma4EHfQkbT0ej19ZYAsUmzmNrvH
+  t=1766452729; x=1797988729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MgkW2R9lnTeSxYxmms0jpSDguy/EHETG6PKO7HWLO38=;
+  b=bY3ctldOP1PzQN6rD1PnCwLIzxFIRXiYJcypXW6Q0Sql3K1TjCJa9PWe
+   l/zyCjhpZZKZyu1gAvkwPP3lzYL2PQ0KvtGJDs4IoT75dvL7fgnAte03n
+   hsqzOdQScAE+AaEN0GgO0vgU8aHHBvSpz1oG+Viw67rUvxYr2J9dS1fv9
+   4u7PsEMKWJxG7tk1f47fcO6Zs8via2vTifIgQ9Wv4EHKWTknTeVNisWVk
+   tHKzGMknM/Ql+U/cjNUNJU51CXVQ3OQ/kuuLG2iBfRqTbzZt5mNkdyVbU
+   YVAxwI3uZuVrPgAvgWBQ7W+dg9eR06XqRW3Xv9sll1komBNUq4jToGlFF
    A==;
-X-CSE-ConnectionGUID: BLldGcfRR++Am+TxJMMIjw==
-X-CSE-MsgGUID: ftsVkOpWShWDFtRWDFzCxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="79420825"
+X-CSE-ConnectionGUID: npPu1Af/T+qmqDR/r/5Faw==
+X-CSE-MsgGUID: swHjhao5SuSOzPAnP3gXjw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="68347972"
 X-IronPort-AV: E=Sophos;i="6.21,169,1763452800"; 
-   d="scan'208";a="79420825"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 15:58:47 -0800
-X-CSE-ConnectionGUID: zO7L59eUTEKGxkmCH/oSKQ==
-X-CSE-MsgGUID: oHt/qga/SjKgHYs/SK6j3w==
+   d="scan'208";a="68347972"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 17:18:48 -0800
+X-CSE-ConnectionGUID: znlUpYS+QS2gEaKf08Mtaw==
+X-CSE-MsgGUID: PN8XDdVPSven7B3LV4uYeA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,169,1763452800"; 
-   d="scan'208";a="237048305"
+   d="scan'208";a="198902419"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 22 Dec 2025 15:58:45 -0800
+  by orviesa010.jf.intel.com with ESMTP; 22 Dec 2025 17:18:45 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vXpnW-000000001F0-3tht;
-	Mon, 22 Dec 2025 23:58:42 +0000
-Date: Tue, 23 Dec 2025 07:58:22 +0800
+	id 1vXr2x-000000001Ht-1Ep2;
+	Tue, 23 Dec 2025 01:18:43 +0000
+Date: Tue, 23 Dec 2025 09:17:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sascha Bischoff <sascha.bischoff@arm.com>
+To: pip-izony <eeodqql09@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org
-Subject: [arm-platforms:kvm-arm64/gicv5-full 42/82]
- arch/arm64/kvm/vgic/vgic-v5-tables.c:385:6: warning: variable 'vmi' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202512230706.u4lubWCl-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-media@vger.kernel.org, Seungjin Bae <eeodqql09@gmail.com>,
+	Kyungtae Kim <Kyungtae.Kim@dartmouth.edu>,
+	Sanghoon Choi <csh0052@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: ttusb-dec: fix heap-buffer-overflow in
+ ttusb_dec_process_urb_frame()
+Message-ID: <202512230947.zdHvFcAE-lkp@intel.com>
+References: <20251222054644.938208-2-eeodqql09@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251222054644.938208-2-eeodqql09@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/gicv5-full
-head:   1426b88096b597395df4c82f089b87c62bab45da
-commit: a994bc0447523a526e17ae0a62024bf8ef371ce6 [42/82] KVM: arm64: gic-v5: Create, manage, and teardown VMT & VPETs
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251223/202512230706.u4lubWCl-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512230706.u4lubWCl-lkp@intel.com/reproduce)
+Hi pip-izony,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linuxtv-media-pending/master]
+[also build test ERROR on media-tree/master sailus-media-tree/master linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/pip-izony/media-ttusb-dec-fix-heap-buffer-overflow-in-ttusb_dec_process_urb_frame/20251222-134809
+base:   https://git.linuxtv.org/media-ci/media-pending.git master
+patch link:    https://lore.kernel.org/r/20251222054644.938208-2-eeodqql09%40gmail.com
+patch subject: [PATCH v2] media: ttusb-dec: fix heap-buffer-overflow in ttusb_dec_process_urb_frame()
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20251223/202512230947.zdHvFcAE-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 185f5fd5ce4c65116ca8cf6df467a682ef090499)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512230947.zdHvFcAE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512230706.u4lubWCl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512230947.zdHvFcAE-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm64/kvm/vgic/vgic-v5-tables.c:385:6: warning: variable 'vmi' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     385 |         if (!vgic_v5_vmt_allocated()) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/vgic/vgic-v5-tables.c:507:6: note: uninitialized use occurs here
-     507 |         if (vmi)
-         |             ^~~
-   arch/arm64/kvm/vgic/vgic-v5-tables.c:385:2: note: remove the 'if' if its condition is always false
-     385 |         if (!vgic_v5_vmt_allocated()) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     386 |                 kvm_err("VMT is not allocated; cannot populate\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     387 |                 ret = -EINVAL;
-         |                 ~~~~~~~~~~~~~~
-     388 |                 goto out_fail;
-         |                 ~~~~~~~~~~~~~~
-     389 |         }
-         |         ~
-   arch/arm64/kvm/vgic/vgic-v5-tables.c:377:20: note: initialize the variable 'vmi' to silence this warning
-     377 |         gicv5_vm_info *vmi;
-         |                           ^
-         |                            = NULL
-   1 warning generated.
+>> drivers/media/usb/ttusb-dec/ttusb_dec.c:713:7: error: expected ')'
+     713 |                                                 __func__);
+         |                                                 ^
+   drivers/media/usb/ttusb-dec/ttusb_dec.c:711:6: note: to match this '('
+     711 |                                         dev_warn(&dec->udev->dev,
+         |                                         ^
+   include/linux/dev_printk.h:156:2: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/dev_printk.h:109:3: note: expanded from macro 'dev_printk_index_wrap'
+     109 |                 dev_printk_index_emit(level, fmt);                      \
+         |                 ^
+   include/linux/dev_printk.h:105:2: note: expanded from macro 'dev_printk_index_emit'
+     105 |         printk_index_subsys_emit("%s %s: ", level, fmt)
+         |         ^
+   include/linux/printk.h:479:2: note: expanded from macro 'printk_index_subsys_emit'
+     479 |         __printk_index_emit(fmt, level, subsys_fmt_prefix)
+         |         ^
+   include/linux/printk.h:436:27: note: expanded from macro '__printk_index_emit'
+     436 |                 if (__builtin_constant_p(_fmt) && __builtin_constant_p(_level)) { \
+         |                                         ^
+>> drivers/media/usb/ttusb-dec/ttusb_dec.c:713:7: error: expected ')'
+     713 |                                                 __func__);
+         |                                                 ^
+   drivers/media/usb/ttusb-dec/ttusb_dec.c:711:6: note: to match this '('
+     711 |                                         dev_warn(&dec->udev->dev,
+         |                                         ^
+   include/linux/dev_printk.h:156:2: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/dev_printk.h:109:3: note: expanded from macro 'dev_printk_index_wrap'
+     109 |                 dev_printk_index_emit(level, fmt);                      \
+         |                 ^
+   include/linux/dev_printk.h:105:2: note: expanded from macro 'dev_printk_index_emit'
+     105 |         printk_index_subsys_emit("%s %s: ", level, fmt)
+         |         ^
+   include/linux/printk.h:479:2: note: expanded from macro 'printk_index_subsys_emit'
+     479 |         __printk_index_emit(fmt, level, subsys_fmt_prefix)
+         |         ^
+   include/linux/printk.h:445:32: note: expanded from macro '__printk_index_emit'
+     445 |                                 .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                                            ^
+>> drivers/media/usb/ttusb-dec/ttusb_dec.c:713:7: error: expected ')'
+     713 |                                                 __func__);
+         |                                                 ^
+   drivers/media/usb/ttusb-dec/ttusb_dec.c:711:6: note: to match this '('
+     711 |                                         dev_warn(&dec->udev->dev,
+         |                                         ^
+   include/linux/dev_printk.h:156:2: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/dev_printk.h:109:3: note: expanded from macro 'dev_printk_index_wrap'
+     109 |                 dev_printk_index_emit(level, fmt);                      \
+         |                 ^
+   include/linux/dev_printk.h:105:2: note: expanded from macro 'dev_printk_index_emit'
+     105 |         printk_index_subsys_emit("%s %s: ", level, fmt)
+         |         ^
+   include/linux/printk.h:479:2: note: expanded from macro 'printk_index_subsys_emit'
+     479 |         __printk_index_emit(fmt, level, subsys_fmt_prefix)
+         |         ^
+   include/linux/printk.h:445:41: note: expanded from macro '__printk_index_emit'
+     445 |                                 .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                                                     ^
+>> drivers/media/usb/ttusb-dec/ttusb_dec.c:713:7: error: expected ')'
+     713 |                                                 __func__);
+         |                                                 ^
+   drivers/media/usb/ttusb-dec/ttusb_dec.c:711:6: note: to match this '('
+     711 |                                         dev_warn(&dec->udev->dev,
+         |                                         ^
+   include/linux/dev_printk.h:156:2: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/dev_printk.h:110:10: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                        ^
+   4 errors generated.
 
 
-vim +385 arch/arm64/kvm/vgic/vgic-v5-tables.c
+vim +713 drivers/media/usb/ttusb-dec/ttusb_dec.c
 
-   357	
-   358	/*
-   359	 * Initialise an entry in the VMT based on the index of the VM. We
-   360	 * make the assumption that our VM ID is zero based, and that we can
-   361	 * use it to index into the VMT. We check that the index is in the
-   362	 * allowed range, just in case.
-   363	 *
-   364	 * We allocate:
-   365	 *     * The VM Descriptor
-   366	 *     * The VPE Table
-   367	 *
-   368	 * We set:
-   369	 *     * The VPE ID Bits
-   370	 *
-   371	 * Note: We don't mark the VMTE as valid as this needs to be done by
-   372	 * the hardware..
-   373	 */
-   374	int vgic_v5_vmte_init(struct kvm *kvm)
-   375	{
-   376		struct vmtl2_entry *vmte;
-   377		gicv5_vm_info *vmi;
-   378		void *vmd = NULL, *vpet = NULL;
-   379		void **vped_ptrs = NULL;
-   380		size_t vpet_alloc_size;
-   381		int ret;
-   382		u64 tmp;
-   383		u16 vm_id = vgic_v5_vm_id(kvm);
-   384	
- > 385		if (!vgic_v5_vmt_allocated()) {
-   386			kvm_err("VMT is not allocated; cannot populate\n");
-   387			ret = -EINVAL;
-   388			goto out_fail;
-   389		}
-   390	
-   391		if (vm_id < 0) {
-   392			kvm_err("Failed to find free vm_id\n");
-   393			return vm_id;
-   394		}
-   395	
-   396		if (vgic_v5_alloc_l2_vmt(kvm)) {
-   397			kvm_err("Failed to make the L2 VMTE valid!\n");
-   398			return -EIO;
-   399		}
-   400	
-   401		ret = vgic_v5_get_l2_vmte(vm_id, &vmte);
-   402		if (ret) {
-   403			kvm_err("Failed to look up VMTE\n");
-   404			return ret;
-   405		}
-   406	
-   407		if (FIELD_GET(GICV5_VMTEL2E_VALID, vmte->val[0])) {
-   408			kvm_err("Attempt to initialize a valid VMTE (0x%x)!\n", vm_id);
-   409			return -EINVAL;
-   410		}
-   411	
-   412		ret = vgic_v5_reset_vmte(vm_id);
-   413		if (ret) {
-   414			kvm_err("Failed to reset VMTE\n");
-   415			return ret;
-   416		}
-   417	
-   418		vmi = kzalloc(sizeof(gicv5_vm_info), GFP_KERNEL);
-   419		if (vmi == NULL) {
-   420			ret = -ENOMEM;
-   421			goto out_fail;
-   422		}
-   423	
-   424		/* Allocate and assign the VM Descriptor, if requested. */
-   425		if (vmt_info->vmd_size != 0) {
-   426			vmd = kzalloc(vmt_info->vmd_size, GFP_KERNEL);
-   427			if (vmd == NULL) {
-   428				kvm_err("Failed to allocate memory for VM Descriptor\n");
-   429				ret = -ENOMEM;
-   430				goto out_fail;
-   431			}
-   432	
-   433			if (!IS_ALIGNED((u64)vmd, vmt_info->vmd_size)) {
-   434				kvm_err("VMD is incorrectly aligned\n");
-   435				ret = -EFAULT;
-   436				goto out_fail;
-   437			}
-   438	
-   439			/* Stash the VA so we can free it later */
-   440			vmi->vmd_base = vmd;
-   441	
-   442			tmp = FIELD_PREP(GICV5_VMTEL2E_VMD_ADDR,
-   443					virt_to_phys(vmd) >>
-   444					GICV5_VMTEL2E_VMD_ADDR_SHIFT);
-   445			WRITE_ONCE(vmte->val[0], cpu_to_le64(tmp));
-   446		}
-   447	
-   448		/*
-   449		 * Allocate and assign the VPE Table.
-   450		 */
-   451		vpet_alloc_size = sizeof(vpe_entry) * vmt_info->max_vpes;
-   452		vpet = kzalloc(vpet_alloc_size, GFP_KERNEL);
-   453		if (vpet == NULL) {
-   454			kvm_err("Failed to allocate memory for VPE Table\n");
-   455			ret = -ENOMEM;
-   456			goto out_fail;
-   457		}
-   458	
-   459		if (!IS_ALIGNED((u64)vpet, vpet_alloc_size)) {
-   460			kvm_err("VPET is incorrectly aligned\n");
-   461			ret = -EFAULT;
-   462			goto out_fail;
-   463		}
-   464	
-   465		/* Stash the VA so we can free it later */
-   466		vmi->vpet_base = vpet;
-   467	
-   468		tmp = FIELD_PREP(GICV5_VMTEL2E_VPET_ADDR,
-   469				virt_to_phys(vpet) >> GICV5_VMTEL2E_VPET_ADDR_SHIFT);
-   470		tmp |= FIELD_PREP(GICV5_VMTEL2E_VPE_ID_BITS, fls(vmt_info->max_vpes) - 1);
-   471		WRITE_ONCE(vmte->val[1], cpu_to_le64(tmp));
-   472	
-   473		vped_ptrs = kzalloc(vmt_info->max_vpes * sizeof(vped_ptrs), GFP_KERNEL);
-   474		if (vped_ptrs == NULL) {
-   475			kvm_err("Failed to allocate memory for VPED tracking\n");
-   476			ret = -ENOMEM;
-   477			goto out_fail;
-   478		}
-   479		vmi->vped_ptrs = vped_ptrs;
-   480	
-   481		if (gicv5_host_ist_caps.irs_non_coherent) {
-   482			if (vmd)
-   483				dcache_clean_inval_poc((unsigned long)vmd,
-   484						       (unsigned long)vmd + vmt_info->vmd_size);
-   485			if (vpet)
-   486				dcache_clean_inval_poc((unsigned long)vpet,
-   487						       (unsigned long)vpet + vpet_alloc_size);
-   488			dcache_clean_poc((unsigned long)vmte,
-   489					 (unsigned long)vmte + sizeof(*vmte));
-   490		} else {
-   491			dsb(ishst);
-   492		}
-   493	
-   494		ret = xa_insert(&vm_info, vm_id, vmi, GFP_KERNEL);
-   495		if (ret)
-   496			goto out_fail;
-   497	
-   498		return 0;
-   499	
-   500	out_fail:
-   501		if (vmd)
-   502			kfree(vmd);
-   503		if (vpet)
-   504			kfree(vpet);
-   505		if (vped_ptrs)
-   506			kfree(vped_ptrs);
-   507		if (vmi)
-   508			kfree(vmi);
-   509	
-   510		vgic_v5_reset_vmte(vm_id);
-   511	
-   512		return ret;
-   513	}
-   514	
+   640	
+   641	static void ttusb_dec_process_urb_frame(struct ttusb_dec *dec, u8 *b,
+   642						int length)
+   643	{
+   644		swap_bytes(b, length);
+   645	
+   646		while (length) {
+   647			switch (dec->packet_state) {
+   648	
+   649			case 0:
+   650			case 1:
+   651			case 2:
+   652				if (*b++ == 0xaa)
+   653					dec->packet_state++;
+   654				else
+   655					dec->packet_state = 0;
+   656	
+   657				length--;
+   658				break;
+   659	
+   660			case 3:
+   661				if (*b == 0x00) {
+   662					dec->packet_state++;
+   663					dec->packet_length = 0;
+   664				} else if (*b != 0xaa) {
+   665					dec->packet_state = 0;
+   666				}
+   667	
+   668				b++;
+   669				length--;
+   670				break;
+   671	
+   672			case 4:
+   673				dec->packet[dec->packet_length++] = *b++;
+   674	
+   675				if (dec->packet_length == 2) {
+   676					if (dec->packet[0] == 'A' &&
+   677					    dec->packet[1] == 'V') {
+   678						dec->packet_type =
+   679							TTUSB_DEC_PACKET_PVA;
+   680						dec->packet_state++;
+   681					} else if (dec->packet[0] == 'S') {
+   682						dec->packet_type =
+   683							TTUSB_DEC_PACKET_SECTION;
+   684						dec->packet_state++;
+   685					} else if (dec->packet[0] == 0x00) {
+   686						dec->packet_type =
+   687							TTUSB_DEC_PACKET_EMPTY;
+   688						dec->packet_payload_length = 2;
+   689						dec->packet_state = 7;
+   690					} else {
+   691						printk("%s: unknown packet type: %02x%02x\n",
+   692						       __func__,
+   693						       dec->packet[0], dec->packet[1]);
+   694						dec->packet_state = 0;
+   695					}
+   696				}
+   697	
+   698				length--;
+   699				break;
+   700	
+   701			case 5:
+   702				dec->packet[dec->packet_length++] = *b++;
+   703	
+   704				if (dec->packet_type == TTUSB_DEC_PACKET_PVA &&
+   705				    dec->packet_length == 8) {
+   706					int len = 8 +
+   707						(dec->packet[6] << 8) +
+   708						dec->packet[7];
+   709	
+   710					if (len > MAX_PVA_LENGTH + 4) {
+   711						dev_warn(&dec->udev->dev,
+   712							"%s: packet too long - discarding\n"
+ > 713							__func__);
+   714						dec->packet_state = 0;
+   715					} else {
+   716						dec->packet_state++;
+   717						dec->packet_payload_length = len;
+   718					}
+   719				} else if (dec->packet_type ==
+   720						TTUSB_DEC_PACKET_SECTION &&
+   721					   dec->packet_length == 5) {
+   722					dec->packet_state++;
+   723					dec->packet_payload_length = 5 +
+   724						((dec->packet[3] & 0x0f) << 8) +
+   725						dec->packet[4];
+   726				}
+   727	
+   728				length--;
+   729				break;
+   730	
+   731			case 6: {
+   732				int remainder = dec->packet_payload_length -
+   733						dec->packet_length;
+   734	
+   735				if (length >= remainder) {
+   736					memcpy(dec->packet + dec->packet_length,
+   737					       b, remainder);
+   738					dec->packet_length += remainder;
+   739					b += remainder;
+   740					length -= remainder;
+   741					dec->packet_state++;
+   742				} else {
+   743					memcpy(&dec->packet[dec->packet_length],
+   744					       b, length);
+   745					dec->packet_length += length;
+   746					length = 0;
+   747				}
+   748	
+   749				break;
+   750			}
+   751	
+   752			case 7: {
+   753				int tail = 4;
+   754	
+   755				dec->packet[dec->packet_length++] = *b++;
+   756	
+   757				if (dec->packet_type == TTUSB_DEC_PACKET_SECTION &&
+   758				    dec->packet_payload_length % 2)
+   759					tail++;
+   760	
+   761				if (dec->packet_length ==
+   762				    dec->packet_payload_length + tail) {
+   763					ttusb_dec_process_packet(dec);
+   764					dec->packet_state = 0;
+   765				}
+   766	
+   767				length--;
+   768				break;
+   769			}
+   770	
+   771			default:
+   772				printk("%s: illegal packet state encountered.\n",
+   773				       __func__);
+   774				dec->packet_state = 0;
+   775			}
+   776		}
+   777	}
+   778	
 
 -- 
 0-DAY CI Kernel Test Service
