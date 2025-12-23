@@ -1,183 +1,99 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194A61494C2
-	for <llvm@lists.linux.dev>; Tue, 23 Dec 2025 15:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7BA2BF3CC;
+	Tue, 23 Dec 2025 16:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766504954; cv=none; b=kz9XJnvQCecyCpyHQFHamZ2ALnXclE5TXl852vU2VxA70tG6HFeYDthBgXZJMCGZSJleyTORtOVx+NpYzNJWKAiQFkb48Wbc/DKjIeXCPtc3rhPNMtw8MnKl2WERUsePx5bxU6ESpEW0Gvj8F+Mj2K5fuK97JqfUtwz3i9ARNBU=
+	t=1766506190; cv=none; b=MD1FXQwTsUABDQsGORC4ESHxExiJ/VRiiJuMpPekgmlcgYfcnxBHUIjDZwEvUapCmVS+TqGSlO0rs+VFLeLmWhd8BOCvj/yee06MyM4nggdFHkkPNcPmvc/HzfvemmD/X37dfS2/G/fkZHgWeajH2tm0tCUZqR1nmYTgn0ph9cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766504954; c=relaxed/simple;
-	bh=FqlmP+kwnhwBT9W+4BU8lDvTOmPOLotOl+cxygzeTW8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KYgoGYeOZIYZdgKIrNVYOvYuv2+erKAX+PnKX7IdCpOB3x2Hza+n+UOnTPo5dDYAyO6Bp74oukies3NMjzwfVHF1+QahZ4R53Pjio5fbVqlvJhNSW5GsRDu6GN7Knhy+koPm8RtRaVklC6q+FyGPCYu63MSyDCSXnpNkw5tpR9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gvZGSaAm; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1766506190; c=relaxed/simple;
+	bh=IzoToA1I8I0KWE0efJl9sFujPzKUzhtTCmJsBIH3Hx8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dMDGnamzwjfI+mhI3lkV6LXTMdGOEenPjELzv326j8PHDPmcEGycCa5UGESa4r3B0Vsrsna7X+i2Xhp59Bh+/pr98JUPMYyihaykega3rfwz88iq19zszZp5HjYice18qmMGa3lcdBDDDaNCUcyg+2REvitvK7oeMUeynufD3lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jYrtLxJ+; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gvZGSaAm"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 3AB574E41D50;
-	Tue, 23 Dec 2025 15:49:09 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 0387960716;
-	Tue, 23 Dec 2025 15:49:09 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5A6B610AB0B8A;
-	Tue, 23 Dec 2025 16:49:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1766504947; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=qwNYdPNwkNQfvtXRvdd/5N/fyJbUhxz9upsm5xT0pTc=;
-	b=gvZGSaAmi8tCoDwVPHBrY+XGFfKGE/Mqyq2gyeowWwxUqSfq91TdWiGhf/0nSN+bdWA4K9
-	eIpZu+NkXMBcJXMUPMnvJqhPwehcBXnsPVHIAjs41OsUmxlo54RraaP0m4AUAUGmBSfSqj
-	O5EHOwy02DvWvbNI9h7QgNGxcMXyg+dsU+c9+gC0f525LBjDP1GyQJdSEsOOHvvTZTj/3u
-	JytOyUCwRb3c+4QxTfiHq91vvXbQLkrqXxpKm9fAzhtdCKmZ0C/nIneDwoL/PzRQLmCguT
-	GONpVwbnlZkU0XGt/BM5S3AMqYZEqY9y2SfCvPYj3ah/IrTaXELtYmDEy2otQg==
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Tue, 23 Dec 2025 16:48:49 +0100
-Subject: [PATCH] drm/bridge: rename drm_for_each_bridge_in_chain_scoped()
- to drm_for_each_bridge_in_chain()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jYrtLxJ+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766506188; x=1798042188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IzoToA1I8I0KWE0efJl9sFujPzKUzhtTCmJsBIH3Hx8=;
+  b=jYrtLxJ+ZYhurLIn466Z4yuMFt6T2ohyKOK/DPxwzycqHW9TZO8F+13G
+   XO5Wb/Dk1VwXsrgRDVqpfvw6KobXmf1fWeHPLH8nSnUnB/xrArq27qV1d
+   9mue4VMuo0yfH9ceiUj1Qzymjt3uuICLvpcccCApxLENAoTxhEgv1xtc3
+   yZZkqF6sRjbnK0vLd0rAa6F34AQ+6yYJsJCKN7Fhe/C4LQC1EVG36e5Zn
+   c4dlRZq0mcmlttM04Oo0QIJmjinS5wVQbM8oo8WdJn6ny3X5iS5Yvhpbo
+   HoqPqpT0j5JRmCPSaYDuodZOvUpLy73n9E2rgsI8zUios9/CrY/yX1qPx
+   g==;
+X-CSE-ConnectionGUID: XKYt30RRRXSkUTtoY2lqIA==
+X-CSE-MsgGUID: Nv+dlx54QdGKDw5Lzw/TOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="79075750"
+X-IronPort-AV: E=Sophos;i="6.21,171,1763452800"; 
+   d="scan'208";a="79075750"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 08:09:47 -0800
+X-CSE-ConnectionGUID: ZVtET5yHRiKd5uh3q5vF/A==
+X-CSE-MsgGUID: E83UwC1wSzyq1dfmrwH56w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,171,1763452800"; 
+   d="scan'208";a="198948733"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 23 Dec 2025 08:09:46 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vY4x8-0000000027l-03Tx;
+	Tue, 23 Dec 2025 16:09:39 +0000
+Date: Wed, 24 Dec 2025 00:09:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v6 24/28] KVM: s390: Switch to new gmap
+Message-ID: <202512240257.wvkcvjdc-lkp@intel.com>
+References: <20251222165033.162329-25-imbrenda@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-drm-bridge-alloc-getput-for_each_bridge-2-v1-1-0362434ae0eb@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAOC5SmkC/y2N0QqDMAwAf0XyvMCasjH3K2NIbKMGnJVUx0D89
- xXx8Ti42yCLqWR4VhuYfDVrmgq4SwVh4KkX1FgY6Eo3R+Qx2gdb01gMj2MK2Msyrwt2yRrhMDS
- nJCTvHsy1b++1QOnNJp3+jtfrve9/RYpr0nsAAAA=
-X-Change-ID: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
-To: Miguel Ojeda <ojeda@kernel.org>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Hui Pu <Hui.Pu@gehealthcare.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- llvm@lists.linux.dev, Luca Ceresoli <luca.ceresoli@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251222165033.162329-25-imbrenda@linux.ibm.com>
 
-drm_for_each_bridge_in_chain_scoped() was added in commit e46efc6a7d28
-("drm/bridge: add drm_for_each_bridge_in_chain_scoped()") to provide a
-safer alternative to drm_for_each_bridge_in_chain().
+Hi Claudio,
 
-Following commits converted all users to the _scoped variant.
+kernel test robot noticed the following build warnings:
 
-Finally commit 2f08387a444c ("drm/bridge: remove
-drm_for_each_bridge_in_chain()") removed the old
-drm_for_each_bridge_in_chain() macro.
+[auto build test WARNING on s390/features]
+[also build test WARNING on kvm/queue kvm/next linus/master v6.19-rc2 next-20251219]
+[cannot apply to kvms390/next kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It's time to rename drm_for_each_bridge_in_chain_scoped() back to the
-original name.
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudio-Imbrenda/KVM-s390-Refactor-pgste-lock-and-unlock-functions/20251223-012700
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
+patch link:    https://lore.kernel.org/r/20251222165033.162329-25-imbrenda%40linux.ibm.com
+patch subject: [PATCH v6 24/28] KVM: s390: Switch to new gmap
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20251224/202512240257.wvkcvjdc-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240257.wvkcvjdc-lkp@intel.com/reproduce)
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- .clang-format                                  | 2 +-
- drivers/gpu/drm/display/drm_bridge_connector.c | 4 ++--
- drivers/gpu/drm/drm_atomic.c                   | 2 +-
- drivers/gpu/drm/drm_bridge.c                   | 2 +-
- include/drm/drm_bridge.h                       | 5 ++---
- 5 files changed, 7 insertions(+), 8 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512240257.wvkcvjdc-lkp@intel.com/
 
-diff --git a/.clang-format b/.clang-format
-index 2ceca764122f..f2b46d275d30 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -167,7 +167,7 @@ ForEachMacros:
-   - 'drm_connector_for_each_possible_encoder'
-   - 'drm_exec_for_each_locked_object'
-   - 'drm_exec_for_each_locked_object_reverse'
--  - 'drm_for_each_bridge_in_chain_scoped'
-+  - 'drm_for_each_bridge_in_chain'
-   - 'drm_for_each_connector_iter'
-   - 'drm_for_each_crtc'
-   - 'drm_for_each_crtc_reverse'
-diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
-index a2d30cf9e06d..925aca7ae84a 100644
---- a/drivers/gpu/drm/display/drm_bridge_connector.c
-+++ b/drivers/gpu/drm/display/drm_bridge_connector.c
-@@ -139,7 +139,7 @@ static void drm_bridge_connector_hpd_notify(struct drm_connector *connector,
- 		to_drm_bridge_connector(connector);
- 
- 	/* Notify all bridges in the pipeline of hotplug events. */
--	drm_for_each_bridge_in_chain_scoped(bridge_connector->encoder, bridge) {
-+	drm_for_each_bridge_in_chain(bridge_connector->encoder, bridge) {
- 		if (bridge->funcs->hpd_notify)
- 			bridge->funcs->hpd_notify(bridge, status);
- 	}
-@@ -684,7 +684,7 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
- 	 * detection are available, we don't support hotplug detection at all.
- 	 */
- 	connector_type = DRM_MODE_CONNECTOR_Unknown;
--	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
-+	drm_for_each_bridge_in_chain(encoder, bridge) {
- 		if (!bridge->interlace_allowed)
- 			connector->interlace_allowed = false;
- 		if (!bridge->ycbcr_420_allowed)
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index 52738b80ddbe..5b017d36f293 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -1468,7 +1468,7 @@ drm_atomic_add_encoder_bridges(struct drm_atomic_state *state,
- 		       "Adding all bridges for [encoder:%d:%s] to %p\n",
- 		       encoder->base.id, encoder->name, state);
- 
--	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
-+	drm_for_each_bridge_in_chain(encoder, bridge) {
- 		/* Skip bridges that don't implement the atomic state hooks. */
- 		if (!bridge->funcs->atomic_duplicate_state)
- 			continue;
-diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
-index db40c26d1cb3..bf39f19bd379 100644
---- a/drivers/gpu/drm/drm_bridge.c
-+++ b/drivers/gpu/drm/drm_bridge.c
-@@ -1582,7 +1582,7 @@ static int encoder_bridges_show(struct seq_file *m, void *data)
- 	struct drm_printer p = drm_seq_file_printer(m);
- 	unsigned int idx = 0;
- 
--	drm_for_each_bridge_in_chain_scoped(encoder, bridge)
-+	drm_for_each_bridge_in_chain(encoder, bridge)
- 		drm_bridge_debugfs_show_bridge(&p, bridge, idx++, false);
- 
- 	return 0;
-diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-index d2683846cc61..cdd631582fe7 100644
---- a/include/drm/drm_bridge.h
-+++ b/include/drm/drm_bridge.h
-@@ -1473,8 +1473,7 @@ drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
- }
- 
- /**
-- * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
-- *                                       to an encoder
-+ * drm_for_each_bridge_in_chain - iterate over all bridges attached to an encoder
-  * @encoder: the encoder to iterate bridges on
-  * @bridge: a bridge pointer updated to point to the current bridge at each
-  *	    iteration
-@@ -1484,7 +1483,7 @@ drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
-  * Automatically gets/puts the bridge reference while iterating, and puts
-  * the reference even if returning or breaking in the middle of the loop.
-  */
--#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
-+#define drm_for_each_bridge_in_chain(encoder, bridge)			\
- 	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
- 	     drm_bridge_chain_get_first_bridge(encoder);		\
- 	     bridge;							\
+All warnings (new ones prefixed by >>):
 
----
-base-commit: e05b08d7d0162cf77fff119367fb1a2d5ab3e669
-change-id: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
+>> Warning: arch/s390/kvm/gaccess.c:1052 function parameter 'size' not described in '__cmpxchg_with_key'
+>> Warning: arch/s390/kvm/gaccess.c:1587 expecting prototype for __kvm_s390_shadow_fault(). Prototype was for __gaccess_shadow_fault() instead
+>> Warning: arch/s390/kvm/gaccess.c:1052 function parameter 'size' not described in '__cmpxchg_with_key'
 
-Best regards,
 -- 
-Luca Ceresoli <luca.ceresoli@bootlin.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
