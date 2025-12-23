@@ -1,118 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f68.google.com (mail-dl1-f68.google.com [74.125.82.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442D74C92;
-	Tue, 23 Dec 2025 07:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C78723EA97
+	for <llvm@lists.linux.dev>; Tue, 23 Dec 2025 08:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766475968; cv=none; b=qsfb1YgsWazCwH6alkpDgLsI6vmwLwD3UhNgpPn0U7yS301giGyU6SlWySIm261L5IScTqb8ej7PeFtrw6Kgy0nc2gWN6iOi6WcgyNlHtphkgwgRi/kx5b6duCUiJ5yvfeRkLOIN5BRgylxZML3PD2mChZ1IrNBzSbkcHflKiBI=
+	t=1766479439; cv=none; b=e9yvM+z+PqHv47LpgdEb37iaJvVIBZFgS3pNnw+fRkGkeEv747zG5M26N5Ucb9SbTc/XmOGv2IQW9sW7bf3hl4FN2IRDr1JVTQQJp6Aq8/r5NY/g7XpLMuSUZ1gEGKzKmTb+63e6nfTfp/lp7xuSbydAqorB/tFYPl7DFhCLv20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766475968; c=relaxed/simple;
-	bh=EK+X9cvpnZumkE5VdXNrNDnpOJbV5oAh7rMbhuXvouI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BAfRToo929JNfl/uo4a1tnvE9oeZ8c5iciMLeauVTOXCstGjTYmy7B26VltUfNv91f80GowlxmIEpRIf35K7If9qWnhjzSOD1kWG5j27WPpi0eu2tFJAnyRPKazbeeIIGExOcgn7I6K1O0MK1zj4/JY8BLM/3OlS4eVz+BkHFRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQzP1asP; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766479439; c=relaxed/simple;
+	bh=VyBd1eV+gELd/rR0R+vBYOgANcizKnzDQ9kVhpk1qqQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rr+bKwRlCPDo9kIzI2o/hjTmeC3Z6SGONSUALDbUdzWf+6yjrxEVA/WG9sF+E/R2u8C5axP2ePS9IWyQIJE67CoPd7FnyBeHzpZPiIN+02WmAN7UOdd/bm5E56Uh4v4MHZYBlfTmFZ2Y+y2C0snojYS4JPpLdyMPCjx1+EE3fiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZfyP0Vj; arc=none smtp.client-ip=74.125.82.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQzP1asP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766475966; x=1798011966;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EK+X9cvpnZumkE5VdXNrNDnpOJbV5oAh7rMbhuXvouI=;
-  b=XQzP1asP/HHPAYnYDd7F1d4Yk4mK5dd/nxwXxmukJqCwPo1wGBknKLEN
-   +cuOfSNuQbZmUlI8o+ZpkirKHtlSZLXCKIhpdZXrfn2jRnsMoZoUgv55B
-   c7oOZhs75CKDGUOjzxc5XK2qOc/usL0I95k/qoo30rQyUD/l1+D+a4nXo
-   L2YBK+kCpTl944WMl/wdPhNBfnhpY/umQohAnb/ovgm9V5XC5DKE2yCvv
-   Kbo1odhN3FCD4d45o5J2MD0cHgPLWxsyLJMa4yt+osqVCPS8a2eG03cLL
-   hNaxhMT+B5ukYcBa3LZUp4pIMYsM+dAzmjQZP3VwY2Ks+zhcxikRvylBF
-   w==;
-X-CSE-ConnectionGUID: U30GCXetRTaW3qb9+tfZFQ==
-X-CSE-MsgGUID: Pg5y+Ii4S/+XEO5HAS2Q6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="79778011"
-X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
-   d="scan'208";a="79778011"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 23:46:06 -0800
-X-CSE-ConnectionGUID: VTvSP80xSwKu0XJHqk3anQ==
-X-CSE-MsgGUID: SkpwsRCgR0K4Y9psLbd0UA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
-   d="scan'208";a="198860893"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 22 Dec 2025 23:46:05 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vXx5m-000000001bh-1NUq;
-	Tue, 23 Dec 2025 07:46:02 +0000
-Date: Tue, 23 Dec 2025 15:45:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joel Fernandes <joelagnelf@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v5 3/6] rust: gpu: Add GPU buddy allocator bindings
-Message-ID: <202512232015.WVmaP40F-lkp@intel.com>
-References: <20251219203805.1246586-4-joelagnelf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZfyP0Vj"
+Received: by mail-dl1-f68.google.com with SMTP id a92af1059eb24-11b6bc976d6so8375388c88.0
+        for <llvm@lists.linux.dev>; Tue, 23 Dec 2025 00:43:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766479437; x=1767084237; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/WvLrPfewTaP7n/Uh0KhRCzVSKciyi4EIRaB65WMUJA=;
+        b=gZfyP0Vj3tiprsJsJNvi4bsfahaMizf3xeI8h35SxFrsuqdG9P9Vx5skzfcqEGYrtU
+         6pQNARgtTiTmvMvboJJXfmU/T/fTTGww1BIZUFqUCDoGoR3YjyOmkBjL832ICrZnQIyU
+         fJoIgO9l+njSgAKKig8KN7Pe2BqLH5yl+0ty4Mb1XUraMno9En+PCagyXioN+Am4RNPG
+         T2q2cIvG2Ba/1Ysq5inaAFYHOgS3tK6rORNDTTvRvLQlNvo/Q7cRfsM68Ge49NoLLg59
+         5GZfPQhgUFy4/9eNvf4Q2KkCeqGQ7HEmt4u/L3a3ex6/TZb/aldeGMbPO1JBmvj0kMWM
+         UHLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766479437; x=1767084237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/WvLrPfewTaP7n/Uh0KhRCzVSKciyi4EIRaB65WMUJA=;
+        b=JWVW7WNu65d7Dmp2BMsXL5HLsViana4bG4OmUQ06rc2xr45UJpEBNotk+fS3vPByzm
+         rEW2t0F8FcN8MXjUAMPigphDN5nCI9GoDUuYpT+WJGJPfBTxzxoVfpYYguUKJfkikNjV
+         fLfNTjYIInutCM1w5ak5yDl0P/Um7dxCB2YIt+J3v9t2Up20ZxJbUTqJJhhNB+ghAO8g
+         cdcwic/vkgiUnzEz12scNplz/34ebLOaGUpKbHZgIxPZVUnNMv/y82ed5LYZgyeCVSTm
+         9FRR/vI5rKLjP45Mydd3i46sL1XnxbmvgWbLpDkNPdF38ZRg2npNcuEWCzFugnfJqbeD
+         yw+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU8tP0hWN4l0fHCy9T7YH5CIaMZbFZi0nGUGrtEJ3UeN3WVGFksCrWnJK5bTi2Kup4y48Ki@lists.linux.dev
+X-Gm-Message-State: AOJu0YyAAOHFQ3HEDx33NIA6x1AEEpJqOSR70YKj2LmMdH3OdpUt8QtI
+	iWybHftCSDwBDALfS3BlRu1euDVxw1CGGHG/ZXuFWN6REpdiGEN47DfT
+X-Gm-Gg: AY/fxX7WNKCRjUqj6Lf1/nincyG7dOXk6jPI7kACDsBnBNmGLZRSJ+Dy6L5f2ce9euO
+	bDpVlsp25HbRE4XtrT6ITsnvFCxwKi9r1j8NvLa6uDBxpdiHAZbBNMKQeruac2mD6HreyjrK2ZZ
+	ATE22+Lw06byfeJxPdZfCkSonEjDa9mdPG2HbKov+17TljUzjckaGNrvpwwegJ+AkiOtHC4+lJ4
+	v9Wx9/0yMHr4Fbp3S8UcszHRvBfPVyLVdxF0I52T75gwBHDkWaXVUjvWTOEj0Qvo7TwfVJ3dIWF
+	h31Xf9vSktvs1USOME5ijdYuiKpkRNhpZpqISfKSS46xApgaQMsa7Yu/1NMLXoUpjzWKVpGSkG7
+	YQuks05nY7Dk7+Ivw2E8Yg0BqmSYPNZBJQXIYvvptekj11hkafcgJye+XLo/EqZNe07C35NMvE/
+	AkKgvtQdu7ulmkO16i5mVdK/oFEbfeRI/UWxEy
+X-Google-Smtp-Source: AGHT+IF8M5el/p3S+HSb7uaDOqzLo07M4mW5NEfYL68wEvjV4FhIdackjxmYl2T9yCatLWm/tFAGIw==
+X-Received: by 2002:a05:7022:504:b0:119:e569:f873 with SMTP id a92af1059eb24-12171aca67dmr13491735c88.16.1766479436980;
+        Tue, 23 Dec 2025 00:43:56 -0800 (PST)
+Received: from HUC.. ([149.34.251.245])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217254c734sm56720887c88.13.2025.12.23.00.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Dec 2025 00:43:56 -0800 (PST)
+From: hupu <hupu.gm@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	hupu.gm@gmail.com
+Subject: [RFC 0/2] perf build: Improve header handling for BPF skeleton cross-builds
+Date: Tue, 23 Dec 2025 16:43:33 +0800
+Message-ID: <20251223084337.3789-1-hupu.gm@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219203805.1246586-4-joelagnelf@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Joel,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+I am currently cross-compiling perf for ARM64. During the build of the
+eBPF skeleton (compiled by Clang), the build fails due to missing header
+files. The error message is as follows:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+/usr/include/linux/ioctl.h:5:10: fatal error: 'asm/ioctl.h' file not
+found
+    5 | #include <asm/ioctl.h>
+      |          ^~~~~~~~~~~~~
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joel-Fernandes/rust-clist-Add-support-to-interface-with-C-linked-lists/20251220-044108
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20251219203805.1246586-4-joelagnelf%40nvidia.com
-patch subject: [PATCH RFC v5 3/6] rust: gpu: Add GPU buddy allocator bindings
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251223/202512232015.WVmaP40F-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512232015.WVmaP40F-lkp@intel.com/reproduce)
+Leo suggested resolving this issue by installing the following packages
+on the host:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512232015.WVmaP40F-lkp@intel.com/
+  $ sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+  $ sudo apt-get install libc6-dev-aarch64-cross linux-libc-dev-aarch64-cross
+  $ sudo apt-get install libc6-dev-arm64-cross linux-libc-dev-arm64-cross
 
-All errors (new ones prefixed by >>):
+With these packages installed, the required header files can be found in
+the following host paths (defined by the CLANG_SYS_INCLUDES variable),
+and perf can indeed be built successfully:
 
->> error[E0425]: cannot find function `gpu_buddy_block_offset` in crate `bindings`
-   --> rust/kernel/gpu/buddy.rs:474:28
-   |
-   474   |         unsafe { bindings::gpu_buddy_block_offset(self.as_raw()) }
-   |                            ^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `gpu_buddy_block_print`
-   |
-   ::: rust/bindings/bindings_generated.rs:61566:5
-   |
-   61566 |     pub fn gpu_buddy_block_print(mm: *mut gpu_buddy, block: *mut gpu_buddy_block);
-   |     ------------------------------------------------------------------------------ similarly named function `gpu_buddy_block_print` defined here
---
->> error[E0425]: cannot find function `gpu_buddy_block_order` in crate `bindings`
-   --> rust/kernel/gpu/buddy.rs:480:28
-   |
-   480   |         unsafe { bindings::gpu_buddy_block_order(self.as_raw()) }
-   |                            ^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `gpu_buddy_block_print`
-   |
-   ::: rust/bindings/bindings_generated.rs:61566:5
-   |
-   61566 |     pub fn gpu_buddy_block_print(mm: *mut gpu_buddy, block: *mut gpu_buddy_block);
-   |     ------------------------------------------------------------------------------ similarly named function `gpu_buddy_block_print` defined here
+  *** Makefile.perf:1203: ***
+  CLANG_SYS_INCLUDES=-idirafter /usr/lib/llvm-18/lib/clang/18/include
+  -idirafter /usr/local/include
+  -idirafter /usr/bin/../lib/gcc-cross/aarch64-linux-gnu/14/../../../../aarch64-linux-gnu/include
+  -idirafter /usr/include/aarch64-linux-gnu
+  -idirafter /usr/include
+
+However, I do not believe that relying on the host build environment is
+the best approach, for several reasons:
+
+a) These commands install UAPI header files on the host, especially
+`linux-libc-dev-aarch64-cross` and `linux-libc-dev-arm64-cross`. These
+headers originate from the kernel source tree’s `include/uapi/` and
+`arch/arm64/include/uapi/` directories, and their versions are tied to
+the *HOST* kernel version. If the target kernel version is different,
+mismatches may cause compilation errors or even runtime failures.
+
+b) Even if `perf` can be compiled and run successfully now, there is
+no guarantee that the kernel source headers will always match the
+host-installed UAPI headers as the upstream kernel evolves.
+
+c) In scenarios where the host acts as a general build server and
+needs to build multiple target kernel versions, it is not possible to
+ensure that the host UAPI headers are compatible with all target
+versions.
+
+d) On the other hand, `CLANG_SYS_INCLUDES` does include host headers,
+but it uses `-idirafter` instead of `-I`. This means the host headers
+have lower priority. This change was introduced in commit a2af0f6b8ef7
+("perf build: Add system include paths to BPF builds"); as noted in
+the commit message, the preferred approach is to use kernel source
+headers rather than potentially older ones from the system.
+
+
+Therefore, although installing the corresponding packages on the host
+can resolve the immediate build issue, I do not think this should be
+considered the only solution, nor should it have the highest priority.
+
+Instead, I think the header search order should be as follows.
+
+- Prefer kernel source headers
+  [RFC 2/2] perf build: Prefer kernel source headers for BPF skeletons
+  With this approach, even as the kernel version evolves, the headers
+  used during the build will always match the target kernel version.
+
+- Allow users to specify header search paths matching the target kernel
+  version (eg. via `EXTRA_BPF_FLAGS`)
+  [RFC 1/2] perf build: Allow passing extra Clang flags via EXTRA_BPF_FLAGS
+  With this approach, users can explicitly specify the appropriate
+  header search paths via EXTRA_BPF_FLAGS.
+
+- Fall back to the host build environment only if necessary
+  Reliance on the host build environment should be the last resort.
+
+In summary, while relying on the host build environment can address the
+current build issue, I believe it is not the optimal solution.
+
+hupu (2):
+  perf build: Allow passing extra Clang flags via EXTRA_BPF_FLAGS
+  perf build: Prefer kernel source headers for BPF skeletons
+
+ tools/perf/Makefile.perf | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
