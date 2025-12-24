@@ -1,91 +1,93 @@
-Received: from forward203a.mail.yandex.net (forward203a.mail.yandex.net [178.154.239.90])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAB4347FFE
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 13:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41998345CD8;
+	Wed, 24 Dec 2025 15:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766584789; cv=none; b=BcpRVcMX5akQXcJTqW0DBUD1w5MKRujzZTNmHc+bGheqW4A8X0DlkW8+6sg9BEPCr1hDbG8khJm7iCmi6rOr/GOedrsD3ijKNS+3kJTdN2DxVp6x1/Ivnal1O9qiGxEWNuZmMNJSsJbLQ2hebi3+flPaL0nFJK+tDh0O6zPqPn0=
+	t=1766589022; cv=none; b=Ojxhoems5xdycYLeSTslCdbYK2mRNe5GGoO/EEidN7j43uFBUu7Y0VWnMqltWMRE60lO6UJSQiRlOglWRfaW2sm/33Q3LkYb9eCiX2ybImI4FwFUby4q5xWcaUE/pg9JV7jPYh+AhlRI6C5/pFZJLizGLpCFr35wN60JFrU16TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766584789; c=relaxed/simple;
-	bh=cO991nW5urK9/OXkLEZmSQRBSSTG1gg61Ln2YmTXY64=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CnPGi34iFmB1/ex0psizlcFJMhNEa/WjNdq3df6Eac5NdVkazIvnI7xi4UdIvZmKTZp3uxnHRJhUa/knHVLOZ9N8UrXwSboyKRl1CerK2UzNIN1d4eg/P9tpx/ynlAtE8MvjI+0GhXMhRZaKfS26FR/j8/KucQnx2+tzYrzSap8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=f6G9iKr9; arc=none smtp.client-ip=178.154.239.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
+	s=arc-20240116; t=1766589022; c=relaxed/simple;
+	bh=6w4suvYy3Yd5Tthp96Im37P1lvbu9wNR0ef6oInsMTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hT/dAPbQl/DLp3TL76ql3O/E/k74GLIiCW7pLzPtJgPdMBPy2wQZyrWkEu1l/OigFskqzVTHP6LOb7TleD5swEqQje3W1w36vSehlWBBRUk1ZmGll9v5umpqiUD+Nq6oOi14/vWaizk4GzLjzFWNPV+iSNy3q0dlwbglc7o7YuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O/n8Ys/Z; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="f6G9iKr9"
-Received: from forward101a.mail.yandex.net (forward101a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d101])
-	by forward203a.mail.yandex.net (Yandex) with ESMTPS id 907658760E
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 16:54:16 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-97.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-97.vla.yp-c.yandex.net [IPv6:2a02:6b8:c15:2804:0:640:a3ea:0])
-	by forward101a.mail.yandex.net (Yandex) with ESMTPS id CA3E7806AF;
-	Wed, 24 Dec 2025 16:54:08 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-97.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id jrctgn1HTiE0-TsspEcnG;
-	Wed, 24 Dec 2025 16:54:07 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
-	s=mail; t=1766584448;
-	bh=eSIvKMG94eNJsUJQbnQOUr24UTSlu42e0Qza5prctJE=;
-	h=Message-ID:Date:Cc:Subject:To:From;
-	b=f6G9iKr9mvHhI4BhI7Pop9U13YbP/tf4wp6SIbdEgEqquDs8txAVpRdKh6AN4Pn8q
-	 hed9Ffar7amlil2kbKOdP6vI65aU5zuDtzPi+J1GMIDea9bjAs+WKzvXMrzm+kMAQw
-	 maEeHgU4mcfUSzrwz7pWDQicskhZq/8+O/78iWcE=
-Authentication-Results: mail-nwsmtp-smtp-production-main-97.vla.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
-From: =?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
-To: llvm@lists.linux.dev
-Cc: ojeda@kernel.org,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	dakr@kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
-Subject: [PATCH] remove sysroot assertion in generate_rust_analyzer.py
-Date: Wed, 24 Dec 2025 16:53:43 +0300
-Message-ID: <20251224135343.32476-1-work@onurozkan.dev>
-X-Mailer: git-send-email 2.51.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O/n8Ys/Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766589017; x=1798125017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6w4suvYy3Yd5Tthp96Im37P1lvbu9wNR0ef6oInsMTM=;
+  b=O/n8Ys/ZO6BSWITqpzNyENjpSF+nR0qACnC5cm4mSRLklM+AFKL1aMMC
+   88Pz+cQdO20MupXlnRQAR2chgnGWt5wnQ62JL+B64ZtI94H7ShGKK8IKm
+   zs4uT8LgaxNRdkTS0QuPpGSSfSG085YtClEBlCxBevf7fNsCHW9zI2Piv
+   RX20khfMJd2RhYPfOrH2jzFgzKEkfqaxpPdLsblkoH3sxz7PlVsHleS57
+   L0wBqvPud2LgihaDNy0+jrdNyu/0ndntpaE6UcFzE0IFAHoxpTz9THQjW
+   7kUaeVMRGEBRy0xg6+gO+9uB8vN+bBNsaIlu3AWggdlN90henntXpB8sW
+   A==;
+X-CSE-ConnectionGUID: qtyIwNwPSmqhfedwyV2Hxw==
+X-CSE-MsgGUID: At/8QMlDQNGdvEhwYPYhEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68408027"
+X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
+   d="scan'208";a="68408027"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 07:10:16 -0800
+X-CSE-ConnectionGUID: X4WSqm+SR7KqqHHrwYTqZA==
+X-CSE-MsgGUID: q5YeptrTSkCjGWlbAZ5V7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
+   d="scan'208";a="237425597"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 24 Dec 2025 07:10:16 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYQVB-000000003B3-25kb;
+	Wed, 24 Dec 2025 15:10:13 +0000
+Date: Wed, 24 Dec 2025 23:09:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gladyshev Ilya <foxido@foxido.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 3/3] rust: sample driver for WMI demonstrations
+Message-ID: <202512242235.PPZwsyor-lkp@intel.com>
+References: <905217b6dc4dda707e3596737b4ade9a210aa445.1766331321.git.foxido@foxido.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <905217b6dc4dda707e3596737b4ade9a210aa445.1766331321.git.foxido@foxido.dev>
 
-With nixpkgs's rustc, rust-src component is not bundled
-with the compiler by default and is instead provided from
-a separate store path, so this assumption does not hold.
+Hi Gladyshev,
 
-The assertion assumes these paths are in the same location
-which causes `make LLVM=1 rust-analyzer` to fail on NixOS.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Link: https://rust-for-linux.zulipchat.com/#narrow/stream/x/topic/x/near/565284250
-Signed-off-by: Onur Özkan <work@onurozkan.dev>
----
- scripts/generate_rust_analyzer.py | 3 ---
- 1 file changed, 3 deletions(-)
+[auto build test ERROR on 9094662f6707d1d4b53d18baba459604e8bb0783]
 
-diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
-index 147d0cc94068..e69fa5e0a9b9 100755
---- a/scripts/generate_rust_analyzer.py
-+++ b/scripts/generate_rust_analyzer.py
-@@ -213,9 +213,6 @@ def main():
-         level=logging.INFO if args.verbose else logging.WARNING
-     )
- 
--    # Making sure that the `sysroot` and `sysroot_src` belong to the same toolchain.
--    assert args.sysroot in args.sysroot_src.parents
--
-     rust_project = {
-         "crates": generate_crates(args.srctree, args.objtree, args.sysroot_src, args.exttree, args.cfgs, args.core_edition),
-         "sysroot": str(args.sysroot),
+url:    https://github.com/intel-lab-lkp/linux/commits/Gladyshev-Ilya/rust-implement-wrapper-for-acpi_object/20251222-064506
+base:   9094662f6707d1d4b53d18baba459604e8bb0783
+patch link:    https://lore.kernel.org/r/905217b6dc4dda707e3596737b4ade9a210aa445.1766331321.git.foxido%40foxido.dev
+patch subject: [RFC PATCH 3/3] rust: sample driver for WMI demonstrations
+config: i386-randconfig-014-20251224 (https://download.01.org/0day-ci/archive/20251224/202512242235.PPZwsyor-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512242235.PPZwsyor-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512242235.PPZwsyor-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error: target file "./scripts/target.json" does not exist
+
 -- 
-2.51.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
