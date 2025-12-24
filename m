@@ -1,229 +1,316 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAA9283C9E;
-	Wed, 24 Dec 2025 03:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75632741B6
+	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 05:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766548072; cv=none; b=Dijn8/x/9QFNrAIxyOb3vdPWMbwX51k4sCLSQLcx8l7VCH8YVm+3plwH8MHSCXZ4ZUep5w/hZGh2j9cT/eM/IwAOYgZ1Yu5YF6404+3TT0sqLjBbiBX0O4HPj9hxnMIvMqTP9CcVK6GMMwM1+kFjlqot98QeMbOKnBd9uzRTUTU=
+	t=1766554592; cv=none; b=FLxxzsNK3PTkZDDoxfMwalLw8Z1kd0A5KPzfhCB37vP31fI0KL+dZURAts7PU+WpeI3fFesgAsP2ubqIiqpYmmUNLv2/C/N9c8hvnvlbVrAnWcEoUli5UtKBYub15+RXJFBYDkrzyligFnhIxcVNI2pwUmn4Ys10HAkzc3z+ojc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766548072; c=relaxed/simple;
-	bh=Nrx8SnLjGi1tMAy5C7x9+knQXlEkEfFgw7pqhY61U1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cgzd2id1yEsxBUjMVQVTfHUDpggfbhvnZqKeS798IfWZ6xm7ukBQV3OdffuUGNaYHE6bjoTFot6EyENXrsdem1jxAmC5iFqL1fVoc7jB8tzI3cK9/7ITOaToBdXXtNQJqrqZCC1Kw37kcfrgNy0VWEo1GvNzbhk4tmFFJaZSCZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gPf03/Lr; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766554592; c=relaxed/simple;
+	bh=f0pKkChIzjZS/7gb5J9jwf0OGZYqz2n74a56KVmIRAg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qWDHwNoJjJ5cjPGgqE6alxFl5H6DCgYi3hZhWffai/w2RxRv3W/DfESrFS5N/APy0dhiKGreKsD/pAyn/ppf2VZZEXq7GkU0sFUrhqQVYM8YxDzAsAlE4xA8h7n4scM5T93BGtrlr0B3V8w+8GkpW2FQTRbyGWfG3t1Rp6FIzsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n8UWXI59; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gPf03/Lr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766548070; x=1798084070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Nrx8SnLjGi1tMAy5C7x9+knQXlEkEfFgw7pqhY61U1A=;
-  b=gPf03/Lr6I2xxGmPL8I+aY4XaMQmPbW1JCgEWXj50THrwbwlrVVTM/Xn
-   eaRrbzrMFJMK5mIwOA2R+bqxaVRs5hHcHtH8NUAaJeJJ/7i2ii59zhhWL
-   6Kb39+qmcamn/MLoq84j6H3y5uD8gc3niyPeP6OhMM+HlIDrJ+46vh+aq
-   y0QmIaFTYw+g+VnEfTHAq9kPr5RgSufosyCbCLVxDiqzanY6vRtxA9gXw
-   MyKNeMAMvx9IKU0muzAmN1epiqM4Flc5Wkt1CWh+2d1hIhwKCWSg7JncL
-   CPqE/9Zl8U5UevnZwHiRVG7hYHTQ4Koo1xhyTXPjlDdlmPWbknsNM9peQ
-   g==;
-X-CSE-ConnectionGUID: e6t9zNWtStC+OZ8ZFEhMjw==
-X-CSE-MsgGUID: lVcseNaJQzyCWBz0QuxZIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="55959850"
-X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="55959850"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 19:47:50 -0800
-X-CSE-ConnectionGUID: 4c4zx21aSOiwPn10uk9MFg==
-X-CSE-MsgGUID: Yb0nJWM8QrS2LcCkJCGrmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="223410948"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 23 Dec 2025 19:47:48 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vYFqk-0000000066O-10ma;
-	Wed, 24 Dec 2025 03:47:46 +0000
-Date: Wed, 24 Dec 2025 04:47:04 +0100
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?B?UGF3ZcWC?= Narewski <pawel.narewski@nokia.com>,
-	linux-gpio@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linusw@kernel.org,
-	brgl@kernel.org,
-	=?utf-8?B?UGF3ZcWC?= Narewski <pawel.narewski@nokia.com>,
-	Jakub Lewalski <jakub.lewalski@nokia.com>
-Subject: Re: [PATCH] gpiolib: fix race condition for gdev->srcu
-Message-ID: <202512240408.wrQcvO0t-lkp@intel.com>
-References: <20251223084952.1847489-1-pawel.narewski@nokia.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n8UWXI59"
+Message-ID: <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766554588;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zbiVkbEbpfeVAU/ecvNvfKdtMSPu86Ui3ddOqdISv80=;
+	b=n8UWXI59cir+cCXqz7wSVwRBH131j4Z4xlhB37kLYzE5O86uvzq72iA8daaHlF1xPVuFFX
+	HNwhNabhFBuzff+ioUiDcV1EGEVpbHoKHkGAh+gWdb0zVJYzIl8gCwXv9HgbokNuH4FQHt
+	vfEZqJTPLVKmmW4/4pjyx2D01DDSYtI=
+Date: Tue, 23 Dec 2025 21:36:22 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251223084952.1847489-1-pawel.narewski@nokia.com>
-
-Hi Paweł,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawe-Narewski/gpiolib-fix-race-condition-for-gdev-srcu/20251223-165142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20251223084952.1847489-1-pawel.narewski%40nokia.com
-patch subject: [PATCH] gpiolib: fix race condition for gdev->srcu
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251224/202512240408.wrQcvO0t-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240408.wrQcvO0t-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512240408.wrQcvO0t-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpio/gpiolib.c:1109:2: error: no member named 'rwsem' in 'struct raw_notifier_head'
-    1109 |         BLOCKING_INIT_NOTIFIER_HEAD(&gdev->line_state_notifier);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/notifier.h:86:23: note: expanded from macro 'BLOCKING_INIT_NOTIFIER_HEAD'
-      86 |                 init_rwsem(&(name)->rwsem);     \
-         |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/linux/rwsem.h:121:16: note: expanded from macro 'init_rwsem'
-     121 |         __init_rwsem((sem), #sem, &__key);                      \
-         |                       ^~~
-   1 error generated.
+Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is
+ out of bounds
+Content-Language: en-GB
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20251224005752.201911-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +1109 drivers/gpio/gpiolib.c
 
-  1044	
-  1045	int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
-  1046				       struct lock_class_key *lock_key,
-  1047				       struct lock_class_key *request_key)
-  1048	{
-  1049		struct gpio_device *gdev;
-  1050		unsigned int desc_index;
-  1051		int base = 0;
-  1052		int ret;
-  1053	
-  1054		/*
-  1055		 * First: allocate and populate the internal stat container, and
-  1056		 * set up the struct device.
-  1057		 */
-  1058		gdev = kzalloc(sizeof(*gdev), GFP_KERNEL);
-  1059		if (!gdev)
-  1060			return -ENOMEM;
-  1061	
-  1062		gdev->dev.type = &gpio_dev_type;
-  1063		gdev->dev.bus = &gpio_bus_type;
-  1064		gdev->dev.parent = gc->parent;
-  1065		rcu_assign_pointer(gdev->chip, gc);
-  1066	
-  1067		gc->gpiodev = gdev;
-  1068		gpiochip_set_data(gc, data);
-  1069	
-  1070		device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
-  1071	
-  1072		ret = ida_alloc(&gpio_ida, GFP_KERNEL);
-  1073		if (ret < 0)
-  1074			goto err_free_gdev;
-  1075		gdev->id = ret;
-  1076	
-  1077		ret = dev_set_name(&gdev->dev, GPIOCHIP_NAME "%d", gdev->id);
-  1078		if (ret)
-  1079			goto err_free_ida;
-  1080	
-  1081		if (gc->parent && gc->parent->driver)
-  1082			gdev->owner = gc->parent->driver->owner;
-  1083		else if (gc->owner)
-  1084			/* TODO: remove chip->owner */
-  1085			gdev->owner = gc->owner;
-  1086		else
-  1087			gdev->owner = THIS_MODULE;
-  1088	
-  1089		ret = gpiochip_get_ngpios(gc, &gdev->dev);
-  1090		if (ret)
-  1091			goto err_free_dev_name;
-  1092	
-  1093		gdev->descs = kcalloc(gc->ngpio, sizeof(*gdev->descs), GFP_KERNEL);
-  1094		if (!gdev->descs) {
-  1095			ret = -ENOMEM;
-  1096			goto err_free_dev_name;
-  1097		}
-  1098	
-  1099		gdev->label = kstrdup_const(gc->label ?: "unknown", GFP_KERNEL);
-  1100		if (!gdev->label) {
-  1101			ret = -ENOMEM;
-  1102			goto err_free_descs;
-  1103		}
-  1104	
-  1105		gdev->ngpio = gc->ngpio;
-  1106		gdev->can_sleep = gc->can_sleep;
-  1107	
-  1108		rwlock_init(&gdev->line_state_lock);
-> 1109		BLOCKING_INIT_NOTIFIER_HEAD(&gdev->line_state_notifier);
-  1110		BLOCKING_INIT_NOTIFIER_HEAD(&gdev->device_notifier);
-  1111	
-  1112		ret = init_srcu_struct(&gdev->srcu);
-  1113		if (ret)
-  1114			goto err_free_label;
-  1115	
-  1116		ret = init_srcu_struct(&gdev->desc_srcu);
-  1117		if (ret)
-  1118			goto err_cleanup_gdev_srcu;
-  1119	
-  1120	
-  1121		scoped_guard(mutex, &gpio_devices_lock) {
-  1122			/*
-  1123			 * TODO: this allocates a Linux GPIO number base in the global
-  1124			 * GPIO numberspace for this chip. In the long run we want to
-  1125			 * get *rid* of this numberspace and use only descriptors, but
-  1126			 * it may be a pipe dream. It will not happen before we get rid
-  1127			 * of the sysfs interface anyways.
-  1128			 */
-  1129			base = gc->base;
-  1130			if (base < 0) {
-  1131				base = gpiochip_find_base_unlocked(gc->ngpio);
-  1132				if (base < 0) {
-  1133					ret = base;
-  1134					base = 0;
-  1135					goto err_cleanup_desc_srcu;
-  1136				}
-  1137	
-  1138				/*
-  1139				 * TODO: it should not be necessary to reflect the
-  1140				 * assigned base outside of the GPIO subsystem. Go over
-  1141				 * drivers and see if anyone makes use of this, else
-  1142				 * drop this and assign a poison instead.
-  1143				 */
-  1144				gc->base = base;
-  1145			} else {
-  1146				dev_warn(&gdev->dev,
-  1147					 "Static allocation of GPIO base is deprecated, use dynamic allocation.\n");
-  1148			}
-  1149	
-  1150			gdev->base = base;
-  1151	
-  1152			ret = gpiodev_add_to_list_unlocked(gdev);
-  1153			if (ret) {
-  1154				gpiochip_err(gc, "GPIO integer space overlap, cannot add chip\n");
-  1155				goto err_cleanup_desc_srcu;
-  1156			}
-  1157		}
-  1158	
+On 12/23/25 4:57 PM, Ihor Solodrai wrote:
+> I've been chasing down the following flaky splat, introduced by recent
+> changes in BTF generation [1]:
+>
+>    ------------[ cut here ]------------
+>    BUG: unable to handle page fault for address: ffa000000233d828
+>    #PF: supervisor read access in kernel mode
+>    #PF: error_code(0x0000) - not-present page
+>    PGD 100000067 P4D 100253067 PUD 100258067 PMD 0
+>    Oops: Oops: 0000 [#1] SMP NOPTI
+>    CPU: 1 UID: 0 PID: 390 Comm: test_progs Tainted: G        W  OE       6.19.0-rc1-gf785a31395d9 #331 PREEMPT(full)
+>    Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+>    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-4.el9 04/01/2014
+>    RIP: 0010:simplify_symbols+0x2b2/0x480
+>       9.737179] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+>    RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+>    RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+>    RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+>    RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+>    R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+>    R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+>    FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) knlGS:0000000000000000
+>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>    CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+>    PKRU: 55555554
+>    Call Trace:
+>     <TASK>
+>     ? __kmalloc_node_track_caller_noprof+0x37f/0x740
+>     ? __pfx_setup_modinfo_srcversion+0x10/0x10
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? kstrdup+0x4a/0x70
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? setup_modinfo_srcversion+0x1a/0x30
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? setup_modinfo+0x12b/0x1e0
+>     load_module+0x133a/0x1610
+>     __x64_sys_finit_module+0x31b/0x450
+>     ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>     do_syscall_64+0x80/0x2d0
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? exc_page_fault+0x95/0xc0
+>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>    RIP: 0033:0x7f1c63a2582d
+>       9.794028] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff 8 8b 0d bb 15 0f 00 f7 d8 64 89 01 48
+>    RSP: 002b:00007ffe513df128 EFLAGS: 00000206 ORIG_RAX: 0000000000000139
+>    RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1c63a2582d
+>    RDX: 0000000000000000 RSI: 0000000000ee83f9 RDI: 0000000000000016
+>    RBP: 00007ffe513df150 R08: 0000000000000000 R09: 0000000000000000
+>    R10: 0000000000000000 R11: 0000000000000206 R12: 00007ffe513e3588
+>    R13: 000000000088fad0 R14: 00000000014bddb0 R15: 00007f1c63ba7000
+>     </TASK>
+>    Modules linked in: bpf_testmod(OE)
+>    CR2: ffa000000233d828
+>    ---[ end trace 0000000000000000 ]---
+>    RIP: 0010:simplify_symbols+0x2b2/0x480
+>       9.821595] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+>    RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+>    RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+>    RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+>    RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+>    R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+>    R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+>    FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) knlGS:0000000000000000
+>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>    CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+>    PKRU: 55555554
+>    Kernel panic - not syncing: Fatal exception
+>    Kernel Offset: disabled
+>
+> This hasn't happened on BPF CI so far, for example, however I was able
+> to reproduce it on a particular x64 machine using a kernel built with
+> LLVM 20.
+>
+> The crash happens on attempt to load one of the BPF selftest modules
+> (tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.ko) which
+> is used by kfunc_module_order test.
+>
+> The reason for the crash is that simplify_symbols() doesn't check for
+> bounds of the ELF section index:
+>
+>         for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+> 		const char *name = info->strtab + sym[i].st_name;
+>
+> 		switch (sym[i].st_shndx) {
+> 		case SHN_COMMON:
+>
+> 		[...]
+>
+> 		default:
+> 			/* Divert to percpu allocation if a percpu var. */
+> 			if (sym[i].st_shndx == info->index.pcpu)
+> 				secbase = (unsigned long)mod_percpu(mod);
+> 			else
+>    /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+> 			sym[i].st_value += secbase;
+> 			break;
+> 		}
+> 	}
+>
+> And in the case I was able to reproduce, the value 0xffff
+> (SHN_HIRESERVE aka SHN_XINDEX [2]) fell through here.
+>
+> Now this code fragment is between 15 and 20 years old, so obviously
+> it's not expected for a kmodule symbol to have such st_shndx
+> value. Even so, the kernel probably should fail loading the module
+> instead of crashing, which is what this patch attempts to fix.
+>
+> Investigating further, I discovered that the module binary became
+> corrupted by `${OBJCOPY} --update-section` operation updating .BTF_ids
+> section data in scripts/gen-btf.sh. This explains how the bug has
+> surfaced after gen-btf.sh was introduced:
+>
+>    $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (2), but unable to locate the extended symbol index table
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (3), but unable to locate the extended symbol index table
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (4), but unable to locate the extended symbol index table
+>         3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT   RSV[0xffff] __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (16), but unable to locate the extended symbol index table
+>         4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT   RSV[0xffff] __BTF_ID__func__bpf_test_modorder_retx__44417
+>
+> vs expected
+>
+>    $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+>         3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT     6 __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+>         4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT     6 __BTF_ID__func__bpf_test_modorder_retx__44417
+>
+> But why? Updating section data without changing it's size is not
+> supposed to affect sections indices, right?
+>
+> With a bit more testing I confirmed that this is a LLVM-specific
+> issue (doesn't reproduce with GCC kbuild), and it's not stable,
+> because in link-vmlinux.h we also do:
+>
+>      ${OBJCOPY} --update-section .BTF_ids=${btfids_vmlinux} ${VMLINUX}
+>
+> However:
+>
+>    $ llvm-readelf -s --wide ~/workspace/prog-aux/linux/vmlinux | grep 0xffff
+>    # no output, which is good
+>
+> So the suspect is the implementation of llvm-objcopy. As it turns out
+> there is a relevant known bug that explains the flakiness and isn't
+> fixed yet [3].
+>
+> [1] https://lore.kernel.org/bpf/20251219181825.1289460-3-ihor.solodrai@linux.dev/
+> [2] https://man7.org/linux/man-pages/man5/elf.5.html
+> [3] https://github.com/llvm/llvm-project/issues/168060#issuecomment-3533552952
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>
+> ---
+>
+> RFC
+>
+> While this llvm-objcopy bug is not fixed, we can not trust it in the
+> kernel build pipeline. In the short-term we have to come up with a
+> workaround for .BTF_ids section update and replace the calls to
+> ${OBJCOPY} --update-section with something else.
+>
+> One potential workaround is to force the use of the objcopy (from
+> binutils) instead of llvm-objcopy when updating .BTF_ids section.
+>
+> Alternatively, we could just dd the .BTF_ids data computed by
+> resolve_btfids at the right offset in the target ELF file.
+>
+> Surprisingly I couldn't find a good way to read a section offset and
+> size from the ELF with a specified format in a command line. Both
+> readelf and {llvm-}objdump give a human readable output, and it
+> appears we can't rely on the column order, for example.
+>
+> We could still try parsing readelf output with awk/grep, covering
+> output variants that appear in the kernel build.
+>
+> We can also do:
+>
+>     llvm-readobj --elf-output-style=JSON --sections "$elf" | \
+>          jq -r --arg name .BTF_ids '
+>              .[0].Sections[] |
+>              select(.Section.Name.Name == $name) |
+>              "\(.Section.Offset) \(.Section.Size)"'
+>
+> ...but idk man, doesn't feel right.
+>
+> Most reliable way to determine the size and offset of .BTF_ids section
+> is probably reading them by a C program with libelf, such as
+> resolve_btfids. Which is quite ironic, given the recent
+> changes. Setting the irony aside, we could add smth like:
+>           resolve_btfids --section-info=.BTF_ids $elf
+>
+> Reverting the gen-btf.sh patch is also a possible workaround, but I'd
+> really like to avoid it, given that BPF features/optimizations in
+> development depend on it.
+>
+> I'd appreciate comments and suggestions on this issue. Thank you!
+> ---
+>   kernel/module/main.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 710ee30b3bea..5bf456fad63e 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
+>   			break;
+>   
+>   		default:
+> +			if (sym[i].st_shndx >= info->hdr->e_shnum) {
+> +				pr_err("%s: Symbol %s has an invalid section index %u (max %u)\n",
+> +				       mod->name, name, sym[i].st_shndx, info->hdr->e_shnum - 1);
+> +				ret = -ENOEXEC;
+> +				break;
+> +			}
+> +
+>   			/* Divert to percpu allocation if a percpu var. */
+>   			if (sym[i].st_shndx == info->index.pcpu)
+>   				secbase = (unsigned long)mod_percpu(mod);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I tried both llvm21 and llvm22 (where llvm21 is used in bpf ci).
+
+Without KASAN, I can reproduce the failure for llvm19/llvm21/llvm22.
+I did not test llvm20 and I assume it may fail too.
+
+The following llvm patch
+    https://github.com/llvm/llvm-project/pull/170462
+can fix the issue. Currently it is still in review stage. The actual diff is
+
+diff --git a/llvm/lib/ObjCopy/ELF/ELFObject.cpp b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+index e5de17e093df..cc1527d996e2 100644
+--- a/llvm/lib/ObjCopy/ELF/ELFObject.cpp
++++ b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+@@ -2168,7 +2168,11 @@ Error Object::updateSectionData(SecPtr &Sec, ArrayRef<uint8_t> Data) {
+                               Data.size(), Sec->Name.c_str(), Sec->Size);
+  
+    if (!Sec->ParentSegment) {
+-    Sec = std::make_unique<OwnedDataSection>(*Sec, Data);
++    SectionBase *Replaced = Sec.get();
++    SectionBase *Modified = &addSection<OwnedDataSection>(*Sec, Data);
++    DenseMap<SectionBase *, SectionBase *> Replacements{{Replaced, Modified}};
++    if (auto err = replaceSections(Replacements))
++      return err;
+    } else {
+      // The segment writer will be in charge of updating these contents.
+      Sec->Size = Data.size();
+
+I applied the above patch to latest llvm21 and llvm22 and
+the crash is gone and the selftests can run properly.
+
+With KASAN, everything is okay for llvm21 and llvm22.
+
+Not sure whether the llvm patch
+    https://github.com/llvm/llvm-project/pull/170462
+can make into llvm21 or not as looks like llvm21 intends to
+freeze for now. See
+    https://github.com/llvm/llvm-project/pull/168314#issuecomment-3645797175
+the llvm22 will branch into rc mode in January.
+
+I will try to see whether we can have a reasonable workaround
+for llvm21 llvm-objcopy (for without KASAN).
+
