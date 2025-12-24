@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E61883F;
-	Wed, 24 Dec 2025 01:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1052271456;
+	Wed, 24 Dec 2025 03:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766539850; cv=none; b=th0QTIEoML7frp/+RbkN8pqGvCZiXdhetJieDeFWkM+ZFQd8rxBl37Harjh5tytDwWCfUx1bJw2dbGXF3RSfB/NoRrYQJzaOQtKwbpCn/vzT30B35t+FZz+++WF8hZtwV70S8emJgNVp6cMJin6h/aGHIuLl6SQ70d+WMWfIhnk=
+	t=1766546865; cv=none; b=jILOGPKQKJVhZ757mkxRW39nIih25iTvo8f6GVOnWUGGfYHEHlV7iWlXnM7pVgAEhoyaJhdjROD4feBFcmM08nr8m7XfTZetLrE6zCuJdMPgSDxzUMRWtjxFEjVTAv75lPHXza5INYK4pU4ywo8lfDYbBhed/Uv/4FOTw6fn+z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766539850; c=relaxed/simple;
-	bh=skQ0+qYPReTeRZw8sTAnoA64uJ/Hd430GeZTZzoUiQo=;
+	s=arc-20240116; t=1766546865; c=relaxed/simple;
+	bh=nA7u6gjpcNff6GD+HoSy6Nia4ZNz+eOojZUn1RsdchI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m2nXP5s7fY22h00L+SKH7xGYXA8ElQuZLAIyjhPLY+p+7iqeOjn5Iaj2rsOvxmrkDrNuhzfauNXAp765OKxvK6CckOhc7RlXVeq23bQA09Kl3amFlciirmPM6b5RjFaG6DBYRs+HRdVg0pPBt01Ek0QsWtL7govGYJKEMO/xeeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V8q46HOJ; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=YqduhyfFX/liIzJxtfTv068iZfDVjK+vDMOWdN3npc0Q/tjOKJN5IloVWJdG15L8nTI5VgY7DOyCvNzaqwb/85V53VmyN4shad/zTWOOMPrrRy+KzBoSW3pTDuv3tN/xLnQTya37CQc++o40zxilsxozK6g5z2shu1jSLLxsVMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c3mWmE6K; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V8q46HOJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c3mWmE6K"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766539849; x=1798075849;
+  t=1766546863; x=1798082863;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=skQ0+qYPReTeRZw8sTAnoA64uJ/Hd430GeZTZzoUiQo=;
-  b=V8q46HOJaPln7pE6SssozIdyPtqfKJCpng3vUZc3dRB6c0sipIlIgtCK
-   tR71OwMTedfGZli3wd2a2G9ghLjietKmvAazS//tNRpIE+8V4N2PizTLc
-   ET5KwWJeVg8QDnyq7z9Boh6BRS5cu0CM0sInZhHUvEOxtvpfrWnHY/ImY
-   C4afwdceOx3ocCE9tQ8gnwzdtpzA5+z4uiz1ECr/pyfvSM6Tekh2aXgN3
-   K4hvzqnlg+rxkJBv4n+xorfhvZXXxFaoaUpOa7oI9fRQJmXXvoytxos9C
-   03bVcBmpT3p0hHT3EUnQQHQkViR044mvWOLSp2pIQZ+ogzJmP5FCPzDXc
-   Q==;
-X-CSE-ConnectionGUID: CFN/Y4wqQNaGeApIbEUOxg==
-X-CSE-MsgGUID: fcktV8MBQX6wpPKYdkJ5DQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="72247638"
+  bh=nA7u6gjpcNff6GD+HoSy6Nia4ZNz+eOojZUn1RsdchI=;
+  b=c3mWmE6KXHrBcEB9PYFfemKXhegtyk5VnJdiNEbgVI136YzW7pvdLwcx
+   yrnxTpCe6HlwQQWEY+7wzWp1Qbkm/3jL0Gpb8YO1xVWomdkWUi+BtXkX5
+   GsA3+jfs/ltnrujxY4hpEyffFNz07ezZLlgkYqrQL+/MykCpt4s+ruIDO
+   a5VH7CO9s4NtLSl2JAajne6kW1/9GCP97GCw7wQ9/7mKRYMycrnlMqSTn
+   nQ6gRXGrKt1CIxafEGnNdl2CkUdMP1WfB2MDHdKwna4GzKuJwx9tJvml4
+   XepSgdZoev3ZJHNcTt2AyFHGw2No0Oy3Edp8eSTnUmgHrcbe8eG6AjFpr
+   A==;
+X-CSE-ConnectionGUID: qJ4LoCPxRNSUhN1ZEj1Krg==
+X-CSE-MsgGUID: jum9YYo+Skab8r6UrtJlcg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="67585961"
 X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="72247638"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 17:30:48 -0800
-X-CSE-ConnectionGUID: NnaiU3w5QnKuhy0O5c3kqA==
-X-CSE-MsgGUID: kbQ72kWGT/2vLf41xHnebg==
+   d="scan'208";a="67585961"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 19:27:39 -0800
+X-CSE-ConnectionGUID: Pb2VFdUITb2atK7bdBZXkw==
+X-CSE-MsgGUID: i3pkqJNGQ8O7oBU6ueHwSg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="199564218"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 23 Dec 2025 17:30:46 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+   d="scan'208";a="204993889"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 23 Dec 2025 19:27:37 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vYDi8-0000000063I-0KWN;
-	Wed, 24 Dec 2025 01:30:44 +0000
-Date: Wed, 24 Dec 2025 02:30:36 +0100
+	id 1vYFXC-000000002d7-39Xr;
+	Wed, 24 Dec 2025 03:27:34 +0000
+Date: Wed, 24 Dec 2025 11:26:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, Tejun Heo <tj@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -57,7 +57,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 Subject: Re: [PATCH 2/2] cgroup-v2/freezer: Print information about
  unfreezable process
-Message-ID: <202512240240.TCvafX5S-lkp@intel.com>
+Message-ID: <202512241151.JDZuy1z3-lkp@intel.com>
 References: <20251223102124.738818-4-ptikhomirov@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -83,14 +83,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Tikhomirov/cgroup-v
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
 patch link:    https://lore.kernel.org/r/20251223102124.738818-4-ptikhomirov%40virtuozzo.com
 patch subject: [PATCH 2/2] cgroup-v2/freezer: Print information about unfreezable process
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251224/202512240240.TCvafX5S-lkp@intel.com/config)
+config: sparc64-randconfig-002-20251224 (https://download.01.org/0day-ci/archive/20251224/202512241151.JDZuy1z3-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240240.TCvafX5S-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512241151.JDZuy1z3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512240240.TCvafX5S-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512241151.JDZuy1z3-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
