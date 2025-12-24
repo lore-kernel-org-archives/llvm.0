@@ -1,151 +1,228 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722AB261B96;
-	Wed, 24 Dec 2025 03:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAA9283C9E;
+	Wed, 24 Dec 2025 03:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766547502; cv=none; b=LDJMPLyZjutP6vD+hMJduzY5bsxKcMVwhFuvaqdO14OMaXDb/VT6ya8Wgptu7BKdSRPZPBPm2rlF+qe0XitFxO7Jq6KEzOir/vhq7aIDat3NqYaNfcGXOva1RTozE5qsZ4xR2VIBBqWii8kIUG3sq4LQe5mpNnZceWGTJRsK0MQ=
+	t=1766548072; cv=none; b=Dijn8/x/9QFNrAIxyOb3vdPWMbwX51k4sCLSQLcx8l7VCH8YVm+3plwH8MHSCXZ4ZUep5w/hZGh2j9cT/eM/IwAOYgZ1Yu5YF6404+3TT0sqLjBbiBX0O4HPj9hxnMIvMqTP9CcVK6GMMwM1+kFjlqot98QeMbOKnBd9uzRTUTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766547502; c=relaxed/simple;
-	bh=jx5eP+3enRBdEWoLER6u8Qy1rbmoTd1TulfxzryzJJM=;
+	s=arc-20240116; t=1766548072; c=relaxed/simple;
+	bh=Nrx8SnLjGi1tMAy5C7x9+knQXlEkEfFgw7pqhY61U1A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iRT/RHtymUf3WuzdArPqmoAWow3tbzzuK21EoJovy0Ps7B/8G4Z+MDsemMoRrG/9GxAvGu9t5sRrCxQONB8tw07H9fospxjS0ZFSzQtQ4SkqWAGL7d7hL2Log75nfBZ5NY+Ga0QvIe4q4iLtRZ/r2IJLkZQIzsuMopWOmS4ZQjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g4iKlMnS; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cgzd2id1yEsxBUjMVQVTfHUDpggfbhvnZqKeS798IfWZ6xm7ukBQV3OdffuUGNaYHE6bjoTFot6EyENXrsdem1jxAmC5iFqL1fVoc7jB8tzI3cK9/7ITOaToBdXXtNQJqrqZCC1Kw37kcfrgNy0VWEo1GvNzbhk4tmFFJaZSCZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gPf03/Lr; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g4iKlMnS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gPf03/Lr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766547501; x=1798083501;
+  t=1766548070; x=1798084070;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jx5eP+3enRBdEWoLER6u8Qy1rbmoTd1TulfxzryzJJM=;
-  b=g4iKlMnSO/w/RH/fqwgoPWiGsDgDSctXNuyVSR35X89eqnXQWs1r+hG/
-   dx1vs+p/ga9VE8G/0w9bY7CwnyZqKZkWYJfrDbYgchdisbxkxb5c+JbaT
-   OBNy4P9lY31adPjBvfkDfh47Xl1QQ+sVZ0RUq+oeV6mc0k59CEG/nF0Pd
-   ujtzzvK/TTlRHCgwUJuRG6Jj13uKTmW8YXYsN+Xvzxq+n+fdS4VXqDo8+
-   QSjV4U7nF293k5R3Ov4oC0M+AitMz6vPBNbspUSYkr61OQiZSLp+ZkcX8
-   Ffov3eDEumb03SWbb+NVrzC6xIDbVQQSViK62ak0PeEES3zx6iAtPS6nf
-   w==;
-X-CSE-ConnectionGUID: ld+GLDV9TNalVwgF6c2bpA==
-X-CSE-MsgGUID: HdX5IS2eQY6IiuU2bdxeWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="67586961"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Nrx8SnLjGi1tMAy5C7x9+knQXlEkEfFgw7pqhY61U1A=;
+  b=gPf03/Lr6I2xxGmPL8I+aY4XaMQmPbW1JCgEWXj50THrwbwlrVVTM/Xn
+   eaRrbzrMFJMK5mIwOA2R+bqxaVRs5hHcHtH8NUAaJeJJ/7i2ii59zhhWL
+   6Kb39+qmcamn/MLoq84j6H3y5uD8gc3niyPeP6OhMM+HlIDrJ+46vh+aq
+   y0QmIaFTYw+g+VnEfTHAq9kPr5RgSufosyCbCLVxDiqzanY6vRtxA9gXw
+   MyKNeMAMvx9IKU0muzAmN1epiqM4Flc5Wkt1CWh+2d1hIhwKCWSg7JncL
+   CPqE/9Zl8U5UevnZwHiRVG7hYHTQ4Koo1xhyTXPjlDdlmPWbknsNM9peQ
+   g==;
+X-CSE-ConnectionGUID: e6t9zNWtStC+OZ8ZFEhMjw==
+X-CSE-MsgGUID: lVcseNaJQzyCWBz0QuxZIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="55959850"
 X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="67586961"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 19:38:20 -0800
-X-CSE-ConnectionGUID: k3rlYyJiQF69AY+B9kf+0Q==
-X-CSE-MsgGUID: +y3vX6QCQEucg3pwulKRSw==
+   d="scan'208";a="55959850"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 19:47:50 -0800
+X-CSE-ConnectionGUID: 4c4zx21aSOiwPn10uk9MFg==
+X-CSE-MsgGUID: Yb0nJWM8QrS2LcCkJCGrmQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,172,1763452800"; 
-   d="scan'208";a="204428705"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Dec 2025 19:38:15 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+   d="scan'208";a="223410948"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by fmviesa002.fm.intel.com with ESMTP; 23 Dec 2025 19:47:48 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vYFhI-000000002dN-1iSv;
-	Wed, 24 Dec 2025 03:38:04 +0000
-Date: Wed, 24 Dec 2025 11:37:15 +0800
+	id 1vYFqk-0000000066O-10ma;
+	Wed, 24 Dec 2025 03:47:46 +0000
+Date: Wed, 24 Dec 2025 04:47:04 +0100
 From: kernel test robot <lkp@intel.com>
-To: Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>,
-	robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
-	robh@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
-	konrad.dybcio@oss.qualcomm.com, bjorn.andersson@oss.qualcomm.com,
-	bod@kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
-	saravanak@google.com, prakash.gupta@oss.qualcomm.com,
-	vikash.garodia@oss.qualcomm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Charan Teja Kalla <charan.kalla@oss.qualcomm.com>,
-	Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>
-Subject: Re: [PATCH v3 2/3] of: factor arguments passed to of_map_id() into a
- struct
-Message-ID: <202512241124.Tl95CT1C-lkp@intel.com>
-References: <20251221213602.2413124-3-vijayanand.jitta@oss.qualcomm.com>
+To: =?utf-8?B?UGF3ZcWC?= Narewski <pawel.narewski@nokia.com>,
+	linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linusw@kernel.org,
+	brgl@kernel.org,
+	=?utf-8?B?UGF3ZcWC?= Narewski <pawel.narewski@nokia.com>,
+	Jakub Lewalski <jakub.lewalski@nokia.com>
+Subject: Re: [PATCH] gpiolib: fix race condition for gdev->srcu
+Message-ID: <202512240408.wrQcvO0t-lkp@intel.com>
+References: <20251223084952.1847489-1-pawel.narewski@nokia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251221213602.2413124-3-vijayanand.jitta@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251223084952.1847489-1-pawel.narewski@nokia.com>
 
-Hi Vijayanand,
+Hi Paweł,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on xen-tip/linux-next]
-[cannot apply to robh/for-next pci/next pci/for-linus linus/master v6.19-rc2 next-20251219]
+[auto build test ERROR on brgl/gpio/for-next]
+[also build test ERROR on linus/master v6.19-rc2 next-20251219]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vijayanand-Jitta/of-Add-convenience-wrappers-for-of_map_id/20251222-053941
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
-patch link:    https://lore.kernel.org/r/20251221213602.2413124-3-vijayanand.jitta%40oss.qualcomm.com
-patch subject: [PATCH v3 2/3] of: factor arguments passed to of_map_id() into a struct
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251224/202512241124.Tl95CT1C-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512241124.Tl95CT1C-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawe-Narewski/gpiolib-fix-race-condition-for-gdev-srcu/20251223-165142
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20251223084952.1847489-1-pawel.narewski%40nokia.com
+patch subject: [PATCH] gpiolib: fix race condition for gdev->srcu
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251224/202512240408.wrQcvO0t-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240408.wrQcvO0t-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512241124.Tl95CT1C-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512240408.wrQcvO0t-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/of/base.c:2078:71: warning: address of array 'arg->map_args.args' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    2078 |         if (!np || !map_name || !arg || (!arg->map_args.np && !arg->map_args.args))
-         |                                                               ~~~~~~~~~~~~~~~^~~~
-   drivers/of/base.c:2136:21: warning: address of array 'arg->map_args.args' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    2136 |                 if (arg->map_args.args)
-         |                 ~~  ~~~~~~~~~~~~~~^~~~
-   drivers/of/base.c:2149:20: warning: address of array 'arg->map_args.args' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    2149 |         if (arg->map_args.args)
-         |         ~~  ~~~~~~~~~~~~~~^~~~
-   3 warnings generated.
+>> drivers/gpio/gpiolib.c:1109:2: error: no member named 'rwsem' in 'struct raw_notifier_head'
+    1109 |         BLOCKING_INIT_NOTIFIER_HEAD(&gdev->line_state_notifier);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/notifier.h:86:23: note: expanded from macro 'BLOCKING_INIT_NOTIFIER_HEAD'
+      86 |                 init_rwsem(&(name)->rwsem);     \
+         |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/linux/rwsem.h:121:16: note: expanded from macro 'init_rwsem'
+     121 |         __init_rwsem((sem), #sem, &__key);                      \
+         |                       ^~~
+   1 error generated.
 
 
-vim +2078 drivers/of/base.c
+vim +1109 drivers/gpio/gpiolib.c
 
-  2047	
-  2048	/**
-  2049	 * of_map_id - Translate an ID through a downstream mapping.
-  2050	 * @np: root complex device node.
-  2051	 * @id: device ID to map.
-  2052	 * @map_name: property name of the map to use.
-  2053	 * @map_mask_name: optional property name of the mask to use.
-  2054	 * @arg: contains the optional params, wrapped in a struct of_phandle_args,
-  2055	 *	which includes:
-  2056	 *	np: pointer to the target device node
-  2057	 *	args_count: number of arguments
-  2058	 *	args[]: array to receive the translated ID(s).
-  2059	 *
-  2060	 * Given a device ID, look up the appropriate implementation-defined
-  2061	 * platform ID and/or the target device which receives transactions on that
-  2062	 * ID, as per the "iommu-map" and "msi-map" bindings. Either of @target or
-  2063	 * @id_out may be NULL if only the other is required. If @target points to
-  2064	 * a non-NULL device node pointer, only entries targeting that node will be
-  2065	 * matched; if it points to a NULL value, it will receive the device node of
-  2066	 * the first matching target phandle, with a reference held.
-  2067	 *
-  2068	 * Return: 0 on success or a standard error code on failure.
-  2069	 */
-  2070	int of_map_id(const struct device_node *np, u32 id,
-  2071		       const char *map_name, const char *map_mask_name,
-  2072		       struct of_map_id_arg *arg)
-  2073	{
-  2074		u32 map_mask, masked_id;
-  2075		int map_len;
-  2076		const __be32 *map = NULL;
-  2077	
-> 2078		if (!np || !map_name || !arg || (!arg->map_args.np && !arg->map_args.args))
+  1044	
+  1045	int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+  1046				       struct lock_class_key *lock_key,
+  1047				       struct lock_class_key *request_key)
+  1048	{
+  1049		struct gpio_device *gdev;
+  1050		unsigned int desc_index;
+  1051		int base = 0;
+  1052		int ret;
+  1053	
+  1054		/*
+  1055		 * First: allocate and populate the internal stat container, and
+  1056		 * set up the struct device.
+  1057		 */
+  1058		gdev = kzalloc(sizeof(*gdev), GFP_KERNEL);
+  1059		if (!gdev)
+  1060			return -ENOMEM;
+  1061	
+  1062		gdev->dev.type = &gpio_dev_type;
+  1063		gdev->dev.bus = &gpio_bus_type;
+  1064		gdev->dev.parent = gc->parent;
+  1065		rcu_assign_pointer(gdev->chip, gc);
+  1066	
+  1067		gc->gpiodev = gdev;
+  1068		gpiochip_set_data(gc, data);
+  1069	
+  1070		device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
+  1071	
+  1072		ret = ida_alloc(&gpio_ida, GFP_KERNEL);
+  1073		if (ret < 0)
+  1074			goto err_free_gdev;
+  1075		gdev->id = ret;
+  1076	
+  1077		ret = dev_set_name(&gdev->dev, GPIOCHIP_NAME "%d", gdev->id);
+  1078		if (ret)
+  1079			goto err_free_ida;
+  1080	
+  1081		if (gc->parent && gc->parent->driver)
+  1082			gdev->owner = gc->parent->driver->owner;
+  1083		else if (gc->owner)
+  1084			/* TODO: remove chip->owner */
+  1085			gdev->owner = gc->owner;
+  1086		else
+  1087			gdev->owner = THIS_MODULE;
+  1088	
+  1089		ret = gpiochip_get_ngpios(gc, &gdev->dev);
+  1090		if (ret)
+  1091			goto err_free_dev_name;
+  1092	
+  1093		gdev->descs = kcalloc(gc->ngpio, sizeof(*gdev->descs), GFP_KERNEL);
+  1094		if (!gdev->descs) {
+  1095			ret = -ENOMEM;
+  1096			goto err_free_dev_name;
+  1097		}
+  1098	
+  1099		gdev->label = kstrdup_const(gc->label ?: "unknown", GFP_KERNEL);
+  1100		if (!gdev->label) {
+  1101			ret = -ENOMEM;
+  1102			goto err_free_descs;
+  1103		}
+  1104	
+  1105		gdev->ngpio = gc->ngpio;
+  1106		gdev->can_sleep = gc->can_sleep;
+  1107	
+  1108		rwlock_init(&gdev->line_state_lock);
+> 1109		BLOCKING_INIT_NOTIFIER_HEAD(&gdev->line_state_notifier);
+  1110		BLOCKING_INIT_NOTIFIER_HEAD(&gdev->device_notifier);
+  1111	
+  1112		ret = init_srcu_struct(&gdev->srcu);
+  1113		if (ret)
+  1114			goto err_free_label;
+  1115	
+  1116		ret = init_srcu_struct(&gdev->desc_srcu);
+  1117		if (ret)
+  1118			goto err_cleanup_gdev_srcu;
+  1119	
+  1120	
+  1121		scoped_guard(mutex, &gpio_devices_lock) {
+  1122			/*
+  1123			 * TODO: this allocates a Linux GPIO number base in the global
+  1124			 * GPIO numberspace for this chip. In the long run we want to
+  1125			 * get *rid* of this numberspace and use only descriptors, but
+  1126			 * it may be a pipe dream. It will not happen before we get rid
+  1127			 * of the sysfs interface anyways.
+  1128			 */
+  1129			base = gc->base;
+  1130			if (base < 0) {
+  1131				base = gpiochip_find_base_unlocked(gc->ngpio);
+  1132				if (base < 0) {
+  1133					ret = base;
+  1134					base = 0;
+  1135					goto err_cleanup_desc_srcu;
+  1136				}
+  1137	
+  1138				/*
+  1139				 * TODO: it should not be necessary to reflect the
+  1140				 * assigned base outside of the GPIO subsystem. Go over
+  1141				 * drivers and see if anyone makes use of this, else
+  1142				 * drop this and assign a poison instead.
+  1143				 */
+  1144				gc->base = base;
+  1145			} else {
+  1146				dev_warn(&gdev->dev,
+  1147					 "Static allocation of GPIO base is deprecated, use dynamic allocation.\n");
+  1148			}
+  1149	
+  1150			gdev->base = base;
+  1151	
+  1152			ret = gpiodev_add_to_list_unlocked(gdev);
+  1153			if (ret) {
+  1154				gpiochip_err(gc, "GPIO integer space overlap, cannot add chip\n");
+  1155				goto err_cleanup_desc_srcu;
+  1156			}
+  1157		}
+  1158	
 
 -- 
 0-DAY CI Kernel Test Service
