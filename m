@@ -1,170 +1,229 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E88B298CD5
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 11:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94822F616C;
+	Wed, 24 Dec 2025 12:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766577340; cv=none; b=k9+FC1bskqgA1214HAVcYLc656GDjBg3EwcsyvqvQPAe95FhUEdxLOlHzEubImmQtQJBqNsrrZLfkpNGe/214uXtzQIQpnViBz9U7wqvd9amM6JldX8YXhDG6myzIZGse9PujBA/cnDeCfgdLXvScoLM2nTRfVVUXh1zYLxqW2Y=
+	t=1766578856; cv=none; b=lLKciHhkcRZHXYhx9aqjLLiSEU7mN8Xw2b7dIJkJ8FpxzqOgZip1kQxezjeCebpsphl+/UAXlH040X/yCPtvBVu/PJnkkIoqtn3IhCyxTHy5qp5j4FOWIpzyMNMJch63KF5aQXpbjUp7Fc5SNXossaO9Q99FwHHzGyukTHHwuyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766577340; c=relaxed/simple;
-	bh=vemuzK6Z66BYseCSrGp1BwERcxcZZRay3Ftgg54BBVI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NqjBH35s3OlDy1++/fqvaZibPpOt4sFehGosVGBRoft8/Hz4QUkuLpLtEE+U4JRh8/98n1hMlPdUpI8f97UIOlI96ek/VTX7t+vutZ9l4qIdeHOVZhd3VzjvVsQQ6okLPt+BQpUxWoSwgxWobcvcS0gg7T/FYOjfyc7p3iBCLKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=O6dRQKLZ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=CqS/MMZr; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1766578856; c=relaxed/simple;
+	bh=jDDzoEMDWKJjxdGROLKVvjf7g0T6U4unJ1T7ysSscaQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GtiBeg+mbEaMpkQXgJ0KbuCFZCN8cMlkN2+518rvKiH1D8GbqWYaYk9LU3ad42B4/RNofI9C4X3CkLvkE+OEFX+nyPklUe0yBKFfjKV0WjYG4tVcbvGQGhbubFedtFByhQvJybrM8wEj3WTgYu3AftiKYgVwt9i6MRP4I30VHMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H0I56F65; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="O6dRQKLZ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="CqS/MMZr"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BO9XTj7700449
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 11:55:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=pptCuuTC1OOr2ay6czaswVQWYUdbU39uOji
-	dp7GpfEA=; b=O6dRQKLZGceTfDz0hYPENIG0G3RNmJXSfaJud78XbMtwZWE2KPM
-	12BxkXJ4/U3HBlMGPmEaxH/pfBt5MTsk6+o7tduzh2o0kKOzIQ6Gs/T5mPQx3YS6
-	T57gmFICEaCWLMnqjH/oWv1SO7M7o8kAv9kwn/+VvEAsFGmWL59VWDqQWa2ljVMj
-	3JCxiQYSdYjJiJosavDh4zR4dzKfkQU7gnApAcWFp9XHJgyBQ9mrf+lNx1X1Ri4n
-	1Y0sGzhFJkFMxgpNI5vJnBnqgBpnID5/6gelPa5AKGvlWT/UexE9xhYD46xD3RHI
-	bBVOZbkfMInO7aq08XPliPhKZRqEkJuB/2w==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7t7jumb3-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 11:55:37 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ed7591799eso141594501cf.0
-        for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 03:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766577337; x=1767182137; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pptCuuTC1OOr2ay6czaswVQWYUdbU39uOjidp7GpfEA=;
-        b=CqS/MMZrczlarYXJaQoUIbRxdat7K6Z+c6TQLhSECWsCKuQJ3uvPOxcZxcII6nVImo
-         bfTkczyBY+ae1Ti0/IVRnCxKi83dkHNGoAjRpLUv77l/1Cg81sQTFJtsyefQuudthvJH
-         w5Hm54K5yXdtl6RHXp8u5V+QP8mjdhsl049d98uJQJcd6+TOPDf0wf+YhN9TUm+FwjAA
-         bLLJr6BmzzUmSBikytnHLoLMZ9TIljJMUWRuSFGa6uNbCGg0rZO39JrPqq1+LcuIG210
-         Gga3HskPs8DkXVpiJfcni8Zvwd2YQ+J5N7Et+MMQX8wQ4pKejK4XYh/oQ2CiMgRuXoz5
-         TK5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766577337; x=1767182137;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pptCuuTC1OOr2ay6czaswVQWYUdbU39uOjidp7GpfEA=;
-        b=LdcStwlzQwHJZHvXCzuTL+1e2v2zj5gDbZQ8ThjWNGFqusiQ3mq8QwfSu9b/Akc+BA
-         F3LsfQ+p5OJPxbHIw2Hkyw1gfD5CGG61UpYKszgPtRxnNEIfhcWFEpgzcgiEeBZkY+yn
-         ORDlwNjWY+hFGVqgWkbwOqt2/lurt+tXuo4Jyw1N52I1Xfjqct1Vk0aFwm695XbXv62f
-         REOxwLKHD5ffzVBAxabAl3nzPn4cyNpJ/FaU5Qug3AHOrEWC36NB4K3CrsVvYoHafG0e
-         oRfjflPj3sor3d6hbIc/N+0/qVmRsm9kYGvFxJ5y2eE716XHrN6hAHn3POnctIFSjE7/
-         qBiA==
-X-Forwarded-Encrypted: i=1; AJvYcCUn8aGH5glmVNeH7jEs5AzYZp/fEKlUvTh10gvOnVnSFqzelAxghm/OLQzXN19dpGB/GaXm@lists.linux.dev
-X-Gm-Message-State: AOJu0YyCiq20ZFkuaxadoPCR6lXsw6TGbO1eX9ajnbxN6lrLcBh4th3C
-	y3yjQobcdvNtJLbH8RPFiT/RedGdoQa0XAMQ37glfNmjzQBz7dw5044XFyuFNeee+AwTmxhzKgo
-	ndPYJUil+NBj9l8GbYLQRWodeTV85YmY11ETEWkVS3ssxoPrzy589Mo3w6v+KuP9D
-X-Gm-Gg: AY/fxX5LN2yv4AgP0H6mtgxWtrWVY7crznc8Bt5g8fdt526XhKPc0cQsY4ONR5HEQy6
-	ieaDruRsTUxO8SKdaM0mtCLwTBEimRfOUqg6j9yokZ2ku2GkiHnwvEdUIyqVt8hJI7zHFxpLnKh
-	gKZa8NL9oH00MZjT8Kigd0kuNzRjp8drFkIlVCbuP0ivVPWM3liGGasLCvVUmbewovm7iHeVPrS
-	W/mnYY2qkalY1jErMcONWbPZKx3d0ocP52mGzeYkJTr84/a+5syg5xz/ydjuxnTjd/pRtAJnFDE
-	cyOgsuag4FLiZwqIzL9DUwvsHuBdcy6+kW87Cg8eNjFCV4pptJYBP6KK8931uGYdwcgrhFxOQ1J
-	eensR2F+4VesndDhNFQ/G2qND0pa0/jAuNNSqf42DEh0CtYHNa21/MYYBhb2G2emdgTVqkQ==
-X-Received: by 2002:ac8:6f11:0:b0:4f3:530f:d752 with SMTP id d75a77b69052e-4f4abdf0a9fmr252540931cf.81.1766577337010;
-        Wed, 24 Dec 2025 03:55:37 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHeViacEKRwjTIS0jjNlTmcjj1bhV4Nz1GOIydg0gyPvNKJdVkNhDTEAgASB6rHxaT18VyNaQ==
-X-Received: by 2002:ac8:6f11:0:b0:4f3:530f:d752 with SMTP id d75a77b69052e-4f4abdf0a9fmr252540521cf.81.1766577336575;
-        Wed, 24 Dec 2025 03:55:36 -0800 (PST)
-Received: from quoll.home (83.5.187.232.ipv4.supernova.orange.pl. [83.5.187.232])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64b9159a4eesm16344541a12.24.2025.12.24.03.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Dec 2025 03:55:36 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-To: Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH] phy: broadcom: ns-usb3: Fix Wvoid-pointer-to-enum-cast warning (again)
-Date: Wed, 24 Dec 2025 12:55:34 +0100
-Message-ID: <20251224115533.154162-2-krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H0I56F65"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766578854; x=1798114854;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=jDDzoEMDWKJjxdGROLKVvjf7g0T6U4unJ1T7ysSscaQ=;
+  b=H0I56F653Ef0Li3/MnFZ46Qx4Ppb7eOrN6kyfaNSCuJeslV9QC1e8n4E
+   /ivHTQHW3tDNKOWsUd3puM3nUki9tEfGdBpitpc8FsnoYQ+fdo0RUb0Eo
+   UpEQylTAd4EPjlP0FYI+go19xB6QRmWFbI8hqTbg/iSp370lDwDJcusr2
+   Bu69wMKt+ovwxsnw1nFGZteDxiLP9VwOK686Twit5tsr7RUna0OmbqlBf
+   LZBuDloXlhXuzw/8Ascf0Ji2fdXpOG2562UwAAyBP6xW0GIhqXcjzTxqB
+   qfSBQUTNlc9selSBugYekNSDrFwoun9xH4Jj2RkFwrRKJh5CWmGiofAxP
+   Q==;
+X-CSE-ConnectionGUID: 6VGwG0snTY2JeoXX0hTZ9A==
+X-CSE-MsgGUID: TMNRPOhhR4S+gcV6D8r1Ww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="68354720"
+X-IronPort-AV: E=Sophos;i="6.20,256,1758610800"; 
+   d="scan'208";a="68354720"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 04:20:53 -0800
+X-CSE-ConnectionGUID: LR/k6W1OQIWtevoLKMkHCA==
+X-CSE-MsgGUID: G2+gnj9MTfSPMLd72OaynQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,173,1763452800"; 
+   d="scan'208";a="199759525"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 24 Dec 2025 04:20:51 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYNrF-0000000032L-12pY;
+	Wed, 24 Dec 2025 12:20:49 +0000
+Date: Wed, 24 Dec 2025 20:20:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?B?UGF3ZcWC?= Narewski <pawel.narewski@nokia.com>,
+	linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linusw@kernel.org,
+	brgl@kernel.org,
+	=?utf-8?B?UGF3ZcWC?= Narewski <pawel.narewski@nokia.com>,
+	Jakub Lewalski <jakub.lewalski@nokia.com>
+Subject: Re: [PATCH] gpiolib: fix race condition for gdev->srcu
+Message-ID: <202512250122.ibtipV8L-lkp@intel.com>
+References: <20251223084952.1847489-1-pawel.narewski@nokia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1397; i=krzysztof.kozlowski@oss.qualcomm.com;
- h=from:subject; bh=vemuzK6Z66BYseCSrGp1BwERcxcZZRay3Ftgg54BBVI=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpS9S1lAkJZZmCPpM7M9YvzU/rLS2mcNFsWehPg
- j8ECdGO3IyJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaUvUtQAKCRDBN2bmhouD
- 1z3bD/4xYjvPn0SqX2FZC+wqx1X+YsgIE7EYwBmyh1hXiMWWAvk8LaAcTOp9AimevGbqUnrIlNv
- Gf0j+t7zkqaRL7ab96VKv8sENO+6NQqr2yyXw96dIohOoomo6AaoCTIhHOi9537OclmVeZ/ulaC
- q55zWYvSVIad8MHEvL5G/eVhG0IyZzVXfClA2ABSjCFTg+tTeF74vT75CtVm6IYPBlaG0cRPWBh
- G/oplrWTqOC5/iLYf8mBaFQFB+0TtrDAcQbp/PuNsXfF+WDcexVvNgax/qfHzrc1U3+In4A2GqQ
- 0d79WvZr7fgF9J+5KeaEEqGqxShWJzpU6Jx5ls5zxpuOGdB/7JNKuYGtaTfCO+yDI5fVc+7QEth
- UL7UeEvbqTCFTecbJii2MnlVoQgT6LVubd4FG26eiLhVSqoaq+8MLTyjnwvDahNl/MbfLJjNkRE
- PBAzFQpIc08m+OuMbfBowGCQLWWhXN/Pw/wkxGqI1ZSYvyubeAdWmM4v+HYXNEgJF2CuvixyGZw
- O8MOIrcRpIu4wqWsrzg9ibljzgJkjK4CqJL0Q8jmu8vS8jEpB6wFMlSpWxj+QL2foxRRwcYGO5T
- ehpiWfTvsSDI4NSaZrI8sgX05MRq5qhKhxESWX65iRb4EDLnBFF4MJ4j1jN3uxpQSquQDNSy0Hv w5DJKn5qAbdNFXA==
-X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI0MDEwMiBTYWx0ZWRfX23HJK/1tUTS/
- U/9lKCQts2ykX4ggoPcpMNh7+tJrikDw+7YhWBZXrM+JKTas7P4oB34oIAbJIrMpWrmAKeqEjUN
- BOmxw2JHYPXxvPzz1/1tuTMVo+RrCUIyMykA4yio9IM9l7neHdpnsDvfEDIo2yzGroS7FbjiEJH
- p3GcPDtqE4pI//hrHncAetUwtu7K1+AzMdOmWHC1htmcgBLhepD/NZct0X/Wah2GpQ3Cy5wGWYV
- pyyy5ZlMS79bNm8q7Q1Pqwn+aojk8U8Y9iRvkBJBaJoPzvt5/l+fQc9UWu2LlrPT8MVloT3dmWI
- VIF7Vf4CU0IZ3xu2MC8ZpXpo3bN7QvHgimzw1pTDT0abGtibrRPTc3YS73SiQONt4LcH6fPTMnH
- 0dys7QLznLl2eDi1+jeRPHOBrib5i6UTlxCneI50iDVzArrqtpPnSUHyfwWRgOY+zCM4PHCQw+i
- 7NwunoiKfA0P55eNVQg==
-X-Authority-Analysis: v=2.4 cv=IvATsb/g c=1 sm=1 tr=0 ts=694bd4ba cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=urQ9wjG1USoGuMoDBEOPbA==:17
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=9BVSq9XGK2-IPpPmIU8A:9 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-GUID: u5mEZNcAA0dpKu4l5enNSxBlkmTtWF_s
-X-Proofpoint-ORIG-GUID: u5mEZNcAA0dpKu4l5enNSxBlkmTtWF_s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-24_03,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 bulkscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512240102
+In-Reply-To: <20251223084952.1847489-1-pawel.narewski@nokia.com>
 
-"family" is an enum, thus cast of pointer on 64-bit compile test with
-clang W=1 causes:
+Hi Paweł,
 
-  phy-bcm-ns-usb3.c:206:17: error: cast to smaller integer type 'enum bcm_ns_family' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+kernel test robot noticed the following build errors:
 
-This was already fixed in commit bd6e74a2f0a0 ("phy: broadcom: ns-usb3:
-fix Wvoid-pointer-to-enum-cast warning") but then got bad in commit
-21bf6fc47a1e ("phy: Use device_get_match_data()").
+[auto build test ERROR on brgl/gpio/for-next]
+[also build test ERROR on linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Note that after various discussions the preferred cast is via "unsigned
-long", not "uintptr_t".
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawe-Narewski/gpiolib-fix-race-condition-for-gdev-srcu/20251223-165142
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20251223084952.1847489-1-pawel.narewski%40nokia.com
+patch subject: [PATCH] gpiolib: fix race condition for gdev->srcu
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251225/202512250122.ibtipV8L-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512250122.ibtipV8L-lkp@intel.com/reproduce)
 
-Fixes: 21bf6fc47a1e ("phy: Use device_get_match_data()")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
----
- drivers/phy/broadcom/phy-bcm-ns-usb3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512250122.ibtipV8L-lkp@intel.com/
 
-diff --git a/drivers/phy/broadcom/phy-bcm-ns-usb3.c b/drivers/phy/broadcom/phy-bcm-ns-usb3.c
-index 9f995e156f75..6e56498d0644 100644
---- a/drivers/phy/broadcom/phy-bcm-ns-usb3.c
-+++ b/drivers/phy/broadcom/phy-bcm-ns-usb3.c
-@@ -203,7 +203,7 @@ static int bcm_ns_usb3_mdio_probe(struct mdio_device *mdiodev)
- 	usb3->dev = dev;
- 	usb3->mdiodev = mdiodev;
- 
--	usb3->family = (enum bcm_ns_family)device_get_match_data(dev);
-+	usb3->family = (unsigned long)device_get_match_data(dev);
- 
- 	syscon_np = of_parse_phandle(dev->of_node, "usb3-dmp-syscon", 0);
- 	err = of_address_to_resource(syscon_np, 0, &res);
+All errors (new ones prefixed by >>):
+
+>> drivers/gpio/gpiolib.c:1109:2: error: no member named 'rwsem' in 'struct raw_notifier_head'
+    1109 |         BLOCKING_INIT_NOTIFIER_HEAD(&gdev->line_state_notifier);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/notifier.h:86:23: note: expanded from macro 'BLOCKING_INIT_NOTIFIER_HEAD'
+      86 |                 init_rwsem(&(name)->rwsem);     \
+         |                 ~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/linux/rwsem.h:121:16: note: expanded from macro 'init_rwsem'
+     121 |         __init_rwsem((sem), #sem, &__key);                      \
+         |                       ^~~
+   1 error generated.
+
+
+vim +1109 drivers/gpio/gpiolib.c
+
+  1044	
+  1045	int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+  1046				       struct lock_class_key *lock_key,
+  1047				       struct lock_class_key *request_key)
+  1048	{
+  1049		struct gpio_device *gdev;
+  1050		unsigned int desc_index;
+  1051		int base = 0;
+  1052		int ret;
+  1053	
+  1054		/*
+  1055		 * First: allocate and populate the internal stat container, and
+  1056		 * set up the struct device.
+  1057		 */
+  1058		gdev = kzalloc(sizeof(*gdev), GFP_KERNEL);
+  1059		if (!gdev)
+  1060			return -ENOMEM;
+  1061	
+  1062		gdev->dev.type = &gpio_dev_type;
+  1063		gdev->dev.bus = &gpio_bus_type;
+  1064		gdev->dev.parent = gc->parent;
+  1065		rcu_assign_pointer(gdev->chip, gc);
+  1066	
+  1067		gc->gpiodev = gdev;
+  1068		gpiochip_set_data(gc, data);
+  1069	
+  1070		device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
+  1071	
+  1072		ret = ida_alloc(&gpio_ida, GFP_KERNEL);
+  1073		if (ret < 0)
+  1074			goto err_free_gdev;
+  1075		gdev->id = ret;
+  1076	
+  1077		ret = dev_set_name(&gdev->dev, GPIOCHIP_NAME "%d", gdev->id);
+  1078		if (ret)
+  1079			goto err_free_ida;
+  1080	
+  1081		if (gc->parent && gc->parent->driver)
+  1082			gdev->owner = gc->parent->driver->owner;
+  1083		else if (gc->owner)
+  1084			/* TODO: remove chip->owner */
+  1085			gdev->owner = gc->owner;
+  1086		else
+  1087			gdev->owner = THIS_MODULE;
+  1088	
+  1089		ret = gpiochip_get_ngpios(gc, &gdev->dev);
+  1090		if (ret)
+  1091			goto err_free_dev_name;
+  1092	
+  1093		gdev->descs = kcalloc(gc->ngpio, sizeof(*gdev->descs), GFP_KERNEL);
+  1094		if (!gdev->descs) {
+  1095			ret = -ENOMEM;
+  1096			goto err_free_dev_name;
+  1097		}
+  1098	
+  1099		gdev->label = kstrdup_const(gc->label ?: "unknown", GFP_KERNEL);
+  1100		if (!gdev->label) {
+  1101			ret = -ENOMEM;
+  1102			goto err_free_descs;
+  1103		}
+  1104	
+  1105		gdev->ngpio = gc->ngpio;
+  1106		gdev->can_sleep = gc->can_sleep;
+  1107	
+  1108		rwlock_init(&gdev->line_state_lock);
+> 1109		BLOCKING_INIT_NOTIFIER_HEAD(&gdev->line_state_notifier);
+  1110		BLOCKING_INIT_NOTIFIER_HEAD(&gdev->device_notifier);
+  1111	
+  1112		ret = init_srcu_struct(&gdev->srcu);
+  1113		if (ret)
+  1114			goto err_free_label;
+  1115	
+  1116		ret = init_srcu_struct(&gdev->desc_srcu);
+  1117		if (ret)
+  1118			goto err_cleanup_gdev_srcu;
+  1119	
+  1120	
+  1121		scoped_guard(mutex, &gpio_devices_lock) {
+  1122			/*
+  1123			 * TODO: this allocates a Linux GPIO number base in the global
+  1124			 * GPIO numberspace for this chip. In the long run we want to
+  1125			 * get *rid* of this numberspace and use only descriptors, but
+  1126			 * it may be a pipe dream. It will not happen before we get rid
+  1127			 * of the sysfs interface anyways.
+  1128			 */
+  1129			base = gc->base;
+  1130			if (base < 0) {
+  1131				base = gpiochip_find_base_unlocked(gc->ngpio);
+  1132				if (base < 0) {
+  1133					ret = base;
+  1134					base = 0;
+  1135					goto err_cleanup_desc_srcu;
+  1136				}
+  1137	
+  1138				/*
+  1139				 * TODO: it should not be necessary to reflect the
+  1140				 * assigned base outside of the GPIO subsystem. Go over
+  1141				 * drivers and see if anyone makes use of this, else
+  1142				 * drop this and assign a poison instead.
+  1143				 */
+  1144				gc->base = base;
+  1145			} else {
+  1146				dev_warn(&gdev->dev,
+  1147					 "Static allocation of GPIO base is deprecated, use dynamic allocation.\n");
+  1148			}
+  1149	
+  1150			gdev->base = base;
+  1151	
+  1152			ret = gpiodev_add_to_list_unlocked(gdev);
+  1153			if (ret) {
+  1154				gpiochip_err(gc, "GPIO integer space overlap, cannot add chip\n");
+  1155				goto err_cleanup_desc_srcu;
+  1156			}
+  1157		}
+  1158	
+
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
