@@ -1,186 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2303148A4;
-	Wed, 24 Dec 2025 17:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71FB2580DE;
+	Wed, 24 Dec 2025 20:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766597825; cv=none; b=Hj7Kaw10XT6BYwjnedFsOPtn5mB7teYBKyqiA3xQDTqti43eM/Jhe1plOptix0Y/diGWuTdvHr57aE1oCPBnC6qOGGji2BwwzZuDRf/upm/JW29eMpLNxce+MIAhhhiKvp7GPRrvtgdUNuIQhQEvLeHZnrBEY00E+KS3c90KUqM=
+	t=1766608934; cv=none; b=piLKnxe1Qjf/RDQQHwoGytoZiqq6vg6e5IyYiEFnBAp/XJQHRdAbav6svM5DIhCBTWeN9xD55bnkORt7XqQ08BD5NS+/C2b7wGnH3LJKWhhmhoB9zGBjf38WdccBTOpe2uewZZRO6u//aWsgxrHRGdDrWV2YqrnSZDnZOoqzaLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766597825; c=relaxed/simple;
-	bh=fo818rKYUV3iUz7vVpkzO40wvdFahdJjmFMcTzoxsVA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dny1yduNqQI7F5Lb1fAp4n9MMli+LEvGUcm9BtclQvF+C+zqzmiDw5kc2Wa3lyGgZq1Oe4kI4OMSCgrYI8Tq++PigPbdeiBG0B/N6X7gtIR2FMjTcpiXXNvx8+HymNGUs2FnKWeOs5ILSqLGhTedczSnZH8XvcKT44N3SpgBYXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KkVb51ah; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1766608934; c=relaxed/simple;
+	bh=XrVB5bzV6PlxMhUCLbZ8BG4J7YUU7NXZcC+QkTxn+dk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ZJzRB+jvVOMB/vKV4memhVa/pBt/FKrk0dNdl1xRrYS3qN6xVpYJxBBUKuaDLVdxnLI+aLPObYIcrQdMulqCP7wqhpq/5kY7fAXwaOEMFEe+UGYGF6PctcBKPgNcgl8huP0flElafiswTOPa/WGR1EVvGMiY6pBrsEybYACQVQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g2i14Kuu; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KkVb51ah"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g2i14Kuu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766597821; x=1798133821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fo818rKYUV3iUz7vVpkzO40wvdFahdJjmFMcTzoxsVA=;
-  b=KkVb51ahAMPzv+FLYs3JZupthweh1pATsDAJnXBYol/tNBXFYy1I2avj
-   gYB2NCShDuh9blUdjlQ4bTX7csnAePahN26pCL37+2bcNGfkw7x/hi7IN
-   k6/ipeKOUyoVwmdWWZ7n88eeS0LVUT9oV1SoCPEAghG6/HvHa0KqUfxWT
-   8DXUmxKLPVuVqvqiVo9fKlRQX6qeyrb1NCDOvV/3vdWlS0rhe3TsDZZUU
-   p9LKKyyi6igjIAxKSFLWxmp3i0nMl6DzNN9VhK5uCJuDZ6poQ6bF7YmqZ
-   DPoDlj/Ux/fAbkFPLw5Vd4YKslVTyETI8Bc+jPUFtcmtwnBZBRGciLlS7
-   A==;
-X-CSE-ConnectionGUID: RrGFWBFcQL2ojehQxpdpqQ==
-X-CSE-MsgGUID: l6v3fsBFRsCNZE5No+A1nQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="72291875"
+  t=1766608932; x=1798144932;
+  h=date:from:to:cc:subject:message-id;
+  bh=XrVB5bzV6PlxMhUCLbZ8BG4J7YUU7NXZcC+QkTxn+dk=;
+  b=g2i14Kuusr4uOZ0lKDDeiZycZbSSJ/ge9IRH/QEV5wjVt2W0FYaKJVv1
+   HmyKkhbPCw4uUibmXHmO5ZQXYd2F3TUOVdQKirqXv2tPbmi6/VNj7YxY6
+   eFdew+ZtqEMAutGadzeLCnlw06msVGWPkO0MTqekMlZhXZ71XFtoZYIz9
+   ZFG4Q/Y53Bp+PXBiPjiY56be3BrFsD2hwAn5tNqXojjEPjZEcj3wQlULx
+   6tr6yt9KmGjn7Wfxh6gAMawIdn9AniQsfPXFWsVmZUdMt1b7kIMyWeOVd
+   f4HiojqgvziCJWQsOV06dg2x9Q8veKYzWMcP5CC3ITQORKPqYEAP7U6zX
+   g==;
+X-CSE-ConnectionGUID: HWEFSgC8S1uTwrcSESYtIw==
+X-CSE-MsgGUID: csKnn/fYQq+gcD9PrUbVDA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68513772"
 X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
-   d="scan'208";a="72291875"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 09:36:59 -0800
-X-CSE-ConnectionGUID: fa3qXGNKT6enRSexsYWaQw==
-X-CSE-MsgGUID: KeXmPxyBRo+wTk1epwSTeg==
+   d="scan'208";a="68513772"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 12:42:11 -0800
+X-CSE-ConnectionGUID: JVJPIdZ7Q/a6k/jbZamnsw==
+X-CSE-MsgGUID: m9cG7qDETK2E4hFS+R5poA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
-   d="scan'208";a="223542813"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Dec 2025 09:36:57 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+   d="scan'208";a="204220918"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 24 Dec 2025 12:42:09 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vYSn8-000000006IK-3edH;
-	Wed, 24 Dec 2025 17:36:54 +0000
-Date: Wed, 24 Dec 2025 18:35:55 +0100
+	id 1vYVgM-000000003RG-22QE;
+	Wed, 24 Dec 2025 20:42:06 +0000
+Date: Thu, 25 Dec 2025 04:41:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yanfei Xu <yanfei.xu@bytedance.com>, pbonzini@redhat.com
+To: David Lechner <dlechner@baylibre.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, caixiangfeng@bytedance.com,
-	fangying.tommy@bytedance.com, yanfei.xu@bytedance.com
-Subject: Re: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in
- kvm_set_irq_routing()
-Message-ID: <202512241858.vP31c8Cu-lkp@intel.com>
-References: <20251224023201.381586-1-yanfei.xu@bytedance.com>
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Nuno Sa <nuno.sa@analog.com>
+Subject: drivers/gpu/drm/panel/panel-samsung-ld9040.c:240:12:
+ warning: stack frame size (8344) exceeds limit (8192) in 'ld9040_prepare'
+Message-ID: <202512250407.8W7HmLYR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251224023201.381586-1-yanfei.xu@bytedance.com>
 
-Hi Yanfei,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on kvm/next linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yanfei-Xu/KVM-irqchip-KVM-Reduce-allocation-overhead-in-kvm_set_irq_routing/20251224-103451
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20251224023201.381586-1-yanfei.xu%40bytedance.com
-patch subject: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in kvm_set_irq_routing()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251224/202512241858.vP31c8Cu-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b927546677c876e26eba308550207c2ddf812a43
+commit: 700a281905f2a4ccf6f3b2d3cd6985e034b4b021 spi: add offload TX/RX streaming APIs
+date:   11 months ago
+config: x86_64-randconfig-013-20251225 (https://download.01.org/0day-ci/archive/20251225/202512250407.8W7HmLYR-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512241858.vP31c8Cu-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512250407.8W7HmLYR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512241858.vP31c8Cu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512250407.8W7HmLYR-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/../../../virt/kvm/irqchip.c:190:6: warning: variable 'r' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     190 |         if (!e)
-         |             ^~
-   arch/x86/kvm/../../../virt/kvm/irqchip.c:233:9: note: uninitialized use occurs here
-     233 |         return r;
-         |                ^
-   arch/x86/kvm/../../../virt/kvm/irqchip.c:190:2: note: remove the 'if' if its condition is always false
-     190 |         if (!e)
-         |         ^~~~~~~
-     191 |                 goto out;
-         |                 ~~~~~~~~
-   arch/x86/kvm/../../../virt/kvm/irqchip.c:176:7: note: initialize the variable 'r' to silence this warning
-     176 |         int r;
-         |              ^
-         |               = 0
+>> drivers/gpu/drm/panel/panel-samsung-ld9040.c:240:12: warning: stack frame size (8344) exceeds limit (8192) in 'ld9040_prepare' [-Wframe-larger-than]
+     240 | static int ld9040_prepare(struct drm_panel *panel)
+         |            ^
    1 warning generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
 
-vim +190 arch/x86/kvm/../../../virt/kvm/irqchip.c
 
-   167	
-   168	int kvm_set_irq_routing(struct kvm *kvm,
-   169				const struct kvm_irq_routing_entry *ue,
-   170				unsigned nr,
-   171				unsigned flags)
-   172	{
-   173		struct kvm_irq_routing_table *new, *old;
-   174		struct kvm_kernel_irq_routing_entry *e;
-   175		u32 i, j, nr_rt_entries = 0;
-   176		int r;
-   177	
-   178		for (i = 0; i < nr; ++i) {
-   179			if (ue[i].gsi >= KVM_MAX_IRQ_ROUTES)
-   180				return -EINVAL;
-   181			nr_rt_entries = max(nr_rt_entries, ue[i].gsi);
-   182		}
-   183	
-   184		nr_rt_entries += 1;
-   185	
-   186		new = kzalloc(struct_size(new, map, nr_rt_entries), GFP_KERNEL_ACCOUNT);
-   187		if (!new)
-   188			return -ENOMEM;
-   189		e = kcalloc(nr, sizeof(*e), GFP_KERNEL_ACCOUNT);
- > 190		if (!e)
-   191			goto out;
-   192		new->entries_addr = e;
-   193	
-   194		new->nr_rt_entries = nr_rt_entries;
-   195		for (i = 0; i < KVM_NR_IRQCHIPS; i++)
-   196			for (j = 0; j < KVM_IRQCHIP_NUM_PINS; j++)
-   197				new->chip[i][j] = -1;
-   198	
-   199		for (i = 0; i < nr; ++i) {
-   200			r = -EINVAL;
-   201			switch (ue->type) {
-   202			case KVM_IRQ_ROUTING_MSI:
-   203				if (ue->flags & ~KVM_MSI_VALID_DEVID)
-   204					goto out;
-   205				break;
-   206			default:
-   207				if (ue->flags)
-   208					goto out;
-   209				break;
-   210			}
-   211			r = setup_routing_entry(kvm, new, e + i, ue);
-   212			if (r)
-   213				goto out;
-   214			++ue;
-   215		}
-   216	
-   217		mutex_lock(&kvm->irq_lock);
-   218		old = rcu_dereference_protected(kvm->irq_routing, 1);
-   219		rcu_assign_pointer(kvm->irq_routing, new);
-   220		kvm_irq_routing_update(kvm);
-   221		kvm_arch_irq_routing_update(kvm);
-   222		mutex_unlock(&kvm->irq_lock);
-   223	
-   224		synchronize_srcu_expedited(&kvm->irq_srcu);
-   225	
-   226		new = old;
-   227		r = 0;
-   228		goto out;
-   229	
-   230	out:
-   231		free_irq_routing_table(new);
-   232	
-   233		return r;
-   234	}
-   235	
+vim +/ld9040_prepare +240 drivers/gpu/drm/panel/panel-samsung-ld9040.c
+
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  239  
+099b3e8699322e drivers/gpu/drm/panel/panel-ld9040.c Ajay Kumar    2014-07-31 @240  static int ld9040_prepare(struct drm_panel *panel)
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  241  {
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  242  	struct ld9040 *ctx = panel_to_ld9040(panel);
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  243  	int ret;
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  244  
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  245  	ret = ld9040_power_on(ctx);
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  246  	if (ret < 0)
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  247  		return ret;
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  248  
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  249  	ld9040_init(ctx);
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  250  
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  251  	ret = ld9040_clear_error(ctx);
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  252  
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  253  	if (ret < 0)
+8141028278c2ea drivers/gpu/drm/panel/panel-ld9040.c Ajay Kumar    2014-07-31  254  		ld9040_unprepare(panel);
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  255  
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  256  	return ret;
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  257  }
+ff219937763253 drivers/gpu/drm/panel/panel-ld9040.c Andrzej Hajda 2014-03-26  258  
+
+:::::: The code at line 240 was first introduced by commit
+:::::: 099b3e8699322efb7229913d2c1651588205f182 drm/panel: ld9040: Add dummy prepare and unprepare routines
+
+:::::: TO: Ajay Kumar <ajaykumar.rs@samsung.com>
+:::::: CC: Thierry Reding <treding@nvidia.com>
 
 -- 
 0-DAY CI Kernel Test Service
