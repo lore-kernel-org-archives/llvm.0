@@ -1,110 +1,145 @@
-Received: from aposti.net (aposti.net [185.119.170.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886ED31A061
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 13:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.119.170.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940592F2918;
+	Wed, 24 Dec 2025 13:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766583619; cv=none; b=FuHWbYUA+anh+/tuyWC/gNZJetl9+VHC0YGEk15iirdLl7/3/r5RH4tSOKMCvy/aYwxLMNBLGCCPtEdOuukB//GZl7KNt/WjHuQmD46CHMxe7ATA4q4I7jLSlfmtlP8VZlgAGT8EIFPFLlXx0WG+d1N1f8hj0p4NAJ19AI9tnxw=
+	t=1766583965; cv=none; b=av+mLYBZI6LkawY93ZcXsgzVGgiSoJGJspZb6N6qS0Im1syiQXhA6bu7CtfnCK/zvfow3XevzP/QV9js0HdxjuIibe9kLNSDkMCbcZtatXYMMMO1VrTzsZc17HSztiPqKCfe7xYJNCu0wP8tO62A/YAi9jZsdU2fcGxsonYoPGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766583619; c=relaxed/simple;
-	bh=bTY5HM17BasmovFf7os5QH3GUWn/+RHsPCkAtVxwwHA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ovwSdcl+2ndD+kEFHuapoU17k8n52SxeEfr2VIVNlnuLdnKxoZdbiXVTik+y15vXEjPIQdRiMMKculVOBDyrj8CHTh/t30PQnnnJk24O/ZAIfh5rSrE1VzPq4vcr/BaUif/6IyPEaCl/EaOY3e/WilnT2XLmuAH9+UwkXSSb/W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=DEHZIvg4; arc=none smtp.client-ip=185.119.170.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+	s=arc-20240116; t=1766583965; c=relaxed/simple;
+	bh=/d91pAxAO2VuPVofRj/M6dRUJOyR68jCa4G2snyUv8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HSSUuCiH456dHiDYhwXWKpl02rLvx75XNZ0bNqbKxb8hVslak0ptglv4tBVLwMjN7ZPFZU4EkmmbJEKoNOLlAyzPiPKBREC+B1C5FkowL2cPE5uHaHd4tXGLjmo3Ch3evlMGqabzxQH6yqQGMXeHUvPwFP3c5ieevIJazeVmetg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lx5P0E2b; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="DEHZIvg4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1766583118;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=xbu83KDb8EzV5fBCpVF9Ofv9QvuINTQfWgSaYI2v7SA=;
-	b=DEHZIvg4Ki+CGC9dPeVP65atqr2lD/HbbCKx2IgDAZyJ++LHBm6mGdJpLvqm1yVa6wvdCo
-	e33UpVsAOyw6MNZnD9cFpL+K1heqU7rD5VAIJijN9F4mwjYwoixKdfDqpvXni9X7q/WsRp
-	D55qOu5YZ0UXQidG7niJggEcy9NMSOc=
-Message-ID: <e661a947f0cefb1651dcd3f7f57855313ad9fd7a.camel@crapouillou.net>
-Subject: Re: [PATCH 3/4] mmc: jz4740: Fix Wvoid-pointer-to-enum-cast warning
-From: Paul Cercueil <paul@crapouillou.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Aubin
- Constans <aubin.constans@microchip.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Nicolas Ferre	 <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,  Claudiu Beznea
- <claudiu.beznea@tuxon.dev>, Robert Richter <rric@kernel.org>, Andrew
- Jeffery	 <andrew@codeconstruct.com.au>, Adrian Hunter
- <adrian.hunter@intel.com>, Joel Stanley <joel@jms.id.au>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers	 <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-mmc@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, 	linux-mips@vger.kernel.org,
- linux-aspeed@lists.ozlabs.org, 	openbmc@lists.ozlabs.org,
- llvm@lists.linux.dev
-Date: Wed, 24 Dec 2025 14:30:56 +0100
-In-Reply-To: <20251224124431.208434-7-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20251224124431.208434-5-krzysztof.kozlowski@oss.qualcomm.com>
-	 <20251224124431.208434-7-krzysztof.kozlowski@oss.qualcomm.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRU=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lx5P0E2b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766583963; x=1798119963;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/d91pAxAO2VuPVofRj/M6dRUJOyR68jCa4G2snyUv8g=;
+  b=Lx5P0E2bkanpWm1p+8d6FpnjsG6+EmbojTBtA7B267eA3oPQJbz39mR8
+   W6HoqTL+tE//38h2/2dFz4RAYmrR/jWPTPR3rDj+a+ZZ2DBryZg77Qt+8
+   3Kh9tqq8opkedz2nCnUw461fwO2D95lXBoz5iCSGAJlGcKc9iwqtppB/N
+   yvpuziXHaoFfP8ZxurHwlA7AvVr/1H6hcLc0Y5/WJUlCMGweLWjPwfqBv
+   qL5L8uIhpl+jbFkGEg3Xr6vEkAlTPkYgwixspnQk1Pmf5F/96dNppZhXh
+   yaiNqqgyw8c4ftF5kScTwfDibYqLq0p46QOQEwz0s8AKiajdPoKbyAeFO
+   Q==;
+X-CSE-ConnectionGUID: 3y/repLRTEKZZbWQy+W0Kg==
+X-CSE-MsgGUID: Uo/wJ19AS26N51IgH3wo7g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68473060"
+X-IronPort-AV: E=Sophos;i="6.21,173,1763452800"; 
+   d="scan'208";a="68473060"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 05:46:02 -0800
+X-CSE-ConnectionGUID: 1kV1MSVbQEmK7frEI5p81A==
+X-CSE-MsgGUID: qwRHu9mpSJu7ErxGnSj0XQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,173,1763452800"; 
+   d="scan'208";a="200002622"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 24 Dec 2025 05:46:00 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYPAz-0000000037d-0v75;
+	Wed, 24 Dec 2025 13:45:25 +0000
+Date: Wed, 24 Dec 2025 21:44:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Khaled Saleh <khaled.saleh.req@gmail.com>, rostedt@goodmis.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+	linux-kernel@vger.kernel.org,
+	Khaled Saleh <khaled.saleh.req@gmail.com>
+Subject: Re: [PATCH] trace: make ftrace likely counters atomic
+Message-ID: <202512242156.fyUcX7CR-lkp@intel.com>
+References: <20251223203715.10954-1-khaled.saleh.req@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251223203715.10954-1-khaled.saleh.req@gmail.com>
 
-Hi Krzysztof,
+Hi Khaled,
 
-Le mercredi 24 d=C3=A9cembre 2025 =C3=A0 13:44 +0100, Krzysztof Kozlowski a
-=C3=A9crit=C2=A0:
-> "jz4740" is an enum, thus cast of pointer on 64-bit compile test with
-> clang W=3D1 causes:
->=20
-> =C2=A0 jz4740_mmc.c:1055:18: error: cast to smaller integer type 'enum
-> jz4740_mmc_version' from 'const void *' [-Werror,-Wvoid-pointer-to-
-> enum-cast]
->=20
-> Signed-off-by: Krzysztof Kozlowski
-> <krzysztof.kozlowski@oss.qualcomm.com>
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
--Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Khaled-Saleh/trace-make-ftrace-likely-counters-atomic/20251224-044106
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20251223203715.10954-1-khaled.saleh.req%40gmail.com
+patch subject: [PATCH] trace: make ftrace likely counters atomic
+config: hexagon-randconfig-002-20251224 (https://download.01.org/0day-ci/archive/20251224/202512242156.fyUcX7CR-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512242156.fyUcX7CR-lkp@intel.com/reproduce)
 
-> ---
-> =C2=A0drivers/mmc/host/jz4740_mmc.c | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mmc/host/jz4740_mmc.c
-> b/drivers/mmc/host/jz4740_mmc.c
-> index 6a0d0250d47b..6a3c26b7c82d 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -1052,7 +1052,7 @@ static int jz4740_mmc_probe(struct
-> platform_device* pdev)
-> =C2=A0	host =3D mmc_priv(mmc);
-> =C2=A0
-> =C2=A0	/* Default if no match is JZ4740 */
-> -	host->version =3D (enum
-> jz4740_mmc_version)device_get_match_data(&pdev->dev);
-> +	host->version =3D (unsigned long)device_get_match_data(&pdev-
-> >dev);
-> =C2=A0
-> =C2=A0	ret =3D mmc_of_parse(mmc);
-> =C2=A0	if (ret)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512242156.fyUcX7CR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace_branch.c:219:19: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'atomic_long_t *' (aka 'atomic_t *') [-Wincompatible-pointer-types]
+     219 |                 atomic_long_inc(&f->data.correct);
+         |                                 ^~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:3589:32: note: passing argument to parameter 'v' here
+    3589 | atomic_long_inc(atomic_long_t *v)
+         |                                ^
+   kernel/trace/trace_branch.c:221:18: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'atomic_long_t *' (aka 'atomic_t *') [-Wincompatible-pointer-types]
+     221 |         atomic_long_inc(&f->data.incorrect);
+         |                         ^~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:3589:32: note: passing argument to parameter 'v' here
+    3589 | atomic_long_inc(atomic_long_t *v)
+         |                                ^
+   2 errors generated.
+
+
+vim +219 kernel/trace/trace_branch.c
+
+   198	
+   199	void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+   200				  int expect, int is_constant)
+   201	{
+   202		unsigned long flags = user_access_save();
+   203	
+   204		/* A constant is always correct */
+   205		if (is_constant) {
+   206			f->constant++;
+   207			val = expect;
+   208		}
+   209		/*
+   210		 * I would love to have a trace point here instead, but the
+   211		 * trace point code is so inundated with unlikely and likely
+   212		 * conditions that the recursive nightmare that exists is too
+   213		 * much to try to get working. At least for now.
+   214		 */
+   215		trace_likely_condition(f, val, expect);
+   216	
+   217		/* FIXME: Make this atomic! */
+   218		if (val == expect) {
+ > 219			atomic_long_inc(&f->data.correct);
+   220		} else {
+   221		atomic_long_inc(&f->data.incorrect);
+   222		}
+   223	
+   224		user_access_restore(flags);
+   225	}
+   226	EXPORT_SYMBOL(ftrace_likely_update);
+   227	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
