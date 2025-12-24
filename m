@@ -1,147 +1,204 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E173131A81F
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 16:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9678223AB98;
+	Wed, 24 Dec 2025 17:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766593798; cv=none; b=rJfodun0kBSSNgsJEVmlqQDcHcQtB3xYQA6pHCHvpFVPoMobYpEVjHjC4ECf7SDCBUkn6K8FOiCmWhsJOOtWhxbSweD2TpqhB2+xqy6aS5yR8jfGmSs5dncXGONq99XZKIXHSePFXiDNsxffyhR4HoKESI9eu5W3fc5AkTgYa8M=
+	t=1766597212; cv=none; b=fIGGJczUM7/eKlWRiJ29QeixSNNYeo6NXyShhJr7xYqz5dX26UXKmICLUL/khYiOzbWl/qURov8pvCq71uB1/yRNXB2BI0W9GLTAUxfgRQ4fXihEbHsdS39U6TGucqBTaXV30wMCR/54uJBqcsAVDRPqt+GO7rF2jVdF4kYyZnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766593798; c=relaxed/simple;
-	bh=xnT+EvR0s5oIZp/3XXt4XA68h5snb9BsA7e9vL/N/vM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Kx7JkilJ2gM5mad4wCJlZ86gstw3x1f7TopF80HZYvJtMqTSC7/ovUfKDNNQhNpA6yz60KqzjhnnUbgkT/XFiurDjJX1s/A7PoU2/LFNhv/0NwOrQRfgDrKon6n2OjqEI0YpQf0v062KQu892Tuwb1qAvYp4NUr1xJIu/oHoc6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=D+OgRvDO; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1766597212; c=relaxed/simple;
+	bh=XG5dlRwOvowC+M8+nqEdM+9kKwWj2fDGtVuY6Ihq/14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KCJp3kA49clROF51+Ou0GMFcpAoI6TzfEuDo15rYfb5NIfDX/iEtM4N9aJSzly8zL1Glu96aRpTaz5neAl1YVF4AAldIU2+mchbyaA56WNoUA9vTIPEcuYYOwbiloS1/wkxGWBhMLns5nbLX8RJzwxDgR+E43TlvfC6T/qop0ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iS7z6Yw/; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="D+OgRvDO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iS7z6Yw/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1766593796; x=1798129796;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=xnT+EvR0s5oIZp/3XXt4XA68h5snb9BsA7e9vL/N/vM=;
-  b=D+OgRvDOSFxUZW3xGPuf0uqDQGlYJAs6OQjkwPNspoIsEddO3K0zN9jh
-   yMQY4jZ4VMYsbYNdsqv5SyM1Swg3Vqqwsed3/87K8X8EU817d3fytOc/0
-   ecFVoI7VuXSw6U5GJtnh8od/ly6z6s0CY8jB/kHzbOacpDKn/vRdBKWWV
-   47p6mHEDrr0UXZxzknomMojFozSP7eYxCWgkpAYWUVy9NrfEgJRPvMfHB
-   TOu+fjCXVy7GX3CY4JcTRj/k4wewOgzQiOup7mrqt0fCP4bn85PXSRRHE
-   h77KuMLBs80ALOlfe7YHy3SBVG+UnUX88nRhNnPEe0eEBW36Z0gICGFo8
-   A==;
-X-CSE-ConnectionGUID: 1mpAtqqvTWKDWP3ouM+OuA==
-X-CSE-MsgGUID: bJulCPQ/SGmZ0iD/Mn03NA==
-X-IronPort-AV: E=Sophos;i="6.21,174,1763449200"; 
-   d="scan'208";a="51495333"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Dec 2025 09:29:48 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Wed, 24 Dec 2025 09:29:25 -0700
-Received: from [10.171.248.28] (10.10.85.11) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Wed, 24 Dec 2025 09:29:20 -0700
-Message-ID: <9faff0a3-0f3d-4e51-ab5b-0cf0204ee4fd@microchip.com>
-Date: Wed, 24 Dec 2025 17:29:19 +0100
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766597210; x=1798133210;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XG5dlRwOvowC+M8+nqEdM+9kKwWj2fDGtVuY6Ihq/14=;
+  b=iS7z6Yw/o70DnLiMKL8SdxPa+HaScNf9PeOGqIsNeynm+CrmeH7UElrY
+   Pj/CKJvyAKDYS314PuLGhS20m6oRe0P4i9cYmVcw6/RnxqMJ8ac8UA7Ly
+   ZS3HqVtHUKQqn5YA1ZlsWkYekZNgi8Re0X4UkqPTF3wEZh5+fFfHbBYHD
+   2McdCcr3RX09ZQeSGQ9BMEcHmZ3HLqkyqp59e2Ac2f8voDb21qbFM+0Qr
+   FD8wMHWCwPOfDRRx7caDaAF3RJfvZlgF0uMah+TOXi7MRMaCdDVxRMCo/
+   LY+3nKnTYhK5rk+z+J72UJI7BrPhGten7XDLrT2kuE1tlI/EHwTY0OMPA
+   g==;
+X-CSE-ConnectionGUID: vZdNf0GqTCWCR6rCZstoZQ==
+X-CSE-MsgGUID: XFLUcTvLTn61YmYGfJR9zQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68415003"
+X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
+   d="scan'208";a="68415003"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 09:26:50 -0800
+X-CSE-ConnectionGUID: WbxWu0zkQAOUpen9vMtANw==
+X-CSE-MsgGUID: XSA1HX4rSy6bhh+XTpkEBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
+   d="scan'208";a="237446533"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 24 Dec 2025 09:26:44 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYSdF-000000003K5-1xOA;
+	Wed, 24 Dec 2025 17:26:41 +0000
+Date: Thu, 25 Dec 2025 01:26:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marijn Suijten <marijn.suijten@somainline.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Simona Vetter <simona@ffwll.ch>,
+	Casey Connolly <casey.connolly@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	~postmarketos/upstreaming@lists.sr.ht,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+	Martin Botka <martin.botka@somainline.org>,
+	Jami Kettunen <jami.kettunen@somainline.org>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Kuogee Hsieh <quic_khsieh@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Dmitry Baryshkov <lumag@kernel.org>
+Subject: Re: [PATCH v2 09/11] drm/panel: Add panel driver for Samsung
+ SOUXP00-A DDIC
+Message-ID: <202512250101.ljTix9QV-lkp@intel.com>
+References: <20251222-drm-panels-sony-v2-9-82a87465d163@somainline.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] mmc: atmel-mci: Simplify with scoped for each OF
- child loop
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Aubin Constans
-	<aubin.constans@microchip.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@tuxon.dev>, Robert Richter <rric@kernel.org>, Paul Cercueil
-	<paul@crapouillou.net>, Andrew Jeffery <andrew@codeconstruct.com.au>, "Adrian
- Hunter" <adrian.hunter@intel.com>, Joel Stanley <joel@jms.id.au>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, "Justin
- Stitt" <justinstitt@google.com>, <linux-mmc@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
-	<openbmc@lists.ozlabs.org>, <llvm@lists.linux.dev>
-References: <20251224124431.208434-5-krzysztof.kozlowski@oss.qualcomm.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <20251224124431.208434-5-krzysztof.kozlowski@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251222-drm-panels-sony-v2-9-82a87465d163@somainline.org>
 
-On 24/12/2025 at 13:44, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Hi Marijn,
 
-Reviewed-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+kernel test robot noticed the following build warnings:
 
-Thanks Krzysztof, best regards,
-   Nicolas
+[auto build test WARNING on cc3aa43b44bdb43dfbac0fcb51c56594a11338a8]
 
-> ---
->   drivers/mmc/host/atmel-mci.c | 12 +++---------
->   1 file changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-> index fdf6926ea468..3b4928f5b9b2 100644
-> --- a/drivers/mmc/host/atmel-mci.c
-> +++ b/drivers/mmc/host/atmel-mci.c
-> @@ -629,14 +629,13 @@ static int atmci_of_init(struct atmel_mci *host)
->   {
->          struct device *dev = host->dev;
->          struct device_node *np = dev->of_node;
-> -       struct device_node *cnp;
->          u32 slot_id;
->          int err;
-> 
->          if (!np)
->                  return dev_err_probe(dev, -EINVAL, "device node not found\n");
-> 
-> -       for_each_child_of_node(np, cnp) {
-> +       for_each_child_of_node_scoped(np, cnp) {
->                  if (of_property_read_u32(cnp, "reg", &slot_id)) {
->                          dev_warn(dev, "reg property is missing for %pOF\n", cnp);
->                          continue;
-> @@ -645,7 +644,6 @@ static int atmci_of_init(struct atmel_mci *host)
->                  if (slot_id >= ATMCI_MAX_NR_SLOTS) {
->                          dev_warn(dev, "can't have more than %d slots\n",
->                                   ATMCI_MAX_NR_SLOTS);
-> -                       of_node_put(cnp);
->                          break;
->                  }
-> 
-> @@ -658,10 +656,8 @@ static int atmci_of_init(struct atmel_mci *host)
->                                                "cd", GPIOD_IN, "cd-gpios");
->                  err = PTR_ERR_OR_ZERO(host->pdata[slot_id].detect_pin);
->                  if (err) {
-> -                       if (err != -ENOENT) {
-> -                               of_node_put(cnp);
-> +                       if (err != -ENOENT)
->                                  return err;
-> -                       }
->                          host->pdata[slot_id].detect_pin = NULL;
->                  }
-> 
-> @@ -673,10 +669,8 @@ static int atmci_of_init(struct atmel_mci *host)
->                                                "wp", GPIOD_IN, "wp-gpios");
->                  err = PTR_ERR_OR_ZERO(host->pdata[slot_id].wp_pin);
->                  if (err) {
-> -                       if (err != -ENOENT) {
-> -                               of_node_put(cnp);
-> +                       if (err != -ENOENT)
->                                  return err;
-> -                       }
->                          host->pdata[slot_id].wp_pin = NULL;
->                  }
->          }
-> --
-> 2.51.0
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Marijn-Suijten/drm-panel-Clean-up-SOFEF00-config-dependencies/20251222-073548
+base:   cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
+patch link:    https://lore.kernel.org/r/20251222-drm-panels-sony-v2-9-82a87465d163%40somainline.org
+patch subject: [PATCH v2 09/11] drm/panel: Add panel driver for Samsung SOUXP00-A DDIC
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251225/202512250101.ljTix9QV-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512250101.ljTix9QV-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512250101.ljTix9QV-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/panel/panel-samsung-souxp00.c:304:20: warning: cast to smaller integer type 'enum panel_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     304 |         ctx->panel_type = (enum panel_type)of_device_get_match_data(dev);
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +304 drivers/gpu/drm/panel/panel-samsung-souxp00.c
+
+   285	
+   286	static int samsung_souxp00_a_probe(struct mipi_dsi_device *dsi)
+   287	{
+   288		const struct backlight_properties props = {
+   289			.type = BACKLIGHT_RAW,
+   290			.brightness = 400,
+   291			.max_brightness = 4095,
+   292		};
+   293		const u16 hdisplay = enable_4k ? 1644 : 1096;
+   294		struct device *dev = &dsi->dev;
+   295		struct samsung_souxp00_a *ctx;
+   296		int ret;
+   297	
+   298		ctx = devm_drm_panel_alloc(dev, struct samsung_souxp00_a, panel,
+   299					   &samsung_souxp00_a_panel_funcs,
+   300					   DRM_MODE_CONNECTOR_DSI);
+   301		if (IS_ERR(ctx))
+   302			return PTR_ERR(ctx);
+   303	
+ > 304		ctx->panel_type = (enum panel_type)of_device_get_match_data(dev);
+   305	
+   306		ret = devm_regulator_bulk_get_const(
+   307			dev,
+   308			ARRAY_SIZE(samsung_souxp00_a_supplies),
+   309			samsung_souxp00_a_supplies,
+   310			&ctx->supplies);
+   311		if (ret < 0)
+   312			return dev_err_probe(dev, ret, "Failed to get regulators\n");
+   313	
+   314		ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+   315		if (IS_ERR(ctx->reset_gpio))
+   316			return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+   317					     "Failed to get reset-gpios\n");
+   318	
+   319		ctx->dsi = dsi;
+   320		mipi_dsi_set_drvdata(dsi, ctx);
+   321	
+   322		dsi->lanes = 4;
+   323		dsi->format = MIPI_DSI_FMT_RGB888;
+   324		dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
+   325	
+   326		ctx->panel.prepare_prev_first = true;
+   327	
+   328		ctx->panel.backlight = devm_backlight_device_register(
+   329			dev, dev_name(dev), dev, dsi,
+   330			&samsung_souxp00_a_bl_ops,
+   331			&props);
+   332		if (IS_ERR(ctx->panel.backlight))
+   333			return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
+   334					     "Failed to create backlight\n");
+   335	
+   336		drm_panel_add(&ctx->panel);
+   337	
+   338		/* This panel only supports DSC; unconditionally enable it */
+   339		dsi->dsc = &ctx->dsc;
+   340	
+   341		ctx->dsc.dsc_version_major = 1;
+   342		ctx->dsc.dsc_version_minor = 1;
+   343	
+   344		ctx->dsc.slice_height = 32;
+   345		ctx->dsc.slice_count = 2;
+   346		/*
+   347		 * hdisplay should be read from the selected mode once
+   348		 * it is passed back to drm_panel (in prepare?)
+   349		 */
+   350		WARN_ON(hdisplay % ctx->dsc.slice_count);
+   351		ctx->dsc.slice_width = hdisplay / ctx->dsc.slice_count;
+   352		ctx->dsc.bits_per_component = 8;
+   353		ctx->dsc.bits_per_pixel = 8 << 4; /* 4 fractional bits */
+   354		ctx->dsc.block_pred_enable = true;
+   355	
+   356		ret = mipi_dsi_attach(dsi);
+   357		if (ret < 0) {
+   358			dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
+   359			drm_panel_remove(&ctx->panel);
+   360			return ret;
+   361		}
+   362	
+   363		return 0;
+   364	}
+   365	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
