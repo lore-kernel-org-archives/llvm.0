@@ -1,136 +1,123 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216C732ED22
-	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 08:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A22334C36
+	for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 09:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766565693; cv=none; b=X5IRHpwVN0Qfw8Kror9GGdXHlEbS7sE5B8XX5CjD8+hnk5t+gOwV2YBM7IiCR5ggnrteXj9a7oWVMAKGzBA6ZrMgG0fDu5CEq2npqlXT2giJVNgShCBbtGjMW7QNrYS/ivYQvrpe7FrXqcjBatzqf+04V2qq+9cAH41Q29/cJFA=
+	t=1766569414; cv=none; b=G4hfi5fVxtMZ7DXvQYZX7r0ZHTEM7Th3M7bewfo3TQPCK/885fxjAeX3jMYksvVA+NxQ5l8nBFWCEwV/6zp/6sqg4BkrnJ7Maipnapwf+B+UKNOOFretFayGX8MbnaY204Fn3ofvUv+/yhsaH/KWeCj2gfm33rSxBVH5LDc67jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766565693; c=relaxed/simple;
-	bh=b9azLrvng1W+owOZrrSCG2h1ZMWVw5Gr5XMFi74WAM0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uLLl8to7xdDCERQ7GW3vhX4PiFtw/M4UAnL6kiUCaNXHwYW9AnF/V+NJ7Opr+1lRcts0jxL5oS5HsVqNb92rtFalE/UF1rq5er7o8GS56ebiSIBVhI1DOpe+Mrusqo8vRR6Vbfcw+PCnkITAzgoFqxb37/lssDRNOQLERk9YmIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qJlRtx58; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+	s=arc-20240116; t=1766569414; c=relaxed/simple;
+	bh=AXrA3sRJwnZgC6dfkQwPIf3oBdpxwqAB6RNtrpM7rKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KXJQlebPz1443sUdwqLuV00bRhOygioashUC8hJVCmbf0+BRJIVpJitn/u1kqb6EvHF46xNORSTprRp53QaHk5SnrdyTdr4n+CHRGERyB5QmXDg7mPaih5rCgeTtMJojoJYCIc1qAQfp2qsGRq/wV7c/OvzatXp9CcUFraRI0+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GdXWaD76; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qJlRtx58"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-29f1f69eec6so72300695ad.1
-        for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 00:41:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GdXWaD76"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a07fb1527cso13635095ad.3
+        for <llvm@lists.linux.dev>; Wed, 24 Dec 2025 01:43:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766565691; x=1767170491; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8kS3dI32T4iLMQTgoo/uaduNvix6IC7/fsObmlhneA=;
-        b=qJlRtx58I/9PuuCRzkfFRLlEZztJjD+25DLhZ/IvDu5pEkJGHPzyqSp+r/hSzzIFzu
-         0cR9xafLueT89uswrx9zOCAA6JZEM8fvGlSSe78Cz7rBHjj+aOH624nogzF8t9lpDrkk
-         eZI2mpHazBNRrpOYtr1MQXU59AQusXHXVHCI20Fwx1yb6ohsikz2wnylmLSQ8h3R63rx
-         J0BYIWP0NC1yy1GdmfSd6MKUi0F26h2PBWKE4oBVv+CI6AijBkisht+tJ8CKWchcVgX8
-         pGiHraT7peu7Tgg2oS7gI0cMx3CRCEvs2RWrdOtPYxggnfnaoL+3WN/X8OpgHU08lg/K
-         iW4A==
+        d=gmail.com; s=20230601; t=1766569412; x=1767174212; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zE5g/APfOf7Doh4n8+ohsSXdsPUU5o9q9e6BCGyON8I=;
+        b=GdXWaD76qELTjBVz5YKcWmKxT8ocyqgi2t9+LaqtCeDHebaZtjl+R+fOYLJX9YWR3f
+         ini6RIVEWIDUmraeBRb/kc6wGx6pwtPi25kNZMI/sXgDPQ+878JJe1vFAUt6yCyoCJ1W
+         jRzV2cm4TXDYOWtDNTBsTW8mz2rpOSI6pn2MoQKAsC+82hm31lCnrE2rWG01bTwHTwdl
+         NvKx1soMPvyabL7Ntfkbj3Sh4/cbhey+HkCoMN2mbgmStR7eKlGwRBtb4qoMJcjynUhU
+         DYNwd4KY5W0Vfr4CR87xohK8XB7NTl0Cd993N+ARrMiMGtXkvYTbKCIWXixFUFsIGNCE
+         nOog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766565691; x=1767170491;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8kS3dI32T4iLMQTgoo/uaduNvix6IC7/fsObmlhneA=;
-        b=ZXotfiPI0Bp5GBxNJAHwzMC63LzuTyXQH1iBiMyE0sGEaEchzYkdldJmhu2rnFPQQn
-         wjYHaH29Fqo5+Ht3NEvDBmW3sfyEW2doyWs77kUbMiuGFDk8qOZ831kNcztzoupaqAW/
-         6gHgJpel7g7Bf2bG3qu9sdAQv7yevcmbqedCRpPrz7TghWXeRrrlnwwu8d74tT3On8Rz
-         IyF+WgDN2SGUkGngyOXcdKnnf971g4yQHO7v7Mn0n3xp0pUti6h1ZWK9jQXna0RP5Dpc
-         CdvfsDv7MT4BZ3478Xif/v/oj1DmB5gKNvksd7SxoTqkvNLqxgEvcXQheUZ88LfefLp/
-         jcuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVGFZOCVXIyfU+WkeoNxPtCHnq3ZP61zRZQTfP+XrURYPkY/L044+GsgOhaJC9Pnl7j69eu@lists.linux.dev
-X-Gm-Message-State: AOJu0Yza5yAKA3XaXk+cmG67zIzCKNoFqoqRguo7DOVS1/UPFVoIFHMv
-	MTavJbsly3Br/4fNklMbt2AwLBh/omOwXczwIZJ1pSaYhyV17ZYrw8qSGyKkW6pnrRzaRuJ05Bj
-	4mA==
-X-Google-Smtp-Source: AGHT+IEyqeTMoaShXNRUvtHOhlYNvGlKrvndvLDnIj+Cloeh6LxSFejF5eSTr8OUrR3lJf2+Y5Rv2yfKdg==
-X-Received: from pjbei18.prod.google.com ([2002:a17:90a:e552:b0:343:af64:f654])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d54b:b0:2a2:d2e8:9f25
- with SMTP id d9443c01a7336-2a2f28368eamr173738215ad.33.1766565691337; Wed, 24
- Dec 2025 00:41:31 -0800 (PST)
-Date: Wed, 24 Dec 2025 16:41:20 +0800
-In-Reply-To: <871plslxsw.ffs@tglx>
+        d=1e100.net; s=20230601; t=1766569412; x=1767174212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zE5g/APfOf7Doh4n8+ohsSXdsPUU5o9q9e6BCGyON8I=;
+        b=YYq6i4ewUlYh6WP9heKtkkWnAnhQSoIZcZpuHPkqhCm8PMfTaBgfq752X+gZFxJ0Iu
+         TyTqfT4uJS4KGxHeW24i7CLrgoISYpbHd55rooZfwOj9IVAmoh2ovKHeDYke3YOBRSM3
+         tgLpAYoSpK3wh9HTQ/xn6Xb+aVvEYgR5rauYCQ0ujRqjfLV28d++krhLiJ7k+cPJ15lY
+         dRvR/zqJuX7w+oX+Q0/5QRE+Tmv+itRt2FJNlylfTZTqnGoIvgS+sNOc7pHmmUHLzvMZ
+         srY85yyoTuZVdG8e/VRznKwUC5oJTXM7DHL6PMswfLnxJRGL/+e7sNj0OOUbQCzVAYty
+         ZkwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVwBoarpQdZ5KlO7T/r9SDoVT1AS+mA29UZwSuSKMdm64ty2KfdsaTD1aKT4eZdziHKF77B@lists.linux.dev
+X-Gm-Message-State: AOJu0YxKHIL6AD8X7HxCRuaeg5GTNDspWv5N0ptJY9GS7yFip7i6C3sw
+	aLOirEV014A4hetV5a0gayfrIH3F/thHsO6GdDbD52HfBLDc4IdyCvD2BsDbgDCDGBBK4W4h1nO
+	+SlHzXyd/Dw8lRCtJOA8/UG16mJ/ky0Q=
+X-Gm-Gg: AY/fxX58bkym3dgd0vgSOJauktdM6aNaOEObjeGPwxf7qyE6oF4gNomYd0vzRXkI9fc
+	RoqVGAwd3ZuOymj3xfuoIJoc2Lxj1pqkrapieg7EHlVmbw7CTX0qbaNF9YavdAQ1y9UPcNqeyej
+	ImNUsVV2c4cbT8OqVsDTHPKzKfOcTUp9K2DE8YhNHuVbxSsMp/QaGPQMqaaEbhKMOdEBb4gsawy
+	nu70Mw2HblcHeFwEqE9B6FK5H5J3G/Fhp4DlDjeuNmxOD4SYPNnqRLUOEkzghqMDigQa9YU6L9H
+	ai73hny7B7ZogLaTvJ1EwhCJ2ybD2PDT27Lb3d4XKIxxmU1NXpJHWrhhcwMrmRFCTRq9eqilsNl
+	u3pYXoxUj8G51EGObGMRZHOw=
+X-Google-Smtp-Source: AGHT+IFrptM25tDo6OgwVjwNE6sttK8tiJTbTeh1uLcr5AC6QnmieVL8kggrKij9zZwy/QPwpL9ycfqV/YVXijoETTM=
+X-Received: by 2002:a05:7300:c00c:10b0:2ae:5d59:3ef6 with SMTP id
+ 5a478bee46e88-2b05ec8546fmr8341481eec.9.1766569411905; Wed, 24 Dec 2025
+ 01:43:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <871plslxsw.ffs@tglx>
-X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
-Message-ID: <20251224084120.249417-1-wakel@google.com>
-Subject: [PATCH] kselftest/harness: Use helper to avoid zero-size memset warning
-From: Wake Liu <wakel@google.com>
-To: tglx@linutronix.de, kees@kernel.org, shuah@kernel.org, nathan@kernel.org
-Cc: luto@amacapital.net, wad@chromium.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Wake Liu <wakel@google.com>
+MIME-Version: 1.0
+References: <20251223175216.1353814-1-gary@kernel.org>
+In-Reply-To: <20251223175216.1353814-1-gary@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 24 Dec 2025 10:43:19 +0100
+X-Gm-Features: AQt7F2rBPEL7D8SfZ6Gc5tG6d1djTg5NeV01DNU875a1bSh2mPJggyCVC3K4fd0
+Message-ID: <CANiq72=p9QzjApCLzbAwgUe5OMAo6qrPadthspdjE8UMQcXRgQ@mail.gmail.com>
+Subject: Re: [PATCH] perf symbol: remove Rust symbol workarounds
+To: Gary Guo <gary@garyguo.net>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andi Kleen <ak@linux.intel.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Stephen Brennan <stephen.s.brennan@oracle.com>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When building kselftests with a toolchain that enables source
-fortification (e.g., Android's build environment, which uses
--D_FORTIFY_SOURCE=3), a build failure occurs in tests that use an
-empty FIXTURE().
+On Tue, Dec 23, 2025 at 6:54=E2=80=AFPM Gary Guo <gary@kernel.org> wrote:
+>
+> Drop the workaround in perf symbol that filter out these symbol types.
+>
+> Specifically, '1' and 'l' can never be generated by nm -- 'u' does
+> indicate GNU unique, however such symbols are only generated by G++ for
+> C++ templates, and are never generated by LLVM (LLVM generates weak
+> symbols in such cases instead). Therefore, the previous occurrence of
+> these symbols types must be due to the off-by-error and can be safely
+> removed.
 
-The root cause is that an empty fixture struct results in
-`sizeof(self_private)` evaluating to 0. The compiler's fortification
-checks then detect the `memset()` call with a compile-time constant size
-of 0, issuing a `-Wuser-defined-warnings` which is promoted to an error
-by `-Werror`.
+Thanks Gary, this indeed should go away now.
 
-An initial attempt to guard the call with `if (sizeof(self_private) > 0)`
-was insufficient. The compiler's static analysis is aggressive enough
-to flag the `memset(..., 0)` pattern before evaluating the conditional,
-thus still triggering the error.
+Should we mention `N` which is also removed? (i.e. you mention all the
+others that got removed in the paragraph above).
 
-To resolve this robustly, this change introduces a `static inline`
-helper function, `__kselftest_memset_safe()`. This function wraps the
-size check and the `memset()` call. By replacing the direct `memset()`
-in the `__TEST_F_IMPL` macro with a call to this helper, we create an
-abstraction boundary. This prevents the compiler's static analyzer from
-"seeing" the problematic pattern at the macro expansion site, resolving
-the build failure.
+In addition, should we remove the `__` prefix in the parameter name?
+It was added in the commit that added `u`.
 
-Build Context:
-Compiler: Android (14488419, +pgo, +bolt, +lto, +mlgo, based on r584948) clang version 22.0.0 (https://android.googlesource.com/toolchain/llvm-project 2d65e4108033380e6fe8e08b1f1826cd2bfb0c99)
-Relevant Options: -O2 -Wall -Werror -D_FORTIFY_SOURCE=3 -target i686-linux-android10000
+For context, the commits that added this were (probably useful to
+mention in the commit message):
 
-Test: m kselftest_futex_futex_requeue_pi
+    945f50036169 ("perf symbols: Handle 'N' symbols in /proc/kallsyms")
+    4d728bb93bab ("perf symbols: Handle 'u' and 'l' symbols in /proc/kallsy=
+ms")
 
-Change-Id: If4fdfe6ffcbe9736fbd8f66b2453e8cbbb95e25e
-Signed-off-by: Wake Liu <wakel@google.com>
----
- tools/testing/selftests/kselftest_harness.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+With the notes above considered:
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 3f66e862e83eb..159cd6729af33 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -70,6 +70,12 @@
- 
- #include "kselftest.h"
- 
-+static inline void __kselftest_memset_safe(void *s, int c, size_t n)
-+{
-+	if (n > 0)
-+		memset(s, c, n);
-+}
-+
- #define TEST_TIMEOUT_DEFAULT 30
- 
- /* Utilities exposed to the test definitions */
-@@ -416,7 +422,7 @@
- 				self = mmap(NULL, sizeof(*self), PROT_READ | PROT_WRITE, \
- 					MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
- 			} else { \
--				memset(&self_private, 0, sizeof(self_private)); \
-+				__kselftest_memset_safe(&self_private, 0, sizeof(self_private)); \
- 				self = &self_private; \
- 			} \
- 		} \
--- 
-2.52.0.351.gbe84eed79e-goog
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
+Cheers,
+Miguel
