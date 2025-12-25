@@ -1,62 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E64845C0B;
-	Thu, 25 Dec 2025 06:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C392AD32;
+	Thu, 25 Dec 2025 06:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766642690; cv=none; b=NFsDBTdCDVcRL8VpbbvjXVURMNYD7XpzCIzVljUONgZM9PObE8HlE2TNDFYKBWctXzRBJFOA+3/wnFy3SSkaOQgTF5wCWuvTYzdXy+Dbta963FTXD2RYFWEZRSRjBPPORvWK9qF8e6UXD+pQ4scwOc19gU70KxzP3ykjg1N/GXA=
+	t=1766642692; cv=none; b=LEIvtHW6ctrj3n9O+DGHAViH+MIX8JD/f0gcF3SlwHSDwvM7MjhfA5yFXfJ7+i3Qdyv+MCdkRUo43QsEebz9PZSbxKQhEYvLBIGUlhPeC565HWTzVd8pBBZMSNogIOnGKHMBn4Me+nB/Aae8/j+gUQY8Qxrhc8BNRBz0GI3SMlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766642690; c=relaxed/simple;
-	bh=OwoQ8LLuJ0L0BO2q3wFDVu0UQmtLzj2aPGVWbwQB6qU=;
+	s=arc-20240116; t=1766642692; c=relaxed/simple;
+	bh=VcKC9/CBFU8uwKDrnoVC8HUQENdMl7CZvAYW/cKoi9o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k+BbGFiJTIwPOPwBsN591WXBxx4UUbqObjS1qMQ7Oxgk7YXNkziiBcnR+xF5V82899VBGceOXS9/xfuBfe27k03yn814Bo7whDh73QhzjmPS7+Pp8ikzetoV1qwPmw35x0YKOMY/0o6qIaAmZeKA3SdG87lsCErrfs9bzuHEeZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BpUEj/gx; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=qq6zFN6azqVGD1/LILnP4GDX8hJ14LDHGYuF3klbrVRJ/Ho/G29nb6y8Kp7n8mjywKgMFqDMnzPlWjeQwn7Etyab/RXhSWIWRRIo1peczTNuTzO/uyCrCAowalPF/Io7Of2OoZFjaDEzAuha4vv20QuQ9bsrtENM5uv/MUNQeR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dlRbJmyH; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BpUEj/gx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dlRbJmyH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766642688; x=1798178688;
+  t=1766642691; x=1798178691;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OwoQ8LLuJ0L0BO2q3wFDVu0UQmtLzj2aPGVWbwQB6qU=;
-  b=BpUEj/gxcUaGh4Irxgqk0o+J0RaQuEFjWshWUodZAvZVKSDReQNUFGEu
-   nYrAaiWkm95WNXWSK43mJB2ZKvhIoHBSPQwE5C7pYjTxlB+dkMzOeOSpx
-   KFDvk13GqCCJmuTehbVNAhC2J8r9RFxKdl5o1nilwdEBqn6SMOELitlP6
-   z5TvPwB9Jn9ivc4NbF/U1eOUBZhbW0bn+YBB86E5Q8Z3ble4dOdG16aHR
-   NxnT3e0LduHT5tLYeS4INGqwHdDzTFzsq0sKvOIAqqyGHq3pMPh7B4Ws5
-   xcgMDNIzyiFhtyL5KZuWZnwoI4Ie2nYXqXFfGfjiU+nDFeuSKDkegV6Sp
-   w==;
-X-CSE-ConnectionGUID: 9Ml5nlykTOiPC+/egLC2nA==
-X-CSE-MsgGUID: Rai17muGQACrg0THUhXcrQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68438982"
+  bh=VcKC9/CBFU8uwKDrnoVC8HUQENdMl7CZvAYW/cKoi9o=;
+  b=dlRbJmyH2W8ncRgJ80QS9ehukvPhZVNlYNCujHJiRp2/LLEXrvFUqQvi
+   lY7yp+g7J0Z8njnixwdIwNxTfw6NdNa/Qvp2mTXsziIh/Yxck2Bcrk2zk
+   OBbzleGr7OF1C+6X0DqfDAAiEI7f2YZrq6WdgCNh10eAitXYBvlJjDePK
+   24UQwpBwLyruIXRCJ3Jek82w0ayHxvX8csk0v20o7eLMc5L4+vITzTO+n
+   71kl2qf25LI0olUdTSnOlv7YMT2Gdg44aYlMWQ7fGvn1QIgGqFzluxiz8
+   C61f6+qIQJcM3pwgxB8tLiU94jiBFr14jjAX2sdBelgwb6WhqPyYVvLqD
+   Q==;
+X-CSE-ConnectionGUID: jQ4TiQFIQey2t+p/bU08vw==
+X-CSE-MsgGUID: NUQIL8FHS+6aprRQsLsZKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68613580"
 X-IronPort-AV: E=Sophos;i="6.21,175,1763452800"; 
-   d="scan'208";a="68438982"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 22:04:48 -0800
-X-CSE-ConnectionGUID: OD2JONPuQUiPnMfdWSJ4gQ==
-X-CSE-MsgGUID: jwVrFT5VTH6Ppypzi1Icyw==
+   d="scan'208";a="68613580"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 22:04:50 -0800
+X-CSE-ConnectionGUID: YjemtR3sRSKp5bj/xnm3fA==
+X-CSE-MsgGUID: wALkkXzzQruU2rIXRw2m+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,175,1763452800"; 
-   d="scan'208";a="200466995"
+   d="scan'208";a="199305559"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 24 Dec 2025 22:04:45 -0800
+  by orviesa006.jf.intel.com with ESMTP; 24 Dec 2025 22:04:45 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vYeSo-000000003nt-2txd;
+	id 1vYeSo-000000003nv-31Ir;
 	Thu, 25 Dec 2025 06:04:42 +0000
-Date: Thu, 25 Dec 2025 14:04:27 +0800
+Date: Thu, 25 Dec 2025 14:04:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yanfei Xu <yanfei.xu@bytedance.com>, pbonzini@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, caixiangfeng@bytedance.com,
-	fangying.tommy@bytedance.com, yanfei.xu@bytedance.com
-Subject: Re: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in
- kvm_set_irq_routing()
-Message-ID: <202512251312.VbcflZDz-lkp@intel.com>
-References: <20251224023201.381586-1-yanfei.xu@bytedance.com>
+To: Vincent Mailhol <mailhol@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Chris Mason <chris.mason@fusionio.com>,
+	David Sterba <dsterba@suse.com>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	linux-btrfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Vincent Mailhol <mailhol@kernel.org>
+Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
+ is_negative()
+Message-ID: <202512251340.UApIFw9R-lkp@intel.com>
+References: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,122 +79,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251224023201.381586-1-yanfei.xu@bytedance.com>
+In-Reply-To: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 
-Hi Yanfei,
+Hi Vincent,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on kvm/next linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 3e7f562e20ee87a25e104ef4fce557d39d62fa85]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yanfei-Xu/KVM-irqchip-KVM-Reduce-allocation-overhead-in-kvm_set_irq_routing/20251224-103451
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20251224023201.381586-1-yanfei.xu%40bytedance.com
-patch subject: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in kvm_set_irq_routing()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251225/202512251312.VbcflZDz-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512251312.VbcflZDz-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/kbuild-remove-gcc-s-Wtype-limits/20251220-190509
+base:   3e7f562e20ee87a25e104ef4fce557d39d62fa85
+patch link:    https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-3-24b170af700e%40kernel.org
+patch subject: [PATCH v3 3/3] overflow: Remove is_non_negative() and is_negative()
+config: i386-randconfig-141-20251225 (https://download.01.org/0day-ci/archive/20251225/202512251340.UApIFw9R-lkp@intel.com/config)
+compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512251312.VbcflZDz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512251340.UApIFw9R-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+smatch warnings:
+drivers/md/dm-stripe.c:463 stripe_io_hints() warn: unsigned '*_d' is never less than zero.
+drivers/md/dm-stripe.c:463 stripe_io_hints() warn: unsigned '_a' is never less than zero.
 
->> arch/x86/kvm/../../../virt/kvm/irqchip.c:190:6: warning: variable 'r' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     190 |         if (!e)
-         |             ^~
-   arch/x86/kvm/../../../virt/kvm/irqchip.c:233:9: note: uninitialized use occurs here
-     233 |         return r;
-         |                ^
-   arch/x86/kvm/../../../virt/kvm/irqchip.c:190:2: note: remove the 'if' if its condition is always false
-     190 |         if (!e)
-         |         ^~~~~~~
-     191 |                 goto out;
-         |                 ~~~~~~~~
-   arch/x86/kvm/../../../virt/kvm/irqchip.c:176:7: note: initialize the variable 'r' to silence this warning
-     176 |         int r;
-         |              ^
-         |               = 0
-   1 warning generated.
+vim +463 drivers/md/dm-stripe.c
 
-
-vim +190 arch/x86/kvm/../../../virt/kvm/irqchip.c
-
-   167	
-   168	int kvm_set_irq_routing(struct kvm *kvm,
-   169				const struct kvm_irq_routing_entry *ue,
-   170				unsigned nr,
-   171				unsigned flags)
-   172	{
-   173		struct kvm_irq_routing_table *new, *old;
-   174		struct kvm_kernel_irq_routing_entry *e;
-   175		u32 i, j, nr_rt_entries = 0;
-   176		int r;
-   177	
-   178		for (i = 0; i < nr; ++i) {
-   179			if (ue[i].gsi >= KVM_MAX_IRQ_ROUTES)
-   180				return -EINVAL;
-   181			nr_rt_entries = max(nr_rt_entries, ue[i].gsi);
-   182		}
-   183	
-   184		nr_rt_entries += 1;
-   185	
-   186		new = kzalloc(struct_size(new, map, nr_rt_entries), GFP_KERNEL_ACCOUNT);
-   187		if (!new)
-   188			return -ENOMEM;
-   189		e = kcalloc(nr, sizeof(*e), GFP_KERNEL_ACCOUNT);
- > 190		if (!e)
-   191			goto out;
-   192		new->entries_addr = e;
-   193	
-   194		new->nr_rt_entries = nr_rt_entries;
-   195		for (i = 0; i < KVM_NR_IRQCHIPS; i++)
-   196			for (j = 0; j < KVM_IRQCHIP_NUM_PINS; j++)
-   197				new->chip[i][j] = -1;
-   198	
-   199		for (i = 0; i < nr; ++i) {
-   200			r = -EINVAL;
-   201			switch (ue->type) {
-   202			case KVM_IRQ_ROUTING_MSI:
-   203				if (ue->flags & ~KVM_MSI_VALID_DEVID)
-   204					goto out;
-   205				break;
-   206			default:
-   207				if (ue->flags)
-   208					goto out;
-   209				break;
-   210			}
-   211			r = setup_routing_entry(kvm, new, e + i, ue);
-   212			if (r)
-   213				goto out;
-   214			++ue;
-   215		}
-   216	
-   217		mutex_lock(&kvm->irq_lock);
-   218		old = rcu_dereference_protected(kvm->irq_routing, 1);
-   219		rcu_assign_pointer(kvm->irq_routing, new);
-   220		kvm_irq_routing_update(kvm);
-   221		kvm_arch_irq_routing_update(kvm);
-   222		mutex_unlock(&kvm->irq_lock);
-   223	
-   224		synchronize_srcu_expedited(&kvm->irq_srcu);
-   225	
-   226		new = old;
-   227		r = 0;
-   228		goto out;
-   229	
-   230	out:
-   231		free_irq_routing_table(new);
-   232	
-   233		return r;
-   234	}
-   235	
+af4874e03ed82f Mike Snitzer    2009-06-22  454  
+40bea431274c24 Mike Snitzer    2009-09-04  455  static void stripe_io_hints(struct dm_target *ti,
+40bea431274c24 Mike Snitzer    2009-09-04  456  			    struct queue_limits *limits)
+40bea431274c24 Mike Snitzer    2009-09-04  457  {
+40bea431274c24 Mike Snitzer    2009-09-04  458  	struct stripe_c *sc = ti->private;
+1071d560afb4c2 Mikulas Patocka 2025-08-11  459  	unsigned int io_min, io_opt;
+40bea431274c24 Mike Snitzer    2009-09-04  460  
+5fb9d4341b782a John Garry      2025-07-11  461  	limits->chunk_sectors = sc->chunk_size;
+1071d560afb4c2 Mikulas Patocka 2025-08-11  462  
+1071d560afb4c2 Mikulas Patocka 2025-08-11 @463  	if (!check_shl_overflow(sc->chunk_size, SECTOR_SHIFT, &io_min) &&
+1071d560afb4c2 Mikulas Patocka 2025-08-11  464  	    !check_mul_overflow(io_min, sc->stripes, &io_opt)) {
+1071d560afb4c2 Mikulas Patocka 2025-08-11  465  		limits->io_min = io_min;
+1071d560afb4c2 Mikulas Patocka 2025-08-11  466  		limits->io_opt = io_opt;
+1071d560afb4c2 Mikulas Patocka 2025-08-11  467  	}
+40bea431274c24 Mike Snitzer    2009-09-04  468  }
+40bea431274c24 Mike Snitzer    2009-09-04  469  
 
 -- 
 0-DAY CI Kernel Test Service
