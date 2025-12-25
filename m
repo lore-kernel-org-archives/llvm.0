@@ -1,64 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D407D17BED0;
-	Thu, 25 Dec 2025 04:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E64845C0B;
+	Thu, 25 Dec 2025 06:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766637043; cv=none; b=lEj6HrdIsuBUHJHdI2hQaVPDGGGDrEi/A+Ik8gmuru12bv7VNWyNC/oUS+yL+6iGgYBggqTF4Asr6yPOuO4orZ7mCSKazuNOaghztqXa3qGbHEl4IfTPKbrJE2lwHP4PBaV9xYtQTbahyrPKCQL84SSjooagu4jbH3Krw4M8nLQ=
+	t=1766642690; cv=none; b=NFsDBTdCDVcRL8VpbbvjXVURMNYD7XpzCIzVljUONgZM9PObE8HlE2TNDFYKBWctXzRBJFOA+3/wnFy3SSkaOQgTF5wCWuvTYzdXy+Dbta963FTXD2RYFWEZRSRjBPPORvWK9qF8e6UXD+pQ4scwOc19gU70KxzP3ykjg1N/GXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766637043; c=relaxed/simple;
-	bh=0jF1HJwFcGPuiL/DoLAg+iWgJoZ/B5TQNXYupJjw4n0=;
+	s=arc-20240116; t=1766642690; c=relaxed/simple;
+	bh=OwoQ8LLuJ0L0BO2q3wFDVu0UQmtLzj2aPGVWbwQB6qU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D5kpqozr4cxJNBXnFq/50js+tR33GT68WIF/Fh06uxCqwSpO8s469R5P86HbcsVZENZ5vCRY3E9PdtuNhIBdwIch8nodGxXA/mP5lnCtIBc1iouxzEzN9036t2+IevRwzoJKuI16zlFY45CXvjNnC7pmwKXme2gWdDVLoMBB/pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lJKY3UO4; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=k+BbGFiJTIwPOPwBsN591WXBxx4UUbqObjS1qMQ7Oxgk7YXNkziiBcnR+xF5V82899VBGceOXS9/xfuBfe27k03yn814Bo7whDh73QhzjmPS7+Pp8ikzetoV1qwPmw35x0YKOMY/0o6qIaAmZeKA3SdG87lsCErrfs9bzuHEeZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BpUEj/gx; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lJKY3UO4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BpUEj/gx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766637041; x=1798173041;
+  t=1766642688; x=1798178688;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0jF1HJwFcGPuiL/DoLAg+iWgJoZ/B5TQNXYupJjw4n0=;
-  b=lJKY3UO4FYgaXl5zMRobMVoxUirktUPJlIkRgVkTBJVNldSsu6efy+xB
-   XNBbDcn3Vr9Rj8EdRpmSmcOBRpY3sk02sBZQE2XnZA0YlDxPqjfQMmQcZ
-   8/vPA9sn32G9WmOO3aypA+vYTkRs9XQUTtaNpEXlCxbVlFnS5GfyvTZAS
-   Oy0UNnTdYDa7A13/bb5Scn6twQiHT7ZcJmTEJ8MuVWQdcoNDSarHh+Ymx
-   HCFfv1ce5UNXF7iNSPvryYj9SY5DAY1x3mzIyFfHlE9UWuCiqKuDALEV/
-   u/ry81ukR6smmBvjrv0WxCj+yXdAHG8WHA+AQi/yPlouOCq5ttMDyYgMT
-   Q==;
-X-CSE-ConnectionGUID: ly7v72DgRC2DhX/NSsHNyQ==
-X-CSE-MsgGUID: 16IM76TbTbWk3onRACD+kg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="79086192"
+  bh=OwoQ8LLuJ0L0BO2q3wFDVu0UQmtLzj2aPGVWbwQB6qU=;
+  b=BpUEj/gxcUaGh4Irxgqk0o+J0RaQuEFjWshWUodZAvZVKSDReQNUFGEu
+   nYrAaiWkm95WNXWSK43mJB2ZKvhIoHBSPQwE5C7pYjTxlB+dkMzOeOSpx
+   KFDvk13GqCCJmuTehbVNAhC2J8r9RFxKdl5o1nilwdEBqn6SMOELitlP6
+   z5TvPwB9Jn9ivc4NbF/U1eOUBZhbW0bn+YBB86E5Q8Z3ble4dOdG16aHR
+   NxnT3e0LduHT5tLYeS4INGqwHdDzTFzsq0sKvOIAqqyGHq3pMPh7B4Ws5
+   xcgMDNIzyiFhtyL5KZuWZnwoI4Ie2nYXqXFfGfjiU+nDFeuSKDkegV6Sp
+   w==;
+X-CSE-ConnectionGUID: 9Ml5nlykTOiPC+/egLC2nA==
+X-CSE-MsgGUID: Rai17muGQACrg0THUhXcrQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68438982"
 X-IronPort-AV: E=Sophos;i="6.21,175,1763452800"; 
-   d="scan'208";a="79086192"
+   d="scan'208";a="68438982"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 20:30:40 -0800
-X-CSE-ConnectionGUID: pDRKGQpkRY6j0z/ltvJafg==
-X-CSE-MsgGUID: QZM6HknrSNmRzybAjm/6kw==
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 22:04:48 -0800
+X-CSE-ConnectionGUID: OD2JONPuQUiPnMfdWSJ4gQ==
+X-CSE-MsgGUID: jwVrFT5VTH6Ppypzi1Icyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,175,1763452800"; 
-   d="scan'208";a="200453480"
+   d="scan'208";a="200466995"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 24 Dec 2025 20:30:38 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 24 Dec 2025 22:04:45 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vYczj-000000003k9-2jFe;
-	Thu, 25 Dec 2025 04:30:35 +0000
-Date: Thu, 25 Dec 2025 12:30:35 +0800
+	id 1vYeSo-000000003nt-2txd;
+	Thu, 25 Dec 2025 06:04:42 +0000
+Date: Thu, 25 Dec 2025 14:04:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, adrian.hunter@intel.com,
-	quic_asutoshd@quicinc.com, ulf.hansson@linaro.org,
-	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, ebiggers@kernel.org
+To: Yanfei Xu <yanfei.xu@bytedance.com>, pbonzini@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_mdalam@quicinc.com
-Subject: Re: [PATCH] mmc: sdhci-msm: Add quirk to disable CQE for ICE legacy
- mode
-Message-ID: <202512251242.zOsGwwe8-lkp@intel.com>
-References: <20251224101050.3497746-1-quic_mdalam@quicinc.com>
+	kvm@vger.kernel.org, caixiangfeng@bytedance.com,
+	fangying.tommy@bytedance.com, yanfei.xu@bytedance.com
+Subject: Re: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in
+ kvm_set_irq_routing()
+Message-ID: <202512251312.VbcflZDz-lkp@intel.com>
+References: <20251224023201.381586-1-yanfei.xu@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,50 +65,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251224101050.3497746-1-quic_mdalam@quicinc.com>
+In-Reply-To: <20251224023201.381586-1-yanfei.xu@bytedance.com>
 
-Hi Md,
+Hi Yanfei,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on ulf-hansson-mmc-mirror/next v6.19-rc2 next-20251219]
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next linus/master v6.19-rc2 next-20251219]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/mmc-sdhci-msm-Add-quirk-to-disable-CQE-for-ICE-legacy-mode/20251224-181537
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251224101050.3497746-1-quic_mdalam%40quicinc.com
-patch subject: [PATCH] mmc: sdhci-msm: Add quirk to disable CQE for ICE legacy mode
-config: arm64-randconfig-004-20251225 (https://download.01.org/0day-ci/archive/20251225/202512251242.zOsGwwe8-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512251242.zOsGwwe8-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yanfei-Xu/KVM-irqchip-KVM-Reduce-allocation-overhead-in-kvm_set_irq_routing/20251224-103451
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20251224023201.381586-1-yanfei.xu%40bytedance.com
+patch subject: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in kvm_set_irq_routing()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251225/202512251312.VbcflZDz-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512251312.VbcflZDz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512251242.zOsGwwe8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512251312.VbcflZDz-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/mmc/host/sdhci-msm.c:2121:36: warning: unused variable 'sdhci_msm_cqhci_ops' [-Wunused-const-variable]
-    2121 | static const struct cqhci_host_ops sdhci_msm_cqhci_ops = {
-         |                                    ^~~~~~~~~~~~~~~~~~~
+>> arch/x86/kvm/../../../virt/kvm/irqchip.c:190:6: warning: variable 'r' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     190 |         if (!e)
+         |             ^~
+   arch/x86/kvm/../../../virt/kvm/irqchip.c:233:9: note: uninitialized use occurs here
+     233 |         return r;
+         |                ^
+   arch/x86/kvm/../../../virt/kvm/irqchip.c:190:2: note: remove the 'if' if its condition is always false
+     190 |         if (!e)
+         |         ^~~~~~~
+     191 |                 goto out;
+         |                 ~~~~~~~~
+   arch/x86/kvm/../../../virt/kvm/irqchip.c:176:7: note: initialize the variable 'r' to silence this warning
+     176 |         int r;
+         |              ^
+         |               = 0
    1 warning generated.
 
 
-vim +/sdhci_msm_cqhci_ops +2121 drivers/mmc/host/sdhci-msm.c
+vim +190 arch/x86/kvm/../../../virt/kvm/irqchip.c
 
-67b13f3e221ed8 Shaik Sajida Bhanu 2021-07-16  2120  
-87a8df0dce6ad0 Ritesh Harjani     2020-01-16 @2121  static const struct cqhci_host_ops sdhci_msm_cqhci_ops = {
-c93767cf64ebf4 Eric Biggers       2021-01-25  2122  	.enable		= sdhci_msm_cqe_enable,
-87a8df0dce6ad0 Ritesh Harjani     2020-01-16  2123  	.disable	= sdhci_msm_cqe_disable,
-c93767cf64ebf4 Eric Biggers       2021-01-25  2124  #ifdef CONFIG_MMC_CRYPTO
-741521fa273fdd Eric Biggers       2024-12-12  2125  	.uses_custom_crypto_profile = true,
-c93767cf64ebf4 Eric Biggers       2021-01-25  2126  #endif
-87a8df0dce6ad0 Ritesh Harjani     2020-01-16  2127  };
-87a8df0dce6ad0 Ritesh Harjani     2020-01-16  2128  
+   167	
+   168	int kvm_set_irq_routing(struct kvm *kvm,
+   169				const struct kvm_irq_routing_entry *ue,
+   170				unsigned nr,
+   171				unsigned flags)
+   172	{
+   173		struct kvm_irq_routing_table *new, *old;
+   174		struct kvm_kernel_irq_routing_entry *e;
+   175		u32 i, j, nr_rt_entries = 0;
+   176		int r;
+   177	
+   178		for (i = 0; i < nr; ++i) {
+   179			if (ue[i].gsi >= KVM_MAX_IRQ_ROUTES)
+   180				return -EINVAL;
+   181			nr_rt_entries = max(nr_rt_entries, ue[i].gsi);
+   182		}
+   183	
+   184		nr_rt_entries += 1;
+   185	
+   186		new = kzalloc(struct_size(new, map, nr_rt_entries), GFP_KERNEL_ACCOUNT);
+   187		if (!new)
+   188			return -ENOMEM;
+   189		e = kcalloc(nr, sizeof(*e), GFP_KERNEL_ACCOUNT);
+ > 190		if (!e)
+   191			goto out;
+   192		new->entries_addr = e;
+   193	
+   194		new->nr_rt_entries = nr_rt_entries;
+   195		for (i = 0; i < KVM_NR_IRQCHIPS; i++)
+   196			for (j = 0; j < KVM_IRQCHIP_NUM_PINS; j++)
+   197				new->chip[i][j] = -1;
+   198	
+   199		for (i = 0; i < nr; ++i) {
+   200			r = -EINVAL;
+   201			switch (ue->type) {
+   202			case KVM_IRQ_ROUTING_MSI:
+   203				if (ue->flags & ~KVM_MSI_VALID_DEVID)
+   204					goto out;
+   205				break;
+   206			default:
+   207				if (ue->flags)
+   208					goto out;
+   209				break;
+   210			}
+   211			r = setup_routing_entry(kvm, new, e + i, ue);
+   212			if (r)
+   213				goto out;
+   214			++ue;
+   215		}
+   216	
+   217		mutex_lock(&kvm->irq_lock);
+   218		old = rcu_dereference_protected(kvm->irq_routing, 1);
+   219		rcu_assign_pointer(kvm->irq_routing, new);
+   220		kvm_irq_routing_update(kvm);
+   221		kvm_arch_irq_routing_update(kvm);
+   222		mutex_unlock(&kvm->irq_lock);
+   223	
+   224		synchronize_srcu_expedited(&kvm->irq_srcu);
+   225	
+   226		new = old;
+   227		r = 0;
+   228		goto out;
+   229	
+   230	out:
+   231		free_irq_routing_table(new);
+   232	
+   233		return r;
+   234	}
+   235	
 
 -- 
 0-DAY CI Kernel Test Service
