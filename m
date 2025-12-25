@@ -1,92 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06657326927;
-	Thu, 25 Dec 2025 15:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5B432ABF7;
+	Thu, 25 Dec 2025 15:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766675504; cv=none; b=GXgtSfEx+AuQufKALavmsM0wnD1w9mJ/Mw+pAkBgy1eiMGvlRvlu+LHZTJMnFqRYkUeKM0WqjiafOWwm/A3r2xZRj58m+jwUxBqC0/NerPO0uF1U9TBZqUw8aNOHIcxesf9+pxqqtYfjsQ/pgbGJywxpUPfVrkh8HE73umkGe9Y=
+	t=1766676171; cv=none; b=O0/VIHmGVS8KbDh9410qKPPAFgL3+otLHTAOLZ+ekNy2vJ4WIhqYCbzxXqzICM81m3p24reQGFb91Q9gYEhjEYbLxLZyEx7XrhCc/3R2zMUcr6TEFhTo+oUKUiYF1FJJuHlCJ0h56wlO3v66vHaIhCJwvn0rJU8We1ZzXPivvGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766675504; c=relaxed/simple;
-	bh=XvynBruvWowMgTuK426/5H04FFVEyVfDgybA03hM39k=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Cp3BOnizgAFB0jAIRirW468MhRtsxXqNT41/YuCHR9FLvguMekCSEIt78aVXx0ndEWWNZFIj4ls4vymMwinvzH/pIjVIlfuwFTuR2o+yrGrOyfp1G/sMkNfux4LC0k1xv/WuydgItE894Mb8NkMbk/rvvHDFK130DRQE0HSaH0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hDCpYQqI; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1766676171; c=relaxed/simple;
+	bh=Mua5PcFuFTdif7xns+l4a0Wzx/++maU7a5zH11eSc5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P3CtCpghHHmIRlUEq+mFNBI6Al9fkk7ZXb5lDK0gEVRM6szEm90KJ+e7tTPUV1xBxgn2/SgzBVD41qChb49Xv/oKk8ZMi9DnyXYZsMfDFs6SEMOKPjYDosAe/0k94Pg7XEYv/TDGXqFHCjGLYXA7LDy+OxFWR8ZKvSfzgBgSJQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Joaqmpro; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hDCpYQqI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Joaqmpro"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766675503; x=1798211503;
-  h=date:from:to:cc:subject:message-id;
-  bh=XvynBruvWowMgTuK426/5H04FFVEyVfDgybA03hM39k=;
-  b=hDCpYQqIxtgj/CYGv0fif7aPvgrV6iq+i42MNwJSop2Utycut1FiFE7o
-   dC1K3uVfCavoe3gO+NulBkx797Llc16bkvLxM+iddl8aJ+jZI7x8kLJ15
-   FnHBl+PwQK74dp4XmSVmhbbnrISzQED3FEaMWsJGzftrCFqsBGQdgbeZQ
-   wpxp7Md2dHPgT4zJmbKcgLq6f+B95EVqAqvEfeaWlIuX1I++gmBcTnuZP
-   QEY4m1tgeklM7p78gnpRoW7FaWwa2Y4sc01eH4SJrJSclhfHlv9nCg8w7
-   bg6D3gSb77QoyFOFRVynp7BpVUYAzsuORMyaS2PeeFhGZcQNV5iurndgQ
-   Q==;
-X-CSE-ConnectionGUID: 45g1QB/bRRKw69ly+xma8Q==
-X-CSE-MsgGUID: h+TpXVh0R8+iF/OQms/O4g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="71052560"
+  t=1766676169; x=1798212169;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Mua5PcFuFTdif7xns+l4a0Wzx/++maU7a5zH11eSc5Y=;
+  b=JoaqmproLs6huuxA3K41v88jo/eWE7rnd0zGis0TJ15dMtwxFEt7floP
+   xgY0L4riSaNNIHcnTq9EzZLu1NSSA0rzzdmo4rpHedOW9BB4tXNyYC/n8
+   ht8QGvj6D1bJ9tDw3KbY76043vsWgQLS4LqYTXeJQWcoiw6MG8xm7/+0U
+   iAGYpghdnndKS+ffU7pAaPipoaBcvzi43hgaEKbco6g83t/CTVlqqZdvX
+   B6AAPn+BY0lB0yPyqRHN+Jn9XZxlk/+vAn5mXSeulJvl2yu+QLy9zAFtK
+   aRi24VOrKE2hA8PDAzF70iGa3K2pt4XlFJ6ZQruu566CyPz4PM11t6hk8
+   w==;
+X-CSE-ConnectionGUID: eJQ1PDzOQUmKCpXLaEBx2A==
+X-CSE-MsgGUID: V6GFwDTiR62i2LPMMNGs7A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="68547245"
 X-IronPort-AV: E=Sophos;i="6.21,176,1763452800"; 
-   d="scan'208";a="71052560"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2025 07:11:41 -0800
-X-CSE-ConnectionGUID: dDimkZ9HSRia3pNIAUusHg==
-X-CSE-MsgGUID: 86sYHnMYQR+8q2TT3XgBqw==
+   d="scan'208";a="68547245"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2025 07:22:48 -0800
+X-CSE-ConnectionGUID: 2W6vjGClTKWQvvkL/AtQuA==
+X-CSE-MsgGUID: T0cUWfwpRrew/1M6cK+N+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,176,1763452800"; 
-   d="scan'208";a="200716317"
+   d="scan'208";a="199475155"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 25 Dec 2025 07:11:39 -0800
+  by orviesa010.jf.intel.com with ESMTP; 25 Dec 2025 07:22:44 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vYn05-000000004Bn-1muP;
-	Thu, 25 Dec 2025 15:11:37 +0000
-Date: Thu, 25 Dec 2025 23:10:56 +0800
+	id 1vYnAn-000000004C1-0YjF;
+	Thu, 25 Dec 2025 15:22:41 +0000
+Date: Thu, 25 Dec 2025 23:22:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/250-aop 35/62] warning: associated items
- `zeroed` and `as_raw` are never used
-Message-ID: <202512260140.s3YzBb69-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Ke Sun <sunke@kylinos.cn>, Miguel Ojeda <ojeda@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Timur Tabi <ttabi@nvidia.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Benno Lossin <lossin@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Tamir Duberstein <tamird@gmail.com>, rust-for-linux@vger.kernel.org,
+	Ke Sun <sunke@kylinos.cn>
+Subject: Re: [PATCH v3 2/4] rust: kernel: Add pointer wrapper types for safe
+ pointer formatting
+Message-ID: <202512252338.UQxvMW2X-lkp@intel.com>
+References: <20251224081315.729684-3-sunke@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251224081315.729684-3-sunke@kylinos.cn>
 
-tree:   https://github.com/AsahiLinux/linux bits/250-aop
-head:   e08116e258e28774a3770a80debc819b89928f45
-commit: 8a33a772f7d73cc9cb83c339652be8d04171e6d1 [35/62] rust: io: resource: Add owned Resource initialiser
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251226/202512260140.s3YzBb69-lkp@intel.com/config)
+Hi Ke,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 9448598b22c50c8a5bb77a9103e2d49f134c9578]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ke-Sun/lib-vsprintf-Export-ptr_to_hashval-for-Rust-use/20251224-161946
+base:   9448598b22c50c8a5bb77a9103e2d49f134c9578
+patch link:    https://lore.kernel.org/r/20251224081315.729684-3-sunke%40kylinos.cn
+patch subject: [PATCH v3 2/4] rust: kernel: Add pointer wrapper types for safe pointer formatting
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251225/202512252338.UQxvMW2X-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
 rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251226/202512260140.s3YzBb69-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512252338.UQxvMW2X-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512260140.s3YzBb69-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512252338.UQxvMW2X-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> warning: associated items `zeroed` and `as_raw` are never used
-   --> rust/kernel/io/resource.rs:80:19
+>> error: cannot find macro `seq_print` in this scope
+   --> rust/doctests_kernel_generated.rs:12267:1
    |
-   78 | impl Resource {
-   | ------------- associated items in this implementation
-   79 |     /// Create a new zeroed [`Resource`]
-   80 |     pub(crate) fn zeroed() -> Self {
-   |                   ^^^^^^
-   ...
-   87 |     pub(crate) fn as_raw(&self) -> *mut bindings::resource {
-   |                   ^^^^^^
+   12267 | seq_print!(seq_file, "Pointer: {:p}n", ptr);
+   | ^^^^^^^^^
    |
-   = note: `#[warn(dead_code)]` on by default
+   help: consider importing this macro
+   |
+   3     + use kernel::seq_print;
+   |
 
 -- 
 0-DAY CI Kernel Test Service
