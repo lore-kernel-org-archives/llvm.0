@@ -1,133 +1,187 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AEB23D7EC
-	for <llvm@lists.linux.dev>; Thu, 25 Dec 2025 09:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354A2239562;
+	Thu, 25 Dec 2025 09:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766654977; cv=none; b=Jy+gFM20CcVc5+EzkVHyaml/7n4MnKpv20MWPtEbirfTyiV0RUqiORFOKqEhvd2Q0rwAi6tEddNwUDUBcoHEhkDzM/arNzZYcElD9X2GhLMbMsNQBsi7KI+u7mdy5+/TPMIOGyYq+SdtG4w9f5nPOATzEUvRSQ+O5HlJ8JQq7WI=
+	t=1766655343; cv=none; b=c/acdC1zH0MrIMgl6FtNWxx2enzLkm+oefZzX8+eBNHVg7Wz4G6ky14Gdyssvyh2GtM+29lJEvMi6r0AQ029O6+Mce237WAPA9AyoIY4+8xKPoReunTa+yeRqkWy35IjXDi7GcEwAYPGKarIvQxVbXlrLScpSmJgzYcRI0zuijo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766654977; c=relaxed/simple;
-	bh=dIiHudqau8HkwQ82U4mSgcVs98qUWs02ghKs8TZe3Ew=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NDYmeAOnhSN5KIZuXCevIN4XurYNTV2Cn18H7jlvb7IqJDvtNn5TnT2a31lKGRJyzoNitFEbs9xCsPL32Q1CoiqnRt8Ozj0ODnZpUVmJLVPoqV/lRFlE4uSBcPxqG210nuHU93VHPKsw0eJNDvQScTLodIva4UFtsR/0VMcaSBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hoIQFJfM; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766655343; c=relaxed/simple;
+	bh=TcCc2zIbX0Qe9C4Qf96J+EeN2S2w6bx5WWKs0C2meac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VKZNVa87j5C+ljzw4DMLU2PACBXn/DG6EA0Oh7JVvFeqs2qWXeyhaczVxXcdmA4aVcv3pMwpq3r7ga0hppZoT3PDBM9MfHgqX/G3UsJZRE1H+VvRK8fVnU/RxnznPf32ouC03SMnQFMID8zQSL2gOf4RWCh24rgNkcqD7MTPQI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QZZYH/WH; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hoIQFJfM"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so66508935e9.2
-        for <llvm@lists.linux.dev>; Thu, 25 Dec 2025 01:29:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766654974; x=1767259774; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=faQ94yKV2lNZmayfN+SBafh3Mve1GtiJbz6Z2cAFkVo=;
-        b=hoIQFJfMSGocOgNadM+xuX1WW+iA5lo06WKdsjB6V+DGTDRJQwfPQd1wKRfeBjH3RQ
-         lRMOCawudkJLY7Pehl+1zRpACmkWtXfEIrAl8GdZcS7QDFxoYfjO/ab7gAxFvj6dnEEk
-         Y+TBcDFrSxw8kSJSsVn7Im4MVtGEviHTf0Mrw5TAsGFJer7vo9/vNKZJ49vA+UVGSc5C
-         Dz3LHFhEoGZDqutUJ65uQ6zp9VE7r4q0RQiroGqvh5Cdc1ZxXd0dvNgY2umsgZy5ILuY
-         kw3nAEMmXp8Plr9yW7Wtf4sAS7p4jLcZCqH7C0rtzKm1klFiEN+4ecS0g49ynnQEcyK4
-         6VJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766654974; x=1767259774;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=faQ94yKV2lNZmayfN+SBafh3Mve1GtiJbz6Z2cAFkVo=;
-        b=n9ztcwRLX6tgMWbWQNYzsPHQkNjWIURktOn5J4SD6gi+puJfhOqPZ61uaRmG2Bkm2y
-         aAii8vPilW9g42bLQpvuatezY3oCxxXHOl6jj27ImOKZQ8fhDuGLYUibhLlJn0FrMRtF
-         My07+piwG4VtjFiVRbXqiLKJcmDtR8bATVizteeV8aryOeNsvPJ1RFXz0TEA1XvysW2V
-         33uosrP6KFy6yu128YnPGC/FHy+QTK81xZk0kUmzoO5NddIns5cyizVLyh+n470PjWpj
-         hizJXln6hccOvwaICIA6lQ/tuVGSbd0Y6A4//gbtAhV2xNzEk0YEkaLuilipsVa1O2VC
-         520A==
-X-Forwarded-Encrypted: i=1; AJvYcCWBsURB92hVTDWM1J/2+Mb0gm4vKnW1GtUpNoBgUwZJgholKlZWnWFNeOw9wBfZ8+MY7xOZ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyw/JHQOzOUBE3y7NZtajLQ7pcHj3dp2Z0tv3TKuWsVx2g6alRr
-	HWoWNnSuhXwWGhszsAQTDJhWcaWsOfc03+vZqXdQLCQvUwRjMIrO5PR/
-X-Gm-Gg: AY/fxX6EpovXKMf06ZvJwnwzxnJdVpmVLPv4pG8ExP9powrozEkM+JvtoSkIZRofC0u
-	qz7MRgRvuP/mJ0k2O4egnf77uwy71ZU3uJumFPnM6AgYoFFyMWGZ2PAiI0dBBHbxBjqwazeOxV5
-	r9IYM/gW2ygqjJccjTgCtxzR1n/1xpvA1ihv8qL9Sn2G6EVyNigadn5fFhuvQhIOE7imeG7Z4E9
-	rAtM3v5chq4jF8fGTXzilRQlXH1BqfAILBQa03Tga5mExTv/ZoO9WH99xEtE9EhAmZST1lzyhnj
-	MTW6VjOgmEX6tYF4myfBF7m+SrFSW43OpaODkSV+l2+061eVRqWHY84AtobYZLyjK0jrbiT9Tyb
-	zweVDPCkqOGQKAWavHjw9B529p0RILN7GLOAqSWm+GwxO7V6fnskXBqXH1c9X2wHwh7nv4BY9Nq
-	a5zHBAAItkLKOMsL0Y8ROcbW1mEbDf7RrnAAjG9WyOa1H+snsPKSo=
-X-Google-Smtp-Source: AGHT+IFiFjOziIp/UKjDWvO52fsM6yAtFbCuD8k0D3ZRnROb+hWjeCMN7uKtar8ydRo0fiBlKpVfzw==
-X-Received: by 2002:a05:600c:c0d5:b0:47b:da85:b9ee with SMTP id 5b1f17b1804b1-47d1c038cf9mr183328575e9.31.1766654973785;
-        Thu, 25 Dec 2025 01:29:33 -0800 (PST)
-Received: from pumpkin (host-2-103-239-165.as13285.net. [2.103.239.165])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d1936d220sm364843305e9.8.2025.12.25.01.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Dec 2025 01:29:33 -0800 (PST)
-Date: Thu, 25 Dec 2025 09:29:27 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: LiangCheng Wang <zaq14760@gmail.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, Thomas
- Zimmermann <tzimmermann@suse.de>
-Subject: Re: drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame
- size (20024) exceeds limit (8192) in 'pixpaper_panel_hw_init'
-Message-ID: <20251225092927.4925c4d7@pumpkin>
-In-Reply-To: <202512250610.xyL5clTw-lkp@intel.com>
-References: <202512250610.xyL5clTw-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QZZYH/WH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766655343; x=1798191343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TcCc2zIbX0Qe9C4Qf96J+EeN2S2w6bx5WWKs0C2meac=;
+  b=QZZYH/WHjcWJDjDJxUhTlJcpIf7EswbqLu1ARWcXlKCdVc4RPOmcTv4J
+   InZ0K4ZcfJEOHD+nRD3KsyOWurz62/yfHZu0RULy1n+GxLW9wRC+WldJO
+   CCZrEg99WJhtZWrZuBjIWeZUR/WxojPkhGEzY1KrIPxhHwudaKSNbeo/x
+   a73f6/vqRi8vvTCNs+4X0A0j8yHQb8hXLcy8xXYuMzO47mqMZzti3yNNJ
+   HjpcZtXSh9S0xXWqW+2FY449ORoM5H2T/zzDeqE5zhRDrXVq1VoT32hyv
+   DuvcLpoIuBt1Tgd+EK+8FvXdCsA2jLqHyoAB9irCHj7FInGy0+dDzmGqz
+   Q==;
+X-CSE-ConnectionGUID: NkaeOebnQAWFn6XApg8WiQ==
+X-CSE-MsgGUID: M5/lc0PHQ1S5e5Dg9CiPYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="72317163"
+X-IronPort-AV: E=Sophos;i="6.21,176,1763452800"; 
+   d="scan'208";a="72317163"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2025 01:35:42 -0800
+X-CSE-ConnectionGUID: Podu9RDwTZepowNu+9wXMg==
+X-CSE-MsgGUID: T2D3D8GcROOzwu5fhhsoRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,176,1763452800"; 
+   d="scan'208";a="200492621"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 25 Dec 2025 01:35:40 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYhkp-000000003x3-0Mzd;
+	Thu, 25 Dec 2025 09:35:33 +0000
+Date: Thu, 25 Dec 2025 17:34:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yanfei Xu <yanfei.xu@bytedance.com>, pbonzini@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, caixiangfeng@bytedance.com,
+	fangying.tommy@bytedance.com, yanfei.xu@bytedance.com
+Subject: Re: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in
+ kvm_set_irq_routing()
+Message-ID: <202512251741.UOsoJoam-lkp@intel.com>
+References: <20251224023201.381586-1-yanfei.xu@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251224023201.381586-1-yanfei.xu@bytedance.com>
 
-On Thu, 25 Dec 2025 06:46:40 +0800
-kernel test robot <lkp@intel.com> wrote:
+Hi Yanfei,
 
-> Hi LiangCheng,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   ccd1cdca5cd433c8a5dff78b69a79b31d9b77ee1
-> commit: c9e70639f5915f2d084a0126e62fe53a52c29cea drm: tiny: Add support for Mayqueen Pixpaper e-ink panel
-> date:   4 months ago
-> config: x86_64-randconfig-013-20251225 (https://download.01.org/0day-ci/archive/20251225/202512250610.xyL5clTw-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512250610.xyL5clTw-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512250610.xyL5clTw-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame size (20024) exceeds limit (8192) in 'pixpaper_panel_hw_init' [-Wframe-larger-than]  
->      579 | static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
->          |            ^
->    1 warning generated.
-> 
-> 
-> vim +/pixpaper_panel_hw_init +579 drivers/gpu/drm/tiny/pixpaper.c
-> 
->    578	
->  > 579	static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)  
->    580	{
->    581		struct pixpaper_error_ctx err = { .errno_code = 0 };
->    582	
->    583		gpiod_set_value_cansleep(panel->reset, 0);
->    584		msleep(50);
->    585		gpiod_set_value_cansleep(panel->reset, 1);
->    586		msleep(50);
->    587	
->    588		pixpaper_wait_for_panel(panel);
->    589	
->    590		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_4D, &err);
->    591		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_4D_CONFIG, &err);
+kernel test robot noticed the following build warnings:
 
-Those two functions want marking noinline (all the time).
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	David
+url:    https://github.com/intel-lab-lkp/linux/commits/Yanfei-Xu/KVM-irqchip-KVM-Reduce-allocation-overhead-in-kvm_set_irq_routing/20251224-103451
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20251224023201.381586-1-yanfei.xu%40bytedance.com
+patch subject: [PATCH] KVM: irqchip: KVM: Reduce allocation overhead in kvm_set_irq_routing()
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251225/202512251741.UOsoJoam-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251225/202512251741.UOsoJoam-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512251741.UOsoJoam-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/loongarch/kvm/../../../virt/kvm/irqchip.c:190:6: warning: variable 'r' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     190 |         if (!e)
+         |             ^~
+   arch/loongarch/kvm/../../../virt/kvm/irqchip.c:233:9: note: uninitialized use occurs here
+     233 |         return r;
+         |                ^
+   arch/loongarch/kvm/../../../virt/kvm/irqchip.c:190:2: note: remove the 'if' if its condition is always false
+     190 |         if (!e)
+         |         ^~~~~~~
+     191 |                 goto out;
+         |                 ~~~~~~~~
+   arch/loongarch/kvm/../../../virt/kvm/irqchip.c:176:7: note: initialize the variable 'r' to silence this warning
+     176 |         int r;
+         |              ^
+         |               = 0
+   1 warning generated.
 
 
+vim +190 arch/loongarch/kvm/../../../virt/kvm/irqchip.c
 
+   167	
+   168	int kvm_set_irq_routing(struct kvm *kvm,
+   169				const struct kvm_irq_routing_entry *ue,
+   170				unsigned nr,
+   171				unsigned flags)
+   172	{
+   173		struct kvm_irq_routing_table *new, *old;
+   174		struct kvm_kernel_irq_routing_entry *e;
+   175		u32 i, j, nr_rt_entries = 0;
+   176		int r;
+   177	
+   178		for (i = 0; i < nr; ++i) {
+   179			if (ue[i].gsi >= KVM_MAX_IRQ_ROUTES)
+   180				return -EINVAL;
+   181			nr_rt_entries = max(nr_rt_entries, ue[i].gsi);
+   182		}
+   183	
+   184		nr_rt_entries += 1;
+   185	
+   186		new = kzalloc(struct_size(new, map, nr_rt_entries), GFP_KERNEL_ACCOUNT);
+   187		if (!new)
+   188			return -ENOMEM;
+   189		e = kcalloc(nr, sizeof(*e), GFP_KERNEL_ACCOUNT);
+ > 190		if (!e)
+   191			goto out;
+   192		new->entries_addr = e;
+   193	
+   194		new->nr_rt_entries = nr_rt_entries;
+   195		for (i = 0; i < KVM_NR_IRQCHIPS; i++)
+   196			for (j = 0; j < KVM_IRQCHIP_NUM_PINS; j++)
+   197				new->chip[i][j] = -1;
+   198	
+   199		for (i = 0; i < nr; ++i) {
+   200			r = -EINVAL;
+   201			switch (ue->type) {
+   202			case KVM_IRQ_ROUTING_MSI:
+   203				if (ue->flags & ~KVM_MSI_VALID_DEVID)
+   204					goto out;
+   205				break;
+   206			default:
+   207				if (ue->flags)
+   208					goto out;
+   209				break;
+   210			}
+   211			r = setup_routing_entry(kvm, new, e + i, ue);
+   212			if (r)
+   213				goto out;
+   214			++ue;
+   215		}
+   216	
+   217		mutex_lock(&kvm->irq_lock);
+   218		old = rcu_dereference_protected(kvm->irq_routing, 1);
+   219		rcu_assign_pointer(kvm->irq_routing, new);
+   220		kvm_irq_routing_update(kvm);
+   221		kvm_arch_irq_routing_update(kvm);
+   222		mutex_unlock(&kvm->irq_lock);
+   223	
+   224		synchronize_srcu_expedited(&kvm->irq_srcu);
+   225	
+   226		new = old;
+   227		r = 0;
+   228		goto out;
+   229	
+   230	out:
+   231		free_irq_routing_table(new);
+   232	
+   233		return r;
+   234	}
+   235	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
