@@ -1,144 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77313A1E6B;
-	Fri, 26 Dec 2025 12:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CCF274B58;
+	Fri, 26 Dec 2025 20:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766752346; cv=none; b=SQkH4272yL6RT0zx1aC5HrSLjlyhpUeOuHX8dqs54n+STM4g64MtEqZcmJL/UMKQCQthVVCVshfoRcjQcQQGatuqsNnva0rzuZThSs2hvNwF/+PcsVS3muy5/ffcn8ipd8jcvIZ+1Nz/uc0yz8Lt1FpiPJ/16JYhTtmgBEIG3Ak=
+	t=1766780710; cv=none; b=etCdiOYSyWJdfk1vXqffNFGPws8voNwA8ZdcRS4MQGi82uczuMZLhUNAzr1bn1e6syR8BzurqsCDqvatvjAjvSA/KEjCqcLpuandSgdf/Cra26/vFFXSOKC6CKR24UGLU4jeGztsP4cmiXTwVDVGvCxxskFXvojGz8NWIkn1t7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766752346; c=relaxed/simple;
-	bh=FbaYoFfToe6pPkt1KOkYwSAmsyLcTdfKga88xlj7jTE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T0VvcVKd0Ar+NQ7GIKeVdKWLuvL7FemBa5mQwilsvkUNeoAJxeFuOU0i9S5B6rzCXZW3MFzCchh5z//O55Ca38btp2XbL2WzAQqJ1caCgRYbJaV9dDcxBOl1vi3Gb5E8kdLJjAc9eB0oic0wLze3YajThlS1yef3SKZt8Zxa2/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kS5C7ofp; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1766780710; c=relaxed/simple;
+	bh=nvlLVnvatpqwgOjAS/q3NGOgoHfMJaX/ZS0arCm25vI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q1bfNFaNm6oXhQIvfNLjNzP83HR4HER+Y5CNUC+bhnLYmuqlVDvLa8+weXqFRgGy3GNycDfwhETM+/zqGO5am8swgTBUFUcHQMAKXicWeiqSb5fNZFVEEq0dlzwSyDkG2bhUVT+nlsInqF3ihc1gDJliXpLW0GIc8b2zgkbk2BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=JT6QTaUX; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kS5C7ofp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766752342; x=1798288342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FbaYoFfToe6pPkt1KOkYwSAmsyLcTdfKga88xlj7jTE=;
-  b=kS5C7ofpHCEutWnmV9RfuyuHf6IR+6eo9KHsAPUxAihk3UJ99+MUMnpi
-   ax19IKPF/f2l777cOZ3gBb5c4gCaWiNnLarPuKn+jTRLgFACzpbnTBBgn
-   k9+icDIGC7JNQkYCduHPx2JRz09cwdr2PNUQ7s+GandKbhk5Uyfkt0KkB
-   LOCxcTYxU6PLBds7kdghcYiFNfaRcX3A7v5hqUuWiCThyIqMCLWB0OJzh
-   QGdm0Bkqf/Y/yq+wOTbOwxrEG3iTOxoAcxn+MyM62LC8nmTOKnG7iFkdM
-   DFOdpQDdSSuKX1bxhiVpIde25Y6rtKqe78K4zZpcsho6YFwegY1COJUz2
-   g==;
-X-CSE-ConnectionGUID: vYUC6rKNRQ2Fo9WPIcsH4w==
-X-CSE-MsgGUID: JZNsw0ugSjG2Tw+7y/zdhg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11653"; a="68264047"
-X-IronPort-AV: E=Sophos;i="6.21,177,1763452800"; 
-   d="scan'208";a="68264047"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2025 04:32:21 -0800
-X-CSE-ConnectionGUID: BX3uOhXuRGCixMQLyS9NUA==
-X-CSE-MsgGUID: dxhpSzVyTHanhs2eBN8uAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,177,1763452800"; 
-   d="scan'208";a="205298179"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 26 Dec 2025 04:32:18 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vZ6zP-00000000529-3gjE;
-	Fri, 26 Dec 2025 12:32:15 +0000
-Date: Fri, 26 Dec 2025 20:31:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>, SeongJae Park <sj@kernel.org>,
-	Meta kernel team <kernel-team@meta.com>, cgroups@vger.kernel.org,
-	damon@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 8/8] memcg: rename mem_cgroup_ino() to mem_cgroup_id()
-Message-ID: <202512262045.CkWwCNp7-lkp@intel.com>
-References: <20251225232116.294540-9-shakeel.butt@linux.dev>
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="JT6QTaUX"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vZEMf-003iee-38; Fri, 26 Dec 2025 21:24:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector2; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
+	bh=i1GRlWCzDCZz3wdSHgzwoDEJfj5lb11Zn8FwETxb/9c=; b=JT6QTaUXUK+E4xcKu7QGqIZCOa
+	TKrrz8OrTaQqR+6vp6Me/XQ5GevgJZn0yZyHvJ9bkASBio+x6/RWP1EEXF0vpSLNH7M8LPlVrcXzG
+	3p9/33+lbiQ/aMuWhlCSXdYTz1yFWwpot82lX3fMA+4MbHPrjPma/oJ/hBpMz9atpp7zp79D68Ykj
+	N+6GXhcLYnvK7rtT19eq9dxr1ZziF3EEa+hm3F/hDNF7x8zY+9nV1ctacLh3EKAzgorMuLSQU3dgx
+	HMqLG837EHQT5/bLHjq8qGQnwZ6YuZizsmRsXhb6coKVtbQI/Ts1B2huGfAO+yFMxGzXaRnW/ooW+
+	lyPkVvDA==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vZEMd-0008Sz-UA; Fri, 26 Dec 2025 21:24:44 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vZEMV-00H1T6-CE; Fri, 26 Dec 2025 21:24:35 +0100
+Date: Fri, 26 Dec 2025 20:24:33 +0000
+From: david laight <david.laight@runbox.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, Ard
+ Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Thorsten Blum
+ <thorsten.blum@linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, David Sterba
+ <dsterba@suse.com>, llvm@lists.linux.dev, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] lib/crypto: blake2b: Roll up BLAKE2b round loop on
+ 32-bit
+Message-ID: <20251226202433.107af09a@pumpkin>
+In-Reply-To: <20251205201411.GA1954@quark>
+References: <20251203190652.144076-1-ebiggers@kernel.org>
+	<20251205141644.313404db@pumpkin>
+	<20251205201411.GA1954@quark>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251225232116.294540-9-shakeel.butt@linux.dev>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Shakeel,
+On Fri, 5 Dec 2025 12:14:11 -0800
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-kernel test robot noticed the following build warnings:
+> On Fri, Dec 05, 2025 at 02:16:44PM +0000, david laight wrote:
+> > Note that executing two G() in parallel probably requires the source
+> > interleave the instructions for the two G() rather than relying on the
+> > cpu's 'out of order execution' to do all the work
+> > (Intel cpu might manage it...).  
+> 
+> I actually tried that earlier, and it didn't help.  Either the compiler
+> interleaved the calculations already, or the CPU did, or both.
+> 
+> It definitely could use some more investigation to better understand
+> exactly what is going on, though.
+> 
+> You're welcome to take a closer look, if you're interested.
 
-[auto build test WARNING on sj/damon/next]
-[cannot apply to akpm-mm/mm-everything tj-cgroup/for-next linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I had a quick look at the objdump output for the 'not unrolled loop'
+of blake2s on x86-64 compiled with gcc 12.2.
+The generated code seemed reasonable.
+A single register tracked the array of offsets for the data buffer.
+So on x86 there was a read of the offset then nn(%rsp,%reg,4) to
+get the value (%reg,8 for blake2b).
+There weren't many spills to stack, I suspect that 14 of the v[]
+were assigned to registers - but didn't analyse the entire loop.
+The fully unrolled loop is harder to read, but one of the v[] still
+needs spilling to stack.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shakeel-Butt/memcg-introduce-private-id-API-for-in-kernel-users/20251226-072954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-patch link:    https://lore.kernel.org/r/20251225232116.294540-9-shakeel.butt%40linux.dev
-patch subject: [PATCH 8/8] memcg: rename mem_cgroup_ino() to mem_cgroup_id()
-config: arm64-randconfig-001-20251226 (https://download.01.org/0day-ci/archive/20251226/202512262045.CkWwCNp7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251226/202512262045.CkWwCNp7-lkp@intel.com/reproduce)
+Each 1/2G has at least one memory read and seven ALU operations.
+The Intel cpu (Haswell onwards) can execute 4 ALU instructions
+every clock - so however well the multiple G get scheduled each
+1/2G will be (pretty much) two clocks.
+That really means it should be possible to include the second
+memory read (for the not-unrolled loop) without slowing things down.
+Even if the nn(%rsp,%reg,8) needs an extra ALU operations the change
+shouldn't be massive.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512262045.CkWwCNp7-lkp@intel.com/
+Which makes be wonder whether the slowdown for rolling-up the loop
+is due to data cache effects rather than actual ALU instructions.
 
-All warnings (new ones prefixed by >>):
+Of course this is x86 and the nn(%rsp,%reg,8) addressing mode helps.
+Otherwise you'd want to multiply the offsets by 8 and, ideally, add
+in the stack offset of the data[] array allowing the simpler (%sp,%reg)
+addressing mode.
 
->> mm/damon/sysfs.c:2704:33: warning: format specifies type 'unsigned int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-    2704 |                 pr_info("id: %u, path: %s\n", mem_cgroup_id(memcg), path);
-         |                              ~~               ^~~~~~~~~~~~~~~~~~~~
-         |                              %llu
-   include/linux/printk.h:585:34: note: expanded from macro 'pr_info'
-     585 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+I've still not done any timings, on holiday with the wrong computers.
+
+	David
 
 
-vim +2704 mm/damon/sysfs.c
+> 
+> - Eric
+> 
 
-c951cd3b89010c SeongJae Park 2022-03-22  2690  
-a25dadf8af8ddc SeongJae Park 2022-11-18  2691  static ssize_t debug_show(struct kobject *kobj,
-a25dadf8af8ddc SeongJae Park 2022-11-18  2692  		struct kobj_attribute *attr, char *buf)
-a25dadf8af8ddc SeongJae Park 2022-11-18  2693  {
-a25dadf8af8ddc SeongJae Park 2022-11-18  2694  #ifdef CONFIG_MEMCG
-a25dadf8af8ddc SeongJae Park 2022-11-18  2695  	struct mem_cgroup *memcg;
-a25dadf8af8ddc SeongJae Park 2022-11-18  2696  	char *path = kmalloc(sizeof(*path) * PATH_MAX, GFP_KERNEL);
-a25dadf8af8ddc SeongJae Park 2022-11-18  2697  
-a25dadf8af8ddc SeongJae Park 2022-11-18  2698  	if (!path)
-a25dadf8af8ddc SeongJae Park 2022-11-18  2699  		return -ENOMEM;
-a25dadf8af8ddc SeongJae Park 2022-11-18  2700  
-a25dadf8af8ddc SeongJae Park 2022-11-18  2701  	for (memcg = mem_cgroup_iter(NULL, NULL, NULL); memcg; memcg =
-a25dadf8af8ddc SeongJae Park 2022-11-18  2702  			mem_cgroup_iter(NULL, memcg, NULL)) {
-a25dadf8af8ddc SeongJae Park 2022-11-18  2703  		cgroup_path(memcg->css.cgroup, path, PATH_MAX);
-a25dadf8af8ddc SeongJae Park 2022-11-18 @2704  		pr_info("id: %u, path: %s\n", mem_cgroup_id(memcg), path);
-a25dadf8af8ddc SeongJae Park 2022-11-18  2705  	}
-a25dadf8af8ddc SeongJae Park 2022-11-18  2706  
-a25dadf8af8ddc SeongJae Park 2022-11-18  2707  	kfree(path);
-a25dadf8af8ddc SeongJae Park 2022-11-18  2708  #endif
-a25dadf8af8ddc SeongJae Park 2022-11-18  2709  
-a25dadf8af8ddc SeongJae Park 2022-11-18  2710  	return 0;
-a25dadf8af8ddc SeongJae Park 2022-11-18  2711  }
-a25dadf8af8ddc SeongJae Park 2022-11-18  2712  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
