@@ -1,141 +1,268 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447C7154BF5;
-	Sat, 27 Dec 2025 13:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39A32222A0;
+	Sat, 27 Dec 2025 14:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766841850; cv=none; b=c4Zo+72I9En/JOh0PxpPBsj0w/pjoVRFq7yPWSiVWba78Qp4NnNKnIDbJcOS22j2OQlsFlUdV9GWl46Y+ZYcxtAdWo6/29QE2Z7OEoGGHj7NV3hZVBsXNLOM4Y+3hiNmiAQXqaFaE/ile80LOrynJx/2b/+CK28fUbcaRmzL2ro=
+	t=1766846175; cv=none; b=iED6G0qfqgdho3+KsLaqMFUguk2xZDCmMFSPs0M9EomDfFbNjtlS0rGb+DIGi9rgxPx0C/N7sGe2yE5AFcLnDIAInSbcNWfITSyIt7m7o+E3s/MX9Vy1Hco/mdbPbhcyLmUKck/mOUwSq3TKRKN3XcMJ0DMoU/E+yKUGGCHJgeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766841850; c=relaxed/simple;
-	bh=MTN64UOfmWKZgF2uN4JzGrrlM7gLmPL4rjrDdtJ69ak=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ndhNeaVogmfDGTVh/6KdOKkJ/hjbeY5WbWhSLe7lMLelYDUD6VYYc5LIpFLoQHIZL9KRn6ER6n/ClI2Q+BiRpBah/2BuHb9pHXiPCSRV3fLxtGp00suuc0R5TOnZMwBr3KTxyEqA3Ihf3ooiPNPauBUq9+W8EtHAxkUIe6EqDng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aD+iJ0iE; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1766846175; c=relaxed/simple;
+	bh=XruNjXDQ+pLSmZykNsY99NzSIdjR9hrgODcg6kqeGpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GU3kssv9Hu5s6Jja4yyyLtbh8pE2dIifxHU+tgcD+PuxZOEw3TJIkZKNZhDEeohr4cgEINL8e7mqpi/rmDX8LQkGalBp4OpUMUNYFs+YINNTq82KCKCeon5z9XCLm312YdAbzkmYEsxDcWKicB5OSIxuQRoMeru0CTZR5aImZE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fhLnNfvy; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aD+iJ0iE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fhLnNfvy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766841849; x=1798377849;
-  h=date:from:to:cc:subject:message-id;
-  bh=MTN64UOfmWKZgF2uN4JzGrrlM7gLmPL4rjrDdtJ69ak=;
-  b=aD+iJ0iEvtwEVfmPfWuHNDOyCTA/mUCcmUQfXy030JUiMA6KA73g3Qfp
-   P3b3csv5ofbySvjHJv2JwNhJ2ZnXTKaZD+2vGRHd/zT0ZhJRkOGwxiMUU
-   tHRWxPRSgc4jt7RrYHkALgrmWJW7znWOrCFWcGUlQQ9phXb6C6C/AgH14
-   xcW4WsIxo12OH0BEwGQrZkF5tAkJxxJabx9l5tgkXUxD7+z5HkKuKfD0o
-   Eh27xNUoNEcv4KH8nM/TISTaOJI8fm4sSY1B8xwHlFaCLimcG/l4lGABL
-   K5qCs21P2nYMmLRlIEzl9FWETCszWVd/U+6CkDIA1aw7OX2m0stc99dly
+  t=1766846173; x=1798382173;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XruNjXDQ+pLSmZykNsY99NzSIdjR9hrgODcg6kqeGpQ=;
+  b=fhLnNfvypuQkTavjJ0KDu3xQ001F4Fdprj4EUbI7dy6kSq70TgKGLt62
+   ZJ99Kc9RRHgRJIeyh7aMna8bvNQobvyq2V8esV1rm79+0/wR7h3AhBR+M
+   vV8JtSNciQYqflDlQI9U5dy3nqUuLzRMnxceuzZcjkGClqkRFrNHQmf23
+   Xu7/gwE4wrVTG1/4kEpI1NIiQu0EgcHnS20VAzrJ93oqZWXMBru5um2Ae
+   X9Z7KA42sgq7i4Ne19K1232rvuyhIADJnokL1G9W8DcDevYJ4BSIWtAnm
+   N9aMJUbWvKcCZrPBnwA2KVIP84NaaoaU1dsrGcEcYnxpLDKAUeIeUbg/D
    A==;
-X-CSE-ConnectionGUID: 2615NJh3SoOI4smGQVSMxg==
-X-CSE-MsgGUID: Yq3DTc8XSfeiPGZ7svN4Bw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="79176479"
+X-CSE-ConnectionGUID: xQ+PC/H0SMSiv4FNa33iEA==
+X-CSE-MsgGUID: I+Qoh6DtQY6DPZ+0+IH+Rw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="94014698"
 X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="79176479"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 05:24:08 -0800
-X-CSE-ConnectionGUID: SZ5SSthNS8qaaxpoAWxWgg==
-X-CSE-MsgGUID: lefJGmzATfWmHQooBs4Nbg==
+   d="scan'208";a="94014698"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:36:12 -0800
+X-CSE-ConnectionGUID: ytWJBh5gQ0SgHankNUyK4Q==
+X-CSE-MsgGUID: Lzx5E9MqRXeniwUYM6lSQg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="231628950"
+   d="scan'208";a="200581167"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 27 Dec 2025 05:24:06 -0800
+  by orviesa008.jf.intel.com with ESMTP; 27 Dec 2025 06:36:08 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vZUH5-000000005r1-44c0;
-	Sat, 27 Dec 2025 13:24:03 +0000
-Date: Sat, 27 Dec 2025 21:23:37 +0800
+	id 1vZVOn-000000005sn-1JCs;
+	Sat, 27 Dec 2025 14:36:05 +0000
+Date: Sat, 27 Dec 2025 22:35:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [chao:feature/lock_trace 12/12] fs/f2fs/checkpoint.c:84:3:
- error: call to undeclared function 'inject_timeout'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202512272106.IboSmrsA-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thomas Staudt <tstaudt@de.ibm.com>,
+	Arnaud Lefebvre <arnaud.lefebvre@clever-cloud.com>,
+	Baoquan he <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+	Kairui Song <ryncsn@gmail.com>, Pingfan Liu <kernelfans@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/kdump: pass dm-crypt keys to kdump kernel
+Message-ID: <202512272218.ghBaSjzO-lkp@intel.com>
+References: <20251226140636.1378505-1-coxu@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251226140636.1378505-1-coxu@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/lock_trace
-head:   a9004baf110bf87f6a75b023c26616d966c93733
-commit: f9743bca5f65d63981311ab66455aacdf1de7fd2 [12/12] f2fs: sysfs: introduce inject_lock_timeout
-config: arm-randconfig-003-20251227 (https://download.01.org/0day-ci/archive/20251227/202512272106.IboSmrsA-lkp@intel.com/config)
+Hi Coiby,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on ccd1cdca5cd433c8a5dff78b69a79b31d9b77ee1]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Coiby-Xu/powerpc-kdump-pass-dm-crypt-keys-to-kdump-kernel/20251226-220726
+base:   ccd1cdca5cd433c8a5dff78b69a79b31d9b77ee1
+patch link:    https://lore.kernel.org/r/20251226140636.1378505-1-coxu%40redhat.com
+patch subject: [PATCH] powerpc/kdump: pass dm-crypt keys to kdump kernel
+config: powerpc64-randconfig-001-20251227 (https://download.01.org/0day-ci/archive/20251227/202512272218.ghBaSjzO-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251227/202512272106.IboSmrsA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251227/202512272218.ghBaSjzO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512272106.IboSmrsA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512272218.ghBaSjzO-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/f2fs/hash.c:18:
->> fs/f2fs/f2fs.h:4945:6: warning: no previous prototype for function 'f2fs_simulate_lock_timeout' [-Wmissing-prototypes]
-    4945 | void f2fs_simulate_lock_timeout(struct f2fs_sb_info *sbi) { return; }
-         |      ^
-   fs/f2fs/f2fs.h:4945:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    4945 | void f2fs_simulate_lock_timeout(struct f2fs_sb_info *sbi) { return; }
-         | ^
-         | static 
-   1 warning generated.
---
-   In file included from fs/f2fs/checkpoint.c:22:
->> fs/f2fs/f2fs.h:4945:6: warning: no previous prototype for function 'f2fs_simulate_lock_timeout' [-Wmissing-prototypes]
-    4945 | void f2fs_simulate_lock_timeout(struct f2fs_sb_info *sbi) { return; }
-         |      ^
-   fs/f2fs/f2fs.h:4945:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    4945 | void f2fs_simulate_lock_timeout(struct f2fs_sb_info *sbi) { return; }
-         | ^
-         | static 
-   fs/f2fs/checkpoint.c:37:18: error: variable has incomplete type 'struct rq_flags'
-      37 |         struct rq_flags rf;
-         |                         ^
-   include/linux/sched.h:640:8: note: forward declaration of 'struct rq_flags'
-     640 | struct rq_flags;
-         |        ^
-   fs/f2fs/checkpoint.c:40:7: error: call to undeclared function 'task_rq_lock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      40 |         rq = task_rq_lock(t, &rf);
-         |              ^
-   fs/f2fs/checkpoint.c:42:2: error: call to undeclared function 'task_rq_unlock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      42 |         task_rq_unlock(rq, t, &rf);
-         |         ^
->> fs/f2fs/checkpoint.c:84:3: error: call to undeclared function 'inject_timeout'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      84 |                 inject_timeout(sem->sbi);
-         |                 ^
-   1 warning and 4 errors generated.
+>> arch/powerpc/kexec/elf_64.c:95:9: error: call to undeclared function 'crash_load_dm_crypt_keys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      95 |                 ret = crash_load_dm_crypt_keys(image);
+         |                       ^
+   1 error generated.
 
 
-vim +/inject_timeout +84 fs/f2fs/checkpoint.c
+vim +/crash_load_dm_crypt_keys +95 arch/powerpc/kexec/elf_64.c
 
-    70	
-    71	static inline void trace_lock_elapsed_time_end(struct f2fs_rwsem *sem,
-    72					struct f2fs_lock_context *lc, bool is_write)
-    73	{
-    74		struct f2fs_time_stat tts;
-    75		unsigned long long total_time, running_time;
-    76		unsigned long long runnable_time = 0;
-    77		unsigned long long io_sleep_time = 0;
-    78		unsigned long long other_time = 0;
-    79	
-    80		if (!lc->lock_trace)
-    81			return;
-    82	
-    83		if (time_to_inject(sem->sbi, FAULT_LOCK_TIMEOUT))
-  > 84			inject_timeout(sem->sbi);
-    85	
-    86		get_lock_elapsed_time(&tts);
-    87	
-    88		total_time = (tts.total_time - lc->ts.total_time) / NSEC_PER_MSEC;
-    89		if (total_time <= sem->sbi->max_lock_elapsed_time)
-    90			return;
-    91	
-    92		running_time = (tts.running_time - lc->ts.running_time) / NSEC_PER_MSEC;
-    93	
+    27	
+    28	static void *elf64_load(struct kimage *image, char *kernel_buf,
+    29				unsigned long kernel_len, char *initrd,
+    30				unsigned long initrd_len, char *cmdline,
+    31				unsigned long cmdline_len)
+    32	{
+    33		int ret;
+    34		unsigned long kernel_load_addr;
+    35		unsigned long initrd_load_addr = 0, fdt_load_addr;
+    36		void *fdt;
+    37		const void *slave_code;
+    38		struct elfhdr ehdr;
+    39		char *modified_cmdline = NULL;
+    40		struct crash_mem *rmem = NULL;
+    41		struct kexec_elf_info elf_info;
+    42		struct kexec_buf kbuf = { .image = image, .buf_min = 0,
+    43					  .buf_max = ppc64_rma_size };
+    44		struct kexec_buf pbuf = { .image = image, .buf_min = 0,
+    45					  .buf_max = ppc64_rma_size, .top_down = true,
+    46					  .mem = KEXEC_BUF_MEM_UNKNOWN };
+    47	
+    48		ret = kexec_build_elf_info(kernel_buf, kernel_len, &ehdr, &elf_info);
+    49		if (ret)
+    50			return ERR_PTR(ret);
+    51	
+    52		if (IS_ENABLED(CONFIG_CRASH_DUMP) && image->type == KEXEC_TYPE_CRASH) {
+    53			/* min & max buffer values for kdump case */
+    54			kbuf.buf_min = pbuf.buf_min = crashk_res.start;
+    55			kbuf.buf_max = pbuf.buf_max =
+    56					((crashk_res.end < ppc64_rma_size) ?
+    57					 crashk_res.end : (ppc64_rma_size - 1));
+    58		}
+    59	
+    60		ret = kexec_elf_load(image, &ehdr, &elf_info, &kbuf, &kernel_load_addr);
+    61		if (ret)
+    62			goto out;
+    63	
+    64		kexec_dprintk("Loaded the kernel at 0x%lx\n", kernel_load_addr);
+    65	
+    66		ret = kexec_load_purgatory(image, &pbuf);
+    67		if (ret) {
+    68			pr_err("Loading purgatory failed.\n");
+    69			goto out;
+    70		}
+    71	
+    72		kexec_dprintk("Loaded purgatory at 0x%lx\n", pbuf.mem);
+    73	
+    74		/* Load additional segments needed for panic kernel */
+    75		if (IS_ENABLED(CONFIG_CRASH_DUMP) && image->type == KEXEC_TYPE_CRASH) {
+    76			ret = load_crashdump_segments_ppc64(image, &kbuf);
+    77			if (ret) {
+    78				pr_err("Failed to load kdump kernel segments\n");
+    79				goto out;
+    80			}
+    81	
+    82			/* Setup cmdline for kdump kernel case */
+    83			modified_cmdline = setup_kdump_cmdline(image, cmdline,
+    84							       cmdline_len,
+    85							       "elfcorehdr",
+    86							       image->elf_load_addr);
+    87			if (!modified_cmdline) {
+    88				pr_err("Setting up cmdline for kdump kernel failed\n");
+    89				ret = -EINVAL;
+    90				goto out;
+    91			}
+    92			cmdline = modified_cmdline;
+    93			cmdline_len = strlen(cmdline) + 1;
+    94	
+  > 95			ret = crash_load_dm_crypt_keys(image);
+    96			if (ret == -ENOENT) {
+    97				kexec_dprintk("No dm crypt key to load\n");
+    98			} else if (ret) {
+    99				pr_err("Failed to load dm crypt keys\n");
+   100				return ERR_PTR(ret);
+   101			}
+   102	
+   103			if (image->dm_crypt_keys_addr != 0) {
+   104				modified_cmdline = setup_kdump_cmdline(image, cmdline,
+   105								       cmdline_len,
+   106								       "dmcryptkeys",
+   107								       image->dm_crypt_keys_addr);
+   108				if (!modified_cmdline) {
+   109					pr_err("Setting up cmdline for kdump kernel failed\n");
+   110					ret = -EINVAL;
+   111					goto out;
+   112				}
+   113				cmdline = modified_cmdline;
+   114			}
+   115		}
+   116	
+   117		if (initrd != NULL) {
+   118			kbuf.buffer = initrd;
+   119			kbuf.bufsz = kbuf.memsz = initrd_len;
+   120			kbuf.buf_align = PAGE_SIZE;
+   121			kbuf.top_down = false;
+   122			kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+   123			ret = kexec_add_buffer(&kbuf);
+   124			if (ret)
+   125				goto out;
+   126			initrd_load_addr = kbuf.mem;
+   127	
+   128			kexec_dprintk("Loaded initrd at 0x%lx\n", initrd_load_addr);
+   129		}
+   130	
+   131		ret = get_reserved_memory_ranges(&rmem);
+   132		if (ret)
+   133			goto out;
+   134	
+   135		fdt = of_kexec_alloc_and_setup_fdt(image, initrd_load_addr,
+   136						   initrd_len, cmdline,
+   137						   kexec_extra_fdt_size_ppc64(image, rmem));
+   138		if (!fdt) {
+   139			pr_err("Error setting up the new device tree.\n");
+   140			ret = -EINVAL;
+   141			goto out;
+   142		}
+   143	
+   144		ret = setup_new_fdt_ppc64(image, fdt, rmem);
+   145		if (ret)
+   146			goto out_free_fdt;
+   147	
+   148		if (!IS_ENABLED(CONFIG_CRASH_HOTPLUG) || image->type != KEXEC_TYPE_CRASH)
+   149			fdt_pack(fdt);
+   150	
+   151		kbuf.buffer = fdt;
+   152		kbuf.bufsz = kbuf.memsz = fdt_totalsize(fdt);
+   153		kbuf.buf_align = PAGE_SIZE;
+   154		kbuf.top_down = true;
+   155		kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+   156		ret = kexec_add_buffer(&kbuf);
+   157		if (ret)
+   158			goto out_free_fdt;
+   159	
+   160		/* FDT will be freed in arch_kimage_file_post_load_cleanup */
+   161		image->arch.fdt = fdt;
+   162	
+   163		fdt_load_addr = kbuf.mem;
+   164	
+   165		kexec_dprintk("Loaded device tree at 0x%lx\n", fdt_load_addr);
+   166	
+   167		slave_code = elf_info.buffer + elf_info.proghdrs[0].p_offset;
+   168		ret = setup_purgatory_ppc64(image, slave_code, fdt, kernel_load_addr,
+   169					    fdt_load_addr);
+   170		if (ret)
+   171			pr_err("Error setting up the purgatory.\n");
+   172	
+   173		goto out;
+   174	
+   175	out_free_fdt:
+   176		kvfree(fdt);
+   177	out:
+   178		kfree(rmem);
+   179		kfree(modified_cmdline);
+   180		kexec_free_elf_info(&elf_info);
+   181	
+   182		return ret ? ERR_PTR(ret) : NULL;
+   183	}
+   184	
 
 -- 
 0-DAY CI Kernel Test Service
