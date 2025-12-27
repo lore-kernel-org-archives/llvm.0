@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5699D487BE;
-	Sat, 27 Dec 2025 11:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675CD2F28EB;
+	Sat, 27 Dec 2025 12:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766835604; cv=none; b=PEKY9KZzbIA4IYD932Sns4RIP01+EzxQwDiuVDB/aTeoCZW1uyOYn3LWZGIg2A+hZr6E+45vQWwasyT0vfaxZbBrMHCS9AP+gAkrXR3019G8kCNLjTO4jHhVsx1BYpTBOf+p4QTlhd0EywAlIAb56El5AxmA3IiVmtLTBRPUqHs=
+	t=1766837514; cv=none; b=YlFU+sfun4wXVO1ZdSrig4UB2xckt9JGYqheWwOehRONAoGG2xGT+9GLY1mqiuX+5Jyx7Z0pK4+NdMylg/IaoMTHfuK8ag9ENvhuo6zGKb6kZZSNAVIfXFZLaUS80zTIoLQO+E0uQxr79yTRYId2RugQ4oHpecqfJps50Xspbpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766835604; c=relaxed/simple;
-	bh=Vkc+X5bAG5Bigv4OX5jwbMjunMpUv3klOO04x8pu0jc=;
+	s=arc-20240116; t=1766837514; c=relaxed/simple;
+	bh=5rlzGCg2dCtgcZ3ltO61gAui7Ts+OfSSOjrtg9tCM7c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LcpE2j3jFIwbeMD/i63yWNIrhU7QNPS07o+j5ezF1hQXgm5kwURAtyLZi90wbe5MlqJaQ0LIks11SBdD1K30elx+NLLaTuaYz+X7Z2Pd08Ug6kIF+QBXav/Qh51rukvDVAyRT/7iKwyqScc2nrE0h3cOywYU5tltlwUnRzOoCA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n/3UO/VQ; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=hsb78/PvJCx5Fr87tvMHcTra71Y+clCnMCMo7WZuh6ELkmbb5Xkc4+JvtX6yk7e45kiZrxYVAi8XB2wAN3ME4tx+3i9HSEmuX/f8aLO3qBQ7fE/dwso3MH6/v0Nwh3qk6MIQb2Xb6VJq6NYhSkr9djhJn9I6E34hYQeCvIoPGTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nbC9q+iS; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n/3UO/VQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nbC9q+iS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766835601; x=1798371601;
+  t=1766837512; x=1798373512;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Vkc+X5bAG5Bigv4OX5jwbMjunMpUv3klOO04x8pu0jc=;
-  b=n/3UO/VQjuKtniosofqLjC1vMmQUHdSnVCM+QfqZlRM8+sOrgN6YofC+
-   I/+b6nJC9E3qejszB4vJvRLgGp53QsMl8fxwOC+Ba7V3eTYkgJoHOA8aq
-   JzVZE1Y1n9u0sbtnD9IbYm3VbENwgO6VaMiM28QuzBU/BVSOLZpF9n5/G
-   MPOOBiz4Vm639usoO0Cmf5CYuKUZZxk6nPBK1PTb71jxRYYqpelQ4h4gG
-   CW2C2meLc2of37yyMT5xuJKwVfvKpq5JpbGsoHkzeHAAUW4iw9lzcmbba
-   HeS3tNb3NiUtGZfVvtvVure9W6NLGMQJar3jkuM/Vgs3lt0fdKYdwtVNX
-   A==;
-X-CSE-ConnectionGUID: kcaqObgiT4yDO76vvpM8Ew==
-X-CSE-MsgGUID: 4Qebvi1/TkijdAB8AUzX7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11653"; a="79174535"
+  bh=5rlzGCg2dCtgcZ3ltO61gAui7Ts+OfSSOjrtg9tCM7c=;
+  b=nbC9q+iSRr3dQ9JOn+wlnChfw0+Z96F9V+ADFT4fzuRjNfMjxHW2b0LC
+   SL6tvpvVK0fVtN5UbdkSvFTku3/ANeDLbJVCriMgZB/nf5Kd/Iy3wAQ6T
+   KT6VBLDNXb690i3FD28di0G4EzfchdgJYkFP88erE9PKNBeAh9/hcz2D9
+   XLCMgGJKfk41GThf0nlXxoBLtC4X1IY6SuI9lHBhxjL9is4cchorCxzRd
+   ExqO1MwGzOjkxTq/ykxgs9L5dle1uiC5IgpmKsgInJPxAsKYl1aIZxGrF
+   EzzNk18sfAFBgD9bvp2nAgSEwXrFeLRMeeZQajdtbeh5JSbC7NmMePpNp
+   w==;
+X-CSE-ConnectionGUID: Z3T6mko+SaSvdEdvGij67Q==
+X-CSE-MsgGUID: mnIkhoTqR9upYq1nRX83yg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="68432687"
 X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="79174535"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 03:39:59 -0800
-X-CSE-ConnectionGUID: 5vIKQ6g5Ttu6JvY3YWR8PA==
-X-CSE-MsgGUID: 7tRYIJSQTwqfxFbSUoYh+A==
+   d="scan'208";a="68432687"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 04:11:52 -0800
+X-CSE-ConnectionGUID: DKd9dMYsRK+R6UugFpJynA==
+X-CSE-MsgGUID: 7KDCho3+R86Lv2bUmNPLBQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="200559133"
+   d="scan'208";a="200182349"
 Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 27 Dec 2025 03:40:00 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 27 Dec 2025 04:11:50 -0800
 Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vZSeI-000000005mJ-3ifa;
-	Sat, 27 Dec 2025 11:39:55 +0000
-Date: Sat, 27 Dec 2025 19:39:33 +0800
+	id 1vZT9A-000000005oj-11Cq;
+	Sat, 27 Dec 2025 12:11:48 +0000
+Date: Sat, 27 Dec 2025 20:10:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC v1 7/8] PM: hibernate: Enter s2idle sleep state before
- hibernation
-Message-ID: <202512271901.0fiprS0M-lkp@intel.com>
-References: <20251226102656.6296-8-lkml@antheas.dev>
+To: Rosen Penev <rosenp@gmail.com>, dmaengine@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: pl08x: add COMPILE_TEST support
+Message-ID: <202512271929.xdAStz0T-lkp@intel.com>
+References: <20251223204500.12786-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,194 +63,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251226102656.6296-8-lkml@antheas.dev>
+In-Reply-To: <20251223204500.12786-1-rosenp@gmail.com>
 
-Hi Antheas,
+Hi Rosen,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 9448598b22c50c8a5bb77a9103e2d49f134c9578]
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/Documentation-PM-Add-documentation-for-Runtime-Standby-States/20251226-183746
-base:   9448598b22c50c8a5bb77a9103e2d49f134c9578
-patch link:    https://lore.kernel.org/r/20251226102656.6296-8-lkml%40antheas.dev
-patch subject: [RFC v1 7/8] PM: hibernate: Enter s2idle sleep state before hibernation
-config: i386-randconfig-002-20251227 (https://download.01.org/0day-ci/archive/20251227/202512271901.0fiprS0M-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/dmaengine-pl08x-add-COMPILE_TEST-support/20251224-045157
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20251223204500.12786-1-rosenp%40gmail.com
+patch subject: [PATCH] dmaengine: pl08x: add COMPILE_TEST support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251227/202512271929.xdAStz0T-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251227/202512271901.0fiprS0M-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251227/202512271929.xdAStz0T-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512271901.0fiprS0M-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512271929.xdAStz0T-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/power/hibernate.c:823:5: warning: 'CONFIG_SUSPEND' is not defined, evaluates to 0 [-Wundef]
-     823 | #if CONFIG_SUSPEND
-         |     ^
-   kernel/power/hibernate.c:913:5: warning: 'CONFIG_SUSPEND' is not defined, evaluates to 0 [-Wundef]
-     913 | #if CONFIG_SUSPEND
-         |     ^
->> kernel/power/hibernate.c:794:7: warning: variable 'powered_down' set but not used [-Wunused-but-set-variable]
-     794 |         bool powered_down = false;
-         |              ^
-   3 warnings generated.
-
-
-vim +/CONFIG_SUSPEND +823 kernel/power/hibernate.c
-
-   784	
-   785	/**
-   786	 * hibernate - Carry out system hibernation, including saving the image.
-   787	 */
-   788	int hibernate(void)
-   789	{
-   790	#ifdef CONFIG_SUSPEND
-   791		standby_state_t previous_standby;
-   792	#endif
-   793		bool snapshot_test = false;
- > 794		bool powered_down = false;
-   795		unsigned int sleep_flags;
-   796		int error;
-   797	
-   798		if (!hibernation_available()) {
-   799			pm_pr_dbg("Hibernation not available.\n");
-   800			return -EPERM;
-   801		}
-   802	
-   803		/*
-   804		 * Query for the compression algorithm support if compression is enabled.
-   805		 */
-   806		if (!nocompress) {
-   807			strscpy(hib_comp_algo, hibernate_compressor);
-   808			if (!crypto_has_acomp(hib_comp_algo, 0, CRYPTO_ALG_ASYNC)) {
-   809				pr_err("%s compression is not available\n", hib_comp_algo);
-   810				return -EOPNOTSUPP;
-   811			}
-   812		}
-   813	
-   814		sleep_flags = lock_system_sleep();
-   815		/* The snapshot device should not be opened while we're running */
-   816		if (!hibernate_acquire()) {
-   817			error = -EBUSY;
-   818			goto Unlock;
-   819		}
-   820	
-   821		pr_info("hibernation entry\n");
-   822	
- > 823	#if CONFIG_SUSPEND
-   824		/* Enter the standby screen off state in case userspace has not. */
-   825		previous_standby = pm_standby_get_state();
-   826		pm_standby_transition(PM_STANDBY_INACTIVE);
-   827	#endif
-   828	
-   829		pm_prepare_console();
-   830		error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
-   831		if (error)
-   832			goto Restore;
-   833	
-   834		error = pm_sleep_fs_sync();
-   835		if (error)
-   836			goto Notify;
-   837	
-   838		filesystems_freeze(filesystem_freeze_enabled);
-   839	
-   840		error = freeze_processes();
-   841		if (error)
-   842			goto Exit;
-   843	
-   844		lock_device_hotplug();
-   845		/* Allocate memory management structures */
-   846		error = create_basic_memory_bitmaps();
-   847		if (error)
-   848			goto Thaw;
-   849	
-   850		error = hibernation_snapshot(hibernation_mode == HIBERNATION_PLATFORM);
-   851		if (error || freezer_test_done)
-   852			goto Free_bitmaps;
-   853	
-   854		if (in_suspend) {
-   855			unsigned int flags = 0;
-   856	
-   857			if (hibernation_mode == HIBERNATION_PLATFORM)
-   858				flags |= SF_PLATFORM_MODE;
-   859			if (nocompress) {
-   860				flags |= SF_NOCOMPRESS_MODE;
-   861			} else {
-   862			        flags |= SF_CRC32_MODE;
-   863	
-   864				/*
-   865				 * By default, LZO compression is enabled. Use SF_COMPRESSION_ALG_LZ4
-   866				 * to override this behaviour and use LZ4.
-   867				 *
-   868				 * Refer kernel/power/power.h for more details
-   869				 */
-   870	
-   871				if (!strcmp(hib_comp_algo, COMPRESSION_ALGO_LZ4))
-   872					flags |= SF_COMPRESSION_ALG_LZ4;
-   873				else
-   874					flags |= SF_COMPRESSION_ALG_LZO;
-   875			}
-   876	
-   877			pm_pr_dbg("Writing hibernation image.\n");
-   878			error = swsusp_write(flags);
-   879			swsusp_free();
-   880			if (!error) {
-   881				if (hibernation_mode == HIBERNATION_TEST_RESUME) {
-   882					snapshot_test = true;
-   883				} else {
-   884					powered_down = true;
-   885					power_down();
-   886				}
-   887			}
-   888			in_suspend = 0;
-   889			pm_restore_gfp_mask();
-   890		} else {
-   891			pm_pr_dbg("Hibernation image restored successfully.\n");
-   892		}
-   893	
-   894	 Free_bitmaps:
-   895		free_basic_memory_bitmaps();
-   896	 Thaw:
-   897		unlock_device_hotplug();
-   898		if (snapshot_test) {
-   899			pm_pr_dbg("Checking hibernation image\n");
-   900			error = swsusp_check(false);
-   901			if (!error)
-   902				error = load_image_and_restore();
-   903		}
-   904		thaw_processes();
-   905	
-   906		/* Don't bother checking whether freezer_test_done is true */
-   907		freezer_test_done = false;
-   908	 Exit:
-   909		filesystems_thaw();
-   910	 Notify:
-   911		pm_notifier_call_chain(PM_POST_HIBERNATION);
-   912	 Restore:
-   913	#if CONFIG_SUSPEND
-   914		/*
-   915		 * If we resumed from S5, we are in the active standby state. However,
-   916		 * the kernel restored a stale value. Sync it. Otherwise, in e.g., the
-   917		 * case of a failed hibernation, transition to the previous value.
-   918		 */
-   919		if (powered_down)
-   920			pm_standby_set_state(PM_STANDBY_ACTIVE);
-   921		else
-   922			pm_standby_transition(previous_standby);
-   923	#endif
-   924	
-   925		pm_restore_console();
-   926		hibernate_release();
-   927	 Unlock:
-   928		unlock_system_sleep(sleep_flags);
-   929		pr_info("hibernation exit\n");
-   930	
-   931		return error;
-   932	}
-   933	
+>> ld.lld: error: undefined symbol: amba_request_regions
+   >>> referenced by amba-pl08x.c:2702 (drivers/dma/amba-pl08x.c:2702)
+   >>>               vmlinux.o:(pl08x_probe)
+--
+>> ld.lld: error: undefined symbol: amba_release_regions
+   >>> referenced by amba-pl08x.c:2977 (drivers/dma/amba-pl08x.c:2977)
+   >>>               vmlinux.o:(pl08x_probe)
 
 -- 
 0-DAY CI Kernel Test Service
