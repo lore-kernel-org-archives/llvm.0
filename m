@@ -1,48 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB552B2DA;
-	Fri, 26 Dec 2025 23:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E8438DE1;
+	Sat, 27 Dec 2025 07:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766792813; cv=none; b=iYD/gMwYjvjyHrh5AxoRhTCfZThhCC1H3jqebR9Wn8ifiTTh++/JSPciuYarOqKcWQ/lDR3gMBY5zmFY4x0mkSrFulCWM2xvU1dryvQZ6nR7mooPoEbobpupfit61efeaECTCSa5eo016ux6900/C6i482zf0GToMffuCnDo7RY=
+	t=1766819117; cv=none; b=ZjDVs52szGjaJpRhNyy7k4MHkK36WVD51qI6NKeGI6YLbeW6T49NdZPZZ3LtGzY8fyQz7+WA2m/6Eiea5FWCmxtwog8p0Vgmfras3RZzU8df0nYktt8/lmgipGTGaVxw5mlZbI9EgL/bNoWdNkPc7mBtdiMPF+59XqmnIMRq3G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766792813; c=relaxed/simple;
-	bh=mNwbS3FHpwKCBARgVxIQ6GeM8kLKlZvOA+pbE6NdXDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=mmqIVC0HP8tL6lNS00kdt7qr6Yihu/LM/yh2BbbeCXn9CX4r9J8daZVdshrbGyMd12N/XURK8t/SP8t9acLiIA8Dq9VOeXItxPJExtxFgQljXLdYQ6b5mE1K2CpAIkGXzGWNDBOnSA+U9MAagPVhIu03TYRMPw/2skEOPFLkvts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DIBvyqte; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766819117; c=relaxed/simple;
+	bh=+MYBUvaekcX2sSPzpj1fUpCCoIuWlnhasEc3m8SvhqA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nz4GgB0JnYlgxT4szaARfXRW3wkd9kMW1tkj7+qzwnKTStKZTojDnT5v+8qZ38x7QcHYvU4OS3mfMrfveF40dpKhv7jczy+CNrYZ/zsp1sSVnl1txBI+6+hYiJy1yqB/s5/RC21IjUdHreXMpLFS29w8eLYC65yiSe/RA2VZvxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YtTdb0Xd; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DIBvyqte"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF764C4CEF7;
-	Fri, 26 Dec 2025 23:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766792813;
-	bh=mNwbS3FHpwKCBARgVxIQ6GeM8kLKlZvOA+pbE6NdXDE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=DIBvyqtesOH1on+kWKFitpmCpw/8xWzrnv7rSzSGryD0GOIUb+sKtUrpI6+CDoRNg
-	 zGWmE25HQHVAqO5tJIvzr80CbDxNA461ZRdVpEtJi6Ko8seHti6uMPavxHxYWdmgGm
-	 q2oW4/5lPMyE3DpoadKBUp4ES3mgFHusPRSSvbheeC5DcBmR5s7ZFbaO7DxigGCwGg
-	 Q0p/lmlei0OvDHTZrhzyC0Wyhr1udB+4bsqHn2iAxPz2UPATX42YQF3DXPcP9JVxFE
-	 r3qXkatr5isuw3GZkZC9+9P5DL95FB21CLac4Xe993XTuDt/Fp/aU6qqOOyMa7Lrj0
-	 RnLnTX+brEQXA==
-Date: Fri, 26 Dec 2025 17:46:51 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Marek Vasut <marek.vasut+renesas@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, Kees Cook <kees@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] PCI: rcar-host: Add OF Kconfig dependency to avoid
- objtool no-cfi warning
-Message-ID: <20251226234651.GA4148926@bhelgaas>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YtTdb0Xd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766819116; x=1798355116;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+MYBUvaekcX2sSPzpj1fUpCCoIuWlnhasEc3m8SvhqA=;
+  b=YtTdb0Xd7gynPlzJOFsQ7d/0l2H6MN3HsKJWWlqwA/c/WJwF8WDNw2dQ
+   MGaXvH39fAS2OTIQaGtFEkKpaNLvYfQNK0TOEUqy+zq4lc130tA9YcaUQ
+   0u7wPfsdvrGseAt0dr/l1Jc8GpD4vHAqzLQZErZFtqwlfuDi7XWB5CYMD
+   QnS9DfFwxRa2fW9ifkhigr6hUGWLl+LBho7lzK3XlpNoPNg1inodbHCT5
+   KP96Q1qyksUcagJ10EJpGtFXIfaK8dKeihHovXyimPcKTtl2QfmRp/R1j
+   jBkO2dTtKGS4ok0v+wExfzvzjcnCQwgfMWYWgivyeKdu7C+D2bG/msY1k
+   A==;
+X-CSE-ConnectionGUID: c7i/PYjGTQmRseYH8aOJfQ==
+X-CSE-MsgGUID: i+zPUN/5Sc+lFleMfKvOQQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11653"; a="79654593"
+X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
+   d="scan'208";a="79654593"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2025 23:05:16 -0800
+X-CSE-ConnectionGUID: jAODHWteRYC//AAY5npWTQ==
+X-CSE-MsgGUID: /KSrmsRoQoq1h6O7SH1EIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
+   d="scan'208";a="200247943"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 26 Dec 2025 23:05:10 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vZOMN-000000005dB-26Cp;
+	Sat, 27 Dec 2025 07:05:07 +0000
+Date: Sat, 27 Dec 2025 15:04:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>, Yunke Cao <yunkec@google.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Pavan Bobba <opensource206@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	James Cowgill <james.cowgill@blaize.com>,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Diederik de Haas <didi.debian@cknow.org>
+Subject: Re: [PATCH v7 14/17] media: rkvdec: Add H264 support for the VDPU381
+ variant
+Message-ID: <202512271444.48dPgeMW-lkp@intel.com>
+References: <20251218232829.337811-15-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,36 +83,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <176603538085.6580.3625113457403612097.b4-ty@kernel.org>
+In-Reply-To: <20251218232829.337811-15-detlev.casanova@collabora.com>
 
-On Thu, Dec 18, 2025 at 10:53:00AM +0530, Manivannan Sadhasivam wrote:
-> On Tue, 14 Oct 2025 11:20:27 -0700, Nathan Chancellor wrote:
-> > After commit 894af4a1cde6 ("objtool: Validate kCFI calls"), compile
-> > testing pcie-rcar-host.c with CONFIG_FINEIBT=y and CONFIG_OF=n results
-> > in a no-cfi objtool warning in rcar_pcie_probe():
-> > 
-> >   $ cat allno.config
-> >   CONFIG_CFI=y
-> >   CONFIG_COMPILE_TEST=y
-> >   CONFIG_CPU_MITIGATIONS=y
-> >   CONFIG_GENERIC_PHY=y
-> >   CONFIG_MITIGATION_RETPOLINE=y
-> >   CONFIG_MODULES=y
-> >   CONFIG_PCI=y
-> >   CONFIG_PCI_MSI=y
-> >   CONFIG_PCIE_RCAR_HOST=y
-> >   CONFIG_X86_KERNEL_IBT=y
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [1/1] PCI: rcar-host: Add OF Kconfig dependency to avoid objtool no-cfi warning
->       commit: 57833f84f6f5967134c9c1119289f7acdd1c93e9
+Hi Detlev,
 
-Is this v6.19 material?  The patch is old, 894af4a1cde6 appeared in
-v6.18, and it's not really a regression, but it only affects
-PCIE_RCAR_HOST and it looks like it papers over a headache for static
-analysis.
+kernel test robot noticed the following build errors:
 
-Bjorn
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v6.19-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Detlev-Casanova/media-uapi-HEVC-Add-v4l2_ctrl_hevc_ext_sps_-ls-t_rps-controls/20251219-074342
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20251218232829.337811-15-detlev.casanova%40collabora.com
+patch subject: [PATCH v7 14/17] media: rkvdec: Add H264 support for the VDPU381 variant
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251227/202512271444.48dPgeMW-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251227/202512271444.48dPgeMW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512271444.48dPgeMW-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__hexagon_udivdi3" [drivers/media/platform/rockchip/rkvdec/rockchip-vdec.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
