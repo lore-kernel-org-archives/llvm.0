@@ -1,104 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC611E868;
-	Sat, 27 Dec 2025 22:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252677DA66;
+	Sun, 28 Dec 2025 01:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766873534; cv=none; b=FPkO2BqkirjT0kzvTu3hBt2UoCZ9CfrJ7IqQqcJG05wN6Y34Lg7U+MktJVbRO7i9wgC63xclnkr234b69zL/Q3bUZFH87LOkKwttTGImdSljwxMSMdr189byB7icNJ6Xy0x5FOYsRiaZImSPaogIsAqyRfoLA3CskIiMj1tAt6U=
+	t=1766886102; cv=none; b=aD2ovuvmZqzdMfyOGFjjuHPpF/MULiBrQoxoqk+G0/8I64IO9djBxbW2At1WhzqcySVECdeXxb4gINEj+qjvma3HijDj6DENhrgj8+y0/o1kVKx4Bi7MDQmnL0JszcMfqCeoeMGK7l1t0iXJ5Vyx6wC2p7ZSB2e2jVXd2I+8Etw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766873534; c=relaxed/simple;
-	bh=VOh/YL2n8G3f+/QICIKeFajquKb19s2MloMaGXxPaq0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M3yYQ9VIEDQwW50/6Mk+d9Dc7egNdZdMDePakpKVrU2GYbtGkKiGSTFuqb1sfdpesZOu/Q7VBQ8QVvS7clxmrQy5QPf/bV6rfTHxo/KMUh4JXWMXSX2AwBoT+aDZepZxFGU2bNYgUzTPuKioPQJEVrPz4XkYVa6Tcb8wqMP2Ydw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=svlL/IHA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766886102; c=relaxed/simple;
+	bh=XGPDATEJoD0Tjpv7B97lYqqg0PSD96XgRnmEqo5BcEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sKC3Weo/LRhkV8jfSXw0g5hfKjeprzuiJbBIijNTEt8fz4jf+idQuKrNgkrpxY8SUQsE2o6AHdgs2W5SXyOAJIwy1l4R6TjtAfnSMlE7UuUxej1TH0JaJlR/RDDHP06fupiVN8RSlcDaMpHvTrs47A52iJYGq1SmNX+f0mn+SZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C/WvCQAZ; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="svlL/IHA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F66C4CEF1;
-	Sat, 27 Dec 2025 22:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766873533;
-	bh=VOh/YL2n8G3f+/QICIKeFajquKb19s2MloMaGXxPaq0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=svlL/IHAsDuzcsygJQQL6bqUfHBQ8mf1KQDuQC628cQfUO5fgZbkggax/Xp9mYZxf
-	 /kGaXzp7Xi8L17G7bpdrQUyIwYnJnS1PrAG2EIXZ/q8VVU9pZiUyEewb5inI0uroUL
-	 fqOcS9lBr1s5tC/cZup5FFUXo6EsH0iiXUK09Riavai75+mTex0/z63bVZhZ8qEv+L
-	 uzTkoHX9qPbbm5uy2h0dx92dZDtRFCdpXX/UQ86wpLAXqmy+8+QEUMqneU53wGsRMm
-	 sQaNgp5O3D2u6GzM1hJwKJ7aHNxJP+BFESWpcHumR8vRGAzb6Z/eQBktZgXH3E3fq0
-	 s4fut9++L5D9A==
-From: SeongJae Park <sj@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Meta kernel team <kernel-team@meta.com>,
-	cgroups@vger.kernel.org,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 8/8] memcg: rename mem_cgroup_ino() to mem_cgroup_id()
-Date: Sat, 27 Dec 2025 14:12:05 -0800
-Message-ID: <20251227221206.282703-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <202512262045.CkWwCNp7-lkp@intel.com>
-References: 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C/WvCQAZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766886100; x=1798422100;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XGPDATEJoD0Tjpv7B97lYqqg0PSD96XgRnmEqo5BcEk=;
+  b=C/WvCQAZPvXs0IzxZyjiKeXXeEw8FkX9dxfsDna7ke67YekWqUQi+yS2
+   zm4ptN9jsxIN4xxxRtpnN7iTTnfwmHXiHw9L5HZuQaPuyfne0fpM9oCfz
+   +0ryAqIdUsQhzFFuNirqnJqUcPVyZOtSOHm+JX20LfDsFLfdMPN4HdQBw
+   nYBqDCcmvn3GBtX3dPQusyudQR+9roasNg3ruImZkHG+QwaUlpBFWOIzC
+   6RMrthFKoLeqEmp0J81hQ93UGyQ77bxfYNayfrSCwREqH8dWBz0air55Z
+   MkV6YKZhrgw62HENtsTMEoSnkLFfUh8YpAC429HI17+jU0u2G+E2YQXog
+   w==;
+X-CSE-ConnectionGUID: PHhTpyMuRHmeaIqt2+vIYA==
+X-CSE-MsgGUID: ya/xTB28SrWf5Pjo96Vofg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="56128930"
+X-IronPort-AV: E=Sophos;i="6.21,182,1763452800"; 
+   d="scan'208";a="56128930"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 17:41:39 -0800
+X-CSE-ConnectionGUID: xxgYEPKsT9mW/owCO/TLhw==
+X-CSE-MsgGUID: pT9BLpqlRbGBwYqXnI3Q/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,182,1763452800"; 
+   d="scan'208";a="200267571"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 27 Dec 2025 17:41:34 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vZfme-000000006BJ-2pmJ;
+	Sun, 28 Dec 2025 01:41:28 +0000
+Date: Sun, 28 Dec 2025 09:41:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincent Mailhol <mailhol@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Chris Mason <chris.mason@fusionio.com>,
+	David Sterba <dsterba@suse.com>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	linux-btrfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Vincent Mailhol <mailhol@kernel.org>
+Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
+ is_negative()
+Message-ID: <202512280906.wt7UNpya-lkp@intel.com>
+References: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
 
-On Fri, 26 Dec 2025 20:31:38 +0800 kernel test robot <lkp@intel.com> wrote:
+Hi Vincent,
 
-> Hi Shakeel,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on sj/damon/next]
-> [cannot apply to akpm-mm/mm-everything tj-cgroup/for-next linus/master v6.19-rc2 next-20251219]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Shakeel-Butt/memcg-introduce-private-id-API-for-in-kernel-users/20251226-072954
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+kernel test robot noticed the following build warnings:
 
-damon/next tree contains some debugging-purpose only changes that not aim to be
-upstreamed.
+[auto build test WARNING on 3e7f562e20ee87a25e104ef4fce557d39d62fa85]
 
-> patch link:    https://lore.kernel.org/r/20251225232116.294540-9-shakeel.butt%40linux.dev
-> patch subject: [PATCH 8/8] memcg: rename mem_cgroup_ino() to mem_cgroup_id()
-> config: arm64-randconfig-001-20251226 (https://download.01.org/0day-ci/archive/20251226/202512262045.CkWwCNp7-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251226/202512262045.CkWwCNp7-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512262045.CkWwCNp7-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> mm/damon/sysfs.c:2704:33: warning: format specifies type 'unsigned int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
->     2704 |                 pr_info("id: %u, path: %s\n", mem_cgroup_id(memcg), path);
->          |                              ~~               ^~~~~~~~~~~~~~~~~~~~
->          |                              %llu
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/kbuild-remove-gcc-s-Wtype-limits/20251220-190509
+base:   3e7f562e20ee87a25e104ef4fce557d39d62fa85
+patch link:    https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-3-24b170af700e%40kernel.org
+patch subject: [PATCH v3 3/3] overflow: Remove is_non_negative() and is_negative()
+config: arm-randconfig-r071-20251224 (https://download.01.org/0day-ci/archive/20251228/202512280906.wt7UNpya-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 8.5.0
 
-And this issue happens due to a damon/next chage that made for only debugging
-and thus not aiming to be upstreamed.  Hence, no action from Shakeel is needed.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512280906.wt7UNpya-lkp@intel.com/
 
-I will resolve this issue after this patch is added to damon/next.
+smatch warnings:
+fs/xfs/xfs_mount.c:144 xfs_sb_validate_fsb_count() warn: unsigned '*_d' is never less than zero.
+fs/xfs/xfs_mount.c:144 xfs_sb_validate_fsb_count() warn: unsigned '_a' is never less than zero.
 
+vim +144 fs/xfs/xfs_mount.c
 
-Thanks,
-SJ
+27174203f570b9 Christoph Hellwig 2009-03-30  130  
+4cc929ee305c69 Nathan Scott      2007-05-14  131  /*
+4cc929ee305c69 Nathan Scott      2007-05-14  132   * Check size of device based on the (data/realtime) block count.
+4cc929ee305c69 Nathan Scott      2007-05-14  133   * Note: this check is used by the growfs code as well as mount.
+4cc929ee305c69 Nathan Scott      2007-05-14  134   */
+4cc929ee305c69 Nathan Scott      2007-05-14  135  int
+4cc929ee305c69 Nathan Scott      2007-05-14  136  xfs_sb_validate_fsb_count(
+4cc929ee305c69 Nathan Scott      2007-05-14  137  	xfs_sb_t	*sbp,
+c8ce540db5f67d Darrick J. Wong   2017-06-16  138  	uint64_t	nblocks)
+4cc929ee305c69 Nathan Scott      2007-05-14  139  {
+cebf9dacd5c3ce Pankaj Raghav     2024-08-22  140  	uint64_t		max_bytes;
+cebf9dacd5c3ce Pankaj Raghav     2024-08-22  141  
+4cc929ee305c69 Nathan Scott      2007-05-14  142  	ASSERT(sbp->sb_blocklog >= BBSHIFT);
+4cc929ee305c69 Nathan Scott      2007-05-14  143  
+cebf9dacd5c3ce Pankaj Raghav     2024-08-22 @144  	if (check_shl_overflow(nblocks, sbp->sb_blocklog, &max_bytes))
+cebf9dacd5c3ce Pankaj Raghav     2024-08-22  145  		return -EFBIG;
+cebf9dacd5c3ce Pankaj Raghav     2024-08-22  146  
+d5cf09baced0ef Christoph Hellwig 2014-07-30  147  	/* Limited by ULONG_MAX of page cache index */
+cebf9dacd5c3ce Pankaj Raghav     2024-08-22  148  	if (max_bytes >> PAGE_SHIFT > ULONG_MAX)
+2451337dd04390 Dave Chinner      2014-06-25  149  		return -EFBIG;
+4cc929ee305c69 Nathan Scott      2007-05-14  150  	return 0;
+4cc929ee305c69 Nathan Scott      2007-05-14  151  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  152  
 
-[...]
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
