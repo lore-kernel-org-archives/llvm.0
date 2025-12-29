@@ -1,72 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6451D6195;
-	Sun, 28 Dec 2025 21:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA734C79
+	for <llvm@lists.linux.dev>; Mon, 29 Dec 2025 02:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766958978; cv=none; b=UnxyTOECQ6OIC6xzmDQwAZnu7k6EhkAvxiI7hRH9SMDCnGrDeDtFU0zt2j/djhG3CNH4OtKNrsvqdm8vmQ7AFTguG98NBaFin9oP24OP3VOpYZpgliSSQ0557dGnbrpZi849fGuSNXNReKCtRpjUbxCxL5GMkqGJZZ832h1cbGE=
+	t=1766974945; cv=none; b=meK+My6U515y97J/lPUW3gT0kbWhAABSrZRefiEhsMXq9uticg0cH7JQlIFK4lpnKP4h4oziVDHA5Grfg0eI21LU/U9AVYYx16qJ/ChCKCwUx4cNUlM8V2tmK5kgYPzVWy7me7ZJQbZKETj/ezta/WwmRFF7Z/TuOPIQHDxNq9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766958978; c=relaxed/simple;
-	bh=h9J1W/6qeXCXFcc9WTdkGzuxAMIhZc3abbaha7ymYlo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y/WB2STqRL1AAwhF52f+WMUG769OwYvCewA+mK/ORd5+aM1Lx3lasp4nQdj/RBQW9meB4V3A6dYwhsE6VZL2nWhEtJuaU2a7F3U3GgRvr70LBJXz98Y3SvmSqRH6xL3IfrtPCp+h0CuGxE73288UIwZilZLA3nA0YC/pS9hMboA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V6kP6p3e; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766974945; c=relaxed/simple;
+	bh=I0r5sYGPVhZ6GgY1Byo3zGaT84LopDQ1OsqbbXivk6c=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XILN40IE1674JO2CqYwWVGcsJRMPpoiExrbsrRLbTrEzgxIrARHXxfFWyq+4zxGv8MIWMkOIiSkfAaQTC4xTATlMGUF39gCMgQ82mmm9jUguJMn/x2Z9ZSd6nEMivA3Oa2LP8EV0b+3rIKwKfCfJG4R3KY99sjhrO+HUZZO3pWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZZQD8xOq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V6kP6p3e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C3DC4CEFB;
-	Sun, 28 Dec 2025 21:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766958977;
-	bh=h9J1W/6qeXCXFcc9WTdkGzuxAMIhZc3abbaha7ymYlo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V6kP6p3eIsXi/oNcYimf2y8YtiQ0bXLMueMiuWkJlf9EolZjK8Jz1pqVpNqROJIXH
-	 mmtB66oeJsalB2nctBbAtKrRgm55m32EHj5CeRaZX4F1yg3SpUk5xaoYBKT7F6LqiJ
-	 MKHQ24gCf1VsREMEKT2OOER7iplYjsOPocvs33WOeK+bzcH5O5Ruo+u1RwBXM5uwn6
-	 Q5ORz1k7ECvNBHLMlqMUMUxYOqi5MHu3Gk6ZA21q6v9tf4NdDyjkGYgDF3xMk4+YTK
-	 YY0Ig05WScT50dGHEc9/37lZ69ADl8x4d3nOugpaMOf6gVi2Hs9+zn7modn6/+N4Rg
-	 vbGLgXLjnUHkQ==
-Date: Sun, 28 Dec 2025 14:56:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [bpf-next:master 8/9] ld.lld: error: .tmp_vmlinux1.btf.o is
- incompatible with elf32lriscv
-Message-ID: <20251228215613.GA2167770@ax162>
-References: <202512240559.2M06DSX7-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZZQD8xOq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766974941;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sOnz35+Tvkwc2RZeEIKaMcIrv2goS6wqOS6sxuTXYZQ=;
+	b=ZZQD8xOqSJN0RhWQ/caL+RKTRKvex+7cSoUJabpMeHDvfpFeW8ph5RHD6xVLlSuljcaJ0R
+	ycHT/BC60krtzczgfEZEBsCmH7c6ZJ9yZ95vGx18EgcE7Uya8bjlIx0IzSoXheVLGnQqxq
+	AFvRmK31vWiUvpYO1KqgxhWjRFiY1Wg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-520-HC_aJf1LOGaleGsRvL6H8g-1; Sun,
+ 28 Dec 2025 21:22:19 -0500
+X-MC-Unique: HC_aJf1LOGaleGsRvL6H8g-1
+X-Mimecast-MFC-AGG-ID: HC_aJf1LOGaleGsRvL6H8g_1766974939
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DC26419560B2
+	for <llvm@lists.linux.dev>; Mon, 29 Dec 2025 02:22:18 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6BF6018004D8;
+	Mon, 29 Dec 2025 02:22:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc2,
+ upstream-mainline, c875a6c3)
+Date: Mon, 29 Dec 2025 02:22:18 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202512240559.2M06DSX7-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <08510.125122821221900114@us-mta-520.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: DQkslRORSK-ttBct2mcj9-TXhWDybsdEnCFjAxWPteY_1766974939
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 24, 2025 at 06:02:31AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> head:   f14cdb1367b947d373215e36cfe9c69768dbafc9
-> commit: 522397d05e7d4a7c30b91841492360336b24f833 [8/9] resolve_btfids: Change in-place update with raw binary output
-> config: riscv-randconfig-002-20251224 (https://download.01.org/0day-ci/archive/20251224/202512240559.2M06DSX7-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240559.2M06DSX7-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512240559.2M06DSX7-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: .tmp_vmlinux1.btf.o is incompatible with elf32lriscv
+Hi, we tested your kernel and here are the results:
 
-While I have not verified this, I suspect this error occurs because the
-${CC} command in gen_btf_o() in scripts/gen-btf.sh only includes
-CLANG_FLAGS for the target selection but not '-m32' or '-m64' from
-KBUILD_CFLAGS to control the word size (as documented in
-scripts/Makefile.clang).
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Cheers,
-Nathan
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'usb-6.19-rc3' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/gregkh/usb
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2235427280
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [RHEL10.0] blktests throtl failed
+            URL: https://issues.redhat.com/browse/RHEL-66783
+            Affected tests:
+                Storage - blktests - throtl [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
+ Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
+            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
+comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
+d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
+medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
+=3D1
+            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
+65900650445969
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+                Boot test [aarch64]
+                Reboot test [aarch64]
+                Storage - blktests - ublk [aarch64]
+                stress: stress-ng - cpu-cache [aarch64]
+                xfstests - btrfs [aarch64]
+                xfstests - ext4 [aarch64]
+                xfstests - xfs [aarch64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
