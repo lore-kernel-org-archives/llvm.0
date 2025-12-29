@@ -1,107 +1,83 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851662F0C46
-	for <llvm@lists.linux.dev>; Mon, 29 Dec 2025 17:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D42245014
+	for <llvm@lists.linux.dev>; Mon, 29 Dec 2025 20:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767031003; cv=none; b=gTYrb+u3mO1Zn+AdUbzSkdaSjASo31HPqlGRDxoT5bdnyu4gcLzdpCbwjT/Drwo4wbLiirA6bVef+eF/hC3w6KtxGTLBw56az4dwhtE6MNs5O933BHozg2gnc305Slfl7tcJsNnGPJOIktIO7rU15DNknD5NAClluRAgPoYi8Sc=
+	t=1767040133; cv=none; b=D7xKB9ioV9Z/DVElx6AUeUEemYjgQ5sV0w+ezINXpRg1rqY0kPE9GnaW4c5zg2hVPGTCHe2vrtuqKMvVacsLjJ4LxQugbVNB4mkf1tkj1UN9YDMNzyiM1rlCqKay2kGKXo1wwtR5kf7cMPIHILze9llQW07i/2hCWuyroXoDOHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767031003; c=relaxed/simple;
-	bh=CjWuNHHaVbrAnmI3EfkznNdEY9Q0OqfgNW2sSNmZyKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OFRb5tle4p/b0DZVOJ8c9VnlDV9895w+6Jdah/kF7ME9Uf+VFf4whDyKmBkpaTpwNOnKCwQirza13lJPZ9dMsc5aeQeLkKjuyhsq2j/eKEJFtK2ZheJdOpRxQ02tGPFIpzROInV0/iQ4mBzjlm8/bTYJmpEcbmu/RzBOwIRRRrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Jht35+NJ; arc=none smtp.client-ip=95.215.58.183
+	s=arc-20240116; t=1767040133; c=relaxed/simple;
+	bh=8l70OTim6XjUp23ekQsAZ33A3YoAPuKldtj6TuiRU28=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T3E7flK24olyOvYt7x50sQrsUoCOAHi+O3TvEooTtePx/xPMNzHMcpIPtd5L3Oa+w6gI88cnhjvtAO0Pxq7mS+6y7Gv2K9YY7wAUhDix0QS8M0qmeyG+SA74KtnccYzh6MzzttfbWuixSu3Mc7yJZ+HAuMsnRtgJ7RgivsjPEBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aaM+eKAG; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Jht35+NJ"
-Message-ID: <72b12d0b-a513-41a6-91ac-076404a25713@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aaM+eKAG"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767030987;
+	t=1767040128;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dtPQFeJN2I2P2evtUp/h8YnGo3x2O/6C1PcR1entX1E=;
-	b=Jht35+NJGiKlUg0dmkJElpAqxV6Fdy738vg1idA8pfrjd5hmV4fLpLFD5pk90ZzyzgbFkW
-	dAaGmvV33Vs4xpouj/vdeRJ9LEnUbDOZbRS2y+w2c/9sl4SV4ISvnuqUdycfwD8qdkjB67
-	m00VDb5lckmi3ekwtse3qUQFgT8LCPk=
-Date: Mon, 29 Dec 2025 09:56:22 -0800
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=66RyJtvFY4/td0oW3dHBamAjsmRJXPQckDimQmVLu+A=;
+	b=aaM+eKAGmaBXwvnMTxR319XP55l+85bqCxm0N9ztJ2Kvyjph/zlmMCdNJ7m8rxJhdGMfXw
+	fjgXyo/Ny+ZWjVnlmCUnSWpy66D+8iuL/bkNk1syePirgnPbL8ScDrwab19VLl0reYIhvF
+	A5La9N10X/2tapVPpLqNx1rUSvKMTAI=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next] scripts/gen-btf.sh: Fix .btf.o generation when compiling for RISCV
+Date: Mon, 29 Dec 2025 12:28:23 -0800
+Message-ID: <20251229202823.569619-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [bpf-next:master 8/9] ld.lld: error: .tmp_vmlinux1.btf.o is
- incompatible with elf32lriscv
-To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-References: <202512240559.2M06DSX7-lkp@intel.com>
- <20251228215613.GA2167770@ax162>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20251228215613.GA2167770@ax162>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 12/28/25 1:56 PM, Nathan Chancellor wrote:
-> On Wed, Dec 24, 2025 at 06:02:31AM +0800, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
->> head:   f14cdb1367b947d373215e36cfe9c69768dbafc9
->> commit: 522397d05e7d4a7c30b91841492360336b24f833 [8/9] resolve_btfids: Change in-place update with raw binary output
->> config: riscv-randconfig-002-20251224 (https://download.01.org/0day-ci/archive/20251224/202512240559.2M06DSX7-lkp@intel.com/config)
->> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4ef602d446057dabf5f61fb221669ecbeda49279)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251224/202512240559.2M06DSX7-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202512240559.2M06DSX7-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> ld.lld: error: .tmp_vmlinux1.btf.o is incompatible with elf32lriscv
-> 
-> While I have not verified this, I suspect this error occurs because the
-> ${CC} command in gen_btf_o() in scripts/gen-btf.sh only includes
-> CLANG_FLAGS for the target selection but not '-m32' or '-m64' from
-> KBUILD_CFLAGS to control the word size (as documented in
-> scripts/Makefile.clang).
+gen-btf.sh emits a .btf.o file with BTF sections to be linked into
+vmlinux in link-vmlinux.sh
 
-Hi Nathan, thanks for the pointer.
+This .btf.o file is created by compiling an emptystring with ${CC},
+and then adding BTF sections into it with ${OBJCOPY}.
 
-I was able to reproduce this. Your suspicion is correct. 
+To ensure the .btf.o is linkable when cross-compiling with LLVM, we
+have to also pass ${KBUILD_FLAGS}, which in particular control the
+target word size.
 
-The .o file generated by:
-
-	echo "" | ${CC} ${CLANG_FLAGS} -c -x c -o ${btf_data} -
-
-when cross-compiling to riscv is 64-bit, while vmlinux.o is 32-bit, hence the error.
-
-This helps:
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512240559.2M06DSX7-lkp@intel.com/
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ scripts/gen-btf.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
 index 06c6d8becaa2..12244dbe097c 100755
 --- a/scripts/gen-btf.sh
 +++ b/scripts/gen-btf.sh
 @@ -96,7 +96,7 @@ gen_btf_o()
-        # deletes all symbols including __start_BTF and __stop_BTF, which will
-        # be redefined in the linker script.
-        info OBJCOPY "${btf_data}"
--       echo "" | ${CC} ${CLANG_FLAGS} -c -x c -o ${btf_data} -
-+       echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CFLAGS} -c -x c -o ${btf_data} -
-        ${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
-                --set-section-flags .BTF=alloc,readonly ${btf_data}
-        ${OBJCOPY} --only-section=.BTF --strip-all ${btf_data}
-
-I'll send a proper patch later today. Have another bug report to check.
-
-> 
-> Cheers,
-> Nathan
+ 	# deletes all symbols including __start_BTF and __stop_BTF, which will
+ 	# be redefined in the linker script.
+ 	info OBJCOPY "${btf_data}"
+-	echo "" | ${CC} ${CLANG_FLAGS} -c -x c -o ${btf_data} -
++	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CFLAGS} -c -x c -o ${btf_data} -
+ 	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
+ 		--set-section-flags .BTF=alloc,readonly ${btf_data}
+ 	${OBJCOPY} --only-section=.BTF --strip-all ${btf_data}
+-- 
+2.52.0
 
