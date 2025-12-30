@@ -1,250 +1,93 @@
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FEA31A547
-	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 16:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CBD32693F
+	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 16:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767113352; cv=none; b=XqL6yerY7oxmUeoTCc8leilduJPWQyIs8X/Sb2mDJf2H6c6vfugmBxBaZNWvPcv1dQAEHIjqbJIqa3giO8PCmz5Hk8O3coNAnLBSryLnUa8EeXJtlnYhFxxAGHreYA+bFosiwJr9rKDsVx17kZ1nqRAojt2ToN7lOsYINMR26jY=
+	t=1767113952; cv=none; b=kPdHbSBen/3I7opu6LSFDiUTCt+zPUo0JUhMZO6Yj4RVwJbSAAomQUL2NaICZA3bLKyNq7EzKAH4bgUxS94e75THbvwFgp25lQ0Dr1No+n6Phhgeb2FnmlcIRvA4GuBB3t1gemPLqpBrVgQp3m9U2lMi29FNoE98hszD32ghZxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767113352; c=relaxed/simple;
-	bh=RhC6l1PbQbreA7q0UtfZqJIjoV0EZp1hIhdytC+A7v8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fUc7z2Mibb0MCafMZyKIvbRoXQ8t3M/5fgqP14xCewxtV9VUfFQRjKTagzTt6svv9inFN/jWSd2ojLB5LfUyxE2a1SVNNUIiW+mP6t3r8pcD8xfp39g/asmnsBN+e8QWearfVS2KzMSRozD+uivFGdm31C6RV+J02/B2+ZwNAWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from minun.felixc.at (unknown [65.108.105.71])
-	by APP-05 (Coremail) with SMTP id zQCowAA3yQw8AlRpUjKQAg--.63740S6;
-	Wed, 31 Dec 2025 00:48:51 +0800 (CST)
-From: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
-Date: Tue, 30 Dec 2025 17:47:57 +0100
-Subject: [PATCH v6 4/4] RISC-V: handle extension configs for bindgen,
- re-enable gcc + rust builds
+	s=arc-20240116; t=1767113952; c=relaxed/simple;
+	bh=dDbdKs/reOX/Ro2QQ4y9yDKHfgrv3HPQ+5tuYEjKOfs=;
+	h=From:Message-ID:Date:MIME-Version:To:Cc:References:Subject:
+	 In-Reply-To:Content-Type; b=t/6mjBxd3vjf8YXg9jwDhO5pdticuicotNyDTQfc1uemaHSk5n3pebbfqHGKgAukQpw+/g54rzUljfimFzGYOxV2HfW8bzXZNpjuUZsHS0BGvoRf3771R0GyDtldJnEtIPv5pjFKR5tqYvw6DKhRrYpa6BQbMnsIHQ+aNsH6tMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHXIJdMf; arc=none smtp.client-ip=74.125.224.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHXIJdMf"
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6442e2dd8bbso6998221d50.0
+        for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 08:59:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767113949; x=1767718749; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DRDjCthMH/qjCzj5SkNL4SRuuhJchcrlyUpx/5Dmle8=;
+        b=NHXIJdMfA/gPmci9HEh9+MhU4p3fyjH3KUxH69TNhqTCAd+3AkgJvQUNeYqy+8PQLi
+         WSlgtN+Xb7HE6nPyQQJMCnxSgAfVQQvZZrLISoT38Tfugo6wq5abMCnGq0An1ESLBYu2
+         vrPUFJYWJkhLqQBS0HezVWdb33/rsUPY4SvnY6Rv1d4wgqclByh3eA1usVRanH9JNV3R
+         FFYoJLM1EQC11z1HCiuL0X8W/R0qK2C18FPdPLRWSRMhd0mHpZQ6aEaWIci2RRgVAQt2
+         BVy+S0ky61aE4kXxYpdbbrZNxvyOxXNqEWCz6EV/6f4EGqLrB2leIsRvSqJp6X3Hxo93
+         tNEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767113949; x=1767718749;
+        h=content-transfer-encoding:in-reply-to:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DRDjCthMH/qjCzj5SkNL4SRuuhJchcrlyUpx/5Dmle8=;
+        b=mKNC27NBPeq7TajpiitRUmMH8gi9QLmvBpMTZY1MpF0cHS0WKeJH1ctji3pxcSJbkX
+         FR0EKEJ7bBwJV7w4q3R8+7N0ae0iGCHZ7RnuUhXlPx3KF4hurJpsRT3KzWsA3X2OStjO
+         YHkaGUiOYkqh7afxChXnusEJk2TBuUTDpibdfwlNkkdsBgpP5jZZCLQs38aif23SesuG
+         DUvupfRL39LWe7qvNzfBl9YOmNtoKNAvjttMsC1F7AKPboRNJ6Zjr5f52ZNlXwWmO7xn
+         HEmOQ1iwokp8FrE+WwgzZSSzPceKxx4yL+Hai1NyZTlTv3rcKBhspS2gtxH/dzVrNeO+
+         S8HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtcxXpjIh5JVtsvggtsuJKxbJubJ7j9nmv+fqpqA96LjyV7mjcubjZP3iejQOjivEEUrGP@lists.linux.dev
+X-Gm-Message-State: AOJu0YwPB3QcjVfUpWthUG3U+awOjLOMKyci8TyNgKDz/9RBc5uhCFfN
+	MYGKh18A866WzkiZq+IMrm3xbybd+THcZLxUQhZkYGjeLhYAjP+Ko+1U
+X-Gm-Gg: AY/fxX77ykiPI1JXvpzAH2vw/E/YBQD6pUz5ulBpbxK5CNYGQRAgLv77Pjxueg40CIP
+	MpVy5Ros60YDfP39rwL3NxDNz9eWAUFELT5lS6Gv9KAjRVRpcwH1VGgWHOhEJwIO60WkVOsmjsY
+	1jmUMkRsV0oD94L5ZtS7ntT8EfPGCKalNQYX0tpWtk6EKoDInbL1c1vC/5UB75BArVw5DASbjOt
+	GpI7ihY4bHcXUGQ5n/eLZscWvblLUlHanDcI5Uo1VY2NIVCUZ+Zhlnw9GpwcNh8ErNIVHmlY+/h
+	XBn5zdpa25mTXIQoXjlgZKlbRTdXVO6qEEa8hNCS7x8UFh3DJmvtBOvSXp0m/sBDwtGNAVVAMlJ
+	sGtx1Q1FfBwuS2GTTKXYPrAnEyRH9Xk2ytrnd48jiuXm/05SvNi2PhurocGmWP1V+OV0iBRaFDI
+	MYYZlWFpeFDgmyVkEq4JdI1mHfJLU27/IeUTZ8yqc1
+X-Google-Smtp-Source: AGHT+IH2V57ZyrIGYmhMfY0baEpBO+dBiOAau3e5WvXJCMGvc5QlBIWU/5RRYx65BeBxQ6CEQap2dA==
+X-Received: by 2002:a05:690e:12c9:b0:636:149a:f54e with SMTP id 956f58d0204a3-6466a8a5c84mr29092072d50.37.1767113948961;
+        Tue, 30 Dec 2025 08:59:08 -0800 (PST)
+Received: from [192.168.1.209] (74.211.98.217.16clouds.com. [74.211.98.217])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a92d913sm16230434d50.20.2025.12.30.08.59.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Dec 2025 08:59:08 -0800 (PST)
+From: Asuna Yang <spriteovo@gmail.com>
+X-Google-Original-From: Asuna Yang <SpriteOvO@gmail.com>
+Message-ID: <f462b3e9-0650-4d5f-ad60-96e8f1e39419@gmail.com>
+Date: Wed, 31 Dec 2025 00:58:59 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251230-gcc-rust-v5-v6-4-2ac86ba728c8@isrc.iscas.ac.cn>
+User-Agent: Mozilla Thunderbird
+To: xinrui.riscv@isrc.iscas.ac.cn
+Cc: a.hindborg@kernel.org, alex@ghiti.fr, aliceryhl@google.com,
+ aou@eecs.berkeley.edu, bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
+ conor@kernel.org, corbet@lwn.net, dakr@kernel.org, gary@garyguo.net,
+ jeffbai@aosc.io, jmontleo@redhat.com, justinstitt@google.com,
+ linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, lossin@kernel.org, morbo@google.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, nsc@kernel.org,
+ ojeda@kernel.org, palmer@dabbelt.com, pjw@kernel.org, rabenda.cn@gmail.com,
+ rust-for-linux@vger.kernel.org, tmgross@umich.edu, wangruikang@iscas.ac.cn
 References: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
+Subject: Re: [PATCH v6 0/4] RISC-V: re-enable gcc + rust builds
+Content-Language: en-US
 In-Reply-To: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor@kernel.org>, 
- Mingcong Bai <jeffbai@aosc.io>, Han Gao <rabenda.cn@gmail.com>, 
- Vivian Wang <wangruikang@iscas.ac.cn>, Jason Montleon <jmontleo@redhat.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
- Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
-X-Mailer: b4 0.14.3
-X-CM-TRANSID:zQCowAA3yQw8AlRpUjKQAg--.63740S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw1kWr1Uur4UKF1xZFW7XFb_yoWfJFWUpw
-	n2yr97tr4DJFyDKr12yry8W3WYk3Z5JFs3WFy8Kw18ArZayryvvrWqya13Z34UCan2vr9I
-	qw47uF4UXr4UCFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-	8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28C
-	jxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI
-	8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E
-	87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2
-	IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
-	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I64
-	8v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK6IIF
-	6r1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUxbyuUU
-	UUU
-X-CM-SenderInfo: x0lq233loux21fy6x21ufox2xfdvhtffof0/
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Commit 33549fcf37ec ("RISC-V: disallow gcc + rust builds") disabled GCC
-+ Rust builds for RISC-V due to differences in extension handling
-compared to LLVM. This commit enables GCC + Rust builds again.
-
-Add `bindgen-option` conditions for the availability of libclang to the
-RISC-V extension Kconfig symbols that depend on the `cc-option`
-function.
-
-For Zicsr/Zifencei special handling, since LLVM/Clang always enables
-these two extensions, either don't pass them to `-march`, or pass them
-explicitly and Rust bindgen libclang must recognize them.
-
-Clang does not support `-mno-riscv-attribute` flag, filter it out to
-resolve error: unknown argument: '-mno-riscv-attribute'.
-
-Define `BINDGEN_TARGET_riscv` to pass the target triplet to Rust bindgen
-libclang for RISC-V to resolve error: unsupported argument 'medany' to
-option '-mcmodel=' for target 'unknown'.
-
-Update the documentation, GCC + Rust builds for RISC-V are now
-maintained.
-
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
----
- Documentation/rust/arch-support.rst |  2 +-
- arch/riscv/Kconfig                  | 35 ++++++++++++++++++++++++++++++++++-
- rust/Makefile                       |  3 ++-
- scripts/Makefile.rust               |  1 +
- 4 files changed, 38 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index 6e6a515d0899..5282e0e174e8 100644
---- a/Documentation/rust/arch-support.rst
-+++ b/Documentation/rust/arch-support.rst
-@@ -18,7 +18,7 @@ Architecture   Level of support  Constraints
- ``arm``        Maintained        ARMv7 Little Endian only.
- ``arm64``      Maintained        Little Endian only.
- ``loongarch``  Maintained        \-
--``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
-+``riscv``      Maintained        ``riscv64`` only.
- ``um``         Maintained        \-
- ``x86``        Maintained        ``x86_64`` only.
- =============  ================  ==============================================
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 6b39f37f769a..c869ee07117e 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -195,7 +195,7 @@ config RISCV
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RETHOOK if !XIP_KERNEL
- 	select HAVE_RSEQ
--	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
-+	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && TOOLCHAIN_MATCHES_ZICSR_ZIFENCEI
- 	select HAVE_SAMPLE_FTRACE_DIRECT
- 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
- 	select HAVE_STACKPROTECTOR
-@@ -619,6 +619,8 @@ config TOOLCHAIN_HAS_V
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32imv)
- 	depends on LD_IS_LLD || LD_VERSION >= 23800
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64imv)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32imv)
- 
- config RISCV_ISA_V
- 	bool "Vector extension support"
-@@ -683,6 +685,8 @@ config TOOLCHAIN_HAS_ZABHA
- 	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zabha)
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zabha)
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zabha)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zabha)
- 
- config RISCV_ISA_ZABHA
- 	bool "Zabha extension support for atomic byte/halfword operations"
-@@ -701,6 +705,8 @@ config TOOLCHAIN_HAS_ZACAS
- 	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zacas)
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zacas)
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zacas)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zacas)
- 
- config RISCV_ISA_ZACAS
- 	bool "Zacas extension support for atomic CAS"
-@@ -719,6 +725,8 @@ config TOOLCHAIN_HAS_ZBB
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbb)
- 	depends on LD_IS_LLD || LD_VERSION >= 23900
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zbb)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zbb)
- 
- # This symbol indicates that the toolchain supports all v1.0 vector crypto
- # extensions, including Zvk*, Zvbb, and Zvbc.  LLVM added all of these at once.
-@@ -734,6 +742,8 @@ config TOOLCHAIN_HAS_ZBA
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zba)
- 	depends on LD_IS_LLD || LD_VERSION >= 23900
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zba)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zba)
- 
- config RISCV_ISA_ZBA
- 	bool "Zba extension support for bit manipulation instructions"
-@@ -769,6 +779,8 @@ config TOOLCHAIN_HAS_ZBC
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbc)
- 	depends on LD_IS_LLD || LD_VERSION >= 23900
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zbc)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zbc)
- 
- config RISCV_ISA_ZBC
- 	bool "Zbc extension support for carry-less multiplication instructions"
-@@ -792,6 +804,8 @@ config TOOLCHAIN_HAS_ZBKB
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbkb)
- 	depends on LD_IS_LLD || LD_VERSION >= 23900
- 	depends on AS_HAS_OPTION_ARCH
-+	depends on !RUST || !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zbkb)
-+	depends on !RUST || !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zbkb)
- 
- config RISCV_ISA_ZBKB
- 	bool "Zbkb extension support for bit manipulation instructions"
-@@ -893,6 +907,25 @@ config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
- 	  versions of clang and GCC to be passed to GAS, which has the same result
- 	  as passing zicsr and zifencei to -march.
- 
-+config RUST_BINDGEN_HAS_ZICSR_ZIFENCEI
-+	def_bool y
-+	depends on !64BIT || $(bindgen-backend-option,-mabi=lp64 -march=rv64ima_zicsr_zifencei)
-+	depends on !32BIT || $(bindgen-backend-option,-mabi=ilp32 -march=rv32ima_zicsr_zifencei)
-+
-+config TOOLCHAIN_MATCHES_ZICSR_ZIFENCEI
-+	def_bool y
-+	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
-+	depends on TOOLCHAIN_NEEDS_OLD_ISA_SPEC || !TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI || RUST_BINDGEN_HAS_ZICSR_ZIFENCEI
-+	help
-+	  LLVM/Clang >= 17.0.0 starts recognizing Zicsr/Zifencei in -march, passing
-+	  them to -march doesn't generate an error anymore, and passing them or not
-+	  doesn't have any real difference, it still follows ISA before version
-+	  20190608 - Zicsr/Zifencei are included in base ISA.
-+
-+	  The current latest version of LLVM/Clang still does not require explicit
-+	  Zicsr/Zifencei to enable these two extensions, Clang just accepts them in
-+	  -march and then silently ignores them.
-+
- config FPU
- 	bool "FPU support"
- 	default y
-diff --git a/rust/Makefile b/rust/Makefile
-index 37b4205afb70..d8b6a570cb84 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -383,7 +383,8 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
- 	-fno-inline-functions-called-once -fsanitize=bounds-strict \
- 	-fstrict-flex-arrays=% -fmin-function-alignment=% \
- 	-fzero-init-padding-bits=% -mno-fdpic \
--	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference
-+	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference \
-+	-mno-riscv-attribute
- 
- # Because scripts/Makefile.rust is included regardless of whether Rust is enabled,
- # we perform this check here to avoid breaking targets that do not yet support Rust builds.
-diff --git a/scripts/Makefile.rust b/scripts/Makefile.rust
-index 5c12b4b8c8b6..bfdad4a0a3ce 100644
---- a/scripts/Makefile.rust
-+++ b/scripts/Makefile.rust
-@@ -3,6 +3,7 @@ BINDGEN_TARGET_x86	:= x86_64-linux-gnu
- BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
- BINDGEN_TARGET_arm	:= arm-linux-gnueabi
- BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
-+BINDGEN_TARGET_riscv	:= riscv64-linux-gnu
- BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
- BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
- 
-
--- 
-2.51.1
-
+I am replying using my previous personal email address to cross-verify 
+that <xinrui.riscv@isrc.iscas.ac.cn> is indeed my own.
