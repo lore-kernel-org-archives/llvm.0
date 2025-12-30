@@ -1,116 +1,167 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF4B2DAFD7
-	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 02:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E152D301000;
+	Tue, 30 Dec 2025 08:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767061486; cv=none; b=dFgD59GO3mBU88B5br7ToM3uLrB13grJpMQmg9jDuPNwqusIny1vRWMqunJ+nj6JLdkDF+i1hViSkTg+z4Z0bDej6X7Am9GUefEbLY+LGxTxethp9zXIurRHEDMW4tSm+Lu1Y6u4r8OQRs+hP/MLhOm5HYGJ53UNNOwka6hXEd0=
+	t=1767085198; cv=none; b=oMJzVTrZmHccjgKQ4n8aDpizKvODNdL1BExmj2kdoyMNMH3kzX8Ut3YUCt8oy2It6lORFdaRNCcszgxx8iYynzqtuC3rxSakrcwr0/dW5ipooE5PH64YcxnKaG6AtEHjhfRNegOtQTaSy7nIaPuJiqgEbH7Kpg8AXbp3yxWmHIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767061486; c=relaxed/simple;
-	bh=Y2d/CkXgDCUfq+HeES3Gz0BuPuu6qm4OAyv3mnAt3M4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fPZSbbVeuEzv8GiiO0szxyxXIY/xVdpZdRFb6qTKLguqkOG7awOtK6T4qoRPHJp9ezF7zZOkY50n9UQ3+IrpU9W9csg3LFBdteODhxXo+pgUfpuNXRh6k34+6NkeSUVadQchw4fCPB9U+f4MAKZpWwGrjEHBPGiWCszdbSvh0yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3sRjxM0i; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
+	s=arc-20240116; t=1767085198; c=relaxed/simple;
+	bh=vMAX2H19ZJ3r1QTStGN5av3Vfzb+aG9bvsZ3lbvCwgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jTysgWhmWMROF+Jlji6W9DPEK8UFLYDSEX9WwjrTn8VLiIxQtfLtZXW+9gdY2m2I95GLWy9HepXAC57LTg+T19Bej60jI+jHAytk2XJ70cQgMMMWzXejEEfn3/EEkW9Yau5SDEX3IMRO0EEtDI3xDfMyXs+dTkfZnvnKu/Mrbng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VUw7DO0u; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3sRjxM0i"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2b0588c6719so9129827eec.0
-        for <llvm@lists.linux.dev>; Mon, 29 Dec 2025 18:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767061484; x=1767666284; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:user-agent:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wBG9qGfwdN2gzPyM4vrD083y3HoBOEnU7+ZJVK/meSs=;
-        b=3sRjxM0idAG4siRbPIqK+4LYyJAmDMbXtR/msZQ7FISZj2fnLDvQPrUH8O50PPPUB6
-         CI/WC/sZeDT2t08bEd31LmmQSxJjwoJY5qY2UiQnPIXnlCXb7r6kgqtcOMu6kaAVPjb8
-         B1S/cfjjRLYDP4CyKZMgrOuI/O6ZmqfU2WkwWP1TKRpuutJjEf9UNQwc4B1S7ODH8G0Z
-         5ZdR/WI2l4UawETRlEf1wbyQ7ziJ/dsWPa3tOXpH37IC7Pg8P02mbXQt4YjnQPRGHq87
-         J6NHT/CKbovrWtqu37b3xhyQFEXiD0ObJwkYdiY6YYLWrE3bBIlBqyoOV452xVG9aovb
-         Ur+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767061484; x=1767666284;
-        h=cc:to:from:subject:message-id:user-agent:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wBG9qGfwdN2gzPyM4vrD083y3HoBOEnU7+ZJVK/meSs=;
-        b=VicoHClrvDh4tXF51u3tKhePZOsV2TcyPXDunqO41P1XJTe6uS1YSiNMqFW5xXPF87
-         TjI2rukEKdjVJl/IEJ8XEoLkA+QygjwhTHo49pufE10BMoIJkgQVA4xLPRq2vwueuZT3
-         Fin7KPWqhbw1PXfW+aP62KBdl5Ei2wv6MDEyBpQl6rjtpiGUo27UcsGZbTor3xuqbD90
-         b0bza9C2HFor6zCyxGpM94Kg7EAErEQkqC5pBQskZMQD5BrkYkejKPJvDyFlzidCv/D4
-         bHBXHPeuu8q3LMqK2fxp0WTxf79lKfksgpQNPhQFFvo29aFFg4rzF4Rk9Q7owDJW5Uf1
-         zMmw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1I+W4ezmtHDFIxGjrDdwpaOT5H0BwVvMQhbHOakUsaGO5aCW+3XrRqsSaBfcXcmDs0rmQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSVyprpnAmtcvSFDzShwki5plUoUENfvkzKWnE2P8vooTMKzZt
-	0Lem0oNvR8WT1LEBBDJjeoHF97fFSSxdo8SumTm6+fN1D8Tt7rvA3R1s6r9a0AQB/2YBY5n/jIN
-	uo2H+OYiXUw==
-X-Google-Smtp-Source: AGHT+IGuKbBb2lRfg0zkm1s3qWA/FlYtdLZvNL3qHYsniInakt/sV+rfHnyjB/VJVAG4XIo5VyzVxdsJDy6k
-X-Received: from dybgp28.prod.google.com ([2002:a05:7301:211c:b0:2b0:5541:d643])
- (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:80cc:b0:2ab:ca55:b75b
- with SMTP id 5a478bee46e88-2b05e6beb4emr39241858eec.20.1767061483570; Mon, 29
- Dec 2025 18:24:43 -0800 (PST)
-Date: Mon, 29 Dec 2025 18:24:41 -0800
-In-Reply-To: <20251204-b4-stable-disable-uninit-ptr-warn-5-15-v1-1-41212e2c6409@google.com>
- (Justin Stitt's message of "Thu, 04 Dec 2025 12:44:48 -0800")
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VUw7DO0u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767085196; x=1798621196;
+  h=date:from:to:cc:subject:message-id;
+  bh=vMAX2H19ZJ3r1QTStGN5av3Vfzb+aG9bvsZ3lbvCwgQ=;
+  b=VUw7DO0u3zLLIZIdW/hgR86UZRoSyIhT96tZABZQsTWsmaHI4nltSFz0
+   jX6TkwgesOL3wN9YDI3SzYiF/gHu1nV/k/PaPQK981bjPOH22m7ah968J
+   Vmjn5iV+pD+xPbY/DSa6irEHKafxW/TwF/XLCpsahPkRZdqSlyxWWnFQv
+   DnPSl85qtyahoCePN0ODxPB7jFxyTycn2+WEqrl+W103SW9hxQwoSCnjZ
+   thBNcKI75bMuHAwXlx4YhnhDFwSnIDZXyUrGuaFik56Lyi0RDgn9rKVpc
+   fTidVlvzdR/QgSJtcoXEoBBOJEjOrr+QjJliQH9DA/yz0bp/dLGNG5nKp
+   Q==;
+X-CSE-ConnectionGUID: hVEWhS9cT0GIdmP2PAQsyQ==
+X-CSE-MsgGUID: /qc3axUnQDSvhqTdUx2WUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="79795842"
+X-IronPort-AV: E=Sophos;i="6.21,188,1763452800"; 
+   d="scan'208";a="79795842"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 00:59:53 -0800
+X-CSE-ConnectionGUID: Wt7+fjDxStm7I1BbfMBtWA==
+X-CSE-MsgGUID: bZZ3Jnu7Q0Oc3X2s7NptsQ==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Dec 2025 00:59:49 -0800
+Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vaVZz-000000000G3-0IOR;
+	Tue, 30 Dec 2025 08:59:47 +0000
+Date: Tue, 30 Dec 2025 16:59:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mukesh Rathor <mrathor@linux.microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>
+Subject: arch/x86/hyperv/hv_crash.c:282:6: warning: variable 'status'
+ set but not used
+Message-ID: <202512301641.FC6OAbGM-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251204-b4-stable-disable-uninit-ptr-warn-5-15-v1-1-41212e2c6409@google.com>
-User-Agent: mu4e 1.12.12; emacs 30.1
-Message-ID: <dbx8cy3wso46.fsf@ynaffit-andsys.c.googlers.com>
-Subject: Re: [PATCH 5.15.y RESEND] KVM: arm64: sys_regs: disable
- -Wuninitialized-const-pointer warning
-From: Tiffany Yang <ynaffit@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Christopher Covington <cov@codeaurora.org>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-Justin Stitt <justinstitt@google.com> writes:
+Hi Mukesh,
 
-> A new warning in Clang 22 [1] complains that @clidr passed to
-> get_clidr_el1() is an uninitialized const pointer. get_clidr_el1()
-> doesn't really care since it casts away the const-ness anyways -- it is
-> a false positive.
+First bad commit (maybe != root cause):
 
-> |  ../arch/arm64/kvm/sys_regs.c:2838:23: warning: variable 'clidr' is  
-> uninitialized when passed as a const pointer argument here  
-> [-Wuninitialized-const-pointer]
-> |   2838 |         get_clidr_el1(NULL, &clidr); /* Ugly... */
-> |        |                              ^~~~~
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8640b74557fc8b4c300030f6ccb8cd078f665ec8
+commit: 77c860d2dbb72d1f3c6a2e882a07d19eca399db5 x86/hyperv: Enable build of hypervisor crashdump collection files
+date:   6 weeks ago
+config: x86_64-randconfig-014-20251230 (https://download.01.org/0day-ci/archive/20251230/202512301641.FC6OAbGM-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251230/202512301641.FC6OAbGM-lkp@intel.com/reproduce)
 
-> This patch isn't needed for anything past 6.1 as this code section was
-> reworked in Commit 7af0c2534f4c ("KVM: arm64: Normalize cache
-> configuration"). Since there is no upstream equivalent, this patch just
-> needs to be applied to 5.15.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512301641.FC6OAbGM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/hyperv/hv_crash.c:282:6: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+     282 |         u64 status;
+         |             ^
+   arch/x86/hyperv/hv_crash.c:631:2: error: must use 'struct' tag to refer to type 'smp_ops'
+     631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+         |         ^
+         |         struct 
+   arch/x86/hyperv/hv_crash.c:631:9: error: expected identifier or '('
+     631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+         |                ^
+   1 warning and 2 errors generated.
 
 
-This error has also been showing up in 5.10 since KernelCI started using
-clang-21.
+vim +/status +282 arch/x86/hyperv/hv_crash.c
 
-> Disable this warning for sys_regs.o with an iron fist as it doesn't make
-> sense to waste maintainer's time or potentially break builds by
-> backporting large changelists from 6.2+.
+94212d34618c26 Mukesh Rathor 2025-10-06  258  
+94212d34618c26 Mukesh Rathor 2025-10-06  259  /*
+94212d34618c26 Mukesh Rathor 2025-10-06  260   * Common function for all cpus before devirtualization.
+94212d34618c26 Mukesh Rathor 2025-10-06  261   *
+94212d34618c26 Mukesh Rathor 2025-10-06  262   * Hypervisor crash: all cpus get here in NMI context.
+94212d34618c26 Mukesh Rathor 2025-10-06  263   * Linux crash: the panicing cpu gets here at base level, all others in NMI
+94212d34618c26 Mukesh Rathor 2025-10-06  264   *		context. Note, panicing cpu may not be the BSP.
+94212d34618c26 Mukesh Rathor 2025-10-06  265   *
+94212d34618c26 Mukesh Rathor 2025-10-06  266   * The function is not inlined so it will show on the stack. It is named so
+94212d34618c26 Mukesh Rathor 2025-10-06  267   * because the crash cmd looks for certain well known function names on the
+94212d34618c26 Mukesh Rathor 2025-10-06  268   * stack before looking into the cpu saved note in the elf section, and
+94212d34618c26 Mukesh Rathor 2025-10-06  269   * that work is currently incomplete.
+94212d34618c26 Mukesh Rathor 2025-10-06  270   *
+94212d34618c26 Mukesh Rathor 2025-10-06  271   * Notes:
+94212d34618c26 Mukesh Rathor 2025-10-06  272   *  Hypervisor crash:
+94212d34618c26 Mukesh Rathor 2025-10-06  273   *    - the hypervisor is in a very restrictive mode at this point and any
+94212d34618c26 Mukesh Rathor 2025-10-06  274   *	vmexit it cannot handle would result in reboot. So, no mumbo jumbo,
+94212d34618c26 Mukesh Rathor 2025-10-06  275   *	just get to kexec as quickly as possible.
+94212d34618c26 Mukesh Rathor 2025-10-06  276   *
+94212d34618c26 Mukesh Rathor 2025-10-06  277   *  Devirtualization is supported from the BSP only at present.
+94212d34618c26 Mukesh Rathor 2025-10-06  278   */
+94212d34618c26 Mukesh Rathor 2025-10-06  279  static noinline __noclone void crash_nmi_callback(struct pt_regs *regs)
+94212d34618c26 Mukesh Rathor 2025-10-06  280  {
+94212d34618c26 Mukesh Rathor 2025-10-06  281  	struct hv_input_disable_hyp_ex *input;
+94212d34618c26 Mukesh Rathor 2025-10-06 @282  	u64 status;
+94212d34618c26 Mukesh Rathor 2025-10-06  283  	int msecs = 1000, ccpu = smp_processor_id();
+94212d34618c26 Mukesh Rathor 2025-10-06  284  
+94212d34618c26 Mukesh Rathor 2025-10-06  285  	if (ccpu == 0) {
+94212d34618c26 Mukesh Rathor 2025-10-06  286  		/* crash_save_cpu() will be done in the kexec path */
+94212d34618c26 Mukesh Rathor 2025-10-06  287  		cpu_emergency_stop_pt();	/* disable performance trace */
+94212d34618c26 Mukesh Rathor 2025-10-06  288  		atomic_inc(&crash_cpus_wait);
+94212d34618c26 Mukesh Rathor 2025-10-06  289  	} else {
+94212d34618c26 Mukesh Rathor 2025-10-06  290  		crash_save_cpu(regs, ccpu);
+94212d34618c26 Mukesh Rathor 2025-10-06  291  		cpu_emergency_stop_pt();	/* disable performance trace */
+94212d34618c26 Mukesh Rathor 2025-10-06  292  		atomic_inc(&crash_cpus_wait);
+94212d34618c26 Mukesh Rathor 2025-10-06  293  		for (;;)
+94212d34618c26 Mukesh Rathor 2025-10-06  294  			cpu_relax();
+94212d34618c26 Mukesh Rathor 2025-10-06  295  	}
+94212d34618c26 Mukesh Rathor 2025-10-06  296  
+94212d34618c26 Mukesh Rathor 2025-10-06  297  	while (atomic_read(&crash_cpus_wait) < num_online_cpus() && msecs--)
+94212d34618c26 Mukesh Rathor 2025-10-06  298  		mdelay(1);
+94212d34618c26 Mukesh Rathor 2025-10-06  299  
+94212d34618c26 Mukesh Rathor 2025-10-06  300  	stop_nmi();
+94212d34618c26 Mukesh Rathor 2025-10-06  301  	if (!hv_has_crashed)
+94212d34618c26 Mukesh Rathor 2025-10-06  302  		hv_notify_prepare_hyp();
+94212d34618c26 Mukesh Rathor 2025-10-06  303  
+94212d34618c26 Mukesh Rathor 2025-10-06  304  	if (crashing_cpu == -1)
+94212d34618c26 Mukesh Rathor 2025-10-06  305  		crashing_cpu = ccpu;		/* crash cmd uses this */
+94212d34618c26 Mukesh Rathor 2025-10-06  306  
+94212d34618c26 Mukesh Rathor 2025-10-06  307  	hv_hvcrash_ctxt_save();
+94212d34618c26 Mukesh Rathor 2025-10-06  308  	hv_mark_tss_not_busy();
+94212d34618c26 Mukesh Rathor 2025-10-06  309  	hv_crash_fixup_kernpt();
+94212d34618c26 Mukesh Rathor 2025-10-06  310  
+94212d34618c26 Mukesh Rathor 2025-10-06  311  	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+94212d34618c26 Mukesh Rathor 2025-10-06  312  	memset(input, 0, sizeof(*input));
+94212d34618c26 Mukesh Rathor 2025-10-06  313  	input->rip = trampoline_pa;
+94212d34618c26 Mukesh Rathor 2025-10-06  314  	input->arg = devirt_arg;
+94212d34618c26 Mukesh Rathor 2025-10-06  315  
+94212d34618c26 Mukesh Rathor 2025-10-06  316  	status = hv_do_hypercall(HVCALL_DISABLE_HYP_EX, input, NULL);
+94212d34618c26 Mukesh Rathor 2025-10-06  317  
+94212d34618c26 Mukesh Rathor 2025-10-06  318  	hv_panic_timeout_reboot();
+94212d34618c26 Mukesh Rathor 2025-10-06  319  }
+94212d34618c26 Mukesh Rathor 2025-10-06  320  
 
-> Cc: stable@vger.kernel.org
-> Fixes: 7c8c5e6a9101e ("arm64: KVM: system register handling")
-> Link:  
-> https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e  
-> [1]
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-<snip>
+:::::: The code at line 282 was first introduced by commit
+:::::: 94212d34618c2608758128da32ddac2ad834cb9f x86/hyperv: Implement hypervisor RAM collection into vmcore
 
-Reviewed-by: Tiffany Yang <ynaffit@google.com>
+:::::: TO: Mukesh Rathor <mrathor@linux.microsoft.com>
+:::::: CC: Wei Liu <wei.liu@kernel.org>
 
 -- 
-Tiffany Y. Yang
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
