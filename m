@@ -1,113 +1,90 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3290213D638
-	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 00:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1772DAFD7
+	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 02:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767056355; cv=none; b=AkFzmfSpo6fdlC8KsC5sJDTD9pLu3quH/JCAmf19fKIjVmC3pbgdSEHk96RLPPzmUiX307yo140/o/W3506uVreSSbt7p0FzFgN3/mbX+4lvhV7ugHSQ9r+NLjJ0tMMQS5hh3H3S8yQE6mNexXwKtY/Kv0k+NaFCSyV9tS1rzu4=
+	t=1767061373; cv=none; b=onjX8xFh13FJb+KJ5+fzI13YZlMw+C5aER6PwF6oNDMDbFKdBxiHgtcZxGuGy2H98xI7mNG46H+sXjl/CSN+75SUUPNzaR0oxgGjf3JZJl3yE0lf9s24Iqwev+hCaD44eBI8DLixdGPJHkgpJS60EGtx+DZQw5/7AS7NzJ5NVRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767056355; c=relaxed/simple;
-	bh=2lxDnwdsZekXe4NfDsKQJITWCMDUWP6xiRX5VchwVV4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CAbWAbOTUS5tEeqVzdSagFJjs4YvsO8198deAcs07xe6p38r9qSpXArBUYlkxYuUwLSg0DKKiwcHkRtE7oBIPQvKAhBOhHtRX75tVrtbj6bxl8pJ623Wmiir90E+gzZ/73kSNHmqKSqGlFsv3MUtL6WOLxMd89/PyNfoR5v7Ki8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oLZ7OzKO; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1767061373; c=relaxed/simple;
+	bh=1TPUuZRqeK9VE9JKVNfQ7gOUgA9r0Suwe3bu4LqCFiI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=MNfYDVsL7w4UHf/Lumyc7fhG7DsBn7B6geZ+3Ou66wSR+LnlLxzrKK4Kc2aMJgY+mqjYQzYRGdfuwULZ36RtMyXLhZRLVjVdWOWt4ikFBm1zWKRO++PFkJxii6ZQu8Y8JuAl9JXT9bF87BUTlq5PamlJwpeMDMqoxAojc9y0uOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3S+dbpwa; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oLZ7OzKO"
-Message-ID: <26800836-3864-47ec-910b-aed571758f04@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767056351;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TSyzvjl2It73lqYA6EDJUDBcvQxjHw4X7Zb7XrvQVUQ=;
-	b=oLZ7OzKOpf4AbXx1p7wAm4IkLiVOcM7MnlHBnQYpYeKv2eymkHXiCpvQz03QcYr9tU4Bcc
-	WO/jFUHfHLy+ol+q9jTWIiewXfC4ZhoMW2JWLqXm3jpqTCQ0vVgUq9r9RnZRw1hiOGyWHH
-	FgosFZ8sEO9qw+v4wRKSoxAGCYXUflA=
-Date: Mon, 29 Dec 2025 16:59:03 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3S+dbpwa"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c0c7e0a8ac1so14469688a12.0
+        for <llvm@lists.linux.dev>; Mon, 29 Dec 2025 18:22:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1767061371; x=1767666171; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKB/MFi2JJNcHgRM1ZVpW/6k+K0ih/df/zx7AJgRywM=;
+        b=3S+dbpwa9+t5Af7MVQAyjQCQ2gJLjb17gW2GOUSSWsipyGFvpyo/tWkN0mc3R1h9wa
+         xH3SmX0EFqJ9xL/eftHPkDhOnS9dbqT9KpZBW3CCCr6jI8IwO/9bXwgvOhCt6tS67AZb
+         cJ3qPpGpIOd5eTXR/oKzyC8TrDLRJGUDC5PQr4Ti/bqr80I450uI7z7RvnqgthFMMmPN
+         HZjuf8Aor+PhoisP1hZiYc/Gk7ZtKPOaDFCPGoYJUyL6/HcGdTo9yJcmqAajL28EzWi2
+         OaswE0+22SJiXgQ5aL0iIgJee9R8tY7kPVDRRtzUEsA2ccltH0juv5z53CMZ6T9JT3GE
+         4bXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767061371; x=1767666171;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dKB/MFi2JJNcHgRM1ZVpW/6k+K0ih/df/zx7AJgRywM=;
+        b=Ag4ALlR4CCNzsmk9P8CoUhlIbxpgu4cFFkqpXlQfYrZB2LNVPRQUTNC2/kq39yP9Xd
+         Keq7hy1MghbYX1Ux4wsgFrEPmTKCf1k8wmMxhVWSvzXk+S7FodlJjzTdObkEtliWYYP/
+         Fr5y7WBIxH4TeUNrbQTAdwQ8nNx3hjqrNE9fNkaOXyr8PrYNkskKLvtfEvv/8ExvIHyV
+         5aXc0ecGsCVufr1MIGxTWsIHGWoP4Ndiv//o71wja0JONlBORbcczfQarVLvju1N0mi+
+         4wgiHZWmtQWXy1u60giKBJj87O3KMpdnDup+wg32d58oU+ZL7cifNq30dq0il6C+NZ5J
+         Qsyg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6zk5I8blEKUoF3WtSaKXICSXIjc3+w3aRhLK8o/lZodQy6Jv/zxqLfXH1tUMx8Wp/J25m@lists.linux.dev
+X-Gm-Message-State: AOJu0YyppQALQM6hT3h81oUFZBOUjfXnUpwlTzKL2ZTejcT4oWZTqhvx
+	bDOKbs99PCE2DzSfkfYRtAVl708XfPVPSRZK7CP5svVeZnUQi2a820oIRlXJDG9xxvx5//AW807
+	LVWII02Fybw==
+X-Google-Smtp-Source: AGHT+IELINBMPFmRxNHDW7vHWpdCROA3hncsEtneXbUH1OrOJmjFny3vsrRGMAMBfntFNvUrUIrN7tzzSSsU
+X-Received: from dlbsn2.prod.google.com ([2002:a05:7022:b902:b0:11f:300a:a308])
+ (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:3718:b0:119:e569:f62e
+ with SMTP id a92af1059eb24-121722ecbe0mr22094565c88.39.1767061371145; Mon, 29
+ Dec 2025 18:22:51 -0800 (PST)
+Date: Mon, 29 Dec 2025 18:22:49 -0800
+In-Reply-To: <20251205-stable-disable-unit-ptr-warn-v2-1-cec53a8f736b@google.com>
+ (Justin Stitt's message of "Fri, 05 Dec 2025 14:51:41 -0800")
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is
- out of bounds
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-modules@vger.kernel.org, bpf <bpf@vger.kernel.org>,
- Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>
-References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
- <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
- <af906e9e-8f94-41f5-9100-1a3b4526e220@linux.dev>
- <20251229212938.GA2701672@ax162>
- <6b87701b-98fb-4089-a201-a7b402e338f9@linux.dev>
- <CAADnVQ+X-a92LEgcd-HjTJUcw2zR_jtUmD9U-Z6OtNnvpVwfiw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQ+X-a92LEgcd-HjTJUcw2zR_jtUmD9U-Z6OtNnvpVwfiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20251205-stable-disable-unit-ptr-warn-v2-1-cec53a8f736b@google.com>
+User-Agent: mu4e 1.12.12; emacs 30.1
+Message-ID: <dbx8ikdoso7a.fsf@ynaffit-andsys.c.googlers.com>
+Subject: Re: [PATCH 6.1.y RESEND v2] KVM: arm64: sys_regs: disable
+ -Wuninitialized-const-pointer warning
+From: Tiffany Yang <ynaffit@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Alexandru Elisei <alexandru.elisei@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Will Deacon <will@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Christopher Covington <cov@codeaurora.org>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On 12/29/25 4:50 PM, Alexei Starovoitov wrote:
-> On Mon, Dec 29, 2025 at 4:39 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> [...]
->>
->>
->> From 7c3b9cce97cc76d0365d8948b1ca36c61faddde3 Mon Sep 17 00:00:00 2001
->> From: Ihor Solodrai <ihor.solodrai@linux.dev>
->> Date: Mon, 29 Dec 2025 15:49:51 -0800
->> Subject: [PATCH] BTF_OBJCOPY
->>
->> ---
->>  Makefile                             |  6 +++++-
->>  lib/Kconfig.debug                    |  1 +
->>  scripts/gen-btf.sh                   | 10 +++++-----
->>  scripts/link-vmlinux.sh              |  2 +-
->>  tools/testing/selftests/bpf/Makefile |  4 ++--
->>  5 files changed, 14 insertions(+), 9 deletions(-)
-> 
-> All the makefile hackery looks like overkill and wrong direction.
-> 
-> What's wrong with kernel/module/main.c change?
-> 
-> Module loading already does a bunch of sanity checks for ELF
-> in elf_validity_cache_copy().
-> 
-> + if (sym[i].st_shndx >= info->hdr->e_shnum)
-> is just one more.
-> 
-> Maybe it can be moved to elf_validity*() somewhere,
-> but that's a minor detail.
-> 
-> iiuc llvm-objcopy affects only bpf testmod, so not a general
-> issue that needs top level makefile changes.
+Justin Stitt <justinstitt@google.com> writes:
 
-AFAIU, the problem is that the llvm-objcopy bug is essentially
-use-after-free [1], that may (or may not) corrupt st_shndx value of
-some symbols when executing --update-section.
+> A new warning in Clang 22 [1] complains that @clidr passed to
+> get_clidr_el1() is an uninitialized const pointer. get_clidr_el1()
+> doesn't really care since it casts away the const-ness anyways -- it is
+> a false positive.
 
-And so we can't trust this command anywhere in the kernel build, even
-though it only manifested itself in a BPF test module.
+<snip>
 
-With the gen-btf.sh changes ${OBJCOPY} --update-section is called for
-all binaries with .BTF_ids: vmlinux and all modules.
+Reviewed-by: Tiffany Yang <ynaffit@google.com>
 
-The fix in module.c is an independent kernel bug, that is hopefully
-fixed with the st_shndx check.
-
-[1] https://github.com/llvm/llvm-project/issues/168060#issuecomment-3533552952
-
+-- 
+Tiffany Y. Yang
