@@ -1,141 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2261821D3F0
-	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 15:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654F31A38F9
+	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 16:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767109827; cv=none; b=GQEvfoVq2fGaWiP9yzzFNqzCr94zce3wgBKwLwYbxvmIbD194kxN0daAWPrJ4M1g3Nm1uyQxgDtZe4MZCm3YdU4kIPA8OPsl7oyqcQdO6H0AxahowSJ9/yCL7wTR+WEFKvHl1rublYSKgG1NxInB4pdxnpbbmgc81bdfWmUzdik=
+	t=1767113315; cv=none; b=SvwnpcaGP1pev62tI/Xeywiek31/Huf8FPZMxwf+BV5rrizluyoIAs+jnujAqzOF+hpzCdCTbfANashEn1wegO/FP3lSJ93qGRXhpSSGdxNIpxzt3DyxajK39AV3rcjjb3+gP+Vd2TbRsWDZxFuZzaawrt/L6n4c6eMNf17GutY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767109827; c=relaxed/simple;
-	bh=buNYBa+G8qfLlUvBCR4ZFcvapW46f5DYot+jLhw9HoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oNyriGz/8bJhDCzxY85HwS+btd4iBoa11fADm2dJbQLXgcxQNDoqsKhF96qxDZz1A884V9Ph8F52krz6hvCm2bAGy1bMXa86iM+yku1d+9XUEc4saF1ZPNu2cVfdXoDGtkHylqwBiUrx6iN0nYQNic9lJSWhuXtrnE03jgu55d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uud/8zHK; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uud/8zHK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD7C0C19424
-	for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 15:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767109826;
-	bh=buNYBa+G8qfLlUvBCR4ZFcvapW46f5DYot+jLhw9HoQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uud/8zHKAy9vAmWpvkX9rbSTgMdpfHBrh6WLiprE9pI8hXsuIlJvKVSvybs77Fn8Y
-	 sUNNKqabH1O3AAdbTpPpjTZKBZ6V0IebRTaOqL2zluNQBKVnI/KyICHqazM4+tq8Al
-	 e7KrJX5C2v4quZN/1/fXqONBGLQD9e5pGrZWWuL4E2yUMn9tgr24TnxY0pGE54iQk3
-	 FNmaJE5Xh1NVQAEmCs/Ertn7U8sVHeyHuLWOeql2YdFDe2u0OwNx/yZ5U0KPz8j379
-	 t4oJxM3x8CAObxRNyV5UERTf1i+gfTxIHvgPsa8R+JAxSfQDAsS9oaFzAQxP4vVDon
-	 lgi7CNLA0cyfA==
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7aa9be9f03aso8345369b3a.2
-        for <llvm@lists.linux.dev>; Tue, 30 Dec 2025 07:50:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXc2D2ZbhQOytHOfOtgtExrQpO8k8sUEViOtt7q0Wz+vq24ORySySe2NKE0j7pS7W1q5giU@lists.linux.dev
-X-Gm-Message-State: AOJu0YzXvEZ+bHXRMB0crqkEsuf88pRJD28POteICkpNC+CMlUD0tRDq
-	gvnbZHPjnYrVw3JPwvexuQ9NKOxJvfhtnH+wygrJhp9CUANJDVM8nDcGdutNgDaZM6mtQMcq4Bq
-	vJSJvLyfCxhTv+IW4RnBhmjZvbLW3pw==
-X-Google-Smtp-Source: AGHT+IEZjuJ741PMreIHh9uiPP3hb59AwPjPkgs6EZmokmEJmwSPfCMKsbUmse1x0DIpIk+dUrk59qVP/n9gj5/yiuc=
-X-Received: by 2002:a05:7022:b906:b0:11b:d4a8:d244 with SMTP id
- a92af1059eb24-121722ab1e3mr21838218c88.16.1767109826287; Tue, 30 Dec 2025
- 07:50:26 -0800 (PST)
+	s=arc-20240116; t=1767113315; c=relaxed/simple;
+	bh=TUu2Dp2xZxi1yNJqpMQ42nivcbRZIxIELfScEgMADkU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=miF1qcIe+mJlsW1ftOZs+vAcvn1ckoabJ4mTgSkvE8iClkAsiJimn0bbeq3uilU7FwX0SRVht6bfL4n4I00Y/QjLxq1BGllDAAFjDkUdQcRKKwV8hzw+ZD6jFj7fosOXl7K464NSCpfFpVm5MQC/tsKAYltidHpfVb50Cb04Rto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from minun.felixc.at (unknown [65.108.105.71])
+	by APP-05 (Coremail) with SMTP id zQCowAA3yQw8AlRpUjKQAg--.63740S2;
+	Wed, 31 Dec 2025 00:48:08 +0800 (CST)
+From: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
+Subject: [PATCH v6 0/4] RISC-V: re-enable gcc + rust builds
+Date: Tue, 30 Dec 2025 17:47:53 +0100
+Message-Id: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251125-drm-mediatek-hdmi-v2-wifpts-v1-1-a6c7582cf69a@kernel.org>
-In-Reply-To: <20251125-drm-mediatek-hdmi-v2-wifpts-v1-1-a6c7582cf69a@kernel.org>
-From: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date: Tue, 30 Dec 2025 15:50:13 +0000
-X-Gmail-Original-Message-ID: <CAAOTY_-hGe-yWK-iSXDefEPJN9bc8A_r=kNirBAyHgCPhqoAvw@mail.gmail.com>
-X-Gm-Features: AQt7F2ole3Zhplk3q7hyGThFScP9pdJnuSD325W6WxvbLpbbWXRXwbGOdauOQ4Q
-Message-ID: <CAAOTY_-hGe-yWK-iSXDefEPJN9bc8A_r=kNirBAyHgCPhqoAvw@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: mtk_hdmi_v2: Fix return type of mtk_hdmi_v2_tmds_char_rate_valid()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	David Airlie <airlied@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, CK Hu <ck.hu@mediatek.com>, 
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADkCVGkC/22MQQrDIBBFrxJmXYuZaChd9R4lC9HRDDSxaCotw
+ bvXZl34m/fhvR0yJaYM126HRIUzx7XBeOrAzmYNJNg1BpSoe5RKBGtFeuVNFC2M8ZYcDT2ZAZr
+ xTOT5fdTuU+OZ8xbT54gX/Xv/d9qkQKc8SncZLapbWAw/zjYuMNVav7H9R8mmAAAA
+X-Change-ID: 20251204-gcc-rust-v5-aafcede31ea3
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor@kernel.org>, 
+ Mingcong Bai <jeffbai@aosc.io>, Han Gao <rabenda.cn@gmail.com>, 
+ Vivian Wang <wangruikang@iscas.ac.cn>, Jason Montleon <jmontleo@redhat.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+ Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
+X-Mailer: b4 0.14.3
+X-CM-TRANSID:zQCowAA3yQw8AlRpUjKQAg--.63740S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrW8KrWUGF48JF1fuw4UJwb_yoW8Jw4xpa
+	95Cr4fKrWDJFWIgr4fAr48WF45GF1rJrWrJF17t34UJ3y7ur18trnIkr4rJa17ZryvvrWj
+	vr1F9Fy09ryUCwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBKb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkIecxEwVCI4V
+	WUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
+	0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
+	JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
+	AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7xRAhL0DUUUUU=
+	=
+X-CM-SenderInfo: x0lq233loux21fy6x21ufox2xfdvhtffof0/
 
-Hi, Nathan:
+Previous v5 patch:
+https://lore.kernel.org/20251204-gcc-rust-v5-v5-0-2d4f20d86c24@gmail.com
 
-Nathan Chancellor <nathan@kernel.org> =E6=96=BC 2025=E5=B9=B411=E6=9C=8825=
-=E6=97=A5=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:14=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> When building with -Wincompatible-function-pointer-types-strict, a
-> warning designed to catch kernel control flow integrity (kCFI) issues at
-> build time, there is an instance in the new HDMI v2 drm/mediatek code:
->
->   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:1331:31: error: incompatible fun=
-ction pointer types initializing 'enum drm_mode_status (*)(const struct drm=
-_bridge *, const struct drm_display_mode *, unsigned long long)' with an ex=
-pression of type 'int (const struct drm_bridge *, const struct drm_display_=
-mode *, unsigned long long)' [-Werror,-Wincompatible-function-pointer-types=
--strict]
->    1331 |         .hdmi_tmds_char_rate_valid =3D mtk_hdmi_v2_hdmi_tmds_ch=
-ar_rate_valid,
->         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~
->
-> While 'int' and 'enum drm_mode_status' are ABI compatible, hence no
-> regular warning from -Wincompatible-function-pointer-types, the mismatch
-> will trigger a kCFI violation when mtk_hdmi_v2_tmds_char_rate_valid() is
-> called indirectly.
->
-> Update the return type of mtk_hdmi_v2_tmds_char_rate_valid() to be 'enum
-> drm_mode_status' to clear up the warning and kCFI violation.
+Changes in v6:
+- Simplified `bindgen-backend-option` Kconfig function by using
+`/dev/null` with clang option `-x c` instead of `touch`ing a new temp
+file.
+- Moved the `BINDGEN_TARGET` check to `rust/Makefile` so it only
+performs the check when Rust is enabled, avoiding breaking targets that
+do not support Rust builds.
+- Updated my git email to the institutional email address.
 
-Applied to mediatek-drm-fixes [1], thanks.
+Signed-off-by: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
+---
+Asuna Yang (4):
+      rust: export BINDGEN_TARGET from a separate Makefile
+      rust: generate a fatal error if BINDGEN_TARGET is undefined
+      rust: add a Kconfig function to test for support of bindgen options
+      RISC-V: handle extension configs for bindgen, re-enable gcc + rust builds
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-fixes
+ Documentation/rust/arch-support.rst |  2 +-
+ Makefile                            |  3 ++-
+ arch/riscv/Kconfig                  | 35 ++++++++++++++++++++++++++++++++++-
+ rust/Makefile                       | 17 ++++++++---------
+ scripts/Kconfig.include             |  5 +++++
+ scripts/Makefile.rust               | 10 ++++++++++
+ 6 files changed, 60 insertions(+), 12 deletions(-)
+---
+base-commit: 8640b74557fc8b4c300030f6ccb8cd078f665ec8
+change-id: 20251204-gcc-rust-v5-aafcede31ea3
 
-Regards,
-Chun-Kuang.
+Best regards,
+-- 
+Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
 
->
-> Fixes: 8d0f79886273 ("drm/mediatek: Introduce HDMI/DDC v2 for MT8195/MT81=
-88")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/gpu/drm/mediatek/mtk_hdmi_v2.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c b/drivers/gpu/drm/med=
-iatek/mtk_hdmi_v2.c
-> index c272e1e74b7d..454b8b93b834 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi_v2.c
-> @@ -1120,9 +1120,10 @@ static void mtk_hdmi_v2_hpd_disable(struct drm_bri=
-dge *bridge)
->         mtk_hdmi_v2_disable(hdmi);
->  }
->
-> -static int mtk_hdmi_v2_hdmi_tmds_char_rate_valid(const struct drm_bridge=
- *bridge,
-> -                                                const struct drm_display=
-_mode *mode,
-> -                                                unsigned long long tmds_=
-rate)
-> +static enum drm_mode_status
-> +mtk_hdmi_v2_hdmi_tmds_char_rate_valid(const struct drm_bridge *bridge,
-> +                                     const struct drm_display_mode *mode=
-,
-> +                                     unsigned long long tmds_rate)
->  {
->         if (mode->clock < MTK_HDMI_V2_CLOCK_MIN)
->                 return MODE_CLOCK_LOW;
->
-> ---
-> base-commit: a846505a193d7492ad3531e33cacfca31e4bcdd1
-> change-id: 20251125-drm-mediatek-hdmi-v2-wifpts-d67b55175609
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
