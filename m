@@ -1,143 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f67.google.com (mail-oa1-f67.google.com [209.85.160.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738F62C0F7C;
-	Wed, 31 Dec 2025 20:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3732BCA5A
+	for <llvm@lists.linux.dev>; Wed, 31 Dec 2025 20:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767211938; cv=none; b=fZ4dgEq/QHy1EKc9TcALAlqF5Xeev7jWUIdxYaIWRgQjLbpHa2ECGdnuWWOOeEvoNBCuQi6vdLYKRhUYDt6VZlCQMJjUW3PFUE74l+OZ8VvoaPPX/tBVsTjFoDKPNgedrQXMvXIEziQGLczPluJeBZkSmO9ElJh1Dsx/waAjjCg=
+	t=1767213085; cv=none; b=JlXXxmAL9TuMxKvv99cJIphOr9BgUNhUdXKvUorb/p8y1/rRL75cuYDNGDsfIaO0BhACALoTQA39P0iBe838p7/CMDLhPhbk8fYnkL2tot+T/zit9VSKtHLyIzTWcyYfkaaq55ClioMDVER7V01o7o8+2wgrYgK6tfNKIFx6DMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767211938; c=relaxed/simple;
-	bh=rtcpSlV4otllEvszA0uCP33efmeDHNTuJFf2xC4IG6g=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HEyue8UUIuSwHqsukomocwM8OJdPM50M/XBwGj5KqKnWF2OGiVRIBzMJR5sJrHlxO6eAU/P4BMDFPen6eXZj1+Rmx1FYSSZS4QwsG3iyttdQ2ylMGK0zgExSrULS420rC2fTnitl/NPUET+dlR5eyYmSToNCY2llJ+tA9xlFGUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CBWwSM4q; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767213085; c=relaxed/simple;
+	bh=rpAyc043Ax5VQr8+dHc0LhLszXtoHwy4eiOIzYipxz4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PHjWW3VzjnNuj7tt5XLYOqkauvNkqYF+vftyyHXcGl/DzofsauhiEGEY6HLfIzCEdRWMWuuNincqj9tfFNRkOQbP2VmoEs5TXoOUOB3yL/kKPRf8sADy+TK5L5hfZZKDA3PscqpVU99WSA4HOBLo/64CT5wxmtPPR/asr59+uJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fcwke/Ef; arc=none smtp.client-ip=209.85.160.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CBWwSM4q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767211937; x=1798747937;
-  h=date:from:to:cc:subject:message-id;
-  bh=rtcpSlV4otllEvszA0uCP33efmeDHNTuJFf2xC4IG6g=;
-  b=CBWwSM4qWd6k+EYs6QtvotAP0egfADDTqmZEaM4SeNkDGKyp1ziMrPbr
-   Sy2ytzp//wqbuEMiie110LP3isJBJUiRtzrmHwQjfRxyFiP0qYW5jY5sg
-   HNa27QkBAf2b3Qu+tlZnueZAEho4XOnGPMN12YZUnn7435KxSVZiRGmDU
-   IBcl4uQIR3tyxE0vhejsU29bntRoOZbzXBVymCEsKMF+6iJnofLCh9zgC
-   aE+G2sxdNXk4snALyyfgzC7YngDG3irtcfxwZq/BZ6NO3XezBNr7D5KYR
-   nN/CYibmnRkpixyDx3nSHZAJ2s0waH+6YPyJ6TmFQXIUyQ+RHNzKlCsaw
-   A==;
-X-CSE-ConnectionGUID: 7xIduURrRBmlJJ+HCOdrYg==
-X-CSE-MsgGUID: RU0ZGk9NQxe1AsaTTsa6XQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11658"; a="68844591"
-X-IronPort-AV: E=Sophos;i="6.21,193,1763452800"; 
-   d="scan'208";a="68844591"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2025 12:12:16 -0800
-X-CSE-ConnectionGUID: ZOdCzR3mQGaP/h7JRHVVng==
-X-CSE-MsgGUID: E3DvLC77S8+UvF3N8Y+LJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,193,1763452800"; 
-   d="scan'208";a="205984439"
-Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 31 Dec 2025 12:12:14 -0800
-Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vb2YF-000000001ST-3DOY;
-	Wed, 31 Dec 2025 20:12:11 +0000
-Date: Thu, 01 Jan 2026 04:12:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- ntfs3@lists.linux.dev
-Subject: [paragon-software-group-ntfs3:master 16/16]
- fs/ntfs3/inode.c:1021:6: warning: variable 'folio' is used uninitialized
- whenever 'if' condition is true
-Message-ID: <202601010644.FIhOXy6Y-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fcwke/Ef"
+Received: by mail-oa1-f67.google.com with SMTP id 586e51a60fabf-3f13043e2fdso3681447fac.1
+        for <llvm@lists.linux.dev>; Wed, 31 Dec 2025 12:31:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1767213082; x=1767817882; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CkgP3P/JOmmU4SQIzQRxbAxKStjjkyO+o9UMdLOwKAc=;
+        b=fcwke/EfYlncebRI8RqrYTBvO1x0XA7ayv1ic7phH9ahRQ/92zxGvLLNP+O5Kk3s/l
+         Hy99Cgl31ypAkZBdH8/+SDrtAGnMR2wcoHdmLc4EohZxOTS7ezSrXvTpLjQalOkPHvMR
+         G5v2i4U2mACqIEvUo1M9jrheoGwW9eE2UNWIw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767213082; x=1767817882;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CkgP3P/JOmmU4SQIzQRxbAxKStjjkyO+o9UMdLOwKAc=;
+        b=ia6kxLdxPKwt074xN4Lj+XYqE7o8cAKW3kmQulk0UeOCvRzgcjIn7TxNJOAy3ptp2t
+         zfO9qxvtnkibgBOqtQw7jiAtekKRvj09a7LDfCghByp4Sg9gAtm7R8dOpWGbGTB/QPWi
+         LZMBoHO6FY/JuuUuBsojqCS4dJ+AHBjuKN1JQAK+AUVJgk+UvtI9FYX+qsSzMiMoc7Gg
+         xOPAhH/LDHb3pI9Kc4z56RtrGeD4QnHceQVDM7Zm42/vDz8wKkIkb8AWswTkzP9ANVz3
+         0YYVYZuBZWCIsBXXsHcYePanqIEhWcWnKd4XggbcyeQbrLa0s50bn89NLjkwHw7PyHAc
+         k1yg==
+X-Forwarded-Encrypted: i=1; AJvYcCXafpCMeWgReKo11gcOkUypmC8yzNOMpboJkvHuEmkad1xmjiNIvxJy6rcOcdCDDXPx0efj@lists.linux.dev
+X-Gm-Message-State: AOJu0YwbeNBbhAcaVrag/qE6Xi2ZUvx1GKhSLHWmJnSGv4eZZXUAiEM/
+	iS9VBU/UOZAfwPqaYcMLnBPAXiIDu74yolt1nKfPfBInygJRO9Hw8GidD4Atb+Ogj2I=
+X-Gm-Gg: AY/fxX71NPEFMbdIDxeEgMRoldXhxHDyqGMMYBeDpUJsPRrRElEvVyn1AE6+tlZtlF0
+	XxDrCC/tQ5+jqe6xcB3FCN0qJ1g5/dFveR3cgpWa/BXiqR9fS4VK7RQyeCVhHJustK9rZX/sZGw
+	r66SmAxDQffHmL3wm62CSUSSbsVGXkaUvPb4POFlAzv6GkkWI5IqbMscqygzNSu6wmOzyhIFTqO
+	IGQ3iYgo7UyRtsrhEebCMUF5ySoryYpIoxhcvdFUdy5WyIBTU0mBXrHzG0aCoPGSmJNbQrJJZv6
+	1NzdVJibBZeRhxtn4p+V4HiklWJOhpiwjbxYxU5cOXpagSyz1RrT/FmHoI77nqwHLDW5tEOwqI6
+	Nb2GD15KDy4We0hnc6zukx3W3kwnlNpSqBzhmi3JUG7FpfNeQeDWJUhYFI73nZfJU2lXaJvoSYh
+	4XG/ffYkLhICg65SkWKkivyEWRMagH6p4/1Q==
+X-Google-Smtp-Source: AGHT+IFZAkPcKJ2uTeFxS+roZ678AbK78d+9mfwo6bn/TTYmxsIJ+R5E5wssgjSFb8Ze3mX//4DEXQ==
+X-Received: by 2002:a05:6870:d691:b0:3f5:d9b0:567e with SMTP id 586e51a60fabf-3fda5666a5cmr18296581fac.14.1767213082037;
+        Wed, 31 Dec 2025 12:31:22 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3fdaabbadacsm22960637fac.15.2025.12.31.12.31.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Dec 2025 12:31:21 -0800 (PST)
+Message-ID: <3ee8406b-1789-4a18-8637-120fc0c62a99@linuxfoundation.org>
+Date: Wed, 31 Dec 2025 13:31:20 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kselftest/harness: Use helper to avoid zero-size memset
+ warning
+To: Wake Liu <wakel@google.com>, tglx@linutronix.de, kees@kernel.org,
+ shuah@kernel.org, nathan@kernel.org
+Cc: luto@amacapital.net, wad@chromium.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <871plslxsw.ffs@tglx> <20251224084120.249417-1-wakel@google.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20251224084120.249417-1-wakel@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/Paragon-Software-Group/linux-ntfs3.git master
-head:   099ef9ab9203dff327f2d61e44773f9acbc01f13
-commit: 099ef9ab9203dff327f2d61e44773f9acbc01f13 [16/16] fs/ntfs3: implement iomap-based file operations
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260101/202601010644.FIhOXy6Y-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260101/202601010644.FIhOXy6Y-lkp@intel.com/reproduce)
+On 12/24/25 01:41, Wake Liu wrote:
+> When building kselftests with a toolchain that enables source
+> fortification (e.g., Android's build environment, which uses
+> -D_FORTIFY_SOURCE=3), a build failure occurs in tests that use an
+> empty FIXTURE().
+> 
+> The root cause is that an empty fixture struct results in
+> `sizeof(self_private)` evaluating to 0. The compiler's fortification
+> checks then detect the `memset()` call with a compile-time constant size
+> of 0, issuing a `-Wuser-defined-warnings` which is promoted to an error
+> by `-Werror`.
+> 
+> An initial attempt to guard the call with `if (sizeof(self_private) > 0)`
+> was insufficient. The compiler's static analysis is aggressive enough
+> to flag the `memset(..., 0)` pattern before evaluating the conditional,
+> thus still triggering the error.
+> 
+> To resolve this robustly, this change introduces a `static inline`
+> helper function, `__kselftest_memset_safe()`. This function wraps the
+> size check and the `memset()` call. By replacing the direct `memset()`
+> in the `__TEST_F_IMPL` macro with a call to this helper, we create an
+> abstraction boundary. This prevents the compiler's static analyzer from
+> "seeing" the problematic pattern at the macro expansion site, resolving
+> the build failure.
+> 
+> Build Context:
+> Compiler: Android (14488419, +pgo, +bolt, +lto, +mlgo, based on r584948) clang version 22.0.0 (https://android.googlesource.com/toolchain/llvm-project 2d65e4108033380e6fe8e08b1f1826cd2bfb0c99)
+> Relevant Options: -O2 -Wall -Werror -D_FORTIFY_SOURCE=3 -target i686-linux-android10000
+> 
+> Test: m kselftest_futex_futex_requeue_pi
+> 
+> Change-Id: If4fdfe6ffcbe9736fbd8f66b2453e8cbbb95e25e
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601010644.FIhOXy6Y-lkp@intel.com/
+I removed this before applying. In the future remove these
+before sending the patch - running checkpatch.pl prompts
+you to remove it.
 
-All warnings (new ones prefixed by >>):
+> Signed-off-by: Wake Liu <wakel@google.com>
+> ---
+>   tools/testing/selftests/kselftest_harness.h | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index 3f66e862e83eb..159cd6729af33 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -70,6 +70,12 @@
+>   
+>   #include "kselftest.h"
+>   
+> +static inline void __kselftest_memset_safe(void *s, int c, size_t n)
+> +{
+> +	if (n > 0)
+> +		memset(s, c, n);
+> +}
+> +
+>   #define TEST_TIMEOUT_DEFAULT 30
+>   
+>   /* Utilities exposed to the test definitions */
+> @@ -416,7 +422,7 @@
+>   				self = mmap(NULL, sizeof(*self), PROT_READ | PROT_WRITE, \
+>   					MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
+>   			} else { \
+> -				memset(&self_private, 0, sizeof(self_private)); \
+> +				__kselftest_memset_safe(&self_private, 0, sizeof(self_private)); \
+>   				self = &self_private; \
+>   			} \
+>   		} \
 
->> fs/ntfs3/inode.c:1021:6: warning: variable 'folio' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1021 |         if (is_resident(ni)) {
-         |             ^~~~~~~~~~~~~~~
-   fs/ntfs3/inode.c:1024:48: note: uninitialized use occurs here
-    1024 |                 while ((folio = writeback_iter(mapping, wbc, folio, &err)))
-         |                                                              ^~~~~
-   fs/ntfs3/inode.c:1021:2: note: remove the 'if' if its condition is always false
-    1021 |         if (is_resident(ni)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-    1022 |                 struct folio *folio;
-         |                 ~~~~~~~~~~~~~~~~~~~~
-    1023 | 
-    1024 |                 while ((folio = writeback_iter(mapping, wbc, folio, &err)))
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1025 |                         err = ntfs_resident_writepage(folio, wbc);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1026 | 
-    1027 |                 return err;
-         |                 ~~~~~~~~~~~
-    1028 |         }
-         |         ~
-   fs/ntfs3/inode.c:1022:22: note: initialize the variable 'folio' to silence this warning
-    1022 |                 struct folio *folio;
-         |                                    ^
-         |                                     = NULL
-   1 warning generated.
 
+Applied to linux-kselftest fixes branch for next rc.
 
-vim +1021 fs/ntfs3/inode.c
-
-  1001	
-  1002	static int ntfs_writepages(struct address_space *mapping,
-  1003				   struct writeback_control *wbc)
-  1004	{
-  1005		int err;
-  1006		struct inode *inode = mapping->host;
-  1007		struct ntfs_inode *ni = ntfs_i(inode);
-  1008		struct iomap_writepage_ctx wpc = {
-  1009			.inode = mapping->host,
-  1010			.wbc = wbc,
-  1011			.ops = &ntfs_writeback_ops,
-  1012		};
-  1013	
-  1014		/* Avoid any operation if inode is bad. */
-  1015		if (unlikely(is_bad_ni(ni)))
-  1016			return -EINVAL;
-  1017	
-  1018		if (unlikely(ntfs3_forced_shutdown(inode->i_sb)))
-  1019			return -EIO;
-  1020	
-> 1021		if (is_resident(ni)) {
-  1022			struct folio *folio;
-  1023	
-  1024			while ((folio = writeback_iter(mapping, wbc, folio, &err)))
-  1025				err = ntfs_resident_writepage(folio, wbc);
-  1026	
-  1027			return err;
-  1028		}
-  1029	
-  1030		return iomap_writepages(&wpc);
-  1031	}
-  1032	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+thanks,
+-- Shuah
