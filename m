@@ -1,94 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E86C22D7B5;
-	Tue, 30 Dec 2025 20:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2F61C69D
+	for <llvm@lists.linux.dev>; Wed, 31 Dec 2025 00:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767126209; cv=none; b=AY/pl7HVEDr+9TKz152DaqWu8yniUWhswuDE4b63YeXBEm5NE4jqe51ZcD0SZV+cWxl2eLQrG0w9ONz/vLHSBF9kpsNRKVa86JPwkZBeAnss35C1iH3rA57vGbj/4Z4GpVXOuoY1Hr78+Z54GGhohc4L0/6UEnGeR237QXiXaqM=
+	t=1767139944; cv=none; b=B4+PSO5GabJGpQp6oCZFJQ11PKuO1A81cGFmdG9CFkCc3NkhvGTyBpKUi/KzUTjMIvG+HhwtxIoybX8KXvfW8j+uHyORSZMtafdezc0xmJdIJU1Exz+BekjBqnntuU7FOOncS8gGVmk8ZmuJ3Oob9me+a4yR1RRcADDoCcLuuGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767126209; c=relaxed/simple;
-	bh=1Zv2k7ah9l3UzPsLJ7NnWCOTmIAJnHwP0BwRDWVJOGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyWoM/bPmLLDEkliECBXf0xvIAxs+tu4DmQ8weUJdnXb8PvkbzZgVFmPeFOsJesUNXlWn89bbJD2VCHeuTZmPBkAmXaYe+YDmK+WIKe7hSFHujb2YzYs4zzawvapW66Syfu1azRRvQDAwKJWpDI1p3Yx7tUziuRZauJ80ho1lWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bv7foRQJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767139944; c=relaxed/simple;
+	bh=GbNtvzuH4macgUVsoyT5dNMet9YIptuMl8eDesafE0I=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PUL6k0jazX+lLlBoGTDfL5W3BRD92kcijsNl4zZY0Mq82PmiHKAKplayJZdm+UeF/5YeqAMz5AxdvFeLRo5VZk5FFxnl6uxBJXP0UPgobvsuec63UNDBNfUGE4eTiCmRQAogowEnxhR+uQ3MG3k/pB3/jCNko0/3nbY6DSB4v/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bLmnRABZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bv7foRQJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B823BC4CEFB;
-	Tue, 30 Dec 2025 20:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767126208;
-	bh=1Zv2k7ah9l3UzPsLJ7NnWCOTmIAJnHwP0BwRDWVJOGM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bv7foRQJQ7WyuAXSw7oSbzxIxXeoY73lV7Q6YYCXxFj9hgRYi0WWY2aonNUa9GlXT
-	 WRnks4FADlpsyAVvYRCFM8SYmcH2IrdkOrxUwZyjARrYm06k+OLYA9k9wRihd+/LOy
-	 z94UjUmzDdic6u8wo3mkxAUjOEhk70KOyNVz9vHLyJ1MQjlF/U0YFPVWK2VxRD5uXR
-	 t0OOk1doWJAQ7QeCLEueyJb3oHBryAdMzFwCa6QVTCfwhJyQzNk32KOyg8Mn6ZUbUV
-	 rW38w9LuO/zj2t8awKtqpuh/Em+c60iuSfmdS2+JEhmS2hcukXs66FbNH8+TcC2eHN
-	 rmi1qj2J+zaSA==
-Date: Tue, 30 Dec 2025 13:23:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] scripts: add tool to run containerized builds
-Message-ID: <20251230202324.GC4062669@ax162>
-References: <cover.1766061692.git.gtucker@gtucker.io>
- <35b951506304b141047812f516fa946a4f1549a1.1766061692.git.gtucker@gtucker.io>
- <20251219212731.GC1407372@ax162>
- <50ee5ec6-ca9b-486d-ac7e-5a896006a9de@gtucker.io>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bLmnRABZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767139940;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MLV68m3ACiuOCTGDrPirWQNVS0EhG0+wRIeSnMst9jw=;
+	b=bLmnRABZgaLRbbR8r5dp3XzgOUT1de39im6bLecJF4upqCS4RMaRrT2qU3oVxuF/DO0SaU
+	3/U20SYFGnPLaezQKydVR8MhucWMKIQO7Vl1Z7gnk5aELcWPxO/4ZjlNJThYS/LUGwyHb5
+	lXQu97R1mQ/f51XbAQ+kkusXj/Lge0w=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-591-ftGb-I4oMxKlN5j7hBkIFw-1; Tue,
+ 30 Dec 2025 19:12:19 -0500
+X-MC-Unique: ftGb-I4oMxKlN5j7hBkIFw-1
+X-Mimecast-MFC-AGG-ID: ftGb-I4oMxKlN5j7hBkIFw_1767139938
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EB09A1956088
+	for <llvm@lists.linux.dev>; Wed, 31 Dec 2025 00:12:17 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 43E05180045B;
+	Wed, 31 Dec 2025 00:12:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc3,
+ upstream-mainline, dbf8fe85)
+Date: Wed, 31 Dec 2025 00:12:16 -0000
+To: ftjahjad@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50ee5ec6-ca9b-486d-ac7e-5a896006a9de@gtucker.io>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <94972.125123019121900159@us-mta-591.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: mbCxLOJ8T9nwuCdBZsiMgVGICJn8t9RbHIZuc_yJ9vQ_1767139938
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 21, 2025 at 09:09:17PM +0100, Guillaume Tucker wrote:
-> On 19/12/2025 10:27 pm, Nathan Chancellor wrote:
-> > On Thu, Dec 18, 2025 at 01:49:52PM +0100, Guillaume Tucker wrote:
-> > ...
-> > > +    def __init__(self, args, logger):
-> > Adding something like
-> > 
-> >      self._args = [
-> >          '--rm',
-> >          '--tty',
-> >          '--volume', f'{os.getcwd()}:/src',
-> >          '--workdir', '/src',
-> >      ]
-> > 
-> > here then adding an __init__() in the subclasses to append the runtime
-> > specific arguments would allow _do_run() to be moved into
-> > ContainerRuntime(). Otherwise, this looks pretty good and extensible.
-> 
-> Yes, I left these very similar parts as-is on purpose to make it very
-> clear what the command line arguments are for each container runtime.
-> It's a good idea to refactor this though as you mention, and I'll add
-> a debug log message to print the command line instead.
-> 
-> I'm also anticipating that other runtimes will be quite different,
-> Podman and Docker just so happen to have many options in common.
-> Things like runc or containerd are very different beasts so I don't
-> want to over-generalise.  But this is straightforward enough for now.
+Hi, we tested your kernel and here are the results:
 
-Yeah, I had figured that might have been the reason for keeping these
-things separate, which does make sense. At the same time, I would rather
-keep things simple and shared now since we can with no other runtimes
-supported. If we want to add new runtimes in the future, undoing this
-should be simple enough and make it obvious to see why the separation is
-happening.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> So I'll rework this a bit in a v3.
 
-Thanks a lot!
+Kernel information:
+    Commit message: Merge tag 'net-6.19-rc4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-Cheers,
-Nathan
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2238409722
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2238409722_x86_64_kernel-debug_kcidb_tool_20323190_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2238409722_x86_64_kernel-debug_kcidb_tool_20323190_12
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [RHEL10.0] blktests throtl failed
+            URL: https://issues.redhat.com/browse/RHEL-66783
+            Affected tests:
+                Storage - blktests - throtl [s390x]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
+ Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
+            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
+comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
+d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
+medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
+=3D1
+            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
+65900650445969
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+                Boot test [aarch64]
+                Reboot test [aarch64]
+                Storage - blktests - ublk [aarch64]
+                stress: stress-ng - cpu-cache [aarch64]
+                xfstests - btrfs [aarch64]
+                xfstests - ext4 [aarch64]
+                xfstests - xfs [aarch64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
