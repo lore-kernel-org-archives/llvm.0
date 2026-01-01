@@ -1,150 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4ACA930;
-	Thu,  1 Jan 2026 03:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53EC2C11E7;
+	Thu,  1 Jan 2026 11:07:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767239369; cv=none; b=Aax5t2fxpqOUv6ulfZ5uu/XeReP3NwXDYZ8pBjTIk6ZckIsRoknIiTITmhBPZGmW7uFKHfTNAFkRhdghwbiwdVb70Zj6MqgLs/Wb7FbR8Xy9MpIlOAFPBJRRMqvYr/484lp2enibqsRunj9LnZSu3j9EJcHpS6QtheXDZtHJnUY=
+	t=1767265662; cv=none; b=gh9Qa/MY4HFMZsiESB9/5X5CVb5b0wLJRcb7scVYnD0+4mNqpzbkmjxHKsHrR18rJLilvzA6QtH7KeaHgzuDQj1Nz+cRqvx6Jtgg5Bm4yeKi1CpsYUFMYBEAhcwbcTxVMirMdr2R1fXUTmz9P1Pk9AtlN1c3bIgj/2bjxnRGTJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767239369; c=relaxed/simple;
-	bh=1sTaYu5maZYYp5Tn4/bX5HWP/0gbz500XijtDaG9+bk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rMtMWg9yoX3PDblq1nEXuTZhuYDFdztxZgd+UqSvCg4Z12S/SPxhRhcNsKiTmijZlVEASIrmK+R4+4HNmhg3nDSaFi9B7t0DL4eRMby43LyQky57xBK6FWgo3XW1NKVdCX8M3On5PwmHdr5jJOm4OBkmkS3T7S0UKR6ZtJ+BIcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dTFTw3bj; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767265662; c=relaxed/simple;
+	bh=EYcWz1jnZfK4e7EKWAUogtrN5osErH+nhOJp1YScoew=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=lNOpURmTP03sMCORRxUPDO5j05w4QK29dhZ2JpBbrQenK3BqMH9jjed6ajh/LJd/AjudVZHCKiL2f/9LhSIgPWqLWZ8HgZJED/AfD+wW1av/bhwurExUSNuMhMBOqrfdDwB3KVpnE2bf8UqQlzn2bmlxU/P3wnEhZ+UMMTgg3vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y25HQiHO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dTFTw3bj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767239368; x=1798775368;
-  h=date:from:to:cc:subject:message-id;
-  bh=1sTaYu5maZYYp5Tn4/bX5HWP/0gbz500XijtDaG9+bk=;
-  b=dTFTw3bjrr+u5uqPm4DOJPZOPfQQWjYHja3VegMIiCzRMsBTu59+fBxA
-   RsciOjnHs/2zcDduDcqTBUp4qTVAih9Wshr7Y+bzC3B0WcQC0bCso1Fj/
-   tgc58Zbh7UarLtCCw5KyYR6/Fu+9bWcUOUxQ+a66Tn+ScK67b+gS3x4md
-   Dii78+I86nZJ6Qlfb+altxQp5wo3snO6Dj+4ByLtwlaMM2rWbqLJjqPo8
-   peo13/QzxZyVVYDoNFDnzq3+3w0mW0bgwVLHg6aVxgDNeWJZleH2pEwwj
-   tFipVkLDhMtRnClXZU3Ut0FybKBaBAR5wDkElIDgtrb63wgbWZCjL+Mj2
-   Q==;
-X-CSE-ConnectionGUID: dBP7GxIfTW2WV9bWnvW2uA==
-X-CSE-MsgGUID: S7zu0cR8T4yS2w+J9skpJQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11658"; a="68831904"
-X-IronPort-AV: E=Sophos;i="6.21,193,1763452800"; 
-   d="scan'208";a="68831904"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2025 19:49:27 -0800
-X-CSE-ConnectionGUID: cWBFAkmfS4CxBznvKfVE0g==
-X-CSE-MsgGUID: +dZi8eIvSeuOqYddKxAnbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,193,1763452800"; 
-   d="scan'208";a="206605297"
-Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 31 Dec 2025 19:49:25 -0800
-Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vb9gg-000000001eN-3dgM;
-	Thu, 01 Jan 2026 03:49:22 +0000
-Date: Thu, 01 Jan 2026 11:48:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:pm-runtime-cleanup 23/23]
- drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer
- types initializing 'int (*)(struct device *)' with an expression of type
- 'void (*)(struct device *)'
-Message-ID: <202601011126.sozHuNJ1-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y25HQiHO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926EFC4CEF7;
+	Thu,  1 Jan 2026 11:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767265661;
+	bh=EYcWz1jnZfK4e7EKWAUogtrN5osErH+nhOJp1YScoew=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=Y25HQiHOoFhvhEiNVU/sdWAjl/K+5pnhuCBvj8VujflppS1hafCVJMsse0VUXUzvF
+	 fO+1uip4i6oNMWXkiLr+QckEn+yv8cnjd1QBzOPR7Z0QHhC226BDGC6X3X32+sK46W
+	 4wyucXoj69mEQQEif52wtptSIfHH6pMBWXjH8u1p5Gos0A1dzGjYk5RiLlfmcldCYG
+	 y3rN5I5+6XI6B8jTxgwtWfPNDjCYfmoS7OVZcspRawsursUFLP2AY6/Mpb+5xLQh2O
+	 NqGLo/uSZwYUH0AkYi2xkNyDqlOH41tH2W7hcpGeci+AadOEGCWtU7gYx1o7QESkbY
+	 qLYmwh/aCgdWw==
+From: Vinod Koul <vkoul@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>, 
+ linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251224115533.154162-2-krzysztof.kozlowski@oss.qualcomm.com>
+References: <20251224115533.154162-2-krzysztof.kozlowski@oss.qualcomm.com>
+Subject: Re: [PATCH] phy: broadcom: ns-usb3: Fix Wvoid-pointer-to-enum-cast
+ warning (again)
+Message-Id: <176726565821.201321.6387558248591118830.b4-ty@kernel.org>
+Date: Thu, 01 Jan 2026 16:37:38 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-runtime-cleanup
-head:   93098b331b83758601e6a4c26bbc773de1bd21cd
-commit: 93098b331b83758601e6a4c26bbc773de1bd21cd [23/23] PM: runtime: Change pm_runtime_put() return type to void
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260101/202601011126.sozHuNJ1-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260101/202601011126.sozHuNJ1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601011126.sozHuNJ1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'void (*)(struct device *)' [-Wincompatible-function-pointer-types]
-     178 |         SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:345:2: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
-     345 |         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:316:12: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
-     316 |         .resume = pm_sleep_ptr(resume_fn), \
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
-     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
-     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'void (*)(struct device *)' [-Wincompatible-function-pointer-types]
-     178 |         SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:345:2: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
-     345 |         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:318:10: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
-     318 |         .thaw = pm_sleep_ptr(resume_fn), \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
-     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
-     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'void (*)(struct device *)' [-Wincompatible-function-pointer-types]
-     178 |         SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:345:2: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
-     345 |         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:320:13: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
-     320 |         .restore = pm_sleep_ptr(resume_fn),
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
-     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
-     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
 
-vim +178 drivers/clk/tegra/clk-device.c
+On Wed, 24 Dec 2025 12:55:34 +0100, Krzysztof Kozlowski wrote:
+> "family" is an enum, thus cast of pointer on 64-bit compile test with
+> clang W=1 causes:
+> 
+>   phy-bcm-ns-usb3.c:206:17: error: cast to smaller integer type 'enum bcm_ns_family' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> 
+> This was already fixed in commit bd6e74a2f0a0 ("phy: broadcom: ns-usb3:
+> fix Wvoid-pointer-to-enum-cast warning") but then got bad in commit
+> 21bf6fc47a1e ("phy: Use device_get_match_data()").
+> 
+> [...]
 
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  169  
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  170  /*
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  171   * Tegra GENPD driver enables clocks during NOIRQ phase. It can't be done
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  172   * for clocks served by this driver because runtime PM is unavailable in
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  173   * NOIRQ phase. We will keep clocks resumed during suspend to mitigate this
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  174   * problem. In practice this makes no difference from a power management
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  175   * perspective since voltage is kept at a nominal level during suspend anyways.
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  176   */
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  177  static const struct dev_pm_ops tegra_clock_pm = {
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01 @178  	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  179  };
-b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  180  
+Applied, thanks!
 
-:::::: The code at line 178 was first introduced by commit
-:::::: b1bc04a2ac5b15e0b681228376664671fc2f2017 clk: tegra: Support runtime PM and power domain
+[1/1] phy: broadcom: ns-usb3: Fix Wvoid-pointer-to-enum-cast warning (again)
+      commit: fb21116099bbea1fc59efa9207e63c4be390ab72
 
-:::::: TO: Dmitry Osipenko <digetx@gmail.com>
-:::::: CC: Thierry Reding <treding@nvidia.com>
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+~Vinod
+
+
