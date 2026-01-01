@@ -1,136 +1,123 @@
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [194.63.252.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9EF155C87;
-	Thu,  1 Jan 2026 20:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.63.252.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D2E2E62C3;
+	Thu,  1 Jan 2026 21:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767298377; cv=none; b=GOt4sRmbsTerEWTCpko9QCJjxgYWFbxZ4pZkpX+IA5gqrsFVT7l4dtLuo5xox+R5x+xJHpXAQJLaID4qy0n/B/MbKByDFrzx/vkJPvnOL6s+X1DwznGJoRkYgpeFx7LvG/Fbkv6k+kmm5FuQtUdmgZxMeM3416eEDVXDT4pGLac=
+	t=1767301854; cv=none; b=HqseOwUSYlNJyToDOXIjjj7HC27zO83sPKUtpmfAAscYY8FRZQyja7Trb6g3q1WD8WoZzseH3EMLOnXL5THFCADI9iJPar7BSQOLSbGGIvOIWZkzO7EbgL+rF6BiqIbXwnmBLmQcsy145ZCFjZmPIbNtAr5kgYKcTaN1+LP8akE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767298377; c=relaxed/simple;
-	bh=rY42i1BlFFAUFUS1FaOmIWfRKJkDvn94zmHyZkEyVEo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQnYDpTRLWz8Yf9ATXAJ9Oa/GZkhtaRNO9kpXhzxZ/S9iTmYJB6e6fBxTQNBSgy8DSoTDauqJoV2kXxZiRFBXUB8wS2R6VFhka5oBT65nOLWtgLDFHZaToxTCScqQKkAyKKL3dJ/tUkhWPavJ2BvFwq3whEitnDUa8F95GqpuDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu; spf=pass smtp.mailfrom=fjasle.eu; dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b=ntNIn8qf; arc=none smtp.client-ip=194.63.252.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fjasle.eu
+	s=arc-20240116; t=1767301854; c=relaxed/simple;
+	bh=86Ln23Vif1EKGE44X2NHTBz/d6s9wpGgmLDrlpyXVVI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bq2O3HgaRIUbWXBtwXqnycNszbs2X+2+6hKVgidzM798Q/cgwaqJUYGiAttRuvOe2Gd7i5G9XeWzDVv2R41yI2rknUVcjo2UuvclkZmMn3JPdhrEbvoT2ZqtowNZSuoO7OYBKrRk6iefpVyncVlFrECtyqr139LSQwDhY2zDtVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g2z5tR+m; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="ntNIn8qf"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fjasle.eu;
-	s=ds202307; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=NfmiQM37ly0jL0rmd/GvAkOHEOuwHHfshS7CwxNb0e4=; b=ntNIn8qfYcw2SPrD7yXav4rYqN
-	/xYUT6kpVbB5gXiOBwfL/XtrTJPf3kp1Vs5QyeSCV0jDQAxEzNX3LOTWOV5c/EjNp/WqdLD4ZtcEK
-	R1nQfMzJN9fd8yznJH3h4nKtcVxb4qeeBfXmR3tmSKCMzdRoiAF6hIexQpjlP6iPyogK7Yoqhgx6i
-	ziCqYyVkpeMoAFWMlg492axc7U2S99wbnB1tJBnXKMLlSQ+ejICAr55c+b0jz77nzBPBz9k3udoTY
-	IfZfMlqatnfYcnDym2NslBWRa1dRFTFHQUfjMCvdVbUH7bAED3Akln5um2AB+y8+qvr6BsMEPje7P
-	qmPjbTOQ==;
-Received: from smtp
-	by smtp.domeneshop.no with esmtpsa (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	id 1vbOWY-00DiJn-Rw;
-	Thu, 01 Jan 2026 20:39:54 +0100
-Date: Thu, 1 Jan 2026 20:39:46 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
-	linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
- is_negative()
-Message-ID: <20260101-futuristic-petrel-of-ecstasy-23db5f@lindesnes>
-References: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
- <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
- <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g2z5tR+m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767301853; x=1798837853;
+  h=date:from:to:cc:subject:message-id;
+  bh=86Ln23Vif1EKGE44X2NHTBz/d6s9wpGgmLDrlpyXVVI=;
+  b=g2z5tR+msPPxgOQ6skNAwbmFqmwUpqaMeEAwP6GSSkIfYwpRIsjEOelA
+   e5032GOAFFrolS376g7WPCB5wz50fE/GS6sRTQqRIEl6B2d12yuT09MTg
+   dZixRHwntxARvVOIBWjvFyH0cbK4nks6NqsA772PyFedLfWnYdfs+40uQ
+   dGkJ1JMql2J05OE94cPJBBHOF7S77R6vBNRHyI1GNe38XntkYGh3J7T2L
+   3BcaTCTnNh3hwkUE1duGdiogBcrz5UR4tvGkhdqDERfzeh24gVbCbEW4M
+   jF0AdmoMEZqETrGyJDfibZ5xMTXr+WQnlCRX5CcFtzeRZy7/0+A62ni99
+   w==;
+X-CSE-ConnectionGUID: JGwkkwA6QPK63d/3Pst8LQ==
+X-CSE-MsgGUID: dsOWZp4eTh6MGR+VMa9JHw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11658"; a="68887519"
+X-IronPort-AV: E=Sophos;i="6.21,195,1763452800"; 
+   d="scan'208";a="68887519"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2026 13:10:50 -0800
+X-CSE-ConnectionGUID: QzA3NkI2T5W/gNTprPAskQ==
+X-CSE-MsgGUID: RR9UNWXKTPuHI4wrKaUowA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,195,1763452800"; 
+   d="scan'208";a="200914602"
+Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 01 Jan 2026 13:10:49 -0800
+Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vbPwT-00000000225-3kPY;
+	Thu, 01 Jan 2026 21:10:45 +0000
+Date: Fri, 02 Jan 2026 05:10:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:pm-runtime-cleanup 24/25]
+ drivers/clk/tegra/clk-device.c:178:2: error: expected function body after
+ function declarator
+Message-ID: <202601020507.LzWANVpm-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="0BVVorEFNEq+bZUt"
-Content-Disposition: inline
-In-Reply-To: <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
-X-Operating-System: Debian GNU/Linux forky/sid
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-runtime-cleanup
+head:   e853e6ed1e01eb6846357d4692bf6131e218837e
+commit: a7e9532f30c77611ad48560b165326ce96e6e8dc [24/25] clk: tegra: Discard pm_runtime_put() return value
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20260102/202601020507.LzWANVpm-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260102/202601020507.LzWANVpm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601020507.LzWANVpm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/tegra/clk-device.c:178:2: error: expected function body after function declarator
+     178 |         return pm_runtime_resume_and_get(dev);
+         |         ^
+>> drivers/clk/tegra/clk-device.c:179:1: error: extraneous closing brace ('}')
+     179 | }
+         | ^
+>> drivers/clk/tegra/clk-device.c:188:26: error: use of undeclared identifier 'tegra_clock_suspend'
+     188 |         SET_SYSTEM_SLEEP_PM_OPS(tegra_clock_suspend, tegra_clock_resume)
+         |                                 ^~~~~~~~~~~~~~~~~~~
+>> drivers/clk/tegra/clk-device.c:188:26: error: use of undeclared identifier 'tegra_clock_suspend'
+     188 |         SET_SYSTEM_SLEEP_PM_OPS(tegra_clock_suspend, tegra_clock_resume)
+         |                                 ^~~~~~~~~~~~~~~~~~~
+>> drivers/clk/tegra/clk-device.c:188:26: error: use of undeclared identifier 'tegra_clock_suspend'
+     188 |         SET_SYSTEM_SLEEP_PM_OPS(tegra_clock_suspend, tegra_clock_resume)
+         |                                 ^~~~~~~~~~~~~~~~~~~
+   5 errors generated.
 
 
---0BVVorEFNEq+bZUt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +178 drivers/clk/tegra/clk-device.c
 
-On Thu, Jan 01, 2026 at 04:10:36PM +0100, Vincent Mailhol wrote:
-> On 20/12/2025 at 12:02, Vincent Mailhol wrote:
-> > The is_non_negative() and is_negative() function-like macros just
-> > exist as a workaround to silence the -Wtype-limits warning. Now that
-> > this warning is disabled, those two macros have lost their raison
-> > d'=EAtre. Remove them.
-> >=20
-> > This reverts commit dc7fe518b049 ("overflow: Fix -Wtype-limits
-> > compilation warnings").
-> >=20
-> > Suggested-by: Nicolas Schier <nsc@kernel.org>
-> > Link: https://lore.kernel.org/all/aUT_yWin_xslnOFh@derry.ads.avm.de
-> > Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
->=20
-> So at the end, this patch got five kernel test robot reports:
->=20
->   https://lore.kernel.org/all/202512221735.mRV4BZqB-lkp@intel.com/
->   https://lore.kernel.org/all/202512230342.Lgha2HGH-lkp@intel.com/
->   https://lore.kernel.org/all/202512251340.UApIFw9R-lkp@intel.com/
->   https://lore.kernel.org/all/202512271618.33YepxDC-lkp@intel.com/
->   https://lore.kernel.org/all/202512280906.wt7UNpya-lkp@intel.com/
->=20
-> All these are the same smatch warning just triggered from a different
-> place. I think it is still too early to undo that workaround in
-> include/linux/overflow.h, otherwise developers would be getting that
-> smatch report too often.
->=20
-> I will send a v4 in which I will drop this patch. This basically means
-> that the v4 is a revert to v1...
+   169	
+   170	/*
+   171	 * Tegra GENPD driver enables clocks during NOIRQ phase. It can't be done
+   172	 * for clocks served by this driver because runtime PM is unavailable in
+   173	 * NOIRQ phase. We will keep clocks resumed during suspend to mitigate this
+   174	 * problem. In practice this makes no difference from a power management
+   175	 * perspective since voltage is kept at a nominal level during suspend anyways.
+   176	 */
+   177	static inline int tegra_clock_suspend(struct device *dev)
+ > 178		return pm_runtime_resume_and_get(dev);
+ > 179	}
+   180	
+   181	static inline int tegra_clock_resume(struct device *dev)
+   182	{
+   183		pm_runtime_put(dev);
+   184		return 0;
+   185	}
+   186	
+   187	static const struct dev_pm_ops tegra_clock_pm = {
+ > 188		SET_SYSTEM_SLEEP_PM_OPS(tegra_clock_suspend, tegra_clock_resume)
+   189	};
+   190	
 
-thanks!  I think it's a bit sad to keep code only to make some checker=20
-tooling happy, but for now it seems to be the right thing to do.
-
-Kind Regards,
-Nicolas
-
---0BVVorEFNEq+bZUt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmlWzYIACgkQB1IKcBYm
-Emkv5A/+JGh8gXsgclOmUAW84XlSnEuwIhRXs3PO+BaFvveNaRIkkKUPw6dsHWDR
-VlbsSCp/6fyRrH5A2UQ8i7mAgkaFPrmi76d50HrYsMDFDPcCmmFkQP+6UTSvymZo
-KBiXwBoypXpUzcUaoWPmwhMfWH+0Ov4IMj6Suy808QAaESPPwJORFmd7zTl7ZE3i
-zUibhRVpU3qlgcV0ZcpJAkx4KJFHc0ADv9GTAmWTeBHGMsqWk4xZaFCwLB8bv+IB
-1l1X+7DjY9GzqupPzrfTZxeFZsrG/DVQAtKUutcbvZJPM8XWD9sHtb4oM9BEbQr8
-ShaZ3CbtXBGo5MCzQCw/Sb9DGCYm66apPE3NWbcEFKPqLG4slF7PdQ8o1DyyDbjK
-v8icj6elb23wmQGRd47aIVTcsFUeis+nJHAMnlQSMfVgDNB+trggaEHrzhcgP4Ff
-IhouTrsvdLsqzz01Oa+XQfR4GkjBxL6nWZLMbbOlXmHin4iSKqLKiCWrc6lkPJ7I
-d2F1JJoEH4XpbfdTV4YtsU+D3gpjywC7uGWSweHGTs8DihnQ/x5bwBUX3Bo98+pK
-T59NTfnjD02v+802qjCKvOoM90j5dX1FUCqhekc8Nm+TUlC5UHDjtts8SAmf1x9u
-OatEZU2f5zGPJBL91kVMQS7/psD1ZkDNucVtKBKX9gCveWFvVnQ=
-=7eoQ
------END PGP SIGNATURE-----
-
---0BVVorEFNEq+bZUt--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
