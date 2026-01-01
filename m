@@ -1,108 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17D42DCBF4;
-	Thu,  1 Jan 2026 15:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6E621CC64;
+	Thu,  1 Jan 2026 18:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767280932; cv=none; b=tmNE2oRG6UHvUXai2iNLtdzGKw96YAkg2S8GA4RgLgxF9boVn7Qu4SGLHRAuCdQ3Y7beZ3h1/36dG6Zzf25pZN7L1Cn7iM7vd7VMfscRdju76xotgEabeuWSap+nv0FWEg7naP3B70oM9pj2f565Man8kwqjlvUfwYZi6lMlR2Q=
+	t=1767291889; cv=none; b=DGi8DEnUWNO754cRDKy3jfr85VK8XPE8l7GtTAX3BgzqiVrR1rlt2aaworpnsVwAqX1W5BDWgR8KJYKqeUwJjGEM/ymvPBySPF4FhNXPClYoIqUmQqvQPDQZQGaXMEn7Web2+b3L3b5T9BCN5JH1u5SxefpmTe8wd+6Rjp+wqOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767280932; c=relaxed/simple;
-	bh=mIhQkcwbxHiDGbqkIpgQI8IR3rwmgawWbN+IVj32UUs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L8c4Csfm8JA+/gZjeQtWoCtcw8UeDJZusf79m9pRPCdk9DhY+4M18cuY1R6dgPnY3UxYmWj8iiDatRrPUDZOC34eYovU/77hWf4LFXGa8FW5CxlgYsJZLH7uC2Q9v+lH0uwB4Xy1XX1RVryEV2zEzjAjpCQR229kMts3Ux0QXPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGqcmwLV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767291889; c=relaxed/simple;
+	bh=DAOcHh2NP4X6BvmCgQOFtGglNzMYFUDr8cNn7KV4X0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PPnODHSLH4HlTQXXkyK1qQ7KqvQDvt3WYvZGAGNWfVe9/TT2n3WxgF1TQNn37gAwYSYgBeOmrbEqqEs3Uz8Gjld9+Uj7tXNgkOA+7bSJocEjYFb78Icca2QekmjzpiZpENeG594RzPkImTwUFBUL1tydSp4mXU8W4ILAt8+nsyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PkmkWkbQ; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGqcmwLV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB30C19421;
-	Thu,  1 Jan 2026 15:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767280931;
-	bh=mIhQkcwbxHiDGbqkIpgQI8IR3rwmgawWbN+IVj32UUs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kGqcmwLV7Ca8pob+S+kw7LGUFHbGytU1VCH0dL6/wWPfp0iy/bf+Px9uL8SKguBXN
-	 3xA3qQMHp2XmmYnMEr16+BC38K5DNn/lSPBlhtLmGICsPIV+2ZClFydcg78x10VRci
-	 InQV9sb8stN0QoRv/lJ+sefAIVAbtia3CQSwW6t4yjZjftMMyuC9pjmqVAL9IW7Gzd
-	 tM1CPTVb6OIIR0ode4i6/ZgdHinRHmWnWDi1JO/PKI58t3/WIdTA7PftGELwGr20i3
-	 rVYdKeGoWjMgerYaoi444pDmhXGYXxSSOr0UW6QJqg4BYTjmOOkBQtMtrm1o0Hihtr
-	 3qpNd61NbZ7cw==
-From: Vincent Mailhol <mailhol@kernel.org>
-Date: Thu, 01 Jan 2026 16:21:40 +0100
-Subject: [PATCH v4 2/2] kbuild: cleanup local -Wno-type-limits exceptions
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PkmkWkbQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767291887; x=1798827887;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DAOcHh2NP4X6BvmCgQOFtGglNzMYFUDr8cNn7KV4X0c=;
+  b=PkmkWkbQet10duy8O8YYqarpKXfpF5isVQzILzz6/b7LLIifMLNlwP6Y
+   u4il39BFJAEVgPe8oAA+Ip+bzL1uZAPaq0TA3xqNTRQNpfj7y3qUEEi3E
+   iKjHo7xBPt6+KQLx/FHIZ4hmtw6J16YGimqHXDAqWFmjYMhzusY32xyxF
+   th2u/GdV+t0cUEhnocMfvn5C1HfdH5NcGRChirbCyTuug9TEIY34G9n3i
+   uNDsG3unLB3stexGsQreV2kq6ykprqljjYRUCuBESfDa6EFH93OJuobDy
+   6vYl9IYwY1N8lACXccbYxL/36ZDOoO8h3PH/VWflZ7vfZ+TU5KhNaTaib
+   w==;
+X-CSE-ConnectionGUID: zEem1wsfSNKccT1WmGz3bw==
+X-CSE-MsgGUID: NYCIbND1RDOTEPQbHUNDLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11658"; a="79936548"
+X-IronPort-AV: E=Sophos;i="6.21,194,1763452800"; 
+   d="scan'208";a="79936548"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2026 10:24:46 -0800
+X-CSE-ConnectionGUID: c2CNmyWcRPej0OPL58ZsYg==
+X-CSE-MsgGUID: RCgLJvmeT1iMSi2eyv3ujQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,194,1763452800"; 
+   d="scan'208";a="200892981"
+Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 01 Jan 2026 10:24:44 -0800
+Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vbNLm-000000001zB-1bw9;
+	Thu, 01 Jan 2026 18:24:42 +0000
+Date: Fri, 2 Jan 2026 02:23:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Navid-Derakhshandeh <navid.derakhshandeh1@gmail.com>,
+	mporter@kernel.crashing.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alex.bou9@gmail.com, linux-kernel@vger.kernel.org,
+	Navid-Derakhshandeh <navid.derakhshandeh1@gmail.com>
+Subject: Re: [PATCH] mailbox: rio : implement discovery for all
+Message-ID: <202601020241.CwU3w5vS-lkp@intel.com>
+References: <20251229190724.20608-1-navid.derakhshandeh1@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260101-remove_wtype-limits-v4-2-225b75c29086@kernel.org>
-References: <20260101-remove_wtype-limits-v4-0-225b75c29086@kernel.org>
-In-Reply-To: <20260101-remove_wtype-limits-v4-0-225b75c29086@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org, 
- linux-hardening@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1458; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=mIhQkcwbxHiDGbqkIpgQI8IR3rwmgawWbN+IVj32UUs=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJlhE3mrlDPMGDaIXHSKZGlJkn9skCQg7toTo82q/yzg7
- 4KDe/Q7JrIwiHExWIopsiwr5+RW6Cj0Djv01xJmDisTyBBpkQYGIGBh4MtNzCs10jHSM9U21DM0
- 1AEyGbg4BWCqnfUY/mecfnenflaxkYSDPVd8NMfZjSuW5708HvG/hOen+0K9H98Y/kcvy5iQ//p
- zdKGbczX72k6b2XfD69WqygV2xl7tq034zQQA
-X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
- fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251229190724.20608-1-navid.derakhshandeh1@gmail.com>
 
-Now that -Wtype-limits is globally deactivated, there is no need for
-local exceptions anymore.
+Hi Navid-Derakhshandeh,
 
-Acked-by: David Sterba <dsterba@suse.com>
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
-Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
----
-Changelog:
+kernel test robot noticed the following build errors:
 
-  v1 -> v2: small change in patch description
----
- drivers/gpu/drm/Makefile | 1 -
- fs/btrfs/Makefile        | 1 -
- 2 files changed, 2 deletions(-)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.19-rc3 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index 0e1c668b46d2..b879a60ca79a 100644
---- a/drivers/gpu/drm/Makefile
-+++ b/drivers/gpu/drm/Makefile
-@@ -22,7 +22,6 @@ subdir-ccflags-y += $(call cc-option, -Wstringop-truncation)
- # The following turn off the warnings enabled by -Wextra
- ifeq ($(findstring 2, $(KBUILD_EXTRA_WARN)),)
- subdir-ccflags-y += -Wno-missing-field-initializers
--subdir-ccflags-y += -Wno-type-limits
- subdir-ccflags-y += -Wno-shift-negative-value
- endif
- ifeq ($(findstring 3, $(KBUILD_EXTRA_WARN)),)
-diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
-index 743d7677b175..40bc2f7e6f6b 100644
---- a/fs/btrfs/Makefile
-+++ b/fs/btrfs/Makefile
-@@ -17,7 +17,6 @@ subdir-ccflags-y += $(condflags)
- # The following turn off the warnings enabled by -Wextra
- subdir-ccflags-y += -Wno-missing-field-initializers
- subdir-ccflags-y += -Wno-sign-compare
--subdir-ccflags-y += -Wno-type-limits
- subdir-ccflags-y += -Wno-shift-negative-value
- 
- obj-$(CONFIG_BTRFS_FS) := btrfs.o
+url:    https://github.com/intel-lab-lkp/linux/commits/Navid-Derakhshandeh/mailbox-rio-implement-discovery-for-all/20251230-031149
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20251229190724.20608-1-navid.derakhshandeh1%40gmail.com
+patch subject: [PATCH] mailbox: rio : implement discovery for all
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260102/202601020241.CwU3w5vS-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260102/202601020241.CwU3w5vS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601020241.CwU3w5vS-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/rapidio/rio.c:1081:4: error: call to undeclared function 'rio_scan_mport'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1081 |                         rio_scan_mport(net->hport);
+         |                         ^
+>> drivers/rapidio/rio.c:1074:6: warning: no previous prototype for function 'rio_restart_discovery_all' [-Wmissing-prototypes]
+    1074 | void rio_restart_discovery_all(void)
+         |      ^
+   drivers/rapidio/rio.c:1074:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1074 | void rio_restart_discovery_all(void)
+         | ^
+         | static 
+   drivers/rapidio/rio.c:1109:3: error: call to undeclared function 'rio_scan_mport'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1109 |                 rio_scan_mport(net->hport);
+         |                 ^
+   drivers/rapidio/rio.c:1119:3: error: call to undeclared function 'rio_scan_mport'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1119 |                 rio_scan_mport(net->hport);
+         |                 ^
+   1 warning and 3 errors generated.
+
+
+vim +/rio_scan_mport +1081 drivers/rapidio/rio.c
+
+  1021	
+  1022	/**
+  1023	 * rio_get_input_status - Sends a Link-Request/Input-Status control symbol and
+  1024	 *                        returns link-response (if requested).
+  1025	 * @rdev: RIO devive to issue Input-status command
+  1026	 * @pnum: Device port number to issue the command
+  1027	 * @lnkresp: Response from a link partner
+  1028	 */
+  1029	static int
+  1030	rio_get_input_status(struct rio_dev *rdev, int pnum, u32 *lnkresp)
+  1031	{
+  1032		u32 regval;
+  1033		int checkcount;
+  1034	
+  1035		if (lnkresp) {
+  1036			/* Read from link maintenance response register
+  1037			 * to clear valid bit */
+  1038			rio_read_config_32(rdev,
+  1039				RIO_DEV_PORT_N_MNT_RSP_CSR(rdev, pnum),
+  1040				&regval);
+  1041			udelay(50);
+  1042		}
+  1043	
+  1044		/* Issue Input-status command */
+  1045		rio_write_config_32(rdev,
+  1046			RIO_DEV_PORT_N_MNT_REQ_CSR(rdev, pnum),
+  1047			RIO_MNT_REQ_CMD_IS);
+  1048	
+  1049		/* Exit if the response is not expected */
+  1050		if (!lnkresp)
+  1051			return 0;
+  1052	
+  1053		checkcount = 3;
+  1054		while (checkcount--) {
+  1055			udelay(50);
+  1056			rio_read_config_32(rdev,
+  1057				RIO_DEV_PORT_N_MNT_RSP_CSR(rdev, pnum),
+  1058				&regval);
+  1059			if (regval & RIO_PORT_N_MNT_RSP_RVAL) {
+  1060				*lnkresp = regval;
+  1061				return 0;
+  1062			}
+  1063		}
+  1064	
+  1065		return -EIO;
+  1066	}
+  1067	/**
+  1068	 * rio_restart_discovery_all - Restart discovery on all RapidIO networks
+  1069	 *
+  1070	 * Iterates through all registered RapidIO networks and restarts topology
+  1071	 * discovery process from each network's host port. Intended to be used
+  1072	 * after a system-wide error or configuration change.
+  1073	 */
+> 1074	void rio_restart_discovery_all(void)
+  1075	{
+  1076		struct rio_net *net;
+  1077	
+  1078		spin_lock(&rio_global_list_lock);
+  1079		list_for_each_entry(net, &rio_nets, node) {
+  1080			if (net->hport)
+> 1081				rio_scan_mport(net->hport);
+  1082		}
+  1083		spin_unlock(&rio_global_list_lock);
+  1084	}
+  1085	EXPORT_SYMBOL_GPL(rio_restart_discovery_all);
+  1086	/**
+  1087	 * rio_maybe_restart_discovery - Restart discovery if device requires rediscovery
+  1088	 * @rdev: Pointer to RIO device control structure
+  1089	 *
+  1090	 * If the given device is associated with a RapidIO network,
+  1091	 * attempts to restart topology discovery from the network's host port.
+  1092	 * Intended to be called if an error condition is detected that may
+  1093	 * require rediscovery to restore normal operation.
+  1094	 */
+  1095	static void rio_maybe_restart_discovery(struct rio_dev *rdev)
+  1096	{
+  1097		struct rio_net *net;
+  1098	
+  1099		if (!rdev || !rdev->net)
+  1100			return;
+  1101	
+  1102		net = rdev->net;
+  1103	
+  1104		/* Only restart if there is a valid host port */
+  1105		if (net->hport) {
+  1106			msleep(100); /* Brief delay for safety */
+  1107			pr_info("RIO: Discovery restart triggered for device %s (net '%s')\n",
+  1108				dev_name(&rdev->dev), dev_name(&net->dev));
+  1109			rio_scan_mport(net->hport);
+  1110		}
+  1111	}
+  1112	
 
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
