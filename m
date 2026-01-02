@@ -1,67 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA5A2EBDC0;
-	Fri,  2 Jan 2026 17:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EB8219A8D;
+	Fri,  2 Jan 2026 21:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767375855; cv=none; b=hr//6jJl3/JN81AIVinaPJQPot9Wj7edm/NDHxY7GIqdQfzZR/lTIu4wdXWTqA7KlRCX0lzzZV8p+LxzGVhK21f37F3rN31R2TwhXlhDIJaV81/2YWxWu0IUUPQnoYWUjaDU5G2xgYRrdNy5qkp9Ci0gr7iTLdQQm2IeHtPpJPo=
+	t=1767388215; cv=none; b=LW3F0S/WbntPUQBa1qkapTl8glkCnXVLxQveNc916ImcAuIg8RQXHWDPrRBDYDyMepBM1qQ2dWdefBbEpp/z6ey6VeMXERkKvNR/wlxeWV94aOlOI1kxLuqon1BfH/6ZF5cg21xdqSH8p5HkguySfq+KWwwgYIZF+wakUMK1umM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767375855; c=relaxed/simple;
-	bh=KOZ5foOUSxYaKCChUnSfgSGAhjJZijduMAvs7fjhWnQ=;
+	s=arc-20240116; t=1767388215; c=relaxed/simple;
+	bh=lQTcRdEeiie90zb13gty2n3r50qs7Iq/ZfMmtsuIQrE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I9UgIHLMG0S82RR9Rm1Nae91a+tTzr9wtH9UDqXqqEF7DRnpqpj8mDUCfnWCIkiJNRXpi4FcWD4E9Cy7BGZC1UbwQqhL1hXbdGSk+4oJQD4fOQd1SDBbPa2+Eod3NHzBVYZL8pRlhQhdIyGrtVIzQgo9EQ1uileW3U3gyGNzcP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tzs5kWZg; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=PRHa5nlQeyNz4lmvjG2KI9h8lgvh29kfIDx/HF0QW7c0yUtj45+ZpATGAr8NcT1riEJ1M0UFfQyeiNdBmGXA7/jhTR8QPTkEe5bdiDyzxCQJBFMcZs30IE1gNCqA2HviQXb6LwQQ5oUc2qUI68v98LW5nypxZoUD0AoFmBxzgTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lKMiGmme; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tzs5kWZg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767375854; x=1798911854;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KOZ5foOUSxYaKCChUnSfgSGAhjJZijduMAvs7fjhWnQ=;
-  b=Tzs5kWZg/BxY37LwHLPVnqXBcbvLzUwFytCOi2bmQhy65EEP4x+e7EOU
-   n3Bk/Hht1vfgDXzMbx4Wb0qNMexJhmfLjYk9Sc5TVQ9Qvb+n9fYzqgePf
-   zsV2I8r9vz116RP8BGxoKL7XjNg45j8grCzRRBFefSgURgZMsNppsYcJ2
-   inx7zfWvMHTF+lTg77HZr2OYVEjXGptQJpWQwNWbcw/d8zNLMxTmL9neH
-   gSHxkLXhQKFcvMUABaSQq+aIEMB0i3Vq3XvSPT7mD+UVJST1q9is5CP6O
-   RDATmvyb7iMREmc+u+09/NVNWcoF8HvOKClncC2VQ9OzShz2QqSRvONfI
-   w==;
-X-CSE-ConnectionGUID: C/aMLEBiSYmdfKn7sQR+RQ==
-X-CSE-MsgGUID: kJ+k7mUETKCnbtQSDdWwSg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="68850817"
-X-IronPort-AV: E=Sophos;i="6.21,197,1763452800"; 
-   d="scan'208";a="68850817"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2026 09:44:14 -0800
-X-CSE-ConnectionGUID: bAvvsgMxSXaUZ4i9QLqufw==
-X-CSE-MsgGUID: lJ3tcmuLSl6pj5WjLyGVng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,197,1763452800"; 
-   d="scan'208";a="202818406"
-Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 02 Jan 2026 09:44:09 -0800
-Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vbjC3-000000002Nt-095Q;
-	Fri, 02 Jan 2026 17:44:07 +0000
-Date: Sat, 3 Jan 2026 01:43:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ruidong Tian <tianruidong@linux.alibaba.com>, catalin.marinas@arm.com,
-	will@kernel.org, lpieralisi@kernel.org, guohanjun@huawei.com,
-	sudeep.holla@arm.com, xueshuai@linux.alibaba.com,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, rafael@kernel.org,
-	lenb@kernel.org, tony.luck@intel.com, bp@alien8.de,
-	yazen.ghannam@amd.com, misono.tomohiro@fujitsu.com,
-	fengwei_yin@linux.alibaba.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v5 16/17] ras: AEST: support vendor node CMN700
-Message-ID: <202601030129.ltAsW4vh-lkp@intel.com>
-References: <20251230091342.50404-1-tianruidong@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lKMiGmme"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB75FC116B1;
+	Fri,  2 Jan 2026 21:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767388213;
+	bh=lQTcRdEeiie90zb13gty2n3r50qs7Iq/ZfMmtsuIQrE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lKMiGmmeQaniXcs1vjJ60EZzMY0HIBbADuqd+jgYK44IBNcy9dl0HUPYd9VnxzqXs
+	 iRR1o/wJN/NdrXBzss1ORoeNhuBJdcXZVOVsr7YUJ2jOsce2/GxzA8p8hJ23pRoOdd
+	 ZcbyXjPJ1Tf1EdrnTk47XW3uDuo8bSTMunwuNernbWdhS6oM3yCSeNMPtFIBnnzClk
+	 rp9dB6J193vbmt3McWDG2Zzjaa0B22D5s2k6MvG6rbNzpPXzOHkoqL4+3IzoHOe4Mj
+	 ZLdNLv0XjxleAYYPr1Qh6hry+IaRqcAkssUxLvbrlIL0H5bWhNQSlguHX93fKaW0/3
+	 KI4rq1Kc/0qWQ==
+Date: Fri, 2 Jan 2026 15:10:10 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+	Taniya Das <taniya.das@oss.qualcomm.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] clk: qcom: gcc-kaanapali: Fix double array
+ initializer
+Message-ID: <j2qvtpdsak2z2l3o5ckpin7zun4wo3c5uc6jvutfdkfbqebfxa@zvbg6tmph7eg>
+References: <20251224112257.83874-3-krzysztof.kozlowski@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,61 +48,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251230091342.50404-1-tianruidong@linux.alibaba.com>
+In-Reply-To: <20251224112257.83874-3-krzysztof.kozlowski@oss.qualcomm.com>
 
-Hi Ruidong,
+On Wed, Dec 24, 2025 at 12:22:58PM +0100, Krzysztof Kozlowski wrote:
+> [GCC_QMIP_VIDEO_VCODEC_AHB_CLK] element in clk_regmap array is already
+> initialized, as reported by W=1 clang warning:
+> 
+>   gcc-kaanapali.c:3383:36: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+> 
+> Fixes: d1919c375f21 ("clk: qcom: Add support for Global clock controller on Kaanapali")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> 
+> ---
+> 
+> Does anyone even build this code before sending it to upstream?
 
-kernel test robot noticed the following build errors:
+It hope the author does...but I of couse sanity check the result through
+an allmodconfig build across a few different architectures before
+pushing.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge ras/edac-for-next linus/master v6.19-rc3 next-20251219]
-[cannot apply to arm64/for-next/core tip/smp/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But it seems passing '--environment "W=1"' to tuxmake doesn't actually
+enable these warnings :(
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ruidong-Tian/ACPI-AEST-Parse-the-AEST-table/20251230-172000
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20251230091342.50404-1-tianruidong%40linux.alibaba.com
-patch subject: [PATCH v5 16/17] ras: AEST: support vendor node CMN700
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260103/202601030129.ltAsW4vh-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260103/202601030129.ltAsW4vh-lkp@intel.com/reproduce)
+Thanks for the report, and the fixes.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601030129.ltAsW4vh-lkp@intel.com/
+Regards,
+Bjorn
 
-All errors (new ones prefixed by >>):
-
->> drivers/perf/arm-cmn.c:5:10: fatal error: 'asm/arm-cmn.h' file not found
-       5 | #include <asm/arm-cmn.h>
-         |          ^~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +5 drivers/perf/arm-cmn.c
-
-     4	
-   > 5	#include <asm/arm-cmn.h>
-     6	#include <linux/acpi.h>
-     7	#include <linux/bitfield.h>
-     8	#include <linux/bitops.h>
-     9	#include <linux/debugfs.h>
-    10	#include <linux/interrupt.h>
-    11	#include <linux/io.h>
-    12	#include <linux/io-64-nonatomic-lo-hi.h>
-    13	#include <linux/kernel.h>
-    14	#include <linux/list.h>
-    15	#include <linux/module.h>
-    16	#include <linux/of.h>
-    17	#include <linux/perf_event.h>
-    18	#include <linux/platform_device.h>
-    19	#include <linux/slab.h>
-    20	#include <linux/sort.h>
-    21	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/clk/qcom/gcc-kaanapali.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/clk/qcom/gcc-kaanapali.c b/drivers/clk/qcom/gcc-kaanapali.c
+> index 182b152df14c..b9743284927d 100644
+> --- a/drivers/clk/qcom/gcc-kaanapali.c
+> +++ b/drivers/clk/qcom/gcc-kaanapali.c
+> @@ -3380,7 +3380,6 @@ static struct clk_regmap *gcc_kaanapali_clocks[] = {
+>  	[GCC_QMIP_VIDEO_CV_CPU_AHB_CLK] = &gcc_qmip_video_cv_cpu_ahb_clk.clkr,
+>  	[GCC_QMIP_VIDEO_CVP_AHB_CLK] = &gcc_qmip_video_cvp_ahb_clk.clkr,
+>  	[GCC_QMIP_VIDEO_V_CPU_AHB_CLK] = &gcc_qmip_video_v_cpu_ahb_clk.clkr,
+> -	[GCC_QMIP_VIDEO_VCODEC_AHB_CLK] = &gcc_qmip_video_vcodec_ahb_clk.clkr,
+>  };
+>  
+>  static struct gdsc *gcc_kaanapali_gdscs[] = {
+> -- 
+> 2.51.0
+> 
