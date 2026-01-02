@@ -1,108 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934431E5734;
-	Fri,  2 Jan 2026 21:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476EB2D249B;
+	Fri,  2 Jan 2026 22:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767390197; cv=none; b=dC1FCaqwCglzIEiyyGaAva8suE/dYEWRIBp+psHwTn5BjrMr12AqK/BoJgiDLtt+ON1NX6ZqMduQelXh1dMefqyXy4PpMYFUm7gKUZaGkiyfPV1IZpIFes9CaNg0jR6zaNWZrtguG+s91HzsbLqBtGBXnxNEa8yEDycz2aprY0w=
+	t=1767392804; cv=none; b=dScFi8sY4WxpCdYO+HzcRHldxLcK4Wqv5OgAdfXS1MNaRiPEntBEm7k4ofvuKXOgmPqE1rIxSMzzckUBxl+2TFUADBB7pfldFZnOlJj2guCvpxfhcVhqVkz3cUk+z6R/Z0NJhe++a0YQbaNWVuduTF1yatIJ/LaEkvDRO2PjvgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767390197; c=relaxed/simple;
-	bh=Fw+n87duyCWC01lK5K2jFFX5rVfSDfVEdaklPH7wBhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jxEQ6afs6dbI4smO1D2Eqzv0To0NHUZohwAH+D/UvYqiofqvxf30izrHQe5D3RLMiUm9fg5Ot2d7h1mf0DQVdmdyeoSfkBNOpe9QSeO8NoO9WLFrB+ghzwKxF7Pox6q0SF/yqFy+olbd4FXI42g91nIPUqsRIHz4Oq9WlIoEBKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbYWheCb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767392804; c=relaxed/simple;
+	bh=J/sL983X/0vBalHqoLpr7GXM37hk7msCvf822DzhzBE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f29KG+PCFh8sNSbRDbLBxNiUq+zgJWF8C3ErYFG1tjcDiEhEfQh+N8aO6xAvDhAWrHkX2FiPdBcbksQTiDN5Ff37ZuovgaI4VIF8KrH8JhXHO95CeXnH0DFaJ/d5Z0RTtOBWuF/gbRYesRge1iqdqKGc2yRnMxsPUI+gvr1ksWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rob5AMor; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbYWheCb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E4EC116B1;
-	Fri,  2 Jan 2026 21:43:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rob5AMor"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FD7C116B1;
+	Fri,  2 Jan 2026 22:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767390197;
-	bh=Fw+n87duyCWC01lK5K2jFFX5rVfSDfVEdaklPH7wBhY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VbYWheCbEJaftH7XdKLEv6KJpO8gDZ15tPFP1cYhFzfY0/Kg3SDNTo4X1bUU/skrn
-	 c+EPew1DA7meDcq19YyXeh0V2sbTmcte/T8otK2oAISivBal2xmLq/mca3KNb015V7
-	 lMZjij3sMPLOb+JxbGLYmLRaePkQyTwt3qwkrNmdfSgY5AssfKG/BEpw89wvmtFm97
-	 4JjedgwxCY8GeAjEFc36HYRC9ehJzFk6rSexdSGAY6hu2/nKnZKKzngW6oHdpgV7G6
-	 5oWYt+jtGrEWjRJFg8R6v1CFyJ861MCdrYtu5vG90kefWuNWUMr7TCVd4gVHAcNyW1
-	 KC4F4EPMYcoYQ==
-Date: Fri, 2 Jan 2026 15:43:14 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Taniya Das <taniya.das@oss.qualcomm.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] clk: qcom: gcc-kaanapali: Fix double array
- initializer
-Message-ID: <ldcherld5hsyvgdzzoqvetcfleh7olj6zswc5qx5q3nntejbht@jhrgo4yitsva>
-References: <20251224112257.83874-3-krzysztof.kozlowski@oss.qualcomm.com>
- <j2qvtpdsak2z2l3o5ckpin7zun4wo3c5uc6jvutfdkfbqebfxa@zvbg6tmph7eg>
+	s=k20201202; t=1767392803;
+	bh=J/sL983X/0vBalHqoLpr7GXM37hk7msCvf822DzhzBE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Rob5AMorNzzOXqHUHII4Eyuge1d9SSvjvsr1PigXkpLA3u3daGl+zwPd5eRYpkfMM
+	 qxcXQuHapVnsY/MNlmHqO3J45yfuJ2uskTZopAbvXRDab5WKoYb8Vdxpl4kP1gGpIs
+	 t5qyDYOBHx0gObQUbMOzeeYMees/7+WTSl1RAz6u+OfblFw7ldAfF3kn1Ol4Komx+J
+	 sqQnM5QCl0MeoLIz6jKIby6MbErRLjEF/8nQrO2WDNEtNw2NspsiGOrjvZx/h7sNAe
+	 d8elRWFf7R7C76OcZEAtJG983L4Od8KN9YCyaqQvWT2BTlKLjed4tfxm/0QciNGLGl
+	 oQKeKE+ukejeA==
+Message-ID: <b549e430-5623-4c60-acb1-4b5e095ae870@kernel.org>
+Date: Fri, 2 Jan 2026 23:26:35 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <j2qvtpdsak2z2l3o5ckpin7zun4wo3c5uc6jvutfdkfbqebfxa@zvbg6tmph7eg>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/3] overflow: Remove is_non_negative() and
+ is_negative()
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Nicolas Schier <nicolas@fjasle.eu>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
+ linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
+ <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
+ <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
+ <20260101-futuristic-petrel-of-ecstasy-23db5f@lindesnes>
+ <CANiq72=jRT+6+2PBgshsK-TpxPiRK70H-+3D6sYaN-fdfC83qw@mail.gmail.com>
+From: Vincent Mailhol <mailhol@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CANiq72=jRT+6+2PBgshsK-TpxPiRK70H-+3D6sYaN-fdfC83qw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 02, 2026 at 03:10:10PM -0600, Bjorn Andersson wrote:
-> On Wed, Dec 24, 2025 at 12:22:58PM +0100, Krzysztof Kozlowski wrote:
-> > [GCC_QMIP_VIDEO_VCODEC_AHB_CLK] element in clk_regmap array is already
-> > initialized, as reported by W=1 clang warning:
-> > 
-> >   gcc-kaanapali.c:3383:36: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-> > 
-> > Fixes: d1919c375f21 ("clk: qcom: Add support for Global clock controller on Kaanapali")
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> > 
-> > ---
-> > 
-> > Does anyone even build this code before sending it to upstream?
+On 02/01/2026 at 12:04, Miguel Ojeda wrote:
+> On Thu, Jan 1, 2026 at 9:13 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>>
+>> thanks!  I think it's a bit sad to keep code only to make some checker
+>> tooling happy, but for now it seems to be the right thing to do.
 > 
-> It hope the author does...but I of couse sanity check the result through
-> an allmodconfig build across a few different architectures before
-> pushing.
-> 
-> But it seems passing '--environment "W=1"' to tuxmake doesn't actually
-> enable these warnings :(
-> 
+> Perhaps a patch to add a comment explaining Vincent's findings would
+> be a good outcome, i.e. explaining the reason it needs to remain in
+> place for the moment 
 
-Realized that W=1 should be passed as a build target, not through
-environment.
+OK. But I will send this as a separate patch as a reply to this thread
+so that this can be discussed separately without having to respin the
+main series again and again. I will add it back to the main series only
+if it get a decent level of Acked-by tags.
 
-Do you have any sensible post-processing tools/steps that you could
-share to make the output usable?
+> (even a link to lore.kernel.org to this thread would help).
 
-Regards,
-Bjorn
+It is rather uncommon to add lore.kernel.org links in the code comment.
+But I am not against. I will do as you suggested so and see what people
+think of it.
 
-> Thanks for the report, and the fixes.
-> 
-> Regards,
-> Bjorn
-> 
-> > ---
-> >  drivers/clk/qcom/gcc-kaanapali.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/drivers/clk/qcom/gcc-kaanapali.c b/drivers/clk/qcom/gcc-kaanapali.c
-> > index 182b152df14c..b9743284927d 100644
-> > --- a/drivers/clk/qcom/gcc-kaanapali.c
-> > +++ b/drivers/clk/qcom/gcc-kaanapali.c
-> > @@ -3380,7 +3380,6 @@ static struct clk_regmap *gcc_kaanapali_clocks[] = {
-> >  	[GCC_QMIP_VIDEO_CV_CPU_AHB_CLK] = &gcc_qmip_video_cv_cpu_ahb_clk.clkr,
-> >  	[GCC_QMIP_VIDEO_CVP_AHB_CLK] = &gcc_qmip_video_cvp_ahb_clk.clkr,
-> >  	[GCC_QMIP_VIDEO_V_CPU_AHB_CLK] = &gcc_qmip_video_v_cpu_ahb_clk.clkr,
-> > -	[GCC_QMIP_VIDEO_VCODEC_AHB_CLK] = &gcc_qmip_video_vcodec_ahb_clk.clkr,
-> >  };
-> >  
-> >  static struct gdsc *gcc_kaanapali_gdscs[] = {
-> > -- 
-> > 2.51.0
-> > 
+
+Yours sincerely,
+Vincent Mailhol
+
