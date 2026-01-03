@@ -1,120 +1,127 @@
-Received: from aposti.net (aposti.net [185.119.170.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8C74086A
-	for <llvm@lists.linux.dev>; Fri,  2 Jan 2026 22:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.119.170.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5FA27453;
+	Sat,  3 Jan 2026 01:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767393085; cv=none; b=k/04dpOrkKOgMbJdUT5gjQ4QezfVEmr9As8peT7FWI8dtwbEQKzhUZ8M+42mbDNaqPMK4O0vplR6neELkHSc+GPVZcUU/eKiYIM2WEONHfaKokUhlw9BK4CfIcN1zSs/pwt5CZEqJUe8vGk6k3ZKCn12Y4dTdyEPcgJfbQx/Qx0=
+	t=1767404235; cv=none; b=BqBJhjYmdW8V0JP51+zeNwNLn7mkYC1fWyGBYfl2+8TrLtmX3ZVAyt0xfILVY2Pj7fWN0ynWxxcI1wrcYAZt2HjEBcpoeRLMOoZtc+No+MoXZtByq4CukYz/j5feVbLyek6BfoiADOzNilDXs5nL2dCFQqrcjSGctif1ETrQj5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767393085; c=relaxed/simple;
-	bh=Ayzy4d12cCBIDnDvxTp6pffsaMCVkd33OsiCXsJGxJc=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=T6kwc0wX98OIocI5D+m9ke7I/KqwdFNv2w4F95Vba6mz8xkqIAQvNggiRwo2R+k7o6rJuzKoH0THp69K5zRZZ6WF5MCtKK5Ty8u07MwWBOtyRCHIx5f7QbnFTRf70bSg2ISlrc7j68eFFvqQy5joBMpDQd6cljVIf4GAgymKrwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=gPi+yOgI; arc=none smtp.client-ip=185.119.170.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+	s=arc-20240116; t=1767404235; c=relaxed/simple;
+	bh=VE1xzgjjWYjXm43fyyzXvGlUIdhmjF7rIMUozNnHze0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=umeqIt29tD3JHVdjzIfpQ0qdq0kiEEppCaj+tEpeJAwGddoTU+EHrqFzOvNUxNpgAvMsKW0TDK5uHQx3iJn8w+TPUl5tYQkBm2F7O4H7PxGfav9VIL8ps1t27WhmCX9Qnk4kDtGXWmzER26TzluETjdbIv7OI8WoJRg8HreZ9RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YfoHqVnI; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="gPi+yOgI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1767392595;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=61H6RqsGuCa4a5uaIvZ0gNRDCPUVUQgGp5iWxLp0eXQ=;
-	b=gPi+yOgIHaXxLndZNYkjdzjFO/QcOh/jMHayuu23Slzgml8v5JJMwuqOPjlcwB2noz0hn+
-	ufbyGL8LfP4mlYZyYQWhThU0cBtTESAvYHK2/TUIL/P8P9tQG5fJ6/10eWfHi134RLMUPE
-	TWgRuO4+cEfKFN9diizuZMUOvfPqzlg=
-Message-ID: <5f4f0697622ee26db9c3e09b1a8b64157666eb0b.camel@crapouillou.net>
-Subject: Re: [PATCH 3/7] mtd: rawnand: ingenic: Simplify with scoped for
- each OF child loop
-From: Paul Cercueil <paul@crapouillou.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Brian Norris
-	 <computersforpeace@gmail.com>, Kamal Dasu <kamal.dasu@broadcom.com>, 
- Broadcom internal kernel review list	
- <bcm-kernel-feedback-list@broadcom.com>, Miquel Raynal	
- <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, Vignesh
- Raghavendra <vigneshr@ti.com>, Harvey Hunt <harveyhuntnexus@gmail.com>,
- Manivannan Sadhasivam	 <mani@kernel.org>, Stefan Agner <stefan@agner.ch>,
- Tudor Ambarus	 <tudor.ambarus@linaro.org>, Pratyush Yadav
- <pratyush@kernel.org>, Michael Walle	 <mwalle@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers	
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, linux-mtd@lists.infradead.org,
- linux-kernel@vger.kernel.org, 	linux-mips@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev
-Date: Fri, 02 Jan 2026 23:22:12 +0100
-In-Reply-To: <20260102124927.64703-10-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260102124927.64703-8-krzysztof.kozlowski@oss.qualcomm.com>
-	 <20260102124927.64703-10-krzysztof.kozlowski@oss.qualcomm.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRU=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YfoHqVnI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767404234; x=1798940234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VE1xzgjjWYjXm43fyyzXvGlUIdhmjF7rIMUozNnHze0=;
+  b=YfoHqVnIkovhhiZSUQG+FDjgcYSgyFQwT+tr+4fjh1lpFAxqhNeq8OFU
+   /S8GiuN1isvsIRFp51bvAYukI1xziPS2IkL/8vOtl8M7zpnvjkdS7PKt7
+   wIyg1CAVV4d2lfeDapfn6hC7YnHJV5p1V5HzPsy353i2bGEG8aC3ZfILC
+   SN8Jb2N0n0qew0BctI6foHbfU8C4n77/25BHWy4DS8Tf19HLf64/kX7ki
+   Z0fpgN40KsfkmbXPQ++ImSXyT8HbL9TG+jBl76KLBFrJAgMpujW1QrHxe
+   4SeGpvPkKoJPHl1u1RmjM7INeTSTs8Scrosj9hqPSmkm0tTk8Lw3cOVF0
+   g==;
+X-CSE-ConnectionGUID: 64YSAtEGTQCINo0wNijU/w==
+X-CSE-MsgGUID: upKRnCe8S6yjVgDW8FqmSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="72729953"
+X-IronPort-AV: E=Sophos;i="6.21,198,1763452800"; 
+   d="scan'208";a="72729953"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2026 17:37:12 -0800
+X-CSE-ConnectionGUID: xtDsHCaJRvmxBNbVSfJHuw==
+X-CSE-MsgGUID: 4KmqNy3cStGqWehgYBnVjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,198,1763452800"; 
+   d="scan'208";a="202388517"
+Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 02 Jan 2026 17:37:11 -0800
+Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vbqZn-000000000Vd-3qth;
+	Sat, 03 Jan 2026 01:37:07 +0000
+Date: Sat, 3 Jan 2026 02:36:23 +0100
+From: kernel test robot <lkp@intel.com>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 2/2] bpf: arena: Reintroduce memcg accounting
+Message-ID: <202601030234.BWfTlyVd-lkp@intel.com>
+References: <20260102151852.570285-3-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260102151852.570285-3-puranjay@kernel.org>
 
-Hi Krzysztof,
+Hi Puranjay,
 
-Le vendredi 02 janvier 2026 =C3=A0 13:49 +0100, Krzysztof Kozlowski a
-=C3=A9crit=C2=A0:
-> Use scoped for-each loop when iterating over device nodes to make
-> code a
-> bit simpler.
->=20
-> Signed-off-by: Krzysztof Kozlowski
-> <krzysztof.kozlowski@oss.qualcomm.com>
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+[auto build test WARNING on c286e7e9d1f1f3d90ad11c37e896f582b02d19c4]
 
-Cheers,
--Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Puranjay-Mohan/bpf-syscall-Introduce-memcg-enter-exit-helpers/20260102-232059
+base:   c286e7e9d1f1f3d90ad11c37e896f582b02d19c4
+patch link:    https://lore.kernel.org/r/20260102151852.570285-3-puranjay%40kernel.org
+patch subject: [PATCH bpf-next v3 2/2] bpf: arena: Reintroduce memcg accounting
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260103/202601030234.BWfTlyVd-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260103/202601030234.BWfTlyVd-lkp@intel.com/reproduce)
 
-> ---
-> =C2=A0drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 4 +---
-> =C2=A01 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> index 47dc3efcee92..f1e2c82936b3 100644
-> --- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> @@ -438,7 +438,6 @@ static int ingenic_nand_init_chips(struct
-> ingenic_nfc *nfc,
-> =C2=A0				=C2=A0=C2=A0 struct platform_device *pdev)
-> =C2=A0{
-> =C2=A0	struct device *dev =3D &pdev->dev;
-> -	struct device_node *np;
-> =C2=A0	int i =3D 0;
-> =C2=A0	int ret;
-> =C2=A0	int num_chips =3D of_get_child_count(dev->of_node);
-> @@ -449,11 +448,10 @@ static int ingenic_nand_init_chips(struct
-> ingenic_nfc *nfc,
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-> =C2=A0
-> -	for_each_child_of_node(dev->of_node, np) {
-> +	for_each_child_of_node_scoped(dev->of_node, np) {
-> =C2=A0		ret =3D ingenic_nand_init_chip(pdev, nfc, np, i);
-> =C2=A0		if (ret) {
-> =C2=A0			ingenic_nand_cleanup_chips(nfc);
-> -			of_node_put(np);
-> =C2=A0			return ret;
-> =C2=A0		}
-> =C2=A0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601030234.BWfTlyVd-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/syscall.c:619:21: warning: unused variable 'memcg' [-Wunused-variable]
+     619 |         struct mem_cgroup *memcg, *old_memcg;
+         |                            ^~~~~
+>> kernel/bpf/syscall.c:619:29: warning: unused variable 'old_memcg' [-Wunused-variable]
+     619 |         struct mem_cgroup *memcg, *old_memcg;
+         |                                    ^~~~~~~~~
+   2 warnings generated.
+
+
+vim +/memcg +619 kernel/bpf/syscall.c
+
+c9eb8102e21e8c Alexei Starovoitov 2025-02-21  612  
+c9eb8102e21e8c Alexei Starovoitov 2025-02-21  613  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+317460317a02a1 Alexei Starovoitov 2024-03-07  614  			unsigned long nr_pages, struct page **pages)
+317460317a02a1 Alexei Starovoitov 2024-03-07  615  {
+317460317a02a1 Alexei Starovoitov 2024-03-07  616  	unsigned long i, j;
+317460317a02a1 Alexei Starovoitov 2024-03-07  617  	struct page *pg;
+317460317a02a1 Alexei Starovoitov 2024-03-07  618  	int ret = 0;
+317460317a02a1 Alexei Starovoitov 2024-03-07 @619  	struct mem_cgroup *memcg, *old_memcg;
+317460317a02a1 Alexei Starovoitov 2024-03-07  620  
+317460317a02a1 Alexei Starovoitov 2024-03-07  621  	for (i = 0; i < nr_pages; i++) {
+c9eb8102e21e8c Alexei Starovoitov 2025-02-21  622  		pg = __bpf_alloc_page(nid);
+317460317a02a1 Alexei Starovoitov 2024-03-07  623  
+317460317a02a1 Alexei Starovoitov 2024-03-07  624  		if (pg) {
+317460317a02a1 Alexei Starovoitov 2024-03-07  625  			pages[i] = pg;
+317460317a02a1 Alexei Starovoitov 2024-03-07  626  			continue;
+317460317a02a1 Alexei Starovoitov 2024-03-07  627  		}
+317460317a02a1 Alexei Starovoitov 2024-03-07  628  		for (j = 0; j < i; j++)
+c9eb8102e21e8c Alexei Starovoitov 2025-02-21  629  			free_pages_nolock(pages[j], 0);
+317460317a02a1 Alexei Starovoitov 2024-03-07  630  		ret = -ENOMEM;
+317460317a02a1 Alexei Starovoitov 2024-03-07  631  		break;
+317460317a02a1 Alexei Starovoitov 2024-03-07  632  	}
+317460317a02a1 Alexei Starovoitov 2024-03-07  633  
+317460317a02a1 Alexei Starovoitov 2024-03-07  634  	return ret;
+317460317a02a1 Alexei Starovoitov 2024-03-07  635  }
+317460317a02a1 Alexei Starovoitov 2024-03-07  636  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
