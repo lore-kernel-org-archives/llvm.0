@@ -1,77 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89859219A81;
-	Sat,  3 Jan 2026 04:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D1719B5A7
+	for <llvm@lists.linux.dev>; Sat,  3 Jan 2026 10:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767414872; cv=none; b=hoouyO5gXFV7pn0G6weRkzeROPC5oun5q4bNdnKC6WhQ8ZShbLWwj/7NYD5bhPurebNfiMqztbgHRRu6+Tzb0zB8Fk7o3SY4D5JJ/Gxj+lGWCgsnbHaf5NlwCqwN4FMd36Dq1gM+/uD2Mx8tWOeoMlIzT+dWaJJzvNxQQ1KsoX0=
+	t=1767434577; cv=none; b=mCrNZ72StitYnIHDiHVtMLa8gEdq5MP3gP++Vv7FPGmTFkcvXhVs+JYPhioU7ZI7ittUtEQ1ZCcdReb5geHOkwnOxnqilKQq7hUHziwcLl2l1ogCxbMoRIRkdr4VfKfCI5wgpKtQ1ZPSlq+VVUsKiDTUMuNSBHfGCGg8zD/4dFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767414872; c=relaxed/simple;
-	bh=zJLNuqjJo8JSyAfKtWlFzw6htbmTx3tk4UMdE6ePqOo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SHMXb7jrqDVSQ7gz0CVBDwfS14GISNRu6xXltpJVpNtAA6qr8mhjy1L8jrOEFtMEXHBFCeq4y5zE0AlVrzfpf03PFyllh2MSTjOk4H7GKgBUG+gY4b+O73SCi/5oWldYYAwW5+fz03auKna20EE5DmhU7/ueStz3AVAnb8n933o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebn/fhhH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767434577; c=relaxed/simple;
+	bh=qPbRsMMm0OalGU9qVWShgfi/u94dI5ZvzdhcCM49xKU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o0509y/ujl7GYz8ysdkHuFX+xp2noLUt7H+JKuuXvCvwJ6IL/oMoo/op5hvx4Iv1o4DzcTFOBCkhybEaC3bP5uA706MPUGpfQxoEgmUzK3pRQUt+o2VfQTFcTtwgdiVr2/LLNKRwkdyun4kB+YJySg01bGubaPb10yq6Kni6luQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=syAb+5YE; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebn/fhhH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCE4C19422;
-	Sat,  3 Jan 2026 04:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767414872;
-	bh=zJLNuqjJo8JSyAfKtWlFzw6htbmTx3tk4UMdE6ePqOo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ebn/fhhHASCh9lvI/N00Z3xeJkSx4vMlyMNel7Y2xsfxQgbhzQaJGZYIOUBeN6K/U
-	 9SXreAuq7GJkew57XzXr//B7OGf+TmIEn94PZIz+lhSpBwQLbfUqQj26YcxhGs45g5
-	 oKuBP68xkNM77tA6pwxEuQ4cG6II6oLtrRlm6BDFPXATjOR7me8P+kHWZzIIMoapvO
-	 t4ioirBtcdmnsACPpUDdBon6QYjsxbhGIEPKRLQPq56TwJ8ddZcsy9woHoOvLemtjM
-	 JXJniSIf+eAU3SbWA/IWTdx0tKjlvm+P/RQZPyovKoD6C9G1inU5Ln9MRsuQCTArPj
-	 4Ugd8bU/6ntuw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="syAb+5YE"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42e2ba54a6fso5428305f8f.3
+        for <llvm@lists.linux.dev>; Sat, 03 Jan 2026 02:02:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767434574; x=1768039374; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pVMxWDM6IlrZiTwjie+uTeOt+ekq2BmDE9odN218w14=;
+        b=syAb+5YEgsSp1bFZrEcFXZKtKnkt/6f37kBFmhF46c0wk4w4+18hO4OQCliT6Wmdjr
+         wox9kfd+VjHJ+TgyaO3oAxWUCU3gcpRLNcSxIKopac7G1++n5FdEsUWkxAOXmIMldIyf
+         K2s2dH71HhEuGkdrlNIHw0nAM02xogdvwz8nkofNr4b04IGzKHflDGLfrTyIcSzYdtv5
+         ApLwP//zB084QcPavvL+Hh7Ipi43iMsRhclIFAopG0LMOZDyjUjkY8nCcCegZztxnPsC
+         r2Q+zRph6lbWQeKPk8kgkk6JV72cO76+KEMD7Kp21Ceg47R91zL74xpJ+BK16uuXVCsy
+         cQNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767434574; x=1768039374;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pVMxWDM6IlrZiTwjie+uTeOt+ekq2BmDE9odN218w14=;
+        b=n9GKqanmLmI67BBk8Rbu2KLFtKw06Tcwddoppb52ghExa1fpxH9DXwelTPygH3Y21Z
+         ohPgtxK5Y5O+jMSeiIGXjoN9YiZZ3wHmbqBXp57DNTr9R47yLJq0Mjxr55PhPajccxvU
+         Jkyc65hILn0Jqv3F0HVABXksjGyuFMlBnSTanJA9kDsOMBHoQaFEE056B5eQE2V19ylY
+         E9PviARbVcUnEYFr8NGhCl1j9/kS72bK9q3lKhuIEnygFUXcsDs7qlJcQqfHvZ/ctKfG
+         HT1FjP6UIzwwWY9uwpH4/APb7pusiB4L5eETPrBRHKzAddQlaEr0s1QNcDAQZZ0f6QlW
+         Zb+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWDMpPUZaD7akT/LFQEOmqKsPndHsZmdJ+St2G/8UNdBNAsZmErI9xBL67uQpfpG2py3f4B@lists.linux.dev
+X-Gm-Message-State: AOJu0YziwRtC+SlyQbeZlhCip9w0zms6++a+YSQKcjvQQWBazdXpQAE9
+	uKGewOqQK7dusQcUp8tQgXVoMuJTURF2DT/vNaJA4/4V1cBe0tTXxhAS6ZUEtK/1wgo=
+X-Gm-Gg: AY/fxX7jprB8cdrlQw1pIvOSDpYt8836p2YJNtg0AjI50Sl3Gh/R67l+3TDqEMIzz0V
+	Ee/K63hbfZ2C3CYaejhAVClPaRKwBfZ7EHy2gQqHO7w0O4tJ4VEFIlcHTNFeOcvz82Ga0EvCezF
+	FBN/qtRNOGuc/ChYfGdV/ba8FKlLjvAmkbwBy4ItlKoeNBSvpovo3Yu/4wgIrnL8fRr5euC5zrQ
+	JQLSP/Zet8liS+MMHe4i5dRg69QFSuyug4MI4Hh67ImOenU2s2Z+KiN1llxm+a/vVeRTNt2PoCY
+	gLx0dgdcKme4marwFZr1z3yePqkQz6Kq3pWnjxwmM57N0Gd6zZJZnTHuCTT9xp89D2tZWfQ1pDk
+	LQkv9B1okKUHxGISravQShbHoPMu/OtPKJ/bNwA9B23A1s2dr4VwnccXsAE0DUSKfMmPJtiZ1Ys
+	GX/Qib78dzHgOpwDA4Iu7mmFsg5g==
+X-Google-Smtp-Source: AGHT+IFPkanq3RHUbcsbNCpasG6Z313jdsfGQVH9J5om8n/FtqWwK7E4sTbdu6zUmursa5ksRK1pIw==
+X-Received: by 2002:a05:6000:3113:b0:42f:bb4a:9989 with SMTP id ffacd0b85a97d-4324e4d0fc1mr49661835f8f.28.1767434573075;
+        Sat, 03 Jan 2026 02:02:53 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eab2a94sm89174903f8f.43.2026.01.03.02.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jan 2026 02:02:52 -0800 (PST)
+Date: Sat, 3 Jan 2026 13:02:48 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Vincent Mailhol <mailhol@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
 	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Taniya Das <taniya.das@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH 1/2] clk: qcom: gcc-kaanapali: Fix double array initializer
-Date: Fri,  2 Jan 2026 22:34:27 -0600
-Message-ID: <176741484221.2558240.12492908303952193297.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251224112257.83874-3-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20251224112257.83874-3-krzysztof.kozlowski@oss.qualcomm.com>
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
+	linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] overflow: Update is_non_negative() and is_negative()
+ comment
+Message-ID: <903ba91b-f052-4b1c-827d-6292965026c5@moroto.mountain>
+References: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
+ <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
+ <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
+ <20260101-futuristic-petrel-of-ecstasy-23db5f@lindesnes>
+ <CANiq72=jRT+6+2PBgshsK-TpxPiRK70H-+3D6sYaN-fdfC83qw@mail.gmail.com>
+ <b549e430-5623-4c60-acb1-4b5e095ae870@kernel.org>
+ <b6b35138-2c37-4b82-894e-59e897ec7d58@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6b35138-2c37-4b82-894e-59e897ec7d58@kernel.org>
 
+Thanks Randy, for sending this to me.  I'm on the sparse list, but
+I've been on vacation and haven't caught up with my email.  I can
+easily silence this in Smatch.
 
-On Wed, 24 Dec 2025 12:22:58 +0100, Krzysztof Kozlowski wrote:
-> [GCC_QMIP_VIDEO_VCODEC_AHB_CLK] element in clk_regmap array is already
-> initialized, as reported by W=1 clang warning:
-> 
->   gcc-kaanapali.c:3383:36: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-> 
-> 
+regards,
+dan carpenter
 
-Applied, thanks!
-
-[1/2] clk: qcom: gcc-kaanapali: Fix double array initializer
-      commit: e77ff7d32b2029851a3567f1ccf7ab9db5cfa137
-[2/2] clk: qcom: rpmh: Fix double array initializer on Kaanapali
-      commit: bb466f234f2cfeea1c65b2d777ed878ee783b3ba
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+diff --git a/check_unsigned_lt_zero.c b/check_unsigned_lt_zero.c
+index bfeb3261f91d..ac3e650704ce 100644
+--- a/check_unsigned_lt_zero.c
++++ b/check_unsigned_lt_zero.c
+@@ -105,7 +105,8 @@ static bool is_allowed_zero(struct expression *expr)
+ 	    strcmp(macro, "STRTO_H") == 0 ||
+ 	    strcmp(macro, "SUB_EXTEND_USTAT") == 0 ||
+ 	    strcmp(macro, "TEST_CASTABLE_TO_TYPE_VAR") == 0 ||
+-	    strcmp(macro, "TEST_ONE_SHIFT") == 0)
++	    strcmp(macro, "TEST_ONE_SHIFT") == 0 ||
++	    strcmp(macro, "check_shl_overflow") == 0)
+ 		return true;
+ 	return false;
+ }
