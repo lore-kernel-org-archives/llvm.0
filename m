@@ -1,142 +1,163 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD009219A81
-	for <llvm@lists.linux.dev>; Sat,  3 Jan 2026 17:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63E525783A;
+	Sat,  3 Jan 2026 17:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767459716; cv=none; b=AqzYubKJFWSjUYU/i3ygOOj+WJJ5D20yNsDUMAIC1vK7D/h2skIlxEX/eODTx0QzfExGXvHcNQJ34koZj7FYxK60zYnT8bNbJxFSDE7hHUgsdatnrGWHj5RFUwllZga6TJwvBgABzFP9ldr9rHprQ5hGcMPXn0KDFF3wqIg4tVo=
+	t=1767461248; cv=none; b=gDFoQx136HeWUeeL4uQjlw8tSLGR8alXJl16GchMf5TS5tCKlNeuHuGCE/7mt2/pGtzt0WTIPCIOF1BFSYVTXrqEmJNQzoUR5schg9KR0lUUI7Cjrrw9rNP+33zLo2iaRuJ2Umiz3+GcsWI4OZvmu4rRqpXDfoDVFod4IAqAw8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767459716; c=relaxed/simple;
-	bh=KQXl8jGs3GODk15tB6KTtrgOeAb6Hys26tY1ny9AYdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GoHUtByf+Y5zMBVqhSAhrZbe9JAeOctI1I0DNdTFVrxKJ2XyuWsdAGQnYUIOq+itDHkrE4c6dkFH0+NGxQRg4QBA3pLmE1Ou7C+FHFfrZpzI+zPr7B4JZemLHgBKqR3y1PF+HJG11/EkJ+Hp3OcStxL8ZTumc4dJxM9YdNgS6Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QvZUmhUu; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1767461248; c=relaxed/simple;
+	bh=1KTepNE9/PIiH60G1XCJqDTU661np6x7wNVI1ZkZJPY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UahQcHDuOzI75iqO95znpk6VA8xKA7RbsfzD0nHUQsTh37R44l3pvaZX2gzFCvMeL3/mVmyHftepUkdHHe0h5rJ1NOYq44EKzdAlddN2ZQ5L9j3+GMMLbps9R1NbWMBUxaSxWlqBk2BrjSrVsRtWvow/sgap7bZESBYSt9Malus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OLKbiucR; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QvZUmhUu"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42e2e77f519so7483775f8f.2
-        for <llvm@lists.linux.dev>; Sat, 03 Jan 2026 09:01:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767459713; x=1768064513; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yHSQMnJBQHG3fEabcx1jHr7yPb3RERixhfZ5sKkWzqY=;
-        b=QvZUmhUuh0bSoQtA4E1pjrGnHBBkDyK5GnOVDM5JmR4DNnxYT+UCj7Os0qZJ1/8/5a
-         bEC/OsIZX0iv0Q2wEKupCzJEPicbcnLRwYWTJwva/MGa2R/KKW6l0FuI3mGBEjniNCil
-         YFEOGYLhmsTgvt7hJoKt0gNEYxgBYaNxIlWY6arAUA8Ga8mQDDuZi3JhwfCYTx7MAp86
-         c/XUA8RGtWBNJo9tqoss9VEgo7lvBTlcoF+pTCAKwdZcF1vTT77qt9c3TbEMkNO14kOc
-         e/an/PD6433AEg20VdxkhQ6FvXB936bGT04KSIt8frD+NeM7kLZfVGBr8g7XlHqnPvx5
-         6wAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767459713; x=1768064513;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yHSQMnJBQHG3fEabcx1jHr7yPb3RERixhfZ5sKkWzqY=;
-        b=aQExQcze/okQAifR6mEv3ofcrsQzP0UncEdzek30nvGA1WMQ0m72Uy6Aj8dOEzxA3N
-         CI/xVBZaGM2oY3B4yZkYepbdM1+a3cyDffxfwxExgZQYXvsV1mdQbbnzNmcKkCugBs4n
-         FyM/Crf4443jtGgCtxxT52geCz8JvjrjkfVWh7WdfQedbiRvCjjE1E4eCfO1uNUFcfHY
-         apA3uLJMRD2oIug5KUlW+h32OPy7WbcsFAjcpiUmG5w90/P3E53MWuraiwmLxExtWi3x
-         c7RuADobudK60m5aAEEpw1N9vPTKLCdBZZFSzwfBHYmAbTiT2ZpiT6amhretMAH3R8xn
-         tksQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV4HlSiWcaSRJy+i2mMc6MVHva4rFG+3EODK/Tia+Y7QgF7UTJIWnN9Mc139nQMusaRPMHz@lists.linux.dev
-X-Gm-Message-State: AOJu0YyHYeWCyUj+Z8in83CRcsXFd+uM0VKn+FnknsSOAhu1JOF4zjbv
-	2ynJlNIEOeHEt5L8Gpp0UdMRQ1/33Nem754MZ6ZlmTMsJuHFieaveli/IgjbbFTA4rc=
-X-Gm-Gg: AY/fxX5EOe+yg1ghgCjobP3TRi+SHkTPyRUlNfnBN9/4RVHSXwTDXbUk/WDI2JnsJDe
-	jEBN8XjqOZiWaRhKRaR6lY4d+Rcw4xddmEyjzxQKSP7MK/V+4uDcmXlFoCpZLDJlEsRLFsEHE65
-	l0B6sr2bh03s44Q2vFp0mE6lv/I+rz//W5IvYoJ8v45aVEcHJ22IGDa+/4QFjm5jP7S3A4h+7gd
-	ZgI6dtemnwjzMtptcK3fwirQgRwLr+y3uefLqgBIAKLlH2SLnNP/hADD2AUdLsqoV/o1UG3frDd
-	j78vjN5pmSTPi5Q0LSXJRvXxNmz/3E8dukKYf5yS4MJ2zsZWUQS/oeSDiNtObCJ3RMxjxQ7WUJx
-	SG7NRW/rc1lMeaGTag3LMeXDAlwzf3fFlYULuWaf5YP0XTzpCJkZIblJD8vXcomyVorBzAOVf3a
-	IM3gNDkxEdSBRVHQig
-X-Google-Smtp-Source: AGHT+IH76r9upX5LgpHZ/fOST6gsEDX5p5oGk436/qE1kT4SAaRLVvV1SuOGoIs6C86iZ8FylfCo5w==
-X-Received: by 2002:a05:6000:2c0f:b0:431:54c:6f0 with SMTP id ffacd0b85a97d-4324e4c739emr61327273f8f.4.1767459708384;
-        Sat, 03 Jan 2026 09:01:48 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4325b6bfe88sm82459187f8f.19.2026.01.03.08.56.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jan 2026 09:01:47 -0800 (PST)
-Date: Sat, 3 Jan 2026 19:56:45 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
-	linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] overflow: Update is_non_negative() and is_negative()
- comment
-Message-ID: <aVlKTculhgJzuZJy@stanley.mountain>
-References: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
- <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
- <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
- <20260101-futuristic-petrel-of-ecstasy-23db5f@lindesnes>
- <CANiq72=jRT+6+2PBgshsK-TpxPiRK70H-+3D6sYaN-fdfC83qw@mail.gmail.com>
- <b549e430-5623-4c60-acb1-4b5e095ae870@kernel.org>
- <b6b35138-2c37-4b82-894e-59e897ec7d58@kernel.org>
- <903ba91b-f052-4b1c-827d-6292965026c5@moroto.mountain>
- <c84557e6-aa92-42e9-8768-e246676ec1e9@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OLKbiucR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767461246; x=1798997246;
+  h=date:from:to:cc:subject:message-id;
+  bh=1KTepNE9/PIiH60G1XCJqDTU661np6x7wNVI1ZkZJPY=;
+  b=OLKbiucRee3J1r96bJUdGm+t1GXK7qbfXQ/Rllcva3y97uXBZ7nAce4x
+   XQYV61XUKGhqIDv9jlusF/qIKV0JEAxS1oW0ZjwSWDZQaVeWfB8/aXxPX
+   cNFeWxh5YLEYnUIK0Ce8s5D8DNn1Q/FoFMkK6sBJGWS7Gp0ey2jqOhRZE
+   fhsqOVJizBS0ZP/1GrPV+zH1tYqpev1O4aGuAmWu4qOeO4v2BHgoejBzk
+   zr7OknotVlUGiFIaOy9KPBN4v06gI9vfInPSyEXtjrexJtfkJAZ95VSo/
+   qQrhYCt+lsmgKcMJBab3RsOQkTecw689EltGbK4hldX5Rj10729woeO/j
+   Q==;
+X-CSE-ConnectionGUID: TX9GB3vaSf+tqM2H4hYO4w==
+X-CSE-MsgGUID: xSSeQJqlSDq1HMD83CuEaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="68644641"
+X-IronPort-AV: E=Sophos;i="6.21,198,1763452800"; 
+   d="scan'208";a="68644641"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2026 09:27:25 -0800
+X-CSE-ConnectionGUID: CUej8eGpTyqHTCFJLHKbgw==
+X-CSE-MsgGUID: WmLsXgdlQUqvgzYVgUEv4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,198,1763452800"; 
+   d="scan'208";a="201794097"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 03 Jan 2026 09:27:22 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vc5PM-000000000An-3fGB;
+	Sat, 03 Jan 2026 17:27:20 +0000
+Date: Sun, 04 Jan 2026 01:26:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: "jaeyuel.im" <jaeyuel.im@lge.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ dm-devel@lists.linux.dev, Mikulas Patocka <mpatocka@redhat.com>
+Subject: [device-mapper-dm:for-next 6/15]
+ drivers/md/dm-init.c:314:20: error: call to undeclared function
+ 'blkdev_get_no_open'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202601040123.HHNIwEua-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c84557e6-aa92-42e9-8768-e246676ec1e9@kernel.org>
 
-On Sat, Jan 03, 2026 at 12:10:45PM +0100, Vincent Mailhol wrote:
-> On 03/01/2026 at 11:02, Dan Carpenter wrote:
-> > Thanks Randy, for sending this to me.  I'm on the sparse list, but
-> > I've been on vacation and haven't caught up with my email. 
-> 
-> Welcome back, hope you enjoyed your holidays!
-> 
-> >I can easily silence this in Smatch.
-> 
-> Thanks. I ran this locally, I can confirm that this silences the
-> warning. So:
-> 
-> Tested-by: Vincent Mailhol <mailhol@kernel.org>
-> 
-> > diff --git a/check_unsigned_lt_zero.c b/check_unsigned_lt_zero.c
-> > index bfeb3261f91d..ac3e650704ce 100644
-> > --- a/check_unsigned_lt_zero.c
-> > +++ b/check_unsigned_lt_zero.c
-> > @@ -105,7 +105,8 @@ static bool is_allowed_zero(struct expression *expr)
-> >  	    strcmp(macro, "STRTO_H") == 0 ||
-> >  	    strcmp(macro, "SUB_EXTEND_USTAT") == 0 ||
-> >  	    strcmp(macro, "TEST_CASTABLE_TO_TYPE_VAR") == 0 ||
-> > -	    strcmp(macro, "TEST_ONE_SHIFT") == 0)
-> > +	    strcmp(macro, "TEST_ONE_SHIFT") == 0 ||
-> > +	    strcmp(macro, "check_shl_overflow") == 0)
-> 
-> But, for the long term, wouldn't it better to just ignore all the code
-> coming from macro extensions instead of maintaining this allow-list?
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+head:   89db2b980bb27a5ec625382f8fe7798f6ab10d01
+commit: 5cf739d81755e49c39a3bd3c8bf5ec57441710b5 [6/15] dm init: ensure block device is ready before creating mapped device
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260104/202601040123.HHNIwEua-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260104/202601040123.HHNIwEua-lkp@intel.com/reproduce)
 
-Of course, that idea occured to me, but so far the allow list is not
-very burdensome to maintain.  I maybe should disable it for all
-macros unless the --spammy option is used...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601040123.HHNIwEua-lkp@intel.com/
 
-regards,
-dan carpenter
+All errors (new ones prefixed by >>):
 
+>> drivers/md/dm-init.c:314:20: error: call to undeclared function 'blkdev_get_no_open'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     314 |                         while (!(bdev = blkdev_get_no_open(dev, false)))
+         |                                         ^
+>> drivers/md/dm-init.c:314:18: error: incompatible integer to pointer conversion assigning to 'struct block_device *' from 'int' [-Wint-conversion]
+     314 |                         while (!(bdev = blkdev_get_no_open(dev, false)))
+         |                                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/md/dm-init.c:316:4: error: call to undeclared function 'blkdev_put_no_open'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     316 |                         blkdev_put_no_open(bdev);
+         |                         ^
+   3 errors generated.
+
+
+vim +/blkdev_get_no_open +314 drivers/md/dm-init.c
+
+   267	
+   268	/**
+   269	 * dm_init_init - parse "dm-mod.create=" argument and configure drivers
+   270	 */
+   271	static int __init dm_init_init(void)
+   272	{
+   273		struct dm_device *dev;
+   274		LIST_HEAD(devices);
+   275		char *str;
+   276		int i, r;
+   277	
+   278		if (!create)
+   279			return 0;
+   280	
+   281		if (strlen(create) >= DM_MAX_STR_SIZE) {
+   282			DMERR("Argument is too big. Limit is %d", DM_MAX_STR_SIZE);
+   283			return -EINVAL;
+   284		}
+   285		str = kstrndup(create, DM_MAX_STR_SIZE, GFP_KERNEL);
+   286		if (!str)
+   287			return -ENOMEM;
+   288	
+   289		r = dm_parse_devices(&devices, str);
+   290		if (r)
+   291			goto out;
+   292	
+   293		DMINFO("waiting for all devices to be available before creating mapped devices");
+   294		wait_for_device_probe();
+   295	
+   296		for (i = 0; i < ARRAY_SIZE(waitfor); i++) {
+   297			if (waitfor[i]) {
+   298				dev_t dev;
+   299				struct block_device *bdev;
+   300	
+   301				DMINFO("waiting for device %s ...", waitfor[i]);
+   302				while (early_lookup_bdev(waitfor[i], &dev))
+   303					fsleep(5000);
+   304	
+   305				/*
+   306				 * early_lookup_bdev() only checks if the device node exists and
+   307				 * returns the dev_t. It does not guarantee that the underlying
+   308				 * block device is fully initialized and ready to be opened. On
+   309				 * some platforms, this can lead to a race condition where
+   310				 * dm_early_create() fails because the device is not yet ready.
+   311				 * Ensure the block device is truly available by attempting to
+   312				 * get it.
+   313				 */
+ > 314				while (!(bdev = blkdev_get_no_open(dev, false)))
+   315					fsleep(5000);
+ > 316				blkdev_put_no_open(bdev);
+   317			}
+   318		}
+   319	
+   320		if (waitfor[0])
+   321			DMINFO("all devices available");
+   322	
+   323		list_for_each_entry(dev, &devices, list) {
+   324			if (dm_early_create(&dev->dmi, dev->table,
+   325					    dev->target_args_array))
+   326				break;
+   327		}
+   328	out:
+   329		kfree(str);
+   330		dm_setup_cleanup(&devices);
+   331		return r;
+   332	}
+   333	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
