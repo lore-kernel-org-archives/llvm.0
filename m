@@ -1,132 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADDB3A1E72;
-	Sat,  3 Jan 2026 19:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9110C3C465;
+	Sat,  3 Jan 2026 23:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767469227; cv=none; b=HUA9Eou3UAaI4eDAGwUfzJVdiRIgiO2VDvSnayp0yi1f1t2C5dTJ9PMpmNWHS8J+RRl+X5AMxM+irx4qafSEk3uwtdW/cOh6iUq3PaonCBqRYsH5YsqkE8jdyRFw/vLUvDo1r2VfXd4jpBSJ9ItMJ8OuJ/F6zhMuMiDr1fXaI+k=
+	t=1767482981; cv=none; b=QQfNTGv5GGNkfQiTniGAHkBXUcohJmhKbiWPb320+htiA5h1mtPp8Ybys1fRojBYKTbkISiSrVNb5mgfzr49casxNOLYTdo1WVsj7OqkASXwRijU+iYVH91SnIqS0B37m2JDEWhgrlKgR0YATLe+ot+FAVKFw00krLS5z/wuTME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767469227; c=relaxed/simple;
-	bh=tkpnTK4Qj656t1SjViYdrojmOrUb4VMdsQ1vCgGZFaM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JpB80xk6phQC6rXRixGV7d+rD3udH77sco7mA11vQGDtVs4ghgVA/6Mm9RQshnxjK/QkA4FfoyNjpW+v0l4oqgRSXdsP+8lC26XzaDi7SwjKvQoEHA/Y+It/aXWOHOIuEzGs68vThqbOIo7T0qL/FhmzS/DF/EiGXG0EFXENyP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ptk8Eq01; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767482981; c=relaxed/simple;
+	bh=yrlIZZmC5Lkf636QMdCK3gAWLqc/QTEizMpkoKTohjo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=I7g4XueHf0KX3nYzt73OBiFUr6/YGb/1ueRr7iENIsA1fHOoaRjJLE0Fm1aLAgHxQrb3xdHe4Cz3X7aydbm+eo823zzUNAIszIBSzRbLbL3FLji9/7D5l7z5FCwosqIp+YsEqMz1fE5HgtsWERJEPx7XqSHSx+M3Zx22qi03n0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9U15b9R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ptk8Eq01"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2700C113D0;
-	Sat,  3 Jan 2026 19:40:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9U15b9R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A6E9C113D0;
+	Sat,  3 Jan 2026 23:29:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767469226;
-	bh=tkpnTK4Qj656t1SjViYdrojmOrUb4VMdsQ1vCgGZFaM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ptk8Eq017hq7LXx1dg/UvM82Pt2sJPL5TWUcNecJF4hcdqsylreXB1vc6LxpYKW/R
-	 9BFtTUrUfQ6lI82kt6wwlhqf7M65pT8tHi9NtuTo7kfe+tZuRamjzVaBj8o2/xOmMS
-	 LaoevR3U2LqszzHyshrbiae4H/vyhmY377Eo5dqooqKzC+noeELYMVY4t02yU2o+5C
-	 qtYwbFBsNY0o0tndQO1CLdFe7U5Ma1IxgGojOEUmf4U6vKfryh1yieUj4B5oJplZ5N
-	 grGmU4u6Dmx9hrkVInJgl38oRemDeRkyJojpy+NB09Tc3smQe+7xN7WuoL6oL+li+0
-	 Drx6RpyJAa6UQ==
-Message-ID: <e66bd09b-9879-4562-a71e-a1e1a964f3f2@kernel.org>
-Date: Sat, 3 Jan 2026 20:40:17 +0100
+	s=k20201202; t=1767482981;
+	bh=yrlIZZmC5Lkf636QMdCK3gAWLqc/QTEizMpkoKTohjo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=E9U15b9RxY6HTYs6wpRuWwsmCm4OU8ivllYcEyE2knOFNPiBusMUjUKDpZz6g2cs2
+	 60/u4xJvoMD9fO1XPikWOC6Td8bT8qpS0ZnDjvM9XoFfnIWQu3aPZNLVfZCv3JSu7v
+	 vNmBkg55lYvymbtUXxIg0vVaKerIC5AMKQ8ZyjRNcVYtGot3A72L1sMdczTc8gSrt7
+	 5YNfVDOH6fQV3uiSZbN1lkLXo7u67gTGl4i8kF81pfNJnbk5EUc3CH+sFc1nrlq403
+	 SwXAJdbQewUUPyaNeJIRp77912vc+uRumzuKe6nSZqGTgNUg+XBWVRtsEEyQa04zTj
+	 xodVamwZZpnZw==
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id B831BF40069;
+	Sat,  3 Jan 2026 18:29:39 -0500 (EST)
+Received: from phl-imap-09 ([10.202.2.99])
+  by phl-compute-12.internal (MEProxy); Sat, 03 Jan 2026 18:29:39 -0500
+X-ME-Sender: <xms:Y6ZZaeesRuDLLoCJ67QcNN-RasOsGOFeJ3Vhg79_u5ZPi7alvY7DWw>
+    <xme:Y6ZZaTD88Y8d0pPH5o6dmhda915lkc3vzwY9TN8u_FPx3kHgpdw0x0u1lvM_PqwOV
+    1KioqlqL2qgwL-M1VaT7eBaRzewVdr6DoQNNA-jCFUgE_VRkTrELzE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdelvdekiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdfrrhgrthih
+    uhhshhcujggruggrvhdfuceophhrrghthihushhhsehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnheptdelledvjedtieduhfdtveefueejhffgteelieefffelveettdeg
+    veekhefhledunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepmhgvodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqddugeejfedujedt
+    tdekqdeftddvleekfeeitddqphhrrghthihushhhpeepkhgvrhhnvghlrdhorhhgseihrg
+    gurghvphhrrghthihushhhrdgtohhmpdhnsggprhgtphhtthhopedvvddpmhhouggvpehs
+    mhhtphhouhhtpdhrtghpthhtohepshhtvghfrghnsegrghhnvghrrdgthhdprhgtphhtth
+    hopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhrtghpthhtohep
+    sggtmhdqkhgvrhhnvghlqdhfvggvuggsrggtkhdqlhhishhtsegsrhhorggutghomhdrtg
+    homhdprhgtphhtthhopehkrghmrghlrdgurghsuhessghrohgruggtohhmrdgtohhmpdhr
+    tghpthhtohepphgruhhlsegtrhgrphhouhhilhhlohhurdhnvghtpdhrtghpthhtoheptg
+    homhhpuhhtvghrshhfohhrphgvrggtvgesghhmrghilhdrtghomhdprhgtphhtthhopehh
+    rghrvhgvhihhuhhnthhnvgiguhhssehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhitg
+    hkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthho
+    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:Y6ZZaQ7mQXPQkcM4NvdmDqFOL812AD7VtG0uOOwUNuaOKuldo7cKrA>
+    <xmx:Y6ZZadcuuUbRXaECpqepJDIaKplrZbJZa4BxI7qZ0jPeNJOZS4zSTw>
+    <xmx:Y6ZZafe3HOucT5EYIwZCRjzwdVLXkIFe_j6Eoe9LeTskBgOVbqUp6A>
+    <xmx:Y6ZZaaExh7RtaodQZNUCVajs76K9DnvNnhTpsnGk-iPIQVV9lr1H6Q>
+    <xmx:Y6ZZaWHYvgqSjc0X8gGrH6Fx_Kfz73xdC9aa3PF1PZU_GL1Y392Hn-Qm>
+Feedback-ID: id4c94969:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8F3E63020061; Sat,  3 Jan 2026 18:29:39 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] overflow: Update is_non_negative() and is_negative()
- comment
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Nicolas Schier <nicolas@fjasle.eu>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
- linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
- <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
- <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
- <20260101-futuristic-petrel-of-ecstasy-23db5f@lindesnes>
- <CANiq72=jRT+6+2PBgshsK-TpxPiRK70H-+3D6sYaN-fdfC83qw@mail.gmail.com>
- <b549e430-5623-4c60-acb1-4b5e095ae870@kernel.org>
- <b6b35138-2c37-4b82-894e-59e897ec7d58@kernel.org>
- <903ba91b-f052-4b1c-827d-6292965026c5@moroto.mountain>
- <c84557e6-aa92-42e9-8768-e246676ec1e9@kernel.org>
- <aVlKTculhgJzuZJy@stanley.mountain>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <aVlKTculhgJzuZJy@stanley.mountain>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: A8SErWKoyjPZ
+Date: Sun, 04 Jan 2026 00:28:48 +0100
+From: "Pratyush Yadav" <pratyush@kernel.org>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: "Brian Norris" <computersforpeace@gmail.com>,
+ "Kamal Dasu" <kamal.dasu@broadcom.com>,
+ "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Harvey Hunt" <harveyhuntnexus@gmail.com>,
+ "Paul Cercueil" <paul@crapouillou.net>,
+ "Manivannan Sadhasivam" <mani@kernel.org>, "Stefan Agner" <stefan@agner.ch>,
+ "Tudor Ambarus" <tudor.ambarus@linaro.org>,
+ "Michael Walle" <mwalle@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <230bd4a1-7ccf-479e-acbb-8eb8440ec0e1@app.fastmail.com>
+In-Reply-To: <e2e72720-5541-44cc-a000-c469d7873c06@oss.qualcomm.com>
+References: <20260102124927.64703-8-krzysztof.kozlowski@oss.qualcomm.com>
+ <20260102124927.64703-14-krzysztof.kozlowski@oss.qualcomm.com>
+ <86a4yw87g8.fsf@kernel.org>
+ <e2e72720-5541-44cc-a000-c469d7873c06@oss.qualcomm.com>
+Subject: Re: [PATCH 7/7] mtd: spi-nor: hisi-sfc: Simplify with scoped for each OF child
+ loop
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 03/01/2026 at 17:56, Dan Carpenter wrote:
-> On Sat, Jan 03, 2026 at 12:10:45PM +0100, Vincent Mailhol wrote:
->> On 03/01/2026 at 11:02, Dan Carpenter wrote:
->>> Thanks Randy, for sending this to me.  I'm on the sparse list, but
->>> I've been on vacation and haven't caught up with my email. 
->>
->> Welcome back, hope you enjoyed your holidays!
->>
->>> I can easily silence this in Smatch.
->>
->> Thanks. I ran this locally, I can confirm that this silences the
->> warning. So:
->>
->> Tested-by: Vincent Mailhol <mailhol@kernel.org>
->>
->>> diff --git a/check_unsigned_lt_zero.c b/check_unsigned_lt_zero.c
->>> index bfeb3261f91d..ac3e650704ce 100644
->>> --- a/check_unsigned_lt_zero.c
->>> +++ b/check_unsigned_lt_zero.c
->>> @@ -105,7 +105,8 @@ static bool is_allowed_zero(struct expression *expr)
->>>  	    strcmp(macro, "STRTO_H") == 0 ||
->>>  	    strcmp(macro, "SUB_EXTEND_USTAT") == 0 ||
->>>  	    strcmp(macro, "TEST_CASTABLE_TO_TYPE_VAR") == 0 ||
->>> -	    strcmp(macro, "TEST_ONE_SHIFT") == 0)
->>> +	    strcmp(macro, "TEST_ONE_SHIFT") == 0 ||
->>> +	    strcmp(macro, "check_shl_overflow") == 0)
->>
->> But, for the long term, wouldn't it better to just ignore all the code
->> coming from macro extensions instead of maintaining this allow-list?
->>
-> 
-> Of course, that idea occured to me, but so far the allow list is not
-> very burdensome to maintain.
+(writing from my phone so please excuse the formatting)
 
-Indeed, but my concern was more on how people would treat such smatch
-warnings coming from the kernel test robot. It is very uncommon to have
-an allow-list hard coded into the static analyzer. Actually, this is the
-first time I see this. My fear here is that people will just uglify the
-code rather than sending a patch to extend the allow list in smatch.
+On Sat, Jan 3, 2026, at 1:38 PM, Krzysztof Kozlowski wrote:
+> On 02/01/2026 14:33, Pratyush Yadav wrote:
+>> Hi Kyzystof,
+>> 
+>> Thanks for the cleanup.
+>> 
+>> On Fri, Jan 02 2026, Krzysztof Kozlowski wrote:
+>> 
+>>> Use scoped for-each loop when iterating over device nodes to make code a
+>>> bit simpler.
+>> 
+>> Nit: the commit message is a bit too dry. I had to go and look what the
+>> difference between the two variants was. I could make an educated guess
+>> by looking at the patch, but still.
+>
+> Really? That's old and widely used syntax, replaced so many times and
+> sorry, but really obvious.
+>
+> We should not explain core kernel API in commit msgs, except maybe first
+> months of usage.
 
-> I maybe should disable it for all macros unless the --spammy option is used...
+Dunno. It's the first time I'm seeing these. So this was my first reaction. I think the patch would read nicer if you explain why the new variant is better even if it is widely used.
 
-IMHO, that would be an even better approach. That said, I am happy
-enough with your previous patch which resolves my issue and which is way
-better than updating the is_non_negative() and is_negative() comments as
-I did in my patch!
+Anyway, I don't want to waste either of our energy arguing this, so if you don't want to add the one liner, that's fine by me too.
 
+>> 
+>> If you end up doing a v2, a one-liner explanation of the difference
+>> between the two loop variants would be nice to have.
 
-Yours sincerely,
-Vincent Mailhol
-
+-- 
+Regards,
+Pratyush Yadav
