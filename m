@@ -1,126 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5FA27453;
-	Sat,  3 Jan 2026 01:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B221C68F;
+	Sat,  3 Jan 2026 02:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767404235; cv=none; b=BqBJhjYmdW8V0JP51+zeNwNLn7mkYC1fWyGBYfl2+8TrLtmX3ZVAyt0xfILVY2Pj7fWN0ynWxxcI1wrcYAZt2HjEBcpoeRLMOoZtc+No+MoXZtByq4CukYz/j5feVbLyek6BfoiADOzNilDXs5nL2dCFQqrcjSGctif1ETrQj5Y=
+	t=1767406825; cv=none; b=cWbk0e+S+ZstXrtu9QNT51ImnWnduerMMSeAHi+cdQviOehp1bZEhW08SL1t+qmwAxjd6sTKvB7mnNdoWtF6X++0GDEk3ISvr65lY7coXl0adBHZQiWAJbaADpwF5NXoyBtN1Rd71dbTY3p2UOk4JdyAbdf/bDpjnVHy7QW6YtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767404235; c=relaxed/simple;
-	bh=VE1xzgjjWYjXm43fyyzXvGlUIdhmjF7rIMUozNnHze0=;
+	s=arc-20240116; t=1767406825; c=relaxed/simple;
+	bh=GAz6lVW9pP3EQThoU4Z64Wm4ELMF1S0wejso0L8U92Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=umeqIt29tD3JHVdjzIfpQ0qdq0kiEEppCaj+tEpeJAwGddoTU+EHrqFzOvNUxNpgAvMsKW0TDK5uHQx3iJn8w+TPUl5tYQkBm2F7O4H7PxGfav9VIL8ps1t27WhmCX9Qnk4kDtGXWmzER26TzluETjdbIv7OI8WoJRg8HreZ9RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YfoHqVnI; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=B/X6oevQWHpd0yM1GhDUBMIy9TmGp3xym2Ox3EbNF3stLwyKR6bHEImgEAfV3AAQLTzdQhOYp9FAGHcBsMXxt/tK//OnKV+wwt/vB6SQHdYMz35K26h3hvqhPyiTB2D+fRIIdgtLFLJpc3Sx8Yw5zUJfyjJ/Ub2taR6YnA2k0Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Te7rfK3t; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YfoHqVnI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Te7rfK3t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767404234; x=1798940234;
+  t=1767406823; x=1798942823;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VE1xzgjjWYjXm43fyyzXvGlUIdhmjF7rIMUozNnHze0=;
-  b=YfoHqVnIkovhhiZSUQG+FDjgcYSgyFQwT+tr+4fjh1lpFAxqhNeq8OFU
-   /S8GiuN1isvsIRFp51bvAYukI1xziPS2IkL/8vOtl8M7zpnvjkdS7PKt7
-   wIyg1CAVV4d2lfeDapfn6hC7YnHJV5p1V5HzPsy353i2bGEG8aC3ZfILC
-   SN8Jb2N0n0qew0BctI6foHbfU8C4n77/25BHWy4DS8Tf19HLf64/kX7ki
-   Z0fpgN40KsfkmbXPQ++ImSXyT8HbL9TG+jBl76KLBFrJAgMpujW1QrHxe
-   4SeGpvPkKoJPHl1u1RmjM7INeTSTs8Scrosj9hqPSmkm0tTk8Lw3cOVF0
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=GAz6lVW9pP3EQThoU4Z64Wm4ELMF1S0wejso0L8U92Y=;
+  b=Te7rfK3tWXqp//O5leov0KN033rlMQzsCSmD8q1GMreCtN2EjNGRImuz
+   qmsQkuAtUhoA4pyGZetzAPpRFvJ5JNap5Rr4ZY/fjRF1sEapRRTxbe3gf
+   CBf+kIUBFnJQgJGeg3hJJh/DXXW2jEZQ114OwVoJf0gouLaQpu/dNcoe8
+   dFxBQ496bsfUafkcCEAENP/WTq9P9pkABVDjXA3CMI4lMJ9WmiDzjtGpm
+   iRY8LO3asfemkgTFC5zGzDAMYtewzyetyNR7M6pD4mZNadCh05Pc5PEyn
+   QI13o7BlkmfyA2inHrjYihj4CHVyVswwoBLJtWzn4FxfVg72ma0HdZK9v
    g==;
-X-CSE-ConnectionGUID: 64YSAtEGTQCINo0wNijU/w==
-X-CSE-MsgGUID: upKRnCe8S6yjVgDW8FqmSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="72729953"
+X-CSE-ConnectionGUID: 9WBPm4NjSMaLqNkaJsH1/Q==
+X-CSE-MsgGUID: w2nk8SfSSkGa+YhzJ4z6ZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="68788099"
 X-IronPort-AV: E=Sophos;i="6.21,198,1763452800"; 
-   d="scan'208";a="72729953"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2026 17:37:12 -0800
-X-CSE-ConnectionGUID: xtDsHCaJRvmxBNbVSfJHuw==
-X-CSE-MsgGUID: 4KmqNy3cStGqWehgYBnVjQ==
+   d="scan'208";a="68788099"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2026 18:20:22 -0800
+X-CSE-ConnectionGUID: cYzilF2MT8G/+TeZ4kaVtw==
+X-CSE-MsgGUID: R9/AmzffTsaCv10Cn1bAHg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,198,1763452800"; 
-   d="scan'208";a="202388517"
-Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Jan 2026 17:37:11 -0800
-Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+   d="scan'208";a="201556561"
+Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 02 Jan 2026 18:20:17 -0800
+Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vbqZn-000000000Vd-3qth;
-	Sat, 03 Jan 2026 01:37:07 +0000
-Date: Sat, 3 Jan 2026 02:36:23 +0100
+	id 1vbrFX-000000002Xt-23O6;
+	Sat, 03 Jan 2026 02:20:15 +0000
+Date: Sat, 3 Jan 2026 10:19:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 2/2] bpf: arena: Reintroduce memcg accounting
-Message-ID: <202601030234.BWfTlyVd-lkp@intel.com>
-References: <20260102151852.570285-3-puranjay@kernel.org>
+To: Jordan Niethe <jniethe@nvidia.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, balbirs@nvidia.com,
+	matthew.brost@intel.com, akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	david@redhat.com, ziy@nvidia.com, apopple@nvidia.com,
+	lorenzo.stoakes@oracle.com, lyude@redhat.com, dakr@kernel.org,
+	airlied@gmail.com, simona@ffwll.ch, rcampbell@nvidia.com,
+	mpenttil@redhat.com, jgg@nvidia.com, willy@infradead.org,
+	linuxppc-dev@lists.ozlabs.org, intel-xe@lists.freedesktop.org,
+	jgg@ziepe.ca, Felix.Kuehling@amd.com
+Subject: Re: [PATCH v1 8/8] mm: Remove device private pages from the physical
+ address space
+Message-ID: <202601030906.9lgtN5Gq-lkp@intel.com>
+References: <20251231043154.42931-9-jniethe@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260102151852.570285-3-puranjay@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251231043154.42931-9-jniethe@nvidia.com>
 
-Hi Puranjay,
+Hi Jordan,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on c286e7e9d1f1f3d90ad11c37e896f582b02d19c4]
+[auto build test WARNING on f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Puranjay-Mohan/bpf-syscall-Introduce-memcg-enter-exit-helpers/20260102-232059
-base:   c286e7e9d1f1f3d90ad11c37e896f582b02d19c4
-patch link:    https://lore.kernel.org/r/20260102151852.570285-3-puranjay%40kernel.org
-patch subject: [PATCH bpf-next v3 2/2] bpf: arena: Reintroduce memcg accounting
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260103/202601030234.BWfTlyVd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260103/202601030234.BWfTlyVd-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Niethe/mm-migrate_device-Add-migrate-PFN-flag-to-track-device-private-pages/20251231-123453
+base:   f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da
+patch link:    https://lore.kernel.org/r/20251231043154.42931-9-jniethe%40nvidia.com
+patch subject: [PATCH v1 8/8] mm: Remove device private pages from the physical address space
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260103/202601030906.9lgtN5Gq-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260103/202601030906.9lgtN5Gq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601030234.BWfTlyVd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601030906.9lgtN5Gq-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/syscall.c:619:21: warning: unused variable 'memcg' [-Wunused-variable]
-     619 |         struct mem_cgroup *memcg, *old_memcg;
-         |                            ^~~~~
->> kernel/bpf/syscall.c:619:29: warning: unused variable 'old_memcg' [-Wunused-variable]
-     619 |         struct mem_cgroup *memcg, *old_memcg;
-         |                                    ^~~~~~~~~
-   2 warnings generated.
+   In file included from arch/s390/purgatory/purgatory.c:10:
+   In file included from include/linux/kexec.h:18:
+   In file included from include/linux/vmcore_info.h:6:
+   In file included from include/linux/elfcore.h:11:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:33:
+>> include/linux/memremap.h:148:2: warning: field '' with variable sized type 'union dev_pagemap::(anonymous at include/linux/memremap.h:148:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+     148 |         union {
+         |         ^
+   1 warning generated.
 
 
-vim +/memcg +619 kernel/bpf/syscall.c
+vim +148 include/linux/memremap.h
 
-c9eb8102e21e8c Alexei Starovoitov 2025-02-21  612  
-c9eb8102e21e8c Alexei Starovoitov 2025-02-21  613  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
-317460317a02a1 Alexei Starovoitov 2024-03-07  614  			unsigned long nr_pages, struct page **pages)
-317460317a02a1 Alexei Starovoitov 2024-03-07  615  {
-317460317a02a1 Alexei Starovoitov 2024-03-07  616  	unsigned long i, j;
-317460317a02a1 Alexei Starovoitov 2024-03-07  617  	struct page *pg;
-317460317a02a1 Alexei Starovoitov 2024-03-07  618  	int ret = 0;
-317460317a02a1 Alexei Starovoitov 2024-03-07 @619  	struct mem_cgroup *memcg, *old_memcg;
-317460317a02a1 Alexei Starovoitov 2024-03-07  620  
-317460317a02a1 Alexei Starovoitov 2024-03-07  621  	for (i = 0; i < nr_pages; i++) {
-c9eb8102e21e8c Alexei Starovoitov 2025-02-21  622  		pg = __bpf_alloc_page(nid);
-317460317a02a1 Alexei Starovoitov 2024-03-07  623  
-317460317a02a1 Alexei Starovoitov 2024-03-07  624  		if (pg) {
-317460317a02a1 Alexei Starovoitov 2024-03-07  625  			pages[i] = pg;
-317460317a02a1 Alexei Starovoitov 2024-03-07  626  			continue;
-317460317a02a1 Alexei Starovoitov 2024-03-07  627  		}
-317460317a02a1 Alexei Starovoitov 2024-03-07  628  		for (j = 0; j < i; j++)
-c9eb8102e21e8c Alexei Starovoitov 2025-02-21  629  			free_pages_nolock(pages[j], 0);
-317460317a02a1 Alexei Starovoitov 2024-03-07  630  		ret = -ENOMEM;
-317460317a02a1 Alexei Starovoitov 2024-03-07  631  		break;
-317460317a02a1 Alexei Starovoitov 2024-03-07  632  	}
-317460317a02a1 Alexei Starovoitov 2024-03-07  633  
-317460317a02a1 Alexei Starovoitov 2024-03-07  634  	return ret;
-317460317a02a1 Alexei Starovoitov 2024-03-07  635  }
-317460317a02a1 Alexei Starovoitov 2024-03-07  636  
+514caf23a70fd6 Christoph Hellwig   2019-06-26  113  
+9476df7d80dfc4 Dan Williams        2016-01-15  114  /**
+9476df7d80dfc4 Dan Williams        2016-01-15  115   * struct dev_pagemap - metadata for ZONE_DEVICE mappings
+4b94ffdc4163ba Dan Williams        2016-01-15  116   * @altmap: pre-allocated/reserved memory for vmemmap allocations
+5c2c2587b13235 Dan Williams        2016-01-15  117   * @ref: reference count that pins the devm_memremap_pages() mapping
+b80892ca022e9e Christoph Hellwig   2021-10-28  118   * @done: completion for @ref
+0c32c9f7a58e77 John Groves         2024-02-05  119   * @type: memory type: see MEMORY_* above in memremap.h
+514caf23a70fd6 Christoph Hellwig   2019-06-26  120   * @flags: PGMAP_* flags to specify defailed behavior
+c4386bd8ee3a92 Joao Martins        2022-01-14  121   * @vmemmap_shift: structural definition of how the vmemmap page metadata
+c4386bd8ee3a92 Joao Martins        2022-01-14  122   *      is populated, specifically the metadata page order.
+c4386bd8ee3a92 Joao Martins        2022-01-14  123   *	A zero value (default) uses base pages as the vmemmap metadata
+c4386bd8ee3a92 Joao Martins        2022-01-14  124   *	representation. A bigger value will set up compound struct pages
+c4386bd8ee3a92 Joao Martins        2022-01-14  125   *	of the requested order value.
+1e240e8d4a7d92 Christoph Hellwig   2019-06-26  126   * @ops: method table
+f894ddd5ff01d3 Christoph Hellwig   2020-03-16  127   * @owner: an opaque pointer identifying the entity that manages this
+f894ddd5ff01d3 Christoph Hellwig   2020-03-16  128   *	instance.  Used by various helpers to make sure that no
+f894ddd5ff01d3 Christoph Hellwig   2020-03-16  129   *	foreign ZONE_DEVICE memory is accessed.
+0386df765967ce Jordan Niethe       2025-12-31  130   * @nr_range: number of ranges to be mapped. Always == 1 for
+0386df765967ce Jordan Niethe       2025-12-31  131   *	MEMORY_DEVICE_PRIVATE.
+0386df765967ce Jordan Niethe       2025-12-31  132   * @range: range to be mapped when nr_range == 1. Used as an output param for
+0386df765967ce Jordan Niethe       2025-12-31  133   *	MEMORY_DEVICE_PRIVATE.
+b7b3c01b191596 Dan Williams        2020-10-13  134   * @ranges: array of ranges to be mapped when nr_range > 1
+0386df765967ce Jordan Niethe       2025-12-31  135   * @nr_pages: number of pages requested to be mapped for MEMORY_DEVICE_PRIVATE.
+0386df765967ce Jordan Niethe       2025-12-31  136   * @pages: array of nr_pages initialized for MEMORY_DEVICE_PRIVATE.
+9476df7d80dfc4 Dan Williams        2016-01-15  137   */
+9476df7d80dfc4 Dan Williams        2016-01-15  138  struct dev_pagemap {
+e7744aa25cffe2 Logan Gunthorpe     2017-12-29  139  	struct vmem_altmap altmap;
+b80892ca022e9e Christoph Hellwig   2021-10-28  140  	struct percpu_ref ref;
+24917f6b1041a7 Christoph Hellwig   2019-06-26  141  	struct completion done;
+5042db43cc26f5 Jérôme Glisse       2017-09-08  142  	enum memory_type type;
+514caf23a70fd6 Christoph Hellwig   2019-06-26  143  	unsigned int flags;
+c4386bd8ee3a92 Joao Martins        2022-01-14  144  	unsigned long vmemmap_shift;
+1e240e8d4a7d92 Christoph Hellwig   2019-06-26  145  	const struct dev_pagemap_ops *ops;
+f894ddd5ff01d3 Christoph Hellwig   2020-03-16  146  	void *owner;
+b7b3c01b191596 Dan Williams        2020-10-13  147  	int nr_range;
+b7b3c01b191596 Dan Williams        2020-10-13 @148  	union {
+b7b3c01b191596 Dan Williams        2020-10-13  149  		struct range range;
+06919d226d0113 Gustavo A. R. Silva 2022-09-03  150  		DECLARE_FLEX_ARRAY(struct range, ranges);
+b7b3c01b191596 Dan Williams        2020-10-13  151  	};
+0386df765967ce Jordan Niethe       2025-12-31  152  	unsigned long nr_pages;
+0386df765967ce Jordan Niethe       2025-12-31  153  	struct page *pages;
+9476df7d80dfc4 Dan Williams        2016-01-15  154  };
+9476df7d80dfc4 Dan Williams        2016-01-15  155  
 
 -- 
 0-DAY CI Kernel Test Service
