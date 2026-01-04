@@ -1,139 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216A61DF985;
-	Sun,  4 Jan 2026 05:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC07B2D876A
+	for <llvm@lists.linux.dev>; Sun,  4 Jan 2026 06:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767506225; cv=none; b=Eh8tdU8kfu+vzR0ry7Y3ubTqF7zCq3FQfhOcr8smZZSXDgguWHtyLbVDsXDR9aMLlFvlwtQ0MzA1hB1zgwRl+mGnO0ZPXxuwYwaqu1HOO5Gu1eqD8Y9XRNq3L08AYjP2NmMQ/uTrE/Ikl0cdhSoCPaktJbHCgMtfr0i5U8VXbDY=
+	t=1767506892; cv=none; b=RG3MjJm3OmJn2PTvC8kHFPcEwqRMwCJCf4E9/g95J8S2q+gxHntnYKt5Zce3EArCyMCYfoaq5uVfCc5cCb+1u/wBJmpVgXjfE11b7DJWOb1NGGKto6VsGaZygU2MvRRnaxNLotHWp+tP1/ST4JL2ohk1+E8f6WaRRkS0BvGY+Bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767506225; c=relaxed/simple;
-	bh=Hh7Bm5wXYDjBRU3I2k7OCElVnOBJlMHEC1HhrY3NEBs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tV+hw8givKCcvF0EZbb6ox71QuF7IafbIvvhIb3JiNe6RcBpkJC5pyMezug6OeTY6GyidPwhyoJKo56eZQKLnmPN1QZv6iSM5FJ9yB16y83C8PhZ98mulUGVsVRxW8STWSrHOgB30URTs13QwMOuJURZdwKnsDL4BdR+yDK3cqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oIDcckvg; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767506892; c=relaxed/simple;
+	bh=/vlYxBW1gH14hcw6MHQkRzxbor2vvHRcB3qBGQ2z+Ss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aWCD/hkmFmRAHheo2mIqNrMWQnflP1Z+ceqR80yfFFDgFiigvk+1ESrt9y8pKpIbGcLvuAvDwpH8C+QlhEDkRHUDhJM6+HdJInnE/zl4c1dRXjMgRhN9Y2DNcs/M3l/4b2kLLxuqKa4AJF3LioCY8+Ms+e+dlfbv6CfPYMX97EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=enMAZiVR; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oIDcckvg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767506223; x=1799042223;
-  h=date:from:to:cc:subject:message-id;
-  bh=Hh7Bm5wXYDjBRU3I2k7OCElVnOBJlMHEC1HhrY3NEBs=;
-  b=oIDcckvgsxmRPJl5b5Bbu1dXxQkmZ4Oci9i1fheHTepxKOKWQctNFjtU
-   P61Ma1kOjchHtefOI91j8QS+KM9Etx42nm4zKagSkfBii0fbOqJtTBSpN
-   yoBhRBEDQJBD0566iz9AbqrJUmAtdeJOUnpNswUyJxfSSjscjJIAi1EoV
-   UXLdH0RGEU3hNhK1iqFO3qtE5xPkoZbZjwh3mk3et5am0Ue46vGOrlsml
-   c2W3rVKSWDmygMAhmR0aeiAtrInIBAUwFdhQsP3dtSI2QV5bcW74Z+MUW
-   J2SXkI0siaLQhCEai8nO8ndAvxqLHFagqb/PxsYT4iJKFrr+HGAJSkIwj
-   A==;
-X-CSE-ConnectionGUID: v+IghrCzSyGhMRq6LdYgng==
-X-CSE-MsgGUID: msQOxBaLRj2cqxPzChEIKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="80286797"
-X-IronPort-AV: E=Sophos;i="6.21,200,1763452800"; 
-   d="scan'208";a="80286797"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2026 21:57:02 -0800
-X-CSE-ConnectionGUID: ohFU4H4TQhCpDYITlu0Vnw==
-X-CSE-MsgGUID: ihYmbPtESBezQj34QDJtfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,200,1763452800"; 
-   d="scan'208";a="206602777"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Jan 2026 21:57:01 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vcH6o-000000000Oj-3lqv;
-	Sun, 04 Jan 2026 05:56:58 +0000
-Date: Sun, 04 Jan 2026 13:56:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [trondmy-nfs-2.6:testing 26/35] fs/nfs/write.c:2049:6:
- warning: variable 'ret' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202601041331.pbHo7TSH-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="enMAZiVR"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5DCB840E0200;
+	Sun,  4 Jan 2026 06:08:06 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 1BXU3Dj6OJrw; Sun,  4 Jan 2026 06:08:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1767506882; bh=Dbqd0rL3/FzIbYne0vhVXhUp0QRkV7TNMnop++/0n8U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=enMAZiVRy0Q9A7ItoHWnobv+tvl+mDVSPdH9sE8UshUDMlbTN+XOqRAeD6FwExWC5
+	 w4vwj1Ye2A/+F+xsxC8ZOMK/RdWWsNuEHPrMspxFYJzCLbMtKezd4D2hTZ/RA7dyF1
+	 feA7pFKul4K6fP+QWjmPN3XaX5pa6Tdu8921zlU1AiAZfZbeWPDyWz0mxSLZGkb0ly
+	 KmTGLO1QvWi5ieJc7laJV1rjcTAwlVyDFD8badAYwO0eW8oaf9HhDOvU2cAE4o3SJ/
+	 zODjpTDmhIaZtZ2hR/Y2M+r+b/6q9OdEuREf90xWRIvkBFA2YOS/TlSyt5ZkF1XMHe
+	 cHXLwJZudGfeRkRkfFCmVnSaK3pjgLlyKNsOoa35WxFd8c/wqWD/rrrHrEdGDgEhBb
+	 iF2zf58pVMDV7Rt8u3aUUsXdB9/8CLIcK7gXjjnDY6TSlUus4DKqtcX7ePGniqPnmQ
+	 cTAfgiWIgU4PG4rVBv0pG1vnaWxaHcSKb7/8vCSOkAjFJ+8Yl1igGyaX5WcEdE28Cd
+	 iApE2X1AnNuUSIOAPefwx3GE1NPEtgMM9gBmm9sUdOtEZHWgCurBVS9D3p5IevNN1v
+	 0Q9APf9ib2SRH5pMreFVOZES5Y8kx8uAqFlQXM1ju36Xi4q70ox8GgBY2n1FwcwE6V
+	 TUs4hQKFVySZMEvQ7gPDir9k=
+Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 4107B40E01B0;
+	Sun,  4 Jan 2026 06:07:40 +0000 (UTC)
+Date: Sun, 4 Jan 2026 07:07:39 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Brendan Jackman <jackmanb@google.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Marco Elver <elver@google.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 1/3] kasan: mark !__SANITIZE_ADDRESS__ stubs
+ __always_inline
+Message-ID: <20260104060739.GAaVoDq_VggsNP5jif@fat_crate.local>
+References: <20251216-gcov-inline-noinstr-v3-0-10244d154451@google.com>
+ <20251216-gcov-inline-noinstr-v3-1-10244d154451@google.com>
+ <20251216130155.GD3707891@noisy.programming.kicks-ass.net>
+ <DF0JIYFQGFCP.9RDI8V58PFNH@google.com>
+ <20251218092439.GL3707891@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251218092439.GL3707891@noisy.programming.kicks-ass.net>
 
-tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
-head:   bf5a9581839ebeebbd3bd004a174fea9afa19dcb
-commit: 3533434037066b610d50e7bd36f3525ace296928 [26/35] NFS: Fix a deadlock involving nfs_release_folio()
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260104/202601041331.pbHo7TSH-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260104/202601041331.pbHo7TSH-lkp@intel.com/reproduce)
+On Thu, Dec 18, 2025 at 10:24:39AM +0100, Peter Zijlstra wrote:
+> > And in the meantime, I guess patch 3/3 is OK? 
+> 
+> I'm not sure, ISTR having yelled profanities at GCOV in general for
+> being just straight up broken. And people seem to insist on adding more
+> and more *COV variants and I keep yelling at them or something.
+> 
+> That is GCOV, KCOV and llvm-cov are all doing basically the same damn
+> thing (and sure, llvm-cov gets more edges but details) and we should not
+> be having 3 different damn interfaces for it. Also, they all should
+> bloody well respect noinstr and if they don't they're just broken and
+> all that :-)
+> 
+> That is, I'd as soon just make them all "depend BROKEN" and call it a
+> day.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601041331.pbHo7TSH-lkp@intel.com/
+Right.
 
-All warnings (new ones prefixed by >>):
+And I don't think anyone has had any serious plans for COV-ing the SEV code so
+lemme take 3/3.
 
->> fs/nfs/write.c:2049:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2049 |         if (folio_clear_dirty_for_io(folio)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/write.c:2056:9: note: uninitialized use occurs here
-    2056 |         return ret;
-         |                ^~~
-   fs/nfs/write.c:2049:2: note: remove the 'if' if its condition is always true
-    2049 |         if (folio_clear_dirty_for_io(folio)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2050 |                 trace_nfs_writeback_folio_reclaim(inode, range_start, len);
-    2051 |                 ret = nfs_writepage_locked(folio, &wbc);
-    2052 |                 trace_nfs_writeback_folio_reclaim_done(inode, range_start, len,
-    2053 |                                                        ret);
-    2054 |         } else
-         |           ~~~~
-    2055 |                 nfs_commit_inode(inode, 0);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/write.c:2045:9: note: initialize the variable 'ret' to silence this warning
-    2045 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+I, like Peter, am gravitating towards a kill-that-thing-with-a-master-switch
+instead of whack-a-mole-ing the kernel.
 
-
-vim +2049 fs/nfs/write.c
-
-  2026	
-  2027	/**
-  2028	 * nfs_wb_folio_reclaim - Write back all requests on one page
-  2029	 * @inode: pointer to page
-  2030	 * @folio: pointer to folio
-  2031	 *
-  2032	 * Assumes that the folio has been locked by the caller
-  2033	 */
-  2034	int nfs_wb_folio_reclaim(struct inode *inode, struct folio *folio)
-  2035	{
-  2036		loff_t range_start = folio_pos(folio);
-  2037		size_t len = folio_size(folio);
-  2038		struct writeback_control wbc = {
-  2039			.sync_mode = WB_SYNC_ALL,
-  2040			.nr_to_write = 0,
-  2041			.range_start = range_start,
-  2042			.range_end = range_start + len - 1,
-  2043			.for_sync = 1,
-  2044		};
-  2045		int ret;
-  2046	
-  2047		if (folio_test_writeback(folio))
-  2048			return -EBUSY;
-> 2049		if (folio_clear_dirty_for_io(folio)) {
-  2050			trace_nfs_writeback_folio_reclaim(inode, range_start, len);
-  2051			ret = nfs_writepage_locked(folio, &wbc);
-  2052			trace_nfs_writeback_folio_reclaim_done(inode, range_start, len,
-  2053							       ret);
-  2054		} else
-  2055			nfs_commit_inode(inode, 0);
-  2056		return ret;
-  2057	}
-  2058	
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
