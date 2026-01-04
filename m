@@ -1,97 +1,187 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49883277C9D
-	for <llvm@lists.linux.dev>; Sun,  4 Jan 2026 20:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD632D6E6B;
+	Sun,  4 Jan 2026 22:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767560020; cv=none; b=Z/vDgK7CAJB9YR091HIrfro3lbm1NpuuL8BadKK9hzzfwg4T0YoBvHQMETBA9vqLtxDQ6pTeyK2YXTplOlfsPZoj2OhDVh1JMLEnr2Hmz8AVXbGmhu6gRwkjwAqikSp1in5a8Oc5nYGtZ7whIqQYv0AfsCh75or6t14hMEJEnfM=
+	t=1767566376; cv=none; b=swhXE+E4UW2ivBTb7XjnqUgJ+sHoIfxKIDv5QwYtTOMQSX5W5ZSiWIKtv/T0Y+8RnFxcLP6I53o3XBWylwFs57Wcrisj024n126+r4f7SXXsZ9NVArFIsPDNC1IngM8lAjuIh/XJ65iHCN3sfXCVaSRjjL6IvgFPu6tH5IT4tdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767560020; c=relaxed/simple;
-	bh=sK5xKgJux8sT3Sx9ZUS8NtOGkJPrQ0I7tH8PhjrPm4A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iHB1ufjH4CB+sAd5TwM9QhKpSwuKcajNCywVjRRFitNGXVcE00MfNFDF+Gk0pOFhu7HjBFEjmuqGiuD2E6bxXBtGnDZfKe5Oqeqok/l0o6fctgWD/HPEyXoT20euLY8tOsch6zioOtSqWWNj/cEfil58fNXWTKFtl+vz+KPi2Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJFVsgbs; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767566376; c=relaxed/simple;
+	bh=17Ezu8/N3Z3LZM7I+XRKl0i15UkVlNBbcXgYP8T38Jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nKR/vpJRNv1LM8T6Uy+35VbQ+nH7dcU3DP1HheIKZsISpaA0xscZgXDa7VKltffwMoAeLFw3j2xTnjalPqbqtevAZKN1PHZoYZlH6J19zmUdpKVZyQ7rYCt7WjiDtD8ZDpts2qxUFroL4lzCylTvhMP1iTnQTVVOrIYI15nU77k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N62eSF0V; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJFVsgbs"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a110548f10so48535565ad.1
-        for <llvm@lists.linux.dev>; Sun, 04 Jan 2026 12:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767560018; x=1768164818; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sK5xKgJux8sT3Sx9ZUS8NtOGkJPrQ0I7tH8PhjrPm4A=;
-        b=eJFVsgbsvMRkYzoZA2OqiQJuhCnKg5x+AJtVvVD37K+sJatKW1UqfmaErFlwEtQ0H3
-         meeV6WDKEsAtUwgcbpTmJ1gH975az9l1byF+zRVPfb01FeDKWE58+J4n0VUHxgSXagCe
-         QCdpao4otivwSJzicwndsGZhdEE5Ln3iJNR2/nEJDclfj9IUjRVTI1HRf49jfy1YugwQ
-         d4jqZWtNLfzKwfqoZCYqOQrtLEoEVI056/4Vx5BfdpbD6olR/pLjRx3pZrIVgGLTITiC
-         4Dy2Zx6zh/3QcZuj/y4PB2QndwvUABNCOrPrloijFDFaTucSEMUq2VKChcdTWm5o73Bk
-         MBWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767560018; x=1768164818;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sK5xKgJux8sT3Sx9ZUS8NtOGkJPrQ0I7tH8PhjrPm4A=;
-        b=P8t3iuPtW1oCrOJVNgGfyeFebCDbf53li0tbkCuxhfKLQn9cACXwrd1lQb8GUkK9SC
-         +D+WYn9SQVqFJz3wLopjEcL0YOjaqr171IohJ+alroFSwDoxR0gnqoR5GRbWUN4O3RPQ
-         H2KwIOgOKomCzYtolgEu1gaSOYf4B+eZUglu1J+kXja/0M8lQss2hJXNbJAjal3ofVC3
-         HldSsDJXpEu22IL2Xwv99RVSCg/8euTnHYwdZjfrchzmyQjFUxGmP7OE4003SCeCubOG
-         4R5aHBWjXsH6qlJcw2sE3dVl+/I2vEE/yDre3nuEX/ZmrSgh+ikRp+C7FXzFF1G/7Tpi
-         m9yw==
-X-Forwarded-Encrypted: i=1; AJvYcCWz3/k1QYqRpxUFLz87mVExCqJfDXNNRq610yn6Us/mBG63oUAdUCFI9W/XTUK7Y2ox76Ey@lists.linux.dev
-X-Gm-Message-State: AOJu0YzA/hh3EkDHfTmXg1bZjzfc76onvMcBUEnLygoxEu+gmkP71vGq
-	RWIXYQT0QVqA06hiHHW2eVpsFBxFvAX1NCvAqqaauiSUvGgh7bWJ59qQXDrgk6Dl15IUm48hQgQ
-	UUG+44Dh2LHsU181HQ3j6PFxAMRMPeJc=
-X-Gm-Gg: AY/fxX4sjAU4bWcYInbC4+4OOiVEz5tjjNxx0r8uqfXFdSEzlYE4q9YZsxW0G0lSPLS
-	SBRnkCbcYUZG73HVC6HVqjRzqAUjtwedtSa9y0ws3EbaagX3S623jDpK2b7KsZirqrM49Jp71pj
-	1eyuNu+jTtL9k98RvsGnIbCWsqeYgV6Hm3V9Ia8tIKNeJzCgijClw8mW5fAHfNXmg+8FeU3RQ9c
-	F/TNk8RdPO/l+2kio0BaiwFSyKcStwtyNaoyhHWxk2pxS7SofphjNJfFBrSWDKZMTp1LyqfMJ0H
-	3Q+jey1qfQH/md+KWCuSFaw/aq8A2LRGTbgR0VcbvDMY7qg9XS4qZ0K9ogNMZC6pXW/j03x2ojy
-	XBf/u/7Njy7fq
-X-Google-Smtp-Source: AGHT+IEY5WU8qdT2x4W9RhyaoUAIxe/Revt/XcUhrg0fBmvqp9LK2uRUv+DpO1/rHFugYJh7v9P+cWIgLbf4IU/ffNQ=
-X-Received: by 2002:a05:7300:e9ce:20b0:2ae:5b31:5dc with SMTP id
- 5a478bee46e88-2b05ec6b143mr17044785eec.7.1767560018452; Sun, 04 Jan 2026
- 12:53:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N62eSF0V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767566375; x=1799102375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=17Ezu8/N3Z3LZM7I+XRKl0i15UkVlNBbcXgYP8T38Jw=;
+  b=N62eSF0Va2kK6nwaTz+gpI6gJ8rCosARb3xEaPKE3D5iVfvJ1VJ8Om+H
+   Q79wowUeIwjCNlTrVJngIMWVyLnkO0bgg9V4D1jGq/0Lp2VZ/fEO3MSOe
+   urloAPGnbZQ8yGJstu11hkeR4YsKMkL5AUzc4w4oIVy7Stfms+17KktTR
+   /tL6u83py+b4D6vQtN4nV/gnN0LnVlilcO29RpL7gzIo6d+TsnsrIZVHe
+   osE7IV+3zXHM35wFPbmT/DSKuGWERXPej0qc/qRhYQ1TO0TjwMWwlqoW3
+   Qj8PRg3/t3woYkI3RvvYxYJOC6BXUyVvT3yJ51HoHzXBtgjzrKRdK5vJv
+   Q==;
+X-CSE-ConnectionGUID: q1QlDecWTVG4HgPy6efjVg==
+X-CSE-MsgGUID: csQmQlHdTdmff5yM7PWbNQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11661"; a="67953290"
+X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
+   d="scan'208";a="67953290"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2026 14:39:34 -0800
+X-CSE-ConnectionGUID: vC+DQ5pkSwaMyp0CWDmDhw==
+X-CSE-MsgGUID: nqfsVbT7Q0GXrxuNhBNw5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
+   d="scan'208";a="203217809"
+Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
+  by fmviesa010.fm.intel.com with ESMTP; 04 Jan 2026 14:39:30 -0800
+Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vcWky-000000000y9-1BPW;
+	Sun, 04 Jan 2026 22:39:28 +0000
+Date: Sun, 4 Jan 2026 23:38:51 +0100
+From: kernel test robot <lkp@intel.com>
+To: Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Michael Klein <michael@fossekall.de>,
+	Aleksander Jan Bajkowski <olek2@wp.pl>,
+	Bevan Weiss <bevan.weiss@gmail.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 3/4] net: phy: realtek: use paged access for
+ MDIO_MMD_VEND2 in C22 mode
+Message-ID: <202601042339.7aMa6atC-lkp@intel.com>
+References: <d7053fe51fb857b634880be5dcec253858f01aff.1767531485.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251217150010.665153-1-siddhesh@gotplt.org> <20251217224050.1186896-1-siddhesh@gotplt.org>
-In-Reply-To: <20251217224050.1186896-1-siddhesh@gotplt.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 4 Jan 2026 21:53:25 +0100
-X-Gm-Features: AQt7F2qb1EDeyLmlG9hUTUI1fBPD9sLv7nfHHvfBJvOJxdTKvQkzrqD3Rmnu53k
-Message-ID: <CANiq72n0BtCxAsXOaNnSMWC-aW2bNTPzN=4VGb+ic8YA6jhsAw@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: Add -fdiagnostics-show-context to bindgen_skip_c_flags
-To: Siddhesh Poyarekar <siddhesh@gotplt.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: rust-for-linux@vger.kernel.org, Kees Cook <kees@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, stable@vger.kernel.org, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7053fe51fb857b634880be5dcec253858f01aff.1767531485.git.daniel@makrotopia.org>
 
-On Wed, Dec 17, 2025 at 11:41=E2=80=AFPM Siddhesh Poyarekar <siddhesh@gotpl=
-t.org> wrote:
->
-> but clang does not have this option, so avoid passing it to bindgen.
+Hi Daniel,
 
-This looks indeed correct, although it is not yet in a released GCC
-(testing quickly in Compiler Explorer, GCC 15.2 doesn't have it, but
-GCC trunk has).
+kernel test robot noticed the following build errors:
 
-I will apply it -- Cc'ing ClangBuiltLinux and Kbuild so that they are aware=
-.
+[auto build test ERROR on net-next/main]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/net-phy-realtek-fix-whitespace-in-struct-phy_driver-initializers/20260104-211500
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/d7053fe51fb857b634880be5dcec253858f01aff.1767531485.git.daniel%40makrotopia.org
+patch subject: [PATCH net-next 3/4] net: phy: realtek: use paged access for MDIO_MMD_VEND2 in C22 mode
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260104/202601042339.7aMa6atC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260104/202601042339.7aMa6atC-lkp@intel.com/reproduce)
 
-Cheers,
-Miguel
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601042339.7aMa6atC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/phy/realtek/realtek_main.c:1261:16: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
+    1261 |                                           devnum, mmdreg);
+         |                                                   ^~~~~~
+         |                                                   mmdrop
+   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
+      47 | static inline void mmdrop(struct mm_struct *mm)
+         |                    ^
+   drivers/net/phy/realtek/realtek_main.c:1270:19: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
+    1270 |                                 MII_MMD_DATA, mmdreg);
+         |                                               ^~~~~~
+         |                                               mmdrop
+   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
+      47 | static inline void mmdrop(struct mm_struct *mm)
+         |                    ^
+   drivers/net/phy/realtek/realtek_main.c:1309:17: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
+    1309 |                                            devnum, mmdreg, val);
+         |                                                    ^~~~~~
+         |                                                    mmdrop
+   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
+      47 | static inline void mmdrop(struct mm_struct *mm)
+         |                    ^
+   drivers/net/phy/realtek/realtek_main.c:1318:19: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
+    1318 |                                 MII_MMD_DATA, mmdreg);
+         |                                               ^~~~~~
+         |                                               mmdrop
+   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
+      47 | static inline void mmdrop(struct mm_struct *mm)
+         |                    ^
+   4 errors generated.
+
+
+vim +1261 drivers/net/phy/realtek/realtek_main.c
+
+  1248	
+  1249	/* RTL822x cannot access MDIO_MMD_VEND2 via MII_MMD_CTRL/MII_MMD_DATA.
+  1250	 * A mapping to use paged access needs to be used instead.
+  1251	 * All other MMD devices can be accessed as usual.
+  1252	 */
+  1253	static int rtl822xb_read_mmd(struct phy_device *phydev, int devnum, u16 reg)
+  1254	{
+  1255		int oldpage, ret, read_ret;
+  1256		u16 page;
+  1257	
+  1258		/* Use Clause-45 bus access in case it is available */
+  1259		if (phydev->is_c45)
+  1260			return __mdiobus_c45_read(phydev->mdio.bus, phydev->mdio.addr,
+> 1261						  devnum, mmdreg);
+  1262	
+  1263		/* Use indirect access via MII_MMD_CTRL and MII_MMD_DATA for all
+  1264		 * MMDs except MDIO_MMD_VEND2
+  1265		 */
+  1266		if (devnum != MDIO_MMD_VEND2) {
+  1267			__mdiobus_write(phydev->mdio.bus, phydev->mdio.addr,
+  1268					MII_MMD_CTRL, devnum);
+  1269			__mdiobus_write(phydev->mdio.bus, phydev->mdio.addr,
+  1270					MII_MMD_DATA, mmdreg);
+  1271			__mdiobus_write(phydev->mdio.bus, phydev->mdio.addr,
+  1272					MII_MMD_CTRL, devnum | MII_MMD_CTRL_NOINCR);
+  1273	
+  1274			return __mdiobus_read(phydev->mdio.bus, phydev->mdio.addr,
+  1275					       MII_MMD_DATA);
+  1276		}
+  1277	
+  1278		/* Use paged access for MDIO_MMD_VEND2 over Clause-22 */
+  1279		page = RTL822X_VND2_TO_PAGE(reg);
+  1280		oldpage = __phy_read(phydev, RTL821x_PAGE_SELECT);
+  1281		if (oldpage < 0)
+  1282			return ret;
+  1283	
+  1284		if (oldpage != page) {
+  1285			ret = __phy_write(phydev, RTL821x_PAGE_SELECT, page);
+  1286			if (ret < 0)
+  1287				return ret;
+  1288		}
+  1289	
+  1290		read_ret = __phy_read(phydev, RTL822X_VND2_TO_PAGE_REG(reg));
+  1291		if (oldpage != page) {
+  1292			ret = __phy_write(phydev, RTL821x_PAGE_SELECT, oldpage);
+  1293			if (ret < 0)
+  1294				return ret;
+  1295		}
+  1296	
+  1297		return read_ret;
+  1298	}
+  1299	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
