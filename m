@@ -1,89 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE363A1CD;
-	Sun,  4 Jan 2026 20:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49883277C9D
+	for <llvm@lists.linux.dev>; Sun,  4 Jan 2026 20:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767556946; cv=none; b=W7zVm33b28CGnZA64oRGA5fYycZ5WblKYU/0I6UjlJmFCgjaQswBpNhSxxrpgwV9qcuKlz8co8wfVSs/L4ugQCJAV94fPVknYf9uPu0zARreemqdqIlWdmR5nf/JExXhvLq1uJBOkpKXdssmbiKNfL8LWlMhlNVVGj6bMsTDGq4=
+	t=1767560020; cv=none; b=Z/vDgK7CAJB9YR091HIrfro3lbm1NpuuL8BadKK9hzzfwg4T0YoBvHQMETBA9vqLtxDQ6pTeyK2YXTplOlfsPZoj2OhDVh1JMLEnr2Hmz8AVXbGmhu6gRwkjwAqikSp1in5a8Oc5nYGtZ7whIqQYv0AfsCh75or6t14hMEJEnfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767556946; c=relaxed/simple;
-	bh=Y9ivLc3/6UA5b1BL4xU+Qc5YDdxrj6fvdTp9IZIZOQI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pk5zK0IsKG2ZsJ5nZbGK+q5b+UqDnfsyUHlS7lWo8wroR2qJ0RjTpCkKIVJevl6d8QCBdlgF5Kd87pmGNX+lVs6flRCLUCORQbBOuZOY/FHLPvqECDJNUBTiCZWZjjO3WSAFi8M+6QYcR4UeW9k6yvojsa6iwh3Ok1Qtj8JRg+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=USmq4lHL; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767560020; c=relaxed/simple;
+	bh=sK5xKgJux8sT3Sx9ZUS8NtOGkJPrQ0I7tH8PhjrPm4A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iHB1ufjH4CB+sAd5TwM9QhKpSwuKcajNCywVjRRFitNGXVcE00MfNFDF+Gk0pOFhu7HjBFEjmuqGiuD2E6bxXBtGnDZfKe5Oqeqok/l0o6fctgWD/HPEyXoT20euLY8tOsch6zioOtSqWWNj/cEfil58fNXWTKFtl+vz+KPi2Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJFVsgbs; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="USmq4lHL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767556944; x=1799092944;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y9ivLc3/6UA5b1BL4xU+Qc5YDdxrj6fvdTp9IZIZOQI=;
-  b=USmq4lHLXKz0Xg/9LxLOgoaEm31pFVouHobx3qmfaXnKnoxtCO2tJnBk
-   9zDn2inVw+CPFHvmhF5vLJlInUPX4hG0sMO33lztzGmhdPcO7iH70bllA
-   wIapF7H4uuYSzeP5ZkxKNw2/RP355lU4Y0eFcAXpLLvtA1/g/jmadUTr6
-   tXHo4jH5tSI5VRnat21Bqw6I4/2dymifNwtS2kc3glIHUkxtIRYOzYkYN
-   hujYkK8EuFECExNvL1/yhEeSmS1DW5r+Px9OJ+xvJyJllBiqcH5dx0g6x
-   4lXIabiCKiHIw1PcwpIPO9QVg6cNcfTWEC/Xm/yS+3WBiVz8u/F6JUWdr
-   w==;
-X-CSE-ConnectionGUID: ckB38sZEQHq/GNik0a8aqQ==
-X-CSE-MsgGUID: bExCzVhYSzqOVt8Ps4CyRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11661"; a="72786252"
-X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
-   d="scan'208";a="72786252"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2026 12:02:23 -0800
-X-CSE-ConnectionGUID: XR5bJNcDQ6uIWp9dYnof7A==
-X-CSE-MsgGUID: jRczdp6dSVaEZFQVG1Y7KQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
-   d="scan'208";a="206779188"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 04 Jan 2026 12:02:22 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vcUIu-000000000kf-2SZe;
-	Sun, 04 Jan 2026 20:02:20 +0000
-Date: Mon, 05 Jan 2026 04:01:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?"Cl=C3=A9ment?= =?utf-8?Q?_L=C3=A9ger"?= <cleger@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>,
- Himanshu Chauhan <hchauhan@ventanamicro.com>
-Subject: [avpatel:riscv_trace_support_v3 23/52] ld.lld: error:
- insufficient padding bytes for R_RISCV_ALIGN: 2 bytes available for requested
- alignment of 4 bytes
-Message-ID: <202601050302.WYAVzOpn-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJFVsgbs"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a110548f10so48535565ad.1
+        for <llvm@lists.linux.dev>; Sun, 04 Jan 2026 12:53:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767560018; x=1768164818; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sK5xKgJux8sT3Sx9ZUS8NtOGkJPrQ0I7tH8PhjrPm4A=;
+        b=eJFVsgbsvMRkYzoZA2OqiQJuhCnKg5x+AJtVvVD37K+sJatKW1UqfmaErFlwEtQ0H3
+         meeV6WDKEsAtUwgcbpTmJ1gH975az9l1byF+zRVPfb01FeDKWE58+J4n0VUHxgSXagCe
+         QCdpao4otivwSJzicwndsGZhdEE5Ln3iJNR2/nEJDclfj9IUjRVTI1HRf49jfy1YugwQ
+         d4jqZWtNLfzKwfqoZCYqOQrtLEoEVI056/4Vx5BfdpbD6olR/pLjRx3pZrIVgGLTITiC
+         4Dy2Zx6zh/3QcZuj/y4PB2QndwvUABNCOrPrloijFDFaTucSEMUq2VKChcdTWm5o73Bk
+         MBWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767560018; x=1768164818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sK5xKgJux8sT3Sx9ZUS8NtOGkJPrQ0I7tH8PhjrPm4A=;
+        b=P8t3iuPtW1oCrOJVNgGfyeFebCDbf53li0tbkCuxhfKLQn9cACXwrd1lQb8GUkK9SC
+         +D+WYn9SQVqFJz3wLopjEcL0YOjaqr171IohJ+alroFSwDoxR0gnqoR5GRbWUN4O3RPQ
+         H2KwIOgOKomCzYtolgEu1gaSOYf4B+eZUglu1J+kXja/0M8lQss2hJXNbJAjal3ofVC3
+         HldSsDJXpEu22IL2Xwv99RVSCg/8euTnHYwdZjfrchzmyQjFUxGmP7OE4003SCeCubOG
+         4R5aHBWjXsH6qlJcw2sE3dVl+/I2vEE/yDre3nuEX/ZmrSgh+ikRp+C7FXzFF1G/7Tpi
+         m9yw==
+X-Forwarded-Encrypted: i=1; AJvYcCWz3/k1QYqRpxUFLz87mVExCqJfDXNNRq610yn6Us/mBG63oUAdUCFI9W/XTUK7Y2ox76Ey@lists.linux.dev
+X-Gm-Message-State: AOJu0YzA/hh3EkDHfTmXg1bZjzfc76onvMcBUEnLygoxEu+gmkP71vGq
+	RWIXYQT0QVqA06hiHHW2eVpsFBxFvAX1NCvAqqaauiSUvGgh7bWJ59qQXDrgk6Dl15IUm48hQgQ
+	UUG+44Dh2LHsU181HQ3j6PFxAMRMPeJc=
+X-Gm-Gg: AY/fxX4sjAU4bWcYInbC4+4OOiVEz5tjjNxx0r8uqfXFdSEzlYE4q9YZsxW0G0lSPLS
+	SBRnkCbcYUZG73HVC6HVqjRzqAUjtwedtSa9y0ws3EbaagX3S623jDpK2b7KsZirqrM49Jp71pj
+	1eyuNu+jTtL9k98RvsGnIbCWsqeYgV6Hm3V9Ia8tIKNeJzCgijClw8mW5fAHfNXmg+8FeU3RQ9c
+	F/TNk8RdPO/l+2kio0BaiwFSyKcStwtyNaoyhHWxk2pxS7SofphjNJfFBrSWDKZMTp1LyqfMJ0H
+	3Q+jey1qfQH/md+KWCuSFaw/aq8A2LRGTbgR0VcbvDMY7qg9XS4qZ0K9ogNMZC6pXW/j03x2ojy
+	XBf/u/7Njy7fq
+X-Google-Smtp-Source: AGHT+IEY5WU8qdT2x4W9RhyaoUAIxe/Revt/XcUhrg0fBmvqp9LK2uRUv+DpO1/rHFugYJh7v9P+cWIgLbf4IU/ffNQ=
+X-Received: by 2002:a05:7300:e9ce:20b0:2ae:5b31:5dc with SMTP id
+ 5a478bee46e88-2b05ec6b143mr17044785eec.7.1767560018452; Sun, 04 Jan 2026
+ 12:53:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+References: <20251217150010.665153-1-siddhesh@gotplt.org> <20251217224050.1186896-1-siddhesh@gotplt.org>
+In-Reply-To: <20251217224050.1186896-1-siddhesh@gotplt.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 4 Jan 2026 21:53:25 +0100
+X-Gm-Features: AQt7F2qb1EDeyLmlG9hUTUI1fBPD9sLv7nfHHvfBJvOJxdTKvQkzrqD3Rmnu53k
+Message-ID: <CANiq72n0BtCxAsXOaNnSMWC-aW2bNTPzN=4VGb+ic8YA6jhsAw@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: Add -fdiagnostics-show-context to bindgen_skip_c_flags
+To: Siddhesh Poyarekar <siddhesh@gotplt.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: rust-for-linux@vger.kernel.org, Kees Cook <kees@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, stable@vger.kernel.org, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/avpatel/linux.git riscv_trace_support_v3
-head:   5f775d2c6c5439d7fdff647375b6382ba14cb496
-commit: 436870e0815c944d7287f1e30e8de020677850fe [23/52] drivers: firmware: add riscv SSE support
-config: riscv-randconfig-002-20260104 (https://download.01.org/0day-ci/archive/20260105/202601050302.WYAVzOpn-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260105/202601050302.WYAVzOpn-lkp@intel.com/reproduce)
+On Wed, Dec 17, 2025 at 11:41=E2=80=AFPM Siddhesh Poyarekar <siddhesh@gotpl=
+t.org> wrote:
+>
+> but clang does not have this option, so avoid passing it to bindgen.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601050302.WYAVzOpn-lkp@intel.com/
+This looks indeed correct, although it is not yet in a released GCC
+(testing quickly in Compiler Explorer, GCC 15.2 doesn't have it, but
+GCC trunk has).
 
-All errors (new ones prefixed by >>):
+I will apply it -- Cc'ing ClangBuiltLinux and Kbuild so that they are aware=
+.
 
->> ld.lld: error: insufficient padding bytes for R_RISCV_ALIGN: 2 bytes available for requested alignment of 4 bytes
->> ld.lld: error: insufficient padding bytes for R_RISCV_ALIGN: 2 bytes available for requested alignment of 4 bytes
->> ld.lld: error: insufficient padding bytes for R_RISCV_ALIGN: 2 bytes available for requested alignment of 4 bytes
->> ld.lld: error: insufficient padding bytes for R_RISCV_ALIGN: 2 bytes available for requested alignment of 4 bytes
->> ld.lld: error: insufficient padding bytes for R_RISCV_ALIGN: 2 bytes available for requested alignment of 4 bytes
+Thanks!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
