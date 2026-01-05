@@ -1,102 +1,125 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from gecko.ash.relay.mailchannels.net (gecko.ash.relay.mailchannels.net [23.83.222.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC753A1E89;
-	Mon,  5 Jan 2026 10:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767610379; cv=none; b=hdSD0HEoyL1bJGfaZxImX8zlxTI03kW7KGBB/TIKSJbRG98xzIJThtIx7dMh2PGLRV91aVgQiRSXClsZEfL63Xqkzk6H8tGDI30L7OpKDpAJ9Jd0r6NXz051AOinhsNRpnPUMn0uUwiIcu/EbwlN65PSBz60rTnuchNNykC7558=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767610379; c=relaxed/simple;
-	bh=Q2P69CQwyZPVXD08je39Ji5HIqSbRTNQlcSkwdK+RKM=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k5uN98KrTXoIoaASGkHtGJU8WhTbqXr+Y+86IUDwN7AnyQXXYv3DZOIeq+tDcvBSr/nLza40lu2XqAm3ehIMm+EnGz9P80ok0HyyiutWsIHQ9SCFUC21XiF/1+tbEqLXS3uyrZNysMCTndVucIa/t2x2g8sQAo6TCQ5kv9bHdcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dlB230nTyzJ46hp;
-	Mon,  5 Jan 2026 18:51:55 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 579F840539;
-	Mon,  5 Jan 2026 18:52:55 +0800 (CST)
-Received: from localhost (10.48.146.88) by dubpeml100005.china.huawei.com
- (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 5 Jan
- 2026 10:52:54 +0000
-Date: Mon, 5 Jan 2026 10:52:52 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-CC: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam
-	<festevam@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
- Desaulniers" <nick.desaulniers+lkml@gmail.com>, Bill Wendling
-	<morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	<linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH 1/3] ata: ahci-dwc: Simplify with scoped for each OF
- child loop
-Message-ID: <20260105105252.00003b5a@huawei.com>
-In-Reply-To: <20260102125040.65256-4-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260102125040.65256-4-krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5693358D2
+	for <llvm@lists.linux.dev>; Mon,  5 Jan 2026 12:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.222.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767615368; cv=pass; b=ksFicrw9LF43epscn65Fgr1e7dKUXK2tTY7haeH2zg2U4+FLb6LSoxarGIIZZNAt9OU6A605rjn6yinkU21wxksTHpYwAlAgM0dM8GeptOxXSRsZ1OX+RsE7B/6c1qX9lxNLhKNzusT+FdU7qUDSaHFRcI+aNEZ+recMoLUHxfQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767615368; c=relaxed/simple;
+	bh=afR4gIGQqWhtKSR1X6mRLeY3XvSaFBMOEvA0r09mFAg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mRsVrsDN6YuFj+vRl+I1W2RHXCQnKZy2Ba+ER3BHUZA7inA/C8xMI1HDML74lcR1Zs+ZApu4tPko6BGJaH+Jr5KfNF1UZ5Q9jKJBvU8dv5Oy2j8WoF4755Aia4+HsCuURpFriS7BmaSqkkCmVApqsOQbsxx5ZkSsuCGfReNWjC4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gotplt.org; spf=pass smtp.mailfrom=gotplt.org; dkim=pass (2048-bit key) header.d=gotplt.org header.i=@gotplt.org header.b=el1pXq7q; arc=pass smtp.client-ip=23.83.222.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gotplt.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gotplt.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gotplt.org header.i=@gotplt.org header.b="el1pXq7q"
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 83EEB1222CA;
+	Mon, 05 Jan 2026 10:58:33 +0000 (UTC)
+Received: from pdx1-sub0-mail-a207.dreamhost.com (100-112-117-24.trex-nlb.outbound.svc.cluster.local [100.112.117.24])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id C7EDB12141B;
+	Mon, 05 Jan 2026 10:58:30 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; d=mailchannels.net; s=arc-2022; cv=none;
+	t=1767610710;
+	b=yDaTHnunXJtHF1PfK/rKts/kNyY9OSz1ehYlnrSWv2j0FJ7+SY1cBIJbOQKNBLTFX+m+Xj
+	YP0WAAEOlUVbLIdGGBEfFmgPsAOK4f29csQFaA0AnZ2MN02m8E/lvxBn/CMK0liqh61lty
+	Q24mK6w9H0wumSr2I2p2Kpsd00i1pq3+V02VzF+ZOol1sAIudCo5tvE2e70mDUhGaBomva
+	SAPpk91dh7ERVFIZjbUkXzLICteXfypeV1/0IRGePPxCnOkqT69OL0JZ0GYYx12+HLKveB
+	13ye+z+KIXgupqCreSfaoMJQUAa4V/GETevGF1JYClfAYpJxp6n04ID7EnB+Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1767610710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=cNmAC3AVapO1Aew1Ac2I+U6usxxH3KR/0xXLpeGV+Do=;
+	b=IECAN491GkOpwdje5h1E80O+A9zqT7fjr2aWt3pHSd4etSy8RbCIbmSPQcpnB/R6Y7dlsC
+	35CiPU4mXGyH6hNwaNcgevNJ7YosJ4sTQJWJKQEda7QZRu4cCBKfjnuF6Cs3PGDYLTYDzb
+	uGuqo1gc+zrI1ZccLx+ooeS9DoBe6FMYLOSLsZf8lE9b5McI8e9U93RsiaD2WfAJu0OFb2
+	JaOQoDjpeY4evi+1GhyrZe6qV554cZG1sN93XYm7MXgsEfojG4cJGZzfZm2OLP6havDnWp
+	Q3eozlhl+S2EPc21imUraZcvQICdPKDH7i1R21ldONZ3HGT7pdaDkJvkZXbQWw==
+ARC-Authentication-Results: i=1;
+	rspamd-85db7f4c96-t7gj4;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=siddhesh@gotplt.org
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MailChannels-Auth-Id: dreamhost
+X-Tank-Battle: 5df69bd121c8e0dc_1767610713071_630209668
+X-MC-Loop-Signature: 1767610713071:3562879293
+X-MC-Ingress-Time: 1767610713070
+Received: from pdx1-sub0-mail-a207.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.112.117.24 (trex/7.1.3);
+	Mon, 05 Jan 2026 10:58:33 +0000
+Received: from [192.168.0.135] (unknown [38.23.181.90])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: siddhesh@gotplt.org)
+	by pdx1-sub0-mail-a207.dreamhost.com (Postfix) with ESMTPSA id 4dlB9d0Rx9z2D;
+	Mon,  5 Jan 2026 02:58:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gotplt.org;
+	s=dreamhost; t=1767610710;
+	bh=cNmAC3AVapO1Aew1Ac2I+U6usxxH3KR/0xXLpeGV+Do=;
+	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+	b=el1pXq7qeqARVsRQgySVTc8sbPJZjNYilZVwzUIguE51RPtjZu0tjbqIsq+lAm/Fh
+	 MMk6tA5Db0T4g2wvhKp8acteRO/d2R9/eIjpv90MyHwaoVYwnHB8GuNEaQAwvQetVe
+	 KqnoRvM8xF65YvdaXssbc2aplhU6H0+X4dk46Kp0hX46ykF2pPqi3MCeVs2CQ1ieGX
+	 8uj35Et1QZcvQ1BF1Xa8zbfRn62UBnB4H7S7G9F4UPK8JlRHPEPImlHSUhiRWHHM3F
+	 M5e1eZh7xmobNQiYDhti2Mo2Dt1r+y318qQvTYgQgGdxLXqJ0JDS2QTNP7VSWwq/A/
+	 BXhmZ35ZIC5Lg==
+Message-ID: <68d83837-cc78-43d0-a084-d783b9de83e9@gotplt.org>
+Date: Mon, 5 Jan 2026 05:58:27 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
- dubpeml100005.china.huawei.com (7.214.146.113)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] rust: Add -fdiagnostics-show-context to
+ bindgen_skip_c_flags
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: rust-for-linux@vger.kernel.org, Kees Cook <kees@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ stable@vger.kernel.org,
+ Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>
+References: <20251217150010.665153-1-siddhesh@gotplt.org>
+ <20251217224050.1186896-1-siddhesh@gotplt.org>
+ <CANiq72n0BtCxAsXOaNnSMWC-aW2bNTPzN=4VGb+ic8YA6jhsAw@mail.gmail.com>
+Content-Language: en-US
+From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+In-Reply-To: <CANiq72n0BtCxAsXOaNnSMWC-aW2bNTPzN=4VGb+ic8YA6jhsAw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri,  2 Jan 2026 13:50:41 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com> wrote:
-
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
+On 2026-01-04 15:53, Miguel Ojeda wrote:
+> On Wed, Dec 17, 2025 at 11:41 PM Siddhesh Poyarekar <siddhesh@gotplt.org> wrote:
+>>
+>> but clang does not have this option, so avoid passing it to bindgen.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> This looks indeed correct, although it is not yet in a released GCC
+> (testing quickly in Compiler Explorer, GCC 15.2 doesn't have it, but
+> GCC trunk has).
 
-A whilst you are here suggestion inline to make it a bit simpler.
+Yes, sorry I didn't mention that in my commit message; it's mentioned in 
+Kees' commit message (7454048db27d6).
 
-> ---
->  drivers/ata/ahci_dwc.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
-> index aec6d793f51a..bfd24772ee67 100644
-> --- a/drivers/ata/ahci_dwc.c
-> +++ b/drivers/ata/ahci_dwc.c
-> @@ -260,7 +260,6 @@ static void ahci_dwc_init_timer(struct ahci_host_priv *hpriv)
->  static int ahci_dwc_init_dmacr(struct ahci_host_priv *hpriv)
->  {
->  	struct ahci_dwc_host_priv *dpriv = hpriv->plat_data;
-> -	struct device_node *child;
->  	void __iomem *port_mmio;
->  	u32 port, dmacr, ts;
->  
-> @@ -271,14 +270,12 @@ static int ahci_dwc_init_dmacr(struct ahci_host_priv *hpriv)
->  	 * the HBA global reset so we can freely initialize it once until the
->  	 * next system reset.
->  	 */
-> -	for_each_child_of_node(dpriv->pdev->dev.of_node, child) {
-> +	for_each_child_of_node_scoped(dpriv->pdev->dev.of_node, child) {
->  		if (!of_device_is_available(child))
+> I will apply it -- Cc'ing ClangBuiltLinux and Kbuild so that they are aware.
 
-for_each_available_child_of_node_scoped()?
+Thank you!
 
->  			continue;
->  
-> -		if (of_property_read_u32(child, "reg", &port)) {
-> -			of_node_put(child);
-> +		if (of_property_read_u32(child, "reg", &port))
->  			return -EINVAL;
-> -		}
->  
->  		port_mmio = __ahci_port_base(hpriv, port);
->  		dmacr = readl(port_mmio + AHCI_DWC_PORT_DMACR);
-
+Sid
