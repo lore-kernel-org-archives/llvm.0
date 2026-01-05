@@ -1,83 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F6E2836E;
-	Mon,  5 Jan 2026 23:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40CD2EFD95;
+	Mon,  5 Jan 2026 23:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767656770; cv=none; b=oBNYxicAgd8LyKHT2m0yRnym8NaeXikUXRV5JhVHP6gCVisyAIHyvSC9wEJhq+YJGLTwVDQ5jkSlsVgS1Jr25k6MxLlJik0EtCKBMvJAru4V0431YuTmybqyRFobFNPHdKTGifvgsbtPRs/gZCF0ZqEG+KPP+WUXBt1opgYkqkE=
+	t=1767657412; cv=none; b=tUwNy2ZAWVuXCeYWcTGpWwDSC8t0mxq2mkA863YdVvu3GvVgDLkm3WGKeGlaAKe8pnDXLMLJNtAeqoBkGRyWzl0f4U4QFy38yR3oHWZrvYdI/r1eJ5WDeSt/FsG1sHsbCgh/UQMJtt5GKI6letdftmw7XWwJ42GLaRIytlQboRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767656770; c=relaxed/simple;
-	bh=dvIS49jbsB+FpD9rVQ/xwSlM0vYensYCvpHNdfR853g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T2Co7rRNbRgicNppyUJjqPTVh1bd0DN0YtLJZ6Lk1DN+nDgM00TD2kyekwcWX7GCnCfYz4gs9mK8Yu2Tp4b4TISNjujw1HPrz1fsDDaSLdq9Vq1mouxM4VPYIZ7e0n7s479k04e9RJYLefgONCSyH4BBjobvsYwXTrAwPvIQuFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jdb/+SAI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767657412; c=relaxed/simple;
+	bh=HBefWBHNf4ymkXE1PWUOS9//5AiwqnDSrYphgTjisOw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=CEUZrwbwO4Knkxh5+yATwEKppzRLRnBRXzHNbrx/Qr3mo7s03jsAlRTSdGWhhh+QnzunEtudaXJIAbnvPeR0dvh05N++57sEMUt1VkQq7JPrHZZheQ7c0DPJzKhIG7YZuVyiqc0tuqs9FxIRyPdOQxmX5o/gu76SDClYzGc1J3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDg/o9QI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jdb/+SAI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE1BC116D0;
-	Mon,  5 Jan 2026 23:46:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDg/o9QI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30CAFC16AAE;
+	Mon,  5 Jan 2026 23:56:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767656769;
-	bh=dvIS49jbsB+FpD9rVQ/xwSlM0vYensYCvpHNdfR853g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jdb/+SAINQcEyGffd+mvJMEToFc+bpGUdfmefBXU/EWBqxYCkjumV/VeAy6ke2Ix/
-	 Yd2IqNunNAyjGRfJuMcsKc3m5zKMPWksQXpDiwUiGhE3izDb2WHK6Uyx9bdxVWzreb
-	 tUq+H9am9B0aR+lbqvtVcc3xYznpWJ6AZ6nqAuy9mZPYy40oK8kdKUGtzd+n3E90+Q
-	 31zFL++axBoA6J6ycaQTqtnCeMUWHdp05uGJstyyKzdndiYBEt5ZLcEAikq7lzoBxG
-	 E4JnfwvRwzptJ8i0h6xkZFrxnGK8wEZiPougsyWVauZ3q+3wjfiWUuIMPMtcFGJ0sG
-	 geOQl3dSrHSDg==
-Date: Mon, 5 Jan 2026 16:46:05 -0700
+	s=k20201202; t=1767657411;
+	bh=HBefWBHNf4ymkXE1PWUOS9//5AiwqnDSrYphgTjisOw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=nDg/o9QIX94RGxQ8o4uWO4940lF6rBh8EFCk3iRRe/0G/kimpAVyxBjGu72E209mZ
+	 Y5ZOLi28OSOum6l7U3P09kVpW9Q2LnDDcyqt2OhvRjROl0Bsj0UVcBzi6NDmpBKrsB
+	 wf4GUjw9MHOHelPU40BYYO+3r9YrNQurpm2lKJojrcAOM+sEOw0Q/9F5DhoFZCzoo9
+	 fWxBGf1doRNqR/a1PAaLfulyfPTtPLgYKbwz4s8i0O3VXiS5pQElQ7gweku3dkN4Tg
+	 GSi+yG3RZnvRpG6OOh+KtL4zREbWF6dmCW/spLJ7som9azTud0QYzBXHd/gIFvWwez
+	 +2YeHHtpWUTjw==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next] scripts/gen-btf.sh: Disable LTO when generating
- initial .o file
-Message-ID: <20260105234605.GB1276749@ax162>
-References: <20260105-fix-gen-btf-sh-lto-v1-1-18052ea055a9@kernel.org>
- <ff8187bd-0bae-4b49-8844-6c975a2e79c6@linux.dev>
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Vincent Mailhol <mailhol@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org, 
+ linux-hardening@vger.kernel.org
+In-Reply-To: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
+References: <20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org>
+Subject: Re: [PATCH v3 0/3] kbuild: remove gcc's -Wtype-limits
+Message-Id: <176765740692.3236304.10853846154010651497.b4-ty@kernel.org>
+Date: Mon, 05 Jan 2026 16:56:46 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff8187bd-0bae-4b49-8844-6c975a2e79c6@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev
 
-On Mon, Jan 05, 2026 at 02:01:36PM -0800, Ihor Solodrai wrote:
-> Hi Nathan, thank you for the patch.
+On Sat, 20 Dec 2025 12:02:18 +0100, Vincent Mailhol wrote:
+> I often read on the mailing list people saying "who cares about W=2
+> builds anyway?". At least I do. Not that I want to fix all of them,
+> but on some occasions, such as new driver submissions, I have often
+> found a couple valid diagnostics in the W=2 output.
 > 
-> I'm starting to think it wasn't a good idea to do
+> That said, the annoying thing is that W=2 is heavily polluted by one
+> warning: -Wtype-limits. Try a gcc W=2 build on any file and see the
+> results for yourself. I suspect this to be the reason why so few
+> people are using W=2.
 > 
-> 	echo "" | ${CC} ...
-> 
-> here, given the number of associated bugs.
+> [...]
 
-Yeah, I was wondering if a lack of KBUILD_CPPFLAGS would also be a
-problem since that contains the endianness flag for some targets. I
-cannot imagine any more issues than that but I can understand wanting to
-back out of it.
+Applied to
 
-> Before gen-btf.sh was introduced, the .btf.o binary was generated with this [1]:
-> 
-> 	${OBJCOPY} --only-section=.BTF --set-section-flags .BTF=alloc,readonly \
-> 		--strip-all ${1} "${btf_data}" 2>/dev/null
-> 
-> I changed to ${CC} on the assumption it's a quicker operation than
-> stripping entire vmlinux. But maybe it's not worth it and we should
-> change back to --strip-all? wdyt?
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
 
-That certainly seems more robust to me. I see the logic but with
-'--only-section' and no glob, I would expect that to be a rather quick
-operation but I am running out of time today to test and benchmark such
-a change. I will try to do it tomorrow unless someone beats me to it.
+Thanks!
 
-Cheers,
-Nathan
+[1/3] kbuild: remove gcc's -Wtype-limits
+      https://git.kernel.org/kbuild/c/660e899103e29
+[2/3] kbuild: cleanup local -Wno-type-limits exceptions
+      https://git.kernel.org/kbuild/c/34a1bd0b6b2c0
+[3/3] overflow: Remove is_non_negative() and is_negative()
+      https://git.kernel.org/kbuild/c/5ce3218d4f102
+
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted.
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
