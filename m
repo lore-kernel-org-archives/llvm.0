@@ -1,186 +1,153 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD632D6E6B;
-	Sun,  4 Jan 2026 22:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5E421CC51;
+	Mon,  5 Jan 2026 04:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767566376; cv=none; b=swhXE+E4UW2ivBTb7XjnqUgJ+sHoIfxKIDv5QwYtTOMQSX5W5ZSiWIKtv/T0Y+8RnFxcLP6I53o3XBWylwFs57Wcrisj024n126+r4f7SXXsZ9NVArFIsPDNC1IngM8lAjuIh/XJ65iHCN3sfXCVaSRjjL6IvgFPu6tH5IT4tdk=
+	t=1767588390; cv=none; b=XLNGnjAcgEK1JJ6VnaFdylI+uI7fP7im5yJHmR1u7uI6HzoTe1X3l8wDDiT3bsA+m+yWoCjV24HZRUPOGzJly1GXbz/YyDJlZ1/HHWE80KODW9C+WdsDO33ZLUx09koIbW70hdntzoGZCPiESpmJ75fBCRehVFdbWV1+PIzojMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767566376; c=relaxed/simple;
-	bh=17Ezu8/N3Z3LZM7I+XRKl0i15UkVlNBbcXgYP8T38Jw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nKR/vpJRNv1LM8T6Uy+35VbQ+nH7dcU3DP1HheIKZsISpaA0xscZgXDa7VKltffwMoAeLFw3j2xTnjalPqbqtevAZKN1PHZoYZlH6J19zmUdpKVZyQ7rYCt7WjiDtD8ZDpts2qxUFroL4lzCylTvhMP1iTnQTVVOrIYI15nU77k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N62eSF0V; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1767588390; c=relaxed/simple;
+	bh=e66a15lEvMS5/0tetiz2yLJL3T9fHXsu4MzXu0oYxec=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GdhxaX4JS3ObmAwKyMFppKBotCzw99VrgWmWwQ/dkqDvzu1ePbZZW+WkW6iPB/6hoDMtT4GdBpuyHl/tsjRuGc9a0P4eeunffAEBbup8dUA6r+o4IEMj617SOklS82mzEbDiHVIiIju5O/1k3gnk3niO3JUVS7uYDCw1IF0TXlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WhK4rz0m; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N62eSF0V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WhK4rz0m"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767566375; x=1799102375;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=17Ezu8/N3Z3LZM7I+XRKl0i15UkVlNBbcXgYP8T38Jw=;
-  b=N62eSF0Va2kK6nwaTz+gpI6gJ8rCosARb3xEaPKE3D5iVfvJ1VJ8Om+H
-   Q79wowUeIwjCNlTrVJngIMWVyLnkO0bgg9V4D1jGq/0Lp2VZ/fEO3MSOe
-   urloAPGnbZQ8yGJstu11hkeR4YsKMkL5AUzc4w4oIVy7Stfms+17KktTR
-   /tL6u83py+b4D6vQtN4nV/gnN0LnVlilcO29RpL7gzIo6d+TsnsrIZVHe
-   osE7IV+3zXHM35wFPbmT/DSKuGWERXPej0qc/qRhYQ1TO0TjwMWwlqoW3
-   Qj8PRg3/t3woYkI3RvvYxYJOC6BXUyVvT3yJ51HoHzXBtgjzrKRdK5vJv
+  t=1767588386; x=1799124386;
+  h=date:from:to:cc:subject:message-id;
+  bh=e66a15lEvMS5/0tetiz2yLJL3T9fHXsu4MzXu0oYxec=;
+  b=WhK4rz0mQFVUzxfa0r4aRYSR6An+RuouQw5J9cDaPs6lp328hV8LShz+
+   IHOAHTFsOpON1z0e56FsHrgG+xWNAurutEBG/Pc/3L+fzUtYEhLZFeAJ/
+   Rc/FJmTVaZMNSJqAkJfOV52ACP1sTHsCjRBV1YqE8nqqh0XgX1hVl6w6j
+   Pa36WFXmT/arl8+KUrYIboXHKTDdS7+7ca0wU8zLSaTB94SWFA+MU3O7a
+   V/7O+ILq0qAWmBRxTYOLHNkvEBFUs0oGVRWZaWplwX3G7n2adNYe2qcdO
+   KuMKeajLS7pok35F7kYOkebrovMGdBaewBzLrLFf8ZHpA+jTCCzTAmTFE
    Q==;
-X-CSE-ConnectionGUID: q1QlDecWTVG4HgPy6efjVg==
-X-CSE-MsgGUID: csQmQlHdTdmff5yM7PWbNQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11661"; a="67953290"
+X-CSE-ConnectionGUID: MepKoDP4QTSY+WAQ4nP1kg==
+X-CSE-MsgGUID: OrOB1ruXSQ6ClquJp9hJOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11661"; a="67965066"
 X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
-   d="scan'208";a="67953290"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2026 14:39:34 -0800
-X-CSE-ConnectionGUID: vC+DQ5pkSwaMyp0CWDmDhw==
-X-CSE-MsgGUID: nqfsVbT7Q0GXrxuNhBNw5g==
+   d="scan'208";a="67965066"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2026 20:46:25 -0800
+X-CSE-ConnectionGUID: BFNiGtvcTiquc4zhMt9meg==
+X-CSE-MsgGUID: sflfUcZORl+soO98ljR6eg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
-   d="scan'208";a="203217809"
-Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 04 Jan 2026 14:39:30 -0800
-Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+   d="scan'208";a="206780138"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Jan 2026 20:46:22 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vcWky-000000000y9-1BPW;
-	Sun, 04 Jan 2026 22:39:28 +0000
-Date: Sun, 4 Jan 2026 23:38:51 +0100
+	id 1vccU0-000000000wH-3KdF;
+	Mon, 05 Jan 2026 04:46:20 +0000
+Date: Mon, 05 Jan 2026 12:45:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Michael Klein <michael@fossekall.de>,
-	Aleksander Jan Bajkowski <olek2@wp.pl>,
-	Bevan Weiss <bevan.weiss@gmail.com>, linux-kernel@vger.kernel.org
+To: Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 3/4] net: phy: realtek: use paged access for
- MDIO_MMD_VEND2 in C22 mode
-Message-ID: <202601042339.7aMa6atC-lkp@intel.com>
-References: <d7053fe51fb857b634880be5dcec253858f01aff.1767531485.git.daniel@makrotopia.org>
+ Linux Memory Management List <linux-mm@kvack.org>,
+ Sasha Levin <sashal@kernel.org>
+Subject: [sashal-next:mm-next 5/7]
+ arch/loongarch/net/bpf_jit.c:1322:7: error: call to undeclared function
+ '__bpf_address_lookup'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202601051241.10hXC1ge-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d7053fe51fb857b634880be5dcec253858f01aff.1767531485.git.daniel@makrotopia.org>
 
-Hi Daniel,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/net-phy-realtek-fix-whitespace-in-struct-phy_driver-initializers/20260104-211500
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/d7053fe51fb857b634880be5dcec253858f01aff.1767531485.git.daniel%40makrotopia.org
-patch subject: [PATCH net-next 3/4] net: phy: realtek: use paged access for MDIO_MMD_VEND2 in C22 mode
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260104/202601042339.7aMa6atC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260104/202601042339.7aMa6atC-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sashal/linux-next.git mm-next
+head:   e10a56cdd2c231b8e6e59651bf02e3878ea3cc76
+commit: 5c48a0498b4b96a11af18d27ae295822bc40e0c3 [5/7] Merge 'mm-nonmm-unstable' from https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm (mm-nonmm-unstable)
+config: loongarch-randconfig-002-20260105 (https://download.01.org/0day-ci/archive/20260105/202601051241.10hXC1ge-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260105/202601051241.10hXC1ge-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601042339.7aMa6atC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601051241.10hXC1ge-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/phy/realtek/realtek_main.c:1261:16: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
-    1261 |                                           devnum, mmdreg);
-         |                                                   ^~~~~~
-         |                                                   mmdrop
-   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
-      47 | static inline void mmdrop(struct mm_struct *mm)
-         |                    ^
-   drivers/net/phy/realtek/realtek_main.c:1270:19: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
-    1270 |                                 MII_MMD_DATA, mmdreg);
-         |                                               ^~~~~~
-         |                                               mmdrop
-   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
-      47 | static inline void mmdrop(struct mm_struct *mm)
-         |                    ^
-   drivers/net/phy/realtek/realtek_main.c:1309:17: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
-    1309 |                                            devnum, mmdreg, val);
-         |                                                    ^~~~~~
-         |                                                    mmdrop
-   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
-      47 | static inline void mmdrop(struct mm_struct *mm)
-         |                    ^
-   drivers/net/phy/realtek/realtek_main.c:1318:19: error: use of undeclared identifier 'mmdreg'; did you mean 'mmdrop'?
-    1318 |                                 MII_MMD_DATA, mmdreg);
-         |                                               ^~~~~~
-         |                                               mmdrop
-   include/linux/sched/mm.h:47:20: note: 'mmdrop' declared here
-      47 | static inline void mmdrop(struct mm_struct *mm)
-         |                    ^
-   4 errors generated.
+>> arch/loongarch/net/bpf_jit.c:1322:7: error: call to undeclared function '__bpf_address_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1322 |         if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
+         |              ^
+   arch/loongarch/net/bpf_jit.c:1322:7: note: did you mean 'bpf_address_lookup'?
+   include/linux/filter.h:1378:5: note: 'bpf_address_lookup' declared here
+    1378 | int bpf_address_lookup(unsigned long addr, unsigned long *size,
+         |     ^
+   1 error generated.
 
 
-vim +1261 drivers/net/phy/realtek/realtek_main.c
+vim +/__bpf_address_lookup +1322 arch/loongarch/net/bpf_jit.c
 
-  1248	
-  1249	/* RTL822x cannot access MDIO_MMD_VEND2 via MII_MMD_CTRL/MII_MMD_DATA.
-  1250	 * A mapping to use paged access needs to be used instead.
-  1251	 * All other MMD devices can be accessed as usual.
-  1252	 */
-  1253	static int rtl822xb_read_mmd(struct phy_device *phydev, int devnum, u16 reg)
-  1254	{
-  1255		int oldpage, ret, read_ret;
-  1256		u16 page;
-  1257	
-  1258		/* Use Clause-45 bus access in case it is available */
-  1259		if (phydev->is_c45)
-  1260			return __mdiobus_c45_read(phydev->mdio.bus, phydev->mdio.addr,
-> 1261						  devnum, mmdreg);
-  1262	
-  1263		/* Use indirect access via MII_MMD_CTRL and MII_MMD_DATA for all
-  1264		 * MMDs except MDIO_MMD_VEND2
-  1265		 */
-  1266		if (devnum != MDIO_MMD_VEND2) {
-  1267			__mdiobus_write(phydev->mdio.bus, phydev->mdio.addr,
-  1268					MII_MMD_CTRL, devnum);
-  1269			__mdiobus_write(phydev->mdio.bus, phydev->mdio.addr,
-  1270					MII_MMD_DATA, mmdreg);
-  1271			__mdiobus_write(phydev->mdio.bus, phydev->mdio.addr,
-  1272					MII_MMD_CTRL, devnum | MII_MMD_CTRL_NOINCR);
-  1273	
-  1274			return __mdiobus_read(phydev->mdio.bus, phydev->mdio.addr,
-  1275					       MII_MMD_DATA);
-  1276		}
-  1277	
-  1278		/* Use paged access for MDIO_MMD_VEND2 over Clause-22 */
-  1279		page = RTL822X_VND2_TO_PAGE(reg);
-  1280		oldpage = __phy_read(phydev, RTL821x_PAGE_SELECT);
-  1281		if (oldpage < 0)
-  1282			return ret;
-  1283	
-  1284		if (oldpage != page) {
-  1285			ret = __phy_write(phydev, RTL821x_PAGE_SELECT, page);
-  1286			if (ret < 0)
-  1287				return ret;
-  1288		}
-  1289	
-  1290		read_ret = __phy_read(phydev, RTL822X_VND2_TO_PAGE_REG(reg));
-  1291		if (oldpage != page) {
-  1292			ret = __phy_write(phydev, RTL821x_PAGE_SELECT, oldpage);
-  1293			if (ret < 0)
-  1294				return ret;
-  1295		}
-  1296	
-  1297		return read_ret;
-  1298	}
-  1299	
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1305  
+ae4a3160d19cd16 Menglong Dong 2025-11-18  1306  int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ae4a3160d19cd16 Menglong Dong 2025-11-18  1307  		       enum bpf_text_poke_type new_t, void *old_addr,
+ae4a3160d19cd16 Menglong Dong 2025-11-18  1308  		       void *new_addr)
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1309  {
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1310  	int ret;
+ae4a3160d19cd16 Menglong Dong 2025-11-18  1311  	bool is_call;
+73721d8676771c6 Chenghao Duan 2025-12-31  1312  	unsigned long size = 0;
+73721d8676771c6 Chenghao Duan 2025-12-31  1313  	unsigned long offset = 0;
+73721d8676771c6 Chenghao Duan 2025-12-31  1314  	void *image = NULL;
+73721d8676771c6 Chenghao Duan 2025-12-31  1315  	char namebuf[KSYM_NAME_LEN];
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1316  	u32 old_insns[LOONGARCH_LONG_JUMP_NINSNS] = {[0 ... 4] = INSN_NOP};
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1317  	u32 new_insns[LOONGARCH_LONG_JUMP_NINSNS] = {[0 ... 4] = INSN_NOP};
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1318  
+3d770bd11b94306 Hengqi Chen   2025-10-02  1319  	/* Only poking bpf text is supported. Since kernel function entry
+3d770bd11b94306 Hengqi Chen   2025-10-02  1320  	 * is set up by ftrace, we rely on ftrace to poke kernel functions.
+3d770bd11b94306 Hengqi Chen   2025-10-02  1321  	 */
+73721d8676771c6 Chenghao Duan 2025-12-31 @1322  	if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1323  		return -ENOTSUPP;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1324  
+73721d8676771c6 Chenghao Duan 2025-12-31  1325  	image = ip - offset;
+73721d8676771c6 Chenghao Duan 2025-12-31  1326  
+73721d8676771c6 Chenghao Duan 2025-12-31  1327  	/* zero offset means we're poking bpf prog entry */
+73721d8676771c6 Chenghao Duan 2025-12-31  1328  	if (offset == 0) {
+73721d8676771c6 Chenghao Duan 2025-12-31  1329  		/* skip to the nop instruction in bpf prog entry:
+73721d8676771c6 Chenghao Duan 2025-12-31  1330  		 * move t0, ra
+73721d8676771c6 Chenghao Duan 2025-12-31  1331  		 * nop
+73721d8676771c6 Chenghao Duan 2025-12-31  1332  		 */
+73721d8676771c6 Chenghao Duan 2025-12-31  1333  		ip = image + LOONGARCH_INSN_SIZE;
+73721d8676771c6 Chenghao Duan 2025-12-31  1334  	}
+73721d8676771c6 Chenghao Duan 2025-12-31  1335  
+ae4a3160d19cd16 Menglong Dong 2025-11-18  1336  	is_call = old_t == BPF_MOD_CALL;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1337  	ret = emit_jump_or_nops(old_addr, ip, old_insns, is_call);
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1338  	if (ret)
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1339  		return ret;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1340  
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1341  	if (memcmp(ip, old_insns, LOONGARCH_LONG_JUMP_NBYTES))
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1342  		return -EFAULT;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1343  
+ae4a3160d19cd16 Menglong Dong 2025-11-18  1344  	is_call = new_t == BPF_MOD_CALL;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1345  	ret = emit_jump_or_nops(new_addr, ip, new_insns, is_call);
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1346  	if (ret)
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1347  		return ret;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1348  
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1349  	mutex_lock(&text_mutex);
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1350  	if (memcmp(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES))
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1351  		ret = larch_insn_text_copy(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES);
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1352  	mutex_unlock(&text_mutex);
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1353  
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1354  	return ret;
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1355  }
+9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1356  
+
+:::::: The code at line 1322 was first introduced by commit
+:::::: 73721d8676771c6c7b06d4e636cc053fc76afefd LoongArch: BPF: Enhance the bpf_arch_text_poke() function
+
+:::::: TO: Chenghao Duan <duanchenghao@kylinos.cn>
+:::::: CC: Huacai Chen <chenhuacai@loongson.cn>
 
 -- 
 0-DAY CI Kernel Test Service
