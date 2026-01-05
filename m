@@ -1,47 +1,59 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13EB2FD1B6;
-	Mon,  5 Jan 2026 15:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B02302CDE;
+	Mon,  5 Jan 2026 15:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767627329; cv=none; b=XU3UGCSpxphOG/lkXJU04sYvF8GVk2WJDPjBOcILP41TqmUwF/r/NhZ6zXH/z3qzyFg80ecsMV3IfptHfY6wM623EuRNLIe43g0xJDHul/J6ahME2esAaRpY6alqw4IyrfE8aNSX1vp2PAYNjkGQxzKiWDotoGQ/S1z32mxDlYI=
+	t=1767628220; cv=none; b=sXqEXcmIvBhW8bJxGubS881QjBDM7zwQ8DdB0l25bpqlZ0paPcK4C7+oaF6x4pdig4kRfJPufwUFbYtJGFk/MI3U0Ockli41OYr8dwTp+nNy3IWQWg3wlvJ/UV2QZI3pTT+kfDbCvKwZpM+uKxXLGXAW+D2t3cteKFCvJaSnY4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767627329; c=relaxed/simple;
-	bh=O4aBjEbbObV3cNtGvoDkesjGiNuLHJOfZI0S/+mkDO4=;
+	s=arc-20240116; t=1767628220; c=relaxed/simple;
+	bh=PEBb9wQ9FhUg8cFiXLTuY3wqyM/GKiSBkUlFyaUf5rs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aFdkUAxmbBPZSdv0geOi/Tn4jiit7p57Gt/p55kWC3TrsES9R1t4skPo+8174m/z+hmmqBwEVVp5JRomuG4+4prpMA0z/cY19k+5cSHwT8jYXAPCvyxdnqHTCKS4yMzKkW6I3YZIOeaSmw9m1HC0jiIHXjkt2DT/ajd9KO3ieJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=sVDc9Vwf; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=W3q0sbv0tVZLo3ySo9+N0I4L22Bzw88d/FWbIHZj/sZva8zu/Mju+xK3e26AhrDDrgSbU0YzoGcTaVYMq2DIAKZi8vYOyvQysRC9s9twn+FDC9bJDGgtYT7A1cpbI9G4/h68rMmcqtgndsdew59/7FOGWlA9n3780vAkzHP1Sxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7Rn7+vz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="sVDc9Vwf"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Dua1dCY1BlwzgYeD5iOt6sOUoTdhebb29bX4E+I1q5I=; b=sVDc9VwfVaKh6SxeyD7rLbxGPw
-	mIkFftZvVQ8l0TyyWYILIBvggJT8LgTG3GKMMXTswfP7sMdHak5m6gK9WXEAnGq8B0v5UIPOLPJV4
-	dgXN8LMF3yEHxC7CqMMxTNN7lOGN/7wEa13SVh3mXY5Y8lpaYcrNSGAOO21ua9q1PFrOTiFrkU5RA
-	5/81Jc4EeJ8sxx5MB73huze1sUBVCnKd8zf26cI7fOH40Gkuk/W4S95j77YhWb4scXVQiQ5/7SIPl
-	PFz9dxPJZqsIBNv0hM1SI8Dl9V04UQ0ZWck0Gok/6sFD9721LOhU7KROA5KKDp8I/7lv5YOqOBUGx
-	SH8GAZRQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vcmc5-0000000AYJq-3uld;
-	Mon, 05 Jan 2026 15:35:22 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 70615300E8E; Mon, 05 Jan 2026 16:35:20 +0100 (CET)
-Date: Mon, 5 Jan 2026 16:35:20 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>, hca@linux.ibm.com
-Cc: Marco Elver <elver@google.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [peterz-queue:locking/core 34/39] WARNING: modpost: EXPORT
- symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol
- will not be versioned.
-Message-ID: <20260105153520.GV3707891@noisy.programming.kicks-ass.net>
-References: <202512222219.F6EkVNmQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7Rn7+vz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9452EC116D0;
+	Mon,  5 Jan 2026 15:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767628219;
+	bh=PEBb9wQ9FhUg8cFiXLTuY3wqyM/GKiSBkUlFyaUf5rs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R7Rn7+vzVt+oMNXnuQeC1RPbR4DEgVq4UZXIZLLRMMVTEPWCIie1N2Ldspnbr+gju
+	 8SJXafZVhZmrPl0AAdp17Mn7idzAsGfTbvnRDVmeY2mZm9xNoG9f5oq7em7UXTFxz+
+	 1bEXlsnZefiVDn08aUyOAmc1h0AxeoP6vsoFunY/eBYrBeIE8n00/M4s/0QKsxDfoP
+	 +k4hjUjjwaBMuxNUc+0cHN0wvZYi+Y+0fBXqMSjYB5yBIG8C+yOYqpYUa9uzCGCNhB
+	 wWMit6XKEV0GDryt+7Xza90EdUS68GMZ+yX600jHQv4wRbgVecbofsR7DawxNf5OPp
+	 WpSpZR3Or/kcg==
+Date: Mon, 5 Jan 2026 12:50:15 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Gary Guo <gary@garyguo.net>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andi Kleen <ak@linux.intel.com>, Dmitry Vyukov <dvyukov@google.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] perf symbol: remove Rust symbol workarounds
+Message-ID: <aVvdt90YmhJz3i5i@x1>
+References: <20260105150106.567830-1-gary@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,35 +62,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202512222219.F6EkVNmQ-lkp@intel.com>
+In-Reply-To: <20260105150106.567830-1-gary@kernel.org>
 
-On Mon, Dec 22, 2025 at 10:11:10PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-> head:   77b4ebc9e43b02f3c50dab48963d969964ea83ef
-> commit: ee771bab5add646af678f7a40b6272c21a0964d7 [34/39] stackdepot: Enable context analysis
-> config: s390-defconfig (https://download.01.org/0day-ci/archive/20251222/202512222219.F6EkVNmQ-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 185f5fd5ce4c65116ca8cf6df467a682ef090499)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251222/202512222219.F6EkVNmQ-lkp@intel.com/reproduce)
+On Mon, Jan 05, 2026 at 03:00:57PM +0000, Gary Guo wrote:
+> From: Gary Guo <gary@garyguo.net>
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202512222219.F6EkVNmQ-lkp@intel.com/
+> Due to an off-by-one error introduced in commit 73bbb94466fd ("kallsyms:
+> support "big" kernel symbols"), long symbols (which are currently only
+> produced by Rust) can have their symbol type being wrongly parsed by
+> kernel/kallsyms.c.
+
+Looks sane, applied to perf-tools-next,
+
+- Arnaldo
+ 
+> This has been fixed in commit f3f9f42232dee5 ("kallsyms: Fix wrong "big"
+> kernel symbol type read from procfs"), and these symbols are now
+> reported correctly.
 > 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> Drop the workaround in perf symbol that filter out these symbol types.
 > 
-> >> WARNING: modpost: EXPORT symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol will not be versioned.
-> Is "stack_depot_save_flags" prototyped in <asm/asm-prototypes.h>?
-> >> WARNING: modpost: EXPORT symbol "stack_depot_save" [vmlinux] version generation failed, symbol will not be versioned.
-> Is "stack_depot_save" prototyped in <asm/asm-prototypes.h>?
-
-Heiko, I'm seeing these warnings, and I can reproduce in a local build.
-But I have to note that its just one more of an already existing string
-of similar failures.
-
-I don't see anything like this on x86, not have I had robot reports for
-other architectures. As such, I'm considering this a pre-existing s390
-issue.
-
-Please let me know if this is something you want me to look at
-nevertheless.
+> Specifically, '1' and 'l' can never be generated by nm -- 'u' does
+> indicate GNU unique, however such symbols are only generated by G++ for
+> C++ templates, and are never generated by LLVM (LLVM generates weak
+> symbols in such cases instead). 'N' can appear if symbols exist inside
+> debug sections, and 'n' may appear for symbols inside note sections,
+> however these sections do not typically have symbol (and they're
+> explicitly filtered out by kallsyms).
+> 
+> Therefore, the previous occurrence of these symbols types must be due to
+> the off-by-one error and can be safely removed.
+> 
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> ---
+> v2:
+> - Removed the "__" change as suggested by Miguel
+> - Expanded the commit message to mention why "N" and "n" cannot appear
+> - Link to v1: https://lore.kernel.org/rust-for-linux/20251223175216.1353814-1-gary@kernel.org/#t
+> ---
+>  tools/perf/util/symbol.c | 19 ++++---------------
+>  1 file changed, 4 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index 814f960fa8f8d..8662001e1e25b 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -104,21 +104,10 @@ static enum dso_binary_type binary_type_symtab[] = {
+>  
+>  #define DSO_BINARY_TYPE__SYMTAB_CNT ARRAY_SIZE(binary_type_symtab)
+>  
+> -static bool symbol_type__filter(char __symbol_type)
+> -{
+> -	// Since 'U' == undefined and 'u' == unique global symbol, we can't use toupper there
+> -	// 'N' is for debugging symbols, 'n' is a non-data, non-code, non-debug read-only section.
+> -	// According to 'man nm'.
+> -	// 'N' first seen in:
+> -	// ffffffff9b35d130 N __pfx__RNCINvNtNtNtCsbDUBuN8AbD4_4core4iter8adapters3map12map_try_foldjNtCs6vVzKs5jPr6_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+> -	// a seemingly Rust mangled name
+> -	// Ditto for '1':
+> -	// root@x1:~# grep ' 1 ' /proc/kallsyms
+> -	// ffffffffb098bc00 1 __pfx__RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+> -	// ffffffffb098bc10 1 _RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+> -	char symbol_type = toupper(__symbol_type);
+> -	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B' ||
+> -	       __symbol_type == 'u' || __symbol_type == 'l' || __symbol_type == 'N' || __symbol_type == '1';
+> +static bool symbol_type__filter(char symbol_type)
+> +{
+> +	symbol_type = toupper(symbol_type);
+> +	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B';
+>  }
+>  
+>  static int prefix_underscores_count(const char *str)
+> 
+> base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
+> -- 
+> 2.51.2
