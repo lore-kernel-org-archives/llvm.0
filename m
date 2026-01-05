@@ -1,174 +1,143 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FBF337119
-	for <llvm@lists.linux.dev>; Mon,  5 Jan 2026 14:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A854346FA5;
+	Mon,  5 Jan 2026 15:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767623398; cv=none; b=Wpz4eBz0iPHQ3gODWKH+coK1K7ST7acTtqb93924ze2vgu7iqK7AZSdWiw8osYbuiW+pI/89tL/1j/Hloc5bj2xj0wGqV7kJ+K09M2eJ/BvGlQ1HE5J1b+Emv9mD0kRqs6tBjxJoYrgdcguDTxbu8QtbtcFHhrWbmlVbfsC5UMY=
+	t=1767625277; cv=none; b=ISFA8fnc6GnapBNkL4c1KEIu2k4iWGj3wwry6aZ5o5aRUyOWpuQs3CcfJhK626moBCQ/FbsNTBx9zwgWb+38mDbl2wrP4lCfLeUyDZsCFBqmQuClF1CY23IWnjVuROhUV0NOjtoGhq4/5Ul5yX/HBSCaB8p1R44TncUnxY8pogE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767623398; c=relaxed/simple;
-	bh=BWYdpph40V6+ahw3fGxd5TEaRDtyIoFvWrDnre9gYGI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SIeTR2D2TnrYZLfofjOQONNglIHveXqNHJH1ielOteg4VWyBQEs/EIOfatEfSXFIyCKVlrU/KoCv9+qL81ZcxHOs+jvQQO/UpMRuBr/KrAjR5VxsC7VYqLjabMFyrJBJRhr14hSumPkrGoUc9zwKR+QAH60I7/Tet7cJbLSqfIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GKrGuv+M; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Hloa9vLo; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1767625277; c=relaxed/simple;
+	bh=YLMKOZuVzDuqeOTYIfEGrkR0nqoifKRHFSqLGuFhapk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MxpBBJ+WWNI9SrEGNKHPduPr8Oc0HYxwfApC53LIasi9HHzuzphq6s/SZs3aWwc8kdlKVrGngJfFN62qmuDQ8/l+wi4cPqSCYUxxmHQjqMrYs2JdJoicTgo57M3Lg6g9vUiRlxmWqke/c9tEQK5o/fypB+YM1M2pNDY5Cmerv2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jRAWNi1k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GKrGuv+M";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Hloa9vLo"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6058K0nO3895225
-	for <llvm@lists.linux.dev>; Mon, 5 Jan 2026 14:29:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=+iNK/CviJGp
-	soYfpGa3P7BzXOJu5rWNivgQO0pzVOhI=; b=GKrGuv+MDRzWfoH6u2MOaWA+jUS
-	QMJW14mjgycgebMrgtwzzoIz1KFBvmTRklF6sUa4KahKDwl3Q4YwULmRTNGLgT8V
-	C7zBejimhM++9gZO+sZQYp4ILpQ93ODbv+zI5iOwGwZfK+PPimmXNYA7Vn2LLfGQ
-	uG93w5yRfvjPEQ6+p4nEe1OgI8pMBGISOm3HO+s3BVYYhGSI37a94vKxOpZcSGja
-	B/tQnUYg0vPlxcriq0N3ZccNDltxupt+vOOpXW3PsgXaFMNUVs2s5HFGU7l9j2/E
-	Tg4FAvhQCwJmAa8jOeVqwTnE8yPSXFUGjbk2xTLesjIK811F41xPHEi2BiQ==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4beuvd4r3j-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 05 Jan 2026 14:29:55 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ed6855557aso52277711cf.1
-        for <llvm@lists.linux.dev>; Mon, 05 Jan 2026 06:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767623395; x=1768228195; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+iNK/CviJGpsoYfpGa3P7BzXOJu5rWNivgQO0pzVOhI=;
-        b=Hloa9vLoVbN2McXWoikhXnEvNpXC8iDFn0ZksvNFe3/hv48AlWVCiFQP/1GRfrP/JV
-         jsJ9RdxeSlNquO1Bh9+Ekb/CGpYY7OvnlUbG3gyU/zngT5Fn3JldmPA0r1F8l2CO7I+a
-         kBHrk5HvePUrV7vPACB1abtTV3Wf2ngjACdznd1ycQd0xxLqScAfDeFtszS8SK5CfYnX
-         5EbNerNpNkvVje635gFEYFe0cRTHVDQoXP2L8bW9CPG+hISrdlsPHJ4EKsw3wYkRa9qi
-         GCAHcZPdXHNSsX0+SAQDCQf2iAM7fZ+ccq6Y1mRbWLm7q9xY2t/i4rpC2PSK/0OwS9lc
-         QxPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767623395; x=1768228195;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+iNK/CviJGpsoYfpGa3P7BzXOJu5rWNivgQO0pzVOhI=;
-        b=alZVc4bNa1K2hEvWnhBhKcfar3HSRlPZMkLuVbGMlMT/4++PHRPe7c2/JLc1KdFUb2
-         MWPfd21U1B3wwQ/OYJRVdAScKka3Qv4Gc3KX0Cec5//6i9Ec/2xYo5ucNo5q10FL1o3X
-         ekl8YaeikXGj42Z0yFZbw9DEahRCgZW/YRIcpLBLdI0BvvvgNRgA8ZwkHt7JWg6tdRZq
-         XiiVfetdgNMkMdznXAQX70AJB9h0h05xsbRWMVuA0Uu1B36PnvPBfRRIrN6rTnJ2PkBc
-         WLYuKrtE693xK069BY0pHJOkbM4zPQ4NeAQykZJFq5lYVph5WU3pLuiLTZJ7BKCTQfMx
-         wcBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVaMwekShnIue7v3yErdMHKO5u6Xo0NlQ6FiZhkptCwxaFUc5Hf+2Ms0v7fs9M6Du3JfP0f@lists.linux.dev
-X-Gm-Message-State: AOJu0YyiyORiRXIkxUAd3LaJcVlzyVtnbZHQUkO655EXrW/1lntqvS9W
-	/OwRqhfVzPR0IuEvesH0igbT+wYpjuDqVklO3N3Dk1yQkQcgctYH4CXwllXb9Q9GHqm8vZcUeoV
-	9RicOzUvSl7uI27CEsJhoRbcxnAyvqG6Kch7HDTpgFLePy+oT9cc+maYyYEm5UdRv
-X-Gm-Gg: AY/fxX5hEgT0wRZ8QaBFjb9i3soR5eSafsk+Bve5Rh8b54dKJgaWw+VqickO4njD7BV
-	mkpSvo4rhcEzfasU5AzZl3HA/Lqh4bnJBP54Aalx0jEQCs2oihr/H5HYdneV64IFAW91UBbKa37
-	lhGeOU3t9GO/uDKMO8foQXNV2Fuu4b926DbqIpfFBEII/E0SJZg7vm41wGQTPyF2/BtOlD+x03q
-	+c6ad5ZYMap9sf32SSelXk58FSjEnqRH+qnHURAGKD1bkJ8s117mwEyzMuil48+9m+ent+3QTi6
-	TFnSVN/1WY82OBzG/5dUS3nJg3pFkPTNCumIJO2kPQsd/kAwIyDvZiIY63q/HRYJtU+NymSsQIi
-	Se6I5+/WBSqaMer6+InBna1xNzg==
-X-Received: by 2002:a05:622a:1114:b0:4e8:916f:9716 with SMTP id d75a77b69052e-4ff473d0731mr134520831cf.36.1767623394592;
-        Mon, 05 Jan 2026 06:29:54 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE06SnXQd0QyMUw3KAomX8sIlRFZrYWQP05g/qKtByRhTo4HPd8NEFQcvSlC7YlkgOoEKitQA==
-X-Received: by 2002:a05:622a:1114:b0:4e8:916f:9716 with SMTP id d75a77b69052e-4ff473d0731mr134520491cf.36.1767623394170;
-        Mon, 05 Jan 2026 06:29:54 -0800 (PST)
-Received: from quoll ([178.197.218.229])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842673b560sm2074066b.33.2026.01.05.06.29.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 06:29:53 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-To: Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH v2 3/3] ata: ahci-xgene: Fix Wvoid-pointer-to-enum-cast warning
-Date: Mon,  5 Jan 2026 15:29:47 +0100
-Message-ID: <20260105142944.372959-6-krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260105142944.372959-4-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260105142944.372959-4-krzysztof.kozlowski@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jRAWNi1k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B1AC116D0;
+	Mon,  5 Jan 2026 15:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767625276;
+	bh=YLMKOZuVzDuqeOTYIfEGrkR0nqoifKRHFSqLGuFhapk=;
+	h=From:To:Cc:Subject:Date:Reply-To:From;
+	b=jRAWNi1kwqtS0MLuVIZiBHGKkOf/BJGcPYUpxF9YIgaGbLwytRM3q1qIqpY4oZ0lz
+	 rMK61sovOa9ZVhD9lQ7e9Q/B3oLd+d7qN7ShbybXyV7k4JMmmsp0hEuyYrXT3dHgsf
+	 PlGwwZNTek40g+NCoo+iP1VEm/NthQH6ROj5469/wAwZZOpFL3+Ib8JKt6ikGT3TG/
+	 L+M96ABWz016ftyZVH4gsbwnK7qxJjXKIm0VF614tAhP3UVyxb658IY43En5demMwA
+	 DCxQmjnabz3KE0AO9Uv2qWJo7J5ngHDSE0GS3A0nK1mSnyYsKT+6tcXeTrTYxDaM0P
+	 jrNFxSSSPukpQ==
+From: Gary Guo <gary@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] perf symbol: remove Rust symbol workarounds
+Date: Mon,  5 Jan 2026 15:00:57 +0000
+Message-ID: <20260105150106.567830-1-gary@kernel.org>
+X-Mailer: git-send-email 2.51.2
+Reply-To: Gary Guo <gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=897; i=krzysztof.kozlowski@oss.qualcomm.com;
- h=from:subject; bh=BWYdpph40V6+ahw3fGxd5TEaRDtyIoFvWrDnre9gYGI=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpW8raBLsX3Vc5LQN/Lm/KA2HXWJ3ElsyFcYpKw
- oci58LT6wKJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaVvK2gAKCRDBN2bmhouD
- 18W/D/9BzNbkGi3fl7+u/MRsmiQ4kbuD38XsWOnVNS+RGOdpux08sN4iFjzr3Qvr756CrBgHF3h
- stnwcqEDDpEEK/gmVbPiOVxnL2akfXubjpbd5m2yuaHW/1pUULHCLLL7/n4nDmihY6i7G4m8PLa
- R61etURmds9vifnE3hkCKsZfc1ZxmeEvP0XuKTTV+YSKcNuMAAABCQS2IqcphURKrif+wDd5olw
- Ofe542fLtcTf7aT3p4ntPfwzfHDrE9dAjkEO/Ymz9gmwD8/EbjqX+nChs1LkxT7Z4E+PBOjdvdA
- ZBQM2DhKPVsp4xW2bFpNEx9hsCZe1JPSQCkhZ7kCyiBKsrwIa9qV3gDDYaHP8vvfivW+0cxCZp/
- udr0JU1stNjyXAgysiXaXUcnHDFrCs+aRWmQRGku5UANHi5OSqe2yxMxKCEU4x/p2cQpSuePdNk
- RzLiw9L8xvbledztQcqx8Z48tTFoBbem3qjyplQdQ+Gvv5UQjZxeDbPBf4M7+BuSgZIaiSQGFd+
- BaPLMa//bPBu1TjLNWSnFf52tywgSbijSfC7oM1Xw/aV2kHhzLmzBnRaA15rbAFvF5XlNoO1uMY
- +SRaNcbfYi3Nc7+ReyYxQJW4/fiLDSsnsuXul2FeRPkQYje5Pveh7YYWUAp13qoPmXmcoGqAjGq Sr/2aiwJPTacv+A==
-X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: SutEDEgq7SEV5hG6_CVDJzmFjpPCQ38h
-X-Proofpoint-GUID: SutEDEgq7SEV5hG6_CVDJzmFjpPCQ38h
-X-Authority-Analysis: v=2.4 cv=OuhCCi/t c=1 sm=1 tr=0 ts=695bcae3 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=Eb9f15NH/cHKzfGOmZSO4Q==:17
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=O-IaotXkb1TqCMFDYkEA:9 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA1MDEyNiBTYWx0ZWRfX4g9qNd66l3Vz
- GsIwQH7iYmElU6vA4gBfd+ylpwHH0s1RDvHvzsrA7WvaRpKnpb2tCC8mBXV41CrdHyYiapuBqTy
- XJmICCgEMj4CbzEvimTd0QmiPErR8MpTw97y7wF1DxhlKuvL6b9tgV03PTdFzmP4agbn9iK4lfc
- dYAP4kgaD8JIaGtx4rARD/yhCcB5liPNlJ7FSEJkWmJhf2JALqPEhj4lQ9xdlhAgZmWcYxeNnP3
- J7UpHtoJImPbGNbOG/nKw/fqNjxZZ4Qlrp9+ormNYyy0xNX5Ig8J/eJfDtB56iggTAPWN7Hl/sr
- /Ebe7V/Gj/FRg9ZLNAFX31rpsZD6m2vD2q4B+/LNdjYXknt1y5evNh2NrqKyUoldaQkE/Lfcbwx
- n8CZZ9uiuDcRnIp+XO+umBZU44Twx3ds41ArVy0Kl+PzKx2lyJ1pG3UK2dTjZA5fRaQ6IO3+N6b
- uziz4V0HmIOcTGoXX7A==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-05_01,2026-01-05_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 suspectscore=0 bulkscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601050126
 
-"version" is an enum, thus cast of pointer on 64-bit compile test with
-clang W=1 causes:
+From: Gary Guo <gary@garyguo.net>
 
-  ahci_xgene.c:776:13: error: cast to smaller integer type 'enum xgene_ahci_version' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+Due to an off-by-one error introduced in commit 73bbb94466fd ("kallsyms:
+support "big" kernel symbols"), long symbols (which are currently only
+produced by Rust) can have their symbol type being wrongly parsed by
+kernel/kallsyms.c.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+This has been fixed in commit f3f9f42232dee5 ("kallsyms: Fix wrong "big"
+kernel symbol type read from procfs"), and these symbols are now
+reported correctly.
 
+Drop the workaround in perf symbol that filter out these symbol types.
+
+Specifically, '1' and 'l' can never be generated by nm -- 'u' does
+indicate GNU unique, however such symbols are only generated by G++ for
+C++ templates, and are never generated by LLVM (LLVM generates weak
+symbols in such cases instead). 'N' can appear if symbols exist inside
+debug sections, and 'n' may appear for symbols inside note sections,
+however these sections do not typically have symbol (and they're
+explicitly filtered out by kallsyms).
+
+Therefore, the previous occurrence of these symbols types must be due to
+the off-by-one error and can be safely removed.
+
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Gary Guo <gary@garyguo.net>
 ---
-
-Changes in v2:
-1. None
+v2:
+- Removed the "__" change as suggested by Miguel
+- Expanded the commit message to mention why "N" and "n" cannot appear
+- Link to v1: https://lore.kernel.org/rust-for-linux/20251223175216.1353814-1-gary@kernel.org/#t
 ---
- drivers/ata/ahci_xgene.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/symbol.c | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/ata/ahci_xgene.c b/drivers/ata/ahci_xgene.c
-index 6b8844646fcd..98c99b5a8242 100644
---- a/drivers/ata/ahci_xgene.c
-+++ b/drivers/ata/ahci_xgene.c
-@@ -773,7 +773,7 @@ static int xgene_ahci_probe(struct platform_device *pdev)
- 	}
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index 814f960fa8f8d..8662001e1e25b 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -104,21 +104,10 @@ static enum dso_binary_type binary_type_symtab[] = {
  
- 	if (dev->of_node) {
--		version = (enum xgene_ahci_version)of_device_get_match_data(dev);
-+		version = (unsigned long)of_device_get_match_data(dev);
- 	}
- #ifdef CONFIG_ACPI
- 	else {
+ #define DSO_BINARY_TYPE__SYMTAB_CNT ARRAY_SIZE(binary_type_symtab)
+ 
+-static bool symbol_type__filter(char __symbol_type)
+-{
+-	// Since 'U' == undefined and 'u' == unique global symbol, we can't use toupper there
+-	// 'N' is for debugging symbols, 'n' is a non-data, non-code, non-debug read-only section.
+-	// According to 'man nm'.
+-	// 'N' first seen in:
+-	// ffffffff9b35d130 N __pfx__RNCINvNtNtNtCsbDUBuN8AbD4_4core4iter8adapters3map12map_try_foldjNtCs6vVzKs5jPr6_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+-	// a seemingly Rust mangled name
+-	// Ditto for '1':
+-	// root@x1:~# grep ' 1 ' /proc/kallsyms
+-	// ffffffffb098bc00 1 __pfx__RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+-	// ffffffffb098bc10 1 _RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+-	char symbol_type = toupper(__symbol_type);
+-	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B' ||
+-	       __symbol_type == 'u' || __symbol_type == 'l' || __symbol_type == 'N' || __symbol_type == '1';
++static bool symbol_type__filter(char symbol_type)
++{
++	symbol_type = toupper(symbol_type);
++	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B';
+ }
+ 
+ static int prefix_underscores_count(const char *str)
+
+base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
 -- 
-2.51.0
+2.51.2
 
