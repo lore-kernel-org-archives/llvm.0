@@ -1,102 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0C7230BE9;
-	Mon,  5 Jan 2026 19:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF144414;
+	Mon,  5 Jan 2026 20:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767640637; cv=none; b=RhONbA+mmAQx/bKZzHhlhkiTlaeqUGJLLhzX4bXH9RU2olAm+1/mco1KLKMMqb+yXinOO3qcdloWVPh0eey7jgbxNuWmqiYNZdfxLP4b/Bc5Dmxq/gnXEwA4ayW0OG7rxOH7sW8WQ3Y9SG6c9r5BFeB/bffcTNXg8gngef+Ej6M=
+	t=1767646031; cv=none; b=C3/FN6+pPHDIeKSpcREF0NdltQ4SI9pivwVGdizjt2VBE+q/3d5TTjPlgEq3s21GjABL5H4fCCs0upr0savkX5IaBcx5Y78m6NhBCGjIVzCO3E9sslupZ7GRBjk2sl1QLSsoLjEt1s9inEB2vEjLTJYOyij17fugshmPN0KXYc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767640637; c=relaxed/simple;
-	bh=tja02UDzBs7wICK3Voj6Ot/znyUDcV2n437uw4TqOgo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=D9SuOTLDv4um2TJOmkY9gBD1ax40LQSdIRLDKn7X66MQfrwi7Q7E2jUL+UwnBbQihpIJUiGIo+EWgJlxwGr5WoMvexZR9QqKOwm/PiTaDBSxysSeCWSrSjQmyRSDiNhLBVYS0j5NHSnAxRHzLgqu3OZjAfREpp8q1tDf/qGLNzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BsC/zPsF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767646031; c=relaxed/simple;
+	bh=0cXxgiKJYEDsCA8YbH5UmnzTobnhAPOmLswUtmtPxRA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=LuKOchQqB7TmivGmzXmu2zILvGXh3NwrmO/4U5Xb4Dg0Barv4zedUE/tvvG84FCUmEq+Xh57MrR14MAbgl+bcxNbDXoAwY3psPlpARfQi3fqpKV6Sc82O5v0kbSloh71mFuTYTPZ/1cDco1H2VvdjZa6zc4818eJjNN3Zd+87xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMHzx6W0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BsC/zPsF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D2AC116D0;
-	Mon,  5 Jan 2026 19:17:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMHzx6W0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B913DC116D0;
+	Mon,  5 Jan 2026 20:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767640637;
-	bh=tja02UDzBs7wICK3Voj6Ot/znyUDcV2n437uw4TqOgo=;
-	h=From:Date:Subject:To:Cc:From;
-	b=BsC/zPsFahMr0nL2HRpqZQRNz+sfUcLnA1ZzzZYLKO+hrdFzvq42QbFYhFvNSU83K
-	 gN/QmHqqRB8RexqhxwYbKKYMl7SgZysb0wm8d4kjBtHl6Ztlrh7sCDrd8qUjyIxGMI
-	 ZcIQ8NZuKAkBqEX/ZXg5iCvvunh8wjrvZeMG161q3g8wop7GulT4HBKFSdCgd+Rg9k
-	 +vQ6k/eWJwp5IjJW/EHvLVVCV2/63KqVz3Tsx3/pZ4gLwq70ntTPF9/41J7cF1nLIV
-	 noJuxtr+UaV7tgl6bmE9xT6s9a7OyqVGekfI4PXMIXcYcQU/qNrgWqKcP/W8VMmfEn
-	 3xhb0+UG0z5bA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 05 Jan 2026 12:17:10 -0700
-Subject: [PATCH] ntfs3: Restore NULL folio initialization in
- ntfs_writepages()
+	s=k20201202; t=1767646030;
+	bh=0cXxgiKJYEDsCA8YbH5UmnzTobnhAPOmLswUtmtPxRA=;
+	h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
+	b=BMHzx6W0wYpa3dgpAYuiWxtwk/g6bicVK04ntKuo+FrzNCEcut784a7NVdkREQZ4Q
+	 n4b9t2XKZwfbQY6ArCYQZMAmEdWhpQGSVD7qkABSAfRymBfqNTZYJpXZpRI7C7lRRR
+	 oesQ925GuAJP+kPS+GIt2TaKlrtanK8p9EXO57ajadGtvsbqVeMrKEVFhcwYQdIYa7
+	 VkFFAlpclS3v14r8gKi2wB1f3DcqJU46CQEAqo980IZaN8BYe9OfQtj3CP1niifHIy
+	 FlIgh+mkVBtY0Cf10+z+7TjcjSnOIynxH6CzYDfTlgR9raoYjiNClOWiXo9nZjKbUj
+	 kczLXVhiwMwjg==
+Message-ID: <54fe30d3-856e-45d4-ba30-b9e770d9afc6@kernel.org>
+Date: Mon, 5 Jan 2026 21:47:02 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/2] kbuild: remove gcc's -Wtype-limits
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+References: <20260101-remove_wtype-limits-v4-0-225b75c29086@kernel.org>
+ <aVutfSk4PWbGac_Q@levanger>
+From: Vincent Mailhol <mailhol@kernel.org>
+Content-Language: en-US
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
+ linux-hardening@vger.kernel.org, Daniel Plakosh <dplakosh@sei.cmu.edu>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <aVutfSk4PWbGac_Q@levanger>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260105-ntfs3-restore-null-folio-init-v1-1-432093703dfd@kernel.org>
-X-B4-Tracking: v=1; b=H4sIADUOXGkC/yXMwQrCMAwA0F8ZORtoN9zAXxEPc0k1UlJJOhHG/
- t2qx3d5GzibsMOp28D4JS5FG+Khg+U+641RqBn60I8hhiNqTT6gsddijLrmjKlkKSgqFXmgaZ5
- oJAoR2vE0TvL+/efL375eH7zUbwr7/gF/gjjLgQAAAA==
-X-Change-ID: 20260105-ntfs3-restore-null-folio-init-e3d7a7d6dd01
-To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc: ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1695; i=nathan@kernel.org;
- h=from:subject:message-id; bh=tja02UDzBs7wICK3Voj6Ot/znyUDcV2n437uw4TqOgo=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJkxfNbPI/K3mDHsn/Lixs+4K/9vtKlH7Dq46+GFQ4GFN
- itudvks7ihlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATUb/N8M9EM4Z1zf1CoSPH
- W+8nHlmqYhEYmVDSqh491fXf7N3bt/gxMhx02fGj9qnz7EUXxcMn/Uwt/RC43uc44/6KPs3NXL+
- sX7ADAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Clang warns (or errors with CONFIG_WERROR=y):
+On 05/01/2026 at 13:24, Nicolas Schier wrote:
+> On Thu, Jan 01, 2026 at 04:21:38PM +0100, Vincent Mailhol wrote:
+>> I often read on the mailing list people saying "who cares about W=2
+>> builds anyway?". At least I do. Not that I want to fix all of them,
+>> but on some occasions, such as new driver submissions, I have often
+>> found a couple valid diagnostics in the W=2 output.
+>>
+>> That said, the annoying thing is that W=2 is heavily polluted by one
+>> warning: -Wtype-limits. Try a gcc W=2 build on any file and see the
+>> results for yourself. I suspect this to be the reason why so few
+>> people are using W=2.
+>>
+>> This series removes gcc's -Wtype-limits in an attempt to make W=2 more
+>> useful. Those who do not use W=2 can continue to not use it if they
+>> want. Those who, like me, use it for time to time will get an improved
+>> experience from the reduced spam.
+>>
+>> Patch #1 deactivates -Wtype-limits. Extra details on statistics, past
+>> attempts and alternatives are given in the description.
+>>
+>> Patch #2 clean-ups the local Kbuild -Wno-type-limits exceptions.
+>>
+>> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+>> ---
+>> Changes in v4:
+>>
+>>   - Remove patch #3.
+>>   - Aside from minor changes in the patch descriptions, this is
+>>     basially a revert to v1.
+>>
+>> Link to v3: https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org
+> 
+> just to prevent confusions:  As Dan silenced the Smatch warning caused
+> by patch #3 [1] (thanks!), the additional comment patch [2] is obsolete
+> and v3 of the series is a more complete version than v4.
 
-  fs/ntfs3/inode.c:1021:6: error: variable 'folio' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-   1021 |         if (is_resident(ni)) {
-        |             ^~~~~~~~~~~~~~~
-  fs/ntfs3/inode.c:1024:48: note: uninitialized use occurs here
-   1024 |                 while ((folio = writeback_iter(mapping, wbc, folio, &err)))
-        |                                                              ^~~~~
+Exactly!
 
-folio should be initialized to NULL for the first iteration of
-writeback_iter() to start the loop properly. Restore the NULL
-initialization of folio that was lost in the recent iomap conversion to
-clear up the warning.
+Thanks to Daniel's effort we finally have a complete fix.
 
-Fixes: 099ef9ab9203 ("fs/ntfs3: implement iomap-based file operations")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601010644.FIhOXy6Y-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- fs/ntfs3/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Let me know if you need any actions from my side. Otherwise, I will
+assume that my part of the work is done here and will just wait for the
+v3 to be picked.
 
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index b969ad7c3258..438d468f28ba 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -1019,7 +1019,7 @@ static int ntfs_writepages(struct address_space *mapping,
- 		return -EIO;
- 
- 	if (is_resident(ni)) {
--		struct folio *folio;
-+		struct folio *folio = NULL;
- 
- 		while ((folio = writeback_iter(mapping, wbc, folio, &err)))
- 			err = ntfs_resident_writepage(folio, wbc);
+(I am so happy to start 2026 by getting rid of this annoying
+-Wtype-limits spam :D)
 
----
-base-commit: 099ef9ab9203dff327f2d61e44773f9acbc01f13
-change-id: 20260105-ntfs3-restore-null-folio-init-e3d7a7d6dd01
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+Yours sincerely,
+Vincent Mailhol
 
