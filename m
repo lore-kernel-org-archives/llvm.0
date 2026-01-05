@@ -1,119 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF144414;
-	Mon,  5 Jan 2026 20:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9318A2DCC05;
+	Mon,  5 Jan 2026 21:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767646031; cv=none; b=C3/FN6+pPHDIeKSpcREF0NdltQ4SI9pivwVGdizjt2VBE+q/3d5TTjPlgEq3s21GjABL5H4fCCs0upr0savkX5IaBcx5Y78m6NhBCGjIVzCO3E9sslupZ7GRBjk2sl1QLSsoLjEt1s9inEB2vEjLTJYOyij17fugshmPN0KXYc0=
+	t=1767647597; cv=none; b=kEtUk1FZ8VHVTvEPhJssM9JkMP/PQ537MtZ/oyubseumm+RMgwQN1d9+Zj3gFTgbPXcOFmRN1VZS0C8osqPrdUDdTdtCCmmy2dcfi5DcojU3zBz34qVYmSwOCFF8m+4XVBYtbIrdCxqRGB9kJiRUSX2XN2Da/68+G9tLFi3ZiOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767646031; c=relaxed/simple;
-	bh=0cXxgiKJYEDsCA8YbH5UmnzTobnhAPOmLswUtmtPxRA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
-	 In-Reply-To:Content-Type; b=LuKOchQqB7TmivGmzXmu2zILvGXh3NwrmO/4U5Xb4Dg0Barv4zedUE/tvvG84FCUmEq+Xh57MrR14MAbgl+bcxNbDXoAwY3psPlpARfQi3fqpKV6Sc82O5v0kbSloh71mFuTYTPZ/1cDco1H2VvdjZa6zc4818eJjNN3Zd+87xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMHzx6W0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767647597; c=relaxed/simple;
+	bh=WPRm7ypDLH4oUKUKkFSKKcB4TUBktJTRAz56zlFb6VA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iiEIwL5+2TMkDVa3e11c+F2yPByb6J8aBr9ykLn0KoF/G3p5kcU+DcKez9pJK4pCkotS04+QS64yOiCLS03RyN4HMZL60fWPWQaNmEp0vJf1Ep2AMYz+8eeUjjhv4aij6EtWK74eYI224fP13DE8wkMa65hzuZ6OrH1kizxbMgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S+ns49Tg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMHzx6W0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B913DC116D0;
-	Mon,  5 Jan 2026 20:47:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S+ns49Tg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53DAC116D0;
+	Mon,  5 Jan 2026 21:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767646030;
-	bh=0cXxgiKJYEDsCA8YbH5UmnzTobnhAPOmLswUtmtPxRA=;
-	h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
-	b=BMHzx6W0wYpa3dgpAYuiWxtwk/g6bicVK04ntKuo+FrzNCEcut784a7NVdkREQZ4Q
-	 n4b9t2XKZwfbQY6ArCYQZMAmEdWhpQGSVD7qkABSAfRymBfqNTZYJpXZpRI7C7lRRR
-	 oesQ925GuAJP+kPS+GIt2TaKlrtanK8p9EXO57ajadGtvsbqVeMrKEVFhcwYQdIYa7
-	 VkFFAlpclS3v14r8gKi2wB1f3DcqJU46CQEAqo980IZaN8BYe9OfQtj3CP1niifHIy
-	 FlIgh+mkVBtY0Cf10+z+7TjcjSnOIynxH6CzYDfTlgR9raoYjiNClOWiXo9nZjKbUj
-	 kczLXVhiwMwjg==
-Message-ID: <54fe30d3-856e-45d4-ba30-b9e770d9afc6@kernel.org>
-Date: Mon, 5 Jan 2026 21:47:02 +0100
+	s=k20201202; t=1767647597;
+	bh=WPRm7ypDLH4oUKUKkFSKKcB4TUBktJTRAz56zlFb6VA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=S+ns49TgVNGcLLixmeR4+AoejeRF/MxqtaHOPpyz4JU9pExUpJhiRi15q/GJnRxiu
+	 X2chpKUJN8cxVr4744gHZaG3jf4Kt6mLodu6eJH+Gj9nmV6hsNJFzBPwxUuy+G8E3/
+	 LAtkFA/qqusbvzqchdD2/fdhTO5r+qSQAuptZ2V+E5KhC07nTl+dx2J2jj2A7N9cl5
+	 GblkUKX3PC4SZeKxJaX03GY7NbXrTd1bB6txvk1aFTjxugeof9N1c4tUC5It1/mUDP
+	 RLwP9hqWCiRb09UVjqS68vJTC4Rm8y7hJaQKB46MkeJpIfacqjB8ovVsIaPoDotSP0
+	 Uc+9RYwvT4aoQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 05 Jan 2026 14:12:58 -0700
+Subject: [PATCH bpf-next] scripts/gen-btf.sh: Disable LTO when generating
+ initial .o file
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] kbuild: remove gcc's -Wtype-limits
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
-References: <20260101-remove_wtype-limits-v4-0-225b75c29086@kernel.org>
- <aVutfSk4PWbGac_Q@levanger>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
- linux-hardening@vger.kernel.org, Daniel Plakosh <dplakosh@sei.cmu.edu>
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <aVutfSk4PWbGac_Q@levanger>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260105-fix-gen-btf-sh-lto-v1-1-18052ea055a9@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFkpXGkC/yWM0QqCQBBFf0XmuYFRSqtfCR9au6sTscrOKoL47
+ 235eLj3nI0MUWF0LzaKWNR0DBnKU0Hd8Aw9WF+ZqZKqllIu7HXlHoFd8mwDf9LIIo3H+SZXaYS
+ yOEXk1z/6IDd5DlgTtcdis3ujS78m7fsXEIBPdYAAAAA=
+X-Change-ID: 20260105-fix-gen-btf-sh-lto-007fe4908070
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1834; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=WPRm7ypDLH4oUKUKkFSKKcB4TUBktJTRAz56zlFb6VA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJkxmln6mj7PjzkzZ0VccZobV83CNHkC5+S8VVk29yeIf
+ FrP9Neto5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkQi/DX/m7S3/af5IpeLZN
+ aM2mSy1Wd0x+JhlJ/pWe9n7P8at2/LoM/2tW/2xceG/qshN5r4UFTssxqx36em5S5+TpO4JWvu9
+ 4+4sJAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 05/01/2026 at 13:24, Nicolas Schier wrote:
-> On Thu, Jan 01, 2026 at 04:21:38PM +0100, Vincent Mailhol wrote:
->> I often read on the mailing list people saying "who cares about W=2
->> builds anyway?". At least I do. Not that I want to fix all of them,
->> but on some occasions, such as new driver submissions, I have often
->> found a couple valid diagnostics in the W=2 output.
->>
->> That said, the annoying thing is that W=2 is heavily polluted by one
->> warning: -Wtype-limits. Try a gcc W=2 build on any file and see the
->> results for yourself. I suspect this to be the reason why so few
->> people are using W=2.
->>
->> This series removes gcc's -Wtype-limits in an attempt to make W=2 more
->> useful. Those who do not use W=2 can continue to not use it if they
->> want. Those who, like me, use it for time to time will get an improved
->> experience from the reduced spam.
->>
->> Patch #1 deactivates -Wtype-limits. Extra details on statistics, past
->> attempts and alternatives are given in the description.
->>
->> Patch #2 clean-ups the local Kbuild -Wno-type-limits exceptions.
->>
->> Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
->> ---
->> Changes in v4:
->>
->>   - Remove patch #3.
->>   - Aside from minor changes in the patch descriptions, this is
->>     basially a revert to v1.
->>
->> Link to v3: https://lore.kernel.org/r/20251220-remove_wtype-limits-v3-0-24b170af700e@kernel.org
-> 
-> just to prevent confusions:  As Dan silenced the Smatch warning caused
-> by patch #3 [1] (thanks!), the additional comment patch [2] is obsolete
-> and v3 of the series is a more complete version than v4.
+After commit 600605853f87 ("scripts/gen-btf.sh: Fix .btf.o generation
+when compiling for RISCV"), there is an error from llvm-objcopy when
+CONFIG_LTO_CLANG is enabled:
 
-Exactly!
+  llvm-objcopy: error: '.tmp_vmlinux1.btf.o': The file was not recognized as a valid object file
+  Failed to generate BTF for vmlinux
 
-Thanks to Daniel's effort we finally have a complete fix.
+KBUILD_CFLAGS includes CC_FLAGS_LTO, which makes clang emit an LLVM IR
+object, rather than an ELF one as expected by llvm-objcopy.
 
-Let me know if you need any actions from my side. Otherwise, I will
-assume that my part of the work is done here and will just wait for the
-v3 to be picked.
+Most areas of the kernel deal with this by filtering out CC_FLAGS_LTO
+from KBUILD_CFLAGS for the particular object or directory but this is
+not so easy to do in bash. Just include '-fno-lto' after KBUILD_CFLAGS
+to ensure an ELF object is consistently created as the initial .o file.
 
-(I am so happy to start 2026 by getting rid of this annoying
--Wtype-limits spam :D)
+Fixes: 600605853f87 ("scripts/gen-btf.sh: Fix .btf.o generation when compiling for RISCV")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/gen-btf.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+index d6457661b9b6..08b46b91c04b 100755
+--- a/scripts/gen-btf.sh
++++ b/scripts/gen-btf.sh
+@@ -87,7 +87,7 @@ gen_btf_o()
+ 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
+ 	# deletes all symbols including __start_BTF and __stop_BTF, which will
+ 	# be redefined in the linker script.
+-	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CFLAGS} -c -x c -o ${btf_data} -
++	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CFLAGS} -fno-lto -c -x c -o ${btf_data} -
+ 	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
+ 		--set-section-flags .BTF=alloc,readonly ${btf_data}
+ 	${OBJCOPY} --only-section=.BTF --strip-all ${btf_data}
 
-Yours sincerely,
-Vincent Mailhol
+---
+base-commit: a069190b590e108223cd841a1c2d0bfb92230ecc
+change-id: 20260105-fix-gen-btf-sh-lto-007fe4908070
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
