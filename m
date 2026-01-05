@@ -1,154 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5E421CC51;
-	Mon,  5 Jan 2026 04:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED201643B
+	for <llvm@lists.linux.dev>; Mon,  5 Jan 2026 07:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767588390; cv=none; b=XLNGnjAcgEK1JJ6VnaFdylI+uI7fP7im5yJHmR1u7uI6HzoTe1X3l8wDDiT3bsA+m+yWoCjV24HZRUPOGzJly1GXbz/YyDJlZ1/HHWE80KODW9C+WdsDO33ZLUx09koIbW70hdntzoGZCPiESpmJ75fBCRehVFdbWV1+PIzojMc=
+	t=1767597977; cv=none; b=uiuZv6PDk8r40eepC95aJ0CwjqKYgyDZMzDNtFAD30jUGamsX/1j8wRPhfgpV2G5fHPBz6tIiTPwsLxR6Ytw/UsK39FdCBdButrVEksulwPeqUjTfOBZCrRNQimJB79MdEdKAQiLN1oA1bpTPpgkV4dw4lUJygokxBZTVPXFWQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767588390; c=relaxed/simple;
-	bh=e66a15lEvMS5/0tetiz2yLJL3T9fHXsu4MzXu0oYxec=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GdhxaX4JS3ObmAwKyMFppKBotCzw99VrgWmWwQ/dkqDvzu1ePbZZW+WkW6iPB/6hoDMtT4GdBpuyHl/tsjRuGc9a0P4eeunffAEBbup8dUA6r+o4IEMj617SOklS82mzEbDiHVIiIju5O/1k3gnk3niO3JUVS7uYDCw1IF0TXlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WhK4rz0m; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767597977; c=relaxed/simple;
+	bh=J+0zgzblPWcILdaJe+sS8PZ3YqSBzV7Z4n11YbyV75A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sJFBHV3UEThWJX+Qtr7Fz9qd4KNjiRkmd6DUiiBsCHIUEzMX4NBNlv5+hyL8TWylSY/VQQ57zT7NziL5j8vf2l9sHmZc+lbUPtjNVYHdKQDfhsDrxUA1VB5YRrkIQImEKDj8n3Mnq0xVS0VY2gH59vgQPD+XdmJ3Q2uvwbFhvYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LME0Y4sX; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WhK4rz0m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767588386; x=1799124386;
-  h=date:from:to:cc:subject:message-id;
-  bh=e66a15lEvMS5/0tetiz2yLJL3T9fHXsu4MzXu0oYxec=;
-  b=WhK4rz0mQFVUzxfa0r4aRYSR6An+RuouQw5J9cDaPs6lp328hV8LShz+
-   IHOAHTFsOpON1z0e56FsHrgG+xWNAurutEBG/Pc/3L+fzUtYEhLZFeAJ/
-   Rc/FJmTVaZMNSJqAkJfOV52ACP1sTHsCjRBV1YqE8nqqh0XgX1hVl6w6j
-   Pa36WFXmT/arl8+KUrYIboXHKTDdS7+7ca0wU8zLSaTB94SWFA+MU3O7a
-   V/7O+ILq0qAWmBRxTYOLHNkvEBFUs0oGVRWZaWplwX3G7n2adNYe2qcdO
-   KuMKeajLS7pok35F7kYOkebrovMGdBaewBzLrLFf8ZHpA+jTCCzTAmTFE
-   Q==;
-X-CSE-ConnectionGUID: MepKoDP4QTSY+WAQ4nP1kg==
-X-CSE-MsgGUID: OrOB1ruXSQ6ClquJp9hJOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11661"; a="67965066"
-X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
-   d="scan'208";a="67965066"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2026 20:46:25 -0800
-X-CSE-ConnectionGUID: BFNiGtvcTiquc4zhMt9meg==
-X-CSE-MsgGUID: sflfUcZORl+soO98ljR6eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,202,1763452800"; 
-   d="scan'208";a="206780138"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Jan 2026 20:46:22 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vccU0-000000000wH-3KdF;
-	Mon, 05 Jan 2026 04:46:20 +0000
-Date: Mon, 05 Jan 2026 12:45:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>,
- Sasha Levin <sashal@kernel.org>
-Subject: [sashal-next:mm-next 5/7]
- arch/loongarch/net/bpf_jit.c:1322:7: error: call to undeclared function
- '__bpf_address_lookup'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202601051241.10hXC1ge-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LME0Y4sX"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47795f6f5c0so74004825e9.1
+        for <llvm@lists.linux.dev>; Sun, 04 Jan 2026 23:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767597971; x=1768202771; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tqXPGRlmqIR2c73hehXqAT4WnRWsCFlwnXSzbZ1gZgI=;
+        b=LME0Y4sXJVLH3/43zJfcB5CwRH+uuk3DWznC6Z7Yk9+/pgNRqwYYepsNy63VNIv8Dp
+         f6KooxzMI5vRYnmuhlDEH5/JzUTYzweVwSkKpM8g5P5I9PlIs55bFCdqtJerujenXE9j
+         IcGOh3o2h/LsRw1jvnzK3HiABAgpQhk8ATfpd1eMH+4r81vov4rc0j+KccCvEqD3doo2
+         inZBMc2LxlYajNsqqpLb9wcNs7TsJl2jXzfZ9EBeNSlyF/RggMdkJl4CbR/hnfB90dnw
+         PdCuWso3BzWlT5l8FNrT6iaCNgnrC7U3lnH8xwP+nj9YukWtPoZ4nOiCvlt7S5t87pUd
+         mnTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767597971; x=1768202771;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tqXPGRlmqIR2c73hehXqAT4WnRWsCFlwnXSzbZ1gZgI=;
+        b=nol5H/VUL0pNz2F4eudj3d2YERpOWjRd8d4EqwxPpqxqWKG/NXmbGrxck33M52luUM
+         fOca3OQp4xlyKHxD0BnY1XbA6rVThtXu8QjYePVzikPPTG8swKJy8Ua4seNHRgOK/397
+         PGp2sxmNEUqclDLe1KDxlXfzvmze4/wCPB9w1Bqx5E2OYYroQCUMw9ZgHX1HJUZA+mQH
+         htMha+WsrmXaxLDk4nU/M5ED4IN+X/h/0YKhCWz38oqe5PEoDvtUM37wBuU8YM6KyF4V
+         76n9c8DL3kpjVB6FX1PL514kqwz1fEA03TWhGiJU9ZBBepeoeFn456cIpLkiWWw/YZjB
+         Ih5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQUUvYMhNcL2puNEI9MdqirJ0sfX0yU16h/0jCd/xwO38MvJ39uFWU87d54E7HRYAg8wL/@lists.linux.dev
+X-Gm-Message-State: AOJu0YzFhirlEwQFfbkDFZGXvjE0C3nPhsg9C+kGsM76209VolJHDno/
+	j/wLzLn2q3EieV1v6PS10fJegUiMiyhD0IdfCnnNipSmtiSobvFtLA+t2FWRmZLI4FA=
+X-Gm-Gg: AY/fxX4AqObll3H6UyMELS4J+/cWqRQ6beYHud1hAbWVgxx9ClCfbEcyvJWwaUjk/nv
+	wJPqvi+Lsxv6ftQe2p9W/00KSvOVDwr80MyfDlOLeCLq5ylNDJCgMvU2UiZJMLensb4x1DBGW28
+	LtlhRPW7/G/bzFP59+x0cyjEdkmDd1s/KLtFmgUOMAwDJLfUOHt4EoDzlSYRqEg4+BrJ5AmQp8q
+	auKDmh7MZ5A+FI5ebx+7EJpfA8nWP5n70k7BvzXbYb8xx0iquAQw1/N5oS9w/2SFMDScerpExlV
+	9W4fA2SOa6aTforDWIyv2FTYCh40ul2WamxwlaTITpAWhB3XOswcZgIQyT13xrZn/GJU5I5Y9Fv
+	MXSIMdyg5XGcO3u3zvLI+P9x5o0gE37ZTiTjw6ySGhcDSSfCTZlHqJoJ3B/DUlVwa50cOpgF+8b
+	9KBZsTE3QX9eJwxPK8
+X-Google-Smtp-Source: AGHT+IFrdZFxzxTrmRZMpsP27Ztfl7Uoc6pbDtE/T7BSP5JYGzpyq/KpLAX/yGG7sIYcOpNE6ZVEuA==
+X-Received: by 2002:a05:600c:1d1d:b0:477:8ba7:fe0a with SMTP id 5b1f17b1804b1-47d1957da90mr604728865e9.24.1767597970515;
+        Sun, 04 Jan 2026 23:26:10 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d6d45bb57sm148423745e9.14.2026.01.04.23.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jan 2026 23:26:09 -0800 (PST)
+Date: Mon, 5 Jan 2026 10:26:06 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kbuild@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
+	linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] overflow: Update is_non_negative() and is_negative()
+ comment
+Message-ID: <aVtnjgJOjMp9cMDn@stanley.mountain>
+References: <20251220-remove_wtype-limits-v3-3-24b170af700e@kernel.org>
+ <acdd84b2-e893-419c-8a46-da55d695dda2@kernel.org>
+ <20260101-futuristic-petrel-of-ecstasy-23db5f@lindesnes>
+ <CANiq72=jRT+6+2PBgshsK-TpxPiRK70H-+3D6sYaN-fdfC83qw@mail.gmail.com>
+ <b549e430-5623-4c60-acb1-4b5e095ae870@kernel.org>
+ <b6b35138-2c37-4b82-894e-59e897ec7d58@kernel.org>
+ <903ba91b-f052-4b1c-827d-6292965026c5@moroto.mountain>
+ <c84557e6-aa92-42e9-8768-e246676ec1e9@kernel.org>
+ <aVlKTculhgJzuZJy@stanley.mountain>
+ <e66bd09b-9879-4562-a71e-a1e1a964f3f2@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e66bd09b-9879-4562-a71e-a1e1a964f3f2@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sashal/linux-next.git mm-next
-head:   e10a56cdd2c231b8e6e59651bf02e3878ea3cc76
-commit: 5c48a0498b4b96a11af18d27ae295822bc40e0c3 [5/7] Merge 'mm-nonmm-unstable' from https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm (mm-nonmm-unstable)
-config: loongarch-randconfig-002-20260105 (https://download.01.org/0day-ci/archive/20260105/202601051241.10hXC1ge-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260105/202601051241.10hXC1ge-lkp@intel.com/reproduce)
+On Sat, Jan 03, 2026 at 08:40:17PM +0100, Vincent Mailhol wrote:
+> On 03/01/2026 at 17:56, Dan Carpenter wrote:
+> > On Sat, Jan 03, 2026 at 12:10:45PM +0100, Vincent Mailhol wrote:
+> >> On 03/01/2026 at 11:02, Dan Carpenter wrote:
+> >>> Thanks Randy, for sending this to me.  I'm on the sparse list, but
+> >>> I've been on vacation and haven't caught up with my email. 
+> >>
+> >> Welcome back, hope you enjoyed your holidays!
+> >>
+> >>> I can easily silence this in Smatch.
+> >>
+> >> Thanks. I ran this locally, I can confirm that this silences the
+> >> warning. So:
+> >>
+> >> Tested-by: Vincent Mailhol <mailhol@kernel.org>
+> >>
+> >>> diff --git a/check_unsigned_lt_zero.c b/check_unsigned_lt_zero.c
+> >>> index bfeb3261f91d..ac3e650704ce 100644
+> >>> --- a/check_unsigned_lt_zero.c
+> >>> +++ b/check_unsigned_lt_zero.c
+> >>> @@ -105,7 +105,8 @@ static bool is_allowed_zero(struct expression *expr)
+> >>>  	    strcmp(macro, "STRTO_H") == 0 ||
+> >>>  	    strcmp(macro, "SUB_EXTEND_USTAT") == 0 ||
+> >>>  	    strcmp(macro, "TEST_CASTABLE_TO_TYPE_VAR") == 0 ||
+> >>> -	    strcmp(macro, "TEST_ONE_SHIFT") == 0)
+> >>> +	    strcmp(macro, "TEST_ONE_SHIFT") == 0 ||
+> >>> +	    strcmp(macro, "check_shl_overflow") == 0)
+> >>
+> >> But, for the long term, wouldn't it better to just ignore all the code
+> >> coming from macro extensions instead of maintaining this allow-list?
+> >>
+> > 
+> > Of course, that idea occured to me, but so far the allow list is not
+> > very burdensome to maintain.
+> 
+> Indeed, but my concern was more on how people would treat such smatch
+> warnings coming from the kernel test robot. It is very uncommon to have
+> an allow-list hard coded into the static analyzer. Actually, this is the
+> first time I see this. My fear here is that people will just uglify the
+> code rather than sending a patch to extend the allow list in smatch.
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601051241.10hXC1ge-lkp@intel.com/
+People need to learn to ignore false positives.  The zero day bot sends
+a one time email and if you just delete it, then it's gone forever.
+Forget about it.
 
-All errors (new ones prefixed by >>):
+It's really limitting to try be totally static checker clean.  Things
+like passing a zero to ERR_PTR() for example.  It's a perfectly valid way
+to return NULL and the fs/ subsystem uses this a lot.  But 80% when you
+see it in new code, then it's a bug where they returned the wrong
+variable or something.  It's a high quality warning.  The solution is to
+look at it one time, when the code is fresh and then never look at it
+again.
 
->> arch/loongarch/net/bpf_jit.c:1322:7: error: call to undeclared function '__bpf_address_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1322 |         if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
-         |              ^
-   arch/loongarch/net/bpf_jit.c:1322:7: note: did you mean 'bpf_address_lookup'?
-   include/linux/filter.h:1378:5: note: 'bpf_address_lookup' declared here
-    1378 | int bpf_address_lookup(unsigned long addr, unsigned long *size,
-         |     ^
-   1 error generated.
+In this case when I disable the unsigned < 0 checking for macros then it
+means that if someone does if (WARN_ON(u32_var < 0)) { it's silenced.  I
+don't want that.
+
+I could create a much better way to silence false positives like this
+if I passed an expression pointer to the sm_warning()...  It's a bit of
+a re-work.
+
+regards,
+dan carpenter
 
 
-vim +/__bpf_address_lookup +1322 arch/loongarch/net/bpf_jit.c
 
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1305  
-ae4a3160d19cd16 Menglong Dong 2025-11-18  1306  int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
-ae4a3160d19cd16 Menglong Dong 2025-11-18  1307  		       enum bpf_text_poke_type new_t, void *old_addr,
-ae4a3160d19cd16 Menglong Dong 2025-11-18  1308  		       void *new_addr)
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1309  {
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1310  	int ret;
-ae4a3160d19cd16 Menglong Dong 2025-11-18  1311  	bool is_call;
-73721d8676771c6 Chenghao Duan 2025-12-31  1312  	unsigned long size = 0;
-73721d8676771c6 Chenghao Duan 2025-12-31  1313  	unsigned long offset = 0;
-73721d8676771c6 Chenghao Duan 2025-12-31  1314  	void *image = NULL;
-73721d8676771c6 Chenghao Duan 2025-12-31  1315  	char namebuf[KSYM_NAME_LEN];
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1316  	u32 old_insns[LOONGARCH_LONG_JUMP_NINSNS] = {[0 ... 4] = INSN_NOP};
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1317  	u32 new_insns[LOONGARCH_LONG_JUMP_NINSNS] = {[0 ... 4] = INSN_NOP};
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1318  
-3d770bd11b94306 Hengqi Chen   2025-10-02  1319  	/* Only poking bpf text is supported. Since kernel function entry
-3d770bd11b94306 Hengqi Chen   2025-10-02  1320  	 * is set up by ftrace, we rely on ftrace to poke kernel functions.
-3d770bd11b94306 Hengqi Chen   2025-10-02  1321  	 */
-73721d8676771c6 Chenghao Duan 2025-12-31 @1322  	if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1323  		return -ENOTSUPP;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1324  
-73721d8676771c6 Chenghao Duan 2025-12-31  1325  	image = ip - offset;
-73721d8676771c6 Chenghao Duan 2025-12-31  1326  
-73721d8676771c6 Chenghao Duan 2025-12-31  1327  	/* zero offset means we're poking bpf prog entry */
-73721d8676771c6 Chenghao Duan 2025-12-31  1328  	if (offset == 0) {
-73721d8676771c6 Chenghao Duan 2025-12-31  1329  		/* skip to the nop instruction in bpf prog entry:
-73721d8676771c6 Chenghao Duan 2025-12-31  1330  		 * move t0, ra
-73721d8676771c6 Chenghao Duan 2025-12-31  1331  		 * nop
-73721d8676771c6 Chenghao Duan 2025-12-31  1332  		 */
-73721d8676771c6 Chenghao Duan 2025-12-31  1333  		ip = image + LOONGARCH_INSN_SIZE;
-73721d8676771c6 Chenghao Duan 2025-12-31  1334  	}
-73721d8676771c6 Chenghao Duan 2025-12-31  1335  
-ae4a3160d19cd16 Menglong Dong 2025-11-18  1336  	is_call = old_t == BPF_MOD_CALL;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1337  	ret = emit_jump_or_nops(old_addr, ip, old_insns, is_call);
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1338  	if (ret)
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1339  		return ret;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1340  
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1341  	if (memcmp(ip, old_insns, LOONGARCH_LONG_JUMP_NBYTES))
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1342  		return -EFAULT;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1343  
-ae4a3160d19cd16 Menglong Dong 2025-11-18  1344  	is_call = new_t == BPF_MOD_CALL;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1345  	ret = emit_jump_or_nops(new_addr, ip, new_insns, is_call);
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1346  	if (ret)
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1347  		return ret;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1348  
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1349  	mutex_lock(&text_mutex);
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1350  	if (memcmp(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES))
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1351  		ret = larch_insn_text_copy(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES);
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1352  	mutex_unlock(&text_mutex);
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1353  
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1354  	return ret;
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1355  }
-9fbd18cf4c69f51 Chenghao Duan 2025-08-05  1356  
 
-:::::: The code at line 1322 was first introduced by commit
-:::::: 73721d8676771c6c7b06d4e636cc053fc76afefd LoongArch: BPF: Enhance the bpf_arch_text_poke() function
 
-:::::: TO: Chenghao Duan <duanchenghao@kylinos.cn>
-:::::: CC: Huacai Chen <chenhuacai@loongson.cn>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+
+
+
+
+It's really limitting
+if we can only check 
+
+> > I maybe should disable it for all macros unless the --spammy option is used...
+> 
+> IMHO, that would be an even better approach. That said, I am happy
+> enough with your previous patch which resolves my issue and which is way
+> better than updating the is_non_negative() and is_negative() comments as
+> I did in my patch!
+> 
+> 
+> Yours sincerely,
+> Vincent Mailhol
