@@ -1,102 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397744A35;
-	Mon,  5 Jan 2026 07:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8822125FA10
+	for <llvm@lists.linux.dev>; Mon,  5 Jan 2026 08:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767599156; cv=none; b=izdw6ABlSmoj0UBz5CUfTEJiNjGed8D+HniDktIhM+pdfDCEnakc81MM5upTYZys04nufy3mHDEE5XYf1HeWsZYpv3PPyfBnAJFSq7e4F8Sf9FxXzSeScDX/twR1vVBAp+jGLlzNkm4il/qgASgR5GtHG5RCFTJLw5SMcf1cazU=
+	t=1767603194; cv=none; b=sJJwSIcjhhlj06w+RlCLt0IxNbGeVNA/bM3koB9ssagR0ckGHoBgRt0LLwP2f67HIX4e97QA8qB32eL8g/GGS7WfVV59ALM+mWFJj00zdBYg+3V3nxXMiW+l7MCwpRYe9+t+FZIGyoUGZ18/VxegBW8ZqnsgeO7ae/uXYlhP/PY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767599156; c=relaxed/simple;
-	bh=k6Tt5yTwHGvGjAYNj5vnutG3De0UqSFPh6CVE9bICIQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mbqY5bce8ZnFt3jjT6OQNR5mdYc8zEd85OKYmgc5G+Dse8EIghZqgTjmxoAPyL0FOMWzinY3ZF0kOv1iag/EbnXx7hiEzq/CpL8Fz1/jug4Jqku4R8bxCQDTk2mkukrtYeFNl0NtCc9bp3KRJ40ForqPSUndaO+MsDmL5MhMSJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tgd70OPn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767603194; c=relaxed/simple;
+	bh=Ytj9/zjpDDhOuaoIXiQKQKaQ74o4fRWOodUge0W/8V4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=R6wDaKaHl0ws9fu9pIKYQsGoBCdLUe7em1eBnwT6bVA9290J4tCzI5EwYneTIZR4S2bAlFzLLORPfcYuEnJuvy7S/THPyiuiJeOqegtS9+GqHZl27PJz/UVkwe1fEJBcHlf399upUmf8RzOhDNKyy/V7pEgJhV3vCxMfjmn2nYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WU/jKLp6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tgd70OPn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24ABC116D0;
-	Mon,  5 Jan 2026 07:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767599155;
-	bh=k6Tt5yTwHGvGjAYNj5vnutG3De0UqSFPh6CVE9bICIQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Tgd70OPnYQqVw0gUaYhdLwpZd5uyr3gmOOwrOOISPEe1PV+NfPyxEgvyKroSXQFyS
-	 RPLee18ZDQreq/UEC8Vzaon3yiJSreHoRw+zRJdWkWWZQP/Eq9UoICMFdwF5ewenMt
-	 6f8f1FBgqBx9nZnYCqaaOO6xXsQj1b/ckDCRe6yMQSEmvjZmNj1rIqhoVrVW+oAkv3
-	 q/knFwQZk8DXriN2bIqDVH0rS/m/Ofc9M+BXWuoHKFclPvp/aL2hY+Sq4iBYGjO/S7
-	 GXAOZZjEyPHFr1x+oLCf9qdvAn47y6gwh+RgAeKt/YjyoAT9CfCc7jyWWOk/Dwl9r6
-	 CQHuY5T/Qyg0Q==
-Date: Mon, 5 Jan 2026 13:15:45 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Brian Norris <computersforpeace@gmail.com>, 
-	Kamal Dasu <kamal.dasu@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Harvey Hunt <harveyhuntnexus@gmail.com>, Paul Cercueil <paul@crapouillou.net>, 
-	Stefan Agner <stefan@agner.ch>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 4/7] mtd: rawnand: qcom: Simplify with scoped for each OF
- child loop
-Message-ID: <yy6nfsezapap7o2pnbydczoh6376crzr33oibkuwonygxnhsky@ongy4c6cy67m>
-References: <20260102124927.64703-8-krzysztof.kozlowski@oss.qualcomm.com>
- <20260102124927.64703-11-krzysztof.kozlowski@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WU/jKLp6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767603186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XiV6XUHu91WyjLhYI6kjAKfBXeXBmGLULEHMfo1n7nA=;
+	b=WU/jKLp6VnCMRsruqQQvsuUy+9PQvhNSFYiZfbjZ7A774p3G/V+0kIdnULnGhVUI1pCPox
+	/jBe+/kX28JgMCQCgOn1udP0wxAB2usT39Kywv33bp17Vu9771zAGq4OoQxB61UApsYuvv
+	9ETluHy7BYRQkhnWz5vGq/fPO3JBCvM=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-473-b-6_q83uOiulk8J81ulWDQ-1; Mon,
+ 05 Jan 2026 03:53:05 -0500
+X-MC-Unique: b-6_q83uOiulk8J81ulWDQ-1
+X-Mimecast-MFC-AGG-ID: b-6_q83uOiulk8J81ulWDQ_1767603184
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 830941800625
+	for <llvm@lists.linux.dev>; Mon,  5 Jan 2026 08:53:04 +0000 (UTC)
+Received: from [172.20.50.79] (unknown [10.30.44.138])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8714B1800663;
+	Mon,  5 Jan 2026 08:53:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 88 of 137): Test report for master
+ (6.19.0-rc4, upstream-mainline, 9ace4753)
+Date: Mon, 05 Jan 2026 08:53:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260102124927.64703-11-krzysztof.kozlowski@oss.qualcomm.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <49640.126010503530503024@us-mta-473.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Z3pQmdFw6vOSlt4xcp-wagCo5IIGz_MAhGnMkzY48nM_1767603184
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 02, 2026 at 01:49:31PM +0100, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-- Mani
+Tested-by: CKI Project <cki-project@redhat.com>
 
-> ---
->  drivers/mtd/nand/raw/qcom_nandc.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-> index 4dd6f1a4e797..b7e79b76654d 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -2206,16 +2206,14 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
->  static int qcom_probe_nand_devices(struct qcom_nand_controller *nandc)
->  {
->  	struct device *dev = nandc->dev;
-> -	struct device_node *dn = dev->of_node, *child;
-> +	struct device_node *dn = dev->of_node;
->  	struct qcom_nand_host *host;
->  	int ret = -ENODEV;
->  
-> -	for_each_available_child_of_node(dn, child) {
-> +	for_each_available_child_of_node_scoped(dn, child) {
->  		host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
-> -		if (!host) {
-> -			of_node_put(child);
-> +		if (!host)
->  			return -ENOMEM;
-> -		}
->  
->  		ret = qcom_nand_host_init_and_register(nandc, host, child);
->  		if (ret) {
-> -- 
-> 2.51.0
-> 
+Kernel information:
+    Commit message: Linux 6.19-rc4
 
--- 
-மணிவண்ணன் சதாசிவம்
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2244215002
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64]
+    xfstests - ext4 [aarch64]
+    xfstests - xfs [aarch64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
