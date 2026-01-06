@@ -1,219 +1,259 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF06319851
-	for <llvm@lists.linux.dev>; Tue,  6 Jan 2026 09:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212AF2DA775;
+	Tue,  6 Jan 2026 09:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767690958; cv=none; b=fpccxtTSCj2PbvFwVNzYPCp0E/Z93BnyGIsFAQ53ufO/RzAcOcf7uEJOLpscLoRBCUL4u34EuhQZf++brBicwlpwVbf/3xCVaMB+BeWPhtUH1p3Ms5eAG1S3K2WvbJ0uiVOEoP8lIW9F0EIj2WdJBTYzz7WdcW4FZtAun0NVnkc=
+	t=1767691848; cv=none; b=GimPNMQXxg+HBvZAXVGMu643RBMtjybdhxW3vR1hOwQDNcMmSAvCawDi9OKOXoi99SCwoZK3fMBtzB+kDH4VCjDslKyfZGZghc/SQQC82vVVeqCEqVKMS5Y9kFE3ozVmYL+s2GUoGaEtM3tdRIJ8XjAwYqZjtRDEBTQzFLlo0YA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767690958; c=relaxed/simple;
-	bh=OVCWQJWSot2eG/7wK3qMzP+a9sG5lzn0vIz1M3MguJI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LihNVkGJWd+XSolQPIq5To7+nh8pEymtUCE6WoX6KGUgLspqcH32F1Da3Wf1YJKS5nw3OZ0BVxBjmuE2Lac2QodKkyRlpWeRqdmx4KN6T2DRuWV7C150dMvkF6n5P69Q8kEdkS2981w9NcbK4ldBiuv/Z9WyJvY7IHCyQuoG3jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=md12x/t1; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=R3ixWBxN; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1767691848; c=relaxed/simple;
+	bh=9A84fjymSv9Vu+C9GDOc1qrBye/BZMsWGoquy16U+B4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VQeVoSYvvC+l6KNrjdLrdTKAreDozk1ubrPwi/1PGTA322qlBSs2HjweYNh1mqeiaCE0XyH299WGPDueTPseU3BA3SVxoTeoytAvBbi+A9djw+aaC8sno/vUJbttCGp/Z6VlAtPfBK4w3TvrJnABqowVj9ALAsCKnQAXIK+JIJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DJ4Ui/9c; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="md12x/t1";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="R3ixWBxN"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6063RRcR2432438
-	for <llvm@lists.linux.dev>; Tue, 6 Jan 2026 09:15:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	GQU5Kz/VgyQX4saHEvB7jD5Kcu9XiHJQFMsoC85Sd9Q=; b=md12x/t1PN6YwCIq
-	knSl5/ZirmGXUDUYxz9rwecf2vzC6ok/22z68zzrnIRO8d3CfREkMk8AHsjtTe16
-	fm5zOZONNblnsUA3A6ClL/YYd/dlprpBmcJQWGMdebMCQKOfTxnPsPkw1WGtUtEn
-	25Cy/Y0WM+5PSNM7gOqHM/68nq+/Ahq2uNHHpvNYVu1yRi1kJgIvaRlzByGIHNhI
-	yWXymJJwkAZabe4PzOq3sK70kSyL/F4Yy9O+j45NDXwN9lfQDycZBNPs5EnF4cIy
-	F/ggKd8Oy7Wlmbl1q+GtGhAT4S9Ba4CuOcVn1uaeu3uLqAhiQoFQZfslJR94fe83
-	AnkqrQ==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bgr7399vy-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 06 Jan 2026 09:15:54 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ee09211413so20733461cf.2
-        for <llvm@lists.linux.dev>; Tue, 06 Jan 2026 01:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767690953; x=1768295753; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GQU5Kz/VgyQX4saHEvB7jD5Kcu9XiHJQFMsoC85Sd9Q=;
-        b=R3ixWBxNjJ8y9vrnOFkZdJfDrB9YqekFrfMlV9fhfGaADaBTce41Eon8K2D2A8UnXe
-         ID0lVsigdupVjOTaRDi5rFYbGg/c6rUg7vfwcaYfPutMdqe9MbVuTcYFvdhAbE0BU/Wk
-         PahWV+92sH9YNeVHACeKgoSURuH8y4naR/VSUIRCxGuC4EIylYXrOjeKJ/+xUsDrcn+s
-         e/y7qnO/pzJwiD8lEOqn3g+vCtWGYUs5U56n/HE+i6JBnJYOwqI/tqJkpZHRMzbNjoxV
-         y2dmwX7THHLHdfKYAadfsYUt8n9fa1VuaijjevWYBmXlLR3lxoneM/PhqFjjeJlB0LVj
-         TMqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767690953; x=1768295753;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GQU5Kz/VgyQX4saHEvB7jD5Kcu9XiHJQFMsoC85Sd9Q=;
-        b=ekQtjjyBVhLNkUWNpwjUW37B1u35BxtIc6w6WCdOU+RRfX3y9MZgQs10ihCU5ISBL+
-         Z0R9Fs9xqa+xoIsOztDtZB7WoWHFeboGyNf5ivywC4TS6WNluqaUj1BLGeFcF1C79Nnd
-         Pzsy1qys7jEakiqCgUX/Kas/twB8YrxGi00S4oBqiLQvR2k5nnyaZGjkHKZfQHVUFSZH
-         gFWhcoge3z7RM4IHg70b0alT4Y0cbyw5seJFXH0A0g6+JTOhlBej8FzgYF3FPU5rPbPq
-         liQ0smzWg9zcberodfL6VX3iKKSpt5lwZ1KHQU5ovKOMYrtIRzNvsEEqb0p5LXFv91DQ
-         mfFA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/aGZvjxR7A+v1EN4b2RdFDqk/r39WqYZYxoF2Yr0KABvXD3Q7bxgcVBU5vqs8D0q/XQmU@lists.linux.dev
-X-Gm-Message-State: AOJu0YyHc2+RXebG60zCYSw+gmBEhczGsRLUwNHAWw9B5rr4OuDqC3QN
-	S51kHl6LBZ4J4MuqZC4eO6KqH1xdF508/LuwRpXNRAqw65GPR+wvKDLBAl5DuCDn9aaqe0rqwPp
-	NNS6+/tc+PvsBpoIKli9G29FCq2e/c/Z4nuoSqKdXval2YyHINJhVuws4
-X-Gm-Gg: AY/fxX4HbwOOdJnk7cyyX+MnzPj7jKDRl5pvJ4WRULIZ7lzbfEPIEwWBZ3rM+IBc8Gq
-	O86WD4QgjZm4yxe5CwfQM3YpGMNO5DRF5B+1W1lKya/iBwQ7DhTuNHp2nSzGR+jvGgMOIZDVoS+
-	YuK9XtfQGXjaquSwXzUQtFZIZPNE3GUq4pfZzQkCPc0ZcHjmO/j3qYL8XdPxiblqblgrSEDNJAz
-	Tt7ORU8vfpdR/dYAt8lfJQZMVqNTd36vEEZz2qnUEcIvdgifeYkIlAKmw2kADIJpPCCLb4tPHTb
-	ONTD9r+F0VuAurR4zyCIWs1O4bmPCOzV4oRZCOlLHMr9tS2JHMrSyzebioYjBtw4KVBO2dGJriZ
-	KUxSgSCvisU1ceOyMyF39jIRudBonhxElfA==
-X-Received: by 2002:a05:622a:1352:b0:4ed:1948:a8a2 with SMTP id d75a77b69052e-4ffa77a96dbmr27455851cf.40.1767690953261;
-        Tue, 06 Jan 2026 01:15:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG+8LYz510+kg3a8iGMOOOC+oA8oVcMMGxgamtnTMDOaG+Cvx0GMuVV1Mcl3rlOA02I51oLgw==
-X-Received: by 2002:a05:622a:1352:b0:4ed:1948:a8a2 with SMTP id d75a77b69052e-4ffa77a96dbmr27455491cf.40.1767690952811;
-        Tue, 06 Jan 2026 01:15:52 -0800 (PST)
-Received: from [127.0.1.1] ([178.197.218.229])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff319sm3271370f8f.43.2026.01.06.01.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 01:15:52 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Date: Tue, 06 Jan 2026 10:15:21 +0100
-Subject: [PATCH v2 11/11] media: samsung: exynos4-is: Simplify with scoped
- for each OF child loop
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DJ4Ui/9c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767691847; x=1799227847;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9A84fjymSv9Vu+C9GDOc1qrBye/BZMsWGoquy16U+B4=;
+  b=DJ4Ui/9crQMiPD3LvDVYQkZMaWiJ5zJfsbeAYFcNcIXve95ZVqxBLOu4
+   BT9Pk9SxFJzKJw+/jC7s9dTWBhvdbrzQ40rpN2YND6BBzeoV2SP9fZgDy
+   MF2Omv/9Y3Lq4dRe+WutzeZNIvaGf5eX3OWlRbwsoCUN6zqSUSIm3fwnM
+   VabidJCskO3jyED6NyPC2TNQvXm9Dh3aAuBhO6pAg06u16jpnsaYhGGPU
+   J6r34f3bxjR8JgkXDvNqOactdKQ70/3NSa/b2xMWAuSwwK8L8JqnMY4pq
+   kJXr0EQQDBL1GPFGJvvYIwyVV8zZdSaym5OZFodXnMLnZLlLbhsO1/hV7
+   Q==;
+X-CSE-ConnectionGUID: kS5zcw5VQZmd4bgV04cPJw==
+X-CSE-MsgGUID: 40Na7mFpR5amQ4IKG0hvUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11662"; a="56620744"
+X-IronPort-AV: E=Sophos;i="6.21,204,1763452800"; 
+   d="scan'208";a="56620744"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2026 01:30:47 -0800
+X-CSE-ConnectionGUID: r/8mLZ1LStq9ZEC7RXKUoA==
+X-CSE-MsgGUID: PX6EmKYIRXyWUnSIWIPfqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,204,1763452800"; 
+   d="scan'208";a="203578511"
+Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
+  by fmviesa010.fm.intel.com with ESMTP; 06 Jan 2026 01:30:44 -0800
+Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vd3Ok-000000001ID-37KG;
+	Tue, 06 Jan 2026 09:30:42 +0000
+Date: Tue, 6 Jan 2026 10:30:01 +0100
+From: kernel test robot <lkp@intel.com>
+To: Nanzhe Zhao <nzzhao@126.com>, Kim Jaegeuk <jaegeuk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <chao@kernel.org>, linux-f2fs-devel@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, Nanzhe Zhao <nzzhao@126.com>
+Subject: Re: [PATCH v1 3/5] f2fs: add f2fs_block_needs_zeroing() to handle
+ hole blocks
+Message-ID: <202601061013.MBnRTOrG-lkp@intel.com>
+References: <20260105153101.152892-4-nzzhao@126.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260106-of-for-each-compatible-scoped-v2-11-05eb948d91f2@oss.qualcomm.com>
-References: <20260106-of-for-each-compatible-scoped-v2-0-05eb948d91f2@oss.qualcomm.com>
-In-Reply-To: <20260106-of-for-each-compatible-scoped-v2-0-05eb948d91f2@oss.qualcomm.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Nipun Gupta <nipun.gupta@amd.com>,
-        Nikhil Agarwal <nikhil.agarwal@amd.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-clk@vger.kernel.org, imx@lists.linux.dev,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1509;
- i=krzysztof.kozlowski@oss.qualcomm.com; h=from:subject:message-id;
- bh=OVCWQJWSot2eG/7wK3qMzP+a9sG5lzn0vIz1M3MguJI=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpXNKpAxidBL7lQwtLhuqODev8GHN8RC2HoZMf7
- bdsRs21x4mJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaVzSqQAKCRDBN2bmhouD
- 1w91D/0Q67fTH34HvAuxFNouYtVjUOjzwae5nuoLVKTUCyZ5NtaDt+Kt7GT+3EHjDDAq6Bm3lCd
- mktwbSzzfw9O8z1xPht/F3yzxfANcfUp3JvwOwNmccxd3X5XKYmfqYEXcnvpLXbv81MaT0h0DSR
- QEC7BCiUBIGF7I7usfi8AUMzbseiuYuRzQ9d3eD0YOL95Z6t0xbzEhdgQetdK//xWSdHK8fRBdM
- huIpYTKQZKy8Ke7fUvdK32hEZXrxBo/xvLK+2WuIFdMdeP5blnwsg3y0ooSQHEchB6FAdGQTEyP
- nhRn731UqnNBPfHVJCDz4QVavmcz1Yehq09UFl1TeKBJ/ZFYe2Kl5OT9k9n07Q7jzoAnKsI52Sw
- DLRdbLO06m1Nl2ltYduOTOm7WrAehvSE7y+LEv6aEj/nrlOZ+hTeKhu1Kl3M4z47e8dp8FqaBDP
- UNBEzOM5t16efbCp5/aMX4LOTYqxP4kTKmIjqYWmMwdmWR1yEc5Zg4qGKTKvxCzwMc9s3tyGvD2
- wQnmyp/rDvRwRLesC88p8kq0d+6KDbnMhOYU3DfOdPwowVCASXXheCLLfSHXKdYCfL8aVV7LcUf
- bd2oqkBXH3wTG3RIeXY/1HrkAy557dlcaZJQGT33UbdvAuEkJJ/r6ygKb78s9/lIWsR95FzwD8w
- jKKFHaH0UjoJaJA==
-X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp;
- fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-X-Authority-Analysis: v=2.4 cv=QrxTHFyd c=1 sm=1 tr=0 ts=695cd2ca cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=Eb9f15NH/cHKzfGOmZSO4Q==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=2mm1MoeH4kfNTzOWiPUA:9 a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
-X-Proofpoint-ORIG-GUID: 85IWW2MeJFKw4IscgpnawBmDmn3B4E97
-X-Proofpoint-GUID: 85IWW2MeJFKw4IscgpnawBmDmn3B4E97
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA2MDA3NyBTYWx0ZWRfX+Ml/9W3lgyEq
- 7HQVaQEXYiuIqNqpQClRG/VEGmzsR9A9kSab2VYaxyyU4keQtsc/1zRpkUmWqwRh+zfPwFttmzE
- 8N7M79FrBah6BwezcNPSxZ+xx+Uw1j5gToQgkYA4drMOjSjGlkyr5N853XlEZSPl/VgmlZM+wmU
- A9MOjh8hHQ325OB3sIVi2hZhrL2tRACoRIQ4mNeQAVCvtHnBqlcMvr0RzIP5ko6UBU3PtO68H8w
- c0kzXgl01m7mGq4NO0qQ2ubXzvHCfGPRTw7ry448CDKpqqICuBI2m+s8Rfg5Op5Es8Nva1811uI
- 8l35oBXeHTydogLO0nL1g1Z1N/IDUZD/1UPMl8IWqqNYzbKmAcs8Qyg1/SyI8D1ZdsuTq2huu54
- GNaSB4zKA4CWoZWmW1eSZEQwM7Qdo20uHkwpLuASKZ+1ws07Yd4wodm+kQExEgRIlX9E23W/2zS
- FQYIWhQXh71PzdP7sVA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-05_02,2026-01-05_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601060077
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260105153101.152892-4-nzzhao@126.com>
 
-Use scoped for_each_compatible_node_scoped() loop when iterating over
-device nodes to make code a bit simpler.
+Hi Nanzhe,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+kernel test robot noticed the following build warnings:
 
----
+[auto build test WARNING on 48b5439e04ddf4508ecaf588219012dc81d947c0]
 
-Depends on the first patch and on:
-https://lore.kernel.org/all/20260102124955.64904-2-krzysztof.kozlowski@oss.qualcomm.com/
----
- drivers/media/platform/samsung/exynos4-is/fimc-is.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nanzhe-Zhao/f2fs-Zero-f2fs_folio_state-on-allocation/20260106-005006
+base:   48b5439e04ddf4508ecaf588219012dc81d947c0
+patch link:    https://lore.kernel.org/r/20260105153101.152892-4-nzzhao%40126.com
+patch subject: [PATCH v1 3/5] f2fs: add f2fs_block_needs_zeroing() to handle hole blocks
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260106/202601061013.MBnRTOrG-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260106/202601061013.MBnRTOrG-lkp@intel.com/reproduce)
 
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.c b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
-index 14d84cc96831..b7d9bfedd590 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-is.c
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
-@@ -200,21 +200,19 @@ static int fimc_is_parse_sensor_config(struct fimc_is *is, unsigned int index,
- 
- static int fimc_is_register_subdevs(struct fimc_is *is)
- {
--	struct device_node *i2c_bus;
- 	int ret, index = 0;
- 
- 	ret = fimc_isp_subdev_create(&is->isp);
- 	if (ret < 0)
- 		return ret;
- 
--	for_each_compatible_node(i2c_bus, NULL, "samsung,exynos4212-i2c-isp") {
-+	for_each_compatible_node_scoped(i2c_bus, NULL, "samsung,exynos4212-i2c-isp") {
- 		for_each_available_child_of_node_scoped(i2c_bus, child) {
- 			ret = fimc_is_parse_sensor_config(is, index, child);
- 
--			if (ret < 0 || index >= FIMC_IS_SENSORS_NUM) {
--				of_node_put(i2c_bus);
-+			if (ret < 0 || index >= FIMC_IS_SENSORS_NUM)
- 				return ret;
--			}
-+
- 			index++;
- 		}
- 	}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601061013.MBnRTOrG-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/f2fs/data.c:2485:13: warning: variable 'block_nr' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2485 |                 } else if((map.m_flags & F2FS_MAP_MAPPED)) {
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/data.c:2527:39: note: uninitialized use occurs here
+    2527 |                 f2fs_wait_on_block_writeback(inode, block_nr);
+         |                                                     ^~~~~~~~
+   fs/f2fs/data.c:2485:10: note: remove the 'if' if its condition is always true
+    2485 |                 } else if((map.m_flags & F2FS_MAP_MAPPED)) {
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/data.c:2454:20: note: initialize the variable 'block_nr' to silence this warning
+    2454 |                 sector_t block_nr;
+         |                                  ^
+         |                                   = 0
+   1 warning generated.
+
+
+vim +2485 fs/f2fs/data.c
+
+  2420	
+  2421	static int f2fs_read_data_large_folio(struct inode *inode,
+  2422			struct readahead_control *rac, struct folio *folio)
+  2423	{
+  2424		struct bio *bio = NULL;
+  2425		sector_t last_block_in_bio = 0;
+  2426		struct f2fs_map_blocks map = {0, };
+  2427		pgoff_t index, offset;
+  2428		unsigned max_nr_pages = rac ? readahead_count(rac) :
+  2429					folio_nr_pages(folio);
+  2430		unsigned nrpages;
+  2431		struct f2fs_folio_state *ffs;
+  2432		int ret = 0;
+  2433	
+  2434		if (!IS_IMMUTABLE(inode))
+  2435			return -EOPNOTSUPP;
+  2436	
+  2437		if (f2fs_compressed_file(inode))
+  2438			return -EOPNOTSUPP;
+  2439	
+  2440		map.m_seg_type = NO_CHECK_TYPE;
+  2441	
+  2442		if (rac)
+  2443			folio = readahead_folio(rac);
+  2444	next_folio:
+  2445		if (!folio)
+  2446			goto out;
+  2447	
+  2448		index = folio->index;
+  2449		offset = 0;
+  2450		ffs = NULL;
+  2451		nrpages = folio_nr_pages(folio);
+  2452	
+  2453		for (; nrpages; nrpages--) {
+  2454			sector_t block_nr;
+  2455			/*
+  2456			 * Map blocks using the previous result first.
+  2457			 */
+  2458			if ((map.m_flags & F2FS_MAP_MAPPED) &&
+  2459					index > map.m_lblk &&
+  2460					index < (map.m_lblk + map.m_len))
+  2461				goto got_it;
+  2462	
+  2463			/*
+  2464			 * Then do more f2fs_map_blocks() calls until we are
+  2465			 * done with this page.
+  2466			 */
+  2467			memset(&map, 0, sizeof(map));
+  2468			map.m_seg_type = NO_CHECK_TYPE;
+  2469			map.m_lblk = index;
+  2470			map.m_len = max_nr_pages;
+  2471	
+  2472			ret = f2fs_map_blocks(inode, &map, F2FS_GET_BLOCK_DEFAULT);
+  2473			if (ret)
+  2474				goto err_out;
+  2475	got_it:
+  2476			if ((f2fs_block_needs_zeroing(&map))) {
+  2477				folio_zero_range(folio, offset << PAGE_SHIFT, PAGE_SIZE);
+  2478				if (f2fs_need_verity(inode, index) &&
+  2479				    !fsverity_verify_page(folio_file_page(folio,
+  2480									index))) {
+  2481					ret = -EIO;
+  2482					goto err_out;
+  2483				}
+  2484				continue;
+> 2485			} else if((map.m_flags & F2FS_MAP_MAPPED)) {
+  2486				block_nr = map.m_pblk + index - map.m_lblk;
+  2487				if (!f2fs_is_valid_blkaddr(F2FS_I_SB(inode), block_nr,
+  2488							DATA_GENERIC_ENHANCE_READ)) {
+  2489					ret = -EFSCORRUPTED;
+  2490					goto err_out;
+  2491				}
+  2492			}
+  2493	
+  2494			/* We must increment read_pages_pending before possible BIOs submitting
+  2495			 * to prevent from premature folio_end_read() call on folio
+  2496			 */
+  2497			if (folio_test_large(folio)) {
+  2498				ffs = ffs_find_or_alloc(folio);
+  2499	
+  2500				/* set the bitmap to wait */
+  2501				spin_lock_irq(&ffs->state_lock);
+  2502				ffs->read_pages_pending++;
+  2503				spin_unlock_irq(&ffs->state_lock);
+  2504			}
+  2505	
+  2506			/*
+  2507			 * This page will go to BIO.  Do we need to send this
+  2508			 * BIO off first?
+  2509			 */
+  2510			if (bio && (!page_is_mergeable(F2FS_I_SB(inode), bio,
+  2511							last_block_in_bio, block_nr) ||
+  2512				!f2fs_crypt_mergeable_bio(bio, inode, index, NULL))) {
+  2513	submit_and_realloc:
+  2514				f2fs_submit_read_bio(F2FS_I_SB(inode), bio, DATA);
+  2515				bio = NULL;
+  2516			}
+  2517			if (bio == NULL)
+  2518				bio = f2fs_grab_read_bio(inode, block_nr,
+  2519						max_nr_pages,
+  2520						f2fs_ra_op_flags(rac),
+  2521						index, false);
+  2522	
+  2523			/*
+  2524			 * If the page is under writeback, we need to wait for
+  2525			 * its completion to see the correct decrypted data.
+  2526			 */
+  2527			f2fs_wait_on_block_writeback(inode, block_nr);
+  2528	
+  2529			if (!bio_add_folio(bio, folio, F2FS_BLKSIZE,
+  2530						offset << PAGE_SHIFT))
+  2531				goto submit_and_realloc;
+  2532	
+  2533			inc_page_count(F2FS_I_SB(inode), F2FS_RD_DATA);
+  2534			f2fs_update_iostat(F2FS_I_SB(inode), NULL, FS_DATA_READ_IO,
+  2535					F2FS_BLKSIZE);
+  2536			last_block_in_bio = block_nr;
+  2537			index++;
+  2538			offset++;
+  2539		}
+  2540		trace_f2fs_read_folio(folio, DATA);
+  2541		if (rac) {
+  2542			folio = readahead_folio(rac);
+  2543			goto next_folio;
+  2544		}
+  2545	err_out:
+  2546		/* Nothing was submitted. */
+  2547		if (!bio) {
+  2548			if (!ret)
+  2549				folio_mark_uptodate(folio);
+  2550			folio_unlock(folio);
+  2551			return ret;
+  2552		}
+  2553	
+  2554		if (ret) {
+  2555			f2fs_submit_read_bio(F2FS_I_SB(inode), bio, DATA);
+  2556	
+  2557			/* Wait bios and clear uptodate. */
+  2558			folio_lock(folio);
+  2559			folio_clear_uptodate(folio);
+  2560			folio_unlock(folio);
+  2561		}
+  2562	out:
+  2563		f2fs_submit_read_bio(F2FS_I_SB(inode), bio, DATA);
+  2564		return ret;
+  2565	}
+  2566	
 
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
