@@ -1,253 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409EE27713;
-	Tue,  6 Jan 2026 22:04:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3775E2DEA6F;
+	Tue,  6 Jan 2026 22:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767737051; cv=none; b=Q9mqkJsNX5nhLGgC0RmhBAf52uGj9Vn5bng17sH7mVM/ZHxkPKB+0yElZanrU5qaMQgNmUBwKRAGf1UKSnPLzDG37IRz8UHrS7iI38toIPpv+UKaKA4qbYX0YSSLSXxmBHpyJcDHwOtU+9kKYd1cR+0xbO9fpGGz/QrupVRZ3pk=
+	t=1767737912; cv=none; b=rBj177Fjey/MC4tOXQgE+rwIDcJ+EhfKtPAtBRsyRh9viwSv3X4OeP+Lkiq4ox8isUNToB9bXvxJ8ofR2BdnXO+VF7WQoIB0HZ17wMbtc3RZD0DRT7uLMIKmzb+TQYHPuZni3KEPfKUBx3i2MsnhpVg6LYj2iHqZ8r/9eVN+XWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767737051; c=relaxed/simple;
-	bh=UFTG9aL3f9/XmUP+1PBndY6CARZ4FneNWM1ttoPXAEU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Vrcc4e1WjTP15WGLhRNAxiRH8mlywNqgpSeYuR0EiNq04AbrSlkUTdDg+uuR+r5bHGw87yImMUxOhLnGSwKwzevPUe2lwl2wDDp2qbKZ8IeBx4Bj2130BlynWldoivznmZMTK45iLkkNl+nuztJosuHiWYFfl2PgW7e2KdzKIVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hj638dO2; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767737912; c=relaxed/simple;
+	bh=VxP3gN6EuETCO78G27pem7ZWOyviGO5t6cCqAm0GUuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jGgYqOepFtChIoqPGje0ilpmxf6uHAGqOf1o4cYaVT/ez+nNEyTqiDDC8LfpxpZJYPUbOX5VWQh4iQcVE3qHmplWVo4wJI8THOK23PHgnjsWnXjUAaJJrjNZ7xddrZSy3KU5oRymQ1vrvL5oq0sJbL0MFvDbcskDRC1pZyAi+xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pxa9uNrx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hj638dO2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767737049; x=1799273049;
-  h=date:from:to:cc:subject:message-id;
-  bh=UFTG9aL3f9/XmUP+1PBndY6CARZ4FneNWM1ttoPXAEU=;
-  b=hj638dO2SKSSpmXTge/VIMSbnbtlAb7HAoO2iTwhUmk/nOeVofytEgJd
-   Q8mz1+1uITI5Sx3IrkLQc5tAt5PeH4+CZALy0zWrzL36HqetGLoM49818
-   fMpEO9o1PU07oX0USqAMKL0b1Ie6ZOB+h0hgxQ7MYRnxKV+TpL6LiFFEd
-   JBi8lmvxKoX+TXgidQcCG8d1Xzz8ZLYpMT8PAPQRrrazNfG4TWBUaXkAc
-   grbHvapfbdAig6HQsEVbhRt8GZml0qVjps4OP2HNZzAiCJBBPd9SFt/kq
-   kdRoXVxol9qZhq3K6Knl6Wzhcwc65RT70SeRP6I75P/Ko9g9dgk9kgNUo
-   g==;
-X-CSE-ConnectionGUID: CZYpk5DmRPeMbPAeCPuAuw==
-X-CSE-MsgGUID: LLGw0owITIq6I4KyHFcuJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="86692918"
-X-IronPort-AV: E=Sophos;i="6.21,206,1763452800"; 
-   d="scan'208";a="86692918"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2026 14:04:07 -0800
-X-CSE-ConnectionGUID: f951dwc+TXSmbgrI9VCqbQ==
-X-CSE-MsgGUID: W0PEiAFmQh6buIR1uY0ONg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,206,1763452800"; 
-   d="scan'208";a="202522720"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 06 Jan 2026 14:04:05 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vdF9l-000000003GP-3evx;
-	Tue, 06 Jan 2026 22:04:01 +0000
-Date: Wed, 07 Jan 2026 06:03:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Ballasi <tballasi@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- David Hildenbrand <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-new 224/226]
- include/trace/events/vmscan.h:238:54: error: incomplete definition of type
- 'struct mem_cgroup'
-Message-ID: <202601070517.0yxdw4WK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pxa9uNrx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288E8C116C6;
+	Tue,  6 Jan 2026 22:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767737911;
+	bh=VxP3gN6EuETCO78G27pem7ZWOyviGO5t6cCqAm0GUuE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pxa9uNrxiIF4RZGx5HinH42KcBAPUqsaPf6/Ts2txh8VTMXJxo9TLigNtwW1t/nDF
+	 Wq56bhAV4mbhBP2gWfQnkARjrQDLgP0QffP20cR73hQqEQRD0jOZm3zlDLThQS+P+0
+	 rxHYquOg7nOXlLPVgbbOghleN6AaX663rezS4P77jgtGwAcJ3nKeabwCYcAnrzcO5t
+	 5lqwZG9Lgkwykci+43NTUXmTt3p2eTch/bjyTYh+qUHpR+Z5ZynsrSMFERCZlC3LFE
+	 z0zss7oc3sSwBiM5IPgjzU/x+ZsQe3swHn3JZAZ2xinMQ0FCRb1GricmKGM3Ay1oRb
+	 za4PYthjoInog==
+Date: Tue, 6 Jan 2026 19:18:27 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: James Clark <james.clark@linaro.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>, Leo Yan <leo.yan@arm.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andres Freund <andres@anarazel.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Nick Terrell <terrelln@fb.com>, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Subject: Re: [PATCH 0/5] perf build: nondistro build tidyups
+Message-ID: <aV2KM5yEAoLWT8rx@x1>
+References: <20251223-james-libbfd-feat-check-v1-0-0e901ba32ed9@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251223-james-libbfd-feat-check-v1-0-0e901ba32ed9@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
-head:   d51d3f6765d29ab5cdc6a59ad832017e660d5add
-commit: b84bca52c8e661aa7da507a03cc3f6831fef2edf [224/226] mm: vmscan: add cgroup IDs to vmscan tracepoints
-config: arm64-randconfig-002-20260107 (https://download.01.org/0day-ci/archive/20260107/202601070517.0yxdw4WK-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260107/202601070517.0yxdw4WK-lkp@intel.com/reproduce)
+On Tue, Dec 23, 2025 at 05:00:23PM +0000, James Clark wrote:
+> nondistro builds now require a specific version of libbfd, so this adds
+> an error when doing an explicit BUILD_NONDISTRO build and some other
+> related tidyups.
+> 
+> I'm not sure if the intention is to skip build-tests if something is
+> missing, but I see it was done for libbpf versions, so I added the same
+> for libbfd. This is the main thing that I hit, that build-test all of a
+> sudden stopped working for me.
+> 
+> The first commit is also a cherry pick of an old commit that seemed to
+> have been accidentally reverted in the unrelated change linked in the
+> trailers.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601070517.0yxdw4WK-lkp@intel.com/
+Thanks, applied to perf-tools-next,
 
-All errors (new ones prefixed by >>):
-
-   In file included from mm/vmscan.c:73:
-   In file included from include/trace/events/vmscan.h:554:
-   In file included from include/trace/define_trace.h:132:
-   In file included from include/trace/trace_events.h:468:
->> include/trace/events/vmscan.h:238:54: error: incomplete definition of type 'struct mem_cgroup'
-     238 |                 __entry->memcg_id = sc->memcg ? cgroup_id(sc->memcg->css.cgroup) : 0;
-         |                                                           ~~~~~~~~~^
-   include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
-     133 | #define TP_fast_assign(args...) args
-         |                                 ^~~~
-   include/trace/trace_events.h:44:16: note: expanded from macro 'TRACE_EVENT'
-      44 |                              PARAMS(assign),                   \
-         |                                     ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/trace_events.h:435:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
-     435 |                       PARAMS(assign), PARAMS(print))                    \
-         |                              ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/trace_events.h:427:4: note: expanded from macro '\
-   __DECLARE_EVENT_CLASS'
-     427 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/linux/mm_types.h:36:8: note: forward declaration of 'struct mem_cgroup'
-      36 | struct mem_cgroup;
-         |        ^
-   In file included from mm/vmscan.c:73:
-   In file included from include/trace/events/vmscan.h:554:
-   In file included from include/trace/define_trace.h:132:
-   In file included from include/trace/trace_events.h:468:
-   include/trace/events/vmscan.h:280:42: error: incomplete definition of type 'struct mem_cgroup'
-     280 |                 __entry->memcg_id = cgroup_id(sc->memcg->css.cgroup);
-         |                                               ~~~~~~~~~^
-   include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
-     133 | #define TP_fast_assign(args...) args
-         |                                 ^~~~
-   include/trace/trace_events.h:44:16: note: expanded from macro 'TRACE_EVENT'
-      44 |                              PARAMS(assign),                   \
-         |                                     ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/trace_events.h:435:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
-     435 |                       PARAMS(assign), PARAMS(print))                    \
-         |                              ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/trace_events.h:427:4: note: expanded from macro '\
-   __DECLARE_EVENT_CLASS'
-     427 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/linux/mm_types.h:36:8: note: forward declaration of 'struct mem_cgroup'
-      36 | struct mem_cgroup;
-         |        ^
-   In file included from mm/vmscan.c:73:
-   In file included from include/trace/events/vmscan.h:554:
-   In file included from include/trace/define_trace.h:133:
-   In file included from include/trace/perf.h:110:
->> include/trace/events/vmscan.h:238:54: error: incomplete definition of type 'struct mem_cgroup'
-     238 |                 __entry->memcg_id = sc->memcg ? cgroup_id(sc->memcg->css.cgroup) : 0;
-         |                                                           ~~~~~~~~~^
-   include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
-     133 | #define TP_fast_assign(args...) args
-         |                                 ^~~~
-   include/trace/trace_events.h:44:16: note: expanded from macro 'TRACE_EVENT'
-      44 |                              PARAMS(assign),                   \
-         |                                     ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/perf.h:67:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      67 |                       PARAMS(assign), PARAMS(print))                    \
-         |                              ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/perf.h:51:4: note: expanded from macro '\
-   __DECLARE_EVENT_CLASS'
-      51 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/linux/mm_types.h:36:8: note: forward declaration of 'struct mem_cgroup'
-      36 | struct mem_cgroup;
-         |        ^
-   In file included from mm/vmscan.c:73:
-   In file included from include/trace/events/vmscan.h:554:
-   In file included from include/trace/define_trace.h:133:
-   In file included from include/trace/perf.h:110:
-   include/trace/events/vmscan.h:280:42: error: incomplete definition of type 'struct mem_cgroup'
-     280 |                 __entry->memcg_id = cgroup_id(sc->memcg->css.cgroup);
-         |                                               ~~~~~~~~~^
-   include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
-     133 | #define TP_fast_assign(args...) args
-         |                                 ^~~~
-   include/trace/trace_events.h:44:16: note: expanded from macro 'TRACE_EVENT'
-      44 |                              PARAMS(assign),                   \
-         |                                     ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/perf.h:67:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      67 |                       PARAMS(assign), PARAMS(print))                    \
-         |                              ^~~~~~
-   include/linux/tracepoint.h:139:25: note: expanded from macro 'PARAMS'
-     139 | #define PARAMS(args...) args
-         |                         ^~~~
-   include/trace/perf.h:51:4: note: expanded from macro '\
-   __DECLARE_EVENT_CLASS'
-      51 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/linux/mm_types.h:36:8: note: forward declaration of 'struct mem_cgroup'
-      36 | struct mem_cgroup;
-         |        ^
-   4 errors generated.
-
-
-vim +238 include/trace/events/vmscan.h
-
-   205	
-   206	TRACE_EVENT(mm_shrink_slab_start,
-   207		TP_PROTO(struct shrinker *shr, struct shrink_control *sc,
-   208			long nr_objects_to_shrink, unsigned long cache_items,
-   209			unsigned long long delta, unsigned long total_scan,
-   210			int priority),
-   211	
-   212		TP_ARGS(shr, sc, nr_objects_to_shrink, cache_items, delta, total_scan,
-   213			priority),
-   214	
-   215		TP_STRUCT__entry(
-   216			__field(struct shrinker *, shr)
-   217			__field(void *, shrink)
-   218			__field(long, nr_objects_to_shrink)
-   219			__field(unsigned long, gfp_flags)
-   220			__field(unsigned long, cache_items)
-   221			__field(unsigned long long, delta)
-   222			__field(unsigned long, total_scan)
-   223			__field(int, priority)
-   224			__field(int, nid)
-   225			__field(unsigned short, memcg_id)
-   226		),
-   227	
-   228		TP_fast_assign(
-   229			__entry->shr = shr;
-   230			__entry->shrink = shr->scan_objects;
-   231			__entry->nr_objects_to_shrink = nr_objects_to_shrink;
-   232			__entry->gfp_flags = (__force unsigned long)sc->gfp_mask;
-   233			__entry->cache_items = cache_items;
-   234			__entry->delta = delta;
-   235			__entry->total_scan = total_scan;
-   236			__entry->priority = priority;
-   237			__entry->nid = sc->nid;
- > 238			__entry->memcg_id = sc->memcg ? cgroup_id(sc->memcg->css.cgroup) : 0;
-   239		),
-   240	
-   241		TP_printk("%pS %p: nid: %d memcg_id: %u objects to shrink %ld gfp_flags %s cache items %ld delta %lld total_scan %ld priority %d",
-   242			__entry->shrink,
-   243			__entry->shr,
-   244			__entry->nid,
-   245			__entry->memcg_id,
-   246			__entry->nr_objects_to_shrink,
-   247			show_gfp_flags(__entry->gfp_flags),
-   248			__entry->cache_items,
-   249			__entry->delta,
-   250			__entry->total_scan,
-   251			__entry->priority)
-   252	);
-   253	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Arnaldo
+ 
+> ---
+> James Clark (4):
+>       perf build: Do all non-distro feature checks in one go
+>       perf build: Remove unused libbfd-buildid feature test
+>       perf build: Feature test for libbfd thread safety API
+>       perf build: Skip nondistro build test if libbfd is old
+> 
+> Roberto Sassu (1):
+>       perf build: Remove FEATURE_CHECK_LDFLAGS-disassembler-{four-args,init-styled} setting
+> 
+>  tools/build/Makefile.feature                 |  2 +-
+>  tools/build/feature/Makefile                 |  4 +--
+>  tools/build/feature/test-libbfd-buildid.c    |  8 -----
+>  tools/build/feature/test-libbfd-threadsafe.c | 18 ++++++++++
+>  tools/perf/Makefile.config                   | 54 ++++++++++------------------
+>  tools/perf/tests/make                        |  5 +++
+>  6 files changed, 45 insertions(+), 46 deletions(-)
+> ---
+> base-commit: cbd41c6d4c26c161a2b0e70ad411d3885ff13507
+> change-id: 20251223-james-libbfd-feat-check-e0cd09d2c1e1
+> 
+> Best regards,
+> -- 
+> James Clark <james.clark@linaro.org>
