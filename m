@@ -1,30 +1,30 @@
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960AE3161BA;
-	Tue,  6 Jan 2026 10:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3932F6165;
+	Tue,  6 Jan 2026 10:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767694333; cv=none; b=mDEGvYPW8tFZibRLtJAm4m7B6w7TkL+231SV5pq9DtVakImq7q+JsEHAvbarslBpWiXCqV/+ozC9/InFPux4gYkYcKYXJ6lvtM/+ApCpp+T3FBg71QJG6cgVcaO5IWh1TB2fXqZdGu2ZvIJdaFb+W5DgakOJE2gByhd3mN+wL0g=
+	t=1767694468; cv=none; b=EQVzlXR0IY8ym1iglhPJdlZIclXYKFt/OY1cgHZ0CnM+45a7a558Y7XviiWq4UlkN4N2N43+qCoU6ucjW9GZYQZlQ0NvK2s/+XeFWT4U8PHf0HvqtY+QxKc3oQ+3RhTWtOtv+0OYZne46gqXKGBtUzU2l5bee1dK3m3xWjG0Z2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767694333; c=relaxed/simple;
-	bh=BeXKAQYS5WTcYWWvg7r/DBjBmwQiiJ55pdgChutvALs=;
+	s=arc-20240116; t=1767694468; c=relaxed/simple;
+	bh=I+JlTpw4GBTt0sDjFAEWfK/HJi08a3YGsn7E66fBpt0=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tVq7hxAvx/6SuwrukLRCW1ZV1Bhgrylc5MN7brBc0lRn9n14pgSXtZaIKbja+2AoSj2B/cxyXxylXf2O8o0uOCFI47D06MWdRU1iAMMD6yIgjlTdDorodhCddoz2ZJKtDRbjFhAGOdoLO5niuCWfSI23PCelOUooMtOk4Q277ec=
+	 MIME-Version:Content-Type; b=Zot5/CFywAuFwbri4/Rje4/6kVquK6veRxZZGN5AZU1HaDJVlDzXeYbM37ZzGG+nD9O1cj5aGhFHHdIZW0MxHwIbLA4nlO0S5//TM4p8BiUmX/IsJL562crCivsnwSOJxBp/M7iNowmk8RKfhSLtmt/ZJq9JzUTQ5gMNEAsyc7s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dln5f2WCRzJ473W;
-	Tue,  6 Jan 2026 18:12:06 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dln8H3XltzJ46dw;
+	Tue,  6 Jan 2026 18:14:23 +0800 (CST)
 Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id B693F4056F;
-	Tue,  6 Jan 2026 18:12:07 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id DA3514056A;
+	Tue,  6 Jan 2026 18:14:24 +0800 (CST)
 Received: from localhost (10.48.149.114) by dubpeml100005.china.huawei.com
  (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 6 Jan
- 2026 10:12:05 +0000
-Date: Tue, 6 Jan 2026 10:12:04 +0000
+ 2026 10:14:22 +0000
+Date: Tue, 6 Jan 2026 10:14:21 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 CC: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, "Saravana
@@ -51,12 +51,12 @@ CC: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, "Saravana
 	<linux-clk@vger.kernel.org>, <imx@lists.linux.dev>,
 	<dmaengine@vger.kernel.org>, <linux-media@vger.kernel.org>,
 	<linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 04/11] powerpc/fsp2: Simplify with scoped for each OF
+Subject: Re: [PATCH 05/11] powerpc/wii: Simplify with scoped for each OF
  child loop
-Message-ID: <20260106101204.00004a7a@huawei.com>
-In-Reply-To: <20260105-of-for-each-compatible-scoped-v1-4-24e99c177164@oss.qualcomm.com>
+Message-ID: <20260106101421.000007ea@huawei.com>
+In-Reply-To: <20260105-of-for-each-compatible-scoped-v1-5-24e99c177164@oss.qualcomm.com>
 References: <20260105-of-for-each-compatible-scoped-v1-0-24e99c177164@oss.qualcomm.com>
-	<20260105-of-for-each-compatible-scoped-v1-4-24e99c177164@oss.qualcomm.com>
+	<20260105-of-for-each-compatible-scoped-v1-5-24e99c177164@oss.qualcomm.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,7 +69,7 @@ Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
  dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Mon, 05 Jan 2026 14:33:42 +0100
+On Mon, 05 Jan 2026 14:33:43 +0100
 Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com> wrote:
 
 > Use scoped for-each loop when iterating over device nodes to make code a
