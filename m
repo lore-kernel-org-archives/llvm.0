@@ -1,30 +1,30 @@
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9888C3242B2;
-	Tue,  6 Jan 2026 10:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26456336EDB;
+	Tue,  6 Jan 2026 10:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767695032; cv=none; b=EHoD7I80Z0UYXtv4yY+PESt5/CLZprRrv4wXyKCwmAjIexJVdhT08JgNbbvOoRNMpt/3qs8WyUJRXO7rkG8NNZgiMn5uUwGPs5kdkX/mJoTm/v74fe6hhmANy+L3hdcdtmJXlytjxiHDEL08fsbKxGVrGze283+S/m3UpEzhusQ=
+	t=1767695151; cv=none; b=NqQxubUjdVbBl+oMQT3NiEFvxmZLbRYXbeGuX0moyNYGaOGxWJCLW150KeyFBFSERolO3VDR7+e6bapgDUMriq1hZdHjbtnnGeDqjU4QRRG0qYpYu2ftk88187/i0kpghyhQhEx/cEtefneWbHnKD6YRxW4qGGKwXzpxFXUksXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767695032; c=relaxed/simple;
-	bh=kWEr6KRd8QtmW6gX41iN9OsDNbx6l3BZrOL5rcpiSjA=;
+	s=arc-20240116; t=1767695151; c=relaxed/simple;
+	bh=pr+gzxXMRB6lLA5zZV4XLi1srJmGNM9WyS/yN3tmAlk=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dhmliQVFJ5GhP6qbbyrOs0RYH8a2ma33iOJXpMvg9+Kc3BG5FdtGZen9hh1bVvofTrNsO0w/5a5YL2I8htSX0YNRWFXQXnlieLa/scvJ3Sor78MKii8Q/yyuxFN4aeuaWeE2Z/XyHvfoGsd9watrc4wFMTrYYBIp3rZ+cpp/eag=
+	 MIME-Version:Content-Type; b=jnv9znKb1+vTL7wR8gml3Y1bWIlOVI60cuNOFqJD/wSYYkQH0KU99D4m19X2FBYasxGBzkd1zG/WumobZhvBn3zCZkiOeBlbF94MMZvKacUzEjO/LyVLuiTg8J8k4JPN23eMc1HuOKM1N6CO/RWy3KDwvjSZdz5hdN0ly1eVZ/4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.107])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dlnM661F0zJ4703;
-	Tue,  6 Jan 2026 18:23:46 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dlnPN1wWDzHnHXQ;
+	Tue,  6 Jan 2026 18:25:44 +0800 (CST)
 Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3D53640570;
-	Tue,  6 Jan 2026 18:23:48 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 3FA7F40565;
+	Tue,  6 Jan 2026 18:25:48 +0800 (CST)
 Received: from localhost (10.48.149.114) by dubpeml100005.china.huawei.com
  (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 6 Jan
- 2026 10:23:45 +0000
-Date: Tue, 6 Jan 2026 10:23:44 +0000
+ 2026 10:25:45 +0000
+Date: Tue, 6 Jan 2026 10:25:44 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 CC: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, "Saravana
@@ -51,12 +51,12 @@ CC: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, "Saravana
 	<linux-clk@vger.kernel.org>, <imx@lists.linux.dev>,
 	<dmaengine@vger.kernel.org>, <linux-media@vger.kernel.org>,
 	<linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 08/11] clk: imx: imx31: Simplify with scoped for each OF
- child loop
-Message-ID: <20260106102344.00003201@huawei.com>
-In-Reply-To: <20260105-of-for-each-compatible-scoped-v1-8-24e99c177164@oss.qualcomm.com>
+Subject: Re: [PATCH 09/11] dmaengine: fsl_raid: Simplify with scoped for
+ each OF child loop
+Message-ID: <20260106102544.00004d4e@huawei.com>
+In-Reply-To: <20260105-of-for-each-compatible-scoped-v1-9-24e99c177164@oss.qualcomm.com>
 References: <20260105-of-for-each-compatible-scoped-v1-0-24e99c177164@oss.qualcomm.com>
-	<20260105-of-for-each-compatible-scoped-v1-8-24e99c177164@oss.qualcomm.com>
+	<20260105-of-for-each-compatible-scoped-v1-9-24e99c177164@oss.qualcomm.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,53 +69,12 @@ Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
  dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Mon, 05 Jan 2026 14:33:46 +0100
+On Mon, 05 Jan 2026 14:33:47 +0100
 Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com> wrote:
 
 > Use scoped for-each loop when iterating over device nodes to make code a
 > bit simpler.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> 
 Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-
-I guess this is papering over similar compatibility issues with old DT
-as the previous one (so fsl,imx-osc26m which may or may not have fallback
-compatible to fixed-clock).
-
-Jonathan
-
-> 
-> ---
-> 
-> Depends on first patch.
-> ---
->  drivers/clk/imx/clk-imx31.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/clk/imx/clk-imx31.c b/drivers/clk/imx/clk-imx31.c
-> index 4c8d9ff0b2ad..962eccac63ce 100644
-> --- a/drivers/clk/imx/clk-imx31.c
-> +++ b/drivers/clk/imx/clk-imx31.c
-> @@ -123,18 +123,15 @@ static void __init _mx31_clocks_init(void __iomem *base, unsigned long fref)
->  
->  static void __init mx31_clocks_init_dt(struct device_node *np)
->  {
-> -	struct device_node *osc_np;
->  	u32 fref = 26000000; /* default */
->  	void __iomem *ccm;
->  
-> -	for_each_compatible_node(osc_np, NULL, "fixed-clock") {
-> +	for_each_compatible_node_scoped(osc_np, NULL, "fixed-clock") {
->  		if (!of_device_is_compatible(osc_np, "fsl,imx-osc26m"))
->  			continue;
->  
-> -		if (!of_property_read_u32(osc_np, "clock-frequency", &fref)) {
-> -			of_node_put(osc_np);
-> +		if (!of_property_read_u32(osc_np, "clock-frequency", &fref))
->  			break;
-> -		}
->  	}
->  
->  	ccm = of_iomap(np, 0);
-> 
-
