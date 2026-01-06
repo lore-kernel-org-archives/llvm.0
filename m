@@ -1,117 +1,90 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB283A1E92
-	for <llvm@lists.linux.dev>; Tue,  6 Jan 2026 02:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05BE2BD59C
+	for <llvm@lists.linux.dev>; Tue,  6 Jan 2026 04:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767666674; cv=none; b=YH3MxzlgXQqi6nrk6y3Mi8CKktO59o7oHgtPmxY+Cy3hSIsZ1TZZTPc5BlIZC3cGp0XeYCvRtKi5uaUE8UnigPEiGn0tzSWsFg0SSvbDZkDTIbEvgyQVMR966Qns3CzPQOtfNqNLkb4rfbfB3mBd4oID5IzzBeE/fYFioCV8eco=
+	t=1767675437; cv=none; b=oIsReipq6RyKgPMYycxsS4NfMXBrDklIq2eehX8qXVKHFiTo3rSF8TugjTwY0ly1NfQSCJLuisgsVDu/tiSP+cPb+oJ2lRmUITdq0L4X9a0Aod8nszk2he16mpDKgb89unLZeXKVmTHGts9q8cZjADHn0OLr9rXgWkz7CIKSY40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767666674; c=relaxed/simple;
-	bh=9a4n2kPDzF0DXccy7fQpDqoOMcVW96AL3BwAsewKImk=;
+	s=arc-20240116; t=1767675437; c=relaxed/simple;
+	bh=p/jbSDGwTWmm/8mvuCIwU/V1ZevpiU/zQiFsYrx82/U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FJcmRH59S8rj7Q8ODG6HvOpUj+Y8fBKxrzI2zpjIzNa+oX/YpYAMWRE6fRXoYkF0SH8DCSiyS/0z2kZ/X3Y5mOPrNd+r5I6W3LGxptrHREgzn6UIlKXWf+l2pB2p91S0Jt7D25CILJwanmV4oMk0XcAKvzjJl+U3+3gNJbXRgB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oc13SZEk; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=h0khPLojLNSCgus0BqBrIUIgbN3jrUkpnp8iRHFHyH8OOiHABW62GruaoNT/vKM5RkiJEXMXUKobzkqlEmSgrx8uTlv9SEH+f2FyDKAeVbi0LEan/D4XRPsZq398yEWUirDia2S0Tn/XXacsDHRCrWbgfSGBz5PIMojcIbku4Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kY8MsRzN; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oc13SZEk"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-88a367a1db0so7025676d6.3
-        for <llvm@lists.linux.dev>; Mon, 05 Jan 2026 18:31:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kY8MsRzN"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7a9c64dfa8aso561887b3a.3
+        for <llvm@lists.linux.dev>; Mon, 05 Jan 2026 20:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767666672; x=1768271472; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1767675435; x=1768280235; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3PneSlTXDqotjglO3Y2Knzidjrv0hwlCbWEle0lUDcE=;
-        b=Oc13SZEkhqozfIiZTM56+4/2yGd7YOu/DFzVKyo4VCgMQB0VMZ+mffraPvY3jpp55e
-         xq+ksrbMgGhBgaCgNs2+BJbDflyWQkyOzVu62rP+hzkQoJtn7wbGVQBsXCyzzjgQfbMV
-         yyXqEHsJseWcMU6n7rQAgJOaJKXsxVnLvmGyPa5Bfi4kOdqGQKi4G/VwBjCdnm03mF6Y
-         +Ii2zpN3y7IT0ft5MjbmRnWOqPa02nF07ovElYtoe0Ajp7/7OQwIimRvWKlQ6OYpl6c/
-         rLfL+CrJKrP3B5jDXPHAV0MHd7sjpWAaMPSIWXY7jidJEhWKEOi5iNd0Equz2RyKVTlF
-         uPeg==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOlNWZ1ASjDiM8/EVArPiKc25ePbXneuyrH70Dm1FmA=;
+        b=kY8MsRzNUo8pczqQIIwLQS1FjERf5FhNkqTEQtlwu0WWPzrJY5pVGYCO6i/l4ZvJQs
+         9kiV4tXNsJXvdZIvBOvMfCrdD2C2hSLinRt2ojD9kuRj94z8SPzR0KChgtzL2IiU43RN
+         k8eOmAQtrsou0LEYT7JStywc6uvvanWN9Pyw3T275haRArVx57gLRcLaOq//VW54UCAq
+         gwmBnToJy1gaRH3uh09ilC3c35tbdsxEJaXnkuNjNPuRC5oTkjlWUvQtWWOfEDlhyWdg
+         rsuhnCXbaW3/o1Nlk2j7UdIRIesJZbpWzbtQN9EAq0FmdRqrlMxiuLgTOVZEXxhJLTdX
+         3uDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767666672; x=1768271472;
+        d=1e100.net; s=20230601; t=1767675435; x=1768280235;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3PneSlTXDqotjglO3Y2Knzidjrv0hwlCbWEle0lUDcE=;
-        b=wkThdzEHgcX8MD3ISlwCMh4wNT8pLxhrdg1VJw9LKheBgL9+2MZSOtOjCxTyyEsyEF
-         GSrVA7A+3lxKFg+MY63u9wRZPpwcmh2ArufWxAd6MVlvYmPTHxLGZLCIiBZCo4zo0tpj
-         7nSTFgxKOdFF+V+YvjM+GorEs+Koc4vqqT3E2ydYMj997jyVqvdXbg1lxvNP/RTnbP0H
-         33y5vxU/oftVtu6b1RuWPL4mltXVfP3tvPlqqMMw5LK3ppLhA5+79P1J+NzTPaNBY7vg
-         EdVJn9JhD2kfWHxqjT8k+6olZubLT6VosonqxNNOR7i/RzRaFkKKNkB8pzz0noV7eDHu
-         CG1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV4kF2Im1K543l6zJtxk1gU/2oFjuRCAn/tst414ESA4Q5mui4Dp8KuyolmDrR93JNAsggR@lists.linux.dev
-X-Gm-Message-State: AOJu0YwwIYHW3hvCDVZKrsaiCPQd6ldhsFWmtT7y5yAr7cjoUCTvQaTY
-	6ojfWZGacF1jBqvkLrT35Dy5ZTONc0+wIUWrBo91YhPObbZXi9P6NeT8z5pBNJ/C
-X-Gm-Gg: AY/fxX6xtzV6UpaQoKtEUh3UuHyaSZ224gCCKTzdm+qQCCKmYyPgeJy2Mr+Gk20NT8t
-	kPj44OsVnv1G2irty0BsZv6IjQA06KsTQO+Zg6NAMMRmdtT8a8rLkqBk8DZI7QwY+cLjOZKYR4a
-	P+K8qfd5/GFEq0hynGyPue3BCrpGgHoofdtmSri6UDx1nQ/TjpgLVMU+4bArf3pd44bT2mc9V3v
-	HIb0XRAy8uo8hQnAMtwXFQj2ltwqqV2BDtrp5Yh7YNGjk2JyIIz9ptMe6NWAQjQ/defeZHSnZIO
-	TRyy6qU9L6RmZ3NQ2ER2+mTFy3od1bS7Lp8oPR6EgFb4Ur+mrViyOUaYSkoE+ZbCyv4h5zmxmSl
-	KHOB98IzXbI/wzymLDWp2x86OiqgkBmymJx3yMdeHMii9OJDasKGjoFuK6K3jyJ3MTXbJElkjr/
-	cn7hN6aTIGsO27Y4s4dWPTJ3NW4NGaaT39ilcKALEjgYJ8PWHzbzEDvAx7p6PS/JRf7e/BuQEAl
-	fm69Ilbq9yvoNo=
-X-Google-Smtp-Source: AGHT+IH/ZnViArMDusDnASin1cg4KvwlFUBMfsXmrGNUlYaoDSSPkbXVeTNfTyQwJuK1hW94jJnL2A==
-X-Received: by 2002:a05:620a:1aa8:b0:8c3:55bf:735b with SMTP id af79cd13be357-8c37ec06899mr194116885a.81.1767660549347;
-        Mon, 05 Jan 2026 16:49:09 -0800 (PST)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c37f540650sm62900285a.47.2026.01.05.16.49.08
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oOlNWZ1ASjDiM8/EVArPiKc25ePbXneuyrH70Dm1FmA=;
+        b=H3NGxIWzYyiUlgHQqHlHw5W1010vlbpADGLQfFnEl+kZJv1+qawfCB98czQk7Exuy1
+         7xwMrN+wU0hxLefKOz4xAvxzwr5eOAzlfoxen3yOhsw4RmAiT3SzRGvLg0PsV19u0s77
+         jonLHwskKtRbJ8LAgDXJDMbSD6fgU7kPpsRdeZBR/QIUvKicbkyZZVkZkSfEHVOP2bwK
+         ket4tBoBgf12Qzh4nvKSGfweT1ifa5+GBMeT3oMd48zFBjAtcCe7KT4Cg46wF0r77TOr
+         n2bvaZ87afJPVhvWbQjOqY/fqorHPCsRFxGjwUHb9oe02DM1Q3vP5IV7AHSYlmM7EJBH
+         eVRA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIilYBe9Kh9vCrSkB6YUWpk4ppeeTmbYltbYpeVdVfHT+fEDkmzVbPO1JktgnsXM3egqIC@lists.linux.dev
+X-Gm-Message-State: AOJu0YxlvLU5q4H5kcPLPloQUeOkTUN7JzBKz5yDPZYE9Fo1E/Ks/Kub
+	xhY30AjyFNuz04C0pDzQ2IPHYO1R6Zhr2rdgeZyT8QCFFPk4CwQDtDxWSDv1uPbzW34=
+X-Gm-Gg: AY/fxX5aepYFUU3MbwkE+MLyf3QWG+OW9IDukMIt/2GYJ+M7342FuTHIM5O37dQ2baR
+	gH5LJ5/hGVuCz35EWAdxldFGsBhapeCJYQJvs/1FydBLR+HFAH1l3cRbq0UGHO+cEzWjARgzlnl
+	zTiBZZ3wdHTuqdvHPv7sCUlbd1ZgsqYItMQXoGMuopwPtyTpJllYMRAnifMdta9ouF052J5ZpnX
+	ZEYKqpFfRR8OkH0FiOyDa4XT8iYliUmZb59I/JsoJvvy12o86MFW2QY7URFpMfc5UH6AMvKbA5Y
+	VjbHmWA+K2yDJT+qpeoexkQi1+oeKaNw7D5UtPmgr6ef7tcqmz3jUiaP0VPBUwkYVKY3IHdYLLN
+	ssl2gNiKBBps3p1FQhztJazb/z4ilTWl8OnCUAArNbtraR99NUFJOTcCuwJb+yzFByqFF46rgQ3
+	zHNK/bGEMVd+z2VjeQ5F5Obw==
+X-Google-Smtp-Source: AGHT+IH1HIV++y2p498uUKeXICIqTonP/XkL+xU6dt4xBDj6CXKEeUOGv7lJojUw920KVFSDaG10IA==
+X-Received: by 2002:a05:6a00:ad86:b0:7e8:43f5:bd3e with SMTP id d2e1a72fcca58-8187f78d9fdmr1867900b3a.42.1767675434866;
+        Mon, 05 Jan 2026 20:57:14 -0800 (PST)
+Received: from localhost ([122.172.80.63])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819baa1936dsm727051b3a.12.2026.01.05.20.57.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 16:49:08 -0800 (PST)
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 45B0CF4006A;
-	Mon,  5 Jan 2026 19:49:08 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Mon, 05 Jan 2026 19:49:08 -0500
-X-ME-Sender: <xms:BFxcacLaYSZeaZHCInRCEKx1t7gio2sOan8nMWlaOAftxb6cMbzZig>
-    <xme:BFxcaVi8cvoZQl5Yjxu0XkAdVD9WiLnvhLKqIGJ56Jkc-Uv-6oKEtDTmaK-O0_FI3
-    skFnOJcgXWWFOPCRuNqRWaplgcZn0dYLpM2dMrks1atArfO6zbR6A>
-X-ME-Received: <xmr:BFxcaVN_MHnqRgCLmuuW_xddB_5EgJOgN5rf_SgfuEUzcrr7m0ALSh6C>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdelkeejkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
-    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhepfeffudehveduteeuffeutdetieeftdelfeelveffffevteeffedtteehteegkeeg
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegs
-    ohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeige
-    dqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihig
-    mhgvrdhnrghmvgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhuthdprh
-    gtphhtthhopehlkhhpsehinhhtvghlrdgtohhmpdhrtghpthhtohepfhhujhhithgrrdht
-    ohhmohhnohhrihesghhmrghilhdrtghomhdprhgtphhtthhopehllhhvmheslhhishhtsh
-    drlhhinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhs
-    thhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheprhhitghhrghrugesnhhougdrrghtpd
-    hrtghpthhtoheprghnthhonhdrihhvrghnohhvsegtrghmsghrihgughgvghhrvgihshdr
-    tghomhdprhgtphhtthhopehjohhhrghnnhgvshesshhiphhsohhluhhtihhonhhsrdhnvg
-    htpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohep
-    mhhinhhgohesrhgvughhrghtrdgtohhm
-X-ME-Proxy: <xmx:BFxcaY5Gx8Jp86sLaYoazAtB9DP7v3tKbfmtFZVR8YT1OUkyVSK-sw>
-    <xmx:BFxcaUmk0QWQ3Edbq7ih6qmgSAky7Qhn95FtxRYszP2gv4lO5huQHQ>
-    <xmx:BFxcaQJTqkKpqJuZCkQAsFeM0C0nkyz3vT60LAhR_03jL-g4nAaoAg>
-    <xmx:BFxcaUTG5mSIvQgOY_GbRZ3D-7cZKEpzjwucqXIXpm73stWvyPiFpQ>
-    <xmx:BFxcadtBWFQ5rj93VI_SYR0myk8PisqpeSvfhhy8BiyD_jiI67FztcYD>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Jan 2026 19:49:07 -0500 (EST)
-Date: Tue, 6 Jan 2026 08:49:05 +0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: FUJITA Tomonori <fujita.tomonori@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-um@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [boqun:rust-sync.20260105a 18/22] error[E0277]: the trait bound
- `i8: AtomicImpl` is not satisfied
-Message-ID: <aVxcAZe6AEXEfx3G@tardis-2.local>
-References: <202601060041.k0JkAkUD-lkp@intel.com>
+        Mon, 05 Jan 2026 20:57:14 -0800 (PST)
+Date: Tue, 6 Jan 2026 10:27:12 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Nipun Gupta <nipun.gupta@amd.com>, 
+	Nikhil Agarwal <nikhil.agarwal@amd.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-clk@vger.kernel.org, 
+	imx@lists.linux.dev, dmaengine@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 11/11] cpufreq: s5pv210: Simplify with scoped for each OF
+ child loop
+Message-ID: <g4k2qdsihxfawfsi5ie3w2fhbsd2x6z5heifkcte75c2w3sjg3@cofrjgaiilta>
+References: <20260105-of-for-each-compatible-scoped-v1-0-24e99c177164@oss.qualcomm.com>
+ <20260105-of-for-each-compatible-scoped-v1-11-24e99c177164@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -120,72 +93,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202601060041.k0JkAkUD-lkp@intel.com>
+In-Reply-To: <20260105-of-for-each-compatible-scoped-v1-11-24e99c177164@oss.qualcomm.com>
 
-[Cc UML]
-
-On Tue, Jan 06, 2026 at 12:25:24AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git rust-sync.20260105a
-> head:   243aa6a057d46d3a4de9297422e480d469eddaf7
-> commit: 06ed7e7e7aa656f7054af7d3d3387a07244d85b1 [18/22] rust: sync: atomic: Add i8/i16 xchg and cmpxchg support
-> config: um-randconfig-001-20260105 (https://download.01.org/0day-ci/archive/20260106/202601060041.k0JkAkUD-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260106/202601060041.k0JkAkUD-lkp@intel.com/reproduce)
+On 05-01-26, 14:33, Krzysztof Kozlowski wrote:
+> Use scoped for-each loop when iterating over device nodes to make code a
+> bit simpler.  Note that there is another part of code using "np"
+> variable, so scoped loop should not shadow it.
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601060041.k0JkAkUD-lkp@intel.com/
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 > 
-> All errors (new ones prefixed by >>):
+> ---
 > 
->    In file included from kernel/sched/rq-offsets.c:5:
->    In file included from kernel/sched/sched.h:28:
->    In file included from include/linux/cgroup_api.h:1:
->    In file included from include/linux/cgroup.h:27:
->    In file included from include/linux/kernel_stat.h:8:
->    In file included from include/linux/interrupt.h:11:
->    In file included from include/linux/hardirq.h:11:
->    In file included from arch/um/include/asm/hardirq.h:24:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:12:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
->    |                                                   ~~~~~~~~~~ ^
->    1 warning generated.
->    llvm-nm: error: rust/helpers/helpers.o: No such file or directory
->    clang diag: include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->    clang diag: include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->    clang diag: include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >> error[E0277]: the trait bound `i8: AtomicImpl` is not satisfied
->    --> rust/kernel/sync/atomic/internal.rs:265:7
->    |
->    265 |     [ i8 => atomic_i8, i16 => atomic_i16, i32 => atomic, i64 => atomic64 ]
->    |       ^^ the trait `AtomicImpl` is not implemented for `i8`
->    |
->    = help: the following other types implement trait `AtomicImpl`:
->    i32
->    i64
+> Depends on the first patch.
+> ---
+>  drivers/cpufreq/s5pv210-cpufreq.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/s5pv210-cpufreq.c b/drivers/cpufreq/s5pv210-cpufreq.c
+> index ba8a1c96427a..e64e84e1ee79 100644
+> --- a/drivers/cpufreq/s5pv210-cpufreq.c
+> +++ b/drivers/cpufreq/s5pv210-cpufreq.c
+> @@ -629,19 +629,17 @@ static int s5pv210_cpufreq_probe(struct platform_device *pdev)
+>  		goto err_clock;
+>  	}
+>  
+> -	for_each_compatible_node(np, NULL, "samsung,s5pv210-dmc") {
+> -		id = of_alias_get_id(np, "dmc");
+> +	for_each_compatible_node_scoped(dmc, NULL, "samsung,s5pv210-dmc") {
+> +		id = of_alias_get_id(dmc, "dmc");
+>  		if (id < 0 || id >= ARRAY_SIZE(dmc_base)) {
+> -			dev_err(dev, "failed to get alias of dmc node '%pOFn'\n", np);
+> -			of_node_put(np);
+> +			dev_err(dev, "failed to get alias of dmc node '%pOFn'\n", dmc);
+>  			result = id;
+>  			goto err_clk_base;
+>  		}
+>  
+> -		dmc_base[id] = of_iomap(np, 0);
+> +		dmc_base[id] = of_iomap(dmc, 0);
+>  		if (!dmc_base[id]) {
+>  			dev_err(dev, "failed to map dmc%d registers\n", id);
+> -			of_node_put(np);
+>  			result = -EFAULT;
+>  			goto err_dmc;
+>  		}
+> 
 
-UML_X86 is using the atomics of x86 kernel (defined in
-arch/x86/include/asm/atomic*), right? If so, I think we need this:
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
-index bdd7c8e39b01..44b12e45f9a0 100644
---- a/arch/x86/um/Kconfig
-+++ b/arch/x86/um/Kconfig
-@@ -9,6 +9,7 @@ endmenu
- config UML_X86
-        def_bool y
-        select ARCH_USE_QUEUED_RWLOCKS
-+       select ARCH_SUPPORTS_ATOMIC_RMW
-        select ARCH_USE_QUEUED_SPINLOCKS
-        select DCACHE_WORD_ACCESS
-        select HAVE_EFFICIENT_UNALIGNED_ACCESS
-
-Regards,
-Boqun
-
-[...]
+-- 
+viresh
