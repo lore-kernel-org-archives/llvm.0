@@ -1,44 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC6633985D;
-	Wed,  7 Jan 2026 20:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00ACCBA3F;
+	Wed,  7 Jan 2026 21:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767818753; cv=none; b=lvKMSB++mlkRsQmU5GoxpiYtecQhk2bX2aEjIE3yfUqlmfLBat7mzo1GfjC9p0qTrZ76nHGJuZrzKk0qGnxUxhx9FCzVtTEeye5dH8e8IirOTGZrBWTy9pwWT8aPBObO5jF7UFvs+BLrzKkCKw6v8Tu5ifEJenqZjcvFKZf18pY=
+	t=1767820325; cv=none; b=EIYx3hCvPdbzdDWnnI+jBDBmxFJVdj9qzb8Xe/Y62CsdOjsztx+SX8Ll10ywedP4lNziS3KDXDjhZD5W7HB6/QOHPZBjpZ/fumbHqY4NtWJi4sFZzbNStU7SQ+KXIR4UIyuEbkIydNHrKTxDSdF6uUkvBhf9rPDCFYDUGxHARI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767818753; c=relaxed/simple;
-	bh=ylxZ3xfbrrZ8hUeBW7snxibvV9z4nQSKvWiM3FqQYQI=;
+	s=arc-20240116; t=1767820325; c=relaxed/simple;
+	bh=vU/Y2pefRyJ+jQDO9QdGjxnQJ/MzStethzjBgPfzTLY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ollqQ0hfLg/c6oJDsydPGgYCFon/vAP/t/b9Oow8nauYjxrZKZ7wR701+YfFAwdu4SW/ggMNoVexJpY2+0uy/x11L2FZp5TNRTekmJ6POh/lT1JBx674XurQiz8K3cGYCBetPkCc93fkygndZiJg42Zuraqc+gl7duXyaira16Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cSa0saWw; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=RpaKFBPwozYa0T6DmDOP+0KPq4dEyaw/MELcxCJy+5RKqCPvmSqRggpQ/b9pWxlTpd0qLymAdwLtGBR35FioEPQjDV5QEi2br83woarflvgiPjRwqLMxx+AeLgeykpg+p3XML2fDwE/RtDzHsaS/W1eUvOzLiKADdd3PP/HOuns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S/fSelmj; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cSa0saWw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A2CC19422;
-	Wed,  7 Jan 2026 20:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767818753;
-	bh=ylxZ3xfbrrZ8hUeBW7snxibvV9z4nQSKvWiM3FqQYQI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cSa0saWwd5Dh9WStEfIglG/Gdi8xcV/rXCFC10VW/gfz5P0lbPGesebgkaKUncca4
-	 sWcVDR0fM4YCNKYY2gugZsnQ/SPQLaPxCwqGiAN+9MoDWwKgZYIIZOVBRruj1ACA1T
-	 pnnxFCPiyaFvNHpPRah8V8D3fr6ZfA7EIgbV2ixIoQnZCFcAhIZE/j/WECyNosVwyH
-	 c1rBsZtmt5j7ARIssKmPeU6+GKzEtCAireAGc6c2irJW3o7Z4mEMuSBpdk/d9ISPf2
-	 RLrnQkrAEdscWHhe1UgsJepPsdnEmKOJ7E7hwwAQR5jnjBbQsgUiY/OI7TqXSfRFW2
-	 zAhkfTAmO22mg==
-Date: Wed, 7 Jan 2026 13:45:49 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	kernel test robot <lkp@intel.com>, Marco Elver <elver@google.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [peterz-queue:locking/core 34/39] WARNING: modpost: EXPORT
- symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol
- will not be versioned.
-Message-ID: <20260107204549.GA846948@ax162>
-References: <202512222219.F6EkVNmQ-lkp@intel.com>
- <20260105153520.GV3707891@noisy.programming.kicks-ass.net>
- <20260107114608.10536C6a-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S/fSelmj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767820324; x=1799356324;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vU/Y2pefRyJ+jQDO9QdGjxnQJ/MzStethzjBgPfzTLY=;
+  b=S/fSelmjzvfubHDAwNXauSJWFeQjFCOaLD+Mr+N6Wi/WJGWlHrexgm51
+   Lp2qQA6wVlWPsA1V6xAbW7auTJ0hXl9TTgqb5ZBwXA4iB43R42pBb++3e
+   n2VHjYHY++zOWi3hvsoILBPkZLC0bYHynhfK0qUGDKMfXxetXlcAc8mmi
+   Vb0CLIGNN52PugDxYXSbqkp0PnXVBsD+GMeAWciKsPmhuVQI4zCrE2ntb
+   w1BZzFh38CJT90p5+PsA3p4FTADg4OwNOnWVSoQPq2e8RzIwWsHuJ4OFO
+   H3kBu+ewyFW9Brgl8dRN6Ik8BCuj0sSa47CCQYjIWGvEZX+qpiiwdKTCR
+   w==;
+X-CSE-ConnectionGUID: 5bldo3SAQMaglvLwbnkgqA==
+X-CSE-MsgGUID: 9boQWtHwS/m4sHE0tlWpsQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="80558863"
+X-IronPort-AV: E=Sophos;i="6.21,209,1763452800"; 
+   d="scan'208";a="80558863"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 13:12:03 -0800
+X-CSE-ConnectionGUID: hiV6ib5fRMOPr5wSLxDCzg==
+X-CSE-MsgGUID: eC/gqlvTQ5Gj56Y++knxlA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,209,1763452800"; 
+   d="scan'208";a="207503017"
+Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 07 Jan 2026 13:12:01 -0800
+Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vdaow-000000001cS-340E;
+	Wed, 07 Jan 2026 21:11:58 +0000
+Date: Wed, 7 Jan 2026 22:11:01 +0100
+From: kernel test robot <lkp@intel.com>
+To: Kartik Rajput <kkartik@nvidia.com>, lenb@kernel.org,
+	sakari.ailus@linux.intel.com, mika.westerberg@linux.intel.com,
+	andriy.shevchenko@linux.intel.com, thierry.reding@gmail.com,
+	jonathanh@nvidia.com, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kartik Rajput <kkartik@nvidia.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] ACPI: bus: Use OF match data for PRP0001 matched devices
+Message-ID: <202601072231.MPkHMWgN-lkp@intel.com>
+References: <20260107062453.10893-1-kkartik@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,45 +67,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260107114608.10536C6a-hca@linux.ibm.com>
+In-Reply-To: <20260107062453.10893-1-kkartik@nvidia.com>
 
-On Wed, Jan 07, 2026 at 12:46:08PM +0100, Heiko Carstens wrote:
-> On Mon, Jan 05, 2026 at 04:35:20PM +0100, Peter Zijlstra wrote:
-> > > commit: ee771bab5add646af678f7a40b6272c21a0964d7 [34/39] stackdepot: Enable context analysis
-> > > All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> > > 
-> > > >> WARNING: modpost: EXPORT symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol will not be versioned.
-> > > Is "stack_depot_save_flags" prototyped in <asm/asm-prototypes.h>?
-> > > >> WARNING: modpost: EXPORT symbol "stack_depot_save" [vmlinux] version generation failed, symbol will not be versioned.
-> > > Is "stack_depot_save" prototyped in <asm/asm-prototypes.h>?
-> > 
-> > Heiko, I'm seeing these warnings, and I can reproduce in a local build.
-> > But I have to note that its just one more of an already existing string
-> > of similar failures.
-> > 
-> > I don't see anything like this on x86, not have I had robot reports for
-> > other architectures. As such, I'm considering this a pre-existing s390
-> > issue.
-> > 
-> > Please let me know if this is something you want me to look at
-> > nevertheless.
-> 
-> Sorry, to be more precise: I haven't seen anything like this before on s390.
-> All other occurences are also new and come with EXPORT_SYMBOL statements
-> within files where context analysis has been enabled.
-> 
-> When enabling CONFIG_MODVERSIONS I see this also for x86 builds.
-> 
-> I assume you cannot see this error pattern for s390 builds with
-> context analysis disabled?
+Hi Kartik,
 
-Something about the context analysis makes genksyms fall over, running
-it manually on kernel/sched/core.i with '-w' to show warnings reveals
-many new "syntax error" instances. I don't see any warnings when using
-gendwarfksyms. Maybe it is context_lock_struct, as that is the first
-error I see in the list:
+kernel test robot noticed the following build errors:
 
-  include/linux/spinlock_types_raw.h:14: syntax error
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge westeri-thunderbolt/next linus/master v6.16-rc1 next-20260107]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Kartik-Rajput/ACPI-bus-Use-OF-match-data-for-PRP0001-matched-devices/20260107-142543
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20260107062453.10893-1-kkartik%40nvidia.com
+patch subject: [PATCH] ACPI: bus: Use OF match data for PRP0001 matched devices
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260107/202601072231.MPkHMWgN-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260107/202601072231.MPkHMWgN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601072231.MPkHMWgN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/bus.c:1034:21: error: expected identifier or '('
+    1034 |         struct acpi_device = ACPI_COMPANION(dev);
+         |                            ^
+>> drivers/acpi/bus.c:1036:53: error: use of undeclared identifier 'adev'; did you mean 'dev'?
+    1036 |         if (!strcmp(ACPI_DT_NAMESPACE_HID, acpi_device_hid(adev))
+         |                                                            ^~~~
+         |                                                            dev
+   drivers/acpi/bus.c:1030:61: note: 'dev' declared here
+    1030 | const void *acpi_device_get_match_data(const struct device *dev)
+         |                                                             ^
+>> drivers/acpi/bus.c:1037:3: error: expected ')'
+    1037 |                 return acpi_of_device_get_match_data(dev);
+         |                 ^
+   drivers/acpi/bus.c:1036:5: note: to match this '('
+    1036 |         if (!strcmp(ACPI_DT_NAMESPACE_HID, acpi_device_hid(adev))
+         |            ^
+   3 errors generated.
+
+
+vim +1034 drivers/acpi/bus.c
+
+  1029	
+  1030	const void *acpi_device_get_match_data(const struct device *dev)
+  1031	{
+  1032		const struct acpi_device_id *acpi_ids = dev->driver->acpi_match_table;
+  1033		const struct acpi_device_id *match;
+> 1034		struct acpi_device = ACPI_COMPANION(dev);
+  1035	
+> 1036		if (!strcmp(ACPI_DT_NAMESPACE_HID, acpi_device_hid(adev))
+> 1037			return acpi_of_device_get_match_data(dev);
+  1038	
+  1039		match = acpi_match_device(acpi_ids, dev);
+  1040		if (!match)
+  1041			return NULL;
+  1042	
+  1043		return (const void *)match->driver_data;
+  1044	}
+  1045	EXPORT_SYMBOL_GPL(acpi_device_get_match_data);
+  1046	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
