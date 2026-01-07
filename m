@@ -1,134 +1,117 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71543126C6;
-	Wed,  7 Jan 2026 11:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142DB30F545
+	for <llvm@lists.linux.dev>; Wed,  7 Jan 2026 12:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767786380; cv=none; b=FTZ74qhAj/6mGMBIEgMbsDUad8TkdRFcvCo6QBUZboAl0XHeRegPwXcSKazsrOz/9OjAk0ctVQFLcBqcCLPF2J7XvYFE2khZ7nzlA97wonOj6iu119jlo9WOklj2fNMjX4RH2kibhBeIgLeAvY3P9ONFN/vsk44D8nGUDwxwuu0=
+	t=1767787203; cv=none; b=Jm9ksOsEYi9kdgt/b+7Ilp5VJLZ+hDoxNStpveCh+rremfmX0kaUO48e3Gn3uMz422LViZHKkZHNoxbFzdYZ6vVowTxw/bTlGNKuyT+iW8vf7MYSdt1xkGjRfZElwh0RQ8AwqE6YIAQrDpZVeDujL+nht3vdpfSUazP78VZG/J4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767786380; c=relaxed/simple;
-	bh=0FDl3N90vVT+GMCNTjM0mgcs0kHntDjPJwpISdAwIyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cRxAdubCOPmUqewhl83p2Ga+RYIf5H9GqpUlRRySpaX0nkiZTlnNEtxiwKufMn7Wog9BJrbsoGz5G9mYuP+k1bkzILouaKRfaCwesh9qgPR2DQ9Bwxg/BwidCOiW4pn7RJ2eyf53Ga9S6JBz3KxIzNqDdmu7LlR6qwu4Q0J+1s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rYYWxPfn; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1767787203; c=relaxed/simple;
+	bh=TfMWykcf+8UXGfHGmT9UsPj0B1MObIutniI9d+Q2eso=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=txe39kkSbAalyi7As0dzETgsV2ATwIKLvRfmK8LCFUbV25880svZwiMGaZpnJfyzpEck4e8Ao2TdTtC1vXe5N4tyVn3++N4A2E0NAyzv4qPzyfQzq7rHEqOOcByCJolaVlHS8QZhpgkjOxXfm9pKAxVfqYtqvTrqDIeh9eS9sP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yj9kdNe2; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rYYWxPfn"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 607ARU9p019057;
-	Wed, 7 Jan 2026 11:46:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=vP4NeFrIl/Y/2eOEx9BN4fh6Wo1vDo
-	F/Yaavp2jntQ8=; b=rYYWxPfntA9ie0rIAwdzYSMapY7cpZGAgRsK2nUoaUF4ho
-	mAwMTSsAmnYuioIIZMjAGe+ukYOP/PEx3wNIeQ9xhV+0yqvjZoezYy57GTo+GgN3
-	QMjDCzA1uvUd8RQo/p2CUsXhVqvlYqTvXmyE/L3HlT5haLUOJM8uwDnrf9QTVAvi
-	mcOBQSKNzKQ+0ByW8UeAPOHE3Xbpd//whZemWJysjVdrrZpsNRTHbNFoYA4NcbvC
-	vAtOVz1TPocqg/GbxSeBq3cdompgHlVbzzd+1kYOvrNKPuEBY3Zeer4oc9dBtQ0b
-	68qBSBweQE+4gNCOzgqnpVxZMrtf+iSskCMfdZmg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4betsq8kjd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Jan 2026 11:46:13 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 607BkC3b018610;
-	Wed, 7 Jan 2026 11:46:12 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4betsq8kjb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Jan 2026 11:46:12 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6078wpFn012560;
-	Wed, 7 Jan 2026 11:46:11 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bffnjgh4j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Jan 2026 11:46:11 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 607BkATm39387616
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 7 Jan 2026 11:46:10 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1656E20040;
-	Wed,  7 Jan 2026 11:46:10 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB94B20043;
-	Wed,  7 Jan 2026 11:46:09 +0000 (GMT)
-Received: from osiris (unknown [9.52.214.206])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  7 Jan 2026 11:46:09 +0000 (GMT)
-Date: Wed, 7 Jan 2026 12:46:08 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: kernel test robot <lkp@intel.com>, Marco Elver <elver@google.com>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [peterz-queue:locking/core 34/39] WARNING: modpost: EXPORT
- symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol
- will not be versioned.
-Message-ID: <20260107114608.10536C6a-hca@linux.ibm.com>
-References: <202512222219.F6EkVNmQ-lkp@intel.com>
- <20260105153520.GV3707891@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yj9kdNe2"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-12055b489e0so140987c88.3
+        for <llvm@lists.linux.dev>; Wed, 07 Jan 2026 04:00:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767787201; x=1768392001; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IvnLNPW39tzQQ3hSPGDk4srbtyERtKsm0TVoURbB78I=;
+        b=Yj9kdNe25NZrRV/bZoHSjQJoc3eFoQidoxhAD+OPzwrGPyGmH7eUKm5gHcmhjBwCFY
+         WgisE7//ogKMySewI8DjzzpP1UQDeh8+vvTPy0pBRQxooAsoOLLD1JFFMMyVbeGONVsd
+         yij4eLk1hlYtuCbiok/dNRMglglRjkPtyJjfbs1aWFP8ussxuGRoPedTHSJKgDEUypYu
+         5EJ34F5Um9KDrfHvx9ASHpjUwmZJsU2wwNTLDJgctIgyZV9X2vkpKEFiOCUGC0luqqk5
+         xwZK2ZXwSpVliUEPjAtUwm8n+PmEQU3dalELuycjOJ6JSbkgl/MUWtoFRygErAxaHM07
+         jO0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767787201; x=1768392001;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IvnLNPW39tzQQ3hSPGDk4srbtyERtKsm0TVoURbB78I=;
+        b=iPeTXEzXZh8X9w5RzFdqjyCMCGpIIk29SBXdJWYY74yQMyxJuzZIr/1pu/tcnY/6ZY
+         9hM0C9mWkVppQntqxpwYEcAmB8ntSQcVLrJbr7cTGJRryczN/rDtcy8ExjOpBzUvwOnX
+         Aja458p3foSlE2qPQtbDpbhKamgZy7TKdhZASXCFVtNtRq1JaoDBALsWazkD89T7HZTN
+         wNlTrBmk9DF1oIlIbg5HxLM6KE3G87Ndrg9h6Ymzyw6vjXEW40znvM6RPHGMGQd0oTxJ
+         i0GKMF/mli6oEk28m8lh12jkcP1eKfRE99r/jVBsacbWIt+yfLPzVvZLGgR4kb2nkLJL
+         O6+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUC5f0sqWnxEJeZe6zBdMUA95VY2YwUYT+WvrS7NJhDqjstiqWs028PbS/p7sC2lspKz6LZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YzpzOYHHwV8czBb+DLkN0kZf7LbWIoqhglusqBQsSkwVWn0Z5Dl
+	aRJx89MiCd8TbZm0RQ2D0qW8FOKXk5ofDuzRkFjT0g6O8Xk1pD0Fuy9QZM07naxloZCc9aFqOGf
+	+NyhSWghJk9APzr34P/SUGUIT2seKGFI=
+X-Gm-Gg: AY/fxX79V0FwRH145qstDfSQ6F3qC160yKmHmL9hXwtyUSE+/6bVv4m1BMcjq+3RMzC
+	2IzOWp+9HeRQfa+j29c0Fq2U1BRCWdefBkNxbGwKcv+EzM2OBZTj8qEYUM8+BODxCSNMQJyxBIV
+	ljVo7MhcGVkpFj0Ua4/9NXVHZzfKXYTFx0TMBAahp9rCmjI2oDxjfPeMTPgJNHouEuGCa0kO5H8
+	M0sxQtbuYp+gc1Sij/aXTxq66zDKzPbk7P8V9mfhg9wzyMtKNGKN91unmtcd1ovTfAKTJJk+XWI
+	lhSNMnpHCdhLQJ3fjVcjq8Egzzz8ro1nbSqkPBRDzGiEOfFF/fSzgCX+xM74mWhB4M05IALWAv/
+	PMGD3UOz3uwSS
+X-Google-Smtp-Source: AGHT+IHl2VXT8tuqTG18KAX87XjyJCanrQuK31sAG/wWGLYWMCAEZ3iuh0hHmV4OVYAR5S0P8i88XR+h9IHEV+IH9n8=
+X-Received: by 2002:a05:7301:4288:b0:2a4:3592:cf89 with SMTP id
+ 5a478bee46e88-2b17d0d4b88mr704118eec.0.1767787200933; Wed, 07 Jan 2026
+ 04:00:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260105153520.GV3707891@noisy.programming.kicks-ass.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2wk_w2bMrXU0h7sjzylMIh1XEdMa8MVp
-X-Authority-Analysis: v=2.4 cv=Jvf8bc4C c=1 sm=1 tr=0 ts=695e4785 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=OQpX69FAkt-afPtDZqAA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: Q06weXAJInH_woGlMumulDpCvL1cWett
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA3MDA5MSBTYWx0ZWRfX6RHkQAjqMhlR
- +v8p6+kbBQed5wpguLdFNDBlINiNEdfoHrhUt2SjezcKZQHvNmpSGL60fJpbLSghZ7zhMxC4WKP
- jWgBtsCDiVCRrEBn7Wf15p2tHR+hUP7Cu4gQyevMPobqLQ03i6yqDBlix3fASnn96H847CuGbL7
- 7MgJxKD+iEtHfHXmJrr9EDYeefxXGZSTPKmZjgb4oaWERbdcfN56CT2/FFFyPBC1JjlGG+RsRlv
- 4ZFKkq75MDGiT/JAWnlO84buZEmZ/tV1iER0a9ibcdSKIi0GTO54iRpm3mwScLtpsJ8OCEzmP+I
- lcoPbVPhWXU1GWrA6ChP8O7Zv+y9+F1+ApoB9i54ERQH40mnspFLAlQ+Xp5QWDNDApylkpyFdHq
- aapfkZMSYyfmcCN6LT7opp2Wokza2H3CBQTRk+TtqQgYKA4+S8PRA7sHhcVSSyyVkyoVtJIVGuR
- XDhOpSV76kFUO7lIAvg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-07_01,2026-01-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 adultscore=0 spamscore=0 bulkscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2512120000
- definitions=main-2601070091
+References: <20260105150106.567830-1-gary@kernel.org> <aVvdt90YmhJz3i5i@x1> <aV4TkNE_hAyByISq@google.com>
+In-Reply-To: <aV4TkNE_hAyByISq@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 7 Jan 2026 12:59:48 +0100
+X-Gm-Features: AQt7F2qCZtVjBpQW4g-uNITeBCmbGHFYwnjYgECDW25Z8q9F1kvT6B953AVTAIo
+Message-ID: <CANiq72kUVvMznfFtcjks=0iJ7HE2uvCSyD-Xu5NV=_9ZykVXhg@mail.gmail.com>
+Subject: Re: [PATCH v2] perf symbol: remove Rust symbol workarounds
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andi Kleen <ak@linux.intel.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Stephen Brennan <stephen.s.brennan@oracle.com>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 05, 2026 at 04:35:20PM +0100, Peter Zijlstra wrote:
-> > commit: ee771bab5add646af678f7a40b6272c21a0964d7 [34/39] stackdepot: Enable context analysis
-> > All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> > 
-> > >> WARNING: modpost: EXPORT symbol "stack_depot_save_flags" [vmlinux] version generation failed, symbol will not be versioned.
-> > Is "stack_depot_save_flags" prototyped in <asm/asm-prototypes.h>?
-> > >> WARNING: modpost: EXPORT symbol "stack_depot_save" [vmlinux] version generation failed, symbol will not be versioned.
-> > Is "stack_depot_save" prototyped in <asm/asm-prototypes.h>?
-> 
-> Heiko, I'm seeing these warnings, and I can reproduce in a local build.
-> But I have to note that its just one more of an already existing string
-> of similar failures.
-> 
-> I don't see anything like this on x86, not have I had robot reports for
-> other architectures. As such, I'm considering this a pre-existing s390
-> issue.
-> 
-> Please let me know if this is something you want me to look at
-> nevertheless.
+On Wed, Jan 7, 2026 at 9:04=E2=80=AFAM Namhyung Kim <namhyung@kernel.org> w=
+rote:
+>
+> I'm afraid there may be some outdated kernels which don't have the fix
+> yet.  Maybe make sense to wait some more time for them to disappear?
 
-Sorry, to be more precise: I haven't seen anything like this before on s390.
-All other occurences are also new and come with EXPORT_SYMBOL statements
-within files where context analysis has been enabled.
+Hmm... Do you mean that someone would use a new perf with an old
+kernel? Is that supported etc.?
 
-When enabling CONFIG_MODVERSIONS I see this also for x86 builds.
+In any case, the fix is getting backported all the way to 6.1.y, i.e.
+all the supported LTSs:
 
-I assume you cannot see this error pattern for s390 builds with
-context analysis disabled?
+    761e965d2c61 ("kallsyms: Fix wrong "big" kernel symbol type read
+from procfs")
+    d5fe0c115bbc ("kallsyms: Fix wrong "big" kernel symbol type read
+from procfs")
+    d46ef2bf91ef ("kallsyms: Fix wrong "big" kernel symbol type read
+from procfs")
+
+And the one in this thread could in principle be backported too to
+6.18.y now that the fix is there, no?
+
+Thanks!
+
+Cheers,
+Miguel
