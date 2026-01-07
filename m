@@ -1,149 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B90F18859B;
-	Wed,  7 Jan 2026 08:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAB01A4F3C
+	for <llvm@lists.linux.dev>; Wed,  7 Jan 2026 08:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767773075; cv=none; b=arFPcADMS7Pw4tKtxmwMkBleraxglzVBDSJoYSlikipgyi1j6o1Ub/y83e0ntKe5NJlS2aZXVt17pwhQfbY01RegGSbAG4/I7G2hj4ljtkuYsEqkMZHw9IKRxq/Ynv/K50rIrhi0R+i4edmC1U1acHNFYCUMRrb4OlgOLAkLWz4=
+	t=1767773116; cv=none; b=TFpZGXbeUiOuh1+7eIF9wnYtNWQvOtmqbWVwuBV8K5kbQCjKrU//vD71u46kBu6cQA+zJE5SdOS5g52EkLBalewk+6/OaCxPtgufLwhRoorApd53vRust/cODJO4UonIgyLdxv65DzG45ONmhT2B+zzefS7328/c3rejh8d1tC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767773075; c=relaxed/simple;
-	bh=KNSQ4jS+uaz7zUizkEDbdTh1ukeuADvTY5T7Q3SBezQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dfh3fVltUIZ+FuQdqT5hd91KK5McCR8ZYxnS1qq2JZcs3tcCuBO89qJUX6o7fue3igOsddoH1rO2jn8CfAhDgYQ4OduX2Jr/JmhHdAlH5/MBVxAtYkm6w/i7YCRCM0cr5/FIEoXn3dHnbY/hrXa8mkouRI1v0oX4EXyEzkadkb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RCNZYBKJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767773116; c=relaxed/simple;
+	bh=xHllFBFUlqwO9t0eAvqYTg9WJll2vY0hzxsQKnhIlxg=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fyMMVnbslyW6u5EX4lF4pgLip/HDs3BMf+9iRGpJ2tCifnVgwg8yF7DUogGu3OmbJb9EEMugNk5GNB6bTW/If5hjx1fHnXFMPc5HIbZGvIrV5cNvy88srfl/g1L9ccvtzoMM5AoAeT8uys3j5uITu7VQWTA26spRKMVeHfBoV+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hW5uosiX; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UR/FsX+/; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hW5uosiX; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UR/FsX+/; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCNZYBKJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE61AC4CEF7;
-	Wed,  7 Jan 2026 08:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767773074;
-	bh=KNSQ4jS+uaz7zUizkEDbdTh1ukeuADvTY5T7Q3SBezQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RCNZYBKJHLsUtJtomJjDt4QgQQ9nTe3ry74SElBoEH28iVwd5Bxj4EOrfBqfEnHjV
-	 YBwiLPKjxXvn+JzXOpM1RQ83g2wG0oKykt6t3KZPgt9B+Uvl97IDDlJ9scT8nKGxra
-	 xm+mhkSli5V9P8zOVueHTiqEtCs4CLp1IyO3OGTkUkx1EMWHPEppnL19kf7qX+YKGe
-	 JM9sRpU6tqypwTueA/MTlvYV+FUClsZIiIW2bdyRya9SVCHMWrQ9Sa3IUOYsWc+Y2N
-	 zZChHCPoA3uVzgRyFw7nHK3lTzRnKkGSfF19WKjNWTszpBVJ68Ug+lxghtSD8sAllB
-	 +/26YgBkm94ZQ==
-Date: Wed, 7 Jan 2026 00:04:32 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Gary Guo <gary@garyguo.net>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hW5uosiX";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="UR/FsX+/";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hW5uosiX";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="UR/FsX+/"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 859FE33AF2;
+	Wed,  7 Jan 2026 08:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767773111; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jD09M/XJzsS6gONTWnJUHOB1Hx0G1Mtqz242EBUvEmE=;
+	b=hW5uosiXriRQ2Lzvw3G12+ZtWw0/ODqBX8wrsAPcDDWR1dY0O6zjQ2tGTFWDWJ+KZNDtQD
+	KVkj0IysN8iRRCNAEeRex9/w+/Tq7hrHpCpoqsQDHvWe0YUeUoG7XdWFCXOFSeJxN/jlnS
+	SUo28PIhRugOuc2UrHNmXqomSRyFKIw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767773111;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jD09M/XJzsS6gONTWnJUHOB1Hx0G1Mtqz242EBUvEmE=;
+	b=UR/FsX+/JdSxAs9ksYmZf9HrYNG3gcYOoxzYt8gYDQFVOY5yK3FPhjLyUPgQkC8/K1gKAs
+	sWcj21gaSlxzShDA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=hW5uosiX;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="UR/FsX+/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767773111; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jD09M/XJzsS6gONTWnJUHOB1Hx0G1Mtqz242EBUvEmE=;
+	b=hW5uosiXriRQ2Lzvw3G12+ZtWw0/ODqBX8wrsAPcDDWR1dY0O6zjQ2tGTFWDWJ+KZNDtQD
+	KVkj0IysN8iRRCNAEeRex9/w+/Tq7hrHpCpoqsQDHvWe0YUeUoG7XdWFCXOFSeJxN/jlnS
+	SUo28PIhRugOuc2UrHNmXqomSRyFKIw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767773111;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jD09M/XJzsS6gONTWnJUHOB1Hx0G1Mtqz242EBUvEmE=;
+	b=UR/FsX+/JdSxAs9ksYmZf9HrYNG3gcYOoxzYt8gYDQFVOY5yK3FPhjLyUPgQkC8/K1gKAs
+	sWcj21gaSlxzShDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 37BAE3EA63;
+	Wed,  7 Jan 2026 08:05:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id p8xWDLcTXmllSAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 07 Jan 2026 08:05:11 +0000
+Date: Wed, 07 Jan 2026 09:05:10 +0100
+Message-ID: <87jyxtetl5.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Andi Kleen <ak@linux.intel.com>, Dmitry Vyukov <dvyukov@google.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] perf symbol: remove Rust symbol workarounds
-Message-ID: <aV4TkNE_hAyByISq@google.com>
-References: <20260105150106.567830-1-gary@kernel.org>
- <aVvdt90YmhJz3i5i@x1>
+	linux-sound@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ALSA: pcm: Revert bufs move in snd_pcm_xfern_frames_ioctl()
+In-Reply-To: <20260106-pcm_native-revert-var-move-free-for-old-clang-v1-1-06a03693423d@kernel.org>
+References: <20260106-pcm_native-revert-var-move-free-for-old-clang-v1-1-06a03693423d@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.1 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aVvdt90YmhJz3i5i@x1>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Flag: NO
+X-Spam-Score: -2.01
+X-Rspamd-Queue-Id: 859FE33AF2
+X-Spamd-Result: default: False [-2.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[perex.cz,suse.com,gmail.com,google.com,vger.kernel.org,lists.linux.dev,intel.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[lkml];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Level: 
 
-Hello,
-
-On Mon, Jan 05, 2026 at 12:50:15PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Mon, Jan 05, 2026 at 03:00:57PM +0000, Gary Guo wrote:
-> > From: Gary Guo <gary@garyguo.net>
-> > 
-> > Due to an off-by-one error introduced in commit 73bbb94466fd ("kallsyms:
-> > support "big" kernel symbols"), long symbols (which are currently only
-> > produced by Rust) can have their symbol type being wrongly parsed by
-> > kernel/kallsyms.c.
+On Wed, 07 Jan 2026 00:08:18 +0100,
+Nathan Chancellor wrote:
 > 
-> Looks sane, applied to perf-tools-next,
-  
-I'm afraid there may be some outdated kernels which don't have the fix
-yet.  Maybe make sense to wait some more time for them to disappear?
+> When building with clang older than 17 targeting architectures that use
+> asm goto for their get_user() and put_user(), such as arm64, after
+> commit f3d233daf011 ("ALSA: pcm: Relax __free() variable declarations"),
+> there are bogus errors around skipping over a variable declared with the
+> cleanup attribute:
+> 
+>   sound/core/pcm_native.c:3308:6: error: cannot jump from this asm goto statement to one of its possible targets
+>           if (put_user(result, &_xfern->result))
+>               ^
+>   ...
+>   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+>           asm goto(
+>           ^
+>   sound/core/pcm_native.c:3295:6: note: possible target of asm goto statement
+>           if (put_user(0, &_xfern->result))
+>               ^
+>   ...
+>   sound/core/pcm_native.c:3300:8: note: jump exits scope of variable with __attribute__((cleanup))
+>           void *bufs __free(kfree) =
+>                 ^
+> 
+> clang-17 fixed a bug in clang's jump scope checker [1] where all labels
+> in a function were checked as valid targets for all asm goto instances
+> in a function, regardless of whether they were actual targets in a
+> paricular asm goto's provided list of labels.
+> 
+> To workaround this, revert the change done to
+> snd_pcm_xfern_frames_ioctl() by commit f3d233daf011 ("ALSA: pcm: Relax
+> __free() variable declarations") to avoid a variable declared with
+> cleanup from existing between multiple uses of asm goto. There are no
+> other uses of cleanup in this function so there should be low risk from
+> moving this variable back to the top of the function.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1886 [1]
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202512190802.i4Jzbcsl-lkp@intel.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks,
-Namhyung
+I hoped that this mess is addressed in the put_user() side, but it
+doesn't seem happening, so I took your workaround now.
 
 
-> > This has been fixed in commit f3f9f42232dee5 ("kallsyms: Fix wrong "big"
-> > kernel symbol type read from procfs"), and these symbols are now
-> > reported correctly.
-> > 
-> > Drop the workaround in perf symbol that filter out these symbol types.
-> > 
-> > Specifically, '1' and 'l' can never be generated by nm -- 'u' does
-> > indicate GNU unique, however such symbols are only generated by G++ for
-> > C++ templates, and are never generated by LLVM (LLVM generates weak
-> > symbols in such cases instead). 'N' can appear if symbols exist inside
-> > debug sections, and 'n' may appear for symbols inside note sections,
-> > however these sections do not typically have symbol (and they're
-> > explicitly filtered out by kallsyms).
-> > 
-> > Therefore, the previous occurrence of these symbols types must be due to
-> > the off-by-one error and can be safely removed.
-> > 
-> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> > Signed-off-by: Gary Guo <gary@garyguo.net>
-> > ---
-> > v2:
-> > - Removed the "__" change as suggested by Miguel
-> > - Expanded the commit message to mention why "N" and "n" cannot appear
-> > - Link to v1: https://lore.kernel.org/rust-for-linux/20251223175216.1353814-1-gary@kernel.org/#t
-> > ---
-> >  tools/perf/util/symbol.c | 19 ++++---------------
-> >  1 file changed, 4 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> > index 814f960fa8f8d..8662001e1e25b 100644
-> > --- a/tools/perf/util/symbol.c
-> > +++ b/tools/perf/util/symbol.c
-> > @@ -104,21 +104,10 @@ static enum dso_binary_type binary_type_symtab[] = {
-> >  
-> >  #define DSO_BINARY_TYPE__SYMTAB_CNT ARRAY_SIZE(binary_type_symtab)
-> >  
-> > -static bool symbol_type__filter(char __symbol_type)
-> > -{
-> > -	// Since 'U' == undefined and 'u' == unique global symbol, we can't use toupper there
-> > -	// 'N' is for debugging symbols, 'n' is a non-data, non-code, non-debug read-only section.
-> > -	// According to 'man nm'.
-> > -	// 'N' first seen in:
-> > -	// ffffffff9b35d130 N __pfx__RNCINvNtNtNtCsbDUBuN8AbD4_4core4iter8adapters3map12map_try_foldjNtCs6vVzKs5jPr6_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
-> > -	// a seemingly Rust mangled name
-> > -	// Ditto for '1':
-> > -	// root@x1:~# grep ' 1 ' /proc/kallsyms
-> > -	// ffffffffb098bc00 1 __pfx__RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
-> > -	// ffffffffb098bc10 1 _RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
-> > -	char symbol_type = toupper(__symbol_type);
-> > -	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B' ||
-> > -	       __symbol_type == 'u' || __symbol_type == 'l' || __symbol_type == 'N' || __symbol_type == '1';
-> > +static bool symbol_type__filter(char symbol_type)
-> > +{
-> > +	symbol_type = toupper(symbol_type);
-> > +	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B';
-> >  }
-> >  
-> >  static int prefix_underscores_count(const char *str)
-> > 
-> > base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
-> > -- 
-> > 2.51.2
+thanks,
+
+Takashi
