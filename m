@@ -1,78 +1,149 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F201B257828;
-	Wed,  7 Jan 2026 05:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B90F18859B;
+	Wed,  7 Jan 2026 08:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767762221; cv=none; b=LM9mPc4ey3g9XA160GQr/FV1QK8eAYsTlmJRxW+rrurAUKeXgZ9cRSCy5I8B+WgHqspXCfdSw9MavxM6voB+8YMO+pCrl+dzfVZheDNYFVhIPT14zBnaA9a8YKc5pRFLXwdqSTye5BdyySec95v1gYvV3vldNWo+icDcDhKIOL8=
+	t=1767773075; cv=none; b=arFPcADMS7Pw4tKtxmwMkBleraxglzVBDSJoYSlikipgyi1j6o1Ub/y83e0ntKe5NJlS2aZXVt17pwhQfbY01RegGSbAG4/I7G2hj4ljtkuYsEqkMZHw9IKRxq/Ynv/K50rIrhi0R+i4edmC1U1acHNFYCUMRrb4OlgOLAkLWz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767762221; c=relaxed/simple;
-	bh=Mw/HM2NiutzZ5I+gGaNyr68w91B8BKl1ebFDVbo1zqM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gMfbIzK8v/y9FSjbrnefMcy3Hioy9t/exEPEQRRIEtwtdGJD++gnVmiqO0uY9OOGPlG/A64LKpwpbfTPwwGqt3+Xm2hUp8t8sptbrIXh99wLYP+tR+QU+fWjU/7S/4uOqsbDq6sXSmxy2v6+g4SmR5hapGyPLrRDl8i7pVm15qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYQ+q5NP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767773075; c=relaxed/simple;
+	bh=KNSQ4jS+uaz7zUizkEDbdTh1ukeuADvTY5T7Q3SBezQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dfh3fVltUIZ+FuQdqT5hd91KK5McCR8ZYxnS1qq2JZcs3tcCuBO89qJUX6o7fue3igOsddoH1rO2jn8CfAhDgYQ4OduX2Jr/JmhHdAlH5/MBVxAtYkm6w/i7YCRCM0cr5/FIEoXn3dHnbY/hrXa8mkouRI1v0oX4EXyEzkadkb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RCNZYBKJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYQ+q5NP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9255AC4CEF7;
-	Wed,  7 Jan 2026 05:03:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCNZYBKJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE61AC4CEF7;
+	Wed,  7 Jan 2026 08:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767762220;
-	bh=Mw/HM2NiutzZ5I+gGaNyr68w91B8BKl1ebFDVbo1zqM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hYQ+q5NPFUQq7vpIFuRN1f2LQvYzk7Lq5lkx1nmjevI0iBR9nCnwstskORA7f3c0v
-	 q5UksxwM+NVKlYY6mo2lJGiEqShNMsj/YTJkkaH4g5+pYnvmOdO5pHgRYZ51YZ5oeQ
-	 qmgiNZJF5zP95UADD1U58kyMzehfReRaoc047Wa3KRe5gzeWULuu/5vxiJ91vJAd+t
-	 C8BLJCVLbN7b46RKqGnPtxNRx62aLaMQ06LBGZxDAPtjahy/o5+dm+pehO47vU+dUR
-	 dXtwW5oDQphe+wssKCvO8scSEMNOm4d8V924u1BKoAYeHps8kZwZccqJrxK8zNXLEI
-	 f40qBMkPUpgFQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BA47380CEFA;
-	Wed,  7 Jan 2026 05:00:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1767773074;
+	bh=KNSQ4jS+uaz7zUizkEDbdTh1ukeuADvTY5T7Q3SBezQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RCNZYBKJHLsUtJtomJjDt4QgQQ9nTe3ry74SElBoEH28iVwd5Bxj4EOrfBqfEnHjV
+	 YBwiLPKjxXvn+JzXOpM1RQ83g2wG0oKykt6t3KZPgt9B+Uvl97IDDlJ9scT8nKGxra
+	 xm+mhkSli5V9P8zOVueHTiqEtCs4CLp1IyO3OGTkUkx1EMWHPEppnL19kf7qX+YKGe
+	 JM9sRpU6tqypwTueA/MTlvYV+FUClsZIiIW2bdyRya9SVCHMWrQ9Sa3IUOYsWc+Y2N
+	 zZChHCPoA3uVzgRyFw7nHK3lTzRnKkGSfF19WKjNWTszpBVJ68Ug+lxghtSD8sAllB
+	 +/26YgBkm94ZQ==
+Date: Wed, 7 Jan 2026 00:04:32 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Gary Guo <gary@garyguo.net>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andi Kleen <ak@linux.intel.com>, Dmitry Vyukov <dvyukov@google.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] perf symbol: remove Rust symbol workarounds
+Message-ID: <aV4TkNE_hAyByISq@google.com>
+References: <20260105150106.567830-1-gary@kernel.org>
+ <aVvdt90YmhJz3i5i@x1>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] scripts/gen-btf.sh: Ensure initial object in
- gen_btf_o is ELF with correct endianness
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176776201803.2234404.13594705347777050753.git-patchwork-notify@kernel.org>
-Date: Wed, 07 Jan 2026 05:00:18 +0000
-References: <20260106-fix-gen-btf-sh-lto-v2-1-01d3e1c241c4@kernel.org>
-In-Reply-To: <20260106-fix-gen-btf-sh-lto-v2-1-01d3e1c241c4@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aVvdt90YmhJz3i5i@x1>
 
-Hello:
+Hello,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Tue, 06 Jan 2026 15:44:20 -0700 you wrote:
-> After commit 600605853f87 ("scripts/gen-btf.sh: Fix .btf.o generation
-> when compiling for RISCV"), there is an error from llvm-objcopy when
-> CONFIG_LTO_CLANG is enabled:
+On Mon, Jan 05, 2026 at 12:50:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> On Mon, Jan 05, 2026 at 03:00:57PM +0000, Gary Guo wrote:
+> > From: Gary Guo <gary@garyguo.net>
+> > 
+> > Due to an off-by-one error introduced in commit 73bbb94466fd ("kallsyms:
+> > support "big" kernel symbols"), long symbols (which are currently only
+> > produced by Rust) can have their symbol type being wrongly parsed by
+> > kernel/kallsyms.c.
 > 
->   llvm-objcopy: error: '.tmp_vmlinux1.btf.o': The file was not recognized as a valid object file
->   Failed to generate BTF for vmlinux
-> 
-> [...]
+> Looks sane, applied to perf-tools-next,
+  
+I'm afraid there may be some outdated kernels which don't have the fix
+yet.  Maybe make sense to wait some more time for them to disappear?
 
-Here is the summary with links:
-  - [bpf-next,v2] scripts/gen-btf.sh: Ensure initial object in gen_btf_o is ELF with correct endianness
-    https://git.kernel.org/bpf/bpf-next/c/2421649778dc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Namhyung
 
 
+> > This has been fixed in commit f3f9f42232dee5 ("kallsyms: Fix wrong "big"
+> > kernel symbol type read from procfs"), and these symbols are now
+> > reported correctly.
+> > 
+> > Drop the workaround in perf symbol that filter out these symbol types.
+> > 
+> > Specifically, '1' and 'l' can never be generated by nm -- 'u' does
+> > indicate GNU unique, however such symbols are only generated by G++ for
+> > C++ templates, and are never generated by LLVM (LLVM generates weak
+> > symbols in such cases instead). 'N' can appear if symbols exist inside
+> > debug sections, and 'n' may appear for symbols inside note sections,
+> > however these sections do not typically have symbol (and they're
+> > explicitly filtered out by kallsyms).
+> > 
+> > Therefore, the previous occurrence of these symbols types must be due to
+> > the off-by-one error and can be safely removed.
+> > 
+> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> > Signed-off-by: Gary Guo <gary@garyguo.net>
+> > ---
+> > v2:
+> > - Removed the "__" change as suggested by Miguel
+> > - Expanded the commit message to mention why "N" and "n" cannot appear
+> > - Link to v1: https://lore.kernel.org/rust-for-linux/20251223175216.1353814-1-gary@kernel.org/#t
+> > ---
+> >  tools/perf/util/symbol.c | 19 ++++---------------
+> >  1 file changed, 4 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> > index 814f960fa8f8d..8662001e1e25b 100644
+> > --- a/tools/perf/util/symbol.c
+> > +++ b/tools/perf/util/symbol.c
+> > @@ -104,21 +104,10 @@ static enum dso_binary_type binary_type_symtab[] = {
+> >  
+> >  #define DSO_BINARY_TYPE__SYMTAB_CNT ARRAY_SIZE(binary_type_symtab)
+> >  
+> > -static bool symbol_type__filter(char __symbol_type)
+> > -{
+> > -	// Since 'U' == undefined and 'u' == unique global symbol, we can't use toupper there
+> > -	// 'N' is for debugging symbols, 'n' is a non-data, non-code, non-debug read-only section.
+> > -	// According to 'man nm'.
+> > -	// 'N' first seen in:
+> > -	// ffffffff9b35d130 N __pfx__RNCINvNtNtNtCsbDUBuN8AbD4_4core4iter8adapters3map12map_try_foldjNtCs6vVzKs5jPr6_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+> > -	// a seemingly Rust mangled name
+> > -	// Ditto for '1':
+> > -	// root@x1:~# grep ' 1 ' /proc/kallsyms
+> > -	// ffffffffb098bc00 1 __pfx__RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+> > -	// ffffffffb098bc10 1 _RNCINvNtNtNtCsfwaGRd4cjqE_4core4iter8adapters3map12map_try_foldjNtCskFudTml27HW_12drm_panic_qr7VersionuINtNtNtBa_3ops12control_flow11ControlFlowB10_ENcB10_0NCINvNvNtNtNtB8_6traits8iterator8Iterator4find5checkB10_NCNvMB12_B10_13from_segments0E0E0B12_
+> > -	char symbol_type = toupper(__symbol_type);
+> > -	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B' ||
+> > -	       __symbol_type == 'u' || __symbol_type == 'l' || __symbol_type == 'N' || __symbol_type == '1';
+> > +static bool symbol_type__filter(char symbol_type)
+> > +{
+> > +	symbol_type = toupper(symbol_type);
+> > +	return symbol_type == 'T' || symbol_type == 'W' || symbol_type == 'D' || symbol_type == 'B';
+> >  }
+> >  
+> >  static int prefix_underscores_count(const char *str)
+> > 
+> > base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
+> > -- 
+> > 2.51.2
