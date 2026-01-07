@@ -1,190 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45F7357A5A;
-	Wed,  7 Jan 2026 16:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5981833C539;
+	Wed,  7 Jan 2026 18:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767802401; cv=none; b=laouQCq5gcIJs+QzlA1G8K0ASvbsqBkRY8RHe858U66zDHkPD4G2+XGmDrcMlo4jJDLJCW/xaxGIPGhKvvRviPeemAeLmbXf2ElijW475M22EjZXGbaEwtIZwVvXgO7du4LpYvdVxdSvyi1f/E/1SHVIIK+kcalMrI0Iebc1q7E=
+	t=1767809901; cv=none; b=J63BONA9eKKbV4z1lhP0CzhOERf4GIz/xExp7b7EQq7kiLBI/lxBfxghDFtB1TSaEQK5WEpH54vq2hHRHXyTsYa0yn9v5oF0HO54D5Jt8Oi+2987PjFKSBiSJCKM8v2ndAVjiwygwHsbdgyCDHh6q345Xjo9vycoUw0eRRP4nRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767802401; c=relaxed/simple;
-	bh=g5hX7rx3gqypzWVwObD6RHVtceJmV34peEHX9sF0qlw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MtLqt6uhPBwUQCg36Fz7UtGyRaNxFk9OnDgoZCHxwXVYrCTD3tG3z7wi//EAHesCtsAio9sRafc32WBGYZLrb7Phz1siHbgXXn3xyHL+pO104EFnzG9ZG5DJLxwxElDTjzzfo3AFg/Ptf2LlCz2KRnV/zZ3mLbG998CW76E/rI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VsjBLLwc; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767809901; c=relaxed/simple;
+	bh=s27ccQFbApbt2q5ImZlGXA0T8FPFBDdt+ES6BeIF8vU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MRHV6gymMItjNkAzBM72iegxxTgre26OKPdzIJdTPNKA787LfCscwXnLJ6kImru6p4dQ5aSdsTuHo61Y+diwD3hMzXfXCzWvzIP1zwIN1JKUBb7X4Ga0oQ4P7Q1M9Ht4UtCJ855w4JtRPMxz9wqxA+B8BahdOuvl10ITFrB7AVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0mG8/Nw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VsjBLLwc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767802388; x=1799338388;
-  h=date:from:to:cc:subject:message-id;
-  bh=g5hX7rx3gqypzWVwObD6RHVtceJmV34peEHX9sF0qlw=;
-  b=VsjBLLwcmu8MGnU1a6Go5krbBAJsJWIgp4fMOCfFQI/kUxnxnbgl7Lv6
-   eWw0Eh+Y2tFPMCZr0FSBpNTdhZ2xC3wjG/hpyz0OCcwrleg/HMHI9JUq2
-   5GrtSpkTTOtHVzWSd3mthJWViS6UNbN7brq3bve2hZ4fh/nyaPab7O7Vm
-   BQF5vsPnX4+x2ieKuaNKfQTQtww8Om2/rUV/ZMimv92tLaNirpT5bxVXg
-   Ay+ah505OPBayShSQCg1yukC+ysUVqcL0W39F460bTPNC+CVyo9l+Rawi
-   7lk8W0i4Ms/emDFqqaC5oa5W+mB4y5A55PK7FAEqcri+BhxBTLrT95Y67
-   g==;
-X-CSE-ConnectionGUID: 74zubGOnS0SGuVLvGlrufA==
-X-CSE-MsgGUID: UEUEJONbSiC0myr7FZWUSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="69335459"
-X-IronPort-AV: E=Sophos;i="6.21,208,1763452800"; 
-   d="scan'208";a="69335459"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 08:13:00 -0800
-X-CSE-ConnectionGUID: aUIlSa9WTVSzezxEjQJpUQ==
-X-CSE-MsgGUID: Ig10LUVoTnmKvZXrB9y+tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,208,1763452800"; 
-   d="scan'208";a="207819744"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Jan 2026 08:12:58 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vdW9X-000000003y1-1fTE;
-	Wed, 07 Jan 2026 16:12:55 +0000
-Date: Thu, 08 Jan 2026 00:12:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Vishal Annapurve <vannapurve@google.com>
-Subject: [intel-tdx:huge_page_v3 369/499] clang diag:
- include/linux/huge_mm.h:576:2: warning: void function
- '__split_folio_to_order' should not return a value
-Message-ID: <202601080003.OCxHSviM-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0mG8/Nw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED219C4CEF1;
+	Wed,  7 Jan 2026 18:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767809901;
+	bh=s27ccQFbApbt2q5ImZlGXA0T8FPFBDdt+ES6BeIF8vU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o0mG8/Nwy67GgnHYsqslR0XuIgiZ/l7XbXDcrCMMJP/NISmz953u12IaiV4MpF3Yk
+	 gmI5BGxdDGoXFnwJL1BDu4y2aOtUOY1IyRgU3/PcHPzuAYvWQE74srH1Oka/P4B8Ea
+	 bpCJuidzFFbYgXZWxrHPCjHi/yhj6r4P/zUeP+smtBhDxutrJJehNzP20oo9FHg71Z
+	 fD0QcwqMkUfLOTwfTp2gopqqYn/P+fSaSbuHX6voiThV7kVS4SQLjtvZFs85M5ahz4
+	 9YJs7fBOIFK+sQXYC1Y0+IIL2sUllKIXaBNBYMatDDV1NAZOivAPPe93d4h19wcRE4
+	 gDX6AtB8sl7hg==
+Date: Wed, 7 Jan 2026 10:18:17 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Gary Guo <gary@garyguo.net>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andi Kleen <ak@linux.intel.com>, Dmitry Vyukov <dvyukov@google.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] perf symbol: remove Rust symbol workarounds
+Message-ID: <aV6jaaBftvR0Dl0b@google.com>
+References: <20260105150106.567830-1-gary@kernel.org>
+ <aVvdt90YmhJz3i5i@x1>
+ <aV4TkNE_hAyByISq@google.com>
+ <aV5h4I5rRl61vFFu@x1>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aV5h4I5rRl61vFFu@x1>
 
-Hi Ackerley,
+On Wed, Jan 07, 2026 at 10:38:40AM -0300, Arnaldo Carvalho de Melo wrote:
+> On Wed, Jan 07, 2026 at 12:04:32AM -0800, Namhyung Kim wrote:
+> > On Mon, Jan 05, 2026 at 12:50:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > On Mon, Jan 05, 2026 at 03:00:57PM +0000, Gary Guo wrote:
+> > > > Due to an off-by-one error introduced in commit 73bbb94466fd ("kallsyms:
+> > > > support "big" kernel symbols"), long symbols (which are currently only
+> > > > produced by Rust) can have their symbol type being wrongly parsed by
+> > > > kernel/kallsyms.c.
+>  
+> > > Looks sane, applied to perf-tools-next,
+>    
+> > I'm afraid there may be some outdated kernels which don't have the fix
+> > yet.  Maybe make sense to wait some more time for them to disappear?
+> 
+> Right, I took it more as it seems to be just a blip in time, something
+> that came and went quickly and that most likely will not cause problems,
+> i.e. just a handful of extra symbols in the lookup data structures in
+> those particular kernels and a new 'perf test' tool with these reverts,
+> if run on those particular kernels would then fail for that particular
+> test case, for a known reason.
+> 
+> So with the above rationale you still feel strongly about having it
+> applied?
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+No, it's good to go.  Thanks for the explanation!
 
-tree:   https://github.com/intel/tdx.git huge_page_v3
-head:   deceaf0d419ad678d86b42a3f71e1a6b588163fe
-commit: 51b1ab09f0ac9a5ef88c1882648453bbc8fe0274 [369/499] mm: huge_memory: Expose __split_folio_to_order
-config: x86_64-randconfig-002-20260107 (https://download.01.org/0day-ci/archive/20260108/202601080003.OCxHSviM-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260108/202601080003.OCxHSviM-lkp@intel.com/reproduce)
+Namhyung
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601080003.OCxHSviM-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> clang diag: include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
---
->> clang diag: include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
->> clang diag: include/linux/huge_mm.h:574:6: warning: no previous prototype for function '__split_folio_to_order' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1172:5: warning: no previous prototype for function 'mem_cgroup_hugetlb_try_charge' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1178:6: warning: no previous prototype for function 'mem_cgroup_commit_charge' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1182:6: warning: no previous prototype for function 'mem_cgroup_cancel_charge' [-Wmissing-prototypes]
---
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:1081:
-   include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
-     576 |         return 0;
-         |         ^      ~
-   include/linux/huge_mm.h:574:6: warning: no previous prototype for function '__split_folio_to_order' [-Wmissing-prototypes]
-     574 | void __split_folio_to_order(struct folio *folio, int old_order, int new_order)
-         |      ^
-   include/linux/huge_mm.h:574:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     574 | void __split_folio_to_order(struct folio *folio, int old_order, int new_order)
-         | ^
-         | static 
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   include/linux/memcontrol.h:1172:5: warning: no previous prototype for function 'mem_cgroup_hugetlb_try_charge' [-Wmissing-prototypes]
-    1172 | int mem_cgroup_hugetlb_try_charge(struct mem_cgroup *memcg, gfp_t gfp,
-         |     ^
-   include/linux/memcontrol.h:1172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1172 | int mem_cgroup_hugetlb_try_charge(struct mem_cgroup *memcg, gfp_t gfp,
-         | ^
-         | static 
-   include/linux/memcontrol.h:1178:6: warning: no previous prototype for function 'mem_cgroup_commit_charge' [-Wmissing-prototypes]
-    1178 | void mem_cgroup_commit_charge(struct folio *folio, struct mem_cgroup *memcg)
-         |      ^
-   include/linux/memcontrol.h:1178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1178 | void mem_cgroup_commit_charge(struct folio *folio, struct mem_cgroup *memcg)
-         | ^
-         | static 
-   include/linux/memcontrol.h:1182:6: warning: no previous prototype for function 'mem_cgroup_cancel_charge' [-Wmissing-prototypes]
-    1182 | void mem_cgroup_cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
-         |      ^
-   include/linux/memcontrol.h:1182:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1182 | void mem_cgroup_cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
-         | ^
-         | static 
-   5 warnings generated.
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:46:
-   In file included from include/linux/mm.h:1081:
-   include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
-     576 |         return 0;
-         |         ^      ~
-   include/linux/huge_mm.h:574:6: warning: no previous prototype for function '__split_folio_to_order' [-Wmissing-prototypes]
-     574 | void __split_folio_to_order(struct folio *folio, int old_order, int new_order)
-         |      ^
-   include/linux/huge_mm.h:574:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     574 | void __split_folio_to_order(struct folio *folio, int old_order, int new_order)
-         | ^
-         | static 
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:61:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:95:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:53:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:32:
-   include/linux/memcontrol.h:1172:5: warning: no previous prototype for function 'mem_cgroup_hugetlb_try_charge' [-Wmissing-prototypes]
-    1172 | int mem_cgroup_hugetlb_try_charge(struct mem_cgroup *memcg, gfp_t gfp,
-         |     ^
-   include/linux/memcontrol.h:1172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1172 | int mem_cgroup_hugetlb_try_charge(struct mem_cgroup *memcg, gfp_t gfp,
-         | ^
-         | static 
-   include/linux/memcontrol.h:1178:6: warning: no previous prototype for function 'mem_cgroup_commit_charge' [-Wmissing-prototypes]
-    1178 | void mem_cgroup_commit_charge(struct folio *folio, struct mem_cgroup *memcg)
-         |      ^
-   include/linux/memcontrol.h:1178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1178 | void mem_cgroup_commit_charge(struct folio *folio, struct mem_cgroup *memcg)
-         | ^
-         | static 
-   include/linux/memcontrol.h:1182:6: warning: no previous prototype for function 'mem_cgroup_cancel_charge' [-Wmissing-prototypes]
-    1182 | void mem_cgroup_cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
-         |      ^
-   include/linux/memcontrol.h:1182:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1182 | void mem_cgroup_cancel_charge(struct mem_cgroup *memcg, unsigned int nr_pages)
-         | ^
-         | static 
-   5 warnings generated.
-   llvm-nm: error: rust/helpers/helpers.o: No such file or directory
->> clang diag: include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
->> clang diag: include/linux/huge_mm.h:574:6: warning: no previous prototype for function '__split_folio_to_order' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1172:5: warning: no previous prototype for function 'mem_cgroup_hugetlb_try_charge' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1178:6: warning: no previous prototype for function 'mem_cgroup_commit_charge' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1182:6: warning: no previous prototype for function 'mem_cgroup_cancel_charge' [-Wmissing-prototypes]
->> clang diag: include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
->> clang diag: include/linux/huge_mm.h:576:2: warning: void function '__split_folio_to_order' should not return a value [-Wreturn-mismatch]
->> clang diag: include/linux/huge_mm.h:574:6: warning: no previous prototype for function '__split_folio_to_order' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1172:5: warning: no previous prototype for function 'mem_cgroup_hugetlb_try_charge' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1178:6: warning: no previous prototype for function 'mem_cgroup_commit_charge' [-Wmissing-prototypes]
-   clang diag: include/linux/memcontrol.h:1182:6: warning: no previous prototype for function 'mem_cgroup_cancel_charge' [-Wmissing-prototypes]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
