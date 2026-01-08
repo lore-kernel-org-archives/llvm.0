@@ -1,149 +1,122 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2653F219A71
-	for <llvm@lists.linux.dev>; Thu,  8 Jan 2026 15:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BB615ECD7;
+	Thu,  8 Jan 2026 15:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767886811; cv=none; b=IlBLQFTTglxXq5XVMf4jw4iluoxoo1LNa7iv79Bc7rpnRhsahvfcfDxXOaKGpLvfm+/eS0P4gn2Y76qZgxkxGAS/kqZL7YYeLCINhYxgyz6+hS1fecZ+nPP8yhtwZxd8LlBd093s9msi80wEvy2ViI7m7cq39DrK3jHn1iijphY=
+	t=1767887932; cv=none; b=rR5ibHRK5lBJgVBWG8TADZPB8qDen1038CeaimuscdEEM5LpjDhrnJJnQoEV61lET8b9Sy+gxny3t56fXiCb8qUIxG0v3eVk+J9CLiFH4W5eGkbOqTRE51vgWxcaqwxdq/5DiTyvsTiq8ugD/CRheUAmHFF4N1QctA4UIFkdkpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767886811; c=relaxed/simple;
-	bh=NkWLe98qh9F/G9rVqj3CNvimsQ6CTIncUVluqRlSDnk=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=eDUARAZeY7HQQd26K3KMAkzbcqKQWkeXCStPYYF2jsaw3an1r4oL994ia6KEFKvNy3Nk0yfbBTqxFHNXlTwpU5Lm9qg9N9ZlN5FPDWjld2mLlH+KS7HcuMa1sNWR+8mbTVYtrsxK5owMa6rDwuFtoZW28kddmavJDzg0roJ14wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FifAN5zS; arc=none smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1767887932; c=relaxed/simple;
+	bh=59UGg20+a8O/utg7jkDZv98IzGuoXpfkweM7G+15fCY=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=MoUTz2+WuuMe4kozA1jihuVr/UItDycDxqxaK8SFDsKXhVBojLkEs2sS2Qv71oM5sWPpIC/Ru7DfuBVdAeVYaPD24VgcOYpj8CHuoT9sGqxqZau7tvPYpiHwSJffB2ERV54dBQNmjA9VJD6SFbPvMmiWL6Ao66iBfcS0WgO4fMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zngMsS34; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FifAN5zS"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-47774d3536dso19507515e9.0
-        for <llvm@lists.linux.dev>; Thu, 08 Jan 2026 07:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767886808; x=1768491608; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EQ9YGWWRJ/GtPJ0CV8MnrZfCKF9r6uGQ5aRt07LlwLI=;
-        b=FifAN5zSRUrzAtWXHoR8LGeB7TeCiXDRRcsE7hQR/cIDVzmAQJLTXr9YvuhvgcXN6e
-         4T+2bPHTVXoCpZn1pTGBYWgeWVxWteT+9DXGmYmsxxpHvtyec6vZZOIP+amjx2bBvO/K
-         XoIoZsmIXy3RbGq+gP81tAST1MHyqu9grThHnKrThFCs9hYpTII2SvUPiEMbJKlJ6oiu
-         O6GcjTqK85ZRFtY7iOc6pb7Vo77ujMpw+XfsQgEPTQ+Y2TzRZi/LPoBWLTs3yC2IbRzB
-         qavQXliYWKNYaKh3dzZpkj0QuammjdR/j5FIBhncRx/AiUAbZvj5A9PJwucJxsHugpyy
-         +GFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767886808; x=1768491608;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EQ9YGWWRJ/GtPJ0CV8MnrZfCKF9r6uGQ5aRt07LlwLI=;
-        b=H+LMyzHrWskJs6OOm47WOQ0j8mfNZy6MuJ6UTNJhYus/GuzxotqJ5aIW1kOhXm4rbv
-         HJg2hBpmEuXGZt3jLirtJhZ5A5itRib+1mb7EQEB8kiI0cgQXDJ76PdL5J4V4zrVs04T
-         X+ETMjwrqllXMg0sNhOJXuVfBrFDdCFX4acNCNrek2teIsZqQzxVfclUEilMrh6Nx3Xc
-         Q6c+AYQnIx9uMhr82b1Evuve4HSNx6F6ioRDlcyZwFv8odqoKb6r5C4bX+PRXc3D5TDa
-         G+sK9tER+aeA61H51DdcEu4w+Xlm+2lY917Iv2W9+gufSdBxfrhbIUNXdKji7gmzPzq4
-         1aTQ==
-X-Gm-Message-State: AOJu0Yw3KY97gMsCGMmymmozsumtWRNOmX5qh1eNs2YH7ERp8P0dDRrq
-	JE0Yo/X/iWVofW3JWdgzSm3KedI5R+3VoYhfDZRtDCyZg18nKSjRG2Ue2lv25sGqPH/CqG3fIlr
-	TbeIfEBE=
-X-Gm-Gg: AY/fxX7CGdQehV/2SsyE+AoilSzS5VTx/F9YmGd8d/yMSDsX/Rn/mnx2tEqmnmY52o9
-	Go/l+/EVqjtvcPwB+Cu3MslyPIpySDCQWpd06hlkZpGaDsRBkPYFJBKwp9EiW2yHJZH2rSk7YnD
-	Bcu5xzkG7c0my+7QiNfDVGMTLfkyn9COHcuhpfh63ESQhKy3CdKBDXzTWKPy/TKZWpEFtbYGcMj
-	sbeT5VgTTIec75GCkUsxDUgSoAi7o6oP5C6up3s+h4djkKL9m5mh3JBp+o5/Ja7U7e+sOxNrIwg
-	yeOoz3kiYeFnJOXmwmzt+FAB45I0WaQu9gBy87/0S8kSohXOhKooa2RyyCMo6FSYvl639LMBTzR
-	io5Nm9d0yeoO5UWOV4aaJhvlFrEtQQSS5p0klxEFMxqccZqmvn4pFFqgwX/lAEeX2M9Q/Jj4ekb
-	Mh1hwrysmGWX+f7q70ZUmfQYGz2f3AD4FgE0XrlEREwDugwYw+JHXpOh5UMQ==
-X-Google-Smtp-Source: AGHT+IEeRJrAXIcCtu7i4CxFDvACzgSiZC2jKLsG1vmDaX3z/3VAqu5kI/GJGtZVb+H8vaI/+NZTBg==
-X-Received: by 2002:a05:600c:681b:b0:477:a219:cdc3 with SMTP id 5b1f17b1804b1-47d8486d5e6mr76495175e9.12.1767886808298;
-        Thu, 08 Jan 2026 07:40:08 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f620ac8sm153684175e9.0.2026.01.08.07.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 07:40:07 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Thu, 8 Jan 2026 15:40:05 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1987263045.13894.1767886807819@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.19-rc3-237-gf2960def96dfa: Failure on arm
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zngMsS34"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0C9C116C6;
+	Thu,  8 Jan 2026 15:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1767887932;
+	bh=59UGg20+a8O/utg7jkDZv98IzGuoXpfkweM7G+15fCY=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:From;
+	b=zngMsS34cLX0kYuzhDo4C7C9VTnmdi+kizMAUdNstjtHf8cRjkWHUXYpyB/6/63W3
+	 FI2zRPcEDPntQn6AZ5tNt9N/0NudnPfGqIK0WGlt+9UAfsL/5e1P2Wz9+wEStv5JqC
+	 ItVBGx0pEpEdRnhquO153j9eF4wkLjlw86+uKrg8=
+Subject: Patch "KVM: arm64: sys_regs: disable -Wuninitialized-const-pointer warning" has been added to the 5.10-stable tree
+To: alexandru.elisei@arm.com,catalin.marinas@arm.com,cov@codeaurora.org,gregkh@linuxfoundation.org,joey.gouly@arm.com,justinstitt@google.com,kvmarm@lists.cs.columbia.edu,linux-arm-kernel@lists.infradead.org,llvm@lists.linux.dev,maz@kernel.org,nathan@kernel.org,oliver.upton@linux.dev,suzuki.poulose@arm.com,will@kernel.org,yuzenghui@huawei.com
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Thu, 08 Jan 2026 16:57:53 +0100
+In-Reply-To: <20251204-b4-stable-disable-uninit-ptr-warn-5-15-v1-1-41212e2c6409@google.com>
+Message-ID: <2026010853-fineness-stopwatch-0bd4@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_13893_1100228239.1767886806191"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-defconfig
-X-Jenkins-Result: SUCCESS
-
-------=_Part_13893_1100228239.1767886806191
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-Dear contributor,
-
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
-
-In tcwg_kernel/llvm-master-arm-next-defconfig, after:
-  | commit v6.19-rc3-237-gf2960def96dfa
-  | Author: Mike Rapoport (Microsoft) <rppt@kernel.org>
-  | Date:   Fri Jan 2 08:59:58 2026 +0200
-  | 
-  |     arch, mm: consolidate initialization of nodes, zones and memory map
-  |     
-  |     To initialize node, zone and memory map data structures every architecture
-  |     calls free_area_init() during setup_arch() and passes it an array of zone
-  |     limits.
-  | ... 69 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 8057
-  | # linux build successful:
-  | all
-  | # First few build errors in logs:
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 8057
-  | # linux build successful:
-  | all
-  | # linux boot successful:
-  | boot
-
-Used configuration :
- tcwg_kernel/llvm-master-arm-next-defconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-2150. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore 
 
 
+This is a note to let you know that I've just added the patch titled
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-defconfig-build/282/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-defconfig-build/281/artifact/artifacts
+    KVM: arm64: sys_regs: disable -Wuninitialized-const-pointer warning
 
-Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/f2960def96dfa78e379b2906015f0c9e90ef37ae/tcwg_kernel/llvm-master-arm-next-defconfig/reproduction_instructions.txt
+to the 5.10-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/f2960def96dfa78e379b2906015f0c9e90ef37ae
-------=_Part_13893_1100228239.1767886806191--
+The filename of the patch is:
+     kvm-arm64-sys_regs-disable-wuninitialized-const-pointer-warning.patch
+and it can be found in the queue-5.10 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From justinstitt@google.com  Thu Jan  8 16:52:32 2026
+From: Justin Stitt <justinstitt@google.com>
+Date: Thu, 04 Dec 2025 12:44:48 -0800
+Subject: KVM: arm64: sys_regs: disable -Wuninitialized-const-pointer warning
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,  Alexandru Elisei <alexandru.elisei@arm.com>, Joey Gouly <joey.gouly@arm.com>,  Suzuki K Poulose <suzuki.poulose@arm.com>, Catalin Marinas <catalin.marinas@arm.com>,  Zenghui Yu <yuzenghui@huawei.com>, Will Deacon <will@kernel.org>,  Nathan Chancellor <nathan@kernel.org>, Christopher Covington <cov@codeaurora.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,  linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org,  Justin Stitt <justinstitt@google.com>
+Message-ID: <20251204-b4-stable-disable-uninit-ptr-warn-5-15-v1-1-41212e2c6409@google.com>
+
+From: Justin Stitt <justinstitt@google.com>
+
+A new warning in Clang 22 [1] complains that @clidr passed to
+get_clidr_el1() is an uninitialized const pointer. get_clidr_el1()
+doesn't really care since it casts away the const-ness anyways -- it is
+a false positive.
+
+|  ../arch/arm64/kvm/sys_regs.c:2838:23: warning: variable 'clidr' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
+|   2838 |         get_clidr_el1(NULL, &clidr); /* Ugly... */
+|        |                              ^~~~~
+
+This patch isn't needed for anything past 6.1 as this code section was
+reworked in Commit 7af0c2534f4c ("KVM: arm64: Normalize cache
+configuration"). Since there is no upstream equivalent, this patch just
+needs to be applied to 5.15.
+
+Disable this warning for sys_regs.o with an iron fist as it doesn't make
+sense to waste maintainer's time or potentially break builds by
+backporting large changelists from 6.2+.
+
+Cc: stable@vger.kernel.org
+Fixes: 7c8c5e6a9101e ("arm64: KVM: system register handling")
+Link: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e [1]
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm64/kvm/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+index 989bb5dad2c8..109cca425d3e 100644
+--- a/arch/arm64/kvm/Makefile
++++ b/arch/arm64/kvm/Makefile
+@@ -25,3 +25,6 @@ kvm-y := $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o $(KVM)/eventfd.o \
+ 	 vgic/vgic-its.o vgic/vgic-debug.o
+ 
+ kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o
++
++# Work around a false positive Clang 22 -Wuninitialized-const-pointer warning
++CFLAGS_sys_regs.o := $(call cc-disable-warning, uninitialized-const-pointer)
+
+---
+base-commit: 8bb7eca972ad531c9b149c0a51ab43a417385813
+change-id: 20250728-b4-stable-disable-uninit-ptr-warn-5-15-c0c9db3df206
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
+
+
+Patches currently in stable-queue which might be from justinstitt@google.com are
+
+queue-5.10/kvm-arm64-sys_regs-disable-wuninitialized-const-pointer-warning.patch
