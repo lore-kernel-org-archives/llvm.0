@@ -1,72 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB1E2DC774;
-	Thu,  8 Jan 2026 17:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776DA2DE200;
+	Thu,  8 Jan 2026 17:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767894060; cv=none; b=gryzWDACowubbE8M2ny2y81p0RrQ3D9R5AYZWv7QLOTTyqGV0KLRMall6FfmOaWeJ1fH+XdG/o13WUVr4I5ergpHHYEz9skYQiwilfxwXVn4faX8xHCDqEazR4eWSgzXWm4oau5MYhX3xKxEK+d8FAUPRpr8VtOiSkEmr6u4U6E=
+	t=1767894980; cv=none; b=COowdNqhd/9cfonSTFxBDURRccvuLSzmHp7Mn3koC5896Hvm+FbvrfyYQ3u7exTyt3SX53F4yaYzGq94px3Mx/AZE0aoo8H2Z+vT73bZRX8hiXkNUXuH35AV0i05VcwhaUhKjDGl8+M4hs3yPUW5toL+aE32XyRwlhqd2Y06wu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767894060; c=relaxed/simple;
-	bh=BHDdPpb32MY2i2fwkzE3yXM71nGt/m2CVIq2iPGkD6M=;
+	s=arc-20240116; t=1767894980; c=relaxed/simple;
+	bh=fVFKoDSGtu/m8fcssWWh1M0gKpmCnRC4+ap+lVdeYB0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HAnnYbHqdpOrG2PpaCYnTmymwxvd3ppoXbF3ude6/RMoUrpSOmRho8zgen5xIYUF40bJ1Enwdr7dOjzA691cXKewV60JDJjsxRvLfQ8JFWx5nqCLn6eFnRb8wTKQCOEymSK6f49xDcKslPggall4lDn7V5Tpnz5YRw2UwDfVSzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WHtwXWTG; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=W1dwzscvd2qY1zkDo4WYt7AbsrxyHeZan4K3rD89YZOjlMy5qZ5/+yLLyTKPPuURbJcp1m6pj8klqBfd8thWteIJkqVLZjPN/OHNk8PsY8vfWqqicBr4s8Cl3PrTqtR4E+eI6c/DrsVC1w6yLznYAqqaLIUhfM8RurR7wzYTbks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cuoOgmof; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WHtwXWTG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0787C116C6;
-	Thu,  8 Jan 2026 17:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767894060;
-	bh=BHDdPpb32MY2i2fwkzE3yXM71nGt/m2CVIq2iPGkD6M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WHtwXWTGHb9kHiOWzYRLmcK5SrLwYwSLs4AP63ZX7lpeaKpX5t9iEmeEecGGFZJp0
-	 xAmLwU5bChPZEPMLXPn0mQjWaEO0a52l/mybjLfoA2hocSEWiHejm3Adb2AC7PUAZg
-	 5I26aGJYxIfmfz99qtmj/nQqtWkjQi+zkUgVbyBFfQ9FcHUKkYt3KKeOn20hVfDliv
-	 DRksaxI3W8EnZj6XqYdLhjHZLzXTPSa0QWvvQN2urPu/iO0U22fAXMgZCSGha/IgIE
-	 BW1pZV4/kWmAmc2n+SMbON22aMWCwYw/tI/Uphd9DRy4hHPXcivkNV73BdmkzT9g44
-	 4mzT39lblGS5g==
-Date: Thu, 8 Jan 2026 09:40:59 -0800
-From: Kees Cook <kees@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cuoOgmof"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767894979; x=1799430979;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fVFKoDSGtu/m8fcssWWh1M0gKpmCnRC4+ap+lVdeYB0=;
+  b=cuoOgmofuMOssEpyvh8W/eYGO2Kw8tHj3H8N9qon5YGlrNBOoujMC3xt
+   OuWr8AVGcHSm0XQBEj5MORMRdxlmi+s9kxhjbBF+Rkhxru+sULETDTFyI
+   uhKOINJSq5WCfCLVRufqAIwbdrOHFYNQJ2+R2A9FQHMo90V9LX3+4dRpX
+   fpVm2ChAkMWbSRd7vVSvyOiQflVBDSncBfL+o/t7dkQ6nGz4uM+31Axfk
+   vhyCKy4X3AqMyEjZYlgczf7BItXRi/gFqr2CeIKVbo651f3K0VtcSL5ZC
+   0zgbk8WdmS6SOD/o9MHKAEQUKJtzinlK9MAsiqFbODOqO4UAg6FHzttWa
+   A==;
+X-CSE-ConnectionGUID: TF4N3eEAQVGrv3uGTW47vA==
+X-CSE-MsgGUID: VcGdbxvZTAmzotOt1V1MtQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="86695398"
+X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
+   d="scan'208";a="86695398"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 09:56:19 -0800
+X-CSE-ConnectionGUID: 09hYryXbTDywVNcrXWvL1A==
+X-CSE-MsgGUID: BFN3ZKRIRLapNvoSYo54WA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
+   d="scan'208";a="203285622"
+Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
+  by orviesa007.jf.intel.com with ESMTP; 08 Jan 2026 09:56:11 -0800
+Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vduEz-000000001pc-1EmA;
+	Thu, 08 Jan 2026 17:56:09 +0000
+Date: Thu, 8 Jan 2026 18:55:54 +0100
+From: kernel test robot <lkp@intel.com>
+To: John Groves <John@groves.net>, Miklos Szeredi <miklos@szeredi.hu>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Bernd Schubert <bschubert@ddn.com>,
+	Alison Schofield <alison.schofield@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Corbet <corbet@lwn.net>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	David Hildenbrand <david@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	"Darrick J . Wong" <djwong@kernel.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	John Hubbard <jhubbard@nvidia.com>, Joe Perches <joe@perches.com>,
-	Christoph Lameter <cl@linux.com>, Marco Elver <elver@google.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v6 4/5] slab: Introduce kmalloc_flex() and family
-Message-ID: <202601080939.B99FEFF780@keescook>
-References: <20251203233029.it.641-kees@kernel.org>
- <20251203233036.3212363-4-kees@kernel.org>
- <f1f06db9-a12c-4999-9723-1fca5e8383a4@suse.cz>
+	Jeff Layton <jlayton@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Stefan Hajnoczi <shajnocz@redhat.com>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Chen Linxuan <chenlinxuan@uniontech.com>,
+	James Morse <james.morse@arm.com>, Fuad Tabba <tabba@google.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shivank Garg <shivankg@amd.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Gregory Price <gourry@gourry.net>,
+	Aravind Ramesh <arramesh@micron.com>
+Subject: Re: [PATCH V3 04/21] dax: Add dax_operations for use by fs-dax on
+ fsdev dax
+Message-ID: <202601081822.Ww7CSgov-lkp@intel.com>
+References: <20260107153332.64727-5-john@groves.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,63 +89,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1f06db9-a12c-4999-9723-1fca5e8383a4@suse.cz>
+In-Reply-To: <20260107153332.64727-5-john@groves.net>
 
-On Thu, Jan 08, 2026 at 03:06:31PM +0100, Vlastimil Babka wrote:
-> On 12/4/25 00:30, Kees Cook wrote:
-> > As done for kmalloc_obj*(), introduce a type-aware allocator for flexible
-> > arrays, which may also have "counted_by" annotations:
-> > 
-> > 	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
-> > 
-> > becomes:
-> > 
-> > 	ptr = kmalloc_flex(*ptr, flex_member, count, gfp);
-> > 
-> > The internal use of __flex_counter() allows for automatically setting
-> > the counter member of a struct's flexible array member when it has
-> > been annotated with __counted_by(), avoiding any missed early size
-> > initializations while __counted_by() annotations are added to the
-> > kernel. Additionally, this also checks for "too large" allocations based
-> > on the type size of the counter variable. For example:
-> > 
-> > 	if (count > type_max(ptr->flex_counter))
-> > 		fail...;
-> > 	size = struct_size(ptr, flex_member, count);
-> > 	ptr = kmalloc(size, gfp);
-> > 	ptr->flex_counter = count;
-> > 
-> > becomes (n.b. unchanged from earlier example):
-> > 
-> > 	ptr = kmalloc_flex(*ptr, flex_member, count, gfp);
-> > 	ptr->flex_count = count;
-> 
->              ^ flex_counter ?
-> 
-> But if it was "too large", ptr is NULL so this will oops?
+Hi John,
 
-I've changed this to:
+kernel test robot noticed the following build errors:
 
-...
-based on the type size of the counter variable. For example:
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on linus/master v6.19-rc4 next-20260108]
+[cannot apply to mszeredi-fuse/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-        if (count > type_max(ptr->flex_counter))
-                fail...;
-        size = struct_size(ptr, flex_member, count);
-        ptr = kmalloc(size, gfp);
-        if (!ptr)
-                fail...;
-        ptr->flex_counter = count;
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Groves/dax-add-fsdev-c-driver-for-fs-dax-on-character-dax/20260108-013232
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20260107153332.64727-5-john%40groves.net
+patch subject: [PATCH V3 04/21] dax: Add dax_operations for use by fs-dax on fsdev dax
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260108/202601081822.Ww7CSgov-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260108/202601081822.Ww7CSgov-lkp@intel.com/reproduce)
 
-becomes (n.b. unchanged from earlier example):
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601081822.Ww7CSgov-lkp@intel.com/
 
-        ptr = kmalloc_flex(*ptr, flex_member, count, gfp);
-        if (!ptr)
-                fail...;
-        ptr->flex_counter = count;
+All errors (new ones prefixed by >>):
+
+>> drivers/dax/fsdev.c:97:9: error: call to undeclared function '_copy_from_iter_flushcache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      97 |         return _copy_from_iter_flushcache(addr, bytes, i);
+         |                ^
+   drivers/dax/fsdev.c:97:9: note: did you mean '__copy_from_user_flushcache'?
+   arch/x86/include/asm/uaccess_64.h:166:1: note: '__copy_from_user_flushcache' declared here
+     166 | __copy_from_user_flushcache(void *dst, const void __user *src, unsigned size)
+         | ^
+   1 error generated.
 
 
-May I add your Acked-by for this 4/5 patch?
+vim +/_copy_from_iter_flushcache +97 drivers/dax/fsdev.c
+
+    93	
+    94	static size_t fsdev_dax_recovery_write(struct dax_device *dax_dev, pgoff_t pgoff,
+    95			void *addr, size_t bytes, struct iov_iter *i)
+    96	{
+  > 97		return _copy_from_iter_flushcache(addr, bytes, i);
+    98	}
+    99	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
