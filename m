@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BB615ECD7;
-	Thu,  8 Jan 2026 15:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A31323717F;
+	Thu,  8 Jan 2026 15:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767887932; cv=none; b=rR5ibHRK5lBJgVBWG8TADZPB8qDen1038CeaimuscdEEM5LpjDhrnJJnQoEV61lET8b9Sy+gxny3t56fXiCb8qUIxG0v3eVk+J9CLiFH4W5eGkbOqTRE51vgWxcaqwxdq/5DiTyvsTiq8ugD/CRheUAmHFF4N1QctA4UIFkdkpw=
+	t=1767887998; cv=none; b=CR7Ki1wYavHWw1tOnyCHmyafmu9lzPc4dsR79WfPUKmju6gM3rtgWBP32g5cPswAoQl6ghBzORN2tlNhD3FPZZZre/ghaiBHImS/bwLRXupFmKbbT8Xqep/Q4W2voLbHikmJ6+gDzjflqAMQ2O7Ty2pGRDASzHvejD4mUFVnDD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767887932; c=relaxed/simple;
-	bh=59UGg20+a8O/utg7jkDZv98IzGuoXpfkweM7G+15fCY=;
+	s=arc-20240116; t=1767887998; c=relaxed/simple;
+	bh=sgvITlXj9ilI7M6aqw0oCqZXs79wIBWPDtsQUt1afCc=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=MoUTz2+WuuMe4kozA1jihuVr/UItDycDxqxaK8SFDsKXhVBojLkEs2sS2Qv71oM5sWPpIC/Ru7DfuBVdAeVYaPD24VgcOYpj8CHuoT9sGqxqZau7tvPYpiHwSJffB2ERV54dBQNmjA9VJD6SFbPvMmiWL6Ao66iBfcS0WgO4fMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zngMsS34; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=c2SZAhrVdYKeeXHAz0JHFN46NaNsBCvrC17Av55dRxafUb9zt7kMBayM9bLq/7iZjoJddhsfYI7YVTgPZzFxgVGJP5qkx8cZnHRxdgYH5dgt5LyRLWeWOME3p4UKmUfYCAltftePaJm37l9tY4dswy/M0PCAM6kj+RmiTWV3gbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JmFgsRnM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zngMsS34"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0C9C116C6;
-	Thu,  8 Jan 2026 15:58:51 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JmFgsRnM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 280F3C116C6;
+	Thu,  8 Jan 2026 15:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1767887932;
-	bh=59UGg20+a8O/utg7jkDZv98IzGuoXpfkweM7G+15fCY=;
+	s=korg; t=1767887997;
+	bh=sgvITlXj9ilI7M6aqw0oCqZXs79wIBWPDtsQUt1afCc=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=zngMsS34cLX0kYuzhDo4C7C9VTnmdi+kizMAUdNstjtHf8cRjkWHUXYpyB/6/63W3
-	 FI2zRPcEDPntQn6AZ5tNt9N/0NudnPfGqIK0WGlt+9UAfsL/5e1P2Wz9+wEStv5JqC
-	 ItVBGx0pEpEdRnhquO153j9eF4wkLjlw86+uKrg8=
-Subject: Patch "KVM: arm64: sys_regs: disable -Wuninitialized-const-pointer warning" has been added to the 5.10-stable tree
+	b=JmFgsRnMt8GyzaR2yDzGnx96J2E/cTBA8Q7f45RwG/Sjpjl5TeKY3vbRMdbl6e91e
+	 1dsbSu6LsOxa6fs0SYqgmncjMTJvQieWUAKqV78QRPKWKaQNmFhk2RS51rl76HzwPw
+	 leai23tPUM9bNhUlWR6U1oc47jFSOSRW89vu9KtU=
+Subject: Patch "KVM: arm64: sys_regs: disable -Wuninitialized-const-pointer warning" has been added to the 5.15-stable tree
 To: alexandru.elisei@arm.com,catalin.marinas@arm.com,cov@codeaurora.org,gregkh@linuxfoundation.org,joey.gouly@arm.com,justinstitt@google.com,kvmarm@lists.cs.columbia.edu,linux-arm-kernel@lists.infradead.org,llvm@lists.linux.dev,maz@kernel.org,nathan@kernel.org,oliver.upton@linux.dev,suzuki.poulose@arm.com,will@kernel.org,yuzenghui@huawei.com
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Thu, 08 Jan 2026 16:57:53 +0100
+Date: Thu, 08 Jan 2026 16:58:15 +0100
 In-Reply-To: <20251204-b4-stable-disable-uninit-ptr-warn-5-15-v1-1-41212e2c6409@google.com>
-Message-ID: <2026010853-fineness-stopwatch-0bd4@gregkh>
+Message-ID: <2026010815-scraggly-flagship-ebb1@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,12 +46,12 @@ This is a note to let you know that I've just added the patch titled
 
     KVM: arm64: sys_regs: disable -Wuninitialized-const-pointer warning
 
-to the 5.10-stable tree which can be found at:
+to the 5.15-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      kvm-arm64-sys_regs-disable-wuninitialized-const-pointer-warning.patch
-and it can be found in the queue-5.10 subdirectory.
+and it can be found in the queue-5.15 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
@@ -92,14 +92,12 @@ Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Justin Stitt <justinstitt@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kvm/Makefile | 3 +++
+ arch/arm64/kvm/Makefile |    3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
-index 989bb5dad2c8..109cca425d3e 100644
 --- a/arch/arm64/kvm/Makefile
 +++ b/arch/arm64/kvm/Makefile
-@@ -25,3 +25,6 @@ kvm-y := $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o $(KVM)/eventfd.o \
+@@ -25,3 +25,6 @@ kvm-y := $(KVM)/kvm_main.o $(KVM)/coales
  	 vgic/vgic-its.o vgic/vgic-debug.o
  
  kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o
@@ -107,16 +105,7 @@ index 989bb5dad2c8..109cca425d3e 100644
 +# Work around a false positive Clang 22 -Wuninitialized-const-pointer warning
 +CFLAGS_sys_regs.o := $(call cc-disable-warning, uninitialized-const-pointer)
 
----
-base-commit: 8bb7eca972ad531c9b149c0a51ab43a417385813
-change-id: 20250728-b4-stable-disable-uninit-ptr-warn-5-15-c0c9db3df206
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
-
-
 
 Patches currently in stable-queue which might be from justinstitt@google.com are
 
-queue-5.10/kvm-arm64-sys_regs-disable-wuninitialized-const-pointer-warning.patch
+queue-5.15/kvm-arm64-sys_regs-disable-wuninitialized-const-pointer-warning.patch
