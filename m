@@ -1,184 +1,124 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC0F33CEB2
-	for <llvm@lists.linux.dev>; Thu,  8 Jan 2026 21:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767907981; cv=pass; b=SdtvYfGP79/uKiJZRwXqpmYa5gumHU6cQdtv+ETAr2aURyy9ep+R1z0yunV0qaOT6DBoRR8BaTYaClyolmMCu1E4872B2sl/R1ESkZJXItzrvDVDKVQl/EVO5j9qWZN9SbFMIQQHASc8K4ITt70I1huqIgtzJpQlhQbJrW7TdNA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767907981; c=relaxed/simple;
-	bh=h7T9WIGW4cP4dhj2JwRYmxkFXPoI0ySk4+E7EPCzcII=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=iP+Y2SRhmJJ3UtPFHj62jFKmR/p+b7cP2sOM1I+ttOFkoa1ddS4GqfKvFzfrxjkM1lYxQiakNYgeqJcPHr39KB2hXBVOwR+S8ZjZxedHuE9+Yz8/YqeAp6v9wlrCwCRUusBHfk1l0nJ/N50cUBwH0VKKiD0iMbhguonWs1kuPwY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a9CSpGzy; arc=pass smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F402F3623
+	for <llvm@lists.linux.dev>; Thu,  8 Jan 2026 22:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767910253; cv=none; b=tVKgRKM87CY3WS3ro2DYIR5yEffwEdoB+nGPMiNZJ8zfa2ZVVGivnzXAiOvaxreYtmpk998n0BiPQqeilHMD+eH7GqFERP1YtjUsr6QI/TUtyd562lrWRPa8xayNoDr/lUtdgpHguWufp1OZqmqTKTlQef9ExtxPW9Wtnr3CvNs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767910253; c=relaxed/simple;
+	bh=Zrh6g3iqQucP/rJuVPvG/r1wbhapoAMvUjp8oSDN/3U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fWfTfbW1YN6IsJhFSuc1f70wJxvBa72Wc/OQ6+FeCAAlqxtPWM6ZkI6OWWlvcWBRwdRVWLJPssePocTgMPRIc3gBr3/P7HhsREeDFb6ylYr8d7TqjqiNpInSScZZuE7Jj0l7v75C690oOCqxBboP0T4NI9++QuH4u4NPt0VR2Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=y3DnIpMC; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a9CSpGzy"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a1462573caso21455ad.0
-        for <llvm@lists.linux.dev>; Thu, 08 Jan 2026 13:33:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1767907979; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dUtkFXRaJEPZ96hnrM88RZNuMAyp0AgYWKNw/HKX2nZH9QegllvGU00/lzvq1mx+Kq
-         IgwikwgZL/VeAJ4sSASvtua9PJFqkvkzskKAllK2cVa3yzyaCjIeUCM8ihxrD/A8Y3K8
-         EDtQlTn52J7lJxllgDeOc+d4yCQbDm5dMmzhPZHCJ5ZjIGmxlJJ6sRAB/GDAKXvQuy/5
-         CxduKm93TtQiaHBtgUzdIKKnwsVnJ4W5umCkZdV/v02P/bRp+Z5ngvm+/tu5u5jxc6Lf
-         2dnEQoo0Hjkh/8E2wg7v3KqxYyJBG1XWz7Ww2j/tTVJltgxlGeB3cTbeAlXgBmaLZTV7
-         NcsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9jii3QhKwF6ZszXh6UcF2y7D5ibtMfEq4bxBfO5NQDc=;
-        fh=j5oYNqepfeC25nI94k/NCYu6TlPRU4E0/OqIr8fYHX0=;
-        b=Hlbn271YuurgXJxbNPao6r1e7Uczi0OgRtii5ohWvSClQWSAnZPHrhKwW/b3YqUcgb
-         YVeIwbGUFxcCa5iexACHwV2ALbZwUa95gTH1kxImk1meRvJwhVIrJgmCX8KSP6h0QK1q
-         7uXV6ofEym3re076QtySh5/92sI5oi1mvJOT+AYJKhn7n2ejfyu/T4pqRTS4GoHse8UW
-         tO9nxlf6aJQeSf6lqAr5G3D5YCwG3Jk2bgVGEgP//A7g55plotYcIfYnL+b4dkjdwEPQ
-         fOUTFraFb2AqytCo4jyCcaZuCCtEkmbRJYIxVFTsqNcUxefkDloj/zLgtAVy/L6Qyasp
-         mpbg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767907979; x=1768512779; darn=lists.linux.dev;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9jii3QhKwF6ZszXh6UcF2y7D5ibtMfEq4bxBfO5NQDc=;
-        b=a9CSpGzy59nwHJeSvhFaw54z4IictKjvLHAe6QaJmbYavE4uC9HW53rCap/hTkIoDI
-         rwjlNj244ZMOW54a4XzWHJbwdMpDjDtVbrIi3OTPFeJoL9XH1CTSv5/QeDjqg3wPZwXS
-         hI1Ia5B3edJUz9Gx+CSYkgDK6KFF2AbyR+kXNQ+iF+VMCCv/5PRyxN5mR5ymUU7X5t5f
-         ZRY+cCDX+0+NdwVUS+E1qmOgI91yO9cxLY4Fp33g5QE+y1Nxb4FUVF37ulJbdErM9mCb
-         zjmUH/4ulORSoaZRX1e3qgRtv19Rs4pomGbArp3Yrg2Cqo5eW28aKQFugwgpA4qA/ZKs
-         Clrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767907979; x=1768512779;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9jii3QhKwF6ZszXh6UcF2y7D5ibtMfEq4bxBfO5NQDc=;
-        b=b0OLD1TtqDoNTW/QUubqaKpG4kRAL/s0qiCSCc3dfIuXSp05R59kPeHmedyegdB9Yk
-         QCb2DQ7iMSRHyK4L0SqBKDCdedRW/EQ5LNIU7rmjtjy2NR8J+h4+68yiOJez9Yvq5BFo
-         TWbyeku+gYLlPSHDnvEaDnOM1FsBLsFSxv2/m1dKvuT4N+LcedHjae1oNSSBpsedEKEz
-         o7Lqn6wmFwEpars9v+yG2rySTSuqMckims+BrOvTqCJXm/0FjrpWOYFUIdrHqEGco2oF
-         0EybKsZXadJGMKIHKxQdr3v59/4n+FbTnvYS46pW6PQ+f6vPi0tMzWxUa++veJK78JRW
-         K26w==
-X-Forwarded-Encrypted: i=1; AJvYcCWz3QnZ5Tk+LRY87h4BzYLjweNfqmUMF/suj9W0xGH1ifTLc2yWh1E05eH8P7jPgDwvieno@lists.linux.dev
-X-Gm-Message-State: AOJu0YwEId3/MxxJ90Y/cYbp2At4s71F2of+ZpnC1QuavrE/oRI52j30
-	it9QM+3foNKE20NBfyc8h/HvZRcAOggKzEJekwC5ZxWBGXMJkmLxzdcqS5V77lq5tMU94JldNoU
-	6xGF+z2kVXkFTHAIGH/4FZouChNOQe0s3lTF/uP3o
-X-Gm-Gg: AY/fxX7fJzhYl4mKS25RnOhCJ34ijtrDUVvUNrix9Buy5L02VY4VHlLn02O8ZLfogCC
-	pWT0r58lxQzncDJa5ywHotdDOUcJpSboFFoj/J0IvvlKaqgyiMeTu3bjAjmczj06eYPaMd9bUvG
-	6f/MDY6ri8BTK6lYGViPqOmCIwbcYOOJIq+gKMVIuGa1ezGf2uUADVbD/a4FCPPM9+ZtoG/m9RG
-	Czf4L9bfEFt3k4peYFdNZATqRnK3ymOMz8Bk4b9lJ6+G91PlrVy+ImXRoE9s08ErEkeBJQcsqHb
-	FxpXe0Aoa2iTlkUeeY7izFx7uhCssRmwHMoj
-X-Received: by 2002:a17:903:2ac3:b0:299:c368:6b1f with SMTP id
- d9443c01a7336-2a409ac2549mr882185ad.18.1767907979220; Thu, 08 Jan 2026
- 13:32:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="y3DnIpMC"
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dnJxx5cFFz1XT1Z9;
+	Thu,  8 Jan 2026 22:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1767910237; x=1770502238; bh=9wcZSTi8w0Set4rh18vUE4zP
+	r/D6QOeIA+Se4D2Yz7E=; b=y3DnIpMCSQnKfEQcNUdJmBRbcLno92oeKfo+WMYi
+	GH7blNKN0irLymfpBF3Hg2QDn+bUOND9Ph7+2f+3JOuxuWVyZeHsX/eUX6nr4u42
+	Xo2+GsL+38yL5abFm2PTOhHHNbpFxaViFrEYePNdHtMs7t66UhI3rEcsqAbQ0git
+	yvIzwW2Puf3sh2g2Yh6ypqckaBLqa3pUBV8iuttx96qnQS6WndngwpK8KdYd2a1p
+	gWKipnbDHZpiaajmh8SgTT8KCPLDjeAtbIOlGRsmWTvjAkHdDpnNsQrr3OZChyg8
+	yuKl6RyxlRCmlJ0VSvSzQ99QFu2RTNvj4T9gnBxHCvPCnw==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 2VIQQt_5Aq81; Thu,  8 Jan 2026 22:10:37 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dnJxZ1xlYz1XZYyy;
+	Thu,  8 Jan 2026 22:10:26 +0000 (UTC)
+Message-ID: <57062131-e79e-42c2-aa0b-8f931cb8cac2@acm.org>
+Date: Thu, 8 Jan 2026 14:10:25 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251007163835.3152881-1-irogers@google.com>
-In-Reply-To: <20251007163835.3152881-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 8 Jan 2026 13:32:47 -0800
-X-Gm-Features: AQt7F2p4jlLBo8WB0IBnDmjDWl4i1PUdEKalJuFo7-mqHyIq6-NhlJpnSTbe7tQ
-Message-ID: <CAP-5=fW7YViusbdr9uZ_wSg5cwAPcdnysGbfuytKyYw6cbQa4g@mail.gmail.com>
-Subject: Re: [PATCH v8 0/3] Capstone/llvm dlopen support
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Collin Funk <collin.funk1@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 10/36] locking/mutex: Support Clang's context analysis
+To: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+ Will Deacon <will@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+ Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>,
+ Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+ Eric Dumazet <edumazet@google.com>, Frederic Weisbecker
+ <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>,
+ Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Kentaro Takeda <takedakn@nttdata.co.jp>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+ Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+ Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
+ kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org,
+ linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+References: <20251219154418.3592607-1-elver@google.com>
+ <20251219154418.3592607-11-elver@google.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20251219154418.3592607-11-elver@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 7, 2025 at 9:38=E2=80=AFAM Ian Rogers <irogers@google.com> wrot=
-e:
->
-> Linking against libcapstone and libLLVM can be a significant increase
-> in dependencies and file size if building statically. The dependencies
-> are also quite cumbersome if bringing perf into a distribution. For
-> something like `perf record` the disassembler and addr2line
-> functionality of libcapstone and libLLVM won't be used. These patches
-> support dynamically loading these libraries using dlopen and then
-> calling the appropriate functions found using dlsym. Using dlopen
-> allows libcapstone and libLLVM to be installed separately to perf and
-> when that's done the performance will improve as separate commands for
-> objdump and addr2line won't be invoked.
->
-> The patch series adds perf_ variants of the capstone/llvm functions
-> that will either directly call the function or (NO_CAPSTONE=3D1 and
-> NO_LIBLLVM=3D1 cases) use dlopen/dlsym to discover and then call the
-> function. To support the function signatures when
-> HAVE_LIBCAPSTONE_SUPPORT and HAVE_LIBLLVM_SUPPORT aren't defined
-> prototypes generated using pahole are given. This avoids requiring
-> libcapstone or libLLVM for the sake of the header files. It also
-> avoids having a build where neither dlopen or dynamic linking against
-> libcapstone or libLLVM is supported. There are other possibilities in
-> how to organize this, but the chosen approach was done so for the
-> simplicity and cleanliness of the code.
->
-> The addr2line LLVM functionality is written in C++. To avoid linking
-> against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
-> the C++ code with the libLLVM dependency will be built into a
-> libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
-> would extend their C API to avoid this.
->
-> v8: Rebase down to 3 patches. Update commit and cover messages.
-> v7: Refactor now the first 5 patches, that largely moved code around,
->     have landed. Move the dlopen code to the end of the series so that
->     the first 8 patches can be picked improving capstone/LLVM support
->     without adding the dlopen code. Rename the cover letter and
->     disassembler cleanup patches.
-> v6: Refactor the libbfd along with capstone and LLVM, previous patch
->     series had tried to avoid this by just removing the deprecated
->     BUILD_NONDISTRO code. Remove the libtracefs removal into its own
->     patch.
-> v5: Rebase and comment typo fix.
-> v4: Rebase and addition of a patch removing an unused struct variable.
-> v3: Add srcline addr2line fallback trying LLVM first then forking a
->     process. This came up in conversation with Steinar Gunderson
->     <sesse@google.com>.
->     Tweak the cover letter message to try to address Andi Kleen's
->     <ak@linux.intel.com> feedback that the series doesn't really
->     achieve anything.
-> v2: Add mangling of the function names in libperf-llvm.so to avoid
->     potential infinite recursion. Add BPF JIT disassembly support to
->     LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
->     series from:
->     https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.=
-com/
->     Some other minor additional clean up.
->
-> Ian Rogers (3):
->   perf capstone: Support for dlopen-ing libcapstone.so
->   perf llvm: Support for dlopen-ing libLLVM.so
->   perf llvm: Mangle libperf-llvm.so function names
+On 12/19/25 8:39 AM, Marco Elver wrote:
+> diff --git a/include/linux/mutex.h b/include/linux/mutex.h
+> index bf535f0118bb..89977c215cbd 100644
+> --- a/include/linux/mutex.h
+> +++ b/include/linux/mutex.h
+> @@ -62,6 +62,7 @@ do {									\
+>   	static struct lock_class_key __key;				\
+>   									\
+>   	__mutex_init((mutex), #mutex, &__key);				\
+> +	__assume_ctx_lock(mutex);					\
+>   } while (0)
 
-Ping.
+The above type of change probably will have to be reverted. If I enable
+context analysis for the entire kernel tree, drivers/base/devcoredump.c
+doesn't build. The following error is reported:
+
+drivers/base/devcoredump.c:406:2: error: acquiring mutex '_res->mutex' 
+that is already held [-Werror,-Wthread-safety-analysis]
+   406 |         mutex_lock(&devcd->mutex);
+       |         ^
+
+dev_coredumpm_timeout() calls mutex_init() and mutex_lock() from the 
+same function. The above type of change breaks compilation of all code
+that initializes and locks a synchronization object from the same
+function. My understanding of dev_coredumpm_timeout() is that there is a
+good reason for calling both mutex_init() and mutex_lock() from that
+function. Possible solutions are disabling context analysis for that
+function or removing __assume_ctx_lock() again from mutex_init(). Does
+anyone want to share their opinion about this?
 
 Thanks,
-Ian
 
->  tools/perf/Makefile.config         |  13 ++
->  tools/perf/Makefile.perf           |  24 ++-
->  tools/perf/tests/make              |   2 +
->  tools/perf/util/Build              |   2 +-
->  tools/perf/util/capstone.c         | 285 +++++++++++++++++++++++++----
->  tools/perf/util/llvm-c-helpers.cpp | 120 +++++++++++-
->  tools/perf/util/llvm-c-helpers.h   |  24 ++-
->  tools/perf/util/llvm.c             | 273 ++++++++++++++++++++++++---
->  8 files changed, 660 insertions(+), 83 deletions(-)
->
-> --
-> 2.51.0.618.g983fd99d29-goog
->
+Bart.
