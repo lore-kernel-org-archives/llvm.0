@@ -1,130 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0866D3328E0;
-	Thu,  8 Jan 2026 21:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767906322; cv=none; b=OsA8GbJYnYttTFffgFiwtKyhFx4g+Qdou5N64PEFbyhLrKg1ad7GwRrxkmh6gzURK4iFtGYpzlTbsXBFuXtETxadPBai4MvNYL6ScPrz6rbIexJBWZNGhJlIRj54jzwfrylbF4w9TzdAqu26JrQcb5X96mNenb9URU0h9dz1LP0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767906322; c=relaxed/simple;
-	bh=+WnQHj0lg7EAQX+YbgE2lusc+q8ddfwIUjjQ0bTC3fE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qGLc330MbmGHAqUoT6k9NshrfDOlTzoX0eGnui1HkikC9P9geuAB2dawbGWeMzplSPM+vpIlNqc/qpiom0Q5tmtGHT8I++hoDXTKJ8Fw6g1jfihEVvD9hEaa9n2V6Hk6N8iE1hp6izhzCdmNYqDRaCeXLZqzKJ8BCKZtGyCzoZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BmCzbN1k; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC0F33CEB2
+	for <llvm@lists.linux.dev>; Thu,  8 Jan 2026 21:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767907981; cv=pass; b=SdtvYfGP79/uKiJZRwXqpmYa5gumHU6cQdtv+ETAr2aURyy9ep+R1z0yunV0qaOT6DBoRR8BaTYaClyolmMCu1E4872B2sl/R1ESkZJXItzrvDVDKVQl/EVO5j9qWZN9SbFMIQQHASc8K4ITt70I1huqIgtzJpQlhQbJrW7TdNA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767907981; c=relaxed/simple;
+	bh=h7T9WIGW4cP4dhj2JwRYmxkFXPoI0ySk4+E7EPCzcII=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=iP+Y2SRhmJJ3UtPFHj62jFKmR/p+b7cP2sOM1I+ttOFkoa1ddS4GqfKvFzfrxjkM1lYxQiakNYgeqJcPHr39KB2hXBVOwR+S8ZjZxedHuE9+Yz8/YqeAp6v9wlrCwCRUusBHfk1l0nJ/N50cUBwH0VKKiD0iMbhguonWs1kuPwY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a9CSpGzy; arc=pass smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BmCzbN1k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767906320; x=1799442320;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+WnQHj0lg7EAQX+YbgE2lusc+q8ddfwIUjjQ0bTC3fE=;
-  b=BmCzbN1kQtlmoXplGOHj5Xjg6356Y323XlmAnrj+NaJHTqsDTFX6JYmR
-   uBFzMq20iJG7iOvLmgLcGGdKPLt43QGNrz57cpRoCEgsytYmGySPQ0KXY
-   bvNbU+rQvC+tGctFCmgP8ugF9vB+NB8OMAVIZZaBu8+kzCPFb/Qg+Mhny
-   4U9FOfqnoZ8I6dJH0tBEuCG+sBw2pQ9FID3zZuxaDOdWprCkMnxtwi8GL
-   zoZqkZolBcYZamQstyeuzM+dfzNk1II9fhnei4msDDMPh9F/UrNQ/j7eA
-   24PYr5b0Wdx1TOffPT06xBj380L021pK176Zza+ihK7PIrN+5zXIeHwre
-   w==;
-X-CSE-ConnectionGUID: PRb6jRWNSuW+pX7srNaCMQ==
-X-CSE-MsgGUID: UjkNDmnwSnaHCmSQnM5pjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="69342914"
-X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
-   d="scan'208";a="69342914"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 13:05:19 -0800
-X-CSE-ConnectionGUID: Z6vPPb/XRty4kp7GZYZtGw==
-X-CSE-MsgGUID: Xq2bwUfBQVaPeuvbfvmZ9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
-   d="scan'208";a="207783715"
-Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Jan 2026 13:05:12 -0800
-Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vdxBu-000000001qu-1XV0;
-	Thu, 08 Jan 2026 21:05:10 +0000
-Date: Thu, 8 Jan 2026 22:04:13 +0100
-From: kernel test robot <lkp@intel.com>
-To: John Groves <John@groves.net>, Miklos Szeredi <miklos@szeredi.hu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Bernd Schubert <bschubert@ddn.com>,
-	Alison Schofield <alison.schofield@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	David Hildenbrand <david@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	"Darrick J . Wong" <djwong@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Stefan Hajnoczi <shajnocz@redhat.com>,
-	Joanne Koong <joannelkoong@gmail.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Chen Linxuan <chenlinxuan@uniontech.com>,
-	James Morse <james.morse@arm.com>, Fuad Tabba <tabba@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shivank Garg <shivankg@amd.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Gregory Price <gourry@gourry.net>,
-	Aravind Ramesh <arramesh@micron.com>
-Subject: Re: [PATCH V3 16/21] famfs_fuse: GET_DAXDEV message and daxdev_table
-Message-ID: <202601082251.cKsBXMtT-lkp@intel.com>
-References: <20260107153332.64727-17-john@groves.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a9CSpGzy"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a1462573caso21455ad.0
+        for <llvm@lists.linux.dev>; Thu, 08 Jan 2026 13:33:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1767907979; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dUtkFXRaJEPZ96hnrM88RZNuMAyp0AgYWKNw/HKX2nZH9QegllvGU00/lzvq1mx+Kq
+         IgwikwgZL/VeAJ4sSASvtua9PJFqkvkzskKAllK2cVa3yzyaCjIeUCM8ihxrD/A8Y3K8
+         EDtQlTn52J7lJxllgDeOc+d4yCQbDm5dMmzhPZHCJ5ZjIGmxlJJ6sRAB/GDAKXvQuy/5
+         CxduKm93TtQiaHBtgUzdIKKnwsVnJ4W5umCkZdV/v02P/bRp+Z5ngvm+/tu5u5jxc6Lf
+         2dnEQoo0Hjkh/8E2wg7v3KqxYyJBG1XWz7Ww2j/tTVJltgxlGeB3cTbeAlXgBmaLZTV7
+         NcsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9jii3QhKwF6ZszXh6UcF2y7D5ibtMfEq4bxBfO5NQDc=;
+        fh=j5oYNqepfeC25nI94k/NCYu6TlPRU4E0/OqIr8fYHX0=;
+        b=Hlbn271YuurgXJxbNPao6r1e7Uczi0OgRtii5ohWvSClQWSAnZPHrhKwW/b3YqUcgb
+         YVeIwbGUFxcCa5iexACHwV2ALbZwUa95gTH1kxImk1meRvJwhVIrJgmCX8KSP6h0QK1q
+         7uXV6ofEym3re076QtySh5/92sI5oi1mvJOT+AYJKhn7n2ejfyu/T4pqRTS4GoHse8UW
+         tO9nxlf6aJQeSf6lqAr5G3D5YCwG3Jk2bgVGEgP//A7g55plotYcIfYnL+b4dkjdwEPQ
+         fOUTFraFb2AqytCo4jyCcaZuCCtEkmbRJYIxVFTsqNcUxefkDloj/zLgtAVy/L6Qyasp
+         mpbg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1767907979; x=1768512779; darn=lists.linux.dev;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9jii3QhKwF6ZszXh6UcF2y7D5ibtMfEq4bxBfO5NQDc=;
+        b=a9CSpGzy59nwHJeSvhFaw54z4IictKjvLHAe6QaJmbYavE4uC9HW53rCap/hTkIoDI
+         rwjlNj244ZMOW54a4XzWHJbwdMpDjDtVbrIi3OTPFeJoL9XH1CTSv5/QeDjqg3wPZwXS
+         hI1Ia5B3edJUz9Gx+CSYkgDK6KFF2AbyR+kXNQ+iF+VMCCv/5PRyxN5mR5ymUU7X5t5f
+         ZRY+cCDX+0+NdwVUS+E1qmOgI91yO9cxLY4Fp33g5QE+y1Nxb4FUVF37ulJbdErM9mCb
+         zjmUH/4ulORSoaZRX1e3qgRtv19Rs4pomGbArp3Yrg2Cqo5eW28aKQFugwgpA4qA/ZKs
+         Clrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767907979; x=1768512779;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9jii3QhKwF6ZszXh6UcF2y7D5ibtMfEq4bxBfO5NQDc=;
+        b=b0OLD1TtqDoNTW/QUubqaKpG4kRAL/s0qiCSCc3dfIuXSp05R59kPeHmedyegdB9Yk
+         QCb2DQ7iMSRHyK4L0SqBKDCdedRW/EQ5LNIU7rmjtjy2NR8J+h4+68yiOJez9Yvq5BFo
+         TWbyeku+gYLlPSHDnvEaDnOM1FsBLsFSxv2/m1dKvuT4N+LcedHjae1oNSSBpsedEKEz
+         o7Lqn6wmFwEpars9v+yG2rySTSuqMckims+BrOvTqCJXm/0FjrpWOYFUIdrHqEGco2oF
+         0EybKsZXadJGMKIHKxQdr3v59/4n+FbTnvYS46pW6PQ+f6vPi0tMzWxUa++veJK78JRW
+         K26w==
+X-Forwarded-Encrypted: i=1; AJvYcCWz3QnZ5Tk+LRY87h4BzYLjweNfqmUMF/suj9W0xGH1ifTLc2yWh1E05eH8P7jPgDwvieno@lists.linux.dev
+X-Gm-Message-State: AOJu0YwEId3/MxxJ90Y/cYbp2At4s71F2of+ZpnC1QuavrE/oRI52j30
+	it9QM+3foNKE20NBfyc8h/HvZRcAOggKzEJekwC5ZxWBGXMJkmLxzdcqS5V77lq5tMU94JldNoU
+	6xGF+z2kVXkFTHAIGH/4FZouChNOQe0s3lTF/uP3o
+X-Gm-Gg: AY/fxX7fJzhYl4mKS25RnOhCJ34ijtrDUVvUNrix9Buy5L02VY4VHlLn02O8ZLfogCC
+	pWT0r58lxQzncDJa5ywHotdDOUcJpSboFFoj/J0IvvlKaqgyiMeTu3bjAjmczj06eYPaMd9bUvG
+	6f/MDY6ri8BTK6lYGViPqOmCIwbcYOOJIq+gKMVIuGa1ezGf2uUADVbD/a4FCPPM9+ZtoG/m9RG
+	Czf4L9bfEFt3k4peYFdNZATqRnK3ymOMz8Bk4b9lJ6+G91PlrVy+ImXRoE9s08ErEkeBJQcsqHb
+	FxpXe0Aoa2iTlkUeeY7izFx7uhCssRmwHMoj
+X-Received: by 2002:a17:903:2ac3:b0:299:c368:6b1f with SMTP id
+ d9443c01a7336-2a409ac2549mr882185ad.18.1767907979220; Thu, 08 Jan 2026
+ 13:32:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260107153332.64727-17-john@groves.net>
+References: <20251007163835.3152881-1-irogers@google.com>
+In-Reply-To: <20251007163835.3152881-1-irogers@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 8 Jan 2026 13:32:47 -0800
+X-Gm-Features: AQt7F2p4jlLBo8WB0IBnDmjDWl4i1PUdEKalJuFo7-mqHyIq6-NhlJpnSTbe7tQ
+Message-ID: <CAP-5=fW7YViusbdr9uZ_wSg5cwAPcdnysGbfuytKyYw6cbQa4g@mail.gmail.com>
+Subject: Re: [PATCH v8 0/3] Capstone/llvm dlopen support
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Collin Funk <collin.funk1@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi John,
+On Tue, Oct 7, 2025 at 9:38=E2=80=AFAM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> Linking against libcapstone and libLLVM can be a significant increase
+> in dependencies and file size if building statically. The dependencies
+> are also quite cumbersome if bringing perf into a distribution. For
+> something like `perf record` the disassembler and addr2line
+> functionality of libcapstone and libLLVM won't be used. These patches
+> support dynamically loading these libraries using dlopen and then
+> calling the appropriate functions found using dlsym. Using dlopen
+> allows libcapstone and libLLVM to be installed separately to perf and
+> when that's done the performance will improve as separate commands for
+> objdump and addr2line won't be invoked.
+>
+> The patch series adds perf_ variants of the capstone/llvm functions
+> that will either directly call the function or (NO_CAPSTONE=3D1 and
+> NO_LIBLLVM=3D1 cases) use dlopen/dlsym to discover and then call the
+> function. To support the function signatures when
+> HAVE_LIBCAPSTONE_SUPPORT and HAVE_LIBLLVM_SUPPORT aren't defined
+> prototypes generated using pahole are given. This avoids requiring
+> libcapstone or libLLVM for the sake of the header files. It also
+> avoids having a build where neither dlopen or dynamic linking against
+> libcapstone or libLLVM is supported. There are other possibilities in
+> how to organize this, but the chosen approach was done so for the
+> simplicity and cleanliness of the code.
+>
+> The addr2line LLVM functionality is written in C++. To avoid linking
+> against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
+> the C++ code with the libLLVM dependency will be built into a
+> libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
+> would extend their C API to avoid this.
+>
+> v8: Rebase down to 3 patches. Update commit and cover messages.
+> v7: Refactor now the first 5 patches, that largely moved code around,
+>     have landed. Move the dlopen code to the end of the series so that
+>     the first 8 patches can be picked improving capstone/LLVM support
+>     without adding the dlopen code. Rename the cover letter and
+>     disassembler cleanup patches.
+> v6: Refactor the libbfd along with capstone and LLVM, previous patch
+>     series had tried to avoid this by just removing the deprecated
+>     BUILD_NONDISTRO code. Remove the libtracefs removal into its own
+>     patch.
+> v5: Rebase and comment typo fix.
+> v4: Rebase and addition of a patch removing an unused struct variable.
+> v3: Add srcline addr2line fallback trying LLVM first then forking a
+>     process. This came up in conversation with Steinar Gunderson
+>     <sesse@google.com>.
+>     Tweak the cover letter message to try to address Andi Kleen's
+>     <ak@linux.intel.com> feedback that the series doesn't really
+>     achieve anything.
+> v2: Add mangling of the function names in libperf-llvm.so to avoid
+>     potential infinite recursion. Add BPF JIT disassembly support to
+>     LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
+>     series from:
+>     https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.=
+com/
+>     Some other minor additional clean up.
+>
+> Ian Rogers (3):
+>   perf capstone: Support for dlopen-ing libcapstone.so
+>   perf llvm: Support for dlopen-ing libLLVM.so
+>   perf llvm: Mangle libperf-llvm.so function names
 
-kernel test robot noticed the following build warnings:
+Ping.
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v6.19-rc4 next-20260108]
-[cannot apply to mszeredi-fuse/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Groves/dax-add-fsdev-c-driver-for-fs-dax-on-character-dax/20260108-013232
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20260107153332.64727-17-john%40groves.net
-patch subject: [PATCH V3 16/21] famfs_fuse: GET_DAXDEV message and daxdev_table
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260108/202601082251.cKsBXMtT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260108/202601082251.cKsBXMtT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601082251.cKsBXMtT-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: fs/fuse/famfs.c:203 function parameter 'fm' not described in 'famfs_update_daxdev_table'
->> Warning: fs/fuse/famfs.c:203 function parameter 'meta' not described in 'famfs_update_daxdev_table'
-   Warning: fs/fuse/famfs.c:316 function parameter 'fmap_buf' not described in 'famfs_fuse_meta_alloc'
-   Warning: fs/fuse/famfs.c:316 function parameter 'fmap_buf_size' not described in 'famfs_fuse_meta_alloc'
->> Warning: fs/fuse/famfs.c:203 function parameter 'fm' not described in 'famfs_update_daxdev_table'
->> Warning: fs/fuse/famfs.c:203 function parameter 'meta' not described in 'famfs_update_daxdev_table'
-   Warning: fs/fuse/famfs.c:316 function parameter 'fmap_buf' not described in 'famfs_fuse_meta_alloc'
-   Warning: fs/fuse/famfs.c:316 function parameter 'fmap_buf_size' not described in 'famfs_fuse_meta_alloc'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  tools/perf/Makefile.config         |  13 ++
+>  tools/perf/Makefile.perf           |  24 ++-
+>  tools/perf/tests/make              |   2 +
+>  tools/perf/util/Build              |   2 +-
+>  tools/perf/util/capstone.c         | 285 +++++++++++++++++++++++++----
+>  tools/perf/util/llvm-c-helpers.cpp | 120 +++++++++++-
+>  tools/perf/util/llvm-c-helpers.h   |  24 ++-
+>  tools/perf/util/llvm.c             | 273 ++++++++++++++++++++++++---
+>  8 files changed, 660 insertions(+), 83 deletions(-)
+>
+> --
+> 2.51.0.618.g983fd99d29-goog
+>
