@@ -1,80 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5836E70814;
-	Thu,  8 Jan 2026 00:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8052D249A;
+	Thu,  8 Jan 2026 05:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767831686; cv=none; b=n1boP034smWIiCu8i8ZDrsStrlFf6E6LjKQJlWFdlVnX0Vwx9W3P9HzMxPzCu5YBen2OVmIwykImqdvY7IZgAtfoeR+6TdRuRXYJy64N0drnROi/GAy6tDa5fyBhglwfHp43uqbL5qtTc/FfZaL5pkqcDfROzIfDapmhZJP/x90=
+	t=1767848533; cv=none; b=CoIARXlahBw4Q0T/ncyED2zzEpr9banX6WMaN91vda/NQWCwudkNAMbM4fKDcqWU5pm8HVYn5AR9SR2Iy3H87BExoaZLXMWzBlxlbA5oOOgNFATASWhQnPbKfQMS7i5fezaNxHHz6LZy1gElHGH84r8+mwxfS5YeSauUbJI7G+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767831686; c=relaxed/simple;
-	bh=doegLQy+UKIiM7ZkKS9FbOOraAXel28WhjhojfRiivQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=AMo4yBgt9mSGEMrti11pm0jJ5ra58Tzg6TUD3r3TExJz1/JTXlzR4qpgTnJpMgtLuvP8T74sP6YGkjchli6u0BPEd+lUkn6pEnlvwm1YZoV+j/i7ozqRxq8PKnxgysE29PxjjQlYVPRO72Ta/aYZo5YE3Y9eaoJrTDXs4Pp5YJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nMsBgDjQ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767848533; c=relaxed/simple;
+	bh=i4vxDHGS1uCPrVEmpsixJJW62XNo1Hexm5sGNP4HlFQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XCI9tBJfNF8qjpciEUl81pDg8UiJZwbOeLTmd8tAwnNQomXrKsnGE9yT7cp6xNbUKSOb5GfEK7obWOA5roXbC6x7teQ1Ou/H7KLeMBa4x9BhnMn5EVCRs5ZyTJpojBix3LwJ5sixbXAWm124i2RaVrLfmo9NVwvVrCI46debCuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MuHyXbUY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nMsBgDjQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767831685; x=1799367685;
-  h=date:from:to:cc:subject:message-id;
-  bh=doegLQy+UKIiM7ZkKS9FbOOraAXel28WhjhojfRiivQ=;
-  b=nMsBgDjQgjUD5aXLB+MnYRgnVh7x8EWwbtxlPE2FK8Jv/rhltUBh5XCS
-   Rh4fSl5pK57X0qjMm1ld3oRKdfsvi+6worpU+SI1armPsLyuWO/IFSvMZ
-   +/+ovZ/woNlQhesW/I6saHKXEd9/F0++vxbTX2mJJbltFm/pmKomQgbqj
-   ICNIltv0sEQ4YCHstSs6b4F1xhU2IV1OrWmK89ijm3fpeoIs1H2Sk4ZEr
-   SkYoZ6Nf02JjuiWE4RWPudCdFDg/u8LQO2ELao7mIIjhiCtgu2zHsVOsI
-   YfnaN0EvcXfisIRPwgmr8JbB13upx8MkAZ3QOBtTtJv+/WGgCX21eGxKF
-   A==;
-X-CSE-ConnectionGUID: UIkfc3AtTeyZh+31bot+tg==
-X-CSE-MsgGUID: fbIz+FNJTAukRa08O9ralw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="68400366"
-X-IronPort-AV: E=Sophos;i="6.21,209,1763452800"; 
-   d="scan'208";a="68400366"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 16:21:23 -0800
-X-CSE-ConnectionGUID: yWCd7V/yR1OOVadn+QKtoQ==
-X-CSE-MsgGUID: 1R1wcoQXQI2RcI5aDmiyGw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Jan 2026 16:21:22 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vddmB-000000004GT-3mH3;
-	Thu, 08 Jan 2026 00:21:19 +0000
-Date: Thu, 08 Jan 2026 08:20:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [gourryinverse:scratch/gourry/isolation/v3 2/9] ld.lld:
- error: undefined symbol: efi_mem_attributes
-Message-ID: <202601080818.ELltsMQK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MuHyXbUY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488F7C116C6;
+	Thu,  8 Jan 2026 05:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767848532;
+	bh=i4vxDHGS1uCPrVEmpsixJJW62XNo1Hexm5sGNP4HlFQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MuHyXbUY5gsIUFy+nPKOl8ADyxIguPI/IQJK4MooIQvzrXrOv1dSjqvd6sL2FTTQR
+	 dsTx6NRFmFE2kFF02ftOKz9Tbk12OTfkey2pgxVBKE4M8YiqnfDabVxUdcmeeuT+by
+	 ldIlmHeJPMfY593xmKo4ys6xlPvD1ABrhoexmOGv8qm9Qc9qXBmQkw8oy5n7Re814Z
+	 HetvJrum9TH1HffpcDkGris04F2JqKm02pm3EhhOrv8N+L/wx39iNNM9JHIkvENVQO
+	 rFFouuRy85Cu7GLmYcLuGTEa7eBpXQZ8nlsuoLG6bQvEuHr7glgbhOm06G0AjnziCq
+	 r58hBkxQjP9/g==
+From: SeongJae Park <sj@kernel.org>
+To: SeongJae Park <sj@kernel.org>
+Cc: kernel test robot <lkp@intel.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Meta kernel team <kernel-team@meta.com>,
+	cgroups@vger.kernel.org,
+	damon@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] memcg: rename mem_cgroup_ino() to mem_cgroup_id()
+Date: Wed,  7 Jan 2026 21:02:02 -0800
+Message-ID: <20260108050204.78666-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251227221206.282703-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/gourryinverse/linux scratch/gourry/isolation/v3
-head:   8a4f71e8f0a8aef992da7df176a352073872a47c
-commit: 4f450a5bd7e696d6e61362537e159aa1914749ae [2/9] drivers/numa/srat: report EFI_MEMORY_SP regions as spm memblks
-config: x86_64-randconfig-075-20260108 (https://download.01.org/0day-ci/archive/20260108/202601080818.ELltsMQK-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260108/202601080818.ELltsMQK-lkp@intel.com/reproduce)
+On Sat, 27 Dec 2025 14:12:05 -0800 SeongJae Park <sj@kernel.org> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601080818.ELltsMQK-lkp@intel.com/
+> On Fri, 26 Dec 2025 20:31:38 +0800 kernel test robot <lkp@intel.com> wrote:
+> 
+> > Hi Shakeel,
+> > 
+> > kernel test robot noticed the following build warnings:
+> > 
+> > [auto build test WARNING on sj/damon/next]
+> > [cannot apply to akpm-mm/mm-everything tj-cgroup/for-next linus/master v6.19-rc2 next-20251219]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Shakeel-Butt/memcg-introduce-private-id-API-for-in-kernel-users/20251226-072954
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+> 
+> damon/next tree contains some debugging-purpose only changes that not aim to be
+> upstreamed.
+[...]
+> And this issue happens due to a damon/next chage that made for only debugging
+> and thus not aiming to be upstreamed.  Hence, no action from Shakeel is needed.
+> 
+> I will resolve this issue after this patch is added to damon/next.
 
-All errors (new ones prefixed by >>):
+FWIW, I ended up removing the debugging-only-purpose commit from damon/next.
+So hopefully it will not cause any noise.
 
->> ld.lld: error: undefined symbol: efi_mem_attributes
-   >>> referenced by srat.c:397 (drivers/acpi/numa/srat.c:397)
-   >>>               vmlinux.o:(acpi_parse_memory_affinity)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+SJ
+
+[...]
