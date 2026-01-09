@@ -1,111 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EAD26E70E;
-	Thu,  8 Jan 2026 23:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A348A1A9F84;
+	Fri,  9 Jan 2026 01:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767914979; cv=none; b=nRco4H93NA2w1H4wLARKtzegjNl2EK87bJh2UMYPZFTTq12EwX0RXv7lZT0VcUAP9FGL+1nRiZqIQsz62RLTvrIMWNicggEPM7upvbS26YPHRjGs7ucX7BBktHluJsbKyU1uBReY/2DPbfX33OKEWUhzYpuZpdsKa06Cw/+d1Uc=
+	t=1767921561; cv=none; b=Ga5d0xSXoaeLjBtN+qkF9ewRMnNABLqrbap7kwzwNwWxb0DO0tXIV0RFqSHgW1y8Td7sOUAIe5RA1XuK2ZUzDOd1H5tDpmpFYpQFUxQtDSLZxspcMINVLm27E7nLmjPz09eh9rEyyHHMAmVMn1tyi4ki2ZN3kNxIK2QFZlXLsM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767914979; c=relaxed/simple;
-	bh=Rw3b/I81KHL7rDt7WZsRA6q5wG50TRlXUqsg2VrqzSg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=N5Q1FEM+VX6ABXOoLA7KaBV5n5dJzEXrqnymwWrAIg5Pib+GzgytI5s7sJJlDSZTO6aaPomyWvbS8rhORv7m+SIvvdUT3B8lt01hYS5SrR5icQq+3TcaNsjCLZdMowaIIrtQamuOrVVULgP7MgeYVwmhLqzRroyPOwo2+Npwu7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LaDAOUIY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767921561; c=relaxed/simple;
+	bh=ELxtyq4vddEpI3Ogsxk5PIfoXaHqV4FbI5PRrNHftnc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fYVLdcIwZWifB/3kpemHdbidEGLFlPNd5m6TU5laAVJr3MSSNK9rQj3DYqnlu6m5o4QyHSVp+0udvXLbavk7vzTnfirySToEVxlGbOlh9DwRRRbD1PqebJV6VOZ/huRZj+NDc6QFio6x/ZL8iBWNNiFVnDk3rTN6Wf1HDZoPif4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lC8X/y4b; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LaDAOUIY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BCEC116C6;
-	Thu,  8 Jan 2026 23:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767914978;
-	bh=Rw3b/I81KHL7rDt7WZsRA6q5wG50TRlXUqsg2VrqzSg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=LaDAOUIYfdcS1TELNDZjf6/2IqXXfGW9tJJF8AlT3amw0KHLz9m4RzhPpyFj0eUwO
-	 NkBhHLaa4ImtevJtSzL/7gXNCnJEsHk79Z3H1XX8ESpkJ59wXKL+/6RpIq2l15CV0N
-	 zCQSF+DO1Z38ppubYSyswD8prBuFDD+RBJW9PxrDck8LviJp+WGDOhzsjBOKKS1GY/
-	 UWleuMUSKLsIeCBFE4EexrdxldpVclpji9HV49gz9eb4QvdVZvkBRt33eEbZbnFk+Y
-	 aiGKhCCqHynXF3WvHn8yik682hKDChFuk+YnPkVGwQy9Jg+7feUnHXmCQgX9xOBMU1
-	 FwUSkYrQcnf4g==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 08 Jan 2026 16:29:25 -0700
-Subject: [PATCH] drm/msm/dp: Avoid division by zero in
- msm_dp_ctrl_config_msa()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lC8X/y4b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767921558; x=1799457558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ELxtyq4vddEpI3Ogsxk5PIfoXaHqV4FbI5PRrNHftnc=;
+  b=lC8X/y4bY95s37dM+QQlS92vN6PgunYiaFTFHiDAPaO27GfhAKT7zi5F
+   P9htY3Imj+FqvJRPtsAFun7WNXnbsNi/7uraVLJtDabnxgRUzT3Nptueu
+   6eGE38QnmfWltv1jcYuC9oKOHS/HFhZo3sXR+gUpALHes5NJ7ozLpGXJ4
+   Np8OsBoK60HMvejbItK9VllxUnmtayXEfwTTI6wZPFUCKS3S7NHJf3HU3
+   Ev3i1w47ozu/4PdVMZn0DC5Q91YcIGlH0CyGf00Q1PNKxypiMoEcaZg/G
+   LFsScpJUn4ISyUcsmjsSC1mlmejh5dhWQTPhtpHT7Rs6Z9hQ4+IAW8z3c
+   A==;
+X-CSE-ConnectionGUID: b5/I5ZZMS9S0mkxlPbTMAg==
+X-CSE-MsgGUID: ARIW+U3XRtSVsyV2He0tzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="69043473"
+X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
+   d="scan'208";a="69043473"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 17:19:18 -0800
+X-CSE-ConnectionGUID: Up0brljGS2aY70NDK/Nubg==
+X-CSE-MsgGUID: BVSgPC8AQ3CKeoOrT0tl0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
+   d="scan'208";a="202967176"
+Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
+  by fmviesa007.fm.intel.com with ESMTP; 08 Jan 2026 17:19:15 -0800
+Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1ve19l-000000001uK-02YQ;
+	Fri, 09 Jan 2026 01:19:13 +0000
+Date: Fri, 9 Jan 2026 02:18:29 +0100
+From: kernel test robot <lkp@intel.com>
+To: Pnina Feder <pnina.feder@mobileye.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pmladek@suse.com,
+	bhe@redhat.com, linux-kernel@vger.kernel.org, lkp@intel.com,
+	mgorman@suse.de, mingo@redhat.com, peterz@infradead.org,
+	pnina.feder@mobileye.com, rostedt@goodmis.org,
+	senozhatsky@chromium.org, tglx@linutronix.de, vkondra@mobileye.com
+Subject: Re: [PATCH v4] panic: add panic_force_cpu= parameter to redirect
+ panic to a specific CPU
+Message-ID: <202601090229.rC0GNQqG-lkp@intel.com>
+References: <20260107215659.3619730-1-pnina.feder@mobileye.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-drm-msm-dp_ctrl-avoid-zero-div-v1-1-6a8debcb3033@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXN0QrCMAxA0V8ZeTbQDifDXxGRNYkasetIZxHH/
- n1VH8/LvQtkMZUMx2YBk6JZ01jhdw3QfRhvgsrV0Lr24LzrkS1izBF5utBsTxxKUsaPWELWgkE
- 6pr2jQL6HGplMrvr+DU7nv/MrPITmbxXWdQMS7Q8DggAAAA==
-X-Change-ID: 20260108-drm-msm-dp_ctrl-avoid-zero-div-be5dc40cbc18
-To: Rob Clark <robin.clark@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>, 
- Abhinav Kumar <abhinav.kumar@linux.dev>, 
- Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>, 
- Marijn Suijten <marijn.suijten@somainline.org>
-Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- freedreno@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2225; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Rw3b/I81KHL7rDt7WZsRA6q5wG50TRlXUqsg2VrqzSg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJkJtvckMppmf1ITXfHmyfb7Mzas2bhW59SuK76O7ketn
- kTdWRa5t6OUhUGMi0FWTJGl+rHqcUPDOWcZb5yaBDOHlQlkCAMXpwBMZOYERobLr3oXTIlLNNns
- qfGj32ri40sRd+SPHXM9f9HMNfvJkSYlhv8uosfs1tsuObR9s++ClsJ9u15fTJVmZdraah9R+mM
- P91UGAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260107215659.3619730-1-pnina.feder@mobileye.com>
 
-An (admittedly problematic) optimization change in LLVM 20 [1] turns
-known division by zero into the equivalent of __builtin_unreachable(),
-which invokes undefined behavior if it is encountered in a control flow
-graph, destroying code generation. When compile testing for x86_64,
-objtool flags an instance of this optimization triggering in
-msm_dp_ctrl_config_msa(), inlined into msm_dp_ctrl_on_stream():
+Hi Pnina,
 
-  drivers/gpu/drm/msm/msm.o: warning: objtool: msm_dp_ctrl_on_stream(): unexpected end of section .text.msm_dp_ctrl_on_stream
+kernel test robot noticed the following build warnings:
 
-The zero division happens if the else branch in the first if statement
-in msm_dp_ctrl_config_msa() is taken because pixel_div is initialized to
-zero and it is not possible for LLVM to eliminate the else branch since
-rate is still not known after inlining into msm_dp_ctrl_on_stream().
-Change pixel_div to one to make the division well defined in the
-presence of an unsupported rate, relying on the DRM_ERROR print to
-indicate the error to the user.
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v6.19-rc4 next-20260108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
-Link: https://github.com/llvm/llvm-project/commit/37932643abab699e8bb1def08b7eb4eae7ff1448 [1]
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601081959.9UVJEOfP-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pnina-Feder/panic-add-panic_force_cpu-parameter-to-redirect-panic-to-a-specific-CPU/20260108-055823
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260107215659.3619730-1-pnina.feder%40mobileye.com
+patch subject: [PATCH v4] panic: add panic_force_cpu= parameter to redirect panic to a specific CPU
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260109/202601090229.rC0GNQqG-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260109/202601090229.rC0GNQqG-lkp@intel.com/reproduce)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index cbcc7c2f0ffc..e4731c059ed8 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -2395,7 +2395,7 @@ static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
- 			       bool is_ycbcr_420)
- {
- 	u32 pixel_m, pixel_n;
--	u32 mvid, nvid, pixel_div = 0, dispcc_input_rate;
-+	u32 mvid, nvid, pixel_div = 1, dispcc_input_rate;
- 	u32 const nvid_fixed = DP_LINK_CONSTANT_N_VALUE;
- 	u32 const link_rate_hbr2 = 540000;
- 	u32 const link_rate_hbr3 = 810000;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601090229.rC0GNQqG-lkp@intel.com/
 
----
-base-commit: 66691e272e40c91305f1704695e0cb340cd162ff
-change-id: 20260108-drm-msm-dp_ctrl-avoid-zero-div-be5dc40cbc18
+All warnings (new ones prefixed by >>):
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+>> Warning: kernel/panic.c:344 function parameter 'buf' not described in 'panic_force_target_cpu'
+>> Warning: kernel/panic.c:344 function parameter 'buf_size' not described in 'panic_force_target_cpu'
+>> Warning: kernel/panic.c:344 function parameter 'buf' not described in 'panic_force_target_cpu'
+>> Warning: kernel/panic.c:344 function parameter 'buf_size' not described in 'panic_force_target_cpu'
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
