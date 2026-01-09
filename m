@@ -1,118 +1,125 @@
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AFE31E0EF
-	for <llvm@lists.linux.dev>; Fri,  9 Jan 2026 21:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92D5335BA8;
+	Fri,  9 Jan 2026 23:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767994007; cv=none; b=Wa9O5z0ie0Xj4eFrtzSN4aKooD6M9zO0FbeM6RzNDlkwAK3SDln8XGixV2LGS0yiQgF7dw26r9lCHQkhFHKxQhF3AvCJv17S8nOGjsR9t8Nv4Vvm7RfkiUGXUOt9aKFVtsvFdqf7l9kLCQTBrOSQx3wnpiuF7uAw8SXkMW00KGE=
+	t=1768002663; cv=none; b=Eo5hgjnecvrSy96xSRyaJB55HxLtClsJ03GZ8BX+SQVz3ug0c8T+Q94gItOKmzB3RJ5vi8KongJa7zzUdyJ9Cl0BV3GQXWyPiDtUb4eVHIK1fQDzlu3aigST77ja49SuiBSG8g00nCWeatcweW4lE61XrdzBg0f95tYU3nLYqZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767994007; c=relaxed/simple;
-	bh=kVqxi06fhKwoZgXTNpFdWEZ/nlKbofAaMwqmPcPl6V4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lahfa1wI201GRGtxBCAMsjBt5v8V3TEqgZK2MQbDqDhgKNXeXlOTrVDFmFh4sHd9MFy0Dx7M2VV+IROHxW4Q1PDTx9G+ycovEv0GLlf3Y4yd/tRI890dIM9yMIHS7HTxnP5VdchHjgsmkC2mGOdYrwN5GhFHlLZ0jl8ZAPVUqVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=UQJCMP5/; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1768002663; c=relaxed/simple;
+	bh=YDUj4B+QwqZXCXesA+SYwb9Zcmb2p3X2TvwDVNFn/GQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UyO2TZWfA4C1R9+/xdU1bHE9esQCv+aUbOkioC31SbXIDA0M+oS1uCkKMYvxmIAwBC8aAAYOlaqQyJCCzGx7GaNzQ1CGt1N9cmkIGiqjRLE8kDogxouxbzRCsll96hOFUk15pcra9+8c7Mbg8nQQLUYN+9qhEhiDSbt58YuELGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I4AVPu98; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="UQJCMP5/"
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4dnvwj1rSVzlsqj1;
-	Fri,  9 Jan 2026 21:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1767993997; x=1770585998; bh=kVqxi06fhKwoZgXTNpFdWEZ/
-	nlKbofAaMwqmPcPl6V4=; b=UQJCMP5/4z5OkbytmihEViGuPxzO9MDFixo1jD/j
-	b7B+ZCP9e73vZ3Lw5l0wl4bbaMC2+1fC/nuUtQ5Qlw8nIM+EbIuZnUW2Zu/mse1A
-	d/KzsFdZLLYSLdLoVcxZsopqYXBfFggKKaS7l/Xzj0d4R6LcnSGzVLTsWnjCAzlG
-	j0jGrM6I8VxGPhZFu7ln5JERHarPuFgd6jxrRZWTvlb8pN9qri//ThxalZKJAw4M
-	2ayFAwPTWuSmIOsoqZCnT3A2Zko5jGsXg7uSYnllHsZ6Dee9gPu+KHIXFaJFY3DW
-	2utpFE0Zij1eDpkq5UWLB4QwFY0l4H0xzCVpLK9pcF9oMw==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 4NnprJS4L2Lu; Fri,  9 Jan 2026 21:26:37 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4dnvwJ0Q9kzm10Bh;
-	Fri,  9 Jan 2026 21:26:23 +0000 (UTC)
-Message-ID: <8143ab09-fd9b-4615-8afb-7ee10e073c51@acm.org>
-Date: Fri, 9 Jan 2026 13:26:23 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I4AVPu98"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768002662; x=1799538662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YDUj4B+QwqZXCXesA+SYwb9Zcmb2p3X2TvwDVNFn/GQ=;
+  b=I4AVPu98USkyaPIIvi7dNAeu1NMjbIDug4CacEn3IE5KsKVSzx3YVx4S
+   omFoHVy4YTPFIS9c58182GVxMxvXiFXz4ExSzHr6qLtkC85sX1Dgn+5Ga
+   7qm9M83XEfjZHrvjc5JafHIU7lapQ/YIAvXmZ1RTAYXTICdXEOhc78ag5
+   N2ONwnFEBIOPrkU4NIdt5h9Em/VAKTDDrBFnFoZtigZzAh3NTh7J4aNvF
+   6Ix6b547wNQxk3zmsemgZCpDji6cWqTlsfjZG7EKRE9RMGXLV07KJBjYl
+   3L1RQ1YNkFoTIjzGqeD9TK7NI4HLXuCvVgATD4QmL/anKOfNtm1hPqNHk
+   w==;
+X-CSE-ConnectionGUID: X2ltMjy6QaSWxiPgl2ideg==
+X-CSE-MsgGUID: MBRfAIz+SluN9sHeDpRKIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11666"; a="69314550"
+X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
+   d="scan'208";a="69314550"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 15:50:59 -0800
+X-CSE-ConnectionGUID: zVRr1xBDQSio9MKx9+9KGA==
+X-CSE-MsgGUID: 8DODvtV1Rx2xtbtjXXrH2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
+   d="scan'208";a="226938784"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 09 Jan 2026 15:50:57 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1veMFr-000000007qy-2Wq6;
+	Fri, 09 Jan 2026 23:50:55 +0000
+Date: Sat, 10 Jan 2026 07:50:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: rick.macklem@gmail.com, linux-nfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rick Macklem <rmacklem@uoguelph.ca>
+Subject: Re: [PATCH v1 5/7] Make nfs4_server_supports_acls() global
+Message-ID: <202601100751.PT89Ryd4-lkp@intel.com>
+References: <20260102232934.1560-6-rick.macklem@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 20/36] locking/ww_mutex: Support Clang's context
- analysis
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
- Will Deacon <will@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
- Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>,
- Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
- Eric Dumazet <edumazet@google.com>, Frederic Weisbecker
- <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>,
- Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>,
- Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>,
- Josh Triplett <josh@joshtriplett.org>, Justin Stitt
- <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
- Kentaro Takeda <takedakn@nttdata.co.jp>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland
- <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
- Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
- Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
- kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org,
- linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
-References: <20251219154418.3592607-1-elver@google.com>
- <20251219154418.3592607-21-elver@google.com>
- <05c77ca1-7618-43c5-b259-d89741808479@acm.org>
- <aWFt6hcLaCjQQu2c@elver.google.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <aWFt6hcLaCjQQu2c@elver.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260102232934.1560-6-rick.macklem@gmail.com>
 
-(+Maarten)
+Hi,
 
-On 1/9/26 2:06 PM, Marco Elver wrote:
-> If there's 1 out of N ww_mutex users that missed ww_acquire_done()
-> there's a good chance that 1 case is wrong.
+kernel test robot noticed the following build errors:
 
-$ git grep -w ww_acquire_done '**c'|wc -l
-11
-$ git grep -w ww_acquire_fini '**c'|wc -l
-33
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v6.19-rc4 next-20260109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The above statistics show that there are more cases where
-ww_acquire_done() is not called rather than cases where
-ww_acquire_done() is called.
+url:    https://github.com/intel-lab-lkp/linux/commits/rick-macklem-gmail-com/Add-entries-to-the-predefined-client-operations-enum/20260103-073239
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20260102232934.1560-6-rick.macklem%40gmail.com
+patch subject: [PATCH v1 5/7] Make nfs4_server_supports_acls() global
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260110/202601100751.PT89Ryd4-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260110/202601100751.PT89Ryd4-lkp@intel.com/reproduce)
 
-Maarten, since you introduced the ww_mutex code, do you perhaps prefer
-that calling ww_acquire_done() is optional or rather that all users that
-do not call ww_acquire_done() are modified such that they call
-ww_acquire_done()? The full email conversation is available here:
-https://lore.kernel.org/all/20251219154418.3592607-1-elver@google.com/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601100751.PT89Ryd4-lkp@intel.com/
 
-Thanks,
+All errors (new ones prefixed by >>):
 
-Bart.
+>> fs/nfs/nfs4proc.c:6083:36: error: use of undeclared identifier 'FATTR4_WORD2_POSIX_DEFAULT_ACL'
+    6083 |                 return server->attr_bitmask[2] & FATTR4_WORD2_POSIX_DEFAULT_ACL;
+         |                                                  ^
+>> fs/nfs/nfs4proc.c:6085:36: error: use of undeclared identifier 'FATTR4_WORD2_POSIX_ACCESS_ACL'
+    6085 |                 return server->attr_bitmask[2] & FATTR4_WORD2_POSIX_ACCESS_ACL;
+         |                                                  ^
+   2 errors generated.
+
+
+vim +/FATTR4_WORD2_POSIX_DEFAULT_ACL +6083 fs/nfs/nfs4proc.c
+
+  6071	
+  6072	bool nfs4_server_supports_acls(const struct nfs_server *server,
+  6073					      enum nfs4_acl_type type)
+  6074	{
+  6075		switch (type) {
+  6076		default:
+  6077			return server->attr_bitmask[0] & FATTR4_WORD0_ACL;
+  6078		case NFS4ACL_DACL:
+  6079			return server->attr_bitmask[1] & FATTR4_WORD1_DACL;
+  6080		case NFS4ACL_SACL:
+  6081			return server->attr_bitmask[1] & FATTR4_WORD1_SACL;
+  6082		case NFS4ACL_POSIXDEFAULT:
+> 6083			return server->attr_bitmask[2] & FATTR4_WORD2_POSIX_DEFAULT_ACL;
+  6084		case NFS4ACL_POSIXACCESS:
+> 6085			return server->attr_bitmask[2] & FATTR4_WORD2_POSIX_ACCESS_ACL;
+  6086		}
+  6087	}
+  6088	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
