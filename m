@@ -1,155 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D2E318BB3;
-	Sat, 10 Jan 2026 10:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216F618D636
+	for <llvm@lists.linux.dev>; Sat, 10 Jan 2026 14:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768042132; cv=none; b=I3XJ8G77Jt6pawYOUDBv4eQsDTdNMNZhi15z+0txyUCraFFcmJ5pC2S/vEx/geQlSDE/V5cJmdy5LRHv5fAjtl8F5bAz+h8M8cprZOuiuLRn/iwjZ2hT9/NyTqZsaLOnb8YZOTm2aMOAhuqaudpmw/oIXQSR7BMeDtB9kVjG6Mw=
+	t=1768056545; cv=none; b=ZBtBJ/KHP9phw2lS9Wn6A49LBmtfiq6j2SsZpTZsgKNUd61KfMAG+aLlXc1UsYkuymVG1xa11WC/kKRjNPCoQ9G2MjN6SKdTVJF53xh2s4gbtJgx9im3ZTYSULBY8VcmL9dUddT+rnJAjmbKY2LY8zLc/dWxvzcU8zAlvvsE4vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768042132; c=relaxed/simple;
-	bh=SBNhXxNdMBEEmO3KzZjmsADuqsv0KrPKvpw2/Xo3oPw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dUZ8IE/5qpLYeIHWm75aI4NNcR15jzpMQ8ySGO5x+FaaMCZCNby6BQfkXEZVuzQYFLT/zA4BooRq5sETclQhL1lYib4z1+fXyTzNubdCvuZwOf+mCpaIDkO8XcnJmyWHSmX32nxFTQpXolfcGzp5iVeOzMV/p8feF/5X6zM/Tyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KJ3ajDmG; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768056545; c=relaxed/simple;
+	bh=8cZF88ZHHeswEWIoZ1XSpuokeFUHz2t/rDtmfT1Fb54=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s1Hz5hu6OZT5XvTOWvYTaTYDcY+tfaZ2bnXg30/93MGXWKB01dwx+QPYgDjslQ5IOjweAELqk8Jg0eKJkl9tVznFxoDyYPeBEGV65UbB1x++3ge9G7SRKscBoy60rQostB1rAxMO1p1xrmFbpOcA3WtEnLULbRwdxTks5tGlCWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=VJQOKxQh; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KJ3ajDmG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768042130; x=1799578130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SBNhXxNdMBEEmO3KzZjmsADuqsv0KrPKvpw2/Xo3oPw=;
-  b=KJ3ajDmGA738HQIELzKu1OUxV3lzDo4wZHgxgx3YmxSF5QzDTuvv8zN9
-   vsg8aa54siDVZOzIOlxOy4gUVCupAa6MsIG7MHR6K5YUopfO9lUfpp3a3
-   soVh9qIXT9URBkNN9XyRcCrGJ0ZfEcUa8pca/QSEOfZ5svLw0dZzv0b+W
-   rF29Z8VHDLQaF1VKp1A0XfFWpUJvre+yflj2UjhbqZEBmAHWNqdRgFQzE
-   uHiUYufashbo7qnG7Kjd735xn+JmOCwhMR+p+V1LhU+ReZnoXxinkcm4V
-   bmOVcbNqNZRdduZBmLPmfStArDmmnphZlk4muUsgffmjG14fH3eq2HlfM
-   w==;
-X-CSE-ConnectionGUID: diTtWlufRF2zIQiQQnfsRA==
-X-CSE-MsgGUID: CrwcwyXzQ3WH5NbE3gh7Hg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11666"; a="69449948"
-X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
-   d="scan'208";a="69449948"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2026 02:48:49 -0800
-X-CSE-ConnectionGUID: zRHhslGAQX631ZYKUZc3aQ==
-X-CSE-MsgGUID: W3w6n7B8TrWaJDutA0zeTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
-   d="scan'208";a="203966809"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 10 Jan 2026 02:48:47 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1veWWT-000000008YS-1PNV;
-	Sat, 10 Jan 2026 10:48:45 +0000
-Date: Sat, 10 Jan 2026 18:48:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matthew Brost <matthew.brost@intel.com>, intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	daniele.ceraolospurio@intel.com, carlos.santa@intel.com
-Subject: Re: [PATCH v2 12/22] drm/xe: Implement GuC submission backend ops
- for deadlines
-Message-ID: <202601101818.dyOCWJK0-lkp@intel.com>
-References: <20260105040237.1307873-13-matthew.brost@intel.com>
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="VJQOKxQh"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4327555464cso2977712f8f.1
+        for <llvm@lists.linux.dev>; Sat, 10 Jan 2026 06:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1768056540; x=1768661340; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IHk6EgoNk8lP2vqJMYUzvRzyl3K2JzNhjFEm/rJg//s=;
+        b=VJQOKxQhoOnvhNvaY/aTr0tGIw/X8PCJwqiPHVYWEOsduw1dwc3JVaXgKyG4Udtzph
+         2BtvrzoJCtV0LKXerd1I0LmxFskmG1/QnNdHh2bLzSn3PeLrS98fuhe5wavC1Y+Ya8RX
+         kq5OQEIMle4RR9A3K1ERW6Od3mbahVWoTP2EgrRV2M6LprguzrzWySyZzyIXLlEsmKUH
+         b5teekPFVT4Q40KXna7dMjw3+hxd7fSk2Ufv6V4/1YXV53c15K9PpWQsEYtXUGu1Ya8Z
+         w4t13xp3RqjLHSni4K+KlONUdce3Zyy3UKFYkmsSa9c09GS4KTOWKf0oQ3qgwoDsNPnq
+         7wvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768056540; x=1768661340;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IHk6EgoNk8lP2vqJMYUzvRzyl3K2JzNhjFEm/rJg//s=;
+        b=FEX8ddLUnGWHRaw2on8e6auKOzkFsU5o4By6npxLbMyFhHbMdl/10JlsBdbVCDpZrh
+         aw1xBWwrwk8rS2UM3mNLTvNjCBEkAUa/03FRLDHCCOwQLVIKRV9cpmBBYhhA471PBU7+
+         cEdXbaZsGvvdsHguGH+buoCHnNAw2FO+yRRdhWaAzrv2SR7+vWUSR9JuHukQIa971/Qz
+         65ARKP9P5Q6GRj4KPgPGJY4GD0CLIrqNDGJ/2GQKIpYl97FjII3pK86cP0ukYBomy1wF
+         D4nAg2tobpz68PsHlAhPxzvY4pi42T0E4IrObShW3THXeY60G0YunAviKFvnI3lcGw0x
+         nDog==
+X-Forwarded-Encrypted: i=1; AJvYcCUtVNQtUa2hrGCCMDhTqwL8mru9qTbWTyaJ4/dwhUSKD+T9wdUK1uCSbYkP7+kE+xFRZTUa@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw2PA72X6Y9aBRZUPpZiIpVkYk/Aj51zaDyJ7h5Ek5yZTSkEVNH
+	BviqIx/XW3oFSyZVqls5RsWwGgXvC24AHcQ0yiKHvWSCWPq00d8Tpn4Kj4g9S8nbzJ4=
+X-Gm-Gg: AY/fxX68a9cFQ0GMd1MMiCv481vR6msDz7+NGQ99oAvSfOKFS1MFBClG6I0627tGRC+
+	a13hR/b5F1B0fwed7fHJz3fP5rPyed4Z3mINQIhm2dW/D+i9VWq8gXYiPpLjLKjWPxGU6KrDUOf
+	dXOp5n5lMJoYyvR2RYiq4FMa0AuN5UySe9V6grYryXDiNg0IucKIleMOwAewtql9HbajSJ6tX/k
+	+8CuA7Lp2GOSFjW1NH8UPBbXT7meZohn3/PE20/iRAHwUnqIVP4HPzeJ20tAa6mUTbGf6e/VrBb
+	Dn/9yTN+vOu/cjGrcEzWiylnWOF9V2JpeiVy3xxQykSJ7iJfxF9p0PHFWxyiUAZ8emHx+yx+7zy
+	ml52anQd34tVD0XcYNqlQqQpb8uHjDpZWcbxJPnttjLzIxuXhqpc62jaqvVYG38Z920bUsuDMKu
+	k0TJFvQAhBNbyIVJWac0bYiwKUmBCV
+X-Google-Smtp-Source: AGHT+IExDiyl6+cMqnLU0OScR46v/DhXxaFlI7KfbIz5c0gjBYd8wiO/Eo5iH1Cn00OMlkpwekH3Hg==
+X-Received: by 2002:adf:f54f:0:b0:432:e00b:866f with SMTP id ffacd0b85a97d-432e00b8b14mr2891143f8f.60.1768056540373;
+        Sat, 10 Jan 2026 06:49:00 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.31])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0dacd1sm27764794f8f.4.2026.01.10.06.48.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jan 2026 06:48:59 -0800 (PST)
+Message-ID: <b0dec3fb-51df-4bcd-ba13-c2049695266e@tuxon.dev>
+Date: Sat, 10 Jan 2026 16:48:55 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260105040237.1307873-13-matthew.brost@intel.com>
-
-Hi Matthew,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20251219]
-[cannot apply to drm-xe/drm-xe-next drm-misc/drm-misc-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes v6.19-rc4 v6.19-rc3 v6.19-rc2 linus/master v6.19-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/drm-xe-Add-dedicated-message-lock/20260105-160721
-base:   next-20251219
-patch link:    https://lore.kernel.org/r/20260105040237.1307873-13-matthew.brost%40intel.com
-patch subject: [PATCH v2 12/22] drm/xe: Implement GuC submission backend ops for deadlines
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260110/202601101818.dyOCWJK0-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260110/202601101818.dyOCWJK0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601101818.dyOCWJK0-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/xe/xe_guc_submit.c:2477:2: warning: variable 'opcode' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-    2477 |         default:
-         |         ^~~~~~~
-   drivers/gpu/drm/xe/xe_guc_submit.c:2482:43: note: uninitialized use occurs here
-    2482 |                 if (!guc_exec_queue_try_add_msg(q, msg, opcode)) {
-         |                                                         ^~~~~~
-   drivers/gpu/drm/xe/xe_guc_submit.c:2462:21: note: initialize the variable 'opcode' to silence this warning
-    2462 |         unsigned int opcode;
-         |                            ^
-         |                             = 0
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/11] ARM: at91: Simplify with scoped for each OF child
+ loop
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
+ Saravana Kannan <saravanak@google.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Russell King <linux@armlinux.org.uk>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal <nikhil.agarwal@amd.com>,
+ Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-clk@vger.kernel.org, imx@lists.linux.dev, dmaengine@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20260105-of-for-each-compatible-scoped-v1-0-24e99c177164@oss.qualcomm.com>
+ <20260105-of-for-each-compatible-scoped-v1-2-24e99c177164@oss.qualcomm.com>
+Content-Language: en-US
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20260105-of-for-each-compatible-scoped-v1-2-24e99c177164@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +/opcode +2477 drivers/gpu/drm/xe/xe_guc_submit.c
 
-  2454	
-  2455	static void guc_exec_queue_set_deadline_state(struct xe_exec_queue *q,
-  2456						      enum xe_deadline_mgr_state state)
-  2457	{
-  2458		struct xe_gpu_scheduler *sched = &q->guc->sched;
-  2459		struct xe_sched_msg *msg = q->guc->static_msgs +
-  2460			STATIC_MSG_SET_DEADLINE_STATE;
-  2461		struct xe_guc *guc = exec_queue_to_guc(q);
-  2462		unsigned int opcode;
-  2463	
-  2464		xe_gt_assert(guc_to_gt(guc), state !=
-  2465			     XE_DEADLINE_MGR_STATE_UNSUPPORTED);
-  2466	
-  2467		switch (state) {
-  2468		case XE_DEADLINE_MGR_STATE_NO_BOOST:
-  2469			opcode = EXIT_DEADLINE;
-  2470			break;
-  2471		case XE_DEADLINE_MGR_STATE_FREQ_BOOST:
-  2472			opcode = ENTER_DEADLINE_FREQ;
-  2473			break;
-  2474		case XE_DEADLINE_MGR_STATE_PRIO_BOOST:
-  2475			opcode = ENTER_DEADLINE_PRIO;
-  2476			break;
-> 2477		default:
-  2478			drm_warn(&guc_to_xe(guc)->drm, "NOT POSSIBLE");
-  2479		}
-  2480	
-  2481		xe_sched_msg_scoped_guard(sched) {
-  2482			if (!guc_exec_queue_try_add_msg(q, msg, opcode)) {
-  2483				bool added;
-  2484	
-  2485				/*
-  2486				 * A deadline state change has yet to be processed,
-  2487				 * removed it.
-  2488				 */
-  2489				list_del_init(&msg->link);
-  2490	
-  2491				added = guc_exec_queue_try_add_msg(q, msg, opcode);
-  2492				xe_gt_assert(guc_to_gt(guc), added);
-  2493			}
-  2494		}
-  2495	}
-  2496	
+On 1/5/26 15:33, Krzysztof Kozlowski wrote:
+> Use scoped for-each loop when iterating over device nodes to make code a
+> bit simpler.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
