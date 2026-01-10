@@ -1,154 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9DC29405
-	for <llvm@lists.linux.dev>; Sat, 10 Jan 2026 20:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5511DDC1D;
+	Sat, 10 Jan 2026 22:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768078398; cv=none; b=h1EB2/gsWqFHKEKFGNlT2r+mdgp2RbeWRW3lzBA/uOUhyE4/csqLV62X97rCEb0vEpTDr28QDi6tNl/ujzWMUcrMYpHl0NstgDA3QKlf5IxWjCKD+VIZ5sKjCq/tjPh6U2KDnDdoXaK/DyQtY/jyC91Z8U/wlpqrOX8D97DkHwo=
+	t=1768085620; cv=none; b=lGISynfc7N3icFBivnRqM5xYO6ZkAtKUb8FRoG12c5U++sVIPDozZYVpTDhaAM/ZIqtUnYL+OVmteku2SLUb3p34XJuE7VhYAOXNzCx3qEtfPc+wUKBavRia4K3WEjfQBX4nLzrL8rJcXWlEW3QNZgbFUg+HnrOtj3agz6bmLeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768078398; c=relaxed/simple;
-	bh=9xaAZGlZteem7ZxbpPbYiG6+4y7u3PcIy9IiJlqeOy0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eq1L7c28GHTbqJcgx7F+tz0dPFH+219LxLBTAcQWM3p5IoFNU7koVbf2xlIKgAgNqbhuzV2sH7BZDau4ENm6ibcvZxzOTWdcCMkIzAvj34Ps5pn7SCqEU72rl5Q/bJyo9DaS5unANgcBvaOKfsIb2j2Nl0ltZJNBUzVI9naozn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gUtAEGR/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1768085620; c=relaxed/simple;
+	bh=zu8KmA7iTm8o7eYlgcTEtwZ1BTZxDzvpAVPGWphWOGo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WzdtkaXKMBaKDvjy0yZUtNU2VCt6X578fznMSmt6ZK0oRAXvYVwsk21ulF1g0DzSETvwdEG+KAepkgwKewiki8s6vyzxh3+DQ5dNKirTEXg9b6AgzYQojFKgx3JMaXs8hD6sCdN/t45AlT1L9yt3MY4xCye/M5jezkZPH5soUy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DwI+P/Gj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gUtAEGR/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768078396;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NR6l0ywCiUWxHxm7yuYM45LAQ49zB9JUmoGdD6Oq58Q=;
-	b=gUtAEGR/yTY0nlcNsdnjUUGr+sskdZittlC3U8nm19dbjWilxpDuLk120DuDO4kT3lQJ8B
-	H/SFLvpoMPD5QODjhU+JOeaJoysFyzhYqchdLUvIZ9pcrullPFhQ8uIT7wyMebjXV/xH4K
-	32A1ITqueBYkjTQpxTwrK8SLYkKLX1U=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-677-n4Y4F2snM-uGZ2KR6g4NKQ-1; Sat,
- 10 Jan 2026 15:53:14 -0500
-X-MC-Unique: n4Y4F2snM-uGZ2KR6g4NKQ-1
-X-Mimecast-MFC-AGG-ID: n4Y4F2snM-uGZ2KR6g4NKQ_1768078394
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A9E1180044D
-	for <llvm@lists.linux.dev>; Sat, 10 Jan 2026 20:53:14 +0000 (UTC)
-Received: from [172.20.95.168] (unknown [10.30.44.183])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A701D19560BA;
-	Sat, 10 Jan 2026 20:53:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc4,
- upstream-mainline, cb2076b0)
-Date: Sat, 10 Jan 2026 20:53:13 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DwI+P/Gj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 450C3C4CEF1;
+	Sat, 10 Jan 2026 22:53:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768085619;
+	bh=zu8KmA7iTm8o7eYlgcTEtwZ1BTZxDzvpAVPGWphWOGo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DwI+P/GjbEOStW2Kv8CyMlnplVMLKYUuRqeQNcnsbvEEy0Pqd+cNG8ug5jgkZ9Jdt
+	 JL0GshbttdeHqq3Wl/JZ12pSzP4k5C2PpkQpyAYcqr7zoAjyAXaOYRBrr6T/sceAxY
+	 mEyfxeis4ozICCgPPegs34ZeqK0O3kFd9/N6nOPLzizalGHPC0KjK+soph2tQCCjid
+	 8zFxVZvTiY5LhKo+5ahdCF7K0N6faOYf1/LwGuA+wwyW8oPSdLhYmPT42LXIfIpDyX
+	 4wEcyBqW3Q8GCuWFKPgqnB9YEOd9IC3KYZjmBCVffCuhmLviTjL/Ldb7wyxCpyuUQB
+	 Smpm2TNW4ALHw==
+Date: Sat, 10 Jan 2026 15:53:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] drm/msm/dp: Avoid division by zero in
+ msm_dp_ctrl_config_msa()
+Message-ID: <20260110225334.GA1672363@ax162>
+References: <20260108-drm-msm-dp_ctrl-avoid-zero-div-v1-1-6a8debcb3033@kernel.org>
+ <ca851614-2804-4029-9799-19e71dd73414@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <09943.126011015531500199@us-mta-677.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: iEV07PcXby1iEyIndEMhpeAh_VxpXtk_e4bMGWCDhrI_1768078394
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca851614-2804-4029-9799-19e71dd73414@oss.qualcomm.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Jan 09, 2026 at 10:06:29AM +0100, Konrad Dybcio wrote:
+> Dmitry, would it be beneficial to throw an actual error when the rate is
+> is mangled? i.e.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+This certainly seems more robust if acceptable.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index aa2303d0e148..4f710b8e6bc6 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -2404,9 +2404,9 @@ static int msm_dp_ctrl_link_retrain(struct msm_dp_ctrl_private *ctrl)
+>         return msm_dp_ctrl_setup_main_link(ctrl, &training_step);
+>  }
+>  
+> -static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
+> -                              u32 rate, u32 stream_rate_khz,
+> -                              bool is_ycbcr_420)
+> +static int msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
+> +                                 u32 rate, u32 stream_rate_khz,
+> +                                 bool is_ycbcr_420)
+>  {
+>         u32 pixel_m, pixel_n;
+>         u32 mvid, nvid, pixel_div = 0, dispcc_input_rate;
 
-Kernel information:
-    Commit message: Merge tag 'block-6.19-20260109' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/axboe/linux
+This initialization is now unnecessary with this change.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2255078903
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
- Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
-            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
-comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
-d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
-medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
-=3D1
-            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
-65900650445969
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-                Boot test [aarch64]
-                Reboot test [aarch64]
-                Storage - blktests - ublk [aarch64]
-                stress: stress-ng - cpu-cache [aarch64]
-                xfstests - btrfs [aarch64]
-                xfstests - ext4 [aarch64]
-                xfstests - xfs [aarch64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> @@ -2415,14 +2415,21 @@ static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
+>         u32 const link_rate_hbr3 = 810000;
+>         unsigned long den, num;
+>  
+> -       if (rate == link_rate_hbr3)
+> +       switch (rate) {
+> +       case link_rate_hbr3:
+>                 pixel_div = 6;
+> -       else if (rate == 162000 || rate == 270000)
+> -               pixel_div = 2;
+> -       else if (rate == link_rate_hbr2)
+> +               break;
+> +       case link_rate_hbr2:
+>                 pixel_div = 4;
+> -       else
+> +               break;
+> +       case 270000:
+> +       case 162000:
+> +               pixel_div = 2;
+> +               break;
+> +       default:
+>                 DRM_ERROR("Invalid pixel mux divider\n");
+> +               return -EINVAL;
+> +       }
+>  
+>         dispcc_input_rate = (rate * 10) / pixel_div;
+>  
+> @@ -2458,6 +2465,8 @@ static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
+>         drm_dbg_dp(ctrl->drm_dev, "mvid=0x%x, nvid=0x%x\n", mvid, nvid);
+>         msm_dp_write_link(ctrl, REG_DP_SOFTWARE_MVID, mvid);
+>         msm_dp_write_link(ctrl, REG_DP_SOFTWARE_NVID, nvid);
+> +
+> +       return 0;
+>  }
+>  
+>  int msm_dp_ctrl_on_stream(struct msm_dp_ctrl *msm_dp_ctrl, bool force_link_train)
+> @@ -2525,10 +2534,11 @@ int msm_dp_ctrl_on_stream(struct msm_dp_ctrl *msm_dp_ctrl, bool force_link_train
+>  
+>         msm_dp_ctrl_configure_source_params(ctrl);
+>  
+> -       msm_dp_ctrl_config_msa(ctrl,
+> -               ctrl->link->link_params.rate,
+> -               pixel_rate_orig,
+> -               ctrl->panel->msm_dp_mode.out_fmt_is_yuv_420);
+> +       ret = msm_dp_ctrl_config_msa(ctrl, ctrl->link->link_params.rate,
+> +                                    pixel_rate_orig,
+> +                                    ctrl->panel->msm_dp_mode.out_fmt_is_yuv_420);
+> +       if (ret)
+> +               return ret;
+>  
+>         msm_dp_panel_clear_dsc_dto(ctrl->panel);
+>  
+> 
+> 
+> Konrad
