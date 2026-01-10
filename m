@@ -1,104 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5A1500963;
-	Sat, 10 Jan 2026 16:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9DC29405
+	for <llvm@lists.linux.dev>; Sat, 10 Jan 2026 20:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768062730; cv=none; b=sxf/AlSnWXfLye5PMqluu17HNmqpNYNU4HPMVutbAsiD/f/iP1C6iEapQAYn80fGixGcnLXJWeGAJaXQhn/WRYiKLjxwqniyJLDAO+xZ/mzBXUAgqM5mkJEFD/URUMAXeWqkfrn+LK2NjAxUwGwX36vU5rdaDzBWPS6XXkGSbBc=
+	t=1768078398; cv=none; b=h1EB2/gsWqFHKEKFGNlT2r+mdgp2RbeWRW3lzBA/uOUhyE4/csqLV62X97rCEb0vEpTDr28QDi6tNl/ujzWMUcrMYpHl0NstgDA3QKlf5IxWjCKD+VIZ5sKjCq/tjPh6U2KDnDdoXaK/DyQtY/jyC91Z8U/wlpqrOX8D97DkHwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768062730; c=relaxed/simple;
-	bh=/DEeUwzte8cJg7Saq52kWbsMHsLc0XiicOAZR5lQblI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GxmGY2DjKtlhsbxK8gwPlvUlATjALfu0x7I/2HShDwpEwJXtE7DGry7Sksghcewj6mDl59qWO1osAzNqC/45DvhkRrhvLxWWYGm1bPQ7sYeqQdQAuqUOohVBrVBMRwfSgKYPAt5EcFlMKH9RO+ivaGBCAAqpBWd+Cek7EU/u3qM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D5hn4//b; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768078398; c=relaxed/simple;
+	bh=9xaAZGlZteem7ZxbpPbYiG6+4y7u3PcIy9IiJlqeOy0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eq1L7c28GHTbqJcgx7F+tz0dPFH+219LxLBTAcQWM3p5IoFNU7koVbf2xlIKgAgNqbhuzV2sH7BZDau4ENm6ibcvZxzOTWdcCMkIzAvj34Ps5pn7SCqEU72rl5Q/bJyo9DaS5unANgcBvaOKfsIb2j2Nl0ltZJNBUzVI9naozn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gUtAEGR/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D5hn4//b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768062729; x=1799598729;
-  h=date:from:to:cc:subject:message-id;
-  bh=/DEeUwzte8cJg7Saq52kWbsMHsLc0XiicOAZR5lQblI=;
-  b=D5hn4//bU6+pnfVq8tkn7NK/8wK5ei5j8z4rV3D1ivlQkoOiGbxVsXSy
-   BaZKLktOmjiHsBKanFWah0W97iG6Y/yqvfKrqN7D3n+7QVUUiZczGwdbE
-   h/wcNf8dWw5NJAIE6mTVWbiRWy+QIGlvR1kpIU89258qGz/JdOe+79K63
-   zmqAvjeDeiYFpcIzaJeLKKgA6tnJzSISu9opK5p40H7ZqAHg93vH6f9Hv
-   Wb1hIy6ahYK062Fs2kYz8KQMIiFA+Bb9tByipUUVQLEpjewRtYuFp8lfp
-   6s855jUPSGooCud4IPASiijTnK3pSqk4JVgLQr4ZINqM2is0IZbpeXiK+
-   w==;
-X-CSE-ConnectionGUID: +5NNTNkoRC2C5VUaKEKcLQ==
-X-CSE-MsgGUID: BZux2CRuSNCA4d3k+cWtBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11667"; a="79705059"
-X-IronPort-AV: E=Sophos;i="6.21,215,1763452800"; 
-   d="scan'208";a="79705059"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2026 08:32:09 -0800
-X-CSE-ConnectionGUID: LMb933MeTNC9p5YnIqnk0w==
-X-CSE-MsgGUID: 4Jx0ElecQ2KBck1NOPAemg==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 10 Jan 2026 08:32:06 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vebsi-000000008rG-27M7;
-	Sat, 10 Jan 2026 16:32:04 +0000
-Date: Sun, 11 Jan 2026 00:31:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [chao:bugfix/common 7/7] fs/f2fs/data.c:2647:22: error: use
- of undeclared identifier 'next_pgofs'
-Message-ID: <202601110035.XzgqZYN5-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gUtAEGR/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768078396;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NR6l0ywCiUWxHxm7yuYM45LAQ49zB9JUmoGdD6Oq58Q=;
+	b=gUtAEGR/yTY0nlcNsdnjUUGr+sskdZittlC3U8nm19dbjWilxpDuLk120DuDO4kT3lQJ8B
+	H/SFLvpoMPD5QODjhU+JOeaJoysFyzhYqchdLUvIZ9pcrullPFhQ8uIT7wyMebjXV/xH4K
+	32A1ITqueBYkjTQpxTwrK8SLYkKLX1U=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-677-n4Y4F2snM-uGZ2KR6g4NKQ-1; Sat,
+ 10 Jan 2026 15:53:14 -0500
+X-MC-Unique: n4Y4F2snM-uGZ2KR6g4NKQ-1
+X-Mimecast-MFC-AGG-ID: n4Y4F2snM-uGZ2KR6g4NKQ_1768078394
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A9E1180044D
+	for <llvm@lists.linux.dev>; Sat, 10 Jan 2026 20:53:14 +0000 (UTC)
+Received: from [172.20.95.168] (unknown [10.30.44.183])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A701D19560BA;
+	Sat, 10 Jan 2026 20:53:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc4,
+ upstream-mainline, cb2076b0)
+Date: Sat, 10 Jan 2026 20:53:13 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <09943.126011015531500199@us-mta-677.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: iEV07PcXby1iEyIndEMhpeAh_VxpXtk_e4bMGWCDhrI_1768078394
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/common
-head:   261bd0007c481171f11979ad38d62af7725d56df
-commit: 261bd0007c481171f11979ad38d62af7725d56df [7/7] f2fs: avoid f2fs_map_blocks() for hole in readpages
-config: i386-randconfig-011-20260110 (https://download.01.org/0day-ci/archive/20260111/202601110035.XzgqZYN5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260111/202601110035.XzgqZYN5-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601110035.XzgqZYN5-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   fs/f2fs/data.c:1274:24: warning: unused variable 'mapping' [-Wunused-variable]
-    1274 |         struct address_space *mapping = inode->i_mapping;
-         |                               ^~~~~~~
->> fs/f2fs/data.c:2647:22: error: use of undeclared identifier 'next_pgofs'
-    2647 |         map.m_next_pgofs = &next_pgofs;
-         |                             ^
-   1 warning and 1 error generated.
+Kernel information:
+    Commit message: Merge tag 'block-6.19-20260109' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/axboe/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2255078903
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [RHEL10.0] blktests throtl failed
+            URL: https://issues.redhat.com/browse/RHEL-66783
+            Affected tests:
+                Storage - blktests - throtl [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
+ Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
+            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
+comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
+d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
+medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
+=3D1
+            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
+65900650445969
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+                Boot test [aarch64]
+                Reboot test [aarch64]
+                Storage - blktests - ublk [aarch64]
+                stress: stress-ng - cpu-cache [aarch64]
+                xfstests - btrfs [aarch64]
+                xfstests - ext4 [aarch64]
+                xfstests - xfs [aarch64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-vim +/next_pgofs +2647 fs/f2fs/data.c
 
-  2642	
-  2643		map.m_pblk = 0;
-  2644		map.m_lblk = 0;
-  2645		map.m_len = 0;
-  2646		map.m_flags = 0;
-> 2647		map.m_next_pgofs = &next_pgofs;
-  2648		map.m_next_extent = NULL;
-  2649		map.m_seg_type = NO_CHECK_TYPE;
-  2650		map.m_may_create = false;
-  2651	
-  2652		for (; nr_pages; nr_pages--) {
-  2653			if (rac) {
-  2654				folio = readahead_folio(rac);
-  2655				prefetchw(&folio->flags);
-  2656			}
-  2657	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
