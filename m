@@ -1,135 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5511DDC1D;
-	Sat, 10 Jan 2026 22:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E9CB67A;
+	Sun, 11 Jan 2026 00:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768085620; cv=none; b=lGISynfc7N3icFBivnRqM5xYO6ZkAtKUb8FRoG12c5U++sVIPDozZYVpTDhaAM/ZIqtUnYL+OVmteku2SLUb3p34XJuE7VhYAOXNzCx3qEtfPc+wUKBavRia4K3WEjfQBX4nLzrL8rJcXWlEW3QNZgbFUg+HnrOtj3agz6bmLeU=
+	t=1768092755; cv=none; b=bh7hDFq6rsHDn8SA4XhCUtZIjLK540IHzJ0xWMQoVxnAVMQgQh+ZCuKLkjL4TQ3N+Phq3qcA7ZleYEgyHBKVDS2lW+LtVK09rj0VAK1lrWmf0Qi7gFIjtOv2T30zxURrX3pcvjqtu6KpYX2y24tTxrUuTpbrHzx9c/SUZ5XPMmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768085620; c=relaxed/simple;
-	bh=zu8KmA7iTm8o7eYlgcTEtwZ1BTZxDzvpAVPGWphWOGo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WzdtkaXKMBaKDvjy0yZUtNU2VCt6X578fznMSmt6ZK0oRAXvYVwsk21ulF1g0DzSETvwdEG+KAepkgwKewiki8s6vyzxh3+DQ5dNKirTEXg9b6AgzYQojFKgx3JMaXs8hD6sCdN/t45AlT1L9yt3MY4xCye/M5jezkZPH5soUy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DwI+P/Gj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768092755; c=relaxed/simple;
+	bh=bPz8ImhJVEJL9nBgq6xRINNHb1whl/QQJoPCa33QHs8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ivtheEWcDV/GoDfYh/vH+mFJDhg23+rkJ40y66cmHlzEtwA3yK4TsHeeOApGRuuY+ljksM/7lq4lBv4UA/vlOAL268WOmh6T2YP4W/sNYKk2vo2daMyv16yMp0v+QCv58MKnPcL6CxM3fxRwd8HwBRJCeqzD9AgvMdQPmlQ284o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMyu8+lq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DwI+P/Gj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 450C3C4CEF1;
-	Sat, 10 Jan 2026 22:53:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMyu8+lq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29857C4CEF1;
+	Sun, 11 Jan 2026 00:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768085619;
-	bh=zu8KmA7iTm8o7eYlgcTEtwZ1BTZxDzvpAVPGWphWOGo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DwI+P/GjbEOStW2Kv8CyMlnplVMLKYUuRqeQNcnsbvEEy0Pqd+cNG8ug5jgkZ9Jdt
-	 JL0GshbttdeHqq3Wl/JZ12pSzP4k5C2PpkQpyAYcqr7zoAjyAXaOYRBrr6T/sceAxY
-	 mEyfxeis4ozICCgPPegs34ZeqK0O3kFd9/N6nOPLzizalGHPC0KjK+soph2tQCCjid
-	 8zFxVZvTiY5LhKo+5ahdCF7K0N6faOYf1/LwGuA+wwyW8oPSdLhYmPT42LXIfIpDyX
-	 4wEcyBqW3Q8GCuWFKPgqnB9YEOd9IC3KYZjmBCVffCuhmLviTjL/Ldb7wyxCpyuUQB
-	 Smpm2TNW4ALHw==
-Date: Sat, 10 Jan 2026 15:53:34 -0700
+	s=k20201202; t=1768092755;
+	bh=bPz8ImhJVEJL9nBgq6xRINNHb1whl/QQJoPCa33QHs8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=AMyu8+lqdpK7h+W62lwmX9m7dU/Z1RS2xOPjJDKlUsfREmYDGuBYzzB8ATgMjI0cG
+	 ecYJ1RTIPSe8nQZi/ZasGpMmcG6F/UOAr5gQgOXtXXsA79kIuaT0daYRsFy080xh98
+	 sBC/jhTdpzKrdSEtrfXwzM1t2nJhSuYfDrUo0WFoy61vgmMtAq49MhjBpAXYsbJuvZ
+	 KYYxNNh+8xpYyA8ipx0sTiqnB7bxGoKdqhVyzQEDFli0iy6jFHfJSA8eXSYDDn8Xsk
+	 0CeLYi/dq2an7X2EKTmsxdlD1I9p7H1j4GDYJRLAjm/Xv/jlqjEP/vJQG+WcL1DYaV
+	 DU5Kw7SUB2fLw==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	freedreno@lists.freedesktop.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] drm/msm/dp: Avoid division by zero in
- msm_dp_ctrl_config_msa()
-Message-ID: <20260110225334.GA1672363@ax162>
-References: <20260108-drm-msm-dp_ctrl-avoid-zero-div-v1-1-6a8debcb3033@kernel.org>
- <ca851614-2804-4029-9799-19e71dd73414@oss.qualcomm.com>
+Date: Sat, 10 Jan 2026 17:52:28 -0700
+Subject: [PATCH] kbuild: uapi: Avoid testing certain headers on ARCH=arm
+ with CC=clang
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca851614-2804-4029-9799-19e71dd73414@oss.qualcomm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260110-uapi-test-disable-headers-arm-clang-unaligned-access-v1-1-b7b0fa541daa@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQrCMBBFr1Jm7UASxIVXERfT5NuOxFgyqQild
+ zfq8vH5721kqAqj87BRxUtNn6WDPwwUZykTWFNnCi6cnPeOV1mUG6xxUpMxg2dIQjWW+uCY+4f
+ XIlmngsQSI6xPAd4dJTjxoK5eKm76/mUv1z/bOt4R27dF+/4BkGzqspgAAAA=
+X-Change-ID: 20260110-uapi-test-disable-headers-arm-clang-unaligned-access-a2e104a20a1e
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3593; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=bPz8ImhJVEJL9nBgq6xRINNHb1whl/QQJoPCa33QHs8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJlJXwIuPaybrJU+scxXN/9XsPDlOwrvptpdvPLGtUB8h
+ YDFta3GHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi8taMDIsXyUv1VF2/t7GM
+ ZempVdNu3F7Bn/v8woFtqZN53gtaT97IyNDhtEwxnu3muQk6j4JXmDcvObpBN83UQCLx878Qx03
+ T+XgB
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, Jan 09, 2026 at 10:06:29AM +0100, Konrad Dybcio wrote:
-> Dmitry, would it be beneficial to throw an actual error when the rate is
-> is mangled? i.e.
+After commit e3970d77ec50 ("kbuild: uapi: drop dependency on
+CC_CAN_LINK"), which enables compile testing of UAPI headers in more
+circumstances due to dropping the dependency on CONFIG_CC_CAN_LINK,
+there are new instances of -Wunaligned-access when building with clang
+targeting ARCH=arm in a few headers:
 
-This certainly seems more robust if acceptable.
+  In file included from <built-in>:1:
+  ./usr/include/linux/hyperv.h:361:2: error: field  within 'struct hv_kvp_exchg_msg_value' is less aligned than 'union hv_kvp_exchg_msg_value::(anonymous at ./usr/include/linux/hyperv.h:361:2)' and is usually due to 'struct hv_kvp_exchg_msg_value' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+    361 |         union {
+        |         ^
+  1 error generated.
 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index aa2303d0e148..4f710b8e6bc6 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -2404,9 +2404,9 @@ static int msm_dp_ctrl_link_retrain(struct msm_dp_ctrl_private *ctrl)
->         return msm_dp_ctrl_setup_main_link(ctrl, &training_step);
->  }
->  
-> -static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
-> -                              u32 rate, u32 stream_rate_khz,
-> -                              bool is_ycbcr_420)
-> +static int msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
-> +                                 u32 rate, u32 stream_rate_khz,
-> +                                 bool is_ycbcr_420)
->  {
->         u32 pixel_m, pixel_n;
->         u32 mvid, nvid, pixel_div = 0, dispcc_input_rate;
+  In file included from <built-in>:1:
+  In file included from ./usr/include/linux/vboxguest.h:14:
+  usr/include/linux/vbox_vmmdev_types.h:239:4: error: field u within 'struct vmmdev_hgcm_function_parameter32' is less aligned than 'union (unnamed union at usr/include/linux/vbox_vmmdev_types.h:223:2)' and is usually due to 'struct vmmdev_hgcm_function_parameter32' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+    239 |         } u;
+        |           ^
+  usr/include/linux/vbox_vmmdev_types.h:254:6: error: field u within 'struct vmmdev_hgcm_function_parameter64::(unnamed at usr/include/linux/vbox_vmmdev_types.h:249:3)' is less aligned than 'union (unnamed union at usr/include/linux/vbox_vmmdev_types.h:251:4)' and is usually due to 'struct vmmdev_hgcm_function_parameter64::(unnamed at usr/include/linux/vbox_vmmdev_types.h:249:3)' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+    254 |                         } u;
+        |                           ^
+  2 errors generated.
 
-This initialization is now unnecessary with this change.
+These warnings are now fatal after commit 3788d69db18d ("kbuild: uapi:
+fail header test on compiler warnings"). -Wunaligned-access is only
+enabled at W=1 for the rest of the kernel because of numerous instances
+of it.
 
-> @@ -2415,14 +2415,21 @@ static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
->         u32 const link_rate_hbr3 = 810000;
->         unsigned long den, num;
->  
-> -       if (rate == link_rate_hbr3)
-> +       switch (rate) {
-> +       case link_rate_hbr3:
->                 pixel_div = 6;
-> -       else if (rate == 162000 || rate == 270000)
-> -               pixel_div = 2;
-> -       else if (rate == link_rate_hbr2)
-> +               break;
-> +       case link_rate_hbr2:
->                 pixel_div = 4;
-> -       else
-> +               break;
-> +       case 270000:
-> +       case 162000:
-> +               pixel_div = 2;
-> +               break;
-> +       default:
->                 DRM_ERROR("Invalid pixel mux divider\n");
-> +               return -EINVAL;
-> +       }
->  
->         dispcc_input_rate = (rate * 10) / pixel_div;
->  
-> @@ -2458,6 +2465,8 @@ static void msm_dp_ctrl_config_msa(struct msm_dp_ctrl_private *ctrl,
->         drm_dbg_dp(ctrl->drm_dev, "mvid=0x%x, nvid=0x%x\n", mvid, nvid);
->         msm_dp_write_link(ctrl, REG_DP_SOFTWARE_MVID, mvid);
->         msm_dp_write_link(ctrl, REG_DP_SOFTWARE_NVID, nvid);
-> +
-> +       return 0;
->  }
->  
->  int msm_dp_ctrl_on_stream(struct msm_dp_ctrl *msm_dp_ctrl, bool force_link_train)
-> @@ -2525,10 +2534,11 @@ int msm_dp_ctrl_on_stream(struct msm_dp_ctrl *msm_dp_ctrl, bool force_link_train
->  
->         msm_dp_ctrl_configure_source_params(ctrl);
->  
-> -       msm_dp_ctrl_config_msa(ctrl,
-> -               ctrl->link->link_params.rate,
-> -               pixel_rate_orig,
-> -               ctrl->panel->msm_dp_mode.out_fmt_is_yuv_420);
-> +       ret = msm_dp_ctrl_config_msa(ctrl, ctrl->link->link_params.rate,
-> +                                    pixel_rate_orig,
-> +                                    ctrl->panel->msm_dp_mode.out_fmt_is_yuv_420);
-> +       if (ret)
-> +               return ret;
->  
->         msm_dp_panel_clear_dsc_dto(ctrl->panel);
->  
-> 
-> 
-> Konrad
+To keep the build working while the root cause of the warnings is
+investigated and resolved, disable testing these header files for
+ARCH=arm when building with clang. This should be a minimal loss of
+coverage; if the issue pointed out by this warning existed in the wild,
+it should have been noticed in real testing at this point since some of
+these structures have been around for many years. It is likely the case
+that since these structures are for specialized applications, they have
+never been used on an ARM platform that does not support unaligned
+access.
+
+Fixes: e3970d77ec50 ("kbuild: uapi: drop dependency on CC_CAN_LINK")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ usr/include/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 6d86a53c6f0a..d23a0c0363bd 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -52,6 +52,12 @@ ifeq ($(SRCARCH),arc)
+ no-header-test += linux/bpf_perf_event.h
+ endif
+ 
++ifeq ($(SRCARCH)_$(CONFIG_CC_IS_CLANG),arm_y)
++no-header-test += linux/hyperv.h
++no-header-test += linux/vboxguest.h
++no-header-test += linux/vbox_vmmdev_types.h
++endif
++
+ ifeq ($(SRCARCH),openrisc)
+ no-header-test += linux/bpf_perf_event.h
+ endif
+
+---
+base-commit: e3970d77ec504e54c3f91a48b2125775c16ba4c0
+change-id: 20260110-uapi-test-disable-headers-arm-clang-unaligned-access-a2e104a20a1e
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
