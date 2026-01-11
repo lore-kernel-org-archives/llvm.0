@@ -1,130 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E9CB67A;
-	Sun, 11 Jan 2026 00:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B711D6194;
+	Sun, 11 Jan 2026 01:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768092755; cv=none; b=bh7hDFq6rsHDn8SA4XhCUtZIjLK540IHzJ0xWMQoVxnAVMQgQh+ZCuKLkjL4TQ3N+Phq3qcA7ZleYEgyHBKVDS2lW+LtVK09rj0VAK1lrWmf0Qi7gFIjtOv2T30zxURrX3pcvjqtu6KpYX2y24tTxrUuTpbrHzx9c/SUZ5XPMmc=
+	t=1768095881; cv=none; b=n17hOfElEWIvr7nqfEzxKk8SDP3b4s2fbUdncszCDsEqZeSGDDOSAFAomDdfy/lNV12XassyffI0i3lGnM3pYzbh8Iaix72ghapuOwBqnbrVwgh9W8QgL7shl1QLtjp40mgd96p2DRh4vm8t5IRE1yEDQrEur7WdqVlg1R2Hwdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768092755; c=relaxed/simple;
-	bh=bPz8ImhJVEJL9nBgq6xRINNHb1whl/QQJoPCa33QHs8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ivtheEWcDV/GoDfYh/vH+mFJDhg23+rkJ40y66cmHlzEtwA3yK4TsHeeOApGRuuY+ljksM/7lq4lBv4UA/vlOAL268WOmh6T2YP4W/sNYKk2vo2daMyv16yMp0v+QCv58MKnPcL6CxM3fxRwd8HwBRJCeqzD9AgvMdQPmlQ284o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMyu8+lq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768095881; c=relaxed/simple;
+	bh=D0r7SfGfWO6MjtMcgOmSM7RlknpUXEIOiE2FtND/0Ik=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bXBLXo6nLpGX6bzvVKriJ0FBrnwkdWtrCwqVANLvQnlRBjQaqdJl5k55Htw3c0yDzNyO0TFQjRNeBwSIOf7Uc2bOgGxHqkaEWjox/OXQYey9THuInQKBzSv65V95QWml2MyY9JMLio6WQpdovd/PGINR+Rst9sptpvJzIwqcAIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hZiSu/Hv; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMyu8+lq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29857C4CEF1;
-	Sun, 11 Jan 2026 00:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768092755;
-	bh=bPz8ImhJVEJL9nBgq6xRINNHb1whl/QQJoPCa33QHs8=;
-	h=From:Date:Subject:To:Cc:From;
-	b=AMyu8+lqdpK7h+W62lwmX9m7dU/Z1RS2xOPjJDKlUsfREmYDGuBYzzB8ATgMjI0cG
-	 ecYJ1RTIPSe8nQZi/ZasGpMmcG6F/UOAr5gQgOXtXXsA79kIuaT0daYRsFy080xh98
-	 sBC/jhTdpzKrdSEtrfXwzM1t2nJhSuYfDrUo0WFoy61vgmMtAq49MhjBpAXYsbJuvZ
-	 KYYxNNh+8xpYyA8ipx0sTiqnB7bxGoKdqhVyzQEDFli0iy6jFHfJSA8eXSYDDn8Xsk
-	 0CeLYi/dq2an7X2EKTmsxdlD1I9p7H1j4GDYJRLAjm/Xv/jlqjEP/vJQG+WcL1DYaV
-	 DU5Kw7SUB2fLw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Sat, 10 Jan 2026 17:52:28 -0700
-Subject: [PATCH] kbuild: uapi: Avoid testing certain headers on ARCH=arm
- with CC=clang
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hZiSu/Hv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768095880; x=1799631880;
+  h=date:from:to:cc:subject:message-id;
+  bh=D0r7SfGfWO6MjtMcgOmSM7RlknpUXEIOiE2FtND/0Ik=;
+  b=hZiSu/HvXfgTi/ms2e6DnRBFvLMHMpMWrNCrbh2rLlB79ROgOvR6Dt0J
+   v5TJKj7cIHjNR00GqcJ2TXbBzagwiHxby5nl2dLrIXB6TRNISDSHWsIgh
+   ZanVGnnqIq1vVt9H6Z/gCjnRe/dFR7QuIc1D5u94rUW8St2JxQOZfH9J/
+   Xc2w7yl3ehD+PxoP8AanAZhtNLjJMkvvxVGP0Y5U4hkD1TwLorWX1luV/
+   ItdfzbHnq2+7PK+IuqfyykZcAXQu3Wit7IrZ2piLwg0AMT0Qq8/bd0KPi
+   CW8IOye1suCpW3MwZi0E80TJLm/gsK97Wu82DgiMJ5RkM7ZuE7IlM9hhi
+   g==;
+X-CSE-ConnectionGUID: I9QMPc1FTEuk6pkojOEM6A==
+X-CSE-MsgGUID: NGlEIAg9Ryu9B9NxcNe3tA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11667"; a="80061364"
+X-IronPort-AV: E=Sophos;i="6.21,217,1763452800"; 
+   d="scan'208";a="80061364"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2026 17:44:37 -0800
+X-CSE-ConnectionGUID: q4jbM9ocS2GUxOZWGUirkw==
+X-CSE-MsgGUID: BYZ7i5JyQvGf51FercOmAA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 10 Jan 2026 17:44:36 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vekVO-000000009RQ-0CwG;
+	Sun, 11 Jan 2026 01:44:34 +0000
+Date: Sun, 11 Jan 2026 09:44:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-pie-v3+i386 8/19] vmlinux.o: warning: objtool:
+ x86_pmu_aux_output_match+0x1c: no-cfi indirect call!
+Message-ID: <202601110959.4qlKzeGJ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260110-uapi-test-disable-headers-arm-clang-unaligned-access-v1-1-b7b0fa541daa@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQrCMBBFr1Jm7UASxIVXERfT5NuOxFgyqQild
- zfq8vH5721kqAqj87BRxUtNn6WDPwwUZykTWFNnCi6cnPeOV1mUG6xxUpMxg2dIQjWW+uCY+4f
- XIlmngsQSI6xPAd4dJTjxoK5eKm76/mUv1z/bOt4R27dF+/4BkGzqspgAAAA=
-X-Change-ID: 20260110-uapi-test-disable-headers-arm-clang-unaligned-access-a2e104a20a1e
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Arnd Bergmann <arnd@arndb.de>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3593; i=nathan@kernel.org;
- h=from:subject:message-id; bh=bPz8ImhJVEJL9nBgq6xRINNHb1whl/QQJoPCa33QHs8=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJlJXwIuPaybrJU+scxXN/9XsPDlOwrvptpdvPLGtUB8h
- YDFta3GHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi8taMDIsXyUv1VF2/t7GM
- ZempVdNu3F7Bn/v8woFtqZN53gtaT97IyNDhtEwxnu3muQk6j4JXmDcvObpBN83UQCLx878Qx03
- T+XgB
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-After commit e3970d77ec50 ("kbuild: uapi: drop dependency on
-CC_CAN_LINK"), which enables compile testing of UAPI headers in more
-circumstances due to dropping the dependency on CONFIG_CC_CAN_LINK,
-there are new instances of -Wunaligned-access when building with clang
-targeting ARCH=arm in a few headers:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3+i386
+head:   18caf3c0711e493cd12d61138bb0c7cb0b98e72e
+commit: c25feb76bcb9eef1db49b4793195808b5b268bdd [8/19] x86: Use PIE codegen for the relocatable 64-bit kernel
+config: x86_64-randconfig-004-20260110 (https://download.01.org/0day-ci/archive/20260111/202601110959.4qlKzeGJ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260111/202601110959.4qlKzeGJ-lkp@intel.com/reproduce)
 
-  In file included from <built-in>:1:
-  ./usr/include/linux/hyperv.h:361:2: error: field  within 'struct hv_kvp_exchg_msg_value' is less aligned than 'union hv_kvp_exchg_msg_value::(anonymous at ./usr/include/linux/hyperv.h:361:2)' and is usually due to 'struct hv_kvp_exchg_msg_value' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
-    361 |         union {
-        |         ^
-  1 error generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601110959.4qlKzeGJ-lkp@intel.com/
 
-  In file included from <built-in>:1:
-  In file included from ./usr/include/linux/vboxguest.h:14:
-  usr/include/linux/vbox_vmmdev_types.h:239:4: error: field u within 'struct vmmdev_hgcm_function_parameter32' is less aligned than 'union (unnamed union at usr/include/linux/vbox_vmmdev_types.h:223:2)' and is usually due to 'struct vmmdev_hgcm_function_parameter32' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
-    239 |         } u;
-        |           ^
-  usr/include/linux/vbox_vmmdev_types.h:254:6: error: field u within 'struct vmmdev_hgcm_function_parameter64::(unnamed at usr/include/linux/vbox_vmmdev_types.h:249:3)' is less aligned than 'union (unnamed union at usr/include/linux/vbox_vmmdev_types.h:251:4)' and is usually due to 'struct vmmdev_hgcm_function_parameter64::(unnamed at usr/include/linux/vbox_vmmdev_types.h:249:3)' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
-    254 |                         } u;
-        |                           ^
-  2 errors generated.
+All warnings (new ones prefixed by >>):
 
-These warnings are now fatal after commit 3788d69db18d ("kbuild: uapi:
-fail header test on compiler warnings"). -Wunaligned-access is only
-enabled at W=1 for the rest of the kernel because of numerous instances
-of it.
+>> vmlinux.o: warning: objtool: x86_pmu_aux_output_match+0x1c: no-cfi indirect call!
+>> vmlinux.o: warning: objtool: perf_check_microcode+0x13: no-cfi indirect call!
+>> vmlinux.o: warning: objtool: acpi_unregister_gsi+0x13: no-cfi indirect call!
 
-To keep the build working while the root cause of the warnings is
-investigated and resolved, disable testing these header files for
-ARCH=arm when building with clang. This should be a minimal loss of
-coverage; if the issue pointed out by this warning existed in the wild,
-it should have been noticed in real testing at this point since some of
-these structures have been around for many years. It is likely the case
-that since these structures are for specialized applications, they have
-never been used on an ARM platform that does not support unaligned
-access.
-
-Fixes: e3970d77ec50 ("kbuild: uapi: drop dependency on CC_CAN_LINK")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1576
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- usr/include/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 6d86a53c6f0a..d23a0c0363bd 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -52,6 +52,12 @@ ifeq ($(SRCARCH),arc)
- no-header-test += linux/bpf_perf_event.h
- endif
- 
-+ifeq ($(SRCARCH)_$(CONFIG_CC_IS_CLANG),arm_y)
-+no-header-test += linux/hyperv.h
-+no-header-test += linux/vboxguest.h
-+no-header-test += linux/vbox_vmmdev_types.h
-+endif
-+
- ifeq ($(SRCARCH),openrisc)
- no-header-test += linux/bpf_perf_event.h
- endif
-
----
-base-commit: e3970d77ec504e54c3f91a48b2125775c16ba4c0
-change-id: 20260110-uapi-test-disable-headers-arm-clang-unaligned-access-a2e104a20a1e
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
