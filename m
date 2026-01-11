@@ -1,154 +1,184 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4977346ADD
-	for <llvm@lists.linux.dev>; Sun, 11 Jan 2026 14:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E6733D6EA;
+	Sun, 11 Jan 2026 18:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768141342; cv=none; b=hJ2a0Ct3YUtiGnOI37+TbN069RvEQOifipwCkPkYzD5sRxyE3vvH1CnD6oJl/gWeDiMntCacXPIczbOJVGyK6kYJOEFSUsCwzoS4uIhZ51H4W6jaOwtlJLZVtRjmHMoTEcRgfigYjAXRJt6CEkMEy0elNrIe0dX2L16iItcj4rw=
+	t=1768154641; cv=none; b=kxf7Trk4fgCtIfvPz4v4PpUwpOCS440lIIKP2728ur0dCLKbVQWMGkH3GeL0j8x5eGEZQpNH+Jw4IzV/GeCvwr1TEVsSNBDxBX9BHwD+2TzJno+/W27IW6QPcCsGLI37WiNKKf3EHyV9+WhsWrw4hU5AEPitkDTMxfzi03haaXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768141342; c=relaxed/simple;
-	bh=KhcAtPturiDrNAMoZEtu+kV0mrrwf16LcCf7d8ckowE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BGwclUP5N9lIzbTYtb6phDbqEQQ864Q0ECytg/O5fN7u3RP9a1wQ0cbK9IkQevailh2qdfsEbhY3fWRUv0CNeaMFxqP+q9lijxC94QwVGn1feRQ0HkAgcBI/Ll429Q7mSL+DQoNHd8XlLZO9yt79r5ktGGP9fLmLrkyGfkmFRdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X7chhem6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1768154641; c=relaxed/simple;
+	bh=zbTnStaZRGXqT6TfypigN7OHnqv2DHIxSoAC5Gw88yg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YIzTC2cfZohvUAFCWDjzf1HmkkSjxtlHWOu8vL/bLjQ8etsZWpR1h7eXmzyLHZeTyWQaIueqPCXBWuMeOJ2PZr/B0ZZmxwo7e4X0wwAQo7l484u72txW3jLLJwwp8z+ktHLcScNbM6dzS8nQ6Xqdaj9LpleokE/Qf7e5pA6CJKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i42kBWKP; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X7chhem6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768141339;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4aCyz2kzYfNqFhRZekOqTmynAaZHmbyBnMTMFv8e4ps=;
-	b=X7chhem6T6dyicHOFPPWmfNTC4gNh/Bj3USTLlg1nyo/5V37ekxWTIJ/F7qUUY/qapxNxV
-	49tMXgLjWKrgAMtOnbDfsbL6l202VvBXsEwznIroWlM4C5J2PCrAX8aZINS8JZqhDatwPO
-	UJ7zy8ViUbucdKP2kO0iCGhadXvk96E=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-541-2G8GD9wbPROdJufbE-GRBA-1; Sun,
- 11 Jan 2026 09:22:17 -0500
-X-MC-Unique: 2G8GD9wbPROdJufbE-GRBA-1
-X-Mimecast-MFC-AGG-ID: 2G8GD9wbPROdJufbE-GRBA_1768141336
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 66A061956088
-	for <llvm@lists.linux.dev>; Sun, 11 Jan 2026 14:22:16 +0000 (UTC)
-Received: from [172.20.95.168] (unknown [10.30.44.183])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 02B6919560BA;
-	Sun, 11 Jan 2026 14:22:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc4,
- upstream-mainline, 755bc133)
-Date: Sun, 11 Jan 2026 14:22:15 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i42kBWKP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768154638; x=1799690638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zbTnStaZRGXqT6TfypigN7OHnqv2DHIxSoAC5Gw88yg=;
+  b=i42kBWKPjkZz60wg96NQ4np0Ou2H8oiJDPekp3L8WbI8YGOVN6jSHk4/
+   J3sP7evtRezLYVvL5blTP8V4PNs0WsDroUa4whMmWqDJkx6UvH9PJpHpG
+   2Ch5lenerW31GfLUt0b5r1XHj0ZTgqL+7LPtdZt4NAE7eSFXbNMss6j39
+   MC0d37AohG0aEur+84InF02wRnyRUC++2hxOrQglW/JRCpk0nTbhWUxSx
+   9ONDI0XaeFW4R81nLJnRkCO307WQrd5L2ONY7HFIRIXcAqHeYCFppfq0a
+   cXnaFx1jwSxBOoJbDCLmWwpTMlkdnTMJcs9bAqVjGmxRXCN1/S3JI3m20
+   g==;
+X-CSE-ConnectionGUID: ebdITIrfQNuKQLKXCaU6bw==
+X-CSE-MsgGUID: 8txKHc1SSmSZ2crbpEdL9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="68452006"
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="68452006"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2026 10:03:57 -0800
+X-CSE-ConnectionGUID: pCRMPKXFTZmo/M3PkCS/fg==
+X-CSE-MsgGUID: EucFxaScS++i9cFiaip57w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="208441509"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 11 Jan 2026 10:03:51 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vezn1-00000000CbA-48AU;
+	Sun, 11 Jan 2026 18:03:47 +0000
+Date: Mon, 12 Jan 2026 02:03:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	Martin Liu <liumartin@google.com>,
+	David Rientjes <rientjes@google.com>, christian.koenig@amd.com,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	SeongJae Park <sj@kernel.org>, Michal Hocko <mhocko@suse.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R . Howlett" <liam.howlett@oracle.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Christian Brauner <brauner@kernel.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	David Hildenbrand <david@redhat.com>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-trace-kernel@vger.kernel.org, Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v12 3/3] mm: Implement precise OOM killer task selection
+Message-ID: <202601120124.RK3AWOwu-lkp@intel.com>
+References: <20260111150249.1222944-4-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <47521.126011109221700144@us-mta-541.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: PtT0HAdSSXIFHM1p7YuCjQd7KjEA0oKhGr2jytYlQUc_1768141336
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260111150249.1222944-4-mathieu.desnoyers@efficios.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Mathieu,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on next-20260109]
+[cannot apply to akpm-mm/mm-everything kees/for-next/execve tip/sched/core linus/master v6.19-rc4 v6.19-rc3 v6.19-rc2 v6.19-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'riscv-for-linus-6.19-rc5' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/riscv/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Mathieu-Desnoyers/lib-Introduce-hierarchical-per-cpu-counters/20260111-231206
+base:   next-20260109
+patch link:    https://lore.kernel.org/r/20260111150249.1222944-4-mathieu.desnoyers%40efficios.com
+patch subject: [PATCH v12 3/3] mm: Implement precise OOM killer task selection
+config: arm-randconfig-001-20260112 (https://download.01.org/0day-ci/archive/20260112/202601120124.RK3AWOwu-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260112/202601120124.RK3AWOwu-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2256013711
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601120124.RK3AWOwu-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [RHEL10.0] blktests throtl failed
-            URL: https://issues.redhat.com/browse/RHEL-66783
-            Affected tests:
-                Storage - blktests - throtl [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
- Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
-            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
-comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
-d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
-medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
-=3D1
-            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
-65900650445969
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-                Boot test [aarch64]
-                Reboot test [aarch64]
-                Storage - blktests - ublk [aarch64]
-                stress: stress-ng - cpu-cache [aarch64]
-                xfstests - btrfs [aarch64]
-                xfstests - ext4 [aarch64]
-                xfstests - xfs [aarch64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All warnings (new ones prefixed by >>):
+
+>> kernel/fork.c:637:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+     635 |                         pr_alert("BUG: Bad rss-counter state mm:%p type:%s val:%ld Comm:%s Pid:%d\n",
+         |                                                                                ~~~
+         |                                                                                %d
+     636 |                                  mm, resident_page_types[i],
+     637 |                                  percpu_counter_tree_precise_sum(&mm->rss_stat[i]),
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:534:35: note: expanded from macro 'pr_alert'
+     534 |         printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
+         |                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:511:60: note: expanded from macro 'printk'
+     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
+     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning generated.
+--
+>> mm/oom_kill.c:351:6: warning: variable 'points_min' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     351 |         if (oom_task_origin(task)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   mm/oom_kill.c:392:22: note: uninitialized use occurs here
+     392 |         oc->chosen_points = points_min;
+         |                             ^~~~~~~~~~
+   mm/oom_kill.c:351:2: note: remove the 'if' if its condition is always false
+     351 |         if (oom_task_origin(task)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     352 |                 points = LONG_MAX;
+         |                 ~~~~~~~~~~~~~~~~~~
+     353 |                 goto select;
+         |                 ~~~~~~~~~~~~
+     354 |         }
+         |         ~
+   mm/oom_kill.c:326:25: note: initialize the variable 'points_min' to silence this warning
+     326 |         long points, points_min, points_max;
+         |                                ^
+         |                                 = 0
+   1 warning generated.
 
 
+vim +637 kernel/fork.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+6af8cb80d3a9a6 David Hildenbrand    2025-03-03  625  
+d70f2a14b72a4b Andrew Morton        2018-01-31  626  static void check_mm(struct mm_struct *mm)
+d70f2a14b72a4b Andrew Morton        2018-01-31  627  {
+d70f2a14b72a4b Andrew Morton        2018-01-31  628  	int i;
+d70f2a14b72a4b Andrew Morton        2018-01-31  629  
+8495f7e6732ed2 Sai Praneeth Prakhya 2019-09-25  630  	BUILD_BUG_ON_MSG(ARRAY_SIZE(resident_page_types) != NR_MM_COUNTERS,
+8495f7e6732ed2 Sai Praneeth Prakhya 2019-09-25  631  			 "Please make sure 'struct resident_page_types[]' is updated as well");
+8495f7e6732ed2 Sai Praneeth Prakhya 2019-09-25  632  
+d70f2a14b72a4b Andrew Morton        2018-01-31  633  	for (i = 0; i < NR_MM_COUNTERS; i++) {
+25d942f31cc499 Mathieu Desnoyers    2026-01-11  634  		if (unlikely(percpu_counter_tree_precise_compare_value(&mm->rss_stat[i], 0) != 0))
+72456781289a6e Mathieu Desnoyers    2026-01-11  635  			pr_alert("BUG: Bad rss-counter state mm:%p type:%s val:%ld Comm:%s Pid:%d\n",
+25d942f31cc499 Mathieu Desnoyers    2026-01-11  636  				 mm, resident_page_types[i],
+25d942f31cc499 Mathieu Desnoyers    2026-01-11 @637  				 percpu_counter_tree_precise_sum(&mm->rss_stat[i]),
+881388f3433819 Xuanye Liu           2025-07-23  638  				 current->comm,
+881388f3433819 Xuanye Liu           2025-07-23  639  				 task_pid_nr(current));
+881388f3433819 Xuanye Liu           2025-07-23  640  	}
+d70f2a14b72a4b Andrew Morton        2018-01-31  641  
+d70f2a14b72a4b Andrew Morton        2018-01-31  642  	if (mm_pgtables_bytes(mm))
+d70f2a14b72a4b Andrew Morton        2018-01-31  643  		pr_alert("BUG: non-zero pgtables_bytes on freeing mm: %ld\n",
+d70f2a14b72a4b Andrew Morton        2018-01-31  644  				mm_pgtables_bytes(mm));
+d70f2a14b72a4b Andrew Morton        2018-01-31  645  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
