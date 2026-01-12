@@ -1,104 +1,123 @@
-Received: from mail-43102.protonmail.ch (mail-43102.protonmail.ch [185.70.43.102])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10172EE5FD
-	for <llvm@lists.linux.dev>; Mon, 12 Jan 2026 17:27:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C78531ED70;
+	Mon, 12 Jan 2026 18:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768238871; cv=none; b=ROuqnZcrIe7VOuSR/1/TgRn8FAYOuQU7vruV8QMpPpJBWHif7iZcOqKFVx4ITvxmI3/Qjdeu6nIZWK2Wr54jM49+n9TRWRbD0LDocqfsnrBq5lF/Uvy9JArchCaTuky6xBkdqTvY1dF5HJonWw0BkE20jJvQLSSpKxAgVKHffrU=
+	t=1768241687; cv=none; b=UDzEwnB7WPZmSbTskxTIseSmN2oCRIBjX9J2I6Yym5zPD71S4iuFGPhfaDjJ/0WH8n6QVOtA1Ga9qkXSfDI0RrN+UaTt+dDXPO33F9VKNNm0Vdjc5TLPhvE4kMmKmRa5LO9YElDg2Q2+FldbmHBFFqv8uo/O0XEdKriT9n7PSRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768238871; c=relaxed/simple;
-	bh=MOW+FEXSkjqoA9gO0vl1FWTSXtEjOD+DXsStw9lDKJE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a1hFlCXw/8cr/nKoB22SmBfypo76nCPY+1XSieNII+ds7O6bTM3tvdzGQXHW9uCjK0ydUzCUoa8HFoGhKXQPplzPjHlP2IdCdevQvkMvC5xDRP7tP/NkfnDBrQZRmaNihHznjzNKI2PsOSsIw3VzIV1GYPcxWri/jhpeg8qFYm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=rp7WD2hz; arc=none smtp.client-ip=185.70.43.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1768241687; c=relaxed/simple;
+	bh=yULqg6xbplSNoGrbWc7nRJwiu2hMeDoaNumPp/ywvE8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PwZaoxsvH1exyLRy5JSCtqxQca+8/92sbPQxV+oS7kFO/iXwEBgtAVRkCMkHFMYzOqVVx6uYCnntQeLkIObW/eNmL8S5iK1LRBrCv9YwT48g0shnHiowAP5l1X773rZyD/jnsylylisMib9YizwIJ2FFYxaalmeBBxT2QJ0K/dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTTFdzVb; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="rp7WD2hz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1768238858; x=1768498058;
-	bh=i82hVLnXXbAVfgARSkNfTSungiQEgJywgSx/RsX/wSc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=rp7WD2hzYG+/fEcnXAYWwaq16gfF91DR+4hlcwz8ePNMqLJeSviu3xQH6/dUjJIMC
-	 wkHKU+oTtl5PB8Tj6vu9LfKAfpWhuGldwh34+z9y6Qj4+000LRC6/50Ql4la2bIkqE
-	 moV4n0OMJbVFFztW4DV/NDkKTe2rhGZceMaYYCt0IgIRJ2y2eaMHDS9AvH+hQKG3fM
-	 hx+9cipW/u/ZlCnCIbDrzrOVhwWgs7OvfA8jTsRDKcrgWz26fF13DYVu4jeI+vFIWK
-	 pk/KfdqXsbXP3S0Nf9IgwlDxQjtOSPLXlMP8bj4gEzq1VF1IF4N9fQiSYWtOVpN4LD
-	 1qbso/EPHZzHQ==
-Date: Mon, 12 Jan 2026 17:27:35 +0000
-To: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v8 03/14] kasan: Fix inline mode for x86 tag-based mode
-Message-ID: <1598e2bb7d45902fb0dc4d0d8e218f61b0c1a0f6.1768233085.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1768233085.git.m.wieczorretman@pm.me>
-References: <cover.1768233085.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: ca3467c5c544f1474f2a10b1278334b95255c44c
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTTFdzVb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768241686; x=1799777686;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yULqg6xbplSNoGrbWc7nRJwiu2hMeDoaNumPp/ywvE8=;
+  b=eTTFdzVbR6yVAN8w1KfDimOMkxOORIHzz89nBe+IBBYTNqPpB2hZbAT6
+   ZYKnmtVP0XnplFCTyYVWzEapx+Rg+zQQBEhdWdsSSmNbOT70FACK+UvsM
+   3zSj2wZO40g2ifkt4T+jNp4iRZip6bpfWItjdkdESTCIw185m6gD8dsEM
+   0kkN5UiYefPQ/V9WFk414YLasmK4iZfl1vGYb5cTcIuA/KObeX4z4TPJ5
+   E/yehkZsBTnYaIrdIszHR4tWUd+6KAr8KEzLuGzIEjPBVLAu8cFCH+Xwn
+   2uVFYvX9TAeLdeEI7J2KQFDlCHgHnOxcDJGMu3u/Uhw4YqwuViqzarwS4
+   A==;
+X-CSE-ConnectionGUID: 6v++bDq1QyKoKQ88NRJALw==
+X-CSE-MsgGUID: VdwMtmp/Rx2eiCD4VOpiFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="68526605"
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="68526605"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 10:14:46 -0800
+X-CSE-ConnectionGUID: cqtdRvSXTiy3tH5HkosK3g==
+X-CSE-MsgGUID: 1TiJoZbOT3+d/2xbHc+zhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="227400023"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 12 Jan 2026 10:14:44 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vfMR8-00000000Diy-09T1;
+	Mon, 12 Jan 2026 18:14:42 +0000
+Date: Tue, 13 Jan 2026 02:14:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bastien Nocera <hadess@hadess.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 12/12] HID: surface: Use pm_ptr_sleep instead of #ifdef
+ CONFIG_PM_SLEEP
+Message-ID: <202601130224.PFFZLOhf-lkp@intel.com>
+References: <20260112105500.3664834-13-hadess@hadess.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112105500.3664834-13-hadess@hadess.net>
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Hi Bastien,
 
-The LLVM compiler uses hwasan-instrument-with-calls parameter to setup
-inline or outline mode in tag-based KASAN. If zeroed, it means the
-instrumentation implementation will be pasted into each relevant
-location along with KASAN related constants during compilation. If set
-to one all function instrumentation will be done with function calls
-instead.
+kernel test robot noticed the following build errors:
 
-The default hwasan-instrument-with-calls value for the x86 architecture
-in the compiler is "1", which is not true for other architectures.
-Because of this, enabling inline mode in software tag-based KASAN
-doesn't work on x86 as the kernel script doesn't zero out the parameter
-and always sets up the outline mode.
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on linus/master v6.19-rc5 next-20260109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Explicitly zero out hwasan-instrument-with-calls when enabling inline
-mode in tag-based KASAN.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/HID-hid-alps-Use-pm_ptr-instead-of-ifdef-CONFIG_PM/20260112-190559
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20260112105500.3664834-13-hadess%40hadess.net
+patch subject: [PATCH 12/12] HID: surface: Use pm_ptr_sleep instead of #ifdef CONFIG_PM_SLEEP
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260113/202601130224.PFFZLOhf-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130224.PFFZLOhf-lkp@intel.com/reproduce)
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
----
-Changelog v7:
-- Add Alexander's Reviewed-by tag.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601130224.PFFZLOhf-lkp@intel.com/
 
-Changelog v6:
-- Add Andrey's Reviewed-by tag.
+All errors (new ones prefixed by >>):
 
-Changelog v3:
-- Add this patch to the series.
-
- scripts/Makefile.kasan | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 0ba2aac3b8dc..e485814df3e9 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -76,8 +76,11 @@ CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
- RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress \
- =09=09   -Zsanitizer-recover=3Dkernel-hwaddress
-=20
-+# LLVM sets hwasan-instrument-with-calls to 1 on x86 by default. Set it to=
- 0
-+# when inline mode is enabled.
- ifdef CONFIG_KASAN_INLINE
- =09kasan_params +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
-+=09kasan_params +=3D hwasan-instrument-with-calls=3D0
- else
- =09kasan_params +=3D hwasan-instrument-with-calls=3D1
- endif
---=20
-2.52.0
+>> drivers/hid/surface-hid/surface_hid.c:244:9: error: call to undeclared function 'pm_ptr_sleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     244 |                 .pm = pm_ptr_sleep(&surface_hid_pm_ops),
+         |                       ^
+>> drivers/hid/surface-hid/surface_hid.c:244:9: error: incompatible integer to pointer conversion initializing 'const struct dev_pm_ops *' with an expression of type 'int' [-Wint-conversion]
+     244 |                 .pm = pm_ptr_sleep(&surface_hid_pm_ops),
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/surface-hid/surface_hid.c:244:9: error: initializer element is not a compile-time constant
+     244 |                 .pm = pm_ptr_sleep(&surface_hid_pm_ops),
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
+vim +/pm_ptr_sleep +244 drivers/hid/surface-hid/surface_hid.c
+
+   237	
+   238	static struct ssam_device_driver surface_hid_driver = {
+   239		.probe = surface_hid_probe,
+   240		.remove = surface_hid_remove,
+   241		.match_table = surface_hid_match,
+   242		.driver = {
+   243			.name = "surface_hid",
+ > 244			.pm = pm_ptr_sleep(&surface_hid_pm_ops),
+   245			.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+   246		},
+   247	};
+   248	module_ssam_device_driver(surface_hid_driver);
+   249	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
