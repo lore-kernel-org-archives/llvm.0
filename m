@@ -1,59 +1,58 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C452BDC3D;
-	Mon, 12 Jan 2026 22:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999BC326958;
+	Mon, 12 Jan 2026 22:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768258176; cv=none; b=CRRlIs80JCq6ikpTjXKQny32rWRmrI8Q5rmneyDL+BEO3iAeRvO7zrHzjAe6ELZnK7Z/LW6X12MdCcuyikw+QNvYDmh2CjDNAvV2R5avV4GrkrluwZIu5NdgH7V4ckkJdP7WtMLi+5FOoRQ1NhWnK2wMbKEaWU0uUFIak6i7IQg=
+	t=1768258181; cv=none; b=TJaaxr3Cz/OLoIdkKMytjQ035piQlOGHSxLiUyUBOoRdsxewL1LRwrnltAHz97ymd8+9xt3WKz0B428nqHyBACxjSTuo7SAsEUV/DgKQR+UJeX9RXE/8sd7juIKxmfKul6m1a2YUGV+Cl9S5lr9Bc7NkVfrQl8rH7dntoIcjcZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768258176; c=relaxed/simple;
-	bh=qdlAi7Xd86aU0w//s/dluMuWX1c843d/fyoLkDm3CYc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=O+7Gzlv1dWcu1ZW+y8C+jhOaWwtDpeGzCyfjG45PCKQfrHFSWyQ82lngnrPYUYtZs5MqRcX7ix9MN0B1H3I3JC9ukeY7sfX3nkIzhY6MC3jiMfswvVtC/rIPgbZbQQiWs+/RMl+nQy4ZbeCQatkoM5IGx6pH+OupRWy8f0LQMkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HPsv+Ubt; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1768258181; c=relaxed/simple;
+	bh=XN2R9SGOj9THEQ3V3jjcI+uwL+U1dtsAzfJpfF53GGc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Xg4xdNld56eTPEG4nYDMBIzT/YmLtP06Oq7pBmhX9jH2avXULkyCRpbHQIQHCNZFPpHA2L7/aDYUIAbAo4MsUa43zT4kO/Vh4f4naXZPZftrxJxzhHRkCEsSshJsynV7rVh1RBA6NoGBKCt9nEGVEiCprByGLYX2nutT3xcZC78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YhWalKYq; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HPsv+Ubt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YhWalKYq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768258164; x=1799794164;
+  t=1768258177; x=1799794177;
   h=date:from:to:cc:subject:message-id;
-  bh=qdlAi7Xd86aU0w//s/dluMuWX1c843d/fyoLkDm3CYc=;
-  b=HPsv+UbtW3hW73zowKu5V7nqYh0jkttH7WHgLt4QZlBhfvDAUn7ksCVW
-   1J8t5tLMHmkGZ2pHs//nFM7I/3BEHT02oHRcpFjbENmhE+hXTpJVF3IFT
-   OB3B1P8ypUtsH1vKCa03fmUJTnzFvMkgJ5R/9jkzw006dTvYX5Lj2ZJ5h
-   bVvMrYOskc2WnRYg8AJOzCG0dD79bTfAGsffVRSsS45ZmPZRFuB5Ce8N0
-   X1z92PcEshuWd9KG2VJ2Wyn1CZ7Vx99BshIGoBafCaRqzBD1yl0SlkQS4
-   7uFfpbEj2oIp97ozmWq9A/l6TL9+KTSgCoDdu8hJVW+1tmMjIkLkWh6Yu
+  bh=XN2R9SGOj9THEQ3V3jjcI+uwL+U1dtsAzfJpfF53GGc=;
+  b=YhWalKYqCrvZkX8S7aKQE0lTOEo7tW2C8p36dCSijsFTfeBw9DmGMIME
+   KuawqN5o1OBcHsrwGzH9zxhw0MHJbdHt9WjocyaXwM18XUXibjYe4g1ku
+   phgUe/x8Spxev15CApEfaIBEYFQ/ElgmQoKJc3h++3RH3FAfAK+4aLMLx
+   GMC5gcBE6O8zSSyJV8DAzsOkfNaP62c6Q9A+eWWOlMVwIYs3FvARP4RTh
+   T8eSXEVR9jsxQ/eVuLHyTqI7FSnv4M4AzlQsZoFDmIsBFh4GQ145T/tFv
+   SX/NypdhLEMsEIGEjT0k0VYaTmwXHeT4LpAe+KaRkPplUGnQiw1uPLIVc
    Q==;
-X-CSE-ConnectionGUID: D515VCAFRdGeS4A8nb0Frw==
-X-CSE-MsgGUID: GfdbMOr8QnyRsQQm8+82BA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69439084"
+X-CSE-ConnectionGUID: qfSThxV6SG+vQl13AzFRAw==
+X-CSE-MsgGUID: w+iv9EOzTDGHvbP+VZ3b8Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69439088"
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="69439084"
+   d="scan'208";a="69439088"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
   by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 14:49:23 -0800
-X-CSE-ConnectionGUID: +DJjZPgNTkOMGTLDuFCvww==
-X-CSE-MsgGUID: +twLTypjTrCn46F0A6Q6Zg==
+X-CSE-ConnectionGUID: 1+fBq8grSBOi+BPU2ISy0w==
+X-CSE-MsgGUID: hUwCD06jSjCcg5Fi1VUPnQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="204867843"
+   d="scan'208";a="204867845"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
   by fmviesa010.fm.intel.com with ESMTP; 12 Jan 2026 14:49:21 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vfQit-00000000Dx7-0j4E;
+	id 1vfQit-00000000DxA-0r5G;
 	Mon, 12 Jan 2026 22:49:19 +0000
-Date: Tue, 13 Jan 2026 06:49:08 +0800
+Date: Tue, 13 Jan 2026 06:49:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hou Wenlong <houwenlong.hwl@antgroup.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:x86/urgent 2/2] arch/x86/mm/extable.c:414:7:
- error: call to undeclared function 'handle_bug'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202601130649.JANvnxPo-lkp@intel.com>
+ linux-kernel@vger.kernel.org
+Subject: crypto/hmac.c:251:12: warning: stack frame size (1152)
+ exceeds limit (1024) in 'hmac_setkey_ahash'
+Message-ID: <202601130603.OVc1bV9o-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,67 +60,86 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/urgent
-head:   695d896472d6543523de43110b0016b8b4469643
-commit: 695d896472d6543523de43110b0016b8b4469643 [2/2] x86_64/bug: Handle __WARN_printf() trap in early_fixup_exception()
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260113/202601130649.JANvnxPo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130649.JANvnxPo-lkp@intel.com/reproduce)
+Hi Herbert,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b71e635feefc852405b14620a7fc58c4c80c0f73
+commit: c3103416d5217655d707d9417aaf66f184e3d72f crypto: hmac - Add ahash support
+date:   8 months ago
+config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20260113/202601130603.OVc1bV9o-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130603.OVc1bV9o-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601130649.JANvnxPo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601130603.OVc1bV9o-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/mm/extable.c:414:7: error: call to undeclared function 'handle_bug'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     414 |                 if (handle_bug(regs))
-         |                     ^
-   1 error generated.
+>> crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit (1024) in 'hmac_setkey_ahash' [-Wframe-larger-than]
+     251 | static int hmac_setkey_ahash(struct crypto_ahash *parent,
+         |            ^
+   1 warning generated.
 
 
-vim +/handle_bug +414 arch/x86/mm/extable.c
+vim +/hmac_setkey_ahash +251 crypto/hmac.c
 
-   376	
-   377	/* Restricted version used during very early boot */
-   378	void __init early_fixup_exception(struct pt_regs *regs, int trapnr)
-   379	{
-   380		/* Ignore early NMIs. */
-   381		if (trapnr == X86_TRAP_NMI)
-   382			return;
-   383	
-   384		if (early_recursion_flag > 2)
-   385			goto halt_loop;
-   386	
-   387		/*
-   388		 * Old CPUs leave the high bits of CS on the stack
-   389		 * undefined.  I'm not sure which CPUs do this, but at least
-   390		 * the 486 DX works this way.
-   391		 * Xen pv domains are not using the default __KERNEL_CS.
-   392		 */
-   393		if (!xen_pv_domain() && regs->cs != __KERNEL_CS)
-   394			goto fail;
-   395	
-   396		/*
-   397		 * The full exception fixup machinery is available as soon as
-   398		 * the early IDT is loaded.  This means that it is the
-   399		 * responsibility of extable users to either function correctly
-   400		 * when handlers are invoked early or to simply avoid causing
-   401		 * exceptions before they're ready to handle them.
-   402		 *
-   403		 * This is better than filtering which handlers can be used,
-   404		 * because refusing to call a handler here is guaranteed to
-   405		 * result in a hard-to-debug panic.
-   406		 *
-   407		 * Keep in mind that not all vectors actually get here.  Early
-   408		 * page faults, for example, are special.
-   409		 */
-   410		if (fixup_exception(regs, trapnr, regs->orig_ax, 0))
-   411			return;
-   412	
-   413		if (trapnr == X86_TRAP_UD) {
- > 414			if (handle_bug(regs))
+   250	
+ > 251	static int hmac_setkey_ahash(struct crypto_ahash *parent,
+   252				     const u8 *inkey, unsigned int keylen)
+   253	{
+   254		struct ahash_hmac_ctx *tctx = crypto_ahash_ctx(parent);
+   255		struct crypto_ahash *fb = crypto_ahash_fb(tctx->hash);
+   256		int ds = crypto_ahash_digestsize(parent);
+   257		int bs = crypto_ahash_blocksize(parent);
+   258		int ss = crypto_ahash_statesize(parent);
+   259		HASH_REQUEST_ON_STACK(req, fb);
+   260		u8 *opad = &tctx->pads[ss];
+   261		u8 *ipad = &tctx->pads[0];
+   262		int err, i;
+   263	
+   264		if (fips_enabled && (keylen < 112 / 8))
+   265			return -EINVAL;
+   266	
+   267		ahash_request_set_callback(req, 0, NULL, NULL);
+   268	
+   269		if (keylen > bs) {
+   270			ahash_request_set_virt(req, inkey, ipad, keylen);
+   271			err = crypto_ahash_digest(req);
+   272			if (err)
+   273				goto out_zero_req;
+   274	
+   275			keylen = ds;
+   276		} else
+   277			memcpy(ipad, inkey, keylen);
+   278	
+   279		memset(ipad + keylen, 0, bs - keylen);
+   280		memcpy(opad, ipad, bs);
+   281	
+   282		for (i = 0; i < bs; i++) {
+   283			ipad[i] ^= HMAC_IPAD_VALUE;
+   284			opad[i] ^= HMAC_OPAD_VALUE;
+   285		}
+   286	
+   287		ahash_request_set_virt(req, ipad, NULL, bs);
+   288		err = crypto_ahash_init(req) ?:
+   289		      crypto_ahash_update(req) ?:
+   290		      crypto_ahash_export(req, ipad);
+   291	
+   292		ahash_request_set_virt(req, opad, NULL, bs);
+   293		err = err ?:
+   294		      crypto_ahash_init(req) ?:
+   295		      crypto_ahash_update(req) ?:
+   296		      crypto_ahash_export(req, opad);
+   297	
+   298	out_zero_req:
+   299		HASH_REQUEST_ZERO(req);
+   300		return err;
+   301	}
+   302	
 
 -- 
 0-DAY CI Kernel Test Service
