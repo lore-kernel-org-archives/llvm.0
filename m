@@ -1,105 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEE43644A6;
-	Mon, 12 Jan 2026 18:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518AF318EC1;
+	Mon, 12 Jan 2026 19:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768242601; cv=none; b=kBDEUeCWC0KFS6B4dbajhAr12xSZjQxopi+WyeOic6nHai/gfMfQSk2/X6sVr+NBVtdsVSjXZQFJk+3zroi4Cp+ZgmvczO0Em2VgJOO/idWenkfKfI+9Ou9s1E9DDimeIfWxx/QwMY7e7QaDezSQdprl/3SQNTNh1o9UZWKrcdE=
+	t=1768245594; cv=none; b=mKEPuGrv337d6zcZsBNfYiPlx+6riSLCRvc+ilE+GM6Clq1o/wWz2E5vOf1AxSjpXhJF4WPjsaw5dnleoBKABHu2eRgcMzav/83RLU9vfbnoZi5a4GOLx/d6+V5oqJo3mwkIKiNmnsRrVx47i3VozOfeVAbqpjfB2ScLrGGIkbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768242601; c=relaxed/simple;
-	bh=pb/tVCd1nrZorzc3OQJ5GZ/GnwX25D91HAoQwYjWh9A=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=kSzj5ESjVnZ9AvbyZcK5JP4HkpEe4T9h6jt4NGulSeH+HiXEFP+MP9JvF1p4ZV2/1tVfSFGRUiIQJUVgQ5KhKBC9ORARRwZhwxraFvgEgvQODlOw2ol2fpqFxAH0ClB4N8kDNK7bR62cq35TImJqpSaAi/b0ld5+u21vC/6a3cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=zzVnZrOK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768245594; c=relaxed/simple;
+	bh=i2o5OSwgZxueKsGzvOapUi10A7iexUAqUjRdR47rGNE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Un4a0uvGRJira2Z/40+ypg20dhaZM3a63yuVHgSg3GDkt/iyFS8Y0wNCvyiEfHW9FdTdWQmRuHka9GGCMI8swof1zTEhxgD36MvzN92o3Bx5d8+a7iLZ/s0fSX5H4LdigpQ3AqU0NCD2I/Xx2KwbyPuvuzdzkyyeCrO41wf5t5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oi3QVI3h; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="zzVnZrOK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1E7C116D0;
-	Mon, 12 Jan 2026 18:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1768242600;
-	bh=pb/tVCd1nrZorzc3OQJ5GZ/GnwX25D91HAoQwYjWh9A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=zzVnZrOKkI5LQ7+XAL7zuJbCgfgnfqQ6c//ayo6FMiYjPMM5GN0thTTLoC0v3HytI
-	 0hd6ThWdQnfX/79qVJ7TSOIicNp0Obgssj6CPfZw/oqr+6R06NeTUnIJO72B3djMq8
-	 W03ZnqF6oZOrCYz2QoGo82heKOjO3ypVyeIonYME=
-Date: Mon, 12 Jan 2026 10:29:57 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: corbet@lwn.net, morbo@google.com, rppt@kernel.org,
- lorenzo.stoakes@oracle.com, ubizjak@gmail.com, mingo@redhat.com,
- vincenzo.frascino@arm.com, maciej.wieczor-retman@intel.com, maz@kernel.org,
- catalin.marinas@arm.com, yeoreum.yun@arm.com, will@kernel.org,
- jackmanb@google.com, samuel.holland@sifive.com, glider@google.com,
- osandov@fb.com, nsc@kernel.org, luto@kernel.org, jpoimboe@kernel.org,
- Liam.Howlett@oracle.com, kees@kernel.org, jan.kiszka@siemens.com,
- thomas.lendacky@amd.com, jeremy.linton@arm.com, dvyukov@google.com,
- axelrasmussen@google.com, leitao@debian.org, ryabinin.a.a@gmail.com,
- bigeasy@linutronix.de, peterz@infradead.org, mark.rutland@arm.com,
- urezki@gmail.com, brgerst@gmail.com, hpa@zytor.com, mhocko@suse.com,
- andreyknvl@gmail.com, weixugc@google.com, kbingham@kernel.org,
- vbabka@suse.cz, nathan@kernel.org, trintaeoitogc@gmail.com,
- samitolvanen@google.com, tglx@kernel.org, thuth@redhat.com,
- surenb@google.com, anshuman.khandual@arm.com, smostafa@google.com,
- yuanchu@google.com, ada.coupriediaz@arm.com, dave.hansen@linux.intel.com,
- kas@kernel.org, nick.desaulniers+lkml@gmail.com, david@kernel.org,
- bp@alien8.de, ardb@kernel.org, justinstitt@google.com,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v8 00/14] kasan: x86: arm64: KASAN tag-based mode for
- x86
-Message-Id: <20260112102957.359c8de904b11dc23cffd575@linux-foundation.org>
-In-Reply-To: <cover.1768233085.git.m.wieczorretman@pm.me>
-References: <cover.1768233085.git.m.wieczorretman@pm.me>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oi3QVI3h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768245591; x=1799781591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i2o5OSwgZxueKsGzvOapUi10A7iexUAqUjRdR47rGNE=;
+  b=Oi3QVI3helfH/yfHKrwfy6h95/Igpk5mLWVdiutkFskg2mf4PI51jY0P
+   UC9Cg7y38dcQlaqSEnvezxJwnrwIavQbzBd43Gd5q1o9Hh8pMgqXGcUIT
+   I9WEMEXEwvEG+Q2WnLJxkAeW0jwBdTX0wayw26D7K+EnWwzUybq+G4EZQ
+   GjdCbci56vJhszFbCQGRTlQfOjQehykRnMsvX64mpGRWN5maLD46zkLhA
+   wOGkU/Ou/GYwPhQ+yXRN/CelVi8p+7lPITgtz04FCWaf40pI+1IitrHMT
+   sQF9jclM9l8EWmY64R7Zm9WaJWdzvkA/eLlu1JI4UX2XHoBDiou1baUZI
+   g==;
+X-CSE-ConnectionGUID: WP6fv/7cTWimZBDHbl9JIA==
+X-CSE-MsgGUID: 1gkdd9a8ST6tjgAWwClfFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69259347"
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="69259347"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 11:19:50 -0800
+X-CSE-ConnectionGUID: x11Kegm6RCS/lIPaSO/jAQ==
+X-CSE-MsgGUID: voSqYQ6ITIexQAlXSQrEwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="235411264"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 12 Jan 2026 11:19:49 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vfNS6-00000000Dmg-1YO0;
+	Mon, 12 Jan 2026 19:19:46 +0000
+Date: Tue, 13 Jan 2026 03:19:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bastien Nocera <hadess@hadess.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] Bluetooth: btusb: Use pm_ptr instead of #ifdef CONFIG_PM
+Message-ID: <202601130334.mSDifI9D-lkp@intel.com>
+References: <20260112105127.3664608-1-hadess@hadess.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112105127.3664608-1-hadess@hadess.net>
 
-On Mon, 12 Jan 2026 17:26:29 +0000 Maciej Wieczor-Retman <m.wieczorretman@pm.me> wrote:
+Hi Bastien,
 
-> The patchset aims to add a KASAN tag-based mode for the x86 architecture
-> with the help of the new CPU feature called Linear Address Masking
-> (LAM). Main improvement introduced by the series is 2x lower memory
-> usage compared to KASAN's generic mode, the only currently available
-> mode on x86. The tag based mode may also find errors that the generic
-> mode couldn't because of differences in how these modes operate.
+kernel test robot noticed the following build errors:
 
-Well this is a hearty mixture of arm, x86 and MM.  I guess that means
-mm.git.
+[auto build test ERROR on bluetooth-next/master]
+[also build test ERROR on bluetooth/master linus/master v6.19-rc5 next-20260109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The review process seems to be proceeding OK so I'll add this to
-mm.git's mm-new branch, which is not included in linux-next.  I'll aim
-to hold it there for a week while people check the patches over and
-send out their acks (please).  Then I hope I can move it into mm.git's
-mm-unstable branch where it will receive linux-next exposure.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/Bluetooth-btusb-Use-pm_ptr-instead-of-ifdef-CONFIG_PM/20260112-185450
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20260112105127.3664608-1-hadess%40hadess.net
+patch subject: [PATCH] Bluetooth: btusb: Use pm_ptr instead of #ifdef CONFIG_PM
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260113/202601130334.mSDifI9D-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130334.mSDifI9D-lkp@intel.com/reproduce)
 
-> [1] Currently inline mode doesn't work on x86 due to things missing in
-> the compiler. I have written a patch for clang that seems to fix the
-> inline mode and I was able to boot and check that all patches regarding
-> the inline mode work as expected. My hope is to post the patch to LLVM
-> once this series is completed, and then make inline mode available in
-> the kernel config.
-> 
-> [2] While I was able to boot the inline tag-based kernel with my
-> compiler changes in a simulated environment, due to toolchain
-> difficulties I couldn't get it to boot on the machine I had access to.
-> Also boot time results from the simulation seem too good to be true, and
-> they're much too worse for the generic case to be believable. Therefore
-> I'm posting only results from the physical server platform.
-> 
-> ======= Compilation
-> Clang was used to compile the series (make LLVM=1) since gcc doesn't
-> seem to have support for KASAN tag-based compiler instrumentation on
-> x86.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601130334.mSDifI9D-lkp@intel.com/
 
-OK, known issues and they are understandable.  With this patchset is
-there any way in which our testers can encounter these things?  If so
-can we make changes to protect them from hitting known issues?
+All errors (new ones prefixed by >>):
+
+>> drivers/bluetooth/btusb.c:4640:20: error: use of undeclared identifier 'btusb_suspend'
+    4640 |         .suspend        = pm_ptr(btusb_suspend),
+         |                                  ^
+>> drivers/bluetooth/btusb.c:4641:20: error: use of undeclared identifier 'btusb_resume'; did you mean 'btusb_reset'?
+    4641 |         .resume         = pm_ptr(btusb_resume),
+         |                                  ^~~~~~~~~~~~
+         |                                  btusb_reset
+   include/linux/pm.h:472:53: note: expanded from macro 'pm_ptr'
+     472 | #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+         |                                                     ^
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^
+   drivers/bluetooth/btusb.c:979:13: note: 'btusb_reset' declared here
+     979 | static void btusb_reset(struct hci_dev *hdev)
+         |             ^
+   2 errors generated.
+
+
+vim +/btusb_suspend +4640 drivers/bluetooth/btusb.c
+
+  4635	
+  4636	static struct usb_driver btusb_driver = {
+  4637		.name		= "btusb",
+  4638		.probe		= btusb_probe,
+  4639		.disconnect	= btusb_disconnect,
+> 4640		.suspend	= pm_ptr(btusb_suspend),
+> 4641		.resume		= pm_ptr(btusb_resume),
+  4642		.id_table	= btusb_table,
+  4643		.supports_autosuspend = 1,
+  4644		.disable_hub_initiated_lpm = 1,
+  4645	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
