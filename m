@@ -1,89 +1,183 @@
-Received: from mail-lj1-f194.google.com (mail-lj1-f194.google.com [209.85.208.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746C41B3925
-	for <llvm@lists.linux.dev>; Mon, 12 Jan 2026 01:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451322F5A23;
+	Mon, 12 Jan 2026 02:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768182412; cv=none; b=lZY+6aXzxH6syq+VOQOWI9zoum0LQhD21+bfiartYeAhIugoNJxBVHQDNSQyTX0hcO6bw/UwEY73igZqZltZoL6n3vGHRC5gWzhdVsKYfw2Js8uIbEYgDpTA0wnpwLfavgoAarCEXK/05zjTlRIDQPIwZ9DxlG2Z2VXxndL3Ibo=
+	t=1768185072; cv=none; b=fLzFYGHUm47/2qxW/72JM9MOWUAhJmS1pTd8hCvRWIpYBqgIH8J5XRr+2GGXFqKaFAh4WdcphE4N/HUHa+TcZSLF/ZCPT1yXYRET+J/E7i8X93X1LKNc9VVOf2BaDvcLefXJJ3ZZEYd+gBlWS9//ijyMvCM78gEpBV9b7/1oefY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768182412; c=relaxed/simple;
-	bh=nEbS/u2RQQcYbrbJKPWfQ5L+q5LiXJAFL1FpwJCPoC8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=hlSQDz9Vt0oK/eFFr4gplTtItzjwvkNOCchkw0E/JVvyuKO1lAGdNYosjhxGt7AhteA+GYzPABHwIO8/T4JLjoMupA+onaembZFCbnxoQIR0KZlC2BYxgy6zaimJSHN36aJTBcsH11TkTGZg5wf50cP0IWmzslmKjH+lqYwVW6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pb6WIrGa; arc=none smtp.client-ip=209.85.208.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768185072; c=relaxed/simple;
+	bh=hhZVXNdiDm27B6GL7CLn6BHevsMxpMVhs9ifBa3TKkg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=fGoQeu5/YkY/YMleJK6J4aPs01Q4W+75XhPt6eQL0k1J906eziSy3RMPsd2J4mrkwaAkUl8p51j3+XaVcjk3Q971+bQgBB502wZJPplrW4JguhLnrBqPHw5vMjBVz4pKBvLdnRn/OkrNL6G7Tqy0Gm/2cx+rT5kFskQaTEv92+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HRC54ISO; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pb6WIrGa"
-Received: by mail-lj1-f194.google.com with SMTP id 38308e7fff4ca-382fa0dc9f4so48427741fa.3
-        for <llvm@lists.linux.dev>; Sun, 11 Jan 2026 17:46:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768182410; x=1768787210; darn=lists.linux.dev;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nEbS/u2RQQcYbrbJKPWfQ5L+q5LiXJAFL1FpwJCPoC8=;
-        b=Pb6WIrGabHkwv8H+1ZyzeqDDyTscjg2QazrhnWqB3d5PBdAMEkVWI3/cUKg75qee0T
-         qh34Nz7eLhoeq5nfOHLTAzZVXpq6smRXt6J3zHk/zAR/GC+t8cD08RpLrKAbo88s6Yay
-         bhVdBzTfLAbMPbkmzsgTta4c6mOb5wgfE9v5A+YvlJrUuJiCbO1iQ8tpBCr1LwYpZHOr
-         D6fC92dtjWCdMfKKCYNRo+ndWZ9R4uqVTwe70j3gvNJykzn3bJmmHAqSt3Zcjva4xj7L
-         A8llPEUHdGoSwXXy1bF0oGi1B/er3ncTMq6nmxFEsK9EG967gw5i5qAQ38wCTJ7qx4nA
-         lolQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768182410; x=1768787210;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nEbS/u2RQQcYbrbJKPWfQ5L+q5LiXJAFL1FpwJCPoC8=;
-        b=UDQzvDT/U81ctzmipJWi8WM9IwgVhF9wR66UjSCNo/RbjmMb0eyV6DqCRliAuV3WPW
-         KzJJFOyvv54PrdRqWX9CGydRbkt3ILr5ILy/g4Q2w0ZCDrNKstEU2gZu/xA/nwGakmJo
-         9i41pzXsaTl2jpL2lySmMWAFcas/hgXFWDQMJgG+zRAboEj0Tm5ajhgnHNk0uHSvBTMX
-         vzrfLKC/CSSCVz4sWiJiDw5J5ZV64OPFEgD5uct6QXLXH1ka7QFXVTdg8vNBaCFI4eQx
-         XfgPZcWWUlJj/XXYH2UjlG3qAMPi3njG0sANnvBnj6r59HV2ib7Gsld0qGTTlAZSL6/o
-         zisg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAfIknTFiSXQ7e8AYxiQlkNRb0j1lAct2VS7KJU4ugztdPD3e4j9MOwta/sG1Ccz2g3uBO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy3pLIeKRuhQeY/eUY0R9QGmAGeTa5pwIzCJHllzU3B/nKubC+b
-	qHPE7wmSiEe0aDGKX+8Sdz8Ji34c9Es1Lan1cs3BKxJUFapoE2tHzCIqqmEq4fi6Fg0wpfKgXM2
-	XybdVa0GCR5O61CN9nDC51jSlwXbJYkw=
-X-Gm-Gg: AY/fxX4Hkb4wLBK4lgNle+kIr6pgxP3fVGKP4HpyMHC9pED5S12MdlT6lkQHDh5w4CE
-	Uj8lb0LLFYPPkYvyqAexY9cTRU00HdVFjeTDSmU7QPbhD1soUQ7SMu2JmXDbyq+zTwLx42bgKXp
-	lRZG/tucee09c+ubPasbvlvtgz6ydWpk0AgxJSPIaFnwu9+NefGxbWKsaflwVvP5fMoyGuGFYND
-	Q+eNTBkrfpTjok0zo4xjYSBFyByUazM1sFZ1Kpv0LIwCeDauMqsicsw0Yvv0DirdoXQU3afc/kY
-	aA5J8o0=
-X-Google-Smtp-Source: AGHT+IFFpwzTXrZRWWTS4SqiF2TooCPfdND7LQbcPh92LwGsCcyKVlkAaUkkFBv7cb0PtOc7uKfEgzgNAyHXbkUFUVQ=
-X-Received: by 2002:a05:651c:2103:b0:383:46e:4b50 with SMTP id
- 38308e7fff4ca-383046e4dcamr54169621fa.40.1768182409357; Sun, 11 Jan 2026
- 17:46:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HRC54ISO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768185071; x=1799721071;
+  h=date:from:to:cc:subject:message-id;
+  bh=hhZVXNdiDm27B6GL7CLn6BHevsMxpMVhs9ifBa3TKkg=;
+  b=HRC54ISOl6de4QndD0jwKB4/ISZwpKbIZbmal6BfTwKNXMoTAfQGs8P0
+   nYNoPM7NOV4+ftTnebLNIP/DXpnafdYLhsSZ+6LX3dAOeCuLXk832x49e
+   LxH9fs3oZKrkgKMsA7E6tQTJN7z07Gn9GkBQxW9Kjt2zmx1RDFGKLI+zo
+   GbK2uYXu5P7k3eznSE+XGR7oM5DZjDSBwbvQCQmz+ydzgkbuiZ2VoPxI2
+   xbDMNKvdzwMATcT30zDPKudFvW/kAmFe5zhzL13Vj79NJC0kFNG2vCweE
+   6hvy3B2cYiC4e/Q6khsOCxFj0PNlzYlemLc4aZ1rtD+cbVoY8DYdpQG5b
+   w==;
+X-CSE-ConnectionGUID: wE5ObWBgRmanlNYs6L1A+g==
+X-CSE-MsgGUID: 8K0oSjwOQ+m7UKcKW9zaEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="79751899"
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="79751899"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2026 18:31:10 -0800
+X-CSE-ConnectionGUID: JUzlh+HjRN+X8GHN/ke1iQ==
+X-CSE-MsgGUID: 3xy1FAL6TG6JmA54R1he4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="204678201"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 11 Jan 2026 18:30:49 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vf7ha-00000000Csq-09QZ;
+	Mon, 12 Jan 2026 02:30:42 +0000
+Date: Mon, 12 Jan 2026 10:29:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [frederic-dynticks:timers/core 13/15]
+ kernel/sched/cputime.c:481:65: error: call to undeclared function
+ 'vtime_enabled_this_cpu'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202601121033.Q9ivcFQ9-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20251223084337.3789-1-hupu.gm@gmail.com> <20251223084337.3789-3-hupu.gm@gmail.com>
-In-Reply-To: <20251223084337.3789-3-hupu.gm@gmail.com>
-From: hupu <hupu.gm@gmail.com>
-Date: Mon, 12 Jan 2026 09:46:37 +0800
-X-Gm-Features: AZwV_Qh31RHE-ZoDZTo_QRvvWB2SkShFywUC-YhkU2L6OpiFx26tkfkIuGOSbSI
-Message-ID: <CADHxFxQkffVfxfjkX5+F5Dg4ewibB41aXSo6f5icVwD8fghjog@mail.gmail.com>
-Subject: Re: [RFC 2/2] perf build: Prefer kernel source headers for BPF skeletons
-To: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
-	james.clark@linaro.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, hupu.gm@gmail.com
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Maintainers,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/core
+head:   dbfc29e2be8d36d0159dc4337c7362bf51c8da9f
+commit: 68fe31b4f141a343ee788815606d24da6609cb86 [13/15] sched/cputime: Handle idle irqtime gracefully
+config: riscv-randconfig-002-20260112 (https://download.01.org/0day-ci/archive/20260112/202601121033.Q9ivcFQ9-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260112/202601121033.Q9ivcFQ9-lkp@intel.com/reproduce)
 
-Sorry for the noise.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601121033.Q9ivcFQ9-lkp@intel.com/
 
-This patch was sent nearly three weeks ago, but I have not received
-any feedback yet.
-I am resending this email as a gentle reminder in case it was missed.
+All errors (new ones prefixed by >>):
 
-Thank you very much for your time and review.
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     838 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:108:53: note: expanded from macro 'insb'
+     108 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:846:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     846 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:109:53: note: expanded from macro 'insw'
+     109 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:854:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     854 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:110:53: note: expanded from macro 'insl'
+     110 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:863:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     863 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsb'
+     122 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:872:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     872 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsw'
+     123 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:881:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     881 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:124:55: note: expanded from macro 'outsl'
+     124 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:7:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_policy.c:57:
+>> kernel/sched/cputime.c:481:65: error: call to undeclared function 'vtime_enabled_this_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     481 |         if (!vtime_generic_enabled_this_cpu() && (irqtime_enabled() || vtime_enabled_this_cpu()))
+         |                                                                        ^
+   kernel/sched/cputime.c:489:65: error: call to undeclared function 'vtime_enabled_this_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     489 |         if (!vtime_generic_enabled_this_cpu() && (irqtime_enabled() || vtime_enabled_this_cpu()))
+         |                                                                        ^
+   7 warnings and 2 errors generated.
 
-Best regards,
-hupu
+
+vim +/vtime_enabled_this_cpu +481 kernel/sched/cputime.c
+
+   476	
+   477	void kcpustat_irq_enter(ktime_t now)
+   478	{
+   479		struct kernel_cpustat *kc = kcpustat_this_cpu;
+   480	
+ > 481		if (!vtime_generic_enabled_this_cpu() && (irqtime_enabled() || vtime_enabled_this_cpu()))
+   482			kcpustat_idle_stop(kc, now);
+   483	}
+   484	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
