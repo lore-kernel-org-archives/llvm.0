@@ -1,153 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C167F32ABC2
-	for <llvm@lists.linux.dev>; Mon, 12 Jan 2026 20:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357E833E352;
+	Mon, 12 Jan 2026 20:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768249680; cv=none; b=lAwhtEwgaeBIcPS0ywJDTWPIavTGX4o2byHjsgsqfK/MYIn0+TIzeInnV+zV2EANwST1tH64uShPNjdGT+7sHWgOI9fwizDkGTICqLhjM3C2HnK7/aTxcybopRWBz8uwVw5tt8T6LRpqYMD6OTIR/dM6EPZ3p3PWdYv5n73PImw=
+	t=1768250037; cv=none; b=lhs9juyPTnQvZqxnDMfgZguXW4y5SHm8/I7/s8Fs0Mt0iUQYbTTDdvx5n63OAvKHBpYxkUfWKFKjS9oC1YMN5WFDds4U4fs8x4StQqbT3CI/E3HfCuHLjFGrk6iOHrzpGHbwEd3Xs2tg+TJsM1Jckm6EG/ctfHj2EO+pTqWWWx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768249680; c=relaxed/simple;
-	bh=t2fdhdnYewNpKea12/Gs+AVw/4a8pJY6L//ggFDOvMY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i4kbAKfJokBjPcl4aCailwgzl6xUrYYptZq95LyUeqnHHT6loU+QUJnCSIEQmN7cDijNiG9xWVlEIIygtzwBwIMuCvdfB9O8VUq++/bZHvYJMC4B7U+pgauOlZciodUpCq2+lQkamS2avJ92rZXTfRZTUB5KKHWeuPEyAF69NvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fa0lO8rg; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1768250037; c=relaxed/simple;
+	bh=8BX5GpPt9sxcVrHLpwm2pr6ypxDcKVN5RIY9nBUe9jc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tkJ5uR3U2XgDT8yf0t5KYx+RWHCtzmXIahCDYi82TA6AdCUllpnS9I3Rv/T4l/mm4JwFg1dkLo1yVzScTDoJONJXJ66PXD/WX7M+n0YyC6V1iF05S7BngSj1b+VWXpCoRoXH4P1izH4BqTzzgVw2RjUi0FPejhREEob+6PBXmPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cgu6iFAy; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fa0lO8rg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cgu6iFAy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768249678; x=1799785678;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=t2fdhdnYewNpKea12/Gs+AVw/4a8pJY6L//ggFDOvMY=;
-  b=fa0lO8rgyziZq98noCwmP6xWSr7pLQV6KOhg2NDmk08CbNonl0G7BS5m
-   /MinaASxrlvhVYjSb4s+pT8nAmyOP+YBrV5zEn1iM+znA0E+5bAKXaPo2
-   2CjJqX9DabGXiV7ZbCQF4Trn96q2HtHWgrLK5VfSEUlmWNoP+TWEFKhyz
-   L3tmgUbd44ld+Dk88CAhjpfBSWNt8kpoPG2S4sKF1RMx5C77kDa9v4Wis
-   xDppa7wYETRqvmstzyosBBNeBEz7y4wst1X4s1CK3Njj55Be6ymGcpLbD
-   hqFtx21FDC8RixVt4AnUOfUxA+g5nFJRjqTCwbpsJWqBVMgGWkWxFj//x
-   A==;
-X-CSE-ConnectionGUID: 2zcxKDLFQmOIK89lGEMonA==
-X-CSE-MsgGUID: 8YJv6wZgSt2bkxDVZ4XcKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69443998"
+  t=1768250036; x=1799786036;
+  h=date:from:to:cc:subject:message-id;
+  bh=8BX5GpPt9sxcVrHLpwm2pr6ypxDcKVN5RIY9nBUe9jc=;
+  b=cgu6iFAyLvHgkGERqbcWjc+ne9R7X9lhyRRb/CXUHH7r4A7W3HRq/Zp4
+   Nx8tshEeZUJ+WWZnr27RVIvS++EyFTvJgf07Ril7QYKw0I5RMGoIT3hmb
+   DghOq65AQ28nyAXYt9nQkHg4S0GYxNTCpcPk8OPdFdpqAJqAwRw9dV17+
+   j7XqqjALk3yJH9GhIRdE240FsX9hrY2oXaBNXjlQiI2PES1hCgBaqiXCa
+   IzegWvFNFKUPAGlffwqKNGI1NtfZkZVHRN3gh60Lb8NGxczpPkFpPadte
+   InrC2gsHCYuUd9xMOu5f3V1BLABzb0T0d5vmUfcGyUtGADkAnNwU/wTsn
+   g==;
+X-CSE-ConnectionGUID: 2sjpHeosSJyLiTKl/rqyag==
+X-CSE-MsgGUID: vZUMZmb8ToWxNdJofBD21Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="73164092"
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="69443998"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 12:27:58 -0800
-X-CSE-ConnectionGUID: 3Fkudj2QRTePIWwm3VElwA==
-X-CSE-MsgGUID: aaSqAWTbSpSfrO7GygXATQ==
+   d="scan'208";a="73164092"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 12:33:54 -0800
+X-CSE-ConnectionGUID: WArX1HSEQmWC338DwGdspg==
+X-CSE-MsgGUID: OMxjS0bMRZOktnulur4ZDA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="208659007"
-Received: from vverma7-desk1.amr.corp.intel.com (HELO [10.125.110.123]) ([10.125.110.123])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 12:27:56 -0800
-Message-ID: <9d78f71b-cbf1-4936-bc72-befa6d6bfe35@intel.com>
-Date: Mon, 12 Jan 2026 12:27:54 -0800
+   d="scan'208";a="209021980"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 12 Jan 2026 12:33:53 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vfObm-00000000Dqo-1dXn;
+	Mon, 12 Jan 2026 20:33:50 +0000
+Date: Tue, 13 Jan 2026 04:33:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-next 13/17] net/core/skbuff.c:7280:33:
+ error: use of undeclared identifier 'bvec'
+Message-ID: <202601130437.tJhWp6uK-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 00/14] kasan: x86: arm64: KASAN tag-based mode for x86
-To: Andrew Morton <akpm@linux-foundation.org>,
- Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: corbet@lwn.net, morbo@google.com, rppt@kernel.org,
- lorenzo.stoakes@oracle.com, ubizjak@gmail.com, mingo@redhat.com,
- vincenzo.frascino@arm.com, maciej.wieczor-retman@intel.com, maz@kernel.org,
- catalin.marinas@arm.com, yeoreum.yun@arm.com, will@kernel.org,
- jackmanb@google.com, samuel.holland@sifive.com, glider@google.com,
- osandov@fb.com, nsc@kernel.org, luto@kernel.org, jpoimboe@kernel.org,
- Liam.Howlett@oracle.com, kees@kernel.org, jan.kiszka@siemens.com,
- thomas.lendacky@amd.com, jeremy.linton@arm.com, dvyukov@google.com,
- axelrasmussen@google.com, leitao@debian.org, ryabinin.a.a@gmail.com,
- bigeasy@linutronix.de, peterz@infradead.org, mark.rutland@arm.com,
- urezki@gmail.com, brgerst@gmail.com, hpa@zytor.com, mhocko@suse.com,
- andreyknvl@gmail.com, weixugc@google.com, kbingham@kernel.org,
- vbabka@suse.cz, nathan@kernel.org, trintaeoitogc@gmail.com,
- samitolvanen@google.com, tglx@kernel.org, thuth@redhat.com,
- surenb@google.com, anshuman.khandual@arm.com, smostafa@google.com,
- yuanchu@google.com, ada.coupriediaz@arm.com, dave.hansen@linux.intel.com,
- kas@kernel.org, nick.desaulniers+lkml@gmail.com, david@kernel.org,
- bp@alien8.de, ardb@kernel.org, justinstitt@google.com,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, x86@kernel.org
-References: <cover.1768233085.git.m.wieczorretman@pm.me>
- <20260112102957.359c8de904b11dc23cffd575@linux-foundation.org>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20260112102957.359c8de904b11dc23cffd575@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 1/12/26 10:29, Andrew Morton wrote:
-> On Mon, 12 Jan 2026 17:26:29 +0000 Maciej Wieczor-Retman <m.wieczorretman@pm.me> wrote:
->> The patchset aims to add a KASAN tag-based mode for the x86 architecture
->> with the help of the new CPU feature called Linear Address Masking
->> (LAM). Main improvement introduced by the series is 2x lower memory
->> usage compared to KASAN's generic mode, the only currently available
->> mode on x86. The tag based mode may also find errors that the generic
->> mode couldn't because of differences in how these modes operate.
-> Well this is a hearty mixture of arm, x86 and MM.  I guess that means
-> mm.git.
-> 
-> The review process seems to be proceeding OK so I'll add this to
-> mm.git's mm-new branch, which is not included in linux-next.  I'll aim
-> to hold it there for a week while people check the patches over and
-> send out their acks (please).  Then I hope I can move it into mm.git's
-> mm-unstable branch where it will receive linux-next exposure.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
+head:   8dc07632381d372883f12b9ca6da7438ce683a33
+commit: 586e10988ec72acea43cbc695cec236fd69c57f3 [13/17] net: Perform special handling for a splice from a bvecq
+config: i386-randconfig-011-20260113 (https://download.01.org/0day-ci/archive/20260113/202601130437.tJhWp6uK-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130437.tJhWp6uK-lkp@intel.com/reproduce)
 
-Yeah, it'll be good to get it some more testing exposure.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601130437.tJhWp6uK-lkp@intel.com/
 
-But, we definitely don't want it going upstream until it's more
-thoroughly reviewed than it stands. Maciej, this would be a good time to
-make sure you have a good idea who needs to review this and go rattle
-some cages.
+All errors (new ones prefixed by >>):
+
+>> net/core/skbuff.c:7280:33: error: use of undeclared identifier 'bvec'
+    7280 |                 void *kaddr = kmap_local_bvec(bvec, offset);
+         |                                               ^
+   1 error generated.
+
+
+vim +/bvec +7280 net/core/skbuff.c
+
+  7265	
+  7266	static __always_inline
+  7267	size_t iterate_one_bvec(struct bio_vec *p, size_t skip, size_t len,
+  7268				void *priv, void *priv2, iov_step_f step)
+  7269	{
+  7270	#ifdef CONFIG_HIGHMEM
+  7271		size_t progress = 0;
+  7272	
+  7273		if (skip >= p->bv_len)
+  7274			return 0;
+  7275	
+  7276		len = umin(len, p->bv_len - skip);
+  7277		while (len > 0) {
+  7278			size_t remain, consumed;
+  7279			size_t offset = p->bv_offset + skip, part;
+> 7280			void *kaddr = kmap_local_bvec(bvec, offset);
+  7281	
+  7282			part = umin(len, PAGE_SIZE - offset % PAGE_SIZE);
+  7283			remain = step(kaddr, progress, part, priv, priv2);
+  7284			kunmap_local(kaddr);
+  7285	
+  7286			consumed = part - remain;
+  7287			len -= consumed;
+  7288			progress += consumed;
+  7289			skip += consumed;
+  7290			if (remain)
+  7291				break;
+  7292		}
+  7293	
+  7294		return progress;
+  7295	#else
+  7296		return len - step(bvec_virt(p) + skip, 0, len, priv, priv2);
+  7297	#endif
+  7298	}
+  7299	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
