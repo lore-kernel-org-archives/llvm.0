@@ -1,59 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518AF318EC1;
-	Mon, 12 Jan 2026 19:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD68E318EF8;
+	Mon, 12 Jan 2026 19:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768245594; cv=none; b=mKEPuGrv337d6zcZsBNfYiPlx+6riSLCRvc+ilE+GM6Clq1o/wWz2E5vOf1AxSjpXhJF4WPjsaw5dnleoBKABHu2eRgcMzav/83RLU9vfbnoZi5a4GOLx/d6+V5oqJo3mwkIKiNmnsRrVx47i3VozOfeVAbqpjfB2ScLrGGIkbk=
+	t=1768245598; cv=none; b=dhR0ZZu5l/GoXyf+VsIngDyYODxGCjhnHF/FQtSf/euiJg3OSSlQST65bzCaJeuqAQWA3SgQ5GhJ+acMfzmtFI6qV0OoJO3BlirVeC8zc47FLQlh52pftyq/s22miHpFn7/H6+9u6gqp/6ALbGlMcfXVF6/76ydrLDcsUTjmqfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768245594; c=relaxed/simple;
-	bh=i2o5OSwgZxueKsGzvOapUi10A7iexUAqUjRdR47rGNE=;
+	s=arc-20240116; t=1768245598; c=relaxed/simple;
+	bh=8XdDuYY8o16AHBqptf2+Lenxj/jSJqYCRVV3ayhVeHI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Un4a0uvGRJira2Z/40+ypg20dhaZM3a63yuVHgSg3GDkt/iyFS8Y0wNCvyiEfHW9FdTdWQmRuHka9GGCMI8swof1zTEhxgD36MvzN92o3Bx5d8+a7iLZ/s0fSX5H4LdigpQ3AqU0NCD2I/Xx2KwbyPuvuzdzkyyeCrO41wf5t5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oi3QVI3h; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=PyHKMYcbFN4dz0R7XKvYXejB0XnSoAEbqhKYJrnoYKLxEnfS9mf6vfGk2P0MnS0yEGyxAWpQo+Tx+tpfU+u2MFaYiTgtR4A1r3diV8qfEE/LQCjtuQcTxLzgerNNIl7WSrSxQ8jrhgVmKyjwzKswjhH8GDFfZko4WK/QbVm2WCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i4dq3UQu; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oi3QVI3h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i4dq3UQu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768245591; x=1799781591;
+  t=1768245596; x=1799781596;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i2o5OSwgZxueKsGzvOapUi10A7iexUAqUjRdR47rGNE=;
-  b=Oi3QVI3helfH/yfHKrwfy6h95/Igpk5mLWVdiutkFskg2mf4PI51jY0P
-   UC9Cg7y38dcQlaqSEnvezxJwnrwIavQbzBd43Gd5q1o9Hh8pMgqXGcUIT
-   I9WEMEXEwvEG+Q2WnLJxkAeW0jwBdTX0wayw26D7K+EnWwzUybq+G4EZQ
-   GjdCbci56vJhszFbCQGRTlQfOjQehykRnMsvX64mpGRWN5maLD46zkLhA
-   wOGkU/Ou/GYwPhQ+yXRN/CelVi8p+7lPITgtz04FCWaf40pI+1IitrHMT
-   sQF9jclM9l8EWmY64R7Zm9WaJWdzvkA/eLlu1JI4UX2XHoBDiou1baUZI
-   g==;
-X-CSE-ConnectionGUID: WP6fv/7cTWimZBDHbl9JIA==
-X-CSE-MsgGUID: 1gkdd9a8ST6tjgAWwClfFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69259347"
+  bh=8XdDuYY8o16AHBqptf2+Lenxj/jSJqYCRVV3ayhVeHI=;
+  b=i4dq3UQuLJKe0UMkY2PBi/sS5UEiZ3MC7haLiYb2wmgqdc/r9+7O1WEC
+   7Ay8FKRVgZtTkaET2HqF5Ag4qlGp+Tuh68Wo34iF6P9xLgEGo0ktY3QcM
+   oVX3DoUho2NbqSw0qdtcuXRmsuevqrAr+8su1fQldrm7WU6UF9GLk5LzF
+   DqfWhxXPNp/o6im2TYhqg5QA1L71qv+Fj2s0jMZH0P6+tl2ydfd+ADb3g
+   zvuOO3kFYxMm++r/gQ+EWxiAKuvk1prCnw3KoArMCTCX4MwOtDkTt+AFT
+   dfsJ83a0yu7EAB6u1CYpAzGS7hEajbO5DtfZ1oVJjGOPfs/WIZEANlnMu
+   w==;
+X-CSE-ConnectionGUID: v7kg7J1mQLKsEaampQWGdQ==
+X-CSE-MsgGUID: DdFyBvAbSMa66SzxQS/JHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69450953"
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="69259347"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 11:19:50 -0800
-X-CSE-ConnectionGUID: x11Kegm6RCS/lIPaSO/jAQ==
-X-CSE-MsgGUID: voSqYQ6ITIexQAlXSQrEwQ==
+   d="scan'208";a="69450953"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 11:19:54 -0800
+X-CSE-ConnectionGUID: MXpzZ1xnR9iTu7OhIX4rXg==
+X-CSE-MsgGUID: +gG6zgHgS7iFR/wRaFE7Qg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="235411264"
+   d="scan'208";a="203987512"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Jan 2026 11:19:49 -0800
+  by orviesa009.jf.intel.com with ESMTP; 12 Jan 2026 11:19:49 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vfNS6-00000000Dmg-1YO0;
+	id 1vfNS6-00000000Dme-1S2R;
 	Mon, 12 Jan 2026 19:19:46 +0000
-Date: Tue, 13 Jan 2026 03:19:10 +0800
+Date: Tue, 13 Jan 2026 03:19:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bastien Nocera <hadess@hadess.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] Bluetooth: btusb: Use pm_ptr instead of #ifdef CONFIG_PM
-Message-ID: <202601130334.mSDifI9D-lkp@intel.com>
-References: <20260112105127.3664608-1-hadess@hadess.net>
+To: Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Eric Dumazet <edumazet@google.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Rob Herring <robh@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, linux-rdma@vger.kernel.org,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+	intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Prathosh Satish <Prathosh.Satish@microchip.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Mark Bloch <mbloch@nvidia.com>, linux-kernel@vger.kernel.org,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next 06/12] dpll: Support dynamic
+ pin index allocation
+Message-ID: <202601130301.7QjXjwFp-lkp@intel.com>
+References: <20260108182318.20935-7-ivecera@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,65 +81,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260112105127.3664608-1-hadess@hadess.net>
+In-Reply-To: <20260108182318.20935-7-ivecera@redhat.com>
 
-Hi Bastien,
+Hi Ivan,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on bluetooth/master linus/master v6.19-rc5 next-20260109]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/Bluetooth-btusb-Use-pm_ptr-instead-of-ifdef-CONFIG_PM/20260112-185450
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20260112105127.3664608-1-hadess%40hadess.net
-patch subject: [PATCH] Bluetooth: btusb: Use pm_ptr instead of #ifdef CONFIG_PM
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260113/202601130334.mSDifI9D-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Vecera/dt-bindings-dpll-add-common-dpll-pin-consumer-schema/20260109-022618
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260108182318.20935-7-ivecera%40redhat.com
+patch subject: [Intel-wired-lan] [PATCH net-next 06/12] dpll: Support dynamic pin index allocation
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260113/202601130301.7QjXjwFp-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130334.mSDifI9D-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130301.7QjXjwFp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601130334.mSDifI9D-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601130301.7QjXjwFp-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/bluetooth/btusb.c:4640:20: error: use of undeclared identifier 'btusb_suspend'
-    4640 |         .suspend        = pm_ptr(btusb_suspend),
-         |                                  ^
->> drivers/bluetooth/btusb.c:4641:20: error: use of undeclared identifier 'btusb_resume'; did you mean 'btusb_reset'?
-    4641 |         .resume         = pm_ptr(btusb_resume),
-         |                                  ^~~~~~~~~~~~
-         |                                  btusb_reset
-   include/linux/pm.h:472:53: note: expanded from macro 'pm_ptr'
-     472 | #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
-         |                                                     ^
-   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
-     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-         |                                            ^
-   drivers/bluetooth/btusb.c:979:13: note: 'btusb_reset' declared here
-     979 | static void btusb_reset(struct hci_dev *hdev)
-         |             ^
-   2 errors generated.
+>> drivers/dpll/dpll_core.c:499:21: warning: overflow in expression; result is -2147483648 with type 'int' [-Winteger-overflow]
+     499 |         pin_idx -= INT_MAX + 1;
+         |                            ^
+   1 warning generated.
 
 
-vim +/btusb_suspend +4640 drivers/bluetooth/btusb.c
+vim +/int +499 drivers/dpll/dpll_core.c
 
-  4635	
-  4636	static struct usb_driver btusb_driver = {
-  4637		.name		= "btusb",
-  4638		.probe		= btusb_probe,
-  4639		.disconnect	= btusb_disconnect,
-> 4640		.suspend	= pm_ptr(btusb_suspend),
-> 4641		.resume		= pm_ptr(btusb_resume),
-  4642		.id_table	= btusb_table,
-  4643		.supports_autosuspend = 1,
-  4644		.disable_hub_initiated_lpm = 1,
-  4645	
+   490	
+   491	static void dpll_pin_idx_free(u32 pin_idx)
+   492	{
+   493		if (pin_idx <= INT_MAX)
+   494			return; /* Not a dynamic pin index */
+   495	
+   496		/* Map the index value from dynamic pin index range to IDA range and
+   497		 * free it.
+   498		 */
+ > 499		pin_idx -= INT_MAX + 1;
+   500		ida_free(&dpll_pin_idx_ida, pin_idx);
+   501	}
+   502	
 
 -- 
 0-DAY CI Kernel Test Service
