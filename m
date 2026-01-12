@@ -1,233 +1,199 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBF12D8DD4;
-	Mon, 12 Jan 2026 14:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD5D2D8375;
+	Mon, 12 Jan 2026 14:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768229609; cv=none; b=ZbouOXNKeFTeB5EWda+CRTD6lD8dT6XrSuEmCI6yKGWu1NjjvZeVko4LYIQFTPUUyBShKYbxxooac/DthTiXsbdMaHME7WsU66LnrAw3tHEUkN/hZ+oUpBYdBTCjin1DoIzgS0etmNRMltoPDswnT7iRdzBAecQTF1aRN6IotF4=
+	t=1768229924; cv=none; b=UYH/Oy1Hy6H0BkJwKGUJAsAwC9T6fO72Wh9yz2pesK/+Axm7+919yYMxYGjFEcb568u3U2QLvPLmVY2Y6GcFBkP4C9ueScMUfVA2VtcSMz+ioPOQyP4SJ0WXI2jIt5b2KwjbIoobvjMBITx4Rk+GQsqNp3mSOvI93jCYEAkLbQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768229609; c=relaxed/simple;
-	bh=o7nqUzvqQ9oJ4xLDTBcff1jYIEXkQK0Ts9/HV9dsjKw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=nRLkTgqeEAXPJEf0s+uBTKu4k+d2aXlA55V9cKFFhqdSef9zFUt8822cNqjMpvEgw+ljtzdIuPwxc8VJ6KUrjKYCvZ7G3WE18IYviegY2BXWU3zbivjdBLlVQ493i6I19OYybMIQKGWLBZfwnYSqDuCcD4bNaj+7oYAdybBRetY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UTMb/XPx; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768229924; c=relaxed/simple;
+	bh=TcP8aCz11Hd2xDXus4EA8Y7dbVgzx5ZbKfqVHRsQz48=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=m3U+UaDQ7IL9jx5Mhav8XRkKjIioHwwbHIivmDkXlBw3O3RetE62tYm8MDNMv8a8pf7J7Fei+XnoqS3I8cVDlYCXdyPWMt7ycsZ+hO4xR5QpldQc8rSeKQoAHZXQLORWlqHSrFTlzC/Z4qOpTv60Xo9L6rV+VcLGnnC97ZA9Pcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WthNu8Wb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UTMb/XPx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768229607; x=1799765607;
-  h=date:from:to:cc:subject:message-id;
-  bh=o7nqUzvqQ9oJ4xLDTBcff1jYIEXkQK0Ts9/HV9dsjKw=;
-  b=UTMb/XPxS+dKUzQ5OBFlPViOoVz3/z+XFV9yVGU6ChlQtPsfmZUz9F9z
-   b3QxKY9uyXYD7p51K2q6C6n0kp/HiDPU/wGy/WlrABMkxPQKqC3Ri9GzH
-   c713k6LOP+F43WnGS1f88EJghH8MlWgrZVt9NO8dNYTXVRznLIyPDQyDj
-   HkEFm/D2EN97z3METyZ9wyjuXTTnLAhVErc6BKdCQ9/a04FW9MXw49Euy
-   24FdkqAp6MoLatwTfdd6zZvw+p4gF5qOi6M0+JNH1v+kMWHTwDqTyYuQD
-   cZ5LSvLoyIuBmyZrvEzD8E92yWpnypwiTq4chhry+k3yw8es71SIuvEH6
-   g==;
-X-CSE-ConnectionGUID: Amqc0cUISkG0aEOMMhLh3g==
-X-CSE-MsgGUID: SDKN4jW/QA6OAZV7WEvWHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69554023"
-X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="69554023"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 06:53:26 -0800
-X-CSE-ConnectionGUID: N8zPr4KsSXqAvIW1PX3ZlA==
-X-CSE-MsgGUID: ewnuJU4FQT+TXJsSncvJEw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="209184746"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 12 Jan 2026 06:53:24 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vfJIH-00000000DRs-41MW;
-	Mon, 12 Jan 2026 14:53:21 +0000
-Date: Mon, 12 Jan 2026 22:52:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dinh Nguyen <dinguyen@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dinguyen:remove_ocp_v4 2/4]
- drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:625:9: error: no member
- named 'stmmac_ocp_rst' in 'struct socfpga_dwmac'; did you mean 'stmmac_rst'?
-Message-ID: <202601122223.ntQbUJHy-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WthNu8Wb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4A3C19423;
+	Mon, 12 Jan 2026 14:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768229924;
+	bh=TcP8aCz11Hd2xDXus4EA8Y7dbVgzx5ZbKfqVHRsQz48=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WthNu8Wb/7yZtL2GioS+un2O2XbJUft41Vqd4XwyQT8Ws6HT2KYMpk1jH5eERe00l
+	 +cOWLRp9rR4ZUaOELHZ6xVsAuQzZbm2M9AMqYfesIJBWDpV3+/L0HWNLSVDNOe9JyD
+	 AsJA5kfnRUBeZZ5ACeQ3VsM2a5T+geC+7jDCEaD6prrgqIYxw07xn28c/sgbz4O2Xy
+	 DMOW29bcXjGW4vwS0I9HZxQV1X2e6F8HYGRSKAYtsRAoVJfPs75MRfObpwOJq2nbXv
+	 Ucpsi1Q5l0YiC+bRNJqZwz9Ct3XrccxusxgQ/YeciYC5hd+ypP8PzYP9ueLV9RvlvL
+	 Lg7DR3zKt17QA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Brendan Jackman <jackmanb@google.com>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Marco Elver <elver@google.com>,
+	Sasha Levin <sashal@kernel.org>,
+	nathan@kernel.org,
+	ardb@kernel.org,
+	mingo@kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.18] x86/sev: Disable GCOV on noinstr object
+Date: Mon, 12 Jan 2026 09:58:03 -0500
+Message-ID: <20260112145840.724774-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260112145840.724774-1-sashal@kernel.org>
+References: <20260112145840.724774-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.5
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git remove_ocp_v4
-head:   304fdccabcccbd3edc8e12cac67521f0513191e7
-commit: 3d0a0b1aae1ed39b4334accb26a51adc839fc150 [2/4] net: stmmac: socfpga: add call to assert/deassert ahb reset line
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260112/202601122223.ntQbUJHy-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260112/202601122223.ntQbUJHy-lkp@intel.com/reproduce)
+From: Brendan Jackman <jackmanb@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601122223.ntQbUJHy-lkp@intel.com/
+[ Upstream commit 9efb74f84ba82a9de81fc921baf3c5e2decf8256 ]
 
-All error/warnings (new ones prefixed by >>):
+With Debian clang version 19.1.7 (3+build5) there are calls to
+kasan_check_write() from __sev_es_nmi_complete(), which violates noinstr.  Fix
+it by disabling GCOV for the noinstr object, as has been done for previous
+such instrumentation issues.
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:625:9: error: no member named 'stmmac_ocp_rst' in 'struct socfpga_dwmac'; did you mean 'stmmac_rst'?
-     625 |         dwmac->stmmac_ocp_rst = devm_reset_control_get_optional(dev, "stmmaceth-ocp");
-         |                ^~~~~~~~~~~~~~
-         |                stmmac_rst
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:66:24: note: 'stmmac_rst' declared here
-      66 |         struct reset_control *stmmac_rst;
-         |                               ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:632:18: warning: missing terminating '"' character [-Winvalid-pp-token]
-     632 |                         dev_warn(dev, "ocp reset is deprecated, please update your
-         |                                       ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:633:20: warning: missing terminating '"' character [-Winvalid-pp-token]
-     633 |                                  device tree.\n");
-         |                                                ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:632:4: error: unterminated function-like macro invocation
-     632 |                         dev_warn(dev, "ocp reset is deprecated, please update your
-         |                         ^
-   include/linux/dev_printk.h:155:9: note: macro 'dev_warn' defined here
-     155 | #define dev_warn(dev, fmt, ...) \
-         |         ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:699:26: error: expected expression
-     699 | MODULE_LICENSE("GPL v2");
-         |                          ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:699:26: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:631:3: note: previous statement is here
-     631 |                 if (ocp_rst)
-         |                 ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:699:26: error: expected '}'
-     699 | MODULE_LICENSE("GPL v2");
-         |                          ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:626:33: note: to match this '{'
-     626 |         if (!plat_dat->stmmac_ahb_rst) {
-         |                                        ^
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:699:26: error: expected '}'
-     699 | MODULE_LICENSE("GPL v2");
-         |                          ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:598:1: note: to match this '{'
-     598 | {
-         | ^
-   3 warnings and 5 errors generated.
+Note that this file already disables __SANITIZE_ADDRESS__ and
+__SANITIZE_THREAD__, thus calls like kasan_check_write() ought to be nops
+regardless of GCOV. This has been fixed in other patches. However, to avoid
+any other accidental instrumentation showing up, (and since, in principle GCOV
+is instrumentation and hence should be disabled for noinstr code anyway),
+disable GCOV overall as well.
 
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Acked-by: Marco Elver <elver@google.com>
+Link: https://patch.msgid.link/20251216-gcov-inline-noinstr-v3-3-10244d154451@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-vim +625 drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+LLM Generated explanations, may be completely bogus:
 
-93d46ea3e984323 Rohan G Thomas        2025-11-01  596  
-8880b6c849916a3 Joachim Eastwood      2015-07-29  597  static int socfpga_dwmac_probe(struct platform_device *pdev)
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  598  {
-8880b6c849916a3 Joachim Eastwood      2015-07-29  599  	struct plat_stmmacenet_data *plat_dat;
-8880b6c849916a3 Joachim Eastwood      2015-07-29  600  	struct stmmac_resources stmmac_res;
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  601  	struct device		*dev = &pdev->dev;
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  602  	int			ret;
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  603  	struct socfpga_dwmac	*dwmac;
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  604  	struct reset_control	*ocp_rst;
-40ae25505fe8346 Dinh Nguyen           2019-06-05  605  	const struct socfpga_dwmac_ops *ops;
-40ae25505fe8346 Dinh Nguyen           2019-06-05  606  
-40ae25505fe8346 Dinh Nguyen           2019-06-05  607  	ops = device_get_match_data(&pdev->dev);
-40ae25505fe8346 Dinh Nguyen           2019-06-05  608  	if (!ops) {
-40ae25505fe8346 Dinh Nguyen           2019-06-05  609  		dev_err(&pdev->dev, "no of match data provided\n");
-40ae25505fe8346 Dinh Nguyen           2019-06-05  610  		return -EINVAL;
-40ae25505fe8346 Dinh Nguyen           2019-06-05  611  	}
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  612  
-8880b6c849916a3 Joachim Eastwood      2015-07-29  613  	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
-8880b6c849916a3 Joachim Eastwood      2015-07-29  614  	if (ret)
-8880b6c849916a3 Joachim Eastwood      2015-07-29  615  		return ret;
-8880b6c849916a3 Joachim Eastwood      2015-07-29  616  
-9086d3f2b5607f4 Jisheng Zhang         2023-09-16  617  	plat_dat = devm_stmmac_probe_config_dt(pdev, stmmac_res.mac);
-8880b6c849916a3 Joachim Eastwood      2015-07-29  618  	if (IS_ERR(plat_dat))
-8880b6c849916a3 Joachim Eastwood      2015-07-29  619  		return PTR_ERR(plat_dat);
-8880b6c849916a3 Joachim Eastwood      2015-07-29  620  
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  621  	dwmac = devm_kzalloc(dev, sizeof(*dwmac), GFP_KERNEL);
-9086d3f2b5607f4 Jisheng Zhang         2023-09-16  622  	if (!dwmac)
-9086d3f2b5607f4 Jisheng Zhang         2023-09-16  623  		return -ENOMEM;
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  624  
-bc8a2d9bcbf1ca5 Dinh Nguyen           2018-06-19 @625  	dwmac->stmmac_ocp_rst = devm_reset_control_get_optional(dev, "stmmaceth-ocp");
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  626  	if (!plat_dat->stmmac_ahb_rst) {
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  627  		ocp_rst = devm_reset_control_get_optional(dev, "stmmaceth-ocp");
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  628  		if (IS_ERR(ocp_rst))
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  629  			return dev_err_probe(dev, PTR_ERR(ocp_rst),
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  630  					     "failed to get ocp reset");
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  631  		if (ocp_rst)
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27 @632  			dev_warn(dev, "ocp reset is deprecated, please update your
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27 @633  				 device tree.\n");
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  634  		plat_dat->stmmac_ahb_rst = ocp_rst;
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  635  	}
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  636  
-3d0a0b1aae1ed39 Dinh Nguyen           2025-12-27  637  	reset_control_deassert(plat_dat->stmmac_ahb_rst = ocp_rst);
-bc8a2d9bcbf1ca5 Dinh Nguyen           2018-06-19  638  
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  639  	ret = socfpga_dwmac_parse_data(dwmac, dev);
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  640  	if (ret) {
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  641  		dev_err(dev, "Unable to parse OF data\n");
-9086d3f2b5607f4 Jisheng Zhang         2023-09-16  642  		return ret;
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  643  	}
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  644  
-9276bfc2df92c6c Russell King (Oracle  2025-04-17  645) 	/* The socfpga driver needs to control the stmmac reset to set the phy
-9276bfc2df92c6c Russell King (Oracle  2025-04-17  646) 	 * mode. Create a copy of the core reset handle so it can be used by
-9276bfc2df92c6c Russell King (Oracle  2025-04-17  647) 	 * the driver later.
-9276bfc2df92c6c Russell King (Oracle  2025-04-17  648) 	 */
-9276bfc2df92c6c Russell King (Oracle  2025-04-17  649) 	dwmac->stmmac_rst = plat_dat->stmmac_rst;
-40ae25505fe8346 Dinh Nguyen           2019-06-05  650  	dwmac->ops = ops;
-91255347bba9637 Russell King (Oracle  2025-04-17  651) 	dwmac->plat_dat = plat_dat;
-9276bfc2df92c6c Russell King (Oracle  2025-04-17  652) 
-8880b6c849916a3 Joachim Eastwood      2015-07-29  653  	plat_dat->bsp_priv = dwmac;
-8880b6c849916a3 Joachim Eastwood      2015-07-29  654  	plat_dat->fix_mac_speed = socfpga_dwmac_fix_mac_speed;
-6bf70d999aa90bc Russell King (Oracle  2025-04-17  655) 	plat_dat->init = socfpga_dwmac_init;
-81b418a65657571 Russell King (Oracle  2024-05-13  656) 	plat_dat->pcs_init = socfpga_dwmac_pcs_init;
-81b418a65657571 Russell King (Oracle  2024-05-13  657) 	plat_dat->pcs_exit = socfpga_dwmac_pcs_exit;
-98a6d9f192d3214 Russell King (Oracle  2024-06-13  658) 	plat_dat->select_pcs = socfpga_dwmac_select_pcs;
-82732789e8e7fb1 Joachim Eastwood      2015-07-29  659  
-93d46ea3e984323 Rohan G Thomas        2025-11-01  660  	ops->setup_plat_dat(dwmac);
-407618d66dba55e Maxime Chevallier     2024-11-22  661  
-1dbefd578d8bd3b Russell King (Oracle  2025-04-17  662) 	return devm_stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
-8880b6c849916a3 Joachim Eastwood      2015-07-29  663  }
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  664  
-40ae25505fe8346 Dinh Nguyen           2019-06-05  665  static const struct socfpga_dwmac_ops socfpga_gen5_ops = {
-40ae25505fe8346 Dinh Nguyen           2019-06-05  666  	.set_phy_mode = socfpga_gen5_set_phy_mode,
-93d46ea3e984323 Rohan G Thomas        2025-11-01  667  	.setup_plat_dat = socfpga_gen5_setup_plat_dat,
-40ae25505fe8346 Dinh Nguyen           2019-06-05  668  };
-40ae25505fe8346 Dinh Nguyen           2019-06-05  669  
-40ae25505fe8346 Dinh Nguyen           2019-06-05  670  static const struct socfpga_dwmac_ops socfpga_gen10_ops = {
-40ae25505fe8346 Dinh Nguyen           2019-06-05  671  	.set_phy_mode = socfpga_gen10_set_phy_mode,
-93d46ea3e984323 Rohan G Thomas        2025-11-01  672  	.setup_plat_dat = socfpga_gen5_setup_plat_dat,
-93d46ea3e984323 Rohan G Thomas        2025-11-01  673  };
-93d46ea3e984323 Rohan G Thomas        2025-11-01  674  
-93d46ea3e984323 Rohan G Thomas        2025-11-01  675  static const struct socfpga_dwmac_ops socfpga_agilex5_ops = {
-93d46ea3e984323 Rohan G Thomas        2025-11-01  676  	.set_phy_mode = socfpga_gen10_set_phy_mode,
-93d46ea3e984323 Rohan G Thomas        2025-11-01  677  	.setup_plat_dat = socfpga_agilex5_setup_plat_dat,
-40ae25505fe8346 Dinh Nguyen           2019-06-05  678  };
-40ae25505fe8346 Dinh Nguyen           2019-06-05  679  
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  680  static const struct of_device_id socfpga_dwmac_match[] = {
-40ae25505fe8346 Dinh Nguyen           2019-06-05  681  	{ .compatible = "altr,socfpga-stmmac", .data = &socfpga_gen5_ops },
-40ae25505fe8346 Dinh Nguyen           2019-06-05  682  	{ .compatible = "altr,socfpga-stmmac-a10-s10", .data = &socfpga_gen10_ops },
-93d46ea3e984323 Rohan G Thomas        2025-11-01  683  	{ .compatible = "altr,socfpga-stmmac-agilex5", .data = &socfpga_agilex5_ops },
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  684  	{ }
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  685  };
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  686  MODULE_DEVICE_TABLE(of, socfpga_dwmac_match);
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  687  
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  688  static struct platform_driver socfpga_dwmac_driver = {
-8880b6c849916a3 Joachim Eastwood      2015-07-29  689  	.probe  = socfpga_dwmac_probe,
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  690  	.driver = {
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  691  		.name           = "socfpga-dwmac",
-6bf70d999aa90bc Russell King (Oracle  2025-04-17  692) 		.pm		= &stmmac_pltfr_pm_ops,
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  693  		.of_match_table = socfpga_dwmac_match,
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  694  	},
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  695  };
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  696  module_platform_driver(socfpga_dwmac_driver);
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14  697  
-23f487f70c73e31 Breno Leitao          2024-01-25  698  MODULE_DESCRIPTION("Altera SOC DWMAC Specific Glue layer");
-c7c52ae74f0bd3a Joachim Eastwood      2015-05-14 @699  MODULE_LICENSE("GPL v2");
+## Analysis of Commit: x86/sev: Disable GCOV on noinstr object
 
-:::::: The code at line 625 was first introduced by commit
-:::::: bc8a2d9bcbf1ca548b1deb315d14e1da81945bea net: stmmac: socfpga: add additional ocp reset line for Stratix10
+### 1. COMMIT MESSAGE ANALYSIS
 
-:::::: TO: Dinh Nguyen <dinguyen@kernel.org>
-:::::: CC: David S. Miller <davem@davemloft.net>
+The commit message clearly explains the problem:
+- With Clang 19.1.7, GCOV instrumentation causes calls to
+  `kasan_check_write()` from `__sev_es_nmi_complete()`
+- This violates the `noinstr` (no instrumentation) attribute requirement
+- The fix follows an established pattern already used in the same file
+  for other sanitizers
 
+Key review tags:
+- Signed-off-by maintainers from Google and AMD (Borislav Petkov, well-
+  known x86 maintainer)
+- Acked-by from Marco Elver (instrumentation/sanitizer expert at Google)
+
+### 2. CODE CHANGE ANALYSIS
+
+The change is trivially simple - one line added to a Makefile:
+
+```makefile
+GCOV_PROFILE_noinstr.o          := n
+```
+
+This disables GCOV code coverage profiling for the `noinstr.o` object
+file. The context shows this follows an established pattern:
+- `UBSAN_SANITIZE_noinstr.o := n` - already disables UBSAN
+- `KASAN_SANITIZE_noinstr.o := n` - already disables KASAN
+- `KCSAN_SANITIZE_noinstr.o := n` - already disables KCSAN
+
+The `noinstr` attribute is critical for code that runs in sensitive
+contexts like NMI handlers, where any unexpected function calls can
+cause deadlocks, crashes, or undefined behavior.
+
+### 3. CLASSIFICATION
+
+This is a **build fix** that prevents instrumentation violations. When
+`noinstr` code gets instrumented:
+- NMI handlers may call functions that aren't safe in NMI context
+- Potential deadlocks if instrumentation takes locks
+- Potential crashes or undefined behavior
+
+This falls squarely under the "build fixes" exception category for
+stable backports.
+
+### 4. SCOPE AND RISK ASSESSMENT
+
+- **Lines changed**: 2 (including blank line)
+- **Files touched**: 1 Makefile only
+- **Complexity**: Minimal
+- **Risk**: Extremely low
+
+This change cannot cause regressions because:
+1. It's a Makefile-only change, not code modification
+2. It only disables optional build-time instrumentation
+3. GCOV is used for code coverage analysis, not production functionality
+4. The pattern is already used in the same file for other sanitizers
+
+### 5. USER IMPACT
+
+- **Affected users**: Those building with GCOV enabled + Clang 19+ + AMD
+  SEV support
+- **Severity if hit**: noinstr violations in NMI handlers can cause
+  crashes or deadlocks - severe
+- **Scope**: Relatively niche configuration, but real for users who hit
+  it
+
+### 6. STABILITY INDICATORS
+
+- Reviewed and acked by instrumentation expert (Marco Elver)
+- Signed off by well-known x86 maintainer (Borislav Petkov)
+- Follows well-established pattern in the kernel
+
+### 7. DEPENDENCY CHECK
+
+- No dependencies on other commits
+- The affected Makefile with existing `*_SANITIZE_noinstr.o` lines
+  exists in stable trees with SEV support
+
+### VERDICT
+
+**Pros:**
+- Trivially small change (1 line)
+- Fixes a real instrumentation violation issue
+- Zero risk of runtime regression
+- Follows established pattern already in the file
+- Well-reviewed by appropriate experts
+- Falls under "build fixes" exception
+
+**Cons:**
+- Requires specific toolchain configuration to trigger
+- Somewhat niche (Clang 19 + GCOV + SEV)
+
+This is a textbook example of a safe, low-risk build fix. It disables
+optional instrumentation for code that must not be instrumented
+(`noinstr`). The change is defensive, harmless, and prevents potential
+crashes/deadlocks in NMI handlers. Even if users don't actively hit the
+issue with their current toolchain, disabling GCOV for noinstr code is
+the correct thing to do.
+
+**YES**
+
+ arch/x86/coco/sev/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/coco/sev/Makefile b/arch/x86/coco/sev/Makefile
+index 3b8ae214a6a64..b2e9ec2f69014 100644
+--- a/arch/x86/coco/sev/Makefile
++++ b/arch/x86/coco/sev/Makefile
+@@ -8,3 +8,5 @@ UBSAN_SANITIZE_noinstr.o	:= n
+ # GCC may fail to respect __no_sanitize_address or __no_kcsan when inlining
+ KASAN_SANITIZE_noinstr.o	:= n
+ KCSAN_SANITIZE_noinstr.o	:= n
++
++GCOV_PROFILE_noinstr.o		:= n
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
