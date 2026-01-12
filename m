@@ -1,146 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f194.google.com (mail-lj1-f194.google.com [209.85.208.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2ED1EBFF7;
-	Mon, 12 Jan 2026 01:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746C41B3925
+	for <llvm@lists.linux.dev>; Mon, 12 Jan 2026 01:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768179987; cv=none; b=JiGI30ljNxJJUuY/2QnEsWGkRtmEU/fInOvDJjCSJuu4SKsdtBWb+eJbqKWXMaxIDRLSvYyrC4z1curhknQ5ZboSFEmIVkFs0fUivN+hbrEIYQUYPwN10bpARc/dZwCj/8HXt+Dts9zNDZln03hWn9iCQmqsu0vsZI0D4Z3TpXE=
+	t=1768182412; cv=none; b=lZY+6aXzxH6syq+VOQOWI9zoum0LQhD21+bfiartYeAhIugoNJxBVHQDNSQyTX0hcO6bw/UwEY73igZqZltZoL6n3vGHRC5gWzhdVsKYfw2Js8uIbEYgDpTA0wnpwLfavgoAarCEXK/05zjTlRIDQPIwZ9DxlG2Z2VXxndL3Ibo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768179987; c=relaxed/simple;
-	bh=bJscLIX8YNa0pTLBuMKLUe5HuNdRKcxMYkcucIl5i8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=poDoTox5ekP4cUMmDGwQInc9al9f55DrYLln+rAFjMZNtbH6muV3lKvoMI/HfwdO0wwd1tSGlZKetcIV+7MoWejNeMZ1q/07Pc/ZOzg1QyRywphU/1xeZcG6IOOJ/TfGFUocB6jMRxCqbozd4OSBnyVy5KFsekEUb0DTRplTPIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ay7vIrFS; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768182412; c=relaxed/simple;
+	bh=nEbS/u2RQQcYbrbJKPWfQ5L+q5LiXJAFL1FpwJCPoC8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=hlSQDz9Vt0oK/eFFr4gplTtItzjwvkNOCchkw0E/JVvyuKO1lAGdNYosjhxGt7AhteA+GYzPABHwIO8/T4JLjoMupA+onaembZFCbnxoQIR0KZlC2BYxgy6zaimJSHN36aJTBcsH11TkTGZg5wf50cP0IWmzslmKjH+lqYwVW6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pb6WIrGa; arc=none smtp.client-ip=209.85.208.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ay7vIrFS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768179986; x=1799715986;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bJscLIX8YNa0pTLBuMKLUe5HuNdRKcxMYkcucIl5i8o=;
-  b=Ay7vIrFSI1Ouf6Z5r1ZKYoLtxddHn5kniwupjUMlxIdf5OYgPZzqnaMo
-   djkev/7rC6rp6jpACS+khgHmQKSrgQR5+Hd0QgMkHNmAImmjkvojtGq52
-   o2t+izk4WrKy0VNhRiPIOd/3v6YjWbb2tDnmkNxrocnHCwLaERURMb4xg
-   QADlTBqD4HGvZcWmpswrQhv/4pF5eaml7Vvll/+Izr4hW5sqJMebjzpLS
-   z1Tk4U9GH1HZFJIFHLu+rnhwvZOAHbEflvrSlCensOwAC5rjWj+mLIU8o
-   DN3k5GwhKBE3Tl7P4duRcgNzkLqlCn7hjBjQBE1qAFGjbYea7di1brDl0
-   g==;
-X-CSE-ConnectionGUID: 1D1feuCrTfSBp3ienIxhLg==
-X-CSE-MsgGUID: x8+6RGGLQZOscehKqa2l8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="72033551"
-X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
-   d="scan'208";a="72033551"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2026 17:06:25 -0800
-X-CSE-ConnectionGUID: FWjlspKDTsiCiYhhRMiAVQ==
-X-CSE-MsgGUID: 7O1Mx+4lRaqh+tGfM3OHeg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
-   d="scan'208";a="209023701"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 11 Jan 2026 17:06:24 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vf6Nw-00000000Coy-3zTF;
-	Mon, 12 Jan 2026 01:06:20 +0000
-Date: Mon, 12 Jan 2026 09:05:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dma-pool: don't allocate DMA32 pool if no 32-bit memory
-Message-ID: <202601120747.TAMpIDnI-lkp@intel.com>
-References: <20260111152632.2133580-1-vladimir.kondratiev@mobileye.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pb6WIrGa"
+Received: by mail-lj1-f194.google.com with SMTP id 38308e7fff4ca-382fa0dc9f4so48427741fa.3
+        for <llvm@lists.linux.dev>; Sun, 11 Jan 2026 17:46:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768182410; x=1768787210; darn=lists.linux.dev;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nEbS/u2RQQcYbrbJKPWfQ5L+q5LiXJAFL1FpwJCPoC8=;
+        b=Pb6WIrGabHkwv8H+1ZyzeqDDyTscjg2QazrhnWqB3d5PBdAMEkVWI3/cUKg75qee0T
+         qh34Nz7eLhoeq5nfOHLTAzZVXpq6smRXt6J3zHk/zAR/GC+t8cD08RpLrKAbo88s6Yay
+         bhVdBzTfLAbMPbkmzsgTta4c6mOb5wgfE9v5A+YvlJrUuJiCbO1iQ8tpBCr1LwYpZHOr
+         D6fC92dtjWCdMfKKCYNRo+ndWZ9R4uqVTwe70j3gvNJykzn3bJmmHAqSt3Zcjva4xj7L
+         A8llPEUHdGoSwXXy1bF0oGi1B/er3ncTMq6nmxFEsK9EG967gw5i5qAQ38wCTJ7qx4nA
+         lolQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768182410; x=1768787210;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nEbS/u2RQQcYbrbJKPWfQ5L+q5LiXJAFL1FpwJCPoC8=;
+        b=UDQzvDT/U81ctzmipJWi8WM9IwgVhF9wR66UjSCNo/RbjmMb0eyV6DqCRliAuV3WPW
+         KzJJFOyvv54PrdRqWX9CGydRbkt3ILr5ILy/g4Q2w0ZCDrNKstEU2gZu/xA/nwGakmJo
+         9i41pzXsaTl2jpL2lySmMWAFcas/hgXFWDQMJgG+zRAboEj0Tm5ajhgnHNk0uHSvBTMX
+         vzrfLKC/CSSCVz4sWiJiDw5J5ZV64OPFEgD5uct6QXLXH1ka7QFXVTdg8vNBaCFI4eQx
+         XfgPZcWWUlJj/XXYH2UjlG3qAMPi3njG0sANnvBnj6r59HV2ib7Gsld0qGTTlAZSL6/o
+         zisg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAfIknTFiSXQ7e8AYxiQlkNRb0j1lAct2VS7KJU4ugztdPD3e4j9MOwta/sG1Ccz2g3uBO@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy3pLIeKRuhQeY/eUY0R9QGmAGeTa5pwIzCJHllzU3B/nKubC+b
+	qHPE7wmSiEe0aDGKX+8Sdz8Ji34c9Es1Lan1cs3BKxJUFapoE2tHzCIqqmEq4fi6Fg0wpfKgXM2
+	XybdVa0GCR5O61CN9nDC51jSlwXbJYkw=
+X-Gm-Gg: AY/fxX4Hkb4wLBK4lgNle+kIr6pgxP3fVGKP4HpyMHC9pED5S12MdlT6lkQHDh5w4CE
+	Uj8lb0LLFYPPkYvyqAexY9cTRU00HdVFjeTDSmU7QPbhD1soUQ7SMu2JmXDbyq+zTwLx42bgKXp
+	lRZG/tucee09c+ubPasbvlvtgz6ydWpk0AgxJSPIaFnwu9+NefGxbWKsaflwVvP5fMoyGuGFYND
+	Q+eNTBkrfpTjok0zo4xjYSBFyByUazM1sFZ1Kpv0LIwCeDauMqsicsw0Yvv0DirdoXQU3afc/kY
+	aA5J8o0=
+X-Google-Smtp-Source: AGHT+IFFpwzTXrZRWWTS4SqiF2TooCPfdND7LQbcPh92LwGsCcyKVlkAaUkkFBv7cb0PtOc7uKfEgzgNAyHXbkUFUVQ=
+X-Received: by 2002:a05:651c:2103:b0:383:46e:4b50 with SMTP id
+ 38308e7fff4ca-383046e4dcamr54169621fa.40.1768182409357; Sun, 11 Jan 2026
+ 17:46:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260111152632.2133580-1-vladimir.kondratiev@mobileye.com>
+References: <20251223084337.3789-1-hupu.gm@gmail.com> <20251223084337.3789-3-hupu.gm@gmail.com>
+In-Reply-To: <20251223084337.3789-3-hupu.gm@gmail.com>
+From: hupu <hupu.gm@gmail.com>
+Date: Mon, 12 Jan 2026 09:46:37 +0800
+X-Gm-Features: AZwV_Qh31RHE-ZoDZTo_QRvvWB2SkShFywUC-YhkU2L6OpiFx26tkfkIuGOSbSI
+Message-ID: <CADHxFxQkffVfxfjkX5+F5Dg4ewibB41aXSo6f5icVwD8fghjog@mail.gmail.com>
+Subject: Re: [RFC 2/2] perf build: Prefer kernel source headers for BPF skeletons
+To: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	james.clark@linaro.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	morbo@google.com, justinstitt@google.com, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, hupu.gm@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Vladimir,
+Hi Maintainers,
 
-kernel test robot noticed the following build errors:
+Sorry for the noise.
 
-[auto build test ERROR on 7d0a66e4bb9081d75c82ec4957c50034cb0ea449]
+This patch was sent nearly three weeks ago, but I have not received
+any feedback yet.
+I am resending this email as a gentle reminder in case it was missed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Kondratiev/dma-pool-don-t-allocate-DMA32-pool-if-no-32-bit-memory/20260111-232732
-base:   7d0a66e4bb9081d75c82ec4957c50034cb0ea449
-patch link:    https://lore.kernel.org/r/20260111152632.2133580-1-vladimir.kondratiev%40mobileye.com
-patch subject: [PATCH] dma-pool: don't allocate DMA32 pool if no 32-bit memory
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260112/202601120747.TAMpIDnI-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260112/202601120747.TAMpIDnI-lkp@intel.com/reproduce)
+Thank you very much for your time and review.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601120747.TAMpIDnI-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/dma/pool.c:212:39: error: use of undeclared identifier 'phys_ram_base'; did you mean 'phys_base'?
-     212 |         if (IS_ENABLED(CONFIG_ZONE_DMA32) && phys_ram_base < BIT_ULL(32)) {
-         |                                              ^~~~~~~~~~~~~
-         |                                              phys_base
-   arch/x86/include/asm/page_64.h:15:22: note: 'phys_base' declared here
-      15 | extern unsigned long phys_base;
-         |                      ^
-   1 error generated.
-
-
-vim +212 kernel/dma/pool.c
-
-   186	
-   187	static int __init dma_atomic_pool_init(void)
-   188	{
-   189		int ret = 0;
-   190	
-   191		/*
-   192		 * If coherent_pool was not used on the command line, default the pool
-   193		 * sizes to 128KB per 1GB of memory, min 128KB, max MAX_PAGE_ORDER.
-   194		 */
-   195		if (!atomic_pool_size) {
-   196			unsigned long pages = totalram_pages() / (SZ_1G / SZ_128K);
-   197			pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
-   198			atomic_pool_size = max_t(size_t, pages << PAGE_SHIFT, SZ_128K);
-   199		}
-   200		INIT_WORK(&atomic_pool_work, atomic_pool_work_fn);
-   201	
-   202		atomic_pool_kernel = __dma_atomic_pool_init(atomic_pool_size,
-   203							    GFP_KERNEL);
-   204		if (!atomic_pool_kernel)
-   205			ret = -ENOMEM;
-   206		if (has_managed_dma()) {
-   207			atomic_pool_dma = __dma_atomic_pool_init(atomic_pool_size,
-   208							GFP_KERNEL | GFP_DMA);
-   209			if (!atomic_pool_dma)
-   210				ret = -ENOMEM;
-   211		}
- > 212		if (IS_ENABLED(CONFIG_ZONE_DMA32) && phys_ram_base < BIT_ULL(32)) {
-   213			atomic_pool_dma32 = __dma_atomic_pool_init(atomic_pool_size,
-   214							GFP_KERNEL | GFP_DMA32);
-   215			if (!atomic_pool_dma32)
-   216				ret = -ENOMEM;
-   217		}
-   218	
-   219		dma_atomic_pool_debugfs_init();
-   220		return ret;
-   221	}
-   222	postcore_initcall(dma_atomic_pool_init);
-   223	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+hupu
