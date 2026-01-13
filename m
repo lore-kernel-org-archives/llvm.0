@@ -1,62 +1,82 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001BF255F5E;
-	Tue, 13 Jan 2026 13:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6921C330663;
+	Tue, 13 Jan 2026 13:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768312454; cv=none; b=awW5sw/RrGSKUjpE1h1ZqJ36E/TVZtyZTnLMvCePl+S/OSYcRwVGYIhxqLTh4vqq9hg6yQOg0wMtOe/fts5NzQKEc5SGVizVHOUQjbz1wgHeylZ/2f3vO1DOcatKAjtF2NR3fWGLPzkrYHYYB/GDdaqB+OpGGpN4cQcLpdlJ/fY=
+	t=1768312458; cv=none; b=Ja8j2+P1GqKOo29apaYmxHojakaQv28KSQKOkXI0vvFaSKoVWTmJA7cIce8ZwE8ZPU1jLov7h8vKjZ7pQO8IQLbuG0m5B7kbOOzeJDviug0a2nHh+XPyUOzVsNi3mfFJXPZx0DFmg0oJm5oN9zu1kkytCWvjGOUDDlt9Cruf7YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768312454; c=relaxed/simple;
-	bh=pyA/JgmKFyglfXBKM3H2uiwcjz9QpGlzDqpt96DXDVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SGldNp6pq2+IQxxfo1nCeonkFWKaEuGI45pvW76QVrKjVmx8TrVyJvRbt0hC+LFi7uYkxR5C59ChUiCBXVwZjVI7jrexGMfxgmGHgeB/DK6NW6qBJOoQXHtOOS9wUQPX1LfPqbNAXlvQ0De9bKmCyHpCkpL2ZXp2ncPLcf5+gEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YHCllw6T; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1768312458; c=relaxed/simple;
+	bh=+bhepDGuDR6MhZWdEj77cvVlTGoNDFhvxgoQK+HG8cY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LY83dVDqIKNqxXgQYAN+yn2FyjZGQ4WD0S9feug2WRR08OicJ1uqxvQxD+BXbTIVUgYhjzlUooR1soVi7bIWY6GBek9+qOq8bdD14kHF+vfOwLGWdN2rwpNRd2UHoBbDltiV6xbC5sNgcbQ8RsOh4XtCiQYkfimQLKtt/mehJLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AnOpY8CE; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YHCllw6T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AnOpY8CE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768312453; x=1799848453;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pyA/JgmKFyglfXBKM3H2uiwcjz9QpGlzDqpt96DXDVo=;
-  b=YHCllw6TDpYwlqzZW85CCrQRgeqpXM9wDHVMf7H2fFe7XoU5lcycybtE
-   LDum9KMrDJlBNTuvXZ53zc2PYII0BZv0qcqk1DLR76DsbBmE7d4zmk6x5
-   bXJs8b3wl6X2bJUiPnzaSoyoIAe7Nn6ei9Vxx07emVdflxlIuAvBbYCLn
-   R0QMI1cEXtMLu0aZtn1q6A2r49e46pMz3gggh4L0goWqF8fo1are7pgqt
-   +crjgWQDUrAoYtoD9US7VU1zxwI2ip8/Z7T0mw6Nq/8QeboY95LibqBsw
-   kmmq4fC95q/zd8jSv9qtqMNCfAF63EnGUiAZca0H0GCSkEWkZnefj8Vwt
-   g==;
-X-CSE-ConnectionGUID: vRe40V6YTDOAKF1BEJTe4w==
-X-CSE-MsgGUID: E9Dm8IFfTUy75768ubQYFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="69518441"
+  t=1768312458; x=1799848458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+bhepDGuDR6MhZWdEj77cvVlTGoNDFhvxgoQK+HG8cY=;
+  b=AnOpY8CEbmdo2dNDJhZsO9dsiY/KtLXLMR/OcqPnnwHF8gO6fLMxI2Oo
+   /VPdxWjc7+xofgAMOYozpMWI77wrvhERkToIWjtuRMyq8iHA/NHbQbF91
+   Pgrv0krni1qLLXydQN0wCw4J2RW6Qn1Ka01MpQs0exUPvrWrnLd86PYsa
+   iA3MAnd1JZG0FTxUvucTNjapFVdM9iaYSYkIcIumPb/9kqUjbnOcXdF7K
+   AhKFIKxjp/7+LcMeVk1t0W2H1zdKAQZQLLuQ+w3oON74Z2gRE1BJd1Kju
+   htD8+nD8VtuQPLW1Sp6/rru9J25CukFYFrzGN9vq2Dx7TYASnVSZ5jhKR
+   A==;
+X-CSE-ConnectionGUID: nNLSWgm4Qy2LoaPB7VMgpA==
+X-CSE-MsgGUID: 0FXTqqksRKi9s5Rl46zDVw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="69518446"
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="69518441"
+   d="scan'208";a="69518446"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 05:54:13 -0800
-X-CSE-ConnectionGUID: Y7iOaemZRGmaxAZowsWL3w==
-X-CSE-MsgGUID: cIbd/nVtQGm1DCqZ87mvqQ==
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 05:54:18 -0800
+X-CSE-ConnectionGUID: S18dgBAeToiEfghkImEGvQ==
+X-CSE-MsgGUID: kD+YWK5HRN66BnGy6WLQVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="208550529"
+   d="scan'208";a="208550518"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
   by orviesa003.jf.intel.com with ESMTP; 13 Jan 2026 05:54:10 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vfeqV-00000000ErQ-2Lz6;
+	id 1vfeqV-00000000ErM-25kG;
 	Tue, 13 Jan 2026 13:54:07 +0000
-Date: Tue, 13 Jan 2026 21:53:27 +0800
+Date: Tue, 13 Jan 2026 21:53:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Uwe =?utf-8?Q?Kleine-K=C3=B6nig"?= <u.kleine-koenig@baylibre.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Long Li <longli@microsoft.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jens Wiklander <jens.wiklander@linaro.org>,
- Sumit Garg <sumit.garg@oss.qualcomm.com>,
- Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [linux-next:master 3691/5774] Warning:
- drivers/char/tpm/tpm_ftpm_tee.c:172 expecting prototype for ftpm_tee_probe().
- Prototype was for ftpm_tee_probe_generic() instead
-Message-ID: <202601132105.9lgSsC4U-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>,
+	Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: Re: [PATCH net-next v14 01/12] vsock: add netns to vsock core
+Message-ID: <202601132126.k8ZgzA9M-lkp@intel.com>
+References: <20260112-vsock-vmtest-v14-1-a5c332db3e2b@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,23 +84,32 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112-vsock-vmtest-v14-1-a5c332db3e2b@meta.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   0f853ca2a798ead9d24d39cad99b0966815c582a
-commit: 92fad96aea24fc19abe1eae2249402b61de3a3e2 [3691/5774] tpm/tpm_ftpm_tee: Make use of tee bus methods
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260113/202601132105.9lgSsC4U-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601132105.9lgSsC4U-lkp@intel.com/reproduce)
+Hi Bobby,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/virtio-set-skb-owner-of-virtio_transport_reset_no_sock-reply/20260113-125559
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260112-vsock-vmtest-v14-1-a5c332db3e2b%40meta.com
+patch subject: [PATCH net-next v14 01/12] vsock: add netns to vsock core
+config: hexagon-randconfig-002-20260113 (https://download.01.org/0day-ci/archive/20260113/202601132126.k8ZgzA9M-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601132126.k8ZgzA9M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601132105.9lgSsC4U-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601132126.k8ZgzA9M-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> Warning: drivers/char/tpm/tpm_ftpm_tee.c:172 expecting prototype for ftpm_tee_probe(). Prototype was for ftpm_tee_probe_generic() instead
->> Warning: drivers/char/tpm/tpm_ftpm_tee.c:275 expecting prototype for ftpm_tee_remove(). Prototype was for ftpm_tee_remove_generic() instead
+>> WARNING: modpost: vmlinux: section mismatch in reference: vsock_exit+0x34 (section: .exit.text) -> vsock_sysctl_ops (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: vsock_exit+0x38 (section: .exit.text) -> vsock_sysctl_ops (section: .init.data)
 
 -- 
 0-DAY CI Kernel Test Service
