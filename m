@@ -1,58 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B32389468;
-	Tue, 13 Jan 2026 09:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5848C3816F6;
+	Tue, 13 Jan 2026 09:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768295876; cv=none; b=mYgemPfSojZDP4aHIFdcTys1Ua+DMPSzHrkNyo6FN3tWiKvMihmUxN5QsovpmxyeX3wGy31CuCkP2kFrNXAHDvuN+lL6zlaosquToO003YkgioTFtIprstLMC04KmFKmEqchgt0hUTSa4r4yZLkNNdVoiEpJAMRbJCKPu/Gt8uo=
+	t=1768297549; cv=none; b=WrG9x2EnntWpSMh8O+4B3hNpR7Ms5mIWrCNrRaGHowwiimJIHT7dbjAibKbDkDLOJv8p4WHsi7eaYEhVthqy9DtBEPMnHA2FPg9vh/pWoNTCWcXZTquv4tqVHQPPAVlf5vO9ilOpQc5MBCdY0eA5woPHj5TGFxjbYWPwp78PFZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768295876; c=relaxed/simple;
-	bh=BlLAv6yHBz65H5mqBAFyuT7pXJkZoVMFJGWvyT/byYk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=H8GGFO7zQDKDmPdMemDItv6IexzMipRkqkbTNcQjEAhOBsnKhezleCJHz/+xkgliME/cT84fh0NUcJUwOY7q6droRRbt4CA9cKxb/+WRs8jtBm4Q23/JoA1bq4W01U1SxvizxEFI3061EBUgxnSGgEZeNHdz5PAXOD4seVTomG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3JmHqXc; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1768297549; c=relaxed/simple;
+	bh=IeBzusjziXd3C7Dmli2792gLRDd+M7CCutkE3laOUX0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=LiRCqpxl5onJSci5xqm/6vXQbmKmO84vNmWYi2o+crj5A96ta8vODjhcP5RqRy5RyJ9mK1zb/K2UbOWblNlhfgz3WEArH4JP3/nvVRGImvGPRl4+YLq5kMmRRauTme2t8Mg2d2o8MCW1oSHAo3LfJZBwKamLDXGW2Occa5U6pww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOuSl+4I; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3JmHqXc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOuSl+4I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768295873; x=1799831873;
+  t=1768297547; x=1799833547;
   h=date:from:to:cc:subject:message-id;
-  bh=BlLAv6yHBz65H5mqBAFyuT7pXJkZoVMFJGWvyT/byYk=;
-  b=b3JmHqXcU1WcYfgqxYC0iadbkkUlX4sjSi2miaxSuYu2srVOmNvok4cr
-   V8T+7dfFklCRmS7ujhfQ1tYRedOP8k6/1PJvI9pEbnqWkcAnX5zsMETsh
-   sntcWI2SYgT2n5hagvDt2/FDgdHySgheJ93frGjXwRhsVSncq76asuyyl
-   MryZPSVj6p59hevKmZlQD7mHcMUcmIW+JsNQBHG1P2WxH4khm1LUx5UIW
-   woLFeKT1TiW9dzDsWtKdk07kZiHF2ZdEtXwI/pErFlc7pruUG587A504P
-   65cLoksWM5ilGzyASEVEyq0B8FhgNAGg4CxK2kjFvcmR0D9PEu1hbE/pU
-   g==;
-X-CSE-ConnectionGUID: twIavD2cSQGUEASWew8ofA==
-X-CSE-MsgGUID: 7h2xzxBYQB+hG8WNJUPyRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69498673"
+  bh=IeBzusjziXd3C7Dmli2792gLRDd+M7CCutkE3laOUX0=;
+  b=jOuSl+4IdEr2yRi7B6JuRUSO0BD83JeLMh6l9LWMSdQQE3tsKr/gpNSS
+   wfMrQjXuM/WO3QqJzAk/ldMl7VZwG0mO5mYXZ7q8zBBealA4LwMrOWlzr
+   grbBfTDIomJWgaG3/xGR+3iD9WKpyGw+gYZAmrHDh+S6oz1kOXG1jlWDR
+   JCOyNrpiz+NsL5sN5sO1vSNjhBoO/RD1xyZPp0zYYqxEUDgpIvZYZwLLW
+   OHJYYofF/4IlLworaENGmzBqPgWC+fIle9Mlbbwqw374szpa4VxrpjuOe
+   8vJUFEZ7G1FAOrTbpnm/jnJQeBB1U2a/kFuvlLGeguKre+qEF1rEeYUIX
+   Q==;
+X-CSE-ConnectionGUID: fWFyOE1bQ4CBuaFJu7ehig==
+X-CSE-MsgGUID: lx3tA/rcQIe5XGlRLxDQ5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80944717"
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="69498673"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 01:17:46 -0800
-X-CSE-ConnectionGUID: nGndZZ/bQS6QvT2A9f8Mkw==
-X-CSE-MsgGUID: fN5tICnQSLeUWxGUk8BddA==
+   d="scan'208";a="80944717"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 01:45:46 -0800
+X-CSE-ConnectionGUID: 1BlaQxUzS+SiY0ACPN+6aQ==
+X-CSE-MsgGUID: uz1fPdrYR7yRR54SRghmAQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="204230238"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 13 Jan 2026 01:17:45 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+   d="scan'208";a="208809926"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8581b2e2a62c) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 13 Jan 2026 01:45:45 -0800
+Received: from kbuild by 8581b2e2a62c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vfaX0-00000000EWi-3LSx;
-	Tue, 13 Jan 2026 09:17:42 +0000
-Date: Tue, 13 Jan 2026 17:17:22 +0800
+	id 1vfay7-0000000017V-0Dcz;
+	Tue, 13 Jan 2026 09:45:43 +0000
+Date: Tue, 13 Jan 2026 10:45:04 +0100
 From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [gourryinverse:scratch/gourry/cxl/controllers/v2 6/6]
- drivers/cxl/core/memctrl/sysram_region.c:267:7: error: use of undeclared
- identifier 'MMOP_OFFLINE'; did you mean 'MEM_OFFLINE'?
-Message-ID: <202601131751.firIxiyH-lkp@intel.com>
+Subject: [dhowells-fs:netfs-next 6/17] fs/netfs/write_issue.c:800:9:
+ warning: variable 'ret' is uninitialized when used here
+Message-ID: <202601131034.V6lQB1v6-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,120 +59,105 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/gourryinverse/linux scratch/gourry/cxl/controllers/v2
-head:   dcbd460f630113f17cb71133f44920a1f35c2605
-commit: 9a7e9f00bdcec2e1a0f8843abe36f31f75d00493 [6/6] cxl/sysram: disallow onlining in ZONE_NORMAL if state is movable only
-config: arm-randconfig-003-20260113 (https://download.01.org/0day-ci/archive/20260113/202601131751.firIxiyH-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601131751.firIxiyH-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
+head:   8dc07632381d372883f12b9ca6da7438ce683a33
+commit: bff57425b6c4175565f1c28fa1f3d53ef7de7703 [6/17] afs: Use a bvecq to hold dir content rather than folioq
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260113/202601131034.V6lQB1v6-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601131034.V6lQB1v6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601131751.firIxiyH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601131034.V6lQB1v6-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/cxl/core/memctrl/sysram_region.c:92:7: error: call to undeclared function 'offline_and_remove_memory'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      92 |         rc = offline_and_remove_memory(range.start, range_len(&range));
-         |              ^
-   drivers/cxl/core/memctrl/sysram_region.c:149:7: error: call to undeclared function 'walk_memory_blocks'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     149 |         rc = walk_memory_blocks(range->start, range_len(range),
-         |              ^
-   drivers/cxl/core/memctrl/sysram_region.c:162:7: error: call to undeclared function 'walk_memory_blocks'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     162 |         rc = walk_memory_blocks(range->start, range_len(range),
-         |              ^
-   drivers/cxl/core/memctrl/sysram_region.c:201:32: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-     201 |         if (data->last_online_type != MMOP_ONLINE_MOVABLE)
-         |                                       ^~~~~~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:230:17: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-     230 |                 online_type = MMOP_ONLINE_MOVABLE;
-         |                               ^~~~~~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:232:17: error: use of undeclared identifier 'MMOP_ONLINE_KERNEL'
-     232 |                 online_type = MMOP_ONLINE_KERNEL;
-         |                               ^~~~~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:234:17: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-     234 |                 online_type = MMOP_ONLINE_MOVABLE;
-         |                               ^~~~~~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:263:7: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-     263 |         case MMOP_ONLINE_MOVABLE:
-         |              ^~~~~~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:265:7: error: use of undeclared identifier 'MMOP_ONLINE_KERNEL'
-     265 |         case MMOP_ONLINE_KERNEL:
-         |              ^~~~~~~~~~~~~~~~~~
->> drivers/cxl/core/memctrl/sysram_region.c:267:7: error: use of undeclared identifier 'MMOP_OFFLINE'; did you mean 'MEM_OFFLINE'?
-     267 |         case MMOP_OFFLINE:
-         |              ^~~~~~~~~~~~
-         |              MEM_OFFLINE
-   include/linux/memory.h:71:2: note: 'MEM_OFFLINE' declared here
-      71 |         MEM_OFFLINE,            /* exposed to userspace */
-         |         ^
-   drivers/cxl/core/memctrl/sysram_region.c:280:20: error: use of undeclared identifier 'MMOP_OFFLINE'; did you mean 'MEM_OFFLINE'?
-     280 |         int online_type = MMOP_OFFLINE;
-         |                           ^~~~~~~~~~~~
-         |                           MEM_OFFLINE
-   include/linux/memory.h:71:2: note: 'MEM_OFFLINE' declared here
-      71 |         MEM_OFFLINE,            /* exposed to userspace */
-         |         ^
-   drivers/cxl/core/memctrl/sysram_region.c:299:17: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-     299 |                 online_type = MMOP_ONLINE_MOVABLE;
-         |                               ^~~~~~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:302:17: error: use of undeclared identifier 'MMOP_ONLINE'; did you mean 'MEM_ONLINE'?
-     302 |                 online_type = MMOP_ONLINE;
-         |                               ^~~~~~~~~~~
-         |                               MEM_ONLINE
-   include/linux/memory.h:69:2: note: 'MEM_ONLINE' declared here
-      69 |         MEM_ONLINE,             /* exposed to userspace */
-         |         ^
-   drivers/cxl/core/memctrl/sysram_region.c:316:21: error: use of undeclared identifier 'MMOP_OFFLINE'; did you mean 'MEM_OFFLINE'?
-     316 |         if (online_type != MMOP_OFFLINE)
-         |                            ^~~~~~~~~~~~
-         |                            MEM_OFFLINE
-   include/linux/memory.h:71:2: note: 'MEM_OFFLINE' declared here
-      71 |         MEM_OFFLINE,            /* exposed to userspace */
-         |         ^
-   drivers/cxl/core/memctrl/sysram_region.c:343:7: error: call to undeclared function 'add_memory_driver_managed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     343 |         rc = add_memory_driver_managed(data->mgid, range.start,
-         |              ^
-   drivers/cxl/core/memctrl/sysram_region.c:345:12: error: use of undeclared identifier 'MHP_NID_IS_MGID'
-     345 |                                        MHP_NID_IS_MGID);
-         |                                        ^~~~~~~~~~~~~~~
-   drivers/cxl/core/memctrl/sysram_region.c:379:7: error: call to undeclared function 'offline_and_remove_memory'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     379 |         if (!offline_and_remove_memory(range.start, range_len(&range))) {
-         |              ^
-   drivers/cxl/core/memctrl/sysram_region.c:382:3: error: call to undeclared function 'memory_group_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     382 |                 memory_group_unregister(data->mgid);
-         |                 ^
-   drivers/cxl/core/memctrl/sysram_region.c:400:2: error: use of undeclared identifier 'mhp_t'
-     400 |         mhp_t mhp_flags;
-         |         ^~~~~
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+>> fs/netfs/write_issue.c:800:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     800 |         return ret;
+         |                ^~~
+   fs/netfs/write_issue.c:750:9: note: initialize the variable 'ret' to silence this warning
+     750 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +267 drivers/cxl/core/memctrl/sysram_region.c
+vim +/ret +800 fs/netfs/write_issue.c
 
-   252	
-   253	static ssize_t state_show(struct device *dev,
-   254				  struct device_attribute *attr, char *buf)
-   255	{
-   256		struct cxl_sysram_data *data;
-   257	
-   258		data = dev_get_drvdata(dev);
-   259		if (!data)
-   260			return -ENODEV;
-   261	
-   262		switch (data->last_online_type) {
-   263		case MMOP_ONLINE_MOVABLE:
-   264			return sysfs_emit(buf, "online\n");
-   265		case MMOP_ONLINE_KERNEL:
-   266			return sysfs_emit(buf, "online_normal\n");
- > 267		case MMOP_OFFLINE:
-   268		default:
-   269			return sysfs_emit(buf, "offline\n");
-   270		}
-   271	}
-   272	
+49866ce7ea8d41 David Howells 2024-12-16  734  
+49866ce7ea8d41 David Howells 2024-12-16  735  /**
+49866ce7ea8d41 David Howells 2024-12-16  736   * netfs_writeback_single - Write back a monolithic payload
+49866ce7ea8d41 David Howells 2024-12-16  737   * @mapping: The mapping to write from
+49866ce7ea8d41 David Howells 2024-12-16  738   * @wbc: Hints from the VM
+bff57425b6c417 David Howells 2026-01-07  739   * @iter: Data to write.
+49866ce7ea8d41 David Howells 2024-12-16  740   *
+49866ce7ea8d41 David Howells 2024-12-16  741   * Write a monolithic, non-pagecache object back to the server and/or
+49866ce7ea8d41 David Howells 2024-12-16  742   * the cache.
+49866ce7ea8d41 David Howells 2024-12-16  743   */
+49866ce7ea8d41 David Howells 2024-12-16  744  int netfs_writeback_single(struct address_space *mapping,
+49866ce7ea8d41 David Howells 2024-12-16  745  			   struct writeback_control *wbc,
+49866ce7ea8d41 David Howells 2024-12-16  746  			   struct iov_iter *iter)
+49866ce7ea8d41 David Howells 2024-12-16  747  {
+49866ce7ea8d41 David Howells 2024-12-16  748  	struct netfs_io_request *wreq;
+49866ce7ea8d41 David Howells 2024-12-16  749  	struct netfs_inode *ictx = netfs_inode(mapping->host);
+49866ce7ea8d41 David Howells 2024-12-16  750  	int ret;
+49866ce7ea8d41 David Howells 2024-12-16  751  
+49866ce7ea8d41 David Howells 2024-12-16  752  	if (!mutex_trylock(&ictx->wb_lock)) {
+49866ce7ea8d41 David Howells 2024-12-16  753  		if (wbc->sync_mode == WB_SYNC_NONE) {
+49866ce7ea8d41 David Howells 2024-12-16  754  			netfs_stat(&netfs_n_wb_lock_skip);
+49866ce7ea8d41 David Howells 2024-12-16  755  			return 0;
+49866ce7ea8d41 David Howells 2024-12-16  756  		}
+49866ce7ea8d41 David Howells 2024-12-16  757  		netfs_stat(&netfs_n_wb_lock_wait);
+49866ce7ea8d41 David Howells 2024-12-16  758  		mutex_lock(&ictx->wb_lock);
+49866ce7ea8d41 David Howells 2024-12-16  759  	}
+49866ce7ea8d41 David Howells 2024-12-16  760  
+49866ce7ea8d41 David Howells 2024-12-16  761  	wreq = netfs_create_write_req(mapping, NULL, 0, NETFS_WRITEBACK_SINGLE);
+49866ce7ea8d41 David Howells 2024-12-16  762  	if (IS_ERR(wreq)) {
+49866ce7ea8d41 David Howells 2024-12-16  763  		ret = PTR_ERR(wreq);
+49866ce7ea8d41 David Howells 2024-12-16  764  		goto couldnt_start;
+49866ce7ea8d41 David Howells 2024-12-16  765  	}
+49866ce7ea8d41 David Howells 2024-12-16  766  
+bff57425b6c417 David Howells 2026-01-07  767  	wreq->buffer.iter = *iter;
+bff57425b6c417 David Howells 2026-01-07  768  
+2b1424cd131cfa David Howells 2025-05-19  769  	__set_bit(NETFS_RREQ_OFFLOAD_COLLECTION, &wreq->flags);
+20d72b00ca814d David Howells 2025-05-19  770  	trace_netfs_write(wreq, netfs_write_trace_writeback_single);
+49866ce7ea8d41 David Howells 2024-12-16  771  	netfs_stat(&netfs_n_wh_writepages);
+49866ce7ea8d41 David Howells 2024-12-16  772  
+49866ce7ea8d41 David Howells 2024-12-16  773  	if (__test_and_set_bit(NETFS_RREQ_UPLOAD_TO_SERVER, &wreq->flags))
+49866ce7ea8d41 David Howells 2024-12-16  774  		wreq->netfs_ops->begin_writeback(wreq);
+49866ce7ea8d41 David Howells 2024-12-16  775  
+bff57425b6c417 David Howells 2026-01-07  776  	for (int s = 0; s < NR_IO_STREAMS; s++) {
+bff57425b6c417 David Howells 2026-01-07  777  		struct netfs_io_subrequest *subreq;
+bff57425b6c417 David Howells 2026-01-07  778  		struct netfs_io_stream *stream = &wreq->io_streams[s];
+49866ce7ea8d41 David Howells 2024-12-16  779  
+bff57425b6c417 David Howells 2026-01-07  780  		if (!stream->avail)
+bff57425b6c417 David Howells 2026-01-07  781  			continue;
+49866ce7ea8d41 David Howells 2024-12-16  782  
+bff57425b6c417 David Howells 2026-01-07  783  		netfs_prepare_write(wreq, stream, 0);
+bff57425b6c417 David Howells 2026-01-07  784  
+bff57425b6c417 David Howells 2026-01-07  785  		subreq = stream->construct;
+bff57425b6c417 David Howells 2026-01-07  786  		subreq->len = iov_iter_count(iter);
+bff57425b6c417 David Howells 2026-01-07  787  		stream->submit_len = subreq->len;
+bff57425b6c417 David Howells 2026-01-07  788  
+bff57425b6c417 David Howells 2026-01-07  789  		netfs_issue_write(wreq, stream);		
+49866ce7ea8d41 David Howells 2024-12-16  790  	}
+49866ce7ea8d41 David Howells 2024-12-16  791  
+49866ce7ea8d41 David Howells 2024-12-16  792  	smp_wmb(); /* Write lists before ALL_QUEUED. */
+49866ce7ea8d41 David Howells 2024-12-16  793  	set_bit(NETFS_RREQ_ALL_QUEUED, &wreq->flags);
+49866ce7ea8d41 David Howells 2024-12-16  794  
+49866ce7ea8d41 David Howells 2024-12-16  795  	mutex_unlock(&ictx->wb_lock);
+2b1424cd131cfa David Howells 2025-05-19  796  	netfs_wake_collector(wreq);
+49866ce7ea8d41 David Howells 2024-12-16  797  
+20d72b00ca814d David Howells 2025-05-19  798  	netfs_put_request(wreq, netfs_rreq_trace_put_return);
+49866ce7ea8d41 David Howells 2024-12-16  799  	_leave(" = %d", ret);
+49866ce7ea8d41 David Howells 2024-12-16 @800  	return ret;
+
+:::::: The code at line 800 was first introduced by commit
+:::::: 49866ce7ea8d41a3dc198f519cc9caa2d6be1891 netfs: Add support for caching single monolithic objects such as AFS dirs
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: Christian Brauner <brauner@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
