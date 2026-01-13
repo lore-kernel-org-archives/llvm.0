@@ -1,55 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3D021B9F6;
-	Tue, 13 Jan 2026 00:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250F923D7DE
+	for <llvm@lists.linux.dev>; Tue, 13 Jan 2026 01:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768265611; cv=none; b=Ijs17ZbqfCkbFf+UCwzx2gN8cmR04RroCSG9DXfdvaqW1ciPizi84FeV+PGRbwgd8dV4miG/4ghUEWEE7clHPX9b2lMNad9lw/5/3KFnm1K1M5uoWsTIgIxjo1hmSp4i6fLsE2CaJY7IPtnLZ3W8xtGOjweuuOli2/NBfj2pTvA=
+	t=1768268612; cv=none; b=DhmY9dsYUGozWEcadaMFaPp/hTYxKLbtbtixVihbwFCPnBwLWj9XMLv68uVVZFidqZKxRSi8xpcWnBF/9R6U4rkoYQK14NlCgUPt17alKTMegVVoq8tsUBStEesuSs6VI0p95H9Kvu345KHUoQQEKfNTzkWulT36Yl8cRU4q8aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768265611; c=relaxed/simple;
-	bh=EvvB6/WbIVvCrsHcEq2SG+Kse8Izaug3kCrqUhEiGSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OUhrQciDZGCz5YpFEu5Gh3/uCWvvrKJsrAFLtm/KgGO0Q8HYnFQ5BHAsX4f1i3+d4FXA2l7OwxENONTPG3aTJeXpDz/A0gmRmQElf/eNSrUKA24PZUbHW3d3B9AvvqIrASaThndSBfXpuUoy0wWqXgFdgvo5WLlYE7JVw823WO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FmivJll5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768268612; c=relaxed/simple;
+	bh=AzGYY8TVf6kHgCekFCUzEbv5VDS1oXckWndMM4wUWIQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=idChCsZB2q35rlTtnNcvb4C9AOTeNWUy5XZ9ZPLlyDR0nnUJajuKbH69NACvPFfBnvqjdW3w01932a6rvj+s7lHi3/EOmGlrpoZ7dUWcr8eBQSl3iiNQ7+vc3+S2xx+dapdOQklFQ1vUZnN5KYGsrmwYjcefPDAtVE+TAUzzIns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WAnavtjN; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FmivJll5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0988BC116D0;
-	Tue, 13 Jan 2026 00:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768265611;
-	bh=EvvB6/WbIVvCrsHcEq2SG+Kse8Izaug3kCrqUhEiGSo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=FmivJll5UiQtl59+17eVl36vj3k0407XPme34niXvDS+MpUjpbA7YLttwf/efwpRO
-	 KSNo9RGuLhkaQ9BC1ItKDaPd6IsClkgvwyQDcGolzN9YCN2gDvGPT8hN/GfGKbR+cc
-	 ybrzvtws1Zjo5PY7Iq/WFOCKFSn1q409Ixi8rlcAXiD0u9jEB42l1Ij9IN75m+UnPS
-	 +joB9L4E8OeTQXTDw2rxszKQqt4tJFTqpvItfUYuIxjXncEw2PYP56ibnDrnph5+Ol
-	 uKq5/tRQBauywj2UVs89TwQC0eThI+ezT12TDEzIvTZwBYrr75HYuZtazkBEu+Lwlm
-	 7BZaE2qgs1rwQ==
-Date: Mon, 12 Jan 2026 17:53:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: amd-gfx@lists.freedesktop.org, stable@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Apply 70740454377f1ba3ff32f5df4acd965db99d055b to linux-6.12.y
-Message-ID: <20260113005327.GA2283840@ax162>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WAnavtjN"
+Message-ID: <39acf3ae-031e-41fe-8343-9445775f312c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768268599;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HlY+CfNE9yvpYaQbltrehDKBAIWVYvJbFw7ICzfvQHs=;
+	b=WAnavtjN1+zzKw4FnoeX0yz4HzyCQ7l3gW29koNOFbo8Zn1rd132wS6VXPuiccj09DukFR
+	DQa9tTNenc+jK1CJJX2Rvy95LPOqU7GeSjJIRiLLDmi90sMXRQi4rmbj5Dql2r6uMQ+Qq/
+	KB67rxnIDrFeqvIYT0uMhIXiZ3RJ/V0=
+Date: Tue, 13 Jan 2026 09:43:02 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: [PATCH bpf-next 2/3] bpf: Introduce BPF_BRANCH_SNAPSHOT_F_COPY
+ flag for bpf_get_branch_snapshot helper
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S . Miller" <davem@davemloft.net>,
+ David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H . Peter Anvin" <hpa@zytor.com>, Matt Bobrowski
+ <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20260109153420.32181-3-leon.hwang@linux.dev>
+ <202601122013.hmoeIXXs-lkp@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <202601122013.hmoeIXXs-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Greg and Sasha,
+Hi kernel test robot,
 
-Commit 70740454377f ("drm/amd/display: Apply e4479aecf658 to dml") was
-recently queued up for 6.18. This same change will be needed in 6.12 but
-it will need commit 820ccf8cb2b1 ("drm/amd/display: Respect user's
-CONFIG_FRAME_WARN more for dml files") applied first for it to apply
-cleanly. Please let me know if there are any problems with this.
+Thanks for the test results.
 
-Cheers,
-Nathan
+No further testing is needed for this patch series, as it will not be
+pursued further and is not expected to be accepted upstream.
+
+Thanks again for the testing effort.
+
+Thanks,
+Leon
+
+On 13/1/26 03:22, kernel test robot wrote:
+> Hi Leon,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-x64-Call-perf_snapshot_branch_stack-in-trampoline/20260109-234435
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20260109153420.32181-3-leon.hwang%40linux.dev
+> patch subject: [PATCH bpf-next 2/3] bpf: Introduce BPF_BRANCH_SNAPSHOT_F_COPY flag for bpf_get_branch_snapshot helper
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260112/202601122013.hmoeIXXs-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260112/202601122013.hmoeIXXs-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202601122013.hmoeIXXs-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: bpf_branch_snapshot
+>    >>> referenced by bpf_trace.c:1182 (kernel/trace/bpf_trace.c:1182)
+>    >>>               vmlinux.o:(bpf_get_branch_snapshot)
+>    >>> referenced by bpf_trace.c:0 (kernel/trace/bpf_trace.c:0)
+>    >>>               vmlinux.o:(bpf_get_branch_snapshot)
+> 
+
