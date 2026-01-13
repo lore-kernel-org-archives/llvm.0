@@ -1,107 +1,159 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250F923D7DE
-	for <llvm@lists.linux.dev>; Tue, 13 Jan 2026 01:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29CC26CE39
+	for <llvm@lists.linux.dev>; Tue, 13 Jan 2026 01:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768268612; cv=none; b=DhmY9dsYUGozWEcadaMFaPp/hTYxKLbtbtixVihbwFCPnBwLWj9XMLv68uVVZFidqZKxRSi8xpcWnBF/9R6U4rkoYQK14NlCgUPt17alKTMegVVoq8tsUBStEesuSs6VI0p95H9Kvu345KHUoQQEKfNTzkWulT36Yl8cRU4q8aw=
+	t=1768268690; cv=none; b=ndqj9kqZ1Dd9BQpaFQxee3wogp6CEymNhuBg9ITqLEPZp0NoyW8fT4OwyPpXpa7zHjXUMXdlW82SVJvmHuO9tGgSF4ZZuu2WW+GMLRWg26q7ZEZKRj28YSHMLIbrowC2uhEO8sFhB5CjQ9dmMn2+dvWI3rmd60vbegf4LAi1czU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768268612; c=relaxed/simple;
-	bh=AzGYY8TVf6kHgCekFCUzEbv5VDS1oXckWndMM4wUWIQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=idChCsZB2q35rlTtnNcvb4C9AOTeNWUy5XZ9ZPLlyDR0nnUJajuKbH69NACvPFfBnvqjdW3w01932a6rvj+s7lHi3/EOmGlrpoZ7dUWcr8eBQSl3iiNQ7+vc3+S2xx+dapdOQklFQ1vUZnN5KYGsrmwYjcefPDAtVE+TAUzzIns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WAnavtjN; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768268690; c=relaxed/simple;
+	bh=rzrjC221+4p2F3nUmD1KU5yTvAmfj72IKccTj/qfT6I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SKrm0ToF8Js5GyQaN3qwIwcwraQj+sOdDrSm4OEURIBPsZ9phtFWUgxei8vLBq/9aYzfbOmIccTsyjvn9lnJK1sx4amuEkkDnuVJYlhydy+NWrYvjdKJtfxDjQ1+3bQlFSwGTANsfnsPLbaKpUm7K+uzSSyqEwSIXVddrWPnRA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+wjK7iD; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WAnavtjN"
-Message-ID: <39acf3ae-031e-41fe-8343-9445775f312c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768268599;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HlY+CfNE9yvpYaQbltrehDKBAIWVYvJbFw7ICzfvQHs=;
-	b=WAnavtjN1+zzKw4FnoeX0yz4HzyCQ7l3gW29koNOFbo8Zn1rd132wS6VXPuiccj09DukFR
-	DQa9tTNenc+jK1CJJX2Rvy95LPOqU7GeSjJIRiLLDmi90sMXRQi4rmbj5Dql2r6uMQ+Qq/
-	KB67rxnIDrFeqvIYT0uMhIXiZ3RJ/V0=
-Date: Tue, 13 Jan 2026 09:43:02 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+wjK7iD"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-432d256c2a9so3473626f8f.3
+        for <llvm@lists.linux.dev>; Mon, 12 Jan 2026 17:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768268687; x=1768873487; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8QXuf4cwRpBOzqTZvP4qMKCqVPPc0MElEg+LdlADa3c=;
+        b=l+wjK7iDXYT3/rWEq8bs2dhQuHhmJWndgVCxfvwYr325KftrPifM4kd1xYeN3NJCjD
+         diVsZ+vmowQwL18PKj6jvHOCjoL75ecgX2wZ2Kek95D+pdiu23k6EqJpg0Cl22WzyRKJ
+         cRLM88M1cz8F6pJhQf9aUwef34QRtxzVND1hFxoOFa7VB5//cjPXv0TqQR7Ez8RRPuKh
+         Sz1ZUa+w/K9sLKNKHapvP5lzFG/67cnWyiB4Bc3caly2GLOB0IdITd5EmtOdUOBhovLP
+         uaSJJ+UOTtX3EDh6j1+WdNQIHQS+gwqA+MRz3z+AnkTz9FBrYO6tymzMrFeq/u6iNAsw
+         9mCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768268687; x=1768873487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8QXuf4cwRpBOzqTZvP4qMKCqVPPc0MElEg+LdlADa3c=;
+        b=TUv8n6NaRREVtN7EffuovSKTjU0btoX2pzAsF2Zdwhlowe52e8IUhIrqvrn+EwoxTe
+         N31083jBQujdoMPGR9RTJ9+ou0qgxADWyTeMHYCe4jPfoO0UbtjpAVRdmexZtJgXy93d
+         ynKILjUeGWvewuNo+qOwmMEVDVxjf3+qjL++eBNOOezubwqFbFV9YlbmRuLsjTcLRW2c
+         u/8osH09w7gRQQhlOqrikHMQBt4Kj53C9jsZ/RCC9/F3iHhubMHyTZlv1N3xv6X0Q7fA
+         mgvlz2nXrLW0PqERsaCmLDviMX5sN7yatLw9TKQjmjtdcOyem2bOkDVaPIDyUynVF8QY
+         ap+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV4qSJCFyib6H2eGZYINRMevPSoZ7c1chim7Chf70oJW7U5x+3eBM2mnNdIlH368UU3eOUz@lists.linux.dev
+X-Gm-Message-State: AOJu0YzMCJfvHfcdKKbOutzJetbyJW3zpDE+iOz3q7SAwL6QZjNaC8V0
+	fFY1B824m06woTBe5KDAfbnnN5nE0wT5gj9Yfy8yPsnTxYH1UN/Vr7UYFQGGXqPAjw6aJDDBAPn
+	S0ykBN0M6u2+x3tPQ/CT1JnK3MVPf6M0=
+X-Gm-Gg: AY/fxX4UrmEGeS0MXlUd1Uo/JOuA+K/fXPsBkp1X3iGlE9Fs6IqHCjIQHReC336CWIr
+	pBPwDuZcdZY9E6gJoy8bTedOGH+60YmuqYDR6RAykT5deByi/s+/ypLLa1FRssPnNS/rIJcmiqN
+	/j6JkhuYKsxH+C0vd6YySMf86F7tVv6fVetJ5zyc6EUtiESlRoirNts57u/hgw8uD15eaq/hoNe
+	JdWo/dMuzWMissf5pzZ/I5JONpJpPXpvkgTkQ1+dvahPjtUtAxQu8B4JG2C8mbRHpon3+kpQ71M
+	IjbueEfN4ADuP+p/uF+PIuDz5JjF0A==
+X-Google-Smtp-Source: AGHT+IEebGw6L+DCEowzC1fWnpJ9/6F/tHC8QlJPrsrlqIYFHxBkcEnJQunhABrVxJS4ojuoSVylquTQBlixDe2/UhU=
+X-Received: by 2002:a05:6000:25c6:b0:42b:4267:83e3 with SMTP id
+ ffacd0b85a97d-432c374f5femr24312893f8f.5.1768268687045; Mon, 12 Jan 2026
+ 17:44:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/3] bpf: Introduce BPF_BRANCH_SNAPSHOT_F_COPY
- flag for bpf_get_branch_snapshot helper
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S . Miller" <davem@davemloft.net>,
- David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H . Peter Anvin" <hpa@zytor.com>, Matt Bobrowski
- <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20260109153420.32181-3-leon.hwang@linux.dev>
- <202601122013.hmoeIXXs-lkp@intel.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <202601122013.hmoeIXXs-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <cover.1768233085.git.m.wieczorretman@pm.me>
+In-Reply-To: <cover.1768233085.git.m.wieczorretman@pm.me>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 13 Jan 2026 02:44:35 +0100
+X-Gm-Features: AZwV_Qg49kJdgHS5b0feyJ3FQ4qpkZSxgMzwvg9-kXkrvqB0Op5YiaAIZPipNv4
+Message-ID: <CA+fCnZf5NMa=_Aic_gVQ05rvAvYx0xUpbZ=hOg2=7A9=ZbPdFw@mail.gmail.com>
+Subject: Re: [PATCH v8 00/14] kasan: x86: arm64: KASAN tag-based mode for x86
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: corbet@lwn.net, morbo@google.com, rppt@kernel.org, 
+	lorenzo.stoakes@oracle.com, ubizjak@gmail.com, mingo@redhat.com, 
+	vincenzo.frascino@arm.com, maciej.wieczor-retman@intel.com, maz@kernel.org, 
+	catalin.marinas@arm.com, yeoreum.yun@arm.com, will@kernel.org, 
+	jackmanb@google.com, samuel.holland@sifive.com, glider@google.com, 
+	osandov@fb.com, nsc@kernel.org, luto@kernel.org, jpoimboe@kernel.org, 
+	akpm@linux-foundation.org, Liam.Howlett@oracle.com, kees@kernel.org, 
+	jan.kiszka@siemens.com, thomas.lendacky@amd.com, jeremy.linton@arm.com, 
+	dvyukov@google.com, axelrasmussen@google.com, leitao@debian.org, 
+	ryabinin.a.a@gmail.com, bigeasy@linutronix.de, peterz@infradead.org, 
+	mark.rutland@arm.com, urezki@gmail.com, brgerst@gmail.com, hpa@zytor.com, 
+	mhocko@suse.com, weixugc@google.com, kbingham@kernel.org, vbabka@suse.cz, 
+	nathan@kernel.org, trintaeoitogc@gmail.com, samitolvanen@google.com, 
+	tglx@kernel.org, thuth@redhat.com, surenb@google.com, 
+	anshuman.khandual@arm.com, smostafa@google.com, yuanchu@google.com, 
+	ada.coupriediaz@arm.com, dave.hansen@linux.intel.com, kas@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, david@kernel.org, bp@alien8.de, 
+	ardb@kernel.org, justinstitt@google.com, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi kernel test robot,
+On Mon, Jan 12, 2026 at 6:26=E2=80=AFPM Maciej Wieczor-Retman
+<m.wieczorretman@pm.me> wrote:
+>
+> =3D=3D=3D=3D=3D=3D=3D Introduction
+> The patchset aims to add a KASAN tag-based mode for the x86 architecture
+> with the help of the new CPU feature called Linear Address Masking
+> (LAM). Main improvement introduced by the series is 2x lower memory
+> usage compared to KASAN's generic mode, the only currently available
+> mode on x86. The tag based mode may also find errors that the generic
+> mode couldn't because of differences in how these modes operate.
+>
+> =3D=3D=3D=3D=3D=3D=3D How does KASAN' tag-based mode work?
+> When enabled, memory accesses and allocations are augmented by the
+> compiler during kernel compilation. Instrumentation functions are added
+> to each memory allocation and each pointer dereference.
+>
+> The allocation related functions generate a random tag and save it in
+> two places: in shadow memory that maps to the allocated memory, and in
+> the top bits of the pointer that points to the allocated memory. Storing
+> the tag in the top of the pointer is possible because of Top-Byte Ignore
+> (TBI) on arm64 architecture and LAM on x86.
+>
+> The access related functions are performing a comparison between the tag
+> stored in the pointer and the one stored in shadow memory. If the tags
+> don't match an out of bounds error must have occurred and so an error
+> report is generated.
+>
+> The general idea for the tag-based mode is very well explained in the
+> series with the original implementation [1].
+>
+> [1] https://lore.kernel.org/all/cover.1544099024.git.andreyknvl@google.co=
+m/
+>
+> =3D=3D=3D=3D=3D=3D=3D Differences summary compared to the arm64 tag-based=
+ mode
+> - Tag width:
+>         - Tag width influences the chance of a tag mismatch due to two
+>           tags from different allocations having the same value. The
+>           bigger the possible range of tag values the lower the chance
+>           of that happening.
+>         - Shortening the tag width from 8 bits to 4, while it can help
+>           with memory usage, it also increases the chance of not
+>           reporting an error. 4 bit tags have a ~7% chance of a tag
+>           mismatch.
+>
+> - Address masking mechanism
+>         - TBI in arm64 allows for storing metadata in the top 8 bits of
+>           the virtual address.
+>         - LAM in x86 allows storing tags in bits [62:57] of the pointer.
+>           To maximize memory savings the tag width is reduced to bits
+>           [60:57].
+>
+> - Inline mode mismatch reporting
+>         - Arm64 inserts a BRK instruction to pass metadata about a tag
+>           mismatch to the KASAN report.
+>         - Right now on x86 the INT3 instruction is used for the same
+>           purpose. The attempt to move it over to use UD1 is already
+>           implemented and tested but relies on another series that needs
+>           merging first. Therefore this patch will be posted separately
+>           once the dependency is satisfied by being merged upstream.
+>
 
-Thanks for the test results.
-
-No further testing is needed for this patch series, as it will not be
-pursued further and is not expected to be accepted upstream.
-
-Thanks again for the testing effort.
-
-Thanks,
-Leon
-
-On 13/1/26 03:22, kernel test robot wrote:
-> Hi Leon,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-x64-Call-perf_snapshot_branch_stack-in-trampoline/20260109-234435
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20260109153420.32181-3-leon.hwang%40linux.dev
-> patch subject: [PATCH bpf-next 2/3] bpf: Introduce BPF_BRANCH_SNAPSHOT_F_COPY flag for bpf_get_branch_snapshot helper
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260112/202601122013.hmoeIXXs-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260112/202601122013.hmoeIXXs-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601122013.hmoeIXXs-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: bpf_branch_snapshot
->    >>> referenced by bpf_trace.c:1182 (kernel/trace/bpf_trace.c:1182)
->    >>>               vmlinux.o:(bpf_get_branch_snapshot)
->    >>> referenced by bpf_trace.c:0 (kernel/trace/bpf_trace.c:0)
->    >>>               vmlinux.o:(bpf_get_branch_snapshot)
-> 
-
+Please also update the Software Tag-Based KASAN section in
+Documentation/dev-tools/kasan.rst accordingly.
