@@ -1,147 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD6B36E469;
-	Tue, 13 Jan 2026 11:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C431E8826
+	for <llvm@lists.linux.dev>; Tue, 13 Jan 2026 11:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768303069; cv=none; b=g8cYTVnYqUbI/8r8GNw/yLHCRyUokufKRXsrt06/uf4n/s/X31Fl3ZO25dUb2jTrN0v/apb2CfxGbIfDgz79gSqb3jqpICkdvIIIeDSRhSKToDwEk69zf5pqLEHMFTU3X+VF6LcII5I7U/e5VGss2eQdxWMyaGLGcAP/1LagJOA=
+	t=1768304897; cv=none; b=jEYLq31E42DszZl/Og1Bn4uOmh+FWnONXdDRxTzNnrTcztu/qnLjNnNFBa/q62Qxo6qi6qk8XGekW78Kq0PTpRJfzdSO5XIreu4yp0fYO/42fLRIkxYrR3ZFrGPiOLI8hbz45ZNAVK4pqswm2xTbdZQ2Wy9jhAVqSQzkVst2U58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768303069; c=relaxed/simple;
-	bh=6ApKDvuYrHCbgkSDoJal6UGfZda5gYbmKgC7rJ4nZuU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=dHnRv9l7JeDIUCkBzL0o249/qAcBqgXVJRNw9E/yC+q8w+LAD7RoP6XbxURhwBKFucP8ce98pOrkMIsxMEAt5sH1AAeloOdvA2zpIhZp8Gbc8sQn3B0WlaGNKhBBOMnhKW71lC62B64quUmPCCFnkXcQaZLRmP/AfoAAJk5NvEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KkmTbX38; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768304897; c=relaxed/simple;
+	bh=/KMIFQGR4Bul37gWLEtJAePhpTN+maF3gId13DkHyMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RsHFNz+/8nHE0mmeL4oBp7hvDCZwCmuqei7puPHomrV9nuRxbIIJLKqfpsU2TYQ6aRQP9Wb3EYGRhWTIT2FRBs6fuWLLkoljdZXdLPhwpbLOZWGc8J48JG1EFyV7zykeo+v7dSFF2JKdFCo7DjJxMIG6ZQaR/Nkj0vECWrYHV0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Xu0+QRmj; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KkmTbX38"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768303068; x=1799839068;
-  h=date:from:to:cc:subject:message-id;
-  bh=6ApKDvuYrHCbgkSDoJal6UGfZda5gYbmKgC7rJ4nZuU=;
-  b=KkmTbX38IP3ggvO4FTBHLy1izCyaWy9m5EMJoRN+aVGPbCB6DYrIzwe4
-   EdrDaX0H3EWQ8qz7MgDWlh/0tMqfWUlr4y0FwdCmCxBLG6NpJlduVzhzH
-   gYiGukk9LKr+iHWoTL33rpvkS0vJQbHOZhs2cMuK7bVfKLJJyFP6q6cxg
-   cLiho5VMxp4H1ZZZcLDViiNxTIlGX/ynHAXT/ModYYJA3Y/jOvouEwTCc
-   iJE7jAI1AI9gWuHmqFDUXPfOhpLvfPjKYWWUmd6+Dimi11NBXS+RhwMea
-   lX9t367Y1G15IwZ1z6zAK0AaEU2uT9j+Rkyw+mFMEHhln3eHZSTnEWIwk
-   g==;
-X-CSE-ConnectionGUID: g4RGNISvT8CcPRUGCqdguA==
-X-CSE-MsgGUID: UPneoYkYRpaDlAeW7ej0Tg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69743623"
-X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="69743623"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 03:17:47 -0800
-X-CSE-ConnectionGUID: jQQH36KdTwSJFFKg24tgLg==
-X-CSE-MsgGUID: LGntL7VbT267s43u8hM8mA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="235068305"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8581b2e2a62c) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 13 Jan 2026 03:17:46 -0800
-Received: from kbuild by 8581b2e2a62c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vfcP9-0000000017x-1bI9;
-	Tue, 13 Jan 2026 11:17:43 +0000
-Date: Tue, 13 Jan 2026 12:16:45 +0100
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-next 15/17] fs/netfs/rxqueue.c:468:15:
- warning: variable 'got' set but not used
-Message-ID: <202601131203.DoAh9qXh-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Xu0+QRmj"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5470340E0028;
+	Tue, 13 Jan 2026 11:48:14 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id TuovWBZKXyO3; Tue, 13 Jan 2026 11:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1768304892; bh=rTbY8atxjKRjBA0y7/TdrF1D3ojAC1i7Hfmy4BpGVjk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xu0+QRmjVzNBeP/SFAjZtAYJhh21/UMZZySy8yfoIPEBTM4uIy81JkjyYzMDkN+01
+	 n+8yvHO7z7BYTqramqSmlCga3GRnbhy7+aaGT9vruZ8fLyV2f6AyRnKg7EVljfIqK6
+	 lOHOIMZuDODjGpIdo4Qc2uqTKS9WoZmSXSetNTKJ/hoXL1K3f0EuVcGvghZ6XV2pje
+	 uSZa2REx13fy9H2mVCdKrJtb02uLGMEYUONgSqVGTtnI9OLu8V1NSDwPz7de71ETiO
+	 wBA9CcU/Bzp1kCBtzPupRc/pF1vb5GoIkk9j8U0lmI827DrbA0GGCKA9XqcU1poQqb
+	 uKIrf9KzbJYRxhJHXaSxcxLN52HneYEXBmDHVmSOgslImgxuumZkdJAvl4SVmu9BMy
+	 1ZNoNFr194LKYfVF+BxPzd5FSH2shoVaru+f41SJ+nEeSwAX29dBPVqqHxxnEo7Uua
+	 yy30+t1ym5n601GoZV5F76xpQhfo7AV29Y9mu3rWjfyxDPhVrHt53rWfTxzQ6bG+11
+	 UXsjKFSGRi/2UG/gm5Kh3HFtjczcjwwRG/cn6wYOMivXrevjw8nosm4zMs55sut6HD
+	 wAi/LWh0YyOYKy54CB2fW1apZheJfHlztDFVkJvkT1BYdgWEEW46JWy3RDdAcDDsHR
+	 FcYQ/RrS/jrxs8yaH2eXQqk8=
+Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 78B1A40E0194;
+	Tue, 13 Jan 2026 11:47:06 +0000 (UTC)
+Date: Tue, 13 Jan 2026 12:47:05 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Maciej Wieczor-Retman <m.wieczorretman@pm.me>, corbet@lwn.net,
+	morbo@google.com, rppt@kernel.org, lorenzo.stoakes@oracle.com,
+	ubizjak@gmail.com, mingo@redhat.com, vincenzo.frascino@arm.com,
+	maciej.wieczor-retman@intel.com, maz@kernel.org,
+	catalin.marinas@arm.com, yeoreum.yun@arm.com, will@kernel.org,
+	jackmanb@google.com, samuel.holland@sifive.com, glider@google.com,
+	osandov@fb.com, nsc@kernel.org, luto@kernel.org,
+	jpoimboe@kernel.org, Liam.Howlett@oracle.com, kees@kernel.org,
+	jan.kiszka@siemens.com, thomas.lendacky@amd.com,
+	jeremy.linton@arm.com, dvyukov@google.com, axelrasmussen@google.com,
+	leitao@debian.org, ryabinin.a.a@gmail.com, bigeasy@linutronix.de,
+	peterz@infradead.org, mark.rutland@arm.com, urezki@gmail.com,
+	brgerst@gmail.com, hpa@zytor.com, mhocko@suse.com,
+	andreyknvl@gmail.com, weixugc@google.com, kbingham@kernel.org,
+	vbabka@suse.cz, nathan@kernel.org, trintaeoitogc@gmail.com,
+	samitolvanen@google.com, tglx@kernel.org, thuth@redhat.com,
+	surenb@google.com, anshuman.khandual@arm.com, smostafa@google.com,
+	yuanchu@google.com, ada.coupriediaz@arm.com,
+	dave.hansen@linux.intel.com, kas@kernel.org,
+	nick.desaulniers+lkml@gmail.com, david@kernel.org, ardb@kernel.org,
+	justinstitt@google.com, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v8 00/14] kasan: x86: arm64: KASAN tag-based mode for x86
+Message-ID: <20260113114705.GJaWYwubl3yCqa1POx@fat_crate.local>
+References: <cover.1768233085.git.m.wieczorretman@pm.me>
+ <20260112102957.359c8de904b11dc23cffd575@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260112102957.359c8de904b11dc23cffd575@linux-foundation.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
-head:   8dc07632381d372883f12b9ca6da7438ce683a33
-commit: 8a18d8ea965502452510e9bd13addd1058370329 [15/17] netfs: Add some TCP receive queue helpers
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260113/202601131203.DoAh9qXh-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601131203.DoAh9qXh-lkp@intel.com/reproduce)
+On Mon, Jan 12, 2026 at 10:29:57AM -0800, Andrew Morton wrote:
+> The review process seems to be proceeding OK so I'll add this to
+> mm.git's mm-new branch, which is not included in linux-next.  I'll aim
+> to hold it there for a week while people check the patches over and
+> send out their acks (please).  Then I hope I can move it into mm.git's
+> mm-unstable branch where it will receive linux-next exposure.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601131203.DoAh9qXh-lkp@intel.com/
+Yah, you can drop this one and take the next revision after all comments have
+been addressed.
 
-All warnings (new ones prefixed by >>):
-
->> fs/netfs/rxqueue.c:468:15: warning: variable 'got' set but not used [-Wunused-but-set-variable]
-     468 |         unsigned int got = 0;
-         |                      ^
-   1 warning generated.
-
-
-vim +/got +468 fs/netfs/rxqueue.c
-
-   449	
-   450	/**
-   451	 * netfs_rxqueue_tcp_refill - Refill receive queue by TCP splice
-   452	 * @tcp_sock: The TCP socket to splice data from
-   453	 * @rxq: The Rx queue to splice into
-   454	 * @min_size: The amount of data we're interested in
-   455	 *
-   456	 * Refill the receive queue by splicing network receive buffer segments from a
-   457	 * TCP socket, but don't wait for data.  The caller must do any waiting
-   458	 * required.
-   459	 *
-   460	 * Note that whilst the peer may send PDUs in separate TCP packets, it's
-   461	 * possible that the local NIC may join them back together if doing receive
-   462	 * offload.
-   463	 */
-   464	int netfs_rxqueue_tcp_refill(struct socket *tcp_sock, struct netfs_rxqueue *rxq,
-   465				     size_t min_size)
-   466	{
-   467		struct bvecq *add_to = rxq->add_to;
- > 468		unsigned int got = 0;
-   469		size_t qsize = rxq->qsize;
-   470		int rc = 0;
-   471	
-   472		if (!rxq->refillable) {
-   473			WARN_ON(min_size > qsize);
-   474			return 0;
-   475		}
-   476		if (qsize >= min_size && min_size > 0)
-   477			return 0;
-   478	
-   479		do {
-   480			if (!add_to || add_to->nr_segs == add_to->max_segs) {
-   481				struct bvecq *b;
-   482				unsigned int nr_bv = (2048 - sizeof(*add_to)) / sizeof(add_to->bv[0]);
-   483	
-   484				b = netfs_alloc_rx_bvecq(nr_bv);
-   485				b->prev = add_to;
-   486				if (!add_to)
-   487					rxq->take_from = b;
-   488				else
-   489					add_to->next = b;
-   490				add_to = b;
-   491			}
-   492	
-   493			rc = netfs_tcp_splice_to_bvecq(tcp_sock, add_to, INT_MAX);
-   494			//trace_smb3_tcp_splice(rc);
-   495			if (rc < 0)
-   496				break;
-   497	
-   498			qsize += rc;
-   499			got += rc;
-   500			rc = 0;
-   501		} while (qsize < min_size);
-   502	
-   503		rxq->add_to = add_to;
-   504		rxq->qsize = qsize;
-   505		return rc;
-   506	}
-   507	EXPORT_SYMBOL(netfs_rxqueue_tcp_refill);
-   508	
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
