@@ -1,171 +1,210 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67472F6925
-	for <llvm@lists.linux.dev>; Tue, 13 Jan 2026 07:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F62F31AA91;
+	Tue, 13 Jan 2026 07:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768289781; cv=none; b=ZcHKmXwqFSpOAkwLxhzMlTNx7hUPoRvMQTE6VsWjs6nziWrXHghdEJpGOTzEaLeNiMww+PzqzYg3C3lvbJwf/zIkIObQmv7wMJZYh92lYlL+8hf42HnkAwW7dbFsMnHqFHKItovzoW7Miet96S0J1hmwGSAzTZX64V3gs/+xpJA=
+	t=1768290463; cv=none; b=Iouvuc5r76mYdJXRc9p9QIiE5YEzAxoWFzoqIAIe8Z+KfAwblaCz0rWv4vkGSeDfJcmlR2y7AI71Cs34fGBCihziS8DimhBEZw+TjXXmX/QoGlhCQhPKRS8gm3N1FJ13umXz6c01MAwRZx62bPVgUrJ8sOf7vfZWV5rjwuqnZRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768289781; c=relaxed/simple;
-	bh=Z/KpXmg2acLr6HY276d2km3DUkXuG6WTvI3ls6E5+UM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=E5Ialf13oYQjFXygdyxglJe+9/oOE4y8cd43YqS0BenDJCGUfcBha13b15HfEEQJB3biYE90GxDD2zm6+rrn2j7oEPQabXIku1sFueb6HZupoKHr5+u2Gm/8JXEQewGzL+zXW91kjgD+L2KZfbiwClexc6ujaASWlocGr0Gry/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HiBTSDsG; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1768290463; c=relaxed/simple;
+	bh=J4PcDyKeentBfEoiQRb2xDPqhx/fOMHrdpLfCypZrKk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UXPBKxl+bCCFyBM5ssMjt1DN9dUeO2PhdU0AImLRWDK0IaYkbNKXNiG0BdM4VMwKPkyjjmhUTvgGfJksfCYorm0o/0Q2jj8VHPEmvhPidi573yPnc/y+/5DPnidFPoj9Y4lUNSfk2mHhs2JaJYKPCVmiaJpxM3YyxgJ2ekkr6cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQrDbVqp; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HiBTSDsG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1768289401;
-	bh=Z/KpXmg2acLr6HY276d2km3DUkXuG6WTvI3ls6E5+UM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=HiBTSDsG4tYdLOhwWifV/krOuWGbDApgYRNjFxuB2C8yZzzuSZ8UseZ7BeZW82ggd
-	 QpYQ1FYDke/Uu81zpWXZPo9f3WFvp9VmFcRsXzBaGzziVyJ7uN5t9n+s2Ptqpg8uIY
-	 HnK8epg4qvggH+4iZW2h0/3lwxRwwpLp7ut0wUaY=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 13 Jan 2026 08:29:58 +0100
-Subject: [PATCH] kbuild: Drop superfluous compiler option checks
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQrDbVqp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768290457; x=1799826457;
+  h=date:from:to:cc:subject:message-id;
+  bh=J4PcDyKeentBfEoiQRb2xDPqhx/fOMHrdpLfCypZrKk=;
+  b=LQrDbVqpD6ugYQQrhTPAhIWsgv+t+SfuocAdPM/evMo4Bzf76y0MyoXS
+   vcdcB4N5w2nnYe6wlcW/4nNIcGqs8pvGreG5HLLhKeBTpM7737d/3/yir
+   PJnp7LWeyG8xKkVGV4jfpCbQmbZqjhdCgWm4bsNVMPIQUDnEO0leA02SY
+   rzauB7iUg7wV/E6kwRnu6FSLUfrLeGsUCJWGoLfXlqwQRyAmVEqz4rvZy
+   /sEcZLIgD/nQPbxUOOFbYOzuAfc+YzfC8lXnE5rQxM/ciyQD8YjQq62po
+   AeYS/U5xK8WHzoMgh7tkTKKf/Bq1R7HuNYu6u2g8EXeLXFcolZCOy95EF
+   A==;
+X-CSE-ConnectionGUID: U/1IOJm5SQiMo/JGXXjJPg==
+X-CSE-MsgGUID: hHANtFEHTBG54l0YDZOisA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80678672"
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="80678672"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 23:47:37 -0800
+X-CSE-ConnectionGUID: 6XKv94g8SH2vONWghmC/Zw==
+X-CSE-MsgGUID: MU/oy78cQguVxJT5ilisXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="235024330"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 12 Jan 2026 23:47:33 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vfZ7j-00000000EOC-0IDk;
+	Tue, 13 Jan 2026 07:47:31 +0000
+Date: Tue, 13 Jan 2026 15:47:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Maciej Wieczor-Retman" <maciej.wieczor-retman@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Hildenbrand <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-new 294/303] arch/arm64/kernel/traps.c:1074:2:
+ error: call to undeclared function 'kasan_die_unless_recover'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202601131502.L9EGfMiI-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260113-kbuild-cc-option-v1-1-011314a0f7f1@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2WMTQqDMBBGrxJm3QEzOKbkKsVFTMY2VNQmKgXx7
- g110UWX7/t5O2RJUTJYtUOSLeY4jQX0RYF/uPEuGENhoIqaSmuNz26NQ0DvcZqXMkbDRMbVzNw
- 3UG5zkj6+v8pbe3KS11rMyxn+xFb9aYdSoSYkMYZrCuzC1W4a2uP4AFO8dHKsAAAA
-X-Change-ID: 20260111-kbuild-cc-option-75227a4555f6
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768289400; l=4526;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Z/KpXmg2acLr6HY276d2km3DUkXuG6WTvI3ls6E5+UM=;
- b=q4JS4Tlt1EoEvIDK+J1fJlpKoFWdE+x5GpHavmUusypSYb2aT3vAdEEFUxi0pGsAENNNRbLSy
- qDvazjqmt1pCoYrodvyEyneGva98srfosNzQR4vuEZye568T4ahMggj
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Many of the compiler option checks are not necessary anymore with the
-current supported versions of compilers.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+head:   abb8eb84b7bb668d982e556b2b19f0e3ac42c591
+commit: c22668ddeabded18adfebc428e99d20d59bc6d9d [294/303] arm64: unify software tag-based KASAN inline recovery path
+config: arm64-randconfig-001-20260113 (https://download.01.org/0day-ci/archive/20260113/202601131502.L9EGfMiI-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601131502.L9EGfMiI-lkp@intel.com/reproduce)
 
-Remove them.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601131502.L9EGfMiI-lkp@intel.com/
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- Makefile              |  2 +-
- scripts/Makefile.warn | 23 ++++++++++-------------
- 2 files changed, 11 insertions(+), 14 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/Makefile b/Makefile
-index e404e4767944..232ea447ce5c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1102,7 +1102,7 @@ KBUILD_CFLAGS += -fno-builtin-wcslen
- 
- # change __FILE__ to the relative path to the source directory
- ifdef building_out_of_srctree
--KBUILD_CPPFLAGS += $(call cc-option,-fmacro-prefix-map=$(srcroot)/=)
-+KBUILD_CPPFLAGS += -fmacro-prefix-map=$(srcroot)/=
- endif
- 
- # include additional Makefiles when needed
-diff --git a/scripts/Makefile.warn b/scripts/Makefile.warn
-index 68e6fafcb80c..df2f63df6506 100644
---- a/scripts/Makefile.warn
-+++ b/scripts/Makefile.warn
-@@ -16,7 +16,7 @@ KBUILD_CFLAGS += -Werror=return-type
- KBUILD_CFLAGS += -Werror=strict-prototypes
- KBUILD_CFLAGS += -Wno-format-security
- KBUILD_CFLAGS += -Wno-trigraphs
--KBUILD_CFLAGS += $(call cc-option, -Wno-frame-address)
-+KBUILD_CFLAGS += -Wno-frame-address
- KBUILD_CFLAGS += $(call cc-option, -Wno-address-of-packed-member)
- KBUILD_CFLAGS += -Wmissing-declarations
- KBUILD_CFLAGS += -Wmissing-prototypes
-@@ -72,7 +72,7 @@ KBUILD_CFLAGS += -Wno-pointer-sign
- # In order to make sure new function cast mismatches are not introduced
- # in the kernel (to avoid tripping CFI checking), the kernel should be
- # globally built with -Wcast-function-type.
--KBUILD_CFLAGS += $(call cc-option, -Wcast-function-type)
-+KBUILD_CFLAGS += -Wcast-function-type
- 
- # Currently, disable -Wstringop-overflow for GCC 11, globally.
- KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-option, -Wno-stringop-overflow)
-@@ -99,7 +99,7 @@ KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- KBUILD_CFLAGS += -Werror=date-time
- 
- # enforce correct pointer usage
--KBUILD_CFLAGS += $(call cc-option,-Werror=incompatible-pointer-types)
-+KBUILD_CFLAGS += -Werror=incompatible-pointer-types
- 
- # Require designated initializers for all marked structures
- KBUILD_CFLAGS += $(call cc-option,-Werror=designated-init)
-@@ -116,7 +116,7 @@ ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
- 
- KBUILD_CFLAGS += -Wmissing-format-attribute
- KBUILD_CFLAGS += -Wmissing-include-dirs
--KBUILD_CFLAGS += $(call cc-option, -Wunused-const-variable)
-+KBUILD_CFLAGS += -Wunused-const-variable
- 
- KBUILD_CPPFLAGS += -Wundef
- KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN1
-@@ -125,12 +125,12 @@ else
- 
- # Some diagnostics enabled by default are noisy.
- # Suppress them by using -Wno... except for W=1.
--KBUILD_CFLAGS += $(call cc-option, -Wno-unused-but-set-variable)
--KBUILD_CFLAGS += $(call cc-option, -Wno-unused-const-variable)
-+KBUILD_CFLAGS += -Wno-unused-but-set-variable
-+KBUILD_CFLAGS += -Wno-unused-const-variable
- KBUILD_CFLAGS += $(call cc-option, -Wno-packed-not-aligned)
- KBUILD_CFLAGS += $(call cc-option, -Wno-format-overflow)
- ifdef CONFIG_CC_IS_GCC
--KBUILD_CFLAGS += $(call cc-option, -Wno-format-truncation)
-+KBUILD_CFLAGS += -Wno-format-truncation
- endif
- KBUILD_CFLAGS += $(call cc-option, -Wno-stringop-truncation)
- 
-@@ -145,14 +145,11 @@ KBUILD_CFLAGS += -Wno-format
- # problematic.
- KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
- KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
--# Requires clang-12+.
--ifeq ($(call clang-min-version, 120000),y)
- KBUILD_CFLAGS += -Wformat-insufficient-args
- endif
--endif
--KBUILD_CFLAGS += $(call cc-option, -Wno-pointer-to-enum-cast)
-+KBUILD_CFLAGS += -Wno-pointer-to-enum-cast
- KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
--KBUILD_CFLAGS += $(call cc-option, -Wno-unaligned-access)
-+KBUILD_CFLAGS += -Wno-unaligned-access
- KBUILD_CFLAGS += -Wno-enum-compare-conditional
- endif
- 
-@@ -166,7 +163,7 @@ ifneq ($(findstring 2, $(KBUILD_EXTRA_WARN)),)
- KBUILD_CFLAGS += -Wdisabled-optimization
- KBUILD_CFLAGS += -Wshadow
- KBUILD_CFLAGS += $(call cc-option, -Wlogical-op)
--KBUILD_CFLAGS += $(call cc-option, -Wunused-macros)
-+KBUILD_CFLAGS += -Wunused-macros
- 
- KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN2
- 
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:862:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     862 |         [ESR_ELx_EC_DABT_CUR]           = "DABT (current EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:863:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     863 |         [ESR_ELx_EC_SP_ALIGN]           = "SP Alignment",
+         |                                           ^~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:864:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     864 |         [ESR_ELx_EC_MOPS]               = "MOPS",
+         |                                           ^~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:865:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     865 |         [ESR_ELx_EC_FP_EXC32]           = "FP (AArch32)",
+         |                                           ^~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:866:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     866 |         [ESR_ELx_EC_FP_EXC64]           = "FP (AArch64)",
+         |                                           ^~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:867:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     867 |         [ESR_ELx_EC_GCS]                = "Guarded Control Stack",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:868:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     868 |         [ESR_ELx_EC_SERROR]             = "SError",
+         |                                           ^~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:869:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     869 |         [ESR_ELx_EC_BREAKPT_LOW]        = "Breakpoint (lower EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:870:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     870 |         [ESR_ELx_EC_BREAKPT_CUR]        = "Breakpoint (current EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:871:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     871 |         [ESR_ELx_EC_SOFTSTP_LOW]        = "Software Step (lower EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:872:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     872 |         [ESR_ELx_EC_SOFTSTP_CUR]        = "Software Step (current EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:873:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     873 |         [ESR_ELx_EC_WATCHPT_LOW]        = "Watchpoint (lower EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:874:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     874 |         [ESR_ELx_EC_WATCHPT_CUR]        = "Watchpoint (current EL)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:875:25: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     875 |         [ESR_ELx_EC_BKPT32]             = "BKPT (AArch32)",
+         |                                           ^~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:876:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     876 |         [ESR_ELx_EC_VECTOR32]           = "Vector catch (AArch32)",
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:877:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     877 |         [ESR_ELx_EC_BRK64]              = "BRK (AArch64)",
+         |                                           ^~~~~~~~~~~~~~~
+   arch/arm64/kernel/traps.c:833:28: note: previous initialization is here
+     833 |         [0 ... ESR_ELx_EC_MAX]          = "UNRECOGNIZED EC",
+         |                                           ^~~~~~~~~~~~~~~~~
+>> arch/arm64/kernel/traps.c:1074:2: error: call to undeclared function 'kasan_die_unless_recover'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1074 |         kasan_die_unless_recover(recover, "Oops - KASAN", regs, esr, die);
+         |         ^
+   44 warnings and 1 error generated.
 
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20260111-kbuild-cc-option-75227a4555f6
-prerequisite-change-id: 20260111-kbuild-clang-12-2e77542d5ad8:v1
 
-Best regards,
+vim +/kasan_die_unless_recover +1074 arch/arm64/kernel/traps.c
+
+  1063	
+  1064	int kasan_brk_handler(struct pt_regs *regs, unsigned long esr)
+  1065	{
+  1066		bool recover = esr & KASAN_ESR_RECOVER;
+  1067		bool write = esr & KASAN_ESR_WRITE;
+  1068		size_t size = KASAN_ESR_SIZE(esr);
+  1069		void *addr = (void *)regs->regs[0];
+  1070		u64 pc = regs->pc;
+  1071	
+  1072		kasan_report(addr, size, write, pc);
+  1073	
+> 1074		kasan_die_unless_recover(recover, "Oops - KASAN", regs, esr, die);
+  1075	
+  1076		/* If thread survives, skip over the brk instruction and continue: */
+  1077		arm64_skip_faulting_instruction(regs, AARCH64_INSN_SIZE);
+  1078		return DBG_HOOK_HANDLED;
+  1079	}
+  1080	#endif
+  1081	
+
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
