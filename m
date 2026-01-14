@@ -1,130 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4927637F737;
-	Wed, 14 Jan 2026 08:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B63344053
+	for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 11:03:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768380633; cv=none; b=bvHd+W11FMuC8HcG7SqOMN0A/Sxpx0zyAuIEaW9Ps6nJO3wTK+7YjvKEFUkEWwvt0fmaLYqHGBwGvQaPRcejFB1oLnZzwsfcLTppAH6jear+yxUYcDZ2IIORnhnMpEf+JTK1eg5MP563XadZH0vuP9CeZcqdpbN8Kjgs/Xgti/g=
+	t=1768388607; cv=none; b=ggJ6tDAGk8oz+LBJg/y4uLKZXomI6fxqheYv4w9mxkbmLMNdlqzEGPpv+hZf1B5CpY9Ww+RdGBzE6+4pwVd3QaICxFgClZx66Xfep5yodHwL+Hybc0kV2zpKz4DyZVUAglK/p4CNbOrtDyLpOujey69xdh8p8IrVSPSmYt+8ng4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768380633; c=relaxed/simple;
-	bh=9WrC7PoW1tnMSWaGp+a6OzL1P5H5ocgF70PzqOotMyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ywtp+IhFZqkXaNgNGzlGqXwmQmztFIQoLvf7e3/Sr4lHwtE9VqAtTvSRuSZyjpiSBxn5uFSYWfpE2b7iJESM1vjYISYM5sBAFQkqpi3Pa8zXmVs2WXhLaMOC02vQADKGW6eRpvDpn+L18D97UkuoVfntpVhRflBnlMFZ1dWjCwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TpmtMO+q; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768388607; c=relaxed/simple;
+	bh=GvtxZp6TjhNCeN3HfELvv5o3JZk5/lWZS357Fn7BCEA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=W1PTzKfn1vQPqKWKyHGnUWAJcZq8HT3+HzkYmpefx2fv/YzYpQR6SnXIali3vPcwkkPC4mWPufVj3nMua6eC/N4ijJiY0RzORXFoCBVGLQy6tGqOJz1oeK9/ce7uXiogVzZye8fm1B0dXGXLTzVLew/szbPb/Xh4DayNyevpdY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q1hIb76B; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TpmtMO+q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768380630; x=1799916630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9WrC7PoW1tnMSWaGp+a6OzL1P5H5ocgF70PzqOotMyc=;
-  b=TpmtMO+qG5wVCVhdUL98HY+a+e8ntoif8/oWzDV/uSdsjZe0sOvE/PKT
-   PMvFTHtyeqHEt1Rx34l8b02rD6Gj0vUArVSXp1DWKIqiHZzhP3RWtLr1V
-   EegI4yQS/9oXMvl8vCknFg18ZY3lw7awqExCytiLgfy5Ng9KT71JV+SU7
-   vkX1lLpfzsL838FYFmaLNJp6yi8to4Kvv4TNlBc45jBbethmFk2D0Pe8K
-   Y4An/HyRltVTQeyRztmFstWfQD7JjvDMfKyAh2SGBZiciDDVuJ8H/0IpR
-   q/h2Jrqx6HyjGYhdaULWSS/tNGjn7IELHVOu+ZIgTr+EgtQE9QDu8ezle
-   Q==;
-X-CSE-ConnectionGUID: KSQRpBqPSke/XVGLYQmrRg==
-X-CSE-MsgGUID: UVEW1CMfQ4uf1GB+gU4xuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="69583990"
-X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="69583990"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 00:50:28 -0800
-X-CSE-ConnectionGUID: 51X8b6BBSdGy+ZLZ30sGMQ==
-X-CSE-MsgGUID: 377IeQY0TY2w52nrrvyDBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="204514346"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 14 Jan 2026 00:50:27 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vfwa8-00000000G6C-3x4A;
-	Wed, 14 Jan 2026 08:50:24 +0000
-Date: Wed, 14 Jan 2026 16:49:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Allen Pais <allen.lkml@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/1] dmaengine: introduce dmaengine_bh_wq and bh
- helpers
-Message-ID: <202601141622.CAk5SXFi-lkp@intel.com>
-References: <20260108080332.2341725-2-allen.lkml@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q1hIb76B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768388593;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QfHF1aMZu8OdM5vMD0vXDn0KqJxkQn/j0XIkOyxbqJ8=;
+	b=Q1hIb76Bra+dbId9K02/bedQ03XyKigKvLQwTyxDbIDmHMbvJo6MqZOcgQu/HyIHkg1NJN
+	L6M2uIlxgsWy6d/RuScbBSQi6EpJS+zs9g/lE9adUFPgZEiPnNVh0C6jIeqpQOf//gJPs3
+	jl1nBOaED0C7DuMgm+uwdwYmEpGbYS4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-653-l5R2jhxaNI6ltzJpBLFiXw-1; Wed,
+ 14 Jan 2026 06:03:12 -0500
+X-MC-Unique: l5R2jhxaNI6ltzJpBLFiXw-1
+X-Mimecast-MFC-AGG-ID: l5R2jhxaNI6ltzJpBLFiXw_1768388591
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 738AE19560B5
+	for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 11:03:11 +0000 (UTC)
+Received: from [172.20.95.168] (unknown [10.30.44.183])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1BC901956048;
+	Wed, 14 Jan 2026 11:03:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
+ (6.19.0-rc5, upstream-mainline, b5434592)
+Date: Wed, 14 Jan 2026 11:03:10 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260108080332.2341725-2-allen.lkml@gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <28197.126011406031201521@us-mta-653.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: s6heYhlzu3aEUuKZUWNKZS29ICYtxdqd7anAcdYRYEM_1768388591
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Allen,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on shawnguo/for-next sunxi/sunxi/for-next soc/for-next linus/master v6.19-rc5 next-20260114]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Allen-Pais/dmaengine-introduce-dmaengine_bh_wq-and-bh-helpers/20260108-164201
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-patch link:    https://lore.kernel.org/r/20260108080332.2341725-2-allen.lkml%40gmail.com
-patch subject: [RFC PATCH 1/1] dmaengine: introduce dmaengine_bh_wq and bh helpers
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260114/202601141622.CAk5SXFi-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601141622.CAk5SXFi-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601141622.CAk5SXFi-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/dma/hsu/hsu.c:22:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/dma/hsu/hsu.c:503:29: error: no member named 'task' in 'struct virt_dma_chan'
-     503 |                 tasklet_kill(&hsuc->vchan.task);
-         |                               ~~~~~~~~~~~ ^
-   1 warning and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +503 drivers/dma/hsu/hsu.c
+Kernel information:
+    Commit message: Merge tag 'gfs2-for-6.19-rc6' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/gfs2/linux-gfs2
 
-2b49e0c56741fc Andy Shevchenko 2015-02-23  492  
-2b49e0c56741fc Andy Shevchenko 2015-02-23  493  int hsu_dma_remove(struct hsu_dma_chip *chip)
-2b49e0c56741fc Andy Shevchenko 2015-02-23  494  {
-2b49e0c56741fc Andy Shevchenko 2015-02-23  495  	struct hsu_dma *hsu = chip->hsu;
-2b49e0c56741fc Andy Shevchenko 2015-02-23  496  	unsigned short i;
-2b49e0c56741fc Andy Shevchenko 2015-02-23  497  
-2b49e0c56741fc Andy Shevchenko 2015-02-23  498  	dma_async_device_unregister(&hsu->dma);
-2b49e0c56741fc Andy Shevchenko 2015-02-23  499  
-4c97ad993d7639 Heikki Krogerus 2015-10-13  500  	for (i = 0; i < hsu->nr_channels; i++) {
-2b49e0c56741fc Andy Shevchenko 2015-02-23  501  		struct hsu_dma_chan *hsuc = &hsu->chan[i];
-2b49e0c56741fc Andy Shevchenko 2015-02-23  502  
-2b49e0c56741fc Andy Shevchenko 2015-02-23 @503  		tasklet_kill(&hsuc->vchan.task);
-2b49e0c56741fc Andy Shevchenko 2015-02-23  504  	}
-2b49e0c56741fc Andy Shevchenko 2015-02-23  505  
-2b49e0c56741fc Andy Shevchenko 2015-02-23  506  	return 0;
-2b49e0c56741fc Andy Shevchenko 2015-02-23  507  }
-2b49e0c56741fc Andy Shevchenko 2015-02-23  508  EXPORT_SYMBOL_GPL(hsu_dma_remove);
-2b49e0c56741fc Andy Shevchenko 2015-02-23  509  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2261014202
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2261014202_x86_64_kernel-debug
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, x86_64]
+    /distribution/command [aarch64, ppc64le, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
+    Boot test [aarch64, ppc64le, x86_64]
+    CKI/restraint [aarch64, ppc64le, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [aarch64, ppc64le, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
+    Storage - blktests - throtl [aarch64, x86_64]
+    Storage - blktests - ublk [aarch64, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, x86_64]
+    stress: stress-ng - memory [aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
