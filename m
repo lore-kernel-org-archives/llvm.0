@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622EF36BCE8;
-	Wed, 14 Jan 2026 06:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4927637F737;
+	Wed, 14 Jan 2026 08:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768372893; cv=none; b=kaz8NYlHzfIbrtnhGQmETqdy7WRV20dYWd58OgyYt7d/ZEb82op6+5cqvyOBrAF/Z8R7tTWX+NTKuw1SChoXZ88Se8W9whTPOreWl+nExA27Xl6cBaV72+tRRbg+MuLQxooPZEiW5Wt/tU4JgpqkKJeAyWbF2oHQSCMb95Gj92s=
+	t=1768380633; cv=none; b=bvHd+W11FMuC8HcG7SqOMN0A/Sxpx0zyAuIEaW9Ps6nJO3wTK+7YjvKEFUkEWwvt0fmaLYqHGBwGvQaPRcejFB1oLnZzwsfcLTppAH6jear+yxUYcDZ2IIORnhnMpEf+JTK1eg5MP563XadZH0vuP9CeZcqdpbN8Kjgs/Xgti/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768372893; c=relaxed/simple;
-	bh=XpxsGPlLj5NM4VDI7W0Vxow+OTTiPnZzejvjUQVlmf8=;
+	s=arc-20240116; t=1768380633; c=relaxed/simple;
+	bh=9WrC7PoW1tnMSWaGp+a6OzL1P5H5ocgF70PzqOotMyc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KI0JAMa8H7k9uRcja73DdZxqfIC9zh2MTusk98vI6+OvwivVEMsT0NB/lIjRbJEC751CffSG64uRk4O6Y3cq4HUrconrDSXFxJHQf0mUSgowamSItcH4QlDk5MvpwFP1VuXGG2i4MSJl+hypLTl/YrMK5M3Vqfl5Pa7NIYRvoLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Etq/lMf7; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ywtp+IhFZqkXaNgNGzlGqXwmQmztFIQoLvf7e3/Sr4lHwtE9VqAtTvSRuSZyjpiSBxn5uFSYWfpE2b7iJESM1vjYISYM5sBAFQkqpi3Pa8zXmVs2WXhLaMOC02vQADKGW6eRpvDpn+L18D97UkuoVfntpVhRflBnlMFZ1dWjCwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TpmtMO+q; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Etq/lMf7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TpmtMO+q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768372885; x=1799908885;
+  t=1768380630; x=1799916630;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XpxsGPlLj5NM4VDI7W0Vxow+OTTiPnZzejvjUQVlmf8=;
-  b=Etq/lMf75sb4I85B6HLGj3ik/JzFYi8W61eMKKEtw8gKarLXvzJnBpFK
-   RznL98z0c8gcw37HVNeBIZyHSpUiFF4S9nRC4rrklmg3PnNt3zic4+HKr
-   OQhR+u99FtoJjpbIu+n8h0Z/aH7vWcHwHNGLd/9ADGNE0trqnUjHWjEcb
-   pjL5JsDJwWV0kYhEyv2MBVABffwjxuSP2yHwGsIEXboFMJWIZrswJsZzL
-   V0Xet3xTVrAzQLKp3F27nx3dY/IjCR+jYoocDjLoREF/e67TheelfSdsC
-   ts41yCLhhXejekvsVyQFlol33q9UBY1LBpA1rjH8x3smzex9sby/a4KUf
-   g==;
-X-CSE-ConnectionGUID: ziguPwyNSiOZQOntlZ+C0g==
-X-CSE-MsgGUID: YnnPGw2iQLmjgEIpMo4qGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="80777748"
+  bh=9WrC7PoW1tnMSWaGp+a6OzL1P5H5ocgF70PzqOotMyc=;
+  b=TpmtMO+qG5wVCVhdUL98HY+a+e8ntoif8/oWzDV/uSdsjZe0sOvE/PKT
+   PMvFTHtyeqHEt1Rx34l8b02rD6Gj0vUArVSXp1DWKIqiHZzhP3RWtLr1V
+   EegI4yQS/9oXMvl8vCknFg18ZY3lw7awqExCytiLgfy5Ng9KT71JV+SU7
+   vkX1lLpfzsL838FYFmaLNJp6yi8to4Kvv4TNlBc45jBbethmFk2D0Pe8K
+   Y4An/HyRltVTQeyRztmFstWfQD7JjvDMfKyAh2SGBZiciDDVuJ8H/0IpR
+   q/h2Jrqx6HyjGYhdaULWSS/tNGjn7IELHVOu+ZIgTr+EgtQE9QDu8ezle
+   Q==;
+X-CSE-ConnectionGUID: KSQRpBqPSke/XVGLYQmrRg==
+X-CSE-MsgGUID: UVEW1CMfQ4uf1GB+gU4xuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="69583990"
 X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="80777748"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 22:41:20 -0800
-X-CSE-ConnectionGUID: Li1sWpUOTPeHOoMTNEmoIw==
-X-CSE-MsgGUID: k9fAY+zpRnqecC2vExlfZw==
+   d="scan'208";a="69583990"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 00:50:28 -0800
+X-CSE-ConnectionGUID: 51X8b6BBSdGy+ZLZ30sGMQ==
+X-CSE-MsgGUID: 377IeQY0TY2w52nrrvyDBw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="227745806"
+   d="scan'208";a="204514346"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 13 Jan 2026 22:41:17 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 14 Jan 2026 00:50:27 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vfuZ9-00000000FwK-1ZET;
-	Wed, 14 Jan 2026 06:41:15 +0000
-Date: Wed, 14 Jan 2026 14:40:23 +0800
+	id 1vfwa8-00000000G6C-3x4A;
+	Wed, 14 Jan 2026 08:50:24 +0000
+Date: Wed, 14 Jan 2026 16:49:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	phasta@mailbox.org, tursulin@ursulin.net, matthew.brost@intel.com,
-	sumit.semwal@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH 05/10] dma-buf: inline spinlock for fence protection v4
-Message-ID: <202601141517.1B4n6bXr-lkp@intel.com>
-References: <20260113152125.47380-6-christian.koenig@amd.com>
+To: Allen Pais <allen.lkml@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 1/1] dmaengine: introduce dmaengine_bh_wq and bh
+ helpers
+Message-ID: <202601141622.CAk5SXFi-lkp@intel.com>
+References: <20260108080332.2341725-2-allen.lkml@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,111 +63,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260113152125.47380-6-christian.koenig@amd.com>
+In-Reply-To: <20260108080332.2341725-2-allen.lkml@gmail.com>
 
-Hi Christian,
+Hi Allen,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-xe/drm-xe-next daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-tip/drm-tip next-20260114]
-[cannot apply to drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v6.19-rc5]
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on shawnguo/for-next sunxi/sunxi/for-next soc/for-next linus/master v6.19-rc5 next-20260114]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-K-nig/dma-buf-add-dma_fence_is_initialized-function/20260114-001656
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260113152125.47380-6-christian.koenig%40amd.com
-patch subject: [PATCH 05/10] dma-buf: inline spinlock for fence protection v4
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260114/202601141517.1B4n6bXr-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601141517.1B4n6bXr-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Allen-Pais/dmaengine-introduce-dmaengine_bh_wq-and-bh-helpers/20260108-164201
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20260108080332.2341725-2-allen.lkml%40gmail.com
+patch subject: [RFC PATCH 1/1] dmaengine: introduce dmaengine_bh_wq and bh helpers
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260114/202601141622.CAk5SXFi-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601141622.CAk5SXFi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601141517.1B4n6bXr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601141622.CAk5SXFi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gt/intel_breadcrumbs.c:151:29: error: no member named 'lock' in 'struct dma_fence'
-     151 |         lockdep_assert_held(fence->lock);
-         |                             ~~~~~  ^
-   include/linux/lockdep.h:392:46: note: expanded from macro 'lockdep_assert_held'
-     392 | #define lockdep_assert_held(l)                  do { (void)(l); } while (0)
-         |                                                             ^
-   1 error generated.
---
->> drivers/gpu/drm/i915/i915_active.c:1048:27: error: no member named 'lock' in 'struct dma_fence'
-    1048 |         spin_lock_irqsave(fence->lock, flags);
-         |                           ~~~~~  ^
-   include/linux/spinlock.h:381:39: note: expanded from macro 'spin_lock_irqsave'
-     381 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |                                              ^~~~
-   include/linux/spinlock.h:244:34: note: expanded from macro 'raw_spin_lock_irqsave'
-     244 |                 flags = _raw_spin_lock_irqsave(lock);   \
-         |                                                ^~~~
-   drivers/gpu/drm/i915/i915_active.c:1050:26: error: no member named 'lock' in 'struct dma_fence'
-    1050 |                 spin_lock_nested(prev->lock, SINGLE_DEPTH_NESTING);
-         |                                  ~~~~  ^
-   include/linux/spinlock.h:366:38: note: expanded from macro 'spin_lock_nested'
-     366 |         raw_spin_lock_nested(spinlock_check(lock), subclass);   \
-         |                                             ^~~~
-   include/linux/spinlock.h:235:37: note: expanded from macro 'raw_spin_lock_nested'
-     235 |         _raw_spin_lock(((void)(subclass), (lock)))
-         |                                            ^~~~
-   drivers/gpu/drm/i915/i915_active.c:1064:22: error: no member named 'lock' in 'struct dma_fence'
-    1064 |                         spin_unlock(prev->lock);
-         |                                     ~~~~  ^
-   drivers/gpu/drm/i915/i915_active.c:1067:33: error: no member named 'lock' in 'struct dma_fence'
-    1067 |                 spin_unlock_irqrestore(fence->lock, flags);
-         |                                        ~~~~~  ^
-   drivers/gpu/drm/i915/i915_active.c:1072:28: error: no member named 'lock' in 'struct dma_fence'
-    1072 |                 spin_lock_irqsave(fence->lock, flags);
-         |                                   ~~~~~  ^
-   include/linux/spinlock.h:381:39: note: expanded from macro 'spin_lock_irqsave'
-     381 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |                                              ^~~~
-   include/linux/spinlock.h:244:34: note: expanded from macro 'raw_spin_lock_irqsave'
-     244 |                 flags = _raw_spin_lock_irqsave(lock);   \
-         |                                                ^~~~
-   drivers/gpu/drm/i915/i915_active.c:1074:27: error: no member named 'lock' in 'struct dma_fence'
-    1074 |                         spin_lock_nested(prev->lock, SINGLE_DEPTH_NESTING);
-         |                                          ~~~~  ^
-   include/linux/spinlock.h:366:38: note: expanded from macro 'spin_lock_nested'
-     366 |         raw_spin_lock_nested(spinlock_check(lock), subclass);   \
-         |                                             ^~~~
-   include/linux/spinlock.h:235:37: note: expanded from macro 'raw_spin_lock_nested'
-     235 |         _raw_spin_lock(((void)(subclass), (lock)))
-         |                                            ^~~~
-   drivers/gpu/drm/i915/i915_active.c:1091:21: error: no member named 'lock' in 'struct dma_fence'
-    1091 |                 spin_unlock(prev->lock); /* serialise with prev->cb_list */
-         |                             ~~~~  ^
-   drivers/gpu/drm/i915/i915_active.c:1094:32: error: no member named 'lock' in 'struct dma_fence'
-    1094 |         spin_unlock_irqrestore(fence->lock, flags);
-         |                                ~~~~~  ^
-   8 errors generated.
+   In file included from drivers/dma/hsu/hsu.c:22:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/dma/hsu/hsu.c:503:29: error: no member named 'task' in 'struct virt_dma_chan'
+     503 |                 tasklet_kill(&hsuc->vchan.task);
+         |                               ~~~~~~~~~~~ ^
+   1 warning and 1 error generated.
 
 
-vim +151 drivers/gpu/drm/i915/gt/intel_breadcrumbs.c
+vim +503 drivers/dma/hsu/hsu.c
 
-0152b3b3f49b36 Chris Wilson 2019-05-08  144  
-0152b3b3f49b36 Chris Wilson 2019-05-08  145  static void
-f2cb60e9a3881e Chris Wilson 2019-08-17  146  __dma_fence_signal__notify(struct dma_fence *fence,
-f2cb60e9a3881e Chris Wilson 2019-08-17  147  			   const struct list_head *list)
-0152b3b3f49b36 Chris Wilson 2019-05-08  148  {
-0152b3b3f49b36 Chris Wilson 2019-05-08  149  	struct dma_fence_cb *cur, *tmp;
-0152b3b3f49b36 Chris Wilson 2019-05-08  150  
-0152b3b3f49b36 Chris Wilson 2019-05-08 @151  	lockdep_assert_held(fence->lock);
-0152b3b3f49b36 Chris Wilson 2019-05-08  152  
-f2cb60e9a3881e Chris Wilson 2019-08-17  153  	list_for_each_entry_safe(cur, tmp, list, node) {
-0152b3b3f49b36 Chris Wilson 2019-05-08  154  		INIT_LIST_HEAD(&cur->node);
-0152b3b3f49b36 Chris Wilson 2019-05-08  155  		cur->func(fence, cur);
-0152b3b3f49b36 Chris Wilson 2019-05-08  156  	}
-0152b3b3f49b36 Chris Wilson 2019-05-08  157  }
-0152b3b3f49b36 Chris Wilson 2019-05-08  158  
+2b49e0c56741fc Andy Shevchenko 2015-02-23  492  
+2b49e0c56741fc Andy Shevchenko 2015-02-23  493  int hsu_dma_remove(struct hsu_dma_chip *chip)
+2b49e0c56741fc Andy Shevchenko 2015-02-23  494  {
+2b49e0c56741fc Andy Shevchenko 2015-02-23  495  	struct hsu_dma *hsu = chip->hsu;
+2b49e0c56741fc Andy Shevchenko 2015-02-23  496  	unsigned short i;
+2b49e0c56741fc Andy Shevchenko 2015-02-23  497  
+2b49e0c56741fc Andy Shevchenko 2015-02-23  498  	dma_async_device_unregister(&hsu->dma);
+2b49e0c56741fc Andy Shevchenko 2015-02-23  499  
+4c97ad993d7639 Heikki Krogerus 2015-10-13  500  	for (i = 0; i < hsu->nr_channels; i++) {
+2b49e0c56741fc Andy Shevchenko 2015-02-23  501  		struct hsu_dma_chan *hsuc = &hsu->chan[i];
+2b49e0c56741fc Andy Shevchenko 2015-02-23  502  
+2b49e0c56741fc Andy Shevchenko 2015-02-23 @503  		tasklet_kill(&hsuc->vchan.task);
+2b49e0c56741fc Andy Shevchenko 2015-02-23  504  	}
+2b49e0c56741fc Andy Shevchenko 2015-02-23  505  
+2b49e0c56741fc Andy Shevchenko 2015-02-23  506  	return 0;
+2b49e0c56741fc Andy Shevchenko 2015-02-23  507  }
+2b49e0c56741fc Andy Shevchenko 2015-02-23  508  EXPORT_SYMBOL_GPL(hsu_dma_remove);
+2b49e0c56741fc Andy Shevchenko 2015-02-23  509  
 
 -- 
 0-DAY CI Kernel Test Service
