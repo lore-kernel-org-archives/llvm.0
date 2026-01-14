@@ -1,67 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271B7221FCA;
-	Wed, 14 Jan 2026 03:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD55336EC0;
+	Wed, 14 Jan 2026 04:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768361532; cv=none; b=uincSAigAYO2W52ZNNEtWAL1gW3zvKw79EQtQX/KkBzRbLj7UdECOBf5cstvBD7qPkTZ7ReI0GemVir2+QnYOcDy3TpuqIx5h47bSXYDpSb0FIQk1J8dm4m3Nf+0OB194R8n3fHq9viX/YLQvDGkfzwQ0CAxZsRg+y+9T3hI+34=
+	t=1768365383; cv=none; b=C6Y8LchXplaJojCDqeTDvGPBCHvPB1jpLV81fZK7BUzzyTwuWu6gN4QuapT/R3AcRfQvOOzIpur36VenKHeZYOiKm/ZigmHizyRzKwyA4QzBuZIOjvHtXJid9ka6ykAhIcclkihf9mfzbjI+5Q4iwUwVo3ez4qzGd/eqqdW/eH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768361532; c=relaxed/simple;
-	bh=DgAhAdepUnjp+k3Df0WJMhod73fO0hqcJptvi1pvuuA=;
+	s=arc-20240116; t=1768365383; c=relaxed/simple;
+	bh=zF3EdgRjHVtpVqrIul/E0YAUCIe5vpaFfMrnuSUsHG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JWEeLgsuC2tHyNjD8yRFYDFHdAB42XolMVRzUSv7GIX3H0eWU2Hlxvnnv10vHKIv2YPS9fw1oJ6nz+TBTOZG93LFb4CMtIprNeHbe7actHXTA3R6EZMPemdPwcYVo1q81CvD6OihtxAZlfndilUwlqmHjodkS3arBtBEHSvZWc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KwbYgqvX; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lu2Roo/5Q5if78GktwtpO2nmRD8Qk3sopKhaDckxgG7LroyGYXzlOnM8YPpKbKk32rEWIZUBtGtAfHYEo1exeeQBDzNDp5ZPcfFRhW6gpsBbyzuh2C7yB64Zf095HKpxTbxI8CIDLzLpJJpm+MHanD6xioWTuuyDXHUNsr/iRJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LAZop9K/; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KwbYgqvX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LAZop9K/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768361530; x=1799897530;
+  t=1768365374; x=1799901374;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DgAhAdepUnjp+k3Df0WJMhod73fO0hqcJptvi1pvuuA=;
-  b=KwbYgqvXv/A8gB8Xy+AtdJ296bAE+l9Fpo9kSuvRbwa+IAonguDm1hBi
-   wQzMWFq3iFzgdRj9hyoLa0uoZeAae/QmNj/YkvPtlx5qvYqBqhOxOEZrh
-   Rao8Dr615zMTC0sdlzxmxQBrEMieSRJsbaw7qnSc19lCB2pwRiWFJuBFk
-   DbrF5bBylcHIoCh7hkWdOuWYc5zEQnjWBlM/mXU64o6I70XJTsfVFP51D
-   JG+ZYfTSjBAIcGiPkGXB0+IpuWKJqnJTH5/36fblVeVKGWPrXIlmKeQ3q
-   4B2HhDcitrPBAOzI/DJKTbBaQNFVxVN5xuMPW5IDhsye4ArOsQbUCgT5D
-   A==;
-X-CSE-ConnectionGUID: uM38BmdkTcWBJTOACtuU4w==
-X-CSE-MsgGUID: 0vD/5fYZQeWTcZYygZ24PA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="80306365"
+  bh=zF3EdgRjHVtpVqrIul/E0YAUCIe5vpaFfMrnuSUsHG8=;
+  b=LAZop9K/bjwiuJ5ceLtioTXiWTg8d1IAGnZXjhwiKdovjJ6+6l3hN4VB
+   Q8DeOLPeRI/r0epdnX2/SSPNMgjSKQ9KeUVnHMr3t7fF3zIAGdNavt2kA
+   Tng0C+Ee8tilAf/R+BxDMfQeSeLbCAfXWw2DpzB/ezJFt/J2W+gzcG8rt
+   14ogRFKPz16I2LQpnLpHvEdnRbVSMtL+tk7ORRSZ8goPPbLTlwOJWHGay
+   IKmYauEjYrJ+NFo9XtLA38+z01LDgYTWcSnjr5qhn5ByXtr8Yl6COYQ/j
+   VGsrZ1kBvSLy7CDVBH5SREhyd2naE6deRPv0BVqZqSJ/5vEDddeawanRl
+   g==;
+X-CSE-ConnectionGUID: 4gzIpBNGT0+aY/hcfWd2GQ==
+X-CSE-MsgGUID: ZqQ+BxurS1mmSRzM+NZqVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="81109400"
 X-IronPort-AV: E=Sophos;i="6.21,224,1763452800"; 
-   d="scan'208";a="80306365"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 19:32:09 -0800
-X-CSE-ConnectionGUID: lbfhpFDURfK7rW8hPfkrng==
-X-CSE-MsgGUID: r0fEaz18RpyK09lrk5Ovlw==
+   d="scan'208";a="81109400"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 20:36:10 -0800
+X-CSE-ConnectionGUID: kpDpgYPeTviJ1BMBk2zXqQ==
+X-CSE-MsgGUID: ZSAkH35xStqMDr2agUFWLA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,224,1763452800"; 
-   d="scan'208";a="235281436"
+   d="scan'208";a="209032540"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 13 Jan 2026 19:32:07 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 13 Jan 2026 20:36:09 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vfrc3-00000000FjQ-35Uq;
-	Wed, 14 Jan 2026 03:32:03 +0000
-Date: Wed, 14 Jan 2026 11:31:58 +0800
+	id 1vfsc2-00000000Fmm-1Y7w;
+	Wed, 14 Jan 2026 04:36:06 +0000
+Date: Wed, 14 Jan 2026 12:35:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
+To: Imran Khan <imran.f.khan@oracle.com>, tglx@linutronix.de
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dhowells@redhat.com,
-	syzbot+6182afad5045e6703b3d@syzkaller.appspotmail.com,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, linux-afs@lists.infradead.org,
-	stable@kernel.org, linux-kernel@kernel.org
-Subject: Re: [PATCH] rxrpc: Fix data-race warning and potential load/store
- tearing
-Message-ID: <202601141152.2TfkKMKv-lkp@intel.com>
-References: <3535584.1768322992@warthog.procyon.org.uk>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] genirq/cpuhotplug: notify about irq affinity change
+ for offlined cpus.
+Message-ID: <202601141105.x7z7rWPk-lkp@intel.com>
+References: <20260113143727.1041265-1-imran.f.khan@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,88 +64,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3535584.1768322992@warthog.procyon.org.uk>
+In-Reply-To: <20260113143727.1041265-1-imran.f.khan@oracle.com>
 
-Hi David,
+Hi Imran,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net/main]
-[also build test WARNING on net-next/main linus/master v6.19-rc5 next-20260113]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Howells/rxrpc-Fix-data-race-warning-and-potential-load-store-tearing/20260114-005726
-base:   net/main
-patch link:    https://lore.kernel.org/r/3535584.1768322992%40warthog.procyon.org.uk
-patch subject: [PATCH] rxrpc: Fix data-race warning and potential load/store tearing
-config: x86_64-buildonly-randconfig-006-20260114 (https://download.01.org/0day-ci/archive/20260114/202601141152.2TfkKMKv-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601141152.2TfkKMKv-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Imran-Khan/genirq-cpuhotplug-notify-about-irq-affinity-change-for-offlined-cpus/20260113-223900
+base:   f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da
+patch link:    https://lore.kernel.org/r/20260113143727.1041265-1-imran.f.khan%40oracle.com
+patch subject: [PATCH v3] genirq/cpuhotplug: notify about irq affinity change for offlined cpus.
+config: arm-randconfig-002-20260114 (https://download.01.org/0day-ci/archive/20260114/202601141105.x7z7rWPk-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601141105.x7z7rWPk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601141152.2TfkKMKv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601141105.x7z7rWPk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/rxrpc/proc.c:305:6: warning: format specifies type 'unsigned long long' but the argument has type 's32' (aka 'int') [-Wformat]
-     299 |                    "UDP   %-47.47s %-47.47s %3u %4u %5u %6llus %8d %8d\n",
-         |                                                         ~~~~~
-         |                                                         %6d
-     300 |                    lbuff,
-     301 |                    rbuff,
-     302 |                    refcount_read(&peer->ref),
-     303 |                    peer->cong_ssthresh,
-     304 |                    peer->max_data,
-     305 |                    (s32)now - (s32)peer->last_tx_at,
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+   kernel/irq/manage.c:149:6: error: redefinition of 'schedule_affinity_notify_work'
+     149 | void schedule_affinity_notify_work(struct irq_desc *desc)
+         |      ^
+   include/linux/interrupt.h:449:20: note: previous definition is here
+     449 | static inline void schedule_affinity_notify_work(struct irq_desc *desc) { }
+         |                    ^
+>> kernel/irq/manage.c:151:18: error: no member named 'affinity_notify' in 'struct irq_desc'
+     151 |         kref_get(&desc->affinity_notify->kref);
+         |                   ~~~~  ^
+   kernel/irq/manage.c:152:28: error: no member named 'affinity_notify' in 'struct irq_desc'
+     152 |         if (!schedule_work(&desc->affinity_notify->work))
+         |                             ~~~~  ^
+   kernel/irq/manage.c:154:19: error: no member named 'affinity_notify' in 'struct irq_desc'
+     154 |                 kref_put(&desc->affinity_notify->kref,
+         |                           ~~~~  ^
+   kernel/irq/manage.c:155:11: error: no member named 'affinity_notify' in 'struct irq_desc'
+     155 |                          desc->affinity_notify->release);
+         |                          ~~~~  ^
+   5 errors generated.
 
 
-vim +305 net/rxrpc/proc.c
+vim +151 kernel/irq/manage.c
 
-   274	
-   275	/*
-   276	 * generate a list of extant virtual peers in /proc/net/rxrpc/peers
-   277	 */
-   278	static int rxrpc_peer_seq_show(struct seq_file *seq, void *v)
-   279	{
-   280		struct rxrpc_peer *peer;
-   281		time64_t now;
-   282		char lbuff[50], rbuff[50];
-   283	
-   284		if (v == SEQ_START_TOKEN) {
-   285			seq_puts(seq,
-   286				 "Proto Local                                           Remote                                          Use SST   Maxd LastUse      RTT      RTO\n"
-   287				 );
-   288			return 0;
-   289		}
-   290	
-   291		peer = list_entry(v, struct rxrpc_peer, hash_link);
-   292	
-   293		sprintf(lbuff, "%pISpc", &peer->local->srx.transport);
-   294	
-   295		sprintf(rbuff, "%pISpc", &peer->srx.transport);
-   296	
-   297		now = ktime_get_seconds();
-   298		seq_printf(seq,
-   299			   "UDP   %-47.47s %-47.47s %3u %4u %5u %6llus %8d %8d\n",
-   300			   lbuff,
-   301			   rbuff,
-   302			   refcount_read(&peer->ref),
-   303			   peer->cong_ssthresh,
-   304			   peer->max_data,
- > 305			   (s32)now - (s32)peer->last_tx_at,
-   306			   READ_ONCE(peer->recent_srtt_us),
-   307			   READ_ONCE(peer->recent_rto_us));
-   308	
-   309		return 0;
-   310	}
-   311	
+   141	
+   142	/**
+   143	 * schedule_affinity_notify_work - Schedule work to notify
+   144	 * about irq affinity change.
+   145	 * @desc:  irq descriptor whose affinity changed
+   146	 *
+   147	 * Caller needs to hold desc->lock
+   148	 */
+   149	void schedule_affinity_notify_work(struct irq_desc *desc)
+   150	{
+ > 151		kref_get(&desc->affinity_notify->kref);
+   152		if (!schedule_work(&desc->affinity_notify->work))
+   153			/* Work was already scheduled, drop our extra ref */
+   154			kref_put(&desc->affinity_notify->kref,
+   155				 desc->affinity_notify->release);
+   156	}
+   157	EXPORT_SYMBOL_GPL(schedule_affinity_notify_work);
+   158	
 
 -- 
 0-DAY CI Kernel Test Service
