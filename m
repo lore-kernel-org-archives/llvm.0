@@ -1,247 +1,183 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3659C2D5937
-	for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 19:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8947C314B73;
+	Wed, 14 Jan 2026 19:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768419447; cv=none; b=tdpbRF6i6BOLS0Z67UrBylIfWlLc651OyZ+pAeirJ5bL1Ay0sJlxzjj6P3AXaUFYoXFx+QLLODBMHsDlsKdz9KEXWt7c8R6VXRMjqLdDfU0Fhz0dTgC1pnXhIAc3gzTjJTHI40FtVvJRvSDmE/MJVxTns9vkSI4V+9M4x1cTisc=
+	t=1768419623; cv=none; b=AmT467YfWL5SSsykTfrkV2GBtyC5ya+GODE+bWWe5lAyqEl1D/vmXELmbd+1th6MrlrL1eUeNYRW5PzIOTAMN6Hk9adbA3DlI5DvfHaNPtGTUFDXvFpEO+4m1L8mHiWe6xMRlc79mbiDRbpCSaBtIxyXsu3z+PynssJfzvKRGTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768419447; c=relaxed/simple;
-	bh=EQdSM0yOXS8C3leRvmeb2QGrjb/3aaIMy7AzLXYJTsQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 Cc:Content-Type; b=L8yfaPqA17e5Hgmi9HO6wjyOIvOLk806jjqQWNvi43ebBND9TggdUsV5s4tZ12zPZNOjxszkiojgR+jyjj71bFzXUgAgqT67fBsX/i+eJQ0PlmDtan/nGbZNJxayuwRNcBwlgc5TYLNuWAm/vqwt/tEK0pww1scppJhp8JcqJGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A85gEP9+; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com
+	s=arc-20240116; t=1768419623; c=relaxed/simple;
+	bh=UQoSRSUJq1fJdRS4oTVdfqsPc/Q3oltC4Vc6RTrMgtk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=St7vFwU2p57ZFrsJrb7oMwOBXtbwwa6Rpx3WgOJLI15Tah7OOG8VpZJcxh09vSvkMExozKyInQUaheDz5OXZBRizZTCbOvJODXJGfjHzAfADF+xfpCphaagJIz7Nf0tzGSBfb5NZMjdszRZHPZaOcnIVDOo8BZApJQDQzWOAbcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TRXEF3GG; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A85gEP9+"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c52743b781eso93963a12.2
-        for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 11:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768419445; x=1769024245; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PJ1Oy9t9P+wnGwZGZn0q3AykJg67xBsGj9QaYqlCMiU=;
-        b=A85gEP9+fbb0jOiujM2W3zgOpjBPubcYQxVfBrT40ybdJ7rku0WsiGUtG4Samxd05h
-         gY4uYnIqyhl2AoaRa9slCe4VE7DrdD6FH6/EBhB19RusIal9Gd1lZyYo7ZItNSXLSFVa
-         CbGiL/HR100/5K6c6mWtnXs+XxxLpCkl5Y8jHbpdATeQ/XxC1rffD1pGr6sy19IIVxrG
-         k8UIdXm7sRa3I1zmqSKz7G/XQ0DbiF2Hg/SGENP3NtKKj8NuFgX4LkSOOCMIan8pofA8
-         oKXZPFVWO6eGJrns2WUnoWxq2VgxVnZzlYqtydX+2jHIuWE9RaB4mWM/qpPvpss0FzOM
-         csRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768419445; x=1769024245;
-        h=content-transfer-encoding:cc:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PJ1Oy9t9P+wnGwZGZn0q3AykJg67xBsGj9QaYqlCMiU=;
-        b=XLSC/S9RkfAEGwjwAQRaalUqpSByK7WMkPb6HhB64nwCgjuQlzriIp4onUxPtATrru
-         YJQYh2JpJwTb5npOdXuetoXUPxnmn9+BygwHYwAXQ2FfQmloBXB2eMEkOZHL63i0BhSd
-         mQfB/ECFsbXWY/98toqLJ8wXS8YGr2ZwrmMNN+CoSJJtAA+L/SfCViSWnqRJk6CtBnUo
-         Hx1BIEXHyB7/lVAguBVNRBlSy+/2KY0fw4fK6zuhKxPcLNbJ21VVOUtYlpKtCUIkr9PB
-         Do4QjPYztEqjDcM/eJLpopwImGRETgmNSXfYzUukfH6FjgyhZPZf447jCWu4fj7l9XfW
-         4MfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHxjNi7ZBEMZACnFwyKyKEKWKDP6ibqijrq6m4m5TnrTwohtC0bJ9KLhSQS/b7iDFsto46@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy/Epyu8+B18mDOJk4vFSJU0R9Y1hJuT/2Z12YM/0lUPLzM6bvr
-	JjwsOzK4ntgCGHKe/nYxo2fFo4uUDl1OG7AQDtcJ+ur9UNrV17W1SwXZtn7VWD6qPyFAy31ZnHR
-	i
-X-Received: from pgnd16.prod.google.com ([2002:a63:7350:0:b0:bfe:d576:aabd])
- (user=morbo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7f97:b0:38b:d95d:efd7
- with SMTP id adf61e73a8af0-38bed1b9f0emr4607629637.44.1768419445289; Wed, 14
- Jan 2026 11:37:25 -0800 (PST)
-Date: Wed, 14 Jan 2026 19:36:47 +0000
-In-Reply-To: <20251121195504.1661783-1-morbo@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TRXEF3GG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768419621; x=1799955621;
+  h=date:from:to:cc:subject:message-id;
+  bh=UQoSRSUJq1fJdRS4oTVdfqsPc/Q3oltC4Vc6RTrMgtk=;
+  b=TRXEF3GGE+oso/Ppj5cUMnSO0mc0FQ5vcHYMUM9Ja4BXh5ttrGcXNgf3
+   NdN+6VAkMY/gQTCIk36fuMwosef+C8Wy6bVqMhuuBRRx5pHAc95hTIAjF
+   yBEqRVophgjjJVmR2WkRwg23xJoAJ2sJCjgmfVTioDZDMCiZBasuykKHE
+   Io3ZGdxgkcYRFyiGxe3/WjNEmCxPtZ+UN61Zq9PjS/3ZIfHnniYSSN0JD
+   YiswfnYrwnPUs5cv+D1vfl0A0cy1f/+vnzvzL5/HNZvbgwb46PvdlU+VQ
+   yAVUVofFjm3B200RlSwfiyD64gSA2kpYeop9cgfPpkfBqF/nxsxiOqVuo
+   g==;
+X-CSE-ConnectionGUID: EK8+DMepS96S/6mq4iquMQ==
+X-CSE-MsgGUID: 5m5yFcj9SwWRLxnqToTWeg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="69812141"
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="69812141"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 11:40:20 -0800
+X-CSE-ConnectionGUID: XtuY3qDQRLqVn9Js/QufBw==
+X-CSE-MsgGUID: Dxsv3r6uS4qDbiHs2XEYBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="204550715"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 14 Jan 2026 11:40:17 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vg6j0-00000000GvS-28nN;
+	Wed, 14 Jan 2026 19:40:14 +0000
+Date: Thu, 15 Jan 2026 03:39:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chengchang Tang <tangchengchang@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Doug Ledford <dledford@redhat.com>,
+ Jason Gunthorpe <jgg+lists@ziepe.ca>, linux-rdma@vger.kernel.org,
+ Leon Romanovsky <leon@kernel.org>,
+ Junxian Huang <huangjunxian6@hisilicon.com>
+Subject: [rdma:wip/leon-for-next 30/32]
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c:964:6: warning: no previous
+ prototype for function 'hns_roce_v2_drain_rq'
+Message-ID: <202601150334.jRDP5xSy-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251121195504.1661783-1-morbo@google.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260114193716.1740684-1-morbo@google.com>
-Subject: [PATCH 1/2] Compiler Attributes: Add __counted_by_ptr macro
-From: Bill Wendling <morbo@google.com>
-Cc: Bill Wendling <morbo@google.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Marc Herbert <Marc.Herbert@linux.intel.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
-	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	"=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, John Stultz <jstultz@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Nicolas Schier <nsc@kernel.org>, Tamir Duberstein <tamird@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Naman Jain <namjain@linux.microsoft.com>, Eric Dumazet <edumazet@google.com>, 
-	Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Douglas Anderson <dianders@chromium.org>, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Introduce __counted_by_ptr(), which works like __counted_by(), but for
-pointer struct members.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git wip/leon-for-next
+head:   c6b61cad07189d4556a968a305056263b73025f4
+commit: cfa74ad31baad3027410b6e75c8e47092aef8d97 [30/32] RDMA/hns: Support drain SQ and RQ
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260115/202601150334.jRDP5xSy-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601150334.jRDP5xSy-lkp@intel.com/reproduce)
 
-struct foo {
-	int a, b, c;
-	char *buffer __counted_by_ptr(bytes);
-	short nr_bars;
-	struct bar *bars __counted_by_ptr(nr_bars);
-	size_t bytes;
-};
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601150334.jRDP5xSy-lkp@intel.com/
 
-Because "counted_by" can only be applied to pointer members in very
-recent compiler versions, its application ends up needing to be distinct
-from flexibe array "counted_by" annotations, hence a separate macro.
+All warnings (new ones prefixed by >>):
 
-Note that Clang's support for "void *" members will be in version 22.
-So, when using Clang, you'll need to wait until its release before using
-the feature with "void *". No such restriction applies to GCC's version
-16.
+>> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:964:6: warning: no previous prototype for function 'hns_roce_v2_drain_rq' [-Wmissing-prototypes]
+   void hns_roce_v2_drain_rq(struct ib_qp *ibqp)
+        ^
+   drivers/infiniband/hw/hns/hns_roce_hw_v2.c:964:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void hns_roce_v2_drain_rq(struct ib_qp *ibqp)
+   ^
+   static 
+>> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:1001:6: warning: no previous prototype for function 'hns_roce_v2_drain_sq' [-Wmissing-prototypes]
+   void hns_roce_v2_drain_sq(struct ib_qp *ibqp)
+        ^
+   drivers/infiniband/hw/hns/hns_roce_hw_v2.c:1001:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void hns_roce_v2_drain_sq(struct ib_qp *ibqp)
+   ^
+   static 
+   2 warnings generated.
 
-This is a reworking of Kees' previous patch [1].
 
-Link: https://lore.kernel.org/all/20251020220118.1226740-1-kees@kernel.org/=
- [1]
-Co-developed-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Bill Wendling <morbo@google.com>
----
-Cc: Kees Cook <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Marc Herbert <Marc.Herbert@linux.intel.com>
-Cc: Uros Bizjak <ubizjak@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Jeff Xu <jeffxu@chromium.org>
-Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: "Thomas Wei=C3=9Fschuh" <thomas.weissschuh@linutronix.de>
-Cc: John Stultz <jstultz@google.com>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-hardening@vger.kernel.org
-Cc: llvm@lists.linux.dev
----
-v3 - Replace the previous code with a modified version of Kees' previous pa=
-tch
-     [1].
-   - The question about the naming of the macro was considered, but we deci=
-ded
-     to keep the original naming (__counted_by_ptr), because it mirrors the=
- current
-     macros like "__counted_by_{le,be}".
-v2 - Add support for GCC.
----
- Makefile                       |  6 ++++++
- include/linux/compiler_types.h | 18 +++++++++++++++++-
- include/uapi/linux/stddef.h    |  4 ++++
- init/Kconfig                   |  7 +++++++
- 4 files changed, 34 insertions(+), 1 deletion(-)
+vim +/hns_roce_v2_drain_rq +964 drivers/infiniband/hw/hns/hns_roce_hw_v2.c
 
-diff --git a/Makefile b/Makefile
-index 9d38125263fb..6b029f694bc2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -952,6 +952,12 @@ KBUILD_CFLAGS	+=3D $(CC_AUTO_VAR_INIT_ZERO_ENABLER)
- endif
- endif
-=20
-+ifdef CONFIG_CC_IS_CLANG
-+ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
-+KBUILD_CFLAGS	+=3D -fexperimental-late-parse-attributes
-+endif
-+endif
-+
- # Explicitly clear padding bits during variable initialization
- KBUILD_CFLAGS +=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
-=20
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.=
-h
-index d3318a3c2577..e597c814d60b 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -369,7 +369,7 @@ struct ftrace_likely_data {
-  * Optional: only supported since clang >=3D 18
-  *
-  *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
-- * clang: https://github.com/llvm/llvm-project/pull/76348
-+ * clang: https://clang.llvm.org/docs/AttributeReference.html#counted-by-c=
-ounted-by-or-null-sized-by-sized-by-or-null
-  *
-  * __bdos on clang < 19.1.2 can erroneously return 0:
-  * https://github.com/llvm/llvm-project/pull/110497
-@@ -383,6 +383,22 @@ struct ftrace_likely_data {
- # define __counted_by(member)
- #endif
-=20
-+/*
-+ * Runtime track number of objects pointed to by a pointer member for use =
-by
-+ * CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS.
-+ *
-+ * Optional: only supported since gcc >=3D 16
-+ * Optional: only supported since clang >=3D 21.1
-+ *
-+ *   gcc: https://gcc.gnu.org/pipermail/gcc-patches/2025-April/681727.html
-+ * clang: https://github.com/llvm/llvm-project/pull/137250
-+ */
-+#ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
-+#define __counted_by_ptr(member)	__attribute__((__counted_by__(member)))
-+#else
-+#define __counted_by_ptr(member)
-+#endif
-+
- /*
-  * Optional: only supported since gcc >=3D 15
-  * Optional: not supported by Clang
-diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-index 9a28f7d9a334..111b097ec00b 100644
---- a/include/uapi/linux/stddef.h
-+++ b/include/uapi/linux/stddef.h
-@@ -72,6 +72,10 @@
- #define __counted_by_be(m)
- #endif
-=20
-+#ifndef __counted_by_ptr
-+#define __counted_by_ptr(m)
-+#endif
-+
- #ifdef __KERNEL__
- #define __kernel_nonstring	__nonstring
- #else
-diff --git a/init/Kconfig b/init/Kconfig
-index fa79feb8fe57..dc27b998d111 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -143,6 +143,13 @@ config CC_HAS_COUNTED_BY
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
- 	default y if CC_IS_GCC && GCC_VERSION >=3D 150100
-=20
-+config CC_HAS_COUNTED_BY_PTR
-+	bool
-+	# supported since clang 21.1.0
-+	default y if CC_IS_CLANG && CLANG_VERSION >=3D 210100
-+	# supported since gcc 16.0.0
-+	default y if CC_IS_GCC && GCC_VERSION >=3D 160000
-+
- config CC_HAS_MULTIDIMENSIONAL_NONSTRING
- 	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) =3D=
- { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
-=20
---=20
-2.52.0.457.g6b5491de43-goog
+   963	
+ > 964	void hns_roce_v2_drain_rq(struct ib_qp *ibqp)
+   965	{
+   966		struct hns_roce_dev *hr_dev = to_hr_dev(ibqp->device);
+   967		struct ib_qp_attr attr = { .qp_state = IB_QPS_ERR };
+   968		struct hns_roce_qp *hr_qp = to_hr_qp(ibqp);
+   969		struct hns_roce_drain_cqe rdrain = {};
+   970		const struct ib_recv_wr *bad_rwr;
+   971		struct ib_cq *cq = ibqp->recv_cq;
+   972		struct ib_recv_wr rwr = {};
+   973		int ret;
+   974	
+   975		ret = ib_modify_qp(ibqp, &attr, IB_QP_STATE);
+   976		if (ret && hr_dev->state < HNS_ROCE_DEVICE_STATE_RST_DOWN) {
+   977			ibdev_err_ratelimited(&hr_dev->ib_dev,
+   978					      "failed to modify qp during drain rq, ret = %d.\n",
+   979					      ret);
+   980			return;
+   981		}
+   982	
+   983		rwr.wr_cqe = &rdrain.cqe;
+   984		rdrain.cqe.done = hns_roce_drain_qp_done;
+   985		init_completion(&rdrain.done);
+   986	
+   987		if (hr_dev->state >= HNS_ROCE_DEVICE_STATE_RST_DOWN)
+   988			ret = hns_roce_push_drain_wr(&hr_qp->rq, cq, rwr.wr_id);
+   989		else
+   990			ret = hns_roce_v2_post_recv(ibqp, &rwr, &bad_rwr);
+   991		if (ret) {
+   992			ibdev_err_ratelimited(&hr_dev->ib_dev,
+   993					      "failed to post recv for drain rq, ret = %d.\n",
+   994					      ret);
+   995			return;
+   996		}
+   997	
+   998		handle_drain_completion(cq, &rdrain, hr_dev);
+   999	}
+  1000	
+> 1001	void hns_roce_v2_drain_sq(struct ib_qp *ibqp)
+  1002	{
+  1003		struct hns_roce_dev *hr_dev = to_hr_dev(ibqp->device);
+  1004		struct ib_qp_attr attr = { .qp_state = IB_QPS_ERR };
+  1005		struct hns_roce_qp *hr_qp = to_hr_qp(ibqp);
+  1006		struct hns_roce_drain_cqe sdrain = {};
+  1007		const struct ib_send_wr *bad_swr;
+  1008		struct ib_cq *cq = ibqp->send_cq;
+  1009		struct ib_rdma_wr swr = {
+  1010			.wr = {
+  1011				.next = NULL,
+  1012				{ .wr_cqe	= &sdrain.cqe, },
+  1013				.opcode	= IB_WR_RDMA_WRITE,
+  1014			},
+  1015		};
+  1016		int ret;
+  1017	
+  1018		ret = ib_modify_qp(ibqp, &attr, IB_QP_STATE);
+  1019		if (ret && hr_dev->state < HNS_ROCE_DEVICE_STATE_RST_DOWN) {
+  1020			ibdev_err_ratelimited(&hr_dev->ib_dev,
+  1021					      "failed to modify qp during drain sq, ret = %d.\n",
+  1022					      ret);
+  1023			return;
+  1024		}
+  1025	
+  1026		sdrain.cqe.done = hns_roce_drain_qp_done;
+  1027		init_completion(&sdrain.done);
+  1028	
+  1029		if (hr_dev->state >= HNS_ROCE_DEVICE_STATE_RST_DOWN)
+  1030			ret = hns_roce_push_drain_wr(&hr_qp->sq, cq, swr.wr.wr_id);
+  1031		else
+  1032			ret = hns_roce_v2_post_send(ibqp, &swr.wr, &bad_swr);
+  1033		if (ret) {
+  1034			ibdev_err_ratelimited(&hr_dev->ib_dev,
+  1035					      "failed to post send for drain sq, ret = %d.\n",
+  1036					      ret);
+  1037			return;
+  1038		}
+  1039	
+  1040		handle_drain_completion(cq, &sdrain, hr_dev);
+  1041	}
+  1042	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
