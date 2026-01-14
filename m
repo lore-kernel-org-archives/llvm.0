@@ -1,183 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8947C314B73;
-	Wed, 14 Jan 2026 19:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3810B356A0E;
+	Wed, 14 Jan 2026 20:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768419623; cv=none; b=AmT467YfWL5SSsykTfrkV2GBtyC5ya+GODE+bWWe5lAyqEl1D/vmXELmbd+1th6MrlrL1eUeNYRW5PzIOTAMN6Hk9adbA3DlI5DvfHaNPtGTUFDXvFpEO+4m1L8mHiWe6xMRlc79mbiDRbpCSaBtIxyXsu3z+PynssJfzvKRGTw=
+	t=1768423417; cv=none; b=YdnOv9oM92hTJ4boKe/prMBcP6W/cOvjEPGygsQTprMm9y6MzPhAP8vk9WxuG37ursyH3acdi76wd8lEEOuT2EkmAHIjEuOy4Miat7ioTM6TMhUglxu2RKartUyOsl97inQjIGcljg3sr2T9a4ah432QDCtihGZDXdvJxTskNHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768419623; c=relaxed/simple;
-	bh=UQoSRSUJq1fJdRS4oTVdfqsPc/Q3oltC4Vc6RTrMgtk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=St7vFwU2p57ZFrsJrb7oMwOBXtbwwa6Rpx3WgOJLI15Tah7OOG8VpZJcxh09vSvkMExozKyInQUaheDz5OXZBRizZTCbOvJODXJGfjHzAfADF+xfpCphaagJIz7Nf0tzGSBfb5NZMjdszRZHPZaOcnIVDOo8BZApJQDQzWOAbcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TRXEF3GG; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768423417; c=relaxed/simple;
+	bh=qfichP7xshYGFSCR4CwpNABFHfqMVK0zW00HFV+0Ppc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QA2pf6l7Gv/8bZcHQ95OUBcZSTijUd/hTz/MH/q5H6WXRXRfLZaCF+6UZNw/kPlux8LwFOcRq+Vf2T/DaX/auwKo8A3Ig16/y/VRtjUIsicYOgjlOrUhpGd7HH7Gup9JhC2SYK8DKI8OAX1aZnsoh0KVtt65c487ApUeEj/iyXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etJouZgf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TRXEF3GG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768419621; x=1799955621;
-  h=date:from:to:cc:subject:message-id;
-  bh=UQoSRSUJq1fJdRS4oTVdfqsPc/Q3oltC4Vc6RTrMgtk=;
-  b=TRXEF3GGE+oso/Ppj5cUMnSO0mc0FQ5vcHYMUM9Ja4BXh5ttrGcXNgf3
-   NdN+6VAkMY/gQTCIk36fuMwosef+C8Wy6bVqMhuuBRRx5pHAc95hTIAjF
-   yBEqRVophgjjJVmR2WkRwg23xJoAJ2sJCjgmfVTioDZDMCiZBasuykKHE
-   Io3ZGdxgkcYRFyiGxe3/WjNEmCxPtZ+UN61Zq9PjS/3ZIfHnniYSSN0JD
-   YiswfnYrwnPUs5cv+D1vfl0A0cy1f/+vnzvzL5/HNZvbgwb46PvdlU+VQ
-   yAVUVofFjm3B200RlSwfiyD64gSA2kpYeop9cgfPpkfBqF/nxsxiOqVuo
-   g==;
-X-CSE-ConnectionGUID: EK8+DMepS96S/6mq4iquMQ==
-X-CSE-MsgGUID: 5m5yFcj9SwWRLxnqToTWeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="69812141"
-X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
-   d="scan'208";a="69812141"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 11:40:20 -0800
-X-CSE-ConnectionGUID: XtuY3qDQRLqVn9Js/QufBw==
-X-CSE-MsgGUID: Dxsv3r6uS4qDbiHs2XEYBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
-   d="scan'208";a="204550715"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 14 Jan 2026 11:40:17 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vg6j0-00000000GvS-28nN;
-	Wed, 14 Jan 2026 19:40:14 +0000
-Date: Thu, 15 Jan 2026 03:39:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chengchang Tang <tangchengchang@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Doug Ledford <dledford@redhat.com>,
- Jason Gunthorpe <jgg+lists@ziepe.ca>, linux-rdma@vger.kernel.org,
- Leon Romanovsky <leon@kernel.org>,
- Junxian Huang <huangjunxian6@hisilicon.com>
-Subject: [rdma:wip/leon-for-next 30/32]
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c:964:6: warning: no previous
- prototype for function 'hns_roce_v2_drain_rq'
-Message-ID: <202601150334.jRDP5xSy-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etJouZgf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72BBDC4CEF7;
+	Wed, 14 Jan 2026 20:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768423416;
+	bh=qfichP7xshYGFSCR4CwpNABFHfqMVK0zW00HFV+0Ppc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=etJouZgfLTBrE3zutq1WvgULMAXLMPLYRA1OB+IkohMIN+G/kuGNOZLMDFORxfiHA
+	 qCr2G2zT8hu3QOp291w6wr+JwiE13yamT81agkXb1n1Psu5sqZHuB/84IsC4ZcVIYb
+	 WYUKmZO0rio1CHfSSs69jl+BmzoBtBowsRNS5a5Om9Bt54j5+wEWV0oruv0XdCTV0H
+	 YiM7WAqLqeeXs+XqDFfydl8+Rp57F0khLMVYJrAmV2qaXx1GCjYXotoIRoNsXnJo6g
+	 YIcE4g9CYEIg6AErCkaqySM7i7Ip7RpTR0FR1Ad2YiUhqi6RQ2H/xosLiOfivHbMky
+	 1v4i0DEL3cMxQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 14 Jan 2026 13:43:31 -0700
+Subject: [PATCH] drm/panel: ilitek-ili9882t: Remove duplicate initializers
+ in tianma_il79900a_dsc
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNwQ6CMBBEf4Xs2U26lQj4K8YDwqCrpJBtJSaEf
+ 7foafKSmTcrRZgi0rlYybBo1ClkkENB3aMNd7D2mck7f3IiJc9twMg6asJrj6aufeJBPzwtMNM
+ +L4Im9gJppDwOVeUo22ZDLv2eLtc/x/ftiS7tetq2L8ZhFAiLAAAA
+X-Change-ID: 20260114-panel-ilitek-ili9882t-fix-override-init-21e19143f770
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jessica Zhang <jesszhan0024@gmail.com>, 
+ Langyan Ye <yelangyan@huaqin.corp-partner.google.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4540; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=qfichP7xshYGFSCR4CwpNABFHfqMVK0zW00HFV+0Ppc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJnp/79pL5Mv6jR+3VjU5eS10X0q68sN/FzCwn07l7p6p
+ 37+Pm9vRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIBz8jQ5Me8yLnjy4Mn2Iq
+ p92dIuZrPefAk4yqufafJy89Ksf2rZ+R4cc3/9MpU6p3uOe+r2e1ZWVSaHpgyl6Rm8mq5S1y9sB
+ OTgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git wip/leon-for-next
-head:   c6b61cad07189d4556a968a305056263b73025f4
-commit: cfa74ad31baad3027410b6e75c8e47092aef8d97 [30/32] RDMA/hns: Support drain SQ and RQ
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260115/202601150334.jRDP5xSy-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601150334.jRDP5xSy-lkp@intel.com/reproduce)
+Clang warns (or errors with CONFIG_WERROR=y / W=e):
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601150334.jRDP5xSy-lkp@intel.com/
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:95:16: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+     95 |         .vbr_enable = 0,
+        |                       ^
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:90:16: note: previous initialization is here
+     90 |         .vbr_enable = false,
+        |                       ^~~~~
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:97:19: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+     97 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+        |                          ^~~~~~~~~~~~~~~~~~~~~~~
+  include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
+     22 | #define DSC_RC_MODEL_SIZE_CONST             8192
+        |                                             ^~~~
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:91:19: note: previous initialization is here
+     91 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+        |                          ^~~~~~~~~~~~~~~~~~~~~~~
+  include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
+     22 | #define DSC_RC_MODEL_SIZE_CONST             8192
+        |                                             ^~~~
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:132:25: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+    132 |         .initial_scale_value = 32,
+        |                                ^~
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:126:25: note: previous initialization is here
+    126 |         .initial_scale_value = 32,
+        |                                ^~
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:133:20: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+    133 |         .nfl_bpg_offset = 3511,
+        |                           ^~~~
+  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:108:20: note: previous initialization is here
+    108 |         .nfl_bpg_offset = 1402,
+        |                           ^~~~
 
-All warnings (new ones prefixed by >>):
+GCC would warn about this in the same manner but its version,
+-Woverride-init, is disabled for a normal kernel build in
+scripts/Makefile.warn. For clang, -Wextra in drivers/gpu/drm/Makefile
+turns it back but GCC respects turning it off earlier in the command
+line.
 
->> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:964:6: warning: no previous prototype for function 'hns_roce_v2_drain_rq' [-Wmissing-prototypes]
-   void hns_roce_v2_drain_rq(struct ib_qp *ibqp)
-        ^
-   drivers/infiniband/hw/hns/hns_roce_hw_v2.c:964:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hns_roce_v2_drain_rq(struct ib_qp *ibqp)
-   ^
-   static 
->> drivers/infiniband/hw/hns/hns_roce_hw_v2.c:1001:6: warning: no previous prototype for function 'hns_roce_v2_drain_sq' [-Wmissing-prototypes]
-   void hns_roce_v2_drain_sq(struct ib_qp *ibqp)
-        ^
-   drivers/infiniband/hw/hns/hns_roce_hw_v2.c:1001:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void hns_roce_v2_drain_sq(struct ib_qp *ibqp)
-   ^
-   static 
-   2 warnings generated.
+Of all the duplicate fields in the initializer, only nfl_bpg_offset is a
+different value. Clear up the duplicate initializers, keeping the
+'false' value for .vbr_enable, as it is bool, and the second value for
+.nfl_bpg_offset, assuming it is the correct one since it was the one
+tested in the original change.
 
+Fixes: 65ce1f5834e9 ("drm/panel: ilitek-ili9882t: Switch Tianma TL121BVMS07 to DSC 120Hz mode")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/panel/panel-ilitek-ili9882t.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-vim +/hns_roce_v2_drain_rq +964 drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
+index 370424ddfc80..8b2bfb7d3638 100644
+--- a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
++++ b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
+@@ -88,11 +88,9 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
+ 	.native_422 = false,
+ 	.simple_422 = false,
+ 	.vbr_enable = false,
+-	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+ 	.pic_width = 1600,
+ 	.pic_height = 2560,
+ 	.convert_rgb = 0,
+-	.vbr_enable = 0,
+ 	.rc_buf_thresh = {14, 28, 42, 56, 70, 84, 98, 105, 112, 119, 121, 123, 125, 126},
+ 	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+ 	.rc_edge_factor = DSC_RC_EDGE_FACTOR_CONST,
+@@ -105,7 +103,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
+ 	.initial_offset = 6144,
+ 	.rc_quant_incr_limit0 = 11,
+ 	.rc_quant_incr_limit1 = 11,
+-	.nfl_bpg_offset = 1402,
+ 	.rc_range_params = {
+ 		{ 0,  4, DSC_BPG_OFFSET(2)},
+ 		{ 0,  4, DSC_BPG_OFFSET(0)},
+@@ -123,7 +120,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
+ 		{ 9, 12, DSC_BPG_OFFSET(-12)},
+ 		{12, 13, DSC_BPG_OFFSET(-12)},
+ 	},
+-	.initial_scale_value = 32,
+ 	.slice_chunk_size = 800,
+ 	.initial_dec_delay = 657,
+ 	.final_offset = 4320,
 
-   963	
- > 964	void hns_roce_v2_drain_rq(struct ib_qp *ibqp)
-   965	{
-   966		struct hns_roce_dev *hr_dev = to_hr_dev(ibqp->device);
-   967		struct ib_qp_attr attr = { .qp_state = IB_QPS_ERR };
-   968		struct hns_roce_qp *hr_qp = to_hr_qp(ibqp);
-   969		struct hns_roce_drain_cqe rdrain = {};
-   970		const struct ib_recv_wr *bad_rwr;
-   971		struct ib_cq *cq = ibqp->recv_cq;
-   972		struct ib_recv_wr rwr = {};
-   973		int ret;
-   974	
-   975		ret = ib_modify_qp(ibqp, &attr, IB_QP_STATE);
-   976		if (ret && hr_dev->state < HNS_ROCE_DEVICE_STATE_RST_DOWN) {
-   977			ibdev_err_ratelimited(&hr_dev->ib_dev,
-   978					      "failed to modify qp during drain rq, ret = %d.\n",
-   979					      ret);
-   980			return;
-   981		}
-   982	
-   983		rwr.wr_cqe = &rdrain.cqe;
-   984		rdrain.cqe.done = hns_roce_drain_qp_done;
-   985		init_completion(&rdrain.done);
-   986	
-   987		if (hr_dev->state >= HNS_ROCE_DEVICE_STATE_RST_DOWN)
-   988			ret = hns_roce_push_drain_wr(&hr_qp->rq, cq, rwr.wr_id);
-   989		else
-   990			ret = hns_roce_v2_post_recv(ibqp, &rwr, &bad_rwr);
-   991		if (ret) {
-   992			ibdev_err_ratelimited(&hr_dev->ib_dev,
-   993					      "failed to post recv for drain rq, ret = %d.\n",
-   994					      ret);
-   995			return;
-   996		}
-   997	
-   998		handle_drain_completion(cq, &rdrain, hr_dev);
-   999	}
-  1000	
-> 1001	void hns_roce_v2_drain_sq(struct ib_qp *ibqp)
-  1002	{
-  1003		struct hns_roce_dev *hr_dev = to_hr_dev(ibqp->device);
-  1004		struct ib_qp_attr attr = { .qp_state = IB_QPS_ERR };
-  1005		struct hns_roce_qp *hr_qp = to_hr_qp(ibqp);
-  1006		struct hns_roce_drain_cqe sdrain = {};
-  1007		const struct ib_send_wr *bad_swr;
-  1008		struct ib_cq *cq = ibqp->send_cq;
-  1009		struct ib_rdma_wr swr = {
-  1010			.wr = {
-  1011				.next = NULL,
-  1012				{ .wr_cqe	= &sdrain.cqe, },
-  1013				.opcode	= IB_WR_RDMA_WRITE,
-  1014			},
-  1015		};
-  1016		int ret;
-  1017	
-  1018		ret = ib_modify_qp(ibqp, &attr, IB_QP_STATE);
-  1019		if (ret && hr_dev->state < HNS_ROCE_DEVICE_STATE_RST_DOWN) {
-  1020			ibdev_err_ratelimited(&hr_dev->ib_dev,
-  1021					      "failed to modify qp during drain sq, ret = %d.\n",
-  1022					      ret);
-  1023			return;
-  1024		}
-  1025	
-  1026		sdrain.cqe.done = hns_roce_drain_qp_done;
-  1027		init_completion(&sdrain.done);
-  1028	
-  1029		if (hr_dev->state >= HNS_ROCE_DEVICE_STATE_RST_DOWN)
-  1030			ret = hns_roce_push_drain_wr(&hr_qp->sq, cq, swr.wr.wr_id);
-  1031		else
-  1032			ret = hns_roce_v2_post_send(ibqp, &swr.wr, &bad_swr);
-  1033		if (ret) {
-  1034			ibdev_err_ratelimited(&hr_dev->ib_dev,
-  1035					      "failed to post send for drain sq, ret = %d.\n",
-  1036					      ret);
-  1037			return;
-  1038		}
-  1039	
-  1040		handle_drain_completion(cq, &sdrain, hr_dev);
-  1041	}
-  1042	
+---
+base-commit: b36178488d479e9a53bbef2b01280378b5586e60
+change-id: 20260114-panel-ilitek-ili9882t-fix-override-init-21e19143f770
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
