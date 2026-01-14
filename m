@@ -1,34 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3810B356A0E;
-	Wed, 14 Jan 2026 20:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426243570B5;
+	Wed, 14 Jan 2026 21:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768423417; cv=none; b=YdnOv9oM92hTJ4boKe/prMBcP6W/cOvjEPGygsQTprMm9y6MzPhAP8vk9WxuG37ursyH3acdi76wd8lEEOuT2EkmAHIjEuOy4Miat7ioTM6TMhUglxu2RKartUyOsl97inQjIGcljg3sr2T9a4ah432QDCtihGZDXdvJxTskNHA=
+	t=1768425848; cv=none; b=IUxktaodDEtG5Bi+6QrUpF1Efx2XgyQLfbtKS99uQh0HQh1APkrbbNtAodozmc9JPsC7NUz7NLW7YZShY7azPA5XeU9eg57NPoWDYHcifCwBer0AC3LvitV4ZwrI2vSI9PUmlL6yHXycgiqmqUewpeLwYq31kmf4NbDFlHcfUr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768423417; c=relaxed/simple;
-	bh=qfichP7xshYGFSCR4CwpNABFHfqMVK0zW00HFV+0Ppc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QA2pf6l7Gv/8bZcHQ95OUBcZSTijUd/hTz/MH/q5H6WXRXRfLZaCF+6UZNw/kPlux8LwFOcRq+Vf2T/DaX/auwKo8A3Ig16/y/VRtjUIsicYOgjlOrUhpGd7HH7Gup9JhC2SYK8DKI8OAX1aZnsoh0KVtt65c487ApUeEj/iyXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etJouZgf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768425848; c=relaxed/simple;
+	bh=2trI+8s8PDptory9mBVHGdX0mT6PJozEr0pjQ289tE8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=E2Ye6OVmEsgV81p6jS7eezRnyubjd1qRiFza7W7xMCgoSZPNmA759jWWRvY/yTsMheMHZ7b50AlQ8JTteZd3+AW3O1JU3bnM3jm2xdrr2B6a2W9NeijDxegILU9qUUotjcRomyBiViiPEbqQQwjHORWOdJ1Ofb13euje3Vito54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zn47IUSM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etJouZgf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72BBDC4CEF7;
-	Wed, 14 Jan 2026 20:43:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zn47IUSM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C760FC4CEF7;
+	Wed, 14 Jan 2026 21:24:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768423416;
-	bh=qfichP7xshYGFSCR4CwpNABFHfqMVK0zW00HFV+0Ppc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=etJouZgfLTBrE3zutq1WvgULMAXLMPLYRA1OB+IkohMIN+G/kuGNOZLMDFORxfiHA
-	 qCr2G2zT8hu3QOp291w6wr+JwiE13yamT81agkXb1n1Psu5sqZHuB/84IsC4ZcVIYb
-	 WYUKmZO0rio1CHfSSs69jl+BmzoBtBowsRNS5a5Om9Bt54j5+wEWV0oruv0XdCTV0H
-	 YiM7WAqLqeeXs+XqDFfydl8+Rp57F0khLMVYJrAmV2qaXx1GCjYXotoIRoNsXnJo6g
-	 YIcE4g9CYEIg6AErCkaqySM7i7Ip7RpTR0FR1Ad2YiUhqi6RQ2H/xosLiOfivHbMky
-	 1v4i0DEL3cMxQ==
+	s=k20201202; t=1768425847;
+	bh=2trI+8s8PDptory9mBVHGdX0mT6PJozEr0pjQ289tE8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Zn47IUSMETwpMr6e7yJAojFvTasVGe7lyIJ21JVLqL3s4EvKX6N/3zrJi1atXBJJv
+	 eu8ZIwrCRWM/FnMPdmHmL179TsgCQlgeSlPjEPP03jmgHlaWmoEVrH4q10uEDPK1Ie
+	 7rI6ulPxTgP9yFFqv4S5M7qGRCAxG2qFYUryQdjEsFedPin70b7Gz2rMYqwcVPkm88
+	 pl2lAL5qqk20L5QRkl7FdkFoDymTo7t+MCl5SmV89v0n9gmMJlHUhU5ii/trxbzcdY
+	 ZQYPyPnoGynvlpivzvepSOzuNkF+GOFCPxKRipjiLmnwfsYY21yi8diCrDOu3Y5Zx7
+	 kixhj0361fmfA==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 14 Jan 2026 13:43:31 -0700
-Subject: [PATCH] drm/panel: ilitek-ili9882t: Remove duplicate initializers
- in tianma_il79900a_dsc
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev
+In-Reply-To: <20260113-kbuild-cc-option-v1-1-011314a0f7f1@weissschuh.net>
+References: <20260113-kbuild-cc-option-v1-1-011314a0f7f1@weissschuh.net>
+Subject: Re: [PATCH] kbuild: Drop superfluous compiler option checks
+Message-Id: <176842584555.2841457.8759143570481663014.b4-ty@kernel.org>
+Date: Wed, 14 Jan 2026 14:24:05 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,120 +45,33 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNwQ6CMBBEf4Xs2U26lQj4K8YDwqCrpJBtJSaEf
- 7foafKSmTcrRZgi0rlYybBo1ClkkENB3aMNd7D2mck7f3IiJc9twMg6asJrj6aufeJBPzwtMNM
- +L4Im9gJppDwOVeUo22ZDLv2eLtc/x/ftiS7tetq2L8ZhFAiLAAAA
-X-Change-ID: 20260114-panel-ilitek-ili9882t-fix-override-init-21e19143f770
-To: Neil Armstrong <neil.armstrong@linaro.org>, 
- Jessica Zhang <jesszhan0024@gmail.com>, 
- Langyan Ye <yelangyan@huaqin.corp-partner.google.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4540; i=nathan@kernel.org;
- h=from:subject:message-id; bh=qfichP7xshYGFSCR4CwpNABFHfqMVK0zW00HFV+0Ppc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJnp/79pL5Mv6jR+3VjU5eS10X0q68sN/FzCwn07l7p6p
- 37+Pm9vRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIBz8jQ5Me8yLnjy4Mn2Iq
- p92dIuZrPefAk4yqufafJy89Ksf2rZ+R4cc3/9MpU6p3uOe+r2e1ZWVSaHpgyl6Rm8mq5S1y9sB
- OTgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Clang warns (or errors with CONFIG_WERROR=y / W=e):
+On Tue, 13 Jan 2026 08:29:58 +0100, Thomas Weißschuh wrote:
+> Many of the compiler option checks are not necessary anymore with the
+> current supported versions of compilers.
+> 
+> Remove them.
+> 
+> 
 
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:95:16: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-     95 |         .vbr_enable = 0,
-        |                       ^
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:90:16: note: previous initialization is here
-     90 |         .vbr_enable = false,
-        |                       ^~~~~
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:97:19: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-     97 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
-        |                          ^~~~~~~~~~~~~~~~~~~~~~~
-  include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
-     22 | #define DSC_RC_MODEL_SIZE_CONST             8192
-        |                                             ^~~~
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:91:19: note: previous initialization is here
-     91 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
-        |                          ^~~~~~~~~~~~~~~~~~~~~~~
-  include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
-     22 | #define DSC_RC_MODEL_SIZE_CONST             8192
-        |                                             ^~~~
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:132:25: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-    132 |         .initial_scale_value = 32,
-        |                                ^~
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:126:25: note: previous initialization is here
-    126 |         .initial_scale_value = 32,
-        |                                ^~
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:133:20: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-    133 |         .nfl_bpg_offset = 3511,
-        |                           ^~~~
-  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:108:20: note: previous initialization is here
-    108 |         .nfl_bpg_offset = 1402,
-        |                           ^~~~
+Applied to
 
-GCC would warn about this in the same manner but its version,
--Woverride-init, is disabled for a normal kernel build in
-scripts/Makefile.warn. For clang, -Wextra in drivers/gpu/drm/Makefile
-turns it back but GCC respects turning it off earlier in the command
-line.
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
 
-Of all the duplicate fields in the initializer, only nfl_bpg_offset is a
-different value. Clear up the duplicate initializers, keeping the
-'false' value for .vbr_enable, as it is bool, and the second value for
-.nfl_bpg_offset, assuming it is the correct one since it was the one
-tested in the original change.
+Thanks!
 
-Fixes: 65ce1f5834e9 ("drm/panel: ilitek-ili9882t: Switch Tianma TL121BVMS07 to DSC 120Hz mode")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/panel/panel-ilitek-ili9882t.c | 4 ----
- 1 file changed, 4 deletions(-)
+[1/1] kbuild: Drop superfluous compiler option checks
+      https://git.kernel.org/kbuild/c/379b749add7ef
 
-diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
-index 370424ddfc80..8b2bfb7d3638 100644
---- a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
-+++ b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
-@@ -88,11 +88,9 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
- 	.native_422 = false,
- 	.simple_422 = false,
- 	.vbr_enable = false,
--	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
- 	.pic_width = 1600,
- 	.pic_height = 2560,
- 	.convert_rgb = 0,
--	.vbr_enable = 0,
- 	.rc_buf_thresh = {14, 28, 42, 56, 70, 84, 98, 105, 112, 119, 121, 123, 125, 126},
- 	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
- 	.rc_edge_factor = DSC_RC_EDGE_FACTOR_CONST,
-@@ -105,7 +103,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
- 	.initial_offset = 6144,
- 	.rc_quant_incr_limit0 = 11,
- 	.rc_quant_incr_limit1 = 11,
--	.nfl_bpg_offset = 1402,
- 	.rc_range_params = {
- 		{ 0,  4, DSC_BPG_OFFSET(2)},
- 		{ 0,  4, DSC_BPG_OFFSET(0)},
-@@ -123,7 +120,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
- 		{ 9, 12, DSC_BPG_OFFSET(-12)},
- 		{12, 13, DSC_BPG_OFFSET(-12)},
- 	},
--	.initial_scale_value = 32,
- 	.slice_chunk_size = 800,
- 	.initial_dec_delay = 657,
- 	.final_offset = 4320,
-
----
-base-commit: b36178488d479e9a53bbef2b01280378b5586e60
-change-id: 20260114-panel-ilitek-ili9882t-fix-override-init-21e19143f770
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted. Patches applied to an "unstable" branch are accepted pending
+wider testing in -next and any post-commit review; they will generally
+be moved to the main branch in a week if no issues are found.
 
 Best regards,
---  
+-- 
 Nathan Chancellor <nathan@kernel.org>
 
