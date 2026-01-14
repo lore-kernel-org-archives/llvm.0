@@ -1,122 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B63344053
-	for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 11:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78F12D94BB
+	for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 11:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768388607; cv=none; b=ggJ6tDAGk8oz+LBJg/y4uLKZXomI6fxqheYv4w9mxkbmLMNdlqzEGPpv+hZf1B5CpY9Ww+RdGBzE6+4pwVd3QaICxFgClZx66Xfep5yodHwL+Hybc0kV2zpKz4DyZVUAglK/p4CNbOrtDyLpOujey69xdh8p8IrVSPSmYt+8ng4=
+	t=1768388890; cv=none; b=BC8kTp3Y8kvuygHTmpxGTSNbFDkPqA64As0tXCsEznjyC6uslzfxQ8utXv6fQczvrTn+AO+S6c5yLbRjgE38+1Gvqq0811tJ9Mlf1+IntPX3LiJ5C1owT2GrE4hN7a99NVwgcPUztcsSIjvhQiF7KJDZOf95+tbEzJtoPZ6zMAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768388607; c=relaxed/simple;
-	bh=GvtxZp6TjhNCeN3HfELvv5o3JZk5/lWZS357Fn7BCEA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=W1PTzKfn1vQPqKWKyHGnUWAJcZq8HT3+HzkYmpefx2fv/YzYpQR6SnXIali3vPcwkkPC4mWPufVj3nMua6eC/N4ijJiY0RzORXFoCBVGLQy6tGqOJz1oeK9/ce7uXiogVzZye8fm1B0dXGXLTzVLew/szbPb/Xh4DayNyevpdY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q1hIb76B; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1768388890; c=relaxed/simple;
+	bh=MWI1qVU13aYugfnLCugfev/zg0Nbw+E/adx+rYcbLY4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a01+RNBbMNb4nMNXh03aDwRz6Rewj/Ghv911duguqr37BANFcjPPu9SL9DIlBox//HsvD15Zm57MaTiVhG8mY4xyKaYG78oCaE6ddXxMUKI8N610BWd99HHB9KQhAA/OYuPv7CbXivG8AV5syEV8DyZaaQiS+CcToUBPaC07W2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=K4RnD6up; arc=none smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q1hIb76B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768388593;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=QfHF1aMZu8OdM5vMD0vXDn0KqJxkQn/j0XIkOyxbqJ8=;
-	b=Q1hIb76Bra+dbId9K02/bedQ03XyKigKvLQwTyxDbIDmHMbvJo6MqZOcgQu/HyIHkg1NJN
-	L6M2uIlxgsWy6d/RuScbBSQi6EpJS+zs9g/lE9adUFPgZEiPnNVh0C6jIeqpQOf//gJPs3
-	jl1nBOaED0C7DuMgm+uwdwYmEpGbYS4=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-653-l5R2jhxaNI6ltzJpBLFiXw-1; Wed,
- 14 Jan 2026 06:03:12 -0500
-X-MC-Unique: l5R2jhxaNI6ltzJpBLFiXw-1
-X-Mimecast-MFC-AGG-ID: l5R2jhxaNI6ltzJpBLFiXw_1768388591
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 738AE19560B5
-	for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 11:03:11 +0000 (UTC)
-Received: from [172.20.95.168] (unknown [10.30.44.183])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1BC901956048;
-	Wed, 14 Jan 2026 11:03:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
- (6.19.0-rc5, upstream-mainline, b5434592)
-Date: Wed, 14 Jan 2026 11:03:10 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="K4RnD6up"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-432d256c2a9so4754696f8f.3
+        for <llvm@lists.linux.dev>; Wed, 14 Jan 2026 03:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1768388884; x=1768993684; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zsZRaUIv311mQjR1/d/UwzmBCVEkDM2qHnJQZ9QsbMg=;
+        b=K4RnD6upu5BQulQYnaDbaD4LJICv5B0JIa1iqJ9W/+ZADaZGefYDAVMSZb5Z0k8roc
+         Mn4gPnjNGoqDCZJrJJs9DbIzLj0430KGd6GQo6z8K/BeyXobMi7NpIfBWxdH9COncU7M
+         uP5I1ikmHb9forIY7fNiyxHqg8z2RP0YWr8sT+awHNpEL0etrufNN/2fLEnfwreLqrVp
+         O8PhicxOxfMiGDTURKcr52u5OIav9on01dxWpnbP3Ern0ycO3kgcC5peIRLIin7ngPXB
+         zuQOVp7flNgn4B1EFgoiUbhLvWBTcj8B0n13L3+hLGB6g2ItJgzJ9B/RRtWQxcrTfDPq
+         byWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768388884; x=1768993684;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zsZRaUIv311mQjR1/d/UwzmBCVEkDM2qHnJQZ9QsbMg=;
+        b=EFmUAyzsMOlwLVZbdaCphaVwpGq6WIDfXZ56y8OFOwxu2peozehEQPihbaPdQYtrf5
+         nhOM6nDl2cG3qNxjF/bNZvVGUVRKqtI0GrYTrGsUyLZc5nKt0U+UdFlRMnEtRwPRBx/w
+         lFlY/AAP61GqYjDZed3RAeHBzYcWsLntABMAd/N15i2KjbZwY1n72V0fm1TpQ8zSUIIK
+         SNNuDxiF40GDBKfg2APFrSuJQo3vbB+IbyH99tv+ZM86uslP7N+zd6m3blKTsmWbr5wh
+         Aycl68d+PoHREqv1+hHpTOHZugTCh8+2pjiuqxn34t2M/Fxwh/m+OvcRvA6PCDtufdJs
+         pVDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUdB9LzQriw+y+VW079dn/b30UXJZJqCfPk7xOWrV8mq0b7Jj2o468xQvPK4QlrjtgXppab@lists.linux.dev
+X-Gm-Message-State: AOJu0YzwHC3KsPpePKvpDZmXF4PRBXmYlUOvnZw+d7HIX0A/hIZvYSmW
+	VHYYEZCzlduPjMybj8U9SdZyNBSG/EaJc06ZzfrVt7dXqns79vee/sx2MLdAVmx77yo=
+X-Gm-Gg: AY/fxX7Ev+YKsprOm1fKk4gD4x0y7GxU1ZFiHTEHJ7vz7VXRCPMf2jRLZFVdC327C1Y
+	5en7SxS9Wgi1+SZqoN+rTRS3CfOjDSmznB37ls7jFStV534Ly5+xGHwFE4tHCf6u5VqLaZ/jfxh
+	cfHHxYWzIA3uyDyrxQGywflkZ3qlJmEN0TlUfMvqJ0e9G5XaXq6cmsZ+gVkrrQOWypPlOgZVvLC
+	6SpCkFpNmXzCEBieHUtwW0kOf2RStOC/MfCONIxEsgcBO82lSNip1iedoqy026Smuaz0WEjBq+8
+	VEEKZvDWjnIpWE2RDN8qfytM9MtYyVNY/j67I86uY6f0ffLMpJui4miVeuA19w+Tm30BvRSGr2G
+	DvwPwbCVVIeZX3CT8cZYaEgX9CopdYvG167SkHufLjtjPka1VfnwwoYtWKqci0PSU1370Bycy1U
+	ncvqlNf7TkgdblMA==
+X-Received: by 2002:a05:6000:402b:b0:430:f41f:bd5a with SMTP id ffacd0b85a97d-4342c5727bamr2462178f8f.57.1768388884316;
+        Wed, 14 Jan 2026 03:08:04 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432d286cdecsm35938006f8f.7.2026.01.14.03.08.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 03:08:04 -0800 (PST)
+Date: Wed, 14 Jan 2026 12:08:02 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, David Hildenbrand <david@kernel.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-nonmm-unstable 77/129]
+ arch/loongarch/net/bpf_jit.c:1322:7: error: call to undeclared function
+ '__bpf_address_lookup'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <aWd5EoT9dGUwEbE4@pathway.suse.cz>
+References: <202601140159.I4b0kwpE-lkp@intel.com>
+ <20260113094801.d3c7b9d327959c6bcb8f4db6@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <28197.126011406031201521@us-mta-653.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: s6heYhlzu3aEUuKZUWNKZS29ICYtxdqd7anAcdYRYEM_1768388591
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113094801.d3c7b9d327959c6bcb8f4db6@linux-foundation.org>
 
-Hi, we tested your kernel and here are the results:
+On Tue 2026-01-13 09:48:01, Andrew Morton wrote:
+> On Wed, 14 Jan 2026 01:37:38 +0800 kernel test robot <lkp@intel.com> wrote:
+> 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+> > head:   01c8de771f4a779caac5d841b1cb2207ac23330a
+> > commit: 0f1766dc93f077061bf42cc6222bb2ade96422a4 [77/129] kallsyms/bpf: rename __bpf_address_lookup() to bpf_address_lookup()
+> > config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260114/202601140159.I4b0kwpE-lkp@intel.com/config)
+> > compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601140159.I4b0kwpE-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601140159.I4b0kwpE-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> > >> arch/loongarch/net/bpf_jit.c:1322:7: error: call to undeclared function '__bpf_address_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >     1322 |         if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
+> >          |              ^
+> >    arch/loongarch/net/bpf_jit.c:1322:7: note: did you mean 'bpf_address_lookup'?
+> >    include/linux/filter.h:1378:5: note: 'bpf_address_lookup' declared here
+> >     1378 | int bpf_address_lookup(unsigned long addr, unsigned long *size,
+> >          |     ^
+> >    1 error generated.
+> 
+> Thanks.  Presumably this:
+> 
+> --- a/arch/loongarch/net/bpf_jit.c~kallsyms-bpf-rename-__bpf_address_lookup-to-bpf_address_lookup-fix
+> +++ a/arch/loongarch/net/bpf_jit.c
+> @@ -1319,7 +1319,7 @@ int bpf_arch_text_poke(void *ip, enum bp
+>  	/* Only poking bpf text is supported. Since kernel function entry
+>  	 * is set up by ftrace, we rely on ftrace to poke kernel functions.
+>  	 */
+> -	if (!__bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
+> +	if (!bpf_address_lookup((unsigned long)ip, &size, &offset, namebuf))
+>  		return -ENOTSUPP;
+>  
+>  	image = ip - offset;
+> _
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+Yes, this is correct.
 
+JFYI, the "problematic" code has been added into arch/loongarch/net/bpf_jit.c
+just a two weeks ago by the commit 73721d8676771c6c ("LoongArch: BPF: Enhance
+the bpf_arch_text_poke() function").
 
-Kernel information:
-    Commit message: Merge tag 'gfs2-for-6.19-rc6' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/gfs2/linux-gfs2
+The good thing is that it is already in the mainline. It has been
+added in 6.19-rc4, see
+https://lore.kernel.org/all/CAHk-=wjO7Jq1dR7rdDA2wY=jwg4TTq-C6PjJz0=N=1dSO=3NTg@mail.gmail.com/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2261014202
+I see that you have already pushed a fix into -mm tree.
+Thanks a lot for fixing it.
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2261014202_x86_64_kernel-debug
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, x86_64]
-    /distribution/command [aarch64, ppc64le, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
-    Boot test [aarch64, ppc64le, x86_64]
-    CKI/restraint [aarch64, ppc64le, x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    kselftests upstream - net [x86_64]
-    Reboot test [aarch64, ppc64le, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Best Regards,
+Petr
