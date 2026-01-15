@@ -1,134 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE8532ABC3;
-	Thu, 15 Jan 2026 10:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E9317B505;
+	Thu, 15 Jan 2026 10:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768472643; cv=none; b=bVfgnmjc+oxtEsV31yTC8pnwZ5umE/VZPam3Ja/ylpOqiW2h2s+BcWh/cFThLihvipo23iufOgNqPP1/j/0XbYdvFlzyVHXa29jbT+tiiUkBPnmVyh4xGhmSIfdzmHCXGNBA27hJwzQ94IQUJpT4BfoUYBUSDZHuRI3I9QRAJcQ=
+	t=1768473962; cv=none; b=X3kWtDIlzVg4CEOX0Bvx91U+7QO4cQzhaolLMMBvQqCIqlRufZyntfKZmYg/e9z3JYWR6lJbIHIhNvTmJKgS8EtFQPjogknBYzxhP+d/WGbaQJu1Q4zWBVrZ0CRuN0TVHYVDr969Puje1XrAUOqfSJrq86KBoc50eSoPONwynsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768472643; c=relaxed/simple;
-	bh=p9miV0nNryyvHyd1FyrzdZUkZX6TLv1ioe/BqF8c1NU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eo9EG5ybPD0yza/v0XSfzzLVGluuSNpFl5GehRtYWt9kd9RWG3qQkj8ac4mrv8Y0bGZddhz/7QA4LVg+F2aUG4Hn4TqKYCJpVF/e0rKvTpTa0O8DpM6MMm5aFOJZ+CTG/yIjjZq4pxEwzNAkH378QMnxlecqsAq2a/A6yKFLHPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QxTvwyWI; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1768473962; c=relaxed/simple;
+	bh=tRXyI7pnEXKZ3if45n1yvRYI50Ey2GlVTBzohEtnCyg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PHshYBuSGdWsibB/Ep8eK5yUwxwvxVarSymoLWUboQFfujV7VVjrNAD6GcpPgoLccqkfGRzDpn0KubH+4TsCSYPsw3+gXZDgfvDAX5XevvHNJ7+IurTBDRQ/ZafKM7n0Ji72MIhYrBtfsjBCG63EWZjPhMNWPHrY4wpz7oZ4ITQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PdTYuS6I; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QxTvwyWI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PdTYuS6I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768472642; x=1800008642;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p9miV0nNryyvHyd1FyrzdZUkZX6TLv1ioe/BqF8c1NU=;
-  b=QxTvwyWI0es+D38Gqca9gYHDkYDMU8JZYY8kTL/xv5Wd9n1DMAYO7uqn
-   K2kDcf+0dxwY4JjWoZST21V2LtxpAvX4xx9ELcaVAAU+AFlMjnaJgFsvT
-   DQ3lEWBEwH1S13u0b/+54FdKWGACy08t1LMB0sCXk6o//cPj5uVOF7AaT
-   hWH/4ZbhxtPPt2jYLJFx3CSOjvAT7nqwqy+A6X4GjU6FOAIgVjSdxYcZd
-   vHLRAo/X6rT7nQYzZ5Ezxvj8ZYu7ria4e7gymPViNBsQeuEwg4JnP807+
-   iq6ppyxa6t0wWjMBHSvn+PGFhHtu+7lrGGk+dKABQccdBaHR4DmF3izWm
+  t=1768473961; x=1800009961;
+  h=date:from:to:cc:subject:message-id;
+  bh=tRXyI7pnEXKZ3if45n1yvRYI50Ey2GlVTBzohEtnCyg=;
+  b=PdTYuS6IZEQeYrOa1k1K89SO7v6+ZYwR9iPiEFTVxOXUDHIUU+oBd5Nb
+   UAJ4JFRYqC8tWiQnU/kKH00eM1k4ekzSDgk/0+Hbwsuf0O9H6PI1IEpym
+   BMO/DSpp4NDT//NLHwiwo72YpwDJ4LXgl+m2ToJlUAKPDi+zl4pcq50ou
+   p0jiPDMtFGWnLnfx8+W1ZaXWyZU04ep0HXRW8DR5xUfT+6toKIOXvCnq6
+   BJ1z4GrR4Q7BMVj/H/RIWojvy59Q+ZoLGpUpHnv2JX7hnmImbqc/7Ryoa
+   W+8v30X8oCUDGywc2amkrmZrE2Wknhr4JTCGT7e4dHqV2BZspdezZROdc
    g==;
-X-CSE-ConnectionGUID: KAKAmoMZTXSgk7GytxJs5A==
-X-CSE-MsgGUID: 3o9DnV8MSEuEdYXzRJTyeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="68787895"
+X-CSE-ConnectionGUID: rz0DXTxZQLmJxf7bnJdX8w==
+X-CSE-MsgGUID: iV3NvUriRUK5lIAax8AX2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="80499587"
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="68787895"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 02:24:02 -0800
-X-CSE-ConnectionGUID: 1DP/q8OUSOaiDbgrzWpjsw==
-X-CSE-MsgGUID: +4l+nVOsSCmGCnreoNkZIQ==
+   d="scan'208";a="80499587"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 02:46:00 -0800
+X-CSE-ConnectionGUID: h9scHwPHT2CzDh9hNrRJNA==
+X-CSE-MsgGUID: fgCY4IG0TBSrHeJ6Y/Qh5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="209393799"
+   d="scan'208";a="204956908"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Jan 2026 02:23:58 -0800
+  by orviesa007.jf.intel.com with ESMTP; 15 Jan 2026 02:45:58 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgKWB-00000000HqG-0nOs;
-	Thu, 15 Jan 2026 10:23:55 +0000
-Date: Thu, 15 Jan 2026 18:23:48 +0800
+	id 1vgKrU-00000000HrM-0QZP;
+	Thu, 15 Jan 2026 10:45:56 +0000
+Date: Thu, 15 Jan 2026 18:45:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Mohd Ayaan Anwar <mohd.anwar@oss.qualcomm.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH net-next 03/14] phy: qcom-sgmii-eth: add .set_mode() and
- .validate() methods
-Message-ID: <202601151700.IjgxseKd-lkp@intel.com>
-References: <E1vg4vs-00000003SFt-1Fje@rmk-PC.armlinux.org.uk>
+ Mark Brown <broonie@kernel.org>,
+ "Pierre-Louis Bossart" <pierre-louis.bossart@linux.dev>
+Subject: [linux-next:master 6348/6771]
+ sound/soc/sdca/sdca_interrupts.c:212:34: error: no member named 'completion'
+ in 'struct dev_pm_info'
+Message-ID: <202601151803.XY7KryHC-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1vg4vs-00000003SFt-1Fje@rmk-PC.armlinux.org.uk>
 
-Hi Russell,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-qcom-ethqos-remove-mac_base/20260115-054728
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/E1vg4vs-00000003SFt-1Fje%40rmk-PC.armlinux.org.uk
-patch subject: [PATCH net-next 03/14] phy: qcom-sgmii-eth: add .set_mode() and .validate() methods
-config: powerpc-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260115/202601151700.IjgxseKd-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601151700.IjgxseKd-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   9b7977f9e39b7768c70c2aa497f04e7569fd3e00
+commit: ffd7e8a101110cba86925a2906d925e0db7102f3 [6348/6771] ASoC: SDCA: Device boot into the system suspend process
+config: i386-randconfig-004-20260115 (https://download.01.org/0day-ci/archive/20260115/202601151803.XY7KryHC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601151803.XY7KryHC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601151700.IjgxseKd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601151803.XY7KryHC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/phy/qualcomm/phy-qcom-sgmii-eth.c:294:17: error: use of undeclared identifier 'PHY_INTERFACE_MODE_SGMII'
-     294 |         if (submode == PHY_INTERFACE_MODE_SGMII ||
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-sgmii-eth.c:295:17: error: use of undeclared identifier 'PHY_INTERFACE_MODE_1000BASEX'
-     295 |             submode == PHY_INTERFACE_MODE_1000BASEX)
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-sgmii-eth.c:298:17: error: use of undeclared identifier 'PHY_INTERFACE_MODE_2500BASEX'
-     298 |         if (submode == PHY_INTERFACE_MODE_2500BASEX)
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+>> sound/soc/sdca/sdca_interrupts.c:212:34: error: no member named 'completion' in 'struct dev_pm_info'
+     212 |         if (completion_done(&dev->power.completion)) {
+         |                              ~~~~~~~~~~ ^
+   sound/soc/sdca/sdca_interrupts.c:226:34: error: no member named 'completion' in 'struct dev_pm_info'
+     226 |         if (completion_done(&dev->power.completion))
+         |                              ~~~~~~~~~~ ^
+   2 errors generated.
 
 
-vim +/PHY_INTERFACE_MODE_SGMII +294 drivers/phy/qualcomm/phy-qcom-sgmii-eth.c
+vim +212 sound/soc/sdca/sdca_interrupts.c
 
-   288	
-   289	static int qcom_dwmac_sgmii_phy_speed(enum phy_mode mode, int submode)
-   290	{
-   291		if (mode != PHY_MODE_ETHERNET)
-   292			return -EINVAL;
-   293	
- > 294		if (submode == PHY_INTERFACE_MODE_SGMII ||
- > 295		    submode == PHY_INTERFACE_MODE_1000BASEX)
-   296			return SPEED_1000;
-   297	
- > 298		if (submode == PHY_INTERFACE_MODE_2500BASEX)
-   299			return SPEED_2500;
-   300	
-   301		return -EINVAL;
-   302	}
-   303	
+   200	
+   201	static irqreturn_t fdl_owner_handler(int irq, void *data)
+   202	{
+   203		struct sdca_interrupt *interrupt = data;
+   204		struct device *dev = interrupt->dev;
+   205		irqreturn_t irqret = IRQ_NONE;
+   206		int ret;
+   207	
+   208		/*
+   209		 * FDL has to run from the system resume handler, at which point
+   210		 * we can't wait for the pm runtime.
+   211		 */
+ > 212		if (completion_done(&dev->power.completion)) {
+   213			ret = pm_runtime_get_sync(dev);
+   214			if (ret < 0) {
+   215				dev_err(dev, "failed to resume for fdl: %d\n", ret);
+   216				goto error;
+   217			}
+   218		}
+   219	
+   220		ret = sdca_fdl_process(interrupt);
+   221		if (ret)
+   222			goto error;
+   223	
+   224		irqret = IRQ_HANDLED;
+   225	error:
+   226		if (completion_done(&dev->power.completion))
+   227			pm_runtime_put(dev);
+   228		return irqret;
+   229	}
+   230	
 
 -- 
 0-DAY CI Kernel Test Service
