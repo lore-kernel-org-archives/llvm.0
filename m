@@ -1,419 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF34D3939A6;
-	Thu, 15 Jan 2026 12:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B909327C05
+	for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 12:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768479188; cv=none; b=jBZ8vKFrEht/CfZVFsjVbZNFYN2jf5YEz0TaIWy3LkF+Z6UkCCT89dpWSh1eNyoPQSgsFOkVaT/p8quJErLcHnDQnicGNiHgn3YsHBFnU0Oi+iF6D8lnfrWq1RslCHpowtw/wWJfU9uRna7TJQ5aLIli2vcvVM9UwKya0uPTfrE=
+	t=1768479734; cv=none; b=qVRF1gKr9U8XLyGWEKCbZ5i+DxlCMQQryrUMk5qsux2yvlvVZeq2fVU7AAgVTYo/cufAWJyHX5hQc0X9qKdJ/JzVKU0cw0d+XQNmFFMFI8EeYQTlg4GihPswes3gQFt5d76v+zOfEhbnQZ6/9mXOz8I5noOasJj5PsxumxW4EbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768479188; c=relaxed/simple;
-	bh=eGf/0D/IM7ZXDZf/Bu6ATzxNE1y3CzylF3sYmtu3E+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d9VYhHjWXmhPt67VOEiREcleNDhvmKDquIQILaAC8Z66OVHj6Hie3FO8ZlUImPY8my/T+IF+pDp5zRluZo0IyovZAGU6Id3jIv2+mYULHnJ3NNTLDeAynwhr7Lf2eCt4S21rMXMZcy6HkV5LdheQLAE0a1Vl6ZV15CPRDKU6mrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MabO7DtI; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768479734; c=relaxed/simple;
+	bh=qogbE5IY5ITri/LU9Qno22M1lfoj9k2O9+GYZs3FfwQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mOEGU/RQYXlqTxzFpymCVvUkZsDWbjZDBFbIHDAs8IZr6liTdOg44aUS/z4HUeuw3AkkHvwOcf3x5HzU1tI5rAOgoPAVbYovK1tmeHtAZ+hy9CklaOVJYxgE0YtQ2QeUJrX2tKSKWMbw2I07fUnMNe30nqqOCCAYn9eL/e00G7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lq3DeBFY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MabO7DtI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768479186; x=1800015186;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eGf/0D/IM7ZXDZf/Bu6ATzxNE1y3CzylF3sYmtu3E+c=;
-  b=MabO7DtIpy4HBzBZXtVntxizMGwed9hFZvKMLfGgFBrC38mNlQol4auF
-   BJdpOlDGjuLTOzLlAet2d+p7zgc9ZUVcInW+SUVtW4smUNIktLg6Btqi3
-   +v10527il0OriihEr8wyGY7yScWnzNXel/5d13fhWDjX4fOFO/8yNlI7q
-   WtEwEvb/TdFVlAu+s1+OnaLdwrhFe9BKGcCmjw6Prnn6lUbf5F0cslHzn
-   iXYDdSD2D4AIoWXt0YivXPWzJWtUlGj7k/xD2uHmSjBXgM0tg6GtsuF/q
-   YoKfsSOzsZgBsQR9Erts4PxO4rmpGR7E18C1vO4fiphCQB5psgoU+wr/c
-   Q==;
-X-CSE-ConnectionGUID: OAo4YltUSw2cYdBraaW1UA==
-X-CSE-MsgGUID: juEHhpTqRveChaSdXzPcvw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="69518471"
-X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="69518471"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 04:13:04 -0800
-X-CSE-ConnectionGUID: knDXh2aSRTCHOvjG7gmWmA==
-X-CSE-MsgGUID: i39+hqsjQoKkIULGG0PMGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="205352070"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 15 Jan 2026 04:13:02 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgMDj-00000000Hvo-3L5p;
-	Thu, 15 Jan 2026 12:12:59 +0000
-Date: Thu, 15 Jan 2026 20:12:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerry Wu <w.7erry@foxmail.com>, marcel@holtmann.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	w.7erry@foxmail.com
-Subject: Re: [PATCH] Bluetooth: Perform careful capability checks in
- hci_sock_bind()
-Message-ID: <202601151957.xmjlRkZB-lkp@intel.com>
-References: <tencent_2FAB909645504A5E0FDC88F125E139242C05@qq.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lq3DeBFY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768479731;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WA5XjgY2qMo2TmjsnXcc8xoWvlnIZ/r5rdU0uU7KAWI=;
+	b=Lq3DeBFYaaTFmFcunoQwjkLNRLfR3S13TP3cMJA2oYsxWAgSNGlUFvL5Jb0R/h29hGy60p
+	82pnODDPrNx7fBBb5P0/DKVvqBwrmy1ydVQMlItEjxi8rQ/v4xLuGmfMj9mWcYw07mMs9p
+	tBGM7hwC4/cDYD4sIvpePoM1ZGUvkuU=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-387-uUeyMQS2OJGHRPUFBIPBeA-1; Thu,
+ 15 Jan 2026 07:22:10 -0500
+X-MC-Unique: uUeyMQS2OJGHRPUFBIPBeA-1
+X-Mimecast-MFC-AGG-ID: uUeyMQS2OJGHRPUFBIPBeA_1768479729
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 63E6719560B2
+	for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 12:22:09 +0000 (UTC)
+Received: from [172.20.95.168] (unknown [10.30.44.183])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 173E518007D2;
+	Thu, 15 Jan 2026 12:22:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
+ (6.19.0-rc5, upstream-mainline, 944aacb6)
+Date: Thu, 15 Jan 2026 12:22:08 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_2FAB909645504A5E0FDC88F125E139242C05@qq.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <00078.126011507221000578@us-mta-387.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: v1lCsjGFhG3g8jibLxsVHyRHpennwgQUug2BrRd1YjI_1768479729
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jerry,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.19-rc5 next-20260115]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerry-Wu/Bluetooth-Perform-careful-capability-checks-in-hci_sock_bind/20260109-100553
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/tencent_2FAB909645504A5E0FDC88F125E139242C05%40qq.com
-patch subject: [PATCH] Bluetooth: Perform careful capability checks in hci_sock_bind()
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260115/202601151957.xmjlRkZB-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601151957.xmjlRkZB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601151957.xmjlRkZB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/bluetooth/hci_sock.c:1262:31: error: too few arguments to function call, expected 2, have 1
-    1262 |                 if (sk_capable(CAP_NET_ADMIN))
-         |                     ~~~~~~~~~~              ^
-   include/net/sock.h:3023:6: note: 'sk_capable' declared here
-    3023 | bool sk_capable(const struct sock *sk, int cap);
-         |      ^          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/bluetooth/hci_sock.c:1430:31: error: too few arguments to function call, expected 2, have 1
-    1430 |                 if (sk_capable(CAP_NET_ADMIN))
-         |                     ~~~~~~~~~~              ^
-   include/net/sock.h:3023:6: note: 'sk_capable' declared here
-    3023 | bool sk_capable(const struct sock *sk, int cap);
-         |      ^          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +1262 net/bluetooth/hci_sock.c
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-  1187	
-  1188	static int hci_sock_bind(struct socket *sock, struct sockaddr_unsized *addr,
-  1189				 int addr_len)
-  1190	{
-  1191		struct sockaddr_hci haddr;
-  1192		struct sock *sk = sock->sk;
-  1193		struct hci_dev *hdev = NULL;
-  1194		struct sk_buff *skb;
-  1195		int len, err = 0;
-  1196	
-  1197		BT_DBG("sock %p sk %p", sock, sk);
-  1198	
-  1199		if (!addr)
-  1200			return -EINVAL;
-  1201	
-  1202		memset(&haddr, 0, sizeof(haddr));
-  1203		len = min_t(unsigned int, sizeof(haddr), addr_len);
-  1204		memcpy(&haddr, addr, len);
-  1205	
-  1206		if (haddr.hci_family != AF_BLUETOOTH)
-  1207			return -EINVAL;
-  1208	
-  1209		lock_sock(sk);
-  1210	
-  1211		/* Allow detaching from dead device and attaching to alive device, if
-  1212		 * the caller wants to re-bind (instead of close) this socket in
-  1213		 * response to hci_sock_dev_event(HCI_DEV_UNREG) notification.
-  1214		 */
-  1215		hdev = hci_pi(sk)->hdev;
-  1216		if (hdev && hci_dev_test_flag(hdev, HCI_UNREGISTER)) {
-  1217			hci_pi(sk)->hdev = NULL;
-  1218			sk->sk_state = BT_OPEN;
-  1219			hci_dev_put(hdev);
-  1220		}
-  1221		hdev = NULL;
-  1222	
-  1223		if (sk->sk_state == BT_BOUND) {
-  1224			err = -EALREADY;
-  1225			goto done;
-  1226		}
-  1227	
-  1228		switch (haddr.hci_channel) {
-  1229		case HCI_CHANNEL_RAW:
-  1230			if (hci_pi(sk)->hdev) {
-  1231				err = -EALREADY;
-  1232				goto done;
-  1233			}
-  1234	
-  1235			if (haddr.hci_dev != HCI_DEV_NONE) {
-  1236				hdev = hci_dev_get(haddr.hci_dev);
-  1237				if (!hdev) {
-  1238					err = -ENODEV;
-  1239					goto done;
-  1240				}
-  1241	
-  1242				atomic_inc(&hdev->promisc);
-  1243			}
-  1244	
-  1245			hci_pi(sk)->channel = haddr.hci_channel;
-  1246	
-  1247			if (!hci_sock_gen_cookie(sk)) {
-  1248				/* In the case when a cookie has already been assigned,
-  1249				 * then there has been already an ioctl issued against
-  1250				 * an unbound socket and with that triggered an open
-  1251				 * notification. Send a close notification first to
-  1252				 * allow the state transition to bounded.
-  1253				 */
-  1254				skb = create_monitor_ctrl_close(sk);
-  1255				if (skb) {
-  1256					hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
-  1257							    HCI_SOCK_TRUSTED, NULL);
-  1258					kfree_skb(skb);
-  1259				}
-  1260			}
-  1261	
-> 1262			if (sk_capable(CAP_NET_ADMIN))
-  1263				hci_sock_set_flag(sk, HCI_SOCK_TRUSTED);
-  1264	
-  1265			hci_pi(sk)->hdev = hdev;
-  1266	
-  1267			/* Send event to monitor */
-  1268			skb = create_monitor_ctrl_open(sk);
-  1269			if (skb) {
-  1270				hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
-  1271						    HCI_SOCK_TRUSTED, NULL);
-  1272				kfree_skb(skb);
-  1273			}
-  1274			break;
-  1275	
-  1276		case HCI_CHANNEL_USER:
-  1277			if (hci_pi(sk)->hdev) {
-  1278				err = -EALREADY;
-  1279				goto done;
-  1280			}
-  1281	
-  1282			if (haddr.hci_dev == HCI_DEV_NONE) {
-  1283				err = -EINVAL;
-  1284				goto done;
-  1285			}
-  1286	
-  1287			if (!capable(CAP_NET_ADMIN)) {
-  1288				err = -EPERM;
-  1289				goto done;
-  1290			}
-  1291	
-  1292			hdev = hci_dev_get(haddr.hci_dev);
-  1293			if (!hdev) {
-  1294				err = -ENODEV;
-  1295				goto done;
-  1296			}
-  1297	
-  1298			if (test_bit(HCI_INIT, &hdev->flags) ||
-  1299			    hci_dev_test_flag(hdev, HCI_SETUP) ||
-  1300			    hci_dev_test_flag(hdev, HCI_CONFIG) ||
-  1301			    (!hci_dev_test_flag(hdev, HCI_AUTO_OFF) &&
-  1302			     test_bit(HCI_UP, &hdev->flags))) {
-  1303				err = -EBUSY;
-  1304				hci_dev_put(hdev);
-  1305				goto done;
-  1306			}
-  1307	
-  1308			if (hci_dev_test_and_set_flag(hdev, HCI_USER_CHANNEL)) {
-  1309				err = -EUSERS;
-  1310				hci_dev_put(hdev);
-  1311				goto done;
-  1312			}
-  1313	
-  1314			hci_dev_lock(hdev);
-  1315			mgmt_index_removed(hdev);
-  1316			hci_dev_unlock(hdev);
-  1317	
-  1318			err = hci_dev_open(hdev->id);
-  1319			if (err) {
-  1320				if (err == -EALREADY) {
-  1321					/* In case the transport is already up and
-  1322					 * running, clear the error here.
-  1323					 *
-  1324					 * This can happen when opening a user
-  1325					 * channel and HCI_AUTO_OFF grace period
-  1326					 * is still active.
-  1327					 */
-  1328					err = 0;
-  1329				} else {
-  1330					hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
-  1331					mgmt_index_added(hdev);
-  1332					hci_dev_put(hdev);
-  1333					goto done;
-  1334				}
-  1335			}
-  1336	
-  1337			hci_pi(sk)->channel = haddr.hci_channel;
-  1338	
-  1339			if (!hci_sock_gen_cookie(sk)) {
-  1340				/* In the case when a cookie has already been assigned,
-  1341				 * this socket will transition from a raw socket into
-  1342				 * a user channel socket. For a clean transition, send
-  1343				 * the close notification first.
-  1344				 */
-  1345				skb = create_monitor_ctrl_close(sk);
-  1346				if (skb) {
-  1347					hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
-  1348							    HCI_SOCK_TRUSTED, NULL);
-  1349					kfree_skb(skb);
-  1350				}
-  1351			}
-  1352	
-  1353			/* The user channel is restricted to CAP_NET_ADMIN
-  1354			 * capabilities and with that implicitly trusted.
-  1355			 */
-  1356			hci_sock_set_flag(sk, HCI_SOCK_TRUSTED);
-  1357	
-  1358			hci_pi(sk)->hdev = hdev;
-  1359	
-  1360			/* Send event to monitor */
-  1361			skb = create_monitor_ctrl_open(sk);
-  1362			if (skb) {
-  1363				hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
-  1364						    HCI_SOCK_TRUSTED, NULL);
-  1365				kfree_skb(skb);
-  1366			}
-  1367	
-  1368			atomic_inc(&hdev->promisc);
-  1369			break;
-  1370	
-  1371		case HCI_CHANNEL_MONITOR:
-  1372			if (haddr.hci_dev != HCI_DEV_NONE) {
-  1373				err = -EINVAL;
-  1374				goto done;
-  1375			}
-  1376	
-  1377			if (!capable(CAP_NET_RAW)) {
-  1378				err = -EPERM;
-  1379				goto done;
-  1380			}
-  1381	
-  1382			hci_pi(sk)->channel = haddr.hci_channel;
-  1383	
-  1384			/* The monitor interface is restricted to CAP_NET_RAW
-  1385			 * capabilities and with that implicitly trusted.
-  1386			 */
-  1387			hci_sock_set_flag(sk, HCI_SOCK_TRUSTED);
-  1388	
-  1389			send_monitor_note(sk, "Linux version %s (%s)",
-  1390					  init_utsname()->release,
-  1391					  init_utsname()->machine);
-  1392			send_monitor_note(sk, "Bluetooth subsystem version %u.%u",
-  1393					  BT_SUBSYS_VERSION, BT_SUBSYS_REVISION);
-  1394			send_monitor_replay(sk);
-  1395			send_monitor_control_replay(sk);
-  1396	
-  1397			atomic_inc(&monitor_promisc);
-  1398			break;
-  1399	
-  1400		case HCI_CHANNEL_LOGGING:
-  1401			if (haddr.hci_dev != HCI_DEV_NONE) {
-  1402				err = -EINVAL;
-  1403				goto done;
-  1404			}
-  1405	
-  1406			if (!capable(CAP_NET_ADMIN)) {
-  1407				err = -EPERM;
-  1408				goto done;
-  1409			}
-  1410	
-  1411			hci_pi(sk)->channel = haddr.hci_channel;
-  1412			break;
-  1413	
-  1414		default:
-  1415			if (!hci_mgmt_chan_find(haddr.hci_channel)) {
-  1416				err = -EINVAL;
-  1417				goto done;
-  1418			}
-  1419	
-  1420			if (haddr.hci_dev != HCI_DEV_NONE) {
-  1421				err = -EINVAL;
-  1422				goto done;
-  1423			}
-  1424	
-  1425			/* Users with CAP_NET_ADMIN capabilities are allowed
-  1426			 * access to all management commands and events. For
-  1427			 * untrusted users the interface is restricted and
-  1428			 * also only untrusted events are sent.
-  1429			 */
-  1430			if (sk_capable(CAP_NET_ADMIN))
-  1431				hci_sock_set_flag(sk, HCI_SOCK_TRUSTED);
-  1432	
-  1433			hci_pi(sk)->channel = haddr.hci_channel;
-  1434	
-  1435			/* At the moment the index and unconfigured index events
-  1436			 * are enabled unconditionally. Setting them on each
-  1437			 * socket when binding keeps this functionality. They
-  1438			 * however might be cleared later and then sending of these
-  1439			 * events will be disabled, but that is then intentional.
-  1440			 *
-  1441			 * This also enables generic events that are safe to be
-  1442			 * received by untrusted users. Example for such events
-  1443			 * are changes to settings, class of device, name etc.
-  1444			 */
-  1445			if (hci_pi(sk)->channel == HCI_CHANNEL_CONTROL) {
-  1446				if (!hci_sock_gen_cookie(sk)) {
-  1447					/* In the case when a cookie has already been
-  1448					 * assigned, this socket will transition from
-  1449					 * a raw socket into a control socket. To
-  1450					 * allow for a clean transition, send the
-  1451					 * close notification first.
-  1452					 */
-  1453					skb = create_monitor_ctrl_close(sk);
-  1454					if (skb) {
-  1455						hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
-  1456								    HCI_SOCK_TRUSTED, NULL);
-  1457						kfree_skb(skb);
-  1458					}
-  1459				}
-  1460	
-  1461				/* Send event to monitor */
-  1462				skb = create_monitor_ctrl_open(sk);
-  1463				if (skb) {
-  1464					hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
-  1465							    HCI_SOCK_TRUSTED, NULL);
-  1466					kfree_skb(skb);
-  1467				}
-  1468	
-  1469				hci_sock_set_flag(sk, HCI_MGMT_INDEX_EVENTS);
-  1470				hci_sock_set_flag(sk, HCI_MGMT_UNCONF_INDEX_EVENTS);
-  1471				hci_sock_set_flag(sk, HCI_MGMT_OPTION_EVENTS);
-  1472				hci_sock_set_flag(sk, HCI_MGMT_SETTING_EVENTS);
-  1473				hci_sock_set_flag(sk, HCI_MGMT_DEV_CLASS_EVENTS);
-  1474				hci_sock_set_flag(sk, HCI_MGMT_LOCAL_NAME_EVENTS);
-  1475			}
-  1476			break;
-  1477		}
-  1478	
-  1479		/* Default MTU to HCI_MAX_FRAME_SIZE if not set */
-  1480		if (!hci_pi(sk)->mtu)
-  1481			hci_pi(sk)->mtu = HCI_MAX_FRAME_SIZE;
-  1482	
-  1483		sk->sk_state = BT_BOUND;
-  1484	
-  1485	done:
-  1486		release_sock(sk);
-  1487		return err;
-  1488	}
-  1489	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2263644569
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2263644569_x86_64_kernel-debug
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, x86_64]
+    /distribution/command [aarch64, ppc64le, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
+    Boot test [aarch64, ppc64le, x86_64]
+    CKI/restraint [aarch64, ppc64le, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [aarch64, ppc64le, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
+    Storage - blktests - throtl [aarch64, x86_64]
+    Storage - blktests - ublk [aarch64, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, x86_64]
+    stress: stress-ng - memory [aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
