@@ -1,179 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7441938A715;
-	Thu, 15 Jan 2026 13:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE17A3A1A55;
+	Thu, 15 Jan 2026 14:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768485012; cv=none; b=cVM3zdoc1KScSPVMs6EXH0ZnOcSr78eV3h6Nfcceya0IYNdduPkhglx4AJgN5qegFZYX3jop1R0lXcFC6LMBPNsjmYuZD6KCufrlYjzu1B7PLjN7UzY0JYDrs9wbsD4hfLvjK44ZS/BOTQgrK7svZ6n8SqV9WLD9+2Nim7iTTMg=
+	t=1768485670; cv=none; b=VQI8s2x0Ew/ci6TNBSk/1/45oM6fD5czEWtwTVg91BEmm7s1Ngr/r7USNT79lOBrl3lh9HOZGRflHumpDa8z4aM2MQRDabj8bfCF4GOu9bjRQVFJfoWDs/ubzCTrvxfWXzvNgsxDVRw8pKJPOHczlKAqfZ63wTshYhjrN7h99as=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768485012; c=relaxed/simple;
-	bh=9BuasZ0t33a7AsjKXVovC2XLmPpO90VhX+AWfX4/5cY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lpN1QhIp4PAu9ZsNdkM27z9hf4jFkOD8FoOCkP36RHLiIcWj2D0rZSZkn0BqcgREHdcgWyyVuNgYhDbDiW9R3tc3Qjez99/RP73E8kh6KW5uxRy7Ij3pdKwauPXuzwDf4e7pA32F5lA9WTD0K/y0WxbGK214cgojSGkSvrM2CIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fScTsD0z; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1768485670; c=relaxed/simple;
+	bh=hJJl95SYFUc6OLzc6JIHj9meMnBXpzNd1RauUuIsKsU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=OSNjhwSwkobS+VfguOROJGwW2H7dCcU+vDMXskDV5uKxv/OLa/epN9LX7+aCl2BqGJEwAUvxN07x9eAHcP6HRAvUTHHN7XXq4yyIN4BdM1rUC5XpIjysNPm9cqHEvj9L1PaPuBlzug+qeyJctY6CtHjzpWCoFrDTq9BuipLZ3Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hXd5+0Jj; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fScTsD0z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hXd5+0Jj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768485011; x=1800021011;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9BuasZ0t33a7AsjKXVovC2XLmPpO90VhX+AWfX4/5cY=;
-  b=fScTsD0zvJleJjihxGPHylvh8WVboaYf4StEhkgPl7ErOZmx2f6adFQk
-   oI7IS+w095dA4Ez2w1FE+F8TfDAqgjzfB2len/cPAraPQBSV0jOVWO1fU
-   SEzfrme6ZGvbzW4SY3HvlGhJbm/thkDNUViyjzBWCyF/TYKJx/ylRHfWf
-   xXlflRh7iSYxBgB6hRtFyJxC4pyCzLpJ3K3AqxyPSsKUQ1j2ertnDPs/w
-   xyG71EE6xq/DG0rJtgNGVE20QFrD/LUfP9uHj/ZFY5O3M3LsJvFxJRhCf
-   LAH4QZ8ymSSYuqZxvXs/Tr1VPO7o8xIXKcGZoU5BM8VrulcmiQxhKgVN7
-   Q==;
-X-CSE-ConnectionGUID: cideZ5yEQTq6AH1RRP0pKw==
-X-CSE-MsgGUID: AAtyCqV1Ss+L2JDyVH4cSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="73641272"
+  t=1768485669; x=1800021669;
+  h=date:from:to:cc:subject:message-id;
+  bh=hJJl95SYFUc6OLzc6JIHj9meMnBXpzNd1RauUuIsKsU=;
+  b=hXd5+0JjrF3Cj4QHVCl7ii0r4T5SuIa9YnKAQgEw9d5OXn2c0yeIDwh3
+   S+gjgSchKqU/MgO8Xu+slvcEMONUA9/jLx5vJjjwbNC9Zw4EKViXceM02
+   58zIIDw73r2xjDzU9UsoZ7qj/o9R20v9jV6kwNwI+LA7mZsh80PSBDca0
+   /sDRcQ4WSwEdgG1ZEMVYitD5VMqhJTqHRwQx75P4oYLc3hLhFxDW4ql2I
+   0hnK7KSMZ5ADUzMzfLbeqA2HT4Qo7/SjoZE2z8xqcnPM0hB3TuSe2ko8l
+   OYUSI6bYAH6kVXdl/mDQSyjUkQVL0NkR+ACNiQ9kLZAmxiKGqDzDFyjOE
+   g==;
+X-CSE-ConnectionGUID: AEunZ+QxTJK5tKBvd7J95w==
+X-CSE-MsgGUID: GwExZU6vQWSDxMGTTITqzA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="69689033"
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="73641272"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 05:50:11 -0800
-X-CSE-ConnectionGUID: AZ9/3ya5TCiOyR984WpPMA==
-X-CSE-MsgGUID: AGN9oiwIQOiOpBYwKn7DfA==
+   d="scan'208";a="69689033"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 06:01:09 -0800
+X-CSE-ConnectionGUID: tohnMBLWRKuhSfIYh3rqAw==
+X-CSE-MsgGUID: vy1FSQzrSMC46Tg2IaS1Bg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="204838423"
+   d="scan'208";a="209471366"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 15 Jan 2026 05:50:06 -0800
+  by orviesa004.jf.intel.com with ESMTP; 15 Jan 2026 06:01:07 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgNjg-00000000I1s-0ySb;
-	Thu, 15 Jan 2026 13:50:04 +0000
-Date: Thu, 15 Jan 2026 21:49:06 +0800
+	id 1vgNuK-00000000I2E-2MNA;
+	Thu, 15 Jan 2026 14:01:04 +0000
+Date: Thu, 15 Jan 2026 22:00:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Madieu <john.madieu.xa@bp.renesas.com>,
-	claudiu.beznea.uj@bp.renesas.com, lpieralisi@kernel.org,
-	kwilczynski@kernel.org, mani@kernel.org, geert+renesas@glider.be,
-	krzk+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
-	bhelgaas@google.com, conor+dt@kernel.org, magnus.damm@gmail.com,
-	biju.das.jz@bp.renesas.com, linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, john.madieu@gmail.com,
-	John Madieu <john.madieu.xa@bp.renesas.com>
-Subject: Re: [PATCH 10/16] PCI: rzg3s-host: Explicitly set class code for
- RZ/G3E compatibility
-Message-ID: <202601152104.pV9uMS76-lkp@intel.com>
-References: <20260114153337.46765-11-john.madieu.xa@bp.renesas.com>
+To: Prathamesh Shete <pshete@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Jon Hunter <jonathanh@nvidia.com>,
+ Petlozu Pravareshwar <petlozup@nvidia.com>
+Subject: [jonhunter:tegra/next-fixes 4/6] Warning:
+ drivers/soc/tegra/pmc.c:477 struct member 'pending_wake_status' not described
+ in 'tegra_pmc'
+Message-ID: <202601152118.iUDaBhog-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260114153337.46765-11-john.madieu.xa@bp.renesas.com>
 
-Hi John,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20260114]
-[cannot apply to pci/next pci/for-linus geert-renesas-devel/next geert-renesas-drivers/renesas-clk linus/master v6.19-rc5 v6.19-rc4 v6.19-rc3 v6.19-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Madieu/PCI-rzg3s-host-Fix-reset-handling-in-probe-error-path/20260114-234634
-base:   next-20260114
-patch link:    https://lore.kernel.org/r/20260114153337.46765-11-john.madieu.xa%40bp.renesas.com
-patch subject: [PATCH 10/16] PCI: rzg3s-host: Explicitly set class code for RZ/G3E compatibility
-config: powerpc64-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260115/202601152104.pV9uMS76-lkp@intel.com/config)
+tree:   https://github.com/jonhunter/linux tegra/next-fixes
+head:   8db7df69105098e025ef2c558d2a3e23bc788a9b
+commit: 8c40b13eff0e1a7d46a38648951ff0b9581c0628 [4/6] soc/tegra: pmc: Fix unsafe generic_handle_irq() call
+config: arm-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260115/202601152118.iUDaBhog-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601152104.pV9uMS76-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601152118.iUDaBhog-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601152104.pV9uMS76-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601152118.iUDaBhog-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pci/controller/pcie-rzg3s-host.c:1090:11: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-    1090 |                                FIELD_PREP(mask, PCI_CLASS_BRIDGE_PCI_NORMAL));
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:137:3: note: expanded from macro 'FIELD_PREP'
-     137 |                 __BF_FIELD_CHECK_REG(_mask, 0ULL, "FIELD_PREP: ");      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:79:50: note: expanded from macro '__BF_FIELD_CHECK_REG'
-      79 |         BUILD_BUG_ON_MSG(__bf_cast_unsigned(mask, mask) >               \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-      80 |                          __bf_cast_unsigned(reg, ~0ull),                \
-         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      81 |                          pfx "type of reg too small for mask")
-         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/linux/compiler_types.h:667:22: note: expanded from macro 'compiletime_assert'
-     667 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:655:23: note: expanded from macro '_compiletime_assert'
-     655 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:647:9: note: expanded from macro '__compiletime_assert'
-     647 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   1 warning generated.
-
-
-vim +1090 drivers/pci/controller/pcie-rzg3s-host.c
-
-  1057	
-  1058	static int rzg3s_pcie_config_init(struct rzg3s_pcie_host *host)
-  1059	{
-  1060		struct pci_host_bridge *bridge = pci_host_bridge_from_priv(host);
-  1061		u32 mask = GENMASK(31, 8);
-  1062		struct resource_entry *ft;
-  1063		struct resource *bus;
-  1064		u8 subordinate_bus;
-  1065		u8 secondary_bus;
-  1066		u8 primary_bus;
-  1067	
-  1068		ft = resource_list_first_type(&bridge->windows, IORESOURCE_BUS);
-  1069		if (!ft)
-  1070			return -ENODEV;
-  1071	
-  1072		bus = ft->res;
-  1073		primary_bus = bus->start;
-  1074		secondary_bus = bus->start + 1;
-  1075		subordinate_bus = bus->end;
-  1076	
-  1077		/* Enable access control to the CFGU */
-  1078		writel_relaxed(RZG3S_PCI_PERM_CFG_HWINIT_EN,
-  1079			       host->axi + RZG3S_PCI_PERM);
-  1080	
-  1081		/* HW manual recommends to write 0xffffffff on initialization */
-  1082		writel_relaxed(0xffffffff, host->pcie + RZG3S_PCI_CFG_BARMSK00L);
-  1083		writel_relaxed(0xffffffff, host->pcie + RZG3S_PCI_CFG_BARMSK00U);
-  1084	
-  1085		/*
-  1086		 * Explicitly program class code. RZ/G3E requires this configuration.
-  1087		 * Harmless for RZ/G3S where this matches the hardware default.
-  1088		 */
-  1089		rzg3s_pcie_update_bits(host->pcie, PCI_CLASS_REVISION, mask,
-> 1090				       FIELD_PREP(mask, PCI_CLASS_BRIDGE_PCI_NORMAL));
-  1091	
-  1092		/* Disable access control to the CFGU */
-  1093		writel_relaxed(0, host->axi + RZG3S_PCI_PERM);
-  1094	
-  1095		/* Update bus info */
-  1096		writeb_relaxed(primary_bus, host->pcie + PCI_PRIMARY_BUS);
-  1097		writeb_relaxed(secondary_bus, host->pcie + PCI_SECONDARY_BUS);
-  1098		writeb_relaxed(subordinate_bus, host->pcie + PCI_SUBORDINATE_BUS);
-  1099	
-  1100		return 0;
-  1101	}
-  1102	
+>> Warning: drivers/soc/tegra/pmc.c:477 struct member 'pending_wake_status' not described in 'tegra_pmc'
+>> Warning: drivers/soc/tegra/pmc.c:477 struct member 'pending_wake_irq_work' not described in 'tegra_pmc'
+>> Warning: drivers/soc/tegra/pmc.c:477 struct member 'pending_wake_status' not described in 'tegra_pmc'
+>> Warning: drivers/soc/tegra/pmc.c:477 struct member 'pending_wake_irq_work' not described in 'tegra_pmc'
 
 -- 
 0-DAY CI Kernel Test Service
