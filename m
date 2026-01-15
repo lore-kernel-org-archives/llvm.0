@@ -1,59 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BD8348458;
-	Thu, 15 Jan 2026 13:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7441938A715;
+	Thu, 15 Jan 2026 13:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768483028; cv=none; b=gmtIb5MouGCZj0VJJy+P1lxxWY/lVpXGipTg1TJMtvQgMg0nQj4XWOv1H9KdHd4iTUknvcYRFiRpTWd1qg6UkKatVcKjUsMmtfHBhTc2NmWvY+cbGc6D7GODn6RiClFw0QjdPaj7t3ujJWOYsb9jMnvChhE8XDZuNBfusJsQOdQ=
+	t=1768485012; cv=none; b=cVM3zdoc1KScSPVMs6EXH0ZnOcSr78eV3h6Nfcceya0IYNdduPkhglx4AJgN5qegFZYX3jop1R0lXcFC6LMBPNsjmYuZD6KCufrlYjzu1B7PLjN7UzY0JYDrs9wbsD4hfLvjK44ZS/BOTQgrK7svZ6n8SqV9WLD9+2Nim7iTTMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768483028; c=relaxed/simple;
-	bh=LXAAtqwWDTcMivM/8r6216OVPqCU1gH+dga9Cygj59s=;
+	s=arc-20240116; t=1768485012; c=relaxed/simple;
+	bh=9BuasZ0t33a7AsjKXVovC2XLmPpO90VhX+AWfX4/5cY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+68MCvMtYCxO60uWCXZg7H96d4v1Qv6Pcc5eOWiPEvPuJf+OMr1ubdLQBYNXvpPlNX9l1qDytUeHDMsUi7Sz1oKZHttJzwyecxmcxi0Vm9GldT+Z+kxQ8IyuiuFYSKGRK/23ftC1x+q2eOpVlw4Dc4tTEmeLZnMRgO7Va/qbiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IVQ2GZV/; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=lpN1QhIp4PAu9ZsNdkM27z9hf4jFkOD8FoOCkP36RHLiIcWj2D0rZSZkn0BqcgREHdcgWyyVuNgYhDbDiW9R3tc3Qjez99/RP73E8kh6KW5uxRy7Ij3pdKwauPXuzwDf4e7pA32F5lA9WTD0K/y0WxbGK214cgojSGkSvrM2CIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fScTsD0z; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IVQ2GZV/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fScTsD0z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768483027; x=1800019027;
+  t=1768485011; x=1800021011;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LXAAtqwWDTcMivM/8r6216OVPqCU1gH+dga9Cygj59s=;
-  b=IVQ2GZV/h/nd3JGlh34dJ35xUIng0330/FEZPboyPVfgH5xMUdWT02Ec
-   vn01gAtxbaevzvCtBRUmvqVc2026KYAcy8BW68eVxIsISGmX9K4nc3nj2
-   OMcZbPQpYvhbe3jv2MDDf3VI8MlkPNE8detoIxGZJFRTKYdDLNF3z4Hq3
-   i3X1NetJYowN2rNGzY/S3QpAFBPsV85uw08JoRied4w5MuL9PiHnTrw90
-   kh2NoW0qY9U2BmOQg12+ku1e2QcQKbUNOdEWXdTmbVdfW1Jh2Fcz9mmtz
-   UDlHbJfNKGeq7oloVT0tlSvsMrOf0t6Wf1+FMG0oWCOj2usu1FjkF3cbo
-   g==;
-X-CSE-ConnectionGUID: L7qHrIeFSYyYKq2tRfE+xQ==
-X-CSE-MsgGUID: 47PFOnrwSjiD3HsPUtQX2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="81151173"
+  bh=9BuasZ0t33a7AsjKXVovC2XLmPpO90VhX+AWfX4/5cY=;
+  b=fScTsD0zvJleJjihxGPHylvh8WVboaYf4StEhkgPl7ErOZmx2f6adFQk
+   oI7IS+w095dA4Ez2w1FE+F8TfDAqgjzfB2len/cPAraPQBSV0jOVWO1fU
+   SEzfrme6ZGvbzW4SY3HvlGhJbm/thkDNUViyjzBWCyF/TYKJx/ylRHfWf
+   xXlflRh7iSYxBgB6hRtFyJxC4pyCzLpJ3K3AqxyPSsKUQ1j2ertnDPs/w
+   xyG71EE6xq/DG0rJtgNGVE20QFrD/LUfP9uHj/ZFY5O3M3LsJvFxJRhCf
+   LAH4QZ8ymSSYuqZxvXs/Tr1VPO7o8xIXKcGZoU5BM8VrulcmiQxhKgVN7
+   Q==;
+X-CSE-ConnectionGUID: cideZ5yEQTq6AH1RRP0pKw==
+X-CSE-MsgGUID: AAtyCqV1Ss+L2JDyVH4cSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="73641272"
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="81151173"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 05:17:07 -0800
-X-CSE-ConnectionGUID: yGhCw92URRGxSAJ1pglvGw==
-X-CSE-MsgGUID: LxvWpiDCQgKBlWUW5YYMfQ==
+   d="scan'208";a="73641272"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 05:50:11 -0800
+X-CSE-ConnectionGUID: AZ9/3ya5TCiOyR984WpPMA==
+X-CSE-MsgGUID: AGN9oiwIQOiOpBYwKn7DfA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="242493058"
+   d="scan'208";a="204838423"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 15 Jan 2026 05:17:05 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 15 Jan 2026 05:50:06 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgNDi-00000000Hzc-1VVZ;
-	Thu, 15 Jan 2026 13:17:02 +0000
-Date: Thu, 15 Jan 2026 21:16:50 +0800
+	id 1vgNjg-00000000I1s-0ySb;
+	Thu, 15 Jan 2026 13:50:04 +0000
+Date: Thu, 15 Jan 2026 21:49:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v5 7/7] net: wwan: hwsim: support NMEA port emulation
-Message-ID: <202601152039.wm03lOE5-lkp@intel.com>
-References: <20260109010909.4216-8-ryazanov.s.a@gmail.com>
+To: John Madieu <john.madieu.xa@bp.renesas.com>,
+	claudiu.beznea.uj@bp.renesas.com, lpieralisi@kernel.org,
+	kwilczynski@kernel.org, mani@kernel.org, geert+renesas@glider.be,
+	krzk+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
+	bhelgaas@google.com, conor+dt@kernel.org, magnus.damm@gmail.com,
+	biju.das.jz@bp.renesas.com, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org, john.madieu@gmail.com,
+	John Madieu <john.madieu.xa@bp.renesas.com>
+Subject: Re: [PATCH 10/16] PCI: rzg3s-host: Explicitly set class code for
+ RZ/G3E compatibility
+Message-ID: <202601152104.pV9uMS76-lkp@intel.com>
+References: <20260114153337.46765-11-john.madieu.xa@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,88 +71,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260109010909.4216-8-ryazanov.s.a@gmail.com>
+In-Reply-To: <20260114153337.46765-11-john.madieu.xa@bp.renesas.com>
 
-Hi Sergey,
+Hi John,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main net-next/main net/main linus/master v6.19-rc5 next-20260115]
+[auto build test WARNING on next-20260114]
+[cannot apply to pci/next pci/for-linus geert-renesas-devel/next geert-renesas-drivers/renesas-clk linus/master v6.19-rc5 v6.19-rc4 v6.19-rc3 v6.19-rc5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sergey-Ryazanov/net-wwan-core-remove-unused-port_id-field/20260109-091432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20260109010909.4216-8-ryazanov.s.a%40gmail.com
-patch subject: [RFC PATCH v5 7/7] net: wwan: hwsim: support NMEA port emulation
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260115/202601152039.wm03lOE5-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601152039.wm03lOE5-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Madieu/PCI-rzg3s-host-Fix-reset-handling-in-probe-error-path/20260114-234634
+base:   next-20260114
+patch link:    https://lore.kernel.org/r/20260114153337.46765-11-john.madieu.xa%40bp.renesas.com
+patch subject: [PATCH 10/16] PCI: rzg3s-host: Explicitly set class code for RZ/G3E compatibility
+config: powerpc64-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260115/202601152104.pV9uMS76-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601152104.pV9uMS76-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601152039.wm03lOE5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601152104.pV9uMS76-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/wwan/wwan_hwsim.c:239:33: error: call to undeclared function 'from_timer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     239 |         struct wwan_hwsim_port *port = from_timer(port, t, nmea_emul.timer);
-         |                                        ^
-   drivers/net/wwan/wwan_hwsim.c:239:33: note: did you mean 'mod_timer'?
-   include/linux/timer.h:151:12: note: 'mod_timer' declared here
-     151 | extern int mod_timer(struct timer_list *timer, unsigned long expires);
-         |            ^
->> drivers/net/wwan/wwan_hwsim.c:239:53: error: use of undeclared identifier 'nmea_emul'
-     239 |         struct wwan_hwsim_port *port = from_timer(port, t, nmea_emul.timer);
-         |                                                            ^
-   2 errors generated.
+>> drivers/pci/controller/pcie-rzg3s-host.c:1090:11: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+    1090 |                                FIELD_PREP(mask, PCI_CLASS_BRIDGE_PCI_NORMAL));
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:137:3: note: expanded from macro 'FIELD_PREP'
+     137 |                 __BF_FIELD_CHECK_REG(_mask, 0ULL, "FIELD_PREP: ");      \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:79:50: note: expanded from macro '__BF_FIELD_CHECK_REG'
+      79 |         BUILD_BUG_ON_MSG(__bf_cast_unsigned(mask, mask) >               \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+      80 |                          __bf_cast_unsigned(reg, ~0ull),                \
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      81 |                          pfx "type of reg too small for mask")
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:667:22: note: expanded from macro 'compiletime_assert'
+     667 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:655:23: note: expanded from macro '_compiletime_assert'
+     655 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:647:9: note: expanded from macro '__compiletime_assert'
+     647 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   1 warning generated.
 
 
-vim +/from_timer +239 drivers/net/wwan/wwan_hwsim.c
+vim +1090 drivers/pci/controller/pcie-rzg3s-host.c
 
-   233	
-   234	static void wwan_hwsim_nmea_emul_timer(struct timer_list *t)
-   235	{
-   236		/* 43.74754722298909 N 11.25759835922875 E in DMM format */
-   237		static const unsigned int coord[4 * 2] = { 43, 44, 8528, 0,
-   238							   11, 15, 4559, 0 };
- > 239		struct wwan_hwsim_port *port = from_timer(port, t, nmea_emul.timer);
-   240		struct sk_buff *skb;
-   241		struct tm tm;
-   242	
-   243		time64_to_tm(ktime_get_real_seconds(), 0, &tm);
-   244	
-   245		mod_timer(&port->nmea_emul.timer, jiffies + HZ);	/* 1 second */
-   246	
-   247		skb = alloc_skb(NMEA_MAX_LEN * 2, GFP_KERNEL);	/* GGA + RMC */
-   248		if (!skb)
-   249			return;
-   250	
-   251		wwan_hwsim_nmea_skb_push_sentence(skb,
-   252						  "$GPGGA,%02u%02u%02u.000,%02u%02u.%04u,%c,%03u%02u.%04u,%c,1,7,1.03,176.2,M,55.2,M,,",
-   253						  tm.tm_hour, tm.tm_min, tm.tm_sec,
-   254						  coord[0], coord[1], coord[2],
-   255						  coord[3] ? 'S' : 'N',
-   256						  coord[4], coord[5], coord[6],
-   257						  coord[7] ? 'W' : 'E');
-   258	
-   259		wwan_hwsim_nmea_skb_push_sentence(skb,
-   260						  "$GPRMC,%02u%02u%02u.000,A,%02u%02u.%04u,%c,%03u%02u.%04u,%c,0.02,31.66,%02u%02u%02u,,,A",
-   261						  tm.tm_hour, tm.tm_min, tm.tm_sec,
-   262						  coord[0], coord[1], coord[2],
-   263						  coord[3] ? 'S' : 'N',
-   264						  coord[4], coord[5], coord[6],
-   265						  coord[7] ? 'W' : 'E',
-   266						  tm.tm_mday, tm.tm_mon + 1,
-   267						  (unsigned int)tm.tm_year - 100);
-   268	
-   269		wwan_port_rx(port->wwan, skb);
-   270	}
-   271	
+  1057	
+  1058	static int rzg3s_pcie_config_init(struct rzg3s_pcie_host *host)
+  1059	{
+  1060		struct pci_host_bridge *bridge = pci_host_bridge_from_priv(host);
+  1061		u32 mask = GENMASK(31, 8);
+  1062		struct resource_entry *ft;
+  1063		struct resource *bus;
+  1064		u8 subordinate_bus;
+  1065		u8 secondary_bus;
+  1066		u8 primary_bus;
+  1067	
+  1068		ft = resource_list_first_type(&bridge->windows, IORESOURCE_BUS);
+  1069		if (!ft)
+  1070			return -ENODEV;
+  1071	
+  1072		bus = ft->res;
+  1073		primary_bus = bus->start;
+  1074		secondary_bus = bus->start + 1;
+  1075		subordinate_bus = bus->end;
+  1076	
+  1077		/* Enable access control to the CFGU */
+  1078		writel_relaxed(RZG3S_PCI_PERM_CFG_HWINIT_EN,
+  1079			       host->axi + RZG3S_PCI_PERM);
+  1080	
+  1081		/* HW manual recommends to write 0xffffffff on initialization */
+  1082		writel_relaxed(0xffffffff, host->pcie + RZG3S_PCI_CFG_BARMSK00L);
+  1083		writel_relaxed(0xffffffff, host->pcie + RZG3S_PCI_CFG_BARMSK00U);
+  1084	
+  1085		/*
+  1086		 * Explicitly program class code. RZ/G3E requires this configuration.
+  1087		 * Harmless for RZ/G3S where this matches the hardware default.
+  1088		 */
+  1089		rzg3s_pcie_update_bits(host->pcie, PCI_CLASS_REVISION, mask,
+> 1090				       FIELD_PREP(mask, PCI_CLASS_BRIDGE_PCI_NORMAL));
+  1091	
+  1092		/* Disable access control to the CFGU */
+  1093		writel_relaxed(0, host->axi + RZG3S_PCI_PERM);
+  1094	
+  1095		/* Update bus info */
+  1096		writeb_relaxed(primary_bus, host->pcie + PCI_PRIMARY_BUS);
+  1097		writeb_relaxed(secondary_bus, host->pcie + PCI_SECONDARY_BUS);
+  1098		writeb_relaxed(subordinate_bus, host->pcie + PCI_SUBORDINATE_BUS);
+  1099	
+  1100		return 0;
+  1101	}
+  1102	
 
 -- 
 0-DAY CI Kernel Test Service
