@@ -1,139 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BFC86334;
-	Thu, 15 Jan 2026 17:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509F33A1E86
+	for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 17:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768497373; cv=none; b=gWtnYejtCtQ+2R+EGXWf7df7KXr7klqnCBCljiHAVxESLpRUIAcZpIy1qynaiRsqhppaxtDZwb71hDl9iAuEITsKQJCcA0R3jcvLFADD1V4ODBJF6LkhOAZKszilaAKb9uAQFPDrHXtGFL8wknIqPleLIjDPNAqr+9cymjZJ4AI=
+	t=1768497776; cv=none; b=PXA0ceB7K7rv0+AJlULDzUV0WN/ueyqbG2rO5XjQopaWjd2vU7RI7mO1uSAMX46JQiSkR84owl1god8qiFIk52diwOQ1HgKea/h8bvrDBrftUJ+63GSCauoy4W716B7aH8v/Vu0jvY/T/0Pz1rVa5o5vWWFdFFbMBHFHzGe/AtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768497373; c=relaxed/simple;
-	bh=/Xfu+GLfL/gNB3NygmKWW1xZCpnYx7ANVJgGf5YJpZw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T0KaK9Tv/IUfE83U72fbGApYiv1Gr3Y8q02GQo3bqcHRxt6H8XypryiMkkkSip46grdAJ4aGVORf08ZlabmrV4LlVcP8KNd1kOYwnGbFG2RFBX+aBgFN5mPbTlsbRjnxREhHfIoje4CeI/4OpL2uez8v7RHVWX1xBaqufgITivY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NfYFN6zG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768497776; c=relaxed/simple;
+	bh=Dk57vWXhj7hAZy/ErMoo6C6zg50pGLe9O2TB2mFcY8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sylqScWpBg4l4Dv9ClaBO8He26J7sNhRYLXL/bO1WFQMx1mqUmnvjhExxM4onU8dr7rNaOi2BBwYz1xfVV71/Iek0UigZUhlzypkwBZmCN01TFKRHLhwISsiW2QdBuB3BeXdP3vM9xnQBGlxMuFiEReUePu11kSQm1d5xawM9L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=pJ76wDhs; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NfYFN6zG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 917B0C116D0;
-	Thu, 15 Jan 2026 17:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768497373;
-	bh=/Xfu+GLfL/gNB3NygmKWW1xZCpnYx7ANVJgGf5YJpZw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NfYFN6zGRsrcHuFoCT3gRs6DOb+yJrac+VHA4RC3CYh8k/VOAW7Qd+XRHsAe0q8sQ
-	 KWqIT91Vvvii75tpM02TWRZ1P4wrRVV8zHssmy9Xa+CKLKVxO5IyXTwr49UMqkiwep
-	 wnJkPq4yTaE3HJ3ChxaSMRctOYlPphwcc1ThEH5E=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Will Deacon <will@kernel.org>,
-	Arvind Sankar <nivedita@alum.mit.edu>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	llvm@lists.linux.dev,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 057/554] compiler-gcc.h: Define __SANITIZE_ADDRESS__ under hwaddress sanitizer
-Date: Thu, 15 Jan 2026 17:42:03 +0100
-Message-ID: <20260115164248.309136820@linuxfoundation.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260115164246.225995385@linuxfoundation.org>
-References: <20260115164246.225995385@linuxfoundation.org>
-User-Agent: quilt/0.69
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="pJ76wDhs"
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dsVDZ5Xlzz1XLwWq;
+	Thu, 15 Jan 2026 17:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1768497772; x=1771089773; bh=IW7Utb06OyAy3GqiohZ5lJqr
+	slKWyKIOPKjoxfymhgs=; b=pJ76wDhs7CODvqEjNPO5E5jGpnT0J5V3hMx9OaKc
+	Xp4NxGypIoVcDTUtAUnU5UHhIUHojitPY+92t8jjYIYR0TsshaPDfLxiAaQziZpO
+	qxRG940QCLAWMT6lqp6hhWsRHdU+JiqyfK2AYJrq5WV0S+o0XcT3CLDFu7PLgQEr
+	Qz2IaYdGr+QPICgfz8wLJUwjnthGNpMh8bx0Q/+D6Cpj/1VdhBwO4YyyyuB9ymnL
+	dm8BxvneK2Pm6u4pOq9MkFgtY2m6ELg9YCgsRKN5D5KJT1qIiKNdQpK5VujOsmQp
+	gdN/buDb+xrPf/lcO4qfpU4RXAQR8MNXCimG7fqqgkh1hQ==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 6-pyFJ88SuMf; Thu, 15 Jan 2026 17:22:52 +0000 (UTC)
+Received: from [IPV6:2a00:79e0:2e7c:9:1de3:5bc8:3be1:d169] (unknown [104.135.180.217])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dsVDV6xfjz1XM6JB;
+	Thu, 15 Jan 2026 17:22:50 +0000 (UTC)
+Message-ID: <c708b1c5-1165-47e6-a93c-54b2928716b6@acm.org>
+Date: Thu, 15 Jan 2026 09:22:49 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
+ immediate acquisition after initialization
+To: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260115005231.1211866-1-elver@google.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20260115005231.1211866-1-elver@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-5.15-stable review patch.  If anyone has any objections, please let me know.
+On 1/14/26 4:51 PM, Marco Elver wrote:
+> To do so *only* within the initialization scope, we can cast the lock
+> pointer to any reentrant type for the init assume/assert. Introduce a
+> generic reentrant context lock type `struct __ctx_lock_init` and add
+> `__inits_ctx_lock()` that casts the lock pointer to this type before
+> assuming/asserting it.
+> 
+> This ensures that the initial "held" state is reentrant, allowing
+> patterns like:
+> 
+>    mutex_init(&lock);
+>    ...
+>    mutex_lock(&lock);
+> 
+> to compile without false positives, and avoids having to make all
+> context lock types reentrant outside an initialization scope.
+> 
+> The caveat here is missing real double-lock bugs right after init scope.
+> However, this is a classic trade-off of avoiding false positives against
+> (unlikely) false negatives.
 
-------------------
+The goal of lock context analysis is to detect as many locking bugs at
+compile time as possible. As mentioned above, with this patch applied, a
+class of real bugs won't be detected: recursive locking in the context
+of the initialization of the synchronization object. Hence, I think this
+patch is a step in the wrong direction.
 
-From: Kees Cook <keescook@chromium.org>
+Even without this patch there is a class of locking bugs that is not
+detected, namely unpaired synchronization object release calls in the
+context of synchronization object initialization. An example for struct
+mutex of this type of incorrect use of the mutex API that won't be
+detected even without this patch:
 
-[ Upstream commit 9a48e7564ac83fb0f1d5b0eac5fe8a7af62da398 ]
+	mutex_init(&mutex);
+	...
+	mutex_unlock(&mutex);
 
-When Clang is using the hwaddress sanitizer, it sets __SANITIZE_ADDRESS__
-explicitly:
+My preference is to remove __assume_ctx_lock() from mutex_init() and
+similar macros in .h files and to add __assume_ctx_lock() explicitly in
+the .c code that needs it. This will reduce significantly the chance
+that the locking bug mentioned above is not detected at compile time.
 
- #if __has_feature(address_sanitizer) || __has_feature(hwaddress_sanitizer)
- /* Emulate GCC's __SANITIZE_ADDRESS__ flag */
- #define __SANITIZE_ADDRESS__
- #endif
-
-Once hwaddress sanitizer was added to GCC, however, a separate define
-was created, __SANITIZE_HWADDRESS__. The kernel is expecting to find
-__SANITIZE_ADDRESS__ in either case, though, and the existing string
-macros break on supported architectures:
-
- #if (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)) && \
-          !defined(__SANITIZE_ADDRESS__)
-
-where as other architectures (like arm32) have no idea about hwaddress
-sanitizer and just check for __SANITIZE_ADDRESS__:
-
- #if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
-
-This would lead to compiler foritfy self-test warnings when building
-with CONFIG_KASAN_SW_TAGS=y:
-
-warning: unsafe memmove() usage lacked '__read_overflow2' symbol in lib/test_fortify/read_overflow2-memmove.c
-warning: unsafe memcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memcpy.c
-...
-
-Sort this out by also defining __SANITIZE_ADDRESS__ in GCC under the
-hwaddress sanitizer.
-
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Arvind Sankar <nivedita@alum.mit.edu>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Marco Elver <elver@google.com>
-Link: https://lore.kernel.org/r/20211020200039.170424-1-keescook@chromium.org
-Stable-dep-of: ced37e9ceae5 ("x86/dumpstack: Prevent KASAN false positive warnings in __show_regs()")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/compiler-gcc.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index b9d5f9c373a09..06c1cf2ab0244 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -123,6 +123,14 @@
- #define __no_sanitize_coverage
- #endif
- 
-+/*
-+ * Treat __SANITIZE_HWADDRESS__ the same as __SANITIZE_ADDRESS__ in the kernel,
-+ * matching the defines used by Clang.
-+ */
-+#ifdef __SANITIZE_HWADDRESS__
-+#define __SANITIZE_ADDRESS__
-+#endif
-+
- /*
-  * Turn individual warnings and errors on and off locally, depending
-  * on version.
--- 
-2.51.0
-
-
-
+Bart.
