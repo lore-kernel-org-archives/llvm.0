@@ -1,133 +1,135 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A5B313547
-	for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 07:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE8532ABC3;
+	Thu, 15 Jan 2026 10:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768462563; cv=none; b=X3v9Xhiya9zYEX34w4p48wBooAbrWPBUFan8ko0CU3x9jzUt1OSYHFKhvApHVmeE/dHz/+Jl+rrVZvq9es7eLuRBxV9UmgL7at8Er5FiMFGURenmE3fzZwzCrmjpNq2BQu/p3Bspo8s6rNWwEjgqIsot8pzMzRQay1T6sJY8K7o=
+	t=1768472643; cv=none; b=bVfgnmjc+oxtEsV31yTC8pnwZ5umE/VZPam3Ja/ylpOqiW2h2s+BcWh/cFThLihvipo23iufOgNqPP1/j/0XbYdvFlzyVHXa29jbT+tiiUkBPnmVyh4xGhmSIfdzmHCXGNBA27hJwzQ94IQUJpT4BfoUYBUSDZHuRI3I9QRAJcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768462563; c=relaxed/simple;
-	bh=Uf4LnRBelGVyDvh256L7550y1T4VRuzh8TwYPxjXxWE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tXCIgpO/ajK/bpYloZu8A7TpziEYvlKlj3Z/xQFW1LEqK9kj/jtG8lyUOuk+ojwZTC4/gRysaIjbffOG3OxcD3y1n4wfXGegSeXA4hKLCTfopYutO5GEIjdOvshyfxhA2jalliEDlafAR0KHUoTueEklLqW6GX4kf7XQPi0V/J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rsiFZqv3; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LESULiCJ; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1768472643; c=relaxed/simple;
+	bh=p9miV0nNryyvHyd1FyrzdZUkZX6TLv1ioe/BqF8c1NU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eo9EG5ybPD0yza/v0XSfzzLVGluuSNpFl5GehRtYWt9kd9RWG3qQkj8ac4mrv8Y0bGZddhz/7QA4LVg+F2aUG4Hn4TqKYCJpVF/e0rKvTpTa0O8DpM6MMm5aFOJZ+CTG/yIjjZq4pxEwzNAkH378QMnxlecqsAq2a/A6yKFLHPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QxTvwyWI; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rsiFZqv3";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LESULiCJ"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768462559;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZmJfbgsi5ZQog2/tvaxio1e94jEe7ryoDan67NooQFU=;
-	b=rsiFZqv34iH7cqVI5zlA0ZsX5brXxKxkZv5NHg/roCNR4COcMx0rwulyevzYMS3oJqEaml
-	62pELoOvg1yExFEYAmBKLXXNh0RO5/oJxdlNGUZCzQav+UebPfmwEs4042Ptlve8M9xtpC
-	2hLBWmKfZDY17vRCwA5m0RIIgsKINAzUi9gjs93al1BbrBFgatiCisYnkyvD5FMpCZc6iE
-	Z8hAGpsi/9h+rjLg6cIxLVO3e/L83my5waE/0PmuUiHStxuHdYNDMH37XA8C2Gdb6i8dFm
-	CqoQpkA5JRoP/duCRSmMTyBaIxsRKKMW+7m/qwz2M7idw5enJp8p44qFK2dhnQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768462559;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZmJfbgsi5ZQog2/tvaxio1e94jEe7ryoDan67NooQFU=;
-	b=LESULiCJlpZ5X+Z6LNcgrw/nSUW6xEXYvqeNuo2AZv1t3DZBwpuO/6ubTvnHYKsvVRvxXb
-	AVS3AzpfXTrYXJBQ==
-Date: Thu, 15 Jan 2026 08:35:45 +0100
-Subject: [PATCH 2/2] virt: vbox: uapi: Mark inner unions in packed structs
- as packed
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QxTvwyWI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768472642; x=1800008642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p9miV0nNryyvHyd1FyrzdZUkZX6TLv1ioe/BqF8c1NU=;
+  b=QxTvwyWI0es+D38Gqca9gYHDkYDMU8JZYY8kTL/xv5Wd9n1DMAYO7uqn
+   K2kDcf+0dxwY4JjWoZST21V2LtxpAvX4xx9ELcaVAAU+AFlMjnaJgFsvT
+   DQ3lEWBEwH1S13u0b/+54FdKWGACy08t1LMB0sCXk6o//cPj5uVOF7AaT
+   hWH/4ZbhxtPPt2jYLJFx3CSOjvAT7nqwqy+A6X4GjU6FOAIgVjSdxYcZd
+   vHLRAo/X6rT7nQYzZ5Ezxvj8ZYu7ria4e7gymPViNBsQeuEwg4JnP807+
+   iq6ppyxa6t0wWjMBHSvn+PGFhHtu+7lrGGk+dKABQccdBaHR4DmF3izWm
+   g==;
+X-CSE-ConnectionGUID: KAKAmoMZTXSgk7GytxJs5A==
+X-CSE-MsgGUID: 3o9DnV8MSEuEdYXzRJTyeg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="68787895"
+X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
+   d="scan'208";a="68787895"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 02:24:02 -0800
+X-CSE-ConnectionGUID: 1DP/q8OUSOaiDbgrzWpjsw==
+X-CSE-MsgGUID: +4l+nVOsSCmGCnreoNkZIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
+   d="scan'208";a="209393799"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 15 Jan 2026 02:23:58 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgKWB-00000000HqG-0nOs;
+	Thu, 15 Jan 2026 10:23:55 +0000
+Date: Thu, 15 Jan 2026 18:23:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Mohd Ayaan Anwar <mohd.anwar@oss.qualcomm.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH net-next 03/14] phy: qcom-sgmii-eth: add .set_mode() and
+ .validate() methods
+Message-ID: <202601151700.IjgxseKd-lkp@intel.com>
+References: <E1vg4vs-00000003SFt-1Fje@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260115-kbuild-alignment-vbox-v1-2-076aed1623ff@linutronix.de>
-References: <20260115-kbuild-alignment-vbox-v1-0-076aed1623ff@linutronix.de>
-In-Reply-To: <20260115-kbuild-alignment-vbox-v1-0-076aed1623ff@linutronix.de>
-To: "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Hans de Goede <hansg@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- kernel test robot <lkp@intel.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768462556; l=2576;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=Uf4LnRBelGVyDvh256L7550y1T4VRuzh8TwYPxjXxWE=;
- b=lNuIsxK9kyAW4nia9it1+N+6Jv4CmihW70V0JoQD+pak81IehyJF6TLWmzvPrCduaYm3I7hUX
- bfz/a8mBwO5BHP/sqVrHQoVqJb7DHhSYlMsihjoW/4SehIUBtuhzPPT
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1vg4vs-00000003SFt-1Fje@rmk-PC.armlinux.org.uk>
 
-The unpacked unions within a packed struct generates alignment warnings
-on clang for 32-bit ARM:
+Hi Russell,
 
-./usr/include/linux/vbox_vmmdev_types.h:239:4: error: field u within 'struct vmmdev_hgcm_function_parameter32'
-  is less aligned than 'union (unnamed union at ./usr/include/linux/vbox_vmmdev_types.h:223:2)'
-  and is usually due to 'struct vmmdev_hgcm_function_parameter32' being packed,
-  which can lead to unaligned accesses [-Werror,-Wunaligned-access]
-     239 |         } u;
-         |           ^
+kernel test robot noticed the following build errors:
 
-./usr/include/linux/vbox_vmmdev_types.h:254:6: error: field u within
-  'struct vmmdev_hgcm_function_parameter64::(anonymous union)::(unnamed at ./usr/include/linux/vbox_vmmdev_types.h:249:3)'
-  is less aligned than 'union (unnamed union at ./usr/include/linux/vbox_vmmdev_types.h:251:4)' and is usually due to
-  'struct vmmdev_hgcm_function_parameter64::(anonymous union)::(unnamed at ./usr/include/linux/vbox_vmmdev_types.h:249:3)'
-  being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+[auto build test ERROR on net-next/main]
 
-With the recent changes to compile-test the UAPI headers in more cases,
-these warning in combination with CONFIG_WERROR breaks the build.
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-qcom-ethqos-remove-mac_base/20260115-054728
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1vg4vs-00000003SFt-1Fje%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH net-next 03/14] phy: qcom-sgmii-eth: add .set_mode() and .validate() methods
+config: powerpc-randconfig-002-20260115 (https://download.01.org/0day-ci/archive/20260115/202601151700.IjgxseKd-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601151700.IjgxseKd-lkp@intel.com/reproduce)
 
-Fix the warnings.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601151700.IjgxseKd-lkp@intel.com/
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202512140314.DzDxpIVn-lkp@intel.com/
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://lore.kernel.org/linux-kbuild/20260110-uapi-test-disable-headers-arm-clang-unaligned-access-v1-1-b7b0fa541daa@kernel.org/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-kbuild/29b2e736-d462-45b7-a0a9-85f8d8a3de56@app.fastmail.com/
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- include/uapi/linux/vbox_vmmdev_types.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/include/uapi/linux/vbox_vmmdev_types.h b/include/uapi/linux/vbox_vmmdev_types.h
-index 6073858d52a2..11f3627c3729 100644
---- a/include/uapi/linux/vbox_vmmdev_types.h
-+++ b/include/uapi/linux/vbox_vmmdev_types.h
-@@ -236,7 +236,7 @@ struct vmmdev_hgcm_function_parameter32 {
- 			/** Relative to the request header. */
- 			__u32 offset;
- 		} page_list;
--	} u;
-+	} __packed u;
- } __packed;
- VMMDEV_ASSERT_SIZE(vmmdev_hgcm_function_parameter32, 4 + 8);
- 
-@@ -251,7 +251,7 @@ struct vmmdev_hgcm_function_parameter64 {
- 			union {
- 				__u64 phys_addr;
- 				__u64 linear_addr;
--			} u;
-+			} __packed u;
- 		} __packed pointer;
- 		struct {
- 			/** Size of the buffer described by the page list. */
+>> drivers/phy/qualcomm/phy-qcom-sgmii-eth.c:294:17: error: use of undeclared identifier 'PHY_INTERFACE_MODE_SGMII'
+     294 |         if (submode == PHY_INTERFACE_MODE_SGMII ||
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/phy/qualcomm/phy-qcom-sgmii-eth.c:295:17: error: use of undeclared identifier 'PHY_INTERFACE_MODE_1000BASEX'
+     295 |             submode == PHY_INTERFACE_MODE_1000BASEX)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/phy/qualcomm/phy-qcom-sgmii-eth.c:298:17: error: use of undeclared identifier 'PHY_INTERFACE_MODE_2500BASEX'
+     298 |         if (submode == PHY_INTERFACE_MODE_2500BASEX)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +/PHY_INTERFACE_MODE_SGMII +294 drivers/phy/qualcomm/phy-qcom-sgmii-eth.c
+
+   288	
+   289	static int qcom_dwmac_sgmii_phy_speed(enum phy_mode mode, int submode)
+   290	{
+   291		if (mode != PHY_MODE_ETHERNET)
+   292			return -EINVAL;
+   293	
+ > 294		if (submode == PHY_INTERFACE_MODE_SGMII ||
+ > 295		    submode == PHY_INTERFACE_MODE_1000BASEX)
+   296			return SPEED_1000;
+   297	
+ > 298		if (submode == PHY_INTERFACE_MODE_2500BASEX)
+   299			return SPEED_2500;
+   300	
+   301		return -EINVAL;
+   302	}
+   303	
 
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
