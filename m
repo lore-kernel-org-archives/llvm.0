@@ -1,159 +1,174 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDCF32692F
-	for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 22:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EF4289E06;
+	Thu, 15 Jan 2026 23:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768516975; cv=none; b=POBAj4nyppFH2LMG2urE8kweeYs4ggjieDMl+xjzrdtfzamA8Lmp1l9AzCRbF8CYjpDO7MVqop4VoMDRe/NjVRT0c2vNnO7EyObErvcSkn+7PBx0CS7aOCPUn9bF05vjGHDTB8W1VPuuVE9XSDgtip6go7Yzd/K7rgzUeohOM3I=
+	t=1768519168; cv=none; b=DyVXswTgz0az3JVMNzJk2eTtkILh9437Zkf9uawNV51Eu4Qv5vHaRwpVxzSdnrZNfvpWkovd7mxLUQKnHdmydQ9A85EhXjLMbNeulvMDyDRNKlvsjw+BDmSh/NpT86OD7B3tf45aUqMNgSLglhtRG5dfANUHktDPC3M6deqazLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768516975; c=relaxed/simple;
-	bh=/urejZHkiW/JLzSovkhbPvkfJag0mLFQ0r8u0h3A/30=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DmZ5VZeInSOpVENR4n58hGjlMwwrRTlJ7pgBeeI20NbtEJvZKWmHFNijdIWotne/B5JsAB/EvfOdF9lceIEbG8qaHjcWUP+dKk2aLehJSD5awxAUabsmpiDowbTIoUz+ZLLhbVeXGv1A7Zl2y25SPFavZCazxTBsKH6NXBKfckE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhYMyF0x; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768519168; c=relaxed/simple;
+	bh=kwGRF5mURihJe/iQlmz7bEwEkA+zgkfqc7bU0SHLJZc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ToWq8Afg5gBeFlID/UHsFMr2GQAiLPUfamNarOk0WBZOvg8ZWNW0wo2bvSbSWV4dZy3kbBlh1A9kuNdOrrzg5E/zbwTjkyISeaheTC+yhJL8+d/0HHwkKe9Q6LcP73SG+zuO0rTlZoU8lIj456wZMl4O8YQ01bESbMzJh3XjsRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ys1zqpzl; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhYMyF0x"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b77ff32feso200876e87.0
-        for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 14:42:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768516971; x=1769121771; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vQuagjPxslA3/GbLy8OgugPdFRJI5tMwgAjobUXXgeg=;
-        b=YhYMyF0xzMqPIXqNip8Hh9sMmOm/Noksfect2VbXA6mOUPD9V3dD8ZgPLlF29asf6S
-         Rd8g8aRYTPK+4++YkKrwiQzJeZUzhrvGjzXhUNU7z949NHBWNH8q580rPweOP1j2PDx9
-         WF5tkDWQISa736Qp78R13onKfGHts//5jzsYlAJ1cy19YqbnTzGmOmZ7vsmu14IMn0ls
-         nsvRHvcpvnNIaKRWIWZB2rVrb7X7HJQvo8yOvFRcg3EWNf1iOZxSgIh12eVyGJg7vNEi
-         RprcWhZdtZFyfPvakjr68JRao/C1yDyOxB6BimLt7N5N5v2xyI+MOMv1zs1v+j9CjqEX
-         xwew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768516971; x=1769121771;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vQuagjPxslA3/GbLy8OgugPdFRJI5tMwgAjobUXXgeg=;
-        b=TLCvUYmxZlq1vB3XiCi+0yizWUdPXnKf7Z4VV4m3Eq99q+q66MuraLArDKKOYWvGy3
-         uCNpA94YbZTq/qf7nGcjrCh9/L7MCOtK8tmUbDNK90ra7VP5m6Mujj16gvlqgGrV3MTt
-         +N6JcGN9GK8gMlQhPxGtmrYDjON9Hw7kCBZJwa8dHkZquTwpNf1KqHInwHBn06CuEfVH
-         d/HTZdZXE4MTs5nlX+2EbFUKpQpxohfv2jAKE5gQrdIc4hJiL+pGAeZKH1jweiP8Wnzj
-         LlvtcHf6dbrppEOWq02Lr4Met7FPHCK6sWwDRoFX1fHJZ1nQG2b0Qh5nhj9byESteYEO
-         utGg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1SJ06IgCzeVPQSLnG6CnHbsBMrx/5jiNAoZzYmpOIJsYGGJEJ5G8m5tQdhsocr/Xvf0Ng@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyo4rxesVV/5k+bBDUkasxvGd8odtOVQm+7puc7fRdv/Tj2cf7V
-	1jv9j7Fn8BeqJy/7SxMBvZJw+sR9i9OttQpTxriBO9T6q4rgjz7CDtXQ
-X-Gm-Gg: AY/fxX6RN1vxr8i2+aBt2h7HGHdKfV2HvhSmEVTHFSrWwARIirJeOY/r9HfAo6rR74f
-	/W4pBJtHKrKOJCO7ioEX7ngfmM+LhPdmoadnNzMc7KN8uyWhRUfj6ixJTKDDEx0prS0KX5cozpx
-	//J1pYAZhUKH5s6HmD26e4nYU+aX+N1IuBJ/n6H/RAz+2KWXZ0vc4hWc3xM6ovDrf0Gx6y/vRGH
-	FWbaIB+vum2RzWkdf9KkTqnZR5RNVhboE5ZwHk1vQD5sTcyOsX9/7QEG4YPT48oUl7BnbVbmYoV
-	rue8TF6GJPlLZOLxzg/n8ms4NLbORZr5rh9rfVZJl4qsltAAbjJ1HjPbNZXvDPWtsaE9SyKhDz8
-	Rg0G/BKqK9St/IWSDdd2/YHqNn537VSYsKA81XTuO/qXkHlKCVVfnmoO7h3Jzn9mv+rq3XaZjyM
-	lI8q9keajA5JB+cMAjaNg=
-X-Received: by 2002:a05:6512:63d1:20b0:59b:7be4:8c40 with SMTP id 2adb3069b0e04-59baef130e4mr131958e87.8.1768516970797;
-        Thu, 15 Jan 2026 14:42:50 -0800 (PST)
-Received: from [192.168.0.18] ([87.116.178.235])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59baf35434bsm209044e87.45.2026.01.15.14.42.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 14:42:50 -0800 (PST)
-Message-ID: <2592f303-05f5-4646-b59f-38cb7549834e@gmail.com>
-Date: Thu, 15 Jan 2026 23:42:02 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ys1zqpzl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768519166; x=1800055166;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kwGRF5mURihJe/iQlmz7bEwEkA+zgkfqc7bU0SHLJZc=;
+  b=Ys1zqpzldmic0T97luv/oZV2BZmvBuMNJokT+NJZE0sGrVkgYla+CoWK
+   0m9pUja5/k3U7fMvszundbcKmx3j9blorwydzRbJrxUbWgEUwOZbpRTfS
+   VnwYcU/FBkkvnn8tiqsDHLhdWaqn8se0P3ObA4ec4xjulfrJBRZk+G0/z
+   YBp3tOxFJ0+FISUdtyN2stbEWHEgJYBJA1UUK0qJ/bvrt8cpgIOz1uDmu
+   ptJ+FQinssHXpVQC46CyBJLBO4KfLqWe1pjzNuWWxkYO+GtXBd4C79cHO
+   iD/XewEFkgOacOsZUkrJJigzc4ejVAipqTdiaPynIyHi/weypVDJHLKSM
+   Q==;
+X-CSE-ConnectionGUID: FFaabLnsT6SzEjFa9UISlw==
+X-CSE-MsgGUID: xChIGwTkRXqGOPesK9um3g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="81283369"
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="81283369"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 15:19:25 -0800
+X-CSE-ConnectionGUID: I06q/XGzSDitkMj/Do7Ecg==
+X-CSE-MsgGUID: EAbpvl4JTUi151xMldnkpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="205496892"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 15 Jan 2026 15:19:21 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgWcZ-00000000K6K-0h7Y;
+	Thu, 15 Jan 2026 23:19:19 +0000
+Date: Fri, 16 Jan 2026 07:18:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Bastien Curutchet (Schneider Electric)" <bastien.curutchet@bootlin.com>,
+	Woojung Huh <woojung.huh@microchip.com>,
+	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Simon Horman <horms@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Pascal Eberhard <pascal.eberhard@se.com>,
+	=?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org,
+	"Bastien Curutchet (Schneider Electric)" <bastien.curutchet@bootlin.com>
+Subject: Re: [PATCH net-next 4/8] net: dsa: microchip: Add support for
+ KSZ8463's PTP interrupts
+Message-ID: <202601160729.AzeG6b64-lkp@intel.com>
+References: <20260115-ksz8463-ptp-v1-4-bcfe2830cf50@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 01/14] kasan: sw_tags: Use arithmetic shift for shadow
- computation
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Alexander Potapenko <glider@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Samuel Holland <samuel.holland@sifive.com>,
- Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
- linux-mm@kvack.org, llvm@lists.linux.dev
-References: <cover.1768233085.git.m.wieczorretman@pm.me>
- <4f31939d55d886f21c91272398fe43a32ea36b3f.1768233085.git.m.wieczorretman@pm.me>
-Content-Language: en-US
-From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <4f31939d55d886f21c91272398fe43a32ea36b3f.1768233085.git.m.wieczorretman@pm.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115-ksz8463-ptp-v1-4-bcfe2830cf50@bootlin.com>
+
+Hi Bastien,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 3adff276e751051e77be4df8d29eab1cf0856fbf]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Curutchet-Schneider-Electric/net-dsa-microchip-Add-support-for-KSZ8463-global-irq/20260116-000545
+base:   3adff276e751051e77be4df8d29eab1cf0856fbf
+patch link:    https://lore.kernel.org/r/20260115-ksz8463-ptp-v1-4-bcfe2830cf50%40bootlin.com
+patch subject: [PATCH net-next 4/8] net: dsa: microchip: Add support for KSZ8463's PTP interrupts
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601160729.AzeG6b64-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160729.AzeG6b64-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601160729.AzeG6b64-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/dsa/microchip/ksz_ptp.c:1187:40: warning: variable 'p' is uninitialized when used here [-Wuninitialized]
+    1187 |         ptpirq->reg_mask = ops->get_port_addr(p, KSZ8463_PTP_TS_IER);
+         |                                               ^
+   drivers/net/dsa/microchip/ksz_ptp.c:1175:7: note: initialize the variable 'p' to silence this warning
+    1175 |         int p;
+         |              ^
+         |               = 0
+   1 warning generated.
 
 
+vim +/p +1187 drivers/net/dsa/microchip/ksz_ptp.c
 
-On 1/12/26 6:27 PM, Maciej Wieczor-Retman wrote:
-  
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index 62c01b4527eb..b5beb1b10bd2 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -642,11 +642,39 @@ void kasan_non_canonical_hook(unsigned long addr)
->  	const char *bug_type;
->  
->  	/*
-> -	 * All addresses that came as a result of the memory-to-shadow mapping
-> -	 * (even for bogus pointers) must be >= KASAN_SHADOW_OFFSET.
-> +	 * For Generic KASAN, kasan_mem_to_shadow() uses the logical right shift
-> +	 * and never overflows with the chosen KASAN_SHADOW_OFFSET values (on
-> +	 * both x86 and arm64). Thus, the possible shadow addresses (even for
-> +	 * bogus pointers) belong to a single contiguous region that is the
-> +	 * result of kasan_mem_to_shadow() applied to the whole address space.
->  	 */
-> -	if (addr < KASAN_SHADOW_OFFSET)
-> -		return;
-> +	if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
-> +		if (addr < (unsigned long)kasan_mem_to_shadow((void *)(0ULL)) ||
-> +		    addr > (unsigned long)kasan_mem_to_shadow((void *)(~0ULL)))
-> +			return;
-> +	}
-> +
-> +	/*
-> +	 * For Software Tag-Based KASAN, kasan_mem_to_shadow() uses the
-> +	 * arithmetic shift. Normally, this would make checking for a possible
-> +	 * shadow address complicated, as the shadow address computation
-> +	 * operation would overflow only for some memory addresses. However, due
-> +	 * to the chosen KASAN_SHADOW_OFFSET values and the fact the
-> +	 * kasan_mem_to_shadow() only operates on pointers with the tag reset,
-> +	 * the overflow always happens.
-> +	 *
-> +	 * For arm64, the top byte of the pointer gets reset to 0xFF. Thus, the
-> +	 * possible shadow addresses belong to a region that is the result of
-> +	 * kasan_mem_to_shadow() applied to the memory range
-> +	 * [0xFF000000000000, 0xFFFFFFFFFFFFFFFF]. Despite the overflow, the
-                  ^ Missing couple 00 here
+  1167	
+  1168	int ksz8463_ptp_irq_setup(struct dsa_switch *ds)
+  1169	{
+  1170		struct ksz_device *dev = ds->priv;
+  1171		const struct ksz_dev_ops *ops = dev->dev_ops;
+  1172		struct ksz_port *port1, *port2;
+  1173		struct ksz_irq *ptpirq;
+  1174		int ret;
+  1175		int p;
+  1176	
+  1177		port1 = &dev->ports[0];
+  1178		port2 = &dev->ports[1];
+  1179		ptpirq = &port1->ptpirq;
+  1180	
+  1181		ptpirq->irq_num = irq_find_mapping(dev->girq.domain, KSZ8463_SRC_PTP_INT);
+  1182		if (!ptpirq->irq_num)
+  1183			return -EINVAL;
+  1184	
+  1185		ptpirq->dev = dev;
+  1186		ptpirq->nirqs = 4;
+> 1187		ptpirq->reg_mask = ops->get_port_addr(p, KSZ8463_PTP_TS_IER);
+  1188		ptpirq->reg_status = ops->get_port_addr(p, KSZ8463_PTP_TS_ISR);
+  1189		ptpirq->irq0_offset = KSZ8463_PTP_INT_START;
+  1190		snprintf(ptpirq->name, sizeof(ptpirq->name), "ptp-irq-%d", p);
+  1191	
+  1192		ptpirq->domain = irq_domain_create_linear(dev_fwnode(dev->dev), ptpirq->nirqs,
+  1193							  &ksz_ptp_irq_domain_ops, ptpirq);
+  1194		if (!ptpirq->domain)
+  1195			return -ENOMEM;
+  1196	
+  1197		ret = request_threaded_irq(ptpirq->irq_num, NULL, ksz_ptp_irq_thread_fn,
+  1198					   IRQF_ONESHOT, ptpirq->name, ptpirq);
+  1199		if (ret)
+  1200			goto release_domain;
+  1201	
+  1202		ret = ksz8463_ptp_port_irq_setup(ptpirq, port1,
+  1203						 KSZ8463_PTP_PORT1_INT_START - KSZ8463_PTP_INT_START);
+  1204		if (ret)
+  1205			goto release_irq;
+  1206	
+  1207		ret = ksz8463_ptp_port_irq_setup(ptpirq, port2,
+  1208						 KSZ8463_PTP_PORT2_INT_START - KSZ8463_PTP_INT_START);
+  1209		if (ret)
+  1210			goto free_port1;
+  1211	
+  1212		return 0;
+  1213	
+  1214	free_port1:
+  1215		ksz8463_ptp_port_irq_teardown(port1);
+  1216	release_irq:
+  1217		free_irq(ptpirq->irq_num, ptpirq);
+  1218	release_domain:
+  1219		irq_domain_remove(ptpirq->domain);
+  1220	
+  1221		return ret;
+  1222	}
+  1223	
 
-> +	 * resulting possible shadow region is contiguous, as the overflow
-> +	 * happens for both 0xFF000000000000 and 0xFFFFFFFFFFFFFFFF.
-                                  ^ same as above
-
-> +	 */
-> +	if (IS_ENABLED(CONFIG_KASAN_SW_TAGS) && IS_ENABLED(CONFIG_ARM64)) {
-> +		if (addr < (unsigned long)kasan_mem_to_shadow((void *)(0xFFULL << 56)) ||
-
-This will not work for inline mode because compiler uses logical shift.
-Consider NULL-ptr derefernce. Compiler will calculate shadow address for 0 as:
-      (((0x0 | 0xffULL) << 56) >> 4)+0xffff800000000000ULL = 0x0fef8000....0
-Which is less than ((0xFF00...00LL) >> 4) +  0xffff800000000000ULL = 0xffff800...0
-So we will bail out here.
-Perhaps we could do addr |= 0xFFLL to fix this
-
-> +		    addr > (unsigned long)kasan_mem_to_shadow((void *)(~0ULL)))
-> +			return;
-> +	}
->  
->  	orig_addr = (unsigned long)kasan_shadow_to_mem((void *)addr);
->  
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
