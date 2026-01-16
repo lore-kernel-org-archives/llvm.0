@@ -1,143 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8339311C07;
-	Fri, 16 Jan 2026 22:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FC1264A9D;
+	Fri, 16 Jan 2026 22:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768602927; cv=none; b=Nswodad6f3NyeR18H0TpnwO0dNrP0z+BK7Nc7ju9QncL8epHn0hfldk8jdHIfGoUmHVanMnEXUrP9oy3vjBakxpUmFUZ249E+5tgWfGvKdFC0wrG+Bd2Yr1U1zrRkfNJZs9HGmyOOUA7YdEwkH/wGWYf8VLhQzBT02NreaCg/VY=
+	t=1768603499; cv=none; b=uMo63lFwvcpoobne8Mir1ncxer4473mGUxNhblRYbUYCGUtmNTsyOPE+MiFhwWdJIc4hNDMaLkPhAUPt+o8oheUjymcp7PV8O5XRekI3ai+lu2ddwfmB3HOHrqlIylKPpWnL/14zJOKhZdxqPDd1yD539SZbuiRVNmrx3zo4k/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768602927; c=relaxed/simple;
-	bh=t+TfOvLaP0sZosWUu8D5eH4N8s6/Tcdc3O8Dsj5Gih4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GzxlwW6tJmfmHewYiX9zZMHhLchxXTG5zlnmmcDjvHTWIVYZjDyQX1PxCRKx8K7gHk45cJD6Ek4Eh2HasTBEE5pftoPeFbCGqWbSJuF2Vx/HHqhECmgU9tGHpznZxCnyV9JfzEwxyZNYA0IVcTdfRfbvdPCh8tCLEgYg5yxZM84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jaSa8ciH; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768603499; c=relaxed/simple;
+	bh=gjvrPL9/wzh4AalQEt+FlL5xbebbIKh0iM8Gwb+H4Uw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nCmCcWGMmFgMR4ozZJ4usQ21+FCaPfRn2IHsoZssZlp153Ba1sI4ErGu2gfUVSsmJ1IvADvWadXaRmTY9usXf8hhH/sLd4mZnLV+zsyn2zKHfRGvYznrQb4qRpAdg2kQyqbUpTuX4EacvRP97KiInr53WCJXUemFpMEQsvY+DXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eq/IMixj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jaSa8ciH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768602926; x=1800138926;
-  h=date:from:to:cc:subject:message-id;
-  bh=t+TfOvLaP0sZosWUu8D5eH4N8s6/Tcdc3O8Dsj5Gih4=;
-  b=jaSa8ciH52W2A2z5Bs5/QSj3zVdvqDpTLPUXfwxKztE7ut+Rxxh8WsKP
-   KX5yZALe8S8buiavNitf6P2STeBHZZdcYnRsHxhZaCl09zsmagGHfCSR6
-   /2XPHkuXPjqQiNzIh6bhhD+R3uGsm6Tc+R5edIv+ltahRwrDYevTWhqrZ
-   0Lo7TGfxoHhKO8QAjjAGon5yE3x1Py7dGLtDcdNEf9BODVloxf/9Sf5zp
-   HQhwVQrI8As0WWrg606lIXXFk3aSW09cPPqc0AdNNeb8RRLrEB8/QskvJ
-   FDY2G42BvrtkkqiTsOlkNYLxKd5YmwYJTn5Dy2ze8RI80EPPDyotBHCEq
-   g==;
-X-CSE-ConnectionGUID: /oIzLUURSialMHvusy04fQ==
-X-CSE-MsgGUID: zPAwGHrfRiWengBf6Qia8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="69971939"
-X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="69971939"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 14:35:25 -0800
-X-CSE-ConnectionGUID: ufFekzMqS/iP6sDvjPTWIQ==
-X-CSE-MsgGUID: m3Egce2LQHGzzuCoIdeBTQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="205777156"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Jan 2026 14:35:23 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgsPZ-00000000LJU-3Iox;
-	Fri, 16 Jan 2026 22:35:21 +0000
-Date: Sat, 17 Jan 2026 06:34:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 167/214]
- fs/bcachefs/data/reconcile.c:1888:25: warning: stack frame size (1040)
- exceeds limit (1024) in 'do_reconcile_phys_thread'
-Message-ID: <202601170657.uiPMHmY7-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eq/IMixj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC27AC116C6;
+	Fri, 16 Jan 2026 22:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768603498;
+	bh=gjvrPL9/wzh4AalQEt+FlL5xbebbIKh0iM8Gwb+H4Uw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=eq/IMixjH6fWBH6DyiJOwY+q6q0xKMIpw4uP3fY/ZGGHBV+Mg5xPh8p/nGdQJguUH
+	 5JmB6PUrzXSJT7BoBg7KMCvvwhPDAouKqpaCpiXql3Shjy56dR4XBSHsvTkhgPp3Fl
+	 Y62nygglr3ELpR8Ewwj825CyWjj0TW0hZobR3Vhsl4seNMO6xaxZQSqPG6RQnpHXYj
+	 BtLGqR/rRwvsGNaJ8eAXoZMDI4QYX7M9dv6BoYkw/bKFFjrqg+DfgJnx9CgvIQhPJM
+	 GsQeY2+CdIbUjZDRHF+Ub8QLOQZzQ2hv5T5TSLXsrNuGz0IDStaa6SU7N7flrpL0zA
+	 1gkTTNP7VvmHg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 16 Jan 2026 15:44:34 -0700
+Subject: [PATCH v3] riscv: Use 64-bit variable for output in __get_user_asm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260116-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v3-1-55b5775f989b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6XOTQ6CMBQE4KuYrn2mP4rgynsYF219hUagpC1VQ
+ 7i7hcSFW13OLOabiQT0FgM5bSbiMdlgXZ+D2G6IbmRfI9hbzoRTfqAlY+Bt0AkeEto2dSBDB7W
+ LDtwYhzGGXOTBmEfASNuOHqGQaCQvhCi1Jnl28GjscyUv15wbG6Lzr/VBYkv7B5YYMDgqVepKK
+ 1Vxdb6j77HdOV+TRUv8IxSUMfGDwLOAdC+V5MhMZb6EeZ7fEee3bFMBAAA=
+X-Change-ID: 20250811-riscv-wa-llvm-asm-goto-outputs-assertion-failure-6aefa26338cc
+To: Paul Walmsley <pjw@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Craig Topper <craig.topper@sifive.com>, linux-riscv@lists.infradead.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2859; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=gjvrPL9/wzh4AalQEt+FlL5xbebbIKh0iM8Gwb+H4Uw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJlZ+zMChCv5IkOs+bnErGsOdwb9ezsvn0dh37ufd8S4i
+ 2XTj57sKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABPZZs3wP6N7e4QnW9ILc25T
+ bn/lE7Ktzjqd0xRLfZ/uLtqXqVTlzciw9MDPJVNsV8ieuvc1xq1u/ulvCWccd509PWFJh4r/jIg
+ ebgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   321d6b2ede8c135ad00646b40ada16f17ab3eb1b
-commit: 7533247ef4e07f309908aa5c50053cfc1b700d33 [167/214] fixup! bcachefs: Multithreaded processing of reconcile_phys
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260117/202601170657.uiPMHmY7-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170657.uiPMHmY7-lkp@intel.com/reproduce)
+After commit f6bff7827a48 ("riscv: uaccess: use 'asm_goto_output' for
+get_user()"), which was the first commit that started using asm goto
+with outputs on RISC-V, builds of clang built with assertions enabled
+start crashing in certain files that use get_user() with:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601170657.uiPMHmY7-lkp@intel.com/
+  clang: llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp:12743: Register FollowCopyChain(MachineRegisterInfo &, Register): Assertion `MI->getOpcode() == TargetOpcode::COPY && "start of copy chain MUST be COPY"' failed.
 
-All warnings (new ones prefixed by >>):
+Internally, LLVM generates an addiw instruction when the output of the
+inline asm (which may be any scalar type) needs to be sign extended for
+ABI reasons, such as a later function call, so that basic block does not
+have to do it.
 
->> fs/bcachefs/data/reconcile.c:1888:25: warning: stack frame size (1040) exceeds limit (1024) in 'do_reconcile_phys_thread' [-Wframe-larger-than]
-    1888 | static CLOSURE_CALLBACK(do_reconcile_phys_thread)
-         |                         ^
-   1 warning generated.
+Use a temporary 64-bit variable as the output of the inline assembly in
+__get_user_asm() and explicitly cast it to truncate it if necessary,
+avoiding the addiw that triggers the assertion.
 
+Link: https://github.com/ClangBuiltLinux/linux/issues/2092
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v3:
+- Add a comment around why a temporary variable is used (Paul)
+- Link to v2: https://patch.msgid.link/20260113-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v2-1-e04aba2e1f9f@kernel.org
 
-vim +/do_reconcile_phys_thread +1888 fs/bcachefs/data/reconcile.c
+Changes in v2:
+- Rebase on 6.19-rc5
+- Send to updated addresses
+- Link to v1: https://lore.kernel.org/r/20250811-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v1-1-7bb8c9cbb92b@kernel.org
+---
+ arch/riscv/include/asm/uaccess.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-6efb894685bad7 Kent Overstreet 2026-01-06  1887  
-6efb894685bad7 Kent Overstreet 2026-01-06 @1888  static CLOSURE_CALLBACK(do_reconcile_phys_thread)
-6efb894685bad7 Kent Overstreet 2026-01-06  1889  {
-6efb894685bad7 Kent Overstreet 2026-01-06  1890  	closure_type(thr, reconcile_phys_thr, cl);
-6efb894685bad7 Kent Overstreet 2026-01-06  1891  	struct bch_fs *c = thr->c;
-6efb894685bad7 Kent Overstreet 2026-01-06  1892  
-6efb894685bad7 Kent Overstreet 2026-01-06  1893  	struct moving_context ctxt __cleanup(bch2_moving_ctxt_exit);
-6efb894685bad7 Kent Overstreet 2026-01-06  1894  	bch2_moving_ctxt_init(&ctxt, c, NULL, &thr->stats,
-6efb894685bad7 Kent Overstreet 2026-01-06  1895  			      writepoint_ptr(&c->allocator.reconcile_write_point),
-6efb894685bad7 Kent Overstreet 2026-01-06  1896  			      true);
-6efb894685bad7 Kent Overstreet 2026-01-06  1897  
-6efb894685bad7 Kent Overstreet 2026-01-06  1898  	struct btree_trans *trans = ctxt.trans;
-6efb894685bad7 Kent Overstreet 2026-01-06  1899  
-6efb894685bad7 Kent Overstreet 2026-01-06  1900  	CLASS(darray_reconcile_work, work)();
-6efb894685bad7 Kent Overstreet 2026-01-06  1901  	darray_make_room(&work, REBALANCE_WORK_BUF_NR);
-6efb894685bad7 Kent Overstreet 2026-01-06  1902  	if (!work.size) {
-6efb894685bad7 Kent Overstreet 2026-01-06  1903  		bch_err(c, "%s: unable to allocate memory", __func__);
-7533247ef4e07f Kent Overstreet 2026-01-08  1904  		closure_return(cl);
-7533247ef4e07f Kent Overstreet 2026-01-08  1905  		return;
-6efb894685bad7 Kent Overstreet 2026-01-06  1906  	}
-6efb894685bad7 Kent Overstreet 2026-01-06  1907  
-6efb894685bad7 Kent Overstreet 2026-01-06  1908  	CLASS(per_snapshot_io_opts, snapshot_io_opts)(c);
-6efb894685bad7 Kent Overstreet 2026-01-06  1909  
-6efb894685bad7 Kent Overstreet 2026-01-06  1910  	struct wb_maybe_flush last_flushed __cleanup(wb_maybe_flush_exit);
-6efb894685bad7 Kent Overstreet 2026-01-06  1911  	wb_maybe_flush_init(&last_flushed);
-6efb894685bad7 Kent Overstreet 2026-01-06  1912  
-6efb894685bad7 Kent Overstreet 2026-01-06  1913  	struct bbpos work_pos = BBPOS(thr->btree, POS(thr->dev, 0));
-6efb894685bad7 Kent Overstreet 2026-01-06  1914  
-6efb894685bad7 Kent Overstreet 2026-01-06  1915  	while (!bch2_move_ratelimit(&ctxt)) {
-6efb894685bad7 Kent Overstreet 2026-01-06  1916  		if (!bch2_reconcile_enabled(c))
-6efb894685bad7 Kent Overstreet 2026-01-06  1917  			break;
-6efb894685bad7 Kent Overstreet 2026-01-06  1918  
-6efb894685bad7 Kent Overstreet 2026-01-06  1919  		bch2_trans_begin(trans);
-6efb894685bad7 Kent Overstreet 2026-01-06  1920  
-6efb894685bad7 Kent Overstreet 2026-01-06  1921  		struct bkey_s_c k = next_reconcile_entry(trans, &work, thr->btree, &work_pos.pos);
-6efb894685bad7 Kent Overstreet 2026-01-06  1922  		if (bkey_err(k) ||
-6efb894685bad7 Kent Overstreet 2026-01-06  1923  		    !k.k ||
-6efb894685bad7 Kent Overstreet 2026-01-06  1924  		    k.k->p.inode != thr->dev)
-6efb894685bad7 Kent Overstreet 2026-01-06  1925  			break;
-6efb894685bad7 Kent Overstreet 2026-01-06  1926  
-6efb894685bad7 Kent Overstreet 2026-01-06  1927  		int ret = lockrestart_do(trans,
-6efb894685bad7 Kent Overstreet 2026-01-06  1928  			do_reconcile_extent_phys(&ctxt, &snapshot_io_opts, work_pos, &last_flushed));
-6efb894685bad7 Kent Overstreet 2026-01-06  1929  		if (ret)
-6efb894685bad7 Kent Overstreet 2026-01-06  1930  			break;
-6efb894685bad7 Kent Overstreet 2026-01-06  1931  	}
-7533247ef4e07f Kent Overstreet 2026-01-08  1932  
-6efb894685bad7 Kent Overstreet 2026-01-06  1933  	closure_return(cl);
-6efb894685bad7 Kent Overstreet 2026-01-06  1934  }
-6efb894685bad7 Kent Overstreet 2026-01-06  1935  
+diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+index 36bba6720c26..53a643c0f6fe 100644
+--- a/arch/riscv/include/asm/uaccess.h
++++ b/arch/riscv/include/asm/uaccess.h
+@@ -97,13 +97,23 @@ static inline unsigned long __untagged_addr_remote(struct mm_struct *mm, unsigne
+  */
+ 
+ #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
++/*
++ * Use a temporary variable for the output of the asm goto to avoid a
++ * triggering an LLVM assertion due to sign extending the output when
++ * it is used in later function calls:
++ * https://github.com/llvm/llvm-project/issues/143795
++ */
+ #define __get_user_asm(insn, x, ptr, label)			\
++do {								\
++	u64 __tmp;						\
+ 	asm_goto_output(					\
+ 		"1:\n"						\
+ 		"	" insn " %0, %1\n"			\
+ 		_ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)		\
+-		: "=&r" (x)					\
+-		: "m" (*(ptr)) : : label)
++		: "=&r" (__tmp)					\
++		: "m" (*(ptr)) : : label);			\
++	(x) = (__typeof__(x))__tmp;				\
++} while (0)
+ #else /* !CONFIG_CC_HAS_ASM_GOTO_OUTPUT */
+ #define __get_user_asm(insn, x, ptr, label)			\
+ do {								\
 
-:::::: The code at line 1888 was first introduced by commit
-:::::: 6efb894685bad7b9d57fc51a8bfef4707572382f bcachefs: Multithreaded processing of reconcile_phys
+---
+base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+change-id: 20250811-riscv-wa-llvm-asm-goto-outputs-assertion-failure-6aefa26338cc
 
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
