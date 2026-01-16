@@ -1,44 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C0E21FF35;
-	Fri, 16 Jan 2026 21:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E28C2DAFBA;
+	Fri, 16 Jan 2026 21:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768597971; cv=none; b=HUE8wVyAqk49KEO5F/XIfzdXuoWJnxSdUAFuKFLtPgiG5dwt++NxvNWyoMffyKXDPnpXG0JS9MbmOUcF+HOZ7vW+jw8vCOM1MRBqHntNLvCDpAcz3Ezc3nrVX7H5+DSelQo/7oz0Dg+ajRj4zXHi90SV4x84tmerQpTXpfE0H4E=
+	t=1768599447; cv=none; b=oSP/+Gcbt5Zhe2sA2Z2vmMxPs/n55KRrsoJOZz9bghDoQzcY0dXKmjU61EiJU1mxr3DoH3iSuNpr0kxwjgO5iZQCF3dF/JZmYrL39iubICGXgESo3ShmSxRIjuPyTVBj6dm+B821aQR5ePoHHGyrCees/lH97/gUC43gbUg8nk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768597971; c=relaxed/simple;
-	bh=1+xZgmeo1KVi2Gr/Gt3xPzGxEBf6M3InqpKa/VrnSto=;
+	s=arc-20240116; t=1768599447; c=relaxed/simple;
+	bh=cXaYCWY+NFHrw2co2+VwRx7+jg87vo2na/i0pxgM5eM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e/vDJnDeWFy0jl4pB+5pn0n/slYahL+m7Mp/WsCg3zAfTJ9XvhErWq4LDWrlwKsZL3Zvmtldi4q0X7xDIL9EaC5VamFAgOnEw1KCJLkqaiwF9FoDoWPKUpgzokaWkqQXChJGnCR4JMuSFZacddOlfxmrhBEh1R+lVpU0puGlsr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n6767Caj; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OxEj9jVzWfc8F8dNE5yKtg54rNXmy+EpaNkPT2yX9Xrs1y+HoejdmlHL0eVoBEF8LJXaqOvDb1i0US7aaE1+qqvXvEqqQWpv3fgpiNZqyARXe1s1cC0SniHhTPuZXbGOSD17A9r4llUU3meNb8babqvKOgyyWnU01wstmCyol7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OZGXnxqb; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n6767Caj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 218A7C116C6;
-	Fri, 16 Jan 2026 21:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768597971;
-	bh=1+xZgmeo1KVi2Gr/Gt3xPzGxEBf6M3InqpKa/VrnSto=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n6767CajHyyXzolULq6swOS5aMqmTWv7LyQxhflpcggXbnA4fhEt6R8/P4cmWtfnr
-	 jgN0p1m55EJ7I5mPUS5D+p5A8BUzawwhlL+tJBc/JX9xvZrrWLWUASyk7guEN9T29a
-	 bWSgLhgNDz+PigqktA0hEQ0jJFN681KS0/VUttfMAfEQpKykYO60NRyfFX976IxVcR
-	 FKb10LJTeVPvlQAJCtCQIT6FJW6xVNZZ/kcRjGGy8BA6Vl5leg0jpUs1P7nIHhqY++
-	 0idU/7HV+Ny4UMUije6nTeQoo93o1lQlNOtovFXl1lShgP665co8gpuJv6xNlMQe8o
-	 lftxLJRlyUT0w==
-Date: Fri, 16 Jan 2026 14:12:46 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 0/2] scripts: introduce containerized builds
-Message-ID: <20260116211246.GA1826279@ax162>
-References: <cover.1767199119.git.gtucker@gtucker.io>
- <6af4b4cb-cf0a-4647-bdb8-0b2b1cb03b76@gtucker.io>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OZGXnxqb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768599445; x=1800135445;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cXaYCWY+NFHrw2co2+VwRx7+jg87vo2na/i0pxgM5eM=;
+  b=OZGXnxqbpzbBfy1H77TF0ubmBqdJ2XJWpkfXz67ShC3Kz0yVK+BfnrCF
+   9rUyLponO/MsS6xkFHUUknVuQuj5wkacmoamXF8im5S56vaA64S7fdLlW
+   8h+hTvWxKuuSKAapzsbF5Ke2Jbs0AOXODvNu2VxxBloDljU9WjFe8Mq2c
+   1Beye2ehku94ibcyw58Hno3chc240/km4+l7rSKxY5H27FlNPRNnvfPyh
+   XvVrdbgEE6cSyx5coxxuLJOtE2nkDiRxMbcC5QOj25aMFDlYXzKty0Y47
+   6gQQ3D2SfFrdv3DRhd645AnxzF37VPo9zyCe+iGWk3NmxlVsh+fDSjK9Z
+   w==;
+X-CSE-ConnectionGUID: enYIUpMNQYOo+0fS0XNo4w==
+X-CSE-MsgGUID: JrwNlEMARQy/lu0HzCe5Iw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="92583832"
+X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
+   d="scan'208";a="92583832"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 13:37:25 -0800
+X-CSE-ConnectionGUID: GpUlGRTFQl2vYTqKJRteGw==
+X-CSE-MsgGUID: zFZj+0JbSQ27MRLUM31HiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
+   d="scan'208";a="205401656"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 16 Jan 2026 13:37:21 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgrVO-00000000LGU-33wE;
+	Fri, 16 Jan 2026 21:37:18 +0000
+Date: Sat, 17 Jan 2026 05:37:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Coddington <bcodding@hammerspace.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Rick Macklem <rick.macklem@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v1 2/4] nfsd: Add a key for signing filehandles
+Message-ID: <202601170520.GITVT8Iy-lkp@intel.com>
+References: <c49d28aade36c044f0533d03b564ff65e00d9e05.1768573690.git.bcodding@hammerspace.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,34 +70,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6af4b4cb-cf0a-4647-bdb8-0b2b1cb03b76@gtucker.io>
+In-Reply-To: <c49d28aade36c044f0533d03b564ff65e00d9e05.1768573690.git.bcodding@hammerspace.com>
 
-Hi Guillaume,
+Hi Benjamin,
 
-On Fri, Jan 16, 2026 at 11:28:24AM +0100, Guillaume Tucker wrote:
-> Hello,
-> 
-> On 31/12/2025 17:51, Guillaume Tucker wrote:
-> > Changes in v3:
-> > - Refactor common code for Docker and Podman
-> > - Add docs.kernel.org URL in help message
-> > - Use pathlib Python package
-> > - Handle signals in parent process by default
-> > - Add --shell option to use an interactive shell
-> > - Tweak debug messages in verbose mode
-> > - Specify Python 3.10 as minimum version in the docs
-> > - Provide an example env file in the docs
-> > - Update docs regarding interactive shell usage
-> 
-> I'm sure you're all busy landing commits ahead of the next merge
-> window.  Could you please take a look at this v3 when you have a
-> moment?  I believe I've addressed everything from previous reviews.
+kernel test robot noticed the following build warnings:
 
-So sorry for the radio silence. I was going to try and look at this
-today to give feedback before the weekend but I will not be able to look
-at it until Monday. Given that this is self-contained (no pun intended)
-with no regression risks, I would have no qualms with applying this late
-in the development cycle.
+[auto build test WARNING on bfd453acb5637b5df881cef4b21803344aa9e7ac]
 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Coddington/nfsd-Convert-export-flags-to-use-BIT-macro/20260116-223927
+base:   bfd453acb5637b5df881cef4b21803344aa9e7ac
+patch link:    https://lore.kernel.org/r/c49d28aade36c044f0533d03b564ff65e00d9e05.1768573690.git.bcodding%40hammerspace.com
+patch subject: [PATCH v1 2/4] nfsd: Add a key for signing filehandles
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260117/202601170520.GITVT8Iy-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170520.GITVT8Iy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601170520.GITVT8Iy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/nfsd/nfsctl.c:2282:50: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    2282 |         trace_nfsd_ctl_fh_key_set((const char *)fh_key, ret);
+         |                                                         ^~~
+   fs/nfsd/nfsctl.c:2260:9: note: initialize the variable 'ret' to silence this warning
+    2260 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +/ret +2282 fs/nfsd/nfsctl.c
+
+  2254	
+  2255	int nfsd_nl_fh_key_set_doit(struct sk_buff *skb, struct genl_info *info)
+  2256	{
+  2257		siphash_key_t *fh_key;
+  2258		struct nfsd_net *nn;
+  2259		int fh_key_len;
+  2260		int ret;
+  2261	
+  2262		if (GENL_REQ_ATTR_CHECK(info, NFSD_A_SERVER_FH_KEY))
+  2263			return -EINVAL;
+  2264	
+  2265		fh_key_len = nla_len(info->attrs[NFSD_A_SERVER_FH_KEY]);
+  2266		if (fh_key_len != sizeof(siphash_key_t))
+  2267			return -EINVAL;
+  2268	
+  2269		/* Is the key already set? */
+  2270		nn = net_generic(genl_info_net(info), nfsd_net_id);
+  2271		if (nn->fh_key)
+  2272			return -EEXIST;
+  2273	
+  2274		fh_key = kmalloc(sizeof(siphash_key_t), GFP_KERNEL);
+  2275		if (!fh_key)
+  2276			return -ENOMEM;
+  2277	
+  2278		memcpy(fh_key, nla_data(info->attrs[NFSD_A_SERVER_FH_KEY]), sizeof(siphash_key_t));
+  2279		nn = net_generic(genl_info_net(info), nfsd_net_id);
+  2280		nn->fh_key = fh_key;
+  2281	
+> 2282		trace_nfsd_ctl_fh_key_set((const char *)fh_key, ret);
+  2283		return ret;
+  2284	}
+  2285	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
