@@ -1,73 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EF4289E06;
-	Thu, 15 Jan 2026 23:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC9F9460;
+	Fri, 16 Jan 2026 00:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768519168; cv=none; b=DyVXswTgz0az3JVMNzJk2eTtkILh9437Zkf9uawNV51Eu4Qv5vHaRwpVxzSdnrZNfvpWkovd7mxLUQKnHdmydQ9A85EhXjLMbNeulvMDyDRNKlvsjw+BDmSh/NpT86OD7B3tf45aUqMNgSLglhtRG5dfANUHktDPC3M6deqazLg=
+	t=1768523189; cv=none; b=aFDiLklezCU1GAN09PF7/i9za2vgY7cX5kuGo8YSTaAIh/Zos+RqJF3h39R5p/K/eTS+zGhx+WyxEKYqQnDx1H9grAm3+XlVNT+aeDBBo5DEnVwUsYPNA8BQzORebPQqKP0kSF+IQhQquFiTbhysNixLhnjwx+QP/YS75x4r7JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768519168; c=relaxed/simple;
-	bh=kwGRF5mURihJe/iQlmz7bEwEkA+zgkfqc7bU0SHLJZc=;
+	s=arc-20240116; t=1768523189; c=relaxed/simple;
+	bh=YbWZSNBq8yxIaNI4r+vfvwTWe4SVmWkoH5Q+Z8HUnqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ToWq8Afg5gBeFlID/UHsFMr2GQAiLPUfamNarOk0WBZOvg8ZWNW0wo2bvSbSWV4dZy3kbBlh1A9kuNdOrrzg5E/zbwTjkyISeaheTC+yhJL8+d/0HHwkKe9Q6LcP73SG+zuO0rTlZoU8lIj456wZMl4O8YQ01bESbMzJh3XjsRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ys1zqpzl; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=eu8NbAGCte2r/1/ehPgGDty9uw1abws2AczPplTQpAlCOE2NHgMRo0hWD9kVfNmxlwD+Tw45KcM3cRSz7SWNUIRx5u89I6H2krq0a64o70j3Zotttn/ztd+K6rHPffHeeR6b38fEKBzip0cKDayQ32BZkVd+crUwH0I0ZbZAdgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VcydsAkJ; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ys1zqpzl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VcydsAkJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768519166; x=1800055166;
+  t=1768523188; x=1800059188;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kwGRF5mURihJe/iQlmz7bEwEkA+zgkfqc7bU0SHLJZc=;
-  b=Ys1zqpzldmic0T97luv/oZV2BZmvBuMNJokT+NJZE0sGrVkgYla+CoWK
-   0m9pUja5/k3U7fMvszundbcKmx3j9blorwydzRbJrxUbWgEUwOZbpRTfS
-   VnwYcU/FBkkvnn8tiqsDHLhdWaqn8se0P3ObA4ec4xjulfrJBRZk+G0/z
-   YBp3tOxFJ0+FISUdtyN2stbEWHEgJYBJA1UUK0qJ/bvrt8cpgIOz1uDmu
-   ptJ+FQinssHXpVQC46CyBJLBO4KfLqWe1pjzNuWWxkYO+GtXBd4C79cHO
-   iD/XewEFkgOacOsZUkrJJigzc4ejVAipqTdiaPynIyHi/weypVDJHLKSM
-   Q==;
-X-CSE-ConnectionGUID: FFaabLnsT6SzEjFa9UISlw==
-X-CSE-MsgGUID: xChIGwTkRXqGOPesK9um3g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="81283369"
+  bh=YbWZSNBq8yxIaNI4r+vfvwTWe4SVmWkoH5Q+Z8HUnqY=;
+  b=VcydsAkJM5w5PemWTC+uw2+/QTsVfqF+PbYmUuoFPTqMQ2gCvzZPqvrs
+   /WkvVmXD49MEmDOKCXbpQ9lstTEOMt1N/JXouluQi3M97Py6bnn2iuVw1
+   xHLUERnht/x2jR/URhAsC+dNXrvywXBAuG30mPJ0MJiznDoX0R0HW09jm
+   2yMb70/tMpPpccv+1pleoM4hX4XoHr3HfvwPdIFYEFaTnsjsv1xJ6npEl
+   kq0Nenw5cZs8qDxdFWBfos736aLLTQN3Yg+4ZeqjRIsChrV+8CLufdXDV
+   zeNxO51zqCHIG8FDyOTP5IsnXsNG7qa3i7MdxIk8s3C/QAgpOXFQIR0Y0
+   w==;
+X-CSE-ConnectionGUID: Nb+YGv8OR4m4V68PR3oBjg==
+X-CSE-MsgGUID: 56SkTYbyQZKIHEkF4xeZhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="87254847"
 X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="81283369"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 15:19:25 -0800
-X-CSE-ConnectionGUID: I06q/XGzSDitkMj/Do7Ecg==
-X-CSE-MsgGUID: EAbpvl4JTUi151xMldnkpw==
+   d="scan'208";a="87254847"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 16:26:27 -0800
+X-CSE-ConnectionGUID: mX2zdz9tSlGiSMw1Q5fvCQ==
+X-CSE-MsgGUID: p/jf6VUySmKqJumn6G5zDA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="205496892"
+   d="scan'208";a="210128037"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 15 Jan 2026 15:19:21 -0800
+  by orviesa005.jf.intel.com with ESMTP; 15 Jan 2026 16:26:24 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgWcZ-00000000K6K-0h7Y;
-	Thu, 15 Jan 2026 23:19:19 +0000
-Date: Fri, 16 Jan 2026 07:18:32 +0800
+	id 1vgXfR-00000000K9A-2vML;
+	Fri, 16 Jan 2026 00:26:21 +0000
+Date: Fri, 16 Jan 2026 08:25:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Bastien Curutchet (Schneider Electric)" <bastien.curutchet@bootlin.com>,
-	Woojung Huh <woojung.huh@microchip.com>,
-	UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Simon Horman <horms@kernel.org>
+To: Holger Dengler <dengler@linux.ibm.com>,
+	Eric Biggers <ebiggers@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Pascal Eberhard <pascal.eberhard@se.com>,
-	=?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-kernel@vger.kernel.org,
-	"Bastien Curutchet (Schneider Electric)" <bastien.curutchet@bootlin.com>
-Subject: Re: [PATCH net-next 4/8] net: dsa: microchip: Add support for
- KSZ8463's PTP interrupts
-Message-ID: <202601160729.AzeG6b64-lkp@intel.com>
-References: <20260115-ksz8463-ptp-v1-4-bcfe2830cf50@bootlin.com>
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Harald Freudenberger <freude@linux.ibm.com>,
+	Holger Dengler <dengler@linux.ibm.com>,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] lib/crypto: tests: Add KUnit tests for AES
+Message-ID: <202601160822.yLaBf86R-lkp@intel.com>
+References: <20260115183831.72010-2-dengler@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,98 +69,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260115-ksz8463-ptp-v1-4-bcfe2830cf50@bootlin.com>
+In-Reply-To: <20260115183831.72010-2-dengler@linux.ibm.com>
 
-Hi Bastien,
+Hi Holger,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 3adff276e751051e77be4df8d29eab1cf0856fbf]
+[auto build test ERROR on 47753e09a15d9fd7cdf114550510f4f2af9333ec]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Curutchet-Schneider-Electric/net-dsa-microchip-Add-support-for-KSZ8463-global-irq/20260116-000545
-base:   3adff276e751051e77be4df8d29eab1cf0856fbf
-patch link:    https://lore.kernel.org/r/20260115-ksz8463-ptp-v1-4-bcfe2830cf50%40bootlin.com
-patch subject: [PATCH net-next 4/8] net: dsa: microchip: Add support for KSZ8463's PTP interrupts
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601160729.AzeG6b64-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Holger-Dengler/lib-crypto-tests-Add-KUnit-tests-for-AES/20260116-030041
+base:   47753e09a15d9fd7cdf114550510f4f2af9333ec
+patch link:    https://lore.kernel.org/r/20260115183831.72010-2-dengler%40linux.ibm.com
+patch subject: [PATCH v1 1/1] lib/crypto: tests: Add KUnit tests for AES
+config: hexagon-randconfig-002-20260116 (https://download.01.org/0day-ci/archive/20260116/202601160822.yLaBf86R-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160729.AzeG6b64-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160822.yLaBf86R-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601160729.AzeG6b64-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601160822.yLaBf86R-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/dsa/microchip/ksz_ptp.c:1187:40: warning: variable 'p' is uninitialized when used here [-Wuninitialized]
-    1187 |         ptpirq->reg_mask = ops->get_port_addr(p, KSZ8463_PTP_TS_IER);
-         |                                               ^
-   drivers/net/dsa/microchip/ksz_ptp.c:1175:7: note: initialize the variable 'p' to silence this warning
-    1175 |         int p;
-         |              ^
-         |               = 0
-   1 warning generated.
+>> lib/crypto/tests/aes_kunit.c:73:24: error: use of undeclared identifier 'SZ_1M'
+      73 |                              (t_enc ?: 1) * SZ_1M));
+         |                                             ^
+>> lib/crypto/tests/aes_kunit.c:73:24: error: use of undeclared identifier 'SZ_1M'
+   lib/crypto/tests/aes_kunit.c:80:24: error: use of undeclared identifier 'SZ_1M'
+      80 |                              (t_dec ?: 1) * SZ_1M));
+         |                                             ^
+   lib/crypto/tests/aes_kunit.c:80:24: error: use of undeclared identifier 'SZ_1M'
+   4 errors generated.
 
 
-vim +/p +1187 drivers/net/dsa/microchip/ksz_ptp.c
+vim +/SZ_1M +73 lib/crypto/tests/aes_kunit.c
 
-  1167	
-  1168	int ksz8463_ptp_irq_setup(struct dsa_switch *ds)
-  1169	{
-  1170		struct ksz_device *dev = ds->priv;
-  1171		const struct ksz_dev_ops *ops = dev->dev_ops;
-  1172		struct ksz_port *port1, *port2;
-  1173		struct ksz_irq *ptpirq;
-  1174		int ret;
-  1175		int p;
-  1176	
-  1177		port1 = &dev->ports[0];
-  1178		port2 = &dev->ports[1];
-  1179		ptpirq = &port1->ptpirq;
-  1180	
-  1181		ptpirq->irq_num = irq_find_mapping(dev->girq.domain, KSZ8463_SRC_PTP_INT);
-  1182		if (!ptpirq->irq_num)
-  1183			return -EINVAL;
-  1184	
-  1185		ptpirq->dev = dev;
-  1186		ptpirq->nirqs = 4;
-> 1187		ptpirq->reg_mask = ops->get_port_addr(p, KSZ8463_PTP_TS_IER);
-  1188		ptpirq->reg_status = ops->get_port_addr(p, KSZ8463_PTP_TS_ISR);
-  1189		ptpirq->irq0_offset = KSZ8463_PTP_INT_START;
-  1190		snprintf(ptpirq->name, sizeof(ptpirq->name), "ptp-irq-%d", p);
-  1191	
-  1192		ptpirq->domain = irq_domain_create_linear(dev_fwnode(dev->dev), ptpirq->nirqs,
-  1193							  &ksz_ptp_irq_domain_ops, ptpirq);
-  1194		if (!ptpirq->domain)
-  1195			return -ENOMEM;
-  1196	
-  1197		ret = request_threaded_irq(ptpirq->irq_num, NULL, ksz_ptp_irq_thread_fn,
-  1198					   IRQF_ONESHOT, ptpirq->name, ptpirq);
-  1199		if (ret)
-  1200			goto release_domain;
-  1201	
-  1202		ret = ksz8463_ptp_port_irq_setup(ptpirq, port1,
-  1203						 KSZ8463_PTP_PORT1_INT_START - KSZ8463_PTP_INT_START);
-  1204		if (ret)
-  1205			goto release_irq;
-  1206	
-  1207		ret = ksz8463_ptp_port_irq_setup(ptpirq, port2,
-  1208						 KSZ8463_PTP_PORT2_INT_START - KSZ8463_PTP_INT_START);
-  1209		if (ret)
-  1210			goto free_port1;
-  1211	
-  1212		return 0;
-  1213	
-  1214	free_port1:
-  1215		ksz8463_ptp_port_irq_teardown(port1);
-  1216	release_irq:
-  1217		free_irq(ptpirq->irq_num, ptpirq);
-  1218	release_domain:
-  1219		irq_domain_remove(ptpirq->domain);
-  1220	
-  1221		return ret;
-  1222	}
-  1223	
+    27	
+    28	static void benchmark_aes(struct kunit *test, const struct aes_testvector *tv)
+    29	{
+    30		const size_t num_iters = 10000000;
+    31		u8 out[AES_BLOCK_SIZE];
+    32		struct aes_key aes_key;
+    33		u64 t_enc, t_dec;
+    34		int rc;
+    35	
+    36		if (!IS_ENABLED(CONFIG_CRYPTO_LIB_BENCHMARK))
+    37			kunit_skip(test, "not enabled");
+    38	
+    39		rc = aes_preparekey(&aes_key, tv->key.b, tv->key.len);
+    40		KUNIT_ASSERT_EQ(test, 0, rc);
+    41	
+    42		/* warm-up enc */
+    43		for (size_t i = 0; i < 1000; i++)
+    44			aes_encrypt(&aes_key, out, tv->plain);
+    45	
+    46		preempt_disable();
+    47		t_enc = ktime_get_ns();
+    48	
+    49		for (size_t i = 0; i < num_iters; i++)
+    50			aes_encrypt(&aes_key, out, tv->plain);
+    51	
+    52		t_enc = ktime_get_ns() - t_enc;
+    53		preempt_enable();
+    54	
+    55		/* warm-up dec */
+    56		for (size_t i = 0; i < 1000; i++)
+    57			aes_decrypt(&aes_key, out, tv->cipher);
+    58	
+    59		preempt_disable();
+    60		t_dec = ktime_get_ns();
+    61	
+    62		for (size_t i = 0; i < num_iters; i++)
+    63			aes_decrypt(&aes_key, out, tv->cipher);
+    64	
+    65		t_dec = ktime_get_ns() - t_dec;
+    66		preempt_enable();
+    67	
+    68		kunit_info(test, "enc (iter. %zu, duration %lluns)",
+    69			   num_iters, t_enc);
+    70		kunit_info(test, "enc (len=%zu): %llu MB/s",
+    71			   (size_t)AES_BLOCK_SIZE,
+    72			   div64_u64((u64)AES_BLOCK_SIZE * num_iters * NSEC_PER_SEC,
+  > 73				     (t_enc ?: 1) * SZ_1M));
+    74	
+    75		kunit_info(test, "dec (iter. %zu, duration %lluns)",
+    76			   num_iters, t_dec);
+    77		kunit_info(test, "dec (len=%zu): %llu MB/s",
+    78			   (size_t)AES_BLOCK_SIZE,
+    79			   div64_u64((u64)AES_BLOCK_SIZE * num_iters * NSEC_PER_SEC,
+    80				     (t_dec ?: 1) * SZ_1M));
+    81	}
+    82	
 
 -- 
 0-DAY CI Kernel Test Service
