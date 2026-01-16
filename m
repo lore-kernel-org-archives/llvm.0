@@ -1,227 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7E0265623;
-	Fri, 16 Jan 2026 13:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807111C8626
+	for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 13:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768569667; cv=none; b=eFb38a4EMDNHnP4QsosOmudo7uiCt60KT96GIkyd/MaM4dQ9bJxqWat+g03qQ4jsTaQxki9457AoO5Jsx0sP/gvz0NogPtSELY7tyVVOOaMrB67xhMOls3GpqNzHc54wC73gy92yaTQMLEocNypmruwmQFAlhZ6ky+tNcZ/wcbA=
+	t=1768570463; cv=none; b=Jvw4W439EgoyIUPQ2qsHjSe9pIvdEQ+rT42+M+nQQJrPwjPaq8rSeGAvLN/9lk8nFlbF3sR9xzcQp68XyspMP0Z71nI+5rEM20QQ53kGsgzLoOAvdcTs3nH2UUr4DDXp4c+H19fpTv2vVJbwTg6CNDUv3Am6CFYPSmYvkM5Zvb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768569667; c=relaxed/simple;
-	bh=i32t1y7XODJy/klylqSnaSxh4yladx7T3RFtlv8mVfY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ld6jUgVrZdGq6XKYUtZyCdTFLiA20EtJ59aCHB2YIY1AyCce06KEfK0OnQdH6EJWXygJ0i+bqOyaCQ6I67KjpmijRXpt3UvxJ3C40jggF9xpABPg3WUjsJ8D9pgNdARUnioKBcQOS3bFFnbTJJhx+PEvOtE+MTeufdBbt1ePEWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LjdJ09lb; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768570463; c=relaxed/simple;
+	bh=lhWftONTvT8mo5Rk/TohDUhgTti9Iwnng/XSd0I81G8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=doGvza0Bgu/sdZdI1cOCM7rh0SOZo0V7MfBJ9CKnJTnpzsZjK5zvSqgeXVRZUS9jEPhvH73sOqM3Zv2wknEsrvOFRYgmg+ec8mSUfy8KhfLy9oj42V1gFn+KluZFAN8qJywz88fh1j5FR6zAYKlEUeEij+3kMGgPEYyemftOYZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fLZQs2BL; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LjdJ09lb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768569664; x=1800105664;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i32t1y7XODJy/klylqSnaSxh4yladx7T3RFtlv8mVfY=;
-  b=LjdJ09lbr8LoLomhTlzXBxc9GuLbi633ftSIn4/zJHcMnoZfykKzDt2D
-   dN2oaWPHv1a7rhlMt46XsmuBi/dg2RXbkg3yOZ4a/09cXDccGAprJMFAG
-   GZqd2+arRHzx1dDknHU9MiZatFIDu8KDCM0QFgf5/beOcJXE1+sJ5/D5c
-   o/Z053GZH7IFgq88I6wNQxDl9DdxIHBrcBF04YK4+HPiBePejsKyGKFfj
-   b1b8YXGC4YJR6ju+xFhb5BsTcDg9btOtZ8qknsItOtwBYVM438osMdA0v
-   2vmTVoBA3Ix3c9oq+vktbq5QmRMZdCinwPlXV8lU6xJPnna/HlWfigjY7
-   Q==;
-X-CSE-ConnectionGUID: sQu5ArILTFCrhGAK3f9zxQ==
-X-CSE-MsgGUID: ueqbsVYXRyabObW7uBktEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="73735954"
-X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
-   d="scan'208";a="73735954"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 05:21:00 -0800
-X-CSE-ConnectionGUID: z20xf1QURzeARJmUSF2riA==
-X-CSE-MsgGUID: I8LJAjIITWuAZrKb+MhEbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
-   d="scan'208";a="236502851"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 16 Jan 2026 05:20:59 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgjl3-00000000KrM-1PJj;
-	Fri, 16 Jan 2026 13:20:57 +0000
-Date: Fri, 16 Jan 2026 21:20:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Brian Masney <bmasney@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 13/13] clk: microchip: core: allow driver to be compiled
- with COMPILE_TEST
-Message-ID: <202601162110.K1eWGORM-lkp@intel.com>
-References: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fLZQs2BL"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59b89e1cf34so306138e87.1
+        for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 05:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768570460; x=1769175260; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bev0/5BsocMDQdsWbP6nwDXNzQ2lVeqE+NGh6GYspu8=;
+        b=fLZQs2BLio8/uYd5Y+ckWQi0MPVj6MxPlQj1iJZfMIJb9uJR4mHfhxRFcr2WuUT7c4
+         EI04ShCVXpH7d/z3/01IG+wmorW1HqzZflrgvVawNEuTgvjoCMWMDvh9oVaet2wBagPh
+         p+SU7ocFHyFAqg06zbAKNxbi5pYFlp9NOYrJRdGEmhSxSkSANieGMzixo+dS8k3YmhBr
+         eTeMjImeqgEnD8sXxDIz0HSJy82evSoG9sLnaUJEkRXi3zcA1Aq5PTzi+Najzfsp+++T
+         teobT/rMQq3PA785GBJkZ5HdCQaqf/La0o3lnsrUAHnML9wQcfrkpj03Rz9pQn6VrUpb
+         7tAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768570460; x=1769175260;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bev0/5BsocMDQdsWbP6nwDXNzQ2lVeqE+NGh6GYspu8=;
+        b=JuZI/k2vmiroFUJZE8rYKHnjaLcv5m9wCzyfy+EwrkTEEYixnGcIz9UTfN200Fr4lY
+         0w3NSVCvdyadY/K1OTR/iIo6zEY23qn4UPaMQUQ06YqXkw2H5IionDRv+9ZwkWtLyrg5
+         UQa7kNzu1EPVV4IIGbgr2QubcE9Bu2nDRx5BkP8tea3KDB/VXF63Zm50Uo6KeLfeGtTR
+         YYt0qI2OJoBqbwS9nL79Gwe+HRuh1ccIZk9Mh1JDOs75sEY6tvI0VlF+bM96dit1cN0z
+         d8hOPe9g/xQLn6y6DUWsIfWusy4L3XUOIYkTD3yK87fz/Xops2iff4+Tp22aCMe2SLPK
+         AL5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVRHz+n0MjfNjwi+uM4d+ayZYLkNI82DS9zv9v0I4mmXjdJsB6pt2X5w/T6cTsg7qg5iYv4@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywgx07c1OcRAto7LyX8G25tLXWnXYUAdklTJaLjZ09qnTrjJhzA
+	/tmSnsRDwXICnBUFdNJKkrSGuJ72EM4BLZqIoY/g66nw1dEHB+PALJtP
+X-Gm-Gg: AY/fxX4UIHW5Iw9g/58khmhovaVkEwB+UfwinvD5CCX/OmSLdAZ0QzWI+u6VdDOXO/5
+	A5zgrclmIeqLz3lbJ6eXG27bMMWfVY8rDN7o4nSZWu5U9yFxMjqqEe0u4ESrMIaQeXwPgw8ENHG
+	D8x3eN1q7BkGu0X/+6Pw2koVJr/dm61zdbrmQ5w/P9xXSDC5BrYnHJia2fkuu1k5sMlj3Dkqei+
+	c8MiQitOhN6leYBLOVEm3dFffGp969QruxG6ymqXdy830/7Mk8IjODttbqyXQNEBR8nhj9zm6Af
+	Fng6nXpvGeIjFRmeDhKr9wwIpzPQaiUn1ZA5fI5O1nIkiyC5sltEETRLvPrqdjnD5oBpsgb7voI
+	9v8uQzBdlyq1FH+gBPgHu5oeDWP+7/PX9jQcF8igg6L3AMoyRl8wt2M3w7KE6qViNWtiJ3VYigi
+	m9k1iqwiAwTJ/wf1Il8w==
+X-Received: by 2002:a05:651c:31dc:b0:37f:c5ca:7428 with SMTP id 38308e7fff4ca-38383fe052dmr6437051fa.0.1768570459458;
+        Fri, 16 Jan 2026 05:34:19 -0800 (PST)
+Received: from [10.214.35.248] ([80.93.240.68])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38384fb8ff0sm7244461fa.45.2026.01.16.05.34.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jan 2026 05:34:18 -0800 (PST)
+Message-ID: <1f821f5a-403b-4dad-b9d8-239c9b039000@gmail.com>
+Date: Fri, 16 Jan 2026 14:33:33 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
-
-Hi Brian,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on f417b7ffcbef7d76b0d8860518f50dae0e7e5eda]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/MIPS-copy-pic32-h-header-file-from-asm-mach-pic32-to-include-platform-data/20260110-005057
-base:   f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
-patch link:    https://lore.kernel.org/r/20260109-mips-pic32-header-move-v1-13-99859c55783d%40redhat.com
-patch subject: [PATCH 13/13] clk: microchip: core: allow driver to be compiled with COMPILE_TEST
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601162110.K1eWGORM-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/clk/microchip/clk-core.c:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:8:
->> arch/x86/include/asm/debugreg.h:180:20: error: no member named 'x86' in 'struct cpuinfo_um'
-     180 |         if (boot_cpu_data.x86 < 6)
-         |             ~~~~~~~~~~~~~ ^
-   arch/x86/include/asm/debugreg.h:191:20: error: no member named 'x86' in 'struct cpuinfo_um'
-     191 |         if (boot_cpu_data.x86 < 6)
-         |             ~~~~~~~~~~~~~ ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:5:
-   In file included from include/linux/irq-entry-common.h:13:
-   In file included from arch/x86/include/asm/entry-common.h:8:
-   arch/x86/include/asm/nospec-branch.h:598:24: error: use of undeclared identifier '__KERNEL_DS'
-     598 |         static const u16 ds = __KERNEL_DS;
-         |                               ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:5:
-   In file included from include/linux/irq-entry-common.h:13:
-   In file included from arch/x86/include/asm/entry-common.h:9:
->> arch/x86/include/asm/io_bitmap.h:13:23: error: use of undeclared identifier 'IO_BITMAP_LONGS'
-      13 |         unsigned long   bitmap[IO_BITMAP_LONGS];
-         |                                ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:5:
-   In file included from include/linux/irq-entry-common.h:13:
->> arch/x86/include/asm/entry-common.h:22:25: error: call to undeclared function 'native_save_fl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      22 |                 unsigned long flags = native_save_fl();
-         |                                       ^
->> arch/x86/include/asm/entry-common.h:23:24: error: use of undeclared identifier 'X86_EFLAGS_DF'
-      23 |                 unsigned long mask = X86_EFLAGS_DF | X86_EFLAGS_NT;
-         |                                      ^
->> arch/x86/include/asm/entry-common.h:23:40: error: use of undeclared identifier 'X86_EFLAGS_NT'
-      23 |                 unsigned long mask = X86_EFLAGS_DF | X86_EFLAGS_NT;
-         |                                                      ^
->> arch/x86/include/asm/entry-common.h:28:7: error: call to undeclared function 'DISABLED_MASK_BIT_SET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      28 |                 if (cpu_feature_enabled(X86_FEATURE_SMAP) ||
-         |                     ^
-   arch/um/include/asm/cpufeature.h:52:32: note: expanded from macro 'cpu_feature_enabled'
-      52 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
-         |                                       ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:5:
-   In file included from include/linux/irq-entry-common.h:13:
->> arch/x86/include/asm/entry-common.h:30:12: error: use of undeclared identifier 'X86_EFLAGS_AC'
-      30 |                         mask |= X86_EFLAGS_AC;
-         |                                 ^
->> arch/x86/include/asm/entry-common.h:42:17: error: call to undeclared function 'on_thread_stack'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      42 |                 WARN_ON_ONCE(!on_thread_stack());
-         |                               ^
->> arch/x86/include/asm/entry-common.h:50:16: error: use of undeclared identifier '_TIF_USER_RETURN_NOTIFY'
-      50 |         if (ti_work & _TIF_USER_RETURN_NOTIFY)
-         |                       ^
->> arch/x86/include/asm/entry-common.h:53:25: error: use of undeclared identifier '_TIF_IO_BITMAP'
-      53 |         if (unlikely(ti_work & _TIF_IO_BITMAP))
-         |                                ^
->> arch/x86/include/asm/entry-common.h:56:25: error: use of undeclared identifier '_TIF_NEED_FPU_LOAD'
-      56 |         if (unlikely(ti_work & _TIF_NEED_FPU_LOAD))
-         |                                ^
->> arch/x86/include/asm/entry-common.h:57:3: error: call to undeclared function 'switch_fpu_return'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      57 |                 switch_fpu_return();
-         |                 ^
->> arch/x86/include/asm/entry-common.h:63:2: error: call to undeclared function 'fpregs_assert_state_consistent'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      63 |         fpregs_assert_state_consistent();
-         |         ^
-   arch/x86/include/asm/entry-common.h:98:6: error: call to undeclared function 'DISABLED_MASK_BIT_SET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      98 |         if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
-         |             ^
-   arch/um/include/asm/cpufeature.h:52:32: note: expanded from macro 'cpu_feature_enabled'
-      52 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
-         |                                       ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:5:
-   In file included from include/linux/irq-entry-common.h:13:
->> arch/x86/include/asm/entry-common.h:108:2: error: call to undeclared function 'amd_clear_divider'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     108 |         amd_clear_divider();
-         |         ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:5:
->> include/linux/irq-entry-common.h:225:25: error: use of undeclared identifier '_TIF_UPROBE'
-     225 |         if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
-         |                                ^
-   include/linux/irq-entry-common.h:31:42: note: expanded from macro 'EXIT_TO_USER_MODE_WORK'
-      31 |         (_TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_UPROBE |           \
-         |                                                 ^
-   In file included from drivers/clk/microchip/clk-core.c:13:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
->> include/linux/entry-common.h:48:6: error: conflicting types for 'syscall_trace_enter'
-      48 | long syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long work);
-         |      ^
-   arch/um/include/asm/ptrace-generic.h:44:12: note: previous declaration is here
-      44 | extern int syscall_trace_enter(struct pt_regs *regs);
-         |            ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 03/14] kasan: Fix inline mode for x86 tag-based mode
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>,
+ Alexander Potapenko <glider@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+ kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <cover.1768233085.git.m.wieczorretman@pm.me>
+ <1598e2bb7d45902fb0dc4d0d8e218f61b0c1a0f6.1768233085.git.m.wieczorretman@pm.me>
+Content-Language: en-US
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <1598e2bb7d45902fb0dc4d0d8e218f61b0c1a0f6.1768233085.git.m.wieczorretman@pm.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +180 arch/x86/include/asm/debugreg.h
 
-42181186ad4db9 Steven Rostedt  2011-12-16  174  
-154fcf3a788868 Thomas Gleixner 2024-03-04  175  static inline unsigned long get_debugctlmsr(void)
-154fcf3a788868 Thomas Gleixner 2024-03-04  176  {
-154fcf3a788868 Thomas Gleixner 2024-03-04  177  	unsigned long debugctlmsr = 0;
-154fcf3a788868 Thomas Gleixner 2024-03-04  178  
-154fcf3a788868 Thomas Gleixner 2024-03-04  179  #ifndef CONFIG_X86_DEBUGCTLMSR
-154fcf3a788868 Thomas Gleixner 2024-03-04 @180  	if (boot_cpu_data.x86 < 6)
-154fcf3a788868 Thomas Gleixner 2024-03-04  181  		return 0;
-154fcf3a788868 Thomas Gleixner 2024-03-04  182  #endif
-c435e608cf59ff Ingo Molnar     2025-04-09  183  	rdmsrq(MSR_IA32_DEBUGCTLMSR, debugctlmsr);
-154fcf3a788868 Thomas Gleixner 2024-03-04  184  
-154fcf3a788868 Thomas Gleixner 2024-03-04  185  	return debugctlmsr;
-154fcf3a788868 Thomas Gleixner 2024-03-04  186  }
-154fcf3a788868 Thomas Gleixner 2024-03-04  187  
+On 1/12/26 6:27 PM, Maciej Wieczor-Retman wrote:
+> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> 
+> The LLVM compiler uses hwasan-instrument-with-calls parameter to setup
+> inline or outline mode in tag-based KASAN. If zeroed, it means the
+> instrumentation implementation will be pasted into each relevant
+> location along with KASAN related constants during compilation. If set
+> to one all function instrumentation will be done with function calls
+> instead.
+> 
+> The default hwasan-instrument-with-calls value for the x86 architecture
+> in the compiler is "1", which is not true for other architectures.
+> Because of this, enabling inline mode in software tag-based KASAN
+> doesn't work on x86 as the kernel script doesn't zero out the parameter
+> and always sets up the outline mode.
+> 
+> Explicitly zero out hwasan-instrument-with-calls when enabling inline
+> mode in tag-based KASAN.
+> 
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> Reviewed-by: Alexander Potapenko <glider@google.com>
+> ---
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
