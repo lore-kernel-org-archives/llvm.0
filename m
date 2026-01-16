@@ -1,83 +1,64 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FC233A708
-	for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 15:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383C233A6EB;
+	Fri, 16 Jan 2026 15:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768577886; cv=none; b=f/Dwj2IxW01DJIYNeUTHhzYdCNXRCbUtmV+kpoucH5onW6PcpH8AQUX+Adt50bZVjr3ImjZXS2bLmshxiw89XPqvTwwcycbvFJx2oaZvnCnbimU8OMR7SWGLNIpNgkfYS3AnpT+aYuKip0jhm9cO4/LJ2fX9k2rHwymXCNzVWvQ=
+	t=1768577896; cv=none; b=BFV1/5iQv1ARi9/7BTyMFUbzv1MM1rGVQHDa373lZ27fSwxXLTtTRf1Is4DAT3plg9QI04o2rzgZnmHx5c4Kf2m7KrqVKwBKRhMtZSM4cfD5CU3zfLxOgrk4m8X7Fk8bQMCxUT/wjjGiIhbFrE/Di+L5lkbNIFgwuwt1cTquGVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768577886; c=relaxed/simple;
-	bh=BOWxuALbnVsg76rC9q42aLUuxBJuctl3jLVjqz1y6Jo=;
+	s=arc-20240116; t=1768577896; c=relaxed/simple;
+	bh=8Dcv71JrcWpR8h6y57WNkmYCQbL1GhtCY+1kUVFVza8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T5ToTaPDnDi7OF8DS0kU7Pv88y+R72bs7fqS+j/6D1QSfr+tLDJEuv/L5d4GzXPitaDpppOE1KcJ3VyrHiAGPgTRYDJOMFYxOhz0n1CB5kuREZMkpOw+IivYmWyKEZho/GXjgZO6WT+6RMl8Z8/6AwAPbbcpTvRBK6sD2qOSxpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mbRWAexv; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gLGDsaxC7JczA8bFLKG3QHsk15Wg1rHUeRA/Ie4T1o3ehlfhK2iqeh8Ue2NDGcApdTri2UA3z+XZ/7XZm461R9qVda8DTmeWyjB4j4xjSoqQuotp0ikC24pjF2cNVoW/j5vDL1/OtH9ruTyU9KUpxoh4qAkvlGvuJ/T26ZLWS7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RPS1xTZq; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mbRWAexv"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-4801bc328easo15173315e9.3
-        for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 07:38:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768577883; x=1769182683; darn=lists.linux.dev;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pgFxhnuAvKh4+DybKpe+A5yQM2/DqHkYrZhkViFcA54=;
-        b=mbRWAexvtYSWvKD5HOKsAsjqKvhHWYVfDvC+/jLwZ7NlbGtAY1m0yoHr9cMYHrzesI
-         /mUjb2A9pJW9u5faiBXKcr/UCZc1tVqHW0fr41IdkewwPT0MK6Mtk38Ir61YgBcrQNJH
-         RzUk49kQHoP8D8xTSC9CtD8TP61ogyT64cXhcLmDauLfTqH4YK0bVlTAtOhO70hUu0ib
-         S8gn5D6jZylRSxub+HHIZlSbn4dDT4ZKbqNhbKgOXwgONeQeVmrwyiNvqo6Oo61lctWB
-         AwM41Qho67/2bdC07dR3k8YXxafrTy2+AaAdzrg5l7zeOwOu7icntQ+uDEzw0ZdacFKC
-         QtMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768577883; x=1769182683;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pgFxhnuAvKh4+DybKpe+A5yQM2/DqHkYrZhkViFcA54=;
-        b=mgu7FvpKnztfsSTEVlIpK+K4pwbal7c9YJ+m5U4XY1zxGyRT5YIfHxCFNFRJRdrivF
-         BKpMOE+h0zQlqZKsbbHKEMOOU3lYuicqVBIv8xOiaxkhbr7MrjMHJ1WvD69mH0qDKRns
-         28yiGA8v7/fdxkdbaHNwZp6Ku57p9b7ESuWiacoFEcTIhYnqo5l1eVfwHzHC4XLG9Wxq
-         kKmc8swtwLOGcJ2luXM5N6lUT/FiuNzRQxEMB/IrpoaIVpfkYhxwWHulnAG6o0xETIrg
-         ck1pxUTvAIIFjO0n3I6BlKkBFS18gpCt1rAMUydNNbPXXQqQ9fxWodp+Summ3B2SM8Id
-         sH0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWisVlt5SmJMFeFfg2/JEkPSKVvyfH1kZSL1MKKqBwT/3CuhwYvqcW9FjqCIcreVLkHN3AD@lists.linux.dev
-X-Gm-Message-State: AOJu0YxdGtWrIYp25B5qypdHBA5gmiwW5wtFmbEHgM21Y/AOgKs6S8Wk
-	Rej4EAZAm/7/1hshbY7UePPDfRHoF4FflQqccX2XP33UXjbxQgwu8/QGARVZ6pDKfg==
-X-Gm-Gg: AY/fxX7sF8jINP63kCzqfDX9LeJe4EoEBzLnJ69RRna4NppGJkJU59/nd95T+2PNN4j
-	D+eEK+8mH+8ItViYuAiRUTNqUkeBQJHo8Wf9a1lpOgrm2b+i2WlRh1Qk1QV8VWC/llEKOG6QzfU
-	YlBluqJlXDrwtf3rkSXMMbOdH2cv2lyluTLdTtSwljMvpEsqJQ41eU4nFA53zKOKnfSBkZihif1
-	y6nU/6P7Qx6hKFOBxYI6dqUsc3miW9ZwZJoYaJWM7DS7fZoy1i+jhAPz6esNVMhR9xO7AoshtUk
-	GO7uxxcJ5JHyNwhpOJuUaF8tOgmXRTllNWgttuxUu8Fk4aIUAgazbPKhrO0FMEVlmO0fuvIJDtF
-	8UUI8uuX3Rv5nLnWYBsx/JO+PAS9SHaRe4t8JrhZUE/zWtX5S5qttrFDriMwOWlnwttSpumUMit
-	bfcU1P4g5WkKCM439AlzAztOyTMa79Xy9kI+C+fc1320Ke2hzl
-X-Received: by 2002:a05:600c:e41a:b0:46e:4b79:551 with SMTP id 5b1f17b1804b1-48024b8a77bmr18132835e9.31.1768577882473;
-        Fri, 16 Jan 2026 07:38:02 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:2834:9:b36e:71f6:fb51:66e3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356992681esm5892119f8f.11.2026.01.16.07.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 07:38:01 -0800 (PST)
-Date: Fri, 16 Jan 2026 16:37:55 +0100
-From: Marco Elver <elver@google.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
- immediate acquisition after initialization
-Message-ID: <aWpbU3Msh2q-bRH5@elver.google.com>
-References: <20260115005231.1211866-1-elver@google.com>
- <20260115213311.GG830755@noisy.programming.kicks-ass.net>
- <aWmRlXZaOOUvU_Nv@elver.google.com>
- <20260116150750.GG831050@noisy.programming.kicks-ass.net>
- <20260116151043.GA18805@lst.de>
- <20260116152016.GI831050@noisy.programming.kicks-ass.net>
- <20260116152741.GA19823@lst.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RPS1xTZq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768577889; x=1800113889;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8Dcv71JrcWpR8h6y57WNkmYCQbL1GhtCY+1kUVFVza8=;
+  b=RPS1xTZq5y9tZ3WLA40fXQNCYWFQSgfq+fuAroC2IuByLoDbsM6oePvM
+   O91uQZENOTK08lOtjQr7qYS6n7mTaITk8wq2tgllM3wzpycwmAc/RjzD/
+   mULQMuahMSB51P9ESnAJWIDEidxD0j/rsw7WbIqmDCFYyNiVwTrTeRgIe
+   OBbdE/NDzS/x2IP+cc27icg7V7EXo2Wf+8m61j9oZXMwzSGtsPfsIS9ny
+   CAQ03aZ5H9cPGUuUV5K0JwaFwNtg4oDplNpBuEHlulGOMp5u3NJ2KRBJu
+   /EhhJmP43mUetAPgJ1a9OHp32pyXfAZztp1Wy2Q/f5p05dDXGEjbtXHKP
+   g==;
+X-CSE-ConnectionGUID: 0nnOL+NRTmS1Sh9dIJLQhQ==
+X-CSE-MsgGUID: sms2+WnIR6+hEuLnum414w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="87468014"
+X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
+   d="scan'208";a="87468014"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 07:38:09 -0800
+X-CSE-ConnectionGUID: yOUtbHC+S9OQxPPAQKFmSA==
+X-CSE-MsgGUID: jmP+gCkXQd6ztsxwNqKCCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
+   d="scan'208";a="235962770"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 16 Jan 2026 07:38:05 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgltj-00000000Kyy-2Su2;
+	Fri, 16 Jan 2026 15:38:03 +0000
+Date: Fri, 16 Jan 2026 23:37:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: sunpeng.li@amd.com, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Harry.Wentland@amd.com, simona@ffwll.ch, airlied@gmail.com,
+	jani.nikula@linux.intel.com, ville.syrjala@linux.intel.com,
+	Leo Li <sunpeng.li@amd.com>
+Subject: Re: [PATCH v3 2/2] drm/amd/display: Implement prepare_vblank_enable
+ callback
+Message-ID: <202601162358.Uv6IL5Jo-lkp@intel.com>
+References: <20260109192027.116325-2-sunpeng.li@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -86,59 +67,173 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260116152741.GA19823@lst.de>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+In-Reply-To: <20260109192027.116325-2-sunpeng.li@amd.com>
 
-On Fri, Jan 16, 2026 at 04:27PM +0100, Christoph Hellwig wrote:
-> On Fri, Jan 16, 2026 at 04:20:16PM +0100, Peter Zijlstra wrote:
-> > is *much* clearer than something like:
-> > 
-> > 	spinlock_init(&obj->lock);
-> > 	// init
-> > 	spinlock_deinit(&obj->lock);
-> > 
-> > Exactly because it has explicit scope. (also my deinit naming might not
-> > be optimal, it is ambiguous at best, probably confusing).
-> 
-> WTF is spinlock_deinit even supposed to be?
-> 
-> I though this is about:
-> 
-> 	spin_lock_init(&obj->lock);
-> 	spin_lock(&obj->lock);
-> 
-> > Not to mention that the scope things are far more robust vs error paths.
-> 
-> They are just a really hacked up clumsy way to provide what a very
-> limited version of what the capability analys provides, while messing
-> up the code.
+Hi,
 
-There might be more design options we're missing, but thus far I think
-it's this patch (using the "reentrant promotion" approach) vs. scoped
-init guards.
+kernel test robot noticed the following build errors:
 
-   * Scoped init guards [1]: Sound, requires explicit
-     guard(type_init) (or scoped_guard) for guarded member
-     initialization.
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-tip/drm-tip next-20260115]
+[cannot apply to drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v6.19-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-   * Reentrant init (this patch): Less intrusive, foo_init() just
-     works. Misses double-locks immediately after init.
+url:    https://github.com/intel-lab-lkp/linux/commits/sunpeng-li-amd-com/drm-amd-display-Implement-prepare_vblank_enable-callback/20260110-032355
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260109192027.116325-2-sunpeng.li%40amd.com
+patch subject: [PATCH v3 2/2] drm/amd/display: Implement prepare_vblank_enable callback
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260116/202601162358.Uv6IL5Jo-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162358.Uv6IL5Jo-lkp@intel.com/reproduce)
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/melver/linux.git/log/?h=ctx-analysis/init-guards
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601162358.Uv6IL5Jo-lkp@intel.com/
 
-FWIW, on the C++ side, Clang's Thread Safety Analysis just completely
-disables itself in constructors to allow guarded member init. So we're
-already doing better than that. :-)
+All errors (new ones prefixed by >>):
 
-As for why this simpler patch, I stand by my points from [2]; trading
-false positives against false negatives so that things "just work" does
-have merit, too.
+>> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crc.c:659:24: error: use of undeclared identifier 'dm'
+     659 |                 scoped_guard(mutex, &dm->dc_lock) {
+         |                                      ^
+   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crc.c:660:30: error: use of undeclared identifier 'dm'
+     660 |                         dc_exit_ips_for_hw_access(dm->dc);
+         |                                                   ^
+   2 errors generated.
 
-[2] https://lore.kernel.org/all/CANpmjNPm5861mmHYMHoC9ErRfbLxmTy=MYwfsGC-YTpgP+z-Bw@mail.gmail.com/
 
-I'm more or less indifferent, though would slightly favor the simpler
-patch (this one), but can live with either. I can send out [1] for
-reference, and you can choose.
+vim +/dm +659 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crc.c
 
-Thanks,
--- Marco
+   542	
+   543	int amdgpu_dm_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
+   544	{
+   545		enum amdgpu_dm_pipe_crc_source source = dm_parse_crc_source(src_name);
+   546		enum amdgpu_dm_pipe_crc_source cur_crc_src;
+   547		struct drm_crtc_commit *commit;
+   548		struct dm_crtc_state *crtc_state;
+   549		struct drm_device *drm_dev = crtc->dev;
+   550	#if defined(CONFIG_DRM_AMD_SECURE_DISPLAY)
+   551		struct amdgpu_device *adev = drm_to_adev(drm_dev);
+   552		struct amdgpu_display_manager *dm = &adev->dm;
+   553	#endif
+   554		struct amdgpu_crtc *acrtc = to_amdgpu_crtc(crtc);
+   555		struct drm_dp_aux *aux = NULL;
+   556		bool enable = false;
+   557		bool enabled = false;
+   558		int ret = 0;
+   559	
+   560		if (source < 0) {
+   561			DRM_DEBUG_DRIVER("Unknown CRC source %s for CRTC%d\n",
+   562					 src_name, crtc->index);
+   563			return -EINVAL;
+   564		}
+   565	
+   566		ret = drm_modeset_lock(&crtc->mutex, NULL);
+   567		if (ret)
+   568			return ret;
+   569	
+   570		spin_lock(&crtc->commit_lock);
+   571		commit = list_first_entry_or_null(&crtc->commit_list,
+   572						  struct drm_crtc_commit, commit_entry);
+   573		if (commit)
+   574			drm_crtc_commit_get(commit);
+   575		spin_unlock(&crtc->commit_lock);
+   576	
+   577		if (commit) {
+   578			/*
+   579			 * Need to wait for all outstanding programming to complete
+   580			 * in commit tail since it can modify CRC related fields and
+   581			 * hardware state. Since we're holding the CRTC lock we're
+   582			 * guaranteed that no other commit work can be queued off
+   583			 * before we modify the state below.
+   584			 */
+   585			ret = wait_for_completion_interruptible_timeout(
+   586				&commit->hw_done, 10 * HZ);
+   587			if (ret)
+   588				goto cleanup;
+   589		}
+   590	
+   591		enable = amdgpu_dm_is_valid_crc_source(source);
+   592		crtc_state = to_dm_crtc_state(crtc->state);
+   593		spin_lock_irq(&drm_dev->event_lock);
+   594		cur_crc_src = acrtc->dm_irq_params.crc_src;
+   595		spin_unlock_irq(&drm_dev->event_lock);
+   596	
+   597		/*
+   598		 * USER REQ SRC | CURRENT SRC | BEHAVIOR
+   599		 * -----------------------------
+   600		 * None         | None        | Do nothing
+   601		 * None         | CRTC        | Disable CRTC CRC, set default to dither
+   602		 * None         | DPRX        | Disable DPRX CRC, need 'aux', set default to dither
+   603		 * None         | CRTC DITHER | Disable CRTC CRC
+   604		 * None         | DPRX DITHER | Disable DPRX CRC, need 'aux'
+   605		 * CRTC         | XXXX        | Enable CRTC CRC, no dither
+   606		 * DPRX         | XXXX        | Enable DPRX CRC, need 'aux', no dither
+   607		 * CRTC DITHER  | XXXX        | Enable CRTC CRC, set dither
+   608		 * DPRX DITHER  | XXXX        | Enable DPRX CRC, need 'aux', set dither
+   609		 */
+   610		if (dm_is_crc_source_dprx(source) ||
+   611		    (source == AMDGPU_DM_PIPE_CRC_SOURCE_NONE &&
+   612		     dm_is_crc_source_dprx(cur_crc_src))) {
+   613			struct amdgpu_dm_connector *aconn = NULL;
+   614			struct drm_connector *connector;
+   615			struct drm_connector_list_iter conn_iter;
+   616	
+   617			drm_connector_list_iter_begin(crtc->dev, &conn_iter);
+   618			drm_for_each_connector_iter(connector, &conn_iter) {
+   619				if (!connector->state || connector->state->crtc != crtc)
+   620					continue;
+   621	
+   622				if (connector->connector_type == DRM_MODE_CONNECTOR_WRITEBACK)
+   623					continue;
+   624	
+   625				aconn = to_amdgpu_dm_connector(connector);
+   626				break;
+   627			}
+   628			drm_connector_list_iter_end(&conn_iter);
+   629	
+   630			if (!aconn) {
+   631				DRM_DEBUG_DRIVER("No amd connector matching CRTC-%d\n", crtc->index);
+   632				ret = -EINVAL;
+   633				goto cleanup;
+   634			}
+   635	
+   636			aux = (aconn->mst_output_port) ? &aconn->mst_output_port->aux : &aconn->dm_dp_aux.aux;
+   637	
+   638			if (!aux) {
+   639				DRM_DEBUG_DRIVER("No dp aux for amd connector\n");
+   640				ret = -EINVAL;
+   641				goto cleanup;
+   642			}
+   643	
+   644			if ((aconn->base.connector_type != DRM_MODE_CONNECTOR_DisplayPort) &&
+   645					(aconn->base.connector_type != DRM_MODE_CONNECTOR_eDP)) {
+   646				DRM_DEBUG_DRIVER("No DP connector available for CRC source\n");
+   647				ret = -EINVAL;
+   648				goto cleanup;
+   649			}
+   650	
+   651		}
+   652	
+   653		/*
+   654		 * Reading the CRC requires the vblank interrupt handler to be
+   655		 * enabled. Keep a reference until CRC capture stops.
+   656		 */
+   657		enabled = amdgpu_dm_is_valid_crc_source(cur_crc_src);
+   658		if (!enabled && enable) {
+ > 659			scoped_guard(mutex, &dm->dc_lock) {
+   660				dc_exit_ips_for_hw_access(dm->dc);
+   661				ret = drm_crtc_vblank_get(crtc);
+   662			}
+   663	
+   664			if (ret)
+   665				goto cleanup;
+   666		}
+   667	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
