@@ -1,251 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3592EDD57;
-	Fri, 16 Jan 2026 21:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFBA2F49F8;
+	Fri, 16 Jan 2026 22:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768599459; cv=none; b=ki46F0eDgwJ2Cv8rOAl+gq8aXwLoOKnsJY4Ic1DGpns+7Y1M64tAbKRzL6VxQ5ieBEmLkG1WtUoe/MqIGufpu/8f+p3/hZ3SwBF/HCSuw0UaCeLp46Gbg3fxgY1Zsqg7rGItnRdOBKtrg+2FxPgNTUYobQx1tf2h4WOi14emsto=
+	t=1768601183; cv=none; b=URGiwwEF7G6MprgHF2SXcC56RMx5gUGR+D4FLeslBJu1xAlVkUYCx9zFNF+HjPUyn77qYtTtdD4C12tauawtjqRDpyzbwlBzGW7jpEQgSXySfWMYjBraBh+uhmBbn+Tf4Lm8I5BiGy17fFV2Bk21D2/dzppWCcYMrz5CnXX0wBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768599459; c=relaxed/simple;
-	bh=euHakU3Cm3tzvjW7BAytl4uh1jyOgYlbifHaTarnt5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kQt0Xgt9pkZT3wOu3jIsmhUmf2IBZFhCc7Ar1Iwx8G/6o+K68Wup+siXMWjRBY0EAQqj/97sRan4IsXUjKiTlMh4+gLqCyDILYHncqHOryjTlDhY3d2LVAUQwGaDEHgRKYPE1eV74cqRpGv06v0UjEVNa8iwZ+7wPFW0E8dMxGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jJGYvHhd; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768601183; c=relaxed/simple;
+	bh=EzzsnpJqQeFX65vdO2xqUr8mbhB6kqT5NEAk1PFa+Bo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=g6CH17NLbkVXUM26F1B9znrfrsZQiTuhto5SjYs5y3a0HjSus0oCOeoj2ssp70t3BtfdkBYQ5YVhc5s1g+kFR1QgP1oVEmp4xCq+M4GPfe6i+MdTDiuEdMTXIY6BMTgW8tlqeY1GxWyeJkVG9Iu5aovgrrQhDo7Wku+JlplOPY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ki7+D5zM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJGYvHhd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768599448; x=1800135448;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=euHakU3Cm3tzvjW7BAytl4uh1jyOgYlbifHaTarnt5I=;
-  b=jJGYvHhdwJXrmOvdEEaRmH/KVDhpLITrMMoACv2WLOKmoujh9P631x7J
-   unrUSTvFrceBlVvWKIWu2vc6H1vFAlll6AvzmOcphrCkm0pgkiYSkZppi
-   dD/oUOyG1u3vuN6wCR622nkkJUEBLCNRUZ9YvTdq2UBwJdI0Av/PEEWOO
-   wrEyDBTnMXFSQWaCoPWBjgnmNiOzeGEAZ2aI/TCh1FlHqWSBIg70EwMSV
-   9RLjkP6Mrh7lGfv435C1g5W7dNAea8RWUBlsrKLS3/JmgQUum7hjefSqa
-   IPAjVqFxzjNpr0UV/OH0tBUF1r7UtFTrhcDRvWJRSnbBrWFeXlWPOj+VR
-   Q==;
-X-CSE-ConnectionGUID: MrCZKNVMS0qJyxz7L3V3GQ==
-X-CSE-MsgGUID: a3nsTOViRcSmHI4Kpb634A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="92583844"
-X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="92583844"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 13:37:25 -0800
-X-CSE-ConnectionGUID: XSVjO9CwTziruvACI+9evQ==
-X-CSE-MsgGUID: bjY3thmeRmSmMYbPzk1y/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="205401657"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 16 Jan 2026 13:37:21 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgrVO-00000000LGW-3A9T;
-	Fri, 16 Jan 2026 21:37:18 +0000
-Date: Sat, 17 Jan 2026 05:37:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mayank Mahajan <mayankmahajan.x@nxp.com>, linux@roeck-us.net,
-	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	priyanka.jain@nxp.com, vikash.bansal@nxp.com,
-	Mayank Mahajan <mayankmahajan.x@nxp.com>
-Subject: Re: [PATCH v4 2/3] hwmon: (tmp108) Add support for P3T1035 and
- P3T2030
-Message-ID: <202601170516.uQw9DKHB-lkp@intel.com>
-References: <20260116113554.986-2-mayankmahajan.x@nxp.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ki7+D5zM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BF3C116C6;
+	Fri, 16 Jan 2026 22:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768601183;
+	bh=EzzsnpJqQeFX65vdO2xqUr8mbhB6kqT5NEAk1PFa+Bo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ki7+D5zMdagPdM1BslM407qhVB0UbFVvlLrCm55ESIxA/+GBlqgePANqrCiw8v0Ye
+	 fIoPozH/TPNbLWVTTqAnNuRptROlUrMzU/ng5KOLiyFLWdqcvL1OZlUAfhtMJTE3x/
+	 s5fYlggQ2DGNWORsEYTKSAhQ9cc96ANESuXW0PFpKsPU17/RF17xIxJPU78SfPoM3w
+	 f3eJ7dZPsakq1VLDcztSfbVHDov21ycDL8TYtHTkduQwuu4DL88vboujReTE7khqzP
+	 zXkkzSqj4pooSZX+oRdWPGt+tE5SZyXM4RYRE3onIusjCHHUcb+C6J+TuX05/Yoc8i
+	 GzfaplnTEC6CA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Hans de Goede <hansg@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+In-Reply-To: <20260115-kbuild-alignment-vbox-v1-0-076aed1623ff@linutronix.de>
+References: <20260115-kbuild-alignment-vbox-v1-0-076aed1623ff@linutronix.de>
+Subject: Re: [PATCH 0/2] kbuild, uapi: Mark inner unions in packed structs
+ as packed
+Message-Id: <176860117992.3208640.15511985701328893417.b4-ty@kernel.org>
+Date: Fri, 16 Jan 2026 15:06:19 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260116113554.986-2-mayankmahajan.x@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev
 
-Hi Mayank,
+On Thu, 15 Jan 2026 08:35:43 +0100, Thomas Weißschuh wrote:
+> The unpacked unions within a packed struct generates alignment warnings
+> on clang for 32-bit ARM.
+> 
+> With the recent changes to compile-test the UAPI headers in more cases,
+> these warning in combination with CONFIG_WERROR breaks the build.
+> 
+> Fix the warnings.
+> 
+> [...]
 
-kernel test robot noticed the following build errors:
+Applied to
 
-[auto build test ERROR on 983d014aafb14ee5e4915465bf8948e8f3a723b5]
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mayank-Mahajan/hwmon-tmp108-Add-support-for-P3T1035-and-P3T2030/20260116-193800
-base:   983d014aafb14ee5e4915465bf8948e8f3a723b5
-patch link:    https://lore.kernel.org/r/20260116113554.986-2-mayankmahajan.x%40nxp.com
-patch subject: [PATCH v4 2/3] hwmon: (tmp108) Add support for P3T1035 and P3T2030
-config: i386-buildonly-randconfig-004-20260117 (https://download.01.org/0day-ci/archive/20260117/202601170516.uQw9DKHB-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170516.uQw9DKHB-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601170516.uQw9DKHB-lkp@intel.com/
+[1/2] hyper-v: Mark inner union in hv_kvp_exchg_msg_value as packed
+      https://git.kernel.org/kbuild/c/1e5271393d777
+[2/2] virt: vbox: uapi: Mark inner unions in packed structs as packed
+      https://git.kernel.org/kbuild/c/c25d01e1c4f2d
 
-All errors (new ones prefixed by >>):
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted. Patches applied to an "unstable" branch are accepted pending
+wider testing in -next and any post-commit review; they will generally
+be moved to the main branch in a week if no issues are found.
 
->> drivers/hwmon/tmp108.c:123:33: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     123 |                         *temp = tmp108->sample_times[FIELD_GET(TMP108_CONF_CONVRATE_FLD, regval)];
-         |                                                      ^
->> drivers/hwmon/tmp108.c:210:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     210 |                                                   FIELD_PREP(TMP108_CONF_CONVRATE_FLD, index));
-         |                                                   ^
-   2 errors generated.
-
-
-vim +/FIELD_GET +123 drivers/hwmon/tmp108.c
-
-   109	
-   110	static int tmp108_read(struct device *dev, enum hwmon_sensor_types type,
-   111			       u32 attr, int channel, long *temp)
-   112	{
-   113		struct tmp108 *tmp108 = dev_get_drvdata(dev);
-   114		unsigned int regval;
-   115		int err, hyst;
-   116	
-   117		if (type == hwmon_chip) {
-   118			if (attr == hwmon_chip_update_interval) {
-   119				err = regmap_read(tmp108->regmap, TMP108_REG_CONF,
-   120						  &regval);
-   121				if (err < 0)
-   122					return err;
- > 123				*temp = tmp108->sample_times[FIELD_GET(TMP108_CONF_CONVRATE_FLD, regval)];
-   124				return 0;
-   125			}
-   126			return -EOPNOTSUPP;
-   127		}
-   128	
-   129		switch (attr) {
-   130		case hwmon_temp_input:
-   131			/* Is it too early to return a conversion ? */
-   132			if (time_before(jiffies, tmp108->ready_time)) {
-   133				dev_dbg(dev, "%s: Conversion not ready yet..\n",
-   134					__func__);
-   135				return -EAGAIN;
-   136			}
-   137			err = regmap_read(tmp108->regmap, TMP108_REG_TEMP, &regval);
-   138			if (err < 0)
-   139				return err;
-   140			*temp = tmp108_temp_reg_to_mC(regval);
-   141			break;
-   142		case hwmon_temp_min:
-   143		case hwmon_temp_max:
-   144			err = regmap_read(tmp108->regmap, attr == hwmon_temp_min ?
-   145					  TMP108_REG_TLOW : TMP108_REG_THIGH, &regval);
-   146			if (err < 0)
-   147				return err;
-   148			*temp = tmp108_temp_reg_to_mC(regval);
-   149			break;
-   150		case hwmon_temp_min_alarm:
-   151		case hwmon_temp_max_alarm:
-   152			err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &regval);
-   153			if (err < 0)
-   154				return err;
-   155			*temp = !!(regval & (attr == hwmon_temp_min_alarm ?
-   156					     TMP108_CONF_FL : TMP108_CONF_FH));
-   157			break;
-   158		case hwmon_temp_min_hyst:
-   159		case hwmon_temp_max_hyst:
-   160			err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &regval);
-   161			if (err < 0)
-   162				return err;
-   163			switch (regval & TMP108_CONF_HYSTERESIS_MASK) {
-   164			case TMP108_HYSTERESIS_0C:
-   165			default:
-   166				hyst = 0;
-   167				break;
-   168			case TMP108_HYSTERESIS_1C:
-   169				hyst = 1000;
-   170				break;
-   171			case TMP108_HYSTERESIS_2C:
-   172				hyst = 2000;
-   173				break;
-   174			case TMP108_HYSTERESIS_4C:
-   175				hyst = 4000;
-   176				break;
-   177			}
-   178			err = regmap_read(tmp108->regmap, attr == hwmon_temp_min_hyst ?
-   179					  TMP108_REG_TLOW : TMP108_REG_THIGH, &regval);
-   180			if (err < 0)
-   181				return err;
-   182			*temp = tmp108_temp_reg_to_mC(regval);
-   183			if (attr == hwmon_temp_min_hyst)
-   184				*temp += hyst;
-   185			else
-   186				*temp -= hyst;
-   187			break;
-   188		default:
-   189			return -EOPNOTSUPP;
-   190		}
-   191	
-   192		return 0;
-   193	}
-   194	
-   195	static int tmp108_write(struct device *dev, enum hwmon_sensor_types type,
-   196				u32 attr, int channel, long temp)
-   197	{
-   198		struct tmp108 *tmp108 = dev_get_drvdata(dev);
-   199		u32 regval, mask;
-   200		u8 index;
-   201		int err;
-   202	
-   203		if (type == hwmon_chip) {
-   204			if (attr == hwmon_chip_update_interval) {
-   205				index = find_closest_descending(temp, tmp108->sample_times,
-   206								tmp108->n_sample_times);
-   207				return regmap_update_bits(tmp108->regmap,
-   208							  TMP108_REG_CONF,
-   209							  TMP108_CONF_CONVRATE_MASK,
- > 210							  FIELD_PREP(TMP108_CONF_CONVRATE_FLD, index));
-   211			}
-   212			return -EOPNOTSUPP;
-   213		}
-   214	
-   215		switch (attr) {
-   216		case hwmon_temp_min:
-   217		case hwmon_temp_max:
-   218			temp = clamp_val(temp, TMP108_TEMP_MIN_MC, TMP108_TEMP_MAX_MC);
-   219			return regmap_write(tmp108->regmap,
-   220					    attr == hwmon_temp_min ?
-   221						TMP108_REG_TLOW : TMP108_REG_THIGH,
-   222					    tmp108_mC_to_temp_reg(temp));
-   223		case hwmon_temp_min_hyst:
-   224		case hwmon_temp_max_hyst:
-   225			temp = clamp_val(temp, TMP108_TEMP_MIN_MC, TMP108_TEMP_MAX_MC);
-   226			err = regmap_read(tmp108->regmap,
-   227					  attr == hwmon_temp_min_hyst ?
-   228						TMP108_REG_TLOW : TMP108_REG_THIGH,
-   229					  &regval);
-   230			if (err < 0)
-   231				return err;
-   232			if (attr == hwmon_temp_min_hyst)
-   233				temp -= tmp108_temp_reg_to_mC(regval);
-   234			else
-   235				temp = tmp108_temp_reg_to_mC(regval) - temp;
-   236			if (temp < 500)
-   237				mask = TMP108_HYSTERESIS_0C;
-   238			else if (temp < 1500)
-   239				mask = TMP108_HYSTERESIS_1C;
-   240			else if (temp < 3000)
-   241				mask = TMP108_HYSTERESIS_2C;
-   242			else
-   243				mask = TMP108_HYSTERESIS_4C;
-   244			return regmap_update_bits(tmp108->regmap, TMP108_REG_CONF,
-   245						  TMP108_CONF_HYSTERESIS_MASK, mask);
-   246		default:
-   247			return -EOPNOTSUPP;
-   248		}
-   249	}
-   250	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
