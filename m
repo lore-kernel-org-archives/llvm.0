@@ -1,294 +1,463 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3999305976
-	for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 00:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260AA328B78
+	for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 01:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768525189; cv=none; b=TYUG8hCALe5osfiZD6fZJXkVy9qk8sMJn4YTJtOoYhQ2sWHR+y/4s1ibjbCe+7149/GtI163VFCvWg7e8u6pbSmfHDF1e7lne71BsOrERHcxPe8H1EqFfgSLK6gRvygarG2GeQA01/oJ1JmGq2wExVuEACl5X9HWtuU0gxMmusM=
+	t=1768526246; cv=none; b=IX0w8ndEzMuvhS1Idnq4bTSPZWlZsLe7er6MKIG8NyOaqzUCj5hSYVxvDxItPohngpQRZbku9dNRfPzgXFXdxxO1pODSHUjTRiLxpRCDt6UijdWIH2faBJXMU8aRfZGBU5R0RCk3+OpAoyQ5RZU/wjq7j9gMG2g3c/dabyOQYG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768525189; c=relaxed/simple;
-	bh=sswrjQ8EExX8Ejn+hiBAAzKCMUulX0bAX3V3v+aCP3A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TPscsx5YaE2Maz0OXNwOnvmBnz9/NCNRPR09IMqm3HgoPPENvrwY859PbsCqcwt9km+8werwCZuSgAOZwKPrbQAi9TpPrilcoTwHM+o6f0CiE8k3tESkfeo6h7OUd+DTm/En6surdyi0vFwpAF9hdEbLwhM7xDXyzmu3qy5wwCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3AjIHJKJ; arc=none smtp.client-ip=209.85.218.54
+	s=arc-20240116; t=1768526246; c=relaxed/simple;
+	bh=jo/z2ClkXAUNPt1s3azDN+3+GXUCVx/cLHT+tbRfrzs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qZ4dSNAsqJvWCIIlQoJYwz4L//BhcocGsp+V/87b8t5qJ1CCSHwr89WX/LDE1wHr3+7YYYs2N8QVN6CgUqHH8qJqqyRvlMafoumpYb6EV4INq/l6lrEJhw526t/mv14voTD4p82vPhcWMgv1QI0WHjo9TWkZZydMO+6EJXZoWDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WTN8vD+l; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3AjIHJKJ"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b7ffbf4284dso200135866b.3
-        for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 16:59:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WTN8vD+l"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so17815515e9.0
+        for <llvm@lists.linux.dev>; Thu, 15 Jan 2026 17:17:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768525185; x=1769129985; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1768526237; x=1769131037; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1zwo6Ubytkm4NaoKO/41U838fyGRUNTBhuW6qdGo2Ks=;
-        b=3AjIHJKJWfDskx7uGJL2DVR0Xop2AL8gzCzkkG0snjBEJW5XAU8ch8mQn0fsvgn4FL
-         7PHLpH/4YFb7clWy4feF2+vDcIBTD/m4y+scoqYGvWalRTrJ5DK1OOsgIN5n6XiSmd/s
-         MiFEMml8k/Du4Raro3TUaYIwwEg30EpeCzYxHm3M0j/Gvz/FKOZEDhAe8EjbWm06qseE
-         6V7DY/hEpuNsSKyIrSTfdrmHreqwrmYuc3EpnJpHNOcp1Xo4H9foy3YaTOnlYhEjvRAe
-         742VZOEHA6kxvpEvoAoXCG124JLE6YDp4uoEB2rr7KLcBgJ89zY9GKPusL6bYUMBkXJx
-         a4ig==
+        bh=RarHsn9mectVuS/RlfcIvspw8mX/YCp8idbx6nxucHY=;
+        b=WTN8vD+lWt/OV8kX9Fne5/eaUcLSjOkdqUCQOpIEAgjSngrDIFB8wUJZTP7fEhFPRU
+         46yRdC0+zjeKCdsWgtZnanD5rLBxfqnWnPmhLFK7041erMljBJx6mjpenOzMlpqLQx93
+         UkvPjhsA0fgXvJtujP88hIsUw3QSP3mvRIV8HVPrXIM9m2Rx6h85cyFnI0GW26hkai9u
+         ZC6iyNXcY/7eOxnrD1Oe5C6IlrVjlqKMW+EK2uI/dZGllB5Ji0SEK2E201wfNvoYu3o1
+         NtM/4gti/4UPUxgsD1myuSNSylFXI/037jWw2rXyPvpUV/BXhBONoskBO24mVrgMfbjL
+         /UAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768525185; x=1769129985;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1768526237; x=1769131037;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1zwo6Ubytkm4NaoKO/41U838fyGRUNTBhuW6qdGo2Ks=;
-        b=S04dwMX5pI36D7AFxQda0UQNmBGroqKhzUZDh2uOGesYaEHfaa1W7jwu7UQtf4CF+6
-         IwSPz/Ck6obhe6y/xs7ppgN1xvkQZz3YsXqaZF2TNwG7Fkp8e0NxDrkKm0dj230MCxy/
-         YxfDj74HuPh9rhJoORm8l8MwkviLBKw5cJUNdTonMNFBSz06Stuy7/Cg1DgYAsSa4w/0
-         CuuVINk6fm80Sl1evamBjcqCuuT6WKY6bjQTcBzTt5PYl73pYxGGpQ21EV3+UMfdU7tz
-         kknZ7Oxjc2aQusM5O+5CC2aJV5kwHjYMdtG9z3ImhGlMJzjZk65RxRMui2iY48HCQYA/
-         cCMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWH5JdGvlbhHTbj4rP/P+BNB57YtM9ttqZ1dFL7/GpEzhRYAoJbsgQPAU3I3e8vMBcWVmnm@lists.linux.dev
-X-Gm-Message-State: AOJu0YwfADCV6CVByDd21V22BvvkYILAP3TA2oy7EVfC1EwWfUaP1/Si
-	xdxeru4z0Mw8F45oMw6TRAkmubNx9Nr5t0RR0Jeq7dnWdKsQOe44n16AWs7Iun8hp0rxf6+SOvx
-	VZxVykhfWd2SpUjNAf1jr3AgVcnxeQxG5Yl+p/pQ=
-X-Gm-Gg: AY/fxX4jIz7qBjsFOA7pJWEdKfNM4H6+sNbc/SCWPmqQU7bcDB7ah31Pzi5362GDBJQ
-	nAfBQCzhaHKg+nSDWyrJFLiCrv0BAQJxgOQo92dVsZV46Hw7sdg8ecJdoTb3oSGPQD5fLomTCA6
-	5x1bZPf90ItcfADi8xyWlh69glZiQc+jMIaJgRH7QfqpNS66NxH2Dn01pk2/3lgxSXriyPfgNZX
-	UJ8LlP3TrQHFrs1ycZnMl89TP9TSO5AV8391wfqV4+clxkGRzcY/wboo1VNJzq25hbLh0+aA0sv
-	aOeJvSdmF8I0dlBvpSJGuvgOJblEIL/evzw/clnRr0yn0Sw=
-X-Received: by 2002:a17:907:981:b0:b80:3fc4:37bd with SMTP id
- a640c23a62f3a-b8792d3bc65mr118920866b.7.1768525184982; Thu, 15 Jan 2026
- 16:59:44 -0800 (PST)
+        bh=RarHsn9mectVuS/RlfcIvspw8mX/YCp8idbx6nxucHY=;
+        b=Yhx4b5dLV8CmNjmG2Zzh7u46BWIEJfBndVGpYwEcEXqxI3ylpvSnilii0qt9rCBCYT
+         bhHeQH6rCGpAWdSMEFyrjP9/7uw3QoXNx3tf+dEnqeUkXBBT4ArQ0x95jd2L7QNIWNj4
+         B6FcXAqttYrNJCNJn+CvDxBXxcwFfUI4UCBMFLDYOwruHHZn/xJuYmVRnJ/muboV5lVC
+         zL4sNctHxcXiuhFASwqwTYYeUp6AN73H+KtCUU6yrhlkT3zmtjO/NxRAEJqudae7t5Pf
+         1aKg7pB55V+Y6WQP9Bjec+5mlLKySFq/Wj03IQdJ7hHW3JYoSrPPf98gWV+jTdyAxBC9
+         UiIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUptvSefy7xAHg0orB1Zg+HjA9ph+zOEfexaFIUsVfNV3HC5w7ShtLnNeYDUDrZVjxbsefg@lists.linux.dev
+X-Gm-Message-State: AOJu0YwLlan0wyUT0WXO5O+rGEZ4vVUdsl5rSMBY/RZFSDP7kOb1Yn8S
+	2c7Hh3OT8GY4oPGzx1lgnDnJJYR3q9H/VJxhHEPRBklGxHr2bJkmor6+9mRZbbE5blDO5s6e8eE
+	3531LWq1RL/4=
+X-Gm-Gg: AY/fxX4kUDnQdX3gk4yJa9Y4NNyQXOyimTF++WFhFuHF8hFq1XKMsQPdqtQXy0+2Irw
+	65Ho9rLaL0Fy2TRMwkoL4q64SJW0fxgzrk4fmoFdGyelWP+q0pzSuBhcZajKqEe58XEJ6Z2Kd16
+	N4iIGYbx+1QwcV5+7LvFQGTt66h/UyfcmqGhG7vHmqApe6w96VQv2cLT9/Z/9QQrwUArfzyC0TC
+	g1I7hUE6pJxss3++wb3QKUtC435Sd+14wK1dQmErfA57sUcnPB45IhzQAEWBvjEqVOVpEr0dM+8
+	MUInzs2r6FoQyvFtZLeOtLpflVtnDmm0PvznBpnrcwzcBwHO5V1bLd9/YhTxjEVYC+iORw+WWsV
+	PCBhiiEvCsid7WcR7CmzLKps2RP22uN5Y7rTsHiFIfwauJgTsFOSq10M2629v3AezHzCAY7ziAe
+	QDy515BAlcPKQb+7QI1AvqV3r7NV2ftdQsn1hB1pfK7/6HqNhc
+X-Received: by 2002:a05:600c:6215:b0:477:6e02:54a5 with SMTP id 5b1f17b1804b1-4801e3388b6mr16386085e9.18.1768526236723;
+        Thu, 15 Jan 2026 17:17:16 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:f9a6:51d3:e5cd:842f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f3b7a5f94sm77417205e9.0.2026.01.15.17.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jan 2026 17:17:15 -0800 (PST)
+Date: Fri, 16 Jan 2026 02:17:09 +0100
+From: Marco Elver <elver@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
+ immediate acquisition after initialization
+Message-ID: <aWmRlXZaOOUvU_Nv@elver.google.com>
+References: <20260115005231.1211866-1-elver@google.com>
+ <20260115213311.GG830755@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251121195504.1661783-1-morbo@google.com> <20260114193716.1740684-1-morbo@google.com>
- <202601141956.A798BFF@keescook>
-In-Reply-To: <202601141956.A798BFF@keescook>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 15 Jan 2026 16:59:28 -0800
-X-Gm-Features: AZwV_Qi7dJY7T3WLRN4EQzetqOSzw93u9VRGgifQybmb4sr3sTd_O24GMALwMT4
-Message-ID: <CAGG=3QWmQL_ctqm=hnyTUgJgCDswC91agV=y8FBy8Eqte1VFyA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] Compiler Attributes: Add __counted_by_ptr macro
-To: Kees Cook <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Marc Herbert <Marc.Herbert@linux.intel.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Nicolas Schier <nsc@kernel.org>, Tamir Duberstein <tamird@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Naman Jain <namjain@linux.microsoft.com>, Eric Dumazet <edumazet@google.com>, 
-	Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Douglas Anderson <dianders@chromium.org>, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115213311.GG830755@noisy.programming.kicks-ass.net>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Wed, Jan 14, 2026 at 8:00=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
-> On Wed, Jan 14, 2026 at 07:36:47PM +0000, Bill Wendling wrote:
-> > Introduce __counted_by_ptr(), which works like __counted_by(), but for
-> > pointer struct members.
-> >
-> > struct foo {
-> >       int a, b, c;
-> >       char *buffer __counted_by_ptr(bytes);
-> >       short nr_bars;
-> >       struct bar *bars __counted_by_ptr(nr_bars);
-> >       size_t bytes;
-> > };
-> >
-> > Because "counted_by" can only be applied to pointer members in very
-> > recent compiler versions, its application ends up needing to be distinc=
-t
-> > from flexibe array "counted_by" annotations, hence a separate macro.
-> >
-> > Note that Clang's support for "void *" members will be in version 22.
-> > So, when using Clang, you'll need to wait until its release before usin=
-g
-> > the feature with "void *". No such restriction applies to GCC's version
-> > 16.
->
-> I think to keep operational parity, we should limit counted_ptr on Clang
-> to version 22 then, otherwise we'll have problems using it on void *.
->
-> > This is a reworking of Kees' previous patch [1].
->
-> Thanks for this!
->
-> >
-> > Link: https://lore.kernel.org/all/20251020220118.1226740-1-kees@kernel.=
-org/ [1]
-> > Co-developed-by: Kees Cook <kees@kernel.org>
->
-> This needs to be followed by my S-o-b, I think? checkpatch.pl ought to
-> check this.
->
-> > Signed-off-by: Bill Wendling <morbo@google.com>
-> > ---
-> > Cc: Kees Cook <kees@kernel.org>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> > Cc: Justin Stitt <justinstitt@google.com>
-> > Cc: Miguel Ojeda <ojeda@kernel.org>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Heiko Carstens <hca@linux.ibm.com>
-> > Cc: Marc Herbert <Marc.Herbert@linux.intel.com>
-> > Cc: Uros Bizjak <ubizjak@gmail.com>
-> > Cc: Tejun Heo <tj@kernel.org>
-> > Cc: Jeff Xu <jeffxu@chromium.org>
-> > Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
-> > Cc: Shakeel Butt <shakeel.butt@linux.dev>
-> > Cc: "Thomas Wei=C3=9Fschuh" <thomas.weissschuh@linutronix.de>
-> > Cc: John Stultz <jstultz@google.com>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Brian Gerst <brgerst@gmail.com>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-hardening@vger.kernel.org
-> > Cc: llvm@lists.linux.dev
-> > ---
-> > v3 - Replace the previous code with a modified version of Kees' previou=
-s patch
-> >      [1].
-> >    - The question about the naming of the macro was considered, but we =
-decided
-> >      to keep the original naming (__counted_by_ptr), because it mirrors=
- the current
-> >      macros like "__counted_by_{le,be}".
-> > v2 - Add support for GCC.
-> > ---
-> >  Makefile                       |  6 ++++++
-> >  include/linux/compiler_types.h | 18 +++++++++++++++++-
-> >  include/uapi/linux/stddef.h    |  4 ++++
-> >  init/Kconfig                   |  7 +++++++
-> >  4 files changed, 34 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 9d38125263fb..6b029f694bc2 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -952,6 +952,12 @@ KBUILD_CFLAGS    +=3D $(CC_AUTO_VAR_INIT_ZERO_ENAB=
-LER)
-> >  endif
-> >  endif
-> >
-> > +ifdef CONFIG_CC_IS_CLANG
-> > +ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
-> > +KBUILD_CFLAGS        +=3D -fexperimental-late-parse-attributes
-> > +endif
-> > +endif
-> > +
-> >  # Explicitly clear padding bits during variable initialization
-> >  KBUILD_CFLAGS +=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
-> >
-> > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_ty=
-pes.h
-> > index d3318a3c2577..e597c814d60b 100644
-> > --- a/include/linux/compiler_types.h
-> > +++ b/include/linux/compiler_types.h
-> > @@ -369,7 +369,7 @@ struct ftrace_likely_data {
-> >   * Optional: only supported since clang >=3D 18
-> >   *
-> >   *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
-> > - * clang: https://github.com/llvm/llvm-project/pull/76348
-> > + * clang: https://clang.llvm.org/docs/AttributeReference.html#counted-=
-by-counted-by-or-null-sized-by-sized-by-or-null
-> >   *
-> >   * __bdos on clang < 19.1.2 can erroneously return 0:
-> >   * https://github.com/llvm/llvm-project/pull/110497
-> > @@ -383,6 +383,22 @@ struct ftrace_likely_data {
-> >  # define __counted_by(member)
-> >  #endif
-> >
-> > +/*
-> > + * Runtime track number of objects pointed to by a pointer member for =
-use by
-> > + * CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS.
-> > + *
-> > + * Optional: only supported since gcc >=3D 16
-> > + * Optional: only supported since clang >=3D 21.1
->
-> As I mention above, let's make this 22
->
-> > + *
-> > + *   gcc: https://gcc.gnu.org/pipermail/gcc-patches/2025-April/681727.=
-html
-> > + * clang: https://github.com/llvm/llvm-project/pull/137250
->
-> Oh, hm, did the docs for
-> https://clang.llvm.org/docs/AttributeReference.html#counted-by-counted-by=
--or-null-sized-by-sized-by-or-null
-> not get updated by the above PR? Docs should get added to LLVM for this
-> so we can link to the same AttributeReference.html as above.
->
-> And, actually, same question for GCC, now that I'm looking at this...
->
->
-> > + */
-> > +#ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
-> > +#define __counted_by_ptr(member)     __attribute__((__counted_by__(mem=
-ber)))
-> > +#else
-> > +#define __counted_by_ptr(member)
-> > +#endif
-> > +
-> >  /*
-> >   * Optional: only supported since gcc >=3D 15
-> >   * Optional: not supported by Clang
-> > diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-> > index 9a28f7d9a334..111b097ec00b 100644
-> > --- a/include/uapi/linux/stddef.h
-> > +++ b/include/uapi/linux/stddef.h
-> > @@ -72,6 +72,10 @@
-> >  #define __counted_by_be(m)
-> >  #endif
-> >
-> > +#ifndef __counted_by_ptr
-> > +#define __counted_by_ptr(m)
-> > +#endif
-> > +
-> >  #ifdef __KERNEL__
-> >  #define __kernel_nonstring   __nonstring
-> >  #else
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index fa79feb8fe57..dc27b998d111 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -143,6 +143,13 @@ config CC_HAS_COUNTED_BY
-> >       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
-> >       default y if CC_IS_GCC && GCC_VERSION >=3D 150100
-> >
-> > +config CC_HAS_COUNTED_BY_PTR
-> > +     bool
-> > +     # supported since clang 21.1.0
-> > +     default y if CC_IS_CLANG && CLANG_VERSION >=3D 210100
->
-> Let's do 22
->
-> > +     # supported since gcc 16.0.0
-> > +     default y if CC_IS_GCC && GCC_VERSION >=3D 160000
-> > +
-> >  config CC_HAS_MULTIDIMENSIONAL_NONSTRING
-> >       def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring=
-__)) =3D { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
-> >
-> > --
-> > 2.52.0.457.g6b5491de43-goog
-> >
->
-> Great! Once this is fixed up, I'll snag the other 2 patches from my
-> original series too.
->
-Should be corrected now. PTAL.
+On Thu, Jan 15, 2026 at 10:33PM +0100, Peter Zijlstra wrote:
+> On Thu, Jan 15, 2026 at 01:51:25AM +0100, Marco Elver wrote:
+> 
+> > Longer-term, Peter suggested to create scoped init-guards [1], which
+> > will both fix the issue in a more robust way and also denote clearly
+> > where initialization starts and ends. However, that requires new APIs,
+> > and won't help bridge the gap for code that just wants to opt into the
+> > analysis with as little other changes as possible (as suggested in [2]).
+> 
+> OTOH, switching to that *now*, while we have minimal files with
+> CONTEXT_ANALYSIS enabled, is the easiest it will ever get.
+> 
+> The more files get enabled, the harder it gets to switch, no?
 
--bw
+Fair point; meaning, we should improve it sooner than later. :-)
+
+In my sleep-deprived state, I came up with the below. I'd split it up
+into maybe 3 patches (add guards; use guards where needed; remove
+assume).
+
+Thoughts?
+
+------ >8 ------
+
+diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+index e69896e597b6..0afe29398e26 100644
+--- a/Documentation/dev-tools/context-analysis.rst
++++ b/Documentation/dev-tools/context-analysis.rst
+@@ -83,9 +83,11 @@ Currently the following synchronization primitives are supported:
+ `bit_spinlock`, RCU, SRCU (`srcu_struct`), `rw_semaphore`, `local_lock_t`,
+ `ww_mutex`.
+ 
+-For context locks with an initialization function (e.g., `spin_lock_init()`),
+-calling this function before initializing any guarded members or globals
+-prevents the compiler from issuing warnings about unguarded initialization.
++For context locks with an initialization function (e.g., ``spin_lock_init()``),
++use ``guard(foo_init)(&lock)`` or ``scoped_guard(foo_init, &lock) { ...  }``
++pattern to initialize guarded members or globals. This initializes the context
++lock, but also treats the context as active within the initialization scope
++(initialization implies exclusive access to the underlying object).
+ 
+ Lockdep assertions, such as `lockdep_assert_held()`, inform the compiler's
+ context analysis that the associated synchronization primitive is held after
+diff --git a/include/linux/local_lock.h b/include/linux/local_lock.h
+index 99c06e499375..0f971fd6d02a 100644
+--- a/include/linux/local_lock.h
++++ b/include/linux/local_lock.h
+@@ -104,6 +104,8 @@ DEFINE_LOCK_GUARD_1(local_lock_nested_bh, local_lock_t __percpu,
+ 		    local_lock_nested_bh(_T->lock),
+ 		    local_unlock_nested_bh(_T->lock))
+ 
++DEFINE_LOCK_GUARD_1(local_lock_init, local_lock_t __percpu, local_lock_init(_T->lock), /* */)
++
+ DECLARE_LOCK_GUARD_1_ATTRS(local_lock, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
+ #define class_local_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock, _T)
+ DECLARE_LOCK_GUARD_1_ATTRS(local_lock_irq, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
+@@ -112,5 +114,11 @@ DECLARE_LOCK_GUARD_1_ATTRS(local_lock_irqsave, __acquires(_T), __releases(*(loca
+ #define class_local_lock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock_irqsave, _T)
+ DECLARE_LOCK_GUARD_1_ATTRS(local_lock_nested_bh, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
+ #define class_local_lock_nested_bh_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock_nested_bh, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(local_lock_init, __acquires(_T), __releases(*(local_lock_t __percpu **)_T))
++#define class_local_lock_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_lock_init, _T)
++
++DEFINE_LOCK_GUARD_1(local_trylock_init, local_trylock_t __percpu, local_trylock_init(_T->lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(local_trylock_init, __acquires(_T), __releases(*(local_trylock_t __percpu **)_T))
++#define class_local_trylock_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(local_trylock_init, _T)
+ 
+ #endif
+diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock_internal.h
+index e8c4803d8db4..66d4984eea62 100644
+--- a/include/linux/local_lock_internal.h
++++ b/include/linux/local_lock_internal.h
+@@ -86,13 +86,11 @@ do {								\
+ 			      0, LD_WAIT_CONFIG, LD_WAIT_INV,	\
+ 			      LD_LOCK_PERCPU);			\
+ 	local_lock_debug_init(lock);				\
+-	__assume_ctx_lock(lock);				\
+ } while (0)
+ 
+ #define __local_trylock_init(lock)				\
+ do {								\
+ 	__local_lock_init((local_lock_t *)lock);		\
+-	__assume_ctx_lock(lock);				\
+ } while (0)
+ 
+ #define __spinlock_nested_bh_init(lock)				\
+@@ -104,7 +102,6 @@ do {								\
+ 			      0, LD_WAIT_CONFIG, LD_WAIT_INV,	\
+ 			      LD_LOCK_NORMAL);			\
+ 	local_lock_debug_init(lock);				\
+-	__assume_ctx_lock(lock);				\
+ } while (0)
+ 
+ #define __local_lock_acquire(lock)					\
+diff --git a/include/linux/mutex.h b/include/linux/mutex.h
+index 89977c215cbd..ecaa0440f6ec 100644
+--- a/include/linux/mutex.h
++++ b/include/linux/mutex.h
+@@ -62,7 +62,6 @@ do {									\
+ 	static struct lock_class_key __key;				\
+ 									\
+ 	__mutex_init((mutex), #mutex, &__key);				\
+-	__assume_ctx_lock(mutex);					\
+ } while (0)
+ 
+ /**
+@@ -254,6 +253,7 @@ extern int atomic_dec_and_mutex_lock(atomic_t *cnt, struct mutex *lock) __cond_a
+ DEFINE_LOCK_GUARD_1(mutex, struct mutex, mutex_lock(_T->lock), mutex_unlock(_T->lock))
+ DEFINE_LOCK_GUARD_1_COND(mutex, _try, mutex_trylock(_T->lock))
+ DEFINE_LOCK_GUARD_1_COND(mutex, _intr, mutex_lock_interruptible(_T->lock), _RET == 0)
++DEFINE_LOCK_GUARD_1(mutex_init, struct mutex, mutex_init(_T->lock), /* */)
+ 
+ DECLARE_LOCK_GUARD_1_ATTRS(mutex,	__acquires(_T), __releases(*(struct mutex **)_T))
+ #define class_mutex_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex, _T)
+@@ -261,6 +261,8 @@ DECLARE_LOCK_GUARD_1_ATTRS(mutex_try,	__acquires(_T), __releases(*(struct mutex
+ #define class_mutex_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex_try, _T)
+ DECLARE_LOCK_GUARD_1_ATTRS(mutex_intr,	__acquires(_T), __releases(*(struct mutex **)_T))
+ #define class_mutex_intr_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex_intr, _T)
++DECLARE_LOCK_GUARD_1_ATTRS(mutex_init,	__acquires(_T), __releases(*(struct mutex **)_T))
++#define class_mutex_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(mutex_init, _T)
+ 
+ extern unsigned long mutex_get_owner(struct mutex *lock);
+ 
+diff --git a/include/linux/rwlock.h b/include/linux/rwlock.h
+index 65a5b55e1bcd..3390d21c95dd 100644
+--- a/include/linux/rwlock.h
++++ b/include/linux/rwlock.h
+@@ -22,11 +22,10 @@ do {								\
+ 	static struct lock_class_key __key;			\
+ 								\
+ 	__rwlock_init((lock), #lock, &__key);			\
+-	__assume_ctx_lock(lock);				\
+ } while (0)
+ #else
+ # define rwlock_init(lock)					\
+-	do { *(lock) = __RW_LOCK_UNLOCKED(lock); __assume_ctx_lock(lock); } while (0)
++	do { *(lock) = __RW_LOCK_UNLOCKED(lock); } while (0)
+ #endif
+ 
+ #ifdef CONFIG_DEBUG_SPINLOCK
+diff --git a/include/linux/rwlock_rt.h b/include/linux/rwlock_rt.h
+index 37b387dcab21..5353abbfdc0b 100644
+--- a/include/linux/rwlock_rt.h
++++ b/include/linux/rwlock_rt.h
+@@ -22,7 +22,6 @@ do {							\
+ 							\
+ 	init_rwbase_rt(&(rwl)->rwbase);			\
+ 	__rt_rwlock_init(rwl, #rwl, &__key);		\
+-	__assume_ctx_lock(rwl);				\
+ } while (0)
+ 
+ extern void rt_read_lock(rwlock_t *rwlock)	__acquires_shared(rwlock);
+diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
+index 8da14a08a4e1..9bf1d93d3d7b 100644
+--- a/include/linux/rwsem.h
++++ b/include/linux/rwsem.h
+@@ -121,7 +121,6 @@ do {								\
+ 	static struct lock_class_key __key;			\
+ 								\
+ 	__init_rwsem((sem), #sem, &__key);			\
+-	__assume_ctx_lock(sem);					\
+ } while (0)
+ 
+ /*
+@@ -175,7 +174,6 @@ do {								\
+ 	static struct lock_class_key __key;			\
+ 								\
+ 	__init_rwsem((sem), #sem, &__key);			\
+-	__assume_ctx_lock(sem);					\
+ } while (0)
+ 
+ static __always_inline int rwsem_is_locked(const struct rw_semaphore *sem)
+@@ -280,6 +278,10 @@ DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write_try, __acquires(_T), __releases(*(struct
+ DECLARE_LOCK_GUARD_1_ATTRS(rwsem_write_kill, __acquires(_T), __releases(*(struct rw_semaphore **)_T))
+ #define class_rwsem_write_kill_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_write_kill, _T)
+ 
++DEFINE_LOCK_GUARD_1(rwsem_init, struct rw_semaphore, init_rwsem(_T->lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(rwsem_init, __acquires(_T), __releases(*(struct rw_semaphore **)_T))
++#define class_rwsem_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwsem_init, _T)
++
+ /*
+  * downgrade write lock to read lock
+  */
+diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
+index 113320911a09..c0c6235dff59 100644
+--- a/include/linux/seqlock.h
++++ b/include/linux/seqlock.h
+@@ -14,6 +14,7 @@
+  */
+ 
+ #include <linux/compiler.h>
++#include <linux/cleanup.h>
+ #include <linux/kcsan-checks.h>
+ #include <linux/lockdep.h>
+ #include <linux/mutex.h>
+@@ -816,7 +817,6 @@ static __always_inline void write_seqcount_latch_end(seqcount_latch_t *s)
+ 	do {								\
+ 		spin_lock_init(&(sl)->lock);				\
+ 		seqcount_spinlock_init(&(sl)->seqcount, &(sl)->lock);	\
+-		__assume_ctx_lock(sl);					\
+ 	} while (0)
+ 
+ /**
+@@ -1359,4 +1359,8 @@ static __always_inline void __scoped_seqlock_cleanup_ctx(struct ss_tmp **s)
+ #define scoped_seqlock_read(_seqlock, _target)				\
+ 	__scoped_seqlock_read(_seqlock, _target, __UNIQUE_ID(seqlock))
+ 
++DEFINE_LOCK_GUARD_1(seqlock_init, seqlock_t, seqlock_init(_T->lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(seqlock_init, __acquires(_T), __releases(*(seqlock_t **)_T))
++#define class_seqlock_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(seqlock_init, _T)
++
+ #endif /* __LINUX_SEQLOCK_H */
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 396b8c5d6c1b..e1e2f144af9b 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -106,12 +106,11 @@ do {									\
+ 	static struct lock_class_key __key;				\
+ 									\
+ 	__raw_spin_lock_init((lock), #lock, &__key, LD_WAIT_SPIN);	\
+-	__assume_ctx_lock(lock);					\
+ } while (0)
+ 
+ #else
+ # define raw_spin_lock_init(lock)				\
+-	do { *(lock) = __RAW_SPIN_LOCK_UNLOCKED(lock); __assume_ctx_lock(lock); } while (0)
++	do { *(lock) = __RAW_SPIN_LOCK_UNLOCKED(lock); } while (0)
+ #endif
+ 
+ #define raw_spin_is_locked(lock)	arch_spin_is_locked(&(lock)->raw_lock)
+@@ -324,7 +323,6 @@ do {								\
+ 								\
+ 	__raw_spin_lock_init(spinlock_check(lock),		\
+ 			     #lock, &__key, LD_WAIT_CONFIG);	\
+-	__assume_ctx_lock(lock);				\
+ } while (0)
+ 
+ #else
+@@ -333,7 +331,6 @@ do {								\
+ do {						\
+ 	spinlock_check(_lock);			\
+ 	*(_lock) = __SPIN_LOCK_UNLOCKED(_lock);	\
+-	__assume_ctx_lock(_lock);		\
+ } while (0)
+ 
+ #endif
+@@ -582,6 +579,10 @@ DEFINE_LOCK_GUARD_1_COND(raw_spinlock_irqsave, _try,
+ DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave_try, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
+ #define class_raw_spinlock_irqsave_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave_try, _T)
+ 
++DEFINE_LOCK_GUARD_1(raw_spinlock_init, raw_spinlock_t, raw_spin_lock_init(_T->lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_init, __acquires(_T), __releases(*(raw_spinlock_t **)_T))
++#define class_raw_spinlock_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(raw_spinlock_init, _T)
++
+ DEFINE_LOCK_GUARD_1(spinlock, spinlock_t,
+ 		    spin_lock(_T->lock),
+ 		    spin_unlock(_T->lock))
+@@ -626,6 +627,10 @@ DEFINE_LOCK_GUARD_1_COND(spinlock_irqsave, _try,
+ DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irqsave_try, __acquires(_T), __releases(*(spinlock_t **)_T))
+ #define class_spinlock_irqsave_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_irqsave_try, _T)
+ 
++DEFINE_LOCK_GUARD_1(spinlock_init, spinlock_t, spin_lock_init(_T->lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(spinlock_init, __acquires(_T), __releases(*(spinlock_t **)_T))
++#define class_spinlock_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_init, _T)
++
+ DEFINE_LOCK_GUARD_1(read_lock, rwlock_t,
+ 		    read_lock(_T->lock),
+ 		    read_unlock(_T->lock))
+@@ -664,5 +669,9 @@ DEFINE_LOCK_GUARD_1(write_lock_irqsave, rwlock_t,
+ DECLARE_LOCK_GUARD_1_ATTRS(write_lock_irqsave, __acquires(_T), __releases(*(rwlock_t **)_T))
+ #define class_write_lock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(write_lock_irqsave, _T)
+ 
++DEFINE_LOCK_GUARD_1(rwlock_init, rwlock_t, rwlock_init(_T->lock), /* */)
++DECLARE_LOCK_GUARD_1_ATTRS(rwlock_init, __acquires(_T), __releases(*(rwlock_t **)_T))
++#define class_rwlock_init_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(rwlock_init, _T)
++
+ #undef __LINUX_INSIDE_SPINLOCK_H
+ #endif /* __LINUX_SPINLOCK_H */
+diff --git a/include/linux/spinlock_rt.h b/include/linux/spinlock_rt.h
+index 0a585768358f..373618a4243c 100644
+--- a/include/linux/spinlock_rt.h
++++ b/include/linux/spinlock_rt.h
+@@ -20,7 +20,6 @@ static inline void __rt_spin_lock_init(spinlock_t *lock, const char *name,
+ do {								\
+ 	rt_mutex_base_init(&(slock)->lock);			\
+ 	__rt_spin_lock_init(slock, name, key, percpu);		\
+-	__assume_ctx_lock(slock);				\
+ } while (0)
+ 
+ #define _spin_lock_init(slock, percpu)				\
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index 6cbc6e2d8aee..5397d0c14127 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -530,7 +530,7 @@ static int kcov_open(struct inode *inode, struct file *filep)
+ 	kcov = kzalloc(sizeof(*kcov), GFP_KERNEL);
+ 	if (!kcov)
+ 		return -ENOMEM;
+-	spin_lock_init(&kcov->lock);
++	guard(spinlock_init)(&kcov->lock);
+ 	kcov->mode = KCOV_MODE_DISABLED;
+ 	kcov->sequence = 1;
+ 	refcount_set(&kcov->refcount, 1);
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 1c5a381461fc..0f05943d957f 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -35,7 +35,7 @@ static void __used test_common_helpers(void)
+ 	};											\
+ 	static void __used test_##class##_init(struct test_##class##_data *d)			\
+ 	{											\
+-		type_init(&d->lock);								\
++		guard(type_init)(&d->lock);							\
+ 		d->counter = 0;									\
+ 	}											\
+ 	static void __used test_##class(struct test_##class##_data *d)				\
+@@ -83,7 +83,7 @@ static void __used test_common_helpers(void)
+ 
+ TEST_SPINLOCK_COMMON(raw_spinlock,
+ 		     raw_spinlock_t,
+-		     raw_spin_lock_init,
++		     raw_spinlock_init,
+ 		     raw_spin_lock,
+ 		     raw_spin_unlock,
+ 		     raw_spin_trylock,
+@@ -109,7 +109,7 @@ static void __used test_raw_spinlock_trylock_extra(struct test_raw_spinlock_data
+ 
+ TEST_SPINLOCK_COMMON(spinlock,
+ 		     spinlock_t,
+-		     spin_lock_init,
++		     spinlock_init,
+ 		     spin_lock,
+ 		     spin_unlock,
+ 		     spin_trylock,
+@@ -163,7 +163,7 @@ struct test_mutex_data {
+ 
+ static void __used test_mutex_init(struct test_mutex_data *d)
+ {
+-	mutex_init(&d->mtx);
++	guard(mutex_init)(&d->mtx);
+ 	d->counter = 0;
+ }
+ 
+@@ -226,7 +226,7 @@ struct test_seqlock_data {
+ 
+ static void __used test_seqlock_init(struct test_seqlock_data *d)
+ {
+-	seqlock_init(&d->sl);
++	guard(seqlock_init)(&d->sl);
+ 	d->counter = 0;
+ }
+ 
+@@ -275,7 +275,7 @@ struct test_rwsem_data {
+ 
+ static void __used test_rwsem_init(struct test_rwsem_data *d)
+ {
+-	init_rwsem(&d->sem);
++	guard(rwsem_init)(&d->sem);
+ 	d->counter = 0;
+ }
+ 
+@@ -475,7 +475,7 @@ static DEFINE_PER_CPU(struct test_local_lock_data, test_local_lock_data) = {
+ 
+ static void __used test_local_lock_init(struct test_local_lock_data *d)
+ {
+-	local_lock_init(&d->lock);
++	guard(local_lock_init)(&d->lock);
+ 	d->counter = 0;
+ }
+ 
+@@ -519,7 +519,7 @@ static DEFINE_PER_CPU(struct test_local_trylock_data, test_local_trylock_data) =
+ 
+ static void __used test_local_trylock_init(struct test_local_trylock_data *d)
+ {
+-	local_trylock_init(&d->lock);
++	guard(local_trylock_init)(&d->lock);
+ 	d->counter = 0;
+ }
+ 
