@@ -1,129 +1,84 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CCD26B0B3;
-	Fri, 16 Jan 2026 15:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0DE1AAE13;
+	Fri, 16 Jan 2026 15:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768578481; cv=none; b=F1bd+Qkce+cuB23DD86n6M0H5ORt3wVfpAp2W3TzaLn7qo7+Kq2/Ch1qKyI2gju0iU6SwWqNVeWxaYTIr5i9vHzkEUbs55Mm2sPap/dj4jjgm20Y+NqF5SRKdtAgioDkniURbAqwL7QsVCv8nteNr9cggu71Lrvc5GRgeOgHel8=
+	t=1768578760; cv=none; b=sw3fzjBG5On8GEgjr0fiyyitZbtD9WcCiky8RDUkLrR60Z6e3ytDW7rMI9wbZ03PuFMwI5fbOfq7dH0Ve8UQwCTxDEKKB+9o/8xQhtrh+BllgW32pJQPkzORREZqVTB4V5WZLQ91+Cat7FHtMfYhMfPllCgRTdIZ/ig/vGPgaUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768578481; c=relaxed/simple;
-	bh=WSi8N0YOGOcsHSVSef6RMQxztPhfFapgkgxT6S7KkcY=;
+	s=arc-20240116; t=1768578760; c=relaxed/simple;
+	bh=ccgAeaYXT57mZxZmgSb8MPT61/gS42zGa89VBeKhB7M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gl8BK3HrYkGU1GEX/AMyalImvAO6E6sEUYFTOMuLjxE/4x6zqTDdI5zugxRzxGdnit5dlxvQgoucavO6+ur/y/0VRa3OgSfXgMm+9qfS7XDOi6U/VYictJBQdNTu+Tr/ISSxaJabyu/Wbcft6mg4oK7b+M8GXjoWbiwptXm58OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WBEkHBSi; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=jsd86bMkkeXJVcoHEkOAzQDdpaOmfgE4xb2ShcbtZTdkPg2I19DcjLaRTa3RrFeCbRIek+vYF+SsOgl9VuxQlPQmIe38gbJ8DsbMP3VDm0JrIxc4K+IUH5YTj/ULF4kb8PSw+K6I9QypUcwo3smp9ovt7abj4fuWj7mWMT00ll8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e6kNZYiN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WBEkHBSi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=oSjG1d8OZ7OmFUCDFova52CcXzuGRhvK5+mM1zx7v9E=; b=WBEkHBSiCkkoF7Nh5NRjphe7w8
-	kRgzblbsb1m2Y/jAcI9JA+eU6SkarKpNIiiXaHaZdjx71viZarMxJOp/69MnhiZzS0lFpmBzivR4b
-	GkgViA75PdvlYyZ+cFi2RqjzAQ0zgL4cVxlvGDJhJYbhToGv6WlSNQYAxlQX2afC2HX3dzJVlOLG/
-	zK+xUsqilyMxQv3aZv9dxUise2DHHPJI+BirglEu3CDArriPmHFdOpBss1Dx9B5qqW4ReGuWX0Tr1
-	PezYwd6a/2LKFR4Ctc4V/JHrHXrPJGFpbwdoLHqIdFM0igzX2fjRChGrHSwEms3SmgJwznP14485j
-	Zu1ZqrLQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vgm3H-00000009YaU-3M4m;
-	Fri, 16 Jan 2026 15:47:55 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 49E7F3005E5; Fri, 16 Jan 2026 16:47:54 +0100 (CET)
-Date: Fri, 16 Jan 2026 16:47:54 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Marco Elver <elver@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
- immediate acquisition after initialization
-Message-ID: <20260116154754.GN830755@noisy.programming.kicks-ass.net>
-References: <20260115005231.1211866-1-elver@google.com>
- <20260115213311.GG830755@noisy.programming.kicks-ass.net>
- <aWmRlXZaOOUvU_Nv@elver.google.com>
- <20260116150750.GG831050@noisy.programming.kicks-ass.net>
- <20260116151043.GA18805@lst.de>
- <20260116152016.GI831050@noisy.programming.kicks-ass.net>
- <20260116152741.GA19823@lst.de>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e6kNZYiN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D19BC116C6;
+	Fri, 16 Jan 2026 15:52:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1768578760;
+	bh=ccgAeaYXT57mZxZmgSb8MPT61/gS42zGa89VBeKhB7M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e6kNZYiNpA8s32qTucoZCdBV/ZlHwH7MsAHAdESZNHgZgeL0jrrhew3Qc4nMYR+Gc
+	 rbicbIAiI6NNjgCKjsH1Oh4KFChTZysPq2GpxUj06YkP0NRUoCNyfL5zxZHka2TLNd
+	 Jh8qr2bKF7HagzmeIPBrWqD2Bcf6LrQhPWcSBNoU=
+Date: Fri, 16 Jan 2026 16:52:37 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Hans de Goede <hansg@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 0/2] kbuild, uapi: Mark inner unions in packed structs as
+ packed
+Message-ID: <2026011632-favorite-creamlike-aec6@gregkh>
+References: <20260115-kbuild-alignment-vbox-v1-0-076aed1623ff@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260116152741.GA19823@lst.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260115-kbuild-alignment-vbox-v1-0-076aed1623ff@linutronix.de>
 
-On Fri, Jan 16, 2026 at 04:27:41PM +0100, Christoph Hellwig wrote:
-> On Fri, Jan 16, 2026 at 04:20:16PM +0100, Peter Zijlstra wrote:
-> > is *much* clearer than something like:
-> > 
-> > 	spinlock_init(&obj->lock);
-> > 	// init
-> > 	spinlock_deinit(&obj->lock);
-> > 
-> > Exactly because it has explicit scope. (also my deinit naming might not
-> > be optimal, it is ambiguous at best, probably confusing).
+On Thu, Jan 15, 2026 at 08:35:43AM +0100, Thomas Weiﬂschuh wrote:
+> The unpacked unions within a packed struct generates alignment warnings
+> on clang for 32-bit ARM.
 > 
-> WTF is spinlock_deinit even supposed to be?
+> With the recent changes to compile-test the UAPI headers in more cases,
+> these warning in combination with CONFIG_WERROR breaks the build.
 > 
-> I though this is about:
+> Fix the warnings.
 > 
-> 	spin_lock_init(&obj->lock);
-> 	spin_lock(&obj->lock);
+> Intended for the kbuild tree.
 > 
-> > Not to mention that the scope things are far more robust vs error paths.
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Thomas Weiﬂschuh (2):
+>       hyper-v: Mark inner union in hv_kvp_exchg_msg_value as packed
+>       virt: vbox: uapi: Mark inner unions in packed structs as packed
 > 
-> They are just a really hacked up clumsy way to provide what a very
-> limited version of what the capability analys provides, while messing
-> up the code.
+>  include/uapi/linux/hyperv.h            | 2 +-
+>  include/uapi/linux/vbox_vmmdev_types.h | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> ---
+> base-commit: e3970d77ec504e54c3f91a48b2125775c16ba4c0
+> change-id: 20260115-kbuild-alignment-vbox-d0409134d335
+> 
+> Best regards,
+> -- 
+> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> 
 
-So the base problem here is something like:
-
-struct obj {
-	spinlock_t	lock;
-	int		state __guarded_by(lock);
-};
-
-struct obj *create_obj(void)
-{
-	struct obj *obj = kzmalloc(sizeof(*obj), GFP_KERNEL);
-	if (!obj)
-		return NULL;
-
-	spin_lock_init(&obj->lock);
-	obj->state = INIT_STATE; // error: ->state demands ->lock is held
-}
-
-So if you want/can take spin_lock() directly after spin_lock_init(),
-then yes, you can write:
-
-
-	spin_lock_init(&obj->lock);
-	spin_lock(&obj->lock);
-	obj->state = INIT_STATE; // OK
-
-However, if code is structured such that you need to init fields before
-taking the lock, you need a 'fake' lock acquire to wrap the
-initialization -- which is safe because there is no concurrency yet and
-all that, furthermore, by holding the fake lock you also ensure you
-cannot in fact take the lock and create undue concurrency before
-initialization is complete.
-
-So the fairly common pattern where an object is first (fully) initialized
-before it can be used will need this fake acquisition. For this we get:
-
-	scoped_lock (spinlock_init, &obj->lock) {
-		// init goes here
-	}
-
-Or you can manually __acquire_ctx_lock() / __release_ctx_lock().
-
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
