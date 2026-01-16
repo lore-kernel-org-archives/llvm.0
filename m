@@ -1,147 +1,227 @@
-Received: from mail-43103.protonmail.ch (mail-43103.protonmail.ch [185.70.43.103])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349CA22256F
-	for <llvm@lists.linux.dev>; Fri, 16 Jan 2026 13:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7E0265623;
+	Fri, 16 Jan 2026 13:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768569101; cv=none; b=EGqkW4RQPlIZkKU+7IiFTlLTDYdavOhk6lFzLQLHPHq6RNFhfaeGro0SBNxMSYh8UjpfdkXAbKF+Pe4yU5LCSakS2eMTOeChRxfD6hP6o7AE6yBeAfAA8ObUEZ2Hy3eVsHfRy9p3cl9Z/E2ZZpYxuPnYrIIghoOBwrNw4zeNqq8=
+	t=1768569667; cv=none; b=eFb38a4EMDNHnP4QsosOmudo7uiCt60KT96GIkyd/MaM4dQ9bJxqWat+g03qQ4jsTaQxki9457AoO5Jsx0sP/gvz0NogPtSELY7tyVVOOaMrB67xhMOls3GpqNzHc54wC73gy92yaTQMLEocNypmruwmQFAlhZ6ky+tNcZ/wcbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768569101; c=relaxed/simple;
-	bh=gA5Gcwjt++Ugz1oA1ig1zUCPtcY1thD7Vg+WwWrpi54=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cndDOQU5IFxILaxaK8xeISc5rxpU5yeCkETLlqaYEKv+0hy7ox56TGwkb4Bb6GOIIQnofm42OzsRqT3fXTzQOAKAW/MRrY3WJa3pNud0MG6ibrUfYYqa0VFkOJADnCjKBrosgyZEuh9OJqiJKpStdF4ZrrT1sB5j1hNsshLcNvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=NsW4vNWI; arc=none smtp.client-ip=185.70.43.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1768569667; c=relaxed/simple;
+	bh=i32t1y7XODJy/klylqSnaSxh4yladx7T3RFtlv8mVfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ld6jUgVrZdGq6XKYUtZyCdTFLiA20EtJ59aCHB2YIY1AyCce06KEfK0OnQdH6EJWXygJ0i+bqOyaCQ6I67KjpmijRXpt3UvxJ3C40jggF9xpABPg3WUjsJ8D9pgNdARUnioKBcQOS3bFFnbTJJhx+PEvOtE+MTeufdBbt1ePEWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LjdJ09lb; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="NsW4vNWI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1768569098; x=1768828298;
-	bh=VUy6Z0nl3UN06uLRlgqbdTzfRq3/0KilXmceKHyT+FA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=NsW4vNWI+sy+jtCwGEepBnQnhkRgbVqOJ8bQNyN7XOu/Bmiv5eUFHRTgDUqIkkZCL
-	 3+CCEPXQsQCOIr68mCMChffW/v/xa4NXARE65ARAC1tUdbbVCR0YM/VVD87fT5Hnf4
-	 g7uTiInwCUmOnfHiNaRH18bYdqK3XZUA8thcmHVBaNFZ6vrtQYXmnYyJGmjtUTL/eI
-	 FeJuldGwl9Kv2xapCx8JUTWPf6JHyDRUjGnR9+bb0IaoSyvCU0fdqXQw8ZvrndtD8c
-	 iztvGbaWNit1drtUSc0hgFnX7xkOB7r9nmg0mEFIctA/zk1M/dLih3b+MPcDkmHT6E
-	 fi3T+X+l0xZ7Q==
-Date: Fri, 16 Jan 2026 13:11:32 +0000
-To: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Andrew Morton <akpm@linux-foundation.org>, Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Samuel Holland <samuel.holland@sifive.com>, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v8 01/14] kasan: sw_tags: Use arithmetic shift for shadow computation
-Message-ID: <aWo31aytvelldfiE@wieczorr-mobl1.localdomain>
-In-Reply-To: <2592f303-05f5-4646-b59f-38cb7549834e@gmail.com>
-References: <cover.1768233085.git.m.wieczorretman@pm.me> <4f31939d55d886f21c91272398fe43a32ea36b3f.1768233085.git.m.wieczorretman@pm.me> <2592f303-05f5-4646-b59f-38cb7549834e@gmail.com>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 3ed341666d06b561ea7c217cda5b5d4311dd5d20
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LjdJ09lb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768569664; x=1800105664;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i32t1y7XODJy/klylqSnaSxh4yladx7T3RFtlv8mVfY=;
+  b=LjdJ09lbr8LoLomhTlzXBxc9GuLbi633ftSIn4/zJHcMnoZfykKzDt2D
+   dN2oaWPHv1a7rhlMt46XsmuBi/dg2RXbkg3yOZ4a/09cXDccGAprJMFAG
+   GZqd2+arRHzx1dDknHU9MiZatFIDu8KDCM0QFgf5/beOcJXE1+sJ5/D5c
+   o/Z053GZH7IFgq88I6wNQxDl9DdxIHBrcBF04YK4+HPiBePejsKyGKFfj
+   b1b8YXGC4YJR6ju+xFhb5BsTcDg9btOtZ8qknsItOtwBYVM438osMdA0v
+   2vmTVoBA3Ix3c9oq+vktbq5QmRMZdCinwPlXV8lU6xJPnna/HlWfigjY7
+   Q==;
+X-CSE-ConnectionGUID: sQu5ArILTFCrhGAK3f9zxQ==
+X-CSE-MsgGUID: ueqbsVYXRyabObW7uBktEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="73735954"
+X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
+   d="scan'208";a="73735954"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 05:21:00 -0800
+X-CSE-ConnectionGUID: z20xf1QURzeARJmUSF2riA==
+X-CSE-MsgGUID: I8LJAjIITWuAZrKb+MhEbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
+   d="scan'208";a="236502851"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 16 Jan 2026 05:20:59 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgjl3-00000000KrM-1PJj;
+	Fri, 16 Jan 2026 13:20:57 +0000
+Date: Fri, 16 Jan 2026 21:20:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brian Masney <bmasney@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 13/13] clk: microchip: core: allow driver to be compiled
+ with COMPILE_TEST
+Message-ID: <202601162110.K1eWGORM-lkp@intel.com>
+References: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
 
-Thanks for looking at the patches :)
+Hi Brian,
 
-On 2026-01-15 at 23:42:02 +0100, Andrey Ryabinin wrote:
->
->
->On 1/12/26 6:27 PM, Maciej Wieczor-Retman wrote:
-> =20
->> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
->> index 62c01b4527eb..b5beb1b10bd2 100644
->> --- a/mm/kasan/report.c
->> +++ b/mm/kasan/report.c
->> @@ -642,11 +642,39 @@ void kasan_non_canonical_hook(unsigned long addr)
->>  =09const char *bug_type;
->> =20
->>  =09/*
->> -=09 * All addresses that came as a result of the memory-to-shadow mappi=
-ng
->> -=09 * (even for bogus pointers) must be >=3D KASAN_SHADOW_OFFSET.
->> +=09 * For Generic KASAN, kasan_mem_to_shadow() uses the logical right s=
-hift
->> +=09 * and never overflows with the chosen KASAN_SHADOW_OFFSET values (o=
-n
->> +=09 * both x86 and arm64). Thus, the possible shadow addresses (even fo=
-r
->> +=09 * bogus pointers) belong to a single contiguous region that is the
->> +=09 * result of kasan_mem_to_shadow() applied to the whole address spac=
-e.
->>  =09 */
->> -=09if (addr < KASAN_SHADOW_OFFSET)
->> -=09=09return;
->> +=09if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
->> +=09=09if (addr < (unsigned long)kasan_mem_to_shadow((void *)(0ULL)) ||
->> +=09=09    addr > (unsigned long)kasan_mem_to_shadow((void *)(~0ULL)))
->> +=09=09=09return;
->> +=09}
->> +
->> +=09/*
->> +=09 * For Software Tag-Based KASAN, kasan_mem_to_shadow() uses the
->> +=09 * arithmetic shift. Normally, this would make checking for a possib=
-le
->> +=09 * shadow address complicated, as the shadow address computation
->> +=09 * operation would overflow only for some memory addresses. However,=
- due
->> +=09 * to the chosen KASAN_SHADOW_OFFSET values and the fact the
->> +=09 * kasan_mem_to_shadow() only operates on pointers with the tag rese=
-t,
->> +=09 * the overflow always happens.
->> +=09 *
->> +=09 * For arm64, the top byte of the pointer gets reset to 0xFF. Thus, =
-the
->> +=09 * possible shadow addresses belong to a region that is the result o=
-f
->> +=09 * kasan_mem_to_shadow() applied to the memory range
->> +=09 * [0xFF000000000000, 0xFFFFFFFFFFFFFFFF]. Despite the overflow, the
->                  ^ Missing couple 00 here
->
->> +=09 * resulting possible shadow region is contiguous, as the overflow
->> +=09 * happens for both 0xFF000000000000 and 0xFFFFFFFFFFFFFFFF.
->                                  ^ same as above
+kernel test robot noticed the following build errors:
 
-Hah, right, thank you!
+[auto build test ERROR on f417b7ffcbef7d76b0d8860518f50dae0e7e5eda]
 
->
->> +=09 */
->> +=09if (IS_ENABLED(CONFIG_KASAN_SW_TAGS) && IS_ENABLED(CONFIG_ARM64)) {
->> +=09=09if (addr < (unsigned long)kasan_mem_to_shadow((void *)(0xFFULL <<=
- 56)) ||
->
->This will not work for inline mode because compiler uses logical shift.
->Consider NULL-ptr derefernce. Compiler will calculate shadow address for 0=
- as:
->      (((0x0 | 0xffULL) << 56) >> 4)+0xffff800000000000ULL =3D 0x0fef8000.=
-...0
->Which is less than ((0xFF00...00LL) >> 4) +  0xffff800000000000ULL =3D 0xf=
-fff800...0
->So we will bail out here.
->Perhaps we could do addr |=3D 0xFFLL to fix this
+url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/MIPS-copy-pic32-h-header-file-from-asm-mach-pic32-to-include-platform-data/20260110-005057
+base:   f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
+patch link:    https://lore.kernel.org/r/20260109-mips-pic32-header-move-v1-13-99859c55783d%40redhat.com
+patch subject: [PATCH 13/13] clk: microchip: core: allow driver to be compiled with COMPILE_TEST
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/reproduce)
 
-I suppose it should work; tried it in a python script by shoving various
-addresses into this check. Pushing addresses through a logical shift
-memory_to_shadow normally would return early as you noticed, and after 'add=
-r |=3D
-0xFFLL' it seems to work as expected. And I didn't really catch any incorre=
-ct
-address slipping by this scheme either. Thanks, I'll correct it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601162110.K1eWGORM-lkp@intel.com/
 
->
->> +=09=09    addr > (unsigned long)kasan_mem_to_shadow((void *)(~0ULL)))
->> +=09=09=09return;
->> +=09}
->> =20
->>  =09orig_addr =3D (unsigned long)kasan_shadow_to_mem((void *)addr);
->> =20
+All errors (new ones prefixed by >>):
 
---=20
-Kind regards
-Maciej Wiecz=C3=B3r-Retman
+   In file included from drivers/clk/microchip/clk-core.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:8:
+>> arch/x86/include/asm/debugreg.h:180:20: error: no member named 'x86' in 'struct cpuinfo_um'
+     180 |         if (boot_cpu_data.x86 < 6)
+         |             ~~~~~~~~~~~~~ ^
+   arch/x86/include/asm/debugreg.h:191:20: error: no member named 'x86' in 'struct cpuinfo_um'
+     191 |         if (boot_cpu_data.x86 < 6)
+         |             ~~~~~~~~~~~~~ ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:13:
+   In file included from arch/x86/include/asm/entry-common.h:8:
+   arch/x86/include/asm/nospec-branch.h:598:24: error: use of undeclared identifier '__KERNEL_DS'
+     598 |         static const u16 ds = __KERNEL_DS;
+         |                               ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:13:
+   In file included from arch/x86/include/asm/entry-common.h:9:
+>> arch/x86/include/asm/io_bitmap.h:13:23: error: use of undeclared identifier 'IO_BITMAP_LONGS'
+      13 |         unsigned long   bitmap[IO_BITMAP_LONGS];
+         |                                ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:13:
+>> arch/x86/include/asm/entry-common.h:22:25: error: call to undeclared function 'native_save_fl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      22 |                 unsigned long flags = native_save_fl();
+         |                                       ^
+>> arch/x86/include/asm/entry-common.h:23:24: error: use of undeclared identifier 'X86_EFLAGS_DF'
+      23 |                 unsigned long mask = X86_EFLAGS_DF | X86_EFLAGS_NT;
+         |                                      ^
+>> arch/x86/include/asm/entry-common.h:23:40: error: use of undeclared identifier 'X86_EFLAGS_NT'
+      23 |                 unsigned long mask = X86_EFLAGS_DF | X86_EFLAGS_NT;
+         |                                                      ^
+>> arch/x86/include/asm/entry-common.h:28:7: error: call to undeclared function 'DISABLED_MASK_BIT_SET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      28 |                 if (cpu_feature_enabled(X86_FEATURE_SMAP) ||
+         |                     ^
+   arch/um/include/asm/cpufeature.h:52:32: note: expanded from macro 'cpu_feature_enabled'
+      52 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+         |                                       ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:13:
+>> arch/x86/include/asm/entry-common.h:30:12: error: use of undeclared identifier 'X86_EFLAGS_AC'
+      30 |                         mask |= X86_EFLAGS_AC;
+         |                                 ^
+>> arch/x86/include/asm/entry-common.h:42:17: error: call to undeclared function 'on_thread_stack'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      42 |                 WARN_ON_ONCE(!on_thread_stack());
+         |                               ^
+>> arch/x86/include/asm/entry-common.h:50:16: error: use of undeclared identifier '_TIF_USER_RETURN_NOTIFY'
+      50 |         if (ti_work & _TIF_USER_RETURN_NOTIFY)
+         |                       ^
+>> arch/x86/include/asm/entry-common.h:53:25: error: use of undeclared identifier '_TIF_IO_BITMAP'
+      53 |         if (unlikely(ti_work & _TIF_IO_BITMAP))
+         |                                ^
+>> arch/x86/include/asm/entry-common.h:56:25: error: use of undeclared identifier '_TIF_NEED_FPU_LOAD'
+      56 |         if (unlikely(ti_work & _TIF_NEED_FPU_LOAD))
+         |                                ^
+>> arch/x86/include/asm/entry-common.h:57:3: error: call to undeclared function 'switch_fpu_return'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      57 |                 switch_fpu_return();
+         |                 ^
+>> arch/x86/include/asm/entry-common.h:63:2: error: call to undeclared function 'fpregs_assert_state_consistent'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      63 |         fpregs_assert_state_consistent();
+         |         ^
+   arch/x86/include/asm/entry-common.h:98:6: error: call to undeclared function 'DISABLED_MASK_BIT_SET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      98 |         if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
+         |             ^
+   arch/um/include/asm/cpufeature.h:52:32: note: expanded from macro 'cpu_feature_enabled'
+      52 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+         |                                       ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+   In file included from include/linux/irq-entry-common.h:13:
+>> arch/x86/include/asm/entry-common.h:108:2: error: call to undeclared function 'amd_clear_divider'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     108 |         amd_clear_divider();
+         |         ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:5:
+>> include/linux/irq-entry-common.h:225:25: error: use of undeclared identifier '_TIF_UPROBE'
+     225 |         if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
+         |                                ^
+   include/linux/irq-entry-common.h:31:42: note: expanded from macro 'EXIT_TO_USER_MODE_WORK'
+      31 |         (_TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_UPROBE |           \
+         |                                                 ^
+   In file included from drivers/clk/microchip/clk-core.c:13:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+>> include/linux/entry-common.h:48:6: error: conflicting types for 'syscall_trace_enter'
+      48 | long syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long work);
+         |      ^
+   arch/um/include/asm/ptrace-generic.h:44:12: note: previous declaration is here
+      44 | extern int syscall_trace_enter(struct pt_regs *regs);
+         |            ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
+
+vim +180 arch/x86/include/asm/debugreg.h
+
+42181186ad4db9 Steven Rostedt  2011-12-16  174  
+154fcf3a788868 Thomas Gleixner 2024-03-04  175  static inline unsigned long get_debugctlmsr(void)
+154fcf3a788868 Thomas Gleixner 2024-03-04  176  {
+154fcf3a788868 Thomas Gleixner 2024-03-04  177  	unsigned long debugctlmsr = 0;
+154fcf3a788868 Thomas Gleixner 2024-03-04  178  
+154fcf3a788868 Thomas Gleixner 2024-03-04  179  #ifndef CONFIG_X86_DEBUGCTLMSR
+154fcf3a788868 Thomas Gleixner 2024-03-04 @180  	if (boot_cpu_data.x86 < 6)
+154fcf3a788868 Thomas Gleixner 2024-03-04  181  		return 0;
+154fcf3a788868 Thomas Gleixner 2024-03-04  182  #endif
+c435e608cf59ff Ingo Molnar     2025-04-09  183  	rdmsrq(MSR_IA32_DEBUGCTLMSR, debugctlmsr);
+154fcf3a788868 Thomas Gleixner 2024-03-04  184  
+154fcf3a788868 Thomas Gleixner 2024-03-04  185  	return debugctlmsr;
+154fcf3a788868 Thomas Gleixner 2024-03-04  186  }
+154fcf3a788868 Thomas Gleixner 2024-03-04  187  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
