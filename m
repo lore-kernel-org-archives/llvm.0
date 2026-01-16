@@ -1,77 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1517F281341;
-	Fri, 16 Jan 2026 05:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751A8225775;
+	Fri, 16 Jan 2026 05:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768540216; cv=none; b=vBJF8TtRLgFpZTMv5jAb1ty/OpGpV21yx+8HcFaS+/7iSThPSIwBqkA8tA9+1wXapHLE4FjlRIMc/wLcm9xgUwwyIk39iM4sWxNx2LwXE7Vw/3Gr21Elhx+hsI+FGkxVPGtjme8mGRI+x89tDzwCYoCbv3qQy+e5gtXs04kVNuQ=
+	t=1768541083; cv=none; b=kPcJtQX49MR5FUJ5nIspzK/6qSd25zRxpIM3GHGANSeWS9cUS92lhWKo/WLuhBYqNrAzHw42iUvhUK6dLUwEbV9oaq4ogiwIaocDNMUVHw3aPCWeSdZXqrOeHzFEHOJiZVs3IIEh2WFEjxcEnLSb7rv0HFA0E83UAfzANTEF6fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768540216; c=relaxed/simple;
-	bh=HZzHW7YHZPFUQKO1dKDsA0Pg/kpBIfBQhMpeukAM8II=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RxoUXfJKKKZn9jNadoDL6r+ifC1cKIW7RAp+YtgWCOgSJpID8uQfS5Xj2ErPeKOLplNtK5l1uCnHj2mdPu2dUzbB8UqVR2sS4MvBi605IJkHF9hFPC8X2S9b+XI/jR5khJm+N32OUxdLMJOM1Xg9fU9lisbgdSHCq1tdbJddD5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Het7nqji; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768541083; c=relaxed/simple;
+	bh=5YPf87ZGuinlRtituBGIhNcQxgeYz4Tr1NAjaf4vQgI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=O2h+1bG+rnoGqNIPU/4BhMwPRHVqqv3XoNLcYzWAKuRItN9JreAWjC+hlAR8SIO9fGl6qpe87ody99G1ZFfmGnps2TkwJUaxlX0afvjsyzNx1sg/VIs8LbzPO9PL6ACueTBCkV2g+6ZdDhlTlwNUctI2Q0fVyNBcBjcidztrag8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iqti4aJp; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Het7nqji"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EFDC116C6;
-	Fri, 16 Jan 2026 05:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768540215;
-	bh=HZzHW7YHZPFUQKO1dKDsA0Pg/kpBIfBQhMpeukAM8II=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Het7nqjiBCR4dN8g3EHFcpM9lAzrF60K0/j1XIY6YjUPMhPtRmD6t5xGxbngzHAV2
-	 /RMwlWIc2Y6ZymJ73u4Lv3IaFocowX+CRqTyOkx8+Q52QoK1AN1tKprDXos4BXBH5S
-	 rEmmXD5qf3HeTNQfgCn3o6gioZzNbEGkcJk4PsqlB53DAzVe1eB3Q25dEVDFqUX7bc
-	 dfHhhuuqzXSxjvegYtSkfxiY5g2ZC11GXt4YimMK3vJiuOVlCYteH41RevpMgWvvba
-	 m1DXZ5QT52HlbQX3zkfjbSwuczYwQ8wCRRzDPTJrb+BQEXiPSnI1airiKQbzelXmEc
-	 14Cef03trdThA==
-Date: Thu, 15 Jan 2026 22:10:11 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Walmsley <pjw@kernel.org>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Craig Topper <craig.topper@sifive.com>,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH RFC v2] riscv: Use 64-bit variable for output in
- __get_user_asm
-Message-ID: <20260116051011.GB1452322@ax162>
-References: <20260113-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v2-1-e04aba2e1f9f@kernel.org>
- <7bc39d4d-6e2d-f0af-9787-5fd2c92bfd4e@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iqti4aJp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768541082; x=1800077082;
+  h=date:from:to:cc:subject:message-id;
+  bh=5YPf87ZGuinlRtituBGIhNcQxgeYz4Tr1NAjaf4vQgI=;
+  b=iqti4aJp9e4PLli7N0eSZOauj8b7rbr9Fv52JjrJWkdv15U5/bc0DTAa
+   0Bc4AQSbqkte7Y2mdzVVwSvzcs8vvwfdcnNZIczNDt2QmZGINpVq4sYHr
+   y0FmrUsV9YOcquxSfXkeulkEl0hzR+roY9sjEjV8uEZ7oPZh5Zo2AMQRR
+   h6IrjnPFNbZ2jy9W07hyFVKNBeQMZ7RbEAbvfO0JTHtkBZRLB2yYtlg60
+   DNQOW59YQ+DW8f28Vbhgc+DC81Q9713Ag41pbPFNUDp2zf+4jCwv5EtrD
+   ger2OIeMD/Ohjc1GVXrQeZ9LpEEtcsrXwq0K0mlCkdDe2f2npbCUG+urb
+   Q==;
+X-CSE-ConnectionGUID: ks+DfD13SCeJfuek2Ks8pQ==
+X-CSE-MsgGUID: lE+leex1QWW/67zVEGEjGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="72441847"
+X-IronPort-AV: E=Sophos;i="6.21,230,1763452800"; 
+   d="scan'208";a="72441847"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 21:24:42 -0800
+X-CSE-ConnectionGUID: TM+lC10ERfSlUPeBNZRjpA==
+X-CSE-MsgGUID: kueySC1/QEWO1Hgim4eaVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,230,1763452800"; 
+   d="scan'208";a="210186400"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 15 Jan 2026 21:24:38 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgcK4-00000000KPc-1pqB;
+	Fri, 16 Jan 2026 05:24:36 +0000
+Date: Fri, 16 Jan 2026 13:23:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alison Schofield <alison.schofield@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Vishal Verma <vishal.l.verma@intel.com>,
+ Ira Weiny <ira.weiny@intel.com>,
+ Dan Williams <dan.j.williams@intel.com>, linux-cxl@vger.kernel.org,
+ Dave Jiang <dave.jiang@intel.com>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>
+Subject: [cxl:next 8/8] ERROR: modpost: "__udivdi3"
+ [drivers/cxl/core/cxl_core.ko] undefined!
+Message-ID: <202601161359.cnyZgr4S-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bc39d4d-6e2d-f0af-9787-5fd2c92bfd4e@kernel.org>
 
-On Wed, Jan 14, 2026 at 06:02:46PM -0700, Paul Walmsley wrote:
-> I'm assuming this would be a temporary patch, and that we might be able to 
-> remove it at some point (years, I guess?)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
+head:   9582b6a47ef87168a3a57084f75fd7239a6c56f6
+commit: 9582b6a47ef87168a3a57084f75fd7239a6c56f6 [8/8] cxl/region: Translate HPA to DPA and memdev in unaligned regions
+config: i386-buildonly-randconfig-004-20260116 (https://download.01.org/0day-ci/archive/20260116/202601161359.cnyZgr4S-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601161359.cnyZgr4S-lkp@intel.com/reproduce)
 
-Yes, ideally this would be short lived but unfortunately, I am not
-really sure what the plan to fix this on the LLVM side is :/ Maybe Craig
-or Bill can comment on that.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601161359.cnyZgr4S-lkp@intel.com/
 
-> Might be worth adding a comment in the code to explain why a temporary 
-> variable is needed.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-I will insert:
+>> ERROR: modpost: "__udivdi3" [drivers/cxl/core/cxl_core.ko] undefined!
+>> ERROR: modpost: "__umoddi3" [drivers/cxl/core/cxl_core.ko] undefined!
 
-/*
- * Use a temporary variable for the output of the asm goto to avoid a
- * triggering an LLVM assertion due to sign extending the output when
- * it is used in function calls:
- * https://github.com/llvm/llvm-project/issues/143795
- */
-
-I will send v3 either tomorrow or Monday.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
