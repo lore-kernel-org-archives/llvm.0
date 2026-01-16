@@ -1,63 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED82D1EB5E3;
-	Fri, 16 Jan 2026 02:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1517F281341;
+	Fri, 16 Jan 2026 05:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768531001; cv=none; b=hTUuxcRKxSCzqex/e0Ku7B6bHfOcI3xtkn1qn2D7Sjs69cxAhP9w9TFUgbql73jMqa9kYph++gSNk5HlXNko0Pts0bUZc40K7hjUbBw8jq/Z64Ty1Utxm92UtFyE/YPApz/aqpXGmntUlPgPlQxGzI/RCZimWQ+uox5bwl0UIxs=
+	t=1768540216; cv=none; b=vBJF8TtRLgFpZTMv5jAb1ty/OpGpV21yx+8HcFaS+/7iSThPSIwBqkA8tA9+1wXapHLE4FjlRIMc/wLcm9xgUwwyIk39iM4sWxNx2LwXE7Vw/3Gr21Elhx+hsI+FGkxVPGtjme8mGRI+x89tDzwCYoCbv3qQy+e5gtXs04kVNuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768531001; c=relaxed/simple;
-	bh=I36aSXTzriBgDYv73mmeefdxppcdbFavEzvnxfjsNOs=;
+	s=arc-20240116; t=1768540216; c=relaxed/simple;
+	bh=HZzHW7YHZPFUQKO1dKDsA0Pg/kpBIfBQhMpeukAM8II=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=npW4lLvFz/3xn/UvC3pYdmhbl/CuXZFaBooN+09R1nq/ZaMAFPYYDNU+FftGnd08IYCh9cFUh2gf3WZjYJSc4cGjSa6JLWpTBh/jolkM24xugvfGz1ccCTdUgHEnK3HvPxPAuR6c9AfwiXM80E2rJVCYekGdyUw7Gyy03yYDjxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MiuxIzkg; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=RxoUXfJKKKZn9jNadoDL6r+ifC1cKIW7RAp+YtgWCOgSJpID8uQfS5Xj2ErPeKOLplNtK5l1uCnHj2mdPu2dUzbB8UqVR2sS4MvBi605IJkHF9hFPC8X2S9b+XI/jR5khJm+N32OUxdLMJOM1Xg9fU9lisbgdSHCq1tdbJddD5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Het7nqji; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MiuxIzkg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768530999; x=1800066999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I36aSXTzriBgDYv73mmeefdxppcdbFavEzvnxfjsNOs=;
-  b=MiuxIzkg2tBePOA64h+lGjgWqpWxyixgm6QkepRo93gYgamQSM73KQqB
-   i8kymZ50Qoj5qAcd3xrK3v73+YFOYn/9QWLKCAKotSQQcXT/znAZwDo00
-   MYlvpF7EI7WIkdyef/GoULRRXdXHnBBEGZ3yqXo2r/2mL3sZzs2QviwAG
-   hjsKQyx442i+fDKCKOwFYnuoCBJjUb5RzMsqyrKx1bGmnUlB06vpP3wep
-   VL7sGRvRBloV1noksqzPor/UC5H3Lgfb33nsivCT8SJoSw2qnGKSRx2Wn
-   79OmuavpHT9TBvFagDSA6Xf4Ln2FXj6Jnj9J+x66GQaFPdI7O1RsYOvEI
-   Q==;
-X-CSE-ConnectionGUID: RTzJUgS0Tg2kYCq5r17szw==
-X-CSE-MsgGUID: 5Wg53lumTgu/UiQTnK8CDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="80490134"
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="80490134"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 18:36:38 -0800
-X-CSE-ConnectionGUID: RNs7zFrbTSKiVzSsjB2SXQ==
-X-CSE-MsgGUID: wI6tJSYyT/ORZg51PZyQIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="210153141"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 15 Jan 2026 18:36:35 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgZhN-00000000KGe-06KE;
-	Fri, 16 Jan 2026 02:36:29 +0000
-Date: Fri, 16 Jan 2026 10:36:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Devendra K Verma <devendra.verma@amd.com>, bhelgaas@google.com,
-	mani@kernel.org, vkoul@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, michal.simek@amd.com,
-	Devendra.Verma@amd.com
-Subject: Re: [PATCH v8 2/2] dmaengine: dw-edma: Add non-LL mode
-Message-ID: <202601161018.9e9hUXUa-lkp@intel.com>
-References: <20260109120354.306048-3-devendra.verma@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Het7nqji"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EFDC116C6;
+	Fri, 16 Jan 2026 05:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768540215;
+	bh=HZzHW7YHZPFUQKO1dKDsA0Pg/kpBIfBQhMpeukAM8II=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Het7nqjiBCR4dN8g3EHFcpM9lAzrF60K0/j1XIY6YjUPMhPtRmD6t5xGxbngzHAV2
+	 /RMwlWIc2Y6ZymJ73u4Lv3IaFocowX+CRqTyOkx8+Q52QoK1AN1tKprDXos4BXBH5S
+	 rEmmXD5qf3HeTNQfgCn3o6gioZzNbEGkcJk4PsqlB53DAzVe1eB3Q25dEVDFqUX7bc
+	 dfHhhuuqzXSxjvegYtSkfxiY5g2ZC11GXt4YimMK3vJiuOVlCYteH41RevpMgWvvba
+	 m1DXZ5QT52HlbQX3zkfjbSwuczYwQ8wCRRzDPTJrb+BQEXiPSnI1airiKQbzelXmEc
+	 14Cef03trdThA==
+Date: Thu, 15 Jan 2026 22:10:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Paul Walmsley <pjw@kernel.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Craig Topper <craig.topper@sifive.com>,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH RFC v2] riscv: Use 64-bit variable for output in
+ __get_user_asm
+Message-ID: <20260116051011.GB1452322@ax162>
+References: <20260113-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v2-1-e04aba2e1f9f@kernel.org>
+ <7bc39d4d-6e2d-f0af-9787-5fd2c92bfd4e@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,280 +49,29 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260109120354.306048-3-devendra.verma@amd.com>
+In-Reply-To: <7bc39d4d-6e2d-f0af-9787-5fd2c92bfd4e@kernel.org>
 
-Hi Devendra,
+On Wed, Jan 14, 2026 at 06:02:46PM -0700, Paul Walmsley wrote:
+> I'm assuming this would be a temporary patch, and that we might be able to 
+> remove it at some point (years, I guess?)
 
-kernel test robot noticed the following build errors:
+Yes, ideally this would be short lived but unfortunately, I am not
+really sure what the plan to fix this on the LLVM side is :/ Maybe Craig
+or Bill can comment on that.
 
-[auto build test ERROR on v6.19-rc4]
-[also build test ERROR on linus/master next-20260115]
-[cannot apply to vkoul-dmaengine/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Might be worth adding a comment in the code to explain why a temporary 
+> variable is needed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Devendra-K-Verma/dmaengine-dw-edma-Add-AMD-MDB-Endpoint-Support/20260109-200654
-base:   v6.19-rc4
-patch link:    https://lore.kernel.org/r/20260109120354.306048-3-devendra.verma%40amd.com
-patch subject: [PATCH v8 2/2] dmaengine: dw-edma: Add non-LL mode
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601161018.9e9hUXUa-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601161018.9e9hUXUa-lkp@intel.com/reproduce)
+I will insert:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601161018.9e9hUXUa-lkp@intel.com/
+/*
+ * Use a temporary variable for the output of the asm goto to avoid a
+ * triggering an LLVM assertion due to sign extending the output when
+ * it is used in function calls:
+ * https://github.com/llvm/llvm-project/issues/143795
+ */
 
-All errors (new ones prefixed by >>):
+I will send v3 either tomorrow or Monday.
 
->> drivers/dma/dw-edma/dw-edma-pcie.c:348:37: error: use of undeclared identifier 'DW_PCIE_AMD_MDB_INVALID_ADDR'
-     348 |                 if (vsec_data->devmem_phys_off == DW_PCIE_AMD_MDB_INVALID_ADDR)
-         |                                                   ^
->> drivers/dma/dw-edma/dw-edma-pcie.c:358:14: error: use of undeclared identifier 'DW_PCIE_XILINX_LL_OFF_GAP'
-     358 |                                                        DW_PCIE_XILINX_LL_OFF_GAP,
-         |                                                        ^
->> drivers/dma/dw-edma/dw-edma-pcie.c:359:14: error: use of undeclared identifier 'DW_PCIE_XILINX_LL_SIZE'
-     359 |                                                        DW_PCIE_XILINX_LL_SIZE,
-         |                                                        ^
->> drivers/dma/dw-edma/dw-edma-pcie.c:360:14: error: use of undeclared identifier 'DW_PCIE_XILINX_DT_OFF_GAP'
-     360 |                                                        DW_PCIE_XILINX_DT_OFF_GAP,
-         |                                                        ^
->> drivers/dma/dw-edma/dw-edma-pcie.c:361:14: error: use of undeclared identifier 'DW_PCIE_XILINX_DT_SIZE'
-     361 |                                                        DW_PCIE_XILINX_DT_SIZE);
-         |                                                        ^
-   5 errors generated.
-
-
-vim +/DW_PCIE_AMD_MDB_INVALID_ADDR +348 drivers/dma/dw-edma/dw-edma-pcie.c
-
-   309	
-   310	static int dw_edma_pcie_probe(struct pci_dev *pdev,
-   311				      const struct pci_device_id *pid)
-   312	{
-   313		struct dw_edma_pcie_data *pdata = (void *)pid->driver_data;
-   314		struct dw_edma_pcie_data *vsec_data __free(kfree) = NULL;
-   315		struct device *dev = &pdev->dev;
-   316		struct dw_edma_chip *chip;
-   317		int err, nr_irqs;
-   318		int i, mask;
-   319		bool non_ll = false;
-   320	
-   321		vsec_data = kmalloc(sizeof(*vsec_data), GFP_KERNEL);
-   322		if (!vsec_data)
-   323			return -ENOMEM;
-   324	
-   325		/* Enable PCI device */
-   326		err = pcim_enable_device(pdev);
-   327		if (err) {
-   328			pci_err(pdev, "enabling device failed\n");
-   329			return err;
-   330		}
-   331	
-   332		memcpy(vsec_data, pdata, sizeof(struct dw_edma_pcie_data));
-   333	
-   334		/*
-   335		 * Tries to find if exists a PCIe Vendor-Specific Extended Capability
-   336		 * for the DMA, if one exists, then reconfigures it.
-   337		 */
-   338		dw_edma_pcie_get_synopsys_dma_data(pdev, vsec_data);
-   339		dw_edma_pcie_get_xilinx_dma_data(pdev, vsec_data);
-   340	
-   341		if (pdev->vendor == PCI_VENDOR_ID_XILINX) {
-   342			/*
-   343			 * There is no valid address found for the LL memory
-   344			 * space on the device side. In the absence of LL base
-   345			 * address use the non-LL mode or simple mode supported by
-   346			 * the HDMA IP.
-   347			 */
- > 348			if (vsec_data->devmem_phys_off == DW_PCIE_AMD_MDB_INVALID_ADDR)
-   349				non_ll = true;
-   350	
-   351			/*
-   352			 * Configure the channel LL and data blocks if number of
-   353			 * channels enabled in VSEC capability are more than the
-   354			 * channels configured in xilinx_mdb_data.
-   355			 */
-   356			if (!non_ll)
-   357				dw_edma_set_chan_region_offset(vsec_data, BAR_2, 0,
- > 358							       DW_PCIE_XILINX_LL_OFF_GAP,
- > 359							       DW_PCIE_XILINX_LL_SIZE,
- > 360							       DW_PCIE_XILINX_DT_OFF_GAP,
- > 361							       DW_PCIE_XILINX_DT_SIZE);
-   362		}
-   363	
-   364		/* Mapping PCI BAR regions */
-   365		mask = BIT(vsec_data->rg.bar);
-   366		for (i = 0; i < vsec_data->wr_ch_cnt; i++) {
-   367			mask |= BIT(vsec_data->ll_wr[i].bar);
-   368			mask |= BIT(vsec_data->dt_wr[i].bar);
-   369		}
-   370		for (i = 0; i < vsec_data->rd_ch_cnt; i++) {
-   371			mask |= BIT(vsec_data->ll_rd[i].bar);
-   372			mask |= BIT(vsec_data->dt_rd[i].bar);
-   373		}
-   374		err = pcim_iomap_regions(pdev, mask, pci_name(pdev));
-   375		if (err) {
-   376			pci_err(pdev, "eDMA BAR I/O remapping failed\n");
-   377			return err;
-   378		}
-   379	
-   380		pci_set_master(pdev);
-   381	
-   382		/* DMA configuration */
-   383		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-   384		if (err) {
-   385			pci_err(pdev, "DMA mask 64 set failed\n");
-   386			return err;
-   387		}
-   388	
-   389		/* Data structure allocation */
-   390		chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
-   391		if (!chip)
-   392			return -ENOMEM;
-   393	
-   394		/* IRQs allocation */
-   395		nr_irqs = pci_alloc_irq_vectors(pdev, 1, vsec_data->irqs,
-   396						PCI_IRQ_MSI | PCI_IRQ_MSIX);
-   397		if (nr_irqs < 1) {
-   398			pci_err(pdev, "fail to alloc IRQ vector (number of IRQs=%u)\n",
-   399				nr_irqs);
-   400			return -EPERM;
-   401		}
-   402	
-   403		/* Data structure initialization */
-   404		chip->dev = dev;
-   405	
-   406		chip->mf = vsec_data->mf;
-   407		chip->nr_irqs = nr_irqs;
-   408		chip->ops = &dw_edma_pcie_plat_ops;
-   409		chip->non_ll = non_ll;
-   410	
-   411		chip->ll_wr_cnt = vsec_data->wr_ch_cnt;
-   412		chip->ll_rd_cnt = vsec_data->rd_ch_cnt;
-   413	
-   414		chip->reg_base = pcim_iomap_table(pdev)[vsec_data->rg.bar];
-   415		if (!chip->reg_base)
-   416			return -ENOMEM;
-   417	
-   418		for (i = 0; i < chip->ll_wr_cnt && !non_ll; i++) {
-   419			struct dw_edma_region *ll_region = &chip->ll_region_wr[i];
-   420			struct dw_edma_region *dt_region = &chip->dt_region_wr[i];
-   421			struct dw_edma_block *ll_block = &vsec_data->ll_wr[i];
-   422			struct dw_edma_block *dt_block = &vsec_data->dt_wr[i];
-   423	
-   424			ll_region->vaddr.io = pcim_iomap_table(pdev)[ll_block->bar];
-   425			if (!ll_region->vaddr.io)
-   426				return -ENOMEM;
-   427	
-   428			ll_region->vaddr.io += ll_block->off;
-   429			ll_region->paddr = dw_edma_get_phys_addr(pdev, vsec_data,
-   430								 ll_block->bar);
-   431			ll_region->paddr += ll_block->off;
-   432			ll_region->sz = ll_block->sz;
-   433	
-   434			dt_region->vaddr.io = pcim_iomap_table(pdev)[dt_block->bar];
-   435			if (!dt_region->vaddr.io)
-   436				return -ENOMEM;
-   437	
-   438			dt_region->vaddr.io += dt_block->off;
-   439			dt_region->paddr = dw_edma_get_phys_addr(pdev, vsec_data,
-   440								 dt_block->bar);
-   441			dt_region->paddr += dt_block->off;
-   442			dt_region->sz = dt_block->sz;
-   443		}
-   444	
-   445		for (i = 0; i < chip->ll_rd_cnt && !non_ll; i++) {
-   446			struct dw_edma_region *ll_region = &chip->ll_region_rd[i];
-   447			struct dw_edma_region *dt_region = &chip->dt_region_rd[i];
-   448			struct dw_edma_block *ll_block = &vsec_data->ll_rd[i];
-   449			struct dw_edma_block *dt_block = &vsec_data->dt_rd[i];
-   450	
-   451			ll_region->vaddr.io = pcim_iomap_table(pdev)[ll_block->bar];
-   452			if (!ll_region->vaddr.io)
-   453				return -ENOMEM;
-   454	
-   455			ll_region->vaddr.io += ll_block->off;
-   456			ll_region->paddr = dw_edma_get_phys_addr(pdev, vsec_data,
-   457								 ll_block->bar);
-   458			ll_region->paddr += ll_block->off;
-   459			ll_region->sz = ll_block->sz;
-   460	
-   461			dt_region->vaddr.io = pcim_iomap_table(pdev)[dt_block->bar];
-   462			if (!dt_region->vaddr.io)
-   463				return -ENOMEM;
-   464	
-   465			dt_region->vaddr.io += dt_block->off;
-   466			dt_region->paddr = dw_edma_get_phys_addr(pdev, vsec_data,
-   467								 dt_block->bar);
-   468			dt_region->paddr += dt_block->off;
-   469			dt_region->sz = dt_block->sz;
-   470		}
-   471	
-   472		/* Debug info */
-   473		if (chip->mf == EDMA_MF_EDMA_LEGACY)
-   474			pci_dbg(pdev, "Version:\teDMA Port Logic (0x%x)\n", chip->mf);
-   475		else if (chip->mf == EDMA_MF_EDMA_UNROLL)
-   476			pci_dbg(pdev, "Version:\teDMA Unroll (0x%x)\n", chip->mf);
-   477		else if (chip->mf == EDMA_MF_HDMA_COMPAT)
-   478			pci_dbg(pdev, "Version:\tHDMA Compatible (0x%x)\n", chip->mf);
-   479		else if (chip->mf == EDMA_MF_HDMA_NATIVE)
-   480			pci_dbg(pdev, "Version:\tHDMA Native (0x%x)\n", chip->mf);
-   481		else
-   482			pci_dbg(pdev, "Version:\tUnknown (0x%x)\n", chip->mf);
-   483	
-   484		pci_dbg(pdev, "Registers:\tBAR=%u, off=0x%.8lx, sz=0x%zx bytes, addr(v=%p)\n",
-   485			vsec_data->rg.bar, vsec_data->rg.off, vsec_data->rg.sz,
-   486			chip->reg_base);
-   487	
-   488	
-   489		for (i = 0; i < chip->ll_wr_cnt; i++) {
-   490			pci_dbg(pdev, "L. List:\tWRITE CH%.2u, BAR=%u, off=0x%.8lx, sz=0x%zx bytes, addr(v=%p, p=%pa)\n",
-   491				i, vsec_data->ll_wr[i].bar,
-   492				vsec_data->ll_wr[i].off, chip->ll_region_wr[i].sz,
-   493				chip->ll_region_wr[i].vaddr.io, &chip->ll_region_wr[i].paddr);
-   494	
-   495			pci_dbg(pdev, "Data:\tWRITE CH%.2u, BAR=%u, off=0x%.8lx, sz=0x%zx bytes, addr(v=%p, p=%pa)\n",
-   496				i, vsec_data->dt_wr[i].bar,
-   497				vsec_data->dt_wr[i].off, chip->dt_region_wr[i].sz,
-   498				chip->dt_region_wr[i].vaddr.io, &chip->dt_region_wr[i].paddr);
-   499		}
-   500	
-   501		for (i = 0; i < chip->ll_rd_cnt; i++) {
-   502			pci_dbg(pdev, "L. List:\tREAD CH%.2u, BAR=%u, off=0x%.8lx, sz=0x%zx bytes, addr(v=%p, p=%pa)\n",
-   503				i, vsec_data->ll_rd[i].bar,
-   504				vsec_data->ll_rd[i].off, chip->ll_region_rd[i].sz,
-   505				chip->ll_region_rd[i].vaddr.io, &chip->ll_region_rd[i].paddr);
-   506	
-   507			pci_dbg(pdev, "Data:\tREAD CH%.2u, BAR=%u, off=0x%.8lx, sz=0x%zx bytes, addr(v=%p, p=%pa)\n",
-   508				i, vsec_data->dt_rd[i].bar,
-   509				vsec_data->dt_rd[i].off, chip->dt_region_rd[i].sz,
-   510				chip->dt_region_rd[i].vaddr.io, &chip->dt_region_rd[i].paddr);
-   511		}
-   512	
-   513		pci_dbg(pdev, "Nr. IRQs:\t%u\n", chip->nr_irqs);
-   514	
-   515		/* Validating if PCI interrupts were enabled */
-   516		if (!pci_dev_msi_enabled(pdev)) {
-   517			pci_err(pdev, "enable interrupt failed\n");
-   518			return -EPERM;
-   519		}
-   520	
-   521		/* Starting eDMA driver */
-   522		err = dw_edma_probe(chip);
-   523		if (err) {
-   524			pci_err(pdev, "eDMA probe failed\n");
-   525			return err;
-   526		}
-   527	
-   528		/* Saving data structure reference */
-   529		pci_set_drvdata(pdev, chip);
-   530	
-   531		return 0;
-   532	}
-   533	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
