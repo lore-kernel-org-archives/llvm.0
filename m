@@ -1,64 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383C233A6EB;
-	Fri, 16 Jan 2026 15:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CCD26B0B3;
+	Fri, 16 Jan 2026 15:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768577896; cv=none; b=BFV1/5iQv1ARi9/7BTyMFUbzv1MM1rGVQHDa373lZ27fSwxXLTtTRf1Is4DAT3plg9QI04o2rzgZnmHx5c4Kf2m7KrqVKwBKRhMtZSM4cfD5CU3zfLxOgrk4m8X7Fk8bQMCxUT/wjjGiIhbFrE/Di+L5lkbNIFgwuwt1cTquGVQ=
+	t=1768578481; cv=none; b=F1bd+Qkce+cuB23DD86n6M0H5ORt3wVfpAp2W3TzaLn7qo7+Kq2/Ch1qKyI2gju0iU6SwWqNVeWxaYTIr5i9vHzkEUbs55Mm2sPap/dj4jjgm20Y+NqF5SRKdtAgioDkniURbAqwL7QsVCv8nteNr9cggu71Lrvc5GRgeOgHel8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768577896; c=relaxed/simple;
-	bh=8Dcv71JrcWpR8h6y57WNkmYCQbL1GhtCY+1kUVFVza8=;
+	s=arc-20240116; t=1768578481; c=relaxed/simple;
+	bh=WSi8N0YOGOcsHSVSef6RMQxztPhfFapgkgxT6S7KkcY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gLGDsaxC7JczA8bFLKG3QHsk15Wg1rHUeRA/Ie4T1o3ehlfhK2iqeh8Ue2NDGcApdTri2UA3z+XZ/7XZm461R9qVda8DTmeWyjB4j4xjSoqQuotp0ikC24pjF2cNVoW/j5vDL1/OtH9ruTyU9KUpxoh4qAkvlGvuJ/T26ZLWS7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RPS1xTZq; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gl8BK3HrYkGU1GEX/AMyalImvAO6E6sEUYFTOMuLjxE/4x6zqTDdI5zugxRzxGdnit5dlxvQgoucavO6+ur/y/0VRa3OgSfXgMm+9qfS7XDOi6U/VYictJBQdNTu+Tr/ISSxaJabyu/Wbcft6mg4oK7b+M8GXjoWbiwptXm58OM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WBEkHBSi; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RPS1xTZq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768577889; x=1800113889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8Dcv71JrcWpR8h6y57WNkmYCQbL1GhtCY+1kUVFVza8=;
-  b=RPS1xTZq5y9tZ3WLA40fXQNCYWFQSgfq+fuAroC2IuByLoDbsM6oePvM
-   O91uQZENOTK08lOtjQr7qYS6n7mTaITk8wq2tgllM3wzpycwmAc/RjzD/
-   mULQMuahMSB51P9ESnAJWIDEidxD0j/rsw7WbIqmDCFYyNiVwTrTeRgIe
-   OBbdE/NDzS/x2IP+cc27icg7V7EXo2Wf+8m61j9oZXMwzSGtsPfsIS9ny
-   CAQ03aZ5H9cPGUuUV5K0JwaFwNtg4oDplNpBuEHlulGOMp5u3NJ2KRBJu
-   /EhhJmP43mUetAPgJ1a9OHp32pyXfAZztp1Wy2Q/f5p05dDXGEjbtXHKP
-   g==;
-X-CSE-ConnectionGUID: 0nnOL+NRTmS1Sh9dIJLQhQ==
-X-CSE-MsgGUID: sms2+WnIR6+hEuLnum414w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="87468014"
-X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
-   d="scan'208";a="87468014"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 07:38:09 -0800
-X-CSE-ConnectionGUID: yOUtbHC+S9OQxPPAQKFmSA==
-X-CSE-MsgGUID: jmP+gCkXQd6ztsxwNqKCCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,231,1763452800"; 
-   d="scan'208";a="235962770"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 16 Jan 2026 07:38:05 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgltj-00000000Kyy-2Su2;
-	Fri, 16 Jan 2026 15:38:03 +0000
-Date: Fri, 16 Jan 2026 23:37:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: sunpeng.li@amd.com, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Harry.Wentland@amd.com, simona@ffwll.ch, airlied@gmail.com,
-	jani.nikula@linux.intel.com, ville.syrjala@linux.intel.com,
-	Leo Li <sunpeng.li@amd.com>
-Subject: Re: [PATCH v3 2/2] drm/amd/display: Implement prepare_vblank_enable
- callback
-Message-ID: <202601162358.Uv6IL5Jo-lkp@intel.com>
-References: <20260109192027.116325-2-sunpeng.li@amd.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WBEkHBSi"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=oSjG1d8OZ7OmFUCDFova52CcXzuGRhvK5+mM1zx7v9E=; b=WBEkHBSiCkkoF7Nh5NRjphe7w8
+	kRgzblbsb1m2Y/jAcI9JA+eU6SkarKpNIiiXaHaZdjx71viZarMxJOp/69MnhiZzS0lFpmBzivR4b
+	GkgViA75PdvlYyZ+cFi2RqjzAQ0zgL4cVxlvGDJhJYbhToGv6WlSNQYAxlQX2afC2HX3dzJVlOLG/
+	zK+xUsqilyMxQv3aZv9dxUise2DHHPJI+BirglEu3CDArriPmHFdOpBss1Dx9B5qqW4ReGuWX0Tr1
+	PezYwd6a/2LKFR4Ctc4V/JHrHXrPJGFpbwdoLHqIdFM0igzX2fjRChGrHSwEms3SmgJwznP14485j
+	Zu1ZqrLQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vgm3H-00000009YaU-3M4m;
+	Fri, 16 Jan 2026 15:47:55 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 49E7F3005E5; Fri, 16 Jan 2026 16:47:54 +0100 (CET)
+Date: Fri, 16 Jan 2026 16:47:54 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Marco Elver <elver@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
+ immediate acquisition after initialization
+Message-ID: <20260116154754.GN830755@noisy.programming.kicks-ass.net>
+References: <20260115005231.1211866-1-elver@google.com>
+ <20260115213311.GG830755@noisy.programming.kicks-ass.net>
+ <aWmRlXZaOOUvU_Nv@elver.google.com>
+ <20260116150750.GG831050@noisy.programming.kicks-ass.net>
+ <20260116151043.GA18805@lst.de>
+ <20260116152016.GI831050@noisy.programming.kicks-ass.net>
+ <20260116152741.GA19823@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,173 +59,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260109192027.116325-2-sunpeng.li@amd.com>
+In-Reply-To: <20260116152741.GA19823@lst.de>
 
-Hi,
+On Fri, Jan 16, 2026 at 04:27:41PM +0100, Christoph Hellwig wrote:
+> On Fri, Jan 16, 2026 at 04:20:16PM +0100, Peter Zijlstra wrote:
+> > is *much* clearer than something like:
+> > 
+> > 	spinlock_init(&obj->lock);
+> > 	// init
+> > 	spinlock_deinit(&obj->lock);
+> > 
+> > Exactly because it has explicit scope. (also my deinit naming might not
+> > be optimal, it is ambiguous at best, probably confusing).
+> 
+> WTF is spinlock_deinit even supposed to be?
+> 
+> I though this is about:
+> 
+> 	spin_lock_init(&obj->lock);
+> 	spin_lock(&obj->lock);
+> 
+> > Not to mention that the scope things are far more robust vs error paths.
+> 
+> They are just a really hacked up clumsy way to provide what a very
+> limited version of what the capability analys provides, while messing
+> up the code.
 
-kernel test robot noticed the following build errors:
+So the base problem here is something like:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-tip/drm-tip next-20260115]
-[cannot apply to drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v6.19-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+struct obj {
+	spinlock_t	lock;
+	int		state __guarded_by(lock);
+};
 
-url:    https://github.com/intel-lab-lkp/linux/commits/sunpeng-li-amd-com/drm-amd-display-Implement-prepare_vblank_enable-callback/20260110-032355
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260109192027.116325-2-sunpeng.li%40amd.com
-patch subject: [PATCH v3 2/2] drm/amd/display: Implement prepare_vblank_enable callback
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260116/202601162358.Uv6IL5Jo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162358.Uv6IL5Jo-lkp@intel.com/reproduce)
+struct obj *create_obj(void)
+{
+	struct obj *obj = kzmalloc(sizeof(*obj), GFP_KERNEL);
+	if (!obj)
+		return NULL;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601162358.Uv6IL5Jo-lkp@intel.com/
+	spin_lock_init(&obj->lock);
+	obj->state = INIT_STATE; // error: ->state demands ->lock is held
+}
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crc.c:659:24: error: use of undeclared identifier 'dm'
-     659 |                 scoped_guard(mutex, &dm->dc_lock) {
-         |                                      ^
-   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crc.c:660:30: error: use of undeclared identifier 'dm'
-     660 |                         dc_exit_ips_for_hw_access(dm->dc);
-         |                                                   ^
-   2 errors generated.
+So if you want/can take spin_lock() directly after spin_lock_init(),
+then yes, you can write:
 
 
-vim +/dm +659 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crc.c
+	spin_lock_init(&obj->lock);
+	spin_lock(&obj->lock);
+	obj->state = INIT_STATE; // OK
 
-   542	
-   543	int amdgpu_dm_crtc_set_crc_source(struct drm_crtc *crtc, const char *src_name)
-   544	{
-   545		enum amdgpu_dm_pipe_crc_source source = dm_parse_crc_source(src_name);
-   546		enum amdgpu_dm_pipe_crc_source cur_crc_src;
-   547		struct drm_crtc_commit *commit;
-   548		struct dm_crtc_state *crtc_state;
-   549		struct drm_device *drm_dev = crtc->dev;
-   550	#if defined(CONFIG_DRM_AMD_SECURE_DISPLAY)
-   551		struct amdgpu_device *adev = drm_to_adev(drm_dev);
-   552		struct amdgpu_display_manager *dm = &adev->dm;
-   553	#endif
-   554		struct amdgpu_crtc *acrtc = to_amdgpu_crtc(crtc);
-   555		struct drm_dp_aux *aux = NULL;
-   556		bool enable = false;
-   557		bool enabled = false;
-   558		int ret = 0;
-   559	
-   560		if (source < 0) {
-   561			DRM_DEBUG_DRIVER("Unknown CRC source %s for CRTC%d\n",
-   562					 src_name, crtc->index);
-   563			return -EINVAL;
-   564		}
-   565	
-   566		ret = drm_modeset_lock(&crtc->mutex, NULL);
-   567		if (ret)
-   568			return ret;
-   569	
-   570		spin_lock(&crtc->commit_lock);
-   571		commit = list_first_entry_or_null(&crtc->commit_list,
-   572						  struct drm_crtc_commit, commit_entry);
-   573		if (commit)
-   574			drm_crtc_commit_get(commit);
-   575		spin_unlock(&crtc->commit_lock);
-   576	
-   577		if (commit) {
-   578			/*
-   579			 * Need to wait for all outstanding programming to complete
-   580			 * in commit tail since it can modify CRC related fields and
-   581			 * hardware state. Since we're holding the CRTC lock we're
-   582			 * guaranteed that no other commit work can be queued off
-   583			 * before we modify the state below.
-   584			 */
-   585			ret = wait_for_completion_interruptible_timeout(
-   586				&commit->hw_done, 10 * HZ);
-   587			if (ret)
-   588				goto cleanup;
-   589		}
-   590	
-   591		enable = amdgpu_dm_is_valid_crc_source(source);
-   592		crtc_state = to_dm_crtc_state(crtc->state);
-   593		spin_lock_irq(&drm_dev->event_lock);
-   594		cur_crc_src = acrtc->dm_irq_params.crc_src;
-   595		spin_unlock_irq(&drm_dev->event_lock);
-   596	
-   597		/*
-   598		 * USER REQ SRC | CURRENT SRC | BEHAVIOR
-   599		 * -----------------------------
-   600		 * None         | None        | Do nothing
-   601		 * None         | CRTC        | Disable CRTC CRC, set default to dither
-   602		 * None         | DPRX        | Disable DPRX CRC, need 'aux', set default to dither
-   603		 * None         | CRTC DITHER | Disable CRTC CRC
-   604		 * None         | DPRX DITHER | Disable DPRX CRC, need 'aux'
-   605		 * CRTC         | XXXX        | Enable CRTC CRC, no dither
-   606		 * DPRX         | XXXX        | Enable DPRX CRC, need 'aux', no dither
-   607		 * CRTC DITHER  | XXXX        | Enable CRTC CRC, set dither
-   608		 * DPRX DITHER  | XXXX        | Enable DPRX CRC, need 'aux', set dither
-   609		 */
-   610		if (dm_is_crc_source_dprx(source) ||
-   611		    (source == AMDGPU_DM_PIPE_CRC_SOURCE_NONE &&
-   612		     dm_is_crc_source_dprx(cur_crc_src))) {
-   613			struct amdgpu_dm_connector *aconn = NULL;
-   614			struct drm_connector *connector;
-   615			struct drm_connector_list_iter conn_iter;
-   616	
-   617			drm_connector_list_iter_begin(crtc->dev, &conn_iter);
-   618			drm_for_each_connector_iter(connector, &conn_iter) {
-   619				if (!connector->state || connector->state->crtc != crtc)
-   620					continue;
-   621	
-   622				if (connector->connector_type == DRM_MODE_CONNECTOR_WRITEBACK)
-   623					continue;
-   624	
-   625				aconn = to_amdgpu_dm_connector(connector);
-   626				break;
-   627			}
-   628			drm_connector_list_iter_end(&conn_iter);
-   629	
-   630			if (!aconn) {
-   631				DRM_DEBUG_DRIVER("No amd connector matching CRTC-%d\n", crtc->index);
-   632				ret = -EINVAL;
-   633				goto cleanup;
-   634			}
-   635	
-   636			aux = (aconn->mst_output_port) ? &aconn->mst_output_port->aux : &aconn->dm_dp_aux.aux;
-   637	
-   638			if (!aux) {
-   639				DRM_DEBUG_DRIVER("No dp aux for amd connector\n");
-   640				ret = -EINVAL;
-   641				goto cleanup;
-   642			}
-   643	
-   644			if ((aconn->base.connector_type != DRM_MODE_CONNECTOR_DisplayPort) &&
-   645					(aconn->base.connector_type != DRM_MODE_CONNECTOR_eDP)) {
-   646				DRM_DEBUG_DRIVER("No DP connector available for CRC source\n");
-   647				ret = -EINVAL;
-   648				goto cleanup;
-   649			}
-   650	
-   651		}
-   652	
-   653		/*
-   654		 * Reading the CRC requires the vblank interrupt handler to be
-   655		 * enabled. Keep a reference until CRC capture stops.
-   656		 */
-   657		enabled = amdgpu_dm_is_valid_crc_source(cur_crc_src);
-   658		if (!enabled && enable) {
- > 659			scoped_guard(mutex, &dm->dc_lock) {
-   660				dc_exit_ips_for_hw_access(dm->dc);
-   661				ret = drm_crtc_vblank_get(crtc);
-   662			}
-   663	
-   664			if (ret)
-   665				goto cleanup;
-   666		}
-   667	
+However, if code is structured such that you need to init fields before
+taking the lock, you need a 'fake' lock acquire to wrap the
+initialization -- which is safe because there is no concurrency yet and
+all that, furthermore, by holding the fake lock you also ensure you
+cannot in fact take the lock and create undue concurrency before
+initialization is complete.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+So the fairly common pattern where an object is first (fully) initialized
+before it can be used will need this fake acquisition. For this we get:
+
+	scoped_lock (spinlock_init, &obj->lock) {
+		// init goes here
+	}
+
+Or you can manually __acquire_ctx_lock() / __release_ctx_lock().
+
+
