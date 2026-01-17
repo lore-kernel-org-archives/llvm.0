@@ -1,65 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186351D5178;
-	Sat, 17 Jan 2026 01:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38283016F2;
+	Sat, 17 Jan 2026 02:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768614818; cv=none; b=ZbDOQv+KGhNKGGWFZwIbk7AHkcvAenIJJtYrzsOpG32D4hoAboVE3uk5tYATyLdtrwIgmAE1sljC4jgS6BWT70ktViqoDVd7M80wzjiL441D/U0RVzeVHOtxxneoMY/obz+T4dmRYlzTRxhnP+XFWuifBR3fBMDazF6eVDKBpCs=
+	t=1768615546; cv=none; b=KBvsY0uSmVKLO8x4J/jINNChP7AMfU6ZPAwLTtuncIWSjtcFKgaYZaIKUXkMhJZiTjD1gHTcCTMp3/XAoV4JzpEnTtiM1ZPoDAYh4ZAHjZT7OWnMNcJgPL0LVE0PoHAMlNWkO0SFFDXVtvR6wsiDg3+OZ3Y+1ZQCMAZEdW3MsQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768614818; c=relaxed/simple;
-	bh=qXgdN23yNMQAaURttp868hNhHD5PD0Z52ZxrJ3+EJsc=;
+	s=arc-20240116; t=1768615546; c=relaxed/simple;
+	bh=h7Sl2joeSfECTM5ZoFqm0wKTMvEe5jWh6Z/mZZ09eoU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E0E4ftBkGoZpPUHn2BNsF0JRtMzOUbPeeU8DvoRjZeUfGA8qq0Wb90LS1U1dZAWjDUPh2EI7zvTDCkn0y48xRWBUKQQaRTbUux9d2dyTKBsi5NjkJ4JUKYCTaUWwNS00KnMM+HRaOQsBxhEUztwDiKi94Z21NU438DnAq3kZMj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=esFjgEP0; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=oaCeexjw75h+MU3OCiflXaTai8WG8ebdQKg+o+W8BMLwN8h7bTZi9yvBvI48ioVL6dv//cyhjMCvNX/NOMfwJ9O0dQ5SOe6o0iDqCbaMH6ayx3LirH26Hs04H+4aY1Mq7Js/rK6ra3qmec17LPb27Tq9PmTiojPck2SSVRHnh7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fDK2ekEF; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="esFjgEP0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fDK2ekEF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768614816; x=1800150816;
+  t=1768615545; x=1800151545;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qXgdN23yNMQAaURttp868hNhHD5PD0Z52ZxrJ3+EJsc=;
-  b=esFjgEP0gqZLdzMQ/9ETEp9dyxp2FeUjHvDIy1f5vDq96XcvvBtAq/Bd
-   hBX8JbmKT0CEB+SMM4JJg6A90J0xxZ/sSASMygjjSA9VAuPqhvOOms0YU
-   jHclDtaXJDwlXwvc/0pB9lGwgWvf6jf9qhkcV3lKHvM3JN7hQ5XtxyY61
-   nSHe0JFoNMMUvUHvC2EmVWkeXqyslnziltcsWlpEuqxQEa7CqsiGd2yQD
-   S3WdrSdRz8E+Hun1bcLCaFVrL8u+b5v8ocPqMtPQT1J+Lth/cLskjxsYo
-   nM0m6xGpOKmEsaz2LJ880VeXUyWNITyDZFeKdSh6fG1SL1yhYMMoVSjAo
-   w==;
-X-CSE-ConnectionGUID: lCFyTNSiSgGnLtPTihuZxg==
-X-CSE-MsgGUID: pLTJgoCgS6GmaSXxOjIOoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="73560111"
+  bh=h7Sl2joeSfECTM5ZoFqm0wKTMvEe5jWh6Z/mZZ09eoU=;
+  b=fDK2ekEFtIC6+4sBUB/RCLtvgsucEqRwQLiHGHBrxnHfyCochM7BQQA7
+   +CKZI1qwrssFe+11cpfRgJLg3BdaOMBKoNFBkkGMEE0LvJimUVDJ6/ueH
+   /bgxyVwi8M8Yx2/iMsoz+X0By4bQmzBmgboXDe5f/tvMhVxILuX2uNCyW
+   svk7qnBUszQdRsmLAZBt1BewZYeu36NTS2L+LozLeFWjQj/VzojwMJgCH
+   cDZYP8Sg4e85qciSIyszXACEQyw9UYY0vpOJKDByS5vUmHKLYtAQWRJIv
+   VBeigjP+jPjwdPULlMhPMGopcuw21SfQghekAGJg1m46hzi0XJSsYLqud
+   g==;
+X-CSE-ConnectionGUID: 6bEhXvRoRUiMfEZaFETdqw==
+X-CSE-MsgGUID: mSzizoUdRu+nrB8jfRQ0Og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="69844274"
 X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="73560111"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 17:53:36 -0800
-X-CSE-ConnectionGUID: TnTgWTMXSwiZMbMHD75aOg==
-X-CSE-MsgGUID: oKzd/2pDQUWhBTL5uX+IJA==
+   d="scan'208";a="69844274"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 18:05:36 -0800
+X-CSE-ConnectionGUID: toNzXDEsRMWnn/kmBJJeaQ==
+X-CSE-MsgGUID: GPG5X80zRa2x579q4eMQNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="205186320"
+   d="scan'208";a="205285574"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 16 Jan 2026 17:53:33 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 16 Jan 2026 18:05:33 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgvVK-00000000LRI-0wBq;
-	Sat, 17 Jan 2026 01:53:30 +0000
-Date: Sat, 17 Jan 2026 09:52:36 +0800
+	id 1vgvgw-00000000LS4-3FMv;
+	Sat, 17 Jan 2026 02:05:30 +0000
+Date: Sat, 17 Jan 2026 10:05:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+To: Bart Van Assche <bvanassche@acm.org>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-	Willem de Bruijn <willemb@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>, eric.dumazet@gmail.com,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 2/3] gro: inline tcp6_gro_receive()
-Message-ID: <202601170955.0wVpALLC-lkp@intel.com>
-References: <20260116152957.1825626-3-edumazet@google.com>
+	linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Peter Wang <peter.wang@mediatek.com>,
+	Avri Altman <avri.altman@sandisk.com>,
+	Bean Huo <beanhuo@micron.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+Subject: Re: [PATCH 3/7] ufs: core: Redirect clock gating to RPM
+Message-ID: <202601170903.r8uLs14E-lkp@intel.com>
+References: <20260116182628.3255116-4-bvanassche@acm.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,143 +70,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260116152957.1825626-3-edumazet@google.com>
+In-Reply-To: <20260116182628.3255116-4-bvanassche@acm.org>
 
-Hi Eric,
+Hi Bart,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next linus/master v6.19-rc5 next-20260116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-always-inline-__skb_incr_checksum_unnecessary/20260116-233745
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260116152957.1825626-3-edumazet%40google.com
-patch subject: [PATCH net-next 2/3] gro: inline tcp6_gro_receive()
-config: i386-randconfig-011-20260117 (https://download.01.org/0day-ci/archive/20260117/202601170955.0wVpALLC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170955.0wVpALLC-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/ufs-core-Change-the-type-of-an-ufshcd_clkgate_delay_set-argument/20260117-022907
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20260116182628.3255116-4-bvanassche%40acm.org
+patch subject: [PATCH 3/7] ufs: core: Redirect clock gating to RPM
+config: hexagon-randconfig-002-20260117 (https://download.01.org/0day-ci/archive/20260117/202601170903.r8uLs14E-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170903.r8uLs14E-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601170955.0wVpALLC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601170903.r8uLs14E-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/ipv6/ip6_offload.c:304:8: error: call to undeclared function 'udp6_gro_receive'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     304 |                 pp = udp6_gro_receive(head, skb);
-         |                      ^
-   net/ipv6/ip6_offload.c:304:8: note: did you mean 'udp_gro_receive'?
-   include/net/gro.h:419:17: note: 'udp_gro_receive' declared here
-     419 | struct sk_buff *udp_gro_receive(struct list_head *head, struct sk_buff *skb,
-         |                 ^
->> net/ipv6/ip6_offload.c:304:6: error: incompatible integer to pointer conversion assigning to 'struct sk_buff *' from 'int' [-Wint-conversion]
-     304 |                 pp = udp6_gro_receive(head, skb);
-         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/ufs/core/ufshcd.c:2120:22: error: no member named 'use_autosuspend' in 'struct dev_pm_info'
+    2120 |         if (!rpm_dev->power.use_autosuspend)
+         |              ~~~~~~~~~~~~~~ ^
+>> drivers/ufs/core/ufshcd.c:2123:48: error: no member named 'autosuspend_delay' in 'struct dev_pm_info'
+    2123 |         return sysfs_emit(buf, "%u\n", rpm_dev->power.autosuspend_delay);
+         |                                        ~~~~~~~~~~~~~~ ^
+   drivers/ufs/core/ufshcd.c:2143:22: error: no member named 'use_autosuspend' in 'struct dev_pm_info'
+    2143 |         if (!rpm_dev->power.use_autosuspend)
+         |              ~~~~~~~~~~~~~~ ^
+>> drivers/ufs/core/ufshcd.c:2158:57: error: no member named 'runtime_auto' in 'struct dev_pm_info'
+    2158 |         return sysfs_emit(buf, "%d\n", ufs_rpm_dev(hba)->power.runtime_auto);
+         |                                        ~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/ufs/core/ufshcd.c:10656:44: warning: shift count >= width of type [-Wshift-count-overflow]
+    10656 |                 if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+          |                                                          ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:93:54: note: expanded from macro 'DMA_BIT_MASK'
+      93 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 4 errors generated.
 
 
-vim +/udp6_gro_receive +304 net/ipv6/ip6_offload.c
+vim +2120 drivers/ufs/core/ufshcd.c
 
-   215	
-   216	INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
-   217								 struct sk_buff *skb)
-   218	{
-   219		const struct net_offload *ops;
-   220		struct sk_buff *pp = NULL;
-   221		struct sk_buff *p;
-   222		struct ipv6hdr *iph;
-   223		unsigned int nlen;
-   224		unsigned int hlen;
-   225		unsigned int off;
-   226		u16 flush = 1;
-   227		int proto;
-   228	
-   229		off = skb_gro_offset(skb);
-   230		hlen = off + sizeof(*iph);
-   231		iph = skb_gro_header(skb, hlen, off);
-   232		if (unlikely(!iph))
-   233			goto out;
-   234	
-   235		NAPI_GRO_CB(skb)->network_offsets[NAPI_GRO_CB(skb)->encap_mark] = off;
-   236	
-   237		flush += ntohs(iph->payload_len) != skb->len - hlen;
-   238	
-   239		proto = iph->nexthdr;
-   240		ops = rcu_dereference(inet6_offloads[proto]);
-   241		if (!ops || !ops->callbacks.gro_receive) {
-   242			proto = ipv6_gro_pull_exthdrs(skb, hlen, proto);
-   243	
-   244			ops = rcu_dereference(inet6_offloads[proto]);
-   245			if (!ops || !ops->callbacks.gro_receive)
-   246				goto out;
-   247	
-   248			iph = skb_gro_network_header(skb);
-   249		} else {
-   250			skb_gro_pull(skb, sizeof(*iph));
-   251		}
-   252	
-   253		skb_set_transport_header(skb, skb_gro_offset(skb));
-   254	
-   255		NAPI_GRO_CB(skb)->proto = proto;
-   256	
-   257		flush--;
-   258		nlen = skb_gro_offset(skb) - off;
-   259	
-   260		list_for_each_entry(p, head, list) {
-   261			const struct ipv6hdr *iph2;
-   262			__be32 first_word; /* <Version:4><Traffic_Class:8><Flow_Label:20> */
-   263	
-   264			if (!NAPI_GRO_CB(p)->same_flow)
-   265				continue;
-   266	
-   267			iph2 = (struct ipv6hdr *)(p->data + off);
-   268			first_word = *(__be32 *)iph ^ *(__be32 *)iph2;
-   269	
-   270			/* All fields must match except length and Traffic Class.
-   271			 * XXX skbs on the gro_list have all been parsed and pulled
-   272			 * already so we don't need to compare nlen
-   273			 * (nlen != (sizeof(*iph2) + ipv6_exthdrs_len(iph2, &ops)))
-   274			 * memcmp() alone below is sufficient, right?
-   275			 */
-   276			 if ((first_word & htonl(0xF00FFFFF)) ||
-   277			     !ipv6_addr_equal(&iph->saddr, &iph2->saddr) ||
-   278			     !ipv6_addr_equal(&iph->daddr, &iph2->daddr) ||
-   279			     iph->nexthdr != iph2->nexthdr) {
-   280	not_same_flow:
-   281				NAPI_GRO_CB(p)->same_flow = 0;
-   282				continue;
-   283			}
-   284			if (unlikely(nlen > sizeof(struct ipv6hdr))) {
-   285				if (memcmp(iph + 1, iph2 + 1,
-   286					   nlen - sizeof(struct ipv6hdr)))
-   287					goto not_same_flow;
-   288			}
-   289		}
-   290	
-   291		NAPI_GRO_CB(skb)->flush |= flush;
-   292	
-   293		skb_gro_postpull_rcsum(skb, iph, nlen);
-   294	
-   295		if (unlikely(gro_recursion_inc_test(skb))) {
-   296			flush = 1;
-   297			goto out;
-   298		}
-   299	
-   300		if (likely(proto == IPPROTO_TCP))
-   301			pp = tcp6_gro_receive(head, skb);
-   302	#if IS_BUILTIN(CONFIG_IPV6)
-   303		else if (likely(proto == IPPROTO_UDP))
- > 304			pp = udp6_gro_receive(head, skb);
-   305	#endif
-   306		else
-   307			pp = ops->callbacks.gro_receive(head, skb);
-   308	out:
-   309		skb_gro_flush_final(skb, pp, flush);
-   310	
-   311		return pp;
-   312	}
-   313	
+  2113	
+  2114	static ssize_t ufshcd_clkgate_delay_show(struct device *dev,
+  2115			struct device_attribute *attr, char *buf)
+  2116	{
+  2117		struct ufs_hba *hba = dev_get_drvdata(dev);
+  2118		struct device *rpm_dev = ufs_rpm_dev(hba);
+  2119	
+> 2120		if (!rpm_dev->power.use_autosuspend)
+  2121			return -EIO;
+  2122	
+> 2123		return sysfs_emit(buf, "%u\n", rpm_dev->power.autosuspend_delay);
+  2124	}
+  2125	
+  2126	void ufshcd_clkgate_delay_set(struct ufs_hba *hba, unsigned long value)
+  2127	{
+  2128		struct device *rpm_dev = ufs_rpm_dev(hba);
+  2129	
+  2130		device_lock(rpm_dev);
+  2131		pm_runtime_set_autosuspend_delay(rpm_dev, value);
+  2132		device_unlock(rpm_dev);
+  2133	}
+  2134	EXPORT_SYMBOL_GPL(ufshcd_clkgate_delay_set);
+  2135	
+  2136	static ssize_t ufshcd_clkgate_delay_store(struct device *dev,
+  2137			struct device_attribute *attr, const char *buf, size_t count)
+  2138	{
+  2139		struct ufs_hba *hba = dev_get_drvdata(dev);
+  2140		struct device *rpm_dev = ufs_rpm_dev(hba);
+  2141		unsigned long value;
+  2142	
+  2143		if (!rpm_dev->power.use_autosuspend)
+  2144			return -EIO;
+  2145	
+  2146		if (kstrtoul(buf, 0, &value))
+  2147			return -EINVAL;
+  2148	
+  2149		ufshcd_clkgate_delay_set(hba, value);
+  2150		return count;
+  2151	}
+  2152	
+  2153	static ssize_t ufshcd_clkgate_enable_show(struct device *dev,
+  2154			struct device_attribute *attr, char *buf)
+  2155	{
+  2156		struct ufs_hba *hba = dev_get_drvdata(dev);
+  2157	
+> 2158		return sysfs_emit(buf, "%d\n", ufs_rpm_dev(hba)->power.runtime_auto);
+  2159	}
+  2160	
 
 -- 
 0-DAY CI Kernel Test Service
