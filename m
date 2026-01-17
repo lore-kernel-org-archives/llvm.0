@@ -1,87 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC8019CD03;
-	Sat, 17 Jan 2026 01:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186351D5178;
+	Sat, 17 Jan 2026 01:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768614102; cv=none; b=AdVi244UNpU70d8bGzBiUzKJh9km2BBphvBoHcvwSD+tLASWsmZ6p+8cRPSTADCZjmMnqBdRQ4mXzGTwxbS8GH9EfFVfIVLtaxdcI9++0yVxLx2/I5OiXUjh3GQ821yNcD1iVtE+aaMxEAc8qz4yhcbp8g8i8+iKjz9U9vJuJvQ=
+	t=1768614818; cv=none; b=ZbDOQv+KGhNKGGWFZwIbk7AHkcvAenIJJtYrzsOpG32D4hoAboVE3uk5tYATyLdtrwIgmAE1sljC4jgS6BWT70ktViqoDVd7M80wzjiL441D/U0RVzeVHOtxxneoMY/obz+T4dmRYlzTRxhnP+XFWuifBR3fBMDazF6eVDKBpCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768614102; c=relaxed/simple;
-	bh=65Oeufs+W/s9Urm/cMBhPSNb3wLmLMe+aDB4Wsr7ptg=;
+	s=arc-20240116; t=1768614818; c=relaxed/simple;
+	bh=qXgdN23yNMQAaURttp868hNhHD5PD0Z52ZxrJ3+EJsc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IsX0kAcIJUHQLTqLBg235HBWo56P8TZcZNZXkCr/XVxt6Xpu45GjpCkgBjKfHNj4pndcuS/bVvhBYafC47t8Z091hTAivKE9BNxdzEnPVswEPR5ymFUAFScf9l3DNqzJCGUluhZDRyUFPcuDtWI4x2rkT2V7wFj9dzyTjZtVsGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bfTKyiRH; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=E0E4ftBkGoZpPUHn2BNsF0JRtMzOUbPeeU8DvoRjZeUfGA8qq0Wb90LS1U1dZAWjDUPh2EI7zvTDCkn0y48xRWBUKQQaRTbUux9d2dyTKBsi5NjkJ4JUKYCTaUWwNS00KnMM+HRaOQsBxhEUztwDiKi94Z21NU438DnAq3kZMj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=esFjgEP0; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bfTKyiRH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="esFjgEP0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768614101; x=1800150101;
+  t=1768614816; x=1800150816;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=65Oeufs+W/s9Urm/cMBhPSNb3wLmLMe+aDB4Wsr7ptg=;
-  b=bfTKyiRHxPAP/ndLodzt8LgotRTpqgSwAfsZv4ArXuaS1Klzx0q1eg7e
-   iIEp5wswN1VbawoL7ZlWwU7sO979goEGNat5sgVEuJFuj8WrO52cFmpBM
-   2a8/626S0jckSgwOjP/8np+uFZDklDR83kiJk2R5uPei1G1i5+5ts7xRi
-   fiNxMlbiFeAZudk54seZsac5SrVPpSkYWYbxQ9EgnHct3rLSb3g7y4v/P
-   +qDs2j54xr5OUNunnBcah0NMskBDhkHGrmMpQLcI1XPgymaQWVBz+eMJs
-   0WF1dkGlWdSFRWcEjkolnucIkhGiJzk/1c509VsHlVtiu4qKq5oUMMqre
-   A==;
-X-CSE-ConnectionGUID: XxQCujEhTM+/wscoN5kYiw==
-X-CSE-MsgGUID: W5trCVlOTIa1OsbY7Z19og==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="80649632"
+  bh=qXgdN23yNMQAaURttp868hNhHD5PD0Z52ZxrJ3+EJsc=;
+  b=esFjgEP0gqZLdzMQ/9ETEp9dyxp2FeUjHvDIy1f5vDq96XcvvBtAq/Bd
+   hBX8JbmKT0CEB+SMM4JJg6A90J0xxZ/sSASMygjjSA9VAuPqhvOOms0YU
+   jHclDtaXJDwlXwvc/0pB9lGwgWvf6jf9qhkcV3lKHvM3JN7hQ5XtxyY61
+   nSHe0JFoNMMUvUHvC2EmVWkeXqyslnziltcsWlpEuqxQEa7CqsiGd2yQD
+   S3WdrSdRz8E+Hun1bcLCaFVrL8u+b5v8ocPqMtPQT1J+Lth/cLskjxsYo
+   nM0m6xGpOKmEsaz2LJ880VeXUyWNITyDZFeKdSh6fG1SL1yhYMMoVSjAo
+   w==;
+X-CSE-ConnectionGUID: lCFyTNSiSgGnLtPTihuZxg==
+X-CSE-MsgGUID: pLTJgoCgS6GmaSXxOjIOoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="73560111"
 X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="80649632"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 17:41:40 -0800
-X-CSE-ConnectionGUID: uPH9YteEQseVeLleeUPjuQ==
-X-CSE-MsgGUID: X1Pm1qY+Rqa/tnQUnB7bKg==
+   d="scan'208";a="73560111"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 17:53:36 -0800
+X-CSE-ConnectionGUID: TnTgWTMXSwiZMbMHD75aOg==
+X-CSE-MsgGUID: oKzd/2pDQUWhBTL5uX+IJA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
-   d="scan'208";a="205438363"
+   d="scan'208";a="205186320"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 16 Jan 2026 17:41:33 -0800
+  by orviesa009.jf.intel.com with ESMTP; 16 Jan 2026 17:53:33 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgvJh-00000000LQy-3vN0;
-	Sat, 17 Jan 2026 01:41:29 +0000
-Date: Sat, 17 Jan 2026 09:40:39 +0800
+	id 1vgvVK-00000000LRI-0wBq;
+	Sat, 17 Jan 2026 01:53:30 +0000
+Date: Sat, 17 Jan 2026 09:52:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Groves <john@jagalactic.com>, John Groves <John@groves.net>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Bernd Schubert <bschubert@ddn.com>,
-	Alison Schofield <alison.schofield@intel.com>
+To: Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	David Hildenbrand <david@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	"Darrick J . Wong" <djwong@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Stefan Hajnoczi <shajnocz@redhat.com>,
-	Joanne Koong <joannelkoong@gmail.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	James Morse <james.morse@arm.com>, Fuad Tabba <tabba@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shivank Garg <shivankg@amd.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Gregory Price <gourry@gourry.net>,
-	Aravind Ramesh <arramesh@micron.com>,
-	Ajay Joshi <ajayjoshi@micron.com>
-Subject: Re: [PATCH V5 15/19] famfs_fuse: Plumb dax iomap and fuse
- read/write/mmap
-Message-ID: <202601170925.1qbFpAwE-lkp@intel.com>
-References: <0100019bc834ead9-7ed67793-5e18-45f6-80cc-146cfd7d4c8a-000000@email.amazonses.com>
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>, eric.dumazet@gmail.com,
+	Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next 2/3] gro: inline tcp6_gro_receive()
+Message-ID: <202601170955.0wVpALLC-lkp@intel.com>
+References: <20260116152957.1825626-3-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -90,139 +68,143 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0100019bc834ead9-7ed67793-5e18-45f6-80cc-146cfd7d4c8a-000000@email.amazonses.com>
+In-Reply-To: <20260116152957.1825626-3-edumazet@google.com>
 
-Hi John,
+Hi Eric,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on mszeredi-fuse/for-next]
-[also build test WARNING on brauner-vfs/vfs.all v6.19-rc5]
-[cannot apply to linus/master next-20260116]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Groves/dax-Factor-out-dax_folio_reset_order-helper/20260117-031401
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
-patch link:    https://lore.kernel.org/r/0100019bc834ead9-7ed67793-5e18-45f6-80cc-146cfd7d4c8a-000000%40email.amazonses.com
-patch subject: [PATCH V5 15/19] famfs_fuse: Plumb dax iomap and fuse read/write/mmap
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20260117/202601170925.1qbFpAwE-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170925.1qbFpAwE-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-always-inline-__skb_incr_checksum_unnecessary/20260116-233745
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260116152957.1825626-3-edumazet%40google.com
+patch subject: [PATCH net-next 2/3] gro: inline tcp6_gro_receive()
+config: i386-randconfig-011-20260117 (https://download.01.org/0day-ci/archive/20260117/202601170955.0wVpALLC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170955.0wVpALLC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601170925.1qbFpAwE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601170955.0wVpALLC-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/fuse/famfs.c:610:22: warning: variable 'ext_size' is uninitialized when used within its own initialization [-Wuninitialized]
-     610 |                 u64 ext_size = min(ext_size, meta->file_size);
-         |                     ~~~~~~~~       ^~~~~~~~
-   include/linux/minmax.h:105:38: note: expanded from macro 'min'
-     105 | #define min(x, y)       __careful_cmp(min, x, y)
-         |                                            ^
-   include/linux/minmax.h:98:25: note: expanded from macro '__careful_cmp'
-      98 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |                                ^
-   include/linux/minmax.h:92:13: note: expanded from macro '__careful_cmp_once'
-      92 |         auto ux = (x); auto uy = (y);                   \
-         |                    ^
-   1 warning generated.
+>> net/ipv6/ip6_offload.c:304:8: error: call to undeclared function 'udp6_gro_receive'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     304 |                 pp = udp6_gro_receive(head, skb);
+         |                      ^
+   net/ipv6/ip6_offload.c:304:8: note: did you mean 'udp_gro_receive'?
+   include/net/gro.h:419:17: note: 'udp_gro_receive' declared here
+     419 | struct sk_buff *udp_gro_receive(struct list_head *head, struct sk_buff *skb,
+         |                 ^
+>> net/ipv6/ip6_offload.c:304:6: error: incompatible integer to pointer conversion assigning to 'struct sk_buff *' from 'int' [-Wint-conversion]
+     304 |                 pp = udp6_gro_receive(head, skb);
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +/ext_size +610 fs/fuse/famfs.c
+vim +/udp6_gro_receive +304 net/ipv6/ip6_offload.c
 
-   585	
-   586	static int
-   587	famfs_interleave_fileofs_to_daxofs(struct inode *inode, struct iomap *iomap,
-   588				 loff_t file_offset, off_t len, unsigned int flags)
-   589	{
-   590		struct fuse_inode *fi = get_fuse_inode(inode);
-   591		struct famfs_file_meta *meta = fi->famfs_meta;
-   592		struct fuse_conn *fc = get_fuse_conn(inode);
-   593		loff_t local_offset = file_offset;
-   594	
-   595		/* This function is only for extent_type INTERLEAVED_EXTENT */
-   596		if (meta->fm_extent_type != INTERLEAVED_EXTENT) {
-   597			pr_err("%s: bad extent type\n", __func__);
-   598			goto err_out;
-   599		}
-   600	
-   601		if (famfs_file_bad(inode))
-   602			goto err_out;
-   603	
-   604		iomap->offset = file_offset;
-   605	
-   606		for (int i = 0; i < meta->fm_niext; i++) {
-   607			struct famfs_meta_interleaved_ext *fei = &meta->ie[i];
-   608			u64 chunk_size = fei->fie_chunk_size;
-   609			u64 nstrips = fei->fie_nstrips;
- > 610			u64 ext_size = min(ext_size, meta->file_size);
-   611	
-   612			if (ext_size == 0) {
-   613				pr_err("%s: ext_size=%lld file_size=%ld\n",
-   614				       __func__, fei->fie_nbytes, meta->file_size);
-   615				goto err_out;
-   616			}
-   617	
-   618			/* Is the data is in this striped extent? */
-   619			if (local_offset < ext_size) {
-   620				u64 chunk_num       = local_offset / chunk_size;
-   621				u64 chunk_offset    = local_offset % chunk_size;
-   622				u64 chunk_remainder = chunk_size - chunk_offset;
-   623				u64 stripe_num      = chunk_num / nstrips;
-   624				u64 strip_num       = chunk_num % nstrips;
-   625				u64 strip_offset    = chunk_offset + (stripe_num * chunk_size);
-   626				u64 strip_dax_ofs = fei->ie_strips[strip_num].ext_offset;
-   627				u64 strip_devidx = fei->ie_strips[strip_num].dev_index;
-   628	
-   629				if (strip_devidx >= fc->dax_devlist->nslots) {
-   630					pr_err("%s: strip_devidx %llu >= nslots %d\n",
-   631					       __func__, strip_devidx,
-   632					       fc->dax_devlist->nslots);
-   633					goto err_out;
-   634				}
-   635	
-   636				if (!fc->dax_devlist->devlist[strip_devidx].valid) {
-   637					pr_err("%s: daxdev=%lld invalid\n", __func__,
-   638						strip_devidx);
-   639					goto err_out;
-   640				}
-   641	
-   642				iomap->addr    = strip_dax_ofs + strip_offset;
-   643				iomap->offset  = file_offset;
-   644				iomap->length  = min_t(loff_t, len, chunk_remainder);
-   645	
-   646				iomap->dax_dev = fc->dax_devlist->devlist[strip_devidx].devp;
-   647	
-   648				iomap->type    = IOMAP_MAPPED;
-   649				iomap->flags   = flags;
-   650	
-   651				return 0;
-   652			}
-   653			local_offset -= ext_size; /* offset is beyond this striped extent */
-   654		}
-   655	
-   656	 err_out:
-   657		pr_err("%s: err_out\n", __func__);
-   658	
-   659		/* We fell out the end of the extent list.
-   660		 * Set iomap to zero length in this case, and return 0
-   661		 * This just means that the r/w is past EOF
-   662		 */
-   663		iomap->addr    = 0; /* there is no valid dax device offset */
-   664		iomap->offset  = file_offset; /* file offset */
-   665		iomap->length  = 0; /* this had better result in no access to dax mem */
-   666		iomap->dax_dev = NULL;
-   667		iomap->type    = IOMAP_MAPPED;
-   668		iomap->flags   = flags;
-   669	
-   670		return -EIO;
-   671	}
-   672	
+   215	
+   216	INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
+   217								 struct sk_buff *skb)
+   218	{
+   219		const struct net_offload *ops;
+   220		struct sk_buff *pp = NULL;
+   221		struct sk_buff *p;
+   222		struct ipv6hdr *iph;
+   223		unsigned int nlen;
+   224		unsigned int hlen;
+   225		unsigned int off;
+   226		u16 flush = 1;
+   227		int proto;
+   228	
+   229		off = skb_gro_offset(skb);
+   230		hlen = off + sizeof(*iph);
+   231		iph = skb_gro_header(skb, hlen, off);
+   232		if (unlikely(!iph))
+   233			goto out;
+   234	
+   235		NAPI_GRO_CB(skb)->network_offsets[NAPI_GRO_CB(skb)->encap_mark] = off;
+   236	
+   237		flush += ntohs(iph->payload_len) != skb->len - hlen;
+   238	
+   239		proto = iph->nexthdr;
+   240		ops = rcu_dereference(inet6_offloads[proto]);
+   241		if (!ops || !ops->callbacks.gro_receive) {
+   242			proto = ipv6_gro_pull_exthdrs(skb, hlen, proto);
+   243	
+   244			ops = rcu_dereference(inet6_offloads[proto]);
+   245			if (!ops || !ops->callbacks.gro_receive)
+   246				goto out;
+   247	
+   248			iph = skb_gro_network_header(skb);
+   249		} else {
+   250			skb_gro_pull(skb, sizeof(*iph));
+   251		}
+   252	
+   253		skb_set_transport_header(skb, skb_gro_offset(skb));
+   254	
+   255		NAPI_GRO_CB(skb)->proto = proto;
+   256	
+   257		flush--;
+   258		nlen = skb_gro_offset(skb) - off;
+   259	
+   260		list_for_each_entry(p, head, list) {
+   261			const struct ipv6hdr *iph2;
+   262			__be32 first_word; /* <Version:4><Traffic_Class:8><Flow_Label:20> */
+   263	
+   264			if (!NAPI_GRO_CB(p)->same_flow)
+   265				continue;
+   266	
+   267			iph2 = (struct ipv6hdr *)(p->data + off);
+   268			first_word = *(__be32 *)iph ^ *(__be32 *)iph2;
+   269	
+   270			/* All fields must match except length and Traffic Class.
+   271			 * XXX skbs on the gro_list have all been parsed and pulled
+   272			 * already so we don't need to compare nlen
+   273			 * (nlen != (sizeof(*iph2) + ipv6_exthdrs_len(iph2, &ops)))
+   274			 * memcmp() alone below is sufficient, right?
+   275			 */
+   276			 if ((first_word & htonl(0xF00FFFFF)) ||
+   277			     !ipv6_addr_equal(&iph->saddr, &iph2->saddr) ||
+   278			     !ipv6_addr_equal(&iph->daddr, &iph2->daddr) ||
+   279			     iph->nexthdr != iph2->nexthdr) {
+   280	not_same_flow:
+   281				NAPI_GRO_CB(p)->same_flow = 0;
+   282				continue;
+   283			}
+   284			if (unlikely(nlen > sizeof(struct ipv6hdr))) {
+   285				if (memcmp(iph + 1, iph2 + 1,
+   286					   nlen - sizeof(struct ipv6hdr)))
+   287					goto not_same_flow;
+   288			}
+   289		}
+   290	
+   291		NAPI_GRO_CB(skb)->flush |= flush;
+   292	
+   293		skb_gro_postpull_rcsum(skb, iph, nlen);
+   294	
+   295		if (unlikely(gro_recursion_inc_test(skb))) {
+   296			flush = 1;
+   297			goto out;
+   298		}
+   299	
+   300		if (likely(proto == IPPROTO_TCP))
+   301			pp = tcp6_gro_receive(head, skb);
+   302	#if IS_BUILTIN(CONFIG_IPV6)
+   303		else if (likely(proto == IPPROTO_UDP))
+ > 304			pp = udp6_gro_receive(head, skb);
+   305	#endif
+   306		else
+   307			pp = ops->callbacks.gro_receive(head, skb);
+   308	out:
+   309		skb_gro_flush_final(skb, pp, flush);
+   310	
+   311		return pp;
+   312	}
+   313	
 
 -- 
 0-DAY CI Kernel Test Service
