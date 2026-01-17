@@ -1,57 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FE730C378;
-	Sat, 17 Jan 2026 05:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D43F29B216;
+	Sat, 17 Jan 2026 06:01:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768626524; cv=none; b=PWGsyv9nuJ+VbdjBkDMehQBkIVlBUKqsKRTBQsUt/GUhWwVvowS8iNW7Rkf+VVQ0jpMCnFD5p/5L7q3UhBKoZJZ0ql/CnOp+SOkquW99BlTcDIpMAIuWe6VygG5Kew5CScO4Ds24OoCLnkdQn/CXqkw83LnSvX2nB6/UJcAgkaY=
+	t=1768629707; cv=none; b=UVy/6EiptmGT1tYLzVBZwHk9LkKc3sCrQfsJcyCg9wmRh4OWuFe1uBS2Hrou/cujBEfaj88ZpdKEWzjKlgYS0LG157bx2wdpGT9gtZX0LHGWsejMypXf559MG2/A7pTTlqDRINaXYnTo8XZQhExqVqaZJan6wkV9NY9M8iclNeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768626524; c=relaxed/simple;
-	bh=6M0rTQg+J28b574wweKDC19aUm2m2dG1zZ4ygZ7ONKM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cEOgx5f+XfJIkr3Eaee/5aa9JM6iKzdvKltflE83TzIHFde0hQaW6rdy6DaGewyx9/x4R2k3FhIkzQKm6PkfTVJFN/hH4CPEulSizqEaWuy3d5X+hbTq/Whrb/kfFiMTLtxOqpKhDyJlNShRmjBDUN3Yr4j4S6/ESNLmtB/aDiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G7iWw+eU; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1768629707; c=relaxed/simple;
+	bh=BkOY6oqug4W414oNdzCvpfAzeeurFW6yDKk/pQU5mfA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=kLxpOjv2RwkU9dAfKIs9UoH7Wy+AiNpS6S8ArKZnsPF9Wp4U3cdA5385jgMGypZjVQLEQn5Az+sKJXW0WtstHfOl6WyVRWLyrvL9F3b0el4CTfYCfx2ixDJQbx60RhAY83QGDjK3LqiRvSNQOlIrNt++hOKFsniwiWOknwKoAy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LiKCh16K; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G7iWw+eU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LiKCh16K"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768626523; x=1800162523;
+  t=1768629705; x=1800165705;
   h=date:from:to:cc:subject:message-id;
-  bh=6M0rTQg+J28b574wweKDC19aUm2m2dG1zZ4ygZ7ONKM=;
-  b=G7iWw+eU9RxVqODKsPGINSDOGlff2B7v9uN87uImRA8AP6iDLugfukhK
-   1awuEMTxZYevyE1gE4uXHz58Ny4WaXKFAaFPC/VSDIgvfknNSPUhjxyZG
-   0WECuhWg813rFU0nUiC0so0zO+BGFikd+/4mZCDWvHfk2Z/MF8EA0Fnch
-   4ANnsOx8FOk2EPngsaoYpJMYFf9uzCWyxUkT8+xXIEVBbZWh0/t1h+eMJ
-   FKWApLEl6MD6RU0ksFPFfPvkTVM6Krwu1g3r4nqUGfqY1ntHJA+Op8Z3W
-   r5zybMT6z0kUpP8Th9K81gNJTjOdv719synhQfGzT2HAy+1/JkwUFwj1K
+  bh=BkOY6oqug4W414oNdzCvpfAzeeurFW6yDKk/pQU5mfA=;
+  b=LiKCh16K6ZtNO21R6zCSzvUNWa2g3L9Vmm5QWdYzNuuYyNqFu1fqEhqj
+   RGzlVjcKLJd/GjjkqP9P2LANJ6DXONipS2mKjU2HqCDxOicnF/9+0Xkx3
+   GSNQ4cnAgq5oDNaSa9F2iG0s6nUfBLB9M4rzueKUWcuen+4j6AWtBfRE8
+   AkB1u7PlPiD9Yxs1YS9MLJsqJFQ9xhooNoC7wE2htVQNRmds6qz/ie3iM
+   u+EUcCMcK/lnC/L0KUgUYRG82IXWTT0anBrWXtASJA6GvjB0xPzRnfQkJ
+   34RNfx0lDSORLfxNcj1Y077nrTpXqoonKFi3+LMpygpbnSl2K5SVlWvYM
    g==;
-X-CSE-ConnectionGUID: HBy+KeqUQjyvt5N6RdhqZQ==
-X-CSE-MsgGUID: VjK7aV9RSXCajDSEO3jhsw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="68946161"
+X-CSE-ConnectionGUID: A1sZXbYZQTGGcg4no3gCZQ==
+X-CSE-MsgGUID: 4bKRXMe/RsWeeabww+VxgA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="68947356"
 X-IronPort-AV: E=Sophos;i="6.21,233,1763452800"; 
-   d="scan'208";a="68946161"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 21:08:42 -0800
-X-CSE-ConnectionGUID: 3R+HxOvUTcCxOWG1iw4/7g==
-X-CSE-MsgGUID: WHoJQj9ARsGjORNazman5g==
+   d="scan'208";a="68947356"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 22:01:45 -0800
+X-CSE-ConnectionGUID: s+Ni4w6sTU+dQxeoz9JZ8g==
+X-CSE-MsgGUID: 2dGdl6SSTh+K5b3Qju1f7g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,233,1763452800"; 
-   d="scan'208";a="205825122"
+   d="scan'208";a="205029269"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Jan 2026 21:08:40 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 16 Jan 2026 22:01:42 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vgyYA-00000000LaK-1POq;
-	Sat, 17 Jan 2026 05:08:38 +0000
-Date: Sat, 17 Jan 2026 13:07:52 +0800
+	id 1vgzNT-00000000Lbo-2iKV;
+	Sat, 17 Jan 2026 06:01:39 +0000
+Date: Sat, 17 Jan 2026 14:00:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kiryl Shutsemau <kas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kas:compound_head 2/15] include/linux/sched/mm.h:316:20:
- error: static declaration of 'might_alloc' follows non-static declaration
-Message-ID: <202601171340.k5KLMGYs-lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+ Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+ Nilay Shroff <nilay@linux.ibm.com>
+Subject: arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size
+ (2152) exceeds limit (2048) in 'ubd_device_release'
+Message-ID: <202601171315.t7AOGOhS-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,200 +62,123 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git compound_head
-head:   b85ab3c6f9b0b85159a92143639da1947695d8da
-commit: 44d8c0bdca357faa441b6a75b316a399a31b2bd1 [2/15] mm: Move MAX_FOLIO_ORDER definition to mmzone.h
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260117/202601171340.k5KLMGYs-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601171340.k5KLMGYs-lkp@intel.com/reproduce)
+Hi Ming,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d3eeb99bbc99cc5eb94a4a75ed4415a0272254ef
+commit: 98e68f67020ce30e1a4d8e2d05d85a453738dfb8 block: prevent adding/deleting disk during updating nr_hw_queues
+date:   9 months ago
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260117/202601171315.t7AOGOhS-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601171315.t7AOGOhS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601171340.k5KLMGYs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601171315.t7AOGOhS-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:14:
-   In file included from include/linux/sched/mm.h:9:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:24:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/s390/include/asm/pgtable.h:19:
-   In file included from include/linux/radix-tree.h:21:
->> include/linux/xarray.h:594:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     594 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:621:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     621 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:697:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     697 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:725:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     725 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:753:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     753 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:783:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     783 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:813:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     813 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:843:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     843 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:876:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     876 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:909:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     909 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:942:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     942 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:981:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     981 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:1020:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1020 |         might_alloc(gfp);
-         |         ^
-   include/linux/xarray.h:1059:2: error: call to undeclared function 'might_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1059 |         might_alloc(gfp);
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:14:
->> include/linux/sched/mm.h:316:20: error: static declaration of 'might_alloc' follows non-static declaration
-     316 | static inline void might_alloc(gfp_t gfp_mask)
-         |                    ^
-   include/linux/xarray.h:594:2: note: previous implicit declaration is here
-     594 |         might_alloc(gfp);
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:116:5: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     116 |                         (set1->sig[1] == set2->sig[1]) &&
-         |                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:116:21: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     116 |                         (set1->sig[1] == set2->sig[1]) &&
-         |                                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:16:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:119:11: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     119 |                 return  (set1->sig[1] == set2->sig[1]) &&
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size (2152) exceeds limit (2048) in 'ubd_device_release' [-Wframe-larger-than]
+     780 | static void ubd_device_release(struct device *dev)
+         |             ^
+   13 warnings generated.
 
 
-vim +/might_alloc +316 include/linux/sched/mm.h
+vim +/ubd_device_release +780 arch/um/drivers/ubd_kern.c
 
-4034247a0d6ab2 NeilBrown     2022-01-14  307  
-95d6c701f4ca7c Simona Vetter 2020-12-14  308  /**
-95d6c701f4ca7c Simona Vetter 2020-12-14  309   * might_alloc - Mark possible allocation sites
-95d6c701f4ca7c Simona Vetter 2020-12-14  310   * @gfp_mask: gfp_t flags that would be used to allocate
-95d6c701f4ca7c Simona Vetter 2020-12-14  311   *
-95d6c701f4ca7c Simona Vetter 2020-12-14  312   * Similar to might_sleep() and other annotations, this can be used in functions
-95d6c701f4ca7c Simona Vetter 2020-12-14  313   * that might allocate, but often don't. Compiles to nothing without
-95d6c701f4ca7c Simona Vetter 2020-12-14  314   * CONFIG_LOCKDEP. Includes a conditional might_sleep() if @gfp allows blocking.
-95d6c701f4ca7c Simona Vetter 2020-12-14  315   */
-95d6c701f4ca7c Simona Vetter 2020-12-14 @316  static inline void might_alloc(gfp_t gfp_mask)
-95d6c701f4ca7c Simona Vetter 2020-12-14  317  {
-95d6c701f4ca7c Simona Vetter 2020-12-14  318  	fs_reclaim_acquire(gfp_mask);
-95d6c701f4ca7c Simona Vetter 2020-12-14  319  	fs_reclaim_release(gfp_mask);
-95d6c701f4ca7c Simona Vetter 2020-12-14  320  
-95d6c701f4ca7c Simona Vetter 2020-12-14  321  	might_sleep_if(gfpflags_allow_blocking(gfp_mask));
-95d6c701f4ca7c Simona Vetter 2020-12-14  322  }
-95d6c701f4ca7c Simona Vetter 2020-12-14  323  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  779  
+2e3f5251ac7168 Jeff Dike          2007-05-06 @780  static void ubd_device_release(struct device *dev)
+2e3f5251ac7168 Jeff Dike          2007-05-06  781  {
+5bee35e5389f45 Tiwei Bie          2024-11-05  782  	struct ubd *ubd_dev = container_of(dev, struct ubd, pdev.dev);
+2e3f5251ac7168 Jeff Dike          2007-05-06  783  
+4e6da0fe8058df Richard Weinberger 2017-11-26  784  	blk_mq_free_tag_set(&ubd_dev->tag_set);
+2e3f5251ac7168 Jeff Dike          2007-05-06  785  	*ubd_dev = ((struct ubd) DEFAULT_UBD);
+2e3f5251ac7168 Jeff Dike          2007-05-06  786  }
+2e3f5251ac7168 Jeff Dike          2007-05-06  787  
 
-:::::: The code at line 316 was first introduced by commit
-:::::: 95d6c701f4ca7c44dc148d664f604541266a2333 mm: extract might_alloc() debug check
+:::::: The code at line 780 was first introduced by commit
+:::::: 2e3f5251ac716879df6b6271f243f657c6e02e9a uml: drivers get release methods
 
-:::::: TO: Daniel Vetter <daniel.vetter@ffwll.ch>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: TO: Jeff Dike <jdike@addtoit.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
