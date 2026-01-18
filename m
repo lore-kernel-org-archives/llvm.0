@@ -1,122 +1,151 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8C0218827
-	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 08:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768723932; cv=none; b=mFrBCdgxITkkY3KgPiCpqSQLp9jvrs/Avam6CVrhMokTiBhEa9mIT+MCNtD+chn/y1gFctMAL99IMrjPnMuRijC0nYtgdsi2RluybL5//iCnavhvMNso0NsEMjQKktk2Ej1omDBgbZ8nlCXuv/1xDICHBt7Kv91Pj6la3RU5sjc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768723932; c=relaxed/simple;
-	bh=AOgaUo8yvJS3EErIQQ9PvpjA2y66Wve3kwa13O5HBL4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Xphw43oRKbdNd3DDqjFnF/i6wuHM1B84Mg0zqlJKWuNntRqZmDqeLcfSnof2/FY+8Wzy2y+c75TEDWDcr4gKsMGDiNo+9XKR5Q5ygYiwbzJwmmrGR1wXS7WJnW9oAlkZUX7BEKi60/0WVSNf4M9bQVInTRsPi4/Vsg2ri4ML6B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iKMB/tql; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09576FC3
+	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 09:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768726989; cv=pass; b=ej6zXvQPJtPFgDW55JrshXBXiPSnbRNB6cjwB6f7zRfXIKJSA7GNFFvwqANLhf9ffZmW1Gu7hKfImgLYBcLKvbKZn9gXl9L2Ppf2s4Cp3PfGQCf1qcJxyTPcPTltTGLWWbWHaoTB9VCBGfaLivRoRVBsI6L1M+M45Rgwbv4BiDY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768726989; c=relaxed/simple;
+	bh=uZrjtSNl7WA0To3TDLXDmC5txmqD3ciHeAn+zcxAJfU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LqAPb81AM0d4/xosPh70A0CBNzPyh++gqYnj8loz0qC0CIG5Ge5e8NfbHSOJfNi5qz/W40UfcFKX/Nodb8fuKAeWaS8QMbHDsT4qc1xVta5bp9RRqMtlWFToIz4zZ0nbQnyjq9wyvg5fJa/qqIex3LBYpbOlJw0wPF3k6Q8H+bc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=PxNZv06i; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iKMB/tql"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768723929;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6FzDnachohbtruIcGPvFvMzy+j/G69m5cgD3Qj1/Ab4=;
-	b=iKMB/tqlN8qzOPPhyvgoLBnYoIOXlDkXaAcpNjQt1YDmGU0TkVmlxiCSsOzWBgHoLHFjpc
-	JlGj2yIZ5PVXm0lYWQcdIEQjWAUizItPutgXs63qi93McxVvelBS/ZEZaMEzu4Jll+YMuz
-	OpZKYYcX8T9Xv+41/DF7icQzOgK5NWU=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-62--ocRhnsiNS-ase1-Cns4Zw-1; Sun,
- 18 Jan 2026 03:12:08 -0500
-X-MC-Unique: -ocRhnsiNS-ase1-Cns4Zw-1
-X-Mimecast-MFC-AGG-ID: -ocRhnsiNS-ase1-Cns4Zw_1768723927
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7246E18003FD
-	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 08:12:07 +0000 (UTC)
-Received: from [172.20.95.168] (unknown [10.30.44.183])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 102461955F66;
-	Sun, 18 Jan 2026 08:12:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
- (6.19.0-rc5, upstream-mainline, e84d9601)
-Date: Sun, 18 Jan 2026 08:12:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="PxNZv06i"
+ARC-Seal: i=1; a=rsa-sha256; t=1768726966; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=jouxY5SByNcmXi/vOnAEE4ZYQElPLgwqWWJcwKUJMg2tin8j6hOfD8xCK6866oP+QGhKsiYoHf2+OTR3L5XCwDrXJ5fsT5xZ3wpI03SDm5ma/ratNMVLKsIyu7dGr6ItC8x8nHI1bvBvJ49NzFEbgPEFAzDlfoXjb7Ny6SA0B3k=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1768726966; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=rbBA+pmKoTQxxz0XddBk9DcB50kiQw+IwRhWDthJeH8=; 
+	b=P9diO6yyf14L1CYOXiYgjdo6aWtUwOMuTRQU9V9AsXB3o9C1GWex2/J1cYRf4c0swpuz01xZh9D703suNudOhGejpcWEBCGFapigZO6pkTSzf/e+q63WTlftIsEE/iMwlkmc8mPIU3cNH/3SwasS7o3+H5zYXmuhYdphSUPEuOk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=ziyao.cc;
+	spf=pass  smtp.mailfrom=me@ziyao.cc;
+	dmarc=pass header.from=<me@ziyao.cc>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768726966;
+	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=rbBA+pmKoTQxxz0XddBk9DcB50kiQw+IwRhWDthJeH8=;
+	b=PxNZv06i19r4R1L2Q3A1XwnJRz6hhYRPcSHM/cshvN0kuaOB5NkV/L0ERfAQPhpW
+	q/tjmnG1yWajnxT+88MWDKY5wBKLGxrWaJrSle7v5iYRvdMnCVwpMfNbMb5fBDokzT0
+	tHz1Atg94a0feAYNH0TKwHHD2XP25SBGtwUSrKYU=
+Received: by mx.zohomail.com with SMTPS id 1768726963844776.8985224358725;
+	Sun, 18 Jan 2026 01:02:43 -0800 (PST)
+From: Yao Zi <me@ziyao.cc>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Yao Zi <me@ziyao.cc>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH] MIPS: Work around LLVM bug when gp is used as global register variable
+Date: Sun, 18 Jan 2026 09:02:35 +0000
+Message-ID: <20260118090235.60670-1-me@ziyao.cc>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <57906.126011803120800125@us-mta-62.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: At9nPa-fU3k_N4tElvt4jwFmBbO1hgPbe7y4WyHzt1k_1768723927
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Hi, we tested your kernel and here are the results:
+On MIPS, __current_thread_info is defined as global register variable
+locating in $gp, and is simply assigned with new address during kernel
+relocation.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+This however is broken with LLVM, which always restores $gp if it finds
+$gp is clobbered in any form, including when intentionally through a
+global register variable. This is against GCC's documentation[1], which
+requires a callee-saved register used as global register variable not to
+be restored if it's clobbered.
 
+As a result, $gp will continue to point to the unrelocated kernel after
+the epilog of relocate_kernel(), leading to an early crash in init_idle,
 
-Kernel information:
-    Commit message: Merge tag 'for-6.19-rc5-tag' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/kdave/linux
+[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
+[    0.000000] Oops[#1]:
+[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
+[    0.000000] Tainted: [W]=WARN
+[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
+[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
+[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
+[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
+[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
+[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
+[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
+[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
+[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
+[    0.000000] Hi    : 0000000000000000
+[    0.000000] Lo    : 0000000000000000
+[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
+[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
+[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
+[    0.000000] Cause : 00000008 (ExcCode 02)
+[    0.000000] BadVA : 0000000000000000
+[    0.000000] PrId  : 00006305 (ICT Loongson-3)
+[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
+[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
+[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
+[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
+[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
+[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
+[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
+[    0.000000]         ...
+[    0.000000] Call Trace:
+[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
+[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
+[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2269546618
+This bug has been reported to LLVM[2] and affects version from (at
+least) 18 to 21. Let's work around this by using inline assembly to
+assign $gp before a fix is widely available.
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2269546618_x86_64_kernel-debug
+Cc: stable@vger.kernel.org
+Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
+Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
+Signed-off-by: Yao Zi <me@ziyao.cc>
+---
+ arch/mips/kernel/relocate.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, x86_64]
-    /distribution/command [aarch64, ppc64le, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
-    Boot test [aarch64, ppc64le, x86_64]
-    CKI/restraint [aarch64, ppc64le, x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    kselftests upstream - net [x86_64]
-    Reboot test [aarch64, ppc64le, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 7f1c136ad850..12aa0bbdd65e 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -420,7 +420,18 @@ void *__init relocate_kernel(void)
+ 			goto out;
+ 
+ 		/* The current thread is now within the relocated image */
++#ifndef CONFIG_CC_IS_CLANG
+ 		__current_thread_info = RELOCATED(&init_thread_union);
++#else
++		/*
++		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
++		 * intentionally modified. Work around this by using inline
++		 * assembly to assign $gp. $gp couldn't be listed as output or
++		 * clobber, or LLVM will still restore its original value.
++		 */
++		asm volatile("move $28, %0" : :
++			     "r" (RELOCATED(&init_thread_union)));
++#endif
+ 
+ 		/* Return the new kernel's entry point */
+ 		kernel_entry = RELOCATED(start_kernel);
+-- 
+2.52.0
 
