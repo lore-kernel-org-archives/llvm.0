@@ -1,151 +1,98 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09576FC3
-	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 09:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768726989; cv=pass; b=ej6zXvQPJtPFgDW55JrshXBXiPSnbRNB6cjwB6f7zRfXIKJSA7GNFFvwqANLhf9ffZmW1Gu7hKfImgLYBcLKvbKZn9gXl9L2Ppf2s4Cp3PfGQCf1qcJxyTPcPTltTGLWWbWHaoTB9VCBGfaLivRoRVBsI6L1M+M45Rgwbv4BiDY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768726989; c=relaxed/simple;
-	bh=uZrjtSNl7WA0To3TDLXDmC5txmqD3ciHeAn+zcxAJfU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LqAPb81AM0d4/xosPh70A0CBNzPyh++gqYnj8loz0qC0CIG5Ge5e8NfbHSOJfNi5qz/W40UfcFKX/Nodb8fuKAeWaS8QMbHDsT4qc1xVta5bp9RRqMtlWFToIz4zZ0nbQnyjq9wyvg5fJa/qqIex3LBYpbOlJw0wPF3k6Q8H+bc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=PxNZv06i; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E91D19CC28;
+	Sun, 18 Jan 2026 09:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768727179; cv=none; b=D4igFTMARw0LQdG4s9TnFLHZRbSQtB3nt2jtKDzCKJ8MiAJ/zbsToeRJ3yo8k5GBbza4fAZ/inYgQM3WkDtNU4R5NyS2Dky3J0JFV0mR6uGDBPyIZN75sJ40C7+757549bqJwtD33v4Qa3MlipbFWfnhjI+wUx/wGTm918WdIao=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768727179; c=relaxed/simple;
+	bh=SE0HEsBf5x4DW8bhX7pUa+V9htGk1ZNmhCu6za32VOA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GoFTPcPyMaRgRS0d5uPaR5+KYEO06YOfJU0K69KPxc+Ka8g7aU8t5+9Nw+FoZF/LjLQinV9Nxq0YJUIVpMzYv/7skPKCdJAYjg0ZbRe5YBm93UmzjkfiwDg5GSS6SuLYciBzvse8LE71wy4fMva5tL83fr15DOWPUV961oCThvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B5GhxgS0; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="PxNZv06i"
-ARC-Seal: i=1; a=rsa-sha256; t=1768726966; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=jouxY5SByNcmXi/vOnAEE4ZYQElPLgwqWWJcwKUJMg2tin8j6hOfD8xCK6866oP+QGhKsiYoHf2+OTR3L5XCwDrXJ5fsT5xZ3wpI03SDm5ma/ratNMVLKsIyu7dGr6ItC8x8nHI1bvBvJ49NzFEbgPEFAzDlfoXjb7Ny6SA0B3k=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768726966; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=rbBA+pmKoTQxxz0XddBk9DcB50kiQw+IwRhWDthJeH8=; 
-	b=P9diO6yyf14L1CYOXiYgjdo6aWtUwOMuTRQU9V9AsXB3o9C1GWex2/J1cYRf4c0swpuz01xZh9D703suNudOhGejpcWEBCGFapigZO6pkTSzf/e+q63WTlftIsEE/iMwlkmc8mPIU3cNH/3SwasS7o3+H5zYXmuhYdphSUPEuOk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=ziyao.cc;
-	spf=pass  smtp.mailfrom=me@ziyao.cc;
-	dmarc=pass header.from=<me@ziyao.cc>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768726966;
-	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=rbBA+pmKoTQxxz0XddBk9DcB50kiQw+IwRhWDthJeH8=;
-	b=PxNZv06i19r4R1L2Q3A1XwnJRz6hhYRPcSHM/cshvN0kuaOB5NkV/L0ERfAQPhpW
-	q/tjmnG1yWajnxT+88MWDKY5wBKLGxrWaJrSle7v5iYRvdMnCVwpMfNbMb5fBDokzT0
-	tHz1Atg94a0feAYNH0TKwHHD2XP25SBGtwUSrKYU=
-Received: by mx.zohomail.com with SMTPS id 1768726963844776.8985224358725;
-	Sun, 18 Jan 2026 01:02:43 -0800 (PST)
-From: Yao Zi <me@ziyao.cc>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Yao Zi <me@ziyao.cc>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH] MIPS: Work around LLVM bug when gp is used as global register variable
-Date: Sun, 18 Jan 2026 09:02:35 +0000
-Message-ID: <20260118090235.60670-1-me@ziyao.cc>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B5GhxgS0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768727177; x=1800263177;
+  h=date:from:to:cc:subject:message-id;
+  bh=SE0HEsBf5x4DW8bhX7pUa+V9htGk1ZNmhCu6za32VOA=;
+  b=B5GhxgS0/fbSdKxpUcIVykdUrXmG5Ig6GWs0t6QLYZIx1UHxP9OBYYqc
+   DtMoQJq+B/z0eHS0pGCLpRM0lTZu+avk1EKzc9yR9ZKZjBm41n+ZDXcVW
+   Tb3pHtRyfvyYYN1sUIdyz0Pg8da6iGPxhiZqROpk3JDel9wYFdxCGGh1W
+   e0MkD6dE3i8g7hSkLGjiM1jTDDRQgAD8YvUQo6JEBqD40VX3f7uv7f/UU
+   lE5r1RD6ZxZpBzit4RSfxkQl0rHu4KVhjlCD9Ip1SgRlHwL3s/zIH3DUv
+   /cEsk4Gv8JjWpSv2f1Q7INu5Kl3qZ8dVeGLFvzMIDi8+b4KNj//+iY5hG
+   w==;
+X-CSE-ConnectionGUID: h73qes4DQr2NqIilMSO0Mg==
+X-CSE-MsgGUID: Wd+0dXDoTjKjAoSNdkQUuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11674"; a="68982921"
+X-IronPort-AV: E=Sophos;i="6.21,235,1763452800"; 
+   d="scan'208";a="68982921"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2026 01:06:16 -0800
+X-CSE-ConnectionGUID: gpFMPvIRTjSzjiTDdcL26A==
+X-CSE-MsgGUID: 8IZyu3BTQBecsPmL9atVRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,235,1763452800"; 
+   d="scan'208";a="205402198"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 18 Jan 2026 01:06:14 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vhOjb-00000000Mpo-14U3;
+	Sun, 18 Jan 2026 09:06:11 +0000
+Date: Sun, 18 Jan 2026 17:05:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Drew Fustini <fustini@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Adrien Ricciardi <aricciardi@baylibre.com>
+Subject: [fustini:b4/ssqosid-cbqri 17/20]
+ include/linux/riscv_qos.h:10:10: fatal error: 'asm/qos.h' file not found
+Message-ID: <202601181655.1SqxqcQY-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-On MIPS, __current_thread_info is defined as global register variable
-locating in $gp, and is simply assigned with new address during kernel
-relocation.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git b4/ssqosid-cbqri
+head:   b34c2f7cb87d02f5b712e9e35ac9b66d21ce07e9
+commit: 06bff4d3050a3b1c23ebe8412e5f9730deddf83d [17/20] [NFU] resctrl: riscv: build CBQRI drivers
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260118/202601181655.1SqxqcQY-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260118/202601181655.1SqxqcQY-lkp@intel.com/reproduce)
 
-This however is broken with LLVM, which always restores $gp if it finds
-$gp is clobbered in any form, including when intentionally through a
-global register variable. This is against GCC's documentation[1], which
-requires a callee-saved register used as global register variable not to
-be restored if it's clobbered.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601181655.1SqxqcQY-lkp@intel.com/
 
-As a result, $gp will continue to point to the unrelocated kernel after
-the epilog of relocate_kernel(), leading to an early crash in init_idle,
+All errors (new ones prefixed by >>):
 
-[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-[    0.000000] Oops[#1]:
-[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-[    0.000000] Tainted: [W]=WARN
-[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-[    0.000000] Hi    : 0000000000000000
-[    0.000000] Lo    : 0000000000000000
-[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-[    0.000000] Cause : 00000008 (ExcCode 02)
-[    0.000000] BadVA : 0000000000000000
-[    0.000000] PrId  : 00006305 (ICT Loongson-3)
-[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-[    0.000000]         ...
-[    0.000000] Call Trace:
-[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+   In file included from drivers/resctrl/riscv/cbqri_cache.c:6:
+>> include/linux/riscv_qos.h:10:10: fatal error: 'asm/qos.h' file not found
+      10 | #include <asm/qos.h>
+         |          ^~~~~~~~~~~
+   1 error generated.
 
-This bug has been reported to LLVM[2] and affects version from (at
-least) 18 to 21. Let's work around this by using inline assembly to
-assign $gp before a fix is widely available.
 
-Cc: stable@vger.kernel.org
-Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-Signed-off-by: Yao Zi <me@ziyao.cc>
----
- arch/mips/kernel/relocate.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+vim +10 include/linux/riscv_qos.h
 
-diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-index 7f1c136ad850..12aa0bbdd65e 100644
---- a/arch/mips/kernel/relocate.c
-+++ b/arch/mips/kernel/relocate.c
-@@ -420,7 +420,18 @@ void *__init relocate_kernel(void)
- 			goto out;
- 
- 		/* The current thread is now within the relocated image */
-+#ifndef CONFIG_CC_IS_CLANG
- 		__current_thread_info = RELOCATED(&init_thread_union);
-+#else
-+		/*
-+		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
-+		 * intentionally modified. Work around this by using inline
-+		 * assembly to assign $gp. $gp couldn't be listed as output or
-+		 * clobber, or LLVM will still restore its original value.
-+		 */
-+		asm volatile("move $28, %0" : :
-+			     "r" (RELOCATED(&init_thread_union)));
-+#endif
- 
- 		/* Return the new kernel's entry point */
- 		kernel_entry = RELOCATED(start_kernel);
+279a516c8a1314 Drew Fustini 2023-04-19   9  
+279a516c8a1314 Drew Fustini 2023-04-19 @10  #include <asm/qos.h>
+279a516c8a1314 Drew Fustini 2023-04-19  11  
+
+:::::: The code at line 10 was first introduced by commit
+:::::: 279a516c8a131464cc73327ecfb2c6a62ad33622 RISC-V: QoS: define properties of CBQRI controllers
+
+:::::: TO: Drew Fustini <fustini@kernel.org>
+:::::: CC: Drew Fustini <fustini@kernel.org>
+
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
