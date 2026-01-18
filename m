@@ -1,132 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0674C1D88D7;
-	Sun, 18 Jan 2026 21:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C74429E0E6;
+	Sun, 18 Jan 2026 21:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768770926; cv=none; b=Stm1lfthnBXDg3Mz26bv1iCTir8He7/ziRyBsRLLIoOcVzy8brV4LPnyjbHCvcgyC4ef0HBeR7Wnsu4oukHC409dkh3utZkLY/WJd1uIJmbSKu0Dxv5S0LbYqKP/L6dkgbWUCF6YLusypuZes/JWV+eo1ZCcBi3qAAzZgxrbkXE=
+	t=1768773449; cv=none; b=C0kOOAA7lvMhQCiInpHV0uldZW2hd84UfS2H1JZi9nq4BfEXir0TFZgG7E47n9fD4bS1O4jO+GcUHMQaYoUzMqnYOyN9rBYj3XhdiMnIWhctS9lrakJ14Ar7N7YCo75rjUf20rx+VdeWXT27U3+Cp7xa8aOyUwcbpBpaoRE5tk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768770926; c=relaxed/simple;
-	bh=nzTze7Oy2Ww98/C574URFvYNK38eHRGnE5Q2j/sicpo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XZcOEw+MaCnUCVwnbtR1JAjlbRCZISsB5zGGnvzDiLKf4j84TkNx1lqrPApj31z1n7fWqqF0oIbkm1s43iHfuA0mGRGASNS8VpK3uc5189NpLyEG6329peKVHK/V0teiUxi7cBOQTVgcMoaLOmMm9dLfiCy0jZE1Bns60V2PUOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoAL5/Ey; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1768773449; c=relaxed/simple;
+	bh=1Fk03iryRzs/uSuAuslbL6hkCiD1JGaxyBQe/j3bSk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VyCAMGNqWVgqt+3fT/UKJscTHf+4QyCeKCQdqE63Fe7fn/DeCwfxO7f53e82S9zu13ZPVslJ7O3zCOOm55YnvKAY/qn4hTqp8prGXkEv6EQCfAEzHFykz1TzLisHmtWXU11OtCwlhjrEnh5+jvY9u5d4kbzD8QtZb0tf6qpmJYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BU1qGvrM; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoAL5/Ey"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BU1qGvrM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768770925; x=1800306925;
-  h=date:from:to:cc:subject:message-id;
-  bh=nzTze7Oy2Ww98/C574URFvYNK38eHRGnE5Q2j/sicpo=;
-  b=ZoAL5/EyeUn9qFGU1vZpBcglDQS7IJPbS3MDWC/sQv5BsVQYoIjVYrVb
-   oF65iia/KJjq+3d72Bbb9vHm3vz1rfQ9emAC3a4VqQddRHyF6dLzZfp4Z
-   U+GXPxprwoEfkkuoJwTSY4il6ofdu1SYjN31SDi5LFg6wJ3nVUiIyiUxQ
-   Z0XouqAd5FJezLtYBgYNT0D7PFXQAs2lPquGUzXMUTpPlz+FJsci+cbHB
-   DvCA02LEEHMNfOwNB/f5Fb8ncW5Ract4EKOL9b2HBBpZxHmOw+T690Vf0
-   E5JhXQ5RfSIX47OmUiqKJ506TElz33mp9894sNB1MkS5rUaUuM4Xtoy8E
+  t=1768773449; x=1800309449;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1Fk03iryRzs/uSuAuslbL6hkCiD1JGaxyBQe/j3bSk0=;
+  b=BU1qGvrMEQ/9eOoP6PK/ol0zOcO8/UX+z8qGhfJq31wMTXep8EBDeRQY
+   R7UHwcocoI9zwSYUVHlaai1pXub5+B2E1NO2qOa/F0YV+c5YYGGwg2Waq
+   z3CYGnV2hoFp+99Oq/Wt0onRMXPJ0YKHSZceoSU6E9DQOquwtvq0+9mnD
+   li32hV8YXw/npvRQs/yRRobKIauvKhMuamW6ItUse2HRzMPEkJNQ9kXcQ
+   d2qb2F2saFRJh1iy6iIZUuT9VQPWXNuuWO1PzvZO5eisqeZuLHXGnE8iS
+   rHj3Suk7/IqmcmoCvBenHviq0G1Kh+NjDe5dpVVnBFtJBs+TsiOY4xWQz
    A==;
-X-CSE-ConnectionGUID: T0+RI2SjTCGjdFF45Vv1ow==
-X-CSE-MsgGUID: bwveRjifRgO+B0XWQzvUhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11675"; a="69892514"
+X-CSE-ConnectionGUID: f4y34Io6T5uuQyIOPSFkVA==
+X-CSE-MsgGUID: Q/RynfXLQ5qQIbNxnkVklA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11675"; a="69726474"
 X-IronPort-AV: E=Sophos;i="6.21,236,1763452800"; 
-   d="scan'208";a="69892514"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2026 13:15:25 -0800
-X-CSE-ConnectionGUID: oIifd4uMQNCD9SB1CgDAuQ==
-X-CSE-MsgGUID: I3kADDy5RTKG/W+UqNO4oQ==
+   d="scan'208";a="69726474"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2026 13:57:28 -0800
+X-CSE-ConnectionGUID: kRo8DRNmQm+iQW+OHmYyJA==
+X-CSE-MsgGUID: AadYBTAQTyuKL8IwDUP6/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,236,1763452800"; 
-   d="scan'208";a="206132202"
+   d="scan'208";a="210195281"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 18 Jan 2026 13:15:22 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 18 Jan 2026 13:57:23 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vha7E-00000000NEH-0wqK;
-	Sun, 18 Jan 2026 21:15:20 +0000
-Date: Mon, 19 Jan 2026 05:14:48 +0800
+	id 1vhalt-00000000NF3-06b5;
+	Sun, 18 Jan 2026 21:57:21 +0000
+Date: Mon, 19 Jan 2026 05:57:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To: Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>,
+	robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
+	robh@kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+	konrad.dybcio@oss.qualcomm.com, bjorn.andersson@oss.qualcomm.com,
+	bod@kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
+	prakash.gupta@oss.qualcomm.com, vikash.garodia@oss.qualcomm.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
- Jan Kara <jack@suse.cz>
-Subject: [tytso-ext4:dev 25/37] fs/ext4/extents-test.c:300:5:
- warning: format specifies type 'long' but the argument has type '__ptrdiff_t'
- (aka 'int')
-Message-ID: <202601190552.ZJeAkmLt-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, vijayanand.jitta@oss.qualcomm.com
+Subject: Re: [PATCH v5 3/3] of: Respect #{iommu,msi}-cells in maps
+Message-ID: <202601190548.wFIEEgJC-lkp@intel.com>
+References: <20260118181125.1436036-4-vijayanand.jitta@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260118181125.1436036-4-vijayanand.jitta@oss.qualcomm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-head:   11f1ff3cc21a8e9ca9f509a664de5975469ec561
-commit: 16bbdb54f49e58d51dbf2217bab9ed424172ea9a [25/37] ext4: kunit tests for extent splitting and conversion
-config: powerpc-randconfig-002-20260119 (https://download.01.org/0day-ci/archive/20260119/202601190552.ZJeAkmLt-lkp@intel.com/config)
+Hi Vijayanand,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on pci/next pci/for-linus xen-tip/linux-next linus/master v6.19-rc5 next-20260116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vijayanand-Jitta/of-Add-convenience-wrappers-for-of_map_id/20260119-021706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260118181125.1436036-4-vijayanand.jitta%40oss.qualcomm.com
+patch subject: [PATCH v5 3/3] of: Respect #{iommu,msi}-cells in maps
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260119/202601190548.wFIEEgJC-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260119/202601190552.ZJeAkmLt-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260119/202601190548.wFIEEgJC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601190552.ZJeAkmLt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601190548.wFIEEgJC-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/ext4/extents.c:6200:
->> fs/ext4/extents-test.c:300:5: warning: format specifies type 'long' but the argument has type '__ptrdiff_t' (aka 'int') [-Wformat]
-     299 |                   "# %s: wrong char found at offset %ld (expected:%d got:%d)", __func__,
-         |                                                     ~~~
-         |                                                     %td
-     300 |                   ((char *)ret - buf), c, *((char *)ret));
-         |                   ^~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:661:21: note: expanded from macro 'kunit_log'
-     661 |                 printk(lvl fmt, ##__VA_ARGS__);                         \
-         |                            ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   In file included from fs/ext4/extents.c:6200:
->> fs/ext4/extents-test.c:300:5: warning: format specifies type 'long' but the argument has type '__ptrdiff_t' (aka 'int') [-Wformat]
-     299 |                   "# %s: wrong char found at offset %ld (expected:%d got:%d)", __func__,
-         |                                                     ~~~
-         |                                                     %td
-     300 |                   ((char *)ret - buf), c, *((char *)ret));
-         |                   ^~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:663:8: note: expanded from macro 'kunit_log'
-     662 |                 kunit_log_append((test_or_suite)->log,  fmt,            \
-         |                                                         ~~~
-     663 |                                  ##__VA_ARGS__);                        \
-         |                                    ^~~~~~~~~~~
-   2 warnings generated.
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:31:
+   In file included from include/linux/cpufreq.h:17:
+>> include/linux/of.h:937:1: error: expected identifier or '('
+     937 | {
+         | ^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: kernel/sched/rq-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1314: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +300 fs/ext4/extents-test.c
+vim +937 include/linux/of.h
 
-   286	
-   287	/*
-   288	 * Return 1 if all bytes in the buf equal to c, else return the offset of first mismatch
-   289	 */
-   290	static int check_buffer(char *buf, int c, int size)
-   291	{
-   292		void *ret = NULL;
-   293	
-   294		ret = memchr_inv(buf, c, size);
-   295		if (ret  == NULL)
-   296			return 0;
-   297	
-   298		kunit_log(KERN_ALERT, kunit_get_current_test(),
-   299			  "# %s: wrong char found at offset %ld (expected:%d got:%d)", __func__,
- > 300			  ((char *)ret - buf), c, *((char *)ret));
-   301		return 1;
-   302	}
-   303	
+0384e8c6c6fa49 Pantelis Antoniou 2015-01-21  933  
+eb8f695e71ec36 Robin Murphy      2026-01-18  934  static inline int of_map_id(const struct device_node *np, u32 id, const char *map_name,
+eb8f695e71ec36 Robin Murphy      2026-01-18  935  			    const char *cells_name, const char *map_mask_name,
+eb8f695e71ec36 Robin Murphy      2026-01-18  936  			    struct of_map_id_arg *arg);
+2a6db719c92dbf Nipun Gupta       2018-09-10 @937  {
+2a6db719c92dbf Nipun Gupta       2018-09-10  938  	return -EINVAL;
+2a6db719c92dbf Nipun Gupta       2018-09-10  939  }
+2a6db719c92dbf Nipun Gupta       2018-09-10  940  
 
 -- 
 0-DAY CI Kernel Test Service
