@@ -1,122 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B023224FA
-	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 05:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A31421420B;
+	Sun, 18 Jan 2026 06:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768714331; cv=none; b=o9eYydQJQRyMU5E6+yXgLjmC02p4xPycIE48HV1mOMySBZHhCb/v/gTIbNezXmdULXcmTnRtad81fa+0Xkl+BJ1JV1ZDZDW0vFhuDIutoF1DBC53ifZovJJlFz++wk+HMRCp4lTFaSwKVVZuW3BbDu5wq/BP/q+oV8abOJWPesU=
+	t=1768716252; cv=none; b=fEgmKUqGLsEFIMCEC1pH9haloRyA6lu/gWCHkNOfqXFjeFw5L7ksmFBQREpTB0+tfP+fD8MCHJvTBKnUMzEOrEf4hNDIdizV3K7YLSZ6yQ5ixoJl/efsq5j8ywjUqdh4t/MvAB1x5SnDbPGag9o1IembBVUEvOuVaigp+pM+GFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768714331; c=relaxed/simple;
-	bh=fuoMutvfNAeJazICgLnkTtplFCRubJVYz4QG9tlz4jc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CQ8LMTppX7z50vbq0TZYIofUMtH1EN65GEC/oiiB8mD9YsO13vO9OXUzAJhsw8swkm3w3Y1o7cmjc80OFUsJgUougfN5JKCj36x4Xx6n6PoM3FA///D4H4VrSAKP+ahGVLBaaaSpZ/txIZH6QHDLlihC3xtjXow6A4FgLKw+qf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NRrzkFOg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1768716252; c=relaxed/simple;
+	bh=vjuTpa8FQPCKXk27Dd2CXMdPASu9VmjTA/8+qKJdnn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Iq8J9VAGGzdtKWmjTHFf4YRb/liWRt6tlfRFMzhM8oVoeoVgCVOEITmbrV61J3DlRiSSZTaLaatE5iZhVfl16RVf9FPJLufaG6kA7OA1Yfi99Omvir5eNgFXSezxsgyVo/ikpRam1yQVo3DBMI3oq7GgJB6syoSiSv38bZ54GgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e/RmGfqk; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NRrzkFOg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768714328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vn4c0cCdeG4Fc1rd/bPJ2yaqIH6MiNKFKsQIZyBkUfw=;
-	b=NRrzkFOgfZEqaYsiKuXcDCCzT9g4m5/X1ugZ+vcbbP4b/mGYSqptef/YVs/IY7jx8i/V5W
-	EHrr/RQP/Sb4V1qKAOTwrH5EGUGJvMBYSMdMENvey933FyJRUBg116uzQWeWuwWkn/LFT6
-	aPitpl2JhClsJGn4x2hBj8y/yQklr/o=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-483-yWoz5y2PPXOVfo-WlRBGLg-1; Sun,
- 18 Jan 2026 00:32:06 -0500
-X-MC-Unique: yWoz5y2PPXOVfo-WlRBGLg-1
-X-Mimecast-MFC-AGG-ID: yWoz5y2PPXOVfo-WlRBGLg_1768714326
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D52621956050
-	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 05:32:05 +0000 (UTC)
-Received: from [172.20.95.168] (unknown [10.30.44.183])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 87F431955F22;
-	Sun, 18 Jan 2026 05:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
- (6.19.0-rc5, upstream-mainline, d3eeb99b)
-Date: Sun, 18 Jan 2026 05:32:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e/RmGfqk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768716251; x=1800252251;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vjuTpa8FQPCKXk27Dd2CXMdPASu9VmjTA/8+qKJdnn4=;
+  b=e/RmGfqkY/gtDEplaZ1e5dSQu05bmhpToaqju8/kOJ0zDPGDSUpXFLS5
+   Fwm3VPf717dC9i7rVzjj0Cqg4WabZFoumWF9Gk3DZ3I7Zq6sXv1Ykmhpr
+   EmIr136NDZ5Q7JHP+pWhQCMv2WdfpUuXYQdhurlz3ErosSABa1nrtK3SX
+   8xCffcj+YvYPFgM0GH3+loCT2HNToav32SFsfj8uDYS/PwFlfqovO9bFv
+   ite7HLJmk/uemk1w7PjgivaFQi0OeLeVppDvBLw/Ax9aY4sLM+S39ltHA
+   9nKlElHRH8l7XH4z3Y1/K03IejObUALGfhf2yJQWA2u8bkxPREoN97IzF
+   w==;
+X-CSE-ConnectionGUID: Zdz3ScE+ShGkyfOBRdk7NA==
+X-CSE-MsgGUID: vKJLnK2WQ/iZU4kBTsq9YA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11674"; a="73597533"
+X-IronPort-AV: E=Sophos;i="6.21,235,1763452800"; 
+   d="scan'208";a="73597533"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2026 22:04:08 -0800
+X-CSE-ConnectionGUID: P5PEZA2YTmKwkBsvouE99w==
+X-CSE-MsgGUID: aLPQ4iIyTO6+5Rb2dYnCSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,235,1763452800"; 
+   d="scan'208";a="205860251"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 17 Jan 2026 22:04:06 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vhLtL-00000000MhU-3Qt3;
+	Sun, 18 Jan 2026 06:04:03 +0000
+Date: Sun, 18 Jan 2026 14:03:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Coiby Xu <coxu@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC] s390x/kdump: pass dm-crypt keys to kdump kernel
+Message-ID: <202601181322.wUUqO1Ok-lkp@intel.com>
+References: <20260116103347.523747-1-coxu@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <38719.126011800320600212@us-mta-483.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 4TUDVeH6Y9Cp6FvkohatLFUmOf1BY2uaVykcOMmZg1A_1768714326
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260116103347.523747-1-coxu@redhat.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Coiby,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on 7f98ab9da046865d57c102fd3ca9669a29845f67]
 
-Kernel information:
-    Commit message: Merge tag 'block-6.19-20260116' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/axboe/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Coiby-Xu/s390x-kdump-pass-dm-crypt-keys-to-kdump-kernel/20260116-183709
+base:   7f98ab9da046865d57c102fd3ca9669a29845f67
+patch link:    https://lore.kernel.org/r/20260116103347.523747-1-coxu%40redhat.com
+patch subject: [RFC] s390x/kdump: pass dm-crypt keys to kdump kernel
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20260118/202601181322.wUUqO1Ok-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260118/202601181322.wUUqO1Ok-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2268507827
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601181322.wUUqO1Ok-lkp@intel.com/
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2268507827_x86_64_kernel-debug
+All warnings (new ones prefixed by >>):
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, x86_64]
-    /distribution/command [aarch64, ppc64le, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
-    Boot test [aarch64, ppc64le, x86_64]
-    CKI/restraint [aarch64, ppc64le, x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    kselftests upstream - net [x86_64]
-    Reboot test [aarch64, ppc64le, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
+>> kernel/crash_dump_dm_crypt.c:55:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+      55 |         int ret;
+         |             ^
+>> kernel/crash_dump_dm_crypt.c:432:6: warning: variable 'r' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     432 |         if (!is_dm_key_reused) {
+         |             ^~~~~~~~~~~~~~~~~
+   kernel/crash_dump_dm_crypt.c:461:9: note: uninitialized use occurs here
+     461 |         return r;
+         |                ^
+   kernel/crash_dump_dm_crypt.c:432:2: note: remove the 'if' if its condition is always true
+     432 |         if (!is_dm_key_reused) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/crash_dump_dm_crypt.c:424:7: note: initialize the variable 'r' to silence this warning
+     424 |         int r;
+         |              ^
+         |               = 0
+   2 warnings generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +/ret +55 kernel/crash_dump_dm_crypt.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+    51	
+    52	static int __init setup_dmcryptkeys_size(char *arg)
+    53	{
+    54		size_t keys_size;
+  > 55		int ret;
+    56	
+    57		if (dm_crypt_keys_addr == 0) {
+    58			pr_warn("dmcryptkeys=0\n");
+    59			return -EINVAL;
+    60		}
+    61	
+    62		if (!arg)
+    63			return -EINVAL;
+    64	
+    65		ret = kstrtoul(arg, 0, &keys_size);
+    66		memblock_reserve((phys_addr_t)dm_crypt_keys_addr, keys_size);
+    67		return 0;
+    68	}
+    69	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
