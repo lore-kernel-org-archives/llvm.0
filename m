@@ -1,121 +1,133 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8942C22652D
-	for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 19:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768765405; cv=pass; b=s1UX8C+2S84DCM7sjfn7r4ywGjAAlzczcm3ksLZbYzfwY21UjLbbLuDs0yB4fALUFBRkf2hwXMbS1g2G95P9AQztL7XZ9cGPAcK3VRj+5WWkGbHpEw1eZLbe7TqAKXI2/NWrnhrC75M9/KD6v1cdgUs2AsIB2JdKmYR90RDeQis=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768765405; c=relaxed/simple;
-	bh=nQpSK1jhoj1ixzRBBHG4I4mMZc+hix9T7+kxBl0su/Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zo6hX0Yxko3vtpriJNdM6lEzx9HSrlZtoz7SrB+lCevd+fqUHodOLf01BOrqrGaSQiEPk+RRCwoQiL4WJzCsTjix/XD2DSVk04jQSDV5w4WiHDtb55FL0hh9IIAGCgNFW7SpxL3Df407ZbI8QPxV8W5X9aaZpXjCdN9po0EdjAo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W6vi0nu8; arc=pass smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0674C1D88D7;
+	Sun, 18 Jan 2026 21:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768770926; cv=none; b=Stm1lfthnBXDg3Mz26bv1iCTir8He7/ziRyBsRLLIoOcVzy8brV4LPnyjbHCvcgyC4ef0HBeR7Wnsu4oukHC409dkh3utZkLY/WJd1uIJmbSKu0Dxv5S0LbYqKP/L6dkgbWUCF6YLusypuZes/JWV+eo1ZCcBi3qAAzZgxrbkXE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768770926; c=relaxed/simple;
+	bh=nzTze7Oy2Ww98/C574URFvYNK38eHRGnE5Q2j/sicpo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XZcOEw+MaCnUCVwnbtR1JAjlbRCZISsB5zGGnvzDiLKf4j84TkNx1lqrPApj31z1n7fWqqF0oIbkm1s43iHfuA0mGRGASNS8VpK3uc5189NpLyEG6329peKVHK/V0teiUxi7cBOQTVgcMoaLOmMm9dLfiCy0jZE1Bns60V2PUOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoAL5/Ey; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W6vi0nu8"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2b6c86fbd6cso93082eec.3
-        for <llvm@lists.linux.dev>; Sun, 18 Jan 2026 11:43:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768765404; cv=none;
-        d=google.com; s=arc-20240605;
-        b=O5BhRjENyNG9OJFXg0GITdW44PYO4rHkOspPpWD5SB3oOijJ3V8QHhPJzZZ8UKzRqJ
-         0237AGuyr5+wh060PyxmufL2kie4Yx+vAB64UYt4OGX7dXTJPNxAmkWGCLMQ9kt4rEfE
-         IrDzdqz2oXIqdMQFc6LpfOL52LgVQXLGSpLdpaBCLR1eYgKu/mHtDQ5AZAUK1QnOFwu6
-         6KTVwBiSxKW9/8FgNBflj34ynU/P3NNIyEtgnV6KTYTMkXYnMVIwWHCpXFNkPn3yeTIT
-         kFNPnXghzZbB51vaGV8Hg82s1a1wvR4xJfS8UPN4OrpmvoM/798YnSTrX5KNiod6jtEX
-         4Pmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lcP5qtKRpIwfP877F6cFp0+F/gBJxn7DM0tE1zeA5l4=;
-        fh=NSGs1DItV6ij3UEDgFE2TEolO9VHGOBUHk8+dCehNd8=;
-        b=GQhDGPtwidXQ2EQ6dKU5/PArvw4K/vVK49bmj1KucqqAuRXCt0eV7C3ofBb1LBuNp7
-         UISN+0Scazd1wu/g+PbR9Pj/xx3pG9df06bNkJhUAohk8eCBMDqnTuO/gtGHCxpRh72U
-         ZFE9nVLvQQIejt4bjcfj97BOdDJarrpOpZ16b9oBR2OMIxaV0X8cL5ImQfNHxmNj5GN4
-         mSRYTkOQaz3c2MvlwCUPZHX9lafXAnEEhPXDq+3jG3wWXf8szQAp7wdogDnnqd2FyZb6
-         W/sI/L7E19Foyh9b7inWSH5REDsFWkLmzfKNedzooupAuXF+rtbjtCG5vVjF/qjw9DcR
-         2gVQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768765404; x=1769370204; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lcP5qtKRpIwfP877F6cFp0+F/gBJxn7DM0tE1zeA5l4=;
-        b=W6vi0nu8YzOIBPPkswhNmcBQSbCW3yzFYhdwsJoGV/X43c4xSvJCfqt4E4pI3w7sa5
-         Z0uPNiQkq7SB+Yj38+J5QdsYrCKkq5Eu1p1caeCe3uhy1+sZtKK7GsVMA6iGi71mUApV
-         w4iShA2l7ia6QiZDXZwfivMjRBCeR2ky8+qx2uWzHoDZSR6h72o3ZdRK6y0/i3ltghlT
-         wjCQtYPj/9ku1QAjrj/V+i8BHxHzki+6d6NDGigxDGvl1O1kuK0098FAIZMNV05WF0/U
-         h6rHDwtm/631ZjIxj9w/kfwYu2Bx3N/mEfzRKxZh+p/F0LRgun5EiWcQCFIMbCzxwYJm
-         Go0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768765404; x=1769370204;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lcP5qtKRpIwfP877F6cFp0+F/gBJxn7DM0tE1zeA5l4=;
-        b=noSR2SZBem+BDzE2h1FdNFGMLu8rhTPXy+D3Tu1oOo5q461UaxKzKDMspaF97sCZAE
-         RqwZSug/b/RRVKgiMYGIux83jGcl6J2YiiOVPw7CA1d4+jGFhK2bckTm60NQbPJhR7LB
-         INo0JkM+3V10n8pU0Nw9LW4vlw/L2H1qke5o12vRY4567hP4LY0kgc0i4MtHd6Vady70
-         lU0aYSNor7EkBgo3fHvKlRXC7omn0hoLWSCwWArSvWApVfjDj5tKCA1pVdBg+qQtm4Wm
-         sps6oscgsWMbXCTH7eMZ98Kom1JyRG+q5fHEzrORzoyIsPTrqp2/6W4unpyRwgTFRRkH
-         cxpg==
-X-Gm-Message-State: AOJu0YwXm+4HwVNguKVDx32DRPnT3KKVjP3Yrob36bH7fr0GWAEqiaOT
-	tpVB+LqktkVPz2abOgbSJdfuJ/OWwLgcMrEEH37AK/51J6ePoj1ya1XiKmH0utlaEv7YzABM5g9
-	3Hv8N5dISWqGLlRPPdfZ/lUiIvjAsmdk=
-X-Gm-Gg: AY/fxX6Vrkp8xe4SLbq+X0k7SORhfrt1O8h8zIn8OzzdhjzQ+Lqkhzg2wbiC9BxxXRO
-	0L6o1W6ryMlqapEKBBkcMwLZGkEaUn39kOxKb2GSH2hRcYDXp2WbutUVx+c9agWVqVDfZ175VCm
-	nuJz+8kgz2PsDb0lUIK8Qj8a7j7uTD3j2Wr+Xc1MWTKJQRs3794oKa3aZjmi19aA8Qd6sVwatuN
-	uEd+QhwWIxbBAsSLMvX1fgrVw4VgakbIxcpVKGOcQOxhmMLSGc1Kxk9XHu68r8LYIWp6PqVOOMT
-	7kee4YrbODAOXJAB6qhyYK06OMqGq+x3tJ21JXqsdJC0BghsXl+358+P9IUKWErKftGLFlOybiO
-	jC4RE1GDYyezv
-X-Received: by 2002:a05:7301:3e0b:b0:2ab:ca55:89cb with SMTP id
- 5a478bee46e88-2b6b40dd0a5mr3450844eec.6.1768765403686; Sun, 18 Jan 2026
- 11:43:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoAL5/Ey"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768770925; x=1800306925;
+  h=date:from:to:cc:subject:message-id;
+  bh=nzTze7Oy2Ww98/C574URFvYNK38eHRGnE5Q2j/sicpo=;
+  b=ZoAL5/EyeUn9qFGU1vZpBcglDQS7IJPbS3MDWC/sQv5BsVQYoIjVYrVb
+   oF65iia/KJjq+3d72Bbb9vHm3vz1rfQ9emAC3a4VqQddRHyF6dLzZfp4Z
+   U+GXPxprwoEfkkuoJwTSY4il6ofdu1SYjN31SDi5LFg6wJ3nVUiIyiUxQ
+   Z0XouqAd5FJezLtYBgYNT0D7PFXQAs2lPquGUzXMUTpPlz+FJsci+cbHB
+   DvCA02LEEHMNfOwNB/f5Fb8ncW5Ract4EKOL9b2HBBpZxHmOw+T690Vf0
+   E5JhXQ5RfSIX47OmUiqKJ506TElz33mp9894sNB1MkS5rUaUuM4Xtoy8E
+   A==;
+X-CSE-ConnectionGUID: T0+RI2SjTCGjdFF45Vv1ow==
+X-CSE-MsgGUID: bwveRjifRgO+B0XWQzvUhQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11675"; a="69892514"
+X-IronPort-AV: E=Sophos;i="6.21,236,1763452800"; 
+   d="scan'208";a="69892514"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2026 13:15:25 -0800
+X-CSE-ConnectionGUID: oIifd4uMQNCD9SB1CgDAuQ==
+X-CSE-MsgGUID: I3kADDy5RTKG/W+UqNO4oQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,236,1763452800"; 
+   d="scan'208";a="206132202"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 18 Jan 2026 13:15:22 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vha7E-00000000NEH-0wqK;
+	Sun, 18 Jan 2026 21:15:20 +0000
+Date: Mon, 19 Jan 2026 05:14:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+ Jan Kara <jack@suse.cz>
+Subject: [tytso-ext4:dev 25/37] fs/ext4/extents-test.c:300:5:
+ warning: format specifies type 'long' but the argument has type '__ptrdiff_t'
+ (aka 'int')
+Message-ID: <202601190552.ZJeAkmLt-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20251224135343.32476-1-work@onurozkan.dev>
-In-Reply-To: <20251224135343.32476-1-work@onurozkan.dev>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 18 Jan 2026 20:43:11 +0100
-X-Gm-Features: AZwV_Qg43hRAQ1pNM4R2GwRpygO8U0lz21Jjm5D1gBu80tjVeKKNS6jB5hsvFVU
-Message-ID: <CANiq72n9K9EG4yiCUnZe0_Po881PA+=Qt6y07-9mtPeuac9fPg@mail.gmail.com>
-Subject: Re: [PATCH] remove sysroot assertion in generate_rust_analyzer.py
-To: =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: llvm@lists.linux.dev, ojeda@kernel.org, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-	dakr@kernel.org, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 24, 2025 at 2:54=E2=80=AFPM Onur =C3=96zkan <work@onurozkan.dev=
-> wrote:
->
-> With nixpkgs's rustc, rust-src component is not bundled
-> with the compiler by default and is instead provided from
-> a separate store path, so this assumption does not hold.
->
-> The assertion assumes these paths are in the same location
-> which causes `make LLVM=3D1 rust-analyzer` to fail on NixOS.
->
-> Link: https://rust-for-linux.zulipchat.com/#narrow/stream/x/topic/x/near/=
-565284250
-> Signed-off-by: Onur =C3=96zkan <work@onurozkan.dev>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+head:   11f1ff3cc21a8e9ca9f509a664de5975469ec561
+commit: 16bbdb54f49e58d51dbf2217bab9ed424172ea9a [25/37] ext4: kunit tests for extent splitting and conversion
+config: powerpc-randconfig-002-20260119 (https://download.01.org/0day-ci/archive/20260119/202601190552.ZJeAkmLt-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260119/202601190552.ZJeAkmLt-lkp@intel.com/reproduce)
 
-Applied to `rust-fixes` -- thanks everyone!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601190552.ZJeAkmLt-lkp@intel.com/
 
-    Fixes: fe992163575b ("rust: Support latest version of `rust-analyzer`")
-    Cc: stable@vger.kernel.org
+All warnings (new ones prefixed by >>):
 
-    [ Reworded title. - Miguel ]
+   In file included from fs/ext4/extents.c:6200:
+>> fs/ext4/extents-test.c:300:5: warning: format specifies type 'long' but the argument has type '__ptrdiff_t' (aka 'int') [-Wformat]
+     299 |                   "# %s: wrong char found at offset %ld (expected:%d got:%d)", __func__,
+         |                                                     ~~~
+         |                                                     %td
+     300 |                   ((char *)ret - buf), c, *((char *)ret));
+         |                   ^~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:661:21: note: expanded from macro 'kunit_log'
+     661 |                 printk(lvl fmt, ##__VA_ARGS__);                         \
+         |                            ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:512:60: note: expanded from macro 'printk'
+     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
+     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   In file included from fs/ext4/extents.c:6200:
+>> fs/ext4/extents-test.c:300:5: warning: format specifies type 'long' but the argument has type '__ptrdiff_t' (aka 'int') [-Wformat]
+     299 |                   "# %s: wrong char found at offset %ld (expected:%d got:%d)", __func__,
+         |                                                     ~~~
+         |                                                     %td
+     300 |                   ((char *)ret - buf), c, *((char *)ret));
+         |                   ^~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:663:8: note: expanded from macro 'kunit_log'
+     662 |                 kunit_log_append((test_or_suite)->log,  fmt,            \
+         |                                                         ~~~
+     663 |                                  ##__VA_ARGS__);                        \
+         |                                    ^~~~~~~~~~~
+   2 warnings generated.
 
-Cheers,
-Miguel
+
+vim +300 fs/ext4/extents-test.c
+
+   286	
+   287	/*
+   288	 * Return 1 if all bytes in the buf equal to c, else return the offset of first mismatch
+   289	 */
+   290	static int check_buffer(char *buf, int c, int size)
+   291	{
+   292		void *ret = NULL;
+   293	
+   294		ret = memchr_inv(buf, c, size);
+   295		if (ret  == NULL)
+   296			return 0;
+   297	
+   298		kunit_log(KERN_ALERT, kunit_get_current_test(),
+   299			  "# %s: wrong char found at offset %ld (expected:%d got:%d)", __func__,
+ > 300			  ((char *)ret - buf), c, *((char *)ret));
+   301		return 1;
+   302	}
+   303	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
