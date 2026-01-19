@@ -1,177 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9263828B4E2;
-	Mon, 19 Jan 2026 16:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FBF288CA6;
+	Mon, 19 Jan 2026 16:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768838816; cv=none; b=FGZWX8oAgUHf31di6KY924zQNE5jw/U7J/0Tw39yc/xtIS9Tyjljr9JRY+IwzCDkkyaFQYIqI5C4jLxPp+86vpFDOrtepe0ljirrFBr2VShj8xjvfheW/On26n6U3g+7YyIFgNu+e8CGeo9PbZGqno5o8N+8h2f/tUx8kRzM/P4=
+	t=1768841465; cv=none; b=GO+7sDfk6w1thQR6O5AkEv35ObaGl/KhecySSQA8d11lb9FCW/E3p8kyCRah7ZWvujXqGXr/MUXZ7K1mZBGWVVVdhCHgzB+DGCAVFGaZcPNLWxwNeuI8QaCql70ujL2hElLEpshbLZgYbDgvnuXPrrqLXdOBrXUayX1ff7zxw0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768838816; c=relaxed/simple;
-	bh=iiTWFxVuXnU0mWiC21e5T+swlehvrN6/YzDkkSJAwcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JsdlVxqyWciqq1O0zrbQ2iG5ZKfjVsH+i64AkO5VtwHAYsBHEmGk9PSAJbv6l4lCvUlXk9tpNt0GD5mkxHVAyiN/BD7ZXJaTVHvA+8lp+V397h2BMeGhPrglZGkDmF9AVxawblXwYr5NkVtV32cO89FzgAt4n4o1phwLslof/5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C85O78v1; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1768841465; c=relaxed/simple;
+	bh=veAkvtfjO28QDuLu+vXSMveaeVuBDeoPyLaNrgJBN2k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nmi+Mn2vfiI/ToH+7p1PeHGcyah4Fi9kb5LuatiqSnusZUU/9YFXtaL1iFENTuigOnJHXGiTo7mEkoSzi7lJi9J6kUeFFRmEf8mPmC/iqpYvvpd/NZQG8xdJwsBiHt/R6vH4zwU9X+l6IwADFAUJdcLzvuZbvalLQvvBqcgCe8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NoGL3PvA; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C85O78v1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NoGL3PvA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768838814; x=1800374814;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iiTWFxVuXnU0mWiC21e5T+swlehvrN6/YzDkkSJAwcI=;
-  b=C85O78v154tKny/N3WAXLBFZdSRmY3rF4Aj8Ym6iEV0oR5pCWiCE+3Dn
-   v+CIa1h4GcdBdt52X4LElYZ8X+Txp3b6Fju3/r4IhkvXPEN+uxYzT5Txo
-   DxUEt+5yn9LrhCDYzoKTAy/+IY+LIW0qLmQYzB0SC3q7bTSROez+BpCA6
-   znO1yrh6bLDwLzceystxKPGQIQ49W4YDuT06fgXgOSFm+fTu+ybnAVLwl
-   bBmONPqxT+Lek28FuBuMK5zmkGptyzYuRIdAvxcHlqr5Lz29e4z+uXgxm
-   J13p3FdbVT8iH+zR5Nu7kcES+nMD70Dg8bIw8rrajZJEPRGHOcDrqp0Qa
-   Q==;
-X-CSE-ConnectionGUID: RtIrXNJ2TcKpNl9lGqx42Q==
-X-CSE-MsgGUID: SZZdu14zSsO58B7RrTd7vw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="73912747"
+  t=1768841463; x=1800377463;
+  h=date:from:to:cc:subject:message-id;
+  bh=veAkvtfjO28QDuLu+vXSMveaeVuBDeoPyLaNrgJBN2k=;
+  b=NoGL3PvAxdSH6s7bw/AkXWZGta26MYYTM5VtvbI2xcPjE7MfaM8wkE/C
+   rdCBLJPqlK781aVXaqg5EnYbGFnqq1EOhCSB1iWYa/x4Vkd8QdwJl9Pju
+   C22uIcaI7AO+LnU+zsN8UoTyIVIFn9PU4gzdKRnDmWW/vKn17IP7YByD9
+   jVVVJU90Yjcp+6/Z7DLSh+TPpOs27YUOxijbaKORwgYKA3OCyWrZmc+JF
+   fKeS57mhAR+K48lOra5zFZ5rVfqgFAjbBFho27rX6L2yamHCpplvqIdT+
+   StAep8rFZ5ZIyYJI5qv9YoJjyR10/ag3UBC+/5Zst8ZoEefniqdfR3uRc
+   A==;
+X-CSE-ConnectionGUID: 2EbrJOuTQLSjCCS38xNV2w==
+X-CSE-MsgGUID: 2Nfy7SK9Q8SU7hCOPJtt3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="57609705"
 X-IronPort-AV: E=Sophos;i="6.21,238,1763452800"; 
-   d="scan'208";a="73912747"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 08:06:54 -0800
-X-CSE-ConnectionGUID: GQh7vyycS/eUQ0Wmmvj0lQ==
-X-CSE-MsgGUID: RuPkVJ3qTFq6VLUNkoUY/g==
+   d="scan'208";a="57609705"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 08:51:00 -0800
+X-CSE-ConnectionGUID: /kaAi1FSSrW8870CrLxSHw==
+X-CSE-MsgGUID: uLU5FtQvQamflgrvddvw6w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,238,1763452800"; 
-   d="scan'208";a="210389007"
+   d="scan'208";a="236584884"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 19 Jan 2026 08:06:52 -0800
+  by orviesa002.jf.intel.com with ESMTP; 19 Jan 2026 08:50:57 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vhrmD-00000000O01-3hcG;
-	Mon, 19 Jan 2026 16:06:49 +0000
-Date: Tue, 20 Jan 2026 00:05:54 +0800
+	id 1vhsSt-00000000O4b-24nR;
+	Mon, 19 Jan 2026 16:50:55 +0000
+Date: Tue, 20 Jan 2026 00:50:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Nirjhar Roy (IBM)" <nirjhar.roy.lists@gmail.com>,
-	linux-xfs@vger.kernel.org
+To: "Tzung-Bi Shih" <tzungbi@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ritesh.list@gmail.com, ojaswin@linux.ibm.com, djwong@kernel.org,
-	hch@infradead.org, nirjhar.roy.lists@gmail.com
-Subject: Re: [PATCH v1] xfs: Fix calculation of m_rtx_per_rbmblock
-Message-ID: <202601192312.dyXO6IrE-lkp@intel.com>
-References: <2e0f36968b112303466c5e07a88c7e9949f769fe.1768822986.git.nirjhar.roy.lists@gmail.com>
+ linux-gpio@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [brgl:gpio/for-current 1/2]
+ drivers/gpio/gpiolib-cdev.c:2800:3: error: cannot jump from this goto
+ statement to its label
+Message-ID: <202601200022.ZFwz8K6u-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e0f36968b112303466c5e07a88c7e9949f769fe.1768822986.git.nirjhar.roy.lists@gmail.com>
 
-Hi Nirjhar,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on xfs-linux/for-next]
-[also build test ERROR on linus/master v6.19-rc6 next-20260116]
-[cannot apply to riteshharjani/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nirjhar-Roy-IBM/xfs-Fix-calculation-of-m_rtx_per_rbmblock/20260119-195408
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-patch link:    https://lore.kernel.org/r/2e0f36968b112303466c5e07a88c7e9949f769fe.1768822986.git.nirjhar.roy.lists%40gmail.com
-patch subject: [PATCH v1] xfs: Fix calculation of m_rtx_per_rbmblock
-config: i386-buildonly-randconfig-002-20260119 (https://download.01.org/0day-ci/archive/20260119/202601192312.dyXO6IrE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260119/202601192312.dyXO6IrE-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-current
+head:   c7843298bf973d4bc7f4346140661e117186decc
+commit: be037ec1785d76351037103ce6baddd3299606ee [1/2] gpio: cdev: Fix resource leaks on errors in gpiolib_cdev_register()
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260120/202601200022.ZFwz8K6u-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601200022.ZFwz8K6u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601192312.dyXO6IrE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601200022.ZFwz8K6u-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/xfs/libxfs/xfs_sb.c:1271:27: error: call to undeclared function 'xfs_rtbitmap_rtx_per_rbmblock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1271 |         mp->m_rtx_per_rbmblock = xfs_rtbitmap_rtx_per_rbmblock(mp);
-         |                                  ^
+>> drivers/gpio/gpiolib-cdev.c:2800:3: error: cannot jump from this goto statement to its label
+    2800 |                 goto err_free_workqueue;
+         |                 ^
+   drivers/gpio/gpiolib-cdev.c:2802:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    2802 |         guard(srcu)(&gdev->srcu);
+         |         ^
+   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
+     414 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+     168 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:30:1: note: expanded from here
+      30 | __UNIQUE_ID_guard_354
+         | ^
    1 error generated.
 
 
-vim +/xfs_rtbitmap_rtx_per_rbmblock +1271 fs/xfs/libxfs/xfs_sb.c
+vim +2800 drivers/gpio/gpiolib-cdev.c
 
-  1245	
-  1246	/*
-  1247	 * xfs_mount_common
-  1248	 *
-  1249	 * Mount initialization code establishing various mount
-  1250	 * fields from the superblock associated with the given
-  1251	 * mount structure.
-  1252	 *
-  1253	 * Inode geometry are calculated in xfs_ialloc_setup_geometry.
-  1254	 */
-  1255	void
-  1256	xfs_sb_mount_common(
-  1257		struct xfs_mount	*mp,
-  1258		struct xfs_sb		*sbp)
-  1259	{
-  1260		struct xfs_groups	*ags = &mp->m_groups[XG_TYPE_AG];
-  1261	
-  1262		mp->m_agfrotor = 0;
-  1263		atomic_set(&mp->m_agirotor, 0);
-  1264		mp->m_maxagi = mp->m_sb.sb_agcount;
-  1265		mp->m_blkbit_log = sbp->sb_blocklog + XFS_NBBYLOG;
-  1266		mp->m_blkbb_log = sbp->sb_blocklog - BBSHIFT;
-  1267		mp->m_sectbb_log = sbp->sb_sectlog - BBSHIFT;
-  1268		mp->m_agno_log = xfs_highbit32(sbp->sb_agcount - 1) + 1;
-  1269		mp->m_blockmask = sbp->sb_blocksize - 1;
-  1270		mp->m_blockwsize = xfs_rtbmblock_size(sbp) >> XFS_WORDLOG;
-> 1271		mp->m_rtx_per_rbmblock = xfs_rtbitmap_rtx_per_rbmblock(mp);
-  1272	
-  1273		ags->blocks = mp->m_sb.sb_agblocks;
-  1274		ags->blklog = mp->m_sb.sb_agblklog;
-  1275		ags->blkmask = xfs_mask32lo(mp->m_sb.sb_agblklog);
-  1276	
-  1277		xfs_sb_mount_rextsize(mp, sbp);
-  1278	
-  1279		mp->m_alloc_mxr[0] = xfs_allocbt_maxrecs(mp, sbp->sb_blocksize, true);
-  1280		mp->m_alloc_mxr[1] = xfs_allocbt_maxrecs(mp, sbp->sb_blocksize, false);
-  1281		mp->m_alloc_mnr[0] = mp->m_alloc_mxr[0] / 2;
-  1282		mp->m_alloc_mnr[1] = mp->m_alloc_mxr[1] / 2;
-  1283	
-  1284		mp->m_bmap_dmxr[0] = xfs_bmbt_maxrecs(mp, sbp->sb_blocksize, true);
-  1285		mp->m_bmap_dmxr[1] = xfs_bmbt_maxrecs(mp, sbp->sb_blocksize, false);
-  1286		mp->m_bmap_dmnr[0] = mp->m_bmap_dmxr[0] / 2;
-  1287		mp->m_bmap_dmnr[1] = mp->m_bmap_dmxr[1] / 2;
-  1288	
-  1289		mp->m_rmap_mxr[0] = xfs_rmapbt_maxrecs(mp, sbp->sb_blocksize, true);
-  1290		mp->m_rmap_mxr[1] = xfs_rmapbt_maxrecs(mp, sbp->sb_blocksize, false);
-  1291		mp->m_rmap_mnr[0] = mp->m_rmap_mxr[0] / 2;
-  1292		mp->m_rmap_mnr[1] = mp->m_rmap_mxr[1] / 2;
-  1293	
-  1294		mp->m_rtrmap_mxr[0] = xfs_rtrmapbt_maxrecs(mp, sbp->sb_blocksize, true);
-  1295		mp->m_rtrmap_mxr[1] = xfs_rtrmapbt_maxrecs(mp, sbp->sb_blocksize, false);
-  1296		mp->m_rtrmap_mnr[0] = mp->m_rtrmap_mxr[0] / 2;
-  1297		mp->m_rtrmap_mnr[1] = mp->m_rtrmap_mxr[1] / 2;
-  1298	
-  1299		mp->m_refc_mxr[0] = xfs_refcountbt_maxrecs(mp, sbp->sb_blocksize, true);
-  1300		mp->m_refc_mxr[1] = xfs_refcountbt_maxrecs(mp, sbp->sb_blocksize, false);
-  1301		mp->m_refc_mnr[0] = mp->m_refc_mxr[0] / 2;
-  1302		mp->m_refc_mnr[1] = mp->m_refc_mxr[1] / 2;
-  1303	
-  1304		mp->m_rtrefc_mxr[0] = xfs_rtrefcountbt_maxrecs(mp, sbp->sb_blocksize,
-  1305				true);
-  1306		mp->m_rtrefc_mxr[1] = xfs_rtrefcountbt_maxrecs(mp, sbp->sb_blocksize,
-  1307				false);
-  1308		mp->m_rtrefc_mnr[0] = mp->m_rtrefc_mxr[0] / 2;
-  1309		mp->m_rtrefc_mnr[1] = mp->m_rtrefc_mxr[1] / 2;
-  1310	
-  1311		mp->m_bsize = XFS_FSB_TO_BB(mp, 1);
-  1312		mp->m_alloc_set_aside = xfs_alloc_set_aside(mp);
-  1313		mp->m_ag_max_usable = xfs_alloc_ag_max_usable(mp);
-  1314	}
-  1315	
+  2783	
+  2784	int gpiolib_cdev_register(struct gpio_device *gdev, dev_t devt)
+  2785	{
+  2786		struct gpio_chip *gc;
+  2787		int ret;
+  2788	
+  2789		cdev_init(&gdev->chrdev, &gpio_fileops);
+  2790		gdev->chrdev.owner = THIS_MODULE;
+  2791		gdev->dev.devt = MKDEV(MAJOR(devt), gdev->id);
+  2792	
+  2793		gdev->line_state_wq = alloc_ordered_workqueue("%s", WQ_HIGHPRI,
+  2794							      dev_name(&gdev->dev));
+  2795		if (!gdev->line_state_wq)
+  2796			return -ENOMEM;
+  2797	
+  2798		ret = cdev_device_add(&gdev->chrdev, &gdev->dev);
+  2799		if (ret)
+> 2800			goto err_free_workqueue;
+  2801	
+  2802		guard(srcu)(&gdev->srcu);
+  2803		gc = srcu_dereference(gdev->chip, &gdev->srcu);
+  2804		if (!gc) {
+  2805			ret = -ENODEV;
+  2806			goto err_free_cdev;
+  2807		}
+  2808	
+  2809		gpiochip_dbg(gc, "added GPIO chardev (%d:%d)\n", MAJOR(devt), gdev->id);
+  2810	
+  2811		return 0;
+  2812	
+  2813	err_free_cdev:
+  2814		cdev_device_del(&gdev->chrdev, &gdev->dev);
+  2815	err_free_workqueue:
+  2816		destroy_workqueue(gdev->line_state_wq);
+  2817		return ret;
+  2818	}
+  2819	
 
 -- 
 0-DAY CI Kernel Test Service
