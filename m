@@ -1,268 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28CC354AF3;
-	Mon, 19 Jan 2026 09:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DD53563CE
+	for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 09:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768814247; cv=none; b=W1506WkSIdzW6f7NZIaEb1oTU6pcgwvc+UxbvrIv5XPaoKRxMsiU5lf7HUB2t0KrJpc0s0fCXrDD6/J3WeB8G9h5kxkEr3/q1bP3dVeLI+/Wfm4I+vHslTuFca1JCxRzYbbvel8w7nBoBo8POEKuuCG0a7i7iI0KeW9poSzzODs=
+	t=1768815648; cv=none; b=gCZ2cHU3DJ/H7KIYd+jWov2JTB3dyEqwGAqFSU34boeLOhKMN834GB5URqqvk3t/uI53a0af7KYNNJq/NPqHe/KAeQE2zi6/Jgz+eDFwVjZg8uuaNlHwK37UcxZ8aAsXBvkfVQA5wI3cFJquGkgAIQG58gToOppDMEdc0VmTcnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768814247; c=relaxed/simple;
-	bh=AU9JVoNnfRKsIj4AsW7oSKQlXRJhBnRLc/ccZNkzymE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dgi/k5DhwsQ5uX0t3i2Mg3VnMTCChQRXrqguHULb4/slCxcEvXAQFt4XBgUuwWL72RYonjM8B32hfsCAf2RLLN/pM13pZTU0289RwrirHmG/tOTKeCxztLw6tMDJSKLOvMSak4l1he+47ATwstfP6EBGK4ncCAvUmRbnRaIwzfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EEfDHTEP; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768815648; c=relaxed/simple;
+	bh=LFRNb1gEQo9FV1jLi6+eyd+fRn/YHv3OptpdwWFbVxE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Co2zlrnF00kEMQevar6omF+xgZraCt7Qx+2/ODDfzC9bix8lC/gl41EhNXN1BIfXSHMTe/6zV/6PrtQy5RVV6ktfU256FtkCIBmIIXDkFWEoE3RxG64J5izec0eMUTTefn4HOetOnkTguaEWouyL0QHwsioWIVpvssZXNAVLdz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QRLtl3f0; arc=none smtp.client-ip=209.85.221.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EEfDHTEP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768814246; x=1800350246;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AU9JVoNnfRKsIj4AsW7oSKQlXRJhBnRLc/ccZNkzymE=;
-  b=EEfDHTEP0TBAoqVN8iJns0mfs6X5p6rZE3ORmJxrRwCdIOoWem2EaAwr
-   mWtO5yO6jyd3hFsVsjO26Pdf+SYUuAOruFXI7GnOlLZpkrY56cQvBRdWC
-   1fynYbd3EMj+EP60ubApFMhnCuhVycox2ok8MLNrv78q7oIbMn5fPKqyk
-   1eaH74yyMsqssmhekA+tXTCKVMIXtW5Cn6AVaZv+5T2h/aWeU2azH0tna
-   Bay+wmyJva+uSaGxhzH75WeUoBb7aesj92MNKdpK5C2s3QoW4UONnmxtW
-   jaPGxI8biXRQUrPd5wu5cI8/itSFuIHqFmElkX2wQv87wNTHHJKsMnacD
-   Q==;
-X-CSE-ConnectionGUID: aYouTIrRSD2rthjf/2/1jQ==
-X-CSE-MsgGUID: Vn9NRsH9RE2lp8Ipv0+8lg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11675"; a="73881376"
-X-IronPort-AV: E=Sophos;i="6.21,237,1763452800"; 
-   d="scan'208";a="73881376"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 01:17:25 -0800
-X-CSE-ConnectionGUID: hDP+P3CzSqW+srxROFK3Pg==
-X-CSE-MsgGUID: sXSNzcZUQDmRSiM+EyGXIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,237,1763452800"; 
-   d="scan'208";a="206249073"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 19 Jan 2026 01:17:20 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vhlNu-00000000Ndd-1Vmo;
-	Mon, 19 Jan 2026 09:17:18 +0000
-Date: Mon, 19 Jan 2026 17:16:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhiguo Zhou <zhiguo.zhou@intel.com>, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	willy@infradead.org, akpm@linux-foundation.org, david@kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	muchun.song@linux.dev, osalvador@suse.de,
-	linux-kernel@vger.kernel.org, tianyou.li@intel.com,
-	tim.c.chen@linux.intel.com, gang.deng@intel.com,
-	Zhiguo Zhou <zhiguo.zhou@intel.com>
-Subject: Re: [PATCH 1/2] mm/filemap: refactor __filemap_add_folio to separate
- critical section
-Message-ID: <202601191620.O1a0T02o-lkp@intel.com>
-References: <20260119065027.918085-2-zhiguo.zhou@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QRLtl3f0"
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-4325b182e3cso2486745f8f.2
+        for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 01:40:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768815646; x=1769420446; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Tir03/0eTjGqYap+VXkH/YQyday94uYso0Z0/c7DdeU=;
+        b=QRLtl3f0DWaNB2XRG5XfUVNRg01uE++vt/WSKFxZjOCNoKnPMTo8eH6IAulGpxcqkP
+         KTrcS6yEDXhYuvMLfLGjd/y2iYUNcUsXIqFpCXVQZ54/EWO6RDzM5lSfIFWqbEQ6X2sk
+         QXPkHTqHOA5BWHfHzmH0clu+FW1gw8rAeJGeuwYsXB6irB2vX2mvJMCj3GsQhPqXMpOa
+         jFPM1g2xZj8Y417EgeGUyRFFXbGmw+uR5TUFcEE2TtSCSZwkeAHOIhGlnYJ90XmgtxY0
+         gdnsUdxnzM3pfNlE0rIrMZLdNZmeNIO0ZHgfZxSVWoHjs0QH38RGT37aePg0vww+5wpb
+         AX/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768815646; x=1769420446;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tir03/0eTjGqYap+VXkH/YQyday94uYso0Z0/c7DdeU=;
+        b=suBjQR8S6ozW60XpJZ9rT5RCHCLLOfA20Rgk48/gSRWkX6fYyLN+sjzJIUr9I9NYXC
+         QOiVw/xKmEdo9zkFBCa9BJViyUtW4UCn5nI2GquFliNBnQVYMHORWnktho0nPwOt03iU
+         /E+6P29A4Biu3Dv+rJsi0QDpatg39bf9ne0FPtMMIvJxbaznU6Y96RNb4U2VavG3+oQb
+         Ao68OduuHPRJ/L4dm7wx+ScV+CQs+q+btC3uGn2YL6KnZhWVk8/4yy7Lqg4M+nDUYkt7
+         FXlr5nFKtRuk2JXF9VrxbyFpWrat6/E07LH2pAMRJqcBRsgOq9l4tbQiuXptSsjxkm/8
+         e0aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU66FNNoSV66lofipW/qy6Y8HYwBqDWLOLUn2U1lMN1eUAD+iao0FQMXXcG+e4HiWWa0hbU@lists.linux.dev
+X-Gm-Message-State: AOJu0YzoN7wWBPA4JtO31EJXQiHQc3qtBgZIoK+mOtV2YgzEFT3cRE/D
+	B8pPMhympEBj5V7YiJbGW5ngJFz/W7zSpRtEHlNx88XdoMP/No9MCX7mtM6VTahyJ7CFHFOMZ7d
+	5TQ==
+X-Received: from wmbil25.prod.google.com ([2002:a05:600c:a599:b0:46e:1e57:dbd6])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:358e:b0:470:fe3c:a3b7
+ with SMTP id 5b1f17b1804b1-4801e2f3083mr136239335e9.5.1768815645684; Mon, 19
+ Jan 2026 01:40:45 -0800 (PST)
+Date: Mon, 19 Jan 2026 10:05:50 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260119065027.918085-2-zhiguo.zhou@intel.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+Message-ID: <20260119094029.1344361-1-elver@google.com>
+Subject: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped init guards
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Christoph Hellwig <hch@lst.de>, Steven Rostedt <rostedt@goodmis.org>, Bart Van Assche <bvanassche@acm.org>, 
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Zhiguo,
+Current context analysis treats lock_init() as implicitly "holding" the
+lock to allow initializing guarded members. This causes false-positive
+"double lock" reports if the lock is acquired immediately after
+initialization in the same scope; for example:
 
-kernel test robot noticed the following build errors:
+	mutex_init(&d->mtx);
+	/* ... counter is guarded by mtx ... */
+	d->counter = 0;  /* ok, but mtx is now "held" */
+	...
+	mutex_lock(&d->mtx); /* warning: acquiring mutex already held */
 
-[auto build test ERROR on akpm-mm/mm-everything]
+This series proposes a solution to this by introducing scoped init
+guards which Peter suggested, using the guard(type_init)(&lock) or
+scoped_guard(type_init, ..) interface. This explicitly marks init scope
+where we can initialize guarded members. With that we can revert the
+"implicitly hold" after init annotations, which allows use after
+initialization scope as follows:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhiguo-Zhou/mm-filemap-refactor-__filemap_add_folio-to-separate-critical-section/20260119-143737
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260119065027.918085-2-zhiguo.zhou%40intel.com
-patch subject: [PATCH 1/2] mm/filemap: refactor __filemap_add_folio to separate critical section
-config: s390-randconfig-002-20260119 (https://download.01.org/0day-ci/archive/20260119/202601191620.O1a0T02o-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260119/202601191620.O1a0T02o-lkp@intel.com/reproduce)
+	scoped_guard(mutex_init, &d->mtx) {
+		d->counter = 0;
+	}
+	...
+	mutex_lock(&d->mtx); /* ok */
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601191620.O1a0T02o-lkp@intel.com/
+Note: Scoped guarded initialization remains optional, and normal
+initialization can still be used if no guarded members are being
+initialized. Another alternative is to just disable context analysis to
+initialize guarded members with `context_unsafe(var = init)` or adding
+the `__context_unsafe(init)` function attribute (the latter not being
+recommended for non-trivial functions due to lack of any checking):
 
-All errors (new ones prefixed by >>):
+	mutex_init(&d->mtx);
+	context_unsafe(d->counter = 0);  /* ok */
+	...
+	mutex_lock(&d->mtx);
 
->> mm/filemap.c:861:2: error: member reference type 'spinlock_t' (aka 'struct spinlock') is not a pointer; did you mean to use '.'?
-     861 |         lockdep_assert_held(xas->xa->xa_lock);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:52: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON'
-     110 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
->> mm/filemap.c:861:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-     861 |         lockdep_assert_held(xas->xa->xa_lock);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:45: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                      ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON'
-     110 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   mm/filemap.c:941:3: error: member reference type 'spinlock_t' (aka 'struct spinlock') is not a pointer; did you mean to use '.'?
-     941 |                 lockdep_assert_held(xas->xa->xa_lock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:52: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON'
-     110 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   mm/filemap.c:941:3: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-     941 |                 lockdep_assert_held(xas->xa->xa_lock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:45: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                      ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON'
-     110 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   mm/filemap.c:944:3: error: member reference type 'spinlock_t' (aka 'struct spinlock') is not a pointer; did you mean to use '.'?
-     944 |                 lockdep_assert_not_held(xas->xa->xa_lock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:288:17: note: expanded from macro 'lockdep_assert_not_held'
-     288 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:52: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON'
-     110 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   mm/filemap.c:944:3: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-     944 |                 lockdep_assert_not_held(xas->xa->xa_lock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:288:17: note: expanded from macro 'lockdep_assert_not_held'
-     288 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:45: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                      ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON'
-     110 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   6 errors generated.
+This series is an alternative to the approach in [1]:
 
+   * Scoped init guards (this series): Sound interface, requires use of
+     guard(type_init)(&lock) or scoped_guard(type_init, ..) for guarded
+     member initialization.
 
-vim +861 mm/filemap.c
+   * Reentrant init [1]: Less intrusive, type_init() just works, and
+     also allows guarded member initialization with later lock use in
+     the same function. But unsound, and e.g. misses double-lock bugs
+     immediately after init, trading false positives for false negatives.
 
-   847	
-   848	/*
-   849	 * The critical section for storing a folio in an XArray.
-   850	 * Context: Expects xas->xa->xa_lock to be held.
-   851	 */
-   852	static void __filemap_add_folio_xa_locked(struct xa_state *xas,
-   853			struct address_space *mapping, struct folio *folio, void **shadowp)
-   854	{
-   855		bool huge;
-   856		long nr;
-   857		unsigned int forder = folio_order(folio);
-   858		int order = -1;
-   859		void *entry, *old = NULL;
-   860	
- > 861		lockdep_assert_held(xas->xa->xa_lock);
-   862	
-   863		huge = folio_test_hugetlb(folio);
-   864		nr = folio_nr_pages(folio);
-   865	
-   866		xas_for_each_conflict(xas, entry) {
-   867			old = entry;
-   868			if (!xa_is_value(entry)) {
-   869				xas_set_err(xas, -EEXIST);
-   870				return;
-   871			}
-   872			/*
-   873			 * If a larger entry exists,
-   874			 * it will be the first and only entry iterated.
-   875			 */
-   876			if (order == -1)
-   877				order = xas_get_order(xas);
-   878		}
-   879	
-   880		if (old) {
-   881			if (order > 0 && order > forder) {
-   882				unsigned int split_order = max(forder,
-   883						xas_try_split_min_order(order));
-   884	
-   885				/* How to handle large swap entries? */
-   886				BUG_ON(shmem_mapping(mapping));
-   887	
-   888				while (order > forder) {
-   889					xas_set_order(xas, xas->xa_index, split_order);
-   890					xas_try_split(xas, old, order);
-   891					if (xas_error(xas))
-   892						return;
-   893					order = split_order;
-   894					split_order =
-   895						max(xas_try_split_min_order(
-   896							    split_order),
-   897						    forder);
-   898				}
-   899				xas_reset(xas);
-   900			}
-   901			if (shadowp)
-   902				*shadowp = old;
-   903		}
-   904	
-   905		xas_store(xas, folio);
-   906		if (xas_error(xas))
-   907			return;
-   908	
-   909		mapping->nrpages += nr;
-   910	
-   911		/* hugetlb pages do not participate in page cache accounting */
-   912		if (!huge) {
-   913			lruvec_stat_mod_folio(folio, NR_FILE_PAGES, nr);
-   914			if (folio_test_pmd_mappable(folio))
-   915				lruvec_stat_mod_folio(folio,
-   916						NR_FILE_THPS, nr);
-   917		}
-   918	}
-   919	
+[1] https://lore.kernel.org/all/20260115005231.1211866-1-elver@google.com/
+
+Marco Elver (6):
+  cleanup: Make __DEFINE_LOCK_GUARD handle commas in initializers
+  compiler-context-analysis: Introduce scoped init guards
+  kcov: Use scoped init guard
+  crypto: Use scoped init guard
+  tomoyo: Use scoped init guard
+  compiler-context-analysis: Remove __assume_ctx_lock from initializers
+
+ Documentation/dev-tools/context-analysis.rst | 30 ++++++++++++++++++--
+ crypto/crypto_engine.c                       |  2 +-
+ crypto/drbg.c                                |  2 +-
+ include/linux/cleanup.h                      |  8 +++---
+ include/linux/compiler-context-analysis.h    |  9 ++----
+ include/linux/local_lock.h                   |  8 ++++++
+ include/linux/local_lock_internal.h          |  4 +--
+ include/linux/mutex.h                        |  4 ++-
+ include/linux/rwlock.h                       |  3 +-
+ include/linux/rwlock_rt.h                    |  1 -
+ include/linux/rwsem.h                        |  6 ++--
+ include/linux/seqlock.h                      |  6 +++-
+ include/linux/spinlock.h                     | 17 ++++++++---
+ include/linux/spinlock_rt.h                  |  1 -
+ include/linux/ww_mutex.h                     |  1 -
+ kernel/kcov.c                                |  2 +-
+ lib/test_context-analysis.c                  | 22 ++++++--------
+ security/tomoyo/common.c                     |  2 +-
+ 18 files changed, 80 insertions(+), 48 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0.457.g6b5491de43-goog
+
