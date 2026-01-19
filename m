@@ -1,87 +1,93 @@
-Received: from mail-244116.protonmail.ch (mail-244116.protonmail.ch [109.224.244.116])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8D62DF155
-	for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 19:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936E825A62E;
+	Mon, 19 Jan 2026 19:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768851819; cv=none; b=S+G0jSqQnUKG54DLT1Vh3+FdyKTQOXtWq2CpGXZ8FBlBwcVaiGzm2zevxE4eGkcJr1qMufLD+hUI91LXO+pQIFbCYob29iVFnTFJW3oD4PyvynO2LWZfMF+OZsc2zJTYT9sOVlA4F3pAKeBvbWM63TFpGLk4syAZCc5bbOG2DGo=
+	t=1768852097; cv=none; b=BYK7bahlb8JJHGwJfjzV1HOBzwQ8c5k5Qzz0ea6LX9R1hTjmdNZNchlxITB3jMJa8F7dl8ji0I5FmXIPrw/qCYbxHnBCanD0R5M4pFkku7VdXAepcFM2JFtaLV1OEaWfIdbNAbPhsHq3kdfeSnF1XqoDvm6p4uzGq8J3K5Z8kUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768851819; c=relaxed/simple;
-	bh=s9GRY0FJY6iHKv2Hjum9gopPHHwQIkfpO/pEZWZdRvM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EUFbHKxjubNVaWFFoEwQyRsGrY2YUpfkP6LJkynoLSDlMdY8zFCU4G1ZMWz2q3o9y/f2H69dUCFejfpkqrbEjU4kNyBGzZ1v68uEUIfDn5+xPwESH0c82pbILZBX/tsdF9iR/tqfTYzSwfGabRjAHuo78g99HMX6Gg2dv4+6KwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=mmSiMYG6; arc=none smtp.client-ip=109.224.244.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1768852097; c=relaxed/simple;
+	bh=iKZVxB/8oLlHOmiX9jlBbkSdfFKDFyMKrLx56Vm6cB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=a7roJKfBpUCsAWcpGIxJg0KolH/pByAhMJZ7Ow7dF4KzkSyMTI/VlMKBIvWrRj7Xe9nqrBm/CpezeGF03Uax8O+w3LFWPPT/p7yrhVMM53ZEatYjuqs5b4GvCL5p9QWpSZ+dz9qO4SqGkkmhBTRLHla9kSRuEq6Zt5cGykUCXIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sy0G+NC1; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="mmSiMYG6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1768851808; x=1769111008;
-	bh=s9GRY0FJY6iHKv2Hjum9gopPHHwQIkfpO/pEZWZdRvM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=mmSiMYG64YPT+CQ2wjQHoHi/YZc2cnwxdRHwxNUlyF5nEW8PzpH0VZc3HhOYq+8CF
-	 FaChEkwkVLmrBvz027ugXCYoa9Dw6oR8nhShXt8fMNoMsjirTcTsUdKc4tfa+87dWo
-	 g7J8yzuqRHz69j8YjGEwC+wz4kxz3xf27HtjEkhcHnr2TfHaHL9kzwwRGG9v5F4slZ
-	 0bSFQATgcmirIgLi2xLDI0kRXAqEuT/gvcJiLCpDytXAsVoLUTj5+IxONZb80FXluD
-	 w6lymthWpVEPALccPThV3E4Ok9EXUMEWIuvoAnAPIDgpBGOlzcZxqD2ddjWZuKPFwT
-	 R1bShR6pmJUTA==
-Date: Mon, 19 Jan 2026 19:43:23 +0000
-To: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: corbet@lwn.net, morbo@google.com, rppt@kernel.org, lorenzo.stoakes@oracle.com, ubizjak@gmail.com, mingo@redhat.com, vincenzo.frascino@arm.com, maciej.wieczor-retman@intel.com, maz@kernel.org, catalin.marinas@arm.com, yeoreum.yun@arm.com, will@kernel.org, jackmanb@google.com, samuel.holland@sifive.com, glider@google.com, osandov@fb.com, nsc@kernel.org, luto@kernel.org, jpoimboe@kernel.org, akpm@linux-foundation.org, Liam.Howlett@oracle.com, kees@kernel.org, jan.kiszka@siemens.com, thomas.lendacky@amd.com, jeremy.linton@arm.com, dvyukov@google.com, axelrasmussen@google.com, leitao@debian.org, bigeasy@linutronix.de, peterz@infradead.org, mark.rutland@arm.com, urezki@gmail.com, brgerst@gmail.com, hpa@zytor.com, mhocko@suse.com, andreyknvl@gmail.com, weixugc@google.com, kbingham@kernel.org, vbabka@suse.cz, nathan@kernel.org, trintaeoitogc@gmail.com, samitolvanen@google.com, tglx@kernel.org, thuth@redhat.com, surenb@google.com, anshuman.khandual@arm.com, smostafa@google.com,
-	yuanchu@google.com, ada.coupriediaz@arm.com, dave.hansen@linux.intel.com, kas@kernel.org, nick.desaulniers+lkml@gmail.com, david@kernel.org, bp@alien8.de, ardb@kernel.org, justinstitt@google.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v8 00/14] kasan: x86: arm64: KASAN tag-based mode for x86
-Message-ID: <aW6HcGjkAZ3lITeA@wieczorr-mobl1.localdomain>
-In-Reply-To: <e273571e-ab8f-46d6-a44e-c1d0d06d3cbf@gmail.com>
-References: <cover.1768233085.git.m.wieczorretman@pm.me> <e273571e-ab8f-46d6-a44e-c1d0d06d3cbf@gmail.com>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 85c5e72275bf1238c6f06b30c2b28981083b1095
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sy0G+NC1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768852094; x=1800388094;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iKZVxB/8oLlHOmiX9jlBbkSdfFKDFyMKrLx56Vm6cB4=;
+  b=Sy0G+NC1BkCzFPnkpR/lUbD8AUX8HCO+FdZmcxcCmdcrFKBAiWTmYXR0
+   1XYs5PCn1MuS7K16LuA+gf4Z4Xv8sTiu6N6SoWLhYCjIYHbkrWKc+Ckzg
+   rp18PgtqqfP+2Hg7bGuAn3rJfKOqvattutVZ7hbvRfAf0gPaqCVkobeOn
+   rt2HZq4rw/V5LoHU1yc4x2UGdaL+k5hJMzddFH9zFG+O1cDkcK2c1kPm1
+   0knQFFECNWLFjDaJ51sMB7M52CoO25UOThSjmNScJNOyYr5Rjajl4FZ4i
+   V/VEEWU6rjuFpnpT6xYGbAa+5GlxrHaFOigJOachDDjTzHdyxbKYHyFGw
+   Q==;
+X-CSE-ConnectionGUID: UWXbc8G9RgqofIMbJvFqag==
+X-CSE-MsgGUID: JlIhmdjNQHyvmmzQvyHsXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="73928209"
+X-IronPort-AV: E=Sophos;i="6.21,238,1763452800"; 
+   d="scan'208";a="73928209"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 11:48:13 -0800
+X-CSE-ConnectionGUID: yczU2/EhRlOrK4UpmgTLyQ==
+X-CSE-MsgGUID: Py30EavGRrmd50JU1Xfe1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,238,1763452800"; 
+   d="scan'208";a="205964578"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 19 Jan 2026 11:48:12 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vhvEP-00000000OF4-3gA5;
+	Mon, 19 Jan 2026 19:48:09 +0000
+Date: Tue, 20 Jan 2026 03:47:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 4/29]
+ /usr/include/linux/errno.h:1:10: fatal error: 'asm/errno.h' file not found
+Message-ID: <202601200338.xQ9HAITG-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 
-On 2026-01-19 at 17:33:35 +0100, Andrey Ryabinin wrote:
->On 1/12/26 6:26 PM, Maciej Wieczor-Retman wrote:
->
->> =3D=3D=3D=3D=3D=3D=3D Compilation
->> Clang was used to compile the series (make LLVM=3D1) since gcc doesn't
->> seem to have support for KASAN tag-based compiler instrumentation on
->> x86.
->>
->
->It appears that GCC nominally supports this, but in practice it does not w=
-ork.
->Here is a minimal reproducer: https://godbolt.org/z/s85e11T5r
->
->As far as I understand, calling a function through a tagged pointer is not
->supported by the hardware, so GCC attempts to clear the tag before the cal=
-l.
->This behavior seems to be inherited from the userspace implementation of H=
-WASan (-fsanitize=3Dhwaddress).
->
->I have filed a GCC bug report: https://gcc.gnu.org/bugzilla/show_bug.cgi?i=
-d=3D123696
->
->For the kernel, we probably do not want this masking at all, as effectivel=
-y 99.9=E2=80=93100%
->of function pointer calls are expected to be untagged anyway.
->
->Clang does not appear to do this, not even for userspace.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   fc55af66ff49a263c16fc4ddf9877c91a307edbf
+commit: 80643f78e2004b8b389b1200b6a196940afc14e4 [4/29] test
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260120/202601200338.xQ9HAITG-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601200338.xQ9HAITG-lkp@intel.com/reproduce)
 
-Cool, thanks, nice to know why the kernel didn't start with gcc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601200338.xQ9HAITG-lkp@intel.com/
 
-I'm going to check in on the bug report every now and then and once it gets
-resolved I'll test if everything works as expected on both compilers.
+All errors (new ones prefixed by >>):
 
---=20
-Kind regards
-Maciej Wiecz=C3=B3r-Retman
+   In file included from init/test.c:4:
+   In file included from /usr/include/err.h:55:
+   /usr/include/bits/floatn.h:97:9: error: __float128 is not supported on this target
+      97 | typedef __float128 _Float128;
+         |         ^
+   In file included from init/test.c:8:
+   In file included from /usr/include/errno.h:28:
+   In file included from /usr/include/bits/errno.h:26:
+>> /usr/include/linux/errno.h:1:10: fatal error: 'asm/errno.h' file not found
+       1 | #include <asm/errno.h>
+         |          ^~~~~~~~~~~~~
+   2 errors generated.
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
