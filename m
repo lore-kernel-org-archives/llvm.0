@@ -1,54 +1,54 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4616C3587A9
-	for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 09:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CE6358D0B
+	for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 09:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768815660; cv=none; b=PNLWgMhDVAuK+tBtMyhIjxU6gmNCcpNVbi+MHx9uRujtT4p5hfEqPrvpiOdez4Dfhc42jylUsSGCpBpsFgMmSVY3VtzPx8yH0Q2jmZWxlngrrdzmyZC3zx+tII/0GYLZOqNs6ACHkiO7E7h5J7drnJP/CwHvQuKV41xeZtQBs5w=
+	t=1768815662; cv=none; b=iLnFuexkTXkpeIXIgrtTB7AWTDBdQckxejJtjmoRUI/FH1alF4ZCFPjgidlhe33KESQuS9Dcfl4a+hBKhLWl9f4/RJLGTSqTxd9cH0UBLI2bHkZ0BrVQWmxY4bRjnYp+dcQ7lvijZhrUINmHWuxcfLIlFEMVtz+Ln9xncGU+ZNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768815660; c=relaxed/simple;
-	bh=y9/1uLJMC7+X7yi1h38x4esMDvrYwSDX9pt6Sh+Dy/I=;
+	s=arc-20240116; t=1768815662; c=relaxed/simple;
+	bh=fI1glmYoH1DqxqK83xKlTtx/Ar+iZrLYeSgCJ+MEbqk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bXzDEGiYLlt1ph02C0OLb9Pwo1frs55Ojige1E3ooe+TFcqW9GG8fVHfzaBSSkm8mMpVi0R2jQUWrEgVfvIXNiMCWcw5UO5VhuT72CyUkUG5G5mhAcWjVpa33/pRgNYSw4iPrp11/s+M1z9Dx7pYr1npeR3LN4yC6ISICK1vrqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OcnA23Vi; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=Qz2Nbpe88Ks9SdhDzj2/AofKpVJgJl8vw8bDqUz/+34m1psrOqWcylY7k4AqRjAZXGY1WDE62QVSN0bVUD2BEkb7kzgqVTx78fiE/nxsn0GUM98X61Cm5NaBZXPKU+vd43qVKoRIiZnux5XjomT6CIiV7j0fPL/SuMBl44QEb34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E5lOXEiJ; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OcnA23Vi"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4801d21c280so23376455e9.1
-        for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 01:40:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E5lOXEiJ"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4801ad6e51cso33506735e9.2
+        for <llvm@lists.linux.dev>; Mon, 19 Jan 2026 01:41:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768815657; x=1769420457; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1768815660; x=1769420460; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CA3Nu437Rj+eAevya/i4iek0cQKs4Ymlx+qux+GVc44=;
-        b=OcnA23Vi1O2S5FY67tR5RcolFbLVb4wjKu9yBFEcTOrmW3Nshfg/AMgKB4Qs3DsXK5
-         kxcqncjR7FTPEyDZlWAp2zKYH3kBf4i+A7IDYp80Xjg+PzhhB4cjg5JwriHdhiyQvJ+R
-         SgUaUXtxvDrIkfrWDOIKppKmWGAn0Zv0/1oBYqDmiQIAHXw8HFyADKmaAP9YgBxUNARs
-         MUN6GxJePv++n4tzNZDMKMi+3ZD/h9102DCBz8LNoyeferD4DrS9dOi54c09VhRjUieq
-         8hdVKyKchEWm3GMTrdFdKmBz4LHtngGbhP+8V0BT3EoxjLkcSPAviscP7sxfbwCG3FeK
-         oeGw==
+        bh=5O5shuIyt2OF6tzGpJJeUtztHqWv8B89x7ZKRetoFcY=;
+        b=E5lOXEiJDxTqSsLN35Bjq6zbp7v60USBe/0gx8FfMxKjAoeAFTAjnEqJp3a5rk5vef
+         JdQWSMItfhSMci1OWeMr6vjIAhDh39ryD0p9ScH+kZ9n/5dodIrNp9Uhs/HFgO5BLfYM
+         HhywAQ6KEhf3b91SE+4HAtn8Sq0/wazk51Y2V8bdbONMZqISHWatR/2Aon45iBrYeal2
+         Kd6LVc425sXXxu7tk3y5OXVXgp0SdmGPtzK6cXWyKwexWllbNUrZm/nJHhAPgi8vgb3z
+         4Hq1AZLQo8SAjAXVic/Dp6c2pf8eM7BFnOjiwLp9aahtot9z1aMHaOnig4FpW/XJJgIC
+         m//A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768815657; x=1769420457;
+        d=1e100.net; s=20230601; t=1768815660; x=1769420460;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CA3Nu437Rj+eAevya/i4iek0cQKs4Ymlx+qux+GVc44=;
-        b=nyAXMGowg5D1/gfCXH9NR+4dm394kklGSVGjHsCD/KroX6IC/wFUAklULYJLluQ/9G
-         VJ5ShJFDh4KplVODatDYYpv66pY5xeEz6GDtfzb5T3wrnem8nVVfnN96PZhhLbbz3Z1O
-         aV+872lA5yd/2KZVv6ecAj2gV7Pe3oiuWfkp2ruSaiHNXuaxVqIHN0IO1hbeFhodC9W1
-         /ZgCG17P+3XL5+QxK+fQBRznYq8x/9vc1/JQD4vn3HJ+v7bs370IoeNizOYwYcpcmYro
-         KCCI7DIsDbsd6K8Wbu8bHbSuaTjEx+v6e+vPOPIoPJrQIFIj6lsxwkgUCl6NUXg2+4Z+
-         5sfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXB/74fooT4VQMPsp8ys1HD/6FnCl+yOe8ZQGX5lJdi/njW0zciU3U3Ku8hzRT7OrZBibdl@lists.linux.dev
-X-Gm-Message-State: AOJu0YwG5LBVVephaxW1eySQv4baIEBhnJsyBZ/bglAHkyaxDZyyF8vh
-	fWpXSRMELMQXdxoOCpJt5hyaLTqQGteU5N5EKpDJzYu7uD4tvDil3KjmYPgLqCxUx8mDePIYwi9
-	EqQ==
-X-Received: from wmbka9.prod.google.com ([2002:a05:600c:5849:b0:480:2880:4d51])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600d:6413:10b0:480:1e40:3d2
- with SMTP id 5b1f17b1804b1-4801e400518mr100658775e9.29.1768815656749; Mon, 19
- Jan 2026 01:40:56 -0800 (PST)
-Date: Mon, 19 Jan 2026 10:05:54 +0100
+        bh=5O5shuIyt2OF6tzGpJJeUtztHqWv8B89x7ZKRetoFcY=;
+        b=oW5uLJs/F14rjpb2QoPAafAUvliSQ2l+YhmFaJkz+GZ7gsIRWbfHgc0anRqi+Q55Un
+         FpX7LzkBxSqqpizWujKIJHwGFwWw2z/MSQ6nzCL/OpVDZaLnqZXOBgleuovbf1pzhdme
+         XcF6HzMITY9+hbGObdHHxGXgpkm0oVBURDotf2wqUBvl0MTsF4nKp3IpoNxfH0orzlIH
+         tELNuULlRTbUO1TyNpw7u6AVwex8Oeii/RYrll6kv3fO/NpOaijwT1rzJCKmIGN2nKQo
+         LQIFyiyIlERzkgcIrJAi32JuKa1dVF07UbN897qObKZVzkri4OXwZ6zG7Rz95plMfhzh
+         bRZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ74T6o/CoCuxnk7PRTyYhHKInLsSLket07GOkncBqtyZDn+avC8KT6rWFce5e7F5I+Vlx@lists.linux.dev
+X-Gm-Message-State: AOJu0YwoqMURcFfuKi3kpykzy7Cmx1qwO3LNwS1FfFZSJ2UOhH0kwn5C
+	3vZbfgm8g6dm0bpikWvjz9Rp+ApaQXuZQfYWevTdpWvk6DfVqUna54/0TNnA5L46vVy1Qzzym8l
+	RLg==
+X-Received: from wmbhb2.prod.google.com ([2002:a05:600c:8682:b0:480:3842:3532])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:8b81:b0:480:32da:f338
+ with SMTP id 5b1f17b1804b1-48032daf48bmr41618245e9.14.1768815659820; Mon, 19
+ Jan 2026 01:40:59 -0800 (PST)
+Date: Mon, 19 Jan 2026 10:05:55 +0100
 In-Reply-To: <20260119094029.1344361-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20260119094029.1344361-1-elver@google.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260119094029.1344361-5-elver@google.com>
-Subject: [PATCH tip/locking/core 4/6] crypto: Use scoped init guard
+Message-ID: <20260119094029.1344361-6-elver@google.com>
+Subject: [PATCH tip/locking/core 5/6] tomoyo: Use scoped init guard
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
@@ -79,36 +79,22 @@ assertion is removed.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- crypto/crypto_engine.c | 2 +-
- crypto/drbg.c          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ security/tomoyo/common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
-index 1653a4bf5b31..afb6848f7df4 100644
---- a/crypto/crypto_engine.c
-+++ b/crypto/crypto_engine.c
-@@ -453,7 +453,7 @@ struct crypto_engine *crypto_engine_alloc_init_and_set(struct device *dev,
- 	snprintf(engine->name, sizeof(engine->name),
- 		 "%s-engine", dev_name(dev));
+diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
+index 86ce56c32d37..7e1f825d903b 100644
+--- a/security/tomoyo/common.c
++++ b/security/tomoyo/common.c
+@@ -2557,7 +2557,7 @@ int tomoyo_open_control(const u8 type, struct file *file)
  
--	spin_lock_init(&engine->queue_lock);
-+	guard(spinlock_init)(&engine->queue_lock);
- 	crypto_init_queue(&engine->queue, qlen);
- 
- 	engine->kworker = kthread_run_worker(0, "%s", engine->name);
-diff --git a/crypto/drbg.c b/crypto/drbg.c
-index 0a6f6c05a78f..21b339c76cca 100644
---- a/crypto/drbg.c
-+++ b/crypto/drbg.c
-@@ -1780,7 +1780,7 @@ static inline int __init drbg_healthcheck_sanity(void)
- 	if (!drbg)
+ 	if (!head)
  		return -ENOMEM;
- 
--	mutex_init(&drbg->drbg_mutex);
-+	guard(mutex_init)(&drbg->drbg_mutex);
- 	drbg->core = &drbg_cores[coreref];
- 	drbg->reseed_threshold = drbg_max_requests(drbg);
- 
+-	mutex_init(&head->io_sem);
++	guard(mutex_init)(&head->io_sem);
+ 	head->type = type;
+ 	switch (type) {
+ 	case TOMOYO_DOMAINPOLICY:
 -- 
 2.52.0.457.g6b5491de43-goog
 
