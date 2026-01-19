@@ -1,63 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FE9242D86;
-	Mon, 19 Jan 2026 08:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924BB33CE8C;
+	Mon, 19 Jan 2026 08:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768810889; cv=none; b=QU1DajpxMmWxb6QQVr/EAGP2VzEKXfnReCrvezvxHoUuaw8xKnSxpdw6Nk/XAAxyZGtoTZLIqOaB94DKApwTvA8nteB4K8szNnoo4FgFtUGLBlBytS/vYb4hAVWtbzCKEnsfAkM31gg8pVoh1CTyu5am+vQPDo/BX9KYFV/4+Zg=
+	t=1768811063; cv=none; b=i29l9uxg7Vx39M/C/ys1t2X8tK1rKryGJWiiE3Vy4pkKmRZcNg7IoXwYyVzn4FGuvTXGOlr9hh05Icj6hstzbjswily2yfzWaipBsLhv/yv9AWzK8QCstX20w2qHeOuwugoqrr/dXGuRujMAz/PT+5p3lmNwxSNPWB8nwiKAH8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768810889; c=relaxed/simple;
-	bh=yWIuGDCzdMvsLFpHkHy6dqOvi7Er+zXe2kGVQJpyS4g=;
+	s=arc-20240116; t=1768811063; c=relaxed/simple;
+	bh=ek0shKrzSAAunEX/d72L5w4AAFj3fcjzuZlmAQPI6LE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qYpMze1s5azeGyQi3reW1bAAdYuG7jEqHnAkm2/yvH7j4Bgk6HaeapXKeQGCJuMHXrFlp54HPXErabmTrdc+0Zkpashb+/P5EBJuy6mRaZGtfCpDrdGy+VCQ4WfANzJpor3OXXMC0Kgu33kUNjfe6fHbD+PG7BGKaZ26wDT3sZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b+CNlb65; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=bam0F2e/2HyOOQqnUbCwdE6ZxIgvOMr1XL4snioG2EFyqTsDQT4rc37QstYEgZKVD0z6/s3c/FxxfGGV1MwnNXOAPYBZrdx9cOT5E3R+5TAzgUrHEPammjnEa1TdN9rwDA6TOME3+azP9qMVfsPusO2PL+hcc8d975IuHg20pjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GPL1yxZU; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b+CNlb65"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GPL1yxZU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768810888; x=1800346888;
+  t=1768811062; x=1800347062;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yWIuGDCzdMvsLFpHkHy6dqOvi7Er+zXe2kGVQJpyS4g=;
-  b=b+CNlb65x+eOTI5Bblgb0bcqIC7ebrjmnW2Tx/uWrntW11RR2CXDt8s4
-   jwoHnm+ZYqZwkB/1NP0Fh2dtxKYR3YsGNpbFVBwCM+ZcB9ecibirTdOpi
-   t5c2YHLjkbq3aPNv2irlVJ5SsaIvyJIQ9WUXnLjW4+9fUQCOWKhJe86Dn
-   Feo6sQNumN4W6qej/PKUVxU/0bfLY6fxkpql6MfO0ne61OzuMi2CTF28V
-   b77Xe7blOv59rWRYsrbgG3/djPpp302bQ6kAMYqOwsE7S1GO2lSbbEf1q
-   rCNsRMK4K2Fmq33A87nmn9CkJo5ZdU/5EbLYKihGdVit36obOmQfJMSup
-   Q==;
-X-CSE-ConnectionGUID: Fhy72bWKT6iTwW2vU8ckXg==
-X-CSE-MsgGUID: 5SSUFRJySEaReyDiLclXNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11675"; a="69992683"
+  bh=ek0shKrzSAAunEX/d72L5w4AAFj3fcjzuZlmAQPI6LE=;
+  b=GPL1yxZUZoGw4p3/H+jGc+IAWRK5ZGitf3zUy0V50srJjWHP0L77LjPw
+   vDGQu09ykqNf1/jhCfADRw8uZ3z83bPCvFPGiZnwclqj56fghwoV3sar3
+   AempY1GoghHihey/o1lMhk/TOZ010SaqYj+DA+HEXrSLb7w3MXuG/oLjy
+   KsjvmgmVTN41KvQjJGao1G4Rf/F1YRXXJBqkfTJAh8aHmm1opiFYIubYZ
+   AdL5XDsW5x9MUtxZvydLMbwCY4XmQkEAksde6KLHlQpuQiXMbReU2jE+5
+   8o+q5Fr6VNc1fdSwtmhnWwOFupgK3m8ylOu6tjDMMwlvWQNeXFbAXssnu
+   g==;
+X-CSE-ConnectionGUID: 7ukIiiPyTjSVEZw1D+GNOw==
+X-CSE-MsgGUID: oj+Q91+zQ3yQ9TtrPkPKZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11675"; a="69217469"
 X-IronPort-AV: E=Sophos;i="6.21,237,1763452800"; 
-   d="scan'208";a="69992683"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 00:21:28 -0800
-X-CSE-ConnectionGUID: EDzjMCHKTjyzC/EZfZgYEA==
-X-CSE-MsgGUID: 8qlOXmrfROC0pE7nQoaDwA==
+   d="scan'208";a="69217469"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 00:24:21 -0800
+X-CSE-ConnectionGUID: ULlrqDt7QIeAzYWUmmSDwQ==
+X-CSE-MsgGUID: TprYcUiKTw+mcgwBRIQ85A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,237,1763452800"; 
-   d="scan'208";a="243379162"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.37])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2026 00:21:24 -0800
-Date: Mon, 19 Jan 2026 10:21:21 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] printf: convert test_hashed into macro
-Message-ID: <aW3pgf4FQHFCC9Bm@smile.fi.intel.com>
-References: <20260116-printf-kunit-printf-attr-v2-1-3dd7fefc3207@kernel.org>
+   d="scan'208";a="228742758"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 19 Jan 2026 00:24:18 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vhkYa-00000000Nax-00rz;
+	Mon, 19 Jan 2026 08:24:16 +0000
+Date: Mon, 19 Jan 2026 16:23:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH 2/2] Move kernel-doc to tools/docs
+Message-ID: <202601191546.Bvd74asP-lkp@intel.com>
+References: <20260114164146.532916-3-corbet@lwn.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,49 +68,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260116-printf-kunit-printf-attr-v2-1-3dd7fefc3207@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20260114164146.532916-3-corbet@lwn.net>
 
-On Fri, Jan 16, 2026 at 11:27:03AM -0500, Tamir Duberstein wrote:
-> This allows the compiler to check the arguments against the __printf
+Hi Jonathan,
 
-__printf() since it takes parameters, OTOH it's an attribute at the end,
-so I have no strong opinion on how to spell it.
+kernel test robot noticed the following build errors:
 
-> attribute on __test. This produces better diagnostics when incorrect
+[auto build test ERROR on lwn/docs-next]
+[also build test ERROR on drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v6.19-rc6 next-20260116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-__test()
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Corbet/docs-kdoc-remove-support-for-an-external-kernel-doc-from-sphinx/20260115-004646
+base:   git://git.lwn.net/linux.git docs-next
+patch link:    https://lore.kernel.org/r/20260114164146.532916-3-corbet%40lwn.net
+patch subject: [PATCH 2/2] Move kernel-doc to tools/docs
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260119/202601191546.Bvd74asP-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260119/202601191546.Bvd74asP-lkp@intel.com/reproduce)
 
-*This is reference to a function.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601191546.Bvd74asP-lkp@intel.com/
 
-> inputs are passed.
+All errors (new ones prefixed by >>):
 
-...
-
-> +/*
-> + * This is a macro so that the compiler can compare its arguments to the
-> + * __printf attribute on __test. This cannot be a function with a __printf
-> + * attribute because GCC requires __printf functions to be variadic.
-
-As per commit message remarks.
-
-> + */
-> +#define test_hashed(kunittest, fmt, p)                                   \
-> +	do {                                                             \
-> +		char buf[PLAIN_BUF_SIZE];                                \
-> +		plain_hash_to_buffer(kunittest, p, buf, PLAIN_BUF_SIZE); \
-> +		test(buf, fmt, p);                                       \
-> +	} while (0)
-
-Make sure you used tabs to indent the \:s.
-
-...
-
-The downside of a macro is a killing of compile-time type checks.
+   Traceback (most recent call last):
+     File "tools/docs/kernel-doc", line 339, in <module>
+       main()
+       ~~~~^^
+     File "tools/docs/kernel-doc", line 295, in main
+       from kdoc.kdoc_files import KernelFiles             # pylint: disable=C0415
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>> ModuleNotFoundError: No module named 'kdoc'
+   make[3]: *** [scripts/Makefile.build:287: scripts/mod/empty.o] Error 1
+   make[3]: *** Deleting file 'scripts/mod/empty.o'
+   make[3]: Target 'scripts/mod/' not remade because of errors.
+   make[2]: *** [Makefile:1313: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
