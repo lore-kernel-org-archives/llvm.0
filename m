@@ -1,108 +1,102 @@
-Received: from mail-24417.protonmail.ch (mail-24417.protonmail.ch [109.224.244.17])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDDA42EED0
-	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 14:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DD630BB80
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 15:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768920094; cv=none; b=XcmtMugSVUATGRqB7n3fw2NKNEKP9xWQiMUnTMPcdwEVC5iLPMlfH9lP841grVKrzcaIgvkq7/ytN54YXL0iW22m+IpS/V+7aNzMNeuTNNckgE9znHOge2o14dXGcEcEqvy5LXKgaQbAEXYDGaVbW+najPwMCCJBj69p+LmkEbs=
+	t=1768923586; cv=none; b=GcKL85KDdCTEKBAaWM/3eyM3WMJcl/MwSJ4DiBQOk+E6DvsV2n4ods3Piax0o2TfcrPyOuDbkX4vQJUjQHoe1zT3PVEu5+4RVu2coXOAZTdue/+k88bxzha6RuHM7g1xbQ/KF+EMr+FdxmkrZpX4iYwqRLA2FG9FONeNTNJiI3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768920094; c=relaxed/simple;
-	bh=mpaAioP9xru6B/CFoG7LGoQcykHVJkLIzdsXpgUjdj8=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DdGxhsvYSorfU7DMnz4ie30c+mDsrOeY3mB3noVnlqZdIRvIpE9Gt1iDudXbliOET/rI6p0EZrwVtUJReokoaNXWSNHAi/Jh8f7XXXZKIxJMB/RiwKa4HNFaW+0AL/G6oerXfie3eG+Z+NFg9fVwE2+LU97ShcGTkI9gaVM+h/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=PmYwNYnj; arc=none smtp.client-ip=109.224.244.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1768923586; c=relaxed/simple;
+	bh=V40aj+iEcKhkrs1YNrs2AN6U2XZeqfJ35ZGRQdMdvNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cciChuwCMs+Wu83ffZXq2gckcYc4nA3ijy6gmtavD1xR0qK2HMTbs4kNgzZ0rP+WOXjHzByAf85mX3cq63k9wusLzCegDDtkrfqOIvpz4j5FZQa9nbwG39EvQpTahxLDQBnhLkGTfoUunJuGLpeMOtKxu13PCHAoNsY+1nKBzmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SoJ3oqHR; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="PmYwNYnj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1768920090; x=1769179290;
-	bh=/QCjh1bIysDd4v5OZ14LNkObiBtwfe/ruaYSf4e0H0s=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=PmYwNYnjHnsEre5V0Q+WWJChYF2avoL+3kqOftMwwckzsmujMaXvqHZFV8Wy5wYUP
-	 mhtKCYS9nkhG3lZLKDxITWaJjl9TNA0fZFlD52WHxuUGkzdfth5H2GiPdUFNIYo1+6
-	 fTFX4oxnh5gtQCcSyf6OSnWQiA8kA8X9B/PeydnyXtB7QczE3435d2KhzMMATCWudh
-	 dWv8Gc6g2PLzaXEaMerEHuUaj2nGiN/ziE4b1SxNDcu+zk3VpKqI4a8sTQyVtnExHD
-	 jLVudsAXXBiu4fGPAx8oOj37AcI1MjyWQEsTBdNq+PR/VqNiq+HztXJBCPIQMbEnpx
-	 mbFW/BVWDxAOg==
-Date: Tue, 20 Jan 2026 14:41:25 +0000
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v9 03/13] kasan: Fix inline mode for x86 tag-based mode
-Message-ID: <afb50f5db054f807b57f33f591fc43d79862e9a2.1768845098.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1768845098.git.m.wieczorretman@pm.me>
-References: <cover.1768845098.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: a28f2f4e8684592b68d763d58d259d63cccf2fce
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SoJ3oqHR"
+Date: Tue, 20 Jan 2026 23:39:19 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768923582;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=urvg/XtaZlBbzcQcq8EiqAuOpFhl6Pv+GSbmq2DJdbA=;
+	b=SoJ3oqHRsMJsnydigqOEf56Ym9ympNUfN6BX0yHAWE/3VWNWtkvE0OtshjQfgYdtr5SwSe
+	miqp6VjWjBsnqxZyrlUwbBi602tlImge9bMaNseMkf0S6oL8i9gb6aM5dbK0h+T+MbZ1sh
+	j+oW7QrWCgKlfEkXNQ54Y8vQYS3RQs8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Hao Li <hao.li@linux.dev>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Eric Dumazet <edumazet@google.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] slab: replace cache_from_obj() with inline checks
+Message-ID: <obrup5ejxuy42fpwmzczvo5ubyv62tocoqooqpxg3u5eq2i2sg@qpcialjznogf>
+References: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
+ <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
+ <8bd3c3e8-9865-4467-86d5-17d891f6f21b@suse.cz>
+ <vyhpr6lq5rb6qgkshksg26a5ns5gd5ryqu46pqx2z5twy2gzlx@t4xaze2lhoen>
+ <efd02f1f-b09b-4786-aa55-aa366f58442f@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efd02f1f-b09b-4786-aa55-aa366f58442f@suse.cz>
+X-Migadu-Flow: FLOW_OUT
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+On Tue, Jan 20, 2026 at 03:01:23PM +0100, Vlastimil Babka wrote:
+> On 1/20/26 14:56, Hao Li wrote:
+> > On Tue, Jan 20, 2026 at 01:55:09PM +0100, Vlastimil Babka wrote:
+> >> On 1/20/26 12:57, Hao Li wrote:
+> >> 
+> >> >> @@ -6774,11 +6770,21 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
+> >> >>   */
+> >> >>  void kmem_cache_free(struct kmem_cache *s, void *x)
+> >> >>  {
+> >> >> -	s = cache_from_obj(s, x);
+> >> >> -	if (!s)
+> >> >> -		return;
+> >> >> +	struct slab *slab;
+> >> >> +
+> >> >> +	slab = virt_to_slab(x);
+> >> >> +
+> >> >> +	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
+> >> >> +	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
+> >> >> +
+> >> >> +		if (unlikely(!slab || (slab->slab_cache != s))) {
+> >> >> +			warn_free_bad_obj(s, x);
+> >> > 
+> >> > Just to make sure I'm understanding correctly, are we intentionally not
+> >> > releasing the object x in this case? Thanks.
+> >> 
+> >> Yes, it means something went wrong so it's better not to do anything.
+> > 
+> > Got it, that makes sense - thanks!
+> > 
+> >> That was true before this patch as well.
+> > 
+> > I'm still not entirely sure I follow. I read the original code, and it seems
+> > like it retrieved the real cache from the object and released the object into
+> > that correct cache. Did I misunderstand something?
+> 
+> You're right, I misread it as returning NULL, but that was only on
+> virt_to_slab() failure. So that's a change, but I believe a proper one.
 
-The LLVM compiler uses hwasan-instrument-with-calls parameter to setup
-inline or outline mode in tag-based KASAN. If zeroed, it means the
-instrumentation implementation will be pasted into each relevant
-location along with KASAN related constants during compilation. If set
-to one all function instrumentation will be done with function calls
-instead.
+Yes, I agree - the current handling looks good to me.
 
-The default hwasan-instrument-with-calls value for the x86 architecture
-in the compiler is "1", which is not true for other architectures.
-Because of this, enabling inline mode in software tag-based KASAN
-doesn't work on x86 as the kernel script doesn't zero out the parameter
-and always sets up the outline mode.
+> But I'll mention it in the changelog and the comment. Thanks!
 
-Explicitly zero out hwasan-instrument-with-calls when enabling inline
-mode in tag-based KASAN.
+Sounds great, thanks for taking care of that.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
----
-Changelog v9:
-- Add Andrey Ryabinin's Reviewed-by tag.
+Reviewed-by: Hao Li <hao.li@linux.dev>
 
-Changelog v7:
-- Add Alexander's Reviewed-by tag.
-
-Changelog v6:
-- Add Andrey's Reviewed-by tag.
-
-Changelog v3:
-- Add this patch to the series.
-
- scripts/Makefile.kasan | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 0ba2aac3b8dc..e485814df3e9 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -76,8 +76,11 @@ CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
- RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress \
- =09=09   -Zsanitizer-recover=3Dkernel-hwaddress
-=20
-+# LLVM sets hwasan-instrument-with-calls to 1 on x86 by default. Set it to=
- 0
-+# when inline mode is enabled.
- ifdef CONFIG_KASAN_INLINE
- =09kasan_params +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
-+=09kasan_params +=3D hwasan-instrument-with-calls=3D0
- else
- =09kasan_params +=3D hwasan-instrument-with-calls=3D1
- endif
---=20
-2.52.0
-
-
+-- 
+Thanks,
+Hao
