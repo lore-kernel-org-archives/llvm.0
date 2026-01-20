@@ -1,66 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B587427A13;
-	Tue, 20 Jan 2026 13:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B24A42E016;
+	Tue, 20 Jan 2026 13:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768915635; cv=none; b=HPQdikkPyda0/4i4M8OB6yGFwYYdSlzEpCYJILywblGoVNazFkrnZdh86GWNL8mN5JQEOyzpux+OEIV9pzqyNIlXICYca/fQgtsWhBJ2LurYGgUik9HZQ27Hl76hmz1gEMbIa9SH2dcRAmahnT7DWNyTjdTr+QE0jBHkzCdk6w8=
+	t=1768916297; cv=none; b=ZYebSy9nkjZA3yw/RmMxEU2Ut2lHDImizc4IN2t4j106pw8LTFysJpt8JAo8B4ui1FBSQr71dhzcfjWV1HkQvauFiPR0WpEwzEBfEdz+UMguOgy2HQDtQSdlIXBhkXS5DMjn69sfBcQmjNYQ9vRMahecjhw8VsP6/zVTUscCLsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768915635; c=relaxed/simple;
-	bh=zliMfnqN7+4qWXkakteLMnL1rqDZXpRuUMDYk9dV31A=;
+	s=arc-20240116; t=1768916297; c=relaxed/simple;
+	bh=pSSrWCIklsSRcJaHDIaB8EgbSGX9daEF0899fXydSvM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o6XzmbP6Rw6BTWvquPnAIVNZNFcKj5NsclD4CFbakdTKVoqYMY8nJ/MvvPgO/9QKxW64ffNJ8kWV9sLh8vOt1E8qLdaiUiczLqUArdLuUmfE8oPbVpMCqd3m1alpOe8Ajfh+Tx4I7v87HQIuzxO7Vzn1ka9AZFaYVrLvezOY6UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RFZYvcnc; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=ngz5v7O6N79vdFYigjQFFAb8va7lejrrj4pUAcXMw7QolTW+/F5t0QeVlxnmfRtyRoYDE0VE/lKfyNsJHHr6uSPPyF4tvyz58uonzKCw8Hx48FFzpVUy02U3f6TnKaT5JbM1BuQF1SRxOQXoE1yc+XXpJNokOr6XXYAlcuqdCF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ABDN1XJj; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RFZYvcnc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ABDN1XJj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768915632; x=1800451632;
+  t=1768916296; x=1800452296;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zliMfnqN7+4qWXkakteLMnL1rqDZXpRuUMDYk9dV31A=;
-  b=RFZYvcncd4tQ24uOoRFKKMoEZgTn7Z1L8DFAypWkOadhEgAU4BZMeO4R
-   mcdYIaHMwqBsF4n7eW48IAYULs2/5zvqPlOjmq4Lx2VdRV/YWWaCj+RVE
-   EIJtW048BB/g28S1ZkaLVptDzKZIYiq52oA+RXa/0nJnBAnblACurqJwU
-   zi9Ro4mfYs9jlCvO8dj7Y9U4aq5vqowMIR2mEXenYHuqGbMCm9MOl4ixr
-   5sZk2B0klI5Q60igLEHMRkfjthEUgTfzmUK7rMst/i9kj8FDu2EdUBilg
-   zsT4U7ScCN3fTRQ20WnAodZX1TaXSKBeW5MtUqSLf3EfRCLvLdO57aK0G
-   g==;
-X-CSE-ConnectionGUID: XdamqUNJQEGzG197hwrl0g==
-X-CSE-MsgGUID: rNqBwjcGTsCrMeFFsO147w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="81232154"
+  bh=pSSrWCIklsSRcJaHDIaB8EgbSGX9daEF0899fXydSvM=;
+  b=ABDN1XJjlQEpKgnPg0rA1uzPvy53EGqUwWsxk6ojTyW/6/RlD+pl+Kul
+   R2MipMtNNldi5jkIXhQ/Wxk3vrgHn2wI9RImy8TikiI42G/2VdhdwCBCM
+   xNExqj86gh5zzTOU9VbpTXxgS9qEwMk1IBo1woTYBbcbIP5+Ibhp7FKHy
+   dU2T3EKmYS/ph1CF7MdeD9ZOx8m/ywya4ninM4Q+upVpeVnCHPJ3zoz2w
+   nzgQ3KnfgutZEBlX/2RnkV/aCRCGDuGNy6XBX+7lJf81K+PKOsB+G+PC1
+   s+fBqMXN4NYlcMZubKXq1ZGpbrtRX/C+QMpwEPSJs1xunBYfSpQZT4sDk
+   w==;
+X-CSE-ConnectionGUID: Vhvc8MAcTLKMq7vX9YhJ5g==
+X-CSE-MsgGUID: sHRWZvoFTumvRn9DwK6aRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="69136161"
 X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="81232154"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 05:27:12 -0800
-X-CSE-ConnectionGUID: qs6DvTcrSlGaTFKGlwR8NQ==
-X-CSE-MsgGUID: dy0vDc1tSN2LQyhVI9nNbg==
+   d="scan'208";a="69136161"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 05:38:15 -0800
+X-CSE-ConnectionGUID: 73lzpn1ESiSqsFV6nhzIQA==
+X-CSE-MsgGUID: D/b+QLerQ+mFDkHAwRjTBg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="205362466"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 20 Jan 2026 05:27:09 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 20 Jan 2026 05:38:08 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1viBlB-00000000P1B-45b7;
-	Tue, 20 Jan 2026 13:27:05 +0000
-Date: Tue, 20 Jan 2026 21:26:40 +0800
+	id 1viBvq-00000000P1t-2mNw;
+	Tue, 20 Jan 2026 13:38:06 +0000
+Date: Tue, 20 Jan 2026 21:37:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zac <zac@zacbowling.com>, sean.wang@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	deren.wu@mediatek.com, kvalo@kernel.org,
-	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-wireless@vger.kernel.org, lorenzo@kernel.org, nbd@nbd.name,
-	ryder.lee@mediatek.com, sean.wang@mediatek.com,
-	stable@vger.kernel.org, linux@frame.work, zbowling@gmail.com,
-	Zac Bowling <zac@zacbowling.com>
-Subject: Re: [PATCH 11/11] wifi: mt76: mt7925: fix ROC deadlocks and race
- conditions
-Message-ID: <202601202144.ee4DM9Pz-lkp@intel.com>
-References: <20260120062854.126501-12-zac@zacbowling.com>
+To: Zhi Wang <zhiw@nvidia.com>, rust-for-linux@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dakr@kernel.org,
+	aliceryhl@google.com, bhelgaas@google.com, kwilczynski@kernel.org,
+	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+	a.hindborg@kernel.org, tmgross@umich.edu, markus.probst@posteo.de,
+	helgaas@kernel.org, cjia@nvidia.com, smitra@nvidia.com,
+	ankita@nvidia.com, aniketa@nvidia.com, kwankhede@nvidia.com,
+	targupta@nvidia.com, acourbot@nvidia.com, joelagnelf@nvidia.com,
+	jhubbard@nvidia.com, zhiwang@kernel.org,
+	daniel.almeida@collabora.com, Zhi Wang <zhiw@nvidia.com>
+Subject: Re: [PATCH v10 2/5] rust: io: separate generic I/O helpers from MMIO
+ implementation
+Message-ID: <202601202126.NVP5cs8k-lkp@intel.com>
+References: <20260119202250.870588-3-zhiw@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,133 +71,222 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260120062854.126501-12-zac@zacbowling.com>
+In-Reply-To: <20260119202250.870588-3-zhiw@nvidia.com>
 
-Hi Zac,
+Hi Zhi,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main linus/master v6.19-rc6 next-20260119]
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next]
+[cannot apply to driver-core/driver-core-linus pci/next pci/for-linus drm-rust/drm-rust-next linus/master v6.19-rc6 next-20260119]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zac/wifi-mt76-fix-list-corruption-in-mt76_wcid_cleanup/20260120-143842
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20260120062854.126501-12-zac%40zacbowling.com
-patch subject: [PATCH 11/11] wifi: mt76: mt7925: fix ROC deadlocks and race conditions
-config: i386-randconfig-015-20260120 (https://download.01.org/0day-ci/archive/20260120/202601202144.ee4DM9Pz-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhi-Wang/rust-devres-style-for-imports/20260120-042526
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20260119202250.870588-3-zhiw%40nvidia.com
+patch subject: [PATCH v10 2/5] rust: io: separate generic I/O helpers from MMIO implementation
+config: x86_64-buildonly-randconfig-004-20260120 (https://download.01.org/0day-ci/archive/20260120/202601202126.NVP5cs8k-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601202144.ee4DM9Pz-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601202126.NVP5cs8k-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601202144.ee4DM9Pz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601202126.NVP5cs8k-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/mediatek/mt76/mt7925/main.c:611:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     610 |                                 "mt7925: ROC throttled, %lu ms remaining\n",
-         |                                                         ~~~
-         |                                                         %u
-     611 |                                 jiffies_to_msecs(throttle));
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
-     285 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/net/wireless/mediatek/mt76/mt7925/main.c:662:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     661 |                                 "mt7925: MLO ROC throttled, %lu ms remaining\n",
-         |                                                             ~~~
-         |                                                             %u
-     662 |                                 jiffies_to_msecs(throttle));
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
-     285 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +611 drivers/net/wireless/mediatek/mt76/mt7925/main.c
-
-   592	
-   593	static int mt7925_set_roc(struct mt792x_phy *phy,
-   594				  struct mt792x_bss_conf *mconf,
-   595				  struct ieee80211_channel *chan,
-   596				  int duration,
-   597				  enum mt7925_roc_req type)
-   598	{
-   599		unsigned long throttle;
-   600		int err;
-   601	
-   602		/* Check rate limiting - if in backoff period, wait or return busy */
-   603		throttle = mt7925_roc_throttle_check(phy);
-   604		if (throttle) {
-   605			/* For short backoffs, wait; for longer ones, return busy */
-   606			if (throttle < msecs_to_jiffies(200)) {
-   607				msleep(jiffies_to_msecs(throttle));
-   608			} else {
-   609				dev_dbg(phy->dev->mt76.dev,
-   610					"mt7925: ROC throttled, %lu ms remaining\n",
- > 611					jiffies_to_msecs(throttle));
-   612				return -EBUSY;
-   613			}
-   614		}
-   615	
-   616		/* Clear stale abort flag from previous ROC */
-   617		clear_bit(MT76_STATE_ROC_ABORT, &phy->mt76->state);
-   618	
-   619		if (test_and_set_bit(MT76_STATE_ROC, &phy->mt76->state))
-   620			return -EBUSY;
-   621	
-   622		phy->roc_grant = false;
-   623	
-   624		err = mt7925_mcu_set_roc(phy, mconf, chan, duration, type,
-   625					 ++phy->roc_token_id);
-   626		if (err < 0) {
-   627			clear_bit(MT76_STATE_ROC, &phy->mt76->state);
-   628			goto out;
-   629		}
-   630	
-   631		if (!wait_event_timeout(phy->roc_wait, phy->roc_grant, 4 * HZ)) {
-   632			mt7925_mcu_abort_roc(phy, mconf, phy->roc_token_id);
-   633			clear_bit(MT76_STATE_ROC, &phy->mt76->state);
-   634			mt7925_roc_record_timeout(phy);
-   635			err = -ETIMEDOUT;
-   636		} else {
-   637			/* Successful ROC - reset timeout tracking */
-   638			mt7925_roc_clear_timeout(phy);
-   639		}
-   640	
-   641	out:
-   642		return err;
-   643	}
-   644	
+>> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:241:26
+   |
+   241 |         let ctrl = iomap.try_read32(th1520_pwm_ctrl(hwpwm))?;
+   |                          ^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_read` with a similar name
+   |
+   241 -         let ctrl = iomap.try_read32(th1520_pwm_ctrl(hwpwm))?;
+   241 +         let ctrl = iomap.try_read(th1520_pwm_ctrl(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:242:35
+   |
+   242 |         let period_cycles = iomap.try_read32(th1520_pwm_per(hwpwm))?;
+   |                                   ^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_read` with a similar name
+   |
+   242 -         let period_cycles = iomap.try_read32(th1520_pwm_per(hwpwm))?;
+   242 +         let period_cycles = iomap.try_read(th1520_pwm_per(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:294:15
+   |
+   294 |         iomap.try_write32(
+   |         ------^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   294 -         iomap.try_write32(
+   294 +         iomap.try_write(
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:302:19
+   |
+   302 |             iomap.try_write32(wfhw.ctrl_val | TH1520_PWM_START, th1520_pwm_ctrl(hwpwm))?;
+   |                   ^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   302 -             iomap.try_write32(wfhw.ctrl_val | TH1520_PWM_START, th1520_pwm_ctrl(hwpwm))?;
+   302 +             iomap.try_write(wfhw.ctrl_val | TH1520_PWM_START, th1520_pwm_ctrl(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:243:33
+   |
+   243 |         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
+   |                                 ^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_read` with a similar name
+   |
+   243 -         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
+   243 +         let duty_cycles = iomap.try_read(th1520_pwm_fp(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:275:33
+   |
+   275 |         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
+   |                                 ^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_read` with a similar name
+   |
+   275 -         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
+   275 +         let duty_cycles = iomap.try_read(th1520_pwm_fp(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:281:23
+   |
+   281 |                 iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
+   |                       ^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   281 -                 iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
+   281 +                 iomap.try_write(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:282:23
+   |
+   282 |                 iomap.try_write32(0, th1520_pwm_fp(hwpwm))?;
+   |                       ^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   282 -                 iomap.try_write32(0, th1520_pwm_fp(hwpwm))?;
+   282 +                 iomap.try_write(0, th1520_pwm_fp(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:283:23
+   |
+   283 |                 iomap.try_write32(
+   |                 ------^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   283 -                 iomap.try_write32(
+   283 +                 iomap.try_write(
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:291:15
+   |
+   291 |         iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
+   |               ^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   291 -         iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
+   291 +         iomap.try_write(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
+   |
+--
+>> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
+   --> drivers/pwm/pwm_th1520.rs:292:15
+   |
+   292 |         iomap.try_write32(wfhw.period_cycles, th1520_pwm_per(hwpwm))?;
+   |               ^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is in scope
+   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
+   |
+   23  + use kernel::io::Io;
+   |
+   help: there is a method `try_write` with a similar name
+   |
+   292 -         iomap.try_write32(wfhw.period_cycles, th1520_pwm_per(hwpwm))?;
+   292 +         iomap.try_write(wfhw.period_cycles, th1520_pwm_per(hwpwm))?;
+   |
+..
 
 -- 
 0-DAY CI Kernel Test Service
