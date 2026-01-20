@@ -1,94 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B5D34888F;
-	Tue, 20 Jan 2026 11:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719F1421EEB
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 11:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768909384; cv=none; b=n3cycZhshy+nvNLopzy49of/4DfKSD3Huwr6msVzgk1kCHJN7QEDTGkLuzNK+u7a+Eh8IhLZz4O3hGBn+plBEr2TzsC3WbwhbQdgCR//kfMRgJpB7QnEwBu9Bx9jTZB3T+dhgwjGwJIUJ7AtMd47IwHG0YRAUtjjCtJQb+HGGMg=
+	t=1768910259; cv=none; b=lWdICBO4oRHMQi+zRT33VHTQdf6CG/OEbAYXFW2IKqZEyoLlc3Pi+px0cOAnr5HOER2f/SoOsfT2kwdzwI2yd0cpkS0KbzN4MvjeoxTG7P0eqFqcMThe39Iu1QaTjT+LJwZIb0ERNZ6ZwUWwqoT+WBAfbTfPvO/gZjhuHZgZS/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768909384; c=relaxed/simple;
-	bh=8oQZfy5tdtGMqmuPFhnyDBwrZILD/fXu1zfsgDZm1AM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Px4lAK4wOo8jVCcXiqYE34OUYoEpcCOAuHgX3MYeEf+upnV0D/i8wZ+tZfQStcENWTB1DW/Y/JoGo/RKIFdq3uz1peTNRVJyZ1Ol3hGKTpo/3QpG9LvUi9ivww53JAHZgxR99Sd3I4KZb4UgCrNyACjDnkpKZG0G2G8zdkGjkNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dv2P8Gfe; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768910259; c=relaxed/simple;
+	bh=IGsY8sR5Ruag7BDuH0OXLmOku5rl1afK4wzdIZt7vwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rreZywIf6kAmzOct8S+LdUJhx9ac2iMfCe+BwPCbjQOG2jRxda3IL+tnlmN39TE1NskL3TyOZamEZ4W3KnZ66wCLyXTbH0DvlRu+rdUYlq2mVeyL7ZcrRH2Udedc85EdYq3TWPcQrCCQj0dDAs75f5kF2DlronPQkiBTyXXybHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rJ4VrhTy; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dv2P8Gfe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768909382; x=1800445382;
-  h=date:from:to:cc:subject:message-id;
-  bh=8oQZfy5tdtGMqmuPFhnyDBwrZILD/fXu1zfsgDZm1AM=;
-  b=dv2P8GfeeIvjn6oN++1vKyHOoyDuJ9wt1Y4r1UH3+TcMT3CO2Cf55qvr
-   0Z/LTQUXQj95TKsD5kjzVJqluasUU3FoOpvziRy/jwq3raN8Jj8q+tTVU
-   bHVL7x8Lgu+kSLQEE+jnbfuRRmTizfNJTKXRiUOenRT8RNcHWjL4rDBj2
-   0a/TeuotWNoUopo/0vgO/LPg542M+r3u+z8CaepGaR4Yj97w/ypueM0lS
-   213WHg4S/12zsy6foAbx1pXzKFTsBJjT5EYbv3Sf2DSKSK0QhCDgwmhJZ
-   6Pq9xHiEztTxOT3uTxJ7NhK2BZfTceJgJJEPv/HgmeUaDULntVSpnh682
-   w==;
-X-CSE-ConnectionGUID: CqW16zCaR8O2pcsz9H7Cvw==
-X-CSE-MsgGUID: SBr5QQlVQOGvtC2U/t6ntQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="69315711"
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="69315711"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 03:43:01 -0800
-X-CSE-ConnectionGUID: zU+4P4VsSv+MFF6ZNJgp1A==
-X-CSE-MsgGUID: BofyWPTvQ3aX5nzp5va8+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="205256700"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 20 Jan 2026 03:43:00 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1viA8P-00000000OuJ-0gWZ;
-	Tue, 20 Jan 2026 11:42:57 +0000
-Date: Tue, 20 Jan 2026 19:42:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-debug 231/231]
- fs/bcachefs/btree/locking.c:957:6: warning: no previous prototype for
- function 'bch2_account_sched_blocked'
-Message-ID: <202601201947.e4D9wKcJ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rJ4VrhTy"
+Date: Tue, 20 Jan 2026 19:57:26 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768910255;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HYEpCcCgyOkPKRRfQKMgVhYxxpRPIrOqb5axcNzE03I=;
+	b=rJ4VrhTyQdhFkerciHCs4dOwK9+lY9C7TBgHlyFYs8jDjUXtO+FfCbZ3OKuoZ5ZpEN81wo
+	jwdDHUZNY4AGhASTayKavNAEBTL4zkrJcH1/9r7+3ho1ZECOr0LQZ5kPav2OThdYhYKGQy
+	voC9+uXPzq1YLOkFof5WavjYyk3wXRM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Hao Li <hao.li@linux.dev>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Eric Dumazet <edumazet@google.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] slab: replace cache_from_obj() with inline checks
+Message-ID: <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
+References: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-debug
-head:   7cd4e8f9f8f13d9c5a2bbc98b80ca164430d6062
-commit: 7cd4e8f9f8f13d9c5a2bbc98b80ca164430d6062 [231/231] BCH_SB_COUNTER_blocked_with_btree_locks_held
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260120/202601201947.e4D9wKcJ-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601201947.e4D9wKcJ-lkp@intel.com/reproduce)
+On Tue, Jan 20, 2026 at 10:35:42AM +0100, Vlastimil Babka wrote:
+> Eric Dumazet has noticed cache_from_obj() is not inlined with clang and
+> suggested splitting it into two functions, where the smaller inlined one
+> assumes the fastpath is !CONFIG_SLAB_FREELIST_HARDENED. However most
+> distros enable it these days and so this would likely add a function
+> call to the object free fastpaths.
+> 
+> Instead take a step back and consider that cache_from_obj() is a relict
+> from when memcgs created their separate kmem_cache copies, as the
+> outdated comment in build_detached_freelist() reminds us.
+> 
+> Meanwhile hardening/debugging had reused cache_from_obj() to validate
+> that the freed object really belongs to a slab from the cache we think
+> we are freeing from.
+> 
+> In build_detached_freelist() simply remove this, because it did not
+> handle the NULL result from cache_from_obj() failure properly, nor
+> validate objects (for the NULL slab->slab_cache pointer) when called via
+> kfree_bulk(). If anyone is motivated to implement it properly, it should
+> be possible in a similar way to kmem_cache_free().
+> 
+> In kmem_cache_free(), do the hardening/debugging checks directly so they
+> are inlined by definition and virt_to_slab(obj) is performed just once.
+> In case they failed, call a newly introduced warn_free_bad_obj() that
+> performs the warnings outside of the fastpath.
+> 
+> As a result the fastpath should be inlined in all configs and the
+> warnings are moved away.
+> 
+> Reported-by: Eric Dumazet <edumazet@google.com>
+> Closes: https://lore.kernel.org/all/20260115130642.3419324-1-edumazet@google.com/
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>  mm/slub.c | 52 +++++++++++++++++++++++++++++-----------------------
+>  1 file changed, 29 insertions(+), 23 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 861592ac5425..1bdb4f73d61b 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -6738,30 +6738,26 @@ void ___cache_free(struct kmem_cache *cache, void *x, unsigned long addr)
+>  }
+>  #endif
+>  
+> -static inline struct kmem_cache *virt_to_cache(const void *obj)
+> +static noinline void warn_free_bad_obj(struct kmem_cache *s, void *obj)
+>  {
+> +	struct kmem_cache *cachep;
+>  	struct slab *slab;
+>  
+>  	slab = virt_to_slab(obj);
+> -	if (WARN_ONCE(!slab, "%s: Object is not a Slab page!\n", __func__))
+> -		return NULL;
+> -	return slab->slab_cache;
+> -}
+> -
+> -static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
+> -{
+> -	struct kmem_cache *cachep;
+> +	if (WARN_ONCE(!slab,
+> +			"kmem_cache_free(%s, %p): object is not in a slab page\n",
+> +			s->name, obj))
+> +		return;
+>  
+> -	if (!IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) &&
+> -	    !kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS))
+> -		return s;
+> +	cachep = slab->slab_cache;
+>  
+> -	cachep = virt_to_cache(x);
+> -	if (WARN(cachep && cachep != s,
+> -		 "%s: Wrong slab cache. %s but object is from %s\n",
+> -		 __func__, s->name, cachep->name))
+> -		print_tracking(cachep, x);
+> -	return cachep;
+> +	if (WARN_ONCE(cachep != s,
+> +			"kmem_cache_free(%s, %p): object belongs to different cache %s\n",
+> +			s->name, obj, cachep ? cachep->name : "(NULL)")) {
+> +		if (cachep)
+> +			print_tracking(cachep, obj);
+> +		return;
+> +	}
+>  }
+>  
+>  /**
+> @@ -6774,11 +6770,21 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
+>   */
+>  void kmem_cache_free(struct kmem_cache *s, void *x)
+>  {
+> -	s = cache_from_obj(s, x);
+> -	if (!s)
+> -		return;
+> +	struct slab *slab;
+> +
+> +	slab = virt_to_slab(x);
+> +
+> +	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
+> +	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
+> +
+> +		if (unlikely(!slab || (slab->slab_cache != s))) {
+> +			warn_free_bad_obj(s, x);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601201947.e4D9wKcJ-lkp@intel.com/
+Just to make sure I'm understanding correctly, are we intentionally not
+releasing the object x in this case? Thanks.
 
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/btree/locking.c:957:6: warning: no previous prototype for function 'bch2_account_sched_blocked' [-Wmissing-prototypes]
-     957 | void bch2_account_sched_blocked(u64 start_time)
-         |      ^
-   fs/bcachefs/btree/locking.c:957:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     957 | void bch2_account_sched_blocked(u64 start_time)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/bch2_account_sched_blocked +957 fs/bcachefs/btree/locking.c
-
-   956	
- > 957	void bch2_account_sched_blocked(u64 start_time)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +			return;
+> +		}
+> +	}
+> +
+>  	trace_kmem_cache_free(_RET_IP_, x, s);
+> -	slab_free(s, virt_to_slab(x), x, _RET_IP_);
+> +	slab_free(s, slab, x, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_free);
+>  
+> @@ -7305,7 +7311,7 @@ int build_detached_freelist(struct kmem_cache *s, size_t size,
+>  		df->s = slab->slab_cache;
+>  	} else {
+>  		df->slab = slab;
+> -		df->s = cache_from_obj(s, object); /* Support for memcg */
+> +		df->s = s;
+>  	}
+>  
+>  	/* Start new detached freelist */
+> 
+> ---
+> base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+> change-id: 20260120-b4-remove_cache_from_obj-190fcaf16789
+> 
+> Best regards,
+> -- 
+> Vlastimil Babka <vbabka@suse.cz>
+> 
