@@ -1,293 +1,267 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B24A42E016;
-	Tue, 20 Jan 2026 13:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B1921ABBB;
+	Tue, 20 Jan 2026 13:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768916297; cv=none; b=ZYebSy9nkjZA3yw/RmMxEU2Ut2lHDImizc4IN2t4j106pw8LTFysJpt8JAo8B4ui1FBSQr71dhzcfjWV1HkQvauFiPR0WpEwzEBfEdz+UMguOgy2HQDtQSdlIXBhkXS5DMjn69sfBcQmjNYQ9vRMahecjhw8VsP6/zVTUscCLsA=
+	t=1768917312; cv=none; b=gCv1LyUNtw1YdVCsdEr604w4vpyqG7KiPOXRDnG8Ymp3ukOtalQkGm9bhKgpyW5uNXrHjhXZIjO/WzqdvWYyMPkVs3PjqkZMASjbNByy0jRDyQ4VpxgGIQnUUhovQqWBp5iTbFMKPMsE/rSn9aiN5T29S2GwIEKCRzoaGR8zN3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768916297; c=relaxed/simple;
-	bh=pSSrWCIklsSRcJaHDIaB8EgbSGX9daEF0899fXydSvM=;
+	s=arc-20240116; t=1768917312; c=relaxed/simple;
+	bh=OBHzWftJV/HPuzjp7EqL2/okD1447XonIyvVUXHuPyg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ngz5v7O6N79vdFYigjQFFAb8va7lejrrj4pUAcXMw7QolTW+/F5t0QeVlxnmfRtyRoYDE0VE/lKfyNsJHHr6uSPPyF4tvyz58uonzKCw8Hx48FFzpVUy02U3f6TnKaT5JbM1BuQF1SRxOQXoE1yc+XXpJNokOr6XXYAlcuqdCF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ABDN1XJj; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hXNtkEVdBBqy6q3f21Lo9jg2KU8yfns/FOcvC+eIbL6AlVcDiVaHtZaCReTYOMJC2c9poVsw241abQVB6c14Uw8nv6P4DVOruIEkNoFoGfYgvPSGKepxTKtjxTRFLL1G0ywtIiG0PgG7yQDNCUVQq56/plk+r6ADu6UC6LC3nVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gwDTDqqt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ABDN1XJj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768916296; x=1800452296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pSSrWCIklsSRcJaHDIaB8EgbSGX9daEF0899fXydSvM=;
-  b=ABDN1XJjlQEpKgnPg0rA1uzPvy53EGqUwWsxk6ojTyW/6/RlD+pl+Kul
-   R2MipMtNNldi5jkIXhQ/Wxk3vrgHn2wI9RImy8TikiI42G/2VdhdwCBCM
-   xNExqj86gh5zzTOU9VbpTXxgS9qEwMk1IBo1woTYBbcbIP5+Ibhp7FKHy
-   dU2T3EKmYS/ph1CF7MdeD9ZOx8m/ywya4ninM4Q+upVpeVnCHPJ3zoz2w
-   nzgQ3KnfgutZEBlX/2RnkV/aCRCGDuGNy6XBX+7lJf81K+PKOsB+G+PC1
-   s+fBqMXN4NYlcMZubKXq1ZGpbrtRX/C+QMpwEPSJs1xunBYfSpQZT4sDk
-   w==;
-X-CSE-ConnectionGUID: Vhvc8MAcTLKMq7vX9YhJ5g==
-X-CSE-MsgGUID: sHRWZvoFTumvRn9DwK6aRw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="69136161"
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="69136161"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 05:38:15 -0800
-X-CSE-ConnectionGUID: 73lzpn1ESiSqsFV6nhzIQA==
-X-CSE-MsgGUID: D/b+QLerQ+mFDkHAwRjTBg==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Jan 2026 05:38:08 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1viBvq-00000000P1t-2mNw;
-	Tue, 20 Jan 2026 13:38:06 +0000
-Date: Tue, 20 Jan 2026 21:37:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhi Wang <zhiw@nvidia.com>, rust-for-linux@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dakr@kernel.org,
-	aliceryhl@google.com, bhelgaas@google.com, kwilczynski@kernel.org,
-	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
-	a.hindborg@kernel.org, tmgross@umich.edu, markus.probst@posteo.de,
-	helgaas@kernel.org, cjia@nvidia.com, smitra@nvidia.com,
-	ankita@nvidia.com, aniketa@nvidia.com, kwankhede@nvidia.com,
-	targupta@nvidia.com, acourbot@nvidia.com, joelagnelf@nvidia.com,
-	jhubbard@nvidia.com, zhiwang@kernel.org,
-	daniel.almeida@collabora.com, Zhi Wang <zhiw@nvidia.com>
-Subject: Re: [PATCH v10 2/5] rust: io: separate generic I/O helpers from MMIO
- implementation
-Message-ID: <202601202126.NVP5cs8k-lkp@intel.com>
-References: <20260119202250.870588-3-zhiw@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gwDTDqqt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65546C16AAE;
+	Tue, 20 Jan 2026 13:55:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768917309;
+	bh=OBHzWftJV/HPuzjp7EqL2/okD1447XonIyvVUXHuPyg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gwDTDqqtkwHgeTN6IP41Sqd3KBe8c9lwFp8o9NKhx1kDxhOrC1jJohlLMVmsv88AB
+	 ziEOXJeMGY6uBPANYuze1oI9P83VknRsN3GXpTUJhokSWIJeI7Q9j6Rm3J6R7XYh9i
+	 lGDceu4UReTscxvb6CmJmxSzD7ZQfXmg7aBh1rLCfLCe3jPcgFJ+CAVZL/HIBONiFc
+	 CUOh70KLJBMd+znpVopz62rrKpJFkrXq18UC3cGD0LM9Ecs99BobtjfS08Eylb7XQ2
+	 6CR97G/WwQWPHRMIJ4+FOjJdBIWlR8NwIvICBB/uUVy6iuEoM/wa3M1imC6ge0oFZP
+	 Nce/uoYXSuZuQ==
+Date: Tue, 20 Jan 2026 14:53:33 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	David Gow <davidgow@google.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] Documentation: dev-tools: add container.rst page
+Message-ID: <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
+Mail-Followup-To: Guillaume Tucker <gtucker@gtucker.io>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+References: <cover.1767199119.git.gtucker@gtucker.io>
+ <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260119202250.870588-3-zhiw@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
 
-Hi Zhi,
+On Wed, Dec 31, 2025 at 05:51:50PM +0100, Guillaume Tucker wrote:
+> Add a dev-tools/container.rst documentation page for the
+> scripts/container tool.  This covers the basic usage with additional
+> information about environment variables and user IDs.  It also
+> includes a number of practical examples with a reference to the
+> experimental kernel.org toolchain images.
+> 
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: "Onur Özkan" <work@onurozkan.dev>
+> Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
+> ---
+>  Documentation/dev-tools/container.rst | 201 ++++++++++++++++++++++++++
+>  Documentation/dev-tools/index.rst     |   1 +
+>  2 files changed, 202 insertions(+)
+>  create mode 100644 Documentation/dev-tools/container.rst
+> 
+> diff --git a/Documentation/dev-tools/container.rst b/Documentation/dev-tools/container.rst
+> new file mode 100644
+> index 000000000000..f6f134ec09f5
+> --- /dev/null
+> +++ b/Documentation/dev-tools/container.rst
+> @@ -0,0 +1,201 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +.. Copyright (C) 2025 Guillaume Tucker
+> +
+> +====================
+> +Containerized Builds
+> +====================
+> +
+> +The ``container`` tool can be used to run any command in the kernel source tree
+> +from within a container.  Doing so facilitates reproducing builds across
+> +various platforms, for example when a test bot has reported an issue which
+> +requires a specific version of a compiler or an external test suite.  While
+> +this can already be done by users who are familiar with containers, having a
+> +dedicated tool in the kernel tree lowers the barrier to entry by solving common
+> +problems once and for all (e.g. user id management).  It also makes it easier
+> +to share an exact command line leading to a particular result.  The main use
+> +case is likely to be kernel builds but virtually anything can be run: KUnit,
+> +checkpatch etc. provided a suitable image is available.
+> +
+> +
+> +Options
+> +=======
+> +
+> +Command line syntax::
+> +
+> +  scripts/container -i IMAGE [OPTION]... CMD...
+> +
+> +Available options:
+> +
+> +``-e, --env-file ENV_FILE``
+> +
+> +    Path to an environment file to load in the container.
+> +
+> +``-g, --gid GID``
+> +
+> +    Group id to use inside the container.
+> +
+> +``-i, --image IMAGE``
+> +
+> +    Container image name (required).
+> +
+> +``-r, --runtime RUNTIME``
+> +
+> +    Container runtime name.  Supported runtimes: ``docker``, ``podman``.
+> +
+> +    If not specified, the first one found on the system will be used
+> +    i.e. Docker if present, otherwise Podman.
+> +
+> +``-s, --shell``
+> +
+> +    Run the container in an interactive shell.
+> +
+> +``-u, --uid UID``
+> +
+> +    User id to use inside the container.
+> +
+> +    If the ``-g`` option is not specified, the user id will also be used for
+> +    the group id.
+> +
+> +``-v, --verbose``
+> +
+> +    Enable verbose output.
+> +
+> +``-h, --help``
+> +
+> +    Show the help message and exit.
+> +
+> +
+> +Usage
+> +=====
+> +
+> +It's entirely up to the user to choose which image to use and the ``CMD``
+> +arguments are passed directly as an arbitrary command line to run in the
+> +container.  The tool will take care of mounting the source tree as the current
+> +working directory and adjust the user and group id as needed.
+> +
+> +The container image which would typically include a compiler toolchain is
+> +provided by the user and selected via the ``-i`` option.  The container runtime
+> +can be selected with the ``-r`` option, which can be either ``docker`` or
+> +``podman``.  If none is specified, the first one found on the system will be
+> +used.  Support for other runtimes may be added later depending on their
+> +popularity among users.
+> +
+> +By default, commands are run non-interactively.  The user can abort a running
+> +container with SIGINT (Ctrl-C).  To run commands interactively with a TTY, the
+> +``--shell`` or ``-s`` option can be used.  Signals will then be received by the
+> +shell directly rather than the parent ``container`` process.  To exit an
+> +interactive shell, use Ctrl-D or ``exit``.
+> +
+> +.. note::
+> +
+> +   The only host requirement aside from a container runtime is Python 3.10 or
+> +   later.
+> +
+> +
+> +Environment Variables
+> +=====================
+> +
+> +Environment variables are not propagated to the container so they have to be
+> +either defined in the image itself or via the ``-e`` option using an
+> +environment file.  In some cases it makes more sense to have them defined in
+> +the Containerfile used to create the image.  For example, a Clang-only compiler
+> +toolchain image may have ``LLVM=1`` defined.
+> +
+> +The local environment file is more useful for user-specific variables added
+> +during development.  It is passed as-is to the container runtime so its format
+> +may vary.  Typically, it will look like the output of ``env``.  For example::
+> +
+> +  INSTALL_MOD_STRIP=1
+> +  SOME_RANDOM_TEXT=One upon a time
+> +
+> +Please also note that ``make`` options can still be passed on the command line,
+> +so while this can't be done since the first argument needs to be the
+> +executable::
+> +
+> +  scripts/container -i tuxmake/korg-clang LLVM=1 make
+> +
+> +this will work::
+> +
+> +  scripts/container -i tuxmake/korg-clang make LLVM=1
 
-kernel test robot noticed the following build errors:
+First of all: Thanks for all that work!
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next]
-[cannot apply to driver-core/driver-core-linus pci/next pci/for-linus drm-rust/drm-rust-next linus/master v6.19-rc6 next-20260119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhi-Wang/rust-devres-style-for-imports/20260120-042526
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20260119202250.870588-3-zhiw%40nvidia.com
-patch subject: [PATCH v10 2/5] rust: io: separate generic I/O helpers from MMIO implementation
-config: x86_64-buildonly-randconfig-004-20260120 (https://download.01.org/0day-ci/archive/20260120/202601202126.NVP5cs8k-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601202126.NVP5cs8k-lkp@intel.com/reproduce)
+I probably have just read it over: I have to prefix the
+'tuxmake/korg-clang' by 'docker.io/'.  Is that a problem of my system
+configuration (Debian forky, no special podman config)?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601202126.NVP5cs8k-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+> +
+> +
+> +User IDs
+> +========
+> +
+> +This is an area where the behaviour will vary slightly depending on the
+> +container runtime.  The goal is to run commands as the user invoking the tool.
+> +With Podman, a namespace is created to map the current user id to a different
+> +one in the container (1000 by default).  With Docker, while this is also
+> +possible with recent versions it requires a special feature to be enabled in
+> +the daemon so it's not used here for simplicity.  Instead, the container is run
+> +with the current user id directly.  In both cases, this will provide the same
+> +file permissions for the kernel source tree mounted as a volume.  The only
+> +difference is that when using Docker without a namespace, the user id may not
+> +be the same as the default one set in the image.
+> +
+> +Say, we're using an image which sets up a default user with id 1000 and the
+> +current user calling the ``container`` tool has id 1234.  The kernel source
+> +tree was checked out by this same user so the files belong to user 1234.  With
+> +Podman, the container will be running as user id 1000 with a mapping to id 1234
+> +so that the files from the mounted volume appear to belong to id 1000 inside
+> +the container.  With Docker and no namespace, the container will be running
+> +with user id 1234 which can access the files in the volume but not in the user
+> +1000 home directory.  This shouldn't be an issue when running commands only in
+> +the kernel tree but it is worth highlighting here as it might matter for
+> +special corner cases.
 
->> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:241:26
-   |
-   241 |         let ctrl = iomap.try_read32(th1520_pwm_ctrl(hwpwm))?;
-   |                          ^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_read` with a similar name
-   |
-   241 -         let ctrl = iomap.try_read32(th1520_pwm_ctrl(hwpwm))?;
-   241 +         let ctrl = iomap.try_read(th1520_pwm_ctrl(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:242:35
-   |
-   242 |         let period_cycles = iomap.try_read32(th1520_pwm_per(hwpwm))?;
-   |                                   ^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_read` with a similar name
-   |
-   242 -         let period_cycles = iomap.try_read32(th1520_pwm_per(hwpwm))?;
-   242 +         let period_cycles = iomap.try_read(th1520_pwm_per(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:294:15
-   |
-   294 |         iomap.try_write32(
-   |         ------^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   294 -         iomap.try_write32(
-   294 +         iomap.try_write(
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:302:19
-   |
-   302 |             iomap.try_write32(wfhw.ctrl_val | TH1520_PWM_START, th1520_pwm_ctrl(hwpwm))?;
-   |                   ^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   302 -             iomap.try_write32(wfhw.ctrl_val | TH1520_PWM_START, th1520_pwm_ctrl(hwpwm))?;
-   302 +             iomap.try_write(wfhw.ctrl_val | TH1520_PWM_START, th1520_pwm_ctrl(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:243:33
-   |
-   243 |         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
-   |                                 ^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_read` with a similar name
-   |
-   243 -         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
-   243 +         let duty_cycles = iomap.try_read(th1520_pwm_fp(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_read32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:275:33
-   |
-   275 |         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
-   |                                 ^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_read32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_read` with a similar name
-   |
-   275 -         let duty_cycles = iomap.try_read32(th1520_pwm_fp(hwpwm))?;
-   275 +         let duty_cycles = iomap.try_read(th1520_pwm_fp(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:281:23
-   |
-   281 |                 iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
-   |                       ^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   281 -                 iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
-   281 +                 iomap.try_write(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:282:23
-   |
-   282 |                 iomap.try_write32(0, th1520_pwm_fp(hwpwm))?;
-   |                       ^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   282 -                 iomap.try_write32(0, th1520_pwm_fp(hwpwm))?;
-   282 +                 iomap.try_write(0, th1520_pwm_fp(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:283:23
-   |
-   283 |                 iomap.try_write32(
-   |                 ------^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   283 -                 iomap.try_write32(
-   283 +                 iomap.try_write(
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:291:15
-   |
-   291 |         iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
-   |               ^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   291 -         iomap.try_write32(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
-   291 +         iomap.try_write(wfhw.ctrl_val, th1520_pwm_ctrl(hwpwm))?;
-   |
---
->> error[E0599]: no method named `try_write32` found for reference `&Mmio<176>` in the current scope
-   --> drivers/pwm/pwm_th1520.rs:292:15
-   |
-   292 |         iomap.try_write32(wfhw.period_cycles, th1520_pwm_per(hwpwm))?;
-   |               ^^^^^^^^^^^
-   |
-   = help: items from traits can only be used if the trait is in scope
-   help: trait `Io` which provides `try_write32` is implemented but not in scope; perhaps you want to import it
-   |
-   23  + use kernel::io::Io;
-   |
-   help: there is a method `try_write` with a similar name
-   |
-   292 -         iomap.try_write32(wfhw.period_cycles, th1520_pwm_per(hwpwm))?;
-   292 +         iomap.try_write(wfhw.period_cycles, th1520_pwm_per(hwpwm))?;
-   |
-..
+I tested a tiny bit with podman as runtime backend.  If I leave out the
+'-r podman' podman's docker emulation is in effect and fails with:
+
+    $ scripts/container -i docker.io/tuxmake/korg-clang -- make LLVM=1 -j8 olddefconfig
+    Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+    mkdir: cannot create directory '.tmp_15': Permission denied
+    mkdir: cannot create directory '.tmp_19': Permission denied
+    mkdir: cannot create directory '.tmp_22': Permission denied
+    mkdir: cannot create directory '.tmp_25': Permission denied
+    mkdir: cannot create directory '.tmp_28': Permission denied
+    mkdir: cannot create directory '.tmp_31': Permission denied
+      HOSTCC  scripts/basic/fixdep
+    error: error opening 'scripts/basic/.fixdep.d': Permission denied
+    1 error generated.
+    make[2]: *** [scripts/Makefile.host:114: scripts/basic/fixdep] Error 1
+    make[1]: *** [/src/Makefile:655: scripts_basic] Error 2
+    make: *** [Makefile:248: __sub-make] Error 2
+    [exit code 2]
+
+But with '-r podman' it works like a charm.
+
+Would it make sense to switch the default runtime to podman to
+prevent non-functional podman-docker emulation?  (Or is this just a
+problem on my machine?)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nicolas
