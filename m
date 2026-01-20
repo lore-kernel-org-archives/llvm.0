@@ -1,113 +1,180 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2293642EED6
-	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 17:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768931207; cv=none; b=XZDghlgZ2OkBaiBUzlbkwrIORN5x05B1dd9UYdgPzyGH0sN7fZ2lQDE+yYrdRoTDLDqxFrSryqqxwnU3nmGY04nsHEyMp0yDk8gQugf+Y1hD7hEUOccOTktwj7fwG7UDlkzAXpGUW5Si5OfPZxW2l0w3DuF2HK0fmy122Ck4Qv4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768931207; c=relaxed/simple;
-	bh=bsHD5ASTyZQ6NgkQHF/MszE1ynvH2TtdgFI+ciczVR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=s1SlRcc8k/Lp7UfsVTUoezYD53I8NA8+h8/Enr0kYEJheLw7oo0KHPWupcQEs6pE5b2cxFSfA8eYFxGIwM73UK+9TVKyWQWGwY7o7m3ZbISNGDY37CJu8Oetl3y1pkYlDCs5qmcWwt1gnkbyCJuNZAafkfqxf9b9YT/H28drn88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EJLnx7gb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86BE441055
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 17:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768931703; cv=pass; b=uatkevSwqsKSxb8UkV6OYWLP9/CRbpGacoQxE3l+OTid1HuRhKtnxpllK9UyHShFB5Yyj6MOLLYmZFwlVb+lETly/awQ/mbaWMsDeNDoRfDAxgJdfX+ph8MbPLWOBYhT033+RUJyzlBEGdvNrty9HvkCaMaNFBCjhD0vTeVVRFw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768931703; c=relaxed/simple;
+	bh=oHcdxkzTnAC7Ywax8Vckvgjp4LUCRYz+0yKN85C0sUM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f5sPpqA6ixLj5xu7J9PDjm4y4HpnElRZqiyup2zDS8MEct+hCNYhyJeIDXAgwCjXTZ4UOcDalQsawYb7bntduhN5QDZw4EMjPo9EG8vgfDu1f8VUEiLyGfymMNWbGOiowTTYM18bm3GiJFdRDwrnq55N6emR9EuFuEy1BP7VoOU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYu2RIBc; arc=pass smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EJLnx7gb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768931204;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QFl9G2ldA1TW7qySDFacMiOzzulOTOkp01NTA21hmOA=;
-	b=EJLnx7gbP2kaZU8NiWEagylTkFhSdJls0aHzUsTuldnmobRk1hgKdctalwrBXs59Dy/vqB
-	0J16GODAnI74Ui6M42LGPgGP3ZvA3uPRgzM0YxOkcqdyP6U4DY2Ou9Poh07oY+X46d53l9
-	M9wmnDN0kuUi9cn7UG/7ljWzjeZQz0A=
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com
- [74.125.82.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-14-PMsmQkLnNF6wdBftXFcn8g-1; Tue, 20 Jan 2026 12:46:41 -0500
-X-MC-Unique: PMsmQkLnNF6wdBftXFcn8g-1
-X-Mimecast-MFC-AGG-ID: PMsmQkLnNF6wdBftXFcn8g_1768931200
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-2ac39bd5501so5049392eec.0
-        for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 09:46:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYu2RIBc"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47ee07570deso39729295e9.1
+        for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 09:55:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768931699; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Z/ogpMrm8GrdmEcmcuJVNR3wOGRQD+JKD57y/1TqBt3CNX4s/pL1zHHlTLoChvwIhv
+         FLOTA+u60L7Sd/9C/QchTUQaPHm2Xo+KfuE+nfn9FTeXh8o1iQTTa3bUK9/udA6BASAL
+         Ig+tgf0v5uVhJDRsUnOFo3RppVvSe6mFkJYiVqCVz+Pjx80sLhmHioeKxQlnIsBo9//S
+         Gxx62vyDRInlHE96QW/BgPZ4lq6zyhG0hEzp/GK5t2Yb8ZoBN8I6N5sAn9RaGL2Ojoba
+         /d8QEQOWZ8kT7L3T6hFgK8iCXT2/GBTTclTWYFzNULGQsQTV69hScrwz/vYCBrNCWs/w
+         nV2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CSI8A4TsHJKLPFzycUoWUfFc682TNPoMjAF0fDDKMCo=;
+        fh=Fom22wU5uOedY3tDjCy4JEokZE3uU9WAl7OiaiJwxO4=;
+        b=hM2rXyb+CXnk6fn5K764Y/dRWCkCwwC3MVObeM59kO3nndsi59mDZ8QK6TwMn5b2WW
+         M50liUYV1P7EVS9IvKVmdYTmvMNBgc5P4D6McN5az3H0cCNMSciIVYaNgdPlQHUdJ3Aw
+         pqmuXYsGIKoUMvuiCD6L6LcIkTzyTqQlB8fVtBmN6NzPmb9J7QLlwqnSIIKgERHjWj7/
+         A/vOV6ParkAgJmQsxISdO/9AVmaD1vKGIoiqIGUlX7D/yDTKnzkGiuQcGp/0Ip6ZOIeR
+         amq4fzfXf3lrD9IG5/8Q9a/gF+OSyP9JFd8BFJRgnxeaDeABdnmmKTR88qURhfQafvvb
+         6vVA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768931699; x=1769536499; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CSI8A4TsHJKLPFzycUoWUfFc682TNPoMjAF0fDDKMCo=;
+        b=XYu2RIBc4DT+PSjndz5kRXU4huhVdov6vZkWgEHHub1av4rE8welHJu39krMSPCH84
+         PSfGE13mhBeKWIAjkmEb57qoKeJAP0HRPZlKhSSDQCgW44sGxcSdY/OsZcRftZUwmjin
+         6Z+MOVb3ooRpDh5b5h6zCZAo1d7auFzUt6EXxXJaWw7aux47ByCMSubXigOpJj6BfNp9
+         mxaJ8bCJHapTi6vfKnse+T1WH/+iYDXVFS58mRc5elPTnQUFeGhFoVeC1SXLkkq0mE00
+         j5zMcu5xS5okHt41njc20GKJ8WM4uqQYCR0em1KvURYhPZy3uPYAYKA5ZZYIhU7lcgul
+         1/GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768931200; x=1769536000;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1768931699; x=1769536499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QFl9G2ldA1TW7qySDFacMiOzzulOTOkp01NTA21hmOA=;
-        b=cSQhK/el/5IPW3KpeLFofCwQWNMS3bQKXNjVzYMMz69tqZnmZbflJebRknQiJqYR3E
-         L5I22gaQfvo19r4rhyxgKPkwSwyePKFpTI9PqrDwmC6jyXDuj7dEdZO6Ap6w/UFyh3Qe
-         AFxLSmIZejo+2Pbk6I5zMiJbYj6ru5DLfeb3oFihijqOD6aMMpPiycKkllLmSOpMNz/F
-         OciH+dCDrgzE0UJZz2hPNY7rM5OgLMPIcEWqrreFuNlEeLo60W0YNjny9jE2uCwQnm5V
-         /1NIKsuG/z4jmalvDzAwxoVDQUMuaorNmcMX03MXVZmeZkNfZSZqkSmxW2IgZQWjwB5J
-         /5Rg==
-X-Gm-Message-State: AOJu0YzfpnRIfJSTPYwHvqvxpcDOitVUaAiJVEO4b4vMAV/j+2ySQf+l
-	JGBQj1oMx//W8uzC/7D6/OKfZ7Fm8JSW4jGrxSw9LZnTfzRA5wysk3FZnTaz8cj9VQy9QzmaPmi
-	LHP/zcuUBjn+uKT6kqXJk9Du3gnHNMVVs3h1zM/e/JFx28IVnAxyt8f1DRpZb1xE=
-X-Gm-Gg: AZuq6aIiMCH/Xon0lKKVECduS9cmkRiaXFf4n8KngGuWZibnXmyfu0wS+p6V/Ll16z8
-	tIY/fJCTjPm1Fyz/Mg1Dt6/Oo1CvYGptfXiu67RRXiHtaXn6M/r4IbTBbjfupHmIJJARbLAeTNt
-	XtZ2z75GGIhmgykj3V9+w7vJm6kKxZHwX6hjNYbhrKTU3rU7zorDZ64cS/fbWQ+pm9Wv+flo2kM
-	hSJwEvEpRik7lbDm6mgvjVsu4wD1BWwbbucY69sfJGRGRc1qZaOLSLsja7O4R1FjoAkhNUTniSN
-	+c2TlxKGQ78dDx3GQomDZN1vMcOTDs1VEYU+SPdv21UuQhNwNW5MA1hk3EjqyAXsLot+EPDzxgK
-	0vIx5oy2Zv/WOjZFSstIZCVDuYF5zxUBJaTl4SK1FKNdb
-X-Received: by 2002:a05:7300:e8ac:b0:2ae:614a:330e with SMTP id 5a478bee46e88-2b6fd7bd308mr1523547eec.41.1768931200189;
-        Tue, 20 Jan 2026 09:46:40 -0800 (PST)
-X-Received: by 2002:a05:7300:e8ac:b0:2ae:614a:330e with SMTP id 5a478bee46e88-2b6fd7bd308mr1523481eec.41.1768931198215;
-        Tue, 20 Jan 2026 09:46:38 -0800 (PST)
-Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b3503ce3sm17858047eec.12.2026.01.20.09.46.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 09:46:37 -0800 (PST)
-Date: Tue, 20 Jan 2026 12:46:32 -0500
-From: Brian Masney <bmasney@redhat.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 13/13] clk: microchip: core: allow driver to be compiled
- with COMPILE_TEST
-Message-ID: <aW-_eIjcRp7VM0bt@redhat.com>
-References: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
- <202601162110.K1eWGORM-lkp@intel.com>
+        bh=CSI8A4TsHJKLPFzycUoWUfFc682TNPoMjAF0fDDKMCo=;
+        b=GQuMopt3HrsME6+j7kSXeYfxhM6S2uzSVKIjN2904+cH5aRLTsBpyg++VEUCUvzMWf
+         dZz8d7UKzZ/nXZWFDy+C/FMK7APkdQY5gBqOwi+YbtUim8eIgcjCebkGWcCuA7Nw1nE3
+         5rcB2ATzP5JziTfibngKv5QtynvXrtiO/zSs/2tWD06XpjqYjFN+apNjwpQw08CVTXU1
+         3gTDNU3+YEGaeBQN9HPP/BH8epNz16SKdz4I5ikiUVCB84zhTeOAannENuyIYMp9Rpzt
+         YFCGqOci1vvgasfQUVTZ6sVguIyQH10J8mS+5XSxlNuL8Iw2HOP3MN2AR3KHNIRZ/JV0
+         yF+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVXrZCOPf2F7vcPZt+QWFX/ogAGQ3cvTz+HOFyydDU5ARLBvHEKNxxEPEaDytg2MGknC8uc@lists.linux.dev
+X-Gm-Message-State: AOJu0YxRG3TONcaMsqAFR9H7iSwUWhbpd8eNyLtn5nDFNJ/9d3vmRRpn
+	KEokXX6b0XQmAXUH2BoVtupV8dhjG/9WWN5VJDjmnPbKezOovRxs2q3o5QFZB8cw52aV5y0WruW
+	taplf4/OLQmmqolqS4DjxqMltVlMswnI=
+X-Gm-Gg: AZuq6aK0BzacAX/RtCqfSPuLMZhIlur1A02VZxA2hXu+Oi8W5YExvqPDwgzaarxdUm/
+	UldnUbgRrrJJeBsDVK1JK6h9O+wA/vfEHtXBzkM0TcXI7eIHgc3FEPmC9dWK84uaYAdEvemDy2z
+	4la2iKhU4B92JDX4Ji4vpB8nXfpykpPeAEaBICgPYBS7K7ul3C0FEp2IDxu4Tkr2kUpwh6mGvSN
+	f0rkzkeM8ACVZ7Qi52RQocr5jGhimKmfJk5t5/f0Jo0ac1m3WXYfBK2jst9uxbDHZWWV/F2ySNJ
+	uzC3Y4sGxfS1nq6oN3yf5a2Ebl2SPw==
+X-Received: by 2002:a05:6000:310d:b0:430:f58d:40e5 with SMTP id
+ ffacd0b85a97d-4356a051bbamr17722513f8f.30.1768931698830; Tue, 20 Jan 2026
+ 09:54:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202601162110.K1eWGORM-lkp@intel.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: -Pc_0c81DfX9hA6gbqeS8qKq9GveWunBL0gd4HfDFJU_1768931200
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1768845098.git.m.wieczorretman@pm.me>
+In-Reply-To: <cover.1768845098.git.m.wieczorretman@pm.me>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 20 Jan 2026 18:54:48 +0100
+X-Gm-Features: AZwV_QjKpw6bSXc49tC7Ft6D0ET5YLTkUvlrSRTXNNU3JrK5sgQbId38njXfil8
+Message-ID: <CA+fCnZf+U3RhmMeGxQ-UypJw2yGd8RJ0gFKrCXsC1eQ5YO-eXw@mail.gmail.com>
+Subject: Re: [PATCH v9 00/13] kasan: x86: arm64: KASAN tag-based mode for x86
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: chleroy@kernel.org, surenb@google.com, justinstitt@google.com, 
+	nsc@kernel.org, jan.kiszka@siemens.com, trintaeoitogc@gmail.com, 
+	dave.hansen@linux.intel.com, ryabinin.a.a@gmail.com, kees@kernel.org, 
+	maciej.wieczor-retman@intel.com, urezki@gmail.com, will@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, brgerst@gmail.com, ubizjak@gmail.com, 
+	rppt@kernel.org, samitolvanen@google.com, thuth@redhat.com, mhocko@suse.com, 
+	nathan@kernel.org, osandov@fb.com, thomas.lendacky@amd.com, 
+	yeoreum.yun@arm.com, akpm@linux-foundation.org, catalin.marinas@arm.com, 
+	morbo@google.com, jackmanb@google.com, mingo@redhat.com, jpoimboe@kernel.org, 
+	vbabka@suse.cz, corbet@lwn.net, lorenzo.stoakes@oracle.com, 
+	vincenzo.frascino@arm.com, luto@kernel.org, glider@google.com, 
+	weixugc@google.com, axelrasmussen@google.com, samuel.holland@sifive.com, 
+	kbingham@kernel.org, jeremy.linton@arm.com, kas@kernel.org, tglx@kernel.org, 
+	ardb@kernel.org, peterz@infradead.org, hpa@zytor.com, dvyukov@google.com, 
+	yuanchu@google.com, leitao@debian.org, david@kernel.org, 
+	anshuman.khandual@arm.com, bp@alien8.de, Liam.Howlett@oracle.com, 
+	kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org, x86@kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 16, 2026 at 09:20:36PM +0800, kernel test robot wrote:
-> Hi Brian,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on f417b7ffcbef7d76b0d8860518f50dae0e7e5eda]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/MIPS-copy-pic32-h-header-file-from-asm-mach-pic32-to-include-platform-data/20260110-005057
-> base:   f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
-> patch link:    https://lore.kernel.org/r/20260109-mips-pic32-header-move-v1-13-99859c55783d%40redhat.com
-> patch subject: [PATCH 13/13] clk: microchip: core: allow driver to be compiled with COMPILE_TEST
-> config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601162110.K1eWGORM-lkp@intel.com/
+On Tue, Jan 20, 2026 at 3:40=E2=80=AFPM Maciej Wieczor-Retman
+<m.wieczorretman@pm.me> wrote:
+>
+> Maciej Wieczor-Retman (11):
+>   kasan: Fix inline mode for x86 tag-based mode
+>   x86/kasan: Add arch specific kasan functions
+>   x86/mm: Reset tag for virtual to physical address conversions
+>   mm/execmem: Untag addresses in EXECMEM_ROX related pointer arithmetic
+>   x86/mm: Use physical address comparisons in fill_p*d/pte
+>   x86/kasan: Initialize KASAN raw shadow memory
+>   x86/mm: Reset tags in a canonical address helper call
+>   x86/mm: Initialize LAM_SUP
+>   x86: Increase minimal SLAB alignment for KASAN
+>   x86/kasan: Use a logical bit shift for kasan_mem_to_shadow
+>   x86/kasan: Make software tag-based kasan available
+>
+> Samuel Holland (2):
+>   kasan: sw_tags: Use arithmetic shift for shadow computation
+>   kasan: arm64: x86: Make special tags arch specific
+>
+>  Documentation/arch/arm64/kasan-offsets.sh |  8 ++-
+>  Documentation/arch/x86/x86_64/mm.rst      | 10 ++-
 
-None of the errors in this report appear to be due to the changes that
-I made that allow drivers/clk/microchip/clk-core.c to be compiled on all
-architectures instead of just MIPS.
+Still missing Documentation/dev-tools/kasan.rst updates. Feel free to
+send as a separate patch to avoid resending the whole series.
 
-Brian
 
+
+>  MAINTAINERS                               |  4 +-
+>  arch/arm64/Kconfig                        | 10 +--
+>  arch/arm64/include/asm/kasan-tags.h       | 14 ++++
+>  arch/arm64/include/asm/kasan.h            |  7 +-
+>  arch/arm64/include/asm/memory.h           | 14 +++-
+>  arch/arm64/include/asm/uaccess.h          |  1 +
+>  arch/arm64/mm/Makefile                    |  2 +
+>  arch/arm64/mm/kasan_init.c                |  7 +-
+>  arch/arm64/mm/kasan_sw_tags.c             | 35 ++++++++++
+>  arch/x86/Kconfig                          |  4 ++
+>  arch/x86/boot/compressed/misc.h           |  1 +
+>  arch/x86/include/asm/cache.h              |  4 ++
+>  arch/x86/include/asm/kasan-tags.h         |  9 +++
+>  arch/x86/include/asm/kasan.h              | 79 ++++++++++++++++++++++-
+>  arch/x86/include/asm/page.h               |  8 +++
+>  arch/x86/include/asm/page_64.h            |  1 +
+>  arch/x86/kernel/head_64.S                 |  3 +
+>  arch/x86/mm/init.c                        |  3 +
+>  arch/x86/mm/init_64.c                     | 11 ++--
+>  arch/x86/mm/kasan_init_64.c               | 24 ++++++-
+>  arch/x86/mm/maccess.c                     |  2 +-
+>  arch/x86/mm/physaddr.c                    |  2 +
+>  include/linux/kasan-tags.h                | 21 ++++--
+>  include/linux/kasan.h                     | 13 ++--
+>  include/linux/mm.h                        |  6 +-
+>  include/linux/mmzone.h                    |  2 +-
+>  include/linux/page-flags-layout.h         |  9 +--
+>  lib/Kconfig.kasan                         |  3 +-
+>  mm/execmem.c                              |  9 ++-
+>  mm/kasan/kasan.h                          |  7 ++
+>  mm/kasan/report.c                         | 15 ++++-
+>  mm/vmalloc.c                              |  7 +-
+>  scripts/Makefile.kasan                    |  3 +
+>  scripts/gdb/linux/kasan.py                |  5 +-
+>  scripts/gdb/linux/mm.py                   |  5 +-
+>  37 files changed, 312 insertions(+), 56 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/kasan-tags.h
+>  create mode 100644 arch/arm64/mm/kasan_sw_tags.c
+>  create mode 100644 arch/x86/include/asm/kasan-tags.h
