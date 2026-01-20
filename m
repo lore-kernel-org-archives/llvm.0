@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C083F3A7F78;
-	Tue, 20 Jan 2026 20:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1D03AA1A9;
+	Tue, 20 Jan 2026 20:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768940154; cv=none; b=H14SCgv8EDC3vwtJgsvX8ZtWISDY2Dw9zYNPpW2tsD8SrxmN7rxP3+j7lKCWNS+FeRFampPo8M48HCuP/usJsbdYKaXHDRPS8/4PerKxs3fZEqKBBUHzjYCf9QfM3wrzGp9UDd41Aabb2jQc4v8iyicQPK6Ew1aan5U4ykJ5xmI=
+	t=1768941418; cv=none; b=nsCuJSYzb2KuG5rgb/FjvCk1VgPm0b/EPjrCcgVJjqA840KSoRqH80wf12jwzQv1eJOGwRb2MfMEBKdoeLi43wFJUy0/raMFrn2V5RuOvXnH9gF+7ZS2XVNSgxoZp7i03mGoN6NHzxHeF35IFiv222BRgDDKPcD5K/zgq0vXamk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768940154; c=relaxed/simple;
-	bh=58fpisV8pyLg2TTsu3PMcGliO8Bx3We5VMk8lz5Y++M=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jqT95bnPpb75+MYB4dclnC0hl9R5KSYTktrsBrTScxqZk7bxJJ4c60XBa47jE43V4jEfVOw+Bkz125MnedE6LUywy3bBeMV/yGp27xIHhDxzTLImIuvDvBhYXd0HjwM5Iuf8m2bgd0/YVtN/S3SyvEfydtLNxZ5NI84QeHiuGpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E+Q8toyP; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1768941418; c=relaxed/simple;
+	bh=EXTBXIRIC6sg9KddItGI515kgWbLiLzTEjP/PHBAUks=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=kflIn6EQNTRaROXce9oeBVdT0JdgK3MBTD8gBKqIPjU7HE9OYnZCHU7te51+jLDADkmG1gjwxKG7zeh+4pke+tvVydwQPO58w3/Pag/Tn/JaPJXXwIHMSFAoOyRByx4Zumi5SUASMM2HSCDvSCAGY+5xl80zpH+IxMN2JOvTa6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=azHCZRWM; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+Q8toyP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="azHCZRWM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768940151; x=1800476151;
+  t=1768941414; x=1800477414;
   h=date:from:to:cc:subject:message-id;
-  bh=58fpisV8pyLg2TTsu3PMcGliO8Bx3We5VMk8lz5Y++M=;
-  b=E+Q8toyPmiRGSsIJv6K5G6Nx5v+nH8AnnJp7wgvrUFs0WBa+uUAR5yab
-   Ru58Zv0UHjWFuwP/8C/7gHMe3P+KnwW5w6BgBe7ZwgrGnmp4OA814O71U
-   g1mQeA48EuWZi/kA9/+ErINz84CbTDzwEtcTMisyJvk6iEZ6gv5LZS1JJ
-   L3P+yUWaQLvPkCzGCD48pbk4T0N/fvdlwLVKRPGBXLQGwbllVYYVE8+3d
-   ol+EDDJZNIFZIR6Lts4M5eUQyo3WrAkvt7shIAgvL/m1Kz/r0xwB/5Xdu
-   EZk7xerpu8js6JZkes99ZMgurJNzaBs7Sy4QayZcB0Xi3hsmOR+2pgwAT
-   Q==;
-X-CSE-ConnectionGUID: GMkynId7RS+/EY6o+6WbIw==
-X-CSE-MsgGUID: eqfrs+iWQT2I8qtcytNHyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11677"; a="70214565"
+  bh=EXTBXIRIC6sg9KddItGI515kgWbLiLzTEjP/PHBAUks=;
+  b=azHCZRWMuHW5iqEvPmDdZ2609HAsmfHbtBmZOh/pV0/BlqJPyJHf0Vvp
+   YN1/KWyvP1pRmlVXWVN3usIQRiu1Q+Rr1cc0iAPS0mDfpQ2wv8/W0hNsl
+   M8pilhyGuoVgzs+ppnE2+sQENvIyvFEOnyzKXsUwYaSS632tHj3I64udm
+   juUDvoHEwdx9sxWbE0xemDsRx/fjo6qTR22dsL51Ju0Wv427lvoqUTO0y
+   AUwnMVXglWNj5BU4VR8YPn9uO+wTaNc4tR6u6YTAB56JqQphdr+bA8Oy5
+   gb9ogLcuaObyoB7Y53f+hGrwHezb4qV5T5f5wIBu/1Je28kpd+Iw7/I7t
+   w==;
+X-CSE-ConnectionGUID: yc0G0Ys0SWykTdREGC/RqA==
+X-CSE-MsgGUID: hFVgs6m5TCqMZNM/iEMqkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11677"; a="70328338"
 X-IronPort-AV: E=Sophos;i="6.21,241,1763452800"; 
-   d="scan'208";a="70214565"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 12:15:51 -0800
-X-CSE-ConnectionGUID: XpSJc4qdT36/aK4rHBp60Q==
-X-CSE-MsgGUID: betD6N1PShGi4oM5jIXgCQ==
+   d="scan'208";a="70328338"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 12:36:53 -0800
+X-CSE-ConnectionGUID: z5HT/AKdS5+9D/f6KFiZ0Q==
+X-CSE-MsgGUID: xa6ZhmudThWZT6MAUVHt+w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,241,1763452800"; 
-   d="scan'208";a="205464808"
+   d="scan'208";a="205359378"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 20 Jan 2026 12:15:50 -0800
+  by orviesa006.jf.intel.com with ESMTP; 20 Jan 2026 12:36:51 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1viI8h-00000000PU7-1DaZ;
-	Tue, 20 Jan 2026 20:15:47 +0000
-Date: Wed, 21 Jan 2026 04:15:33 +0800
+	id 1viIT2-00000000PVF-0uvy;
+	Tue, 20 Jan 2026 20:36:48 +0000
+Date: Wed, 21 Jan 2026 04:36:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:b4/virt-to-phys-riscv-v6.19-rc1 2/2]
- arch/riscv/mm/physaddr-debug.c:18:26: error: use of undeclared identifier
- 'vaddr'
-Message-ID: <202601210409.mY4gdkvU-lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org
+Subject: [sailus-media-tree:metadata 111/113]
+ drivers/media/pci/intel/ipu6/ipu6-isys.c:1181:3: error: cannot jump from this
+ goto statement to its label
+Message-ID: <202601210431.Je4aJ8yP-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,42 +61,180 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/virt-to-phys-riscv-v6.19-rc1
-head:   877fcd0044b0a64fc875e01ea3c462f0fdeadd29
-commit: 877fcd0044b0a64fc875e01ea3c462f0fdeadd29 [2/2] riscv: Make virt_to_pfn() a real function
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260121/202601210409.mY4gdkvU-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601210409.mY4gdkvU-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/sailus/media_tree.git metadata
+head:   55ba38aaeb6e07cbbbe550578fa4737b05de1d00
+commit: afa135d9336f38ce80db9a03551b15b9522c3f06 [111/113] media: ipu6: Serialise access to stream pointers by isys stream_lock
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260121/202601210431.Je4aJ8yP-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601210431.Je4aJ8yP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601210409.mY4gdkvU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601210431.Je4aJ8yP-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/mm/physaddr-debug.c:18:26: error: use of undeclared identifier 'vaddr'
-           return phys_to_pfn(__pa(vaddr));
-                                   ^
+>> drivers/media/pci/intel/ipu6/ipu6-isys.c:1181:3: error: cannot jump from this goto statement to its label
+    1181 |                 goto leave;
+         |                 ^
+   drivers/media/pci/intel/ipu6/ipu6-isys.c:1184:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1184 |         guard(spinlock_irqsave)(&isys->streams_lock);
+         |         ^
+   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
+     414 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+     168 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:96:1: note: expanded from here
+      96 | __UNIQUE_ID_guard_1414
+         | ^
    1 error generated.
 
 
-vim +/vaddr +18 arch/riscv/mm/physaddr-debug.c
+vim +1181 drivers/media/pci/intel/ipu6/ipu6-isys.c
 
-     8	
-     9	phys_addr_t __virt_to_phys(unsigned long x)
-    10	{
-    11		/*
-    12		 * Boundary checking aginst the kernel linear mapping space.
-    13		 */
-    14		WARN(!is_linear_mapping(x) && !is_kernel_mapping(x),
-    15		     "virt_to_phys used for non-linear address: %p (%pS)\n",
-    16		     (void *)x, (void *)x);
-    17	
-  > 18		return phys_to_pfn(__pa(vaddr));
-    19	}
-    20	EXPORT_SYMBOL(__virt_to_phys);
-    21	
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1143  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1144  static int isys_isr_one(struct ipu6_bus_device *adev)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1145  {
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1146  	struct ipu6_isys *isys = ipu6_bus_get_drvdata(adev);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1147  	struct ipu6_fw_isys_resp_info_abi *resp;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1148  	struct ipu6_isys_stream *stream;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1149  	struct ipu6_isys_csi2 *csi2 = NULL;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1150  	u32 index;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1151  	u64 ts;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1152  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1153  	if (!isys->fwcom)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1154  		return 1;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1155  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1156  	resp = ipu6_fw_isys_get_resp(isys->fwcom, IPU6_BASE_MSG_RECV_QUEUES);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1157  	if (!resp)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1158  		return 1;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1159  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1160  	ts = (u64)resp->timestamp[1] << 32 | resp->timestamp[0];
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1161  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1162  	index = resp_type_to_index(resp->type);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1163  	dev_dbg(&adev->auxdev.dev,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1164  		"FW resp %02d %s, stream %u, ts 0x%16.16llx, pin %d\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1165  		resp->type, fw_msg[index].msg, resp->stream_handle,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1166  		fw_msg[index].valid_ts ? ts : 0, resp->pin_id);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1167  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1168  	if (resp->error_info.error == IPU6_FW_ISYS_ERROR_STREAM_IN_SUSPENSION)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1169  		/* Suspension is kind of special case: not enough buffers */
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1170  		dev_dbg(&adev->auxdev.dev,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1171  			"FW error resp SUSPENSION, details %d\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1172  			resp->error_info.error_details);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1173  	else if (resp->error_info.error)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1174  		dev_dbg(&adev->auxdev.dev,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1175  			"FW error resp error %d, details %d\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1176  			resp->error_info.error, resp->error_info.error_details);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1177  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1178  	if (resp->stream_handle >= IPU6_ISYS_MAX_STREAMS) {
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1179  		dev_err(&adev->auxdev.dev, "bad stream handle %u\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1180  			resp->stream_handle);
+f50c4ca0a82003b Bingbu Cao        2024-01-31 @1181  		goto leave;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1182  	}
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1183  
+afa135d9336f38c Sakari Ailus      2025-12-18  1184  	guard(spinlock_irqsave)(&isys->streams_lock);
+afa135d9336f38c Sakari Ailus      2025-12-18  1185  
+45316ce8af169db Sakari Ailus      2025-12-01  1186  	stream = resp->stream_handle < IPU6_ISYS_MAX_STREAMS ?
+45316ce8af169db Sakari Ailus      2025-12-01  1187  		isys->streams_by_handle[resp->stream_handle] : NULL;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1188  	if (!stream) {
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1189  		dev_err(&adev->auxdev.dev, "stream of stream_handle %u is unused\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1190  			resp->stream_handle);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1191  		goto leave;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1192  	}
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1193  	stream->error = resp->error_info.error;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1194  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1195  	csi2 = ipu6_isys_subdev_to_csi2(stream->asd);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1196  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1197  	switch (resp->type) {
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1198  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_OPEN_DONE:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1199  		complete(&stream->stream_open_completion);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1200  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1201  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_CLOSE_ACK:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1202  		complete(&stream->stream_close_completion);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1203  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1204  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_START_ACK:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1205  		complete(&stream->stream_start_completion);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1206  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1207  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_START_AND_CAPTURE_ACK:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1208  		complete(&stream->stream_start_completion);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1209  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1210  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_STOP_ACK:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1211  		complete(&stream->stream_stop_completion);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1212  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1213  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_FLUSH_ACK:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1214  		complete(&stream->stream_stop_completion);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1215  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1216  	case IPU6_FW_ISYS_RESP_TYPE_PIN_DATA_READY:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1217  		/*
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1218  		 * firmware only release the capture msg until software
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1219  		 * get pin_data_ready event
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1220  		 */
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1221  		ipu6_put_fw_msg_buf(ipu6_bus_get_drvdata(adev), resp->buf_id);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1222  		if (resp->pin_id < IPU6_ISYS_OUTPUT_PINS &&
+c139c1ac06bea6e Stanislaw Gruszka 2025-05-02  1223  		    stream->output_pins_queue[resp->pin_id])
+c139c1ac06bea6e Stanislaw Gruszka 2025-05-02  1224  			ipu6_isys_queue_buf_ready(stream, resp);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1225  		else
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1226  			dev_warn(&adev->auxdev.dev,
+c139c1ac06bea6e Stanislaw Gruszka 2025-05-02  1227  				 "%d:No queue for pin id %d\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1228  				 resp->stream_handle, resp->pin_id);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1229  		if (csi2)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1230  			ipu6_isys_csi2_error(csi2);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1231  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1232  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1233  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_CAPTURE_ACK:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1234  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1235  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_START_AND_CAPTURE_DONE:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1236  	case IPU6_FW_ISYS_RESP_TYPE_STREAM_CAPTURE_DONE:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1237  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1238  	case IPU6_FW_ISYS_RESP_TYPE_FRAME_SOF:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1239  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1240  		ipu6_isys_csi2_sof_event_by_stream(stream);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1241  		stream->seq[stream->seq_index].sequence =
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1242  			atomic_read(&stream->sequence) - 1;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1243  		stream->seq[stream->seq_index].timestamp = ts;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1244  		dev_dbg(&adev->auxdev.dev,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1245  			"sof: handle %d: (index %u), timestamp 0x%16.16llx\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1246  			resp->stream_handle,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1247  			stream->seq[stream->seq_index].sequence, ts);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1248  		stream->seq_index = (stream->seq_index + 1)
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1249  			% IPU6_ISYS_MAX_PARALLEL_SOF;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1250  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1251  	case IPU6_FW_ISYS_RESP_TYPE_FRAME_EOF:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1252  		ipu6_isys_csi2_eof_event_by_stream(stream);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1253  		dev_dbg(&adev->auxdev.dev,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1254  			"eof: handle %d: (index %u), timestamp 0x%16.16llx\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1255  			resp->stream_handle,
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1256  			stream->seq[stream->seq_index].sequence, ts);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1257  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1258  	case IPU6_FW_ISYS_RESP_TYPE_STATS_DATA_READY:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1259  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1260  	default:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1261  		dev_err(&adev->auxdev.dev, "%d:unknown response type %u\n",
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1262  			resp->stream_handle, resp->type);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1263  		break;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1264  	}
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1265  
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1266  leave:
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1267  	ipu6_fw_isys_put_resp(isys->fwcom, IPU6_BASE_MSG_RECV_QUEUES);
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1268  	return 0;
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1269  }
+f50c4ca0a82003b Bingbu Cao        2024-01-31  1270  
+
+:::::: The code at line 1181 was first introduced by commit
+:::::: f50c4ca0a82003b8a542c3332fd292cf1bc355a2 media: intel/ipu6: add the main input system driver
+
+:::::: TO: Bingbu Cao <bingbu.cao@intel.com>
+:::::: CC: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 -- 
 0-DAY CI Kernel Test Service
