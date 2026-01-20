@@ -1,52 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C51C42980D;
-	Tue, 20 Jan 2026 13:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838B43B8D69
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 13:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768917313; cv=none; b=t+M0t8dXuokLzYyOUteottsfLbxMB2eQaaBJZA5sYlZtnn83BkpbwWdBdNgG4v2PPzbZBoZ4ZhxA4Zjz4UqKCZ8Um0RkK1AJAflGF2FxFVYSehJC08iXkL6GfK0OKQh/D3NSeivhlbmrZl+T5vgUIU9/5bJJzysXeGNPgke9hHc=
+	t=1768917448; cv=none; b=EcDRxSWnLQnTBQMMRWuP4JAcJPY/lERk7lLzR03876LlY0cwIjpK5B21kJe1gxK/4Gp0Kid4BrYp+ZuwQ9UeS4gn0+URMukLOPLRm0MB7r2/W9hhImFQm3kV1YsZDyPxkYlVX9pqOJN3iT2scGrhPoZix7JzyC15HozP4FZ7ppc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768917313; c=relaxed/simple;
-	bh=PjUrq5cWtFbXMjc2NQa42ZtqpF3yt0CzwHVTrsX+g20=;
+	s=arc-20240116; t=1768917448; c=relaxed/simple;
+	bh=Xo8qLFhLD7RZgI6o7gB7s6KkEEyxh92MZxcuCBFZmAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dtJeWDKqIyAl6gvy4925kiyX0KuTwDEDZYac93semCYYCNlWAZiMmMAU3QUsjBCWGfEk5eDl29dMM/wtX7y4Q/rhk8VaXoHgFQcWBXxaTY/N3HKRgrdU/1LhIDf809OT67ny2I8j0NAqHt1YZapPdBMAxqjsI2jZmuorc7RM9tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAruJHew; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=AH3XNSPdX0i/38876zEdPrFLq4mfHJo5FjTawdKjc9hRxQD4t16aXJfDQ+VU+SYFN0r53XujQBXe6VaH8qORFr0gv41Nxwnw9Vy0kqogcTWu+FhYWaTnZCt3zBrt0SvVSGfJ+pUjv2Ba1igzuRKr7oCpLWPMRn2ybHdlX4p4O4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e6JHAzYT; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAruJHew"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63EB0C19422;
-	Tue, 20 Jan 2026 13:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768917312;
-	bh=PjUrq5cWtFbXMjc2NQa42ZtqpF3yt0CzwHVTrsX+g20=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cAruJHew5WAvdT2fMAkD4tprZTxGpGVlg4fZ6VM6EfG6NgKAe+6w6dhKc5yYTDJMG
-	 AhRO+iY7shNn9Mnltsas2VT1z5/DS5p2wTpkcDef4hHBduNzcJCIDWdYXpS5VGU4sh
-	 Ofp/WzbN5v3cliWSW/VwZmN/WoS1RXiJciB1HrRgpz48jio9yHg2w8cWH15/YiK95y
-	 KFQ7MqOfZNcprjnTmGBjVWYGjRbNEh/YsazMuTHhmVEsN4UeZs4FXSNXEb7L7ghpJo
-	 PEJvgsu4hLU0PtGHlYCaKbDTM2XHdVHITS/tWVxr7fI1HGAe+PEZE1T08erKr82NCj
-	 HdDeiM7QSUdWg==
-Date: Tue, 20 Jan 2026 14:54:47 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e6JHAzYT"
+Date: Tue, 20 Jan 2026 21:56:59 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768917441;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3QpIyoYC+nMbp9UGDZ9Nxjg5u3kmtjxXbnx4WVI4Sas=;
+	b=e6JHAzYTer8dwPRGR1RoD5wGWxmDjRMRSfZ1c9MzzHBJ7goTcJKS5Tu8Zn3JaZ81CklAVP
+	oDfb1KooYntJajk4+sX6nG2gzYJXiLA1k+uhwVAtMqIiqFllSnsM0XAa1yJA413UF19O8Y
+	AtcKzru917XR3HbX9bvZkO07qmFz3Rs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Hao Li <hao.li@linux.dev>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Eric Dumazet <edumazet@google.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 0/2] scripts: introduce containerized builds
-Message-ID: <aW-JJ5DT-LRSZkdF@derry.ads.avm.de>
-Mail-Followup-To: Guillaume Tucker <gtucker@gtucker.io>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-References: <cover.1767199119.git.gtucker@gtucker.io>
+Subject: Re: [PATCH] slab: replace cache_from_obj() with inline checks
+Message-ID: <vyhpr6lq5rb6qgkshksg26a5ns5gd5ryqu46pqx2z5twy2gzlx@t4xaze2lhoen>
+References: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
+ <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
+ <8bd3c3e8-9865-4467-86d5-17d891f6f21b@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,100 +46,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1767199119.git.gtucker@gtucker.io>
+In-Reply-To: <8bd3c3e8-9865-4467-86d5-17d891f6f21b@suse.cz>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Dec 31, 2025 at 05:51:48PM +0100, Guillaume Tucker wrote:
-> This proposal emerged from discussions over email and after a talk at
-> Plumbers 2024:
+On Tue, Jan 20, 2026 at 01:55:09PM +0100, Vlastimil Babka wrote:
+> On 1/20/26 12:57, Hao Li wrote:
 > 
->     https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io/
+> >> @@ -6774,11 +6770,21 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
+> >>   */
+> >>  void kmem_cache_free(struct kmem_cache *s, void *x)
+> >>  {
+> >> -	s = cache_from_obj(s, x);
+> >> -	if (!s)
+> >> -		return;
+> >> +	struct slab *slab;
+> >> +
+> >> +	slab = virt_to_slab(x);
+> >> +
+> >> +	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
+> >> +	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
+> >> +
+> >> +		if (unlikely(!slab || (slab->slab_cache != s))) {
+> >> +			warn_free_bad_obj(s, x);
+> > 
+> > Just to make sure I'm understanding correctly, are we intentionally not
+> > releasing the object x in this case? Thanks.
 > 
-> The aim is to facilitate reproducing builds for CI bots as well as
-> developers using containers.  Here's an illustrative example with a
-> kernel.org toolchain in a Docker image from tuxmake:
-> 
->     $ scripts/container -i tuxmake/korg-clang-21 make LLVM=1 defconfig
->       HOSTCC  scripts/basic/fixdep
->       HOSTCC  scripts/kconfig/conf.o
->     [...]
->       HOSTCC  scripts/kconfig/util.o
->       HOSTLD  scripts/kconfig/conf
->     *** Default configuration is based on 'x86_64_defconfig'
->     #
->     # configuration written to .config
->     #
-> 
-> This patch series also includes a documentation page with all the
-> relevant details and further examples about how to use the tool.
-> 
-> To go one step further, I'm in the process of preparing reference
-> container images with kernel.org toolchains and no third-party
-> dependencies other than the base Debian distro.  See this thread for
-> more details and options to host them in an upstream way:
-> 
->     https://lore.kernel.org/all/cc737636-2a43-4a97-975e-4725733f7ee4@gtucker.io/
-> 
-> Say, to run KUnit using the latest kernel.org GCC toolchain:
-> 
->     scripts/container --shell \
->         -i registry.gitlab.com/gtucker/korg-containers/gcc:kunit -- \
->         tools/testing/kunit/kunit.py \
->             run \
->             --arch=x86_64 \
->             --cross_compile=x86_64-linux-
-> 
-> ---
-> Changes in v3:
-> - Refactor common code for Docker and Podman
-> - Add docs.kernel.org URL in help message
-> - Use pathlib Python package
-> - Handle signals in parent process by default
-> - Add --shell option to use an interactive shell
-> - Tweak debug messages in verbose mode
-> - Specify Python 3.10 as minimum version in the docs
-> - Provide an example env file in the docs
-> - Update docs regarding interactive shell usage
-> 
-> Changes in v2:
-> - Drop default image but make -i option required
-> - Look for Docker and Podman if no runtime specified
-> - Catch SIGINT from user to abort container with Docker
-> - Explicitly name each container with a UUID
-> - Update documentation accordingly
-> 
-> ---
-> 
-> Guillaume Tucker (2):
->   scripts: add tool to run containerized builds
->   Documentation: dev-tools: add container.rst page
-> 
->  Documentation/dev-tools/container.rst | 201 ++++++++++++++++++++++++++
->  Documentation/dev-tools/index.rst     |   1 +
->  scripts/container                     | 199 +++++++++++++++++++++++++
->  3 files changed, 401 insertions(+)
->  create mode 100644 Documentation/dev-tools/container.rst
->  create mode 100755 scripts/container
-> 
-> -- 
-> 2.47.3
-> 
-> 
+> Yes, it means something went wrong so it's better not to do anything.
 
-Out-of-source builds do not work on my system with podman.  If this is
-expected, I think it would be great to mention that somewhere in the
-documentation.
+Got it, that makes sense - thanks!
 
+> That was true before this patch as well.
 
-Nevertheless, thanks a lot!  I expect me to use that a lot in the
-future!
-
-For the whole patch set:
-Tested-by: Nicolas Schier <nsc@kernel.org>
-Acked-by: Nicolas Schier <nsc@kernel.org>
-
-Kind regards,
-Nicolas
-
+I'm still not entirely sure I follow. I read the original code, and it seems
+like it retrieved the real cache from the object and released the object into
+that correct cache. Did I misunderstand something?
 
 -- 
-Nicolas
+Thanks,
+Hao
+
+> 
+> >> +			return;
+> >> +		}
+> >> +	}
+> >> +
+> >>  	trace_kmem_cache_free(_RET_IP_, x, s);
+> >> -	slab_free(s, virt_to_slab(x), x, _RET_IP_);
+> >> +	slab_free(s, slab, x, _RET_IP_);
+> >>  }
+> >>  EXPORT_SYMBOL(kmem_cache_free);
+> >>  
+> >> @@ -7305,7 +7311,7 @@ int build_detached_freelist(struct kmem_cache *s, size_t size,
+> >>  		df->s = slab->slab_cache;
+> >>  	} else {
+> >>  		df->slab = slab;
+> >> -		df->s = cache_from_obj(s, object); /* Support for memcg */
+> >> +		df->s = s;
+> >>  	}
+> >>  
+> >>  	/* Start new detached freelist */
+> >> 
+> >> ---
+> >> base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+> >> change-id: 20260120-b4-remove_cache_from_obj-190fcaf16789
+> >> 
+> >> Best regards,
+> >> -- 
+> >> Vlastimil Babka <vbabka@suse.cz>
+> >> 
+> 
