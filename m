@@ -1,211 +1,356 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-24416.protonmail.ch (mail-24416.protonmail.ch [109.224.244.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C061F30BB
-	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 14:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239F143CEF7
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 14:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768917688; cv=none; b=osHyqSYaEstyXDdYau6GwFcHhNPMPcjLwNsjAo49mhZLUVYmJv6Ecox4WoeA8sr8IYZS0pWO5grLwq2/upYGD0HUXUI/2m/vXp8PzOnjRsTNWNBV1+KvspKBKNuksTKR/KbHeAYVR+7O1lALRaMhnoU8dtmFD2t4/npQxwZf7bE=
+	t=1768920030; cv=none; b=XAq84lrfG5N52cDJG/atmN1BFwAjhB4IjboTkugOh3rn3rqBiLlCRC7HVM2KpvzwIkmtVtQSXRmGD9inOR5uNtNtCXa1yxWt7tf20opN+7zvh+fps1XUdI0r6BWhVJKMJg/4EXvWgqnLR0VdsxX4oWAdxCIDuWb1TpciChBXJ8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768917688; c=relaxed/simple;
-	bh=mrpONxaVeeb2NTGfqVsGe2mi1muE/dAiqr4EeJp2Ysk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c9G+vZ7dXCmcl2bryjKQrSdr48JcOd/HProOZBNB6o1ktwYpvaPthd4nQlaqibttmOE5xWtt+iKgVVc3vq4skk1ZT0sQ14lmINP5vU/dcFwaxAMyZWvdH19sti7UnWsGgiprDKH38FzoIukEAlQg74dlDynJ/rScfQc+y3Ztp1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QF9TNIp7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2GxwD/W9; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QF9TNIp7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2GxwD/W9; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1768920030; c=relaxed/simple;
+	bh=NvbdBcOnGtFhIFohdPyR/iugwmiglLh8w443r4LwnVM=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hP8JsRk0bwwu3GHKkr2aRoNpZsn/sfSfEMW0wKalihcH6QcLenXb3LOOFsziyu3LMZ62RaA5x3lrYwpd2xG5UEFCGVKJP7LJCUbX9Z37yWsMMmmSwZ1F01WvmAC56WoyuxezefXQREfxfSQ7lwpCEGW71+Y3EblEqb9poPzdgZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=GyWAu6jQ; arc=none smtp.client-ip=109.224.244.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QF9TNIp7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2GxwD/W9";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QF9TNIp7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2GxwD/W9"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7CAF9337D0;
-	Tue, 20 Jan 2026 14:01:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768917683; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WB/QAIhLT30gDx+iBsgOOPnda3Hx0tMddPYYIhfYYOA=;
-	b=QF9TNIp7cpmu/rXWlGlQdyofxy8eqMnoupjgmIAkpL78b/S1s4FFSu8wDVwu26fAJyWLP9
-	Pn/Zkt/rpy3SRT1kUvkkFLK4S/E0vM1tg/xlQTMZH664HVKhXSnkIeSUHbwgpYtW9BcSRO
-	Lf/msVv40yhL/zY1HsH91Yeeg038wkc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768917683;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WB/QAIhLT30gDx+iBsgOOPnda3Hx0tMddPYYIhfYYOA=;
-	b=2GxwD/W9SNxf7x2i61kshj3kQvNwvD/njJP5TLYqNWSKekQs58CC0JsqQI4AklMYtMDXF+
-	kiNLM6Rm0Zpcw9Ag==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=QF9TNIp7;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="2GxwD/W9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768917683; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WB/QAIhLT30gDx+iBsgOOPnda3Hx0tMddPYYIhfYYOA=;
-	b=QF9TNIp7cpmu/rXWlGlQdyofxy8eqMnoupjgmIAkpL78b/S1s4FFSu8wDVwu26fAJyWLP9
-	Pn/Zkt/rpy3SRT1kUvkkFLK4S/E0vM1tg/xlQTMZH664HVKhXSnkIeSUHbwgpYtW9BcSRO
-	Lf/msVv40yhL/zY1HsH91Yeeg038wkc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768917683;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WB/QAIhLT30gDx+iBsgOOPnda3Hx0tMddPYYIhfYYOA=;
-	b=2GxwD/W9SNxf7x2i61kshj3kQvNwvD/njJP5TLYqNWSKekQs58CC0JsqQI4AklMYtMDXF+
-	kiNLM6Rm0Zpcw9Ag==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5F8E03EA63;
-	Tue, 20 Jan 2026 14:01:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Ixu5FbOKb2kuRAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 20 Jan 2026 14:01:23 +0000
-Message-ID: <efd02f1f-b09b-4786-aa55-aa366f58442f@suse.cz>
-Date: Tue, 20 Jan 2026 15:01:23 +0100
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="GyWAu6jQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1768920025; x=1769179225;
+	bh=SYwR7mzcRNmkDkZFtWt3FaqD6GeRNp89lD+pp3qVLF0=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=GyWAu6jQ4eDP0ee6dhl6c0QtYGx/LcggVo7KU5MH3yWzl7frHDoklW3IwQD8MZPdY
+	 Svu+3I02rjijfdJ8y/1q0o5/g3jTPlTFZnArTtJ5i0STJPsu5Mj84iXE5WEEbkB5ov
+	 BOtb02GpzPfV/mecBquJINRR8cPpFYqXk2cFyWjXIjPpQeofT7LpmGuAkVRb2OPj8x
+	 72/7vQv+sMDzFOPBlMxucK/Kc3X/+qeaorWf6ZBRpGLB3g+N3JZrdh7dGInOSHGPsM
+	 TTkSGoLe7xVf1z4NJLoT9PH7jPdQJOgjD6bj+gvAh5rWNLYFsrcz58dq0J8tcHZaJk
+	 W9U6lXitlcDJA==
+Date: Tue, 20 Jan 2026 14:40:15 +0000
+To: chleroy@kernel.org, surenb@google.com, justinstitt@google.com, nsc@kernel.org, jan.kiszka@siemens.com, trintaeoitogc@gmail.com, dave.hansen@linux.intel.com, ryabinin.a.a@gmail.com, kees@kernel.org, maciej.wieczor-retman@intel.com, urezki@gmail.com, will@kernel.org, nick.desaulniers+lkml@gmail.com, brgerst@gmail.com, ubizjak@gmail.com, rppt@kernel.org, samitolvanen@google.com, thuth@redhat.com, mhocko@suse.com, nathan@kernel.org, osandov@fb.com, thomas.lendacky@amd.com, yeoreum.yun@arm.com, akpm@linux-foundation.org, catalin.marinas@arm.com, morbo@google.com, andreyknvl@gmail.com, jackmanb@google.com, mingo@redhat.com, jpoimboe@kernel.org, vbabka@suse.cz, corbet@lwn.net, lorenzo.stoakes@oracle.com, vincenzo.frascino@arm.com, luto@kernel.org, glider@google.com, weixugc@google.com, axelrasmussen@google.com, samuel.holland@sifive.com, kbingham@kernel.org, jeremy.linton@arm.com, kas@kernel.org, tglx@kernel.org, ardb@kernel.org, peterz@infradead.org, hpa@zytor.com, dvyukov@google.com,
+	yuanchu@google.com, leitao@debian.org, david@kernel.org, anshuman.khandual@arm.com, bp@alien8.de, Liam.Howlett@oracle.com
+From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, m.wieczorretman@pm.me
+Subject: [PATCH v9 00/13] kasan: x86: arm64: KASAN tag-based mode for x86
+Message-ID: <cover.1768845098.git.m.wieczorretman@pm.me>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: 73a30de0b93895cc80a2f788f03a5bd41b564548
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] slab: replace cache_from_obj() with inline checks
-Content-Language: en-US
-To: Hao Li <hao.li@linux.dev>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Eric Dumazet <edumazet@google.com>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
- <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
- <8bd3c3e8-9865-4467-86d5-17d891f6f21b@suse.cz>
- <vyhpr6lq5rb6qgkshksg26a5ns5gd5ryqu46pqx2z5twy2gzlx@t4xaze2lhoen>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <vyhpr6lq5rb6qgkshksg26a5ns5gd5ryqu46pqx2z5twy2gzlx@t4xaze2lhoen>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.51
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 7CAF9337D0
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 1/20/26 14:56, Hao Li wrote:
-> On Tue, Jan 20, 2026 at 01:55:09PM +0100, Vlastimil Babka wrote:
->> On 1/20/26 12:57, Hao Li wrote:
->> 
->> >> @@ -6774,11 +6770,21 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
->> >>   */
->> >>  void kmem_cache_free(struct kmem_cache *s, void *x)
->> >>  {
->> >> -	s = cache_from_obj(s, x);
->> >> -	if (!s)
->> >> -		return;
->> >> +	struct slab *slab;
->> >> +
->> >> +	slab = virt_to_slab(x);
->> >> +
->> >> +	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
->> >> +	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
->> >> +
->> >> +		if (unlikely(!slab || (slab->slab_cache != s))) {
->> >> +			warn_free_bad_obj(s, x);
->> > 
->> > Just to make sure I'm understanding correctly, are we intentionally not
->> > releasing the object x in this case? Thanks.
->> 
->> Yes, it means something went wrong so it's better not to do anything.
-> 
-> Got it, that makes sense - thanks!
-> 
->> That was true before this patch as well.
-> 
-> I'm still not entirely sure I follow. I read the original code, and it seems
-> like it retrieved the real cache from the object and released the object into
-> that correct cache. Did I misunderstand something?
+=3D=3D=3D=3D=3D=3D=3D Introduction
+The patchset aims to add a KASAN tag-based mode for the x86 architecture
+with the help of the new CPU feature called Linear Address Masking
+(LAM). Main improvement introduced by the series is 2x lower memory
+usage compared to KASAN's generic mode, the only currently available
+mode on x86. The tag based mode may also find errors that the generic
+mode couldn't because of differences in how these modes operate.
 
-You're right, I misread it as returning NULL, but that was only on
-virt_to_slab() failure. So that's a change, but I believe a proper one. But
-I'll mention it in the changelog and the comment. Thanks!
+=3D=3D=3D=3D=3D=3D=3D How does KASAN' tag-based mode work?
+When enabled, memory accesses and allocations are augmented by the
+compiler during kernel compilation. Instrumentation functions are added
+to each memory allocation and each pointer dereference.
 
+The allocation related functions generate a random tag and save it in
+two places: in shadow memory that maps to the allocated memory, and in
+the top bits of the pointer that points to the allocated memory. Storing
+the tag in the top of the pointer is possible because of Top-Byte Ignore
+(TBI) on arm64 architecture and LAM on x86.
+
+The access related functions are performing a comparison between the tag
+stored in the pointer and the one stored in shadow memory. If the tags
+don't match an out of bounds error must have occurred and so an error
+report is generated.
+
+The general idea for the tag-based mode is very well explained in the
+series with the original implementation [1].
+
+[1] https://lore.kernel.org/all/cover.1544099024.git.andreyknvl@google.com/
+
+=3D=3D=3D=3D=3D=3D=3D Differences summary compared to the arm64 tag-based m=
+ode
+- Tag width:
+=09- Tag width influences the chance of a tag mismatch due to two
+=09  tags from different allocations having the same value. The
+=09  bigger the possible range of tag values the lower the chance
+=09  of that happening.
+=09- Shortening the tag width from 8 bits to 4, while it can help
+=09  with memory usage, it also increases the chance of not
+=09  reporting an error. 4 bit tags have a ~7% chance of a tag
+=09  mismatch.
+
+- Address masking mechanism
+=09- TBI in arm64 allows for storing metadata in the top 8 bits of
+=09  the virtual address.
+=09- LAM in x86 allows storing tags in bits [62:57] of the pointer.
+=09  To maximize memory savings the tag width is reduced to bits
+=09  [60:57].
+
+- Inline mode mismatch reporting
+=09- Arm64 inserts a BRK instruction to pass metadata about a tag
+=09  mismatch to the KASAN report.
+=09- Right now on x86 the INT3 instruction is used for the same
+=09  purpose. The attempt to move it over to use UD1 is already
+=09  implemented and tested but relies on another series that needs
+=09  merging first. Therefore this patch will be posted separately
+=09  once the dependency is satisfied by being merged upstream.
+
+=3D=3D=3D=3D=3D=3D=3D Testing
+Checked all the kunits for both software tags and generic KASAN after
+making changes.
+
+In generic mode (both with these patches and without) the results were:
+
+kasan: pass:61 fail:1 skip:14 total:76
+Totals: pass:61 fail:1 skip:14 total:76
+not ok 1 kasan
+
+and for software tags:
+
+kasan: pass:65 fail:1 skip:10 total:76
+Totals: pass:65 fail:1 skip:10 total:76
+not ok 1 kasan
+
+At the time of testing the one failing case is also present on generic
+mode without this patchset applied. This seems to point to something
+else being at fault for the one case not passing. The test case in
+question concerns strscpy() out of bounds error not getting caught.
+
+=3D=3D=3D=3D=3D=3D=3D Benchmarks [1]
+All tests were ran on a Sierra Forest server platform. The only
+differences between the tests were kernel options:
+=09- CONFIG_KASAN
+=09- CONFIG_KASAN_GENERIC
+=09- CONFIG_KASAN_SW_TAGS
+=09- CONFIG_KASAN_INLINE [1]
+=09- CONFIG_KASAN_OUTLINE
+
+Boot time (until login prompt):
+* 02:55 for clean kernel
+* 05:42 / 06:32 for generic KASAN (inline/outline)
+* 05:58 for tag-based KASAN (outline) [2]
+
+Total memory usage (512GB present on the system - MemAvailable just
+after boot):
+* 12.56 GB for clean kernel
+* 81.74 GB for generic KASAN
+* 44.39 GB for tag-based KASAN
+
+Kernel size:
+* 14 MB for clean kernel
+* 24.7 MB / 19.5 MB for generic KASAN (inline/outline)
+* 27.1 MB / 18.1 MB for tag-based KASAN (inline/outline)
+
+Work under load time comparison (compiling the mainline kernel) (200 cores)=
+:
+*  62s for clean kernel
+* 171s / 125s for generic KASAN (outline/inline)
+* 145s for tag-based KASAN (outline) [2]
+
+[1] Currently inline mode doesn't work on x86 due to things missing in
+the compiler. I have written a patch for clang that seems to fix the
+inline mode and I was able to boot and check that all patches regarding
+the inline mode work as expected. My hope is to post the patch to LLVM
+once this series is completed, and then make inline mode available in
+the kernel config.
+
+[2] While I was able to boot the inline tag-based kernel with my
+compiler changes in a simulated environment, due to toolchain
+difficulties I couldn't get it to boot on the machine I had access to.
+Also boot time results from the simulation seem too good to be true, and
+they're much too worse for the generic case to be believable. Therefore
+I'm posting only results from the physical server platform.
+
+=3D=3D=3D=3D=3D=3D=3D Compilation
+Clang was used to compile the series (make LLVM=3D1) since gcc doesn't
+seem to have support for KASAN tag-based compiler instrumentation on
+x86. Patchset does seem to compile with gcc without an issue but doesn't
+boot afterwards.
+
+=3D=3D=3D=3D=3D=3D=3D Dependencies
+The series is based on 6.19-rc6.
+
+=3D=3D=3D=3D=3D=3D=3D Previous versions
+v8: https://lore.kernel.org/all/cover.1768233085.git.m.wieczorretman@pm.me/
+v7: https://lore.kernel.org/all/cover.1765386422.git.m.wieczorretman@pm.me/
+v6: https://lore.kernel.org/all/cover.1761763681.git.m.wieczorretman@pm.me/
+v5: https://lore.kernel.org/all/cover.1756151769.git.maciej.wieczor-retman@=
+intel.com/
+v4: https://lore.kernel.org/all/cover.1755004923.git.maciej.wieczor-retman@=
+intel.com/
+v3: https://lore.kernel.org/all/cover.1743772053.git.maciej.wieczor-retman@=
+intel.com/
+v2: https://lore.kernel.org/all/cover.1739866028.git.maciej.wieczor-retman@=
+intel.com/
+v1: https://lore.kernel.org/all/cover.1738686764.git.maciej.wieczor-retman@=
+intel.com/
+
+=3D=3D=3D (two fixes patches were split off after v6) (merged into mm-unsta=
+ble)
+v1: https://lore.kernel.org/all/cover.1762267022.git.m.wieczorretman@pm.me/
+v2: https://lore.kernel.org/all/cover.1764685296.git.m.wieczorretman@pm.me/
+v3: https://lore.kernel.org/all/cover.1764874575.git.m.wieczorretman@pm.me/
+v4: https://lore.kernel.org/all/cover.1764945396.git.m.wieczorretman@pm.me/
+
+Changes v9:
+- Lock HAVE_ARCH_KASAN_SW_TAGS behind CC_IS_CLANG due to gcc not working
+  in practice.
+- Remove pr_info() from KASAN initialization.
+- Add paragraph to mm.rst explaining the alternative KASAN memory
+  ranges.
+- Move out arch based code from kasan_non_canonical_hook() into arch
+  subdirectories. arm64 and non-arch changes in patch 1, x86 changes in
+  patch 12.
+- Reset tag bits on arm64's non-canonical hook to allow inline mode to
+  work.
+- Revert modifying __is_canonical_address() since it can break KVM. Just
+  untag address in copy_from_kernel_no_fault_allowed().
+- Add a bunch of reviewed-by tags.
+
+Changes v8:
+- Detached the UD1/INT3 inline patch from the series so the whole
+  patchset can be merged without waiting on other dependency series. For
+  now with lack of compiler support for the inline mode that patch
+  didn't work anyway so this delay is not an issue.
+- Rebased patches onto 6.19-rc5.
+- Added acked-by tag to "kasan: arm64: x86: Make special tags arch
+  specific".
+
+Changes v7:
+- Rebased the series onto Peter Zijlstra's "WARN() hackery" v2 patchset.
+- Fix flipped memset arguments in "x86/kasan: KASAN raw shadow memory
+  PTE init".
+- Reorder tag width defines on arm64 to avoid redefinition warnings.
+- Split off the pcpu unpoison patches into a separate fix oriented
+  series.
+- Redid the canonicality checks so it works for KVM too (didn't change
+  the __canonical_address() function previously).
+- A lot of fixes pointed out by Alexander in his great review:
+=09- Fixed "x86/mm: Physical address comparisons in fill_p*d/pte"
+=09- Merged "Support tag widths less than 8 bits" and "Make special
+=09  tags arch specific".
+=09- Added comments and extended patch messages for patches
+=09  "x86/kasan: Make software tag-based kasan available" and
+=09  "mm/execmem: Untag addresses in EXECMEM_ROX related pointer arithmetic=
+",
+=09- Fixed KASAN_TAG_MASK definition order so all patches compile
+=09  individually.
+=09- Renamed kasan_inline.c to kasan_sw_tags.c.
+
+Changes v6:
+- Initialize sw-tags only when LAM is available.
+- Move inline mode to use UD1 instead of INT3
+- Remove inline multishot patch.
+- Fix the canonical check to work for user addresses too.
+- Revise patch names and messages to align to tip tree rules.
+- Fix vdso compilation issue.
+
+Changes v5:
+- Fix a bunch of arm64 compilation errors I didn't catch earlier.
+  Thank You Ada for testing the series!
+- Simplify the usage of the tag handling x86 functions (virt_to_page,
+  phys_addr etc.).
+- Remove within() and within_range() from the EXECMEM_ROX patch.
+
+Changes v4:
+- Revert x86 kasan_mem_to_shadow() scheme to the same on used in generic
+  KASAN. Keep the arithmetic shift idea for the KASAN in general since
+  it makes more sense for arm64 and in risc-v.
+- Fix inline mode but leave it unavailable until a complementary
+  compiler patch can be merged.
+- Apply Dave Hansen's comments on series formatting, patch style and
+  code simplifications.
+
+Changes v3:
+- Remove the runtime_const patch and setup a unified offset for both 5
+  and 4 paging levels.
+- Add a fix for inline mode on x86 tag-based KASAN. Add a handler for
+  int3 that is generated on inline tag mismatches.
+- Fix scripts/gdb/linux/kasan.py so the new signed mem_to_shadow() is
+  reflected there.
+- Fix Documentation/arch/arm64/kasan-offsets.sh to take new offsets into
+  account.
+- Made changes to the kasan_non_canonical_hook() according to upstream
+  discussion.
+- Remove patches 2 and 3 since they related to risc-v and this series
+  adds only x86 related things.
+- Reorder __tag_*() functions so they're before arch_kasan_*(). Remove
+  CONFIG_KASAN condition from __tag_set().
+
+Changes v2:
+- Split the series into one adding KASAN tag-based mode (this one) and
+  another one that adds the dense mode to KASAN (will post later).
+- Removed exporting kasan_poison() and used a wrapper instead in
+  kasan_init_64.c
+- Prepended series with 4 patches from the risc-v series and applied
+  review comments to the first patch as the rest already are reviewed.
+
+Maciej Wieczor-Retman (11):
+  kasan: Fix inline mode for x86 tag-based mode
+  x86/kasan: Add arch specific kasan functions
+  x86/mm: Reset tag for virtual to physical address conversions
+  mm/execmem: Untag addresses in EXECMEM_ROX related pointer arithmetic
+  x86/mm: Use physical address comparisons in fill_p*d/pte
+  x86/kasan: Initialize KASAN raw shadow memory
+  x86/mm: Reset tags in a canonical address helper call
+  x86/mm: Initialize LAM_SUP
+  x86: Increase minimal SLAB alignment for KASAN
+  x86/kasan: Use a logical bit shift for kasan_mem_to_shadow
+  x86/kasan: Make software tag-based kasan available
+
+Samuel Holland (2):
+  kasan: sw_tags: Use arithmetic shift for shadow computation
+  kasan: arm64: x86: Make special tags arch specific
+
+ Documentation/arch/arm64/kasan-offsets.sh |  8 ++-
+ Documentation/arch/x86/x86_64/mm.rst      | 10 ++-
+ MAINTAINERS                               |  4 +-
+ arch/arm64/Kconfig                        | 10 +--
+ arch/arm64/include/asm/kasan-tags.h       | 14 ++++
+ arch/arm64/include/asm/kasan.h            |  7 +-
+ arch/arm64/include/asm/memory.h           | 14 +++-
+ arch/arm64/include/asm/uaccess.h          |  1 +
+ arch/arm64/mm/Makefile                    |  2 +
+ arch/arm64/mm/kasan_init.c                |  7 +-
+ arch/arm64/mm/kasan_sw_tags.c             | 35 ++++++++++
+ arch/x86/Kconfig                          |  4 ++
+ arch/x86/boot/compressed/misc.h           |  1 +
+ arch/x86/include/asm/cache.h              |  4 ++
+ arch/x86/include/asm/kasan-tags.h         |  9 +++
+ arch/x86/include/asm/kasan.h              | 79 ++++++++++++++++++++++-
+ arch/x86/include/asm/page.h               |  8 +++
+ arch/x86/include/asm/page_64.h            |  1 +
+ arch/x86/kernel/head_64.S                 |  3 +
+ arch/x86/mm/init.c                        |  3 +
+ arch/x86/mm/init_64.c                     | 11 ++--
+ arch/x86/mm/kasan_init_64.c               | 24 ++++++-
+ arch/x86/mm/maccess.c                     |  2 +-
+ arch/x86/mm/physaddr.c                    |  2 +
+ include/linux/kasan-tags.h                | 21 ++++--
+ include/linux/kasan.h                     | 13 ++--
+ include/linux/mm.h                        |  6 +-
+ include/linux/mmzone.h                    |  2 +-
+ include/linux/page-flags-layout.h         |  9 +--
+ lib/Kconfig.kasan                         |  3 +-
+ mm/execmem.c                              |  9 ++-
+ mm/kasan/kasan.h                          |  7 ++
+ mm/kasan/report.c                         | 15 ++++-
+ mm/vmalloc.c                              |  7 +-
+ scripts/Makefile.kasan                    |  3 +
+ scripts/gdb/linux/kasan.py                |  5 +-
+ scripts/gdb/linux/mm.py                   |  5 +-
+ 37 files changed, 312 insertions(+), 56 deletions(-)
+ create mode 100644 arch/arm64/include/asm/kasan-tags.h
+ create mode 100644 arch/arm64/mm/kasan_sw_tags.c
+ create mode 100644 arch/x86/include/asm/kasan-tags.h
+
+--=20
+2.52.0
 
 
