@@ -1,102 +1,120 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DD630BB80
-	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 15:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D516C472766
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 15:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768923586; cv=none; b=GcKL85KDdCTEKBAaWM/3eyM3WMJcl/MwSJ4DiBQOk+E6DvsV2n4ods3Piax0o2TfcrPyOuDbkX4vQJUjQHoe1zT3PVEu5+4RVu2coXOAZTdue/+k88bxzha6RuHM7g1xbQ/KF+EMr+FdxmkrZpX4iYwqRLA2FG9FONeNTNJiI3w=
+	t=1768924246; cv=none; b=BOqFL6/oslbUeTuJ/Mq4/Z0PJa+5aTSD3BI9/sWUzBd934fsNMPynsx2Lt5K0wCiwZYIQWb/mEqlbxL3D33LwJqaMz+0wlj2vf2hyXVS8czzWF8upQ3rtKxPcrarifYnAEhQo1VPvSaLQNZh1KwgZIYY+51r+UzyNQ+//SgoTqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768923586; c=relaxed/simple;
-	bh=V40aj+iEcKhkrs1YNrs2AN6U2XZeqfJ35ZGRQdMdvNA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cciChuwCMs+Wu83ffZXq2gckcYc4nA3ijy6gmtavD1xR0qK2HMTbs4kNgzZ0rP+WOXjHzByAf85mX3cq63k9wusLzCegDDtkrfqOIvpz4j5FZQa9nbwG39EvQpTahxLDQBnhLkGTfoUunJuGLpeMOtKxu13PCHAoNsY+1nKBzmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SoJ3oqHR; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1768924246; c=relaxed/simple;
+	bh=XpG3bz7R9ediK2WwkkENXDNIEHxL/xrT9HAlIl9whaE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DVMHurARrrUWhgN8uk+jXe4wocbgYgl2WPMnZrdxRDzP4YgYw7/M+uEHGmDQEKBKjZ2MxDvwALV9bdtIWdSMW9FB6HvzhTfW0T2hE2d0py823JQbz59UmvJhfpBr7QeJ3vgy0stvvy2SrfWCGTRu1qCNOo8yGkB2iYcKlU7pbCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2yWLVjS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SoJ3oqHR"
-Date: Tue, 20 Jan 2026 23:39:19 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768923582;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=urvg/XtaZlBbzcQcq8EiqAuOpFhl6Pv+GSbmq2DJdbA=;
-	b=SoJ3oqHRsMJsnydigqOEf56Ym9ympNUfN6BX0yHAWE/3VWNWtkvE0OtshjQfgYdtr5SwSe
-	miqp6VjWjBsnqxZyrlUwbBi602tlImge9bMaNseMkf0S6oL8i9gb6aM5dbK0h+T+MbZ1sh
-	j+oW7QrWCgKlfEkXNQ54Y8vQYS3RQs8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Li <hao.li@linux.dev>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Eric Dumazet <edumazet@google.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] slab: replace cache_from_obj() with inline checks
-Message-ID: <obrup5ejxuy42fpwmzczvo5ubyv62tocoqooqpxg3u5eq2i2sg@qpcialjznogf>
-References: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
- <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
- <8bd3c3e8-9865-4467-86d5-17d891f6f21b@suse.cz>
- <vyhpr6lq5rb6qgkshksg26a5ns5gd5ryqu46pqx2z5twy2gzlx@t4xaze2lhoen>
- <efd02f1f-b09b-4786-aa55-aa366f58442f@suse.cz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2yWLVjS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3ECC4AF09
+	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 15:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768924246;
+	bh=XpG3bz7R9ediK2WwkkENXDNIEHxL/xrT9HAlIl9whaE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=D2yWLVjSmzTjDm8sCdj82rjRC6WYep2mBOgo190kHApCzs2hSee5oCpIe2ZT1ov2d
+	 /iTR+KBW/7nuNo1o28BQl8IAIg0XoXNJqRAmS8FGIVeDEX/PTvcuF2z/sd6Wy8YyAy
+	 KWIuJIIVEX3Dwxfo8PZe+GhEMwsOClJzrrbkN05MQom9HSMTDQpGC1CA706jAVxxHw
+	 05HwAj2SC4O4BaioXBqxixSBGlLSuWmXvgWl6cO6IFL1REkZBFIIhbG91yPMaYVotX
+	 hezr7hTqt5U8nfalwzfzo5jOUZLSWfHfjZxv2Undv3SWIL6JvUKZ1ZIjFJ1S1N1jFl
+	 W3X2/9RiDrFvQ==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-383122fbc9bso43011531fa.1
+        for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 07:50:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXfV2tI6DWlBL0xxTB/WYvaeauOV5dj7atiJLOW/rzFYP/42NSPj6iLFEix5uYYIB1zYHzi@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx+32yyFHvJWCpWIhSIRyDscodsI7dfD3MzCZ/BEkez+qdk4/KO
+	zZtQtZ0uKYs0lC39INVPwmaI4HYn1S6LUrr8pptu7H1IWhoBgtIqiEbQrbDhT+BjwFAwO8tmriv
+	MIkFJ9T/rTh/BWcP3VS8kFBvLgWmSNiI=
+X-Received: by 2002:a2e:a905:0:b0:383:20ac:fb60 with SMTP id
+ 38308e7fff4ca-383842de819mr53698121fa.29.1768924245171; Tue, 20 Jan 2026
+ 07:50:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efd02f1f-b09b-4786-aa55-aa366f58442f@suse.cz>
-X-Migadu-Flow: FLOW_OUT
+References: <20260116-printf-kunit-printf-attr-v2-1-3dd7fefc3207@kernel.org> <aW3pgf4FQHFCC9Bm@smile.fi.intel.com>
+In-Reply-To: <aW3pgf4FQHFCC9Bm@smile.fi.intel.com>
+From: Tamir Duberstein <tamird@kernel.org>
+Date: Tue, 20 Jan 2026 10:50:09 -0500
+X-Gmail-Original-Message-ID: <CAJ-ks9kOpAVq=-b2AXp02F2gJEAmJZxKE=UAGa5ypsVE_an3pQ@mail.gmail.com>
+X-Gm-Features: AZwV_QhX9drB1hgqJ9klVbFZNHTUIutPHEp3R-rgb5Lnsmq4SJrmmeg7Xe6MtRA
+Message-ID: <CAJ-ks9kOpAVq=-b2AXp02F2gJEAmJZxKE=UAGa5ypsVE_an3pQ@mail.gmail.com>
+Subject: Re: [PATCH v2] printf: convert test_hashed into macro
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev, 
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 20, 2026 at 03:01:23PM +0100, Vlastimil Babka wrote:
-> On 1/20/26 14:56, Hao Li wrote:
-> > On Tue, Jan 20, 2026 at 01:55:09PM +0100, Vlastimil Babka wrote:
-> >> On 1/20/26 12:57, Hao Li wrote:
-> >> 
-> >> >> @@ -6774,11 +6770,21 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
-> >> >>   */
-> >> >>  void kmem_cache_free(struct kmem_cache *s, void *x)
-> >> >>  {
-> >> >> -	s = cache_from_obj(s, x);
-> >> >> -	if (!s)
-> >> >> -		return;
-> >> >> +	struct slab *slab;
-> >> >> +
-> >> >> +	slab = virt_to_slab(x);
-> >> >> +
-> >> >> +	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
-> >> >> +	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
-> >> >> +
-> >> >> +		if (unlikely(!slab || (slab->slab_cache != s))) {
-> >> >> +			warn_free_bad_obj(s, x);
-> >> > 
-> >> > Just to make sure I'm understanding correctly, are we intentionally not
-> >> > releasing the object x in this case? Thanks.
-> >> 
-> >> Yes, it means something went wrong so it's better not to do anything.
-> > 
-> > Got it, that makes sense - thanks!
-> > 
-> >> That was true before this patch as well.
-> > 
-> > I'm still not entirely sure I follow. I read the original code, and it seems
-> > like it retrieved the real cache from the object and released the object into
-> > that correct cache. Did I misunderstand something?
-> 
-> You're right, I misread it as returning NULL, but that was only on
-> virt_to_slab() failure. So that's a change, but I believe a proper one.
+On Mon, Jan 19, 2026 at 3:21=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Jan 16, 2026 at 11:27:03AM -0500, Tamir Duberstein wrote:
+> > This allows the compiler to check the arguments against the __printf
+>
+> __printf() since it takes parameters, OTOH it's an attribute at the end,
+> so I have no strong opinion on how to spell it.
+>
+> > attribute on __test. This produces better diagnostics when incorrect
+>
+> __test()
+>
+> *This is reference to a function.
+>
+> > inputs are passed.
+>
+> ...
+>
+> > +/*
+> > + * This is a macro so that the compiler can compare its arguments to t=
+he
+> > + * __printf attribute on __test. This cannot be a function with a __pr=
+intf
+> > + * attribute because GCC requires __printf functions to be variadic.
+>
+> As per commit message remarks.
+>
+> > + */
+> > +#define test_hashed(kunittest, fmt, p)                                =
+   \
+> > +     do {                                                             =
+\
+> > +             char buf[PLAIN_BUF_SIZE];                                =
+\
+> > +             plain_hash_to_buffer(kunittest, p, buf, PLAIN_BUF_SIZE); =
+\
+> > +             test(buf, fmt, p);                                       =
+\
+> > +     } while (0)
+>
+> Make sure you used tabs to indent the \:s.
+>
+> ...
+>
+> The downside of a macro is a killing of compile-time type checks.
 
-Yes, I agree - the current handling looks good to me.
+This macro still bottoms out in __test() which is a function, so I
+believe it preserves (and enhances, per the commit message)
+compile-time checks.
 
-> But I'll mention it in the changelog and the comment. Thanks!
+I'll send v3 with the changes you requested above.
 
-Sounds great, thanks for taking care of that.
-
-Reviewed-by: Hao Li <hao.li@linux.dev>
-
--- 
-Thanks,
-Hao
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
