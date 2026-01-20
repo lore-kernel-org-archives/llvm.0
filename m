@@ -1,213 +1,202 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55837423170
-	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 12:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B587427A13;
+	Tue, 20 Jan 2026 13:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768913712; cv=none; b=Lo5GzrLVQj3DdYdrIMKPZbaZgp+qiU3lDmDFlVWJUMfRHWNCWdFwkfdkuMOcPACxBB2gd3MIrDjGD3JNib7si7pYHWrvzynZ/2gbv4KibrsyChifG7ASId0Z14uvEY7wO5i6ONcdPDFsg+Pa0202vnoGPO5GUd3PKCZxheQiTAI=
+	t=1768915635; cv=none; b=HPQdikkPyda0/4i4M8OB6yGFwYYdSlzEpCYJILywblGoVNazFkrnZdh86GWNL8mN5JQEOyzpux+OEIV9pzqyNIlXICYca/fQgtsWhBJ2LurYGgUik9HZQ27Hl76hmz1gEMbIa9SH2dcRAmahnT7DWNyTjdTr+QE0jBHkzCdk6w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768913712; c=relaxed/simple;
-	bh=xs6/qXvdwZqyPPASDySWjvLszgy3WDwkO/3lWhZ8HXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uI5rQFCyiTeEmUA1AoNI9Iq+lto4Uu1FGMG73dnOBiEQVhps4gwNlOeOt3R7K1L9gce6MqkrDLtOSjD3V6sfPtUs7EstLMxKRRAn0bzFFb9qpQ+ZIdbJu3TQSY8t5AyxkoQtr2QElP1c0VzjTnvKOsscBn5zQoSUB+hNUXOuG/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xm94bQhp; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QFi+8KKf; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xm94bQhp; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QFi+8KKf; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1768915635; c=relaxed/simple;
+	bh=zliMfnqN7+4qWXkakteLMnL1rqDZXpRuUMDYk9dV31A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o6XzmbP6Rw6BTWvquPnAIVNZNFcKj5NsclD4CFbakdTKVoqYMY8nJ/MvvPgO/9QKxW64ffNJ8kWV9sLh8vOt1E8qLdaiUiczLqUArdLuUmfE8oPbVpMCqd3m1alpOe8Ajfh+Tx4I7v87HQIuzxO7Vzn1ka9AZFaYVrLvezOY6UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RFZYvcnc; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xm94bQhp";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QFi+8KKf";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xm94bQhp";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QFi+8KKf"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id A03875BCC9;
-	Tue, 20 Jan 2026 12:55:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768913709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0UOZHr2Nk3gYOc7JHMLcwjUZ2FkjZDEANCYa8EhaDD0=;
-	b=xm94bQhpKGFYr1R8eYbrXbPHZWPDyZh4mVeqokXSYRoE2a8d+tKRQcisFMnw2JcmHjEfnN
-	zeLBQnoFjf/pvtzrkeM4HsV2CJImAhXu0YQtP4xjHrNscRSutnfbO/88Ib97IfPbRHNibL
-	hRkrreVm3+SICYwLSE2wuvOt51vUzJY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768913709;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0UOZHr2Nk3gYOc7JHMLcwjUZ2FkjZDEANCYa8EhaDD0=;
-	b=QFi+8KKfM7jhuDjHJoRhCGGz/YiybzJPD0WsqAUgcGOQ+yj2ny46RMygwG2Z4hLHyV5pnz
-	6EvIf+QRTV6aG/AQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768913709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0UOZHr2Nk3gYOc7JHMLcwjUZ2FkjZDEANCYa8EhaDD0=;
-	b=xm94bQhpKGFYr1R8eYbrXbPHZWPDyZh4mVeqokXSYRoE2a8d+tKRQcisFMnw2JcmHjEfnN
-	zeLBQnoFjf/pvtzrkeM4HsV2CJImAhXu0YQtP4xjHrNscRSutnfbO/88Ib97IfPbRHNibL
-	hRkrreVm3+SICYwLSE2wuvOt51vUzJY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768913709;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0UOZHr2Nk3gYOc7JHMLcwjUZ2FkjZDEANCYa8EhaDD0=;
-	b=QFi+8KKfM7jhuDjHJoRhCGGz/YiybzJPD0WsqAUgcGOQ+yj2ny46RMygwG2Z4hLHyV5pnz
-	6EvIf+QRTV6aG/AQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 879303EA63;
-	Tue, 20 Jan 2026 12:55:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ge/DIC17b2kMAgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 20 Jan 2026 12:55:09 +0000
-Message-ID: <8bd3c3e8-9865-4467-86d5-17d891f6f21b@suse.cz>
-Date: Tue, 20 Jan 2026 13:55:09 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RFZYvcnc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768915632; x=1800451632;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zliMfnqN7+4qWXkakteLMnL1rqDZXpRuUMDYk9dV31A=;
+  b=RFZYvcncd4tQ24uOoRFKKMoEZgTn7Z1L8DFAypWkOadhEgAU4BZMeO4R
+   mcdYIaHMwqBsF4n7eW48IAYULs2/5zvqPlOjmq4Lx2VdRV/YWWaCj+RVE
+   EIJtW048BB/g28S1ZkaLVptDzKZIYiq52oA+RXa/0nJnBAnblACurqJwU
+   zi9Ro4mfYs9jlCvO8dj7Y9U4aq5vqowMIR2mEXenYHuqGbMCm9MOl4ixr
+   5sZk2B0klI5Q60igLEHMRkfjthEUgTfzmUK7rMst/i9kj8FDu2EdUBilg
+   zsT4U7ScCN3fTRQ20WnAodZX1TaXSKBeW5MtUqSLf3EfRCLvLdO57aK0G
+   g==;
+X-CSE-ConnectionGUID: XdamqUNJQEGzG197hwrl0g==
+X-CSE-MsgGUID: rNqBwjcGTsCrMeFFsO147w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="81232154"
+X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
+   d="scan'208";a="81232154"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 05:27:12 -0800
+X-CSE-ConnectionGUID: qs6DvTcrSlGaTFKGlwR8NQ==
+X-CSE-MsgGUID: dy0vDc1tSN2LQyhVI9nNbg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
+   d="scan'208";a="205362466"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 20 Jan 2026 05:27:09 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1viBlB-00000000P1B-45b7;
+	Tue, 20 Jan 2026 13:27:05 +0000
+Date: Tue, 20 Jan 2026 21:26:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zac <zac@zacbowling.com>, sean.wang@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	deren.wu@mediatek.com, kvalo@kernel.org,
+	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	linux-wireless@vger.kernel.org, lorenzo@kernel.org, nbd@nbd.name,
+	ryder.lee@mediatek.com, sean.wang@mediatek.com,
+	stable@vger.kernel.org, linux@frame.work, zbowling@gmail.com,
+	Zac Bowling <zac@zacbowling.com>
+Subject: Re: [PATCH 11/11] wifi: mt76: mt7925: fix ROC deadlocks and race
+ conditions
+Message-ID: <202601202144.ee4DM9Pz-lkp@intel.com>
+References: <20260120062854.126501-12-zac@zacbowling.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] slab: replace cache_from_obj() with inline checks
-Content-Language: en-US
-To: Hao Li <hao.li@linux.dev>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Eric Dumazet <edumazet@google.com>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz>
- <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <imazcyfzfkxofsnriyp5wa5v6yzszozljircucw2tgj6zex2ee@ytew6wy4kkh6>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260120062854.126501-12-zac@zacbowling.com>
 
-On 1/20/26 12:57, Hao Li wrote:
+Hi Zac,
 
->> @@ -6774,11 +6770,21 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
->>   */
->>  void kmem_cache_free(struct kmem_cache *s, void *x)
->>  {
->> -	s = cache_from_obj(s, x);
->> -	if (!s)
->> -		return;
->> +	struct slab *slab;
->> +
->> +	slab = virt_to_slab(x);
->> +
->> +	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
->> +	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
->> +
->> +		if (unlikely(!slab || (slab->slab_cache != s))) {
->> +			warn_free_bad_obj(s, x);
-> 
-> Just to make sure I'm understanding correctly, are we intentionally not
-> releasing the object x in this case? Thanks.
+kernel test robot noticed the following build warnings:
 
-Yes, it means something went wrong so it's better not to do anything. That
-was true before this patch as well.
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on wireless/main linus/master v6.19-rc6 next-20260119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> +			return;
->> +		}
->> +	}
->> +
->>  	trace_kmem_cache_free(_RET_IP_, x, s);
->> -	slab_free(s, virt_to_slab(x), x, _RET_IP_);
->> +	slab_free(s, slab, x, _RET_IP_);
->>  }
->>  EXPORT_SYMBOL(kmem_cache_free);
->>  
->> @@ -7305,7 +7311,7 @@ int build_detached_freelist(struct kmem_cache *s, size_t size,
->>  		df->s = slab->slab_cache;
->>  	} else {
->>  		df->slab = slab;
->> -		df->s = cache_from_obj(s, object); /* Support for memcg */
->> +		df->s = s;
->>  	}
->>  
->>  	/* Start new detached freelist */
->> 
->> ---
->> base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
->> change-id: 20260120-b4-remove_cache_from_obj-190fcaf16789
->> 
->> Best regards,
->> -- 
->> Vlastimil Babka <vbabka@suse.cz>
->> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Zac/wifi-mt76-fix-list-corruption-in-mt76_wcid_cleanup/20260120-143842
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20260120062854.126501-12-zac%40zacbowling.com
+patch subject: [PATCH 11/11] wifi: mt76: mt7925: fix ROC deadlocks and race conditions
+config: i386-randconfig-015-20260120 (https://download.01.org/0day-ci/archive/20260120/202601202144.ee4DM9Pz-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601202144.ee4DM9Pz-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601202144.ee4DM9Pz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/mediatek/mt76/mt7925/main.c:611:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+     610 |                                 "mt7925: ROC throttled, %lu ms remaining\n",
+         |                                                         ~~~
+         |                                                         %u
+     611 |                                 jiffies_to_msecs(throttle));
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/net/wireless/mediatek/mt76/mt7925/main.c:662:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+     661 |                                 "mt7925: MLO ROC throttled, %lu ms remaining\n",
+         |                                                             ~~~
+         |                                                             %u
+     662 |                                 jiffies_to_msecs(throttle));
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +611 drivers/net/wireless/mediatek/mt76/mt7925/main.c
+
+   592	
+   593	static int mt7925_set_roc(struct mt792x_phy *phy,
+   594				  struct mt792x_bss_conf *mconf,
+   595				  struct ieee80211_channel *chan,
+   596				  int duration,
+   597				  enum mt7925_roc_req type)
+   598	{
+   599		unsigned long throttle;
+   600		int err;
+   601	
+   602		/* Check rate limiting - if in backoff period, wait or return busy */
+   603		throttle = mt7925_roc_throttle_check(phy);
+   604		if (throttle) {
+   605			/* For short backoffs, wait; for longer ones, return busy */
+   606			if (throttle < msecs_to_jiffies(200)) {
+   607				msleep(jiffies_to_msecs(throttle));
+   608			} else {
+   609				dev_dbg(phy->dev->mt76.dev,
+   610					"mt7925: ROC throttled, %lu ms remaining\n",
+ > 611					jiffies_to_msecs(throttle));
+   612				return -EBUSY;
+   613			}
+   614		}
+   615	
+   616		/* Clear stale abort flag from previous ROC */
+   617		clear_bit(MT76_STATE_ROC_ABORT, &phy->mt76->state);
+   618	
+   619		if (test_and_set_bit(MT76_STATE_ROC, &phy->mt76->state))
+   620			return -EBUSY;
+   621	
+   622		phy->roc_grant = false;
+   623	
+   624		err = mt7925_mcu_set_roc(phy, mconf, chan, duration, type,
+   625					 ++phy->roc_token_id);
+   626		if (err < 0) {
+   627			clear_bit(MT76_STATE_ROC, &phy->mt76->state);
+   628			goto out;
+   629		}
+   630	
+   631		if (!wait_event_timeout(phy->roc_wait, phy->roc_grant, 4 * HZ)) {
+   632			mt7925_mcu_abort_roc(phy, mconf, phy->roc_token_id);
+   633			clear_bit(MT76_STATE_ROC, &phy->mt76->state);
+   634			mt7925_roc_record_timeout(phy);
+   635			err = -ETIMEDOUT;
+   636		} else {
+   637			/* Successful ROC - reset timeout tracking */
+   638			mt7925_roc_clear_timeout(phy);
+   639		}
+   640	
+   641	out:
+   642		return err;
+   643	}
+   644	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
