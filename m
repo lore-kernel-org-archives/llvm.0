@@ -1,79 +1,107 @@
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B397F42B757
-	for <llvm@lists.linux.dev>; Tue, 20 Jan 2026 18:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7044418DB;
+	Tue, 20 Jan 2026 18:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768933458; cv=none; b=SjCxfC5olskmHXucy4TcEXOGmFz7bK+1dsI1xRtJGCCK6Ufq14WIH6xar286YIUdXpB1QEgUcxJtg3MAaah9K3Qr94oyubXj49j2VAuOMRtD+ROHG06W7OEOonWeBVrYJAmDEnJp245okCE74eyhu3hFLgRnkid8cfDb5S8r+5U=
+	t=1768934156; cv=none; b=f6JcUQT4ZrII4mYk4TyNJNSDC5pSRFn95562JDlBXajJ4572DEWjw4x1PBrp1LWcGX5WjCXRw8EekMIlSEAl7fXV79POYKOnh9YdOgcHF5Fwk86qXSDyTODzRy1y/LYWaki1A5SlEJtRbaP8Swqh2ghSuVTYzP/elqvCtZgS7f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768933458; c=relaxed/simple;
-	bh=laO+s2zBiXudQJg6l9/ECBEXlmXile3qngJMXioXyAw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ut5AHp7ssOavVixWTlUWRopMN2tGgbWSP/fA2DqQ0fc0om+Gaj/ALZ4djek16TcTYQi2XE4bU/NK8uG5xlT12NZOXTDPwnwT1LQhrL15SiQCzEFG9BnXGOCPZ/YuJyxRSmeXQjSsk0A4mxsCTE1dt4mRfdgZh4FFpBJW64hryN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=AqUY9lXl; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1768934156; c=relaxed/simple;
+	bh=uPhqcdn/h2uLSwiRBkeUsYCovXCrymUWKEUIgjSIHaM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lfQoI5Rd8aCd3MrV7p7zIk6FMmW2dY57y8Tv0G5wO261LN9CMrLKR3rG5ratDPnOibPOJ7zOy3REBYA+c8xohAK2Huxq2RNOTam/D7axYtG2DCrPAAlooGw9ZTYAVQf2JGrnvseaTmXZCuVgvdoHK+wvOb2T29wVVVC2ILJwwj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMGIyZ1W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="AqUY9lXl"
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dwbM41s2Lz1XM0ns;
-	Tue, 20 Jan 2026 18:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1768933453; x=1771525454; bh=laO+s2zBiXudQJg6l9/ECBEX
-	lmXile3qngJMXioXyAw=; b=AqUY9lXlAQ4tazuUKBYtOVKX+Sxi+fpryjzp/hnc
-	Z1AscB9YpGz0GenM7OjEN3g14T9M/Kuce+x+5f3bG4kmckbcwZYJfJq9EyaysY72
-	qJw4hePIJKaAvOspdV2bQDFO4HeyNL8JD44+P+BQ14XFhP4xmlsr4FXDo/i4cnMe
-	mxRS9QxPfqEku4O18CCxatl0wvE3GFMMsFeS6BDvIQf/ih6+wet/Un5jjJk7Kwu9
-	4MDVTUzSLTlaMMbwyaZOfz8lROQZTYXIty0LXRmrI+JGyQesgVrQwNJcCJ0zvbYZ
-	jGcUcHjjHU95vSmMp/u05P9C9WLBkOPKCOICmMqwX+l2Zg==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id vZGs651jTWFO; Tue, 20 Jan 2026 18:24:13 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dwbLx272pz1XM5jn;
-	Tue, 20 Jan 2026 18:24:08 +0000 (UTC)
-Message-ID: <16d01754-cab9-4067-a65f-60040ac6d47e@acm.org>
-Date: Tue, 20 Jan 2026 10:24:08 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMGIyZ1W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B891C16AAE;
+	Tue, 20 Jan 2026 18:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768934155;
+	bh=uPhqcdn/h2uLSwiRBkeUsYCovXCrymUWKEUIgjSIHaM=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=GMGIyZ1WAvGp8d78MBU0OL6EOTD6keexZREwXvxl8bshu7ryOQt+D0LLQjZYEP1Yk
+	 XedAP1jtgchKtTX7+kLeDQpshHFon0wL/pKNMnntgYq+d0WSc214UTye4KXjw/mI+Y
+	 34Mc7qwisb5JfkfW4FzvWIzNN5/LlG/QyrhznqJWLRJ0ELUckFerTuUUdTJ2KStirb
+	 oH0jb62DMKqEWUR1PkKbEjpLDFGuOF7Ywx0XjqdwGEHIOvxkZZk+Xl5HgWSQ4FAGp8
+	 WCQxujBPnDgNoxfObbATYSavjxvMr2jbqNaMKoGZOUkOitz3BOvk6zxVGO1K028VdM
+	 Soj5yA9epVlxg==
+Date: Tue, 20 Jan 2026 11:35:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Guillaume Tucker <gtucker@gtucker.io>, Miguel Ojeda <ojeda@kernel.org>,
+	David Gow <davidgow@google.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] Documentation: dev-tools: add container.rst page
+Message-ID: <20260120183550.GD2749368@ax162>
+References: <cover.1767199119.git.gtucker@gtucker.io>
+ <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
+ <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped
- init guards
-To: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
- Christoph Hellwig <hch@lst.de>, Steven Rostedt <rostedt@goodmis.org>,
- kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260119094029.1344361-1-elver@google.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260119094029.1344361-1-elver@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
 
-On 1/19/26 1:05 AM, Marco Elver wrote:
-> This series proposes a solution to this by introducing scoped init
-> guards which Peter suggested, using the guard(type_init)(&lock) or
-> scoped_guard(type_init, ..) interface.
-Although I haven't had the time yet to do an in-depth review, from a
-quick look all patches in this series look good to me.
+On Tue, Jan 20, 2026 at 02:53:33PM +0100, Nicolas Schier wrote:
+> I probably have just read it over: I have to prefix the
+> 'tuxmake/korg-clang' by 'docker.io/'.  Is that a problem of my system
+> configuration (Debian forky, no special podman config)?
 
-Thanks,
+Some distributions ship registries.conf [1] to allow unqualified image
+names but I do not think Debian does. Personally, I use the full name
+regardless but it should be easy to create it for commands such as these
+to work. I use:
 
-Bart.
+unqualified-search-registries = ['docker.io', 'ghcr.io', 'quay.io']
+
+[1]: https://podman.io/docs/installation#registriesconf
+
+> I tested a tiny bit with podman as runtime backend.  If I leave out the
+> '-r podman' podman's docker emulation is in effect and fails with:
+> 
+>     $ scripts/container -i docker.io/tuxmake/korg-clang -- make LLVM=1 -j8 olddefconfig
+>     Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+>     mkdir: cannot create directory '.tmp_15': Permission denied
+>     mkdir: cannot create directory '.tmp_19': Permission denied
+>     mkdir: cannot create directory '.tmp_22': Permission denied
+>     mkdir: cannot create directory '.tmp_25': Permission denied
+>     mkdir: cannot create directory '.tmp_28': Permission denied
+>     mkdir: cannot create directory '.tmp_31': Permission denied
+>       HOSTCC  scripts/basic/fixdep
+>     error: error opening 'scripts/basic/.fixdep.d': Permission denied
+>     1 error generated.
+>     make[2]: *** [scripts/Makefile.host:114: scripts/basic/fixdep] Error 1
+>     make[1]: *** [/src/Makefile:655: scripts_basic] Error 2
+>     make: *** [Makefile:248: __sub-make] Error 2
+>     [exit code 2]
+> 
+> But with '-r podman' it works like a charm.
+> 
+> Would it make sense to switch the default runtime to podman to
+> prevent non-functional podman-docker emulation?  (Or is this just a
+> problem on my machine?)
+
+Yeah, I think it would be better to prefer podman over docker if both
+existed on the system. Something like this should do that?
+
+diff --git a/scripts/container b/scripts/container
+index dbe92630f05b..50c4ae851001 100755
+--- a/scripts/container
++++ b/scripts/container
+@@ -105,7 +105,7 @@ class PodmanRuntime(CommonRuntime):
+ class Runtimes:
+     """List of all supported runtimes"""
+ 
+-    runtimes = [DockerRuntime, PodmanRuntime]
++    runtimes = [PodmanRuntime, DockerRuntime]
+ 
+     @classmethod
+     def get_names(cls):
