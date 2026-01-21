@@ -1,145 +1,136 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9E044CF4E
-	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 08:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768984454; cv=pass; b=L8svMW29iyCPDjB0d1o4jVguqoqQ0kQNer/pRBbcAZIUgng7+MLQ5E5EHA1IAXrxQx7PQAgeLcEozgzpDBcp+9wsBHrwN3f9LF09L1Tn09kZG8ajuXLtYLwvmM+G1K0q4jiJPqvYKINKZtUxYeVOOvM3+1QWA7RxlT+V7NUsYjE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768984454; c=relaxed/simple;
-	bh=qR8UQAhEPTcY6PXq6mSRhJOzhLXbgRU8yzc2N+B5a58=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cn+OA8xRYywrdwJYRE0mXlPrewnEqw4T84znS9cIXmUI/8Es0t/361r4l0W3vQEVmiW6Bbgg8ioU7ragVrxRLUbaj7wWXt766RqkK43Q1SFfjA5ZASpeHuxYfCJ6VEAdpI6kIlT/oiU2FWRzce/d9T/+jdZ2GRZ/BzCzkWVPDr4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=paK84o2Z; arc=pass smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8213370E2
+	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 09:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768989361; cv=none; b=PnCQxtiiAIR+naXi3WjCCZjTmfKbV1lyPn2tY3n400SBCn4TDyma/ap+k59C7B8IgrXvYE2H0yrIDkODUK6nk92we5lLaEc1BCrPdpzczNOJ/J2laP+4d/4pyxrbWFq/XrP5AAonMtvs8nYiS5tr8F6V28Pcuh3S+ba2UQN+lZA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768989361; c=relaxed/simple;
+	bh=vb33am2CXNzJTUFW8xjXCgEdnw5d36/6zQ548a5P7CE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=F65nLDdgqP1O+GOT0haQs7c4P9IwsOQEgSozsXDi4NjnJj54zye5uxZxe+SuTPYetQK8vnUlJ6C7zrj0ofcG0PppKBRxlpo3mtIeI56a28Q5Z5x1x2ZiiEWEv8aENULeEibrIvUXy5z6Ede0gV3I2sTVfCoPDxU5kxfQ3SR+24g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=EQ1DCx84; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="paK84o2Z"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-88fcc71dbf4so48193036d6.2
-        for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 00:34:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768984450; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WiohpXfnMnxgHsGGtc8DKN6Nw+WfaS9U1kcbRZ8vb76u2lYMOMvk73vfZiV2rYTh3N
-         yEyQTGZYyHL+/qcmpusA3sCCDtSti97nLOXK8/aimaBFbCFpSjGSHP7bWTExP7quE1FU
-         25LKMj+lkQ+fGpLElDqH54tRwJkg1socgDnWSq/PVhePdfOAQosoEWMNUkoM+gZXqtut
-         SNGli3eWmjt7j2m+p5L1vCJZoeq8s5pQtvn2ECHUFRiOmUOt+76cRMC7kYwK4i5iiWfN
-         oPeliqoFkN/dvMB7CrLUxRneqgNCgEVWLIuiKSSsFiEDDUXYDZU6yG7yNllO5ggAJ2ax
-         PpQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qR8UQAhEPTcY6PXq6mSRhJOzhLXbgRU8yzc2N+B5a58=;
-        fh=S/HP+kUgBAOabHaoElfl34IO20T6yFe5s6cDBfm5U/w=;
-        b=iXeqVxRVqTBNL6adJwT3niw2vc/GoMrc5nqVuC8dZZ4Lj2wqgrGYILol0+mOD5mB4s
-         DNbqNTKxoEpNuNeV2NemslBPmAAE634D/w8wUxyoJDBGB/2H4k8ZaaFb+8Skt17T9GCe
-         ZZ4x+NXdSpbww6PU8ATi2JTLuu8u8KgIa2Rt8iy7mqASwow6pJNUZR0SQ+xjKA+exskS
-         aUoVB9Mbt0YG2Ll9wNbOFrGsCzVmYNqZoXns+hM0Yyyksi/PfYZOQo4gGRY7hYq9spik
-         tWXcSjs8UJuZK2Pz7gsFYtbOsvQsz/GI2HNSBXmpzZsM8Jn96ehFPbemUgmK9O1hvy2W
-         V1Pw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768984450; x=1769589250; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qR8UQAhEPTcY6PXq6mSRhJOzhLXbgRU8yzc2N+B5a58=;
-        b=paK84o2ZVPm/zxKSv7jRwljbZQo1JpsN+r4ahZT15Ym34hDCpkjr/OhKN05E3leb1r
-         Yh7waSn6nU3/3aVnwikFciA74gm1yqt85DMNPRF6svWvYTeR32gRnRBKmcEynmawRl8o
-         1JdMVu3Vc95Sxx5o4FoB3cTEaz/pD7IJ6DmtLLwalqDbeTIKIUQR3AOaPFEAmflh4NpT
-         LW6CFy7IQr51Ay6PhRQoeJqoK+QWzCDzGQPboiGPfGOYaCfeMBIk/UCfdR5UndtDBj41
-         bGf8e59yOZs2lEUXMdFmo3XdZvr7Jyk6zyVYhTa/rgS/qaz8P1Dj6YXn4StMbocQfH75
-         6VXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768984450; x=1769589250;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qR8UQAhEPTcY6PXq6mSRhJOzhLXbgRU8yzc2N+B5a58=;
-        b=DIDzD6uDLp/WeSeZF0QxtcbtHOaYO/zPRG2CegWmSB9BDa+rzoUZZBy19YK4KgBEqp
-         Jr8mh6YuBSO5s/GjOKNDo6CRNI2dlQclrNPNrNKWtO7mMiwrg6MH1GzHyGrIwc5j1kgs
-         8+QVuj50+wiu6RqAiERJkRqr6rX7qjhhoS/tPBuIwuEwOp4d8V2SAL5pRpRIJwODCeSD
-         TZURdFz0Ry17YxkaCD+VLsD2T/fNUw6Sda6B0kqKK3kaLu4pK9GEu1f38M/jGYE8codz
-         yy5+vZlNlxLgh3Fcm1U/mDq8JtCy8XPCWiOCB10z/KyA0Ad3DvjMzvG8rnt9qHHKj2TP
-         Uz1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU0obG3yJ4dK7/13zqnbUsWYlvxGYER6k935JjIxxuKD3AszN91gWms5r5h1j2wCNbQQs5J@lists.linux.dev
-X-Gm-Message-State: AOJu0YxIhFP7LbBgh7tFP9RWdRxZzT7bzVT6UDFGRQffRpWhrrghcl00
-	DyfT5NIfDoPQJh5iIM5P7uXvGPiQoILmIZ4uritQvMbG5ZQIaaXl+CpGHuIHmQKeanlihpmbF5u
-	vUcpISmP12KAagXZYpa3fnZ6tETP+D2NWUAyzbbuc
-X-Gm-Gg: AZuq6aLc00zwVnNRWTrb0Pjv97rf8Tk0dEFTkVBkSJ88H9w31HLnLp/+zakdo1e6Fgi
-	RWyNZEdkHNCU3hZSQW6jrUxyMa2WjSrzLD+R+Nl71KL11avv1fFP1POboL6lklqxcaSbWhfoP1s
-	q5hmvShzq4ujINH+6glRbnTtM0Zg6j5A+Vh+6ILqu/gYH4M9OJ65K54JXdc3qOgY8PZQO9BV1xX
-	N0FVEXQiHz1FHbQpPudbsreEI7ZPi7Qzqbt7ceeP78nrjmA7sfP8K/ZxG6e3h8TZs1TkkgI
-X-Received: by 2002:a05:622a:1a9e:b0:4ec:f26f:5aea with SMTP id
- d75a77b69052e-502d852debamr64442781cf.68.1768984450268; Wed, 21 Jan 2026
- 00:34:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="EQ1DCx84"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A38F9430CC;
+	Wed, 21 Jan 2026 09:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1768989356;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GaqCvMBL8GtzVC6jIdKSwudL/1w67Gf2qPep5NgGXv4=;
+	b=EQ1DCx84h6BZdcoubAvXWSPdKNVxCvwdllgqX2gJTFTgVi2brHbRG9kfXR4iby7t6eVMV0
+	BizgUDW4ZXuVQymNB4OZoZ7faRLH/Wg5zt5AAT7puLMhUIBNC/VpskQFvnk+cBUwOkstVA
+	4SBQDx3Pl0XWJdZnbGTDQcIDj8f7/28ZILt3FEOX4qY+18vjAAWs7FNhftncYvorbRKPHM
+	4s3RZ25KbKn+EiQPBgsP2PPumyE3zw93wNGgEDdFnu5mULfsO5PGA1Qz54f7dHeyBr4jrG
+	2qioSwCL+IbnsRt1aCwSaDEN73Wd3V5V8O9jYs8Gp8ceYJWW8MMwhpq7/iEmeg==
+Message-ID: <e96a6e71-80b3-4556-a4eb-fd242e0f5713@gtucker.io>
+Date: Wed, 21 Jan 2026 10:55:53 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260121-b4-remove_cache_from_obj-v2-1-7213d36b89d5@suse.cz>
-In-Reply-To: <20260121-b4-remove_cache_from_obj-v2-1-7213d36b89d5@suse.cz>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 21 Jan 2026 09:33:58 +0100
-X-Gm-Features: AZwV_QikhwEzU8VLl-_D2F-UkNB_eH87BoWYdZ-Q4Ay03HF_gzeB9yWn3TofxPY
-Message-ID: <CANn89iJhz9RfpG62kW1XmL1=cTKvVN5kS-KM+TpzE-mPW4WhUQ@mail.gmail.com>
-Subject: Re: [PATCH v2] slab: replace cache_from_obj() with inline checks
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Hao Li <hao.li@linux.dev>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] Documentation: dev-tools: add container.rst page
+To: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ David Gow <davidgow@google.com>, =?UTF-8?Q?Onur_=C3=96zkan?=
+ <work@onurozkan.dev>, Arnd Bergmann <arnd@arndb.de>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
+ workflows@vger.kernel.org, llvm@lists.linux.dev
+References: <cover.1767199119.git.gtucker@gtucker.io>
+ <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
+ <aW-I3fNqp_7X0oeg@derry.ads.avm.de> <20260120183550.GD2749368@ax162>
+Content-Language: en-US
+From: Guillaume Tucker <gtucker@gtucker.io>
+In-Reply-To: <20260120183550.GD2749368@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: gtucker@gtucker.io
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddugedvleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnheptdejffefieefffegtefgueehgeehgfdviefhjeegleetgefhfeejfeeuuefhgeeinecuffhomhgrihhnpeguohgtkhgvrhdrihhopdhpohgumhgrnhdrihhonecukfhppedujeeirddukeekrddujeegrddugedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejiedrudekkedrudejgedrudeguddphhgvlhhopegludelvddrudeikedrudelkedrieegngdpmhgrihhlfhhrohhmpehgthhutghkvghrsehgthhutghkvghrrdhiohdpqhhiugepteefkefhleegfedtveevpdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvihgughhofiesghhoohhglhgvrdgtohhmpdhrtghpthhtohepfihorhhksehonhhurhhoi
+ ihkrghnrdguvghvpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-State: clean
+X-GND-Score: -100
 
-On Wed, Jan 21, 2026 at 7:57=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
-> Eric Dumazet has noticed cache_from_obj() is not inlined with clang and
-> suggested splitting it into two functions, where the smaller inlined one
-> assumes the fastpath is !CONFIG_SLAB_FREELIST_HARDENED. However most
-> distros enable it these days and so this would likely add a function
-> call to the object free fastpaths.
->
-> Instead take a step back and consider that cache_from_obj() is a relict
-> from when memcgs created their separate kmem_cache copies, as the
-> outdated comment in build_detached_freelist() reminds us.
->
-> Meanwhile hardening/debugging had reused cache_from_obj() to validate
-> that the freed object really belongs to a slab from the cache we think
-> we are freeing from.
->
-> In build_detached_freelist() simply remove this, because it did not
-> handle the NULL result from cache_from_obj() failure properly, nor
-> validate objects (for the NULL slab->slab_cache pointer) when called via
-> kfree_bulk(). If anyone is motivated to implement it properly, it should
-> be possible in a similar way to kmem_cache_free().
->
-> In kmem_cache_free(), do the hardening/debugging checks directly so they
-> are inlined by definition and virt_to_slab(obj) is performed just once.
-> In case they failed, call a newly introduced warn_free_bad_obj() that
-> performs the warnings outside of the fastpath, and leak the object.
->
-> As an intentional change, leak the object when slab->slab_cache differs
-> from the cache given to kmem_cache_free(). Previously we would only leak
-> when the object is not in a valid slab page or the slab->slab_cache
-> pointer is NULL, and otherwise trust the slab->slab_cache over the
-> kmem_cache_free() argument. But if those differ, it means something went
-> wrong enough that it's best not to continue freeing.
->
-> As a result the fastpath should be inlined in all configs and the
-> warnings are moved away.
->
-> Reported-by: Eric Dumazet <edumazet@google.com>
-> Closes: https://lore.kernel.org/all/20260115130642.3419324-1-edumazet@goo=
-gle.com/
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-> Reviewed-by: Hao Li <hao.li@linux.dev>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+On 20/01/2026 7:35 pm, Nathan Chancellor wrote:
+> On Tue, Jan 20, 2026 at 02:53:33PM +0100, Nicolas Schier wrote:
+>> I probably have just read it over: I have to prefix the
+>> 'tuxmake/korg-clang' by 'docker.io/'.  Is that a problem of my system
+>> configuration (Debian forky, no special podman config)?
+> 
+> Some distributions ship registries.conf [1] to allow unqualified image
+> names but I do not think Debian does. Personally, I use the full name
+> regardless but it should be easy to create it for commands such as these
+> to work. I use:
+> 
+> unqualified-search-registries = ['docker.io', 'ghcr.io', 'quay.io']
+> 
+> [1]: https://podman.io/docs/installation#registriesconf
 
-Acked-by: Eric Dumazet <edumazet@google.com>
+And this is not directly related to the scripts/container tool as it
+just passes the image name as-is.  Maybe the example in the docs
+should explicitly use docker.io/ though.
 
-Thanks !
+>> I tested a tiny bit with podman as runtime backend.  If I leave out the
+>> '-r podman' podman's docker emulation is in effect and fails with:
+>>
+>>      $ scripts/container -i docker.io/tuxmake/korg-clang -- make LLVM=1 -j8 olddefconfig
+>>      Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+>>      mkdir: cannot create directory '.tmp_15': Permission denied
+>>      mkdir: cannot create directory '.tmp_19': Permission denied
+>>      mkdir: cannot create directory '.tmp_22': Permission denied
+>>      mkdir: cannot create directory '.tmp_25': Permission denied
+>>      mkdir: cannot create directory '.tmp_28': Permission denied
+>>      mkdir: cannot create directory '.tmp_31': Permission denied
+>>        HOSTCC  scripts/basic/fixdep
+>>      error: error opening 'scripts/basic/.fixdep.d': Permission denied
+>>      1 error generated.
+>>      make[2]: *** [scripts/Makefile.host:114: scripts/basic/fixdep] Error 1
+>>      make[1]: *** [/src/Makefile:655: scripts_basic] Error 2
+>>      make: *** [Makefile:248: __sub-make] Error 2
+>>      [exit code 2]
+>>
+>> But with '-r podman' it works like a charm.
+>>
+>> Would it make sense to switch the default runtime to podman to
+>> prevent non-functional podman-docker emulation?  (Or is this just a
+>> problem on my machine?)
+> 
+> Yeah, I think it would be better to prefer podman over docker if both
+> existed on the system. Something like this should do that?
+> 
+> diff --git a/scripts/container b/scripts/container
+> index dbe92630f05b..50c4ae851001 100755
+> --- a/scripts/container
+> +++ b/scripts/container
+> @@ -105,7 +105,7 @@ class PodmanRuntime(CommonRuntime):
+>   class Runtimes:
+>       """List of all supported runtimes"""
+>   
+> -    runtimes = [DockerRuntime, PodmanRuntime]
+> +    runtimes = [PodmanRuntime, DockerRuntime]
+>   
+>       @classmethod
+>       def get_names(cls):
+
+Yes this should do the trick, although the help message and docs
+would need to be updated too.
+
+A better way still would be to make it able to distinguish between
+actual Docker and docker-compatible Podman (e.g. if it's just a
+symlink) so it's not just down to luck.  This may be added to the
+list of potential improvements.
+
+Feel free to make these tweaks now, or we might wait a bit to see if
+others have more feedback with further changes and I can send a v4.
+
+Cheers,
+Guillaume
