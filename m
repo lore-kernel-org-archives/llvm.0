@@ -1,37 +1,25 @@
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3512B4266A2
-	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 10:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352BE36D50C;
+	Wed, 21 Jan 2026 10:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768990447; cv=none; b=j4kcb7eQj8VW2PYbqBL1OdFKrdFJuTBjzzzl11oc64+DX1urm09mROAu5pZxtomGZKLuIhNlBV7q0mtysHcnAKTf/H84BTQ08uj0l9FfTYFHCVxRXGC3dLK6IY096Pxv4Sx3X4ia7cqgL/Hq0hW0d6Zb/QvrLQIDzng1bYR3tzo=
+	t=1768992751; cv=none; b=LZNO/Qvezu5l3Nq8p8SJdrK+3he7Tc48IuXM9lTx73vcXr+whnmgT4LeFnP8HpTvB7DLDHjK/MLMQYMM2CEkyQWfgEFIvaldr6uTyWqm8IupyWQcxojZMAHlzVKYWqXNcCPzh1ep2iQ4J1lTONmHquDScjkFIJ/RCoHF8DpixHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768990447; c=relaxed/simple;
-	bh=pwh6f5VzaTK/a8Hxv/pzd+4XEZHCMvMiYB2JKPP4yXc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
-	 In-Reply-To:Content-Type; b=ueWsUXw6pc0gDwi4jAnvzidKx36foy2Ck/NMJ/os19EH0PrD04tkiQotFFqSADE/9sHyq2gA72dqaAwk5cQ40cVffUPBZYExk6/+G4g576NbjuNSXaujX8V/fRhVVuJyex7JLAfe/LZwGL+XlUQZiS8E7Oieplbdy9LTsGbPR8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=jI/xZ/wz; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="jI/xZ/wz"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 10C09433D3;
-	Wed, 21 Jan 2026 10:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1768990437;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XSdVek+3nur9iWZzpy6Ip/w5pyhwEVGS8pZ2EUOfZJk=;
-	b=jI/xZ/wzkd3D4gjdSbPX12TmGCEtrWikuLQ0bTDQhy5VWAYUlBL6wXTrwhpApdq6IS17hq
-	UfVnLkazYlCeNB6G0/yh9sVKu54HVlxP8zOzl7Tzp8MfTrpuLzl7F8OEU/SFZWZSPnQr17
-	6kxfZkFC2IXJdpNxSsgrv78aBWlhftU1hvim/PAMofKdTtFTSrOjwU9PTuB1+Go8hJKQDD
-	Z7cHpPKn1qHt9B0V8mADlFgrE1omJ8daq8z/+XTW+Ygj19dIZjlOJrNADIkL9NB8kO2yWq
-	ILAuFthHqtElzNuNibFLaw9wPMhc2fAU2JhsUb4aCKbKNEUUSlOIhYNeoUauUQ==
-Message-ID: <d4020305-fc95-446f-b73c-5f0be68529c9@gtucker.io>
-Date: Wed, 21 Jan 2026 11:13:54 +0100
+	s=arc-20240116; t=1768992751; c=relaxed/simple;
+	bh=zentEggJB15fpY/dTvVopIwQnpJkPOZu/7p1qtWMRnU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k7VpRHkGRIVz1LP6vTcaCOefifxBpAcIVEzAMxDXdm/+3Vkni3jyVOsYzzHnJXMKQBUMonnxQ3NocSbeNqbZFIefObXA0ratF5v2+3g8xy7TBRoJ7uSbwUe9vol119u3tFCOZqh+4ej8YT3Ar0yCoaDjGYTe6nK5J9K1iavAwtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF6CE1476;
+	Wed, 21 Jan 2026 02:52:21 -0800 (PST)
+Received: from [10.1.25.175] (XHFQ2J9959.cambridge.arm.com [10.1.25.175])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02DD53F632;
+	Wed, 21 Jan 2026 02:52:22 -0800 (PST)
+Message-ID: <46c7d109-b076-4bb3-9e6e-36c34c546c20@arm.com>
+Date: Wed, 21 Jan 2026 10:52:21 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,60 +27,69 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] scripts: introduce containerized builds
-To: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- David Gow <davidgow@google.com>, =?UTF-8?Q?Onur_=C3=96zkan?=
- <work@onurozkan.dev>, Nicolas Schier <nsc@kernel.org>
-References: <cover.1767199119.git.gtucker@gtucker.io>
- <aW-JJ5DT-LRSZkdF@derry.ads.avm.de>
-Content-Language: en-US
-From: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
- automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
- llvm@lists.linux.dev
-In-Reply-To: <aW-JJ5DT-LRSZkdF@derry.ads.avm.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v4 3/3] randomize_kstack: Unify random source across
+ arches
+Content-Language: en-GB
+To: kernel test robot <lkp@intel.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Jeremy Linton <jeremy.linton@arm.com>,
+ David Laight <david.laight.linux@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
+References: <20260119130122.1283821-4-ryan.roberts@arm.com>
+ <202601210752.6Nsv9et9-lkp@intel.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <202601210752.6Nsv9et9-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddugeeftdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomhepifhuihhllhgruhhmvgcuvfhutghkvghruceoghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhoqeenucggtffrrghtthgvrhhnpefhleeiueelhedtveefheegiedvheevieetvddtgedvjeeljeegffehfeehveevleenucfkphepudejiedrudekkedrudejgedrudegudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeeirddukeekrddujeegrddugedupdhhvghloheplgduledvrdduieekrdduleekrdeigegnpdhmrghilhhfrhhomhepghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhopdhqihgupedutdevtdelgeeffefffedpmhhouggvpehsmhhtphhouhhtpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtthhopeifohhrkhesohhnuhhrohiikhgrnhdruggvvhdprhgtphhtthhopehnshgtsehkvghrnhgvlhdro
- hhrghdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggv
-X-GND-State: clean
 
-Hi Nicolas,
-
-On 20/01/2026 2:54 pm, Nicolas Schier wrote:
-> Out-of-source builds do not work on my system with podman.  If this is
-> expected, I think it would be great to mention that somewhere in the
-> documentation.
-
-Yes, as discussed with Nathan.  So here's the list of potential
-improvements gathered so far:
-
-* automatically pick Podman first, Docker second
-* explicitly mention docker.io registry in examples
-* mention TuxMake available images more explicitly in the docs
-* mention that out-of-tree builds aren't supported yet
-* distinguish true Docker from Docker-compatible Podman
-* add support for out-of-tree output build directory
-* add option for mounting source tree from arbitrary path
-   (needed for nested containers e.g. Docker-in-Docker)
-* detect when Docker has namespace support enabled and document
-* add user config file with default images and runtime etc.
-
-Then beyond that we could consider other container runtimes such as
-containerd, lxc, runc or whatever works in practice.
-
-> Nevertheless, thanks a lot!  I expect me to use that a lot in the
-> future!
+On 20/01/2026 23:50, kernel test robot wrote:
+> Hi Ryan,
 > 
-> For the whole patch set:
-> Tested-by: Nicolas Schier<nsc@kernel.org>
-> Acked-by: Nicolas Schier<nsc@kernel.org>
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on linus/master v6.19-rc6 next-20260119]
+> [cannot apply to tip/sched/core kees/for-next/hardening kees/for-next/execve]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/randomize_kstack-Maintain-kstack_offset-per-task/20260119-210329
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20260119130122.1283821-4-ryan.roberts%40arm.com
+> patch subject: [PATCH v4 3/3] randomize_kstack: Unify random source across arches
+> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260121/202601210752.6Nsv9et9-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601210752.6Nsv9et9-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202601210752.6Nsv9et9-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> vmlinux.o: warning: objtool: do_syscall_64+0x2c: call to preempt_count_add() leaves .noinstr.text section
+>>> vmlinux.o: warning: objtool: __do_fast_syscall_32+0x3d: call to preempt_count_add() leaves .noinstr.text section
 
-Thank you!  Let's hope others will find it useful too.
+Hmm, clearly Dave was correct not to rush this through... yuck. I'll take a
+look, but I guess there is no rush if this won't go into -next until shortly
+after -rc1.
 
-Cheers,
-Guillaume
+Thanks,
+Ryan
 
