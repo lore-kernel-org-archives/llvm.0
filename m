@@ -1,95 +1,77 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352BE36D50C;
-	Wed, 21 Jan 2026 10:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1046C43D51C;
+	Wed, 21 Jan 2026 11:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768992751; cv=none; b=LZNO/Qvezu5l3Nq8p8SJdrK+3he7Tc48IuXM9lTx73vcXr+whnmgT4LeFnP8HpTvB7DLDHjK/MLMQYMM2CEkyQWfgEFIvaldr6uTyWqm8IupyWQcxojZMAHlzVKYWqXNcCPzh1ep2iQ4J1lTONmHquDScjkFIJ/RCoHF8DpixHg=
+	t=1768994005; cv=none; b=JfYPzRQD8itxf8brT9XgNewIG4riX9ANBGu5danp4G59TiyclSp4S0mPRf4Gee266SeCirXF2IrTG/neuqr8Bt+vEm8MYPYJczTr+NDhpb+ZHFeZxqv13XZietzHxKzlGBmXmokQdOC2CRaUatbFhGujDBvQ6Fgb/XFbQUnEu/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768992751; c=relaxed/simple;
-	bh=zentEggJB15fpY/dTvVopIwQnpJkPOZu/7p1qtWMRnU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k7VpRHkGRIVz1LP6vTcaCOefifxBpAcIVEzAMxDXdm/+3Vkni3jyVOsYzzHnJXMKQBUMonnxQ3NocSbeNqbZFIefObXA0ratF5v2+3g8xy7TBRoJ7uSbwUe9vol119u3tFCOZqh+4ej8YT3Ar0yCoaDjGYTe6nK5J9K1iavAwtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF6CE1476;
-	Wed, 21 Jan 2026 02:52:21 -0800 (PST)
-Received: from [10.1.25.175] (XHFQ2J9959.cambridge.arm.com [10.1.25.175])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02DD53F632;
-	Wed, 21 Jan 2026 02:52:22 -0800 (PST)
-Message-ID: <46c7d109-b076-4bb3-9e6e-36c34c546c20@arm.com>
-Date: Wed, 21 Jan 2026 10:52:21 +0000
+	s=arc-20240116; t=1768994005; c=relaxed/simple;
+	bh=XqwdFQXRBbSMjzmudyP0OeCw8k+8X3f2d9+Z7GOquXA=;
+	h=Message-ID:Date:From:To:Cc:Subject; b=K281M+JjNXE+g5103MG/A/ojt78zODrc1aZJmH8sE0DGmnAJrCMhx4M4/x1dzna2YdMra7xTsQ5EB72Cbhs1OreaUpf543zGO1nuJH9CIzIOy/cbPSBjXnFai6uBy9i3fgbL7BRfC29w5SlnQS9bXksl/GXnWBWjWfj5yah83qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YiZLWPVv; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YiZLWPVv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+	Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=BaEeWrPNxLVUQ+V0YLyYJBpkU7M6Bo96bHJOCZGewog=; b=YiZLWPVvvcbpISsbuzxzBPj1l5
+	yqVal+BXBBGXOMy/O8Dq6lZlICs0mK0E6ApUF5XG2R+vGr9dlnYACz+iou1h4QqPOoO73Fale9nEY
+	sX77y1olQfebTuWqIzuQYMrTomkNclh5cRkaAi7SjOnxyT7JI/i+mFxDQi372a14qHR/b2ZWFfEtb
+	yHXu39ckJX6oI7MIGUnZPNOVme3o/ut/g5ZD23ycX2LDTotkBNZw2WgZ/ghF34+u77KM9BrcFx2TA
+	AxHyKsokctjH+DoFZc8K7rSCLDBTOCovuymZJKFOAtonDrThkw6elG0ykOk/0NTiZJoBKSIJ+p27p
+	CI1G7kcg==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1viW9E-0000000GGca-3tbn;
+	Wed, 21 Jan 2026 11:13:17 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
+	id 8E7D0300756; Wed, 21 Jan 2026 12:13:10 +0100 (CET)
+Message-ID: <20260121110704.221498346@infradead.org>
+User-Agent: quilt/0.68
+Date: Wed, 21 Jan 2026 12:07:04 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: elver@google.com
+Cc: linux-kernel@vger.kernel.org,
+ bigeasy@linutronix.de,
+ peterz@infradead.org,
+ mingo@kernel.org,
+ tglx@linutronix.de,
+ will@kernel.org,
+ boqun.feng@gmail.com,
+ longman@redhat.com,
+ hch@lst.de,
+ rostedt@goodmis.org,
+ bvanassche@acm.org,
+ llvm@lists.linux.dev
+Subject: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] randomize_kstack: Unify random source across
- arches
-Content-Language: en-GB
-To: kernel test robot <lkp@intel.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
- "Jason A. Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>,
- Jeremy Linton <jeremy.linton@arm.com>,
- David Laight <david.laight.linux@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-References: <20260119130122.1283821-4-ryan.roberts@arm.com>
- <202601210752.6Nsv9et9-lkp@intel.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <202601210752.6Nsv9et9-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 20/01/2026 23:50, kernel test robot wrote:
-> Hi Ryan,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on akpm-mm/mm-everything]
-> [also build test WARNING on linus/master v6.19-rc6 next-20260119]
-> [cannot apply to tip/sched/core kees/for-next/hardening kees/for-next/execve]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/randomize_kstack-Maintain-kstack_offset-per-task/20260119-210329
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20260119130122.1283821-4-ryan.roberts%40arm.com
-> patch subject: [PATCH v4 3/3] randomize_kstack: Unify random source across arches
-> config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260121/202601210752.6Nsv9et9-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601210752.6Nsv9et9-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601210752.6Nsv9et9-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> vmlinux.o: warning: objtool: do_syscall_64+0x2c: call to preempt_count_add() leaves .noinstr.text section
->>> vmlinux.o: warning: objtool: __do_fast_syscall_32+0x3d: call to preempt_count_add() leaves .noinstr.text section
+Hai
 
-Hmm, clearly Dave was correct not to rush this through... yuck. I'll take a
-look, but I guess there is no rush if this won't go into -next until shortly
-after -rc1.
+This is on top of tip/locking/core with these patches on:
 
-Thanks,
-Ryan
+  https://lkml.kernel.org/r/20260119094029.1344361-1-elver@google.com
+
+and converts mutex, rtmutex, ww_mutex and futex to use the new context analysis
+bits.
+
+There is one snafu:
+
+ww_mutex_set_context_fastpath()'s data_race() usage doesn't stop the compiler
+from complaining when building a defconfig+PREEMPT_RT+LOCKDEP build:
+
+../kernel/locking/ww_mutex.h:439:24: error: calling function '__ww_mutex_has_waiters' requires holding raw_spinlock 'lock->base.rtmutex.wait_lock' exclusively [-Werror,-Wthread-safety-analysis]
+  439 |         if (likely(!data_race(__ww_mutex_has_waiters(&lock->base))))
+      |                               ^
+1 error generated.
+
 
