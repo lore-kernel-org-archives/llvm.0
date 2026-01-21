@@ -1,66 +1,221 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257B748B39B;
-	Wed, 21 Jan 2026 14:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776624A2E07;
+	Wed, 21 Jan 2026 14:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769005871; cv=none; b=JAls+syRYtvHH1uuCNaYDUPZJnUR+uZh3MHtPuWAA9BImeBin0CCC5gFhBcqyRlHOTp0mo9rsa1kUPTG7kyva+SmAzR4OMmLAK9fVZAmEWoStsmc9Ooqrbz1JJbMX/+t1bEs7DQwGE162mFBjmNveGXOWGFVDFoTYjl8YgB0E3U=
+	t=1769006817; cv=none; b=LL8aUuAxNRAm91TcP+gfoFrBNiNm7UEBuBaWoescT2UU86pK4zyhhTnqu3bs3HV/FRXA0An/zg2Md34CkOVDq4BG/CGvIlEU40LLI96S1V/JZtHQ0gGjYM6zoON3DmcDHp1xaNeoex8PXFJxQwZqqTcfGBTggCK8TFczcnE+/ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769005871; c=relaxed/simple;
-	bh=RcFQXjdzTBzBy/KUud4PkCuLezMUyAi8Xu6V7ddqz0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NNzSpENoiZDcy6N1DhXVY0IrjEB3DrG4utjkqny2PdhK4wQ8UdrjARrRhZ08hVD6HnJ6c6APRbA7sqlv7iNmN4w6r5ltrAHMGDPdXluRhXYX4Rc9OhbFmOc+6EddLxeYSxN2dmWjVXmkaI6mWueTQfolVqeFioRObIxyIDqtZQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GsM9Ugm+; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1769006817; c=relaxed/simple;
+	bh=afNV+4Kntzl2OJS5+YQHRny1CbURCs2XIYTp9jU1WYU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nPfa6X4/XAhZS1cjgkAuOUKEk25JinO7csHU7eGbguGj76hu4TU9Z/KJLeotuA4wbtpH7LzsmdKlrkK1NCjrEZq5eSp6TyTf4aWTzXmhsmdWuaEQkaqwzkvW7vw8YxIn2d/Kaqub343thnpVlJwpcDkTWjr7h6Z7IPhav2ZlQZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=P54WYVbs; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GsM9Ugm+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=RWqYwnqDJ799o8YIF56S5CIu7d4I7YfRi8rNkXkluL8=; b=GsM9Ugm+PIFu7fz2Groda0bvwW
-	ocAKrMGIDi7pYHU6Actlte7ieP7qsgCRAs7ZACDIekYnlgApQCzZVlPsCUcGxnTfjKP61cxn8DGPa
-	ClvUKNIHfwrZn3av18o2Ee9usJDcDlG1s2g5RTvu2yhM2opfBpla37h1P31BFobb4RDfPwR1GRyCl
-	WeitjCanILM1RT9B1DtcWqHy7Sq4o475K4BrlSQGPUvUiKaxtg6GtVdGhEyD1VKdo6+BEWs1G3Dgd
-	eELvgHP53vMgS+R/EQNVBBNaHSgkqRFEVvPUPiKVSuiyR3h/dB7zUAuO55QloPbxPRlABZ8Y3IRtK
-	p8r6NERQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1viZEc-0000000GCKs-14pX;
-	Wed, 21 Jan 2026 14:31:02 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4866D3007E1; Wed, 21 Jan 2026 15:31:00 +0100 (CET)
-Date: Wed, 21 Jan 2026 15:31:00 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Marco Elver <elver@google.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [tip:locking/core 24/43] mm/huge_memory.c:4055:8: warning:
- spinlock 'xas.xa->xa_lock' is not held on every path through here
-Message-ID: <20260121143100.GC166857@noisy.programming.kicks-ass.net>
-References: <202601212251.RuHvsKd5-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="P54WYVbs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1769006813;
+	bh=afNV+4Kntzl2OJS5+YQHRny1CbURCs2XIYTp9jU1WYU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=P54WYVbsl17MXk2LcSxoBkOPZ+v81dklD6Yc/blcHFG8sQyIqIvF+MMRH6T4kaMDv
+	 Pxjo1NMW89sPRxGJFPkURFW1nWxsppd5963XazMJ726o6P/Iivoe7ec6ArmAQtamaO
+	 RlZyD7+bGDIGYPQHWw4oE32TfcDBZMg5TZYmlI0l9dEdtr06159ivtRWbsW9e4awTp
+	 4JrJvUoVQc2xrpYWyHOtVJluq9aPIwQkJerYHttPM1RBiv/vy2S6OAhougTe9RdHIV
+	 /r+5JJPd01uc3aTkRStbsetRpip9w6jVKRc4NTRpPW+rxSOZezyf7nN1TPm/6K4DEV
+	 0I9Nquhwzkj7A==
+Received: from [IPv6:2606:6d00:17:7b4b::c41] (unknown [IPv6:2606:6d00:17:7b4b::c41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E1FD417E12E5;
+	Wed, 21 Jan 2026 15:46:50 +0100 (CET)
+Message-ID: <69fda4f0136285e4d2f86e7e93d5bdd812c1d47a.camel@collabora.com>
+Subject: Re: [PATCH v9 15/17] media: rkvdec: Add H264 support for the
+ VDPU383 variant
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: kernel test robot <lkp@intel.com>, Detlev Casanova
+	 <detlev.casanova@collabora.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Mauro Carvalho
+ Chehab	 <mchehab@kernel.org>, linux-media@vger.kernel.org, Ezequiel Garcia	
+ <ezequiel@vanguardiasur.com.ar>, Heiko Stuebner <heiko@sntech.de>, Daniel
+ Almeida <daniel.almeida@collabora.com>, Jonathan Corbet <corbet@lwn.net>,
+ Ricardo Ribalda	 <ribalda@chromium.org>, Hans Verkuil <hverkuil@xs4all.nl>,
+ Yunke Cao	 <yunkec@google.com>, Hans de Goede <hansg@kernel.org>, Laurent
+ Pinchart	 <laurent.pinchart@ideasonboard.com>, Pavan Bobba
+ <opensource206@gmail.com>,  Sakari Ailus <sakari.ailus@linux.intel.com>,
+ James Cowgill <james.cowgill@blaize.com>, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>, Diederik de Haas	
+ <didi.debian@cknow.org>
+Date: Wed, 21 Jan 2026 09:46:48 -0500
+In-Reply-To: <202601211924.rqKS2Ihm-lkp@intel.com>
+References: <20260120222018.404741-16-detlev.casanova@collabora.com>
+	 <202601211924.rqKS2Ihm-lkp@intel.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-HUBaFbLuQRAvVZ40o0vh"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202601212251.RuHvsKd5-lkp@intel.com>
 
-On Wed, Jan 21, 2026 at 10:27:16PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-> head:   ccf9e070116a81d29aae30db501d562c8efd1ed8
-> commit: 6e530e2e31191d88f692e6c8d3bd245e43416e4f [24/43] debugfs: Make debugfs_cancellation a context lock struct
-> config: s390-randconfig-002-20260121 (https://download.01.org/0day-ci/archive/20260121/202601212251.RuHvsKd5-lkp@intel.com/config)
 
-Again, that is:
+--=-HUBaFbLuQRAvVZ40o0vh
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- CONFIG_WARN_CONTEXT_ANALYSIS_ALL=y
+Hi,
 
-Robot folks, could you filter out those configs from the randconfig set?
-At this time, it has no value reporting these.
+Le mercredi 21 janvier 2026 =C3=A0 22:27 +0800, kernel test robot a =C3=A9c=
+rit=C2=A0:
+> Hi Detlev,
+>=20
+> kernel test robot noticed the following build warnings:
+>=20
+> [auto build test WARNING on rockchip/for-next]
+> [also build test WARNING on linuxtv-media-pending/master media-tree/maste=
+r linus/master v6.19-rc6 next-20260120]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:=C2=A0=C2=A0=C2=A0 https://github.com/intel-lab-lkp/linux/commits/Det=
+lev-Casanova/media-uapi-HEVC-Add-v4l2_ctrl_hevc_ext_sps_-ls-t_rps-controls/=
+20260121-071026
+> base:=C2=A0=C2=A0 https://git.kernel.org/pub/scm/linux/kernel/git/mmind/l=
+inux-rockchip.git=C2=A0for-next
+> patch link:=C2=A0=C2=A0=C2=A0 https://lore.kernel.org/r/20260120222018.40=
+4741-16-detlev.casanova%40collabora.com
+> patch subject: [PATCH v9 15/17] media: rkvdec: Add H264 support for the V=
+DPU383 variant
+> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/2=
+0260121/202601211924.rqKS2Ihm-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project=C2=
+=A0cd708029e0b2869e80abe31ddb175f7c35361f90)
+
+Modification has been done to reduce the stack utilization on clang, though=
+ we
+believe we are hitting limitations/bugs on older clang. We went ahead with =
+these
+patch by updating our CI to clang 21, which allocate a lot less stack with =
+KASAN
+enabled and this code. Our general advise is to use a newer clang, or GCC f=
+or
+testing with KASAN.
+
+The stack utilization is caused by the combination of loop unrolling, agres=
+sive
+inlining, and write operations to bitfield (which requires the compiler to
+generate more code for memory checks, since the writes are not aligned).
+
+cheers,
+Nicolas
+
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260121/202601211924.rqKS2Ihm-lkp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202601211924.rqKS2Ihm-lkp=
+@intel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> > > drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c:485:12: =
+warning: stack frame size (2064) exceeds limit (2048) in 'rkvdec_h264_run' =
+[-Wframe-larger-than]
+> =C2=A0=C2=A0=C2=A0=C2=A0 485 | static int rkvdec_h264_run(struct rkvdec_c=
+tx *ctx)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0=C2=A0 1 warning generated.
+>=20
+>=20
+> vim +/rkvdec_h264_run +485 drivers/media/platform/rockchip/rkvdec/rkvdec-=
+vdpu383-h264.c
+>=20
+> =C2=A0=C2=A0 484=09
+> =C2=A0> 485	static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+> =C2=A0=C2=A0 486	{
+> =C2=A0=C2=A0 487		struct v4l2_h264_reflist_builder reflist_builder;
+> =C2=A0=C2=A0 488		struct rkvdec_dev *rkvdec =3D ctx->dev;
+> =C2=A0=C2=A0 489		struct rkvdec_h264_ctx *h264_ctx =3D ctx->priv;
+> =C2=A0=C2=A0 490		struct rkvdec_h264_run run;
+> =C2=A0=C2=A0 491		struct rkvdec_h264_priv_tbl *tbl =3D h264_ctx->priv_tbl=
+.cpu;
+> =C2=A0=C2=A0 492		u32 timeout_threshold;
+> =C2=A0=C2=A0 493=09
+> =C2=A0=C2=A0 494		rkvdec_h264_run_preamble(ctx, &run);
+> =C2=A0=C2=A0 495=09
+> =C2=A0=C2=A0 496		/* Build the P/B{0,1} ref lists. */
+> =C2=A0=C2=A0 497		v4l2_h264_init_reflist_builder(&reflist_builder, run.de=
+code_params,
+> =C2=A0=C2=A0 498					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 run.sps, run.de=
+code_params->dpb);
+> =C2=A0=C2=A0 499		v4l2_h264_build_p_ref_list(&reflist_builder, h264_ctx->=
+reflists.p);
+> =C2=A0=C2=A0 500		v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx-=
+>reflists.b0,
+> =C2=A0=C2=A0 501					=C2=A0=C2=A0=C2=A0 h264_ctx->reflists.b1);
+> =C2=A0=C2=A0 502=09
+> =C2=A0=C2=A0 503		assemble_hw_scaling_list(&run, &tbl->scaling_list);
+> =C2=A0=C2=A0 504		assemble_hw_pps(ctx, &run);
+> =C2=A0=C2=A0 505		lookup_ref_buf_idx(ctx, &run);
+> =C2=A0=C2=A0 506		assemble_hw_rps(&reflist_builder, &run, &h264_ctx->refl=
+ists, &tbl->rps);
+> =C2=A0=C2=A0 507=09
+> =C2=A0=C2=A0 508		config_registers(ctx, &run);
+> =C2=A0=C2=A0 509=09
+> =C2=A0=C2=A0 510		rkvdec_run_postamble(ctx, &run.base);
+> =C2=A0=C2=A0 511=09
+> =C2=A0=C2=A0 512		timeout_threshold =3D h264_ctx->regs.common.reg013_core=
+_timeout_threshold;
+> =C2=A0=C2=A0 513		rkvdec_schedule_watchdog(rkvdec, timeout_threshold);
+> =C2=A0=C2=A0 514=09
+> =C2=A0=C2=A0 515		/* Start decoding! */
+> =C2=A0=C2=A0 516		writel(timeout_threshold, rkvdec->link + VDPU383_LINK_T=
+IMEOUT_THRESHOLD);
+> =C2=A0=C2=A0 517		writel(0, rkvdec->link + VDPU383_LINK_IP_ENABLE);
+> =C2=A0=C2=A0 518		writel(VDPU383_DEC_E_BIT, rkvdec->link + VDPU383_LINK_D=
+EC_ENABLE);
+> =C2=A0=C2=A0 519=09
+> =C2=A0=C2=A0 520		return 0;
+> =C2=A0=C2=A0 521	}
+> =C2=A0=C2=A0 522=09
+
+--=-HUBaFbLuQRAvVZ40o0vh
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaXDm2AAKCRDZQZRRKWBy
+9Fd5AQCFNfQJ7V7hO/CwnP/tTYqJgQUUANlbrcmEIqz2R5L3KAEAlUwzVwSgEeKi
+Ne3geJutlRoJdxx1o7GBsOPJDjWQTwU=
+=cGBC
+-----END PGP SIGNATURE-----
+
+--=-HUBaFbLuQRAvVZ40o0vh--
