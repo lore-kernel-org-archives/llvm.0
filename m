@@ -1,108 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5558A33EAF5;
-	Wed, 21 Jan 2026 23:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DCA3D6495;
+	Wed, 21 Jan 2026 23:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769036654; cv=none; b=hX+yaDq/ZWHeHADVHda8IJqTC+KFW9DsohFLBJ+IW9zVteBIcHM/DFTXRXk88PuwzH7XkJDPwyDQB9w7iIPKkicxdeoNs2r5xRXckHJTcnOxCWM44LdqdkHyeeCCm42BjQcUVWbRFBBAm6mOvnwo2VQ+0xKzfo55Q5AsPCcd0L4=
+	t=1769037205; cv=none; b=ip3WHeAdGx6Drt6gOxuGpNpUgckB+O4DIc6JlKTK6Pxl0Xz7BscApRQt4wRuoJY49PnBk9rsbzguTr8dGuG2pBuUMRDDIn+FzUgFu1R6yxY8AANLevFVnFPzY4MRXwQ8zukUmTw0jfjzIgzlbkFkBIxrzLPWJ0+9xNGL49KONZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769036654; c=relaxed/simple;
-	bh=bicMi5K8e0B0bp9gSrJTYl5RYIvmgDkMATFB4TZCQLA=;
+	s=arc-20240116; t=1769037205; c=relaxed/simple;
+	bh=/Gk8YE/RpZeYyK+0Zp3bB4piIJP7T4NK9Q4ye9Im8Ys=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hVfSIUbW2Jg+8oUsCc8w1Fbk29eUti4Lul9R+xia+O9E/6EkUK1uUswlnvHWs4cFt6GRGgNF6YvjA9BgeUjrQWRMmojr5LYiweDhCKszw+vnpHvaMCH0b66Eb07R6GlFy20zi2QgFzxmgRS9d5XsaSsimW09/bLbrapjcPRl0c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHfQJHdd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ByfFA5PdnjKjWHBwA78FY6AaR/3DE7Jevui8gCVuLnYvmoJYtAufbyOB4Gez7vGr4gLQUB204Jad0xbzZqTFeFXRmqPSW7NEuIeCa9m/OvmpGr/Bf6/UlyLvz1U891+yDxEokV8hHTE2X8ZiU4rAMXhCOpqUm37hZS1JHP25RgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KMZbWtEz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHfQJHdd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4FEC4CEF1;
-	Wed, 21 Jan 2026 23:04:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KMZbWtEz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71AF2C4CEF1;
+	Wed, 21 Jan 2026 23:13:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769036653;
-	bh=bicMi5K8e0B0bp9gSrJTYl5RYIvmgDkMATFB4TZCQLA=;
+	s=k20201202; t=1769037204;
+	bh=/Gk8YE/RpZeYyK+0Zp3bB4piIJP7T4NK9Q4ye9Im8Ys=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FHfQJHddac0k4J6Tc/1P7oFnqeTw3s9eyMEiKLF6XhkkXbmW3Am0ReKC9DLA6UVwb
-	 z/QZjN54GV79pn6NpBuVcSJRqUq6whka+8q9xpqyJeerFnATA6lA5PcrLhEZegM178
-	 53+7d2yvbafoYE7uwLRwI/hKY+NH7aRYe5OvPHyO5d476sXqwdnBagVGa3v1ztCm4y
-	 HAN5SBcNDpFac+VWxA7Rmkk04B8dqLxs2pzZWIfvRB1Y+y6dnwshyyFkPoPC899qkC
-	 iDUSaK4MHkOhqsMacAdTfcNURN6kJiKS//ev5JXi4zNkFkLF8BCUNTr6bQAoxBZtiv
-	 yWBzc8CgzpeAw==
-Date: Wed, 21 Jan 2026 16:04:06 -0700
+	b=KMZbWtEz0HMRQjV0/JOhK6ctFcqFdD1JF9EGgZ7F2V+/ZRhnAhvWdUemm+G+bz42d
+	 fu5SaNuuRMJmJidMuuoFechGdJCYTZEhU+5ns503VQ3ffad1JLMVDhTbPq4PgUVMdl
+	 PmrkMhZhjiZPyz4GBq7w14dXbuVhxN7Mz7VQMtslB7BJdHIbdkClI1t6DLTdSN4oyz
+	 BnkBogj81pLS/uVyRZwzpf6WTtnTKK2jsoGtpLjvSY3CQn1ZqTQvlAAzf0x0jN4zXD
+	 qIs74eshcl8bbaAansZ1JkvrAV3U6xTGRcrPuFSOutANEKex+hhQ5X3XxDa9/E0eJG
+	 xG/SuO/rygAYg==
+Date: Wed, 21 Jan 2026 16:13:21 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>, Yunke Cao <yunkec@google.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Pavan Bobba <opensource206@gmail.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	James Cowgill <james.cowgill@blaize.com>,
-	linux-rockchip@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Diederik de Haas <didi.debian@cknow.org>
-Subject: Re: [PATCH v9 15/17] media: rkvdec: Add H264 support for the VDPU383
- variant
-Message-ID: <20260121230406.GA2625738@ax162>
-References: <20260120222018.404741-16-detlev.casanova@collabora.com>
- <202601211924.rqKS2Ihm-lkp@intel.com>
- <69fda4f0136285e4d2f86e7e93d5bdd812c1d47a.camel@collabora.com>
+To: Brian Masney <bmasney@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 13/13] clk: microchip: core: allow driver to be compiled
+ with COMPILE_TEST
+Message-ID: <20260121231321.GB2625738@ax162>
+References: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
+ <202601162110.K1eWGORM-lkp@intel.com>
+ <aW-_eIjcRp7VM0bt@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <69fda4f0136285e4d2f86e7e93d5bdd812c1d47a.camel@collabora.com>
+In-Reply-To: <aW-_eIjcRp7VM0bt@redhat.com>
 
-On Wed, Jan 21, 2026 at 09:46:48AM -0500, Nicolas Dufresne wrote:
-> Le mercredi 21 janvier 2026 à 22:27 +0800, kernel test robot a écrit :
-> > Hi Detlev,
+On Tue, Jan 20, 2026 at 12:46:32PM -0500, Brian Masney wrote:
+> On Fri, Jan 16, 2026 at 09:20:36PM +0800, kernel test robot wrote:
+> > Hi Brian,
 > > 
-> > kernel test robot noticed the following build warnings:
+> > kernel test robot noticed the following build errors:
 > > 
-> > [auto build test WARNING on rockchip/for-next]
-> > [also build test WARNING on linuxtv-media-pending/master media-tree/master linus/master v6.19-rc6 next-20260120]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > [auto build test ERROR on f417b7ffcbef7d76b0d8860518f50dae0e7e5eda]
 > > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Detlev-Casanova/media-uapi-HEVC-Add-v4l2_ctrl_hevc_ext_sps_-ls-t_rps-controls/20260121-071026
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-> > patch link:    https://lore.kernel.org/r/20260120222018.404741-16-detlev.casanova%40collabora.com
-> > patch subject: [PATCH v9 15/17] media: rkvdec: Add H264 support for the VDPU383 variant
-> > config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260121/202601211924.rqKS2Ihm-lkp@intel.com/config)
-> > compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/MIPS-copy-pic32-h-header-file-from-asm-mach-pic32-to-include-platform-data/20260110-005057
+> > base:   f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
+> > patch link:    https://lore.kernel.org/r/20260109-mips-pic32-header-move-v1-13-99859c55783d%40redhat.com
+> > patch subject: [PATCH 13/13] clk: microchip: core: allow driver to be compiled with COMPILE_TEST
+> > config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/config)
+> > compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601162110.K1eWGORM-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601162110.K1eWGORM-lkp@intel.com/
 > 
-> Modification has been done to reduce the stack utilization on clang, though we
-> believe we are hitting limitations/bugs on older clang. We went ahead with these
-> patch by updating our CI to clang 21, which allocate a lot less stack with KASAN
-> enabled and this code. Our general advise is to use a newer clang, or GCC for
-> testing with KASAN.
-> 
-> The stack utilization is caused by the combination of loop unrolling, agressive
-> inlining, and write operations to bitfield (which requires the compiler to
-> generate more code for memory checks, since the writes are not aligned).
+> None of the errors in this report appear to be due to the changes that
+> I made that allow drivers/clk/microchip/clk-core.c to be compiled on all
+> architectures instead of just MIPS.
 
-Yes, this is an area that has known pain points, even in current
-versions (but it is certainly better in most cases):
+Well, it is just the fact that this code is now compiled on all
+architectures via CONFIG_COMPILE_TEST, right? asm/traps.h is an
+architecture specific header, which might not work when used outside of
+arch/${SRCARCH}. In this case, x86's traps.h is used for arch/um but
+arch/um has never used this header before because all generic uses are
+gated on specific architectures like in this case.
 
-https://github.com/llvm/llvm-project/issues/143908
-https://github.com/llvm/llvm-project/issues/115862
-
-Thank you for working around this.
+Is this header needed when compile testing or could it be gated on
+CONFIG_MIPS?
 
 Cheers,
 Nathan
