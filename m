@@ -1,47 +1,64 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10FD3BFE4B;
-	Wed, 21 Jan 2026 19:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF953559C0;
+	Wed, 21 Jan 2026 19:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769023439; cv=none; b=BuGl91ZdxbL9DlD2L7c8EJ2DC9YdasEh/QbXot1Fd27zE5WWVu8zYivGZgA4Okipjuh3xH3TXMfYP0aXB6Lez/CEEIsVbf2hxaTeZql0m3J12klyJo6/DIiwXWFYBNoFeofxMLV/XGG5tYaBNTlRq8wxAOJXUr7d/yn8TLcAsvQ=
+	t=1769025550; cv=none; b=ezLmEyJ5H2/yT1C+OFqykXsQm9zMbBQU5sRr42hLfe9f35tUZKZySAialJBWPT2rh8PAcsFuhvo/FPjjyMm9aqK8KsjToBdGi5rXiah6ptWYYjS2DvjtN3vqCXAbQBfPYHBK9IwmD/Ua8ilhz04POVMU1kJ01oXuuudpP0nrKVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769023439; c=relaxed/simple;
-	bh=hX+2WxcerQNQFDsoN82FVaBrTTC1GKZ3BhK2vdAWgGc=;
+	s=arc-20240116; t=1769025550; c=relaxed/simple;
+	bh=7BcVKTw//RW3J/ByS+YgywA/D0zOU15Z06BFqWWYqvE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nsN2bwboYTYjkWT8LqN8qpAsD95GJ8LEExxrAwN8BNBLBGyH/HyUmE8KSD9wpjrjZGKYtn2jhfm7j1EEhVTl9Uyq9NnLRx62l7eYELx5EvxKmNUE4dmLKA99fN6XOtnModPNLa49B0ix4JB+bD42G0eCvxLqHF1hcfhrebNdbsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LVEma9o5; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=e+tpT5kRYB7bhCBc2UwaQy5DUcCs0T6PixGAIe17PhFFZ3/bSWbqzKNApLknJ5ln0GNNn05P6do1U+aBW1n0j89hiHYphEkBNrBBf+OW50b+5K9o2iq9Nulze9/YvVcDkgfQ2ugxgLoNS7HGw8HgPBJAnJ49OTZJciek0ato9yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GD+ctjsk; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LVEma9o5"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=i/17FJOZr5I4I9fpJR9XhJ1wsQsRc/kE2heNMaqVYAA=; b=LVEma9o5Kk1BReviBKwSZKAaUG
-	XJk8rCxjZ+EM10XdDKOmsyQwvaUtIE+uoRZF0ay2r17klI5CfvrpNkNl6snZWBiVhDKmilt/YLwU8
-	h5xc5TH6ynlrwGplG78Ho9sPpe421YjrO8eDa6HA3LqU5WqXYuJ2zidZPFWiHRFx+In9a6IiAs6+m
-	Llj+sph5fD+LAYmpIrIG/eXTmPiQKCsxEOY8l7u9N8vHXVUsdBg7K/nYreV0DtpEXadz6xUNS4Gsw
-	4FYKgd4/FkvYFyFcKj9/VkWk8um9hwqUgKZptAry2N42KlsMuLeStplHPXet7bwwcixjmUCzL4H+6
-	E3Cp5mkw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vidny-0000000GgeM-1kqX;
-	Wed, 21 Jan 2026 19:23:50 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 683E23007E1; Wed, 21 Jan 2026 20:23:49 +0100 (CET)
-Date: Wed, 21 Jan 2026 20:23:49 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: elver@google.com
-Cc: linux-kernel@vger.kernel.org, bigeasy@linutronix.de, mingo@kernel.org,
-	tglx@linutronix.de, will@kernel.org, boqun.feng@gmail.com,
-	longman@redhat.com, hch@lst.de, rostedt@goodmis.org,
-	bvanassche@acm.org, llvm@lists.linux.dev
-Subject: Re: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
-Message-ID: <20260121192349.GM166857@noisy.programming.kicks-ass.net>
-References: <20260121110704.221498346@infradead.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GD+ctjsk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769025548; x=1800561548;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7BcVKTw//RW3J/ByS+YgywA/D0zOU15Z06BFqWWYqvE=;
+  b=GD+ctjsk4fV+cY9QURsTQM+tNfRiSIs6WFrHyyol9lMVOB6stCReVhkg
+   SeDF2Qzk8y/EVKFGbZ4/XE9G6XLgZXV8C0GV8DosQETcdBbqRExeKWFul
+   d+389644bUY1XVqkz9VBDv7HEH2QyKHO6oyEFUoAhY2Cb6gDsSRJnNYqd
+   xxwxLX0a/sVr5nwCEZ667nbDWq6bd5uzFwESy2L2QWfiKgP6WM9ziCWkp
+   v0/wsZ7uueS4h5W6uaewochLdwIdPQUc8ZNMyMYEr3RQZzLPoASGKuIA4
+   Gn5FYpLHwjBQ4kCZ/YYuysaRTzxVWhcswSMuloACjNDy9H7vgYoCDCjOY
+   w==;
+X-CSE-ConnectionGUID: kTfmQ1uERymPAMPhSLJABw==
+X-CSE-MsgGUID: XvONW6H4TtOl1AOuCXJcog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="69277878"
+X-IronPort-AV: E=Sophos;i="6.21,244,1763452800"; 
+   d="scan'208";a="69277878"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 11:59:07 -0800
+X-CSE-ConnectionGUID: 4wKyXuawRY+jTQh+RxGylg==
+X-CSE-MsgGUID: Y++KtQPKSVGO9LqXXO/edQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,244,1763452800"; 
+   d="scan'208";a="206784696"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 21 Jan 2026 11:59:04 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vieM2-00000000RpJ-2669;
+	Wed, 21 Jan 2026 19:59:02 +0000
+Date: Thu, 22 Jan 2026 03:58:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Juergen Gross <jgross@suse.com>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 2/4] x86/mtrr: Introduce MTRR work state structure
+Message-ID: <202601220306.FavyG0wD-lkp@intel.com>
+References: <20260121141106.755458-3-jgross@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,19 +67,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260121110704.221498346@infradead.org>
+In-Reply-To: <20260121141106.755458-3-jgross@suse.com>
 
-On Wed, Jan 21, 2026 at 12:07:04PM +0100, Peter Zijlstra wrote:
-> Hai
-> 
-> This is on top of tip/locking/core with these patches on:
-> 
->   https://lkml.kernel.org/r/20260119094029.1344361-1-elver@google.com
-> 
-> and converts mutex, rtmutex, ww_mutex and futex to use the new context analysis
-> bits.
-> 
+Hi Juergen,
 
-Pushed out an updated/fixed series to:
+kernel test robot noticed the following build warnings:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on tip/master linus/master v6.19-rc6 next-20260121]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Juergen-Gross/x86-mtrr-Move-cache_enable-and-cache_disable-to-mtrr-generic-c/20260121-230320
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20260121141106.755458-3-jgross%40suse.com
+patch subject: [PATCH 2/4] x86/mtrr: Introduce MTRR work state structure
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260122/202601220306.FavyG0wD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601220306.FavyG0wD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601220306.FavyG0wD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: arch/x86/kernel/cpu/mtrr/generic.c:920 function parameter 'state' not described in 'set_mtrr_state'
+>> Warning: arch/x86/kernel/cpu/mtrr/generic.c:920 function parameter 'state' not described in 'set_mtrr_state'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
