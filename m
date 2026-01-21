@@ -1,56 +1,73 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6BE481249;
-	Wed, 21 Jan 2026 12:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3236E288C3F
+	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 13:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768998742; cv=none; b=dc8MKACPUhy0bv2AcZU6lnic8l3UojjqYuEYT+VEppTFy8ot9tr8k/SfN5jihAzkxHsqKq0tL8jRUsw70B8iWCQKZR3Yeso7WrAA/SOWYTvx+ugICU69LHhDSgsaBNW7K6JUx7jNWEL9gLQ4wRYAdOfKZiLH1TPh7OHot5rqndM=
+	t=1769000861; cv=none; b=gmMkAaNZwpHkXax2bRuPkOBoAC2crjhboKO08/BiRvUysSf6Gg6/Cfyml7TblbvxUdj9Ly5c1xcYdtNELBuAs4WS+z5YEmHwa0D0rnXNDsTK997axgyLK60+P1HnVuIP27ex+OXaNTNEmITH7Ojh5jef9KjDnyE7vQDjFnG0mCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768998742; c=relaxed/simple;
-	bh=FELHx54kV3W/qnATluFqgshAxI/luUBfj25peQmvX7A=;
+	s=arc-20240116; t=1769000861; c=relaxed/simple;
+	bh=/He7XkJuMD2GHxpy8ngilXXjP86qi/hHg6QMOo5hvwo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekXg4nWnRQzqXq02K50bjhIA5GL17ihNE3HfOFbo8mZdD5WiReJxm7CmmD3mvt25AIqARb7blq/qu4faDyCrOh9qH4AUYT3TJd5FF/3SSje/0wsqM6Acva7LXo71JMduqrhviighDSJDV/23ZysIkfC/Om8gii5oBgRyoWzlHSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D87A81476;
-	Wed, 21 Jan 2026 04:32:12 -0800 (PST)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 16A163F740;
-	Wed, 21 Jan 2026 04:32:13 -0800 (PST)
-Date: Wed, 21 Jan 2026 12:32:08 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Jeremy Linton <jeremy.linton@arm.com>,
-	David Laight <david.laight.linux@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] randomize_kstack: Unify random source across
- arches
-Message-ID: <aXDHSIn3hIvESjXg@J2N7QTR9R3>
-References: <20260119130122.1283821-4-ryan.roberts@arm.com>
- <202601210752.6Nsv9et9-lkp@intel.com>
- <46c7d109-b076-4bb3-9e6e-36c34c546c20@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GwV0Mq7QS7zoC2tgrmYZvwX4lDyXxn51JBr+I9EnL+fToE6ZDFA8dcoIXdsJxr5IUWxZVR0tdYDDC7qx4uAs2w/q5IBPcT4L17ddzOmObb13FMm5x4SE8MI0CHmb0ah2pibJZko0KiehQiflzLgZRr+McQxjLsKlXPSZacutMrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hOwye2+M; arc=none smtp.client-ip=209.85.128.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hOwye2+M"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-47d63594f7eso47696545e9.0
+        for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 05:07:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769000855; x=1769605655; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+18IqaYiahx1d0Sw+3yYUAKVk+CC0tUKgi49oNi4j+c=;
+        b=hOwye2+Ms1O3xnNuH5IDQ36X0SXHKnt1fdR3xvuZwj0oMGDCoUpaVYeSyxpXQbuTj9
+         1Vb0swbbqQeO2zWcm/HPSmiO0NuBY8Bb+NGaYHBa7E/Rj7kEMHE8pInhPUdnE618zUjm
+         FD+YqsypW26Yn8RfT5KoHhrtG5rF3zSMI82k2TNeQnxsWdCHL+uTElEiWXQjL8EAEpJC
+         0DNpHywJnwlj54MXwAriMUSlm2a4S/2ELVKe6tMxsoVYo9QO5r61jfUR4Af18r7nak6d
+         D6aCCH2e6rl9UEMwaABPTXTab9AP/rvVtW70L4bb0lOHk6D47t0g9qs7aPSCV7oLGnIM
+         bIgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769000855; x=1769605655;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+18IqaYiahx1d0Sw+3yYUAKVk+CC0tUKgi49oNi4j+c=;
+        b=RbxpXYH00NoEoJ1mBMg+EC8LaHbq9e2c0zb2aq1moJs7n7XJiI/zpbDXky6w4e6xBm
+         OPachrQd8fgSkFrTrEcXt4N7B//GzWFjM66nxjeEqp65vG9oGJb5DfGdTBYmce0xlqd6
+         MSK0OvB6awlV7T2D6oc+ijPw4nswwnF+wDO0HpthFRJAlXKGmxnxJAZSh/OR8U90x0t9
+         cAFRq/5iJUGaqfoyGq+HXnvGhYRGIQ3NeACzW4ViKM9GiBRshSISRq55S3zZBMVNbVnF
+         68JUCum54K9LspMCN/Kdkf1yMJ4/UZ69fOQGgCFZd2syqBjtP8YWmlEJ/kQtQKetw5po
+         +gRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXTquZ7AgZxB1iDivFSQqsmBrGqCSuBGJPxz1gO4XpEzG1XCe2wBz8n1AA6flN2D4ovjT1S@lists.linux.dev
+X-Gm-Message-State: AOJu0YxgNd7RjaSsuCXWwQxhlg0akJpqq3yXQk+hVU8P6QkIi3pDrjGu
+	sKnDkNjmRLy/e+i4Hpl6HdaYd7cGbmMSrUvDW3BFJM2phtqDo5LkLgFaNc98pgNctA==
+X-Gm-Gg: AZuq6aKLF8gDewaxNHFffLBdHOUx+Qa4IAznKoL12stmLkwo9QmZ/LymmISjLuq4Hgu
+	8CmfcgVTf2xR74eE77lFSfc3TEwmX2v49hs2ZSlepN3935D9Oo+UziBCT6ximgKeOHHdJ7PHLtm
+	5QxYzoNmhZ02CHNzTMZ4pdPHAb+Q1vTnbjupOCWeSJTMqTfWn2VvoPmmXekpVzDB4MCPOEjx4Nm
+	dws+p8+GmobGRKUks1WzfDJbFKw2WoamvsImEqL4JHL/sWWH//JbeN1f7RmM4VtR+sfXNC2a58M
+	x0/GgL5xEdr1ReS9DCH9EB1hbGiJLyHBxJht2tyhQf8ekcnYfutEAwqnH7rAsSJcKrHl/3K34uM
+	1gIdUuu5PbIikugPOiRBhmlNgcQPy9INyxUtbeQjdSFx8LZGFFabh/7JzPaH/16CYNDRLreZQcp
+	4g6BZkM6K9IiHxmt097elBxrCUyyMm7NLY2TfDMNC8IXU6oPY01W02Fa1lMTA=
+X-Received: by 2002:a05:600c:4586:b0:477:6d96:b3c8 with SMTP id 5b1f17b1804b1-48026040621mr166827695e9.23.1769000855326;
+        Wed, 21 Jan 2026 05:07:35 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:2bba:cbd4:de42:72d5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4801e8c9cbcsm307957095e9.12.2026.01.21.05.07.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 05:07:34 -0800 (PST)
+Date: Wed, 21 Jan 2026 14:07:28 +0100
+From: Marco Elver <elver@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, bigeasy@linutronix.de, mingo@kernel.org,
+	tglx@linutronix.de, will@kernel.org, boqun.feng@gmail.com,
+	longman@redhat.com, hch@lst.de, rostedt@goodmis.org,
+	bvanassche@acm.org, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
+Message-ID: <aXDPkGmsSKuhFyOS@elver.google.com>
+References: <20260121110704.221498346@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,73 +76,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <46c7d109-b076-4bb3-9e6e-36c34c546c20@arm.com>
+In-Reply-To: <20260121110704.221498346@infradead.org>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Wed, Jan 21, 2026 at 10:52:21AM +0000, Ryan Roberts wrote:
-> On 20/01/2026 23:50, kernel test robot wrote:
-> > Hi Ryan,
-> > 
-> > kernel test robot noticed the following build warnings:
-> > 
-> > [auto build test WARNING on akpm-mm/mm-everything]
-> > [also build test WARNING on linus/master v6.19-rc6 next-20260119]
-> > [cannot apply to tip/sched/core kees/for-next/hardening kees/for-next/execve]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/randomize_kstack-Maintain-kstack_offset-per-task/20260119-210329
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > patch link:    https://lore.kernel.org/r/20260119130122.1283821-4-ryan.roberts%40arm.com
-> > patch subject: [PATCH v4 3/3] randomize_kstack: Unify random source across arches
-> > config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260121/202601210752.6Nsv9et9-lkp@intel.com/config)
-> > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601210752.6Nsv9et9-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601210752.6Nsv9et9-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >>> vmlinux.o: warning: objtool: do_syscall_64+0x2c: call to preempt_count_add() leaves .noinstr.text section
-> >>> vmlinux.o: warning: objtool: __do_fast_syscall_32+0x3d: call to preempt_count_add() leaves .noinstr.text section
+On Wed, Jan 21, 2026 at 12:07PM +0100, Peter Zijlstra wrote:
+> Hai
 > 
-> Hmm, clearly Dave was correct not to rush this through... yuck. I'll take a
-> look, but I guess there is no rush if this won't go into -next until shortly
-> after -rc1.
+> This is on top of tip/locking/core with these patches on:
+> 
+>   https://lkml.kernel.org/r/20260119094029.1344361-1-elver@google.com
+> 
+> and converts mutex, rtmutex, ww_mutex and futex to use the new context analysis
+> bits.
+> 
+> There is one snafu:
+> 
+> ww_mutex_set_context_fastpath()'s data_race() usage doesn't stop the compiler
+> from complaining when building a defconfig+PREEMPT_RT+LOCKDEP build:
+> 
+> ../kernel/locking/ww_mutex.h:439:24: error: calling function '__ww_mutex_has_waiters' requires holding raw_spinlock 'lock->base.rtmutex.wait_lock' exclusively [-Werror,-Wthread-safety-analysis]
+>   439 |         if (likely(!data_race(__ww_mutex_has_waiters(&lock->base))))
+>       |                               ^
+> 1 error generated.
 
-Sorry, I should have checked the entry sequencing more thoroughly when I
-reviewed this,.
+This works:
 
-From a quick look, I suspect the right thing to do is to pull the call
-to add_random_kstack_offset() a bit later in a few cases; after the
-entry logic has run, and after instrumentation_begin() (if the arch code
-uses that), such that it doesn't matter if this gets instrumented.
+diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
+index 73eed6b7f24e..561e2475954d 100644
+--- a/kernel/locking/ww_mutex.h
++++ b/kernel/locking/ww_mutex.h
+@@ -436,7 +436,8 @@ ww_mutex_set_context_fastpath(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
+ 	 * __ww_mutex_add_waiter() and makes sure we either observe ww->ctx
+ 	 * and/or !empty list.
+ 	 */
+-	if (likely(!data_race(__ww_mutex_has_waiters(&lock->base))))
++	bool has_waiters = data_race(__ww_mutex_has_waiters(&lock->base));
++	if (likely(!has_waiters))
+ 		return;
+ 
+ 	/*
 
-Considering the callers of add_random_kstack_offset(), if we did that:
 
-* arm64 is fine as-is.
+It appears that the _Pragma are ignored when the expression is inside
+__builtin_expect(...). That's a bit inconvenient.
 
-* loongarch is fine as-is.
+Another option is this given its exclusively used without holding this
+lock:
 
-* powerpc's system_call_exception() would need this moved after the
-  user_exit_irqoff(). Given that function is notrace rather than
-  noinstr, it looks like there are bigger extant issues here.
-
-* riscv is fine as-is.
-
-* s390's __do_syscall() would need this moved after
-  enter_from_user_mode().
-
-* On x86:
-  - do_int80_emulation() is fine as-is.
-  - int80_emulation() is fine as-is.
-  - do_int80_syscall_32() would need this moved after
-    instrumentation_begin().
-  - __do_fast_syscall_32() would need this moved after
-    instrumentation_begin().
-  - do_syscall_64() would need this moved after instrumentation_begin().
-
-Mark.
+diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
+index 73eed6b7f24e..45a9c394fe91 100644
+--- a/kernel/locking/ww_mutex.h
++++ b/kernel/locking/ww_mutex.h
+@@ -71,7 +71,7 @@ __ww_mutex_owner(struct mutex *lock)
+ }
+ 
+ static inline bool
+-__ww_mutex_has_waiters(struct mutex *lock)
++__ww_mutex_has_waiters_lockless(struct mutex *lock)
+ {
+ 	return atomic_long_read(&lock->owner) & MUTEX_FLAG_WAITERS;
+ }
+@@ -151,10 +151,9 @@ __ww_mutex_owner(struct rt_mutex *lock)
+ }
+ 
+ static inline bool
+-__ww_mutex_has_waiters(struct rt_mutex *lock)
+-	__must_hold(&lock->rtmutex.wait_lock)
++__ww_mutex_has_waiters_lockless(struct rt_mutex *lock)
+ {
+-	return rt_mutex_has_waiters(&lock->rtmutex);
++	return data_race(rt_mutex_has_waiters(&lock->rtmutex));
+ }
+ 
+ static inline void lock_wait_lock(struct rt_mutex *lock, unsigned long *flags)
+@@ -436,7 +435,7 @@ ww_mutex_set_context_fastpath(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
+ 	 * __ww_mutex_add_waiter() and makes sure we either observe ww->ctx
+ 	 * and/or !empty list.
+ 	 */
+-	if (likely(!data_race(__ww_mutex_has_waiters(&lock->base))))
++	if (likely(!__ww_mutex_has_waiters_lockless(&lock->base)))
+ 		return;
+ 
+ 	/*
