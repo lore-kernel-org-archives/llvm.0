@@ -1,144 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B33C41B361;
-	Wed, 21 Jan 2026 15:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AC62C11E8
+	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 16:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769010290; cv=none; b=K/auGiYFE1joHZAZ9efbcrG1+W+nR37vGMGtYHzgtHyfMU7R4VXtbHA/NsEuaH7njSYgnnUOuiURhTyH5rvNvXujW8twA3r32nYGGQ2Rd9jKFCkNgr5R+aEwzVUBM+eIU18ze/LUC/DwE69XsgYC14pzHiq4WuSivUIHGP9cbzk=
+	t=1769011640; cv=none; b=uvtNf7iodPnPpDZvLJamaz8WDALSRVBuNxYPPovqawEpYXFgYYHubz2Gi5wyPVdFJlzSHXNPH2yfsSwRRvAmIFHeGE32GChCdH7WNzCn/frADp7Dy4lCL73yw0uyi8V4eGSpul+7DoJtCaHxYF7IiN1yWMY0lZNlBY8B+Y1lmm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769010290; c=relaxed/simple;
-	bh=tTM9MIYJDpxfY9o4TuJ5KZ6iY8deAz2hvjUrP6wh8qA=;
+	s=arc-20240116; t=1769011640; c=relaxed/simple;
+	bh=R8j2uJWCuPQF4jnyFmqkM+Jyum5uRWUwD37pUrqBtog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AXBWFrW4oHZ1Lq91ciJyJ4vs3SwGEw/h1YU/FiqGr3lR8RD5gJMNohalZVffg4m6O85h0hF6c7PdCGGeLLRLsugXc895Fe+d7/vtFo4NB5EpxvSWpsrwhZy1xYUl79A7g83/UM6lYYZd3wIUIUumUYpJWg7EcyWB/ckwiP2+ews=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IInIRaOG; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=YplSRpom7IkoLoZM7KpSnGM//cJysyakA5WObWAUfV427XKqtAsZIEZcT8c+cl78BIhuYdIx9Gig+tL6swMx3izReOvJ6gjEWe6viLqccXVtRTVgtGs8/kS+kXTEicE8iRoGlEWGBJT8dUyzBMCQdUZzKQDrNJf1bG6PoKTMDHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cZ61vySY; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IInIRaOG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769010288; x=1800546288;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tTM9MIYJDpxfY9o4TuJ5KZ6iY8deAz2hvjUrP6wh8qA=;
-  b=IInIRaOG+619NDq8p2o5KkES8ovRyzMHkQ5Ntrea3P6FP8FRXb/KiTK5
-   GU2EipoFOVdsYvtSBSXc0jvqJ3rQpi8CGDltX2PZ9b12UNPnk3ojx/ztK
-   kIouT3Y88pX7yZOzssiIBrhou5Q4uWmroE0gx6i1CYRwBVNV7yEIUmIFP
-   WErikY2xd38g0EF+k79KiIC0vMFMu66oK68EDEOB8LoWUhoH7bzuzXwfL
-   KtWrarZnI4qKTYlst3EgXKXhKctoufrX7v0R/dFhlucPw5mkN9fJMPNYW
-   g/BmA3cJZoddoFyLqxFdsfKS5h82UHMKD8oDFI/8qHtq48DpgsIOoMcBP
-   Q==;
-X-CSE-ConnectionGUID: QcsOocQoQNydr72ELb1MyA==
-X-CSE-MsgGUID: OZ4x06/pSSeibf8WLQRruA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="69435062"
-X-IronPort-AV: E=Sophos;i="6.21,242,1763452800"; 
-   d="scan'208";a="69435062"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 07:44:45 -0800
-X-CSE-ConnectionGUID: ejY6aeK9Qz29d06IowdvZQ==
-X-CSE-MsgGUID: Wane3y14QECFNzlkc3A3WA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,242,1763452800"; 
-   d="scan'208";a="244055669"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Jan 2026 07:44:44 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1viaNs-00000000RMT-3xoh;
-	Wed, 21 Jan 2026 15:44:40 +0000
-Date: Wed, 21 Jan 2026 23:44:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>
-Subject: Re: [PATCH v4 6/6] x86/CPU/AMD: Print AGESA string from DMI
- additional information entry
-Message-ID: <202601212323.7qxI0awN-lkp@intel.com>
-References: <20260121060431.432350-7-superm1@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cZ61vySY"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4327790c4e9so4153106f8f.2
+        for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 08:07:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1769011636; x=1769616436; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wg40ewCl+D/97ANr1h+YLqT6oKOLJb+xdwWdPiyglqQ=;
+        b=cZ61vySYiZmYU2PQuFdpg2zx1XyWEiM2RE4jBJj/niG+Z7VGUKeA6pvfEbKQ/OWW3P
+         q4RyM3+TfmrxKA/KKBxMVSIwJVkLfeTCfNevKHt5R5BRNT2PEf0L7e+eE8X26DfWUAs7
+         Ffk2tzpz//1LrjiV6510tpJm/0aAkiSS8gV4r8NZwI3sBFXykYcKpCReGhRE99hybKtz
+         ddPx3S4+31JElaMWLr+ksCIgkogJjGaknyxDRw6uGNCzZNybdPnb8+jVVgswnZbgHgYM
+         ln4wH7ZmDAlqj5AQEiecHP0vlmW4s6HalMhhxGfdYr65URE0XND9jBmTXjOHgwBiPVCH
+         VCXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769011636; x=1769616436;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wg40ewCl+D/97ANr1h+YLqT6oKOLJb+xdwWdPiyglqQ=;
+        b=D0mA99isXk1ACOxirdyoBt7lCIsO1ipEAUe+JnrLknmZQz7oO5/fJIHY9904tRdzmB
+         LIut8FZl4WthV6JPhzk7+kqXnWdVtzVX2hUToBfNtjmrbV4oCMLf8zJ/ockVptdU1iM4
+         2pmED8SRShhDNowaQ05IkKSYSUYNEVlU+NgVkPacLiDKG4vaPAr2s4iqNfbyFYgNKcbB
+         Kot78eQrgaSp403TcNWwvgKml3q1lL1pWPpPEwwtoSuhJDO5qsSsQOYoskMghflm3GEj
+         6uH8uu/rXXqBw1DtsHfQtMIG02fsOpw6cULfsukAou3GktmTdsENRQ/oYFOEp/N7rNc4
+         vdhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2gF2UnkP0CApx/GQ3D/UY9eJj4JrusXw6farCFC2VoTbFx/25B+TF+yPnotmBB2I++edc@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy66zyuAaa3WSi6MIvohEEoutrG0QQ/5P0nJ1VX88n9caWNZC8B
+	cVsaB2r6LPDMuJ5N+W2JuyEFZq4ui3PhWV1lpjLu4Cp4UcnEDc9TEmnRjcU8XPM03Mo=
+X-Gm-Gg: AZuq6aJHwQnqO9VVkfaRl+CeuscUFyisP7il+VlmKVQZrMtt5PJzGkYC/Vx7lhhCj5y
+	ew/LIQ/4H1QARpd/LIoISb3u5dsSdPwUKlYYx0HGHl4cj1hRkt1qtrI0prvYtSNuWYN9/QCBgAO
+	8LgkZ1Kv7igJa32tfUtpPa9fvtLlKuYrhCZpPwg2FNXWH+n8iLP9vg4KM58SNOFLWg+vZunuZnJ
+	I9nRphWpM0coPcL7UZt+bSLwV76hro0Ktqp2YvP6fmWh9nU2MYy3Plz01Rp7K0d+xQxyN/RH6wY
+	nMsXg1YN5dHxVFdriYVSaUm87iH3yhiKxE73nMzcBacodTiQRtwmgcidtQkYjQSBPclaKhrC34C
+	H1cBUuWvB6y/QdmjZk6RmtKPkB/5blv431ZvpzkO21YIJaqpPHL+1U3wQhhmmMfON6vrb47QBP8
+	3vbSU=
+X-Received: by 2002:a5d:5f94:0:b0:431:1d4:3a8a with SMTP id ffacd0b85a97d-43569972d22mr24018615f8f.7.1769011635930;
+        Wed, 21 Jan 2026 08:07:15 -0800 (PST)
+Received: from pathway ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356992201csm38511033f8f.2.2026.01.21.08.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 08:07:15 -0800 (PST)
+Date: Wed, 21 Jan 2026 17:07:12 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] printf: convert test_hashed into macro
+Message-ID: <aXD5sNXwhnU5ycam@pathway>
+References: <20260116-printf-kunit-printf-attr-v2-1-3dd7fefc3207@kernel.org>
+ <aW3pgf4FQHFCC9Bm@smile.fi.intel.com>
+ <CAJ-ks9kOpAVq=-b2AXp02F2gJEAmJZxKE=UAGa5ypsVE_an3pQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260121060431.432350-7-superm1@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ-ks9kOpAVq=-b2AXp02F2gJEAmJZxKE=UAGa5ypsVE_an3pQ@mail.gmail.com>
 
-Hi Mario,
+On Tue 2026-01-20 10:50:09, Tamir Duberstein wrote:
+> On Mon, Jan 19, 2026 at 3:21 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Fri, Jan 16, 2026 at 11:27:03AM -0500, Tamir Duberstein wrote:
+> > > This allows the compiler to check the arguments against the __printf
+> >
+> > __printf() since it takes parameters, OTOH it's an attribute at the end,
+> > so I have no strong opinion on how to spell it.
+> >
+> > > attribute on __test. This produces better diagnostics when incorrect
+> >
+> > __test()
+> >
+> > *This is reference to a function.
+> >
+> > > inputs are passed.
+> >
+> > ...
+> >
+> > > +/*
+> > > + * This is a macro so that the compiler can compare its arguments to the
+> > > + * __printf attribute on __test. This cannot be a function with a __printf
+> > > + * attribute because GCC requires __printf functions to be variadic.
+> >
+> > As per commit message remarks.
+> >
+> > > + */
+> > > +#define test_hashed(kunittest, fmt, p)                                   \
+> > > +     do {                                                             \
+> > > +             char buf[PLAIN_BUF_SIZE];                                \
+> > > +             plain_hash_to_buffer(kunittest, p, buf, PLAIN_BUF_SIZE); \
+> > > +             test(buf, fmt, p);                                       \
+> > > +     } while (0)
+> >
+> > Make sure you used tabs to indent the \:s.
+> >
+> > ...
+> >
+> > The downside of a macro is a killing of compile-time type checks.
+> 
+> This macro still bottoms out in __test() which is a function, so I
+> believe it preserves (and enhances, per the commit message)
+> compile-time checks.
+> 
+> I'll send v3 with the changes you requested above.
 
-kernel test robot noticed the following build errors:
+JFYI, I am fine with this approach.
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/master linus/master v6.19-rc6 next-20260120]
-[cannot apply to bp/for-next tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello-AMD/firmware-dmi-Correct-an-indexing-error-in-dmi-h/20260121-140800
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20260121060431.432350-7-superm1%40kernel.org
-patch subject: [PATCH v4 6/6] x86/CPU/AMD: Print AGESA string from DMI additional information entry
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260121/202601212323.7qxI0awN-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601212323.7qxI0awN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601212323.7qxI0awN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/loongarch/kernel/setup.c:16:
->> include/linux/dmi.h:173:64: error: use of undeclared identifier 'dmi_empty_string'
-     173 |         dmi_string_nosave(const struct dmi_header *dm, u8 s) { return dmi_empty_string; }
-         |                                                                       ^~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +/dmi_empty_string +173 include/linux/dmi.h
-
-   141	
-   142	static inline int dmi_check_system(const struct dmi_system_id *list) { return 0; }
-   143	static inline const char * dmi_get_system_info(int field) { return NULL; }
-   144	static inline const struct dmi_device * dmi_find_device(int type, const char *name,
-   145		const struct dmi_device *from) { return NULL; }
-   146	static inline void dmi_setup(void) { }
-   147	static inline bool dmi_get_date(int field, int *yearp, int *monthp, int *dayp)
-   148	{
-   149		if (yearp)
-   150			*yearp = 0;
-   151		if (monthp)
-   152			*monthp = 0;
-   153		if (dayp)
-   154			*dayp = 0;
-   155		return false;
-   156	}
-   157	static inline int dmi_get_bios_year(void) { return -ENXIO; }
-   158	static inline int dmi_name_in_vendors(const char *s) { return 0; }
-   159	static inline int dmi_name_in_serial(const char *s) { return 0; }
-   160	#define dmi_available 0
-   161	static inline int dmi_walk(void (*decode)(const struct dmi_header *, void *),
-   162		void *private_data) { return -ENXIO; }
-   163	static inline bool dmi_match(enum dmi_field f, const char *str)
-   164		{ return false; }
-   165	static inline void dmi_memdev_name(u16 handle, const char **bank,
-   166			const char **device) { }
-   167	static inline u64 dmi_memdev_size(u16 handle) { return ~0ul; }
-   168	static inline u8 dmi_memdev_type(u16 handle) { return 0x0; }
-   169	static inline u16 dmi_memdev_handle(int slot) { return 0xffff; }
-   170	static inline const struct dmi_system_id *
-   171		dmi_first_match(const struct dmi_system_id *list) { return NULL; }
-   172	static inline const char *
- > 173		dmi_string_nosave(const struct dmi_header *dm, u8 s) { return dmi_empty_string; }
-   174	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best Regards,
+Petr
