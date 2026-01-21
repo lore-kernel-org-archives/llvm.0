@@ -1,287 +1,118 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3506C345753
-	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 06:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768978646; cv=none; b=fr/9k8UdI+4Z6LVwU+k31XKfCsFhZZf7CCLzjnpW/1K2px5NAhZlbkrANnzpgwMS9b+Q4pyE+gqEkpB/BgChi8JzoAVyWkkXWhzgthuLqDX91asVAE7kt9NX17Ufn/RwYJP7KWtK9RMHiy4G9dLi8x0zImC/QXzBUps+ZE/vl6A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768978646; c=relaxed/simple;
-	bh=15RYzhWLTEfcvtbEHKriVBTM8eBckeJmwTj2wXFUVKw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=FARQF8AJTKr9EsSoatY2B+HYdmlZd0OAvRNTaPBw0WbxN7zj3hBvA8nlSWR3gIO0bsfnAbio8mo2UOCJq/KOU5Om2mdd0DhCONAC9WGFYVZfwIE6rPisbCmefDx59vZFOY5jri3YABaXpZdRFNWBXA+obhZU7qhYlCOwDG5Si+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cUI9pn3n; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LtaYqiOp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cUI9pn3n; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LtaYqiOp; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1882B26B756
+	for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 08:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768984274; cv=pass; b=dL2ntmO/mOQOZjTDUjICPq3R17v5pdCtxAyXY0bDM8wqzW7MeDRaNXFAX3BcBjoXNIFS5zvd/khbD6PN6LJiDZ4UIijpGsoM8xqxZZ8QR/u7byNeVMlg8Z2s31wSEQ8emTxFYkAyezjima/3lXyz3S7W0/oYIXhlJWSs317bBoY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768984274; c=relaxed/simple;
+	bh=XFctc9YUZofxB3tz/N/xWCk2r/4c4qsA5rmg4d5qxv4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B0c7b3li7zkTHeNHxrAf39eL474KAXsJkKiPvQC889FlbUzBclI68xdAaBmGISTI6HAvFhIuhSBKN/KtLQDCxDbVUKy9X1Zrd3pDVa3cJDHQPvg5o7jo6KtY6KcE5QHcfDLQOQ2QPXVMHFhATjkcGFtY99ozAE25x2LLLxneP9o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lvR1bTKA; arc=pass smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cUI9pn3n";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LtaYqiOp";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cUI9pn3n";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LtaYqiOp"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 3960E5BCCA;
-	Wed, 21 Jan 2026 06:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768978640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F2hV8Ptre9CxhtsWmxv63EQlnGTxB6W6LapKB5FH07U=;
-	b=cUI9pn3nKjJKaX/2oqP2ioLEjYaq0DnhuStUmV5y9AYoIxb7U4roSXqtM8sP+sB5DndRhk
-	JwtLuNGladv3JLqWStebq3cMdLHx+DdQ59gEUACaz9DZBqniQdMo5A3U9uILilAbVbRuJ9
-	JpqC1uxCE7ZgCtEydhARfWs9PZ8W4sg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768978640;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F2hV8Ptre9CxhtsWmxv63EQlnGTxB6W6LapKB5FH07U=;
-	b=LtaYqiOpfp6zAANu2TdOQF5I7kziKq8HsDaJLp3WH/jvzXFUeBI8dS5l587mfPdMwwvx1P
-	/UwfJrftpuryolDQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cUI9pn3n;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=LtaYqiOp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1768978640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F2hV8Ptre9CxhtsWmxv63EQlnGTxB6W6LapKB5FH07U=;
-	b=cUI9pn3nKjJKaX/2oqP2ioLEjYaq0DnhuStUmV5y9AYoIxb7U4roSXqtM8sP+sB5DndRhk
-	JwtLuNGladv3JLqWStebq3cMdLHx+DdQ59gEUACaz9DZBqniQdMo5A3U9uILilAbVbRuJ9
-	JpqC1uxCE7ZgCtEydhARfWs9PZ8W4sg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1768978640;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F2hV8Ptre9CxhtsWmxv63EQlnGTxB6W6LapKB5FH07U=;
-	b=LtaYqiOpfp6zAANu2TdOQF5I7kziKq8HsDaJLp3WH/jvzXFUeBI8dS5l587mfPdMwwvx1P
-	/UwfJrftpuryolDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2779F3EA63;
-	Wed, 21 Jan 2026 06:57:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id wiJhCdB4cGl6JQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Wed, 21 Jan 2026 06:57:20 +0000
-From: Vlastimil Babka <vbabka@suse.cz>
-Date: Wed, 21 Jan 2026 07:57:10 +0100
-Subject: [PATCH v2] slab: replace cache_from_obj() with inline checks
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lvR1bTKA"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-1233c155a42so8101988c88.1
+        for <llvm@lists.linux.dev>; Wed, 21 Jan 2026 00:31:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768984272; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ix2bRgmBI50P4DUgnXoqxY1aZlqtANyBsWvUFtN4bz/PZkCQfdQsRj4sTPbnwICKla
+         oQSx84YhZHiQcRC+2x8KvlaRwHafzMYKOYiVgMNwlxK6hvT2QoIvk8F5VgcbhDnAAWMW
+         cMnP89c0f78qJ9bGTY+u7GoldQibX80GwyftEiLQxMA0Ezp5laIywpIXN8F+3baiEuvC
+         D5B7lFTQWXz71xlo7Q3CrOne9FCynpm99qO63GVnHznrQMdetxKzGs0aV7Q4rTQCaejI
+         1GeCeEhz/cut4c+e9SHhJ1vvgpHA6A52DGOWPFu8jZa0l577K8bBlrYfH57gerIVhJz6
+         UFIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=P42aspcTRdBvvY2weJyVYtPiuSH8JxKCfznzt5gGMzI=;
+        fh=IUUmr91KHpESx03wYA7Wc22Ieieu+EJFx6Q9XtQiSPM=;
+        b=YJxUWfdlsGCQpVGX5VEckL0oMosbbE9jB5+4uNzYVKSKnL7rnnXBh0/42sir7Xy9rD
+         sthLxHjQTYAtfpvOJcloBnREYZPnsphZeuM0xOBr4cj64OJEGsho0ZrLYoo0mn9A1EZ2
+         8deIWCnvd/28hDFXifVvMR2qn++NCpMmx3KuJGIY/voW7uPXx9yYjVCL1lee66Js4DaB
+         +y+6QF/p0e37p4aWI9BjEmWcoAP3320sr3qxjbvMGWVPRj2k4Dzm83FT0cVN1qTyDDPx
+         RNtPp7Tq5Iw0AFzY5k0jLNBhQI4JyN5GmfQMZf60tw+voqC8FZ9nSwtBn/3l/6C1sF8B
+         mSiQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768984272; x=1769589072; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P42aspcTRdBvvY2weJyVYtPiuSH8JxKCfznzt5gGMzI=;
+        b=lvR1bTKAiNzTSY+HbA8WAnwfhWd5Yvl1G+tQFBEQbLnxg2Y2OWie696KS5c7OpgyP2
+         eNmL1ZOJeq3A5SueL5KPtYXdDdE7U8CHTOMznmqvXZRdu1E52ip6oclYT3h1Ot0hc7CA
+         Q6aAySl+tuHjkMhyVrqt5HkAmR2NRNh61quAIgMtnSy2L4rjdeo6dyk2bX2a2L7e89jf
+         QqGaDmOAn7zugRyFfK4TlewJ24LrlPJW57MHr0M0QZMcBwTL6Lb6GOGBBKjM7ZCyHL2S
+         9YPNzk8jzypw7s87YZW1ITJ4pRJ0PAqgXnG8sMMMOC0QwzV9Pd0kQRf9xLAH4cTrFpaE
+         tuTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768984272; x=1769589072;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P42aspcTRdBvvY2weJyVYtPiuSH8JxKCfznzt5gGMzI=;
+        b=C8HIQl8HZuQZilfZNez95ZiFRXyCo0Vm/2xswIz+lCya8vcpDWuZQMyfRWNTHqXBo9
+         2gMsccAb5sKRaoUN6ds9WsQGDhdypWLqszM48bONOlRYc6f6YtNzcoSJmOeplJJx6iwC
+         RRMNqW7PiV5p3IrSI5PDH/zS/OEYoiBXHkiAKqYPvNduWsKFLcCqYb1sIPJTQc1O9/vn
+         f1P3EVXPcOYeya+rKft5970K7AtAYyW52noTBboi9SYTQDyyKGqfAs5hI8ovVXuTLr0W
+         r5JKLPFv5edg6EICtEQOP3+6hDsGhZBgxg+HlNulMGqCf6ichOApwnUYD+pcOyMtyebl
+         QwEA==
+X-Gm-Message-State: AOJu0YzXjvu6vCSyuWcNemiNyWUMu62e9mEe/DydePN18J+QNGLzFIv1
+	DNeytfOEcmSP7ZaEQzOGyFons3BnKML09eZGmwMLkFRVXJ2SGtQ17NuB5oLBIioQFsRiKuzvRRc
+	74VxE1QCQOuO6Ko5vn8Vf9S9NrMwBoEt24JhlEkXA
+X-Gm-Gg: AZuq6aKdOunMJHB0UbpELoEHu4ndZAbsjEIBzIHd7Y8ku1cfAOBKZrdZshlyB2HQsv9
+	w011G5INADy3lnRrLtrPYhGQBqSDlLIUHWcn/xuWo+Bnqh1cOINyKi3L2ibSyXxkwb4Tfv+k/A2
+	2QeDT38kJGOznY4SZohxwtdy/AJ+AhS09Fc3GZWkP2oXzMkRfFBst0Gbh9yojW/at4R6a7Pn+6w
+	sL7CL8MOv+QQ6Q+31g0F7PX4S4T/q4XtLGkJpz5ZGNZDj06qG2C9mLbWJ5gpUPaAUWJk7KSQYy4
+	p06jaQa8Fs49R3VZtl4NBKd5kA==
+X-Received: by 2002:a05:7022:394:b0:11b:923d:7735 with SMTP id
+ a92af1059eb24-1246a9583ecmr2889558c88.1.1768984271429; Wed, 21 Jan 2026
+ 00:31:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260121-b4-remove_cache_from_obj-v2-1-7213d36b89d5@suse.cz>
-X-B4-Tracking: v=1; b=H4sIAMV4cGkC/42NQQ7CIBBFr9LMWgyDTbWuvIdpCB0HwaTFgBK14
- e5iT+DyveS/v0Di6DnBsVkgcvbJh7mC2jRAzsxXFv5SGZRUnUQlxdiKyFPIrMmQY21jmHQYbwJ
- 7aclY7PaHHur8Htn615o+D5WdT48Q3+tTxp/9I5pRoDDEO0ktMpM9pWfiLX1gKKV8AXZlhH++A
- AAA
-X-Change-ID: 20260120-b4-remove_cache_from_obj-190fcaf16789
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: Eric Dumazet <edumazet@google.com>, Hao Li <hao.li@linux.dev>, 
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
- Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Vlastimil Babka <vbabka@suse.cz>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5211; i=vbabka@suse.cz;
- h=from:subject:message-id; bh=15RYzhWLTEfcvtbEHKriVBTM8eBckeJmwTj2wXFUVKw=;
- b=owGbwMvMwMG4+8GG0kuuHbMYT6slMWQWVJzJ12rmbxVfrLxpwbkNSV5Kl8ODYouceTp+LJ983
- 2JltUdBJ6M/CwMjB4OlmCJL9e4TjqIzlT2mefh+hBnEygQyRVqkgQEIWBj4chPzSo10jPRMtQ31
- DA11gEwGLk4BmOoaZQ6GGWUv1ix4ETE/s+/Ci2fnf7xqma98kefc77dP30o8fHLiSc59i0MN/u9
- nvUg79UX7+LG0931syuctf2j87phzZoqUQvP8jYl35u0+wlTVtFyr9S3DLb3Tr2smKRfk2pfHKk
- W+OOduOZdD66Nd6691hwXaHr83LWSKXjuN7fObqIsfewu/mn4J02a7qLF41pGu1O23pI3uuuioh
- p9a9J3x3EGDSZ5C/VxTzwSF5+TpWD3i2jpZXuOntVR5QMa9rGkpKTyTLnMe7o8o7V/zqf4Sk+e1
- lWzlqj2M8720s9vNbyo+EVhgGrU6jfuVabKtzkapF1suC2qWPV4h4CI1wVBz73S5TpMFByqaCnz
- 2idkJAAA=
-X-Developer-Key: i=vbabka@suse.cz; a=openpgp;
- fpr=A940D434992C2E8E99103D50224FA7E7CC82A664
-X-Spam-Score: -4.51
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MID_RHS_MATCH_FROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,oracle.com:email,linux.dev:email];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 3960E5BCCA
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+References: <202601211136.rAqSN4rF-lkp@intel.com>
+In-Reply-To: <202601211136.rAqSN4rF-lkp@intel.com>
+From: Marco Elver <elver@google.com>
+Date: Wed, 21 Jan 2026 09:30:35 +0100
+X-Gm-Features: AZwV_QgziV2Y0oUsHCXWDkVLLE1tcXx1ZQ5AONgUo0HiZEfFrVHEcJbtRDBbvQ8
+Message-ID: <CANpmjNOCwW7K2iWZh4g6y+DV8edb9noRULKBeP+Q7oa4NOFRiA@mail.gmail.com>
+Subject: Re: [tip:locking/core 20/43] include/linux/rmap.h:123:1: warning:
+ rw_semaphore 'anon_vma->root->rwsem' is still held at the end of function
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Eric Dumazet has noticed cache_from_obj() is not inlined with clang and
-suggested splitting it into two functions, where the smaller inlined one
-assumes the fastpath is !CONFIG_SLAB_FREELIST_HARDENED. However most
-distros enable it these days and so this would likely add a function
-call to the object free fastpaths.
+On Wed, 21 Jan 2026 at 04:23, kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+> head:   ccf9e070116a81d29aae30db501d562c8efd1ed8
+> commit: e4fd3be884cf33a42c5bcde087b0722a5b8f25ca [20/43] locking/rwsem: Support Clang's context analysis
+> config: s390-randconfig-002-20260121 (https://download.01.org/0day-ci/archive/20260121/202601211136.rAqSN4rF-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260121/202601211136.rAqSN4rF-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202601211136.rAqSN4rF-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    include/linux/fs.h:1083:1: warning: rw_semaphore 'mapping->invalidate_lock' is still held at the end of function [-Wthread-safety-analysis]
+>     1083 | }
 
-Instead take a step back and consider that cache_from_obj() is a relict
-from when memcgs created their separate kmem_cache copies, as the
-outdated comment in build_detached_freelist() reminds us.
-
-Meanwhile hardening/debugging had reused cache_from_obj() to validate
-that the freed object really belongs to a slab from the cache we think
-we are freeing from.
-
-In build_detached_freelist() simply remove this, because it did not
-handle the NULL result from cache_from_obj() failure properly, nor
-validate objects (for the NULL slab->slab_cache pointer) when called via
-kfree_bulk(). If anyone is motivated to implement it properly, it should
-be possible in a similar way to kmem_cache_free().
-
-In kmem_cache_free(), do the hardening/debugging checks directly so they
-are inlined by definition and virt_to_slab(obj) is performed just once.
-In case they failed, call a newly introduced warn_free_bad_obj() that
-performs the warnings outside of the fastpath, and leak the object.
-
-As an intentional change, leak the object when slab->slab_cache differs
-from the cache given to kmem_cache_free(). Previously we would only leak
-when the object is not in a valid slab page or the slab->slab_cache
-pointer is NULL, and otherwise trust the slab->slab_cache over the
-kmem_cache_free() argument. But if those differ, it means something went
-wrong enough that it's best not to continue freeing.
-
-As a result the fastpath should be inlined in all configs and the
-warnings are moved away.
-
-Reported-by: Eric Dumazet <edumazet@google.com>
-Closes: https://lore.kernel.org/all/20260115130642.3419324-1-edumazet@google.com/
-Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-Reviewed-by: Hao Li <hao.li@linux.dev>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
-I'll put this to slab/for-next. Thanks for the reviews!
-
-Changes in v2:
-- Add a comment and mention in the commit log that we are leaking the
-  freed object also in cases where s != slab->slab_cache (Hao Li)
-- Link to v1: https://patch.msgid.link/20260120-b4-remove_cache_from_obj-v1-1-ace30c41eecf@suse.cz
----
- mm/slub.c | 56 +++++++++++++++++++++++++++++++++-----------------------
- 1 file changed, 33 insertions(+), 23 deletions(-)
-
-diff --git a/mm/slub.c b/mm/slub.c
-index 861592ac5425..fd915ea95121 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -6738,30 +6738,26 @@ void ___cache_free(struct kmem_cache *cache, void *x, unsigned long addr)
- }
- #endif
- 
--static inline struct kmem_cache *virt_to_cache(const void *obj)
-+static noinline void warn_free_bad_obj(struct kmem_cache *s, void *obj)
- {
-+	struct kmem_cache *cachep;
- 	struct slab *slab;
- 
- 	slab = virt_to_slab(obj);
--	if (WARN_ONCE(!slab, "%s: Object is not a Slab page!\n", __func__))
--		return NULL;
--	return slab->slab_cache;
--}
--
--static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
--{
--	struct kmem_cache *cachep;
-+	if (WARN_ONCE(!slab,
-+			"kmem_cache_free(%s, %p): object is not in a slab page\n",
-+			s->name, obj))
-+		return;
- 
--	if (!IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) &&
--	    !kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS))
--		return s;
-+	cachep = slab->slab_cache;
- 
--	cachep = virt_to_cache(x);
--	if (WARN(cachep && cachep != s,
--		 "%s: Wrong slab cache. %s but object is from %s\n",
--		 __func__, s->name, cachep->name))
--		print_tracking(cachep, x);
--	return cachep;
-+	if (WARN_ONCE(cachep != s,
-+			"kmem_cache_free(%s, %p): object belongs to different cache %s\n",
-+			s->name, obj, cachep ? cachep->name : "(NULL)")) {
-+		if (cachep)
-+			print_tracking(cachep, obj);
-+		return;
-+	}
- }
- 
- /**
-@@ -6774,11 +6770,25 @@ static inline struct kmem_cache *cache_from_obj(struct kmem_cache *s, void *x)
-  */
- void kmem_cache_free(struct kmem_cache *s, void *x)
- {
--	s = cache_from_obj(s, x);
--	if (!s)
--		return;
-+	struct slab *slab;
-+
-+	slab = virt_to_slab(x);
-+
-+	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
-+	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
-+
-+		/*
-+		 * Intentionally leak the object in these cases, because it
-+		 * would be too dangerous to continue.
-+		 */
-+		if (unlikely(!slab || (slab->slab_cache != s))) {
-+			warn_free_bad_obj(s, x);
-+			return;
-+		}
-+	}
-+
- 	trace_kmem_cache_free(_RET_IP_, x, s);
--	slab_free(s, virt_to_slab(x), x, _RET_IP_);
-+	slab_free(s, slab, x, _RET_IP_);
- }
- EXPORT_SYMBOL(kmem_cache_free);
- 
-@@ -7305,7 +7315,7 @@ int build_detached_freelist(struct kmem_cache *s, size_t size,
- 		df->s = slab->slab_cache;
- 	} else {
- 		df->slab = slab;
--		df->s = cache_from_obj(s, object); /* Support for memcg */
-+		df->s = s;
- 	}
- 
- 	/* Start new detached freelist */
-
----
-base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
-change-id: 20260120-b4-remove_cache_from_obj-190fcaf16789
-
-Best regards,
--- 
-Vlastimil Babka <vbabka@suse.cz>
-
+This is a CONFIG_WARN_CONTEXT_ANALYSIS_ALL=y build; that option
+depends !COMPILE_TEST, which is not set for this compile test it
+appears.
+So this seems to be WAI.
