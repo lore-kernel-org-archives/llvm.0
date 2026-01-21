@@ -1,221 +1,195 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776624A2E07;
-	Wed, 21 Jan 2026 14:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769006817; cv=none; b=LL8aUuAxNRAm91TcP+gfoFrBNiNm7UEBuBaWoescT2UU86pK4zyhhTnqu3bs3HV/FRXA0An/zg2Md34CkOVDq4BG/CGvIlEU40LLI96S1V/JZtHQ0gGjYM6zoON3DmcDHp1xaNeoex8PXFJxQwZqqTcfGBTggCK8TFczcnE+/ok=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769006817; c=relaxed/simple;
-	bh=afNV+4Kntzl2OJS5+YQHRny1CbURCs2XIYTp9jU1WYU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nPfa6X4/XAhZS1cjgkAuOUKEk25JinO7csHU7eGbguGj76hu4TU9Z/KJLeotuA4wbtpH7LzsmdKlrkK1NCjrEZq5eSp6TyTf4aWTzXmhsmdWuaEQkaqwzkvW7vw8YxIn2d/Kaqub343thnpVlJwpcDkTWjr7h6Z7IPhav2ZlQZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=P54WYVbs; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC313446C0;
+	Wed, 21 Jan 2026 15:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769008661; cv=fail; b=edoWAR98GCfAzMdmLPh7obP+2sAQptlEkEYr+SlXxmZDt4+CDqo/o5GOYe3Y7Wlk3Y++OChwjTk1OZwYYB+naNpusQoMpQpYtQGt49bXxiuQ2U7vWvGIg+LGJ+c7Z676P+8J/rL+OMqQGSsm7J5tZgYUa6XRWv5mFQ96EnhSpQQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769008661; c=relaxed/simple;
+	bh=tVShzS1sHiWoroGf/s947+lB4V3xLAVOOUp6Lx+yXVE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=EQksUb3gWyM40mvJ1lOPismNAei3yJOJh0a996P+etEV0x4B2WZJqOSyGyGwe+TgIblzDmVRE3FRsagLOdLvH9rGc+mIbjcocANRbXCj27k6I+cKfjIc8bq72HHW9PimAko0+bbqOOruSQXiFSGnPP4hmstdEr3LbwosJiLzwB0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n0s6J2ym; arc=fail smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="P54WYVbs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1769006813;
-	bh=afNV+4Kntzl2OJS5+YQHRny1CbURCs2XIYTp9jU1WYU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=P54WYVbsl17MXk2LcSxoBkOPZ+v81dklD6Yc/blcHFG8sQyIqIvF+MMRH6T4kaMDv
-	 Pxjo1NMW89sPRxGJFPkURFW1nWxsppd5963XazMJ726o6P/Iivoe7ec6ArmAQtamaO
-	 RlZyD7+bGDIGYPQHWw4oE32TfcDBZMg5TZYmlI0l9dEdtr06159ivtRWbsW9e4awTp
-	 4JrJvUoVQc2xrpYWyHOtVJluq9aPIwQkJerYHttPM1RBiv/vy2S6OAhougTe9RdHIV
-	 /r+5JJPd01uc3aTkRStbsetRpip9w6jVKRc4NTRpPW+rxSOZezyf7nN1TPm/6K4DEV
-	 0I9Nquhwzkj7A==
-Received: from [IPv6:2606:6d00:17:7b4b::c41] (unknown [IPv6:2606:6d00:17:7b4b::c41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id E1FD417E12E5;
-	Wed, 21 Jan 2026 15:46:50 +0100 (CET)
-Message-ID: <69fda4f0136285e4d2f86e7e93d5bdd812c1d47a.camel@collabora.com>
-Subject: Re: [PATCH v9 15/17] media: rkvdec: Add H264 support for the
- VDPU383 variant
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: kernel test robot <lkp@intel.com>, Detlev Casanova
-	 <detlev.casanova@collabora.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Mauro Carvalho
- Chehab	 <mchehab@kernel.org>, linux-media@vger.kernel.org, Ezequiel Garcia	
- <ezequiel@vanguardiasur.com.ar>, Heiko Stuebner <heiko@sntech.de>, Daniel
- Almeida <daniel.almeida@collabora.com>, Jonathan Corbet <corbet@lwn.net>,
- Ricardo Ribalda	 <ribalda@chromium.org>, Hans Verkuil <hverkuil@xs4all.nl>,
- Yunke Cao	 <yunkec@google.com>, Hans de Goede <hansg@kernel.org>, Laurent
- Pinchart	 <laurent.pinchart@ideasonboard.com>, Pavan Bobba
- <opensource206@gmail.com>,  Sakari Ailus <sakari.ailus@linux.intel.com>,
- James Cowgill <james.cowgill@blaize.com>, 
-	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>, Diederik de Haas	
- <didi.debian@cknow.org>
-Date: Wed, 21 Jan 2026 09:46:48 -0500
-In-Reply-To: <202601211924.rqKS2Ihm-lkp@intel.com>
-References: <20260120222018.404741-16-detlev.casanova@collabora.com>
-	 <202601211924.rqKS2Ihm-lkp@intel.com>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-HUBaFbLuQRAvVZ40o0vh"
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n0s6J2ym"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769008660; x=1800544660;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=tVShzS1sHiWoroGf/s947+lB4V3xLAVOOUp6Lx+yXVE=;
+  b=n0s6J2ymlLkjcGg3KRA5Kuu0GzUKNEEBsnrhVgx8AYdLHsgE1ZfBoSsr
+   UmCFgvARQhPisqaffahPktpI/4i46jUFgFlapCIORbYBNoRpt8m94UOv2
+   Ashm6alZKkV0o+ZC237ysKamlqOVNgJNKKXv2kz0SFKNp1eakAsVFuYBi
+   AVa56I3LIM7iGAnrMnlng45mgRp1hDytyQwlp2LNrKlMs1M5aZ81QZkrZ
+   vOwW1A8M4FEfOR1rfLvRX1nC87ya2arXE2R2tQAn7HfjTtzLUCdVclD2A
+   xVgc2SlVdl9VAEB6BT/4BPCzSWcHp5kDHmjDCEPCAxAoaMY6pcPJv5Bn/
+   Q==;
+X-CSE-ConnectionGUID: R0CJ+wxDQzOVFiBX2V3LYQ==
+X-CSE-MsgGUID: rB+sPCehT+mP79fibjaiRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="81683134"
+X-IronPort-AV: E=Sophos;i="6.21,242,1763452800"; 
+   d="scan'208";a="81683134"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 07:17:39 -0800
+X-CSE-ConnectionGUID: kNLMZ2SmQWuAfrf/vyYURg==
+X-CSE-MsgGUID: qBgLmvl6TTS/tFjvNUvG/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,242,1763452800"; 
+   d="scan'208";a="205727683"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 07:17:38 -0800
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 21 Jan 2026 07:17:37 -0800
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Wed, 21 Jan 2026 07:17:37 -0800
+Received: from CY7PR03CU001.outbound.protection.outlook.com (40.93.198.40) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 21 Jan 2026 07:17:36 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=o7YyrUH4GGZ0iS0KPx/pkwG53N5EjiYUQ+47PjCE/Pg2HikanJKIEsAVWTLQYadamgHopCiHT6zjKwmLTCyWYBD7Ue03CpoBfAqr/j8Uk4a2OmxTZ62gvX0XOb/NG+RwLYghJ4or4EWqQBYcWfJku4MtO/VSXDODBpCqbCO+4YTBnzYao+VsQQQcmG12r5fnWlMzKhxcqai71sVXpv6P4M/aqqPF2xRJ6IfC5VL2nsVBVqYfERRpXmLC4NJ0LEs9wWUHmNMblcPy4c5v0qmGLmGEmrQVvWCi1UsqqTlsZPfIwpjtV0Fh6Y/1m3Wk18Ch7OKvaduEXZZ/uzOyE4hpJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mOODaCwQURF2rkGOtSVLJ2LP9exEW5finzXiGDGPpiA=;
+ b=fYfBFJ48vjxRRDdr+bcyo9eGyvtZT0kIE5rAstvIkabrwm7qJ22wRXPpjzPnCm0FSnRZ3CBtkJXFK66GlAZFDcCo9fKSUrrVgMaOSB6GXZUlP712dOMhfK0qy3HRk04eLm46EhT9BH+4D44g+Hu1FJttG3rsnzwD8QHjnfSVIVRJchi4JS6cC+P3kl+bZPSqKXdmL1CgJwygbJS9cnCcrjUnHo6zkiZmvkwD07Vbjs1nrSSzkTW6iK8elJcXFIzjdZG37ce3dznBxl9cCZPNX3eNu8GH8sS51xndGlxHCiySL0Ghi1SwP56Ulbry01XF7em/RtGPvvm7c/xJlklk2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH3PR11MB8468.namprd11.prod.outlook.com (2603:10b6:610:1ba::19)
+ by CH3PR11MB8433.namprd11.prod.outlook.com (2603:10b6:610:168::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Wed, 21 Jan
+ 2026 15:17:34 +0000
+Received: from CH3PR11MB8468.namprd11.prod.outlook.com
+ ([fe80::8188:d688:bbca:2394]) by CH3PR11MB8468.namprd11.prod.outlook.com
+ ([fe80::8188:d688:bbca:2394%5]) with mapi id 15.20.9542.008; Wed, 21 Jan 2026
+ 15:17:33 +0000
+Date: Wed, 21 Jan 2026 23:17:22 +0800
+From: Philip Li <philip.li@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+CC: kernel test robot <lkp@intel.com>, Marco Elver <elver@google.com>,
+	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <x86@kernel.org>, Bart Van Assche
+	<bvanassche@acm.org>
+Subject: Re: [tip:locking/core 24/43] mm/huge_memory.c:4055:8: warning:
+ spinlock 'xas.xa->xa_lock' is not held on every path through here
+Message-ID: <aXDuAoDeFOhHvHAP@rli9-mobl>
+References: <202601212251.RuHvsKd5-lkp@intel.com>
+ <20260121143100.GC166857@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260121143100.GC166857@noisy.programming.kicks-ass.net>
+X-ClientProxiedBy: SG2PR04CA0174.apcprd04.prod.outlook.com (2603:1096:4::36)
+ To CH3PR11MB8468.namprd11.prod.outlook.com (2603:10b6:610:1ba::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR11MB8468:EE_|CH3PR11MB8433:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e2bb9cb-a426-454c-95cb-08de590033bb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?ca+P7FjAQnR3WPy6ZID1EtsqW6A3Zo58bL4fUX4+4+BSzBgcyQ0kyKI/ZE4x?=
+ =?us-ascii?Q?ifq6LV1PBdjwbvdruUlI9vcgWaWLjWdzQy/IhvLWfRNQeRTypYlipgblh2wd?=
+ =?us-ascii?Q?xdHCsXRDUekyD9YNN5dTR8IjqzTWDdjIgiJWnl2n/wMOm8WCFargydVlucGT?=
+ =?us-ascii?Q?enz7i5DHZ21oFb/+4ojtVcLauj6jyQfMK4/hFysCXHHnOxXKcOwexMXFAxNw?=
+ =?us-ascii?Q?9p1zgLehC+lpWa98gkMqxsA85MrrFVBy7ZjyxgcHJvb0DRTWpwJbDHiI6c41?=
+ =?us-ascii?Q?KHR9+5p7daCdZjFwcNpMdsaukOUz6ipoDGgMjc3gkJGNOVCiLY00XC85WYj1?=
+ =?us-ascii?Q?n5OmusYW5VkYmANOayZDDEEh+vKlhHc3JTYDcJzOuKhLxSB7A/ZwkzNZGQuO?=
+ =?us-ascii?Q?YNfdYtIE9I78ap2UEZJtBgKVpgP8mBf3JYsUXJwBInBP1sDbogl0A0W2fQYQ?=
+ =?us-ascii?Q?0dL5c/Yn4Wcx0pXpdhhq0a2G+sTsKmWp/Fq1q9ifJrxQtmxQgsv7d9QpyVMm?=
+ =?us-ascii?Q?sKsJSLyrGF/ETTUzBBz1VS8lKqpww8VdwtZFktWe/4B04pOKz4RX0+mOJSQp?=
+ =?us-ascii?Q?tshPRaIzKo0KOQo7IKnLh+RWEVd9al6Yy5mx02k/1Q3cn/1OiCuT/J+XnOOc?=
+ =?us-ascii?Q?wCjUQs2NupNJviiBsIsE/Pope/i3oE0j67n3n3x0j+HyeMwlYyO2MVDOzlvu?=
+ =?us-ascii?Q?9eqfICx+ZUszTaYfe0pjqVQGuVVu1RP4XfMmmjJsK8D6Eym6JeWg5K2aAvG8?=
+ =?us-ascii?Q?LUJNNqAHffZS6poL9ucapxCM6PARMCAnwUgjI/jHbmpZMAs9Y8CY3wsk1twl?=
+ =?us-ascii?Q?j6NzbPz9jbrW5WGac9coweYYkEx5ReAidFg2GWdS0pqFEBUV+y5cH7eEFlz9?=
+ =?us-ascii?Q?2vKDG7JtzBCti4ujehJGhyuGt5AJ63wGUCb0GNV+3tqG3GOl84Hg9N14bVJy?=
+ =?us-ascii?Q?UUsq1+6lXTjVU1boezdZtaBN/9H9dBePVlIRZiJGh2ZXSPgXUdpUKtCXbp6D?=
+ =?us-ascii?Q?tEmCfXF5+beY5W3EKH1uYQ6X+zDmLSzzKFDAkm9C1FGyRTfH2Qo/+4y1J+pb?=
+ =?us-ascii?Q?XK0+TU1v4g0Buf2kYu5E1hnIAcMnmN7htu32/VmlqS9noRY4kOgWaYP/t29r?=
+ =?us-ascii?Q?RB9GWYnZ0X1GdqCFZhuohA2uZNZB8g6p2GiWd9VyZtAgoCKruvQ3O0rL3jDx?=
+ =?us-ascii?Q?Vi1gpg/KIOlVZ6qHgJaf3fuPojYeVJwFS2rOt0j+11FjW75mrJbzgo350kEc?=
+ =?us-ascii?Q?YnKDxbEe5Q8Au8GfhEbzlWVGoZgaAo8+8suA4Jv4kD9QJSm7STo25BFHG5fU?=
+ =?us-ascii?Q?DF8eTW4PjfpX5Vh2M+WWe9FI3GbDaW/5EqMYBEfoGUwrLf2OD6yZ3/slRUcu?=
+ =?us-ascii?Q?l6gzzrvhoetoZAnR0zhb5Ah9VTKZZ6xWQiTbL6WUuajIVSv9QEPvlxFad8mY?=
+ =?us-ascii?Q?VEq1QTIYgMXm1z5HmTbfNm71ffPdF6cwLbfBahtydVYT6c8oUjV42aiCeSFP?=
+ =?us-ascii?Q?eCXNTYiF6NkCKKJORvlSUtZVybrfTE9o9YOCExaVbqVd5fdl2NT3rWZMt0x6?=
+ =?us-ascii?Q?LhvXGUcegS4DD5GxITRZ7b8EYf3gYuEKWlZBfRid?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB8468.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dtqt7U/+x0uXRlBhORz7MB5lpUzPaDV6gnHurCcgpDLi1xstjAApS/ps8BAr?=
+ =?us-ascii?Q?2schTypV+dcG3egFs8a3yTeN73067hBXTthVBD6/IluxDJIIj3qGDocnC2e6?=
+ =?us-ascii?Q?tY/J+LrvfCRRMf6MLmQd17vrShf1X+HchD7EdgmlreZxBGUSgCZrKWK0anOV?=
+ =?us-ascii?Q?VNo/nLMTKTHC+KRtzQDkkctugT5LC1fXuG4jwkx73ofwCqiWeye66SnY2Epo?=
+ =?us-ascii?Q?yUSNq0BmGb0f9ROjIricLL+eiIwAlBTP6To3iOJ1dM08BI6wBvt6mjbFpyHz?=
+ =?us-ascii?Q?7qS6kDwj+rZ+PN0kf0V2hDZFtX74Z/emTSBqTGPm+DUj8RrOOrrlYJdjwmgj?=
+ =?us-ascii?Q?5nvI2BWN1f29Z8uXOfQIFsaqCNmJrWTUr41PAGlYwZJHvLS7mVBP6/4xnDYZ?=
+ =?us-ascii?Q?n0SA9cUIaxPUF9Rijkwl1AXT1kK1fRAMC/CoPeUusfvpxYqVgh49UqrvE1rH?=
+ =?us-ascii?Q?xcLsfcOKFgMl6l6dO7zZbQ7wTujmS++l6skPqbsk2SpHNesYk6SQrKYPpXZO?=
+ =?us-ascii?Q?KMiKp3ivcd3g6UwlQs2/p7OOqhfhmCWrxV6wlkmOvz9GSivdTX5WIifrg6KW?=
+ =?us-ascii?Q?cdSn/91M+klt2fzV0hwJ6LrBSh0sm9VrGRTeXNlsatj8TzIzg4CswO+8kQCY?=
+ =?us-ascii?Q?nrOVDR65MvdCAr9xNUe4AMMWIg8rC3QGLeOfDyyfmaNK63OicALci0g3lNuY?=
+ =?us-ascii?Q?VOL15gxk+kL9mGZFpVl8klxiuE4TwzzbufitBiRVXWIiMgK8bLWD7g8rodol?=
+ =?us-ascii?Q?P+epSf3egoz0LrNoqFGMJV15wsKQucp9cvDVInYz0IbzADl75mFPTzkNt7SC?=
+ =?us-ascii?Q?vodbH8gVBvhKrwHMGJDKgi9S1Z1shD4GuVrMDsn8gFI9c0CPlBnvfsRbZhn2?=
+ =?us-ascii?Q?cdR2WYHUT2J3DioXetBacWbXnsRVWcYnxmGyOfTxQgYybMR69xiaGZTqSFEn?=
+ =?us-ascii?Q?5imvWFj9o96+zrVthnRYToqQLzOBFRqYZGHcxRmW2oiUULlj4/EIKwUG4ojv?=
+ =?us-ascii?Q?EaZdmrPoM8qGIbLr1h+MBAieAyn2o/L5ztLlydt5ZD95be3OadWM6HIiiAwm?=
+ =?us-ascii?Q?06BKpVDH3/kL7xPwIQmIGbw+zNf6f04UTdAI+VArAVIBW6JCy/M7ThCnmHCw?=
+ =?us-ascii?Q?f5Rt6VjIQUVugSPDQoixZTfEVkdK7r1EbBFrw2aiAspCza0G4SecAJR+DiXu?=
+ =?us-ascii?Q?JTX64UDEG3K6bsj3BtPUyYgX14wOCwjkp7ceUKJ2kd5448dt+JI9pXZUhAJv?=
+ =?us-ascii?Q?fyTDR0JkOk/FXplAqsnboLfQzKxFKEoWwjfzd17VSOWSa9qieMdIDLQ/52o1?=
+ =?us-ascii?Q?MiENdD4+BtdwM+lujmwC4ZHUHBhb6b0amCFI55Vxwd+QQGNq/LSKgmP45Eh6?=
+ =?us-ascii?Q?OK6THwquCBQfoBXAIvsyyoLjTBR3YW9kut64jwZ3UbJQEXuY7YY/yrLt+UnL?=
+ =?us-ascii?Q?vRJsnKSM6lvQj3es7hHfGDAGrc4Xaa+aiQf+UhvJhNnd07WaZRMVZZ7UhU9X?=
+ =?us-ascii?Q?cnN34shCimkhV+ld4f79gfJGN/B9JvrpZgUIPVFMDGKHhTSq0ichg51mxQtl?=
+ =?us-ascii?Q?2OW0bF0DYoaGyB1ReRHK0XE38UBPJd9Cxm31IKpTIMs2KHEwi4k5slAZHA22?=
+ =?us-ascii?Q?fuNqKzOkUCB8pBqDJne8bL/wE0EpGiuAUqmItHC0OIE4O6VF9JIbu6CWP8n1?=
+ =?us-ascii?Q?+W2ocfpjcqILCXhXkGzGCljfA4CWYShFiIF/lqDDQpCYvdoaUNKLv+nkY7bg?=
+ =?us-ascii?Q?FySxT/3uMw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e2bb9cb-a426-454c-95cb-08de590033bb
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB8468.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 15:17:33.8302
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m5NEdMqOe2m3RWHmOCOmvrMvACZBGWgAEVYHvSo9Fp3uUKfZNzang1N/6OAGWhNBTuLjOgY1ZuiO1BghKMyyHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8433
+X-OriginatorOrg: intel.com
 
+On Wed, Jan 21, 2026 at 03:31:00PM +0100, Peter Zijlstra wrote:
+> On Wed, Jan 21, 2026 at 10:27:16PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+> > head:   ccf9e070116a81d29aae30db501d562c8efd1ed8
+> > commit: 6e530e2e31191d88f692e6c8d3bd245e43416e4f [24/43] debugfs: Make debugfs_cancellation a context lock struct
+> > config: s390-randconfig-002-20260121 (https://download.01.org/0day-ci/archive/20260121/202601212251.RuHvsKd5-lkp@intel.com/config)
+> 
+> Again, that is:
+> 
+>  CONFIG_WARN_CONTEXT_ANALYSIS_ALL=y
+> 
+> Robot folks, could you filter out those configs from the randconfig set?
+> At this time, it has no value reporting these.
 
---=-HUBaFbLuQRAvVZ40o0vh
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Sorry for the meaningless report, i will update the bot to disable this config.
 
-Hi,
-
-Le mercredi 21 janvier 2026 =C3=A0 22:27 +0800, kernel test robot a =C3=A9c=
-rit=C2=A0:
-> Hi Detlev,
->=20
-> kernel test robot noticed the following build warnings:
->=20
-> [auto build test WARNING on rockchip/for-next]
-> [also build test WARNING on linuxtv-media-pending/master media-tree/maste=
-r linus/master v6.19-rc6 next-20260120]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->=20
-> url:=C2=A0=C2=A0=C2=A0 https://github.com/intel-lab-lkp/linux/commits/Det=
-lev-Casanova/media-uapi-HEVC-Add-v4l2_ctrl_hevc_ext_sps_-ls-t_rps-controls/=
-20260121-071026
-> base:=C2=A0=C2=A0 https://git.kernel.org/pub/scm/linux/kernel/git/mmind/l=
-inux-rockchip.git=C2=A0for-next
-> patch link:=C2=A0=C2=A0=C2=A0 https://lore.kernel.org/r/20260120222018.40=
-4741-16-detlev.casanova%40collabora.com
-> patch subject: [PATCH v9 15/17] media: rkvdec: Add H264 support for the V=
-DPU383 variant
-> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/2=
-0260121/202601211924.rqKS2Ihm-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project=C2=
-=A0cd708029e0b2869e80abe31ddb175f7c35361f90)
-
-Modification has been done to reduce the stack utilization on clang, though=
- we
-believe we are hitting limitations/bugs on older clang. We went ahead with =
-these
-patch by updating our CI to clang 21, which allocate a lot less stack with =
-KASAN
-enabled and this code. Our general advise is to use a newer clang, or GCC f=
-or
-testing with KASAN.
-
-The stack utilization is caused by the combination of loop unrolling, agres=
-sive
-inlining, and write operations to bitfield (which requires the compiler to
-generate more code for memory checks, since the writes are not aligned).
-
-cheers,
-Nicolas
-
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260121/202601211924.rqKS2Ihm-lkp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202601211924.rqKS2Ihm-lkp=
-@intel.com/
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> > > drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c:485:12: =
-warning: stack frame size (2064) exceeds limit (2048) in 'rkvdec_h264_run' =
-[-Wframe-larger-than]
-> =C2=A0=C2=A0=C2=A0=C2=A0 485 | static int rkvdec_h264_run(struct rkvdec_c=
-tx *ctx)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
-> =C2=A0=C2=A0 1 warning generated.
->=20
->=20
-> vim +/rkvdec_h264_run +485 drivers/media/platform/rockchip/rkvdec/rkvdec-=
-vdpu383-h264.c
->=20
-> =C2=A0=C2=A0 484=09
-> =C2=A0> 485	static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
-> =C2=A0=C2=A0 486	{
-> =C2=A0=C2=A0 487		struct v4l2_h264_reflist_builder reflist_builder;
-> =C2=A0=C2=A0 488		struct rkvdec_dev *rkvdec =3D ctx->dev;
-> =C2=A0=C2=A0 489		struct rkvdec_h264_ctx *h264_ctx =3D ctx->priv;
-> =C2=A0=C2=A0 490		struct rkvdec_h264_run run;
-> =C2=A0=C2=A0 491		struct rkvdec_h264_priv_tbl *tbl =3D h264_ctx->priv_tbl=
-.cpu;
-> =C2=A0=C2=A0 492		u32 timeout_threshold;
-> =C2=A0=C2=A0 493=09
-> =C2=A0=C2=A0 494		rkvdec_h264_run_preamble(ctx, &run);
-> =C2=A0=C2=A0 495=09
-> =C2=A0=C2=A0 496		/* Build the P/B{0,1} ref lists. */
-> =C2=A0=C2=A0 497		v4l2_h264_init_reflist_builder(&reflist_builder, run.de=
-code_params,
-> =C2=A0=C2=A0 498					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 run.sps, run.de=
-code_params->dpb);
-> =C2=A0=C2=A0 499		v4l2_h264_build_p_ref_list(&reflist_builder, h264_ctx->=
-reflists.p);
-> =C2=A0=C2=A0 500		v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx-=
->reflists.b0,
-> =C2=A0=C2=A0 501					=C2=A0=C2=A0=C2=A0 h264_ctx->reflists.b1);
-> =C2=A0=C2=A0 502=09
-> =C2=A0=C2=A0 503		assemble_hw_scaling_list(&run, &tbl->scaling_list);
-> =C2=A0=C2=A0 504		assemble_hw_pps(ctx, &run);
-> =C2=A0=C2=A0 505		lookup_ref_buf_idx(ctx, &run);
-> =C2=A0=C2=A0 506		assemble_hw_rps(&reflist_builder, &run, &h264_ctx->refl=
-ists, &tbl->rps);
-> =C2=A0=C2=A0 507=09
-> =C2=A0=C2=A0 508		config_registers(ctx, &run);
-> =C2=A0=C2=A0 509=09
-> =C2=A0=C2=A0 510		rkvdec_run_postamble(ctx, &run.base);
-> =C2=A0=C2=A0 511=09
-> =C2=A0=C2=A0 512		timeout_threshold =3D h264_ctx->regs.common.reg013_core=
-_timeout_threshold;
-> =C2=A0=C2=A0 513		rkvdec_schedule_watchdog(rkvdec, timeout_threshold);
-> =C2=A0=C2=A0 514=09
-> =C2=A0=C2=A0 515		/* Start decoding! */
-> =C2=A0=C2=A0 516		writel(timeout_threshold, rkvdec->link + VDPU383_LINK_T=
-IMEOUT_THRESHOLD);
-> =C2=A0=C2=A0 517		writel(0, rkvdec->link + VDPU383_LINK_IP_ENABLE);
-> =C2=A0=C2=A0 518		writel(VDPU383_DEC_E_BIT, rkvdec->link + VDPU383_LINK_D=
-EC_ENABLE);
-> =C2=A0=C2=A0 519=09
-> =C2=A0=C2=A0 520		return 0;
-> =C2=A0=C2=A0 521	}
-> =C2=A0=C2=A0 522=09
-
---=-HUBaFbLuQRAvVZ40o0vh
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaXDm2AAKCRDZQZRRKWBy
-9Fd5AQCFNfQJ7V7hO/CwnP/tTYqJgQUUANlbrcmEIqz2R5L3KAEAlUwzVwSgEeKi
-Ne3geJutlRoJdxx1o7GBsOPJDjWQTwU=
-=cGBC
------END PGP SIGNATURE-----
-
---=-HUBaFbLuQRAvVZ40o0vh--
+> 
