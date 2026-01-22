@@ -1,135 +1,82 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B4F33ADBF
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 06:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685641DE4E0;
+	Thu, 22 Jan 2026 06:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769063451; cv=none; b=bjuIfjRhg1zmXzIxHK6dW9NUQojvw/8jIYtLjNIu3BZ8f1WgJ5lpKiWNAjysGnio5lQtOaBntG3GpGLLHcgM7txfsydRQYbnD+Xl6Wxo0fW5Oo2JRRsesSmRmmAOR5tjZyONrUhkJigT9FpkR7HLvoLjw7wV6qFj/Q0ZGUeOjlY=
+	t=1769065002; cv=none; b=WmZkF6m2gNctm2tUnUj3SUMWhrA4hoeeqFvEKxt1u/TJI8ocUysHL1svQzkovSI8U8GiAn/2uAS7WWV6GqAnT602tMECoWo2Eie2JNvcBjrEAFcd6cnDtLnPSb1Hk1SbEqoZha4j2q0ihvnSd+vEWzOfrrebFrgXbDSZ8dya890=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769063451; c=relaxed/simple;
-	bh=gI4VneopsdqVesCDKepfvDU9rL2mj/n7kdeCVIu3J5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IH86OUqR9rVBs1BLRs7iILCjpUKm8EYvqAU/Vcju5xzxMrUvlBPpSKq7lVi7F/bWOFqYsAtvm27esb0jfukmiJkSEwGKYrwPVgzh1IbZ6hZwvUsOUE+OXZoi0+Vf2Vw15vDn9oLj9W+bufAqPmtPunYursWKrg1yU4doeQeM+Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id F0E59227AA8; Thu, 22 Jan 2026 07:30:42 +0100 (CET)
-Date: Thu, 22 Jan 2026 07:30:42 +0100
-From: Christoph Hellwig <hch@lst.de>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Bart Van Assche <bvanassche@acm.org>, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, linux-crypto@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped
- init guards
-Message-ID: <20260122063042.GA24452@lst.de>
-References: <20260119094029.1344361-1-elver@google.com> <20260120072401.GA5905@lst.de> <20260120105211.GW830755@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1769065002; c=relaxed/simple;
+	bh=qRkuzxK9kptM3W7AYWE/CJDBGoVYY4BNW8HQvhxKnNg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=i1+YzMxn2+KjDXIvqYjygZpCb1diqv+HQUWrjnPiayCie4hHUB84OdgQwui89dC/Df7hiwCKpewAwUDouM793+N5Mf8g1e6KbrFs+YEINtnYguRHR2MocC9sgC5tZnCl49NnM4ajnF70SCspkuKLb9apFkutG3Lg09cfE8Dm6tM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OJ/o0Yzw; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OJ/o0Yzw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769064999; x=1800600999;
+  h=date:from:to:cc:subject:message-id;
+  bh=qRkuzxK9kptM3W7AYWE/CJDBGoVYY4BNW8HQvhxKnNg=;
+  b=OJ/o0YzwIa54oh9TNjgRZVUW3CKkjWacLXKygHyjOr1N8F9IQUtk5EY0
+   Y3RinMZVK1ozFYY0Pcq0VTqSJaaueI0+xZTNDrcNvpz9J4b8Cvr3Ql/rS
+   Sr8/Ujit0PYZgmHjQ6ZSbwe/xgxInNapiRJryMLaiQGqajCgDZuaK3z6M
+   LcFn/YwvMMU94rfOGaYYsEY5YfwqgRywTh2k+2iCQvMUg759tT25Wtzj6
+   LvumTTJLEvXEeUoSx211JkZllgUxYsmdeUAVAfP1rlJROJM/D+C3k6AnS
+   RHSEnA3k88jEo4Px1nSLv5C8LUhPiQ12KzODUnsQRRsTQpQ7KitcYqdYU
+   w==;
+X-CSE-ConnectionGUID: QT04NDw5Tf6LWLkqturMzg==
+X-CSE-MsgGUID: 0smyn5E3QYqn6UdHUEOEYA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="87715842"
+X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
+   d="scan'208";a="87715842"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 22:56:34 -0800
+X-CSE-ConnectionGUID: xP4P0hqPSJmEHSR22aFI+A==
+X-CSE-MsgGUID: cfpDChZgRsCCPjQsoywfsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
+   d="scan'208";a="237324607"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by orviesa002.jf.intel.com with ESMTP; 21 Jan 2026 22:56:33 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1viocI-000000000Rh-2X6y;
+	Thu, 22 Jan 2026 06:56:30 +0000
+Date: Thu, 22 Jan 2026 07:56:01 +0100
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:x86/tdx_huge_sept 51/79] Warning:
+ arch/x86/kvm/mmu/tdp_mmu.c:543 function parameter 'sptep' not described in
+ 'handle_changed_spte'
+Message-ID: <202601220730.PSncZ6G3-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120105211.GW830755@noisy.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Tue, Jan 20, 2026 at 11:52:11AM +0100, Peter Zijlstra wrote:
-> > So I think the first step is to avoid implying the safety of guarded
-> > member access by initialing the lock.  We then need to think how to
-> > express they are save, which would probably require explicit annotation
-> > unless we can come up with a scheme that makes these accesses fine
-> > before the mutex_init in a magic way.
-> 
-> But that is exactly what these patches do!
-> 
-> Note that the current state of things (tip/locking/core,next) is that
-> mutex_init() is 'special'. And I agree with you that that is quite
-> horrible.
-> 
-> Now, these patches, specifically patch 6, removes this implied
-> horribleness.
-> 
-> The alternative is an explicit annotation -- as you suggest.
-> 
-> 
-> So given something like:
-> 
-> struct my_obj {
-> 	struct mutex	mutex;
-> 	int		data __guarded_by(&mutex);
-> 	...
-> };
-> 
-> 
-> tip/locking/core,next:
-> 
-> init_my_obj(struct my_obj *obj)
-> {
-> 	mutex_init(&obj->mutex); // implies obj->mutex is taken until end of function
-> 	obj->data = FOO;	 // OK, because &obj->mutex 'held'
-> 	...
-> }
-> 
-> And per these patches that will no longer be true. So if you apply just
-> patch 6, which removes this implied behaviour, you get a compile fail.
-> Not good!
-> 
-> So patches 1-5 introduces alternatives.
-> 
-> So your preferred solution:
-> 
-> hch_my_obj(struct my_obj *obj)
-> {
-> 	mutex_init(&obj->mutex);
-> 	mutex_lock(&obj->mutex); // actually acquires lock
-> 	obj->data = FOO;
-> 	...
-> }
-> 
-> is perfectly fine and will work. But not everybody wants this. For the
-> people that only need to init the data fields and don't care about the
-> lock state we get:
-> 
-> init_my_obj(struct my_obj *obj)
-> {
-> 	guard(mutex_init)(&obj->mutex); // initializes mutex and considers lock
-> 					// held until end of function
-> 	obj->data = FOO;
-> 	...
-> }
+tree:   https://github.com/sean-jc/linux x86/tdx_huge_sept
+head:   491d01f5d2ac33f4da9d302ff18cdcb57c0d967b
+commit: af111245b7f1b0948e7677d96ff459953fdfc7ac [51/79] KVM: x86/mmu: Plumb the SPTE _pointer_ into the TDP MMU's handle_changed_spte()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260122/202601220730.PSncZ6G3-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601220730.PSncZ6G3-lkp@intel.com/reproduce)
 
-And this is just as bad as the original version, except it is now
-even more obfuscated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601220730.PSncZ6G3-lkp@intel.com/
 
-> And for the people that *reaaaaaly* hate guards, it is possible to write
-> something like:
-> 
-> ugly_my_obj(struct my_obj *obj)
-> {
-> 	mutex_init(&obj->mutex);
-> 	__acquire_ctx_lock(&obj->mutex);
-> 	obj->data = FOO;
-> 	...
-> 	__release_ctx_lock(&obj->mutex);
-> 
-> 	mutex_lock(&obj->lock);
-> 	...
+All warnings (new ones prefixed by >>):
 
-That's better.  What would be even better for everyone would be:
+>> Warning: arch/x86/kvm/mmu/tdp_mmu.c:543 function parameter 'sptep' not described in 'handle_changed_spte'
+>> Warning: arch/x86/kvm/mmu/tdp_mmu.c:543 function parameter 'sptep' not described in 'handle_changed_spte'
 
-	mutex_prepare(&obj->mutex); /* acquire, but with a nice name */
-	obj->data = FOO;
-	mutex_init_prepared(&obj->mutex); /* release, barrier, actual init */
-
-	mutex_lock(&obj->mutex); /* IFF needed only */
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
