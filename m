@@ -1,86 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78622223DC6;
-	Thu, 22 Jan 2026 09:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77669355802
+	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 09:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769073430; cv=none; b=BUbjecXPVP+ltEYRKGtts4uDB465Mv4O/VSYtcoMW6Wxju1GsUaGz8EUlSYrsTeKAq6BwcsSGnDf5RI/0VaMOZ9QM6+c5jsDSGKB1aSejQ864L0f+ZBDFIf4WU5s9ge7rc3edvcwAaVFJap5nkILWnTShADIhh4RQ4PM6hrWflc=
+	t=1769075076; cv=none; b=kTjSnu1jmV/4RCsq8ohCfxV8xAtWg0G6K0DiI/FTDFi063+5MlrgHgj7lRcr6Qee6akJgWqrNzKW41Q4akrnMVwrye5LH0iUZBOTJkleuJPQoR8eFy8VLWdGnQdaonzKK3G7yDhauGQfZaTTlE27+0pmgriCUwJje2OGm/CUsfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769073430; c=relaxed/simple;
-	bh=q2esC2zJX3g7e6ZMhgi/ddREdTJyIkx9wRyA+rvR/0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H72ta55e9aftqY2lXQcCasE4KPS0e+7HWsy/NBTLt8H7n6XsejHqH6lsUGVyZRU85meP2lYV8wjCnWM+2cE3entDn3aUkeZIEjWKX2B8+l1Mz5E56WbdNX4jLHF9OgdEBH5T0tpJSeG06+mwN1RasFzMSfK+U74pOFLYdu5ehSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wxyb+X9a; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769075076; c=relaxed/simple;
+	bh=paRhJoxipyTSFEVAwfW//2BXhX6IFGS2LPXZYyPgM04=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=u3IWCQEkfKU/urgArAn7gydt0KuaMkB67/L2uiU78+X95LXySOFTFe+F14gKpVdT4LNl6BlB0lm+NSYPt91rClmRVwqjV/7Eb9rFK8e9p+aTKOUveYb8yAoHcp27bx2lU9JPzAW3aq4EZsyTJveF1T6Dm1cKfRnJPgmEkL42hGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VM6/Fiqz; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wxyb+X9a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4463DC16AAE;
-	Thu, 22 Jan 2026 09:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769073427;
-	bh=q2esC2zJX3g7e6ZMhgi/ddREdTJyIkx9wRyA+rvR/0c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wxyb+X9a6SwDrQ00TSl3QEYtmzje5bQ/rb5gr53KVZyRwYscc8Od7sYDuECCyba5y
-	 PGPITHKtj6D0C1Tx/Qc8AMJrzyrMFN3/Wwypia2ZIznxFIm/4LQzhwSuXKHinjQbkQ
-	 DbUyUiwMyF5q/rfng0TZmo2c5EWgCnIM4DKCl0UHhAwzsmCvd7e+lsZoeHhZHiYwo3
-	 yJJBa4NXPA9XVdNtIRuxA09RuS7H8p6CYjdIWQD6UNiuvUT7+l+spEOaNwTIP12/hP
-	 OSg1KQvV7IJSwLhEqS+72Wtu3HeOR/HeO6RPuDeLI8VTleiqKcvSn3eQnocE/RJs16
-	 uEwY5iOVzjtZw==
-Date: Thu, 22 Jan 2026 11:17:02 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [rppt:zero-page/v0 1/1] ERROR: modpost: vmlinux:
- 'empty_zero_page' exported twice. Previous export was in vmlinux
-Message-ID: <aXHrDsAjeoT_8-vr@kernel.org>
-References: <202601221150.JsPp145b-lkp@intel.com>
- <20260122051722.GC3770486@ax162>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VM6/Fiqz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769075073;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0h4x+PvnJjxRJp0UuVyfe4v1EShGV4XQvf1gzMrJHoE=;
+	b=VM6/FiqzR27rLMqZEMJHBuze0gKFMxmtdknRtq1zka5e6UhhYKkNaDgbuZda8eZf5+h++l
+	wuEQ+NrX/HPwygGAHcCClRfR1D9zPOVaJuQ+Z2eWzbgr4WAyfMDwKzhibxIWgCmCnfYIP+
+	Aqt9JByHEkWtmtkadbWgvcnhrUoLxXY=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-2qTKp4e7MJiQUcuPOuM2DQ-1; Thu,
+ 22 Jan 2026 04:44:32 -0500
+X-MC-Unique: 2qTKp4e7MJiQUcuPOuM2DQ-1
+X-Mimecast-MFC-AGG-ID: 2qTKp4e7MJiQUcuPOuM2DQ_1769075071
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2583418002C3
+	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 09:44:31 +0000 (UTC)
+Received: from [172.20.12.215] (unknown [10.30.44.139])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A97D51800577;
+	Thu, 22 Jan 2026 09:44:30 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
+ (6.19.0-rc6, upstream-mainline, 6c790212)
+Date: Thu, 22 Jan 2026 09:44:30 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260122051722.GC3770486@ax162>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <64719.126012204443200147@us-mta-588.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: jVOqH1SGV_QA4oAEzQd6ZqjDnpVLiuPfT5ZdywkjYVY_1769075071
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 21, 2026 at 10:17:22PM -0700, Nathan Chancellor wrote:
-> On Thu, Jan 22, 2026 at 11:14:04AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git zero-page/v0
-> > head:   53d07913878ea27d6fe4224e8581729185291278
-> > commit: 53d07913878ea27d6fe4224e8581729185291278 [1/1] dev: arch, mm: consolidate empty_zero_page
-> > config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260122/202601221150.JsPp145b-lkp@intel.com/config)
-> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221150.JsPp145b-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601221150.JsPp145b-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> > 
-> > >> ERROR: modpost: vmlinux: 'empty_zero_page' exported twice. Previous export was in vmlinux
-> 
-> Seems like the following should fix that?
-> 
-> diff --git a/arch/hexagon/kernel/hexagon_ksyms.c b/arch/hexagon/kernel/hexagon_ksyms.c
-> index 36a80e31d187..81bc6f81e200 100644
-> --- a/arch/hexagon/kernel/hexagon_ksyms.c
-> +++ b/arch/hexagon/kernel/hexagon_ksyms.c
-> @@ -17,7 +17,6 @@ EXPORT_SYMBOL(raw_copy_to_user);
->  EXPORT_SYMBOL(__vmgetie);
->  EXPORT_SYMBOL(__vmsetie);
->  EXPORT_SYMBOL(__vmyield);
-> -EXPORT_SYMBOL(empty_zero_page);
->  EXPORT_SYMBOL(memcpy);
->  EXPORT_SYMBOL(memset);
+Hi, we tested your kernel and here are the results:
 
-Yes, it should :)  
-Thanks!
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
--- 
-Sincerely yours,
-Mike.
+
+Kernel information:
+    Commit message: Merge tag 'devicetree-fixes-for-6.19-3' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/robh/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2275054298
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2275054298_x86_64_kernel-debug
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, x86_64]
+    /distribution/command [aarch64, ppc64le, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
+    Boot test [aarch64, ppc64le, x86_64]
+    CKI/restraint [aarch64, ppc64le, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [aarch64, ppc64le, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
+    Storage - blktests - throtl [aarch64, x86_64]
+    Storage - blktests - ublk [aarch64, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, x86_64]
+    stress: stress-ng - memory [aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
