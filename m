@@ -1,122 +1,127 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77669355802
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 09:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AC536405F
+	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 10:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769075076; cv=none; b=kTjSnu1jmV/4RCsq8ohCfxV8xAtWg0G6K0DiI/FTDFi063+5MlrgHgj7lRcr6Qee6akJgWqrNzKW41Q4akrnMVwrye5LH0iUZBOTJkleuJPQoR8eFy8VLWdGnQdaonzKK3G7yDhauGQfZaTTlE27+0pmgriCUwJje2OGm/CUsfQ=
+	t=1769076827; cv=none; b=ISIlj4pYnk2xAzo3OxNcFUaX5aBQLuFhNZTbZWHCjvHSItpzhgUrtovkvtmRCmBXhADH7zmVgfdYJsd8jvNnAQWyMMdkP+co9lR6tvo5YKspq7njlgByeV3auFVuF/FQ/+iQORwe+536x4Rld2JODJdpHfO23/klOcSxTo9EVZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769075076; c=relaxed/simple;
-	bh=paRhJoxipyTSFEVAwfW//2BXhX6IFGS2LPXZYyPgM04=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=u3IWCQEkfKU/urgArAn7gydt0KuaMkB67/L2uiU78+X95LXySOFTFe+F14gKpVdT4LNl6BlB0lm+NSYPt91rClmRVwqjV/7Eb9rFK8e9p+aTKOUveYb8yAoHcp27bx2lU9JPzAW3aq4EZsyTJveF1T6Dm1cKfRnJPgmEkL42hGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VM6/Fiqz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769076827; c=relaxed/simple;
+	bh=DIdgKvbsE+stQowC8PbWkHC7BKt42IMjS2ZVC6qoNWc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=hAIUtxogWti4AzHqTdby6lvE+M7b6J7a6xq7Ozz2pqg8A2P5We/gnQLFtmbh9Yj5zGcQvPY/5dvJbLGA36BIoKYtvvUGhjRAjBmO2WQ+/LGz/w7zZmtMzia7gniv7OiItYIrUPVFha6mZZ3bjxQy+oX2hGglrfGG7JraSo+HUUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=Zc53HrB4; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VM6/Fiqz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769075073;
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="Zc53HrB4"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 27FCE41DDC;
+	Thu, 22 Jan 2026 10:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1769076823;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0h4x+PvnJjxRJp0UuVyfe4v1EShGV4XQvf1gzMrJHoE=;
-	b=VM6/FiqzR27rLMqZEMJHBuze0gKFMxmtdknRtq1zka5e6UhhYKkNaDgbuZda8eZf5+h++l
-	wuEQ+NrX/HPwygGAHcCClRfR1D9zPOVaJuQ+Z2eWzbgr4WAyfMDwKzhibxIWgCmCnfYIP+
-	Aqt9JByHEkWtmtkadbWgvcnhrUoLxXY=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-2qTKp4e7MJiQUcuPOuM2DQ-1; Thu,
- 22 Jan 2026 04:44:32 -0500
-X-MC-Unique: 2qTKp4e7MJiQUcuPOuM2DQ-1
-X-Mimecast-MFC-AGG-ID: 2qTKp4e7MJiQUcuPOuM2DQ_1769075071
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2583418002C3
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 09:44:31 +0000 (UTC)
-Received: from [172.20.12.215] (unknown [10.30.44.139])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A97D51800577;
-	Thu, 22 Jan 2026 09:44:30 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 81 of 110): Test report for master
- (6.19.0-rc6, upstream-mainline, 6c790212)
-Date: Thu, 22 Jan 2026 09:44:30 -0000
-To: llvm@lists.linux.dev
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FQ1ccnpNqTzAnpIZMwC9x+2AHxI7DYmZi4jFycjHTtQ=;
+	b=Zc53HrB4ErkhxH6BDTLA7t2jNiAoXcZNexCBEzW08h+0JI8PGlqxiHyaALqIKbhLuApQKP
+	8Y1QO3t20/DY+3snt+9b3/vUSvaJq19+96JN3j3qH2LJ7JJh3+5ZQ0kO28zO2dYjSRZDCo
+	a//ZC24JGsbeTfQTWm7WKNb9+YdWuELHyM81n/vMoeeTS5XcOKM9vlLsjDlItd1p7Pl6r7
+	bRNgpbuinN5T6B/rCFD/ZFLIEH5AvMoMchBzrtS37N/zJhLq+kGbr1L77Y+rLBESvurAub
+	PS2Flcg1S+RSrabuBrjg5pTGUlNVQbFjSBqg2LQZ/n0Y469HcRvvPGqXYxnlYQ==
+Message-ID: <61379dc4-2031-4f94-9709-dd5608cdb780@gtucker.io>
+Date: Thu, 22 Jan 2026 11:13:39 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <64719.126012204443200147@us-mta-588.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: jVOqH1SGV_QA4oAEzQd6ZqjDnpVLiuPfT5ZdywkjYVY_1769075071
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] Documentation: dev-tools: add container.rst page
+To: Nicolas Schier <nsc@kernel.org>
+References: <cover.1767199119.git.gtucker@gtucker.io>
+ <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
+ <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
+Content-Language: en-US
+From: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ David Gow <davidgow@google.com>, =?UTF-8?Q?Onur_=C3=96zkan?=
+ <work@onurozkan.dev>, Arnd Bergmann <arnd@arndb.de>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, automated-testing@lists.yoctoproject.org,
+ workflows@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: gtucker@gtucker.io
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddugeehkeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfevjggtgfesthejredttddvjeenucfhrhhomhepifhuihhllhgruhhmvgcuvfhutghkvghruceoghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhoqeenucggtffrrghtthgvrhhnpeelgfehueeugfegudfgveehveegtddvgefggeevvdeutdeghffhfffhtdeklefhieenucffohhmrghinhepughotghkvghrrdhiohenucfkphepudejiedrudeikedrudeguddruddvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeeirdduieekrddugedurdduvddupdhhvghloheplgduledvrdduieekrdduleekrdeigegnpdhmrghilhhfrhhomhepghhtuhgtkhgvrhesghhtuhgtkhgvrhdrihhopdhqihgupedvjefhvefggeduffffvedpmhhouggvpehsmhhtphhouhhtpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehnshgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtt
+ hhopeifohhrkhesohhnuhhrohiikhgrnhdruggvvhdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggv
+X-GND-State: clean
 
-Hi, we tested your kernel and here are the results:
+Hi Nicolas,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+On 20/01/2026 2:53 pm, Nicolas Schier wrote:
+>> +User IDs
+>> +========
+>> +
+>> +This is an area where the behaviour will vary slightly depending on the
+>> +container runtime.  The goal is to run commands as the user invoking the tool.
+>> +With Podman, a namespace is created to map the current user id to a different
+>> +one in the container (1000 by default).  With Docker, while this is also
+>> +possible with recent versions it requires a special feature to be enabled in
+>> +the daemon so it's not used here for simplicity.  Instead, the container is run
+>> +with the current user id directly.  In both cases, this will provide the same
+>> +file permissions for the kernel source tree mounted as a volume.  The only
+>> +difference is that when using Docker without a namespace, the user id may not
+>> +be the same as the default one set in the image.
+>> +
+>> +Say, we're using an image which sets up a default user with id 1000 and the
+>> +current user calling the ``container`` tool has id 1234.  The kernel source
+>> +tree was checked out by this same user so the files belong to user 1234.  With
+>> +Podman, the container will be running as user id 1000 with a mapping to id 1234
+>> +so that the files from the mounted volume appear to belong to id 1000 inside
+>> +the container.  With Docker and no namespace, the container will be running
+>> +with user id 1234 which can access the files in the volume but not in the user
+>> +1000 home directory.  This shouldn't be an issue when running commands only in
+>> +the kernel tree but it is worth highlighting here as it might matter for
+>> +special corner cases.
+> I tested a tiny bit with podman as runtime backend.  If I leave out the
+> '-r podman' podman's docker emulation is in effect and fails with:
+> 
+>      $ scripts/container -i docker.io/tuxmake/korg-clang -- make LLVM=1 -j8 olddefconfig
+>      Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+>      mkdir: cannot create directory '.tmp_15': Permission denied
+>      mkdir: cannot create directory '.tmp_19': Permission denied
+>      mkdir: cannot create directory '.tmp_22': Permission denied
+>      mkdir: cannot create directory '.tmp_25': Permission denied
+>      mkdir: cannot create directory '.tmp_28': Permission denied
+>      mkdir: cannot create directory '.tmp_31': Permission denied
+>        HOSTCC  scripts/basic/fixdep
+>      error: error opening 'scripts/basic/.fixdep.d': Permission denied
+>      1 error generated.
+>      make[2]: *** [scripts/Makefile.host:114: scripts/basic/fixdep] Error 1
+>      make[1]: *** [/src/Makefile:655: scripts_basic] Error 2
+>      make: *** [Makefile:248: __sub-make] Error 2
+>      [exit code 2]
+> 
+> But with '-r podman' it works like a charm.
+> 
+> Would it make sense to switch the default runtime to podman to
+> prevent non-functional podman-docker emulation?  (Or is this just a
+> problem on my machine?)
 
+Yes, I just had a quick look as I'm not familiar with the setup to
+run Docker commands on top of the Podman backend.  So I'll swap the
+order like Nathan suggested so that Podman takes priority over Docker
+and add a note to the docs.  It's on the list of improvements and
+I'll work on a proper fix once the initial version of the tool has
+landed, assuming this is not a blocking issue.
 
-Kernel information:
-    Commit message: Merge tag 'devicetree-fixes-for-6.19-3' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/robh/linux
+Thanks for trying it out and reporting this use case.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2275054298
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2275054298_x86_64_kernel-debug
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, x86_64]
-    /distribution/command [aarch64, ppc64le, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, x86_64]
-    Boot test [aarch64, ppc64le, x86_64]
-    CKI/restraint [aarch64, ppc64le, x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    kselftests upstream - net [x86_64]
-    Reboot test [aarch64, ppc64le, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Cheers,
+Guillaume
 
