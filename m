@@ -1,63 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3D32D979C;
-	Thu, 22 Jan 2026 07:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0E435F8D1;
+	Thu, 22 Jan 2026 09:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769068490; cv=none; b=Qijoi/f/zA3QyRuCvpUgHH3Jb7udZDHw8BU3uVwAYIiINj+4xry9rYbWfX9Lv/TytjECKCLFQew3pxzNAVmByDMnevOe3GWmj6jL0rLjb7Y24hbgyJ5LPrFEH8m36UvaUskm0nIaxKXwVZtjQto96gFDUegIj6WdNMh7a9vbJgI=
+	t=1769072654; cv=none; b=PRzm4lad9iu9og3L0v20FecXXZYxjdW3SxZ6NNPRmY6t+QBgOg+EBTdAIaVIOyHntmswTIq4B5suW3GYgzRPlKbnOS9zQi+nK9K9hSJkSiqFZw8zVKV7LS3ut/NwvbYNy+GK8gzUHrMyUdLWcmuUv12FwbmeW7iTEzRXRpPOuBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769068490; c=relaxed/simple;
-	bh=nyMGeoOkL0QdzBs/NrnaOdhm6/U4oVNKyz0gPRixEf0=;
+	s=arc-20240116; t=1769072654; c=relaxed/simple;
+	bh=9m/NEaEfSPp+2xPIx1vPIL2FrAyyxOhVPf4RE4jFzd0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ag94kMQ9m/cruyIMahLR9CiSyC5Ixgjfh/DtCyhFfGXqfr0fJkxPAN2s/4lf9OuGgi6Zc1XX2R6GK1Fmhb0tYrHmEmVLkYgQk27W1eSh0M9s0TftkutdnJJIVA982LSzCO6VgGAl9yY34CSFH7R3BpcWl/JQotSyUP13a20cIGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GgNnH/HN; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wk7178+JdpRUCzeQQrXs/LJNrxuJFHap7RdGF0kNIIwZrq5r59EsPgqoGx1sNkWP4BTjAyBkq/hnU0u6sIen3AudnenxniJlsukfZszF+NMiC8JogGtgnG3exmjXW0U+iXCeGSTQ37/hlT931kuZTwcy2bvrnE1Z+8nzdsLK4PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OQgQ3xks; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GgNnH/HN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769068489; x=1800604489;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nyMGeoOkL0QdzBs/NrnaOdhm6/U4oVNKyz0gPRixEf0=;
-  b=GgNnH/HNMZOm6w0hq9o9/HEQwC7FPMgmlwYjqicX20PpLFGWPIba6VIS
-   KaNVOf8tCatHsLL8oyR84rOAVBoWL/2fignl9IoacAk5bD5eVyFkPhFiZ
-   pGEX1bQm1zCOaWQjFwiyMW0lqHX37bOyUa1gGgWtZqRgoloN1+VQFCrCd
-   MiPkRs4t2wVCrmlrDi0BtJuj0/z0DsJMOuDX+jUlFzE1uVvb540lZuXyJ
-   XxqQC/Kfm1xKJoaPs0LzekueAWRFGj1/Ei8OwUaI1usikN5HdOJO3L1Wv
-   npGdO6x8jisRAZ6QcIcjrI2AY2p6XOWOzE8XPGt76wi/ydiqWaR+iDjVo
-   g==;
-X-CSE-ConnectionGUID: bnPybWjeRmGuH4lusG7UeA==
-X-CSE-MsgGUID: 4RtfmxK1RJ2iobRg+IOHWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="80929087"
-X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
-   d="scan'208";a="80929087"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 23:54:48 -0800
-X-CSE-ConnectionGUID: l7j7o6K/SImEFTiDyTJELw==
-X-CSE-MsgGUID: 3NNZIlqUQO6sRj11CBolGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
-   d="scan'208";a="205793400"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 21 Jan 2026 23:54:44 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vipWb-00000000SZd-1kBe;
-	Thu, 22 Jan 2026 07:54:41 +0000
-Date: Thu, 22 Jan 2026 15:54:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rishikesh Jethwani <rjethwani@purestorage.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, saeedm@nvidia.com,
-	tariqt@nvidia.com, mbloch@nvidia.com, borisp@nvidia.com,
-	john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
-	davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
-	leon@kernel.org, Rishikesh Jethwani <rjethwani@purestorage.com>
-Subject: Re: [PATCH v4 2/3] tls: add hardware offload key update support
-Message-ID: <202601221546.bR6QG2oX-lkp@intel.com>
-References: <20260121215727.3994324-3-rjethwani@purestorage.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OQgQ3xks"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XUllA3z6xvwso4MPNTeNmaZ7G02VaPIp7hvioKqFSss=; b=OQgQ3xksDFXSMrIEZP3ESmEV7a
+	6hVzpC5tQRD3J0z6aGTH+ngSwaYNxhnibUAO6ns0CNPM9GQtXjCSxA8Ikn6UTfQATsBbcQf4nwT3F
+	57OzNTQh++p3m+iCqvT0sr71lQHCrsaXFN1EOQRE3B1SugY9vvCCI2R8ukcl5Lka6N5XoN60ShA+e
+	7y47Rg2l8dpPNko1hjqmQ7oRb7JWtdZ5wK1KVe6m6Ir8ZGOC4+X0W/YyLA1xu+EUo+UjhcFSx9fCL
+	3PzReRKSyJVKvajK77hoALlrGqYpvJR7xSqEHBZejrYAfDD6ffLSLncBqIy9QXGR444pK23i+JDqE
+	anBc4HDQ==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1viqbj-000000000fD-3rU5;
+	Thu, 22 Jan 2026 09:04:04 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id E43C6300754; Thu, 22 Jan 2026 10:04:02 +0100 (CET)
+Date: Thu, 22 Jan 2026 10:04:02 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: elver@google.com, linux-kernel@vger.kernel.org, bigeasy@linutronix.de,
+	mingo@kernel.org, tglx@linutronix.de, will@kernel.org,
+	boqun.feng@gmail.com, longman@redhat.com, hch@lst.de,
+	rostedt@goodmis.org, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
+Message-ID: <20260122090402.GD171111@noisy.programming.kicks-ass.net>
+References: <20260121110704.221498346@infradead.org>
+ <20260121192349.GM166857@noisy.programming.kicks-ass.net>
+ <e1229c44-048b-4e42-b545-18a8c716b5eb@acm.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,275 +52,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260121215727.3994324-3-rjethwani@purestorage.com>
+In-Reply-To: <e1229c44-048b-4e42-b545-18a8c716b5eb@acm.org>
 
-Hi Rishikesh,
+On Wed, Jan 21, 2026 at 12:37:21PM -0800, Bart Van Assche wrote:
+> On 1/21/26 11:23 AM, Peter Zijlstra wrote:
+> > Pushed out an updated/fixed series to:
+> > 
+> >    git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+> 
+> With CONFIG_WARN_CONTEXT_ANALYSIS=y, CONFIG_WARN_CONTEXT_ANALYSIS_ALL=n
+> and "+src:*include/*=emit" in scripts/context-analysis-suppression.txt
+> I see the following error messages for that tree:
+> 
+> In file included from kernel/locking/mutex.c:22:
+> In file included from ./include/linux/ww_mutex.h:21:
+> ./include/linux/rtmutex.h:44:25: error: reading variable 'owner' requires
+> holding raw_spinlock '&rt_mutex_base::wait_lock'
+> [-Werror,-Wthread-safety-analysis]
+>    44 |         return READ_ONCE(lock->owner) != NULL;
+>       |                                ^
+> ./include/linux/rtmutex.h:52:56: error: reading variable 'owner' requires
+> holding raw_spinlock '&rt_mutex_base::wait_lock'
+> [-Werror,-Wthread-safety-analysis]
+>    52 |         unsigned long owner = (unsigned long)
+> READ_ONCE(lock->owner);
+>       |                                                               ^
+> 2 errors generated.
+> 
+> Should this series perhaps include changes for the file
+> scripts/context-analysis-suppression.txt?
 
-kernel test robot noticed the following build errors:
+I'm having trouble reproducing :-(
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.19-rc6 next-20260121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You're speaking of something like the below, on a defconfig build,
+right?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rishikesh-Jethwani/tls-add-TLS-1-3-hardware-offload-support/20260122-060724
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260121215727.3994324-3-rjethwani%40purestorage.com
-patch subject: [PATCH v4 2/3] tls: add hardware offload key update support
-config: x86_64-randconfig-071-20260122 (https://download.01.org/0day-ci/archive/20260122/202601221546.bR6QG2oX-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221546.bR6QG2oX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601221546.bR6QG2oX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   net/tls/tls_device.c:1249:4: warning: 'volatile' qualifier on function type 'typeof (*sk->sk_validate_xmit_skb)' (aka 'struct sk_buff *(struct sock *, struct net_device *, struct sk_buff *)') has no effect and is a Clang extension [-Wignored-qualifiers]
-    1249 |                         smp_store_release(sk->sk_validate_xmit_skb,
-         |                         ^
-   include/asm-generic/barrier.h:172:55: note: expanded from macro 'smp_store_release'
-     172 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
-         |                                                       ^
-   arch/x86/include/asm/barrier.h:63:2: note: expanded from macro '__smp_store_release'
-      63 |         WRITE_ONCE(*p, v);                                              \
-         |         ^
-   include/asm-generic/rwonce.h:61:2: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ^
-   include/asm-generic/rwonce.h:55:4: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |           ^
->> net/tls/tls_device.c:1249:4: error: non-object type 'typeof (*sk->sk_validate_xmit_skb)' (aka 'struct sk_buff *(struct sock *, struct net_device *, struct sk_buff *)') is not assignable
-    1249 |                         smp_store_release(sk->sk_validate_xmit_skb,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1250 |                                    tls_validate_xmit_skb_sw);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/barrier.h:172:55: note: expanded from macro 'smp_store_release'
-     172 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
-         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/barrier.h:63:2: note: expanded from macro '__smp_store_release'
-      63 |         WRITE_ONCE(*p, v);                                              \
-         |         ^~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:61:2: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ^~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:55:30: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   1 warning and 1 error generated.
-
-
-vim +1249 net/tls/tls_device.c
-
-  1086	
-  1087	int tls_set_device_offload(struct sock *sk,
-  1088				   struct tls_crypto_info *new_crypto_info)
-  1089	{
-  1090		struct tls_crypto_info *crypto_info, *src_crypto_info;
-  1091		struct tls_record_info *start_marker_record;
-  1092		struct tls_offload_context_tx *offload_ctx;
-  1093		const struct tls_cipher_desc *cipher_desc;
-  1094		struct tls_prot_info *prot;
-  1095		struct net_device *netdev;
-  1096		struct tls_context *ctx;
-  1097		char *iv, *rec_seq;
-  1098		int rc;
-  1099	
-  1100		ctx = tls_get_ctx(sk);
-  1101		prot = &ctx->prot_info;
-  1102	
-  1103		/* Rekey is only supported for connections that are already
-  1104		 * using HW offload. For SW offload connections, the caller
-  1105		 * should fall back to tls_set_sw_offload() for rekey.
-  1106		 */
-  1107		if (new_crypto_info && ctx->tx_conf != TLS_HW)
-  1108			return -EINVAL;
-  1109	
-  1110		netdev = get_netdev_for_sock(sk);
-  1111		if (!netdev) {
-  1112			pr_err_ratelimited("%s: netdev not found\n", __func__);
-  1113			return -EINVAL;
-  1114		}
-  1115	
-  1116		if (!(netdev->features & NETIF_F_HW_TLS_TX)) {
-  1117			rc = -EOPNOTSUPP;
-  1118			goto release_netdev;
-  1119		}
-  1120	
-  1121		crypto_info = &ctx->crypto_send.info;
-  1122		src_crypto_info = new_crypto_info ?: crypto_info;
-  1123		if (src_crypto_info->version != TLS_1_2_VERSION &&
-  1124		    src_crypto_info->version != TLS_1_3_VERSION) {
-  1125			rc = -EOPNOTSUPP;
-  1126			goto release_netdev;
-  1127		}
-  1128	
-  1129		cipher_desc = get_cipher_desc(src_crypto_info->cipher_type);
-  1130		if (!cipher_desc || !cipher_desc->offloadable) {
-  1131			rc = -EINVAL;
-  1132			goto release_netdev;
-  1133		}
-  1134	
-  1135		iv = crypto_info_iv(src_crypto_info, cipher_desc);
-  1136		rec_seq = crypto_info_rec_seq(src_crypto_info, cipher_desc);
-  1137	
-  1138		if (!new_crypto_info) {
-  1139			rc = init_prot_info(prot, src_crypto_info, cipher_desc);
-  1140			if (rc)
-  1141				goto release_netdev;
-  1142	
-  1143			memcpy(ctx->tx.iv + cipher_desc->salt, iv, cipher_desc->iv);
-  1144			memcpy(ctx->tx.rec_seq, rec_seq, cipher_desc->rec_seq);
-  1145	
-  1146			start_marker_record = kmalloc(sizeof(*start_marker_record),
-  1147						      GFP_KERNEL);
-  1148			if (!start_marker_record) {
-  1149				rc = -ENOMEM;
-  1150				goto release_netdev;
-  1151			}
-  1152	
-  1153			offload_ctx = alloc_offload_ctx_tx(ctx);
-  1154			if (!offload_ctx) {
-  1155				rc = -ENOMEM;
-  1156				goto free_marker_record;
-  1157			}
-  1158	
-  1159			rc = tls_sw_fallback_init(sk, offload_ctx, src_crypto_info);
-  1160			if (rc)
-  1161				goto free_offload_ctx;
-  1162	
-  1163			start_marker_record->end_seq = tcp_sk(sk)->write_seq;
-  1164			start_marker_record->len = 0;
-  1165			start_marker_record->num_frags = 0;
-  1166			list_add_tail(&start_marker_record->list,
-  1167				      &offload_ctx->records_list);
-  1168	
-  1169			clean_acked_data_enable(tcp_sk(sk), &tls_tcp_clean_acked);
-  1170			ctx->push_pending_record = tls_device_push_pending_record;
-  1171	
-  1172			/* TLS offload is greatly simplified if we don't send
-  1173			 * SKBs where only part of the payload needs to be encrypted.
-  1174			 * So mark the last skb in the write queue as end of record.
-  1175			 */
-  1176			tcp_write_collapse_fence(sk);
-  1177		}
-  1178	
-  1179		/* Avoid offloading if the device is down
-  1180		 * We don't want to offload new flows after
-  1181		 * the NETDEV_DOWN event
-  1182		 *
-  1183		 * device_offload_lock is taken in tls_devices's NETDEV_DOWN
-  1184		 * handler thus protecting from the device going down before
-  1185		 * ctx was added to tls_device_list.
-  1186		 */
-  1187		down_read(&device_offload_lock);
-  1188		if (!(netdev->flags & IFF_UP)) {
-  1189			rc = -EINVAL;
-  1190			goto release_lock;
-  1191		}
-  1192	
-  1193		if (!new_crypto_info) {
-  1194			ctx->priv_ctx_tx = offload_ctx;
-  1195		} else {
-  1196			char *key = crypto_info_key(src_crypto_info, cipher_desc);
-  1197	
-  1198			offload_ctx = tls_offload_ctx_tx(ctx);
-  1199	
-  1200			rc = crypto_aead_setkey(offload_ctx->aead_send, key,
-  1201						cipher_desc->key);
-  1202			if (rc)
-  1203				goto release_lock;
-  1204	
-  1205			/* For rekey, delete old HW context before adding new one. */
-  1206			if (!test_bit(TLS_TX_DEV_CLOSED, &ctx->flags))
-  1207				netdev->tlsdev_ops->tls_dev_del(netdev, ctx,
-  1208								TLS_OFFLOAD_CTX_DIR_TX);
-  1209		}
-  1210	
-  1211		rc = netdev->tlsdev_ops->tls_dev_add(netdev, sk, TLS_OFFLOAD_CTX_DIR_TX,
-  1212						     src_crypto_info,
-  1213						     tcp_sk(sk)->write_seq);
-  1214		trace_tls_device_offload_set(sk, TLS_OFFLOAD_CTX_DIR_TX,
-  1215					     tcp_sk(sk)->write_seq, rec_seq, rc);
-  1216	
-  1217		if (new_crypto_info) {
-  1218			unsigned long flags;
-  1219			__be64 rcd_sn;
-  1220	
-  1221			memcpy(ctx->tx.iv + cipher_desc->salt, iv, cipher_desc->iv);
-  1222			memcpy(ctx->tx.rec_seq, rec_seq, cipher_desc->rec_seq);
-  1223	
-  1224			spin_lock_irqsave(&offload_ctx->lock, flags);
-  1225			/* Delete old records, can't be retransmitted with new key */
-  1226			delete_all_records(offload_ctx);
-  1227	
-  1228			/* Update unacked_record_sn for the new key's rec_seq.
-  1229			 * This is critical for SW fallback encryption to use
-  1230			 * the correct record sequence number after rekey.
-  1231			 */
-  1232			memcpy(&rcd_sn, rec_seq, sizeof(rcd_sn));
-  1233			offload_ctx->unacked_record_sn = be64_to_cpu(rcd_sn);
-  1234			spin_unlock_irqrestore(&offload_ctx->lock, flags);
-  1235	
-  1236			unsafe_memcpy(crypto_info, new_crypto_info,
-  1237				      cipher_desc->crypto_info,
-  1238				      /* size was checked in do_tls_setsockopt_conf */);
-  1239			memzero_explicit(new_crypto_info, cipher_desc->crypto_info);
-  1240		}
-  1241	
-  1242		if (rc) {
-  1243			if (new_crypto_info) {
-  1244				/* HW rekey failed, gracefully degrade to SW encryption.
-  1245				 * SW fallback already has new key, IV, and rec_seq.
-  1246				 * Old HW ctx was deleted, continue with SW encryption.
-  1247				 */
-  1248				set_bit(TLS_TX_DEV_CLOSED, &ctx->flags);
-> 1249				smp_store_release(sk->sk_validate_xmit_skb,
-  1250					   tls_validate_xmit_skb_sw);
-  1251			} else {
-  1252				goto release_lock;
-  1253			}
-  1254		} else {
-  1255			if (new_crypto_info)
-  1256				clear_bit(TLS_TX_DEV_CLOSED, &ctx->flags);
-  1257	
-  1258			tls_device_attach(ctx, sk, netdev);
-  1259	
-  1260			/* following this assignment tls_is_skb_tx_device_offloaded
-  1261			 * will return true and the context might be accessed
-  1262			 * by the netdev's xmit function.
-  1263			*/
-  1264			smp_store_release(&sk->sk_validate_xmit_skb,
-  1265					  tls_validate_xmit_skb);
-  1266		}
-  1267	
-  1268		up_read(&device_offload_lock);
-  1269	
-  1270		dev_put(netdev);
-  1271	
-  1272		return 0;
-  1273	
-  1274	release_lock:
-  1275		up_read(&device_offload_lock);
-  1276		if (new_crypto_info)
-  1277			goto release_netdev;
-  1278		clean_acked_data_disable(tcp_sk(sk));
-  1279		crypto_free_aead(offload_ctx->aead_send);
-  1280	free_offload_ctx:
-  1281		kfree(offload_ctx);
-  1282		ctx->priv_ctx_tx = NULL;
-  1283	free_marker_record:
-  1284		kfree(start_marker_record);
-  1285	release_netdev:
-  1286		dev_put(netdev);
-  1287		return rc;
-  1288	}
-  1289	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+diff --git a/scripts/context-analysis-suppression.txt b/scripts/context-analysis-suppression.txt
+index fd8951d06706..6c31eadd0244 100644
+--- a/scripts/context-analysis-suppression.txt
++++ b/scripts/context-analysis-suppression.txt
+@@ -14,6 +14,7 @@ src:*include/linux/*
+ src:*include/net/*
+ 
+ # Opt-in headers:
++src:*include/*=emit
+ src:*include/linux/bit_spinlock.h=emit
+ src:*include/linux/cleanup.h=emit
+ src:*include/linux/kref.h=emit
