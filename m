@@ -1,86 +1,122 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76E133B958
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 01:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87E138BDC8;
+	Thu, 22 Jan 2026 02:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769045059; cv=none; b=r3GJvgxb9nQ6YzAi7sp3tHSMO5AHY/MflHC+XWxZ6ByKHX02DoAQBmHbCESX76ksy+Qo15XIEa3PIQgXjoA4XKxulTP46IYhfIaaJ0wPeR1fbPvzoMhCj7juS90Xewn/5jTdDkcywYAsu5nbuModgtr7aLcLjulfZ2lvc0d7SWs=
+	t=1769049098; cv=none; b=i/WlrIj89cGf67sDIi+eYDomlIPTARslkWoFslJixDpfani5tu4R86331HPBitFqU8D3Jd7Ln0tkXGMMwoiinz0MqwQtNfOM40E+cB6JBKiKqf3xRabIARazIDbC9Wo2luHH5EYE8vuL24u+QNVkJdu6Y74Ayg9x8u9maJer79c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769045059; c=relaxed/simple;
-	bh=1R5o7hgU1nNhRKgWodeNsOonU6zDQsVCerdqg88fxD0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PUMPjgP+h/j8AQBtjqX62Je3vQm8if0hC99BZD9pPI1rtUkfnF9V7hb3Ky0Q9izeiYyVd+MPadsI9jyMcp26js6/DZIw279P9lK5PD+NLkj4tYwZ9kdeRr+bt1A305npnCikKI+4J6jK2OE4wZwxJCYHmkxJuIt7FKHWkkDf8mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id F3F521A140A;
-	Thu, 22 Jan 2026 01:24:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id ABF9C2002B;
-	Thu, 22 Jan 2026 01:24:03 +0000 (UTC)
-Date: Wed, 21 Jan 2026 20:24:27 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
+	s=arc-20240116; t=1769049098; c=relaxed/simple;
+	bh=Pn8Gj4A1H6PIhGJESn9EoJmpfHhTo9SGxC9b5CdblUE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=LEi958PhqBZJXM1U/wGLh1EbtD+wv28Hr6COL69hPzB8i+z/jUTzPTKyz/oKEzTLgMXw2fzwyOC4LYGfKohTwtKyDiOtQm+mZgczvqxaXPQBbsxlGhqDGIjCSLbiH4xyYr6hKn5Dda7gijkswdV0ZsDUjf3K4VphdBgZHWyUxxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWHoXhex; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWHoXhex"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769049096; x=1800585096;
+  h=date:from:to:cc:subject:message-id;
+  bh=Pn8Gj4A1H6PIhGJESn9EoJmpfHhTo9SGxC9b5CdblUE=;
+  b=dWHoXhexy89mFfHD04jEYR0IZbshJqug98SKFoMym8xD0+tmi0JaURx1
+   n+xBfUZsy0VuOOtCLqA4au/K0eoBBz+VKNCr5MyHziVJTqerNv+sreUlm
+   QrDI9A10MbIJ/5fXqydYOlR+TQiXcR+i/BUvxVL3rzExqHOLATeFoMjmd
+   muFG+zFAadE0qDbI7hW+5Zbqoj3AZ9zT41LLos82EveAxvRnHe8XU+0z8
+   j6btre6xbi1+/JdP5ImTb3YNZ78/P1kkC722KJ1g4+2AFOs0yFc/lchXu
+   vk+wX/NuFrvVJYE8z6VQs2Jo45TgaEqDIQdI5CY473+qRLI0Zoam2aXm+
+   Q==;
+X-CSE-ConnectionGUID: BbRLTDmDQhujY+VhgCiboA==
+X-CSE-MsgGUID: XsOLek4rTeiqDwxmd6+FfQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="69484789"
+X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
+   d="scan'208";a="69484789"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 18:31:31 -0800
+X-CSE-ConnectionGUID: 9tbVFc4lQGOMsB2epULyOA==
+X-CSE-MsgGUID: Bc5SdH0xQzCujGxa2eF+uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
+   d="scan'208";a="206516189"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 21 Jan 2026 18:31:28 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vikTm-00000000SKa-28aO;
+	Thu, 22 Jan 2026 02:31:26 +0000
+Date: Thu, 22 Jan 2026 10:30:28 +0800
+From: kernel test robot <lkp@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, Ingo
- Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Will
- Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Waiman Long
- <longman@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
- immediate acquisition after initialization
-Message-ID: <20260121202427.099c36ab@gandalf.local.home>
-In-Reply-To: <20260116154754.GN830755@noisy.programming.kicks-ass.net>
-References: <20260115005231.1211866-1-elver@google.com>
-	<20260115213311.GG830755@noisy.programming.kicks-ass.net>
-	<aWmRlXZaOOUvU_Nv@elver.google.com>
-	<20260116150750.GG831050@noisy.programming.kicks-ass.net>
-	<20260116151043.GA18805@lst.de>
-	<20260116152016.GI831050@noisy.programming.kicks-ass.net>
-	<20260116152741.GA19823@lst.de>
-	<20260116154754.GN830755@noisy.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:locking/core 10/10] kernel/futex/core.c:982:1:
+ warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end
+ of function
+Message-ID: <202601221040.TeM0ihff-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: zwoeikqsen36sn43fpbg8yxq5b4r7nf8
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: ABF9C2002B
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+BlnHaS0Vf2TlpMEYCGKgb6+nJ3EKQQpw=
-X-HE-Tag: 1769045043-221171
-X-HE-Meta: U2FsdGVkX1/3DUVoPsAbNyPfVQKocA6bLnfESobiS8KbwQJPLO0iJuXOfwMc2qmfS39DIu7YmDu0tjpeY05YCpWCXSvqckXvm4+8T8hwo13sSDsY18a/sHVX638WSVkbiGomiS0LPIF3y+VDknrlk6A0S01tvdVLFe+NYBq5my0JKrJAZHnrehIvXkhDJ1sYwphR7mVyJ+J7cQ0SCAD+hYfdzaVykYbcJBAvVO/YXdzxODXsDQ6YLWfZD4t8GnkxzszO/t5rKSK28uIEVOxqMXwYatl+jfOtl2yKrqa7YjG0YhCnw8k5509t20eIAYHXZJlDur9dSxlSRyTJzYYqATY34af0WejeoSrbgk4xkVnX01dngsRzosUntYxhQ1Wr
 
-On Fri, 16 Jan 2026 16:47:54 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   33d9e7fdf9c17417347d1f06ddebaf25f21ab62a
+commit: 33d9e7fdf9c17417347d1f06ddebaf25f21ab62a [10/10] futex: Convert to compiler context analysis
+config: arm64-randconfig-001-20260122 (https://download.01.org/0day-ci/archive/20260122/202601221040.TeM0ihff-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221040.TeM0ihff-lkp@intel.com/reproduce)
 
-> struct obj {
-> 	spinlock_t	lock;
-> 	int		state __guarded_by(lock);
-> };
-> 
-> struct obj *create_obj(void)
-> {
-> 	struct obj *obj = kzmalloc(sizeof(*obj), GFP_KERNEL);
-> 	if (!obj)
-> 		return NULL;
-> 
-> 	spin_lock_init(&obj->lock);
-> 	obj->state = INIT_STATE; // error: ->state demands ->lock is held
-> }
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
 
-I haven't seen all the other approaches, but would a macro be able to hide
-it with some kind of obfuscation from the compiler?
+All warnings (new ones prefixed by >>):
+
+>> kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
+     982 | }
+         | ^
+   kernel/futex/core.c:976:2: note: spinlock acquired here
+     976 |         spin_lock(lock_ptr);
+         |         ^
+>> kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
+     982 | }
+         | ^
+   kernel/futex/core.c:966:6: note: spinlock acquired here
+     966 | void futex_q_lockptr_lock(struct futex_q *q)
+         |      ^
+   2 warnings generated.
 
 
-	GUARD_INIT(obj->state, INIT_STATE);
+vim +982 kernel/futex/core.c
 
-which would be something like a WRITE_ONCE() macro. I'm not sure what
-tooling there is to disable checks for a small bit of code like this.
+c1e2f0eaf015fb kernel/futex.c      Peter Zijlstra            2017-12-08  965  
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  966  void futex_q_lockptr_lock(struct futex_q *q)
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  967  {
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  968  	spinlock_t *lock_ptr;
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  969  
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  970  	/*
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  971  	 * See futex_unqueue() why lock_ptr can change.
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  972  	 */
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  973  	guard(rcu)();
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  974  retry:
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  975  	lock_ptr = READ_ONCE(q->lock_ptr);
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  976  	spin_lock(lock_ptr);
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  977  
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  978  	if (unlikely(lock_ptr != q->lock_ptr)) {
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  979  		spin_unlock(lock_ptr);
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  980  		goto retry;
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  981  	}
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16 @982  }
+b04b8f3032aae6 kernel/futex/core.c Sebastian Andrzej Siewior 2025-04-16  983  
 
--- Steve
+:::::: The code at line 982 was first introduced by commit
+:::::: b04b8f3032aae6121303bfa324c768faba032242 futex: Introduce futex_q_lockptr_lock()
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
