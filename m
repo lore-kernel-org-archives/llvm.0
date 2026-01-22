@@ -1,63 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE9A30171C;
-	Thu, 22 Jan 2026 04:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D48E38FF0F;
+	Thu, 22 Jan 2026 04:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769054983; cv=none; b=sGelgIuK+ZD9gk5IeUlGjWyDOHJE9cOahe7F5QD82g+aCTf4m8f/w7jh1gnKq7WuetIKPhQa7UDnk/h/uxBeeu0+MRafcmSgWstDdKDP6ZcqrrR3XNX+F7O05JsITiX1zW/R380dhTtpJHRcr5XGNdZWsISp1iG+wwc0geFrsUA=
+	t=1769057739; cv=none; b=ZRNQAIMTmikWaNLG9VoU1NgeeioQZFUuzzLwd6t0KYlgrAk1aU0GCWuYSk/o0sjXUt9/rSVrJkv9qlZrEYWa0ifgtPwVUGwpFt0G38ULQjPe57URXspXzPdLemmK94myUrgOz6pPNg8hUosgzAn+SMOfdDAltJIEm89xyfVkYJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769054983; c=relaxed/simple;
-	bh=E6A7waxtv4nyUz6etjrJs9TWvNCeLOqKAc46+P9xZ1Y=;
+	s=arc-20240116; t=1769057739; c=relaxed/simple;
+	bh=etPNqlh5MLSoKDLwcVjRqAXYlotDUbS97RdxMKgymYU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LuyvTizkSgeoaLveMjTUKJLZkDV56Rj/DjW51AdJ0eo7urhhG6ugubLu3paNGFiq1c0sts7bec4JsBeI5Kwt+u7A9s42RyntH1Wi7uY4LlwgekK+3bBBP+u142H3OiaDEYyUKPlDUphqSQPBj4EjBQ4x0nZ4dI5UmiYTzl/olAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OYiPKm2L; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=PxrCP2ba1T5hdz1w1Qv8FyA+FQIegQPHH0aWA4YJSybGAnB0P/Djfpq6IUT4LaSGhuP/vNLjmkpd/OhwcJi+L1On9tlVdxpDoKtVaNB+QTsiJFmmYIJrLLPA3tGHt+ZjkOdnjaggJp5cIRVmWjmNarZhrZpSyVAHBY0NlqG+VtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DjxCu4pJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OYiPKm2L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769054980; x=1800590980;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E6A7waxtv4nyUz6etjrJs9TWvNCeLOqKAc46+P9xZ1Y=;
-  b=OYiPKm2LCQzcPwP5VChPro2DyRqYsembAzU+NU8uaaoZiSBJrRtZrYWs
-   1wq8yHEgY517oxybs5ntJWC3dD1JiqYurz+VSgCMWQUZtZ41aL+5VGZt2
-   /Bt3cf34yX/vC551AHawDVFz91rIbgInYIYCSnJK2y9F1KHbcHtZp9/61
-   OfWRCQTZQSQerQ0GCAaP9iIyRMCNhckLKehZ6MosAEn7Ahs5TwvHbA1m6
-   mSViGzvad/YGeb7DQ6BO7EpOihIKX47dgfsKikPgloktFV3pUa5X4yFPU
-   dib9gX3Ui8HFm+10RoZeYobu/eTl/MtCc26G5v8X+rzOCCMnx5mMWgDOz
-   Q==;
-X-CSE-ConnectionGUID: 92TxKtAETp2BJn9B27Irrg==
-X-CSE-MsgGUID: nnFIHLomTom9q86mH8jo7w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="87705793"
-X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
-   d="scan'208";a="87705793"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 20:09:39 -0800
-X-CSE-ConnectionGUID: AmJ5cedoQXWEoYTElo9LKw==
-X-CSE-MsgGUID: 73Zj1HYITwe4l5esoKC1sQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
-   d="scan'208";a="205755842"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 21 Jan 2026 20:09:35 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vim0i-00000000SPd-1BrZ;
-	Thu, 22 Jan 2026 04:09:32 +0000
-Date: Thu, 22 Jan 2026 12:09:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rishikesh Jethwani <rjethwani@purestorage.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, saeedm@nvidia.com,
-	tariqt@nvidia.com, mbloch@nvidia.com, borisp@nvidia.com,
-	john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
-	davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
-	leon@kernel.org, Rishikesh Jethwani <rjethwani@purestorage.com>
-Subject: Re: [PATCH v4 2/3] tls: add hardware offload key update support
-Message-ID: <202601221106.NuxFLP3L-lkp@intel.com>
-References: <20260121215727.3994324-3-rjethwani@purestorage.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DjxCu4pJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6FCC116C6;
+	Thu, 22 Jan 2026 04:55:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769057739;
+	bh=etPNqlh5MLSoKDLwcVjRqAXYlotDUbS97RdxMKgymYU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DjxCu4pJINmMaqmaFFAzUETZoCqYFTIMVwdITg3Q/pl/Y2KSqGwob3K2LCfHzKB4n
+	 q738vSgP9Fxpbl4mJHwv3f3MilIJ5LovX5VWDF8lKsLkf62Wj6jAypmvD6LvpcdUoU
+	 qFJCXDAKiLLicOpxIAUzB9yoDy6WxwKzPsP/VbI743fgCppjsubTyeIFOHBTQmxUPv
+	 xNpdOjgL1N34kUlT74V90VmEdzNdaWLF2ohw55k63R+4Zun8vyGfYRDmz4cLMXPgl8
+	 VE25i653hu+7w9hyxIQwgrGNWm12DfmOyk13QB1Y6UZZz9HM2B5TsQoPT0fVafY3v3
+	 Zsclxs51p78NA==
+Date: Wed, 21 Jan 2026 21:55:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] Documentation: dev-tools: add container.rst page
+Message-ID: <20260122045534.GA3770486@ax162>
+References: <cover.1767199119.git.gtucker@gtucker.io>
+ <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
+ <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
+ <20260120183550.GD2749368@ax162>
+ <e96a6e71-80b3-4556-a4eb-fd242e0f5713@gtucker.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,275 +50,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260121215727.3994324-3-rjethwani@purestorage.com>
+In-Reply-To: <e96a6e71-80b3-4556-a4eb-fd242e0f5713@gtucker.io>
 
-Hi Rishikesh,
+On Wed, Jan 21, 2026 at 10:55:53AM +0100, Guillaume Tucker wrote:
+> Feel free to make these tweaks now, or we might wait a bit to see if
+> others have more feedback with further changes and I can send a v4.
 
-kernel test robot noticed the following build warnings:
+How about this? Send a v4 with:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.19-rc6 next-20260121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+1. An initial MAINTAINERS entry addition in patch 1 for
+   scripts/container like I suggested earlier and scripts/container
+   explicitly added to the KERNEL BUILD section so that Nicolas and I
+   are included for handling patches.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rishikesh-Jethwani/tls-add-TLS-1-3-hardware-offload-support/20260122-060724
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260121215727.3994324-3-rjethwani%40purestorage.com
-patch subject: [PATCH v4 2/3] tls: add hardware offload key update support
-config: x86_64-randconfig-071-20260122 (https://download.01.org/0day-ci/archive/20260122/202601221106.NuxFLP3L-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221106.NuxFLP3L-lkp@intel.com/reproduce)
+2. Add the Documentation to the aforementioned MAINTAINERS entry as part
+   of patch 2.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601221106.NuxFLP3L-lkp@intel.com/
+3. Either encorporate my suggested change for preferring podman over
+   docker with the appropriate changes elsewhere inte the patch set like
+   you mentioned or explore checking for the docker alias explicitly.
+   Entirely up to you timewise, as long as it results in Nicolas's
+   environment working, since I don't think that will be too uncommon.
 
-All warnings (new ones prefixed by >>):
+4. Encorporate any other feedback that you feel is appropriate at this
+   stage (if there is any low hanging fruit).
 
->> net/tls/tls_device.c:1249:4: warning: 'volatile' qualifier on function type 'typeof (*sk->sk_validate_xmit_skb)' (aka 'struct sk_buff *(struct sock *, struct net_device *, struct sk_buff *)') has no effect and is a Clang extension [-Wignored-qualifiers]
-    1249 |                         smp_store_release(sk->sk_validate_xmit_skb,
-         |                         ^
-   include/asm-generic/barrier.h:172:55: note: expanded from macro 'smp_store_release'
-     172 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
-         |                                                       ^
-   arch/x86/include/asm/barrier.h:63:2: note: expanded from macro '__smp_store_release'
-      63 |         WRITE_ONCE(*p, v);                                              \
-         |         ^
-   include/asm-generic/rwonce.h:61:2: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ^
-   include/asm-generic/rwonce.h:55:4: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |           ^
-   net/tls/tls_device.c:1249:4: error: non-object type 'typeof (*sk->sk_validate_xmit_skb)' (aka 'struct sk_buff *(struct sock *, struct net_device *, struct sk_buff *)') is not assignable
-    1249 |                         smp_store_release(sk->sk_validate_xmit_skb,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1250 |                                    tls_validate_xmit_skb_sw);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/barrier.h:172:55: note: expanded from macro 'smp_store_release'
-     172 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
-         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/barrier.h:63:2: note: expanded from macro '__smp_store_release'
-      63 |         WRITE_ONCE(*p, v);                                              \
-         |         ^~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:61:2: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ^~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:55:30: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   1 warning and 1 error generated.
+Then we can apply it so that folks can start using it in -next for
+testing and validation. After that, you can start thinking of things you
+would want to work on for future merge windows from the list you already
+started, as I know how that goes when working on a new tool :)
 
-
-vim +1249 net/tls/tls_device.c
-
-  1086	
-  1087	int tls_set_device_offload(struct sock *sk,
-  1088				   struct tls_crypto_info *new_crypto_info)
-  1089	{
-  1090		struct tls_crypto_info *crypto_info, *src_crypto_info;
-  1091		struct tls_record_info *start_marker_record;
-  1092		struct tls_offload_context_tx *offload_ctx;
-  1093		const struct tls_cipher_desc *cipher_desc;
-  1094		struct tls_prot_info *prot;
-  1095		struct net_device *netdev;
-  1096		struct tls_context *ctx;
-  1097		char *iv, *rec_seq;
-  1098		int rc;
-  1099	
-  1100		ctx = tls_get_ctx(sk);
-  1101		prot = &ctx->prot_info;
-  1102	
-  1103		/* Rekey is only supported for connections that are already
-  1104		 * using HW offload. For SW offload connections, the caller
-  1105		 * should fall back to tls_set_sw_offload() for rekey.
-  1106		 */
-  1107		if (new_crypto_info && ctx->tx_conf != TLS_HW)
-  1108			return -EINVAL;
-  1109	
-  1110		netdev = get_netdev_for_sock(sk);
-  1111		if (!netdev) {
-  1112			pr_err_ratelimited("%s: netdev not found\n", __func__);
-  1113			return -EINVAL;
-  1114		}
-  1115	
-  1116		if (!(netdev->features & NETIF_F_HW_TLS_TX)) {
-  1117			rc = -EOPNOTSUPP;
-  1118			goto release_netdev;
-  1119		}
-  1120	
-  1121		crypto_info = &ctx->crypto_send.info;
-  1122		src_crypto_info = new_crypto_info ?: crypto_info;
-  1123		if (src_crypto_info->version != TLS_1_2_VERSION &&
-  1124		    src_crypto_info->version != TLS_1_3_VERSION) {
-  1125			rc = -EOPNOTSUPP;
-  1126			goto release_netdev;
-  1127		}
-  1128	
-  1129		cipher_desc = get_cipher_desc(src_crypto_info->cipher_type);
-  1130		if (!cipher_desc || !cipher_desc->offloadable) {
-  1131			rc = -EINVAL;
-  1132			goto release_netdev;
-  1133		}
-  1134	
-  1135		iv = crypto_info_iv(src_crypto_info, cipher_desc);
-  1136		rec_seq = crypto_info_rec_seq(src_crypto_info, cipher_desc);
-  1137	
-  1138		if (!new_crypto_info) {
-  1139			rc = init_prot_info(prot, src_crypto_info, cipher_desc);
-  1140			if (rc)
-  1141				goto release_netdev;
-  1142	
-  1143			memcpy(ctx->tx.iv + cipher_desc->salt, iv, cipher_desc->iv);
-  1144			memcpy(ctx->tx.rec_seq, rec_seq, cipher_desc->rec_seq);
-  1145	
-  1146			start_marker_record = kmalloc(sizeof(*start_marker_record),
-  1147						      GFP_KERNEL);
-  1148			if (!start_marker_record) {
-  1149				rc = -ENOMEM;
-  1150				goto release_netdev;
-  1151			}
-  1152	
-  1153			offload_ctx = alloc_offload_ctx_tx(ctx);
-  1154			if (!offload_ctx) {
-  1155				rc = -ENOMEM;
-  1156				goto free_marker_record;
-  1157			}
-  1158	
-  1159			rc = tls_sw_fallback_init(sk, offload_ctx, src_crypto_info);
-  1160			if (rc)
-  1161				goto free_offload_ctx;
-  1162	
-  1163			start_marker_record->end_seq = tcp_sk(sk)->write_seq;
-  1164			start_marker_record->len = 0;
-  1165			start_marker_record->num_frags = 0;
-  1166			list_add_tail(&start_marker_record->list,
-  1167				      &offload_ctx->records_list);
-  1168	
-  1169			clean_acked_data_enable(tcp_sk(sk), &tls_tcp_clean_acked);
-  1170			ctx->push_pending_record = tls_device_push_pending_record;
-  1171	
-  1172			/* TLS offload is greatly simplified if we don't send
-  1173			 * SKBs where only part of the payload needs to be encrypted.
-  1174			 * So mark the last skb in the write queue as end of record.
-  1175			 */
-  1176			tcp_write_collapse_fence(sk);
-  1177		}
-  1178	
-  1179		/* Avoid offloading if the device is down
-  1180		 * We don't want to offload new flows after
-  1181		 * the NETDEV_DOWN event
-  1182		 *
-  1183		 * device_offload_lock is taken in tls_devices's NETDEV_DOWN
-  1184		 * handler thus protecting from the device going down before
-  1185		 * ctx was added to tls_device_list.
-  1186		 */
-  1187		down_read(&device_offload_lock);
-  1188		if (!(netdev->flags & IFF_UP)) {
-  1189			rc = -EINVAL;
-  1190			goto release_lock;
-  1191		}
-  1192	
-  1193		if (!new_crypto_info) {
-  1194			ctx->priv_ctx_tx = offload_ctx;
-  1195		} else {
-  1196			char *key = crypto_info_key(src_crypto_info, cipher_desc);
-  1197	
-  1198			offload_ctx = tls_offload_ctx_tx(ctx);
-  1199	
-  1200			rc = crypto_aead_setkey(offload_ctx->aead_send, key,
-  1201						cipher_desc->key);
-  1202			if (rc)
-  1203				goto release_lock;
-  1204	
-  1205			/* For rekey, delete old HW context before adding new one. */
-  1206			if (!test_bit(TLS_TX_DEV_CLOSED, &ctx->flags))
-  1207				netdev->tlsdev_ops->tls_dev_del(netdev, ctx,
-  1208								TLS_OFFLOAD_CTX_DIR_TX);
-  1209		}
-  1210	
-  1211		rc = netdev->tlsdev_ops->tls_dev_add(netdev, sk, TLS_OFFLOAD_CTX_DIR_TX,
-  1212						     src_crypto_info,
-  1213						     tcp_sk(sk)->write_seq);
-  1214		trace_tls_device_offload_set(sk, TLS_OFFLOAD_CTX_DIR_TX,
-  1215					     tcp_sk(sk)->write_seq, rec_seq, rc);
-  1216	
-  1217		if (new_crypto_info) {
-  1218			unsigned long flags;
-  1219			__be64 rcd_sn;
-  1220	
-  1221			memcpy(ctx->tx.iv + cipher_desc->salt, iv, cipher_desc->iv);
-  1222			memcpy(ctx->tx.rec_seq, rec_seq, cipher_desc->rec_seq);
-  1223	
-  1224			spin_lock_irqsave(&offload_ctx->lock, flags);
-  1225			/* Delete old records, can't be retransmitted with new key */
-  1226			delete_all_records(offload_ctx);
-  1227	
-  1228			/* Update unacked_record_sn for the new key's rec_seq.
-  1229			 * This is critical for SW fallback encryption to use
-  1230			 * the correct record sequence number after rekey.
-  1231			 */
-  1232			memcpy(&rcd_sn, rec_seq, sizeof(rcd_sn));
-  1233			offload_ctx->unacked_record_sn = be64_to_cpu(rcd_sn);
-  1234			spin_unlock_irqrestore(&offload_ctx->lock, flags);
-  1235	
-  1236			unsafe_memcpy(crypto_info, new_crypto_info,
-  1237				      cipher_desc->crypto_info,
-  1238				      /* size was checked in do_tls_setsockopt_conf */);
-  1239			memzero_explicit(new_crypto_info, cipher_desc->crypto_info);
-  1240		}
-  1241	
-  1242		if (rc) {
-  1243			if (new_crypto_info) {
-  1244				/* HW rekey failed, gracefully degrade to SW encryption.
-  1245				 * SW fallback already has new key, IV, and rec_seq.
-  1246				 * Old HW ctx was deleted, continue with SW encryption.
-  1247				 */
-  1248				set_bit(TLS_TX_DEV_CLOSED, &ctx->flags);
-> 1249				smp_store_release(sk->sk_validate_xmit_skb,
-  1250					   tls_validate_xmit_skb_sw);
-  1251			} else {
-  1252				goto release_lock;
-  1253			}
-  1254		} else {
-  1255			if (new_crypto_info)
-  1256				clear_bit(TLS_TX_DEV_CLOSED, &ctx->flags);
-  1257	
-  1258			tls_device_attach(ctx, sk, netdev);
-  1259	
-  1260			/* following this assignment tls_is_skb_tx_device_offloaded
-  1261			 * will return true and the context might be accessed
-  1262			 * by the netdev's xmit function.
-  1263			*/
-  1264			smp_store_release(&sk->sk_validate_xmit_skb,
-  1265					  tls_validate_xmit_skb);
-  1266		}
-  1267	
-  1268		up_read(&device_offload_lock);
-  1269	
-  1270		dev_put(netdev);
-  1271	
-  1272		return 0;
-  1273	
-  1274	release_lock:
-  1275		up_read(&device_offload_lock);
-  1276		if (new_crypto_info)
-  1277			goto release_netdev;
-  1278		clean_acked_data_disable(tcp_sk(sk));
-  1279		crypto_free_aead(offload_ctx->aead_send);
-  1280	free_offload_ctx:
-  1281		kfree(offload_ctx);
-  1282		ctx->priv_ctx_tx = NULL;
-  1283	free_marker_record:
-  1284		kfree(start_marker_record);
-  1285	release_netdev:
-  1286		dev_put(netdev);
-  1287		return rc;
-  1288	}
-  1289	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
