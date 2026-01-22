@@ -1,82 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685641DE4E0;
-	Thu, 22 Jan 2026 06:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D81F311C15
+	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 07:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769065002; cv=none; b=WmZkF6m2gNctm2tUnUj3SUMWhrA4hoeeqFvEKxt1u/TJI8ocUysHL1svQzkovSI8U8GiAn/2uAS7WWV6GqAnT602tMECoWo2Eie2JNvcBjrEAFcd6cnDtLnPSb1Hk1SbEqoZha4j2q0ihvnSd+vEWzOfrrebFrgXbDSZ8dya890=
+	t=1769066435; cv=none; b=P3a5H65TQ0PwGFACNmZNYJ/8zMHdB9gGxVlMseWjhnRPye6kWRyT6vpW+ChqEJwFgcxXelDVRiuCoh6tZOX2RuqmJLLIFmVpvK7mUuEMBMJuabmdzMOtPdZk5XlkE8YlDePNq1DTMIKZmH4BRwWp9KguynQtXIM6PeSXRjsjdvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769065002; c=relaxed/simple;
-	bh=qRkuzxK9kptM3W7AYWE/CJDBGoVYY4BNW8HQvhxKnNg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=i1+YzMxn2+KjDXIvqYjygZpCb1diqv+HQUWrjnPiayCie4hHUB84OdgQwui89dC/Df7hiwCKpewAwUDouM793+N5Mf8g1e6KbrFs+YEINtnYguRHR2MocC9sgC5tZnCl49NnM4ajnF70SCspkuKLb9apFkutG3Lg09cfE8Dm6tM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OJ/o0Yzw; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OJ/o0Yzw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769064999; x=1800600999;
-  h=date:from:to:cc:subject:message-id;
-  bh=qRkuzxK9kptM3W7AYWE/CJDBGoVYY4BNW8HQvhxKnNg=;
-  b=OJ/o0YzwIa54oh9TNjgRZVUW3CKkjWacLXKygHyjOr1N8F9IQUtk5EY0
-   Y3RinMZVK1ozFYY0Pcq0VTqSJaaueI0+xZTNDrcNvpz9J4b8Cvr3Ql/rS
-   Sr8/Ujit0PYZgmHjQ6ZSbwe/xgxInNapiRJryMLaiQGqajCgDZuaK3z6M
-   LcFn/YwvMMU94rfOGaYYsEY5YfwqgRywTh2k+2iCQvMUg759tT25Wtzj6
-   LvumTTJLEvXEeUoSx211JkZllgUxYsmdeUAVAfP1rlJROJM/D+C3k6AnS
-   RHSEnA3k88jEo4Px1nSLv5C8LUhPiQ12KzODUnsQRRsTQpQ7KitcYqdYU
-   w==;
-X-CSE-ConnectionGUID: QT04NDw5Tf6LWLkqturMzg==
-X-CSE-MsgGUID: 0smyn5E3QYqn6UdHUEOEYA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="87715842"
-X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
-   d="scan'208";a="87715842"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 22:56:34 -0800
-X-CSE-ConnectionGUID: xP4P0hqPSJmEHSR22aFI+A==
-X-CSE-MsgGUID: cfpDChZgRsCCPjQsoywfsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,245,1763452800"; 
-   d="scan'208";a="237324607"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 21 Jan 2026 22:56:33 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1viocI-000000000Rh-2X6y;
-	Thu, 22 Jan 2026 06:56:30 +0000
-Date: Thu, 22 Jan 2026 07:56:01 +0100
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/tdx_huge_sept 51/79] Warning:
- arch/x86/kvm/mmu/tdp_mmu.c:543 function parameter 'sptep' not described in
- 'handle_changed_spte'
-Message-ID: <202601220730.PSncZ6G3-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1769066435; c=relaxed/simple;
+	bh=BZa0pFuhqQ8/F1bvIjyzdNRxP12JDQ3DvEVXmqCLjn0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iJ0jqgGbCpkdA0Juu38U8WGwPeHCej21a8QueexHEkY/Xc4RvtVwu74VkQ1SxfPZTwJJCD4ixNl+nmvFlfudqpCPaP6sDya6h4rmXH0oR53bqRkj0G0ZJKklgtnxltAlA/hE9tOHoU4Vg+ANUnuaa0OCsY7s9WsZkUgeaM3ZQWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from [192.168.1.209] (unknown [27.19.208.156])
+	by APP-01 (Coremail) with SMTP id qwCowAD3nWmmz3Fp3arABQ--.13364S2;
+	Thu, 22 Jan 2026 15:20:08 +0800 (CST)
+Message-ID: <1b0943c4-b1c5-460a-8944-c8d9c868b085@isrc.iscas.ac.cn>
+Date: Thu, 22 Jan 2026 15:20:06 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/4] RISC-V: re-enable gcc + rust builds
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor@kernel.org>,
+ Mingcong Bai <jeffbai@aosc.io>, Han Gao <rabenda.cn@gmail.com>,
+ Vivian Wang <wangruikang@iscas.ac.cn>, Jason Montleon <jmontleo@redhat.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
+References: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
+Content-Language: en-US
+From: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
+In-Reply-To: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qwCowAD3nWmmz3Fp3arABQ--.13364S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67k0a2IF6F4UM7kC6x804xWl14x267AK
+	xVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
+	A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j
+	6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Jr
+	0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv
+	0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z2
+	80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF
+	7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxAqzxv26xkF7I0En4kS14v26r4a6rW5Mx
+	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
+	wI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
+	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
+	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FD73UUUUU==
+X-CM-SenderInfo: x0lq233loux21fy6x21ufox2xfdvhtffof0/
 
-tree:   https://github.com/sean-jc/linux x86/tdx_huge_sept
-head:   491d01f5d2ac33f4da9d302ff18cdcb57c0d967b
-commit: af111245b7f1b0948e7677d96ff459953fdfc7ac [51/79] KVM: x86/mmu: Plumb the SPTE _pointer_ into the TDP MMU's handle_changed_spte()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260122/202601220730.PSncZ6G3-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601220730.PSncZ6G3-lkp@intel.com/reproduce)
+Gently ping. I think this patch is ready for review. Is there anything 
+else I need to do before merging?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601220730.PSncZ6G3-lkp@intel.com/
+Best regards,
+Asuna Yang
 
-All warnings (new ones prefixed by >>):
-
->> Warning: arch/x86/kvm/mmu/tdp_mmu.c:543 function parameter 'sptep' not described in 'handle_changed_spte'
->> Warning: arch/x86/kvm/mmu/tdp_mmu.c:543 function parameter 'sptep' not described in 'handle_changed_spte'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
