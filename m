@@ -1,47 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D48E38FF0F;
-	Thu, 22 Jan 2026 04:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A43F3AA1A6;
+	Thu, 22 Jan 2026 05:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769057739; cv=none; b=ZRNQAIMTmikWaNLG9VoU1NgeeioQZFUuzzLwd6t0KYlgrAk1aU0GCWuYSk/o0sjXUt9/rSVrJkv9qlZrEYWa0ifgtPwVUGwpFt0G38ULQjPe57URXspXzPdLemmK94myUrgOz6pPNg8hUosgzAn+SMOfdDAltJIEm89xyfVkYJA=
+	t=1769059046; cv=none; b=cqcxoLqKDINBmPrhZtSOaZmOyJnzg57xUohxkV3fP3MQpHbtz8RwCEZJuTZaXZRLCivnMJYvkMfjrc/tpC6FKnyPvLZZshRNeJ0TtpvexTQDL4HkoatIZOFhtnN7shOo9xXHPjKTDy/1B3F7vthLXJ1mL1VS2Qfeb9MDOxPH1EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769057739; c=relaxed/simple;
-	bh=etPNqlh5MLSoKDLwcVjRqAXYlotDUbS97RdxMKgymYU=;
+	s=arc-20240116; t=1769059046; c=relaxed/simple;
+	bh=Yj4t2Q6YxyvZBfhgO0u+WhMltjsUtkqty0mK2Oqpesc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PxrCP2ba1T5hdz1w1Qv8FyA+FQIegQPHH0aWA4YJSybGAnB0P/Djfpq6IUT4LaSGhuP/vNLjmkpd/OhwcJi+L1On9tlVdxpDoKtVaNB+QTsiJFmmYIJrLLPA3tGHt+ZjkOdnjaggJp5cIRVmWjmNarZhrZpSyVAHBY0NlqG+VtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DjxCu4pJ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nXKEovIbeH0JF7ViwsBvzVnhm8OHFz+2Ut/rHijwNDFwoGdWORJK4vGhGEYPD1lrOze/y18pvhHknv7+2nIlyE+R7X675BCEwr1/FC9P3FMi7kw1QTDgQSKlWxUrQaTwtyOSDBbtrrzagmqaVgDrCp34kLTW67+/p64d9YWQWxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFUNvh2W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DjxCu4pJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6FCC116C6;
-	Thu, 22 Jan 2026 04:55:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFUNvh2W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D7C116C6;
+	Thu, 22 Jan 2026 05:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769057739;
-	bh=etPNqlh5MLSoKDLwcVjRqAXYlotDUbS97RdxMKgymYU=;
+	s=k20201202; t=1769059045;
+	bh=Yj4t2Q6YxyvZBfhgO0u+WhMltjsUtkqty0mK2Oqpesc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DjxCu4pJINmMaqmaFFAzUETZoCqYFTIMVwdITg3Q/pl/Y2KSqGwob3K2LCfHzKB4n
-	 q738vSgP9Fxpbl4mJHwv3f3MilIJ5LovX5VWDF8lKsLkf62Wj6jAypmvD6LvpcdUoU
-	 qFJCXDAKiLLicOpxIAUzB9yoDy6WxwKzPsP/VbI743fgCppjsubTyeIFOHBTQmxUPv
-	 xNpdOjgL1N34kUlT74V90VmEdzNdaWLF2ohw55k63R+4Zun8vyGfYRDmz4cLMXPgl8
-	 VE25i653hu+7w9hyxIQwgrGNWm12DfmOyk13QB1Y6UZZz9HM2B5TsQoPT0fVafY3v3
-	 Zsclxs51p78NA==
-Date: Wed, 21 Jan 2026 21:55:34 -0700
+	b=mFUNvh2WCDbCkCtPK8B442JHkqGheNCvQ3s0IJAPfzukTquPhHgwVQFPzGE+PLu2T
+	 IO6Ao+LGn7cje83ijmG8IkSzXvMuqw7eCrChCAc4nKh70uCqjifrRGpCEjmw0VVd7z
+	 8/Lz8xU9MyNgxodDwd7QNVfl10hUnKrSRnTiI7KShga1WsCvdYOfkYAX2FMkymGhtf
+	 KQL2zC2eKXgAl5pjYZjMZzJDkSZBf+FUfw2O1i72t4Yma69DzsXgbI0gq6ktv++TEV
+	 kNcubMpm1vpvunOt5nXOZLOkwjT3hr309D74QOtxSYGMJVu321cpWqiaWyUhHb8fN0
+	 G7Ybmx1wQKykA==
+Date: Wed, 21 Jan 2026 22:17:22 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 2/2] Documentation: dev-tools: add container.rst page
-Message-ID: <20260122045534.GA3770486@ax162>
-References: <cover.1767199119.git.gtucker@gtucker.io>
- <c859f9b6dd5313136f7a445497d6209405eafa7e.1767199119.git.gtucker@gtucker.io>
- <aW-I3fNqp_7X0oeg@derry.ads.avm.de>
- <20260120183550.GD2749368@ax162>
- <e96a6e71-80b3-4556-a4eb-fd242e0f5713@gtucker.io>
+To: kernel test robot <lkp@intel.com>
+Cc: "Mike Rapoport (Microsoft)" <rppt@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [rppt:zero-page/v0 1/1] ERROR: modpost: vmlinux:
+ 'empty_zero_page' exported twice. Previous export was in vmlinux
+Message-ID: <20260122051722.GC3770486@ax162>
+References: <202601221150.JsPp145b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,35 +43,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e96a6e71-80b3-4556-a4eb-fd242e0f5713@gtucker.io>
+In-Reply-To: <202601221150.JsPp145b-lkp@intel.com>
 
-On Wed, Jan 21, 2026 at 10:55:53AM +0100, Guillaume Tucker wrote:
-> Feel free to make these tweaks now, or we might wait a bit to see if
-> others have more feedback with further changes and I can send a v4.
+On Thu, Jan 22, 2026 at 11:14:04AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git zero-page/v0
+> head:   53d07913878ea27d6fe4224e8581729185291278
+> commit: 53d07913878ea27d6fe4224e8581729185291278 [1/1] dev: arch, mm: consolidate empty_zero_page
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260122/202601221150.JsPp145b-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221150.JsPp145b-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202601221150.JsPp145b-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> >> ERROR: modpost: vmlinux: 'empty_zero_page' exported twice. Previous export was in vmlinux
 
-How about this? Send a v4 with:
+Seems like the following should fix that?
 
-1. An initial MAINTAINERS entry addition in patch 1 for
-   scripts/container like I suggested earlier and scripts/container
-   explicitly added to the KERNEL BUILD section so that Nicolas and I
-   are included for handling patches.
-
-2. Add the Documentation to the aforementioned MAINTAINERS entry as part
-   of patch 2.
-
-3. Either encorporate my suggested change for preferring podman over
-   docker with the appropriate changes elsewhere inte the patch set like
-   you mentioned or explore checking for the docker alias explicitly.
-   Entirely up to you timewise, as long as it results in Nicolas's
-   environment working, since I don't think that will be too uncommon.
-
-4. Encorporate any other feedback that you feel is appropriate at this
-   stage (if there is any low hanging fruit).
-
-Then we can apply it so that folks can start using it in -next for
-testing and validation. After that, you can start thinking of things you
-would want to work on for future merge windows from the list you already
-started, as I know how that goes when working on a new tool :)
-
-Cheers,
-Nathan
+diff --git a/arch/hexagon/kernel/hexagon_ksyms.c b/arch/hexagon/kernel/hexagon_ksyms.c
+index 36a80e31d187..81bc6f81e200 100644
+--- a/arch/hexagon/kernel/hexagon_ksyms.c
++++ b/arch/hexagon/kernel/hexagon_ksyms.c
+@@ -17,7 +17,6 @@ EXPORT_SYMBOL(raw_copy_to_user);
+ EXPORT_SYMBOL(__vmgetie);
+ EXPORT_SYMBOL(__vmsetie);
+ EXPORT_SYMBOL(__vmyield);
+-EXPORT_SYMBOL(empty_zero_page);
+ EXPORT_SYMBOL(memcpy);
+ EXPORT_SYMBOL(memset);
+ 
