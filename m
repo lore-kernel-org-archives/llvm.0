@@ -1,90 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7833535CBCD;
-	Thu, 22 Jan 2026 19:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F05D38550F;
+	Thu, 22 Jan 2026 23:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769111948; cv=none; b=N1TzjlBF3xPi14+S9YuVE4RCjwkq6Ij4On6udcIch2KY086Sh5r9SZVvF26xdVMT5p4kVnVOEI9SLe0QgiGRH0hASsv09iC7Xcf56S/Y1BthqyvRERDTX2utRVjTUYxqEYk4zYezS92lzwDHhumQoM3m66zDzU5ZO764dY0JnxI=
+	t=1769124943; cv=none; b=R3XxZq/TXRk+Wx34xHr0w1lmBSI6NGX3tK2biRW/DEt28ULmIQTNhdC1Xuq/vOeFjhe6jExxfFUI2D8iIWtUxwKlsrnjC+neX0k9nBKQ9Vhpk9Gqee6RpnXOhg7KFDpmxPqf5ZzPk6xYehb6Di+6sI7S7ILFQwa9193cW13nASE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769111948; c=relaxed/simple;
-	bh=L3yAFFCMEDFluDFnsvrLzuilg9f4Ft1ohPrL6t/krlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hV65zlwns+WexmZsVpXuegD/Bhp9T8N4ItMKKCchCTfSmEFa7P9x7k8HpVMNmnFCBmSxPHmKAtEi2yIbgOQer5RIIoMizNHUMIfqsPc9ExhFrKQKmDhfOyFN3rmvbWzzSj7eeP+q/YcIPCi609ZSSl+mz5Uq1R4cZwSQzGcLzeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lbdS9FZ+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769124943; c=relaxed/simple;
+	bh=cWPRbNvyPoxvsJNrZndNo+NPoxEhh4AUG0hzh4pQLLw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=d+2n1RKQGw5ZD2ECUg8ahGf3cmT3aDRpoqnal4ZEZsIPqwJPSjPnNCL5iQsTnKOiyhP6BVvDbZp3y5I1F2ty5RbxEz1+v1XX5JWrLzefMCkkhZU5P2CEFjukG77dqClLueQA+e/OiolIZ8nJIQKwXVJbJdnOFxRdNgifCRKjGtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JKQdYEhE; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lbdS9FZ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E03C116D0;
-	Thu, 22 Jan 2026 19:59:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769111948;
-	bh=L3yAFFCMEDFluDFnsvrLzuilg9f4Ft1ohPrL6t/krlM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lbdS9FZ+JqtZCbzkj8qXV0rZCnDPslDRoWvAxauwv8RMES3Hv1cQJITpkMErUCP8a
-	 sp3mD9G0ION5+bWKJAqUALZeOUBDGFJa8H1KN9Ay4eKpEUYch9pi6r93aSdMlOMecP
-	 t9YKcMkenHU1WooMNHxnbQhPrg5cs3kM89aEzVFFNICp4cMTUjVph8cp/dCBZRfvbT
-	 QWHYJP32lGBHk/aMh2tUTXwr9jgTnnM6ZBQWNn8kRq6YXgSW2M2gIf/OvVaVrn+HlJ
-	 YdVYyqAZx9Id9dz1xChx7T7L+gYP+OWFkFowGZj+l4gi06WpotoFDNzM4bfuzKVSU3
-	 n+JMkThblqYBA==
-Date: Thu, 22 Jan 2026 20:57:39 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Guillaume Tucker <gtucker@gtucker.io>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 1/2] scripts: add tool to run containerized builds
-Message-ID: <aXKBM9mmf3VPUgyO@levanger>
-Mail-Followup-To: Nathan Chancellor <nathan@kernel.org>,
-	Guillaume Tucker <gtucker@gtucker.io>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-References: <cover.1769090419.git.gtucker@gtucker.io>
- <9b8da20157e409e8fa3134d2101678779e157256.1769090419.git.gtucker@gtucker.io>
- <20260122172928.1d922490@nimda>
- <611ce02f-2b48-4338-b37f-1df39e02da03@gtucker.io>
- <20260122184939.GA3461196@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKQdYEhE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769124931; x=1800660931;
+  h=date:from:to:cc:subject:message-id;
+  bh=cWPRbNvyPoxvsJNrZndNo+NPoxEhh4AUG0hzh4pQLLw=;
+  b=JKQdYEhElF8NCDZpqF6m/9a4uCOZaZTSnJa6PYN8YPBgZjjJsxpcT6Gn
+   OhZdrCZTCbKyO6QW80LTnLm54SRoUl4nwK8lUsP2/+T5YZjC/BYy35oTO
+   OUSflj10rscUU5eJ22QSdp2phJ9gm73rmCz2rVQ2AWCAvY3ZXW3xt7sJ4
+   aHKSpP24OcrkBvh90BxjAXvU4PZmvRxLbyr6y+KyVBEhy6wVUANotUeRx
+   cJK1ptCrwPFdu4ESijfGqYyQzb83FZA2Du5qr4IsS4Kw6VDxWlgS2FDd5
+   78i9Ge8hPYSGfhPpec6hbX1gX5mG9+a7PB7O/B77GM1ay3/KXxNxoZx5G
+   w==;
+X-CSE-ConnectionGUID: /OqqfRf+S7+CRKNQ+72SIg==
+X-CSE-MsgGUID: Q8B/1L9vQyqz7Lau/HdbiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="87953957"
+X-IronPort-AV: E=Sophos;i="6.21,247,1763452800"; 
+   d="scan'208";a="87953957"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 15:35:27 -0800
+X-CSE-ConnectionGUID: f0Z3AtA5Q/eURyqPkF9RPQ==
+X-CSE-MsgGUID: IDBAAlWvQDCchdXF+ncBTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,247,1763452800"; 
+   d="scan'208";a="237521069"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 22 Jan 2026 15:35:24 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vj4Cw-00000000TLS-26ju;
+	Thu, 22 Jan 2026 23:35:22 +0000
+Date: Fri, 23 Jan 2026 07:35:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-leds@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: [lee-leds:for-leds-next 3/17] ERROR: modpost:
+ "lp5860_device_init" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+Message-ID: <202601230708.wwFMOXZp-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260122184939.GA3461196@ax162>
 
-On Thu, Jan 22, 2026 at 11:49:39AM -0700, Nathan Chancellor wrote:
-> On Thu, Jan 22, 2026 at 03:59:54PM +0100, Guillaume Tucker wrote:
-> > --- a/scripts/container
-> > +++ b/scripts/container
-> > @@ -120,7 +120,7 @@ class Runtimes:
-> >                  if not runtime.is_present():
-> >                      raise ValueError(f"runtime not found: {name}")
-> >                  return runtime
-> > -        raise ValueError(f"unknown runtime: {runtime}")
-> > +        raise ValueError(f"unknown runtime: {name}")
-> >  
-> >      @classmethod
-> >      def find(cls):
-> > 
-> > 
-> > Nathan, would you be OK with folding this in or should I send a v5?
-> 
-> I can fold that in, thanks.
-> 
-> I will carry forward Nicolas's ack and testing tags from v3, as this
-> revision is not substantially different from what he looked at and
-> tested.
+Hi Steffen,
 
-thanks!
+FYI, the error/warning still remains.
 
-Kind regards,
-Nicolas
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+head:   68d2a846952f81cd01331fffdec9a67299b22319
+commit: 51f7560294c911e9394357a903ffa28eebe4b253 [3/17] leds: Add support for TI LP5860 LED driver chip
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260123/202601230708.wwFMOXZp-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601230708.wwFMOXZp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601230708.wwFMOXZp-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: missing MODULE_LICENSE() in drivers/leds/rgb/leds-lp5860-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/rgb/leds-lp5860-core.o
+>> ERROR: modpost: "lp5860_device_init" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+>> ERROR: modpost: "lp5860_device_remove" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
