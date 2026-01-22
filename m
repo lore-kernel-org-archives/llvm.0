@@ -1,81 +1,242 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3863B2AF00;
-	Thu, 22 Jan 2026 00:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF47F30E0D4;
+	Thu, 22 Jan 2026 00:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769040185; cv=none; b=UFJyYopmFETur3TsiGOBHLPAzx7ieRcTjZMSKfHHR4WK5IEcGRK2KXt5YfK3wBVHIipg11S3yHfBSdkjv+EIxxGb7tlUbz+ltbK067q9B/qZEvR43S1g6Pnon7oas98KVxu7Wh4W/lYybmbxzSdCmdcHP2CJnp9BOjX/InGRZso=
+	t=1769043090; cv=none; b=FcP0aiCiGQi37t1BaRNhqYoDXknfdHkSjrlYu6FpG8YTWcSKuuzP0TPa0BlYr6c/mmS//3SAWpJFc60HzwXOD5rzyezzaUBwGowNFYm7wSPdJcyO0OekRFOpNuUBDlqjgzt9dfGewgeNlSqpgUkeyNKlCpYorYEf96JaXg62DDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769040185; c=relaxed/simple;
-	bh=I9pdNdwwGCu/pmlSLxnbwumFj0DXKXxwhgrWRTn5fU0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Z01B4JzqG5l/mbcw6zoEEykc9/2kLs4dbE5cCk7ana04AnNfh07h59XaIRUqhJBd/M9K2cu+O0N1ioRxtjkJ/Ie9y51Qsoj7ruekFADMRYwUPqWv+tDBi60J+NC5FF6lFczJvrpMaR/+n0pkURYX5BGzMjL1kYNXEQoE1frHgGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gb9hF9LZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769043090; c=relaxed/simple;
+	bh=RCNqkVMwIfVKf0aQSQfx46Kk4bHwCtxB2Y9S7fFQWu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uUCiM8jQl6hD0Sa/+Xug1RWDRS5lThb9qQNPnHWJIb+/qQARAcq+U7i3IjVQ3raoaRivEunoOb5XZEXOUUbeqRQOsvJR2B3Dus9QjIuyTVx4OJlBlA6EGfgeOQi+9UF23VYrDScA+Y8NOhONJE2pEBVzrxVd6N+CKP/oGf6/aZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KBJybtfx; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gb9hF9LZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DFCC4CEF1;
-	Thu, 22 Jan 2026 00:03:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769040182;
-	bh=I9pdNdwwGCu/pmlSLxnbwumFj0DXKXxwhgrWRTn5fU0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=gb9hF9LZ8p9aDCid2V8NMMFLltE3I9F9WzpoRiQ+yRzyfCqU92tJkZOZAqqAQ+N1s
-	 VBkhE4G1LQwVPtAlFgKpUQqNFawLsquGi8uTt6j+/TSSRQkks9deh3rVTSyv6yxnpd
-	 etBDs1VNGfVGRI3qhmZRf3wp4tJ8PpZS2SMzKsfHEA8z87yP0ZyUznH5JACE3HUhEk
-	 zFBtwGc7GuAmXIAd24WfFr9AdyaTxaePq2L0TXoxa3FJxYApXyRkA6SnZyV5DVvbXM
-	 Z8Z1OpVmYWWAUbHiwJPWm6roV7kWEs04JCzUoYkUZszO/170vetyUL+5iNBW7jt7Ye
-	 mFzN/JnlFvXlg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, WangYuli <wangyuli@aosc.io>
-In-Reply-To: <20260121-kbuild-llvm-arg-v2-1-5e4d8dca4ad8@weissschuh.net>
-References: <20260121-kbuild-llvm-arg-v2-1-5e4d8dca4ad8@weissschuh.net>
-Subject: Re: [PATCH v2] kbuild: Reject unexpected values for LLVM=
-Message-Id: <176904018061.36280.9070517793890679732.b4-ty@kernel.org>
-Date: Wed, 21 Jan 2026 17:03:00 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KBJybtfx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769043089; x=1800579089;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RCNqkVMwIfVKf0aQSQfx46Kk4bHwCtxB2Y9S7fFQWu4=;
+  b=KBJybtfxUAnxYLY80kxZb0N1Nho1RFgUb/2OUcG3FtGp26+EscquoQFo
+   Zxdc1P4pTphIU+WNdAM7mZg8rOZFAerP7j85mGsViXawHVjSMFqqBbLBN
+   Keogi0MLlYhLI91Yq0v+kEW6R5GiG9lXBJvn0CMcOQ4X2uuIrfL5LjVEb
+   5G9SNdy70fROK9J2u5SJ/pi+F0r/b+bQtUYuPmYKE8lhPVrp1FGpUSbhb
+   3Ukyq55Dkfvr6b/K96nT+h7utxxeXIwpxC/OtrWH2DZE1TTxMgJB5Y8tP
+   C2Jd2fsC4M5GTU1yZ/3BqarAFt2VEPCfO2lQm2dNe2fHBvsFG1WZyVFd8
+   g==;
+X-CSE-ConnectionGUID: dD+l4YqvTyyNAoI7/eMVcw==
+X-CSE-MsgGUID: F32MtJQ0RO+iq+2//DQUpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="70195041"
+X-IronPort-AV: E=Sophos;i="6.21,244,1763452800"; 
+   d="scan'208";a="70195041"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2026 16:51:26 -0800
+X-CSE-ConnectionGUID: yJHh1HgCSqaYPg05Nf/Q/g==
+X-CSE-MsgGUID: DwXXI/rqSsuGHmoae9oqng==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 21 Jan 2026 16:51:21 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1viiut-00000000SDR-2mlh;
+	Thu, 22 Jan 2026 00:51:19 +0000
+Date: Thu, 22 Jan 2026 08:50:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: david.laight.linux@gmail.com, Nathan Chancellor <nathan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Laight <david.laight.linux@gmail.com>
+Subject: Re: [PATCH next 12/14] bits: move the defitions of BIT() and
+ BIT_ULL() back to linux/bits.h
+Message-ID: <202601220832.NJbHlnXC-lkp@intel.com>
+References: <20260121145731.3623-13-david.laight.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260121145731.3623-13-david.laight.linux@gmail.com>
 
-On Wed, 21 Jan 2026 14:42:39 +0100, Thomas Weißschuh wrote:
-> The LLVM argument is documented to accept one of three forms:
-> * a literal '1' to use the default 'clang',
-> * a toolchain prefix path, ending in a trailing '/',
-> * a version suffix.
-> 
-> All other values are silently treated as '1'. If for example
-> the user accidentally forgets the trailing '/' of a toolchain prefix,
-> kbuild will unexpectedly and silently fall back to the system toolchain.
-> 
-> [...]
+Hi,
 
-Applied to
+kernel test robot noticed the following build errors:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
+[auto build test ERROR on next-20260120]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/david-laight-linux-gmail-com/overflow-Reduce-expansion-of-__type_max/20260122-013456
+base:   next-20260120
+patch link:    https://lore.kernel.org/r/20260121145731.3623-13-david.laight.linux%40gmail.com
+patch subject: [PATCH next 12/14] bits: move the defitions of BIT() and BIT_ULL() back to linux/bits.h
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260122/202601220832.NJbHlnXC-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601220832.NJbHlnXC-lkp@intel.com/reproduce)
 
-[1/1] kbuild: Reject unexpected values for LLVM=
-      https://git.kernel.org/kbuild/c/502678b88cb3b
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601220832.NJbHlnXC-lkp@intel.com/
 
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
+All errors (new ones prefixed by >>):
 
-Best regards,
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                      ^      ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:24: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                                      ^      ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
+     140 |                 r->sig[3] = op(a3, b3);                                 \
+         |                 ^      ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:141:3: note: expanded from macro '_SIG_SET_BINOP'
+     141 |                 r->sig[2] = op(a2, b2);                                 \
+         |                 ^      ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:27: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                                  ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                 ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                                  ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                 ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+>> include/linux/mm.h:994:26: error: fields must have a constant size: 'variable length array in structure' extension will never be supported
+     994 |         const vm_flags_t mask = BIT((__force int)bit);
+         |                                 ^
+   include/linux/bits.h:94:18: note: expanded from macro 'BIT'
+      94 | #define BIT(nr)         BIT_TYPE(unsigned long, nr)
+         |                         ^
+   include/linux/bits.h:88:17: note: expanded from macro 'BIT_TYPE'
+      88 |         ((unsigned int)BIT_INPUT_CHECK(+(nr), BITS_PER_TYPE(type)) + ((type)1 << (nr)))
+         |                        ^
+   include/linux/bits.h:82:24: note: expanded from macro 'BIT_INPUT_CHECK'
+      82 |                 sizeof(struct { char bit_number_too_big[-((nr) >= (width))];}), \
+         |                                      ^
+   28 warnings and 16 errors generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/arm/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1330: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +994 include/linux/mm.h
+
+bc292ab00f6c7a6 Suren Baghdasaryan 2023-01-26   990  
+568822502383acd Lorenzo Stoakes    2025-11-18   991  static inline bool __vma_flag_atomic_valid(struct vm_area_struct *vma,
+2b6a3f061f11372 Lorenzo Stoakes    2025-11-25   992  					   vma_flag_t bit)
+568822502383acd Lorenzo Stoakes    2025-11-18   993  {
+2b6a3f061f11372 Lorenzo Stoakes    2025-11-25  @994  	const vm_flags_t mask = BIT((__force int)bit);
+568822502383acd Lorenzo Stoakes    2025-11-18   995  
+568822502383acd Lorenzo Stoakes    2025-11-18   996  	/* Only specific flags are permitted */
+568822502383acd Lorenzo Stoakes    2025-11-18   997  	if (WARN_ON_ONCE(!(mask & VM_ATOMIC_SET_ALLOWED)))
+568822502383acd Lorenzo Stoakes    2025-11-18   998  		return false;
+568822502383acd Lorenzo Stoakes    2025-11-18   999  
+568822502383acd Lorenzo Stoakes    2025-11-18  1000  	return true;
+568822502383acd Lorenzo Stoakes    2025-11-18  1001  }
+568822502383acd Lorenzo Stoakes    2025-11-18  1002  
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
