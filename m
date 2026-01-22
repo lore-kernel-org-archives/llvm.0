@@ -1,138 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C884F3542F0
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 19:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7833535CBCD;
+	Thu, 22 Jan 2026 19:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769111001; cv=none; b=GnON4lGDLB7igxzHgI4TBPfZSNdc/W3sUI+g75O62jn3m19O7UUO8794Hn1LgxSWuNUvKBOmA22IT4pKw9YPMO8NaUqpoLoyYqFeWNbqNyy+K6VtjVBhfSiyVn/0vd5QBL2xVdxMK6eGaU9sFZKudmD4EcFrHIKKsU1vx0D7mgs=
+	t=1769111948; cv=none; b=N1TzjlBF3xPi14+S9YuVE4RCjwkq6Ij4On6udcIch2KY086Sh5r9SZVvF26xdVMT5p4kVnVOEI9SLe0QgiGRH0hASsv09iC7Xcf56S/Y1BthqyvRERDTX2utRVjTUYxqEYk4zYezS92lzwDHhumQoM3m66zDzU5ZO764dY0JnxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769111001; c=relaxed/simple;
-	bh=A9/gIPldbU/Ke+Px/r1XVtQtLUe19aunYqbi/9rAV6w=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kMcsYwfEmNAxygbmAkcdst9viW8BWw+dQ1lWazOxy4gmauhLIzuDC73jYsi1oRQtkMai5ynCW0Dijcvisg2ZhC7HKRlCSqwpVfY6jbGljpyu7wF2pLK17VCyUdoHQxwbNQ1eIpBdwbY4SwpyGHo6ET4JoiNPLUYKSJMR3sezC0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=alserIUe; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769111948; c=relaxed/simple;
+	bh=L3yAFFCMEDFluDFnsvrLzuilg9f4Ft1ohPrL6t/krlM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hV65zlwns+WexmZsVpXuegD/Bhp9T8N4ItMKKCchCTfSmEFa7P9x7k8HpVMNmnFCBmSxPHmKAtEi2yIbgOQer5RIIoMizNHUMIfqsPc9ExhFrKQKmDhfOyFN3rmvbWzzSj7eeP+q/YcIPCi609ZSSl+mz5Uq1R4cZwSQzGcLzeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lbdS9FZ+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="alserIUe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769110988;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=M95hJLm5PQYd7Gh0TDXgsHwNVqYIbuZ3/6f+F3XNmKQ=;
-	b=alserIUerMmAjMFt4pKAO1il6+KUDrbZqSPld4SaU+FRLw3jUzhYDrJfHT/Qa5Sl2VsUWo
-	5zfPuwR8jxvaYaggJPUqdG6YAVgSd9PNpGbRhKZDRBJ2UZX7QJhsIpKwZ4lGHY+cAubTWQ
-	ZIf5U4/C7err5xPmNWA7I1T/2PKc8gY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-384-TOVuyCdyNA2Xx-5Ob7aWew-1; Thu,
- 22 Jan 2026 14:43:07 -0500
-X-MC-Unique: TOVuyCdyNA2Xx-5Ob7aWew-1
-X-Mimecast-MFC-AGG-ID: TOVuyCdyNA2Xx-5Ob7aWew_1769110986
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6F24F1956089
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 19:43:06 +0000 (UTC)
-Received: from [172.20.12.215] (unknown [10.30.44.139])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AB6BD30002D8;
-	Thu, 22 Jan 2026 19:43:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 61 of 137): Test report for master
- (6.19.0-rc6, upstream-mainline, cf38b234)
-Date: Thu, 22 Jan 2026 19:43:05 -0000
-To: ftjahjad@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lbdS9FZ+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E03C116D0;
+	Thu, 22 Jan 2026 19:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769111948;
+	bh=L3yAFFCMEDFluDFnsvrLzuilg9f4Ft1ohPrL6t/krlM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lbdS9FZ+JqtZCbzkj8qXV0rZCnDPslDRoWvAxauwv8RMES3Hv1cQJITpkMErUCP8a
+	 sp3mD9G0ION5+bWKJAqUALZeOUBDGFJa8H1KN9Ay4eKpEUYch9pi6r93aSdMlOMecP
+	 t9YKcMkenHU1WooMNHxnbQhPrg5cs3kM89aEzVFFNICp4cMTUjVph8cp/dCBZRfvbT
+	 QWHYJP32lGBHk/aMh2tUTXwr9jgTnnM6ZBQWNn8kRq6YXgSW2M2gIf/OvVaVrn+HlJ
+	 YdVYyqAZx9Id9dz1xChx7T7L+gYP+OWFkFowGZj+l4gi06WpotoFDNzM4bfuzKVSU3
+	 n+JMkThblqYBA==
+Date: Thu, 22 Jan 2026 20:57:39 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Guillaume Tucker <gtucker@gtucker.io>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/2] scripts: add tool to run containerized builds
+Message-ID: <aXKBM9mmf3VPUgyO@levanger>
+Mail-Followup-To: Nathan Chancellor <nathan@kernel.org>,
+	Guillaume Tucker <gtucker@gtucker.io>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+References: <cover.1769090419.git.gtucker@gtucker.io>
+ <9b8da20157e409e8fa3134d2101678779e157256.1769090419.git.gtucker@gtucker.io>
+ <20260122172928.1d922490@nimda>
+ <611ce02f-2b48-4338-b37f-1df39e02da03@gtucker.io>
+ <20260122184939.GA3461196@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <71219.126012214430700452@us-mta-384.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: PCiwA671eMeTV-LkfIzGCGPzxGTPzwwSVluC1YP6nNc_1769110986
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260122184939.GA3461196@ax162>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Jan 22, 2026 at 11:49:39AM -0700, Nathan Chancellor wrote:
+> On Thu, Jan 22, 2026 at 03:59:54PM +0100, Guillaume Tucker wrote:
+> > --- a/scripts/container
+> > +++ b/scripts/container
+> > @@ -120,7 +120,7 @@ class Runtimes:
+> >                  if not runtime.is_present():
+> >                      raise ValueError(f"runtime not found: {name}")
+> >                  return runtime
+> > -        raise ValueError(f"unknown runtime: {runtime}")
+> > +        raise ValueError(f"unknown runtime: {name}")
+> >  
+> >      @classmethod
+> >      def find(cls):
+> > 
+> > 
+> > Nathan, would you be OK with folding this in or should I send a v5?
+> 
+> I can fold that in, thanks.
+> 
+> I will carry forward Nicolas's ack and testing tags from v3, as this
+> revision is not substantially different from what he looked at and
+> tested.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+thanks!
 
-
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.19-2' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2277363903
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2277363903_s390x_kernel_kcidb_tool_20495341_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, x86_64]
-    /distribution/command [aarch64, x86_64]
-    /test/misc/machineinfo [aarch64, x86_64]
-    Boot test [aarch64, x86_64]
-    CKI/restraint [aarch64, x86_64]
-    Reboot test [aarch64, x86_64]
-    SELinux Custom Module Setup [aarch64, x86_64]
-    selinux-policy: serge-testsuite [aarch64, x86_64]
-    Storage - blktests - throtl [aarch64]
-    Storage - blktests - ublk [aarch64]
-    stress: stress-ng - cpu-cache [aarch64]
-    stress: stress-ng - memory [aarch64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Kind regards,
+Nicolas
