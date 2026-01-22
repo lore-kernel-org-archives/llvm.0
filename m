@@ -1,137 +1,87 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A678B3128C0
-	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 09:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769073350; cv=pass; b=ry6FS7Pb3vftlJw5a7SeYzwo6KV/pCfHkPkjX/5uyk35/UxlmNmqw64vY8NDVEaQ1tJjgroUsMvN/kkeJtmKLa9YYQgJj3cCyV6UXHxfgzMKSrmqD0e0DJ5U0R8E17/yknqQ9Ck59L9v6Nwr4hcVPtAb3+Cf1ziYCQ0NgR6SQiU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769073350; c=relaxed/simple;
-	bh=ApREFQ6wD6lrVuWgy7MMZK5Ag3Q08NmjlQ1gTMrNQtU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u/i9bxXE2zGbKe8DjludyuUOezuL6kYvLrmZVcLFqTRN318pYopymbiYAhNfGektLypJVKqlHXF/3T6BHvmUrZ24wdx29zYda6myP08k5h9WevogMbNhkN1m2GTKAfttFdcaT5GbIS38pQ7cmFYsh5GrQWLV3AD9QHnX1yiYalE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yc8Npb/H; arc=pass smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEBB340D90;
+	Thu, 22 Jan 2026 09:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769073369; cv=none; b=HSazoETCCm2afddusXWfhBvrdGsA8mRNNWQZD9T9iRoP0Yhaa3+VT4NObYC2/PzmgkZrAyD+uXCzYWfurSd5bSTXTenlM4d9qNIT7Mef/daNVdINvqJ5c2F4Q+bJUR8DNqWtMfdMf/8mBxkRnLuGAYSsrNfsq2uteOuarDcNYok=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769073369; c=relaxed/simple;
+	bh=4Yqpu/3RDaqHHmpAmcfDLxY/3hh/yvHYJQNbjtdPfyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lm4qY78InXZEgfP8JcQzidepTg4P4WtEma2veFjIY3YcUHuQHq8j65O0AhlWVCz3l7+cO4QPrOzqYbDmenSmmN4x1PxsygjOrF4NXzICiCOGifXSj2hueeY5TD9o0ZEdsrnNcLdOJpZ0J3NQFIOziTGkC0qD0RQfr53zJ9YxEjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bYAQbliJ; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yc8Npb/H"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-11f1fb91996so1808980c88.1
-        for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 01:15:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769073347; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UfVTh1pTsGmKcPOW0hCv1dc9ZwjnbDJBhUhjhe0wcCFQ1xgWciXj/W1wEascnbK2l3
-         D0ny/gSkzjzSQp1t6YWsMDjRUAfH/WzcPYICZpA5Q4g/hPaIhxPJ+T03QMxBfV7UPJCp
-         bAXndXc8jormLWmDjvlRS5EC5bTk1txec0yRNlNv8s3MTUl8xVmaLTB1/Lbz4BCtlA2N
-         1Y9obQ8fFG4/P1Y8gZ3GYJnB8rUez1cMfObbYbB9fquJzho27FKNCjgYv0IB6OvK1zQW
-         nnQbwXaOnKxyjOXdmxNFvOUZC+pCWAbub/SL9vvAsyDjuvrm5eyam6DaiUmr3FmlsoG2
-         +T7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=O1n87xFYqMZ8hRAVZsvMKMB4Qf2xpXCP3ePnMMEYnPw=;
-        fh=/PeYf2mNuQAs5Yw+I5n3FosO7RxVxuy2dQkRIYNJW3o=;
-        b=eCsDaBNvVmSq0g3vK0C+ZijeVG5MAmVA6wmQBdyvrLfrwV8IYdPeK2I+6BOsrGlld+
-         sh/f/ywNKzV607DMX0cDsI1INsh0jUBQ8BYrGU9+WDtCh+FDZB6bR1lzq2t+OZZRzuAv
-         WAVo/gwLUHh+9+g2UafeUNNS5SEd8umn7J3K9pYraLofOrcML87ToSxu9UBIqFlLMf6/
-         2d5e0FKfxlq74s/Wkc97Z/KaEX+/pmgPDt41rtBuyHnwmoOTVDTcyJoyFbd1a3WeJi2Z
-         Id6ey8M+MjWGc6cgzDSJB4bu+6rMtlVw6+jjUZhSFC6BDSSH61gEggM1neJNMiXt4odf
-         MgyQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769073347; x=1769678147; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1n87xFYqMZ8hRAVZsvMKMB4Qf2xpXCP3ePnMMEYnPw=;
-        b=Yc8Npb/H6Mg4uaQyHUGBzwj0Jc10gaLVmrdXjy5AirPK91JFux7cG/IPsQ3NqPbnvr
-         FRMglzpIPTfrCijrWkk2w8YSLqK5D7IljF2KxTDmjxF/Qi4eqOP7ye+vyifyhysdVyMc
-         a/+SJ8KB7f+km/Qn+RLH/ggCdDQMguUZFN4DviPwUUiDaUbnWcswBJp+8cAuQ/HHQG4P
-         uHQKeGQ8mjMKhvErQjod8sajVkNtgU0fbvsBNf4sI0Toh+InL7nIQQ4PdTfwUVXtAhd6
-         wMy8o+GBtgtPLiIPeJoj0MoRKRpf6whm4nhD0Jz3OEek+htMkhgOmNhnGtfxQyhCESz+
-         bXnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769073347; x=1769678147;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O1n87xFYqMZ8hRAVZsvMKMB4Qf2xpXCP3ePnMMEYnPw=;
-        b=uKvFcCVv3Es4powUIn/jJ0clskmA45wU2SzuntSH0/ywShLg5eEyOOWNmfMRkJkB+q
-         DSN9PB7At9VmBT3aVe/p/cFBFn4gkIhWX2AYxjPnK364kkbSeuq/L+do2+A981XcXbKg
-         EY/BOgIr7Xme0ZW1NDY0+LaQr5v6jdvWwlO6HH/JC48HE9hWi1O3hd7biMkdeTa3d7ZE
-         Az7QXKafLYP9i0YHEm6mmXBYRZJJAay7/0wbtmQPh9sXHD5xnilR19OKgFlehqfGbApd
-         8ige8+2XD+z9roDWBLYF/juap2y+MMasMb+E0+ELy0XVZ9YvAKZsgzaDFE6hYRXRLwz2
-         cUtg==
-X-Forwarded-Encrypted: i=1; AJvYcCUW5vmzfe/QCGwcD3oqtsWCWFzGDigbhqU+2Z9968vE4zxP/sBP6GM7arr7udt/8/21gY0x@lists.linux.dev
-X-Gm-Message-State: AOJu0YzALroBYGM+XcqfRieYFa85hShtnIcONsZ7isBGhnGgaONFNIF8
-	AHBa5jgrZdO9KiObmXQXS3Fxq2pizgSQr8aRk6mIxCZUwjmFGzISx5sz0ASU/GLDuHjqb49rccb
-	dVcskT0i2UmRv3V8BrsBvOaRmxw0gZRXLDvOWuEqv
-X-Gm-Gg: AZuq6aLxchpe5T20LUlADF1QDeUk5o2/LmDkfgbXkh7v77uDZuAmNByuDUUOOZKPttI
-	0fYItbaGI4Ld77sMtIWhhQoefBOWzQgiK5liOSMQeV67ne5weX8v9ZTP+Bc7xq9oaJDnaFWej3d
-	1hLf7FAD2Ui2mdYsX9pI9ZFLA6Az6JMM91kxunUNwW5ZFAWbVtCtlpavlbVFJOs5uZ9RhBI3l0b
-	e/+FZbv0FcZvpM/6uKSkEvBLxDko4ofsOdZIhPvr51Aifj5GBaTumJtlRDPWt2QKcNugDQAQb2t
-	V2ZmzvkcxUUJDYEB+ciGsads
-X-Received: by 2002:a05:7022:e29:b0:123:2c98:f65d with SMTP id
- a92af1059eb24-1244b335a6fmr16241369c88.13.1769073347169; Thu, 22 Jan 2026
- 01:15:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bYAQbliJ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=C7U/N0bsUrzeq4Sw7kLjOn3QUgVvKp0M4t89FKQnaf0=; b=bYAQbliJucXy02Yg+l2Vf7BqsF
+	Lwv/vTd0enRzZbB7RWSTjJutwdkGJiEH+Kz8pkajRosmh8y0zh9AOfwmtrkcpmnE9DbC1afTMnLrj
+	TRkHkuVMrgKe8IDCuIRLfWQWKJL90B7RbjaiKX+FU9AGaQbRMDxU6FJuzNGixBSItXYsfRADKz63y
+	/9udxfJCEJyM40lZykBmGWcdFKPiEUWKnOyL1fCqxtqmV3CUfnTa6ObzeZYYgBuDXxxhs4lSfgNPl
+	dZmzfj893Lan9mJpDXK0kZkXrWNw812KMv8G/NoSaQp5AMifOxNiocUssurGKkk9APUaMTEvMblXA
+	P4dfL75A==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1viqnJ-000000001pK-2LI2;
+	Thu, 22 Jan 2026 09:16:01 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9CE8A3030AC; Thu, 22 Jan 2026 10:16:00 +0100 (CET)
+Date: Thu, 22 Jan 2026 10:16:00 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Marco Elver <elver@google.com>
+Subject: Re: [peterz-queue:locking/core 10/10] kernel/futex/core.c:982:1:
+ warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the
+ end of function
+Message-ID: <20260122091600.GE171111@noisy.programming.kicks-ass.net>
+References: <202601221040.TeM0ihff-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260115005231.1211866-1-elver@google.com> <20260115213311.GG830755@noisy.programming.kicks-ass.net>
- <aWmRlXZaOOUvU_Nv@elver.google.com> <20260116150750.GG831050@noisy.programming.kicks-ass.net>
- <20260116151043.GA18805@lst.de> <20260116152016.GI831050@noisy.programming.kicks-ass.net>
- <20260116152741.GA19823@lst.de> <20260116154754.GN830755@noisy.programming.kicks-ass.net>
- <20260121202427.099c36ab@gandalf.local.home>
-In-Reply-To: <20260121202427.099c36ab@gandalf.local.home>
-From: Marco Elver <elver@google.com>
-Date: Thu, 22 Jan 2026 10:15:10 +0100
-X-Gm-Features: AZwV_QhGh7voJH5MAcuySEgpJuXAIpe-F3-jeqsaVEkPu_SPOZ3AqDPdU9cf4RA
-Message-ID: <CANpmjNPDnFHr9yu1n9Sw3K+sqSfQoM-OHm6vmgjrfVaGMNHmOQ@mail.gmail.com>
-Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Support
- immediate acquisition after initialization
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Christoph Hellwig <hch@lst.de>, Ingo Molnar <mingo@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Bart Van Assche <bvanassche@acm.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202601221040.TeM0ihff-lkp@intel.com>
 
-On Thu, 22 Jan 2026 at 02:24, Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Fri, 16 Jan 2026 16:47:54 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > struct obj {
-> >       spinlock_t      lock;
-> >       int             state __guarded_by(lock);
-> > };
-> >
-> > struct obj *create_obj(void)
-> > {
-> >       struct obj *obj = kzmalloc(sizeof(*obj), GFP_KERNEL);
-> >       if (!obj)
-> >               return NULL;
-> >
-> >       spin_lock_init(&obj->lock);
-> >       obj->state = INIT_STATE; // error: ->state demands ->lock is held
-> > }
->
-> I haven't seen all the other approaches, but would a macro be able to hide
-> it with some kind of obfuscation from the compiler?
->
->
->         GUARD_INIT(obj->state, INIT_STATE);
->
-> which would be something like a WRITE_ONCE() macro. I'm not sure what
-> tooling there is to disable checks for a small bit of code like this.
+On Thu, Jan 22, 2026 at 10:30:28AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+> head:   33d9e7fdf9c17417347d1f06ddebaf25f21ab62a
+> commit: 33d9e7fdf9c17417347d1f06ddebaf25f21ab62a [10/10] futex: Convert to compiler context analysis
+> config: arm64-randconfig-001-20260122 (https://download.01.org/0day-ci/archive/20260122/202601221040.TeM0ihff-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221040.TeM0ihff-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
+>      982 | }
+>          | ^
+>    kernel/futex/core.c:976:2: note: spinlock acquired here
+>      976 |         spin_lock(lock_ptr);
+>          |         ^
+> >> kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
+>      982 | }
+>          | ^
+>    kernel/futex/core.c:966:6: note: spinlock acquired here
+>      966 | void futex_q_lockptr_lock(struct futex_q *q)
+>          |      ^
+>    2 warnings generated.
 
-Something like this is now a documented alternative [1]. Basically this works:
+Urgh, this is the arm64 READ_ONCE() confusing the thing. It can't see
+through that mess and realize: lockptr == q->lock_ptr.
 
-   context_unsafe(obj->state = INIT_STATE);
-
-For single guarded fields, that's as simple as it gets.
-
-[1] https://lore.kernel.org/all/20260119094029.1344361-1-elver@google.com/
+Marco, any suggestion how to best fix that?
