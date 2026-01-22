@@ -1,88 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F05D38550F;
-	Thu, 22 Jan 2026 23:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53FD3DA2C9;
+	Thu, 22 Jan 2026 23:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769124943; cv=none; b=R3XxZq/TXRk+Wx34xHr0w1lmBSI6NGX3tK2biRW/DEt28ULmIQTNhdC1Xuq/vOeFjhe6jExxfFUI2D8iIWtUxwKlsrnjC+neX0k9nBKQ9Vhpk9Gqee6RpnXOhg7KFDpmxPqf5ZzPk6xYehb6Di+6sI7S7ILFQwa9193cW13nASE=
+	t=1769125527; cv=none; b=U7aBNUaCUeJn+EZ7XrRP6hm7pki+uX+8jL0WbWpBORxDgClZxtWrVyvKfVVyNHtQ8GwAfVHpALLzXepGn5mIenMc2gRQ0MH9Uj1/f7kSBzvO+HexHnuwxoo7Q/Fn0DVA7vG3PEh4i3w9gH3jZVJRz8BofVqG1qM2QdtvGhaZUWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769124943; c=relaxed/simple;
-	bh=cWPRbNvyPoxvsJNrZndNo+NPoxEhh4AUG0hzh4pQLLw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=d+2n1RKQGw5ZD2ECUg8ahGf3cmT3aDRpoqnal4ZEZsIPqwJPSjPnNCL5iQsTnKOiyhP6BVvDbZp3y5I1F2ty5RbxEz1+v1XX5JWrLzefMCkkhZU5P2CEFjukG77dqClLueQA+e/OiolIZ8nJIQKwXVJbJdnOFxRdNgifCRKjGtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JKQdYEhE; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769125527; c=relaxed/simple;
+	bh=cKuHsWZ/XbupG8cRTrFGfUP2qLGonwnb92BpvKeZNPY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AKnrpsX5mmszNM7XQQvcO5jdqIE+wHryJWjepmo1TQxCnvZ2a09JY8Z2Ki/QH1CuwaPoWM25tuWnzhmH6ADjbYZxIePf3e1VcEk+zp1M+UoRIUdnQ2TG3UMI+fk3D9kianWNU5nnL5NEmROqhLjRCQITgeGnbxhHQedkMAP2c6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jU0p9GVO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKQdYEhE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769124931; x=1800660931;
-  h=date:from:to:cc:subject:message-id;
-  bh=cWPRbNvyPoxvsJNrZndNo+NPoxEhh4AUG0hzh4pQLLw=;
-  b=JKQdYEhElF8NCDZpqF6m/9a4uCOZaZTSnJa6PYN8YPBgZjjJsxpcT6Gn
-   OhZdrCZTCbKyO6QW80LTnLm54SRoUl4nwK8lUsP2/+T5YZjC/BYy35oTO
-   OUSflj10rscUU5eJ22QSdp2phJ9gm73rmCz2rVQ2AWCAvY3ZXW3xt7sJ4
-   aHKSpP24OcrkBvh90BxjAXvU4PZmvRxLbyr6y+KyVBEhy6wVUANotUeRx
-   cJK1ptCrwPFdu4ESijfGqYyQzb83FZA2Du5qr4IsS4Kw6VDxWlgS2FDd5
-   78i9Ge8hPYSGfhPpec6hbX1gX5mG9+a7PB7O/B77GM1ay3/KXxNxoZx5G
-   w==;
-X-CSE-ConnectionGUID: /OqqfRf+S7+CRKNQ+72SIg==
-X-CSE-MsgGUID: Q8B/1L9vQyqz7Lau/HdbiQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="87953957"
-X-IronPort-AV: E=Sophos;i="6.21,247,1763452800"; 
-   d="scan'208";a="87953957"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 15:35:27 -0800
-X-CSE-ConnectionGUID: f0Z3AtA5Q/eURyqPkF9RPQ==
-X-CSE-MsgGUID: IDBAAlWvQDCchdXF+ncBTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,247,1763452800"; 
-   d="scan'208";a="237521069"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Jan 2026 15:35:24 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vj4Cw-00000000TLS-26ju;
-	Thu, 22 Jan 2026 23:35:22 +0000
-Date: Fri, 23 Jan 2026 07:35:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-leds@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: [lee-leds:for-leds-next 3/17] ERROR: modpost:
- "lp5860_device_init" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
-Message-ID: <202601230708.wwFMOXZp-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jU0p9GVO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90838C116C6;
+	Thu, 22 Jan 2026 23:45:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769125525;
+	bh=cKuHsWZ/XbupG8cRTrFGfUP2qLGonwnb92BpvKeZNPY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jU0p9GVOkRK500u75iF0VWnNCHrv+MZRsz69aOuVSqpZ7LUg2j3chHUF5GgFAytKF
+	 Md11MSWGSusfGeG05Vu7Rj7XBDEpnbbJQREBRT2hdFokfkUYramaw64cymYvzu9nKE
+	 FfGy6kePonzvsusDlPlPq7MqJPBdJW9Lx1TAcjy3x3/zNAhbs3E3wQgw8eykQ1xCnb
+	 ngJu6NUKbWDUW91T8oDOCDtIZPwSnpYHF3NlUeegsgPO2n7TkE475bNq73yEQmdT/s
+	 /CGAjdOfYQ8q75Uh9rqcNt1Q14xWxJb27+vv5YSHINLWXszd7fnMw5Ye6y2OhZcHJI
+	 rv4GjMjwPvOlw==
+Date: Thu, 22 Jan 2026 16:45:21 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux@weissschuh.net, Dell.Client.Kernel@dell.com, corbet@lwn.net,
+	linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 4/9] platform/wmi: Add kunit test for the string
+ conversion code
+Message-ID: <20260122234521.GA413183@ax162>
+References: <20260109214619.7289-1-W_Armin@gmx.de>
+ <20260109214619.7289-5-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260109214619.7289-5-W_Armin@gmx.de>
 
-Hi Steffen,
+Hi Armin,
 
-FYI, the error/warning still remains.
+On Fri, Jan 09, 2026 at 10:46:14PM +0100, Armin Wolf wrote:
+> The string conversion frunctions provided by the WMI driver core
+> have no dependencies on the remaining WMI API, making them suitable
+> for unit tests.
+> 
+> Implement such a unit test using kunit. Those unit tests verify that
+> converting between WMI strings and UTF8 strings works as expected.
+> They also verify that edge cases are handled correctly.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+...
+> +++ b/drivers/platform/wmi/tests/string_kunit.c
+...
+> +static const u8 oversized_test_utf8_string[] = "TEST!";
+...
+> +static void wmi_string_to_utf8s_oversized_test(struct kunit *test)
+> +{
+> +	u8 result[sizeof(oversized_test_utf8_string)];
+> +	ssize_t ret;
+> +
+> +	ret = wmi_string_to_utf8s(&oversized_test_wmi_string, result, sizeof(result));
+> +
+> +	KUNIT_EXPECT_EQ(test, ret, sizeof(test_utf8_string) - 1);
+> +	KUNIT_EXPECT_MEMEQ(test, result, test_utf8_string, sizeof(test_utf8_string));
+> +}
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-head:   68d2a846952f81cd01331fffdec9a67299b22319
-commit: 51f7560294c911e9394357a903ffa28eebe4b253 [3/17] leds: Add support for TI LP5860 LED driver chip
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260123/202601230708.wwFMOXZp-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601230708.wwFMOXZp-lkp@intel.com/reproduce)
+After this change in -next as commit 0e1a8143e797 ("platform/wmi: Add
+kunit test for the string conversion code"), I am seeing a warning from
+clang around oversized_test_utf8_string:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601230708.wwFMOXZp-lkp@intel.com/
+  drivers/platform/wmi/tests/string_kunit.c:108:17: error: variable 'oversized_test_utf8_string' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+    108 | static const u8 oversized_test_utf8_string[] = "TEST!";
+        |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+oversized_test_utf8_string is only used in sizeof() in
+wmi_string_to_utf8s_oversized_test(). clang warns because sizeof() is
+evaluated at compile time, so oversized_test_utf8_string won't end up in
+the final binary. This is typically a bug since the developer may have
+intended to use the variable elsewhere but I was not able to easily
+determine that in this case.
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/leds/rgb/leds-lp5860-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/rgb/leds-lp5860-core.o
->> ERROR: modpost: "lp5860_device_init" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
->> ERROR: modpost: "lp5860_device_remove" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+If it is intentional that this variable is only needed in sizeof(), it
+could either be marked with __maybe_unused or eliminated in favor of a
+direct 'sizeof("TEST!")', depending on maintainer/developer preference.
+I am happy to send a patch.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
