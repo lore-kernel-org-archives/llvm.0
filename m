@@ -1,78 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A43F3AA1A6;
-	Thu, 22 Jan 2026 05:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845CA30DEB8;
+	Thu, 22 Jan 2026 05:50:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769059046; cv=none; b=cqcxoLqKDINBmPrhZtSOaZmOyJnzg57xUohxkV3fP3MQpHbtz8RwCEZJuTZaXZRLCivnMJYvkMfjrc/tpC6FKnyPvLZZshRNeJ0TtpvexTQDL4HkoatIZOFhtnN7shOo9xXHPjKTDy/1B3F7vthLXJ1mL1VS2Qfeb9MDOxPH1EY=
+	t=1769061059; cv=none; b=L6XDvTqmhAirWFRuUwPHstS/Z2mvB8cbbUTEomdhYlxWQ7KIP0BhXU9hFoQeUfrhhotjIc7LrFyXeol7NTr1QLCUin8hOdrNW41K+7O4v5Y2b/bHSW6A48EHHujN75k0LRLWnOVRYqJ9Pe7KiPdWzSmdUJK2xDnmTw6ye+bDNxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769059046; c=relaxed/simple;
-	bh=Yj4t2Q6YxyvZBfhgO0u+WhMltjsUtkqty0mK2Oqpesc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nXKEovIbeH0JF7ViwsBvzVnhm8OHFz+2Ut/rHijwNDFwoGdWORJK4vGhGEYPD1lrOze/y18pvhHknv7+2nIlyE+R7X675BCEwr1/FC9P3FMi7kw1QTDgQSKlWxUrQaTwtyOSDBbtrrzagmqaVgDrCp34kLTW67+/p64d9YWQWxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFUNvh2W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769061059; c=relaxed/simple;
+	bh=Bb74xsoEZKYOuZmvjORZ1FhqK8uLhgEkpy61Bk9sPpw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Svpo+anXKUo+mOdNyHhSPrF4m+lXTafvwYPpZ4KKqB8fOBJfnJBE8c3RKYNfnraM4R8Lcc6GnNtXcjlQpjmr3La6m/kJwhiOIpD3HcEi0UEtd7jVqtxIZt41L4S+hCGq2unL73OHB+++WjoCWd7RlsNeQYXnIXFInW2WcJ3e9Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQT50A0H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFUNvh2W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D7C116C6;
-	Thu, 22 Jan 2026 05:17:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQT50A0H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F432C116C6;
+	Thu, 22 Jan 2026 05:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769059045;
-	bh=Yj4t2Q6YxyvZBfhgO0u+WhMltjsUtkqty0mK2Oqpesc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mFUNvh2WCDbCkCtPK8B442JHkqGheNCvQ3s0IJAPfzukTquPhHgwVQFPzGE+PLu2T
-	 IO6Ao+LGn7cje83ijmG8IkSzXvMuqw7eCrChCAc4nKh70uCqjifrRGpCEjmw0VVd7z
-	 8/Lz8xU9MyNgxodDwd7QNVfl10hUnKrSRnTiI7KShga1WsCvdYOfkYAX2FMkymGhtf
-	 KQL2zC2eKXgAl5pjYZjMZzJDkSZBf+FUfw2O1i72t4Yma69DzsXgbI0gq6ktv++TEV
-	 kNcubMpm1vpvunOt5nXOZLOkwjT3hr309D74QOtxSYGMJVu321cpWqiaWyUhHb8fN0
-	 G7Ybmx1wQKykA==
-Date: Wed, 21 Jan 2026 22:17:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Mike Rapoport (Microsoft)" <rppt@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [rppt:zero-page/v0 1/1] ERROR: modpost: vmlinux:
- 'empty_zero_page' exported twice. Previous export was in vmlinux
-Message-ID: <20260122051722.GC3770486@ax162>
-References: <202601221150.JsPp145b-lkp@intel.com>
+	s=k20201202; t=1769061059;
+	bh=Bb74xsoEZKYOuZmvjORZ1FhqK8uLhgEkpy61Bk9sPpw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RQT50A0HzpXu80ghRZZYelxtd/x8OyQziz+nioon3gfvXf/92qBBs57lGczIfxtNA
+	 C6ZQfIMH4c+6BUPQAqn1Xu2/iUktBrJTujXyhiRRNVhwQagSmOcgIfnpE4q1uvYf4j
+	 xt64t25jqsSHzJ139EUionCY/xuxvrkEQjt7ISO0A/MJdRIf/BSU8SGZDK5LGihs/s
+	 Vt8FCi5UM5+WExEbbH7h10iDtUAg/jf6L/b3ExxAB7dm0vZ9i6IZmtX3LiO6zu8b60
+	 5hQINwr6heezx7iSRJGD899SPOEXy76PsOwYOhF1Iu00+puGDLCEbVMmhvc8K53lkA
+	 sYNiR0Ul22QNg==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: nathan@kernel.org
+Cc: dri-devel@lists.freedesktop.org,
+	jesszhan0024@gmail.com,
+	justinstitt@google.com,
+	llvm@lists.linux.dev,
+	maarten.lankhorst@linux.intel.com,
+	morbo@google.com,
+	mripard@kernel.org,
+	neil.armstrong@linaro.org,
+	nick.desaulniers+lkml@gmail.com,
+	patches@lists.linux.dev,
+	tzimmermann@suse.de,
+	yelangyan@huaqin.corp-partner.google.com
+Subject: Re: [PATCH] drm/panel: ilitek-ili9882t: Remove duplicate initializers in tianma_il79900a_dsc
+Date: Thu, 22 Jan 2026 06:50:50 +0100
+Message-ID: <20260122055050.139154-1-ojeda@kernel.org>
+In-Reply-To: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
+References: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202601221150.JsPp145b-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 22, 2026 at 11:14:04AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git zero-page/v0
-> head:   53d07913878ea27d6fe4224e8581729185291278
-> commit: 53d07913878ea27d6fe4224e8581729185291278 [1/1] dev: arch, mm: consolidate empty_zero_page
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260122/202601221150.JsPp145b-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221150.JsPp145b-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601221150.JsPp145b-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> ERROR: modpost: vmlinux: 'empty_zero_page' exported twice. Previous export was in vmlinux
+On Wed, 14 Jan 2026 13:43:31 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Clang warns (or errors with CONFIG_WERROR=y / W=e):
+>
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:95:16: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+>      95 |         .vbr_enable = 0,
 
-Seems like the following should fix that?
+(...coming from https://lore.kernel.org/all/CANiq72mRp62foTCstQxYhVBdh6y_W27wEjWSRX9_kqShuueaSQ@mail.gmail.com/)
 
-diff --git a/arch/hexagon/kernel/hexagon_ksyms.c b/arch/hexagon/kernel/hexagon_ksyms.c
-index 36a80e31d187..81bc6f81e200 100644
---- a/arch/hexagon/kernel/hexagon_ksyms.c
-+++ b/arch/hexagon/kernel/hexagon_ksyms.c
-@@ -17,7 +17,6 @@ EXPORT_SYMBOL(raw_copy_to_user);
- EXPORT_SYMBOL(__vmgetie);
- EXPORT_SYMBOL(__vmsetie);
- EXPORT_SYMBOL(__vmyield);
--EXPORT_SYMBOL(empty_zero_page);
- EXPORT_SYMBOL(memcpy);
- EXPORT_SYMBOL(memset);
- 
+Yeah, I am also hitting this -- it would be nice to clean it soon.
+
+Thanks Nathan!
+
+Cheers,
+Miguel
