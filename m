@@ -1,210 +1,353 @@
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [178.154.239.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6409319873;
-	Thu, 22 Jan 2026 14:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.152.168
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769093784; cv=fail; b=iFDGWRJAFsxuLb6PFx7MFsseF6rieMtiNLCFQgWNn0vlUSAW6Z98NorL5/TIqlUGZENkvETB5ZxjktGBq7aOKeufetZah8bPvMV53kKT+1iFJD3UocJK5xOkPHLUgqsT4Ivctm/x+QR/uNnSAJu8RF7TMLpsmMnUDdkWEJMLUII=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769093784; c=relaxed/simple;
-	bh=bIhui9a9FNhHp8FqzVOE9BzOYnvEyxMq8ejWhVV4WX4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lvKOGfOZ7qDDWWcDMDA7YNOYhhsPy9GrjPWuuQSneZf97odh3xN0fUw+qCaqf6asullD+RVUwm/KIGQhZ2BbNZmWIPK7dl21yM1if2y3/oprdgl7NDFmOpHkObFiwLjRHi1Xp/DKXVYiDhp6Gs9dCLSEagcBTt8c4Gr3+XJHKJ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=cfumuUJL; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=z9hGt3hy; arc=fail smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DE92FD1B3
+	for <llvm@lists.linux.dev>; Thu, 22 Jan 2026 14:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.82
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769093850; cv=none; b=T7qz34UoFPrSZGahQFE2pOOPt3oWLbsu373+0L4sphZWwlac81ODu9YY5x8m2mO8x4xCAImlyOkZGYpvorquOREKYxc3uIBahsbwCp5eUwoLasruVvrM2PXgKSOErWDTtLVdcBhSIXsT7P8IGaMitmwlLuMr9hooZGqxK26u7+s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769093850; c=relaxed/simple;
+	bh=MJwLJHjgwHoJujqhIoO1zvO/1s5pjRRQpB/ryBDNq60=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ko6mseas+MMQL+YlOLYl/XgJOkDBGvmNR58WeLSBzjYWAPeGeeXBoKaQKg4M339mZaa5Gw6L75C7K709Y1kzs9gDt5nitV0ZzKsaooHjt/GOdy9pXaOeO/kzgcOYCKwxbtBbBi4MZG/bL8DCD43YTIdPx3ZpmIKCkfLcuAJ18+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=RHq+QD8i; arc=none smtp.client-ip=178.154.239.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="cfumuUJL";
-	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="z9hGt3hy"
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60MCfTL22926933;
-	Thu, 22 Jan 2026 08:56:11 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	PODMain02222019; bh=DRd4EBDG/xeBNJbPIOagtgw7LuWg13v6aMgaASTF8tQ=; b=
-	cfumuUJLw7po2wG2kXllX7DNcq58zIYLdVFHRWq+uvDWixWiUHFc0TDJWGo0HRL/
-	gNDV715bDVWHZn6nlACtfZH/YHAE5TwYf5lKgfJfBlzvrI1Q40xoPmKJCrDj+TDG
-	nuKxzBzR+2yVc5/xxiZ9eiinTRu4h362HrYwRFdtVSbQG6XVNRm6RqZFZ+VGznrU
-	O3ZuYOlNu/DLhVjy6ZibXYTsYgmMBUrRVa0cuMhMvNxsIO1mfgKv6V/ub2dsvyyc
-	yxJYl7mPVGQOMCmvEpIZ1RjUAXras+IEZhgmRFTD/xrdAv6ugmk7RUdgRW0CQfgf
-	HMTe/DuIPujlT8vcdhCxnA==
-Received: from cy3pr05cu001.outbound.protection.outlook.com (mail-westcentralusazon11023092.outbound.protection.outlook.com [40.93.201.92])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 4br7qjxdnv-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 08:56:10 -0600 (CST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=B7CmryxcUEXSlPD2mL3wYnTCZmHN6nb6j079bEchsUkVLoCzakIO3OApiQeRxFtGncu5mb4hFwNlBof+fMabNghvHsMSKnWKuQVt0z2u1pjy61xsjLAReM6+zjwETrgSi4Wbk6H1Mg3+abDwa8l0geJk5Kdq6sGwnx+UXZmn7STbgAV281fY3r8GJfoQZ1U2W6s8M5Y4yGeQJke7Go0OtoDXz1WSg8abFBPEwRtDMQ8X9ITyujSuhStE/5ATpCAOYfCNZO7N5OZvs1zyL+Eh2eL4W7wZHefE45i3SoVIssh9J2D8I/oGu/owVrTGNy4Iatf1NKuBXRQSGamNTxnKUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DRd4EBDG/xeBNJbPIOagtgw7LuWg13v6aMgaASTF8tQ=;
- b=AYnYvCOM59hOjDphE9Ut1f2NeHcgAIEGO81I9Sv1pFKzAUYrhH71vqN2+WFG5JWdj7D//Wfn3G+Gx0NNutaEi49UCYA8sMrs6f9OXW2u94oCEACa1JJktKI301wkd+9LKsG1nHCnEvYYq3nq6pWYs4Y5AcStARlrsrxyuFvpEOJCPnpTj2xgc6T385WEDVBri00knZ5XyXO3pU+JgwGru70w8bDBpLikmaspr0r0V/hIidwIVGH5hyOTNLn+dwxj53ZEZv3MXipa1wVaRryMBV4FnIaGpl8XLLgpXlMTCzOABoVq1PZgfENzMEZJwyqLKMFtYR3wNgN4g44GENol3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 84.19.233.75) smtp.rcpttodomain=cirrus.com
- smtp.mailfrom=opensource.cirrus.com; dmarc=fail (p=reject sp=reject pct=100)
- action=oreject header.from=opensource.cirrus.com; dkim=none (message not
- signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DRd4EBDG/xeBNJbPIOagtgw7LuWg13v6aMgaASTF8tQ=;
- b=z9hGt3hyLbRSnswMMvo6u9nBho6Xqu3xhmPny6UjaNvda8VnM7wEr1WSc1iUbOAm55gDjsXAkQYVApjEMj9q9xyVHr5utfqXcuXBk7QN4PmCF40syalaKW7rEtzix4yytkdGnlz/Zm14ESoMqu83sCP7mKVKg2+DceljymDpxOU=
-Received: from BL0PR05CA0017.namprd05.prod.outlook.com (2603:10b6:208:91::27)
- by DM4PR19MB7262.namprd19.prod.outlook.com (2603:10b6:8:10a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.10; Thu, 22 Jan
- 2026 14:56:03 +0000
-Received: from MN1PEPF0000F0E5.namprd04.prod.outlook.com
- (2603:10b6:208:91:cafe::94) by BL0PR05CA0017.outlook.office365.com
- (2603:10b6:208:91::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.3 via Frontend Transport; Thu,
- 22 Jan 2026 14:56:02 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
- smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
-Received-SPF: Fail (protection.outlook.com: domain of opensource.cirrus.com
- does not designate 84.19.233.75 as permitted sender)
- receiver=protection.outlook.com; client-ip=84.19.233.75;
- helo=edirelay1.ad.cirrus.com;
-Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
- MN1PEPF0000F0E5.mail.protection.outlook.com (10.167.242.43) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.3
- via Frontend Transport; Thu, 22 Jan 2026 14:56:03 +0000
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 32E3E406540;
-	Thu, 22 Jan 2026 14:56:02 +0000 (UTC)
-Received: from [198.90.208.24] (ediswws06.ad.cirrus.com [198.90.208.24])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 17831820249;
-	Thu, 22 Jan 2026 14:56:02 +0000 (UTC)
-Message-ID: <22b7a6b0-3abc-4e20-837d-da434111970e@opensource.cirrus.com>
-Date: Thu, 22 Jan 2026 14:56:01 +0000
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="RHq+QD8i"
+Received: from mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:c02d:0:640:f30a:0])
+	by forward502a.mail.yandex.net (Yandex) with ESMTPS id 9A98C8A315;
+	Thu, 22 Jan 2026 17:22:52 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id mMdmTPYGmqM0-ERNeZI8f;
+	Thu, 22 Jan 2026 17:22:51 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1769091771;
+	bh=MBhIWBUY2/5EYJTgIE3lTIPYG+tFnJnPo7Rk4jlv5pg=;
+	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+	b=RHq+QD8i+W6C2Il8rVGNDi7S5cXCSrdQVC1zXucZyvGroae6b80JdiwucoR55sOzh
+	 kKu7+KgpGJW7T7JxeyU4RRFhFReTOQO9HnNdU/WOAd7inO1xCn2LwyjP40xUqvyDbN
+	 F53TvzVE510Pek3GzU/n+UWgUrwI+8Rq9CHwChS8=
+Authentication-Results: mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+Date: Thu, 22 Jan 2026 17:22:45 +0300
+From: Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>, Arnd
+ Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] Documentation: dev-tools: add container.rst page
+Message-ID: <20260122172245.04a1fbe4@nimda>
+In-Reply-To: <af886533cc5cbdd6ef1d909793b79a1ad42c74ca.1769090419.git.gtucker@gtucker.io>
+References: <cover.1769090419.git.gtucker@gtucker.io>
+	<af886533cc5cbdd6ef1d909793b79a1ad42c74ca.1769090419.git.gtucker@gtucker.io>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] ASoC: cs35l56: Add KUnit testing of
- cs35l56_set_fw_suffix()
-To: kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-sound@vger.kernel.org, patches@opensource.cirrus.com
-References: <20260121132243.1256019-6-rf@opensource.cirrus.com>
- <202601221843.kS9IMZ0E-lkp@intel.com>
-Content-Language: en-GB
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <202601221843.kS9IMZ0E-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E5:EE_|DM4PR19MB7262:EE_
-X-MS-Office365-Filtering-Correlation-Id: b309aebc-c698-497f-ce62-08de59c65d07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|61400799027|36860700013|13003099007|7053199007|54012099003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NEZKSk9xQThoQUFRUEpqeU91MEMxZ0xOcnRMUkNjVmJtY0toODdRcWRFRE40?=
- =?utf-8?B?QVA5aEZxcDJTZXhkY28rbWRtVE9NbUNsYldVOFZDbjUrM1pUZkxVQ01nYXc2?=
- =?utf-8?B?T0U0ZXloZE9yZHBzdEE5d0NCNW5kSEdGNVkyMzNVMGE5S1ZOVEloUnUzcFVL?=
- =?utf-8?B?YVJPRlY2RnhpcmVaL1Y1aFAyVHZKTUZoK09EbTJhUVg3WkdBbXc0cVZJOVJI?=
- =?utf-8?B?d1NVZ2tMeEptbnZoZnNSRXNGNjBNcDNQOENSZndGbFJielhpc2dQWEhBalVW?=
- =?utf-8?B?cDA0ZWQreFY0RnZDdDBHSEduZTN6SFZxY0VJSCtBNFlZaHBnaUF0eldrKzZG?=
- =?utf-8?B?bGpzREtwdm00UEVHNXJQaW9sQWRjc3p5QUFDUHNxekJ6cXJaNDRHYVFpdW80?=
- =?utf-8?B?NFk4YXlxQm9XZ1JUcC83R1hnSHp3eXUyT3VZSCszMUNnYzBNUkZGellQWk5M?=
- =?utf-8?B?V29YQ3k4M3ZaUTFLSW9yb3pNd21DbC9QK0Vrc25za3kwS1ovdEY1YlJLVkhE?=
- =?utf-8?B?UkV2Z0VMai9DNmQvU2dnWldLVmc4V0t4Y3dMRXR6RVFjeHlUSzBLRzNUeFA0?=
- =?utf-8?B?akJvMktXSVlvS1pCMlBnVi9kUDh1R05EZmdITHd1YUx2UnRtUnRwRHROQXFy?=
- =?utf-8?B?ZFlaSU5VcEovOUlWVlMzbklkSy9zU2RERnJUNEdYcXkyK3p6NHJUMDNPbkM0?=
- =?utf-8?B?WXkyQldTWXBPQ1h0ZHY2Q2J5bVZKYUpuUGthd0xrajVBUnlobjBYV3Z6aWdy?=
- =?utf-8?B?QkhTeGsvUjBReDQ0aUFiVlQwbW5ZT2NWYzlOTDdIZVJJNFhKcGNYRFM2TkIz?=
- =?utf-8?B?VkcrVjNvSzZma3BCOXhZa2JnK05GRkZtYmZhSUZCVWErZFlldDZJTk5uOG1z?=
- =?utf-8?B?RCtKT2NVM1p1Z0daUEhFYzYwZFZ2T0FRWHFFRFNGMG9KZ3pEYTZ0a3JUTHNw?=
- =?utf-8?B?RzZIRDdnWFZ6VVI5MHlJVG00UENsQnRseVgwZHUzNEtNTXUvNnZCY2duN3No?=
- =?utf-8?B?UFYvVnhPNnVmMVRFMFB6bXZJVHVoejhmcFZveDdNOENWZSt1M1NrMWFLd3pn?=
- =?utf-8?B?RDNNY3Z0RERDemlUU3RWUVpiQ0ZEUkd1YVZRQU40Um03djNETjNWQWZRQTdp?=
- =?utf-8?B?VFc0c0lleFhYRlhNcWVWVzhMRGhGOXkrZmdlN3VaZkpiTWhRR29lRWZ5dy9G?=
- =?utf-8?B?MHQyM1pDRzJ2SVZGVEk3ZHhzUk1XYVJiT2dIRStYTThFSXRYUzlmNm1sRjdo?=
- =?utf-8?B?ampxeTR5T2ZzUlR6UE5iL3NHT0dpcDJxeFp5K290SGd5M3JxaVAycDBTQ2lO?=
- =?utf-8?B?M2RycGhyY3d4cjV0QklWOCtUbzR4RExsZDRhMTY0a1l4eGVhMXR3OWNUeGlU?=
- =?utf-8?B?NGZETHZkY1UwdWFHaVZNZTBmTy9pdkNNMENaKzNiL29uNGkzUkpYdHBBSlk2?=
- =?utf-8?B?QUFjamZTVFJWTTlTUm9MQ3M2ay9FUEdYTlVnVG9Jem5Tc21uK2pOYVQ3Y1E1?=
- =?utf-8?B?aUpBeW9ibDIwK0Q5TzV4eHdZR0hiOHBqYzdPc21lQ0UwcDNrSGVtTndPd0pq?=
- =?utf-8?B?V0VDNHpZL0syOHRPNnFtQTlzZGYxNzJxOGx1c1JEcTIwaDVrdkt1THBRUU9Y?=
- =?utf-8?B?L0xHdmFiNzZ5aU9wWW9LRGtDeElvU1JFb0JzenBDTWVvSTZ0cnhBVTBkbEYz?=
- =?utf-8?B?SlZHcVdNc1Uva21BL0JZZHhhTDhkWi9FVzFmWDZ5UmpCbmdBY1Nma0RFVEJq?=
- =?utf-8?B?OGVlT0E5WlJLTHMwNTUrY015cHZRZWZiNmlrOS9NOEN5ajVQVXJZQUlUVE1B?=
- =?utf-8?B?eWx2MlRTdTJQRTBzSWRPU0lseERNYWNiY010Vk1FQVlGd05lRDJVb3JVakJv?=
- =?utf-8?B?c0NFbW1pNkZiM1JJOWIyOU1Kd1RHSFpldVJPRzA1OEs0dDJ3MVFZTUVtcjM1?=
- =?utf-8?B?QmU0SVlmblpxS1pRRXkrdnZPajVhVU1ibzdIWWJRazZyaEV1WDNLNk90TWlq?=
- =?utf-8?B?dHlmdDRSZXpYaWNuYS90byswMHlkV05OcDhEbzk4bnFSVjYvSjJ0OWZkL01W?=
- =?utf-8?B?Smx2R0hKMHJGTWpmMkVtNWxLbURnZVkrV1ZSTml4MUg2ZXRKdzBFTlVieGRL?=
- =?utf-8?B?THgvUEtlcVVMWWVFSjJyallhdTROWGthOFIrNUI4bzdYVHF3UDB4RUIxdVY3?=
- =?utf-8?B?Mi9DblNHemIxZnNLNkdBeTdlcGZnZSt3UUpQdWZnR09vK2hzeSthOFF0NEJu?=
- =?utf-8?B?YTA1dHJyRXpMR2xFc0xOdHRZWWFBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(61400799027)(36860700013)(13003099007)(7053199007)(54012099003);DIR:OUT;SFP:1102;
-X-OriginatorOrg: opensource.cirrus.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2026 14:56:03.0320
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b309aebc-c698-497f-ce62-08de59c65d07
-X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-MN1PEPF0000F0E5.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR19MB7262
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDExMyBTYWx0ZWRfX6+yYYBoIQoFj
- pXoALVNTNRyLTsyHI4GpxvoOEi3HWM4B7clcxHRgAcagztHU5bU902IfNkjdP/dWzTEj1VAlL6L
- SQyslfa4HSqGqiQps+5ipdxDFAssPECJp5/A4F3nLpn4s1NCAxhzMcWc1jVgbNA2KzHnznxWefh
- pPvvilPbz1EzSGJ4IArMCQybqkEwk3AlT/7yo7CuaJt+jJ6Lcug+VJh2n8UXXqoulPJo6SIkTTN
- 1uJyJRKi9PVdwe5p2pfdmFZXnCpXghJ+60PqX5hYQQY6moH3TKzVruQp4uj4lwrt0xWRsi6BqnD
- cpeBAzV7AEH3eMER9B6UNCNDCOZX/VnuxsFwLlOtb7sbCsdVsZ1rgkxJpG+hhe3uL+tjIDpkHYV
- vtQU4GgQ5dmR90khK1rb4LxnW5bKMMZkgIv8aNWevxYO5kZ6Y2sLngiVegKi1WLjTeUgeuN1x/r
- 6zXgCF+VeOlsFTBa0kA==
-X-Proofpoint-GUID: 1Jg3auqRrhE5aIhdC00l8BUcbgB9QXpw
-X-Authority-Analysis: v=2.4 cv=GrRPO01C c=1 sm=1 tr=0 ts=69723a8a cx=c_pps
- a=Ta0D7379KrHwLEZKU6rhjg==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=anyJmfQTAAAA:8 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
- a=w1d2syhTAAAA:8 a=i3X5FwGiAAAA:8 a=QyXUC8HyAAAA:8 a=hsye5iHl473IEWifFgMA:9
- a=QEXdDO2ut3YA:10 a=mmqRlSCDY2ywfjPLJ4af:22
-X-Proofpoint-ORIG-GUID: 1Jg3auqRrhE5aIhdC00l8BUcbgB9QXpw
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 22/01/2026 10:25 am, kernel test robot wrote:
-> Hi Richard,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on broonie-sound/for-next]
-> [also build test WARNING on linus/master v6.19-rc6 next-20260121]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald/ASoC-cs-amp-lib-Support-Dell-SSIDExV2-UEFI-variable/20260121-220028
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-> patch link:    https://lore.kernel.org/r/20260121132243.1256019-6-rf%40opensource.cirrus.com
-> patch subject: [PATCH 5/5] ASoC: cs35l56: Add KUnit testing of cs35l56_set_fw_suffix()
-> config: arm64-randconfig-003-20260122 (https://download.01.org/0day-ci/archive/20260122/202601221843.kS9IMZ0E-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221843.kS9IMZ0E-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601221843.kS9IMZ0E-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
->>> WARNING: modpost: module snd-soc-cs35l56-test uses symbol cs35l56_set_fw_suffix from namespace EXPORTED_FOR_KUNIT_TESTING, but does not import it.
-> 
-Please reply to all people on a thread. And as a minimum include people
-who were To: on the original patch email. Otherwise people who matter
-won't see this report.
+On Thu, 22 Jan 2026 15:07:00 +0100
+Guillaume Tucker <gtucker@gtucker.io> wrote:
+
+> Add a dev-tools/container.rst documentation page for the
+> scripts/container tool.  This covers the basic usage with additional
+> information about environment variables and user IDs.  It also
+> includes a number of practical examples with a reference to the
+> experimental kernel.org toolchain images.
+>=20
+> Update MAINTAINERS accordingly with a reference to the added file.
+>=20
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nicolas Schier <nsc@kernel.org>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: "Onur =C3=96zkan" <work@onurozkan.dev>
+> Signed-off-by: Guillaume Tucker <gtucker@gtucker.io>
+> ---
+>  Documentation/dev-tools/container.rst | 227
+> ++++++++++++++++++++++++++ Documentation/dev-tools/index.rst     |
+> 1 + MAINTAINERS                           |   1 +
+>  3 files changed, 229 insertions(+)
+>  create mode 100644 Documentation/dev-tools/container.rst
+>=20
+> diff --git a/Documentation/dev-tools/container.rst
+> b/Documentation/dev-tools/container.rst new file mode 100644
+> index 000000000000..452415b64662
+> --- /dev/null
+> +++ b/Documentation/dev-tools/container.rst
+> @@ -0,0 +1,227 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +.. Copyright (C) 2025 Guillaume Tucker
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Containerized Builds
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The ``container`` tool can be used to run any command in the kernel
+> source tree +from within a container.  Doing so facilitates
+> reproducing builds across +various platforms, for example when a test
+> bot has reported an issue which +requires a specific version of a
+> compiler or an external test suite.  While +this can already be done
+> by users who are familiar with containers, having a +dedicated tool
+> in the kernel tree lowers the barrier to entry by solving common
+> +problems once and for all (e.g. user id management).  It also makes
+> it easier +to share an exact command line leading to a particular
+> result.  The main use +case is likely to be kernel builds but
+> virtually anything can be run: KUnit, +checkpatch etc. provided a
+> suitable image is available. + +
+> +Options
+> +=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Command line syntax::
+> +
+> +  scripts/container -i IMAGE [OPTION]... CMD...
+> +
+> +Available options:
+> +
+> +``-e, --env-file ENV_FILE``
+> +
+> +    Path to an environment file to load in the container.
+> +
+> +``-g, --gid GID``
+> +
+> +    Group id to use inside the container.
+> +
+> +``-i, --image IMAGE``
+> +
+> +    Container image name (required).
+> +
+> +``-r, --runtime RUNTIME``
+> +
+> +    Container runtime name.  Supported runtimes: ``docker``,
+> ``podman``. +
+> +    If not specified, the first one found on the system will be used
+> +    i.e. Podman if present, otherwise Docker.
+> +
+> +``-s, --shell``
+> +
+> +    Run the container in an interactive shell.
+> +
+> +``-u, --uid UID``
+> +
+> +    User id to use inside the container.
+> +
+> +    If the ``-g`` option is not specified, the user id will also be
+> used for
+> +    the group id.
+> +
+> +``-v, --verbose``
+> +
+> +    Enable verbose output.
+> +
+> +``-h, --help``
+> +
+> +    Show the help message and exit.
+> +
+> +
+> +Usage
+> +=3D=3D=3D=3D=3D
+> +
+> +It's entirely up to the user to choose which image to use and the
+> ``CMD`` +arguments are passed directly as an arbitrary command line
+> to run in the +container.  The tool will take care of mounting the
+> source tree as the current +working directory and adjust the user and
+> group id as needed. +
+> +The container image which would typically include a compiler
+> toolchain is +provided by the user and selected via the ``-i``
+> option.  The container runtime +can be selected with the ``-r``
+> option, which can be either ``docker`` or +``podman``.  If none is
+> specified, the first one found on the system will be +used while
+> giving priority to Podman.  Support for other runtimes may be added
+> +later depending on their popularity among users. +
+> +By default, commands are run non-interactively.  The user can abort
+> a running +container with SIGINT (Ctrl-C).  To run commands
+> interactively with a TTY, the +``--shell`` or ``-s`` option can be
+> used.  Signals will then be received by the +shell directly rather
+> than the parent ``container`` process.  To exit an +interactive
+> shell, use Ctrl-D or ``exit``. +
+> +.. note::
+> +
+> +   The only host requirement aside from a container runtime is
+> Python 3.10 or
+> +   later.
+> +
+> +.. note::
+> +
+> +   Out-of-tree builds are not fully supported yet.  The ``O=3D``
+> option can
+> +   however already be used with a relative path inside the source
+> tree to keep
+> +   separate build outputs.  A workaround to build outside the tree
+> is to use
+> +   ``mount --bind``, see the examples section further down.
+> +
+> +
+> +Environment Variables
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Environment variables are not propagated to the container so they
+> have to be +either defined in the image itself or via the ``-e``
+> option using an +environment file.  In some cases it makes more sense
+> to have them defined in +the Containerfile used to create the image.
+> For example, a Clang-only compiler +toolchain image may have
+> ``LLVM=3D1`` defined. +
+> +The local environment file is more useful for user-specific
+> variables added +during development.  It is passed as-is to the
+> container runtime so its format +may vary.  Typically, it will look
+> like the output of ``env``.  For example:: +
+> +  INSTALL_MOD_STRIP=3D1
+> +  SOME_RANDOM_TEXT=3DOne upon a time
+> +
+> +Please also note that ``make`` options can still be passed on the
+> command line, +so while this can't be done since the first argument
+> needs to be the +executable::
+> +
+> +  scripts/container -i docker.io/tuxmake/korg-clang LLVM=3D1 make  #
+> won't work +
+> +this will work::
+> +
+> +  scripts/container -i docker.io/tuxmake/korg-clang make LLVM=3D1
+> +
+> +
+> +User IDs
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +This is an area where the behaviour will vary slightly depending on
+> the +container runtime.  The goal is to run commands as the user
+> invoking the tool. +With Podman, a namespace is created to map the
+> current user id to a different +one in the container (1000 by
+> default).  With Docker, while this is also +possible with recent
+> versions it requires a special feature to be enabled in +the daemon
+> so it's not used here for simplicity.  Instead, the container is run
+> +with the current user id directly.  In both cases, this will provide
+> the same +file permissions for the kernel source tree mounted as a
+> volume.  The only +difference is that when using Docker without a
+> namespace, the user id may not +be the same as the default one set in
+> the image. + +Say, we're using an image which sets up a default user
+> with id 1000 and the +current user calling the ``container`` tool has
+> id 1234.  The kernel source +tree was checked out by this same user
+> so the files belong to user 1234.  With +Podman, the container will
+> be running as user id 1000 with a mapping to id 1234 +so that the
+> files from the mounted volume appear to belong to id 1000 inside +the
+> container.  With Docker and no namespace, the container will be
+> running +with user id 1234 which can access the files in the volume
+> but not in the user +1000 home directory.  This shouldn't be an issue
+> when running commands only in +the kernel tree but it is worth
+> highlighting here as it might matter for +special corner cases. +
+> +.. note::
+> +
+> +   Podman's `Docker compatibility
+> +
+> <https://podman-desktop.io/docs/migrating-from-docker/managing-docker-com=
+patibility>`__
+> +   mode to run ``docker`` commands on top of a Podman backend is
+> more complex
+> +   and not fully supported yet.  As such, Podman will take priority
+> if both
+> +   runtimes are available on the system.
+> +
+> +
+> +Examples
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The TuxMake project provides a variety of prebuilt container images
+> available +on `Docker Hub <https://hub.docker.com/u/tuxmake>`__.
+> Here's the shortest +example to build a kernel using a TuxMake Clang
+> image:: +
+> +  scripts/container -i docker.io/tuxmake/korg-clang -- make LLVM=3D1
+> defconfig
+> +  scripts/container -i docker.io/tuxmake/korg-clang -- make LLVM=3D1
+> -j$(nproc) +
+> +.. note::
+> +
+> +   When running a command with options within the container, it
+> should be
+> +   separated with a double dash ``--`` to not confuse them with the
+> +   ``container`` tool options.  Plain commands with no options don't
+> strictly
+> +   require the double dashes e.g.::
+> +
+> +     scripts/container -i docker.io/tuxmake/korg-clang make mrproper
+> +
+> +To run ``checkpatch.pl`` in a ``patches`` directory with a generic
+> Perl image:: +
+> +  scripts/container -i perl:slim-trixie scripts/checkpatch.pl
+> patches/* +
+> +As an alternative to the TuxMake images, the examples below refer to
+> +``kernel.org`` images which are based on the `kernel.org compiler
+> toolchains +<https://mirrors.edge.kernel.org/pub/tools/>`__.  These
+> aren't (yet) officially +available in any public registry but users
+> can build their own locally instead +using this `experimental
+> repository +<https://gitlab.com/gtucker/korg-containers>`__ by
+> running ``make +PREFIX=3Dkernel.org/``.
+> +
+> +To build just ``bzImage`` using Clang::
+> +
+> +  scripts/container -i kernel.org/clang -- make bzImage -j$(nproc)
+> +
+> +Same with GCC 15 as a particular version tag::
+> +
+> +  scripts/container -i kernel.org/gcc:15 -- make bzImage -j$(nproc)
+> +
+> +For an out-of-tree build, a trick is to bind-mount the destination
+> directory to +a relative path inside the source tree::
+> +
+> +  mkdir -p $HOME/tmp/my-kernel-build
+> +  mkdir -p build
+> +  sudo mount --bind $HOME/tmp/my-kernel-build build
+> +  scripts/container -i kernel.org/gcc -- make mrproper
+> +  scripts/container -i kernel.org/gcc -- make O=3Dbuild defconfig
+> +  scripts/container -i kernel.org/gcc -- make O=3Dbuild -j$(nproc)
+> +
+> +To run KUnit in an interactive shell and get the full output::
+> +
+> +  scripts/container -s -i kernel.org/gcc:kunit -- \
+> +      tools/testing/kunit/kunit.py \
+> +          run \
+> +          --arch=3Dx86_64 \
+> +          --cross_compile=3Dx86_64-linux-
+> +
+> +To just start an interactive shell::
+> +
+> +  scripts/container -si kernel.org/gcc bash
+> +
+> +To build the HTML documentation, which requires the ``kdocs`` image
+> built with +``make PREFIX=3Dkernel.org/ extra`` as it's not a compiler
+> toolchain:: +
+> +  scripts/container -i kernel.org/kdocs make htmldocs
+> diff --git a/Documentation/dev-tools/index.rst
+> b/Documentation/dev-tools/index.rst index 4b8425e348ab..527a0e4cf2ed
+> 100644 --- a/Documentation/dev-tools/index.rst
+> +++ b/Documentation/dev-tools/index.rst
+> @@ -38,6 +38,7 @@ Documentation/process/debugging/index.rst
+>     gpio-sloppy-logic-analyzer
+>     autofdo
+>     propeller
+> +   container
+> =20
+> =20
+>  .. only::  subproject and html
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index affd55ff05e0..4e82dba3bd25 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6387,6 +6387,7 @@ F:	include/linux/console*
+>  CONTAINER BUILD SCRIPT
+>  M:	Guillaume Tucker <gtucker@gtucker.io>
+>  S:	Maintained
+> +F:	Documentation/dev-tools/container.rst
+>  F:	scripts/container
+> =20
+>  CONTEXT TRACKING
+
+This looks great.
+
+Reviewed-by: Onur =C3=96zkan <work@onurozkan.dev>
