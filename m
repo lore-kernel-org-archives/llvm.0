@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5236C1E7C2E;
-	Fri, 23 Jan 2026 22:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19BD35957;
+	Fri, 23 Jan 2026 23:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769208638; cv=none; b=iV7utqZANg3/qnqb50L831ynOOPEhKosVTDlkvoCyltUB+rwKCiCj2Ltx3Cv8gpHtSxdpefLvRRk4Owmcp/a5aXwXN8lhu7DooZQf27QM8BnIKxr+fVmg0R54eQUNfVjEMjJ/Tbhoq5e8PQs1dsSqsWsT2a/45RIrjyz8w+F8PI=
+	t=1769209293; cv=none; b=GXFLi9rpHmCj05z36nUWHBvwgaBkje14e17d0ccHm2y+Afz+AiTn4RVx7E5Hi3bIH6fALbVJ55GlFgw/yA4A051cuyZWqhyoWRSS72Cn9GuoaAvoqt5bKcsncVWEEL8Pteisj7KBO5sDLXzCyA0RFRVJW2ygrzCWspyPCoC0how=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769208638; c=relaxed/simple;
-	bh=z+l/Iumm08O54OJsNbQka8X+9Q72qsZNUebKuOgH+/4=;
+	s=arc-20240116; t=1769209293; c=relaxed/simple;
+	bh=bjgANok5VWaUR9/ZGKh2qhbPtOHe4DN7ZcA60OP3kdQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iBGYHlae1AHtQZrIWhJwllX5E4d2BmZ0sUfK9UT3qVXFfS8c6pLOLQnzTNhNT+n9Ype1LX++2BVSwgsteqltDsVJhfKt1csb+/NCJfMl1OuyC+B0TteP0HrVifEUKRNqH6pyLRHyPKOP01sRw4LjlhX9ZoKjMmk+Nb4mYrJn7GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQOlM4Sw; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=cuzHJjuYbHxKLkR7d8nAsyMi/oT3ky06l4hdNoLeTy1SMLKvZTEzkcQQOYWzC6VbnDTYkQYGmnF+c8NftVEWZECQ0nzvOZBIMcmfQKTlnyuMOj3fr+FH7GCjRKbyHwqhjUxywADX+4OPWoV71O1ZSYZP7nHucR1EQUOlHMP0YtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6sU2bCQ; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQOlM4Sw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6sU2bCQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769208637; x=1800744637;
+  t=1769209292; x=1800745292;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=z+l/Iumm08O54OJsNbQka8X+9Q72qsZNUebKuOgH+/4=;
-  b=FQOlM4Swp35XoXeLSY/QsHBp2xikbc94/Za0498A4P5KfDGEBEg1Hwov
-   L3zZhYz5LFi0OT6wi+QBeH18MQul62ZpGycbbtqowTXKBFJwi5I3yFZaA
-   2dKnPkC0wYRik6I7gV8jvsb+pSus5Q6Ybw7nTqn9gyRm9gdss5/X09SoF
-   LkQU9OPLz1qQTf0dw0P1HLV1dhOPk5TEYs9QDOgbDvhB8AWDlyt+XlIPL
-   ahzu3WgUjME/0b2DCNC0p7sIdfbOwqEqOsyRZM03Ti4bgThxfJjijzscy
-   28ocPspfy0Qgn0ghZfJ+B0DMJzBXnW+BuCJ4qWmuRp3rxWszdipgcNEKb
+  bh=bjgANok5VWaUR9/ZGKh2qhbPtOHe4DN7ZcA60OP3kdQ=;
+  b=O6sU2bCQf1yTFqD9lelRkwPPVVQdwnT3sK1hakxvyqILT6Guz9oFkQoA
+   K9CCqVwp4TV+7vztOBKy/gIlArtg0iNnlTSY4frq77mk3O9JoLmx521Ga
+   26VP+U6tQhdblDFva0ocQRU8VOyGWBMA2iF0y8kGU3NNeiOgZMiO3ksjQ
+   LJn19cws4d3/rUdNRddRAM7FPVaWmmzP5C36cJCCmJ9DOF4ViILvSmACb
+   qi887Haguy0QQlxsce53GrXlfXoHstDVu98+2aR0V7J7n17F9KjTntGa4
+   oHAjs89KhwcL7U9A3xv5F4TovTdz9tQHUBKKS2CM64mzKdAtbONSmptsl
    Q==;
-X-CSE-ConnectionGUID: MDniN2v3Tcyncu8IFVT0VA==
-X-CSE-MsgGUID: YdywP7FiRI6jdHuc3rp6OQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70515842"
+X-CSE-ConnectionGUID: wfVPbxOvQcuXyULAp/NsYQ==
+X-CSE-MsgGUID: vJ142B4wQtuzpphW+gG+bw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70525908"
 X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
-   d="scan'208";a="70515842"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 14:50:35 -0800
-X-CSE-ConnectionGUID: 1tqy6JmdQH6dK7zPWXXK8A==
-X-CSE-MsgGUID: TK0Z7lPeR1ypTpwa1GDYeA==
+   d="scan'208";a="70525908"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 15:01:32 -0800
+X-CSE-ConnectionGUID: bt3IcbDZSomtF6EsKFoyrA==
+X-CSE-MsgGUID: yqvrjELfSkO/NTbDwMgjsQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
-   d="scan'208";a="211996524"
+   d="scan'208";a="211598656"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 23 Jan 2026 14:50:30 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 23 Jan 2026 15:01:30 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vjPz1-00000000UYK-1voE;
-	Fri, 23 Jan 2026 22:50:27 +0000
-Date: Sat, 24 Jan 2026 06:50:04 +0800
+	id 1vjQ9g-00000000UYw-0FzO;
+	Fri, 23 Jan 2026 23:01:28 +0000
+Date: Sat, 24 Jan 2026 07:00:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Parvathi Pudi <parvathi@couthit.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, danishanwar@ti.com, rogerq@kernel.org,
-	pmohan@couthit.com, basharath@couthit.com, afd@ti.com
+To: Naohiro Aota <naohiro.aota@wdc.com>, linux-btrfs@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, alok.a.tiwari@oracle.com,
-	horms@kernel.org, pratheesh@ti.com, j-rameshbabu@ti.com,
-	vigneshr@ti.com, praneeth@ti.com, srk@ti.com, rogerq@ti.com,
-	krishna@couthit.com
-Subject: Re: [PATCH net-next v12 1/3] net: ti: icssm-prueth: Add helper
- functions to configure and maintain FDB
-Message-ID: <202601240625.YSMR8XyP-lkp@intel.com>
-References: <20260123135932.535735-2-parvathi@couthit.com>
+	Naohiro Aota <naohiro.aota@wdc.com>
+Subject: Re: [PATCH 4/4] btrfs: tests: zoned: add selftest for zoned code
+Message-ID: <202601240640.fgNkjFQF-lkp@intel.com>
+References: <20260123125920.4129581-5-naohiro.aota@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,55 +63,114 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260123135932.535735-2-parvathi@couthit.com>
+In-Reply-To: <20260123125920.4129581-5-naohiro.aota@wdc.com>
 
-Hi Parvathi,
+Hi Naohiro,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on next-20260122]
+[cannot apply to linus/master v6.19-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Parvathi-Pudi/net-ti-icssm-prueth-Add-helper-functions-to-configure-and-maintain-FDB/20260123-220750
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260123135932.535735-2-parvathi%40couthit.com
-patch subject: [PATCH net-next v12 1/3] net: ti: icssm-prueth: Add helper functions to configure and maintain FDB
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20260124/202601240625.YSMR8XyP-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240625.YSMR8XyP-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-tests-add-cleanup-functions-for-test-specific-functions/20260123-210300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260123125920.4129581-5-naohiro.aota%40wdc.com
+patch subject: [PATCH 4/4] btrfs: tests: zoned: add selftest for zoned code
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260124/202601240640.fgNkjFQF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240640.fgNkjFQF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601240625.YSMR8XyP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601240640.fgNkjFQF-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/ti/icssm/icssm_prueth_switch.c:570:20: error: call to undeclared function 'kmalloc_obj'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     570 |         prueth->fdb_tbl = kmalloc_obj(*prueth->fdb_tbl, GFP_KERNEL);
-         |                           ^
->> drivers/net/ethernet/ti/icssm/icssm_prueth_switch.c:570:18: error: incompatible integer to pointer conversion assigning to 'struct fdb_tbl *' from 'int' [-Wint-conversion]
-     570 |         prueth->fdb_tbl = kmalloc_obj(*prueth->fdb_tbl, GFP_KERNEL);
-         |                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> fs/btrfs/tests/zoned-tests.c:89:8: error: call to undeclared function 'btrfs_load_block_group_by_raid_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      89 |         ret = btrfs_load_block_group_by_raid_type(bg, map, zone_info, active,
+         |               ^
+   fs/btrfs/tests/zoned-tests.c:89:8: note: did you mean 'btrfs_load_block_group_zone_info'?
+   fs/btrfs/tests/../zoned.h:195:19: note: 'btrfs_load_block_group_zone_info' declared here
+     195 | static inline int btrfs_load_block_group_zone_info(
+         |                   ^
+   1 error generated.
 
 
-vim +/kmalloc_obj +570 drivers/net/ethernet/ti/icssm/icssm_prueth_switch.c
+vim +/btrfs_load_block_group_by_raid_type +89 fs/btrfs/tests/zoned-tests.c
 
-   564	
-   565	int icssm_prueth_sw_init_fdb_table(struct prueth *prueth)
-   566	{
-   567		if (prueth->emac_configured)
-   568			return 0;
-   569	
- > 570		prueth->fdb_tbl = kmalloc_obj(*prueth->fdb_tbl, GFP_KERNEL);
-   571		if (!prueth->fdb_tbl)
-   572			return -ENOMEM;
-   573	
-   574		icssm_prueth_sw_fdb_tbl_init(prueth);
-   575	
-   576		return 0;
-   577	}
-   578	
+    39	
+    40	static int test_load_zone_info(struct btrfs_fs_info *fs_info,
+    41				       struct load_zone_info_test_vector *test)
+    42	{
+    43		struct btrfs_block_group *bg __free(btrfs_free_dummy_block_group) = NULL;
+    44		struct btrfs_chunk_map *map __free(btrfs_free_chunk_map) = NULL;
+    45		struct zone_info AUTO_KFREE(zone_info);
+    46		unsigned long AUTO_KFREE(active);
+    47		int i, ret;
+    48	
+    49		bg = btrfs_alloc_dummy_block_group(fs_info, test->bg_length);
+    50		if (!bg) {
+    51			test_std_err(TEST_ALLOC_BLOCK_GROUP);
+    52			return -ENOMEM;
+    53		}
+    54	
+    55		map = btrfs_alloc_chunk_map(test->num_stripes, GFP_KERNEL);
+    56		if (!map) {
+    57			test_std_err(TEST_ALLOC_EXTENT_MAP);
+    58			return -ENOMEM;
+    59		}
+    60	
+    61		zone_info = kcalloc(test->num_stripes, sizeof(*zone_info), GFP_KERNEL);
+    62		if (!zone_info) {
+    63			test_err("cannot allocate zone info");
+    64			return -ENOMEM;
+    65		}
+    66	
+    67		active = bitmap_zalloc(test->num_stripes, GFP_KERNEL);
+    68		if (!zone_info) {
+    69			test_err("cannot allocate active bitmap");
+    70			return -ENOMEM;
+    71		}
+    72	
+    73		map->type = test->raid_type;
+    74		map->num_stripes = test->num_stripes;
+    75		if (test->raid_type == BTRFS_BLOCK_GROUP_RAID10)
+    76			map->sub_stripes = 2;
+    77		for (i = 0; i < test->num_stripes; i++) {
+    78			zone_info[i].physical = 0;
+    79			zone_info[i].alloc_offset = test->alloc_offsets[i];
+    80			zone_info[i].capacity = ZONE_SIZE;
+    81			if (zone_info[i].alloc_offset && zone_info[i].alloc_offset < ZONE_SIZE)
+    82				__set_bit(i, active);
+    83		}
+    84		if (test->degraded)
+    85			btrfs_set_opt(fs_info->mount_opt, DEGRADED);
+    86		else
+    87			btrfs_clear_opt(fs_info->mount_opt, DEGRADED);
+    88	
+  > 89		ret = btrfs_load_block_group_by_raid_type(bg, map, zone_info, active,
+    90							  test->last_alloc);
+    91	
+    92		if (ret != test->expected_result) {
+    93			test_err("unexpected return value: ret %d expected %d", ret,
+    94				 test->expected_result);
+    95			return -EINVAL;
+    96		}
+    97	
+    98		if (!ret && bg->alloc_offset != test->expected_alloc_offset) {
+    99			test_err("unexpected alloc_offset: alloc_offset %llu expected %llu",
+   100				 bg->alloc_offset, test->expected_alloc_offset);
+   101			return -EINVAL;
+   102		}
+   103	
+   104		return 0;
+   105	}
+   106	
 
 -- 
 0-DAY CI Kernel Test Service
