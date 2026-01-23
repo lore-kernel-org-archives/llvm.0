@@ -1,62 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F09292936;
-	Fri, 23 Jan 2026 02:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB247392B6A;
+	Fri, 23 Jan 2026 05:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769134377; cv=none; b=mNKtbLBjf3vThb9q8yWjnZCN+Hjl1ir5sdYJSaiPY2v5fzMv7t/OjExf/cdX1jjkyuR9vMccxdjjsu/uOkN1/xvuUI0QKMvI5NBSAglQfWNY3hRi6Y/OBnwWMJqEHYFQraraMLeRpUfBSS6gZFDs0kDd++rhQQ1vTUUwY8lMl+M=
+	t=1769146313; cv=none; b=Vah9Bzb+lWlU1pHQiSsq33oO0SZVf+ntayltynL01xfVImUiMpKiXBeIVOhNrGyoQGfmm++VX2XNhnqAkqll+Yp2oc0XpcA+XqckQvgYIEljWD5crm7YabVFjKA3fZLu0Nt00VT3QTG08253jG2lYzw6rn0NYMPZyb8GMl9gu/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769134377; c=relaxed/simple;
-	bh=lzxjY+Dz1GcflUKh93fa+rrxb0XIDKDZw4CbJH82K88=;
+	s=arc-20240116; t=1769146313; c=relaxed/simple;
+	bh=6555LqyRbicDS9IM3bg1O2TIluGcJj7F11rI8vrsCQM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5JNxNu5UYZ8Em9fwqpndZvESY/5VpCvtUgww28Kh17XMtI+U0JmWzop2eC96/fEdDj4mkkrU4uH5OAPzMCujJlPJkgAnCim39p7pTZlQoQGaCZ5dMDyLrW0bx8y4wPmtjkspZI463OnGP6vLg/S5uMnU3hZDvEwlc3BGCPkdyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WsjExc/e; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=mvbNUOkfyYCCY+8VL9XlDJLPQuxZE4w1QSRHj38k6x0RykZ2uHboOd9K85Y5grkaFucAsA9dO7+f/hp5y6WvvM2KKPJZDTkwYhYwJYpYxVqJoveZghgAOV3j1xgaJo2X8yHflUD0FMIn9TbvHakENwJkeCViVv/oxjbQPAlLMyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mYAxJKwI; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WsjExc/e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mYAxJKwI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769134359; x=1800670359;
+  t=1769146309; x=1800682309;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lzxjY+Dz1GcflUKh93fa+rrxb0XIDKDZw4CbJH82K88=;
-  b=WsjExc/eih/W4wqGn1GBO6RwBGttaaLeeyKoPMYU/Unq7ArYsyNpxs7i
-   QeuFEtD42w66SKF7/S33055S5YjZMDttCRv1If7KpjlzdFNjCFBJzGK/m
-   uHUCMBOEJzw1ecFKjRrIIk81cL5xt1yElItIyCEFlVNgwIhgZnZjh5izk
-   tOBdP2IPYO4H+eQhF71xf+0gDQnecT5q1EMMC2gzk69jIyEczbAmwog60
-   QEt3bTok8hoTs7e9ult3q/c2SHoiuellq0ugYgRM3/CatKJGSzNR37zv4
-   lfBMmQYHJOdQzAVa0ZI1ph7ucT+vT/3AxjAt68ReyxIjDwwnbIcKSHF7f
-   g==;
-X-CSE-ConnectionGUID: KQVqhwjlTTy7FhcGGjurPA==
-X-CSE-MsgGUID: i3J4qjVoRiSN2Yg2EM2Xzw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="81827741"
+  bh=6555LqyRbicDS9IM3bg1O2TIluGcJj7F11rI8vrsCQM=;
+  b=mYAxJKwImCzUDf6pd4V/8DHWvf9fWqWFC9GBaqBWBzVTci1o3SggquVp
+   ZLvVuhB/RAriym3+2sVfZ3ReD+2ohVhaoqPf647EwggjKyeh85KKfR+jR
+   05HN4ddbeR+TZ6bOcYQxC2mwiamYG4/hlteI0PTmy2Jyu6wPoLvg/uJHq
+   cvevWIRhcRIzGKGQx8kCBmy3HGCzw15/x6xn6nvmPyC2cpIaM4Zbyt+J9
+   yUCpfTaGOhrA6I3aum5i1T52w3mOaxvbNAZ1YFl3h5rtiQIHGF19+5StN
+   KQnEdspnaOWxkMP5Q7Kaq/xQCbG97vvBr2t88hiIl2AtZWkurbC3NuGI1
+   Q==;
+X-CSE-ConnectionGUID: 1IRV14eHQjG1hMAzzg9/Lw==
+X-CSE-MsgGUID: OADkoKlXQSaIxzOzbOMZLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="70563179"
 X-IronPort-AV: E=Sophos;i="6.21,247,1763452800"; 
-   d="scan'208";a="81827741"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 18:12:32 -0800
-X-CSE-ConnectionGUID: pzxDbVSsTvK98R6RE4BGQw==
-X-CSE-MsgGUID: M7Lk9k4gQqCvy/DYacrBaA==
+   d="scan'208";a="70563179"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 21:31:43 -0800
+X-CSE-ConnectionGUID: Ug8nxIJAT4Oi7W/VLkzx9g==
+X-CSE-MsgGUID: RtUbWqjbTrq4IGkLyP1MDg==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,247,1763452800"; 
+   d="scan'208";a="211443441"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Jan 2026 18:12:29 -0800
+  by orviesa004.jf.intel.com with ESMTP; 22 Jan 2026 21:31:34 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vj6ew-00000000TQq-2OhB;
-	Fri, 23 Jan 2026 02:12:26 +0000
-Date: Fri, 23 Jan 2026 10:11:33 +0800
+	id 1vj9lc-00000000TYU-0Cg4;
+	Fri, 23 Jan 2026 05:31:32 +0000
+Date: Fri, 23 Jan 2026 13:30:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pnina Feder <pnina.feder@mobileye.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pmladek@suse.com,
-	bhe@redhat.com, linux-kernel@vger.kernel.org, lkp@intel.com,
-	mgorman@suse.de, mingo@redhat.com, pnina.feder@mobileye.com,
-	rostedt@goodmis.org, senozhatsky@chromium.org, tglx@linutronix.de,
-	vkondra@mobileye.com
-Subject: Re: [PATCH v8] panic: add panic_force_cpu= parameter to redirect
- panic to a specific CPU
-Message-ID: <202601231058.Q6hDGfoT-lkp@intel.com>
-References: <20260122102457.1154599-1-pnina.feder@mobileye.com>
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
+	Li Ming <ming.li@zohomail.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Ying Huang <huang.ying.caritas@gmail.com>,
+	Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>,
+	Robert Richter <rrichter@amd.com>,
+	Benjamin Cheatham <benjamin.cheatham@amd.com>,
+	Zhijian Li <lizhijian@fujitsu.com>
+Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of
+ Soft Reserved memory ranges
+Message-ID: <202601231309.JYIKhk2G-lkp@intel.com>
+References: <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,45 +89,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260122102457.1154599-1-pnina.feder@mobileye.com>
+In-Reply-To: <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
 
-Hi Pnina,
+Hi Smita,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.19-rc6 next-20260122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on bc62f5b308cbdedf29132fe96e9d591e526527e1]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pnina-Feder/panic-add-panic_force_cpu-parameter-to-redirect-panic-to-a-specific-CPU/20260122-182657
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260122102457.1154599-1-pnina.feder%40mobileye.com
-patch subject: [PATCH v8] panic: add panic_force_cpu= parameter to redirect panic to a specific CPU
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260123/202601231058.Q6hDGfoT-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601231058.Q6hDGfoT-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Smita-Koralahalli/dax-hmem-Request-cxl_acpi-and-cxl_pci-before-walking-Soft-Reserved-ranges/20260122-130032
+base:   bc62f5b308cbdedf29132fe96e9d591e526527e1
+patch link:    https://lore.kernel.org/r/20260122045543.218194-7-Smita.KoralahalliChannabasappa%40amd.com
+patch subject: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft Reserved memory ranges
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260123/202601231309.JYIKhk2G-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601231309.JYIKhk2G-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601231058.Q6hDGfoT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601231309.JYIKhk2G-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> kernel/panic.c:79:14: warning: unused variable 'panic_force_buf' [-Wunused-variable]
-      79 | static char *panic_force_buf;
-         |              ^~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/panic_force_buf +79 kernel/panic.c
-
-    77	
-    78	static int panic_force_cpu = -1;
-  > 79	static char *panic_force_buf;
-    80	
+>> ERROR: modpost: "cxl_bus_type" [drivers/dax/hmem/dax_hmem.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
