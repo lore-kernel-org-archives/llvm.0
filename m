@@ -1,177 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19BD35957;
-	Fri, 23 Jan 2026 23:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F961990C7;
+	Fri, 23 Jan 2026 23:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769209293; cv=none; b=GXFLi9rpHmCj05z36nUWHBvwgaBkje14e17d0ccHm2y+Afz+AiTn4RVx7E5Hi3bIH6fALbVJ55GlFgw/yA4A051cuyZWqhyoWRSS72Cn9GuoaAvoqt5bKcsncVWEEL8Pteisj7KBO5sDLXzCyA0RFRVJW2ygrzCWspyPCoC0how=
+	t=1769210465; cv=none; b=ltFcbcgT4R7mwZw+bQBvF7+gUwUW6achp5Mkplu+9ng605ACJQTiqMpwgaLyRDsvPFb+a7ofSxsKrvX1hag+jIXDJK6C9BH+qBM/Lf/1G4rW58uvPwePoaj751t+JP8+4/YPKL3yxvLSLem/piWSuxbpKAm0xsCt0dIL5B55rZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769209293; c=relaxed/simple;
-	bh=bjgANok5VWaUR9/ZGKh2qhbPtOHe4DN7ZcA60OP3kdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cuzHJjuYbHxKLkR7d8nAsyMi/oT3ky06l4hdNoLeTy1SMLKvZTEzkcQQOYWzC6VbnDTYkQYGmnF+c8NftVEWZECQ0nzvOZBIMcmfQKTlnyuMOj3fr+FH7GCjRKbyHwqhjUxywADX+4OPWoV71O1ZSYZP7nHucR1EQUOlHMP0YtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6sU2bCQ; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769210465; c=relaxed/simple;
+	bh=h1OhVeo4a07CpgPIzNHE/qIXeJzhLVmyvBwc5/+BbUk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dEFLrmEbITldpJvdb7MzzOw16v+sUqennM/um7vW7wGZfNYtVXBWBsb1dlEefpZGL/BmAHbfpWtDn1SBWzaMH1i5F/ninKM7ngSIXkvNo2nxLlyzdcrzE9TcA/Widt7JgtV6Vz1ieFUKr/ea6YcoGnL+gg+u5neNJB89mli/3SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jabh+gCL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6sU2bCQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769209292; x=1800745292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bjgANok5VWaUR9/ZGKh2qhbPtOHe4DN7ZcA60OP3kdQ=;
-  b=O6sU2bCQf1yTFqD9lelRkwPPVVQdwnT3sK1hakxvyqILT6Guz9oFkQoA
-   K9CCqVwp4TV+7vztOBKy/gIlArtg0iNnlTSY4frq77mk3O9JoLmx521Ga
-   26VP+U6tQhdblDFva0ocQRU8VOyGWBMA2iF0y8kGU3NNeiOgZMiO3ksjQ
-   LJn19cws4d3/rUdNRddRAM7FPVaWmmzP5C36cJCCmJ9DOF4ViILvSmACb
-   qi887Haguy0QQlxsce53GrXlfXoHstDVu98+2aR0V7J7n17F9KjTntGa4
-   oHAjs89KhwcL7U9A3xv5F4TovTdz9tQHUBKKS2CM64mzKdAtbONSmptsl
-   Q==;
-X-CSE-ConnectionGUID: wfVPbxOvQcuXyULAp/NsYQ==
-X-CSE-MsgGUID: vJ142B4wQtuzpphW+gG+bw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70525908"
-X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
-   d="scan'208";a="70525908"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 15:01:32 -0800
-X-CSE-ConnectionGUID: bt3IcbDZSomtF6EsKFoyrA==
-X-CSE-MsgGUID: yqvrjELfSkO/NTbDwMgjsQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
-   d="scan'208";a="211598656"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Jan 2026 15:01:30 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vjQ9g-00000000UYw-0FzO;
-	Fri, 23 Jan 2026 23:01:28 +0000
-Date: Sat, 24 Jan 2026 07:00:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Naohiro Aota <naohiro.aota@wdc.com>, linux-btrfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Naohiro Aota <naohiro.aota@wdc.com>
-Subject: Re: [PATCH 4/4] btrfs: tests: zoned: add selftest for zoned code
-Message-ID: <202601240640.fgNkjFQF-lkp@intel.com>
-References: <20260123125920.4129581-5-naohiro.aota@wdc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jabh+gCL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBB5C4CEF1;
+	Fri, 23 Jan 2026 23:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769210465;
+	bh=h1OhVeo4a07CpgPIzNHE/qIXeJzhLVmyvBwc5/+BbUk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=jabh+gCLRyivnx4BAbwWGHToRDgrPiDJWb9f9NiSxDFLyT7MXbIaETx7XL7eV5fxw
+	 VG/SzHJFRlcN0vlmAjG2/qTMLfFa06JDBO+Kad0XPMdhGoRakigVKvZXen4QpGRYAS
+	 Ib5EBAQ5Z5eugWjX9lB0aYOtEghBDdLe5yNOaU3u6GKD2cqUpxLZg1RYeFTzMdZMEV
+	 mroAOlqMMrFEEpxyS03ZFXblUQr3+prOVNlCrZ68mxxZryTZETaH7loVduKtnEvSmd
+	 zIkQqi6eyhHKgxSYO6iwUtNzT1sy+R4tdiBEoJ6NvielvuFz0gbzg2AoyBhR+gWstr
+	 wzOFe1NSnbl7A==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 23 Jan 2026 16:20:28 -0700
+Subject: [PATCH] x86/entry/vdso32: Omit '.cfi_offset eflags' for LLVM < 16
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260123125920.4129581-5-naohiro.aota@wdc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-v1-1-0f412e3516a4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNTQ6CMBBA4auQWTtJfxDRqxgXbZliTaWkg5WEc
+ HerLr/Nexsw5UAMl2aDTCVwSFOFPDTg7mYaCcNQDUqoTkilce07LAMnrfBtMMbyRHlE5wMm75k
+ WJB/NyGhPthX+rFvVC6i1OZMP6+90vf3NL/sgt3zzsO8fAhMseIsAAAA=
+X-Change-ID: 20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-b7b40f934280
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+ x86@kernel.org
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1904; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=h1OhVeo4a07CpgPIzNHE/qIXeJzhLVmyvBwc5/+BbUk=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJklTHGlgf8yM547HjstuWZb5lyWXdceTD2kI55T0+Hzo
+ rfXyMSlo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkaxDDPwt5/sPHTyn+eM73
+ 8ttHo60ZvsK7OuwNdslk/lc6cbFs1lqGfzrzDmS9uzavpTxfx6Zz1Qdu6+ZNqcXStYLHxRN5cn6
+ Z8QIA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Naohiro,
+After commit 884961618ee5 ("x86/entry/vdso32: Remove open-coded DWARF in
+sigreturn.S"), building arch/x86/entry/vdso/vdso32/sigreturn.S with LLVM
+15 fails with:
 
-kernel test robot noticed the following build errors:
+  <instantiation>:18:20: error: invalid register name
+   .cfi_offset eflags, 64
+                     ^
+  arch/x86/entry/vdso/vdso32/sigreturn.S:33:2: note: while in macro instantiation
+   STARTPROC_SIGNAL_FRAME 8
+   ^
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on next-20260122]
-[cannot apply to linus/master v6.19-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Support for eflags as an argument to .cfi_offset was added in the LLVM
+16 development cycle [1]. Only add this .cfi_offset directive if it is
+supported by the assembler to clear up the error.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-tests-add-cleanup-functions-for-test-specific-functions/20260123-210300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/20260123125920.4129581-5-naohiro.aota%40wdc.com
-patch subject: [PATCH 4/4] btrfs: tests: zoned: add selftest for zoned code
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260124/202601240640.fgNkjFQF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240640.fgNkjFQF-lkp@intel.com/reproduce)
+Fixes: 884961618ee5 ("x86/entry/vdso32: Remove open-coded DWARF in sigreturn.S")
+Link: https://github.com/llvm/llvm-project/commit/67bd3c58c0c7389e39c5a2f4d3b1a30459ccf5b7 [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/entry/vdso/vdso32/sigreturn.S | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601240640.fgNkjFQF-lkp@intel.com/
+diff --git a/arch/x86/entry/vdso/vdso32/sigreturn.S b/arch/x86/entry/vdso/vdso32/sigreturn.S
+index 25b0ac4b4bfe..8dfcf18f9582 100644
+--- a/arch/x86/entry/vdso/vdso32/sigreturn.S
++++ b/arch/x86/entry/vdso/vdso32/sigreturn.S
+@@ -22,7 +22,15 @@
+ 	CFI_OFFSET	cs,     IA32_SIGCONTEXT_cs
+ 	CFI_OFFSET	ss,     IA32_SIGCONTEXT_ss
+ 	CFI_OFFSET	ds,     IA32_SIGCONTEXT_ds
++/*
++ * .cfi_offset eflags requires LLVM 16 or newer:
++ * https://github.com/llvm/llvm-project/commit/67bd3c58c0c7389e39c5a2f4d3b1a30459ccf5b7
++ * Check for 16.0.1 to ensure the support is present, as 16.0.0 may be a
++ * prerelease version.
++ */
++#if defined(CONFIG_AS_IS_GNU) || (defined(CONFIG_AS_IS_LLVM) && CONFIG_AS_VERSION >= 160001)
+ 	CFI_OFFSET	eflags, IA32_SIGCONTEXT_flags
++#endif
+ .endm
+ 
+ 	.text
 
-All errors (new ones prefixed by >>):
+---
+base-commit: 436ee609df7da5671ae5a717d1df867313868baf
+change-id: 20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-b7b40f934280
 
->> fs/btrfs/tests/zoned-tests.c:89:8: error: call to undeclared function 'btrfs_load_block_group_by_raid_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      89 |         ret = btrfs_load_block_group_by_raid_type(bg, map, zone_info, active,
-         |               ^
-   fs/btrfs/tests/zoned-tests.c:89:8: note: did you mean 'btrfs_load_block_group_zone_info'?
-   fs/btrfs/tests/../zoned.h:195:19: note: 'btrfs_load_block_group_zone_info' declared here
-     195 | static inline int btrfs_load_block_group_zone_info(
-         |                   ^
-   1 error generated.
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
-
-vim +/btrfs_load_block_group_by_raid_type +89 fs/btrfs/tests/zoned-tests.c
-
-    39	
-    40	static int test_load_zone_info(struct btrfs_fs_info *fs_info,
-    41				       struct load_zone_info_test_vector *test)
-    42	{
-    43		struct btrfs_block_group *bg __free(btrfs_free_dummy_block_group) = NULL;
-    44		struct btrfs_chunk_map *map __free(btrfs_free_chunk_map) = NULL;
-    45		struct zone_info AUTO_KFREE(zone_info);
-    46		unsigned long AUTO_KFREE(active);
-    47		int i, ret;
-    48	
-    49		bg = btrfs_alloc_dummy_block_group(fs_info, test->bg_length);
-    50		if (!bg) {
-    51			test_std_err(TEST_ALLOC_BLOCK_GROUP);
-    52			return -ENOMEM;
-    53		}
-    54	
-    55		map = btrfs_alloc_chunk_map(test->num_stripes, GFP_KERNEL);
-    56		if (!map) {
-    57			test_std_err(TEST_ALLOC_EXTENT_MAP);
-    58			return -ENOMEM;
-    59		}
-    60	
-    61		zone_info = kcalloc(test->num_stripes, sizeof(*zone_info), GFP_KERNEL);
-    62		if (!zone_info) {
-    63			test_err("cannot allocate zone info");
-    64			return -ENOMEM;
-    65		}
-    66	
-    67		active = bitmap_zalloc(test->num_stripes, GFP_KERNEL);
-    68		if (!zone_info) {
-    69			test_err("cannot allocate active bitmap");
-    70			return -ENOMEM;
-    71		}
-    72	
-    73		map->type = test->raid_type;
-    74		map->num_stripes = test->num_stripes;
-    75		if (test->raid_type == BTRFS_BLOCK_GROUP_RAID10)
-    76			map->sub_stripes = 2;
-    77		for (i = 0; i < test->num_stripes; i++) {
-    78			zone_info[i].physical = 0;
-    79			zone_info[i].alloc_offset = test->alloc_offsets[i];
-    80			zone_info[i].capacity = ZONE_SIZE;
-    81			if (zone_info[i].alloc_offset && zone_info[i].alloc_offset < ZONE_SIZE)
-    82				__set_bit(i, active);
-    83		}
-    84		if (test->degraded)
-    85			btrfs_set_opt(fs_info->mount_opt, DEGRADED);
-    86		else
-    87			btrfs_clear_opt(fs_info->mount_opt, DEGRADED);
-    88	
-  > 89		ret = btrfs_load_block_group_by_raid_type(bg, map, zone_info, active,
-    90							  test->last_alloc);
-    91	
-    92		if (ret != test->expected_result) {
-    93			test_err("unexpected return value: ret %d expected %d", ret,
-    94				 test->expected_result);
-    95			return -EINVAL;
-    96		}
-    97	
-    98		if (!ret && bg->alloc_offset != test->expected_alloc_offset) {
-    99			test_err("unexpected alloc_offset: alloc_offset %llu expected %llu",
-   100				 bg->alloc_offset, test->expected_alloc_offset);
-   101			return -EINVAL;
-   102		}
-   103	
-   104		return 0;
-   105	}
-   106	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
