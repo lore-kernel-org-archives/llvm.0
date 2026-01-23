@@ -1,197 +1,143 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50311DF97C
-	for <llvm@lists.linux.dev>; Fri, 23 Jan 2026 19:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769195852; cv=none; b=ewgj+2bDU6YvhYklaQd8Aq98VGbN+scOrScvYuTHmNVDT7Loyau3Z+1sfUa8bmVG4637r7B+ZAo89sO3hfxbuyS4ZDayFjBolpHSVGvc+2Zu0ZANkqSG2x+EWLgvoZFLgXjOfwoQbgYVTemQ5SbPi3CmScmWrQTUtlPESbIDQwI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769195852; c=relaxed/simple;
-	bh=aYIGL0hNq/fOe3+YvZE/s3N0bkMmp7Lqi8Cc0Nn/eZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OipcxDTmEBmaoCeXP85FPx+Q14tR8qwnGgGS3NYjloqSHwKiJKb8qh0INSQCO+4nuzbHl/Hf5jtLQ/SMa1+AhYehe0tiEnd0ynhNHO7ErsNPjPUQiqx3/kTdOhOd85JnCgnWGEcGnREeRWac3kHQNDYdjaWm7wPbT/moLnBx/ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=eNw73UWb; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38CF31E7660
+	for <llvm@lists.linux.dev>; Fri, 23 Jan 2026 20:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769199339; cv=pass; b=ZZIeffk01nm4+OAh+VDB19/u6fqmMgc8F5BxmTEuybsukWEjJLIr+cg117wXpUmzg/oNhJioo24d+8Nx1yR9KZfJ/HzZFM9xalcaMKq9T9h/gm/XosEQgP8lr66xKtftrPYex+e6AkngnJ598EKJc+ALqI6cPyKwOxoweMNkeY8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769199339; c=relaxed/simple;
+	bh=Nstqx2mleEMHW56c5TwsoYsuaQ5VRZKbEQS1mvG6bo4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NWfWvbdCbxRF006OxBLDUbQcktRpjTLjXmiwGJTKmnKuJEfWMs15HP1V7f0hoqD1sVnxIRINm5D8ImnTHD4NmWJDyuvkqS/aIKqALOLCKAvw5Ha5v8DdqS3/ehxmd6gwh9DUk8h0NDIy7cHS9SRKzG4sFL3dZEdQTkhrzikb94Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t5Q9YzVb; arc=pass smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="eNw73UWb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1769195836; x=1769800636; i=w_armin@gmx.de;
-	bh=vIwGcj7ZdvaCLM2xlgpSGdeCmKP+wk65XTtRSoDN3I0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=eNw73UWbotFJH1XPtMVtmi1MXVwD6b9j+W6HPIqW5edeR9W0clH4aMN4fEIB1nSm
-	 oK4NCyv8Iv1kJKAESBx8lsIzOyfgG6dXH33qfuQjbF0CXQVdOiTpX8EmlrhrbvjMr
-	 nDweuDIANYtoiRi3lZroU2+E6amCtI7gPj/GbzPcQsY0N3iEst5f3mHhDNe/2pV6Z
-	 aAW2gwQu02Qr7wwW1rfUHYbTglF+yEI8XRpdTkSV+QBdvDnX+qVgnwiVlq4JNQp7S
-	 UrxjQgfY2flPjYEw1eXL5cymobVa8+4OGbQohgzKXuIo6Z+PcKIr12YWJmuE1eSTG
-	 pm3+9BY8tLJXojGbCw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MPGRz-1vQKlK2TGP-00NuRL; Fri, 23
- Jan 2026 20:17:15 +0100
-Message-ID: <218f7a67-9be2-4094-b400-1cfad3fd9d0a@gmx.de>
-Date: Fri, 23 Jan 2026 20:17:12 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t5Q9YzVb"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12336c0a8b6so3068724c88.1
+        for <llvm@lists.linux.dev>; Fri, 23 Jan 2026 12:15:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769199337; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gqTN/YJTtRgDZZ6NvLpR+vw9bg/A0lEAx2U5H7GshU1v7g3A5XTM1JKVgZzgvTwBAC
+         0qhnQzaMxi0PKYzmNSjj+DEHYH++E7PkMkRHJswf65j8r74e0/3igvUuzs7po/MMfVw/
+         5XjzN+2HeIOM5RHsM+7q5WeH3UUssSY4toFzw4pXv6qOkBHnOz1eUfzJTxA+IKbHfC9b
+         xHRzKGZh11mxStYCkYoIZCE+Q3h9HTBjXaUI2U9SaZFJYSyEjbUY/EFohMJlKFVyVr+E
+         /xrrcR+o/v0c4wmGvbcqrBO1yBoC+f4A/ulXiLzuUkDP8xz0HJP3Zd396QHfyfkBkkGL
+         gjng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=RdhsOKTYvI9TN+V3ve2ZG+zs0DWizRQ8NcwKAeAdnzc=;
+        fh=yhis4l2hryMNH75joP6jTWm3XDCKmnra4lG9yq7qhAk=;
+        b=HGe83D7uqjTXo7VJPPBngcMV/5K2+meJ93/7VXG8on/ksWRVrDlzrXltWWlbkxBcSo
+         CrBdn7wMniCjoJJoqbHgihegKqBfaWjtx4ABnBD/AMlXzIWoknZTOpPe5xYkcrXqvAPn
+         +5KJZ08iRoy9lGSfaRfvsT/42U2+yHw1dVHNygCgOZWNHkd+0FgvztezLsXbikBDtqsI
+         yGJEVEQ7YWg4TLvH1/7boK0X4lnjYx9fvTj9l5XTdgvucqXPbujK41UWqzFzI3wggWWC
+         FNDgy8fszfKYPh51HSpT8TtUsTS5HrnGpwnu6QqI9XVOWmn2ow/o2oZmEEWHT3qgYmdr
+         ZmCw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769199337; x=1769804137; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RdhsOKTYvI9TN+V3ve2ZG+zs0DWizRQ8NcwKAeAdnzc=;
+        b=t5Q9YzVbBObaMdobT5HwWKe9EUGzhhYuLmwDQRAAlORP3Cy+7wc33P5slhBEp4jqlq
+         SKxoASwa8oabFMXio16CrcZ/oGAS0dTBcvZ3SEro3+y7M871HX/cYlwQp9tvwEMApoXl
+         mWluwJaI4ah/lawuHY2qNgPVxHWk4vN2F96Q/yTf77Gx2BksbXNxPjl8EPuegnB8xbg6
+         XX/temS6qgTjNeBjgWqg5lsKfsDRuxWGWecJb8Mqvhydtxa8XeOIDU603667Ae2uYw7B
+         EQc7R7CbaawHYTR0gUo/IhX4n1Qh5wbX7CpyRVVOV6DVM4Ga2SRW37otzyhGgA/Ljrm8
+         /mDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769199337; x=1769804137;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RdhsOKTYvI9TN+V3ve2ZG+zs0DWizRQ8NcwKAeAdnzc=;
+        b=caB9UbdcaVQ8LjD3VmVQm8jnUH5CwdjbCvTMTptZjSIZvS03/YZ33gWRaWLHzv76d4
+         S4XXt49QEKeXili8g4j/QLDXh+L65/YEYe9S299Nzpm/U4Q2nDMUlq5Z8HWIcnJzf5Q+
+         dAkgh+7Ik3Tv5yozjicpRW9CK+QG+oMURf+yUP7BxKbAuVbQDmfNlfkGFEoRCEBgIl/4
+         pZLearmhT50+CeyyN6b8Ct2eI3kseygFtFQNieJha7YDazfYYq0e2eChKyH66GehOq72
+         JeoOxD/8wlzqCJxa64s49RzLaDXCYbMWGrGj05tbPym7ImmOPHbUzoXQ9U9xhQcyo2ay
+         nYYA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4itdjJWN8qbxkhmU2ZbVAiNEgbRwmt1J2JlQm6gx7DttV04PMzWY8N2NSv7DOQIIu4FhK@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywx4iC2pmcMtLpYGpOu8oKd+K9TfMmEuXGqxqgMFaOQVuCA2rUD
+	8tki2H4pf00hVxFwFQujRPUChkRVGGCOXcALWc1bS4rFe98MWwpvKIAifHhydkPXwtGBXQeZ1Jx
+	0sHAO/O6iN9TheTrYAUDKLM4N+FZgjh72riDz4seZ
+X-Gm-Gg: AZuq6aIkwFOsy1OZaEJ5eUkQOkbmCYTcNTZJu/GbNYoQSwLIJMLsRjebWcefYi69UsS
+	otyHqLaglvqOSxYb6ls04MCP3oks79IaeD++7PzIrNSQivWeNWeGmFGEzBYxGl/wn4z4BNEpvZU
+	vp0kPZwCGoM7Q7kf/E3mH/iQv33OlprH7YKOKmcfQpNWQGOVL3UST3RWpGyDisIJYwg5bBmf+eL
+	290L4acJD1wLaBp3DzYiZDBlmHaymGeCV82+0nMzQGJ8E/F8Tvu806tHPCv33Iy2hfeZBp5hjcj
+	AJ2uwCP194y5GMrk09b1yeS/LrjSi/9F3rJnuw==
+X-Received: by 2002:a05:7022:787:b0:11e:3e9:3e8a with SMTP id
+ a92af1059eb24-12481a50be0mr1675949c88.49.1769199336823; Fri, 23 Jan 2026
+ 12:15:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/9] platform/wmi: Add kunit test for the string
- conversion code
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
- platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux@weissschuh.net, Dell.Client.Kernel@dell.com, corbet@lwn.net,
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-References: <20260109214619.7289-1-W_Armin@gmx.de>
- <20260109214619.7289-5-W_Armin@gmx.de> <20260122234521.GA413183@ax162>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20260122234521.GA413183@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Fqsx1eOjdnh+HC8OdJAqpt8fXbwQB9TBKwaFKiI0HKNI+Q8r7mt
- kCB8ZL1vboz/VJ2Z+j4dkHouEgHPe1E24n0lg49l5fRVHn+RsnpXv9acaPHAbUXhMAVhGVi
- b0cZby950hgcYZ96YatzYPhqVg60VmhAZC9zJeWgvHrsAyDw5/qoLDfg7GYsqleliifP+QY
- srC4pYehZJGmT2UWkWSMA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:1pvuykjE6Gg=;DMXcgYjn58qZ7EIEnLV5tFXf+JX
- eQpm9MtQigydNfCWDk/DqxyVcC+f3S31cz8B1k7/czfI3d3MUssZMJZZfYMefwkfvTBSLGuTP
- PEjC+6qZhZaSkPd3aDTbPANmwQbcpoRX24vzE5Hxz1IVYPlhHfVTvlWgO2ezurpccMFLqGffq
- lfg15wink56OSKbAs/p1t74fXJHxUud8bwJhaJe69XiJN18JhiO5qcJ5mC9uHwUi2IX+gweLw
- /dMYxB4esX/FQfvElKCpdDi551eA23nEkdro5oDsGi2eB1iP4eibcAjakFoNEybvCcqzOXptR
- MwdWTiYu8AI7an5A1t3ku26fCCusvP3uPPNX4U+0LbNf4Fezx7QKSxuEYcY6ez5NUaD1+oeVI
- 365eV5d8ZZ322IGZEuf344XrJpibNeinXT5AC5psAbWqG79KOKxExNIvLydNYowG8XXj+N6JZ
- phMabH2anQy4arPq+d3Kjc/dWlYKyi5acHZKDgoZgXHSmzVf+nykh/+5qrpcduBIJhQAQSK5q
- Jsny8GdGX7+J1mYRQ25E6dWzIXOCyjuQPmRU+pswCXXBAyKlnNbDszriaDUffO59g1eNzsc+H
- vhEahLOMcICyviJ/GSi3c93uZxSk/ry3a4XbsAFknYVtewYtA/OAL6WDKs4BBNapTnW9/Y5BS
- 0tem73HMellS4jlwmQVtnSnm5Wcf1VhFw93SrYG6ZsnsoDr3RZAOFiF5qBVTr7WN49EGUVuWC
- QOjCwlHnkCQ/2r71tYrG9WoacQfwhSMF1AOYsZ3FoxtjNulnvnRHfMfnl/PAQs9EcPRTsUOxV
- 5MJsa86tlT+HRQ65o8w+OXMaG0L6Hu1oxI2Mhe7rtLkQlYs/+ZBrYZHH5W+EX5KKsXYdfeqXw
- 1ChD/QgbnQbAX180zeSGEr/p+y21Z+2ywjiATDzrTgwHc2yAoaW0AyheTqUkRXZWBo2X2TWFu
- GJYOllx2I6tcV3/b9dLjjWn7aHkuWk2vEWVd28AoBJZ5h3u5ZQfNJKr6+ud86hRdfUteN5Ifk
- 6Kjth+nVr/vtIUPyGFXhaAmGA4HBj0krB9yokavShnm72ipZrKsNxNybdeZ5QCAMYZxzgPsw+
- wrtO0eEIvQ+molxrk6PF9YUZrkFa+7hhEdzV4GXImcMF8W8NjQnTw9Qjll7BLOaiqz2uU34jv
- 0SoX6zjC3T2J5KZUUaaA5qk7XepHQZny5YT8NYG3XzXgfyerSyeGxetkqA2/GLUVy68+F+y1g
- dwo4BCF38Mh7Z7Hy3pUZ+B+VYL4OqdrHjWBPFlgi337XPqEhEU5o9NemRDQhACCAXrUw0vyat
- iLwlqLYh9ilBQfgSNuXvS0wEB4BL+Kta9RH6+zYeXKiqIYKzE5/fFbp+uvRkQ+IrdVGsOwRWC
- I8RP/8RBd6EUovhbtkoOgsev2xQQIp8KOXjXOFi8fqDNhXZIBVabfCNcUx7iqeMOJSUvyyyIx
- HD4HIVtDuNfZEW9xdBZoqvI65lmr4p3B658I8ejyGuxl6QGo3PUaphNcSLvsMP7KJsYrZyW/a
- 7NWU/gt4SSfn/EL+0Witq2jOrBfxJwLHZ/bIF8Bgfu9LW/o9rD8fANS1o9Z1BybUS6G8gHSJt
- /tTXYXNsHe37zg+iSQxFwRXBM3uquq0ywlF2TEYXV1cvzb+pZHORohMrogqE51LrSeCHVYKRy
- 70T86Fr+OhgX1ULGYORLeCVaWp+DNvX6O41nlrP+BrXaTH10JJczPUV2tC+Z3GhQw7rp4k/dg
- ClqKmHUjA5WddjPk7hY9A62uZkrGMugbLumlN23lyPQa+8uxxD0N9nNxcklqKe38Dk346SKTa
- 3i7Hxs5k5GLHLAM8xCT1hAezlKwWK09CVNPl6tJXp7CZUGAQJ0o+ADIRrPMdkFo9jNgA0pKit
- iTWSEY6E+PhZW/6sLbL+MwECIpZmHWewDuFZQ6ffgYj1hS9pELuIMOr+MfUSqs5Xo69q4QX3Q
- L+jTBIYCqruU/yN25bP2Gky5AOu/91vfwiG5JZJXqqHxCnPyAsOdCEG0ZPgp0O7hzEFr6m3x9
- P34oNSjANoxpe6GV5jOtNFTsOjx7aJIBBJPN5Krm0UI2lltZJEkoo1Sj6vIfy/RyF0xlbQ7k/
- MlE5/fRPUiLT9s5pZQTPkQTfCy/i6iJAtUHl3KalJ1iTmCNE0xdecozlNfQzvyBYQGNzQ2dx/
- PLxMT9/9/dpTN6JhMPB8GAypM6z10/Uaa+DKTgn/ErfdrpY/RNGmE6YPsmNr2D2e93lJ0Xlw6
- AooKi73UABfRMWj3ePwgDLYw1Nm2xae4GKn8B2wQx0/8KpHdWXPSaZyNY37eQUoWRnGiiSAGe
- yniY9Ka3PGVQzCoe5JqBXz4te9PKbgacOGfc0W224zgKhI/+FeXLbqzK9IFgi2dLrkqhy+oyg
- Hdk6LP/SKV8+ovAds99PDze3bTTQiNs3T2yAgTupdHMvoGhYhE3idbVw2t5vzmdNvbYoCrZ1s
- e/U1ZUW33XRcOVc11keBXHrGB6Ir5TwkQdQhTlAohXos3Kc8JaDpv99u0k5QxJVd9YXhxoHE8
- Iixbzsnyx4QQf71Ve0yBEtp8W8O/LA+rzBwhN0IpAGjhfmi6XduxehbLD2W8Lz7sJjYQ0kBty
- 8gXoX9RMmILNlWyij4G4Pa4lXmmOarmVuImoXumqb4zAY+pn0lpvCydlf4ttKVk4Ekhc+MyzB
- PWS/ZWzbBctJ/TTfb4lHWfvmTiESMX6/z/zubDwdTy3sQegnG4rfR5wiQAUy+edSfpblyVbB9
- AkfsisQz1qZ6mKKI/iPubAOOKzIxxtux/IwhzNHPg1PTvwwDIRDe2YNhl9j1AlW6RLIK/N5xO
- ggB8kC9vE2fFxQnfAU0CZe/y76CfwMr/sNjHbRfsnwd72bXOuuDp8TeYY4rsS53f1tmE2Uxwl
- WcbdHsyAnNYMnlfLDGdRN4SOliHcvDFh+LtS0+qaRaRtsuPbeWmUwrMOmKnabAMAKkkB8g2v3
- q72r/p7x+TZtuey0CuiYrK9/3QrO5hPKLr2JP4QKYdzOTOcoRYDEJU09lXZ0n696c/b+L5B/C
- AStzGv/xCnAQWiER0qcjUNMFedjz0CZT/EgsXmrDxkrQGZwMrjU1A0rEEMqRouqo7NOcVW0Xe
- 769eA3PqhL0xXxb+GgYpUdEkrY0EryAh45AfzE+Ma1/gFYF4xP2DYQF3VVaGVUQKmtfCk7KHG
- NZmmXoTkGXGFWv73bs3LONu3/XxvrOU4VaXTB2ugP53X36TFVAS6q3EZgnW0/vHyY6KUY1Ef7
- xw5ijh2LG2VlCr5zZDSfHM0KfZFBMbwJk0XIuqXwsv0C6Vgrdt8qpO37IhxTh0RJUnJbdSBhn
- 1gLP1AZJYAPzOcRxlqS8U0azpNEBtBUcT0MvAmFdBDnBeZuPrb1CF3GShfjBbirZNBYOoayZm
- pK0WJlXdTzSDGyh+ine2cyms6+cJz5wZNavXbHOSkDe40i7chBMXlUjQ/XnL72rBsppMOREEw
- Pk1QFF6UBDJ8QrzgVbt60EWRDnCV+ti2w8RTW8OX3Zv/8etI/4h8AL01Pg7UtTWXRuB+vlyTN
- VfpzMR+bFBs5E7VEiAY5pCLkInYduQl6zPRw+NwQvrcuJD4Gu/AhR8v8Ze8dTswTb/3luPDI3
- 0aVMOXWINUDEQnXj2O+ip3ZGtEkoffOn099BY3bB50xabMKQa7RfnVoUEq6hH5hjTJUdZ+mEM
- CefHNYxWaNSbOSbZJXUQiycQ4vt9OxKHv4TPE7j+qB2+sQJnxXIqipyexEtrtLxBPC7sCWSdy
- XK+HwKXZNcD/5lqAPalo8aH9S1dnfzVZRaOG8iPTxNfEbUZOWeL3VGQ54zRxaDRjLR7bJhg/C
- TqsDUyBL41LSfD5SFr4Cn7KGqrr3Dgi2OQGgdno4o6cr6vlCffulJ6mqV0lJuHSXh/kl925mm
- y/2MpRpY2hN5pHSnQhloc8/zBSkK6WNzN2Ul1nx8HqabwEaiUfcV0fzVxTIzECknlwBWKV9Bq
- bS6VKP9hhUR3E/b8jaF3cD4XFshLoJPg3GVmUvobTNXL7M/m6r2ckPiSQptTbHjfypyqbPOiv
- +tan70tBY9K2mxYRXfcwcTU/wcXjTqgy7T9Mijhks+6vnlRXLB84SW76l1i99LJfM9sqvfTeE
- 8SGNO3v+h5v5dOVEL4VRPxh8ceEOxRvd4zG8jeEs1Us4ujJvCBgElR/HyNdgA6lgobJ9t4o1V
- U44QrV7Q+NxSJPJVMVYbMAHSXPVvjrnF/GfKurFPjcY8W9kwC5hVLXAYdwd/yIJh17rBBTtQ/
- 1dtm5B1aDy6q7vOOfDe9lmR0m0u1agY6O6ylJ7wqdNrP4KitoQ6GNVcAXLEUdHcAjPcJxKHG2
- pEu4Tj2ZNEAMeg090EA1zEbPkHH/SyIMvwfut4unYoEiLhfnH0MifC97MGHv8cO/VdfeH9w+w
- UOA5II1v/9i+gn3dMOVl7/N1yPGaSjhviB9GMfGCFhPftFlpNNp0No8iByqEP+xXZoY3xOv+e
- LeCiHhrsKLnu6mIcELWOwCr3VV3LslcJSA2/FyfqrNcteIIPJ4+DFyKiEoYKt4BOGFNIibqcF
- lhxrzK6R3Ru1UVAmzCi6Fc+se8HXepZa55fIoCoFrSn9VNNJMlny6z7E3AyxtVAYN1TrxOTGg
- 7RAx+D9YInsJRxZsBdi9ZuQJpiVBxdpqczJrczvGeoUBF/asIbonjiq7PRsZvunK4wckd1fdU
- /YNFz64EZG6TePP4TP2p+0Hkfp7OPtURKO59cIEVN0e+0asx1xcyDKP1EZMNuXpc8pv9cKVCL
- 98HrYI23F0WFQrgJqoyVVyZKwed/m4LPgWdh9gVEk3v3hBmc7g+LOJjDbnNYBOOjaKt/Z3Wa5
- cIDpvMbhHkiWZbbfgxcSiQbzR9ZSPp/ulkScw6tnyW+lJbCMBLOxvadNy/fJk/MI6FJSdaoSW
- 7/siaPbwvjLqM2cKbC+bXpX9K0nSUHvCLkw3DRKriucqZ0Bk9KWWxG768vPHrnQuK9Yv2kH5G
- r7AUlgLsggFF0CzaTrFOVyx3ft/4DS1ao9/wy+XhLeZz0VO7KfHToVd0eazhLCaqoyvKgRSQM
- dFvCPHMVLGOQ99AG1LrTlwmp/uzPgVrinp8urfQBEIaoDwbwcwHWawmODQM2t3lj3ztIm/ja3
- eTB3a60f6id4pYVwQBFsW8fPvKSKBi6v7cSm0PI9Wgy+8TVgb0CZjpMSGSe8BmcZbIwg/+VB5
- 396ZmuJR+yEoo+GL/BDjbGzbvsdlmgwyzwrMwB/uAGCu3qOoEv+f/irl6Ax20D045XjFgwis=
+References: <20260121110704.221498346@infradead.org> <20260121192349.GM166857@noisy.programming.kicks-ass.net>
+ <e1229c44-048b-4e42-b545-18a8c716b5eb@acm.org> <20260122090402.GD171111@noisy.programming.kicks-ass.net>
+ <d399e354-6d42-488e-a0b7-fe8d08b9bf34@acm.org> <20260123111523.GO171111@noisy.programming.kicks-ass.net>
+ <f4f688ba-8953-4cb6-a749-94dad74692ed@acm.org>
+In-Reply-To: <f4f688ba-8953-4cb6-a749-94dad74692ed@acm.org>
+From: Marco Elver <elver@google.com>
+Date: Fri, 23 Jan 2026 21:15:00 +0100
+X-Gm-Features: AZwV_QjEDYTKPTyuS4xGKAbbrAz-nfGSXjlIEhG6bXF_of2gSn7h0p5KVA8g2K8
+Message-ID: <CANpmjNNGwkb8p7Mo1sgEVg2ttRtmOOeSrHSmnHbQijpYnL7Y7g@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
+	bigeasy@linutronix.de, mingo@kernel.org, tglx@linutronix.de, will@kernel.org, 
+	boqun.feng@gmail.com, longman@redhat.com, hch@lst.de, rostedt@goodmis.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Am 23.01.26 um 00:45 schrieb Nathan Chancellor:
+On Fri, 23 Jan 2026 at 19:58, Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> On 1/23/26 3:15 AM, Peter Zijlstra wrote:
+> > --- a/include/linux/rtmutex.h
+> > +++ b/include/linux/rtmutex.h
+> > @@ -41,7 +41,7 @@ struct rt_mutex_base {
+> >    */
+> >   static inline bool rt_mutex_base_is_locked(struct rt_mutex_base *lock)
+> >   {
+> > -     return READ_ONCE(lock->owner) != NULL;
+> > +     return data_race(READ_ONCE(lock->owner) != NULL);
+> >   }
+> >
+> >   #ifdef CONFIG_RT_MUTEXES
+> > @@ -49,7 +49,7 @@ static inline bool rt_mutex_base_is_lock
+> >
+> >   static inline struct task_struct *rt_mutex_owner(struct rt_mutex_base *lock)
+> >   {
+> > -     unsigned long owner = (unsigned long) READ_ONCE(lock->owner);
+> > +     unsigned long owner = (unsigned long) data_race(READ_ONCE(lock->owner));
+> >
+> >       return (struct task_struct *) (owner & ~RT_MUTEX_HAS_WAITERS);
+> >   }
+> Marco, shouldn't lock context analysis be disabled for all READ_ONCE()
+> invocations? I expect that all code that uses READ_ONCE() to read a
+> structure member annotated with __guarded_by() will have to be annotated
+> with data_race(). Shouldn't the data_race() invocation be moved into the
+> READ_ONCE() definition?
 
-> Hi Armin,
->
-> On Fri, Jan 09, 2026 at 10:46:14PM +0100, Armin Wolf wrote:
->> The string conversion frunctions provided by the WMI driver core
->> have no dependencies on the remaining WMI API, making them suitable
->> for unit tests.
->>
->> Implement such a unit test using kunit. Those unit tests verify that
->> converting between WMI strings and UTF8 strings works as expected.
->> They also verify that edge cases are handled correctly.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ...
->> +++ b/drivers/platform/wmi/tests/string_kunit.c
-> ...
->> +static const u8 oversized_test_utf8_string[] = "TEST!";
-> ...
->> +static void wmi_string_to_utf8s_oversized_test(struct kunit *test)
->> +{
->> +	u8 result[sizeof(oversized_test_utf8_string)];
->> +	ssize_t ret;
->> +
->> +	ret = wmi_string_to_utf8s(&oversized_test_wmi_string, result, sizeof(result));
->> +
->> +	KUNIT_EXPECT_EQ(test, ret, sizeof(test_utf8_string) - 1);
->> +	KUNIT_EXPECT_MEMEQ(test, result, test_utf8_string, sizeof(test_utf8_string));
->> +}
-> After this change in -next as commit 0e1a8143e797 ("platform/wmi: Add
-> kunit test for the string conversion code"), I am seeing a warning from
-> clang around oversized_test_utf8_string:
->
->    drivers/platform/wmi/tests/string_kunit.c:108:17: error: variable 'oversized_test_utf8_string' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
->      108 | static const u8 oversized_test_utf8_string[] = "TEST!";
->          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> oversized_test_utf8_string is only used in sizeof() in
-> wmi_string_to_utf8s_oversized_test(). clang warns because sizeof() is
-> evaluated at compile time, so oversized_test_utf8_string won't end up in
-> the final binary. This is typically a bug since the developer may have
-> intended to use the variable elsewhere but I was not able to easily
-> determine that in this case.
->
-> If it is intentional that this variable is only needed in sizeof(), it
-> could either be marked with __maybe_unused or eliminated in favor of a
-> direct 'sizeof("TEST!")', depending on maintainer/developer preference.
-> I am happy to send a patch.
->
-> Cheers,
-> Nathan
+Unclear, guarded variables accessed with READ_ONCE() do not
+necessarily imply access without said lock is safe.
 
-Good catch, it seems that i forgot to add the test case that was supposed to use oversized_test_utf8_string.
-I will send a patch that adds this missing test case, fixing this warning in the process.
+Second, a READ_ONCE() paired with another marked primitive never
+results in a data race, and using data_race() actually prohibits KCSAN
+from detecting real data races if any would be introduced, but we're
+not expecting any.
 
-Thanks,
-Armin Wolf
-
+In the above case, if there aren't actually any data races, the
+data_race() addition does look odd.
+Perhaps context_unsafe(READ_ONCE(..)) would be more appropriate if
+there's no actual data race. That will signal context analysis this is
+safe, and if there are any real data races introduced here (e.g. by a
+concurrent plain write or such), we'd learn about it if KCSAN detects
+it.
