@@ -1,73 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977C322F388;
-	Fri, 23 Jan 2026 11:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C8330EF81;
+	Fri, 23 Jan 2026 12:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769168520; cv=none; b=sLS7l9tAS5ejiJvSvlqzEKr1b12yITBPtZGxgjgpoWSuTOAc0kp9wYVR/s1BRbKGwNLz+r4k4tOMQQKXnLPfjAoB85AIzxiGrg85QzaPPU5yOyApnHOgMlP2FV7474YWcWVOGvTDUiAPLu1gLLJYBKUlh9LzjKndbVHrP66/fcw=
+	t=1769171222; cv=none; b=Qz3qo0SzVoIt6Iro7QpxarVSZhCV2YmUhCjN53OasSrOsXMdHn1doySNBYXuUM65floMlc692Lj4331x1gXTm7/rH5NsRM5ddj+94EYpgyAJpwlXW+7nSZINMmxygEf1zvDwP6K2a1ix5HPbC73ucS0u2x1rwfpPYqz2c0Dc2So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769168520; c=relaxed/simple;
-	bh=V4Mf94EcyIDXzX94gvCBbKbFzNKoA9nJp5TA6mm7760=;
+	s=arc-20240116; t=1769171222; c=relaxed/simple;
+	bh=XA1SjaS2/7tkFIIRzJGUee57bJy4LE6ja09RafCZp9g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HJpEs4YuFaS0BJGIxDEvRB8PSPp6mrb3EvgdpLr2aazbV9guzk2m7fpY8g4gHRyg7E+LGPIvaGcfMAosU5p6ENyebmMYjVyIA41hljH12R7Cw77/esvarylRHSi0MmDhgXbt8RupGVPVtaGG1JTTto4x8l3VQ2Toen3nJyC7g8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hD/o+oIW; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=PC40huaQDGrUcJgCuVpFyIC3FKYkk12Bke8YA/uMU749Lir06dPf7ELsbx9mWKpfRMoZsLvaEEary+qXp/reygM+cwdlFxYvNKYl8z3E2rAdKD8oUeFM3JG43l1B8I97kBlU4hQYFghu6XuwPLmbcxaSbpmEBR6GCU2qpJZux4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lUvLUFUl; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hD/o+oIW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lUvLUFUl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769168519; x=1800704519;
+  t=1769171222; x=1800707222;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=V4Mf94EcyIDXzX94gvCBbKbFzNKoA9nJp5TA6mm7760=;
-  b=hD/o+oIWEnXcTH+JgQzNqvNShvGI30jRUrmGDPxDINFaOSHFwsGVeAKS
-   m+8WS9Yb68i1uSABYfLSNrNt+wyB1o5/TXSZcPrYUkMP2gmabW2SZLXlL
-   SKLeJr3V8eIGQ6b0r+tiJ8EydYEto/XjFUWTj7gedAuStgcBtIP6l+dF9
-   5XKP9dydGXkMdkteQDLWytikBTU0zA8MQ4aQLoA0JL5kGcZHDG72i+gmI
-   101R5g7BZ24QiN2bhZuN1+8GrxkR4k3xdwQpzFpS5qAodl1YlKDO5dkwy
-   h87CrF6O0RvIp7MzP+u59zjRXGk6tOLIpwq6wtz8guZWBaYz+oPLG5jPc
-   Q==;
-X-CSE-ConnectionGUID: KUfpFs9xSomiQiNXg8td4g==
-X-CSE-MsgGUID: Kq/1yqngS2mAky9NmsKbRQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="70481952"
+  bh=XA1SjaS2/7tkFIIRzJGUee57bJy4LE6ja09RafCZp9g=;
+  b=lUvLUFUlAZBCEeji6JUCP4bk59HalqL+Or4vLPGS4a+tpgbpAC5JWEHO
+   0ukw/r9MSsl0a6b2bTGiAORJjwrev4RPQYp/jBZvoBUuxwl3EYGLsuZZ6
+   /FIFTFExLe5aYhEhIedQtGSzfUH8MillninPPMW61PVVP5r31fUpj6xFF
+   RqrwNprbfCmKTfT2zI9YVPzZHDxSNecrPfuv6Q8G1Oym2fLDBmjZzZTpM
+   mV2gRyfYuPVOnzcyer1J9ap059pOCnS2nHafX0Zxh+5d3cOi7/dhl/VvD
+   yc8sHwVunBLvnHxjxK2p6FR6gB51ZX+47uz41P3LCIorB5NwMArbLPnWS
+   A==;
+X-CSE-ConnectionGUID: aBA7D6MnRpGb2Nd5TJCsuA==
+X-CSE-MsgGUID: bu//7i8LSWK1sHqKE5z6hA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="87841454"
 X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="70481952"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 03:41:58 -0800
-X-CSE-ConnectionGUID: HfX8Xg9RSGi7be1Lr3RVNg==
-X-CSE-MsgGUID: /0HznFOTRbCyDXyBJf4gng==
+   d="scan'208";a="87841454"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 04:27:02 -0800
+X-CSE-ConnectionGUID: QzrIgEsERtSX4zO+kS9/Uw==
+X-CSE-MsgGUID: W4E3+5+NR4iRaLuDbBSLGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="211130239"
+   d="scan'208";a="206274996"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 23 Jan 2026 03:41:52 -0800
+  by orviesa010.jf.intel.com with ESMTP; 23 Jan 2026 04:26:55 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vjFXy-00000000Tty-0dUd;
-	Fri, 23 Jan 2026 11:41:50 +0000
-Date: Fri, 23 Jan 2026 19:41:30 +0800
+	id 1vjGFY-00000000TwY-3vMe;
+	Fri, 23 Jan 2026 12:26:52 +0000
+Date: Fri, 23 Jan 2026 20:26:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anirudh Srinivasan <asrinivasan@oss.tenstorrent.com>,
-	Drew Fustini <dfustini@oss.tenstorrent.com>,
-	Joel Stanley <jms@oss.tenstorrent.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>
+To: Hamza Mahfooz <someguy@effective-light.com>,
+	dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	joel@jms.id.au, fustini@kernel.org, mpe@kernel.org,
-	mpe@oss.tenstorrent.com, npiggin@oss.tenstorrent.com,
-	agross@kernel.org, agross@oss.tenstorrent.com, bmasney@redhat.com
-Subject: Re: [PATCH v2 3/3] clk: tenstorrent: Add Atlantis clock controller
- driver
-Message-ID: <202601231918.PQTTcbRG-lkp@intel.com>
-References: <20260122-atlantis-clocks-v2-3-c66371639e66@oss.tenstorrent.com>
+	Hamza Mahfooz <someguy@effective-light.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <siqueira@igalia.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Sunil Khatri <sunil.khatri@amd.com>,
+	Lijo Lazar <lijo.lazar@amd.com>, Ce Sun <cesun102@amd.com>,
+	Ivan Lipski <ivan.lipski@amd.com>,
+	Kenneth Feng <kenneth.feng@amd.com>, Alex Hung <alex.hung@amd.com>,
+	Tom Chung <chiahsuan.chung@amd.com>, Melissa Wen <mwen@igalia.com>,
+	Michel =?iso-8859-1?Q?D=E4nzer?= <mdaenzer@redhat.com>,
+	Fangzhi Zuo <Jerry.Zuo@amd.com>,
+	Timur =?iso-8859-1?Q?Krist=F3f?= <timur.kristof@gmail.com>,
+	amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] drm/amdgpu: implement page_flip_timeout() support
+Message-ID: <202601232007.NAxTeBna-lkp@intel.com>
+References: <20260123000537.2450496-2-someguy@effective-light.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,145 +81,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260122-atlantis-clocks-v2-3-c66371639e66@oss.tenstorrent.com>
+In-Reply-To: <20260123000537.2450496-2-someguy@effective-light.com>
 
-Hi Anirudh,
+Hi Hamza,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 9448598b22c50c8a5bb77a9103e2d49f134c9578]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v6.19-rc6 next-20260122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anirudh-Srinivasan/dt-bindings-soc-tenstorrent-Add-tenstorrent-atlantis-syscon/20260123-064135
-base:   9448598b22c50c8a5bb77a9103e2d49f134c9578
-patch link:    https://lore.kernel.org/r/20260122-atlantis-clocks-v2-3-c66371639e66%40oss.tenstorrent.com
-patch subject: [PATCH v2 3/3] clk: tenstorrent: Add Atlantis clock controller driver
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260123/202601231918.PQTTcbRG-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hamza-Mahfooz/drm-amdgpu-implement-page_flip_timeout-support/20260123-085944
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260123000537.2450496-2-someguy%40effective-light.com
+patch subject: [PATCH 2/2] drm/amdgpu: implement page_flip_timeout() support
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260123/202601232007.NAxTeBna-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601231918.PQTTcbRG-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601232007.NAxTeBna-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601231918.PQTTcbRG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601232007.NAxTeBna-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/clk/tenstorrent/atlantis-ccu.c:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/clk/tenstorrent/atlantis-ccu.c:832:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     832 |         kfree(to_atlantis_ccu_adev(adev));
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_reset.c:348:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     348 |         default:
          |         ^
->> drivers/clk/tenstorrent/atlantis-ccu.c:852:10: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     852 |         cadev = kzalloc(sizeof(*cadev), GFP_KERNEL);
-         |                 ^
->> drivers/clk/tenstorrent/atlantis-ccu.c:852:8: error: incompatible integer to pointer conversion assigning to 'struct atlantis_ccu_adev *' from 'int' [-Wint-conversion]
-     852 |         cadev = kzalloc(sizeof(*cadev), GFP_KERNEL);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/tenstorrent/atlantis-ccu.c:877:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     877 |         kfree(cadev);
+   drivers/gpu/drm/amd/amdgpu/amdgpu_reset.c:348:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     348 |         default:
          |         ^
-   1 warning and 4 errors generated.
+         |         __attribute__((fallthrough)); 
+   drivers/gpu/drm/amd/amdgpu/amdgpu_reset.c:348:2: note: insert 'break;' to avoid fall-through
+     348 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
 
 
-vim +/kfree +832 drivers/clk/tenstorrent/atlantis-ccu.c
+vim +348 drivers/gpu/drm/amd/amdgpu/amdgpu_reset.c
 
-   827	
-   828	static void atlantis_cadev_release(struct device *dev)
-   829	{
-   830		struct auxiliary_device *adev = to_auxiliary_dev(dev);
-   831	
- > 832		kfree(to_atlantis_ccu_adev(adev));
-   833	}
-   834	
-   835	static void atlantis_adev_unregister(void *data)
-   836	{
-   837		struct auxiliary_device *adev = data;
-   838	
-   839		auxiliary_device_delete(adev);
-   840		auxiliary_device_uninit(adev);
-   841	}
-   842	
-   843	static int atlantis_ccu_adev_register(struct device *dev,
-   844					      struct atlantis_ccu *ccu,
-   845					      const struct atlantis_ccu_data *data,
-   846					      const char *adev_name)
-   847	{
-   848		struct atlantis_ccu_adev *cadev;
-   849		struct auxiliary_device *adev;
-   850		int ret;
-   851	
- > 852		cadev = kzalloc(sizeof(*cadev), GFP_KERNEL);
-   853		if (!cadev)
-   854			return -ENOMEM;
-   855	
-   856		cadev->regmap = ccu->regmap;
-   857	
-   858		adev = &cadev->adev;
-   859		adev->name = adev_name;
-   860		adev->dev.parent = dev;
-   861		adev->dev.release = atlantis_cadev_release;
-   862		adev->dev.of_node = dev->of_node;
-   863	
-   864		ret = auxiliary_device_init(adev);
-   865		if (ret)
-   866			goto err_free_cadev;
-   867	
-   868		ret = auxiliary_device_add(adev);
-   869		if (ret) {
-   870			auxiliary_device_uninit(adev);
-   871			return ret;
-   872		}
-   873	
-   874		return devm_add_action_or_reset(dev, atlantis_adev_unregister, adev);
-   875	
-   876	err_free_cadev:
-   877		kfree(cadev);
-   878	
-   879		return ret;
-   880	}
-   881	static int atlantis_ccu_probe(struct platform_device *pdev)
-   882	{
-   883		const struct atlantis_ccu_data *data;
-   884		struct device *dev = &pdev->dev;
-   885		int ret;
-   886	
-   887		struct atlantis_ccu *ccu = devm_kzalloc(dev, sizeof(*ccu), GFP_KERNEL);
-   888	
-   889		if (!ccu)
-   890			return -ENOMEM;
-   891	
-   892		ccu->dev = dev;
-   893	
-   894		ccu->base = devm_platform_ioremap_resource(pdev, 0);
-   895		if (IS_ERR(ccu->base))
-   896			return dev_err_probe(dev, PTR_ERR(ccu->base),
-   897					     "Failed to map registers\n");
-   898	
-   899		ccu->regmap = devm_regmap_init_mmio(dev, ccu->base,
-   900						    &atlantis_ccu_regmap_config);
-   901		if (IS_ERR(ccu->regmap))
-   902			return dev_err_probe(dev, PTR_ERR(ccu->regmap),
-   903					     "Failed to init regmap\n");
-   904	
-   905		data = of_device_get_match_data(dev);
-   906	
-   907		ret = atlantis_ccu_clocks_register(dev, ccu, data);
-   908		if (ret)
-   909			return dev_err_probe(dev, ret, "failed to register clocks\n");
-   910	
-   911		ret = atlantis_ccu_adev_register(dev, ccu, data, data->reset_name);
-   912		if (ret)
-   913			return dev_err_probe(dev, ret, "failed to register resets\n");
-   914	
-   915		return 0;
-   916	}
-   917	
+2656e1ce783a90 Eric Huang    2024-06-03  315  
+2656e1ce783a90 Eric Huang    2024-06-03  316  void amdgpu_reset_get_desc(struct amdgpu_reset_context *rst_ctxt, char *buf,
+2656e1ce783a90 Eric Huang    2024-06-03  317  			   size_t len)
+2656e1ce783a90 Eric Huang    2024-06-03  318  {
+2656e1ce783a90 Eric Huang    2024-06-03  319  	if (!buf || !len)
+2656e1ce783a90 Eric Huang    2024-06-03  320  		return;
+2656e1ce783a90 Eric Huang    2024-06-03  321  
+2656e1ce783a90 Eric Huang    2024-06-03  322  	switch (rst_ctxt->src) {
+2656e1ce783a90 Eric Huang    2024-06-03  323  	case AMDGPU_RESET_SRC_JOB:
+2656e1ce783a90 Eric Huang    2024-06-03  324  		if (rst_ctxt->job) {
+7bed1df814cd61 Eric Huang    2024-06-06  325  			snprintf(buf, len, "job hang on ring:%s",
+7bed1df814cd61 Eric Huang    2024-06-06  326  				 rst_ctxt->job->base.sched->name);
+2656e1ce783a90 Eric Huang    2024-06-03  327  		} else {
+2656e1ce783a90 Eric Huang    2024-06-03  328  			strscpy(buf, "job hang", len);
+2656e1ce783a90 Eric Huang    2024-06-03  329  		}
+2656e1ce783a90 Eric Huang    2024-06-03  330  		break;
+2656e1ce783a90 Eric Huang    2024-06-03  331  	case AMDGPU_RESET_SRC_RAS:
+2656e1ce783a90 Eric Huang    2024-06-03  332  		strscpy(buf, "RAS error", len);
+2656e1ce783a90 Eric Huang    2024-06-03  333  		break;
+2656e1ce783a90 Eric Huang    2024-06-03  334  	case AMDGPU_RESET_SRC_MES:
+2656e1ce783a90 Eric Huang    2024-06-03  335  		strscpy(buf, "MES hang", len);
+2656e1ce783a90 Eric Huang    2024-06-03  336  		break;
+2656e1ce783a90 Eric Huang    2024-06-03  337  	case AMDGPU_RESET_SRC_HWS:
+2656e1ce783a90 Eric Huang    2024-06-03  338  		strscpy(buf, "HWS hang", len);
+2656e1ce783a90 Eric Huang    2024-06-03  339  		break;
+2656e1ce783a90 Eric Huang    2024-06-03  340  	case AMDGPU_RESET_SRC_USER:
+2656e1ce783a90 Eric Huang    2024-06-03  341  		strscpy(buf, "user trigger", len);
+2656e1ce783a90 Eric Huang    2024-06-03  342  		break;
+c5da9e9c023893 Alex Deucher  2025-04-16  343  	case AMDGPU_RESET_SRC_USERQ:
+c5da9e9c023893 Alex Deucher  2025-04-16  344  		strscpy(buf, "user queue trigger", len);
+c5da9e9c023893 Alex Deucher  2025-04-16  345  		break;
+7136aabf196b0a Hamza Mahfooz 2026-01-22  346  	case AMDGPU_RESET_SRC_DISPLAY:
+7136aabf196b0a Hamza Mahfooz 2026-01-22  347  		strscpy(buf, "display hang", len);
+2656e1ce783a90 Eric Huang    2024-06-03 @348  	default:
+2656e1ce783a90 Eric Huang    2024-06-03  349  		strscpy(buf, "unknown", len);
+2656e1ce783a90 Eric Huang    2024-06-03  350  	}
+2656e1ce783a90 Eric Huang    2024-06-03  351  }
+a86e0c0e94373a Lijo Lazar    2024-11-15  352  
 
 -- 
 0-DAY CI Kernel Test Service
