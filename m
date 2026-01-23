@@ -1,63 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4620E313E01;
-	Fri, 23 Jan 2026 07:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B5E136672;
+	Fri, 23 Jan 2026 08:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769154529; cv=none; b=jeKu9k7VpkjMZc5x2gos43nhn/YDyablbVnGyh7Q407sPfxyetSignox3OgXwdOJQ+Od4VMwq2IFCum/k1hP34lilLQ081c72PoezqkvaoNWVkQdfM1ovAQ28AJNFe1eNtn49hBxfPTI7kNsrJyKEdjo7IjUo5c2FRzQweblgNw=
+	t=1769157856; cv=none; b=NKxNtjnUci28G0gRAclt3B9w+18jTYyIKhceYQYMEO6bszqyLscwb+m3BEocmSvgq5dj0xtlrw9U+5+vxcWGTtWMrif5cemEmpxu8pPe/rzHIXRfA8gehVfX2+bPBK4FgN5ItYBijJR4zaLo5rJJzgp3q/j0Ihsf8TFcj51Zfc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769154529; c=relaxed/simple;
-	bh=erFLakW2WZ72tu+xZhioj2szakHLvev8zWSXYFYy7CA=;
+	s=arc-20240116; t=1769157856; c=relaxed/simple;
+	bh=jKM7y9OA8Ts5lLeDHbj2fY3ejsQhVag7YZy+7flDjW8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZlHy2mTqCRUUU4QCA7zumkeJShyTny8c1KYruf4jf0BdMil2T51pEwH3gw4nT/lJNJgf5WZhjNseRzgPc/uNzK8a8oy2dNWbCwdVAdbzvPtdkMUqog11/tPHcJDG5rxS4HhlxbWGvChvX8KKBZtZwVLJyOtR5mhjpJvm4xrdI5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S/+Fz7WY; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=mhVQhLFUWV81zKEIy5Z99wTIAVUIJ9tSLpMmjid9ULEGgMu5NCzOFzWa/QQORedEOJ4ADacGftX4HDToHO1ydWGoc9KsOmH11gxwTRjZOYW5FCH7nDqXrJTY8+nQIAa5UOKpT01WkZLdFcHTGZvbDrAkGw+So52d/LEISMWFSZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SaLiAaAs; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S/+Fz7WY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769154527; x=1800690527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=erFLakW2WZ72tu+xZhioj2szakHLvev8zWSXYFYy7CA=;
-  b=S/+Fz7WY163j/ox7u0dJG0NEu7iiNI+gD9S7+S4haiL9vKQkSnXAVXKV
-   pa+2BY44y2HTyurTwxeNYGSfQKn+sK0rl+FpnCx5bz4H44PnT3sweNr5z
-   1fY96JKht5GAauSAOW1oS7UdJdWXReICitz2fw8UfsTj+7NGgR6RUnqkZ
-   WxhiR4mx6QQ+OSnt3AdfLKDAAzCQlglKcosEwXTo8D/pWApJAjYzud0Ub
-   Qch9U9/qEhCoK1hM1mNQj/mGd9DRo/Vm7jcULbhdgARXy5im8Xhjza6Yl
-   qtHU03MCD0dJ3EFXVSGlFWUxAKp5d3YwN+VZI4QSIkE6jJV85TuaF7GFq
-   w==;
-X-CSE-ConnectionGUID: RRFRjrseQVmfuS3RmaM5Ww==
-X-CSE-MsgGUID: m8Z4b+B4R7CZQufU6pHAiQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="70465834"
-X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="70465834"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 23:48:45 -0800
-X-CSE-ConnectionGUID: QQOHBZnqSZ2QCdpBfqABww==
-X-CSE-MsgGUID: cu8FMCukRS6SHmRDduq48Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="211416807"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 22 Jan 2026 23:48:40 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vjBuH-00000000Tew-0fmt;
-	Fri, 23 Jan 2026 07:48:37 +0000
-Date: Fri, 23 Jan 2026 15:47:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aaron Tomlin <atomlin@atomlin.com>, rafael@kernel.org, dakr@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pavel@kernel.org,
-	lenb@kernel.org, neelx@suse.com, atomlin@atomlin.com, sean@ashe.io,
-	mproche@gmail.com, chjohnst@gmail.com, nick.lange@gmail.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: QoS: Introduce boot parameter
- pm_qos_resume_latency_us
-Message-ID: <202601231542.GkFyNtdd-lkp@intel.com>
-References: <20260123010024.3301276-1-atomlin@atomlin.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SaLiAaAs"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=GqAez6IU6i4XAwM/6EtVwplPYXTstdRVXB7SnmbYRlw=; b=SaLiAaAsfel5pYPPeoItNDDHFo
+	rICGOG7M/lbjPr/KDTy2AOZBL+6V0VWN6U+AJaN97+WX/UPqvGLkv3woVQqK0avtARPBjj0eIFGSr
+	DXdpKwy7rKNi+HogbY2+GYJPpiLWPJ3nWPiMFe9+k8qWujcTZyYGca702uo9Kdax7Qj4VKpKCx0yo
+	tOvfKEowM6JDpqciRh5M5Ej9KvnMieAgRiwNrRB5mViCd4R3vO0t38bY49jNVNmp+XfW6LMlaQ7Xc
+	moZ5WrkYavZfdw9OPT9MkN2JO+wVWC+H+wM8w9Ff8+JKqpVjfbteFpWJjdj+am/JV2NY/yl5E0K3R
+	Fy1u1lig==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vjCly-00000001xAQ-0DnN;
+	Fri, 23 Jan 2026 08:44:06 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A0187303018; Fri, 23 Jan 2026 09:44:04 +0100 (CET)
+Date: Fri, 23 Jan 2026 09:44:04 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Marco Elver <elver@google.com>, Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Bart Van Assche <bvanassche@acm.org>, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped
+ init guards
+Message-ID: <20260123084404.GF171111@noisy.programming.kicks-ass.net>
+References: <20260119094029.1344361-1-elver@google.com>
+ <20260120072401.GA5905@lst.de>
+ <20260120105211.GW830755@noisy.programming.kicks-ass.net>
+ <20260122063042.GA24452@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,45 +58,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260123010024.3301276-1-atomlin@atomlin.com>
+In-Reply-To: <20260122063042.GA24452@lst.de>
 
-Hi Aaron,
+On Thu, Jan 22, 2026 at 07:30:42AM +0100, Christoph Hellwig wrote:
 
-kernel test robot noticed the following build warnings:
+> That's better.  What would be even better for everyone would be:
+> 
+> 	mutex_prepare(&obj->mutex); /* acquire, but with a nice name */
+> 	obj->data = FOO;
+> 	mutex_init_prepared(&obj->mutex); /* release, barrier, actual init */
+> 
+> 	mutex_lock(&obj->mutex); /* IFF needed only */
+> 
 
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus rafael-pm/linux-next rafael-pm/bleeding-edge linus/master amd-pstate/linux-next amd-pstate/bleeding-edge v6.19-rc6 next-20260122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is cannot work. There is no such thing is a release-barrier.
+Furthermore, store-release, load-acquire needs an address dependency to
+work.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/PM-QoS-Introduce-boot-parameter-pm_qos_resume_latency_us/20260123-090409
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20260123010024.3301276-1-atomlin%40atomlin.com
-patch subject: [PATCH] PM: QoS: Introduce boot parameter pm_qos_resume_latency_us
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260123/202601231542.GkFyNtdd-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601231542.GkFyNtdd-lkp@intel.com/reproduce)
+When publishing an object, which is what we're talking about, we have
+two common patterns:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601231542.GkFyNtdd-lkp@intel.com/
+ 1) a locked data-structure
 
-All warnings (new ones prefixed by >>):
-
->> kernel/power/qos.c:56:13: warning: unused variable 'pm_qos_resume_latency_cmdline' [-Wunused-variable]
-      56 | static char pm_qos_resume_latency_cmdline[COMMAND_LINE_SIZE] __initdata;
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+ 2) RCU
 
 
-vim +/pm_qos_resume_latency_cmdline +56 kernel/power/qos.c
+The way 1) works is:
 
-    55	
-  > 56	static char pm_qos_resume_latency_cmdline[COMMAND_LINE_SIZE] __initdata;
-    57	
+	Publish				Use
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	lock(&structure_lock);
+	insert(&structure, obj);
+	unlock(&structure_lock);
+
+					lock(&structure_lock)
+					obj = find(&structure, key);
+					...
+					unlock(&structure_lock);
+
+And here the Publish-unlock is a release which pairs with the Use-lock's
+acquire and guarantees that Use sees both 'structure' in a coherent
+state and obj as it was at the time of insertion. IOW we have
+release-acquire through the &structure_lock pointer.
+
+The way 2) works is:
+
+	Publish				Use
+
+	lock(&structure_lock);
+	insert(&structure, obj)
+	   rcu_assign_pointer(ptr, obj);
+	unlock(&structure_lock);
+	  	
+					rcu_read_lock();
+					obj = find_rcu(&structure, key);
+					...
+					rcu_read_unlock();
+
+
+And here rcu_assign_pointer() is a store-release that pairs with an
+rcu_dereference() inside find_rcu() on the same pointer.
+
+There is no alternative way to order things, there must be a
+release-acquire through a common address.
+
+In both cases it is imperative the obj is fully (or full enough)
+initialized before publication, because the consumer is only guaranteed
+to see the state of the object it was in at publish time.
