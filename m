@@ -1,112 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F961990C7;
-	Fri, 23 Jan 2026 23:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33AB7262A;
+	Fri, 23 Jan 2026 23:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769210465; cv=none; b=ltFcbcgT4R7mwZw+bQBvF7+gUwUW6achp5Mkplu+9ng605ACJQTiqMpwgaLyRDsvPFb+a7ofSxsKrvX1hag+jIXDJK6C9BH+qBM/Lf/1G4rW58uvPwePoaj751t+JP8+4/YPKL3yxvLSLem/piWSuxbpKAm0xsCt0dIL5B55rZA=
+	t=1769211219; cv=none; b=r8/WJ3PbBXDL+4/rvJ/EcdatGMkGzICY+MeqIShXcoWaDz36ufYa2DvB2bROHycyZhRSOWC3z+AnDnPkA4hQnaVqZ3yzo6odIt3pikAVOiaLiiYjc8uaavH7IURu50N28H/gle25aSNLQAIwuyEY6uKyYSvConkj7HvmxMQqJTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769210465; c=relaxed/simple;
-	bh=h1OhVeo4a07CpgPIzNHE/qIXeJzhLVmyvBwc5/+BbUk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dEFLrmEbITldpJvdb7MzzOw16v+sUqennM/um7vW7wGZfNYtVXBWBsb1dlEefpZGL/BmAHbfpWtDn1SBWzaMH1i5F/ninKM7ngSIXkvNo2nxLlyzdcrzE9TcA/Widt7JgtV6Vz1ieFUKr/ea6YcoGnL+gg+u5neNJB89mli/3SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jabh+gCL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769211219; c=relaxed/simple;
+	bh=f4iO3AM4NYVY9xUt7EwoIYKJRgPi87b+tYMS2wMLNS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+wYN0vPri/zSR28o9gSFK+jA/dnvTk7PDY2Pel8BUUZEpODO0DIAcPZeWeJSWANQvQCpYcG7nS2boaiv4n1d7cS9BtFk3E3wwkY/1CzAzeQWpCVd6GpMkPpGhljvL+tTO21k/RksmH8UafO94hppkSG3pH42HMtoC/0JrFuIyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kp2UQTm1; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jabh+gCL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBB5C4CEF1;
-	Fri, 23 Jan 2026 23:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769210465;
-	bh=h1OhVeo4a07CpgPIzNHE/qIXeJzhLVmyvBwc5/+BbUk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=jabh+gCLRyivnx4BAbwWGHToRDgrPiDJWb9f9NiSxDFLyT7MXbIaETx7XL7eV5fxw
-	 VG/SzHJFRlcN0vlmAjG2/qTMLfFa06JDBO+Kad0XPMdhGoRakigVKvZXen4QpGRYAS
-	 Ib5EBAQ5Z5eugWjX9lB0aYOtEghBDdLe5yNOaU3u6GKD2cqUpxLZg1RYeFTzMdZMEV
-	 mroAOlqMMrFEEpxyS03ZFXblUQr3+prOVNlCrZ68mxxZryTZETaH7loVduKtnEvSmd
-	 zIkQqi6eyhHKgxSYO6iwUtNzT1sy+R4tdiBEoJ6NvielvuFz0gbzg2AoyBhR+gWstr
-	 wzOFe1NSnbl7A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 23 Jan 2026 16:20:28 -0700
-Subject: [PATCH] x86/entry/vdso32: Omit '.cfi_offset eflags' for LLVM < 16
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kp2UQTm1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769211218; x=1800747218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f4iO3AM4NYVY9xUt7EwoIYKJRgPi87b+tYMS2wMLNS8=;
+  b=Kp2UQTm1l3pO9MU+f8tfGpuLEyRodyWtKwZXQp+uF3X6rcZRnS2DtqEN
+   ZqoTMwRRHkOuoG94NsjM9AVwRdevyNwq9TrLFGhdp1GeIHz9QM3gEURmk
+   X8Bz2iUWn/S/Cnub4Q8VM8bLBp4WI2fPfqZzf+RYokFy2bdLOny/2N1Nq
+   4CGZN7/zy3PEO7EpBrVSN1QQ8rFV0VV00NI+JYxQ7uekNSIp++i8Li+vO
+   D4JuXXv+8DzD+U4rfcNGm4dFbsxWwS64YaB9MNZUOKtOv89b9RHAI9o13
+   jue0vABgBqYVaeX7R0ExNqGrFXe94fvoDbAr/d7uiP75PeLC6GEMWYFMi
+   g==;
+X-CSE-ConnectionGUID: cMZlAg1OSx6FtUOvlI5fSw==
+X-CSE-MsgGUID: fosVvxqERpC2JA3UKfVYMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="58038440"
+X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
+   d="scan'208";a="58038440"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 15:33:35 -0800
+X-CSE-ConnectionGUID: XW8al9wlT4y6xIqgnrZSlw==
+X-CSE-MsgGUID: JLUi+jIeT3iU5yL7b7QH9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
+   d="scan'208";a="207057723"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 23 Jan 2026 15:33:32 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vjQef-00000000Uac-2ajU;
+	Fri, 23 Jan 2026 23:33:29 +0000
+Date: Sat, 24 Jan 2026 07:32:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Morgan <macroalpha82@gmail.com>, linux-sound@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, wangweidong.a@awinic.com,
+	tiwai@suse.com, perex@perex.cz, conor+dt@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org, broonie@kernel.org,
+	lgirdwood@gmail.com, Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 2/2] ASoC: codecs: aw87390: Add Anbernic RG-DS amplifier
+ driver
+Message-ID: <202601240757.gYdQGsXp-lkp@intel.com>
+References: <20260123154731.130649-3-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-v1-1-0f412e3516a4@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNTQ6CMBBA4auQWTtJfxDRqxgXbZliTaWkg5WEc
- HerLr/Nexsw5UAMl2aDTCVwSFOFPDTg7mYaCcNQDUqoTkilce07LAMnrfBtMMbyRHlE5wMm75k
- WJB/NyGhPthX+rFvVC6i1OZMP6+90vf3NL/sgt3zzsO8fAhMseIsAAAA=
-X-Change-ID: 20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-b7b40f934280
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
- x86@kernel.org
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1904; i=nathan@kernel.org;
- h=from:subject:message-id; bh=h1OhVeo4a07CpgPIzNHE/qIXeJzhLVmyvBwc5/+BbUk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJklTHGlgf8yM547HjstuWZb5lyWXdceTD2kI55T0+Hzo
- rfXyMSlo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkaxDDPwt5/sPHTyn+eM73
- 8ttHo60ZvsK7OuwNdslk/lc6cbFs1lqGfzrzDmS9uzavpTxfx6Zz1Qdu6+ZNqcXStYLHxRN5cn6
- Z8QIA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123154731.130649-3-macroalpha82@gmail.com>
 
-After commit 884961618ee5 ("x86/entry/vdso32: Remove open-coded DWARF in
-sigreturn.S"), building arch/x86/entry/vdso/vdso32/sigreturn.S with LLVM
-15 fails with:
+Hi Chris,
 
-  <instantiation>:18:20: error: invalid register name
-   .cfi_offset eflags, 64
-                     ^
-  arch/x86/entry/vdso/vdso32/sigreturn.S:33:2: note: while in macro instantiation
-   STARTPROC_SIGNAL_FRAME 8
-   ^
+kernel test robot noticed the following build warnings:
 
-Support for eflags as an argument to .cfi_offset was added in the LLVM
-16 development cycle [1]. Only add this .cfi_offset directive if it is
-supported by the assembler to clear up the error.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.19-rc6 next-20260122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 884961618ee5 ("x86/entry/vdso32: Remove open-coded DWARF in sigreturn.S")
-Link: https://github.com/llvm/llvm-project/commit/67bd3c58c0c7389e39c5a2f4d3b1a30459ccf5b7 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/entry/vdso/vdso32/sigreturn.S | 8 ++++++++
- 1 file changed, 8 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/ASoC-dt-bindings-aw87390-Add-Anbernic-RG-DS-Amplifier/20260123-235216
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20260123154731.130649-3-macroalpha82%40gmail.com
+patch subject: [PATCH 2/2] ASoC: codecs: aw87390: Add Anbernic RG-DS amplifier driver
+config: sparc64-randconfig-001-20260124 (https://download.01.org/0day-ci/archive/20260124/202601240757.gYdQGsXp-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240757.gYdQGsXp-lkp@intel.com/reproduce)
 
-diff --git a/arch/x86/entry/vdso/vdso32/sigreturn.S b/arch/x86/entry/vdso/vdso32/sigreturn.S
-index 25b0ac4b4bfe..8dfcf18f9582 100644
---- a/arch/x86/entry/vdso/vdso32/sigreturn.S
-+++ b/arch/x86/entry/vdso/vdso32/sigreturn.S
-@@ -22,7 +22,15 @@
- 	CFI_OFFSET	cs,     IA32_SIGCONTEXT_cs
- 	CFI_OFFSET	ss,     IA32_SIGCONTEXT_ss
- 	CFI_OFFSET	ds,     IA32_SIGCONTEXT_ds
-+/*
-+ * .cfi_offset eflags requires LLVM 16 or newer:
-+ * https://github.com/llvm/llvm-project/commit/67bd3c58c0c7389e39c5a2f4d3b1a30459ccf5b7
-+ * Check for 16.0.1 to ensure the support is present, as 16.0.0 may be a
-+ * prerelease version.
-+ */
-+#if defined(CONFIG_AS_IS_GNU) || (defined(CONFIG_AS_IS_LLVM) && CONFIG_AS_VERSION >= 160001)
- 	CFI_OFFSET	eflags, IA32_SIGCONTEXT_flags
-+#endif
- .endm
- 
- 	.text
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601240757.gYdQGsXp-lkp@intel.com/
 
----
-base-commit: 436ee609df7da5671ae5a717d1df867313868baf
-change-id: 20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-b7b40f934280
+All warnings (new ones prefixed by >>):
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+>> sound/soc/codecs/aw87390.c:343:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     343 |         case SND_SOC_DAPM_POST_PMD:
+         |              ^~~~~~~~~~~~~~~~~~~~~
+   include/sound/soc-dapm.h:388:32: note: expanded from macro 'SND_SOC_DAPM_POST_PMD'
+     388 | #define SND_SOC_DAPM_POST_PMD           0x8     /* after  widget power down */
+         |                                         ^~~
+   sound/soc/codecs/aw87390.c:354:9: note: uninitialized use occurs here
+     354 |         return ret;
+         |                ^~~
+   sound/soc/codecs/aw87390.c:339:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     339 |         case SND_SOC_DAPM_PRE_PMD:
+         |              ^~~~~~~~~~~~~~~~~~~~
+   include/sound/soc-dapm.h:387:31: note: expanded from macro 'SND_SOC_DAPM_PRE_PMD'
+     387 | #define SND_SOC_DAPM_PRE_PMD            0x4     /* before widget power down */
+         |                                         ^~~
+   sound/soc/codecs/aw87390.c:354:9: note: uninitialized use occurs here
+     354 |         return ret;
+         |                ^~~
+   sound/soc/codecs/aw87390.c:332:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     332 |         case SND_SOC_DAPM_POST_PMU:
+         |              ^~~~~~~~~~~~~~~~~~~~~
+   include/sound/soc-dapm.h:386:32: note: expanded from macro 'SND_SOC_DAPM_POST_PMU'
+     386 | #define SND_SOC_DAPM_POST_PMU           0x2     /* after  widget power up */
+         |                                         ^~~
+   sound/soc/codecs/aw87390.c:354:9: note: uninitialized use occurs here
+     354 |         return ret;
+         |                ^~~
+   sound/soc/codecs/aw87390.c:326:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     326 |         case SND_SOC_DAPM_PRE_PMU:
+         |              ^~~~~~~~~~~~~~~~~~~~
+   include/sound/soc-dapm.h:385:31: note: expanded from macro 'SND_SOC_DAPM_PRE_PMU'
+     385 | #define SND_SOC_DAPM_PRE_PMU            0x1     /* before widget power up */
+         |                                         ^~~
+   sound/soc/codecs/aw87390.c:354:9: note: uninitialized use occurs here
+     354 |         return ret;
+         |                ^~~
+   sound/soc/codecs/aw87390.c:323:9: note: initialize the variable 'ret' to silence this warning
+     323 |         int ret;
+         |                ^
+         |                 = 0
+   4 warnings generated.
 
+
+vim +/ret +343 sound/soc/codecs/aw87390.c
+
+   316	
+   317	static int aw87391_rgds_drv_event(struct snd_soc_dapm_widget *w,
+   318					struct snd_kcontrol *kcontrol, int event)
+   319	{
+   320		struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
+   321		struct aw87390 *aw87390 = snd_soc_component_get_drvdata(component);
+   322		struct aw_device *aw_dev = aw87390->aw_pa;
+   323		int ret;
+   324	
+   325		switch (event) {
+   326		case SND_SOC_DAPM_PRE_PMU:
+   327			if (!IS_ERR(aw87390->vdd_reg)) {
+   328				if (regulator_enable(aw87390->vdd_reg))
+   329					dev_err(aw_dev->dev, "Failed to enable vdd\n");
+   330		}
+   331			break;
+   332		case SND_SOC_DAPM_POST_PMU:
+   333			regmap_write(aw_dev->regmap, AW87391_SYSCTRL_REG,
+   334				     AW87391_REG_VER_SEL_LOW | AW87391_REG_EN_ADAP |
+   335				     AW87391_REG_EN_2X | AW87391_EN_SPK |
+   336				     AW87391_EN_PA | AW87391_REG_EN_CP |
+   337				     AW87391_EN_SW);
+   338			break;
+   339		case SND_SOC_DAPM_PRE_PMD:
+   340			regmap_write(aw_dev->regmap, AW87390_SYSCTRL_REG,
+   341				     AW87390_POWER_DOWN_VALUE);
+   342			break;
+ > 343		case SND_SOC_DAPM_POST_PMD:
+   344			if (!IS_ERR(aw87390->vdd_reg)) {
+   345				if (regulator_disable(aw87390->vdd_reg))
+   346					dev_err(aw_dev->dev, "Failed to disable vdd\n");
+   347		}
+   348			break;
+   349		default:
+   350			dev_err(aw_dev->dev, "%s: invalid event %d\n", __func__, event);
+   351			ret = -EINVAL;
+   352		}
+   353	
+   354		return ret;
+   355	}
+   356	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
