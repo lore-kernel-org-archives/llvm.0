@@ -1,48 +1,41 @@
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8202652A4
-	for <llvm@lists.linux.dev>; Fri, 23 Jan 2026 18:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50311DF97C
+	for <llvm@lists.linux.dev>; Fri, 23 Jan 2026 19:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769194723; cv=none; b=ghnOdZgNULAKFB/J2hZOYjLudCxRuTdbL4diGmsXR6YOugoBLSRGG7Df0d4mI1Zv4sio4N9+/M2fnvOG9k0J2+PumobOVvknxXRri/pYXmh5weKeTlMkqdDNNen1OkMtHVPcAJO3OEaEaWjt0yGVKYffA9liuiWg3eVdJ5RDC8k=
+	t=1769195852; cv=none; b=ewgj+2bDU6YvhYklaQd8Aq98VGbN+scOrScvYuTHmNVDT7Loyau3Z+1sfUa8bmVG4637r7B+ZAo89sO3hfxbuyS4ZDayFjBolpHSVGvc+2Zu0ZANkqSG2x+EWLgvoZFLgXjOfwoQbgYVTemQ5SbPi3CmScmWrQTUtlPESbIDQwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769194723; c=relaxed/simple;
-	bh=UxzNE9VpXiTvOsfMg5vnQPygP879sZAQRVv/7A8l4mg=;
+	s=arc-20240116; t=1769195852; c=relaxed/simple;
+	bh=aYIGL0hNq/fOe3+YvZE/s3N0bkMmp7Lqi8Cc0Nn/eZk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zy8slym2wq1gy3z5uVIP+OEguZnd7DlHClGvoUyGvyrIv9el9F+aaqxfYxqZC5NRhzjpIPi6S4bs93H/oDLCv6IGOQiGeX1TlaDW0tQUS87n69G2raRpapfp8o9P99u54EldYXPBKEPxRsicVtQz2vZmeQmwMxPoFd6s21WUU0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=c2WaxYts; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	 In-Reply-To:Content-Type; b=OipcxDTmEBmaoCeXP85FPx+Q14tR8qwnGgGS3NYjloqSHwKiJKb8qh0INSQCO+4nuzbHl/Hf5jtLQ/SMa1+AhYehe0tiEnd0ynhNHO7ErsNPjPUQiqx3/kTdOhOd85JnCgnWGEcGnREeRWac3kHQNDYdjaWm7wPbT/moLnBx/ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=eNw73UWb; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="c2WaxYts"
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dyRzP5Wtlz1XMFjF;
-	Fri, 23 Jan 2026 18:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1769194719; x=1771786720; bh=yom2drj6gKUrILQ8xeM4Obf3
-	UfnngnS77OB9AKQzU+k=; b=c2WaxYts7Z/dnVid9ms3U0c0rTMqLIZFhxNqV5OS
-	xDbYNTvD2x8JgRyrMosCWeaT1Gk4gx04aGkf7YRHshtWrADeJ2ZLyBw9G4QyykHq
-	Yl51C6JRfrLQNErcEDxNKd5wcumIwH+B/dh9292U3b4r0/CY541C+NXR3gj1nevT
-	LwXQhVrqboEVxunLjb8bjWmnQbE/+c03aYV1+NMG7JnUfFP13zio91lZN25Ck7/l
-	OiqOXID6hYEgZSUnuCNpZ4XoBbTxxzxS+1mVA/K/uqc8EkgQNzkvnJOO1Y/m9kkW
-	ftQZRLTm0orkNrhuUnBh5FsFCyEAh732tCxMo5nNHwSuwA==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id HysN81UsvIJL; Fri, 23 Jan 2026 18:58:39 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dyRzJ4Qxvz1XLwXj;
-	Fri, 23 Jan 2026 18:58:36 +0000 (UTC)
-Message-ID: <f4f688ba-8953-4cb6-a749-94dad74692ed@acm.org>
-Date: Fri, 23 Jan 2026 10:58:35 -0800
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="eNw73UWb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1769195836; x=1769800636; i=w_armin@gmx.de;
+	bh=vIwGcj7ZdvaCLM2xlgpSGdeCmKP+wk65XTtRSoDN3I0=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=eNw73UWbotFJH1XPtMVtmi1MXVwD6b9j+W6HPIqW5edeR9W0clH4aMN4fEIB1nSm
+	 oK4NCyv8Iv1kJKAESBx8lsIzOyfgG6dXH33qfuQjbF0CXQVdOiTpX8EmlrhrbvjMr
+	 nDweuDIANYtoiRi3lZroU2+E6amCtI7gPj/GbzPcQsY0N3iEst5f3mHhDNe/2pV6Z
+	 aAW2gwQu02Qr7wwW1rfUHYbTglF+yEI8XRpdTkSV+QBdvDnX+qVgnwiVlq4JNQp7S
+	 UrxjQgfY2flPjYEw1eXL5cymobVa8+4OGbQohgzKXuIo6Z+PcKIr12YWJmuE1eSTG
+	 pm3+9BY8tLJXojGbCw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MPGRz-1vQKlK2TGP-00NuRL; Fri, 23
+ Jan 2026 20:17:15 +0100
+Message-ID: <218f7a67-9be2-4094-b400-1cfad3fd9d0a@gmx.de>
+Date: Fri, 23 Jan 2026 20:17:12 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,50 +43,155 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
-To: elver@google.com, Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org, bigeasy@linutronix.de, mingo@kernel.org,
- tglx@linutronix.de, will@kernel.org, boqun.feng@gmail.com,
- longman@redhat.com, hch@lst.de, rostedt@goodmis.org, llvm@lists.linux.dev
-References: <20260121110704.221498346@infradead.org>
- <20260121192349.GM166857@noisy.programming.kicks-ass.net>
- <e1229c44-048b-4e42-b545-18a8c716b5eb@acm.org>
- <20260122090402.GD171111@noisy.programming.kicks-ass.net>
- <d399e354-6d42-488e-a0b7-fe8d08b9bf34@acm.org>
- <20260123111523.GO171111@noisy.programming.kicks-ass.net>
+Subject: Re: [PATCH v3 4/9] platform/wmi: Add kunit test for the string
+ conversion code
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+ platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux@weissschuh.net, Dell.Client.Kernel@dell.com, corbet@lwn.net,
+ linux-doc@vger.kernel.org, llvm@lists.linux.dev
+References: <20260109214619.7289-1-W_Armin@gmx.de>
+ <20260109214619.7289-5-W_Armin@gmx.de> <20260122234521.GA413183@ax162>
 Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260123111523.GO171111@noisy.programming.kicks-ass.net>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20260122234521.GA413183@ax162>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Fqsx1eOjdnh+HC8OdJAqpt8fXbwQB9TBKwaFKiI0HKNI+Q8r7mt
+ kCB8ZL1vboz/VJ2Z+j4dkHouEgHPe1E24n0lg49l5fRVHn+RsnpXv9acaPHAbUXhMAVhGVi
+ b0cZby950hgcYZ96YatzYPhqVg60VmhAZC9zJeWgvHrsAyDw5/qoLDfg7GYsqleliifP+QY
+ srC4pYehZJGmT2UWkWSMA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:1pvuykjE6Gg=;DMXcgYjn58qZ7EIEnLV5tFXf+JX
+ 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
 
-On 1/23/26 3:15 AM, Peter Zijlstra wrote:
-> --- a/include/linux/rtmutex.h
-> +++ b/include/linux/rtmutex.h
-> @@ -41,7 +41,7 @@ struct rt_mutex_base {
->    */
->   static inline bool rt_mutex_base_is_locked(struct rt_mutex_base *lock)
->   {
-> -	return READ_ONCE(lock->owner) != NULL;
-> +	return data_race(READ_ONCE(lock->owner) != NULL);
->   }
->   
->   #ifdef CONFIG_RT_MUTEXES
-> @@ -49,7 +49,7 @@ static inline bool rt_mutex_base_is_lock
->   
->   static inline struct task_struct *rt_mutex_owner(struct rt_mutex_base *lock)
->   {
-> -	unsigned long owner = (unsigned long) READ_ONCE(lock->owner);
-> +	unsigned long owner = (unsigned long) data_race(READ_ONCE(lock->owner));
->   
->   	return (struct task_struct *) (owner & ~RT_MUTEX_HAS_WAITERS);
->   }
-Marco, shouldn't lock context analysis be disabled for all READ_ONCE()
-invocations? I expect that all code that uses READ_ONCE() to read a
-structure member annotated with __guarded_by() will have to be annotated
-with data_race(). Shouldn't the data_race() invocation be moved into the
-READ_ONCE() definition?
+Am 23.01.26 um 00:45 schrieb Nathan Chancellor:
+
+> Hi Armin,
+>
+> On Fri, Jan 09, 2026 at 10:46:14PM +0100, Armin Wolf wrote:
+>> The string conversion frunctions provided by the WMI driver core
+>> have no dependencies on the remaining WMI API, making them suitable
+>> for unit tests.
+>>
+>> Implement such a unit test using kunit. Those unit tests verify that
+>> converting between WMI strings and UTF8 strings works as expected.
+>> They also verify that edge cases are handled correctly.
+>>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ...
+>> +++ b/drivers/platform/wmi/tests/string_kunit.c
+> ...
+>> +static const u8 oversized_test_utf8_string[] = "TEST!";
+> ...
+>> +static void wmi_string_to_utf8s_oversized_test(struct kunit *test)
+>> +{
+>> +	u8 result[sizeof(oversized_test_utf8_string)];
+>> +	ssize_t ret;
+>> +
+>> +	ret = wmi_string_to_utf8s(&oversized_test_wmi_string, result, sizeof(result));
+>> +
+>> +	KUNIT_EXPECT_EQ(test, ret, sizeof(test_utf8_string) - 1);
+>> +	KUNIT_EXPECT_MEMEQ(test, result, test_utf8_string, sizeof(test_utf8_string));
+>> +}
+> After this change in -next as commit 0e1a8143e797 ("platform/wmi: Add
+> kunit test for the string conversion code"), I am seeing a warning from
+> clang around oversized_test_utf8_string:
+>
+>    drivers/platform/wmi/tests/string_kunit.c:108:17: error: variable 'oversized_test_utf8_string' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+>      108 | static const u8 oversized_test_utf8_string[] = "TEST!";
+>          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> oversized_test_utf8_string is only used in sizeof() in
+> wmi_string_to_utf8s_oversized_test(). clang warns because sizeof() is
+> evaluated at compile time, so oversized_test_utf8_string won't end up in
+> the final binary. This is typically a bug since the developer may have
+> intended to use the variable elsewhere but I was not able to easily
+> determine that in this case.
+>
+> If it is intentional that this variable is only needed in sizeof(), it
+> could either be marked with __maybe_unused or eliminated in favor of a
+> direct 'sizeof("TEST!")', depending on maintainer/developer preference.
+> I am happy to send a patch.
+>
+> Cheers,
+> Nathan
+
+Good catch, it seems that i forgot to add the test case that was supposed to use oversized_test_utf8_string.
+I will send a patch that adds this missing test case, fixing this warning in the process.
 
 Thanks,
+Armin Wolf
 
-Bart.
