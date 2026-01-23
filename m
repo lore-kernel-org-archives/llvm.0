@@ -1,49 +1,53 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FA52777E0;
-	Fri, 23 Jan 2026 08:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871CD335BAF;
+	Fri, 23 Jan 2026 11:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769158562; cv=none; b=D3XKEwtRr7xTomP58LNFvik0W9imjLiocJbxRlp1PM3/lktNNgYbcP1BPWlq2wVPALM+hDlCLa+1I/duNGWjmUobbUvx4Pszneq6Mvlkfvptv04NG0jdq+AKgwt5HxSLfyB0Ndu092Ish0OP+La9zj0397zr5x0LXqZ9TsJfgVg=
+	t=1769166415; cv=none; b=MtAs0USRUoWIzJrbeukqfgDbZkW9Y8/liU4ulhz/2QajZTXulFKd4zBi1NX8SyCNjwkq49a0fEnsCn0rpRK4AfIUC8w8L9NEpvOpfYxGvMS61F0hdSXPijWiXSYoXKvLZJdJV5h8ISYMcPusHXtFDDjdSLyttl7AKKtzIL+PNKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769158562; c=relaxed/simple;
-	bh=wFpsuxtuy6ajzGj33f3P0L8UMB8Lq8IO66NCGp0uN8o=;
+	s=arc-20240116; t=1769166415; c=relaxed/simple;
+	bh=GE6s1299mxZoUIyY/Tajbnh3VWpVXQ2ZeueJbgvcgME=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qaygdnbPbCDn2dcBBus1nq3kvwrsbfLLUO6JQlnohZo3XjMi8mVUDdHZ+50oNoPOGFfh2cvA/eI8QhMC/5C/3U1me5qwUE8F/nQXmLp8niGTuuHbNcArzJugzY9naGzT0CZ+/C9IXvMbtpjos+Obg/o3dPnBrrkqPQnKYZWgPjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Aj2eYDn2; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=UcRovupTmXCttdkEmlsabUtbIyRpd3OE6nuvmSfzatzDLuaV6On0HyWXeT8yuzSgUojCIjEZ+zzqwJNDSO5ukEqpZsZWUBgsxkVXYAgrAS7wVw2OgVRqQN/ji+7lugE1nPLs2uWM3LmojbX7RyokShvrweq0SprhN2WOgs/UVj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rAHEj2Yj; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Aj2eYDn2"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rAHEj2Yj"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=upb/Rffb/gFtNpDr6t8IyD47ZyaiKZruR4jCghyBReY=; b=Aj2eYDn2u8T1YjGyAPXliPUuVp
-	qOHMuop/3f4M+0IhMlgRODP5XYti1qArQdk1MKh/YVsk3wSfWug5R8w23LlOwxgJYfeS0COD+/OTj
-	4qpBAnEdWbROL+FMy1X6CDQoscKK1oWRq02TUAd1qJvHsSbdt6gc6mdoqIPezFcKhyIsOsBznndqO
-	j6CJp9m2gJmLYyaBEpV5BdQqYsJucsRAwf/MF8dD3FSxRsdmpZioqyXG576ZumKpJdG0T7D3B4Bs+
-	0S9dNYJ6db/6yPP36mD0ICacJ6kgUUwxKzscZl5+3f9TMKcRHgEQo6L3r9KXDGKXIlHXiRZtI9+aH
-	bM23LQfw==;
+	bh=XMEDuJG6OJnlgw983o9nMRX8amTEsRRpisFtThjwLGc=; b=rAHEj2YjnEXzA5xbxd6sR48yUb
+	MMHdsmDEvZkVwZnqSa658GYTowtRjLsmZtam+Cnb+2iLPAoh3kwF3Y86CnFv0/LoZ7pBZeCUzycYy
+	KOOqZSmVvawb00XkyIJY5lgas/ypsl2uS4GMRVLWuXn+s4mQotGo1wiyq4qetI2KFyq1OByX+zFRG
+	waBQj1xidA8OmdD44iFITjAYy9S+QzuOoB7bP3vG/KjyeChWyWakZShGAj71ewCoNg3UbxQk9fFQP
+	Wcom4yp26tmhwZqIzLiVPY9eFcfU3Suq/zei+sdfQDF4LA490yt220XnPwyg1Zby2QxhhTP7fzKOj
+	163tgeyA==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vjCxQ-00000001XCM-45DW;
-	Fri, 23 Jan 2026 08:55:57 +0000
+	id 1vjEzv-00000001fmW-3sWj;
+	Fri, 23 Jan 2026 11:06:40 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B5E0D3007E1; Fri, 23 Jan 2026 09:55:55 +0100 (CET)
-Date: Fri, 23 Jan 2026 09:55:55 +0100
+	id 74C3B3007E1; Fri, 23 Jan 2026 12:06:39 +0100 (CET)
+Date: Fri, 23 Jan 2026 12:06:39 +0100
 From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Will Deacon <will@kernel.org>
-Subject: Re: [peterz-queue:locking/core 10/10] kernel/futex/core.c:982:1:
- warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the
- end of function
-Message-ID: <20260123085555.GG171111@noisy.programming.kicks-ass.net>
-References: <202601221040.TeM0ihff-lkp@intel.com>
- <20260122091600.GE171111@noisy.programming.kicks-ass.net>
- <aXJs7Hi90iOIoeMM@elver.google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Bart Van Assche <bvanassche@acm.org>, elver@google.com,
+	linux-kernel@vger.kernel.org, bigeasy@linutronix.de,
+	mingo@kernel.org, tglx@linutronix.de, will@kernel.org,
+	boqun.feng@gmail.com, longman@redhat.com, hch@lst.de,
+	rostedt@goodmis.org, llvm@lists.linux.dev
+Subject: Re: [RFC][PATCH 0/4] locking: Add/convert context analysis bits
+Message-ID: <20260123110639.GN171111@noisy.programming.kicks-ass.net>
+References: <20260121110704.221498346@infradead.org>
+ <20260121192349.GM166857@noisy.programming.kicks-ass.net>
+ <e1229c44-048b-4e42-b545-18a8c716b5eb@acm.org>
+ <20260122090402.GD171111@noisy.programming.kicks-ass.net>
+ <d399e354-6d42-488e-a0b7-fe8d08b9bf34@acm.org>
+ <20260122185812.GB3461196@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,102 +56,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aXJs7Hi90iOIoeMM@elver.google.com>
+In-Reply-To: <20260122185812.GB3461196@ax162>
 
-On Thu, Jan 22, 2026 at 07:31:08PM +0100, Marco Elver wrote:
-> +Cc Will
-> 
-> On Thu, Jan 22, 2026 at 10:16AM +0100, Peter Zijlstra wrote:
-> > On Thu, Jan 22, 2026 at 10:30:28AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-> > > head:   33d9e7fdf9c17417347d1f06ddebaf25f21ab62a
-> > > commit: 33d9e7fdf9c17417347d1f06ddebaf25f21ab62a [10/10] futex: Convert to compiler context analysis
-> > > config: arm64-randconfig-001-20260122 (https://download.01.org/0day-ci/archive/20260122/202601221040.TeM0ihff-lkp@intel.com/config)
-> > > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221040.TeM0ihff-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > > >> kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
-> > >      982 | }
-> > >          | ^
-> > >    kernel/futex/core.c:976:2: note: spinlock acquired here
-> > >      976 |         spin_lock(lock_ptr);
-> > >          |         ^
-> > > >> kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
-> > >      982 | }
-> > >          | ^
-> > >    kernel/futex/core.c:966:6: note: spinlock acquired here
-> > >      966 | void futex_q_lockptr_lock(struct futex_q *q)
-> > >          |      ^
-> > >    2 warnings generated.
+On Thu, Jan 22, 2026 at 11:58:12AM -0700, Nathan Chancellor wrote:
+> On Thu, Jan 22, 2026 at 08:28:44AM -0800, Bart Van Assche wrote:
+> > The build-kernel-with-clang script is as follows (this may not be the
+> > recommended way to build the kernel with clang):
 > > 
-> > Urgh, this is the arm64 READ_ONCE() confusing the thing. It can't see
-> > through that mess and realize: lockptr == q->lock_ptr.
-> > 
-> > Marco, any suggestion how to best fix that?
+> > #!/bin/bash
+> > export CC=clang
+> > export LD=ld.lld      # Use LLVM's linker (optional but recommended)
+> > export AR=llvm-ar
+> > export NM=llvm-nm
+> > export OBJCOPY=llvm-objcopy
+> > export OBJDUMP=llvm-objdump
+> > export STRIP=llvm-strip
+> > export READELF=llvm-readelf
+> > make LLVM=1 CC=clang "$@"
 > 
-> I have a tentative solution:
+> FWIW, this could ultimately simplify to
 > 
-> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index 78beceec10cd..75265012ff2d 100644
-> --- a/arch/arm64/include/asm/rwonce.h
-> +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -31,9 +31,8 @@
->   */
->  #define __READ_ONCE(x)							\
->  ({									\
-> -	typeof(&(x)) __x = &(x);					\
-> -	int atomic = 1;							\
-> -	union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;	\
-> +	typeof(&(x)) __x = &(x), *__xp = &__x;				\
-> +	union { TYPEOF_UNQUAL(*__x) __val; char __c[1]; } __u;		\
->  	switch (sizeof(x)) {						\
->  	case 1:								\
->  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
-> @@ -56,9 +55,10 @@
->  			: "Q" (*__x) : "memory");			\
->  		break;							\
->  	default:							\
-> -		atomic = 0;						\
-> +		__u.__val = (*(volatile typeof(__x))__x);		\
->  	}								\
-> -	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);\
-> +	*__xp = &__u.__val;						\
-> +	*__x;								\
->  })
->  
->  #endif	/* !BUILD_VDSO */
+>     make LLVM=1 "$@"
 > 
-> This works because the compiler doesn't analyze alias reassignment
-> through pointer-to-alias within the same function. An alternative is to
-> do the alias reassignment via an __always_inline function that takes the
-> alias as a const pointer, and then cast the const away and do the
-> assignment. But I think the above is cleaner. Only compile-tested.
+> as LLVM=1 is the shorthand for
+> 
+>     make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
+>          OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+>          HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+> 
 
-Oh clever! I suppose it does help if you know how the compiler works :-)
+Right, for all of us on Debian, you can use:
 
-I was thinking that perhaps it makes sense to invest in a 'directive'
-where we can explicitly hand alias information to the compiler.
+  make LLVM=-22 ...
 
-Consider:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/tree/kernel/locking/rtmutex.c?h=locking/core&id=a31a1351e9ec9df7a72ea4877a8e53a9c02e8641#n1259
-
-		rtm = container_of(lock, struct rt_mutex, rtmutex);
-		__assume_ctx_lock(&rtm->rtmutex.wait_lock);
-		res = __ww_mutex_add_waiter(waiter, rtm, ww_ctx, wake_q);
-
-Here there is a similar issue, where container_of() wrecks things. It
-cannot tell that rtm->rtmutex == lock and hence its idea of
-lock->wait_lock gets 'confused'.
-
-I hack around it with that __assume_ctx_lock() and I suppose that works,
-but perhaps it makes sense to be able to tell the compiler that yes,
-these things are the actual same thing. Perhaps it will even improve
-code-gen, like in your example.
