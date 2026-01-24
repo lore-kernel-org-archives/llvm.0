@@ -1,108 +1,205 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7339E3EBF36;
-	Sat, 24 Jan 2026 09:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CBD275870;
+	Sat, 24 Jan 2026 11:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769246288; cv=none; b=cdpcBkc2t3BURqJsWCjLMeZUOzt+IyMvqR6Nf9/YU0vnOcFIHvMD4SqjjtMJzhOSg59YH+kiuyYF9arMZ7KjTv6ZEvFCsN7mSIQb8pJVnOvcI7CySNhqSMZAFEa0QXz8xSCUG300n0hBO7eA9bXako50pIEYPwMg0MSiLZfzAtY=
+	t=1769255114; cv=none; b=BOxLpk+t9+DBNnpUX4OxkB6kSyvK3oBBkF7sqso/6m/UgD4Fzz6azU6EItL0cuUtYDNJ61+jmZNnDcBGrGQ4PXeJa30Y0lsEv/Tqy4ILLKJMXfCHiTwBUH3+MCAV6lSyIIrBYCJXVE7w6HLoaajAcmLwXT7QA7JkkGof0Kcla5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769246288; c=relaxed/simple;
-	bh=Oik2bgXeF+0A9Nkt9f8qvBU6aAWFORrEGwS+kqJusmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AmQQ4KO+qxGwiotyPukZwLkHdaoKfO8n2lhR1TQI/NmqZtilg8pYTtHTOup0OF/LO7aofooB4me001pVmCnkjFlor1NozgQ386vIVFhx2+TfYjWhLe8wFdCskYO3bnzbJ0+aNX9C/neGBVkuJnZ4VQPHxqmaqqVltX7k+fiBndo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WyV+KhCq; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1769255114; c=relaxed/simple;
+	bh=wpOlNnzpcOt5iVevobBGuSDmZh0rUmULW0FJuCmoz8s=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=oXnnWBvdcG4K6fUgtLLsaE3S8uBEBH005JqD/sQYRguDjJLnzvrALjO9Q6Hg/6QUNtctJZW7gmMKfo1QfRfvPm5Nw+q9t0g367i+l/gVJPJ/z0LP6RFAgH5lRVmfXrfMQq0i4gQXB9kmgnYnUR/p2VFI//fdygjrKG5W5JiF60c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IAUa1OO8; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WyV+KhCq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IAUa1OO8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769246286; x=1800782286;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Oik2bgXeF+0A9Nkt9f8qvBU6aAWFORrEGwS+kqJusmo=;
-  b=WyV+KhCqOutFj4L28PPPw3Gqh1iTW2OoZb83+5Jh+Ixx4v9jwCjfkfE8
-   LHoBbr1onzd5Fi2KsEFgAftkgzfBdMqZRhvEK5tJDINA/5T8eeDvgT2OT
-   iEhtkmVmvidWYQw7vR0k0PjBvlj3sX4shRz0ed3GcDArn/v9JsBqM+g4J
-   xhmw6QZ5GgdMPvJNFOaOT5jGaxEb4lou0Z+TgySa1qX/PPFPOB8FmWR2A
-   OVe2W9m7IQH1yPEeC7d9Li0+1FLQX4DjXnF2jkc6wwYcW5YVS1Urfy9jI
-   ihx6pXxaA17a1uO/qvvVZZgHV5eGXqxgFdO4xqsG8lEnd6/9eUwh0S3b+
+  t=1769255112; x=1800791112;
+  h=date:from:to:cc:subject:message-id;
+  bh=wpOlNnzpcOt5iVevobBGuSDmZh0rUmULW0FJuCmoz8s=;
+  b=IAUa1OO8VN2IDAOBNDJC2dERaeqzjTwj8Zz/JKs7/qey6NUS85kkbN/c
+   Fo8bE0KGfPAlfstYSU9IkOIfzQpsDtqPmEe15iEj6Pic03+fPf+Y/IHeT
+   TPxJ87qSQb6+x9LmShzdhZ+df6CExtFmrF1KxBkral3vsJW+oZROpSPeZ
+   uRSvd4IzbkDyEIhOg5kGrOsgKlVz0tme3ZnsLXXNBhmyiHYlv9HbRpQdp
+   TbB3YcTf7oC45z3PkuYmkYbSjvDtLCyLfWCJ9MZsCeGGdEpZxn3X+yB3Q
+   Me9LuY8+7bY6pLzyCu1vn66TxK7d2N/oNh26W5he+iXlBKxYoNghm9p5/
    w==;
-X-CSE-ConnectionGUID: pnvYqf7qSJCM9sly1eheVg==
-X-CSE-MsgGUID: TpeMsEkvQHmnhWpTCmZndA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="81924534"
+X-CSE-ConnectionGUID: lWq6ZIwXTims81sZuXkhFw==
+X-CSE-MsgGUID: jQwlHENNTESfOEo0G3jVNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70397112"
 X-IronPort-AV: E=Sophos;i="6.21,250,1763452800"; 
-   d="scan'208";a="81924534"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 01:18:06 -0800
-X-CSE-ConnectionGUID: 6ETZ6+tuS4ijJFlisht7CA==
-X-CSE-MsgGUID: wLtX6H13Tv2RaPerotSSFA==
+   d="scan'208";a="70397112"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 03:45:11 -0800
+X-CSE-ConnectionGUID: ZS3FUVEnQJqoKgxhPg+hxg==
+X-CSE-MsgGUID: jY9fOJWNTSa+lmxJzMKr9A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,250,1763452800"; 
-   d="scan'208";a="211346252"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Jan 2026 01:18:03 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 24 Jan 2026 03:45:09 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vjZmK-00000000V3G-2HNd;
-	Sat, 24 Jan 2026 09:18:00 +0000
-Date: Sat, 24 Jan 2026 17:17:33 +0800
+	id 1vjc4h-00000000V9K-2d1Y;
+	Sat, 24 Jan 2026 11:45:07 +0000
+Date: Sat, 24 Jan 2026 19:44:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Armin Wolf <W_Armin@gmx.de>, rafael@kernel.org, lenb@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ACPI: OSL: Panic when encountering a fatal ACPI error
-Message-ID: <202601241717.giql6AU7-lkp@intel.com>
-References: <20260124021859.8337-1-W_Armin@gmx.de>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [frederic-dynticks:timers/core-v2 5/15]
+ arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier
+ 's390_idle'
+Message-ID: <202601241924.cr8xEHso-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260124021859.8337-1-W_Armin@gmx.de>
 
-Hi Armin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.19-rc6 next-20260123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/ACPI-OSL-Panic-when-encountering-a-fatal-ACPI-error/20260124-102043
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260124021859.8337-1-W_Armin%40gmx.de
-patch subject: [PATCH] ACPI: OSL: Panic when encountering a fatal ACPI error
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260124/202601241717.giql6AU7-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601241717.giql6AU7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git timers/core-v2
+head:   2d375ca5a093ed3f27bba45a583fedf1ae44a2ee
+commit: cad6f3bfa55b9f8abfabb52c940ac93eabb5bb23 [5/15] s390/time: Prepare to stop elapsing in dynticks-idle
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260124/202601241924.cr8xEHso-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601241924.cr8xEHso-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601241717.giql6AU7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601241924.cr8xEHso-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/acpi/osl.c:74:30: error: use of undeclared identifier 'CONFIG_ACPI_PANIC_ON_FATAL'
-      74 | static bool panic_on_fatal = CONFIG_ACPI_PANIC_ON_FATAL;
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |                          ^
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:2: error: indirection requires pointer operand ('void' invalid)
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:443:2: note: expanded from macro '__this_cpu_write'
+     443 |         raw_cpu_write(pcp, val);                                        \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:413:34: note: expanded from macro 'raw_cpu_write'
+     413 | #define raw_cpu_write(pcp, val)         __pcpu_size_call(raw_cpu_write_, pcp, val)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:369:11: note: expanded from macro '__pcpu_size_call'
+     369 |                 case 1: stem##1(variable, __VA_ARGS__);break;           \
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:130:1: note: expanded from here
+     130 | raw_cpu_write_1
+         | ^
+   include/asm-generic/percpu.h:230:35: note: expanded from macro 'raw_cpu_write_1'
+     230 | #define raw_cpu_write_1(pcp, val)       raw_cpu_generic_to_op(pcp, val, =)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:87:2: note: expanded from macro 'raw_cpu_generic_to_op'
+      87 |         *raw_cpu_ptr(&(pcp)) op val;                                    \
+         |         ^~~~~~~~~~~~~~~~~~~~
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |                          ^
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:2: error: indirection requires pointer operand ('void' invalid)
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:443:2: note: expanded from macro '__this_cpu_write'
+     443 |         raw_cpu_write(pcp, val);                                        \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:413:34: note: expanded from macro 'raw_cpu_write'
+     413 | #define raw_cpu_write(pcp, val)         __pcpu_size_call(raw_cpu_write_, pcp, val)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:370:11: note: expanded from macro '__pcpu_size_call'
+     370 |                 case 2: stem##2(variable, __VA_ARGS__);break;           \
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:131:1: note: expanded from here
+     131 | raw_cpu_write_2
+         | ^
+   include/asm-generic/percpu.h:233:35: note: expanded from macro 'raw_cpu_write_2'
+     233 | #define raw_cpu_write_2(pcp, val)       raw_cpu_generic_to_op(pcp, val, =)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:87:2: note: expanded from macro 'raw_cpu_generic_to_op'
+      87 |         *raw_cpu_ptr(&(pcp)) op val;                                    \
+         |         ^~~~~~~~~~~~~~~~~~~~
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |                          ^
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:2: error: indirection requires pointer operand ('void' invalid)
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:443:2: note: expanded from macro '__this_cpu_write'
+     443 |         raw_cpu_write(pcp, val);                                        \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:413:34: note: expanded from macro 'raw_cpu_write'
+     413 | #define raw_cpu_write(pcp, val)         __pcpu_size_call(raw_cpu_write_, pcp, val)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:371:11: note: expanded from macro '__pcpu_size_call'
+     371 |                 case 4: stem##4(variable, __VA_ARGS__);break;           \
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:132:1: note: expanded from here
+     132 | raw_cpu_write_4
+         | ^
+   include/asm-generic/percpu.h:236:35: note: expanded from macro 'raw_cpu_write_4'
+     236 | #define raw_cpu_write_4(pcp, val)       raw_cpu_generic_to_op(pcp, val, =)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:87:2: note: expanded from macro 'raw_cpu_generic_to_op'
+      87 |         *raw_cpu_ptr(&(pcp)) op val;                                    \
+         |         ^~~~~~~~~~~~~~~~~~~~
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |                          ^
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:19: error: use of undeclared identifier 's390_idle'
+>> arch/s390/kernel/vtime.c:292:2: error: indirection requires pointer operand ('void' invalid)
+     292 |         __this_cpu_write(s390_idle.idle_dyntick, true);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:443:2: note: expanded from macro '__this_cpu_write'
+     443 |         raw_cpu_write(pcp, val);                                        \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:413:34: note: expanded from macro 'raw_cpu_write'
+     413 | #define raw_cpu_write(pcp, val)         __pcpu_size_call(raw_cpu_write_, pcp, val)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:372:11: note: expanded from macro '__pcpu_size_call'
+     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:133:1: note: expanded from here
+     133 | raw_cpu_write_8
+         | ^
+   include/asm-generic/percpu.h:239:35: note: expanded from macro 'raw_cpu_write_8'
+     239 | #define raw_cpu_write_8(pcp, val)       raw_cpu_generic_to_op(pcp, val, =)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:87:2: note: expanded from macro 'raw_cpu_generic_to_op'
+      87 |         *raw_cpu_ptr(&(pcp)) op val;                                    \
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kernel/vtime.c:305:19: error: use of undeclared identifier 's390_idle'
+     305 |         __this_cpu_write(s390_idle.idle_dyntick, false);
+         |                          ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/CONFIG_ACPI_PANIC_ON_FATAL +74 drivers/acpi/osl.c
+vim +/s390_idle +292 arch/s390/kernel/vtime.c
 
-    73	
-  > 74	static bool panic_on_fatal = CONFIG_ACPI_PANIC_ON_FATAL;
-    75	module_param(panic_on_fatal, bool, 0);
-    76	MODULE_PARM_DESC(panic_on_fatal, "Trigger a kernel panic when encountering a fatal ACPI error");
-    77	
+   283	
+   284	/**
+   285	 * vtime_dyntick_start - Inform vtime about entry to idle-dynticks
+   286	 *
+   287	 * Called when idle enters in dyntick mode. The idle cputime that elapsed so far
+   288	 * is flushed and the tick subsystem takes over the idle cputime accounting.
+   289	 */
+   290	void vtime_dyntick_start(void)
+   291	{
+ > 292		__this_cpu_write(s390_idle.idle_dyntick, true);
+   293		vtime_flush(current);
+   294	}
+   295	
 
 -- 
 0-DAY CI Kernel Test Service
