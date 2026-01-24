@@ -1,82 +1,144 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F403C0C
-	for <llvm@lists.linux.dev>; Sat, 24 Jan 2026 00:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FAEAD4B;
+	Sat, 24 Jan 2026 01:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769215829; cv=none; b=AYiqZs0R24CD8KTLOcwMzD4ryAu5KxUhEJESUBQkQeXOfus06GdkO+O/TGyjD/KpZCIEJFkFjdNYqHDihnLprs7YUqFf3Vf3XoHpmoFTEZ4toA1qBVPq+cMVO1DHjNS6qoCIfwcfjzcAcRwQe7AUtb1RlwCuhSks4qWsVTHU3z4=
+	t=1769216441; cv=none; b=rZ2ZTMo5yUCuy5CWMhZl3xHlM5j0QLrHhmCwCe/L59juDnFbDCgZLSLGr2HmhORkeR3G9CwPRZmycka/Vfmv1GMdiSckjM5KB7dQDtEfmHBPDat/jKIsJv7q/+v4xDsdzOKhedatjm/CI1Kfa5xVvSm9eiZ59O5782I85eOcSII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769215829; c=relaxed/simple;
-	bh=4YYMCUSMHusIIKJ7Gn+mDB7Nqsnj37inU8q3B0JyRjE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F0Cftrf08Evg0j3uXd2/IqYbZbtjLVNouhD5Dns+0L8dPskuXNjlz5gxNW9NyspCpVv3lBOwJZbYpso19QkrUKK8p6vJHYkGFwEKUgMuMhyVT1qw2zgc6SZjTADMyBtwXNgSv+YaJOEV/xMU+UkHtW2slnGBCExtx9CwzGiUl0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Sza5EiF1; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1769216441; c=relaxed/simple;
+	bh=iM7MBs56o6F3YvsbPeuU9AgkOpJspq9VfVQmvM6iRW8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YxGrRzcoZWMOnim81CeLPCyvEFdHVxERMO77EJzAF0NEwgv9rXqwYS2sWYHx6vkNrUclOogmo8CAgym2A5bWdCKms0gUFlMsa4ogNQxIjCVMfG+cLtR7s4bG14BBvw4skpv63IwGlD80l9Q+wMABK4640gasDvFtW39a4MKduho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jN4wiI/I; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Sza5EiF1"
-Received: from [172.27.2.41] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 60O0nSu11199224
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 23 Jan 2026 16:50:02 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 60O0nSu11199224
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025122301; t=1769215803;
-	bh=jeGqMzGZSjxSnUjXzypoToG5FZgBdXCJnXQg+Brwh6I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Sza5EiF1TyD0HY1Zkvu3ggtQ6u6MyA4QGBiPt0i7+d2sB734hFVBKjP0J96RH/iu2
-	 j0beg3AXA1IW+BjBmyZd058gkb5hadDypQX5xF50OIXCMHl86QOUHV+WlAKvaORIVt
-	 rsr3dqeC+emx5Y4uirnAbMZeAeBhj3awc3foNv9Xu/jNa+O3Ri64vvxp1GYeTtunk5
-	 88SWnCXV2t0fIcH1h/tTv/3+NhKN7Aj/QJaMUmO40Qo+D2Mf71L84bttu7jXS+47JW
-	 8oMXzXIHZJnXCs9hMRONyTxxi/mDReXbWDGWMuIS+WF//47w1d2R3r+DKOkTNI6rYU
-	 mmi8OlV7c/8mg==
-Message-ID: <f6a53599-f3ba-4ed7-bf93-3fd3edb4f490@zytor.com>
-Date: Fri, 23 Jan 2026 16:49:23 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jN4wiI/I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769216440; x=1800752440;
+  h=date:from:to:cc:subject:message-id;
+  bh=iM7MBs56o6F3YvsbPeuU9AgkOpJspq9VfVQmvM6iRW8=;
+  b=jN4wiI/I8VIbluwV1EUktnw6UhU6HMQI8o+/JGMHOeWpyeLl9P5VXuSb
+   g23UW1xnXYc2WNXuod5aUpL4WL4Nf22T2ZsBcg452XcQ9OU/jjplHyxKa
+   vf7JRjldHqhO1RRF88gCwkCgtviJxsaHOtC6XnWNjQmopXuGftlfS5L+1
+   tvpsHkqaKmuW8KNf2ssjFe1CUWAAVkdo1Qd/xEA7FBDuH4LuWZ0Ag0eSq
+   bJEGcBLhRTIgny6KylzuPUcWC7kJuDXNrFAIz/GZ0wTJeGPz09xXEW/+L
+   Lrnk/v4mj9rWamJi8rmDm3TG5QAfXgRhuT3i8DeDcuaJ6erjA4w+9QkUg
+   Q==;
+X-CSE-ConnectionGUID: XxbMwfC/SFWJKaCqjD3rvQ==
+X-CSE-MsgGUID: UvqUQFkLSbyRFH/LB2DA0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70369235"
+X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
+   d="scan'208";a="70369235"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 17:00:37 -0800
+X-CSE-ConnectionGUID: 3/dmkxGlSO+fLnJMFpBHbg==
+X-CSE-MsgGUID: ixZSgdvoS1a46Qm+M0PQBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
+   d="scan'208";a="206277544"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 23 Jan 2026 17:00:33 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vjS0t-00000000UdS-1WLK;
+	Sat, 24 Jan 2026 01:00:31 +0000
+Date: Sat, 24 Jan 2026 08:59:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 172/186]
+ kernel/time/hrtimer.c:946:41: error: call to undeclared function
+ 'tick_nohz_is_active'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202601240833.jYdOreP4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/entry/vdso32: Omit '.cfi_offset eflags' for LLVM < 16
-To: Nathan Chancellor <nathan@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-v1-1-0f412e3516a4@kernel.org>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20260123-x86-vdso32-wa-llvm-15-cfi-offset-eflags-v1-1-0f412e3516a4@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 2026-01-23 15:20, Nathan Chancellor wrote:
-> After commit 884961618ee5 ("x86/entry/vdso32: Remove open-coded DWARF in
-> sigreturn.S"), building arch/x86/entry/vdso/vdso32/sigreturn.S with LLVM
-> 15 fails with:
-> 
->   <instantiation>:18:20: error: invalid register name
->    .cfi_offset eflags, 64
->                      ^
->   arch/x86/entry/vdso/vdso32/sigreturn.S:33:2: note: while in macro instantiation
->    STARTPROC_SIGNAL_FRAME 8
->    ^
-> 
-> Support for eflags as an argument to .cfi_offset was added in the LLVM
-> 16 development cycle [1]. Only add this .cfi_offset directive if it is
-> supported by the assembler to clear up the error.
-> 
-> Fixes: 884961618ee5 ("x86/entry/vdso32: Remove open-coded DWARF in sigreturn.S")
-> Link: https://github.com/llvm/llvm-project/commit/67bd3c58c0c7389e39c5a2f4d3b1a30459ccf5b7 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   7e9b0371ed5b9bf9a80c59487f47fca0ba638f61
+commit: b0d640cf14148cbce9f1651fe6028c7586291cf5 [172/186] cpufreq: ondemand: Simplify idle cputime granularity test
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260124/202601240833.jYdOreP4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240833.jYdOreP4-lkp@intel.com/reproduce)
 
-Unfortunate, but simple enough.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601240833.jYdOreP4-lkp@intel.com/
 
-Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+All errors (new ones prefixed by >>):
+
+>> kernel/time/hrtimer.c:946:41: error: call to undeclared function 'tick_nohz_is_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     946 |         if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
+         |                                                ^
+   1 error generated.
+
+
+vim +/tick_nohz_is_active +946 kernel/time/hrtimer.c
+
+   925	
+   926	/*
+   927	 * Clock was set. This might affect CLOCK_REALTIME, CLOCK_TAI and
+   928	 * CLOCK_BOOTTIME (for late sleep time injection).
+   929	 *
+   930	 * This requires to update the offsets for these clocks
+   931	 * vs. CLOCK_MONOTONIC. When high resolution timers are enabled, then this
+   932	 * also requires to eventually reprogram the per CPU clock event devices
+   933	 * when the change moves an affected timer ahead of the first expiring
+   934	 * timer on that CPU. Obviously remote per CPU clock event devices cannot
+   935	 * be reprogrammed. The other reason why an IPI has to be sent is when the
+   936	 * system is in !HIGH_RES and NOHZ mode. The NOHZ mode updates the offsets
+   937	 * in the tick, which obviously might be stopped, so this has to bring out
+   938	 * the remote CPU which might sleep in idle to get this sorted.
+   939	 */
+   940	void clock_was_set(unsigned int bases)
+   941	{
+   942		struct hrtimer_cpu_base *cpu_base = raw_cpu_ptr(&hrtimer_bases);
+   943		cpumask_var_t mask;
+   944		int cpu;
+   945	
+ > 946		if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
+   947			goto out_timerfd;
+   948	
+   949		if (!zalloc_cpumask_var(&mask, GFP_KERNEL)) {
+   950			on_each_cpu(retrigger_next_event, NULL, 1);
+   951			goto out_timerfd;
+   952		}
+   953	
+   954		/* Avoid interrupting CPUs if possible */
+   955		cpus_read_lock();
+   956		for_each_online_cpu(cpu) {
+   957			unsigned long flags;
+   958	
+   959			cpu_base = &per_cpu(hrtimer_bases, cpu);
+   960			raw_spin_lock_irqsave(&cpu_base->lock, flags);
+   961	
+   962			if (update_needs_ipi(cpu_base, bases))
+   963				cpumask_set_cpu(cpu, mask);
+   964	
+   965			raw_spin_unlock_irqrestore(&cpu_base->lock, flags);
+   966		}
+   967	
+   968		preempt_disable();
+   969		smp_call_function_many(mask, retrigger_next_event, NULL, 1);
+   970		preempt_enable();
+   971		cpus_read_unlock();
+   972		free_cpumask_var(mask);
+   973	
+   974	out_timerfd:
+   975		timerfd_clock_was_set();
+   976	}
+   977	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
