@@ -1,143 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FAEAD4B;
-	Sat, 24 Jan 2026 01:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE031CD1E4;
+	Sat, 24 Jan 2026 01:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769216441; cv=none; b=rZ2ZTMo5yUCuy5CWMhZl3xHlM5j0QLrHhmCwCe/L59juDnFbDCgZLSLGr2HmhORkeR3G9CwPRZmycka/Vfmv1GMdiSckjM5KB7dQDtEfmHBPDat/jKIsJv7q/+v4xDsdzOKhedatjm/CI1Kfa5xVvSm9eiZ59O5782I85eOcSII=
+	t=1769219936; cv=none; b=LUqp4+YIEpmhkJWFmhiUNnJdJmUpsGLAER7Doar3bbridJBACzhPBeAc6vdzgPUNINWaq7XuK+eXMOlch96B4pf5RNfBjb4npfpkIx4N07NBxTcUcDsLouc8ZhPAh5qub1yC0X04V9pMrXtFlrzjsTz0s/gAz6TVsdgXUXMnsR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769216441; c=relaxed/simple;
-	bh=iM7MBs56o6F3YvsbPeuU9AgkOpJspq9VfVQmvM6iRW8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=YxGrRzcoZWMOnim81CeLPCyvEFdHVxERMO77EJzAF0NEwgv9rXqwYS2sWYHx6vkNrUclOogmo8CAgym2A5bWdCKms0gUFlMsa4ogNQxIjCVMfG+cLtR7s4bG14BBvw4skpv63IwGlD80l9Q+wMABK4640gasDvFtW39a4MKduho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jN4wiI/I; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1769219936; c=relaxed/simple;
+	bh=W4KpLvlCDKKiNZ3A7t0u+ak8r2FD3BRHbUWCEIAGDQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hdVuPAi0IxRwmQb1Wikqj9u+JPD6xl6NGQr9AJghZyj4vQxk9cMdS8Y6b25dGKaQ6W5xiS1ycPuYxOcWl0qjli7NaZf6FAJE5mB4+2QisD8wEFf+Oa1YrKGY0x8Bn7HWMGUsWFFxUuZHoAXupkQ8h7cva7jTL3etGL8LKgJB9j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kftpZoc+; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jN4wiI/I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kftpZoc+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769216440; x=1800752440;
-  h=date:from:to:cc:subject:message-id;
-  bh=iM7MBs56o6F3YvsbPeuU9AgkOpJspq9VfVQmvM6iRW8=;
-  b=jN4wiI/I8VIbluwV1EUktnw6UhU6HMQI8o+/JGMHOeWpyeLl9P5VXuSb
-   g23UW1xnXYc2WNXuod5aUpL4WL4Nf22T2ZsBcg452XcQ9OU/jjplHyxKa
-   vf7JRjldHqhO1RRF88gCwkCgtviJxsaHOtC6XnWNjQmopXuGftlfS5L+1
-   tvpsHkqaKmuW8KNf2ssjFe1CUWAAVkdo1Qd/xEA7FBDuH4LuWZ0Ag0eSq
-   bJEGcBLhRTIgny6KylzuPUcWC7kJuDXNrFAIz/GZ0wTJeGPz09xXEW/+L
-   Lrnk/v4mj9rWamJi8rmDm3TG5QAfXgRhuT3i8DeDcuaJ6erjA4w+9QkUg
-   Q==;
-X-CSE-ConnectionGUID: XxbMwfC/SFWJKaCqjD3rvQ==
-X-CSE-MsgGUID: UvqUQFkLSbyRFH/LB2DA0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70369235"
+  t=1769219933; x=1800755933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W4KpLvlCDKKiNZ3A7t0u+ak8r2FD3BRHbUWCEIAGDQQ=;
+  b=kftpZoc+5nu62GKa7F1iLUrI8UgQol6MKLUWl4sJnn+VR2Gc+UQNnljC
+   xFphxH6RbKyZaWob79nXwG6SGIrgVOahzcBE7YMmVSE+HWlmug9NufXNa
+   9l41ETKVGQiqBUl4DLPmQ0NSlhfxJWA89AFF4aTGhlM01EWNn/YhB3Tcg
+   z/emSL7/rq9PCVI3KLeaNbdjVx02ui6fm8IZxcn8VOZnAu5u4tOuAa2Hg
+   1fE1CYqbv0PqbvZ1u2j+pRKUYzYrPgXWCNDo3pzqi6bxiXaPhB0eEycEm
+   3YanpXCHFllHGNzVfqvYvNB9wFANQDxthWsbuSMDeCFCs/ZqaAIWxNxO4
+   A==;
+X-CSE-ConnectionGUID: 7s9uGw9QS0G49EPcHZHFwg==
+X-CSE-MsgGUID: 4WPXgpj7RTix/c+xTaqprA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="81191728"
 X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
-   d="scan'208";a="70369235"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 17:00:37 -0800
-X-CSE-ConnectionGUID: 3/dmkxGlSO+fLnJMFpBHbg==
-X-CSE-MsgGUID: ixZSgdvoS1a46Qm+M0PQBQ==
+   d="scan'208";a="81191728"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 17:58:52 -0800
+X-CSE-ConnectionGUID: PEbsSgEsR5ye0co4CbngPw==
+X-CSE-MsgGUID: aXwhd8SvTYO2ZBfAUi7BIg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,249,1763452800"; 
-   d="scan'208";a="206277544"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 23 Jan 2026 17:00:33 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 23 Jan 2026 17:58:50 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vjS0t-00000000UdS-1WLK;
-	Sat, 24 Jan 2026 01:00:31 +0000
-Date: Sat, 24 Jan 2026 08:59:56 +0800
+	id 1vjSvI-000000000rV-1KHr;
+	Sat, 24 Jan 2026 01:58:48 +0000
+Date: Sat, 24 Jan 2026 02:58:23 +0100
 From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
+To: Naohiro Aota <naohiro.aota@wdc.com>, linux-btrfs@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [rafael-pm:bleeding-edge 172/186]
- kernel/time/hrtimer.c:946:41: error: call to undeclared function
- 'tick_nohz_is_active'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202601240833.jYdOreP4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Naohiro Aota <naohiro.aota@wdc.com>
+Subject: Re: [PATCH 4/4] btrfs: tests: zoned: add selftest for zoned code
+Message-ID: <202601240254.ewdvMi5U-lkp@intel.com>
+References: <20260123125920.4129581-5-naohiro.aota@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123125920.4129581-5-naohiro.aota@wdc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   7e9b0371ed5b9bf9a80c59487f47fca0ba638f61
-commit: b0d640cf14148cbce9f1651fe6028c7586291cf5 [172/186] cpufreq: ondemand: Simplify idle cputime granularity test
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260124/202601240833.jYdOreP4-lkp@intel.com/config)
+Hi Naohiro,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on next-20260123]
+[cannot apply to linus/master v6.16-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-tests-add-cleanup-functions-for-test-specific-functions/20260123-210300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260123125920.4129581-5-naohiro.aota%40wdc.com
+patch subject: [PATCH 4/4] btrfs: tests: zoned: add selftest for zoned code
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260124/202601240254.ewdvMi5U-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240833.jYdOreP4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601240254.ewdvMi5U-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601240833.jYdOreP4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601240254.ewdvMi5U-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/time/hrtimer.c:946:41: error: call to undeclared function 'tick_nohz_is_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     946 |         if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
-         |                                                ^
+>> fs/btrfs/tests/zoned-tests.c:89:8: error: call to undeclared function 'btrfs_load_block_group_by_raid_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      89 |         ret = btrfs_load_block_group_by_raid_type(bg, map, zone_info, active,
+         |               ^
+   fs/btrfs/tests/zoned-tests.c:89:8: note: did you mean 'btrfs_load_block_group_zone_info'?
+   fs/btrfs/tests/../zoned.h:195:19: note: 'btrfs_load_block_group_zone_info' declared here
+     195 | static inline int btrfs_load_block_group_zone_info(
+         |                   ^
    1 error generated.
 
 
-vim +/tick_nohz_is_active +946 kernel/time/hrtimer.c
+vim +/btrfs_load_block_group_by_raid_type +89 fs/btrfs/tests/zoned-tests.c
 
-   925	
-   926	/*
-   927	 * Clock was set. This might affect CLOCK_REALTIME, CLOCK_TAI and
-   928	 * CLOCK_BOOTTIME (for late sleep time injection).
-   929	 *
-   930	 * This requires to update the offsets for these clocks
-   931	 * vs. CLOCK_MONOTONIC. When high resolution timers are enabled, then this
-   932	 * also requires to eventually reprogram the per CPU clock event devices
-   933	 * when the change moves an affected timer ahead of the first expiring
-   934	 * timer on that CPU. Obviously remote per CPU clock event devices cannot
-   935	 * be reprogrammed. The other reason why an IPI has to be sent is when the
-   936	 * system is in !HIGH_RES and NOHZ mode. The NOHZ mode updates the offsets
-   937	 * in the tick, which obviously might be stopped, so this has to bring out
-   938	 * the remote CPU which might sleep in idle to get this sorted.
-   939	 */
-   940	void clock_was_set(unsigned int bases)
-   941	{
-   942		struct hrtimer_cpu_base *cpu_base = raw_cpu_ptr(&hrtimer_bases);
-   943		cpumask_var_t mask;
-   944		int cpu;
-   945	
- > 946		if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
-   947			goto out_timerfd;
-   948	
-   949		if (!zalloc_cpumask_var(&mask, GFP_KERNEL)) {
-   950			on_each_cpu(retrigger_next_event, NULL, 1);
-   951			goto out_timerfd;
-   952		}
-   953	
-   954		/* Avoid interrupting CPUs if possible */
-   955		cpus_read_lock();
-   956		for_each_online_cpu(cpu) {
-   957			unsigned long flags;
-   958	
-   959			cpu_base = &per_cpu(hrtimer_bases, cpu);
-   960			raw_spin_lock_irqsave(&cpu_base->lock, flags);
-   961	
-   962			if (update_needs_ipi(cpu_base, bases))
-   963				cpumask_set_cpu(cpu, mask);
-   964	
-   965			raw_spin_unlock_irqrestore(&cpu_base->lock, flags);
-   966		}
-   967	
-   968		preempt_disable();
-   969		smp_call_function_many(mask, retrigger_next_event, NULL, 1);
-   970		preempt_enable();
-   971		cpus_read_unlock();
-   972		free_cpumask_var(mask);
-   973	
-   974	out_timerfd:
-   975		timerfd_clock_was_set();
-   976	}
-   977	
+    39	
+    40	static int test_load_zone_info(struct btrfs_fs_info *fs_info,
+    41				       struct load_zone_info_test_vector *test)
+    42	{
+    43		struct btrfs_block_group *bg __free(btrfs_free_dummy_block_group) = NULL;
+    44		struct btrfs_chunk_map *map __free(btrfs_free_chunk_map) = NULL;
+    45		struct zone_info AUTO_KFREE(zone_info);
+    46		unsigned long AUTO_KFREE(active);
+    47		int i, ret;
+    48	
+    49		bg = btrfs_alloc_dummy_block_group(fs_info, test->bg_length);
+    50		if (!bg) {
+    51			test_std_err(TEST_ALLOC_BLOCK_GROUP);
+    52			return -ENOMEM;
+    53		}
+    54	
+    55		map = btrfs_alloc_chunk_map(test->num_stripes, GFP_KERNEL);
+    56		if (!map) {
+    57			test_std_err(TEST_ALLOC_EXTENT_MAP);
+    58			return -ENOMEM;
+    59		}
+    60	
+    61		zone_info = kcalloc(test->num_stripes, sizeof(*zone_info), GFP_KERNEL);
+    62		if (!zone_info) {
+    63			test_err("cannot allocate zone info");
+    64			return -ENOMEM;
+    65		}
+    66	
+    67		active = bitmap_zalloc(test->num_stripes, GFP_KERNEL);
+    68		if (!zone_info) {
+    69			test_err("cannot allocate active bitmap");
+    70			return -ENOMEM;
+    71		}
+    72	
+    73		map->type = test->raid_type;
+    74		map->num_stripes = test->num_stripes;
+    75		if (test->raid_type == BTRFS_BLOCK_GROUP_RAID10)
+    76			map->sub_stripes = 2;
+    77		for (i = 0; i < test->num_stripes; i++) {
+    78			zone_info[i].physical = 0;
+    79			zone_info[i].alloc_offset = test->alloc_offsets[i];
+    80			zone_info[i].capacity = ZONE_SIZE;
+    81			if (zone_info[i].alloc_offset && zone_info[i].alloc_offset < ZONE_SIZE)
+    82				__set_bit(i, active);
+    83		}
+    84		if (test->degraded)
+    85			btrfs_set_opt(fs_info->mount_opt, DEGRADED);
+    86		else
+    87			btrfs_clear_opt(fs_info->mount_opt, DEGRADED);
+    88	
+  > 89		ret = btrfs_load_block_group_by_raid_type(bg, map, zone_info, active,
+    90							  test->last_alloc);
+    91	
+    92		if (ret != test->expected_result) {
+    93			test_err("unexpected return value: ret %d expected %d", ret,
+    94				 test->expected_result);
+    95			return -EINVAL;
+    96		}
+    97	
+    98		if (!ret && bg->alloc_offset != test->expected_alloc_offset) {
+    99			test_err("unexpected alloc_offset: alloc_offset %llu expected %llu",
+   100				 bg->alloc_offset, test->expected_alloc_offset);
+   101			return -EINVAL;
+   102		}
+   103	
+   104		return 0;
+   105	}
+   106	
 
 -- 
 0-DAY CI Kernel Test Service
