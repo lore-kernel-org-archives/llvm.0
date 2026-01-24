@@ -1,150 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98893164B8
-	for <llvm@lists.linux.dev>; Sat, 24 Jan 2026 12:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E5E2DCC08;
+	Sat, 24 Jan 2026 12:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769258541; cv=none; b=iyZZGF6zvgqdTm8q3Nku2Gf2OepQfO5L2zg/nGc4gaksrVB6Zk3JAmYqK3wFHHEfrAali9zmXtULpXS281KvnixiwhiikRW069jGtlAFYPDcX3Sqji1WQ3RO1NZRFux/OHHlp7/9r0CynBPWPsnMOz1mFaqIyIZNhwhrQKtvTK4=
+	t=1769259558; cv=none; b=IeWa9Uq/vNiym5VbUHTyMrr0hrmPsiHTqYKxzwWyX4XX7ghafekkI949JLcHMQ2k4mPobpZrkBJLFtzCBiM75zWavxzZA0vLSqeGnzwJ3O0xYV3QaZvAyCv59effPv2c7rRbnP2HcRVbCCOK1M0YFSA1/qn1xSXh/swO5i0J2u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769258541; c=relaxed/simple;
-	bh=OS+bB6nqKfyIyzs5Gbaj5ij1c9PF/pLvq0QVg9RqwEQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kyVMAtFk84BQYI3DY5bZ4wWU5J5GNw+hOeiKwydETkXiekdPy/wJ7WaiYy7296pHCiCpQMVeuV/4aja6ScScxqFEsxwzxpc5DL+ePRx2IV4xSTwyEuCr/XTEc8KSzg6Fz95QWpOz90Y+4nZCfVOadTZLUa/3hk5g4qRF2++tbRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gYbmE4mQ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769259558; c=relaxed/simple;
+	bh=6VWELgiXnV8xByG7aIJEZB/pmilfWBd9gDammhpke/U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=kgW7bgwDjuciSe7v2sVICygi1G737gAYiqPLzagvy5CHydWx5mrclsTgxbolLftZ2TLc14UJTXeVxY7yQKF+6DuKWRLjyP6KpxFqaD8borXjdjjgjXBU6zJ2oI4TkegVSptjRQU4FzCLh8EUw6Oyjt/h7W2RCrZfaSdbIysiksg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aWPy6xL5; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gYbmE4mQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769258538;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1GdTHFEMXXiiGz2UMIppYqrPpMlJMdAaMir/HGQ1ZjM=;
-	b=gYbmE4mQ6UQtelfP4eY1HDVhUKMs5m626LBgI8dK9T1xjyPIuXnYKYRplZiaMTaoUtjQ3+
-	KJUoaM9bn4YB7LJ7ifblN38S6wI+h9UGEe0jHCJ5Nhi0DE0DfTgmApluoJdyGNqGab1fkf
-	nxuNPYDAnQQp0ZDTUkuySDlzs9h4DVU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-271-yg7ou3A-PAiKiHY1IciMUg-1; Sat,
- 24 Jan 2026 07:42:17 -0500
-X-MC-Unique: yg7ou3A-PAiKiHY1IciMUg-1
-X-Mimecast-MFC-AGG-ID: yg7ou3A-PAiKiHY1IciMUg_1769258536
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A4A671944EB7
-	for <llvm@lists.linux.dev>; Sat, 24 Jan 2026 12:42:16 +0000 (UTC)
-Received: from [172.20.12.215] (unknown [10.30.44.139])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E991F18001D5;
-	Sat, 24 Jan 2026 12:42:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc6,
- upstream-mainline, 62085877)
-Date: Sat, 24 Jan 2026 12:42:15 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aWPy6xL5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769259556; x=1800795556;
+  h=date:from:to:cc:subject:message-id;
+  bh=6VWELgiXnV8xByG7aIJEZB/pmilfWBd9gDammhpke/U=;
+  b=aWPy6xL5U+En52JKwJDbGL322LXPYMUykKtZKSzXqw/Ba50T4MpMGViz
+   ZuNpsB9Ow7ifpVUSZeXRB0CxPexE0WViwRQ4Ty/97TL3Gd+8mOJh/sgEa
+   fyGQx6PWSW/ZDXAhHJQs6bVigoRcoN46ovw5k5374j1ZdW7r36wzxaWfn
+   XsIanUzpZ7C8/H2Ipx3Jo3UK6OURRmn9Yh0jIAj3rtOINcxg957/Vx8LT
+   /qBDfMJlFkTxeKc8czSQn2TLD723aNX+tCYQxf0YGo7DtPbHVeIsMj+DW
+   fEQu6Y3jZ879S8DVk5tCm5wxR1s5t7y88n+Sqo5F8BXw6BrhojTttrUD8
+   Q==;
+X-CSE-ConnectionGUID: cR8UwAbNQz+Ve8Y++hyF2Q==
+X-CSE-MsgGUID: feHovB0jR1eJ1Rx8Q4AhDQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="74122115"
+X-IronPort-AV: E=Sophos;i="6.21,250,1763452800"; 
+   d="scan'208";a="74122115"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 04:59:14 -0800
+X-CSE-ConnectionGUID: dmQraaB9SXm4g2l0nBmOVQ==
+X-CSE-MsgGUID: fBftZ3KLQfm13Gj1r500lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,250,1763452800"; 
+   d="scan'208";a="207505316"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 24 Jan 2026 04:59:12 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vjdEL-00000000VBo-3IhH;
+	Sat, 24 Jan 2026 12:59:09 +0000
+Date: Sat, 24 Jan 2026 20:58:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bahubali B Gumaji <bahubali.bg@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Namjae Jeon <linkinjeon@kernel.org>, Hyunchul Lee <hyc.lee@gmail.com>
+Subject: [samba-ksmbd:ksmbd-for-next-next 2/2]
+ fs/smb/server/vfs.c:34:10: fatal error: 'stats.h' file not found
+Message-ID: <202601242353.Ymm0oTBe-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <55523.126012407421700139@us-mta-271.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 7vA2ebSL0Pucyo2-Xrfqm-OofQvvIPg4UkKq2_hq-ko_1769258536
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   git://git.samba.org/ksmbd.git ksmbd-for-next-next
+head:   165b1c2775ace8540bc0869e3fa92aed566fc193
+commit: 165b1c2775ace8540bc0869e3fa92aed566fc193 [2/2] ksmbd: add procfs interface for runtime monitoring and statistics
+config: x86_64-buildonly-randconfig-003-20260124 (https://download.01.org/0day-ci/archive/20260124/202601242353.Ymm0oTBe-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260124/202601242353.Ymm0oTBe-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601242353.Ymm0oTBe-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'kbuild-fixes-6.19-2' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/kbuild/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2283445629
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - ext4
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2283445629_aarch64_kernel_kcidb_tool_20514549_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        xfstests - nfsv4.2
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2283445629_x86_64_kernel_kcidb_tool_20514544_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/309
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2283445629_x86_64_kernel-debug_kcidb_tool_20516075_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/309
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
- Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
-            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-        Issue: [rawhide] [aarch64] avc:  denied  { open } for  pid=3D14791 =
-comm=3D"systemd-user-ru" path=3D"/sys/kernel/mm/transparent_hugepage/enable=
-d" dev=3D"sysfs" ino=3D1784 scontext=3Dsystem_u:system_r:systemd_user_runti=
-medir_t:s0 tcontext=3Dsystem_u:object_r:sysfs_t:s0 tclass=3Dfile permissive=
-=3D1
-            URL: https://redhat-internal.slack.com/archives/C04EX425HP1/p17=
-65900650445969
-            Affected tests:
-                /test/misc/machineinfo [aarch64]
-                Boot test [aarch64]
-                Reboot test [aarch64]
-                Storage - blktests - ublk [aarch64]
-                stress: stress-ng - cpu-cache [aarch64]
-                xfstests - btrfs [aarch64]
-                xfstests - xfs [aarch64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> fs/smb/server/vfs.c:34:10: fatal error: 'stats.h' file not found
+      34 | #include "stats.h"
+         |          ^~~~~~~~~
+   1 error generated.
+--
+>> fs/smb/server/mgmt/tree_connect.c:12:10: fatal error: '../stats.h' file not found
+      12 | #include "../stats.h"
+         |          ^~~~~~~~~~~~
+   1 error generated.
+--
+>> fs/smb/server/smb2ops.c:14:10: fatal error: 'stats.h' file not found
+      14 | #include "stats.h"
+         |          ^~~~~~~~~
+   1 error generated.
+--
+>> fs/smb/server/mgmt/user_session.c:20:10: fatal error: '../stats.h' file not found
+      20 | #include "../stats.h"
+         |          ^~~~~~~~~~~~
+   1 error generated.
+--
+>> fs/smb/server/connection.c:47:37: error: no member named 'inet6_addr' in 'struct ksmbd_conn'; did you mean 'inet_addr'?
+      47 |                         seq_printf(m, "%-20pI6c", &conn->inet6_addr);
+         |                                                          ^~~~~~~~~~
+         |                                                          inet_addr
+   fs/smb/server/connection.h:53:12: note: 'inet_addr' declared here
+      53 |                 __be32                  inet_addr;
+         |                                         ^
+   1 error generated.
+--
+>> fs/smb/server/server.c:25:10: fatal error: 'stats.h' file not found
+      25 | #include "stats.h"
+         |          ^~~~~~~~~
+   1 error generated.
+--
+>> fs/smb/server/smb2pdu.c:42:10: fatal error: 'stats.h' file not found
+      42 | #include "stats.h"
+         |          ^~~~~~~~~
+   1 error generated.
 
 
+vim +34 fs/smb/server/vfs.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    24	
+    25	#include "glob.h"
+    26	#include "oplock.h"
+    27	#include "connection.h"
+    28	#include "vfs.h"
+    29	#include "vfs_cache.h"
+    30	#include "smbacl.h"
+    31	#include "ndr.h"
+    32	#include "auth.h"
+    33	#include "misc.h"
+  > 34	#include "stats.h"
+    35	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
