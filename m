@@ -1,91 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711001096F;
-	Sun, 25 Jan 2026 03:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8433472612;
+	Sun, 25 Jan 2026 04:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769310231; cv=none; b=Fiiqe+gcV98Cgx4pobHDWxcBsM7eTshOrZarnAhNGEk+59kOAHkoPzajOE33UWsxKNDPQ1AzRlHPxxbhSpgrUr0EW3SPxEPjD85TKanZ/w0wXZm7YA2PbH+PHpLtmgoL1KcIgw7xfndLkMalzlyIEDPi04btCkhSWxHQ3MRM4+w=
+	t=1769314073; cv=none; b=nB3Kubkitw5fFjFLXNdUijB+nxmMVQ7KJOxCZXikdPAFxx6qGsrdZATNP6JXAYawTxsokFafCmXBpg5+U2EmRzNHfzS3wVJGuWXxXOfQEHDLFwqPeJyRtS/NckEgHPXTBR1EFvjz5lqyrY6/B7TSTk8VBrXKF3LFZp3pYOJHyTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769310231; c=relaxed/simple;
-	bh=24Orw5wgg7SHrf63LUnpGGmdk6ohAoBqQ/Ohhvs4tKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=SYRegmag7o9Bsf+DvhtlTtqk+t/anHJnOxiLS2CQSURzIPKOdoLtxGuAZVMy1Ku9H6TUuONBsVDFAiA6h4zpxtQMZaIP03SswbuNXQQ9SxQR7KPNvkaVLn9M2yaqnR8zA70ce4M+k40UfKANnMqzYbtcDD+8tf5NIV+w56guB7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iYsqc70H; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1769314073; c=relaxed/simple;
+	bh=z/Q3Uki5iUeDrYudztHt8sojXXIhjVcCLpsmjGeWo9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c9VXL46QYWcRBXX+VuCEdZIVhErSkr8o1XTrYF+KjOChKykiHhTPiPNt8qBwDtTmsKi29v4nAWtHIFY/ee7syF7EpminjwN6Em4qWY5t9O3qzREvu7jusUFKnfEjmJ5ninWM9cN3zVsO5wIEDcnGpBpUXwZ9jSqNdV4TWEnfzIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fb1ND8Ea; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iYsqc70H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fb1ND8Ea"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769310229; x=1800846229;
-  h=date:from:to:cc:subject:message-id;
-  bh=24Orw5wgg7SHrf63LUnpGGmdk6ohAoBqQ/Ohhvs4tKQ=;
-  b=iYsqc70Hi9HF0zW+uYB+AADSvJ/jnogLKDe7odbk8VfOCzvsZtr6BwbZ
-   oFmNQiFPLxs7rTkyjxdb6DqHdJS4IAmJWRTnb0aOIIXKTAUPBX2pyOGQz
-   6rCBIw7CGM5Up9kvmHF6lnG4kgnbgZykiZvbCFosSReJaVBOAmneTMlCh
-   ukjt87r8LKij/MT2u4LXH2/KVnjhEM853E7vdlx+67189qjGxYrPxZl/8
-   dH1tF5VcL8PttpFDYXv9cgTv9Tp9IL5weJdiSwe08vjPAxDhoANW4c8vc
-   vOehhz61TwgycRXEAwh/H7/O3zbwwyohaWHu/ZZr6N5KA0NhWJ+QNyy9Z
-   w==;
-X-CSE-ConnectionGUID: zQ+NZb1JTPK/x2vR14CKGg==
-X-CSE-MsgGUID: 8dD+7VtmRZmvlBej2McJag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11681"; a="81235663"
+  t=1769314072; x=1800850072;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z/Q3Uki5iUeDrYudztHt8sojXXIhjVcCLpsmjGeWo9c=;
+  b=Fb1ND8Ea94J+Y4nFNEdPnomrjWCL0q8j0fXJ3xKW6PyKUjmJUVTUstty
+   oX5eB4iXrmc/uXFoMkArZDR3UZMTOwupPNyXqj1Pj0qqfh/l4naG0SJUZ
+   oSj9goCW68oaa9SAZKKdvEyhr/vFm/0rBESgIuuOmoc6Olpwiq+aCj749
+   9LTQ7xyl2EsGu0zkkZD2nOBB6CaDWNoUqIIfOUeZxJnopMB40jRa8Rvn7
+   PlH3OzvuhasO3jI79eQbqYGEBo+hsC/18T0Y5viQcbgfIWATE0FrfJ8Tt
+   RK+hKJEzsrqOoCwWX6TeXzMERDCA5FjufceoFqeXWyHupzePutRWEUzZS
+   g==;
+X-CSE-ConnectionGUID: cFxjosCvQqaz/FCiz4ofhw==
+X-CSE-MsgGUID: AraGoOFSRDSTKqHkulH44Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11681"; a="70419462"
 X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
-   d="scan'208";a="81235663"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 19:03:48 -0800
-X-CSE-ConnectionGUID: qW3g8wGeSpue8KYcMkjTbw==
-X-CSE-MsgGUID: zDwYhegET6ihW9M8WCgd7Q==
+   d="scan'208";a="70419462"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 20:07:51 -0800
+X-CSE-ConnectionGUID: nM2A70SRQ/+OhsvZU2XmIQ==
+X-CSE-MsgGUID: iJHVGoymRpu9ROwGyASi6Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
-   d="scan'208";a="211481432"
+   d="scan'208";a="207798954"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Jan 2026 19:03:45 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 24 Jan 2026 20:07:47 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vjqPe-00000000Vi2-2oXb;
-	Sun, 25 Jan 2026 03:03:42 +0000
-Date: Sun, 25 Jan 2026 11:03:37 +0800
+	id 1vjrPc-00000000Vl4-2R1P;
+	Sun, 25 Jan 2026 04:07:44 +0000
+Date: Sun, 25 Jan 2026 12:07:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roy Luo <royluo@google.com>
+To: Junhui Liu <junhui.liu@pigmoral.tech>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Vinod Koul <vkoul@kernel.org>, Joy Chakraborty <joychakr@google.com>,
- Naveen Kumar <mnkumar@google.com>
-Subject: [linux-next:master 5740/9539] ld.lld: error: undefined
- symbol: typec_switch_register
-Message-ID: <202601251012.3DftRbri-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	Junhui Liu <junhui.liu@pigmoral.tech>
+Subject: Re: [PATCH 4/7] clk: sunxi-ng: Extract common RTC CCU clock logic
+Message-ID: <202601251139.9CCmxdok-lkp@intel.com>
+References: <20260121-a733-rtc-v1-4-d359437f23a7@pigmoral.tech>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260121-a733-rtc-v1-4-d359437f23a7@pigmoral.tech>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
-commit: cbce66669c82ee9ae0e26523c0fcd3c721fcfe85 [5740/9539] phy: Add Google Tensor SoC USB PHY driver
-config: x86_64-randconfig-013-20260123 (https://download.01.org/0day-ci/archive/20260125/202601251012.3DftRbri-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260125/202601251012.3DftRbri-lkp@intel.com/reproduce)
+Hi Junhui,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Junhui-Liu/dt-bindings-rtc-sun6i-Add-Allwinner-A733-support/20260121-192151
+base:   24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+patch link:    https://lore.kernel.org/r/20260121-a733-rtc-v1-4-d359437f23a7%40pigmoral.tech
+patch subject: [PATCH 4/7] clk: sunxi-ng: Extract common RTC CCU clock logic
+config: arm64-randconfig-002-20260125 (https://download.01.org/0day-ci/archive/20260125/202601251139.9CCmxdok-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260125/202601251139.9CCmxdok-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601251012.3DftRbri-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601251139.9CCmxdok-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ld.lld: error: undefined symbol: typec_switch_register
-   >>> referenced by phy-google-usb.c:261 (drivers/phy/phy-google-usb.c:261)
-   >>>               vmlinux.o:(google_usb_phy_probe)
---
->> ld.lld: error: undefined symbol: typec_switch_unregister
-   >>> referenced by phy-google-usb.c:273 (drivers/phy/phy-google-usb.c:273)
-   >>>               vmlinux.o:(google_usb_phy_remove)
---
->> ld.lld: error: undefined symbol: typec_switch_get_drvdata
-   >>> referenced by phy-google-usb.c:82 (drivers/phy/phy-google-usb.c:82)
-   >>>               vmlinux.o:(google_usb_set_orientation)
+>> ERROR: modpost: "ccu_iosc_32k_ops" [drivers/clk/sunxi-ng/sun6i-rtc-ccu.ko] undefined!
+>> ERROR: modpost: "ccu_iosc_ops" [drivers/clk/sunxi-ng/sun6i-rtc-ccu.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
