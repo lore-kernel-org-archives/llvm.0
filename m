@@ -1,138 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487F425776
-	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 02:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711001096F;
+	Sun, 25 Jan 2026 03:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769309537; cv=none; b=ciqIT69yRWmgKJWSbsaltyEtg0wQY03GSO+qlVq8yCD2w1iIgathWY1y1Xs3oM93i8RLNoc2vgaHRKGe8tVL2yBxUqSgCJQS0fy8iI0WL0D7cCwMvy4QI/7ft/UXem8tUywGihJx1ZkIvU/DKnZXzZF4IHlb/JOISFBkEruoQKw=
+	t=1769310231; cv=none; b=Fiiqe+gcV98Cgx4pobHDWxcBsM7eTshOrZarnAhNGEk+59kOAHkoPzajOE33UWsxKNDPQ1AzRlHPxxbhSpgrUr0EW3SPxEPjD85TKanZ/w0wXZm7YA2PbH+PHpLtmgoL1KcIgw7xfndLkMalzlyIEDPi04btCkhSWxHQ3MRM4+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769309537; c=relaxed/simple;
-	bh=fqnzhmxXmK4k7PeUdMFoSSshVgcUfN8QXJcdb8IlDcI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MAD/XdjAPMzSVyr4lyQlCv9szIzAEcCFZt37xncT2PzAZ8lVhFj/WKHTSDHlQ1Cemy6Uoz4d6n/kaqwAWoltgpIvDND1RHPkEAZVgwANgVu699s5OxcZptNoI94hNp274H9gUhwACiPVnZF8z7qoxO4g/jCII8kYc/9TEH+fVoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gkkPbdD0; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769310231; c=relaxed/simple;
+	bh=24Orw5wgg7SHrf63LUnpGGmdk6ohAoBqQ/Ohhvs4tKQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SYRegmag7o9Bsf+DvhtlTtqk+t/anHJnOxiLS2CQSURzIPKOdoLtxGuAZVMy1Ku9H6TUuONBsVDFAiA6h4zpxtQMZaIP03SswbuNXQQ9SxQR7KPNvkaVLn9M2yaqnR8zA70ce4M+k40UfKANnMqzYbtcDD+8tf5NIV+w56guB7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iYsqc70H; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gkkPbdD0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769309535;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=aQSBV21cVBN3D8hZZEUY7CpDkP2AqSs0J6NNXLCfAKQ=;
-	b=gkkPbdD040eaWDctv2Ej7APGRhmE4yCMky5sukZq0j3Yoze92Qc8PSmYZD4TEKeK07tY6U
-	lDoE9yHao7SJdpTqiXvBMOQSnDIA7VwT+LKalUZerWBuwLKd1sAn4+DDbGkxkAagdMh4Qd
-	wVdZ5UeYI3HmMSVg1madfp+VtPmPU1c=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-226-i-o--HLwMJmM0Wg5VI7N8w-1; Sat,
- 24 Jan 2026 21:52:14 -0500
-X-MC-Unique: i-o--HLwMJmM0Wg5VI7N8w-1
-X-Mimecast-MFC-AGG-ID: i-o--HLwMJmM0Wg5VI7N8w_1769309533
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F07C11956054
-	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 02:52:12 +0000 (UTC)
-Received: from [172.20.12.215] (unknown [10.30.44.139])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6744A1956095;
-	Sun, 25 Jan 2026 02:52:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc6,
- upstream-mainline, 12a00948)
-Date: Sun, 25 Jan 2026 02:52:12 -0000
-To: ftjahjad@redhat.com, yoyang@redhat.com, bgoncalv@redhat.com,
- llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iYsqc70H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769310229; x=1800846229;
+  h=date:from:to:cc:subject:message-id;
+  bh=24Orw5wgg7SHrf63LUnpGGmdk6ohAoBqQ/Ohhvs4tKQ=;
+  b=iYsqc70Hi9HF0zW+uYB+AADSvJ/jnogLKDe7odbk8VfOCzvsZtr6BwbZ
+   oFmNQiFPLxs7rTkyjxdb6DqHdJS4IAmJWRTnb0aOIIXKTAUPBX2pyOGQz
+   6rCBIw7CGM5Up9kvmHF6lnG4kgnbgZykiZvbCFosSReJaVBOAmneTMlCh
+   ukjt87r8LKij/MT2u4LXH2/KVnjhEM853E7vdlx+67189qjGxYrPxZl/8
+   dH1tF5VcL8PttpFDYXv9cgTv9Tp9IL5weJdiSwe08vjPAxDhoANW4c8vc
+   vOehhz61TwgycRXEAwh/H7/O3zbwwyohaWHu/ZZr6N5KA0NhWJ+QNyy9Z
+   w==;
+X-CSE-ConnectionGUID: zQ+NZb1JTPK/x2vR14CKGg==
+X-CSE-MsgGUID: 8dD+7VtmRZmvlBej2McJag==
+X-IronPort-AV: E=McAfee;i="6800,10657,11681"; a="81235663"
+X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
+   d="scan'208";a="81235663"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 19:03:48 -0800
+X-CSE-ConnectionGUID: qW3g8wGeSpue8KYcMkjTbw==
+X-CSE-MsgGUID: zDwYhegET6ihW9M8WCgd7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
+   d="scan'208";a="211481432"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 24 Jan 2026 19:03:45 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vjqPe-00000000Vi2-2oXb;
+	Sun, 25 Jan 2026 03:03:42 +0000
+Date: Sun, 25 Jan 2026 11:03:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Roy Luo <royluo@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Vinod Koul <vkoul@kernel.org>, Joy Chakraborty <joychakr@google.com>,
+ Naveen Kumar <mnkumar@google.com>
+Subject: [linux-next:master 5740/9539] ld.lld: error: undefined
+ symbol: typec_switch_register
+Message-ID: <202601251012.3DftRbri-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <01443.126012421521400185@us-mta-226.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AHU8AKAyRoWe4jjJ0HbzHpKHgfwm0-4AP4QiRkYYPP4_1769309533
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
+commit: cbce66669c82ee9ae0e26523c0fcd3c721fcfe85 [5740/9539] phy: Add Google Tensor SoC USB PHY driver
+config: x86_64-randconfig-013-20260123 (https://download.01.org/0day-ci/archive/20260125/202601251012.3DftRbri-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260125/202601251012.3DftRbri-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601251012.3DftRbri-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'timers-urgent-2026-01-24' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/tip/tip
+>> ld.lld: error: undefined symbol: typec_switch_register
+   >>> referenced by phy-google-usb.c:261 (drivers/phy/phy-google-usb.c:261)
+   >>>               vmlinux.o:(google_usb_phy_probe)
+--
+>> ld.lld: error: undefined symbol: typec_switch_unregister
+   >>> referenced by phy-google-usb.c:273 (drivers/phy/phy-google-usb.c:273)
+   >>>               vmlinux.o:(google_usb_phy_remove)
+--
+>> ld.lld: error: undefined symbol: typec_switch_get_drvdata
+   >>> referenced by phy-google-usb.c:82 (drivers/phy/phy-google-usb.c:82)
+   >>>               vmlinux.o:(google_usb_set_orientation)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2284320394
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2284320394_x86_64_kernel-debug_kcidb_tool_20518383_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2284320394_x86_64_kernel-debug_kcidb_tool_20518383_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - nfsv4.2
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2284320394_x86_64_kernel_kcidb_tool_20518375_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/309
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2284320394_x86_64_kernel-debug_kcidb_tool_20518383_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/309
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
