@@ -1,172 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8A21C68F;
-	Sun, 25 Jan 2026 02:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487F425776
+	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 02:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769307118; cv=none; b=l6ie+R2XrWZo3gAu7K4NXgC5YI96aS8vsu49IHohhrp+leT86R9/LLyUGUumx43Yg/Y7mhpCO8TXsDt7i++00tHYQHX/BJwKvNAqEE/VnsrDYRCOiQ2NqcL+varfz04QADotQfq03bL+y+gXaB/fOsShXgmR8+laPXaq7EG6iYs=
+	t=1769309537; cv=none; b=ciqIT69yRWmgKJWSbsaltyEtg0wQY03GSO+qlVq8yCD2w1iIgathWY1y1Xs3oM93i8RLNoc2vgaHRKGe8tVL2yBxUqSgCJQS0fy8iI0WL0D7cCwMvy4QI/7ft/UXem8tUywGihJx1ZkIvU/DKnZXzZF4IHlb/JOISFBkEruoQKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769307118; c=relaxed/simple;
-	bh=5+zaJOnluGsQr64By2Xu6kmcCVfHx3PGxNHewb0+KIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nKnKgr0KPSGnvbqArtqr9SdQmIxYSi7B5M2UFYH648KHcq1qnw5QCX95zJ0jb2pofuHMAixCq185ogfTz2CUSPmgCZlLLxI0er/IwFDJs4OR3qY7fr3+Lb+EAGKlQfxJnwvM++oK+pnplOovF1FDh8wpGmlnqfXeR9zBvqjYgXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l0uMxoCW; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769309537; c=relaxed/simple;
+	bh=fqnzhmxXmK4k7PeUdMFoSSshVgcUfN8QXJcdb8IlDcI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MAD/XdjAPMzSVyr4lyQlCv9szIzAEcCFZt37xncT2PzAZ8lVhFj/WKHTSDHlQ1Cemy6Uoz4d6n/kaqwAWoltgpIvDND1RHPkEAZVgwANgVu699s5OxcZptNoI94hNp274H9gUhwACiPVnZF8z7qoxO4g/jCII8kYc/9TEH+fVoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gkkPbdD0; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l0uMxoCW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769307117; x=1800843117;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5+zaJOnluGsQr64By2Xu6kmcCVfHx3PGxNHewb0+KIk=;
-  b=l0uMxoCWES99rNDxFrdeAyKOIYH9Hvy9tjmM68jPZ5heP0kZeAXwubA7
-   rI2+30+dmbNehCKpyoPK/jwAMmoQ6yeAVdvvxZIGMR5TbaYtbkodXnLAi
-   39TsWndIEk5u4o8iYU9V5zQEJ4YrM8Lx6sVkkdZmRnxNhu8eaWRtQEKKg
-   50fATuSfHMa0DKpm6B0yc/+N8hbD6DvI2hqMZE6/F1H8/+IuNMMFk60RT
-   NDhP7nHd2XXAgCih+b4cFRo87gNWIH77X1JhJvUerza0zu4hxdjsiM9dP
-   arI0KkdmJhBXdEsqv8GSw0VbrWECgXfQDelR7tlf1SmqrWJlh5nIfc8Ay
-   A==;
-X-CSE-ConnectionGUID: urBfCmYwSdmjltgEqU32Xw==
-X-CSE-MsgGUID: GIsRydfLS3CHeH+rJWUx5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11681"; a="73102016"
-X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
-   d="scan'208";a="73102016"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 18:11:56 -0800
-X-CSE-ConnectionGUID: DzTP11UrRoqGq31nY1ykdA==
-X-CSE-MsgGUID: U3yjqrfpSEi8+ofbZGGi0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
-   d="scan'208";a="207783717"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 24 Jan 2026 18:11:45 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vjpbJ-00000000VgM-01xJ;
-	Sun, 25 Jan 2026 02:11:41 +0000
-Date: Sun, 25 Jan 2026 10:11:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shardul Bankar <shardul.b@mpiricsoftware.com>, slava@dubeyko.com,
-	glaubitz@physik.fu-berlin.de, frank.li@vivo.com,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	syzbot+1c8ff72d0cd8a50dfeaa@syzkaller.appspotmail.com,
-	janak@mpiricsoftware.com, shardulsb08@gmail.com,
-	Shardul Bankar <shardul.b@mpiricsoftware.com>
-Subject: Re: [PATCH] hfsplus: validate btree bitmap during mount and handle
- corruption gracefully
-Message-ID: <202601251011.kJUhBF3P-lkp@intel.com>
-References: <20260124192501.748071-1-shardul.b@mpiricsoftware.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gkkPbdD0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769309535;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aQSBV21cVBN3D8hZZEUY7CpDkP2AqSs0J6NNXLCfAKQ=;
+	b=gkkPbdD040eaWDctv2Ej7APGRhmE4yCMky5sukZq0j3Yoze92Qc8PSmYZD4TEKeK07tY6U
+	lDoE9yHao7SJdpTqiXvBMOQSnDIA7VwT+LKalUZerWBuwLKd1sAn4+DDbGkxkAagdMh4Qd
+	wVdZ5UeYI3HmMSVg1madfp+VtPmPU1c=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-226-i-o--HLwMJmM0Wg5VI7N8w-1; Sat,
+ 24 Jan 2026 21:52:14 -0500
+X-MC-Unique: i-o--HLwMJmM0Wg5VI7N8w-1
+X-Mimecast-MFC-AGG-ID: i-o--HLwMJmM0Wg5VI7N8w_1769309533
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F07C11956054
+	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 02:52:12 +0000 (UTC)
+Received: from [172.20.12.215] (unknown [10.30.44.139])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6744A1956095;
+	Sun, 25 Jan 2026 02:52:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc6,
+ upstream-mainline, 12a00948)
+Date: Sun, 25 Jan 2026 02:52:12 -0000
+To: ftjahjad@redhat.com, yoyang@redhat.com, bgoncalv@redhat.com,
+ llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260124192501.748071-1-shardul.b@mpiricsoftware.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <01443.126012421521400185@us-mta-226.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: AHU8AKAyRoWe4jjJ0HbzHpKHgfwm0-4AP4QiRkYYPP4_1769309533
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Shardul,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v6.19-rc6 next-20260123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shardul-Bankar/hfsplus-validate-btree-bitmap-during-mount-and-handle-corruption-gracefully/20260125-032702
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20260124192501.748071-1-shardul.b%40mpiricsoftware.com
-patch subject: [PATCH] hfsplus: validate btree bitmap during mount and handle corruption gracefully
-config: hexagon-randconfig-001-20260125 (https://download.01.org/0day-ci/archive/20260125/202601251011.kJUhBF3P-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260125/202601251011.kJUhBF3P-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601251011.kJUhBF3P-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/hfsplus/btree.c:180:17: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-     180 |             bitmap_off >= PAGE_SIZE)
-         |             ~~~~~~~~~~ ^  ~~~~~~~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +180 fs/hfsplus/btree.c
+Kernel information:
+    Commit message: Merge tag 'timers-urgent-2026-01-24' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tip/tip
 
-   131	
-   132	/*
-   133	 * Validate that node 0 (header node) is marked allocated in the bitmap.
-   134	 * This is a fundamental invariant - node 0 must always be allocated.
-   135	 * Returns true if corruption is detected (node 0 bit is unset).
-   136	 * Note: head must be from kmap_local_page(page) that is still mapped.
-   137	 * This function accesses the page through head pointer, so it must be
-   138	 * called before kunmap_local(head).
-   139	 */
-   140	static bool hfsplus_validate_btree_bitmap(struct hfs_btree *tree,
-   141						  struct hfs_btree_header_rec *head)
-   142	{
-   143		u8 *page_base;
-   144		u16 rec_off_tbl_off;
-   145		__be16 rec_data[2];
-   146		u16 bitmap_off, bitmap_len;
-   147		u8 *bitmap_ptr;
-   148		u8 first_byte;
-   149		unsigned int node_size = tree->node_size;
-   150	
-   151		/*
-   152		 * Get base page pointer. head points to:
-   153		 * kmap_local_page(page) + sizeof(struct hfs_bnode_desc)
-   154		 */
-   155		page_base = (u8 *)head - sizeof(struct hfs_bnode_desc);
-   156	
-   157		/*
-   158		 * Calculate offset to record 2 entry in record offset table.
-   159		 * Record offsets are at end of node: node_size - (rec_num + 2) * 2
-   160		 * Record 2: (2+2)*2 = 8 bytes from end
-   161		 */
-   162		rec_off_tbl_off = node_size - (2 + 2) * 2;
-   163	
-   164		/* Only validate if record offset table is on the first page */
-   165		if (rec_off_tbl_off + 4 > node_size || rec_off_tbl_off + 4 > PAGE_SIZE)
-   166			return false; /* Skip validation if offset table not on first page */
-   167	
-   168		/* Read record 2 offset table entry (length and offset, both u16) */
-   169		memcpy(rec_data, page_base + rec_off_tbl_off, 4);
-   170		bitmap_off = be16_to_cpu(rec_data[1]);
-   171		bitmap_len = be16_to_cpu(rec_data[0]) - bitmap_off;
-   172	
-   173		/*
-   174		 * Validate bitmap offset is within node and after bnode_desc.
-   175		 * Also ensure bitmap is on the first page.
-   176		 */
-   177		if (bitmap_len == 0 ||
-   178		    bitmap_off < sizeof(struct hfs_bnode_desc) ||
-   179		    bitmap_off >= node_size ||
- > 180		    bitmap_off >= PAGE_SIZE)
-   181			return false; /* Skip validation if bitmap not accessible */
-   182	
-   183		/* Read first byte of bitmap */
-   184		bitmap_ptr = page_base + bitmap_off;
-   185		first_byte = bitmap_ptr[0];
-   186	
-   187		/* Check if node 0's bit (bit 7, MSB) is set */
-   188		if (!(first_byte & 0x80))
-   189			return true; /* Corruption detected */
-   190	
-   191		return false;
-   192	}
-   193	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2284320394
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2284320394_x86_64_kernel-debug_kcidb_tool_20518383_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2284320394_x86_64_kernel-debug_kcidb_tool_20518383_12
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - nfsv4.2
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2284320394_x86_64_kernel_kcidb_tool_20518375_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/309
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2284320394_x86_64_kernel-debug_kcidb_tool_20518383_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/309
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
