@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F17223323;
-	Sun, 25 Jan 2026 17:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDD923ABB0;
+	Sun, 25 Jan 2026 17:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769363195; cv=none; b=SzESo3VzzfhRIBqlRto2qTR7vHzLl0u/op88BlxTd1HCZ79/x9Lhqg73CDU56LhsNA2QcxZZ47xQXENgrqW1H4R/FDBx0Z5pWDULUsnVgWK9/K/yWegVu6TpFiSEoMUVhEW48cXvHlQEu03j69yFFi3QtowWp+WNkkFPLjTBdwU=
+	t=1769363536; cv=none; b=TM9Hsbb93s0I6bGLXEqsV300q/DVHIr+vyqsa6+k64JM+SkLM3MNresmGupnhOQmMjJGmN/iqIQqG+q84VdrNwrOplTRZAyiHPuwVD8qUd973mcZ5lAR+RL8P93snFD3mKQ2xXCU/PXj+09ylSojT+VcSrcEjF85po9XPySIvpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769363195; c=relaxed/simple;
-	bh=gtomOP3T+g24/ZRBgKqSkB37M02PRFS6hzq/HmMVzow=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nBhU/G6wZSntJsl6DiiHWAyq7hRqjAbVvBuWP7mkzp1I7eoy/Rila4t87tBrY/e6uG4ZUE569Bheh5+PscNEcI3hf+wSADUXJ3kmV5uMRu+zpRHPPkC1KVVrHofvoXxVI6WUwSEdeV+PccTBPmok98sEFuGVtU2fQX3Aq7gl2F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ua/5QqHj; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1769363536; c=relaxed/simple;
+	bh=YnbJDmctA8Kn5tEtpzFyhTSiRZrok1/JotS08QQp2As=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=q1m4f8Vz2lXoAtEKtqCwNudDM4KyD3amMSmJ/MtPclU1D1o0EwUQAbUR8ZNdr36uI1CU4r38Eq6aVUQchV+b+8Az+npTUdoGuKEpYlStwFxcgHh6D/Kv9hxHiF7kiid/S+qC2tgnX176+/ex7kszmb16SqOqYI7h3r2oGq/pk2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQLC3Ces; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ua/5QqHj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQLC3Ces"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769363193; x=1800899193;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gtomOP3T+g24/ZRBgKqSkB37M02PRFS6hzq/HmMVzow=;
-  b=Ua/5QqHjvD3OnXZGvslubArR0t+EyuXYqrU7SzvUUAWBYr4i8nnPqgpt
-   75lM5xc64xZfr/ka2MlGzZESFFlQ1Hm/cUuIT+OhqBnlhA1bXAVEauV1W
-   7k7l7h5CD3whhA+TCJOkyER5cLp5n5rF72Q8W8A7QveB0uRDwMGKUdWDI
-   j/9LIfht9XJockHSoAhpDNw1gKBaAB7cGM9IncyoFBTBLhWMBdbnZjlRW
-   r1FITEQM2ng9yRGr3rVS5/27rI2NUmFp3g2FUF1q7qcFNmsBVbCr/FGgM
-   V+f16tF2bN/3dqlvFG+Oh98ObADtSdT5709jcV/A3pqQL7BuZJ/LLARAX
-   A==;
-X-CSE-ConnectionGUID: hfl4QP0KTbytc/H/Sx6+6Q==
-X-CSE-MsgGUID: QxyFQXbwQzKTtgzfa0k6IQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70609870"
+  t=1769363534; x=1800899534;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YnbJDmctA8Kn5tEtpzFyhTSiRZrok1/JotS08QQp2As=;
+  b=cQLC3Cesqz34/K558L2BQQD6RdCpHCoQba8+H303Pn3kSZq0B72lwWCC
+   2hlFVZV8LaslAmmwnfnU5dRgqTvhgqfWXDbK2bYaiuOOy8iAoy9U9BlNg
+   PAngeZmFmY5rGx/2I/r/O5oADG4ezaCAa5Fv/cQPIgVtigRXD4+gLAvCm
+   YOr7lmfwMPjsV27/1Ul7PNmhJg1EIs8O3gA4i63spPFk5WnwicGxaXEX0
+   eZkPYbhI77M7NkwIEpaClaMXSnLr0WOmMNuaKabrhXuJRbq+H9Bo7FtaR
+   bjZTjrpSxDo3ESjImqVinRmoPr2RjNQvkvi+Aozfml1rtpMlt4/d7uh7K
+   g==;
+X-CSE-ConnectionGUID: hy0uicycTvCP7YFHfNTX1w==
+X-CSE-MsgGUID: BUHnO3t/SbuQyowm8gOJrA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="74415280"
 X-IronPort-AV: E=Sophos;i="6.21,253,1763452800"; 
-   d="scan'208";a="70609870"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 09:46:31 -0800
-X-CSE-ConnectionGUID: ksNWieZFTJ+gPU08DjfrDQ==
-X-CSE-MsgGUID: LG7RvCBdRemOT0NU/xW6hQ==
+   d="scan'208";a="74415280"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 09:52:13 -0800
+X-CSE-ConnectionGUID: X7hweObiQt22NfxEtQw+Vw==
+X-CSE-MsgGUID: boVMw0cHTq6YwVluiIupag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,253,1763452800"; 
-   d="scan'208";a="207391816"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 25 Jan 2026 09:46:29 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+   d="scan'208";a="238746312"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 25 Jan 2026 09:52:11 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vk4Bv-00000000WJT-2Ie6;
-	Sun, 25 Jan 2026 17:46:27 +0000
-Date: Mon, 26 Jan 2026 01:46:19 +0800
+	id 1vk4HR-000000001KD-2fh5;
+	Sun, 25 Jan 2026 17:52:09 +0000
+Date: Sun, 25 Jan 2026 18:51:37 +0100
 From: kernel test robot <lkp@intel.com>
 To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/sysfs-const-driver-attribute 15/17]
- drivers/s390/cio/ccwgroup.c:385:20: error: assigning to 'struct device_driver
- *' from 'const struct device_driver *' discards qualifiers
-Message-ID: <202601260131.sVHgbus8-lkp@intel.com>
+Subject: [thomas-weissschuh:b4/sysfs-const-driver-attribute 17/17]
+ drivers/i2c/i2c-core-base.c:1602:46: error: incompatible function pointer
+ types passing 'int (struct device_driver *, void *)' to parameter of type
+ 'int (*)(const struct device_driver *, void *)'
+Message-ID: <202601251801.Y5dqDeCr-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,206 +61,147 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/l=
-inux.git b4/sysfs-const-driver-attribute
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/sysfs-const-driver-attribute
 head:   92cff81ee317b9c2c7c4e3bb80f46c9feddbfa9d
-commit: 28a546377e7351001aec8530b9b5c171928dd1a5 [15/17] s390 prep
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260126=
-/202601260131.sVHgbus8-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c=
-1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20260126/202601260131.sVHgbus8-lkp@intel.com/reproduce)
+commit: 92cff81ee317b9c2c7c4e3bb80f46c9feddbfa9d [17/17] bus_for_each_drv
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260125/202601251801.Y5dqDeCr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260125/202601251801.Y5dqDeCr-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601260131.sVHgbus8-lkp@i=
-ntel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601251801.Y5dqDeCr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/s390/cio/ccwgroup.c:385:20: error: assigning to 'struct device_d=
-river *' from 'const struct device_driver *' discards qualifiers [-Werror,-=
-Wincompatible-pointer-types-discards-qualifiers]
-     385 |                 gdev->dev.driver =3D &gdrv->driver;
-         |                                  ^ ~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/i2c/i2c-core-base.c:1602:46: error: incompatible function pointer types passing 'int (struct device_driver *, void *)' to parameter of type 'int (*)(const struct device_driver *, void *)' [-Wincompatible-function-pointer-types]
+    1602 |         bus_for_each_drv(&i2c_bus_type, NULL, adap, __process_new_adapter);
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/bus.h:241:26: note: passing argument to parameter 'fn' here
+     241 |                      void *data, int (*fn)(const struct device_driver *, void *));
+         |                                        ^
+   drivers/i2c/i2c-core-base.c:1773:11: error: incompatible function pointer types passing 'int (struct device_driver *, void *)' to parameter of type 'int (*)(const struct device_driver *, void *)' [-Wincompatible-function-pointer-types]
+    1773 |                                __process_removed_adapter);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/bus.h:241:26: note: passing argument to parameter 'fn' here
+     241 |                      void *data, int (*fn)(const struct device_driver *, void *));
+         |                                        ^
+   2 errors generated.
 
 
-vim +385 drivers/s390/cio/ccwgroup.c
+vim +1602 drivers/i2c/i2c-core-base.c
 
-022b660ae5d075 Ursula Braun        2008-04-24  300 =20
-b2ffd8e9a76ec9 Cornelia Huck       2007-10-12  301  /**
-f2962dae0efd81 Sebastian Ott       2012-05-15  302   * ccwgroup_create_dev(=
-) - create and register a ccw group device
-f2962dae0efd81 Sebastian Ott       2012-05-15  303   * @parent: parent devi=
-ce for the new device
-f2962dae0efd81 Sebastian Ott       2012-05-15  304   * @gdrv: driver for th=
-e new group device
-022b660ae5d075 Ursula Braun        2008-04-24  305   * @num_devices: number=
- of slave devices
-022b660ae5d075 Ursula Braun        2008-04-24  306   * @buf: buffer contain=
-ing comma separated bus ids of slave devices
-b2ffd8e9a76ec9 Cornelia Huck       2007-10-12  307   *
-f2962dae0efd81 Sebastian Ott       2012-05-15  308   * Create and register =
-a new ccw group device as a child of @parent. Slave
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  309   * devices are obtained=
- from the list of bus ids given in @buf.
-b2ffd8e9a76ec9 Cornelia Huck       2007-10-12  310   * Returns:
-b2ffd8e9a76ec9 Cornelia Huck       2007-10-12  311   *  %0 on success and a=
-n error code on failure.
-b2ffd8e9a76ec9 Cornelia Huck       2007-10-12  312   * Context:
-b2ffd8e9a76ec9 Cornelia Huck       2007-10-12  313   *  non-atomic
-^1da177e4c3f41 Linus Torvalds      2005-04-16  314   */
-28a546377e7351 Thomas Wei=C3=9Fschuh    2026-01-25  315  int ccwgroup_creat=
-e_dev(struct device *parent, const struct ccwgroup_driver *gdrv,
-9814fdfbecbb03 Sebastian Ott       2012-05-15  316  			int num_devices, con=
-st char *buf)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  317  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  318  	struct ccwgroup_device=
- *gdev;
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  319  	struct ccw_dev_id dev_=
-id;
-022b660ae5d075 Ursula Braun        2008-04-24  320  	int rc, i;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  321 =20
-ab7efda477f976 Julian Wiedmann     2018-01-30  322  	if (num_devices < 1)
-ab7efda477f976 Julian Wiedmann     2018-01-30  323  		return -EINVAL;
-ab7efda477f976 Julian Wiedmann     2018-01-30  324 =20
-acafe7e3021616 Kees Cook           2018-05-08  325  	gdev =3D kzalloc(struc=
-t_size(gdev, cdev, num_devices), GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  326  	if (!gdev)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  327  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  328 =20
-^1da177e4c3f41 Linus Torvalds      2005-04-16  329  	atomic_set(&gdev->onof=
-f, 0);
-d76123eb357a4b Cornelia Huck       2007-04-27  330  	mutex_init(&gdev->reg_=
-mutex);
-d76123eb357a4b Cornelia Huck       2007-04-27  331  	mutex_lock(&gdev->reg_=
-mutex);
-0b60f9ead5d481 Tejun Heo           2014-02-03  332  	INIT_WORK(&gdev->ungro=
-up_work, ccwgroup_ungroup_workfn);
-16f7f9564c3ae1 Peter Oberparleiter 2008-08-21  333  	gdev->count =3D num_de=
-vices;
-16f7f9564c3ae1 Peter Oberparleiter 2008-08-21  334  	gdev->dev.bus =3D &ccw=
-group_bus_type;
-f2962dae0efd81 Sebastian Ott       2012-05-15  335  	gdev->dev.parent =3D p=
-arent;
-16f7f9564c3ae1 Peter Oberparleiter 2008-08-21  336  	gdev->dev.release =3D =
-ccwgroup_release;
-16f7f9564c3ae1 Peter Oberparleiter 2008-08-21  337  	device_initialize(&gde=
-v->dev);
-16f7f9564c3ae1 Peter Oberparleiter 2008-08-21  338 =20
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  339  	for (i =3D 0; i < num_=
-devices && buf; i++) {
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  340  		rc =3D __get_next_id(=
-&buf, &dev_id);
-022b660ae5d075 Ursula Braun        2008-04-24  341  		if (rc !=3D 0)
-022b660ae5d075 Ursula Braun        2008-04-24  342  			goto error;
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  343  		gdev->cdev[i] =3D get=
-_ccwdev_by_dev_id(&dev_id);
-022b660ae5d075 Ursula Braun        2008-04-24  344  		/*
-022b660ae5d075 Ursula Braun        2008-04-24  345  		 * All devices have t=
-o be of the same type in
-022b660ae5d075 Ursula Braun        2008-04-24  346  		 * order to be groupe=
-d.
-022b660ae5d075 Ursula Braun        2008-04-24  347  		 */
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  348  		if (!gdev->cdev[i] ||=
- !gdev->cdev[i]->drv ||
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  349  		    gdev->cdev[i]->dr=
-v !=3D gdev->cdev[0]->drv ||
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  350  		    gdev->cdev[i]->id=
-.driver_info !=3D
-^1da177e4c3f41 Linus Torvalds      2005-04-16  351  		    gdev->cdev[0]->id=
-.driver_info) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  352  			rc =3D -EINVAL;
-d76123eb357a4b Cornelia Huck       2007-04-27  353  			goto error;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  354  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  355  		/* Don't allow a devi=
-ce to belong to more than one group. */
-c560d105a19746 Sebastian Ott       2010-05-26  356  		spin_lock_irq(gdev->c=
-dev[i]->ccwlock);
-db6a64238a9277 Cornelia Huck       2008-01-26  357  		if (dev_get_drvdata(&=
-gdev->cdev[i]->dev)) {
-c560d105a19746 Sebastian Ott       2010-05-26  358  			spin_unlock_irq(gdev=
-->cdev[i]->ccwlock);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  359  			rc =3D -EINVAL;
-d76123eb357a4b Cornelia Huck       2007-04-27  360  			goto error;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  361  		}
-db6a64238a9277 Cornelia Huck       2008-01-26  362  		dev_set_drvdata(&gdev=
-->cdev[i]->dev, gdev);
-c560d105a19746 Sebastian Ott       2010-05-26  363  		spin_unlock_irq(gdev-=
->cdev[i]->ccwlock);
-17088229846c07 Cornelia Huck       2006-07-27  364  	}
-022b660ae5d075 Ursula Braun        2008-04-24  365  	/* Check for sufficien=
-t number of bus ids. */
-b7a610f7b4cb95 Sebastian Ott       2012-05-15  366  	if (i < num_devices) {
-022b660ae5d075 Ursula Braun        2008-04-24  367  		rc =3D -EINVAL;
-022b660ae5d075 Ursula Braun        2008-04-24  368  		goto error;
-022b660ae5d075 Ursula Braun        2008-04-24  369  	}
-022b660ae5d075 Ursula Braun        2008-04-24  370  	/* Check for trailing =
-stuff. */
-ea298e6ee8b34b Vasily Gorbik       2019-09-17  371  	if (i =3D=3D num_devic=
-es && buf && strlen(buf) > 0) {
-022b660ae5d075 Ursula Braun        2008-04-24  372  		rc =3D -EINVAL;
-022b660ae5d075 Ursula Braun        2008-04-24  373  		goto error;
-022b660ae5d075 Ursula Braun        2008-04-24  374  	}
-f9a5d70cfaf3e3 Julian Wiedmann     2017-09-14  375  	/* Check if the device=
-s are bound to the required ccw driver. */
-ab7efda477f976 Julian Wiedmann     2018-01-30  376  	if (gdrv && gdrv->ccw_=
-driver &&
-f9a5d70cfaf3e3 Julian Wiedmann     2017-09-14  377  	    gdev->cdev[0]->drv=
- !=3D gdrv->ccw_driver) {
-f9a5d70cfaf3e3 Julian Wiedmann     2017-09-14  378  		rc =3D -EINVAL;
-f9a5d70cfaf3e3 Julian Wiedmann     2017-09-14  379  		goto error;
-f9a5d70cfaf3e3 Julian Wiedmann     2017-09-14  380  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  381 =20
-1bf5b2853925cf Cornelia Huck       2008-10-10  382  	dev_set_name(&gdev->de=
-v, "%s", dev_name(&gdev->cdev[0]->dev));
-f2962dae0efd81 Sebastian Ott       2012-05-15  383 =20
-f2962dae0efd81 Sebastian Ott       2012-05-15  384  	if (gdrv) {
-f2962dae0efd81 Sebastian Ott       2012-05-15 @385  		gdev->dev.driver =3D =
-&gdrv->driver;
-f2962dae0efd81 Sebastian Ott       2012-05-15  386  		rc =3D gdrv->setup ? =
-gdrv->setup(gdev) : 0;
-f2962dae0efd81 Sebastian Ott       2012-05-15  387  		if (rc)
-f2962dae0efd81 Sebastian Ott       2012-05-15  388  			goto error;
-f2962dae0efd81 Sebastian Ott       2012-05-15  389  	}
-16f7f9564c3ae1 Peter Oberparleiter 2008-08-21  390  	rc =3D device_add(&gde=
-v->dev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  391  	if (rc)
-d76123eb357a4b Cornelia Huck       2007-04-27  392  		goto error;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  393  	rc =3D __ccwgroup_crea=
-te_symlinks(gdev);
-dad572e3701385 Sebastian Ott       2011-10-30  394  	if (rc) {
-dad572e3701385 Sebastian Ott       2011-10-30  395  		device_del(&gdev->dev=
-);
-dad572e3701385 Sebastian Ott       2011-10-30  396  		goto error;
-dad572e3701385 Sebastian Ott       2011-10-30  397  	}
-d76123eb357a4b Cornelia Huck       2007-04-27  398  	mutex_unlock(&gdev->re=
-g_mutex);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  399  	return 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  400  error:
-d76123eb357a4b Cornelia Huck       2007-04-27  401  	mutex_unlock(&gdev->re=
-g_mutex);
-d76123eb357a4b Cornelia Huck       2007-04-27  402  	put_device(&gdev->dev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  403  	return rc;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  404  }
-f2962dae0efd81 Sebastian Ott       2012-05-15  405  EXPORT_SYMBOL(ccwgroup_=
-create_dev);
-f2962dae0efd81 Sebastian Ott       2012-05-15  406 =20
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1518  
+6e13e641841833c drivers/i2c/i2c-core.c      David Brownell     2007-05-01  1519  static int i2c_register_adapter(struct i2c_adapter *adap)
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds     2005-04-16  1520  {
+ce0dffafd403e78 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1521  	int res = -EINVAL;
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds     2005-04-16  1522  
+1d0b19c9a0612c6 drivers/i2c/i2c-core.c      David Brownell     2008-10-14  1523  	/* Can't register until after driver model init */
+95026658c46ea2d drivers/i2c/i2c-core.c      Sudip Mukherjee    2016-03-07  1524  	if (WARN_ON(!is_registered)) {
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1525  		res = -EAGAIN;
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1526  		goto out_list;
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1527  	}
+1d0b19c9a0612c6 drivers/i2c/i2c-core.c      David Brownell     2008-10-14  1528  
+2236baa75f70485 drivers/i2c/i2c-core.c      Jean Delvare       2010-11-15  1529  	/* Sanity checks */
+8ddfe4108e0a160 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1530  	if (WARN(!adap->name[0], "i2c adapter has no name"))
+ce0dffafd403e78 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1531  		goto out_list;
+8ddfe4108e0a160 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1532  
+8ddfe4108e0a160 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1533  	if (!adap->algo) {
+44239a5afd7c568 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1534  		pr_err("adapter '%s': no algo supplied!\n", adap->name);
+ce0dffafd403e78 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1535  		goto out_list;
+2236baa75f70485 drivers/i2c/i2c-core.c      Jean Delvare       2010-11-15  1536  	}
+2236baa75f70485 drivers/i2c/i2c-core.c      Jean Delvare       2010-11-15  1537  
+d1ed7985b9a6b85 drivers/i2c/i2c-core.c      Peter Rosin        2016-08-25  1538  	if (!adap->lock_ops)
+d1ed7985b9a6b85 drivers/i2c/i2c-core.c      Peter Rosin        2016-08-25  1539  		adap->lock_ops = &i2c_adapter_lock_ops;
+8320f495cf441d5 drivers/i2c/i2c-core.c      Peter Rosin        2016-05-04  1540  
+9ac6cb5fbb1781d drivers/i2c/i2c-core-base.c Wolfram Sang       2018-12-19  1541  	adap->locked_flags = 0;
+194684e596af4bd drivers/i2c/i2c-core.c      Mika Kuoppala      2009-12-06  1542  	rt_mutex_init(&adap->bus_lock);
+6ef91fcca8a8ba3 drivers/i2c/i2c-core.c      Peter Rosin        2016-05-04  1543  	rt_mutex_init(&adap->mux_lock);
+c4d3dfd8ccaef2c drivers/i2c/i2c-core-base.c Wolfram Sang       2025-02-05  1544  	mutex_init(&adap->userspace_clients_lock);
+c4d3dfd8ccaef2c drivers/i2c/i2c-core-base.c Wolfram Sang       2025-02-05  1545  	INIT_LIST_HEAD(&adap->userspace_clients);
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds     2005-04-16  1546  
+8fcfef6e65c5b58 drivers/i2c/i2c-core.c      Jean Delvare       2009-03-28  1547  	/* Set default timeout to 1 second if not already set */
+8fcfef6e65c5b58 drivers/i2c/i2c-core.c      Jean Delvare       2009-03-28  1548  	if (adap->timeout == 0)
+8fcfef6e65c5b58 drivers/i2c/i2c-core.c      Jean Delvare       2009-03-28  1549  		adap->timeout = HZ;
+8fcfef6e65c5b58 drivers/i2c/i2c-core.c      Jean Delvare       2009-03-28  1550  
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1551  	/* register soft irqs for Host Notify */
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1552  	res = i2c_setup_host_notify_irq_domain(adap);
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1553  	if (res) {
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1554  		pr_err("adapter '%s': can't create Host Notify IRQs (%d)\n",
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1555  		       adap->name, res);
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1556  		goto out_list;
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1557  	}
+4d5538f5882a6b6 drivers/i2c/i2c-core.c      Benjamin Tissoires 2016-10-13  1558  
+27d9c1838f65cc5 drivers/i2c/i2c-core.c      Kay Sievers        2009-01-07  1559  	dev_set_name(&adap->dev, "i2c-%d", adap->nr);
+4f8cf8240a0c8b2 drivers/i2c/i2c-core.c      Jean Delvare       2009-09-18  1560  	adap->dev.bus = &i2c_bus_type;
+4f8cf8240a0c8b2 drivers/i2c/i2c-core.c      Jean Delvare       2009-09-18  1561  	adap->dev.type = &i2c_adapter_type;
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1562  	device_initialize(&adap->dev);
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1563  
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1564  	/*
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1565  	 * This adapter can be used as a parent immediately after device_add(),
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1566  	 * setup runtime-pm (especially ignore-children) before hand.
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1567  	 */
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1568  	device_enable_async_suspend(&adap->dev);
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1569  	pm_runtime_no_callbacks(&adap->dev);
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1570  	pm_suspend_ignore_children(&adap->dev, true);
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1571  	pm_runtime_enable(&adap->dev);
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1572  
+60f68597024d5af drivers/i2c/i2c-core-base.c Hans de Goede      2024-08-12  1573  	res = device_add(&adap->dev);
+8ddfe4108e0a160 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1574  	if (res) {
+44239a5afd7c568 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1575  		pr_err("adapter '%s': can't register device (%d)\n", adap->name, res);
+3f8c4f5e9a57868 drivers/i2c/i2c-core-base.c Joe Hattori        2024-12-11  1576  		put_device(&adap->dev);
+b119c6c952a086f drivers/i2c/i2c-core.c      Jean Delvare       2006-08-15  1577  		goto out_list;
+8ddfe4108e0a160 drivers/i2c/i2c-core.c      Wolfram Sang       2016-07-09  1578  	}
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds     2005-04-16  1579  
+73febd775bdbdb9 drivers/i2c/i2c-core-base.c Wolfram Sang       2023-11-12  1580  	adap->debugfs = debugfs_create_dir(dev_name(&adap->dev), i2c_debugfs_root);
+73febd775bdbdb9 drivers/i2c/i2c-core-base.c Wolfram Sang       2023-11-12  1581  
+a263a84088f689b drivers/i2c/i2c-core-base.c Akhil R            2022-01-28  1582  	res = i2c_setup_smbus_alert(adap);
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1583  	if (res)
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1584  		goto out_reg;
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1585  
+23a698fe65eca15 drivers/i2c/i2c-core-base.c Codrin Ciubotariu  2020-08-04  1586  	res = i2c_init_recovery(adap);
+23a698fe65eca15 drivers/i2c/i2c-core-base.c Codrin Ciubotariu  2020-08-04  1587  	if (res == -EPROBE_DEFER)
+23a698fe65eca15 drivers/i2c/i2c-core-base.c Codrin Ciubotariu  2020-08-04  1588  		goto out_reg;
+23a698fe65eca15 drivers/i2c/i2c-core-base.c Codrin Ciubotariu  2020-08-04  1589  
+23a698fe65eca15 drivers/i2c/i2c-core-base.c Codrin Ciubotariu  2020-08-04  1590  	dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
+23a698fe65eca15 drivers/i2c/i2c-core-base.c Codrin Ciubotariu  2020-08-04  1591  
+729d6dd57146495 drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1592  	/* create pre-declared device nodes */
+687b81d083c082b drivers/i2c/i2c-core.c      Wolfram Sang       2013-07-11  1593  	of_i2c_register_devices(adap);
+aec809fc63f61a8 drivers/i2c/i2c-core.c      Jarkko Nikula      2016-08-12  1594  	i2c_acpi_install_space_handler(adap);
+21653a4181ff292 drivers/i2c/i2c-core-base.c Hans de Goede      2020-09-09  1595  	i2c_acpi_register_devices(adap);
+687b81d083c082b drivers/i2c/i2c-core.c      Wolfram Sang       2013-07-11  1596  
+6e13e641841833c drivers/i2c/i2c-core.c      David Brownell     2007-05-01  1597  	if (adap->nr < __i2c_first_dynamic_bus_num)
+6e13e641841833c drivers/i2c/i2c-core.c      David Brownell     2007-05-01  1598  		i2c_scan_static_board_info(adap);
+6e13e641841833c drivers/i2c/i2c-core.c      David Brownell     2007-05-01  1599  
+4735c98f8447acb drivers/i2c/i2c-core.c      Jean Delvare       2008-07-14  1600  	/* Notify drivers */
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1601  	mutex_lock(&core_lock);
+d6703281ff20df6 drivers/i2c/i2c-core.c      Jean Delvare       2010-08-11 @1602  	bus_for_each_drv(&i2c_bus_type, NULL, adap, __process_new_adapter);
+caada32afe0d181 drivers/i2c/i2c-core.c      Jean Delvare       2008-01-27  1603  	mutex_unlock(&core_lock);
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1604  
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1605  	return 0;
+b119c6c952a086f drivers/i2c/i2c-core.c      Jean Delvare       2006-08-15  1606  
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1607  out_reg:
+73febd775bdbdb9 drivers/i2c/i2c-core-base.c Wolfram Sang       2023-11-12  1608  	debugfs_remove_recursive(adap->debugfs);
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1609  	init_completion(&adap->dev_released);
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1610  	device_unregister(&adap->dev);
+f8756c67b3de71a drivers/i2c/i2c-core-base.c Phil Reid          2017-08-24  1611  	wait_for_completion(&adap->dev_released);
+b119c6c952a086f drivers/i2c/i2c-core.c      Jean Delvare       2006-08-15  1612  out_list:
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1613  	mutex_lock(&core_lock);
+b119c6c952a086f drivers/i2c/i2c-core.c      Jean Delvare       2006-08-15  1614  	idr_remove(&i2c_adapter_idr, adap->nr);
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1615  	mutex_unlock(&core_lock);
+35fc37f8188177e drivers/i2c/i2c-core.c      Jean Delvare       2009-06-19  1616  	return res;
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds     2005-04-16  1617  }
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds     2005-04-16  1618  
 
-:::::: The code at line 385 was first introduced by commit
-:::::: f2962dae0efd81fed06d0687f300725ab063587a s390/ccwgroup: introduce cc=
-wgroup_create_dev
+:::::: The code at line 1602 was first introduced by commit
+:::::: d6703281ff20df6c2c0ea7c39a0cc2fa8be3e680 i2c: Drop dummy variable
 
-:::::: TO: Sebastian Ott <sebott@linux.vnet.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: TO: Jean Delvare <khali@linux-fr.org>
+:::::: CC: Jean Delvare <khali@linux-fr.org>
 
---=20
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
