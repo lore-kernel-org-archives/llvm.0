@@ -1,146 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585412EFD9E;
-	Sun, 25 Jan 2026 19:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7984F2FF148;
+	Sun, 25 Jan 2026 19:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769369034; cv=none; b=s+Bi0P01DBoyG7G58AYY54QQo1O+r7lb8EsjTsBBpRUa3m/YEgRNelCi8WhbgLVzDypnksCDnCJMMPwZ7X9WcJdZ2oQ2jatosOKNfTqCPihODuEVDeC8bmqsU0K8oX5Pq6x6PKnaV5mbB2oWI+qs12b80cf/2oOPu0UvH2ehVsc=
+	t=1769371018; cv=none; b=jlPkqcF0/5O/RyfdMqKITfEmurKvJ0kEEXFZZnvNgwkY5BjPxQG6gKbXoiKHSSdph0fVYk7IpVVOqkcknigVHUMnUw0weBTohXT+e0baQlYXK8PCtL0I6eX2AIvUqhZib4Nzo+P+L06dGioK6pu2ayAp2m6MH+Pu3HamaSooGPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769369034; c=relaxed/simple;
-	bh=ZvY+/dIefD4oYxaWRxIw+XqWndXIEC0UHyn4rMcgJM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kSKFWIjc7qR4816onsljmJRRGCAQhSr9e0yH7MWjLwfN5zZYaZtfYYJsrL+kwUy2Byk8aoekdc//VIJ+4JBNbcZfTN+/jU2KjtUktDxjnQu/VC1bmAlaR1O+HAqUIRVWX8PumfKcRQB34iP2Fa9lveYyHXnoR4xR9PzcQoCLJZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ow7aAeCc; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1769371018; c=relaxed/simple;
+	bh=qTKxnEAJp/Ki0VGMVmpt0zh+HCdIB1MFyEaQiBTjsxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o+99pRn34Eo2jmKKq8+sRWPFvAqCedmQOLIXidDtu6UQEe2ehffRK1bNsmuvSd182jTbr4CjX+SE1HRVzgWtTyPB7ZAPw28nNwk90/Xwj1vjO8CAChLG8g2xu+khx8R1m3WxB02fuHRtZkB2i9jSxgcNs/BBfasIwp8JRzSgJFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M+q73UM9; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ow7aAeCc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M+q73UM9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769369032; x=1800905032;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZvY+/dIefD4oYxaWRxIw+XqWndXIEC0UHyn4rMcgJM8=;
-  b=Ow7aAeCc4LW5ZyUJSmqv+qWHP9BhrqWpEsIlH121t89TdlyJGKzYDG0i
-   URsMLwqb+WHjAuRt1lbxIoTEjFqnO57wSaRINZeX/XLFTm4z91AovabWn
-   ZUj80g6BfvG0bAVPmWrnzS05uuV/EyMxNXjVTXttMjOliyP9AgDmSEVAx
-   k1c2CeY1St/LYTqO1YtTHcwvYuuWD/JvQ15zos8ApFQ/OzjIJo6kkJOYm
-   mmc+jIVNf3PZi8UNCl8DztCJZfd+JHky+VcvHKjTagSJglYBTZsD7GmwY
-   Ekkj9kqpD+mtQWl7lApUKDWr55GU+uAp36gZ6o3xcmZlguX4GSN8eJnHi
-   Q==;
-X-CSE-ConnectionGUID: FyBQ2p5lR3iunWKp15myPg==
-X-CSE-MsgGUID: tfA7xHyzRc+uMXEh92JGFw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70647721"
+  t=1769371017; x=1800907017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qTKxnEAJp/Ki0VGMVmpt0zh+HCdIB1MFyEaQiBTjsxg=;
+  b=M+q73UM9YwX4PFXdXOkWFuVDqhoc1hn+1vqjgYQIE9pRvnxb5XzkApKI
+   JihXOgarY/hOBORl+1LV7VRc72Fb0M0So19A0zqvWgqIZ/3ZyXq0i01fU
+   sxJiOKWrt7c8icCD/e9WmjbVlAk5XJ9oqmb7yjU3kajpO1q/KWF7388iL
+   P1VmE4ryFy2MxD3Hn5fpei/rckA2K93Fi864E/tRU28uaBfoW0DfIfXda
+   xuO3dSYHOVxq4w0SbOF5sr/KSaDEJnygml2YB0aa9PbqZn/qYqwje0a3d
+   A4iS3tfiY6QhAnyy8lU7goSr+WtFndN10RWRQYeT6dMU86dlys8/evwXl
+   g==;
+X-CSE-ConnectionGUID: z+9J6YltTsqyuT8QKk8y/Q==
+X-CSE-MsgGUID: 7uhppx4ISQixU+dibDKaXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70601011"
 X-IronPort-AV: E=Sophos;i="6.21,253,1763452800"; 
-   d="scan'208";a="70647721"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 11:23:51 -0800
-X-CSE-ConnectionGUID: k36dFk4GQLSZBmGKtJjH1Q==
-X-CSE-MsgGUID: ok/yCGfgQ62KKbKJ8OqBcg==
+   d="scan'208";a="70601011"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 11:56:56 -0800
+X-CSE-ConnectionGUID: BvjibUp4RkOnR7Ek7NSQDQ==
+X-CSE-MsgGUID: D0xhRt44Qv2cUqSn23xRjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,253,1763452800"; 
-   d="scan'208";a="211970758"
+   d="scan'208";a="207564226"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 25 Jan 2026 11:23:50 -0800
+  by orviesa007.jf.intel.com with ESMTP; 25 Jan 2026 11:56:52 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vk5i7-00000000WYz-2q5I;
-	Sun, 25 Jan 2026 19:23:47 +0000
-Date: Mon, 26 Jan 2026 03:23:13 +0800
+	id 1vk6E5-00000000Wba-1WlU;
+	Sun, 25 Jan 2026 19:56:49 +0000
+Date: Mon, 26 Jan 2026 03:56:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/sysfs-const-driver-attribute 17/17]
- drivers/s390/crypto/ap_bus.c:1507:20: error: initializing 'struct ap_driver
- *' with an expression of type 'const struct ap_driver *' discards qualifiers
-Message-ID: <202601260335.bRgOolw4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Michael Reeves via B4 Relay <devnull+michael.reeves077.gmail.com@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>,
+	Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
+	Lee Jones <lee@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Michael Reeves <michael.reeves077@gmail.com>,
+	Hector Martin <marcan@marcan.st>, Joey Gouly <joey.gouly@arm.com>
+Subject: Re: [PATCH v5 1/2] power: supply: Add macsmc-power driver for Apple
+ Silicon
+Message-ID: <202601260326.ZuabPAK0-lkp@intel.com>
+References: <20260126-b4-macsmc-power-v5-1-302462673b18@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126-b4-macsmc-power-v5-1-302462673b18@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/l=
-inux.git b4/sysfs-const-driver-attribute
-head:   92cff81ee317b9c2c7c4e3bb80f46c9feddbfa9d
-commit: 92cff81ee317b9c2c7c4e3bb80f46c9feddbfa9d [17/17] bus_for_each_drv
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260126=
-/202601260335.bRgOolw4-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c=
-1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20260126/202601260335.bRgOolw4-lkp@intel.com/reproduce)
+Hi Michael,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Reeves-via-B4-Relay/power-supply-Add-macsmc-power-driver-for-Apple-Silicon/20260125-211800
+base:   ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
+patch link:    https://lore.kernel.org/r/20260126-b4-macsmc-power-v5-1-302462673b18%40gmail.com
+patch subject: [PATCH v5 1/2] power: supply: Add macsmc-power driver for Apple Silicon
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260126/202601260326.ZuabPAK0-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601260326.ZuabPAK0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601260335.bRgOolw4-lkp@i=
-ntel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601260326.ZuabPAK0-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/s390/crypto/ap_bus.c:1507:20: error: initializing 'struct ap_dri=
-ver *' with an expression of type 'const struct ap_driver *' discards quali=
-fiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    1507 |         struct ap_driver *ap_drv =3D to_ap_drv(drv);
-         |                           ^        ~~~~~~~~~~~~~~
+>> drivers/power/supply/macsmc-power.c:559:3: error: call to undeclared function 'emergency_sync'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     559 |                 emergency_sync();
+         |                 ^
    1 error generated.
 
 
-vim +1507 drivers/s390/crypto/ap_bus.c
+vim +/emergency_sync +559 drivers/power/supply/macsmc-power.c
 
-7e0bdbe5c21cb8 Harald Freudenberger 2018-07-20  1503 =20
-92cff81ee317b9 Thomas Wei=C3=9Fschuh     2026-01-25  1504  static int __ver=
-ify_card_reservations(const struct device_driver *drv, void *data)
-4f8206b882868b Tony Krowiak         2019-02-01  1505  {
-4f8206b882868b Tony Krowiak         2019-02-01  1506  	int rc =3D 0;
-4f8206b882868b Tony Krowiak         2019-02-01 @1507  	struct ap_driver *ap=
-_drv =3D to_ap_drv(drv);
-4f8206b882868b Tony Krowiak         2019-02-01  1508  	unsigned long *newap=
-m =3D (unsigned long *)data;
-6917f434fda346 Harald Freudenberger 2025-11-19  1509  	unsigned long aqm_an=
-y[BITS_TO_LONGS(AP_DOMAINS)];
-4f8206b882868b Tony Krowiak         2019-02-01  1510 =20
-4f8206b882868b Tony Krowiak         2019-02-01  1511  	/*
-4f8206b882868b Tony Krowiak         2019-02-01  1512  	 * increase the driv=
-er's module refcounter to be sure it is not
-4f8206b882868b Tony Krowiak         2019-02-01  1513  	 * going away when w=
-e invoke the callback function.
-4f8206b882868b Tony Krowiak         2019-02-01  1514  	 */
-4f8206b882868b Tony Krowiak         2019-02-01  1515  	if (!try_module_get(=
-drv->owner))
-4f8206b882868b Tony Krowiak         2019-02-01  1516  		return 0;
-4f8206b882868b Tony Krowiak         2019-02-01  1517 =20
-4f8206b882868b Tony Krowiak         2019-02-01  1518  	if (ap_drv->in_use) {
-6917f434fda346 Harald Freudenberger 2025-11-19  1519  		bitmap_fill(aqm_any=
-, AP_DOMAINS);
-6917f434fda346 Harald Freudenberger 2025-11-19  1520  		rc =3D ap_drv->in_u=
-se(newapm, aqm_any);
-4f8206b882868b Tony Krowiak         2019-02-01  1521  		if (rc)
-4f8206b882868b Tony Krowiak         2019-02-01  1522  			rc =3D -EBUSY;
-4f8206b882868b Tony Krowiak         2019-02-01  1523  	}
-4f8206b882868b Tony Krowiak         2019-02-01  1524 =20
-4f8206b882868b Tony Krowiak         2019-02-01  1525  	/* release the drive=
-r's module */
-4f8206b882868b Tony Krowiak         2019-02-01  1526  	module_put(drv->owne=
-r);
-4f8206b882868b Tony Krowiak         2019-02-01  1527 =20
-4f8206b882868b Tony Krowiak         2019-02-01  1528  	return rc;
-4f8206b882868b Tony Krowiak         2019-02-01  1529  }
-4f8206b882868b Tony Krowiak         2019-02-01  1530 =20
+   531	
+   532	static void macsmc_power_critical_work(struct work_struct *wrk)
+   533	{
+   534		struct macsmc_power *power = container_of(wrk, struct macsmc_power, critical_work);
+   535		u16 bitv, b0av;
+   536		u32 bcf0;
+   537	
+   538		if (!power->batt)
+   539			return;
+   540	
+   541		/*
+   542		 * Avoid duplicate atempts at emergency shutdown
+   543		 */
+   544		if (power->emergency_shutdown_triggered || system_state > SYSTEM_RUNNING)
+   545			return;
+   546	
+   547		/*
+   548		 * EMERGENCY: Check voltage vs design minimum.
+   549		 * If we are below BITV, the battery is physically exhausted.
+   550		 * We must shut down NOW to protect the filesystem.
+   551		 */
+   552		if (apple_smc_read_u16(power->smc, SMC_KEY(BITV), &bitv) >= 0 &&
+   553		    apple_smc_read_u16(power->smc, SMC_KEY(B0AV), &b0av) >= 0 &&
+   554		    b0av < bitv) {
+   555			power->emergency_shutdown_triggered = true;
+   556			dev_emerg(power->dev,
+   557				  "Battery voltage (%d mV) below design minimum (%d mV)! Emergency shutdown.\n",
+   558				  b0av, bitv);
+ > 559			emergency_sync();
+   560			kernel_power_off();
+   561		}
+   562	
+   563		/*
+   564		 * Avoid duplicate attempts at orderly shutdown.
+   565		 * Voltage check is above this as we may want to
+   566		 * "upgrade" an orderly shutdown to a critical power
+   567		 * off if voltage drops.
+   568		 */
+   569		if (power->orderly_shutdown_triggered || system_state > SYSTEM_RUNNING)
+   570			return;
+   571	
+   572		/*
+   573		 * Check if SMC flagged the battery as empty.
+   574		 * We trigger a graceful shutdown to let the OS save data.
+   575		 */
+   576		if (apple_smc_read_u32(power->smc, SMC_KEY(BCF0), &bcf0) == 0 && bcf0 != 0) {
+   577			power->orderly_shutdown_triggered = true;
+   578			dev_crit(power->dev, "Battery critical (empty flag set). Triggering orderly shutdown.\n");
+   579			orderly_poweroff(true);
+   580		}
+   581	}
+   582	
 
-:::::: The code at line 1507 was first introduced by commit
-:::::: 4f8206b882868b62dc15ddfc0c17bb031876afb5 s390/ap: driver callback to=
- indicate resource in use
-
-:::::: TO: Tony Krowiak <akrowiak@linux.ibm.com>
-:::::: CC: Vasily Gorbik <gor@linux.ibm.com>
-
---=20
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
