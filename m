@@ -1,49 +1,49 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC898F4A
-	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 06:53:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449EE3176EE
+	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 13:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769323996; cv=none; b=Dym6XuHz5c8NCpTRF2OXMIRF0Bel29n007VVZBTG4UwOxGlOBw5LKKBCz50sfU7RZc5iouLqBpN5Tu2IA0edO7B2u0siVuUTIq/L9qizhsvgLlsr6/4NORl9gYXivhtaxDrSqH95s+59htcFhNfIJTn+QFKHLxLuJemeBGf9zmw=
+	t=1769348541; cv=none; b=rqfufax/B/Ga9JjP8uHLrdng/FAo3qTRXUQ+2tny9KmSoJIdoohjZZWCPFp/9rFZQe57TXEXBvKNk//izSM24fSrVdYW3p/SFhCniS94f3PRsaBJqVysUZ/FVv6tVkcIPvAtxg968BnUQRHMch+Ja4OzJf8jiGzTqhwj7JvI5ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769323996; c=relaxed/simple;
-	bh=m+cCdQZGgcIzIMHjAR/n0ksacVTt9yvgxi+sgY70+1o=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OJsBxhWV3mLKQDZdOdEV1+UHhG72C+nsuX6L0CFkDp9OXYIWxcsjDWSCTMyINB7V45StOlTRWc7W/Eb6ussua7euoXcnu9gyX9/cN/MDBEv0bsGevTDXiz97N6lKOkRWa6DquFMD/+hwn94eFn2xxPqVIvKOsVB+ghZtnPJlb1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DPC5L5T1; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1769348541; c=relaxed/simple;
+	bh=4jQaNkWLVmkmedqRxgu8PMyOi6cJXhggESod3Jk5RLE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mITZWYLo4cCDPZ8Kt0wpP4h7vvFU3uTgnOzoj0cqvnacAe9BQcXGtDeyTTqdT04sf0dC7hV5C0v0AekxK5YF5WYqMsQ2b+O8hLjDGPpwP6DEElZXn0SbUtjiJP92HoPh3qdNvhS9yVcYhsirKqgEJ0gK5VT3SLtD3gVE+0Cdric=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U3E7nf12; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DPC5L5T1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U3E7nf12"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769323994;
+	s=mimecast20190719; t=1769348539;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=59MXtD92PZ5okpV8BaiTERe3FLVyHNBQHJzIYqKjdaQ=;
-	b=DPC5L5T12ovOKglNhFVRDZD6yywIVpLIpQqNc+bvWC/SGkoaCmRG9zs215V2F7yhm0tVtH
-	eIrX+ycEqZc0KFRvi6irL79ZSMVLC/hs4tTPWFvbG7MQxQIUu4jrAZu/fFlOepRMEsrbCM
-	cvwkoqEBV7tloB9dGPvZbxNtLRvlWyI=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=zIoeYE5O1WgCgIyuHtYkn9ff2PefRoQtHKQC81DP2uE=;
+	b=U3E7nf12bOALcGBg8m9MSgxHiSUcYkJDjV0/NgSTjG/2pTz6nWOIjubr1xAM/SloshI7IJ
+	g1NVbOWS+Uy76gO9kYDgEGfJ4BlcByOXy5uLG5BtOYSX0L8BPQz1AK1KnkirHCMSq3BGnD
+	YJs3fPqlI3VY3rmZhFiqQef1xg3VBx4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-349-c88V1ewfNAOdCiBOAX0MbQ-1; Sun,
- 25 Jan 2026 01:53:12 -0500
-X-MC-Unique: c88V1ewfNAOdCiBOAX0MbQ-1
-X-Mimecast-MFC-AGG-ID: c88V1ewfNAOdCiBOAX0MbQ_1769323991
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-330-ldl_hgy3N7W-iClg7sHE5Q-1; Sun,
+ 25 Jan 2026 08:42:17 -0500
+X-MC-Unique: ldl_hgy3N7W-iClg7sHE5Q-1
+X-Mimecast-MFC-AGG-ID: ldl_hgy3N7W-iClg7sHE5Q_1769348536
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3602718005B2
-	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 06:53:11 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A4DF21956054
+	for <llvm@lists.linux.dev>; Sun, 25 Jan 2026 13:42:16 +0000 (UTC)
 Received: from [172.20.12.215] (unknown [10.30.44.139])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 96C421800240;
-	Sun, 25 Jan 2026 06:53:10 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 17E781956095;
+	Sun, 25 Jan 2026 13:42:16 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc6,
- upstream-mainline, 5dbeeb26)
-Date: Sun, 25 Jan 2026 06:53:10 -0000
+ upstream-mainline, d91a46d6)
+Date: Sun, 25 Jan 2026 13:42:15 -0000
 To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -51,10 +51,10 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <58489.126012501531200113@us-mta-349.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <32428.126012508421700317@us-mta-330.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: OdqNeiM4gQone1EWYTNLQXYummO92kNB5VPQA62r0eI_1769323991
+X-Mimecast-MFC-PROC-ID: E5a01-B3zPBX75hEzPI-mQjO76W1f3CP-8jsNqNaTgo_1769348536
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -68,23 +68,23 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'driver-core-6.19-rc7' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/driver-core/driver-core
+    Commit message: Merge tag 'riscv-for-linus-6.19-rc7' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/riscv/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2284402812
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2284681690
 
 One or more kernel tests failed:
     Unrecognized or new issues:
         xfstests - nfsv4.2
               x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2284402812_x86_64_kernel_kcidb_tool_20518813_10
+redhat:2284681690_x86_64_kernel_kcidb_tool_20520215_10
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL generic/309
               x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2284402812_x86_64_kernel-debug_kcidb_tool_20518818_10
+redhat:2284681690_x86_64_kernel-debug_kcidb_tool_20520299_10
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL generic/309
 
