@@ -1,126 +1,119 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21C93064B3
-	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 09:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFF730DD3A;
+	Mon, 26 Jan 2026 10:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769419358; cv=none; b=vFbAxwVE0X0vC6OuRdO6LGMpcsutrizlFYHwf6LpMnSeLJCeU8iuXSHZ41lEpBNmtv98Lk64np84wF4pHSKC3G5uSE3FsnBZSMiH6UM/OekA0WAyyNJT6d1iF8A+ll4PKoOoj19xO+tzPfsMFoSwl4gBJpJ8RiEO9ioRIZcqeYA=
+	t=1769422695; cv=none; b=GBUSbQOh3iDNQcN97NSkt8tXs0wAMF2J9MhWh519Y/fxuFzSw7xI/30ysYRqOHeB0qwzLXSM8B8kpAmM5wxaVEv8fcKInKXujlSfP0fzkyUmlaYY/MC6+RuiwhZqMmCUBqcTedDTBr+qXPAR0suMrVCZen5Fr4ZbS6wlV+qJH58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769419358; c=relaxed/simple;
-	bh=pwtagrJ6Orntn9rCTwPChBjN7HhxzqpgG+/pftaTDqI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iSolLdcPYyrmzJbFnIcW/7XvU8sphEh5J/mLg8HENrfRX1unU1jxFZxw0vjhidBGNe8xt3hf2z6C1K4fZRscgxFsAWNpCfL+F4mpd7im9vOgFBedGHJ+9RNBWlifkeUQQZPVbJPjgPFkhs6IcuxhSzQFtenaRC7mdP2sx/rLmbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=09CBhijv; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1769422695; c=relaxed/simple;
+	bh=quqRkVFthBroWqgig1FsNhPaP4WnTvGnsAf91QGigAk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WNgQD6qv1q5U8y7xH7N6LJljtMDSIw3xT0EVWbAGxyuT9x0g/FS4LdIWjR761fTy1+jtGBbGjPsJPsPGpkVnPf2wA42t9hDOiUbogNkSCuUBCib1SS6Mg9Zv+OMUbDsUeEdSw1cR9Pamt5bTWT1YI7BTh4dXHqiyGZbcjlKsgKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mPyfcySK; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="09CBhijv"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-6581b412518so411405a12.3
-        for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 01:22:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769419355; x=1770024155; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7a6yIcsB2kt1CiNa5tFb4Ajz4/4gpPILl4lTvlfFzgs=;
-        b=09CBhijvf3dRDSUNSd9nVxzIRs7KePAlfFHrslLj2JL2k1dXN2lSZ8tT6QjBQnboho
-         2kE+1PoLdGuJv0o3nlaCCrOgkAqLMM570XSgb72vNIZm3TFCM9AUrtow1/QBTJya+0+Y
-         Vnp/H/UTmRUgg9YupCE9OuTa3GhzYtGyABBJZSsWVRMge/emF51s+xcVWLeNi4ulMm4u
-         84tsG3WwksfeSx6FmqYJnC3hoyQHlwUyftF4G9Atuqm4NCStPNB6CFqP0WrK6lPsyA8i
-         BYIjsDHDH4B3GnGWopOuqH74BB83yVFLvkchVGrpFA8hD88BiLk7hpYk7WYbuXCfVZlo
-         ghBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769419355; x=1770024155;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7a6yIcsB2kt1CiNa5tFb4Ajz4/4gpPILl4lTvlfFzgs=;
-        b=oRvSzh8PpNZYegrFXRbzROozvlOMMuEMtQfDbzWmXl2NhnWwVhrji79k+rdtdkRvp2
-         Q4QoNalc89bQOvm05K6ftmJjIFnkeGzeFg2dwMpIKt6tKOG0omKjAQVY6u7859bu+mm8
-         ckdC6riqtzgKayG7FGngtwwBO5D/4uishNALhqqO60uspTT4DpPUUDmxtEgLCUcoRfQx
-         7trXJ0ulrpjDYg8U20Cs+YXnL24wt00W3eMRMVeI0wL3LjQlN6uiCseMns+jOBPThHAq
-         QlnVvV4qvAeT7VNGGljrLyWVsIMZ+jJxotUcK1IscaKcUgZyK9glQobyXVZ5yCyr/Zdm
-         T+0g==
-X-Forwarded-Encrypted: i=1; AJvYcCX4hooFfFJ/UN+biV+D7H24pkMbjhawIgaPwjfGMkdKV6JJL92KKeUUg3jiAcBKNT4j9Lpo@lists.linux.dev
-X-Gm-Message-State: AOJu0YxsiRbbH64cYfYuMLFuaVs20BnfcaA3zh5/kPe8KGsf7uHdZNIC
-	9nsqmUqlaCult03PELK/cbebn8e/zKt1KTRsFD1t+qNe8LNOkeIC/UWnspV6evJmSwFUts66PLj
-	hv1UJsjbAEOX7lX8lHg==
-X-Received: from edqr22.prod.google.com ([2002:aa7:d596:0:b0:654:3514:7440])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:358f:b0:64b:4f44:60ef with SMTP id 4fb4d7f45d1cf-658706e14famr2889920a12.27.1769419355015;
- Mon, 26 Jan 2026 01:22:35 -0800 (PST)
-Date: Mon, 26 Jan 2026 09:22:34 +0000
-In-Reply-To: <CAJ-ks9=N6GViTH-7Ki1qpSfRdByBFxb9132et7J0OXTTcosLwg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mPyfcySK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769422694; x=1800958694;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=quqRkVFthBroWqgig1FsNhPaP4WnTvGnsAf91QGigAk=;
+  b=mPyfcySKXEHWHRuaeX3QepwZgYyxBvhi9SxNlqr3XB66SppgL3a6zhg7
+   XTpu7qikDGJAE5DBGud4ecpxbQdcV62ekCAOuDUwmS48hkIuutvo2iFe1
+   76JNcOhYKg/bM9s2gFDu6lc1BAMdkK+Ocbtdc3RjyGOKgaWST8mXUaUqF
+   vNNcWgOvf/jU2fK3B7DHR7cmtUW9entAxkuqCjrPv9vsNEjGayPmiJTX4
+   QEA8R5wVuq3S0PbojYGb173ir8YwQOB3DhqfeIROdEmr51fuOS2r2BQLr
+   p97O4tflZ8ODiZpUV4bcI9cA9wfYDQZxQcRuH4kb8A/RixhvIhbcZvKkg
+   w==;
+X-CSE-ConnectionGUID: 3C07O8FDS3+bCes+Zoq6ww==
+X-CSE-MsgGUID: OQrr4GrUSL+23NjkUCIMfQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70501578"
+X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
+   d="scan'208";a="70501578"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 02:18:14 -0800
+X-CSE-ConnectionGUID: EZyT1F7jTTazaVY3kxp/rQ==
+X-CSE-MsgGUID: Wla4yzLASDOGBJsv28hOPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
+   d="scan'208";a="211736576"
+Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.122])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 02:18:10 -0800
+Date: Mon, 26 Jan 2026 12:18:07 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Kyle Hsieh <kylehsieh1995@gmail.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Beguin <liambeguin@gmail.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] iio: adc: ltc2309: add support for ltc2305
+Message-ID: <aXc_XxDxc5PuI7Tu@smile.fi.intel.com>
+References: <20260126-add_ltc2305_driver-v3-2-951349a87f97@gmail.com>
+ <202601261441.M4qQzY72-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260122144444.265412-1-gary@kernel.org> <202601250701.wXxtGd9z-lkp@intel.com>
- <CAJ-ks9=N6GViTH-7Ki1qpSfRdByBFxb9132et7J0OXTTcosLwg@mail.gmail.com>
-Message-ID: <aXcyWhM-KSg52t0I@google.com>
-Subject: Re: [PATCH v2 1/2] rust: task: use `as_char_ptr` instead of `as_ptr().cast()`
-From: Alice Ryhl <aliceryhl@google.com>
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Gary Guo <gary@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Panagiotis Foliadis <pfoliadis@posteo.net>, 
-	Shankari Anand <shankari.ak0208@gmail.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202601261441.M4qQzY72-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Sun, Jan 25, 2026 at 03:19:53PM -0500, Tamir Duberstein wrote:
-> On Sat, Jan 24, 2026 at 6:34=E2=80=AFPM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > Hi Gary,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on 053966c344dbd346e71305f530e91ea77916189f]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Gary-Guo/rust-di=
-sallow-use-of-CStr-as_ptr/20260122-224657
-> > base:   053966c344dbd346e71305f530e91ea77916189f
-> > patch link:    https://lore.kernel.org/r/20260122144444.265412-1-gary%4=
-0kernel.org
-> > patch subject: [PATCH v2 1/2] rust: task: use `as_char_ptr` instead of =
-`as_ptr().cast()`
-> > config: x86_64-buildonly-randconfig-004-20260125 (https://download.01.o=
-rg/0day-ci/archive/20260125/202601250701.wXxtGd9z-lkp@intel.com/config)
-> > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87=
-f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20260125/202601250701.wXxtGd9z-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601250701.wXxtGd9z-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> warning: unused import: `str::CStrExt`
-> >    --> rust/kernel/task.rs:12:5
-> >    |
-> >    12 |     str::CStrExt,
-> >    |     ^^^^^^^^^^^^
-> >    |
-> >    =3D note: `#[warn(unused_imports)]` on by default
->=20
-> Seems like the import needs to be conditional on
-> CONFIG_DEBUG_ATOMIC_SLEEP. Aside: it can also be `as _` since it isn't
-> named directly.
+On Mon, Jan 26, 2026 at 02:22:21PM +0800, kernel test robot wrote:
+> Hi Kyle,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on 9448598b22c50c8a5bb77a9103e2d49f134c9578]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Hsieh/dt-bindings-adc-ltc2497-add-support-for-ltc2305/20260126-093339
+> base:   9448598b22c50c8a5bb77a9103e2d49f134c9578
+> patch link:    https://lore.kernel.org/r/20260126-add_ltc2305_driver-v3-2-951349a87f97%40gmail.com
+> patch subject: [PATCH v3 2/2] iio: adc: ltc2309: add support for ltc2305
+> config: i386-buildonly-randconfig-006-20260126 (https://download.01.org/0day-ci/archive/20260126/202601261441.M4qQzY72-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601261441.M4qQzY72-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202601261441.M4qQzY72-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/iio/adc/ltc2309.c:209:20: warning: variable 'chip_info' is uninitialized when used here [-Wuninitialized]
+>      209 |         indio_dev->name = chip_info->name;
+>          |                           ^~~~~~~~~
+>    drivers/iio/adc/ltc2309.c:195:43: note: initialize the variable 'chip_info' to silence this warning
+>      195 |         const struct ltc2309_chip_info *chip_info;
+>          |                                                  ^
+>          |                                                   = NULL
 
-Can we just import the prelude instead of having a conditional import?
+This is so wrong advice!
 
-Alice
+>    1 warning generated.
+
+...
+
+The device_get_match_data() call is missing.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
