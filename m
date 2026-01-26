@@ -1,145 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D1923B61E;
-	Mon, 26 Jan 2026 18:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B45B2459ED
+	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 18:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769453372; cv=none; b=cr/wSGvNbn2aDs4+7r3/Q77X+KWOtQe26LrK5P99fUsiCXfEQMIX/Jj0S6k6FU8Uav2d7sIaI5CAk/hJkDWrMTgHPUMBUAYyiFa8sh0XmYRH/rsFR1GNx0J3GW1rjazVJUPJa1bTIEp/PpHftemLGTvh6WMQx4D0ub3CUo0hga8=
+	t=1769453720; cv=none; b=a5kMJcFafY8QjK8WAMhGzxtQCzBkX3bLRimVxo0ov1021PCQPiF1PjQZyp2Ab77gMa+ZnptbDPxtdiVq0tNCuysOEJjqd1ltrIVPtf0+hY/Y/EMtUR+GVFGywj/6E6POhbUt5gFM0lA5MnaKi4K3soVZ6BEMx5zoLctu7Sw9uBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769453372; c=relaxed/simple;
-	bh=SXbUQi/mPjILsJLm7/839nCdVVFUVngbGnAYOD7YVNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dOyg0RLX1Rxc/e2QqF6cMuavomMLe2QXQ9HtJC/66IwQrKM6ef9z1NpcP7+pJz6RjTQOS3C30l575uLLcXhM0fnkHUQ5vjPUZd5a67ZWPjgKsMTTTstaOiaQJ++/7LdBQktkqB+8TqooQcyqIaeQZAR6Lwv6m/DEbnMbq+27fXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I66o3Oqy; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769453720; c=relaxed/simple;
+	bh=jMVk9CS2JBRNsS5GC6/yI2ZxOvdhUQdY4kP4Vs3jjqU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U1LdWPmSE5EV/wwkSS6C/sNX1XhD/h0erzyArhHo19CvXQl7xZCsNgooFFxCFnkPxGxw/v1mFZ4qxiHCViTDS73pUrt1R4jjDEsbGmWEbCNe9mIM/wWj6ZBOHhFsLkUeIKOMBUffctIWlzGFVH0aOB7tMnsHcxBELg7cChxkvgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=4b+R0ix5; arc=none smtp.client-ip=199.89.1.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I66o3Oqy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769453371; x=1800989371;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SXbUQi/mPjILsJLm7/839nCdVVFUVngbGnAYOD7YVNs=;
-  b=I66o3OqyNuu4FgDCirBWHu/AauTPt4OE5Q/h2kmWL1rpLqzdRJPuwf4w
-   hmD9zKJzkC74Vmc/D2xZe/IkOCH76E50Ezr/U5aSiI7ch/5nldN0090nD
-   wjaT9TkAbtEVKc+aQXjVnI0znuZGO/wiemo/e3hMxJmDyDjwYim0TN9XA
-   CxikphaWDvDmXMJJOye+o24JGyIA8SATVruas/E4gf7xskKiC1DRE5zOs
-   ov65+yzp8Ajcy8Dg9pMCJ3GDnsSIWM2O3g+Kh5TOGzhaomVY/6DspsFbt
-   z7mZOv5Vz+fPgJepwKwiEnLFJ7MAy1AzM/Mi8f2dSPR0qO8OUc6ac1K4K
-   g==;
-X-CSE-ConnectionGUID: JvwJCsTyS8W/SX+PcDB9qA==
-X-CSE-MsgGUID: 21LsQqYLRXKdDoOSbT5n6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="96100248"
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="96100248"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 10:49:28 -0800
-X-CSE-ConnectionGUID: Ec9Xcv1mReqcQU5/+wEU7g==
-X-CSE-MsgGUID: RY3/mLDzQ1Smoy4+ign3qw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="207361135"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Jan 2026 10:49:25 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vkReM-00000000Xaw-3Vju;
-	Mon, 26 Jan 2026 18:49:22 +0000
-Date: Tue, 27 Jan 2026 02:48:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: mpenttil@redhat.com, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Mika =?iso-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>,
-	David Hildenbrand <david@redhat.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Balbir Singh <balbirs@nvidia.com>, Zi Yan <ziy@nvidia.com>,
-	Matthew Brost <matthew.brost@intel.com>
-Subject: Re: [PATCH v3 1/3] mm: unified hmm fault and migrate device pagewalk
- paths
-Message-ID: <202601270202.cL2IcE86-lkp@intel.com>
-References: <20260126111939.1332983-2-mpenttil@redhat.com>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="4b+R0ix5"
+Received: from localhost (localhost [127.0.0.1])
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4f0Hm56kBhzlgyGr;
+	Mon, 26 Jan 2026 18:55:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1769453709; x=1772045710; bh=lrmRnMiS7e8oDqS8sJHadbKN
+	aRE4y8/9HerN9jURAnw=; b=4b+R0ix5+Os0UdymHVdPefR75pAjuePHzZSBDv1T
+	PhKFA4FAC8OQc9TuXgMxSrv6ALYLM26zsK043txlRzxnGUh1OQAsqSN0foShyawt
+	pgoA82i8a3e56Az+c5yQ/FRzJRlVVV9ONPOmo5QZvE0Q0R6BZlDabDdSvqRaIrWq
+	5qv/o/SAv+5/3fRLam45SzREjjV6pc62GFn6nBiQJg3JMywlrNKvmQ7VlMyrTxAH
+	T23+3S/pU978iX4yw8ahY2EFo/8Xq0lczgH+hEk7oD3ExiVmcFff0tai2SlH7PR7
+	9U/uiA5vPsPPUdDSnrYljSKcp1+NnDZMaTuY+V/YB+pCTQ==
+X-Virus-Scanned: by MailRoute
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id vhOvcRL97NLm; Mon, 26 Jan 2026 18:55:09 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4f0Hlj4MJNzlh1T6;
+	Mon, 26 Jan 2026 18:54:57 +0000 (UTC)
+Message-ID: <8c1bbab4-4615-4518-b773-a006d1402b8b@acm.org>
+Date: Mon, 26 Jan 2026 10:54:56 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126111939.1332983-2-mpenttil@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 15/36] srcu: Support Clang's context analysis
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>,
+ Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+ Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>,
+ Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
+ Eric Dumazet <edumazet@google.com>, Frederic Weisbecker
+ <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>,
+ Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Kentaro Takeda <takedakn@nttdata.co.jp>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+ Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+ Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
+ kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org,
+ linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+References: <20251219154418.3592607-1-elver@google.com>
+ <20251219154418.3592607-16-elver@google.com>
+ <dd65bb7b-0dac-437a-a370-38efeb4737ba@acm.org>
+ <aXez9fSxdfu5-Boo@elver.google.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <aXez9fSxdfu5-Boo@elver.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 1/26/26 10:35 AM, Marco Elver wrote:
+> That being said, I don't think it's wrong to write e.g.:
+> 
+> 	spin_lock(&updater_lock);
+> 	__acquire_shared(ssp);
+> 	...
+> 	// writes happen through rcu_assign_pointer()
+> 	// reads can happen through srcu_dereference_check()
+> 	...
+> 	__release_shared(ssp);
+> 	spin_unlock(&updater_lock);
+> 
+> , given holding the updater lock implies reader access.
+> 
+> And given the analysis is opt-in (CONTEXT_ANALYSIS := y), I think
+> it's a manageable problem.
 
-kernel test robot noticed the following build errors:
+I'd like to make context-analysis mandatory for the entire kernel tree.
 
-[auto build test ERROR on 63804fed149a6750ffd28610c5c1c98cce6bd377]
+> If you have a different idea how we can solve this, please let us know.
+> 
+> One final note, usage of srcu_dereference_check() is rare enough:
+> 
+> 	arch/x86/kvm/hyperv.c:	irq_rt = srcu_dereference_check(kvm->irq_routing, &kvm->irq_srcu,
+> 	arch/x86/kvm/x86.c:	kvm_free_msr_filter(srcu_dereference_check(kvm->arch.msr_filter, &kvm->srcu, 1));
+> 	arch/x86/kvm/x86.c:	kfree(srcu_dereference_check(kvm->arch.pmu_event_filter, &kvm->srcu, 1));
+> 	drivers/gpio/gpiolib.c:	label = srcu_dereference_check(desc->label, &desc->gdev->desc_srcu,
+> 	drivers/hv/mshv_irq.c:	girq_tbl = srcu_dereference_check(partition->pt_girq_tbl,
+> 	drivers/hwtracing/stm/core.c:	link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
+> 	drivers/infiniband/hw/hfi1/user_sdma.c:	pq = srcu_dereference_check(fd->pq, &fd->pq_srcu,
+> 	fs/quota/dquot.c:			struct dquot *dquot = srcu_dereference_check(
+> 	fs/quota/dquot.c:				struct dquot *dquot = srcu_dereference_check(
+> 	fs/quota/dquot.c:		put[cnt] = srcu_dereference_check(dquots[cnt], &dquot_srcu,
+> 	fs/quota/dquot.c:		transfer_from[cnt] = srcu_dereference_check(dquots[cnt],
+> 	include/linux/kvm_host.h:	return srcu_dereference_check(kvm->memslots[as_id], &kvm->srcu,
+> 	virt/kvm/irqchip.c:	irq_rt = srcu_dereference_check(kvm->irq_routing, &kvm->irq_srcu,
+> 
+> , that I think it's easy enough to annotate these places with the above
+> suggestions in case you're trying out global enablement.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/mpenttil-redhat-com/mm-unified-hmm-fault-and-migrate-device-pagewalk-paths/20260126-192236
-base:   63804fed149a6750ffd28610c5c1c98cce6bd377
-patch link:    https://lore.kernel.org/r/20260126111939.1332983-2-mpenttil%40redhat.com
-patch subject: [PATCH v3 1/3] mm: unified hmm fault and migrate device pagewalk paths
-config: x86_64-randconfig-013-20260126 (https://download.01.org/0day-ci/archive/20260127/202601270202.cL2IcE86-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601270202.cL2IcE86-lkp@intel.com/reproduce)
+Has it ever been considered to add support in the clang compiler for a
+variant of __must_hold() that expresses that one of two capabilities
+must be held by the caller? I think that would remove the need to
+annotate SRCU update-side code with __acquire_shared(ssp) and
+__release_shared(ssp).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601270202.cL2IcE86-lkp@intel.com/
+Thanks,
 
-All errors (new ones prefixed by >>):
-
->> mm/hmm.c:927:31: error: no member named 'owner' in 'struct mmu_notifier_range'
-     927 |         if (!hmm_vma_walk->mmu_range.owner) {
-         |              ~~~~~~~~~~~~~~~~~~~~~~~ ^
-   mm/hmm.c:1343:24: error: call to undeclared function 'mmu_interval_check_retry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1343 |                 if (is_fault_path && mmu_interval_check_retry(range->notifier,
-         |                                      ^
-   mm/hmm.c:1361:29: error: no member named 'owner' in 'struct mmu_notifier_range'
-    1361 |             hmm_vma_walk.mmu_range.owner) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~ ^
-   3 errors generated.
-
-
-vim +927 mm/hmm.c
-
-   906	
-   907	static int hmm_vma_capture_migrate_range(unsigned long start,
-   908						 unsigned long end,
-   909						 struct mm_walk *walk)
-   910	{
-   911		struct hmm_vma_walk *hmm_vma_walk = walk->private;
-   912		struct hmm_range *range = hmm_vma_walk->range;
-   913	
-   914		if (!hmm_select_migrate(range))
-   915			return 0;
-   916	
-   917		if (hmm_vma_walk->vma && (hmm_vma_walk->vma != walk->vma))
-   918			return -ERANGE;
-   919	
-   920		hmm_vma_walk->vma = walk->vma;
-   921		hmm_vma_walk->start = start;
-   922		hmm_vma_walk->end = end;
-   923	
-   924		if (end - start > range->end - range->start)
-   925			return -ERANGE;
-   926	
- > 927		if (!hmm_vma_walk->mmu_range.owner) {
-   928			mmu_notifier_range_init_owner(&hmm_vma_walk->mmu_range, MMU_NOTIFY_MIGRATE, 0,
-   929						      walk->vma->vm_mm, start, end,
-   930						      range->dev_private_owner);
-   931			mmu_notifier_invalidate_range_start(&hmm_vma_walk->mmu_range);
-   932		}
-   933	
-   934		return 0;
-   935	}
-   936	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bart.
