@@ -1,153 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50147221DB1;
-	Mon, 26 Jan 2026 05:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931F7275870;
+	Mon, 26 Jan 2026 06:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769404849; cv=none; b=PwnPDB/GfhI95KqNeY+5SWHywpgIa6Okn0EZs91F5c/RZvtgwuJxBIfIVTJHBjMi4lYu9T2eQOEqYSM6HRmuLO9ph1PLv3hPvvfm2XUWD7vq3ELgSVInW5j1lmeYGDqJTJLg+xUywTZpqErCOcZ6q/vaNPSDLYA6VmbvkPGhHBU=
+	t=1769408585; cv=none; b=Rw4ANGljMwo4WvBHDkOMdiCqoizsgcSodIdhKjO/x6fBrmYFbpgpMVcX07VAIOXqw650TqvLdCOLDFf1LpfeXEys1wacPd2S2+CQr/T8jPLRtgIEfrXWanbyj0uHxjQPvBq6deJRnfIVDC2MTqWmFbkfuvvwxLcShv4bfCCMisw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769404849; c=relaxed/simple;
-	bh=lIIySIxjC+F/+hLCaAdTMtlygliQTbPaYAx9O5w1niM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ooHN0IhVsgpBbg3La3bQpfJEu8MN6UjpVgAv2BT8h55mbFZkDUCS4zuYu6ul617ziN6pSQItA/l0cfRCmHYe+0xYQaFk0o3Y0vpbl5x1NNMKz8JM2QwucrRMnTc3KBWxZgwKuKX2O5lJ7u9GZ3U0kT26XCk7SKrTZiQn8JkikVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jnyQW9We; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1769408585; c=relaxed/simple;
+	bh=yesCRLnpUW0N4UlyhL4kJihQyTkRYs29NeTzs4HOwBo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MDU3KEp4jf5Z+V3YZI7sqOH+eGk0nwZfZ74ZYxzipjgyetRw+F7LexOHM+wHc+/Fd2jONwM0po5WYe8enl6o+Rq4shSLNiToMGo8mZY6tqApmPGf4nFR8DPerHLrLsnu6sF5Zc6JGdags8fxc3teCJEbueh9HZBoEeZ3V0drkEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R0HVNoG1; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jnyQW9We"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R0HVNoG1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769404849; x=1800940849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lIIySIxjC+F/+hLCaAdTMtlygliQTbPaYAx9O5w1niM=;
-  b=jnyQW9We4WFTioHd8qigtIRyCKdYwEquAv0CgOrAYE1yuJpMahsJL8WO
-   SOpFi8X8E4kzDH99htzeFK4oZPxPBz84ufgejPOvp/Tayt6W3l33BNxsP
-   RlSp0cP5KBg9CXXrEa69VkOH4uhDqdYo7QLz/iNzG/vNoNKa7wIbjkm55
-   niFh+bXhrFdrBUGU4OwgWa6ncaTqYciBJsWcZZYm13z1nxtgd4legtpkx
-   wL8gInpikgJ3omuwacD75+KX3OMIsWdGkJzJP3lDOJudJuwk9YpHaNmK+
-   rOkbOOZY0emkzNKfU/MeZWtihcoc4Fx/FfOpqWNaYtCVA8s7gszVL81N5
-   g==;
-X-CSE-ConnectionGUID: Ve9SnSpiRYGj6MdKhO8iGA==
-X-CSE-MsgGUID: +Z2A1hyFQoe2X0L1wWlllA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="93243276"
+  t=1769408583; x=1800944583;
+  h=date:from:to:cc:subject:message-id;
+  bh=yesCRLnpUW0N4UlyhL4kJihQyTkRYs29NeTzs4HOwBo=;
+  b=R0HVNoG1GB0k5sSmcEMtjAG4GXNfRAXBlttUsQkFe7d8sYiVko1T45ml
+   h3RePV+IubTrg94rPrAGHqYme0XuF3l6Ks1stKOe2l3Yadb+aI/+F1aHE
+   JOU6r3pMqu8jNQeZGguNtp+rcN6hzT+hIc8d6/ZlJJR0i/rI+ntczazQQ
+   AzdPhvyfe6tczpPdLdcLLDdx6n+AjL0gzxDQIqQbvj797YKhGUgvep4Ik
+   TvNmycCjeltbh11Nln16xUEXX7AS2BAfPYHRVdZOQMSubJYysq8OWU9VR
+   ac84/r9kXio9BGKFCqHX9GFwW7V9sSx0oV6iKtDEzuLUnY+lwM7VHKkR3
+   w==;
+X-CSE-ConnectionGUID: Ra5VjI9PR3Kd2OOys0iu0Q==
+X-CSE-MsgGUID: 9SCscv4VTwOJLuCZJxq8Ew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="58158192"
 X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="93243276"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 21:20:48 -0800
-X-CSE-ConnectionGUID: shdXjNf4S0evh3rcUgSJqw==
-X-CSE-MsgGUID: 7fFaf1RbTM+qk/O1vpVBxw==
+   d="scan'208";a="58158192"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 22:23:03 -0800
+X-CSE-ConnectionGUID: idoQUuAdTzuHUoLzFlViKg==
+X-CSE-MsgGUID: OEJaApueT+eO5zwBRXB31Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="211688175"
+   d="scan'208";a="207406807"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 25 Jan 2026 21:20:45 -0800
+  by orviesa009.jf.intel.com with ESMTP; 25 Jan 2026 22:23:02 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vkF1m-00000000Wve-1v2U;
-	Mon, 26 Jan 2026 05:20:42 +0000
-Date: Mon, 26 Jan 2026 13:20:13 +0800
+	id 1vkG02-00000000X06-3u43;
+	Mon, 26 Jan 2026 06:22:58 +0000
+Date: Mon, 26 Jan 2026 14:22:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>, sathya.prakash@broadcom.com,
-	sreekanth.reddy@broadcom.com, suganath-prabu.subramani@broadcom.com,
-	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
-Subject: Re: [PATCH] scsi: mpt3sas: fix a potential memory leak in
- scsih_pci_slot_reset()
-Message-ID: <202601261539.Dt3EKe8y-lkp@intel.com>
-References: <20260125161201.2156109-1-lihaoxiang@isrc.iscas.ac.cn>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:bcachefs-testing 262/262]
+ fs/bcachefs/data/reconcile/work.c:1205:12: warning: stack frame size (1080)
+ exceeds limit (1024) in 'bch2_reconcile_thread'
+Message-ID: <202601261444.aUW4nj6U-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260125161201.2156109-1-lihaoxiang@isrc.iscas.ac.cn>
 
-Hi Haoxiang,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next linus/master v6.19-rc7 next-20260123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haoxiang-Li/scsi-mpt3sas-fix-a-potential-memory-leak-in-scsih_pci_slot_reset/20260126-001420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20260125161201.2156109-1-lihaoxiang%40isrc.iscas.ac.cn
-patch subject: [PATCH] scsi: mpt3sas: fix a potential memory leak in scsih_pci_slot_reset()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260126/202601261539.Dt3EKe8y-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601261539.Dt3EKe8y-lkp@intel.com/reproduce)
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   802455d452518d185b7c66ed871468d77e4d9ef1
+commit: 802455d452518d185b7c66ed871468d77e4d9ef1 [262/262] bcachefs: Fix use-after-unlock in reconcile tracepoints
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260126/202601261444.aUW4nj6U-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601261444.aUW4nj6U-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601261539.Dt3EKe8y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601261444.aUW4nj6U-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/scsi/mpt3sas/mpt3sas_scsih.c:12533:2: error: call to undeclared function 'mpt3sas_base_unmap_resources'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    12533 |         mpt3sas_base_unmap_resources(ioc);
-          |         ^
-   drivers/scsi/mpt3sas/mpt3sas_scsih.c:12533:2: note: did you mean 'mpt3sas_base_map_resources'?
-   drivers/scsi/mpt3sas/mpt3sas_base.h:1700:5: note: 'mpt3sas_base_map_resources' declared here
-    1700 | int mpt3sas_base_map_resources(struct MPT3SAS_ADAPTER *ioc);
-         |     ^
-   1 error generated.
+>> fs/bcachefs/data/reconcile/work.c:1205:12: warning: stack frame size (1080) exceeds limit (1024) in 'bch2_reconcile_thread' [-Wframe-larger-than]
+    1205 | static int bch2_reconcile_thread(void *arg)
+         |            ^
+   fs/bcachefs/data/reconcile/work.c:980:25: warning: stack frame size (1216) exceeds limit (1024) in 'do_reconcile_phys_thread' [-Wframe-larger-than]
+     980 | static CLOSURE_CALLBACK(do_reconcile_phys_thread)
+         |                         ^
+   2 warnings generated.
 
 
-vim +/mpt3sas_base_unmap_resources +12533 drivers/scsi/mpt3sas/mpt3sas_scsih.c
+vim +/bch2_reconcile_thread +1205 fs/bcachefs/data/reconcile/work.c
 
- 12496	
- 12497	/**
- 12498	 * scsih_pci_slot_reset - Called when PCI slot has been reset.
- 12499	 * @pdev: PCI device struct
- 12500	 *
- 12501	 * Description: This routine is called by the pci error recovery
- 12502	 * code after the PCI slot has been reset, just before we
- 12503	 * should resume normal operations.
- 12504	 */
- 12505	static pci_ers_result_t
- 12506	scsih_pci_slot_reset(struct pci_dev *pdev)
- 12507	{
- 12508		struct Scsi_Host *shost;
- 12509		struct MPT3SAS_ADAPTER *ioc;
- 12510		int rc;
- 12511	
- 12512		if (_scsih_get_shost_and_ioc(pdev, &shost, &ioc))
- 12513			return PCI_ERS_RESULT_DISCONNECT;
- 12514	
- 12515		ioc_info(ioc, "PCI error: slot reset callback!!\n");
- 12516	
- 12517		ioc->pci_error_recovery = 0;
- 12518		ioc->pdev = pdev;
- 12519		pci_restore_state(pdev);
- 12520		rc = mpt3sas_base_map_resources(ioc);
- 12521		if (rc)
- 12522			return PCI_ERS_RESULT_DISCONNECT;
- 12523	
- 12524		ioc_info(ioc, "Issuing Hard Reset as part of PCI Slot Reset\n");
- 12525		rc = mpt3sas_base_hard_reset_handler(ioc, FORCE_BIG_HAMMER);
- 12526	
- 12527		ioc_warn(ioc, "hard reset: %s\n",
- 12528			 (rc == 0) ? "success" : "failed");
- 12529	
- 12530		if (!rc)
- 12531			return PCI_ERS_RESULT_RECOVERED;
- 12532	
- 12533		mpt3sas_base_unmap_resources(ioc);
- 12534		return PCI_ERS_RESULT_DISCONNECT;
- 12535	}
- 12536	
+de374d7b729620 Kent Overstreet 2026-01-19  1204  
+de374d7b729620 Kent Overstreet 2026-01-19 @1205  static int bch2_reconcile_thread(void *arg)
+de374d7b729620 Kent Overstreet 2026-01-19  1206  {
+de374d7b729620 Kent Overstreet 2026-01-19  1207  	struct bch_fs *c = arg;
+de374d7b729620 Kent Overstreet 2026-01-19  1208  	struct bch_fs_reconcile *r = &c->reconcile;
+de374d7b729620 Kent Overstreet 2026-01-19  1209  
+de374d7b729620 Kent Overstreet 2026-01-19  1210  	set_freezable();
+de374d7b729620 Kent Overstreet 2026-01-19  1211  
+de374d7b729620 Kent Overstreet 2026-01-19  1212  	/*
+de374d7b729620 Kent Overstreet 2026-01-19  1213  	 * Data move operations can't run until after check_snapshots has
+de374d7b729620 Kent Overstreet 2026-01-19  1214  	 * completed, and bch2_snapshot_is_ancestor() is available.
+de374d7b729620 Kent Overstreet 2026-01-19  1215  	 */
+de374d7b729620 Kent Overstreet 2026-01-19  1216  	kthread_wait_freezable(c->recovery.pass_done > BCH_RECOVERY_PASS_check_snapshots ||
+de374d7b729620 Kent Overstreet 2026-01-19  1217  			       kthread_should_stop());
+de374d7b729620 Kent Overstreet 2026-01-19  1218  	if (kthread_should_stop())
+de374d7b729620 Kent Overstreet 2026-01-19  1219  		return 0;
+de374d7b729620 Kent Overstreet 2026-01-19  1220  
+de374d7b729620 Kent Overstreet 2026-01-19  1221  	struct moving_context ctxt __cleanup(bch2_moving_ctxt_exit);
+de374d7b729620 Kent Overstreet 2026-01-19  1222  	bch2_moving_ctxt_init(&ctxt, c, NULL, &r->work_stats,
+de374d7b729620 Kent Overstreet 2026-01-19  1223  			      writepoint_ptr(&c->allocator.reconcile_write_point),
+de374d7b729620 Kent Overstreet 2026-01-19  1224  			      true);
+de374d7b729620 Kent Overstreet 2026-01-19  1225  
+de374d7b729620 Kent Overstreet 2026-01-19  1226  	while (!kthread_should_stop() && !do_reconcile(&ctxt))
+de374d7b729620 Kent Overstreet 2026-01-19  1227  		;
+de374d7b729620 Kent Overstreet 2026-01-19  1228  
+de374d7b729620 Kent Overstreet 2026-01-19  1229  	return 0;
+de374d7b729620 Kent Overstreet 2026-01-19  1230  }
+de374d7b729620 Kent Overstreet 2026-01-19  1231  
+
+:::::: The code at line 1205 was first introduced by commit
+:::::: de374d7b7296203619ba70f976867051cebaf41b bcachefs: Break up reconcile.c
+
+:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
 0-DAY CI Kernel Test Service
