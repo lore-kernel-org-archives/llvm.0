@@ -1,126 +1,127 @@
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04FC311960
-	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 07:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FAC1624C0
+	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 08:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769414217; cv=none; b=FFR4cAt+rxA2B9ND2+gZg71spN5FXQFjtXrOjRCWehT4/8vKXChiSiIqKUR2WieBw6gKuEJU+fYOsRymRTBzd2rZSRKFkt1NsBsvF/yas+cJakXl5LdViQbW8bvhAYRMO2wLnUYPnOBeYkjKj7TpybuqjRQZcTsr24srpOpuZ6A=
+	t=1769416390; cv=none; b=BzkKB2GoElrJdLgEepAh9I4osx+G8hl8+jkFMhU6knW/LrwN+Y3nQWAiUrzu++9EZn+jZwlxNuS9aq4uNCBhMcHcIxsqAl9UuiiyHsdJKLSUSbfejpX44Hk9nPk8ScLJhTLBURrInVn5C+EqBdL5WXBb4Legv+Zdc+LkHsv9Obc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769414217; c=relaxed/simple;
-	bh=+LrPioRNF54S72TjY1H1JjQU7/f9iPy8u2q0PAqC468=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=UelcYPRdH6go7LAbRaXh+5WzmCAQeYcL0XE54A0fygJeq4i5HVPAVRIMdfm7ZXRe0F1jXB5edWi7hbaADak0OYB6tLzbRxdBYo50PmOYfDo2cLgARHtahr0xzK0syQxqP9iHW6JoOmELs5UPs7eN/VVVQ4TsBl1CRK2ly3OPDVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=eDOHAvbf; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=W3fx2I7+; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1769416390; c=relaxed/simple;
+	bh=PfgoTN71hUihdPPQCL7JgTibwTnZ2EivAx2x5YgDMx4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RwEk1HKfa0ateYGIG7dnKoayIS2S3shzCSkW0qLI8cHinswc9547reYU4yc7TiCt+UkX9Dnj+Xod3N3iW3me+J+LhwirUqfQJRAkbQOZiL6LIuHWF3+hlvjdtAvaW1MNZWXSLLL3vpPYVwVEwFb5E0TLPFZdTuJ+T+Ef5dyok08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q6G0VhW9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="eDOHAvbf";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="W3fx2I7+"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id EE9AF1400133;
-	Mon, 26 Jan 2026 02:56:52 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 26 Jan 2026 02:56:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1769414212;
-	 x=1769500612; bh=3IfPvmYKcPzCTIR9O8n/ZZl1J7ESmm5QMdaDtE3F9Ak=; b=
-	eDOHAvbfe67c7eNr6nvfZediiLLte7005PrRqlu0iOJYtnxgkYz8ahsKixtMWmuD
-	u8u8nGO1QkjwNaktsBNh2CV5c+9vSXwE4p0INN+HMcT61A1rtud2mCDy2LUIuaaS
-	mG7qawiTbA6SBlvFMx4B5MjlsBQ9hkpApdV6pksVN44LVf2NDjdgrnq+oXw4cKTu
-	Eda9a2eXauZCaA0oJCQQ30By2P3Bawit66b+1DgGCEqNAzUK6wTbLYnjVygmPTtL
-	e1cqM4Y93GWBjzGAh/p1xZA7oFWvRyW/fCvq4Cks2Z/e5OUQdufbB4hLLVv5326K
-	M3NxG9mJ2mScK+XkgXhkhg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1769414212; x=
-	1769500612; bh=3IfPvmYKcPzCTIR9O8n/ZZl1J7ESmm5QMdaDtE3F9Ak=; b=W
-	3fx2I7+Tr3U/oGqVC8/FrPV/NMfI3Cy8wmbcKoMJ4yMyysqKEdx1Dv0JWlON72n3
-	NW/N8kpdDewTu/Ld03jpDt0mTYMXFy+qVOV+x928f2Aw/7qsK/+5mr6NhYzK2NWt
-	ZtxkaZVbty9gKQpYkOaQY3Uu6gQ9AI59N+OOvL1clClFURNjw4Rf5E+AcNtL2cTl
-	ajRffZ8guBUhV57QGkQ6gQzfpOC3S8MN1o0QLH77PNmaXBsJLDm/5lTpe1BTr3Ye
-	M7oAzYxYCGQeBbz+td+Pdh2AtaP8/WFH9A3ht3kZYbw7Wem0WOrajZJFBdFjcVH/
-	e7HOsm5c8lvji14tfgEsQ==
-X-ME-Sender: <xms:RB53adg4XV3YLrQwjKUTfLbpfRx-xYDDm43MvU6zuE2ok_iyZaWZvA>
-    <xme:RB53ac0XchSpGcx1Vhll0YcisS3D8rMC31psmJm4eDWDwL3Ot7sEzlKR9lGABVtEJ
-    1o_zH0UQYwPvKgBi-ZDdiA7iWnBuNUArkmJ4SRM7a6IFGD6DEQkQrM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduheejudefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegsvhgrnhgrshhstghhvgesrggtmhdrohhrghdprhgtphhtthhope
-    gtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohepsghoqhhu
-    nhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvghlvhgvrhesghhoohhglh
-    gvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhr
-    tghpthhtohepmhhinhhgoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhlse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdgu
-    vgdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfh
-    hrrgguvggrugdrohhrgh
-X-ME-Proxy: <xmx:RB53aReo68kLo8Q1IJCChvRmKN-3htxlI-nXrn6R5155lU1DAyOEzw>
-    <xmx:RB53aVm6-evyg8KFJbFCbA2umpHntC9GhAPNbn3962Rs2sCPDehgTQ>
-    <xmx:RB53aWxvvEu_mZ49ut_QBMH9nYXstucdc__dd9-N53eNV8C0M_RVTQ>
-    <xmx:RB53aYwYVFAceK9En2bDONpgdSB5BKx7v13o8NcOATLXSbVwLVH0tw>
-    <xmx:RB53abOVjjg5sh8HqUZ3KEB_tzykmn2fdXpbJmsUeO3-psbeH5fcgbBp>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2B7E8700069; Mon, 26 Jan 2026 02:56:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q6G0VhW9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769416388;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=w6D+Vl3Jf0+b5DtzUt9+3LABK2HAC6KsscjTz8YJR1o=;
+	b=Q6G0VhW9Hnn2zaYG2UjqcnYXB4auKHeO3Z46w9ZwisRUOy6Fo1zEY9FgbRfFYGHyVXKRZ7
+	0wBGB7P0D3GFbYt+HBEO2mk1XpIbaWfmruUCiartjygdfjSDGI5heAnu2xmVMs+mEHzSlt
+	ub8+6KKZ4cBPCYxFxAwwsnPPrrPh7fQ=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-622-q0tPDErKMQi1iSvA11SAoQ-1; Mon,
+ 26 Jan 2026 03:33:06 -0500
+X-MC-Unique: q0tPDErKMQi1iSvA11SAoQ-1
+X-Mimecast-MFC-AGG-ID: q0tPDErKMQi1iSvA11SAoQ_1769416385
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 47DB01956054
+	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 08:33:05 +0000 (UTC)
+Received: from [172.20.12.215] (unknown [10.30.44.139])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BD80A180049F;
+	Mon, 26 Jan 2026 08:33:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 84 of 137): Test report for master
+ (6.19.0-rc6, upstream-mainline, 02377779)
+Date: Mon, 26 Jan 2026 08:33:04 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ArrhcHX-7EeF
-Date: Mon, 26 Jan 2026 08:56:11 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Marco Elver" <elver@google.com>, "Peter Zijlstra" <peterz@infradead.org>,
- "Will Deacon" <will@kernel.org>
-Cc: "Ingo Molnar" <mingo@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Waiman Long" <longman@redhat.com>,
- "Bart Van Assche" <bvanassche@acm.org>, llvm@lists.linux.dev,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-Id: <d3295c84-da15-4695-8110-7e04cfaf1419@app.fastmail.com>
-In-Reply-To: <20260126002936.2676435-3-elver@google.com>
-References: <20260126002936.2676435-1-elver@google.com>
- <20260126002936.2676435-3-elver@google.com>
-Subject: Re: [PATCH 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <36171.126012603330600276@us-mta-622.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: oD_l950EX0A7X5H5vZMWH3qyI7TaTLoL4S51NmCsaHo_1769416385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 26, 2026, at 01:25, Marco Elver wrote:
-> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index fc0fb42b0b64..9963948f4b44 100644
-> --- a/arch/arm64/include/asm/rwonce.h
-> +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -32,8 +32,7 @@
->  #define __READ_ONCE(x)							\
->  ({									\
->  	typeof(&(x)) __x = &(x);					\
-> -	int atomic = 1;							\
-> -	union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;	\
-> +	union { TYPEOF_UNQUAL(*__x) __val; char __c[1]; } __u;		\
->  	switch (sizeof(x)) {						\
->  	case 1:								\
->  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
+Hi, we tested your kernel and here are the results:
 
-How does this work with CC_HAS_TYPEOF_UNQUAL=false?
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-As far as I can tell, TYPEOF_UNQUAL() falls back to __typeof__
-on gcc-13, clang-18 and earlier, and not strip out qualifiers.
 
-With fd69b2f7d5f4 ("compiler: Use __typeof_unqual__() for
-__unqual_scalar_typeof()"), I would expect __unqual_scalar_typeof()
-to do the right thing already.
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-     Arnd
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2285331680
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - nfsv4.2
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2285331680_x86_64_kernel-debug_kcidb_tool_20524879_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/309
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    Storage - blktests - throtl [s390x, x86_64]
+    Storage - blktests - ublk [s390x, x86_64]
+    stress: stress-ng - cpu-cache [s390x, x86_64]
+    stress: stress-ng - memory [s390x, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
