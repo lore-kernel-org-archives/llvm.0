@@ -1,149 +1,194 @@
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17C9305976
-	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 22:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE52243367;
+	Mon, 26 Jan 2026 22:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769466274; cv=none; b=NGSc6cN8UJqLGC8iM2mvH5cnZR1DYPEMVopHImtvy8GhEtnicdjEfaR4hVIZ9JCFQ0zIBmmz3TKYIjbnp2qYjEimW3szVBy/yjYGTGOi8d9dpy7ahw1d2o6gu/uC+wNr02DbHCbeqyrekrRmFZd0rtomTzyBqvgYgojxk50EZEk=
+	t=1769466645; cv=none; b=IIXpuuiL7IM+jT0VImYCrq0A8ZxZykC0YwO0DPA1qejzKmX8yvc4pSmZDn21WWn6kmpgd9ZHqTb9Z5C7oBU8Vg61M8twsXDktknqo/ZrIdt+7vwJEFnNIYxbOQ47ww+ilRB0vz/N4cWNQoAzbhNBfDtbXl1W3PHhqnsfRhf3jrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769466274; c=relaxed/simple;
-	bh=k2kDDrB0DMjzZ0vmF63mAmNgQS1j5NiGz2mNZjZj/yw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Te7wTXYVYdLQ5WdhrdJwWllCbgqawdP6csig0/ftpK5ivZr5lxthmlgYvUhb7qcXVVbygcEoqGiYdkXhC+auJThPRbHgATIi0FBM2qsJBAwJlcONZvnyFvrpEcTF4nw1O/2QZUmM8YaxuEAkS/8JiDnEhIGYKzEZYpyskQcbxmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=V3qubgH5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GjPkkp8x; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1769466645; c=relaxed/simple;
+	bh=SDlHPRbnJB1XeB8p7QDzp8qp4nlasKsGSTn2yj84yhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RH301C2u74X/SpixfaOZUmjd7OkLQUqxrUgANH4OnZXANh/qjzqIJa0M795ZeDavdSmCaHDEGVPx6Sqh8nzWWaS4+q4op6PC3uUGTk5XrjdWb19HVxxNdgH8FELizbV6Wl4ksAT2e/wR8yIwvmUbvMLoyegPBTWgNR70CMW1vbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kwWVieaK; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="V3qubgH5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GjPkkp8x"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 0D4A21400081;
-	Mon, 26 Jan 2026 17:24:32 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 26 Jan 2026 17:24:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1769466272;
-	 x=1769552672; bh=+K7IY2VEjZ5xcqD4utKWilBgIlKvpGKN17wXmYFtuSc=; b=
-	V3qubgH5SvElXBb+qKvl+SHFP0M206/qBTh99JZ4y13qnZFJ6qbywFejaozjen5g
-	VMjpy8hL8TFFxbm7NS+uAZuy4V8QzFtAyF+U05u0vYirfNJ+l+MI87HLK2rRhv3A
-	Hr/vAqseNgqFVK4mPxYuQV0LGIt5Ciwja/J+al8njhHEN5kj/oeX+3GzPrlIa3Aj
-	2HkuZ9szU1oEjUjVo6s/3J+00lr3Z+IiDEwHP5k2q9H0CuLHpY/f394i3BXE6P65
-	VWbX2HS57jHhd9I5CqcKO20CovV95QgtBUKwlgGqdIAthX5ZkWVt+9Qlvuh4ggOP
-	itsC9EbB4O2UCgzJWs1GJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1769466272; x=
-	1769552672; bh=+K7IY2VEjZ5xcqD4utKWilBgIlKvpGKN17wXmYFtuSc=; b=G
-	jPkkp8xxcSPbhGSZp9xVDkghMTADUpjGgN9+AlC20IZQP/CXa1JhyOUPOgJx7c2Y
-	JijWQsvT/cjXRIOX2iIalVE/QDq0CFoSfinL00r8A4ha8pjjvzupVR8ItAOfHACe
-	byys5cX+dlGMGB30GXhdjyfg+UCodo5okP5A/wMQT1ypCQgCLx2RQvY5B/4O58KO
-	dDiI0xvcfM+F+gF4ugTDvn4d7YHoJnKfpGhBJiEPO8Y6cf/whF/Hs5GgCzH4WwXv
-	cFZVQQM2ijl/+28CYGgB6qyqaLZlG9OgdqeQR9vfIQ6SNZEMS7s9tei6lfg/adiW
-	O5ZHL/fg4UaIyax1bFtug==
-X-ME-Sender: <xms:n-l3aUz90gP7G69GKVcf1eFIvORSPz0uabmkmCVPNfRYpx7LCZloNQ>
-    <xme:n-l3aTH1Bnb_tVkGab_gOBQ5wbRgRGKQU4aoKTpkiJtBq4s8Lv-jnjoPIEUVFZR25
-    -RckiVUqtXs1RLdBYZrXCZzeKroBYdZKv6NqFySLijlsayup_51Xx4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduheekkeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegsvhgrnhgrshhstghhvgesrggtmhdrohhrghdprhgtphhtthhope
-    gtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohepsghoqhhu
-    nhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvghlvhgvrhesghhoohhglh
-    gvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhr
-    tghpthhtohepmhhinhhgoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhlse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdgu
-    vgdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfh
-    hrrgguvggrugdrohhrgh
-X-ME-Proxy: <xmx:n-l3aYsFpP5_9sxy_uPq7QSx5PxjO2T5C9ZiQEemDUb2bzZvixaZ1A>
-    <xmx:n-l3ab28X8GtNgU6VVfEavF0VQv4wJ4NdIGrznUOUiM2zIGp4ygZPg>
-    <xmx:n-l3aQBMgbqk24OMuzoJ8rlhFlFk2Y_DrNgoB8YYE42lwZzWbi0ULw>
-    <xmx:n-l3aZD7wgjcuFIxS9tJ3_KXnz7000XSe0Uogfv7SRIQ9wZXudXWGw>
-    <xmx:oOl3afdFqOf5Tdtz_kA0W-mE2alzhrNRwlKW6Bw6xdkgdeWGwhp727jG>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 34EDB700065; Mon, 26 Jan 2026 17:24:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kwWVieaK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769466643; x=1801002643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SDlHPRbnJB1XeB8p7QDzp8qp4nlasKsGSTn2yj84yhk=;
+  b=kwWVieaK6oIDinCVoON3WUCf1HQdLmN29sH8f+W870VeoHxuspHzIzMU
+   RIOfuodu0XPTlp2XNWYF1VN9tPd1E80hu6cNQg5V+gX5bPq05YKJbddpb
+   lUpsIFDyXP9GBYve8SMvSmHsuRissY3zdlPM7myreYwv4Tp1KvobmHq4C
+   hEcsab4pcOP729pne2zriSqY3ixgGG8Lkg+ovOrWdUu9D6zmoIjWlpa2C
+   3QU6L5VFVBboL7oOvjy1y99hkDz9yX66lWOfd7UU19r1mArREqmZA7/Fi
+   +dcAiwMsSSJOlfrRlTn5AH05abkUok8XujlcuEfPiasZEqxHpYxnxH2PC
+   g==;
+X-CSE-ConnectionGUID: Tl40MTtVQPuam/P0FvbGnw==
+X-CSE-MsgGUID: YYejrUQUTWO+53ZIRbAPgg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="82021443"
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="82021443"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 14:30:43 -0800
+X-CSE-ConnectionGUID: Kg8CKuQ1QIO3ci8zzJ95cA==
+X-CSE-MsgGUID: /mOcDF+HSoStiLCAx97Guw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="245407170"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 26 Jan 2026 14:30:37 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkV6P-00000000XkE-3Sha;
+	Mon, 26 Jan 2026 22:30:33 +0000
+Date: Tue, 27 Jan 2026 06:29:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: pengfuyuan <pengfuyuan@kylinos.cn>, Danilo Krummrich <dakr@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Miguel Ojeda <ojeda@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Helge Deller <deller@gmx.de>, Hans de Goede <hansg@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, Lee Jones <lee@kernel.org>,
+	Sam Ravnborg <sam@ravnborg.org>, Zsolt Kajtar <soci@c64.rulez.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	pengfuyuan <pengfuyuan@kylinos.cn>
+Subject: Re: [PATCH v1 v1 3/4] rust: fb: add framebuffer driver support
+Message-ID: <202601270630.FHzCSbVv-lkp@intel.com>
+References: <20260126081744.781392-4-pengfuyuan@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ArrhcHX-7EeF
-Date: Mon, 26 Jan 2026 23:24:00 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Marco Elver" <elver@google.com>
-Cc: "Peter Zijlstra" <peterz@infradead.org>, "Will Deacon" <will@kernel.org>,
- "Ingo Molnar" <mingo@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Waiman Long" <longman@redhat.com>,
- "Bart Van Assche" <bvanassche@acm.org>, llvm@lists.linux.dev,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-Id: <7478d2cf-9636-45c8-8ffa-8e3a3ba9baf8@app.fastmail.com>
-In-Reply-To: <aXfGcIpeXQNRUI-A@elver.google.com>
-References: <20260126002936.2676435-1-elver@google.com>
- <20260126002936.2676435-3-elver@google.com>
- <d3295c84-da15-4695-8110-7e04cfaf1419@app.fastmail.com>
- <aXfGcIpeXQNRUI-A@elver.google.com>
-Subject: Re: [PATCH 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126081744.781392-4-pengfuyuan@kylinos.cn>
 
-On Mon, Jan 26, 2026, at 20:54, Marco Elver wrote:
-> On Mon, Jan 26, 2026 at 08:56AM +0100, Arnd Bergmann wrote:
->> On Mon, Jan 26, 2026, at 01:25, Marco Elver wrote:
->> 
->> How does this work with CC_HAS_TYPEOF_UNQUAL=false?
->> 
->> As far as I can tell, TYPEOF_UNQUAL() falls back to __typeof__
->> on gcc-13, clang-18 and earlier, and not strip out qualifiers.
->
-> I think we only need to worry about Clang for LTO builds. But yeah, our
-> minimum supported Clang is 15, so between 15-18 it'd be broken.
+Hi pengfuyuan,
 
-Right, I missed the #ifdef CONFIG_LTO check, so indeed gcc is
-fine here.
+kernel test robot noticed the following build errors:
 
->> With fd69b2f7d5f4 ("compiler: Use __typeof_unqual__() for
->> __unqual_scalar_typeof()"), I would expect __unqual_scalar_typeof()
->> to do the right thing already.
->
-> It'd still be broken for Clang 15-18, so it won't help much. We need
-> this to work for more than "scalar", so even though it'll work for Clang
-> 19+ given the redefinition to __typeof_unqual__, we should deprecate the
-> _Generic-based __unqual_scalar_typeof() sooner than later.
->
-> I was able to make this work for older compilers:
->
-...
->  #define __READ_ONCE(x)							\
->  ({									\
->  	auto __x = &(x);						\
-> -	auto __ret = (TYPEOF_UNQUAL(*__x) *)__x, *__retp = &__ret;	\
-> -	union { TYPEOF_UNQUAL(*__x) __val; char __c[1]; } __u;		\
-> +	auto __ret = (__read_once_typeof(*__x) *)__x, *__retp = &__ret;	\
-> +	union { __read_once_typeof(*__x) __val; char __c[1]; } __u;	\
->  	*__retp = &__u.__val;						\
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on driver-core/driver-core-linus linus/master v6.19-rc7]
+[cannot apply to driver-core/driver-core-testing driver-core/driver-core-next next-20260123]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> Thoughts?
+url:    https://github.com/intel-lab-lkp/linux/commits/pengfuyuan/rust-io-mem-add-ioremap_wc-support/20260126-162117
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20260126081744.781392-4-pengfuyuan%40kylinos.cn
+patch subject: [PATCH v1 v1 3/4] rust: fb: add framebuffer driver support
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260127/202601270630.FHzCSbVv-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601270630.FHzCSbVv-lkp@intel.com/reproduce)
 
-Looks better than __unqual_scalar_typeof() to me. Would it make
-sense to do the same __read_once_typeof() in the asm-generic
-version of __READ_ONCE()? I don't remember if we discussed it
-in the thread leading up to dee081bf8f82 ("READ_ONCE: Drop 
-pointer qualifiers when reading from scalar types").
-We probably didn't have __auto_type back then.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601270630.FHzCSbVv-lkp@intel.com/
 
-        Arnd
+All errors (new ones prefixed by >>):
+
+>> error[E0308]: mismatched types
+   --> rust/kernel/fb/device.rs:307:23
+   |
+   307 |         fb_read: Some(Self::read_callback),
+   |                  ---- ^^^^^^^^^^^^^^^^^^^ expected fn pointer, found fn item
+   |                  |
+   |                  arguments to this enum variant are incorrect
+   |
+   = note: expected fn pointer `unsafe extern "C" fn(_, *mut u8, _, _) -> _`
+   found fn item `extern "C" fn(_, *mut i8, _, _) -> _ {fb::device::Device::<T>::read_callback}`
+   help: the type constructed contains `extern "C" fn(*mut fb_info, *mut i8, usize, *mut i64) -> isize {fb::device::Device::<T>::read_callback}` due to the type of the argument passed
+   --> rust/kernel/fb/device.rs:307:18
+   |
+   307 |         fb_read: Some(Self::read_callback),
+   |                  ^^^^^-------------------^
+   |                       |
+   |                       this argument influences the type of `Some`
+   note: tuple variant defined here
+   --> /opt/cross/rustc-1.88.0-bindgen-0.72.1/rustup/toolchains/1.88.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:597:5
+   |
+   597 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
+   |     ^^^^
+--
+>> error[E0308]: mismatched types
+   --> rust/kernel/fb/device.rs:308:24
+   |
+   308 |         fb_write: Some(Self::write_callback),
+   |                   ---- ^^^^^^^^^^^^^^^^^^^^ expected fn pointer, found fn item
+   |                   |
+   |                   arguments to this enum variant are incorrect
+   |
+   = note: expected fn pointer `unsafe extern "C" fn(_, *const u8, _, _) -> _`
+   found fn item `extern "C" fn(_, *const i8, _, _) -> _ {fb::device::Device::<T>::write_callback}`
+   help: the type constructed contains `extern "C" fn(*mut fb_info, *const i8, usize, *mut i64) -> isize {fb::device::Device::<T>::write_callback}` due to the type of the argument passed
+   --> rust/kernel/fb/device.rs:308:19
+   |
+   308 |         fb_write: Some(Self::write_callback),
+   |                   ^^^^^--------------------^
+   |                        |
+   |                        this argument influences the type of `Some`
+   note: tuple variant defined here
+   --> /opt/cross/rustc-1.88.0-bindgen-0.72.1/rustup/toolchains/1.88.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:597:5
+   |
+   597 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
+   |     ^^^^
+--
+>> error[E0308]: mismatched types
+   --> rust/kernel/fb/io.rs:32:13
+   |
+   30     |         bindings::fb_io_read(
+   |         -------------------- arguments to this function are incorrect
+   31     |             device.as_raw(),
+   32     |             buf.as_mut_ptr() as *mut core::ffi::c_char,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `*mut u8`, found `*mut i8`
+   |
+   = note: expected raw pointer `*mut u8`
+   found raw pointer `*mut i8`
+   note: function defined here
+   --> rust/bindings/bindings_generated.rs:123562:12
+   |
+   123562 |     pub fn fb_io_read(
+   |            ^^^^^^^^^^
+--
+>> error[E0308]: mismatched types
+   --> rust/kernel/fb/io.rs:58:13
+   |
+   56     |         bindings::fb_io_write(
+   |         --------------------- arguments to this function are incorrect
+   57     |             device.as_raw(),
+   58     |             buf.as_ptr() as *const core::ffi::c_char,
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `*const u8`, found `*const i8`
+   |
+   = note: expected raw pointer `*const u8`
+   found raw pointer `*const i8`
+   note: function defined here
+   --> rust/bindings/bindings_generated.rs:123570:12
+   |
+   123570 |     pub fn fb_io_write(
+   |            ^^^^^^^^^^^
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
