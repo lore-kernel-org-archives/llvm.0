@@ -1,147 +1,148 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E53221DAD
-	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 23:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52973233722
+	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 23:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769469377; cv=pass; b=IR38GcBNuot2EMYfOTnC0Srs1lRZ73LLJBmkCfbXwkqlG9HC4hVllvTxJ5A4lHzW4gnW91rzy3T1zGUS9pHE9oNHt8U07IBwDUDdcN+02PHk5NAxDGdPBBlC9Mgv8dltQjadUoCmKM9VDfogf/12SaIRihJwkLERVLJEX3nMYLk=
+	t=1769471248; cv=pass; b=mGf9tzmqne31M0yFH+QS+2n2EU1ONYdXJ5jg75su/bB2mkYs/qXoPyhhgFiJJLhNn8gDzMdCANO1c7gjIyvX83ATk8mtrPz7xJfYfQIBMs+UOe7WVTIYGwwzXtT+wKtlQOpbJFvaEasJVTskzJh30Xlx7naFDuL0se9Uu+i4B/Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769469377; c=relaxed/simple;
-	bh=2uFOIbbEt+daOOS5BiDub0Af3Bbuf50PWSRLoGgUqI4=;
+	s=arc-20240116; t=1769471248; c=relaxed/simple;
+	bh=fG2Ruh+rMXy8HECrlWrSGEzE9JMwnw/wcqEcRF2te3c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gG4z4/S/2mnR+uqdDir1/XYepWTFmAPAmVjADOA1SpRnx6gWJGMrhVrzMWc82n0GAHSl3OkxlObcuB4ZoGQikjwzm8Bf2zo1ws7dYbuXassvXaujFOTc40nI7CnVBJuU07G8LeFSEWqusM3xZ5BMEIuh0dQ4j6hjuhjFgJNEZ+w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ESugPCVX; arc=pass smtp.client-ip=74.125.82.41
+	 To:Cc:Content-Type; b=BwiCOQPgrGdkyWmzc6HTfE4klzQV4OoEFpFruAGE5JdtMb/e1o49e/SR9NaYma3Sz9z8Q6sYq+AmPhCWzGark6M1QmHFRsDljWc/xyyR55UTemPRwzNggnoyXafhQS5ZJQstaUMIAzO0rXWrl4bM2UpC1J7IHM+zQSoiewLEM+w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tOQ5kISW; arc=pass smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ESugPCVX"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1248d27f293so4589619c88.0
-        for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 15:16:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769469375; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tOQ5kISW"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12460a7caa2so7228636c88.1
+        for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 15:47:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769471245; cv=none;
         d=google.com; s=arc-20240605;
-        b=AUiumtgmv0xWLUelZ2tYnRCBrAnOoHlBjQ8revAbxE2evX6qrOVS8BGsO8egfpyOiT
-         5x/ZNsS5fNEef2W/7UJiQGAx/GTkyNd/hemGqFEuI08QYJ0h/htGbxEfgL1qIFCUfW31
-         T6Pb3BePdUlhZlbDfw31FxKP799vfbO5gsi4tUYuL5tHguBOU1Es1HENRvmcqJP6x3I1
-         VSoOcrWm/X0HgwNT8y9wqsKOa9ZtY6KH3YanU+gV9j8qxGtDKWReXqZDwvvUYNEpC05t
-         sO2xhrG2KpMq0dl6apOOClrqjiP2bQ0PrZfVtaUbzSMhRA1O5yCDAIP6Sf2zvHjluHCS
-         mIDA==
+        b=UwkVkXu6QvH6Uuh4WpbfGKyP9OYJZ5MD0dzZGvaISO1BK6oUcZWcgh3ONZFXpo2Tsn
+         W0CdKRIgGE8lt/EFZJh30xvw0f0+8w9jWbVnAlNrYHJ/fE/ygTO8PHyvDqN4kRgwfind
+         o7RAeYQ7WDQfIO0kOdaE4589CnHku4lA8J77Ez6lpqSw29vyab3giTfO5By43DAvFwgx
+         TNyiKgI/8UVdDb+SUMk4ZMwX+xoPoCN4/E0Oyp0m/5vTL/nRf/B72TDjl/occpdKPY70
+         b7CBvGuP0rwqz+DznV6ueMqPCuZ89AYGz+9iHfchcL1lDkof8HPFn+EtgSiQEDGBTtPu
+         YXpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=2gVqs+YSL9tkjaJJdsqPr0duAJEHrfSLsOJ+i8YF7aY=;
-        fh=OgsigD+Ki5fdAVlLD2btinASAOx5gqklxQnrBhqmU/I=;
-        b=HA2F/IptsU4yV6xSgNsHVyApW/Y9JJmigscrmUQsLauqB1ugZ+dFQLXhp5uvwhJpi1
-         SoKSIdqg8AA/2NlcZwQrJFrYp7xyZJSUFij8QiPsGsxMvNFs4RmkNZ0XcBBMH2/IUH5i
-         ppw0DD/UHmUvPZ9bioaZYsSimxAydjjYUUWb1Nm5iXNWB5+cGSiilqB6R3Cr1LvFSRbM
-         uIv505E4bpr/wzxN3cm0mY0I2kCWLMTvjVwaasfobvOzPjssTTOzdkj9nF1HYSNuMZUA
-         Lk4UTFqOG8SzaR+oUHiyOUI9lSbxVo+t5gGAyly3KIbGAYitPAS6W6ISPWmsv/aX1jUH
-         jVnw==;
+        bh=X34tjfxPPMupW8WHmEJAIsWdH0Oem6uch60iKqedEdc=;
+        fh=mdBBKK0BzupVSDkLJYwy8fKjeterENnae/Cvck+RYUE=;
+        b=k3Bk4/0snznoYpAlwKpInnTiq5P+jf6mEA6CekVGMw8POcNpn1b+1tKpJqEuomtxWP
+         VsqkEiGe6D2PYSwQwVzIq9i/CWO1/4L8CsGPEth1db/aFGcvsHh/iuA8CtoQjGF6Hq00
+         fujGIk0cKerYYM8xL4JXrd6BvUWkxh3TH0RKkjcWcEoTytTIbm86PPEANJiLiD55KFwR
+         dCg0tDDQfarpR1ev9AuG1zhDA0elCHdkyypdUTuhsHMSTQJmSXva/3xfmww+mUN1dCdF
+         XKT7dfi+58phsiM8lRilzJCmIzi6kKitPwKV70LQ2gPQJ1vtln1Xk0NZ/KM6A1YQvlB1
+         ZPKg==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769469375; x=1770074175; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1769471245; x=1770076045; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2gVqs+YSL9tkjaJJdsqPr0duAJEHrfSLsOJ+i8YF7aY=;
-        b=ESugPCVXHLcVuzUmCBFvDCyrBrt6+siBwnl2jTyIY2hilDAsb48uRZW9ZqXq0Nf9lj
-         9LKF+gtMhbCVRzHTtbundxNZ0vNbzKxemCR9GvG/apnFSmY2JaUncWAuJJI9UkzYlOtw
-         b39KU+V0rhN25A3KDVj/ucSfgetH/hUiucaAFASfxLkij5HkctZ0wHeY045sG4HsaHSd
-         ULmARvXc3bXF7hi575Y39yyzogfsSY+16jpe3GqaMc70A3S0CCkjOg7qKzqCcBg8uNJP
-         /2n7Hx8+TktxAAOdbHBmNnajHCeEGKL+xPlZirBRBOUOWx941kSEfeckZKKNDSxx10ts
-         H0ag==
+        bh=X34tjfxPPMupW8WHmEJAIsWdH0Oem6uch60iKqedEdc=;
+        b=tOQ5kISWDX1QsA9ML/6HqpZdAYqCmvu1LAl4RLjV6vmMc4FurcDbz94Bs2WqIi6zQx
+         hxlwHyXnJTlRyPXrileUtaHeMBQkZ9Mr2rii6cf8UZCehdTOWSHakYOVGyAesTk99mcB
+         FPxcpcREa+6xV9jajU2vI2kc2Ufi5BDSa8unt+FCaQ/dMh2VUlXGGlurR7q5Vc+R1l/b
+         v/dVxZslza0PVO2iaCuzKLt44aY6Tb/F84K+b753oxJ9KUkkrM9maYaEcYhwPoy8ET5a
+         4EMkun0kBryaLcC7o1paX6OFN8EXiwqly0mlI6ruzV3nJJrRDEtN9PYp3O3sibi5B/7V
+         HyZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769469375; x=1770074175;
+        d=1e100.net; s=20230601; t=1769471245; x=1770076045;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2gVqs+YSL9tkjaJJdsqPr0duAJEHrfSLsOJ+i8YF7aY=;
-        b=QUwLy5zWKRTDJdid57xZpmKpgvJocuRwS+DIAwouXmJdBOq27mH+y1vTFRPf4F9P2P
-         vN+A0sGhxu0SOKfiMBzRw5sfQtq0lHf2BACZXzntiFG6BxHnZ5BAW/QjbkB9jSrpPkRo
-         TRgq6JnBzZJeDdW9ujLxESg0C6QyAGoCfV6PisMYCiIctKprGvKYfQdosAP+CO6C2Ysn
-         OQ++amty2eWwZ704XGEhZrLwLv+UkDnCZoaSgGhSSoN+RvB0beMHAWwaZPxn8phqojZm
-         fEVNxMOeLcwJ1jTKSsIDKGIDP8c9LSMvJBtT5jIIpGghwI7pW8nlAKOy+gkmqE+KmAL0
-         aN3A==
-X-Forwarded-Encrypted: i=1; AJvYcCXG0ZuW1YKdXw/OXC1xdsZd97ze+o7c0sijsNo2r3GY4LCHelI1FLwRVO0CesZhJQX6o6qe@lists.linux.dev
-X-Gm-Message-State: AOJu0YzFMb/wEMfd9LvygAQiCxgFmU16UQuX/chw7ghHw6eGmDioxQkv
-	cqTxfTuf2JMEsbjADOlE5wFEdIV5lSwuTkFjxlKxcEGqo/kQ5hVACBmUoUVw0GcU73ne9L/7pVF
-	OyS+qWaIp3yNazx0PqSMrfEFx+7EZiIWCxmy/wpYu
-X-Gm-Gg: AZuq6aIDoyXgdtYPwKg+ZzkVO55B0To2ZhQV5tnPgJ/3vdYm2vNILCv0ZYz7S7GXtCN
-	E1MpID6gdRFAccn8mM5SaMK0wAD+KRNNXkS/JYYfMqMK+dX1YGGnslmkIYkiTCJIW/7mSJLEbj7
-	Gt3YZozGtQ9FA8hROii/00nbpVsAhzolKZy56X3Wyw6fqda7U6Y8+OMpYRvT+bxukHSB5VsyQ5q
-	CIv6DA7lPHfW1hRorgRuo07WZaTqJEGEANGbJMy4wu7EwG6BhKFDgsv8Jq71v99DoBJD2bm6GlO
-	iPvbUdM7MTSVzW0c2NbEdck56ks=
-X-Received: by 2002:a05:7022:4189:b0:119:e56b:c73d with SMTP id
- a92af1059eb24-1248ec0da9cmr2570569c88.2.1769469374916; Mon, 26 Jan 2026
- 15:16:14 -0800 (PST)
+        bh=X34tjfxPPMupW8WHmEJAIsWdH0Oem6uch60iKqedEdc=;
+        b=OnraBnPtCR/R4eCrxc3F6gslhzO7+Xf/O6T2OrCZIXNL7NHPHkuAafaZCD8/BtVNat
+         3YgHX02IMA9euDTGclrsgCEpPJWRFXzti0rAKxBGCBcLbkAHj/G78GNg8BbFQbYF8RTo
+         pdlCcwDtGFt8mzQ2BWfyn0Pjr3wVv6Yguiaqi3spF/axD7sOu1sL+FCk0JfEJcZuoD1l
+         MwhWPPsbjR7WwC247qCALZxo1NL05hOdsroPKVKrxKrb/eHMDTpgbILCdqtUOqpIlkpO
+         eKY9QRrcNqGJBiCHYxL+hyYA0psmKfUYf+mkMzbmMjY8+3QZ8G9yO7fNMVy1HJTT3AFB
+         9oUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpuVptFDKrK2Gvxt/x6c7xJKnNtvX+Qq5VQnOEd8/BF+LDM0dNscvhDklWatX9D/a9b/QV@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxq8FzJmdt6Ea8tr8qensUVzj+lxdcIrtllYNp9ZB/hhLPaLoAE
+	tQL/pdfj6io9Yjp5gkTmE92GXJVERKLyF22pjn8qQ9UJllbTly4H/rOQ7f8epE0vw2Wj0cC11gC
+	O6Sx22pjz3IeroL8XWGWL1CstyLN/KrivknreFi9e
+X-Gm-Gg: AZuq6aI1bHMAvJEbqO1ijQ5Ib/GgNpTdoBJKwYYYTzlzZrEGOwZ0mZzMNN4bMAlFu11
+	3yaYVyKvGuOTj1Gwgkuon595g7mtM0hBJ4gFyfvgiE9LyJOkIMchWAjBc/Vs3R/92HjED7LuDya
+	IRkx9ONC6kKiBsqfctaKvSagk4zV2HmL1Xvy/xHpaGL2LWYoyOkhPNXgi8yDJfgLZdSOo5C/xYa
+	GOyRIvHQb2pU7XNr/1d1wmR/Wj8VAthvFJ79Dli4p5NpcaSFpT6q2gPhCxKcDY6+Q070Au80kP5
+	KkZTZicSVheG0reVzJjNmMyIvyYL0IZrQ+ccFw==
+X-Received: by 2002:a05:7022:eb46:20b0:124:9e46:82fb with SMTP id
+ a92af1059eb24-1249e468815mr157327c88.38.1769471245289; Mon, 26 Jan 2026
+ 15:47:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260126002936.2676435-1-elver@google.com> <20260126002936.2676435-3-elver@google.com>
- <20260126111643.534c8274@pumpkin>
-In-Reply-To: <20260126111643.534c8274@pumpkin>
+References: <20251219154418.3592607-1-elver@google.com> <20251219154418.3592607-16-elver@google.com>
+ <dd65bb7b-0dac-437a-a370-38efeb4737ba@acm.org> <aXez9fSxdfu5-Boo@elver.google.com>
+ <8c1bbab4-4615-4518-b773-a006d1402b8b@acm.org> <20260126213556.GQ171111@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260126213556.GQ171111@noisy.programming.kicks-ass.net>
 From: Marco Elver <elver@google.com>
-Date: Tue, 27 Jan 2026 00:15:38 +0100
-X-Gm-Features: AZwV_QiD3_ipngjN37zY3RtrCwuNKR0vaNI3HEz51trEIWvcYYXjpjyuf605hOE
-Message-ID: <CANpmjNNUGzgLxSj78ptW-t5ux7WL7sq3q-h9acGEfJxC2u==hQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
-	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, 
-	Waiman Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
-	Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date: Tue, 27 Jan 2026 00:46:49 +0100
+X-Gm-Features: AZwV_QgcknJe0PlLV-z7bksgFQT7uSnaZ1B5QvyI9tPRocr5FzcCAIEUg9yCt-Y
+Message-ID: <CANpmjNPs9CtY1w1-MqL1-CnHVFLxXoA2rbd6d2w4wfxT8AP0ew@mail.gmail.com>
+Subject: Re: [PATCH v5 15/36] srcu: Support Clang's context analysis
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Bart Van Assche <bvanassche@acm.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Triplett <josh@joshtriplett.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 26 Jan 2026 at 12:16, David Laight <david.laight.linux@gmail.com> wrote:
+On Mon, 26 Jan 2026 at 22:36, Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Mon, 26 Jan 2026 01:25:11 +0100
-> Marco Elver <elver@google.com> wrote:
+> On Mon, Jan 26, 2026 at 10:54:56AM -0800, Bart Van Assche wrote:
 >
-> > Rework arm64 LTO __READ_ONCE() to improve code generation as follows:
-> >
-> > 1. Replace the _Generic-based __unqual_scalar_typeof() with the builtin
-> >    typeof_unqual(). This strips qualifiers from all types, not just
-> >    integer types, which is required to be able to assign (must be
-> >    non-const) to __u.__val in the non-atomic case (required for #2).
-> >
-> > One subtle point here is that non-integer types of __val could be const
-> > or volatile within the union with the old __unqual_scalar_typeof(), if
-> > the passed variable is const or volatile. This would then result in a
-> > forced load from the stack if __u.__val is volatile; in the case of
-> > const, it does look odd if the underlying storage changes, but the
-> > compiler is told said member is "const" -- it smells like UB.
-> >
-> > 2. Eliminate the atomic flag and ternary conditional expression. Move
-> >    the fallback volatile load into the default case of the switch,
-> >    ensuring __u is unconditionally initialized across all paths.
-> >    The statement expression now unconditionally returns __u.__val.
+> > Has it ever been considered to add support in the clang compiler for a
+> > variant of __must_hold() that expresses that one of two capabilities
+> > must be held by the caller? I think that would remove the need to
+> > annotate SRCU update-side code with __acquire_shared(ssp) and
+> > __release_shared(ssp).
 >
-> Does it even need to be a union?
-> I think (eg):
->         TYPEOF_UNQUAL(*__x) __val;      \
->         ...
->                 : "=r" (*(__u32 *)&__val)       \
-> will have the same effect (might need an __force for sparse).
+> Right, I think I've asked for logical operators like that. Although I
+> think it was in the __guarded_by() clause rather than the __must_hold().
+> Both || and && would be nice to have ;-)
 
-Unsure, but we might be treading on UB even with -fno-strict-aliasing
-given all the inline asm around here.
+Some attributes take multiple arguments (__must_hold does), though
+__guarded_by doesn't. Yet, && can still be had with adding it multiple
+times e.g. '__guarded_by(pi_lock) __guarded_by(rq->__lock)'.
 
-> Also is the 'default' branch even needed?
-> READ_ONCE() rejects sizes other than 1, 2, 4 and 8.
-> A quick search only found one oversize read - for 'struct vcpu_runstate_info'
-> in arch/x86/kvm/xen.c
-> Requiring that code use a different define might make sense.
+Only thing that doesn't exist is ||. I think the syntax you ask for
+won't fly, but I can add it to the backlog to investigate an _any
+variant of these attributes. Don't hold your breath though, given the
+time it takes to land all that in a released Clang version.
+
+> Specifically, I think I asked for something like:
 >
-> I also did some x86-64 build timings with compiletime_assert_rwonce_type()
-> commented out.
-> Expanding and compiling that check seems to add just over 1% to the
-> build time.
-> So anything to shrink that define is likely to be noticeable.
-
-The compiletime_assert_rwonce_type() is for the benefit of the
-asm-generic variant, which is implemented like the 'default' case here
-by default. This here is only the arm64 override of all that with LTO.
+>         cpumask_t       cpus_allowed __guarded_by(pi_lock && rq->__lock)
+>                                      __guarded_shared_by(pi_lock || rq->__lock);
+>
+>
+> I think Marco's suggestion was to use 'fake' locks to mimic those
+> semantics.
