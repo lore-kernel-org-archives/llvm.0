@@ -1,149 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA1027A133;
-	Mon, 26 Jan 2026 06:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04FC311960
+	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 07:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769408588; cv=none; b=az+6qPIsdRajlUydFf6/cEUTniBZ014zX3Tzpyw+tLdrkBzEuqtN7H2MmTC/LkQXxtt8lc3bVN57rmRS/1emlsqVvhbUB/wJz0Fl6IXA5SFtARDTzKa4I7QZnd1kTgXiVbgio8xUm09UO1XBuj2CXw1BQFRtC9xvfaZMz2xyDxc=
+	t=1769414217; cv=none; b=FFR4cAt+rxA2B9ND2+gZg71spN5FXQFjtXrOjRCWehT4/8vKXChiSiIqKUR2WieBw6gKuEJU+fYOsRymRTBzd2rZSRKFkt1NsBsvF/yas+cJakXl5LdViQbW8bvhAYRMO2wLnUYPnOBeYkjKj7TpybuqjRQZcTsr24srpOpuZ6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769408588; c=relaxed/simple;
-	bh=YsXx1MoHLIz7jzQAiJhBrQUFvFX/e6YQld0DsR1WATo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g6SWf+8BaRdJJINHvvxpWkbFvPeHDbLt8nI/VigcM/VyfWoh1Y/ROg8WAnk1HtIUegnInN5tp5wJRgMEtdgy0Uw/+3vAxa6Gxds7G38d4uOweFG8+zdcsRs7JZtwRjEhzoBh9FPl7/JObSdigxUDaagsFnUqeIjbbB19/RUDG0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eEl/ecQE; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769414217; c=relaxed/simple;
+	bh=+LrPioRNF54S72TjY1H1JjQU7/f9iPy8u2q0PAqC468=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=UelcYPRdH6go7LAbRaXh+5WzmCAQeYcL0XE54A0fygJeq4i5HVPAVRIMdfm7ZXRe0F1jXB5edWi7hbaADak0OYB6tLzbRxdBYo50PmOYfDo2cLgARHtahr0xzK0syQxqP9iHW6JoOmELs5UPs7eN/VVVQ4TsBl1CRK2ly3OPDVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=eDOHAvbf; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=W3fx2I7+; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eEl/ecQE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769408587; x=1800944587;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YsXx1MoHLIz7jzQAiJhBrQUFvFX/e6YQld0DsR1WATo=;
-  b=eEl/ecQEtlsY5L6w7xsv49QH9yk2Iu2mhoauP6iM/ztkiD2AEb8evH0h
-   EQaN89kymT7DLPlc2EuyoiXaVHe0FxzWpHZ9d3PAfs7jUHIUAFPUSR/TR
-   66oXWtTsmlFM2qSLl5/ifgYSPjo9xYc4YxRDf3nowKVTt3vdZk9qTLWwD
-   kshoZGnYZnDGy/njyxhRCOPkeCUbrzeLnH2Ys2/Q7mQ+Un51ZEmM+WCee
-   rY/uIqXuep8EE92Gqeqm/AfxgnNWiCMNSvQFRP7q+W429+rSEV5+qiyGg
-   aHVCuHPh4DfZozQM2/u/7799achOBaVse+faGGh66Km40cv+E+L4p9lWp
-   Q==;
-X-CSE-ConnectionGUID: esFJFkpfQmKhaxCo77bQYA==
-X-CSE-MsgGUID: LkgImaC4Q0q1RLBF9tr9Xw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="58158198"
-X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="58158198"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 22:23:05 -0800
-X-CSE-ConnectionGUID: u4qiLRv2TbGKtlwNgiNogA==
-X-CSE-MsgGUID: bfxaqDnrS3a/xUWWplBWVw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
-   d="scan'208";a="207406796"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 25 Jan 2026 22:23:02 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vkG02-00000000X02-3aRH;
-	Mon, 26 Jan 2026 06:22:58 +0000
-Date: Mon, 26 Jan 2026 14:22:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kyle Hsieh <kylehsieh1995@gmail.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Beguin <liambeguin@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Kyle Hsieh <kylehsieh1995@gmail.com>
-Subject: Re: [PATCH v3 2/2] iio: adc: ltc2309: add support for ltc2305
-Message-ID: <202601261441.M4qQzY72-lkp@intel.com>
-References: <20260126-add_ltc2305_driver-v3-2-951349a87f97@gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="eDOHAvbf";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="W3fx2I7+"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id EE9AF1400133;
+	Mon, 26 Jan 2026 02:56:52 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Mon, 26 Jan 2026 02:56:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1769414212;
+	 x=1769500612; bh=3IfPvmYKcPzCTIR9O8n/ZZl1J7ESmm5QMdaDtE3F9Ak=; b=
+	eDOHAvbfe67c7eNr6nvfZediiLLte7005PrRqlu0iOJYtnxgkYz8ahsKixtMWmuD
+	u8u8nGO1QkjwNaktsBNh2CV5c+9vSXwE4p0INN+HMcT61A1rtud2mCDy2LUIuaaS
+	mG7qawiTbA6SBlvFMx4B5MjlsBQ9hkpApdV6pksVN44LVf2NDjdgrnq+oXw4cKTu
+	Eda9a2eXauZCaA0oJCQQ30By2P3Bawit66b+1DgGCEqNAzUK6wTbLYnjVygmPTtL
+	e1cqM4Y93GWBjzGAh/p1xZA7oFWvRyW/fCvq4Cks2Z/e5OUQdufbB4hLLVv5326K
+	M3NxG9mJ2mScK+XkgXhkhg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1769414212; x=
+	1769500612; bh=3IfPvmYKcPzCTIR9O8n/ZZl1J7ESmm5QMdaDtE3F9Ak=; b=W
+	3fx2I7+Tr3U/oGqVC8/FrPV/NMfI3Cy8wmbcKoMJ4yMyysqKEdx1Dv0JWlON72n3
+	NW/N8kpdDewTu/Ld03jpDt0mTYMXFy+qVOV+x928f2Aw/7qsK/+5mr6NhYzK2NWt
+	ZtxkaZVbty9gKQpYkOaQY3Uu6gQ9AI59N+OOvL1clClFURNjw4Rf5E+AcNtL2cTl
+	ajRffZ8guBUhV57QGkQ6gQzfpOC3S8MN1o0QLH77PNmaXBsJLDm/5lTpe1BTr3Ye
+	M7oAzYxYCGQeBbz+td+Pdh2AtaP8/WFH9A3ht3kZYbw7Wem0WOrajZJFBdFjcVH/
+	e7HOsm5c8lvji14tfgEsQ==
+X-ME-Sender: <xms:RB53adg4XV3YLrQwjKUTfLbpfRx-xYDDm43MvU6zuE2ok_iyZaWZvA>
+    <xme:RB53ac0XchSpGcx1Vhll0YcisS3D8rMC31psmJm4eDWDwL3Ot7sEzlKR9lGABVtEJ
+    1o_zH0UQYwPvKgBi-ZDdiA7iWnBuNUArkmJ4SRM7a6IFGD6DEQkQrM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduheejudefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopegsvhgrnhgrshhstghhvgesrggtmhdrohhrghdprhgtphhtthhope
+    gtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohepsghoqhhu
+    nhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvghlvhgvrhesghhoohhglh
+    gvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhr
+    tghpthhtohepmhhinhhgoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhlse
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdgu
+    vgdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfh
+    hrrgguvggrugdrohhrgh
+X-ME-Proxy: <xmx:RB53aReo68kLo8Q1IJCChvRmKN-3htxlI-nXrn6R5155lU1DAyOEzw>
+    <xmx:RB53aVm6-evyg8KFJbFCbA2umpHntC9GhAPNbn3962Rs2sCPDehgTQ>
+    <xmx:RB53aWxvvEu_mZ49ut_QBMH9nYXstucdc__dd9-N53eNV8C0M_RVTQ>
+    <xmx:RB53aYwYVFAceK9En2bDONpgdSB5BKx7v13o8NcOATLXSbVwLVH0tw>
+    <xmx:RB53abOVjjg5sh8HqUZ3KEB_tzykmn2fdXpbJmsUeO3-psbeH5fcgbBp>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2B7E8700069; Mon, 26 Jan 2026 02:56:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126-add_ltc2305_driver-v3-2-951349a87f97@gmail.com>
+X-ThreadId: ArrhcHX-7EeF
+Date: Mon, 26 Jan 2026 08:56:11 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Marco Elver" <elver@google.com>, "Peter Zijlstra" <peterz@infradead.org>,
+ "Will Deacon" <will@kernel.org>
+Cc: "Ingo Molnar" <mingo@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Waiman Long" <longman@redhat.com>,
+ "Bart Van Assche" <bvanassche@acm.org>, llvm@lists.linux.dev,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Message-Id: <d3295c84-da15-4695-8110-7e04cfaf1419@app.fastmail.com>
+In-Reply-To: <20260126002936.2676435-3-elver@google.com>
+References: <20260126002936.2676435-1-elver@google.com>
+ <20260126002936.2676435-3-elver@google.com>
+Subject: Re: [PATCH 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Kyle,
+On Mon, Jan 26, 2026, at 01:25, Marco Elver wrote:
+> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> index fc0fb42b0b64..9963948f4b44 100644
+> --- a/arch/arm64/include/asm/rwonce.h
+> +++ b/arch/arm64/include/asm/rwonce.h
+> @@ -32,8 +32,7 @@
+>  #define __READ_ONCE(x)							\
+>  ({									\
+>  	typeof(&(x)) __x = &(x);					\
+> -	int atomic = 1;							\
+> -	union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;	\
+> +	union { TYPEOF_UNQUAL(*__x) __val; char __c[1]; } __u;		\
+>  	switch (sizeof(x)) {						\
+>  	case 1:								\
+>  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
 
-kernel test robot noticed the following build warnings:
+How does this work with CC_HAS_TYPEOF_UNQUAL=false?
 
-[auto build test WARNING on 9448598b22c50c8a5bb77a9103e2d49f134c9578]
+As far as I can tell, TYPEOF_UNQUAL() falls back to __typeof__
+on gcc-13, clang-18 and earlier, and not strip out qualifiers.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Hsieh/dt-bindings-adc-ltc2497-add-support-for-ltc2305/20260126-093339
-base:   9448598b22c50c8a5bb77a9103e2d49f134c9578
-patch link:    https://lore.kernel.org/r/20260126-add_ltc2305_driver-v3-2-951349a87f97%40gmail.com
-patch subject: [PATCH v3 2/2] iio: adc: ltc2309: add support for ltc2305
-config: i386-buildonly-randconfig-006-20260126 (https://download.01.org/0day-ci/archive/20260126/202601261441.M4qQzY72-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601261441.M4qQzY72-lkp@intel.com/reproduce)
+With fd69b2f7d5f4 ("compiler: Use __typeof_unqual__() for
+__unqual_scalar_typeof()"), I would expect __unqual_scalar_typeof()
+to do the right thing already.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601261441.M4qQzY72-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/adc/ltc2309.c:209:20: warning: variable 'chip_info' is uninitialized when used here [-Wuninitialized]
-     209 |         indio_dev->name = chip_info->name;
-         |                           ^~~~~~~~~
-   drivers/iio/adc/ltc2309.c:195:43: note: initialize the variable 'chip_info' to silence this warning
-     195 |         const struct ltc2309_chip_info *chip_info;
-         |                                                  ^
-         |                                                   = NULL
-   1 warning generated.
-
-
-vim +/chip_info +209 drivers/iio/adc/ltc2309.c
-
-   192	
-   193	static int ltc2309_probe(struct i2c_client *client)
-   194	{
-   195		const struct ltc2309_chip_info *chip_info;
-   196		struct iio_dev *indio_dev;
-   197		struct ltc2309 *ltc2309;
-   198		int ret;
-   199	
-   200		indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*ltc2309));
-   201		if (!indio_dev)
-   202			return -ENOMEM;
-   203	
-   204		ltc2309 = iio_priv(indio_dev);
-   205	
-   206		ltc2309->dev = &indio_dev->dev;
-   207		ltc2309->client = client;
-   208	
- > 209		indio_dev->name = chip_info->name;
-   210		indio_dev->modes = INDIO_DIRECT_MODE;
-   211		indio_dev->channels = chip_info->channels;
-   212		indio_dev->num_channels = chip_info->num_channels;
-   213		indio_dev->info = &ltc2309_info;
-   214	
-   215		ret = devm_regulator_get_enable_read_voltage(&client->dev, "vref");
-   216		if (ret < 0 && ret != -ENODEV)
-   217			return dev_err_probe(ltc2309->dev, ret,
-   218					     "failed to get vref voltage\n");
-   219	
-   220		ltc2309->vref_mv = ret == -ENODEV ? LTC2309_INTERNAL_REF_MV : ret / 1000;
-   221	
-   222		mutex_init(&ltc2309->lock);
-   223	
-   224		return devm_iio_device_register(&client->dev, indio_dev);
-   225	}
-   226	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
