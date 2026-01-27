@@ -1,186 +1,297 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3083559F8
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 13:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E6E34C9AC;
+	Tue, 27 Jan 2026 13:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769519186; cv=none; b=uEhEErDvv5ZE5greAGxonyBL3zoZjWaZlQaYdnAs84X/u0m4ZWGtBWIM8n3gQJszJSRRGaxoMHfmN887tJN1+mNvht2XxjDGANqOaTKatNLISz7M7fBWn+eBW8QgzGOSzwHImVZtwI80c24pC3l3d+1lhUTjCKyr6zkSOYsaqis=
+	t=1769519671; cv=none; b=rssEbZOP50g5A/tpfM+Uidbom+OKr3gnpptQwU7OeHlOQ0zIxMXdYK9RzNovtsZbsCOeP7zCSxAdLRlLRTvpKJ1DsqdHLUR86hNZbUQ2vXV2wGSenBcp9CgRjWTY9GVr/BqyIpZ5g5Mog55P9lHzQKiJdi/IZHx1H4rtfVX3LRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769519186; c=relaxed/simple;
-	bh=jgA/Uujf10BhGbOSNIE1krgPvsTZ8w0jjl4lzAXYgUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bTMYpGK2K8rXyLEsuDEfB4LPtSC+749a+QpmFjH1v/Val4s+QvuV3F9e5KPLxjY+Slf6+GXnHYhjPM/A1KwjI5v1+LgiNYDxisC+/ZhVYSHG2LhYZ7kpxhiAticHihSmO+qBASOnoBi3vgjDdfrZneWF4htnjZBHJTxn+6WUOUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=YDVdB0Y+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Tpywlas9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1769519671; c=relaxed/simple;
+	bh=KTqHTplNUe7OnkDWCvoPN4NSN5ru25jM85WGbpCf3dw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=fIX2pLZXocMDso3/wCyTPB1PrRkvTIGmUpTtm//wIFItb8BENozSbi9GlegO5dWuJQ1gHwK6gnVsm9AgC5quQsm9h2yPL4HPtbA36JGEeWqAbljtDFFi9lLX2m5zz5UBolNFPEDFeHcVncNxbS8/N4D/EdyayWoW1efKMNe29Oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fmSz3789; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="YDVdB0Y+";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Tpywlas9"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60R9tH9C3857550
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 13:06:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	EWLo9Ea+3GkWbisbwaIrDxm7iAQxoGZnDo5vW6pC4rM=; b=YDVdB0Y+tXBhgd7a
-	VPs+WZnJhyirwInsxyHT7uC79jySmwLuVgDU5pD2HFTE/YnLwOYTrlqvywJ3y9dM
-	nDVX+VnsF++5AR927VsHANK+o17lhrJ8C6cCLowMix4tKmGryfAEEhiQZVBDaut3
-	VD84J2XJUujWy7+OhMKzmvoyBBQTgEMMcvxFahxUS3F5LRDzaeRKhWfvdkePb6GE
-	sD7z/xUqIkq1JR+gStvuCJN1TB9EgUbmFqsE4C+d7dcIk91/z/sJqWEb3yhvoirw
-	Lw5+ENRIpzDzSVEAkL/IoFFQaOJX+5J4iFGQg4QrKvzS0fiQHjiK2LyptKDVKEvv
-	cttsRw==
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bxffs2r8h-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 13:06:21 +0000 (GMT)
-Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-9414fc8eb29so1272561241.3
-        for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 05:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769519181; x=1770123981; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EWLo9Ea+3GkWbisbwaIrDxm7iAQxoGZnDo5vW6pC4rM=;
-        b=Tpywlas9I09tJV5L0Lb6rK/qPSndYQ1JO1Pd6zKN5a1zi4bHxbnkiTLUt4SCMupAQm
-         2dPppMolWqosV0rxzKFkVQY8yoaI3ncXyrDP8z1yF61y9GbP5PLd1oZpwTyer4kYMhqt
-         cBOkpSNPSsg8fujemMXm7vgMG2R8tEV+FMsRZcfYgCVfX11HTz8ybJMM2HB4jwiWVDBb
-         LbVAvXG6KG6DzB7qhqzt4fXYy0k0BIEijME5DDywjk2DKZRI57prhZ7I9y+e1oQGVDy9
-         xPkHhBWO7zCjQDlEt7Zc/wKknWhanp1UueRfsGpQlpqzD1ASGGIVWEJ9skB10YRWcqjS
-         jgkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769519181; x=1770123981;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EWLo9Ea+3GkWbisbwaIrDxm7iAQxoGZnDo5vW6pC4rM=;
-        b=E+iyxK6ems2eep77UXv14CEkhuBglAfAM8mqVooT09+QDIaSCNLGRZMDLnsL+hi+EB
-         yh7EONNiL1M36Ev1MtxFs9xUdCNrZRFcPDSZQW6qxBNCjZ2nQkiwso4AOiIZkChUuFr9
-         L9QO5w9DkB0BYWiLQK2RnKeeArkXmh2myoEB3x4QI+RDDmoZx/724kItivLCjBwJ89uj
-         sceSwb9r2Pb5D2MMPapICxFxeKzEeRm39J14IBt7QsrD9pbgwbZHNPacQal+lH+fB9vv
-         jHvmlYUA+uJKIGFZNHoZwAD6vPye/zJmm1qWHoIOvQBTzi0oP120PRXUT9KCURKvmlwS
-         bxVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVSak5jNKk9OP9gxo5oz4PQtKNI9u4pKl/dC4G6K2uGMaoiAlGzzciq5NmS+HpsK6XgZA/w@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz+23HhJRmq02uhOthj3nk/WL02lvyKni7T05SRGbm6HiuaN31p
-	estw8N29HSQ82VtGGzVYxAbrJPsHTM2I/2Qs154rk/juBrg2TZBLytLOc4NOnT0n3bK6VGwcIjn
-	qbsbwEAQYwsFNR6Ti8i5uXyfbUaDp7xf3AUquZieuX4z88BlNN+YXFLD+
-X-Gm-Gg: AZuq6aJNkpvwKagOkzk5hF/hcFbB4bPUQDY9nmvar7C3N6UxxG3Ba1YivW3Z+1WChuV
-	GHrJXZ7z8yNNrPpkgGTNzp4lid+gLxfF9XipWSTtplCdKGAHRfwuoepubN62FW2OYskLflw3Dyz
-	XIh7c5+08dIw0nYo4O2Np4G/f4aoE79eapTLiru9sGjc1oGTM0ON7kmKbfUoihN6YiCYjd5sSAB
-	GTOcLH+xl9RUJyB401ykqQHljtBM4H0/QNu6BYc1lkGG5fGFD/nR0OOIP7Sg+u9N7+b9HnVAuLF
-	+YzAJTdRTsqHDqV05GLX38nXcdtYmUEgo4ntXkYp5rd3d+pHs8DER79b51wd/Wj+qQoP34E2gcV
-	Sq1uExTaF5putjQ+4D9403JiRREUqjMurEvOTmSLGxsg1Yfqez5AVlh7XGFsCPuYphXI=
-X-Received: by 2002:a05:6122:91d:b0:559:9663:bfb1 with SMTP id 71dfb90a1353d-5667935b4cdmr288168e0c.0.1769519181378;
-        Tue, 27 Jan 2026 05:06:21 -0800 (PST)
-X-Received: by 2002:a05:6122:91d:b0:559:9663:bfb1 with SMTP id 71dfb90a1353d-5667935b4cdmr288151e0c.0.1769519180836;
-        Tue, 27 Jan 2026 05:06:20 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6584b92b98asm6147030a12.19.2026.01.27.05.06.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 05:06:19 -0800 (PST)
-Message-ID: <6498dc50-c08a-4416-95ff-06a8ca7db6b0@oss.qualcomm.com>
-Date: Tue, 27 Jan 2026 14:06:15 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fmSz3789"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769519670; x=1801055670;
+  h=date:from:to:cc:subject:message-id;
+  bh=KTqHTplNUe7OnkDWCvoPN4NSN5ru25jM85WGbpCf3dw=;
+  b=fmSz3789ffe5mgPjRlYdE02Sbwe0j5s3VLdJmKHyRMKktemCxuP88CMr
+   /z9jYjYGjxIuIvSrn/Y5KWxLDS2f2N9scwVkBz/h1sIRwnAc4FgDwemh/
+   nsseCyJuPumz8DwkBa3az6VuyNYj6v0mJFv4han00DLfIXUE6TOPo7E3o
+   pZyV6UBYmZgQ+vGUvRyMjUCKkMg5e1SshGFX4Bq+omtivqRFRcg5aCYOO
+   nrXb7kJAAzNJl0PgWGB+uJHGb/GyJYqH7fY8S3/LLQZ9r0SNLajLq35dw
+   16uw4cS5ViJywotefC0VfN2l9FanszimhgndD9YCH+5d+CfQCGqSE1D7E
+   w==;
+X-CSE-ConnectionGUID: CJGdl7Y6T6KqzoxDe0OPvA==
+X-CSE-MsgGUID: a7vdIcN0SaqjSs3WCwO4nA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="81017858"
+X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
+   d="scan'208";a="81017858"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 05:14:29 -0800
+X-CSE-ConnectionGUID: FwsBbSTeSv+HQ4AoGDOF3w==
+X-CSE-MsgGUID: 1orGw4GaQIq4yKEpN4OFFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
+   d="scan'208";a="208215905"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 27 Jan 2026 05:14:26 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkitk-00000000YVM-2BBM;
+	Tue, 27 Jan 2026 13:14:24 +0000
+Date: Tue, 27 Jan 2026 21:14:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Kuo <rkuo@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Brian Cain <bcain@kernel.org>
+Subject: [bcain:bcain/boot_qemu 26/38]
+ arch/hexagon/kernel/devtree.c:50:6: error: call to undeclared function
+ 'of_get_flat_dt_prop'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202601272107.nfitPBz1-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] remoteproc: qcom_wcnss: Fix handling the lack of PD
- regulators in v3
-To: Val Packett <val@packett.cool>, Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Luca Weiss <luca@lucaweiss.eu>
-Cc: Vladimir Lypak <vladimir.lypak@gmail.com>,
-        =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org,
-        phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev
-References: <20260126235018.969140-1-val@packett.cool>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260126235018.969140-1-val@packett.cool>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: Y2F6AHPLmVOuvTq2jOYnT738_TKSxGmr
-X-Authority-Analysis: v=2.4 cv=YpcChoYX c=1 sm=1 tr=0 ts=6978b84e cx=c_pps
- a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Q--SMSCEpvHRqS4MLmMA:9 a=QEXdDO2ut3YA:10
- a=TOPH6uDL9cOC6tEoww4z:22
-X-Proofpoint-ORIG-GUID: Y2F6AHPLmVOuvTq2jOYnT738_TKSxGmr
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDEwNyBTYWx0ZWRfX/ZHvmi5AtTkI
- C7sk9zGf1O5BFwrP6qwi0YzTmyVJkXQQ3hP0m8QUhv2pu6XBK1qomg77O1Y0YaRETrrftT7tl9U
- c59N62Mjr2/HL3IpMUl0YhUFTNBh0OKN1UE/qhjRqd1RO2ZW1mLheaJadoWyg66WVgsGhqTNxpY
- V3Gnz/u8eITMXj3CbRLC6kE8LQmjRZbS1yiqpIHLrBOw72JU4c5jTTS7aC53GOLrO2AlkpweA8B
- DDljH4YUKqUzh6zqGglQ4K+XqVwbB9clZuoBGQbSuTi5CFz6Feh0MPYvYpB6OP00NpYSp8h5FCI
- cFve3JIR57YqfRmzkxfnkvC1oJnJ5l0E+3mTXdMk23YTytJepuRJZgyNtuB/UWCm6YJQUTt3gGx
- kjjjGnFDqhVI1dwUgc/2WcgeBNvoZOHSPK/ZNbm/FOdPvxcdrDzFybdw/iqSBhYmT/Hc682hjNx
- XgnqadcTo2T54rUyzpw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-27_02,2026-01-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1015 phishscore=0 impostorscore=0 suspectscore=0
- spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601270107
 
-On 1/27/26 12:44 AM, Val Packett wrote:
-> The changes introduced to handle single power domain platforms have
-> swapped the info pointer increment from num_pd_vregs to num_pds, which
-> doesn't change anything for pronto-v1 and v2 where they match, but as
-> pronto-v3 has 2 power domains with no PD regulators at all, this would
-> shift the pointer past the end of the array.
-> 
-> This showed up as a difference between GCC- and LLVM-compiled kernels
-> on MSM8953/SDM632 devices, where only with LLVM one would get the
-> "regulator request with no identifier" error, because the out-of-bounds
-> memory ended up being zeroed. Fix by reverting that single line.
-> 
-> Fixes: 65991ea8a6d1 ("remoteproc: qcom_wcnss: Handle platforms with only single power domain")
-> Signed-off-by: Val Packett <val@packett.cool>
-> ---
-> 
-> I'm like 99% sure that this (old) line is correct and the change in this one line
-> in 65991ea8a6d1 might've been an unintentional/stray one.
-> 
-> Still, please retest on MSM8974/MSM8226!
-> 
-> Thanks,
-> ~val
-> ---
->  drivers/remoteproc/qcom_wcnss.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-> index ee18bf2e8054..5884c5a52af6 100644
-> --- a/drivers/remoteproc/qcom_wcnss.c
-> +++ b/drivers/remoteproc/qcom_wcnss.c
-> @@ -454,7 +454,7 @@ static int wcnss_init_regulators(struct qcom_wcnss *wcnss,
->  	 * reserve extra space to manage them through the regulator interface.
->  	 */
->  	if (wcnss->num_pds) {
-> -		info += wcnss->num_pds;
-> +		info += num_pd_vregs;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   6dd00eeb9163d38cdab8b12c40702a711f04a9ab
+commit: c03d45c08b8a1046b1502fc07d0a7145fc2fb5b8 [26/38] hexagon: add memory management enhancements
+config: hexagon-randconfig-002-20260127 (https://download.01.org/0day-ci/archive/20260127/202601272107.nfitPBz1-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601272107.nfitPBz1-lkp@intel.com/reproduce)
 
-The existing code is correct in that it skips the wcnss->num_pds
-(i.e. "the number of PDs Linux managed to successfully attach to"), out
-of the vregs table (which on all-but-pronto_v3_data is a superset of the
-PD list, since 15 years ago the regulator framework was used to represent
-all power-related RPM resources)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601272107.nfitPBz1-lkp@intel.com/
 
-I believe the correct diff would be to check if the length of .pd_names
-is >= the length of .vregs and say that it's the backwards-compat case
-(which again, pronto_v3 isn't concerned by)
+All error/warnings (new ones prefixed by >>):
 
-Konrad
+>> arch/hexagon/kernel/devtree.c:17:13: warning: no previous prototype for function 'early_init_dt_add_memory_arch' [-Wmissing-prototypes]
+      17 | void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+         |             ^
+   arch/hexagon/kernel/devtree.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      17 | void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+         | ^
+         | static 
+>> arch/hexagon/kernel/devtree.c:50:6: error: call to undeclared function 'of_get_flat_dt_prop'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
+         |             ^
+   arch/hexagon/kernel/devtree.c:50:4: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
+         |           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/hexagon/kernel/devtree.c:104:29: warning: attribute declaration must precede definition [-Wignored-attributes]
+     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+         |                             ^
+   include/linux/init.h:45:17: note: expanded from macro '__init'
+      45 | #define __init          __section(".init.text") __cold __latent_entropy \
+         |                         ^
+   include/linux/compiler_attributes.h:321:56: note: expanded from macro '__section'
+     321 | #define __section(section)              __attribute__((__section__(section)))
+         |                                                        ^
+   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
+      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
+         |                                          ^
+>> arch/hexagon/kernel/devtree.c:104:29: warning: attribute declaration must precede definition [-Wignored-attributes]
+     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+         |                             ^
+   include/linux/init.h:45:41: note: expanded from macro '__init'
+      45 | #define __init          __section(".init.text") __cold __latent_entropy \
+         |                                                 ^
+   include/linux/compiler_types.h:126:34: note: expanded from macro '__cold'
+     126 | #define __cold                          __attribute__((__cold__))
+         |                                                        ^
+   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
+      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
+         |                                          ^
+>> arch/hexagon/kernel/devtree.c:104:36: error: redefinition of 'setup_machine_fdt'
+     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+         |                                    ^
+   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
+      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
+         |                                          ^
+>> arch/hexagon/kernel/devtree.c:120:2: error: use of undeclared identifier 'initial_boot_params'
+     120 |         initial_boot_params = dt_phys;
+         |         ^~~~~~~~~~~~~~~~~~~
+   arch/hexagon/kernel/devtree.c:126:23: error: use of undeclared identifier 'initial_boot_params'
+     126 |         if (fdt_magic(initial_boot_params) != OF_DT_HEADER) {
+         |                       ^~~~~~~~~~~~~~~~~~~
+>> arch/hexagon/kernel/devtree.c:130:12: error: call to undeclared function 'of_get_flat_dt_root'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |         dt_root = of_get_flat_dt_root();
+         |                   ^
+>> arch/hexagon/kernel/devtree.c:132:15: error: call to undeclared function 'of_flat_dt_match_machine'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     132 |         mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
+         |                      ^
+>> arch/hexagon/kernel/devtree.c:132:13: error: incompatible integer to pointer conversion assigning to 'const struct machine_desc *' from 'int' [-Wint-conversion]
+     132 |         mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/hexagon/kernel/devtree.c:142:9: error: call to undeclared function 'early_init_dt_scan_root'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     142 |         early_init_dt_scan_root();
+         |         ^
+>> arch/hexagon/kernel/devtree.c:147:2: error: call to undeclared function 'early_init_dt_scan_chosen'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     147 |         early_init_dt_scan_chosen(boot_command_line);
+         |         ^
+   3 warnings and 10 errors generated.
+
+
+vim +/of_get_flat_dt_prop +50 arch/hexagon/kernel/devtree.c
+
+57d9a292755c80 Richard Kuo 2025-08-18   15  
+57d9a292755c80 Richard Kuo 2025-08-18   16  /*  called via early_init_dt_scan_memory?  */
+57d9a292755c80 Richard Kuo 2025-08-18  @17  void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+57d9a292755c80 Richard Kuo 2025-08-18   18  {
+57d9a292755c80 Richard Kuo 2025-08-18   19  	//  Cheesy solution is to just twiddle bootmem_lastpg
+57d9a292755c80 Richard Kuo 2025-08-18   20  	BUG();  ///  XXX Todo fixme
+57d9a292755c80 Richard Kuo 2025-08-18   21  }
+57d9a292755c80 Richard Kuo 2025-08-18   22  
+57d9a292755c80 Richard Kuo 2025-08-18   23  #ifdef CONFIG_BLK_DEV_INITRD
+57d9a292755c80 Richard Kuo 2025-08-18   24  /*  Seems to be the implementation used by most archs  */
+57d9a292755c80 Richard Kuo 2025-08-18   25  static void __init __maybe_unused early_init_dt_setup_initrd_arch(u64 start,
+57d9a292755c80 Richard Kuo 2025-08-18   26  					    u64 end)
+57d9a292755c80 Richard Kuo 2025-08-18   27  {
+57d9a292755c80 Richard Kuo 2025-08-18   28  	initrd_start = (unsigned long)__va(start);
+57d9a292755c80 Richard Kuo 2025-08-18   29  	initrd_end = (unsigned long)__va(end);
+57d9a292755c80 Richard Kuo 2025-08-18   30  	initrd_below_start_ok = 1;
+57d9a292755c80 Richard Kuo 2025-08-18   31  }
+57d9a292755c80 Richard Kuo 2025-08-18   32  #endif
+57d9a292755c80 Richard Kuo 2025-08-18   33  
+57d9a292755c80 Richard Kuo 2025-08-18   34  //  basically a copy of dt_scan_chosen, but doesn't do the initrd scan.
+57d9a292755c80 Richard Kuo 2025-08-18   35  static int __init early_init_dt_scan_chosen_noinitrd(unsigned long node, const char *uname,
+57d9a292755c80 Richard Kuo 2025-08-18   36  				     int depth, void *data)
+57d9a292755c80 Richard Kuo 2025-08-18   37  {
+57d9a292755c80 Richard Kuo 2025-08-18   38  	unsigned long l;
+57d9a292755c80 Richard Kuo 2025-08-18   39  	char *p;
+57d9a292755c80 Richard Kuo 2025-08-18   40  
+57d9a292755c80 Richard Kuo 2025-08-18   41  	pr_debug("search \"chosen\", depth: %d, uname: %s\n", depth, uname);
+57d9a292755c80 Richard Kuo 2025-08-18   42  
+57d9a292755c80 Richard Kuo 2025-08-18   43  	if (depth != 1 || !data ||
+57d9a292755c80 Richard Kuo 2025-08-18   44  	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
+57d9a292755c80 Richard Kuo 2025-08-18   45  		return 0;
+57d9a292755c80 Richard Kuo 2025-08-18   46  
+57d9a292755c80 Richard Kuo 2025-08-18   47  	//early_init_dt_check_for_initrd(node);
+57d9a292755c80 Richard Kuo 2025-08-18   48  
+57d9a292755c80 Richard Kuo 2025-08-18   49  	/* Retrieve command line */
+57d9a292755c80 Richard Kuo 2025-08-18  @50  	p = of_get_flat_dt_prop(node, "bootargs", &l);
+57d9a292755c80 Richard Kuo 2025-08-18   51  	if (p != NULL && l > 0)
+57d9a292755c80 Richard Kuo 2025-08-18   52  		strscpy(data, p, min((int)l, COMMAND_LINE_SIZE));
+57d9a292755c80 Richard Kuo 2025-08-18   53  
+57d9a292755c80 Richard Kuo 2025-08-18   54  	/*
+57d9a292755c80 Richard Kuo 2025-08-18   55  	 * CONFIG_CMDLINE is meant to be a default in case nothing else
+57d9a292755c80 Richard Kuo 2025-08-18   56  	 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
+57d9a292755c80 Richard Kuo 2025-08-18   57  	 * is set in which case we override whatever was found earlier.
+57d9a292755c80 Richard Kuo 2025-08-18   58  	 */
+57d9a292755c80 Richard Kuo 2025-08-18   59  #ifdef CONFIG_CMDLINE
+57d9a292755c80 Richard Kuo 2025-08-18   60  #ifndef CONFIG_CMDLINE_FORCE
+57d9a292755c80 Richard Kuo 2025-08-18   61  	if (!((char *)data)[0])
+57d9a292755c80 Richard Kuo 2025-08-18   62  #endif
+57d9a292755c80 Richard Kuo 2025-08-18   63  		strscpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+57d9a292755c80 Richard Kuo 2025-08-18   64  #endif /* CONFIG_CMDLINE */
+57d9a292755c80 Richard Kuo 2025-08-18   65  
+57d9a292755c80 Richard Kuo 2025-08-18   66  	pr_debug("Command line is: %s\n", (char*)data);
+57d9a292755c80 Richard Kuo 2025-08-18   67  
+57d9a292755c80 Richard Kuo 2025-08-18   68  	/* break now */
+57d9a292755c80 Richard Kuo 2025-08-18   69  	return 1;
+57d9a292755c80 Richard Kuo 2025-08-18   70  }
+57d9a292755c80 Richard Kuo 2025-08-18   71  
+57d9a292755c80 Richard Kuo 2025-08-18   72  
+57d9a292755c80 Richard Kuo 2025-08-18   73  
+1732d55bf9016e Brian Cain  2026-01-24   74  /*
+1732d55bf9016e Brian Cain  2026-01-24   75   * Iterator for of_flat_dt_match_machine
+1732d55bf9016e Brian Cain  2026-01-24   76   */
+1732d55bf9016e Brian Cain  2026-01-24   77  static const void * __init arch_get_next_mach(const char *const **match)
+1732d55bf9016e Brian Cain  2026-01-24   78  {
+1732d55bf9016e Brian Cain  2026-01-24   79  	static const struct machine_desc *mdesc = __arch_info_begin;
+1732d55bf9016e Brian Cain  2026-01-24   80  	const struct machine_desc *m = mdesc;
+1732d55bf9016e Brian Cain  2026-01-24   81  
+1732d55bf9016e Brian Cain  2026-01-24   82  	if (m >= __arch_info_end)
+1732d55bf9016e Brian Cain  2026-01-24   83  		return NULL;
+1732d55bf9016e Brian Cain  2026-01-24   84  
+1732d55bf9016e Brian Cain  2026-01-24   85  	mdesc++;
+1732d55bf9016e Brian Cain  2026-01-24   86  	*match = m->dt_compat;
+1732d55bf9016e Brian Cain  2026-01-24   87  	return m;
+1732d55bf9016e Brian Cain  2026-01-24   88  }
+1732d55bf9016e Brian Cain  2026-01-24   89  
+57d9a292755c80 Richard Kuo 2025-08-18   90  /*
+57d9a292755c80 Richard Kuo 2025-08-18   91   * setup_machine_fdt - set up machine based on dtb passed to kernel
+57d9a292755c80 Richard Kuo 2025-08-18   92   * @dt_phys: physical address of dtb
+57d9a292755c80 Richard Kuo 2025-08-18   93   *
+57d9a292755c80 Richard Kuo 2025-08-18   94   * Sets up some of the earliest stuff -- setting the machine type,
+57d9a292755c80 Richard Kuo 2025-08-18   95   * pulling the command line options, and finding the memory.
+57d9a292755c80 Richard Kuo 2025-08-18   96   *
+57d9a292755c80 Richard Kuo 2025-08-18   97   * Since we're calling this from setup_arch, this is going to happen
+57d9a292755c80 Richard Kuo 2025-08-18   98   * very, very early.  Prior to even the bootmem being set up in the
+57d9a292755c80 Richard Kuo 2025-08-18   99   * old scheme I think.
+57d9a292755c80 Richard Kuo 2025-08-18  100   *
+57d9a292755c80 Richard Kuo 2025-08-18  101   * Also since we're always being fired up by the hypervisor, then
+57d9a292755c80 Richard Kuo 2025-08-18  102   * we are already running with the MMU on with an init segtable.
+57d9a292755c80 Richard Kuo 2025-08-18  103   */
+1732d55bf9016e Brian Cain  2026-01-24 @104  const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+57d9a292755c80 Richard Kuo 2025-08-18  105  {
+1732d55bf9016e Brian Cain  2026-01-24  106  	const struct machine_desc *mdesc_best = NULL;
+57d9a292755c80 Richard Kuo 2025-08-18  107  	unsigned long dt_root;
+57d9a292755c80 Richard Kuo 2025-08-18  108  
+57d9a292755c80 Richard Kuo 2025-08-18  109  #ifdef CONFIG_HEXAGON_MSM8974_FLUID
+57d9a292755c80 Richard Kuo 2025-08-18  110  	//  Fixme:  use this for...  everybody if possible
+57d9a292755c80 Richard Kuo 2025-08-18  111  	//  The "tags" struct or whatever provided by LK; currently stuffing it in the "external buffer" space.
+57d9a292755c80 Richard Kuo 2025-08-18  112  	initial_boot_params = (void *) &external_buffer;
+57d9a292755c80 Richard Kuo 2025-08-18  113  	dt_root = of_get_flat_dt_root();
+57d9a292755c80 Richard Kuo 2025-08-18  114  	of_scan_flat_dt(early_init_dt_scan_chosen_noinitrd, boot_command_line);
+57d9a292755c80 Richard Kuo 2025-08-18  115  #endif
+57d9a292755c80 Richard Kuo 2025-08-18  116  
+57d9a292755c80 Richard Kuo 2025-08-18  117  	/*  reset global pointer that devtree uses to the proper blob  */
+57d9a292755c80 Richard Kuo 2025-08-18  118  #ifdef CONFIG_DTB_BUILTIN
+57d9a292755c80 Richard Kuo 2025-08-18  119  	/*  This is the label placed on the assembly blob; will already be in virtual space  */
+57d9a292755c80 Richard Kuo 2025-08-18 @120  	initial_boot_params = dt_phys;
+57d9a292755c80 Richard Kuo 2025-08-18  121  #else
+57d9a292755c80 Richard Kuo 2025-08-18  122          initial_boot_params = phys_to_virt(dt_phys);
+57d9a292755c80 Richard Kuo 2025-08-18  123  #endif
+57d9a292755c80 Richard Kuo 2025-08-18  124  
+57d9a292755c80 Richard Kuo 2025-08-18  125          /* check device tree validity */
+57d9a292755c80 Richard Kuo 2025-08-18  126          if (fdt_magic(initial_boot_params) != OF_DT_HEADER) {
+57d9a292755c80 Richard Kuo 2025-08-18  127                  return NULL;
+57d9a292755c80 Richard Kuo 2025-08-18  128  	}
+57d9a292755c80 Richard Kuo 2025-08-18  129  
+57d9a292755c80 Richard Kuo 2025-08-18 @130  	dt_root = of_get_flat_dt_root();
+57d9a292755c80 Richard Kuo 2025-08-18  131  
+1732d55bf9016e Brian Cain  2026-01-24 @132  	mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
+57d9a292755c80 Richard Kuo 2025-08-18  133  
+57d9a292755c80 Richard Kuo 2025-08-18  134  	if (!mdesc_best) {
+57d9a292755c80 Richard Kuo 2025-08-18  135  		panic("Unrecognized device tree\n");
+57d9a292755c80 Richard Kuo 2025-08-18  136  	}
+57d9a292755c80 Richard Kuo 2025-08-18  137  
+57d9a292755c80 Richard Kuo 2025-08-18  138          /*
+57d9a292755c80 Richard Kuo 2025-08-18  139  	 * Sets the top level address and size cells which are stored
+57d9a292755c80 Richard Kuo 2025-08-18  140  	 * in globals by the devtree infrastructure.
+57d9a292755c80 Richard Kuo 2025-08-18  141  	 */
+57d9a292755c80 Richard Kuo 2025-08-18 @142          early_init_dt_scan_root();
+57d9a292755c80 Richard Kuo 2025-08-18  143  
+57d9a292755c80 Richard Kuo 2025-08-18  144          /*  Retrieve various information from the /chosen node  */
+57d9a292755c80 Richard Kuo 2025-08-18  145  #ifndef CONFIG_HEXAGON_MSM8974_FLUID
+57d9a292755c80 Richard Kuo 2025-08-18  146  	//  Fixme:  do this consistently for platforms
+57d9a292755c80 Richard Kuo 2025-08-18 @147  	early_init_dt_scan_chosen(boot_command_line);
+57d9a292755c80 Richard Kuo 2025-08-18  148  #endif
+57d9a292755c80 Richard Kuo 2025-08-18  149          /*  Setup memory  */
+57d9a292755c80 Richard Kuo 2025-08-18  150  	//of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+57d9a292755c80 Richard Kuo 2025-08-18  151  
+57d9a292755c80 Richard Kuo 2025-08-18  152  	return mdesc_best;
+57d9a292755c80 Richard Kuo 2025-08-18  153  }
+57d9a292755c80 Richard Kuo 2025-08-18  154  
+
+:::::: The code at line 50 was first introduced by commit
+:::::: 57d9a292755c8023e31bdefe25e21f0c9837db51 hexagon: add device tree support
+
+:::::: TO: Richard Kuo <rkuo@quicinc.com>
+:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
