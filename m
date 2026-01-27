@@ -1,64 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527C2362129;
-	Tue, 27 Jan 2026 16:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352FA3624C5;
+	Tue, 27 Jan 2026 17:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769532776; cv=none; b=MLVnnIEtF1J9I+XtjI6cpoMvv6rJksrlSRHCTAifzGUDHe68LkUlw7MTEpUPUwQEoT2+F1+fyB6Te8DNHenWwsvy5tw0Uli2wP5UR0oz1o0e0pGuq5LBQTELd77piftVALTFMzNoia3pJyWwJTz8kvk/NLiRlR8RSwVHA7r+Y5M=
+	t=1769533969; cv=none; b=DkNAB4TXJ5Yj/PD16hpSuAlw4UXHXZvO4W2NotowDsMqTNw689qvIw8HYReOtS/uC/q1SHEMGwSqXLzv9kwbNE27TfUzNEG58fjjGZObl03qkPNbxoByCWhZ3dKpARGEji8+/LjX0qH0/cgPJ1mrgWfAvAuj+rnsZ79U9EOjbWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769532776; c=relaxed/simple;
-	bh=J0GVUHK0eDX2Fsy9MRcfPgb8LlHLmm8u2IrImd/yZ+M=;
+	s=arc-20240116; t=1769533969; c=relaxed/simple;
+	bh=es7Lzi+GLpreS3paNVEOSrq0wFpglPAFO/+T/8F9y4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OGU/7Y2ohQ0WWcrI7cuOe00Kw8j/uAC/7ys09EJR7frmyKcX4bFg+m2mlSdIC4iXSGq/e/v8fBuL4rwOgAJ2vC3YVy7D1vh6xt4e8kHufMA65T0j7cbNbfIIVseHRlOz2Bn5s1u4hlXK2/Ko3sV3lf1cLwMSTcxqzcmEUKZ5Rjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ECNKLVDk; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rfsB5GR6NpBg8Uzo0msXmTtGp+xCkVtC79r0yrYslKz5VW13okDXiKKPl1MEkhzbjR/qk1KDgImMPl8VGhl7x7XxF80dvnOwpgIKKOPnjOeOAOxWbSLhiFFxsi09tbjTreL+tHiqkY8C7D+Gp7mxuM+T9Cp51m1TXt4qYtAkAGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bgA2EBOW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ECNKLVDk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769532774; x=1801068774;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J0GVUHK0eDX2Fsy9MRcfPgb8LlHLmm8u2IrImd/yZ+M=;
-  b=ECNKLVDkH0WLCLTfEyV2j6eueliDR0Ph31CjCqkU74vrKZ/FaYL2ucgx
-   uyO1z+fy1qj3KjCNa6uky2jMIE+K8JMDeADt2caRCd60tOAYk1DSrtRKO
-   UORj6K31O4eQYi1Khby6CBt6hcvlUTsD6neDv9reXNBIcm19oxpKkE2SS
-   w052O8w6RVc2r4+QpOtGE8mGxaiU+CkKK05zNb60vxAV6ZJrPq0Gg2IZm
-   JchH0cJmGND7XzC8sV191Apjvo5n74VLP5iqzXEGmGRNbyhJayfIU3LAc
-   Q8cmyrpp87OB8J9nzZ/O57BZNIzaT9WbKkpWi3XVxCt6tPEW7OYMiyXOl
-   g==;
-X-CSE-ConnectionGUID: VOaV8V/CTryI768g9bKl4A==
-X-CSE-MsgGUID: TiEGF3/bRvmGo1Ou1iztdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="88152437"
-X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
-   d="scan'208";a="88152437"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 08:52:54 -0800
-X-CSE-ConnectionGUID: RYXDdM9OTjaY2Z+MqHuJEw==
-X-CSE-MsgGUID: EdkzNB0ySUmUVu5HlrtLLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
-   d="scan'208";a="208081018"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 27 Jan 2026 08:52:42 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vkmIx-00000000YjU-3EqP;
-	Tue, 27 Jan 2026 16:52:39 +0000
-Date: Wed, 28 Jan 2026 00:51:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
-	andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] remoteproc: add support for Microchip IPC
- remoteproc platform driver
-Message-ID: <202601280013.INN2YRRj-lkp@intel.com>
-References: <20260126120658.1674253-3-valentina.fernandezalanis@microchip.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bgA2EBOW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C49C116C6;
+	Tue, 27 Jan 2026 17:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769533968;
+	bh=es7Lzi+GLpreS3paNVEOSrq0wFpglPAFO/+T/8F9y4Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bgA2EBOWzd4zlvhbfAZOHLgja7/mlc+pOtcKyw7PGj8HKRHlW25GFZb+/thcTdEz4
+	 JtRGWBiCe8OBRGnsfnVK2Bu5Bzyb/CVAd6fPY33kN5dMXtlJoCPbvIAR1sEWLd1tT6
+	 u2JDC2Dow3V+Yt2JthmvwYNOQonOUcBsM3TKnixAqax3umM69h4nFU7J57RcE2GEfu
+	 N7y8YTQV/AGUbzICEPuvx8Dq5ZkTXI/+GYui+62HH1jE27ywVEMnhFV4Bvqmbh0msk
+	 O+IUeyy0KMEPU9l4pfW9uAyJKj6V3XWsP06J49DsSBllwWjRFOLdJ7RkYXl6OGT4vb
+	 wqKCQHGD6iN6A==
+Date: Tue, 27 Jan 2026 14:12:45 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Collin Funk <collin.funk1@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v9 0/3] Capstone/llvm dlopen support
+Message-ID: <aXjyDUjim64yqI4N@x1>
+References: <20260127062302.544809-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,47 +56,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260126120658.1674253-3-valentina.fernandezalanis@microchip.com>
+In-Reply-To: <20260127062302.544809-1-irogers@google.com>
 
-Hi Valentina,
+On Mon, Jan 26, 2026 at 10:22:59PM -0800, Ian Rogers wrote:
+> Linking against libcapstone and libLLVM can be a significant increase
+> in dependencies and file size if building statically. The dependencies
+> are also quite cumbersome if bringing perf into a distribution. For
+> something like `perf record` the disassembler and addr2line
+> functionality of libcapstone and libLLVM won't be used. These patches
+> support dynamically loading these libraries using dlopen and then
+> calling the appropriate functions found using dlsym. Using dlopen
+> allows libcapstone and libLLVM to be installed separately to perf and
+> when that's done the performance will improve as separate commands for
+> objdump and addr2line won't be invoked.
+> 
+> The patch series adds perf_ variants of the capstone/llvm functions
+> that will either directly call the function or (NO_CAPSTONE=1 and
+> NO_LIBLLVM=1 cases) use dlopen/dlsym to discover and then call the
+> function. To support the function signatures when
+> HAVE_LIBCAPSTONE_SUPPORT and HAVE_LIBLLVM_SUPPORT aren't defined
+> prototypes generated using pahole are given. This avoids requiring
+> libcapstone or libLLVM for the sake of the header files. It also
+> avoids having a build where neither dlopen or dynamic linking against
+> libcapstone or libLLVM is supported. There are other possibilities in
+> how to organize this, but the chosen approach was done so for the
+> simplicity and cleanliness of the code.
+> 
+> The addr2line LLVM functionality is written in C++. To avoid linking
+> against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
+> the C++ code with the libLLVM dependency will be built into a
+> libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
+> would extend their C API to avoid this.
+> 
+> v9: Rebase.
 
-kernel test robot noticed the following build errors:
+Thanks, applied locally, will test this after lunch.
 
-[auto build test ERROR on remoteproc/rproc-next]
-[also build test ERROR on linus/master v6.19-rc7 next-20260126]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+- Arnaldo
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Valentina-Fernandez/dt-bindings-remoteproc-add-Microchip-IPC-remoteproc/20260126-201137
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-patch link:    https://lore.kernel.org/r/20260126120658.1674253-3-valentina.fernandezalanis%40microchip.com
-patch subject: [PATCH v3 2/2] remoteproc: add support for Microchip IPC remoteproc platform driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260128/202601280013.INN2YRRj-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601280013.INN2YRRj-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601280013.INN2YRRj-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/remoteproc/mchp_remoteproc.c:23:10: fatal error: 'asm/sbi.h' file not found
-      23 | #include <asm/sbi.h>
-         |          ^~~~~~~~~~~
-   1 error generated.
-
-
-vim +23 drivers/remoteproc/mchp_remoteproc.c
-
-    22	
-  > 23	#include <asm/sbi.h>
-    24	#include <asm/vendorid_list.h>
-    25	#include <linux/mailbox/mchp-ipc.h>
-    26	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> v8: Rebase down to 3 patches. Update commit and cover messages.
+> v7: Refactor now the first 5 patches, that largely moved code around,
+>     have landed. Move the dlopen code to the end of the series so that
+>     the first 8 patches can be picked improving capstone/LLVM support
+>     without adding the dlopen code. Rename the cover letter and
+>     disassembler cleanup patches.
+> v6: Refactor the libbfd along with capstone and LLVM, previous patch
+>     series had tried to avoid this by just removing the deprecated
+>     BUILD_NONDISTRO code. Remove the libtracefs removal into its own
+>     patch.
+> v5: Rebase and comment typo fix.
+> v4: Rebase and addition of a patch removing an unused struct variable.
+> v3: Add srcline addr2line fallback trying LLVM first then forking a
+>     process. This came up in conversation with Steinar Gunderson
+>     <sesse@google.com>.
+>     Tweak the cover letter message to try to address Andi Kleen's
+>     <ak@linux.intel.com> feedback that the series doesn't really
+>     achieve anything.
+> v2: Add mangling of the function names in libperf-llvm.so to avoid
+>     potential infinite recursion. Add BPF JIT disassembly support to
+>     LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
+>     series from:
+>     https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
+>     Some other minor additional clean up.
+> 
+> Ian Rogers (3):
+>   perf capstone: Support for dlopen-ing libcapstone.so
+>   perf llvm: Support for dlopen-ing libLLVM.so
+>   perf llvm: Mangle libperf-llvm.so function names
+> 
+>  tools/perf/Makefile.config         |  13 ++
+>  tools/perf/Makefile.perf           |  24 ++-
+>  tools/perf/tests/make              |   2 +
+>  tools/perf/util/Build              |   2 +-
+>  tools/perf/util/capstone.c         | 285 +++++++++++++++++++++++++----
+>  tools/perf/util/llvm-c-helpers.cpp | 120 +++++++++++-
+>  tools/perf/util/llvm-c-helpers.h   |  24 ++-
+>  tools/perf/util/llvm.c             | 273 ++++++++++++++++++++++++---
+>  8 files changed, 660 insertions(+), 83 deletions(-)
+> 
+> -- 
+> 2.52.0.457.g6b5491de43-goog
+> 
