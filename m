@@ -1,105 +1,99 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79633101AD
-	for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 23:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645271A9F9B;
+	Tue, 27 Jan 2026 00:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769471508; cv=none; b=LKyD58Bx98F2BeaCcO8HfJCGUjpWicubkoqjbDrFhaABVnjuTH4iH8HP1+jEbabJxZa69GG1Gr5axy3AJUpAFTOsq0FAU1pMvtca2F0hbQ3L33bTk7eQp0jG1rfekM7ijiB7FHTt0HG74C/8A6pyxTN8XuBCzAH7qHwWy92afek=
+	t=1769474670; cv=none; b=mwbDOXTUCBcBI/4TYxAZFnuLys5rcn/VnCGAnGJvoIFpOTFs2hjkArPSZ5slT3OhLnMnyN4Rp2t1TA4h7d3pJvcBJak8ykDCe1NE1f3z8Q264jgZw2tgay0vWSy/QaRwR1kL4mzWnw9gQ3QJbuYneCdtKTFnQETi+X+wiAar5rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769471508; c=relaxed/simple;
-	bh=8zZa6ZARHitoc1+bqtC7FMQcSiyFXquJwLixosWd9Kw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IrN6tfDjenpgAznz8ygHNSzjOhAbxlQ+IVrgrh4I/bFOK3dMdvqnqnXh/y722gMH5Q/QxAyVLos1IIBRlLiCvdJQq6PBzM0UiBY9VASLzinKq0Y+hKpykFoIGIlJFDnf44o9epQX76fIJdCMDhHbkKL0QIZ7xlrsNR3Busq/vPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=abse7cgw; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
+	s=arc-20240116; t=1769474670; c=relaxed/simple;
+	bh=SX29ljktqS4p0j18wvhLNMKtr/+Z4ad+LKKu1ZhdHHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=D2oFm4UOlWRq8FHnvUizJ86CHUMxvMfbUTL8iwRWJBkmI5yqpLY4KmbePBfNDNTVrEgKWK0Lb7hDs5CEywW4UpGUskX9kYJGlnnnHcccv7RrmHyr64B/gBCdRQ51tlL6qwlAeZsyBfNigMahO0UvkKCwLWezZhP3x8oiU5RgR00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ol9QdVyM; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="abse7cgw"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
-	s=key1; t=1769471503;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1fSxClOL3mdUPnELbN+FOWuFk/bMEyjiygh5WUO5XDM=;
-	b=abse7cgwIajY6KJRGkVaOlTNVov8kk7mAXnR+J8aEC2yDclW/fRPFL4+8yyZrOW8WOL8up
-	ivBVw13apkDghuh2lFy86PEpyHxPh2sHOjaER8BdlrFKJn7ZE/GS5MDgP3mV6eSmooQEfk
-	PGYHq3ZrzO/Z2+JNyDIei0dSzPOTH/+TlGUaqbNiAz0WFMpy40adUOFvXoyxZBP9NVVsZc
-	Hu05SpwEW3H2epfH3fafVA7vli1uoDG12qIx29pquGdK8nw1gie+lxZy6jYo9Dy1vZFQ2p
-	JKV6nXtzLHWRcFAfbPa45TpXaVhBOVnI41AWhxUfLxuiJkVL+BGmzeZkyL0eOg==
-From: Val Packett <val@packett.cool>
-To: Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-	Luca Weiss <luca@lucaweiss.eu>
-Cc: Val Packett <val@packett.cool>,
-	Vladimir Lypak <vladimir.lypak@gmail.com>,
-	=?UTF-8?q?Barnab=C3=A1s=20Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	~postmarketos/upstreaming@lists.sr.ht,
-	linux@mainlining.org,
-	phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] remoteproc: qcom_wcnss: Fix handling the lack of PD regulators in v3
-Date: Mon, 26 Jan 2026 20:44:02 -0300
-Message-ID: <20260126235018.969140-1-val@packett.cool>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ol9QdVyM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769474668; x=1801010668;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SX29ljktqS4p0j18wvhLNMKtr/+Z4ad+LKKu1ZhdHHI=;
+  b=Ol9QdVyMdbHrqlKm5TOGnDqqcpLlIpu/UMoQW+vr9JIb8H9L+BbkKmdc
+   t033mTn6emx+astSotj39piaRniOfavyjr0VLlwy640hgXpm+YEZ+kQwR
+   Lh6U+MQvFKiE2GVLTK86jP0vCUACEGdgtz0TxGjXfkJfQh6HSFz34L0aO
+   6MT31JGMHvjMvJTpMh9VG68CTPIBCp9WDVEfoyFSRU+xWmOFJkLZMyvDP
+   vmapea7UV/cIu6of+VED0KhGzv6Yep91+gdk7Kun+AsYalOuY0VQT2+g9
+   Hmk0o4UhOQusOR+ImeIlasanVqsoVp8ILsKeKDpeymG/GtXZHltMqS+yt
+   A==;
+X-CSE-ConnectionGUID: hz3/79gPRWurulnzGvhK1Q==
+X-CSE-MsgGUID: Mq0wf8GJTqm+k/DTLXXmsw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="70563927"
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="70563927"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 16:44:28 -0800
+X-CSE-ConnectionGUID: uTXzeD4+RXuY2kowtxkm8A==
+X-CSE-MsgGUID: hI0erCRxQ3i+gQanvafJ1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="207848094"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by orviesa008.jf.intel.com with ESMTP; 26 Jan 2026 16:44:26 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkXBv-000000001e5-3LbM;
+	Tue, 27 Jan 2026 00:44:23 +0000
+Date: Tue, 27 Jan 2026 01:43:24 +0100
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 41/42]
+ kernel/time/hrtimer.c:121:45: error: static assertion expression is not an
+ integral constant expression
+Message-ID: <202601270157.7meA0n5c-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
 
-The changes introduced to handle single power domain platforms have
-swapped the info pointer increment from num_pd_vregs to num_pds, which
-doesn't change anything for pronto-v1 and v2 where they match, but as
-pronto-v3 has 2 power domains with no PD regulators at all, this would
-shift the pointer past the end of the array.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   80461d79725e9de0ffda5d621552a2db3608f64d
+commit: 2969d9693803a8bfd1c8bfcf3943af5a920be88f [41/42] hrtimer: Add support for auxiliary clocks
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260127/202601270157.7meA0n5c-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601270157.7meA0n5c-lkp@intel.com/reproduce)
 
-This showed up as a difference between GCC- and LLVM-compiled kernels
-on MSM8953/SDM632 devices, where only with LLVM one would get the
-"regulator request with no identifier" error, because the out-of-bounds
-memory ended up being zeroed. Fix by reverting that single line.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601270157.7meA0n5c-lkp@intel.com/
 
-Fixes: 65991ea8a6d1 ("remoteproc: qcom_wcnss: Handle platforms with only single power domain")
-Signed-off-by: Val Packett <val@packett.cool>
----
+All errors (new ones prefixed by >>):
 
-I'm like 99% sure that this (old) line is correct and the change in this one line
-in 65991ea8a6d1 might've been an unintentional/stray one.
+>> kernel/time/hrtimer.c:121:45: error: static assertion expression is not an integral constant expression
+     121 | static_assert(HRTIMER_BASE_MONOTONIC_SOFT - HRTIMER_BASE_AUX0 == MAX_AUX_CLOCKS);
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   1 error generated.
 
-Still, please retest on MSM8974/MSM8226!
 
-Thanks,
-~val
----
- drivers/remoteproc/qcom_wcnss.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+vim +121 kernel/time/hrtimer.c
 
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index ee18bf2e8054..5884c5a52af6 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -454,7 +454,7 @@ static int wcnss_init_regulators(struct qcom_wcnss *wcnss,
- 	 * reserve extra space to manage them through the regulator interface.
- 	 */
- 	if (wcnss->num_pds) {
--		info += wcnss->num_pds;
-+		info += num_pd_vregs;
- 		/* Handle single power domain case */
- 		if (wcnss->num_pds < num_pd_vregs)
- 			num_vregs += num_pd_vregs - wcnss->num_pds;
+   120	
+ > 121	static_assert(HRTIMER_BASE_MONOTONIC_SOFT - HRTIMER_BASE_AUX0 == MAX_AUX_CLOCKS);
+   122	
+
 -- 
-2.51.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
