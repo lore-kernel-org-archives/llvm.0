@@ -1,133 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6201F2B8D;
-	Tue, 27 Jan 2026 04:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477532E973F;
+	Tue, 27 Jan 2026 04:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769488884; cv=none; b=KIizk56pYkRX7BDEJ9gLfFghZPABoxuCDIbfMrGZj1EPGk9JNHmhbF4pczh0MaqtiCcwGmI0gu2mEtRSVX7nchSlddLhlkGiDiBbJqXJmVQF+CYJwuETaYyr/1ywRNkhzExgY2Ji8H2hBUSrpbTzNq5c6O57BfjComjFZ+3xfqo=
+	t=1769489824; cv=none; b=UFzJY3tL07vPkFkZHzjrLIemWZXfLcfaac8RHVuzH5CyiKY7RkT62RZ9xSx2CFhXjSSmUTPAm7+TQ7fk56y7XysaLt58S24a30z/TaiqhFCaS+lIE9JRRx8llRZBRnzEiI62PyunKd41mpKCWeXtJwnQfUDBAxqmMdm1xBDwa6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769488884; c=relaxed/simple;
-	bh=yRlECGWjQL1+vdGUE5GP03TXlFsaGbCuvzDqQrDoseo=;
+	s=arc-20240116; t=1769489824; c=relaxed/simple;
+	bh=iCCD613JRllm9h3TTRIOf9U7yT/wcqwphBj87uNAy8M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CfDX2YrO3KYKN35usC4HZ6anASp5MDrWzQ2KYyP2WJumQb8XVKN15LClwKCyE9yCB7ziK/MkQnTn6TptJsdbe2hqBjNZZxqs41Pm0oF4gN/ckQVkyBwTrSfjk+zwVzPYe/XEvp6QJRvYjwNJSYMEizAGYffPla/zrdJ9kjUSJYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJLewdWC; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=QUy58629mpiaLJ0lauMNL/Hs49Vucy2egJra3ZGnhbGgoudYvtxKwg0vP3nLi6bt7kyYo5UPOrfB/031DrTw5iW99uebsG4CGN/SjfJGxQanktAixH8S8/twKPYtPw3V6GiIW8ynJR2K51YG7KMMYSKfdNt8XRVIcgEpL2OjjNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=daMYg1oO; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJLewdWC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C79AC116C6;
-	Tue, 27 Jan 2026 04:41:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769488884;
-	bh=yRlECGWjQL1+vdGUE5GP03TXlFsaGbCuvzDqQrDoseo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EJLewdWCo0S/vHXQtYpYnXbmkSzdRxP/AklH9MSsHurilVNWqK4FHXg/3+M5KmaCB
-	 TEMeduslDuU9N4XY4EcGbAAJXmqicZ1XUtqiF6m4oBLo41P3GiSijgVNuGVgIhUr1n
-	 E7xcKTdvoqA3udrRyhsZJWtMhP9iPTGJgUCv23kPG8eOOV/QxxD8BchsnUUXYwNs8A
-	 Cd17OYuTZwUcrrMHpingRiJcDRHMOmXLV/ZQLOJ13XjVgBqmYYZb70jCR1Ms8wADXF
-	 e11VoE0oDSZOCthU47DJ+SUikhUnhmbIP2kBeM0fVwy02pM7FQEsPbOmNorVwf+iHw
-	 2qlXY9f12QxEw==
-Date: Tue, 27 Jan 2026 01:41:20 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Collin Funk <collin.funk1@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v8 0/3] Capstone/llvm dlopen support
-Message-ID: <aXhB8B7jdTAoZ_Qe@x1>
-References: <20251007163835.3152881-1-irogers@google.com>
- <CAP-5=fW7YViusbdr9uZ_wSg5cwAPcdnysGbfuytKyYw6cbQa4g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="daMYg1oO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769489822; x=1801025822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iCCD613JRllm9h3TTRIOf9U7yT/wcqwphBj87uNAy8M=;
+  b=daMYg1oObe3BtsAcjqu4hJbAQZ+aO9xYkIOjL9v+MTTk/J33nOpzXKBB
+   sb1vovTy4Pk0IsaogJid6MVc0hya1ohg24y++tiIN+VChLMisG3Iy9Ts9
+   3s1GLZ4Tvkh+NUiuQX73NijyTeN38IiZpHC/scUCO4C9NjiasHIWqws+v
+   4hbQ95sZk5W28Ayh2eSx6T5JQ+R28FqOv3oskE1/i7Lc2lcpHVF0QchLd
+   OSfLzcndsvXrr0C+C75aqS4J3tIyZL8wYuEzIM/bkHyRYMTfX6w11U+WE
+   P0JqvoD+tVUJ7WRu2O8c1h0x6AhL+Eklplb7RMwHyg+WDgM5KPFLyWC7X
+   A==;
+X-CSE-ConnectionGUID: vDbg3AJhSbit2P61U+QY7Q==
+X-CSE-MsgGUID: 7iKEi2AZSVSskq35pupcpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="70576409"
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="70576409"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 20:56:56 -0800
+X-CSE-ConnectionGUID: RnL5XyQ0TyifckmNW9deyg==
+X-CSE-MsgGUID: BjAW/y1nS+OoBpGBNWqn3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="207103829"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 26 Jan 2026 20:56:53 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkb8E-00000000Y0S-2WGC;
+	Tue, 27 Jan 2026 04:56:50 +0000
+Date: Tue, 27 Jan 2026 12:56:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chuck Lever <cel@kernel.org>, NeilBrown <neilb@ownmail.net>,
+	Jeff Layton <jlayton@kernel.org>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <dai.ngo@oracle.com>, Tom Talpey <tom@talpey.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
+Subject: Re: [PATCH v3 11/14] lockd: Move xdr.h from include/linux/lockd/ to
+ fs/lockd/
+Message-ID: <202601271247.TFeb5MO5-lkp@intel.com>
+References: <20260126195535.154697-12-cel@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fW7YViusbdr9uZ_wSg5cwAPcdnysGbfuytKyYw6cbQa4g@mail.gmail.com>
+In-Reply-To: <20260126195535.154697-12-cel@kernel.org>
 
-On Thu, Jan 08, 2026 at 01:32:47PM -0800, Ian Rogers wrote:
-> On Tue, Oct 7, 2025 at 9:38 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Linking against libcapstone and libLLVM can be a significant increase
-> > in dependencies and file size if building statically. The dependencies
-> > are also quite cumbersome if bringing perf into a distribution. For
-> > something like `perf record` the disassembler and addr2line
-> > functionality of libcapstone and libLLVM won't be used. These patches
-> > support dynamically loading these libraries using dlopen and then
-> > calling the appropriate functions found using dlsym. Using dlopen
-> > allows libcapstone and libLLVM to be installed separately to perf and
-> > when that's done the performance will improve as separate commands for
-> > objdump and addr2line won't be invoked.
-> >
-> > The patch series adds perf_ variants of the capstone/llvm functions
-> > that will either directly call the function or (NO_CAPSTONE=1 and
-> > NO_LIBLLVM=1 cases) use dlopen/dlsym to discover and then call the
-> > function. To support the function signatures when
-> > HAVE_LIBCAPSTONE_SUPPORT and HAVE_LIBLLVM_SUPPORT aren't defined
-> > prototypes generated using pahole are given. This avoids requiring
-> > libcapstone or libLLVM for the sake of the header files. It also
-> > avoids having a build where neither dlopen or dynamic linking against
-> > libcapstone or libLLVM is supported. There are other possibilities in
-> > how to organize this, but the chosen approach was done so for the
-> > simplicity and cleanliness of the code.
-> >
-> > The addr2line LLVM functionality is written in C++. To avoid linking
-> > against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
-> > the C++ code with the libLLVM dependency will be built into a
-> > libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
-> > would extend their C API to avoid this.
-> >
-> > v8: Rebase down to 3 patches. Update commit and cover messages.
-> > v7: Refactor now the first 5 patches, that largely moved code around,
-> >     have landed. Move the dlopen code to the end of the series so that
-> >     the first 8 patches can be picked improving capstone/LLVM support
-> >     without adding the dlopen code. Rename the cover letter and
-> >     disassembler cleanup patches.
-> > v6: Refactor the libbfd along with capstone and LLVM, previous patch
-> >     series had tried to avoid this by just removing the deprecated
-> >     BUILD_NONDISTRO code. Remove the libtracefs removal into its own
-> >     patch.
-> > v5: Rebase and comment typo fix.
-> > v4: Rebase and addition of a patch removing an unused struct variable.
-> > v3: Add srcline addr2line fallback trying LLVM first then forking a
-> >     process. This came up in conversation with Steinar Gunderson
-> >     <sesse@google.com>.
-> >     Tweak the cover letter message to try to address Andi Kleen's
-> >     <ak@linux.intel.com> feedback that the series doesn't really
-> >     achieve anything.
-> > v2: Add mangling of the function names in libperf-llvm.so to avoid
-> >     potential infinite recursion. Add BPF JIT disassembly support to
-> >     LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
-> >     series from:
-> >     https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
-> >     Some other minor additional clean up.
-> >
-> > Ian Rogers (3):
-> >   perf capstone: Support for dlopen-ing libcapstone.so
-> >   perf llvm: Support for dlopen-ing libLLVM.so
-> >   perf llvm: Mangle libperf-llvm.so function names
-> 
-> Ping.
+Hi Chuck,
 
-The first two patches apply with a bit of fuzz, the last one fails
-harder, can you take a stab at refreshing it so that I can try to test
-it?
+kernel test robot noticed the following build warnings:
 
-Thanks,
+[auto build test WARNING on trondmy-nfs/linux-next]
+[also build test WARNING on brauner-vfs/vfs.all linus/master v6.19-rc7 next-20260126]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-- Arnaldo
+url:    https://github.com/intel-lab-lkp/linux/commits/Chuck-Lever/lockd-Simplify-cast_status-in-svcproc-c/20260127-035838
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20260126195535.154697-12-cel%40kernel.org
+patch subject: [PATCH v3 11/14] lockd: Move xdr.h from include/linux/lockd/ to fs/lockd/
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20260127/202601271247.TFeb5MO5-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601271247.TFeb5MO5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601271247.TFeb5MO5-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/nfsd/lockd.c:11:
+>> include/linux/lockd/bind.h:76:64: warning: declaration of 'struct file_lock' will not be visible outside of this function [-Wvisibility]
+      76 | extern int      nlmclnt_proc(struct nlm_host *host, int cmd, struct file_lock *fl, void *data);
+         |                                                                     ^
+   1 warning generated.
+
+
+vim +76 include/linux/lockd/bind.h
+
+b1ece737f44f91d Benjamin Coddington  2017-04-11  75  
+b1ece737f44f91d Benjamin Coddington  2017-04-11 @76  extern int	nlmclnt_proc(struct nlm_host *host, int cmd, struct file_lock *fl, void *data);
+40373b125de6bab Trond Myklebust      2019-04-09  77  extern int	lockd_up(struct net *net, const struct cred *cred);
+e3f70eadb7dddfb Stanislav Kinsbursky 2012-03-29  78  extern void	lockd_down(struct net *net);
+^1da177e4c3f415 Linus Torvalds       2005-04-16  79  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
