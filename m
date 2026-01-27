@@ -1,86 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE80199949;
-	Tue, 27 Jan 2026 20:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F6F32BF43;
+	Tue, 27 Jan 2026 21:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769547464; cv=none; b=WTjqzWkWC6jeYiqTSpIjmjdAyTYDmEQgySt+a3MSXk8FHQMVCTVeMrTgm8xMN5Mjc3KkWI53EvYQSsyJ7HfLFkDxa5tRMFrKZZUt2/XUT+/I79gBSvfhEWaL5XcX8Jqxg8EvXdslVQad1gOl8N1jdC/CupjB4IEtxLwJwAxi1MY=
+	t=1769550437; cv=none; b=GJjN3P4lJLfi+O+TrAITFosqrbMDQTx65ah5mezV83aIiXTVPxY5gpWijSMtat7hILl/QlfyomZLSH8TWm+A9KQxG+7x8VaTyqKMJwo9gI1wO9883RLNvGIOXzE2fmvQoaMn9PEffx82xdBiTTpfJGt2rubKropKUcx9U6cv/sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769547464; c=relaxed/simple;
-	bh=cmjdEPiuJ79Jte59ZTtNhVL6Y+xDId8DcPmc95XyRk8=;
+	s=arc-20240116; t=1769550437; c=relaxed/simple;
+	bh=V9UEkbOrvf5E0u78+1v0R8sZs6y1JexLeJyE/uJ2M3Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RvAQpCT5gKGBUZ4P4t2Faeofxb4mAORJs5g/0Pe9q5OUPYzoSe6yqkT9LxL9+GPqVfz5JtLp95oc+cARW4FbiKjMr8ufjQz90bgt+ajaSn44N2aa4la6Y13vZh3eR+le4vXsQt6gCo6Vj+KNMipooR01v4oEqfcFN1IFDIuTOvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j6/XtGDY; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kwdk+UJ0qfJHxPnvpiY9CJ361l2RmgumC2bKFehxrsG9G440wqA3J2pR4rYoquEzLNumqLkrQ1l6JlJaqcwT55onm/NFmlqXrJmvR0TusgDtWaMNBgM29R7tSvyElLP1kFGRFlginBGDYVfcTlfi0ixdB8fL0/7y0ukgE/3yAMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vEARLZZm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j6/XtGDY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD292C116C6;
-	Tue, 27 Jan 2026 20:57:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vEARLZZm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FB6C2BCAF;
+	Tue, 27 Jan 2026 21:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769547464;
-	bh=cmjdEPiuJ79Jte59ZTtNhVL6Y+xDId8DcPmc95XyRk8=;
+	s=k20201202; t=1769550436;
+	bh=V9UEkbOrvf5E0u78+1v0R8sZs6y1JexLeJyE/uJ2M3Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j6/XtGDYplbq+mTzHXjamxwk3buhZszIzNkUdkvmLnV6h5exMY6O/T9dJVY/q0V+o
-	 UJm9zx9RVSscgD/xH7iXpTlxMnEabNXrHpsWYezd9tiabqT8kLuzYayUssOQvRcsgb
-	 FhZ9J/lKJwRIPk/ElmzaXsPrHBtWG5ZqpyCr+7MbOrnFzo5UbP6rIVTwBF92Yh/y9u
-	 6gANy67fENNrsiW0gq0gXalgVhU7nRX3PdW36diRiMuIJe48gNBThnUIiLgRms7VnZ
-	 6jHl5hahTxbFNEejmUeRHknOwv0GjUYnmep0NTzvxlGtrSwQhqehzTA5/PMhVqDj8p
-	 /8dlu5nPJ7ztA==
-Date: Tue, 27 Jan 2026 21:13:44 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v3 0/2] scripts: introduce containerized builds
-Message-ID: <aXkceKDeYxUGHLQh@levanger>
-Mail-Followup-To: Guillaume Tucker <gtucker@gtucker.io>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	automated-testing@lists.yoctoproject.org, workflows@vger.kernel.org,
-	llvm@lists.linux.dev
-References: <cover.1767199119.git.gtucker@gtucker.io>
- <aW-JJ5DT-LRSZkdF@derry.ads.avm.de>
- <56209dbc-2dbe-4f52-a703-bcbd9ed3e712@gtucker.io>
+	b=vEARLZZmBMOxL+lnrFFcUA6zg+F1phIc9ggqJPS8lag1bfsUMoKu8rmVogFia+JVG
+	 9PJCW8z3Gj95pG0vni1MKU9BPwOlDnhX6YVnnS3ppO27JnsuwwCjGxHPXN4HCxV4Wy
+	 5eoUNdwCQgFhXCwcfJ/CFHKu3FLRvST/in9W6wBMoZ7LPAODhoHdD/Pf3BO6UjKS5U
+	 raJWGXF9xrI6ahr6C1ozFs+1urEszs7uBBVRdJHuhXswuetDgzSVSDPQnsa+M7Cvu3
+	 2RLMB6SS6GscWbyn/vSoANwdbjRngIUzM0cmyxA2EvuFR+wAbVSTm1xYqYEexYbIrR
+	 wLBydC45wRPtA==
+Date: Tue, 27 Jan 2026 14:47:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Shuai Xue <xueshuai@linux.alibaba.com>, Len Brown <lenb@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-acpi@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] ACPI: APEI: GHES: Disable KASAN instrumentation when
+ compile testing with clang < 18
+Message-ID: <20260127214711.GA3382807@ax162>
+References: <20260114-ghes-avoid-wflt-clang-older-than-18-v1-1-9c8248bfe4f4@kernel.org>
+ <CAJZ5v0ju+7U10_nuQMijadeFrVxUWQFYJfUyRvga9qEPdK50_Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <56209dbc-2dbe-4f52-a703-bcbd9ed3e712@gtucker.io>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0ju+7U10_nuQMijadeFrVxUWQFYJfUyRvga9qEPdK50_Q@mail.gmail.com>
 
-On Thu, Jan 22, 2026 at 03:12:36PM +0100, Guillaume Tucker wrote:
-> Hi Nicolas,
+On Tue, Jan 27, 2026 at 03:37:58PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Jan 15, 2026 at 12:27 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > After a recent innocuous change to drivers/acpi/apei/ghes.c, building
+> > ARCH=arm64 allmodconfig with clang-17 or older (which has both
+> > CONFIG_KASAN=y and CONFIG_WERROR=y) fails with:
+> >
+> >   drivers/acpi/apei/ghes.c:902:13: error: stack frame size (2768) exceeds limit (2048) in 'ghes_do_proc' [-Werror,-Wframe-larger-than]
+> >     902 | static void ghes_do_proc(struct ghes *ghes,
+> >         |             ^
+> >
+> > A KASAN pass that removes unneeded stack instrumentation, enabled by
+> > default in clang-18 [1], drastically improves stack usage in this case.
+> >
+> > To avoid the warning in the common allmodconfig case when it can break
+> > the build, disable KASAN for ghes.o when compile testing with clang-17
+> > and older. Disabling KASAN outright may hide legitimate runtime issues,
+> > so live with the warning in that case; the user can either increase the
+> > frame warning limit or disable -Werror, which they should probably do
+> > when debugging with KASAN anyways.
+> >
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/2148
+> > Link: https://github.com/llvm/llvm-project/commit/51fbab134560ece663517bf1e8c2a30300d08f1a [1]
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/acpi/apei/Makefile | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/acpi/apei/Makefile b/drivers/acpi/apei/Makefile
+> > index 2c474e6477e1..346cdf0a0ef9 100644
+> > --- a/drivers/acpi/apei/Makefile
+> > +++ b/drivers/acpi/apei/Makefile
+> > @@ -1,6 +1,10 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  obj-$(CONFIG_ACPI_APEI)                += apei.o
+> >  obj-$(CONFIG_ACPI_APEI_GHES)   += ghes.o
+> > +# clang versions prior to 18 may blow out the stack with KASAN
+> > +ifeq ($(CONFIG_COMPILE_TEST)_$(CONFIG_CC_IS_CLANG)_$(call clang-min-version, 180000),y_y_)
+> > +KASAN_SANITIZE_ghes.o := n
+> > +endif
+> >  obj-$(CONFIG_ACPI_APEI_EINJ)   += einj.o
+> >  einj-y                         := einj-core.o
+> >  einj-$(CONFIG_ACPI_APEI_EINJ_CXL) += einj-cxl.o
+> >
+> > ---
 > 
-> On 20/01/2026 14:54, Nicolas Schier wrote:
-> > Out-of-source builds do not work on my system with podman.  If this is
-> > expected, I think it would be great to mention that somewhere in the
-> > documentation.
-> 
-> The v4 now mentions this and also includes a trick using bind-mount:
-> 
->   mkdir -p $HOME/tmp/my-kernel-build
->   mkdir -p build
->   sudo mount --bind $HOME/tmp/my-kernel-build build
->   scripts/container -i kernel.org/gcc -- make mrproper
->   scripts/container -i kernel.org/gcc -- make O=build defconfig
->   scripts/container -i kernel.org/gcc -- make O=build -j$(nproc)
-> 
-> Would this work for your use-case?  Directory names are entirely
-> arbitrary.  It's not ideal but might be good enough as a workaround
-> until this gets properly supported by the tool in a future version.
+> I'm inclined to apply this for 6.20/7.0 unless someone has any
+> particular heartburn related to it.
 
-sorry for the long delay.  Yes, thanks for the follow-up!
+I think taking it for next cycle is fine, I can just apply this to our
+CI until it makes its way to Linus. Could you stick a
 
-Kind regards,
-Nicolas
+  Cc: stable@vger.kernel.org
+
+on the patch in that case so that it can go back to 6.18 after the
+initial flurry of the merge window?
+
+Cheers,
+Nathan
