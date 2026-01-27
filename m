@@ -1,125 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493F32E62A9;
-	Tue, 27 Jan 2026 09:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB032D979F;
+	Tue, 27 Jan 2026 09:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769507195; cv=none; b=EtqNfH0YGZjvreumJqUnsBAsPXPi4EoT1q7eO9Hw3/aPgK0j3EbyzkHRH6kcv7c3NeVEN/YJB8iyrYI9Risyx/T0sj6bK5tJ3DwenI3Ows1wXly/zQVLU70cD5xz/8At769xaS80MLJwp2E1VhWXaWZNY/fCttV0WblPcSMbw6Y=
+	t=1769507912; cv=none; b=sd6mrEknlxJ0n74TX/mCOxFHAcCx2W+ou/TH4GmYhyWDd/7FKVwUMF+kkUHsyrTdNHXtt/2aDyBdjfAe7PSUVhbSIElwTCYAzOdPvp8/X6XAqJlPpHXyMK9UA6u9SECl74NBrzWPeu1H327K6kLWarIkom0oEZJDwVLU+iG9EL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769507195; c=relaxed/simple;
-	bh=bVc+d7DJg5NGklMe1sgBsuB1Uexqh/ghglOhkC5/v+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a2quEjCrGRsLrFa/+9NVjiv5pAlhVcZcRf46h+WwA36RN9RIWmlGik53WjC8OiKDmfWKocfGky4mEMBiTiQ1VbO1sawCvKJqMdnNLy6imu7Qhsg4eDmVodyH2oFMtlijYVLMRQgOCFh0PGLgv04NITJLST0EDhEo82NMaO4mdTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JKanL/Xz; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769507912; c=relaxed/simple;
+	bh=AzrFVW593Ai5xx9FLIVRL8w0+432x7sxOT+xZPYWQ9I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AiipVe5bt5Fp9japiny3USAv3zuH5hfzuwDPWUVH3AlUSk8GDNBLLWBbYydqFPWKWmMSwnOd5cL32T8F96W6ZQ8jhUh2+VqdbRthxAbwrzIa+lu22w+aVUVn+U4JEL+05Kz5Q4afi3vRxRvbf6Zs8r9vqq2/ESjQTkQ+TIckeQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sQQb48HB; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKanL/Xz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769507193; x=1801043193;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bVc+d7DJg5NGklMe1sgBsuB1Uexqh/ghglOhkC5/v+8=;
-  b=JKanL/XzKL4g1XOpDtaPunxUO5FBFj8eL3jUxPQow8/L+X3npHOpMTC0
-   RtKbp4cKypFsUQV74/YyydHbvu+vqMuyVu6eeKNZVRKxoptPbCWaLM7GT
-   M/ftKH/47Z+XddX/eWXGR6mC7BScQN5t+0LzttLi+NbQMb31iwxZXdacH
-   vp7jUZ/3SjJ2qAj6KjRMqmtv6AOQwi2vWk6CCjY5DHMX/9fJC+hnTaLld
-   Opn9lFNmrJNR4BaRnVN9UE6gNweM7qZE1Yca9fVMTzxrNhVY/c23rRgYM
-   xYQCkdMRfBitZEYppePHvUMjKKJnqR3VFqrcFFj/AP6aqXDeSELFPdfpA
-   w==;
-X-CSE-ConnectionGUID: Fg96e+NzSWmI6ggC/p00LA==
-X-CSE-MsgGUID: gtrxBetqTDKCOcOHeUyqxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="96162706"
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="96162706"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 01:46:17 -0800
-X-CSE-ConnectionGUID: s9Ynv8IYSxiAVB+81W9lhQ==
-X-CSE-MsgGUID: MezOwrSOTla5Se/XPBcsBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="245544986"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 27 Jan 2026 01:46:15 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vkfeG-00000000YGJ-0fCH;
-	Tue, 27 Jan 2026 09:46:12 +0000
-Date: Tue, 27 Jan 2026 17:45:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Koichiro Den <den@valinux.co.jp>, jingoohan1@gmail.com, mani@kernel.org,
-	lpieralisi@kernel.org, kwilczynski@kernel.org, robh@kernel.org,
-	bhelgaas@google.com, Frank.Li@nxp.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] PCI: dwc: Add helper to query integrated dw-edma
- register window
-Message-ID: <202601271718.STDXKWdE-lkp@intel.com>
-References: <20260126071550.3233631-2-den@valinux.co.jp>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sQQb48HB"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=WJ9jgq557aIsoOVME2r7v0yn0vgjgXIa6N0hsPBKqn8=; b=sQQb48HBG+b0VeueUk4xrXCjNA
+	anX8G22s/Ml4agj5ItKvSqkeMRm+IxKUJwh4q68x8ByL6wb5iJJq97l5LDgGgfzP7FlR0Uwc3I3MX
+	hPfFQPka0dGpGNSuLSbRcH34y08I/to1vL4m3rvEH2iAeHMeggGiQuLNkht4HLgwKIV/v2uVvpHo2
+	OVYVnsc3rWRN7uw2LnDW1nV9+6Rskscr73br0ViBNGhARsW1Hp/5HnsUn9GH+Z1VCNgUtZBc0nx2x
+	ZPk9Yp6vZX02b15ndZXXuroCuKDQPd9nlyV9UiIU60BHh9HT9foXtF0oteHcsHmx67YiEjFZrBiCc
+	E65KC7Ww==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.94.2)
+	(envelope-from <leitao@debian.org>)
+	id 1vkfq5-00GuDv-FA; Tue, 27 Jan 2026 09:58:25 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH] ipmi: fix NULL pointer on smi_work
+Date: Tue, 27 Jan 2026 01:57:58 -0800
+Message-Id: <20260127-ipmi-v1-0-ba5cc90f516f@debian.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126071550.3233631-2-den@valinux.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACeMeGkC/yXMzQpAQBSG4Vs5fWtTY4iaW5HFDAdH+WkGKbl3Y
+ fkunvdC5CAcYelC4EOiLDMspQmhGdzcs5IWlmC0KXRqSiXrJEpn3nHutCl9i4SwBu7k/DZV/Xf
+ c/cjN9lrc9wPqKL8uaAAAAA==
+X-Change-ID: 20260127-ipmi-03bae4a027bd
+To: Corey Minyard <corey@minyard.net>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: openipmi-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.15-dev-deb6e
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5642; i=leitao@debian.org;
+ h=from:subject:message-id; bh=AzrFVW593Ai5xx9FLIVRL8w0+432x7sxOT+xZPYWQ9I=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBpeIw8mu+6XKANhhl0lz0RZKytOQ5n1QSt91NOc
+ v0dx6v696iJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaXiMPAAKCRA1o5Of/Hh3
+ bZr0EACvJonjnKi05xumnr6YGTcs8tOo/xIu6pfWSWMhvdwlATwh+ygE0D38BiTj0M4+oBxhRbi
+ SK+qwGHAzwhmI2PMoWnwGg/CTuszR+h6Vf1DlLfI7ZGW2iq0rGl84Wc3VqZhPQyvVYjK5wteSgX
+ rsG3g2Nq9PAI9O1JgjtFvzP77Vt1z79xhY7IomPMyGg1m5TociFZuKFRpsZL5g5DO/RdLgA578F
+ tVvcV1kZJGpnpS17yh23CT12pfY6E4AdsQw0+0JcduiBGdETjiApHH59/8OZeiIZjhtvX5o7C//
+ 4TBFEiK5ruyj76MyF89n7/kLsua9fPmNEHjOIK4ZIzctHAouF9Zv5sUhMewVDYrz5HxzY3EqY9W
+ CJoVCVKCCXUfx6weRojJU8oylNHL2TsIlnDj24lwl5wxOIa3ytgt6UUN0pVwcEwB+jvBGalmW7/
+ ShP6qzj2o9cCGaXKkD4r1Itdr4zK6m+ncfz0NaqBNtAF0AzobDwJ6DwV8LExImzxGc03lzyQtKU
+ s/1Vh3h+G2O0bohTnIpXU525o/vdMvJMSE/rm3VCFxDiBZgWOQwxTeFPBNDdwxZ6vJCUn/1t1HL
+ HMjEXUu8M0v33MOlNjgDvbKxqc35hY9he0lQ5k2GrH4WdiBohruNwHzY2vhn7atnSUteT1PZagL
+ immTvRw2GSJYFwg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Hi Koichiro,
+I am getting the following crash on IPMI on linus' upstream. It tries to
+double-add the same element to a list, and then get
+a slab-use-after-free in handle_one_recv_msg.
 
-kernel test robot noticed the following build errors:
+Here is the decoded stack against commit cf38b2340c0e ("Merge tag
+'soc-fixes-6.19-2' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc")
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.19-rc7 next-20260126]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	list_add double add: new=ffff888145b19000, prev=ffff888145b19000, next=ffff88810bb6d480.
+	  WARNING: lib/list_debug.c:37 at __list_add_valid_or_report+0x10a/0x130, CPU#64: 0/408
+	  Workqueue: events smi_work [ipmi_msghandler]
+	  RIP: 0010:__list_add_valid_or_report (rw/compile/lib/list_debug.c:35)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Koichiro-Den/PCI-dwc-Add-helper-to-query-integrated-dw-edma-register-window/20260126-152209
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260126071550.3233631-2-den%40valinux.co.jp
-patch subject: [PATCH 1/2] PCI: dwc: Add helper to query integrated dw-edma register window
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260127/202601271718.STDXKWdE-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601271718.STDXKWdE-lkp@intel.com/reproduce)
+	  deliver_response (rw/compile/./include/linux/list.h:158 rw/compile/./include/linux/list.h:191 rw/compile/drivers/char/ipmi/ipmi_msghandler.c:974) ipmi_msghandler
+	  smi_work (rw/compile/drivers/char/ipmi/ipmi_msghandler.c:985 rw/compile/drivers/char/ipmi/ipmi_msghandler.c:999 rw/compile/drivers/char/ipmi/ipmi_msghandler.c:4853) ipmi_msghandler
+	  ? process_scheduled_works (rw/compile/kernel/workqueue.c:3233 rw/compile/kernel/workqueue.c:3340)
+	  process_scheduled_works (rw/compile/kernel/workqueue.c:? rw/compile/kernel/workqueue.c:3340)
+	  worker_thread (rw/compile/./include/linux/list.h:381 rw/compile/kernel/workqueue.c:946 rw/compile/kernel/workqueue.c:3422)
+	  kthread (rw/compile/kernel/kthread.c:465)
+	  ? pr_cont_work (rw/compile/kernel/workqueue.c:3367)
+	  ? kthread_blkcg (rw/compile/kernel/kthread.c:412)
+	  ret_from_fork (rw/compile/arch/x86/kernel/process.c:164)
+	  ? kthread_blkcg (rw/compile/kernel/kthread.c:412)
+	  ret_from_fork_asm (rw/compile/arch/x86/entry/entry_64.S:256)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601271718.STDXKWdE-lkp@intel.com/
+	list_add double add: new=ffff888145b19000, prev=ffff888145b19000, next=ffff88810bb6d480.
+	  WARNING: lib/list_debug.c:37 at __list_add_valid_or_report+0x10a/0x130, CPU#64: 0/408
+	  <double add hit again same stack>
 
-All errors (new ones prefixed by >>):
+	BUG: KASAN: slab-use-after-free in handle_one_recv_msg (rw/compile/drivers/char/ipmi/ipmi_msghandler.c:? rw/compile/drivers/char/ipmi/ipmi_msghandler.c:4761) ipmi_msghandler
+	  T473136] Write of size 4 at addr ffff888145b19010 by task kworker/30:3/473136
+	  handle_new_recv_msgs (rw/compile/drivers/char/ipmi/ipmi_msghandler.c:4788) ipmi_msghandler
+	  ? get_smi_info (rw/compile/drivers/char/ipmi/ipmi_si_intf.c:918) ipmi_si
+	  smi_work (rw/compile/drivers/char/ipmi/ipmi_msghandler.c:?) ipmi_msghandler
+	  ? process_scheduled_works (rw/compile/kernel/workqueue.c:3233 rw/compile/kernel/workqueue.c:3340)
+	  process_scheduled_works (rw/compile/kernel/workqueue.c:? rw/compile/kernel/workqueue.c:3340)
+	  worker_thread (rw/compile/./include/linux/list.h:381 rw/compile/kernel/workqueue.c:946 rw/compile/kernel/workqueue.c:3422)
+	  kthread (rw/compile/kernel/kthread.c:465)
+	  ? rcu_is_watching (rw/compile/./include/linux/context_tracking.h:128 rw/compile/kernel/rcu/tree.c:751)
+	  ? pr_cont_work (rw/compile/kernel/workqueue.c:3367)
+	  ? kthread_blkcg (rw/compile/kernel/kthread.c:412)
+	  ret_from_fork (rw/compile/arch/x86/kernel/process.c:164)
+	  ? kthread_blkcg (rw/compile/kernel/kthread.c:412)
+	  ret_from_fork_asm (rw/compile/arch/x86/entry/entry_64.S:256)
 
->> drivers/pci/controller/dwc/pcie-designware.c:1358:7: error: call to undeclared function 'epc_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1358 |         ep = epc_get_drvdata(epc);
-         |              ^
-   drivers/pci/controller/dwc/pcie-designware.c:1358:7: note: did you mean 'epf_get_drvdata'?
-   include/linux/pci-epf.h:229:21: note: 'epf_get_drvdata' declared here
-     229 | static inline void *epf_get_drvdata(struct pci_epf *epf)
-         |                     ^
->> drivers/pci/controller/dwc/pcie-designware.c:1358:5: error: incompatible integer to pointer conversion assigning to 'struct dw_pcie_ep *' from 'int' [-Wint-conversion]
-    1358 |         ep = epc_get_drvdata(epc);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+	Allocated by task 6379:
+	  kasan_save_track (rw/compile/mm/kasan/common.c:58 rw/compile/mm/kasan/common.c:78)
+	  __kasan_kmalloc (rw/compile/mm/kasan/common.c:419)
+	  __kmalloc_cache_noprof (rw/compile/mm/slub.c:5781)
+	  kernfs_fop_open.llvm.1481521202032378051 (rw/compile/./include/linux/slab.h:957 rw/compile/./include/linux/slab.h:1094 rw/compile/fs/kernfs/file.c:641)
+	  do_dentry_open (rw/compile/fs/open.c:963)
+	  vfs_open (rw/compile/fs/open.c:1095)
+	  path_openat (rw/compile/fs/namei.c:4638 rw/compile/fs/namei.c:4796)
+	  do_filp_open (rw/compile/fs/namei.c:4823)
+	  do_sys_openat2 (rw/compile/./include/linux/err.h:78 rw/compile/./include/linux/file.h:177 rw/compile/fs/open.c:1430)
+	  __x64_sys_openat (rw/compile/fs/open.c:1447)
+	  do_syscall_64 (rw/compile/arch/x86/entry/syscall_64.c:?)
+	  entry_SYSCALL_64_after_hwframe (rw/compile/arch/x86/entry/entry_64.S:131)
 
+	Freed by task 6379:
+	  kasan_save_track (rw/compile/mm/kasan/common.c:58 rw/compile/mm/kasan/common.c:78)
+	  kasan_save_free_info (rw/compile/mm/kasan/generic.c:587)
+	  __kasan_slab_free (rw/compile/mm/kasan/common.c:287)
+	  kfree (rw/compile/mm/slub.c:6674 rw/compile/mm/slub.c:6882)
+	  kernfs_fop_release.llvm.1481521202032378051 (rw/compile/fs/kernfs/file.c:788)
+	  __fput (rw/compile/fs/file_table.c:469)
+	  fput_close_sync (rw/compile/fs/file_table.c:574)
+	  __x64_sys_close (rw/compile/fs/open.c:1575 rw/compile/fs/open.c:1558 rw/compile/fs/open.c:1558)
+	  do_syscall_64 (rw/compile/arch/x86/entry/syscall_64.c:?)
+	  entry_SYSCALL_64_after_hwframe (rw/compile/arch/x86/entry/entry_64.S:131)
 
-vim +/epc_get_drvdata +1358 drivers/pci/controller/dwc/pcie-designware.c
+	  BUG: kernel NULL pointer dereference, address: 0000000000000000
+	  #PF: supervisor instruction fetch in kernel mode
+	  #PF: error_code(0x0010) - not-present page
+	  PGD 1d14bb067 P4D 1d14bb067 PUD 67c50d067 PMD 0
+	  Oops: Oops: 0010 [#1] SMP DEBUG_PAGEALLOC KASAN
+	  Hardware name: Quanta North Dome MP/North Dome MP, BIOS F09C_3B14.sign 04/12/2023
+	  Workqueue: events smi_work [ipmi_msghandler]
 
-  1348	
-  1349	int dwc_pcie_edma_get_reg_window(struct pci_epc *epc, phys_addr_t *phys,
-  1350					 resource_size_t *sz)
-  1351	{
-  1352		struct dw_pcie_ep *ep;
-  1353		struct dw_pcie *pci;
-  1354	
-  1355		if (!epc || !phys || !sz)
-  1356			return -EINVAL;
-  1357	
-> 1358		ep = epc_get_drvdata(epc);
+The next patch contains the issue I found and a possible fix.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Breno Leitao (1):
+      ipmi: Fix use-after-free and list corruption on sender error
+
+ drivers/char/ipmi/ipmi_msghandler.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+---
+base-commit: cf38b2340c0e60ef695b7137440a4d187ed49c88
+change-id: 20260127-ipmi-03bae4a027bd
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
