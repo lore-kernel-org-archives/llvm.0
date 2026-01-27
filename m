@@ -1,190 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDF6328255;
-	Tue, 27 Jan 2026 18:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBC5322B7B;
+	Tue, 27 Jan 2026 19:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769540218; cv=none; b=ezhMpWPF0uSez+erYVDFF9kxYjQZuINwonaENOlVk7XmM+7BkiQM1+qmHPFMZsRjCiGh5OJzSFOTUjm+Hb5GFKgDWipdKUHBETboqmC9sT5Ksg6LtgKIE43ffyh0IWun6uP9hcOyYEndTL9EQxAMKvOUu5MreS0r0C+QPUdwoxo=
+	t=1769541535; cv=none; b=pcGzG84D9HtqmtZZYPwCkT7BjxvedHCoGxroWeJFdk3Dx92SPAeUUbm5u32hBX9gGqF7r3zfbnpppHtSUYVPF8evVt7tD2fEKq266oI22yxzn7Y1HzSvO/rBqdFQOH4pcWRehkOLNykEwh4dTwOi01fiVitqEFTK7xfYFG8sJTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769540218; c=relaxed/simple;
-	bh=Ch0LIB4X3I+61DsXgHOBKVGaZxOxxpivi8bEXcVQRqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YLhCz/sjxBHhq5uSAsF7ofShWk+slMq5Hkocvp02LCLYI7NI28GUvk8w8QTx7ImMBjBLQmuNTL78nC0jg0nVv9Pzxi5KbcH9rXqSc5ecM8C0zqmXbURGzxSfHXLoR8N4aeZ4CE4eO4u9u9chbTSX0AfwztOyzZHz7y0a2AoOgGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PeneBB5K; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1769541535; c=relaxed/simple;
+	bh=6wCl/uGDdAxwNuwGhTFeLBr37I6ykNnRVaX8dgkMG+g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=JbgOPymQQ1pJEo/MBGADNbsnUO122fIOfxUfjIOhNRVgEiCX86vtCinKxHJqfYsA+V55XpZ/61ZrY4ub9tGu15LTqT/6eF9IJJPzWIinzF5zPtxaBI7NhD9XgzrabDp5DVBZUjFPbSt5mEtXtjz3rAmLcWK4chj2l1aOPH2Qs8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZdBznfLs; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PeneBB5K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZdBznfLs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769540217; x=1801076217;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ch0LIB4X3I+61DsXgHOBKVGaZxOxxpivi8bEXcVQRqI=;
-  b=PeneBB5K61qZ6UsrDgFrzFsILjKlQBhFVzefPAq0/HWBP5aqXn/PAfcW
-   uLiLOqBx0KficCZkvJnMTol4m9hq1I1p91i8vtK+qXASHFvd2F3Qk/e94
-   /BJ31y4c72md5KoMj/anFrYXGZ7vT8r0ibXp0PUZXLh6OJiRjitS+GMUs
-   +2FrK+Q8jVem2oKtK+gEkwCGXPdIXF/djhPiCGTf4035uWXlvxc2UTw/h
-   M4n0Z6zPaJGHLKOJV4phe8Tu1VeR1GSXkkcziF1MNzpKo58avXIBoT6r7
-   EnTk4aZAIsAI+rfSyZVJxBLKKX+u9WM9EsfVnMCt85pGt1qKc+A+HJMrY
+  t=1769541534; x=1801077534;
+  h=date:from:to:cc:subject:message-id;
+  bh=6wCl/uGDdAxwNuwGhTFeLBr37I6ykNnRVaX8dgkMG+g=;
+  b=ZdBznfLs1KLUjVZUkDgSXWz/BfgC8y3TqNPsaujnZTOC78v9pzn6BDnn
+   43GB17Aq+6FMvQCXIXVDs3TC2jhWWSPly7E1h9nlF3o3WYoMITlvID/wq
+   EP9bbCjf28up/nKwE0X5vPFd3UYgBQ0LB81ElZMX35XzDfIg5Yq+Hnn0p
+   cCySRc7IjvbsGbo86mOLakwKfso9Z5SsekVC/si6tYSylW3u9QDMTVKIZ
+   Yx0C+2Xl9mTd9at5dJgd+aQqPk4AtEZQSTUecgv+STjkatWNah969YEfP
+   YtmUfwWzMtR0sVt5rG0KhAF39dugROZWtZHx2sgAYiYaZJs2ZFeIrZLfO
    Q==;
-X-CSE-ConnectionGUID: +8E/o4egQ2+vJPQquqGwGg==
-X-CSE-MsgGUID: zDg8m+c2Tu+L8916vSjjxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="81377731"
+X-CSE-ConnectionGUID: ARUMXlCSSDKXt4cjlp4l1w==
+X-CSE-MsgGUID: yKA3g3tySI64M/L0tJtUyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="70648989"
 X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
-   d="scan'208";a="81377731"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 10:56:56 -0800
-X-CSE-ConnectionGUID: 943+XywOTBeCmu+rfv8XIg==
-X-CSE-MsgGUID: 27YhhHwpQZ6G6ZLX+E50Fw==
+   d="scan'208";a="70648989"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 11:18:53 -0800
+X-CSE-ConnectionGUID: bYObomZkTDWY/5GHpB/wFA==
+X-CSE-MsgGUID: Nl6PzGUITHCzlnztrfQbSg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
-   d="scan'208";a="208409714"
+   d="scan'208";a="245678980"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 27 Jan 2026 10:56:51 -0800
+  by orviesa001.jf.intel.com with ESMTP; 27 Jan 2026 11:18:52 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vkoF6-00000000YrA-2dUf;
-	Tue, 27 Jan 2026 18:56:48 +0000
-Date: Wed, 28 Jan 2026 02:56:12 +0800
+	id 1vkoaP-00000000YsU-1tj6;
+	Tue, 27 Jan 2026 19:18:49 +0000
+Date: Wed, 28 Jan 2026 03:18:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ruidong Tian <tianruidong@linux.alibaba.com>, catalin.marinas@arm.com,
-	will@kernel.org, lpieralisi@kernel.org, guohanjun@huawei.com,
-	sudeep.holla@arm.com, rafael@kernel.org, robin.murphy@arm.com,
-	mark.rutland@arm.com, tony.luck@intel.com, bp@alien8.de,
-	tglx@linutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lenb@kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-acpi@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	linux-edac@vger.kernel.org, mchehab@kernel.org,
-	xueshuai@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-	oliver.yang@linux.alibaba.com,
-	Ruidong Tian <tianruidong@linux.alibaba.com>
-Subject: Re: [PATCH v6 15/16] ras: AEST: support vendor node CMN700
-Message-ID: <202601280228.CbJgYMRG-lkp@intel.com>
-References: <20260122094656.73399-16-tianruidong@linux.alibaba.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-s390@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
+Subject: [s390:for-next 19/27] lib/bug.c:190:22: warning: diagnostic
+ behavior may be improved by adding the 'format(printf, 1, 0)' attribute to
+ the declaration of '__warn_printf'
+Message-ID: <202601280339.1xH8iSrP-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260122094656.73399-16-tianruidong@linux.alibaba.com>
 
-Hi Ruidong,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.19-rc7 next-20260126]
-[cannot apply to tip/smp/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ruidong-Tian/ACPI-AEST-Parse-the-AEST-table/20260122-180219
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20260122094656.73399-16-tianruidong%40linux.alibaba.com
-patch subject: [PATCH v6 15/16] ras: AEST: support vendor node CMN700
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260128/202601280228.CbJgYMRG-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601280228.CbJgYMRG-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git for-next
+head:   d06f05df104d3cefd48cbf8d2eb76b8e73f39ae1
+commit: 04dabb4261c387318affbdb22c15c31138a989f5 [19/27] s390/bug: Implement __WARN_printf()
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260128/202601280339.1xH8iSrP-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601280339.1xH8iSrP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601280228.CbJgYMRG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601280339.1xH8iSrP-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/ras/aest/aest-cmn.c:209:19: warning: variable 'hnd_base' set but not used [-Wunused-but-set-variable]
-     209 |         u64 errgsr_addr, hnd_base;
-         |                          ^
+>> lib/bug.c:190:22: warning: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '__warn_printf' [-Wmissing-format-attribute]
+     179 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
+         | __attribute__((format(printf, 1, 0))) 
+     180 | {
+     181 |         if (!fmt)
+     182 |                 return;
+     183 | 
+     184 | #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
+     185 |         if (regs) {
+     186 |                 struct arch_va_list _args;
+     187 |                 va_list *args = __warn_args(&_args, regs);
+     188 | 
+     189 |                 if (args) {
+     190 |                         vprintk(fmt, *args);
+         |                                           ^
+   lib/bug.c:179:13: note: '__warn_printf' declared here
+     179 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
+         |             ^
    1 warning generated.
 
 
-vim +/hnd_base +209 drivers/ras/aest/aest-cmn.c
+vim +190 lib/bug.c
 
-   203	
-   204	static int aest_cmn_reorgnize_node(struct aest_device *adev,
-   205					   struct acpi_aest_node *anode, u64 base)
-   206	{
-   207		struct aest_node *cmn_node;
-   208		u64 hnd_offset, cmn_node_offset, reg, logic_id, type, node_id;
- > 209		u64 errgsr_addr, hnd_base;
-   210		struct aest_record *record;
-   211		int ret, node_index;
-   212		struct cmn_vendor_data *vendor_data;
-   213	
-   214		if (anode->interface_hdr->type !=
-   215		    ACPI_AEST_NODE_SINGLE_RECORD_MEMORY_MAPPED) {
-   216			aest_dev_err(adev, "CMN just use single memory mapping\n");
-   217			return -ENODEV;
-   218		}
-   219	
-   220		hnd_offset = *((u64 *)anode->vendor->vendor_specific_data);
-   221		cmn_node_offset = *((u64 *)&anode->vendor->vendor_specific_data[8]);
-   222	
-   223		reg = readq_relaxed((void *)base + cmn_node_offset + CMN_NODE_INFO);
-   224	
-   225		logic_id = FIELD_GET(CMN_NI_LOGICAL_ID, reg);
-   226		type = FIELD_GET(CMN_NI_NODE_TYPE, reg);
-   227		node_id = FIELD_GET(CMN_NI_NODE_ID, reg);
-   228	
-   229		hnd_base = base + hnd_offset;
-   230		node_index = cmn_config->node_id_map[type];
-   231		errgsr_addr = base + cmn_config->errgsr_offset(hnd_offset, node_index);
-   232	
-   233		// node not register, create it
-   234		cmn_node = &adev->nodes[node_index];
-   235		if (!cmn_node->errgsr) {
-   236			ret = aest_cmn_init_node(adev, cmn_node, anode, type,
-   237						 errgsr_addr);
-   238			if (ret)
-   239				return -ENOMEM;
-   240		}
-   241	
-   242		aest_dev_dbg(adev, "node type %llx, id %llx, offset %llx\n", type,
-   243			     logic_id, cmn_node_offset);
-   244	
-   245		if (!test_bit(0, anode->record_implemented))
-   246			clear_bit(logic_id, cmn_node->record_implemented);
-   247	
-   248		if (!test_bit(0, anode->status_reporting))
-   249			clear_bit(logic_id, cmn_node->status_reporting);
-   250	
-   251		record = &cmn_node->records[logic_id];
-   252		record->name =
-   253			devm_kasprintf(adev->dev, GFP_KERNEL, "record%lld", logic_id);
-   254		if (!record->name)
-   255			return -ENOMEM;
-   256		record->regs_base = devm_ioremap(
-   257			adev->dev, (resource_size_t)anode->interface_hdr->address,
-   258			sizeof(struct ras_ext_regs));
-   259		if (!record->regs_base)
-   260			return -ENOMEM;
-   261		record->addressing_mode = test_bit(0, anode->addressing_mode);
-   262		record->node = cmn_node;
-   263		record->index = logic_id;
-   264		record->access = &aest_access[anode->interface_hdr->type];
-   265	
-   266		vendor_data = devm_kzalloc(adev->dev, sizeof(struct cmn_vendor_data),
-   267					   GFP_KERNEL);
-   268		vendor_data->node_type = type;
-   269		vendor_data->node_id = node_id;
-   270		vendor_data->logic_id = logic_id;
-   271	
-   272		record->vendor_data = vendor_data;
-   273		record->vendor_data_size = sizeof(struct cmn_vendor_data);
-   274	
-   275		aest_record_dbg(record, "base %llx\n", anode->interface_hdr->address);
-   276	
-   277		return 0;
-   278	}
-   279	
+7664c5a1da4711 Jeremy Fitzhardinge 2006-12-08  175  
+d36067d6ea0082 Brendan Jackman     2025-12-07  176  __diag_push();
+d36067d6ea0082 Brendan Jackman     2025-12-07  177  __diag_ignore(GCC, all, "-Wsuggest-attribute=format",
+d36067d6ea0082 Brendan Jackman     2025-12-07  178  	      "Not a valid __printf() conversion candidate.");
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  179  static void __warn_printf(const char *fmt, struct pt_regs *regs)
+d292dbb5640c5b Peter Zijlstra      2025-06-02  180  {
+d292dbb5640c5b Peter Zijlstra      2025-06-02  181  	if (!fmt)
+d292dbb5640c5b Peter Zijlstra      2025-06-02  182  		return;
+d292dbb5640c5b Peter Zijlstra      2025-06-02  183  
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  184  #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  185  	if (regs) {
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  186  		struct arch_va_list _args;
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  187  		va_list *args = __warn_args(&_args, regs);
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  188  
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  189  		if (args) {
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07 @190  			vprintk(fmt, *args);
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  191  			return;
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  192  		}
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  193  	}
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  194  #endif
+5c47b7f3d1a9d7 Peter Zijlstra      2025-06-07  195  
+d292dbb5640c5b Peter Zijlstra      2025-06-02  196  	printk("%s", fmt);
+d292dbb5640c5b Peter Zijlstra      2025-06-02  197  }
+d36067d6ea0082 Brendan Jackman     2025-12-07  198  __diag_pop();
+d292dbb5640c5b Peter Zijlstra      2025-06-02  199  
+
+:::::: The code at line 190 was first introduced by commit
+:::::: 5c47b7f3d1a9d7589026a201abb8ad445f029246 bug: Add BUG_FORMAT_ARGS infrastructure
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
