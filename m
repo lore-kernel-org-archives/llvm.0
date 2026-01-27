@@ -1,64 +1,64 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6497835B628
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 13:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A564E35C18C
+	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 13:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769522367; cv=none; b=aJZwlTAuDxmJ5+0nGYc0a+KMWd37BIbEGTo+lXCCr56V9utRtR17ctnGwn150GsROMPk1C2mS1lkCDZKy31Dgcaji4Mo9zYG28BmbI4gA6d8nMWhjGzs3E80CWiLT3gDLRbsO2dphnKZUJI0ji9cIChmO/VHyVTFCg6n/Ty5fYs=
+	t=1769522372; cv=none; b=hiYuJErawUCHSVZtc5vwNjcUW4C3L/kdPGpIGhkMUNOFY1ZB7GiEmKrXU84T/vACpDd27Vbn1qi0brjG0zUEH+uZvy3xrp5kPioms1w+e369ub2WSgNALMd5Vee586mfiDcj2N495Gij101Hb7QpvXLHDeUey3oxkTIJzIRGslA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769522367; c=relaxed/simple;
-	bh=Sosu0g5xuLpMzNuU0oEuEsMP38OOZp79K3ER9Qyx7W0=;
+	s=arc-20240116; t=1769522372; c=relaxed/simple;
+	bh=0HDVlUmXqJZht+Y9T7EqdTkfQ5g8PjMtq9xZD965xOg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LNpa5cUdbOc/xuaBKhXslNy9/r4ye49xXehMgt+M1Oa4/uXdFLeoJDur78yiut4H/P4mYvgisSjqUpLuDdBIg1dRzSWKaUlnFoYParyJMc1IWB8QNM232EBHeJoR8Dro0mrBwJBayHbqpbvq7+btTMJabBkl8n6QxDeyvg2cWrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net; spf=pass smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b=RSxrH6wB; arc=none smtp.client-ip=209.85.210.48
+	 MIME-Version; b=fcJKWnVEQA71m+0WyN86Uu6B6cp+934E7J6tXVK4MW82FX937wr76cuSUXJUhflyq/J0c/PeskRIYCgpbE97jF3uxKhsqPShoRj67MoJgYtP9e9SEdVCXQahQuGCN+cOdYCNgcZeLCVrJfTKuYyPgnSUg+xZOVeCmPnFYFbQHc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net; spf=pass smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b=h6jhw2Jf; arc=none smtp.client-ip=209.85.160.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=minyard.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b="RSxrH6wB"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7cfccba483eso1750844a34.0
-        for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 05:59:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b="h6jhw2Jf"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4094b31a037so187449fac.1
+        for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 05:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=minyard.net; s=google; t=1769522365; x=1770127165; darn=lists.linux.dev;
+        d=minyard.net; s=google; t=1769522369; x=1770127169; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wzzEevdAZzt1nXO9szlER+ciqn2pWS6swN7VnsinsFo=;
-        b=RSxrH6wBONUCWND2oVtc7TsOm9BG7V96jd5h512gmLqgJoPG9OQcslGspktqomxwWO
-         lQMJTRtqe2/9g/fP6RBWx2R9S4rUyN43v0LJvm7XsOkCw5AqWBwlrPbwOLVdKRhPcTnx
-         MP7O0g1cRWLmoAgEGwsacytJcSir0/ePWsgNBeGUfi/bilcJUMfU0Wv+fLhgOjpxJAld
-         UqQyN9eJD+JuPRtLzE8r6kpHMopZ2CIM1EMN8vr2FquwTcNNsK0z4NtEnXph+gSRt+Io
-         /NsUwuHOrD/fUfZicMpfl3pEI5uNwcTl3enJ9XlJHQv305iS5nfD62wIDx0oQHtGgwdC
-         Zhug==
+        bh=x2LPkniD2Jah+bnHAFdMSt2ma4HBjujXhV2ExysNqRM=;
+        b=h6jhw2Jf+4kNMQaXkeLgLxOhXfo1DQ0bC/a5jNRiSyvuAdzqz4EA2zVF1bJ66ru9n9
+         c0usY82YE6d21avXkVA5BsSpm9nWneRIMha8XYHfu9wX3ujm/pojVdmalUJHGV6XEAkZ
+         wyydqfj428C4y47tTViGNIqiMnq0mfiugNND2KcxfWZXk7RfdwRM1pRc2igKvAjuTzr3
+         abL9H2xREfInbXWzcBPqIU/BnEEpcDNPQ3q/70D5Ax/xUmti/12PTZFxlooxC6XsWAIB
+         FqYV5NEZkd+NcRPaZTPFGGxyY49Jscn6TASF48AgVJMetEVUDscOGb5DEb+EUwzRPzSK
+         j7BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769522365; x=1770127165;
+        d=1e100.net; s=20230601; t=1769522369; x=1770127169;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wzzEevdAZzt1nXO9szlER+ciqn2pWS6swN7VnsinsFo=;
-        b=CstbbJUpLmE6WF4QNbQvsELjIBYGa+DXiAI8TD8wh0A8NaYDJi4dUQHwVopZnS0lls
-         IIlRLfY8rN5FwVdnz+UF/rCqkY1Re1k2UffCv9+SPCcJQ4fCK+bIlJ4em+SMwDDYIPxY
-         bksQ8fq0yemhJxPKIWAz1aoTlwOL3vye4Q97bLN49vR06Pnr+rV42nNd37NvyCYfZMxX
-         /mCDhtiJBR2YH3BfL66J6d85NRGi6vCqmlxhcbrPFFFMvsHdl9/5CLUpZ60MqqeWKm6r
-         obvjkPuKDsrCWw/i1KglSAk9Ae2J/2KN+m8s948+Hp8zKxRZOiv+jriDXjbiUOdjCdpQ
-         7ekA==
-X-Forwarded-Encrypted: i=1; AJvYcCWQK3NV2dh/xbPibz6P0xwWHzF8IiPNO8XPVqBeU+AaRIRTrWAcyyFzxtGtonOU854dV37S@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy49CE7TWBnxctklaJA6TQtzMoV0mCXF4TL0pazY5fqPuPiSOkU
-	SI60txzaIdFoe0D7aqsf0fAq1it4fGtMmXqC83ierJ+lc9Se4JgZDlCTS8uLsJ/tcnU=
-X-Gm-Gg: AZuq6aJggdyzkVvIAJTwNKiWArnHSRSKGuD4Ig2Zp6kIhmU1Sc1GzG5qr0B1UZCijd5
-	g4Iq1NQD4+WMZ/m1VhoXW28L6PTcN7YLxLyu2cUrXBNL3ngk1jiwdPea8xn8SmSdE7VgImHJF9U
-	d3OzMQgHl1RIUBxBphSTlE/vueLAkhRqSlEp3PfZsPQ0iVwxOOztPgGVCMTMyLxJHczXyvSgL03
-	4SUtkevFdpsWKqhpYJIpw7+C2oeSwfhO/WFHzfgDEXriLEIcySpMSBSLyyStsXOpthET26bOGeO
-	skV8XQtPENLn2esPwhS+GeyeVfXKQp1XsQRckbg+Lb/p0kYlkEGc2QI4JJEVFpUKjXWK9fBg+Wy
-	EbyTApv0BYYrUK1WC8wDMEFTxB5EjBLyy5pAOVKf6gSyhkmXPNpIpGhqvwB/Vr/8WtJuPdNfizR
-	DADCRAyEmS1V3F2NDb6BlSm1sUd0W/NcFTqUdya1VkMPoGqMIwDlvpDm81eLxsjn+1MJocyvXxx
-	99b
-X-Received: by 2002:a05:6830:4184:b0:7c7:6bb4:1197 with SMTP id 46e09a7af769-7d1850e6378mr1117433a34.24.1769522365402;
-        Tue, 27 Jan 2026 05:59:25 -0800 (PST)
+        bh=x2LPkniD2Jah+bnHAFdMSt2ma4HBjujXhV2ExysNqRM=;
+        b=NuaCfyDkVtE7xIxdJzEPyFAo71a6OQ8GQMkxdtbsQrnx/W7KsMQxZ/eRiG+82a2gaX
+         GlN7453g4EC3pN/aU6Dw660XvtEovLVu6rDKkapvJ8B2VZqwBw1IgjpDs+4OK2kW/mrL
+         +fT6yYX2N9QyHYHrGFmYyQ8a5PIq/eNorQEIcnKGURmc+S/xrucj8/gv80YktmW4u7yj
+         YzAntC1qdsX8grWNydly3r2hDh670RPJJQQPnyBtIGhgHDS6ITeLasAHXmEGTngRcb8P
+         QwBzg4iVRrZCtWC/VSjaXmnKoq0dhVX+lmKn2i9H1kYqYj8gsMJBS8dUn7QJ9nzIlxUp
+         Vnmw==
+X-Forwarded-Encrypted: i=1; AJvYcCXkFTRpT5Yfd12FeLAIvAT5C07AypsdZSj2qqoMGjt3FYAUc3zYw3d5l2wIuCLBsnvZofot@lists.linux.dev
+X-Gm-Message-State: AOJu0YyGpRc8RK6M/b3fYSTmXk+wy0PNsw1QEPLm8PFcCZcWUxPTwrnO
+	Yp441koTikRoTsxuyLL4dHqA4ZO8lXM9ps5jHlk9GrRRxfIuQg304A8NrWv8ezWu5QsESqzd8PV
+	cULoGjfA=
+X-Gm-Gg: AZuq6aJFjQlFLSED2NMpCk3MbpQmpIPRo0lZOeFIsTHBwYtk5laFDrRcOXwpIdNA35U
+	M2pw70rJKzHzWsHEgGoC74NyonYPeIL7A1MSeMmb0W0r80zRrpYcYV/ayNiHH443jWNqLbcI5t/
+	H03H/ElhRbTfiLm7J+lmjyoBvg0xXAyvkRY7KUG9/dSJKtb/a69RI275BW2rZoFs8SkLtDAp0YM
+	N4X1fqC8NfWvQibv6Cy/2Kc0pqx70CbaZUwJH7volzVBTTeSYX6SD3z7A+LWvWFEzYTnaJ25UDy
+	rsF0CPYcLUt4Ccb5cpzJmAC09oHGqGAN+YgcpuzkWsAc6nPedFYSPENcopq5AABfZv3uhXsseSi
+	ZSgbFztNm4B+kOLu7hGvNHUW4cA4C3vktaBFDUXVYP94U281BNCTwodcPiz7M+l5S2/ifyy29OF
+	wwEBet1MzKVbmzvv/HwuKpv8j02dWmpD2RE+ax8aF7Bv5re2WZxt/htOwdY6bH4NNHPg==
+X-Received: by 2002:a05:6870:b627:b0:3d4:876:34b1 with SMTP id 586e51a60fabf-4093ff09acdmr1047607fac.33.1769522367981;
+        Tue, 27 Jan 2026 05:59:27 -0800 (PST)
 Received: from localhost ([2001:470:b8f6:1b:a1a5:d807:e7a1:53eb])
-        by smtp.gmail.com with UTF8SMTPSA id 46e09a7af769-7d15b346e03sm9854283a34.1.2026.01.27.05.59.24
+        by smtp.gmail.com with UTF8SMTPSA id 586e51a60fabf-408af88d1c2sm9407794fac.8.2026.01.27.05.59.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 05:59:24 -0800 (PST)
+        Tue, 27 Jan 2026 05:59:27 -0800 (PST)
 From: Corey Minyard <corey@minyard.net>
 To: Breno Leitao <leitao@debian.org>,
 	Nathan Chancellor <nathan@kernel.org>,
@@ -70,9 +70,9 @@ Cc: openipmi-developer@lists.sourceforge.net,
 	llvm@lists.linux.dev,
 	kernel-team@meta.com,
 	Corey Minyard <corey@minyard.net>
-Subject: [PATCH 1/2] ipmi: Fix use-after-free and list corruption on sender error
-Date: Tue, 27 Jan 2026 07:54:39 -0600
-Message-ID: <20260127135917.1597762-2-corey@minyard.net>
+Subject: [PATCH 2/2] ipmi: Consolidate the run to completion checking for xmit msgs lock
+Date: Tue, 27 Jan 2026 07:54:40 -0600
+Message-ID: <20260127135917.1597762-3-corey@minyard.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260127135917.1597762-1-corey@minyard.net>
 References: <20260127-ipmi-v1-0-ba5cc90f516f@debian.org>
@@ -85,64 +85,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The analysis from Breno:
+It made things hard to read, move the check to a function.
 
-When the SMI sender returns an error, smi_work() delivers an error
-response but then jumps back to restart without cleaning up properly:
-
-1. intf->curr_msg is not cleared, so no new message is pulled
-2. newmsg still points to the message, causing sender() to be called
-   again with the same message
-3. If sender() fails again, deliver_err_response() is called with
-   the same recv_msg that was already queued for delivery
-
-This causes list_add corruption ("list_add double add") because the
-recv_msg is added to the user_msgs list twice. Subsequently, the
-corrupted list leads to use-after-free when the memory is freed and
-reused, and eventually a NULL pointer dereference when accessing
-recv_msg->done.
-
-The buggy sequence:
-
-  sender() fails
-    -> deliver_err_response(recv_msg)  // recv_msg queued for delivery
-    -> goto restart                    // curr_msg not cleared!
-  sender() fails again (same message!)
-    -> deliver_err_response(recv_msg)  // tries to queue same recv_msg
-    -> LIST CORRUPTION
-
-Fix this by freeing the message and setting it to NULL on a send error.
-Also, always free the newmsg on a send error, otherwise it will leak.
-
-Reported-by: Breno Leitao <leitao@debian.org>
-Fixes: 9cf93a8fa9513 ("ipmi: Allow an SMI sender to return an error")
 Signed-off-by: Corey Minyard <corey@minyard.net>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/char/ipmi/ipmi_msghandler.c | 40 ++++++++++++++++-------------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index 3f48fc6ab596..a590a67294e2 100644
+index a590a67294e2..030828cdb778 100644
 --- a/drivers/char/ipmi/ipmi_msghandler.c
 +++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -4852,8 +4852,15 @@ static void smi_work(struct work_struct *t)
+@@ -602,6 +602,20 @@ static int __ipmi_bmc_register(struct ipmi_smi *intf,
+ static int __scan_channels(struct ipmi_smi *intf,
+ 				struct ipmi_device_id *id, bool rescan);
+ 
++static void ipmi_lock_xmit_msgs(struct ipmi_smi *intf, int run_to_completion,
++				unsigned long *flags)
++{
++	if (!run_to_completion)
++		spin_lock_irqsave(&intf->xmit_msgs_lock, *flags);
++}
++
++static void ipmi_unlock_xmit_msgs(struct ipmi_smi *intf, int run_to_completion,
++				  unsigned long *flags)
++{
++	if (!run_to_completion)
++		spin_unlock_irqrestore(&intf->xmit_msgs_lock, *flags);
++}
++
+ static void free_ipmi_user(struct kref *ref)
+ {
+ 	struct ipmi_user *user = container_of(ref, struct ipmi_user, refcount);
+@@ -1878,11 +1892,9 @@ static void smi_send(struct ipmi_smi *intf,
+ 	int run_to_completion = READ_ONCE(intf->run_to_completion);
+ 	unsigned long flags = 0;
+ 
+-	if (!run_to_completion)
+-		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
++	ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
+ 	smi_msg = smi_add_send_msg(intf, smi_msg, priority);
+-	if (!run_to_completion)
+-		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
++	ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
+ 
+ 	if (smi_msg)
+ 		handlers->sender(intf->send_info, smi_msg);
+@@ -4826,8 +4838,7 @@ static void smi_work(struct work_struct *t)
+ 	 * message delivery.
+ 	 */
+ restart:
+-	if (!run_to_completion)
+-		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
++	ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
+ 	if (intf->curr_msg == NULL && !intf->in_shutdown) {
+ 		struct list_head *entry = NULL;
+ 
+@@ -4843,8 +4854,7 @@ static void smi_work(struct work_struct *t)
+ 			intf->curr_msg = newmsg;
+ 		}
+ 	}
+-	if (!run_to_completion)
+-		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
++	ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
+ 
+ 	if (newmsg) {
+ 		cc = intf->handlers->sender(intf->send_info, newmsg);
+@@ -4852,13 +4862,9 @@ static void smi_work(struct work_struct *t)
  			if (newmsg->recv_msg)
  				deliver_err_response(intf,
  						     newmsg->recv_msg, cc);
--			else
--				ipmi_free_smi_msg(newmsg);
-+			if (!run_to_completion)
-+				spin_lock_irqsave(&intf->xmit_msgs_lock,
-+						  flags);
-+			intf->curr_msg = NULL;
-+			if (!run_to_completion)
-+				spin_unlock_irqrestore(&intf->xmit_msgs_lock,
-+						       flags);
-+			ipmi_free_smi_msg(newmsg);
-+			newmsg = NULL;
+-			if (!run_to_completion)
+-				spin_lock_irqsave(&intf->xmit_msgs_lock,
+-						  flags);
++			ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
+ 			intf->curr_msg = NULL;
+-			if (!run_to_completion)
+-				spin_unlock_irqrestore(&intf->xmit_msgs_lock,
+-						       flags);
++			ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
+ 			ipmi_free_smi_msg(newmsg);
+ 			newmsg = NULL;
  			goto restart;
- 		}
- 	}
+@@ -4928,16 +4934,14 @@ void ipmi_smi_msg_received(struct ipmi_smi *intf,
+ 		spin_unlock_irqrestore(&intf->waiting_rcv_msgs_lock,
+ 				       flags);
+ 
+-	if (!run_to_completion)
+-		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
++	ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
+ 	/*
+ 	 * We can get an asynchronous event or receive message in addition
+ 	 * to commands we send.
+ 	 */
+ 	if (msg == intf->curr_msg)
+ 		intf->curr_msg = NULL;
+-	if (!run_to_completion)
+-		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
++	ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
+ 
+ 	if (run_to_completion)
+ 		smi_work(&intf->smi_work);
 -- 
 2.43.0
 
