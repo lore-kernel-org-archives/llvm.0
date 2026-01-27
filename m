@@ -1,191 +1,193 @@
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A564E35C18C
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 13:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED1129AB00;
+	Tue, 27 Jan 2026 14:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769522372; cv=none; b=hiYuJErawUCHSVZtc5vwNjcUW4C3L/kdPGpIGhkMUNOFY1ZB7GiEmKrXU84T/vACpDd27Vbn1qi0brjG0zUEH+uZvy3xrp5kPioms1w+e369ub2WSgNALMd5Vee586mfiDcj2N495Gij101Hb7QpvXLHDeUey3oxkTIJzIRGslA=
+	t=1769523397; cv=none; b=si3yPUO+1QtAkopkjeRPLsAGA3pGnLqdifVC9C+FfmwVxNLDk5rWtMf2tWCyIwLZi9b/jbJS+dAkDxxvT0xPQ9gWFDkEbIVQe3k7m5VbASHPB9vIwWOTPLL4OnnFBoDpc16mKB0odVuB7Jvri65i6tfrwsY7mBmf5NMclsYq2XM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769522372; c=relaxed/simple;
-	bh=0HDVlUmXqJZht+Y9T7EqdTkfQ5g8PjMtq9xZD965xOg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fcJKWnVEQA71m+0WyN86Uu6B6cp+934E7J6tXVK4MW82FX937wr76cuSUXJUhflyq/J0c/PeskRIYCgpbE97jF3uxKhsqPShoRj67MoJgYtP9e9SEdVCXQahQuGCN+cOdYCNgcZeLCVrJfTKuYyPgnSUg+xZOVeCmPnFYFbQHc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net; spf=pass smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b=h6jhw2Jf; arc=none smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=minyard.net
+	s=arc-20240116; t=1769523397; c=relaxed/simple;
+	bh=xPoy1FXQhODL0NPkPKaZgFLKZVbq5JtYflzn+aSP0gM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HcCRSgtxu/hd0Kdtzkft8S4Z4LjPC3OQSMPDpJcZK3hwuxaccbABBTAWyYxMuYmcQH/wuR7dmqfZIp0wz5htxdn3UowUg0ETo5vFT5Qm7DuA8Pubg+MyTzKXW7qAXh/Z2BajH1pf3s9ARNQ2r1HlSfxCXmKbXhJORy85EfMqGdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ga7sVeXD; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b="h6jhw2Jf"
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4094b31a037so187449fac.1
-        for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 05:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=minyard.net; s=google; t=1769522369; x=1770127169; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x2LPkniD2Jah+bnHAFdMSt2ma4HBjujXhV2ExysNqRM=;
-        b=h6jhw2Jf+4kNMQaXkeLgLxOhXfo1DQ0bC/a5jNRiSyvuAdzqz4EA2zVF1bJ66ru9n9
-         c0usY82YE6d21avXkVA5BsSpm9nWneRIMha8XYHfu9wX3ujm/pojVdmalUJHGV6XEAkZ
-         wyydqfj428C4y47tTViGNIqiMnq0mfiugNND2KcxfWZXk7RfdwRM1pRc2igKvAjuTzr3
-         abL9H2xREfInbXWzcBPqIU/BnEEpcDNPQ3q/70D5Ax/xUmti/12PTZFxlooxC6XsWAIB
-         FqYV5NEZkd+NcRPaZTPFGGxyY49Jscn6TASF48AgVJMetEVUDscOGb5DEb+EUwzRPzSK
-         j7BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769522369; x=1770127169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x2LPkniD2Jah+bnHAFdMSt2ma4HBjujXhV2ExysNqRM=;
-        b=NuaCfyDkVtE7xIxdJzEPyFAo71a6OQ8GQMkxdtbsQrnx/W7KsMQxZ/eRiG+82a2gaX
-         GlN7453g4EC3pN/aU6Dw660XvtEovLVu6rDKkapvJ8B2VZqwBw1IgjpDs+4OK2kW/mrL
-         +fT6yYX2N9QyHYHrGFmYyQ8a5PIq/eNorQEIcnKGURmc+S/xrucj8/gv80YktmW4u7yj
-         YzAntC1qdsX8grWNydly3r2hDh670RPJJQQPnyBtIGhgHDS6ITeLasAHXmEGTngRcb8P
-         QwBzg4iVRrZCtWC/VSjaXmnKoq0dhVX+lmKn2i9H1kYqYj8gsMJBS8dUn7QJ9nzIlxUp
-         Vnmw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkFTRpT5Yfd12FeLAIvAT5C07AypsdZSj2qqoMGjt3FYAUc3zYw3d5l2wIuCLBsnvZofot@lists.linux.dev
-X-Gm-Message-State: AOJu0YyGpRc8RK6M/b3fYSTmXk+wy0PNsw1QEPLm8PFcCZcWUxPTwrnO
-	Yp441koTikRoTsxuyLL4dHqA4ZO8lXM9ps5jHlk9GrRRxfIuQg304A8NrWv8ezWu5QsESqzd8PV
-	cULoGjfA=
-X-Gm-Gg: AZuq6aJFjQlFLSED2NMpCk3MbpQmpIPRo0lZOeFIsTHBwYtk5laFDrRcOXwpIdNA35U
-	M2pw70rJKzHzWsHEgGoC74NyonYPeIL7A1MSeMmb0W0r80zRrpYcYV/ayNiHH443jWNqLbcI5t/
-	H03H/ElhRbTfiLm7J+lmjyoBvg0xXAyvkRY7KUG9/dSJKtb/a69RI275BW2rZoFs8SkLtDAp0YM
-	N4X1fqC8NfWvQibv6Cy/2Kc0pqx70CbaZUwJH7volzVBTTeSYX6SD3z7A+LWvWFEzYTnaJ25UDy
-	rsF0CPYcLUt4Ccb5cpzJmAC09oHGqGAN+YgcpuzkWsAc6nPedFYSPENcopq5AABfZv3uhXsseSi
-	ZSgbFztNm4B+kOLu7hGvNHUW4cA4C3vktaBFDUXVYP94U281BNCTwodcPiz7M+l5S2/ifyy29OF
-	wwEBet1MzKVbmzvv/HwuKpv8j02dWmpD2RE+ax8aF7Bv5re2WZxt/htOwdY6bH4NNHPg==
-X-Received: by 2002:a05:6870:b627:b0:3d4:876:34b1 with SMTP id 586e51a60fabf-4093ff09acdmr1047607fac.33.1769522367981;
-        Tue, 27 Jan 2026 05:59:27 -0800 (PST)
-Received: from localhost ([2001:470:b8f6:1b:a1a5:d807:e7a1:53eb])
-        by smtp.gmail.com with UTF8SMTPSA id 586e51a60fabf-408af88d1c2sm9407794fac.8.2026.01.27.05.59.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 05:59:27 -0800 (PST)
-From: Corey Minyard <corey@minyard.net>
-To: Breno Leitao <leitao@debian.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: openipmi-developer@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-team@meta.com,
-	Corey Minyard <corey@minyard.net>
-Subject: [PATCH 2/2] ipmi: Consolidate the run to completion checking for xmit msgs lock
-Date: Tue, 27 Jan 2026 07:54:40 -0600
-Message-ID: <20260127135917.1597762-3-corey@minyard.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260127135917.1597762-1-corey@minyard.net>
-References: <20260127-ipmi-v1-0-ba5cc90f516f@debian.org>
- <20260127135917.1597762-1-corey@minyard.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ga7sVeXD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769523395; x=1801059395;
+  h=date:from:to:cc:subject:message-id;
+  bh=xPoy1FXQhODL0NPkPKaZgFLKZVbq5JtYflzn+aSP0gM=;
+  b=ga7sVeXD2uapeNhdZqjMdbkoYPbWmMPsdSD1+8PoyykDJJryeQf2BrUQ
+   x4nj17nDZrTTI8FITe/0hksL2BjI0s84Ec8HWQFZ7As9a3nFlCnfYnDn2
+   lhlt8iONqBPMY+TEiQG2RXQ5uWaeo3fQ15kKaF5cniC0L9LUpYnUIXeal
+   dak2CxG6Nsg3jEm5wDMdQl/go/r0XCDvbJ67fp7zBLItDncvC5q5RX9bp
+   6zGc8gOGuvY7Z9CVdcxmBunIZ4RBCLY0eelLiGB070Q4laLh/Q1uPXlUU
+   9jiDT4QEVM2hC5vN7gQaieJ43XZjL0rPdz5AxFJi66+yuK8/1fBk3/pzc
+   Q==;
+X-CSE-ConnectionGUID: 2CB5DgZkQkSgxBmGSFRNSw==
+X-CSE-MsgGUID: ftEFtqMmSuqSKRmp9Qt/hw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="70620815"
+X-IronPort-AV: E=Sophos;i="6.21,257,1763452800"; 
+   d="scan'208";a="70620815"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 06:16:32 -0800
+X-CSE-ConnectionGUID: tH8F3Ot4QaWpfJwHZsBCPQ==
+X-CSE-MsgGUID: F1E23dMZTyKDeIrhshKolQ==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 27 Jan 2026 06:16:31 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkjro-00000000YXi-3mYd;
+	Tue, 27 Jan 2026 14:16:28 +0000
+Date: Tue, 27 Jan 2026 22:16:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Kuo <rkuo@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Brian Cain <bcain@kernel.org>
+Subject: [bcain:bcain/boot_qemu 27/38]
+ arch/hexagon/kernel/devtree.c:50:4: error: incompatible integer to pointer
+ conversion assigning to 'const char *' from 'int'
+Message-ID: <202601272221.YKSl5yqg-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-It made things hard to read, move the check to a function.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   6dd00eeb9163d38cdab8b12c40702a711f04a9ab
+commit: c353b293a7e6804bc8910facd062430db3d47fc3 [27/38] hexagon: add SM8150 platform support
+config: hexagon-randconfig-002-20260127 (https://download.01.org/0day-ci/archive/20260127/202601272221.YKSl5yqg-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601272221.YKSl5yqg-lkp@intel.com/reproduce)
 
-Signed-off-by: Corey Minyard <corey@minyard.net>
----
- drivers/char/ipmi/ipmi_msghandler.c | 40 ++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 18 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601272221.YKSl5yqg-lkp@intel.com/
 
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index a590a67294e2..030828cdb778 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -602,6 +602,20 @@ static int __ipmi_bmc_register(struct ipmi_smi *intf,
- static int __scan_channels(struct ipmi_smi *intf,
- 				struct ipmi_device_id *id, bool rescan);
- 
-+static void ipmi_lock_xmit_msgs(struct ipmi_smi *intf, int run_to_completion,
-+				unsigned long *flags)
-+{
-+	if (!run_to_completion)
-+		spin_lock_irqsave(&intf->xmit_msgs_lock, *flags);
-+}
-+
-+static void ipmi_unlock_xmit_msgs(struct ipmi_smi *intf, int run_to_completion,
-+				  unsigned long *flags)
-+{
-+	if (!run_to_completion)
-+		spin_unlock_irqrestore(&intf->xmit_msgs_lock, *flags);
-+}
-+
- static void free_ipmi_user(struct kref *ref)
- {
- 	struct ipmi_user *user = container_of(ref, struct ipmi_user, refcount);
-@@ -1878,11 +1892,9 @@ static void smi_send(struct ipmi_smi *intf,
- 	int run_to_completion = READ_ONCE(intf->run_to_completion);
- 	unsigned long flags = 0;
- 
--	if (!run_to_completion)
--		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
-+	ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
- 	smi_msg = smi_add_send_msg(intf, smi_msg, priority);
--	if (!run_to_completion)
--		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
-+	ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
- 
- 	if (smi_msg)
- 		handlers->sender(intf->send_info, smi_msg);
-@@ -4826,8 +4838,7 @@ static void smi_work(struct work_struct *t)
- 	 * message delivery.
- 	 */
- restart:
--	if (!run_to_completion)
--		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
-+	ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
- 	if (intf->curr_msg == NULL && !intf->in_shutdown) {
- 		struct list_head *entry = NULL;
- 
-@@ -4843,8 +4854,7 @@ static void smi_work(struct work_struct *t)
- 			intf->curr_msg = newmsg;
- 		}
- 	}
--	if (!run_to_completion)
--		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
-+	ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
- 
- 	if (newmsg) {
- 		cc = intf->handlers->sender(intf->send_info, newmsg);
-@@ -4852,13 +4862,9 @@ static void smi_work(struct work_struct *t)
- 			if (newmsg->recv_msg)
- 				deliver_err_response(intf,
- 						     newmsg->recv_msg, cc);
--			if (!run_to_completion)
--				spin_lock_irqsave(&intf->xmit_msgs_lock,
--						  flags);
-+			ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
- 			intf->curr_msg = NULL;
--			if (!run_to_completion)
--				spin_unlock_irqrestore(&intf->xmit_msgs_lock,
--						       flags);
-+			ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
- 			ipmi_free_smi_msg(newmsg);
- 			newmsg = NULL;
- 			goto restart;
-@@ -4928,16 +4934,14 @@ void ipmi_smi_msg_received(struct ipmi_smi *intf,
- 		spin_unlock_irqrestore(&intf->waiting_rcv_msgs_lock,
- 				       flags);
- 
--	if (!run_to_completion)
--		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
-+	ipmi_lock_xmit_msgs(intf, run_to_completion, &flags);
- 	/*
- 	 * We can get an asynchronous event or receive message in addition
- 	 * to commands we send.
- 	 */
- 	if (msg == intf->curr_msg)
- 		intf->curr_msg = NULL;
--	if (!run_to_completion)
--		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
-+	ipmi_unlock_xmit_msgs(intf, run_to_completion, &flags);
- 
- 	if (run_to_completion)
- 		smi_work(&intf->smi_work);
+All errors (new ones prefixed by >>):
+
+   arch/hexagon/kernel/devtree.c:17:13: warning: no previous prototype for function 'early_init_dt_add_memory_arch' [-Wmissing-prototypes]
+      17 | void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+         |             ^
+   arch/hexagon/kernel/devtree.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      17 | void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+         | ^
+         | static 
+   arch/hexagon/kernel/devtree.c:50:6: error: call to undeclared function 'of_get_flat_dt_prop'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
+         |             ^
+>> arch/hexagon/kernel/devtree.c:50:4: error: incompatible integer to pointer conversion assigning to 'const char *' from 'int' [-Wint-conversion]
+      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
+         |           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/hexagon/kernel/devtree.c:104:29: warning: attribute declaration must precede definition [-Wignored-attributes]
+     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+         |                             ^
+   include/linux/init.h:45:17: note: expanded from macro '__init'
+      45 | #define __init          __section(".init.text") __cold __latent_entropy \
+         |                         ^
+   include/linux/compiler_attributes.h:321:56: note: expanded from macro '__section'
+     321 | #define __section(section)              __attribute__((__section__(section)))
+         |                                                        ^
+   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
+      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
+         |                                          ^
+   arch/hexagon/kernel/devtree.c:104:29: warning: attribute declaration must precede definition [-Wignored-attributes]
+     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+         |                             ^
+   include/linux/init.h:45:41: note: expanded from macro '__init'
+      45 | #define __init          __section(".init.text") __cold __latent_entropy \
+         |                                                 ^
+   include/linux/compiler_types.h:126:34: note: expanded from macro '__cold'
+     126 | #define __cold                          __attribute__((__cold__))
+         |                                                        ^
+   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
+      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
+         |                                          ^
+   arch/hexagon/kernel/devtree.c:104:36: error: redefinition of 'setup_machine_fdt'
+     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+         |                                    ^
+   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
+      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
+         |                                          ^
+   arch/hexagon/kernel/devtree.c:120:2: error: use of undeclared identifier 'initial_boot_params'
+     120 |         initial_boot_params = dt_phys;
+         |         ^~~~~~~~~~~~~~~~~~~
+   arch/hexagon/kernel/devtree.c:126:23: error: use of undeclared identifier 'initial_boot_params'
+     126 |         if (fdt_magic(initial_boot_params) != OF_DT_HEADER) {
+         |                       ^~~~~~~~~~~~~~~~~~~
+   arch/hexagon/kernel/devtree.c:130:12: error: call to undeclared function 'of_get_flat_dt_root'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |         dt_root = of_get_flat_dt_root();
+         |                   ^
+   arch/hexagon/kernel/devtree.c:132:15: error: call to undeclared function 'of_flat_dt_match_machine'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     132 |         mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
+         |                      ^
+   arch/hexagon/kernel/devtree.c:132:13: error: incompatible integer to pointer conversion assigning to 'const struct machine_desc *' from 'int' [-Wint-conversion]
+     132 |         mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/hexagon/kernel/devtree.c:142:9: error: call to undeclared function 'early_init_dt_scan_root'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     142 |         early_init_dt_scan_root();
+         |         ^
+   arch/hexagon/kernel/devtree.c:147:2: error: call to undeclared function 'early_init_dt_scan_chosen'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     147 |         early_init_dt_scan_chosen(boot_command_line);
+         |         ^
+   3 warnings and 10 errors generated.
+
+
+vim +50 arch/hexagon/kernel/devtree.c
+
+57d9a292755c80 Richard Kuo 2025-08-18  33  
+57d9a292755c80 Richard Kuo 2025-08-18  34  //  basically a copy of dt_scan_chosen, but doesn't do the initrd scan.
+57d9a292755c80 Richard Kuo 2025-08-18  35  static int __init early_init_dt_scan_chosen_noinitrd(unsigned long node, const char *uname,
+57d9a292755c80 Richard Kuo 2025-08-18  36  				     int depth, void *data)
+57d9a292755c80 Richard Kuo 2025-08-18  37  {
+c353b293a7e680 Richard Kuo 2025-08-26  38  	int l;
+c353b293a7e680 Richard Kuo 2025-08-26  39  	const char *p;
+57d9a292755c80 Richard Kuo 2025-08-18  40  
+57d9a292755c80 Richard Kuo 2025-08-18  41  	pr_debug("search \"chosen\", depth: %d, uname: %s\n", depth, uname);
+57d9a292755c80 Richard Kuo 2025-08-18  42  
+57d9a292755c80 Richard Kuo 2025-08-18  43  	if (depth != 1 || !data ||
+57d9a292755c80 Richard Kuo 2025-08-18  44  	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
+57d9a292755c80 Richard Kuo 2025-08-18  45  		return 0;
+57d9a292755c80 Richard Kuo 2025-08-18  46  
+57d9a292755c80 Richard Kuo 2025-08-18  47  	//early_init_dt_check_for_initrd(node);
+57d9a292755c80 Richard Kuo 2025-08-18  48  
+57d9a292755c80 Richard Kuo 2025-08-18  49  	/* Retrieve command line */
+57d9a292755c80 Richard Kuo 2025-08-18 @50  	p = of_get_flat_dt_prop(node, "bootargs", &l);
+57d9a292755c80 Richard Kuo 2025-08-18  51  	if (p != NULL && l > 0)
+57d9a292755c80 Richard Kuo 2025-08-18  52  		strscpy(data, p, min((int)l, COMMAND_LINE_SIZE));
+57d9a292755c80 Richard Kuo 2025-08-18  53  
+57d9a292755c80 Richard Kuo 2025-08-18  54  	/*
+57d9a292755c80 Richard Kuo 2025-08-18  55  	 * CONFIG_CMDLINE is meant to be a default in case nothing else
+57d9a292755c80 Richard Kuo 2025-08-18  56  	 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
+57d9a292755c80 Richard Kuo 2025-08-18  57  	 * is set in which case we override whatever was found earlier.
+57d9a292755c80 Richard Kuo 2025-08-18  58  	 */
+57d9a292755c80 Richard Kuo 2025-08-18  59  #ifdef CONFIG_CMDLINE
+57d9a292755c80 Richard Kuo 2025-08-18  60  #ifndef CONFIG_CMDLINE_FORCE
+57d9a292755c80 Richard Kuo 2025-08-18  61  	if (!((char *)data)[0])
+57d9a292755c80 Richard Kuo 2025-08-18  62  #endif
+57d9a292755c80 Richard Kuo 2025-08-18  63  		strscpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+57d9a292755c80 Richard Kuo 2025-08-18  64  #endif /* CONFIG_CMDLINE */
+57d9a292755c80 Richard Kuo 2025-08-18  65  
+57d9a292755c80 Richard Kuo 2025-08-18  66  	pr_debug("Command line is: %s\n", (char*)data);
+57d9a292755c80 Richard Kuo 2025-08-18  67  
+57d9a292755c80 Richard Kuo 2025-08-18  68  	/* break now */
+57d9a292755c80 Richard Kuo 2025-08-18  69  	return 1;
+57d9a292755c80 Richard Kuo 2025-08-18  70  }
+57d9a292755c80 Richard Kuo 2025-08-18  71  
+
+:::::: The code at line 50 was first introduced by commit
+:::::: 57d9a292755c8023e31bdefe25e21f0c9837db51 hexagon: add device tree support
+
+:::::: TO: Richard Kuo <rkuo@quicinc.com>
+:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
