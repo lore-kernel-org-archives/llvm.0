@@ -1,174 +1,113 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50DA35B63F
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 14:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A733587C2
+	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 14:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524234; cv=none; b=jQhLYAmqvxKiq7zGRtCXqAsl6OAaJxRI3261TNeOlOVc4RH5ryIBdiz/e8fC5UZnP2d5kAfEVaR1J1m8VfPm+s/0XqrScKAtL1iwx+b3xcYYD2fzJeAUJB648SrRO+AvOSaw0L8pUHNkYf56UTO4MjeZ/WSlq5FmQ8gt99SdGVk=
+	t=1769524690; cv=none; b=hiY3WpJTVetS8o71B+DWh4zJsIgrxPafe5aTUtwC3qHK/X7HRvnI20TC5i1QKifa2ClKT1RuoBejVY/YsZ7STmMIElz+wtqIleLhKvP+eAwGcpDEfwxcK/7zyvro1A1Ibw2ASM7fEbzkzzl2YuXLwMDqyhQfcetY26K4Qxs2grA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524234; c=relaxed/simple;
-	bh=q2XFkv3k1e6ui7Ak1rh2fCMB9+jqFgzgbk8wV3/jOiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OMyrD7U9KgT+u97+3hplg5Lw+u5+Zj63DcEeMb37BsTfXQEWvF/VsrWm+0lc3ty7WOJd1bDZ+RDhBKUNwzMShAujCS4mHt/VQq97xbO/YfToAyyHk0kUnjsgd4YarcbvRXrZggdxprjHDv0+CoVgKPc5yIDxPtprq1vCROkF5Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LH2cy7D4; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769524690; c=relaxed/simple;
+	bh=/Huc7ebUuuPY+O5QSMjOHnPihdsygPxTbc17OjaPudI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GyM9l4ft0n/Ave4iy2Re7IytXgOBJFGe/u2IykYFv9P30dGxt5sKxbPWToCMukyj31h12bm7UBQ2NPZLobVCSudHFkM3K7TvLkf+PfjsdwMkHFM04L5Vqa4HCXjUP2NCqKITpOB7x4YOUQ+w5WbCTh0v16gN6t+VxwYqTwHXWDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJWCr1Oi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LH2cy7D4"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fb2314eb0so4821516f8f.2
-        for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 06:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769524231; x=1770129031; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vhshd5OZQ3rINSAnt7Pm+c6X8anVL8a4fk783Hki388=;
-        b=LH2cy7D4s6Khl8EHGFJM6/VHrdr4ECY0hOzL5wjFUSVn+Opf47t3xtdkgk2B7s+sbU
-         S23XpRd79X5lRGq9RLZYXjHGFg8LYq/+f5Dxvc8KP2JeJ6QpzCGQRUkSdrNlMZfo1cDW
-         sk8f4ru38X8NYiSY/jARcFuu4ACb+b8PVkPGX3L9FG8Y7Qo0e+Fzcne6tzk+goCPSKfz
-         CejpYVqhxrgk+VeF1NE/dxBTjWSdXZ9jeCZfrYXjRe0L3WBMvxXqOTuWlNs9DA2q1st+
-         u/bBBvUdCUpfLC/1TuYvbCo/3k7Y/oJPt7gUFmBbgqnK/VpVMQ15R2DwoGnMdNGZs2ir
-         KWmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769524231; x=1770129031;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vhshd5OZQ3rINSAnt7Pm+c6X8anVL8a4fk783Hki388=;
-        b=q2+oBd3SyPJU4d2qHVqS8Vw8NBCmKb7G1IsxrUnRRl7w7t2cyjvykZBc+qbRrVvTXy
-         0d6CTTObOGezYdmcq9LK/L3vaNwbwV/GSBun5Vw75pBmmjX6yqCXxBV4GMnWr2hCb9ok
-         exIeJMkzqgLQQ6Baug4UcGpmKLW35uZAywYtCFkTMzvJWpY1NRYPfT9Zl++ybxmHLVj2
-         1Ryu47k9lu2/U7Cs6iOzKfsLKZFUuYpkFufO3I7OTDFsFxR+NL6bG+XhDI0V+GbdP/Ym
-         IfHPRcnWkZS7/JsfoccwrKFsV4rwT+gHCqOFnip47wCR20HS/HFUZM6UiPZ0xtdKUaCk
-         yHfA==
-X-Forwarded-Encrypted: i=1; AJvYcCW/9zDpPmU9+TheWJUP3dWYFKxaeRTX85wJpoLY3SXhMdA5uAq7nrW+Z83CpCCG0h8ODCYE@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy5P1E0L8ZcmW+A4estClbBX/8Vh1/T/Cschv/FHSc9xSzmfLRS
-	JYhtyAJ6aZHGWKFl2LHxRLhOGdfVB7RR69fINq8x75ey2fJEfVb2e44D
-X-Gm-Gg: AZuq6aKAIOkWdKMdqLrYj4fMCmKPwprUoIUJIHT9BWPBkSO70IIxKsdluEdgLzPqkSz
-	SuNz01+m+qaKhRhyWYmPWRQFT2vvYjnKpoIQgtgQ1TmxzkWTFC7P5oHm4f//GmticiAPbKYdNdB
-	45ZpUq2aVGsJLWZESV+f0THHFex3OjOZPnVIu9E15SMFVZCDDLRTpAfd8JZugUg1YDxxjB36aQ5
-	zSygDYvZPg1Pe7/LVBgewmhjzDm51385LNsL0ZWoPXCpW7yoG+5gl0hJs7yThrdOf51dk1fjZbM
-	j5Mr8NUThu0PHmLrVnZ7rF6ZLqb4szkXx1gnjIuf2iFkxrujVT3jejviFUy+ePNvOUl+adVMD2J
-	KXwUMrfTv7AZEuaygXVCV6RZzZHbVruZqZ62/2HRVkakonzIbgioXIDSQNPWs5mkB5onz4GZi5O
-	x7tZFuvDgUQ/DnV9fY5AmgCSrJea9U6eWL8WYtZ0uf+k4n38gK4VIl
-X-Received: by 2002:a05:6000:3102:b0:435:97fc:6f1c with SMTP id ffacd0b85a97d-435dd08fbe9mr3025222f8f.25.1769524230765;
-        Tue, 27 Jan 2026 06:30:30 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c246ecsm39449626f8f.10.2026.01.27.06.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 06:30:30 -0800 (PST)
-Date: Tue, 27 Jan 2026 14:30:26 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Peter Zijlstra <peterz@infradead.org>,
- Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>, Thomas
- Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, Waiman
- Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>,
- llvm@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260127143026.32429f32@pumpkin>
-In-Reply-To: <CANpmjNNWoSdE_Lo9CJV3sAR+j8qz3_sq7LoaqYO6cVuOtdTBzA@mail.gmail.com>
-References: <20260126002936.2676435-1-elver@google.com>
-	<20260126002936.2676435-3-elver@google.com>
-	<d3295c84-da15-4695-8110-7e04cfaf1419@app.fastmail.com>
-	<aXfGcIpeXQNRUI-A@elver.google.com>
-	<7478d2cf-9636-45c8-8ffa-8e3a3ba9baf8@app.fastmail.com>
-	<CANpmjNNWoSdE_Lo9CJV3sAR+j8qz3_sq7LoaqYO6cVuOtdTBzA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJWCr1Oi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 116DCC2BC86
+	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 14:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769524690;
+	bh=/Huc7ebUuuPY+O5QSMjOHnPihdsygPxTbc17OjaPudI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EJWCr1Oi0pP9WIJ2i39LOol9ap/lfZKZ2fiyandM+XQCp9p1QgRI/Xh+4STUbKfro
+	 GDMx9n4jMcZ14NG7vtSjZ1Tm/INjsDuQL/tN5wZhXMTn5wfD+XAf5ffhRk0UJAjWqW
+	 mrglv6DMryLFEAneSPp8M2P9fAEwUeof2iOqrlMj/qLxlX7jx8/dHXV5DDpWxpQwbb
+	 4Rk0tXQ4ItJr4ibcq8QJK5Ny3GglM/BYwL90lQYEzOEYUrOisBjATHr6dGOc0s0Hyq
+	 uqFKjGbz8BRbS9QOlI4dGHiWluxeLL+Z6RKAF9AFn1UBz/1RaMcMNgEMEg0N0kozvt
+	 +dVF7NN+viRdg==
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-45c92df37fdso2403148b6e.3
+        for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 06:38:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXTOc6K7Fxl67UwKWTy8qYS6hLAKianbtr/SJo86LAUrfGi9PDpfQUzcoCBTOkzun8XckG7@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPmp5V6yFyKy7Ncv+cYxm0/B9t7UjZFeBsbfro+6RNMwydpStf
+	mR3qFkKoZwE4LwSjW5S2o5DUl2Ul1hysFhytfSeeZJVOiORxKPX0p/dEhm5xOmsJiOWZO9ghMkR
+	a+ks3eMBL0bLWH2cv6Wa0LYIUELi5VlU=
+X-Received: by 2002:a05:6808:1310:b0:45c:874b:3d4a with SMTP id
+ 5614622812f47-45efc50276emr1119220b6e.1.1769524689166; Tue, 27 Jan 2026
+ 06:38:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260114-ghes-avoid-wflt-clang-older-than-18-v1-1-9c8248bfe4f4@kernel.org>
+In-Reply-To: <20260114-ghes-avoid-wflt-clang-older-than-18-v1-1-9c8248bfe4f4@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 27 Jan 2026 15:37:58 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ju+7U10_nuQMijadeFrVxUWQFYJfUyRvga9qEPdK50_Q@mail.gmail.com>
+X-Gm-Features: AZwV_QhVWfAkrO7qybSqqJnJ1Tg8QS5LU98rU2z8KN1v2bcm1AhpEv1pdt_c7rE
+Message-ID: <CAJZ5v0ju+7U10_nuQMijadeFrVxUWQFYJfUyRvga9qEPdK50_Q@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: APEI: GHES: Disable KASAN instrumentation when
+ compile testing with clang < 18
+To: Nathan Chancellor <nathan@kernel.org>, Tony Luck <tony.luck@intel.com>, 
+	Borislav Petkov <bp@alien8.de>
+Cc: Hanjun Guo <guohanjun@huawei.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Shuai Xue <xueshuai@linux.alibaba.com>, Len Brown <lenb@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-acpi@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 27 Jan 2026 13:01:22 +0100
-Marco Elver <elver@google.com> wrote:
+On Thu, Jan 15, 2026 at 12:27=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> After a recent innocuous change to drivers/acpi/apei/ghes.c, building
+> ARCH=3Darm64 allmodconfig with clang-17 or older (which has both
+> CONFIG_KASAN=3Dy and CONFIG_WERROR=3Dy) fails with:
+>
+>   drivers/acpi/apei/ghes.c:902:13: error: stack frame size (2768) exceeds=
+ limit (2048) in 'ghes_do_proc' [-Werror,-Wframe-larger-than]
+>     902 | static void ghes_do_proc(struct ghes *ghes,
+>         |             ^
+>
+> A KASAN pass that removes unneeded stack instrumentation, enabled by
+> default in clang-18 [1], drastically improves stack usage in this case.
+>
+> To avoid the warning in the common allmodconfig case when it can break
+> the build, disable KASAN for ghes.o when compile testing with clang-17
+> and older. Disabling KASAN outright may hide legitimate runtime issues,
+> so live with the warning in that case; the user can either increase the
+> frame warning limit or disable -Werror, which they should probably do
+> when debugging with KASAN anyways.
+>
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2148
+> Link: https://github.com/llvm/llvm-project/commit/51fbab134560ece663517bf=
+1e8c2a30300d08f1a [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/acpi/apei/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/acpi/apei/Makefile b/drivers/acpi/apei/Makefile
+> index 2c474e6477e1..346cdf0a0ef9 100644
+> --- a/drivers/acpi/apei/Makefile
+> +++ b/drivers/acpi/apei/Makefile
+> @@ -1,6 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_ACPI_APEI)                +=3D apei.o
+>  obj-$(CONFIG_ACPI_APEI_GHES)   +=3D ghes.o
+> +# clang versions prior to 18 may blow out the stack with KASAN
+> +ifeq ($(CONFIG_COMPILE_TEST)_$(CONFIG_CC_IS_CLANG)_$(call clang-min-vers=
+ion, 180000),y_y_)
+> +KASAN_SANITIZE_ghes.o :=3D n
+> +endif
+>  obj-$(CONFIG_ACPI_APEI_EINJ)   +=3D einj.o
+>  einj-y                         :=3D einj-core.o
+>  einj-$(CONFIG_ACPI_APEI_EINJ_CXL) +=3D einj-cxl.o
+>
+> ---
 
-> On Mon, 26 Jan 2026 at 23:24, Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Mon, Jan 26, 2026, at 20:54, Marco Elver wrote:  
-> > > On Mon, Jan 26, 2026 at 08:56AM +0100, Arnd Bergmann wrote:  
-> > >> On Mon, Jan 26, 2026, at 01:25, Marco Elver wrote:
-> > >>
-> > >> How does this work with CC_HAS_TYPEOF_UNQUAL=false?
-> > >>
-> > >> As far as I can tell, TYPEOF_UNQUAL() falls back to __typeof__
-> > >> on gcc-13, clang-18 and earlier, and not strip out qualifiers.  
-> > >
-> > > I think we only need to worry about Clang for LTO builds. But yeah, our
-> > > minimum supported Clang is 15, so between 15-18 it'd be broken.  
-> >
-> > Right, I missed the #ifdef CONFIG_LTO check, so indeed gcc is
-> > fine here.
-> >  
-> > >> With fd69b2f7d5f4 ("compiler: Use __typeof_unqual__() for
-> > >> __unqual_scalar_typeof()"), I would expect __unqual_scalar_typeof()
-> > >> to do the right thing already.  
-> > >
-> > > It'd still be broken for Clang 15-18, so it won't help much. We need
-> > > this to work for more than "scalar", so even though it'll work for Clang
-> > > 19+ given the redefinition to __typeof_unqual__, we should deprecate the
-> > > _Generic-based __unqual_scalar_typeof() sooner than later.
-> > >
-> > > I was able to make this work for older compilers:
-> > >  
-> > ...  
-> > >  #define __READ_ONCE(x)                                                       \
-> > >  ({                                                                   \
-> > >       auto __x = &(x);                                                \
-> > > -     auto __ret = (TYPEOF_UNQUAL(*__x) *)__x, *__retp = &__ret;      \
-> > > -     union { TYPEOF_UNQUAL(*__x) __val; char __c[1]; } __u;          \
-> > > +     auto __ret = (__read_once_typeof(*__x) *)__x, *__retp = &__ret; \
-> > > +     union { __read_once_typeof(*__x) __val; char __c[1]; } __u;     \
-> > >       *__retp = &__u.__val;                                           \  
-> >  
-> > >
-> > > Thoughts?  
-> >
-> > Looks better than __unqual_scalar_typeof() to me. Would it make
-> > sense to do the same __read_once_typeof() in the asm-generic
-> > version of __READ_ONCE()? I don't remember if we discussed it
-> > in the thread leading up to dee081bf8f82 ("READ_ONCE: Drop
-> > pointer qualifiers when reading from scalar types").
-> > We probably didn't have __auto_type back then.  
-> 
-> I don't see the point for the asm-generic __READ_ONCE(): it's not
-> wrong to cast to 'const volatile volatile T*' nor 'const volatile
-> const T*' etc., which is dereferenced directly and not stored in any
-> temporary variable when used in READ_ONCE(). I actually don't know why
-> __unqual_scalar_typeof() is used in the asm-generic __READ_ONCE(),
-> which just adds 'const volatile' right back.
-
-That looks historic, once upon a time the code was:
-	typeof(x) __x = __READ_ONCE(x);
-	smp_read_barrier_depends();
-	__x;
-but const needed stripping and someone decided to cast the result back
-to the original type.
-Of course that is pointless since the qualifiers aren't relevant on an
-'rvalue' so are then discarded.
-Then the barrier and temporary variable got removed.
-(The barrier was only needed for alpha - which has its own __READ_ONCE()).
-
-In the arm LTO version the ?: will also remove the qualifiers.
-
-> 
-> And __READ_ONCE_SCALAR() appears to be gone, where the
-> qualifier-stripping resulted in better code-gen.
-
-The qualifier stripping was needed to read a 'const' variable.
-Looks to me like the 'better code gen' happened earlier.
-The 'earlier' version took the address of the on-stack volatile
-variable.
-
-So you may not need to remove the const/volatile qualifiers at all.
-
-	David
-
-
-
+I'm inclined to apply this for 6.20/7.0 unless someone has any
+particular heartburn related to it.
