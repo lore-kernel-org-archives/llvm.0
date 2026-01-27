@@ -1,233 +1,147 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B792C08D5
-	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 06:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B08121773D
+	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 06:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769494996; cv=none; b=lNPzbwR/cnCMFkHQRq/dlmAEyEDJu/QPk1t0uOOtp8k8RJB3dE4Eb+EtpzTWxGkbk0fHsHWNPOL3w5TaANHfLHIQrkk5tgqrOB4+cIyYfL1xNIIerOKoY7cKTlTMq2huM9MpUhPXJ0DIMIoTzBme/N4W5mWGUwFWT3ncIWyiJxc=
+	t=1769496553; cv=none; b=QlOddEZlB439OdZrY798ksa9f7bMoKa94A1hsHMDhrllbSMKXNlDCMOZ/sAtL/tSXsJgxjopp2sUXoUw9ssvMpjgpS67ij91AczfbP+icV0ECObGRFb0NoWK3/TSsuoEaRKTeZ50Z5E33UZmUZNfEUX4HALTd+VeqODCis+/rjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769494996; c=relaxed/simple;
-	bh=DzpBYHNhf+IQZjOsk1aFwqpPOgzRL03WbqTvxyXXEQQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GVT3C0jye4ky50/oTYYa3HznpgtCaBDZG0AvT+BJmxdjjBGjKPLu3UTECysv69ngog+6+2Kc10IWB7tvruVL4+krrbWcuCyFWxd3NK9GCGm5F0A2Ttn63Ur9ec30s42kef2szM6LNW/bEXf5EDHL57yI7QbIm5cQAlo06mti//Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EcSS6bS2; arc=none smtp.client-ip=74.125.82.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1769496553; c=relaxed/simple;
+	bh=E08r8CoY4VWNZUK2A8h323Lt68Nh6C+1Tx/CvExBSQw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=tqrKjP5C210NcBRgxlRLAQ4MeKLc+maGSRZHQovH3+ZhtARMctx8BPHQywDwoZN4LB+v5jjqeR67T5Qa1601lzVUcHbNCtDwHYG3avavVJ7AVeVpJoQMDb37/nRooUmuBkQLcIdtDUlGSW200JKNpeugCohaQhFslAmf0T2SkAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WbGgyHpY; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EcSS6bS2"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b74766fae7so3983253eec.0
-        for <llvm@lists.linux.dev>; Mon, 26 Jan 2026 22:23:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769494994; x=1770099794; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+RQGwZdDM6aunvixP8g7wOTGkfjHo/SchVM6nUgdLuw=;
-        b=EcSS6bS2qf9JWOUvzmKUBw6MXpaV7KTrKOeHt94S0V2SliXcCTN8ViWVBLufeI1Ad0
-         8zuyAuOWQgHGg2UBAQkRCcgoB5cLrQEpYDeU51uZDgpuRBQJOih8YlR+Z9B1E7auLfO5
-         Ny5bGPSZo0mpLV75tdHivLY29LebErBRBYHX1n2QP14eD5+3kca0G+doYjCDb0lWUVhQ
-         OdXG1xavq9q0REwOosIkHauhUF1+PDhXosQJwnZ83pzczxSMV6jFEoMdQkBtPvylapHH
-         3rGUB3C+UMyZx1HfFDL9Xf12+LvUUzcNGJl+a6nBbW+vzs4m+AKcg09C6GAodZlyMMfb
-         YElw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769494994; x=1770099794;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+RQGwZdDM6aunvixP8g7wOTGkfjHo/SchVM6nUgdLuw=;
-        b=FWlcHPYwHRubpI+jL+xlJlwP5ODOnTLr+Kt8FD7HQQc0l56FfJPyeby1+4B0S3nY+5
-         B5iG9C+sIM6xs+6QZ17XUQOWUD6HR9avua2g3HJJU+z/76wyoKTB6TaNo7Rs0wOg8xbE
-         JX8cVZJhcHncVOXHmmmbuIm0vFrCgAz5iyT2SanW9l7DxEahyerlGLCeCeRUAtVY6K/H
-         C4FnTpHq28nWzlY4cnbWzTpSgDsvGco5idjW4HfYpcNZuRvvXuUvdwY966w4K5yYDzWB
-         zDV3sH5nHGL64D4OcsszvljXf71ymz0S77tPNdtBa29MzO4+2YaZ6cCb1Xbr3roPb5e/
-         /OFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPa7LlbJF0fqWmO0sor5mco0HZpaN/9dwv+qPcq1RuLT3SkMpKaw2KEWMt7sZkPEF70aG7@lists.linux.dev
-X-Gm-Message-State: AOJu0YxiqOJZjFcqF0jSWOw8jZmpNdSY7vb5KASf5ABgcEJbACxkOpM0
-	zSrSmxuKTUODzDVICyeEo6irS2UuyaPii19ExOIxrPZDAV47prg3l8Fqho8/clqsqLtSCB3qpGG
-	Kaw3cgPsBqQ==
-X-Received: from dlbcf5.prod.google.com ([2002:a05:7022:4585:b0:123:291f:3e5b])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:6ca1:b0:2b0:5342:e00a
- with SMTP id 5a478bee46e88-2b78d90c31fmr455260eec.15.1769494993905; Mon, 26
- Jan 2026 22:23:13 -0800 (PST)
-Date: Mon, 26 Jan 2026 22:23:02 -0800
-In-Reply-To: <20260127062302.544809-1-irogers@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WbGgyHpY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769496551;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Q4mW5+rgtyHKyVOF0tSbuZRgQmCoU1F8bi+HVJTxZwM=;
+	b=WbGgyHpYHiVFzSO6JgorCcnajRiDTpbeX9dMVBIozWGwLC26FMCG4WOcrBSPYoYSbkoomZ
+	vgsGxpIMFhQd2JpdVxaKXhuiLW2DY+uT1e2UtCgMrn/UB0wzzMChoji83RaL5puZWQeDBe
+	NCQh86kaV8aPKSx4kW2pRU6Rze8MRUc=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-360-_iCj2PJzPKaMDkVgjWWi8A-1; Tue,
+ 27 Jan 2026 01:48:51 -0500
+X-MC-Unique: _iCj2PJzPKaMDkVgjWWi8A-1
+X-Mimecast-MFC-AGG-ID: _iCj2PJzPKaMDkVgjWWi8A_1769496530
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AD875195A15F
+	for <llvm@lists.linux.dev>; Tue, 27 Jan 2026 06:42:06 +0000 (UTC)
+Received: from [172.20.12.215] (unknown [10.30.44.139])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 61C611800285;
+	Tue, 27 Jan 2026 06:42:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 20 of 137): Test report for master
+ (6.19.0-rc7, upstream-mainline, fcb70a56)
+Date: Tue, 27 Jan 2026 06:42:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260127062302.544809-1-irogers@google.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260127062302.544809-4-irogers@google.com>
-Subject: [PATCH v9 3/3] perf llvm: Mangle libperf-llvm.so function names
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Namhyung Kim <namhyung@kernel.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Collin Funk <collin.funk1@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <28256.126012701485100199@us-mta-360.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Glt-Ib1CQ9X0xyv85HtfLBvHjngdwltWXOk7cSi1RhI_1769496530
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-For a function like llvm_addr2line having the libperf-llvm.so exported
-symbol named llvm_addr2line meant that the perf llvm_addr2line could
-sometimes erroneously be returned. This led to infinite recursion and
-eventual stack overflow. To avoid this conflict add a new
-BUILDING_PERF_LLVMSO when libperf-llvm.so is being built and use it to
-alter the behavior of MANGLE_PERF_LLVM_API, a macro that prefixes the
-name when libperf-llvm.so is being built. The prefixed named avoids
-the name collision.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf           |  3 ++-
- tools/perf/util/llvm-c-helpers.cpp | 29 ++++++++++++++++++-----------
- tools/perf/util/llvm-c-helpers.h   | 24 ++++++++++++++++--------
- 3 files changed, 36 insertions(+), 20 deletions(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 30e16a564d60..dafe5a6b8c0f 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -996,7 +996,8 @@ $(LIBSYMBOL)-clean:
- 	$(Q)$(RM) -r -- $(LIBSYMBOL_OUTPUT)
- 
- ifdef LIBLLVM_DYNAMIC
--LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS)) -DHAVE_LIBLLVM_SUPPORT
-+LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS))
-+LIBPERF_LLVM_CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT -DBUILDING_PERF_LLVMSO
- LIBPERF_LLVM_LIBS = -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM) -lstdc++
- 
- $(OUTPUT)$(LIBPERF_LLVM): util/llvm-c-helpers.cpp
-diff --git a/tools/perf/util/llvm-c-helpers.cpp b/tools/perf/util/llvm-c-helpers.cpp
-index 5a6f76e6b705..8cea380be5c2 100644
---- a/tools/perf/util/llvm-c-helpers.cpp
-+++ b/tools/perf/util/llvm-c-helpers.cpp
-@@ -99,10 +99,12 @@ static int extract_file_and_line(const DILineInfo &line_info, char **file,
- #endif
- 
- extern "C"
--int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
--		   char **file __maybe_unused, unsigned int *line __maybe_unused,
--		   bool unwind_inlines __maybe_unused,
--		   llvm_a2l_frame **inline_frames __maybe_unused)
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name __maybe_unused,
-+                                         u64 addr __maybe_unused,
-+                                         char **file __maybe_unused,
-+                                         unsigned int *line __maybe_unused,
-+                                         bool unwind_inlines __maybe_unused,
-+                                         llvm_a2l_frame **inline_frames __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -177,7 +179,8 @@ int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
- 		if (!handle)
- 			return 0;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_addr2line"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_addr2line)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_addr2line\n");
- 		fn_init = true;
-@@ -215,8 +218,9 @@ make_symbol_relative_string(struct dso *dso, const char *sym_name,
- #endif
- 
- extern "C"
--char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -242,7 +246,8 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_code"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_code)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_code\n");
- 		fn_init = true;
-@@ -256,8 +261,9 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- }
- 
- extern "C"
--char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -283,7 +289,8 @@ char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_data"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_data)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_data\n");
- 		fn_init = true;
-diff --git a/tools/perf/util/llvm-c-helpers.h b/tools/perf/util/llvm-c-helpers.h
-index d2b99637a28a..cfcfd540cdae 100644
---- a/tools/perf/util/llvm-c-helpers.h
-+++ b/tools/perf/util/llvm-c-helpers.h
-@@ -13,6 +13,14 @@
- extern "C" {
- #endif
- 
-+/* Support name mangling so that libperf_llvm.so's names don't match those in perf. */
-+#ifdef BUILDING_PERF_LLVMSO
-+#define MANGLE_PERF_LLVM_API(x) PERF_LLVM_SO_ ## x
-+#else
-+#define MANGLE_PERF_LLVM_API(x) x
-+#endif
-+#define MANGLE_PERF_LLVM_API_STR(x) "PERF_LLVM_SO_" #x
-+
- struct dso;
- 
- struct llvm_a2l_frame {
-@@ -37,12 +45,12 @@ struct llvm_a2l_frame {
-  * a newly allocated array with that length. The caller is then responsible
-  * for freeing both the strings and the array itself.
-  */
--int llvm_addr2line(const char* dso_name,
--                   u64 addr,
--                   char** file,
--                   unsigned int* line,
--                   bool unwind_inlines,
--                   struct llvm_a2l_frame** inline_frames);
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name,
-+					 u64 addr,
-+					 char **file,
-+					 unsigned int *line,
-+					 bool unwind_inlines,
-+					 struct llvm_a2l_frame **inline_frames);
- 
- /*
-  * Simple symbolizers for addresses; will convert something like
-@@ -50,8 +58,8 @@ int llvm_addr2line(const char* dso_name,
-  *
-  * The returned value must be freed by the caller, with free().
-  */
--char *llvm_name_for_code(struct dso *dso, const char *dso_name, u64 addr);
--char *llvm_name_for_data(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso, const char *dso_name, u64 addr);
- 
- #ifdef __cplusplus
- }
--- 
-2.52.0.457.g6b5491de43-goog
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'vfs-6.19-rc8.fixes' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/vfs/vfs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2287260741
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                Boot test [aarch64]
+                Reboot test [aarch64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/redhat:2=
+285416486_x86_64_kernel_kcidb_tool_20524969_10
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
