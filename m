@@ -1,74 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627F337647C;
-	Wed, 28 Jan 2026 20:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50F434253C;
+	Wed, 28 Jan 2026 22:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769633513; cv=none; b=hvZPdTfAP7Ug/f8qWnrf18bC3v8Ch85vMc8kbqRdSRmP7DrMsiuhjLB/3McEVVI884qVC3/YBx3MM8dSI8hXgEREsBEbLROXL3f8clZlzImP4KrxvV5CU0NNmzN1MC/mb9cT9midLMnTfsSx1zzFcml7t57oWDEI5mpPkhc4CEY=
+	t=1769639032; cv=none; b=Gs+TUW4LKwE8Q3oFQ4so/E+ZZQkKwNmFSqcxSBT718Z9RM+3Gsqhv3i7DsmLkVkSD/TIfMOWFI6yJuwjWL4w/LJm1/B8AQB6R7+3TQ4F1QPfWda1Xd2YiKnh6wBdaPv8qJJ9keZkNKOXq/yI7G+YpP9Da/sPFKwkb9q/Vc/oWQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769633513; c=relaxed/simple;
-	bh=ha8O6xBwkZSEe2x4SwRua9ejKFac6uo5R6gUfiFhrL0=;
+	s=arc-20240116; t=1769639032; c=relaxed/simple;
+	bh=t6rW2qO0poIYghVFawHwv+wpbgTx39bx7DdeIpcQye8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rR77NEKSak6/hjuCcWkDdlJ04OpqOw4dn5ptt2+TlSfTBzyexqUYrFmFKVPGw6VKVmyjjoB2KIS/FlXyWfG1NYe+28P0MGLDFZsRovtCDSXzsyPGG4DIBljR0cMukz8i5fzJcUNGOuz1oly//nCHIFuSmQVcUlKKh8kRZoR8hwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VzqurXp+; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=T30cCnx15trHPIPRp5XeeisAeRgb6lOiixpgzAlifnZaz8RXssGEmE9Rj7f14FjGJOvW05Wl7te3TvxlPXQ1XHCaH5hYipIfszMdZRT86PFAhpsP63K0+qKFtH1BlnrYUJu468EHw35ChWkxG9sqyy7ldoes/AXikQw38q0LMHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K6EBFORv; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VzqurXp+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K6EBFORv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769633511; x=1801169511;
+  t=1769639031; x=1801175031;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ha8O6xBwkZSEe2x4SwRua9ejKFac6uo5R6gUfiFhrL0=;
-  b=VzqurXp+dT5VOuVylMSxkThPfOx65MHrRZOfSlPKS70/H1Fz0hptxp6F
-   09Qg5mQ3Oueg3dUzCeAvD8IlIVgmEl4yh1LzNXDFtQdvy+wLaSNyLDp9L
-   VqpFtP5h8ql4eHW+omIXwlijhoKhK9Yo4d7eDXy8cBIAE9G6CUVVTqI/U
-   YWyGIloNuJkNGyuLeLQb15Nqc2rolrkyn8OPzsCrQeiRt0eaj/RIC74nB
-   ELhVZy8hiGRDkEAsZA/ns9ar6rwAl2xjPv/vgYeeucWwvDHGFI5t/pR9W
-   Umse0uAMP7tdGbtyC0ffDFntuFet/02f3NJMtg85T103S4oyEThCPRvYy
-   A==;
-X-CSE-ConnectionGUID: q1Kgw7W7QT27DFg5br4C6w==
-X-CSE-MsgGUID: wyC6/TIzS0iPmsXqX0OBsA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="74707656"
+  bh=t6rW2qO0poIYghVFawHwv+wpbgTx39bx7DdeIpcQye8=;
+  b=K6EBFORv+IcdZvyMPNUWTKrq8VTBtR3yHsw2/EWC9y6X1WOEcUlfhVRb
+   tCOmaFfwIhVVAJG2xbqVnoa3TaP/ZQ+YC4qe/wDRIqQKTBLNFTYoLRQSy
+   6u8s+PtiFgEhuBcKzIp/I0NdtgIWhheM5M5j0gzcMJkBXK/PPqj9wtPmh
+   +/lAgZSEpT5AHOJOf9uAo5om6BKH+VGOHukxVoAjanN9HuI8Pvkp5Kpnu
+   U1PE9SuWpKCwL2/zz2UeE5KC34BNoB1gWFkJStFxm2yBi2JKd5vBEGrlp
+   C7N0m5PBk6jUFPRrM4N3jmgmhjXRTgA9w3TOt6TzHSIG4DOUa2bgpRjPf
+   w==;
+X-CSE-ConnectionGUID: 0iF3uDD+S+Gx+IeBK3ffew==
+X-CSE-MsgGUID: eE7nNWS5RtKN5cKZHAQPrw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="70904782"
 X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="74707656"
+   d="scan'208";a="70904782"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 12:51:49 -0800
-X-CSE-ConnectionGUID: ycrchlomTX6zgh1lpCciQw==
-X-CSE-MsgGUID: Zz6Zga9YSyWrIn4dTFUbww==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 14:23:51 -0800
+X-CSE-ConnectionGUID: eZP5evReRN+db4wyxIrqNA==
+X-CSE-MsgGUID: uHlhitT3TSCv3Yy7Ac4ekg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="207971392"
+   d="scan'208";a="207990109"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Jan 2026 12:51:41 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 28 Jan 2026 14:23:47 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vlCVm-00000000anM-33eF;
-	Wed, 28 Jan 2026 20:51:38 +0000
-Date: Thu, 29 Jan 2026 04:51:33 +0800
+	id 1vlDwv-00000000as8-0Tc6;
+	Wed, 28 Jan 2026 22:23:45 +0000
+Date: Thu, 29 Jan 2026 06:23:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	agross@kernel.org, andersson@kernel.org, lumag@kernel.org,
-	dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
-	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-	thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
-	subbaraman.narayanamurthy@oss.qualcomm.com,
-	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-	kamal.wadhwa@oss.qualcomm.com
+To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+	virtualization@lists.linux.dev
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rui.zhang@intel.com, lukasz.luba@arm.com,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
-	jishnu.prakash@oss.qualcomm.com, quic_kotarake@quicinc.com,
-	neil.armstrong@linaro.org
-Subject: Re: [PATCH V9 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC
- thermal monitoring
-Message-ID: <202601290438.IXYMj3d2-lkp@intel.com>
-References: <20260128112420.695518-5-jishnu.prakash@oss.qualcomm.com>
+	"Michael S . Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Alexander Graf <graf@amazon.com>, linux-kernel@vger.kernel.org,
+	Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: Re: [PATCH v2 2/2] virtio: silence KCSAN warning in
+ virtqueue_kick_prepare
+Message-ID: <202601290632.9LWUgtlM-lkp@intel.com>
+References: <20260127152524.200465-3-johannes.thumshirn@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,100 +70,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260128112420.695518-5-jishnu.prakash@oss.qualcomm.com>
+In-Reply-To: <20260127152524.200465-3-johannes.thumshirn@wdc.com>
 
-Hi Jishnu,
+Hi Johannes,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 63804fed149a6750ffd28610c5c1c98cce6bd377]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.19-rc7]
+[cannot apply to mst-vhost/linux-next next-20260127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jishnu-Prakash/dt-bindings-iio-adc-Split-out-QCOM-VADC-channel-properties/20260128-193116
-base:   63804fed149a6750ffd28610c5c1c98cce6bd377
-patch link:    https://lore.kernel.org/r/20260128112420.695518-5-jishnu.prakash%40oss.qualcomm.com
-patch subject: [PATCH V9 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC thermal monitoring
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260129/202601290438.IXYMj3d2-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/virtio-silence-KCSAN-warning-in-virtqueue_get_buf_ctx_split/20260127-235023
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260127152524.200465-3-johannes.thumshirn%40wdc.com
+patch subject: [PATCH v2 2/2] virtio: silence KCSAN warning in virtqueue_kick_prepare
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260129/202601290632.9LWUgtlM-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601290438.IXYMj3d2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601290632.9LWUgtlM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601290438.IXYMj3d2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601290632.9LWUgtlM-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:180:9: warning: variable 'upper_set' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     180 |                                 if (ret)
-         |                                     ^~~
-   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:188:9: note: uninitialized use occurs here
-     188 |                 if (!(upper_set || lower_set))
-         |                       ^~~~~~~~~
-   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:180:5: note: remove the 'if' if its condition is always false
-     180 |                                 if (ret)
-         |                                 ^~~~~~~~
-     181 |                                         break;
-         |                                         ~~~~~
-   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:171:17: note: initialize the variable 'upper_set' to silence this warning
-     171 |                 bool upper_set, lower_set;
-         |                               ^
-         |                                = 0
-   1 warning generated.
+>> drivers/vhost/vringh.c:559:19: error: cannot take the address of an rvalue of type '__virtio16' (aka 'unsigned short')
+     559 |                 if (putu16(vrh, &vring_avail_event(&vrh->vring),
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:562:8: error: cannot take the address of an rvalue of type '__virtio16' (aka 'unsigned short')
+     562 |                                    &vring_avail_event(&vrh->vring));
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +180 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+vim +559 drivers/vhost/vringh.c
 
-   159	
-   160	static void tm_handler_work(struct work_struct *work)
-   161	{
-   162		struct adc_tm5_gen3_chip *adc_tm5 = container_of(work, struct adc_tm5_gen3_chip,
-   163								 tm_handler_work);
-   164		int sdam_index = -1;
-   165		u8 tm_status[2] = { };
-   166		u8 buf[16] = { };
-   167	
-   168		for (int i = 0; i < adc_tm5->nchannels; i++) {
-   169			struct adc_tm5_gen3_channel_props *chan_prop = &adc_tm5->chan_props[i];
-   170			int offset = chan_prop->tm_chan_index;
-   171			bool upper_set, lower_set;
-   172			int ret, temp;
-   173			u16 code;
-   174	
-   175			scoped_guard(adc5_gen3, adc_tm5) {
-   176				if (chan_prop->sdam_index != sdam_index) {
-   177					sdam_index = chan_prop->sdam_index;
-   178					ret = adc5_gen3_tm_status_check(adc_tm5, sdam_index,
-   179									tm_status, buf);
- > 180					if (ret)
-   181						break;
-   182				}
-   183	
-   184				upper_set = ((tm_status[0] & BIT(offset)) && chan_prop->high_thr_en);
-   185				lower_set = ((tm_status[1] & BIT(offset)) && chan_prop->low_thr_en);
-   186			}
-   187	
-   188			if (!(upper_set || lower_set))
-   189				continue;
-   190	
-   191			code = get_unaligned_le16(&buf[2 * offset]);
-   192			dev_dbg(adc_tm5->dev, "ADC_TM threshold code:%#x\n", code);
-   193	
-   194			ret = adc5_gen3_therm_code_to_temp(adc_tm5->dev,
-   195							   &chan_prop->common_props,
-   196							   code, &temp);
-   197			if (ret) {
-   198				dev_err(adc_tm5->dev,
-   199					"Invalid temperature reading, ret = %d, code=%#x\n",
-   200					ret, code);
-   201				continue;
-   202			}
-   203	
-   204			chan_prop->last_temp = temp;
-   205			chan_prop->last_temp_set = true;
-   206			thermal_zone_device_update(chan_prop->tzd, THERMAL_TRIP_VIOLATED);
-   207		}
-   208	}
-   209	
+f87d0fbb579818 Rusty Russell      2013-03-20  542  
+f87d0fbb579818 Rusty Russell      2013-03-20  543  static inline bool __vringh_notify_enable(struct vringh *vrh,
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  544  					  int (*getu16)(const struct vringh *vrh,
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  545  							u16 *val, const __virtio16 *p),
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  546  					  int (*putu16)(const struct vringh *vrh,
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  547  							__virtio16 *p, u16 val))
+f87d0fbb579818 Rusty Russell      2013-03-20  548  {
+f87d0fbb579818 Rusty Russell      2013-03-20  549  	u16 avail;
+f87d0fbb579818 Rusty Russell      2013-03-20  550  
+f87d0fbb579818 Rusty Russell      2013-03-20  551  	if (!vrh->event_indices) {
+f87d0fbb579818 Rusty Russell      2013-03-20  552  		/* Old-school; update flags. */
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  553  		if (putu16(vrh, &vrh->vring.used->flags, 0) != 0) {
+f87d0fbb579818 Rusty Russell      2013-03-20  554  			vringh_bad("Clearing used flags %p",
+f87d0fbb579818 Rusty Russell      2013-03-20  555  				   &vrh->vring.used->flags);
+f87d0fbb579818 Rusty Russell      2013-03-20  556  			return true;
+f87d0fbb579818 Rusty Russell      2013-03-20  557  		}
+f87d0fbb579818 Rusty Russell      2013-03-20  558  	} else {
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12 @559  		if (putu16(vrh, &vring_avail_event(&vrh->vring),
+f87d0fbb579818 Rusty Russell      2013-03-20  560  			   vrh->last_avail_idx) != 0) {
+f87d0fbb579818 Rusty Russell      2013-03-20  561  			vringh_bad("Updating avail event index %p",
+f87d0fbb579818 Rusty Russell      2013-03-20  562  				   &vring_avail_event(&vrh->vring));
+f87d0fbb579818 Rusty Russell      2013-03-20  563  			return true;
+f87d0fbb579818 Rusty Russell      2013-03-20  564  		}
+f87d0fbb579818 Rusty Russell      2013-03-20  565  	}
+f87d0fbb579818 Rusty Russell      2013-03-20  566  
+f87d0fbb579818 Rusty Russell      2013-03-20  567  	/* They could have slipped one in as we were doing that: make
+f87d0fbb579818 Rusty Russell      2013-03-20  568  	 * sure it's written, then check again. */
+f87d0fbb579818 Rusty Russell      2013-03-20  569  	virtio_mb(vrh->weak_barriers);
+f87d0fbb579818 Rusty Russell      2013-03-20  570  
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  571  	if (getu16(vrh, &avail, &vrh->vring.avail->idx) != 0) {
+f87d0fbb579818 Rusty Russell      2013-03-20  572  		vringh_bad("Failed to check avail idx at %p",
+f87d0fbb579818 Rusty Russell      2013-03-20  573  			   &vrh->vring.avail->idx);
+f87d0fbb579818 Rusty Russell      2013-03-20  574  		return true;
+f87d0fbb579818 Rusty Russell      2013-03-20  575  	}
+f87d0fbb579818 Rusty Russell      2013-03-20  576  
+f87d0fbb579818 Rusty Russell      2013-03-20  577  	/* This is unlikely, so we just leave notifications enabled
+f87d0fbb579818 Rusty Russell      2013-03-20  578  	 * (if we're using event_indices, we'll only get one
+f87d0fbb579818 Rusty Russell      2013-03-20  579  	 * notification anyway). */
+f87d0fbb579818 Rusty Russell      2013-03-20  580  	return avail == vrh->last_avail_idx;
+f87d0fbb579818 Rusty Russell      2013-03-20  581  }
+f87d0fbb579818 Rusty Russell      2013-03-20  582  
 
 -- 
 0-DAY CI Kernel Test Service
