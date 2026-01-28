@@ -1,133 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541243370EA
-	for <llvm@lists.linux.dev>; Wed, 28 Jan 2026 20:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627F337647C;
+	Wed, 28 Jan 2026 20:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769632620; cv=none; b=BZkYsNbVmSstNXjAGsQIEo3rOhbrlRZJ90PQjk7QXXeIN7i1Ti0lW2zmuJP+qiQ5G2huWyXNDeQlTUuD5TVJgdsFFDv4oUgcG1QJsulXWBDaNp2fPUNlBSnNmEGC8p9sWyMBnYBSBl3fUsY+9gCb3/T5I+2riuu3WBfONNJoTd0=
+	t=1769633513; cv=none; b=hvZPdTfAP7Ug/f8qWnrf18bC3v8Ch85vMc8kbqRdSRmP7DrMsiuhjLB/3McEVVI884qVC3/YBx3MM8dSI8hXgEREsBEbLROXL3f8clZlzImP4KrxvV5CU0NNmzN1MC/mb9cT9midLMnTfsSx1zzFcml7t57oWDEI5mpPkhc4CEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769632620; c=relaxed/simple;
-	bh=KJYEAdU+kHx97V7CXyWkDRfONvbdw4a+tdv0QncuI7g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SyCsqjo4/7o+3M5VF5ev8IOkrRcWNmphIgiiU2jtg0dQFT5PDU4pj5OwhuGLq+9fUd8ZMWQCbLKVfBzZaYLZiIWDhOELE8EnIRqA/R4M6ILqPfRjVMr4npIZi/XzX5S7D2Wkc4iQjILsouocSLsgh1rrUTVhVgC3pvTXFkC0J1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fw/r+Bp5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769633513; c=relaxed/simple;
+	bh=ha8O6xBwkZSEe2x4SwRua9ejKFac6uo5R6gUfiFhrL0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rR77NEKSak6/hjuCcWkDdlJ04OpqOw4dn5ptt2+TlSfTBzyexqUYrFmFKVPGw6VKVmyjjoB2KIS/FlXyWfG1NYe+28P0MGLDFZsRovtCDSXzsyPGG4DIBljR0cMukz8i5fzJcUNGOuz1oly//nCHIFuSmQVcUlKKh8kRZoR8hwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VzqurXp+; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fw/r+Bp5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E436C2BCB0
-	for <llvm@lists.linux.dev>; Wed, 28 Jan 2026 20:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769632620;
-	bh=KJYEAdU+kHx97V7CXyWkDRfONvbdw4a+tdv0QncuI7g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fw/r+Bp59gCtwUHejInTp6d8z+jo3+i0yymhW1XZaAXSv4RONm/OxNmjnmFfQUuIT
-	 A+lsA4V6U4MvcliHL7I5FreQw5kRj/SWZ6Rrli/5dIKkFk3f5UQ9ML4VZuzS0ame0/
-	 n236m0Z0x9edC5cv5nH4yiy8byM3HtlFwCJWMN1ohKNkT8/BdwctzmqOSd4pJd5vXv
-	 nUMNWBIg/Pv7kIlmkFfYU1pzadx7IeZIbJ2nBTOaaieaJGlyqPEyKqNIq2+uzGa6Tq
-	 cquTggp5NcD/W0/YDJIRMCUN9RqGT/DvfkCPBlKz/kndOhh/TvkbERJUIRmVWo9tt+
-	 bugJImdwNHYcQ==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-662f2fa7e67so101288eaf.1
-        for <llvm@lists.linux.dev>; Wed, 28 Jan 2026 12:37:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUBzJ9jmnCkyZBjaDgxObxnQ44Mh1Z/oq+Ew0qsK887jXmmmaomknZCzy1sYSeCHGzIA0br@lists.linux.dev
-X-Gm-Message-State: AOJu0YzjvtMNHdItflXOcFc8/rIS9suFXaZ79YE9Zklj4X86bQKfO2SK
-	OWqWQlkkkXzymUznZXWx0IWK18CplygmRJM/eEshZKdlrX31MuvHhi+/9iYosOIOsuafvoGbcG2
-	qXXQGyRat0UKwWNXUJBLZJGwyKFA3kZ4=
-X-Received: by 2002:a05:6820:80c7:b0:662:bc9a:91c6 with SMTP id
- 006d021491bc7-662f20435acmr3692656eaf.22.1769632619038; Wed, 28 Jan 2026
- 12:36:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VzqurXp+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769633511; x=1801169511;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ha8O6xBwkZSEe2x4SwRua9ejKFac6uo5R6gUfiFhrL0=;
+  b=VzqurXp+dT5VOuVylMSxkThPfOx65MHrRZOfSlPKS70/H1Fz0hptxp6F
+   09Qg5mQ3Oueg3dUzCeAvD8IlIVgmEl4yh1LzNXDFtQdvy+wLaSNyLDp9L
+   VqpFtP5h8ql4eHW+omIXwlijhoKhK9Yo4d7eDXy8cBIAE9G6CUVVTqI/U
+   YWyGIloNuJkNGyuLeLQb15Nqc2rolrkyn8OPzsCrQeiRt0eaj/RIC74nB
+   ELhVZy8hiGRDkEAsZA/ns9ar6rwAl2xjPv/vgYeeucWwvDHGFI5t/pR9W
+   Umse0uAMP7tdGbtyC0ffDFntuFet/02f3NJMtg85T103S4oyEThCPRvYy
+   A==;
+X-CSE-ConnectionGUID: q1Kgw7W7QT27DFg5br4C6w==
+X-CSE-MsgGUID: wyC6/TIzS0iPmsXqX0OBsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="74707656"
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="74707656"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 12:51:49 -0800
+X-CSE-ConnectionGUID: ycrchlomTX6zgh1lpCciQw==
+X-CSE-MsgGUID: Zz6Zga9YSyWrIn4dTFUbww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="207971392"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 28 Jan 2026 12:51:41 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlCVm-00000000anM-33eF;
+	Wed, 28 Jan 2026 20:51:38 +0000
+Date: Thu, 29 Jan 2026 04:51:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	agross@kernel.org, andersson@kernel.org, lumag@kernel.org,
+	dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
+	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+	thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+	subbaraman.narayanamurthy@oss.qualcomm.com,
+	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+	kamal.wadhwa@oss.qualcomm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rui.zhang@intel.com, lukasz.luba@arm.com,
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+	jishnu.prakash@oss.qualcomm.com, quic_kotarake@quicinc.com,
+	neil.armstrong@linaro.org
+Subject: Re: [PATCH V9 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC
+ thermal monitoring
+Message-ID: <202601290438.IXYMj3d2-lkp@intel.com>
+References: <20260128112420.695518-5-jishnu.prakash@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260114-ghes-avoid-wflt-clang-older-than-18-v1-1-9c8248bfe4f4@kernel.org>
- <CAJZ5v0ju+7U10_nuQMijadeFrVxUWQFYJfUyRvga9qEPdK50_Q@mail.gmail.com> <20260127214711.GA3382807@ax162>
-In-Reply-To: <20260127214711.GA3382807@ax162>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 28 Jan 2026 21:36:48 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g1mx=ASYAVwxOxVHG8Bx0H8HyXt1PT3dcXJrg=WcpLhA@mail.gmail.com>
-X-Gm-Features: AZwV_Qh1U15hps-Avsd1ANLbxEbDXc2lJ961elNZQhk0i28PcdKN2Svifb6RoMo
-Message-ID: <CAJZ5v0g1mx=ASYAVwxOxVHG8Bx0H8HyXt1PT3dcXJrg=WcpLhA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: APEI: GHES: Disable KASAN instrumentation when
- compile testing with clang < 18
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	Borislav Petkov <bp@alien8.de>, Hanjun Guo <guohanjun@huawei.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>, 
-	Len Brown <lenb@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-acpi@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260128112420.695518-5-jishnu.prakash@oss.qualcomm.com>
 
-On Tue, Jan 27, 2026 at 10:47=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> On Tue, Jan 27, 2026 at 03:37:58PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Jan 15, 2026 at 12:27=E2=80=AFAM Nathan Chancellor <nathan@kern=
-el.org> wrote:
-> > >
-> > > After a recent innocuous change to drivers/acpi/apei/ghes.c, building
-> > > ARCH=3Darm64 allmodconfig with clang-17 or older (which has both
-> > > CONFIG_KASAN=3Dy and CONFIG_WERROR=3Dy) fails with:
-> > >
-> > >   drivers/acpi/apei/ghes.c:902:13: error: stack frame size (2768) exc=
-eeds limit (2048) in 'ghes_do_proc' [-Werror,-Wframe-larger-than]
-> > >     902 | static void ghes_do_proc(struct ghes *ghes,
-> > >         |             ^
-> > >
-> > > A KASAN pass that removes unneeded stack instrumentation, enabled by
-> > > default in clang-18 [1], drastically improves stack usage in this cas=
-e.
-> > >
-> > > To avoid the warning in the common allmodconfig case when it can brea=
-k
-> > > the build, disable KASAN for ghes.o when compile testing with clang-1=
-7
-> > > and older. Disabling KASAN outright may hide legitimate runtime issue=
-s,
-> > > so live with the warning in that case; the user can either increase t=
-he
-> > > frame warning limit or disable -Werror, which they should probably do
-> > > when debugging with KASAN anyways.
-> > >
-> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/2148
-> > > Link: https://github.com/llvm/llvm-project/commit/51fbab134560ece6635=
-17bf1e8c2a30300d08f1a [1]
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  drivers/acpi/apei/Makefile | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/drivers/acpi/apei/Makefile b/drivers/acpi/apei/Makefile
-> > > index 2c474e6477e1..346cdf0a0ef9 100644
-> > > --- a/drivers/acpi/apei/Makefile
-> > > +++ b/drivers/acpi/apei/Makefile
-> > > @@ -1,6 +1,10 @@
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > >  obj-$(CONFIG_ACPI_APEI)                +=3D apei.o
-> > >  obj-$(CONFIG_ACPI_APEI_GHES)   +=3D ghes.o
-> > > +# clang versions prior to 18 may blow out the stack with KASAN
-> > > +ifeq ($(CONFIG_COMPILE_TEST)_$(CONFIG_CC_IS_CLANG)_$(call clang-min-=
-version, 180000),y_y_)
-> > > +KASAN_SANITIZE_ghes.o :=3D n
-> > > +endif
-> > >  obj-$(CONFIG_ACPI_APEI_EINJ)   +=3D einj.o
-> > >  einj-y                         :=3D einj-core.o
-> > >  einj-$(CONFIG_ACPI_APEI_EINJ_CXL) +=3D einj-cxl.o
-> > >
-> > > ---
-> >
-> > I'm inclined to apply this for 6.20/7.0 unless someone has any
-> > particular heartburn related to it.
->
-> I think taking it for next cycle is fine, I can just apply this to our
-> CI until it makes its way to Linus. Could you stick a
->
->   Cc: stable@vger.kernel.org
->
-> on the patch in that case so that it can go back to 6.18 after the
-> initial flurry of the merge window?
+Hi Jishnu,
 
-Applied with a Cc: stable tag, thanks!
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 63804fed149a6750ffd28610c5c1c98cce6bd377]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jishnu-Prakash/dt-bindings-iio-adc-Split-out-QCOM-VADC-channel-properties/20260128-193116
+base:   63804fed149a6750ffd28610c5c1c98cce6bd377
+patch link:    https://lore.kernel.org/r/20260128112420.695518-5-jishnu.prakash%40oss.qualcomm.com
+patch subject: [PATCH V9 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC thermal monitoring
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260129/202601290438.IXYMj3d2-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601290438.IXYMj3d2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601290438.IXYMj3d2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:180:9: warning: variable 'upper_set' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     180 |                                 if (ret)
+         |                                     ^~~
+   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:188:9: note: uninitialized use occurs here
+     188 |                 if (!(upper_set || lower_set))
+         |                       ^~~~~~~~~
+   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:180:5: note: remove the 'if' if its condition is always false
+     180 |                                 if (ret)
+         |                                 ^~~~~~~~
+     181 |                                         break;
+         |                                         ~~~~~
+   drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:171:17: note: initialize the variable 'upper_set' to silence this warning
+     171 |                 bool upper_set, lower_set;
+         |                               ^
+         |                                = 0
+   1 warning generated.
+
+
+vim +180 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+
+   159	
+   160	static void tm_handler_work(struct work_struct *work)
+   161	{
+   162		struct adc_tm5_gen3_chip *adc_tm5 = container_of(work, struct adc_tm5_gen3_chip,
+   163								 tm_handler_work);
+   164		int sdam_index = -1;
+   165		u8 tm_status[2] = { };
+   166		u8 buf[16] = { };
+   167	
+   168		for (int i = 0; i < adc_tm5->nchannels; i++) {
+   169			struct adc_tm5_gen3_channel_props *chan_prop = &adc_tm5->chan_props[i];
+   170			int offset = chan_prop->tm_chan_index;
+   171			bool upper_set, lower_set;
+   172			int ret, temp;
+   173			u16 code;
+   174	
+   175			scoped_guard(adc5_gen3, adc_tm5) {
+   176				if (chan_prop->sdam_index != sdam_index) {
+   177					sdam_index = chan_prop->sdam_index;
+   178					ret = adc5_gen3_tm_status_check(adc_tm5, sdam_index,
+   179									tm_status, buf);
+ > 180					if (ret)
+   181						break;
+   182				}
+   183	
+   184				upper_set = ((tm_status[0] & BIT(offset)) && chan_prop->high_thr_en);
+   185				lower_set = ((tm_status[1] & BIT(offset)) && chan_prop->low_thr_en);
+   186			}
+   187	
+   188			if (!(upper_set || lower_set))
+   189				continue;
+   190	
+   191			code = get_unaligned_le16(&buf[2 * offset]);
+   192			dev_dbg(adc_tm5->dev, "ADC_TM threshold code:%#x\n", code);
+   193	
+   194			ret = adc5_gen3_therm_code_to_temp(adc_tm5->dev,
+   195							   &chan_prop->common_props,
+   196							   code, &temp);
+   197			if (ret) {
+   198				dev_err(adc_tm5->dev,
+   199					"Invalid temperature reading, ret = %d, code=%#x\n",
+   200					ret, code);
+   201				continue;
+   202			}
+   203	
+   204			chan_prop->last_temp = temp;
+   205			chan_prop->last_temp_set = true;
+   206			thermal_zone_device_update(chan_prop->tzd, THERMAL_TRIP_VIOLATED);
+   207		}
+   208	}
+   209	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
