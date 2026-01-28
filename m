@@ -1,156 +1,267 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50F434253C;
-	Wed, 28 Jan 2026 22:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E871DE3A4;
+	Wed, 28 Jan 2026 22:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769639032; cv=none; b=Gs+TUW4LKwE8Q3oFQ4so/E+ZZQkKwNmFSqcxSBT718Z9RM+3Gsqhv3i7DsmLkVkSD/TIfMOWFI6yJuwjWL4w/LJm1/B8AQB6R7+3TQ4F1QPfWda1Xd2YiKnh6wBdaPv8qJJ9keZkNKOXq/yI7G+YpP9Da/sPFKwkb9q/Vc/oWQs=
+	t=1769639640; cv=none; b=gPDaX7+l54kk7+z1j9KBLMZEduCROPMpr7JLSfg5/X/ZSkLhmf3iYv+k97tZj0GBVFWbJyWSfFmGaydufRribxeACrcbb06nuroMYJQ9QhWc2tInvvaOtIFNw4EgLF8D+iO6JJQr4tDJ0U4JhDeNgdDqWEQlmZGVi/qAXcuaFsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769639032; c=relaxed/simple;
-	bh=t6rW2qO0poIYghVFawHwv+wpbgTx39bx7DdeIpcQye8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T30cCnx15trHPIPRp5XeeisAeRgb6lOiixpgzAlifnZaz8RXssGEmE9Rj7f14FjGJOvW05Wl7te3TvxlPXQ1XHCaH5hYipIfszMdZRT86PFAhpsP63K0+qKFtH1BlnrYUJu468EHw35ChWkxG9sqyy7ldoes/AXikQw38q0LMHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K6EBFORv; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769639640; c=relaxed/simple;
+	bh=+xRV2HkEsfrdZMBafEPY++3IUBK8ed73YGyM9OSrTOo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PFtPPDMfxlqHyBHY9L6mr7CozTnQSv2cuhLra6Tak1XE5vst+UjUEfi/9DR3MLnq+7IOblooIewd1J+gVvhEdapFhUOWc9GrykPZOPqvkX3ekmElb62fhS56dVROLfMXSRnWUpbf0vf3I5XVVn773ACZ2WV9HHgiYhNtkGTxKrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFT+SJQe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K6EBFORv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769639031; x=1801175031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t6rW2qO0poIYghVFawHwv+wpbgTx39bx7DdeIpcQye8=;
-  b=K6EBFORv+IcdZvyMPNUWTKrq8VTBtR3yHsw2/EWC9y6X1WOEcUlfhVRb
-   tCOmaFfwIhVVAJG2xbqVnoa3TaP/ZQ+YC4qe/wDRIqQKTBLNFTYoLRQSy
-   6u8s+PtiFgEhuBcKzIp/I0NdtgIWhheM5M5j0gzcMJkBXK/PPqj9wtPmh
-   +/lAgZSEpT5AHOJOf9uAo5om6BKH+VGOHukxVoAjanN9HuI8Pvkp5Kpnu
-   U1PE9SuWpKCwL2/zz2UeE5KC34BNoB1gWFkJStFxm2yBi2JKd5vBEGrlp
-   C7N0m5PBk6jUFPRrM4N3jmgmhjXRTgA9w3TOt6TzHSIG4DOUa2bgpRjPf
-   w==;
-X-CSE-ConnectionGUID: 0iF3uDD+S+Gx+IeBK3ffew==
-X-CSE-MsgGUID: eE7nNWS5RtKN5cKZHAQPrw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="70904782"
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="70904782"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 14:23:51 -0800
-X-CSE-ConnectionGUID: eZP5evReRN+db4wyxIrqNA==
-X-CSE-MsgGUID: uHlhitT3TSCv3Yy7Ac4ekg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="207990109"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Jan 2026 14:23:47 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlDwv-00000000as8-0Tc6;
-	Wed, 28 Jan 2026 22:23:45 +0000
-Date: Thu, 29 Jan 2026 06:23:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	virtualization@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Michael S . Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Alexander Graf <graf@amazon.com>, linux-kernel@vger.kernel.org,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: Re: [PATCH v2 2/2] virtio: silence KCSAN warning in
- virtqueue_kick_prepare
-Message-ID: <202601290632.9LWUgtlM-lkp@intel.com>
-References: <20260127152524.200465-3-johannes.thumshirn@wdc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFT+SJQe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F05C4CEF1;
+	Wed, 28 Jan 2026 22:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769639639;
+	bh=+xRV2HkEsfrdZMBafEPY++3IUBK8ed73YGyM9OSrTOo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GFT+SJQeWAxJBzAONEHlTGwIFAve74HlsN9l13gpE9tz/7iC7F/ISJiNzx7vK7W19
+	 wXWwm/bmuO+oyDtQwVHGCyNojeyjoX6cFiIswjJYGs+4Df7AkFK1US4WpAFHUvAud9
+	 ZWqXjwBVCfS8kigZf8AD/msz+Z71O63FtZkLB3AUaqZqnMgyjLEzD3MAfy+3eD++/W
+	 7Sk65RpglYcX62AISqL5InJ1zY08+imf60SdPuNqzIf9xzzYx4KDQNKRSszL0KJRbV
+	 Q9LI2t7OBvA8PRE/EL8rv7aFRKpm1JMmWIBPAltw29d0f/Nqka2rujCfRpEyc+tLIQ
+	 UZUJ3794T/22g==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alexghiti@rivosinc.com,
+	cyrilbur@tenstorrent.com,
+	jszhang@kernel.org,
+	aurelien@aurel32.net,
+	tglx@kernel.org,
+	cleger@rivosinc.com,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.18] riscv: Use 64-bit variable for output in __get_user_asm
+Date: Wed, 28 Jan 2026 17:33:12 -0500
+Message-ID: <20260128223332.2806589-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260128223332.2806589-1-sashal@kernel.org>
+References: <20260128223332.2806589-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260127152524.200465-3-johannes.thumshirn@wdc.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.7
+Content-Transfer-Encoding: 8bit
 
-Hi Johannes,
+From: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit bdce162f2e57a969803e5e9375999a3e0546905f ]
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.19-rc7]
-[cannot apply to mst-vhost/linux-next next-20260127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+After commit f6bff7827a48 ("riscv: uaccess: use 'asm_goto_output' for
+get_user()"), which was the first commit that started using asm goto
+with outputs on RISC-V, builds of clang built with assertions enabled
+start crashing in certain files that use get_user() with:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/virtio-silence-KCSAN-warning-in-virtqueue_get_buf_ctx_split/20260127-235023
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260127152524.200465-3-johannes.thumshirn%40wdc.com
-patch subject: [PATCH v2 2/2] virtio: silence KCSAN warning in virtqueue_kick_prepare
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260129/202601290632.9LWUgtlM-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601290632.9LWUgtlM-lkp@intel.com/reproduce)
+  clang: llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp:12743: Register FollowCopyChain(MachineRegisterInfo &, Register): Assertion `MI->getOpcode() == TargetOpcode::COPY && "start of copy chain MUST be COPY"' failed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601290632.9LWUgtlM-lkp@intel.com/
+Internally, LLVM generates an addiw instruction when the output of the
+inline asm (which may be any scalar type) needs to be sign extended for
+ABI reasons, such as a later function call, so that basic block does not
+have to do it.
 
-All errors (new ones prefixed by >>):
+Use a temporary 64-bit variable as the output of the inline assembly in
+__get_user_asm() and explicitly cast it to truncate it if necessary,
+avoiding the addiw that triggers the assertion.
 
->> drivers/vhost/vringh.c:559:19: error: cannot take the address of an rvalue of type '__virtio16' (aka 'unsigned short')
-     559 |                 if (putu16(vrh, &vring_avail_event(&vrh->vring),
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:562:8: error: cannot take the address of an rvalue of type '__virtio16' (aka 'unsigned short')
-     562 |                                    &vring_avail_event(&vrh->vring));
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Link: https://github.com/ClangBuiltLinux/linux/issues/2092
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://patch.msgid.link/20260116-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v3-1-55b5775f989b@kernel.org
+Signed-off-by: Paul Walmsley <pjw@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
+LLM Generated explanations, may be completely bogus:
 
-vim +559 drivers/vhost/vringh.c
+Looking at the full analysis based on what we have:
 
-f87d0fbb579818 Rusty Russell      2013-03-20  542  
-f87d0fbb579818 Rusty Russell      2013-03-20  543  static inline bool __vringh_notify_enable(struct vringh *vrh,
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  544  					  int (*getu16)(const struct vringh *vrh,
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  545  							u16 *val, const __virtio16 *p),
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  546  					  int (*putu16)(const struct vringh *vrh,
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  547  							__virtio16 *p, u16 val))
-f87d0fbb579818 Rusty Russell      2013-03-20  548  {
-f87d0fbb579818 Rusty Russell      2013-03-20  549  	u16 avail;
-f87d0fbb579818 Rusty Russell      2013-03-20  550  
-f87d0fbb579818 Rusty Russell      2013-03-20  551  	if (!vrh->event_indices) {
-f87d0fbb579818 Rusty Russell      2013-03-20  552  		/* Old-school; update flags. */
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  553  		if (putu16(vrh, &vrh->vring.used->flags, 0) != 0) {
-f87d0fbb579818 Rusty Russell      2013-03-20  554  			vringh_bad("Clearing used flags %p",
-f87d0fbb579818 Rusty Russell      2013-03-20  555  				   &vrh->vring.used->flags);
-f87d0fbb579818 Rusty Russell      2013-03-20  556  			return true;
-f87d0fbb579818 Rusty Russell      2013-03-20  557  		}
-f87d0fbb579818 Rusty Russell      2013-03-20  558  	} else {
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12 @559  		if (putu16(vrh, &vring_avail_event(&vrh->vring),
-f87d0fbb579818 Rusty Russell      2013-03-20  560  			   vrh->last_avail_idx) != 0) {
-f87d0fbb579818 Rusty Russell      2013-03-20  561  			vringh_bad("Updating avail event index %p",
-f87d0fbb579818 Rusty Russell      2013-03-20  562  				   &vring_avail_event(&vrh->vring));
-f87d0fbb579818 Rusty Russell      2013-03-20  563  			return true;
-f87d0fbb579818 Rusty Russell      2013-03-20  564  		}
-f87d0fbb579818 Rusty Russell      2013-03-20  565  	}
-f87d0fbb579818 Rusty Russell      2013-03-20  566  
-f87d0fbb579818 Rusty Russell      2013-03-20  567  	/* They could have slipped one in as we were doing that: make
-f87d0fbb579818 Rusty Russell      2013-03-20  568  	 * sure it's written, then check again. */
-f87d0fbb579818 Rusty Russell      2013-03-20  569  	virtio_mb(vrh->weak_barriers);
-f87d0fbb579818 Rusty Russell      2013-03-20  570  
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  571  	if (getu16(vrh, &avail, &vrh->vring.avail->idx) != 0) {
-f87d0fbb579818 Rusty Russell      2013-03-20  572  		vringh_bad("Failed to check avail idx at %p",
-f87d0fbb579818 Rusty Russell      2013-03-20  573  			   &vrh->vring.avail->idx);
-f87d0fbb579818 Rusty Russell      2013-03-20  574  		return true;
-f87d0fbb579818 Rusty Russell      2013-03-20  575  	}
-f87d0fbb579818 Rusty Russell      2013-03-20  576  
-f87d0fbb579818 Rusty Russell      2013-03-20  577  	/* This is unlikely, so we just leave notifications enabled
-f87d0fbb579818 Rusty Russell      2013-03-20  578  	 * (if we're using event_indices, we'll only get one
-f87d0fbb579818 Rusty Russell      2013-03-20  579  	 * notification anyway). */
-f87d0fbb579818 Rusty Russell      2013-03-20  580  	return avail == vrh->last_avail_idx;
-f87d0fbb579818 Rusty Russell      2013-03-20  581  }
-f87d0fbb579818 Rusty Russell      2013-03-20  582  
+## Analysis Summary
 
+### 1. COMMIT MESSAGE ANALYSIS
+
+The commit message clearly states:
+- **After commit f6bff7827a48** - Clearly identifies the regressing
+  commit
+- **Builds of clang built with assertions enabled start crashing** -
+  This is a **build failure**, not just a warning
+- Provides a link to the ClangBuiltLinux issue tracker
+  (https://github.com/ClangBuiltLinux/linux/issues/2092)
+- The assertion failure message is in LLVM's code generation phase
+- Author: Nathan Chancellor (ClangBuiltLinux maintainer, well-known
+  kernel/LLVM expert)
+
+### 2. CODE CHANGE ANALYSIS
+
+The change is small and surgical:
+- **Old code (asm_goto_output path):**
+  ```c
+  #define __get_user_asm(insn, x, ptr, label)  \
+  asm_goto_output(                          \
+  "1:\n"                                 \
+  "  " insn " %0, %1\n"                  \
+  _ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)  \
+  : "=&r" (x)                            \
+  : "m" (*(ptr)) : : label)
+  ```
+
+- **New code:**
+  ```c
+  #define __get_user_asm(insn, x, ptr, label)  \
+  do {                                          \
+  u64 __tmp;                                \
+  asm_goto_output(                          \
+  "1:\n"                                 \
+  "  " insn " %0, %1\n"                  \
+  _ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)  \
+  : "=&r" (__tmp)                        \
+  : "m" (*(ptr)) : : label);             \
+  (x) = (__typeof__(x))__tmp;               \
+  } while (0)
+  ```
+
+**Technical mechanism:**
+- The fix uses a 64-bit temporary variable (`u64 __tmp`) as the output
+  of the inline assembly
+- Then explicitly casts it to the expected type of `x`
+- This avoids LLVM generating an `addiw` instruction to sign-extend the
+  output for ABI reasons
+- The `addiw` was causing an assertion failure in LLVM's code generation
+  because it wasn't recognized as a proper copy instruction
+
+### 3. CLASSIFICATION
+
+This is a **BUILD FIX** - one of the exception categories that is
+explicitly allowed in stable:
+- Prevents compilation with Clang/LLVM on RISC-V
+- Without this fix, users cannot build kernel for RISC-V when using
+  Clang with assertions enabled
+- The underlying bug likely causes incorrect code generation even when
+  assertions are disabled
+
+### 4. SCOPE AND RISK ASSESSMENT
+
+**Lines changed:** ~10 lines, all in a single macro definition
+**Files touched:** 1 (arch/riscv/include/asm/uaccess.h)
+**Subsystem:** RISC-V uaccess (user-space access)
+**Risk:** Very low
+- Uses a temporary variable to hold the assembly output then casts it
+- This is a known safe pattern (used elsewhere in the kernel)
+- Does not change any runtime behavior for GCC builds
+- Only affects the `CONFIG_CC_HAS_ASM_GOTO_OUTPUT` code path
+  (Clang/modern GCC)
+
+### 5. USER IMPACT
+
+- **Who is affected:** All RISC-V kernel developers and users building
+  with Clang/LLVM
+- **Severity:** Cannot build the kernel at all on RISC-V with Clang
+  (when using assertion-enabled builds)
+- RISC-V is an increasingly popular architecture
+- Clang is a major compiler used by many distributions
+
+### 6. STABILITY INDICATORS
+
+- Written by Nathan Chancellor (ClangBuiltLinux project lead, kernel
+  developer)
+- Clear reference to upstream bug reports
+- Follows a known workaround pattern
+
+### 7. DEPENDENCY CHECK
+
+**Critical:** This fix depends on commit **f6bff7827a48** ("riscv:
+uaccess: use 'asm_goto_output' for get_user()"), which was introduced in
+**v6.16-rc1**.
+
+The fix is only relevant for stable trees that contain v6.16+. For older
+stable trees (6.15.y and earlier), the problematic code doesn't exist,
+so this fix is not needed and wouldn't apply.
+
+### Risk vs. Benefit Analysis
+
+**Benefits:**
+- Fixes a **complete build failure** on RISC-V with Clang
+- Build fixes are explicitly allowed in stable rules
+- Critical for RISC-V users who use Clang
+
+**Risks:**
+- Minimal - adds a temporary variable and explicit cast
+- Does not change runtime behavior for correct code
+- Pattern is well-understood and used elsewhere
+
+### Concerns
+
+1. **Dependency:** Only applicable to stable trees containing 6.16+
+   (which have commit f6bff7827a48)
+2. **LLVM Bug:** This is a workaround for an LLVM bug (tracked at llvm-
+   project#143795). The LLVM bug may eventually be fixed, but kernel
+   builds need to work now.
+
+### Conclusion
+
+This commit is a **build fix** that solves a Clang compilation failure
+on RISC-V. Build fixes are explicitly allowed in stable kernel rules.
+The fix is:
+- Small (10 lines)
+- Surgical (single macro)
+- Safe (temporary variable + cast pattern)
+- Critical (prevents build failure)
+- Well-documented (links to bug reports)
+- Written by an expert (Nathan Chancellor)
+
+The only consideration is that it should only be backported to stable
+trees that contain the parent commit f6bff7827a48 (v6.16+), otherwise
+the fix addresses code that doesn't exist.
+
+**YES**
+
+ arch/riscv/include/asm/uaccess.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+index f5f4f7f85543f..1029c31026dcf 100644
+--- a/arch/riscv/include/asm/uaccess.h
++++ b/arch/riscv/include/asm/uaccess.h
+@@ -97,13 +97,23 @@ static inline unsigned long __untagged_addr_remote(struct mm_struct *mm, unsigne
+  */
+ 
+ #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
++/*
++ * Use a temporary variable for the output of the asm goto to avoid a
++ * triggering an LLVM assertion due to sign extending the output when
++ * it is used in later function calls:
++ * https://github.com/llvm/llvm-project/issues/143795
++ */
+ #define __get_user_asm(insn, x, ptr, label)			\
++do {								\
++	u64 __tmp;						\
+ 	asm_goto_output(					\
+ 		"1:\n"						\
+ 		"	" insn " %0, %1\n"			\
+ 		_ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)		\
+-		: "=&r" (x)					\
+-		: "m" (*(ptr)) : : label)
++		: "=&r" (__tmp)					\
++		: "m" (*(ptr)) : : label);			\
++	(x) = (__typeof__(x))__tmp;				\
++} while (0)
+ #else /* !CONFIG_CC_HAS_ASM_GOTO_OUTPUT */
+ #define __get_user_asm(insn, x, ptr, label)			\
+ do {								\
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
