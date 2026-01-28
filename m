@@ -1,113 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B917C29A1;
-	Wed, 28 Jan 2026 08:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911E5341AC1
+	for <llvm@lists.linux.dev>; Wed, 28 Jan 2026 09:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769589329; cv=none; b=tKNauUv3CbwryyOwrlSEJYGGrf6gwTFnSwmhwTkc2gMWjbz6J46Vc7jXeIQGrhCdqS9snzDxRmhvjfOIOy9JUT/z88mqO6il7lYncT4So1spn8aHc+89CywZ4YcKcpMBc1zvV9nYWT5iZDNEFinallxnip2xdzpoBqHdF0Jt3aI=
+	t=1769591844; cv=none; b=b1QHhpft63Gm823eITPtnZUayDst5FCZp0dXjkTp9N9IfV+mv/vrelyA+Cc05XVSRq3GFAQC6MvB8nUXnp7mzJ6cI4CgZcn8hOzq28ZX3STWDJQKTXC1j9ay5fAUiK14m1JonGzb31Oh9sFQC3DqPmdDA/n8LRFub3fD5E4yra8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769589329; c=relaxed/simple;
-	bh=YoKL3w8ZLoRqQ1yvu+jtmAE/zokmXnq8i67e74f7bD8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=D1YvcXOey/LGL95BZF7cIYvemXmixVjBXevi+xn11p5MrTHfu3O36wIMYr4rMc2NCoWKg18XRvU13X4LuB8IN7DF2EV6kodMJ45Tsjk81RrR3vsN1qdXEMyCSxsZwu2HyqrAkmIg3on9DrSbePkBkbpbA2Rcemrz4zY4EdWRISs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftrGNsLx; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769591844; c=relaxed/simple;
+	bh=yO6+U0qaxUaYOUYCKg1MexH3YZt5dPEUe3lerkYdUFI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GczVnzoKnwp/9RBfE7oUt+ikSzctDMTaAKyYFlG43UTuk/NHICtI09RwMYj+mgeZhynRFlNNMLmHhrp4n1I85DYtpFoGbPJyqANsXJmGvjTZSCDGUGqPjavU3KY1ABBI0J6kjWvkpznOB7c0A9eEd5pVd0MOswB2QrQQtEQfcoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=B4wz4sOa; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftrGNsLx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769589327; x=1801125327;
-  h=date:from:to:cc:subject:message-id;
-  bh=YoKL3w8ZLoRqQ1yvu+jtmAE/zokmXnq8i67e74f7bD8=;
-  b=ftrGNsLxy7qqGX4apsHestDDh2e2UB2hpKJ0NYh7HZ0sYKZVY24pSlYv
-   VZDrEnydlcLfVDrX9Z5+JJHy0ey7SOtOSmwDLMOtYWrR4yRmqPc44M7GT
-   17jli/Py0c5op11/ajFAlRHZ4T2V4FdHuivQ/nVy/YyWpo5szRF4cIHx6
-   5NrL23Htpn1d2eXCuFJQc5P0EGxhlE3dYE2rDFuwO4zLJerF0w5uW4Mam
-   3zu1fVeAqLBUdeV8QpcbV6m/pvEDVVvUO949GWuTARuo+fmEhO5twrbfP
-   1nw9dm7KnZpjyoQv0GwKfFco7fHjFoB4yJd0DKs6t9iX4F5Xko6Dbn9ck
-   Q==;
-X-CSE-ConnectionGUID: QU0rwbxdTWa+/VgALU5hUg==
-X-CSE-MsgGUID: VqKk8Or1SlKM3q8pALfsUA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="82163034"
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="82163034"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 00:35:27 -0800
-X-CSE-ConnectionGUID: aW4FzNuFSNmHQJx7KvswvQ==
-X-CSE-MsgGUID: j/qyVG45T5KdjA2mxFy1Vg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="208275225"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 28 Jan 2026 00:35:25 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vl11G-00000000ZTA-1xXl;
-	Wed, 28 Jan 2026 08:35:22 +0000
-Date: Wed, 28 Jan 2026 16:35:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Kuo <rkuo@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Brian Cain <bcain@kernel.org>
-Subject: [bcain:bcain/boot_qemu 20/38]
- drivers/memory/pl353-smc.c:62:34: warning: unused variable
- 'pl353_smc_supported_children'
-Message-ID: <202601281649.gu6jAJq8-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="B4wz4sOa"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4359a302794so4159561f8f.1
+        for <llvm@lists.linux.dev>; Wed, 28 Jan 2026 01:17:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1769591841; x=1770196641; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/k4MsBbSp2/KH17/DEg4LJaTxhduisqFO54YsL7siAQ=;
+        b=B4wz4sOatPoqTcrwMGe+Wkha/9eDA+cAqEhz3npFbHMI864UAt73qwJElBZRHc/Tq6
+         jGwzLdjSCx/uHjJ20AMeaLBzDka7Ah7Ng6yiNX9TbrEh4cwO49x8gVV8hbJA02yjwe/s
+         D+jueZEGIv21+HNc5r5FmdsUoaCtsZVf03Gjyx6I5k8jVFp8Edj+UiR2f/EG9PVxq5m/
+         WYvho06EkSqR5fy30SNsR5vxEyGB+KyrHU8RbqHbCh1NNEJhSnP7xC1mx85aDpfchRY7
+         4aPklkjR7QXwwiV7AZKcB4n9/JFKkDuiZryTQ2xFDqAzcP9Na7pznHF5UhbQzP7OdYLy
+         /TfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769591841; x=1770196641;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/k4MsBbSp2/KH17/DEg4LJaTxhduisqFO54YsL7siAQ=;
+        b=m6/gw2wFTeebhTU9wfbem8chyl68Wtuh/twWjTIFzHpQYULWnF1f48saVIKU65N3MD
+         RpJeV6IN2l7pvqXwZX6jxW68KM91P+f9+0NqP/37+xc4rVADMgXzEBJhhAa7rGsHKhuV
+         Q3sCec4DNVMEvwGPbRtGh46fYURuFm8X862M0hxRP7sRse3nZ6ZotG8ziaJV8otHB7HM
+         tGIf+7GDVqOhYdBPJ1cZISk75bpBabL2hczsp5wrxdszO/Lgw6sY14EZT2iSsiKqydtN
+         Vw49VIIaHuRE92ci7v4QMnPLWB+sUb/aB+GXcH1Pq2ZJhtaaAzBvuRdwDypejQnDEkSd
+         G3pw==
+X-Forwarded-Encrypted: i=1; AJvYcCUzX71TXJERWE4pHnMJrNPh2eabmMlTq2BsjUAnLO4XSDeUBm24up6UhrGSiUPIKKJt6rjk@lists.linux.dev
+X-Gm-Message-State: AOJu0YxyXah6oBn/fZ5e6VxCRDFf/8LgL/pAKd9BcRotrH0OxsJXOrFR
+	C+iAN2EL36SuUYSJ+WoZUTlsrZUY2rMsbRo1SGw8nYB+DxUBbQmvCtJoaROfBgpFGQc=
+X-Gm-Gg: AZuq6aIQyVZNYADiTaYVjipD1C77EykE4v1KHH4PjiQGtE6FPE2Iq+Aky6zT+iYi2pB
+	ZAMCDRf6gRo/QY4caYAb80v4JjpVlM9oiq7Ld32WL84qT33VIKtVAWL6cXWsSJMVnljOYxqYUlA
+	XLr9xo3x04ZmM8QbfSGPYzNzWYOSlajyYo1spFXDYSvDHWp99UXRe3HBq6NxW9FuWByNO3KI7WH
+	Z+VEIQKYu4OkzpZthzVwEp7Tv991x/C4tx5x+5ZIRro5sGo3TVs5GGdl5vfNalo+clkIHNs86hK
+	T39S3tS/AlFc6u2KaG3dXoFiz6+dlmjg3jPk5I8lwWT19AhQA3MJJUua4pLsz6uZ4A61W3QCzlW
+	rqqPBsdqoX0cbqtEI0szPx7an6Hgef2PMq2+MIaO/C1GS7xgVPbz8a15qbTKzgG++lHUOA53zW5
+	IYS+eRfGbSrqlwdQ==
+X-Received: by 2002:a05:6000:1ac6:b0:432:84f9:8c04 with SMTP id ffacd0b85a97d-435dd06e029mr5958691f8f.24.1769591840559;
+        Wed, 28 Jan 2026 01:17:20 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ee057sm6281836f8f.15.2026.01.28.01.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 01:17:20 -0800 (PST)
+Date: Wed, 28 Jan 2026 10:17:17 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3] printf: convert test_hashed into macro
+Message-ID: <aXnUHTu62MmNGNdy@pathway.suse.cz>
+References: <20260121-printf-kunit-printf-attr-v3-1-4144f337ec8b@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260121-printf-kunit-printf-attr-v3-1-4144f337ec8b@kernel.org>
 
-Hi Richard,
+On Wed 2026-01-21 11:10:08, Tamir Duberstein wrote:
+> This allows the compiler to check the arguments against the __printf()
+> attribute on __test(). This produces better diagnostics when incorrect
+> inputs are passed.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202512061600.89CKQ3ag-lkp@intel.com/
+> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 
-First bad commit (maybe != root cause):
+Looks good to me:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
-head:   6dd00eeb9163d38cdab8b12c40702a711f04a9ab
-commit: 78951630122eae2f9915fda71077ecd729f34ff0 [20/38] hexagon: update build system and Kconfig
-config: hexagon-randconfig-002-20260128 (https://download.01.org/0day-ci/archive/20260128/202601281649.gu6jAJq8-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601281649.gu6jAJq8-lkp@intel.com/reproduce)
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601281649.gu6jAJq8-lkp@intel.com/
+Best Regards,
+Petr
 
-All warnings (new ones prefixed by >>):
-
->> drivers/memory/pl353-smc.c:62:34: warning: unused variable 'pl353_smc_supported_children' [-Wunused-const-variable]
-      62 | static const struct of_device_id pl353_smc_supported_children[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/pl353_smc_supported_children +62 drivers/memory/pl353-smc.c
-
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  58  
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  59  static SIMPLE_DEV_PM_OPS(pl353_smc_dev_pm_ops, pl353_smc_suspend,
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  60  			 pl353_smc_resume);
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  61  
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06 @62  static const struct of_device_id pl353_smc_supported_children[] = {
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  63  	{
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  64  		.compatible = "cfi-flash"
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  65  	},
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  66  	{
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  67  		.compatible = "arm,pl353-nand-r2p1",
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  68  	},
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  69  	{}
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  70  };
-fee10bd2267868 Naga Sureshkumar Relli 2018-12-06  71  
-
-:::::: The code at line 62 was first introduced by commit
-:::::: fee10bd2267868f2a3e7ba008ef7665aac5e4412 memory: pl353: Add driver for arm pl353 static memory controller
-
-:::::: TO: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-:::::: CC: Michal Simek <michal.simek@xilinx.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+PS: I am going to push it right now. It took me some time to get back
+    to this mail. I am a bit overloaded at the moment.
+    
