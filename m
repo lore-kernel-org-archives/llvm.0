@@ -1,98 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4AC338599;
-	Wed, 28 Jan 2026 11:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4018265CC2;
+	Wed, 28 Jan 2026 11:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769599475; cv=none; b=mZtir4CK3KIuR55+yUDLswQkwT5BZ5TOucSywXJHMmgPx+oXXncNOGX22SSYmcPwm6GP0WE2rDp4kZtgaFQMcu6+i91tCybufSXBIqvaayuyT/qixH0R7idXQ7Se+A3+7EJixQJA1+KihBShiK9cqQckOhN2Nfj9/+tlrp74Iho=
+	t=1769600197; cv=none; b=cCR3guxqxkGVmCcefkNim4+V7JJhT+6GrXaScbrGhLBwCpeRgZ408i1FRvF3r+vV4KpXxqltGID+V+RAI1x2344TB+fiojHYGUEZ9EtZe+vYNKuEWZKfMxiWJLz6trKIIowzMnWMH2DJFSXxvZ9SFoMHwYfZnanAOM/ZEYnPURw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769599475; c=relaxed/simple;
-	bh=gIfEkEkmsmiXZClBNNjGinmrbInHh+IuqVzN3DPLhiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rlnU5e62tVHOb7RqSQyr8VYDaWTY2gRdK98+mCt8ayli/qkVbFCpjhGOK2GFgtculmH31ZtQbhE/SVbzgNZ9k+o2QMewR1MwOyOOwR5myNfU356v86Oa/fwUTZEpkoIiMShCEWzJLQwZdAjrYQXQKWKzmS08MCFHOtU/YqoIFu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JVmJRtst; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1769600197; c=relaxed/simple;
+	bh=39+VcHxZp2L05wgjblLxIZQtRSLWjLNhV3d6CWPNefs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=O5O6N8q34y05/dyMAVhJrsT/CjkHsgTPmHQYHPWtuiYga8dSdg6cTw16Rhvztj5xAdkPZe/FB9P9d8xWbHUQp7BKllTl8mWNbRvBYv9XgMFzc1hHkHTXDKKDpN4VoCQpj0R4r+bi4gv9YGylgbOZ60alkvA+f10DAO1EeOzpHww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mbd5cKYs; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JVmJRtst"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mbd5cKYs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769599474; x=1801135474;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gIfEkEkmsmiXZClBNNjGinmrbInHh+IuqVzN3DPLhiQ=;
-  b=JVmJRtst0H2OKPOo5BrjVIPAXCITuRW0aT/8BFP+7keY2t29XrOLh3q1
-   V1MN4wXtHrcIXJl/+C/ECqZWuZXpUdezuTTDFnkQtixZTQF4UDZWDR+jQ
-   +y+rlo0DP5ew2Az2JCRRaN4gFD+WWgAvo+Hb1X9An5ABn9xQ3g81Qrd5K
-   iU98SNw7aBOhk4L/uEfa82O7Bs0muR2+J1oPUgfE2vNOfiYIIUEwbcMAF
-   lVup8KGSgGLU2ECLVqKyUhVr4c5pGduyJYED0e3JlXVqp0spuHLvnTF5z
-   bLrqVBMxhqL9LsrFRj1GrAXSsX1hDNXnsU7V8j9ypBw+UPuMOLmJC3Diq
-   g==;
-X-CSE-ConnectionGUID: /u5850TdSW2Wxo7e6Il4nQ==
-X-CSE-MsgGUID: Yq4mU1K+S72K8OFhjW0MEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="93466419"
+  t=1769600196; x=1801136196;
+  h=date:from:to:cc:subject:message-id;
+  bh=39+VcHxZp2L05wgjblLxIZQtRSLWjLNhV3d6CWPNefs=;
+  b=mbd5cKYsP+WiH8BIM3vykxSf9+D8e07C/Tu0T+xP/96vsCigDVRPSFVh
+   4Fp08c2ELjYzxW23VYpCE49aVsDxMNPYJA9D50HAyJ0LdEXRCBhIg7vx2
+   VlkkyPN4KGRhSM8fEINPU6ujek+g8wkl4GIzzsLxvEF+W25y5OfOTXD4l
+   RM41j3DUWPLKQQylIRUqyS2VH/luaiVXRWBXtjlOAiqwfuDNGDXsFDFpU
+   0BZY9LM4bNfvfqN/n4DLX/S5r4nXiq1nSpZwAaOELYtlEzQSgAXy6oEMy
+   pcqT/VvoGLmgDM/ovTfHjaJ3YFc9O0rw4je99gA2rl1msxW5jQ8stgXuG
+   Q==;
+X-CSE-ConnectionGUID: +R52KXN1QH6Tm/VRifF4jg==
+X-CSE-MsgGUID: Og7Z8Zh+QC2dE6MW88gPCg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="70851452"
 X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="93466419"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 03:24:33 -0800
-X-CSE-ConnectionGUID: ZaSl7l3TTKGQKc3Q6aaSzg==
-X-CSE-MsgGUID: U0c3EI0YTkujuqRG2m5MBw==
+   d="scan'208";a="70851452"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 03:36:34 -0800
+X-CSE-ConnectionGUID: MAGxF+f+TWq1nrsWaCWvXw==
+X-CSE-MsgGUID: jRJfIwCwQ72hyD09t5kOcQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="239494023"
+   d="scan'208";a="208481814"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Jan 2026 03:24:32 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 28 Jan 2026 03:36:33 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vl3ev-00000000Zbg-3UpX;
-	Wed, 28 Jan 2026 11:24:29 +0000
-Date: Wed, 28 Jan 2026 19:24:27 +0800
+	id 1vl3qY-00000000ZcQ-1y78;
+	Wed, 28 Jan 2026 11:36:30 +0000
+Date: Wed, 28 Jan 2026 19:36:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matthew Brost <matthew.brost@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v3 02/11] drm/gpusvm: Use dma-map IOVA alloc, link,
- and sync API in GPU SVM
-Message-ID: <202601281942.mPKchFLW-lkp@intel.com>
-References: <20260128004841.2436896-3-matthew.brost@intel.com>
+To: Richard Kuo <rkuo@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Brian Cain <bcain@kernel.org>
+Subject: [bcain:bcain/boot_qemu 26/38]
+ arch/hexagon/kernel/devtree.c:107:16: warning: variable 'dt_root' set but not
+ used
+Message-ID: <202601281908.ysa4xy7M-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260128004841.2436896-3-matthew.brost@intel.com>
 
-Hi Matthew,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-xe/drm-xe-next]
-[also build test ERROR on drm/drm-next drm-tip/drm-tip next-20260127]
-[cannot apply to drm-misc/drm-misc-next daeinki-drm-exynos/exynos-drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v6.19-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/drm-pagemap-Add-helper-to-access-zone_device_data/20260128-085843
-base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-patch link:    https://lore.kernel.org/r/20260128004841.2436896-3-matthew.brost%40intel.com
-patch subject: [RFC PATCH v3 02/11] drm/gpusvm: Use dma-map IOVA alloc, link, and sync API in GPU SVM
-config: i386-buildonly-randconfig-004-20260128 (https://download.01.org/0day-ci/archive/20260128/202601281942.mPKchFLW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601281942.mPKchFLW-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   6dd00eeb9163d38cdab8b12c40702a711f04a9ab
+commit: c03d45c08b8a1046b1502fc07d0a7145fc2fb5b8 [26/38] hexagon: add memory management enhancements
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260128/202601281908.ysa4xy7M-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601281908.ysa4xy7M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601281942.mPKchFLW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601281908.ysa4xy7M-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: call to __compiletime_assert_287 marked "dontcall-error": BUILD_BUG failed
+   arch/hexagon/kernel/devtree.c:50:44: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'int *' [-Werror,-Wincompatible-pointer-types]
+      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
+         |                                                   ^~
+   include/linux/of_fdt.h:57:17: note: passing argument to parameter 'size' here
+      57 |                                        int *size);
+         |                                             ^
+   arch/hexagon/kernel/devtree.c:50:4: error: assigning to 'char *' from 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
+         |           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/hexagon/kernel/devtree.c:107:16: warning: variable 'dt_root' set but not used [-Wunused-but-set-variable]
+     107 |         unsigned long dt_root;
+         |                       ^
+   1 warning and 2 errors generated.
+
+
+vim +/dt_root +107 arch/hexagon/kernel/devtree.c
+
+1732d55bf9016e Brian Cain  2026-01-24   89  
+57d9a292755c80 Richard Kuo 2025-08-18   90  /*
+57d9a292755c80 Richard Kuo 2025-08-18   91   * setup_machine_fdt - set up machine based on dtb passed to kernel
+57d9a292755c80 Richard Kuo 2025-08-18   92   * @dt_phys: physical address of dtb
+57d9a292755c80 Richard Kuo 2025-08-18   93   *
+57d9a292755c80 Richard Kuo 2025-08-18   94   * Sets up some of the earliest stuff -- setting the machine type,
+57d9a292755c80 Richard Kuo 2025-08-18   95   * pulling the command line options, and finding the memory.
+57d9a292755c80 Richard Kuo 2025-08-18   96   *
+57d9a292755c80 Richard Kuo 2025-08-18   97   * Since we're calling this from setup_arch, this is going to happen
+57d9a292755c80 Richard Kuo 2025-08-18   98   * very, very early.  Prior to even the bootmem being set up in the
+57d9a292755c80 Richard Kuo 2025-08-18   99   * old scheme I think.
+57d9a292755c80 Richard Kuo 2025-08-18  100   *
+57d9a292755c80 Richard Kuo 2025-08-18  101   * Also since we're always being fired up by the hypervisor, then
+57d9a292755c80 Richard Kuo 2025-08-18  102   * we are already running with the MMU on with an init segtable.
+57d9a292755c80 Richard Kuo 2025-08-18  103   */
+1732d55bf9016e Brian Cain  2026-01-24  104  const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
+57d9a292755c80 Richard Kuo 2025-08-18  105  {
+1732d55bf9016e Brian Cain  2026-01-24  106  	const struct machine_desc *mdesc_best = NULL;
+57d9a292755c80 Richard Kuo 2025-08-18 @107  	unsigned long dt_root;
+57d9a292755c80 Richard Kuo 2025-08-18  108  
+
+:::::: The code at line 107 was first introduced by commit
+:::::: 57d9a292755c8023e31bdefe25e21f0c9837db51 hexagon: add device tree support
+
+:::::: TO: Richard Kuo <rkuo@quicinc.com>
+:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
 
 -- 
 0-DAY CI Kernel Test Service
