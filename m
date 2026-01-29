@@ -1,248 +1,138 @@
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010018.outbound.protection.outlook.com [52.101.56.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B386732E724;
-	Thu, 29 Jan 2026 01:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769649447; cv=fail; b=YIyss62c4uH/xRSHY1s1q2JqMpXdyi+Arkr7tw/gRzi7xnhv82NsDUNvIwmZyqeyMY8+6ccazXx0Cf4zAzt10DUnGeE/b0vLpXCmIddkw5BuSyomSkkUIrWCRdI3q2Colg9f8vSIVaAQNyvwOX0u1BUhjDaFtXzZk8H1WQcJ27A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769649447; c=relaxed/simple;
-	bh=L+oeksKCZpBuHcri8h54Ap00h3QDIgHmNrCNfT4Aa6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=J44QoLpjW0z5Pq38D8JEjnCyPu0jcj2Rpbnev0fB0pD4lN8ryhCQwOPGt5qlj0x55kZAhVLUhm5E6r/zBFAv0PXITR64B2JRBzdtF61LzUniFS2mKmz98sxBDc0uU0jmsnKyctcdo9oLxIJHe8jP0f93E3oa5te2Upo7WUWQPPY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=o85pskAF; arc=fail smtp.client-ip=52.101.56.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60B2326944;
+	Thu, 29 Jan 2026 01:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769649687; cv=none; b=UzJ3//WKgF5GQ3vbsl4fGB0gXEtGhpP7q4py9n34QsTrhmUGP80YPYuao8STnnGBlA9TcIqVAgzsxccGStkJRQiZ4WAcYn6pcdtPUrBUS3ZNOCS87RxuoFQlbJnxjb1QPKt0OqNmssYL76G3be4I/ygDz9pdml/KR1N3jOjIplg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769649687; c=relaxed/simple;
+	bh=T131svMu2T3ISOZCqIcwsEXJug1tYGuujwIwl9rBKfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gn0JMSUyLQTfI/PkZfg8V9YHh4kwmaVq1x77wTLnpEOx1D03Zv5HWVoGoAEcAc6Y4nXyQT2DKoV4oe0Qu0Rhazz+NNyx87NHh2SqVerMLzjdFtHT1sE+eiGG6aDiCtWTOX2k88py6ZHGFDyK2Hit2LBkRm29yyoxYOUCqoouC/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ao8jMlci; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="o85pskAF"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AjI68Rc8mqG9HII1clp71p4JiXofB9sncnnTAYskGR0n3e7Lj/8ImGB2GzFVYUHwfatAzRNMLd7j1HTxLiOaRMuHCaww6dY75m3KUXUH5JArDdWo1jwC+1qGp4vJlXNhUJ7zJc7EispunEjk2ncGc5uunb4GEOCdl8b57B6p0ZxU188tldiTEhnWRYmtd/w+H4OjH7NEvYohHezAOwcFNYpqCGX5bJ5jHuQi0bIsdbF7oKZ5ZIuJOJDKHnMjJyjtqDcT8Nqs3UYW4TbLRPhfR4v8/poZJ2serbpApK1WAtgbVNeqKe+F/CFlIIn84pIWOlD8HDegAbAaFdauZlMLcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BSJn8uAfSFiBH4QSxTJNAJaxnMpDupFS/5G4+DzzV3w=;
- b=UT77dT1QRO7cT3iu6HirQ3Hkj/7fhbjeZjWR1cUM+w0g6Dr7wgGro2YxopHtVMiCrOp9OHUnz9p2ZLlZRJ4QOuPRIRWldiur0BpMxTQT/KkPNWFc22hcGzDczJuC0MbVu31rPsfRujnmCJ1779IPb4dMmbi6beKr4XwFtfefFr06+kKREVVGjeheWnzMlK1VNucdu53xKDlEoJ+p0uARPO/Yy8E1i0t5Hbd4RaU9sDUi5l50ql53n4UdEXyY5s1s6JXIJAL4iUz0a718iYTGZNYBkpHMvMpemdEoZPDzdAvJvs0x8DCSGhKu0SOwf82gk+LzGzkhI4GdPpdVIvSowA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BSJn8uAfSFiBH4QSxTJNAJaxnMpDupFS/5G4+DzzV3w=;
- b=o85pskAFN4m1i//edqiM2EkH631xUsQP47sU7iKbxkKCVt2740suSuCylPQKg3rq+5tmci5KBjUP39p1KsS0KQgXn4QI06hzgMhUg+1l3wKEo67XKe/syrI5dKVFflVTKBICqqoSu/7l61D92Qv9dUnbYtGI9UzgyuuxwkLhl5lEhojic5j2gMKhRZO9ea1rGCmnV+/hbL/B1AxnzgG89zk5DWZvZYqRjsmD4y/cdts7WsLTDwJSdf+JgoYUcGWtpdX7MTQSzEQ1nBcEoZdUnwyc6lypHoV6lOm7m0JRSPE60WMFNayTXa21QsY7tDs4Wi8GWCiJWkAlRggVflsAug==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by PH8PR12MB6745.namprd12.prod.outlook.com (2603:10b6:510:1c0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.7; Thu, 29 Jan
- 2026 01:17:17 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9542.015; Thu, 29 Jan 2026
- 01:17:17 +0000
-Date: Wed, 28 Jan 2026 21:17:16 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Alexey Kardashevskiy <aik@amd.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
-	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
-	iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Vasant Hegde <vasant.hegde@amd.com>
-Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
-Message-ID: <20260129011716.GB2223369@nvidia.com>
-References: <20260121170931.GG1134360@nvidia.com>
- <5a3dfc0a-eca4-4de1-96cd-b4034f0b8e06@amd.com>
- <20260122141240.GM1134360@nvidia.com>
- <0295a5bb-2567-48f8-9806-0467907143d5@amd.com>
- <20260123141413.GY1134360@nvidia.com>
- <ddeb2bc8-5088-4d16-bea3-91d58a4403e8@amd.com>
- <20260127142512.GD1134360@nvidia.com>
- <cd7a2d11-bf65-4445-8eec-df9ba7950128@amd.com>
- <20260128133258.GY1134360@nvidia.com>
- <45f4f091-e1b4-4a04-941a-69ae522ffcd5@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45f4f091-e1b4-4a04-941a-69ae522ffcd5@amd.com>
-X-ClientProxiedBy: BL0PR02CA0135.namprd02.prod.outlook.com
- (2603:10b6:208:35::40) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ao8jMlci"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA24C4CEF1;
+	Thu, 29 Jan 2026 01:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769649687;
+	bh=T131svMu2T3ISOZCqIcwsEXJug1tYGuujwIwl9rBKfg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ao8jMlciFjG/h68WfinfE4v/z5xPoxsTvbDrKSu69RUh4ufknA8/TMKu1dOPPD9Rn
+	 90oj8KngFyQQWlnwJi4Cg/StF5Ri6meN/nUzeC2w3qSwEANpE1LWow3G2e/GI+TiIO
+	 rPwFhPtTU3YAjLshLOX/4LejkKHv1VQNTHhVpK8AmSsvXFoslfOsmnLhRAyispehJ0
+	 VFSk7tRWvPvHI9tc0WlN/aaij+bBYaZ5WZ3YCLblYaIemSQ8IWKoXWJMBLM5P8wsdK
+	 2AdMSjzruOlwhU9Hw24BHx06O7iHSzkBJwFOX0aJRYWO4hNKj4v+LeFCOI9N9yShhJ
+	 YGzE64w5KbIkg==
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 56B0FF40068;
+	Wed, 28 Jan 2026 20:21:26 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Wed, 28 Jan 2026 20:21:26 -0500
+X-ME-Sender: <xms:FrZ6aQuq_7z7EACVqdZX3ci0zIAyJtueFzEcJKkVNsKWNUxe3NMbSQ>
+    <xme:FrZ6ad67b6sAjh6ruihHg7guj8rC0GQA_rpts3DEJKyS20U9H_Iw7doXjrGYnPyzq
+    jy6UkjmRDN2HsVH3v0uWPXIRbiXcYb_npdNZX8nAEkLrFAElHjB>
+X-ME-Received: <xmr:FrZ6abjh53bP0vL0DOCI0yIXtYoRe1Lhmtsp1TjbcQ9mCK34NteY2In7CdI9YMx77BNXtDz0IHXLt15JecSXq34TZ4I8Vseg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieegkeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    ekgffhhfeuheelhfekteeuffejveetjeefffettedtteegfefftdduteduudfgleenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
+    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
+    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
+    hnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepvghl
+    vhgvrhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgrug
+    gvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehmihhnghhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinh
+    huthhrohhnihigrdguvgdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdr
+    tghomhdprhgtphhtthhopehlohhnghhmrghnsehrvgguhhgrthdrtghomhdprhgtphhtth
+    hopegsvhgrnhgrshhstghhvgesrggtmhdrohhrghdprhgtphhtthhopehllhhvmheslhhi
+    shhtshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:FrZ6afk6uPE3iywxH1zEpW-gAS1TiDOWABsqlS2c4e0eB4ol6DjlDQ>
+    <xmx:FrZ6aavco9ZAoi9BFqVkBJwmFp52-zuLoATMaWzouqnhglAENcVomA>
+    <xmx:FrZ6aVD2XQeDR9BA5MORIA-7KYHkUX4L2pjQCBlboQxLQWqEpRF_hA>
+    <xmx:FrZ6afVHXxQ7onPhStf0o7jz2oQXqB5leodNkPhnklACBUkSjeSfaA>
+    <xmx:FrZ6aWH_mfLUh04kv8p9nTDrvfa2t2B0iEg1Pl3mz0ol8hS9g7yCkf5D>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 28 Jan 2026 20:21:25 -0500 (EST)
+Date: Wed, 28 Jan 2026 17:21:24 -0800
+From: Boqun Feng <boqun@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] arm64: Fix non-atomic __READ_ONCE() with
+ CONFIG_LTO=y
+Message-ID: <aXq2FOa1va0P_zu8@tardis.local>
+References: <20260129005645.747680-1-elver@google.com>
+ <20260129005645.747680-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|PH8PR12MB6745:EE_
-X-MS-Office365-Filtering-Correlation-Id: 84e81d48-a354-4b21-f6fd-08de5ed42486
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jbDtPWfgVY5pfYhBTJYrcCk5oCtVHZ5v9hS1Ly3Exr/9ORsjUlCa//80MIPX?=
- =?us-ascii?Q?N0bzu73WI20rVsjyRcK4VpYFn6lJYr3zJE1NQ96l2KSddgW5CjtkSBScPCEg?=
- =?us-ascii?Q?uWDXYVKWUK6gK7CWsEXTCqh/Cgl3M7YEachYlcCZRx0t9D3q0WBLL0s/Gv00?=
- =?us-ascii?Q?DF12liHO0MPUlgD92wFgFA1rXtjr6MN6gZl/A+LtwlSYCB/iPyKvswE3o2ym?=
- =?us-ascii?Q?EgTuYdEQ8c7N/+IizC4SUhzCKTaOIfstahj4oZnWdqoEeTEmcAL9JAhrPhzH?=
- =?us-ascii?Q?NFoOxGg1xe9iSWgl8hO9Qapn3WQAIo0XBQFQrKU6AlsqwTGQmO9GjIdAiH6O?=
- =?us-ascii?Q?dQXxLXk/EPrQE9mSyi5ZYebIUsdJ/iBFrRDubEptju+HeOE3OrHPY1M9ElUS?=
- =?us-ascii?Q?NVGwD4ITeLX+9yUi6xgLe9/c7crM6DLAmKagAtHS26WvVyPqsinsFkm5nOw+?=
- =?us-ascii?Q?E8YZQYyGce9V2IlK5U5VRdDz5xNA21oL6VsxUTUvnm97a/UksPx+UickuqAX?=
- =?us-ascii?Q?64znkF63f268ogrdkuXvibyiDmKlc+OWccq7GubyLJ+ane29gmch6tLdSGQj?=
- =?us-ascii?Q?okwzqDGeAjxOnyR0cAbepnh+yq8LJEZMzLbEdVSMsL+0qj81qw/diBPNP/bs?=
- =?us-ascii?Q?l3Rbb6f4bp5fjoOj3XbEUgqv0MYjKPKf+PgRYpe+4lD6EBm6TQgcsH3eMrGM?=
- =?us-ascii?Q?6zv/hJKiZ84ja6PeZ3t+u9FEx3n6re0XzABsV745ig2qgeEuPPORIu4u+E1z?=
- =?us-ascii?Q?7M+3tRm08vj9ZXvV/IH+dIfyLW6wBBPCSyFDDW+d3Pzbu6E4g+cerol4UemJ?=
- =?us-ascii?Q?tXtjwP58pZW53qKR9m2kFdj96W0XPp7Avo/PllPnAUkZD2F8PaezvDMA6hvP?=
- =?us-ascii?Q?qzjn1duCgZNW/8RWw5StaMI+H2DwZHpXuT6aE46CrwFwwZs8Lfr1/H6QNQKh?=
- =?us-ascii?Q?cMYwguQQZYJJ87NOdA+fBjeuJ/E6a5Mjp8SHFGNOWSC+BKCo0U2QZZ5faAes?=
- =?us-ascii?Q?w+TEg9rNj8A4lsXmfjjtXOS5p2szbT2j9gcWuXhA+XTdgdcQdyNeZz5jIy/3?=
- =?us-ascii?Q?sYY8oZmIsKt7Q8AXEU6g0zyjA3lWELP1H+KEWfSuZsHOhRToDUmkM9OGFe06?=
- =?us-ascii?Q?4KbCVc1wBtdW6u7bxLuYmamFmRt7JIi39AMn96wcG1a72YShbxFMEWDCtj3k?=
- =?us-ascii?Q?QcC5TtP8yR2uE2s4k6nqXCAs3/phm9bHHf1NAB2X2Nu5uDs7c9Wxd0/EhuV4?=
- =?us-ascii?Q?jDK3NYkvOLWZUbuHKjCsbi8y8uTUy7bEfO5P3af2t6SP3cB8Yq/8U1wrgNhm?=
- =?us-ascii?Q?8LyiY5/gxR894ZxX6hbiMSbm1YlvYai0iD12l1BHeni7SgYxrI+TPreESOdV?=
- =?us-ascii?Q?q7sr/uvReHgS0ghqbZ2ArBfxlTkIkYaFOLROfp+jzWlOfXc5b2Y4FSJ9yBgY?=
- =?us-ascii?Q?f/sU47Ix/Wh1uaMrD4ClWrHiEGr9zJU0+Z6PLJLi/MsbyeeS0iZh/OkTIlRM?=
- =?us-ascii?Q?M2GrOOAK38UnhjlaNrwqEHeMbwN739WmE1Y7Rzn+Xrkry+Xi9THufvS1liRZ?=
- =?us-ascii?Q?FtY8yPKjh/5MV9mxyEs=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?KMZFMtoj4OtmwcTjxNg5K/JzDdMYXEMzb/p5nhVKgeCSxVDw3h1xSOcb801a?=
- =?us-ascii?Q?sPfi1f3k03ib1URDw8lCdDQXqEfZmuMXABKNdgiWv280THdAjyVTrPwFtIex?=
- =?us-ascii?Q?fmlVER+/LbXG4XE2HdfYmxcDuqceWgdV+heX8EQAonU2xh+j9XZYN55zBaCD?=
- =?us-ascii?Q?ENZqJBodrVV2JarnUWpXxpXuhA3HLu9T67ECz+8nrkK/QoYcIk4kKI4sH6Io?=
- =?us-ascii?Q?EvaJpZCQoy/8MNt2HH378aPasoRxcVs6UsW4bArHSNkn5z4ZrbNBtY/65Mqj?=
- =?us-ascii?Q?jx64Zpc9YsPgNyGbkdiSgJl0zO+OxhxPyBLj6BTNEHC61UAWGCfrVuHPhuod?=
- =?us-ascii?Q?q3GQ5KRDW8yidOVJPbCA+YjaIL2eYcRz4NbrV9FdieezXYUWhv7wpD9XW0Zb?=
- =?us-ascii?Q?MKWdyuRBsUmoIz+na5qtxemMP8D4UEdlzR7BnJPk9W1KnqRJzyV1DW+mGJSn?=
- =?us-ascii?Q?14XwmYU3tddqbqAV/qJ3Q5z7wkNRGr9J4jF2x61FQLu9jhLLkjWkDHMQmDhB?=
- =?us-ascii?Q?fO1MMVsxOzwIyyFBC79D4LNV+D+miT4xdflenFz3fznfMdw0yrd0Szmm53KJ?=
- =?us-ascii?Q?gc5jaRSgYdQbPZSITXSmSXzxUacCTGLzNgOsFDI9OP9oVLt3gZBwtN2THbVq?=
- =?us-ascii?Q?uzjGcFzQKswlLFaJX+vpVIDjM7vtCTfNZklfAXPJC3yj9iSAggO2Cs1p3Zwd?=
- =?us-ascii?Q?DYh/Tfqx48jTSFoRVTcddFWZMCMiFXFyVnf3VczXRqbnGQfIsTeY6CIsZilX?=
- =?us-ascii?Q?mYCN26xqqQCD+u5cmkMUuwcpZSItqoA7wR/JYoLjwYhnFAGrqmTuMWPW+bnS?=
- =?us-ascii?Q?HTD6WT3FTTnnrT4zJiSDUJVPRZnM17c8sat1+caW8rmVrbR6QyAVSc/IP/Pe?=
- =?us-ascii?Q?3RbGqAL6SZ7yJpcpHP+Rlgl8tIVBaDLBhEZjh1M+i5h/XHk0zh49YQwcyy9I?=
- =?us-ascii?Q?Ql4aD5k7TyRK7oUDCY0HcDxH+7BzgigE2PgpaAoL+C+U8SZhGW5tT4B0gxH1?=
- =?us-ascii?Q?LPv5wAZ7/wJiLojfUQ+go8dZBj3XdlJfh5dlCbCec2A2xiPC69z3SpX6n/L8?=
- =?us-ascii?Q?O98umPsVyZ8df6uM7Kg/8ElxoDLtRA/L3jBXqoqLkxKd05Ia+pbquzVJ2Q1T?=
- =?us-ascii?Q?+eZz9wUM5QXPtOhs5LNoYdJj+DlavJ2xOobV1z0WBK0GdWmfg8kFqwy4ECLR?=
- =?us-ascii?Q?vEkxGr/G+sitnbQzAMx3QPekZnyWRtw6w6Cuh2tlKq3QSdygo+mu2DiqbsAb?=
- =?us-ascii?Q?nVJZMpFgmZIQqdaP3V3ut4KTuN7gN8qhTbtvKxYigbSabc7R3QklIIkXqZhE?=
- =?us-ascii?Q?wqxSb69oLFME5o0g/B67qiRzCpBa/GXLoLohxbSndzZtzlYPAXZ8B0F4Q7qS?=
- =?us-ascii?Q?lLmV+A/u7wONKVBFIO6LrHM+s+gzlvZxMkjpQMJfLF1YJgaCegy7bkpPnINW?=
- =?us-ascii?Q?ie6ThaIj8Cdpv07w/v9cnKfjpHsQNV9ePy4GGCPjtgNbGYvOWXK73EJ0UMYS?=
- =?us-ascii?Q?lktz74ADc+k0RQC2vSkfqsZtVRDcyZr1nscz7tlqCPeWKPFrh4C0EVC5iI5i?=
- =?us-ascii?Q?PVS8iTMKUimzkif7ScAfQ8RpweO5dArgCzMPYziVa52m9AeILfoORmFswY2k?=
- =?us-ascii?Q?yeG2ahU7hJjj7gY9wseuLEFi5Lqlnnrx35teRrV911bEbsK0cLfz3Ij9KrXp?=
- =?us-ascii?Q?SvFWgqxUxnpCo3owkhAqiCRV1erJJmI2HCSY0E5/auQetqG7RfYRAmnG8GLF?=
- =?us-ascii?Q?kpCn56I7zw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84e81d48-a354-4b21-f6fd-08de5ed42486
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 01:17:17.3082
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 07eX6bTVU96JYIH+FLrKcDj/OP6XTFzfDAHvFGNsOpMKitie13xHPcFv7UN1HhYg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6745
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129005645.747680-2-elver@google.com>
 
-On Thu, Jan 29, 2026 at 11:33:06AM +1100, Alexey Kardashevskiy wrote:
-> > > > What happens if you don't have a VIOMMU, have a single translation
-> > > > stage and only use the S1 (AMDv2) page table in the hypervisor? Then
-> > > > does the HW fix it? Or does it only fix it with two stages enabled?
-> > > 
-> > > The HW translates a DMA handle to a host pfn, and then RMP checks if
-> > > that [pfn..pfn+size] is assigned to the correct ASID and the page
-> > > size matches and the gfn matches.
-> > > 
-> > > RMP does not check S1 translations inside the guest, only S2. RMP is
-> > > not fixing page sizes or anything, it says yes/no to the access.
-> > 
-> > Your explanation doesn't make alot of sense.
-> > 
-> > If we have a vIOMMU and the guest has a 4K IOPTE in S1 then it goes
-> > 
-> >   S1[4k] -> S2[2M] -- [4k] --> RMP[2M] ==> OK 4k IOTLB entry
+On Thu, Jan 29, 2026 at 01:52:32AM +0100, Marco Elver wrote:
+> The implementation of __READ_ONCE() under CONFIG_LTO=y incorrectly
+> qualified the fallback "once" access for types larger than 8 bytes,
+> which are not atomic but should still happen "once" and suppress common
+> compiler optimizations.
 > 
-> Should be 2MB IOTLB.
-
-That would be a catastrophic HW bug to take the VM's 4k IOPTE and
-expand it to a 2M IOTLB entry.
-
-> > While if we have no vIOMMU, the same effective scenario:
-> > 
-> >   S2[4k] ------- [4k] -------> RMP[2M] ==> FAIL
+> The cast `volatile typeof(__x)` applied the volatile qualifier to the
+> pointer type itself rather than the pointee. This created a volatile
+> pointer to a non-volatile type, which violated __READ_ONCE() semantics.
 > 
-> The host should have made sure S2 and RMP use the same page size.
+> Fix this by casting to `volatile typeof(*__x) *`.
 
-The HW could have installed a 4K IOTLB like it does above.
+I guess a `volatile typeof(x) *` also works. Either way, good catch!
 
-It is obviously possible because the CPU TLB is doing this, the S1
-case is doing it...
+Reviewed-by: Boqun Feng <boqun@kernel.org>
 
-> > Maybe your answer is the entity that is building the RMP also has to
-> > build a matching S2 IOTLB as one unit and
+Regards,
+Boqun
+
 > 
-> Yes, the host OS updates both RMP and S2, and the host uses the same
-> page size. Because when the guest accepts memory/MMIO ("validates"
-> in AMD words, it prevents the host from changing it quietly), it
-> accepts a page of a specific size so then the guest can be sure that
-> that S2 mapping won't be remapped by the (untrusted) host.
-
-I don't mean in such broad terms a "the host", I mean a specific
-kernel unit, probably KVM.
-
-> > we somehow just plumb the
-> > page table pointer and invalidations into the IOMMU driver.
-> > 
-> > Such a messy design.
+> With a defconfig + LTO + debug options build, we see the following
+> functions to be affected:
 > 
-> Not sure about that, I dislike other designs more. At least with
-> this one S2 tables (IOMMU, NPT) stay the same vs having firmwares
-> dealing with them with KVM having to manage some of it. I also
-> suspect I am explaining RMP rather poorly (which is a control
-> mechanism, not for translation). May be Vasant could help :) Thanks,
-
-Maybe, but if the HW is really so dumb that it has to be perfectly in
-sync with special engines to change them, I don't see you have much
-option other than make KVM maintain both tables (where the CPU and IO
-S2 have identical content and exactly match the RMP) and somehow pick
-up the IO S2 from KVM into the iommu DTE.
-
-But I bet the KVM guys will tell you this is not possible because they
-have always said it is not possible for the IOMMU to share the KVM S2.
-
-Maybe they are relenting on that because ARM CCA works that way, IDK.
-
-Or give up on 2M RMP support and Linux only supports 4K until the HW
-is improved.
-
-Or maybe the IOMMU can own the RMP, but that sounds pretty much
-nonsensical to me.
-
-It is just a horrible HW design for the software stack we have today.
-
-Jason
+> 	xen_manage_runstate_time (884 -> 944 bytes)
+> 	xen_steal_clock (248 -> 340 bytes)
+> 	  ^-- use __READ_ONCE() to load vcpu_runstate_info structs
+> 
+> Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+>  arch/arm64/include/asm/rwonce.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> index 78beceec10cd..fc0fb42b0b64 100644
+> --- a/arch/arm64/include/asm/rwonce.h
+> +++ b/arch/arm64/include/asm/rwonce.h
+> @@ -58,7 +58,7 @@
+>  	default:							\
+>  		atomic = 0;						\
+>  	}								\
+> -	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);\
+> +	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(*__x) *)__x);\
+>  })
+>  
+>  #endif	/* !BUILD_VDSO */
+> -- 
+> 2.53.0.rc1.217.geba53bf80e-goog
+> 
