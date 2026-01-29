@@ -1,108 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CA81DFDE;
-	Thu, 29 Jan 2026 14:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769696404; cv=none; b=B33T1bLDalrK+pmU5tFRDYebYH90kU85w6de0uIlNXo3GtAg7V7pjGyBSGWqqAnn1E6ngf7wHloZeb+PH+VZZqOQC4gdzVfMZ56WXp7xnaEsRL7lCfRLiG4cnA2Hew3VhPBjFa+dpDBSLQGs8Yb2mspmG3QP/pJK03FWuHf9XOU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769696404; c=relaxed/simple;
-	bh=apqALf2mZvnFPwFAMX3pLXqSOd6RTvU3jT7r+/TFQCQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GT6i8CBvFiCh0Ehl2o9L4X9RzQO1sMxHHk3b1hhHygqqOLSCZ82pMza0s1//OQG1s9y7fJrJAxSiDKajRvJ+Lzu0kefyERWp2qKhs1NU7CEiOvypnUx8EiisPaTF74N75T9sS0/ZiewB3zfjtrjjYjTT63RPAavDZfhyWHm/mSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=COY+I1LN; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7375B27A45C
+	for <llvm@lists.linux.dev>; Thu, 29 Jan 2026 15:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769700419; cv=pass; b=JppEcrfknBmzkEnVqS9sHPKxo92jSP4jZe/z3DFD97D7fqQhwto4+WDEATkxxQOCC6pU3LIYwCYjLQcURrumIjm0uetayLVk30D35bwJMzwipuqUd7COwYHwDPVcSvpX7v0Cm8WvCUw1Q3y0eFNttGoauhj0cIXMZrrSL8aTGvs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769700419; c=relaxed/simple;
+	bh=jr78jjwW7P/ZJOvhleY6UbMCy1sN1kxF6a6XPjJgC0Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CMaFtq5oegJiV4clE7j5w2zZDvDS68gP9693UfxNQWn4IM3WpVgEfbsD7Hannbh1HFqIVbBpzcQb2GHRnl4K0PFTXL0SNDfh63L/CauD6gkl/TGWbTVBlNpK6dMxXBxBnT8B0/S+sR9ZMJicd0pduK9N5zoxtubxuwGay/Dr1rg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J/cH5DuP; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="COY+I1LN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769696404; x=1801232404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=apqALf2mZvnFPwFAMX3pLXqSOd6RTvU3jT7r+/TFQCQ=;
-  b=COY+I1LN/5i3LdC7YO1hmlFv5Ltx+PoDkdyLfwZth3PfSylc0HHigq0/
-   4KpVsnmDQ9Ik2W8tpTssXe0NmFvHTwHUmFoiIgFek6M4Ky6tjTzCD3tQP
-   05HlInzZrfuHsA2ttcFYCfTkIrEVsOQAlCTQstjFi9McHsqsb2hW9weba
-   m/8Hs5YRROXRGK3dQH9mn8AZLMulICeqw4E6enBnxgI0GQZbaj5DKJcW7
-   ajK3twchq3wmtp9cSorMesZNakDq1xYBmBNBZgFHJBS7IrRpAuSU+wzuo
-   1mkgJO+IK1qKHwplkFQ7UikmYXYfdu16NUDqMt3YGX3rKdf+TMs4iBOr7
-   A==;
-X-CSE-ConnectionGUID: wZMlXKXaSGS/lykghRZwRg==
-X-CSE-MsgGUID: +2UN8s3VQie3tlTib20Q6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="70831098"
-X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
-   d="scan'208";a="70831098"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 06:20:03 -0800
-X-CSE-ConnectionGUID: +fIWDTCtRX+Rd9/3zT4Q+Q==
-X-CSE-MsgGUID: cHu1RMjnT+SWuLKUdUN45Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
-   d="scan'208";a="208829978"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 29 Jan 2026 06:19:57 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlSsE-00000000bXM-42xH;
-	Thu, 29 Jan 2026 14:19:54 +0000
-Date: Thu, 29 Jan 2026 22:19:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arun R Murthy <arun.r.murthy@intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>, xaver.hugl@kde.org,
-	harry.wentland@amd.com, uma.shankar@intel.com,
-	louis.chauvet@bootlin.com, naveen1.kumar@intel.com,
-	ramya.krishna.yella@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	Arun R Murthy <arun.r.murthy@intel.com>,
-	Suraj Kandpal <suraj.kandpal@intel.com>
-Subject: Re: [PATCH v8 2/7] drm/atomic: Add error_code element in atomic_state
-Message-ID: <202601292223.hq35FrBc-lkp@intel.com>
-References: <20260129-atomic-v8-2-4cb7b0faa051@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J/cH5DuP"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59de0080824so143817e87.0
+        for <llvm@lists.linux.dev>; Thu, 29 Jan 2026 07:26:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769700417; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TUK+cR4xj5i1LHPPrzddu/jhO/MUR+NHkfR6bi4IZOfVVh+ja7n8WPPqpZLfWnUESq
+         cHxfaHk3laZ+5tJQQWDCTeAmqxwXHLLEenohA5gipWXYib9czGcz5tJez1DEvUjVAwml
+         3eB/guB94gsWw8rCB2WPzAm3c3VvDkV7MkntVtOXp4vpmaIUeqaMxo1DgFiwJFK2lt48
+         upwp8anKNrlLF6+Mwz+K31XdyijSXoY/4TSl+1I9Gx3x9a/4pF0BZLGYInc9xVpgYOv3
+         r3kka8DvnLlSYAvs1iYyAhD+9KbiOe1DScHS6XlRIZDH5x5v4nBGsxpwd/VxO6qLIxTd
+         ysKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jr78jjwW7P/ZJOvhleY6UbMCy1sN1kxF6a6XPjJgC0Q=;
+        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
+        b=AysnUVd9Wo/GXeuR1m2xIiYtscaENFLHGT2kKxH/1P/5W2uWkcLq9rYaUl/26J7IrZ
+         pk3bUK/iiKyJdKsFHq8tN6Bz6Gl5wIv4l+sjs5HluQRUA8ROG92GHrLHF/uiBQ6y9icg
+         p7hxq5zxtjeeem7JrH3myzGUs7lKF4ONeuEoosDhLiSb6EUB7ujKzy4CjcCXEPiVaPyB
+         y8eGzmDz0oeiv55xhgdAH2uABkoHJVEcMwL6cpfNLBPp75hTmN8dqtMfQmWMFZ2SPVrg
+         Q/GscczZZaCDLry6NAa2zNry6KLSdFPHVaJwbp6un+mpKNs0KTDJzeAJVTVdao2bru2U
+         oVvQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769700417; x=1770305217; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jr78jjwW7P/ZJOvhleY6UbMCy1sN1kxF6a6XPjJgC0Q=;
+        b=J/cH5DuPwb/aiBeyNUmiAs6MflgPO+rzl9oc0sA9Av5LLXPoiml5jSbrreKuicqhLS
+         zGXR6vQ1IMAIUHvBcF5yiDuURpsnndxhHao5S0kMrrJQBCxLvdi5nM90RdlBw7BnzLlH
+         0tQF5A3Mduq2SjLeydhcw942gt3hd5icE4o6eTrJEBhxp3qYMKWFU7+pUA7B/hZjQpT0
+         IMIft1R/uqbTww94k2cBky8A8Fk85t9VYslW4cHTlYrtHySGbH6UF66jryXWXaHLo5db
+         LTP4WsOX4HF8faS5mGk2LgNGMssphArFTgQ/RCEWCQOxQ/pq36s5kRw4+5O3k/cuWxjn
+         LLzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769700417; x=1770305217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jr78jjwW7P/ZJOvhleY6UbMCy1sN1kxF6a6XPjJgC0Q=;
+        b=UrRxpNA/rLDNhyPHz52NWIDxKUvj4/cxNxiJu03NTpHGOFV3E8j8Ko3DZwO4l9SA1G
+         ojM0k9oqNkpjzodxRW7Gh4VK4iYgLeFobjgjyVxVlUvpJ/jBEymG0JLAlkI0hoIXscRs
+         VIQGYQdhwQnqiHXmSNGnXrY7Zeg5AiJN/X3CbAweztNnte/mjJBHi1cCQZTFKGywm9BP
+         fSMPp9DGxZ+E9llccbldu+MH6hkYMzF0QpWvWZLdU/JCtLR/BtmbIquBAFtFYwi+JZg4
+         +hztUbeM0TMI8qoJLFSTTG2xPhzhOLKR2OEELOn4i8fo2hXh/SiBCwNa9ktnaJrMz6JT
+         o3aA==
+X-Gm-Message-State: AOJu0YzevDFFYOiOw8YgcF43tzPGoaxHRH5SbtmeTwC0wGSGT1goC6rX
+	w0Irt0+uKGcVkGNcQ+UKZ+CR8zHNn4aCy0W9/t9iiWsSuttydND1USGDH1OdBosK7fME+C6275s
+	EHH4NwBnOgh8hauMW11JR4cgAeZoO8RJ5GAz2
+X-Gm-Gg: AZuq6aJslYDk7jbh4J90nNHTOIDl2V39pwH2MXS9e9+9xadRH2SnT071hq/hJ0Hz9cX
+	4HjJLgg1NjSIaqf1Dyz7mfSHLAbez6Fb3STrlqB3dvzPVOqUDbJrhLdjm6+QZbKXWAJmBDDz1/s
+	6SVp+fhQfxd6+TBP2dCa1R4ZguxR4f7M+yAyf8yfoEzvnA6NJwe5wUTz7eJI6QrmbIyifYhTM1S
+	iikClm3N4PgEZyyGQfJs/cFTdABwnfobfkxhZUaYzkIkvp6vbuphcie06X1QrFbSXhIFcoGAINW
+	cYw07K/wk6NnFQv18H1H8OA0KdTOVEE6YlS5TNVuVsttpgdY6lgWfrtX7BGRNhJX9n4AUojlkrg
+	CAZaYwei7PzyH
+X-Received: by 2002:a05:6512:1454:20b0:59e:c9a:c94a with SMTP id
+ 2adb3069b0e04-59e0cbea1f7mr741172e87.8.1769700416352; Thu, 29 Jan 2026
+ 07:26:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260129-atomic-v8-2-4cb7b0faa051@intel.com>
+References: <20260128060714.GA1181796@ax162>
+In-Reply-To: <20260128060714.GA1181796@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 29 Jan 2026 16:26:41 +0100
+X-Gm-Features: AZwV_Qg0yw1ZUU6eHgPWeKpZe3_Ac1a1EXXq-QftmFbBwjP7J1fzV4lTQviXtRg
+Message-ID: <CANiq72kzPhb1ZDrNz-qk-YQHZVg=4drZfSqqDzUXxpvkc0Q+bg@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 22.1.0-rc2 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arun,
+On Wed, Jan 28, 2026 at 7:07=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> I have built and uploaded LLVM 22.1.0-rc2 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
+>
+> This is a prerelease version of LLVM, similar to how the Linux kernel
+> release candidates work. If there are any issues found, please let us
+> know via email or https://github.com/ClangBuiltLinux/linux/issues/new,
+> so that we have an opportunity to get them fixed in main and backported
+> to the 22.x branch before 22.1.0 is officially released.
 
-kernel test robot noticed the following build warnings:
+As usual, I gave it a quick x86_64 debug QEMU boot test (taking the
+Rust toolchain from `rustup`) and it seems to work.
 
-[auto build test WARNING on 6a3c9a03d943eb112c916c7419a837bc7de3a296]
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arun-R-Murthy/drm-Define-user-readable-error-codes-for-atomic-ioctl/20260129-170325
-base:   6a3c9a03d943eb112c916c7419a837bc7de3a296
-patch link:    https://lore.kernel.org/r/20260129-atomic-v8-2-4cb7b0faa051%40intel.com
-patch subject: [PATCH v8 2/7] drm/atomic: Add error_code element in atomic_state
-config: hexagon-randconfig-001-20260129 (https://download.01.org/0day-ci/archive/20260129/202601292223.hq35FrBc-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601292223.hq35FrBc-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601292223.hq35FrBc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/gpu/drm/drm_atomic.c:2119 function parameter 'format' not described in 'drm_mode_atomic_add_error_msg'
->> Warning: drivers/gpu/drm/drm_atomic.c:2119 function parameter 'format' not described in 'drm_mode_atomic_add_error_msg'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
