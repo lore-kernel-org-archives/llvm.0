@@ -1,88 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8745E36212C
-	for <llvm@lists.linux.dev>; Thu, 29 Jan 2026 22:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416E0352C51;
+	Thu, 29 Jan 2026 22:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769725900; cv=none; b=UCnmwi7tHqxuQC1k7MBCe0NqXxJmZFdq/gkiPDhtVJ9EVX2pFjY6JsYpqfq+Eo+1vigAoGgQuXRZ7YyBfOXvJLg90qreP5gmRT0Cy60wDFKygHPzxLvHpzyk1Djd+kwlcBkRxalCKcVCkypC3Wj9oQqFsG3DNhUgqYkxmoXqbKo=
+	t=1769726139; cv=none; b=OxhfAjQJAd4zyRUYiehnu2Z86cwP/NCjMOTCoHbDTV6jYSBlW2HfrzG/jdvVjzQb+DV1CYSyve43XwQWqUzWN5UW1Q3rqjDjo/LAVSwgDUydZfv/kmpIufJb2eGNZc3AYq7t8Jk6MnL+oDqGMk52dOO90nN3v25vLa0/OQdRpbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769725900; c=relaxed/simple;
-	bh=E32m1zZl3x1RripaVchHUXrgIQHgmrfviHWdUL621HE=;
+	s=arc-20240116; t=1769726139; c=relaxed/simple;
+	bh=UkNX32KZtTbiUWsoCAvLwtloIiF3hbhWHYIeoQpDme8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=emdNdlX0xSd+pv4GUmzILWl9xSowKxEMH9ZyF2uDEILSoxxtmcBoas4rujpI70aJHKZjgOMLGfI1DBl3TwMW2l9A7KO0vCqnPM023fdNPKK7g9fRf96FV95TrpgHQ/pLN1EXvuc3S4XsVSlo5kDXgkTYUI5YeHy3m++memqSdnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9XqZXlz; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nyvlf2d7fzgkYYcn88d/NiV+zWDJ9EH3SLgns6NkdlG/gSzAWgaTFO4QLtkGQs1HgRxVo1FDyuZJG98V2vMV/s9nzW6B5OcWhbVUWjyowGJn4AP9fvlQUI6JLPdCQE2KP/bPBIP+s/wSaTIDLtJibvHyvpzUs5K4+gWodEzHmFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k09VX/to; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9XqZXlz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFF7C4CEF7;
-	Thu, 29 Jan 2026 22:31:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k09VX/to"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76475C4CEF7;
+	Thu, 29 Jan 2026 22:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769725899;
-	bh=E32m1zZl3x1RripaVchHUXrgIQHgmrfviHWdUL621HE=;
+	s=k20201202; t=1769726138;
+	bh=UkNX32KZtTbiUWsoCAvLwtloIiF3hbhWHYIeoQpDme8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q9XqZXlzP6Mp6G99g+KUIqj2ErofnD8ERZW7Gh29Xb9YlUznohVK/Imewv1JI6ILk
-	 zQ+6rZYGMs5Wvsqs6eiDPtVG0t2AmarAYGamMZiH4MRm8iNAIQaGD7ouYFSixJQkdU
-	 UBPtshydj6D/gmxbpm+w844GVPIpUpk66r/HzsTVio/nsCKXxgJSqGuGs5BB2MdXxR
-	 mHp5HxhnkQ26Lo5h7Wd+XkinJfRgP5wE2Ek4ieDpicb1JesZT6T+RUU1jxgn2M3g9g
-	 lBC9v94uFT2rnM2tCeKjHp9g3NkU5VUodpFxX4tnqkji6DOnNqdd5tmmkpJDoeU6Pu
-	 zGJWVYtdLOj9g==
-Date: Thu, 29 Jan 2026 15:31:36 -0700
+	b=k09VX/toJdFybVhpIQRAo1f8y9CbBEYErGzzsMQjRzVbSqvNBcSEBAVY8oPUivtXX
+	 eopkMR1CT43PMYuUpbsjZMN3YVmv7zqh5JkSq4BOVI80zjWQORYC7tLqj0m79kS8IS
+	 SzNVpo0JtqO2mLkbucoyiQUqAf+oKRagkGxOsaQM/EmF/5r19t1wc8ZiEjoDFO4MDr
+	 Et19cFV2FQoGPxFYsm/v7jsdJtr92j3dJuhva40AFYk1ksrIj3yDj+tChSZWx97B9R
+	 gv9yqQfF/lEwYGy4KjUPSoLy5uY1HLwj9WqcCv9Bo+HiegXEmV+6ZRPHA2WrjnlZU/
+	 X2X+fxmCsMGAg==
+Date: Thu, 29 Jan 2026 15:35:28 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Link Mauve <linkmauve@linkmauve.fr>
-Cc: linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev
-Subject: Re: Failure to build with LLVM for the Wii
-Message-ID: <20260129223136.GA1614447@ax162>
-References: <aXs8sgAcci9FKKpx@luna>
+To: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
+Cc: Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor@kernel.org>,
+	Mingcong Bai <jeffbai@aosc.io>, Han Gao <rabenda.cn@gmail.com>,
+	Vivian Wang <wangruikang@iscas.ac.cn>,
+	Jason Montleon <jmontleo@redhat.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] rust: export BINDGEN_TARGET from a separate
+ Makefile
+Message-ID: <20260129223528.GA844102@ax162>
+References: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
+ <20251230-gcc-rust-v5-v6-1-2ac86ba728c8@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aXs8sgAcci9FKKpx@luna>
+In-Reply-To: <20251230-gcc-rust-v5-v6-1-2ac86ba728c8@isrc.iscas.ac.cn>
 
-Hi Link,
-
-On Thu, Jan 29, 2026 at 11:55:46AM +0100, Link Mauve wrote:
-> I’m trying to build the kernel for the Nintendo Wii, using LLVM instead
-> of gcc, in order to bring Rust support to this architecture (and also
-> because my distribution doesn’t ship a cross-compiling gcc), but I get
-> this build issue near the end:
-> ```
-> % make O=wii LLVM=1 ARCH=powerpc -j1
-> make[1]: Entering directory '/home/linkmauve/dev/linux/wii'
->   GEN     Makefile
->   CALL    ../scripts/checksyscalls.sh
->   DESCEND objtool
->   INSTALL libsubcmd_headers
->   WRAP    arch/powerpc/boot/dtbImage.wii
-> objcopy: Unable to recognise the format of the input file `vmlinux'
-> make[3]: *** [../arch/powerpc/boot/Makefile:394: arch/powerpc/boot/dtbImage.wii] Error 1
-> make[2]: *** [../arch/powerpc/Makefile:236: zImage] Error 2
-> make[1]: *** [/home/linkmauve/dev/linux/Makefile:248: __sub-make] Error 2
-> make[1]: Leaving directory '/home/linkmauve/dev/linux/wii'
-> make: *** [Makefile:248: __sub-make] Error 2
-> ```
+On Tue, Dec 30, 2025 at 05:47:54PM +0100, Asuna Yang wrote:
+> A subsequent commit will add a new function `bindgen-option` to
+> `scripts/Kconfig.include`. The bindgen backend requires the `--target`
+> option for cross compiling, but variable `BINDGEN_TARGET` in
+> `rust/Makefile` cannot be exported to `scripts/Kconfig.include`.
 > 
-> I believe it should use $(OBJCOPY) instead of objcopy, which is set to
-> llvm-objcopy, but couldn’t figure out where it is misconfigured.
+> Therefore, move this variable to a separate new `Makefile.rust` file and
+> include it from `scripts/Makefile` to make the exported variable
+> available for use in Kconfig. Place the include in the `need-compiler`
+> branch to avoid including it in irrelevant make targets.
 > 
-> Thanks for your help!
+> Since the new file name is `Makefile.rust`, it matches an existing
+> MAINTAINERS rule `scripts/*rust*`, so no modification to the MAINTAINERS
+> file is needed.
+> 
+> Signed-off-by: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
 
-It is the arch/powerpc/boot/wrapper script:
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-  https://github.com/ClangBuiltLinux/linux/issues/1601
+> ---
+>  Makefile              | 3 ++-
+>  rust/Makefile         | 8 --------
+>  scripts/Makefile.rust | 9 +++++++++
+>  3 files changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 27ce077520fe..9754d7add947 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -718,9 +718,10 @@ ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
+>  include $(srctree)/scripts/Makefile.clang
+>  endif
+>  
+> +ifdef need-compiler
+> +include $(srctree)/scripts/Makefile.rust
+>  # Include this also for config targets because some architectures need
+>  # cc-cross-prefix to determine CROSS_COMPILE.
+> -ifdef need-compiler
+>  include $(srctree)/scripts/Makefile.compiler
 
-I have a WIP series from long ago that may be a good starting point for
-getting something working but there were some errors I never got around
-to solving before having to shelve it for other issues:
+Not that it is a big deal but it would make the diff simpler if the Rust
+makefile was added after the compiler one, both for alphabetical reasons
+and it would not necessitate moving the comment (even if it mostly
+applies just to the compiler include).
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/log/?h=wip/llvm-1-powerpc-boot-wrapper
-
-Maybe something I (or someone else) can get back to soon.
-
-Cheers,
-Nathan
+>  endif
+>  
+> diff --git a/rust/Makefile b/rust/Makefile
+> index 5d357dce1704..2603b34f9833 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -385,14 +385,6 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
+>  	-fzero-init-padding-bits=% -mno-fdpic \
+>  	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference
+>  
+> -# Derived from `scripts/Makefile.clang`.
+> -BINDGEN_TARGET_x86	:= x86_64-linux-gnu
+> -BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
+> -BINDGEN_TARGET_arm	:= arm-linux-gnueabi
+> -BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
+> -BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
+> -BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
+> -
+>  # All warnings are inhibited since GCC builds are very experimental,
+>  # many GCC warnings are not supported by Clang, they may only appear in
+>  # some configurations, with new GCC versions, etc.
+> diff --git a/scripts/Makefile.rust b/scripts/Makefile.rust
+> new file mode 100644
+> index 000000000000..5c12b4b8c8b6
+> --- /dev/null
+> +++ b/scripts/Makefile.rust
+> @@ -0,0 +1,9 @@
+> +# Derived from `scripts/Makefile.clang`.
+> +BINDGEN_TARGET_x86	:= x86_64-linux-gnu
+> +BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
+> +BINDGEN_TARGET_arm	:= arm-linux-gnueabi
+> +BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
+> +BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
+> +BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
+> +
+> +export BINDGEN_TARGET
+> 
+> -- 
+> 2.51.1
+> 
