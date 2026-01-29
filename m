@@ -1,73 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4512726CE32;
-	Thu, 29 Jan 2026 17:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80EC2C028F;
+	Thu, 29 Jan 2026 18:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769706842; cv=none; b=SR9NI1J05eroZp3qGP5HaHzY2voPajiFcZCZN3OYKIk4M0nZ4Jk/7TOyio4Rhp0P+2DuKrAXxlDFuC4IwKieduZLR26QzxOn8kEqouBhEKf2v7Ypyr7I6swqACJOpq/gkojct8lth7ngqx2zNCpH6CLQXOz6UfNJMYSkZpjJAL4=
+	t=1769712614; cv=none; b=ZOmgd3EBSEz6X/Ob7baprkepNyOoVdx0Kj2ma2u8j5J1TfiqiPV1X17lvujQAlHntP7Z+6MSNDcnjorf3a+t9Yy99GVH9YzCEL0f1ifh2T0Vtx4rLtAQwK6HVkrHn7akx4IivRZt5769Akx0FRfHMsu0cYDCr+ROHq/hTquKx7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769706842; c=relaxed/simple;
-	bh=27kNKSKigZ302oO4twnPMLC0uG5HbWa0Z1KJS0oe/D8=;
+	s=arc-20240116; t=1769712614; c=relaxed/simple;
+	bh=4NIq0yMAxcCBNtMevyEn0r35r1h+lTlde//nJt2+j6c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U4ETeOWKNtVc1UST6z0dnxEZ8a+p4vqDBFRmLzMuPnTT0TDUZQaOcRP9/AXhGGdVptnQM90At+X2QVhXIgqd97IUgWyhudAcuf0A4RvkWv/uPIx3uKuzJqhy3mrWQVnIanZt/zCAW4F96C8gkX++l0ZcJ9NSZ4ffx3MUPXzCdDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tN4zAYJX; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=civ6WGRjXWySC0NVvpBgczYg+zJ1k3HrM5PWTwVgOXjV7C15j7J7giTi3Ep7qUVylBURmgkpqdqIZiwgDm3fKx8qlfcrcQh3WqIpt2WNRzP+otNh1MFFt1Rt/XMv/7pg4C6TvOtDP80cUoN4p6D/dnt/cGTm0RUcTwiUn74OMy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GDQ6uYCo; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tN4zAYJX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B720BC4CEF7;
-	Thu, 29 Jan 2026 17:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769706841;
-	bh=27kNKSKigZ302oO4twnPMLC0uG5HbWa0Z1KJS0oe/D8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tN4zAYJXAZpEy3d6ProYbKGSY739oMbmdfcn5NU4TuOi72e2duwvu2H4xBEsLEWiC
-	 +JfvZeFm2UoEdMRZd47svwmODAxX4pi3zeaF22UV2W/nuE39wNgGsFhdZlmYMie1ta
-	 Nx/EhbK+wOMQoo6E+UtPTGBdAU+fTt5ml2q7wY8+UX2f35E1r04rmfWgxcV1rW4H0s
-	 q2/gPbIS54mC4uNOSqn1qmQZyZzuBAZEE6VlKzYlw5CsXsJoYKtAcDPJPCQ4gB16cp
-	 foi/HCKIAOHR6emQmWYkoPwzBE2XfhY7zv2hG+EzWGi58mMWxeiYd7rERf/JO/Mpv6
-	 wDcR4TVpKurRA==
-Date: Thu, 29 Jan 2026 11:14:00 -0600
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nipun Gupta <nipun.gupta@amd.com>,
-	Nikhil Agarwal <nikhil.agarwal@amd.com>,
-	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-clk@vger.kernel.org, imx@lists.linux.dev,
-	dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v3 00/12] of/treewide: Simplify with
- for_each_compatible_node_scoped()
-Message-ID: <20260129171400.GA1287342-robh@kernel.org>
-References: <20260109-of-for-each-compatible-scoped-v3-0-c22fa2c0749a@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GDQ6uYCo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769712613; x=1801248613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4NIq0yMAxcCBNtMevyEn0r35r1h+lTlde//nJt2+j6c=;
+  b=GDQ6uYCo7aA8oYQe9ifd6bcu3eR0UOw5feaerHKu6t6qw3Qvh12rbWiZ
+   2/03ea8bXwPoX9Lwt4gvVV8B7gGU7t3JR1nf7wXmkCCAk/IMp5ki1dqkw
+   jdaqc+dDsC+Slzfz/jg2Gu7fEo3NVlT33AtCeVECCtg7isw6DXhvJPb09
+   1C5LYoq9NPHhdI2Vp+i4rESMSduXKm7QCkT1LKJ11ILrVMXcvwVSLFMJY
+   zRqWDCbChe1jCbqRYE5EgSH8HRUH9h//IokCrLRfu0hyLN9A4DPhv0uZH
+   rzqp2XtjqvnMsgFLsmPuSijGn6tXfHKiFf5UnVtOVJJAdNEb0y7DoCNNO
+   Q==;
+X-CSE-ConnectionGUID: NM1OlkzJSv6wgLa/4EZ24Q==
+X-CSE-MsgGUID: 9NTf44BNROaYiQ33PAp2Jg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="88375495"
+X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
+   d="scan'208";a="88375495"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:50:12 -0800
+X-CSE-ConnectionGUID: weEkcWSrRNiodjursDISZw==
+X-CSE-MsgGUID: A6dH0ETHTQmRX9s8/4iYLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
+   d="scan'208";a="208758157"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 29 Jan 2026 10:50:10 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlX5k-00000000bn6-1Jg3;
+	Thu, 29 Jan 2026 18:50:08 +0000
+Date: Fri, 30 Jan 2026 02:49:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v1 1/1] dmaengine: idma64: switch to
+ DEFINE_SIMPLE_DEV_PM_OPS()
+Message-ID: <202601300212.Cjv94jx1-lkp@intel.com>
+References: <20260129104916.200484-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,51 +65,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260109-of-for-each-compatible-scoped-v3-0-c22fa2c0749a@oss.qualcomm.com>
+In-Reply-To: <20260129104916.200484-1-andriy.shevchenko@linux.intel.com>
 
-On Fri, Jan 09, 2026 at 05:57:44PM +0100, Krzysztof Kozlowski wrote:
-> Dependencies/merging
-> ====================
-> 1. First patch is a prerequisite for entire set, so either everything
->    goes via same tree, the further patches wait a cycle or stable tag is
->    shared from DT tree.
-> 
-> 2. The last media patch depends on my earlier cleanup.
-> 
-> Changes in v3:
-> - New patch: cdx: Use mutex guard to simplify error handling
-> - Collect tags
-> - Link to v2: https://patch.msgid.link/20260106-of-for-each-compatible-scoped-v2-0-05eb948d91f2@oss.qualcomm.com
-> 
-> Changes in v2:
-> - Update also scripts/dtc/dt-extract-compatibles (Rob)
-> - Collect tags
-> - Link to v1: https://patch.msgid.link/20260105-of-for-each-compatible-scoped-v1-0-24e99c177164@oss.qualcomm.com
-> 
-> Description
-> ===========
-> Simplify for_each_compatible_node() users with a new helper -
-> for_each_compatible_node_scoped().
-> 
-> Best regards,
-> Krzysztof
-> 
-> ---
-> Krzysztof Kozlowski (12):
->       of: Add for_each_compatible_node_scoped() helper
->       ARM: at91: Simplify with scoped for each OF child loop
->       ARM: exynos: Simplify with scoped for each OF child loop
->       powerpc/fsp2: Simplify with scoped for each OF child loop
->       powerpc/wii: Simplify with scoped for each OF child loop
->       cdx: Simplify with scoped for each OF child loop
->       cdx: Use mutex guard to simplify error handling
->       clk: imx: imx27: Simplify with scoped for each OF child loop
->       clk: imx: imx31: Simplify with scoped for each OF child loop
->       dmaengine: fsl_raid: Simplify with scoped for each OF child loop
->       cpufreq: s5pv210: Simplify with scoped for each OF child loop
->       media: samsung: exynos4-is: Simplify with scoped for each OF child loop
+Hi Andy,
 
-I applied all but the last patch which did not apply for me. Send it 
-next cycle.
+kernel test robot noticed the following build errors:
 
-Rob
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on linus/master v6.19-rc7 next-20260129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/dmaengine-idma64-switch-to-DEFINE_SIMPLE_DEV_PM_OPS/20260129-185309
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20260129104916.200484-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] dmaengine: idma64: switch to DEFINE_SIMPLE_DEV_PM_OPS()
+config: hexagon-randconfig-001-20260129 (https://download.01.org/0day-ci/archive/20260130/202601300212.Cjv94jx1-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601300212.Cjv94jx1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601300212.Cjv94jx1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/dma/idma64.c:690:68: error: too few arguments provided to function-like macro invocation
+     690 | static DEFINE_SIMPLE_DEV_PM_OPS(idma64_pm_suspend, idma64_pm_resume);
+         |                                                                    ^
+   include/linux/pm.h:416:9: note: macro 'DEFINE_SIMPLE_DEV_PM_OPS' defined here
+     416 | #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+         |         ^
+>> drivers/dma/idma64.c:690:8: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     690 | static DEFINE_SIMPLE_DEV_PM_OPS(idma64_pm_suspend, idma64_pm_resume);
+         | ~~~~~~ ^
+         | int
+>> drivers/dma/idma64.c:697:23: error: use of undeclared identifier 'idma64_dev_pm_ops'
+     697 |                 .pm     = pm_sleep_ptr(&idma64_dev_pm_ops),
+         |                                         ^~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +690 drivers/dma/idma64.c
+
+   689	
+ > 690	static DEFINE_SIMPLE_DEV_PM_OPS(idma64_pm_suspend, idma64_pm_resume);
+   691	
+   692	static struct platform_driver idma64_platform_driver = {
+   693		.probe		= idma64_platform_probe,
+   694		.remove		= idma64_platform_remove,
+   695		.driver = {
+   696			.name	= LPSS_IDMA64_DRIVER_NAME,
+ > 697			.pm	= pm_sleep_ptr(&idma64_dev_pm_ops),
+   698		},
+   699	};
+   700	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
