@@ -1,135 +1,120 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978E12222D8;
-	Fri, 30 Jan 2026 01:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1307A1C7012;
+	Fri, 30 Jan 2026 06:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769736683; cv=none; b=tX+Ag3aTy677Yfyy1KLovHsAhsz6U5MjdYJqoZ4D6AHMuROpP6oiIbLT53J4GLlB64EDgInKr2h2eSrMTRcd8gCi5jna2BU903wjPn8oD39fpT+tQb4f9cwPg7dLjQlpelF8q+igGMX4MnPsUCKYqMEuLa/cdswbbXt5vnruBbw=
+	t=1769753017; cv=none; b=avokANVNO1MgtGO7Dobha1nJpzcrTGRj30pQtPc/A1pOEOF+uSBAPpb74VoWVBDxdDqYALa9qmYUdZ4voxb3DY2sGABO8F9luDuTYF4fAm3rF32zZ7SUs9pC7Mt9OuWAp9wHXoaB+2Uv+mbOmb0/VdmKj1lhFLnMqtb2jwM1crs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769736683; c=relaxed/simple;
-	bh=qnsCsZ4iMqFuDReTCZk4V47d3o0OAD2f+z9JaNVIVLo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tpdjpIN4bDd1ll/IlleLM+sKuRdNDLZWtkWMf3aEWxpylgjIFg3kJO2MRYrTjCOoUjIqoeH7g4CXQjfdUbHJYEuLxv7KR1YInJI9sMMXfvyyKn/az7ChQWlYCNHgI0U6CetO4pYyvgTjvDh/5ELKPSqDCkJjHRB/cSJu9N/A75M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 5c9c9f92fd7b11f0b0f03b4cfa9209d1-20260130
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:f96d8ae5-7807-4359-8513-e1f3641a4faa,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:495220902e48455b3514bc145a626ce2,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
-	50,EDM:-3,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5c9c9f92fd7b11f0b0f03b4cfa9209d1-20260130
-X-User: jiangfeng@kylinos.cn
-Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 2005360995; Fri, 30 Jan 2026 09:31:12 +0800
-Message-ID: <2d711526-3cee-436a-a563-0d70faf537e2@kylinos.cn>
-Date: Fri, 30 Jan 2026 09:31:09 +0800
+	s=arc-20240116; t=1769753017; c=relaxed/simple;
+	bh=LTthSLKE8RSuVk1YKEXFDmQwJJcU+qOV1aPdsDtSr/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ftxMlgY85ojyhi0wVE/zKIT26Lk5xhEd3FIr6FGsphvVEj/1zCfEIj9E4B3hQiHKbRP8EW+l0sB+QjehovQsyDhxPnzSVe9CNo7pE6V8pQgV7Myjtj3otdLNOAHjwrlENwWzEvWjIsiekDtNtXF5c/Zs72MR87vU5OQ/En68YpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IR3QoIdZ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IR3QoIdZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769753015; x=1801289015;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LTthSLKE8RSuVk1YKEXFDmQwJJcU+qOV1aPdsDtSr/k=;
+  b=IR3QoIdZS6QuOxu2CSfmI7lTW6XZMCSXmfSUnzD6JmrMfd+FUkw1I5Qk
+   j3z/9CxQjhfHBC5H5YHJ6vqbrTVOveNiJuo22oAQ9yO39DIQrYGxN5Pul
+   i8Ija5U3IX/XG6laWKXG8xJUOX5tEsFvv/t44+QdX8x3yi+OdVzB5BJ4/
+   5iQGTg9FI3dU5yMrD78gVtvNWAFCqHratDh+uUy1puGla/txi46QDAvkj
+   1yCVKQ0ziGHkN9x4IXt49K87ocnaBzXoaeLxTsRet02JzN1lESu/gaAMg
+   JzJXWxoq7AlYycAm5FtH9ZN2AXp/GAnBxHDZ2IKkWK/AQQ0pqVrFhHoV3
+   Q==;
+X-CSE-ConnectionGUID: TBfWgDxaThymQ11azvEH3w==
+X-CSE-MsgGUID: BmqJQrBSTbaD13uaRFajHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="96466202"
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="96466202"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 22:03:34 -0800
+X-CSE-ConnectionGUID: jai394SjQ3yIiusppR3KIg==
+X-CSE-MsgGUID: 3+AukfwqTAm/lsQIqoqF3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="212851590"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 29 Jan 2026 22:03:33 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlhbO-00000000cFK-18wj;
+	Fri, 30 Jan 2026 06:03:30 +0000
+Date: Fri, 30 Jan 2026 14:03:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rory Little <rory@candelatech.com>, Enrico Weigelt <info@metux.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH] gpio: amd-fch: Return 0-1 range for get operation
+Message-ID: <202601301319.Zm4jGCnY-lkp@intel.com>
+References: <20260129222150.486419-1-rory@candelatech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/8] lib/string_kunit: add correctness test for
- strlen()
-To: kernel test robot <lkp@intel.com>, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, akpm@linux-foundation.org,
- kees@kernel.org, andy@kernel.org, ebiggers@kernel.org,
- martin.petersen@oracle.com, herbert@gondor.apana.org.au,
- samuel.holland@sifive.com, ajones@ventanamicro.com, charlie@rivosinc.com,
- conor.dooley@microchip.com, linus.walleij@linaro.org, nathan@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20260129070227.220866-2-jiangfeng@kylinos.cn>
- <202601300014.gbv48Y5D-lkp@intel.com>
-Content-Language: en-US
-From: Feng Jiang <jiangfeng@kylinos.cn>
-In-Reply-To: <202601300014.gbv48Y5D-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129222150.486419-1-rory@candelatech.com>
 
-On 2026/1/30 00:55, kernel test robot wrote:
-> Hi Feng,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on kees/for-next/hardening]
-> [also build test ERROR on akpm-mm/mm-nonmm-unstable akpm-mm/mm-everything linus/master v6.19-rc7 next-20260128]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Feng-Jiang/lib-string_kunit-add-correctness-test-for-strlen/20260129-151036
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-> patch link:    https://lore.kernel.org/r/20260129070227.220866-2-jiangfeng%40kylinos.cn
-> patch subject: [PATCH v6 1/8] lib/string_kunit: add correctness test for strlen()
-> config: x86_64-randconfig-001-20260129 (https://download.01.org/0day-ci/archive/20260130/202601300014.gbv48Y5D-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601300014.gbv48Y5D-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601300014.gbv48Y5D-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> lib/tests/string_kunit.c:116:13: error: call to undeclared function 'PAGE_ALIGN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      116 |         buf_size = PAGE_ALIGN(STRING_TEST_MAX_LEN + STRING_TEST_MAX_OFFSET + 1);
->          |                    ^
->    1 error generated.
-> 
-> 
-> vim +/PAGE_ALIGN +116 lib/tests/string_kunit.c
-> 
+Hi Rory,
 
-Thanks for the report.
+kernel test robot noticed the following build errors:
 
-I apologize for the build error. This was caused by the missing <linux/mm.h> header
-for the PAGE_ALIGN macro in the new test logic. I will include the necessary header
-and fix this in the v7 patch set.
+[auto build test ERROR on brgl/gpio/for-next]
+[also build test ERROR on linus/master v6.19-rc7 next-20260129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->    110	
->    111	static void string_test_strlen(struct kunit *test)
->    112	{
->    113		size_t buf_size;
->    114		char *buf, *s;
->    115	
->  > 116		buf_size = PAGE_ALIGN(STRING_TEST_MAX_LEN + STRING_TEST_MAX_OFFSET + 1);
->    117		buf = vmalloc(buf_size);
->    118		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
->    119	
->    120		memset(buf, 'A', buf_size);
->    121	
->    122		for (size_t offset = 0; offset < STRING_TEST_MAX_OFFSET; offset++) {
->    123			for (size_t len = 0; len <= STRING_TEST_MAX_LEN; len++) {
->    124				s = buf + buf_size - 1 - offset - len;
->    125				s[len] = '\0';
->    126				KUNIT_EXPECT_EQ_MSG(test, strlen(s), len,
->    127					"offset:%zu len:%zu", offset, len);
->    128				s[len] = 'A';
->    129			}
->    130		}
->    131	
->    132		vfree(buf);
->    133	}
->    134	
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Rory-Little/gpio-amd-fch-Return-0-1-range-for-get-operation/20260130-063318
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20260129222150.486419-1-rory%40candelatech.com
+patch subject: [PATCH] gpio: amd-fch: Return 0-1 range for get operation
+config: s390-randconfig-002-20260130 (https://download.01.org/0day-ci/archive/20260130/202601301319.Zm4jGCnY-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301319.Zm4jGCnY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601301319.Zm4jGCnY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpio/gpio-amd-fch.c:128:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     128 |         ret = FIELD_GET(AMD_FCH_GPIO_FLAG_READ, readl_relaxed(ptr));
+         |               ^
+   1 error generated.
+
+
+vim +/FIELD_GET +128 drivers/gpio/gpio-amd-fch.c
+
+   118	
+   119	static int amd_fch_gpio_get(struct gpio_chip *gc,
+   120				    unsigned int offset)
+   121	{
+   122		unsigned long flags;
+   123		int ret;
+   124		struct amd_fch_gpio_priv *priv = gpiochip_get_data(gc);
+   125		void __iomem *ptr = amd_fch_gpio_addr(priv, offset);
+   126	
+   127		spin_lock_irqsave(&priv->lock, flags);
+ > 128		ret = FIELD_GET(AMD_FCH_GPIO_FLAG_READ, readl_relaxed(ptr));
+   129		spin_unlock_irqrestore(&priv->lock, flags);
+   130	
+   131		return ret;
+   132	}
+   133	
 
 -- 
-With Best Regards,
-Feng Jiang
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
