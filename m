@@ -1,177 +1,134 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7F630EF9B
-	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 13:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B7E2BE04B
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 15:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769779816; cv=none; b=dZJSc4K9AfkBjiTFYZNl950s6U+f4AgUrK4Y85xHvk2heGuxlq5V03fVaU5VcBey76BJmY1kpFq0rNrwtGfqerRjWZAr/JvQ8ZjWob/DwtP0ZM4MoPc23NMUPG9PBn4uG5FWXmqKmD60Qtbo4pbCyiWbhUY93BIfniFoz6adexs=
+	t=1769785623; cv=none; b=Qhd3Gq3gifb8gsmC/k/bzVs4wvmkAjdfdAPsmGbafF6W2OhQ6laxAKyuCjM66ujRKbO9kLXAoyUkj82Nl3MPGJBKDCkbAlbhOM+sPCkhT9KXGtT4HK0cKaBvg4Up74pX0IodvaY2vnLi4H17txxzixG0tnJU/xNUdEuOuLrPuLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769779816; c=relaxed/simple;
-	bh=T4dPZtG1oh8ppeo/D7aOCiu7eQficsG0EdVSGiJeJNI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MTvFA2NzPLi4zczyqTqROGxZcmD6K7P0E1NpGmqRtJcmyuKKjbBOcDs0ujGT4eK+a5O7+TP81JMQqC6YGh+ZTYXOQAWtG8hs0HCuT/zg8QM0dfWpTDSZjK0j2zln4chs0/kM+Ez2huuFQT9ojlb5JK1c1d7c4JhyuUcVfJMbzxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kf4n6PI2; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
+	s=arc-20240116; t=1769785623; c=relaxed/simple;
+	bh=8J/ffOpUqzqBEMKpZf6ikhEkgDDSWtVMQo8Xj/m34vk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YxU8WGuOBrVCKCklSxoZvtu3EgbPMS/hhvG+bfiJBd5sblhjiB1cmam7CSQkiASFM0UEhc8AxcqV+EMatnXZ6jPrtmJ9+F2FdTVKAYBc255r0ox+NK68w44nB8fe+rp+MwD5qT+9A775azXCSFhAT39qJci2r2La99iFGXqLafo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AjUkBmyZ; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kf4n6PI2"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-480711d09f1so34382865e9.0
-        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 05:30:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AjUkBmyZ"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48068127f00so18964195e9.3
+        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 07:07:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769779813; x=1770384613; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIZZgTWN+WVkGCe2DzZUi2LmQSShjbtn6Lr33NLpRdc=;
-        b=kf4n6PI2Ou818Y8ZAnRGaN2W6lueAKv4zQyNnLemH8DAfMZSgHosViEYEFgOT98oxa
-         mnTvCLbZFyZQF2YcCBeFNxW1WOurLZNC4nVQ6CkgEoX7Tx50CpU2+j29t+ouSOAqJQSQ
-         eHp2SUGNtdbQ/BA7wgfyUKoTnEGeoypflkf4iGx2RRJu5qh9EDQjCiNtqGCeBG0LC/Xs
-         pqHXo/ajz4Jekge4qO34gLL3NXl/cVsQXXXuhd7R+eRr24T0vvOWyuWTyLAzQjo4DBe2
-         mLr5nr5KA/OWOE/2YGerUC2Ms+yID7wo50cjB9irYRAoHryjlWmWd/Kc/s7Wwe55u3us
-         0i/g==
+        d=gmail.com; s=20230601; t=1769785620; x=1770390420; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zONlo3vJkBl5ujY/5KUHB9vDfxClAt4ztGCRSwPclIk=;
+        b=AjUkBmyZN4YqhjzQzpIjEU1XUB44qSlXEShVvy0oZCrDr6ng590jNefEFnxeSFfXmY
+         o/gx5AgPkFbnH4rGj7sPCrG3ZI7Q5yYLGwedM33WSfRZP1SIAhN3qYp5u8mDpYoQba/T
+         ZQbMBeVcYOybGPoDF9UQ8R6t5Zien/qxPwqWmfNfxON4Dmc4snHS6eRG/2cjcIYykj/T
+         9RwlWtUwHWXVNXiaVBOzCX6hmwKBl9r25Vle2vBxwkYD67pPGQAIyJEJZS5rkuLcbdyE
+         c++Jp7CGcule8gVcvytxKa77Bz60a8RWQ2FQAl33naLwQsr5VY2P/3en6VwhKRJLuPCL
+         SzDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769779813; x=1770384613;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIZZgTWN+WVkGCe2DzZUi2LmQSShjbtn6Lr33NLpRdc=;
-        b=p7D3q2dpbzDOwRdBpy5NNZ5yj2Z5PR2u/QZqHIk5yEXM25P5y6x6UYZxs60orb7/wD
-         yXu5botaxG02yt4q1h0eiHS3t/srR3CHPBjkwck6m22E+I/XQSCXkzoGsxhjdvs4Sam3
-         0n4NR693bHKqeWe6TOJfLkOLbmubU9Gub2j6gSNUPS/gYxq2yKe2WRwO6eLm0seoXsip
-         F810vqjjoV4yPcxRFws6xOq4wU2lnSCpsiM2V7ttiOC/6/+2d6/BpVfzLE1JRSqvySHr
-         wJnuTSK8jOqMZdo/PsAgUVxPklsy/AThyoCFGdC5Ecy9g+Fnts/OZGSU+Wfw6dT0VaYz
-         ggfA==
-X-Forwarded-Encrypted: i=1; AJvYcCWkMNEsw0XpBLREcEb6VEKrZy3wIxSIvpKG0YadlE/K4HcCNS4Z5q+G1IB82jUMhiaqQT/t@lists.linux.dev
-X-Gm-Message-State: AOJu0YwoAKRRtcCIbxckMsEYnEpXpHORdiF21TgL8gjtgw8P4Ra7Nlft
-	4ltI9LQbGJtqDyAz6njDK+GpcLsLuWvx+OYCA3nEsndGZqpDUoYpMPF00ZPtDA5kpCUlV4cRvI0
-	y7A==
-X-Received: from wmot9.prod.google.com ([2002:a05:600c:4509:b0:477:7aa2:99cb])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:c4a3:b0:480:6c75:ddce
- with SMTP id 5b1f17b1804b1-482db49da16mr40851245e9.33.1769779813044; Fri, 30
- Jan 2026 05:30:13 -0800 (PST)
-Date: Fri, 30 Jan 2026 14:28:26 +0100
-In-Reply-To: <20260130132951.2714396-1-elver@google.com>
+        d=1e100.net; s=20230601; t=1769785620; x=1770390420;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zONlo3vJkBl5ujY/5KUHB9vDfxClAt4ztGCRSwPclIk=;
+        b=GWzuuCYIqtmEXwTgJa9oX6PlsTV0Lfdtx8GanmnRvL8xHlKRIrOuplJVwmsHVNfRhU
+         ii+2BMrXUlkc57ofB5QbEren+ocuSdDSmuC1BdNv0+OpDmbPznXV5IPZQ7uIoirqMbU9
+         +5hyCv2I7k8SQk2NMD2CInOuhtY3yuDoM9n81NsA1OuWF9yw0+V/tGV6vplje5b93Qek
+         J5+KenoWCwMT98Jv5Ank8VVL0yCmob5UUDX/bHAx5denX/k7/VGJh/5ai2vwYQoh/uJ6
+         lB6zml9TUBvtnGuGdqZbPG/Dhl8DhgS93IV7b9d3J0lppc//cb+HExRbM8YrcPqZDSuL
+         T17Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXMH7KYDC8dlfEE7QhqTqkEn0Ed0sh6/aCsCnyX5JJSzNqp+5Sl4gbqp0LvKnXiNzmjwFt1@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw8pr3fq4BFZ7rF7mlLBSGlYaFbuLG5D1vV7JLr1d53hJIKiAZK
+	16B3GA8fcgnFWJIwQEKPzzEQx/+UEtq3vcjkbbdcdZ6BJA/AA8u5O2rQ
+X-Gm-Gg: AZuq6aIklQeLzffF9aUISMh7v+XxrFCVn1XvQM4bGLFvUBZ+6+Iv2QhR/Oji8C0RNR+
+	atJ1ZY/Cz0/0bNqieEH7WBBS4R9wl6XpR0tjsAFbaHKdb7iL/QkcA+pQDJzhDOULh16JmG2nj0Z
+	Fz5yTSHU+OsfI4TnPIOOcPD16KplRAT6TMEVqKBtVyry4D57bgdldI8oKerILw8sXvCozXZcwIU
+	NFPMsRDHIu2Kf6o+DSWbflHlEkimw0OA5uxfc9bulvGtpou3zfXgh7psX3PQU9xHdZmzYTsEXc0
+	sEMT/6t9E97NYrAepeeOXf7/UuLakP++xmsbxU7gGqBz2K0PYQl7G6uXgNBVAdoN3HH4Jpz0WHt
+	B7L2LfaCYTTteAk2caBhYYbGz9YwRtM4ldJ22ilAlB8ofp6xAd3gcvWBWXOiA7x4yTRgTKseFnH
+	0/TszV+7cn3Ey36KS1Qq2EGR/bFKdY6S84v8kO17+iu00xIjlFeq4J
+X-Received: by 2002:a05:600c:4443:b0:477:79c7:8994 with SMTP id 5b1f17b1804b1-482db4a0fb8mr41870345e9.30.1769785619829;
+        Fri, 30 Jan 2026 07:06:59 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10e4762sm22183847f8f.6.2026.01.30.07.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jan 2026 07:06:59 -0800 (PST)
+Date: Fri, 30 Jan 2026 15:06:58 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>,
+ Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Boqun
+ Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, Bart Van
+ Assche <bvanassche@acm.org>, llvm@lists.linux.dev, Catalin Marinas
+ <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Boqun Feng <boqun@kernel.org>
+Subject: Re: [PATCH v3 1/3] arm64: Fix non-atomic __READ_ONCE() with
+ CONFIG_LTO=y
+Message-ID: <20260130150658.617b65ad@pumpkin>
+In-Reply-To: <20260130132951.2714396-2-elver@google.com>
+References: <20260130132951.2714396-1-elver@google.com>
+	<20260130132951.2714396-2-elver@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260130132951.2714396-1-elver@google.com>
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260130132951.2714396-4-elver@google.com>
-Subject: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
-	David Laight <david.laight.linux@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-When enabling Clang's Context Analysis (aka. Thread Safety Analysis) on
-kernel/futex/core.o (see Peter's changes at [1]), in arm64 LTO builds we
-could see:
+On Fri, 30 Jan 2026 14:28:24 +0100
+Marco Elver <elver@google.com> wrote:
 
-| kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
-|      982 | }
-|          | ^
-|    kernel/futex/core.c:976:2: note: spinlock acquired here
-|      976 |         spin_lock(lock_ptr);
-|          |         ^
-| kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
-|      982 | }
-|          | ^
-|    kernel/futex/core.c:966:6: note: spinlock acquired here
-|      966 | void futex_q_lockptr_lock(struct futex_q *q)
-|          |      ^
-|    2 warnings generated.
+> The implementation of __READ_ONCE() under CONFIG_LTO=y incorrectly
+> qualified the fallback "once" access for types larger than 8 bytes,
+> which are not atomic but should still happen "once" and suppress common
+> compiler optimizations.
+> 
+> The cast `volatile typeof(__x)` applied the volatile qualifier to the
+> pointer type itself rather than the pointee. This created a volatile
+> pointer to a non-volatile type, which violated __READ_ONCE() semantics.
+> 
+> Fix this by casting to `volatile typeof(*__x) *`.
+> 
+> With a defconfig + LTO + debug options build, we see the following
+> functions to be affected:
+> 
+> 	xen_manage_runstate_time (884 -> 944 bytes)
+> 	xen_steal_clock (248 -> 340 bytes)
+> 	  ^-- use __READ_ONCE() to load vcpu_runstate_info structs
+> 
+> Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
+> Cc: <stable@vger.kernel.org>
+> Reviewed-by: Boqun Feng <boqun@kernel.org>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Where we have:
+I found this in some testing (on godbolt), so:
 
-	extern void futex_q_lockptr_lock(struct futex_q *q) __acquires(q->lock_ptr);
-	..
-	void futex_q_lockptr_lock(struct futex_q *q)
-	{
-		spinlock_t *lock_ptr;
+Tested-by: David Laight <david.laight.linux@gmail.com>
 
-		/*
-		 * See futex_unqueue() why lock_ptr can change.
-		 */
-		guard(rcu)();
-	retry:
->>		lock_ptr = READ_ONCE(q->lock_ptr);
-		spin_lock(lock_ptr);
-	...
-	}
-
-At the time of the above report (prior to removal of the 'atomic' flag),
-Clang Thread Safety Analysis's alias analysis resolved 'lock_ptr' to
-'atomic ?  __u.__val : q->lock_ptr' (now just '__u.__val'), and used
-this as the identity of the context lock given it cannot "see through"
-the inline assembly; however, we want 'q->lock_ptr' as the canonical
-context lock.
-
-While for code generation the compiler simplified to '__u.__val' for
-pointers (8 byte case -> 'atomic' was set), TSA's analysis (a) happens
-much earlier on the AST, and (b) would be the wrong deduction.
-
-Now that we've gotten rid of the 'atomic' ternary comparison, we can
-return '__u.__val' through a pointer that we initialize with '&x', but
-then update via a pointer-to-pointer. When READ_ONCE()'ing a context
-lock pointer, TSA's alias analysis does not invalidate the initial alias
-when updated through the pointer-to-pointer, and we make it effectively
-"see through" the __READ_ONCE().
-
-Code generation is unchanged.
-
-Link: https://lkml.kernel.org/r/20260121110704.221498346@infradead.org [1]
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
-Cc: Peter Zijlstra <peterz@infradead.org>
-Tested-by: Boqun Feng <boqun@kernel.org>
-Signed-off-by: Marco Elver <elver@google.com>
----
-v3:
-* Use 'typeof(*__ret)'.
-* Commit message.
-
-v2:
-* Rebase.
----
- arch/arm64/include/asm/rwonce.h | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 42c9e8429274..b7de74d4bf07 100644
---- a/arch/arm64/include/asm/rwonce.h
-+++ b/arch/arm64/include/asm/rwonce.h
-@@ -45,8 +45,12 @@
-  */
- #define __READ_ONCE(x)							\
- ({									\
--	typeof(&(x)) __x = &(x);					\
--	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
-+	auto __x = &(x);						\
-+	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
-+	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
-+	auto __retp = &__ret;						\
-+	union { typeof(*__ret) __val; char __c[1]; } __u;		\
-+	*__retp = &__u.__val;						\
- 	switch (sizeof(x)) {						\
- 	case 1:								\
- 		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
-@@ -71,7 +75,7 @@
- 	default:							\
- 		__u.__val = *(volatile typeof(*__x) *)__x;		\
- 	}								\
--	__u.__val;							\
-+	*__ret;								\
- })
- 
- #endif	/* !BUILD_VDSO */
--- 
-2.53.0.rc1.225.gd81095ad13-goog
+> ---
+>  arch/arm64/include/asm/rwonce.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> index 78beceec10cd..fc0fb42b0b64 100644
+> --- a/arch/arm64/include/asm/rwonce.h
+> +++ b/arch/arm64/include/asm/rwonce.h
+> @@ -58,7 +58,7 @@
+>  	default:							\
+>  		atomic = 0;						\
+>  	}								\
+> -	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);\
+> +	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(*__x) *)__x);\
+>  })
+>  
+>  #endif	/* !BUILD_VDSO */
 
