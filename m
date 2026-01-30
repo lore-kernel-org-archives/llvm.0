@@ -1,67 +1,96 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6CB389DE5
-	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 23:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769816091; cv=none; b=dhPJAFamVEqD8YHpg1e73QDQHfMrsFlRgdTlXKwv/2q//BYPTSgJBCjR02Ljwpxk7Qmg3LlYxcRFDaTiiCS0SddXi2GgkXoXNnDSIVgZ7bzd99hu0OIKpSY3/XxGQzB4p6ulid4hGymRhIph2MTm7bdGytzeKcRPT6sdb+hk1dE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769816091; c=relaxed/simple;
-	bh=f3IwAF4xFUnZiQ0qPUpCQZ3A9awCCpK1Sq8wBjN9MYU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qToS19zv3TXRAOSTaMKahkS4x7RbO4VpQiJHKAimULYQJCPsA4i0CdzWOZKcPaKyFejU7KgNHlxAXwIs3Yay4OMVjv47vnPuw3w48qVGxwRcdxQV/z0STh0bfXGl+2TrNJCGrzY+Cf/Tjvi8jtog43rT5NNEZB/4a1L8A/kXpCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CY2oz0pV; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A5A38A9CC
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 23:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769816301; cv=pass; b=UUPQ/VRT9dZb/rA6tYWI09z4Ak8/txdcJSaQwHL5s5x/cJtP5isqr5zFcXreYMOl9otFz3pshLnyMraqvUv+DtXH67bsK5YQtOmHxmu1GCS6tpGk+iyGoy9MBBPzQlZ7geosow9FfTdiWXmYjeA4JjUuo+SC4RR/n2fkHRHKgDQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769816301; c=relaxed/simple;
+	bh=vARHmrbpjp0NUZZnBSeG9pGjEr10ZhXrYOjx34K528Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FgOaOvjQXyM50QaoLOb1BsgdEtNLsn4MismGAlijfxpSZ33TIATFLcNjnyVSq8M1xHBIUYZRuxlpglMK3o94nXiuGliKl9Snj4eQLL2B4J10PVNtYoWyzB28YfBH1B+3bbZIjZ5kKdHzThBXpEulatPDBNTODXfb7qaNJjzIWUc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V8pUw6oG; arc=pass smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CY2oz0pV"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b74766fae7so3261731eec.0
-        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 15:34:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V8pUw6oG"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a76b39587aso16825ad.0
+        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 15:38:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769816299; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MU8qDdcKfcA1JmO1oRN3Q1Ilh3vHEv/yn4c+JJNr6g7RQDYgT2t/hW0EGDibIeyfPi
+         BAhgacXxTTox6f8PXD+Ho8fvHDzito9XnLpCEEFvqwF4ZCCmV0pc30h1BwSEBSuluYG+
+         k5zYFLa9BnISs8ya+luOIYXr1Z0hEYL8/Q6BLlabFEZ+y8P2OFMcg1o/UI5lI3CjxdT3
+         c+ZvDcmTHLLX8YOYemUrpcNHJJbnen9R5CbkLP1IpIavCGabCPUL6UOJuyp4Ng/El3wL
+         zoyG6PmoTM7GzINwgbTrsaox/ibP2YjJCwtLfm7mmLadULXCuRwDAnZfNlxD2NFsoPCB
+         9/Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MJCN8xuq+y9xjwknttiWW8wKn3JGIxcEWWCJYUOMy00=;
+        fh=W1k188V2njfcvkoC6omNfmOHSQzr5fHrl5wpCSz3l54=;
+        b=POWvtElnSfz23dR5oEhQWvJHX/pNmm+DX8NE/2UA8ylxHfvwjsflng+Nppo700rHPb
+         H3W1i8HvFCbjtUkGIxdKeksaIIRm4Fc7egee+PdkS4y6E1wYfjupNDNlW9FlMg8Wzu1r
+         mSINAGhWA4nYfSjPWHTOSdnV0u2lUGF1xfdV8ney+WKJrPcH54uqNHDZKt6rFuNf+w0I
+         8RsMdGTwHIzkGY3EIbRs7b4x4fWfNSr+p9h7awOd8FcAhnffkY7Dthpht84AXcKJrNK4
+         GTcAOplrLtfXhXocw6DYWobcekBNz3LwSvTY7bwU5qfsu/1g9J9MzEggtcPe7wlYxwsJ
+         +9Fw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769816089; x=1770420889; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WXtY1sGpzNmP+KMWAj1QK4gOAMZ7b1jw8oU2SjTVnA=;
-        b=CY2oz0pVyNIcOQnwXJ8euH9LUXc6GxX9gai1Hi+cmViAnri2M4tJfv4yjJcIRSUFrz
-         y6BOGXj9tbUAn17/Y1UV7TzneV7vBFD/XmT/4PO9k+fFoCmLzx8n129mWAqRHsphoETD
-         ew29dXm4h6eY0hwrb/1g1EmnIf3ebsdwb50vI61LmOV1xew9q7s5KOEe91YldHX9WGMr
-         vVbHPdkwpO4JScgY6KDfPUGCSySsT85VFUNNtxcxYmFs/xK5Cx1Z97DAx0U+VZbn5GHX
-         Wnhy3u559B0O08v6VoKwV2RAacwyCVl4Vqh4ff4k/lyiJpRBe+onfiPL7gpPFXeaBLEP
-         j1YQ==
+        d=google.com; s=20230601; t=1769816299; x=1770421099; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MJCN8xuq+y9xjwknttiWW8wKn3JGIxcEWWCJYUOMy00=;
+        b=V8pUw6oGl6L2SUdgXVNkTtJvDo7vuQ35pBEoa4J2bFO16D2N8S3/rS9KTX1MLW9z1d
+         JEISrQLbwBKTAz1QDfK67Qn3arZ1VyuGHqWNYB1SLFMTQabfnk/D4+O7yreEvhjfZkZo
+         JlOS+JETH408vk/SLvk8raR9/t53PyBbbgEUyJfijlGDH2GVu9zKxM0/PFHK7SHkSzLQ
+         GADYYek8KSlua9HYhPI67PghSakhcJiVrHhmQkvvnnvDMFeY4HRy0aFbFWrsHgPp+W/q
+         7vWoxo7P8BmEgsAmluOwCRTEJJNBHmiGMKtf01rNNpLEvIu+xpdvi/pq4UJD+uAcTHQA
+         ZQWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769816089; x=1770420889;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WXtY1sGpzNmP+KMWAj1QK4gOAMZ7b1jw8oU2SjTVnA=;
-        b=vimQfljuMOmTXabrEXC6i3gTzmbZLZbOATTT0tjSat4kzIfw3EDlM6sJifULRSdBm9
-         WloHSD9l+G3oKec0dyYqejM+BHQpQDluMBE0VDya6Zy75qctUdEbDY7ndTidl9BHLPd1
-         XrzvZzlDE/zz7+Z8S9CZYcEWDwNmouCl3J2IsfuRnDjgbpznZSYqczuoSPfIcpzqw3Q6
-         gt1k/qEXVeOcBRl0BUMFs0Z4Ddpk2KJlAEoFvw1usSyelpA0oO2s8czRP/WmSYlhZHeK
-         mVG6MIiVAqD57OA5L94VVye5gkCQLcUSFJmaaUx0AALNIg3g4ZDONBEigGcnGww63g/s
-         EAqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULDRuqfIs+t0VxkUed78f5fPR0GLFYtHs9f9zU6rhVIKrgBhxEWpmmbR64zdllNAN4aJ5H@lists.linux.dev
-X-Gm-Message-State: AOJu0YzWL/gi1Ua4ReAYkoXJAtUzhIO/iPJQd84WcVtOcJ6QDBdZO8IS
-	e9uHul03B6AJfk23C3Nt2RrtT2pjYMQ3vPWBqslq2q0SVSR1G2TpWw9mUy7uN5Yj9RCDJQcaFtN
-	JhnpbUTXNoQ==
-X-Received: from dysc40.prod.google.com ([2002:a05:7300:3b28:b0:2b6:b71d:d4f0])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:fb83:b0:2a4:3594:72d7
- with SMTP id 5a478bee46e88-2b7c863a245mr2711669eec.6.1769816088831; Fri, 30
- Jan 2026 15:34:48 -0800 (PST)
-Date: Fri, 30 Jan 2026 15:34:39 -0800
-In-Reply-To: <20260130233439.647447-1-irogers@google.com>
+        d=1e100.net; s=20230601; t=1769816299; x=1770421099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MJCN8xuq+y9xjwknttiWW8wKn3JGIxcEWWCJYUOMy00=;
+        b=QBVaRl9OuTG04YzwcXjYM+ihCpLrznKYUgi+5paenTcZYxriScS4crog9mnO7g54Eb
+         xQ0CeOPUkfbSceKm+Zq6ZKNZsP+iwASgpUc1OHPxXRFSDGKbfUpDcy9xI7qE/yWP0b01
+         vFmagmfkBzhuhl7J84W5spXv8tHX0VxehX65cRblCApPdID2bfX4dIlr/3xkPuy5Z1Kv
+         cS1/F3tpxyQPGkfXpWnPxXmOB65pbIdnjeKDDIn1qg+H68ZqzHfeSoRHAcd0bsB5r5oO
+         5UeZ2l6Px6OJakp09i83dL73WRf0sDeUJ3vMY3R04naCu4DuIr+KIEISHPg5eSbi5Ij9
+         5P3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXaQgCAJyBLdIkhHE8XpLadk9J2y690GBpbTG2pTSGUALF9t8CR9KGBqIFnA8pv+Wn8DbFJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YwtlsNuMDCyzHqxqCZY93XRRslG5K0rX1nsYmBzRfTORdpL13SR
+	sVsFoZJh+9GIYGk2IOUNT7uhxZ8YAhPqxZLIFuKDpBGEId+ZJrr3hQWc66EEWSV91PJFJVhua0E
+	Jp8Up2RuDNH/cdiAVtx8S8vLXegMrz0k1JRTkUh1K
+X-Gm-Gg: AZuq6aKLwWv0qmhAQC2VT0RZdYTUVhFoZdOyViMdZ1mBmgsLooZKmV4Bu544tHBz5tv
+	TksBl/mfWvK4+R0ux076hfP5MP+fzGf0z9FW813RLT+rj6zZVhNs54QhI0M7VJZxPQbOei9upj/
+	IvNWXMk4St7fTT+20eZNoTTWcQrwXPzNAnZCbKHZ4U6MVSKgDLiGC5g84be52h+XmsSkUHznpeh
+	zmP3HNnW1mxVlXPGEIcc/i5jD1o6btcziB1aWgtFMMc0qTiCGRNEgET5Voq7eo98LjG/TqY8mRE
+	LjhwvRfpSn9st+G2zwb5yf9a
+X-Received: by 2002:a17:902:eccd:b0:2a7:516d:18e2 with SMTP id
+ d9443c01a7336-2a8f5089f0emr517945ad.9.1769816298400; Fri, 30 Jan 2026
+ 15:38:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260130233439.647447-1-irogers@google.com>
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260130233439.647447-4-irogers@google.com>
-Subject: [PATCH v10 3/3] perf llvm: Mangle libperf-llvm.so function names
+MIME-Version: 1.0
+References: <20260127062302.544809-1-irogers@google.com> <20260127062302.544809-2-irogers@google.com>
+ <aXpZvOZyQLIz5gTF@x1> <CAP-5=fX2+UMzhMCEBVtA0Es_-T7QNxn2c7rPJi4se6bamLsD=w@mail.gmail.com>
+In-Reply-To: <CAP-5=fX2+UMzhMCEBVtA0Es_-T7QNxn2c7rPJi4se6bamLsD=w@mail.gmail.com>
 From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+Date: Fri, 30 Jan 2026 15:38:06 -0800
+X-Gm-Features: AZwV_QiOzgTOxyCMSW7YHd8NIzMy_n57cfgYjbsKCS8zKf_xcLlC9SvsHlO2vks
+Message-ID: <CAP-5=fWczG8j+MP_w35w9=hZ0oMwoLVEi7wGb9rSHxJHZ5M=6A@mail.gmail.com>
+Subject: Re: [PATCH v9 1/3] perf capstone: Support for dlopen-ing libcapstone.so
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Namhyung Kim <namhyung@kernel.org>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
@@ -71,163 +100,755 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Collin Funk <collin.funk1@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
 	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev
-Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For a function like llvm_addr2line having the libperf-llvm.so exported
-symbol named llvm_addr2line meant that the perf llvm_addr2line could
-sometimes erroneously be returned. This led to infinite recursion and
-eventual stack overflow. To avoid this conflict add a new
-BUILDING_PERF_LLVMSO when libperf-llvm.so is being built and use it to
-alter the behavior of MANGLE_PERF_LLVM_API, a macro that prefixes the
-name when libperf-llvm.so is being built. The prefixed named avoids
-the name collision.
+On Fri, Jan 30, 2026 at 10:59=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> On Wed, Jan 28, 2026 at 10:47=E2=80=AFAM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > On Mon, Jan 26, 2026 at 10:23:00PM -0800, Ian Rogers wrote:
+> > > If perf wasn't built against libcapstone, no HAVE_LIBCAPSTONE_SUPPORT=
+,
+> > > support dlopen-ing libcapstone.so and then calling the necessary
+> > > functions by looking them up using dlsym. Reverse engineer the types
+> > > in the API using pahole, adding only what's used in the perf code or
+> > > necessary for the sake of struct size and alignment.
+> >
+> > Trying to test this, I built it with NO_CAPSTONE=3D1 but with:
+> >
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ perf config
+> > annotate.disassemblers=3Dcapstone
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+> >
+> > And:
+> >
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ rpm -qa | grep capstone
+> > capstone-5.0.5-7.fc43.x86_64
+> > capstone-devel-5.0.5-7.fc43.x86_64
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+> >
+> > It manages to build with the needed dlopen magic, etc and ends up
+> > calling dlopen, locates the .so, loads it, etc, but eventually fails:
+> >
+> >
+> > Breakpoint 1, perf_cs_open (arch=3DCS_ARCH_X86, mode=3DCS_MODE_64, hand=
+le=3D0x7fffffff93a8) at util/capstone.c:152
+> > 152     {
+> > (gdb) bt
+> > #0  perf_cs_open (arch=3DCS_ARCH_X86, mode=3DCS_MODE_64, handle=3D0x7ff=
+fffff93a8) at util/capstone.c:152
+> > #1  0x00000000005e2eb8 in capstone_init (machine=3D0x1083b98, cs_handle=
+=3D0x7fffffff93a8, is64=3Dtrue, disassembler_style=3Dtrue) at util/capstone=
+.c:278
+> > #2  0x00000000005e37f7 in symbol__disassemble_capstone (filename=3D0x7f=
+ffffff96f0 "/home/acme/.debug/.build-id/cc/315df11334de01fb444465f08f6bca45=
+a12bd2/elf", sym=3D0x10b0d20, args=3D0x7fffffffa770)
+> >     at util/capstone.c:489
+> > #3  0x00000000005ee303 in symbol__disassemble (sym=3D0x10b0d20, args=3D=
+0x7fffffffa770) at util/disasm.c:1622
+> > #4  0x00000000005d25be in symbol__annotate (ms=3D0x10a4dd0, evsel=3D0x1=
+0842f0, parch=3D0x0) at util/annotate.c:1056
+> > #5  0x00000000005d4808 in hist_entry__tty_annotate (he=3D0x10a4d30, evs=
+el=3D0x10842f0) at util/annotate.c:1710
+> > #6  0x0000000000404544 in hist_entry__stdio_annotate (he=3D0x10a4d30, e=
+vsel=3D0x10842f0, ann=3D0x7fffffffcae0) at builtin-annotate.c:332
+> > #7  0x000000000040516c in hists__find_annotations (hists=3D0x10845b0, e=
+vsel=3D0x10842f0, ann=3D0x7fffffffcae0) at builtin-annotate.c:545
+> > #8  0x000000000040569c in __cmd_annotate (ann=3D0x7fffffffcae0) at buil=
+tin-annotate.c:655
+> > #9  0x000000000040685e in cmd_annotate (argc=3D0, argv=3D0x7fffffffe070=
+) at builtin-annotate.c:949
+> > #10 0x00000000004cbebb in run_builtin (p=3D0xff2cb0 <commands+432>, arg=
+c=3D2, argv=3D0x7fffffffe070) at perf.c:348
+> > #11 0x00000000004cc10d in handle_internal_command (argc=3D2, argv=3D0x7=
+fffffffe070) at perf.c:398
+> > #12 0x00000000004cc269 in run_argv (argcp=3D0x7fffffffdeec, argv=3D0x7f=
+ffffffdee0) at perf.c:442
+> > #13 0x00000000004cc53d in main (argc=3D2, argv=3D0x7fffffffe070) at per=
+f.c:549
+> > (gdb) n
+> > 159             if (!fn_init) {
+> > (gdb) n
+> > 160                     fn =3D dlsym(perf_cs_dll_handle(), "cs_open");
+> > (gdb) n
+> > Downloading 8.80 M separate debug info for /usr/lib64/libcapstone.so
+> > Downloading 2.02 M separate debug info for /home/acme/.cache/debuginfod=
+_client/6f0ac051dccbc6a7a322a5950c4955eca60e8498/debuginfo
+> > 161                     if (!fn)
+> > (gdb) p fn
+> > $1 =3D (enum cs_err (*)(enum cs_arch, enum cs_mode, csh *)) 0x7fffecad7=
+cd0 <cs_open>
+> > (gdb) n
+> > 163                     fn_init =3D true;
+> > (gdb) n
+> > 165             if (!fn)
+> > (gdb) n
+> > 167             return fn(arch, mode, handle);
+> > (gdb) n
+> > 169     }
+> > (gdb) n
+> > capstone_init (machine=3D0x1083b98, cs_handle=3D0x7fffffff93a8, is64=3D=
+true, disassembler_style=3Dtrue) at util/capstone.c:283
+> > 283             if (machine__normalized_is(machine, "x86")) {
+> > (gdb) n
+> > 289                     if (disassembler_style)
+> > (gdb) n
+> > 290                             perf_cs_option(*cs_handle, CS_OPT_SYNTA=
+X, CS_OPT_SYNTAX_ATT);
+> > (gdb) n
+> > 295                     perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OP=
+T_ON);
+> > (gdb) n
+> > 298             return 0;
+> > (gdb) n
+> > 299     }
+> > (gdb) n
+> > symbol__disassemble_capstone (filename=3D0x7fffffff96f0 "/home/acme/.de=
+bug/.build-id/cc/315df11334de01fb444465f08f6bca45a12bd2/elf", sym=3D0x10b0d=
+20, args=3D0x7fffffffa770) at util/capstone.c:493
+> > 493             needs_cs_close =3D true;
+> > (gdb) n
+> > 495             free_count =3D count =3D perf_cs_disasm(handle, buf, bu=
+f_len, start, buf_len, &insn);
+> > (gdb) n
+> > 496             for (i =3D 0, offset =3D 0; i < count; i++) {
+> > (gdb) p count
+> > $2 =3D 32
+> > (gdb) n
+> > 501                                         insn[i].mnemonic, insn[i].o=
+p_str);
+> > (gdb) n
+> > 499                     printed =3D scnprintf(disasm_buf, sizeof(disasm=
+_buf),
+> > (gdb) n
+> > 502                     print_capstone_detail(&insn[i], disasm_buf + pr=
+inted,
+> > (gdb) n
+> > 503                                           sizeof(disasm_buf) - prin=
+ted, args,
+> > (gdb) n
+> > 502                     print_capstone_detail(&insn[i], disasm_buf + pr=
+inted,
+> > (gdb) n
+> > 506                     args->offset =3D offset;
+> > (gdb) n
+> > 507                     args->line =3D disasm_buf;
+> > (gdb) n
+> > 509                     dl =3D disasm_line__new(args);
+> > (gdb) n
+> > 510                     if (dl =3D=3D NULL)
+> > (gdb) n
+> > 511                             goto err;
+> >
+> > While doing it without NO_CAPSTONE=3D1, i.e. dyn linking against capsto=
+ne
+> > seems to work:
+> >
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ perf config
+> > annotate.disassemblers=3Dcapstone
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ ldd ~/bin/perf | grep capstone
+> >         libcapstone.so.5 =3D> /usr/lib64/libcapstone.so.5 (0x00007f1f94=
+588000)
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ perf -vv | grep capst
+> >            libcapstone: [ on  ]  # HAVE_LIBCAPSTONE_SUPPORT
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ perf annotate -v | head
+> > symbol__disassemble: filename=3D/home/acme/.debug/.build-id/cc/315df113=
+34de01fb444465f08f6bca45a12bd2/elf, sym=3Dcache_rpath, start=3D0x7efd8294fd=
+90, end=3D0x7efd8294fdfc
+> > annotating [0x1d043db0] /usr/lib64/ld-linux-x86-64.so.2 : [0x1d0c2b50] =
+                   cache_rpath
+> > Disassembled with capstone
+> > Open Debuginfo file: /home/acme/.debug/.build-id/cc/315df11334de01fb444=
+465f08f6bca45a12bd2/elf
+> > symbol__disassemble: filename=3D/home/acme/.debug/.build-id/cc/315df113=
+34de01fb444465f08f6bca45a12bd2/elf, sym=3D_dl_start, start=3D0x7efd82967990=
+, end=3D0x7efd82968069
+> > annotating [0x1d043db0] /usr/lib64/ld-linux-x86-64.so.2 : [0x1d0c6470] =
+                     _dl_start
+> > Disassembled with capstone
+> > Open Debuginfo file: /home/acme/.debug/.build-id/cc/315df11334de01fb444=
+465f08f6bca45a12bd2/elf
+> >  Percent |      Source code & Disassembly of ld-linux-x86-64.so.2 for c=
+pu/cycles/Pu (1 samples, percent: local period)
+> > -----------------------------------------------------------------------=
+-----------------------------------------------
+> >                             6d93: 1
+> >                    h->nr_samples: 1
+> >          : 0    0x6d90 <cache_rpath>:
+> >     0.00 :   6d90:       movq    (%rsi), %rax
+> >   100.00 :   6d93:       movq    %rsi, %r8
+> >     0.00 :   6d96:       movq    %rcx, %r9
+> >     0.00 :   6d99:       cmpq    $-1, %rax
+> >     0.00 :   6d9d:       je      0x6df7
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+> >
+> > What am I missing?
+> >
+> > Fedora 43.
+> >
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$ git log --oneline -20
+> > e88f915e5f2a809b (HEAD -> perf-tools-next) perf llvm: Mangle libperf-ll=
+vm.so function names
+> > cf0b92a9652719c1 perf llvm: Support for dlopen-ing libLLVM.so
+> > b8bf08b8e4e22c39 perf capstone: Support for dlopen-ing libcapstone.so
+> > e205952db7717557 perf jevents: Validate that all names given an Event
+> > 82e53e7ae09a054b perf jevents: Add cycles breakdown metric for arm64/AM=
+D/Intel
+> > e74f72a7e2178233 perf jevents: Add mesh bandwidth saturation metric for=
+ Intel
+> > 5dc81578ad77c298 perf jevents: Add upi_bw metric for Intel
+> > 6ec3058e709cc635 perf jevents: Add local/remote miss latency metrics fo=
+r Intel
+> > 1fee2701a7d35fa7 perf jevents: Add C-State metrics from the PCU PMU for=
+ Intel
+> > 2166b44be9384209 perf jevents: Add dir breakdown metrics for Intel
+> > cde9c1a5d92520a8 perf jevents: Add local/remote "mem" breakdown metrics=
+ for Intel
+> > 130f4245af99e140 perf jevents: Add mem_bw metric for Intel
+> > 426b8442898de9af perf jevents: Add Miss Level Parallelism (MLP) metric =
+for Intel
+> > d666f0172ab306fa perf jevents: Add FPU metrics for Intel
+> > 2f3d6ea05deca7c1 perf jevents: Add context switch metrics for Intel
+> > 59341f4e171170d3 perf jevents: Add ILP metrics for Intel
+> > d80edef23124baff perf jevents: Add load store breakdown metrics ldst fo=
+r Intel
+> > 7413633e255cb02d perf jevents: Add L2 metrics for Intel
+> > cd1c6a487407a350 perf jevents: Add ports metric group giving utilizatio=
+n on Intel
+> > 397fdb3a24435f55 perf jevents: Add software prefetch (swpf) metric grou=
+p for Intel
+> > =E2=AC=A2 [acme@toolbx perf-tools-next]$
+>
+> I can repro the issue. I'm noticing that the patch has:
+> CS_ARCH_X86 =3D 3,
+> but that doesn't match here:
+> https://github.com/capstone-engine/capstone/blob/next/include/capstone/ca=
+pstone.h#L90
+> where X86 now has value 4. Fixing up the values I still get the issue
+> and so more exploration is necessary. Given capstone's ABI isn't
+> stable we may not be able to use pahole constants and require a header
+> file like Namhyung asked for.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf           |  3 ++-
- tools/perf/util/llvm-c-helpers.cpp | 29 ++++++++++++++++++-----------
- tools/perf/util/llvm-c-helpers.h   | 24 ++++++++++++++++--------
- 3 files changed, 36 insertions(+), 20 deletions(-)
+I sent out a v10 that switched libcapstone to using capstone.h and
+needing a LIBCAPSTONE_DLOPEN=3D1 flag setting to use dlopen:
+https://lore.kernel.org/lkml/20260130233439.647447-1-irogers@google.com/
+I didn't so similar for LLVM as the number of definitions was much
+smaller and the ABI looks more stable.
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 525025af1530..5b634efbead0 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -996,7 +996,8 @@ $(LIBSYMBOL)-clean:
- 	$(Q)$(RM) -r -- $(LIBSYMBOL_OUTPUT)
- 
- ifdef LIBLLVM_DYNAMIC
--LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS)) -DHAVE_LIBLLVM_SUPPORT
-+LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS))
-+LIBPERF_LLVM_CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT -DBUILDING_PERF_LLVMSO
- LIBPERF_LLVM_LIBS = -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM) -lstdc++
- 
- $(OUTPUT)$(LIBPERF_LLVM): util/llvm-c-helpers.cpp
-diff --git a/tools/perf/util/llvm-c-helpers.cpp b/tools/perf/util/llvm-c-helpers.cpp
-index 5a6f76e6b705..8cea380be5c2 100644
---- a/tools/perf/util/llvm-c-helpers.cpp
-+++ b/tools/perf/util/llvm-c-helpers.cpp
-@@ -99,10 +99,12 @@ static int extract_file_and_line(const DILineInfo &line_info, char **file,
- #endif
- 
- extern "C"
--int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
--		   char **file __maybe_unused, unsigned int *line __maybe_unused,
--		   bool unwind_inlines __maybe_unused,
--		   llvm_a2l_frame **inline_frames __maybe_unused)
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name __maybe_unused,
-+                                         u64 addr __maybe_unused,
-+                                         char **file __maybe_unused,
-+                                         unsigned int *line __maybe_unused,
-+                                         bool unwind_inlines __maybe_unused,
-+                                         llvm_a2l_frame **inline_frames __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -177,7 +179,8 @@ int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
- 		if (!handle)
- 			return 0;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_addr2line"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_addr2line)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_addr2line\n");
- 		fn_init = true;
-@@ -215,8 +218,9 @@ make_symbol_relative_string(struct dso *dso, const char *sym_name,
- #endif
- 
- extern "C"
--char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -242,7 +246,8 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_code"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_code)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_code\n");
- 		fn_init = true;
-@@ -256,8 +261,9 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- }
- 
- extern "C"
--char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -283,7 +289,8 @@ char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_data"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_data)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_data\n");
- 		fn_init = true;
-diff --git a/tools/perf/util/llvm-c-helpers.h b/tools/perf/util/llvm-c-helpers.h
-index d2b99637a28a..cfcfd540cdae 100644
---- a/tools/perf/util/llvm-c-helpers.h
-+++ b/tools/perf/util/llvm-c-helpers.h
-@@ -13,6 +13,14 @@
- extern "C" {
- #endif
- 
-+/* Support name mangling so that libperf_llvm.so's names don't match those in perf. */
-+#ifdef BUILDING_PERF_LLVMSO
-+#define MANGLE_PERF_LLVM_API(x) PERF_LLVM_SO_ ## x
-+#else
-+#define MANGLE_PERF_LLVM_API(x) x
-+#endif
-+#define MANGLE_PERF_LLVM_API_STR(x) "PERF_LLVM_SO_" #x
-+
- struct dso;
- 
- struct llvm_a2l_frame {
-@@ -37,12 +45,12 @@ struct llvm_a2l_frame {
-  * a newly allocated array with that length. The caller is then responsible
-  * for freeing both the strings and the array itself.
-  */
--int llvm_addr2line(const char* dso_name,
--                   u64 addr,
--                   char** file,
--                   unsigned int* line,
--                   bool unwind_inlines,
--                   struct llvm_a2l_frame** inline_frames);
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name,
-+					 u64 addr,
-+					 char **file,
-+					 unsigned int *line,
-+					 bool unwind_inlines,
-+					 struct llvm_a2l_frame **inline_frames);
- 
- /*
-  * Simple symbolizers for addresses; will convert something like
-@@ -50,8 +58,8 @@ int llvm_addr2line(const char* dso_name,
-  *
-  * The returned value must be freed by the caller, with free().
-  */
--char *llvm_name_for_code(struct dso *dso, const char *dso_name, u64 addr);
--char *llvm_name_for_data(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso, const char *dso_name, u64 addr);
- 
- #ifdef __cplusplus
- }
--- 
-2.53.0.rc1.225.gd81095ad13-goog
+Thanks,
+Ian
 
+> Thanks,
+> Ian
+>
+> > - Arnaldo
+> >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/util/capstone.c | 285 ++++++++++++++++++++++++++++++++---=
+--
+> > >  1 file changed, 248 insertions(+), 37 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+> > > index 9216916f848f..43168d43e4a3 100644
+> > > --- a/tools/perf/util/capstone.c
+> > > +++ b/tools/perf/util/capstone.c
+> > > @@ -11,20 +11,250 @@
+> > >  #include "print_insn.h"
+> > >  #include "symbol.h"
+> > >  #include "thread.h"
+> > > +#include <dlfcn.h>
+> > >  #include <errno.h>
+> > >  #include <fcntl.h>
+> > > +#include <inttypes.h>
+> > >  #include <string.h>
+> > >
+> > >  #ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > >  #include <capstone/capstone.h>
+> > > +#else
+> > > +typedef size_t csh;
+> > > +enum cs_arch {
+> > > +     CS_ARCH_ARM =3D 0,
+> > > +     CS_ARCH_ARM64 =3D 1,
+> > > +     CS_ARCH_X86 =3D 3,
+> > > +     CS_ARCH_SYSZ =3D 6,
+> > > +};
+> > > +enum cs_mode {
+> > > +     CS_MODE_ARM =3D 0,
+> > > +     CS_MODE_32 =3D 1 << 2,
+> > > +     CS_MODE_64 =3D 1 << 3,
+> > > +     CS_MODE_V8 =3D 1 << 6,
+> > > +     CS_MODE_BIG_ENDIAN =3D 1 << 31,
+> > > +};
+> > > +enum cs_opt_type {
+> > > +     CS_OPT_SYNTAX =3D 1,
+> > > +     CS_OPT_DETAIL =3D 2,
+> > > +};
+> > > +enum cs_opt_value {
+> > > +     CS_OPT_SYNTAX_ATT =3D 2,
+> > > +     CS_OPT_ON =3D 3,
+> > > +};
+> > > +enum cs_err {
+> > > +     CS_ERR_OK =3D 0,
+> > > +     CS_ERR_HANDLE =3D 3,
+> > > +};
+> > > +enum x86_op_type {
+> > > +     X86_OP_IMM =3D 2,
+> > > +     X86_OP_MEM =3D 3,
+> > > +};
+> > > +enum x86_reg {
+> > > +     X86_REG_RIP =3D 41,
+> > > +};
+> > > +typedef int32_t x86_avx_bcast;
+> > > +struct x86_op_mem {
+> > > +     enum x86_reg segment;
+> > > +     enum x86_reg base;
+> > > +     enum x86_reg index;
+> > > +     int scale;
+> > > +     int64_t disp;
+> > > +};
+> > > +
+> > > +struct cs_x86_op {
+> > > +     enum x86_op_type type;
+> > > +     union {
+> > > +             enum x86_reg  reg;
+> > > +             int64_t imm;
+> > > +             struct x86_op_mem mem;
+> > > +     };
+> > > +     uint8_t size;
+> > > +     uint8_t access;
+> > > +     x86_avx_bcast avx_bcast;
+> > > +     bool avx_zero_opmask;
+> > > +};
+> > > +struct cs_x86_encoding {
+> > > +     uint8_t modrm_offset;
+> > > +     uint8_t disp_offset;
+> > > +     uint8_t disp_size;
+> > > +     uint8_t imm_offset;
+> > > +     uint8_t imm_size;
+> > > +};
+> > > +typedef int32_t  x86_xop_cc;
+> > > +typedef int32_t  x86_sse_cc;
+> > > +typedef int32_t  x86_avx_cc;
+> > > +typedef int32_t  x86_avx_rm;
+> > > +struct cs_x86 {
+> > > +     uint8_t prefix[4];
+> > > +     uint8_t opcode[4];
+> > > +     uint8_t rex;
+> > > +     uint8_t addr_size;
+> > > +     uint8_t modrm;
+> > > +     uint8_t sib;
+> > > +     int64_t disp;
+> > > +     enum x86_reg sib_index;
+> > > +     int8_t sib_scale;
+> > > +     enum x86_reg sib_base;
+> > > +     x86_xop_cc xop_cc;
+> > > +     x86_sse_cc sse_cc;
+> > > +     x86_avx_cc avx_cc;
+> > > +     bool avx_sae;
+> > > +     x86_avx_rm avx_rm;
+> > > +     union {
+> > > +             uint64_t eflags;
+> > > +             uint64_t fpu_flags;
+> > > +     };
+> > > +     uint8_t op_count;
+> > > +     struct cs_x86_op operands[8];
+> > > +     struct cs_x86_encoding encoding;
+> > > +};
+> > > +struct cs_detail {
+> > > +     uint16_t regs_read[12];
+> > > +     uint8_t regs_read_count;
+> > > +     uint16_t regs_write[20];
+> > > +     uint8_t regs_write_count;
+> > > +     uint8_t groups[8];
+> > > +     uint8_t groups_count;
+> > > +
+> > > +     union {
+> > > +             struct cs_x86 x86;
+> > > +     };
+> > > +};
+> > > +struct cs_insn {
+> > > +     unsigned int id;
+> > > +     uint64_t address;
+> > > +     uint16_t size;
+> > > +     uint8_t bytes[16];
+> > > +     char mnemonic[32];
+> > > +     char op_str[160];
+> > > +     struct cs_detail *detail;
+> > > +};
+> > > +#endif
+> > > +
+> > > +#ifndef HAVE_LIBCAPSTONE_SUPPORT
+> > > +static void *perf_cs_dll_handle(void)
+> > > +{
+> > > +     static bool dll_handle_init;
+> > > +     static void *dll_handle;
+> > > +
+> > > +     if (!dll_handle_init) {
+> > > +             dll_handle_init =3D true;
+> > > +             dll_handle =3D dlopen("libcapstone.so", RTLD_LAZY);
+> > > +             if (!dll_handle)
+> > > +                     pr_debug("dlopen failed for libcapstone.so\n");
+> > > +     }
+> > > +     return dll_handle;
+> > > +}
+> > > +#endif
+> > > +
+> > > +static enum cs_err perf_cs_open(enum cs_arch arch, enum cs_mode mode=
+, csh *handle)
+> > > +{
+> > > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > +     return cs_open(arch, mode, handle);
+> > > +#else
+> > > +     static bool fn_init;
+> > > +     static enum cs_err (*fn)(enum cs_arch arch, enum cs_mode mode, =
+csh *handle);
+> > > +
+> > > +     if (!fn_init) {
+> > > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_open");
+> > > +             if (!fn)
+> > > +                     pr_debug("dlsym failed for cs_open\n");
+> > > +             fn_init =3D true;
+> > > +     }
+> > > +     if (!fn)
+> > > +             return CS_ERR_HANDLE;
+> > > +     return fn(arch, mode, handle);
+> > > +#endif
+> > > +}
+> > > +
+> > > +static enum cs_err perf_cs_option(csh handle, enum cs_opt_type type,=
+ size_t value)
+> > > +{
+> > > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > +     return cs_option(handle, type, value);
+> > > +#else
+> > > +     static bool fn_init;
+> > > +     static enum cs_err (*fn)(csh handle, enum cs_opt_type type, siz=
+e_t value);
+> > > +
+> > > +     if (!fn_init) {
+> > > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_option");
+> > > +             if (!fn)
+> > > +                     pr_debug("dlsym failed for cs_option\n");
+> > > +             fn_init =3D true;
+> > > +     }
+> > > +     if (!fn)
+> > > +             return CS_ERR_HANDLE;
+> > > +     return fn(handle, type, value);
+> > > +#endif
+> > > +}
+> > > +
+> > > +static size_t perf_cs_disasm(csh handle, const uint8_t *code, size_t=
+ code_size,
+> > > +                     uint64_t address, size_t count, struct cs_insn =
+**insn)
+> > > +{
+> > > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > +     return cs_disasm(handle, code, code_size, address, count, insn)=
+;
+> > > +#else
+> > > +     static bool fn_init;
+> > > +     static enum cs_err (*fn)(csh handle, const uint8_t *code, size_=
+t code_size,
+> > > +                              uint64_t address, size_t count, struct=
+ cs_insn **insn);
+> > > +
+> > > +     if (!fn_init) {
+> > > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_disasm");
+> > > +             if (!fn)
+> > > +                     pr_debug("dlsym failed for cs_disasm\n");
+> > > +             fn_init =3D true;
+> > > +     }
+> > > +     if (!fn)
+> > > +             return CS_ERR_HANDLE;
+> > > +     return fn(handle, code, code_size, address, count, insn);
+> > >  #endif
+> > > +}
+> > >
+> > > +static void perf_cs_free(struct cs_insn *insn, size_t count)
+> > > +{
+> > >  #ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > +     cs_free(insn, count);
+> > > +#else
+> > > +     static bool fn_init;
+> > > +     static void (*fn)(struct cs_insn *insn, size_t count);
+> > > +
+> > > +     if (!fn_init) {
+> > > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_free");
+> > > +             if (!fn)
+> > > +                     pr_debug("dlsym failed for cs_free\n");
+> > > +             fn_init =3D true;
+> > > +     }
+> > > +     if (!fn)
+> > > +             return;
+> > > +     fn(insn, count);
+> > > +#endif
+> > > +}
+> > > +
+> > > +static enum cs_err perf_cs_close(csh *handle)
+> > > +{
+> > > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > +     return cs_close(handle);
+> > > +#else
+> > > +     static bool fn_init;
+> > > +     static enum cs_err (*fn)(csh *handle);
+> > > +
+> > > +     if (!fn_init) {
+> > > +             fn =3D dlsym(perf_cs_dll_handle(), "cs_close");
+> > > +             if (!fn)
+> > > +                     pr_debug("dlsym failed for cs_close\n");
+> > > +             fn_init =3D true;
+> > > +     }
+> > > +     if (!fn)
+> > > +             return CS_ERR_HANDLE;
+> > > +     return fn(handle);
+> > > +#endif
+> > > +}
+> > > +
+> > >  static int capstone_init(struct machine *machine, csh *cs_handle, bo=
+ol is64,
+> > >                        bool disassembler_style)
+> > >  {
+> > > -     cs_arch arch;
+> > > -     cs_mode mode;
+> > > +     enum cs_arch arch;
+> > > +     enum cs_mode mode;
+> > >
+> > >       if (machine__is(machine, "x86_64") && is64) {
+> > >               arch =3D CS_ARCH_X86;
+> > > @@ -45,7 +275,7 @@ static int capstone_init(struct machine *machine, =
+csh *cs_handle, bool is64,
+> > >               return -1;
+> > >       }
+> > >
+> > > -     if (cs_open(arch, mode, cs_handle) !=3D CS_ERR_OK) {
+> > > +     if (perf_cs_open(arch, mode, cs_handle) !=3D CS_ERR_OK) {
+> > >               pr_warning_once("cs_open failed\n");
+> > >               return -1;
+> > >       }
+> > > @@ -57,27 +287,25 @@ static int capstone_init(struct machine *machine=
+, csh *cs_handle, bool is64,
+> > >                * is set via annotation args
+> > >                */
+> > >               if (disassembler_style)
+> > > -                     cs_option(*cs_handle, CS_OPT_SYNTAX, CS_OPT_SYN=
+TAX_ATT);
+> > > +                     perf_cs_option(*cs_handle, CS_OPT_SYNTAX, CS_OP=
+T_SYNTAX_ATT);
+> > >               /*
+> > >                * Resolving address operands to symbols is implemented
+> > >                * on x86 by investigating instruction details.
+> > >                */
+> > > -             cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
+> > > +             perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
+> > >       }
+> > >
+> > >       return 0;
+> > >  }
+> > > -#endif
+> > >
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > -static size_t print_insn_x86(struct thread *thread, u8 cpumode, cs_i=
+nsn *insn,
+> > > +static size_t print_insn_x86(struct thread *thread, u8 cpumode, stru=
+ct cs_insn *insn,
+> > >                            int print_opts, FILE *fp)
+> > >  {
+> > >       struct addr_location al;
+> > >       size_t printed =3D 0;
+> > >
+> > >       if (insn->detail && insn->detail->x86.op_count =3D=3D 1) {
+> > > -             cs_x86_op *op =3D &insn->detail->x86.operands[0];
+> > > +             struct cs_x86_op *op =3D &insn->detail->x86.operands[0]=
+;
+> > >
+> > >               addr_location__init(&al);
+> > >               if (op->type =3D=3D X86_OP_IMM &&
+> > > @@ -95,7 +323,6 @@ static size_t print_insn_x86(struct thread *thread=
+, u8 cpumode, cs_insn *insn,
+> > >       printed +=3D fprintf(fp, "%s %s", insn[0].mnemonic, insn[0].op_=
+str);
+> > >       return printed;
+> > >  }
+> > > -#endif
+> > >
+> > >
+> > >  ssize_t capstone__fprintf_insn_asm(struct machine *machine __maybe_u=
+nused,
+> > > @@ -106,9 +333,8 @@ ssize_t capstone__fprintf_insn_asm(struct machine=
+ *machine __maybe_unused,
+> > >                                  uint64_t ip __maybe_unused, int *len=
+p __maybe_unused,
+> > >                                  int print_opts __maybe_unused, FILE =
+*fp __maybe_unused)
+> > >  {
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > >       size_t printed;
+> > > -     cs_insn *insn;
+> > > +     struct cs_insn *insn;
+> > >       csh cs_handle;
+> > >       size_t count;
+> > >       int ret;
+> > > @@ -118,7 +344,7 @@ ssize_t capstone__fprintf_insn_asm(struct machine=
+ *machine __maybe_unused,
+> > >       if (ret < 0)
+> > >               return ret;
+> > >
+> > > -     count =3D cs_disasm(cs_handle, code, code_size, ip, 1, &insn);
+> > > +     count =3D perf_cs_disasm(cs_handle, code, code_size, ip, 1, &in=
+sn);
+> > >       if (count > 0) {
+> > >               if (machine__normalized_is(machine, "x86"))
+> > >                       printed =3D print_insn_x86(thread, cpumode, &in=
+sn[0], print_opts, fp);
+> > > @@ -126,20 +352,16 @@ ssize_t capstone__fprintf_insn_asm(struct machi=
+ne *machine __maybe_unused,
+> > >                       printed =3D fprintf(fp, "%s %s", insn[0].mnemon=
+ic, insn[0].op_str);
+> > >               if (lenp)
+> > >                       *lenp =3D insn->size;
+> > > -             cs_free(insn, count);
+> > > +             perf_cs_free(insn, count);
+> > >       } else {
+> > >               printed =3D -1;
+> > >       }
+> > >
+> > > -     cs_close(&cs_handle);
+> > > +     perf_cs_close(&cs_handle);
+> > >       return printed;
+> > > -#else
+> > > -     return -1;
+> > > -#endif
+> > >  }
+> > >
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > -static void print_capstone_detail(cs_insn *insn, char *buf, size_t l=
+en,
+> > > +static void print_capstone_detail(struct cs_insn *insn, char *buf, s=
+ize_t len,
+> > >                                 struct annotate_args *args, u64 addr)
+> > >  {
+> > >       int i;
+> > > @@ -154,7 +376,7 @@ static void print_capstone_detail(cs_insn *insn, =
+char *buf, size_t len,
+> > >               return;
+> > >
+> > >       for (i =3D 0; i < insn->detail->x86.op_count; i++) {
+> > > -             cs_x86_op *op =3D &insn->detail->x86.operands[i];
+> > > +             struct cs_x86_op *op =3D &insn->detail->x86.operands[i]=
+;
+> > >               u64 orig_addr;
+> > >
+> > >               if (op->type !=3D X86_OP_MEM)
+> > > @@ -195,9 +417,7 @@ static void print_capstone_detail(cs_insn *insn, =
+char *buf, size_t len,
+> > >               break;
+> > >       }
+> > >  }
+> > > -#endif
+> > >
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > >  struct find_file_offset_data {
+> > >       u64 ip;
+> > >       u64 offset;
+> > > @@ -214,13 +434,11 @@ static int find_file_offset(u64 start, u64 len,=
+ u64 pgoff, void *arg)
+> > >       }
+> > >       return 0;
+> > >  }
+> > > -#endif
+> > >
+> > >  int symbol__disassemble_capstone(const char *filename __maybe_unused=
+,
+> > >                                struct symbol *sym __maybe_unused,
+> > >                                struct annotate_args *args __maybe_unu=
+sed)
+> > >  {
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > >       struct annotation *notes =3D symbol__annotation(sym);
+> > >       struct map *map =3D args->ms->map;
+> > >       struct dso *dso =3D map__dso(map);
+> > > @@ -235,7 +453,7 @@ int symbol__disassemble_capstone(const char *file=
+name __maybe_unused,
+> > >       const u8 *buf;
+> > >       u64 buf_len;
+> > >       csh handle;
+> > > -     cs_insn *insn =3D NULL;
+> > > +     struct cs_insn *insn =3D NULL;
+> > >       char disasm_buf[512];
+> > >       struct disasm_line *dl;
+> > >       bool disassembler_style =3D false;
+> > > @@ -274,7 +492,7 @@ int symbol__disassemble_capstone(const char *file=
+name __maybe_unused,
+> > >
+> > >       needs_cs_close =3D true;
+> > >
+> > > -     free_count =3D count =3D cs_disasm(handle, buf, buf_len, start,=
+ buf_len, &insn);
+> > > +     free_count =3D count =3D perf_cs_disasm(handle, buf, buf_len, s=
+tart, buf_len, &insn);
+> > >       for (i =3D 0, offset =3D 0; i < count; i++) {
+> > >               int printed;
+> > >
+> > > @@ -313,9 +531,9 @@ int symbol__disassemble_capstone(const char *file=
+name __maybe_unused,
+> > >
+> > >  out:
+> > >       if (needs_cs_close) {
+> > > -             cs_close(&handle);
+> > > +             perf_cs_close(&handle);
+> > >               if (free_count > 0)
+> > > -                     cs_free(insn, free_count);
+> > > +                     perf_cs_free(insn, free_count);
+> > >       }
+> > >       free(code_buf);
+> > >       return count < 0 ? count : 0;
+> > > @@ -335,16 +553,12 @@ int symbol__disassemble_capstone(const char *fi=
+lename __maybe_unused,
+> > >       }
+> > >       count =3D -1;
+> > >       goto out;
+> > > -#else
+> > > -     return -1;
+> > > -#endif
+> > >  }
+> > >
+> > >  int symbol__disassemble_capstone_powerpc(const char *filename __mayb=
+e_unused,
+> > >                                        struct symbol *sym __maybe_unu=
+sed,
+> > >                                        struct annotate_args *args __m=
+aybe_unused)
+> > >  {
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > >       struct annotation *notes =3D symbol__annotation(sym);
+> > >       struct map *map =3D args->ms->map;
+> > >       struct dso *dso =3D map__dso(map);
+> > > @@ -458,7 +672,7 @@ int symbol__disassemble_capstone_powerpc(const ch=
+ar *filename __maybe_unused,
+> > >
+> > >  out:
+> > >       if (needs_cs_close)
+> > > -             cs_close(&handle);
+> > > +             perf_cs_close(&handle);
+> > >       free(buf);
+> > >       return count < 0 ? count : 0;
+> > >
+> > > @@ -467,7 +681,4 @@ int symbol__disassemble_capstone_powerpc(const ch=
+ar *filename __maybe_unused,
+> > >               close(fd);
+> > >       count =3D -1;
+> > >       goto out;
+> > > -#else
+> > > -     return -1;
+> > > -#endif
+> > >  }
+> > > --
+> > > 2.52.0.457.g6b5491de43-goog
+> > >
+> >
