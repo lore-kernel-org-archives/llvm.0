@@ -1,134 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3574337A49F
-	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 11:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9722836BCDE;
+	Fri, 30 Jan 2026 11:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769771538; cv=none; b=St50xP5reuLy2OD8PskcVcuZCUo0SyIKVAW9hR+axf06tRXw7vMke5XkwjzifMua/cGh+U9gZat4tHk3lmdsyAvgFb0+oeFoSPjaKY3FJRDOjJDalmeCOpCSo+Dq4FNpxLPaHlEFeqkNqLoAnkKLktAGlKcqzjidNSziL9Oh86Q=
+	t=1769772969; cv=none; b=YWvk19hxjxHK965apOWrWAhqHRESlSn67ihM5dkAofxVZoougyWKubp+vjJEwX+XkaHqpRWLLd1wuSdLb/8TAcdg3tJp9mfRRR3yZic9S2ExoHoh1itbh0jZyTUkP+as7l82AcuLu6lqGritKy8pTFGL5zMKGsbn+AmyadFR2Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769771538; c=relaxed/simple;
-	bh=9NK5sldogbYSGqXeyyOo0dNOqsLbA1y5wizZpONjAeg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jvb5JsobOgHJTBY79JMml9r4iTG4c3r2AuFfVaEcC490Zt19175zOxGkid/b+Put3F0bK2vNAoj4Go6u65zi03RHf0iOILkxaKndflEgsLnNIW8FSUSBjBcgWb2+XYMP0qNBGRW4uWOAzHndeKhcPZIPbsWt8fzqyPNaVYAG10U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GCLtod7J; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769772969; c=relaxed/simple;
+	bh=hW+r1Ygxd2+vqHd0uylKyFHXc/tTJEPmbGQcmYqAEPA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mYpYu5V7SCPgWAklzWyQdxPiohYiqp/Bvle7D7tS2lESbevqqADT54E0Cdvrlt9sYDuBR2M2swegioIfW58My6mbYVvBJuFZmbiZg7RLK6hZfY5DQpUcc/l1BjTnVlNiOalDAzMIU012HLuUEYOLWBqnaXhkAJUPMpfYuJMwQb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IHAD+8/J; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GCLtod7J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769771536;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/eJoQWAqoBSDqpbNDPqCdrN5d4f6wNdnzOFXyukhzf4=;
-	b=GCLtod7JysSLP8wZMoFdHM2Hv+WXwoJZAN0iYynJIAAHRbIjLepqJAEwtTyaDB4DwkaaKr
-	dkRioeFCIqNjPji20NnrQS+4uY4sctxs96ZM5nJrG2kJKfXTau3mHH2WU5Os4YWfxPgkhm
-	4bLsp8hLwX2dXm2T21pi9murdvSISTQ=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-IG-LIqKcO4---B-RlzH-1w-1; Fri,
- 30 Jan 2026 06:12:13 -0500
-X-MC-Unique: IG-LIqKcO4---B-RlzH-1w-1
-X-Mimecast-MFC-AGG-ID: IG-LIqKcO4---B-RlzH-1w_1769771533
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55D7D18007F7
-	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 11:12:12 +0000 (UTC)
-Received: from [172.20.60.237] (unknown [10.30.45.107])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EF48419560A2;
-	Fri, 30 Jan 2026 11:12:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc7,
- upstream-mainline, 4d310797)
-Date: Fri, 30 Jan 2026 11:12:11 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IHAD+8/J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769772967; x=1801308967;
+  h=date:from:to:cc:subject:message-id;
+  bh=hW+r1Ygxd2+vqHd0uylKyFHXc/tTJEPmbGQcmYqAEPA=;
+  b=IHAD+8/JQ8W4Ng1JwuwAU84LS7fGZVhPbZlZlhtw3Ut7BIe1lR9ThM8H
+   mRqNlsdyz04Ss9wxee5NsOU90Q8XsRVmkjRxPZvRPX0Vg+5ZaU8+vLj4N
+   PJiURF4h2TnhrRAN8ez74GoJ4Y5cBnZrTxgN/yxg+RHgz/8M12ILStVpu
+   ykz8GKBvdvr4N9Bsg4IrowYxOiO3Wb5AyEvPk2cCrmfswn9i04FGGJJ/r
+   i6XNPUPoLMlXt1xfzWfjGpXA/kIh6jQqfc6xd6CEVLllLqaPaVSOkfhR6
+   8w76L+zY7xSJE342Cwd/+bFkogirpJcPCjAdzPtuJj4ymAQbbOV7och3K
+   w==;
+X-CSE-ConnectionGUID: n7zJZYR6SJmr1FoZ3nTa5g==
+X-CSE-MsgGUID: SsfxU7dzRnuQ2LThod5Tiw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="70922017"
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="70922017"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 03:36:07 -0800
+X-CSE-ConnectionGUID: MqzJxf/XRxSAq4wSFb+EfA==
+X-CSE-MsgGUID: Oc3NLoRmTpSRU0MZxq0IDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="213326051"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 30 Jan 2026 03:36:06 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlmnD-000000002UV-3Nq9;
+	Fri, 30 Jan 2026 11:36:03 +0000
+Date: Fri, 30 Jan 2026 12:35:36 +0100
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [chao:feature/lock_trace 1/5] fs/f2fs/checkpoint.c:96:3:
+ error: expected ')'
+Message-ID: <202601301207.oGrOdxmG-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <65607.126013006121300201@us-mta-155.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: e9jqn4EEdb9u3N8gUp6EqHkY8KJwwOT-uimtu3eDTG8_1769771533
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/lock_trace
+head:   6c41a3391b747e9a5e8c6fe63003d2a8157d2610
+commit: ea581585794290038e10ac4f1343bb1f5013cc60 [1/5] f2fs: fix lock priority inversion issue
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260130/202601301207.oGrOdxmG-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301207.oGrOdxmG-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601301207.oGrOdxmG-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'pm-6.19-rc8' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/rafael/linux-pm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2295328596
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> fs/f2fs/checkpoint.c:96:3: error: expected ')'
+      96 |                 return false;
+         |                 ^
+   fs/f2fs/checkpoint.c:95:5: note: to match this '('
+      95 |         if (!(sem->sbi->adjust_lock_priority & BIT(sem->name - 1))
+         |            ^
+   1 error generated.
 
 
+vim +96 fs/f2fs/checkpoint.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    92	
+    93	static bool need_uplift_priority(struct f2fs_rwsem *sem, bool is_write)
+    94	{
+    95		if (!(sem->sbi->adjust_lock_priority & BIT(sem->name - 1))
+  > 96			return false;
+    97	
+    98		switch (sem->name) {
+    99		/*
+   100		 * writer is checkpoint which has high priority, let's just uplift
+   101		 * priority for reader
+   102		 */
+   103		case LOCK_NAME_CP_RWSEM:
+   104		case LOCK_NAME_NODE_CHANGE:
+   105		case LOCK_NAME_NODE_WRITE:
+   106			return !is_write;
+   107		case LOCK_NAME_GC_LOCK:
+   108		case LOCK_NAME_CP_GLOBAL:
+   109		case LOCK_NAME_IO_RWSEM:
+   110			return true;
+   111		default:
+   112			f2fs_bug_on(sem->sbi, 1);
+   113		}
+   114		return false;
+   115	}
+   116	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
