@@ -1,151 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BB3244665;
-	Fri, 30 Jan 2026 09:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3574337A49F
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 11:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769764609; cv=none; b=Mi9NvRvzvLKf8pCJeqMgkJwfJMQ+A56limGPeEm2ffGFVz6kSKyKhHjDCH/8b8qwg+wCn4TeahlzRNqID3MrvIJendb+dw+z6Jdo4f498OLj0KzuV8F2uZV6/9sCoAF7shv4yYMCs8JFkWtRU1KeJrvGiK5jlwSG3+ct8hmADn0=
+	t=1769771538; cv=none; b=St50xP5reuLy2OD8PskcVcuZCUo0SyIKVAW9hR+axf06tRXw7vMke5XkwjzifMua/cGh+U9gZat4tHk3lmdsyAvgFb0+oeFoSPjaKY3FJRDOjJDalmeCOpCSo+Dq4FNpxLPaHlEFeqkNqLoAnkKLktAGlKcqzjidNSziL9Oh86Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769764609; c=relaxed/simple;
-	bh=BBsy+STOjQXoX+872fpKKMUeLGy7GrZywVTivm6NlU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1aAYn0Sg1Pv4/EyXnPtzQsaTtxcx4lcpu2M5MstAu0xTLn4kucitE1Z8gaRo1Lp8byowcVbB4id41RwHYrw56iCSK3Mjm/UJrxdRNgmN99WKnN5as22oQmxi133djnfnNa8bk2ka0Hq0T8Z1oFnrrJqyoEHqWFBHiJvmGhBWm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TLeZoEVi; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769771538; c=relaxed/simple;
+	bh=9NK5sldogbYSGqXeyyOo0dNOqsLbA1y5wizZpONjAeg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jvb5JsobOgHJTBY79JMml9r4iTG4c3r2AuFfVaEcC490Zt19175zOxGkid/b+Put3F0bK2vNAoj4Go6u65zi03RHf0iOILkxaKndflEgsLnNIW8FSUSBjBcgWb2+XYMP0qNBGRW4uWOAzHndeKhcPZIPbsWt8fzqyPNaVYAG10U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GCLtod7J; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TLeZoEVi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769764608; x=1801300608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BBsy+STOjQXoX+872fpKKMUeLGy7GrZywVTivm6NlU8=;
-  b=TLeZoEViYWUNIgirXw15puSuRy2ImhFcfMapJnEHjyQdlbjnXAXQDB2t
-   BoY/52rHBqi8Gc/XvhnUO9EdT9W0VC5dQjlk17RACoqwCix3hhcQPHHel
-   Zw32uyr6gr/Z7woY79iDzeTS50c1IPotA82SJHrF8PTB+A+Fc1/6HFH2L
-   1Vb9dYwONsjuvb4mUnIzEwb8IrnROGkTfKUBRxvoZz+2isBRmk606rU1b
-   WJIZ4PeXanWfVBCAJPy/JYdXNotRsfOG6r0owi3EDlQDtFaQetvpZ8qIl
-   JR31HViMV+Ujnap791ykzPr2/A2nbzZhJq4hIqNNrzDQB1EhROrI5juCu
-   A==;
-X-CSE-ConnectionGUID: dHU3rrORSBqcWQIq9vYSXA==
-X-CSE-MsgGUID: K6vodLl1SGKkw5xDVYMm6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="70992411"
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="70992411"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 01:16:47 -0800
-X-CSE-ConnectionGUID: jwbqCRiKSuulYSBh9+RPlg==
-X-CSE-MsgGUID: g6H9NWmVRMeHNXpaXaA9kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="208407269"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 30 Jan 2026 01:16:45 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlkcM-00000000cQm-297A;
-	Fri, 30 Jan 2026 09:16:42 +0000
-Date: Fri, 30 Jan 2026 17:15:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
-	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, longli@microsoft.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mshv: Add support for integrated scheduler
-Message-ID: <202601301732.2k4q81GI-lkp@intel.com>
-References: <176971725312.67225.3938191771112866951.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GCLtod7J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769771536;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/eJoQWAqoBSDqpbNDPqCdrN5d4f6wNdnzOFXyukhzf4=;
+	b=GCLtod7JysSLP8wZMoFdHM2Hv+WXwoJZAN0iYynJIAAHRbIjLepqJAEwtTyaDB4DwkaaKr
+	dkRioeFCIqNjPji20NnrQS+4uY4sctxs96ZM5nJrG2kJKfXTau3mHH2WU5Os4YWfxPgkhm
+	4bLsp8hLwX2dXm2T21pi9murdvSISTQ=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-IG-LIqKcO4---B-RlzH-1w-1; Fri,
+ 30 Jan 2026 06:12:13 -0500
+X-MC-Unique: IG-LIqKcO4---B-RlzH-1w-1
+X-Mimecast-MFC-AGG-ID: IG-LIqKcO4---B-RlzH-1w_1769771533
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55D7D18007F7
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 11:12:12 +0000 (UTC)
+Received: from [172.20.60.237] (unknown [10.30.45.107])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EF48419560A2;
+	Fri, 30 Jan 2026 11:12:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc7,
+ upstream-mainline, 4d310797)
+Date: Fri, 30 Jan 2026 11:12:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <176971725312.67225.3938191771112866951.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <65607.126013006121300201@us-mta-155.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: e9jqn4EEdb9u3N8gUp6EqHkY8KJwwOT-uimtu3eDTG8_1769771533
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stanislav,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.19-rc7 next-20260129]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Kinsburskii/mshv-Add-support-for-integrated-scheduler/20260130-041014
-base:   linus/master
-patch link:    https://lore.kernel.org/r/176971725312.67225.3938191771112866951.stgit%40skinsburskii-cloud-desktop.internal.cloudapp.net
-patch subject: [PATCH v2] mshv: Add support for integrated scheduler
-config: x86_64-buildonly-randconfig-004-20260130 (https://download.01.org/0day-ci/archive/20260130/202601301732.2k4q81GI-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301732.2k4q81GI-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'pm-6.19-rc8' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/rafael/linux-pm
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601301732.2k4q81GI-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2295328596
 
-All errors (new ones prefixed by >>):
-
->> drivers/hv/mshv_root_main.c:2260:2: error: expected identifier or '('
-    2260 |         dev_dbg(dev, "vmm_caps = %#llx\n", mshv_root.vmm_caps.as_uint64[0]);
-         |         ^
-   include/linux/dev_printk.h:171:2: note: expanded from macro 'dev_dbg'
-     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^
-   include/linux/dev_printk.h:137:3: note: expanded from macro 'dev_no_printk'
-     137 |         ({                                                              \
-         |          ^
->> drivers/hv/mshv_root_main.c:2260:2: error: expected ')'
-   include/linux/dev_printk.h:171:2: note: expanded from macro 'dev_dbg'
-     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^
-   include/linux/dev_printk.h:137:3: note: expanded from macro 'dev_no_printk'
-     137 |         ({                                                              \
-         |          ^
-   drivers/hv/mshv_root_main.c:2260:2: note: to match this '('
-   include/linux/dev_printk.h:171:2: note: expanded from macro 'dev_dbg'
-     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^
-   include/linux/dev_printk.h:137:2: note: expanded from macro 'dev_no_printk'
-     137 |         ({                                                              \
-         |         ^
-   drivers/hv/mshv_root_main.c:2262:2: error: expected identifier or '('
-    2262 |         return 0;
-         |         ^
->> drivers/hv/mshv_root_main.c:2263:1: error: extraneous closing brace ('}')
-    2263 | }
-         | ^
-   4 errors generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
 
-vim +2260 drivers/hv/mshv_root_main.c
 
-621191d709b148 Nuno Das Neves                  2025-03-14  2246  
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2247  static int __init mshv_init_vmm_caps(struct device *dev)
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2248  {
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2249  	int ret;
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2250  
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2251  	ret = hv_call_get_partition_property_ex(HV_PARTITION_ID_SELF,
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2252  						HV_PARTITION_PROPERTY_VMM_CAPABILITIES,
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2253  						0, &mshv_root.vmm_caps,
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2254  						sizeof(mshv_root.vmm_caps));
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2255  	if (ret && hv_l1vh_partition())
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2256  		dev_err(dev, "Failed to get VMM capabilities: %d\n", ret);
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2257  		return ret;
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2258  	}
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2259  
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10 @2260  	dev_dbg(dev, "vmm_caps = %#llx\n", mshv_root.vmm_caps.as_uint64[0]);
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2261  
-21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2262  	return 0;
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10 @2263  }
-fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2264  
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
