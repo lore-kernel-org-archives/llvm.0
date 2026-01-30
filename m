@@ -1,54 +1,54 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508053019A4
-	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 13:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033AC30C608
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 13:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769779810; cv=none; b=gIKdahEgyOdmvqTbhOrl3Cr+vLjGKNmXWsXbjSrOarNSsxxA8YOJm4NeEpfHY9nWUPXeCkCK5Qy5BwaXwD/cy+AiYPx6lkjNhKAr2EnILkQtC3lAo/vkuCTt3njQHD3Wtw9Hh7EI+xUZVYA3xdH/sVXozE0vGERat5QKSLTtVhE=
+	t=1769779813; cv=none; b=Dio+iEqsMDQ6FXSphciK4gXrAyS8N7xVBTFR/aFcFcfQqSQVjWLjIyKbw3gDWa3jYwYzySvuwlZx9w5fY3oxUGXvCzlsFMoKmVhj9eqZJ9YMMpeS1Bhxhagk5xj2mezYbr1qhjic1bzvBwXQtZQtvPwXrZva5FjfjnoLdblQsfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769779810; c=relaxed/simple;
-	bh=26nK5ZuTSH07Hc66Z0TGP4MV/KjUVkYvGOV4qaYkpHE=;
+	s=arc-20240116; t=1769779813; c=relaxed/simple;
+	bh=N+0RvBUJ08uz7gY4C8XhNnF6MHXEg5OROSx72CVegc8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZDrlSpcsU+WeMM64tdTF5gaVK9/RpXzVTlCXl1DPc012MusZXQ3FOsG/qMW4MkhKcL9+kjDuzohCUaW+uTH/ebyRAiNCFengJ12unhot0d4JJzzjneI9B7BGpYA/r3E3Jxrt0/lDNhskfs+JYslvswXfipGpQF0/oS1rLxgg984=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZCe7Mxoe; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=Y5x0Kz6PfkIaSVHjIVhR4wiiaee2sGUQk2yQmgs6JNopUHQN/BfkVfw7h0iZvl234tsMgqrx24eghc148Bi+/UQCI6x2Ft1tWnjDmeXLAk9sysfMF703C/Gm3GSa8nqwnYG+u3chCkRIXDZIVEEqTWNw9o0SLLdQTu+tv9pSUOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bywu8sqz; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZCe7Mxoe"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-480711d09f1so34381565e9.0
-        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 05:30:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bywu8sqz"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-47ee432070aso18185475e9.1
+        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 05:30:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769779808; x=1770384608; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1769779810; x=1770384610; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ah0eS4SkK+p5W7jb3OOf6k8LtqY2IjJqo0gqvKUDvkY=;
-        b=ZCe7MxoeH5/cvP0AtkLXSlrWoXDLld3CmZpdowXp95dCYRfUutZINo3PUTzAC1vRVb
-         3oh+cJ3EIPiSq1NmD2x+4gTi7zn/a5BnpYcGFxrOqvciQP9xEvFLfDfS3YzY9OYpNl+N
-         76KmzHrWt/JxS6juGd5CqzGFxwPmUAk3DxvgOy4OgMzV0DajC94BYxj0140fdGTEEhrH
-         pYgdncTw70jssTU68Dds5tW4RgSk/acQ5uIRDsS52nGQmZxeHTzKE1D9BCUMNwH/DUg0
-         DY1ZOwx9O9PhjYKX4rjjoQWvJRNUDWEJC3FSqbRqacI49Ll7DZWq+mBuu4xKBo7PRhFe
-         L73w==
+        bh=scSVMH9or2TMfZesMIFkbkxALtorvxefZYfnvMnEqKA=;
+        b=Bywu8sqzOw80fkSriobmdlRjmsFUBYCD9rmqY42Mu02h7q2f+V5m71E62VUzbtaVJ2
+         8H3VFBgYru2gb9GzzS3vXajsjis4jy8ex2dumD9A/eya+N+XNShjhfVl+82MiQPaET08
+         qU+09HwieZz3pIvzEj4aaX0RDRkDgJ6I9w1Nojg4ZRuXf7Lsv7eGaSAJCb86+gBm07u4
+         bG786UvCPrvXdPxg9OgI99eIrSqS2/ViTE5JvSaiC/9OdLUeP4PLQnjOQhaHnSSyOwII
+         MrqIh9P2YfOGFmcA7W6vPDATIt+xFNzrshiSJdeUxMKMXE3bSsMvdNbPgkvuFtxTlWH/
+         O+5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769779808; x=1770384608;
+        d=1e100.net; s=20230601; t=1769779810; x=1770384610;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ah0eS4SkK+p5W7jb3OOf6k8LtqY2IjJqo0gqvKUDvkY=;
-        b=Oa30EQ+PnxcGhAmR1oufUJ+FA40wJb3Zupt63zF/AgrU0QIiYFijakVKFeZQ5C4kIZ
-         fGIKm5gli5+21FTHPpB098UOui3UE8BA+uTopJ7gE7EpRjkaN27JHo3VRExvHV1AtGrc
-         BffNFGM1sj4iW+mqIPI9mgbI2my65UXTkKW6uo/Cq7ogDocAfw9V3Qx5EPOsIiDF8+jl
-         TYbE/TEQKEdQ1Oq1HG6RpaX4mM8CsELSOUUwK54OIMzDq94yHHbn0jDUqbt3DJzoKvU+
-         ztPvRm0X+aWy9yJMnPPmEEJfQ/wQkNdNLeOYqYyEA/yLCqbUWBYz6WyDFJICFDpoWwLR
-         c0DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEuxc/QjE5PNduJsJqsAbbIQ45ocbOdnj4AsMAVYAAR6/ABb4RfVdo8Zz8ExeHXr4+P0rV@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz/LVSJZi9SmSFJ3xDDnnxII1QZepe8QHB39X6MRspPGpirOkyC
-	UjTmsrWHLpqdQHnDgo7/egxe6aDDGKPo2NylLptgQ10vaXvGpDSy/iIq8NntCvwPdgq+JQIP7Fc
-	yyg==
-X-Received: from wmby7.prod.google.com ([2002:a05:600c:c047:b0:477:a678:a39a])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:3b1d:b0:477:9cdb:e32e
- with SMTP id 5b1f17b1804b1-482db46014dmr37732115e9.9.1769779807742; Fri, 30
- Jan 2026 05:30:07 -0800 (PST)
-Date: Fri, 30 Jan 2026 14:28:24 +0100
+        bh=scSVMH9or2TMfZesMIFkbkxALtorvxefZYfnvMnEqKA=;
+        b=jzbfi9EffRCB4iyr6tyRYZ3Bw8fzSTLCbnBYeh8TvOxZS36+0/bVBzdEnzF/+BHsRO
+         XTiQeEPVPkXJZDFS2cOQCichoQTNVxo4pGBUH8fBlxX3dJ5Yl2CrEs67oEb2rdCrPoV+
+         9jpLRhr9JPxOHI5iVWLTy78zsNmAgEzaA8Dj2ycL1CwBwLrGWZOgH6wGdZSCXoT34zWr
+         d+tT8WTMttJZW6qS/2Lj4Y+jTAq5kdEHRLl6fI+nP5EMtK0sCQOUDa6NTvpzyGSw+wy2
+         7ctNcl36ccN6SaT9hlWT6OtAwyg85E9P77RX05CjuihMC1xQstJm4BoKnHhssB5AATbL
+         QxFw==
+X-Forwarded-Encrypted: i=1; AJvYcCWO2RpOUB/ubYnIydNWqFih6F29QBtnl1l+XJBM8rdhTBieDf2ZRYmXDTiWgFi3hbfOu/Vf@lists.linux.dev
+X-Gm-Message-State: AOJu0YwLJgyJpazdsbUCByXFZXAATWWRxruFbGTT8zjIK+oX9nfFuZJY
+	KuEGBmwdYEPF3Nu0urYEqv3U77ALHCGdw8Sg5Xq72V+2T6EE2ltboTD4tki3hxqLmF9lZ/EJVEb
+	FuQ==
+X-Received: from wmpx5.prod.google.com ([2002:a05:600c:1885:b0:480:4a03:7b7f])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4507:b0:475:dcbb:7903
+ with SMTP id 5b1f17b1804b1-482db45ea8emr33261705e9.9.1769779810315; Fri, 30
+ Jan 2026 05:30:10 -0800 (PST)
+Date: Fri, 30 Jan 2026 14:28:25 +0100
 In-Reply-To: <20260130132951.2714396-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20260130132951.2714396-1-elver@google.com>
 X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260130132951.2714396-2-elver@google.com>
-Subject: [PATCH v3 1/3] arm64: Fix non-atomic __READ_ONCE() with CONFIG_LTO=y
+Message-ID: <20260130132951.2714396-3-elver@google.com>
+Subject: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>
 Cc: Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -67,46 +67,118 @@ Cc: Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
 	David Laight <david.laight.linux@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
 	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Boqun Feng <boqun@kernel.org>
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The implementation of __READ_ONCE() under CONFIG_LTO=y incorrectly
-qualified the fallback "once" access for types larger than 8 bytes,
-which are not atomic but should still happen "once" and suppress common
-compiler optimizations.
+Rework arm64 LTO __READ_ONCE() to improve code generation as follows:
 
-The cast `volatile typeof(__x)` applied the volatile qualifier to the
-pointer type itself rather than the pointee. This created a volatile
-pointer to a non-volatile type, which violated __READ_ONCE() semantics.
+1. Replace _Generic-based __unqual_scalar_typeof() with more complete
+   __rwonce_typeof_unqual(). This strips qualifiers from all types, not
+   just integer types, which is required to be able to assign (must be
+   non-const) to __u.__val in the non-atomic case (required for #2).
 
-Fix this by casting to `volatile typeof(*__x) *`.
+Once our minimum compiler versions are bumped, this just becomes
+TYPEOF_UNQUAL() (or typeof_unqual() should we decide to adopt C23
+naming).  Sadly the fallback version of __rwonce_typeof_unqual() cannot
+be used as a general TYPEOF_UNQUAL() fallback (see code comments).
 
-With a defconfig + LTO + debug options build, we see the following
-functions to be affected:
+One subtle point here is that non-integer types of __val could be const
+or volatile within the union with the old __unqual_scalar_typeof(), if
+the passed variable is const or volatile. This would then result in a
+forced load from the stack if __u.__val is volatile; in the case of
+const, it does look odd if the underlying storage changes, but the
+compiler is told said member is "const" -- it smells like UB.
 
-	xen_manage_runstate_time (884 -> 944 bytes)
-	xen_steal_clock (248 -> 340 bytes)
-	  ^-- use __READ_ONCE() to load vcpu_runstate_info structs
+2. Eliminate the atomic flag and ternary conditional expression. Move
+   the fallback volatile load into the default case of the switch,
+   ensuring __u is unconditionally initialized across all paths.
+   The statement expression now unconditionally returns __u.__val.
 
-Fixes: e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when CONFIG_LTO=y")
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Boqun Feng <boqun@kernel.org>
+This refactoring appears to help the compiler improve (or fix) code
+generation.
+
+With a defconfig + LTO + debug options builds, we observe different
+codegen for the following functions:
+
+	btrfs_reclaim_sweep (708 -> 1032 bytes)
+	btrfs_sinfo_bg_reclaim_threshold_store (200 -> 204 bytes)
+	check_mem_access (3652 -> 3692 bytes) [inlined bpf_map_is_rdonly]
+	console_flush_all (1268 -> 1264 bytes)
+	console_lock_spinning_disable_and_check (180 -> 176 bytes)
+	igb_add_filter (640 -> 636 bytes)
+	igb_config_tx_modes (2404 -> 2400 bytes)
+	kvm_vcpu_on_spin (480 -> 476 bytes)
+	map_freeze (376 -> 380 bytes)
+	netlink_bind (1664 -> 1656 bytes)
+	nmi_cpu_backtrace (404 -> 400 bytes)
+	set_rps_cpu (516 -> 520 bytes)
+	swap_cluster_readahead (944 -> 932 bytes)
+	tcp_accecn_third_ack (328 -> 336 bytes)
+	tcp_create_openreq_child (1764 -> 1772 bytes)
+	tcp_data_queue (5784 -> 5892 bytes)
+	tcp_ecn_rcv_synack (620 -> 628 bytes)
+	xen_manage_runstate_time (944 -> 896 bytes)
+	xen_steal_clock (340 -> 296 bytes)
+
+Increase of some functions are due to more aggressive inlining due to
+better codegen (in this build, e.g. bpf_map_is_rdonly is no longer
+present due to being inlined completely).
+
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- arch/arm64/include/asm/rwonce.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v3:
+* Comment.
+
+v2:
+* Add __rwonce_typeof_unqual() as fallback for old compilers.
+---
+ arch/arm64/include/asm/rwonce.h | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 78beceec10cd..fc0fb42b0b64 100644
+index fc0fb42b0b64..42c9e8429274 100644
 --- a/arch/arm64/include/asm/rwonce.h
 +++ b/arch/arm64/include/asm/rwonce.h
-@@ -58,7 +58,7 @@
+@@ -19,6 +19,20 @@
+ 		"ldapr"	#sfx "\t" #regs,				\
+ 	ARM64_HAS_LDAPR)
+ 
++#ifdef USE_TYPEOF_UNQUAL
++#define __rwonce_typeof_unqual(x) TYPEOF_UNQUAL(x)
++#else
++/*
++ * Fallback for older compilers (Clang < 19).
++ *
++ * Uses the fact that, for all supported Clang versions, 'auto' correctly drops
++ * qualifiers. Unlike typeof_unqual(), the type must be completely defined, i.e.
++ * no forward-declared struct pointer dereferences.  The array-to-pointer decay
++ * case does not matter for usage in READ_ONCE() either.
++ */
++#define __rwonce_typeof_unqual(x) typeof(({ auto ____t = (x); ____t; }))
++#endif
++
+ /*
+  * When building with LTO, there is an increased risk of the compiler
+  * converting an address dependency headed by a READ_ONCE() invocation
+@@ -32,8 +46,7 @@
+ #define __READ_ONCE(x)							\
+ ({									\
+ 	typeof(&(x)) __x = &(x);					\
+-	int atomic = 1;							\
+-	union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;	\
++	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
+ 	switch (sizeof(x)) {						\
+ 	case 1:								\
+ 		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
+@@ -56,9 +69,9 @@
+ 			: "Q" (*__x) : "memory");			\
+ 		break;							\
  	default:							\
- 		atomic = 0;						\
+-		atomic = 0;						\
++		__u.__val = *(volatile typeof(*__x) *)__x;		\
  	}								\
--	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);\
-+	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(*__x) *)__x);\
+-	atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(*__x) *)__x);\
++	__u.__val;							\
  })
  
  #endif	/* !BUILD_VDSO */
