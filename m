@@ -1,120 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1307A1C7012;
-	Fri, 30 Jan 2026 06:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C671E00B4
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 06:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769753017; cv=none; b=avokANVNO1MgtGO7Dobha1nJpzcrTGRj30pQtPc/A1pOEOF+uSBAPpb74VoWVBDxdDqYALa9qmYUdZ4voxb3DY2sGABO8F9luDuTYF4fAm3rF32zZ7SUs9pC7Mt9OuWAp9wHXoaB+2Uv+mbOmb0/VdmKj1lhFLnMqtb2jwM1crs=
+	t=1769753972; cv=none; b=CBzV9xupKBTnBd10Mms0ql9bSW9VxPa2sf2AvnXwfBqtSjy/yUWXQw+xwvwHHy2UDlq3BZn3hM0Nj7EDzvm7n5sqcdcAeavl0eF3iElJW9dEVRmM0Pwc5O655EH+XW+urkYRNUtn0awZQjrrOfg5J/K48SOFtLXv08TJELU0x2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769753017; c=relaxed/simple;
-	bh=LTthSLKE8RSuVk1YKEXFDmQwJJcU+qOV1aPdsDtSr/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ftxMlgY85ojyhi0wVE/zKIT26Lk5xhEd3FIr6FGsphvVEj/1zCfEIj9E4B3hQiHKbRP8EW+l0sB+QjehovQsyDhxPnzSVe9CNo7pE6V8pQgV7Myjtj3otdLNOAHjwrlENwWzEvWjIsiekDtNtXF5c/Zs72MR87vU5OQ/En68YpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IR3QoIdZ; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769753972; c=relaxed/simple;
+	bh=8wVtX+UvqwmUQx+ae1bjga1544wbNn+UslnYtmm/o/o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gCaVJYYLRu1iqVKg9zyaCBUTIDYBU8G+PKTnR1n6P3RMNviK8cgf6kqk6AJBQAsuGbI+PlF3oRanLE1haJlvThVm5i2Tgt6/Dkuq7aty/shffIDQblsLW1Ywp8xK8Yfynln4mJshD0y/YuhJ7sMx7dayl/3crIa59T1iORcstzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aXecpj40; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IR3QoIdZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769753015; x=1801289015;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LTthSLKE8RSuVk1YKEXFDmQwJJcU+qOV1aPdsDtSr/k=;
-  b=IR3QoIdZS6QuOxu2CSfmI7lTW6XZMCSXmfSUnzD6JmrMfd+FUkw1I5Qk
-   j3z/9CxQjhfHBC5H5YHJ6vqbrTVOveNiJuo22oAQ9yO39DIQrYGxN5Pul
-   i8Ija5U3IX/XG6laWKXG8xJUOX5tEsFvv/t44+QdX8x3yi+OdVzB5BJ4/
-   5iQGTg9FI3dU5yMrD78gVtvNWAFCqHratDh+uUy1puGla/txi46QDAvkj
-   1yCVKQ0ziGHkN9x4IXt49K87ocnaBzXoaeLxTsRet02JzN1lESu/gaAMg
-   JzJXWxoq7AlYycAm5FtH9ZN2AXp/GAnBxHDZ2IKkWK/AQQ0pqVrFhHoV3
-   Q==;
-X-CSE-ConnectionGUID: TBfWgDxaThymQ11azvEH3w==
-X-CSE-MsgGUID: BmqJQrBSTbaD13uaRFajHQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="96466202"
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="96466202"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 22:03:34 -0800
-X-CSE-ConnectionGUID: jai394SjQ3yIiusppR3KIg==
-X-CSE-MsgGUID: 3+AukfwqTAm/lsQIqoqF3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="212851590"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 29 Jan 2026 22:03:33 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlhbO-00000000cFK-18wj;
-	Fri, 30 Jan 2026 06:03:30 +0000
-Date: Fri, 30 Jan 2026 14:03:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rory Little <rory@candelatech.com>, Enrico Weigelt <info@metux.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org
-Subject: Re: [PATCH] gpio: amd-fch: Return 0-1 range for get operation
-Message-ID: <202601301319.Zm4jGCnY-lkp@intel.com>
-References: <20260129222150.486419-1-rory@candelatech.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aXecpj40"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60U0EBqL015530;
+	Fri, 30 Jan 2026 06:19:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=VzpX+D
+	1T4NO0rxBtsw/qAjafd/dtQvbYUw2Hzo6xLTQ=; b=aXecpj40VtzWrULkv2//g0
+	DNm4evtQAxe6kErip5vck8OYSe8wT0dY8PZfUyYZBCXSjIWNUAU8DdOdkd8jH9zY
+	v1169dU8uEZ/5kuLpQ/GK08+MWz3u5yCWCkyh3/YRiJvGgHJ/NckhVbjAci0AWAy
+	wWcHYWKZICLRsDN7auFUZsjPRrhPvNV1ZKcjTHjBgBViUfISzuRtWI9bdSOG6IFz
+	fn1bLvX2sw9hX5JWjqQnDNsO69zqcvIVKUlUMRtKrzJaXTzO0KmYgTlf+V9Q1OUx
+	jkO7t3xBHIWJUnxbs0DG0DKfy6BQrP22sX2EQasUtKyJPQklHE4pz7vimMdSLBtA
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnt84k96-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 Jan 2026 06:19:05 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60U5tCbX026805;
+	Fri, 30 Jan 2026 06:19:04 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bw9wkn364-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 Jan 2026 06:19:04 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60U6J3jA22872656
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 30 Jan 2026 06:19:03 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 38E9458052;
+	Fri, 30 Jan 2026 06:19:03 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BF90558056;
+	Fri, 30 Jan 2026 06:18:59 +0000 (GMT)
+Received: from [9.61.240.86] (unknown [9.61.240.86])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 30 Jan 2026 06:18:59 +0000 (GMT)
+Message-ID: <a5bc60c3-ec63-4aa6-a455-20817a8e7cff@linux.ibm.com>
+Date: Fri, 30 Jan 2026 11:48:58 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260129222150.486419-1-rory@candelatech.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] powerpc64/ftrace: fixes clang build issues
+To: Hari Bathini <hbathini@linux.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-trace-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu
+ <mhiramat@kernel.org>, llvm@lists.linux.dev,
+        Maryam Moghadas <maryammo@ca.ibm.com>
+References: <20260127084926.34497-1-hbathini@linux.ibm.com>
+Content-Language: en-GB
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <20260127084926.34497-1-hbathini@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jEaW0EEztOdj0g1ZFujptFKA60au6H7-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMwMDA0NyBTYWx0ZWRfX4irutqbuq9l6
+ 2f5rYw2Ae1O/chIYka3uERQgrUQfpcsSo/s4xDAXgPtDXAnXWqrfJR9S5LAbfv7Dd9JY5FsQ/HF
+ qI5g8U6uyiLmMFtFmBdns/PWRLOS54eMMcHHz5WNg4VheXRaUIac1xotA4h7CfxKsRNklEv2qSd
+ 5HPG4b74KzBhWzdPOITdIaDrIpHeU4eLVGB1CL+aeH3/jZbB6yT7z/eUJVCxown/wIona+05UDP
+ 0NbJ5MhLhOpWX94SBf96mQnuE6vMIMmeCb9EHwSOfiKLKNlODbSQkUAFp4EZeXt+2LjtLxFqNa0
+ eDb8ScEXvQ4JxvfvEG7+g5sDx9JpXNi8Q0xEZA+eICGEu5p5MhsStP0EWLAqre+/EBulIqSvA+b
+ 0OvXpzW9PVji5SzCTi15bR6t0EfGPdR8SAorgbWmXcEZgijMlGighHSpfXccMWkv4wJEO+/UPWw
+ w9jvT24x1raYN4SfzpQ==
+X-Authority-Analysis: v=2.4 cv=Zs3g6t7G c=1 sm=1 tr=0 ts=697c4d59 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NEAV23lmAAAA:8 a=VnNF1IyMAAAA:8 a=nOZgRAGxndUz1iHlvXcA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: jEaW0EEztOdj0g1ZFujptFKA60au6H7-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-29_03,2026-01-29_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601300047
 
-Hi Rory,
 
-kernel test robot noticed the following build errors:
+On 27/01/26 2:19 pm, Hari Bathini wrote:
+> Support for -fpatchable-function-entry on ppc64le was added in Clang
+> with [1]. Faced a couple of issues while building the linux kernel
+> with Clang though. Patches 1 & 2 address those issues. The last patch
+> provides workaround to ensure, an open issue [2] in Clang with
+> -fpatchable-function-entry support, does not impact the linux
+> ftrace subsystem.
+>
+> [1] https://github.com/llvm/llvm-project/pull/151569
+> [2] https://github.com/llvm/llvm-project/issues/163706
+>
+>
+> Hari Bathini (3):
+>    powerpc64: make clang cross-build friendly
+>    powerpc64/ftrace: fix OOL stub count with clang
+>    powerpc64/ftrace: workaround clang recording GEP in
+>      __patchable_function_entries
+>
+>   arch/powerpc/Kconfig                          |  4 +--
+>   arch/powerpc/kernel/trace/ftrace.c            | 26 ++++++++++++++++---
+>   ....sh => check-fpatchable-function-entry.sh} |  0
+>   arch/powerpc/tools/ftrace-gen-ool-stubs.sh    |  4 +--
+>   4 files changed, 26 insertions(+), 8 deletions(-)
+>   rename arch/powerpc/tools/{gcc-check-fpatchable-function-entry.sh => check-fpatchable-function-entry.sh} (100%)
+>
+Tested this patch series, and bulild is successful with both GCC and 
+clang23.x version.
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.19-rc7 next-20260129]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rory-Little/gpio-amd-fch-Return-0-1-range-for-get-operation/20260130-063318
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20260129222150.486419-1-rory%40candelatech.com
-patch subject: [PATCH] gpio: amd-fch: Return 0-1 range for get operation
-config: s390-randconfig-002-20260130 (https://download.01.org/0day-ci/archive/20260130/202601301319.Zm4jGCnY-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301319.Zm4jGCnY-lkp@intel.com/reproduce)
+KERNEL PARAMETER enabled:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601301319.Zm4jGCnY-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpio/gpio-amd-fch.c:128:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     128 |         ret = FIELD_GET(AMD_FCH_GPIO_FLAG_READ, readl_relaxed(ptr));
-         |               ^
-   1 error generated.
+CONFIG_ARCH_USING_PATCHABLE_FUNCTION_ENTRY=y
+CONFIG_PPC_FTRACE_OUT_OF_LINE=y
+CONFIG_PPC_FTRACE_OUT_OF_LINE_NUM_RESERVE=32768
 
 
-vim +/FIELD_GET +128 drivers/gpio/gpio-amd-fch.c
+clang version 23.0.0git
 
-   118	
-   119	static int amd_fch_gpio_get(struct gpio_chip *gc,
-   120				    unsigned int offset)
-   121	{
-   122		unsigned long flags;
-   123		int ret;
-   124		struct amd_fch_gpio_priv *priv = gpiochip_get_data(gc);
-   125		void __iomem *ptr = amd_fch_gpio_addr(priv, offset);
-   126	
-   127		spin_lock_irqsave(&priv->lock, flags);
- > 128		ret = FIELD_GET(AMD_FCH_GPIO_FLAG_READ, readl_relaxed(ptr));
-   129		spin_unlock_irqrestore(&priv->lock, flags);
-   130	
-   131		return ret;
-   132	}
-   133	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please add below tag for the series.
+
+
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
+
+
+
+Regards,
+
+Venkat.
+
