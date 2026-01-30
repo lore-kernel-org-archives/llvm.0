@@ -1,196 +1,206 @@
-Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F86B2FCBE3
-	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 16:48:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F21E3806BD;
+	Fri, 30 Jan 2026 18:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769791713; cv=none; b=lZMXjpJ8Vg7afH3gtBPTybulKFa+nuY6ndtVqwi52csOw5IS4JBTELl83NBolGeiLFQi122kiyVJoiqPeuO1FDIQylDQD5SuF8pvIOoihDh1FTFk2bDW7lw516WDiThaE7/K5VFG9Dx88mZT6wucHrkVcIFdehuNRzDZpzUY9S0=
+	t=1769798439; cv=none; b=XDB6m31fKFmpEgVczwMfneMfa7UhROXd75RZ/Ftv1DFb3Jh6ykBkzgBZG18vpf4o1EzE+dP4OTpBbh01Kl/TMUs8JX8MXTPt621V67Cc1xhwD4ifIilqRbDvVu2xxrerLq7v3EhY/UYZ6E8iOhCma5sxx3FmVabm3GXvWL/Bk54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769791713; c=relaxed/simple;
-	bh=f5GCbVXBlczNwQ5Vaf6tzAND2FAuuEYvNWmS17pcDkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DpB1XTj6cT6Q5jrZoR5h6RSguiOnYQq+DvM3pr6L00Z7jPIrGYXuNNixqaWkZpvyeFFQsI1uun4UaGG6Hd5Xr2uCd2BKaLeP5dbaNt+Pqjdoy0qbj59tUfBdXjwjqHkSfgcgCikV8KVXuZz/2OaKKEDLXPkm+JR1cKHvXVdCGLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KGVnzdHa; arc=none smtp.client-ip=209.85.208.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769798439; c=relaxed/simple;
+	bh=pTzY3pqKQxb+aZ0edQQc0lDTSUa7XikNWWEWjeorMo0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iUVsDShBqTxOdsovmGe4tQB9RSi4qExZWWC/70qIx7xQsVWdndYWTLGrystCeaXrXX2PxVIlCgLx5o2f85stAxfJF3tRMY3hdnOMZMQXQ+90aYYYRo0JbYzmj1RjdFQRJxRAFFgb54f8VMwfW/daFkMl/eV79BXjGiqTqrENnh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S6xrKFx/; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KGVnzdHa"
-Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-6582e8831aeso3820186a12.1
-        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 08:48:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769791710; x=1770396510; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D5YrrQBmasl55YNR+UE7+Tj54HTQyt4aQnFBBbSZIJY=;
-        b=KGVnzdHah7s9+buXA8BLtpQMN0N4VtkokCU2M9Ut9sTLYtyGLd+K1q3n5eJsJHXL71
-         gES9GCFH6dRs670GExPNXMv/LQtPy4k7CeRhAslcjTsDqGKf+7uw9tGsrshrnMD6iJGX
-         AWvoq1jZzKJYKgkCnntSS1U1+X/lysLnwRAhHLFN6eFGIY8OfcbHCdFOJAPlf/VVqrhG
-         l33qn+Ca3JlM9gSlP+Nk3ROvVffgl1jsdEwC0X1Nq1c8dcwD5+Zf9YrpCuoFl8UiD3C8
-         f8bpZ5BsLaJeHlsXp0HwLg+szG9J8G6RVxPO6wlQXv+8IFybRMEGoFI6XtNDOoLBo22+
-         yBGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769791710; x=1770396510;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=D5YrrQBmasl55YNR+UE7+Tj54HTQyt4aQnFBBbSZIJY=;
-        b=EMK/PdcmSpHcJVzn5Rm6l4veGmNGqXGbKV6mmMT0KuOxwIe1x5Ui4WGql5ndQzPWZl
-         IBJ8rw6Bun5kYnSpwDSQwlCqnONKmyMI36xL73Wym1kj0BH3R5Ihvxo3kQZZ5qBGx0Gx
-         3riJVCEPM7wp9r5/7lxAUiFjC3YhyzQUeFN+5VRtDlcrnEoSuVUHqHvqoojpD9zicUx8
-         2n2ntQ+hHzM5VLxQm+HBR9lRyw+QrLo2pVae1LkloRTxe5mj+cc+9Fvd2Uao2cme95IH
-         gW5yoNeLJFOJkp4R3Pg+biisfapvCm9p7DRLTbBRnHnV4WOyshLAx7eBPL0yCZgFd04N
-         Ywmg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3q+Zq72bY1rDkOpfhXo6iS5oW/alAbMYLMLBJnBTKHZM8SU4JTHuy8WivyD/3cdfgt9Mv@lists.linux.dev
-X-Gm-Message-State: AOJu0YxrpHUECbGp5+oR1Ip2Ju/6oDy6esirfhp7ajXAKI7LIjkM4ng8
-	Q2YNCW7XCJTzuZIrvs4HKK3vVpJLvLlL/6tKA03a9C9SE2qPYq5b88ikEoJ24Kg2
-X-Gm-Gg: AZuq6aJufC9Z0mawoA7BFiXnyGBexCZ7bvK4H47bxDY8oifUeCrHIMzPDY7tgDTL+os
-	oU3RPzsO+DaaDgOwbhkeEtmwuN1e2G8HHMKWkh0lTn7JNdYm8lAJRmHrQybxMXCRtxIbrwoY1A3
-	f5gT6SU7Fz/Xf5TulUa+hx1geBcinsvjGkIPJBW+0yIWcBFrVIoqvinSxJyjiD/8cZNfjyvYkE0
-	UNobhAYJfenj5Re2NlhsXQ+4x92KZSlst/wovBvQw3oOqOF05dT2Ng8NmcImKEC1mh+YsXvUiio
-	6Wd+EPmJUuHPF4nltdEDFtVdaNTd7+Cvga/EtpWl5LYS+oli90RKXmIMjwKBWY6aIgW/PRfQo0+
-	OatVmgfg+P1epzRaYWXLwLu/YJTlag8Sua0qJRl8Yn75mJb+qhPnEjUIBYyq6O7Hj/PNm+4iheP
-	sy8v73teHDj7WzwDlctdk/eVxGMLow+LQ52TGOGcVvjtwDroKRNVDd
-X-Received: by 2002:a05:6000:3105:b0:430:f5ed:83f9 with SMTP id ffacd0b85a97d-435f3a6ccacmr4297915f8f.2.1769786016653;
-        Fri, 30 Jan 2026 07:13:36 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e1322f40sm22288828f8f.34.2026.01.30.07.13.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 07:13:36 -0800 (PST)
-Date: Fri, 30 Jan 2026 15:13:34 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>,
- Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Boqun
- Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, Bart Van
- Assche <bvanassche@acm.org>, llvm@lists.linux.dev, Catalin Marinas
- <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kernel
- test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260130151334.2191973d@pumpkin>
-In-Reply-To: <20260130132951.2714396-4-elver@google.com>
-References: <20260130132951.2714396-1-elver@google.com>
-	<20260130132951.2714396-4-elver@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S6xrKFx/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769798438; x=1801334438;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pTzY3pqKQxb+aZ0edQQc0lDTSUa7XikNWWEWjeorMo0=;
+  b=S6xrKFx/9qtwpmRzPzvRVVKIjZylax2b9KpEYpZc8eFhyUfg0d/8F3Yy
+   8+c794uNrZsNL77yCCPExvgSo/KYjoeo/apjPSbjMrCdhltZwhmgjeU94
+   pSHVQjpC71wm0DmCSccyifXNdT9WFkgJopdRna66honltgb0A4KZGZkah
+   MJp5Te9hnV7AWIHuHmQW9YMIknydKxirnv0RXwyu5VjoVCFbckXOvUhp2
+   sxPa9ggo5xg9na0Sv4l4D+jaNLT1OTOycPkdp/qnPu/gjB2Lhw6/lOAV2
+   IVNREdl2Me5bZ+f+6j0Lij44sc+mDdmwIgTPOIXSaorgqvLcpvQkIuxFd
+   w==;
+X-CSE-ConnectionGUID: cEm9OCvHSEWwOCNwG8qHYQ==
+X-CSE-MsgGUID: U0jx6pt4SK6P5HpF9Vqv4g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11687"; a="74906569"
+X-IronPort-AV: E=Sophos;i="6.21,263,1763452800"; 
+   d="scan'208";a="74906569"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 10:40:32 -0800
+X-CSE-ConnectionGUID: Df/BIlV4QGu3l/SNdbt/1A==
+X-CSE-MsgGUID: ENSQz7T/TbK4fNHvDWy15A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,263,1763452800"; 
+   d="scan'208";a="213448805"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 30 Jan 2026 10:40:25 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vltPp-00000000dEG-46DP;
+	Fri, 30 Jan 2026 18:40:21 +0000
+Date: Sat, 31 Jan 2026 02:40:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sai Sree Kartheek Adivi <s-adivi@ti.com>, peter.ujfalusi@gmail.com,
+	vkoul@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, nm@ti.com, ssantosh@kernel.org,
+	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	vigneshr@ti.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, r-sharma3@ti.com,
+	gehariprasath@ti.com
+Subject: Re: [PATCH v4 11/19] drivers: soc: ti: k3-ringacc: handle absence of
+ tisci
+Message-ID: <202601310206.DLRWFXou-lkp@intel.com>
+References: <20260130110159.359501-12-s-adivi@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260130110159.359501-12-s-adivi@ti.com>
 
-On Fri, 30 Jan 2026 14:28:26 +0100
-Marco Elver <elver@google.com> wrote:
+Hi Sai,
 
-> When enabling Clang's Context Analysis (aka. Thread Safety Analysis) on
-> kernel/futex/core.o (see Peter's changes at [1]), in arm64 LTO builds we
-> could see:
-> 
-> | kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
-> |      982 | }
-> |          | ^
-> |    kernel/futex/core.c:976:2: note: spinlock acquired here
-> |      976 |         spin_lock(lock_ptr);
-> |          |         ^
-> | kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
-> |      982 | }
-> |          | ^
-> |    kernel/futex/core.c:966:6: note: spinlock acquired here
-> |      966 | void futex_q_lockptr_lock(struct futex_q *q)
-> |          |      ^
-> |    2 warnings generated.
-> 
-> Where we have:
-> 
-> 	extern void futex_q_lockptr_lock(struct futex_q *q) __acquires(q->lock_ptr);
-> 	..
-> 	void futex_q_lockptr_lock(struct futex_q *q)
-> 	{
-> 		spinlock_t *lock_ptr;
-> 
-> 		/*
-> 		 * See futex_unqueue() why lock_ptr can change.
-> 		 */
-> 		guard(rcu)();
-> 	retry:
-> >>		lock_ptr = READ_ONCE(q->lock_ptr);  
-> 		spin_lock(lock_ptr);
-> 	...
-> 	}
-> 
-> At the time of the above report (prior to removal of the 'atomic' flag),
-> Clang Thread Safety Analysis's alias analysis resolved 'lock_ptr' to
-> 'atomic ?  __u.__val : q->lock_ptr' (now just '__u.__val'), and used
-> this as the identity of the context lock given it cannot "see through"
-> the inline assembly; however, we want 'q->lock_ptr' as the canonical
-> context lock.
-> 
-> While for code generation the compiler simplified to '__u.__val' for
-> pointers (8 byte case -> 'atomic' was set), TSA's analysis (a) happens
-> much earlier on the AST, and (b) would be the wrong deduction.
-> 
-> Now that we've gotten rid of the 'atomic' ternary comparison, we can
-> return '__u.__val' through a pointer that we initialize with '&x', but
-> then update via a pointer-to-pointer. When READ_ONCE()'ing a context
-> lock pointer, TSA's alias analysis does not invalidate the initial alias
-> when updated through the pointer-to-pointer, and we make it effectively
-> "see through" the __READ_ONCE().
-> 
-> Code generation is unchanged.
-> 
-> Link: https://lkml.kernel.org/r/20260121110704.221498346@infradead.org [1]
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Tested-by: Boqun Feng <boqun@kernel.org>
-> Signed-off-by: Marco Elver <elver@google.com>
+kernel test robot noticed the following build errors:
 
-LGTM (for an obscure definition of G).
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on next-20260129]
+[cannot apply to linus/master v6.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: David Laight <david.laight.linux@gmail.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Sree-Kartheek-Adivi/dmaengine-ti-k3-udma-move-macros-to-header-file/20260130-191306
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20260130110159.359501-12-s-adivi%40ti.com
+patch subject: [PATCH v4 11/19] drivers: soc: ti: k3-ringacc: handle absence of tisci
+config: arm-randconfig-001-20260131 (https://download.01.org/0day-ci/archive/20260131/202601310206.DLRWFXou-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260131/202601310206.DLRWFXou-lkp@intel.com/reproduce)
 
-> ---
-> v3:
-> * Use 'typeof(*__ret)'.
-> * Commit message.
-> 
-> v2:
-> * Rebase.
-> ---
->  arch/arm64/include/asm/rwonce.h | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index 42c9e8429274..b7de74d4bf07 100644
-> --- a/arch/arm64/include/asm/rwonce.h
-> +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -45,8 +45,12 @@
->   */
->  #define __READ_ONCE(x)							\
->  ({									\
-> -	typeof(&(x)) __x = &(x);					\
-> -	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
-> +	auto __x = &(x);						\
-> +	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
-> +	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
-> +	auto __retp = &__ret;						\
-> +	union { typeof(*__ret) __val; char __c[1]; } __u;		\
-> +	*__retp = &__u.__val;						\
->  	switch (sizeof(x)) {						\
->  	case 1:								\
->  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
-> @@ -71,7 +75,7 @@
->  	default:							\
->  		__u.__val = *(volatile typeof(*__x) *)__x;		\
->  	}								\
-> -	__u.__val;							\
-> +	*__ret;								\
->  })
->  
->  #endif	/* !BUILD_VDSO */
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601310206.DLRWFXou-lkp@intel.com/
 
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/soc/ti/k3-ringacc.c:17:
+>> include/linux/soc/ti/ti_sci_inta_msi.h:17:15: warning: declaration of 'struct msi_domain_info' will not be visible outside of this function [-Wvisibility]
+      17 |                                    struct msi_domain_info *info,
+         |                                           ^
+>> drivers/soc/ti/k3-ringacc.c:1506:11: error: no member named 'domain' in 'struct dev_msi_info'
+    1506 |         dev->msi.domain = of_msi_get_domain(dev, dev->of_node,
+         |         ~~~~~~~~ ^
+   drivers/soc/ti/k3-ringacc.c:1508:16: error: no member named 'domain' in 'struct dev_msi_info'
+    1508 |         if (!dev->msi.domain)
+         |              ~~~~~~~~ ^
+   1 warning and 2 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CAN_DEV
+   Depends on [n]: NETDEVICES [=n] && CAN [=m]
+   Selected by [m]:
+   - CAN [=m] && NET [=y]
+
+
+vim +1506 drivers/soc/ti/k3-ringacc.c
+
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1497  
+40a2a7c395cf5d9 Grygorii Strashko  2020-07-24  1498  static int k3_ringacc_init(struct platform_device *pdev,
+40a2a7c395cf5d9 Grygorii Strashko  2020-07-24  1499  			   struct k3_ringacc *ringacc)
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1500  {
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1501  	const struct soc_device_attribute *soc;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1502  	void __iomem *base_fifo, *base_rt;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1503  	struct device *dev = &pdev->dev;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1504  	int ret, i;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1505  
+34fff62827b254f Thomas Gleixner    2021-12-10 @1506  	dev->msi.domain = of_msi_get_domain(dev, dev->of_node,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1507  					    DOMAIN_BUS_TI_SCI_INTA_MSI);
+e50a76355c1d858 Jayesh Choudhary   2023-07-28  1508  	if (!dev->msi.domain)
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1509  		return -EPROBE_DEFER;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1510  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1511  	ret = k3_ringacc_probe_dt(ringacc);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1512  	if (ret)
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1513  		return ret;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1514  
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1515  	soc = soc_device_match(k3_ringacc_socinfo);
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1516  	if (soc && soc->data) {
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1517  		const struct k3_ringacc_soc_data *soc_data = soc->data;
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1518  
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1519  		ringacc->dma_ring_reset_quirk = soc_data->dma_ring_reset_quirk;
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1520  	}
+95e7be062aea6d2 Grygorii Strashko  2020-09-11  1521  
+f9dbb99748bab00 Zhang Zekun        2023-08-09  1522  	base_rt = devm_platform_ioremap_resource_byname(pdev, "rt");
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1523  	if (IS_ERR(base_rt))
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1524  		return PTR_ERR(base_rt);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1525  
+f9dbb99748bab00 Zhang Zekun        2023-08-09  1526  	base_fifo = devm_platform_ioremap_resource_byname(pdev, "fifos");
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1527  	if (IS_ERR(base_fifo))
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1528  		return PTR_ERR(base_fifo);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1529  
+f9dbb99748bab00 Zhang Zekun        2023-08-09  1530  	ringacc->proxy_gcfg = devm_platform_ioremap_resource_byname(pdev, "proxy_gcfg");
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1531  	if (IS_ERR(ringacc->proxy_gcfg))
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1532  		return PTR_ERR(ringacc->proxy_gcfg);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1533  
+f9dbb99748bab00 Zhang Zekun        2023-08-09  1534  	ringacc->proxy_target_base = devm_platform_ioremap_resource_byname(pdev,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1535  									   "proxy_target");
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1536  	if (IS_ERR(ringacc->proxy_target_base))
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1537  		return PTR_ERR(ringacc->proxy_target_base);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1538  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1539  	ringacc->num_proxies = readl(&ringacc->proxy_gcfg->config) &
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1540  				     K3_RINGACC_PROXY_CFG_THREADS_MASK;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1541  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1542  	ringacc->rings = devm_kzalloc(dev,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1543  				      sizeof(*ringacc->rings) *
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1544  				      ringacc->num_rings,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1545  				      GFP_KERNEL);
+a8eba8dde5fbf0b Christophe JAILLET 2021-12-23  1546  	ringacc->rings_inuse = devm_bitmap_zalloc(dev, ringacc->num_rings,
+a8eba8dde5fbf0b Christophe JAILLET 2021-12-23  1547  						  GFP_KERNEL);
+a8eba8dde5fbf0b Christophe JAILLET 2021-12-23  1548  	ringacc->proxy_inuse = devm_bitmap_zalloc(dev, ringacc->num_proxies,
+a8eba8dde5fbf0b Christophe JAILLET 2021-12-23  1549  						  GFP_KERNEL);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1550  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1551  	if (!ringacc->rings || !ringacc->rings_inuse || !ringacc->proxy_inuse)
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1552  		return -ENOMEM;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1553  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1554  	for (i = 0; i < ringacc->num_rings; i++) {
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1555  		ringacc->rings[i].rt = base_rt +
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1556  				       K3_RINGACC_RT_REGS_STEP * i;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1557  		ringacc->rings[i].fifos = base_fifo +
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1558  					  K3_RINGACC_FIFO_REGS_STEP * i;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1559  		ringacc->rings[i].parent = ringacc;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1560  		ringacc->rings[i].ring_id = i;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1561  		ringacc->rings[i].proxy_id = K3_RINGACC_PROXY_NOT_USED;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1562  	}
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1563  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1564  	ringacc->tisci_ring_ops = &ringacc->tisci->ops.rm_ring_ops;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1565  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1566  	dev_info(dev, "Ring Accelerator probed rings:%u, gp-rings[%u,%u] sci-dev-id:%u\n",
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1567  		 ringacc->num_rings,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1568  		 ringacc->rm_gp_range->desc[0].start,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1569  		 ringacc->rm_gp_range->desc[0].num,
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1570  		 ringacc->tisci_dev_id);
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1571  	dev_info(dev, "dma-ring-reset-quirk: %s\n",
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1572  		 ringacc->dma_ring_reset_quirk ? "enabled" : "disabled");
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1573  	dev_info(dev, "RA Proxy rev. %08x, num_proxies:%u\n",
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1574  		 readl(&ringacc->proxy_gcfg->revision), ringacc->num_proxies);
+40a2a7c395cf5d9 Grygorii Strashko  2020-07-24  1575  
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1576  	return 0;
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1577  }
+3277e8aa2504d97 Grygorii Strashko  2020-01-15  1578  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
