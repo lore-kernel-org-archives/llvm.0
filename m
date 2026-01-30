@@ -1,128 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1529330662;
-	Fri, 30 Jan 2026 08:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BB3244665;
+	Fri, 30 Jan 2026 09:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769763289; cv=none; b=Zt6iW3agFwMzw1bvPD12N9xxeWEQETVG0DUdTYX/ih1dSelPF7OSCEcMzOzr2GUwqnzinaeur1AoBa2+PRfwau1irMAvKcU6+QiinSzgm2HhlioJqH+H+DAyMshJYg+2WJfXD+bWJtZjj7lNoWMdYwZn7/YloLjCiV3sLAxZdTs=
+	t=1769764609; cv=none; b=Mi9NvRvzvLKf8pCJeqMgkJwfJMQ+A56limGPeEm2ffGFVz6kSKyKhHjDCH/8b8qwg+wCn4TeahlzRNqID3MrvIJendb+dw+z6Jdo4f498OLj0KzuV8F2uZV6/9sCoAF7shv4yYMCs8JFkWtRU1KeJrvGiK5jlwSG3+ct8hmADn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769763289; c=relaxed/simple;
-	bh=/Gw/oYGgtDETEkMgg45W6sh3z1H9POY3B2TWb3ezvck=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=dHdhsoZ/mZfeWeZZ24x6OfkO4wAJ92jAuc/MKQOiGU28XhkWJMJBHJJLNEAH/U/31oqsdyzfDDq62eW3nkThmE5K9KAfrSjT6QACRySpyVIhghb44EX70GhUMfpe63wToLN/JHyAzVg/GhYzUMJT76+Mw/9wqhTPdTb50BzZY6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=faxcOoxu; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1769764609; c=relaxed/simple;
+	bh=BBsy+STOjQXoX+872fpKKMUeLGy7GrZywVTivm6NlU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1aAYn0Sg1Pv4/EyXnPtzQsaTtxcx4lcpu2M5MstAu0xTLn4kucitE1Z8gaRo1Lp8byowcVbB4id41RwHYrw56iCSK3Mjm/UJrxdRNgmN99WKnN5as22oQmxi133djnfnNa8bk2ka0Hq0T8Z1oFnrrJqyoEHqWFBHiJvmGhBWm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TLeZoEVi; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="faxcOoxu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TLeZoEVi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769763286; x=1801299286;
-  h=date:from:to:cc:subject:message-id;
-  bh=/Gw/oYGgtDETEkMgg45W6sh3z1H9POY3B2TWb3ezvck=;
-  b=faxcOoxu42HqUo+0fATCNoNAmNnT23FtVT1BhQBes0OlGuEKXZLDiNo3
-   DT4hwv3cIojenOy5c5NbQZrcVfUwQiCMrhHYR2/sNswTnH4sGfPtWl2YI
-   aWfei1zDbQOEc4BmZCXEysKBpZDyWrtBEdB45fv4N4N434bF9keyLz22K
-   ZgaGdjoLp+3EcvvIyZ3JDA2U2u1FaSW+kKPgI4XbQQoW51jOg+dVifEzp
-   if/XuRySqC3/t63ZGlx2ZxmtnCp1sVVQ+CqR6mp0ciFFdSyHAvf/EEjCt
-   rpKbkE4lYmXMV1ImHBsJm5Efkk568FIxe0p1h7kl0Lh3bg20ztuLZCjnX
-   g==;
-X-CSE-ConnectionGUID: vUbCI66HSkazx6Bsl2iP/g==
-X-CSE-MsgGUID: NeeXnNn3RuWurNwoLA9QuA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="93670143"
+  t=1769764608; x=1801300608;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BBsy+STOjQXoX+872fpKKMUeLGy7GrZywVTivm6NlU8=;
+  b=TLeZoEViYWUNIgirXw15puSuRy2ImhFcfMapJnEHjyQdlbjnXAXQDB2t
+   BoY/52rHBqi8Gc/XvhnUO9EdT9W0VC5dQjlk17RACoqwCix3hhcQPHHel
+   Zw32uyr6gr/Z7woY79iDzeTS50c1IPotA82SJHrF8PTB+A+Fc1/6HFH2L
+   1Vb9dYwONsjuvb4mUnIzEwb8IrnROGkTfKUBRxvoZz+2isBRmk606rU1b
+   WJIZ4PeXanWfVBCAJPy/JYdXNotRsfOG6r0owi3EDlQDtFaQetvpZ8qIl
+   JR31HViMV+Ujnap791ykzPr2/A2nbzZhJq4hIqNNrzDQB1EhROrI5juCu
+   A==;
+X-CSE-ConnectionGUID: dHU3rrORSBqcWQIq9vYSXA==
+X-CSE-MsgGUID: K6vodLl1SGKkw5xDVYMm6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="70992411"
 X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="93670143"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 00:54:45 -0800
-X-CSE-ConnectionGUID: D9GYIX3xSzq87qMKq1/ztw==
-X-CSE-MsgGUID: WFsZD3t8S+CX4a4LNLeSRg==
+   d="scan'208";a="70992411"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 01:16:47 -0800
+X-CSE-ConnectionGUID: jwbqCRiKSuulYSBh9+RPlg==
+X-CSE-MsgGUID: g6H9NWmVRMeHNXpaXaA9kg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="212885890"
+   d="scan'208";a="208407269"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 30 Jan 2026 00:54:44 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 30 Jan 2026 01:16:45 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vlkH3-00000000cPE-1QuY;
-	Fri, 30 Jan 2026 08:54:41 +0000
-Date: Fri, 30 Jan 2026 16:54:40 +0800
+	id 1vlkcM-00000000cQm-297A;
+	Fri, 30 Jan 2026 09:16:42 +0000
+Date: Fri, 30 Jan 2026 17:15:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [gourryinverse:scratch/gourry/cxl/region_rework_v3 8/9]
- drivers/cxl/core/sysram_region.c:31:7: error: use of undeclared identifier
- 'MMOP_OFFLINE'; did you mean 'KOBJ_OFFLINE'?
-Message-ID: <202601301640.RCXOteOZ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, longli@microsoft.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mshv: Add support for integrated scheduler
+Message-ID: <202601301732.2k4q81GI-lkp@intel.com>
+References: <176971725312.67225.3938191771112866951.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <176971725312.67225.3938191771112866951.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 
-tree:   https://github.com/gourryinverse/linux scratch/gourry/cxl/region_rework_v3
-head:   ef956221cc52b1c29b05280fcec99686d744d6b4
-commit: f01228503f96ed593825ba00ad03dfa5cd01041f [8/9] cxl/core: Add dax_kmem_region and sysram_region drivers
-config: i386-buildonly-randconfig-003-20260130 (https://download.01.org/0day-ci/archive/20260130/202601301640.RCXOteOZ-lkp@intel.com/config)
+Hi Stanislav,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.19-rc7 next-20260129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Kinsburskii/mshv-Add-support-for-integrated-scheduler/20260130-041014
+base:   linus/master
+patch link:    https://lore.kernel.org/r/176971725312.67225.3938191771112866951.stgit%40skinsburskii-cloud-desktop.internal.cloudapp.net
+patch subject: [PATCH v2] mshv: Add support for integrated scheduler
+config: x86_64-buildonly-randconfig-004-20260130 (https://download.01.org/0day-ci/archive/20260130/202601301732.2k4q81GI-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301640.RCXOteOZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301732.2k4q81GI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601301640.RCXOteOZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601301732.2k4q81GI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/cxl/core/sysram_region.c:31:7: error: use of undeclared identifier 'MMOP_OFFLINE'; did you mean 'KOBJ_OFFLINE'?
-      31 |         case MMOP_OFFLINE:
-         |              ^~~~~~~~~~~~
-         |              KOBJ_OFFLINE
-   include/linux/kobject.h:59:2: note: 'KOBJ_OFFLINE' declared here
-      59 |         KOBJ_OFFLINE,
+>> drivers/hv/mshv_root_main.c:2260:2: error: expected identifier or '('
+    2260 |         dev_dbg(dev, "vmm_caps = %#llx\n", mshv_root.vmm_caps.as_uint64[0]);
          |         ^
->> drivers/cxl/core/sysram_region.c:33:7: error: use of undeclared identifier 'MMOP_ONLINE'
-      33 |         case MMOP_ONLINE:
-         |              ^
->> drivers/cxl/core/sysram_region.c:35:7: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-      35 |         case MMOP_ONLINE_MOVABLE:
-         |              ^
-   drivers/cxl/core/sysram_region.c:49:30: error: use of undeclared identifier 'MMOP_OFFLINE'; did you mean 'KOBJ_OFFLINE'?
-      49 |                 cxlr_sysram->online_type = MMOP_OFFLINE;
-         |                                            ^~~~~~~~~~~~
-         |                                            KOBJ_OFFLINE
-   include/linux/kobject.h:59:2: note: 'KOBJ_OFFLINE' declared here
-      59 |         KOBJ_OFFLINE,
+   include/linux/dev_printk.h:171:2: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
          |         ^
-   drivers/cxl/core/sysram_region.c:51:30: error: use of undeclared identifier 'MMOP_ONLINE'
-      51 |                 cxlr_sysram->online_type = MMOP_ONLINE;
-         |                                            ^
-   drivers/cxl/core/sysram_region.c:53:30: error: use of undeclared identifier 'MMOP_ONLINE_MOVABLE'
-      53 |                 cxlr_sysram->online_type = MMOP_ONLINE_MOVABLE;
-         |                                            ^
-   6 errors generated.
+   include/linux/dev_printk.h:137:3: note: expanded from macro 'dev_no_printk'
+     137 |         ({                                                              \
+         |          ^
+>> drivers/hv/mshv_root_main.c:2260:2: error: expected ')'
+   include/linux/dev_printk.h:171:2: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/dev_printk.h:137:3: note: expanded from macro 'dev_no_printk'
+     137 |         ({                                                              \
+         |          ^
+   drivers/hv/mshv_root_main.c:2260:2: note: to match this '('
+   include/linux/dev_printk.h:171:2: note: expanded from macro 'dev_dbg'
+     171 |         dev_no_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/dev_printk.h:137:2: note: expanded from macro 'dev_no_printk'
+     137 |         ({                                                              \
+         |         ^
+   drivers/hv/mshv_root_main.c:2262:2: error: expected identifier or '('
+    2262 |         return 0;
+         |         ^
+>> drivers/hv/mshv_root_main.c:2263:1: error: extraneous closing brace ('}')
+    2263 | }
+         | ^
+   4 errors generated.
 
 
-vim +31 drivers/cxl/core/sysram_region.c
+vim +2260 drivers/hv/mshv_root_main.c
 
-    24	
-    25	static ssize_t online_type_show(struct device *dev,
-    26					struct device_attribute *attr, char *buf)
-    27	{
-    28		struct cxl_sysram_region *cxlr_sysram = to_cxl_sysram_region(dev);
-    29	
-    30		switch (cxlr_sysram->online_type) {
-  > 31		case MMOP_OFFLINE:
-    32			return sysfs_emit(buf, "offline\n");
-  > 33		case MMOP_ONLINE:
-    34			return sysfs_emit(buf, "online\n");
-  > 35		case MMOP_ONLINE_MOVABLE:
-    36			return sysfs_emit(buf, "online_movable\n");
-    37		default:
-    38			return sysfs_emit(buf, "invalid\n");
-    39		}
-    40	}
-    41	
+621191d709b148 Nuno Das Neves                  2025-03-14  2246  
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2247  static int __init mshv_init_vmm_caps(struct device *dev)
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2248  {
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2249  	int ret;
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2250  
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2251  	ret = hv_call_get_partition_property_ex(HV_PARTITION_ID_SELF,
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2252  						HV_PARTITION_PROPERTY_VMM_CAPABILITIES,
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2253  						0, &mshv_root.vmm_caps,
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2254  						sizeof(mshv_root.vmm_caps));
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2255  	if (ret && hv_l1vh_partition())
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2256  		dev_err(dev, "Failed to get VMM capabilities: %d\n", ret);
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2257  		return ret;
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2258  	}
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2259  
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10 @2260  	dev_dbg(dev, "vmm_caps = %#llx\n", mshv_root.vmm_caps.as_uint64[0]);
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2261  
+21480aa03ff5bc Stanislav Kinsburskii           2026-01-29  2262  	return 0;
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10 @2263  }
+fd612d97a458f0 Purna Pavan Chandra Aekkaladevi 2025-10-10  2264  
 
 -- 
 0-DAY CI Kernel Test Service
