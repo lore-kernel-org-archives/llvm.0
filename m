@@ -1,106 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CF230FC03;
-	Fri, 30 Jan 2026 07:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58842219EB
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 08:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769758191; cv=none; b=B7E+lGVJ9w/Z80pMZmnzKUBfX1GQQAqcO+CT6C9PxUC8jBVDrcChM3CIUAxDIrpNsmQMAoSdiTQnlHW5MiJCVHTbc1vxSZRS/xyxTwVUnUHUzWlkpzFmNgxqFgPIimvipyRpx6QSpBS70USrIYUhVAiHtUso51aFs1H4Upr7vIo=
+	t=1769762001; cv=none; b=oNm3CNphxyTrxSe1z1pGN7uLnKLknyMsKc2FkuDzQWYAfvZ8/tpZLk+64883UY0Ujf1CS9qxWNbCMND9OJuoM4Xab3PWAQPcHG6DxgQhx9TcgADYacXgUURgPadrE5FbYWGZGOVXYfnV4H8XCZ5hEy2D/H+pbR4RaTOUrKRwvVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769758191; c=relaxed/simple;
-	bh=dxMiNmFVXvlVmQf4iWCNObk/9hfl2KT3dOnQzVN2vXs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CKyvqdMl0/7G+ThphFMUhPxqpP/SGeXsQ5HTBIj/O4quSOsgy6NXYZ4KflLnhALTqevkT7AduxcMTXHv6MHhs0JTzFBqA0Zv7DNe4c1XJE1rVnwAU0aN4BzX7rbZNEivYj9wAphVD9D3g3Zed/muxeqCIq5qCFn6qmWBcf0s8aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T/OSHdpE; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769762001; c=relaxed/simple;
+	bh=ilUb25MdL2FidLniPBJD2YUREpfQC458hR2G/+nwbLE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=EZi+WLVv/dyJPW6YJ7QaiN6kQtHoTVR71/IzpAau+bzPvxpeOe9BJeWw9NVUlLCvJrpcgQDaB1kfc9rcrWnnX6NNMej1FRn15JXiEVEdOh6Jz9Ic67rmvanQbCUbIxxnZ8QpmSoHMzH2/Wa0uW+K6LsyXLw68gQt0croeh/MkGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cog7DInE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T/OSHdpE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769758190; x=1801294190;
-  h=date:from:to:cc:subject:message-id;
-  bh=dxMiNmFVXvlVmQf4iWCNObk/9hfl2KT3dOnQzVN2vXs=;
-  b=T/OSHdpEBjJKloZmqjnN6kslqtRfImwEihbjyb4qooP9gG8QPG3Vv9CA
-   JdHJMhb2K4oqUC8GfclRNHKpYraKjo2aOlOznPPhhX40Jqinxt4bmT9rV
-   DSmQAw07mR/3M8kQjo+Jzg5a600rqSzqTHLPHnQmqWQ9gOGZUjRwDzhZY
-   nlddSI+yjCEishoYfSHcz8oQhhcSq3KU0iMLbZ22ce0A4QcN5kPHgoWsM
-   St+WN8EUY+Jgeng4Z3/bv6W0K2sp7AvSDS3HiNqtjPucEJrpgk8OVbJ41
-   LooUCC83aB8f/F3YY0VDwO5hlYGD59jxgBDmBbF2KZjknoWWyzV/jyfFM
-   w==;
-X-CSE-ConnectionGUID: ug+9I/C6QVOFmk+dnS4lxw==
-X-CSE-MsgGUID: lmzUZNCLTO2AnPSbqVFfmQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="96470742"
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="96470742"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 23:29:41 -0800
-X-CSE-ConnectionGUID: FX7eLx0TQqeX1fuaHqJWqw==
-X-CSE-MsgGUID: GswcvOEUTuCcpjCUdJn+kw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="239519033"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 29 Jan 2026 23:29:40 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vliwi-00000000cJo-2rF9;
-	Fri, 30 Jan 2026 07:29:36 +0000
-Date: Fri, 30 Jan 2026 15:29:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [gourryinverse:scratch/gourry/cxl/region_rework_v3 6/9]
- drivers/cxl/core/dax_region.c:94:26: error: call to undeclared function
- 'mhp_get_default_online_type'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202601301511.YgB0Gubo-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cog7DInE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769761999;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Z0Jdx4utyqxvYd7dnnjTQeHPcHLjVenI4wsfGYgMpgs=;
+	b=cog7DInEK75MPVN507K7T8Ksj+PEE7wuN1SqlVG7X5PME32ah+7hXxgDN6xwP4uoMwF1ug
+	JakPJo7Z0tw36lXTO80OdgGMX3cJmaBX0CmSrZzMndklqeQm5mkj5kKV6auKchatyebBdD
+	Vf5S1eE1PvEcN+8YPFnUo/nOqt/AcW4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-681-CmfKqiA4Mq6Ra4fSXtdT6Q-1; Fri,
+ 30 Jan 2026 03:33:17 -0500
+X-MC-Unique: CmfKqiA4Mq6Ra4fSXtdT6Q-1
+X-Mimecast-MFC-AGG-ID: CmfKqiA4Mq6Ra4fSXtdT6Q_1769761996
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 75BE31954237
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 08:33:16 +0000 (UTC)
+Received: from [172.20.60.237] (unknown [10.30.45.107])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EE88E1800965;
+	Fri, 30 Jan 2026 08:33:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc7,
+ upstream-mainline, 8dfce899)
+Date: Fri, 30 Jan 2026 08:33:15 -0000
+To: ftjahjad@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <58688.126013003331700658@us-mta-681.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: pqWIMIPVCaA09MoOME9tE2uUWf4BcIygk9CgDS4E2CM_1769761996
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Gregory,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://github.com/gourryinverse/linux scratch/gourry/cxl/region_rework_v3
-head:   ef956221cc52b1c29b05280fcec99686d744d6b4
-commit: 4fd6f53383d678673b9fd4df224a53c9da119f17 [6/9] cxl/core/region: move dax region device logic into dax_region.c
-config: i386-buildonly-randconfig-003-20260130 (https://download.01.org/0day-ci/archive/20260130/202601301511.YgB0Gubo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301511.YgB0Gubo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601301511.YgB0Gubo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cxl/core/dax_region.c:94:26: error: call to undeclared function 'mhp_get_default_online_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      94 |         cxlr_dax->online_type = mhp_get_default_online_type();
-         |                                 ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/mhp_get_default_online_type +94 drivers/cxl/core/dax_region.c
+Kernel information:
+    Commit message: Merge tag 'pinctrl-v6.19-3' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/linusw/linux-pinctrl
 
-    82	
-    83	int devm_cxl_add_dax_region(struct cxl_region *cxlr,
-    84				    enum dax_driver_type dax_driver)
-    85	{
-    86		struct cxl_dax_region *cxlr_dax;
-    87		struct device *dev;
-    88		int rc;
-    89	
-    90		cxlr_dax = cxl_dax_region_alloc(cxlr);
-    91		if (IS_ERR(cxlr_dax))
-    92			return PTR_ERR(cxlr_dax);
-    93	
-  > 94		cxlr_dax->online_type = mhp_get_default_online_type();
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2292262651
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2292262651_s390x_kernel_kcidb_tool_20556554_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
