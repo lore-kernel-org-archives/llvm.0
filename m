@@ -1,120 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6052737F2;
-	Fri, 30 Jan 2026 20:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3413876D5
+	for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 23:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769805454; cv=none; b=nonOP9y4OuQSuHZzWYXSx9408clLEUEElCaWwkqnPG6D+UHyiNLtfOLmyZL3SVANmy4NPfuH5ItSjK2pgX2UpG2Xy8Q/7wXhXULMqlgHNb1S3ZqsRLJBdoAk+yoIP7vJ0CHboLkK5AY6i0YvJywQM5NGVuEKTJI5AMDlQY9siKA=
+	t=1769816085; cv=none; b=QDjBr2SBlh2vlylaHAsQQ0IOo7g58jWADOBieEItC7JxTO2Ci6Ik10oLPjv7tcMK29ICeUgH9YLOw7LcO6XSsgHMOnULvflZ3084XfewYRb6o1+hFM1qA3R60mpB1gpcRkqL2vmL2We94BES3xeyx90vTAiJ9IDW9vCeprUYKKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769805454; c=relaxed/simple;
-	bh=Qj+qRU6QNb2iDZSZAC4Q29ueq1xUCL2pvqte8O7rjcg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=JREjFqi+1omAiM/SiAZEjnRhCg5Ktl1GbBzTUiDB6hNuylmR0qeHjN2clws1mc0YW2FjU9x+0eXBVZ8X0DBLnO4x21BrV5+tCte/WkANGngEtLMEEjQOtoXYsbnGh6orId2E8H7DrIH4mwAVZW2DygojhysVDNrQUps9PUzM5mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SZmsL//2; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769816085; c=relaxed/simple;
+	bh=ulECtHp4Ium+Dfvm6HTcLmWw4lrXvXShpUyDj58xUjI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tTWY8oWaEAGzu83wp8pPiPIaKa9dSdh5baoUvucuVVOFrj4T4+o51gXbAwhmp+4E4tjhlr2p0oBJlxsYZV2IuZhA1sV4M1TlXqcOeU67ExPKoSoXSsLzvNzgcoq7RcRRcuSVne+Nc3FZ3pwGhXG2sevwF10n9cJeTOnu0r2BFXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oulqfopz; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SZmsL//2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769805452; x=1801341452;
-  h=date:from:to:cc:subject:message-id;
-  bh=Qj+qRU6QNb2iDZSZAC4Q29ueq1xUCL2pvqte8O7rjcg=;
-  b=SZmsL//2r4il5MYWoMkC5y0/CsqWHWwt5ZRLWQ2Pm6bp3hL2WQsPO7Wa
-   dXdOBVxsGQxXt7rV2ezxku2oEgFBo2bPdUl40Ibw2MDSNpki8NfOPX/iO
-   +IgVKke3yXFPAEVo0w2sZmkMKMBDwGvHLQZa1YA077SOtJtQqKkz+nYsj
-   05jmgliVbXlNLOumfbnVPzscnf2Q/uysBirQgathH0ACRBzbJgYO7ahnw
-   Rqe01995DYfnt9merGfFAKq0jUkrBv+3c6djHrMyey6Gry4qCoKWBM2JX
-   V3yBm8NJ3Krur9czqL7+0Rs44wOUar14YixwJ6ZY9qBb9DchBTaM+BM01
-   g==;
-X-CSE-ConnectionGUID: 53yR0jjXQPK9Yo/2reAqWw==
-X-CSE-MsgGUID: ctTT+YHYTX+TwTuUqG+BSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11687"; a="71098008"
-X-IronPort-AV: E=Sophos;i="6.21,263,1763452800"; 
-   d="scan'208";a="71098008"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 12:37:31 -0800
-X-CSE-ConnectionGUID: yX2+yQjgRzCMXqjqIF/lkA==
-X-CSE-MsgGUID: ov/tu1BPRjqVcOUXuzlQMA==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 30 Jan 2026 12:37:30 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlvF9-00000000dL0-39um;
-	Fri, 30 Jan 2026 20:37:27 +0000
-Date: Sat, 31 Jan 2026 04:36:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-pie-v4-wip 22/22]
- arch/x86/boot/startup/map_kernel.c:111:21: error: no member named
- 'kaslr_va_shift' in 'struct boot_params'
-Message-ID: <202601310427.EhGxWXZn-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oulqfopz"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-124a95b6f61so1129483c88.0
+        for <llvm@lists.linux.dev>; Fri, 30 Jan 2026 15:34:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769816083; x=1770420883; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UbNzrAvZknto1XK2xvz0+YGQlJZ46WeHUdmn08kNX5g=;
+        b=oulqfopzNw7GDQIae4mN93YfEzw61+ui7TNmQTQ2bSsWR7swMFd1i6vjfKEaH6MmHn
+         cZwMPgfUekuIXJWbdfWytRoDvjdxDpbLX/yEgpgez0q9NoiOTUTOHuRdNOyid4RFz/gY
+         FwXQPz4Jtpdwi6yT6/FiP/a6gHyDuSPNwakl89+rl+/sJYiv3ofrHpbEXTLMlzBBosXD
+         oYpE1OMR2FAwKPJvEovstZYrAiROa0n5XPsDetZ+pweahI4AgvWY3qbKaG3mtDGvs7cw
+         FlyPuT2os9+Nu/fkfm3UF4m8VakGt26WTdGFLPR73RCM+3lBqOo04fbiLlH/oiQunnGs
+         G1Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769816083; x=1770420883;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UbNzrAvZknto1XK2xvz0+YGQlJZ46WeHUdmn08kNX5g=;
+        b=Wqf5Lv/kcAOUNWHcjDcWESlwlkjlM0y7TctP+aFJjUzcpoZ5BpYdLKuz0HcZDc72P9
+         j5khuKnj7OLYtD+BO2v7wxPE0zNiYW7GHpri0gNdwbG6iXxhIGOWMYhHi3m68SCBxNV9
+         KrjsMcwpDToUAG9HE71zxxNxtjvpM7FehiIH2UZ3ijuXlR2i+RX0qMjgfEbRUwTuqdZe
+         ozLhlC0SubQCjKAQ2bR4LRcaYE/x1p8Js8zR35l3Szz8KIQYW1YkZudqBBk21zi5f4Ld
+         2Wz0xM6xhHiloQ6aO46vZgGCakSuIB+WtThKcTGUERst4of1QMbv2lZBz1D6TOu/r1or
+         +3xA==
+X-Forwarded-Encrypted: i=1; AJvYcCUl2Gfiv7ppE+vifo+28PiCOv4nNRSuESOTzs677FoEY/ebi3+mllk/zuIVmtAQiRQjpPhu@lists.linux.dev
+X-Gm-Message-State: AOJu0YwAqfATLTsKMaBTBNGBiWPtHIvwBrt5cssf82Pu+EmEfso8mIbF
+	BjCrX7pW1CnIBPrb9VwbOtFD1wVcWvNk9lWoxSmesAKqPtpwdtIVscko/tLNgRmM4Lt9EifiyHn
+	9w+N4/DJMKA==
+X-Received: from dycok9.prod.google.com ([2002:a05:7301:db09:b0:2b7:b47b:2f37])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:2f8f:b0:2b0:51a7:509a
+ with SMTP id 5a478bee46e88-2b7c88ed884mr1694274eec.33.1769816082871; Fri, 30
+ Jan 2026 15:34:42 -0800 (PST)
+Date: Fri, 30 Jan 2026 15:34:36 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
+Message-ID: <20260130233439.647447-1-irogers@google.com>
+Subject: [PATCH v10 0/3] perf capstone/llvm dlopen support
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Charlie Jenkins <charlie@rivosinc.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Collin Funk <collin.funk1@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Cc: Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v4-wip
-head:   1857f672aab1ce60b60db9458e7120522a7b5056
-commit: 1857f672aab1ce60b60db9458e7120522a7b5056 [22/22] WIP
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260131/202601310427.EhGxWXZn-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260131/202601310427.EhGxWXZn-lkp@intel.com/reproduce)
+Linking against libcapstone and libLLVM can be a significant increase
+in dependencies and file size if building statically. The dependencies
+are also quite cumbersome if bringing perf into a distribution. For
+something like `perf record` the disassembler and addr2line
+functionality of libcapstone and libLLVM won't be used. These patches
+support dynamically loading these libraries using dlopen and then
+calling the appropriate functions found using dlsym. Using dlopen
+allows libcapstone and libLLVM to be installed separately to perf and
+when that's done the performance will improve as separate commands for
+objdump and addr2line won't be invoked.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601310427.EhGxWXZn-lkp@intel.com/
+The patch series adds perf_ variants of the capstone/llvm functions
+that will either directly call the function or use dlopen/dlsym to
+discover and then call the function.
 
-All errors (new ones prefixed by >>):
+For capstone if there is no capstone.h then the feature test will
+fail, there is no capstone support and HAVE_LIBCAPSTONE_SUPPORT won't
+be defined. This is necessary as the libcapstone structs and enum
+constants vary across releases and perf cannot know what to use
+without having the header file. If HAVE_LIBCAPSTONE_SUPPORT is defined
+and the build made with LIBCAPSTONE_DLOPEN=1 then dlopen is used to
+open libcapstone.so, etc. If LIBCAPSTONE_DLOPEN isn't given to the
+build then the build will try to link against libcapstone (as with
+before these changes).
 
->> arch/x86/boot/startup/map_kernel.c:111:21: error: no member named 'kaslr_va_shift' in 'struct boot_params'
-     111 |                 p2v_offset -= bp->kaslr_va_shift;
-         |                               ~~  ^
-   1 error generated.
+For LLVM if the feature test succeeded then HAVE_LIBLLVM_SUPPORT is
+defined and libLLVM is linked against. If the feature test fails, or
+NO_LIBLLVM=1 given, then dlopen is used to open the library. Five
+constants and three pointer types are declared to avoid having a
+header file dependency - ie there is no case where the LLVM support
+won't try to at least dlopen libLLVM.so.
 
+The LLVM addr2line ABIs are written in C++ with no C counterpart. When
+!HAVE_LIBLLVM_SUPPORT the LLVM addr2line support is compiled out
+except when a new LIBLLVM_DYNAMIC build option is given. This option
+builds a libperf-llvm.so that contains the LLVM addr2line
+implementation and that creates the dlopen/dlsym calls to use this in
+the regular code. Ideally LLVM would extend their C API to avoid this.
 
-vim +111 arch/x86/boot/startup/map_kernel.c
+v10: Make the libcapstone code use capstone.h and conditionally use
+     dlopen as the constants and structs libcapstone declares vary
+     across releases.
+v9: Rebase.
+    https://lore.kernel.org/lkml/20260127062302.544809-1-irogers@google.com/
+v8: Rebase down to 3 patches. Update commit and cover messages.
+v7: Refactor now the first 5 patches, that largely moved code around,
+    have landed. Move the dlopen code to the end of the series so that
+    the first 8 patches can be picked improving capstone/LLVM support
+    without adding the dlopen code. Rename the cover letter and
+    disassembler cleanup patches.
+v6: Refactor the libbfd along with capstone and LLVM, previous patch
+    series had tried to avoid this by just removing the deprecated
+    BUILD_NONDISTRO code. Remove the libtracefs removal into its own
+    patch.
+v5: Rebase and comment typo fix.
+v4: Rebase and addition of a patch removing an unused struct variable.
+v3: Add srcline addr2line fallback trying LLVM first then forking a
+    process. This came up in conversation with Steinar Gunderson
+    <sesse@google.com>.
+    Tweak the cover letter message to try to address Andi Kleen's
+    <ak@linux.intel.com> feedback that the series doesn't really
+    achieve anything.
+v2: Add mangling of the function names in libperf-llvm.so to avoid
+    potential infinite recursion. Add BPF JIT disassembly support to
+    LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
+    series from:
+    https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
+    Some other minor additional clean up.
 
-    78	
-    79	/*
-    80	 * This code is compiled using PIC codegen because it will execute from the
-    81	 * early 1:1 mapping of memory, which deviates from the mapping expected by the
-    82	 * linker. Due to this deviation, taking the address of a global variable will
-    83	 * produce an ambiguous result when using the plain & operator.  Instead,
-    84	 * rip_rel_ptr() must be used, which will return the RIP-relative address in
-    85	 * the 1:1 mapping of memory. Kernel virtual addresses can be determined by
-    86	 * subtracting p2v_offset from the RIP-relative address.
-    87	 */
-    88	unsigned long __init __startup_64(unsigned long p2v_offset,
-    89					  struct boot_params *bp)
-    90	{
-    91		pmd_t (*early_pgts)[PTRS_PER_PMD] = rip_rel_ptr(early_dynamic_pgts);
-    92		unsigned long physaddr = (unsigned long)rip_rel_ptr(_text);
-    93		unsigned long va_text, va_end;
-    94		unsigned long pgtable_flags;
-    95		unsigned long load_delta;
-    96		pgdval_t *pgd;
-    97		p4dval_t *p4d;
-    98		pudval_t *pud;
-    99		pmdval_t *pmd, pmd_entry;
-   100		bool la57;
-   101		int i;
-   102	
-   103		la57 = check_la57_support();
-   104	
-   105		/* Is the address too large? */
-   106		if (physaddr >> MAX_PHYSMEM_BITS)
-   107			for (;;);
-   108	
-   109		sanitize_boot_params(bp);
-   110		if (IS_ENABLED(CONFIG_RELOCATABLE_PIE))
- > 111			p2v_offset -= bp->kaslr_va_shift;
+Ian Rogers (3):
+  perf capstone: Support for dlopen-ing libcapstone.so
+  perf llvm: Support for dlopen-ing libLLVM.so
+  perf llvm: Mangle libperf-llvm.so function names
+
+ tools/perf/Makefile.config         |  21 ++-
+ tools/perf/Makefile.perf           |  24 ++-
+ tools/perf/tests/make              |   4 +
+ tools/perf/util/Build              |   4 +-
+ tools/perf/util/capstone.c         | 176 ++++++++++++++-----
+ tools/perf/util/capstone.h         |  33 ++++
+ tools/perf/util/llvm-c-helpers.cpp | 120 ++++++++++++-
+ tools/perf/util/llvm-c-helpers.h   |  24 ++-
+ tools/perf/util/llvm.c             | 273 +++++++++++++++++++++++++----
+ 9 files changed, 591 insertions(+), 88 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0.rc1.225.gd81095ad13-goog
+
