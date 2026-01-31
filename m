@@ -1,115 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF2E1E98EF;
-	Sat, 31 Jan 2026 06:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392A82C0260;
+	Sat, 31 Jan 2026 06:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769839433; cv=none; b=mf5x455+HKH0uJiktVWlgw/my4iLRjnJMO0yxK7lFGRkeNNBHMxOh1OP2LxQDM6x0Q4kDekk0OpFBZbgsCf4KDeuIElIkcv0QN3URL/Wniz4udjscVUCOc/TLIb6B16ILWjODOuWMMIVW6Itx/HxUKtyXwPiCTorBNe8Eic23nU=
+	t=1769842257; cv=none; b=sXFC9TlLk0ZyiV8kD8dg/mzgU0wtq403IjQpyZVLJVTwuk2nCrcZNo6tztB5E56e344eeOQMPaabW2sGD0WDA3y7Z/D2MzqAHPDSICM7rFU+2RSGWWdRpzP1+n20Dra3jmtJExXnfoScQlMeT1p3iOgbTI0pH88aZXIrn3JEuvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769839433; c=relaxed/simple;
-	bh=UosttGtbZ2MoYXmc0MprPx+pnbkkqwVxQAGz7Ln8sZ8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=uG9Zz7bv0jX97QAHFU5pm5ojffPKEfRIZScgaRPbCGvG1t9MGE/HhPAMoZ45C1+m+j0yZFoxsPxahwZWJmUhHqC50pOOn4L3f+DxYhS5arx8ZT5gYJNqbf1vkRtuNlIX2vNz/IyjqsJJiM95J0MQc4dL3E7HPJSEVTjqj47Pt/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fdcy9EtU; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1769842257; c=relaxed/simple;
+	bh=fBAoqy2BOeMDuMfjXPn2PSToulwQTPVGqhclRTRnRwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gyd3D/dPDtLOvM9pGVAb7XTS43da6alr9/yvdoO1ifNcDMXzzgQbLEaVxy9/6ozKoN/z5M/7m0TV/PDHRxb3i5vCIpi7P+1o1CWZth4iWO2fSmz3yEs0zGdEOagxkMyXHghQ9jb2tDGd84MuLceYTS2bmWohCZiqk46r6RGvqNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aZ8D6VE6; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fdcy9EtU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aZ8D6VE6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769839431; x=1801375431;
-  h=date:from:to:cc:subject:message-id;
-  bh=UosttGtbZ2MoYXmc0MprPx+pnbkkqwVxQAGz7Ln8sZ8=;
-  b=Fdcy9EtUp0wHj/YvEEtF4dV2g0UJTAlhaQE8dPPZpGuO7z7nOCsb43da
-   UpDQlQ/OVB777f721cczby8NQph5q/FSuXO8lRkXQeC9lxaqQS5ycXTg9
-   /M0IiI27Ru/Z2mWFkpTQWKb3A0NaibDf0ewLEU/riHL7HMM4XiA5velOq
-   mMvTN9Gf85h1K/uDpvPDFfAso2fIqBS7wzOwbnBHvyVB1A1L7S5dDEayT
-   GEJ5AUkB06qkS2CxogIvFI2777dM4kRi8EU8A5qrs/PE2YovgXR0u+eg8
-   nCZnwOa/5g4O7ykNIv60qxcZ4PyXWpswQOkmNTUkDYkxhjlALEXMxKRA3
-   Q==;
-X-CSE-ConnectionGUID: qabw9iPkSLC9NxWcp9lNtA==
-X-CSE-MsgGUID: kqsZNA1fRV6sIRS8zB1Xcg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11687"; a="58667052"
+  t=1769842256; x=1801378256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fBAoqy2BOeMDuMfjXPn2PSToulwQTPVGqhclRTRnRwI=;
+  b=aZ8D6VE69Z8+SufG1Da8u+G505Q/Ti91h9o3rAjx9NhmDLcVXDlZxHwa
+   AX+nm4+uTFCrfXjY8tEdnZzDg9fxT3V4hpKYNMWL4HMo+mlCNf8svlpDo
+   rg6bJcpUW1pqV7vfDNwOCn+oPkg2R7laftHN5OcpQSrhKzulE5zHYbPsb
+   Z6Ra5d+e6XR9VJuCmRxQlkiiy8rJWXX7TwE1vxPDYJvG42iRb0bquqqH1
+   9Tr+m10fc3/DE830wM51zHPTxlDm0MN3EVNCPHQjIsreCK1gsKMt7vpdR
+   V1qEx2b/u567KL0to4iep4lEz65CCyHY/1Fro4rbcd80NagjYcam3fupn
+   A==;
+X-CSE-ConnectionGUID: Nl6UXOcrTsycg+VC2G2BlQ==
+X-CSE-MsgGUID: auf5gpXiTCuXuIs9lqp7Yg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11687"; a="71170917"
 X-IronPort-AV: E=Sophos;i="6.21,264,1763452800"; 
-   d="scan'208";a="58667052"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 22:03:50 -0800
-X-CSE-ConnectionGUID: fbme7Ss8SbCx9j7kV/Jt1g==
-X-CSE-MsgGUID: 1+OQZCG7QXiPxamZkOoSVQ==
+   d="scan'208";a="71170917"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 22:50:56 -0800
+X-CSE-ConnectionGUID: CJE5H3JxTTmGLXbhiDAnAg==
+X-CSE-MsgGUID: Zgx5Or/lS+CEZhW6ZlsLpw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,264,1763452800"; 
-   d="scan'208";a="239739999"
+   d="scan'208";a="208153413"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 30 Jan 2026 22:03:49 -0800
+  by orviesa006.jf.intel.com with ESMTP; 30 Jan 2026 22:50:50 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vm45B-00000000dhi-4B9H;
-	Sat, 31 Jan 2026 06:03:45 +0000
-Date: Sat, 31 Jan 2026 14:03:41 +0800
+	id 1vm4oh-00000000djc-1xxu;
+	Sat, 31 Jan 2026 06:50:47 +0000
+Date: Sat, 31 Jan 2026 14:50:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jacob Pan <jacob.pan@linux.microsoft.com>
+To: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>,
+	tomm.merciai@gmail.com, geert@linux-m68k.org,
+	laurent.pinchart@ideasonboard.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [jgunthorpe:iommufd_noiommu 5/6]
- drivers/iommu/iommufd/ioas.c:388:45: error: incompatible pointer types
- passing '__u64 *' (aka 'unsigned long long *') to parameter of type
- 'phys_addr_t *' (aka 'unsigned int *')
-Message-ID: <202601311356.DzWUPM8d-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com,
+	Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v3 01/20] clk: renesas: rzv2h: Add PLLDSI clk mux support
+Message-ID: <202601311423.gWtJuxiU-lkp@intel.com>
+References: <2cc58beb0c0fd96b07374e1e84e90e860c81fb95.1769797221.git.tommaso.merciai.xr@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2cc58beb0c0fd96b07374e1e84e90e860c81fb95.1769797221.git.tommaso.merciai.xr@bp.renesas.com>
 
-tree:   https://github.com/jgunthorpe/linux iommufd_noiommu
-head:   7786a2757eb91ada48627ce3c749705507a3cdd3
-commit: 302d355a6e327aa415cb85ed0e5bf021cbb1f5b3 [5/6] iommufd: Add an ioctl IOMMU_IOAS_GET_PA to query PA from IOVA
-config: i386-buildonly-randconfig-005-20260131 (https://download.01.org/0day-ci/archive/20260131/202601311356.DzWUPM8d-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260131/202601311356.DzWUPM8d-lkp@intel.com/reproduce)
+Hi Tommaso,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20260129]
+[also build test ERROR on linus/master v6.19-rc7]
+[cannot apply to geert-renesas-drivers/renesas-clk drm-misc/drm-misc-next geert-renesas-devel/next v6.19-rc7 v6.19-rc6 v6.19-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/clk-renesas-rzv2h-Add-PLLDSI-clk-mux-support/20260131-023642
+base:   next-20260129
+patch link:    https://lore.kernel.org/r/2cc58beb0c0fd96b07374e1e84e90e860c81fb95.1769797221.git.tommaso.merciai.xr%40bp.renesas.com
+patch subject: [PATCH v3 01/20] clk: renesas: rzv2h: Add PLLDSI clk mux support
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260131/202601311423.gWtJuxiU-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260131/202601311423.gWtJuxiU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601311356.DzWUPM8d-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601311423.gWtJuxiU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/iommu/iommufd/ioas.c:388:45: error: incompatible pointer types passing '__u64 *' (aka 'unsigned long long *') to parameter of type 'phys_addr_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-     388 |         rc = iopt_get_phys(&ioas->iopt, cmd->iova, &cmd->out_phys,
-         |                                                    ^~~~~~~~~~~~~~
-   drivers/iommu/iommufd/iommufd_private.h:123:17: note: passing argument to parameter 'paddr' here
-     123 |                         phys_addr_t *paddr, u64 *length);
-         |                                      ^
+>> drivers/clk/renesas/rzv2h-cpg.c:796:10: error: invalid application of 'typeof' to bit-field
+     796 |         width = fls(smux.width) - ffs(smux.width) + 1;
+         |                 ^
+   arch/riscv/include/asm/bitops.h:154:8: note: expanded from macro 'fls'
+     154 |         typeof(x) x_ = (x);                                     \
+         |               ^
    1 error generated.
 
 
-vim +388 drivers/iommu/iommufd/ioas.c
+vim +/typeof +796 drivers/clk/renesas/rzv2h-cpg.c
 
-   377	
-   378	int iommufd_ioas_get_pa(struct iommufd_ucmd *ucmd)
-   379	{
-   380		struct iommu_ioas_get_pa *cmd = ucmd->cmd;
-   381		struct iommufd_ioas *ioas;
-   382		int rc;
-   383	
-   384		ioas = iommufd_get_ioas(ucmd->ictx, cmd->ioas_id);
-   385		if (IS_ERR(ioas))
-   386			return PTR_ERR(ioas);
-   387	
- > 388		rc = iopt_get_phys(&ioas->iopt, cmd->iova, &cmd->out_phys,
-   389				   &cmd->out_length);
-   390		if (rc)
-   391			goto out_put;
-   392	
-   393		rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-   394	out_put:
-   395		iommufd_put_object(ucmd->ictx, &ioas->obj);
-   396	
-   397		return rc;
-   398	}
-   399	
+   783	
+   784	static struct clk * __init
+   785	rzv2h_cpg_plldsi_smux_clk_register(const struct cpg_core_clk *core,
+   786					   struct rzv2h_cpg_priv *priv)
+   787	{
+   788		struct rzv2h_plldsi_mux_clk *clk_hw_data;
+   789		struct clk_init_data init;
+   790		struct clk_hw *clk_hw;
+   791		struct smuxed smux;
+   792		u8 width;
+   793		int ret;
+   794	
+   795		smux = core->cfg.smux;
+ > 796		width = fls(smux.width) - ffs(smux.width) + 1;
+   797	
+   798		if (width + smux.width > 16) {
+   799			dev_err(priv->dev, "mux value exceeds LOWORD field\n");
+   800			return ERR_PTR(-EINVAL);
+   801		}
+   802	
+   803		clk_hw_data = devm_kzalloc(priv->dev, sizeof(*clk_hw_data), GFP_KERNEL);
+   804		if (!clk_hw_data)
+   805			return ERR_PTR(-ENOMEM);
+   806	
+   807		clk_hw_data->priv = priv;
+   808	
+   809		init.name = core->name;
+   810		init.ops = &rzv2h_cpg_plldsi_smux_ops;
+   811		init.flags = core->flag;
+   812		init.parent_names = core->parent_names;
+   813		init.num_parents = core->num_parents;
+   814	
+   815		clk_hw_data->mux.reg = priv->base + smux.offset;
+   816	
+   817		clk_hw_data->mux.shift = smux.shift;
+   818		clk_hw_data->mux.mask = smux.width;
+   819		clk_hw_data->mux.flags = core->mux_flags;
+   820		clk_hw_data->mux.lock = &priv->rmw_lock;
+   821	
+   822		clk_hw = &clk_hw_data->mux.hw;
+   823		clk_hw->init = &init;
+   824	
+   825		ret = devm_clk_hw_register(priv->dev, clk_hw);
+   826		if (ret)
+   827			return ERR_PTR(ret);
+   828	
+   829		return clk_hw->clk;
+   830	}
+   831	
 
 -- 
 0-DAY CI Kernel Test Service
