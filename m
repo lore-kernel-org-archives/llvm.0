@@ -1,274 +1,223 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5191A0BE0;
-	Sat, 31 Jan 2026 16:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA6130EF89;
+	Sat, 31 Jan 2026 16:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769877262; cv=none; b=RtgwEZWSYgFNI5IHC9UJ05/OtkM9XezfcakBiptCUUK4YZzEZJf+Y1q4EILnQv7CwU0ybcaIw11pkBBQBn6E/rTB3ma6WUUtbYWUu1WHGSN9plR+xEMjwkVB2EOptJD/tPx6x0UMIDbG//nACq8xVSwqZifuANRS9aLKN+ca65o=
+	t=1769877264; cv=none; b=TMMHPqIvYLfYwx+F6eGBBfYfcb8H4KyzK0xPIauMwUu5IFuR4rIIaI+7iZTmF4IxBJ6W7XkvhzXfI4Jdg8cgsZwWwRN3HLwhSLIncf/EzoobfVIHJlb/6jvDZ4lSQFcy62clX65xeb5pC0HxCOC52pOyTV+q2mgyLoX08rwL+c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769877262; c=relaxed/simple;
-	bh=bnf95Md76DNgf1cWpsKruqT4lDnFBtUIfSIM1fE+2lI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=C3TEpMoGSSGSNNMw/NRLoLQwRfs2y1DzNVLk1HywRrxXUwjzMydO/a7Y32NiRm0RTS5rrzcWSe0k+SaIfKJ/8X7hYo5eDyUn72lWN68oW9gh/jChLe6qKqiA/ixGiTDNevzkxJBldcZ9OSN19i3nwSLGL78U0qZHsHbaRnRC6x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S2YTPOfM; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1769877264; c=relaxed/simple;
+	bh=TXGzYCfaxy+KgDZAD5l6FylHMzTOKjN6aZabO5U+s5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mx9M2hXV/38aOMcUBsissibciaLokA47+YhmUp0cRbDVyUgl6fipDBndBOcI/OAR2x+i7I2MEW5WX62MSIxHp1Io/chmDhotWQFPEpPFet/0moc/ZUHvS3IjUaBCJFpYY6bS2fMEh3bYRJ84sUShPTR84PpCSqP2bT1zVTTMJlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hdQ/VfPx; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S2YTPOfM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hdQ/VfPx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769877260; x=1801413260;
-  h=date:from:to:cc:subject:message-id;
-  bh=bnf95Md76DNgf1cWpsKruqT4lDnFBtUIfSIM1fE+2lI=;
-  b=S2YTPOfMY4r8lPC84S0jWQqk66JZInJg1N0i3zFPhP7ZlRIkBWbalOnH
-   9kTSmxAZuMgR4aNiOOrO9+J/8t5WUDbG0keDoo2Hhyc1wPgd+pNvDxqOq
-   bOkWQZ3F0eGbF3gc+owo2XnhlMmCJgEBIWZ1MaNg9fcfyLjQXRC0/CbJY
-   T19NWeRAMA6vpfL/TRybzr//yKQf+D4uHKU+J8xlt7SPQJfkJeuvE5hEu
-   6NjEXAKZuLeRGXDwYBCZerRlZbsO6YkWwso4pOt9X14d1lr/tR3Uq6cfR
-   9emYVrA7ExuuFsb3BiS0G+luQmggrbm5FCsIxsRL/UVzehvkKlA5CSMoN
-   A==;
-X-CSE-ConnectionGUID: 1h/uSzR1ToqDCaSGrWz1Fg==
-X-CSE-MsgGUID: SYrxLdcGRTyxoMEM3yPGvw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11688"; a="96563080"
+  t=1769877262; x=1801413262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TXGzYCfaxy+KgDZAD5l6FylHMzTOKjN6aZabO5U+s5Q=;
+  b=hdQ/VfPxUVpQlOme6qrny900QM4q7aodZeJFWBjAF8meRGMwpX1CUBp0
+   OQBcQHICc8YaQEAO0eB8K8VuojyoIlTZbZPsirnO4X2H7lviTeAkECwhj
+   3Fpbtu+yo574H5II308OPj9NkY8a+fyoqMwIig1HeL5vSl7uhM/UDeRDl
+   VUXHsWX5sG5i0MZt7pL9j0Ce0wAEiOpdeU9s+XX67ZWyug3rKfH973jM3
+   Anm2erKdGfgZZ04fqKrCsCGaBUiJ9ldaHCZHQABqDHlz+0cgNJq//FlFE
+   yLLWF1oUn48Dfrgxz7enCGzX5hphBWDF9QldrbtpkDcskWsA3/0KNfTDN
+   w==;
+X-CSE-ConnectionGUID: 3AJctYqCSJ21Digntt+jQg==
+X-CSE-MsgGUID: PVjQOemRQxeetCrm/nAogA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11688"; a="96563081"
 X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
-   d="scan'208";a="96563080"
+   d="scan'208";a="96563081"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2026 08:34:19 -0800
-X-CSE-ConnectionGUID: xbVLkJF9Q+Ch7YwGHoAnhA==
-X-CSE-MsgGUID: 1EmkD5g4RVCd4zqKMLg9vw==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2026 08:34:21 -0800
+X-CSE-ConnectionGUID: 4QyvG5cbS1CNBVjK40AkeQ==
+X-CSE-MsgGUID: GELKly7XR12F1jp2aZ2MzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
-   d="scan'208";a="214007527"
+   d="scan'208";a="214007532"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
   by fmviesa004.fm.intel.com with ESMTP; 31 Jan 2026 08:34:17 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vmDvL-00000000eBL-2NCh;
+	id 1vmDvL-00000000eBI-1pKZ;
 	Sat, 31 Jan 2026 16:34:15 +0000
-Date: Sun, 01 Feb 2026 00:34:03 +0800
+Date: Sun, 1 Feb 2026 00:33:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [agd5f:ib_improvements7 8/17]
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c:4687:3: warning: variable 'ib' is
- uninitialized when used here
-Message-ID: <202602010017.IVwlmiJb-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>, anthony.l.nguyen@intel.com,
+	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, daniel@iogearbox.net, magnus.karlsson@intel.com,
+	bjorn@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>, stable@vger.kernel.org
+Subject: Re: [Intel-wired-lan] [PATCH v2] i40e: add an error handling path in
+ i40e_xsk_pool_enable()
+Message-ID: <202602010050.pI2ZZmft-lkp@intel.com>
+References: <20260131055217.729048-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260131055217.729048-1-lihaoxiang@isrc.iscas.ac.cn>
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git ib_improvements7
-head:   d143c0854dc1ee192d8993b3b949dc7288d2f755
-commit: 68c2a1121922681ac8d09b43a322bca7e0d634cb [8/17] drm/amdgpu: switch all IPs to using job for IBs
-config: x86_64-randconfig-006-20260131 (https://download.01.org/0day-ci/archive/20260201/202602010017.IVwlmiJb-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260201/202602010017.IVwlmiJb-lkp@intel.com/reproduce)
+Hi Haoxiang,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tnguy-next-queue/dev-queue]
+[also build test ERROR on tnguy-net-queue/dev-queue linus/master v6.19-rc7 next-20260130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haoxiang-Li/i40e-add-an-error-handling-path-in-i40e_xsk_pool_enable/20260131-135447
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+patch link:    https://lore.kernel.org/r/20260131055217.729048-1-lihaoxiang%40isrc.iscas.ac.cn
+patch subject: [Intel-wired-lan] [PATCH v2] i40e: add an error handling path in i40e_xsk_pool_enable()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260201/202602010050.pI2ZZmft-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260201/202602010050.pI2ZZmft-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602010017.IVwlmiJb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602010050.pI2ZZmft-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c:4687:3: warning: variable 'ib' is uninitialized when used here [-Wuninitialized]
-    4687 |                 ib->ptr[i + (vgpr_offset / 4)] = vgpr_init_shader_ptr[i];
-         |                 ^~
-   drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c:4631:22: note: initialize the variable 'ib' to silence this warning
-    4631 |         struct amdgpu_ib *ib;
-         |                             ^
-         |                              = NULL
-   1 warning generated.
---
->> drivers/gpu/drm/amd/amdgpu/gfx_v9_4_2.c:374:3: warning: variable 'ib' is uninitialized when used here [-Wuninitialized]
-     374 |                 ib->ptr[i + (shader_offset / 4)] = shader_ptr[i];
-         |                 ^~
-   drivers/gpu/drm/amd/amdgpu/gfx_v9_4_2.c:354:22: note: initialize the variable 'ib' to silence this warning
-     354 |         struct amdgpu_ib *ib;
-         |                             ^
-         |                              = NULL
-   1 warning generated.
+>> drivers/net/ethernet/intel/i40e/i40e_xsk.c:130:2: error: call to undeclared function 'i40e_xsk_pool_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |         i40e_xsk_pool_disable(vsi, qid);
+         |         ^
+   drivers/net/ethernet/intel/i40e/i40e_xsk.c:130:2: note: did you mean 'i40e_xsk_pool_enable'?
+   drivers/net/ethernet/intel/i40e/i40e_xsk.c:82:12: note: 'i40e_xsk_pool_enable' declared here
+      82 | static int i40e_xsk_pool_enable(struct i40e_vsi *vsi,
+         |            ^
+>> drivers/net/ethernet/intel/i40e/i40e_xsk.c:141:12: error: conflicting types for 'i40e_xsk_pool_disable'
+     141 | static int i40e_xsk_pool_disable(struct i40e_vsi *vsi, u16 qid)
+         |            ^
+   drivers/net/ethernet/intel/i40e/i40e_xsk.c:130:2: note: previous implicit declaration is here
+     130 |         i40e_xsk_pool_disable(vsi, qid);
+         |         ^
+   2 errors generated.
 
 
-vim +/ib +4687 drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+vim +/i40e_xsk_pool_disable +130 drivers/net/ethernet/intel/i40e/i40e_xsk.c
 
-  4626	
-  4627	static int gfx_v9_0_do_edc_gpr_workarounds(struct amdgpu_device *adev)
-  4628	{
-  4629		struct amdgpu_ring *ring = &adev->gfx.compute_ring[0];
-  4630		struct amdgpu_job *job;
-  4631		struct amdgpu_ib *ib;
-  4632		struct dma_fence *f = NULL;
-  4633		int r, i;
-  4634		unsigned total_size, vgpr_offset, sgpr_offset;
-  4635		u64 gpu_addr;
-  4636	
-  4637		int compute_dim_x = adev->gfx.config.max_shader_engines *
-  4638							adev->gfx.config.max_cu_per_sh *
-  4639							adev->gfx.config.max_sh_per_se;
-  4640		int sgpr_work_group_size = 5;
-  4641		int gpr_reg_size = adev->gfx.config.max_shader_engines + 6;
-  4642		int vgpr_init_shader_size;
-  4643		const u32 *vgpr_init_shader_ptr;
-  4644		const struct soc15_reg_entry *vgpr_init_regs_ptr;
-  4645	
-  4646		/* only support when RAS is enabled */
-  4647		if (!amdgpu_ras_is_supported(adev, AMDGPU_RAS_BLOCK__GFX))
-  4648			return 0;
-  4649	
-  4650		/* bail if the compute ring is not ready */
-  4651		if (!ring->sched.ready)
-  4652			return 0;
-  4653	
-  4654		if (amdgpu_ip_version(adev, GC_HWIP, 0) == IP_VERSION(9, 4, 1)) {
-  4655			vgpr_init_shader_ptr = vgpr_init_compute_shader_arcturus;
-  4656			vgpr_init_shader_size = sizeof(vgpr_init_compute_shader_arcturus);
-  4657			vgpr_init_regs_ptr = vgpr_init_regs_arcturus;
-  4658		} else {
-  4659			vgpr_init_shader_ptr = vgpr_init_compute_shader;
-  4660			vgpr_init_shader_size = sizeof(vgpr_init_compute_shader);
-  4661			vgpr_init_regs_ptr = vgpr_init_regs;
-  4662		}
-  4663	
-  4664		total_size =
-  4665			(gpr_reg_size * 3 + 4 + 5 + 2) * 4; /* VGPRS */
-  4666		total_size +=
-  4667			(gpr_reg_size * 3 + 4 + 5 + 2) * 4; /* SGPRS1 */
-  4668		total_size +=
-  4669			(gpr_reg_size * 3 + 4 + 5 + 2) * 4; /* SGPRS2 */
-  4670		total_size = ALIGN(total_size, 256);
-  4671		vgpr_offset = total_size;
-  4672		total_size += ALIGN(vgpr_init_shader_size, 256);
-  4673		sgpr_offset = total_size;
-  4674		total_size += sizeof(sgpr_init_compute_shader);
-  4675	
-  4676		/* allocate an indirect buffer to put the commands in */
-  4677		r = amdgpu_job_alloc_with_ib(ring->adev, NULL, NULL, total_size,
-  4678					     AMDGPU_IB_POOL_DIRECT, &job,
-  4679					     AMDGPU_KERNEL_JOB_ID_RUN_SHADER);
-  4680		if (r) {
-  4681			drm_err(adev_to_drm(adev), "failed to get ib (%d).\n", r);
-  4682			return r;
-  4683		}
-  4684	
-  4685		/* load the compute shaders */
-  4686		for (i = 0; i < vgpr_init_shader_size/sizeof(u32); i++)
-> 4687			ib->ptr[i + (vgpr_offset / 4)] = vgpr_init_shader_ptr[i];
-  4688	
-  4689		for (i = 0; i < ARRAY_SIZE(sgpr_init_compute_shader); i++)
-  4690			ib->ptr[i + (sgpr_offset / 4)] = sgpr_init_compute_shader[i];
-  4691	
-  4692		/* init the ib length to 0 */
-  4693		ib->length_dw = 0;
-  4694	
-  4695		/* VGPR */
-  4696		/* write the register state for the compute dispatch */
-  4697		for (i = 0; i < gpr_reg_size; i++) {
-  4698			ib->ptr[ib->length_dw++] = PACKET3(PACKET3_SET_SH_REG, 1);
-  4699			ib->ptr[ib->length_dw++] = SOC15_REG_ENTRY_OFFSET(vgpr_init_regs_ptr[i])
-  4700									- PACKET3_SET_SH_REG_START;
-  4701			ib->ptr[ib->length_dw++] = vgpr_init_regs_ptr[i].reg_value;
-  4702		}
-  4703		/* write the shader start address: mmCOMPUTE_PGM_LO, mmCOMPUTE_PGM_HI */
-  4704		gpu_addr = (ib->gpu_addr + (u64)vgpr_offset) >> 8;
-  4705		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_SET_SH_REG, 2);
-  4706		ib->ptr[ib->length_dw++] = SOC15_REG_OFFSET(GC, 0, mmCOMPUTE_PGM_LO)
-  4707								- PACKET3_SET_SH_REG_START;
-  4708		ib->ptr[ib->length_dw++] = lower_32_bits(gpu_addr);
-  4709		ib->ptr[ib->length_dw++] = upper_32_bits(gpu_addr);
-  4710	
-  4711		/* write dispatch packet */
-  4712		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_DISPATCH_DIRECT, 3);
-  4713		ib->ptr[ib->length_dw++] = compute_dim_x * 2; /* x */
-  4714		ib->ptr[ib->length_dw++] = 1; /* y */
-  4715		ib->ptr[ib->length_dw++] = 1; /* z */
-  4716		ib->ptr[ib->length_dw++] =
-  4717			REG_SET_FIELD(0, COMPUTE_DISPATCH_INITIATOR, COMPUTE_SHADER_EN, 1);
-  4718	
-  4719		/* write CS partial flush packet */
-  4720		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_EVENT_WRITE, 0);
-  4721		ib->ptr[ib->length_dw++] = EVENT_TYPE(7) | EVENT_INDEX(4);
-  4722	
-  4723		/* SGPR1 */
-  4724		/* write the register state for the compute dispatch */
-  4725		for (i = 0; i < gpr_reg_size; i++) {
-  4726			ib->ptr[ib->length_dw++] = PACKET3(PACKET3_SET_SH_REG, 1);
-  4727			ib->ptr[ib->length_dw++] = SOC15_REG_ENTRY_OFFSET(sgpr1_init_regs[i])
-  4728									- PACKET3_SET_SH_REG_START;
-  4729			ib->ptr[ib->length_dw++] = sgpr1_init_regs[i].reg_value;
-  4730		}
-  4731		/* write the shader start address: mmCOMPUTE_PGM_LO, mmCOMPUTE_PGM_HI */
-  4732		gpu_addr = (ib->gpu_addr + (u64)sgpr_offset) >> 8;
-  4733		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_SET_SH_REG, 2);
-  4734		ib->ptr[ib->length_dw++] = SOC15_REG_OFFSET(GC, 0, mmCOMPUTE_PGM_LO)
-  4735								- PACKET3_SET_SH_REG_START;
-  4736		ib->ptr[ib->length_dw++] = lower_32_bits(gpu_addr);
-  4737		ib->ptr[ib->length_dw++] = upper_32_bits(gpu_addr);
-  4738	
-  4739		/* write dispatch packet */
-  4740		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_DISPATCH_DIRECT, 3);
-  4741		ib->ptr[ib->length_dw++] = compute_dim_x / 2 * sgpr_work_group_size; /* x */
-  4742		ib->ptr[ib->length_dw++] = 1; /* y */
-  4743		ib->ptr[ib->length_dw++] = 1; /* z */
-  4744		ib->ptr[ib->length_dw++] =
-  4745			REG_SET_FIELD(0, COMPUTE_DISPATCH_INITIATOR, COMPUTE_SHADER_EN, 1);
-  4746	
-  4747		/* write CS partial flush packet */
-  4748		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_EVENT_WRITE, 0);
-  4749		ib->ptr[ib->length_dw++] = EVENT_TYPE(7) | EVENT_INDEX(4);
-  4750	
-  4751		/* SGPR2 */
-  4752		/* write the register state for the compute dispatch */
-  4753		for (i = 0; i < gpr_reg_size; i++) {
-  4754			ib->ptr[ib->length_dw++] = PACKET3(PACKET3_SET_SH_REG, 1);
-  4755			ib->ptr[ib->length_dw++] = SOC15_REG_ENTRY_OFFSET(sgpr2_init_regs[i])
-  4756									- PACKET3_SET_SH_REG_START;
-  4757			ib->ptr[ib->length_dw++] = sgpr2_init_regs[i].reg_value;
-  4758		}
-  4759		/* write the shader start address: mmCOMPUTE_PGM_LO, mmCOMPUTE_PGM_HI */
-  4760		gpu_addr = (ib->gpu_addr + (u64)sgpr_offset) >> 8;
-  4761		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_SET_SH_REG, 2);
-  4762		ib->ptr[ib->length_dw++] = SOC15_REG_OFFSET(GC, 0, mmCOMPUTE_PGM_LO)
-  4763								- PACKET3_SET_SH_REG_START;
-  4764		ib->ptr[ib->length_dw++] = lower_32_bits(gpu_addr);
-  4765		ib->ptr[ib->length_dw++] = upper_32_bits(gpu_addr);
-  4766	
-  4767		/* write dispatch packet */
-  4768		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_DISPATCH_DIRECT, 3);
-  4769		ib->ptr[ib->length_dw++] = compute_dim_x / 2 * sgpr_work_group_size; /* x */
-  4770		ib->ptr[ib->length_dw++] = 1; /* y */
-  4771		ib->ptr[ib->length_dw++] = 1; /* z */
-  4772		ib->ptr[ib->length_dw++] =
-  4773			REG_SET_FIELD(0, COMPUTE_DISPATCH_INITIATOR, COMPUTE_SHADER_EN, 1);
-  4774	
-  4775		/* write CS partial flush packet */
-  4776		ib->ptr[ib->length_dw++] = PACKET3(PACKET3_EVENT_WRITE, 0);
-  4777		ib->ptr[ib->length_dw++] = EVENT_TYPE(7) | EVENT_INDEX(4);
-  4778	
-  4779		/* shedule the ib on the ring */
-  4780		r = amdgpu_job_submit_direct(job, ring, &f);
-  4781		if (r) {
-  4782			drm_err(adev_to_drm(adev), "ib schedule failed (%d).\n", r);
-  4783			amdgpu_job_free(job);
-  4784			goto fail;
-  4785		}
-  4786	
-  4787		/* wait for the GPU to finish processing the IB */
-  4788		r = dma_fence_wait(f, false);
-  4789		if (r) {
-  4790			drm_err(adev_to_drm(adev), "fence wait failed (%d).\n", r);
-  4791			goto fail;
-  4792		}
-  4793	
-  4794	fail:
-  4795		dma_fence_put(f);
-  4796	
-  4797		return r;
-  4798	}
-  4799	
+    72	
+    73	/**
+    74	 * i40e_xsk_pool_enable - Enable/associate an AF_XDP buffer pool to a
+    75	 * certain ring/qid
+    76	 * @vsi: Current VSI
+    77	 * @pool: buffer pool
+    78	 * @qid: Rx ring to associate buffer pool with
+    79	 *
+    80	 * Returns 0 on success, <0 on failure
+    81	 **/
+    82	static int i40e_xsk_pool_enable(struct i40e_vsi *vsi,
+    83					struct xsk_buff_pool *pool,
+    84					u16 qid)
+    85	{
+    86		struct net_device *netdev = vsi->netdev;
+    87		bool if_running;
+    88		int err;
+    89	
+    90		if (vsi->type != I40E_VSI_MAIN)
+    91			return -EINVAL;
+    92	
+    93		if (qid >= vsi->num_queue_pairs)
+    94			return -EINVAL;
+    95	
+    96		if (qid >= netdev->real_num_rx_queues ||
+    97		    qid >= netdev->real_num_tx_queues)
+    98			return -EINVAL;
+    99	
+   100		err = xsk_pool_dma_map(pool, &vsi->back->pdev->dev, I40E_RX_DMA_ATTR);
+   101		if (err)
+   102			return err;
+   103	
+   104		set_bit(qid, vsi->af_xdp_zc_qps);
+   105	
+   106		if_running = netif_running(vsi->netdev) && i40e_enabled_xdp_vsi(vsi);
+   107	
+   108		if (if_running) {
+   109			err = i40e_queue_pair_disable(vsi, qid);
+   110			if (err)
+   111				goto err_out;
+   112	
+   113			err = i40e_realloc_rx_xdp_bi(vsi->rx_rings[qid], true);
+   114			if (err)
+   115				goto err_out;
+   116	
+   117			err = i40e_queue_pair_enable(vsi, qid);
+   118			if (err)
+   119				goto err_out;
+   120	
+   121			/* Kick start the NAPI context so that receiving will start */
+   122			err = i40e_xsk_wakeup(vsi->netdev, qid, XDP_WAKEUP_RX);
+   123			if (err)
+   124				goto err_out;
+   125		}
+   126	
+   127		return 0;
+   128	
+   129	err_out:
+ > 130		i40e_xsk_pool_disable(vsi, qid);
+   131	}
+   132	
+   133	/**
+   134	 * i40e_xsk_pool_disable - Disassociate an AF_XDP buffer pool from a
+   135	 * certain ring/qid
+   136	 * @vsi: Current VSI
+   137	 * @qid: Rx ring to associate buffer pool with
+   138	 *
+   139	 * Returns 0 on success, <0 on failure
+   140	 **/
+ > 141	static int i40e_xsk_pool_disable(struct i40e_vsi *vsi, u16 qid)
+   142	{
+   143		struct net_device *netdev = vsi->netdev;
+   144		struct xsk_buff_pool *pool;
+   145		bool if_running;
+   146		int err;
+   147	
+   148		pool = xsk_get_pool_from_qid(netdev, qid);
+   149		if (!pool)
+   150			return -EINVAL;
+   151	
+   152		if_running = netif_running(vsi->netdev) && i40e_enabled_xdp_vsi(vsi);
+   153	
+   154		if (if_running) {
+   155			err = i40e_queue_pair_disable(vsi, qid);
+   156			if (err)
+   157				return err;
+   158		}
+   159	
+   160		clear_bit(qid, vsi->af_xdp_zc_qps);
+   161		xsk_pool_dma_unmap(pool, I40E_RX_DMA_ATTR);
+   162	
+   163		if (if_running) {
+   164			err = i40e_realloc_rx_xdp_bi(vsi->rx_rings[qid], false);
+   165			if (err)
+   166				return err;
+   167			err = i40e_queue_pair_enable(vsi, qid);
+   168			if (err)
+   169				return err;
+   170		}
+   171	
+   172		return 0;
+   173	}
+   174	
 
 -- 
 0-DAY CI Kernel Test Service
