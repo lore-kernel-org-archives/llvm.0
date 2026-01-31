@@ -1,134 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E0B30EF9A
-	for <llvm@lists.linux.dev>; Sat, 31 Jan 2026 19:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA98836C0D8;
+	Sat, 31 Jan 2026 20:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769886194; cv=none; b=DlRQrh1fU/neA+PtNZhxW93KQO5ETOrwMxTdlyf8SjPTae70obxJm6xB4oPSUv82K6BcBmdHGq3fFZK+ZH8BlH4x/ZjDSPxHwGJJkIS3HfeZs9YctQd90zpez6jtu/DiqyNX4GdWvqUWqZDP3XDAya06JRycbYlSMQW4IXohQoY=
+	t=1769889631; cv=none; b=SO7TwLkT8/jXLYmYefqqlljH3q7mGBVASQi6fdfBnOJkHwuYtjX/u3wNkExDSdjVEVXoOLraTAOwhkSs0wV4hntkx9dfDmOsu30xG8TixYNzYz6JkqJbvsQKaIfaaXcyEftcA1wSRy9FpfKcAkdqkR/J3pDyeoM/aY9i+S/uoxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769886194; c=relaxed/simple;
-	bh=beducbYUZ2e99ovw/VmNgkcs9xW+nf6Tlm8gva6o0oo=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YAge3l6T6586vlhgy1rbBq7V5bI/CbjqC14PhVpU46P4Prf24kuTGGfoNKQtvu0eZi++nQaGrMMwS0NOSfDi8f6xvntRG0pKubVGZMF5jnjWvxARpEY7POg5qQZbGgS9OtK+xJs+APePYm+LyWZ4c2KoAHyziq9vgQ85DH+fdxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FTY5ZcQu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769889631; c=relaxed/simple;
+	bh=ol8unZvcrs7b+wmiigLrZH4qV/mo3pcnEn/GyeKvrcM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IfCb7U+xMk6O+kZeOR7QmFmdG5zbDGLBoADEtC2pTWcS6H3IKTTamh2bs78EJJfDcJfhAmn/w8XCxR24EdnthWAr3EWORVptrXsLTDhxmswH1AyrWTjjJ98DGbCV5zOSRRu0e1jVxDOc4l38C0uluzm+UnXU/6DiQEUbf0qMoZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i9v+SoCl; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FTY5ZcQu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769886192;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+FpVB4eFbtbp0Ay5c13hRx/j2hioR/hZ2tywRG78bT0=;
-	b=FTY5ZcQucbH/7k2H691p7dk3yQFX7zlSql2hpO7V04s49XfE+I8P7SdszumZ2r5eZg/Oa5
-	mfT7lcA/O0sZAsNT6UQIGWSx9UZPw8dUB6LZuS0QWu9yx9ZC3TsEtm3CwPl8oiOxCqmud/
-	RFGYDz14CDslWeDBdEjHoWdvu2zuezQ=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-447-LPQvBogfNoCr0TV1n9orIg-1; Sat,
- 31 Jan 2026 14:03:10 -0500
-X-MC-Unique: LPQvBogfNoCr0TV1n9orIg-1
-X-Mimecast-MFC-AGG-ID: LPQvBogfNoCr0TV1n9orIg_1769886190
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1DCCA195608D
-	for <llvm@lists.linux.dev>; Sat, 31 Jan 2026 19:03:10 +0000 (UTC)
-Received: from [172.20.11.92] (unknown [10.30.44.106])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AD8AC3000218;
-	Sat, 31 Jan 2026 19:03:09 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc7,
- upstream-mainline, ad9a728a)
-Date: Sat, 31 Jan 2026 19:03:09 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i9v+SoCl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769889630; x=1801425630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ol8unZvcrs7b+wmiigLrZH4qV/mo3pcnEn/GyeKvrcM=;
+  b=i9v+SoCl//grpbPL2SSUCOacQweUHrK1apqsBOOvQqB/M5MWwOYUzJYn
+   XkteVwy6t9S4Sckpm7u1/evVK/2yK5qbvmqpYlMRaldyPzoQGpigOt8tm
+   95R9cEW6N7n7wi6GT0mSs6LWzv2h9MR+TUM2ReS8l4nLoCHSf67KUI2no
+   mqyrUAd+xGJ2bk0U+jcTV0TdtKcOiQ6dNzHwfK11WvKYNms5XO75g50+t
+   Fn/LrvjiIX5dzmimKYZzVoEtqp40MHDCK9dA4ri6YOsRLdr5mYEBMs82h
+   Cr6TyXbZZBuH9qxnF9uYTJQyzDM16paZiMKKlnPhBcJFHVb+3K7xdNvm7
+   Q==;
+X-CSE-ConnectionGUID: qxNO4bWDRK+TsN2e3RshXQ==
+X-CSE-MsgGUID: f0MufvNeSXSCoH+CCxP9xQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11688"; a="70826729"
+X-IronPort-AV: E=Sophos;i="6.21,265,1763452800"; 
+   d="scan'208";a="70826729"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2026 12:00:30 -0800
+X-CSE-ConnectionGUID: nIvlyUqkT6uIvcCzCmQ7JQ==
+X-CSE-MsgGUID: 3i8mf/KwT0GpNNEu8pLXpA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 31 Jan 2026 12:00:27 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vmH8q-00000000eLE-1Y4x;
+	Sat, 31 Jan 2026 20:00:24 +0000
+Date: Sun, 1 Feb 2026 03:59:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Icenowy Zheng <zhengxingda@iscas.ac.cn>,
+	Thomas Gleixner <tglx@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org, Icenowy Zheng <zhengxingda@iscas.ac.cn>
+Subject: Re: [PATCH 5/8] irqchip/loongson-pch-lpc: add OF init code
+Message-ID: <202602010337.D6tyoDtw-lkp@intel.com>
+References: <20260131094547.455916-6-zhengxingda@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <77756.126013114031000679@us-mta-447.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: DsYK5JGeIHctQT4qLy5k16ODQ4WbULD1nfiv-9R95ug_1769886190
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260131094547.455916-6-zhengxingda@iscas.ac.cn>
 
-Hi, we tested your kernel and here are the results:
+Hi Icenowy,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on tip/irq/core]
+[also build test WARNING on robh/for-next krzk/for-next krzk-dt/for-next krzk-mem-ctrl/for-next linus/master v6.19-rc7 next-20260130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-iommufd' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/jgg/iommufd
+url:    https://github.com/intel-lab-lkp/linux/commits/Icenowy-Zheng/genirq-reserve-NR_IRQS_LEGACY-IRQs-in-dynirq-by-default/20260131-175403
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20260131094547.455916-6-zhengxingda%40iscas.ac.cn
+patch subject: [PATCH 5/8] irqchip/loongson-pch-lpc: add OF init code
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260201/202602010337.D6tyoDtw-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260201/202602010337.D6tyoDtw-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2297686964
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602010337.D6tyoDtw-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
+>> WARNING: modpost: vmlinux: section mismatch in reference: pch_lpc_of_init+0xa8 (section: .text) -> pch_lpc_init (section: .init.text)
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
