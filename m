@@ -1,133 +1,178 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958E418A6A7
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 15:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E0323FC54;
+	Mon,  2 Feb 2026 15:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770046395; cv=none; b=dvjhtgzDj5Gj5aKt/tQ5VB9IxeeYXZDsGPpByI2h8Z9E75/UG2OTt9N0M3iT/e99uCM45LU289qFp2nqg8oA4ivCmhg7aAmbQ87a0jwY+M4a1U2g6zKYxlr8TCFaN0omHzSY3Bup7dDFiab6fLp7egPlC0MOVHZzjGcC9/uAx1c=
+	t=1770046606; cv=none; b=G9PmwwC9J4Ra3QWabb++YEKxYbybK3nCDsWm72Y41i3sTxdYuDpn1fSAl8hXrTQ26U7k+43AkCHEr0lv4d86s4vscgD6cfMPGb9jOBuDOTONOCvuA0dPK5bjhVu2SQeN0V2HKLX33uev6ErZDvKn9kPgZ2i4cXDaRU/lq6bJU4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770046395; c=relaxed/simple;
-	bh=YFWskOu3giDxz1LmNCvD7qPpIZI8kmK+cgw3bLxhCC8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=dGdJ5YrwuAnHID+nb4fJXDId/iYjxFCj8fOEMNs4ckR/j8+OKocymM/zmW//6yWyBYBwk15zeNnWnUH8TYSlshlycltvoRBDoePRYtBpzlXIJgONUj4cLtfLsJrbnm1rMN0wK6qgnly5ez5hOnHfLg5+L+fhj/hxYQ5NMg5C24Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VblG4Vcq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770046606; c=relaxed/simple;
+	bh=WI6zutmVBSxRxobYaH3/CHHeRqahghvOWUS1hAR6f9s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tu+hwh9/ImjvvUeliB49xYObZtZd6z5YMMRKBy0qxABIMGwvEN+qKP1Bivt6crlIKfSxMRg687+C0/xmGb0UmKcsC8ucCskTTBCOY9N1uz9cAsBpGT6eaIlfoyk9peUXWtquXxHuFC1uftSL+lYaYJqkJNr/yrqs+2u8VUrIYh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZeEBiyj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VblG4Vcq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770046392;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+4Ws7rPoBiJrVCzi+DAL0hre+qPiSD/Zd2R/qCe6t1Q=;
-	b=VblG4VcqHTorJ5MtnZaevv7FAYR0HY9gbZE+mMIU6mOoIysL8UEoACXSstFxaHxn+IG37z
-	mK8SCvwpSeWk7/B3AT6gfgq+vA0DZdybKl4itGb+hhheTT5b6A5JR/iHDHfKTcBeYvGQwo
-	ydJumeXssd/2Fy8nVFKR0FU4Mhfj3yE=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-562-4ncp6BRzNgKFUeqnPfRcfg-1; Mon,
- 02 Feb 2026 10:33:11 -0500
-X-MC-Unique: 4ncp6BRzNgKFUeqnPfRcfg-1
-X-Mimecast-MFC-AGG-ID: 4ncp6BRzNgKFUeqnPfRcfg_1770046390
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25E8B18003FC
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 15:33:10 +0000 (UTC)
-Received: from [172.20.163.214] (unknown [10.30.45.55])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B8E0E1800577;
-	Mon,  2 Feb 2026 15:33:09 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc8,
- upstream-mainline, 18f7fcd5)
-Date: Mon, 02 Feb 2026 15:33:09 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZeEBiyj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AACDC2BC86;
+	Mon,  2 Feb 2026 15:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770046606;
+	bh=WI6zutmVBSxRxobYaH3/CHHeRqahghvOWUS1hAR6f9s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tZeEBiyj67lav4qkYYDtamQukkvU4UhwkXxxUd7IGB3J8tok8/UGdeU/bYWf8vcy1
+	 32lYKKSfiDF5MyL3k8+rkj4WtW+JC0MMGaAzyQkV4jZ1cZ1/6ikLAKeiIMZQjWx658
+	 ZLmkrIIW2u9BX9XSVZNdcZlJEtcuD/HChCtuu9h30eP/MD6+npqcEFjzQ6QF1ObyTn
+	 XMNHY6odUN/gBuMisa1sTHMMYv77QjN3Udd2qRMED7S9Gt1zNEmzTInajbXFFeD97Y
+	 tpVYTswxHkfSUb+5QmeBy3Y1PxgsIkEKV9cGSmcfC7w8JNGAk9x3cUZVe9dglCI/qR
+	 MO8x6HRGKnbfQ==
+Date: Mon, 2 Feb 2026 15:36:40 +0000
+From: Will Deacon <will@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
+	David Laight <david.laight.linux@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
+Message-ID: <aYDEiOutq3_O8irP@willie-the-truck>
+References: <20260130132951.2714396-1-elver@google.com>
+ <20260130132951.2714396-3-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <65629.126020210331100601@us-mta-562.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: jVzH0xODmBbF_BgBN9SDSIfTF_a1ush9uEKGOY4QbaM_1770046390
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260130132951.2714396-3-elver@google.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Jan 30, 2026 at 02:28:25PM +0100, Marco Elver wrote:
+> Rework arm64 LTO __READ_ONCE() to improve code generation as follows:
+> 
+> 1. Replace _Generic-based __unqual_scalar_typeof() with more complete
+>    __rwonce_typeof_unqual(). This strips qualifiers from all types, not
+>    just integer types, which is required to be able to assign (must be
+>    non-const) to __u.__val in the non-atomic case (required for #2).
+> 
+> Once our minimum compiler versions are bumped, this just becomes
+> TYPEOF_UNQUAL() (or typeof_unqual() should we decide to adopt C23
+> naming).  Sadly the fallback version of __rwonce_typeof_unqual() cannot
+> be used as a general TYPEOF_UNQUAL() fallback (see code comments).
+> 
+> One subtle point here is that non-integer types of __val could be const
+> or volatile within the union with the old __unqual_scalar_typeof(), if
+> the passed variable is const or volatile. This would then result in a
+> forced load from the stack if __u.__val is volatile; in the case of
+> const, it does look odd if the underlying storage changes, but the
+> compiler is told said member is "const" -- it smells like UB.
+> 
+> 2. Eliminate the atomic flag and ternary conditional expression. Move
+>    the fallback volatile load into the default case of the switch,
+>    ensuring __u is unconditionally initialized across all paths.
+>    The statement expression now unconditionally returns __u.__val.
+> 
+> This refactoring appears to help the compiler improve (or fix) code
+> generation.
+> 
+> With a defconfig + LTO + debug options builds, we observe different
+> codegen for the following functions:
+> 
+> 	btrfs_reclaim_sweep (708 -> 1032 bytes)
+> 	btrfs_sinfo_bg_reclaim_threshold_store (200 -> 204 bytes)
+> 	check_mem_access (3652 -> 3692 bytes) [inlined bpf_map_is_rdonly]
+> 	console_flush_all (1268 -> 1264 bytes)
+> 	console_lock_spinning_disable_and_check (180 -> 176 bytes)
+> 	igb_add_filter (640 -> 636 bytes)
+> 	igb_config_tx_modes (2404 -> 2400 bytes)
+> 	kvm_vcpu_on_spin (480 -> 476 bytes)
+> 	map_freeze (376 -> 380 bytes)
+> 	netlink_bind (1664 -> 1656 bytes)
+> 	nmi_cpu_backtrace (404 -> 400 bytes)
+> 	set_rps_cpu (516 -> 520 bytes)
+> 	swap_cluster_readahead (944 -> 932 bytes)
+> 	tcp_accecn_third_ack (328 -> 336 bytes)
+> 	tcp_create_openreq_child (1764 -> 1772 bytes)
+> 	tcp_data_queue (5784 -> 5892 bytes)
+> 	tcp_ecn_rcv_synack (620 -> 628 bytes)
+> 	xen_manage_runstate_time (944 -> 896 bytes)
+> 	xen_steal_clock (340 -> 296 bytes)
+> 
+> Increase of some functions are due to more aggressive inlining due to
+> better codegen (in this build, e.g. bpf_map_is_rdonly is no longer
+> present due to being inlined completely).
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> v3:
+> * Comment.
+> 
+> v2:
+> * Add __rwonce_typeof_unqual() as fallback for old compilers.
+> ---
+>  arch/arm64/include/asm/rwonce.h | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> index fc0fb42b0b64..42c9e8429274 100644
+> --- a/arch/arm64/include/asm/rwonce.h
+> +++ b/arch/arm64/include/asm/rwonce.h
+> @@ -19,6 +19,20 @@
+>  		"ldapr"	#sfx "\t" #regs,				\
+>  	ARM64_HAS_LDAPR)
+>  
+> +#ifdef USE_TYPEOF_UNQUAL
+> +#define __rwonce_typeof_unqual(x) TYPEOF_UNQUAL(x)
+> +#else
+> +/*
+> + * Fallback for older compilers (Clang < 19).
+> + *
+> + * Uses the fact that, for all supported Clang versions, 'auto' correctly drops
+> + * qualifiers. Unlike typeof_unqual(), the type must be completely defined, i.e.
+> + * no forward-declared struct pointer dereferences.  The array-to-pointer decay
+> + * case does not matter for usage in READ_ONCE() either.
+> + */
+> +#define __rwonce_typeof_unqual(x) typeof(({ auto ____t = (x); ____t; }))
+> +#endif
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I know that CONFIG_LTO practically depends on Clang, but it's a bit
+grotty relying on that assumption here. Ideally, it would be
+straightforward to enable the strong READ_ONCE() semantics on arm64
+regardless of the compiler.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+>  /*
+>   * When building with LTO, there is an increased risk of the compiler
+>   * converting an address dependency headed by a READ_ONCE() invocation
+> @@ -32,8 +46,7 @@
+>  #define __READ_ONCE(x)							\
+>  ({									\
+>  	typeof(&(x)) __x = &(x);					\
+> -	int atomic = 1;							\
+> -	union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;	\
+> +	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
+>  	switch (sizeof(x)) {						\
+>  	case 1:								\
+>  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
+> @@ -56,9 +69,9 @@
+>  			: "Q" (*__x) : "memory");			\
+>  		break;							\
+>  	default:							\
+> -		atomic = 0;						\
+> +		__u.__val = *(volatile typeof(*__x) *)__x;		\
 
-Kernel information:
-    Commit message: Linux 6.19-rc8
+Since we're not providing acquire semantics for the non-atomic case,
+what we really want is the generic definition of __READ_ONCE() from
+include/asm-generic/rwonce.h here. The header inclusion mess prevents
+that, but why can't we just inline that definition here for the
+'default' case? If TYPEOF_UNQUAL() leads to better codegen, shouldn't
+we use that to implement __unqual_scalar_typeof() when it is available?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2299456475
+I fear I'm missing something here, but it just feels like we're
+optimising a pretty niche case (arm64 + LTO + non-atomic __READ_ONCE())
+in a way that looks more generally applicable.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Will
