@@ -1,122 +1,172 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863E42D7DD4
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 22:45:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151D52E1743;
+	Mon,  2 Feb 2026 23:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770072342; cv=none; b=s/GLsSwSQd29g7wLAPF9VmldvP9t0TnxPAa8yt1zruPnCCoDizsszxEpma2LtqQRCQqz+WBFVkb7o0ezaZoZIYrwqNhIb6pJd1smITaJgBtqW46+mVjB+FGx3d3JWrwirs+xiR5hS8GeE7xglYthya27YUZLjkD0lugrYTspYx0=
+	t=1770074594; cv=none; b=KD29Op9d7YE4DCyFlL/DDDUdUgohsaGBgwGIi+8zHvt1txz1cd9FOrAUE9GkfIzndy1EJnMcttxhj7tlQqRT4BvdMk2me52JwCkYyPY7XWJpH9aoWHX9XjH3qDbMSlMN4lsPQpqZq3509ac72A3+iV75TKsuV1mjB6r/rwlHUrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770072342; c=relaxed/simple;
-	bh=5Kb5krIsfIdKzbY4UbV0w0i93VHuDl4UPIOiaxALKbg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uW8bYGMwwq1w+QYrMi6Du0bCm6K/HtagqhEWifQut74jaZRZFAxeJnly68LHygjlIJdIcJcSG6jneEpRJ/BCjZ5NgMg7xAW0I12WF5ku4tE4FyiQ4RzUmTWokKFfurP3bmugwIdKWTp2nXYpQwd0TtT4FbBNaZDRbYrgD4iM0Xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ChmJdRRM; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770074594; c=relaxed/simple;
+	bh=pJj3uilHcFmYjhffhaNW/o34MHDbJfjpInJy5q6AfY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I01snol4DPNb8KKEjew2+b/YHGYNJQ1atgKDIGu3GFja5YvEGGHqLOKz9BOUWGy4a7QyMR2mkSM478oz84BDEh6WSTA5qFHDpmKHr1UvHA6+13P54m69nLZ9WBaQXI0bsiiCKISOMYYRBAEK9R7Pk09HCCgdnDksDrLID7yGI+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jc6Yd/dk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ChmJdRRM"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso1821555e9.1
-        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 14:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770072339; x=1770677139; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JGqAdrVHnFu6PnnaHfHKQoFDoCwgyHq7ziHIdTjOCQs=;
-        b=ChmJdRRMDiQWsi6x3G3IiDojMR+08+wbD++eAaXtSPnplzEjfUnC8iidkLvQKl78Cz
-         nDGcjI3jA7yhoLpC1qa6ukzF4kWeeV+KV3WxiAodNcK8eEq6h9Pdf3d/WyqZMiev/enU
-         PLGqdOwaWDNm6o1xluB+PW29D8sggNL1I0Bsu0l7xhUM4U6zK2etM9fv+T6xaWbrvXLX
-         dtkYnfcudOrn5aKThrwTDrNzrXvbM3NkDcjr8/GDHwZ8orD6nQ3ka45uXWjOXwSlkzZW
-         Fk83/pqiFhUMSYws8NyF2OeMLbZkfC/kq1TyGw+/NEPNJs2aPQU+lNk5ZKysotNZkLsp
-         Ahug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770072339; x=1770677139;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JGqAdrVHnFu6PnnaHfHKQoFDoCwgyHq7ziHIdTjOCQs=;
-        b=aAtGyVMb114eCtAsBrp/qAuoYr28v9L7Z0BZ8Tlsv5ZlXIRJyRH4QMzqttVZIqnpHz
-         ZNZOAj4qYFRO4gq1Ivj3zGKUQR6kcwsrInUgQ4YRJES5d2dqQkHFaWhPznRxJWB+FlU6
-         zfkpqUfSCt1Pf+qwMCeJ63vyMkwEk3j/MXd6p9yBRjUR1ZDEGwQPIDdwTUaaAHhld8Dr
-         /RWbJtA9zgxq8/cidpr3rRfzoZ11kf5FuyD9Fk/tHKo2/xgqyfaoi06DDiVPZOTn7aSa
-         aK8DRqE6/VsQDhFzmERe0kFXdprtAKvuVPdZuUgjIfQtCnj56VxQm4OQ/we04MfVRkHK
-         xUkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV8RsCfEapSt5c52g/yw/qFOJItCExoDv9zPXn7Jd2Jj9YaT+eZ+t+7V7IHMYHupAM/BO7S@lists.linux.dev
-X-Gm-Message-State: AOJu0YyG00QIv/SAbR52zHl5NFDiJR/Rs/y2MmTvbp5geoNByCKYNyDv
-	+1hIBUr5qD8jZgxMh41z0zIhRLsD7z3jbk22u00vsoqGnmeRAnhNMOzF
-X-Gm-Gg: AZuq6aLfVB1HU7spxojZZvCLVwpUUoqfPSbMPU6Bm+OcQ0qNROgrSR/e4D9Wir12pYV
-	Z7m2tvjsPpFvdp4e9n6niu0OxbDc80u6aSk+SzOhhSTzvyH71wGsfNhdOaTsiUX5NgMoCK/IoMv
-	0KRV5tCVIfCRoFh5RiGoGr2qpKGsixKBsq7iHLyLO82uu8Fpt6+tRG8YXv6CyBke64Ut5xDPMF0
-	z+3VdVcFeuQUx8D7fQWNX9hKxdLc6ftGHbIuaNHwWmhmMg41qZLnVfIm3WBIAVuEc8NpIdx2rCO
-	+ZuS6PEUIIAKYvQknM2QBB0ULGGhP6M63ioc/PxgCupePM7nAQWpraalz2+a0JVX6I+eLYLIlkK
-	naIYT/NJgl41/r8kg2zOJDJLLt3Jb1mRNk4Z/LQFpwhYuwXqPKlO6jS8R4Sq3zZEcasjGMIy0YU
-	1C6cOTPvkzQYD2wptvUDYxpfo2y2F7HjQPEjs7zLQLL9XBzNUygS/v
-X-Received: by 2002:a05:600c:6303:b0:47e:e59c:67c5 with SMTP id 5b1f17b1804b1-4830513aed8mr18382505e9.8.1770072338747;
-        Mon, 02 Feb 2026 14:45:38 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e2973d57sm100080575e9.18.2026.02.02.14.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 14:45:38 -0800 (PST)
-Date: Mon, 2 Feb 2026 22:45:37 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Nicolas Dufresne" <nicolas.dufresne@collabora.com>, "Arnd Bergmann"
- <arnd@kernel.org>, "Detlev Casanova" <detlev.casanova@collabora.com>,
- "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>, "Mauro Carvalho Chehab"
- <mchehab@kernel.org>, Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>,
- "Nathan Chancellor" <nathan@kernel.org>, "Hans Verkuil"
- <hverkuil+cisco@kernel.org>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, linux-media@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
- assemble_hw_pps()
-Message-ID: <20260202224537.16c16e13@pumpkin>
-In-Reply-To: <070cebc8-3cab-4f32-a203-9456506dfcc5@app.fastmail.com>
-References: <20260202094804.1231706-1-arnd@kernel.org>
-	<16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
-	<3b89635f-1c1c-4e4e-b0a9-2bbd0f21bc90@app.fastmail.com>
-	<da9f044152383cacd50989b025fdce08a654bbe3.camel@collabora.com>
-	<070cebc8-3cab-4f32-a203-9456506dfcc5@app.fastmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jc6Yd/dk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D78C116C6;
+	Mon,  2 Feb 2026 23:23:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770074593;
+	bh=pJj3uilHcFmYjhffhaNW/o34MHDbJfjpInJy5q6AfY8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jc6Yd/dkgb6053lGwRI1bzs1p5tAEzlcFyJ8/80INF9/aCkeVlRv+Oz/lxOWHS9ns
+	 EXd2XZ3t1teNTV6Zt54mO/fzQBaN7AgBuseFgK0vqwPwrkG8Gou3zT3yjDzpxB9a9I
+	 SGKbbb4W8QpizN5wrnn8VAZnLuqaBT6kfDdm8ZMbasIBIEPOJck0oVoj9qGh2vE/rU
+	 zxL3+EhBYj9E59CyYbmO4U3hOzoFNwWMSfJN9/tgF3qfWZTfvSDoMx4e/j87SnJYOY
+	 ipM7XklyhKQIb2hpb8dNbkQKDXe54QOQUIFAlqXWI6SqUTafryNYEJHixuz+88z+vE
+	 zkpOvlQea323g==
+Date: Mon, 2 Feb 2026 16:23:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yao Zi <me@ziyao.cc>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
+ register variable
+Message-ID: <20260202232309.GA1070900@ax162>
+References: <20260118090235.60670-1-me@ziyao.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260118090235.60670-1-me@ziyao.cc>
 
-On Mon, 02 Feb 2026 16:59:05 +0100
-"Arnd Bergmann" <arnd@arndb.de> wrote:
-
-...
->  - Since most of the fields are exactly 6 bits offset from a word
->    boundary, you can try assembling all the  *_field_order_cnt*
->    fields in an array first that has all the bits in the correct
->    order, but then shift the entire array six bits.
-
-How are they being written to the hardware?
-It would be very unusual for hardware not to have things 'reasonably aligned'.
-This makes me think that the data buffer is actually being 'bit-bashed'
-down some serial data interface.
-In which case the simple solution is to give the function that writes
-the data a 'bit offset' for the first word.
-
-And to re-iterate C bit-fields are completely non portable and entirely
-inappropriate for mapping onto device registers.
-You can use C structures (arranged with everything on its natural
-boundary so there are no holes) with members declared with the correct
-endianness.
-Indeed that is actually preferable to using numeric constants as the
-offsets are tied to the correct structure.
-
-	David
-
+On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
+> On MIPS, __current_thread_info is defined as global register variable
+> locating in $gp, and is simply assigned with new address during kernel
+> relocation.
 > 
->       Arnd
+> This however is broken with LLVM, which always restores $gp if it finds
+> $gp is clobbered in any form, including when intentionally through a
+> global register variable. This is against GCC's documentation[1], which
+> requires a callee-saved register used as global register variable not to
+> be restored if it's clobbered.
 > 
+> As a result, $gp will continue to point to the unrelocated kernel after
+> the epilog of relocate_kernel(), leading to an early crash in init_idle,
+> 
+> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
+> [    0.000000] Oops[#1]:
+> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
+> [    0.000000] Tainted: [W]=WARN
+> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
+> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
+> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
+> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
+> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
+> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
+> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
+> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
+> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
+> [    0.000000] Hi    : 0000000000000000
+> [    0.000000] Lo    : 0000000000000000
+> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
+> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
+> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
+> [    0.000000] Cause : 00000008 (ExcCode 02)
+> [    0.000000] BadVA : 0000000000000000
+> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
+> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
+> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
+> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
+> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
+> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
+> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
+> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
+> [    0.000000]         ...
+> [    0.000000] Call Trace:
+> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
+> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
+> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+> 
+> This bug has been reported to LLVM[2] and affects version from (at
+> least) 18 to 21. Let's work around this by using inline assembly to
+> assign $gp before a fix is widely available.
+> 
+> Cc: stable@vger.kernel.org
+> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
+> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
+> Signed-off-by: Yao Zi <me@ziyao.cc>
 
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+
+Hopefully the MIPS LLVM folks can look into this (even though I think
+the MIPS backend is one of the less maintained backends in LLVM).
+
+> ---
+>  arch/mips/kernel/relocate.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+> index 7f1c136ad850..12aa0bbdd65e 100644
+> --- a/arch/mips/kernel/relocate.c
+> +++ b/arch/mips/kernel/relocate.c
+> @@ -420,7 +420,18 @@ void *__init relocate_kernel(void)
+>  			goto out;
+>  
+>  		/* The current thread is now within the relocated image */
+> +#ifndef CONFIG_CC_IS_CLANG
+
+I find
+
+  #ifdef FOO
+  <FOO block>
+  #else
+  <!FOO block>
+  #endif
+
+to be easier to read and process
+
+  #ifndef FOO
+  <!FOO block>
+  #else
+  <FOO block>
+  #endif
+
+but maybe that it is just personal preference.
+
+>  		__current_thread_info = RELOCATED(&init_thread_union);
+> +#else
+> +		/*
+> +		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
+> +		 * intentionally modified. Work around this by using inline
+> +		 * assembly to assign $gp. $gp couldn't be listed as output or
+> +		 * clobber, or LLVM will still restore its original value.
+
+This comment should likely include a link to the LLVM upstream report to
+make it easier to version restrict this workaround when fixed in the
+future.
+
+> +		 */
+> +		asm volatile("move $28, %0" : :
+> +			     "r" (RELOCATED(&init_thread_union)));
+> +#endif
+>  
+>  		/* Return the new kernel's entry point */
+>  		kernel_entry = RELOCATED(start_kernel);
+> -- 
+> 2.52.0
+> 
