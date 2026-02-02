@@ -1,64 +1,64 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5642F2918
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 19:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CB62882B7
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 19:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770060503; cv=none; b=av8pSvXqFtb0MndKsY0tQeimZozPoWtufUJJrY3reV/5bFJSx9I+m2oK8Qe5eiIaowNXiZjh/V8aA4D7voWaAQ3tMM2+AIl3Dh+vEdMGEW/B7P2yZxEaweRl17KkP9TohsHHQ76u93Ll+YdWRGSOjBaVvOQ4ONq5SCXUBktIXls=
+	t=1770060569; cv=none; b=lph3NfSbXPY7hvZpIwkysNZbCrZzHdtmxL84mZpjbUFoPDprFjn16QQtzj2yYIG+ip21tTZtj7YOvffl1LILPKssPbG3D/JspvOKPmJqiwVhRssJYf5rTdFGMcl/cMbYqqL/+n5D0N8WPR2bculbVWD+5AYkQXWh/Igr3hidarU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770060503; c=relaxed/simple;
-	bh=VszuXjQtmIOYBDmlcYgEcvY7XY1PCK4liqJOvnCIMV8=;
+	s=arc-20240116; t=1770060569; c=relaxed/simple;
+	bh=frZ9EwnF41UwE05JKAdE+N2X85q0Wy9krJRH9SZYZ5Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pvm+oIEW3ukV/YeINkf98rhTbKjoJVkEBgp9ex8btkkv9SX3GsHG148HYgew0U8+U2+HK1jIuLZ35S9NDazcPmO5OAWt8hWEJfsA2iyehDHweir9bBsF4qKQIgXTyWT6mKnWfBSGx9sYLBdLRuvpy/aPkQopUMnNahDJmp2ai+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HuFL4l+r; arc=none smtp.client-ip=209.85.128.42
+	 MIME-Version:Content-Type; b=EtXE1x4ykF2SeApejOr1HhWKONKhf9Qp9J5ORTc9vO3WYEX8nmUf3VwNEamdf64tZPyOfhOba+hE3ehMYqXu7SgFUgy3nxW4suKI2MDPall8aN543drd6Es/IjSVn4WBER+sRw5Aj9B6+zATVt9QsC7jzY2Lrb5SnJe0bXu1ers=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dx6VD/cD; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuFL4l+r"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4806e0f6b69so35573885e9.3
-        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 11:28:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dx6VD/cD"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-4801bc32725so36805875e9.0
+        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 11:29:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770060500; x=1770665300; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1770060566; x=1770665366; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1e73Tql6+b24rgf2gDbimCQdFoje6dSGN+5ui579isE=;
-        b=HuFL4l+rKyLvFXoB+90RR9Rl+37a8z8R1cxgkNLoCACHpkkOfyTYUVX5VHCLW47lgt
-         7Si/8HgQehowi3GxbdgCGAkUtmazKT0L0oQEbtxQjB7lMHngKUjm/joKiE3cm0Q20YRC
-         prZRkwYwaASLIE20HsyzXipTZ93HOh6J+9LsY2gKyJeTRKOk1q89hH4izkKjz0VHl6LQ
-         oj/nFMvG1yyD9Gxepw2luPNnH5AQxL5jHFPMFzLGhpOzSUsgy8tG6+QkxU9yVPIm2aiD
-         2FAAkvZ9Xttueo4PwUTvmBPD9IAlsfEHwV31yfbX6EswOTk1CgAL0KcO2GoiGMoRHnS4
-         Tqag==
+        bh=Hfuro15FK7ZMNo95mSwjrDaX9JD681ZAOPgzp/YRA90=;
+        b=dx6VD/cDdeLsEVgVY7RO2SJC0BBzSk8t7SVnxxZXp9dTSz36jbHBVvJZsh7fxVrXjP
+         1QthQvUKfZJ0NIOXpR/YVfhjCsYSCMfstxAGL8nYecTsGcbjXWdXkku/qIAvkgAWdCrZ
+         3cYEwrWQo7CtJgimFA+by75lqEaP6302VrjJxOq78xG9/kMK3L30xQxbbSiPprHWwdCJ
+         V2UoocH6KS7EdlQ/Th8R5djsUjECTg02ngqrxf6fFWZOlGzKMm9WUuT0XzbLIRCr5tLd
+         ZGGn8jn0DyA1JyxiByfwqCUBk+mbymgmvcq8pHwJGyxyIqqlD4PPZnOHYxqGC4hmj/5Z
+         BUlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770060500; x=1770665300;
+        d=1e100.net; s=20230601; t=1770060566; x=1770665366;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1e73Tql6+b24rgf2gDbimCQdFoje6dSGN+5ui579isE=;
-        b=OBItmeD/6eqVVDACw0/groX+UE2MZ8HeN6l9TfDvhk1t/AvUOp3u2NnzttNuho6Ngv
-         cQEQSLP6GC6fad6Oi3g2Fg+0qxoSF5R4vsasjkbYqo++kaMhM3squJHk91InAHf7HEa8
-         EVU1/uU0T/BJ7TzLHTs0oRPevxfO3bUJ1tW/9Tuhu2qDUguoNdnKC+kZURqJ8dLzcuE0
-         U5FBXH1sH+32f7xeoKh8jzyF0m7q63vrHsoTRkr0OUxuqYFS7KH0RiP0utAbe1ED8bBH
-         yjQgrcgrDbC7qZ9ubv977sVBifj5fAQYOxoc0oOMINiznqYg1swqQIj5tlE7YxKhGVCx
-         +KIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWP8UUfQWVruffJmMUfaeedUqhklXf+dMcMrDEfo4PIFRnAKghfSp2CdtX5qRFCK0I05bda@lists.linux.dev
-X-Gm-Message-State: AOJu0YwhzkZmYPh/m/jiMFc8Rrg/cT9aQBCSp/XWDTa8pdrcd+gYAkOr
-	SMqdre+z6TKpigIxwe++GYMM5v2yuOamVS+vxo1Tg95f74gx20j3mrtU
-X-Gm-Gg: AZuq6aKbE0pyhDBOe1JZjNvxXjKrXN405n6Jd9O9g/zceWh/ZsdHjcRZb9aln+72YH3
-	jPQWb8lf+B1i8SOrcIpGPMuF6VOg8Gpd0eBnuF2g9qwvIDvqTVQ71VUl+LcC/jOmZfLOZN4az4Q
-	h0w/jJ9m3lpng2pZDUUU2DnXzdLjlpM9xWqb52mdsbHndhQtr8wkXDO1Vw24cFomv6y2LvbNjhz
-	nYPWXU5rSQfJAL+EqtlfGpKy+5WOj1/J/tLL4tKPG58ypxw2xwnrS98ay8cfqDRF4dpBIuJbNf0
-	1hJeqZ8eyhR8KWdZgNsWCG5rUcK6mrMjADY/YWcv6o8x5u/ktIJXcGFloK87TkwzyxS0Su+b/CV
-	+aRTCaJFkGzZL1tcKF2bCthoMD6DeN4S5gBBkRwCAlnjY+9wJPHSbQjpn499YvnwaSI7zt72od/
-	UVnFVWVk0bqhN7/y6xE8dw1pwotbGYpSspaASISCVbPaAGWL/kkSB1
-X-Received: by 2002:a05:600c:1f8e:b0:480:1e8f:d15f with SMTP id 5b1f17b1804b1-482db447b14mr158848135e9.2.1770060499792;
-        Mon, 02 Feb 2026 11:28:19 -0800 (PST)
+        bh=Hfuro15FK7ZMNo95mSwjrDaX9JD681ZAOPgzp/YRA90=;
+        b=da17ADTNbi91RM6kvyr/aKOuU/FSYi5xj7wMf61wS701spXTAvGDMBCI0ty+JUz4r2
+         3VUMik7k8WF7aq8j3D3cFWAIvemNbl4SxFuo/m6PxJbfNxqjeu1gxH35jaiino8ZlpEz
+         wS4ix2Vffmbi3tFQbE2JiVgMbE5Veig6zuvSAy1E/QZw6awm+JCehsdgfRuVN5Y4YVfp
+         0vtnZjitzOKUGOzjv8rDUGkrHd5LtQvGKaaBKTOMwGChzf0xluNov10MbqhTlkLieP/w
+         M6bchl5N129HdpBd5g+Ndwl/uXhh8OzkbdJMREgV0ai2ebo79Ma45rPv5UX9T76djVUh
+         I6ng==
+X-Forwarded-Encrypted: i=1; AJvYcCVuURaIL4gxewWGMwbnlJ4WglngRRrEB3Vbao5WhxZHbnLv97oUBjMyyu61ZV1sJvhdz0Cu@lists.linux.dev
+X-Gm-Message-State: AOJu0YzMG9Bc2jPGZ0/2rEkP4xYqolqzUhiAXLeJuq0ZH08/iz7UAdRf
+	uRO+BFpvFz2zD94rjbB3ocjDda/m3+8ne2WVB8z0CqrGC/IXvPL/TXvd
+X-Gm-Gg: AZuq6aJtNYDyAWqQaeHVwnNQOXv3A+vP5xjsP+61MqpVflzRlBCvBYpU6pUNSFwhaEo
+	KLJNV+8VwAAkYU/LbjFq/97JBoCwhKbb1qaJiMTq7cQBaIiVnNBRXdFzxDBRRAXlZO7+/ApTve8
+	dxQw592grF3H7wIV4abAAu5M3/RDFhErLt4fMvUHWZHGj88GVxku0LcbrHxtJzi/CUWx1LK3P1y
+	z0FfKOX+hace7B2xJEqzpRNWlfGxYTFrsD0gz/pYewQcen8WnyBPLrEzmIxVtpmKFipCbPW0xIB
+	BuKYvbqtqo2t+90p1c0htNpoq87BEeTsa66BnEE+ure63ER0JhlV2f+7u+kCMlCvqDQgAlp7/xB
+	ErCNkG2QYZfC/WZ3pkC6m5SRnkqULxnm3MALjLlLvDXBCpMBZD28nVIEeBoTzvvfQIXRO0jUX1A
+	mL+OBde2ZCBf+OjOIsSgTYaMuL1huaugqNo4L4kOB/ItNAwF/kY1Pt
+X-Received: by 2002:a05:600c:190d:b0:477:561f:6fc8 with SMTP id 5b1f17b1804b1-482db452371mr173238135e9.5.1770060565481;
+        Mon, 02 Feb 2026 11:29:25 -0800 (PST)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483051626c1sm8323325e9.13.2026.02.02.11.28.19
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4830511bfc6sm20203095e9.2.2026.02.02.11.29.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 11:28:19 -0800 (PST)
-Date: Mon, 2 Feb 2026 19:28:18 +0000
+        Mon, 02 Feb 2026 11:29:25 -0800 (PST)
+Date: Mon, 2 Feb 2026 19:29:23 +0000
 From: David Laight <david.laight.linux@gmail.com>
 To: Will Deacon <will@kernel.org>
 Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
@@ -66,13 +66,15 @@ Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
  Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, Bart Van
  Assche <bvanassche@acm.org>, llvm@lists.linux.dev, Catalin Marinas
  <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260202192818.3002fe7a@pumpkin>
-In-Reply-To: <aYDEiOutq3_O8irP@willie-the-truck>
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kernel
+ test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>
+Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
+ analysis through __READ_ONCE() with CONFIG_LTO=y
+Message-ID: <20260202192923.0707e463@pumpkin>
+In-Reply-To: <aYDFOIskB20CbztD@willie-the-truck>
 References: <20260130132951.2714396-1-elver@google.com>
-	<20260130132951.2714396-3-elver@google.com>
-	<aYDEiOutq3_O8irP@willie-the-truck>
+	<20260130132951.2714396-4-elver@google.com>
+	<aYDFOIskB20CbztD@willie-the-truck>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -83,38 +85,116 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 2 Feb 2026 15:36:40 +0000
+On Mon, 2 Feb 2026 15:39:36 +0000
 Will Deacon <will@kernel.org> wrote:
 
-> On Fri, Jan 30, 2026 at 02:28:25PM +0100, Marco Elver wrote:
-> > Rework arm64 LTO __READ_ONCE() to improve code generation as follows:
-...				\
+> On Fri, Jan 30, 2026 at 02:28:26PM +0100, Marco Elver wrote:
+> > When enabling Clang's Context Analysis (aka. Thread Safety Analysis) on
+> > kernel/futex/core.o (see Peter's changes at [1]), in arm64 LTO builds we
+> > could see:
+> > 
+> > | kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
+> > |      982 | }
+> > |          | ^
+> > |    kernel/futex/core.c:976:2: note: spinlock acquired here
+> > |      976 |         spin_lock(lock_ptr);
+> > |          |         ^
+> > | kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
+> > |      982 | }
+> > |          | ^
+> > |    kernel/futex/core.c:966:6: note: spinlock acquired here
+> > |      966 | void futex_q_lockptr_lock(struct futex_q *q)
+> > |          |      ^
+> > |    2 warnings generated.
+> > 
+> > Where we have:
+> > 
+> > 	extern void futex_q_lockptr_lock(struct futex_q *q) __acquires(q->lock_ptr);
+> > 	..
+> > 	void futex_q_lockptr_lock(struct futex_q *q)
+> > 	{
+> > 		spinlock_t *lock_ptr;
+> > 
+> > 		/*
+> > 		 * See futex_unqueue() why lock_ptr can change.
+> > 		 */
+> > 		guard(rcu)();
+> > 	retry:  
+> > >>		lock_ptr = READ_ONCE(q->lock_ptr);  
+> > 		spin_lock(lock_ptr);
+> > 	...
+> > 	}
+> > 
+> > At the time of the above report (prior to removal of the 'atomic' flag),
+> > Clang Thread Safety Analysis's alias analysis resolved 'lock_ptr' to
+> > 'atomic ?  __u.__val : q->lock_ptr' (now just '__u.__val'), and used
+> > this as the identity of the context lock given it cannot "see through"
+> > the inline assembly; however, we want 'q->lock_ptr' as the canonical
+> > context lock.
+> > 
+> > While for code generation the compiler simplified to '__u.__val' for
+> > pointers (8 byte case -> 'atomic' was set), TSA's analysis (a) happens
+> > much earlier on the AST, and (b) would be the wrong deduction.
+> > 
+> > Now that we've gotten rid of the 'atomic' ternary comparison, we can
+> > return '__u.__val' through a pointer that we initialize with '&x', but
+> > then update via a pointer-to-pointer. When READ_ONCE()'ing a context
+> > lock pointer, TSA's alias analysis does not invalidate the initial alias
+> > when updated through the pointer-to-pointer, and we make it effectively
+> > "see through" the __READ_ONCE().
+> > 
+> > Code generation is unchanged.
+> > 
+> > Link: https://lkml.kernel.org/r/20260121110704.221498346@infradead.org [1]
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Tested-by: Boqun Feng <boqun@kernel.org>
+> > Signed-off-by: Marco Elver <elver@google.com>
+> > ---
+> > v3:
+> > * Use 'typeof(*__ret)'.
+> > * Commit message.
+> > 
+> > v2:
+> > * Rebase.
+> > ---
+> >  arch/arm64/include/asm/rwonce.h | 10 +++++++---
+> >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> > index 42c9e8429274..b7de74d4bf07 100644
+> > --- a/arch/arm64/include/asm/rwonce.h
+> > +++ b/arch/arm64/include/asm/rwonce.h
+> > @@ -45,8 +45,12 @@
+> >   */
+> >  #define __READ_ONCE(x)							\
+> >  ({									\
+> > -	typeof(&(x)) __x = &(x);					\
+> > -	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
+> > +	auto __x = &(x);						\
+> > +	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
+> > +	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
+> > +	auto __retp = &__ret;						\
+> > +	union { typeof(*__ret) __val; char __c[1]; } __u;		\
+> > +	*__retp = &__u.__val;						\
+> >  	switch (sizeof(x)) {						\
+> >  	case 1:								\
+> >  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
+> > @@ -71,7 +75,7 @@
 > >  	default:							\
-> > -		atomic = 0;						\
-> > +		__u.__val = *(volatile typeof(*__x) *)__x;		\  
+> >  		__u.__val = *(volatile typeof(*__x) *)__x;		\
+> >  	}								\
+> > -	__u.__val;							\
+> > +	*__ret;								\
+> >  })  
 > 
-> Since we're not providing acquire semantics for the non-atomic case,
-> what we really want is the generic definition of __READ_ONCE() from
-> include/asm-generic/rwonce.h here. The header inclusion mess prevents
-> that, but why can't we just inline that definition here for the
-> 'default' case? If TYPEOF_UNQUAL() leads to better codegen, shouldn't
-> we use that to implement __unqual_scalar_typeof() when it is available?
-> 
-> I fear I'm missing something here, but it just feels like we're
-> optimising a pretty niche case (arm64 + LTO + non-atomic __READ_ONCE())
-> in a way that looks more generally applicable.
+> What does GCC do with this? :/
 
-Is that path even needed?
-
-I'm sure I've built an x86-64 allmodconfig with it being an error.
-If you look back in the history it used to be an error.
-
-Anything to simplify READ_ONCE() will noticeably speed up build times.
-Even on x86 just removing the check that the size is 1, 2, 4 or 8
-makes a measurable difference - and that check doesn't need to be done
-on every compile.
-
-I'm not setup to do arm builds - never mind LTO ones.
-(Yes, I know, it 'just' involves downloading the toolchain.)
+GCC currently doesn't see it, LTO is clang only.
 
 	David
+
+> 
+> Will
+
