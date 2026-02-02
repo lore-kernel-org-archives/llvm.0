@@ -1,200 +1,649 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CB62882B7
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 19:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5B82ED17C;
+	Mon,  2 Feb 2026 19:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770060569; cv=none; b=lph3NfSbXPY7hvZpIwkysNZbCrZzHdtmxL84mZpjbUFoPDprFjn16QQtzj2yYIG+ip21tTZtj7YOvffl1LILPKssPbG3D/JspvOKPmJqiwVhRssJYf5rTdFGMcl/cMbYqqL/+n5D0N8WPR2bculbVWD+5AYkQXWh/Igr3hidarU=
+	t=1770060925; cv=none; b=cELqJ3oh331XiE146tLRoDJmYA87qfxaT3W1V6UkOH7JS2xw5e1hTy2E/TzazJRVP0UHcGKw7pPjnKn9Eeg0K3YOX19pf1pa2cwILiG4NJc1GYpfmVyc1FuoFZxT9gA9F7KicVfAJBgZLRjVoI3q/7Uca0HO8pl9JYaN0J0zPWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770060569; c=relaxed/simple;
-	bh=frZ9EwnF41UwE05JKAdE+N2X85q0Wy9krJRH9SZYZ5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EtXE1x4ykF2SeApejOr1HhWKONKhf9Qp9J5ORTc9vO3WYEX8nmUf3VwNEamdf64tZPyOfhOba+hE3ehMYqXu7SgFUgy3nxW4suKI2MDPall8aN543drd6Es/IjSVn4WBER+sRw5Aj9B6+zATVt9QsC7jzY2Lrb5SnJe0bXu1ers=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dx6VD/cD; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770060925; c=relaxed/simple;
+	bh=ZJM1SJQvDAxftZmXHF4lFyFrCVLTJ3CN2WY9GrAvCp0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Ah+Nrim60Tvr69vGFU72J0Z97X537ck5R9G7eTpnUB8Nwr8GA6/FUmR+VOmajr1Y29y9sGFdfo1bXijF2bwe1nuKBXQvpu22FONpcbsiBOfNYcQBRF3b18QfthEvpJpGIv0Xu0U3wCNR4syhU2aQwt5qbLCnRCzJb7kKuLrbZMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LbG8ILIp; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dx6VD/cD"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-4801bc32725so36805875e9.0
-        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 11:29:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770060566; x=1770665366; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hfuro15FK7ZMNo95mSwjrDaX9JD681ZAOPgzp/YRA90=;
-        b=dx6VD/cDdeLsEVgVY7RO2SJC0BBzSk8t7SVnxxZXp9dTSz36jbHBVvJZsh7fxVrXjP
-         1QthQvUKfZJ0NIOXpR/YVfhjCsYSCMfstxAGL8nYecTsGcbjXWdXkku/qIAvkgAWdCrZ
-         3cYEwrWQo7CtJgimFA+by75lqEaP6302VrjJxOq78xG9/kMK3L30xQxbbSiPprHWwdCJ
-         V2UoocH6KS7EdlQ/Th8R5djsUjECTg02ngqrxf6fFWZOlGzKMm9WUuT0XzbLIRCr5tLd
-         ZGGn8jn0DyA1JyxiByfwqCUBk+mbymgmvcq8pHwJGyxyIqqlD4PPZnOHYxqGC4hmj/5Z
-         BUlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770060566; x=1770665366;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Hfuro15FK7ZMNo95mSwjrDaX9JD681ZAOPgzp/YRA90=;
-        b=da17ADTNbi91RM6kvyr/aKOuU/FSYi5xj7wMf61wS701spXTAvGDMBCI0ty+JUz4r2
-         3VUMik7k8WF7aq8j3D3cFWAIvemNbl4SxFuo/m6PxJbfNxqjeu1gxH35jaiino8ZlpEz
-         wS4ix2Vffmbi3tFQbE2JiVgMbE5Veig6zuvSAy1E/QZw6awm+JCehsdgfRuVN5Y4YVfp
-         0vtnZjitzOKUGOzjv8rDUGkrHd5LtQvGKaaBKTOMwGChzf0xluNov10MbqhTlkLieP/w
-         M6bchl5N129HdpBd5g+Ndwl/uXhh8OzkbdJMREgV0ai2ebo79Ma45rPv5UX9T76djVUh
-         I6ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVuURaIL4gxewWGMwbnlJ4WglngRRrEB3Vbao5WhxZHbnLv97oUBjMyyu61ZV1sJvhdz0Cu@lists.linux.dev
-X-Gm-Message-State: AOJu0YzMG9Bc2jPGZ0/2rEkP4xYqolqzUhiAXLeJuq0ZH08/iz7UAdRf
-	uRO+BFpvFz2zD94rjbB3ocjDda/m3+8ne2WVB8z0CqrGC/IXvPL/TXvd
-X-Gm-Gg: AZuq6aJtNYDyAWqQaeHVwnNQOXv3A+vP5xjsP+61MqpVflzRlBCvBYpU6pUNSFwhaEo
-	KLJNV+8VwAAkYU/LbjFq/97JBoCwhKbb1qaJiMTq7cQBaIiVnNBRXdFzxDBRRAXlZO7+/ApTve8
-	dxQw592grF3H7wIV4abAAu5M3/RDFhErLt4fMvUHWZHGj88GVxku0LcbrHxtJzi/CUWx1LK3P1y
-	z0FfKOX+hace7B2xJEqzpRNWlfGxYTFrsD0gz/pYewQcen8WnyBPLrEzmIxVtpmKFipCbPW0xIB
-	BuKYvbqtqo2t+90p1c0htNpoq87BEeTsa66BnEE+ure63ER0JhlV2f+7u+kCMlCvqDQgAlp7/xB
-	ErCNkG2QYZfC/WZ3pkC6m5SRnkqULxnm3MALjLlLvDXBCpMBZD28nVIEeBoTzvvfQIXRO0jUX1A
-	mL+OBde2ZCBf+OjOIsSgTYaMuL1huaugqNo4L4kOB/ItNAwF/kY1Pt
-X-Received: by 2002:a05:600c:190d:b0:477:561f:6fc8 with SMTP id 5b1f17b1804b1-482db452371mr173238135e9.5.1770060565481;
-        Mon, 02 Feb 2026 11:29:25 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4830511bfc6sm20203095e9.2.2026.02.02.11.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 11:29:25 -0800 (PST)
-Date: Mon, 2 Feb 2026 19:29:23 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Will Deacon <will@kernel.org>
-Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Boqun
- Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, Bart Van
- Assche <bvanassche@acm.org>, llvm@lists.linux.dev, Catalin Marinas
- <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kernel
- test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260202192923.0707e463@pumpkin>
-In-Reply-To: <aYDFOIskB20CbztD@willie-the-truck>
-References: <20260130132951.2714396-1-elver@google.com>
-	<20260130132951.2714396-4-elver@google.com>
-	<aYDFOIskB20CbztD@willie-the-truck>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LbG8ILIp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770060922; x=1801596922;
+  h=date:from:to:cc:subject:message-id;
+  bh=ZJM1SJQvDAxftZmXHF4lFyFrCVLTJ3CN2WY9GrAvCp0=;
+  b=LbG8ILIpaVDH5ex76XHgEvTjUSJTIiW8aFOf+vlM81Cx9nV/wIqiENF/
+   hOyhWXFJs+t/jA5cAWWZo8Gzo5zHbjpJ3o/0vNwxnkwkO01sT1Ikj10rm
+   G1G1k9n+As178/jIwpJFPzY7f0WnqyeTArbOVw15ZdKTKgFCURtmmuYUN
+   bIKx0TP0RBi1Qy4LM5dZBIZAO8U87x5doqRNgL3s6s2odsVb5SFTE9muR
+   RDN+oAa20KgFlY08t/0erf3ezMDvKDxmtS0VzIb4KXE3JtDjuJ8QK1Crn
+   wM6pMue+eP7GO3hwBudWv6Rsy1/9qHudRhPGMLGrg0BUf0chry1RLUnbJ
+   w==;
+X-CSE-ConnectionGUID: /RpYfgZjQ9uxOPy/7+Rx/w==
+X-CSE-MsgGUID: UaQEcEShTXS2OjPaiJ3KmQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="82653265"
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="82653265"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2026 11:35:22 -0800
+X-CSE-ConnectionGUID: Ym8xUcs+SeGAH8aJ3XBm1Q==
+X-CSE-MsgGUID: ZX4pICyXSGmHTt0J/I5Mew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="214095497"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 02 Feb 2026 11:35:19 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vmzhc-00000000fts-40dV;
+	Mon, 02 Feb 2026 19:35:16 +0000
+Date: Tue, 03 Feb 2026 03:34:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: kernel/futex/core.c:604:23: error: cannot jump from this asm
+ goto statement to one of its possible targets
+Message-ID: <202602030343.HVSlSqJ1-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Mon, 2 Feb 2026 15:39:36 +0000
-Will Deacon <will@kernel.org> wrote:
+Hi Thomas,
 
-> On Fri, Jan 30, 2026 at 02:28:26PM +0100, Marco Elver wrote:
-> > When enabling Clang's Context Analysis (aka. Thread Safety Analysis) on
-> > kernel/futex/core.o (see Peter's changes at [1]), in arm64 LTO builds we
-> > could see:
-> > 
-> > | kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
-> > |      982 | }
-> > |          | ^
-> > |    kernel/futex/core.c:976:2: note: spinlock acquired here
-> > |      976 |         spin_lock(lock_ptr);
-> > |          |         ^
-> > | kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
-> > |      982 | }
-> > |          | ^
-> > |    kernel/futex/core.c:966:6: note: spinlock acquired here
-> > |      966 | void futex_q_lockptr_lock(struct futex_q *q)
-> > |          |      ^
-> > |    2 warnings generated.
-> > 
-> > Where we have:
-> > 
-> > 	extern void futex_q_lockptr_lock(struct futex_q *q) __acquires(q->lock_ptr);
-> > 	..
-> > 	void futex_q_lockptr_lock(struct futex_q *q)
-> > 	{
-> > 		spinlock_t *lock_ptr;
-> > 
-> > 		/*
-> > 		 * See futex_unqueue() why lock_ptr can change.
-> > 		 */
-> > 		guard(rcu)();
-> > 	retry:  
-> > >>		lock_ptr = READ_ONCE(q->lock_ptr);  
-> > 		spin_lock(lock_ptr);
-> > 	...
-> > 	}
-> > 
-> > At the time of the above report (prior to removal of the 'atomic' flag),
-> > Clang Thread Safety Analysis's alias analysis resolved 'lock_ptr' to
-> > 'atomic ?  __u.__val : q->lock_ptr' (now just '__u.__val'), and used
-> > this as the identity of the context lock given it cannot "see through"
-> > the inline assembly; however, we want 'q->lock_ptr' as the canonical
-> > context lock.
-> > 
-> > While for code generation the compiler simplified to '__u.__val' for
-> > pointers (8 byte case -> 'atomic' was set), TSA's analysis (a) happens
-> > much earlier on the AST, and (b) would be the wrong deduction.
-> > 
-> > Now that we've gotten rid of the 'atomic' ternary comparison, we can
-> > return '__u.__val' through a pointer that we initialize with '&x', but
-> > then update via a pointer-to-pointer. When READ_ONCE()'ing a context
-> > lock pointer, TSA's alias analysis does not invalidate the initial alias
-> > when updated through the pointer-to-pointer, and we make it effectively
-> > "see through" the __READ_ONCE().
-> > 
-> > Code generation is unchanged.
-> > 
-> > Link: https://lkml.kernel.org/r/20260121110704.221498346@infradead.org [1]
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Tested-by: Boqun Feng <boqun@kernel.org>
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > ---
-> > v3:
-> > * Use 'typeof(*__ret)'.
-> > * Commit message.
-> > 
-> > v2:
-> > * Rebase.
-> > ---
-> >  arch/arm64/include/asm/rwonce.h | 10 +++++++---
-> >  1 file changed, 7 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> > index 42c9e8429274..b7de74d4bf07 100644
-> > --- a/arch/arm64/include/asm/rwonce.h
-> > +++ b/arch/arm64/include/asm/rwonce.h
-> > @@ -45,8 +45,12 @@
-> >   */
-> >  #define __READ_ONCE(x)							\
-> >  ({									\
-> > -	typeof(&(x)) __x = &(x);					\
-> > -	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
-> > +	auto __x = &(x);						\
-> > +	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
-> > +	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
-> > +	auto __retp = &__ret;						\
-> > +	union { typeof(*__ret) __val; char __c[1]; } __u;		\
-> > +	*__retp = &__u.__val;						\
-> >  	switch (sizeof(x)) {						\
-> >  	case 1:								\
-> >  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
-> > @@ -71,7 +75,7 @@
-> >  	default:							\
-> >  		__u.__val = *(volatile typeof(*__x) *)__x;		\
-> >  	}								\
-> > -	__u.__val;							\
-> > +	*__ret;								\
-> >  })  
-> 
-> What does GCC do with this? :/
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-GCC currently doesn't see it, LTO is clang only.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   18f7fcd5e69a04df57b563360b88be72471d6b62
+commit: e4e28fd6986e8cf963ec4137e6c0b95403f636ab futex: Convert to get/put_user_inline()
+date:   3 months ago
+config: powerpc64-randconfig-001-20260203 (https://download.01.org/0day-ci/archive/20260203/202602030343.HVSlSqJ1-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602030343.HVSlSqJ1-lkp@intel.com/reproduce)
 
-	David
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602030343.HVSlSqJ1-lkp@intel.com/
 
-> 
-> Will
+All errors (new ones prefixed by >>):
 
+>> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
+                   if (node_updated && put_user_inline(node, naddr))
+                                       ^
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
+           arch_unsafe_put_user(x, ptr, local_label);      \
+           ^
+   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
+           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
+           ^
+   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                   ^
+   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+           asm goto(                                       \
+           ^
+   kernel/futex/core.c:604:23: note: possible target of asm goto statement
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
+           local_label:                                    \
+           ^
+   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+>> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
+                   if (node_updated && put_user_inline(node, naddr))
+                                       ^
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
+           arch_unsafe_put_user(x, ptr, local_label);      \
+           ^
+   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
+           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
+           ^
+   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                   ^
+   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+           asm goto(                                       \
+           ^
+   kernel/futex/core.c:604:23: note: possible target of asm goto statement
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
+           local_label:                                    \
+           ^
+   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+>> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
+                   if (node_updated && put_user_inline(node, naddr))
+                                       ^
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
+           arch_unsafe_put_user(x, ptr, local_label);      \
+           ^
+   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
+           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
+           ^
+   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                   ^
+   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+           asm goto(                                       \
+           ^
+   kernel/futex/core.c:604:23: note: possible target of asm goto statement
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
+           local_label:                                    \
+           ^
+   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+>> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
+                   if (node_updated && put_user_inline(node, naddr))
+                                       ^
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
+           arch_unsafe_put_user(x, ptr, local_label);      \
+           ^
+   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
+           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
+           ^
+   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                   ^
+   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+           asm goto(                                       \
+           ^
+   kernel/futex/core.c:604:23: note: possible target of asm goto statement
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
+           local_label:                                    \
+           ^
+   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+>> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
+                   if (node_updated && put_user_inline(node, naddr))
+                                       ^
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
+           arch_unsafe_put_user(x, ptr, local_label);      \
+           ^
+   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
+           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
+           ^
+   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                   ^
+   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+           asm goto(                                       \
+           ^
+   kernel/futex/core.c:604:23: note: possible target of asm goto statement
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
+           local_label:                                    \
+           ^
+   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+>> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
+                   if (node_updated && put_user_inline(node, naddr))
+                                       ^
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
+           arch_unsafe_put_user(x, ptr, local_label);      \
+           ^
+   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
+           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
+           ^
+   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
+           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
+                   ^
+   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
+           asm goto(                                       \
+           ^
+   kernel/futex/core.c:604:23: note: possible target of asm goto statement
+   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
+                   unsafe_put_user(val, _tmpdst, efault);          \
+                   ^
+   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
+           local_label:                                    \
+           ^
+   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
+           scoped_user_write_access(_tmpdst, efault)               \
+           ^
+   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
+           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
+           ^
+   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
+           __scoped_user_access(write, udst, size, elbl)
+           ^
+   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
+                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
+                                                    ^
+   6 errors generated.
+
+
+vim +604 kernel/futex/core.c
+
+   520	
+   521	/**
+   522	 * get_futex_key() - Get parameters which are the keys for a futex
+   523	 * @uaddr:	virtual address of the futex
+   524	 * @flags:	FLAGS_*
+   525	 * @key:	address where result is stored.
+   526	 * @rw:		mapping needs to be read/write (values: FUTEX_READ,
+   527	 *              FUTEX_WRITE)
+   528	 *
+   529	 * Return: a negative error code or 0
+   530	 *
+   531	 * The key words are stored in @key on success.
+   532	 *
+   533	 * For shared mappings (when @fshared), the key is:
+   534	 *
+   535	 *   ( inode->i_sequence, page offset within mapping, offset_within_page )
+   536	 *
+   537	 * [ also see get_inode_sequence_number() ]
+   538	 *
+   539	 * For private mappings (or when !@fshared), the key is:
+   540	 *
+   541	 *   ( current->mm, address, 0 )
+   542	 *
+   543	 * This allows (cross process, where applicable) identification of the futex
+   544	 * without keeping the page pinned for the duration of the FUTEX_WAIT.
+   545	 *
+   546	 * lock_page() might sleep, the caller should not hold a spinlock.
+   547	 */
+   548	int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
+   549			  enum futex_access rw)
+   550	{
+   551		unsigned long address = (unsigned long)uaddr;
+   552		struct mm_struct *mm = current->mm;
+   553		struct page *page;
+   554		struct folio *folio;
+   555		struct address_space *mapping;
+   556		int node, err, size, ro = 0;
+   557		bool node_updated = false;
+   558		bool fshared;
+   559	
+   560		fshared = flags & FLAGS_SHARED;
+   561		size = futex_size(flags);
+   562		if (flags & FLAGS_NUMA)
+   563			size *= 2;
+   564	
+   565		/*
+   566		 * The futex address must be "naturally" aligned.
+   567		 */
+   568		key->both.offset = address % PAGE_SIZE;
+   569		if (unlikely((address % size) != 0))
+   570			return -EINVAL;
+   571		address -= key->both.offset;
+   572	
+   573		if (unlikely(!access_ok(uaddr, size)))
+   574			return -EFAULT;
+   575	
+   576		if (unlikely(should_fail_futex(fshared)))
+   577			return -EFAULT;
+   578	
+   579		node = FUTEX_NO_NODE;
+   580	
+   581		if (flags & FLAGS_NUMA) {
+   582			u32 __user *naddr = (void *)uaddr + size / 2;
+   583	
+   584			if (get_user_inline(node, naddr))
+   585				return -EFAULT;
+   586	
+   587			if ((node != FUTEX_NO_NODE) &&
+   588			    ((unsigned int)node >= MAX_NUMNODES || !node_possible(node)))
+   589				return -EINVAL;
+   590		}
+   591	
+   592		if (node == FUTEX_NO_NODE && (flags & FLAGS_MPOL)) {
+   593			node = futex_mpol(mm, address);
+   594			node_updated = true;
+   595		}
+   596	
+   597		if (flags & FLAGS_NUMA) {
+   598			u32 __user *naddr = (void *)uaddr + size / 2;
+   599	
+   600			if (node == FUTEX_NO_NODE) {
+   601				node = numa_node_id();
+   602				node_updated = true;
+   603			}
+ > 604			if (node_updated && put_user_inline(node, naddr))
+   605				return -EFAULT;
+   606		}
+   607	
+   608		key->both.node = node;
+   609	
+   610		/*
+   611		 * PROCESS_PRIVATE futexes are fast.
+   612		 * As the mm cannot disappear under us and the 'key' only needs
+   613		 * virtual address, we dont even have to find the underlying vma.
+   614		 * Note : We do have to check 'uaddr' is a valid user address,
+   615		 *        but access_ok() should be faster than find_vma()
+   616		 */
+   617		if (!fshared) {
+   618			/*
+   619			 * On no-MMU, shared futexes are treated as private, therefore
+   620			 * we must not include the current process in the key. Since
+   621			 * there is only one address space, the address is a unique key
+   622			 * on its own.
+   623			 */
+   624			if (IS_ENABLED(CONFIG_MMU))
+   625				key->private.mm = mm;
+   626			else
+   627				key->private.mm = NULL;
+   628	
+   629			key->private.address = address;
+   630			return 0;
+   631		}
+   632	
+   633	again:
+   634		/* Ignore any VERIFY_READ mapping (futex common case) */
+   635		if (unlikely(should_fail_futex(true)))
+   636			return -EFAULT;
+   637	
+   638		err = get_user_pages_fast(address, 1, FOLL_WRITE, &page);
+   639		/*
+   640		 * If write access is not required (eg. FUTEX_WAIT), try
+   641		 * and get read-only access.
+   642		 */
+   643		if (err == -EFAULT && rw == FUTEX_READ) {
+   644			err = get_user_pages_fast(address, 1, 0, &page);
+   645			ro = 1;
+   646		}
+   647		if (err < 0)
+   648			return err;
+   649		else
+   650			err = 0;
+   651	
+   652		/*
+   653		 * The treatment of mapping from this point on is critical. The folio
+   654		 * lock protects many things but in this context the folio lock
+   655		 * stabilizes mapping, prevents inode freeing in the shared
+   656		 * file-backed region case and guards against movement to swap cache.
+   657		 *
+   658		 * Strictly speaking the folio lock is not needed in all cases being
+   659		 * considered here and folio lock forces unnecessarily serialization.
+   660		 * From this point on, mapping will be re-verified if necessary and
+   661		 * folio lock will be acquired only if it is unavoidable
+   662		 *
+   663		 * Mapping checks require the folio so it is looked up now. For
+   664		 * anonymous pages, it does not matter if the folio is split
+   665		 * in the future as the key is based on the address. For
+   666		 * filesystem-backed pages, the precise page is required as the
+   667		 * index of the page determines the key.
+   668		 */
+   669		folio = page_folio(page);
+   670		mapping = READ_ONCE(folio->mapping);
+   671	
+   672		/*
+   673		 * If folio->mapping is NULL, then it cannot be an anonymous
+   674		 * page; but it might be the ZERO_PAGE or in the gate area or
+   675		 * in a special mapping (all cases which we are happy to fail);
+   676		 * or it may have been a good file page when get_user_pages_fast
+   677		 * found it, but truncated or holepunched or subjected to
+   678		 * invalidate_complete_page2 before we got the folio lock (also
+   679		 * cases which we are happy to fail).  And we hold a reference,
+   680		 * so refcount care in invalidate_inode_page's remove_mapping
+   681		 * prevents drop_caches from setting mapping to NULL beneath us.
+   682		 *
+   683		 * The case we do have to guard against is when memory pressure made
+   684		 * shmem_writepage move it from filecache to swapcache beneath us:
+   685		 * an unlikely race, but we do need to retry for folio->mapping.
+   686		 */
+   687		if (unlikely(!mapping)) {
+   688			int shmem_swizzled;
+   689	
+   690			/*
+   691			 * Folio lock is required to identify which special case above
+   692			 * applies. If this is really a shmem page then the folio lock
+   693			 * will prevent unexpected transitions.
+   694			 */
+   695			folio_lock(folio);
+   696			shmem_swizzled = folio_test_swapcache(folio) || folio->mapping;
+   697			folio_unlock(folio);
+   698			folio_put(folio);
+   699	
+   700			if (shmem_swizzled)
+   701				goto again;
+   702	
+   703			return -EFAULT;
+   704		}
+   705	
+   706		/*
+   707		 * Private mappings are handled in a simple way.
+   708		 *
+   709		 * If the futex key is stored in anonymous memory, then the associated
+   710		 * object is the mm which is implicitly pinned by the calling process.
+   711		 *
+   712		 * NOTE: When userspace waits on a MAP_SHARED mapping, even if
+   713		 * it's a read-only handle, it's expected that futexes attach to
+   714		 * the object not the particular process.
+   715		 */
+   716		if (folio_test_anon(folio)) {
+   717			/*
+   718			 * A RO anonymous page will never change and thus doesn't make
+   719			 * sense for futex operations.
+   720			 */
+   721			if (unlikely(should_fail_futex(true)) || ro) {
+   722				err = -EFAULT;
+   723				goto out;
+   724			}
+   725	
+   726			key->both.offset |= FUT_OFF_MMSHARED; /* ref taken on mm */
+   727			key->private.mm = mm;
+   728			key->private.address = address;
+   729	
+   730		} else {
+   731			struct inode *inode;
+   732	
+   733			/*
+   734			 * The associated futex object in this case is the inode and
+   735			 * the folio->mapping must be traversed. Ordinarily this should
+   736			 * be stabilised under folio lock but it's not strictly
+   737			 * necessary in this case as we just want to pin the inode, not
+   738			 * update i_pages or anything like that.
+   739			 *
+   740			 * The RCU read lock is taken as the inode is finally freed
+   741			 * under RCU. If the mapping still matches expectations then the
+   742			 * mapping->host can be safely accessed as being a valid inode.
+   743			 */
+   744			rcu_read_lock();
+   745	
+   746			if (READ_ONCE(folio->mapping) != mapping) {
+   747				rcu_read_unlock();
+   748				folio_put(folio);
+   749	
+   750				goto again;
+   751			}
+   752	
+   753			inode = READ_ONCE(mapping->host);
+   754			if (!inode) {
+   755				rcu_read_unlock();
+   756				folio_put(folio);
+   757	
+   758				goto again;
+   759			}
+   760	
+   761			key->both.offset |= FUT_OFF_INODE; /* inode-based key */
+   762			key->shared.i_seq = get_inode_sequence_number(inode);
+   763			key->shared.pgoff = page_pgoff(folio, page);
+   764			rcu_read_unlock();
+   765		}
+   766	
+   767	out:
+   768		folio_put(folio);
+   769		return err;
+   770	}
+   771	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
