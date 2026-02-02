@@ -1,205 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F07536EAAB;
-	Mon,  2 Feb 2026 22:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863E42D7DD4
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 22:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770071584; cv=none; b=ivb0cOijOB76wMNMkCmQfC3GoCYyc9RAoMi0L7wumiGtxWxbfw096uswJpWaljj3DOVg3QKJxbyPaczY9t3EazUgxEqiE5w3/xhdDGSJsjRDqez4hrTU6cd5dGJyUbdOTygJAp6ZOMkVYa8TLSMqI1F8uLdgx0s3LMaUbBFCjnU=
+	t=1770072342; cv=none; b=s/GLsSwSQd29g7wLAPF9VmldvP9t0TnxPAa8yt1zruPnCCoDizsszxEpma2LtqQRCQqz+WBFVkb7o0ezaZoZIYrwqNhIb6pJd1smITaJgBtqW46+mVjB+FGx3d3JWrwirs+xiR5hS8GeE7xglYthya27YUZLjkD0lugrYTspYx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770071584; c=relaxed/simple;
-	bh=K94Yr5tqFVaHsCYCKnsxMVUvUOkbufB1DVdDJ7sbhdg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fq9JH+mgG4M5ShiuA6UxYh35iZ+MhrRTtTQQsuWv25rjZFSDfGbb4Hm0axYis+nl2ZGLu9NJatZsHjK85sOx6Eni+sxNajdldDKQxIrqQt/WRmGiDnKbIMidy5jKXpIlm6t2plq4ywr5p0qfPz1oUAp1fzPxfI7227U+mjUbTlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BKlViKJA; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770072342; c=relaxed/simple;
+	bh=5Kb5krIsfIdKzbY4UbV0w0i93VHuDl4UPIOiaxALKbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uW8bYGMwwq1w+QYrMi6Du0bCm6K/HtagqhEWifQut74jaZRZFAxeJnly68LHygjlIJdIcJcSG6jneEpRJ/BCjZ5NgMg7xAW0I12WF5ku4tE4FyiQ4RzUmTWokKFfurP3bmugwIdKWTp2nXYpQwd0TtT4FbBNaZDRbYrgD4iM0Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ChmJdRRM; arc=none smtp.client-ip=209.85.128.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BKlViKJA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770071583; x=1801607583;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K94Yr5tqFVaHsCYCKnsxMVUvUOkbufB1DVdDJ7sbhdg=;
-  b=BKlViKJAVVGto3CtjwFrfkcBkI8FG1P7WHq9O/azjGYnocBOesCY9tiS
-   /GVIGMtCnIp81025Wb25B2YYDNcLCRJIZF2VxhKWSvHk8onBEQ2dVD+dn
-   6kBBfr3+ZyyZ6VbbjwhM//5XN3sikGxLYxRt5cuzY25KyWPXXg6Ln8v1w
-   LchPbAT/HqZsL5/mpbYuWryV1u1PVZIvno2QSl4aSb6/xTNJR/V93GuhF
-   Xw8N7qKN7K1yqRwsB4FS6rmtd1dv2GWbrCv2qoqjFD12NtVA4jB5o7rOs
-   nQquHg3tQSf34ciZCS0MZzkjgb/TRLgGbfnF6rCUuK0TzOhAMC/OBHMHU
-   Q==;
-X-CSE-ConnectionGUID: olDvU4euTSOCSqspAOwVFA==
-X-CSE-MsgGUID: JRp+Y5gGQliLzQb3mURrSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="82348627"
-X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
-   d="scan'208";a="82348627"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2026 14:33:02 -0800
-X-CSE-ConnectionGUID: f0cfM4HPRO+EXrWtBO5R7A==
-X-CSE-MsgGUID: e2M1VSzVScuy0rx2orDXBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
-   d="scan'208";a="209657809"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 02 Feb 2026 14:32:27 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vn2T3-00000000g1M-0wih;
-	Mon, 02 Feb 2026 22:32:25 +0000
-Date: Tue, 3 Feb 2026 06:31:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shashank Balaji <shashank.mahadasyam@sony.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Suresh Siddha <suresh.b.siddha@intel.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	virtualization@lists.linux.dev, jailhouse-dev@googlegroups.com,
-	kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-	Rahul Bukte <rahul.bukte@sony.com>,
-	Shashank Balaji <shashank.mahadasyam@sony.com>,
-	Daniel Palmer <daniel.palmer@sony.com>,
-	Tim Bird <tim.bird@sony.com>
-Subject: Re: [PATCH 1/3] x86/x2apic: disable x2apic on resume if the kernel
- expects so
-Message-ID: <202602030600.jFhsJyEC-lkp@intel.com>
-References: <20260202-x2apic-fix-v1-1-71c8f488a88b@sony.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ChmJdRRM"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso1821555e9.1
+        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 14:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770072339; x=1770677139; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JGqAdrVHnFu6PnnaHfHKQoFDoCwgyHq7ziHIdTjOCQs=;
+        b=ChmJdRRMDiQWsi6x3G3IiDojMR+08+wbD++eAaXtSPnplzEjfUnC8iidkLvQKl78Cz
+         nDGcjI3jA7yhoLpC1qa6ukzF4kWeeV+KV3WxiAodNcK8eEq6h9Pdf3d/WyqZMiev/enU
+         PLGqdOwaWDNm6o1xluB+PW29D8sggNL1I0Bsu0l7xhUM4U6zK2etM9fv+T6xaWbrvXLX
+         dtkYnfcudOrn5aKThrwTDrNzrXvbM3NkDcjr8/GDHwZ8orD6nQ3ka45uXWjOXwSlkzZW
+         Fk83/pqiFhUMSYws8NyF2OeMLbZkfC/kq1TyGw+/NEPNJs2aPQU+lNk5ZKysotNZkLsp
+         Ahug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770072339; x=1770677139;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JGqAdrVHnFu6PnnaHfHKQoFDoCwgyHq7ziHIdTjOCQs=;
+        b=aAtGyVMb114eCtAsBrp/qAuoYr28v9L7Z0BZ8Tlsv5ZlXIRJyRH4QMzqttVZIqnpHz
+         ZNZOAj4qYFRO4gq1Ivj3zGKUQR6kcwsrInUgQ4YRJES5d2dqQkHFaWhPznRxJWB+FlU6
+         zfkpqUfSCt1Pf+qwMCeJ63vyMkwEk3j/MXd6p9yBRjUR1ZDEGwQPIDdwTUaaAHhld8Dr
+         /RWbJtA9zgxq8/cidpr3rRfzoZ11kf5FuyD9Fk/tHKo2/xgqyfaoi06DDiVPZOTn7aSa
+         aK8DRqE6/VsQDhFzmERe0kFXdprtAKvuVPdZuUgjIfQtCnj56VxQm4OQ/we04MfVRkHK
+         xUkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8RsCfEapSt5c52g/yw/qFOJItCExoDv9zPXn7Jd2Jj9YaT+eZ+t+7V7IHMYHupAM/BO7S@lists.linux.dev
+X-Gm-Message-State: AOJu0YyG00QIv/SAbR52zHl5NFDiJR/Rs/y2MmTvbp5geoNByCKYNyDv
+	+1hIBUr5qD8jZgxMh41z0zIhRLsD7z3jbk22u00vsoqGnmeRAnhNMOzF
+X-Gm-Gg: AZuq6aLfVB1HU7spxojZZvCLVwpUUoqfPSbMPU6Bm+OcQ0qNROgrSR/e4D9Wir12pYV
+	Z7m2tvjsPpFvdp4e9n6niu0OxbDc80u6aSk+SzOhhSTzvyH71wGsfNhdOaTsiUX5NgMoCK/IoMv
+	0KRV5tCVIfCRoFh5RiGoGr2qpKGsixKBsq7iHLyLO82uu8Fpt6+tRG8YXv6CyBke64Ut5xDPMF0
+	z+3VdVcFeuQUx8D7fQWNX9hKxdLc6ftGHbIuaNHwWmhmMg41qZLnVfIm3WBIAVuEc8NpIdx2rCO
+	+ZuS6PEUIIAKYvQknM2QBB0ULGGhP6M63ioc/PxgCupePM7nAQWpraalz2+a0JVX6I+eLYLIlkK
+	naIYT/NJgl41/r8kg2zOJDJLLt3Jb1mRNk4Z/LQFpwhYuwXqPKlO6jS8R4Sq3zZEcasjGMIy0YU
+	1C6cOTPvkzQYD2wptvUDYxpfo2y2F7HjQPEjs7zLQLL9XBzNUygS/v
+X-Received: by 2002:a05:600c:6303:b0:47e:e59c:67c5 with SMTP id 5b1f17b1804b1-4830513aed8mr18382505e9.8.1770072338747;
+        Mon, 02 Feb 2026 14:45:38 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e2973d57sm100080575e9.18.2026.02.02.14.45.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 14:45:38 -0800 (PST)
+Date: Mon, 2 Feb 2026 22:45:37 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Nicolas Dufresne" <nicolas.dufresne@collabora.com>, "Arnd Bergmann"
+ <arnd@kernel.org>, "Detlev Casanova" <detlev.casanova@collabora.com>,
+ "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>, "Mauro Carvalho Chehab"
+ <mchehab@kernel.org>, Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Hans Verkuil"
+ <hverkuil+cisco@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, linux-media@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
+ assemble_hw_pps()
+Message-ID: <20260202224537.16c16e13@pumpkin>
+In-Reply-To: <070cebc8-3cab-4f32-a203-9456506dfcc5@app.fastmail.com>
+References: <20260202094804.1231706-1-arnd@kernel.org>
+	<16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
+	<3b89635f-1c1c-4e4e-b0a9-2bbd0f21bc90@app.fastmail.com>
+	<da9f044152383cacd50989b025fdce08a654bbe3.camel@collabora.com>
+	<070cebc8-3cab-4f32-a203-9456506dfcc5@app.fastmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260202-x2apic-fix-v1-1-71c8f488a88b@sony.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Shashank,
+On Mon, 02 Feb 2026 16:59:05 +0100
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-kernel test robot noticed the following build errors:
+...
+>  - Since most of the fields are exactly 6 bits offset from a word
+>    boundary, you can try assembling all the  *_field_order_cnt*
+>    fields in an array first that has all the bits in the correct
+>    order, but then shift the entire array six bits.
 
-[auto build test ERROR on 18f7fcd5e69a04df57b563360b88be72471d6b62]
+How are they being written to the hardware?
+It would be very unusual for hardware not to have things 'reasonably aligned'.
+This makes me think that the data buffer is actually being 'bit-bashed'
+down some serial data interface.
+In which case the simple solution is to give the function that writes
+the data a 'bit offset' for the first word.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shashank-Balaji/x86-x2apic-disable-x2apic-on-resume-if-the-kernel-expects-so/20260202-181147
-base:   18f7fcd5e69a04df57b563360b88be72471d6b62
-patch link:    https://lore.kernel.org/r/20260202-x2apic-fix-v1-1-71c8f488a88b%40sony.com
-patch subject: [PATCH 1/3] x86/x2apic: disable x2apic on resume if the kernel expects so
-config: i386-randconfig-001-20260202 (https://download.01.org/0day-ci/archive/20260203/202602030600.jFhsJyEC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602030600.jFhsJyEC-lkp@intel.com/reproduce)
+And to re-iterate C bit-fields are completely non portable and entirely
+inappropriate for mapping onto device registers.
+You can use C structures (arranged with everything on its natural
+boundary so there are no holes) with members declared with the correct
+endianness.
+Indeed that is actually preferable to using numeric constants as the
+offsets are tied to the correct structure.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602030600.jFhsJyEC-lkp@intel.com/
+	David
 
-All errors (new ones prefixed by >>):
+> 
+>       Arnd
+> 
 
->> arch/x86/kernel/apic/apic.c:2463:3: error: call to undeclared function '__x2apic_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2463 |                 __x2apic_disable();
-         |                 ^
-   arch/x86/kernel/apic/apic.c:2463:3: note: did you mean '__x2apic_enable'?
-   arch/x86/kernel/apic/apic.c:1896:20: note: '__x2apic_enable' declared here
-    1896 | static inline void __x2apic_enable(void) { }
-         |                    ^
-   1 error generated.
-
-
-vim +/__x2apic_disable +2463 arch/x86/kernel/apic/apic.c
-
-  2435	
-  2436	static void lapic_resume(void *data)
-  2437	{
-  2438		unsigned int l, h;
-  2439		unsigned long flags;
-  2440		int maxlvt;
-  2441	
-  2442		if (!apic_pm_state.active)
-  2443			return;
-  2444	
-  2445		local_irq_save(flags);
-  2446	
-  2447		/*
-  2448		 * IO-APIC and PIC have their own resume routines.
-  2449		 * We just mask them here to make sure the interrupt
-  2450		 * subsystem is completely quiet while we enable x2apic
-  2451		 * and interrupt-remapping.
-  2452		 */
-  2453		mask_ioapic_entries();
-  2454		legacy_pic->mask_all();
-  2455	
-  2456		if (x2apic_mode) {
-  2457			__x2apic_enable();
-  2458		} else {
-  2459			/*
-  2460			 * x2apic may have been re-enabled by the
-  2461			 * firmware on resuming from s2ram
-  2462			 */
-> 2463			__x2apic_disable();
-  2464	
-  2465			/*
-  2466			 * Make sure the APICBASE points to the right address
-  2467			 *
-  2468			 * FIXME! This will be wrong if we ever support suspend on
-  2469			 * SMP! We'll need to do this as part of the CPU restore!
-  2470			 */
-  2471			if (boot_cpu_data.x86 >= 6) {
-  2472				rdmsr(MSR_IA32_APICBASE, l, h);
-  2473				l &= ~MSR_IA32_APICBASE_BASE;
-  2474				l |= MSR_IA32_APICBASE_ENABLE | mp_lapic_addr;
-  2475				wrmsr(MSR_IA32_APICBASE, l, h);
-  2476			}
-  2477		}
-  2478	
-  2479		maxlvt = lapic_get_maxlvt();
-  2480		apic_write(APIC_LVTERR, ERROR_APIC_VECTOR | APIC_LVT_MASKED);
-  2481		apic_write(APIC_ID, apic_pm_state.apic_id);
-  2482		apic_write(APIC_DFR, apic_pm_state.apic_dfr);
-  2483		apic_write(APIC_LDR, apic_pm_state.apic_ldr);
-  2484		apic_write(APIC_TASKPRI, apic_pm_state.apic_taskpri);
-  2485		apic_write(APIC_SPIV, apic_pm_state.apic_spiv);
-  2486		apic_write(APIC_LVT0, apic_pm_state.apic_lvt0);
-  2487		apic_write(APIC_LVT1, apic_pm_state.apic_lvt1);
-  2488	#ifdef CONFIG_X86_THERMAL_VECTOR
-  2489		if (maxlvt >= 5)
-  2490			apic_write(APIC_LVTTHMR, apic_pm_state.apic_thmr);
-  2491	#endif
-  2492	#ifdef CONFIG_X86_MCE_INTEL
-  2493		if (maxlvt >= 6)
-  2494			apic_write(APIC_LVTCMCI, apic_pm_state.apic_cmci);
-  2495	#endif
-  2496		if (maxlvt >= 4)
-  2497			apic_write(APIC_LVTPC, apic_pm_state.apic_lvtpc);
-  2498		apic_write(APIC_LVTT, apic_pm_state.apic_lvtt);
-  2499		apic_write(APIC_TDCR, apic_pm_state.apic_tdcr);
-  2500		apic_write(APIC_TMICT, apic_pm_state.apic_tmict);
-  2501		apic_write(APIC_ESR, 0);
-  2502		apic_read(APIC_ESR);
-  2503		apic_write(APIC_LVTERR, apic_pm_state.apic_lvterr);
-  2504		apic_write(APIC_ESR, 0);
-  2505		apic_read(APIC_ESR);
-  2506	
-  2507		irq_remapping_reenable(x2apic_mode);
-  2508	
-  2509		local_irq_restore(flags);
-  2510	}
-  2511	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
