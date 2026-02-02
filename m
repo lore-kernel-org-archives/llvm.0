@@ -1,48 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E441336EC7;
-	Mon,  2 Feb 2026 22:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DA8355045;
+	Mon,  2 Feb 2026 22:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770070464; cv=none; b=B+nf0pRghLqhN6ys0PjHw4BGzazCy9G5H8AECPrjzxDDIuTbYK7ya3hDm48fsMaYIy9WjcKKBzp6NzpOs332PsTTFH+PrAwM1TpdWj0wKJTi0E0tIG7HAqkOpPes8QvLZQeo6ZiWH0ObyDtV2aryR0Ceuzb8Iooo9Yh38QkyPOs=
+	t=1770071553; cv=none; b=DEXpbeQXwRY4vM5tL+bqocTGMRE0S2FVJ4CodCfZEDF31U49lAn5XEk+HtFtcLYMfa9dre8JuTFdw3qY1vtrfH3uoONJAJ1KyAWADj5lS6xXIKejMaVk8Xrb0GhiXBiOoaDErNRL+dG5Esttlg0HWBiPSzRzY6UO8RCw7rLht2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770070464; c=relaxed/simple;
-	bh=sO5KPNQ8TrkL4sJvZKSQZoiBVi33bIgn3j10AQb7f2k=;
+	s=arc-20240116; t=1770071553; c=relaxed/simple;
+	bh=RkwvJ/eaG/ubSf4GeTmV9ctxLTvA9ARikKcdQA5n5PA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KWiWe3vBnGr8fPW36OOBIwGbX35BlU3DRkJCTLOjT1nd7OT4+81+wsRFiRF+Tqe/QIPFB1rRZE9sup7t1T3X0eY/LSK7n+Mkf8DLMq6OuTg8nmzBuAoJ+EieD/GikxCU/jb3ER8EB/0X0bcLXoBWHPSABPMKpEfpPQuIZmxZGz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VX+E3OSh; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TrlUGtY/rHOE4QKCzdM7X0IQdLBMBjZLvr7x9Njcb2jyFoi1iUQWjaxaLfrRHXU+XeGzXjRNb9/Sq7hOHT+F1PlbO048Ipmk4frcerfs0klzA+TPpEZphCY+qNj1GtRulq5tlOQ+WX8O0Sbb6YC7/rI6v2kYioL4+q/IXki3y9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wwo3Yrxf; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VX+E3OSh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA797C116C6;
-	Mon,  2 Feb 2026 22:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770070464;
-	bh=sO5KPNQ8TrkL4sJvZKSQZoiBVi33bIgn3j10AQb7f2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VX+E3OShKLDfDhSRpROGEgofypRa6ipIYNLJdS/bzT5kMqki+Sq5mceA5k1fl/VyV
-	 yQhBEwL6VBTGZLaauoINn8ZDSGaBZuJdD5SwJcfbgasAYeWb8GLpOMxf1EBORTS0B1
-	 IheeKPPBg4W9Nw3sIT8oGKlX3JCMrk4Fo2M5Z+DwQxYxKxnW9XDYgwEwOyeezk4Gxt
-	 ENNHPD6PY7odbG+OI/lpKTa/SuowlfdGtkFUWg1h0rfUfcRJIMJqHX7dS09Vx9as6X
-	 QqziNEjvLjzp6h/c9sKuQksuU3qNpXX4SXZUfrU7GDvEKIjbKJqgQgioCPM6IjcP0F
-	 uRcR63eTdYfFA==
-Date: Mon, 2 Feb 2026 15:14:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <jesszhan0024@gmail.com>,
-	Langyan Ye <yelangyan@huaqin.corp-partner.google.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] drm/panel: ilitek-ili9882t: Remove duplicate
- initializers in tianma_il79900a_dsc
-Message-ID: <20260202221419.GA229639@ax162>
-References: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wwo3Yrxf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770071551; x=1801607551;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RkwvJ/eaG/ubSf4GeTmV9ctxLTvA9ARikKcdQA5n5PA=;
+  b=Wwo3Yrxf+7RnT7YVLqPmFJVkmyK5vM4YmLhWMgJgimZAbXV4bElJDHO5
+   unZ5JSV8/MUx4N3bT4Lw4TC9sXg3d7aFkKf/vLq1CBk1Hn4sSkS1hm3kO
+   E6s9/SCiuFfLlcQzsZ8LmU57j/VQUMlXN2o6o40R36VscHJOlcqKlY/a1
+   7F0fyQ+ClJE6ExZcNfOdcY8fnhs3NyHelQ73uiT93pghAUQZk6PO3uFUS
+   kQDo+d41opkJ6qGUNDhPUBsJifIgj+fiUBglvUGwxqVvyYO6njlqGEcsU
+   zx0QYg1pS1cVwErVhLS8V5dsx40JNr/OUcDqhE1vSXF3EqFT3ykq6iDVN
+   A==;
+X-CSE-ConnectionGUID: iSDmxwd5S3Sskh9efNUp2w==
+X-CSE-MsgGUID: npKc4e3ZSLOcbbj/2pdO6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="71276591"
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="71276591"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2026 14:32:31 -0800
+X-CSE-ConnectionGUID: Hbxrtp+LSiCoLVQlQdZWyA==
+X-CSE-MsgGUID: Ek3RB598Quy6MtEbEFKVDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="208938576"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 02 Feb 2026 14:32:28 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vn2T3-00000000g1O-13HM;
+	Mon, 02 Feb 2026 22:32:25 +0000
+Date: Tue, 3 Feb 2026 06:31:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Coddington <bcodding@hammerspace.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Rick Macklem <rick.macklem@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] NFSD: Add a key for signing filehandles
+Message-ID: <202602030619.d8NUY35L-lkp@intel.com>
+References: <e3806f53c351c03725ecb12fb7ad100786df04f6.1770046529.git.bcodding@hammerspace.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,101 +70,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
+In-Reply-To: <e3806f53c351c03725ecb12fb7ad100786df04f6.1770046529.git.bcodding@hammerspace.com>
 
-Ping? This is still breaking builds and we are about to be in the merge
-window...
+Hi Benjamin,
 
-On Wed, Jan 14, 2026 at 01:43:31PM -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y / W=e):
-> 
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:95:16: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
->      95 |         .vbr_enable = 0,
->         |                       ^
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:90:16: note: previous initialization is here
->      90 |         .vbr_enable = false,
->         |                       ^~~~~
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:97:19: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
->      97 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
->         |                          ^~~~~~~~~~~~~~~~~~~~~~~
->   include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
->      22 | #define DSC_RC_MODEL_SIZE_CONST             8192
->         |                                             ^~~~
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:91:19: note: previous initialization is here
->      91 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
->         |                          ^~~~~~~~~~~~~~~~~~~~~~~
->   include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
->      22 | #define DSC_RC_MODEL_SIZE_CONST             8192
->         |                                             ^~~~
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:132:25: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
->     132 |         .initial_scale_value = 32,
->         |                                ^~
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:126:25: note: previous initialization is here
->     126 |         .initial_scale_value = 32,
->         |                                ^~
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:133:20: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
->     133 |         .nfl_bpg_offset = 3511,
->         |                           ^~~~
->   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:108:20: note: previous initialization is here
->     108 |         .nfl_bpg_offset = 1402,
->         |                           ^~~~
-> 
-> GCC would warn about this in the same manner but its version,
-> -Woverride-init, is disabled for a normal kernel build in
-> scripts/Makefile.warn. For clang, -Wextra in drivers/gpu/drm/Makefile
-> turns it back but GCC respects turning it off earlier in the command
-> line.
-> 
-> Of all the duplicate fields in the initializer, only nfl_bpg_offset is a
-> different value. Clear up the duplicate initializers, keeping the
-> 'false' value for .vbr_enable, as it is bool, and the second value for
-> .nfl_bpg_offset, assuming it is the correct one since it was the one
-> tested in the original change.
-> 
-> Fixes: 65ce1f5834e9 ("drm/panel: ilitek-ili9882t: Switch Tianma TL121BVMS07 to DSC 120Hz mode")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
-> index 370424ddfc80..8b2bfb7d3638 100644
-> --- a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
-> +++ b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
-> @@ -88,11 +88,9 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
->  	.native_422 = false,
->  	.simple_422 = false,
->  	.vbr_enable = false,
-> -	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
->  	.pic_width = 1600,
->  	.pic_height = 2560,
->  	.convert_rgb = 0,
-> -	.vbr_enable = 0,
->  	.rc_buf_thresh = {14, 28, 42, 56, 70, 84, 98, 105, 112, 119, 121, 123, 125, 126},
->  	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
->  	.rc_edge_factor = DSC_RC_EDGE_FACTOR_CONST,
-> @@ -105,7 +103,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
->  	.initial_offset = 6144,
->  	.rc_quant_incr_limit0 = 11,
->  	.rc_quant_incr_limit1 = 11,
-> -	.nfl_bpg_offset = 1402,
->  	.rc_range_params = {
->  		{ 0,  4, DSC_BPG_OFFSET(2)},
->  		{ 0,  4, DSC_BPG_OFFSET(0)},
-> @@ -123,7 +120,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
->  		{ 9, 12, DSC_BPG_OFFSET(-12)},
->  		{12, 13, DSC_BPG_OFFSET(-12)},
->  	},
-> -	.initial_scale_value = 32,
->  	.slice_chunk_size = 800,
->  	.initial_dec_delay = 657,
->  	.final_offset = 4320,
-> 
-> ---
-> base-commit: b36178488d479e9a53bbef2b01280378b5586e60
-> change-id: 20260114-panel-ilitek-ili9882t-fix-override-init-21e19143f770
-> 
-> Best regards,
-> --  
-> Nathan Chancellor <nathan@kernel.org>
-> 
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on dabff11003f9aaf293bd8f907a62f3366bd5e65f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Coddington/NFSD-Add-a-key-for-signing-filehandles/20260203-002703
+base:   dabff11003f9aaf293bd8f907a62f3366bd5e65f
+patch link:    https://lore.kernel.org/r/e3806f53c351c03725ecb12fb7ad100786df04f6.1770046529.git.bcodding%40hammerspace.com
+patch subject: [PATCH v3 1/3] NFSD: Add a key for signing filehandles
+config: x86_64-buildonly-randconfig-003-20260203 (https://download.01.org/0day-ci/archive/20260203/202602030619.d8NUY35L-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602030619.d8NUY35L-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602030619.d8NUY35L-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/nfsd/nfsctl.c:1588:6: warning: variable 'fh_key' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1588 |         if (!nn->fh_key) {
+         |             ^~~~~~~~~~~
+   fs/nfsd/nfsctl.c:1594:9: note: uninitialized use occurs here
+    1594 |         memcpy(fh_key, nla_data(attr), sizeof(siphash_key_t));
+         |                ^~~~~~
+   fs/nfsd/nfsctl.c:1588:2: note: remove the 'if' if its condition is always true
+    1588 |         if (!nn->fh_key) {
+         |         ^~~~~~~~~~~~~~~~
+   fs/nfsd/nfsctl.c:1583:23: note: initialize the variable 'fh_key' to silence this warning
+    1583 |         siphash_key_t *fh_key;
+         |                              ^
+         |                               = NULL
+   1 warning generated.
+
+
+vim +1588 fs/nfsd/nfsctl.c
+
+  1573	
+  1574	/**
+  1575	 * nfsd_nl_fh_key_set - helper to copy fh_key from userspace
+  1576	 * @attr: nlattr NFSD_A_SERVER_FH_KEY
+  1577	 * @nn: nfsd_net
+  1578	 *
+  1579	 * Callers should hold nfsd_mutex, returns 0 on success or negative errno.
+  1580	 */
+  1581	static int nfsd_nl_fh_key_set(const struct nlattr *attr, struct nfsd_net *nn)
+  1582	{
+  1583		siphash_key_t *fh_key;
+  1584	
+  1585		if (nla_len(attr) != sizeof(siphash_key_t))
+  1586			return -EINVAL;
+  1587	
+> 1588		if (!nn->fh_key) {
+  1589			fh_key = kmalloc(sizeof(siphash_key_t), GFP_KERNEL);
+  1590			if (!fh_key)
+  1591				return -ENOMEM;
+  1592		}
+  1593	
+  1594		memcpy(fh_key, nla_data(attr), sizeof(siphash_key_t));
+  1595		nn->fh_key = fh_key;
+  1596		return 0;
+  1597	}
+  1598	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
