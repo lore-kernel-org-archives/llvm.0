@@ -1,100 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EE021CC55;
-	Mon,  2 Feb 2026 09:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEB635DD01
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 10:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770025803; cv=none; b=lPtwe6nGcxM0V7P3P+nd339OURBDBmj8gkKarQpY0hKtOXmMqjL/oAocbVR9mFgIj7GMZsorzMgO+NEdDm3Q0dRyLjVph/iMe5iPwn/DrVq+93rzQCBxmG9Ooj9NDh1/xGWc8/ph5tspcjNqRaQk7UkAIjZGWvXsYKHLgbYLfZQ=
+	t=1770029845; cv=none; b=sxdXIaX6Gwmz9HAgfmruu9iEEOQAQ8xh6LbNP+0UkcjvMWbAgW6IR8PhoPsRQUE4jtSY/f1OBtKnqiJY1bMG7IMHhxW3sYdNwQKstmlsqMqujSDSXGZ2NXwSUh8UD52mZMfSmywWwGRfe839pakIAZbQVcxn2yo+kwPPdYTYND0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770025803; c=relaxed/simple;
-	bh=KGmSrfQi/Lnf2xHNhl2wOyJ/ND0MoBJUfB0nmNstbNA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CgK7GvKMQjbgYFqRBa7MqpUkXYFuR7JbsELVu0MkBm707iuQz9/zbrBC7uxlxJqwYkJ21U1ZsDk85M05oixxtOtcxAtwtfqH4JgN+HwUwN4OFgwX1+19SFGDOfw//MghpiMod1IJHazNOG+/lpkbTCbDURhRi54MB34IydWpnJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t8ZyPOTT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770029845; c=relaxed/simple;
+	bh=TFTxp9Whu76WPWc8LoRr1IbswWOT2EZOfWCEsAXG3cE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=muaZ1HChRcvp6Wrs8bVX5ydDAdn46iIlawg1CHZrwkg16ANS1pvN+sQrWdGdMO71hA9V3uDIu0K6cAdTWdnvrHBr/E2tmeCTm1uLo9H6gESzmf0eQtq3fwMoifwPN6nEbiYZOeOLU0HF9hPSPIyE0me4eveeoY9GqYTGyW21Cwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Dpt1V3u9; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BW7CMNd7; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t8ZyPOTT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0213CC116C6;
-	Mon,  2 Feb 2026 09:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770025803;
-	bh=KGmSrfQi/Lnf2xHNhl2wOyJ/ND0MoBJUfB0nmNstbNA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=t8ZyPOTTJI9+AcAIJV3wVR4r7I26deqLnhbpfDX9o5/CrSEy8jyt3dtYP7PlQCsu2
-	 s5CBkMGOAXVPCcJPErg86HjsNKNGJHgJWSufNXzpPZ2AJEJVHi00u3M4OFpCEtEXcn
-	 bwcxRrL54yeag3XlBZbhY7xgvWPQh/jnESCkoPB3MnRwtuvYfUa1jYILlsuOkvGz63
-	 oL1Du3geFVTAUvVNOkmJHV0FvxYOSBhkvmYn9QKVfE6WwMeeVjnEo73VMf/Zo3EALQ
-	 KewlkE9Iy7xSXFjDZlDBM+GaP0KWuQ3xpuVGL2A9Z+K4cX5fbjlYDhP40ijoULyhTx
-	 aZnczSTfo/Mng==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Dave Kleikamp <shaggy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Zheng Yu <zheng.yu@northwestern.edu>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Aditya Dutt <duttaditya18@gmail.com>,
-	Roman Smirnov <r.smirnov@omp.ru>,
-	jfs-discussion@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] jfs: avoid -Wtautological-constant-out-of-range-compare warning
-Date: Mon,  2 Feb 2026 10:49:53 +0100
-Message-Id: <20260202094958.1232478-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Dpt1V3u9";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BW7CMNd7"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61285EQN2596340
+	for <llvm@lists.linux.dev>; Mon, 2 Feb 2026 10:57:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	UuulFgRx9rd/kvUwhvAhL2lf6p7QUWW0dftJxb5MCVA=; b=Dpt1V3u9rKUpY5Oi
+	GIjOPuOONwb0nuY3VNAVkxQHYXLsyznSjcYRh/g8lQmTfq8Mft9pVlCt5jsoOxFo
+	RFH2Tya5hatwejqa0yztCYXi82sGp+Q/9C5NFJXRtQWiZY3VcuJrJJ7k/jhTLlT8
+	uVbTosc1f7IGFO5gz5p47UG0DyX6w9MgenSLUOs9lalDMPCCChdc3//mvNVu3Tti
+	kdly3kRD6R1IfsXWyJ5KtkkYrmWnIbLF+BxttNFvUNMvlOFG9Cek7GZP/qDYRVpa
+	uOu4Gl3u8IWYq3Ro4W+nrenvnls67qtvuP2iQVLgc/u3g7ML0x5bHr9uQ0AyA9hn
+	rZ5Rjg==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c1awdd4ap-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 10:57:22 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c6b48c08deso70504685a.1
+        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 02:57:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1770029842; x=1770634642; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UuulFgRx9rd/kvUwhvAhL2lf6p7QUWW0dftJxb5MCVA=;
+        b=BW7CMNd7jGufUkE8ZMrFe+DgtM+9QV8ersGvyos4i6hhEmEwWv/bGW7DBmU7W5N5ID
+         k9vIRfu9jdz9NwuVQcYUPLe1g0/SnUPyHTzmzJoe3M+t+bugagHB1YBbrfeGh06ETZmy
+         KFvki7qzDzTAxm8kiDUCqAAsMtinppa59CEKzxtJx82qwI7ECS1brAw6mbcBGgo0v1Zx
+         Uybz6K7r8+LF3PQ9XEW4/naddBm5oQ/gOt2XtRmrf3mG9Pf7dJugWzWB78rbm1FjZlTY
+         +FWw1EpHPHXG5CRuYdldHjYmv3mH7ONhOOHh8mi+QFVcF8VePEwKq1OGsNxWw+BxwzGi
+         LZWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770029842; x=1770634642;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UuulFgRx9rd/kvUwhvAhL2lf6p7QUWW0dftJxb5MCVA=;
+        b=gHVAF1XK9diEyev331DEPs7jaYFYWDUYya1sHwTy1X/pVwqGZs7u7sapyOdCxotyWz
+         sHFvCQkTjhbmrFnmGFLhLcmrftNtdaJ1HM45o8scBnpt2wsfCpnZ/Ej5FghenONp1LTO
+         ji3pl6A//eeyxmL5rwMxgxO9BTrwcam44o82z26t1XPBPFJaGzy8LzpjpZMIa6RxCItb
+         8dulB3J2aufQlTkKRC4QhCoa1H+wJ6kBNjQrfu6XB5E4wC7/A1s478FPDlq63ZUVAVTa
+         Kg6pY5AEcPJiQet8fwwbFN1/KtC0RCxurCPsegNbBhj6Waxkn3huguhm13OJhvkda8wy
+         W3iA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2EzDPe1fSCU/h5iNMo5vQlEgqp7nIzKXjIOSSlQ/I015Hg/8SJf5IhWSXBlpcbRdG/rHG@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw9/odO6U5/KGtNkrzr73kZHS4FrR6Ls5NAZtBN8DHWQtwcdBFX
+	i2BTfdYe1T3Ep+EhKrd35C/kwY+0pQEFXkncOQL5vAik2qu2WD3L/hYiTVs6kQWk6WTjQHt8+Lh
+	UpGl/MBUx1c1+lS540y9yzoIxFoFSL2srT/N4pyJmGMbQalSh6RpXoh1x
+X-Gm-Gg: AZuq6aLgJ6RB2msdM3P5b0W2KD+YoJe6dUDXVPDVdbQfUZivUrHOTuwkksaJGuk8Vrd
+	RJipIXTVLIgC1C9eYTVgpJEqELG7vMLooZ9QdK5tqa0ysMgV3NJAUTy5DBOYQilYjOYwRLFf0Ob
+	rqBoAKnGJyGnNDSTM8XdZ7XSXaRcHgZF2V3xafkEyCdxH4g29wSAt2yZUJOBbJuM3NF8V1I7tGW
+	IFAjit2Z7lfTgCF3y9yLWB2IceHSbtRPe1bSEty6UbBD2Ik7wR/bUwN187M1kkgvCK+LMaAloHa
+	vCghnSynxJlKzU2b8EGhu48QGEDhLVZCJAZDWe/CrlziGKNdivrq8HFpfbmejvtCznnuZwGnNaw
+	Jcagmu6TngNy6E/s8Tg61rnj9seR4x5/MXzXxE2OWPbXINT6DpqBpGirYznU0mTviKlI=
+X-Received: by 2002:a05:620a:4141:b0:8b2:6eba:c45d with SMTP id af79cd13be357-8c9eb20cebcmr1085527185a.2.1770029841906;
+        Mon, 02 Feb 2026 02:57:21 -0800 (PST)
+X-Received: by 2002:a05:620a:4141:b0:8b2:6eba:c45d with SMTP id af79cd13be357-8c9eb20cebcmr1085526585a.2.1770029841519;
+        Mon, 02 Feb 2026 02:57:21 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbf183ccbsm843100366b.34.2026.02.02.02.57.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 02:57:19 -0800 (PST)
+Message-ID: <9b4ce86a-8529-4c55-9dcf-caecf81e46d8@oss.qualcomm.com>
+Date: Mon, 2 Feb 2026 11:57:16 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] remoteproc: qcom_wcnss: Fix handling the lack of PD
+ regulators in v3
+To: Val Packett <val@packett.cool>, Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Cc: =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Luca Weiss <luca@lucaweiss.eu>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org,
+        phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev
+References: <20260201210230.911220-1-val@packett.cool>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260201210230.911220-1-val@packett.cool>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: UGbmS0oKYdzY0H5iJX-7pBPhENJtWD2a
+X-Proofpoint-ORIG-GUID: UGbmS0oKYdzY0H5iJX-7pBPhENJtWD2a
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAyMDA4OCBTYWx0ZWRfX1iO64HOllBIR
+ HRa5JwsBiXCdr2E/ImZN6LXYvaBAYRR0QOlyFOvMO4udz2OHi2bAtkpFEaRpiIl9ciewUlL9NlW
+ IUcg2VjoyGNc98/QjEzg1gndUoLri45JxUQ8st/n9BUwCzzJCmYxtWYh8/1Uj18TQHq8+HAtlUO
+ efv5CAycX3oWUrecgyUqEnPKl1UOhFmRa8bGSolyNAMa7QwVj6NIRDnW4NX9GAq4bM5sJYmHPLl
+ SZO6jcdEQZz6hYfYLp9BfRw8/WXivVwdU/9PrXDSa+lwrvGx+loEeCZBRb7+b2ruH+lAN1j6X51
+ eEilqnWhRlRhj3gl+c8cG+zJ5m3dziNBUOOTPLYPJYgJ4jmvEGZnSPh9QecJcGoviVqkxdu5Avu
+ yecNF70RVhCAY984fJVy/Q2ucNdzLY6ZnpnIVsi6YpCaAL7uqfHKZ5xsmkAO9AkadpI5WzaOuQV
+ pjLCC/8n67rpBGl9/+g==
+X-Authority-Analysis: v=2.4 cv=T8OBjvKQ c=1 sm=1 tr=0 ts=69808313 cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=1XiK3UaZtGXvnlVxuGgA:9
+ a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-02_03,2026-01-30_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 clxscore=1015 suspectscore=0 impostorscore=0
+ bulkscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602020088
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 2/1/26 9:55 PM, Val Packett wrote:
+> The changes introduced to handle single power domain platforms have
+> swapped the info pointer increment from num_pd_vregs to num_pds, which
+> would shift the info pointer past the end of the array for pronto-v3,
+> which does not list power domain regulators in vregs.
+> 
+> This showed up as a difference between GCC- and LLVM-compiled kernels
+> on SDM632 devices, where only with LLVM one would get the
+> "regulator request with no identifier" error, because the out-of-bounds
+> memory ended up being zeroed. Fix by skipping the increment when there
+> are more power domains than regulators.
+> 
+> Signed-off-by: Val Packett <val@packett.cool>
+> ---
 
-A recent change for the range check started triggering a clang warning:
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-fs/jfs/jfs_dtree.c:2906:31: error: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
- 2906 |                         if (stbl[i] < 0 || stbl[i] >= DTPAGEMAXSLOT) {
-      |                                            ~~~~~~~ ^  ~~~~~~~~~~~~~
-fs/jfs/jfs_dtree.c:3111:30: error: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
- 3111 |                 if (stbl[0] < 0 || stbl[0] >= DTPAGEMAXSLOT) {
-      |                                    ~~~~~~~ ^  ~~~~~~~~~~~~~
-
-Both the old and the new check were useless, but the previous version
-apparently did not lead to the warning.
-
-Rephrase this again by adding a cast. The check is still always false,
-but the compiler shuts up about it.
-
-Fixes: cafc6679824a ("jfs: replace hardcoded magic number with DTPAGEMAXSLOT constant")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/jfs/jfs_dtree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/jfs/jfs_dtree.c b/fs/jfs/jfs_dtree.c
-index 0ab83bb7bbdf..e3301e5fa037 100644
---- a/fs/jfs/jfs_dtree.c
-+++ b/fs/jfs/jfs_dtree.c
-@@ -2903,7 +2903,7 @@ int jfs_readdir(struct file *file, struct dir_context *ctx)
- 		stbl = DT_GETSTBL(p);
- 
- 		for (i = index; i < p->header.nextindex; i++) {
--			if (stbl[i] < 0 || stbl[i] >= DTPAGEMAXSLOT) {
-+			if (stbl[i] < 0 || (unsigned char)stbl[i] >= DTPAGEMAXSLOT) {
- 				jfs_err("JFS: Invalid stbl[%d] = %d for inode %ld, block = %lld",
- 					i, stbl[i], (long)ip->i_ino, (long long)bn);
- 				free_page(dirent_buf);
-@@ -3108,7 +3108,7 @@ static int dtReadFirst(struct inode *ip, struct btstack * btstack)
- 		/* get the leftmost entry */
- 		stbl = DT_GETSTBL(p);
- 
--		if (stbl[0] < 0 || stbl[0] >= DTPAGEMAXSLOT) {
-+		if (stbl[0] < 0 || (unsigned char)stbl[0] >= DTPAGEMAXSLOT) {
- 			DT_PUTPAGE(mp);
- 			jfs_error(ip->i_sb, "stbl[0] out of bound\n");
- 			return -EIO;
--- 
-2.39.5
-
+Konrad
