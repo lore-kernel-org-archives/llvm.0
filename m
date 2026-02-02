@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E0323FC54;
-	Mon,  2 Feb 2026 15:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63D3361648;
+	Mon,  2 Feb 2026 15:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770046606; cv=none; b=G9PmwwC9J4Ra3QWabb++YEKxYbybK3nCDsWm72Y41i3sTxdYuDpn1fSAl8hXrTQ26U7k+43AkCHEr0lv4d86s4vscgD6cfMPGb9jOBuDOTONOCvuA0dPK5bjhVu2SQeN0V2HKLX33uev6ErZDvKn9kPgZ2i4cXDaRU/lq6bJU4I=
+	t=1770046782; cv=none; b=Ez/gM7al0G+7PKUJZv5oUxTwW8SXlooADGhD6eIgPOeVlsaHacf2Be+t+PP3e2r+GYtp3avLwBvk/MeUMGaqaCk3U6i8deC9VcvWOrnljxkhI2tilb+pOY7BwY61tzUAABusAwYVnf2uG8cbsRI0t6K1mU9cWAfOrcRsLRFZb/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770046606; c=relaxed/simple;
-	bh=WI6zutmVBSxRxobYaH3/CHHeRqahghvOWUS1hAR6f9s=;
+	s=arc-20240116; t=1770046782; c=relaxed/simple;
+	bh=unfluKwMCWkNWNCY/yvRCDV5S0QCQIPAcj66dRitSeM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tu+hwh9/ImjvvUeliB49xYObZtZd6z5YMMRKBy0qxABIMGwvEN+qKP1Bivt6crlIKfSxMRg687+C0/xmGb0UmKcsC8ucCskTTBCOY9N1uz9cAsBpGT6eaIlfoyk9peUXWtquXxHuFC1uftSL+lYaYJqkJNr/yrqs+2u8VUrIYh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZeEBiyj; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=D3dB15JuusZxgwHXOlG7zlNOsmgVJO5UxsvszZvjIBdme2G7BpwJNFIKaeEG99C0MhNLRm4rA/kiv9vay9G7Lf/I4a2IUxupxLQDaXmJdtvAFQgK6qxpp9IxJ994gGMwwFQSfo0od5PvT1A76jTdDe4x4zcVdncZAm5CmtZPQ7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aDNsNI1k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZeEBiyj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AACDC2BC86;
-	Mon,  2 Feb 2026 15:36:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aDNsNI1k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E2AC116C6;
+	Mon,  2 Feb 2026 15:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770046606;
-	bh=WI6zutmVBSxRxobYaH3/CHHeRqahghvOWUS1hAR6f9s=;
+	s=k20201202; t=1770046782;
+	bh=unfluKwMCWkNWNCY/yvRCDV5S0QCQIPAcj66dRitSeM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tZeEBiyj67lav4qkYYDtamQukkvU4UhwkXxxUd7IGB3J8tok8/UGdeU/bYWf8vcy1
-	 32lYKKSfiDF5MyL3k8+rkj4WtW+JC0MMGaAzyQkV4jZ1cZ1/6ikLAKeiIMZQjWx658
-	 ZLmkrIIW2u9BX9XSVZNdcZlJEtcuD/HChCtuu9h30eP/MD6+npqcEFjzQ6QF1ObyTn
-	 XMNHY6odUN/gBuMisa1sTHMMYv77QjN3Udd2qRMED7S9Gt1zNEmzTInajbXFFeD97Y
-	 tpVYTswxHkfSUb+5QmeBy3Y1PxgsIkEKV9cGSmcfC7w8JNGAk9x3cUZVe9dglCI/qR
-	 MO8x6HRGKnbfQ==
-Date: Mon, 2 Feb 2026 15:36:40 +0000
+	b=aDNsNI1kfM74EZf3jw5Lz6KCoGUQpy/sA48b93AbuYa+d7BpRxbXuLY7cxIkC5Suc
+	 /vA57DbopQ/BAIbIoK2fifMkQisnh8CekTaxBEUsF6ZbYvIq9GtyO4GQe6T6s39L7t
+	 VYTN7KhfdyQxzSvlxHxD5+pIgpIKrMO0AWVGlUBQkJBpCnvkOT2SBKxTfMXsfkSg0/
+	 UND8SWwVizu2milM5CAdJGqlz6kNkH7yXX7OHeda7GBIfn65Y6bNYk7thsp2i8vBrS
+	 L42FJTkyZrlbFz4nwlJO5KacbhMdkh8ZEeHJUR4wGtlwOHN63oTNTQgrqyHmM5O7Oj
+	 ZfozX/hQc5+jA==
+Date: Mon, 2 Feb 2026 15:39:36 +0000
 From: Will Deacon <will@kernel.org>
 To: Marco Elver <elver@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
@@ -36,11 +36,13 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
 	David Laight <david.laight.linux@gmail.com>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <aYDEiOutq3_O8irP@willie-the-truck>
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+	Boqun Feng <boqun@kernel.org>
+Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
+ analysis through __READ_ONCE() with CONFIG_LTO=y
+Message-ID: <aYDFOIskB20CbztD@willie-the-truck>
 References: <20260130132951.2714396-1-elver@google.com>
- <20260130132951.2714396-3-elver@google.com>
+ <20260130132951.2714396-4-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,130 +51,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260130132951.2714396-3-elver@google.com>
+In-Reply-To: <20260130132951.2714396-4-elver@google.com>
 
-On Fri, Jan 30, 2026 at 02:28:25PM +0100, Marco Elver wrote:
-> Rework arm64 LTO __READ_ONCE() to improve code generation as follows:
+On Fri, Jan 30, 2026 at 02:28:26PM +0100, Marco Elver wrote:
+> When enabling Clang's Context Analysis (aka. Thread Safety Analysis) on
+> kernel/futex/core.o (see Peter's changes at [1]), in arm64 LTO builds we
+> could see:
 > 
-> 1. Replace _Generic-based __unqual_scalar_typeof() with more complete
->    __rwonce_typeof_unqual(). This strips qualifiers from all types, not
->    just integer types, which is required to be able to assign (must be
->    non-const) to __u.__val in the non-atomic case (required for #2).
+> | kernel/futex/core.c:982:1: warning: spinlock 'atomic ? __u.__val : q->lock_ptr' is still held at the end of function [-Wthread-safety-analysis]
+> |      982 | }
+> |          | ^
+> |    kernel/futex/core.c:976:2: note: spinlock acquired here
+> |      976 |         spin_lock(lock_ptr);
+> |          |         ^
+> | kernel/futex/core.c:982:1: warning: expecting spinlock 'q->lock_ptr' to be held at the end of function [-Wthread-safety-analysis]
+> |      982 | }
+> |          | ^
+> |    kernel/futex/core.c:966:6: note: spinlock acquired here
+> |      966 | void futex_q_lockptr_lock(struct futex_q *q)
+> |          |      ^
+> |    2 warnings generated.
 > 
-> Once our minimum compiler versions are bumped, this just becomes
-> TYPEOF_UNQUAL() (or typeof_unqual() should we decide to adopt C23
-> naming).  Sadly the fallback version of __rwonce_typeof_unqual() cannot
-> be used as a general TYPEOF_UNQUAL() fallback (see code comments).
+> Where we have:
 > 
-> One subtle point here is that non-integer types of __val could be const
-> or volatile within the union with the old __unqual_scalar_typeof(), if
-> the passed variable is const or volatile. This would then result in a
-> forced load from the stack if __u.__val is volatile; in the case of
-> const, it does look odd if the underlying storage changes, but the
-> compiler is told said member is "const" -- it smells like UB.
+> 	extern void futex_q_lockptr_lock(struct futex_q *q) __acquires(q->lock_ptr);
+> 	..
+> 	void futex_q_lockptr_lock(struct futex_q *q)
+> 	{
+> 		spinlock_t *lock_ptr;
 > 
-> 2. Eliminate the atomic flag and ternary conditional expression. Move
->    the fallback volatile load into the default case of the switch,
->    ensuring __u is unconditionally initialized across all paths.
->    The statement expression now unconditionally returns __u.__val.
+> 		/*
+> 		 * See futex_unqueue() why lock_ptr can change.
+> 		 */
+> 		guard(rcu)();
+> 	retry:
+> >>		lock_ptr = READ_ONCE(q->lock_ptr);
+> 		spin_lock(lock_ptr);
+> 	...
+> 	}
 > 
-> This refactoring appears to help the compiler improve (or fix) code
-> generation.
+> At the time of the above report (prior to removal of the 'atomic' flag),
+> Clang Thread Safety Analysis's alias analysis resolved 'lock_ptr' to
+> 'atomic ?  __u.__val : q->lock_ptr' (now just '__u.__val'), and used
+> this as the identity of the context lock given it cannot "see through"
+> the inline assembly; however, we want 'q->lock_ptr' as the canonical
+> context lock.
 > 
-> With a defconfig + LTO + debug options builds, we observe different
-> codegen for the following functions:
+> While for code generation the compiler simplified to '__u.__val' for
+> pointers (8 byte case -> 'atomic' was set), TSA's analysis (a) happens
+> much earlier on the AST, and (b) would be the wrong deduction.
 > 
-> 	btrfs_reclaim_sweep (708 -> 1032 bytes)
-> 	btrfs_sinfo_bg_reclaim_threshold_store (200 -> 204 bytes)
-> 	check_mem_access (3652 -> 3692 bytes) [inlined bpf_map_is_rdonly]
-> 	console_flush_all (1268 -> 1264 bytes)
-> 	console_lock_spinning_disable_and_check (180 -> 176 bytes)
-> 	igb_add_filter (640 -> 636 bytes)
-> 	igb_config_tx_modes (2404 -> 2400 bytes)
-> 	kvm_vcpu_on_spin (480 -> 476 bytes)
-> 	map_freeze (376 -> 380 bytes)
-> 	netlink_bind (1664 -> 1656 bytes)
-> 	nmi_cpu_backtrace (404 -> 400 bytes)
-> 	set_rps_cpu (516 -> 520 bytes)
-> 	swap_cluster_readahead (944 -> 932 bytes)
-> 	tcp_accecn_third_ack (328 -> 336 bytes)
-> 	tcp_create_openreq_child (1764 -> 1772 bytes)
-> 	tcp_data_queue (5784 -> 5892 bytes)
-> 	tcp_ecn_rcv_synack (620 -> 628 bytes)
-> 	xen_manage_runstate_time (944 -> 896 bytes)
-> 	xen_steal_clock (340 -> 296 bytes)
+> Now that we've gotten rid of the 'atomic' ternary comparison, we can
+> return '__u.__val' through a pointer that we initialize with '&x', but
+> then update via a pointer-to-pointer. When READ_ONCE()'ing a context
+> lock pointer, TSA's alias analysis does not invalidate the initial alias
+> when updated through the pointer-to-pointer, and we make it effectively
+> "see through" the __READ_ONCE().
 > 
-> Increase of some functions are due to more aggressive inlining due to
-> better codegen (in this build, e.g. bpf_map_is_rdonly is no longer
-> present due to being inlined completely).
+> Code generation is unchanged.
 > 
+> Link: https://lkml.kernel.org/r/20260121110704.221498346@infradead.org [1]
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202601221040.TeM0ihff-lkp@intel.com/
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Tested-by: Boqun Feng <boqun@kernel.org>
 > Signed-off-by: Marco Elver <elver@google.com>
 > ---
 > v3:
-> * Comment.
+> * Use 'typeof(*__ret)'.
+> * Commit message.
 > 
 > v2:
-> * Add __rwonce_typeof_unqual() as fallback for old compilers.
+> * Rebase.
 > ---
->  arch/arm64/include/asm/rwonce.h | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
+>  arch/arm64/include/asm/rwonce.h | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
 > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index fc0fb42b0b64..42c9e8429274 100644
+> index 42c9e8429274..b7de74d4bf07 100644
 > --- a/arch/arm64/include/asm/rwonce.h
 > +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -19,6 +19,20 @@
->  		"ldapr"	#sfx "\t" #regs,				\
->  	ARM64_HAS_LDAPR)
->  
-> +#ifdef USE_TYPEOF_UNQUAL
-> +#define __rwonce_typeof_unqual(x) TYPEOF_UNQUAL(x)
-> +#else
-> +/*
-> + * Fallback for older compilers (Clang < 19).
-> + *
-> + * Uses the fact that, for all supported Clang versions, 'auto' correctly drops
-> + * qualifiers. Unlike typeof_unqual(), the type must be completely defined, i.e.
-> + * no forward-declared struct pointer dereferences.  The array-to-pointer decay
-> + * case does not matter for usage in READ_ONCE() either.
-> + */
-> +#define __rwonce_typeof_unqual(x) typeof(({ auto ____t = (x); ____t; }))
-> +#endif
-
-I know that CONFIG_LTO practically depends on Clang, but it's a bit
-grotty relying on that assumption here. Ideally, it would be
-straightforward to enable the strong READ_ONCE() semantics on arm64
-regardless of the compiler.
-
->  /*
->   * When building with LTO, there is an increased risk of the compiler
->   * converting an address dependency headed by a READ_ONCE() invocation
-> @@ -32,8 +46,7 @@
+> @@ -45,8 +45,12 @@
+>   */
 >  #define __READ_ONCE(x)							\
 >  ({									\
->  	typeof(&(x)) __x = &(x);					\
-> -	int atomic = 1;							\
-> -	union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;	\
-> +	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
+> -	typeof(&(x)) __x = &(x);					\
+> -	union { __rwonce_typeof_unqual(*__x) __val; char __c[1]; } __u;	\
+> +	auto __x = &(x);						\
+> +	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
+> +	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
+> +	auto __retp = &__ret;						\
+> +	union { typeof(*__ret) __val; char __c[1]; } __u;		\
+> +	*__retp = &__u.__val;						\
 >  	switch (sizeof(x)) {						\
 >  	case 1:								\
 >  		asm volatile(__LOAD_RCPC(b, %w0, %1)			\
-> @@ -56,9 +69,9 @@
->  			: "Q" (*__x) : "memory");			\
->  		break;							\
+> @@ -71,7 +75,7 @@
 >  	default:							\
-> -		atomic = 0;						\
-> +		__u.__val = *(volatile typeof(*__x) *)__x;		\
+>  		__u.__val = *(volatile typeof(*__x) *)__x;		\
+>  	}								\
+> -	__u.__val;							\
+> +	*__ret;								\
+>  })
 
-Since we're not providing acquire semantics for the non-atomic case,
-what we really want is the generic definition of __READ_ONCE() from
-include/asm-generic/rwonce.h here. The header inclusion mess prevents
-that, but why can't we just inline that definition here for the
-'default' case? If TYPEOF_UNQUAL() leads to better codegen, shouldn't
-we use that to implement __unqual_scalar_typeof() when it is available?
-
-I fear I'm missing something here, but it just feels like we're
-optimising a pretty niche case (arm64 + LTO + non-atomic __READ_ONCE())
-in a way that looks more generally applicable.
+What does GCC do with this? :/
 
 Will
