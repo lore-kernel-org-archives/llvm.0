@@ -1,169 +1,224 @@
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF0825C818
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 15:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75BC37E2FC;
+	Mon,  2 Feb 2026 16:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770047970; cv=none; b=dmMW3+asDyCIptjvR4477bq7Gf8ndG3EOSCwZgemLMn85vaaoxIGRg2OzNBuNLZ16ACP3SOFCX2xjA5Uhg0wN9pYo8dJSF+5Xc90Fn9jL1vKgy8Y3UcMzvJSnujFnddTIGUc4MbuXm/TSYEGDMRi7MhQqhy6GnSX9hJm6+NhHdI=
+	t=1770048111; cv=none; b=dW7MwVds0t8Vp0lpGIGOzA/TDnA8GDDj5a8tyhrYuzcnQWjBgv3F59sL/xyPBqNCh7EcUeULKhfDjMxVbI6wYyCPPdtaBASFVAhhVyXJyoKlusYASEjGj7X2ApC8lRZLXLd3fTprXwR+7HzXpEH7ahWCxB0IR3OexUj9jwaZphU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770047970; c=relaxed/simple;
-	bh=Esc0emZ5Gqh4PnStMKnlzE58d8eJKz/1CwAPqv/F71o=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=sDLlUJXMQ40VX18mPPc1UgDk+QSQ3PhFHEZVjPLgXC+XdcCHZa6MX8ixIq2S+A7zaNZDXSMnTaeTRGes7eIkC/JkmFcMvf21coeBwTNslufOf1oPfexLSLqKPooFiKNhdBhTnL73sg192sUSlhYgWM3/8mllyAa+Xet3K42vYiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=orEsDRtU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Um6RrgXR; arc=none smtp.client-ip=202.12.124.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1770048111; c=relaxed/simple;
+	bh=lbaT3Wn7HaF70WWCXFmd+UA5m1MOorBrpK2OiuM2Esg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gfWK73SsHEB/WYQbnKqeOKHexGwBjmDwCWWeHnK2dc2B14w+PAOzkBdTplRgkPfmEYhLsIN91Pb9cQs6tjv5c5hcJf+GfO+yDjp+Eckgf19lH1N+QUU7K4kv7ycjzq2C7UmJb6QY/X5ZZgMj4H11EfJOkheMWTsMVVfEv/EhhFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=wNqSq53U; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="orEsDRtU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Um6RrgXR"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 7E5457A0068;
-	Mon,  2 Feb 2026 10:59:27 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 02 Feb 2026 10:59:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1770047967;
-	 x=1770134367; bh=CFuW6+SYNh7gkCorL0UhMyQbcABqAcuxQVYw4LykYQU=; b=
-	orEsDRtU1gDGHSbdC5hdMI8RLoa1hDSnwJ594ntuXcpHjbfSFbvTWWiGYsP7SOW2
-	1xJFklUbN9F1reQLTNpRX8WVvy5EOSIqatqlsZ0jbs6TDMB1P7gbwy3+GU7ZSgCH
-	bwGcaCDcoChT8wVHuDBBF+RnqKFguVHScgKzuyEgsuAZ3jUfqeTAX366/q85JdoO
-	od0CvrJBgLy1TRsBk2Ez2i7csMmBE6iVpiSjeNJvDh7jhleLSpLZxYNnGnfzqvnJ
-	KsAdu3NdMoDCYbGaaR23nno1dxDEnaKzbclTuqO5bPKxh5bgtZOM36omeYQLAsfa
-	A0cwDZaVYyZSVIWb4lMecg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770047967; x=
-	1770134367; bh=CFuW6+SYNh7gkCorL0UhMyQbcABqAcuxQVYw4LykYQU=; b=U
-	m6RrgXROEiISQIivZw8LODtYS7lSVOO4jz/w5k2cgunNYxvrORvxkfVX1/Pa9pwV
-	DDGtEkDuiT6IY3BnprS0TZcSMHwYl1TCml59W1vwNc16zJxgx+yIjpElQ2qIBNhM
-	tmrT3wnQ6Wi0ERg75mY8cWP7YxD4lNlcnDxMWfxk5B6Sp398xPpyqWkYWbBvqPuF
-	eg4V8xm7iqhbtjuyD7XUNybNynv+hKXV60sff0Rgw2uVIjtUIMnOMvLT6+4Nw4QE
-	zRFuxMgW5V0Czz7f7uER7YrXgWHoaNvxjNFNtOsrt3hKMM96YMFL6WL6ip855KZi
-	6YtsjV94hz8TCjkrrzikw==
-X-ME-Sender: <xms:3smAaVsA-DXhM0iN7KEj0HUttcdIp49754Nlk3PB_jXz83lQ6uCXnQ>
-    <xme:3smAaZS8XOQmdYSdzrV7ZvToN3NJfONYprIUhw_P4aMKOlu2JS3YADOO-k3hyE594
-    bvdcVtQpsStjb4R2bu1VQ-o8slAtHRkGLteyJ1xWpHrVLBxqIEbmsid>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddujeektdeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopeguvghtlhgvvhdrtggrshgrnhhovhgrsegtohhllhgrsghorhgrrd
-    gtohhmpdhrtghpthhtohepnhhitgholhgrshdrughufhhrvghsnhgvsegtohhllhgrsgho
-    rhgrrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlh
-    esghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhl
-    vgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhvvghrkhhuihhlodgt
-    ihhstghosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmtghhvghhrggssehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:38mAadPIQbkXVjhXUP6FVvG4qEX1nPzoObNfxbzLSyO6ZtoP8qn6hQ>
-    <xmx:38mAacTddcWAcNjiYKqE7C8scRY_xtifCm_6kW6212CPazmRqIFmtA>
-    <xmx:38mAad4mExsk0iZ-3UNId6lpI-EVjYRdfv0Uyu8ViW3b2XNE0I7qng>
-    <xmx:38mAaW2__12zEA63PN0Lk2eLwD0b3oEdC95Tm2xhB1dXNEHSbwJ-tA>
-    <xmx:38mAaV4weXH7dTtfTqrQZdBXEgbLv2B6P6WsCwSk36Z0IwmLu_jeYjcJ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DE73E700065; Mon,  2 Feb 2026 10:59:26 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="wNqSq53U"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=dVIbIJg+Lh1uAzVpPqFrGj6RXd0GzHbrSmXV1+k6BQk=; b=wNqSq53UyuF0zDpknxLZIyyJLL
+	zoCnQJ/Lmv7KHvKKeUwHhDkoJfiumX+j5wZdqcL11wvlK4mfJrqA7f2NQrPR21IZIwHKAgNkU5uft
+	PmAvtotrqPPxJ5AXHu0n/3m92Wo3eFumlblVS/7pQxSCyLBUNy2xxVcFmaBuavuiEekE+VdmE1Ssa
+	lCesYtVUBBwauJWfQBDgTUlDgevXr0OTOymsP4PIgGOwl3y+N3vq4cg3sQRwXpgRGWSMSfWpEkb55
+	SMdc54Ehzp9ArHSjL86QBNYOgaGUWbH1OmAJXW5VfpltkI5BicE7U/SlGvLPIWuGjju80Jb+E0caA
+	UyS8r1Ag==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vmwMv-0000000GinO-07gZ;
+	Mon, 02 Feb 2026 16:01:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C8D9F3008E2; Mon, 02 Feb 2026 17:01:39 +0100 (CET)
+Date: Mon, 2 Feb 2026 17:01:39 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Will Deacon <will@kernel.org>
+Cc: Marco Elver <elver@google.com>, Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
+	David Laight <david.laight.linux@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
+Message-ID: <20260202160139.GF1282955@noisy.programming.kicks-ass.net>
+References: <20260130132951.2714396-1-elver@google.com>
+ <20260130132951.2714396-3-elver@google.com>
+ <aYDEiOutq3_O8irP@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Ad03WE3-YZeR
-Date: Mon, 02 Feb 2026 16:59:05 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nicolas Dufresne" <nicolas.dufresne@collabora.com>,
- "Arnd Bergmann" <arnd@kernel.org>,
- "Detlev Casanova" <detlev.casanova@collabora.com>,
- "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
- "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Hans Verkuil" <hverkuil+cisco@kernel.org>
-Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <070cebc8-3cab-4f32-a203-9456506dfcc5@app.fastmail.com>
-In-Reply-To: <da9f044152383cacd50989b025fdce08a654bbe3.camel@collabora.com>
-References: <20260202094804.1231706-1-arnd@kernel.org>
- <16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
- <3b89635f-1c1c-4e4e-b0a9-2bbd0f21bc90@app.fastmail.com>
- <da9f044152383cacd50989b025fdce08a654bbe3.camel@collabora.com>
-Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
- assemble_hw_pps()
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aYDEiOutq3_O8irP@willie-the-truck>
 
-On Mon, Feb 2, 2026, at 16:12, Nicolas Dufresne wrote:
-> Le lundi 02 f=C3=A9vrier 2026 =C3=A0 15:09 +0100, Arnd Bergmann a =C3=A9=
-crit=C2=A0:
->> On Mon, Feb 2, 2026, at 14:42, Nicolas Dufresne wrote:
+On Mon, Feb 02, 2026 at 03:36:40PM +0000, Will Deacon wrote:
 
->> Right, this randconfig build likely got closer to the warning
->> limit because of the inherent overhead in KASAN, but the problem
->> with the unaligned bitfields was something that I could later
->> reproduce without KASAN, on ARMv5 and MIPS32r2.
->>=20
->> This is something we should fix in clang.
->
-> All fair comments. I plan to take this into fixes (no changes needed),=
- hopefully
-> for rc-2.
->
-> Performance wise, this code is to replace read/mask/write into hardware
-> registers which was significantly slower for this amount of registers =
-(~200
-> 32bit integers) and this type of IP (its not sram). This is run once p=
-er frame.
-> In practice, if we hand code the read/mask/write, the performance shou=
-ld
-> eventually converge to using bitfield and letting the compiler do this=
- masking,
-> I was being optimistic on how the compiler would behave. If performanc=
-e of that
-> is truly a problem, we can always just prepare the ram register ahead =
-of the
-> operation queue (instead of doing it in the executor).
+> Since we're not providing acquire semantics for the non-atomic case,
+> what we really want is the generic definition of __READ_ONCE() from
+> include/asm-generic/rwonce.h here. The header inclusion mess prevents
+> that, but why can't we just inline that definition here for the
+> 'default' case? If TYPEOF_UNQUAL() leads to better codegen, shouldn't
+> we use that to implement __unqual_scalar_typeof() when it is available?
 
-I think there are multiple things going on here, some of which are
-more relevant than others:
+We are?
 
- - The problem I'm addressing with my patch is purely a clang issue
-   for CPU architectures with high register pressure when assembling
-   the structure in memory. As a first-order approximation, you can
-   see the lines in the output being 12.000 with clang, but only
-   600 with gcc in the godbolt.org output. The gcc version isn't that
-   great either, but it is orders of magnitude fewer instructions.
+---
 
--  MMIO reads are clearly a performance killer, so assembling the
-   structure in memory and using memcpy_toio() to access the
-   registers as you appear to  be doing is the right idea.
+commit fd69b2f7d5f4e1d89cea4cdfa6f15e7fa53d8358
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Fri Jan 16 19:18:16 2026 +0100
 
- - using bitfields for hardware structures is non-portable. In
-   particular, the order of the fields within a word depends on
-   byteorder (CONFIG_CPU_BIG_ENDIAN), and the alignment depends
-   on the architecture, e.g. 'struct { u32 a:16: u32 b: 32; u32 c:16};
-   has the second member cross a u32 boundary, which leads to
-   padding between a and b, as well as after c on some architectures
-   but not others. I would always recommend splitting up bitfields
-   on word boundaries and adding explicit padding where necessary.
+    compiler: Use __typeof_unqual__() for __unqual_scalar_typeof()
+    
+    The recent changes to get_unaligned() resulted in a new sparse warning:
+    
+       net/rds/ib_cm.c:96:35: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected void * @@     got restricted __be64 const * @@
+       net/rds/ib_cm.c:96:35: sparse:     expected void *
+       net/rds/ib_cm.c:96:35: sparse:     got restricted __be64 const *
+    
+    The updated get_unaligned_t() uses __unqual_scalar_typeof() to get an
+    unqualified type. This works correctly for the compilers, but fails for
+    sparse when the data type is __be64 (or any other __beNN variant).
+    
+    On sparse runs (C=[12]) __beNN types are annotated with
+    __attribute__((bitwise)).
+    
+    That annotation allows sparse to detect incompatible operations on __beNN
+    variables, but it also prevents sparse from evaluating the _Generic() in
+    __unqual_scalar_typeof() and map __beNN to a unqualified scalar type, so it
+    ends up with the default, i.e. the original qualified type of a 'const
+    __beNN' pointer. That then ends up as the first pointer argument to
+    builtin_memcpy(), which obviously causes the above sparse warnings.
+    
+    The sparse git tree supports typeof_unqual() now, which allows to use it
+    instead of the _Generic() based __unqual_scalar_typeof(). With that sparse
+    correctly evaluates the unqualified type and keeps the __beNN logic intact.
+    
+    The downside is that this requires a top of tree sparse build and an old
+    sparse version will emit a metric ton of incomprehensible error messages
+    before it dies with a segfault.
+    
+    Therefore implement a sanity check which validates that the checker is
+    available and capable of handling typeof_unqual(). Emit a warning if not so
+    the user can take informed action.
+    
+    [ tglx: Move the evaluation of USE_TYPEOF_UNQUAL to compiler_types.h so it is
+            set before use and implement the sanity checker ]
+    
+    Reported-by: kernel test robot <lkp@intel.com>
+    Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+    Signed-off-by: Thomas Gleixner <tglx@kernel.org>
+    Acked-by: Ian Rogers <irogers@google.com>
+    Link: https://patch.msgid.link/87ecnp2zh3.ffs@tglx
+    Closes: https://lore.kernel.org/oe-kbuild-all/202601150001.sKSN644a-lkp@intel.com/
 
- - Since most of the fields are exactly 6 bits offset from a word
-   boundary, you can try assembling all the  *_field_order_cnt*
-   fields in an array first that has all the bits in the correct
-   order, but then shift the entire array six bits.
-
-      Arnd
+diff --git a/Makefile b/Makefile
+index 9d38125263fb..179c9d9a56dd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1187,6 +1187,14 @@ CHECKFLAGS += $(if $(CONFIG_CPU_BIG_ENDIAN),-mbig-endian,-mlittle-endian)
+ # the checker needs the correct machine size
+ CHECKFLAGS += $(if $(CONFIG_64BIT),-m64,-m32)
+ 
++# Validate the checker is available and functional
++ifneq ($(KBUILD_CHECKSRC), 0)
++  ifneq ($(shell $(srctree)/scripts/checker-valid.sh $(CHECK) $(CHECKFLAGS)), 1)
++    $(warning C=$(KBUILD_CHECKSRC) specified, but $(CHECK) is not available or not up to date)
++    KBUILD_CHECKSRC = 0
++  endif
++endif
++
+ # Default kernel image to build when no specific target is given.
+ # KBUILD_IMAGE may be overruled on the command line or
+ # set in the environment
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 04487c9bd751..c601222b495a 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -230,16 +230,6 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 	__BUILD_BUG_ON_ZERO_MSG(!__is_noncstr(p), \
+ 				"must be non-C-string (not NUL-terminated)")
+ 
+-/*
+- * Use __typeof_unqual__() when available.
+- *
+- * XXX: Remove test for __CHECKER__ once
+- * sparse learns about __typeof_unqual__().
+- */
+-#if CC_HAS_TYPEOF_UNQUAL && !defined(__CHECKER__)
+-# define USE_TYPEOF_UNQUAL 1
+-#endif
+-
+ /*
+  * Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof
+  * operator when available, to return an unqualified type of the exp.
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index d3318a3c2577..377df1e64096 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -562,6 +562,14 @@ struct ftrace_likely_data {
+ #define asm_inline asm
+ #endif
+ 
++#ifndef __ASSEMBLY__
++/*
++ * Use __typeof_unqual__() when available.
++ */
++#if CC_HAS_TYPEOF_UNQUAL || defined(__CHECKER__)
++# define USE_TYPEOF_UNQUAL 1
++#endif
++
+ /* Are two types/vars the same type (ignoring qualifiers)? */
+ #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+ 
+@@ -569,6 +577,7 @@ struct ftrace_likely_data {
+  * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
+  *			       non-scalar types unchanged.
+  */
++#ifndef USE_TYPEOF_UNQUAL
+ /*
+  * Prefer C11 _Generic for better compile-times and simpler code. Note: 'char'
+  * is not type-compatible with 'signed char', and we define a separate case.
+@@ -586,6 +595,10 @@ struct ftrace_likely_data {
+ 			 __scalar_type_to_expr_cases(long),		\
+ 			 __scalar_type_to_expr_cases(long long),	\
+ 			 default: (x)))
++#else
++#define __unqual_scalar_typeof(x) __typeof_unqual__(x)
++#endif
++#endif /* !__ASSEMBLY__ */
+ 
+ /* Is this type a native word size -- useful for atomic operations */
+ #define __native_word(t) \
+diff --git a/scripts/checker-valid.sh b/scripts/checker-valid.sh
+new file mode 100755
+index 000000000000..625a789ed1c8
+--- /dev/null
++++ b/scripts/checker-valid.sh
+@@ -0,0 +1,19 @@
++#!/bin/sh -eu
++# SPDX-License-Identifier: GPL-2.0
++
++[ ! -x "$(command -v "$1")" ] && exit 1
++
++tmp_file=$(mktemp)
++trap "rm -f $tmp_file" EXIT
++
++cat << EOF >$tmp_file
++static inline int u(const int *q)
++{
++	__typeof_unqual__(*q) v = *q;
++	return v;
++}
++EOF
++
++# sparse happily exits with 0 on error so validate
++# there is none on stderr. Use awk as grep is a pain with sh -e
++$@ $tmp_file 2>&1 | awk -v c=1 '/error/{c=0}END{print c}'
