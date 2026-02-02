@@ -1,265 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9A526FDAC;
-	Mon,  2 Feb 2026 21:47:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E441336EC7;
+	Mon,  2 Feb 2026 22:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770068844; cv=none; b=tpHnsp8MfdkLob3oEXsyWnN1UFnGwdCOZx6XNN/wAVxkvRsdP88zOVI6LN5EFCRWbt8q5w2FNs2uE4XJE3+Ik7PcsArSl8WqhvIx919RBCIb2VJX4hwN65LFFTeNPpXQOKwFIEaQiO8lDF7+8PT6IrXrjTlXx+DZgAB7YY2s/Qg=
+	t=1770070464; cv=none; b=B+nf0pRghLqhN6ys0PjHw4BGzazCy9G5H8AECPrjzxDDIuTbYK7ya3hDm48fsMaYIy9WjcKKBzp6NzpOs332PsTTFH+PrAwM1TpdWj0wKJTi0E0tIG7HAqkOpPes8QvLZQeo6ZiWH0ObyDtV2aryR0Ceuzb8Iooo9Yh38QkyPOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770068844; c=relaxed/simple;
-	bh=+xRV2HkEsfrdZMBafEPY++3IUBK8ed73YGyM9OSrTOo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DTnWBUtrHM1tGwyf9NwwgsJoHA8/n+VBofA7EgTeXm+YWJgId5zRotjB2q6EowhFPypx7oLpDM2EfgssNMB5WzctM4KAYvZspx6i/HeZjotOob39JWxh9nE0dRNfEZklz064/6meNLYRQQoJ7PB9xbge1TjNvJJ+UDEDb0l568A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWVdIZ9Z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770070464; c=relaxed/simple;
+	bh=sO5KPNQ8TrkL4sJvZKSQZoiBVi33bIgn3j10AQb7f2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KWiWe3vBnGr8fPW36OOBIwGbX35BlU3DRkJCTLOjT1nd7OT4+81+wsRFiRF+Tqe/QIPFB1rRZE9sup7t1T3X0eY/LSK7n+Mkf8DLMq6OuTg8nmzBuAoJ+EieD/GikxCU/jb3ER8EB/0X0bcLXoBWHPSABPMKpEfpPQuIZmxZGz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VX+E3OSh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWVdIZ9Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D31C116C6;
-	Mon,  2 Feb 2026 21:47:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VX+E3OSh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA797C116C6;
+	Mon,  2 Feb 2026 22:14:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770068844;
-	bh=+xRV2HkEsfrdZMBafEPY++3IUBK8ed73YGyM9OSrTOo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eWVdIZ9ZAC2PWIzVpuQY3YYx51E3j/pZ+sP/zUyYj0wBs5z5pL4NoIoNE2p3p97N+
-	 0x5hYt4eY26AliN+n9zoM2aHo2XaN2oR6V5bTLywTL/wCzV5hGiEbmol5XgYjulRYW
-	 HXX+vsMoq7vFFiQrwNT61/6H6HDxZycJ0vpj1FJ1rd0yk02XppfAJc7fX0vid16ZL/
-	 LbGcyfMdFS7s+KgP3L4vJB+6btLLw2eqVAV0a8nDvvNNQGfz4OT0cUQWfexc3C9WPv
-	 Iw4liuRwrbdTEhRzCLCgrs35gJID149SrIvcUM2Q8HzaKc3Y3J9x6eqovA6jcmCqFh
-	 8tBuv0Ll48ocA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alexghiti@rivosinc.com,
-	cyrilbur@tenstorrent.com,
-	jszhang@kernel.org,
-	cleger@rivosinc.com,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.18] riscv: Use 64-bit variable for output in __get_user_asm
-Date: Mon,  2 Feb 2026 16:46:14 -0500
-Message-ID: <20260202214643.212290-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260202214643.212290-1-sashal@kernel.org>
-References: <20260202214643.212290-1-sashal@kernel.org>
+	s=k20201202; t=1770070464;
+	bh=sO5KPNQ8TrkL4sJvZKSQZoiBVi33bIgn3j10AQb7f2k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VX+E3OShKLDfDhSRpROGEgofypRa6ipIYNLJdS/bzT5kMqki+Sq5mceA5k1fl/VyV
+	 yQhBEwL6VBTGZLaauoINn8ZDSGaBZuJdD5SwJcfbgasAYeWb8GLpOMxf1EBORTS0B1
+	 IheeKPPBg4W9Nw3sIT8oGKlX3JCMrk4Fo2M5Z+DwQxYxKxnW9XDYgwEwOyeezk4Gxt
+	 ENNHPD6PY7odbG+OI/lpKTa/SuowlfdGtkFUWg1h0rfUfcRJIMJqHX7dS09Vx9as6X
+	 QqziNEjvLjzp6h/c9sKuQksuU3qNpXX4SXZUfrU7GDvEKIjbKJqgQgioCPM6IjcP0F
+	 uRcR63eTdYfFA==
+Date: Mon, 2 Feb 2026 15:14:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	Langyan Ye <yelangyan@huaqin.corp-partner.google.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] drm/panel: ilitek-ili9882t: Remove duplicate
+ initializers in tianma_il79900a_dsc
+Message-ID: <20260202221419.GA229639@ax162>
+References: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260114-panel-ilitek-ili9882t-fix-override-init-v1-1-1d69a2b096df@kernel.org>
 
-From: Nathan Chancellor <nathan@kernel.org>
+Ping? This is still breaking builds and we are about to be in the merge
+window...
 
-[ Upstream commit bdce162f2e57a969803e5e9375999a3e0546905f ]
-
-After commit f6bff7827a48 ("riscv: uaccess: use 'asm_goto_output' for
-get_user()"), which was the first commit that started using asm goto
-with outputs on RISC-V, builds of clang built with assertions enabled
-start crashing in certain files that use get_user() with:
-
-  clang: llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp:12743: Register FollowCopyChain(MachineRegisterInfo &, Register): Assertion `MI->getOpcode() == TargetOpcode::COPY && "start of copy chain MUST be COPY"' failed.
-
-Internally, LLVM generates an addiw instruction when the output of the
-inline asm (which may be any scalar type) needs to be sign extended for
-ABI reasons, such as a later function call, so that basic block does not
-have to do it.
-
-Use a temporary 64-bit variable as the output of the inline assembly in
-__get_user_asm() and explicitly cast it to truncate it if necessary,
-avoiding the addiw that triggers the assertion.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/2092
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://patch.msgid.link/20260116-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v3-1-55b5775f989b@kernel.org
-Signed-off-by: Paul Walmsley <pjw@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-Looking at the full analysis based on what we have:
-
-## Analysis Summary
-
-### 1. COMMIT MESSAGE ANALYSIS
-
-The commit message clearly states:
-- **After commit f6bff7827a48** - Clearly identifies the regressing
-  commit
-- **Builds of clang built with assertions enabled start crashing** -
-  This is a **build failure**, not just a warning
-- Provides a link to the ClangBuiltLinux issue tracker
-  (https://github.com/ClangBuiltLinux/linux/issues/2092)
-- The assertion failure message is in LLVM's code generation phase
-- Author: Nathan Chancellor (ClangBuiltLinux maintainer, well-known
-  kernel/LLVM expert)
-
-### 2. CODE CHANGE ANALYSIS
-
-The change is small and surgical:
-- **Old code (asm_goto_output path):**
-  ```c
-  #define __get_user_asm(insn, x, ptr, label)  \
-  asm_goto_output(                          \
-  "1:\n"                                 \
-  "  " insn " %0, %1\n"                  \
-  _ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)  \
-  : "=&r" (x)                            \
-  : "m" (*(ptr)) : : label)
-  ```
-
-- **New code:**
-  ```c
-  #define __get_user_asm(insn, x, ptr, label)  \
-  do {                                          \
-  u64 __tmp;                                \
-  asm_goto_output(                          \
-  "1:\n"                                 \
-  "  " insn " %0, %1\n"                  \
-  _ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)  \
-  : "=&r" (__tmp)                        \
-  : "m" (*(ptr)) : : label);             \
-  (x) = (__typeof__(x))__tmp;               \
-  } while (0)
-  ```
-
-**Technical mechanism:**
-- The fix uses a 64-bit temporary variable (`u64 __tmp`) as the output
-  of the inline assembly
-- Then explicitly casts it to the expected type of `x`
-- This avoids LLVM generating an `addiw` instruction to sign-extend the
-  output for ABI reasons
-- The `addiw` was causing an assertion failure in LLVM's code generation
-  because it wasn't recognized as a proper copy instruction
-
-### 3. CLASSIFICATION
-
-This is a **BUILD FIX** - one of the exception categories that is
-explicitly allowed in stable:
-- Prevents compilation with Clang/LLVM on RISC-V
-- Without this fix, users cannot build kernel for RISC-V when using
-  Clang with assertions enabled
-- The underlying bug likely causes incorrect code generation even when
-  assertions are disabled
-
-### 4. SCOPE AND RISK ASSESSMENT
-
-**Lines changed:** ~10 lines, all in a single macro definition
-**Files touched:** 1 (arch/riscv/include/asm/uaccess.h)
-**Subsystem:** RISC-V uaccess (user-space access)
-**Risk:** Very low
-- Uses a temporary variable to hold the assembly output then casts it
-- This is a known safe pattern (used elsewhere in the kernel)
-- Does not change any runtime behavior for GCC builds
-- Only affects the `CONFIG_CC_HAS_ASM_GOTO_OUTPUT` code path
-  (Clang/modern GCC)
-
-### 5. USER IMPACT
-
-- **Who is affected:** All RISC-V kernel developers and users building
-  with Clang/LLVM
-- **Severity:** Cannot build the kernel at all on RISC-V with Clang
-  (when using assertion-enabled builds)
-- RISC-V is an increasingly popular architecture
-- Clang is a major compiler used by many distributions
-
-### 6. STABILITY INDICATORS
-
-- Written by Nathan Chancellor (ClangBuiltLinux project lead, kernel
-  developer)
-- Clear reference to upstream bug reports
-- Follows a known workaround pattern
-
-### 7. DEPENDENCY CHECK
-
-**Critical:** This fix depends on commit **f6bff7827a48** ("riscv:
-uaccess: use 'asm_goto_output' for get_user()"), which was introduced in
-**v6.16-rc1**.
-
-The fix is only relevant for stable trees that contain v6.16+. For older
-stable trees (6.15.y and earlier), the problematic code doesn't exist,
-so this fix is not needed and wouldn't apply.
-
-### Risk vs. Benefit Analysis
-
-**Benefits:**
-- Fixes a **complete build failure** on RISC-V with Clang
-- Build fixes are explicitly allowed in stable rules
-- Critical for RISC-V users who use Clang
-
-**Risks:**
-- Minimal - adds a temporary variable and explicit cast
-- Does not change runtime behavior for correct code
-- Pattern is well-understood and used elsewhere
-
-### Concerns
-
-1. **Dependency:** Only applicable to stable trees containing 6.16+
-   (which have commit f6bff7827a48)
-2. **LLVM Bug:** This is a workaround for an LLVM bug (tracked at llvm-
-   project#143795). The LLVM bug may eventually be fixed, but kernel
-   builds need to work now.
-
-### Conclusion
-
-This commit is a **build fix** that solves a Clang compilation failure
-on RISC-V. Build fixes are explicitly allowed in stable kernel rules.
-The fix is:
-- Small (10 lines)
-- Surgical (single macro)
-- Safe (temporary variable + cast pattern)
-- Critical (prevents build failure)
-- Well-documented (links to bug reports)
-- Written by an expert (Nathan Chancellor)
-
-The only consideration is that it should only be backported to stable
-trees that contain the parent commit f6bff7827a48 (v6.16+), otherwise
-the fix addresses code that doesn't exist.
-
-**YES**
-
- arch/riscv/include/asm/uaccess.h | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
-index f5f4f7f85543f..1029c31026dcf 100644
---- a/arch/riscv/include/asm/uaccess.h
-+++ b/arch/riscv/include/asm/uaccess.h
-@@ -97,13 +97,23 @@ static inline unsigned long __untagged_addr_remote(struct mm_struct *mm, unsigne
-  */
- 
- #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-+/*
-+ * Use a temporary variable for the output of the asm goto to avoid a
-+ * triggering an LLVM assertion due to sign extending the output when
-+ * it is used in later function calls:
-+ * https://github.com/llvm/llvm-project/issues/143795
-+ */
- #define __get_user_asm(insn, x, ptr, label)			\
-+do {								\
-+	u64 __tmp;						\
- 	asm_goto_output(					\
- 		"1:\n"						\
- 		"	" insn " %0, %1\n"			\
- 		_ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)		\
--		: "=&r" (x)					\
--		: "m" (*(ptr)) : : label)
-+		: "=&r" (__tmp)					\
-+		: "m" (*(ptr)) : : label);			\
-+	(x) = (__typeof__(x))__tmp;				\
-+} while (0)
- #else /* !CONFIG_CC_HAS_ASM_GOTO_OUTPUT */
- #define __get_user_asm(insn, x, ptr, label)			\
- do {								\
--- 
-2.51.0
-
+On Wed, Jan 14, 2026 at 01:43:31PM -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y / W=e):
+> 
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:95:16: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+>      95 |         .vbr_enable = 0,
+>         |                       ^
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:90:16: note: previous initialization is here
+>      90 |         .vbr_enable = false,
+>         |                       ^~~~~
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:97:19: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+>      97 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+>         |                          ^~~~~~~~~~~~~~~~~~~~~~~
+>   include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
+>      22 | #define DSC_RC_MODEL_SIZE_CONST             8192
+>         |                                             ^~~~
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:91:19: note: previous initialization is here
+>      91 |         .rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+>         |                          ^~~~~~~~~~~~~~~~~~~~~~~
+>   include/drm/display/drm_dsc.h:22:38: note: expanded from macro 'DSC_RC_MODEL_SIZE_CONST'
+>      22 | #define DSC_RC_MODEL_SIZE_CONST             8192
+>         |                                             ^~~~
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:132:25: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+>     132 |         .initial_scale_value = 32,
+>         |                                ^~
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:126:25: note: previous initialization is here
+>     126 |         .initial_scale_value = 32,
+>         |                                ^~
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:133:20: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+>     133 |         .nfl_bpg_offset = 3511,
+>         |                           ^~~~
+>   drivers/gpu/drm/panel/panel-ilitek-ili9882t.c:108:20: note: previous initialization is here
+>     108 |         .nfl_bpg_offset = 1402,
+>         |                           ^~~~
+> 
+> GCC would warn about this in the same manner but its version,
+> -Woverride-init, is disabled for a normal kernel build in
+> scripts/Makefile.warn. For clang, -Wextra in drivers/gpu/drm/Makefile
+> turns it back but GCC respects turning it off earlier in the command
+> line.
+> 
+> Of all the duplicate fields in the initializer, only nfl_bpg_offset is a
+> different value. Clear up the duplicate initializers, keeping the
+> 'false' value for .vbr_enable, as it is bool, and the second value for
+> .nfl_bpg_offset, assuming it is the correct one since it was the one
+> tested in the original change.
+> 
+> Fixes: 65ce1f5834e9 ("drm/panel: ilitek-ili9882t: Switch Tianma TL121BVMS07 to DSC 120Hz mode")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/panel/panel-ilitek-ili9882t.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
+> index 370424ddfc80..8b2bfb7d3638 100644
+> --- a/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
+> +++ b/drivers/gpu/drm/panel/panel-ilitek-ili9882t.c
+> @@ -88,11 +88,9 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
+>  	.native_422 = false,
+>  	.simple_422 = false,
+>  	.vbr_enable = false,
+> -	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+>  	.pic_width = 1600,
+>  	.pic_height = 2560,
+>  	.convert_rgb = 0,
+> -	.vbr_enable = 0,
+>  	.rc_buf_thresh = {14, 28, 42, 56, 70, 84, 98, 105, 112, 119, 121, 123, 125, 126},
+>  	.rc_model_size = DSC_RC_MODEL_SIZE_CONST,
+>  	.rc_edge_factor = DSC_RC_EDGE_FACTOR_CONST,
+> @@ -105,7 +103,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
+>  	.initial_offset = 6144,
+>  	.rc_quant_incr_limit0 = 11,
+>  	.rc_quant_incr_limit1 = 11,
+> -	.nfl_bpg_offset = 1402,
+>  	.rc_range_params = {
+>  		{ 0,  4, DSC_BPG_OFFSET(2)},
+>  		{ 0,  4, DSC_BPG_OFFSET(0)},
+> @@ -123,7 +120,6 @@ static const struct drm_dsc_config tianma_il79900a_dsc = {
+>  		{ 9, 12, DSC_BPG_OFFSET(-12)},
+>  		{12, 13, DSC_BPG_OFFSET(-12)},
+>  	},
+> -	.initial_scale_value = 32,
+>  	.slice_chunk_size = 800,
+>  	.initial_dec_delay = 657,
+>  	.final_offset = 4320,
+> 
+> ---
+> base-commit: b36178488d479e9a53bbef2b01280378b5586e60
+> change-id: 20260114-panel-ilitek-ili9882t-fix-override-init-21e19143f770
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
