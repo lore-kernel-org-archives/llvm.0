@@ -1,273 +1,183 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE4E385510
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 17:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770053691; cv=fail; b=LUupEdaBTPWCEVfSnoaQl/mR3fwYB5HGk88Rrn42dWAhtMDuyrSFNl2rz0p3cZdklNdCoITD1f/qVFCjp9sTx+ybF9vb97/w6IAoIndY5D0dYz4Xz/slUShR2sImfAp9qSpqROkW2v7rmH0fFJkS9kx+Y8ywC2Ig9qLbxhgdrIY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770053691; c=relaxed/simple;
-	bh=iSgMhBm8uQolLFE2gzLj0iGEKPjqQos9euZuz2mNPHE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sU8FJIdFQzyDSjupmb4zmGuo25dLM4tdZTI/iOhKf1v3rDkz6NjIRy8iRPC6HomBww7tCz1/w2Ef1EKVzpXgjubyDrw8QaUpwkF4LyfUnKRXUj+GDNTdUKT1MuuyTHneFUFNkovZr0ba6roV5bLcVr8HrYdCRBMMDUC41j/1aAA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GdtExkee; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=pB5eSA/9; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47D43806BD
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 17:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770054540; cv=none; b=j5SZnQl+iVL1JXOJV9jUEKX3yH/EhmJ3n1SQ6tOQnB0oqZsaE3D1YziEfAYqE4ZlgCHjzGKRlaVVNrVaZZnkG3RU3luC1ATER6KMZwtPIJyNU66mW161KF03w4PqD4E5yKhhEcaoPvknctG8wswTqsFtu2Nu3HFi1CIqqRFo7N0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770054540; c=relaxed/simple;
+	bh=plEqnRUAK0ai2JOEmKZ9oLZCk82AF0RJqqu0Ez826Zg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5DV+z13GURz5RWlXFyyPb75KM/PAXah/OEfP6diiHc+lhLC52rl3pgoAbabU4Re3yY78C8+xnMz8lsqZ8SfMjTwFhjpTB30g7P2QdgtY8YAF/pMfnRGvf4sMWox9iQLSc11JlVEtTH+s/plZAWqdBr10IHa8jltLo2nZLWCCdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r69olPzO; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GdtExkee";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="pB5eSA/9"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6128uPFc1383306;
-	Mon, 2 Feb 2026 17:34:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=f0szo/RIpCBE41M0kbFNDN2O4NI5EIK8KDtHLqxgSjE=; b=
-	GdtExkeetLJ6PdbkAZgtYNxtikl5Up2k2hmrA9WU8rLnCYtgIRWuR1UHn9kRXlGk
-	OVilMJXi+xr3KlxzYMyKRcFsFCuGw8Pu9wbh29WNvZ7Io/koRPjJnE1jOYR3lPqy
-	6EUG3RVwKNon54+m2FuxXxRb7PM2SKo+cYQNUWhIINzGAuQPJtVdkutResYb9eTn
-	RS4baQzD64YqmzZDJ3JLhxVzLnlKFu8ZjBDrzlwmm5C9ZX2azisfOCRrmp0fRFuo
-	YnWeVRDYQ3E1pDD+pznupe8zYk9A2jFg2p+efVd5ZTv+ikkhQi5pCnMANBBBxz3X
-	y13H70KVfQCjR1b2hq3xcA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c1arhjmk0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 02 Feb 2026 17:34:42 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 612GeZD4025798;
-	Mon, 2 Feb 2026 17:34:41 GMT
-Received: from ch1pr05cu001.outbound.protection.outlook.com (mail-northcentralusazon11010066.outbound.protection.outlook.com [52.101.193.66])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4c1868q0e3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 02 Feb 2026 17:34:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TWcEyNm+od3bTyTrYBgDgKMtU7hk1/8/OXrUfNpQnMiMoNpU2tGVBqG+RUXkCgF06Axm0ivI0igV/NY1+j6WMGPFq91QbHj9IyDresfW25ROb/kVkY2PpJzHU0l5AK3wyXsynV0nJzbpVBg/hkDGCURAHqyHFi4yOLF6BgQjfM5o+DCk5LkSiUPD4e0LiF79FuBkK6Ii+lo+XrFun7Q0pA7Yp0Qms+ZKB6Ey6AdrVPqgu6PLwYRUlXK8CHPy+GKhuX8YKqlFTWALq1anmH4L7uFnxo/NZRLDfGpb41LA1SEtp0GMLFvS2PtoLaS0OTj8s4MkPBag5eG6f4Vtung/mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f0szo/RIpCBE41M0kbFNDN2O4NI5EIK8KDtHLqxgSjE=;
- b=sS0YznYyfK3de4pW7cLZd62WQF+ejvlcL89e2ReN8aQJMMjHHVCWDmUSjiulEygXIH9qyWzOXbMS0wkGN4+5GBBiARYi8okEQ+BPFNBQ0cshHe5XfgUeORuyk8/DyUXQVu/+ZwsoVJrTg2IL4cwIApgYEMM53elR5M2xCi8so434Sz6lnfVG+z//25VUtolT/vTck204HhCasQDm04Jp/+s8Bps4cahSICUV+CzcGkP8IEB9J7/DG0xoBcf3zuaeeruyBcow6KOyIL2wwRH2RpTWZYOVIytj41Gmjw0VgD2T4qy9Y+M6xmyRCm2tfU1TyfPU8qeLFFxiIduG9fulmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r69olPzO"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48069a48629so49253325e9.0
+        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 09:48:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f0szo/RIpCBE41M0kbFNDN2O4NI5EIK8KDtHLqxgSjE=;
- b=pB5eSA/9hIQQC1ihqeJq/z0yfrnfiPIAkXSYWUGoULto8VNmiHWUON6JgVnM8HrXQTUb0pJkQ9eMyZQso+jRIog/HBG+AiCDeqLKWredgr6WRyHvlVv8OKcYkJAotm5VI6NpRcPrWxGzVOgZUSFLwdMbiB+sODzbjEyPkNVjn6o=
-Received: from IA1PR10MB8212.namprd10.prod.outlook.com (2603:10b6:208:463::20)
- by DS4PR10MB997647.namprd10.prod.outlook.com (2603:10b6:8:31f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.7; Mon, 2 Feb
- 2026 17:34:37 +0000
-Received: from IA1PR10MB8212.namprd10.prod.outlook.com
- ([fe80::ee8a:bd21:f1cb:c79a]) by IA1PR10MB8212.namprd10.prod.outlook.com
- ([fe80::ee8a:bd21:f1cb:c79a%3]) with mapi id 15.20.9499.005; Mon, 2 Feb 2026
- 17:34:37 +0000
-Message-ID: <fd1854c2-d3f1-4901-8b7d-c6ce944caf61@oracle.com>
-Date: Mon, 2 Feb 2026 11:34:34 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] jfs: avoid -Wtautological-constant-out-of-range-compare
- warning
-To: Arnd Bergmann <arnd@kernel.org>, Dave Kleikamp <shaggy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Zheng Yu <zheng.yu@northwestern.edu>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Aditya Dutt <duttaditya18@gmail.com>, Roman Smirnov <r.smirnov@omp.ru>,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20260202094958.1232478-1-arnd@kernel.org>
-From: Dave Kleikamp <dave.kleikamp@oracle.com>
-Content-Language: en-US
-In-Reply-To: <20260202094958.1232478-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH5P220CA0024.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:610:1ef::23) To IA1PR10MB8212.namprd10.prod.outlook.com
- (2603:10b6:208:463::20)
+        d=google.com; s=20230601; t=1770054537; x=1770659337; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YAotCLeZyiINnLo/dYSD4BE++0CoAWt914tHyyKTDIs=;
+        b=r69olPzOeSXPNsQVSfmPmbpN310eq1znB4uGZydcBiv9IBcm9CNePdeVmE7/mJ1vH3
+         XpB71j4whAbOKIy+K6q40fcOj824/MItMLWRhRfRHfoQyu43/aXNiUJKkLTPo1PAPY6r
+         +TMvS0sNk/ZvjoE4G2YgfVwYoijgXo0HGr/gMpH6RSavCWY8i1p4dI8PFwktbEgJ9Nl6
+         qSReNd60Z2achjWs4T5oN0LOqM/6r4il2HIuC8xUWDOGecu4MjMjeoV+Q48eEeNOMANw
+         0VVf7ejS5PkK4LWW+FJxSQX11P21TuBHpDbThEVCDrKdlDUd5X86dVG9HkVZ0NUkI7Is
+         1NeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770054537; x=1770659337;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YAotCLeZyiINnLo/dYSD4BE++0CoAWt914tHyyKTDIs=;
+        b=xVPh9YQFaaSGaiQQEBmqmNAA5yUVWwQ0H+ahEwP/IBmXa4mGSuaJLn1a5ibm5KUvWI
+         fkHT4f44/oSC+Uog9FYQ4vP8i5AQJzsR3ORrOugoL10PYEIPqsWiJ0xKctqgW6qiHQr/
+         2tQg8dEDR/Zus1uMSZXF4Zd7NfpM6W3N5JISejBQI/G4fWKliyjAb8LNH0bzv2VmXhvx
+         1j1sQg+INJ4lU+76wd1QOAtE5/PJn28pM1wWTAFksTJ4AndM2ggXg7YLMek9Nm+pX+eo
+         6UQT5RzGllQy74LOEEO93hCZtIQkuEIm9wevkr9Y0ZBr/tfPRYzieJQJ04uSrS5jDFAG
+         Gibw==
+X-Forwarded-Encrypted: i=1; AJvYcCWsuovhfCLGorGmmAQZ1nC+ul6cJdOQkhyEcm9ZyxzjaJv1yzS7SZDlknNcX9a3KLfaIFnL@lists.linux.dev
+X-Gm-Message-State: AOJu0YzzS/dgooiJtVu9bsNvzzMlIi0psLrGF/vtx8ATukO4sbgKeCg+
+	itfCl9WbaDznKisO8fGvyAcD2Ofcz4VsefJ96CjUEC9HpT5FSCT9jpGyG58wIND5lg==
+X-Gm-Gg: AZuq6aLhkKtVqDZUJ6fGjTMgm7zIETpdZnaArP7Vj5oeAq3Nrr23dHS/mVEXURBmBLK
+	AxxEwYkKSqkLNIjDxPPZpNxoHww4A04Odk/On+nvOapSPrkGVu3GoKM6cE5cutAC/WkCUPvzNNv
+	vrf74EuQxhkaaYpc7oFnqgMUFpPMSSenvSmoZ33rHhGorbl/Zh07ubfR7QGIk1gfTH47l0On9WT
+	Sk1If+cwu4d66Fk1z1FczampBxyr4Vi7G3eZdzZjOItQ2YMF/Q7imy6QoDCvWTMKjY54zVRjV7i
+	s+SiUB0NR+NmcRRuOzPZ5YyRpbdRuEUMeemNHTTyJGb7JTjIybvxJB8gTJ65a68L4BK/7oMdzQG
+	5esZVxK9WB/T8u2g6DqR2lAcbyjmk1nTPh664ifWWbeVWQOLQMzUbNquasw+vGU0P9U07K/Gh5I
+	JlnDeEiaQf0vgy5IapHXcnDOTD2EbW9J4Gm/aDxWhoHoO0W4g=
+X-Received: by 2002:a05:600c:a00a:b0:471:1717:411 with SMTP id 5b1f17b1804b1-482db481be4mr157883855e9.24.1770054536894;
+        Mon, 02 Feb 2026 09:48:56 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:34d8:ac7:1851:db23])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482dbcf9c3fsm115055905e9.4.2026.02.02.09.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 09:48:56 -0800 (PST)
+Date: Mon, 2 Feb 2026 18:48:47 +0100
+From: Marco Elver <elver@google.com>
+To: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
+	David Laight <david.laight.linux@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
+Message-ID: <aYDjf8apiadheFuM@elver.google.com>
+References: <20260130132951.2714396-1-elver@google.com>
+ <20260130132951.2714396-3-elver@google.com>
+ <aYDEiOutq3_O8irP@willie-the-truck>
+ <20260202160139.GF1282955@noisy.programming.kicks-ass.net>
+ <aYDLUhWMdvzKpTK9@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR10MB8212:EE_|DS4PR10MB997647:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95cbda7a-a246-4cb2-f243-08de6281569b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dVlHaXMra3F5ZjllZEkzM1Nsd3E3blo3dmRWMUJjYWZMOWJoWEJmcGhROWVJ?=
- =?utf-8?B?cUxsRjhLOUNWZVFFbmFTbk5hRisrSDNybFB1WGlVRGM2NXBIYWNyWFZ2ZTZE?=
- =?utf-8?B?bE1hQmNnK0RSa2tXOTUraWtxTVlNTHZ5LzFjc1M3RGJtaVJwQWV2emlGaHEy?=
- =?utf-8?B?WGJpdDFvM0dESWwybi9SNGNLQjU2LzBPMWlXSEVJMlJCZnBmbGpXaEc2UkVF?=
- =?utf-8?B?L21FeE1pSjA5aG1ReExacUhOQ2xjV0x0VitTd0tLdjRldWpJSFB3aHNQRHZR?=
- =?utf-8?B?ejdnejFPc0tsOTViQ1p5ZU9mOE9SRndIcjhhWGZpYXZCVWcxRVJXTWpUbE1L?=
- =?utf-8?B?UlJRc0xqMnkwTFRTRFM3YXo1QzVrc3FOSllMem1oc0o4TkJSK2JsSVRWeEJP?=
- =?utf-8?B?L2VlUWZ4ZWlyQWltQ1dUeitVUkFRZFJZb2E3UXErUE5jejY5MTZScUZVQ3A5?=
- =?utf-8?B?cHBqekt3WUtZNS9Oa0RaRnhIU0daSXpwNXdnMi9PNDhhb3JVZ1lDYWQrb2ht?=
- =?utf-8?B?ditQbUdxNWs2NGhpcUU0dlNWa0Iyd3ljZGZJRStvekhPU3M0Y0RmQ0luN1Zv?=
- =?utf-8?B?TjAvL1RxUklzUTVsYmMyWW93WG0za3lzQUlmWHFCUUVHQ1JoV1BVNXBEVWJN?=
- =?utf-8?B?TnNwaytTMUhnSXd3bnR5aEp5Z3psTVRoYU9ZLzJTWlBZNkE3MVRMdFJhaTd4?=
- =?utf-8?B?VDc3Y3lGdDhmYnZPMWRlbUZqcDdYR1BEVEtaN2o0MkIzSUtoSTlNRzRMU2NM?=
- =?utf-8?B?Rk96YlhGaTFoTUpJWi84KzJNcUl5QmYvOSszbjQ5WDhmeEJXSTk4MWRYaUNX?=
- =?utf-8?B?a3Z4cm9qWG12QklQNFpZKy9nV0g4WVM2SW1EaUF2ZWhwY1lFakM5R2JjM0d3?=
- =?utf-8?B?ZjV2dlJaWEFoM3l1ZHVnaXRPTEc3eEtyWE1kMDhpaTZjUlc3TTVxV2EvSTlq?=
- =?utf-8?B?aktZOGNlR0ZvaTVWcklncGJUbUwyQ082dFQ0cTd1SkxQQWlpNGxUa05adEhT?=
- =?utf-8?B?VFpGT1MzWUFhOWozWGlMcndWT0ZVaDJVSmIxVlc3U2ZqMEN4T0R6dVRWNWFn?=
- =?utf-8?B?VUk2aUo0dThucC9DN3ZEaDVoUVVvUjJyQmF1N3QzY3pyR2tzeEl3dndFRStM?=
- =?utf-8?B?Ny85dUFxb0FiNEhOSnZRNGc1c1hPZExSUGV3SThpd0FOOUNKcWQ2c3VUZ0NH?=
- =?utf-8?B?VDhYbXFsN1R1UUg3YkFOV1k2bzl3SUZydE5WYkdsVllTVUVVVEU0NmJCZmFk?=
- =?utf-8?B?MklFdUp2emJZUHhDMVlRM2ludjRmSFpJbFB6UWJYT05sR0V4M1h2TXYwWGg3?=
- =?utf-8?B?Z1RIMHVzMytYbEovMHV4Z0V2MzF3Qk95YU1GSldvby9hRkdrczBvRGp4TmZz?=
- =?utf-8?B?bnV4dzY4empSSXRUQjU5RSt6dXdQcEwxY2syVm1PU25qeUdxWHJSdldaN1BR?=
- =?utf-8?B?dUQvQnNPbFNTSDV1WGw0blhndWZraHNJeXZIWUhNQUJQSTYwbWpLK28zVjQ0?=
- =?utf-8?B?cDN4dkp3TFlock9CR2ZXT1h1b0RUbzYrOTlvREtMOEd2TEo3M1dQWnI2RTY3?=
- =?utf-8?B?dVB1WllKaXkwSEx3UUZFWlA1R1R5SmY4RjFiazFlaVNrOG9LRERoZnRYMEFp?=
- =?utf-8?B?dEswQmgyZVlUOFRMVTZNSFZVTHhkVVhSR0J6dVJIMStJdWNUSmp3bFRHcFVy?=
- =?utf-8?B?eUM3RXM3Y1JhRktnOHFkRmFHRE1TSTZEMDBJa0o2TjREMUlUanc4QTdHaVNQ?=
- =?utf-8?B?c0dkSVpLYXVDMExON0xMTEdKS1NveERWbndVR3FtTUhKWVdHcUtWMzRTR0RY?=
- =?utf-8?B?MnVWb09xNlZoR0xtRzRXbkk1QjVYZzBiakVIUElLaWxReXFzakJoTWNwaStY?=
- =?utf-8?B?N1RhWkgrdnNSMDdzTnZ1NVhIVW5tVDVXZDhIdmM3K3RNUVVHc09IanpON1hV?=
- =?utf-8?B?cE9TNllEQ3BqWGNjYTRiZDJKNjV5R29DTURBYzJiSkIxYW1JbkdjN2ozNnJV?=
- =?utf-8?B?M1NvM3dhbkJxSEFXV3dWUUJUeVNRVjFMSTFFSGpZYnFwcldGS05WbzNqYnN4?=
- =?utf-8?B?VGhGNDc1ZVRQNEdWZ2J3M1ZKUWFabnVLSGpIMUFhc3dQZ1pwK0lFcFFZK04r?=
- =?utf-8?Q?MxJk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR10MB8212.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZHUvNVpmSHdtR3hRTERxRUFsc2VkRW4yU0o4Z1FHNm91bm9nSy9VRW1NZ2pk?=
- =?utf-8?B?OE5Ra2hBd1FWMjNPY01oRGRsRExiNHQ4T1oxZ0hsaGNxS29WaEJLWXZjSlVs?=
- =?utf-8?B?WW9jZ0pndWhmaXZ4dHR3a0hidm5HOFVrUndtc2tVZkxtNzRhVXRyTVZ2QlFL?=
- =?utf-8?B?SVBaaHJGVjl1a1ZvMWl3QzJSdVVLMDFqV0laQkwzbWIyUW52bkFDaUdIalhr?=
- =?utf-8?B?QnZhQU1vclpBTGE3QnZ4VmlBSGNzMDdKNEN0eStXOGtOTmpURG5pTVJnTzFw?=
- =?utf-8?B?eVVFalp1MkU5Wklqa25URVZKWmJ3OXltalFOSFVLMEErRHJpaVhBTWJ5eERD?=
- =?utf-8?B?a3JNOTdQWFJSWWFQL1pjbWdQVXU5R29UeGJsT2lIdXBZODJmdGNydzRFcnRi?=
- =?utf-8?B?VlhYWjdzdlR5Y0Jvb1JwT3NkckpRSGI2eEJpSlJpZys0Zk8rTm5MYnZiL2hj?=
- =?utf-8?B?cjhYTFZwRmxHUjRSZkVLODRBMkJsRXRrWkRYaVNkb2dManZtQjU0dmV6R2tM?=
- =?utf-8?B?MVJtaWwrWW1wR00xaXpYdXkrS2hIWFNRd24xNEhtbGU1R2JXUUNjc0NBQkV0?=
- =?utf-8?B?cklydGRyUGVYZnFPOFprQzBlcmZGRnlGbTVqOGF1eVI3REVyOTNpMW1EeEJv?=
- =?utf-8?B?TW5nRy8wbXgyOFJGWXVPSld0TjBHMkNObnFUTVJoVWZEbm5nT3NzYUFJUG9L?=
- =?utf-8?B?NHdHanhNUnE3KzdYSTlSdHduaUJONVpYK0o4Z2pLSU1ZalRFTXg3dDEwalRZ?=
- =?utf-8?B?ckZkdk9VSFFXZGxRVkFNWmpJU2g1VW1zQ3ZmQjlFY2ZNc0o0cnpIMWpIYXRU?=
- =?utf-8?B?Ry9RQURuNnpCUmpRU2NVVW9nbEJEdFlwTzgvci81c1MyZFlvdzZuaUxDendM?=
- =?utf-8?B?UDc4aDkyVmQ3aFZPeithNmNuU25tNTdMcXUzZ0lrSUpvVFFiUVpTMDAzcnFn?=
- =?utf-8?B?eDFMaVVNaWFwY1B2QytLTFBjT3NDb0oxRisxTzhPbkg1U2xFbnI2bm51VC9O?=
- =?utf-8?B?djVWT0lva2MwY204dFVwK2M2eHBJKzBqTjNBNVdkc1JzeGdpcWpnYzA1MFU5?=
- =?utf-8?B?WHVTS0JuZG9uRW9STE1uc3QrMEo4d1d6UitLSk13YjZBUkNWQ29xSUhnSnla?=
- =?utf-8?B?QnNBdzNNWmJMRDlySzU3S3ZJM0xlc2JkZWU1Wm8vTWsweEJtUWRjUHhxNmJR?=
- =?utf-8?B?bHFIckwrYmpVV3YzWmZDNVNySkg5dkM0N0grcFJEdFBValExbW9jWVRRZENz?=
- =?utf-8?B?UlNNQUprZm51SVdkNGt1cU9tcVJxeVR5eEhzQ1RlZU1Pc3VUaDlFNDNUb0lh?=
- =?utf-8?B?ZHJYc3piUitOWDVyNjhWd0N5WE9pOG9tWnZuVmNWNnlkS3pvZjd3cngrQmxx?=
- =?utf-8?B?ZUVXQjhhTUpDQjkzZ2xGR2JaQ1N4UFJmWjkxcGh0SlU5ZkRUa1h5TmYzVU11?=
- =?utf-8?B?NXROSkFnS2VlMS9obDdlZU5OdW0wSHYxVjN1UkJoTVN5NnJiazJPbE50UWhV?=
- =?utf-8?B?WTZ4a09BMGJBQW4wUmxqTlRFY09GUUlmejN5RXNLOHNFaDlLalEyYjNRTEgy?=
- =?utf-8?B?ZS9zVFZ0UmI4eGRncnU2ZkdFMDI4cHRtQXJ4TkV0WFMwM0YydlpOQ1ZuUUlr?=
- =?utf-8?B?WTZYd1dkRDFRTk1jeW9mU1JLcjFyMzlhZkN5QllDRHJ4NWtCd0Z0REtpUzdT?=
- =?utf-8?B?MzZTbTFvcUNzbWE1RzJVZy9aenJKWE41dDg4ZVhtRGFodENJMlUzTTVZa3Fa?=
- =?utf-8?B?aWhrbUNiZktYZlMwNmtUb21sMVVMYTlVK3k5VUNNRFVwU3AvZURiVGZOa2xu?=
- =?utf-8?B?RnRFblIzdkZtSS9lLzRZRVhjY25DR2J6QmVUT3pvcWlaNEZSOVBVYXRiTFUx?=
- =?utf-8?B?SWIxb0MwL2tCVkZvVWd6Z2dRMm5BcVEvbGZwVVFtMWRSTkxXUDBTQnpsQW5U?=
- =?utf-8?B?VGN4a09hQW1yaENmcHYrZWVQWTRKUlUwcndHYzZSYmNpWDcwYzVIZDNIU3VX?=
- =?utf-8?B?SHFQOVFBMFNqQ21mOXQ5bnVYNytCczdBK3hTL1Z3a2kzT3RWbVl4QVd6em9M?=
- =?utf-8?B?a0NjMjNweEtIR1RPWFNQRG8rb2RHZDB4SzRNU3p4VGhmc0gwRWY4T2VVdVhC?=
- =?utf-8?B?NG5ZMDJFYVVyN2lJUXhZTUJDc3F4S3FsQWNJTWlpN1hWd0FxeXIvNUFrWjkr?=
- =?utf-8?B?OVRVUHQ1dXZJT3d2RTVBY0hUMHNldFp0MnVXR2x2ZlFTd3FtbVBONjZhbUFh?=
- =?utf-8?B?eGJ3TkVVOUQ0emMwQUE4VVRrTXVNTFpzejJLazhlM3U5Y1BISVZLeFl5NFNq?=
- =?utf-8?B?ODMzODdiWjJnaU4wZCthYXV1NHRSSzI0Nlh2YTRUOUhIbTliYWpGUT09?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ddQskchAx1RIXVCeuIiy6dufl34QqM7eWH5RtealdjZWesLLnnOOjbmiG6KVXZfihS1J9WbfByp8Fd0kJTxCTg+dYCPXIbuHqdBKHNG4D2Si+ARcT6aEAj6ZQyFwyct0fFEndWg2rJTj204c6rpbmWGAHk4DRodiWFkdBleHr868RMH6tsS3rXRTFZxGdwSpWlhrh/AONyV9ecKG5npmKXKKkmV8RuItLXQTHMDnwEu2Vg4pcVFyA3Q1uvdlr4jSXL8Dvg3bK6c968IWCQ3h+xTBx/MLuPny1V/iIJzg3wA9AslN2opUdmIM9RWp/g0Lbyow6tQ+43eMaJ4BhyghEN6mNrzMJa8hULx4UEh/GiQxbenHCpT0FI+Sc9z6LUrjlCeDBnVLsYz31OaqG4TbCCY8h2nc4f5lngx/BKA0NLH+TSdY0HMU2Xj9Tz8MK7HXsJMQXcUjzQcbFaMoxNXDqTFEtfDC3nAnm/c+7tnBSM5p8vJ6/7lis7EUib/GVLgno02CXSN0/8ik/Q8o3Jf22H2KGcNDfJeE0iaGEXyGJ9me3VyLdxeQaV7Q2C+cNC4nhpW/zkIqj2ua2+ftpIJQvlOz1c16ULT4tZBJF/EJwGs=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95cbda7a-a246-4cb2-f243-08de6281569b
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR10MB8212.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2026 17:34:37.7904
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DydVHDBpYDfCaxBKwyWsxezW9s5Cj5UgPuvPTxfoz6qwmayGrUZV9OaDoCauyrzefKuhaiGAg1uZy2gFSGbeDWZMOVe6YJuQHzB7us2i+Bw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR10MB997647
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-02_05,2026-02-02_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- adultscore=0 suspectscore=0 mlxscore=0 phishscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2601150000 definitions=main-2602020139
-X-Proofpoint-ORIG-GUID: XK_G97vmOsiVT1Mg9HcKB8p8gYBJeg00
-X-Proofpoint-GUID: XK_G97vmOsiVT1Mg9HcKB8p8gYBJeg00
-X-Authority-Analysis: v=2.4 cv=fdmgCkQF c=1 sm=1 tr=0 ts=6980e032 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=HzLeVaNsDn8A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=WmfX0Ep4EwWLics8V8IA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAyMDEzOCBTYWx0ZWRfX2rPn6SzZ1VTc
- WhpVsc3aKFPgZ1C59o72c7K30p0QlyqYX1tr3IXOKgiHxqRJYXHnEMn0Llrlu6SFeCWO4reGqLe
- IFXyDXNWwyELxtM5zkDv360dmhScSMGEMNlMgh92H7RglkjnthEj6MDpDJLToapZvIEx80ElP5Y
- jvju0A3UhcPBleC4sHYVz6xefUYOoPoYEaGLRaJVwyf5s2d4H2AiQtlDRqY5iVx/5RDLmvVzcGe
- UywsJDbbgVYS75OKBIV/ZVO6GAiHCMZfhCl5Zb+ZrpvimmQt/2IATakNgJg0Ou/jHMbayztE68B
- EooP3HOa2dKC0kMC0wwwwTb9MDc4ZnXpPdj8idzuz3ksmSGb0/KHqYI/LO3hQR4Em5yJB2rGG36
- JD8pCkzj4aXGkGQ2TLcEvR8ipiPsO7IWiSAzsz7Opg85topL6Y+0aN54HStZI4JrFbxxyDUQrtj
- knnCIQBdwBP+mpZK60w==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aYDLUhWMdvzKpTK9@willie-the-truck>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On 2/2/26 3:49AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> A recent change for the range check started triggering a clang warning:
-> 
-> fs/jfs/jfs_dtree.c:2906:31: error: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->   2906 |                         if (stbl[i] < 0 || stbl[i] >= DTPAGEMAXSLOT) {
->        |                                            ~~~~~~~ ^  ~~~~~~~~~~~~~
-> fs/jfs/jfs_dtree.c:3111:30: error: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->   3111 |                 if (stbl[0] < 0 || stbl[0] >= DTPAGEMAXSLOT) {
->        |                                    ~~~~~~~ ^  ~~~~~~~~~~~~~
-> 
-> Both the old and the new check were useless, but the previous version
-> apparently did not lead to the warning.
-> 
-> Rephrase this again by adding a cast. The check is still always false,
-> but the compiler shuts up about it.
+On Mon, Feb 02, 2026 at 03:36:40PM +0000, Will Deacon wrote:
+> I know that CONFIG_LTO practically depends on Clang, but it's a bit
+> grotty relying on that assumption here. Ideally, it would be
+> straightforward to enable the strong READ_ONCE() semantics on arm64
+> regardless of the compiler.
 
-I think it would be better to just drop the useless part of these tests.
+Does it matter for GCC versions that do not support LTO? Because I'm
+quite sure that if, one day, we add support for GCC LTO, that GCC
+version will be new enough that it'll just take the __typeof_unqual__()
+version and it'll "just work".
 
-Shaggy
+The problem with older GCC versions was that their __auto_type did not
+actually strip qualifiers (which it should have) -- this was fixed at
+some point.
 
+On Mon, Feb 02, 2026 at 04:05PM +0000, Will Deacon wrote:
+> On Mon, Feb 02, 2026 at 05:01:39PM +0100, Peter Zijlstra wrote:
+> > On Mon, Feb 02, 2026 at 03:36:40PM +0000, Will Deacon wrote:
+> > 
+> > > Since we're not providing acquire semantics for the non-atomic case,
+> > > what we really want is the generic definition of __READ_ONCE() from
+> > > include/asm-generic/rwonce.h here. The header inclusion mess prevents
+> > > that, but why can't we just inline that definition here for the
+> > > 'default' case? If TYPEOF_UNQUAL() leads to better codegen, shouldn't
+> > > we use that to implement __unqual_scalar_typeof() when it is available?
+> > 
+> > We are?
 > 
-> Fixes: cafc6679824a ("jfs: replace hardcoded magic number with DTPAGEMAXSLOT constant")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   fs/jfs/jfs_dtree.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/jfs/jfs_dtree.c b/fs/jfs/jfs_dtree.c
-> index 0ab83bb7bbdf..e3301e5fa037 100644
-> --- a/fs/jfs/jfs_dtree.c
-> +++ b/fs/jfs/jfs_dtree.c
-> @@ -2903,7 +2903,7 @@ int jfs_readdir(struct file *file, struct dir_context *ctx)
->   		stbl = DT_GETSTBL(p);
->   
->   		for (i = index; i < p->header.nextindex; i++) {
-> -			if (stbl[i] < 0 || stbl[i] >= DTPAGEMAXSLOT) {
-> +			if (stbl[i] < 0 || (unsigned char)stbl[i] >= DTPAGEMAXSLOT) {
->   				jfs_err("JFS: Invalid stbl[%d] = %d for inode %ld, block = %lld",
->   					i, stbl[i], (long)ip->i_ino, (long long)bn);
->   				free_page(dirent_buf);
-> @@ -3108,7 +3108,7 @@ static int dtReadFirst(struct inode *ip, struct btstack * btstack)
->   		/* get the leftmost entry */
->   		stbl = DT_GETSTBL(p);
->   
-> -		if (stbl[0] < 0 || stbl[0] >= DTPAGEMAXSLOT) {
-> +		if (stbl[0] < 0 || (unsigned char)stbl[0] >= DTPAGEMAXSLOT) {
->   			DT_PUTPAGE(mp);
->   			jfs_error(ip->i_sb, "stbl[0] out of bound\n");
->   			return -EIO;
+> Great! Then I don't grok why we need to choose between
+> __unqual_scalar_typeof() and __typeof_unqual__() in the arch code. We
+> should just use the former and it will DTRT.
 
+The old __unqual_scalar_typeof() is still broken where
+__typeof_unqual__() is unavailable - for the arm64 + LTO case that'd be
+Clang <= 18, which we still have to support.
+
+We could probably just ignore the performance issue ('volatile' reload
+from stack, rare enough though given volatile variables are not usually
+allowed) for these older versions and just say "use the newer compiler
+to get better perf", but the 'const' issue will break the build:
+
+| --- a/arch/arm64/include/asm/rwonce.h
+| +++ b/arch/arm64/include/asm/rwonce.h
+| @@ -46,7 +46,7 @@
+|  #define __READ_ONCE(x)							\
+|  ({									\
+|  	auto __x = &(x);						\
+| -	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
+| +	auto __ret = (__unqual_scalar_typeof(*__x) *)__x;		\
+|  	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
+|  	auto __retp = &__ret;						\
+|  	union { typeof(*__ret) __val; char __c[1]; } __u;		\
+
+Results in:
+
+| In file included from arch/arm64/kernel/asm-offsets.c:11:
+| In file included from ./include/linux/arm_sdei.h:8:
+| In file included from ./include/acpi/ghes.h:5:
+| In file included from ./include/acpi/apei.h:9:
+| In file included from ./include/linux/acpi.h:15:
+| In file included from ./include/linux/device.h:32:
+| In file included from ./include/linux/device/driver.h:21:
+| In file included from ./include/linux/module.h:20:
+| In file included from ./include/linux/elf.h:6:
+| In file included from ./arch/arm64/include/asm/elf.h:141:
+| ./include/linux/fs.h:1344:9: error: cannot assign to non-static data member '__val' with const-qualified type 'typeof (*__ret)' (aka 'struct fown_struct *const')
+|  1344 |         return READ_ONCE(file->f_owner);
+|       |                ^~~~~~~~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+|    50 |         __READ_ONCE(x);                                                 \
+|       |         ^~~~~~~~~~~~~~
+| ./arch/arm64/include/asm/rwonce.h:76:13: note: expanded from macro '__READ_ONCE'
+|    76 |                 __u.__val = *(volatile typeof(*__x) *)__x;              \
+|       |                 ~~~~~~~~~ ^
+| ./include/linux/fs.h:1344:9: note: non-static data member '__val' declared const here
+|  1344 |         return READ_ONCE(file->f_owner);
+|       |                ^~~~~~~~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+|    50 |         __READ_ONCE(x);                                                 \
+|       |         ^~~~~~~~~~~~~~
+| ./arch/arm64/include/asm/rwonce.h:52:25: note: expanded from macro '__READ_ONCE'
+|    52 |         union { typeof(*__ret) __val; char __c[1]; } __u;               \
+|       |                 ~~~~~~~~~~~~~~~^~~~~
+
+... and many many more such errors.
+
+It's an unfortunate mess today, but I hope sooner than later we bump the
+minimum compiler versions that we can just unconditionally use
+__typeof_unqual__() and delete __unqual_scalar_typeof(),
+__rwonce_typeof_unqual() workaround and all the other code that appears
+to be conditional on USE_TYPEOF_UNQUAL:
+
+	% git grep USE_TYPEOF_UNQUAL
+	arch/x86/include/asm/percpu.h:#if defined(CONFIG_USE_X86_SEG_SUPPORT) && defined(USE_TYPEOF_UNQUAL)
