@@ -1,183 +1,161 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47D43806BD
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 17:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C752F0C6A;
+	Mon,  2 Feb 2026 18:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770054540; cv=none; b=j5SZnQl+iVL1JXOJV9jUEKX3yH/EhmJ3n1SQ6tOQnB0oqZsaE3D1YziEfAYqE4ZlgCHjzGKRlaVVNrVaZZnkG3RU3luC1ATER6KMZwtPIJyNU66mW161KF03w4PqD4E5yKhhEcaoPvknctG8wswTqsFtu2Nu3HFi1CIqqRFo7N0=
+	t=1770057679; cv=none; b=HahZ+YPzDeDHknWBumlNnPue8kUeyLBPzSPva5m3J6KJ5BIn0y/n695IRou8KdVd+slD80A7+lylLPziQ59tdF+DHznk0pdsOz8ayO8/0KulLihv0Zaj2PvHuYtHfn3rn9d9lTrPjafDMLu4y0296bqId/VfdiaXArzV42vpV4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770054540; c=relaxed/simple;
-	bh=plEqnRUAK0ai2JOEmKZ9oLZCk82AF0RJqqu0Ez826Zg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N5DV+z13GURz5RWlXFyyPb75KM/PAXah/OEfP6diiHc+lhLC52rl3pgoAbabU4Re3yY78C8+xnMz8lsqZ8SfMjTwFhjpTB30g7P2QdgtY8YAF/pMfnRGvf4sMWox9iQLSc11JlVEtTH+s/plZAWqdBr10IHa8jltLo2nZLWCCdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r69olPzO; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1770057679; c=relaxed/simple;
+	bh=sw81gQKy0N//HirXWsKr+gHIICA3xfkylXrF05ZACVs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ZMPgSqCWste8WcFVNnp4ZVUHBx8W6O7payIpZ/82dC5bVXGRiitAvO7Rw5NxN72bDrlCrbCUQCsJlyleejMlE4aJLUT3wjPo/++NllvYrPi2rxaADF7/X86x55jNGxz7LX6wdG9i+CnIsCGnJFerz7pLNcWjyypdw3K6fcm1Wfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AFQGSKYV; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r69olPzO"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48069a48629so49253325e9.0
-        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 09:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770054537; x=1770659337; darn=lists.linux.dev;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YAotCLeZyiINnLo/dYSD4BE++0CoAWt914tHyyKTDIs=;
-        b=r69olPzOeSXPNsQVSfmPmbpN310eq1znB4uGZydcBiv9IBcm9CNePdeVmE7/mJ1vH3
-         XpB71j4whAbOKIy+K6q40fcOj824/MItMLWRhRfRHfoQyu43/aXNiUJKkLTPo1PAPY6r
-         +TMvS0sNk/ZvjoE4G2YgfVwYoijgXo0HGr/gMpH6RSavCWY8i1p4dI8PFwktbEgJ9Nl6
-         qSReNd60Z2achjWs4T5oN0LOqM/6r4il2HIuC8xUWDOGecu4MjMjeoV+Q48eEeNOMANw
-         0VVf7ejS5PkK4LWW+FJxSQX11P21TuBHpDbThEVCDrKdlDUd5X86dVG9HkVZ0NUkI7Is
-         1NeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770054537; x=1770659337;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YAotCLeZyiINnLo/dYSD4BE++0CoAWt914tHyyKTDIs=;
-        b=xVPh9YQFaaSGaiQQEBmqmNAA5yUVWwQ0H+ahEwP/IBmXa4mGSuaJLn1a5ibm5KUvWI
-         fkHT4f44/oSC+Uog9FYQ4vP8i5AQJzsR3ORrOugoL10PYEIPqsWiJ0xKctqgW6qiHQr/
-         2tQg8dEDR/Zus1uMSZXF4Zd7NfpM6W3N5JISejBQI/G4fWKliyjAb8LNH0bzv2VmXhvx
-         1j1sQg+INJ4lU+76wd1QOAtE5/PJn28pM1wWTAFksTJ4AndM2ggXg7YLMek9Nm+pX+eo
-         6UQT5RzGllQy74LOEEO93hCZtIQkuEIm9wevkr9Y0ZBr/tfPRYzieJQJ04uSrS5jDFAG
-         Gibw==
-X-Forwarded-Encrypted: i=1; AJvYcCWsuovhfCLGorGmmAQZ1nC+ul6cJdOQkhyEcm9ZyxzjaJv1yzS7SZDlknNcX9a3KLfaIFnL@lists.linux.dev
-X-Gm-Message-State: AOJu0YzzS/dgooiJtVu9bsNvzzMlIi0psLrGF/vtx8ATukO4sbgKeCg+
-	itfCl9WbaDznKisO8fGvyAcD2Ofcz4VsefJ96CjUEC9HpT5FSCT9jpGyG58wIND5lg==
-X-Gm-Gg: AZuq6aLhkKtVqDZUJ6fGjTMgm7zIETpdZnaArP7Vj5oeAq3Nrr23dHS/mVEXURBmBLK
-	AxxEwYkKSqkLNIjDxPPZpNxoHww4A04Odk/On+nvOapSPrkGVu3GoKM6cE5cutAC/WkCUPvzNNv
-	vrf74EuQxhkaaYpc7oFnqgMUFpPMSSenvSmoZ33rHhGorbl/Zh07ubfR7QGIk1gfTH47l0On9WT
-	Sk1If+cwu4d66Fk1z1FczampBxyr4Vi7G3eZdzZjOItQ2YMF/Q7imy6QoDCvWTMKjY54zVRjV7i
-	s+SiUB0NR+NmcRRuOzPZ5YyRpbdRuEUMeemNHTTyJGb7JTjIybvxJB8gTJ65a68L4BK/7oMdzQG
-	5esZVxK9WB/T8u2g6DqR2lAcbyjmk1nTPh664ifWWbeVWQOLQMzUbNquasw+vGU0P9U07K/Gh5I
-	JlnDeEiaQf0vgy5IapHXcnDOTD2EbW9J4Gm/aDxWhoHoO0W4g=
-X-Received: by 2002:a05:600c:a00a:b0:471:1717:411 with SMTP id 5b1f17b1804b1-482db481be4mr157883855e9.24.1770054536894;
-        Mon, 02 Feb 2026 09:48:56 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:2834:9:34d8:ac7:1851:db23])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482dbcf9c3fsm115055905e9.4.2026.02.02.09.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 09:48:56 -0800 (PST)
-Date: Mon, 2 Feb 2026 18:48:47 +0100
-From: Marco Elver <elver@google.com>
-To: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
-	David Laight <david.laight.linux@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <aYDjf8apiadheFuM@elver.google.com>
-References: <20260130132951.2714396-1-elver@google.com>
- <20260130132951.2714396-3-elver@google.com>
- <aYDEiOutq3_O8irP@willie-the-truck>
- <20260202160139.GF1282955@noisy.programming.kicks-ass.net>
- <aYDLUhWMdvzKpTK9@willie-the-truck>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AFQGSKYV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770057677; x=1801593677;
+  h=date:from:to:cc:subject:message-id;
+  bh=sw81gQKy0N//HirXWsKr+gHIICA3xfkylXrF05ZACVs=;
+  b=AFQGSKYVpBHOJlhzZ+l9qi1rLyBUc3ptBa4A/e/e2IS+CRsuM3quGMvm
+   GIy/qsmBd4Ye3FtODQqHLCaTFxXD3cqER64nF0gcN5540kffirsR71yMl
+   fe+hTf1Dl6iUcKSMMDt0H2jBEr32i2w1db58oY68ws2fL0XLpo3dYtVv9
+   hxE9ujHIlArI5FZoupHV2xihrcFowSeFS7tSWMZPMRONIl11JxDAfaboY
+   TaFD8hdjbuHuFX99Hi+5ZfOqxdn1LEeM2rPoo4QEWXUL4icw43zC/Bf9v
+   JAM0xVAxq5AsHw/HqsMB+SFCuYpSTN9BVsm/8qFBM6UwEY5HAwp3EMheV
+   A==;
+X-CSE-ConnectionGUID: qUxzPUqbR/GhljLSilWEWQ==
+X-CSE-MsgGUID: cjBo7MXxR32koFqTy7ycfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="71121340"
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="71121340"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2026 10:41:17 -0800
+X-CSE-ConnectionGUID: HkN1oq+zRmGp6wtEkUH6iw==
+X-CSE-MsgGUID: QdONaKPLSH+0t+HN5XCZkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,269,1763452800"; 
+   d="scan'208";a="209743159"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 02 Feb 2026 10:41:15 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vmyrJ-00000000frU-0kuV;
+	Mon, 02 Feb 2026 18:41:13 +0000
+Date: Tue, 03 Feb 2026 02:41:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Johansen <john.johansen@canonical.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jj-apparmor:apparmor-next 31/32]
+ security/apparmor/policy_unpack.c:549:8: error: use of undeclared identifier
+ 'unsigned_long'
+Message-ID: <202602030243.3X4M6Sua-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYDLUhWMdvzKpTK9@willie-the-truck>
-User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Mon, Feb 02, 2026 at 03:36:40PM +0000, Will Deacon wrote:
-> I know that CONFIG_LTO practically depends on Clang, but it's a bit
-> grotty relying on that assumption here. Ideally, it would be
-> straightforward to enable the strong READ_ONCE() semantics on arm64
-> regardless of the compiler.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor.git apparmor-next
+head:   9058798652c8bc0584ed1fb0766a1015046c06e8
+commit: 102ada7ca37ed8358bd70c6f8e6475ebacf6f76d [31/32] apparmor: fix fmt string type error in process_strs_entry
+config: sparc64-randconfig-002-20260203 (https://download.01.org/0day-ci/archive/20260203/202602030243.3X4M6Sua-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602030243.3X4M6Sua-lkp@intel.com/reproduce)
 
-Does it matter for GCC versions that do not support LTO? Because I'm
-quite sure that if, one day, we add support for GCC LTO, that GCC
-version will be new enough that it'll just take the __typeof_unqual__()
-version and it'll "just work".
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602030243.3X4M6Sua-lkp@intel.com/
 
-The problem with older GCC versions was that their __auto_type did not
-actually strip qualifiers (which it should have) -- this was fixed at
-some point.
+All errors (new ones prefixed by >>):
 
-On Mon, Feb 02, 2026 at 04:05PM +0000, Will Deacon wrote:
-> On Mon, Feb 02, 2026 at 05:01:39PM +0100, Peter Zijlstra wrote:
-> > On Mon, Feb 02, 2026 at 03:36:40PM +0000, Will Deacon wrote:
-> > 
-> > > Since we're not providing acquire semantics for the non-atomic case,
-> > > what we really want is the generic definition of __READ_ONCE() from
-> > > include/asm-generic/rwonce.h here. The header inclusion mess prevents
-> > > that, but why can't we just inline that definition here for the
-> > > 'default' case? If TYPEOF_UNQUAL() leads to better codegen, shouldn't
-> > > we use that to implement __unqual_scalar_typeof() when it is available?
-> > 
-> > We are?
-> 
-> Great! Then I don't grok why we need to choose between
-> __unqual_scalar_typeof() and __typeof_unqual__() in the arch code. We
-> should just use the former and it will DTRT.
+>> security/apparmor/policy_unpack.c:549:8: error: use of undeclared identifier 'unsigned_long'
+     549 |                                          (unsigned_long) e->pos - saved_pos);
+         |                                           ^~~~~~~~~~~~~
+   1 error generated.
 
-The old __unqual_scalar_typeof() is still broken where
-__typeof_unqual__() is unavailable - for the arm64 + LTO case that'd be
-Clang <= 18, which we still have to support.
 
-We could probably just ignore the performance issue ('volatile' reload
-from stack, rare enough though given volatile variables are not usually
-allowed) for these older versions and just say "use the newer compiler
-to get better perf", but the 'const' issue will break the build:
+vim +/unsigned_long +549 security/apparmor/policy_unpack.c
 
-| --- a/arch/arm64/include/asm/rwonce.h
-| +++ b/arch/arm64/include/asm/rwonce.h
-| @@ -46,7 +46,7 @@
-|  #define __READ_ONCE(x)							\
-|  ({									\
-|  	auto __x = &(x);						\
-| -	auto __ret = (__rwonce_typeof_unqual(*__x) *)__x;		\
-| +	auto __ret = (__unqual_scalar_typeof(*__x) *)__x;		\
-|  	/* Hides alias reassignment from Clang's -Wthread-safety. */	\
-|  	auto __retp = &__ret;						\
-|  	union { typeof(*__ret) __val; char __c[1]; } __u;		\
+   501	
+   502	/**
+   503	 * unpack_strs_table - unpack a profile transition table
+   504	 * @e: serialized data extent information  (NOT NULL)
+   505	 * @name: name of table (MAY BE NULL)
+   506	 * @multi: allow multiple strings on a single entry
+   507	 * @strs: str table to unpack to (NOT NULL)
+   508	 *
+   509	 * Returns: 0 if table successfully unpacked or not present, else error
+   510	 */
+   511	static int unpack_strs_table(struct aa_ext *e, const char *name, bool multi,
+   512				      struct aa_str_table *strs)
+   513	{
+   514		void *saved_pos = e->pos;
+   515		struct aa_str_table_ent *table = NULL;
+   516		int error = -EPROTO;
+   517	
+   518		/* exec table is optional */
+   519		if (aa_unpack_nameX(e, AA_STRUCT, name)) {
+   520			u16 size;
+   521			int i;
+   522	
+   523			if (!aa_unpack_array(e, NULL, &size))
+   524				/*
+   525				 * Note: index into trans table array is a max
+   526				 * of 2^24, but unpack array can only unpack
+   527				 * an array of 2^16 in size atm so no need
+   528				 * for size check here
+   529				 */
+   530				goto fail;
+   531			table = kcalloc(size, sizeof(struct aa_str_table_ent),
+   532					GFP_KERNEL);
+   533			if (!table) {
+   534				error = -ENOMEM;
+   535				goto fail;
+   536			}
+   537			strs->table = table;
+   538			strs->size = size;
+   539			for (i = 0; i < size; i++) {
+   540				char *str;
+   541				int c, size2 = aa_unpack_strdup(e, &str, NULL);
+   542				/* aa_unpack_strdup verifies that the last character is
+   543				 * null termination byte.
+   544				 */
+   545				c = process_strs_entry(str, size2, multi);
+   546				if (c <= 0) {
+   547					AA_DEBUG(DEBUG_UNPACK, "process_strs %d i %d pos %ld",
+   548						 c, i,
+ > 549						 (unsigned_long) e->pos - saved_pos);
+   550					goto fail;
+   551				}
+   552				if (!multi && c > 1) {
+   553					AA_DEBUG(DEBUG_UNPACK, "!multi && c > 1");
+   554					/* fail - all other cases with embedded \0 */
+   555					goto fail;
+   556				}
+   557				table[i].strs = str;
+   558				table[i].count = c;
+   559				table[i].size = size2;
+   560			}
+   561			if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
+   562				goto fail;
+   563			if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+   564				goto fail;
+   565		}
+   566		return 0;
+   567	
+   568	fail:
+   569		aa_destroy_str_table(strs);
+   570		e->pos = saved_pos;
+   571		return error;
+   572	}
+   573	
 
-Results in:
-
-| In file included from arch/arm64/kernel/asm-offsets.c:11:
-| In file included from ./include/linux/arm_sdei.h:8:
-| In file included from ./include/acpi/ghes.h:5:
-| In file included from ./include/acpi/apei.h:9:
-| In file included from ./include/linux/acpi.h:15:
-| In file included from ./include/linux/device.h:32:
-| In file included from ./include/linux/device/driver.h:21:
-| In file included from ./include/linux/module.h:20:
-| In file included from ./include/linux/elf.h:6:
-| In file included from ./arch/arm64/include/asm/elf.h:141:
-| ./include/linux/fs.h:1344:9: error: cannot assign to non-static data member '__val' with const-qualified type 'typeof (*__ret)' (aka 'struct fown_struct *const')
-|  1344 |         return READ_ONCE(file->f_owner);
-|       |                ^~~~~~~~~~~~~~~~~~~~~~~~
-| ./include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
-|    50 |         __READ_ONCE(x);                                                 \
-|       |         ^~~~~~~~~~~~~~
-| ./arch/arm64/include/asm/rwonce.h:76:13: note: expanded from macro '__READ_ONCE'
-|    76 |                 __u.__val = *(volatile typeof(*__x) *)__x;              \
-|       |                 ~~~~~~~~~ ^
-| ./include/linux/fs.h:1344:9: note: non-static data member '__val' declared const here
-|  1344 |         return READ_ONCE(file->f_owner);
-|       |                ^~~~~~~~~~~~~~~~~~~~~~~~
-| ./include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
-|    50 |         __READ_ONCE(x);                                                 \
-|       |         ^~~~~~~~~~~~~~
-| ./arch/arm64/include/asm/rwonce.h:52:25: note: expanded from macro '__READ_ONCE'
-|    52 |         union { typeof(*__ret) __val; char __c[1]; } __u;               \
-|       |                 ~~~~~~~~~~~~~~~^~~~~
-
-... and many many more such errors.
-
-It's an unfortunate mess today, but I hope sooner than later we bump the
-minimum compiler versions that we can just unconditionally use
-__typeof_unqual__() and delete __unqual_scalar_typeof(),
-__rwonce_typeof_unqual() workaround and all the other code that appears
-to be conditional on USE_TYPEOF_UNQUAL:
-
-	% git grep USE_TYPEOF_UNQUAL
-	arch/x86/include/asm/percpu.h:#if defined(CONFIG_USE_X86_SEG_SUPPORT) && defined(USE_TYPEOF_UNQUAL)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
