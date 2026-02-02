@@ -1,128 +1,217 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5A2369979
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 15:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770044890; cv=pass; b=GK5C0dHSMpfYqoGxkq2J0FhFFcVhraPm+ioIL1iI3/bbYcV/7+3BkkUpRyxJAeMUtcKcqs+XhU2/b58jrlwDHt+RZ8owHXvUB3HMYpLqmsvyTOztGIHTG0TK/mlzHr46zYagjllNHzvaMUOT7GGWIz/tyJfKkSygIf8pL3SEa+Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770044890; c=relaxed/simple;
-	bh=OHwglCci930h0BPeoKnfBXI07YfnmYvkYhe1czCXm5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VHzpxOWHwNlH0gCyDlraVjbN/TlvMNzfkTg+GgeNBiRiAjjsc5kNKdR07JMeemYMjzYi71A0p8ss1/tXJV3XhF0nsRZnj2VdvkRuoLkJZ7JLuZm0VyENvfcd+NWAJo0fsFir5q1PSTPFRPuCTX1jQUBycxChBVzijGNNBFH57kI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=UcsB6VLP; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08336378801
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 15:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770045180; cv=none; b=esldhEBr+aerBk2gztuANpt4KX5UMRihPRiMaGbT5Qrh6VOO0l1/zwXWbUZmLiXmhvJAiItGPwkuKbSwuNVsgtOPBbmqwFYkL3GgD+EL7LJuWYenRo8ZWW4b2ki++H9GDSamvxQ0tYK4M3AV8sE2rbkrDUuwe88A+P5hw2CDqys=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770045180; c=relaxed/simple;
+	bh=fK0UNuTXnFjqKpqCbxl7apHrA2QHhXM8zAwjoqglbco=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YR3bo0La2bscel3AZnBMeWFCJSgWFOpk+xS0bSc/QEy9H9f6eLgXIjlzpLDtUQZ0ZyYaJf9kNzG2VDoK91gCPvsIKN6fQGbvQOqR4niE0/JmQXfn/GYlGkXQQ1kbPU7s7gpCeG/unwurmCjrx3sC6s98zYuruU7mPslsnbunXaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KiALrxnp; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="UcsB6VLP"
-ARC-Seal: i=1; a=rsa-sha256; t=1770044866; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=O1nsTu0Nm32KmUJcysdnX55vXY+nYlZU7sQyjU6a9F3DauNQDj5CMigQQjzvgBSMI7thc1O3L8ebT15IWw8HdV11S6fB4IzgJW2d34ZMqOq6CzZIuXEkzKU4rgIx4w9VCyK0ba//QqqlIypHPvB2GIhN7P1GoHNkiNEL58nqRlc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1770044866; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=; 
-	b=mOXtWJt14DhbwjFFy0c8WGyLFmYcsPYaTWrhOySy3mFcXQ0byxP8hleo67JuQuGF9UezmLuy8fZh8fTIE/WznemS5FoEZ4h9RHS/EEBCrQGcRAyTXZWRdzgBD5j4FB+dqTu8oqkvkm9MMc0nyxRWkTglLo71BCFvYj5W050c2fI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=ziyao.cc;
-	spf=pass  smtp.mailfrom=me@ziyao.cc;
-	dmarc=pass header.from=<me@ziyao.cc>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770044866;
-	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=;
-	b=UcsB6VLPIEf1abuUYSf6DiHKcwlu9vYf7bQdmpWemlpcN0982Z971L0f6CElyGuk
-	2iqGWjF95CmTb6wQAV0Fxj/KT4XUwbiO8NzZYytcAbqoRX4M40C65y3jd3XR63/UOIc
-	tve2HWHJVOIxARWTGcdWj7ZlDi4NqW/S/w4VZgVA=
-Received: by mx.zohomail.com with SMTPS id 1770044863450508.49955181658333;
-	Mon, 2 Feb 2026 07:07:43 -0800 (PST)
-Date: Mon, 2 Feb 2026 15:07:22 +0000
-From: Yao Zi <me@ziyao.cc>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
- register variable
-Message-ID: <aYC9qgTdhnrWQ1zg@pie>
-References: <20260118090235.60670-1-me@ziyao.cc>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KiALrxnp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1770045177;
+	bh=fK0UNuTXnFjqKpqCbxl7apHrA2QHhXM8zAwjoqglbco=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=KiALrxnpXHJNOBviH4hrLAhS6g40n2NUloKgX4tpKeb/saL9oHnuoWZbyBS6VeRC5
+	 or2D8fcLMlSDWHBeJdkvBT83cb/rY17oyzpyxn+OjtC2SQNkm3gyWgkBwXlos4J+Fs
+	 vM+Tgb1DCy4bNdsp2MmUabrAQoQttJWuXBY+TdP3nC3LJXKE4UyyKKtfxKk47vKKEh
+	 RoI2rSZxSzJTmfjVqn6jzgukaCzf4yQAJNsML5wz3Cte1GGfikbzVM1bvdAFgCgwEa
+	 O2kkor0DIvKfAYRUF9DBUG2VO7OI3g0bsFg8p4LYuWKu9kLOl22b4mdZi0VegCTB7N
+	 Sk6RV6uwW8t3g==
+Received: from [IPv6:2606:6d00:15:210e::5ac] (unknown [IPv6:2606:6d00:15:210e::5ac])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7F23E17E1274;
+	Mon,  2 Feb 2026 16:12:55 +0100 (CET)
+Message-ID: <da9f044152383cacd50989b025fdce08a654bbe3.camel@collabora.com>
+Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
+ assemble_hw_pps()
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>, Detlev
+ Casanova <detlev.casanova@collabora.com>, Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+ Nathan Chancellor	 <nathan@kernel.org>, Hans Verkuil
+ <hverkuil+cisco@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	 <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Date: Mon, 02 Feb 2026 10:12:53 -0500
+In-Reply-To: <3b89635f-1c1c-4e4e-b0a9-2bbd0f21bc90@app.fastmail.com>
+References: <20260202094804.1231706-1-arnd@kernel.org>
+	 <16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
+	 <3b89635f-1c1c-4e4e-b0a9-2bbd0f21bc90@app.fastmail.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-0n1upZ0VLiSy35LHgcM0"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260118090235.60670-1-me@ziyao.cc>
-X-ZohoMailClient: External
 
-On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
-> On MIPS, __current_thread_info is defined as global register variable
-> locating in $gp, and is simply assigned with new address during kernel
-> relocation.
-> 
-> This however is broken with LLVM, which always restores $gp if it finds
-> $gp is clobbered in any form, including when intentionally through a
-> global register variable. This is against GCC's documentation[1], which
-> requires a callee-saved register used as global register variable not to
-> be restored if it's clobbered.
-> 
-> As a result, $gp will continue to point to the unrelocated kernel after
-> the epilog of relocate_kernel(), leading to an early crash in init_idle,
-> 
-> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-> [    0.000000] Oops[#1]:
-> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-> [    0.000000] Tainted: [W]=WARN
-> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-> [    0.000000] Hi    : 0000000000000000
-> [    0.000000] Lo    : 0000000000000000
-> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-> [    0.000000] Cause : 00000008 (ExcCode 02)
-> [    0.000000] BadVA : 0000000000000000
-> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
-> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
-> 
-> This bug has been reported to LLVM[2] and affects version from (at
-> least) 18 to 21. Let's work around this by using inline assembly to
-> assign $gp before a fix is widely available.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-> Signed-off-by: Yao Zi <me@ziyao.cc>
 
-Gently ping on this patch. Thanks for your time and review.
+--=-0n1upZ0VLiSy35LHgcM0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Yao Zi
+Hi Arnd,
+
+Le lundi 02 f=C3=A9vrier 2026 =C3=A0 15:09 +0100, Arnd Bergmann a =C3=A9cri=
+t=C2=A0:
+> On Mon, Feb 2, 2026, at 14:42, Nicolas Dufresne wrote:
+> > Le lundi 02 f=C3=A9vrier 2026 =C3=A0 10:47 +0100, Arnd Bergmann a =C3=
+=A9crit=C2=A0:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >=20
+> > > The rkvdec_pps had a large set of bitfields, all of which
+> > > as misaligned. This causes clang-21 and likely other versions to
+> > > produce absolutely awful object code and a warning about very
+> > > large stack usage, on targets without unaligned access:
+> > >=20
+> > > drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c:966:12: error: st=
+ack frame size (1472) exceeds limit (1280) in 'rkvdec_vp9_start' [-Werror,-=
+Wframe-larger-than]
+> >=20
+> > We had already addressed and validated that on clang-21, which indicate=
+s me that
+> > we likely are missing an architecture (or a config) in our CI. Can you =
+document
+> > which architecture, configuration and flags was affected so we can add =
+it on our
+> > side ?
+> >=20
+> > Our media pipeline before sending to Linus and the clang builds trace a=
+re in the
+> > following link, in case it matters.
+> >=20
+> > https://gitlab.freedesktop.org/linux-media/media-committers/-/pipelines=
+/1588731
+> > https://gitlab.freedesktop.org/linux-media/media-committers/-/jobs/9160=
+4655
+>=20
+> The configuration that hit this for me was an ARMv7-M NOMMU build. I'm
+> doing 'randconfig' builds here, so I inevitably hit some corner cases
+> that all deterministic CI systems miss. I don't think that you should
+> add ARMv7-M here, since that would take up useful build resources
+> from something more important. There are no drviers/media/ actual
+> users on ARMv7-M, and next time it is going to be something else.
+>=20
+> > > Part of the problem here is how all the bitfield accesses are
+> > > inlined into a function that already has large structures on
+> > > the stack.
+> >=20
+> > Another observation is that you had to enable ASAN to make it miss-beha=
+ve on for
+> > loop unrolling (with complex bitfield writes).=C2=A0 All I've obtained =
+by visiting
+> > the Link: is that its armv7-a architecture.
+>=20
+> Right, this randconfig build likely got closer to the warning
+> limit because of the inherent overhead in KASAN, but the problem
+> with the unaligned bitfields was something that I could later
+> reproduce without KASAN, on ARMv5 and MIPS32r2.
+>=20
+> This is something we should fix in clang.
+
+All fair comments. I plan to take this into fixes (no changes needed), hope=
+fully
+for rc-2.
+
+Performance wise, this code is to replace read/mask/write into hardware
+registers which was significantly slower for this amount of registers (~200
+32bit integers) and this type of IP (its not sram). This is run once per fr=
+ame.
+In practice, if we hand code the read/mask/write, the performance should
+eventually converge to using bitfield and letting the compiler do this mask=
+ing,
+I was being optimistic on how the compiler would behave. If performance of =
+that
+is truly a problem, we can always just prepare the ram register ahead of th=
+e
+operation queue (instead of doing it in the executor).
+
+One thing to remind, you can't optimize the data structure layout, since th=
+ey
+need to match the register layout. But while fixing some of the stack repor=
+t
+previously, I did endup up moving few things out of loops (which is not cle=
+arly
+feasible in this patch). I did not checked all the code (only the failing o=
+ne).
+One of the bad pattern which costed stack (and overhead probably) was the u=
+se of
+switch() statement to pick one of the unaligned register location, with tha=
+t
+switch being part of an unrolled loop. If you ever spot these, and have tim=
+e,
+please just manually unroll the switch out of the loop (its actually less c=
+ode).
+
+> =C2=A0
+> > > Mark set_field_order_cnt() as noinline_for_stack, and split out
+> > > the following accesses in assemble_hw_pps() into another noinline
+> > > function, both of which now using around 800 bytes of stack in the
+> > > same configuration.
+> > >=20
+> > > There is clearly still something wrong with clang here, but
+> > > splitting it into multiple functions reduces the risk of stack
+> > > overflow.
+> >=20
+> > We've tried really hard to avoid this noninline_for_stack just because =
+compilers
+> > are buggy. I'll have a look again in case I find some ideas, but meanwh=
+ile, with
+> > failing architecture in the commit message:
+> >=20
+> > Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>=20
+> Thanks!
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0 Arnd
+
+
+thanks to you,
+Nicolas
+
+--=-0n1upZ0VLiSy35LHgcM0
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaYC+9QAKCRDZQZRRKWBy
+9GSlAP98wAwsGZINllsCHn4BZIWdyEFzPQNWZpW54689SrMU7QD9GzjnPH5SIbIo
+XpCL/RFia9fph8ZEiB+jh8mL7sloZAc=
+=zvGH
+-----END PGP SIGNATURE-----
+
+--=-0n1upZ0VLiSy35LHgcM0--
