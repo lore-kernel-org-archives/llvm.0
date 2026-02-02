@@ -1,155 +1,255 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEB635DD01
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 10:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3694F36A00F
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 13:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770029845; cv=none; b=sxdXIaX6Gwmz9HAgfmruu9iEEOQAQ8xh6LbNP+0UkcjvMWbAgW6IR8PhoPsRQUE4jtSY/f1OBtKnqiJY1bMG7IMHhxW3sYdNwQKstmlsqMqujSDSXGZ2NXwSUh8UD52mZMfSmywWwGRfe839pakIAZbQVcxn2yo+kwPPdYTYND0=
+	t=1770039769; cv=none; b=C7Wes7l2T/e1iFEG0xVpDpKhXa7O5n5mHV/tNNLj7zrcoteOn0ITF3ketdEjqdsUBfSCr5oMvYKcEbAwd9TlXR66gUVUy18wwoh21cfNg9AWwFVPtB+SViJjWNDeEm7llmNqXQPH65RgwyGdXJE8Yv05QcgUX72lGkOBO3ySopM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770029845; c=relaxed/simple;
-	bh=TFTxp9Whu76WPWc8LoRr1IbswWOT2EZOfWCEsAXG3cE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=muaZ1HChRcvp6Wrs8bVX5ydDAdn46iIlawg1CHZrwkg16ANS1pvN+sQrWdGdMO71hA9V3uDIu0K6cAdTWdnvrHBr/E2tmeCTm1uLo9H6gESzmf0eQtq3fwMoifwPN6nEbiYZOeOLU0HF9hPSPIyE0me4eveeoY9GqYTGyW21Cwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Dpt1V3u9; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BW7CMNd7; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1770039769; c=relaxed/simple;
+	bh=gcTfsdv162COO0lrMacW+zMoNiUg+aaJ2YIgxYnS0Ak=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XgR/fzfKm4S8jEObLAsdmjY7mGXPIVDUZN9Z2vr7E6NbSKRUUlTCydLI2fqR9JBNTMt3aYj4ANwzPxYlbVu5bc3ncKi4tx0pbJ10VyaJReFckuaxF/Sey1DCT3JeU7fqbMiL6TnVuasw+a6nL15TQeMYQ3DzZ0Kf1pgxNfsugx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Zc/+9uWq; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Dpt1V3u9";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BW7CMNd7"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61285EQN2596340
-	for <llvm@lists.linux.dev>; Mon, 2 Feb 2026 10:57:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	UuulFgRx9rd/kvUwhvAhL2lf6p7QUWW0dftJxb5MCVA=; b=Dpt1V3u9rKUpY5Oi
-	GIjOPuOONwb0nuY3VNAVkxQHYXLsyznSjcYRh/g8lQmTfq8Mft9pVlCt5jsoOxFo
-	RFH2Tya5hatwejqa0yztCYXi82sGp+Q/9C5NFJXRtQWiZY3VcuJrJJ7k/jhTLlT8
-	uVbTosc1f7IGFO5gz5p47UG0DyX6w9MgenSLUOs9lalDMPCCChdc3//mvNVu3Tti
-	kdly3kRD6R1IfsXWyJ5KtkkYrmWnIbLF+BxttNFvUNMvlOFG9Cek7GZP/qDYRVpa
-	uOu4Gl3u8IWYq3Ro4W+nrenvnls67qtvuP2iQVLgc/u3g7ML0x5bHr9uQ0AyA9hn
-	rZ5Rjg==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c1awdd4ap-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 10:57:22 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c6b48c08deso70504685a.1
-        for <llvm@lists.linux.dev>; Mon, 02 Feb 2026 02:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1770029842; x=1770634642; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UuulFgRx9rd/kvUwhvAhL2lf6p7QUWW0dftJxb5MCVA=;
-        b=BW7CMNd7jGufUkE8ZMrFe+DgtM+9QV8ersGvyos4i6hhEmEwWv/bGW7DBmU7W5N5ID
-         k9vIRfu9jdz9NwuVQcYUPLe1g0/SnUPyHTzmzJoe3M+t+bugagHB1YBbrfeGh06ETZmy
-         KFvki7qzDzTAxm8kiDUCqAAsMtinppa59CEKzxtJx82qwI7ECS1brAw6mbcBGgo0v1Zx
-         Uybz6K7r8+LF3PQ9XEW4/naddBm5oQ/gOt2XtRmrf3mG9Pf7dJugWzWB78rbm1FjZlTY
-         +FWw1EpHPHXG5CRuYdldHjYmv3mH7ONhOOHh8mi+QFVcF8VePEwKq1OGsNxWw+BxwzGi
-         LZWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770029842; x=1770634642;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UuulFgRx9rd/kvUwhvAhL2lf6p7QUWW0dftJxb5MCVA=;
-        b=gHVAF1XK9diEyev331DEPs7jaYFYWDUYya1sHwTy1X/pVwqGZs7u7sapyOdCxotyWz
-         sHFvCQkTjhbmrFnmGFLhLcmrftNtdaJ1HM45o8scBnpt2wsfCpnZ/Ej5FghenONp1LTO
-         ji3pl6A//eeyxmL5rwMxgxO9BTrwcam44o82z26t1XPBPFJaGzy8LzpjpZMIa6RxCItb
-         8dulB3J2aufQlTkKRC4QhCoa1H+wJ6kBNjQrfu6XB5E4wC7/A1s478FPDlq63ZUVAVTa
-         Kg6pY5AEcPJiQet8fwwbFN1/KtC0RCxurCPsegNbBhj6Waxkn3huguhm13OJhvkda8wy
-         W3iA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2EzDPe1fSCU/h5iNMo5vQlEgqp7nIzKXjIOSSlQ/I015Hg/8SJf5IhWSXBlpcbRdG/rHG@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw9/odO6U5/KGtNkrzr73kZHS4FrR6Ls5NAZtBN8DHWQtwcdBFX
-	i2BTfdYe1T3Ep+EhKrd35C/kwY+0pQEFXkncOQL5vAik2qu2WD3L/hYiTVs6kQWk6WTjQHt8+Lh
-	UpGl/MBUx1c1+lS540y9yzoIxFoFSL2srT/N4pyJmGMbQalSh6RpXoh1x
-X-Gm-Gg: AZuq6aLgJ6RB2msdM3P5b0W2KD+YoJe6dUDXVPDVdbQfUZivUrHOTuwkksaJGuk8Vrd
-	RJipIXTVLIgC1C9eYTVgpJEqELG7vMLooZ9QdK5tqa0ysMgV3NJAUTy5DBOYQilYjOYwRLFf0Ob
-	rqBoAKnGJyGnNDSTM8XdZ7XSXaRcHgZF2V3xafkEyCdxH4g29wSAt2yZUJOBbJuM3NF8V1I7tGW
-	IFAjit2Z7lfTgCF3y9yLWB2IceHSbtRPe1bSEty6UbBD2Ik7wR/bUwN187M1kkgvCK+LMaAloHa
-	vCghnSynxJlKzU2b8EGhu48QGEDhLVZCJAZDWe/CrlziGKNdivrq8HFpfbmejvtCznnuZwGnNaw
-	Jcagmu6TngNy6E/s8Tg61rnj9seR4x5/MXzXxE2OWPbXINT6DpqBpGirYznU0mTviKlI=
-X-Received: by 2002:a05:620a:4141:b0:8b2:6eba:c45d with SMTP id af79cd13be357-8c9eb20cebcmr1085527185a.2.1770029841906;
-        Mon, 02 Feb 2026 02:57:21 -0800 (PST)
-X-Received: by 2002:a05:620a:4141:b0:8b2:6eba:c45d with SMTP id af79cd13be357-8c9eb20cebcmr1085526585a.2.1770029841519;
-        Mon, 02 Feb 2026 02:57:21 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbf183ccbsm843100366b.34.2026.02.02.02.57.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Feb 2026 02:57:19 -0800 (PST)
-Message-ID: <9b4ce86a-8529-4c55-9dcf-caecf81e46d8@oss.qualcomm.com>
-Date: Mon, 2 Feb 2026 11:57:16 +0100
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Zc/+9uWq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1770039766;
+	bh=gcTfsdv162COO0lrMacW+zMoNiUg+aaJ2YIgxYnS0Ak=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=Zc/+9uWqy6PXrqry3Avy/WE37bZfyD/pTm5q9Ynph2a/6aScihGzebs5+5kSDz7+3
+	 05WcpD/Di4+B7njXyzo93kx8snjSlJl53ze2eP21JZZu5aBVn68bc104nk5s4jkuhe
+	 isSWebCLRG40qe6Q6yEREZpZttyoQ+zv46BTFMNzbVqd/AP9ajkihBW2xLg6Z1k1GY
+	 uNB1cjS+IyCGMkLRnuqNtH86f+xXakrDkIfLptaHXPdJ6In/FXeYjsyOj8lOiUOCC4
+	 /v65MMm9hNU3CvoSdLyRnUzjIEzPkYCVk/wLEOwe2JkYXkOhswj/EuQ2eyhvpnCT2o
+	 7thn6xx70mQtg==
+Received: from [IPv6:2606:6d00:15:210e::5ac] (unknown [IPv6:2606:6d00:15:210e::5ac])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 96AA917E0927;
+	Mon,  2 Feb 2026 14:42:44 +0100 (CET)
+Message-ID: <16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
+Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
+ assemble_hw_pps()
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Arnd Bergmann <arnd@kernel.org>, Detlev Casanova	
+ <detlev.casanova@collabora.com>, Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>,  Mauro Carvalho Chehab	
+ <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Nathan Chancellor	
+ <nathan@kernel.org>, Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers	
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, linux-media@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Mon, 02 Feb 2026 08:42:41 -0500
+In-Reply-To: <20260202094804.1231706-1-arnd@kernel.org>
+References: <20260202094804.1231706-1-arnd@kernel.org>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-7kpS3ryHRVhS3mBqQbB8"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] remoteproc: qcom_wcnss: Fix handling the lack of PD
- regulators in v3
-To: Val Packett <val@packett.cool>, Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-Cc: =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Luca Weiss <luca@lucaweiss.eu>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org,
-        phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev
-References: <20260201210230.911220-1-val@packett.cool>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260201210230.911220-1-val@packett.cool>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: UGbmS0oKYdzY0H5iJX-7pBPhENJtWD2a
-X-Proofpoint-ORIG-GUID: UGbmS0oKYdzY0H5iJX-7pBPhENJtWD2a
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAyMDA4OCBTYWx0ZWRfX1iO64HOllBIR
- HRa5JwsBiXCdr2E/ImZN6LXYvaBAYRR0QOlyFOvMO4udz2OHi2bAtkpFEaRpiIl9ciewUlL9NlW
- IUcg2VjoyGNc98/QjEzg1gndUoLri45JxUQ8st/n9BUwCzzJCmYxtWYh8/1Uj18TQHq8+HAtlUO
- efv5CAycX3oWUrecgyUqEnPKl1UOhFmRa8bGSolyNAMa7QwVj6NIRDnW4NX9GAq4bM5sJYmHPLl
- SZO6jcdEQZz6hYfYLp9BfRw8/WXivVwdU/9PrXDSa+lwrvGx+loEeCZBRb7+b2ruH+lAN1j6X51
- eEilqnWhRlRhj3gl+c8cG+zJ5m3dziNBUOOTPLYPJYgJ4jmvEGZnSPh9QecJcGoviVqkxdu5Avu
- yecNF70RVhCAY984fJVy/Q2ucNdzLY6ZnpnIVsi6YpCaAL7uqfHKZ5xsmkAO9AkadpI5WzaOuQV
- pjLCC/8n67rpBGl9/+g==
-X-Authority-Analysis: v=2.4 cv=T8OBjvKQ c=1 sm=1 tr=0 ts=69808313 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=1XiK3UaZtGXvnlVxuGgA:9
- a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-02_03,2026-01-30_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 clxscore=1015 suspectscore=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602020088
 
-On 2/1/26 9:55 PM, Val Packett wrote:
-> The changes introduced to handle single power domain platforms have
-> swapped the info pointer increment from num_pd_vregs to num_pds, which
-> would shift the info pointer past the end of the array for pronto-v3,
-> which does not list power domain regulators in vregs.
-> 
-> This showed up as a difference between GCC- and LLVM-compiled kernels
-> on SDM632 devices, where only with LLVM one would get the
-> "regulator request with no identifier" error, because the out-of-bounds
-> memory ended up being zeroed. Fix by skipping the increment when there
-> are more power domains than regulators.
-> 
-> Signed-off-by: Val Packett <val@packett.cool>
+
+--=-7kpS3ryHRVhS3mBqQbB8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Arnd,
+
+Le lundi 02 f=C3=A9vrier 2026 =C3=A0 10:47 +0100, Arnd Bergmann a =C3=A9cri=
+t=C2=A0:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The rkvdec_pps had a large set of bitfields, all of which
+> as misaligned. This causes clang-21 and likely other versions to
+> produce absolutely awful object code and a warning about very
+> large stack usage, on targets without unaligned access:
+>=20
+> drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c:966:12: error: stack =
+frame size (1472) exceeds limit (1280) in 'rkvdec_vp9_start' [-Werror,-Wfra=
+me-larger-than]
+
+We had already addressed and validated that on clang-21, which indicates me=
+ that
+we likely are missing an architecture (or a config) in our CI. Can you docu=
+ment
+which architecture, configuration and flags was affected so we can add it o=
+n our
+side ?
+
+Our media pipeline before sending to Linus and the clang builds trace are i=
+n the
+following link, in case it matters.
+
+https://gitlab.freedesktop.org/linux-media/media-committers/-/pipelines/158=
+8731
+https://gitlab.freedesktop.org/linux-media/media-committers/-/jobs/91604655
+
+>=20
+> Part of the problem here is how all the bitfield accesses are
+> inlined into a function that already has large structures on
+> the stack.
+
+Another observation is that you had to enable ASAN to make it miss-behave o=
+n for
+loop unrolling (with complex bitfield writes).  All I've obtained by visiti=
+ng
+the Link: is that its armv7-a architecture.
+
+>=20
+> Mark set_field_order_cnt() as noinline_for_stack, and split out
+> the following accesses in assemble_hw_pps() into another noinline
+> function, both of which now using around 800 bytes of stack in the
+> same configuration.
+>=20
+> There is clearly still something wrong with clang here, but
+> splitting it into multiple functions reduces the risk of stack
+> overflow.
+
+We've tried really hard to avoid this noninline_for_stack just because comp=
+ilers
+are buggy. I'll have a look again in case I find some ideas, but meanwhile,=
+ with
+failing architecture in the commit message:
+
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+
+>=20
+> Fixes: fde24907570d ("media: rkvdec: Add H264 support for the VDPU383 var=
+iant")
+> Link: https://godbolt.org/z/acP1eKeq9
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
+> =C2=A0.../rockchip/rkvdec/rkvdec-vdpu383-h264.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
+ 50 ++++++++++---------
+> =C2=A01 file changed, 27 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c=
+ b/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> index 6ab3167addc8..ef69f2a36478 100644
+> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> @@ -130,7 +130,7 @@ struct rkvdec_h264_ctx {
+> =C2=A0	struct vdpu383_regs_h26x regs;
+> =C2=A0};
+> =C2=A0
+> -static void set_field_order_cnt(struct rkvdec_pps *pps, const struct v4l=
+2_h264_dpb_entry *dpb)
+> +static noinline_for_stack void set_field_order_cnt(struct rkvdec_pps *pp=
+s, const struct v4l2_h264_dpb_entry *dpb)
+> =C2=A0{
+> =C2=A0	pps->top_field_order_cnt0 =3D dpb[0].top_field_order_cnt;
+> =C2=A0	pps->bot_field_order_cnt0 =3D dpb[0].bottom_field_order_cnt;
+> @@ -166,6 +166,31 @@ static void set_field_order_cnt(struct rkvdec_pps *p=
+ps, const struct v4l2_h264_d
+> =C2=A0	pps->bot_field_order_cnt15 =3D dpb[15].bottom_field_order_cnt;
+> =C2=A0}
+> =C2=A0
+> +static noinline_for_stack void set_dec_params(struct rkvdec_pps *pps, co=
+nst struct v4l2_ctrl_h264_decode_params *dec_params)
+> +{
+> +	const struct v4l2_h264_dpb_entry *dpb =3D dec_params->dpb;
+> +
+> +	for (int i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
+> +		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+> +			pps->is_longterm |=3D (1 << i);
+> +		pps->ref_field_flags |=3D
+> +		 (!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD)) << i;
+> +		pps->ref_colmv_use_flag |=3D
+> +		 (!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)) << i;
+> +		pps->ref_topfield_used |=3D
+> +		 (!!(dpb[i].fields & V4L2_H264_TOP_FIELD_REF)) << i;
+> +		pps->ref_botfield_used |=3D
+> +			(!!(dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)) << i;
+> +	}
+> +	pps->pic_field_flag =3D
+> +		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC);
+> +	pps->pic_associated_flag =3D
+> +		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD);
+> +
+> +	pps->cur_top_field =3D dec_params->top_field_order_cnt;
+> +	pps->cur_bot_field =3D dec_params->bottom_field_order_cnt;
+> +}
+> +
+> =C2=A0static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> =C2=A0			=C2=A0=C2=A0=C2=A0 struct rkvdec_h264_run *run)
+> =C2=A0{
+> @@ -177,7 +202,6 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> =C2=A0	struct rkvdec_h264_priv_tbl *priv_tbl =3D h264_ctx->priv_tbl.cpu;
+> =C2=A0	struct rkvdec_sps_pps *hw_ps;
+> =C2=A0	u32 pic_width, pic_height;
+> -	u32 i;
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * HW read the SPS/PPS information from PPS packet index by PPS id=
+.
+> @@ -261,28 +285,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> =C2=A0		!!(pps->flags & V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT);
+> =C2=A0
+> =C2=A0	set_field_order_cnt(&hw_ps->pps, dpb);
+> +	set_dec_params(&hw_ps->pps, dec_params);
+> =C2=A0
+> -	for (i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
+> -		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+> -			hw_ps->pps.is_longterm |=3D (1 << i);
+> -
+> -		hw_ps->pps.ref_field_flags |=3D
+> -			(!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD)) << i;
+> -		hw_ps->pps.ref_colmv_use_flag |=3D
+> -			(!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)) << i;
+> -		hw_ps->pps.ref_topfield_used |=3D
+> -			(!!(dpb[i].fields & V4L2_H264_TOP_FIELD_REF)) << i;
+> -		hw_ps->pps.ref_botfield_used |=3D
+> -			(!!(dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)) << i;
+> -	}
+> -
+> -	hw_ps->pps.pic_field_flag =3D
+> -		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC);
+> -	hw_ps->pps.pic_associated_flag =3D
+> -		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD);
+> -
+> -	hw_ps->pps.cur_top_field =3D dec_params->top_field_order_cnt;
+> -	hw_ps->pps.cur_bot_field =3D dec_params->bottom_field_order_cnt;
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void rkvdec_write_regs(struct rkvdec_ctx *ctx)
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+--=-7kpS3ryHRVhS3mBqQbB8
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Konrad
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaYCp0gAKCRDZQZRRKWBy
+9PKZAQDW2WJYqk6PvFuUHWBQTPBTqefBGs5IqpO8QwVWcBdQRwD/YxyoF4mjJmnc
+OGxL3bcdMp/Ib+/bvccOgrHz6b08vAE=
+=qu3H
+-----END PGP SIGNATURE-----
+
+--=-7kpS3ryHRVhS3mBqQbB8--
