@@ -1,183 +1,128 @@
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A21735971B
-	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 14:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770041378; cv=none; b=i+IBQYUtwbdKYZ6BBdOnCOZgP2y5sHLg3ol1M9vtIc9Btu01+qTgoEdGfbNjT54P4/per1S43idwUp/tlsVkwUwBnNx+azXYt5ztBlFDPxWabiuUPNkPhADf2mWVnQPAW44Vmb3U8IJDlG0hu0NmSntTjmbapH9mCTFkYZGKVnA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770041378; c=relaxed/simple;
-	bh=Nrbev6MrXTTOMZ6WHWCANIm+ZOJm9clFto/GtCIIZmE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Mg0JcfYrVHhFD9ASKpZFE2RrCJdVOYYchWCB+B1kZx+MKJb+ThCxcfxWlo8wBWcs0dal9qarhLNE/lZE8rBt3VrtZFDSBK9ZlXmV/7dHHSiWrKMYHfkIKxZr+e60jb5e3RiH6xxY/3GEK3OeqU/KRNLqyJgb8w1RHkta0d5S99c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BdKTyM9F; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=N/1rYOKe; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5A2369979
+	for <llvm@lists.linux.dev>; Mon,  2 Feb 2026 15:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770044890; cv=pass; b=GK5C0dHSMpfYqoGxkq2J0FhFFcVhraPm+ioIL1iI3/bbYcV/7+3BkkUpRyxJAeMUtcKcqs+XhU2/b58jrlwDHt+RZ8owHXvUB3HMYpLqmsvyTOztGIHTG0TK/mlzHr46zYagjllNHzvaMUOT7GGWIz/tyJfKkSygIf8pL3SEa+Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770044890; c=relaxed/simple;
+	bh=OHwglCci930h0BPeoKnfBXI07YfnmYvkYhe1czCXm5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VHzpxOWHwNlH0gCyDlraVjbN/TlvMNzfkTg+GgeNBiRiAjjsc5kNKdR07JMeemYMjzYi71A0p8ss1/tXJV3XhF0nsRZnj2VdvkRuoLkJZ7JLuZm0VyENvfcd+NWAJo0fsFir5q1PSTPFRPuCTX1jQUBycxChBVzijGNNBFH57kI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=UcsB6VLP; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BdKTyM9F";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="N/1rYOKe"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 10F171D000A0;
-	Mon,  2 Feb 2026 09:09:34 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 02 Feb 2026 09:09:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1770041374;
-	 x=1770127774; bh=RBoismynB60LLwwoMkedKjwF2LAh/OXyt9rYS+d1H6U=; b=
-	BdKTyM9FOy3kpBMxH25ZRVPtJYe4n7zOgFX02Ew7DVrdTjZa7gZMuk/6T3fzAcvr
-	Mq18oV0QO2yKpmXSUJE0m9d8Wy9I+WVQpkMvmPozdkbX4/SBpZ/+E5NdhcPXzvmQ
-	cjDUd7CCzmVk0xxxBIq3JGv3Rw1rp7bJJ/HYq8D7qzpNK1UpVN3Qr1QQmgee1kcT
-	LZ1kbgyDBHzkyjm7I+gnkukAlDSR/jUJE5vJCOMvGEH6CufTpa6L0jIUGbwW2Ymf
-	sat40+3mQz9RuZLauIpnB1wFZ6HtHCFGP0zqJ+S4FfaSEYZDdidT2wIbzbuccTcT
-	bh9N26PmNhrwi2McIECKsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770041374; x=
-	1770127774; bh=RBoismynB60LLwwoMkedKjwF2LAh/OXyt9rYS+d1H6U=; b=N
-	/1rYOKepF09/IuoqxfYRV3dV/zC/5jA8CZYFmhF90XiFmPvg9TTP7fpFux4suFuR
-	FPMlE5wwchXnm+DyJkmYPJJtCFEbTKx2jW8S1Jq9rtQd8owLPVBAS9kR9DcqDcYh
-	b5jG4nvCzl/kOmrcbnCLMOF39oBtkcWji0H659zogoWxiZ59pmewfoB7NMOmG25/
-	1No6XmORBf6ZG/kTbvSuVrDkthHaralWhmxv/RIJ7lPEK7G9n66CEeGgl0zKhNA+
-	rSJhlqWOAWP7TS4UmsXB1BnmWjLrJU7FaoktaL6d+a3/NWNxdQOvWdG5VYi9qVDc
-	lEvFT57Lm+YFItQrfVESg==
-X-ME-Sender: <xms:HrCAaY3mUCjnPG_gHmmxZhkHjJefUm729qdIwPOtpgt8mnN3ppkcZA>
-    <xme:HrCAad6rH4Urj-UNeT4hEclXyd9XpPs4Zvww-XTPjKEJtAwzla7KtMbx8uD8Hc8im
-    vXwsthOsrVKh-rPwMdt10NZj7fBDSoA41mGCsNgCCj7zLN25Kr6AUY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddujeejkeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepteekteeuudegheejjefhleehheehudekuefggeetkeevueeghfevgeduteevtefg
-    necuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdp
-    nhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeguvg
-    htlhgvvhdrtggrshgrnhhovhgrsegtohhllhgrsghorhgrrdgtohhmpdhrtghpthhtohep
-    nhhitgholhgrshdrughufhhrvghsnhgvsegtohhllhgrsghorhgrrdgtohhmpdhrtghpth
-    htohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdp
-    rhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopegrrhhnugeskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohephhhvvghrkhhuihhlodgtihhstghosehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:HrCAabVKYPCDd5wTV9GUcv1BQnYI01S0aSMcc4qKaaZ9Nep53LLEfQ>
-    <xmx:HrCAaf42fF5ngcPG-xsg2abAHd-JD5n_2EKb8aFgrCvUi8FzEnplzA>
-    <xmx:HrCAaZBAaYTs6mI4ctuT-Z5YHvkgT-PjThRjSgck4AeELCkPdivpaA>
-    <xmx:HrCAaTec1p7Kxiwf_aEoxbcZmPezFrnygnncZvSBZ-cc_KzW-j8MUg>
-    <xmx:HrCAaVhiSYwd7RIMWurMrNCzNwNcpKuIlN8tGfl_mRnUodmMGmQvzI81>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 3F359700065; Mon,  2 Feb 2026 09:09:34 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="UcsB6VLP"
+ARC-Seal: i=1; a=rsa-sha256; t=1770044866; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=O1nsTu0Nm32KmUJcysdnX55vXY+nYlZU7sQyjU6a9F3DauNQDj5CMigQQjzvgBSMI7thc1O3L8ebT15IWw8HdV11S6fB4IzgJW2d34ZMqOq6CzZIuXEkzKU4rgIx4w9VCyK0ba//QqqlIypHPvB2GIhN7P1GoHNkiNEL58nqRlc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1770044866; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=; 
+	b=mOXtWJt14DhbwjFFy0c8WGyLFmYcsPYaTWrhOySy3mFcXQ0byxP8hleo67JuQuGF9UezmLuy8fZh8fTIE/WznemS5FoEZ4h9RHS/EEBCrQGcRAyTXZWRdzgBD5j4FB+dqTu8oqkvkm9MMc0nyxRWkTglLo71BCFvYj5W050c2fI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=ziyao.cc;
+	spf=pass  smtp.mailfrom=me@ziyao.cc;
+	dmarc=pass header.from=<me@ziyao.cc>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770044866;
+	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=;
+	b=UcsB6VLPIEf1abuUYSf6DiHKcwlu9vYf7bQdmpWemlpcN0982Z971L0f6CElyGuk
+	2iqGWjF95CmTb6wQAV0Fxj/KT4XUwbiO8NzZYytcAbqoRX4M40C65y3jd3XR63/UOIc
+	tve2HWHJVOIxARWTGcdWj7ZlDi4NqW/S/w4VZgVA=
+Received: by mx.zohomail.com with SMTPS id 1770044863450508.49955181658333;
+	Mon, 2 Feb 2026 07:07:43 -0800 (PST)
+Date: Mon, 2 Feb 2026 15:07:22 +0000
+From: Yao Zi <me@ziyao.cc>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
+ register variable
+Message-ID: <aYC9qgTdhnrWQ1zg@pie>
+References: <20260118090235.60670-1-me@ziyao.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Ad03WE3-YZeR
-Date: Mon, 02 Feb 2026 15:09:14 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nicolas Dufresne" <nicolas.dufresne@collabora.com>,
- "Arnd Bergmann" <arnd@kernel.org>,
- "Detlev Casanova" <detlev.casanova@collabora.com>,
- "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
- "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Hans Verkuil" <hverkuil+cisco@kernel.org>
-Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <3b89635f-1c1c-4e4e-b0a9-2bbd0f21bc90@app.fastmail.com>
-In-Reply-To: <16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
-References: <20260202094804.1231706-1-arnd@kernel.org>
- <16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
-Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
- assemble_hw_pps()
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260118090235.60670-1-me@ziyao.cc>
+X-ZohoMailClient: External
 
-On Mon, Feb 2, 2026, at 14:42, Nicolas Dufresne wrote:
-> Le lundi 02 f=C3=A9vrier 2026 =C3=A0 10:47 +0100, Arnd Bergmann a =C3=A9=
-crit=C2=A0:
->> From: Arnd Bergmann <arnd@arndb.de>
->>=20
->> The rkvdec_pps had a large set of bitfields, all of which
->> as misaligned. This causes clang-21 and likely other versions to
->> produce absolutely awful object code and a warning about very
->> large stack usage, on targets without unaligned access:
->>=20
->> drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c:966:12: error: st=
-ack frame size (1472) exceeds limit (1280) in 'rkvdec_vp9_start' [-Werro=
-r,-Wframe-larger-than]
->
-> We had already addressed and validated that on clang-21, which indicat=
-es me that
-> we likely are missing an architecture (or a config) in our CI. Can you=
- document
-> which architecture, configuration and flags was affected so we can add=
- it on our
-> side ?
->
-> Our media pipeline before sending to Linus and the clang builds trace =
-are in the
-> following link, in case it matters.
->
-> https://gitlab.freedesktop.org/linux-media/media-committers/-/pipeline=
-s/1588731
-> https://gitlab.freedesktop.org/linux-media/media-committers/-/jobs/916=
-04655
+On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
+> On MIPS, __current_thread_info is defined as global register variable
+> locating in $gp, and is simply assigned with new address during kernel
+> relocation.
+> 
+> This however is broken with LLVM, which always restores $gp if it finds
+> $gp is clobbered in any form, including when intentionally through a
+> global register variable. This is against GCC's documentation[1], which
+> requires a callee-saved register used as global register variable not to
+> be restored if it's clobbered.
+> 
+> As a result, $gp will continue to point to the unrelocated kernel after
+> the epilog of relocate_kernel(), leading to an early crash in init_idle,
+> 
+> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
+> [    0.000000] Oops[#1]:
+> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
+> [    0.000000] Tainted: [W]=WARN
+> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
+> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
+> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
+> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
+> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
+> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
+> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
+> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
+> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
+> [    0.000000] Hi    : 0000000000000000
+> [    0.000000] Lo    : 0000000000000000
+> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
+> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
+> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
+> [    0.000000] Cause : 00000008 (ExcCode 02)
+> [    0.000000] BadVA : 0000000000000000
+> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
+> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
+> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
+> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
+> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
+> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
+> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
+> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
+> [    0.000000]         ...
+> [    0.000000] Call Trace:
+> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
+> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
+> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+> 
+> This bug has been reported to LLVM[2] and affects version from (at
+> least) 18 to 21. Let's work around this by using inline assembly to
+> assign $gp before a fix is widely available.
+> 
+> Cc: stable@vger.kernel.org
+> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
+> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
+> Signed-off-by: Yao Zi <me@ziyao.cc>
 
-The configuration that hit this for me was an ARMv7-M NOMMU build. I'm
-doing 'randconfig' builds here, so I inevitably hit some corner cases
-that all deterministic CI systems miss. I don't think that you should
-add ARMv7-M here, since that would take up useful build resources
-from something more important. There are no drviers/media/ actual
-users on ARMv7-M, and next time it is going to be something else.
+Gently ping on this patch. Thanks for your time and review.
 
->> Part of the problem here is how all the bitfield accesses are
->> inlined into a function that already has large structures on
->> the stack.
->
-> Another observation is that you had to enable ASAN to make it miss-beh=
-ave on for
-> loop unrolling (with complex bitfield writes).  All I've obtained by v=
-isiting
-> the Link: is that its armv7-a architecture.
-
-Right, this randconfig build likely got closer to the warning
-limit because of the inherent overhead in KASAN, but the problem
-with the unaligned bitfields was something that I could later
-reproduce without KASAN, on ARMv5 and MIPS32r2.
-
-This is something we should fix in clang.
-=20
->> Mark set_field_order_cnt() as noinline_for_stack, and split out
->> the following accesses in assemble_hw_pps() into another noinline
->> function, both of which now using around 800 bytes of stack in the
->> same configuration.
->>=20
->> There is clearly still something wrong with clang here, but
->> splitting it into multiple functions reduces the risk of stack
->> overflow.
->
-> We've tried really hard to avoid this noninline_for_stack just because=
- compilers
-> are buggy. I'll have a look again in case I find some ideas, but meanw=
-hile, with
-> failing architecture in the commit message:
->
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
-Thanks!
-
-     Arnd
+Regards,
+Yao Zi
