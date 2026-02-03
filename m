@@ -1,279 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5373B8BCB;
-	Tue,  3 Feb 2026 15:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CD3190462
+	for <llvm@lists.linux.dev>; Tue,  3 Feb 2026 15:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770132324; cv=none; b=C6cRlb1ON/J0q9MarwULbXehWJA8k8X6pc5jrKU5Mhm7CVwKctrkJpNGeo6lywLJQzDtvrdMVMAhL3zf8EGUsV+AuJFPf+3lpcIP0d1Kr0ki2r5nyozGzukbNi0GPEbQ+giphvX7lcYtQqywD7DjiVmyXyDlWbQUEm59gvCOgvA=
+	t=1770133937; cv=none; b=azWWkbg03yQj5NKAcwJoUdHAvXm10U2kQq7JvOleJbgVAKD3ZKtNtuoXI8pWqxJMLpKbuOVETkYJ8jV7g1LrEOW8FAqbGHKAVQ+eTQi8SvuC7LRPRe7n6myHvgOphvSNDXt7Z0ezNpmXLNRrDRlSOaXVUy+kpBcp0WlBwgvdcGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770132324; c=relaxed/simple;
-	bh=ToXRXlFJkpvLLmf14Efrez1D31b+2qyQhzLWhUHbIr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXefX7osEmrfPsWqp/bbtnSkocOiE4MFYgFDdS7W+82W/qruplV8Nh0nsJH6lgBRSwfILkVXicacOTi/KevWyjswr30Pu3OD4OPN+8JhmBLWNBpDVwF2vWoAYbYY1ESWWw8uq5Oo+oqRemg4Feix0uIE7y4YcrmB6lYoud9OFdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YkPINvvU; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770133937; c=relaxed/simple;
+	bh=c+PJdy4orfXci6N7R2umRrXOpPfFe/MTVBm2spaN31w=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WNB9K64TJnSyJSOZxuNS+K2V97EosC8ee+1PyZTWgGkkbK3RnTVi2+LcyzRxw2T1i69im6oJue88niI/4Ee72J8E51VMRxLn6a5IvJ6Hum7qnfZyxUMgANBfza9YLqWFsbiXFaevGtisDWSPKkQm3h8MqTzvFju4wvZaWfiqsaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GInMIkGX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YkPINvvU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770132322; x=1801668322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ToXRXlFJkpvLLmf14Efrez1D31b+2qyQhzLWhUHbIr0=;
-  b=YkPINvvUEbN1SQmw2WHOXCOLo7aP4SssEgV35mKSPhoeLiTVCmTuvOAL
-   WlF07yv9URGIVMzwQsBVHt4JrpPUbYJubtpb7IivkSbQlbtpAPIbeLwzz
-   UkQZdwxKHWrnrX5pI903CRmps7V2gIThAbMEgFlRTKJj9x3ATI9ZDeDve
-   GDc3kwLQlOjCitxVPL1NzRW9KcwVo8wkQJTMbg3KE2kphX1Uunz0fmYVC
-   B9EtGvEBlROwDuY+vDzqrlO0BsgctYagIMv49PHIu+LpmWp1gzueHA9+4
-   u7rNAmA566y0urH+Lr2vH7c72c1O+75lxQGBzPuq6Q+TYKLoH+iMs+Ips
-   w==;
-X-CSE-ConnectionGUID: xam7HqnKT5iH6hZi4IAw5Q==
-X-CSE-MsgGUID: v+gdyWLOSMCXjeOyhdXdtg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="75162560"
-X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="75162560"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 07:25:22 -0800
-X-CSE-ConnectionGUID: iu8YvdZOSFi1c0a9bXr+Rw==
-X-CSE-MsgGUID: 1A3PdM6+T566Bej/M9wR+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="209580476"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 03 Feb 2026 07:25:19 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vnIHF-00000000gmC-3iin;
-	Tue, 03 Feb 2026 15:25:17 +0000
-Date: Tue, 3 Feb 2026 23:24:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Muhammad Amirul Asyraf Mohamad Jamian <muhammadamirulasyraf.mohamadjamian@altera.com>,
-	Dinh Nguyen <dinguyen@kernel.org>, linux-kernel@vger.kernel.org,
-	Ang Tien Sung <tien.sung.ang@altera.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RESEND] firmware: stratix10-svc: Add Multi SVC clients support
-Message-ID: <202602032325.MuglZ156-lkp@intel.com>
-References: <20260203025815.4526-1-muhammadamirulasyraf.mohamadjamian@altera.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GInMIkGX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770133935;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YzPq3oDXZLY5tgC2cDcHoxtzNKTI8bal8SywxOaWEcc=;
+	b=GInMIkGXZIYIEZqDpwMb8sF8rRPtkc3bu+JqUdVwfKasPGOGNsQfJjLJlRGfbuVMBfjrqn
+	z2gpyyfjhWtwjyFavdrzx4JPeziII2iVaRfh+ge6SftHUZ38AYhpxjinzBOMstx1iBDYFX
+	3k4ZXetDaV4urzLx0HOfl00gckXdIfU=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-329-PWUYJ1-5Me2LM9UQGY1nEQ-1; Tue,
+ 03 Feb 2026 10:52:14 -0500
+X-MC-Unique: PWUYJ1-5Me2LM9UQGY1nEQ-1
+X-Mimecast-MFC-AGG-ID: PWUYJ1-5Me2LM9UQGY1nEQ_1770133933
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D320195605F
+	for <llvm@lists.linux.dev>; Tue,  3 Feb 2026 15:52:13 +0000 (UTC)
+Received: from [172.20.163.214] (unknown [10.30.45.55])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EB5831956053;
+	Tue,  3 Feb 2026 15:52:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc8,
+ upstream-mainline, 6bd9ed02)
+Date: Tue, 03 Feb 2026 15:52:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260203025815.4526-1-muhammadamirulasyraf.mohamadjamian@altera.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <52490.126020310521400893@us-mta-329.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: L7-p6eQevSH7bdWwsUOSLJVRxfqGGx6or6Sqet_B5ok_1770133933
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Muhammad,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.19-rc8 next-20260202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Amirul-Asyraf-Mohamad-Jamian/firmware-stratix10-svc-Add-Multi-SVC-clients-support/20260203-110120
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260203025815.4526-1-muhammadamirulasyraf.mohamadjamian%40altera.com
-patch subject: [RESEND] firmware: stratix10-svc: Add Multi SVC clients support
-config: arm64-randconfig-003-20260203 (https://download.01.org/0day-ci/archive/20260203/202602032325.MuglZ156-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602032325.MuglZ156-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.19-rc8-fixes' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/tj/cgroup
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602032325.MuglZ156-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2302054918
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
+ at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
+:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
+            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
+0017.GAE@google.com/
+            Affected tests:
+                Boot test [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
 
->> drivers/firmware/stratix10-svc.c:1954:6: warning: variable 'svc' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1954 |         if (ret) {
-         |             ^~~
-   drivers/firmware/stratix10-svc.c:2042:22: note: uninitialized use occurs here
-    2042 |         platform_device_put(svc->stratix10_svc_rsu);
-         |                             ^~~
-   drivers/firmware/stratix10-svc.c:1954:2: note: remove the 'if' if its condition is always false
-    1954 |         if (ret) {
-         |         ^~~~~~~~~~
-    1955 |                 dev_err(dev, "failed to allocate FIFO\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1956 |                 goto err_async_exit;
-         |                 ~~~~~~~~~~~~~~~~~~~~
-    1957 |         }
-         |         ~
-   drivers/firmware/stratix10-svc.c:1899:27: note: initialize the variable 'svc' to silence this warning
-    1899 |         struct stratix10_svc *svc;
-         |                                  ^
-         |                                   = NULL
-   1 warning generated.
 
 
-vim +1954 drivers/firmware/stratix10-svc.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1891  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1892  static int stratix10_svc_drv_probe(struct platform_device *pdev)
-7ca5ce896524f5 Richard Gong                          2018-11-13  1893  {
-7ca5ce896524f5 Richard Gong                          2018-11-13  1894  	struct device *dev = &pdev->dev;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1895  	struct stratix10_svc_controller *controller;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1896  	struct stratix10_svc_chan *chans;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1897  	struct gen_pool *genpool;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1898  	struct stratix10_svc_sh_memory *sh_memory;
-b5dc75c915cdae Richard Gong                          2019-09-03  1899  	struct stratix10_svc *svc;
-b5dc75c915cdae Richard Gong                          2019-09-03  1900  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1901  	svc_invoke_fn *invoke_fn;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1902  	size_t fifo_size;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1903  	int ret;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1904  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1905  	/* get SMC or HVC function */
-7ca5ce896524f5 Richard Gong                          2018-11-13  1906  	invoke_fn = get_invoke_func(dev);
-7ca5ce896524f5 Richard Gong                          2018-11-13  1907  	if (IS_ERR(invoke_fn))
-7ca5ce896524f5 Richard Gong                          2018-11-13  1908  		return -EINVAL;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1909  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1910  	sh_memory = devm_kzalloc(dev, sizeof(*sh_memory), GFP_KERNEL);
-7ca5ce896524f5 Richard Gong                          2018-11-13  1911  	if (!sh_memory)
-7ca5ce896524f5 Richard Gong                          2018-11-13  1912  		return -ENOMEM;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1913  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1914  	sh_memory->invoke_fn = invoke_fn;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1915  	ret = svc_get_sh_memory(pdev, sh_memory);
-7ca5ce896524f5 Richard Gong                          2018-11-13  1916  	if (ret)
-7ca5ce896524f5 Richard Gong                          2018-11-13  1917  		return ret;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1918  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1919  	genpool = svc_create_memory_pool(pdev, sh_memory);
-e1d6ca042e62c2 Dan Carpenter                         2023-04-19  1920  	if (IS_ERR(genpool))
-e1d6ca042e62c2 Dan Carpenter                         2023-04-19  1921  		return PTR_ERR(genpool);
-7ca5ce896524f5 Richard Gong                          2018-11-13  1922  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1923  	/* allocate service controller and supporting channel */
-7ca5ce896524f5 Richard Gong                          2018-11-13  1924  	controller = devm_kzalloc(dev, sizeof(*controller), GFP_KERNEL);
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1925  	if (!controller) {
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1926  		ret = -ENOMEM;
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1927  		goto err_destroy_pool;
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1928  	}
-7ca5ce896524f5 Richard Gong                          2018-11-13  1929  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1930  	chans = devm_kmalloc_array(dev, SVC_NUM_CHANNEL,
-7ca5ce896524f5 Richard Gong                          2018-11-13  1931  				   sizeof(*chans), GFP_KERNEL | __GFP_ZERO);
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1932  	if (!chans) {
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1933  		ret = -ENOMEM;
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1934  		goto err_destroy_pool;
-9175ee1a99d57e Yang Yingliang                        2022-11-29  1935  	}
-7ca5ce896524f5 Richard Gong                          2018-11-13  1936  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1937  	controller->dev = dev;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1938  	controller->num_chans = SVC_NUM_CHANNEL;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1939  	controller->num_active_client = 0;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1940  	controller->chans = chans;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1941  	controller->genpool = genpool;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1942  	controller->invoke_fn = invoke_fn;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1943  	init_completion(&controller->complete_status);
-7ca5ce896524f5 Richard Gong                          2018-11-13  1944  
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1945  	ret = stratix10_svc_async_init(controller);
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1946  	if (ret) {
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1947  		dev_dbg(dev, "Intel Service Layer Driver: Error on stratix10_svc_async_init %d\n",
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1948  			ret);
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1949  		goto err_destroy_pool;
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1950  	}
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1951  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1952  	fifo_size = sizeof(struct stratix10_svc_data) * SVC_NUM_DATA_IN_FIFO;
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1953  	ret = kfifo_alloc(&chans->svc_fifo, fifo_size, GFP_KERNEL);
-7ca5ce896524f5 Richard Gong                          2018-11-13 @1954  	if (ret) {
-b5dc75c915cdae Richard Gong                          2019-09-03  1955  		dev_err(dev, "failed to allocate FIFO\n");
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  1956  		goto err_async_exit;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1957  	}
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1958  	spin_lock_init(&chans->svc_fifo_lock);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1959  	/*
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1960  	 * This mutex is used to block threads from utilizing
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1961  	 * SDM to prevent out of order command tx
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1962  	 */
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1963  	controller->sdm_lock = &mailbox_lock;
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1964  
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1965  	fifo_size = sizeof(struct stratix10_svc_data) * SVC_NUM_DATA_IN_FIFO;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1966  
-7ca5ce896524f5 Richard Gong                          2018-11-13  1967  	chans[0].scl = NULL;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1968  	chans[0].ctrl = controller;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1969  	chans[0].name = SVC_CLIENT_FPGA;
-7ca5ce896524f5 Richard Gong                          2018-11-13  1970  	spin_lock_init(&chans[0].lock);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1971  	ret = kfifo_alloc(&chans[0].svc_fifo, fifo_size, GFP_KERNEL);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1972  	if (ret) {
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1973  		dev_err(dev, "failed to allocate FIFO 0\n");
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1974  		return ret;
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1975  	}
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1976  	spin_lock_init(&chans[0].svc_fifo_lock);
-7ca5ce896524f5 Richard Gong                          2018-11-13  1977  
-6b50d882d38d5a Richard Gong                          2018-11-13  1978  	chans[1].scl = NULL;
-6b50d882d38d5a Richard Gong                          2018-11-13  1979  	chans[1].ctrl = controller;
-6b50d882d38d5a Richard Gong                          2018-11-13  1980  	chans[1].name = SVC_CLIENT_RSU;
-6b50d882d38d5a Richard Gong                          2018-11-13  1981  	spin_lock_init(&chans[1].lock);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1982  	ret = kfifo_alloc(&chans[1].svc_fifo, fifo_size, GFP_KERNEL);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1983  	if (ret) {
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1984  		dev_err(dev, "failed to allocate FIFO 1\n");
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1985  		return ret;
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1986  	}
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1987  	spin_lock_init(&chans[1].svc_fifo_lock);
-6b50d882d38d5a Richard Gong                          2018-11-13  1988  
-e6281c26674e03 Ang Tien Sung                         2022-07-11  1989  	chans[2].scl = NULL;
-e6281c26674e03 Ang Tien Sung                         2022-07-11  1990  	chans[2].ctrl = controller;
-e6281c26674e03 Ang Tien Sung                         2022-07-11  1991  	chans[2].name = SVC_CLIENT_FCS;
-e6281c26674e03 Ang Tien Sung                         2022-07-11  1992  	spin_lock_init(&chans[2].lock);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1993  	ret = kfifo_alloc(&chans[2].svc_fifo, fifo_size, GFP_KERNEL);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1994  	if (ret) {
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1995  		dev_err(dev, "failed to allocate FIFO 2\n");
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1996  		return ret;
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1997  	}
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  1998  	spin_lock_init(&chans[2].svc_fifo_lock);
-e6281c26674e03 Ang Tien Sung                         2022-07-11  1999  
-4f49088c162579 Khairul Anuar Romli                   2025-10-08  2000  	chans[3].scl = NULL;
-4f49088c162579 Khairul Anuar Romli                   2025-10-08  2001  	chans[3].ctrl = controller;
-4f49088c162579 Khairul Anuar Romli                   2025-10-08  2002  	chans[3].name = SVC_CLIENT_HWMON;
-4f49088c162579 Khairul Anuar Romli                   2025-10-08  2003  	spin_lock_init(&chans[3].lock);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2004  	ret = kfifo_alloc(&chans[3].svc_fifo, fifo_size, GFP_KERNEL);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2005  	if (ret) {
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2006  		dev_err(dev, "failed to allocate FIFO 3\n");
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2007  		return ret;
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2008  	}
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2009  	spin_lock_init(&chans[3].svc_fifo_lock);
-4f49088c162579 Khairul Anuar Romli                   2025-10-08  2010  
-7ca5ce896524f5 Richard Gong                          2018-11-13  2011  	list_add_tail(&controller->node, &svc_ctrl);
-7ca5ce896524f5 Richard Gong                          2018-11-13  2012  	platform_set_drvdata(pdev, controller);
-7ca5ce896524f5 Richard Gong                          2018-11-13  2013  
-b5dc75c915cdae Richard Gong                          2019-09-03  2014  	/* add svc client device(s) */
-b5dc75c915cdae Richard Gong                          2019-09-03  2015  	svc = devm_kzalloc(dev, sizeof(*svc), GFP_KERNEL);
-d99247f9b54253 Christophe JAILLET                    2021-05-21  2016  	if (!svc) {
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2017  		return -ENOMEM;
-d99247f9b54253 Christophe JAILLET                    2021-05-21  2018  	}
-d0fcf70c680e4d Khairul Anuar Romli                   2025-11-03  2019  	controller->svc = svc;
-b5dc75c915cdae Richard Gong                          2019-09-03  2020  
-b5dc75c915cdae Richard Gong                          2019-09-03  2021  	svc->stratix10_svc_rsu = platform_device_alloc(STRATIX10_RSU, 0);
-b5dc75c915cdae Richard Gong                          2019-09-03  2022  	if (!svc->stratix10_svc_rsu) {
-b5dc75c915cdae Richard Gong                          2019-09-03  2023  		dev_err(dev, "failed to allocate %s device\n", STRATIX10_RSU);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2024  		return -ENOMEM;
-b5dc75c915cdae Richard Gong                          2019-09-03  2025  	}
-b5dc75c915cdae Richard Gong                          2019-09-03  2026  
-b5dc75c915cdae Richard Gong                          2019-09-03  2027  	ret = platform_device_add(svc->stratix10_svc_rsu);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2028  	if (ret)
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2029  		goto err_put_device;
-d99247f9b54253 Christophe JAILLET                    2021-05-21  2030  
-4d239f447f96bd Mahesh Rao                            2025-03-26  2031  	ret = of_platform_default_populate(dev_of_node(dev), NULL, dev);
-4d239f447f96bd Mahesh Rao                            2025-03-26  2032  	if (ret)
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2033  		goto err_put_device;
-4d239f447f96bd Mahesh Rao                            2025-03-26  2034  
-7ca5ce896524f5 Richard Gong                          2018-11-13  2035  	pr_info("Intel Service Layer Driver Initialized\n");
-7ca5ce896524f5 Richard Gong                          2018-11-13  2036  
-d99247f9b54253 Christophe JAILLET                    2021-05-21  2037  	return 0;
-d99247f9b54253 Christophe JAILLET                    2021-05-21  2038  
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  2039  err_async_exit:
-bcb9f4f0706147 Mahesh Rao                            2025-10-27  2040  	stratix10_svc_async_exit(controller);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2041  err_put_device:
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2042  	platform_device_put(svc->stratix10_svc_rsu);
-9175ee1a99d57e Yang Yingliang                        2022-11-29  2043  err_destroy_pool:
-9175ee1a99d57e Yang Yingliang                        2022-11-29  2044  	gen_pool_destroy(genpool);
-1b2cdbfded37a9 Muhammad Amirul Asyraf Mohamad Jamian 2026-02-02  2045  
-7ca5ce896524f5 Richard Gong                          2018-11-13  2046  	return ret;
-7ca5ce896524f5 Richard Gong                          2018-11-13  2047  }
-7ca5ce896524f5 Richard Gong                          2018-11-13  2048  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
