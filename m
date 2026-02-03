@@ -1,56 +1,64 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393752A1B2
-	for <llvm@lists.linux.dev>; Tue,  3 Feb 2026 04:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770091467; cv=pass; b=IcAvhgex4TbkMxoeIvdOG2AG64CcXreFcNu+bz5KEbD3VvdugAIQDjPwVZeT7olPUiZoZdL15ZKbyy7VNaXwrzG6gIZw9/YM8KxNs7jK/WWbWihN9tkNmje5NZCQtqaa908DQvFy47qyhCZ0eiC4TN0lad+LrnNaeaIFMXQcvPU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770091467; c=relaxed/simple;
-	bh=1eIJCnwpG3fEI13IN5/UWVlQu67xDoqAtLU5dZDOjCY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A49D1EFF8D;
+	Tue,  3 Feb 2026 05:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770097854; cv=none; b=ehXFPUKhbSxtuc4dK/ZGbk9mSizOmVVhV11uu/6frqcnANqYSfafN/JdpqJ1V1SrFe467K8/g2X4OKSQ1u7RnLX1J7YJIYZVtl+k/yGXabzswjcRjQhm5AS4xS86MlXxOtfLAkQKHyTGUPJ+mIZ5ag6xtxD6Gx6AOUaVke+RrWw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770097854; c=relaxed/simple;
+	bh=R4/T1JPDNssUWxQKWrMIA1gEXisPdKvlM4Lnu1iKzUA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=my3xYb3sWmOSzWHPi/pVFT2GQ0oTaBqXYBYZgmS3GEqi7+7yJopQJzU19Z/dMqGAkywbKV+B1JvZDUH96XWjxZzyfJjUzCMIB8RUHYcKRVj8rIDnInvlTAe4+IsFk5a7+9DA++qkWdDIrCLos+nYR1Et8+6ZCIz3YvOQtC0/k8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=Y5SfD9i1; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
+	 Content-Type:Content-Disposition:In-Reply-To; b=tqRbP757Jr4t++oCXk0RWhOwYqOgnuyQhkYLRGVI7H1ieX5jFNeH1/8A7A8LKdmZCJ1Rd84l/vWEBrhmaSPGqJcsx3Dmo9gXIDwEoqEXfwZuhdsfAa5UugTLWBCYRSTIwdTu+b6v01D/ktzLxvAaVvWjbrTDJ6b6DJc83Y2jGz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DuDhit+7; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="Y5SfD9i1"
-ARC-Seal: i=1; a=rsa-sha256; t=1770091447; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=LH2Oa70oPB3xIqfvi7hmqNWuxhnkznFdqMVeQB1orN6rMax+y1hFv/mg0ZEogV8+JiBSw/OV4hXyeuSUw+s9FPCZHp0j4xiHScTkJLdTROmZ6nQ8mU2rJ8Us65y/g1BOfnTzhpk6d4dvDrMk1MdJ87Voua9+TALlFSGBv2pXCYg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1770091447; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=HqjrzV9VLiYP7Os7B9pW1XVgOX/Y/ejuRgPMFQPKpl8=; 
-	b=bGZubk6kvoGkz2yLVxBcd6FG0IKMSsEGCsfb/x5LnecdSjM15qP43T4ig2c7gwXxNySQaf6O1qqh0LUzj9MLz04WiR7cenKEnogdQ2msWcGRP8Yg4R6bCrLplV7TWsBcQqCNtcBPiQBSL3L7LnoYsFGjMNbP3MWjXwedppL/Apo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=ziyao.cc;
-	spf=pass  smtp.mailfrom=me@ziyao.cc;
-	dmarc=pass header.from=<me@ziyao.cc>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770091447;
-	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=HqjrzV9VLiYP7Os7B9pW1XVgOX/Y/ejuRgPMFQPKpl8=;
-	b=Y5SfD9i1OhbW0ZTJJ+R8k4OHsd5pFP/6fvSFNmttGkKvVx8FhKeUHxyacpB5S4aX
-	SF/naeMZEd4nXTEE2xe/YpfuZphA+ZiqPCvNm1i6DyRsxGxanS6xh6JQAGUiANJ2LJi
-	ynKAn4bM79qtueYKAxmsCU1c+Z8k5rm+JMetkKC4=
-Received: by mx.zohomail.com with SMTPS id 1770091444163640.562144038487;
-	Mon, 2 Feb 2026 20:04:04 -0800 (PST)
-Date: Tue, 3 Feb 2026 04:03:58 +0000
-From: Yao Zi <me@ziyao.cc>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
- register variable
-Message-ID: <aYFzrjOV91rBUEB4@pie>
-References: <20260118090235.60670-1-me@ziyao.cc>
- <20260202232309.GA1070900@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DuDhit+7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770097853; x=1801633853;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R4/T1JPDNssUWxQKWrMIA1gEXisPdKvlM4Lnu1iKzUA=;
+  b=DuDhit+77M6OG2QJMAOSLqrY5y+3C6/2aHMKD2axV4XsYEbYMKSkUN1W
+   FRlTVdjZb9P8d54POXwTuBzV6jf4b365uWjonT+X+wwcidc8GcHv75gZZ
+   pt07Xc8CEe65kt9gR+3ojpKzslOBf8xaX6tnphn9RwmGRcORBYizRyOfD
+   eGmECAIcObyJC1pfLXry7/UbojhJxT0RU7m6sI0rB1XchNmAF2HX67TKl
+   FtkHzKOa4WOR7Caj7XblHc6Z2nYO7jKwjtl182MUUw96fQ4aPvaf5psTt
+   Dc74JfcpEGO1V+C8tRY16S8BbRxPnG8Y8SFU05RljG/Qp+AHLU91idaQM
+   g==;
+X-CSE-ConnectionGUID: 7u67pWibRPm64ei7oY8WZQ==
+X-CSE-MsgGUID: tMY6rUTERL2dyhwNsZA8vA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="71169004"
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="71169004"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2026 21:50:51 -0800
+X-CSE-ConnectionGUID: HnwoMS9cQoaZHOsMClvWrg==
+X-CSE-MsgGUID: nSx1lPSWQMWdqkOhq05T+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="208840769"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 02 Feb 2026 21:50:49 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vn9JG-00000000gIq-0Zgx;
+	Tue, 03 Feb 2026 05:50:46 +0000
+Date: Tue, 3 Feb 2026 13:50:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: "jempty.liang" <imntjempty@163.com>, rostedt@goodmis.org,
+	mhiramat@kernel.org, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	"jempty.liang" <imntjempty@163.com>
+Subject: Re: [PATCH v2] tracing: Fix funcgraph_exit calltime/rettime offset
+ for 32-bit ARM
+Message-ID: <202602031332.eQ1Jm69n-lkp@intel.com>
+References: <20260202123342.2544795-1-imntjempty@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,134 +67,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260202232309.GA1070900@ax162>
-X-ZohoMailClient: External
+In-Reply-To: <20260202123342.2544795-1-imntjempty@163.com>
 
-On Mon, Feb 02, 2026 at 04:23:09PM -0700, Nathan Chancellor wrote:
-> On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
-> > On MIPS, __current_thread_info is defined as global register variable
-> > locating in $gp, and is simply assigned with new address during kernel
-> > relocation.
-> > 
-> > This however is broken with LLVM, which always restores $gp if it finds
-> > $gp is clobbered in any form, including when intentionally through a
-> > global register variable. This is against GCC's documentation[1], which
-> > requires a callee-saved register used as global register variable not to
-> > be restored if it's clobbered.
-> > 
-> > As a result, $gp will continue to point to the unrelocated kernel after
-> > the epilog of relocate_kernel(), leading to an early crash in init_idle,
-> > 
-> > [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-> > [    0.000000] Oops[#1]:
-> > [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-> > [    0.000000] Tainted: [W]=WARN
-> > [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-> > [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-> > [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-> > [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-> > [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-> > [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-> > [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-> > [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-> > [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-> > [    0.000000] Hi    : 0000000000000000
-> > [    0.000000] Lo    : 0000000000000000
-> > [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-> > [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-> > [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-> > [    0.000000] Cause : 00000008 (ExcCode 02)
-> > [    0.000000] BadVA : 0000000000000000
-> > [    0.000000] PrId  : 00006305 (ICT Loongson-3)
-> > [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-> > [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-> > [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-> > [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-> > [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-> > [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-> > [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-> > [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> > [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-> > [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> > [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-> > [    0.000000]         ...
-> > [    0.000000] Call Trace:
-> > [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-> > [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-> > [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
-> > 
-> > This bug has been reported to LLVM[2] and affects version from (at
-> > least) 18 to 21. Let's work around this by using inline assembly to
-> > assign $gp before a fix is widely available.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-> > Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-> > Signed-off-by: Yao Zi <me@ziyao.cc>
-> 
-> Acked-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Hopefully the MIPS LLVM folks can look into this (even though I think
-> the MIPS backend is one of the less maintained backends in LLVM).
+Hi jempty.liang,
 
-Sigh...
+kernel test robot noticed the following build errors:
 
-> > ---
-> >  arch/mips/kernel/relocate.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> > 
-> > diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-> > index 7f1c136ad850..12aa0bbdd65e 100644
-> > --- a/arch/mips/kernel/relocate.c
-> > +++ b/arch/mips/kernel/relocate.c
-> > @@ -420,7 +420,18 @@ void *__init relocate_kernel(void)
-> >  			goto out;
-> >  
-> >  		/* The current thread is now within the relocated image */
-> > +#ifndef CONFIG_CC_IS_CLANG
-> 
-> I find
-> 
->   #ifdef FOO
->   <FOO block>
->   #else
->   <!FOO block>
->   #endif
-> 
-> to be easier to read and process
-> 
->   #ifndef FOO
->   <!FOO block>
->   #else
->   <FOO block>
->   #endif
-> 
-> but maybe that it is just personal preference.
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.19-rc8 next-20260202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I preferred to put Clang's workaround later, since
+url:    https://github.com/intel-lab-lkp/linux/commits/jempty-liang/tracing-Fix-funcgraph_exit-calltime-rettime-offset-for-32-bit-ARM/20260202-203926
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20260202123342.2544795-1-imntjempty%40163.com
+patch subject: [PATCH v2] tracing: Fix funcgraph_exit calltime/rettime offset for 32-bit ARM
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260203/202602031332.eQ1Jm69n-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602031332.eQ1Jm69n-lkp@intel.com/reproduce)
 
-> >  		__current_thread_info = RELOCATED(&init_thread_union);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602031332.eQ1Jm69n-lkp@intel.com/
 
-this simple assignment is easier to read and more clear than the inline
-assembly, and matching the comment
+All errors (new ones prefixed by >>):
 
-	/* The current thread is now within the relocated image */
+>> kernel/trace/trace_sched_wakeup.c:172:46: error: too many arguments to function call, expected 3, have 5
+     172 |                 __trace_graph_return(tr, trace, trace_ctx, *calltime, rettime);
+         |                 ~~~~~~~~~~~~~~~~~~~~                       ^~~~~~~~~~~~~~~~~~
+   kernel/trace/trace.h:969:13: note: '__trace_graph_return' declared here
+     969 | extern void __trace_graph_return(struct trace_array *tr,
+         |             ^                    ~~~~~~~~~~~~~~~~~~~~~~~
+     970 |                                  struct ftrace_graph_ret *trace,
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     971 |                                  unsigned int trace_ctx);
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-better. But yes, this is basically a personal preference, and I'm happy
-with both. Please tell me if you do prefer the other.
 
-> > +#else
-> > +		/*
-> > +		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
-> > +		 * intentionally modified. Work around this by using inline
-> > +		 * assembly to assign $gp. $gp couldn't be listed as output or
-> > +		 * clobber, or LLVM will still restore its original value.
-> 
-> This comment should likely include a link to the LLVM upstream report to
-> make it easier to version restrict this workaround when fixed in the
-> future.
+vim +172 kernel/trace/trace_sched_wakeup.c
 
-Sure, will do it in v2. Thanks for the feedback!
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  150  
+37238abe3cb47b Steven Rostedt (VMware    2024-06-03  151) static void wakeup_graph_return(struct ftrace_graph_ret *trace,
+2ca8c112c9676e Masami Hiramatsu (Google  2024-12-26  152) 				struct fgraph_ops *gops,
+2ca8c112c9676e Masami Hiramatsu (Google  2024-12-26  153) 				struct ftrace_regs *fregs)
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  154  {
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  155  	struct trace_array *tr = wakeup_trace;
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  156  	struct trace_array_cpu *data;
+36590c50b2d072 Sebastian Andrzej Siewior 2021-01-25  157  	unsigned int trace_ctx;
+a485ea9e3ef31a Steven Rostedt            2025-01-13  158  	u64 *calltime;
+66611c04757096 Steven Rostedt            2025-01-21  159  	u64 rettime;
+a485ea9e3ef31a Steven Rostedt            2025-01-13  160  	int size;
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  161  
+12117f3307b63f Steven Rostedt (VMware    2024-06-03  162) 	ftrace_graph_addr_finish(gops, trace);
+5cf99a0f3161bc Steven Rostedt (VMware    2018-11-29  163) 
+36590c50b2d072 Sebastian Andrzej Siewior 2021-01-25  164  	if (!func_prolog_preempt_disable(tr, &data, &trace_ctx))
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  165  		return;
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  166  
+77a67833e830fd jempty.liang              2026-02-02  167  	trace->rettime = trace_clock_local();
+66611c04757096 Steven Rostedt            2025-01-21  168  
+a485ea9e3ef31a Steven Rostedt            2025-01-13  169  	calltime = fgraph_retrieve_data(gops->idx, &size);
+77a67833e830fd jempty.liang              2026-02-02  170  	if (calltime) {
+77a67833e830fd jempty.liang              2026-02-02  171  		trace->calltime = *calltime;
+66611c04757096 Steven Rostedt            2025-01-21 @172  		__trace_graph_return(tr, trace, trace_ctx, *calltime, rettime);
+77a67833e830fd jempty.liang              2026-02-02  173  	}
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  174  
+4f7bf54b07e5ac Steven Rostedt            2025-10-08  175  	local_dec(&data->disabled);
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  176  	preempt_enable_notrace();
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  177  	return;
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  178  }
+7495a5beaa22f1 Jiri Olsa                 2010-09-23  179  
 
-Best regards,
-Yao Zi
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
