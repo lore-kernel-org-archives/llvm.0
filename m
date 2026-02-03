@@ -1,73 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB96833D502;
-	Tue,  3 Feb 2026 12:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A5C3451D5;
+	Tue,  3 Feb 2026 12:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770120795; cv=none; b=ZD5Ya22vpgw2VKvhP2NeJNwSch9QyyR25GJP6HT1d9Soz7+W1bHlf1xz/Ai08g87SFeZvFenU5jmboN+P+9V8Am1VBq5SRndqhQ/aRxAa+KqC3NQ9ReUolUVUxSNkTMBcnpMVI66r7XOT0POMjifdy+KHtfamNQDDs46KRYqDlM=
+	t=1770122652; cv=none; b=ufq36LvrMNg8lg06G4JtSBOzpwSdasC74DhRcbM8vRTyE/QrxphBNxPa1WR4eGSNM7TaawwaGNzRCcleLocchJwufNR34uQKUJ07HRgd/uXW01PyD9NCXWa8UferwjKbklR7YqhbcwRkzeHP1NpWBOnUmUPEl8mrlD9w9vlK+HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770120795; c=relaxed/simple;
-	bh=EJ3LnE8q3TaYue/6JRSSE8ScZ+X65Vqv7A3J1Op26pU=;
+	s=arc-20240116; t=1770122652; c=relaxed/simple;
+	bh=nv+0yAgc7A7ZnrmTCcsOyGr+oj3RtRlG3oFkE6//31c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KTxN1JAK7sN6kjdUMmasceaagdu2OXVt0nL3w0b4z84PqMIM95OTbSfYPWBR9RrNkGICQ6VU0Jee3u4RPFn6KIBQec6Vx70PQkSJqAWJBvarhNOTP5t9wvRL35OCIgGrNSaXfrQRN6QYd/g2ufopreFlnvajBog2myfVMIv698A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hbRIJimc; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=g4JhT6+xTfo3CAQbw6VbuR03SxIQw7ZsQ9HNPCQHVcRrNf5e0Fp26yH2FbluOftUwhF15944iHyRv08j7oz6GEIEJtd5GIOUZXpir/n2VsMZDs7XSLNzgYPs4fLpAXayCUMAtZosf1sToqbnI5kbFerhTMuLD9RB7RbkL1sQ1ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tko51Hg/; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hbRIJimc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tko51Hg/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770120792; x=1801656792;
+  t=1770122650; x=1801658650;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=EJ3LnE8q3TaYue/6JRSSE8ScZ+X65Vqv7A3J1Op26pU=;
-  b=hbRIJimcQ3ZBWA59OdbggXsaAb370HFA/MDeLxfTkVPFpXbx0TcPyuWW
-   T9Uqa3UsvChP9+hbFlkRoHLk7WV6QlnP8YM51VVZGP26Y7VY4MX2bV9hS
-   hs5gGayk6iz3e8wDT13HAppmXEQJq18SewOIRGe+qadzxjqtMokzVO2aq
-   qP2xDbuJQdeLybkuA40BYGyp4NPHwnPi0FHtqrD+6bHxLlTht5+5vyLBX
-   HVoR1v/i6oWWEMyYEbWFn+VLibq+thQ5PN1i5SaQuAgKl4SlG5DtZQpVM
-   7VJgcxcS2j+Xv3C6wXoCgktNbUW4GKzLtA+mkauiaSIOGsoIWRrTLKZRP
-   A==;
-X-CSE-ConnectionGUID: AORVjIcATcugiCLbJk/ewA==
-X-CSE-MsgGUID: S0nzdlXZQ4OwJAEnKeBFLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="58869528"
+  bh=nv+0yAgc7A7ZnrmTCcsOyGr+oj3RtRlG3oFkE6//31c=;
+  b=Tko51Hg/aS0CMGYItqieuLznaxbL1S656nAvkkm7BzBmEolRcF6fszYP
+   D8qoZusvgpuBPWc+jPZEBIbA00xbdaPmsJgUg5Eb4s/dAww9TwKssxM82
+   KqTjSB1YyxO6qFDP/Cevbri1JIfB7tZGm8MrjTtadBB8D9W7xx4sLid1t
+   JqOX+9Bw5y4hrCU4+CkyFTxGxrymDuOcY0vh0Q8boRALp3SXQBVQ/frZG
+   +CO2LELYb97EnerlJOpeGpWnLigvECQITT6/fm4/6/iVSVIQxntthmwFc
+   n24xRwarHUgydEFb44IuVfWVdn7FefLGo8V6HySsy8KjBc12EG52xrBOJ
+   Q==;
+X-CSE-ConnectionGUID: gJ0TofnGQbWWcMQYgowyCA==
+X-CSE-MsgGUID: FzapRpXnR+2xOu+tdveiDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="82664581"
 X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="58869528"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 04:13:11 -0800
-X-CSE-ConnectionGUID: fQ0yhWwURwO+qWpT5qZTOA==
-X-CSE-MsgGUID: 6CdExaoMTyel01JhIX6pkA==
+   d="scan'208";a="82664581"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 04:44:10 -0800
+X-CSE-ConnectionGUID: fH4M/HNcQaCn8XOaQXzafQ==
+X-CSE-MsgGUID: O2xh9mAaSD65EfJvpBCdig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="209250856"
+   d="scan'208";a="209935124"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Feb 2026 04:13:07 -0800
+  by orviesa007.jf.intel.com with ESMTP; 03 Feb 2026 04:44:08 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vnFHE-00000000gcK-1HST;
-	Tue, 03 Feb 2026 12:13:04 +0000
-Date: Tue, 3 Feb 2026 20:12:57 +0800
+	id 1vnFlG-00000000geW-0cz8;
+	Tue, 03 Feb 2026 12:44:06 +0000
+Date: Tue, 3 Feb 2026 20:43:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Simon Horman <horms@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	Anna Schumaker <anna.schumaker@oracle.com>,
-	Chuck Lever <chuck.lever@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Yury Norov <ynorov@nvidia.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: remove __printf() attribute on
- __ftrace_vbprintk()
-Message-ID: <202602032036.FQK7gJvV-lkp@intel.com>
-References: <20260202095834.1328352-1-arnd@kernel.org>
+To: gutierrez.asier@huawei-partners.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v1 3/4] mm/damon: New module with hot application
+ detection
+Message-ID: <202602032000.vcEAle6A-lkp@intel.com>
+References: <20260202145650.1795854-4-gutierrez.asier@huawei-partners.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,63 +63,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260202095834.1328352-1-arnd@kernel.org>
+In-Reply-To: <20260202145650.1795854-4-gutierrez.asier@huawei-partners.com>
 
-Hi Arnd,
+Hi,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on next-20260130]
-[cannot apply to trace/for-next linus/master v6.19-rc8 v6.19-rc7 v6.19-rc6 v6.19-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/tracing-remove-__printf-attribute-on-__ftrace_vbprintk/20260202-180958
-base:   next-20260130
-patch link:    https://lore.kernel.org/r/20260202095834.1328352-1-arnd%40kernel.org
-patch subject: [PATCH] tracing: remove __printf() attribute on __ftrace_vbprintk()
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260203/202602032036.FQK7gJvV-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602032036.FQK7gJvV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/gutierrez-asier-huawei-partners-com/mm-damon-Generic-context-creation-for-modules/20260202-230022
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260202145650.1795854-4-gutierrez.asier%40huawei-partners.com
+patch subject: [RFC PATCH v1 3/4] mm/damon: New module with hot application detection
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260203/202602032000.vcEAle6A-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602032000.vcEAle6A-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602032036.FQK7gJvV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602032000.vcEAle6A-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/trace_printk.c:212:34: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of '__trace_bprintk' [-Wmissing-format-attribute]
-     212 |         ret = trace_vbprintk(ip, fmt, ap);
-         |                                         ^
-   include/linux/trace_printk.h:110:5: note: '__trace_bprintk' declared here
-     110 | int __trace_bprintk(unsigned long ip, const char *fmt, ...);
-         |     ^
+>> mm/damon/dynamic_hugepages.c:571:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     571 |         if (enabled)
+         |             ^~~~~~~
+   mm/damon/dynamic_hugepages.c:574:6: note: uninitialized use occurs here
+     574 |         if (err && enabled)
+         |             ^~~
+   mm/damon/dynamic_hugepages.c:571:2: note: remove the 'if' if its condition is always true
+     571 |         if (enabled)
+         |         ^~~~~~~~~~~~
+     572 |                 err = damon_dynamic_hotpages_turn(true);
+   mm/damon/dynamic_hugepages.c:568:9: note: initialize the variable 'err' to silence this warning
+     568 |         int err;
+         |                ^
+         |                 = 0
    1 warning generated.
 
 
-vim +212 kernel/trace/trace_printk.c
+vim +571 mm/damon/dynamic_hugepages.c
 
-1ba28e02a18cbd kernel/trace/trace_bprintk.c Lai Jiangshan            2009-03-06  199  
-48ead02030f849 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-12  200  int __trace_bprintk(unsigned long ip, const char *fmt, ...)
-1427cdf0592368 kernel/trace/trace_bprintk.c Lai Jiangshan            2009-03-06  201  {
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  202  	int ret;
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  203  	va_list ap;
-1427cdf0592368 kernel/trace/trace_bprintk.c Lai Jiangshan            2009-03-06  204  
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  205  	if (unlikely(!fmt))
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  206  		return 0;
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  207  
-b9f9108cad3998 kernel/trace/trace_printk.c  Steven Rostedt (Red Hat  2015-09-29  208) 	if (!trace_printk_enabled)
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  209  		return 0;
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  210  
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  211  	va_start(ap, fmt);
-40ce74f19c2807 kernel/trace/trace_printk.c  Steven Rostedt           2009-03-19 @212  	ret = trace_vbprintk(ip, fmt, ap);
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  213  	va_end(ap);
-769b0441f438c4 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-06  214  	return ret;
-1427cdf0592368 kernel/trace/trace_bprintk.c Lai Jiangshan            2009-03-06  215  }
-48ead02030f849 kernel/trace/trace_printk.c  Frederic Weisbecker      2009-03-12  216  EXPORT_SYMBOL_GPL(__trace_bprintk);
-1427cdf0592368 kernel/trace/trace_bprintk.c Lai Jiangshan            2009-03-06  217  
+   561	
+   562	module_param_cb(enabled, &enabled_param_ops, &enabled, 0600);
+   563	MODULE_PARM_DESC(enabled,
+   564		"Enable or disable DAMON_DYNAMIC_HUGEPAGES (default: disabled)");
+   565	
+   566	static int __init damon_dynamic_hotpages_init(void)
+   567	{
+   568		int err;
+   569	
+   570		/* 'enabled' has set before this function, probably via command line */
+ > 571		if (enabled)
+   572			err = damon_dynamic_hotpages_turn(true);
+   573	
+   574		if (err && enabled)
+   575			enabled = false;
+   576		return err;
+   577	}
+   578	
 
 -- 
 0-DAY CI Kernel Test Service
