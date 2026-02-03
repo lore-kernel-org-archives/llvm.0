@@ -1,72 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DD1EADC;
-	Tue,  3 Feb 2026 17:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654782F3C34;
+	Tue,  3 Feb 2026 17:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770139072; cv=none; b=XRMRi6RQtJhNSXwNHbpTd/1gRu9NGBwvXIUmcu4FtArgb7x2GlZ0lpPIM96ypsQYhxFcUQ79hnzw4HTvnK3afFJzdOZqTwEWBcbR08H8YhVu4NZshnzzCaTUZYYwFCZamn8jyOXL8nEgFBJKpP3hXs6W12QyKlJywXAgrR2Qfa0=
+	t=1770139956; cv=none; b=NIw2AjZ0bisYlGcwX2ynmBuyUAGIsTDlRvvSQXF5UKKkDalKMWhwcXH7BAVgPUFzykfxCYABrvXvW6d/wSbxLUN6RZdovMUmLD1oj8s6e93qyb4NCD/kR+D9kKZIX8eG6QPoI9v5uDFR3TBdZOu0Bfd0r+uR4CGQOdDA6lcHXrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770139072; c=relaxed/simple;
-	bh=v0lDm9YgstKw6NIqXo1gHAVbHj1ebjoVADNi9DqILIA=;
+	s=arc-20240116; t=1770139956; c=relaxed/simple;
+	bh=zOUHPvPYgAED+5chP8L8z0Gl/CW+3EmlWHBnR1pXUuA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n6zoj7UFa9G425Fq742P/dpYqGgeDeZqcUqASbq7QstUfrbtkesamZyyHZT7oXhShPozUaCqKch7qfYQ6j4OlmmnQ/VOEj2x+0g9S0iTlAhYe8ctjBlDp0uVvH2m22bXZth2E27ncTydR6ctrR32zhZpjey+bWAoOYH1+4ZCgkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GKNtxDZ4; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cG2WLmIhGNoXaswrt6rqnkUQWTAhOUKtftMyisXa4ED/2eu/w9UWO8NzV+DPuzuXLArotWS69OS+4dOXfqfVfxRPx/XqBFMyt22c61EFAZD0gqUWZZ3KfwqQ/xwR5wTf9SOD/Ls88xxLf48dzSknJzFTRR4LFNGWb51WbWeAQGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GRuVFepg; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GKNtxDZ4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GRuVFepg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770139070; x=1801675070;
+  t=1770139955; x=1801675955;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=v0lDm9YgstKw6NIqXo1gHAVbHj1ebjoVADNi9DqILIA=;
-  b=GKNtxDZ4s+xtkR5cWXLsEbqxndwOdYvICrK3TYzxxG/hid3VnDbo8HV5
-   bYoM4Ox2P91dwykj9ztHfnOXX+UMcaDQwuk9z26a8aaAIjr6RU3MiFqzB
-   Pb88MMzi9ENIIapKB62shXM4VqkVnfews5NHUwlLyEexIJX42TkHdG7zK
-   j4uSuwn0P4diLiwBFCZKXQXG5K8UVL6IzFXiy4dvEofMip39WGPd+Axvh
-   S+yWtHF9JN4km8jSIhdr61pEBHZINb6zfRA6WKuhggWuWZMaNR45lpCr/
-   FNmoYOTRjNEzQ9I/lz1Wc1vU1LW0JU2+lLCTZpga75Lcvc/lnVoVZia1n
-   A==;
-X-CSE-ConnectionGUID: Du1GSgiVQja99zw0Wtj6gg==
-X-CSE-MsgGUID: 0pX0ott6RsygtXzVoe14Zw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71221766"
+  bh=zOUHPvPYgAED+5chP8L8z0Gl/CW+3EmlWHBnR1pXUuA=;
+  b=GRuVFepgSwo9uPbqatqhaNGu7eEXeotl+61n+bw1cmJp6OUR7ckl+jyC
+   cj56zhrwuHek2FBRhyD8y9OXjPWzTLV+rN/K2dEkR8btqTLSjwn0wbT0e
+   rVUBYcvkepEo4oWOqqUwYSpbPtcRK5VEQxQ+noOHHPZTwvi33gkLq0mZF
+   5PBHMNvmxQynpspHmsdEaUT7H8aDdJ+4FVO4j3Gaxpg7IlQ+XwqwhT2sQ
+   7RHpy2sL6NI0jAqD06Pjqu1oaUiaQEztVEv7hipndoYEj2d3B5QAwuCQJ
+   KuiE5FQ2uGV387hW9q7uhJ4TWZ1eYfSejH/200/2af7AmzePc205nJVUm
+   g==;
+X-CSE-ConnectionGUID: Ftcv7o/rR+Od6LbMaV9eQg==
+X-CSE-MsgGUID: /DDoh6mzTuileTmDQGgKug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="74939348"
 X-IronPort-AV: E=Sophos;i="6.21,271,1763452800"; 
-   d="scan'208";a="71221766"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 09:17:48 -0800
-X-CSE-ConnectionGUID: eFiBkPDwTYek2C7bzla/Yg==
-X-CSE-MsgGUID: ifUYzvaAT5KqOvbUgYsovw==
+   d="scan'208";a="74939348"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 09:32:34 -0800
+X-CSE-ConnectionGUID: oGD2iRp5REOmYrYYHGZ1VQ==
+X-CSE-MsgGUID: j27gC4EKSv+Jhb07xjwNyg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,271,1763452800"; 
-   d="scan'208";a="240590627"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.99])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 09:17:44 -0800
-Date: Tue, 3 Feb 2026 19:17:41 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Simon Horman <horms@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	Anna Schumaker <anna.schumaker@oracle.com>,
-	Chuck Lever <chuck.lever@oracle.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Yury Norov <ynorov@nvidia.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: remove __printf() attribute on
- __ftrace_vbprintk()
-Message-ID: <aYIttabs_YsTiibd@smile.fi.intel.com>
-References: <20260202095834.1328352-1-arnd@kernel.org>
- <202602032036.FQK7gJvV-lkp@intel.com>
- <aYINAPJS9zXlUGCw@smile.fi.intel.com>
- <d777a8f0-41ab-48f8-93db-268f493ac656@app.fastmail.com>
+   d="scan'208";a="209195436"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 03 Feb 2026 09:32:31 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnKGK-00000000guW-0ghX;
+	Tue, 03 Feb 2026 17:32:28 +0000
+Date: Wed, 4 Feb 2026 01:32:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gary Yang <gary.yang@cixtech.com>, lee@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
+	peter.chen@cixtech.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	cix-kernel-upstream@cixtech.com, Gary Yang <gary.yang@cixtech.com>
+Subject: Re: [PATCH v6 2/3] reset: add Sky1 soc reset support
+Message-ID: <202602040111.sphIzkjq-lkp@intel.com>
+References: <20260203022031.4075627-3-gary.yang@cixtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,42 +67,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d777a8f0-41ab-48f8-93db-268f493ac656@app.fastmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20260203022031.4075627-3-gary.yang@cixtech.com>
 
-On Tue, Feb 03, 2026 at 04:56:03PM +0100, Arnd Bergmann wrote:
-> On Tue, Feb 3, 2026, at 15:58, Andy Shevchenko wrote:
-> > On Tue, Feb 03, 2026 at 08:12:57PM +0800, kernel test robot wrote:
-> >
-> >> kernel test robot noticed the following build warnings:
-> >
-> > Yeah, you need to go for the full stack of these calls and mark the 
-> > bottom one with __diag() to avoid these warnings. That's my understanding
-> > and what BPF people required. Chasing this one-by-one would produce
-> > unneeded churn.
-> 
-> From what I can tell, I can just move the printf attribute
-> to the __ftrace_vbprintk() definition to make this bit work.
+Hi Gary,
 
-Ah, that's cool!
+kernel test robot noticed the following build warnings:
 
-...
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on lee-leds/for-leds-next linus/master pza/reset/next v6.19-rc8 next-20260202]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> There are unrelated warnings for BPF that I managed to
-> shut up the same way, doing
+url:    https://github.com/intel-lab-lkp/linux/commits/Gary-Yang/dt-bindings-soc-cix-document-the-simple-mfd-syscon-on-Sky1-SoC/20260203-102331
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260203022031.4075627-3-gary.yang%40cixtech.com
+patch subject: [PATCH v6 2/3] reset: add Sky1 soc reset support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260204/202602040111.sphIzkjq-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602040111.sphIzkjq-lkp@intel.com/reproduce)
 
-BPF rejected such an approach, see lore discussions in the past
-(patches from me). Here some pointers (but not all of them):
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602040111.sphIzkjq-lkp@intel.com/
 
-20251208141618.2805983-1-andriy.shevchenko@linux.intel.com
-202512090407.VxRO6xAS-lkp@intel.com
-20251210131234.3185985-1-andriy.shevchenko@linux.intel.com
-20251216122514.7ee70d5f@canb.auug.org.au
-20251215202430.c35c2d29c4f9ff614d2ab534@linux-foundation.org
+All warnings (new ones prefixed by >>):
+
+>> drivers/reset/reset-sky1-base.c:97:5: warning: no previous prototype for function 'sky1_reset_common_probe' [-Wmissing-prototypes]
+      97 | int sky1_reset_common_probe(struct platform_device *pdev,
+         |     ^
+   drivers/reset/reset-sky1-base.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      97 | int sky1_reset_common_probe(struct platform_device *pdev,
+         | ^
+         | static 
+   1 warning generated.
+
+
+vim +/sky1_reset_common_probe +97 drivers/reset/reset-sky1-base.c
+
+    96	
+  > 97	int sky1_reset_common_probe(struct platform_device *pdev,
+    98				const struct sky1_src_variant *variant)
+    99	{
+   100		struct sky1_src *sky1src;
+   101		struct device *dev = &pdev->dev;
+   102	
+   103		sky1src = devm_kzalloc(dev, sizeof(*sky1src), GFP_KERNEL);
+   104		if (!sky1src)
+   105			return -ENOMEM;
+   106	
+   107		sky1src->regmap = device_node_to_regmap(dev->parent->of_node);
+   108		if (IS_ERR(sky1src->regmap)) {
+   109			dev_err(dev, "Unable to get sky1-src regmap");
+   110			return PTR_ERR(sky1src->regmap);
+   111		}
+   112	
+   113		sky1src->signals = variant->signals;
+   114		sky1src->rcdev.owner     = THIS_MODULE;
+   115		sky1src->rcdev.nr_resets = variant->signals_num;
+   116		sky1src->rcdev.ops       = &sky1_src_ops;
+   117		sky1src->rcdev.of_node   = dev->parent->of_node;
+   118		sky1src->rcdev.dev       = dev;
+   119	
+   120		return devm_reset_controller_register(dev, &sky1src->rcdev);
+   121	}
+   122	EXPORT_SYMBOL_GPL(sky1_reset_common_probe);
+   123	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
