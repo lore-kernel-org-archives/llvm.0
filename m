@@ -1,45 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from jpms-ob02.noc.sony.co.jp (jpms-ob02.noc.sony.co.jp [211.125.140.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151D52E1743;
-	Mon,  2 Feb 2026 23:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CB9946C;
+	Tue,  3 Feb 2026 00:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770074594; cv=none; b=KD29Op9d7YE4DCyFlL/DDDUdUgohsaGBgwGIi+8zHvt1txz1cd9FOrAUE9GkfIzndy1EJnMcttxhj7tlQqRT4BvdMk2me52JwCkYyPY7XWJpH9aoWHX9XjH3qDbMSlMN4lsPQpqZq3509ac72A3+iV75TKsuV1mjB6r/rwlHUrc=
+	t=1770078305; cv=none; b=nR7nuBhlWuwns7ERxDwuz5/6CNdRctCfiYXvyXidHQxvXeQk6ReMAujGc/sK2Xdb/Qze+Pijn2spSSzmuCkswUtRlErwvP0KQiwqmjpamRyCPHXdD6DVhXhSla9YUPjZseO0szeSnK7BndgjKhCO5+qcbApF0rh5xxJeYI4LyFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770074594; c=relaxed/simple;
-	bh=pJj3uilHcFmYjhffhaNW/o34MHDbJfjpInJy5q6AfY8=;
+	s=arc-20240116; t=1770078305; c=relaxed/simple;
+	bh=BntylBVVgecoypzFquKfaO5D5v56DcVhmxm/iNQxf4A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I01snol4DPNb8KKEjew2+b/YHGYNJQ1atgKDIGu3GFja5YvEGGHqLOKz9BOUWGy4a7QyMR2mkSM478oz84BDEh6WSTA5qFHDpmKHr1UvHA6+13P54m69nLZ9WBaQXI0bsiiCKISOMYYRBAEK9R7Pk09HCCgdnDksDrLID7yGI+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jc6Yd/dk; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=S/nIazeC5S1C/XDvdisLDZLExqNgtBiiJbuf6Kk1JO7H1jQkm9kp4KpuxJjFUzSUjOdKS0HK2kZbfch6IfvwjbYKPijqR1muG6n3Jbkf86jJECgnxmAoGyFnomJ7/pleWrMDveT1fyfpwyhyR9W4SlaeH0ngWWmJ0NgWQfmwDo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=fHO3w0XQ; arc=none smtp.client-ip=211.125.140.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jc6Yd/dk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D78C116C6;
-	Mon,  2 Feb 2026 23:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770074593;
-	bh=pJj3uilHcFmYjhffhaNW/o34MHDbJfjpInJy5q6AfY8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jc6Yd/dkgb6053lGwRI1bzs1p5tAEzlcFyJ8/80INF9/aCkeVlRv+Oz/lxOWHS9ns
-	 EXd2XZ3t1teNTV6Zt54mO/fzQBaN7AgBuseFgK0vqwPwrkG8Gou3zT3yjDzpxB9a9I
-	 SGKbbb4W8QpizN5wrnn8VAZnLuqaBT6kfDdm8ZMbasIBIEPOJck0oVoj9qGh2vE/rU
-	 zxL3+EhBYj9E59CyYbmO4U3hOzoFNwWMSfJN9/tgF3qfWZTfvSDoMx4e/j87SnJYOY
-	 ipM7XklyhKQIb2hpb8dNbkQKDXe54QOQUIFAlqXWI6SqUTafryNYEJHixuz+88z+vE
-	 zkpOvlQea323g==
-Date: Mon, 2 Feb 2026 16:23:09 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Yao Zi <me@ziyao.cc>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
- register variable
-Message-ID: <20260202232309.GA1070900@ax162>
-References: <20260118090235.60670-1-me@ziyao.cc>
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="fHO3w0XQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=sony.com; s=s1jp; t=1770078304; x=1801614304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+mESz147mY99AmYLlTyE/1U+z38Cj71ObLjn1oYbbso=;
+  b=fHO3w0XQoI2WqF5YgUqMWB6VZaa9/Q4IyTO664iYoU3Wv6rkTfcG/qph
+   7KHt9QrDJHUAQyH1CscG11pVElrEWVAQY2swJNooFFtOQmu3PYDsd/c7M
+   XYpNsXh+CHmYy2mQ3N+SqtbQlim7rXCCIMvKVHxDv35QALZjG3HgUBhYd
+   RjAD/tcdq9Tb07xnD1ocB9HvUkZAh+KMYFPrN5d2v22vOBVZyasbsDH3N
+   7tdXESbiPT4ikX34kGM+9T7tV2GnqxIlw07DJ3NBJX90rQx+b/nBKkvTQ
+   ugUnPryVOIizL6CNWWCZWToWLu62aprcG7U2xO/BE+3IfYmGfGR6XR/mh
+   g==;
+Received: from unknown (HELO jpmta-ob1.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::6])
+  by jpms-ob02.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 09:25:02 +0900
+X-IronPort-AV: E=Sophos;i="6.21,269,1763391600"; 
+   d="scan'208";a="607577797"
+Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:6b3e:119e])
+  by jpmta-ob1.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 09:25:02 +0900
+Date: Tue, 3 Feb 2026 09:24:56 +0900
+From: Shashank Balaji <shashank.mahadasyam@sony.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Suresh Siddha <suresh.b.siddha@intel.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Juergen Gross <jgross@suse.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+	jailhouse-dev@googlegroups.com, kvm@vger.kernel.org,
+	xen-devel@lists.xenproject.org, Rahul Bukte <rahul.bukte@sony.com>,
+	Daniel Palmer <daniel.palmer@sony.com>,
+	Tim Bird <tim.bird@sony.com>
+Subject: Re: [PATCH 1/3] x86/x2apic: disable x2apic on resume if the kernel
+ expects so
+Message-ID: <aYFAWPRTx7RqZn32@JPC00244420>
+References: <20260202-x2apic-fix-v1-1-71c8f488a88b@sony.com>
+ <202602030600.jFhsJyEC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,125 +73,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260118090235.60670-1-me@ziyao.cc>
+In-Reply-To: <202602030600.jFhsJyEC-lkp@intel.com>
 
-On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
-> On MIPS, __current_thread_info is defined as global register variable
-> locating in $gp, and is simply assigned with new address during kernel
-> relocation.
+On Tue, Feb 03, 2026 at 06:31:40AM +0800, kernel test robot wrote:
+> Hi Shashank,
 > 
-> This however is broken with LLVM, which always restores $gp if it finds
-> $gp is clobbered in any form, including when intentionally through a
-> global register variable. This is against GCC's documentation[1], which
-> requires a callee-saved register used as global register variable not to
-> be restored if it's clobbered.
+> kernel test robot noticed the following build errors:
 > 
-> As a result, $gp will continue to point to the unrelocated kernel after
-> the epilog of relocate_kernel(), leading to an early crash in init_idle,
+> [auto build test ERROR on 18f7fcd5e69a04df57b563360b88be72471d6b62]
 > 
-> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-> [    0.000000] Oops[#1]:
-> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-> [    0.000000] Tainted: [W]=WARN
-> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-> [    0.000000] Hi    : 0000000000000000
-> [    0.000000] Lo    : 0000000000000000
-> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-> [    0.000000] Cause : 00000008 (ExcCode 02)
-> [    0.000000] BadVA : 0000000000000000
-> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
-> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+> url:    https://github.com/intel-lab-lkp/linux/commits/Shashank-Balaji/x86-x2apic-disable-x2apic-on-resume-if-the-kernel-expects-so/20260202-181147
+> base:   18f7fcd5e69a04df57b563360b88be72471d6b62
+> patch link:    https://lore.kernel.org/r/20260202-x2apic-fix-v1-1-71c8f488a88b%40sony.com
+> patch subject: [PATCH 1/3] x86/x2apic: disable x2apic on resume if the kernel expects so
+> config: i386-randconfig-001-20260202 (https://download.01.org/0day-ci/archive/20260203/202602030600.jFhsJyEC-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602030600.jFhsJyEC-lkp@intel.com/reproduce)
 > 
-> This bug has been reported to LLVM[2] and affects version from (at
-> least) 18 to 21. Let's work around this by using inline assembly to
-> assign $gp before a fix is widely available.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202602030600.jFhsJyEC-lkp@intel.com/
 > 
-> Cc: stable@vger.kernel.org
-> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-> Signed-off-by: Yao Zi <me@ziyao.cc>
-
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-
-Hopefully the MIPS LLVM folks can look into this (even though I think
-the MIPS backend is one of the less maintained backends in LLVM).
-
-> ---
->  arch/mips/kernel/relocate.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+> All errors (new ones prefixed by >>):
 > 
-> diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-> index 7f1c136ad850..12aa0bbdd65e 100644
-> --- a/arch/mips/kernel/relocate.c
-> +++ b/arch/mips/kernel/relocate.c
-> @@ -420,7 +420,18 @@ void *__init relocate_kernel(void)
->  			goto out;
->  
->  		/* The current thread is now within the relocated image */
-> +#ifndef CONFIG_CC_IS_CLANG
+> >> arch/x86/kernel/apic/apic.c:2463:3: error: call to undeclared function '__x2apic_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     2463 |                 __x2apic_disable();
+>          |                 ^
+>    arch/x86/kernel/apic/apic.c:2463:3: note: did you mean '__x2apic_enable'?
+>    arch/x86/kernel/apic/apic.c:1896:20: note: '__x2apic_enable' declared here
+>     1896 | static inline void __x2apic_enable(void) { }
+>          |                    ^
+>    1 error generated.
 
-I find
+This happens when CONFIG_X86_X2APIC is disabled. This patch fixes it,
+which I'll include in v2:
 
-  #ifdef FOO
-  <FOO block>
-  #else
-  <!FOO block>
-  #endif
+diff --git i/arch/x86/kernel/apic/apic.c w/arch/x86/kernel/apic/apic.c
+index 8820b631f8a2..06cce23b89c1 100644
+--- i/arch/x86/kernel/apic/apic.c
++++ w/arch/x86/kernel/apic/apic.c
+@@ -1894,6 +1894,7 @@ void __init check_x2apic(void)
 
-to be easier to read and process
+ static inline void try_to_enable_x2apic(int remap_mode) { }
+ static inline void __x2apic_enable(void) { }
++static inline void __x2apic_disable(void) {}
+ #endif /* !CONFIG_X86_X2APIC */
 
-  #ifndef FOO
-  <!FOO block>
-  #else
-  <FOO block>
-  #endif
-
-but maybe that it is just personal preference.
-
->  		__current_thread_info = RELOCATED(&init_thread_union);
-> +#else
-> +		/*
-> +		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
-> +		 * intentionally modified. Work around this by using inline
-> +		 * assembly to assign $gp. $gp couldn't be listed as output or
-> +		 * clobber, or LLVM will still restore its original value.
-
-This comment should likely include a link to the LLVM upstream report to
-make it easier to version restrict this workaround when fixed in the
-future.
-
-> +		 */
-> +		asm volatile("move $28, %0" : :
-> +			     "r" (RELOCATED(&init_thread_union)));
-> +#endif
->  
->  		/* Return the new kernel's entry point */
->  		kernel_entry = RELOCATED(start_kernel);
-> -- 
-> 2.52.0
-> 
+ void __init enable_IR_x2apic(void)
