@@ -1,184 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3D5396B85;
-	Tue,  3 Feb 2026 09:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6434D334685
+	for <llvm@lists.linux.dev>; Tue,  3 Feb 2026 11:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770111545; cv=none; b=icwsd9ci/KJyLy2jjKaf2rj59tbZ3IcF+hNsRPxasxrZDkwUyXItDRa2y/wNkc2RFYWdlvnRxI9wRGPq8Wlz4PIAkkmKfGLLrOdeSDIXGETOjBdKuN5dVGeiuRqLvS8SFWp0LoOkEG1iqulLcUoDo+PKKsVSS0o2CZ7M0eBOoPQ=
+	t=1770118465; cv=none; b=bGYbLGOjKCDnyrlY6ECt3b5B4pK7jDN5bL7e22fNcXMWaGI1PGt5Vb/8y8UNW8Ma0wSFtFh2GOl4eD7gRwzkdVEjKmJgypo4cARF4PRm1hR5cdj0fDC/BtbWRAPYcTOgT7PRcxfjMK9uUyeTf8y9pSYBxFdoW47WGd3djlL4N7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770111545; c=relaxed/simple;
-	bh=YyjVHcEAKeMwQzUB0Q3StU0iVpf8HRLPctKwHV2f+T0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=c0EsrE4h4Ut+cBtUV4GXPJ7lfGQnOyDeeCU8VxrgMmixMtgiYPndiX+fJ+0gHACFO2+me1LOq0MRCp/p7HxdQX8Bl//sbB5h/ktu/nyixLOq0Q7V+zV9UAhATFMLmCQtzlXScDAxRmeQ24cWOPHuAtpcwdg1QVuOWqgjxMWvy7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HQYmjmMI; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770118465; c=relaxed/simple;
+	bh=r/0+9qJswzrRb/+EdDwKidCVLUWK29vWT4K+wcArP6I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=USTQrSmlcCm+BnWjY1lJPLTQjPsbgYd1ig3UjepVRYpFAg6Uht3KOFjC5bahP3DWK9Pv8gY+gNEzhMG9qsiM31iGOCH/7eiXmpQ7eVrYzjovm7BpheTfd8VG1gFtTFEQi3P9TTCyi+cXcnY/fI9BIj3E7CfcuA/dQWspLGvFDq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CzfmK0MA; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HQYmjmMI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770111544; x=1801647544;
-  h=date:from:to:cc:subject:message-id;
-  bh=YyjVHcEAKeMwQzUB0Q3StU0iVpf8HRLPctKwHV2f+T0=;
-  b=HQYmjmMIMyl9In7UTcAWkbLV+1Dr0JTzFYuGy6DURcFM33So58ry6Mkm
-   m6LTOG0TkCbg6egHpEIW8JczcQkgcwbHiVf6JHmawIfxfAuylM0jE4rr3
-   mm3YqUTO7a1+WxfVYYB2FNKzsuzyM7lVpLZkEIJsiyWe45oQEX73CEuxs
-   Ni3s7V9/OL5r/C7cy//AI9Y0kXMxyD+6E19PG7sPT7exDkuoj4tqsxXB+
-   V8YLWPA7k86/duIZYD1NPg15iv1PC2YaEJ05IQgk2nY8HN5LuHX7wPiOM
-   SyP+bm3Dd/0JtA0Uw8MsEOcNTgHmN/TqxW2lRaw1r03KThvcBWnRlbS4t
-   A==;
-X-CSE-ConnectionGUID: ym4+Jdy7RWecZneIBUvY7w==
-X-CSE-MsgGUID: V6srVftUQoK0n4DE0GSm5Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="93931299"
-X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="93931299"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 01:39:01 -0800
-X-CSE-ConnectionGUID: jFUPhhHqSQm3SuvzicjMHQ==
-X-CSE-MsgGUID: BH9oiZOeTiKI0GlbgjD10A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="209230214"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Feb 2026 01:38:58 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vnCs4-00000000gVG-15lS;
-	Tue, 03 Feb 2026 09:38:56 +0000
-Date: Tue, 03 Feb 2026 17:38:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Lyude Paul <lyude@redhat.com>
-Subject: [boqun:rust-sync 16/18]
- include/linux/spinlock_api_smp.h:163:2: warning: raw_spinlock 'lock' is not
- held on every path through here
-Message-ID: <202602031729.MQ9qJ1OX-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CzfmK0MA"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4806fa4a180so47139355e9.2
+        for <llvm@lists.linux.dev>; Tue, 03 Feb 2026 03:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770118463; x=1770723263; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Wt6rr7j8WqJzmDBy6ebcZd6xKb6YF9nq3jIKBZXTuLo=;
+        b=CzfmK0MAzGPuAZ1tjhj4SN1DjWQ6q9rdjBpuwqIj+zSO/ioQ7w7LC8BqM4mjdBWDUC
+         DsXazaKfMMnxrumiShBZio9BjFK5aAcDkGOqc/2nMlvm4tlwWun07JWYmrrt25a2GmbD
+         J/aaql+v1L9dX4GufLmHygs9LwcLux5TlAKZ7bTwqbxY2h84Lm2/yQ4Yq4Mwf8dGPmt7
+         dkvFXCRDraHlC0pIs060IqFx4a7U65sd12oOJylFqwyTr3maG4LF22ZSSGGwb7e40dq1
+         3sF5ktRl2I+KrEcYNbdOIGBMvBpmBDK0dKeXvJUB+TzKnGsA6BQnAaAhk1pan/vPmo6b
+         AsMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770118463; x=1770723263;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wt6rr7j8WqJzmDBy6ebcZd6xKb6YF9nq3jIKBZXTuLo=;
+        b=ToOEOtDBET1K/E9oswQs99ZUSlmXGpIYmDRVg7FFXkrTDYpXXWhFD/bM5DlsX8aSmu
+         lDcSpfrTrCNTn6TMpFMFw6IsBTncs/GIAhq0m1mCaalPSyc4XRU6f1lZLdO2OClN1dlH
+         wkTfNguGuS3Qn5X+QHRQC47A/8zVUzhhZIu7kWwa6hH6ZSXTG0jk8Cofx0zkNjz6i1ki
+         XJA5Qd3QMd2+1j+sHUY6ZjiVPuxTLUXcCnqcBFyH6fgXW2wf4kgRbgo7tBGpM1YXwglc
+         osFlrMJLKPRI8WjVm5HrXJUeKhEpDEnC5T45s9Z0sYrXZJ5r2W1AnID4dqT6yt43Bdjg
+         3ldg==
+X-Forwarded-Encrypted: i=1; AJvYcCVe9qI8mxuzxfBLyljAl8dgPKJ+ozLBxfo1XwA+Tz70X3FAqh0XCX7160BdGbOkLKVSgejJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YyVEnu+IbqUOQXdT/pSPTO2Wpjumt0XOL9nbYHCirJ/necstA9K
+	hYbIAzVf1hIjlT4oaqzMCbicAuRzEMfaN5SB3yUT/45HqUM/r6Dr9V1KwN8Uxo375C+fqeUiEpq
+	HdUmADp2UCG8U0kGhiQ==
+X-Received: from wmjq2.prod.google.com ([2002:a7b:ce82:0:b0:480:3842:3532])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1c20:b0:475:de14:db1e with SMTP id 5b1f17b1804b1-482db4d84d1mr202173045e9.24.1770118462768;
+ Tue, 03 Feb 2026 03:34:22 -0800 (PST)
+Date: Tue, 03 Feb 2026 11:34:07 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAC/dgWkC/3WMwQ7CIBAFf6XZs5hCLbY9+R+mByxb2AShAUM0D
+ f8u9u7lJfOSmR0SRsIEU7NDxEyJgq8gTg0sVnmDjHRlEK3oeR1G3pFHZtFtGBMbR7le9EP2yAe o0hZxpfcRvM+VLaVXiJ+jn/nv/ZvKnLVsuI5aYdcpKdXNhGAcnpfwhLmU8gWYaqQZrQAAAA==
+X-Change-Id: 20251202-inline-helpers-996f4db65e18
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2301; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=r/0+9qJswzrRb/+EdDwKidCVLUWK29vWT4K+wcArP6I=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpgd04KSDTy59pIFCvPyqmf0oiuMXWez7Ej7S0v
+ Efk/14aHv6JAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaYHdOAAKCRAEWL7uWMY5
+ RoepD/4hC0AzibWqTqtig41zWC+uqMM3eR2aWMM0i25I9KhiHYzJwp+gXTjm/sdMUtX+fmLdomD
+ JOOtqTqJRgJb2M6ppRVbT6Zr16NDh2thgm6DmrBDyUDidDREkq6Ka3U57sAP8dr1LUsA4a4wOl1
+ IGU4hI3u6+dqf4OaEBSnjjfLEErseNEYr090nMDDZ/uALAI68FtDhxcFDbUTcuzM5qUvAgQkEhb
+ s1CRiaOYLsF5YUi+oVfF56c4X/ek8JBXcVe+oBqQQyBTdeE/twj8UzBksin0Kq5fvtOdgBXaJzi
+ 8mI9ffxQo2D4BrnbbBVi28EOVU0WJ31j8MKrthJHjeJKtuf7nLSMMOMcUD8wOqeB/kNXsMEHbR3
+ jrhfVfvFXEqmLCU86/tLNr8sU9I4BYtjIwrjCEBwGQ9rdGzWcSE+BfVvQ8ECDNXhYSBNBramDs5
+ GABnreeSJ/GWaIZajEcbzUy8pVe/IONoUyl5bwYcOTd+0Q7o13gGfv//GGGx5GzFqvu7E7WTwkd
+ rJvBNgGJd8jgAI6H9e+h4K9C7POeRap4wWVkfVmisaVarpIVsNkkcvIb46ihFwBsHYSKbvEuPA3
+ l6Br7+K+wySDSLflrojd8uUlpgesx82SSP1oAJb6ZVTP8iJuKc9sWSRchCqBGagigA03+NGfmuq VDWmoDGJBU6oFcg==
+X-Mailer: b4 0.14.2
+Message-ID: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com>
+Subject: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+From: Alice Ryhl <aliceryhl@google.com>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
+	Alice Ryhl <aliceryhl@google.com>, Matthew Maurer <mmaurer@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git rust-sync
-head:   04c35250bb394d7bc867e1527c3250e49d486025
-commit: c54b183eeade43270288ca1fa71cb4731bc78e8e [16/18] irq & spin_lock: Add counted interrupt disabling/enabling
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260203/202602031729.MQ9qJ1OX-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260203/202602031729.MQ9qJ1OX-lkp@intel.com/reproduce)
+Currently the only way for Rust code to call a static inline function is
+to go through a helper in rust/helpers/. This introduces performance
+costs due to additional function calls and also clutters backtraces and
+flame graphs with helper symbols.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602031729.MQ9qJ1OX-lkp@intel.com/
+To get rid of these helper symbols, provide functionality to inline
+helpers into Rust using llvm-link. This option complements full LTO, by
+being much cheaper and avoiding incompatibility with BTF.
 
-All warnings (new ones prefixed by >>):
+I ran a microbenchmark showing the benefit of this. All the benchmark
+does is call refcount_inc() in a loop. This was chosen since refcounting
+is quite hot in Binder. The results are that Rust spends 6.35 ns per
+call vs 5.73 ns per call in C. When enabling this option, the two
+languages become equally fast, and disassembly confirms the exact same
+machine code is used (in particular there is no call to
+rust_helper_refcount_inc). Benchmarking Binder also results in an
+improvement from this change.
 
-   In file included from crypto/api.c:17:
-   In file included from include/linux/kmod.h:9:
-   In file included from include/linux/umh.h:4:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:311:
->> include/linux/spinlock_api_smp.h:163:2: warning: raw_spinlock 'lock' is not held on every path through here [-Wthread-safety-analysis]
-     163 |         LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-         |         ^
-   include/linux/lockdep.h:447:2: note: expanded from macro 'LOCK_CONTENDED'
-     447 |         lock_acquired(&(_lock)->dep_map, _RET_IP_);                     \
-         |         ^
-   include/linux/spinlock_api_smp.h:163:44: note: raw_spinlock acquired here
-     163 |         LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-         |                                                   ^
->> include/linux/spinlock_api_smp.h:214:2: warning: releasing raw_spinlock 'lock' that was not held [-Wthread-safety-analysis]
-     214 |         do_raw_spin_unlock(lock);
-         |         ^
-   In file included from crypto/api.c:17:
-   In file included from include/linux/kmod.h:9:
-   In file included from include/linux/umh.h:4:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:8:
->> include/linux/spinlock.h:387:1: warning: raw_spinlock 'lock->.rlock' is still held at the end of function [-Wthread-safety-analysis]
-     387 | }
-         | ^
-   include/linux/spinlock.h:386:2: note: raw_spinlock acquired here
-     386 |         raw_spin_lock_irq_disable(&lock->rlock);
-         |         ^
-   include/linux/spinlock.h:276:41: note: expanded from macro 'raw_spin_lock_irq_disable'
-     276 | #define raw_spin_lock_irq_disable(lock) _raw_spin_lock_irq_disable(lock)
-         |                                         ^
->> include/linux/spinlock.h:421:2: warning: releasing raw_spinlock 'lock->.rlock' that was not held [-Wthread-safety-analysis]
-     421 |         raw_spin_unlock_irq_enable(&lock->rlock);
-         |         ^
-   include/linux/spinlock.h:280:42: note: expanded from macro 'raw_spin_unlock_irq_enable'
-     280 | #define raw_spin_unlock_irq_enable(lock)        _raw_spin_unlock_irq_enable(lock)
-         |                                                 ^
-   4 warnings generated.
+This patch is complementary to:
+https://lore.kernel.org/all/20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com/
 
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+Changes in v2:
+- Dropped merged patches.
+- Generate two copies of helpers.bc, one for built-in and one for modules.
+- Remove unused llvm-as tool.
+- Add $(cmd_ld_single) to avoid breaking CONFIG_LTO builds (note that
+  LTO does not happen over the language boundary, except for helpers).
+- Improve Kconfig help message.
+- Link to v1: https://lore.kernel.org/r/20251202-inline-helpers-v1-0-879dae33a66a@google.com
 
-vim +/lock +163 include/linux/spinlock_api_smp.h
+---
+Gary Guo (3):
+      kbuild: rust: add `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
+      rust: helpers: #define __rust_helper
+      build: rust: provide an option to inline C helpers into Rust
 
-   158	
-   159	static inline void __raw_spin_lock_irq_disable(raw_spinlock_t *lock)
-   160	{
-   161		local_interrupt_disable();
-   162		spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
- > 163		LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-   164	}
-   165	
-   166	static inline void __raw_spin_lock_bh(raw_spinlock_t *lock)
-   167		__acquires(lock) __no_context_analysis
-   168	{
-   169		__local_bh_disable_ip(_RET_IP_, SOFTIRQ_LOCK_OFFSET);
-   170		spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-   171		LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-   172	}
-   173	
-   174	static inline void __raw_spin_lock(raw_spinlock_t *lock)
-   175		__acquires(lock) __no_context_analysis
-   176	{
-   177		preempt_disable();
-   178		spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-   179		LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-   180	}
-   181	
-   182	#endif /* !CONFIG_GENERIC_LOCKBREAK || CONFIG_DEBUG_LOCK_ALLOC */
-   183	
-   184	static inline void __raw_spin_unlock(raw_spinlock_t *lock)
-   185		__releases(lock)
-   186	{
-   187		spin_release(&lock->dep_map, _RET_IP_);
-   188		do_raw_spin_unlock(lock);
-   189		preempt_enable();
-   190	}
-   191	
-   192	static inline void __raw_spin_unlock_irqrestore(raw_spinlock_t *lock,
-   193						    unsigned long flags)
-   194		__releases(lock)
-   195	{
-   196		spin_release(&lock->dep_map, _RET_IP_);
-   197		do_raw_spin_unlock(lock);
-   198		local_irq_restore(flags);
-   199		preempt_enable();
-   200	}
-   201	
-   202	static inline void __raw_spin_unlock_irq(raw_spinlock_t *lock)
-   203		__releases(lock)
-   204	{
-   205		spin_release(&lock->dep_map, _RET_IP_);
-   206		do_raw_spin_unlock(lock);
-   207		local_irq_enable();
-   208		preempt_enable();
-   209	}
-   210	
-   211	static inline void __raw_spin_unlock_irq_enable(raw_spinlock_t *lock)
-   212	{
-   213		spin_release(&lock->dep_map, _RET_IP_);
- > 214		do_raw_spin_unlock(lock);
-   215		local_interrupt_enable();
-   216	}
-   217	
+ Makefile               |  3 ++-
+ init/Kconfig           | 15 +++++++++++++++
+ lib/Kconfig.debug      | 15 +++++++++++++++
+ rust/Makefile          | 29 +++++++++++++++++++++++++----
+ rust/exports.c         |  5 ++++-
+ rust/helpers/helpers.c | 29 +++++++++++++++++++++++++++++
+ scripts/Makefile.build |  7 ++++++-
+ 7 files changed, 96 insertions(+), 7 deletions(-)
+---
+base-commit: 33a647c659ffa5bdb94abc345c8c86768ff96215
+change-id: 20251202-inline-helpers-996f4db65e18
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice Ryhl <aliceryhl@google.com>
+
