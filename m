@@ -1,46 +1,39 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0A72820AC;
-	Tue,  3 Feb 2026 20:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7544F277CB8;
+	Tue,  3 Feb 2026 22:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770152107; cv=none; b=mqTWDOxvDYmWW0PRv711bEdXuQWc1LneJeocLdQ1fhehpuuNlOuyp2ALobyIU1rEGJEg53bKefyVyKpN+OPQMmNmr9uVfrnlAZ4K0+1OVK5C4DsE/+RX0QGF30kFr34gC24uEvBM04qDKwgwmSxqszzcRiBhlrHP/9WVVCt7iLk=
+	t=1770158223; cv=none; b=caUggQEhZm9ELE24+RxNHgd3saqM3pvJDT9oR/nEdYzWZ/CUWuCsimr/RrbA3p2xwPXkf988P/Vyh8m2lkPJzWCxY3XR1yPxyCJZGAjBJEN3In0q1ogFFxIwrLTFsJCRJQUZ+NeY7szrZzKFn112BQZh7FWcYhrMvW++sHyOqzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770152107; c=relaxed/simple;
-	bh=qNVKdNlvBI2upvfPnIIgcVTzRhdg8ywM2HpUBMwe0vc=;
+	s=arc-20240116; t=1770158223; c=relaxed/simple;
+	bh=/9JNqvJxqlpcdDQtYvBrI3A7+yqWnivfT9JI1Rs04LQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VyZaCMeQyuvGP9MVR2OKHvNkX9pq4QnVPfJp6s2BgodM+O1atnRJFWps95zUvwi+T2OvyhiDTMB8zhWbl9CFU4gat0yWyHpmsAUZtzrtVrdokbCx+YAN+Efgu+RPO3NlxjWHMQw1Rww/wF0gkdiYHUUbe3ub49Us313fCSf2jsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=POWNce9U; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="POWNce9U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E095C116D0;
-	Tue,  3 Feb 2026 20:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770152106;
-	bh=qNVKdNlvBI2upvfPnIIgcVTzRhdg8ywM2HpUBMwe0vc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=POWNce9Uce38XpZ7U2P46dhJuFXkGCnJDzv1qQ7fO+ohlM18AjxAR9TBIe6tAXdl5
-	 PtKfRHKTYSLnla8zkDLT3odsYw90qWhaAtHzzpfQdcJHvtAKPq4e+jlGPJWGWFkk+l
-	 XY6kO7rDIdleV7uKpQxL3QjMowb493+3u7SpFPJAh+RXIpAi6J2S5cKbK12Niazlip
-	 Gcp86Os96EG3x8+RuErxGPng+g31nIgq9udndxB32r7QeKfOYLFMmtfIhv+qL76Kic
-	 rJt3k424VOBVbbVJS9z6aHpldW0kJjzd+wo4VD4BR8BPryApHapNepBCQ2Mi+Bjaay
-	 kgOdVzMPG/HpA==
-Date: Tue, 3 Feb 2026 13:55:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sw/MfMI8cuSZ1kF+Oy6ZstDD/7SEy/NuPGJXcvWScpxjItMOmNeSoDmfehgl8qbTVg5LZNrOexIamGV6TIpBNTDkmo07961E3v+HUpku3sCOApz3B4ng5D5k319O4Lmzl+8FalUUyFDn4SMVc8z8CtKGKY+x0ygkErsMFOjOz94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost [127.0.0.1])
+	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 613MSbKs3677924;
+	Tue, 3 Feb 2026 16:28:37 -0600
+Received: (from segher@localhost)
+	by gate.crashing.org (8.18.1/8.18.1/Submit) id 613MSauR3677923;
+	Tue, 3 Feb 2026 16:28:36 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Tue, 3 Feb 2026 16:28:36 -0600
+From: Segher Boessenkool <segher@kernel.crashing.org>
 To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
 Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Segher Boessenkool <segher@kernel.crashing.org>,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
+        kernel test robot <lkp@intel.com>
 Subject: Re: [PATCH] powerpc/uaccess: Fix inline assembly for clang build on
  PPC32
-Message-ID: <20260203205501.GC3573384@ax162>
+Message-ID: <aYJ2lGdDd041F2SY@gate>
 References: <8ca3a657a650e497a96bfe7acde2f637dadab344.1770103646.git.chleroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -51,6 +44,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <8ca3a657a650e497a96bfe7acde2f637dadab344.1770103646.git.chleroy@kernel.org>
+
+Hi!
 
 On Tue, Feb 03, 2026 at 08:30:41AM +0100, Christophe Leroy (CS GROUP) wrote:
 > Test robot reports the following error with clang-16.0.6:
@@ -93,47 +88,16 @@ On Tue, Feb 03, 2026 at 08:30:41AM +0100, Christophe Leroy (CS GROUP) wrote:
 > With that change, the build doesn't fail anymore and a disassembly shows
 > clang uses r17/r18 and r31/r14 pair when GCC would have used r16/r17 and
 > r30/r31:
-> 
-> 	Disassembly of section .fixup:
-> 
-> 	00000000 <.fixup>:
-> 	   0:	38 a0 ff f2 	li      r5,-14
-> 	   4:	3a 20 00 00 	li      r17,0
-> 	   8:	3a 40 00 00 	li      r18,0
-> 	   c:	48 00 00 00 	b       c <.fixup+0xc>
-> 				c: R_PPC_REL24	.text+0xbc
-> 	  10:	38 a0 ff f2 	li      r5,-14
-> 	  14:	3b e0 00 00 	li      r31,0
-> 	  18:	39 c0 00 00 	li      r14,0
-> 	  1c:	48 00 00 00 	b       1c <.fixup+0x1c>
-> 				1c: R_PPC_REL24	.text+0x144
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202602021825.otcItxGi-lkp@intel.com/
-> Fixes: c20beffeec3c ("powerpc/uaccess: Use flexible addressing with __put_user()/__get_user()")
-> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+This does not fix the problem that somehow LLVM thinks that GPR31/FPR0
+is a valid pair for two-register integer things (well, 31+1 in
+assembler is not actually valid at all).  Quite worrying.
 
-> ---
-> I set Fixes: tag to the commit that recently replaced %1+1 by %L1 in the main part of the macro as the fix would be uncomplete otherwise but the problem has been there since commit 2df5e8bcca53 ("powerpc: merge uaccess.h")
-> ---
->  arch/powerpc/include/asm/uaccess.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
-> index ba1d878c3f404..570b3d91e2e40 100644
-> --- a/arch/powerpc/include/asm/uaccess.h
-> +++ b/arch/powerpc/include/asm/uaccess.h
-> @@ -255,7 +255,7 @@ __gus_failed:								\
->  		".section .fixup,\"ax\"\n"		\
->  		"4:	li %0,%3\n"			\
->  		"	li %1,0\n"			\
-> -		"	li %1+1,0\n"			\
-> +		"	li %L1,0\n"			\
->  		"	b 3b\n"				\
->  		".previous\n"				\
->  		EX_TABLE(1b, 4b)			\
-> -- 
-> 2.49.0
-> 
+Maybe you can fix this in a more fundamental way?  In LLVM itself?
+
+(The kernel patch of course is a nice workaround, if it in fact works
+reliably, but a big fat comment here would be useful.  Pointing to the
+LLVM problem report where this is tracked, etc.)
+
+
+Segher
