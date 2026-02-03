@@ -1,136 +1,223 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CD3190462
-	for <llvm@lists.linux.dev>; Tue,  3 Feb 2026 15:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E706238C07;
+	Tue,  3 Feb 2026 15:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770133937; cv=none; b=azWWkbg03yQj5NKAcwJoUdHAvXm10U2kQq7JvOleJbgVAKD3ZKtNtuoXI8pWqxJMLpKbuOVETkYJ8jV7g1LrEOW8FAqbGHKAVQ+eTQi8SvuC7LRPRe7n6myHvgOphvSNDXt7Z0ezNpmXLNRrDRlSOaXVUy+kpBcp0WlBwgvdcGs=
+	t=1770134197; cv=none; b=iKmj7BL02/cbIozpix0/XB0wTdjFlI51sfDGRidVYdVLzATSv6I2ow84DlTFvh5hkJNMp0XVxirADfZ2qUa95U/TRzAyp+/6xYHiDUQ/YnyVxCpkO4dzSjBoNkrupPqil+QXcQJhFywj8y2x4cv5RwpVkd4UdZLRWxPPE5NM9Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770133937; c=relaxed/simple;
-	bh=c+PJdy4orfXci6N7R2umRrXOpPfFe/MTVBm2spaN31w=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WNB9K64TJnSyJSOZxuNS+K2V97EosC8ee+1PyZTWgGkkbK3RnTVi2+LcyzRxw2T1i69im6oJue88niI/4Ee72J8E51VMRxLn6a5IvJ6Hum7qnfZyxUMgANBfza9YLqWFsbiXFaevGtisDWSPKkQm3h8MqTzvFju4wvZaWfiqsaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GInMIkGX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770134197; c=relaxed/simple;
+	bh=5VQb6XurkFIcrW15lovmU7utC3GXjrZZ5DPn4PqCkYg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=M/hkvUIhxhhpAVqJGZzMcEEysmNns/PXVqS+ekWHBttmWIwc8N7KNOzwiz9CEVYje9/vLntv8i1Of3ok7k85Roc9DJ0NfmJK8+cYBNnYpC3CtF+9PWaJLh47NoSmaoogIqlnzCBCy9KFlrd397Jb/vZH86f4Zj1YHVrLIdXNYUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ZkigJbUQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OJWb7E3d; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GInMIkGX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770133935;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YzPq3oDXZLY5tgC2cDcHoxtzNKTI8bal8SywxOaWEcc=;
-	b=GInMIkGXZIYIEZqDpwMb8sF8rRPtkc3bu+JqUdVwfKasPGOGNsQfJjLJlRGfbuVMBfjrqn
-	z2gpyyfjhWtwjyFavdrzx4JPeziII2iVaRfh+ge6SftHUZ38AYhpxjinzBOMstx1iBDYFX
-	3k4ZXetDaV4urzLx0HOfl00gckXdIfU=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-329-PWUYJ1-5Me2LM9UQGY1nEQ-1; Tue,
- 03 Feb 2026 10:52:14 -0500
-X-MC-Unique: PWUYJ1-5Me2LM9UQGY1nEQ-1
-X-Mimecast-MFC-AGG-ID: PWUYJ1-5Me2LM9UQGY1nEQ_1770133933
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D320195605F
-	for <llvm@lists.linux.dev>; Tue,  3 Feb 2026 15:52:13 +0000 (UTC)
-Received: from [172.20.163.214] (unknown [10.30.45.55])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EB5831956053;
-	Tue,  3 Feb 2026 15:52:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc8,
- upstream-mainline, 6bd9ed02)
-Date: Tue, 03 Feb 2026 15:52:12 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ZkigJbUQ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OJWb7E3d"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D18621400059;
+	Tue,  3 Feb 2026 10:56:34 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 03 Feb 2026 10:56:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1770134194;
+	 x=1770220594; bh=wVp/m1Quz3BoFMxHOwcVsiCA1igA849JUDKjUESuUCI=; b=
+	ZkigJbUQi4lP2PCPoPAYTUKlHopRZ0YwnspaEMVQfBCMEXpsJN6be9HBLUK/Jwh7
+	8u+NDDjFVJ+GXyzCTtK/hGgtPwjK4uEajv0Q5aT4Co+Ox7IANF2kHag3h1TNqJOm
+	/v4RZsFVY9peFJqNzmmlCDmch9lSVrIzXOZbakfcrSUlyPlpmr70aM3zaldLRoEx
+	56pMN76Xrx444kUFJRayqLz6lxKn9wHzo4lsB8ulEtPi6cQ5kpe9QCq1gUJQdAeK
+	LoWq5NBJBcy0Q2H0y0vBBUEjT9VcsV77pEtlA7nfQ1nNfugw6itdpPMhgHvu6Xy8
+	xlwplA4lvT/QlROZ4pBl5Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770134194; x=
+	1770220594; bh=wVp/m1Quz3BoFMxHOwcVsiCA1igA849JUDKjUESuUCI=; b=O
+	JWb7E3dwDuBQ6Oh/fanhwytDwxYiKR6r11AqTNLy5OhVBQErVkwFgzGKxHoYe2zz
+	o82K2wG+06gOsBmKY5NRYuJb/QcCasNW7D8HB7O9GJwMh9JqUOV7c0UDorJHc/Bp
+	+s+GQZjAiyyTe381spHXRC230fQFfb7ygWGWB56kYKaZa83Y/s12J99EpOSyLvIb
+	Ms+FV7rq/hMTZNGatMKQ0CAqUKjXl3tDQPgKUcFl7UhAgtExCLOyr/FT3Dj6xpt8
+	MAaHIYx0laH8z+16bCyFLtgKuxKsKLjbjBVcd4gKYvktYBmWrZH8I21dTaWjBN37
+	FEaLhh8wF8UX0Kpq+AP9A==
+X-ME-Sender: <xms:sRqCacLh9m__M0jBZiOdRimC0QMyHgO-yiWLQtGf2NDfb1PeCbs8tA>
+    <xme:sRqCaW8_WbGQ84P6d5sjzJTC6BJj3famktU7GmylHEjP_EqWG4E9HONeIjar5f-OE
+    1Xl2lsmlqtSa63V8FVF2Kz1TyO3FCZTGHqBgOHh4kiU-jyzbDXHy_kI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedtgeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudelpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehmrghthhhivghurdguvghsnhhohigvrhhssegvfhhfihgtihhosh
+    drtghomhdprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghp
+    thhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlkh
+    hpsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghrnhgusehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehhohhrmhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjlhgrhi
+    htohhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmhhhirhgrmhgrtheskhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhmsehkvhgrtghkrdhorhhg
+X-ME-Proxy: <xmx:sRqCaVgDVOeKcF55yIUFru0feO85XZRvRZP4d41NA7qVljXYrdsOtA>
+    <xmx:sRqCae5TuNvu4rKojfZVpIOMUJTk5vD4mfPC3nY5AjGkG8YH6W0J5A>
+    <xmx:sRqCadrYlx_rFWW6OA7wAk2Fyl10hAAqlWbEDD36CXpDQCZqJTyj4g>
+    <xmx:sRqCabh_drFWdOszV0LArB7FQ_8FWUiHo3g4y2ha-bxOY6CGFQ26LA>
+    <xmx:shqCac_5xk_bEmfYmm4PuL4Xl8VeV31qK2nsZXYcEAo1LfxXpEKFPBI5>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 772E5700065; Tue,  3 Feb 2026 10:56:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <52490.126020310521400893@us-mta-329.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: L7-p6eQevSH7bdWwsUOSLJVRxfqGGx6or6Sqet_B5ok_1770133933
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: ATW73pPHePWN
+Date: Tue, 03 Feb 2026 16:56:03 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "kernel test robot" <lkp@intel.com>
+Cc: "Arnd Bergmann" <arnd@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>, "Simon Horman" <horms@kernel.org>,
+ "Jeff Layton" <jlayton@kernel.org>,
+ "Anna Schumaker" <anna.schumaker@oracle.com>,
+ "Chuck Lever" <chuck.lever@oracle.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Linux Memory Management List" <linux-mm@kvack.org>,
+ "Randy Dunlap" <rdunlap@infradead.org>, "Yury Norov" <ynorov@nvidia.com>,
+ "Joel Fernandes" <joelagnelf@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Message-Id: <d777a8f0-41ab-48f8-93db-268f493ac656@app.fastmail.com>
+In-Reply-To: <aYINAPJS9zXlUGCw@smile.fi.intel.com>
+References: <20260202095834.1328352-1-arnd@kernel.org>
+ <202602032036.FQK7gJvV-lkp@intel.com> <aYINAPJS9zXlUGCw@smile.fi.intel.com>
+Subject: Re: [PATCH] tracing: remove __printf() attribute on __ftrace_vbprintk()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On Tue, Feb 3, 2026, at 15:58, Andy Shevchenko wrote:
+> On Tue, Feb 03, 2026 at 08:12:57PM +0800, kernel test robot wrote:
+>
+>> kernel test robot noticed the following build warnings:
+>
+> Yeah, you need to go for the full stack of these calls and mark the 
+> bottom one with __diag() to avoid these warnings. That's my understanding
+> and what BPF people required. Chasing this one-by-one would produce
+> unneeded churn.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+From what I can tell, I can just move the printf attribute
+to the __ftrace_vbprintk() definition to make this bit work.
+I'll send an updated patch:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+--- a/kernel/trace/trace_printk.c
++++ b/kernel/trace/trace_printk.c
+@@ -197,6 +197,7 @@ struct notifier_block module_trace_bprintk_format_nb = {
+        .notifier_call = module_trace_bprintk_format_notify,
+ };
+ 
++__printf(2, 3)
+ int __trace_bprintk(unsigned long ip, const char *fmt, ...)
+ {
+        int ret;
 
-Kernel information:
-    Commit message: Merge tag 'cgroup-for-6.19-rc8-fixes' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/tj/cgroup
+There are unrelated warnings for BPF that I managed to
+shut up the same way, doing
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2302054918
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b54ec0e945aa..45d026fc4e8a 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1046,6 +1046,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+        return err;
+ }
+ 
++__printf(3, 0)
+ BPF_CALL_5(bpf_snprintf, char *, str, u32, str_size, char *, fmt,
+           const void *, args, u32, data_len)
+ {
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index 24730df55e69..816fd7fba3d2 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -212,6 +212,7 @@ __bpf_kfunc_start_defs();
+  * Avoid using enum bpf_stream_id so that kfunc users don't have to pull in the
+  * enum in headers.
+  */
++__printf(2, 0)
+ __bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
+                                   u32 len__sz, struct bpf_prog_aux *aux)
+ {
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index eadaef8592a3..2d3de71ab86a 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -359,6 +359,7 @@ static const struct bpf_func_proto bpf_probe_write_user_proto = {
+ #define MAX_TRACE_PRINTK_VARARGS       3
+ #define BPF_TRACE_PRINTK_SIZE          1024
+ 
++__printf(1, 0)
+ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
+           u64, arg2, u64, arg3)
+ {
+@@ -412,6 +413,7 @@ const struct bpf_func_proto *bpf_get_trace_printk_proto(void)
+        return &bpf_trace_printk_proto;
+ }
+ 
++__printf(1, 0)
+ BPF_CALL_4(bpf_trace_vprintk, char *, fmt, u32, fmt_size, const void *, args,
+           u32, data_len)
+ {
+@@ -455,6 +457,7 @@ const struct bpf_func_proto *bpf_get_trace_vprintk_proto(void)
+        return &bpf_trace_vprintk_proto;
+ }
+ 
++__printf(2, 0)
+ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_size,
+           const void *, args, u32, data_len)
+ {
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
- at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
-:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
-            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
-0017.GAE@google.com/
-            Affected tests:
-                Boot test [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
+Since those functions have no callers, the annotation on the
+print functions does nothing.
 
+With those added, and a couple of drivers fixed to use the
+correct printf attributes, the only remaining one I see is
+in samples/trace_events/trace-events-sample.h:
 
+In file included from /home/arnd/arm-soc/include/trace/define_trace.h:132,
+                 from /home/arnd/arm-soc/samples/trace_events/trace-events-sample.h:640,
+                 from /home/arnd/arm-soc/samples/trace_events/trace-events-sample.c:12:
+/home/arnd/arm-soc/samples/trace_events/./trace-events-sample.h: In function 'trace_event_get_offsets_foo_bar':
+/home/arnd/arm-soc/include/trace/stages/stage5_get_offsets.h:33:31: error: function 'trace_event_get_offsets_foo_bar' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
+   33 |         { (void)sizeof(struct _test_no_array_##item *); }
+      |                               ^~~~~~~~~~~~~~~
+/home/arnd/arm-soc/include/trace/trace_events.h:285:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
+  285 |         tstruct;                                                        \
+      |         ^~~~~~~
+/home/arnd/arm-soc/include/trace/trace_events.h:43:30: note: in expansion of macro 'PARAMS'
+   43 |                              PARAMS(tstruct),                  \
+      |                              ^~~~~~
+/home/arnd/arm-soc/samples/trace_events/./trace-events-sample.h:291:1: note: in expansion of macro 'TRACE_EVENT'
+  291 | TRACE_EVENT(foo_bar,
+      | ^~~~~~~~~~~
+/home/arnd/arm-soc/samples/trace_events/./trace-events-sample.h:299:9: note: in expansion of macro 'TP_STRUCT__entry'
+  299 |         TP_STRUCT__entry(
+      |         ^~~~~~~~~~~~~~~~
+/home/arnd/arm-soc/samples/trace_events/./trace-events-sample.h:301:17: note: in expansion of macro '__field'
+  301 |                 __field(        int,    bar                     )
+      |                 ^~~~~~~
+/home/arnd/arm-soc/samples/trace_events/./trace-events-sample.h: In function 'do_trace_event_raw_event_foo_bar':
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+I don't think this is related, but I also don't see an obvious
+workaround other than forcing the warning off around that
+definition.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+       Arnd
