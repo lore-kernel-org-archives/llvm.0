@@ -1,49 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C37338939
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 16:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4316232E728
+	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 16:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770223596; cv=none; b=Q536eFeR77stVH0S8jQp0W1o6qxHog6L+i1c0GMdtIWo01UuyZVNsVr3MZfbCT4mVoGD4ZAldMMPXroF3FSdRpjQilHggE1DK3oBQ3PqXXyQ2LFdvgVwTEuFBNRuFgo0fGzn3uY55CweWlthJ4pyM7bSUQDduMINMXfmulEc+GI=
+	t=1770224340; cv=none; b=iZCiZuwkXAokt6s2i4bSL8aHBcNLQvL8N57JWm5jfKSpTMGMQVhRO4UFINDn9voAo5BTDF5EMlyUKpbAMacMtVzZTXcL/hZACU1LZzzM/euDBGiV0dcu/tU+uJJ8+X0Ud/nBbecROmJ+zDgmnl3QNfdSh0UvlVZyAm08fJwehuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770223596; c=relaxed/simple;
-	bh=5MvKB/pLVNRIf5mz1Pcl2H3OSmAikYcgRO6TMhbbEhQ=;
+	s=arc-20240116; t=1770224340; c=relaxed/simple;
+	bh=5p4eUAg3z+8rWM3HHAefWU2eIILWHVSOg4eCtv94Be8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qildz1aYClCmhTuCQwR/tXh5V3yRwGZMAwsBYLL9/WLccZqpfuqhxcIVbv4NRSR/uo9VomgsE6hcYh2OblCn0NA9xX3J2pfCQihA6GMuxKDjpyDjmTfvA3KC/hOUiyCaQD1X6l/QGIUvTUvLzEyTOYwGvop7i/zBeMcfu3/xy98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B1fWzrcJ; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=YYQ2Q5gRfTRGZovQYsQ3wkevuJpnR4KabuBbGFuWCmb5fwPWXMIaPvXIy+3UbLDDJALcyygLWEYRgtKAyDzYfJnxNNv0pHVARH20s7FNyyGhSYIqUheivsYvfHqkHDNqJvKx2oWilxv4SRReTcwwI8GLcplgKsxuZPf0DIvHEj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ksyb/Mwb; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B1fWzrcJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ksyb/Mwb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770223597; x=1801759597;
+  t=1770224340; x=1801760340;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5MvKB/pLVNRIf5mz1Pcl2H3OSmAikYcgRO6TMhbbEhQ=;
-  b=B1fWzrcJOEj3JSxBRCwVN/o1jsAMmvGZUGLIbJ4sohFfV3DWSf4AxTJT
-   hHkeNMiF/JtdWilgF2tf1zvW8IwPbgXQAjP3nBO1Sp5cHZudeYRneJccQ
-   eAXjR1D7qYzqZC3vrfJwZkbAv4peK1IxEuSGvCqe0HYuC+oBgX1WCcZTz
-   OGa9XbQJCEihiffCiWs0PUaOCRzAampPQ69rKKw1mO8gOPnlUlwdlSUPJ
-   +dQrcsA4LURsCljnSthCjkvBeCrZmF79MDsiLXbmXZW+qsIaUkVNtougE
-   fuoym+FdfF6qZTHMChc68cdZo6ROYV2T5mUgrGOX1LB/ECc0H1NprAOjw
+  bh=5p4eUAg3z+8rWM3HHAefWU2eIILWHVSOg4eCtv94Be8=;
+  b=Ksyb/Mwbs19SoWAkhfAS5GmljW8bNWZ1cEWDEHDBrb4Z6SDfmDFgtJ1/
+   M8Z2TeOPW0K0xl4YvgEgelj1WT+iIcD8wQu0ZTvuOOtcWx4hsxS9267D+
+   +8ak3XE59GvsxMiV6qaZbBQZWg0cTQhpraUx1UiGjnY5PEzk4lJRjxfxx
+   N/FUQKxQPLLOu4eAw5GD/DmtH2eEOZbD6gZJnxe5vuBKIUDzQ2z3JvTZY
+   2pEqyC3ZMGbNvqsq0iarG2iEruCpjtrC0AZO9rLdihd22t5ZDHHKCuJnw
+   IKdyarISivPSrsZJOX58BNyuP69c5oigolKa9glp1O4rALMQyBEUSj2kx
    A==;
-X-CSE-ConnectionGUID: 3Qllx1CWQBuOucjyKyPqbw==
-X-CSE-MsgGUID: PFFFhIisRuGjEnjpAoTQ6w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82849678"
+X-CSE-ConnectionGUID: ANEwV8HdSWqPglT2vtRr7w==
+X-CSE-MsgGUID: Lboa8bGcSI6FecNWhBOIKQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82047816"
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="82849678"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 08:46:36 -0800
-X-CSE-ConnectionGUID: jE9J6EhAQLyPa9CcOLprtw==
-X-CSE-MsgGUID: CSh0pk6rT8K9zmmZc64pvA==
+   d="scan'208";a="82047816"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 08:59:00 -0800
+X-CSE-ConnectionGUID: Bw+BDVbtRHK1sm+swOUD+w==
+X-CSE-MsgGUID: +/Lw7ZhnRkaIdrvvE/BVmA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="233140431"
+   d="scan'208";a="214748988"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.188])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 08:46:31 -0800
-Date: Wed, 4 Feb 2026 18:46:29 +0200
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 08:58:54 -0800
+Date: Wed, 4 Feb 2026 18:58:52 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
 	Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
@@ -63,9 +63,10 @@ Cc: Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>
 Subject: Re: [PATCH v2 3/3] sunrpc: Fix compilation error (`make W=1`) when
  dprintk() is no-op
-Message-ID: <aYN35agQMKaIGZA0@smile.fi.intel.com>
+Message-ID: <aYN6zA79q6yOLFmA@smile.fi.intel.com>
 References: <20260204094500.2443455-1-andriy.shevchenko@linux.intel.com>
  <20260204094500.2443455-4-andriy.shevchenko@linux.intel.com>
+ <aYN35agQMKaIGZA0@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,25 +75,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260204094500.2443455-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <aYN35agQMKaIGZA0@smile.fi.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, Feb 04, 2026 at 10:41:23AM +0100, Andy Shevchenko wrote:
-> Clang compiler is not happy about set but unused variables:
+On Wed, Feb 04, 2026 at 06:46:36PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 04, 2026 at 10:41:23AM +0100, Andy Shevchenko wrote:
+> > Clang compiler is not happy about set but unused variables:
+> > 
+> > .../flexfilelayout/flexfilelayoutdev.c:56:9: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
+> > .../flexfilelayout/flexfilelayout.c:1505:6: error: variable 'err' set but not used [-Werror,-Wunused-but-set-variable]
+> > .../nfs4proc.c:9244:12: error: variable 'ptr' set but not used [-Werror,-Wunused-but-set-variable]
+> > 
+> > Fix these by forwarding parameters of dprintk() to no_printk().
+> > The positive side-effect is a format-string checker enabled even for the cases
+> > when dprintk() is no-op.
 > 
-> .../flexfilelayout/flexfilelayoutdev.c:56:9: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
-> .../flexfilelayout/flexfilelayout.c:1505:6: error: variable 'err' set but not used [-Werror,-Wunused-but-set-variable]
-> .../nfs4proc.c:9244:12: error: variable 'ptr' set but not used [-Werror,-Wunused-but-set-variable]
+> I'm afraid this is not end of story...
+> I received a dozen of minutes ago a new report and now I'm investigating.
 > 
-> Fix these by forwarding parameters of dprintk() to no_printk().
-> The positive side-effect is a format-string checker enabled even for the cases
-> when dprintk() is no-op.
+> Patches 1 & 2 though are ready to go.
 
-I'm afraid this is not end of story...
-I received a dozen of minutes ago a new report and now I'm investigating.
+Okay, if I'm not mistaken the only leftover is the missing tk_pid field due to
+conditional inclusion. However, if we do that unconditionally the data structure
+won't be expanded (there is a gap of 3 bytes. (Dunno about m68k, there may be
+actually +2 bytes due to 2-byte alignment.) The rest of the conditionally included
+members seem not being used in dprintk().
 
-Patches 1 & 2 though are ready to go.
+That said, removing ifdeffery around tk_pid in struct rpc_task should fix that
+problem.
+
+If you can fold this to the patch 3, would be nice:
+
+diff --git a/include/linux/sunrpc/sched.h b/include/linux/sunrpc/sched.h
+index ccba79ebf893..0dbdf3722537 100644
+--- a/include/linux/sunrpc/sched.h
++++ b/include/linux/sunrpc/sched.h
+@@ -95,10 +95,7 @@ struct rpc_task {
+ 	int			tk_rpc_status;	/* Result of last RPC operation */
+ 	unsigned short		tk_flags;	/* misc flags */
+ 	unsigned short		tk_timeouts;	/* maj timeouts */
+-
+-#if IS_ENABLED(CONFIG_SUNRPC_DEBUG) || IS_ENABLED(CONFIG_TRACEPOINTS)
+ 	unsigned short		tk_pid;		/* debugging aid */
+-#endif
+ 	unsigned char		tk_priority : 2,/* Task priority */
+ 				tk_garb_retry : 2,
+ 				tk_cred_retry : 2;
+
+Otherwise I can send a new version.
 
 -- 
 With Best Regards,
