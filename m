@@ -1,50 +1,50 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6C83B8BAA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE043B8BB8
 	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 09:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770198317; cv=none; b=riW/JRkMQqIhR1O9ORdI02erNUV6QzSM0CavGLI81CexKL7jf97ranshy9zmJk5WRYfHjIgOD8yXk2rDYaa+mBcWEcVLKDq3EDoaOli3bjXda4jHargCjHsBOWkM83H9sApIXFettejmZKY6TspHNXZqktu6EqXMSIWAqfPZi3k=
+	t=1770198317; cv=none; b=nMOsoVushry1Z9UUNIERcGy4wujStylgwhG13dQXnCZ8KAKBYC+eeLoBetwE1f1+RuQb+Ix+eNm3GYz/dOY4m6EbMWWQDikOZ411E8M4/5T6QPifeWgAc2Vk/5oxj8zO7TH1Hbzbm7CnlWrG2hpfHq6ojO825dRmVZTalfAP+ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770198317; c=relaxed/simple;
-	bh=oHfyB86S699I2l7vasQsJbgTXIDWhFxuxsXjPxNEoW4=;
+	bh=YrUQlyrHEX5MNyRLxbo3Ww4o9KuASOkuXaymD1/wJ98=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o+vAzFXTYvaA6yGZGnk1G7A2s7pSnf6XfL/J2zuBMdZ6+FXgIu68CEiNeTD8aFF7rgwFLCPfc4gBX0vABqiNnEpaR+xKqjk/S4M/aD87Qc3nzeY5XnD8IG2Ec2LKnhVULjq7DX3zJKvREUlpER6FwEGqXy23jeMVegZ3hMGVP5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AIJfgXop; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=hCh1fvwS543yAG59AHOud0cwwOaZ/fxyx3btZb20ZvZ+Z85WfU615W4Ki1KVmVMoC1NpCh/qt26Kn68LN91SvqCJIaNTk+Tqlv9prKahjnpA69PuoephNkuhGNk/y87rkyP/MeK8GF/hlgGMpKJUESqn7U9pZeHWcgdy7NgDk7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nfNdAEEM; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AIJfgXop"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nfNdAEEM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770198317; x=1801734317;
+  t=1770198318; x=1801734318;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oHfyB86S699I2l7vasQsJbgTXIDWhFxuxsXjPxNEoW4=;
-  b=AIJfgXopIoDOWQa7ZoC0irUr1rxw20rtPY8RxLna82MVqJXeJ0EGflZf
-   I+i+6ShUWl/a1Sr9pQRIlh/UXUeKHwKeb7PyWX1exuVmnLu9t8JfYyhUc
-   jW9b+TJZRE/bqawXMO4aOfADBh7q5+jZfg7LYGKU10p42vL7el1WTlkWB
-   4FyVwCvDLoF2OU67bZxcrxT58lVnecJnal2MBiEnG/GZAWiwMG7Ns/N5X
-   MGwZqRq0cfdAeIj0QDOs/8ZuCKJPvYCM1+DpTlKyjSiS2yWo8QulWSfe0
-   IQQd2Z5NYwtwPRssAMjF7qsRzUZpRRrXUFsx5dru3WY8FlKPcWOoUuN9z
-   Q==;
-X-CSE-ConnectionGUID: upGzGxnXRi6YTrF96vvWaQ==
-X-CSE-MsgGUID: z+6RaFLcQASBt1x6crIjEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71110494"
+  bh=YrUQlyrHEX5MNyRLxbo3Ww4o9KuASOkuXaymD1/wJ98=;
+  b=nfNdAEEMn8ichNAvnGrf3j2Vl/Cl96AgRsT45SqmTOOMukBXyMtVbddT
+   zPDh47EprxOwf1/XOB5ARhFnjsWwJ4eCdKHtuEsYfscMUUmB+mkxPuZt7
+   JUg6p0RR9/mjkM9A7eGVBORBqSHOISzyjJ4Swk4U6BRG/VAXPr6A7N8rg
+   ImCyPco8b7Qgtv65fA7xazM9zjqFA54G2LzkcVCjTwGy3BtBsmM8Y0QfR
+   Wz00VxFwKdKaZovNdhyCmvAdPFW4y8810k6Z3xHiQm5FuR3E6hPJOPR+S
+   DKMjMarApgBnN2rslAUh1EA4wUs9CFYT4I72EVK/9vsewmA+zKmr1SAGH
+   w==;
+X-CSE-ConnectionGUID: u1ID49PTQtCBik9DdLtHvg==
+X-CSE-MsgGUID: aKW7D55NSxyDroDRz24HkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71110505"
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="71110494"
+   d="scan'208";a="71110505"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 01:45:17 -0800
-X-CSE-ConnectionGUID: sAn5l725S82scI/jmHTkNw==
-X-CSE-MsgGUID: XP6FcHVqRLuBZCHzy7YxUw==
+X-CSE-ConnectionGUID: zINygFoMTM+ROCfeM5ib3g==
+X-CSE-MsgGUID: kaE1IdPVQPafwuOWu0sj+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="214597136"
+   d="scan'208";a="214597138"
 Received: from black.igk.intel.com ([10.91.253.5])
   by fmviesa005.fm.intel.com with ESMTP; 04 Feb 2026 01:45:12 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 132F198; Wed, 04 Feb 2026 10:45:11 +0100 (CET)
+	id 1C4B49B; Wed, 04 Feb 2026 10:45:11 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Chuck Lever <chuck.lever@oracle.com>,
 	NeilBrown <neil@brown.name>,
@@ -67,10 +67,11 @@ Cc: Trond Myklebust <trondmy@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/3] nfs/blocklayout: Fix compilation error (`make W=1`) in bl_write_pagelist()
-Date: Wed,  4 Feb 2026 10:41:21 +0100
-Message-ID: <20260204094500.2443455-2-andriy.shevchenko@linux.intel.com>
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 3/3] sunrpc: Fix compilation error (`make W=1`) when dprintk() is no-op
+Date: Wed,  4 Feb 2026 10:41:23 +0100
+Message-ID: <20260204094500.2443455-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260204094500.2443455-1-andriy.shevchenko@linux.intel.com>
 References: <20260204094500.2443455-1-andriy.shevchenko@linux.intel.com>
@@ -82,47 +83,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clang compiler is not happy about set but unused variable
-(when dprintk() is no-op):
+Clang compiler is not happy about set but unused variables:
 
-.../blocklayout/blocklayout.c:384:9: error: variable 'count' set but not used [-Werror,-Wunused-but-set-variable]
+.../flexfilelayout/flexfilelayoutdev.c:56:9: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
+.../flexfilelayout/flexfilelayout.c:1505:6: error: variable 'err' set but not used [-Werror,-Wunused-but-set-variable]
+.../nfs4proc.c:9244:12: error: variable 'ptr' set but not used [-Werror,-Wunused-but-set-variable]
 
-Remove a leftover from the previous cleanup.
+Fix these by forwarding parameters of dprintk() to no_printk().
+The positive side-effect is a format-string checker enabled even for the cases
+when dprintk() is no-op.
 
-Fixes: 3a6fd1f004fc ("pnfs/blocklayout: remove read-modify-write handling in bl_write_pagelist")
+Fixes: d67ae825a59d ("pnfs/flexfiles: Add the FlexFile Layout Driver")
+Fixes: fc931582c260 ("nfs41: create_session operation")
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- fs/nfs/blocklayout/blocklayout.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ fs/lockd/svclock.c           | 5 +++++
+ include/linux/sunrpc/debug.h | 8 ++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/blocklayout/blocklayout.c b/fs/nfs/blocklayout/blocklayout.c
-index 0e4c67373e4f..83e4a32b3018 100644
---- a/fs/nfs/blocklayout/blocklayout.c
-+++ b/fs/nfs/blocklayout/blocklayout.c
-@@ -381,14 +381,13 @@ bl_write_pagelist(struct nfs_pgio_header *header, int sync)
- 	sector_t isect, extent_length = 0;
- 	struct parallel_io *par = NULL;
- 	loff_t offset = header->args.offset;
--	size_t count = header->args.count;
- 	struct page **pages = header->args.pages;
- 	int pg_index = header->args.pgbase >> PAGE_SHIFT;
- 	unsigned int pg_len;
- 	struct blk_plug plug;
- 	int i;
+diff --git a/fs/lockd/svclock.c b/fs/lockd/svclock.c
+index 712df1e025d8..dcd3e0b4d997 100644
+--- a/fs/lockd/svclock.c
++++ b/fs/lockd/svclock.c
+@@ -80,6 +80,11 @@ static const char *nlmdbg_cookie2a(const struct nlm_cookie *cookie)
  
--	dprintk("%s enter, %zu@%lld\n", __func__, count, offset);
-+	dprintk("%s enter, %u@%lld\n", __func__, header->args.count, offset);
+ 	return buf;
+ }
++#else
++static inline const char *nlmdbg_cookie2a(const struct nlm_cookie *cookie)
++{
++	return "???";
++}
+ #endif
  
- 	/* At this point, header->page_aray is a (sequential) list of nfs_pages.
- 	 * We want to write each, and if there is an error set pnfs_error
-@@ -429,7 +428,6 @@ bl_write_pagelist(struct nfs_pgio_header *header, int sync)
- 		}
+ /*
+diff --git a/include/linux/sunrpc/debug.h b/include/linux/sunrpc/debug.h
+index e947d668f7b7..82239d5c262e 100644
+--- a/include/linux/sunrpc/debug.h
++++ b/include/linux/sunrpc/debug.h
+@@ -40,6 +40,8 @@ extern unsigned int		nlm_debug;
+ do {									\
+ 	ifdebug(fac)							\
+ 		__sunrpc_printk(fmt, ##__VA_ARGS__);			\
++	else								\
++		no_printk(fmt, ##__VA_ARGS__);				\
+ } while (0)
  
- 		offset += pg_len;
--		count -= pg_len;
- 		isect += (pg_len >> SECTOR_SHIFT);
- 		extent_length -= (pg_len >> SECTOR_SHIFT);
- 	}
+ # define dfprintk_rcu(fac, fmt, ...)					\
+@@ -48,13 +50,15 @@ do {									\
+ 		rcu_read_lock();					\
+ 		__sunrpc_printk(fmt, ##__VA_ARGS__);			\
+ 		rcu_read_unlock();					\
++	} else {							\
++		no_printk(fmt, ##__VA_ARGS__);				\
+ 	}								\
+ } while (0)
+ 
+ #else
+ # define ifdebug(fac)		if (0)
+-# define dfprintk(fac, fmt, ...)	do {} while (0)
+-# define dfprintk_rcu(fac, fmt, ...)	do {} while (0)
++# define dfprintk(fac, fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
++# define dfprintk_rcu(fac, fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
+ #endif
+ 
+ /*
 -- 
 2.50.1
 
