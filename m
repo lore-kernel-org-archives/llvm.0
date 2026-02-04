@@ -1,112 +1,185 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA0833FBA7
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 00:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EBA1D8E01;
+	Wed,  4 Feb 2026 00:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770164044; cv=none; b=DWkrqMMB3os9zYYn46sa1/4KXzpEgpnTeSM2f/7mn9bxPZtAFkDUIrg6XnLaQmr0xl5JFFOXXvz04NsPpt8N4OI7/bwZmbYBO7PS40XqBuRckkebGq6mfvDJVSPL1EnuefhzkmFwdI2g42qDJ2GbwT2Zaqpqem73lMLqN82y7r8=
+	t=1770165183; cv=none; b=ESWn+8ruJAmHw8WeNb78Z5P4hRNN6tpqwWGydMKB43+5YVPTtAN1wtv+HbyIT95PV5qV8c0r7xd04rh4w7HdMi/05p7TG71LvteyUZMaboZidX+Ej6EEVMGbNMKSh+d7iy+m2jg/KzLLEYX4062UiNzYCfAp7yqY78GQ3YrCh8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770164044; c=relaxed/simple;
-	bh=bdbt8JN6hQkEks7USoQwkCeqlenQ1RVmHYP/tvhgTgI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n2JpEdoeBzfxfTValUG7F96b+/AHoZJbiKKo8NgvrjsL7tCws1s9zeXIP+82cJadbq3zBtv9+mJp+D5GRDI25KNxnkij0A8wjv7Pe8nFn8LRa5KfvNdzxi4tE2tJTjh/lz902nI7RKSFe0Ihf90GtSPevHOS0OkJcQAsDCbxfr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost [127.0.0.1])
-	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 6140DeeX3681128;
-	Tue, 3 Feb 2026 18:13:40 -0600
-Received: (from segher@localhost)
-	by gate.crashing.org (8.18.1/8.18.1/Submit) id 6140DZ1W3681124;
-	Tue, 3 Feb 2026 18:13:35 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 3 Feb 2026 18:13:35 -0600
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] powerpc/uaccess: Fix inline assembly for clang build on
- PPC32
-Message-ID: <aYKPL-KME9KnRoA7@gate>
-References: <8ca3a657a650e497a96bfe7acde2f637dadab344.1770103646.git.chleroy@kernel.org>
- <20260203221939.059bb903@pumpkin>
+	s=arc-20240116; t=1770165183; c=relaxed/simple;
+	bh=CtxeYGZrf6GdemXtSbS6AORMoabjNq/3r5bHPMGd+N4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hXxu2WSYOEbSyjtztqSz4VUHws2rp5yZThOXWWQdHAFI5KhpLLJQYsijZHS1Xyc9Gwte4lz9SSFhRea7bzjHkQgDM9lTxaAy28cgiWa7OK+kRZERmc73zcTyxg0FPIWO2BHovTptodgVnmqGFprHe9VNXDRl8slSX1YP/CCdVDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lx2CZv7k; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lx2CZv7k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770165182; x=1801701182;
+  h=date:from:to:cc:subject:message-id;
+  bh=CtxeYGZrf6GdemXtSbS6AORMoabjNq/3r5bHPMGd+N4=;
+  b=lx2CZv7klXwLBIPmAFSZQ6OdnkRr7aO/itDHGiW5tCyw8x3K4B+eLDfD
+   yCnkVdoRrHT0uYlyCnCT3XNKzGzBBvY9ZoTwCXUyAtvdxvwxQ2YUOKFuB
+   Hplt0F4tAbZ1u689ytK4PojgIxmbK1UdKkXvLbTaSbUr4B01bX2VvSh+N
+   lbzQivmuDNSP/r0se7Nvl+8lhskrqgViC30GDXGT1DEfhyRkG88OIbZQt
+   KQJhisaIvjpgCra2DN36DiBBJEdl1dctD35/5JAhbNY6AWQUKVnL5ZZ9+
+   s2/o1RK1Anqjx3I8z1FdX0eI7sa5//AO323sVSrcQ5UqWwMjvYM56GqTA
+   A==;
+X-CSE-ConnectionGUID: FjR6AYn3SVKEYwSkpIcqVA==
+X-CSE-MsgGUID: 1S1n7j5/TuyZ79DHud4muA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="70546835"
+X-IronPort-AV: E=Sophos;i="6.21,271,1763452800"; 
+   d="scan'208";a="70546835"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 16:33:01 -0800
+X-CSE-ConnectionGUID: HXbLnb23R/KvdZviGOrxxg==
+X-CSE-MsgGUID: 5bkRTNh6Ti29PHLTDsak0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,271,1763452800"; 
+   d="scan'208";a="210037561"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 03 Feb 2026 16:32:58 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnQpE-00000000hK8-2r5U;
+	Wed, 04 Feb 2026 00:32:56 +0000
+Date: Wed, 04 Feb 2026 08:32:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_trace_support_v3 27/60]
+ arch/riscv/kvm/aia_imsic.c:837:2: warning: variable 'vcpu' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202602040830.MzgbMKTQ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260203221939.059bb903@pumpkin>
 
-Hi!
+tree:   https://github.com/avpatel/linux.git riscv_trace_support_v3
+head:   e6550b7b7b811a0a3d16982322597770df39483d
+commit: d451ba4a68d954a76d24cd625c21bacbf13ed693 [27/60] RISC-V: KVM: Add guest file irqbypass support
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260204/202602040830.MzgbMKTQ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602040830.MzgbMKTQ-lkp@intel.com/reproduce)
 
-On Tue, Feb 03, 2026 at 10:19:39PM +0000, David Laight wrote:
-> On Tue,  3 Feb 2026 08:30:41 +0100
-> "Christophe Leroy (CS GROUP)" <chleroy@kernel.org> wrote:
-> 
-> > Test robot reports the following error with clang-16.0.6:
-> > 
-> >    In file included from kernel/rseq.c:75:
-> >    include/linux/rseq_entry.h:141:3: error: invalid operand for instruction
-> >                    unsafe_get_user(offset, &ucs->post_commit_offset, efault);
-> >                    ^
-> >    include/linux/uaccess.h:608:2: note: expanded from macro 'unsafe_get_user'
-> >            arch_unsafe_get_user(x, ptr, local_label);      \
-> >            ^
-> >    arch/powerpc/include/asm/uaccess.h:518:2: note: expanded from macro 'arch_unsafe_get_user'
-> >            __get_user_size_goto(__gu_val, __gu_addr, sizeof(*(p)), e); \
-> >            ^
-> >    arch/powerpc/include/asm/uaccess.h:284:2: note: expanded from macro '__get_user_size_goto'
-> >            __get_user_size_allowed(x, ptr, size, __gus_retval);    \
-> >            ^
-> >    arch/powerpc/include/asm/uaccess.h:275:10: note: expanded from macro '__get_user_size_allowed'
-> >            case 8: __get_user_asm2(x, (u64 __user *)ptr, retval);  break;  \
-> >                    ^
-> >    arch/powerpc/include/asm/uaccess.h:258:4: note: expanded from macro '__get_user_asm2'
-> >                    "       li %1+1,0\n"                    \
-> >                     ^
-> >    <inline asm>:7:5: note: instantiated into assembly here
-> >            li 31+1,0
-> >               ^
-> >    1 error generated.
-> > 
-> > On PPC32, for 64 bits vars a pair of registers is used. Usually the
-> > lower register in the pair is the high part and the higher register is
-> > the low part. GCC uses r3/r4 ... r11/r12 ... r14/r15 ... r30/r31
-> > 
-> > In older kernel code inline assembly was using %1 and %1+1 to represent
-> > 64 bits values. However here it looks like clang uses r31 as high part,
-> > allthough r32 doesn't exist hence the error.
-> > 
-> > Allthoug %1+1 should work, most places now use %L1 instead of %1+1, so
-> > let's do the same here.
-> > 
-> > With that change, the build doesn't fail anymore and a disassembly shows
-> > clang uses r17/r18 and r31/r14 pair when GCC would have used r16/r17 and
-> > r30/r31:
-> 
-> Isn't it all horribly worse than that?
-> It only failed because clang picked r31, but if can pick two non-adjacent
-> registers might it not pick any pair.
-> In which case there could easily be a 64bit get_user() that reads an incorrect
-> value and corrupts another register.
-> Find one and you might have a privilege escalation.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602040830.MzgbMKTQ-lkp@intel.com/
 
-I don't think LLVM is that broken, it only has problems for some edge
-cases.  Yes, I might expect too much.  But without proof to the contrary
-let's assume things are okay :-)
+All warnings (new ones prefixed by >>):
 
-And, worrying.  But what can we do against it!  Other than never ever
-use LLVM for anything serious, of course.
+>> arch/riscv/kvm/aia_imsic.c:837:2: warning: variable 'vcpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     837 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kvm_host.h:1012:6: note: expanded from macro 'kvm_for_each_vcpu'
+    1012 |         if (atomic_read(&kvm->online_vcpus))                            \
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_imsic.c:841:7: note: uninitialized use occurs here
+     841 |         if (!vcpu)
+         |              ^~~~
+   arch/riscv/kvm/aia_imsic.c:837:2: note: remove the 'if' if its condition is always true
+     837 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
+         |         ^
+   include/linux/kvm_host.h:1012:2: note: expanded from macro 'kvm_for_each_vcpu'
+    1012 |         if (atomic_read(&kvm->online_vcpus))                            \
+         |         ^
+   arch/riscv/kvm/aia_imsic.c:804:23: note: initialize the variable 'vcpu' to silence this warning
+     804 |         struct kvm_vcpu *vcpu;
+         |                              ^
+         |                               = NULL
+   1 warning generated.
 
 
-Segher
+vim +837 arch/riscv/kvm/aia_imsic.c
+
+   793	
+   794	void kvm_arch_update_irqfd_routing(struct kvm_kernel_irqfd *irqfd,
+   795					   struct kvm_kernel_irq_routing_entry *old,
+   796					   struct kvm_kernel_irq_routing_entry *new)
+   797	{
+   798		struct riscv_iommu_ir_vcpu_info vcpu_info;
+   799		struct kvm *kvm = irqfd->kvm;
+   800		struct kvm_aia *aia = &kvm->arch.aia;
+   801		int host_irq = irqfd->producer->irq;
+   802		struct irq_data *irqdata = irq_get_irq_data(host_irq);
+   803		unsigned long tmp, flags;
+   804		struct kvm_vcpu *vcpu;
+   805		struct imsic *imsic;
+   806		struct msi_msg msg;
+   807		u64 msi_addr_mask;
+   808		gpa_t target;
+   809		int ret;
+   810	
+   811		if (old && old->type == KVM_IRQ_ROUTING_MSI &&
+   812		    new && new->type == KVM_IRQ_ROUTING_MSI &&
+   813		    !memcmp(&old->msi, &new->msi, sizeof(new->msi)))
+   814			return;
+   815	
+   816		if (!new) {
+   817			if (!WARN_ON_ONCE(!old) && old->type == KVM_IRQ_ROUTING_MSI) {
+   818				ret = irq_set_vcpu_affinity(host_irq, NULL);
+   819				WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
+   820			}
+   821			return;
+   822		}
+   823	
+   824		if (new->type != KVM_IRQ_ROUTING_MSI)
+   825			return;
+   826	
+   827		target = ((gpa_t)new->msi.address_hi << 32) | new->msi.address_lo;
+   828		if (WARN_ON_ONCE(target & (IMSIC_MMIO_PAGE_SZ - 1)))
+   829			return;
+   830	
+   831		msg = (struct msi_msg){
+   832			.address_hi = new->msi.address_hi,
+   833			.address_lo = new->msi.address_lo,
+   834			.data = new->msi.data,
+   835		};
+   836	
+ > 837		kvm_for_each_vcpu(tmp, vcpu, kvm) {
+   838			if (target == vcpu->arch.aia_context.imsic_addr)
+   839				break;
+   840		}
+   841		if (!vcpu)
+   842			return;
+   843	
+   844		msi_addr_mask = kvm_riscv_aia_msi_addr_mask(aia);
+   845		vcpu_info = (struct riscv_iommu_ir_vcpu_info){
+   846			.gpa = target,
+   847			.msi_addr_mask = msi_addr_mask,
+   848			.msi_addr_pattern = (target >> IMSIC_MMIO_PAGE_SHIFT) & ~msi_addr_mask,
+   849			.group_index_bits = aia->nr_group_bits,
+   850			.group_index_shift = aia->nr_group_shift,
+   851		};
+   852	
+   853		imsic = vcpu->arch.aia_context.imsic_state;
+   854	
+   855		read_lock_irqsave(&imsic->vsfile_lock, flags);
+   856	
+   857		if (WARN_ON_ONCE(imsic->vsfile_cpu < 0))
+   858			goto out;
+   859	
+   860		vcpu_info.hpa = imsic->vsfile_pa;
+   861	
+   862		ret = irq_set_vcpu_affinity(host_irq, &vcpu_info);
+   863		WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
+   864		if (ret)
+   865			goto out;
+   866	
+   867		irq_data_get_irq_chip(irqdata)->irq_write_msi_msg(irqdata, &msg);
+   868	
+   869	out:
+   870		read_unlock_irqrestore(&imsic->vsfile_lock, flags);
+   871	}
+   872	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
