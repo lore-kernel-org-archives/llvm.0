@@ -1,232 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E107D3D905A;
-	Wed,  4 Feb 2026 10:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549B33E8C52
+	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 10:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770200841; cv=none; b=llkAbeLCa+2H4OIpxKXorFJw8AdLTdW4Xblj7PO/eEd1/LMv/35J/DMA0OFqHJrAxD52rl9J4yupw2Bj8rrTJw+omgD8U7Bu+UTX+e9M8A9jKoClnEt2uYCsioZCpywLjx3nMFou81O5W8rK2vEgzeDtu1ylrU6bnScKBzvTHxw=
+	t=1770201696; cv=none; b=FoZhVd8iGjX08FEdBW+YcI+AJZAZIPJK4g+aKK9c6sDJSRZFEXDyu3ETAumDz3TpL77XOuYOUWb46xM/rffRLzp4LNMsnXjI7Lz8XBq4sTRpdFKZsrX1s5PKyD2N4m+XC04iCcX5KDeDf4Rj1k5vZ5OwkhhDa4ZEUvBMuQsBffg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770200841; c=relaxed/simple;
-	bh=JRuJQPv7aGONantzYfoKczNuuZ11CoKjZlMrKsbTBFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RdpvtcD8b490hISZJSs5YJ/vnA4j7M+zL00INMfIjYzY+hpeZ6CydurMt41oHoRRPLqMWVAuL9I+Udgles/ExkHs69Kv2pCOWZ1Gd4/BwfqJY8W3+j3NDPfBMse3gS1zFHd4f3dd/mQEbYqfyJ/91I7CSZQQXX6DhwWKbYkY9hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aY0nA+PG; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770201696; c=relaxed/simple;
+	bh=n+KFMIEg7ILgHSBVi1DF/IeBc2dZ8C9nEfF1T5o6KA0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Pi8xp+SKgNIEt+Ax8USlGyBH8OjCnJQGglpuwihlG0V67fbilv035cWc9g+ca+Qp/GTHg5DsUtehKeGJ19+pLSaF0YDo+EPjlMEjtduLH7ktyOEEia7kW2nL95Y1RjW8KKoZurTFueTOH4VXX6pppUwdk4TfQSgNxGZWF/bRkJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NBsOWaOd; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aY0nA+PG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770200841; x=1801736841;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JRuJQPv7aGONantzYfoKczNuuZ11CoKjZlMrKsbTBFk=;
-  b=aY0nA+PGWRpSb7iBKNVC2hNXKgySApxq9C5mUOfFRph+FYV8XDcVpnV9
-   E9Z3ZPceqCflw9io1hUToD5z7a7mZ7G626WGGSq0V4NXbrWtE6voeDYG7
-   AalZadeTto8fw5ksgT5pQFhFFB2pwN8f6/KNNHDttLTi7mxIBLV3bFSd9
-   GaoVNKHsrF4ehIVjrU0prErd9LtrDA9xZkSMlP24T+EsetB+TKQqQFABU
-   2ZkFJLEOyQjiRfnuYjymSfBqW+30vXAF3AiggRcSybb+BtLZQBpljwWcK
-   JFKVA6+rr6V5h19vrtFq2Mm0mO/568V2d2Bualj2FXqwW/B99qFnajTC3
-   g==;
-X-CSE-ConnectionGUID: sk+On3fpQ/GfpsC7WAYhMw==
-X-CSE-MsgGUID: dqv1m2nqRWe4RnOptqRQBQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71289075"
-X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="71289075"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 02:27:20 -0800
-X-CSE-ConnectionGUID: JMrX+m0kRKmijS8TxMkcxA==
-X-CSE-MsgGUID: 2O+MoJj/RYOefVIj1fTogA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="247714930"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 04 Feb 2026 02:27:16 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vna6M-00000000hgS-0LaR;
-	Wed, 04 Feb 2026 10:27:14 +0000
-Date: Wed, 4 Feb 2026 18:26:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
-	Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when
- dprintk() is no-op
-Message-ID: <202602041851.8AI0nchL-lkp@intel.com>
-References: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NBsOWaOd"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-480711d09f1so85663345e9.0
+        for <llvm@lists.linux.dev>; Wed, 04 Feb 2026 02:41:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770201695; x=1770806495; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pRwouiQfEMsoda5YPwBCj431swMzELp5kqTN2koP4hQ=;
+        b=NBsOWaOdUeU0Xffo5qarxHluxso6aHa10h7UJu+wI2nWSkeeDyXg8JXm64VLAlKmnU
+         Pnywi0rWBtoHiZaJWsx5BEAWzdNxbZRgtpNzOApbELoEmOYB7ScVMwojAsLfrWKN5AOB
+         rAcr0YOZROCpGSz2l1XaBYjncJ7F8O1ERtXbFjgn4x+E5s2HIiO4ihHMgWm67a9GAcqc
+         T1uw8zRrd1OhP2itp2yp3JDJtUV2UOJsgwaFUPYCsqQnSoFhQ3waZNcoPc9/yJoHfrVd
+         EeXa2SeVjfTMtKULKW9BNb6+j4FNWfyDcBOhCBfKAYfKup+jahm7yzcy9GTdMWZm0ADr
+         ScKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770201695; x=1770806495;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pRwouiQfEMsoda5YPwBCj431swMzELp5kqTN2koP4hQ=;
+        b=UWnSvgNMK8qyY6IoQAfvK8dlJDroDB+wwqp18MpKqpPeOoTopOkMAd/tPPIbYBlXqc
+         rAFKP3mvuBycTbhPHOYsetxqGHLo+RYuUovrzGYvD6n9RQzyFgxXdG4/y56XKDhOJ6UC
+         +mXHX5bRD+fjnTZELS4MTN4jowGrdGkAerrW90XhsBV6eBccr0CCBE8y9bkTPyK+GMMJ
+         +nmtQ+NfMtOyApEwrt5LfSv1cwI97cfW5nLXtRU7k+bqvvBEn1CUki4XpNl8RMUD4Vvo
+         x0hs+oFBUuvteLictl8GKYj7lJ4nNQrZVuJzk6Y6pt+QgWYHiUlJ5ZQ5BC0js+KYPtrV
+         DALQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmWmklIfKH31Q/vTMusjJyGmBZVg+LtFkVh7WbCzmNbRcCcS5pn4ECiPse2pQvq6io9VzZ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx3vu6vQE9Cp7f1MCoNmpy1jqQeqwxqQFGK07qw/mxHyu27yKV3
+	W1fKWwRMwK4MOe1p0br7byYBokUC5qPS17PIT0vhJ97kqhIwJ8jIgylI1mws7Is18JyfBCQHmF2
+	/CWD1SGvzidoOZ4Acmg==
+X-Received: from wmbgz9-n1.prod.google.com ([2002:a05:600c:8889:10b0:480:6c9b:592])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:680a:b0:480:6c75:ddce with SMTP id 5b1f17b1804b1-4830e9a9b17mr35223645e9.33.1770201694753;
+ Wed, 04 Feb 2026 02:41:34 -0800 (PST)
+Date: Wed, 4 Feb 2026 10:41:33 +0000
+In-Reply-To: <20260204030507.8203-1-linkmauve@linkmauve.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com>
+Mime-Version: 1.0
+References: <20260204030507.8203-1-linkmauve@linkmauve.fr>
+Message-ID: <aYMiXcy33YEVkgYM@google.com>
+Subject: Re: [PATCH] rust: Add PowerPC support
+From: Alice Ryhl <aliceryhl@google.com>
+To: Link Mauve <linkmauve@linkmauve.fr>
+Cc: rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev, officialTechflashYT@gmail.com, 
+	Ash Logan <ash@heyquark.com>, Roberto Van Eeden <rw-r-r-0644@protonmail.com>, 
+	"Jonathan =?utf-8?Q?Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+On Wed, Feb 04, 2026 at 04:05:04AM +0100, Link Mauve wrote:
+> For now only Big Endian 32-bit PowerPC is supported, as that is the only
+> hardware I have.  This has been tested on the Nintendo Wii so far, but I
+> plan on also using it on the GameCube, Wii U and Apple G4.
 
-kernel test robot noticed the following build warnings:
+Super cool!
 
-[auto build test WARNING on trondmy-nfs/linux-next]
-[also build test WARNING on linus/master v6.19-rc8 next-20260203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> These changes aren=E2=80=99t the only ones required to get the kernel to =
+compile
+> and link on PowerPC, libcore will also have to be changed to not use
+> integer division to format u64, u128 and core::time::Duration, otherwise
+> __udivdi3() and __umoddi3() will have to be added.  I have tested this
+> change by replacing the three implementations with unimplemented!() and
+> it linked just fine.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/sunrpc-Fix-compilation-error-make-W-1-when-dprintk-is-no-op/20260204-091033
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20260204010415.2149607-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when dprintk() is no-op
-config: powerpc-randconfig-r131-20260204 (https://download.01.org/0day-ci/archive/20260204/202602041851.8AI0nchL-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602041851.8AI0nchL-lkp@intel.com/reproduce)
+Uh oh this seems tricky. How is this not a problem on arm32 too?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602041851.8AI0nchL-lkp@intel.com/
+Perhaps we should just be providing __udivdi3() and __umoddi3() in
+general?
 
-sparse warnings: (new ones prefixed by >>)
->> fs/nfs/getroot.c:90:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/getroot.c:90:17: sparse:    void
-   fs/nfs/getroot.c:90:17: sparse:    int
-   fs/nfs/getroot.c:98:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/getroot.c:98:17: sparse:    void
-   fs/nfs/getroot.c:98:17: sparse:    int
-   fs/nfs/getroot.c:114:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/getroot.c:114:17: sparse:    void
-   fs/nfs/getroot.c:114:17: sparse:    int
---
-   fs/nfs/namespace.c:381:1: sparse: sparse: bad integer constant expression
-   fs/nfs/namespace.c:381:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/namespace.c:382:1: sparse: sparse: bad integer constant expression
-   fs/nfs/namespace.c:382:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
->> fs/nfs/namespace.c:304:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/namespace.c:304:17: sparse:    void
-   fs/nfs/namespace.c:304:17: sparse:    int
---
-   fs/nfs/nfs4super.c:313:1: sparse: sparse: bad integer constant expression
-   fs/nfs/nfs4super.c:313:1: sparse: sparse: static assertion failed: "MODULE_INFO(description, ...) contains embedded NUL byte"
-   fs/nfs/nfs4super.c:314:1: sparse: sparse: bad integer constant expression
-   fs/nfs/nfs4super.c:314:1: sparse: sparse: static assertion failed: "MODULE_INFO(file, ...) contains embedded NUL byte"
-   fs/nfs/nfs4super.c:314:1: sparse: sparse: bad integer constant expression
-   fs/nfs/nfs4super.c:314:1: sparse: sparse: static assertion failed: "MODULE_INFO(license, ...) contains embedded NUL byte"
->> fs/nfs/nfs4super.c:232:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/nfs4super.c:232:17: sparse:    void
-   fs/nfs/nfs4super.c:232:17: sparse:    int
-   fs/nfs/nfs4super.c:255:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/nfs4super.c:255:17: sparse:    void
-   fs/nfs/nfs4super.c:255:17: sparse:    int
---
-   fs/nfs/super.c:1436:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1436:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1437:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1437:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1438:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1438:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1440:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1440:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1441:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1441:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1442:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1442:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1444:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1444:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1446:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1446:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1447:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1447:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1449:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1449:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1450:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1450:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1452:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1452:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1453:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1453:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1455:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1455:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1457:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1457:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1458:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1458:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1462:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1462:1: sparse: sparse: static assertion failed: "MODULE_INFO(parmtype, ...) contains embedded NUL byte"
-   fs/nfs/super.c:1463:1: sparse: sparse: bad integer constant expression
-   fs/nfs/super.c:1463:1: sparse: sparse: static assertion failed: "MODULE_INFO(parm, ...) contains embedded NUL byte"
->> fs/nfs/super.c:1325:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/super.c:1325:17: sparse:    void
-   fs/nfs/super.c:1325:17: sparse:    int
-   fs/nfs/super.c:1351:17: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/super.c:1351:17: sparse:    void
-   fs/nfs/super.c:1351:17: sparse:    int
---
-   fs/nfs/fs_context.c:1773:1: sparse: sparse: bad integer constant expression
-   fs/nfs/fs_context.c:1773:1: sparse: sparse: static assertion failed: "MODULE_INFO(alias, ...) contains embedded NUL byte"
-   fs/nfs/fs_context.c:1785:1: sparse: sparse: bad integer constant expression
-   fs/nfs/fs_context.c:1785:1: sparse: sparse: static assertion failed: "MODULE_INFO(alias, ...) contains embedded NUL byte"
-   fs/nfs/fs_context.c:1786:1: sparse: sparse: bad integer constant expression
-   fs/nfs/fs_context.c:1786:1: sparse: sparse: static assertion failed: "MODULE_INFO(alias, ...) contains embedded NUL byte"
->> fs/nfs/fs_context.c:1119:9: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/fs_context.c:1119:9: sparse:    void
-   fs/nfs/fs_context.c:1119:9: sparse:    int
-   fs/nfs/fs_context.c:1122:9: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/fs_context.c:1122:9: sparse:    void
-   fs/nfs/fs_context.c:1122:9: sparse:    int
-   fs/nfs/fs_context.c:1125:9: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/fs_context.c:1125:9: sparse:    void
-   fs/nfs/fs_context.c:1125:9: sparse:    int
-   fs/nfs/fs_context.c:1590:9: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/fs_context.c:1590:9: sparse:    void
-   fs/nfs/fs_context.c:1590:9: sparse:    int
-   fs/nfs/fs_context.c:1604:9: sparse: sparse: incompatible types in conditional expression (different base types):
-   fs/nfs/fs_context.c:1604:9: sparse:    void
-   fs/nfs/fs_context.c:1604:9: sparse:    int
+> diff --git a/arch/powerpc/include/asm/jump_label.h b/arch/powerpc/include=
+/asm/jump_label.h
+> index d4eaba459a0e..238f0f625a36 100644
+> --- a/arch/powerpc/include/asm/jump_label.h
+> +++ b/arch/powerpc/include/asm/jump_label.h
+> @@ -15,14 +15,18 @@
+>  #define JUMP_ENTRY_TYPE		stringify_in_c(FTR_ENTRY_LONG)
+>  #define JUMP_LABEL_NOP_SIZE	4
+> =20
+> +/* This macro is also expanded on the Rust side. */
+> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
+> +	"1:\n\t"					\
+> +	"nop # arch_static_branch\n\t"			\
+> +	".pushsection __jump_table,  \"aw\"\n\t"	\
+> +	".long 1b - ., " label " - .\n\t"		\
+> +	 JUMP_ENTRY_TYPE key " - .\n\t"			\
+> +	 ".popsection \n\t"
+> +
+>  static __always_inline bool arch_static_branch(struct static_key *key, b=
+ool branch)
+>  {
+> -	asm goto("1:\n\t"
+> -		 "nop # arch_static_branch\n\t"
+> -		 ".pushsection __jump_table,  \"aw\"\n\t"
+> -		 ".long 1b - ., %l[l_yes] - .\n\t"
+> -		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
+> -		 ".popsection \n\t"
+> +	asm goto(ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
+>  		 : :  "i" (&((char *)key)[branch]) : : l_yes);
 
-vim +90 fs/nfs/getroot.c
+In case this patch takes a long time to land, it may make sense to split
+this part out in a separate patch that can land now.
 
-b09b9417d074e0 Trond Myklebust 2007-10-25  63  
-54ceac45159860 David Howells   2006-08-22  64  /*
-6d26c5e4d83cd3 Li Lingfeng     2024-08-24  65   * get a root dentry from the root filehandle
-54ceac45159860 David Howells   2006-08-22  66   */
-62a55d088cd87d Scott Mayhew    2019-12-10  67  int nfs_get_root(struct super_block *s, struct fs_context *fc)
-54ceac45159860 David Howells   2006-08-22  68  {
-62a55d088cd87d Scott Mayhew    2019-12-10  69  	struct nfs_fs_context *ctx = nfs_fc2context(fc);
-eae00c5d6e48cc Scott Mayhew    2021-06-22  70  	struct nfs_server *server = NFS_SB(s), *clone_server;
-54ceac45159860 David Howells   2006-08-22  71  	struct nfs_fsinfo fsinfo;
-62a55d088cd87d Scott Mayhew    2019-12-10  72  	struct dentry *root;
-54ceac45159860 David Howells   2006-08-22  73  	struct inode *inode;
-62a55d088cd87d Scott Mayhew    2019-12-10  74  	char *name;
-62a55d088cd87d Scott Mayhew    2019-12-10  75  	int error = -ENOMEM;
-779df6a5480f13 Scott Mayhew    2020-03-03  76  	unsigned long kflags = 0, kflags_out = 0;
-54ceac45159860 David Howells   2006-08-22  77  
-62a55d088cd87d Scott Mayhew    2019-12-10  78  	name = kstrdup(fc->source, GFP_KERNEL);
-b1942c5f8cf3be Al Viro         2011-03-16  79  	if (!name)
-62a55d088cd87d Scott Mayhew    2019-12-10  80  		goto out;
-b1942c5f8cf3be Al Viro         2011-03-16  81  
-54ceac45159860 David Howells   2006-08-22  82  	/* get the actual root for this mount */
-d755ad8dc752d4 Anna Schumaker  2021-10-22  83  	fsinfo.fattr = nfs_alloc_fattr_with_label(server);
-62a55d088cd87d Scott Mayhew    2019-12-10  84  	if (fsinfo.fattr == NULL)
-62a55d088cd87d Scott Mayhew    2019-12-10  85  		goto out_name;
-54ceac45159860 David Howells   2006-08-22  86  
-62a55d088cd87d Scott Mayhew    2019-12-10  87  	error = server->nfs_client->rpc_ops->getroot(server, ctx->mntfh, &fsinfo);
-54ceac45159860 David Howells   2006-08-22  88  	if (error < 0) {
-54ceac45159860 David Howells   2006-08-22  89  		dprintk("nfs_get_root: getattr error = %d\n", -error);
-ce8866f0913ff1 Scott Mayhew    2019-12-10 @90  		nfs_errorf(fc, "NFS: Couldn't getattr on root");
+Also, consider pre-emptively updating arch_static_branch_jump too. We
+probably need it at some point in the future.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_targ=
+et.rs
+> index 38b3416bb979..0054880ba0ea 100644
+> --- a/scripts/generate_rust_target.rs
+> +++ b/scripts/generate_rust_target.rs
+> @@ -188,6 +188,16 @@ fn main() {
+>          panic!("arm uses the builtin rustc target");
+>      } else if cfg.has("ARM64") {
+>          panic!("arm64 uses the builtin rustc aarch64-unknown-none target=
+");
+> +    } else if cfg.has("PPC32") {
+> +        ts.push("arch", "powerpc");
+> +        ts.push("data-layout", "E-m:e-p:32:32-Fn32-i64:64-n32");
+> +        ts.push("features", "+soft-float");
+> +        ts.push("llvm-target", "powerpc-unknown-eabi");
+> +        if cfg.rustc_version_atleast(1, 91, 0) {
+> +            ts.push("target-pointer-width", 32);
+> +        } else {
+> +            ts.push("target-pointer-width", "32");
+> +        }
+
+Is there no built-in target we can use? I think we want to avoid adding
+new targets if at all possible.
+
+Alice
