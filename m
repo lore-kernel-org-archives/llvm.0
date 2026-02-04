@@ -1,73 +1,138 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF87C392828;
-	Wed,  4 Feb 2026 08:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF3B1917FB;
+	Wed,  4 Feb 2026 08:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770193352; cv=none; b=f5PhaDTB05w6E2BhAZPi63pBsBayYWutwPlprK+afOHgy272csFRA9Y9hsp8r2KOXn5Jlk4rd/dpwtwN4npkczQ6gl7c0N+g3D1JZL5xYP+kKcpFytx6XqBXFw6KS05P6zmS7mLnm1Mthssjr5pDdTnzKQo2fM8sn2eKpl99zXA=
+	t=1770193999; cv=none; b=Szdkj4hYzjHzdL893QycCoOHtMY+xFtEE+P8QthAesHQ5dU0lCJzoCld7fIy6GkZGpLWz8n1cIKpX0ZaHyOaSrguMS/bMv+SIWukNLWly4gjAhaGyN3/Nen672JSyHn62nEs6S6a2wGLYwNZ/zcZFQFLUpy46Nq0V9elkFIiLMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770193352; c=relaxed/simple;
-	bh=TxmBGI2Q00vUliMNm3wdicJqoKYHS5uO0EkXxzAWKc8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QW5rkLdEP6tJ1+6X6Tfp0KAm/VlzgW8Ds7TFFvhSIFiZ9IHLwOGoVxSdtffpwLyhc625/yKDQgEPQFJiZvft8zkIDeh8wOZ+i9lgBhdEGReUfk4JGzWpyQKPOccHmFzMfEFF8IAiYS46KUEShteKHG6D1nWIqyQ9eI44UDYwHlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mps3kRyu; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1770193999; c=relaxed/simple;
+	bh=Gxd2fBzLbq4QXlSVy9GOOfGWBtBYh3kbyMYsYpFkNFQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hqSJQ5cKetK9Ci6i4ZTy7yTRyWh3X3GdruYCyvkVUkRnS/hNyy5KNRdyIzV6x6sMnD8Ugl8F2W5L0KHmSotEot9iYlsr0ktM5aengGWqwbYyBmUp55Q4jnQr4Yw4C8l1fNJHlm2Le4+u0VH1m+OUfp+KaTT/dICp+PlFfP8TQdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VKj/MO3u; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mps3kRyu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=2SFh0tO6e7FI9zu7vtVLT1z2vtaObvhaNT2qiS7nw84=; b=mps3kRyu9hLV2pqE2dnN9TQqvw
-	rUVPmUWjKGRoIZrKWdyg8g/0oNkT1PQmP8DcQXZyPwQMudV3aEZ0r5tGIrOEeTua8vFEeKeiJ3W9n
-	D93QhJl7z7BJfZ+4XHFT6xFMv12Bmum4OqDdz8YH1DO4BsTC34y4YHwEDTjPMydyk0WG+WX7J74F2
-	5I/RPbnOzXwQSeGwUiKoUhjctl6JSRewdX4JfvVmePcIkpT9hFjYawaAxYz0J+KpgtGUXcPUVpbdq
-	zRY0GPhMxbtc9V2RJKKMpvxFyyE8tKcaRLk6Ul6qRS9uMbiSfvD/PSCqcFrvD88a2zQI10uhnQHqP
-	HAm521rQ==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vnY9b-000000007CQ-3301;
-	Wed, 04 Feb 2026 08:22:27 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1F250300E8B; Wed, 04 Feb 2026 09:22:21 +0100 (CET)
-Date: Wed, 4 Feb 2026 09:22:21 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Thomas Gleixner <tglx@kernel.org>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>
-Subject: Re: kernel/futex/core.c:604:23: error: cannot jump from this asm
- goto statement to one of its possible targets
-Message-ID: <20260204082221.GC3016024@noisy.programming.kicks-ass.net>
-References: <202602030343.HVSlSqJ1-lkp@intel.com>
- <20260203035603.GC52989@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VKj/MO3u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770193998; x=1801729998;
+  h=date:from:to:cc:subject:message-id;
+  bh=Gxd2fBzLbq4QXlSVy9GOOfGWBtBYh3kbyMYsYpFkNFQ=;
+  b=VKj/MO3uQ+xA/Rj94H/z5a4b7Tcjhg4YOzeDOeP+nhWDcB1YMo2I9lU2
+   vFG2/jVo1W7CzRN6Ole+xkLVmiUY4KBy2iMq8iDYMA0bPKjbyA7dDaLHB
+   z7/uh+KuG5aTBJWQkApwy9jG8VYM1Y+7EaqDfh9wJH+OIKJSTXBcixr7i
+   AORKkzpslSfD2sYX/8YL30dzSGn/pxTDIWWR3w5e3sU5ipOmXAHEL8bso
+   VIZ0C1Vk20E0+6StMEO2hIl6YyW5xNSd6AFCqCHtqbgC8lNtmG63rsayQ
+   QisK4YyfeFtDj1zvKSTC/BiPQ6oDQ1TQ94+zF5aIIanChYtXYLOZjU6UX
+   g==;
+X-CSE-ConnectionGUID: 5ZN/vAFrRJitAmBQbJDLKQ==
+X-CSE-MsgGUID: swfAEi8uRBmsaxRJLSLMSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82485902"
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="82485902"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 00:33:16 -0800
+X-CSE-ConnectionGUID: mejFTzsaSPeB9G76xYmQSg==
+X-CSE-MsgGUID: szejaWTtR/O6n4HF6g90jQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="247694268"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 04 Feb 2026 00:33:13 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnYJy-00000000hbY-2MWv;
+	Wed, 04 Feb 2026 08:33:10 +0000
+Date: Wed, 04 Feb 2026 16:32:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Carsten Stollmaier <stollmc@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Woodhouse <dwmw@amazon.co.uk>,
+ Lilit Janpoladyan <lilitj@amazon.de>,
+ Sebastian Biemueller <sbiemue@amazon.de>
+Subject: [dwmw2:gpc-stealtime 1/1] arch/x86/kvm/x86.c:5242:2: error:
+ call to undeclared function 'kvm_gpc_mark_dirty'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202602041639.9pLjTipx-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260203035603.GC52989@ax162>
 
-On Mon, Feb 02, 2026 at 08:56:03PM -0700, Nathan Chancellor wrote:
+tree:   git://git.infradead.org/users/dwmw2/linux gpc-stealtime
+head:   34c3f2e56cbf5d6b03946d531e66a91566d90db6
+commit: 34c3f2e56cbf5d6b03946d531e66a91566d90db6 [1/1] KVM: x86: Use gfn_to_pfn_cache for record_steal_time
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260204/202602041639.9pLjTipx-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602041639.9pLjTipx-lkp@intel.com/reproduce)
 
-> This appears to be the same error that necessitated e2ffa15b9baa ("kbuild:
-> Disable CC_HAS_ASM_GOTO_OUTPUT on clang < 17") upstream but this is just
-> regular 'asm goto', not 'asm goto' with outputs. I had noted during
-> review that change might not be sufficient to avoid the error in all
-> cases:
-> 
->   https://lore.kernel.org/20250916184440.GA1245207@ax162/
-> 
-> This is not the only recent instance of this error because cleanup
-> macros are becoming quite popular so I think it is getting to the point
-> where we will need to raise the minimum supported version of LLVM for
-> building the kernel to 17.0.1 or newer to ensure that we have this
-> fixed. LLVM 22.1.0 should be released in a month or so, so I can look at
-> crafting a series for 7.1/7.2 that does this bump.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602041639.9pLjTipx-lkp@intel.com/
 
-Works for me, more recent compiler more better and all that ;-)
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/x86.c:5242:2: error: call to undeclared function 'kvm_gpc_mark_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5242 |         kvm_gpc_mark_dirty(gpc);
+         |         ^
+   1 error generated.
+
+
+vim +/kvm_gpc_mark_dirty +5242 arch/x86/kvm/x86.c
+
+  5201	
+  5202	static void kvm_steal_time_set_preempted(struct kvm_vcpu *vcpu)
+  5203	{
+  5204		struct gfn_to_pfn_cache *gpc = &vcpu->arch.st.cache;
+  5205		struct kvm_steal_time *st;
+  5206		static const u8 preempted = KVM_VCPU_PREEMPTED;
+  5207		unsigned long flags;
+  5208	
+  5209		/*
+  5210		 * The vCPU can be marked preempted if and only if the VM-Exit was on
+  5211		 * an instruction boundary and will not trigger guest emulation of any
+  5212		 * kind (see vcpu_run).  Vendor specific code controls (conservatively)
+  5213		 * when this is true, for example allowing the vCPU to be marked
+  5214		 * preempted if and only if the VM-Exit was due to a host interrupt.
+  5215		 */
+  5216		if (!vcpu->arch.at_instruction_boundary) {
+  5217			vcpu->stat.preemption_other++;
+  5218			return;
+  5219		}
+  5220	
+  5221		vcpu->stat.preemption_reported++;
+  5222		if (!(vcpu->arch.st.msr_val & KVM_MSR_ENABLED))
+  5223			return;
+  5224	
+  5225		if (vcpu->arch.st.preempted)
+  5226			return;
+  5227	
+  5228		/* This happens on process exit */
+  5229		if (unlikely(current->mm != vcpu->kvm->mm))
+  5230			return;
+  5231	
+  5232		read_lock_irqsave(&gpc->lock, flags);
+  5233		if (!kvm_gpc_check(gpc, sizeof(*st)))
+  5234			goto out_unlock_gpc;
+  5235	
+  5236		st = (struct kvm_steal_time *)gpc->khva;
+  5237		BUILD_BUG_ON(sizeof(st->preempted) != sizeof(preempted));
+  5238	
+  5239		st->preempted = preempted;
+  5240		vcpu->arch.st.preempted = KVM_VCPU_PREEMPTED;
+  5241	
+> 5242		kvm_gpc_mark_dirty(gpc);
+  5243	
+  5244	out_unlock_gpc:
+  5245		read_unlock_irqrestore(&gpc->lock, flags);
+  5246	}
+  5247	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
