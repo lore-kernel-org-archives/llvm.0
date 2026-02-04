@@ -1,88 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2BE2E5B19;
-	Wed,  4 Feb 2026 07:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35CC38945D;
+	Wed,  4 Feb 2026 07:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770190214; cv=none; b=ICkof6JMwvDCVuN00m0GHbaodx7KwZdCBZ4SyjGnCV3APLw/IxPGq0isaPulDZrqtHfHslPoQETveI8o2gT5JftaVzD0pdB16wTeJJGfseDqQLz9BxmBke1TQ4ACOD41rudV/MhQXnfX+p6+0+aX52lvK2HVJmMeHA+QExxnrhE=
+	t=1770191347; cv=none; b=s6emoFepr/EQZsmKvkCyETEM69Exa6wunItb12QiAH/DkQh5E1TAuMnK0vK/3D4394Vjhw9Xid+KXNWNniKHJfWToP6h9oua2uSGPBZFvryus5PUucsVUC2nqwd40C5l1HucipxiQbmzdgZo5YyH31mOCWKDh82omvron0BOhI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770190214; c=relaxed/simple;
-	bh=/8/o+axWeUXgOr5NQSbTR7ER8LyGYvR8cW6SfCAxWW8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rNAm2Rl5B1rlPhJWdWWCcgjC70N8Sll6TtkBro8CXIBrJdtcV13NDoz2HDxa0Vt7yJmwXLP+fkgiIqYkkoMkn4SoCc22jQOBhRLF9a0MM8Gl8iBCOW7XZ2snEakwD5hCq4JpbuXsK2YPuN+zo75k6enF9jy0D0Ko5QCS3RTSC0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=njnUrdLt; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1770191347; c=relaxed/simple;
+	bh=D24q5QrcnSsk+iQX/zxY7NraKbAP2JqL3ASTt1//PUw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J6de5f+F5URzCTP3c3cAJKelBCNGM0tnWy0TPkYMWibe/yL31kNlQlaoM1fuPwrXxnu7goK4qkSsawlkFRagJixsPyRH/4Nzdffqwwf8paeVZEVUgBRlddGdQoVUMEZ3vQ5iBcuAGvQstiwinDn0YFaso/45157D+/BN8O2ovCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ltqHQgzk; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="njnUrdLt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ltqHQgzk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770190213; x=1801726213;
-  h=date:from:to:cc:subject:message-id;
-  bh=/8/o+axWeUXgOr5NQSbTR7ER8LyGYvR8cW6SfCAxWW8=;
-  b=njnUrdLtFeuJluFxiAjW2PYICBBHZayUR3IdIXynaMg7KAs+kTyebR3T
-   hEZTdGwSIgx7bCL+Wglhq//ComBpdlSiWktClF8nu6b2ejtyyuc8LKsuh
-   Ut5Z4WP1LcQe6RRTFlAJ/pXukAn/XEb0yjygsHT70NQKPZb/ppOFdbldb
-   i/YVXMgIXc48PF5WRGp+SrAczW9anNPR9PO10KRSyihCfDSbo3FCWIXiM
-   rLBUZle852uHbIIuWSyXrUjEZErnul6DHjFGd8vKC+GD+BhwwMnMLKtiT
-   HimohXdnDz1Q3sBgtNeys2Fgg9eWE4A9n84g0eF2u1QRn2tt7pB8/OVcE
-   g==;
-X-CSE-ConnectionGUID: GrlFwfnpQvOP0IqFuUV5BA==
-X-CSE-MsgGUID: 5AgvCUxjSwKr/t7YG2388A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71430683"
+  t=1770191347; x=1801727347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D24q5QrcnSsk+iQX/zxY7NraKbAP2JqL3ASTt1//PUw=;
+  b=ltqHQgzkdlBSt3ee9baYd3l7uB0RFwGsW6wmqKbbq3iE8MnASdn1oS3R
+   OW+s2uBiekhF38J5KWIcGFflIp5G8lDq82uHYvjGNt+OX1nbW+FmPdkkk
+   d8UI1bA1Troefj2qApyPEQaFhWgOcbpAwf9ck8upEA4BDngAKYdsEze3a
+   AhLv1RhbNCKBsFjjwEkeNnvE1WZbpabyYx4LrLcsqte/dj2KZk+ioyQb+
+   BjIQiGVE6OrgHdpEGYRD0O+ohAGjW3URVaFUmsRghG58ldaEzLsevERo1
+   sY8G3zX2IWwAlJO4Q8LH1m+qydqklD6t/JCgQEWjc93RA2aKmAuY85BEP
+   w==;
+X-CSE-ConnectionGUID: ntibQxr4Tky5kJ5t7kiWWw==
+X-CSE-MsgGUID: 5IEHBbM3RjaOL+46jjNMHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82004307"
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="71430683"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 23:30:12 -0800
-X-CSE-ConnectionGUID: Lr1iUpsmSfqqMFQDV8Dd0Q==
-X-CSE-MsgGUID: DEKEPLOQQh6GaXfhI8ZhDQ==
+   d="scan'208";a="82004307"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 23:49:06 -0800
+X-CSE-ConnectionGUID: 9C5kojHSQgiENXSSIwkfTg==
+X-CSE-MsgGUID: rhJqX7VUSYeFN4IAYVjSqA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="247682707"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 03 Feb 2026 23:30:11 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+   d="scan'208";a="209381015"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by orviesa010.jf.intel.com with ESMTP; 03 Feb 2026 23:49:02 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vnXKy-00000000hYO-2qMp;
-	Wed, 04 Feb 2026 07:30:08 +0000
-Date: Wed, 04 Feb 2026 15:30:01 +0800
+	id 1vnXdD-000000003f3-2Dl1;
+	Wed, 04 Feb 2026 07:48:59 +0000
+Date: Wed, 4 Feb 2026 08:48:37 +0100
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [leon-rdma:refactor-umem-v1 58/59] depmod: ERROR: Cycle
- detected: ib_core -> ib_uverbs -> ib_core
-Message-ID: <202602041508.PVvlEVbB-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
+	Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: oe-kbuild-all@lists.linux.dev, Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when
+ dprintk() is no-op
+Message-ID: <202602040857.KEEWLLQ1-lkp@intel.com>
+References: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git refactor-umem-v1
-head:   2405abede441479826a1e575c2bdf1307ae6940e
-commit: 79289a7d75bab644aff15b4d83db6a5ad4e0c911 [58/59] RDMA/core: Manage CQ umem in core code
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260204/202602041508.PVvlEVbB-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602041508.PVvlEVbB-lkp@intel.com/reproduce)
+Hi Andy,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v6.19-rc8 next-20260203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/sunrpc-Fix-compilation-error-make-W-1-when-dprintk-is-no-op/20260204-091033
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20260204010415.2149607-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when dprintk() is no-op
+config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260204/202602040857.KEEWLLQ1-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602040857.KEEWLLQ1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602041508.PVvlEVbB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602040857.KEEWLLQ1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> depmod: ERROR: Cycle detected: ib_core -> ib_uverbs -> ib_core
->> depmod: ERROR: Found 2 modules in dependency cycles!
-   make[3]: *** [scripts/Makefile.modinst:132: depmod] Error 1
-   make[3]: Target '__modinst' not remade because of errors.
-   make[2]: *** [Makefile:1960: modules_install] Error 2
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'modules_install' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'modules_install' not remade because of errors.
+   In file included from include/asm-generic/bug.h:31,
+                    from arch/x86/include/asm/bug.h:193,
+                    from arch/x86/include/asm/alternative.h:9,
+                    from arch/x86/include/asm/segment.h:6,
+                    from arch/x86/include/asm/ptrace.h:5,
+                    from arch/x86/include/asm/math_emu.h:5,
+                    from arch/x86/include/asm/processor.h:13,
+                    from include/linux/sched.h:13,
+                    from include/linux/sunrpc/svcauth_gss.h:12,
+                    from fs/nfsd/nfsfh.c:13:
+   fs/nfsd/nfsfh.c: In function 'nfsd_setuser_and_check_port':
+>> fs/nfsd/nfsfh.c:110:47: error: 'buf' undeclared (first use in this function); did you mean 'btf'?
+     110 |                         svc_print_addr(rqstp, buf, sizeof(buf)));
+         |                                               ^~~
+   include/linux/printk.h:135:32: note: in definition of macro 'no_printk'
+     135 |                 _printk(fmt, ##__VA_ARGS__);            \
+         |                                ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:25:9: note: in expansion of macro 'dfprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~
+   fs/nfsd/nfsfh.c:109:17: note: in expansion of macro 'dprintk'
+     109 |                 dprintk("nfsd: request from insecure port %s!\n",
+         |                 ^~~~~~~
+   fs/nfsd/nfsfh.c:110:47: note: each undeclared identifier is reported only once for each function it appears in
+     110 |                         svc_print_addr(rqstp, buf, sizeof(buf)));
+         |                                               ^~~
+   include/linux/printk.h:135:32: note: in definition of macro 'no_printk'
+     135 |                 _printk(fmt, ##__VA_ARGS__);            \
+         |                                ^~~~~~~~~~~
+   include/linux/sunrpc/debug.h:25:9: note: in expansion of macro 'dfprintk'
+      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~
+   fs/nfsd/nfsfh.c:109:17: note: in expansion of macro 'dprintk'
+     109 |                 dprintk("nfsd: request from insecure port %s!\n",
+         |                 ^~~~~~~
+
+
+vim +110 fs/nfsd/nfsfh.c
+
+9d7ed1355db5b0 J. Bruce Fields 2018-03-08  101  
+6fa02839bf9412 J. Bruce Fields 2007-11-12  102  static __be32 nfsd_setuser_and_check_port(struct svc_rqst *rqstp,
+b0d87dbd8bd311 NeilBrown       2024-09-05  103  					  struct svc_cred *cred,
+6fa02839bf9412 J. Bruce Fields 2007-11-12  104  					  struct svc_export *exp)
+6fa02839bf9412 J. Bruce Fields 2007-11-12  105  {
+6fa02839bf9412 J. Bruce Fields 2007-11-12  106  	/* Check if the request originated from a secure port. */
+b0d87dbd8bd311 NeilBrown       2024-09-05  107  	if (rqstp && !nfsd_originating_port_ok(rqstp, cred, exp)) {
+5216a8e70e25b0 Pavel Emelyanov 2008-02-21  108  		RPC_IFDEBUG(char buf[RPC_MAX_ADDRBUFLEN]);
+a48fd0f9f77b6e Kinglong Mee    2014-05-29  109  		dprintk("nfsd: request from insecure port %s!\n",
+6fa02839bf9412 J. Bruce Fields 2007-11-12 @110  		        svc_print_addr(rqstp, buf, sizeof(buf)));
+6fa02839bf9412 J. Bruce Fields 2007-11-12  111  		return nfserr_perm;
+6fa02839bf9412 J. Bruce Fields 2007-11-12  112  	}
+6fa02839bf9412 J. Bruce Fields 2007-11-12  113  
+6fa02839bf9412 J. Bruce Fields 2007-11-12  114  	/* Set user creds for this exportpoint */
+b0d87dbd8bd311 NeilBrown       2024-09-05  115  	return nfserrno(nfsd_setuser(cred, exp));
+6fa02839bf9412 J. Bruce Fields 2007-11-12  116  }
+6fa02839bf9412 J. Bruce Fields 2007-11-12  117  
 
 -- 
 0-DAY CI Kernel Test Service
