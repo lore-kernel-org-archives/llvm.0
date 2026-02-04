@@ -1,122 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D27B283FE2
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 14:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B84A3B9608;
+	Wed,  4 Feb 2026 14:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770215584; cv=none; b=fnXcjXctaEiicxHXK9xWef1XiCyk+vLXXqrLAGB9mKRMpzvF0nirLq55mEmtfMSUfp1dwdY2C66b5qyeGZUinwzCadJ0fCe5xzNdeOhr/QZwXzUdB5z5y1Fw79CilJOSaEyXp/YW+LcKq7GbIPSp2HIruRxgNBuYVpBmfktgVm0=
+	t=1770215731; cv=none; b=mCu2/Se/puwlDWv6aawce8CMud2JmxQIeWHqW4zGAXgz7qtGgr711dg4iD1IyBIfRX98pe2kEP48Cu/0hh9lw2GKO0fy/EU+KE1SwLuTMswdEgdNuusO/MjUJrJUpDSt3FdQ4WyFAJeqbAdV2iZ+NlkVKqy/Zf9qJRDjrvfjL6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770215584; c=relaxed/simple;
-	bh=pXXP39c4G2+cWRpwZabdRWaGFcVTaSz2uuubofAEqzs=;
+	s=arc-20240116; t=1770215731; c=relaxed/simple;
+	bh=S51Eo1kvBp2wy/E4Bblmv7YBpm0aNIOY3/VX+4k/fKI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MkLJ4KsPKoxSnMtPXq/36nT6gCTEEqNpAONrhXATCm06Y6sHVXIaJhqbni++hDiulSZYe04MBIN4/1PZOLYs2iGHTA+WlpguqkiZGGtD7zHxqJ357tNhqLZFZn6Mj9b3co7DjN/cNa8s4np5nbeILAi2MFU/KVML33HagkQPXts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZZrndd52; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=reXydTb9z32DFj0wFPaysbCy5Crs5NofaNUHE2nHvdFe708CA/36kaGNuJY+3FmlbcNqAxku7UQz6mYpkfNFeForBLC1bmYGH2EVFEMscg6uLz+ODESMfaPwxlbx578FS0zvlOcUtFtlKhnlyUZ87/YpejUYB0XKegbZmgheJqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=La/bKhVv; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZZrndd52"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="La/bKhVv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770215585; x=1801751585;
+  t=1770215730; x=1801751730;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pXXP39c4G2+cWRpwZabdRWaGFcVTaSz2uuubofAEqzs=;
-  b=ZZrndd52X7Qu0MdAns6V9dd3yERRvGk7YfS0jFo4cdCH7AihB2nvPVsb
-   QTcxWC8CmqL/a6jkcEf9iWfwNTairWoOda1g/mGCg0CsGIbjfHCTkVdOc
-   7w5RqR9SeTV9OI80bL7eJTpXwgJb8AR4i77rlQmJy3OZYsOemqx8fEBxf
-   OiVuMjsHeB98Eu3fTMVsdiYFfDjM+xrBUrDlFtjFiSC3v9xJ4BqkfiSQ7
-   72K7DgXkkjJlALc8V+TRGFrvWupQKtVLbX6fMjexOfUFOMNNGI6bZQGcZ
-   9q6SEd2r6A0nEjN4NT62JBauG3vWbc7rCIxF7vCCwGKZdthI299LdNV4K
-   w==;
-X-CSE-ConnectionGUID: In02MGLNRtydGTQv6IZSMw==
-X-CSE-MsgGUID: m74/lN9MSf+FMHVjjsZElg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="96855662"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=S51Eo1kvBp2wy/E4Bblmv7YBpm0aNIOY3/VX+4k/fKI=;
+  b=La/bKhVvTKG+MBJfkKc/DyOEtCuStDFf7/ulOCCW1dKV12jxPv3gU/k/
+   4RC/SbYZ4OWtFQNGdbeb61CL0jIFtfusjepRkTInHF57uVOSkpe0y8Bma
+   J6qIBUbuBIJZxXkQx23IxWj6Mr/4+XD5NPMo+C4lmghRDVl9rI/e5uuIg
+   y6irenCV72F2Avx6S957XE/txU7petgxEySBV00nCEX955s1/9JPQWUSD
+   A9/dDfzy+yInLcwz2U73o0qwTHzpIf+Pp8qO8srg59nzlHYKN6FW5EKNj
+   pQQfN2xpi+pCtK6Cb8QsRWiobh3eeqrzVrPGXiMoit+D6WgrXvUX8uh04
+   Q==;
+X-CSE-ConnectionGUID: ilVVwcwBRm68LNoo4cHUCA==
+X-CSE-MsgGUID: PwYi4W4xScaaYNNAkZXdRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71437067"
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="96855662"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 06:33:03 -0800
-X-CSE-ConnectionGUID: 7iVTz8XvT0iKwlrMyzxQmw==
-X-CSE-MsgGUID: PQeFSibgRTmg/z2CvsDH3g==
+   d="scan'208";a="71437067"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 06:35:29 -0800
+X-CSE-ConnectionGUID: SyvXr0fbSH+kd4UCZRcVRQ==
+X-CSE-MsgGUID: hrhRM+DnT8Wy939zJfiStA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="247776896"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.188])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 06:32:58 -0800
-Date: Wed, 4 Feb 2026 16:32:55 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
-	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v2 0/3] sunrpc: Fix `make W=1` build issues
-Message-ID: <aYNYlzxdz8cCe5cf@smile.fi.intel.com>
-References: <20260204094500.2443455-1-andriy.shevchenko@linux.intel.com>
- <9859fe54fded87e720e375b1b267908437480f47.camel@kernel.org>
+   d="scan'208";a="209472705"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 04 Feb 2026 06:35:28 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vndyX-00000000huS-2DtK;
+	Wed, 04 Feb 2026 14:35:25 +0000
+Date: Wed, 4 Feb 2026 22:34:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Helge Deller <deller@gmx.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chen Ni <nichen@iscas.ac.cn>, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v1 2/3] fbdev: au1100fb: Make driver compilable on
+ non-mips platforms
+Message-ID: <202602042224.CY8SSh3n-lkp@intel.com>
+References: <474eca0c9ecb8a2e610e82922ad22ad7e8ff0b8b.1770196161.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9859fe54fded87e720e375b1b267908437480f47.camel@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <474eca0c9ecb8a2e610e82922ad22ad7e8ff0b8b.1770196161.git.u.kleine-koenig@baylibre.com>
 
-On Wed, Feb 04, 2026 at 09:28:28AM -0500, Jeff Layton wrote:
-> On Wed, 2026-02-04 at 10:41 +0100, Andy Shevchenko wrote:
-> > Compiler is not happy about unused variables (especially when
-> > dprintk() call is defined as no-op). Here is the series to
-> > address the issues.
-> > 
-> > Changelog v2:
-> > - added patch to kill RPC_IFDEBUG() macro (LKP, Geert)
-> > - united separate patches in the series
-> > - collected tags (Geert)
-> > 
-> > v1: 20260204010402.2149563-1-andriy.shevchenko@linux.intel.com
-> > v1: 20260204010415.2149607-1-andriy.shevchenko@linux.intel.com
-> > 
-> > Andy Shevchenko (3):
-> >   nfs/blocklayout: Fix compilation error (`make W=1`) in
-> >     bl_write_pagelist()
-> >   sunrpc: Kill RPC_IFDEBUG()
-> >   sunrpc: Fix compilation error (`make W=1`) when dprintk() is no-op
-> > 
-> >  fs/lockd/svclock.c                       |  5 +++++
-> >  fs/nfs/blocklayout/blocklayout.c         |  4 +---
-> >  fs/nfsd/nfsfh.c                          |  9 +++++---
-> >  include/linux/sunrpc/debug.h             | 10 +++++----
-> >  net/sunrpc/xprtrdma/svc_rdma_transport.c | 27 ++++++++++++------------
-> >  5 files changed, 32 insertions(+), 23 deletions(-)
-> 
-> These all look like good changes to me. The first patch should go to
-> Trond/Anna and Chuck will probably pick up the other two?
+Hi Uwe,
 
-As I explained in v1, the error in the first patch may be shadowed if the third
-one (and hence second) is taken first. That's why I prefer them to go via
-single place.
+kernel test robot noticed the following build errors:
 
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+[auto build test ERROR on 0636e6205beed850d985276dc56fd73d785bea5c]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/fbdev-au1100fb-Mark-several-local-functions-as-static/20260204-171704
+base:   0636e6205beed850d985276dc56fd73d785bea5c
+patch link:    https://lore.kernel.org/r/474eca0c9ecb8a2e610e82922ad22ad7e8ff0b8b.1770196161.git.u.kleine-koenig%40baylibre.com
+patch subject: [PATCH v1 2/3] fbdev: au1100fb: Make driver compilable on non-mips platforms
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260204/202602042224.CY8SSh3n-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602042224.CY8SSh3n-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602042224.CY8SSh3n-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/video/fbdev/au1100fb.c:354:32: error: expression is not assignable
+     354 |         pgprot_val(vma->vm_page_prot) |= (6 << 9); //CCA=6
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/video/fbdev/au1100fb.c:473:6: warning: format specifies type 'int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+     472 |                 print_err("fail to allocate framebuffer (size: %dK))",
+         |                                                                ~~
+         |                                                                %zu
+     473 |                           fbdev->fb_len / 1024);
+         |                           ^~~~~~~~~~~~~~~~~~~~
+   drivers/video/fbdev/au1100fb.h:33:74: note: expanded from macro 'print_err'
+      33 | #define print_err(f, arg...) printk(KERN_ERR DRIVER_NAME ": " f "\n", ## arg)
+         |                                                               ~          ^~~
+   include/linux/printk.h:512:60: note: expanded from macro 'printk'
+     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
+     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +354 drivers/video/fbdev/au1100fb.c
+
+3b495f2bb749b82 drivers/video/au1100fb.c       Pete Popov        2005-04-04  343  
+3b495f2bb749b82 drivers/video/au1100fb.c       Pete Popov        2005-04-04  344  /* fb_mmap
+3b495f2bb749b82 drivers/video/au1100fb.c       Pete Popov        2005-04-04  345   * Map video memory in user space. We don't use the generic fb_mmap method mainly
+3b495f2bb749b82 drivers/video/au1100fb.c       Pete Popov        2005-04-04  346   * to allow the use of the TLB streaming flag (CCA=6)
+3b495f2bb749b82 drivers/video/au1100fb.c       Pete Popov        2005-04-04  347   */
+0238b447706a72c drivers/video/fbdev/au1100fb.c Uwe Kleine-König  2026-02-04  348  static int au1100fb_fb_mmap(struct fb_info *fbi, struct vm_area_struct *vma)
+3b495f2bb749b82 drivers/video/au1100fb.c       Pete Popov        2005-04-04  349  {
+67f30ad19c4b329 drivers/video/fbdev/au1100fb.c Christoph Hellwig 2019-04-28  350  	struct au1100fb_device *fbdev = to_au1100fb_device(fbi);
+c05b7f3d12b9455 drivers/video/au1100fb.c       Rodolfo Giometti  2006-05-30  351  
+76f92201b821dd2 drivers/video/fbdev/au1100fb.c Thomas Zimmermann 2023-11-27  352  	vma->vm_page_prot = pgprot_decrypted(vma->vm_page_prot);
+76f92201b821dd2 drivers/video/fbdev/au1100fb.c Thomas Zimmermann 2023-11-27  353  
+^1da177e4c3f415 drivers/video/au1100fb.c       Linus Torvalds    2005-04-16 @354  	pgprot_val(vma->vm_page_prot) |= (6 << 9); //CCA=6
+^1da177e4c3f415 drivers/video/au1100fb.c       Linus Torvalds    2005-04-16  355  
+67f30ad19c4b329 drivers/video/fbdev/au1100fb.c Christoph Hellwig 2019-04-28  356  	return dma_mmap_coherent(fbdev->dev, vma, fbdev->fb_mem, fbdev->fb_phys,
+67f30ad19c4b329 drivers/video/fbdev/au1100fb.c Christoph Hellwig 2019-04-28  357  			fbdev->fb_len);
+^1da177e4c3f415 drivers/video/au1100fb.c       Linus Torvalds    2005-04-16  358  }
+^1da177e4c3f415 drivers/video/au1100fb.c       Linus Torvalds    2005-04-16  359  
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
