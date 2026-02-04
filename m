@@ -1,110 +1,105 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4D4364031;
-	Wed,  4 Feb 2026 13:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72243ED13D
+	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 13:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770210849; cv=none; b=AnQeRzjpDlbWOflUY33cZOGGX9NaCR6NMHHZd3pwQ2D9Ni1J7/nutiFku/2+IPg7puv2twLM5qiI6myCX3jneQuhbAhs6BT+7LnjLa+O2OTFGwlN67kWoHqSz3EOjItTkBZWSANmbJFDUPhjHjtaT+tzU8yY2b3mCez7WE6V/MA=
+	t=1770212215; cv=none; b=rqs1FYYYkNtRXL40UwJMEFfKwn4kkCFkc9gpSn1jU0hNlmbZ1zyHjH3ldsTVDp/GeOqa5/fQE5ee7nzAa40nKDIW5v2HA8g4cLi1/eVUe6ZfaswJNGd8T4XFmXXPl7NAtdforFmidMAaWxPs7kF6wewwacxU8eJB4IzZY0KO28k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770210849; c=relaxed/simple;
-	bh=cFbrXk8pPVGKAhnxC2j5ADvuZUt7TfeiWE/MgoUVu8E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FUXSICMM3h0oWpMFURVtdMVADLfj2/iX2MzQXmhrFUEgn5g9jQaeIpK3OqambuDvaXe3aElYgQmp0UXaXMkfzN5tgq83zRQjcjF5pKxiF2AdTS3FaRGuXnA+vlV8ASsoR8Ym0Y1rU1RM1PPkotoLJcuj3NMSUs1ygIHXTEkzZD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WFAAd/9y; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1770212215; c=relaxed/simple;
+	bh=Ek8/E1uf8JioxwC17102C6P6AwOf+FpydRqado7kk28=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=K72rBVkI9ST5UnJKjQHRvYA/LR+gb+BN/qH/MB1zXwWPsqeLw2NiSwEKMQI5eBM9dRbX3wb9GXEvixLmc/3xaJpxOdKolqM13MQMlb+g/2DhiIIcTrmUMNFxlh2SJxCqn9oC83gVpVTFmQmSF9PYqb3zRkPVIRldLRB2A4qN6HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sD+g6p66; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WFAAd/9y"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=bJ/9e2DA8SBPV6XQ0gOXCK1heDCNhcbD1ElCKLLyP5Y=; b=WFAAd/9yNOh7RV0efTlEPqxbue
-	x8Q0Sctd+c4ROAGh4fPza2KWnZ6NSspi1NkxcWZMYEKdD+djm3RkQBGSvB0S1ZC1LO/hqlLylBf6I
-	neHjzbqbnMWfGwDrxCUOQFuhRfjtX4+V4EXokqRhSiDhtjkJz+dZQi1PMf3ATfaDJm/jxy7k/W9W3
-	2uuwOfK7dXsmIx1S+wxWUhcw0y3Gz3xiuQ7GeYK9kulncMPLXxkmzR95F0N2LZhlR5mBlBdHZAKRf
-	ok4TLbfXUGC6naV7ncg9uCSyEK6b+J2YO+17bNs4rnhlb+f/dPHOi9Joymio581Xd05yFd48PtjSP
-	l9QC++HA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vnchl-000000026tM-0NwX;
-	Wed, 04 Feb 2026 13:14:01 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 73BA5300E8B; Wed, 04 Feb 2026 14:14:00 +0100 (CET)
-Date: Wed, 4 Feb 2026 14:14:00 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: Will Deacon <will@kernel.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Boqun Feng <boqun@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260204131400.GI2995752@noisy.programming.kicks-ass.net>
-References: <20260130132951.2714396-1-elver@google.com>
- <20260130132951.2714396-4-elver@google.com>
- <aYDFOIskB20CbztD@willie-the-truck>
- <20260202192923.0707e463@pumpkin>
- <aYHgNSF5a3F7UGU_@willie-the-truck>
- <CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sD+g6p66"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4806e7c4220so9171535e9.2
+        for <llvm@lists.linux.dev>; Wed, 04 Feb 2026 05:36:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770212213; x=1770817013; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fIR6EBMCAqXb340DYxL2KRHd/O9FP1A+6HPiKAJmpBg=;
+        b=sD+g6p66W5e/gOfXpwkomqLFh8uiVJuMxVSruGUgvSWwA18GwYXiPI0sg0unCXknHT
+         kAoJ08sb3xusAmEkX7Y9QBpvg9fwrzbyt+8Plgu+UAwYJsXtDrMn6de2KqPDvseGbICf
+         r6uZ6LRAdXfX8nv24jPf7SgoSHfLBJ15PgrwBJy1v5931K3/LCPzuxBxl+RXv+StnTWB
+         Ef//LYzR/UUu4JZWsEhyVD++WhdiFlupRZFyKKImnzJyqVh08NRfsGZS4BmIyRs4e+tp
+         FanJLsVx/7OdjT3JIcL87xNqSqNXrK93h7Mx6GzAsYd/zrxmue0Cmhq5q0dt5de4vP4C
+         DQLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770212213; x=1770817013;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fIR6EBMCAqXb340DYxL2KRHd/O9FP1A+6HPiKAJmpBg=;
+        b=kLiOlo4WN7+sp7StrQAYBUWaZSUs5OxPCtCp7mOnGCsYorURfUQxBG1sT1weHAN7DX
+         ekt3+r1QB3XsIOfYc3t88a3oejUCTfGHNODALVy4U7tCJT+J9OsrKEacCNI+tP4QgDNY
+         TZjvuOYvl5A2lqvc1/YT6eXvlTfZaWaKTBhljA0SLGatbfcfU7EqEURmL4Q7KCbXSLhr
+         RqglOtaXFHFkGG1vXu1aR4MzQpgmUkf7G9KDo/O1Ak919wqRskM0wfGJDA5WJfAZY+k8
+         LbH6V4zHg97pLhoL0b2SBB+y2DUXSMuPuOQ1XcldAPNwMEWxEQ3lT+/DDCWtPTcsLz5w
+         jkMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkaTFRpWyKnEsxGpeMPEnkJMsvb5GaRKsbOeEjp6c/d7mWMumMqh8s7a6A3XJWJgwaWhJH@lists.linux.dev
+X-Gm-Message-State: AOJu0YzWG1gljgGG4VmVU1pBjADWya71VDFkLQMQCwV51qMp1r6aAxEn
+	LL+vIb9ekdjMIdlnRuEEz8/zmPFzeW6XTW31lzijk+HK284uVzoabhCVc7YSsPOeIEQ4QdsBknE
+	yDNkWU69cOJWIFNCJKg==
+X-Received: from wmqu6.prod.google.com ([2002:a05:600c:19c6:b0:480:4a03:7b76])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1c17:b0:480:5951:fc1e with SMTP id 5b1f17b1804b1-4830e930f73mr44864985e9.11.1770212212161;
+ Wed, 04 Feb 2026 05:36:52 -0800 (PST)
+Date: Wed, 4 Feb 2026 13:36:50 +0000
+In-Reply-To: <20260204130653.GH2995752@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
+Mime-Version: 1.0
+References: <20260204030507.8203-1-linkmauve@linkmauve.fr> <aYMiXcy33YEVkgYM@google.com>
+ <DG66KRKI62WA.3GILMBH1UCYB@garyguo.net> <aYNBtc2Jbtg9sLIE@google.com> <20260204130653.GH2995752@noisy.programming.kicks-ass.net>
+Message-ID: <aYNLcqEo45oWpRYi@google.com>
+Subject: Re: [PATCH] rust: Add PowerPC support
+From: Alice Ryhl <aliceryhl@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Gary Guo <gary@garyguo.net>, Link Mauve <linkmauve@linkmauve.fr>, 
+	rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev, officialTechflashYT@gmail.com, 
+	Ash Logan <ash@heyquark.com>, Roberto Van Eeden <rw-r-r-0644@protonmail.com>, 
+	"Jonathan =?utf-8?Q?Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, Feb 04, 2026 at 11:46:02AM +0100, Marco Elver wrote:
-> On Tue, 3 Feb 2026 at 12:47, Will Deacon <will@kernel.org> wrote:
-> [...]
-> > > > What does GCC do with this? :/
-> > >
-> > > GCC currently doesn't see it, LTO is clang only.
-> >
-> > LTO is just one way that a compiler could end up breaking dependency
-> > chains, so I really want to maintain the option to enable this path for
-> > GCC in case we run into problems caused by other optimisations in future.
+On Wed, Feb 04, 2026 at 02:06:53PM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 04, 2026 at 12:55:17PM +0000, Alice Ryhl wrote:
 > 
-> It will work for GCC, but only from GCC 11. Before that __auto_type
-> does not drop qualifiers:
-> https://godbolt.org/z/sc5bcnzKd (switch to GCC 11 to see it compile)
+> > Is there any reason to not make it Rust-only but for all Rust code?
+> > Making the / operator work seems like it would be a good idea.
 > 
-> So to summarize, all supported Clang versions deal with __auto_type
-> correctly for the fallback; GCC from version 11 does (kernel currently
-> supports GCC 8 and above). From GCC 14 and Clang 19 we have
-> __typeof_unqual__.
+> Why would it be a good idea to have it work on non-native types in Rust?
 > 
-> I really don't see another way forward; there's no other good way to
-> solve this issue. I would advise against pessimizing new compilers and
-> features because maybe one day we might still want to enable this
-> version of READ_ONCE() for GCC 8-10.
-> 
-> Should we one day choose to enable this READ_ONCE() version for GCC,
-> we will (a) either have bumped the minimum GCC version to 11+, or (b)
-> we can only do so from GCC 11. At this point GCC 11 was released 5
-> years ago!
+> The reason we don't have them in C is because non-native divisions are
+> expensive and doing them should be a conscious choice. The very same
+> argument should be true for Rust code too.
 
-There is, from this thread:
+I suppose that's fair. Perhaps one way to go about it could be to create
+a clippy lint for 64-bit divisions telling you to use an explicit
+division method?
 
-  https://lkml.kernel.org/r/20260111182010.GH3634291@ZenIV
+This way cases such as `core` that use division can still use the slash
+operator because the lint is not enabled when building core. And normal
+kernel code would be told to use the explicit method instead. Or kernel
+code could explicitly choose to silence the lint on a specific method if
+they want to perform a lot of divisions and know what they are doing.
 
-another trick to strip qualifiers:
-
-  #define unqual_non_array(T) __typeof__(((T(*)(void))0)())
-
-which will work from GCC-8.4 onwards. Arguably, it should be possible to
-raise the minimum from 8 to 8.4 (IMO).
-
-But yes; in general I think it is fine to have 'old' compilers generate
-suboptimal code.
+Alice
