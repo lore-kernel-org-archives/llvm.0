@@ -1,281 +1,209 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E2D35028C
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 05:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB0337F0FF;
+	Wed,  4 Feb 2026 06:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770184336; cv=none; b=gmo1w5A6NKG/dI9nPs0geh/NbAR3vNaENRVV6JIpm/u82Dg1BSW1a6SP9cUR5yVgicXccihIYXl5X3sQnrRZVk2TJSc6HZiNee5zzSb5gPj+Joyo8Z/DXnjTbHtzvFrJyHrTbv6pE2XcDbsI/qeqdIpz8R0lja5kxG1EykUGTs8=
+	t=1770186490; cv=none; b=f9X7NWMGoVuGatle3lOwZcDDDIWb0uAg1EzOVrcM9T298J2RhaEhw7Prk8czCvZ7emRZLYuMlZ6aCQFTFfvSaXYTq7DSxgriWfaySncAw/1CwgmH/ysMXTnUGWK+yVqi/x/0fiDuaxCmT8dao0WsXGkM9j6HKuOJIDjTbV2dAkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770184336; c=relaxed/simple;
-	bh=Nu0j7/QTMwXNybcCccfMDqePArqp9NasPFKFagIBk5w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ivXO3OjEZS0Uakx451uEyc9GX20QllgdIJfvWyyAGhK1pjbXX/6Im30fXAvD+zHJ6q/cYlFURzHeLGQvIop6MF5XAPf6tmlo6zDiMUneGtLUOYUtmK+wo/HGdXgGB4OShRIeKYrUGC6S3F/JOS2A8nZTMAumK6QoVoNyVi+cGbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lUGBU29C; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770186490; c=relaxed/simple;
+	bh=Ss+6SxOMli8ukLp6d2DRkGJDQp+Z7zuvheuLtf4+Dts=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NKNoO9cLjFOWUxIPx2MqdIzF+hfIPILuHtHkbTEzRDb3t1F8eTJxjxbnfM2u2cjIes6KKYdQc1/PXGADDKQ1aOfLCYpyRa/mpxXAX1ulOXAu0ieUa27FyZMjgfLqbM9QW39M0yg/gXyCXfnv8c7xUU1U67j0Jo6r+43qRiMUL5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3jkK3NG; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lUGBU29C"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2b785801c93so4565955eec.0
-        for <llvm@lists.linux.dev>; Tue, 03 Feb 2026 21:52:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770184336; x=1770789136; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VL5of/f5KyDAfjTDwdEWFiFC2+YlHapoLTi3UvRqx5s=;
-        b=lUGBU29CE2Wk2pRBpYDjweYdBFduMbUsRAxcgEPXVJV8WUpOR+LoUuHomioe9z+QeV
-         13UZGU5NlKKXB8hQbtKCNvedjluL9ydH4u548MyOb1ugyA8qqIgBo29eIbhKanKjsle4
-         HN8XhCaWcbV1sVaKRtYit6ZlE1T6FrYn1KuGMUfbaR0c1taH5y6baNEMUHdlOl0SU3kT
-         GwE01WL3QIN+3YeC/1WEDsRUYv1OiJVezjzQWrW1PJFLQ2RmUJTjrg0MTz4jGeoSc82a
-         foMxcBUDo4YxwNch33YMvwdzeV1r5xOHzb/G5e5ewq9SZxTUnhA/+uNOOvvG3BoNaebS
-         42nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770184336; x=1770789136;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VL5of/f5KyDAfjTDwdEWFiFC2+YlHapoLTi3UvRqx5s=;
-        b=X2lI9QX/iMTaJAzHed7+vyay6IFkaPOa9AnLSjmuLysTsoLwfKvCR2W6durbsgoEzW
-         NtWsIhViFP9+1AV8phgC1k1NmUvaZJBtJanwALuMKT9aWfnKIcwfoRWiCi7tlXGRMphc
-         bAaIxNTmTyhOyK3w+GVN8IK+GwOC6WM4K6xnxAd9IvUps7yjjb9d0TU3ilxUfBktQ2yv
-         sHa7F0bD5spmUqfDkuBxBaEI9+S8cmtpSRmXUNLDciUs8vqbICEhMTJr0KRSM10L1sUA
-         mrDTnegoU9Ho9xv8SGt5GIbMwc6CoWUPMD1zt8qSooYVduz1kjgubjgtmFBvzJzclktm
-         k1Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyxo7RVkcctMGG4K+ryNgYx79mcylFwMDqSbwkFJthL/uURiMWjlL/hAmO64dEOsOXhCxz@lists.linux.dev
-X-Gm-Message-State: AOJu0YxaJH1y2I3Ri07V9wyOx330RglLV+4sKtpz4LE82Pbd7IH4vWAr
-	VVXIy4BYQ92lI7FpvRkK+y9+/Ae6LUfS9G6UGZgabxB+NGnaD6jQRSot0HiBHQ==
-X-Gm-Gg: AZuq6aJ0SxPwKaOkOfIl+9cFzwLFxO3fcODiybghpb5lNzHm8eBhhparRRFedzmk95U
-	i8WDW/bdn5r5RU60UAapVhY2I6Aa4ONYOn4jDGy988ZGHGa1SGTyuty0YQiWyXu/KntNhv9+RtF
-	fgy7TBX2Ykop1ke1NHQXkXM68FAMTxzc7ZGTWFVpd7qwUIdlB33wlF2cthLkvo/NVXypew0zaIS
-	xeB5seZH9y+djzAui4zs3Fps2wpW7A55W0JM6F4nyoicx5HJTM1nQI+XbzptffdWDmZUKRQwnUg
-	CcSvYNYXXG98M9zxqlbLl00MMEd6z3dTphoQCYNZhOjyyTqKLkbXBarIW3o8MNiS17h8zFRx9jp
-	rdhG29tCURIxDk+q37lZc+gtxaTxvKDITBpD43jI3W+2Fc2706jPT4lN9nCR/MRovS0TuSu1dV6
-	aTYozORoAzgLo+I0HGdWuetQasjL+kDWeBh0Agvj4OyBGP2r/XtnJH2RcHUtW/mOC5gjXyyw==
-X-Received: by 2002:a17:90b:2889:b0:335:2747:a9b3 with SMTP id 98e67ed59e1d1-3548720a3eamr1376264a91.32.1770179086053;
-        Tue, 03 Feb 2026 20:24:46 -0800 (PST)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.in.ibm.com ([129.41.58.2])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35485eb8d4csm1017430a91.10.2026.02.03.20.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 20:24:45 -0800 (PST)
-From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-To: maddy@linux.ibm.com,
-	mpe@ellerman.id.au,
-	npiggin@gmail.com,
-	chleroy@kernel.org,
-	peterz@infradead.org,
-	jpoimboe@kernel.org,
-	jbaron@akamai.com,
-	rostedt@goodmis.org,
-	ardb@kernel.org,
-	ojeda@kernel.org,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	dakr@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-Subject: [PATCH] powerpc: Enable Rust for ppc64le
-Date: Wed,  4 Feb 2026 09:54:17 +0530
-Message-ID: <20260204042417.83903-1-mkchauras@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3jkK3NG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770186491; x=1801722491;
+  h=date:from:to:cc:subject:message-id;
+  bh=Ss+6SxOMli8ukLp6d2DRkGJDQp+Z7zuvheuLtf4+Dts=;
+  b=V3jkK3NGc5tUzsewbuvBVCOahIAA6+9Z7XuebXciZ59S2p2jfcaXcFCq
+   njrm9S/YCLRNmnymgOT3JBFKm8FbMHM5FsEIuj0oocq0ZqLZbhRIzXn7r
+   Pjr0KeTN0ZDrZY/6wRTb0LGwpCFDc2gYnzmLCjqN/eQ2JcB+mZQFKEmfm
+   saAjf1WL1F8BquS0oAGGGtwesop8kLkZ/eMg7N1BzxOZjHM49VJ9UtNAK
+   v0tnKM+1c77JJfHaX4WPN9PxGt8OPVhU5QcizYJ8bWeEirn+X3ilaJdaZ
+   41cmZE+mE5h9XmjpZkIHozAEW7oUMeD9MiAP0QMjuixOzZE+ARH6Ofg4Q
+   Q==;
+X-CSE-ConnectionGUID: k+treu5MRK2mDBYJ4pvpnw==
+X-CSE-MsgGUID: KcUv6vMeQhaeH773FZiY6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71271267"
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="71271267"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 22:28:09 -0800
+X-CSE-ConnectionGUID: fDO73LqeQaGHaXYJ0CaO9A==
+X-CSE-MsgGUID: Znz+mOb/TveITXed645AQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="209367562"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 03 Feb 2026 22:28:08 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnWMv-00000000hVK-1me9;
+	Wed, 04 Feb 2026 06:28:05 +0000
+Date: Wed, 04 Feb 2026 14:27:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ ntfs3@lists.linux.dev
+Subject: [paragon-software-group-ntfs3:devel 23/23]
+ fs/ntfs3/super.c:388:3: warning: unannotated fall-through between switch
+ labels
+Message-ID: <202602041402.uojBz5QY-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Enabling rust support for ppc64 only.
+tree:   https://github.com/Paragon-Software-Group/linux-ntfs3.git devel
+head:   3c6248937fb9fe5cfb29aa8813e18c50095e4db7
+commit: 3c6248937fb9fe5cfb29aa8813e18c50095e4db7 [23/23] fs/ntfs3: allow explicit boolean acl/prealloc mount options
+config: s390-randconfig-001-20260204 (https://download.01.org/0day-ci/archive/20260204/202602041402.uojBz5QY-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602041402.uojBz5QY-lkp@intel.com/reproduce)
 
-To support rust a new macro ARCH_STATIC_BRANCH_ASM in powerpc
-is added to avoid duplication of inline asm between C and Rust.
-This is inline with commit
-aecaf181651c '("jump_label: adjust inline asm to be consistent")'
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602041402.uojBz5QY-lkp@intel.com/
 
-Tested on powernv9:
+All warnings (new ones prefixed by >>):
 
-$ uname -rm
-6.19.0-rc8+ ppc64le
+>> fs/ntfs3/super.c:388:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     388 |                 case Opt_acl:
+         |                 ^
+   fs/ntfs3/super.c:388:3: note: insert '__attribute__((fallthrough));' to silence this warning
+     388 |                 case Opt_acl:
+         |                 ^
+         |                 __attribute__((fallthrough)); 
+   fs/ntfs3/super.c:388:3: note: insert 'break;' to avoid fall-through
+     388 |                 case Opt_acl:
+         |                 ^
+         |                 break; 
+   1 warning generated.
 
-$ sudo modprobe rust_minimal
-[  632.890850] rust_minimal: Rust minimal sample (init)
-[  632.890881] rust_minimal: Am I built-in? false
-[  632.890898] rust_minimal: test_parameter: 1
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CAN_DEV
+   Depends on [n]: NETDEVICES [=n] && CAN [=m]
+   Selected by [m]:
+   - CAN [=m] && NET [=y]
+   WARNING: unmet direct dependencies detected for OF_GPIO
+   Depends on [n]: GPIOLIB [=y] && OF [=y] && HAS_IOMEM [=n]
+   Selected by [y]:
+   - REGULATOR_RT5133 [=y] && REGULATOR [=y] && I2C [=y] && GPIOLIB [=y] && OF [=y]
 
-$ sudo rmmod rust_minimal
-[  648.272832] rust_minimal: My numbers are [72, 108, 200]
-[  648.272873] rust_minimal: Rust minimal sample (exit)
 
-$ sudo modprobe rust_print
-[  843.410391] rust_print: Rust printing macros sample (init)
-[  843.410424] rust_print: Emergency message (level 0) without args
-[  843.410451] rust_print: Alert message (level 1) without args
-[  843.410477] rust_print: Critical message (level 2) without args
-[  843.410503] rust_print: Error message (level 3) without args
-[  843.410530] rust_print: Warning message (level 4) without args
-[  843.410557] rust_print: Notice message (level 5) without args
-[  843.410594] rust_print: Info message (level 6) without args
-[  843.410617] rust_print: A line that is continued without args
-[  843.410646] rust_print: Emergency message (level 0) with args
-[  843.410675] rust_print: Alert message (level 1) with args
-[  843.410691] rust_print: Critical message (level 2) with args
-[  843.410727] rust_print: Error message (level 3) with args
-[  843.410761] rust_print: Warning message (level 4) with args
-[  843.410796] rust_print: Notice message (level 5) with args
-[  843.410821] rust_print: Info message (level 6) with args
-[  843.410854] rust_print: A line that is continued with args
-[  843.410892] rust_print: 1
-[  843.410895] rust_print: "hello, world"
-[  843.410924] rust_print: [samples/rust/rust_print_main.rs:35:5] c = "hello, world"
-[  843.410977] rust_print: Arc<dyn Display> says 42
-[  843.410979] rust_print: Arc<dyn Display> says hello, world
+vim +388 fs/ntfs3/super.c
 
-$ sudo rmmod rust_print
-[  843.411003] rust_print: "hello, world"
-[  888.499935] rust_print: Rust printing macros sample (exit)
+610f8f5a7baf998 Kari Argillander   2021-09-07  323  
+610f8f5a7baf998 Kari Argillander   2021-09-07  324  static int ntfs_fs_parse_param(struct fs_context *fc,
+610f8f5a7baf998 Kari Argillander   2021-09-07  325  			       struct fs_parameter *param)
+610f8f5a7baf998 Kari Argillander   2021-09-07  326  {
+610f8f5a7baf998 Kari Argillander   2021-09-07  327  	struct ntfs_mount_options *opts = fc->fs_private;
+610f8f5a7baf998 Kari Argillander   2021-09-07  328  	struct fs_parse_result result;
+610f8f5a7baf998 Kari Argillander   2021-09-07  329  	int opt;
+610f8f5a7baf998 Kari Argillander   2021-09-07  330  
+610f8f5a7baf998 Kari Argillander   2021-09-07  331  	opt = fs_parse(fc, ntfs_fs_parameters, param, &result);
+610f8f5a7baf998 Kari Argillander   2021-09-07  332  	if (opt < 0)
+610f8f5a7baf998 Kari Argillander   2021-09-07  333  		return opt;
+610f8f5a7baf998 Kari Argillander   2021-09-07  334  
+610f8f5a7baf998 Kari Argillander   2021-09-07  335  	switch (opt) {
+82cae269cfa9530 Konstantin Komarov 2021-08-13  336  	case Opt_uid:
+c449cb5d1bcedb8 Eric Sandeen       2024-06-27  337  		opts->fs_uid = result.uid;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  338  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  339  	case Opt_gid:
+c449cb5d1bcedb8 Eric Sandeen       2024-06-27  340  		opts->fs_gid = result.gid;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  341  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  342  	case Opt_umask:
+610f8f5a7baf998 Kari Argillander   2021-09-07  343  		if (result.uint_32 & ~07777)
+610f8f5a7baf998 Kari Argillander   2021-09-07  344  			return invalf(fc, "ntfs3: Invalid value for umask.");
+610f8f5a7baf998 Kari Argillander   2021-09-07  345  		opts->fs_fmask_inv = ~result.uint_32;
+610f8f5a7baf998 Kari Argillander   2021-09-07  346  		opts->fs_dmask_inv = ~result.uint_32;
+610f8f5a7baf998 Kari Argillander   2021-09-07  347  		opts->fmask = 1;
+610f8f5a7baf998 Kari Argillander   2021-09-07  348  		opts->dmask = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  349  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  350  	case Opt_dmask:
+610f8f5a7baf998 Kari Argillander   2021-09-07  351  		if (result.uint_32 & ~07777)
+610f8f5a7baf998 Kari Argillander   2021-09-07  352  			return invalf(fc, "ntfs3: Invalid value for dmask.");
+610f8f5a7baf998 Kari Argillander   2021-09-07  353  		opts->fs_dmask_inv = ~result.uint_32;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  354  		opts->dmask = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  355  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  356  	case Opt_fmask:
+610f8f5a7baf998 Kari Argillander   2021-09-07  357  		if (result.uint_32 & ~07777)
+610f8f5a7baf998 Kari Argillander   2021-09-07  358  			return invalf(fc, "ntfs3: Invalid value for fmask.");
+610f8f5a7baf998 Kari Argillander   2021-09-07  359  		opts->fs_fmask_inv = ~result.uint_32;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  360  		opts->fmask = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  361  		break;
+610f8f5a7baf998 Kari Argillander   2021-09-07  362  	case Opt_immutable:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  363  		opts->sys_immutable = 1;
+610f8f5a7baf998 Kari Argillander   2021-09-07  364  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  365  	case Opt_discard:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  366  		opts->discard = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  367  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  368  	case Opt_force:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  369  		opts->force = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  370  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  371  	case Opt_sparse:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  372  		opts->sparse = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  373  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  374  	case Opt_nohidden:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  375  		opts->nohidden = 1;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  376  		break;
+098250db5dfcc01 Konstantin Komarov 2022-09-12  377  	case Opt_hide_dot_files:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  378  		opts->hide_dot_files = 1;
+098250db5dfcc01 Konstantin Komarov 2022-09-12  379  		break;
+1d07a9dfa19914a Daniel Pinto       2022-10-10  380  	case Opt_windows_names:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  381  		opts->windows_names = 1;
+1d07a9dfa19914a Daniel Pinto       2022-10-10  382  		break;
+16b3dbfb5d5cdfb Konstantin Komarov 2023-02-15  383  	case Opt_showmeta:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  384  		opts->showmeta = 1;
+16b3dbfb5d5cdfb Konstantin Komarov 2023-02-15  385  		break;
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  386  	case Opt_acl_bool:
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  387  		if (result.boolean) {
+82cae269cfa9530 Konstantin Komarov 2021-08-13 @388  		case Opt_acl:
+82cae269cfa9530 Konstantin Komarov 2021-08-13  389  #ifdef CONFIG_NTFS3_FS_POSIX_ACL
+610f8f5a7baf998 Kari Argillander   2021-09-07  390  			fc->sb_flags |= SB_POSIXACL;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  391  #else
+96de65a9413e042 Konstantin Komarov 2023-01-17  392  			return invalf(
+96de65a9413e042 Konstantin Komarov 2023-01-17  393  				fc, "ntfs3: Support for ACL not compiled in!");
+82cae269cfa9530 Konstantin Komarov 2021-08-13  394  #endif
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  395  		} else
+610f8f5a7baf998 Kari Argillander   2021-09-07  396  			fc->sb_flags &= ~SB_POSIXACL;
+610f8f5a7baf998 Kari Argillander   2021-09-07  397  		break;
+e274cde8c7550ca Kari Argillander   2021-09-07  398  	case Opt_iocharset:
+610f8f5a7baf998 Kari Argillander   2021-09-07  399  		kfree(opts->nls_name);
+610f8f5a7baf998 Kari Argillander   2021-09-07  400  		opts->nls_name = param->string;
+610f8f5a7baf998 Kari Argillander   2021-09-07  401  		param->string = NULL;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  402  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  403  	case Opt_prealloc:
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  404  		opts->prealloc = 1;
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  405  		break;
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  406  	case Opt_prealloc_bool:
+3c6248937fb9fe5 Konstantin Komarov 2026-01-30  407  		opts->prealloc = result.boolean;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  408  		break;
+a3a956c78efaa20 Konstantin Komarov 2022-09-23  409  	case Opt_nocase:
+568f1140b9ca92d Konstantin Komarov 2024-07-01  410  		opts->nocase = 1;
+a3a956c78efaa20 Konstantin Komarov 2022-09-23  411  		break;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  412  	default:
+610f8f5a7baf998 Kari Argillander   2021-09-07  413  		/* Should not be here unless we forget add case. */
+82cae269cfa9530 Konstantin Komarov 2021-08-13  414  		return -EINVAL;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  415  	}
+82cae269cfa9530 Konstantin Komarov 2021-08-13  416  	return 0;
+82cae269cfa9530 Konstantin Komarov 2021-08-13  417  }
+82cae269cfa9530 Konstantin Komarov 2021-08-13  418  
 
-Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
----
- arch/powerpc/Kconfig                  |  1 +
- arch/powerpc/Makefile                 |  9 +++++----
- arch/powerpc/include/asm/jump_label.h | 23 +++++++++++++----------
- rust/Makefile                         |  1 +
- scripts/generate_rust_target.rs       | 24 ++++++++++++++++++++++++
- 5 files changed, 44 insertions(+), 14 deletions(-)
+:::::: The code at line 388 was first introduced by commit
+:::::: 82cae269cfa953032fbb8980a7d554d60fb00b17 fs/ntfs3: Add initialization of super block
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 9537a61ebae0..e9b8d761ed52 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -285,6 +285,7 @@ config PPC
- 	select HAVE_RSEQ
- 	select HAVE_SAMPLE_FTRACE_DIRECT	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+	select HAVE_RUST			if PPC64
- 	select HAVE_SETUP_PER_CPU_AREA		if PPC64
- 	select HAVE_SOFTIRQ_ON_OWN_STACK
- 	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,$(m32-flag) -mstack-protector-guard=tls -mstack-protector-guard-reg=r2 -mstack-protector-guard-offset=0)
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index a58b1029592c..7ad28cf0fd35 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -172,10 +172,11 @@ CFLAGS-y += $(CONFIG_TUNE_CPU)
- 
- asinstr := $(call as-instr,lis 9$(comma)foo@high,-DHAVE_AS_ATHIGH=1)
- 
--KBUILD_CPPFLAGS	+= -I $(srctree)/arch/powerpc $(asinstr)
--KBUILD_AFLAGS	+= $(AFLAGS-y)
--KBUILD_CFLAGS	+= $(CC_FLAGS_NO_FPU)
--KBUILD_CFLAGS	+= $(CFLAGS-y)
-+KBUILD_CPPFLAGS		+= -I $(srctree)/arch/powerpc $(asinstr)
-+KBUILD_AFLAGS		+= $(AFLAGS-y)
-+KBUILD_CFLAGS		+= $(CC_FLAGS_NO_FPU)
-+KBUILD_CFLAGS		+= $(CFLAGS-y)
-+KBUILD_RUSTFLAGS        += -Ctarget-feature=-mma,-vsx,-hard-float,-altivec
- 
- CHECKFLAGS	+= -m$(BITS) -D__powerpc__ -D__powerpc$(BITS)__
- ifdef CONFIG_CPU_BIG_ENDIAN
-diff --git a/arch/powerpc/include/asm/jump_label.h b/arch/powerpc/include/asm/jump_label.h
-index d4eaba459a0e..a6b211502bfe 100644
---- a/arch/powerpc/include/asm/jump_label.h
-+++ b/arch/powerpc/include/asm/jump_label.h
-@@ -15,14 +15,20 @@
- #define JUMP_ENTRY_TYPE		stringify_in_c(FTR_ENTRY_LONG)
- #define JUMP_LABEL_NOP_SIZE	4
- 
-+#define JUMP_TABLE_ENTRY(key, label)			\
-+	".pushsection __jump_table,  \"aw\"	\n\t"	\
-+	".long 1b - ., " label " - .		\n\t"	\
-+	JUMP_ENTRY_TYPE key " - .		\n\t"	\
-+	".popsection 				\n\t"
-+
-+#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-+	"1:	nop				\n\t"	\
-+	JUMP_TABLE_ENTRY(key,label)
-+
- static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
- {
--	asm goto("1:\n\t"
--		 "nop # arch_static_branch\n\t"
--		 ".pushsection __jump_table,  \"aw\"\n\t"
--		 ".long 1b - ., %l[l_yes] - .\n\t"
--		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
--		 ".popsection \n\t"
-+	asm goto(
-+		 ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
- 		 : :  "i" (&((char *)key)[branch]) : : l_yes);
- 
- 	return false;
-@@ -34,10 +40,7 @@ static __always_inline bool arch_static_branch_jump(struct static_key *key, bool
- {
- 	asm goto("1:\n\t"
- 		 "b %l[l_yes] # arch_static_branch_jump\n\t"
--		 ".pushsection __jump_table,  \"aw\"\n\t"
--		 ".long 1b - ., %l[l_yes] - .\n\t"
--		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
--		 ".popsection \n\t"
-+		 JUMP_TABLE_ENTRY("%c0", "%l[l_yes]")
- 		 : :  "i" (&((char *)key)[branch]) : : l_yes);
- 
- 	return false;
-diff --git a/rust/Makefile b/rust/Makefile
-index 5d357dce1704..7a6daa822cbc 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -390,6 +390,7 @@ BINDGEN_TARGET_x86	:= x86_64-linux-gnu
- BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
- BINDGEN_TARGET_arm	:= arm-linux-gnueabi
- BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
-+BINDGEN_TARGET_powerpc	:= powerpc64le-linux-gnu
- BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
- BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
- 
-diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
-index 38b3416bb979..875579b37424 100644
---- a/scripts/generate_rust_target.rs
-+++ b/scripts/generate_rust_target.rs
-@@ -256,6 +256,30 @@ fn main() {
-         }
-     } else if cfg.has("LOONGARCH") {
-         panic!("loongarch uses the builtin rustc loongarch64-unknown-none-softfloat target");
-+    } else if cfg.has("PPC64") {
-+        ts.push("arch", "powerpc64");
-+        ts.push(
-+            "data-layout",
-+            if cfg.has("CPU_LITTLE_ENDIAN") {
-+                "e-m:e-Fn32-i64:64-n32:64-S128-v256:256:256-v512:512:512"
-+            } else {
-+                "E-m:e-Fn32-i64:64-n32:64-S128-v256:256:256-v512:512:512"
-+            },
-+        );
-+        ts.push("features", "-mma,-altivec,-vsx,-hard-float");
-+        ts.push(
-+            "llvm-target",
-+            if cfg.has("CPU_LITTLE_ENDIAN") {
-+                "powerpc64le-linux-gnu"
-+            } else {
-+                "powerpc64-linux-gnu"
-+            },
-+        );
-+        if cfg.rustc_version_atleast(1, 91, 0) {
-+            ts.push("target-pointer-width", 64);
-+        } else {
-+            ts.push("target-pointer-width", "64");
-+        }
-     } else {
-         panic!("Unsupported architecture");
-     }
+:::::: TO: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+:::::: CC: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
