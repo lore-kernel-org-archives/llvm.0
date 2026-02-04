@@ -1,133 +1,138 @@
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC8C38F23F
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 07:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917C2288A2;
+	Wed,  4 Feb 2026 08:04:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770191634; cv=none; b=Y764XBkJXBEt01VaF2d6lI6nhD8DhHvYqjLIJxUBGaUB5nXbe+Vezr2IeFjRCNaq6s3b1AR5KSShrDjHfwlG6fEsMqTguMW61tJl/Sr+itKUBAueI1OBRh1QnVdsi4duOjFH7oUPltWk0QTqvAQ+t/AF2IPIrPCpvWq3Wc+6LM4=
+	t=1770192245; cv=none; b=RIajruDwuGu4Uy9yPzuzZuYNYY4wOQcYvc/t2HfzSRBns2xdA8Klgu+3mOqIdtDRQzXguXQUHHf8thgvdTN8vN1aHG072tYxClviefAnETA3zWNu1L6ZuJdT4NBIpa5Kk4Cbp/qhmOEbjkhaccLKgEkCbmxFr13Y/eGFFHUoV2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770191634; c=relaxed/simple;
-	bh=7cZ6HiSRjuEKB5bZIASAJ3Z8DQJZXLetTR4Cvay0McY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u7owcfw2ZHyuXa290GGshHBzdTPtXAzNH/V6vPwrf13fKyFJu9siWdgl7vqbONCNqMxnLlsWtZHfUcwVnEbFtEp99MIkcOsFnLOxFlVBVP1qDREIZZtuVpTg2nnWy5JGA+mZfkAPPTd+M+M5lx7XpD36s9bzvS1f44CyyJhC8mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-56646a34c18so2472708e0c.0
-        for <llvm@lists.linux.dev>; Tue, 03 Feb 2026 23:53:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770191633; x=1770796433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AUrzN4N8aYs+z308MZb4l8llcH3n7fe5n2tW6I3BKIA=;
-        b=GHb1QYtU79D8BE34Zh9xaUtwFYBDEeuhdQ++XLk1UxgqP/It+l3TZe3jq032P11jH8
-         +CxJ7AVnzRXu5w8iI+6FD1QSHcfyb6hIciK6J+nnActsxNr1N3k9AUzHs/cankGwtsID
-         vk/Ob10k4UY07F4CiQCc/Cj3XJvftAMV3yclIEAwPM60nOcMhN7IFtMekCirfxrjVoFk
-         wMnyhyviq5PHCX6/3mNcgZ6s/8neOr0z/Lz2Anf5VQsQZCRrE+xc0hgLpIuHATY9vu5d
-         ERwt3zR7FxJYqy6wimhlDFQjtvK1c8vXozo2sejAc0wBWkVVslfSDDsDFFdnhEIamG6Y
-         EvVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZHFeFeU09LQrE2rf+/58+aLPD3aFbssUbLd2Yp2XvKOpR6IXYh1y/pyeY76snwgglYgfZ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzMoUm6TdZHJe+YVqLEa+qMLwv6viQ8gXdnhx2ir61RWXrbdhaf
-	9UHghc4tQ5L0xeiWnu2wBnXGdBrrvnVuTC4zhaylGsLwtPKjA6Op594NiVhtGpHFBG8=
-X-Gm-Gg: AZuq6aJhLLjA+lZaLLs+qto4rlj8P6nL6At5bb8Rwl/0XRn1EZpGQrx1Xmx7IU4OfLl
-	ADGmKJ9m7wT8aIGQv3SCrUd0pWtR9ygYtQtQX5kZi1HJPo//LCzUr700WCF6lsYwdOw9I9FxdJy
-	ipQ4O5Vu5pcXTGZBPW5pwBqHinGBAO5xkusG3ptM/87EOg6UJ98rCfLsHUKU5A/LSVBvh+MZadT
-	Sq/m6HDMlEwmquDTx67VWZLzco7ymIp88CKgGTn9rPOS0np3N52wqj/lCwyDJJjL55P6md/9FMD
-	lywDkanSXtZ49fe0jd4W6seXvQzyY2r8w++kP/bdYUTF88lVR1OzJ0EjuuIufZiXaldbn1zceA/
-	mtlxbThLbpHeLAl2YjTXme8Cv1Sji9rNywLLyfjGtZwfP3h4dYHSciuvUB2sA4r1F9/KYY6mI9Z
-	pltkAvBKESvRoe+Rm4LHEorwl7jyuF0xm4A1xs2bjeEyQd0pSKpUE1tPVLVuoPWoY=
-X-Received: by 2002:a05:6122:c8a:b0:566:26ce:546b with SMTP id 71dfb90a1353d-566e80b5991mr659528e0c.11.1770191632831;
-        Tue, 03 Feb 2026 23:53:52 -0800 (PST)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-566e81d80e1sm905028e0c.13.2026.02.03.23.53.50
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Feb 2026 23:53:51 -0800 (PST)
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-56646a34c18so2472687e0c.0
-        for <llvm@lists.linux.dev>; Tue, 03 Feb 2026 23:53:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUTXzOcbeE326hcCSfqfrXnEazzMnQUHaojhuAES9nt55tq787PvUdH6WHDvlS0s72IL5CW@lists.linux.dev
-X-Received: by 2002:a05:6122:6595:b0:55b:305b:4e2e with SMTP id
- 71dfb90a1353d-566e8153055mr741014e0c.21.1770191630187; Tue, 03 Feb 2026
- 23:53:50 -0800 (PST)
+	s=arc-20240116; t=1770192245; c=relaxed/simple;
+	bh=GMKkuUh7mspGK9TWvMbS7al11PlD8m4J8oxebbDh4Gk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=K8h7/mCHttL/lT43pV4p5SR8i8/828ADHHALAikRWMwC9zH1iD/4UXG908NsiUVHG5hIRkdj6gyyzCyVOROxTPYrMygDCfDP1HR4Rx/+7jkcC2zwMIcXHWIp0p9hqOdcAx+A6ElyZhV0nlSgDZUv560xUhbhL2ckp8Il/bmvT34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z3ooUtv2; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z3ooUtv2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770192245; x=1801728245;
+  h=date:from:to:cc:subject:message-id;
+  bh=GMKkuUh7mspGK9TWvMbS7al11PlD8m4J8oxebbDh4Gk=;
+  b=Z3ooUtv2MzoezvbzS8l24lSryNiI0zfmD8ADOGWiSWFAazIZ1cDXNtUk
+   6ahmAFC5b5Cz5zEPNEaOtJzdY+aFCGSgC++n1HX8a9hx32W5qj7VinAJr
+   mBAgLOci5SN+308fuT2+Q3JVohyrna1bCR4WC696oyRPXmIObBw2YnNvg
+   iFqm/OYodjfHOxdNltKqlI45D2Td6rubJtIKrgfrO/rlxFh0uNlClNNEe
+   zyXp+JyKZK54ftS16lwSmTyFS6FSbPpKnrrlTceq4L5LyKUh943/AYhfI
+   aP+qKB+foDBZBUEz2zIu7mEYPAliMti5ZgDhuhB9m059Zd7FZ8z3Y2Bt/
+   w==;
+X-CSE-ConnectionGUID: 6M1CZVvRRvSubuY8eX4Gwg==
+X-CSE-MsgGUID: AW7+Y9hmQIanUH10lIq8aQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71433101"
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="71433101"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 00:04:04 -0800
+X-CSE-ConnectionGUID: 5IUEDG/uTcW1ziCJ6F938Q==
+X-CSE-MsgGUID: b5usz7mNRF6840ydpiRAKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="214577203"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Feb 2026 00:04:02 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnXrj-000000003fF-3102;
+	Wed, 04 Feb 2026 08:03:59 +0000
+Date: Wed, 04 Feb 2026 09:03:34 +0100
+From: kernel test robot <lkp@intel.com>
+To: Carsten Stollmaier <stollmc@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Woodhouse <dwmw@amazon.co.uk>,
+ Lilit Janpoladyan <lilitj@amazon.de>,
+ Sebastian Biemueller <sbiemue@amazon.de>
+Subject: [dwmw2:gpc-stealtime 1/1] arch/x86/kvm/x86.c:5242:2: error:
+ call to undeclared function 'kvm_gpc_mark_dirty'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202602040904.0eXBWOvu-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com> <aYKcNds-XsVLRjcC@smile.fi.intel.com>
-In-Reply-To: <aYKcNds-XsVLRjcC@smile.fi.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 4 Feb 2026 08:53:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWZx=2-y_OSjCkxmXo-3YjGjU0aH89puTcL0rmvw7E-Eg@mail.gmail.com>
-X-Gm-Features: AZwV_QjQQaNbz3sSm5Ca5G7xDhKtEIlhGsB9AygKTcUaIrP4KhihNxn7cOIyG98
-Message-ID: <CAMuHMdWZx=2-y_OSjCkxmXo-3YjGjU0aH89puTcL0rmvw7E-Eg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when
- dprintk() is no-op
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
-	Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Andy,
+tree:   git://git.infradead.org/users/dwmw2/linux gpc-stealtime
+head:   34c3f2e56cbf5d6b03946d531e66a91566d90db6
+commit: 34c3f2e56cbf5d6b03946d531e66a91566d90db6 [1/1] KVM: x86: Use gfn_to_pfn_cache for record_steal_time
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260204/202602040904.0eXBWOvu-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602040904.0eXBWOvu-lkp@intel.com/reproduce)
 
-On Wed, 4 Feb 2026 at 02:11, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Wed, Feb 04, 2026 at 02:04:15AM +0100, Andy Shevchenko wrote:
-> > Clang compiler is not happy about set but unused variables:
-> >
-> > .../flexfilelayout/flexfilelayoutdev.c:56:9: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
-> > .../flexfilelayout/flexfilelayout.c:1505:6: error: variable 'err' set but not used [-Werror,-Wunused-but-set-variable]
-> > .../nfs4proc.c:9244:12: error: variable 'ptr' set but not used [-Werror,-Wunused-but-set-variable]
-> >
-> > Fix these by forwarding parameters of dprintk() to no_printk().
-> > The positive side-effect is a format-string checker enabled even for the cases
-> > when dprintk() is no-op.
->
-> Note, the alternative fix is to add __maybe_unused all over the place.
-> With pros and cons I consider my approach better.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602040904.0eXBWOvu-lkp@intel.com/
 
-Definitely.  I tried something similar a few years ago[1], but ran into build
-errors from the robots, and gave up due to lack of time.
+All errors (new ones prefixed by >>):
 
-So for the principle:
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> arch/x86/kvm/x86.c:5242:2: error: call to undeclared function 'kvm_gpc_mark_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5242 |         kvm_gpc_mark_dirty(gpc);
+         |         ^
+   1 error generated.
 
-Ah, my local tree still has the following fix I never sent out, and still
-looks suboptimal:
 
---- a/fs/nfsd/nfsfh.c
-+++ b/fs/nfsd/nfsfh.c
-@@ -105,9 +105,11 @@ static __be32 nfsd_setuser_and_check_port(struct
-svc_rqst *rqstp,
- {
-        /* Check if the request originated from a secure port. */
-        if (rqstp && !nfsd_originating_port_ok(rqstp, cred, exp)) {
--               RPC_IFDEBUG(char buf[RPC_MAX_ADDRBUFLEN]);
-+#ifdef CONFIG_SUNRPC_DEBUG
-+               char buf[RPC_MAX_ADDRBUFLEN];
-                dprintk("nfsd: request from insecure port %s!\n",
-                        svc_print_addr(rqstp, buf, sizeof(buf)));
-+#endif
-                return nfserr_perm;
-        }
+vim +/kvm_gpc_mark_dirty +5242 arch/x86/kvm/x86.c
 
-[1]  https://lore.kernel.org/a93de2e8afa826745746b00fc5f64e513df5d52f.1697104757.git.geert+renesas@glider.be
-
-Gr{oetje,eeting}s,
-
-                        Geert
+  5201	
+  5202	static void kvm_steal_time_set_preempted(struct kvm_vcpu *vcpu)
+  5203	{
+  5204		struct gfn_to_pfn_cache *gpc = &vcpu->arch.st.cache;
+  5205		struct kvm_steal_time *st;
+  5206		static const u8 preempted = KVM_VCPU_PREEMPTED;
+  5207		unsigned long flags;
+  5208	
+  5209		/*
+  5210		 * The vCPU can be marked preempted if and only if the VM-Exit was on
+  5211		 * an instruction boundary and will not trigger guest emulation of any
+  5212		 * kind (see vcpu_run).  Vendor specific code controls (conservatively)
+  5213		 * when this is true, for example allowing the vCPU to be marked
+  5214		 * preempted if and only if the VM-Exit was due to a host interrupt.
+  5215		 */
+  5216		if (!vcpu->arch.at_instruction_boundary) {
+  5217			vcpu->stat.preemption_other++;
+  5218			return;
+  5219		}
+  5220	
+  5221		vcpu->stat.preemption_reported++;
+  5222		if (!(vcpu->arch.st.msr_val & KVM_MSR_ENABLED))
+  5223			return;
+  5224	
+  5225		if (vcpu->arch.st.preempted)
+  5226			return;
+  5227	
+  5228		/* This happens on process exit */
+  5229		if (unlikely(current->mm != vcpu->kvm->mm))
+  5230			return;
+  5231	
+  5232		read_lock_irqsave(&gpc->lock, flags);
+  5233		if (!kvm_gpc_check(gpc, sizeof(*st)))
+  5234			goto out_unlock_gpc;
+  5235	
+  5236		st = (struct kvm_steal_time *)gpc->khva;
+  5237		BUILD_BUG_ON(sizeof(st->preempted) != sizeof(preempted));
+  5238	
+  5239		st->preempted = preempted;
+  5240		vcpu->arch.st.preempted = KVM_VCPU_PREEMPTED;
+  5241	
+> 5242		kvm_gpc_mark_dirty(gpc);
+  5243	
+  5244	out_unlock_gpc:
+  5245		read_unlock_irqrestore(&gpc->lock, flags);
+  5246	}
+  5247	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
