@@ -1,163 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35CC38945D;
-	Wed,  4 Feb 2026 07:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC8C38F23F
+	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 07:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770191347; cv=none; b=s6emoFepr/EQZsmKvkCyETEM69Exa6wunItb12QiAH/DkQh5E1TAuMnK0vK/3D4394Vjhw9Xid+KXNWNniKHJfWToP6h9oua2uSGPBZFvryus5PUucsVUC2nqwd40C5l1HucipxiQbmzdgZo5YyH31mOCWKDh82omvron0BOhI0=
+	t=1770191634; cv=none; b=Y764XBkJXBEt01VaF2d6lI6nhD8DhHvYqjLIJxUBGaUB5nXbe+Vezr2IeFjRCNaq6s3b1AR5KSShrDjHfwlG6fEsMqTguMW61tJl/Sr+itKUBAueI1OBRh1QnVdsi4duOjFH7oUPltWk0QTqvAQ+t/AF2IPIrPCpvWq3Wc+6LM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770191347; c=relaxed/simple;
-	bh=D24q5QrcnSsk+iQX/zxY7NraKbAP2JqL3ASTt1//PUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J6de5f+F5URzCTP3c3cAJKelBCNGM0tnWy0TPkYMWibe/yL31kNlQlaoM1fuPwrXxnu7goK4qkSsawlkFRagJixsPyRH/4Nzdffqwwf8paeVZEVUgBRlddGdQoVUMEZ3vQ5iBcuAGvQstiwinDn0YFaso/45157D+/BN8O2ovCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ltqHQgzk; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ltqHQgzk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770191347; x=1801727347;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D24q5QrcnSsk+iQX/zxY7NraKbAP2JqL3ASTt1//PUw=;
-  b=ltqHQgzkdlBSt3ee9baYd3l7uB0RFwGsW6wmqKbbq3iE8MnASdn1oS3R
-   OW+s2uBiekhF38J5KWIcGFflIp5G8lDq82uHYvjGNt+OX1nbW+FmPdkkk
-   d8UI1bA1Troefj2qApyPEQaFhWgOcbpAwf9ck8upEA4BDngAKYdsEze3a
-   AhLv1RhbNCKBsFjjwEkeNnvE1WZbpabyYx4LrLcsqte/dj2KZk+ioyQb+
-   BjIQiGVE6OrgHdpEGYRD0O+ohAGjW3URVaFUmsRghG58ldaEzLsevERo1
-   sY8G3zX2IWwAlJO4Q8LH1m+qydqklD6t/JCgQEWjc93RA2aKmAuY85BEP
-   w==;
-X-CSE-ConnectionGUID: ntibQxr4Tky5kJ5t7kiWWw==
-X-CSE-MsgGUID: 5IEHBbM3RjaOL+46jjNMHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82004307"
-X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="82004307"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 23:49:06 -0800
-X-CSE-ConnectionGUID: 9C5kojHSQgiENXSSIwkfTg==
-X-CSE-MsgGUID: rhJqX7VUSYeFN4IAYVjSqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
-   d="scan'208";a="209381015"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by orviesa010.jf.intel.com with ESMTP; 03 Feb 2026 23:49:02 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vnXdD-000000003f3-2Dl1;
-	Wed, 04 Feb 2026 07:48:59 +0000
-Date: Wed, 4 Feb 2026 08:48:37 +0100
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
-	Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when
- dprintk() is no-op
-Message-ID: <202602040857.KEEWLLQ1-lkp@intel.com>
-References: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1770191634; c=relaxed/simple;
+	bh=7cZ6HiSRjuEKB5bZIASAJ3Z8DQJZXLetTR4Cvay0McY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u7owcfw2ZHyuXa290GGshHBzdTPtXAzNH/V6vPwrf13fKyFJu9siWdgl7vqbONCNqMxnLlsWtZHfUcwVnEbFtEp99MIkcOsFnLOxFlVBVP1qDREIZZtuVpTg2nnWy5JGA+mZfkAPPTd+M+M5lx7XpD36s9bzvS1f44CyyJhC8mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-56646a34c18so2472708e0c.0
+        for <llvm@lists.linux.dev>; Tue, 03 Feb 2026 23:53:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770191633; x=1770796433;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AUrzN4N8aYs+z308MZb4l8llcH3n7fe5n2tW6I3BKIA=;
+        b=GHb1QYtU79D8BE34Zh9xaUtwFYBDEeuhdQ++XLk1UxgqP/It+l3TZe3jq032P11jH8
+         +CxJ7AVnzRXu5w8iI+6FD1QSHcfyb6hIciK6J+nnActsxNr1N3k9AUzHs/cankGwtsID
+         vk/Ob10k4UY07F4CiQCc/Cj3XJvftAMV3yclIEAwPM60nOcMhN7IFtMekCirfxrjVoFk
+         wMnyhyviq5PHCX6/3mNcgZ6s/8neOr0z/Lz2Anf5VQsQZCRrE+xc0hgLpIuHATY9vu5d
+         ERwt3zR7FxJYqy6wimhlDFQjtvK1c8vXozo2sejAc0wBWkVVslfSDDsDFFdnhEIamG6Y
+         EvVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXZHFeFeU09LQrE2rf+/58+aLPD3aFbssUbLd2Yp2XvKOpR6IXYh1y/pyeY76snwgglYgfZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YzMoUm6TdZHJe+YVqLEa+qMLwv6viQ8gXdnhx2ir61RWXrbdhaf
+	9UHghc4tQ5L0xeiWnu2wBnXGdBrrvnVuTC4zhaylGsLwtPKjA6Op594NiVhtGpHFBG8=
+X-Gm-Gg: AZuq6aJhLLjA+lZaLLs+qto4rlj8P6nL6At5bb8Rwl/0XRn1EZpGQrx1Xmx7IU4OfLl
+	ADGmKJ9m7wT8aIGQv3SCrUd0pWtR9ygYtQtQX5kZi1HJPo//LCzUr700WCF6lsYwdOw9I9FxdJy
+	ipQ4O5Vu5pcXTGZBPW5pwBqHinGBAO5xkusG3ptM/87EOg6UJ98rCfLsHUKU5A/LSVBvh+MZadT
+	Sq/m6HDMlEwmquDTx67VWZLzco7ymIp88CKgGTn9rPOS0np3N52wqj/lCwyDJJjL55P6md/9FMD
+	lywDkanSXtZ49fe0jd4W6seXvQzyY2r8w++kP/bdYUTF88lVR1OzJ0EjuuIufZiXaldbn1zceA/
+	mtlxbThLbpHeLAl2YjTXme8Cv1Sji9rNywLLyfjGtZwfP3h4dYHSciuvUB2sA4r1F9/KYY6mI9Z
+	pltkAvBKESvRoe+Rm4LHEorwl7jyuF0xm4A1xs2bjeEyQd0pSKpUE1tPVLVuoPWoY=
+X-Received: by 2002:a05:6122:c8a:b0:566:26ce:546b with SMTP id 71dfb90a1353d-566e80b5991mr659528e0c.11.1770191632831;
+        Tue, 03 Feb 2026 23:53:52 -0800 (PST)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-566e81d80e1sm905028e0c.13.2026.02.03.23.53.50
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Feb 2026 23:53:51 -0800 (PST)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-56646a34c18so2472687e0c.0
+        for <llvm@lists.linux.dev>; Tue, 03 Feb 2026 23:53:50 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTXzOcbeE326hcCSfqfrXnEazzMnQUHaojhuAES9nt55tq787PvUdH6WHDvlS0s72IL5CW@lists.linux.dev
+X-Received: by 2002:a05:6122:6595:b0:55b:305b:4e2e with SMTP id
+ 71dfb90a1353d-566e8153055mr741014e0c.21.1770191630187; Tue, 03 Feb 2026
+ 23:53:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com>
+References: <20260204010415.2149607-1-andriy.shevchenko@linux.intel.com> <aYKcNds-XsVLRjcC@smile.fi.intel.com>
+In-Reply-To: <aYKcNds-XsVLRjcC@smile.fi.intel.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 4 Feb 2026 08:53:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWZx=2-y_OSjCkxmXo-3YjGjU0aH89puTcL0rmvw7E-Eg@mail.gmail.com>
+X-Gm-Features: AZwV_QjQQaNbz3sSm5Ca5G7xDhKtEIlhGsB9AygKTcUaIrP4KhihNxn7cOIyG98
+Message-ID: <CAMuHMdWZx=2-y_OSjCkxmXo-3YjGjU0aH89puTcL0rmvw7E-Eg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when
+ dprintk() is no-op
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
+	Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
 Hi Andy,
 
-kernel test robot noticed the following build errors:
+On Wed, 4 Feb 2026 at 02:11, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Wed, Feb 04, 2026 at 02:04:15AM +0100, Andy Shevchenko wrote:
+> > Clang compiler is not happy about set but unused variables:
+> >
+> > .../flexfilelayout/flexfilelayoutdev.c:56:9: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
+> > .../flexfilelayout/flexfilelayout.c:1505:6: error: variable 'err' set but not used [-Werror,-Wunused-but-set-variable]
+> > .../nfs4proc.c:9244:12: error: variable 'ptr' set but not used [-Werror,-Wunused-but-set-variable]
+> >
+> > Fix these by forwarding parameters of dprintk() to no_printk().
+> > The positive side-effect is a format-string checker enabled even for the cases
+> > when dprintk() is no-op.
+>
+> Note, the alternative fix is to add __maybe_unused all over the place.
+> With pros and cons I consider my approach better.
 
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on linus/master v6.19-rc8 next-20260203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Definitely.  I tried something similar a few years ago[1], but ran into build
+errors from the robots, and gave up due to lack of time.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/sunrpc-Fix-compilation-error-make-W-1-when-dprintk-is-no-op/20260204-091033
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20260204010415.2149607-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] sunrpc: Fix compilation error (`make W=1`) when dprintk() is no-op
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260204/202602040857.KEEWLLQ1-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602040857.KEEWLLQ1-lkp@intel.com/reproduce)
+So for the principle:
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602040857.KEEWLLQ1-lkp@intel.com/
+Ah, my local tree still has the following fix I never sent out, and still
+looks suboptimal:
 
-All errors (new ones prefixed by >>):
+--- a/fs/nfsd/nfsfh.c
++++ b/fs/nfsd/nfsfh.c
+@@ -105,9 +105,11 @@ static __be32 nfsd_setuser_and_check_port(struct
+svc_rqst *rqstp,
+ {
+        /* Check if the request originated from a secure port. */
+        if (rqstp && !nfsd_originating_port_ok(rqstp, cred, exp)) {
+-               RPC_IFDEBUG(char buf[RPC_MAX_ADDRBUFLEN]);
++#ifdef CONFIG_SUNRPC_DEBUG
++               char buf[RPC_MAX_ADDRBUFLEN];
+                dprintk("nfsd: request from insecure port %s!\n",
+                        svc_print_addr(rqstp, buf, sizeof(buf)));
++#endif
+                return nfserr_perm;
+        }
 
-   In file included from include/asm-generic/bug.h:31,
-                    from arch/x86/include/asm/bug.h:193,
-                    from arch/x86/include/asm/alternative.h:9,
-                    from arch/x86/include/asm/segment.h:6,
-                    from arch/x86/include/asm/ptrace.h:5,
-                    from arch/x86/include/asm/math_emu.h:5,
-                    from arch/x86/include/asm/processor.h:13,
-                    from include/linux/sched.h:13,
-                    from include/linux/sunrpc/svcauth_gss.h:12,
-                    from fs/nfsd/nfsfh.c:13:
-   fs/nfsd/nfsfh.c: In function 'nfsd_setuser_and_check_port':
->> fs/nfsd/nfsfh.c:110:47: error: 'buf' undeclared (first use in this function); did you mean 'btf'?
-     110 |                         svc_print_addr(rqstp, buf, sizeof(buf)));
-         |                                               ^~~
-   include/linux/printk.h:135:32: note: in definition of macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                                ^~~~~~~~~~~
-   include/linux/sunrpc/debug.h:25:9: note: in expansion of macro 'dfprintk'
-      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~
-   fs/nfsd/nfsfh.c:109:17: note: in expansion of macro 'dprintk'
-     109 |                 dprintk("nfsd: request from insecure port %s!\n",
-         |                 ^~~~~~~
-   fs/nfsd/nfsfh.c:110:47: note: each undeclared identifier is reported only once for each function it appears in
-     110 |                         svc_print_addr(rqstp, buf, sizeof(buf)));
-         |                                               ^~~
-   include/linux/printk.h:135:32: note: in definition of macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                                ^~~~~~~~~~~
-   include/linux/sunrpc/debug.h:25:9: note: in expansion of macro 'dfprintk'
-      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~
-   fs/nfsd/nfsfh.c:109:17: note: in expansion of macro 'dprintk'
-     109 |                 dprintk("nfsd: request from insecure port %s!\n",
-         |                 ^~~~~~~
+[1]  https://lore.kernel.org/a93de2e8afa826745746b00fc5f64e513df5d52f.1697104757.git.geert+renesas@glider.be
 
+Gr{oetje,eeting}s,
 
-vim +110 fs/nfsd/nfsfh.c
-
-9d7ed1355db5b0 J. Bruce Fields 2018-03-08  101  
-6fa02839bf9412 J. Bruce Fields 2007-11-12  102  static __be32 nfsd_setuser_and_check_port(struct svc_rqst *rqstp,
-b0d87dbd8bd311 NeilBrown       2024-09-05  103  					  struct svc_cred *cred,
-6fa02839bf9412 J. Bruce Fields 2007-11-12  104  					  struct svc_export *exp)
-6fa02839bf9412 J. Bruce Fields 2007-11-12  105  {
-6fa02839bf9412 J. Bruce Fields 2007-11-12  106  	/* Check if the request originated from a secure port. */
-b0d87dbd8bd311 NeilBrown       2024-09-05  107  	if (rqstp && !nfsd_originating_port_ok(rqstp, cred, exp)) {
-5216a8e70e25b0 Pavel Emelyanov 2008-02-21  108  		RPC_IFDEBUG(char buf[RPC_MAX_ADDRBUFLEN]);
-a48fd0f9f77b6e Kinglong Mee    2014-05-29  109  		dprintk("nfsd: request from insecure port %s!\n",
-6fa02839bf9412 J. Bruce Fields 2007-11-12 @110  		        svc_print_addr(rqstp, buf, sizeof(buf)));
-6fa02839bf9412 J. Bruce Fields 2007-11-12  111  		return nfserr_perm;
-6fa02839bf9412 J. Bruce Fields 2007-11-12  112  	}
-6fa02839bf9412 J. Bruce Fields 2007-11-12  113  
-6fa02839bf9412 J. Bruce Fields 2007-11-12  114  	/* Set user creds for this exportpoint */
-b0d87dbd8bd311 NeilBrown       2024-09-05  115  	return nfserrno(nfsd_setuser(cred, exp));
-6fa02839bf9412 J. Bruce Fields 2007-11-12  116  }
-6fa02839bf9412 J. Bruce Fields 2007-11-12  117  
+                        Geert
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
