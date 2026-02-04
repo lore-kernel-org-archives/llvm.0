@@ -1,136 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E8332D7F8
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 17:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE1E27464F;
+	Wed,  4 Feb 2026 17:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770225197; cv=none; b=R/20hg8bYCCHY77OZBmox0HnItlq0Sz/tWV7mPyYYiWygZvSJtFEJhSYU/0SMi5RZJQfMrsgsWRpqcqNfuBWChGIHt8SSuvgjmFmHN4cbPlXuad544Zt4ZFHUPVqkAnTBuVGknfO9nGTpQxwKehOKy74S9hGEevLELFdDRN/x2s=
+	t=1770225568; cv=none; b=CCAggONdHudAabKlR5i65BB+xfPdSAQGn/D7zRmp8CPG7k6lyFHgpoSvQUDpVcl8ttTI9QDeT1PKLF2ia77i0ct/3tpjy20zzkalkFaqjv5alrni/HGBoESYImhpYDfsjBLJ5A5eqyRoGbLEmaw9OG48GSa10UbdP7eJVihOHQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770225197; c=relaxed/simple;
-	bh=LqHJDV1kK40vDI7exh8dlr10FaGJBVy5Beg3u3ElAF4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=uqU81krVi48BpZ3/AzJrBob8snfvibRvs+RofrtNZ9ttQMjXRdB+d7RPF8wjAPYoPKHN1Vvvtfa6Vb8zthcnirfpMxynBWKMsTBtyqZXOHdxt6snjtLc3x4I3I0H5YVzZlfWO5YsFaq9I+rxGlO2dpgQDpSEEotFsb3vI5Osm5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E7UP9aJs; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770225568; c=relaxed/simple;
+	bh=DtHe0dwbusnQaV94dHwbXq/wTSKOEey/tmCSKDwj+wo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nalRY7nQJ09BUJOSLDkNC5tvudlGCrJB5pORrfHYpunMHW/1ia0zh8r3tLKof1QejUnuNeM+ux67QxgYZCdIlOqZM/XHmunGUOdFklPM7Z4fbmE5mR7IvjmaIWhKMQIT5d7PYvAD0olIUX92pAXda7NoObo2kw//sCchqmQL3Yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mr0Pw4cU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E7UP9aJs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770225195;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UceXwkurdc50fJMDUr3eA9g46uJBjHJOCGHzBmFL3rM=;
-	b=E7UP9aJsbL7H5taZ4+9phNS9Hg3l4ge03bg3wvdZd7AdQNPMLvx5XQHUzJxyC8bycNf5dE
-	e+8ET2qioQZy2mE7ynvWADytb2SExldIsy2cMBUPO2lEFELoC2WWuYyyb3g1x36dqGWpMj
-	+TuPFm6g83DOGna29B/LmsYTZUjIi5E=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-97-Wsh5hQF6PZ6I2jufShJyag-1; Wed,
- 04 Feb 2026 12:13:14 -0500
-X-MC-Unique: Wsh5hQF6PZ6I2jufShJyag-1
-X-Mimecast-MFC-AGG-ID: Wsh5hQF6PZ6I2jufShJyag_1770225193
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C0D5318005BC
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 17:13:13 +0000 (UTC)
-Received: from [172.20.128.30] (unknown [10.30.44.30])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4D745180035A;
-	Wed,  4 Feb 2026 17:13:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.19.0-rc8,
- upstream-mainline, 5fd0a1df)
-Date: Wed, 04 Feb 2026 17:13:13 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mr0Pw4cU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7599C4CEF7;
+	Wed,  4 Feb 2026 17:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770225568;
+	bh=DtHe0dwbusnQaV94dHwbXq/wTSKOEey/tmCSKDwj+wo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mr0Pw4cU9VKIf49Cx5IUekaRAaaJWcVfy4cr6IfmgolfGJgwarXwi7+W2mtY0mUFz
+	 T8SUfyk5vmnZi4h84W19N6J6mA0lHMAsnaT54R3ayxcS3w4OMilo/hjFL7mRLQNc4u
+	 o/8kHtDxD1wuOvAtf1OQbEoSi4aPLhL25djAeuIXxw7OzbBT9hTh2jiGXBqlaWaEns
+	 RL9npkDq+LWQ582cE7X6G+kjwXQ5BDI8U7swO4T9ZbNhNo5PD5CNI7MZ4rFjVB8nZD
+	 0Ql3r/znHtrsNeVVmcvfvWw/ZXmJkryBPyN+Mseo8R4zN2I0wiY9lZvVWYnaD7XbgE
+	 l4uDcnF4SFtWw==
+Message-ID: <6a4799d9-48fe-410e-acad-fe687edebc7e@kernel.org>
+Date: Wed, 4 Feb 2026 18:19:19 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <12418.126020412131401467@us-mta-97.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: qRHmA4wSSAGNI5DL2D1fIhv0BtfCERYS7nXsIiICy98_1770225193
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'v6.19rc8-smb3-client-fixes' of git://git.sam=
-ba.org/sfrench/cifs-2.6
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2304360023
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2304360023_x86_64_kernel_kcidb_tool_20601975_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/590
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] rust: Add PowerPC support
+To: Alice Ryhl <aliceryhl@google.com>, Link Mauve <linkmauve@linkmauve.fr>
+Cc: rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
+ officialTechflashYT@gmail.com, Ash Logan <ash@heyquark.com>,
+ Roberto Van Eeden <rw-r-r-0644@protonmail.com>,
+ =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+ "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+References: <20260204030507.8203-1-linkmauve@linkmauve.fr>
+ <aYMiXcy33YEVkgYM@google.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <aYMiXcy33YEVkgYM@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Le 04/02/2026 à 11:41, Alice Ryhl a écrit :
+> On Wed, Feb 04, 2026 at 04:05:04AM +0100, Link Mauve wrote:
+>> For now only Big Endian 32-bit PowerPC is supported, as that is the only
+>> hardware I have.  This has been tested on the Nintendo Wii so far, but I
+>> plan on also using it on the GameCube, Wii U and Apple G4.
+> 
+> Super cool!
+> 
+>> These changes aren’t the only ones required to get the kernel to compile
+>> and link on PowerPC, libcore will also have to be changed to not use
+>> integer division to format u64, u128 and core::time::Duration, otherwise
+>> __udivdi3() and __umoddi3() will have to be added.  I have tested this
+>> change by replacing the three implementations with unimplemented!() and
+>> it linked just fine.
+> 
+> Uh oh this seems tricky. How is this not a problem on arm32 too?
+> 
+> Perhaps we should just be providing __udivdi3() and __umoddi3() in
+> general?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+We don't want those functions in the kernel as they are sub-optimal and 
+unnecessary. Usually the kernel needs can be covered with do_div() or 
+other functions in include/asm-generic/div64.h. If we add those 
+functions people will start doing divides blindly in the kernel 
+forgetting the huge cost a 64 bits divide has on a 32 bits processor.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> 
+>> diff --git a/arch/powerpc/include/asm/jump_label.h b/arch/powerpc/include/asm/jump_label.h
+>> index d4eaba459a0e..238f0f625a36 100644
+>> --- a/arch/powerpc/include/asm/jump_label.h
+>> +++ b/arch/powerpc/include/asm/jump_label.h
+>> @@ -15,14 +15,18 @@
+>>   #define JUMP_ENTRY_TYPE		stringify_in_c(FTR_ENTRY_LONG)
+>>   #define JUMP_LABEL_NOP_SIZE	4
+>>   
+>> +/* This macro is also expanded on the Rust side. */
+>> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
+>> +	"1:\n\t"					\
+>> +	"nop # arch_static_branch\n\t"			\
+>> +	".pushsection __jump_table,  \"aw\"\n\t"	\
+>> +	".long 1b - ., " label " - .\n\t"		\
+>> +	 JUMP_ENTRY_TYPE key " - .\n\t"			\
+>> +	 ".popsection \n\t"
+>> +
+
+Would be better split in two with a JUMP_TABLE_ENTRY() macro as other 
+architectures and as done by Mukesh in its patch, see 
+https://lore.kernel.org/r/20260204042417.83903-1-mkchauras@gmail.com
+
+>>   static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
+>>   {
+>> -	asm goto("1:\n\t"
+>> -		 "nop # arch_static_branch\n\t"
+>> -		 ".pushsection __jump_table,  \"aw\"\n\t"
+>> -		 ".long 1b - ., %l[l_yes] - .\n\t"
+>> -		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
+>> -		 ".popsection \n\t"
+>> +	asm goto(ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
+>>   		 : :  "i" (&((char *)key)[branch]) : : l_yes);
+> 
+> In case this patch takes a long time to land, it may make sense to split
+> this part out in a separate patch that can land now.
+> 
+> Also, consider pre-emptively updating arch_static_branch_jump too. We
+> probably need it at some point in the future.
+> 
+>> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+>> index 38b3416bb979..0054880ba0ea 100644
+>> --- a/scripts/generate_rust_target.rs
+>> +++ b/scripts/generate_rust_target.rs
+>> @@ -188,6 +188,16 @@ fn main() {
+>>           panic!("arm uses the builtin rustc target");
+>>       } else if cfg.has("ARM64") {
+>>           panic!("arm64 uses the builtin rustc aarch64-unknown-none target");
+>> +    } else if cfg.has("PPC32") {
+>> +        ts.push("arch", "powerpc");
+>> +        ts.push("data-layout", "E-m:e-p:32:32-Fn32-i64:64-n32");
+>> +        ts.push("features", "+soft-float");
+>> +        ts.push("llvm-target", "powerpc-unknown-eabi");
+>> +        if cfg.rustc_version_atleast(1, 91, 0) {
+>> +            ts.push("target-pointer-width", 32);
+>> +        } else {
+>> +            ts.push("target-pointer-width", "32");
+>> +        }
+> 
+> Is there no built-in target we can use? I think we want to avoid adding
+> new targets if at all possible.
+> 
+> Alice
 
