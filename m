@@ -1,165 +1,128 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549B33E8C52
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 10:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770201696; cv=none; b=FoZhVd8iGjX08FEdBW+YcI+AJZAZIPJK4g+aKK9c6sDJSRZFEXDyu3ETAumDz3TpL77XOuYOUWb46xM/rffRLzp4LNMsnXjI7Lz8XBq4sTRpdFKZsrX1s5PKyD2N4m+XC04iCcX5KDeDf4Rj1k5vZ5OwkhhDa4ZEUvBMuQsBffg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770201696; c=relaxed/simple;
-	bh=n+KFMIEg7ILgHSBVi1DF/IeBc2dZ8C9nEfF1T5o6KA0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Pi8xp+SKgNIEt+Ax8USlGyBH8OjCnJQGglpuwihlG0V67fbilv035cWc9g+ca+Qp/GTHg5DsUtehKeGJ19+pLSaF0YDo+EPjlMEjtduLH7ktyOEEia7kW2nL95Y1RjW8KKoZurTFueTOH4VXX6pppUwdk4TfQSgNxGZWF/bRkJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NBsOWaOd; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8AF3A9DAB
+	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 10:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770202000; cv=pass; b=k5riaYNNrtAXMxI0zwCXEBkulIQ61d30SLDiZ4E1Z6juYwVETK/aIy0/8qpflrcKIcfaMPSGR/gwsFysJ+pKIh8P5VdyiWBXiU9YlFjuYbpoe4yNIf2wVU1JpI86fbwUggV9hwl+cHzmcuhoSYdVEcvvfPEtFk46t7ZAkyk6oLk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770202000; c=relaxed/simple;
+	bh=kY7fp7PgRMRvrZC+OlVEnEmguT5LKW9pH/1apzccJLU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fX7oThpydnUdGJYzGuNpl3ALt8fYWxyzM5btULoZMWr1LCP4RbQFbAZApMsbxJ2Lejkl8rGuKL0tLfcnONJLLdlJ0CuDiMM3Yhjc5pSMe8OaTeCL++gTwT2knkMd8k9HZWFwlgoVX5seP3GgfVm27BQT7flxMnSJpNOKU6fofmM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kKWKsXIy; arc=pass smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NBsOWaOd"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-480711d09f1so85663345e9.0
-        for <llvm@lists.linux.dev>; Wed, 04 Feb 2026 02:41:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kKWKsXIy"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2b71515d8adso6427657eec.1
+        for <llvm@lists.linux.dev>; Wed, 04 Feb 2026 02:46:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770201999; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Tv/rpVffvKNun4Xi7kFT0MNxfU/KlYrZdQ0S/bCK8eK3lwnMNip+jVtSRoGAXx5DGq
+         RTq7Opn2nAjDge0T5A52OlrZZe4uV5IEBCEuMZscRRhXHk53NZOarKBE9y9fvJDJT257
+         1/H6k/0MyD3fVEQ1dE7pGUnDJfZsq+jp0tk+OUoKmQAULavNK9OmuBfXuBBQUbZxEKNi
+         +3O4C0GBDKoxA0uQBSKnHmXi0bnq+eM8lj+pxBjKsxy4REJvV8MP9KTJbM5F2RM9IVAg
+         C3GS5XDBNBd3Gd9nCWFmLTK59dOI12w8NFMQuLXA9MVNjLTh1DDn9AK84ElOVm6ZEabg
+         nDuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=kY7fp7PgRMRvrZC+OlVEnEmguT5LKW9pH/1apzccJLU=;
+        fh=z2BEcZz9VMB3d88PhDGgrHLQbf37VhzfvJbc8Tzrxe8=;
+        b=B6Md4qfWTBYDTx6qZlqCwD55odnMLSCVvht79Mo+MMvpRDncYi66l02PYe1PWJX0CG
+         oucNoHGq/1DkcEQ7oDWHBst/AGQ0j6xl+s6+/TSv9XyjwVq54q62Ya9GAfnaK8mU4WTC
+         Y5Z0Deb0e35lqp+AKOV/RKq/7ObTH24zz986L2UlEEMEChJ6H8nKV7WwJNrPZmii2/mz
+         ft2wjYPq2btYLzylbncewegNKQm+FgYCJUtPnKitEmnO8GOnWL85hycnu9x8BYq03c+/
+         W8gg0HlfZQuY7+U1q2FNM/WjeBW4uMDdFjn4Lz7g0C0jaSalqGtQbtCqPmPAMDAsOPYe
+         Kc7w==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770201695; x=1770806495; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pRwouiQfEMsoda5YPwBCj431swMzELp5kqTN2koP4hQ=;
-        b=NBsOWaOdUeU0Xffo5qarxHluxso6aHa10h7UJu+wI2nWSkeeDyXg8JXm64VLAlKmnU
-         Pnywi0rWBtoHiZaJWsx5BEAWzdNxbZRgtpNzOApbELoEmOYB7ScVMwojAsLfrWKN5AOB
-         rAcr0YOZROCpGSz2l1XaBYjncJ7F8O1ERtXbFjgn4x+E5s2HIiO4ihHMgWm67a9GAcqc
-         T1uw8zRrd1OhP2itp2yp3JDJtUV2UOJsgwaFUPYCsqQnSoFhQ3waZNcoPc9/yJoHfrVd
-         EeXa2SeVjfTMtKULKW9BNb6+j4FNWfyDcBOhCBfKAYfKup+jahm7yzcy9GTdMWZm0ADr
-         ScKg==
+        d=google.com; s=20230601; t=1770201999; x=1770806799; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kY7fp7PgRMRvrZC+OlVEnEmguT5LKW9pH/1apzccJLU=;
+        b=kKWKsXIy9xFgRhTtZYKCB0DtZbBbPbKFMFzQjCO6pnWjbtCliNR9NBkixFK6Zm96Dm
+         UcapNSoIpd+oTeECDrbB1NQgkLMp/ysDbAD4dAKPbOTYvXTqgHTmljy+MnP9nY4VJT4Y
+         YDvBo7RohqFMjkr5QREbpPlzt72m5B447KdpFVH9E8WHRbg/O5FGAP1aObk4Fz6ZXlC/
+         vHF1xjnSWoNxqRCs1/va+T02XuXY2s7Z1vZvd2G0Qp5BkVuOwuWxG6d4/fkw18je41qn
+         5yKFPVcJGObOuRHH+SikjdO9BYNZ4g1EZmMOZcT/zgFUBNplI7N7/l4OgqxphlZZwqzN
+         nILQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770201695; x=1770806495;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pRwouiQfEMsoda5YPwBCj431swMzELp5kqTN2koP4hQ=;
-        b=UWnSvgNMK8qyY6IoQAfvK8dlJDroDB+wwqp18MpKqpPeOoTopOkMAd/tPPIbYBlXqc
-         rAFKP3mvuBycTbhPHOYsetxqGHLo+RYuUovrzGYvD6n9RQzyFgxXdG4/y56XKDhOJ6UC
-         +mXHX5bRD+fjnTZELS4MTN4jowGrdGkAerrW90XhsBV6eBccr0CCBE8y9bkTPyK+GMMJ
-         +nmtQ+NfMtOyApEwrt5LfSv1cwI97cfW5nLXtRU7k+bqvvBEn1CUki4XpNl8RMUD4Vvo
-         x0hs+oFBUuvteLictl8GKYj7lJ4nNQrZVuJzk6Y6pt+QgWYHiUlJ5ZQ5BC0js+KYPtrV
-         DALQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXmWmklIfKH31Q/vTMusjJyGmBZVg+LtFkVh7WbCzmNbRcCcS5pn4ECiPse2pQvq6io9VzZ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3vu6vQE9Cp7f1MCoNmpy1jqQeqwxqQFGK07qw/mxHyu27yKV3
-	W1fKWwRMwK4MOe1p0br7byYBokUC5qPS17PIT0vhJ97kqhIwJ8jIgylI1mws7Is18JyfBCQHmF2
-	/CWD1SGvzidoOZ4Acmg==
-X-Received: from wmbgz9-n1.prod.google.com ([2002:a05:600c:8889:10b0:480:6c9b:592])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:680a:b0:480:6c75:ddce with SMTP id 5b1f17b1804b1-4830e9a9b17mr35223645e9.33.1770201694753;
- Wed, 04 Feb 2026 02:41:34 -0800 (PST)
-Date: Wed, 4 Feb 2026 10:41:33 +0000
-In-Reply-To: <20260204030507.8203-1-linkmauve@linkmauve.fr>
+        d=1e100.net; s=20230601; t=1770201999; x=1770806799;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kY7fp7PgRMRvrZC+OlVEnEmguT5LKW9pH/1apzccJLU=;
+        b=TCI2iqkR8Ldzj+k6ku/8wPeEaYL5yzlesZUUcrjow/Fteh4rgJzjvJqocKsZbq23/x
+         EohOC9Rv1YKR8/pglPQ3l/Lqq0n5xVxzuL4SExoD8UppEfu526TF7LXJSMIMacuC8MOH
+         kvaKABH1RvkafGLvApIdWEqer2mGNQgxX5Ec9I/pdY16A4cYYNoJrcPook5N0Ca6BtzW
+         wBmMEd+mvh4uES1nAX/SQdQQL7x3eTsg+OjuKrlankstoSrS4X+jX1GguzC+kAx9kIy8
+         x+XXcprRV+wd4Iox6Z90dzuHK9hnWSfFjw7pfel90/MbtA+inIAWKj1b0YE6tcP74qIJ
+         Odcg==
+X-Forwarded-Encrypted: i=1; AJvYcCXER0wte0eaZIfNxI5sC6zdzeE4i/KsrIs4CZRnctUa4vsjhjXJDWZDXjc+s14MvczUozM9@lists.linux.dev
+X-Gm-Message-State: AOJu0YzWsfEzWd26YPW8LxRtY1yDWyamxWok1oRcCHjLFXxe0qD1DyS1
+	+oazsFe6oJ3oYpC2qNimX48kStVN0wwFnmDWI9Of8R55VW+ePcM8qHxLG894kDlkqeTxLs78QvW
+	5qnnaidxcyrzdBmWZmrNV+f0p5O0kdkEz/g65yUE+
+X-Gm-Gg: AZuq6aJGuvA3K2flZQBOINIkcmPdanBjpSolgZraRSEW8np9vIXjbzh08Zd5yMZQzOp
+	eXVPNyGROWMqwRkE/nyRkNsY8Uz4jctzSCYTlhm7vTY4oKO3iNBWFG96C4JNUXs6K6oI7xCaszR
+	3VvCJq3H8jFzxZ730Nuk9ABzPR2ymfTzJxZWpuBCTfRrdqugHHRtxHFhBhnNv0N1rhoiYshcGuC
+	WMiOQcda3WQcuzMV2RK/zUKBlKU6RcTx2Twp73LwTRYC2g+95ZuNF/2uKZlVbX4/nBMd0B851YQ
+	RYKwt5g55944+FCJG9lhDAoz9Q==
+X-Received: by 2002:a05:7022:eacf:b0:119:e55a:9bf5 with SMTP id
+ a92af1059eb24-126f478dab9mr1212137c88.17.1770201998956; Wed, 04 Feb 2026
+ 02:46:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260204030507.8203-1-linkmauve@linkmauve.fr>
-Message-ID: <aYMiXcy33YEVkgYM@google.com>
-Subject: Re: [PATCH] rust: Add PowerPC support
-From: Alice Ryhl <aliceryhl@google.com>
-To: Link Mauve <linkmauve@linkmauve.fr>
-Cc: rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	llvm@lists.linux.dev, officialTechflashYT@gmail.com, 
-	Ash Logan <ash@heyquark.com>, Roberto Van Eeden <rw-r-r-0644@protonmail.com>, 
-	"Jonathan =?utf-8?Q?Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+References: <20260130132951.2714396-1-elver@google.com> <20260130132951.2714396-4-elver@google.com>
+ <aYDFOIskB20CbztD@willie-the-truck> <20260202192923.0707e463@pumpkin> <aYHgNSF5a3F7UGU_@willie-the-truck>
+In-Reply-To: <aYHgNSF5a3F7UGU_@willie-the-truck>
+From: Marco Elver <elver@google.com>
+Date: Wed, 4 Feb 2026 11:46:02 +0100
+X-Gm-Features: AZwV_QgT8kiMwUIl_me4txlYVSU9o0fAA5wwpILgXvkftY8OJh5BYQhTCavfUPo
+Message-ID: <CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
+ analysis through __READ_ONCE() with CONFIG_LTO=y
+To: Will Deacon <will@kernel.org>
+Cc: David Laight <david.laight.linux@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, 
+	Waiman Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
+	Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 04, 2026 at 04:05:04AM +0100, Link Mauve wrote:
-> For now only Big Endian 32-bit PowerPC is supported, as that is the only
-> hardware I have.  This has been tested on the Nintendo Wii so far, but I
-> plan on also using it on the GameCube, Wii U and Apple G4.
+On Tue, 3 Feb 2026 at 12:47, Will Deacon <will@kernel.org> wrote:
+[...]
+> > > What does GCC do with this? :/
+> >
+> > GCC currently doesn't see it, LTO is clang only.
+>
+> LTO is just one way that a compiler could end up breaking dependency
+> chains, so I really want to maintain the option to enable this path for
+> GCC in case we run into problems caused by other optimisations in future.
 
-Super cool!
+It will work for GCC, but only from GCC 11. Before that __auto_type
+does not drop qualifiers:
+https://godbolt.org/z/sc5bcnzKd (switch to GCC 11 to see it compile)
 
-> These changes aren=E2=80=99t the only ones required to get the kernel to =
-compile
-> and link on PowerPC, libcore will also have to be changed to not use
-> integer division to format u64, u128 and core::time::Duration, otherwise
-> __udivdi3() and __umoddi3() will have to be added.  I have tested this
-> change by replacing the three implementations with unimplemented!() and
-> it linked just fine.
+So to summarize, all supported Clang versions deal with __auto_type
+correctly for the fallback; GCC from version 11 does (kernel currently
+supports GCC 8 and above). From GCC 14 and Clang 19 we have
+__typeof_unqual__.
 
-Uh oh this seems tricky. How is this not a problem on arm32 too?
+I really don't see another way forward; there's no other good way to
+solve this issue. I would advise against pessimizing new compilers and
+features because maybe one day we might still want to enable this
+version of READ_ONCE() for GCC 8-10.
 
-Perhaps we should just be providing __udivdi3() and __umoddi3() in
-general?
-
-> diff --git a/arch/powerpc/include/asm/jump_label.h b/arch/powerpc/include=
-/asm/jump_label.h
-> index d4eaba459a0e..238f0f625a36 100644
-> --- a/arch/powerpc/include/asm/jump_label.h
-> +++ b/arch/powerpc/include/asm/jump_label.h
-> @@ -15,14 +15,18 @@
->  #define JUMP_ENTRY_TYPE		stringify_in_c(FTR_ENTRY_LONG)
->  #define JUMP_LABEL_NOP_SIZE	4
-> =20
-> +/* This macro is also expanded on the Rust side. */
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1:\n\t"					\
-> +	"nop # arch_static_branch\n\t"			\
-> +	".pushsection __jump_table,  \"aw\"\n\t"	\
-> +	".long 1b - ., " label " - .\n\t"		\
-> +	 JUMP_ENTRY_TYPE key " - .\n\t"			\
-> +	 ".popsection \n\t"
-> +
->  static __always_inline bool arch_static_branch(struct static_key *key, b=
-ool branch)
->  {
-> -	asm goto("1:\n\t"
-> -		 "nop # arch_static_branch\n\t"
-> -		 ".pushsection __jump_table,  \"aw\"\n\t"
-> -		 ".long 1b - ., %l[l_yes] - .\n\t"
-> -		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
-> -		 ".popsection \n\t"
-> +	asm goto(ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
->  		 : :  "i" (&((char *)key)[branch]) : : l_yes);
-
-In case this patch takes a long time to land, it may make sense to split
-this part out in a separate patch that can land now.
-
-Also, consider pre-emptively updating arch_static_branch_jump too. We
-probably need it at some point in the future.
-
-> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_targ=
-et.rs
-> index 38b3416bb979..0054880ba0ea 100644
-> --- a/scripts/generate_rust_target.rs
-> +++ b/scripts/generate_rust_target.rs
-> @@ -188,6 +188,16 @@ fn main() {
->          panic!("arm uses the builtin rustc target");
->      } else if cfg.has("ARM64") {
->          panic!("arm64 uses the builtin rustc aarch64-unknown-none target=
-");
-> +    } else if cfg.has("PPC32") {
-> +        ts.push("arch", "powerpc");
-> +        ts.push("data-layout", "E-m:e-p:32:32-Fn32-i64:64-n32");
-> +        ts.push("features", "+soft-float");
-> +        ts.push("llvm-target", "powerpc-unknown-eabi");
-> +        if cfg.rustc_version_atleast(1, 91, 0) {
-> +            ts.push("target-pointer-width", 32);
-> +        } else {
-> +            ts.push("target-pointer-width", "32");
-> +        }
-
-Is there no built-in target we can use? I think we want to avoid adding
-new targets if at all possible.
-
-Alice
+Should we one day choose to enable this READ_ONCE() version for GCC,
+we will (a) either have bumped the minimum GCC version to 11+, or (b)
+we can only do so from GCC 11. At this point GCC 11 was released 5
+years ago!
