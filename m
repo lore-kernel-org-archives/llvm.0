@@ -1,459 +1,363 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-244116.protonmail.ch (mail-244116.protonmail.ch [109.224.244.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3D81A9FBA
-	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 19:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B73B34AB16
+	for <llvm@lists.linux.dev>; Wed,  4 Feb 2026 19:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770232535; cv=none; b=KmkaeLhfru2N2pionscuQqAhSzIG3nHjeQAZ0qj+Y2iMKKf3zHiqUBkx/+SNmGTbB/myt6vHb7T1ehzInxDZrrARbPO8Koa4g1k/uMNoN8uongNRyh0VvlrMDHkCH7VAUOQbMAm0dZ2CiBwjj9MoYQG4ev4tOznuK2VetA9SZWM=
+	t=1770232703; cv=none; b=YZLBT7Y+mwCvJoF9+Zuh+KbimQZXfHTyW2/4eFDPuQ29bomzusee8EnWfSMVzohXF3i4rhvvsU1ZhDXIX5ONBAldbxxWz8lmRnBz97gi3Y/XD2h4bz4OyDWeBJHNO0cNMRtFc63kVQ2fBuiNwVkSELBNvx2SPRu4Ipdqkjw82cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770232535; c=relaxed/simple;
-	bh=NYIkARnJg6Tmu3FMo8EnsSZ/Bddg9GYCkt/zCwlc108=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KNNtSj7CnMX8Xsg//upys4cE4KaGx6p0iq8lbPIqsBbX7tH0qpLHRpxpgm/z86gLZVucGdLxRyhsgMbn5BcWLlQxT477lJqPYQI2Vt8bDvWd5naJCzOojUetXrcSbfCvvaRqNUx4K6eVX0dPYIucEwYk1yrOZusubwvPDnkrW5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGouFmhb; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770232703; c=relaxed/simple;
+	bh=ESI5qy25OZL/FDJA7SVKYRuozXkbu4tNY7ozYDZsjMQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ls4/eGCtDLOoeF7nEYE0KIoI55+Vhd3r4s0/UY2zyyC8GbTS4+wKMJRjfazBF34LM1RCCTgWp9ZYWqG4K7EoocIM2xI7Ej24OT9YziOnZra6/m12M3xsyszHZu4KobEwQlPNqvsCUZwtMROihAMqkuhjGM6pORZio6sI0wRWmbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Tmrlsjvj; arc=none smtp.client-ip=109.224.244.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGouFmhb"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8231061d234so164424b3a.1
-        for <llvm@lists.linux.dev>; Wed, 04 Feb 2026 11:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770232535; x=1770837335; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pZYRyfQm2slhoCJVBlbeRDVIuS1dZe2tpNE2WvBoIdw=;
-        b=OGouFmhb40iKn3tO1HbOSRk/KKqzWza0cmmUtrbPLi4O0rOKDvnjP22BSyso4tEz8U
-         arjidRH3rDUoR/tF+BW+X/SLEZ/Bp9MTmJJX5S4NqnSdZBeOnoLknxcBqpQx5qYDEhQ4
-         PzmgVMIBDJEofS4X+S3vxvs2EwkgQBh6LNVwnCIY7N7zrgZboICVmAB4ZT8M5m8+L+bz
-         Zbg4KSKfd6ng6JBqS1Av/DGffN4KoGQFPQyYDN2Wv1GOaufYYJFFF2e34d8ZEXxjkEQu
-         WNKWKe8FfskTd2KgzJV/HorE/4zVWOAIe2uBjwdBzWgR9i3Th+5Zbzz1K+pZ53gfxnJb
-         Kiog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770232535; x=1770837335;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZYRyfQm2slhoCJVBlbeRDVIuS1dZe2tpNE2WvBoIdw=;
-        b=j9wgUqEwE+BEufzJoXfco6BwUy8bHtg7b7QvOwllAuIMF791APPKzSM0HiaVe0B3zZ
-         IUUSh92AoDxtjcXYvXbrXaZ9KNcpkq9WC/4M2yYvYLBAkBMi/OdTEOWy1HuWcDegdW9m
-         urmNcmVYxonUvWXfut8BVyx38v6SZW1nf6zbCsdguCdGG9xaoVPeP5bkwa1g3FsYw8i8
-         OATotbTGTRJustI6a6OtXd7P9sxAcagwMHYDOXeGkk3JFNWvFmZ1BMfPa1xtOHN+5ZSo
-         TmPJur2/Idjtk3bdqW5EIatqEDCpHyGLPl1+t10jRNhAbp7VwtUceUCKsC3QG3NgRQAD
-         vXEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXDcm7uOYjNBiG2F1eA6d/iiSnqJxULhM+2RL6iFKHNlYFOTT3puJGTu2MMPPyZz7d3vMJc@lists.linux.dev
-X-Gm-Message-State: AOJu0YxJtDk7T1UbDXTOFLavvUZWm21JUnCwqt8IXHmlV/lus9eshy5u
-	E/oHC992dutX7QYVhNfuxlN0EuSFJGnaVHNHV+4ZWUyK2SfZ+zTTLl2v
-X-Gm-Gg: AZuq6aIVMQUVsYnryRisZ6fk/Q5d/OTcRJzrVhOwqx5RGYzMfv1wscoNZlM4TrB+Por
-	9zRkQ0DjLF0Ygw69wmld0GOK0mi6tCnm7cNqvdERk+IOeOfsc1qybLksT0EqazYDs/udzqKkwFP
-	ZmujvWdF5ri5I0AUjLqihgFw/1P2n9uW5hcAeNBLgBmQtABX6JITjEcKvD9KtDMgVYhId8iM5Ml
-	139q1XA3kcFiIfj5sQEmfSm4IR7QonzANaWJi6XCLxO9thx8FebiDJkplqHy/JUZRWk9y35ERbd
-	RMTLxjzEX3yBlLaKmvzrOiVEhvPEboOq2shgbxp17elDje5N1Ws1z1m19k1FPW8Ki3IxgGrLSEY
-	7MygkS4krwYSzlYIedb+XC5c6f2i0w0Rt1dbeGi49GF29BfJC1JKf/tX1QRbJhzrBpIAjQYh571
-	SFNgeIKmUbEPR1vuruswRbfej898q37l2SO6bqb9WuE+6V9rpxr0U3gmmxcRA=
-X-Received: by 2002:a05:6a00:1391:b0:823:5270:f8d3 with SMTP id d2e1a72fcca58-8241c64d75cmr3547890b3a.54.1770226094264;
-        Wed, 04 Feb 2026 09:28:14 -0800 (PST)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.164.193])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8241d434d12sm3016772b3a.40.2026.02.04.09.28.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 09:28:13 -0800 (PST)
-Date: Wed, 4 Feb 2026 22:58:02 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, rostedt@goodmis.org, 
-	ardb@kernel.org, ojeda@kernel.org, boqun.feng@gmail.com, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
-	tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, Link Mauve <linkmauve@linkmauve.fr>
-Subject: Re: [PATCH] powerpc: Enable Rust for ppc64le
-Message-ID: <aYN_3P6aUaBWwQYo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260204042417.83903-1-mkchauras@gmail.com>
- <da26fa6a-5262-45bf-890c-7afbf94d0897@kernel.org>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Tmrlsjvj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1770232692; x=1770491892;
+	bh=73oX5UGRgshUHRpRhlZcRkKYChDyx05rk9BjHk/OfuI=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=TmrlsjvjRZTYgJeK7clA8KHGhP85jvgScM9rXRlZTi3pqRmw25EimtkNJNC8Pbkch
+	 LjNNbvCFYVQ3uchnX2D9SQJbVWP5RT33hJxkrmtyvGeJKuiN7rStgs+96HbzsjKdRY
+	 o8+MIkt1DEEj/bI9GvBQy+4gsSCw3lRcSObuhbwsTSPCTNreeZB02T3jAf4rdcg2Z7
+	 RulLiyqeZLMxBuq1OiJr3ofCoFieqMLGacMhTpyqJ/O0NBHnzauVHO9UQZSwp2vXz/
+	 OL4sgaxAhtvoWYhheZnDbcherNRzT0Dc4ws62bWMcwvqPagfgt+nCMqYmM1ZU0pjDd
+	 U4Zi4pLy0V6cA==
+Date: Wed, 04 Feb 2026 19:18:05 +0000
+To: hpa@zytor.com, andreyknvl@gmail.com, peterz@infradead.org, david@kernel.org, nathan@kernel.org, samitolvanen@google.com, catalin.marinas@arm.com, lorenzo.stoakes@oracle.com, rppt@kernel.org, ryabinin.a.a@gmail.com, luto@kernel.org, surenb@google.com, nick.desaulniers+lkml@gmail.com, kas@kernel.org, chleroy@kernel.org, will@kernel.org, maciej.wieczor-retman@intel.com, vbabka@suse.cz, Liam.Howlett@oracle.com, jeremy.linton@arm.com, jpoimboe@kernel.org, thomas.lendacky@amd.com, thuth@redhat.com, kees@kernel.org, mingo@redhat.com, jan.kiszka@siemens.com, dave.hansen@linux.intel.com, vincenzo.frascino@arm.com, morbo@google.com, axelrasmussen@google.com, yuanchu@google.com, urezki@gmail.com, trintaeoitogc@gmail.com, brgerst@gmail.com, osandov@fb.com, akpm@linux-foundation.org, mhocko@suse.com, nsc@kernel.org, kbingham@kernel.org, glider@google.com, samuel.holland@sifive.com, corbet@lwn.net, dvyukov@google.com, anshuman.khandual@arm.com, yeoreum.yun@arm.com, weixugc@google.com,
+	leitao@debian.org, ubizjak@gmail.com, justinstitt@google.com, bp@alien8.de, jackmanb@google.com, ardb@kernel.org, tglx@kernel.org
+From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, workflows@vger.kernel.org, kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, linux-mm@kvack.org, m.wieczorretman@pm.me
+Subject: [PATCH v10 00/13] kasan: x86: arm64: KASAN tag-based mode for x86
+Message-ID: <cover.1770232424.git.m.wieczorretman@pm.me>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: d8adabb086f51c3e89e343803ba9366a6dc96c98
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <da26fa6a-5262-45bf-890c-7afbf94d0897@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 04, 2026 at 06:11:13PM +0100, Christophe Leroy (CS GROUP) wrote:
-> Hi Mukesh, hi Link,
-> 
-> Le 04/02/2026 à 05:24, Mukesh Kumar Chaurasiya (IBM) a écrit :
-> > [Vous ne recevez pas souvent de courriers de mkchauras@gmail.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > Enabling rust support for ppc64 only.
-> 
-> Link Mauve has sent a patch for rust support on PPC32 a few hours before
-> you, see
-> https://lore.kernel.org/r/20260204030507.8203-1-linkmauve@linkmauve.fr
-> Could you coordinate together to provide something supporting both PPC32 and
-> PPC64 ?
-> 
-Hey Christophe,
-Sure.
-> I see the following conflicts at the time being. I also have a few comments
-> down.
-> 
-Ohk.
-> diff --git a/Documentation/rust/arch-support.rst
-> b/Documentation/rust/arch-support.rst
-> index 6e6a515d0899..70b9e192a7a0 100644
-> --- a/Documentation/rust/arch-support.rst
-> +++ b/Documentation/rust/arch-support.rst
-> @@ -18,6 +18,7 @@ Architecture   Level of support  Constraints
->  ``arm``        Maintained        ARMv7 Little Endian only.
->  ``arm64``      Maintained        Little Endian only.
->  ``loongarch``  Maintained        \-
-> +``powerpc``    Maintained        32-bit Big Endian only.
->  ``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
->  ``um``         Maintained        \-
->  ``x86``        Maintained        ``x86_64`` only.
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index b8d36a261009..80b2666fc5af 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -283,8 +283,10 @@ config PPC
->  	select HAVE_REGS_AND_STACK_ACCESS_API
->  	select HAVE_RELIABLE_STACKTRACE
->  	select HAVE_RSEQ
-> +	select HAVE_RUST			if PPC32
->  	select HAVE_SAMPLE_FTRACE_DIRECT	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
->  	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if
-> HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +	select HAVE_RUST			if PPC64
->  	select HAVE_SETUP_PER_CPU_AREA		if PPC64
->  	select HAVE_SOFTIRQ_ON_OWN_STACK
->  	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,$(m32-flag)
-> -mstack-protector-guard=tls -mstack-protector-guard-reg=r2
-> -mstack-protector-guard-offset=0)
-> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> index a58b1029592c..ac6fe8cc4ece 100644
-> --- a/arch/powerpc/Makefile
-> +++ b/arch/powerpc/Makefile
-> @@ -61,6 +61,8 @@ else
->  KBUILD_LDFLAGS_MODULE += $(objtree)/arch/powerpc/lib/crtsavres.o
->  endif
-> 
-> +KBUILD_RUSTFLAGS += --target=powerpc-unknown-linux-gnu
-> +
->  ifdef CONFIG_CPU_LITTLE_ENDIAN
->  KBUILD_CPPFLAGS	+= -mlittle-endian
->  KBUILD_LDFLAGS	+= -EL
-> @@ -172,10 +174,11 @@ CFLAGS-y += $(CONFIG_TUNE_CPU)
-> 
->  asinstr := $(call as-instr,lis 9$(comma)foo@high,-DHAVE_AS_ATHIGH=1)
-> 
-> -KBUILD_CPPFLAGS	+= -I $(srctree)/arch/powerpc $(asinstr)
-> -KBUILD_AFLAGS	+= $(AFLAGS-y)
-> -KBUILD_CFLAGS	+= $(CC_FLAGS_NO_FPU)
-> -KBUILD_CFLAGS	+= $(CFLAGS-y)
-> +KBUILD_CPPFLAGS		+= -I $(srctree)/arch/powerpc $(asinstr)
-> +KBUILD_AFLAGS		+= $(AFLAGS-y)
-> +KBUILD_CFLAGS		+= $(CC_FLAGS_NO_FPU)
-> +KBUILD_CFLAGS		+= $(CFLAGS-y)
-> +KBUILD_RUSTFLAGS        += -Ctarget-feature=-mma,-vsx,-hard-float,-altivec
-> 
->  CHECKFLAGS	+= -m$(BITS) -D__powerpc__ -D__powerpc$(BITS)__
->  ifdef CONFIG_CPU_BIG_ENDIAN
-> diff --git a/arch/powerpc/include/asm/jump_label.h
-> b/arch/powerpc/include/asm/jump_label.h
-> index d4eaba459a0e..d2284c72d21b 100644
-> --- a/arch/powerpc/include/asm/jump_label.h
-> +++ b/arch/powerpc/include/asm/jump_label.h
-> @@ -15,14 +15,35 @@
->  #define JUMP_ENTRY_TYPE		stringify_in_c(FTR_ENTRY_LONG)
->  #define JUMP_LABEL_NOP_SIZE	4
-> 
-> +<<<<<<< HEAD
-> +/* This macro is also expanded on the Rust side. */
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1:\n\t"					\
-> +	"nop # arch_static_branch\n\t"			\
-> +	".pushsection __jump_table,  \"aw\"\n\t"	\
-> +	".long 1b - ., " label " - .\n\t"		\
-> +	 JUMP_ENTRY_TYPE key " - .\n\t"			\
-> +	 ".popsection \n\t"
-> +
->  static __always_inline bool arch_static_branch(struct static_key *key, bool
-> branch)
->  {
-> -	asm goto("1:\n\t"
-> -		 "nop # arch_static_branch\n\t"
-> -		 ".pushsection __jump_table,  \"aw\"\n\t"
-> -		 ".long 1b - ., %l[l_yes] - .\n\t"
-> -		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
-> -		 ".popsection \n\t"
-> +	asm goto(ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
-> +=======
-> +#define JUMP_TABLE_ENTRY(key, label)			\
-> +	".pushsection __jump_table,  \"aw\"	\n\t"	\
-> +	".long 1b - ., " label " - .		\n\t"	\
-> +	JUMP_ENTRY_TYPE key " - .		\n\t"	\
-> +	".popsection 				\n\t"
-> +
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1:	nop				\n\t"	\
-> +	JUMP_TABLE_ENTRY(key,label)
-> +
-> +static __always_inline bool arch_static_branch(struct static_key *key, bool
-> branch)
-> +{
-> +	asm goto(
-> +		 ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
-> +>>>>>>> rust64
->  		 : :  "i" (&((char *)key)[branch]) : : l_yes);
-> 
->  	return false;
-> @@ -34,10 +55,7 @@ static __always_inline bool
-> arch_static_branch_jump(struct static_key *key, bool
->  {
->  	asm goto("1:\n\t"
->  		 "b %l[l_yes] # arch_static_branch_jump\n\t"
-> -		 ".pushsection __jump_table,  \"aw\"\n\t"
-> -		 ".long 1b - ., %l[l_yes] - .\n\t"
-> -		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
-> -		 ".popsection \n\t"
-> +		 JUMP_TABLE_ENTRY("%c0", "%l[l_yes]")
->  		 : :  "i" (&((char *)key)[branch]) : : l_yes);
-> 
->  	return false;
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 5d357dce1704..9b72c1e96191 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -383,13 +383,19 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387
-> -mpreferred-stack-boundary=% \
->  	-fno-inline-functions-called-once -fsanitize=bounds-strict \
->  	-fstrict-flex-arrays=% -fmin-function-alignment=% \
->  	-fzero-init-padding-bits=% -mno-fdpic \
-> -	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference
-> +	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference \
-> +	-ffixed-r2 -mmultiple -mno-readonly-in-sdata
-> 
->  # Derived from `scripts/Makefile.clang`.
->  BINDGEN_TARGET_x86	:= x86_64-linux-gnu
->  BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
->  BINDGEN_TARGET_arm	:= arm-linux-gnueabi
->  BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
-> +<<<<<<< HEAD
-> +BINDGEN_TARGET_powerpc	:= powerpc-linux-gnu
-> +=======
-> +BINDGEN_TARGET_powerpc	:= powerpc64le-linux-gnu
-> +>>>>>>> rust64
->  BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
->  BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
-> 
-> diff --git a/scripts/generate_rust_target.rs
-> b/scripts/generate_rust_target.rs
-> index 38b3416bb979..1860af50b926 100644
-> --- a/scripts/generate_rust_target.rs
-> +++ b/scripts/generate_rust_target.rs
-> @@ -188,6 +188,16 @@ fn main() {
->          panic!("arm uses the builtin rustc target");
->      } else if cfg.has("ARM64") {
->          panic!("arm64 uses the builtin rustc aarch64-unknown-none target");
-> +    } else if cfg.has("PPC32") {
-> +        ts.push("arch", "powerpc");
-> +        ts.push("data-layout", "E-m:e-p:32:32-Fn32-i64:64-n32");
-> +        ts.push("features", "+soft-float");
-> +        ts.push("llvm-target", "powerpc-unknown-eabi");
-> +        if cfg.rustc_version_atleast(1, 91, 0) {
-> +            ts.push("target-pointer-width", 32);
-> +        } else {
-> +            ts.push("target-pointer-width", "32");
-> +        }
->      } else if cfg.has("RISCV") {
->          if cfg.has("64BIT") {
->              panic!("64-bit RISC-V uses the builtin rustc
-> riscv64-unknown-none-elf target");
-> @@ -256,6 +266,30 @@ fn main() {
->          }
->      } else if cfg.has("LOONGARCH") {
->          panic!("loongarch uses the builtin rustc
-> loongarch64-unknown-none-softfloat target");
-> +    } else if cfg.has("PPC64") {
-> +        ts.push("arch", "powerpc64");
-> +        ts.push(
-> +            "data-layout",
-> +            if cfg.has("CPU_LITTLE_ENDIAN") {
-> +                "e-m:e-Fn32-i64:64-n32:64-S128-v256:256:256-v512:512:512"
-> +            } else {
-> +                "E-m:e-Fn32-i64:64-n32:64-S128-v256:256:256-v512:512:512"
-> +            },
-> +        );
-> +        ts.push("features", "-mma,-altivec,-vsx,-hard-float");
-> +        ts.push(
-> +            "llvm-target",
-> +            if cfg.has("CPU_LITTLE_ENDIAN") {
-> +                "powerpc64le-linux-gnu"
-> +            } else {
-> +                "powerpc64-linux-gnu"
-> +            },
-> +        );
-> +        if cfg.rustc_version_atleast(1, 91, 0) {
-> +            ts.push("target-pointer-width", 64);
-> +        } else {
-> +            ts.push("target-pointer-width", "64");
-> +        }
->      } else {
->          panic!("Unsupported architecture");
->      }
-> 
-> [...]
-> 
-> > ---
-> >   arch/powerpc/Kconfig                  |  1 +
-> >   arch/powerpc/Makefile                 |  9 +++++----
-> >   arch/powerpc/include/asm/jump_label.h | 23 +++++++++++++----------
-> >   rust/Makefile                         |  1 +
-> >   scripts/generate_rust_target.rs       | 24 ++++++++++++++++++++++++
-> >   5 files changed, 44 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index 9537a61ebae0..e9b8d761ed52 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -285,6 +285,7 @@ config PPC
-> >          select HAVE_RSEQ
-> >          select HAVE_SAMPLE_FTRACE_DIRECT        if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> >          select HAVE_SAMPLE_FTRACE_DIRECT_MULTI  if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> > +       select HAVE_RUST                        if PPC64
-> 
-> Keep in alphabetic order
-> 
-Sure.
-> >          select HAVE_SETUP_PER_CPU_AREA          if PPC64
-> >          select HAVE_SOFTIRQ_ON_OWN_STACK
-> >          select HAVE_STACKPROTECTOR              if PPC32 && $(cc-option,$(m32-flag) -mstack-protector-guard=tls -mstack-protector-guard-reg=r2 -mstack-protector-guard-offset=0)
-> > diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> > index a58b1029592c..7ad28cf0fd35 100644
-> > --- a/arch/powerpc/Makefile
-> > +++ b/arch/powerpc/Makefile
-> > @@ -172,10 +172,11 @@ CFLAGS-y += $(CONFIG_TUNE_CPU)
-> > 
-> >   asinstr := $(call as-instr,lis 9$(comma)foo@high,-DHAVE_AS_ATHIGH=1)
-> > 
-> > -KBUILD_CPPFLAGS        += -I $(srctree)/arch/powerpc $(asinstr)
-> > -KBUILD_AFLAGS  += $(AFLAGS-y)
-> > -KBUILD_CFLAGS  += $(CC_FLAGS_NO_FPU)
-> > -KBUILD_CFLAGS  += $(CFLAGS-y)
-> > +KBUILD_CPPFLAGS                += -I $(srctree)/arch/powerpc $(asinstr)
-> > +KBUILD_AFLAGS          += $(AFLAGS-y)
-> > +KBUILD_CFLAGS          += $(CC_FLAGS_NO_FPU)
-> > +KBUILD_CFLAGS          += $(CFLAGS-y)
-> > +KBUILD_RUSTFLAGS        += -Ctarget-feature=-mma,-vsx,-hard-float,-altivec
-> > 
-> >   CHECKFLAGS     += -m$(BITS) -D__powerpc__ -D__powerpc$(BITS)__
-> >   ifdef CONFIG_CPU_BIG_ENDIAN
-> > diff --git a/arch/powerpc/include/asm/jump_label.h b/arch/powerpc/include/asm/jump_label.h
-> > index d4eaba459a0e..a6b211502bfe 100644
-> > --- a/arch/powerpc/include/asm/jump_label.h
-> > +++ b/arch/powerpc/include/asm/jump_label.h
-> > @@ -15,14 +15,20 @@
-> >   #define JUMP_ENTRY_TYPE                stringify_in_c(FTR_ENTRY_LONG)
-> >   #define JUMP_LABEL_NOP_SIZE    4
-> > 
-> > +#define JUMP_TABLE_ENTRY(key, label)                   \
-> > +       ".pushsection __jump_table,  \"aw\"     \n\t"   \
-> > +       ".long 1b - ., " label " - .            \n\t"   \
-> > +       JUMP_ENTRY_TYPE key " - .               \n\t"   \
-> > +       ".popsection                            \n\t"
-> > +
-> > +#define ARCH_STATIC_BRANCH_ASM(key, label)             \
-> > +       "1:     nop                             \n\t"   \
-> > +       JUMP_TABLE_ENTRY(key,label)
-> > +
-> >   static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
-> >   {
-> > -       asm goto("1:\n\t"
-> > -                "nop # arch_static_branch\n\t"
-> > -                ".pushsection __jump_table,  \"aw\"\n\t"
-> > -                ".long 1b - ., %l[l_yes] - .\n\t"
-> > -                JUMP_ENTRY_TYPE "%c0 - .\n\t"
-> > -                ".popsection \n\t"
-> > +       asm goto(
-> > +                ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
-> >                   : :  "i" (&((char *)key)[branch]) : : l_yes);
-> > 
-> >          return false;
-> > @@ -34,10 +40,7 @@ static __always_inline bool arch_static_branch_jump(struct static_key *key, bool
-> >   {
-> >          asm goto("1:\n\t"
-> >                   "b %l[l_yes] # arch_static_branch_jump\n\t"
-> > -                ".pushsection __jump_table,  \"aw\"\n\t"
-> > -                ".long 1b - ., %l[l_yes] - .\n\t"
-> > -                JUMP_ENTRY_TYPE "%c0 - .\n\t"
-> > -                ".popsection \n\t"
-> > +                JUMP_TABLE_ENTRY("%c0", "%l[l_yes]")
-> >                   : :  "i" (&((char *)key)[branch]) : : l_yes);
-> > 
-> >          return false;
-> > diff --git a/rust/Makefile b/rust/Makefile
-> > index 5d357dce1704..7a6daa822cbc 100644
-> > --- a/rust/Makefile
-> > +++ b/rust/Makefile
-> > @@ -390,6 +390,7 @@ BINDGEN_TARGET_x86  := x86_64-linux-gnu
-> >   BINDGEN_TARGET_arm64   := aarch64-linux-gnu
-> >   BINDGEN_TARGET_arm     := arm-linux-gnueabi
-> >   BINDGEN_TARGET_loongarch       := loongarch64-linux-gnusf
-> > +BINDGEN_TARGET_powerpc := powerpc64le-linux-gnu
-> 
-> This needs to depend on CONFIG_PPC64 and CONFIG_CPU_LITTLE_ENDIAN.
-> 
-Yeah, will fix this.
-> 
-> >   BINDGEN_TARGET_um      := $(BINDGEN_TARGET_$(SUBARCH))
-> >   BINDGEN_TARGET         := $(BINDGEN_TARGET_$(SRCARCH))
-> > 
-> > diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
-> > index 38b3416bb979..875579b37424 100644
-> > --- a/scripts/generate_rust_target.rs
-> > +++ b/scripts/generate_rust_target.rs
-> > @@ -256,6 +256,30 @@ fn main() {
-> >           }
-> >       } else if cfg.has("LOONGARCH") {
-> >           panic!("loongarch uses the builtin rustc loongarch64-unknown-none-softfloat target");
-> > +    } else if cfg.has("PPC64") {
-> 
-> Shouldn't this be done closer to PPC32 ?
-> 
-Yeah, I will build the 64 support over 32 and keep them together.
-> > +        ts.push("arch", "powerpc64");
-> > +        ts.push(
-> > +            "data-layout",
-> > +            if cfg.has("CPU_LITTLE_ENDIAN") {
-> > +                "e-m:e-Fn32-i64:64-n32:64-S128-v256:256:256-v512:512:512"
-> > +            } else {
-> > +                "E-m:e-Fn32-i64:64-n32:64-S128-v256:256:256-v512:512:512"
-> > +            },
-> > +        );
-> > +        ts.push("features", "-mma,-altivec,-vsx,-hard-float");
-> > +        ts.push(
-> > +            "llvm-target",
-> > +            if cfg.has("CPU_LITTLE_ENDIAN") {
-> > +                "powerpc64le-linux-gnu"
-> > +            } else {
-> > +                "powerpc64-linux-gnu"
-> > +            },
-> > +        );
-> > +        if cfg.rustc_version_atleast(1, 91, 0) {
-> > +            ts.push("target-pointer-width", 64);
-> > +        } else {
-> > +            ts.push("target-pointer-width", "64");
-> > +        }
-> >       } else {
-> >           panic!("Unsupported architecture");
-> >       }
-> > --
-> > 2.52.0
-> > 
-> 
+=3D=3D=3D=3D=3D=3D=3D Introduction
+The patchset aims to add a KASAN tag-based mode for the x86 architecture
+with the help of the new CPU feature called Linear Address Masking
+(LAM). Main improvement introduced by the series is 2x lower memory
+usage compared to KASAN's generic mode, the only currently available
+mode on x86. The tag based mode may also find errors that the generic
+mode couldn't because of differences in how these modes operate.
+
+=3D=3D=3D=3D=3D=3D=3D How does KASAN' tag-based mode work?
+When enabled, memory accesses and allocations are augmented by the
+compiler during kernel compilation. Instrumentation functions are added
+to each memory allocation and each pointer dereference.
+
+The allocation related functions generate a random tag and save it in
+two places: in shadow memory that maps to the allocated memory, and in
+the top bits of the pointer that points to the allocated memory. Storing
+the tag in the top of the pointer is possible because of Top-Byte Ignore
+(TBI) on arm64 architecture and LAM on x86.
+
+The access related functions are performing a comparison between the tag
+stored in the pointer and the one stored in shadow memory. If the tags
+don't match an out of bounds error must have occurred and so an error
+report is generated.
+
+The general idea for the tag-based mode is very well explained in the
+series with the original implementation [1].
+
+[1] https://lore.kernel.org/all/cover.1544099024.git.andreyknvl@google.com/
+
+=3D=3D=3D=3D=3D=3D=3D Differences summary compared to the arm64 tag-based m=
+ode
+- Tag width:
+=09- Tag width influences the chance of a tag mismatch due to two
+=09  tags from different allocations having the same value. The
+=09  bigger the possible range of tag values the lower the chance
+=09  of that happening.
+=09- Shortening the tag width from 8 bits to 4, while it can help
+=09  with memory usage, it also increases the chance of not
+=09  reporting an error. 4 bit tags have a ~7% chance of a tag
+=09  mismatch.
+
+- Address masking mechanism
+=09- TBI in arm64 allows for storing metadata in the top 8 bits of
+=09  the virtual address.
+=09- LAM in x86 allows storing tags in bits [62:57] of the pointer.
+=09  To maximize memory savings the tag width is reduced to bits
+=09  [60:57].
+
+- Inline mode mismatch reporting
+=09- Arm64 inserts a BRK instruction to pass metadata about a tag
+=09  mismatch to the KASAN report.
+=09- Right now on x86 the INT3 instruction is used for the same
+=09  purpose. The attempt to move it over to use UD1 is already
+=09  implemented and tested but relies on another series that needs
+=09  merging first. Therefore this patch will be posted separately
+=09  once the dependency is satisfied by being merged upstream.
+
+=3D=3D=3D=3D=3D=3D=3D Testing
+Checked all the kunits for both software tags and generic KASAN after
+making changes.
+
+In generic mode (both with these patches and without) the results were:
+
+kasan: pass:61 fail:1 skip:14 total:76
+Totals: pass:61 fail:1 skip:14 total:76
+not ok 1 kasan
+
+and for software tags:
+
+kasan: pass:65 fail:1 skip:10 total:76
+Totals: pass:65 fail:1 skip:10 total:76
+not ok 1 kasan
+
+At the time of testing the one failing case is also present on generic
+mode without this patchset applied. This seems to point to something
+else being at fault for the one case not passing. The test case in
+question concerns strscpy() out of bounds error not getting caught.
+
+=3D=3D=3D=3D=3D=3D=3D Benchmarks [1]
+All tests were ran on a Sierra Forest server platform. The only
+differences between the tests were kernel options:
+=09- CONFIG_KASAN
+=09- CONFIG_KASAN_GENERIC
+=09- CONFIG_KASAN_SW_TAGS
+=09- CONFIG_KASAN_INLINE [1]
+=09- CONFIG_KASAN_OUTLINE
+
+Boot time (until login prompt):
+* 02:55 for clean kernel
+* 05:42 / 06:32 for generic KASAN (inline/outline)
+* 05:58 for tag-based KASAN (outline) [2]
+
+Total memory usage (512GB present on the system - MemAvailable just
+after boot):
+* 12.56 GB for clean kernel
+* 81.74 GB for generic KASAN
+* 44.39 GB for tag-based KASAN
+
+Kernel size:
+* 14 MB for clean kernel
+* 24.7 MB / 19.5 MB for generic KASAN (inline/outline)
+* 27.1 MB / 18.1 MB for tag-based KASAN (inline/outline)
+
+Work under load time comparison (compiling the mainline kernel) (200 cores)=
+:
+*  62s for clean kernel
+* 171s / 125s for generic KASAN (outline/inline)
+* 145s for tag-based KASAN (outline) [2]
+
+[1] Currently inline mode doesn't work on x86 due to things missing in
+the compiler. I have written a patch for clang that seems to fix the
+inline mode and I was able to boot and check that all patches regarding
+the inline mode work as expected. My hope is to post the patch to LLVM
+once this series is completed, and then make inline mode available in
+the kernel config.
+
+[2] While I was able to boot the inline tag-based kernel with my
+compiler changes in a simulated environment, due to toolchain
+difficulties I couldn't get it to boot on the machine I had access to.
+Also boot time results from the simulation seem too good to be true, and
+they're much too worse for the generic case to be believable. Therefore
+I'm posting only results from the physical server platform.
+
+=3D=3D=3D=3D=3D=3D=3D Compilation
+Clang was used to compile the series (make LLVM=3D1) since gcc doesn't
+seem to have support for KASAN tag-based compiler instrumentation on
+x86. Patchset does seem to compile with gcc without an issue but doesn't
+boot afterwards.
+
+=3D=3D=3D=3D=3D=3D=3D Dependencies
+The series is based on 6.19-rc8.
+
+=3D=3D=3D=3D=3D=3D=3D Previous versions
+v9: https://lore.kernel.org/all/cover.1768845098.git.m.wieczorretman@pm.me/
+v8: https://lore.kernel.org/all/cover.1768233085.git.m.wieczorretman@pm.me/
+v7: https://lore.kernel.org/all/cover.1765386422.git.m.wieczorretman@pm.me/
+v6: https://lore.kernel.org/all/cover.1761763681.git.m.wieczorretman@pm.me/
+v5: https://lore.kernel.org/all/cover.1756151769.git.maciej.wieczor-retman@=
+intel.com/
+v4: https://lore.kernel.org/all/cover.1755004923.git.maciej.wieczor-retman@=
+intel.com/
+v3: https://lore.kernel.org/all/cover.1743772053.git.maciej.wieczor-retman@=
+intel.com/
+v2: https://lore.kernel.org/all/cover.1739866028.git.maciej.wieczor-retman@=
+intel.com/
+v1: https://lore.kernel.org/all/cover.1738686764.git.maciej.wieczor-retman@=
+intel.com/
+
+=3D=3D=3D (two fixes patches were split off after v6) (merged into mm-unsta=
+ble)
+v1: https://lore.kernel.org/all/cover.1762267022.git.m.wieczorretman@pm.me/
+v2: https://lore.kernel.org/all/cover.1764685296.git.m.wieczorretman@pm.me/
+v3: https://lore.kernel.org/all/cover.1764874575.git.m.wieczorretman@pm.me/
+v4: https://lore.kernel.org/all/cover.1764945396.git.m.wieczorretman@pm.me/
+
+Changes v10:
+- Rebase the series onto 6.19-rc8.
+- Add Mike Rapoport's acked-by to patch 6.
+- Modify Documentation/dev-tools/kasan.rst in patches 1 and 13.
+
+Changes v9:
+- Lock HAVE_ARCH_KASAN_SW_TAGS behind CC_IS_CLANG due to gcc not working
+  in practice.
+- Remove pr_info() from KASAN initialization.
+- Add paragraph to mm.rst explaining the alternative KASAN memory
+  ranges.
+- Move out arch based code from kasan_non_canonical_hook() into arch
+  subdirectories. arm64 and non-arch changes in patch 1, x86 changes in
+  patch 12.
+- Reset tag bits on arm64's non-canonical hook to allow inline mode to
+  work.
+- Revert modifying __is_canonical_address() since it can break KVM. Just
+  untag address in copy_from_kernel_no_fault_allowed().
+- Add a bunch of reviewed-by tags.
+
+Changes v8:
+- Detached the UD1/INT3 inline patch from the series so the whole
+  patchset can be merged without waiting on other dependency series. For
+  now with lack of compiler support for the inline mode that patch
+  didn't work anyway so this delay is not an issue.
+- Rebased patches onto 6.19-rc5.
+- Added acked-by tag to "kasan: arm64: x86: Make special tags arch
+  specific".
+
+Changes v7:
+- Rebased the series onto Peter Zijlstra's "WARN() hackery" v2 patchset.
+- Fix flipped memset arguments in "x86/kasan: KASAN raw shadow memory
+  PTE init".
+- Reorder tag width defines on arm64 to avoid redefinition warnings.
+- Split off the pcpu unpoison patches into a separate fix oriented
+  series.
+- Redid the canonicality checks so it works for KVM too (didn't change
+  the __canonical_address() function previously).
+- A lot of fixes pointed out by Alexander in his great review:
+=09- Fixed "x86/mm: Physical address comparisons in fill_p*d/pte"
+=09- Merged "Support tag widths less than 8 bits" and "Make special
+=09  tags arch specific".
+=09- Added comments and extended patch messages for patches
+=09  "x86/kasan: Make software tag-based kasan available" and
+=09  "mm/execmem: Untag addresses in EXECMEM_ROX related pointer arithmetic=
+",
+=09- Fixed KASAN_TAG_MASK definition order so all patches compile
+=09  individually.
+=09- Renamed kasan_inline.c to kasan_sw_tags.c.
+
+Changes v6:
+- Initialize sw-tags only when LAM is available.
+- Move inline mode to use UD1 instead of INT3
+- Remove inline multishot patch.
+- Fix the canonical check to work for user addresses too.
+- Revise patch names and messages to align to tip tree rules.
+- Fix vdso compilation issue.
+
+Changes v5:
+- Fix a bunch of arm64 compilation errors I didn't catch earlier.
+  Thank You Ada for testing the series!
+- Simplify the usage of the tag handling x86 functions (virt_to_page,
+  phys_addr etc.).
+- Remove within() and within_range() from the EXECMEM_ROX patch.
+
+Changes v4:
+- Revert x86 kasan_mem_to_shadow() scheme to the same on used in generic
+  KASAN. Keep the arithmetic shift idea for the KASAN in general since
+  it makes more sense for arm64 and in risc-v.
+- Fix inline mode but leave it unavailable until a complementary
+  compiler patch can be merged.
+- Apply Dave Hansen's comments on series formatting, patch style and
+  code simplifications.
+
+Changes v3:
+- Remove the runtime_const patch and setup a unified offset for both 5
+  and 4 paging levels.
+- Add a fix for inline mode on x86 tag-based KASAN. Add a handler for
+  int3 that is generated on inline tag mismatches.
+- Fix scripts/gdb/linux/kasan.py so the new signed mem_to_shadow() is
+  reflected there.
+- Fix Documentation/arch/arm64/kasan-offsets.sh to take new offsets into
+  account.
+- Made changes to the kasan_non_canonical_hook() according to upstream
+  discussion.
+- Remove patches 2 and 3 since they related to risc-v and this series
+  adds only x86 related things.
+- Reorder __tag_*() functions so they're before arch_kasan_*(). Remove
+  CONFIG_KASAN condition from __tag_set().
+
+Changes v2:
+- Split the series into one adding KASAN tag-based mode (this one) and
+  another one that adds the dense mode to KASAN (will post later).
+- Removed exporting kasan_poison() and used a wrapper instead in
+  kasan_init_64.c
+- Prepended series with 4 patches from the risc-v series and applied
+  review comments to the first patch as the rest already are reviewed.
+
+Maciej Wieczor-Retman (11):
+  kasan: Fix inline mode for x86 tag-based mode
+  x86/kasan: Add arch specific kasan functions
+  x86/mm: Reset tag for virtual to physical address conversions
+  mm/execmem: Untag addresses in EXECMEM_ROX related pointer arithmetic
+  x86/mm: Use physical address comparisons in fill_p*d/pte
+  x86/kasan: Initialize KASAN raw shadow memory
+  x86/mm: Reset tags in a canonical address helper call
+  x86/mm: Initialize LAM_SUP
+  x86: Increase minimal SLAB alignment for KASAN
+  x86/kasan: Use a logical bit shift for kasan_mem_to_shadow
+  x86/kasan: Make software tag-based kasan available
+
+Samuel Holland (2):
+  kasan: sw_tags: Use arithmetic shift for shadow computation
+  kasan: arm64: x86: Make special tags arch specific
+
+ Documentation/arch/arm64/kasan-offsets.sh |  8 ++-
+ Documentation/arch/x86/x86_64/mm.rst      | 10 ++-
+ Documentation/dev-tools/kasan.rst         | 46 +++++++------
+ MAINTAINERS                               |  4 +-
+ arch/arm64/Kconfig                        | 10 +--
+ arch/arm64/include/asm/kasan-tags.h       | 14 ++++
+ arch/arm64/include/asm/kasan.h            |  7 +-
+ arch/arm64/include/asm/memory.h           | 14 +++-
+ arch/arm64/include/asm/uaccess.h          |  1 +
+ arch/arm64/mm/Makefile                    |  2 +
+ arch/arm64/mm/kasan_init.c                |  7 +-
+ arch/arm64/mm/kasan_sw_tags.c             | 35 ++++++++++
+ arch/x86/Kconfig                          |  4 ++
+ arch/x86/boot/compressed/misc.h           |  1 +
+ arch/x86/include/asm/cache.h              |  4 ++
+ arch/x86/include/asm/kasan-tags.h         |  9 +++
+ arch/x86/include/asm/kasan.h              | 79 ++++++++++++++++++++++-
+ arch/x86/include/asm/page.h               |  8 +++
+ arch/x86/include/asm/page_64.h            |  1 +
+ arch/x86/kernel/head_64.S                 |  3 +
+ arch/x86/mm/init.c                        |  3 +
+ arch/x86/mm/init_64.c                     | 11 ++--
+ arch/x86/mm/kasan_init_64.c               | 24 ++++++-
+ arch/x86/mm/maccess.c                     |  2 +-
+ arch/x86/mm/physaddr.c                    |  2 +
+ include/linux/kasan-tags.h                | 21 ++++--
+ include/linux/kasan.h                     | 13 ++--
+ include/linux/mm.h                        |  6 +-
+ include/linux/mmzone.h                    |  2 +-
+ include/linux/page-flags-layout.h         |  9 +--
+ lib/Kconfig.kasan                         |  3 +-
+ mm/execmem.c                              |  9 ++-
+ mm/kasan/kasan.h                          |  7 ++
+ mm/kasan/report.c                         | 15 ++++-
+ mm/vmalloc.c                              |  7 +-
+ scripts/Makefile.kasan                    |  3 +
+ scripts/gdb/linux/kasan.py                |  5 +-
+ scripts/gdb/linux/mm.py                   |  5 +-
+ 38 files changed, 340 insertions(+), 74 deletions(-)
+ create mode 100644 arch/arm64/include/asm/kasan-tags.h
+ create mode 100644 arch/arm64/mm/kasan_sw_tags.c
+ create mode 100644 arch/x86/include/asm/kasan-tags.h
+
+--=20
+2.53.0
+
+
