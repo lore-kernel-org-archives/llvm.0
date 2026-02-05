@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02A6283FDB;
-	Thu,  5 Feb 2026 13:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DD03D7D71;
+	Thu,  5 Feb 2026 13:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770299069; cv=none; b=ASUfIA1N5ER/nr0dBdkLH+xn7Tc+EK/bjzSRdQCV95Fg/kbmIpPYPDgGdJPnYdCFBgvzDqBsJ+8mIUooRndm9L65DtNxYJ8efbp3s4Oq+zVwKbXBuoF09jasDd3iiNB09NFBuykGeZ3ZANGKVqQKzj9JTULKNifXj3N5MoH+9MI=
+	t=1770299294; cv=none; b=JgzKPTfvU3fBYBCkxuIL2SLdt9SimO/BzSkdmwrK/1NzZR/g6Tcp0yv1uxrxTEYuADHW6KKxPr1tyMHxwI3Ef5sJnRCAS03u0cwTZ9KM6It/Bto0n3Qf0MeK3gJvAe9ibu6dgt5ljKmDwp32OJdG/tOsHGmFlgLDGuHQWauWs/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770299069; c=relaxed/simple;
-	bh=+XcJc4Y73NCfrZTD+9DmarCzXkV9jJFSlBeo5lqiIaQ=;
+	s=arc-20240116; t=1770299294; c=relaxed/simple;
+	bh=YjGy4klz7sBtKbFx6i0lok1YI6F8G4CWbU/FimH+M0Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nX95S2RKJqnJSH5hd4d6Z2mNCvgNMlTObJBDD4AepB9NuFRZRpQsPAjVXt2GMAk6W5b1UWflolzKTNBWp0RBrYc9R/MB/+8KGFUMfXLAAeEis/bHYKU4+ZPKXn3H6uhS82uYdc32j8uYg9cJ9vEueSnGkzKSMQk6j+/dR1bTu7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEIT2Fba; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=b7kgJaNjm2TPnx+V8VY96IjH3r6M/iBgy0rGTZyJel/nzLFSQriBqz+kddRuIDipkOD0TNjeGA07zpsHC3orYQ4WrCRcdrsLTMi6aPOtvmu7hhgwT3mZ6Ui5y88loDF9F4ouKJKoE0PxSiV8Cw9spsl0Q09JSoUIWwcrhkfVne8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lyjSyGgv; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEIT2Fba"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lyjSyGgv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770299070; x=1801835070;
+  t=1770299294; x=1801835294;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+XcJc4Y73NCfrZTD+9DmarCzXkV9jJFSlBeo5lqiIaQ=;
-  b=JEIT2Fbaq8bXxyxrXlbX4lMvZcI1nUfLYWVLaP/Yud7bB09r+78xZUwf
-   hbIgL8ZKlEgmwKVdS+VHRdwVfgJyuxQJjYw58ax57AGBolUDc23DxmC0o
-   wrvZaOoZ/YEhxwhaYN6RykK2TkY0qgCplk/MTu/Bf3EfpGgzSBUuOTWdA
-   MKviERMshIeKTKvFPLQ+O5ffYd1HtKn4DnzLI68VsXRfQah1PthIQEXD5
-   t2ENIoDFi5YULVJeqEr5yaqz1pWumvW/DYPnac1L60O9cEONJwW/RcXIL
-   9BD0Y3JdRDVAeG2k494JO1QheDKHXM/TprWkdo3VP6Big83U8jJSgFuaW
-   w==;
-X-CSE-ConnectionGUID: QG+FmJKBTluNrRmMo/Ku7g==
-X-CSE-MsgGUID: odmQMJa9QeieIk3s1v24uQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="71486684"
+  bh=YjGy4klz7sBtKbFx6i0lok1YI6F8G4CWbU/FimH+M0Q=;
+  b=lyjSyGgvi1mZiSLxuRgFQnfVOhU39Nwer4twsy9mhTYpcF9Zu7edat77
+   2v4SxKsCd9cvdfHH4nU8mAgVSQGQrrev81q/XDw1LC1VUmWZ+72X0pzhm
+   WfHWLhfbAPRvxaaJifATDXVK9zcRuAxNqQ0sqfWuRxj5N0Wnk6HurjewJ
+   abplQvk85dvNfwu6PkEskHIM28B8G1C1497V8U6ZMmtJrJgO6eIYCyM0W
+   TmHViH7f13G7I3JfXXrF1tQawDHQV/bz8J8w8Re3pZb/jioQ3P/hSPaNx
+   0olzNiezfxb1E0qXxVlzVlePdW5vgpDSw1yYgnJZLrHMZWV+xvLTLFGGR
+   Q==;
+X-CSE-ConnectionGUID: LNWmS3TiRrmqwh9rjgPVmg==
+X-CSE-MsgGUID: u1wDRN/6SIWt/9XC/F/eYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="71535654"
 X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="71486684"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 05:44:30 -0800
-X-CSE-ConnectionGUID: 0DTb0rsKSWCJcU79gSaarA==
-X-CSE-MsgGUID: JGiF1l+eR8WFw1aLLheqoA==
+   d="scan'208";a="71535654"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 05:48:13 -0800
+X-CSE-ConnectionGUID: fS8dvbdAQUOzRFftliHy+Q==
+X-CSE-MsgGUID: sgGPYrHwSN6eBd58VrP/Ag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="215048553"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 05 Feb 2026 05:44:26 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+   d="scan'208";a="241145326"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 05 Feb 2026 05:48:09 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vnzeh-000000004B3-2wHq;
-	Thu, 05 Feb 2026 13:44:23 +0000
-Date: Thu, 5 Feb 2026 14:43:58 +0100
+	id 1vnziJ-00000000jqy-2JAv;
+	Thu, 05 Feb 2026 13:48:07 +0000
+Date: Thu, 5 Feb 2026 21:48:03 +0800
 From: kernel test robot <lkp@intel.com>
 To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -58,7 +58,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	kernel-team@meta.com
 Subject: Re: [PATCH bpf-next v6 09/17] bpf: Prepare for
  bpf_selem_unlink_nofail()
-Message-ID: <202602051417.ebnQFUul-lkp@intel.com>
+Message-ID: <202602052147.PjiFTJlT-lkp@intel.com>
 References: <20260205070208.186382-10-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -80,14 +80,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Select-bpf
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
 patch link:    https://lore.kernel.org/r/20260205070208.186382-10-ameryhung%40gmail.com
 patch subject: [PATCH bpf-next v6 09/17] bpf: Prepare for bpf_selem_unlink_nofail()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260205/202602051417.ebnQFUul-lkp@intel.com/config)
+config: x86_64-buildonly-randconfig-002-20260205 (https://download.01.org/0day-ci/archive/20260205/202602052147.PjiFTJlT-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602051417.ebnQFUul-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602052147.PjiFTJlT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602051417.ebnQFUul-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602052147.PjiFTJlT-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
@@ -102,35 +102,35 @@ All warnings (new ones prefixed by >>):
 
 vim +/owner +289 kernel/bpf/bpf_local_storage.c
 
-588d80f1d996ea9 Amery Hung       2026-02-04  278  
-450af8d0f6be2e7 KP Singh         2020-08-25  279  /* local_storage->lock must be held and selem->local_storage == local_storage.
-450af8d0f6be2e7 KP Singh         2020-08-25  280   * The caller must ensure selem->smap is still valid to be
-450af8d0f6be2e7 KP Singh         2020-08-25  281   * dereferenced for its smap->elem_size and smap->cache_idx.
-450af8d0f6be2e7 KP Singh         2020-08-25  282   */
-c83597fa5dc6b32 Yonghong Song    2022-10-25  283  static bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
-450af8d0f6be2e7 KP Singh         2020-08-25  284  					    struct bpf_local_storage_elem *selem,
-0e854e553569083 Amery Hung       2025-11-14  285  					    struct hlist_head *free_selem_list)
-450af8d0f6be2e7 KP Singh         2020-08-25  286  {
-450af8d0f6be2e7 KP Singh         2020-08-25  287  	struct bpf_local_storage_map *smap;
-450af8d0f6be2e7 KP Singh         2020-08-25  288  	bool free_local_storage;
-450af8d0f6be2e7 KP Singh         2020-08-25 @289  	void *owner;
-450af8d0f6be2e7 KP Singh         2020-08-25  290  
-0fe4b381a59ebc5 KP Singh         2021-12-24  291  	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
-450af8d0f6be2e7 KP Singh         2020-08-25  292  	owner = local_storage->owner;
-450af8d0f6be2e7 KP Singh         2020-08-25  293  
-450af8d0f6be2e7 KP Singh         2020-08-25  294  	free_local_storage = hlist_is_singular_node(&selem->snode,
-450af8d0f6be2e7 KP Singh         2020-08-25  295  						    &local_storage->list);
-450af8d0f6be2e7 KP Singh         2020-08-25  296  
-588d80f1d996ea9 Amery Hung       2026-02-04  297  	bpf_selem_unlink_storage_nolock_misc(selem, smap, local_storage,
-588d80f1d996ea9 Amery Hung       2026-02-04  298  					     free_local_storage);
-450af8d0f6be2e7 KP Singh         2020-08-25  299  
-450af8d0f6be2e7 KP Singh         2020-08-25  300  	hlist_del_init_rcu(&selem->snode);
-450af8d0f6be2e7 KP Singh         2020-08-25  301  
-5bd5bab76669b1e Martin KaFai Lau 2024-10-23  302  	hlist_add_head(&selem->free_node, free_selem_list);
-dcf456c9a095a6e KP Singh         2022-04-18  303  
-450af8d0f6be2e7 KP Singh         2020-08-25  304  	return free_local_storage;
-450af8d0f6be2e7 KP Singh         2020-08-25  305  }
-450af8d0f6be2e7 KP Singh         2020-08-25  306  
+588d80f1d996ea Amery Hung       2026-02-04  278  
+450af8d0f6be2e KP Singh         2020-08-25  279  /* local_storage->lock must be held and selem->local_storage == local_storage.
+450af8d0f6be2e KP Singh         2020-08-25  280   * The caller must ensure selem->smap is still valid to be
+450af8d0f6be2e KP Singh         2020-08-25  281   * dereferenced for its smap->elem_size and smap->cache_idx.
+450af8d0f6be2e KP Singh         2020-08-25  282   */
+c83597fa5dc6b3 Yonghong Song    2022-10-25  283  static bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
+450af8d0f6be2e KP Singh         2020-08-25  284  					    struct bpf_local_storage_elem *selem,
+0e854e55356908 Amery Hung       2025-11-14  285  					    struct hlist_head *free_selem_list)
+450af8d0f6be2e KP Singh         2020-08-25  286  {
+450af8d0f6be2e KP Singh         2020-08-25  287  	struct bpf_local_storage_map *smap;
+450af8d0f6be2e KP Singh         2020-08-25  288  	bool free_local_storage;
+450af8d0f6be2e KP Singh         2020-08-25 @289  	void *owner;
+450af8d0f6be2e KP Singh         2020-08-25  290  
+0fe4b381a59ebc KP Singh         2021-12-24  291  	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
+450af8d0f6be2e KP Singh         2020-08-25  292  	owner = local_storage->owner;
+450af8d0f6be2e KP Singh         2020-08-25  293  
+450af8d0f6be2e KP Singh         2020-08-25  294  	free_local_storage = hlist_is_singular_node(&selem->snode,
+450af8d0f6be2e KP Singh         2020-08-25  295  						    &local_storage->list);
+450af8d0f6be2e KP Singh         2020-08-25  296  
+588d80f1d996ea Amery Hung       2026-02-04  297  	bpf_selem_unlink_storage_nolock_misc(selem, smap, local_storage,
+588d80f1d996ea Amery Hung       2026-02-04  298  					     free_local_storage);
+450af8d0f6be2e KP Singh         2020-08-25  299  
+450af8d0f6be2e KP Singh         2020-08-25  300  	hlist_del_init_rcu(&selem->snode);
+450af8d0f6be2e KP Singh         2020-08-25  301  
+5bd5bab76669b1 Martin KaFai Lau 2024-10-23  302  	hlist_add_head(&selem->free_node, free_selem_list);
+dcf456c9a095a6 KP Singh         2022-04-18  303  
+450af8d0f6be2e KP Singh         2020-08-25  304  	return free_local_storage;
+450af8d0f6be2e KP Singh         2020-08-25  305  }
+450af8d0f6be2e KP Singh         2020-08-25  306  
 
 -- 
 0-DAY CI Kernel Test Service
