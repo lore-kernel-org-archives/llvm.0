@@ -1,129 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5F23043B5;
-	Thu,  5 Feb 2026 17:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770314369; cv=none; b=FmExe6TQhS/7KflFMM2fG27rx9JILXgxlkVIZvnQtqAxtA3jHJZdjwkYqt4oLHO2eG5+axD1D1dbCFCoQ8MTPP+YboZDhPmJk8WZiNYRKV2ibCyLtlHiGVXSDG8ByGaFMjoMtTC8g0wtG1tK+JX9/BXW7cTHUKMKUqnAX7c9fbw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770314369; c=relaxed/simple;
-	bh=QPnMGMiiqKGmwJXq9xUjekruFfRDSmqjNebQDbWjscg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P0E8BWdX6nMEaXzHje8D6+o1qyZgPmLoCcsVx0qVhatb5u0BY9TdyrVe2TGdNNYK9Gf89mvEAELNkQ7bebeCP4+83xPagGs/vavDavzk3HfIe77MF8cCLl/yEaSvfRqs/RPHOlWjr9Yv5y49RGkoNcPHS4EGsRuBXR3GAu7/n6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxKGDeJz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25AE7DA66
+	for <llvm@lists.linux.dev>; Thu,  5 Feb 2026 19:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770320080; cv=pass; b=iEXSlO91QW4Cy8GZmmWiJ657gzVZQ4F4ZepgJXmYUyrkBzk/iRH9aCiiEHrh8wUkHqHm/BZbDZmlhR97uiDyROQXwRKyX7Eoqb1an5iroRMGaXoRZETV0Lxff3+OHRW/hZBHYUP36iW3wenW9fW1xTwssn+BZ20/OJeNIo7VZ5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770320080; c=relaxed/simple;
+	bh=Fkc9V2w5LCx5vxvCS4OBbSZnYWzsDBvR693KSERcN+g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W8s+zJQvsLxz8+dSJ0vy9hPDtQWf7UlKZe7MlGMxdymnBEj4NUrcBmZkplDOQMWekXZZ+zc+abjFs6PvOogj9q41m3WoZxL8nBSR2QZ4bekjTrpWUvgPpbueZKYU6jrpzKCFTh5AgDJYI6GUhsx1wMc+GmlHD4omoQeOAqvu9k4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKRIKZP5; arc=pass smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxKGDeJz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770314370; x=1801850370;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QPnMGMiiqKGmwJXq9xUjekruFfRDSmqjNebQDbWjscg=;
-  b=DxKGDeJzHFWs8z1oBdM38Nw4cYlVyBYOQlmURJZ07uC7UcckyITyHs5D
-   yW9rMkAZeMGyr8AyZv7RR6QWj9LJpZpHOPJgMnsRmBhlmReWNB1XpqGDu
-   gWF1fTQDZGIm9xGNEDkgylHJyVEXiJD21OWGFDHo6SYTior7U4wOTT1lM
-   yhQxl+AiKRXeuOYVjSzzG2wHxocQoty5qlzSkfq3bomofiMAudHdmb+4a
-   La1m4PWOG+hc5Xbn984UvOQ3vI3q1vyvmMKYJBNYS3E9TzKywb+smih+X
-   E+hyQnriTiK/dQZ97wZBcjq09t8QsJKs5D9PhdWQsy8SNqTxKR+cophtW
-   Q==;
-X-CSE-ConnectionGUID: Nzh0lb3HTJW+FqaE7DDvJQ==
-X-CSE-MsgGUID: mrK/BFBnTLK1V1bXBRUV1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="82957298"
-X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
-   d="scan'208";a="82957298"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 09:59:29 -0800
-X-CSE-ConnectionGUID: 1Qo+LnH2Rw2K6QGdWD9sPg==
-X-CSE-MsgGUID: DNX37lliSDuSAIS8oirMcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
-   d="scan'208";a="233552840"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Feb 2026 09:59:25 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vo3dS-00000000k5A-16zC;
-	Thu, 05 Feb 2026 17:59:22 +0000
-Date: Fri, 6 Feb 2026 01:58:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Mikhalitsyn <alexander@mihalicyn.com>, ast@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Christian Brauner <brauner@kernel.org>, bpf@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
-Subject: Re: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
-Message-ID: <202602060128.qfggT7Pd-lkp@intel.com>
-References: <20260205104541.171034-1-alexander@mihalicyn.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKRIKZP5"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1233ad1b4cdso69962c88.0
+        for <llvm@lists.linux.dev>; Thu, 05 Feb 2026 11:34:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770320080; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FPKCl297tu6xPKnp52qo4yaAyRvqN3RGBs/uwnmri5mWS8Uhf5fXUz4VP5KuxV5W2u
+         r96FCSh/GmvWtyPdUZIr++DNSO2o6HseFBCD5UZT9VTg+ScJDT+B4aoIvbw48+WPP5dJ
+         RrRcAXeJnRXyc7aJ2AXx72I/E9yQeVPVPLYZj50tL7TAroI57WLwsr6iLu9XIfv6LEpY
+         AKbtv06D2eniAe/Mk0CxXaeYmJzRPzswije1zBH5ZE3C85HIXvh4Xyl0BlioZh1no/a/
+         6T8iM3LT+d2gqkUME73Gc1uDDUX/dDC9GAW8+0owEK2O4a+iuI0MS47RP/Jr+oogBj+S
+         cgrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Fkc9V2w5LCx5vxvCS4OBbSZnYWzsDBvR693KSERcN+g=;
+        fh=GBaryWNpIgwfg15Vs8Yl9/IkJIaQgqwIglvjmLRgTzs=;
+        b=ZiZRC6UEvLx0eb+6M9JlvvvneI51Bd7hCE1VnoxqnTseIjMaKTMlL5amqRgpd6dOsa
+         3YDBQIGIYvOk61w8nS5wGjKS/hryIw5Tye9V4bjsTMJppurKJmSYylZ10HJ3OmSvmYHo
+         bLuh3CmydgxJfujuQGax4HXjkbjaMPR/fF56yep8CZF0i3E5TbFRtnan5Kmjpe4QGYQv
+         sSxjtwoEMdb+PZGvH1TCBBVw3JASVCVxpjSzFfkGdUkApohCQWD+SO89SiEX6ONLsnaO
+         BylkFHstDEc4h7Z9LJ1HCgFqVHGjv17dHU6wXYIo1VQCSw4Riu6qk7x5wjcC/uQwZDID
+         ov3g==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770320080; x=1770924880; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fkc9V2w5LCx5vxvCS4OBbSZnYWzsDBvR693KSERcN+g=;
+        b=VKRIKZP5zYxXR2rPuI8xCJlpcoXkHb+eL8NWaP9SSLShPUaSlUa091lX+rVcnOq9A1
+         qHeU9K8MLMXKoZedWaQJeKKMbctgJ52GE0NnsE2grmK6rw8kIEZuSi4weeNVlxujEMfA
+         NHPcjQi40EA5oBAslhtxdoVKV3NDD9gC+MUJHC/9N0lh8AyaGx2dwNCSJIiZghVbM/YI
+         OrE1NOsX7O8OboUokHONPdwB028trLurZz87hIkNtE4faIMSXLRUMVYNumR0FBEKynTy
+         ahkAYf1C9MAw6thJQSjBFbZxpFpU6YLrdn1/vzFJ/pRfkRf8WSh6EpDsMIBSeegTq9Ph
+         cNKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770320080; x=1770924880;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Fkc9V2w5LCx5vxvCS4OBbSZnYWzsDBvR693KSERcN+g=;
+        b=WNM97uj28EAS+ZDfOW5C4h0YTyz2SHzpKAPoAWMz9LBKqZjVZFwWEj5YU8j7tQvdtf
+         9VlmPSS0WvYuWfJ+aeyN9r1Yek8H8ZHpLtm6LpRZxO/alZHqHWqTpP+SCvKT8zH1qRfj
+         Z2j6xnVVGQljfI0yInGEmVMbn0IW/PXjxEZan3ke2PoPqQykPslmFVLwFltFQJF+BNQ7
+         2CBAwk6p680CTqvLHdOIkIMyLfjdixIH/zHKCh+Ru/pKC66rpvKHTCphbfmeeOiEGqkN
+         /YrVesjA2lD6S+8ates+jzvYUC5R7/tmSSkQc4+9/yREb/IUofnG8aaHgz3z9lMRbXTF
+         SupQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXFlsma9jIpU//ZcNanG/bx2h0GauoLW6BBu+ch4dcJemIcqlXzDcB43zUSAzQDgk9RlpP@lists.linux.dev
+X-Gm-Message-State: AOJu0YymqZv0un2UPtCOzmsX2SqjaivcBsE9WOPf5RC02pqVPjXARMKX
+	fZT7z9MkWuE/zZLUeSQwGyFFkJoEpN+8jm4DihEJRiztjvLYPoWPjjSn17DXlOY14G/wkp8EZCS
+	VYhced6nC4654s+h5UvG3AHoXuNahfvc=
+X-Gm-Gg: AZuq6aL3sMlSYW8VGwzq68wUXpDwQ89vgfUCGUABdX1+ReXANwZ/8vV/Iz7D53zZ2eC
+	N1TqUMzHoFi3ZBo6YLVEtn85cc4xBe4Sklll9+fYentEhpyBbjKFH8N2EYVM5BaXsI/GkZRKLuw
+	Zy4rnpUhLN8FPsvMY8lH6Z0TZbxKdfJuyJlnkt5COESBj5SmQM61S5Mf7HdEiV40xF1WZchJipm
+	puEos7lCmvzrk8HPoUtyiWNaGOppKb7+WC093FgQUM7CCRjm7bQnnSoxw4IUkhGpsCtWWRd2K2F
+	QEf4rLNr9NRDRutwSkHiUiwcw8QHu7EfRam151oCm1lxVliSucz7GsQyk9qHTjzUv4VcIBqPrO/
+	ofTyKO+93TCf2
+X-Received: by 2002:a05:7301:1f05:b0:2b7:fac6:a9f4 with SMTP id
+ 5a478bee46e88-2b856a4c965mr38975eec.4.1770320079827; Thu, 05 Feb 2026
+ 11:34:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205104541.171034-1-alexander@mihalicyn.com>
+References: <20260204210125.613350-1-mkchauras@gmail.com> <20260204210125.613350-4-mkchauras@gmail.com>
+ <aYSgjPD5KRcNN0j4@luna> <1ed12a72-06e4-461b-907e-2581e25e3e38@linux.ibm.com> <aYS2oWCE0ZCC3don@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+In-Reply-To: <aYS2oWCE0ZCC3don@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 5 Feb 2026 20:34:27 +0100
+X-Gm-Features: AZwV_QiXdOwsA6Cs9ikWk94o2hhbKT_np0MzoS_FXf6_Mvy8gIUKQAkUYwzBM0s
+Message-ID: <CANiq72mi-V_SF+JErMJu1wZEd27HPHqhsxE8dELtd5e3ZEaA4w@mail.gmail.com>
+Subject: Re: [PATCH V2 3/3] powerpc: Enable Rust for ppc64le
+To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>, Jubilee Young <workingjubilee@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Link Mauve <linkmauve@linkmauve.fr>, ojeda@kernel.org, 
+	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, dakr@kernel.org, corbet@lwn.net, maddy@linux.ibm.com, 
+	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, 
+	peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
+	rostedt@goodmis.org, ardb@kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexander,
+On Thu, Feb 5, 2026 at 6:29=E2=80=AFPM Mukesh Kumar Chaurasiya
+<mkchauras@gmail.com> wrote:
+>
+> use rust version nightly-2026-01-28
+>
+> the latest one has some issue. I just raised a bug for the rustc
+> here[1].
+>
+> [1] https://github.com/rust-lang/rust/issues/152177
 
-kernel test robot noticed the following build errors:
+It appears to be a bug in LLVM 22 for ppc64, not present in 21.
 
-[auto build test ERROR on bpf-next/net]
-[also build test ERROR on bpf-next/master bpf/master brauner-vfs/vfs.all linus/master v6.19-rc8 next-20260205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If I understand correctly, then it may be fixed in 22.1.9 if it gets releas=
+ed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/bpf-use-FS_USERNS_DELEGATABLE-for-bpffs/20260205-184845
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20260205104541.171034-1-alexander%40mihalicyn.com
-patch subject: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
-config: i386-buildonly-randconfig-002-20260205 (https://download.01.org/0day-ci/archive/20260206/202602060128.qfggT7Pd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260206/202602060128.qfggT7Pd-lkp@intel.com/reproduce)
+Thanks Jubilee for the quick reply there!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602060128.qfggT7Pd-lkp@intel.com/
+Cc'ing Clang/LLVM build support, in case they didn't hear about it.
 
-All errors (new ones prefixed by >>):
+I linked it in our usual lists.
 
->> kernel/bpf/inode.c:1084:14: error: use of undeclared identifier 'FS_USERNS_DELEGATABLE'; did you mean 'CFTYPE_NS_DELEGATABLE'?
-    1084 |         .fs_flags       = FS_USERNS_DELEGATABLE,
-         |                           ^~~~~~~~~~~~~~~~~~~~~
-         |                           CFTYPE_NS_DELEGATABLE
-   include/linux/cgroup-defs.h:137:2: note: 'CFTYPE_NS_DELEGATABLE' declared here
-     137 |         CFTYPE_NS_DELEGATABLE   = (1 << 2),     /* writeable beyond delegation boundaries */
-         |         ^
-   1 error generated.
-
-
-vim +1084 kernel/bpf/inode.c
-
-  1077	
-  1078	static struct file_system_type bpf_fs_type = {
-  1079		.owner		= THIS_MODULE,
-  1080		.name		= "bpf",
-  1081		.init_fs_context = bpf_init_fs_context,
-  1082		.parameters	= bpf_fs_parameters,
-  1083		.kill_sb	= bpf_kill_super,
-> 1084		.fs_flags	= FS_USERNS_DELEGATABLE,
-  1085	};
-  1086	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
