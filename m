@@ -1,92 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33ACE3A9629;
-	Thu,  5 Feb 2026 10:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BDB38F95F;
+	Thu,  5 Feb 2026 10:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770288128; cv=none; b=k8wsFtD4izMBA+5MxQ7fFWXEJRiECi4niDRzgoruQJ0TERa2wnr8D1zACoLT9+7rW5zCcr/3DsOmX3DLb7iQRQfK4XE9goi72nrcUAX0RJFUB3wYfDZ7iw/rqw3dtrrPinQY26i6f2dGvEBE9ZondwpNKNn0D1l+p6VEk2R7DhA=
+	t=1770288204; cv=none; b=s8LxbFfvpyD5LlAImgDTYiP9ndcUbsQqZcSVd5ZCQ+hoQ9U9Ue1R++F8I2Hcrq6fOl859mIJh8Y0t/L8OP9xZZfUUSEwswaYJCNDvU9tJYci8IiHQJF53Y4OGxp/rn12ABqvuzwaFoEPx5+vsPJTuLQ8t+WhEFtu0oe1qgvgo4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770288128; c=relaxed/simple;
-	bh=NGjS2W/fPan80cD9RMH4Y/pXk5yggvLWzpNgN5tKX14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bgplK/PaLo2ZKVQPKOguLtZdaq69PEGV5tRMnZQ9X+qyYEO/5Gy0Aw0+2xbDaXCEf+GgsotBND0muyGcuhpFsp24rT8WZ/cCkjI6GZxoaU3/Mm+xpYKk/5AZpWxpeu+v6KCZ0K6CV4h3ILVNqJt8vH5tCSyz/N2Q2UIOb8LDcZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cosisSUp; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1770288204; c=relaxed/simple;
+	bh=BE8F0GydfAG/noqHSNUEnAw/4ShuYxswS09rOIxyawE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Aa7D/uV12RsRN1CJmyXaOPA/vvL7qWuDGkbZZ84d8KtJ4+rhxMU/C5gngShIKBVrMxB3Surh9es0oTo/vLCRXCOyA8o66sYwNnWXQ1Msk34A+2ESFezpJlM/MU0aKFq69fFZIexOu0ndXthSCOTkhIM3L8VT+VE8qSZeuCHgkas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+fIRBeL; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cosisSUp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+fIRBeL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770288128; x=1801824128;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NGjS2W/fPan80cD9RMH4Y/pXk5yggvLWzpNgN5tKX14=;
-  b=cosisSUpxyzypsPulOR8kwAbBPTFSkXJ0XBps8mUweAkFD/K3etg7GBY
-   qS7OJs0s2RywH6S1TtmU8aGw0Zulv4dvmJDtGOyI4w5YuRqZxnBMhZj4U
-   rIu6T7D1BPnaLMKqnleOYZO35/A/zHlClm9x7CFgH5P1foiLTcK7Yb1px
-   LQxkqVtQeC+ol+/F1oQ+fdV6l2BmaMMqXka5hk0eRn+cgRut0aPYkMIQ8
-   rmo8PZGFbrGrzpDWVe4rUbAChAu9SlyngUvZkMDTULEAs58PaBl5zW0mz
-   5jta/I66NeL2peSslWbR4Dio6xoX1Jld+XpVZXI/sKgdOWzpos8KXmO/0
-   Q==;
-X-CSE-ConnectionGUID: 7fQgQ2DlQXCwQycJ4Ca4tw==
-X-CSE-MsgGUID: z4SzzcmpSSyfU0FQiKip8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82221834"
+  t=1770288204; x=1801824204;
+  h=date:from:to:cc:subject:message-id;
+  bh=BE8F0GydfAG/noqHSNUEnAw/4ShuYxswS09rOIxyawE=;
+  b=i+fIRBeLbWnsGjLAdJdRmSML8VmeqG3Y3c+0N/zFuQ2bau14OEDMNfgm
+   1NInWD1ybPW0hwrA3Yd8yPlxPXjqhIyPfVfDrVJ4IwRnur9RVhu550GpY
+   VR+dPdAVhn6EVykLbPJLqeJ5Wsn9gWCRARu3j39JP+3z092szUaXUD5EZ
+   +FlMefwSTQE3TQF2Dcw0unl2ILLnPeGIeKZw9tXMI3SqA3OpwAX9LAame
+   urd32Lbl+RW+Bm7sV6fgAwN6vd51+RR2joU3q+3zCgQ0PHQTdGZNkUlu6
+   +dtxxLp/FGXKA8F2Zn/Ut30nxPxlV75a/e+w+PMEXOsaR8bUL0Zc6aFeb
+   g==;
+X-CSE-ConnectionGUID: vEWvzozpSMyecO9/YxEqBg==
+X-CSE-MsgGUID: Pe8JVmVaQ76w2f3ek3Db2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71547070"
 X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="82221834"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 02:42:07 -0800
-X-CSE-ConnectionGUID: ozeke08AS5Sc90Vx7mUNMw==
-X-CSE-MsgGUID: V3W2IP7WRoqI5oG+Ju4Iqw==
+   d="scan'208";a="71547070"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 02:43:23 -0800
+X-CSE-ConnectionGUID: Ob7nh1nTQP28WoluBu8o/g==
+X-CSE-MsgGUID: usKHl4l2Q6aojH+ehL/6aQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="248079118"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 Feb 2026 02:42:04 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 05 Feb 2026 02:43:22 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vnwoD-00000000jjA-0ysQ;
-	Thu, 05 Feb 2026 10:42:01 +0000
-Date: Thu, 5 Feb 2026 18:41:09 +0800
+	id 1vnwpU-00000000461-0AMS;
+	Thu, 05 Feb 2026 10:43:20 +0000
+Date: Thu, 05 Feb 2026 11:42:53 +0100
 From: kernel test robot <lkp@intel.com>
-To: Nikunj A Dadhania <nikunj@amd.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, bp@alien8.de, thomas.lendacky@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@kernel.org,
-	mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-	xin@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-	x86@kernel.org, jon.grimm@amd.com, nikunj@amd.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] x86/fred: Fix early boot failures on SEV-ES/SNP guests
-Message-ID: <202602051859.vGTf24Nk-lkp@intel.com>
-References: <20260205051030.1225975-1-nikunj@amd.com>
+To: Nikunj A Dadhania <nikunj@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: arch/x86/entry/entry_fred.c:213:4: warning: void function
+ 'fred_hwexc' should not return a value
+Message-ID: <202602051128.AqkhZu86-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205051030.1225975-1-nikunj@amd.com>
 
-Hi Nikunj,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 3c2ca964f75460093a8aad6b314a6cd558e80e66]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/x86-fred-Fix-early-boot-failures-on-SEV-ES-SNP-guests/20260205-131359
-base:   3c2ca964f75460093a8aad6b314a6cd558e80e66
-patch link:    https://lore.kernel.org/r/20260205051030.1225975-1-nikunj%40amd.com
-patch subject: [PATCH] x86/fred: Fix early boot failures on SEV-ES/SNP guests
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260205/202602051859.vGTf24Nk-lkp@intel.com/config)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Nikunj-A-Dadhania/x86-fred-Fix-early-boot-failures-on-SEV-ES-SNP-guests/20260205-131359
+head:   920b1b000ee3a4bf7dd6fde28bd4211cf29cb06b
+commit: 920b1b000ee3a4bf7dd6fde28bd4211cf29cb06b x86/fred: Fix early boot failures on SEV-ES/SNP guests
+date:   5 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260205/202602051128.AqkhZu86-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602051859.vGTf24Nk-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602051128.AqkhZu86-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602051859.vGTf24Nk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602051128.AqkhZu86-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
