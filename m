@@ -1,219 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2A9258ECB;
-	Thu,  5 Feb 2026 02:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D69D21FF33
+	for <llvm@lists.linux.dev>; Thu,  5 Feb 2026 05:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770259068; cv=none; b=G7QIY0/uWtNP39ICOx7dUHwHzAdgOn64j4/JqZ19QkykoakkhmEP31q/6cf5a7XaOYgq/hETJIulHp3zDjyms36BxLLT0DA1ru7iP0a13JB4mE6BQAIzR89KmdTp2kEh7rZBa5nph6QTo77mSHmbymE+aliE1+q3bmd2BhnxyhY=
+	t=1770268938; cv=none; b=MhwwMQjaVTqFvN09bNRjGwCUlgyDS9TWjbW3uipDloUUdo4FGHuY61VnGGgNnEF1ugoFCXsed61j105XF+SULpZZXj6g6bf/Q8ENdiKJdm7RPnM8P8wJv1dubpHM6Ec3zY/vtEfMntui6s9lWjMxtNeCFloyXtvqcSKHdYg/E9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770259068; c=relaxed/simple;
-	bh=E5LPU4NWtqOyTdkjV6OAOmlb669H2tC5lWTVQZncWtg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BSgGlY+8Vx4e1kdU4f8i1HVXAxp/06T/tUeoXH2CJlzsaY2z3cEUR50kcIkBlINU7lFxjop+/lnUZLTwT6nvcAyyPaibTBWA52Ly9rKRpQgX5wlm2gNn8wRP0XeVLJ+L2PiZLClWDT+qp/DyosouSoKRbk/AiSxEZck1oMPpdN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A5BrKqNW; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770268938; c=relaxed/simple;
+	bh=wrnaG39zB2DkK5KqHYwRQenWifnmeoHIrBZsQuZygvc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CAn72zoRWzYvDZPryy8/T6ReD2sUBMZSUzlJcxoYCuE9I/edfFuUJkO2FN7ynTHOsyieD8v4kAmlbiAZ2uerQR8nDPFFsGhd1W0UkpSMSPswDaaf58MIbx8PLhZhPUplSHIjhNNhivXVJwJfk5rudL15WH61z6RrfCGBHRz7L2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eDXY9FYm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A5BrKqNW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770259069; x=1801795069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E5LPU4NWtqOyTdkjV6OAOmlb669H2tC5lWTVQZncWtg=;
-  b=A5BrKqNW3v3VHxR1mBW6rXtT4AFi4/Jp/mw1ooVYUOOtwhN6aygOgsL2
-   GfeUJlOTcXJ+DLeEth89zmKxi/0FCnDfyCFUzBQR7Pdd1TW/qNmjexsyf
-   sC5pzfAaKhwzNKashk3JzhwCq+AmmSmdxA9CAAMnbBwNdS+F+z5Nt0A28
-   wqE3piqvr7jrorAiCQFBb5smF/GY0lMtNIYb4KT/S5xPwTF35rpe0AjgK
-   /cqhw2Ia4oV65YMFZhMn99L17C4ePn4dgZgDM/FyJArpaIsq3XdVYU0fy
-   GJUOeykc+wSmipbiNTsTMA8VMNVSXC4EyMT5xFrA/OW3nIk5n+VoG2KXb
-   A==;
-X-CSE-ConnectionGUID: LFYU5ExQRLyVXEY9YKEmAw==
-X-CSE-MsgGUID: B1i/ZHQWSZmD3Z+bAZ01+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="71549170"
-X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
-   d="scan'208";a="71549170"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 18:37:48 -0800
-X-CSE-ConnectionGUID: oNLTQC/mT7GrfH0lFLvqfQ==
-X-CSE-MsgGUID: S66bEHSISoCB+sTIOkhzFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
-   d="scan'208";a="210438991"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 04 Feb 2026 18:37:45 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vnpFW-00000000jLU-1B29;
-	Thu, 05 Feb 2026 02:37:42 +0000
-Date: Thu, 5 Feb 2026 10:37:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Koichiro Den <den@valinux.co.jp>, vkoul@kernel.org, mani@kernel.org,
-	Frank.Li@nxp.com, jingoohan1@gmail.com, lpieralisi@kernel.org,
-	kwilczynski@kernel.org, robh@kernel.org, bhelgaas@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 09/11] PCI: endpoint: pci-epf-test: Add smoke test for
- EPC remote resource API
-Message-ID: <202602051059.2bwjcYJE-lkp@intel.com>
-References: <20260204145440.950609-10-den@valinux.co.jp>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eDXY9FYm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770268937;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pTLrt+/USWu7oYnhBa1J2vON1B2NdZ+b1BmJrlvpMPA=;
+	b=eDXY9FYmm2q/1/E5XfrG1UMPatIv6qO/5AYjB/dMf4MS1wuQiyPTb9mALZ62CRZg3+S00k
+	0YzInX2ukbJnTWeiDF2GkSTpL8kWk+IV9Q5D2G/PjFrDmwE7UwLX3Jma/WP7I3ETmyLj7w
+	MwWHrmZnm7fy+3SD1DkchQDIlCAsO10=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-l13h46XnPKyUY8Fc9A9epg-1; Thu,
+ 05 Feb 2026 00:22:15 -0500
+X-MC-Unique: l13h46XnPKyUY8Fc9A9epg-1
+X-Mimecast-MFC-AGG-ID: l13h46XnPKyUY8Fc9A9epg_1770268935
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 00FD51800465
+	for <llvm@lists.linux.dev>; Thu,  5 Feb 2026 05:22:15 +0000 (UTC)
+Received: from [172.20.128.30] (unknown [10.30.44.30])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 978E219560A7;
+	Thu,  5 Feb 2026 05:22:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.19.0-rc8,
+ upstream-mainline, 27db1ae6)
+Date: Thu, 05 Feb 2026 05:22:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260204145440.950609-10-den@valinux.co.jp>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <76573.126020500221500435@us-mta-147.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 0pKuC72hQnbhsf7g6Ay2Baw9Xao4ZVMd0r34h-373S4_1770268935
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Koichiro,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on next-20260204]
-[cannot apply to vkoul-dmaengine/next pci/for-linus linus/master v6.19-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Koichiro-Den/dmaengine-Add-hw_id-to-dma_slave_caps/20260204-230604
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260204145440.950609-10-den%40valinux.co.jp
-patch subject: [PATCH v3 09/11] PCI: endpoint: pci-epf-test: Add smoke test for EPC remote resource API
-config: um-randconfig-001-20260205 (https://download.01.org/0day-ci/archive/20260205/202602051059.2bwjcYJE-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602051059.2bwjcYJE-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602051059.2bwjcYJE-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2306263151
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/pci/endpoint/functions/pci-epf-test.c:11:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/pci/endpoint/functions/pci-epf-test.c:1013:36: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-    1012 |                                 "Invalid remote resource[%d] (type=%d phys=%pa size=%llu)\n",
-         |                                                                                     ~~~~
-         |                                                                                     %u
-    1013 |                                 i, res->type, &res->phys_addr, res->size);
-         |                                                                ^~~~~~~~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/pci/endpoint/functions/pci-epf-test.c:1021:25: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-    1020 |                                 "Remote resource[%d] overflow (phys=%pa size=%llu)\n",
-         |                                                                              ~~~~
-         |                                                                              %u
-    1021 |                                 i, &res->phys_addr, res->size);
-         |                                                     ^~~~~~~~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   3 warnings generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-vim +1013 drivers/pci/endpoint/functions/pci-epf-test.c
 
-   972	
-   973	static void pci_epf_test_epc_api(struct pci_epf_test *epf_test,
-   974					 struct pci_epf_test_reg *reg)
-   975	{
-   976		struct pci_epc_remote_resource *resources = NULL;
-   977		u32 status = le32_to_cpu(reg->status);
-   978		struct pci_epf *epf = epf_test->epf;
-   979		struct device *dev = &epf->dev;
-   980		struct pci_epc *epc = epf->epc;
-   981		int num_resources;
-   982		int ret, i;
-   983	
-   984		num_resources = pci_epc_get_remote_resources(epc, epf->func_no,
-   985							     epf->vfunc_no, NULL, 0);
-   986		if (num_resources == -EOPNOTSUPP || num_resources == 0)
-   987			goto out_success;
-   988		if (num_resources < 0)
-   989			goto err;
-   990	
-   991		resources = kcalloc(num_resources, sizeof(*resources), GFP_KERNEL);
-   992		if (!resources)
-   993			goto err;
-   994	
-   995		ret = pci_epc_get_remote_resources(epc, epf->func_no, epf->vfunc_no,
-   996						   resources, num_resources);
-   997		if (ret < 0) {
-   998			dev_err(dev, "EPC remote resource query failed: %d\n", ret);
-   999			goto err_free;
-  1000		}
-  1001		if (ret > num_resources) {
-  1002			dev_err(dev, "EPC API returned %d resources (max %d)\n",
-  1003				ret, num_resources);
-  1004			goto err_free;
-  1005		}
-  1006	
-  1007		for (i = 0; i < ret; i++) {
-  1008			struct pci_epc_remote_resource *res = &resources[i];
-  1009	
-  1010			if (!res->phys_addr || !res->size) {
-  1011				dev_err(dev,
-  1012					"Invalid remote resource[%d] (type=%d phys=%pa size=%llu)\n",
-> 1013					i, res->type, &res->phys_addr, res->size);
-  1014				goto err_free;
-  1015			}
-  1016	
-  1017			/* Guard against address overflow */
-  1018			if (res->phys_addr + res->size < res->phys_addr) {
-  1019				dev_err(dev,
-  1020					"Remote resource[%d] overflow (phys=%pa size=%llu)\n",
-  1021					i, &res->phys_addr, res->size);
-  1022				goto err_free;
-  1023			}
-  1024	
-  1025			switch (res->type) {
-  1026			case PCI_EPC_RR_DMA_CTRL_MMIO:
-  1027				/* Generic checks above are sufficient. */
-  1028				break;
-  1029			case PCI_EPC_RR_DMA_CHAN_DESC:
-  1030				/*
-  1031				 * hw_chan_id and ep2rc are informational. No extra validation
-  1032				 * beyond the generic checks above is needed.
-  1033				 */
-  1034				break;
-  1035			default:
-  1036				dev_err(dev, "Unknown remote resource type %d\n", res->type);
-  1037				goto err_free;
-  1038			}
-  1039		}
-  1040	
-  1041	out_success:
-  1042		kfree(resources);
-  1043		status |= STATUS_EPC_API_SUCCESS;
-  1044		reg->status = cpu_to_le32(status);
-  1045		return;
-  1046	
-  1047	err_free:
-  1048		kfree(resources);
-  1049	err:
-  1050		status |= STATUS_EPC_API_FAIL;
-  1051		reg->status = cpu_to_le32(status);
-  1052	}
-  1053	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
