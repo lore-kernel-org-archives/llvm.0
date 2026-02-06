@@ -1,98 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAD836F439
-	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 10:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F7A393DE9
+	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 10:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770374062; cv=none; b=iWNGhMSYZkSsC09em67f+NwDxc+Q54E/BQXTBiyDRCrdZ+PBwffqXOQQNDijU7kwD57AJqPL3yDBz9MPRlE9w4eLNM3OTPIRrFI5PZRlXICQ8tUrmt8Z+lDsvnWoWj3+zH1NgZfy3w/3QKr2IlGxzsh+KMLT5nuna0lME9JOkpM=
+	t=1770375198; cv=none; b=DGy0/GaGR29ClMM27uvMD9UN1ZFu2sMrKgZ/UwlBpE2kUd7hccIEIUQDVUEXpiQWxytxNJIpZm6C+yMTBS7t23Onte8TWSVly3yZ0+hjQLs1AEDFPpQwxvRQ3EqlhFzwDcc3GTexVZTybTGP1Am4ptONAHzZtEgcJ6J455f2oA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770374062; c=relaxed/simple;
-	bh=pYahGYQ1UW6tbFtVQv/Wppkl22KOOt0QfChqJtgA1BU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AGUBjgLbrCbZGlq4d4xuYNIcmKkMRA/DsZO8T9Mq/Ob4NuD8KdnMbH5dtAD65vWnw1sowEXWTQcOLAzAaBLMLCN+f3r2M0Jgs9P62LYE0Vu27FsyZGc8D71VOuHAIr/HedKspG8Yka+A4iIorjJ/k3FDzpa+DC6fnv1Ul3Jq/Ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WAxyxgd+; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1770375198; c=relaxed/simple;
+	bh=SqyZHDigu6Kns9RuLEL1mq2MDgwybomAGxJ9GyHaxQ8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lYOthjxdZDyRuOnhOJF9Bf012bVX/N8bkGlyqv1eHbX7bqaB3QgWzN3jVK0kdCJy6halvj3tDY1nQcvtvj13BjHaP4DYU2jixUtOrSDM1+e4xC90YEO4g4yzc12yIeUUh0yVb90b6IxfMKmCQHSkAWReakkk2Rmrf2F85P0tBgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S7yZxLM1; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WAxyxgd+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770374063; x=1801910063;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pYahGYQ1UW6tbFtVQv/Wppkl22KOOt0QfChqJtgA1BU=;
-  b=WAxyxgd+JLDdbSX4SgH4gDzsSn+cYFrYinB7iR0UioXEppHudeAw+72L
-   E16ow7LrXSLgdXdM7owMYQR6N8tl88qFvbuZ27OHkNZNLvEc5fHi+Lj11
-   eFBBqyIoiJtY6V85ssn1epwlIdwqreepnNtVsTeI4svzwiQikxlzIMuyz
-   lTd8pIfHSa8nMh6eBS54J37JWtNCoiDzZh7e7wkBwU9YiEk+342pT7bs2
-   kXn+jd6LEfKAJiYFtpvPxRG2ZS4KOvjkM118EnwDbPkQ8kl/6MANix/Ee
-   eUHyppMTPkTpYlOXPnEmX/tMf7oRz1XynHi3LBoHDrAiOwMQOpfX72e+6
-   g==;
-X-CSE-ConnectionGUID: FSf6n4dtQbqV41JBU+vyNw==
-X-CSE-MsgGUID: LC/8Tj1dStWutRYAdJNL4g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="75199280"
-X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="75199280"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 02:34:22 -0800
-X-CSE-ConnectionGUID: OkQ02fUiRNuIqWq3reALhg==
-X-CSE-MsgGUID: o6kkH2+TT5KzQjY57oOsPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="233779723"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.202])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 02:34:16 -0800
-Date: Fri, 6 Feb 2026 12:34:14 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chuck Lever <cel@kernel.org>
-Cc: Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v3 0/3] sunrpc: Fix `make W=1` build issues
-Message-ID: <aYXDpqqM0qrEVzvy@smile.fi.intel.com>
-References: <20260204202437.2762161-1-andriy.shevchenko@linux.intel.com>
- <177024270291.126397.9981743455921781902.b4-ty@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S7yZxLM1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770375196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TBXvsriaK3eAJSZsrDyj9/rbH8NRGLFPNoqW9TJAA50=;
+	b=S7yZxLM1cacrauKEKpkOyB8Zqgrfutp692nP2CJVZulItlTVEnraPMXfRgt1mecm/X6tFE
+	6NgH9FHEuMpjrES9xQT64zLIgEVccKIBGaLZTUe9MsAkszxE64178fGFiX7aPGMxaHBE93
+	4gphZH8KMNZQd5/I4z+GOl7Cfev+xLo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-481-jkJAegTbMcaK569bzQ4zFQ-1; Fri,
+ 06 Feb 2026 05:53:15 -0500
+X-MC-Unique: jkJAegTbMcaK569bzQ4zFQ-1
+X-Mimecast-MFC-AGG-ID: jkJAegTbMcaK569bzQ4zFQ_1770375194
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6D72518002FB
+	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 10:53:14 +0000 (UTC)
+Received: from [172.20.128.30] (unknown [10.30.44.30])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0EEB418003F5;
+	Fri,  6 Feb 2026 10:53:13 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 10 of 137): Test report for master
+ (6.19.0-rc8, upstream-mainline, 8fdb05de)
+Date: Fri, 06 Feb 2026 10:53:13 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <177024270291.126397.9981743455921781902.b4-ty@oracle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <80418.126020605531500265@us-mta-481.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: zUxuJebVMSxJyGVhUwi4Qt7lde33e2DROQ7vZ0lK97k_1770375194
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 04, 2026 at 05:05:35PM -0500, Chuck Lever wrote:
+Hi, we tested your kernel and here are the results:
 
-> On Wed, 04 Feb 2026 21:21:48 +0100, Andy Shevchenko wrote:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[...]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-> Applied to nfsd-testing, thanks!
+Kernel information:
+    Commit message: Merge tag 'net-6.19-rc9' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-Thanks!
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2308586228
 
-FWIW, I have got a success report from LKP.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64]
 
--- 
-With Best Regards,
-Andy Shevchenko
 
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
