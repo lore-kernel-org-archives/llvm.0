@@ -1,105 +1,139 @@
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1031A3ACEF8
-	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 12:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7FF35E521
+	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 14:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770381729; cv=none; b=OtgMHI2Du/mxkEpUi4ZT+2ZzfgsmRJ149bHPa+awnm6WSQDO12rwx7iC6Vjb9c85rFPhCn4cYZAkju99g5Cvo8KgJ9UkH/3pUpdYwu2AZ8OfsjozKBfupm04heQ5b/9jVE9diQFlmI+eVGqDKXtaF+vxUScQ7YJ3P8HtX83NFos=
+	t=1770388336; cv=none; b=DoAEQQHVtZDn/2PdkluKVKnZjEwHhmX2WYvLjt9vzBmDEZuf+OtDJgLdtD31E8S47gliIZgN4iOU/kgSMme90i7DnJbIMX5QD9nmv03toi6dinWiMQ1HxiUJ/lpRmszrHILsCpnXQxHUD4okdbwhvu81s6B/h2EHCrX52tifjAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770381729; c=relaxed/simple;
-	bh=DBcnb3P8/rQFglLN+omDWj9BCzQTPUCW5QGfGdd5Gmg=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=fAliuj52AHIefzV2nO7RUV/XfnHGl5H0fmQQ3zoLnR5gMGdpeWpB5L5uT8k12u0JHFdlp3KRSIYZtGhWGXU+hbhuhkjS+5rdPLIwV9Iy/alzbh7I95nMMrtbXo9lSsGHBdejEclaS0cg+wyRBQX18qHvzsgY/9QTJYuXSQx6S8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from [192.168.1.209] (unknown [27.19.236.155])
-	by APP-05 (Coremail) with SMTP id zQCowAAXqg2R4YVpPGybBw--.288S2;
-	Fri, 06 Feb 2026 20:41:54 +0800 (CST)
-Message-ID: <c1e37734-271f-440d-a391-91e958aa89ad@isrc.iscas.ac.cn>
-Date: Fri, 6 Feb 2026 20:41:53 +0800
+	s=arc-20240116; t=1770388336; c=relaxed/simple;
+	bh=bqe5UDvsxsRuJZ5LpITuNgGz3vxpAEz0uYevhdFgSm8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=bldbGfC10CJ7bsssbM5gqpujwjcdriGhTN9O453DMvK1yE5z+tYa+t/uoLa73AqVW2yR3ufoCqNtsmWBZjaeTTvYu96Otj5d1x85advgtf6rrk57knWntxA+r5r5xqfnRqBU4yW+lv3PKFj7hGAIfkV7Ux5pptLUE6xCqhcQbvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DW2qKfJ4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DW2qKfJ4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770388335;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EnVbACn2ZBLWNY6ddoKP5yGgUqEBINLy4ocQ19jb7hk=;
+	b=DW2qKfJ4s8MzW4iMrvSDmxjUKS/XC64fg+plFeiRIl1TyPvwr4ehp/xPxSvG8GRy9McwET
+	YCFn/AwxK/z6QDZJ9UkNZ69duRvTbF5PmreWpJBooXUGyA3fVTzcXpBia+4PRs/DfPY9Aa
+	U7FiftjP6CdPlyLz9JePOd1yFXmlvSs=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-481-T_lvGKh-PKe8eHHm_ZTsqg-1; Fri,
+ 06 Feb 2026 09:32:14 -0500
+X-MC-Unique: T_lvGKh-PKe8eHHm_ZTsqg-1
+X-Mimecast-MFC-AGG-ID: T_lvGKh-PKe8eHHm_ZTsqg_1770388332
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 103A41955F79
+	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 14:32:12 +0000 (UTC)
+Received: from [172.20.128.30] (unknown [10.30.44.30])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AC6E33000709;
+	Fri,  6 Feb 2026 14:32:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 7 of 137): Test report for master
+ (6.19.0-rc8, upstream-mainline, 06bc4e26)
+Date: Fri, 06 Feb 2026 14:32:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: xinrui.riscv@isrc.iscas.ac.cn, Nicolas Schier <nsc@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor@kernel.org>,
- Mingcong Bai <jeffbai@aosc.io>, Han Gao <rabenda.cn@gmail.com>,
- Vivian Wang <wangruikang@iscas.ac.cn>, Jason Montleon <jmontleo@redhat.com>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] rust: generate a fatal error if BINDGEN_TARGET is
- undefined
-To: Nathan Chancellor <nathan@kernel.org>
-References: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
- <20251230-gcc-rust-v5-v6-2-2ac86ba728c8@isrc.iscas.ac.cn>
- <20260129224029.GB844102@ax162>
-Content-Language: en-US
-From: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
-In-Reply-To: <20260129224029.GB844102@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zQCowAAXqg2R4YVpPGybBw--.288S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw43Jw1UZF4UtF17Kw4fGrg_yoW3uFc_Xw
-	n2qw4qkF47W39Ik3W3Kr4fJrZrtFW7uryrXryxtrZrW348KFZ3Wa15Gr98t3WSg3yrKFsx
-	Jrs0vr40kw42kjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbVkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
-	04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-	b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-	nxnUUI43ZEXa7sRiuWl3UUUUU==
-X-CM-SenderInfo: x0lq233loux21fy6x21ufox2xfdvhtffof0/
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <68095.126020609321400265@us-mta-481.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 50z0Lbf9vWMNNSojq652wr0L43XbcLSU0I7IiLMgvQw_1770388332
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/30/26 06:40, Nathan Chancellor wrote:
+Hi, we tested your kernel and here are the results:
 
-> This might read a little better if it were
-> 
->    scripts/Makefile.rust is included ..., so we perform ...
-> 
-> instead of
-> 
->    Because ..., we perform ...
-> 
-> or at the very least reversing the phrases
-> 
->    We perform ... because ...
-> 
-> But that could just be personal preference.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-I think you're right. Since I'm not a native English speaker, some of my 
-phrasing might not sound quite natural.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-However, considering this isn't really a big deal, I'd prefer to skip 
-submitting a new patch to fix it. Unlike GitHub, I'm concerned that a 
-new patch might make too much noise on the mailing list and interrupt 
-the thread.
+Kernel information:
+    Commit message: Merge tag 'block-6.19-20260205' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/axboe/linux
 
-Or if someone could help modify it when merging this patch, that would 
-be better! I've read the docs, and the kernel tree seems to allow this 
-practice.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2309132307
 
-Best regards,
-Asuna
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/command [x86_64]
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
