@@ -1,99 +1,105 @@
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836643A7F7C
-	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 12:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1031A3ACEF8
+	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 12:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770380664; cv=none; b=tHn3jo8dMGJdLBF44g73gVDBaPE/FN0YKdtMxcghHA7l4Q8DuHdYwdtm5LgSngXHy9/PGMaZogV/1nzofShlgLsuTGr5dghlP+cnSbWzzhDP2+LM760BY1CzWBI5g6txaOwgdf4HTcsECqKXiWy0NvpoIHxAt79aTI1jrmOAq00=
+	t=1770381729; cv=none; b=OtgMHI2Du/mxkEpUi4ZT+2ZzfgsmRJ149bHPa+awnm6WSQDO12rwx7iC6Vjb9c85rFPhCn4cYZAkju99g5Cvo8KgJ9UkH/3pUpdYwu2AZ8OfsjozKBfupm04heQ5b/9jVE9diQFlmI+eVGqDKXtaF+vxUScQ7YJ3P8HtX83NFos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770380664; c=relaxed/simple;
-	bh=xihRajkhxSN0LzS6oaE2l+KPnSf/jZpWp5DiMy2CGUs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=f16U2xer+mh0lTTCSgwUlWZ4z63hhWA/sbvs//998y/Ab1R2mremnEWBrryl+OE8/xaGe+OAYDuvti/JDLK0qQNHCgVDeUsLO33dSp+5lB3V8Ufy+sOeO/h9XM1bs04Py2l17QzKY8780G2KkVCa4TtGPL28HuaTH4KIgFVz8CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=NmHEMIco; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="NmHEMIco"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 8D8B8240029
-	for <llvm@lists.linux.dev>; Fri,  6 Feb 2026 13:24:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net; s=2017;
-	t=1770380656; bh=U+Pf4h9M3YEQg0wRE4TDVLhds2dAi1ljJ/3l0LMHbzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 From;
-	b=NmHEMIcoerHjzuD4tJMyvxsXu9zwDiXUTVm/LEGhC8+I9Ssm8IEcX3p/fpIQqzDhI
-	 +hGqZvk61EpnBPX45I4KE0MQAENUK3bA1RmGtJLEtlekWDwWOqyERmJlHDFIaRY2DS
-	 Lccl46s+Tc1RjhTQayH+mTu39OlRxE2bdHlqE/Gjjjm/6J3o8xEjxZzqD+nhGBxGdh
-	 D9MBSNchx+HlNaM4jNlh3H3dQRolnzWG9e/IjZypcEAJK911ajBH/QSF0EJKENjDVh
-	 5EBI3kinb27Nmh9rgH13fXL2Q539V0/vxhKn7V/cfMwYj65vHOUctzBW7YVjY6u2Dk
-	 mPbITL76tJr7g==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4f6tYh12xGz9rxF;
-	Fri,  6 Feb 2026 13:24:08 +0100 (CET)
-From: Charalampos Mitrodimas <charmitro@posteo.net>
-To: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
-Cc: Nathan Chancellor <nathan@kernel.org>,  Nicolas Schier <nsc@kernel.org>,
-  Miguel Ojeda <ojeda@kernel.org>,  Boqun Feng <boqun.feng@gmail.com>,
-  Gary Guo <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,
-  Benno Lossin <lossin@kernel.org>,  Andreas Hindborg
- <a.hindborg@kernel.org>,  Alice Ryhl <aliceryhl@google.com>,  Trevor Gross
- <tmgross@umich.edu>,  Danilo Krummrich <dakr@kernel.org>,  Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>,  Bill Wendling
- <morbo@google.com>,  Justin Stitt <justinstitt@google.com>,  Paul Walmsley
- <pjw@kernel.org>,  Palmer Dabbelt <palmer@dabbelt.com>,  Albert Ou
- <aou@eecs.berkeley.edu>,  Alexandre Ghiti <alex@ghiti.fr>,  Jonathan
- Corbet <corbet@lwn.net>,  Conor Dooley <conor@kernel.org>,  Mingcong Bai
- <jeffbai@aosc.io>,  Han Gao <rabenda.cn@gmail.com>,  Vivian Wang
- <wangruikang@iscas.ac.cn>,  Jason Montleon <jmontleo@redhat.com>,
-  linux-kbuild@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  rust-for-linux@vger.kernel.org,  llvm@lists.linux.dev,
-  linux-riscv@lists.infradead.org,  linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] RISC-V: handle extension configs for bindgen,
- re-enable gcc + rust builds
-In-Reply-To: <9323714a-b15f-4616-a525-780accf33b52@isrc.iscas.ac.cn>
-References: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
-	<20251230-gcc-rust-v5-v6-4-2ac86ba728c8@isrc.iscas.ac.cn>
-	<87v7gk8r5x.fsf@posteo.net>
-	<9323714a-b15f-4616-a525-780accf33b52@isrc.iscas.ac.cn>
-Date: Fri, 06 Feb 2026 12:24:15 +0000
-Message-ID: <874inucb6g.fsf@posteo.net>
+	s=arc-20240116; t=1770381729; c=relaxed/simple;
+	bh=DBcnb3P8/rQFglLN+omDWj9BCzQTPUCW5QGfGdd5Gmg=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=fAliuj52AHIefzV2nO7RUV/XfnHGl5H0fmQQ3zoLnR5gMGdpeWpB5L5uT8k12u0JHFdlp3KRSIYZtGhWGXU+hbhuhkjS+5rdPLIwV9Iy/alzbh7I95nMMrtbXo9lSsGHBdejEclaS0cg+wyRBQX18qHvzsgY/9QTJYuXSQx6S8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from [192.168.1.209] (unknown [27.19.236.155])
+	by APP-05 (Coremail) with SMTP id zQCowAAXqg2R4YVpPGybBw--.288S2;
+	Fri, 06 Feb 2026 20:41:54 +0800 (CST)
+Message-ID: <c1e37734-271f-440d-a391-91e958aa89ad@isrc.iscas.ac.cn>
+Date: Fri, 6 Feb 2026 20:41:53 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Cc: xinrui.riscv@isrc.iscas.ac.cn, Nicolas Schier <nsc@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor@kernel.org>,
+ Mingcong Bai <jeffbai@aosc.io>, Han Gao <rabenda.cn@gmail.com>,
+ Vivian Wang <wangruikang@iscas.ac.cn>, Jason Montleon <jmontleo@redhat.com>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 2/4] rust: generate a fatal error if BINDGEN_TARGET is
+ undefined
+To: Nathan Chancellor <nathan@kernel.org>
+References: <20251230-gcc-rust-v5-v6-0-2ac86ba728c8@isrc.iscas.ac.cn>
+ <20251230-gcc-rust-v5-v6-2-2ac86ba728c8@isrc.iscas.ac.cn>
+ <20260129224029.GB844102@ax162>
+Content-Language: en-US
+From: Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn>
+In-Reply-To: <20260129224029.GB844102@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zQCowAAXqg2R4YVpPGybBw--.288S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw43Jw1UZF4UtF17Kw4fGrg_yoW3uFc_Xw
+	n2qw4qkF47W39Ik3W3Kr4fJrZrtFW7uryrXryxtrZrW348KFZ3Wa15Gr98t3WSg3yrKFsx
+	Jrs0vr40kw42kjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbVkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
+	04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+	1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+	b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+	vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+	nxnUUI43ZEXa7sRiuWl3UUUUU==
+X-CM-SenderInfo: x0lq233loux21fy6x21ufox2xfdvhtffof0/
 
-Asuna Yang <xinrui.riscv@isrc.iscas.ac.cn> writes:
+On 1/30/26 06:40, Nathan Chancellor wrote:
 
-> On 1/29/26 21:49, Charalampos Mitrodimas wrote:
->
->> I'm under the impression that the `!RUST ||` guard here doesn't
->> actually prevent the `$(bindgen-backend-option,...)` call from being
->> executed. `$(...)` shell expansions should happen during the textual
->> substitution phase, before symbol dependency evaluation occurs, check
->> documentation at kconfig-macro-language.rst lines 228-229.
->
-> I suppose this is unavoidable if we decide to probe options rather
-> than rely on version numbers.
->
-> Similar issue also occurs in `cc-option`, for example:
->
-> 	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64imv)
-> 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32imv)
->
-> For 64-bit builds, `-march=rv32imv` will still be probed; for 32-bit
-> builds, `-march=rv64imv` will still be probed.
->
-> I agree with Nathan that this trivial waste is worth it for the sake
-> of simplicity.
+> This might read a little better if it were
+> 
+>    scripts/Makefile.rust is included ..., so we perform ...
+> 
+> instead of
+> 
+>    Because ..., we perform ...
+> 
+> or at the very least reversing the phrases
+> 
+>    We perform ... because ...
+> 
+> But that could just be personal preference.
 
-Understood. Seems not worth it at all.
+I think you're right. Since I'm not a native English speaker, some of my 
+phrasing might not sound quite natural.
 
->
-> Best regards,
-> Asuna
+However, considering this isn't really a big deal, I'd prefer to skip 
+submitting a new patch to fix it. Unlike GitHub, I'm concerned that a 
+new patch might make too much noise on the mailing list and interrupt 
+the thread.
+
+Or if someone could help modify it when merging this patch, that would 
+be better! I've read the docs, and the kernel tree seems to allow this 
+practice.
+
+Best regards,
+Asuna
+
