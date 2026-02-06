@@ -1,61 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648F625A655;
-	Fri,  6 Feb 2026 20:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1CE3101AA;
+	Fri,  6 Feb 2026 21:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770411320; cv=none; b=EAKwBc8eWc+OiFZ4+5+0q7//y6MWnfsQOu1JD20KaNlJVLKEchXduvdHgxsNvLya4uyUTzuFcLkWR/dgxI89asQHWsDYZtUTaPDDK+VYW7hAeLVGeLvqkh1i5276V+cd2QRN1U3eROYkEcypW7ZtEcqLyyU+ElrnUHAsVSigfz8=
+	t=1770413902; cv=none; b=oYpRB9NtF2bJY4dvwzHlYgtYnMnMP7YG+RcxTusrsGe07tiuHX8keez4X4ZT+vJ4ZxRYcCBz9uir0nZiVoYe7z7OFSmRdDJ2bs+CYk78v57L9KK9bZQpJsiVA9Ky1PErpqGN/p+gTn0NVVIHLSCocKPXy0m4USpt8nKsm+xkD0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770411320; c=relaxed/simple;
-	bh=ziDT9QCEHaO7kXhspDjk7nQ8y1IOr/pOlBit3kY6WEY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=AU8JH1aBNmAMUOpxIUytmo1Cy9hF0GzB98m8Gs+i9Y3r3y0Wf1DOqRTETPYpKWGEZdLIWVBNUJvdfDTsMZOero4DFJVU+LAoE7/FwAvTxqk5GjUr6juUzgLrlV1QcZQJIYIInPwFGucKaMGtXUL5f02dYirEfdl7IqKEfZbzm/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T/gH0gIY; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1770413902; c=relaxed/simple;
+	bh=Mow5AyywwMqa9njwaQfYLujpJaXuqgUJ6z1QFmPPrnM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=EOYaCjQtY0icCauF2+YXWPyGVC0g3o03PWdqsxpCsw8+Gbab1MqYcmtJRXAKnSMSCnorVAo5nGzsLntvyJfoewIOsicFkXL5EAjWwytAZxUXMFX+b4d0D4MmUU1s5Gb9qHAbhQSA04ih3SK4+AH6MJMokXEfbN9fWsTGN4ZMZig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QyNwumIz; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T/gH0gIY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QyNwumIz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770411319; x=1801947319;
+  t=1770413902; x=1801949902;
   h=date:from:to:cc:subject:message-id;
-  bh=ziDT9QCEHaO7kXhspDjk7nQ8y1IOr/pOlBit3kY6WEY=;
-  b=T/gH0gIYL2N4PMTFktYS+pks36nAd7nA8L+RJCM4X4C8cTm6RmrkfY/v
-   RSRUDi+mL+W8t+Lg9IBeChQ4M6JUuOhT43Zybs8YkRw2TAMlf+rVw/NRJ
-   KxOpCo0h25Yw+phSK1fiW1HDtwJJ/g42CaLKCEzG2rgrBzt3FGR7eqv2/
-   I8TCXdrXJ4cmpRxsdjm9lZfIs/jY9HjB7BniKPuT6PO7VhIwzdiARW7tA
-   OQ8B/wSXNznwOIdSeWyuzsneLDMKTT0xCosUNr+Vlb3osgYXU3pgVy70X
-   K/RwzQlNtmQxXf5awFN/Ut5dX1+p/ufFrKk8uzXGEgeeN1Rl7/4HEy02i
-   w==;
-X-CSE-ConnectionGUID: mz9ZUNquRHu+iAnkUR0sDA==
-X-CSE-MsgGUID: P71jkmMqTgytixQLOLCKVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="71515668"
+  bh=Mow5AyywwMqa9njwaQfYLujpJaXuqgUJ6z1QFmPPrnM=;
+  b=QyNwumIzOl1vLXnMefLwI7tCG84Ae/F2bts0JEHbrEt2yXf8oA7c1Jmg
+   t1+obc2JuEKJfhjTb0XgU3osr2a0b6e45n3pxGRnUb5pF8kTk/5uMTBXy
+   llNFqjhXxAaEHUDUT/sqK+1U6dBrhDbpIIMDE+vA6oqDFIQ7IE8Huz6FH
+   hvE641G7YsDTbatII29YAWxluqzw2AvGJH/zkjiVk89qezwXtOtdEgPdL
+   BKpo52lv9ddc/SpOY5Lmyic+muhrf7OyWzEYbXXrZMBkyKKZogfMwoh12
+   xJZibw2qSnha8uTmSjW7sLdWU62kXtZiabJ8aAw8p4fAPWarlkld0e9g3
+   A==;
+X-CSE-ConnectionGUID: JgWo/YEySxeqgeA3evYxAg==
+X-CSE-MsgGUID: pgnY7rYJQWKpvLRo+AYAbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="83070741"
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="71515668"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 12:55:19 -0800
-X-CSE-ConnectionGUID: tPcgdwg2SMSeaBEzJXS8/w==
-X-CSE-MsgGUID: YUW552YkQQu+7J56bpvmvQ==
+   d="scan'208";a="83070741"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 13:38:20 -0800
+X-CSE-ConnectionGUID: eItm6pkeQ2K0ZqFmtQ0uPA==
+X-CSE-MsgGUID: denRIxe1SIqiBy4KOqTDYg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="215945782"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 06 Feb 2026 12:55:17 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 06 Feb 2026 13:38:18 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1voSrC-00000000l8c-3Jjx;
-	Fri, 06 Feb 2026 20:55:14 +0000
-Date: Sat, 07 Feb 2026 04:54:54 +0800
+	id 1voTWq-00000000lBU-2Dtm;
+	Fri, 06 Feb 2026 21:38:16 +0000
+Date: Sat, 07 Feb 2026 05:37:31 +0800
 From: kernel test robot <lkp@intel.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
  linux-media@vger.kernel.org
-Subject: [sailus-media-tree:metadata 51/88]
- drivers/media/i2c/ov2740.c:1301:19: error: incompatible function pointer
- types initializing 'int (*)(struct v4l2_subdev *, const struct
- v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct
- v4l2_subdev_selection *)' with an expression of type 'int...
-Message-ID: <202602070437.4jphZAGt-lkp@intel.com>
+Subject: [sailus-media-tree:metadata-pre 13/13]
+ drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting
+ types for 'vsp1_subdev_get_pad_format'
+Message-ID: <202602070533.3Ybd45b6-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,40 +59,66 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   git://linuxtv.org/sailus/media_tree.git metadata
-head:   17d48829c902c064710e9518b453bd252674ae5e
-commit: bd8706aed5a5e6b8d7c0fcc9dbbdc5896b6684a4 [51/88] media: ov2740: Add support for G_SELECTION IOCTL
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260207/202602070437.4jphZAGt-lkp@intel.com/config)
+tree:   git://linuxtv.org/sailus/media_tree.git metadata-pre
+head:   1b58854744d17413b2855b20178e63a1c82d58f5
+commit: 1b58854744d17413b2855b20178e63a1c82d58f5 [13/13] media: v4l: Add struct v4l2_subdev_client_info argument to pad ops
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260207/202602070533.3Ybd45b6-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070437.4jphZAGt-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070533.3Ybd45b6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602070437.4jphZAGt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602070533.3Ybd45b6-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/i2c/ov2740.c:1301:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
-    1301 |         .get_selection = ov2740_get_selection,
-         |                          ^~~~~~~~~~~~~~~~~~~~
+>> drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting types for 'vsp1_subdev_get_pad_format'
+     161 | int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
+         |     ^
+   drivers/media/platform/renesas/vsp1/vsp1_entity.h:178:5: note: previous declaration is here
+     178 | int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
+         |     ^
    1 error generated.
 
 
-vim +1301 drivers/media/i2c/ov2740.c
+vim +/vsp1_subdev_get_pad_format +161 drivers/media/platform/renesas/vsp1/vsp1_entity.c
 
-  1297	
-  1298	static const struct v4l2_subdev_pad_ops ov2740_pad_ops = {
-  1299		.get_fmt = v4l2_subdev_get_fmt,
-  1300		.set_fmt = ov2740_set_format,
-> 1301		.get_selection = ov2740_get_selection,
-  1302		.enum_mbus_code = ov2740_enum_mbus_code,
-  1303		.enum_frame_size = ov2740_enum_frame_size,
-  1304		.enable_streams = ov2740_enable_streams,
-  1305		.disable_streams = ov2740_disable_streams,
-  1306		.get_frame_desc = ov2740_get_frame_desc,
-  1307	};
-  1308	
+e790c3cb8d904c drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2015-11-15  151  
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  152  /*
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  153   * vsp1_subdev_get_pad_format - Subdev pad get_fmt handler
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  154   * @subdev: V4L2 subdevice
+30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  155   * @sd_state: V4L2 subdev state
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  156   * @fmt: V4L2 subdev format
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  157   *
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  158   * This function implements the subdev get_fmt pad operation. It can be used as
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  159   * a direct drop-in for the operation handler.
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  160   */
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24 @161  int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
+1b58854744d174 drivers/media/platform/renesas/vsp1/vsp1_entity.c Sakari Ailus     2026-01-30  162  			       const struct v4l2_subdev_client_info *ci,
+0d346d2a6f54f0 drivers/media/platform/vsp1/vsp1_entity.c         Tomi Valkeinen   2021-06-10  163  			       struct v4l2_subdev_state *sd_state,
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  164  			       struct v4l2_subdev_format *fmt)
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  165  {
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  166  	struct vsp1_entity *entity = to_vsp1_entity(subdev);
+30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  167  	struct v4l2_subdev_state *state;
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  168  
+30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  169  	state = vsp1_entity_get_state(entity, sd_state, fmt->which);
+30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  170  	if (!state)
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  171  		return -EINVAL;
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  172  
+34e77ed84b274d drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-06-26  173  	mutex_lock(&entity->lock);
+0aaf7db0872677 drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-12  174  	fmt->format = *v4l2_subdev_state_get_format(state, fmt->pad);
+34e77ed84b274d drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-06-26  175  	mutex_unlock(&entity->lock);
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  176  
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  177  	return 0;
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  178  }
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  179  
+
+:::::: The code at line 161 was first introduced by commit
+:::::: 3f557220cc29d1961ef9efa2a8db04c7c5f6e6d4 [media] v4l: vsp1: Factorize get pad format code
+
+:::::: TO: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
 
 -- 
 0-DAY CI Kernel Test Service
