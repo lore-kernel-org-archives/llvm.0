@@ -1,124 +1,218 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1CE3101AA;
-	Fri,  6 Feb 2026 21:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF30726D4CD;
+	Fri,  6 Feb 2026 21:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770413902; cv=none; b=oYpRB9NtF2bJY4dvwzHlYgtYnMnMP7YG+RcxTusrsGe07tiuHX8keez4X4ZT+vJ4ZxRYcCBz9uir0nZiVoYe7z7OFSmRdDJ2bs+CYk78v57L9KK9bZQpJsiVA9Ky1PErpqGN/p+gTn0NVVIHLSCocKPXy0m4USpt8nKsm+xkD0U=
+	t=1770415163; cv=none; b=tA4j+93bO6GpZyKrBElJ8S0Kzay0mGoyCD/VWbjzSTr+CVAmNvR4EYInz9xQTtHVHVKGcHF5/+Ic0sf981iCG36jvzeHDDTvgmnKSAaj/KXM1BIAXVhL1hQER2BXa/iEm5GffTcRvdc2BzALVVhe1GgJHZSY9ccIy/NXQxyTkgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770413902; c=relaxed/simple;
-	bh=Mow5AyywwMqa9njwaQfYLujpJaXuqgUJ6z1QFmPPrnM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EOYaCjQtY0icCauF2+YXWPyGVC0g3o03PWdqsxpCsw8+Gbab1MqYcmtJRXAKnSMSCnorVAo5nGzsLntvyJfoewIOsicFkXL5EAjWwytAZxUXMFX+b4d0D4MmUU1s5Gb9qHAbhQSA04ih3SK4+AH6MJMokXEfbN9fWsTGN4ZMZig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QyNwumIz; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1770415163; c=relaxed/simple;
+	bh=pyQ6zRJBMkqV7zsMhN8TlMrSiWM9hl6CFt/g/wO4Jjc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OXXj3DaYSb/bZEAb7ewZbGxzPjaJlSPcjQNF/h1CVOraKvHaxy/dk4aiAEmOnbmNNXHYRuNobqzNBnpnna4bAlfJXL6CpOha6UousXoqK+wbbOIgEDju3oUNzltmCX3jiisSZqAGYanreGOYhy+7VUe+OQa7oVB1kcvp7NLn0Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JC+hB3lW; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QyNwumIz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JC+hB3lW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770413902; x=1801949902;
-  h=date:from:to:cc:subject:message-id;
-  bh=Mow5AyywwMqa9njwaQfYLujpJaXuqgUJ6z1QFmPPrnM=;
-  b=QyNwumIzOl1vLXnMefLwI7tCG84Ae/F2bts0JEHbrEt2yXf8oA7c1Jmg
-   t1+obc2JuEKJfhjTb0XgU3osr2a0b6e45n3pxGRnUb5pF8kTk/5uMTBXy
-   llNFqjhXxAaEHUDUT/sqK+1U6dBrhDbpIIMDE+vA6oqDFIQ7IE8Huz6FH
-   hvE641G7YsDTbatII29YAWxluqzw2AvGJH/zkjiVk89qezwXtOtdEgPdL
-   BKpo52lv9ddc/SpOY5Lmyic+muhrf7OyWzEYbXXrZMBkyKKZogfMwoh12
-   xJZibw2qSnha8uTmSjW7sLdWU62kXtZiabJ8aAw8p4fAPWarlkld0e9g3
-   A==;
-X-CSE-ConnectionGUID: JgWo/YEySxeqgeA3evYxAg==
-X-CSE-MsgGUID: pgnY7rYJQWKpvLRo+AYAbQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="83070741"
+  t=1770415163; x=1801951163;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pyQ6zRJBMkqV7zsMhN8TlMrSiWM9hl6CFt/g/wO4Jjc=;
+  b=JC+hB3lWCgpDQMd816cxHmNn0h82q5eGLHeXBWRdYafJFsJA8FqBIN5z
+   dOIy838Zl3Cjql9hmhF5XJfRsYXiym8U9mJ16/hrpZdYOsCo3kvAprpSo
+   Gj0QEr3/SJhD7XoUHwDbjcEKhZQNy9YiZQNcSvIu4zwO5ECJCcu89XMDK
+   96qFxRvG58s0cB9e1wpyz9TnQLBm6sERs1fcpqVxBOMqn47KSYf0Feulc
+   cRM0dX+3HyRnZFAI+oxqenSPqeRAY6IRs1rk+QeGXse/9wzHsruUPB/LB
+   NZICM1v4hcAEVNE0nbmjdUIByU1jQVmMjFg3ecYrMwdJcGJUKkmesKnVW
+   Q==;
+X-CSE-ConnectionGUID: iXjIt38yR/u3fi69fxyVPQ==
+X-CSE-MsgGUID: uZ5fZNxMTaapR6ORegckMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75248610"
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="83070741"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 13:38:20 -0800
-X-CSE-ConnectionGUID: eItm6pkeQ2K0ZqFmtQ0uPA==
-X-CSE-MsgGUID: denRIxe1SIqiBy4KOqTDYg==
+   d="scan'208";a="75248610"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 13:59:22 -0800
+X-CSE-ConnectionGUID: 28giitybSGm56aigh7emJg==
+X-CSE-MsgGUID: xTPaPPxuT7CXzYhBTOqbBA==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
+   d="scan'208";a="210841562"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Feb 2026 13:38:18 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 06 Feb 2026 13:59:19 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1voTWq-00000000lBU-2Dtm;
-	Fri, 06 Feb 2026 21:38:16 +0000
-Date: Sat, 07 Feb 2026 05:37:31 +0800
+	id 1voTrA-00000000lCG-4ASs;
+	Fri, 06 Feb 2026 21:59:16 +0000
+Date: Sat, 7 Feb 2026 05:58:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Matt Coster <matt.coster@imgtec.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-media@vger.kernel.org
-Subject: [sailus-media-tree:metadata-pre 13/13]
- drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting
- types for 'vsp1_subdev_get_pad_format'
-Message-ID: <202602070533.3Ybd45b6-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Frank Binns <frank.binns@imgtec.com>,
+	Brajesh Gupta <brajesh.gupta@imgtec.com>,
+	Alessio Belle <alessio.belle@imgtec.com>,
+	Alexandru Dadu <alexandru.dadu@imgtec.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Matt Coster <matt.coster@imgtec.com>
+Subject: Re: [PATCH 1/2] drm/imagination: Define packed BVNCs in the uapi
+Message-ID: <202602070500.zo0DrH6U-lkp@intel.com>
+References: <20260206-bvnc-cleanup-v1-1-f3c818541fbe@imgtec.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260206-bvnc-cleanup-v1-1-f3c818541fbe@imgtec.com>
 
-tree:   git://linuxtv.org/sailus/media_tree.git metadata-pre
-head:   1b58854744d17413b2855b20178e63a1c82d58f5
-commit: 1b58854744d17413b2855b20178e63a1c82d58f5 [13/13] media: v4l: Add struct v4l2_subdev_client_info argument to pad ops
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260207/202602070533.3Ybd45b6-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070533.3Ybd45b6-lkp@intel.com/reproduce)
+Hi Matt,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 55473b60178060a4fdb4631bd0c91879cc7d18d8]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Coster/drm-imagination-Define-packed-BVNCs-in-the-uapi/20260206-175844
+base:   55473b60178060a4fdb4631bd0c91879cc7d18d8
+patch link:    https://lore.kernel.org/r/20260206-bvnc-cleanup-v1-1-f3c818541fbe%40imgtec.com
+patch subject: [PATCH 1/2] drm/imagination: Define packed BVNCs in the uapi
+config: riscv-randconfig-001-20260206 (https://download.01.org/0day-ci/archive/20260207/202602070500.zo0DrH6U-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070500.zo0DrH6U-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602070533.3Ybd45b6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602070500.zo0DrH6U-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting types for 'vsp1_subdev_get_pad_format'
-     161 | int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
-         |     ^
-   drivers/media/platform/renesas/vsp1/vsp1_entity.h:178:5: note: previous declaration is here
-     178 | int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
-         |     ^
-   1 error generated.
+>> drivers/gpu/drm/imagination/pvr_device.c:550:7: error: expression is not an integer constant expression
+     550 |         case PVR_PACKED_BVNC(33, 15, 11, 3):
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/imagination/pvr_device.h:490:2: note: expanded from macro 'PVR_PACKED_BVNC'
+     490 |         (FIELD_PREP(DRM_PVR_BVNC_B, b) | \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     491 |          FIELD_PREP(DRM_PVR_BVNC_V, v) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     492 |          FIELD_PREP(DRM_PVR_BVNC_N, n) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |          FIELD_PREP(DRM_PVR_BVNC_C, c))
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/imagination/pvr_device.c:550:7: note: this use of statement expressions is not supported in a constant expression
+   drivers/gpu/drm/imagination/pvr_device.h:490:3: note: expanded from macro 'PVR_PACKED_BVNC'
+     490 |         (FIELD_PREP(DRM_PVR_BVNC_B, b) | \
+         |          ^
+   include/linux/bitfield.h:137:3: note: expanded from macro 'FIELD_PREP'
+     137 |                 __FIELD_PREP(_mask, _val, "FIELD_PREP: ");              \
+         |                 ^
+   include/linux/bitfield.h:90:3: note: expanded from macro '__FIELD_PREP'
+      90 |                 __BF_FIELD_CHECK_MASK(mask, val, pfx);                  \
+         |                 ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:631:2: note: expanded from macro 'compiletime_assert'
+     631 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:619:2: note: expanded from macro '_compiletime_assert'
+     619 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:603:2: note: expanded from macro '__compiletime_assert'
+     603 |         do {                                                            \
+         |         ^
+   drivers/gpu/drm/imagination/pvr_device.c:551:7: error: expression is not an integer constant expression
+     551 |         case PVR_PACKED_BVNC(36, 53, 104, 796):
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/imagination/pvr_device.h:490:2: note: expanded from macro 'PVR_PACKED_BVNC'
+     490 |         (FIELD_PREP(DRM_PVR_BVNC_B, b) | \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     491 |          FIELD_PREP(DRM_PVR_BVNC_V, v) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     492 |          FIELD_PREP(DRM_PVR_BVNC_N, n) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |          FIELD_PREP(DRM_PVR_BVNC_C, c))
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/imagination/pvr_device.c:551:7: note: this use of statement expressions is not supported in a constant expression
+   drivers/gpu/drm/imagination/pvr_device.h:490:3: note: expanded from macro 'PVR_PACKED_BVNC'
+     490 |         (FIELD_PREP(DRM_PVR_BVNC_B, b) | \
+         |          ^
+   include/linux/bitfield.h:137:3: note: expanded from macro 'FIELD_PREP'
+     137 |                 __FIELD_PREP(_mask, _val, "FIELD_PREP: ");              \
+         |                 ^
+   include/linux/bitfield.h:90:3: note: expanded from macro '__FIELD_PREP'
+      90 |                 __BF_FIELD_CHECK_MASK(mask, val, pfx);                  \
+         |                 ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:631:2: note: expanded from macro 'compiletime_assert'
+     631 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:619:2: note: expanded from macro '_compiletime_assert'
+     619 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:603:2: note: expanded from macro '__compiletime_assert'
+     603 |         do {                                                            \
+         |         ^
+   drivers/gpu/drm/imagination/pvr_device.c:554:7: error: expression is not an integer constant expression
+     554 |         case PVR_PACKED_BVNC(36, 52, 104, 182):
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/imagination/pvr_device.h:490:2: note: expanded from macro 'PVR_PACKED_BVNC'
+     490 |         (FIELD_PREP(DRM_PVR_BVNC_B, b) | \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     491 |          FIELD_PREP(DRM_PVR_BVNC_V, v) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     492 |          FIELD_PREP(DRM_PVR_BVNC_N, n) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |          FIELD_PREP(DRM_PVR_BVNC_C, c))
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/imagination/pvr_device.c:554:7: note: this use of statement expressions is not supported in a constant expression
+   drivers/gpu/drm/imagination/pvr_device.h:490:3: note: expanded from macro 'PVR_PACKED_BVNC'
+     490 |         (FIELD_PREP(DRM_PVR_BVNC_B, b) | \
+         |          ^
+   include/linux/bitfield.h:137:3: note: expanded from macro 'FIELD_PREP'
+     137 |                 __FIELD_PREP(_mask, _val, "FIELD_PREP: ");              \
+         |                 ^
+   include/linux/bitfield.h:90:3: note: expanded from macro '__FIELD_PREP'
+      90 |                 __BF_FIELD_CHECK_MASK(mask, val, pfx);                  \
+         |                 ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:631:2: note: expanded from macro 'compiletime_assert'
+     631 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:619:2: note: expanded from macro '_compiletime_assert'
+     619 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:603:2: note: expanded from macro '__compiletime_assert'
+     603 |         do {                                                            \
+         |         ^
+   3 errors generated.
 
 
-vim +/vsp1_subdev_get_pad_format +161 drivers/media/platform/renesas/vsp1/vsp1_entity.c
+vim +550 drivers/gpu/drm/imagination/pvr_device.c
 
-e790c3cb8d904c drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2015-11-15  151  
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  152  /*
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  153   * vsp1_subdev_get_pad_format - Subdev pad get_fmt handler
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  154   * @subdev: V4L2 subdevice
-30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  155   * @sd_state: V4L2 subdev state
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  156   * @fmt: V4L2 subdev format
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  157   *
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  158   * This function implements the subdev get_fmt pad operation. It can be used as
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  159   * a direct drop-in for the operation handler.
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  160   */
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24 @161  int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
-1b58854744d174 drivers/media/platform/renesas/vsp1/vsp1_entity.c Sakari Ailus     2026-01-30  162  			       const struct v4l2_subdev_client_info *ci,
-0d346d2a6f54f0 drivers/media/platform/vsp1/vsp1_entity.c         Tomi Valkeinen   2021-06-10  163  			       struct v4l2_subdev_state *sd_state,
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  164  			       struct v4l2_subdev_format *fmt)
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  165  {
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  166  	struct vsp1_entity *entity = to_vsp1_entity(subdev);
-30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  167  	struct v4l2_subdev_state *state;
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  168  
-30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  169  	state = vsp1_entity_get_state(entity, sd_state, fmt->which);
-30d187cd74874a drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-26  170  	if (!state)
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  171  		return -EINVAL;
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  172  
-34e77ed84b274d drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-06-26  173  	mutex_lock(&entity->lock);
-0aaf7db0872677 drivers/media/platform/renesas/vsp1/vsp1_entity.c Laurent Pinchart 2023-11-12  174  	fmt->format = *v4l2_subdev_state_get_format(state, fmt->pad);
-34e77ed84b274d drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-06-26  175  	mutex_unlock(&entity->lock);
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  176  
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  177  	return 0;
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  178  }
-3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  179  
-
-:::::: The code at line 161 was first introduced by commit
-:::::: 3f557220cc29d1961ef9efa2a8db04c7c5f6e6d4 [media] v4l: vsp1: Factorize get pad format code
-
-:::::: TO: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+1c21f240fbc1e47 Matt Coster 2026-01-13  545  
+1c21f240fbc1e47 Matt Coster 2026-01-13  546  static enum pvr_gpu_support_level
+1c21f240fbc1e47 Matt Coster 2026-01-13  547  pvr_gpu_support_level(const struct pvr_gpu_id *gpu_id)
+1c21f240fbc1e47 Matt Coster 2026-01-13  548  {
+1c21f240fbc1e47 Matt Coster 2026-01-13  549  	switch (pvr_gpu_id_to_packed_bvnc(gpu_id)) {
+1c21f240fbc1e47 Matt Coster 2026-01-13 @550  	case PVR_PACKED_BVNC(33, 15, 11, 3):
+1c21f240fbc1e47 Matt Coster 2026-01-13  551  	case PVR_PACKED_BVNC(36, 53, 104, 796):
+1c21f240fbc1e47 Matt Coster 2026-01-13  552  		return PVR_GPU_SUPPORTED;
+1c21f240fbc1e47 Matt Coster 2026-01-13  553  
+1c21f240fbc1e47 Matt Coster 2026-01-13  554  	case PVR_PACKED_BVNC(36, 52, 104, 182):
+1c21f240fbc1e47 Matt Coster 2026-01-13  555  		return PVR_GPU_EXPERIMENTAL;
+1c21f240fbc1e47 Matt Coster 2026-01-13  556  
+1c21f240fbc1e47 Matt Coster 2026-01-13  557  	default:
+1c21f240fbc1e47 Matt Coster 2026-01-13  558  		return PVR_GPU_UNKNOWN;
+1c21f240fbc1e47 Matt Coster 2026-01-13  559  	}
+1c21f240fbc1e47 Matt Coster 2026-01-13  560  }
+1c21f240fbc1e47 Matt Coster 2026-01-13  561  
 
 -- 
 0-DAY CI Kernel Test Service
