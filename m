@@ -1,169 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B78F199FB0;
-	Sat,  7 Feb 2026 01:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5D323E356;
+	Sat,  7 Feb 2026 01:47:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770427496; cv=none; b=oZi4emsgr0DIIvk12UDVFRaValFSvgZVTm0BTPTyr8yCs6Zxj1Vz23i0XS6a0aAS7lQ4wLy/opWIR+vlJH0DqVOMkVnpnGxnG2VG5iq4OTSxVaFTORPV2xnBD5+QZxVd54q7QKA8HpiUDXa8VkSbrzo5o+y6GjRvw0rRg/3jLTs=
+	t=1770428850; cv=none; b=JrsfoGcbJcZTaxjwkha4au4WyQMCSdT8BieQEzjYFdAoIVJkG4PxRDkge6zmLkJ4kyzpEob/EQ4litWHcthyCbsNLNc0ew6Wb+YEhYGtUV8lR5W2Fj6VbtRzGYKQBYiWqhCA3Mff5mM81rvx71pT1q2xct/ZyDKKNBJVW8iurrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770427496; c=relaxed/simple;
-	bh=UV2CbUZlxksTUJZFXxCJmuPK9FANc5/pG+zvA6ZHauE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=PL3bZUtGZLvo7gNfYjE3NREXh0uUCIY5Tr+QXD3447iHmGwHKMWwInVzvPOOLL95BLOk9znVsaXj6Bllrw2crJK20G9WAtOzzVziW7+NRJwRGTjGy2bN4s4DoSDV8lD588RhUxOhYi+UkjuJ6AzcQYkt3N95kY4ptoBnzysY1Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wv3Ow/qX; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1770428850; c=relaxed/simple;
+	bh=JhehRN6NuQP7bpV2yNg0BgzdHgdYsrMp5h3s/bhNviY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbkgzYVJQ/fo2tfix9aRgttj5wVykh55fb2KnrVDMeizRkk0o/0u89iDjkJ7mvt70YfGS0NFSRjc/7GlB+JQ0vTUNaDmoTHrWpw0jp8JEbDad6B746RJHP8zd4JLBOVilEZItGfMrNs5vStA0aif5EgemLJmtIZKWcnLOZJqzmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AhCtg6UY; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wv3Ow/qX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AhCtg6UY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770427496; x=1801963496;
-  h=date:from:to:cc:subject:message-id;
-  bh=UV2CbUZlxksTUJZFXxCJmuPK9FANc5/pG+zvA6ZHauE=;
-  b=Wv3Ow/qXKWjmxvyghwNtVvj786Opf9R1chBKAGtR0cuEJ0oJy0KDlO2i
-   kB7cg1QgWh4InB5Lp06EgZuy33zpZvFEXHtdXbiyxESdYU23U8iXjGa/B
-   Ab7brdoe9PKPuB1VZeEPEUxVINnnSk70peyMc7U0YNlPquEHkoknmzasw
-   Z4/cxPjGiIhGgh2d253bHBOb11oLROnZfhJCEo75L/l/XttUSFHx//EYE
-   lZvCFw14m7TfMRP285eev61oAyMcNiZu2uMSCT+6savDRonhTfwPuC9QL
-   0r96BC5QWBgthuNCACG/a3/+1YBF5zwcfpnzxaCPOG5z25qCqpuVz7GV+
+  t=1770428851; x=1801964851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JhehRN6NuQP7bpV2yNg0BgzdHgdYsrMp5h3s/bhNviY=;
+  b=AhCtg6UYRi1ZBtH7C9jGoheesxsYFNczAD6UskLR0NmZsNIwotOhYdYa
+   LLmRWhnjjuCZjjygQFQkZMYLusldlzGvNm+FaftOA9SOeNSTxNqXbRm6s
+   6H6EUDjLB916E1Y2bdTTexI4prWcAzpzCGvMmWa8/ZuEFJ22l58xTYbqZ
+   zjGYbokg8ahsfkiV8iHMYzNeZ0vqfWhotGeXmOnqfkQ7AuAwkH5dt49sN
+   LVgGabGH0jba+l3Tw31u0aGCS3NJGsfpOLlIG/ckomEYJk4+/I9Mzi5u3
+   sIaH3VqWdD5juOzBZZMWYtTJ3J2xFSZvB6BE1Iry1MBqp0DCNlqNP5x62
    g==;
-X-CSE-ConnectionGUID: ETnCtZ+8RLaTYfDy+2QPpA==
-X-CSE-MsgGUID: knowTbZuTVmbPrvJdHkReQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75488589"
+X-CSE-ConnectionGUID: YJm4ZXu9SU+RIhWt+U4Uvw==
+X-CSE-MsgGUID: 1TQmY2jDTlS01wq5tspXLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="71676319"
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="75488589"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 17:24:55 -0800
-X-CSE-ConnectionGUID: hDXRMR16RhuxKJ7ULW0Frw==
-X-CSE-MsgGUID: vXKGNptVTFe0PnVsaY0Ztw==
+   d="scan'208";a="71676319"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 17:47:30 -0800
+X-CSE-ConnectionGUID: kMLUEI3jQ4OB7yC5pWeUhA==
+X-CSE-MsgGUID: Fj7PwwsyR3eQ4jqVQNlkrw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="210783982"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Feb 2026 17:24:54 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+   d="scan'208";a="210872881"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 06 Feb 2026 17:47:26 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1voX47-000000004ld-3mrt;
-	Sat, 07 Feb 2026 01:24:51 +0000
-Date: Sat, 07 Feb 2026 02:24:34 +0100
+	id 1voXPv-00000000lK8-33QX;
+	Sat, 07 Feb 2026 01:47:23 +0000
+Date: Sat, 7 Feb 2026 09:46:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:exportd-netlink 2/3] fs/nfsd/nfsctl.c:2270:33:
- error: use of undeclared identifier 'exportd_nl_family'; did you mean
- 'nfsd_nl_family'?
-Message-ID: <202602070201.brMUyB8k-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Jie Zhang <jzhang918@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jzhang918@gmail.com, jie.zhang@analog.com, horms@kernel.org,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Jose Abreu <Jose.Abreu@synopsys.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] net: stmmac: fix oops when split header is enabled
+Message-ID: <202602070944.47xACYer-lkp@intel.com>
+References: <20260206195643.11333-1-jie.zhang@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260206195643.11333-1-jie.zhang@analog.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git exportd-netlink
-head:   aef82be579c01a1995f0e0c98313f23e7e4893a0
-commit: c282986480c6eb27e2330e62a435fdba93b42f32 [2/3] nfsd: register new netlink family for exportd
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260207/202602070201.brMUyB8k-lkp@intel.com/config)
+Hi Jie,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jie-Zhang/net-stmmac-fix-oops-when-split-header-is-enabled/20260207-035916
+base:   net/main
+patch link:    https://lore.kernel.org/r/20260206195643.11333-1-jie.zhang%40analog.com
+patch subject: [PATCH net v2] net: stmmac: fix oops when split header is enabled
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260207/202602070944.47xACYer-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070201.brMUyB8k-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070944.47xACYer-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602070201.brMUyB8k-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602070944.47xACYer-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/nfsd/nfsctl.c:2270:33: error: use of undeclared identifier 'exportd_nl_family'; did you mean 'nfsd_nl_family'?
-    2270 |         retval = genl_register_family(&exportd_nl_family);
-         |                                        ^~~~~~~~~~~~~~~~~
-         |                                        nfsd_nl_family
-   fs/nfsd/netlink.h:30:27: note: 'nfsd_nl_family' declared here
-      30 | extern struct genl_family nfsd_nl_family;
-         |                           ^
-   fs/nfsd/nfsctl.c:2280:26: error: use of undeclared identifier 'exportd_nl_family'; did you mean 'nfsd_nl_family'?
-    2280 |         genl_unregister_family(&exportd_nl_family);
-         |                                 ^~~~~~~~~~~~~~~~~
-         |                                 nfsd_nl_family
-   fs/nfsd/netlink.h:30:27: note: 'nfsd_nl_family' declared here
-      30 | extern struct genl_family nfsd_nl_family;
-         |                           ^
-   fs/nfsd/nfsctl.c:2306:26: error: use of undeclared identifier 'exportd_nl_family'; did you mean 'nfsd_nl_family'?
-    2306 |         genl_unregister_family(&exportd_nl_family);
-         |                                 ^~~~~~~~~~~~~~~~~
-         |                                 nfsd_nl_family
-   fs/nfsd/netlink.h:30:27: note: 'nfsd_nl_family' declared here
-      30 | extern struct genl_family nfsd_nl_family;
-         |                           ^
-   3 errors generated.
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:5041:19: error: no member named 'has_gmac4' in 'struct plat_stmmacenet_data'
+    5041 |         if (!priv->plat->has_gmac4 && (status & rx_not_ls))
+         |              ~~~~~~~~~~  ^
+   1 error generated.
 
 
-vim +2270 fs/nfsd/nfsctl.c
+vim +5041 drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
-  2238	
-  2239	static int __init init_nfsd(void)
-  2240	{
-  2241		int retval;
-  2242	
-  2243		nfsd_debugfs_init();
-  2244	
-  2245		retval = nfsd4_init_slabs();
-  2246		if (retval)
-  2247			return retval;
-  2248		retval = nfsd4_init_pnfs();
-  2249		if (retval)
-  2250			goto out_free_slabs;
-  2251		retval = nfsd_drc_slab_create();
-  2252		if (retval)
-  2253			goto out_free_pnfs;
-  2254		nfsd_lockd_init();	/* lockd->nfsd callbacks */
-  2255		retval = register_pernet_subsys(&nfsd_net_ops);
-  2256		if (retval < 0)
-  2257			goto out_free_lockd;
-  2258		retval = register_cld_notifier();
-  2259		if (retval)
-  2260			goto out_free_subsys;
-  2261		retval = nfsd4_create_laundry_wq();
-  2262		if (retval)
-  2263			goto out_free_cld;
-  2264		retval = register_filesystem(&nfsd_fs_type);
-  2265		if (retval)
-  2266			goto out_free_nfsd4;
-  2267		retval = genl_register_family(&nfsd_nl_family);
-  2268		if (retval)
-  2269			goto out_free_filesystem;
-> 2270		retval = genl_register_family(&exportd_nl_family);
-  2271		if (retval)
-  2272			goto out_free_nfsd_nl;
-  2273		retval = create_proc_exports_entry();
-  2274		if (retval)
-  2275			goto out_free_all;
-  2276		nfsd_localio_ops_init();
-  2277	
-  2278		return 0;
-  2279	out_free_all:
-  2280		genl_unregister_family(&exportd_nl_family);
-  2281	out_free_nfsd_nl:
-  2282		genl_unregister_family(&nfsd_nl_family);
-  2283	out_free_filesystem:
-  2284		unregister_filesystem(&nfsd_fs_type);
-  2285	out_free_nfsd4:
-  2286		nfsd4_destroy_laundry_wq();
-  2287	out_free_cld:
-  2288		unregister_cld_notifier();
-  2289	out_free_subsys:
-  2290		unregister_pernet_subsys(&nfsd_net_ops);
-  2291	out_free_lockd:
-  2292		nfsd_lockd_shutdown();
-  2293		nfsd_drc_slab_free();
-  2294	out_free_pnfs:
-  2295		nfsd4_exit_pnfs();
-  2296	out_free_slabs:
-  2297		nfsd4_free_slabs();
-  2298		nfsd_debugfs_exit();
-  2299		return retval;
-  2300	}
-  2301	
+  5014	
+  5015	static unsigned int stmmac_rx_buf2_len(struct stmmac_priv *priv,
+  5016					       struct dma_desc *p,
+  5017					       int status, unsigned int len)
+  5018	{
+  5019		int coe = priv->hw->rx_csum;
+  5020		unsigned int plen = 0;
+  5021	
+  5022		/* Not split header, buffer is not available */
+  5023		if (!priv->sph_active)
+  5024			return 0;
+  5025	
+  5026		/* For GMAC4, when split header is enabled, in some rare cases, the
+  5027		 * hardware does not fill buf2 of the first descriptor with payload.
+  5028		 * Thus we cannot assume buf2 is always fully filled if it is not
+  5029		 * the last descriptor. Otherwise, the length of buf2 of the second
+  5030		 * descriptor will be calculated wrong and cause an oops.
+  5031		 *
+  5032		 * If this is the last descriptor, 'plen' is the length of the
+  5033		 * received packet that was transferred to system memory.
+  5034		 * Otherwise, it is the accumulated number of bytes that have been
+  5035		 * transferred for the current packet.
+  5036		 *
+  5037		 * Thus 'plen - len' always gives the correct length of buf2.
+  5038		 */
+  5039	
+  5040		/* Not GMAC4 and not last descriptor */
+> 5041		if (!priv->plat->has_gmac4 && (status & rx_not_ls))
+  5042			return priv->dma_conf.dma_buf_sz;
+  5043	
+  5044		/* GMAC4 or last descriptor */
+  5045		plen = stmmac_get_rx_frame_len(priv, p, coe);
+  5046	
+  5047		return plen - len;
+  5048	}
+  5049	
 
 -- 
 0-DAY CI Kernel Test Service
