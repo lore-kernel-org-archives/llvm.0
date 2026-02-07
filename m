@@ -1,331 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2FB242D89;
-	Fri,  6 Feb 2026 23:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B78F199FB0;
+	Sat,  7 Feb 2026 01:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770418888; cv=none; b=SKpw/YsjQ/IIcP+FfKCshTcBUJwctQEcsrjKYoBkoURihY9raFPoE2x9ZDsnPqFf78ziE5linZFauRSYdkAmsmTot38O8jx6yDeqaVSMffD7rMUAP6pRq7XKn5PSlHx1s/RC6WEvnpIV5dMqrN+ESyLykQdo/rPpvN3pN+0514Y=
+	t=1770427496; cv=none; b=oZi4emsgr0DIIvk12UDVFRaValFSvgZVTm0BTPTyr8yCs6Zxj1Vz23i0XS6a0aAS7lQ4wLy/opWIR+vlJH0DqVOMkVnpnGxnG2VG5iq4OTSxVaFTORPV2xnBD5+QZxVd54q7QKA8HpiUDXa8VkSbrzo5o+y6GjRvw0rRg/3jLTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770418888; c=relaxed/simple;
-	bh=ZqN9Ctx2YZYm6+Tm087TpRnIQRGtcP5lICJTnSc91SY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RLVvxT2cjbDYuXFfzNbeKzYTyCzGOEnmXcISx20UPHR8V1fUBjub5Tz+RBr2/SjpiejDoASZ+eZa9kQPe4n9x6U/GrXDUuqNAy5u34zSSB73n6toMLtOhC25MkG7Xp0DsQrFzWE7tDNyjtqJoKidbCNyq9Bht9XgQdSkhgkr7XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCJysa3A; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1770427496; c=relaxed/simple;
+	bh=UV2CbUZlxksTUJZFXxCJmuPK9FANc5/pG+zvA6ZHauE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PL3bZUtGZLvo7gNfYjE3NREXh0uUCIY5Tr+QXD3447iHmGwHKMWwInVzvPOOLL95BLOk9znVsaXj6Bllrw2crJK20G9WAtOzzVziW7+NRJwRGTjGy2bN4s4DoSDV8lD588RhUxOhYi+UkjuJ6AzcQYkt3N95kY4ptoBnzysY1Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wv3Ow/qX; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCJysa3A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wv3Ow/qX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770418888; x=1801954888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZqN9Ctx2YZYm6+Tm087TpRnIQRGtcP5lICJTnSc91SY=;
-  b=eCJysa3ALOIDGj7PJ1l2OmuDC7/eKFq/rEbQubZq0HNtwVqyHar+tae3
-   mMm4+epZDLh7yElhBbnEmC/BYwy1ameJJUK9NyVCMRQ0DvJ/hbS/FduZ5
-   RcHwLECqlEGpec7SeqCoKmv1h2FITLNXi4D874Bec3iOwn895+efpoZfi
-   wgYDL2r4hHwkeDVn15cwPAwq9h1V2JboDOBL5n3Rv49gOdDnWw4qxh45C
-   Wca+FxKbsc6FUayq3dl2t6PWBcpoVUaLa48v4FQEgnxCuYIp8NSdR+eKL
-   eTEpMnHPXSBf107x9q84PnzOd5zQ3sjIzetjwyRPyKghSdhi1Xe2IF8yZ
-   w==;
-X-CSE-ConnectionGUID: AWLducP4SbONnLTKDO6C7Q==
-X-CSE-MsgGUID: xFtnA+4DTGqFR/7oUVdk6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="89208605"
+  t=1770427496; x=1801963496;
+  h=date:from:to:cc:subject:message-id;
+  bh=UV2CbUZlxksTUJZFXxCJmuPK9FANc5/pG+zvA6ZHauE=;
+  b=Wv3Ow/qXKWjmxvyghwNtVvj786Opf9R1chBKAGtR0cuEJ0oJy0KDlO2i
+   kB7cg1QgWh4InB5Lp06EgZuy33zpZvFEXHtdXbiyxESdYU23U8iXjGa/B
+   Ab7brdoe9PKPuB1VZeEPEUxVINnnSk70peyMc7U0YNlPquEHkoknmzasw
+   Z4/cxPjGiIhGgh2d253bHBOb11oLROnZfhJCEo75L/l/XttUSFHx//EYE
+   lZvCFw14m7TfMRP285eev61oAyMcNiZu2uMSCT+6savDRonhTfwPuC9QL
+   0r96BC5QWBgthuNCACG/a3/+1YBF5zwcfpnzxaCPOG5z25qCqpuVz7GV+
+   g==;
+X-CSE-ConnectionGUID: ETnCtZ+8RLaTYfDy+2QPpA==
+X-CSE-MsgGUID: knowTbZuTVmbPrvJdHkReQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75488589"
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="89208605"
+   d="scan'208";a="75488589"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 15:01:28 -0800
-X-CSE-ConnectionGUID: oBpqT+SxQ0qQkm5TLzcCbQ==
-X-CSE-MsgGUID: 0/RKPLOSRwmfFjypKpPhFA==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 17:24:55 -0800
+X-CSE-ConnectionGUID: hDXRMR16RhuxKJ7ULW0Frw==
+X-CSE-MsgGUID: vXKGNptVTFe0PnVsaY0Ztw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="210762833"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Feb 2026 15:01:21 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+   d="scan'208";a="210783982"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa010.fm.intel.com with ESMTP; 06 Feb 2026 17:24:54 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1voUpC-00000000lF2-2S86;
-	Fri, 06 Feb 2026 23:01:18 +0000
-Date: Sat, 7 Feb 2026 07:00:55 +0800
+	id 1voX47-000000004ld-3mrt;
+	Sat, 07 Feb 2026 01:24:51 +0000
+Date: Sat, 07 Feb 2026 02:24:34 +0100
 From: kernel test robot <lkp@intel.com>
-To: Andreas Hindborg <a.hindborg@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Igor Korotin <igor.korotin.linux@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v14 2/9] rust: rename `AlwaysRefCounted` to `RefCounted`.
-Message-ID: <202602070633.mI75LmYQ-lkp@intel.com>
-References: <20260204-unique-ref-v14-2-17cb29ebacbb@kernel.org>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:exportd-netlink 2/3] fs/nfsd/nfsctl.c:2270:33:
+ error: use of undeclared identifier 'exportd_nl_family'; did you mean
+ 'nfsd_nl_family'?
+Message-ID: <202602070201.brMUyB8k-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260204-unique-ref-v14-2-17cb29ebacbb@kernel.org>
 
-Hi Andreas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 63804fed149a6750ffd28610c5c1c98cce6bd377]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Hindborg/rust-types-Add-Ownable-Owned-types/20260204-200041
-base:   63804fed149a6750ffd28610c5c1c98cce6bd377
-patch link:    https://lore.kernel.org/r/20260204-unique-ref-v14-2-17cb29ebacbb%40kernel.org
-patch subject: [PATCH v14 2/9] rust: rename `AlwaysRefCounted` to `RefCounted`.
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260207/202602070633.mI75LmYQ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git exportd-netlink
+head:   aef82be579c01a1995f0e0c98313f23e7e4893a0
+commit: c282986480c6eb27e2330e62a435fdba93b42f32 [2/3] nfsd: register new netlink family for exportd
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260207/202602070201.brMUyB8k-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070633.mI75LmYQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070201.brMUyB8k-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602070633.mI75LmYQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602070201.brMUyB8k-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0407]: method `inc_ref` is not a member of trait `AlwaysRefCounted`
-   --> rust/kernel/usb.rs:378:5
-   |
-   378 | /     fn inc_ref(&self) {
-   ...   |
-   383 | |     }
-   | |_____^ not a member of trait `AlwaysRefCounted`
---
->> error[E0407]: method `dec_ref` is not a member of trait `AlwaysRefCounted`
-   --> rust/kernel/usb.rs:385:5
-   |
-   385 | /     unsafe fn dec_ref(obj: NonNull<Self>) {
-   386 | |         // SAFETY: The safety requirements guarantee that the refcount is non-zero.
-   387 | |         unsafe { bindings::usb_put_intf(obj.cast().as_ptr()) }
-   388 | |     }
-   | |_____^ not a member of trait `AlwaysRefCounted`
---
->> error[E0277]: the trait bound `Interface: RefCounted` is not satisfied
-   --> rust/kernel/device.rs:700:17
-   |
-   700 |                 (&**dev).into()
-   |                 ^^^^^^^^^^^^^^^ the trait `RefCounted` is not implemented for `Interface`
-   |
-   ::: rust/kernel/usb.rs:352:1
-   |
-   352 | kernel::impl_device_context_into_aref!(Interface);
-   | ------------------------------------------------- in this macro invocation
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `ARef`
-   --> rust/kernel/sync/aref.rs:86:20
-   |
-   86  | pub struct ARef<T: RefCounted> {
-   |                    ^^^^^^^^^^ required by this bound in `ARef`
-   = note: this error originates in the macro `::kernel::__impl_device_context_into_aref` which comes from the expansion of the macro `kernel::impl_device_context_into_aref` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0277]: the trait bound `usb::Device: RefCounted` is not satisfied
-   --> rust/kernel/device.rs:700:17
-   |
-   700 |                 (&**dev).into()
-   |                 ^^^^^^^^^^^^^^^ the trait `RefCounted` is not implemented for `usb::Device`
-   |
-   ::: rust/kernel/usb.rs:425:1
-   |
-   425 | kernel::impl_device_context_into_aref!(Device);
-   | ---------------------------------------------- in this macro invocation
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `ARef`
-   --> rust/kernel/sync/aref.rs:86:20
-   |
-   86  | pub struct ARef<T: RefCounted> {
-   |                    ^^^^^^^^^^ required by this bound in `ARef`
-   = note: this error originates in the macro `::kernel::__impl_device_context_into_aref` which comes from the expansion of the macro `kernel::impl_device_context_into_aref` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0407]: method `inc_ref` is not a member of trait `AlwaysRefCounted`
-   --> rust/kernel/usb.rs:429:5
-   |
-   429 | /     fn inc_ref(&self) {
-   ...   |
-   434 | |     }
-   | |_____^ not a member of trait `AlwaysRefCounted`
---
->> error[E0407]: method `dec_ref` is not a member of trait `AlwaysRefCounted`
-   --> rust/kernel/usb.rs:436:5
-   |
-   436 | /     unsafe fn dec_ref(obj: NonNull<Self>) {
-   437 | |         // SAFETY: The safety requirements guarantee that the refcount is non-zero.
-   438 | |         unsafe { bindings::usb_put_dev(obj.cast().as_ptr()) }
-   439 | |     }
-   | |_____^ not a member of trait `AlwaysRefCounted`
---
->> error[E0277]: the trait bound `Interface: RefCounted` is not satisfied
-   --> rust/kernel/device.rs:698:56
-   |
-   698 |         impl ::core::convert::From<&$device<$src>> for $crate::sync::aref::ARef<$device> {
-   |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `RefCounted` is not implemented for `Interface`
-   |
-   ::: rust/kernel/usb.rs:352:1
-   |
-   352 | kernel::impl_device_context_into_aref!(Interface);
-   | ------------------------------------------------- in this macro invocation
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `ARef`
-   --> rust/kernel/sync/aref.rs:86:20
-   |
-   86  | pub struct ARef<T: RefCounted> {
-   |                    ^^^^^^^^^^ required by this bound in `ARef`
-   = note: this error originates in the macro `::kernel::__impl_device_context_into_aref` which comes from the expansion of the macro `kernel::impl_device_context_into_aref` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0277]: the trait bound `Interface: RefCounted` is not satisfied
-   --> rust/kernel/usb.rs:377:34
-   |
-   377 | unsafe impl AlwaysRefCounted for Interface {
-   |                                  ^^^^^^^^^ the trait `RefCounted` is not implemented for `Interface`
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `AlwaysRefCounted`
-   --> rust/kernel/sync/aref.rs:74:36
-   |
-   74  | pub unsafe trait AlwaysRefCounted: RefCounted {}
-   |                                    ^^^^^^^^^^ required by this bound in `AlwaysRefCounted`
---
->> error[E0277]: the trait bound `usb::Device: RefCounted` is not satisfied
-   --> rust/kernel/device.rs:698:56
-   |
-   698 |         impl ::core::convert::From<&$device<$src>> for $crate::sync::aref::ARef<$device> {
-   |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `RefCounted` is not implemented for `usb::Device`
-   |
-   ::: rust/kernel/usb.rs:425:1
-   |
-   425 | kernel::impl_device_context_into_aref!(Device);
-   | ---------------------------------------------- in this macro invocation
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `ARef`
-   --> rust/kernel/sync/aref.rs:86:20
-   |
-   86  | pub struct ARef<T: RefCounted> {
-   |                    ^^^^^^^^^^ required by this bound in `ARef`
-   = note: this error originates in the macro `::kernel::__impl_device_context_into_aref` which comes from the expansion of the macro `kernel::impl_device_context_into_aref` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0277]: the trait bound `usb::Device: RefCounted` is not satisfied
-   --> rust/kernel/usb.rs:428:34
-   |
-   428 | unsafe impl AlwaysRefCounted for Device {
-   |                                  ^^^^^^ the trait `RefCounted` is not implemented for `usb::Device`
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `AlwaysRefCounted`
-   --> rust/kernel/sync/aref.rs:74:36
-   |
-   74  | pub unsafe trait AlwaysRefCounted: RefCounted {}
-   |                                    ^^^^^^^^^^ required by this bound in `AlwaysRefCounted`
---
->> error[E0277]: the trait bound `Interface: RefCounted` is not satisfied
-   --> rust/kernel/device.rs:699:45
-   |
-   699 |             fn from(dev: &$device<$src>) -> Self {
-   |                                             ^^^^ the trait `RefCounted` is not implemented for `Interface`
-   |
-   ::: rust/kernel/usb.rs:352:1
-   |
-   352 | kernel::impl_device_context_into_aref!(Interface);
-   | ------------------------------------------------- in this macro invocation
-   |
-   = help: the following other types implement trait `RefCounted`:
-   Credential
-   FwNode
-   I2cAdapter
-   I2cClient
-   LocalFile
-   Mm
-   MmWithUser
-   MmWithUserAsync
-   and 8 others
-   note: required by a bound in `ARef`
-   --> rust/kernel/sync/aref.rs:86:20
-   |
-   86  | pub struct ARef<T: RefCounted> {
-   |                    ^^^^^^^^^^ required by this bound in `ARef`
-   = note: this error originates in the macro `::kernel::__impl_device_context_into_aref` which comes from the expansion of the macro `kernel::impl_device_context_into_aref` (in Nightly builds, run with -Z macro-backtrace for more info)
-..
+>> fs/nfsd/nfsctl.c:2270:33: error: use of undeclared identifier 'exportd_nl_family'; did you mean 'nfsd_nl_family'?
+    2270 |         retval = genl_register_family(&exportd_nl_family);
+         |                                        ^~~~~~~~~~~~~~~~~
+         |                                        nfsd_nl_family
+   fs/nfsd/netlink.h:30:27: note: 'nfsd_nl_family' declared here
+      30 | extern struct genl_family nfsd_nl_family;
+         |                           ^
+   fs/nfsd/nfsctl.c:2280:26: error: use of undeclared identifier 'exportd_nl_family'; did you mean 'nfsd_nl_family'?
+    2280 |         genl_unregister_family(&exportd_nl_family);
+         |                                 ^~~~~~~~~~~~~~~~~
+         |                                 nfsd_nl_family
+   fs/nfsd/netlink.h:30:27: note: 'nfsd_nl_family' declared here
+      30 | extern struct genl_family nfsd_nl_family;
+         |                           ^
+   fs/nfsd/nfsctl.c:2306:26: error: use of undeclared identifier 'exportd_nl_family'; did you mean 'nfsd_nl_family'?
+    2306 |         genl_unregister_family(&exportd_nl_family);
+         |                                 ^~~~~~~~~~~~~~~~~
+         |                                 nfsd_nl_family
+   fs/nfsd/netlink.h:30:27: note: 'nfsd_nl_family' declared here
+      30 | extern struct genl_family nfsd_nl_family;
+         |                           ^
+   3 errors generated.
+
+
+vim +2270 fs/nfsd/nfsctl.c
+
+  2238	
+  2239	static int __init init_nfsd(void)
+  2240	{
+  2241		int retval;
+  2242	
+  2243		nfsd_debugfs_init();
+  2244	
+  2245		retval = nfsd4_init_slabs();
+  2246		if (retval)
+  2247			return retval;
+  2248		retval = nfsd4_init_pnfs();
+  2249		if (retval)
+  2250			goto out_free_slabs;
+  2251		retval = nfsd_drc_slab_create();
+  2252		if (retval)
+  2253			goto out_free_pnfs;
+  2254		nfsd_lockd_init();	/* lockd->nfsd callbacks */
+  2255		retval = register_pernet_subsys(&nfsd_net_ops);
+  2256		if (retval < 0)
+  2257			goto out_free_lockd;
+  2258		retval = register_cld_notifier();
+  2259		if (retval)
+  2260			goto out_free_subsys;
+  2261		retval = nfsd4_create_laundry_wq();
+  2262		if (retval)
+  2263			goto out_free_cld;
+  2264		retval = register_filesystem(&nfsd_fs_type);
+  2265		if (retval)
+  2266			goto out_free_nfsd4;
+  2267		retval = genl_register_family(&nfsd_nl_family);
+  2268		if (retval)
+  2269			goto out_free_filesystem;
+> 2270		retval = genl_register_family(&exportd_nl_family);
+  2271		if (retval)
+  2272			goto out_free_nfsd_nl;
+  2273		retval = create_proc_exports_entry();
+  2274		if (retval)
+  2275			goto out_free_all;
+  2276		nfsd_localio_ops_init();
+  2277	
+  2278		return 0;
+  2279	out_free_all:
+  2280		genl_unregister_family(&exportd_nl_family);
+  2281	out_free_nfsd_nl:
+  2282		genl_unregister_family(&nfsd_nl_family);
+  2283	out_free_filesystem:
+  2284		unregister_filesystem(&nfsd_fs_type);
+  2285	out_free_nfsd4:
+  2286		nfsd4_destroy_laundry_wq();
+  2287	out_free_cld:
+  2288		unregister_cld_notifier();
+  2289	out_free_subsys:
+  2290		unregister_pernet_subsys(&nfsd_net_ops);
+  2291	out_free_lockd:
+  2292		nfsd_lockd_shutdown();
+  2293		nfsd_drc_slab_free();
+  2294	out_free_pnfs:
+  2295		nfsd4_exit_pnfs();
+  2296	out_free_slabs:
+  2297		nfsd4_free_slabs();
+  2298		nfsd_debugfs_exit();
+  2299		return retval;
+  2300	}
+  2301	
 
 -- 
 0-DAY CI Kernel Test Service
