@@ -1,295 +1,211 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD0027C866;
-	Mon,  9 Feb 2026 20:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572B82EA173;
+	Mon,  9 Feb 2026 21:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770669543; cv=none; b=tKyUKg3ZWtJC4kyUeTBsV8RcJ+xCyeUMwcqkhpFfKA1hCg0xN43ZAl0MVZuxfxYYAcvAw4K4DKMflO3o5nmskxeOFfyyBupWBzvr/Bb39uTTna4zBSEVzRBP65P/SQ5JsLrPM+pi8bkaSt1TwnKMXbVNUmD1QFfMPgwGgjrJcZk=
+	t=1770672064; cv=none; b=YJNdohuwyAmB576n4UOMEofOPZYGftEAxvBJ4h8aspW7GMkfI6K1rlq85i2KxYZOpRJxpOdGyUS4mun5Bbv195g88FDnl8b6uLCfVwxAWUNddZRCZU0Y/5C6TvoVAyckGyN/Q385HJPgQGURXYt8n8OjWoQY2Nex8PzxwxLHcEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770669543; c=relaxed/simple;
-	bh=qHLjsDaga3CYKeVDQtzArGl5Ae11uJp5SyZ+P5aBl80=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=o0pn51fZCtAdfZEwx29D5yOx6hMemUBy5L47KGw6JLNcQL1vfvgshnnUNeRjnnvSebMmSUuBNolvA4xyGT/wHOLwjIrKp7YVFZ/bihqIldbO86w0rcaZvbxABHDp/h4j8yFVx9LMzg7ueWAipHGZJzZSMHAlFAMyRn0qYepZadE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eDQQvNrV; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1770672064; c=relaxed/simple;
+	bh=Tl0X3h0YbIbrMYP/4PSqqKr9YSUO3iCbUFP9QAlD560=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lc9UIyW9DSUkzl7eVE9w8cgV/OPNlQCmu+n2B9pB59x1QmYv0KK1K6j7Vrv0SE2UpWT8w3FAZJR77yPsC24JiD0k6pJvFdzdPAtEtidRGufVlO0Jwx4ju/Sgcct6hTZHeOa6piKslkZtWs8mXFzFkJMKU1vLqnTtp/HYXG/utDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EHIHbUpk; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eDQQvNrV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EHIHbUpk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770669542; x=1802205542;
-  h=date:from:to:cc:subject:message-id;
-  bh=qHLjsDaga3CYKeVDQtzArGl5Ae11uJp5SyZ+P5aBl80=;
-  b=eDQQvNrVoYl5PudNjf/e0kC6qNyYyHouYOTnSjVhPotBKtJMoCHw2Pk2
-   sDIy0Ckk0fCm7fpLp+GS1v9La0tgqYMMXufAzQfFpq5zjAURAJdhsAilU
-   Zc5fkDV9bIKTUn9JR0NfuQ0fk4CSchbJcgjj29ovuSzcq3LOHkbhmq7y/
-   aIraNdC4Kh1QKljFj3yRH1+Ug/rgB/nAvVjCtMk5lCU+3WRUyVGPyBGNf
-   kkuijxZSnVKIRKN8nXwmaQdEynvMgZPPZf/jnoKccis6JYvYL9bLb0g5g
-   zRJzJXRJU0UQkFOLVXK4iTsklB53AG7IP2cJ7w3UFPHpYhB2TaSrSqaNU
-   g==;
-X-CSE-ConnectionGUID: 4oQAwJzDRPCPqrLxpWhRdQ==
-X-CSE-MsgGUID: CozRPoATSO6U52nmhi4G1A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="71690344"
+  t=1770672062; x=1802208062;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tl0X3h0YbIbrMYP/4PSqqKr9YSUO3iCbUFP9QAlD560=;
+  b=EHIHbUpkELesNW0XQHtGAGBpgTXtoPVCW6ErcgmBUlFYol8S4GPPkyRm
+   2CsTcD/PwBIJ/vyAPZvkI3AS90UKtfnDxClNWCxQ+unvd6Licrx1z6YrV
+   0i2WpkBv6jbY6Z4sBcaYCZktDsV6XVCTiH8XWsZdBEN/Npy8qADnVPxPv
+   LWbhwbI6npcF5VLU2Tn5ACMO/yU18YcjuSek4vIj1QMGruwgIHxXBWE02
+   E5vWIneKG0Xt1PTaFP0t59s/2GlnlEq9pqVszyd3AlECO0zoRFPVTr8eM
+   oUIeC3pCVdkRq09tOurp34fKpQJcaxSHPaJWwCSrwZ4DKzKckVwwMru8y
+   A==;
+X-CSE-ConnectionGUID: 4ju+n0DNQZOHoo5695S71A==
+X-CSE-MsgGUID: Lj3jhNDORQK4Kih4eRtTuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="71004179"
 X-IronPort-AV: E=Sophos;i="6.21,282,1763452800"; 
-   d="scan'208";a="71690344"
+   d="scan'208";a="71004179"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 12:39:02 -0800
-X-CSE-ConnectionGUID: NgNha05zS++In+f8k2m6ZQ==
-X-CSE-MsgGUID: mJxTyoREQPWmPbCLIA410w==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 13:21:02 -0800
+X-CSE-ConnectionGUID: qiJVag5sQhC/4fsrAuP8CQ==
+X-CSE-MsgGUID: 2EiX+7RgRAOpeh1o1+No/Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,282,1763452800"; 
-   d="scan'208";a="211706695"
+   d="scan'208";a="211714482"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 09 Feb 2026 12:38:57 -0800
+  by orviesa008.jf.intel.com with ESMTP; 09 Feb 2026 13:21:00 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vpY23-00000000oJg-1bxl;
-	Mon, 09 Feb 2026 20:38:55 +0000
-Date: Tue, 10 Feb 2026 04:38:18 +0800
+	id 1vpYgj-00000000oKy-07Cx;
+	Mon, 09 Feb 2026 21:20:57 +0000
+Date: Tue, 10 Feb 2026 05:20:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/tracing_multi_1 4/12]
- arch/powerpc/net/bpf_jit_comp.c:567:17: warning: declaration of 'struct
- bpf_tramp_links' will not be visible outside of this function
-Message-ID: <202602100410.G51dMk14-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+	matthew.auld@intel.com, christian.koenig@amd.com,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alexander.deucher@amd.com,
+	Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>
+Subject: Re: [PATCH v3 2/2] drm/buddy: Add KUnit test for offset-aligned
+ allocations
+Message-ID: <202602100509.jUETbEEY-lkp@intel.com>
+References: <20260209083051.13376-2-Arunpravin.PaneerSelvam@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260209083051.13376-2-Arunpravin.PaneerSelvam@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_1
-head:   95bf1a3ff57efabf9b7c50b8a0d3583a6714f5d8
-commit: 839b12f2dd3dd0be0a7321691ec25efca4132668 [4/12] bpf: Add struct bpf_tramp_node object
-config: powerpc-randconfig-001-20260210 (https://download.01.org/0day-ci/archive/20260210/202602100410.G51dMk14-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602100410.G51dMk14-lkp@intel.com/reproduce)
+Hi Arunpravin,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 9d757669b2b22cd224c334924f798393ffca537c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arunpravin-Paneer-Selvam/drm-buddy-Add-KUnit-test-for-offset-aligned-allocations/20260209-163512
+base:   9d757669b2b22cd224c334924f798393ffca537c
+patch link:    https://lore.kernel.org/r/20260209083051.13376-2-Arunpravin.PaneerSelvam%40amd.com
+patch subject: [PATCH v3 2/2] drm/buddy: Add KUnit test for offset-aligned allocations
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260210/202602100509.jUETbEEY-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602100509.jUETbEEY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602100410.G51dMk14-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602100509.jUETbEEY-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   arch/powerpc/net/bpf_jit_comp.c:499:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     499 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:499:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     499 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:499:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     499 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:499:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     499 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:499:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     499 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:499:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     499 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:500:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     500 |                 PPC_LI32(_R4, l->cookie);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:500:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     500 |                 PPC_LI32(_R4, l->cookie);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:500:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     500 |                 PPC_LI32(_R4, l->cookie);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:500:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     500 |                 PPC_LI32(_R4, l->cookie);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:500:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     500 |                 PPC_LI32(_R4, l->cookie);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:500:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     500 |                 PPC_LI32(_R4, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:567:17: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
-     567 |                               struct bpf_tramp_links *tl, int regs_off, int retval_off,
-         |                                      ^
-   arch/powerpc/net/bpf_jit_comp.c:578:20: error: incomplete definition of type 'struct bpf_tramp_links'
-     578 |         for (i = 0; i < tl->nr_links; i++) {
-         |                         ~~^
-   arch/powerpc/net/bpf_jit_comp.c:567:17: note: forward declaration of 'struct bpf_tramp_links'
-     567 |                               struct bpf_tramp_links *tl, int regs_off, int retval_off,
-         |                                      ^
-   arch/powerpc/net/bpf_jit_comp.c:579:47: error: incomplete definition of type 'struct bpf_tramp_links'
-     579 |                 if (invoke_bpf_prog(image, ro_image, ctx, tl->links[i], regs_off, retval_off,
-         |                                                           ~~^
-   arch/powerpc/net/bpf_jit_comp.c:567:17: note: forward declaration of 'struct bpf_tramp_links'
-     567 |                               struct bpf_tramp_links *tl, int regs_off, int retval_off,
-         |                                      ^
-   arch/powerpc/net/bpf_jit_comp.c:678:14: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
-     678 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^
-   arch/powerpc/net/bpf_jit_comp.c:683:44: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-     683 |         struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-         |                                             ~~~~~~^
-   arch/powerpc/net/bpf_jit_comp.c:678:14: note: forward declaration of 'struct bpf_tramp_links'
-     678 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^
-   arch/powerpc/net/bpf_jit_comp.c:684:42: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-     684 |         struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-         |                                           ~~~~~~^
-   arch/powerpc/net/bpf_jit_comp.c:678:14: note: forward declaration of 'struct bpf_tramp_links'
-     678 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^
-   arch/powerpc/net/bpf_jit_comp.c:685:41: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-     685 |         struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-         |                                          ~~~~~~^
-   arch/powerpc/net/bpf_jit_comp.c:678:14: note: forward declaration of 'struct bpf_tramp_links'
-     678 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^
-   arch/powerpc/net/bpf_jit_comp.c:870:24: error: incomplete definition of type 'struct bpf_tramp_links'
-     870 |         for (i = 0; i < fentry->nr_links; i++)
-         |                         ~~~~~~^
-   arch/powerpc/net/bpf_jit_comp.c:678:14: note: forward declaration of 'struct bpf_tramp_links'
-     678 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^
-   arch/powerpc/net/bpf_jit_comp.c:871:51: error: incomplete definition of type 'struct bpf_tramp_links'
-     871 |                 if (invoke_bpf_prog(image, ro_image, ctx, fentry->links[i], regs_off, retval_off,
-         |                                                           ~~~~~~^
-   arch/powerpc/net/bpf_jit_comp.c:678:14: note: forward declaration of 'struct bpf_tramp_links'
-     678 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   2 warnings and 20 errors generated.
+   drivers/gpu/tests/gpu_buddy_test.c:46:7: error: too many arguments provided to function-like macro invocation
+                              "buddy_init failed\n");
+                              ^
+   include/kunit/test.h:1390:9: note: macro 'KUNIT_ASSERT_FALSE' defined here
+   #define KUNIT_ASSERT_FALSE(test, condition) \
+           ^
+   drivers/gpu/tests/gpu_buddy_test.c:45:2: error: use of undeclared identifier 'KUNIT_ASSERT_FALSE'; did you mean 'KUNIT_ASSERTION'?
+           KUNIT_ASSERT_FALSE(test, gpu_buddy_init(&mm, mm_size, SZ_4K),
+           ^~~~~~~~~~~~~~~~~~
+           KUNIT_ASSERTION
+   include/kunit/assert.h:27:2: note: 'KUNIT_ASSERTION' declared here
+           KUNIT_ASSERTION,
+           ^
+>> drivers/gpu/tests/gpu_buddy_test.c:45:2: warning: expression result unused [-Wunused-value]
+           KUNIT_ASSERT_FALSE(test, gpu_buddy_init(&mm, mm_size, SZ_4K),
+           ^~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +567 arch/powerpc/net/bpf_jit_comp.c
+vim +45 drivers/gpu/tests/gpu_buddy_test.c
 
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  483  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  484  static int invoke_bpf_prog(u32 *image, u32 *ro_image, struct codegen_context *ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  485  			   struct bpf_tramp_link *l, int regs_off, int retval_off,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  486  			   int run_ctx_off, bool save_ret)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  487  {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  488  	struct bpf_prog *p = l->link.prog;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  489  	ppc_inst_t branch_insn;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  490  	u32 jmp_idx;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  491  	int ret = 0;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  492  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  493  	/* Save cookie */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  494  	if (IS_ENABLED(CONFIG_PPC64)) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  495  		PPC_LI64(_R3, l->cookie);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  496  		EMIT(PPC_RAW_STD(_R3, _R1, run_ctx_off + offsetof(struct bpf_tramp_run_ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  497  				 bpf_cookie)));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  498  	} else {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  499  		PPC_LI32(_R3, l->cookie >> 32);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30 @500  		PPC_LI32(_R4, l->cookie);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  501  		EMIT(PPC_RAW_STW(_R3, _R1,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  502  				 run_ctx_off + offsetof(struct bpf_tramp_run_ctx, bpf_cookie)));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  503  		EMIT(PPC_RAW_STW(_R4, _R1,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  504  				 run_ctx_off + offsetof(struct bpf_tramp_run_ctx, bpf_cookie) + 4));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  505  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  506  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  507  	/* __bpf_prog_enter(p, &bpf_tramp_run_ctx) */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  508  	PPC_LI_ADDR(_R3, p);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  509  	EMIT(PPC_RAW_MR(_R25, _R3));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  510  	EMIT(PPC_RAW_ADDI(_R4, _R1, run_ctx_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  511  	ret = bpf_jit_emit_func_call_rel(image, ro_image, ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  512  					 (unsigned long)bpf_trampoline_enter(p));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  513  	if (ret)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  514  		return ret;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  515  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  516  	/* Remember prog start time returned by __bpf_prog_enter */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  517  	EMIT(PPC_RAW_MR(_R26, _R3));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  518  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  519  	/*
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  520  	 * if (__bpf_prog_enter(p) == 0)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  521  	 *	goto skip_exec_of_prog;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  522  	 *
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  523  	 * Emit a nop to be later patched with conditional branch, once offset is known
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  524  	 */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  525  	EMIT(PPC_RAW_CMPLI(_R3, 0));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  526  	jmp_idx = ctx->idx;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  527  	EMIT(PPC_RAW_NOP());
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  528  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  529  	/* p->bpf_func(ctx) */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  530  	EMIT(PPC_RAW_ADDI(_R3, _R1, regs_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  531  	if (!p->jited)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  532  		PPC_LI_ADDR(_R4, (unsigned long)p->insnsi);
-59ba025948be2a Hari Bathini 2025-04-22  533  	/* Account for max possible instructions during dummy pass for size calculation */
-59ba025948be2a Hari Bathini 2025-04-22  534  	if (image && !create_branch(&branch_insn, (u32 *)&ro_image[ctx->idx],
-59ba025948be2a Hari Bathini 2025-04-22  535  				    (unsigned long)p->bpf_func,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  536  				    BRANCH_SET_LINK)) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  537  		image[ctx->idx] = ppc_inst_val(branch_insn);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  538  		ctx->idx++;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  539  	} else {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  540  		EMIT(PPC_RAW_LL(_R12, _R25, offsetof(struct bpf_prog, bpf_func)));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  541  		EMIT(PPC_RAW_MTCTR(_R12));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  542  		EMIT(PPC_RAW_BCTRL());
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  543  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  544  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  545  	if (save_ret)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  546  		EMIT(PPC_RAW_STL(_R3, _R1, retval_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  547  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  548  	/* Fix up branch */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  549  	if (image) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  550  		if (create_cond_branch(&branch_insn, &image[jmp_idx],
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  551  				       (unsigned long)&image[ctx->idx], COND_EQ << 16))
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  552  			return -EINVAL;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  553  		image[jmp_idx] = ppc_inst_val(branch_insn);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  554  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  555  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  556  	/* __bpf_prog_exit(p, start_time, &bpf_tramp_run_ctx) */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  557  	EMIT(PPC_RAW_MR(_R3, _R25));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  558  	EMIT(PPC_RAW_MR(_R4, _R26));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  559  	EMIT(PPC_RAW_ADDI(_R5, _R1, run_ctx_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  560  	ret = bpf_jit_emit_func_call_rel(image, ro_image, ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  561  					 (unsigned long)bpf_trampoline_exit(p));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  562  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  563  	return ret;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  564  }
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  565  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  566  static int invoke_bpf_mod_ret(u32 *image, u32 *ro_image, struct codegen_context *ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30 @567  			      struct bpf_tramp_links *tl, int regs_off, int retval_off,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  568  			      int run_ctx_off, u32 *branches)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  569  {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  570  	int i;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  571  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  572  	/*
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  573  	 * The first fmod_ret program will receive a garbage return value.
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  574  	 * Set this to 0 to avoid confusing the program.
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  575  	 */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  576  	EMIT(PPC_RAW_LI(_R3, 0));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  577  	EMIT(PPC_RAW_STL(_R3, _R1, retval_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  578  	for (i = 0; i < tl->nr_links; i++) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  579  		if (invoke_bpf_prog(image, ro_image, ctx, tl->links[i], regs_off, retval_off,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  580  				    run_ctx_off, true))
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  581  			return -EINVAL;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  582  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  583  		/*
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  584  		 * mod_ret prog stored return value after prog ctx. Emit:
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  585  		 * if (*(u64 *)(ret_val) !=  0)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  586  		 *	goto do_fexit;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  587  		 */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  588  		EMIT(PPC_RAW_LL(_R3, _R1, retval_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  589  		EMIT(PPC_RAW_CMPLI(_R3, 0));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  590  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  591  		/*
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  592  		 * Save the location of the branch and generate a nop, which is
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  593  		 * replaced with a conditional jump once do_fexit (i.e. the
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  594  		 * start of the fexit invocation) is finalized.
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  595  		 */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  596  		branches[i] = ctx->idx;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  597  		EMIT(PPC_RAW_NOP());
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  598  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  599  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  600  	return 0;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  601  }
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  602  
-
-:::::: The code at line 567 was first introduced by commit
-:::::: d243b62b7bd3d5314382d3b54e4992226245e936 powerpc64/bpf: Add support for bpf trampolines
-
-:::::: TO: Naveen N Rao <naveen@kernel.org>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+    23	
+    24	static void gpu_test_buddy_subtree_offset_alignment_stress(struct kunit *test)
+    25	{
+    26		struct gpu_buddy_block *block;
+    27		struct rb_node *node = NULL;
+    28		const u64 mm_size = SZ_2M;
+    29		const u64 alignments[] = {
+    30			SZ_1M,
+    31			SZ_512K,
+    32			SZ_256K,
+    33			SZ_128K,
+    34			SZ_64K,
+    35			SZ_32K,
+    36			SZ_16K,
+    37			SZ_8K,
+    38		};
+    39	
+    40		struct list_head allocated[ARRAY_SIZE(alignments)];
+    41		unsigned int i, order, max_subtree_align = 0;
+    42		struct gpu_buddy mm;
+    43		int ret, tree;
+    44	
+  > 45		KUNIT_ASSERT_FALSE(test, gpu_buddy_init(&mm, mm_size, SZ_4K),
+    46				   "buddy_init failed\n");
+    47	
+    48		for (i = 0; i < ARRAY_SIZE(allocated); i++)
+    49			INIT_LIST_HEAD(&allocated[i]);
+    50	
+    51		/*
+    52		 * Exercise subtree_max_alignment tracking by allocating blocks with descending
+    53		 * alignment constraints and freeing them in reverse order. This verifies that
+    54		 * free-tree augmentation correctly propagates the maximum offset alignment
+    55		 * present in each subtree at every stage.
+    56		 */
+    57	
+    58		for (i = 0; i < ARRAY_SIZE(alignments); i++) {
+    59			struct gpu_buddy_block *root = NULL;
+    60			unsigned int expected;
+    61			u64 align;
+    62	
+    63			align = alignments[i];
+    64			expected = ilog2(align) - 1;
+    65	
+    66			for (;;) {
+    67				ret = gpu_buddy_alloc_blocks(&mm,
+    68							     0, mm_size,
+    69							     SZ_4K, align,
+    70							     &allocated[i],
+    71							     0);
+    72				if (ret)
+    73					break;
+    74	
+    75				block = list_last_entry(&allocated[i],
+    76							struct gpu_buddy_block,
+    77							link);
+    78				KUNIT_EXPECT_EQ(test, gpu_buddy_block_offset(block) & (align - 1), 0ULL);
+    79			}
+    80	
+    81			for (order = mm.max_order + 1; order-- > 0 && !root; ) {
+    82				for (tree = 0; tree < 2; tree++) {
+    83					node = mm.free_trees[tree][order].rb_node;
+    84					if (node) {
+    85						root = container_of(node,
+    86								    struct gpu_buddy_block,
+    87								    rb);
+    88						break;
+    89					}
+    90				}
+    91			}
+    92	
+    93			KUNIT_ASSERT_NOT_NULL(test, root);
+    94			KUNIT_EXPECT_EQ(test, root->subtree_max_alignment, expected);
+    95		}
+    96	
+    97		for (i = ARRAY_SIZE(alignments); i-- > 0; ) {
+    98			gpu_buddy_free_list(&mm, &allocated[i], 0);
+    99	
+   100			for (order = 0; order <= mm.max_order; order++) {
+   101				for (tree = 0; tree < 2; tree++) {
+   102					node = mm.free_trees[tree][order].rb_node;
+   103					if (!node)
+   104						continue;
+   105	
+   106					block = container_of(node, struct gpu_buddy_block, rb);
+   107					max_subtree_align = max(max_subtree_align, block->subtree_max_alignment);
+   108				}
+   109			}
+   110	
+   111			KUNIT_EXPECT_GE(test, max_subtree_align, ilog2(alignments[i]));
+   112		}
+   113	
+   114		gpu_buddy_fini(&mm);
+   115	}
+   116	
 
 -- 
 0-DAY CI Kernel Test Service
