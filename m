@@ -1,119 +1,115 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F05126C03;
-	Mon,  9 Feb 2026 11:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455C3374165;
+	Mon,  9 Feb 2026 13:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770638397; cv=none; b=mYaDynrE6ULtM6TOeVn+4bvq7rYsaZDNrTCTSYwAB1mkKamyC1GMdW+GxNyGpHmbdlPYd3jo8KBY7l/U8DSdnFmVd6a9yDGPPQjdUZdd/eqP2snKxElTNhgIKxME1JVNhgCMaIRoxDHD9O8NbvUmsVZ5jXPVqNI2B2vdXcJb/VM=
+	t=1770643331; cv=none; b=nO057yI/kPBYwpO1TdgIeKytN9A28vc1/F/xot3F4O7ON8P7M3kczD2v2MDS/nu9EQmmcAY5ni1UINrWyUAE5D/XXzTn34dYgHZLozD3fqHtH/+2Jl7ssjvopKGx3FlTXArQ1i44tu6ggi8e1caetlk5lQ/FgWFYPD4lobEi5Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770638397; c=relaxed/simple;
-	bh=THx9QLDF/GuC2A68C+XYDjXLd4w3dDHsu4Q3mjHNMUQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aaclSeELmdQg4Js5VEIu3e+RQHdnAEg3bjZgZIXFgFqUeNwsMfLfQ1FX9At2QBauNzfa41O3m9zCUA11lhWjgPb/DlZJE2J5b4wL19ZPOO6yKAmsZ5aXOzlDjgalw0OnrXXIj0xLU72emTfEfMGqHFN8gemHr4T3PRbGBGOWGqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1vpPvg-0007A0-00; Mon, 09 Feb 2026 12:59:48 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id F316DC0113; Mon,  9 Feb 2026 12:58:50 +0100 (CET)
-Date: Mon, 9 Feb 2026 12:58:50 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Yao Zi <me@ziyao.cc>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: Work around LLVM bug when gp is used as global
- register variable
-Message-ID: <aYnL-pRhrfqO0X5x@alpha.franken.de>
-References: <20260205155644.34421-1-me@ziyao.cc>
+	s=arc-20240116; t=1770643331; c=relaxed/simple;
+	bh=YdxQc3cQwP9XuHywZ41i1xHy/XfNJbBjyXeY7xbXAbI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Dz7uSuEUL/RadaThiYXDZj111TO9Olct1o1EXFXTwMklmT9pcW6Z3J+CJp8/7fp5RFUpROSQpN7LXysqRQqHzKO7ULYs4h+I+C0W/4G3RGDZ0bV23DODauBHNp4A81ioyCFgDB3BAlmpy1LVtN3IugXZJFjfFLz94XcDfIJJmmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SbGil4U/; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SbGil4U/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770643331; x=1802179331;
+  h=date:from:to:cc:subject:message-id;
+  bh=YdxQc3cQwP9XuHywZ41i1xHy/XfNJbBjyXeY7xbXAbI=;
+  b=SbGil4U/inDrbTqCvqIyeIPvWtO9X9bbv75DtBNM8UrnAoALo1mZhRaX
+   SYGh+gJa0xcE64mLOgrh8tZXwqvaTdpKE/k+khoWiXS0ZE/svAJDHu2xW
+   XhGMtLOTwGoUfQghoALT5EREJJ8n42UbDZ45Jcar/oDk9QtaS+qMPEYcc
+   x1/qitpdimopoAwTrDEMDNbZCqnBA+LcODOlgRs6CAjupgchzpNx+0az8
+   s4KgYgDzVzbBM2t/FuUs0FvH6xNewkSq+YLrKMYZxBCQ2XXl3PPZqqbNy
+   YS8cGBRWhr26S0qTgQWE6u5w9vCp6hyKfJ7OyZtf5HmAPio9CF2MXy2uv
+   w==;
+X-CSE-ConnectionGUID: heRSexGDRYW4t+YRf3TbxA==
+X-CSE-MsgGUID: NIatcxo7TfaS7VDV+AKCNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="71816101"
+X-IronPort-AV: E=Sophos;i="6.21,282,1763452800"; 
+   d="scan'208";a="71816101"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 05:22:10 -0800
+X-CSE-ConnectionGUID: LWoGoaPWShuk7Evp8yyDzw==
+X-CSE-MsgGUID: NYDaygtaT06fsakmWAa/VQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,282,1763452800"; 
+   d="scan'208";a="211407565"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 09 Feb 2026 05:22:09 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vpRDK-00000000nOr-3GcL;
+	Mon, 09 Feb 2026 13:22:06 +0000
+Date: Mon, 09 Feb 2026 21:21:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [trace:trace/for-next 27/40] kernel/trace/trace.c:1967:6:
+ error: no member named 'd_max_latency' in 'struct trace_array'; did you mean
+ 'max_latency'?
+Message-ID: <202602092133.fTdojd95-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205155644.34421-1-me@ziyao.cc>
 
-On Thu, Feb 05, 2026 at 03:56:44PM +0000, Yao Zi wrote:
-> On MIPS, __current_thread_info is defined as global register variable
-> locating in $gp, and is simply assigned with new address during kernel
-> relocation.
-> 
-> This however is broken with LLVM, which always restores $gp if it finds
-> $gp is clobbered in any form, including when intentionally through a
-> global register variable. This is against GCC's documentation[1], which
-> requires a callee-saved register used as global register variable not to
-> be restored if it's clobbered.
-> 
-> As a result, $gp will continue to point to the unrelocated kernel after
-> the epilog of relocate_kernel(), leading to an early crash in init_idle,
-> 
-> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-> [    0.000000] Oops[#1]:
-> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-> [    0.000000] Tainted: [W]=WARN
-> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-> [    0.000000] Hi    : 0000000000000000
-> [    0.000000] Lo    : 0000000000000000
-> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-> [    0.000000] Cause : 00000008 (ExcCode 02)
-> [    0.000000] BadVA : 0000000000000000
-> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
-> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
-> 
-> This bug has been reported to LLVM[2] and affects version from (at
-> least) 18 to 21. Let's work around this by using inline assembly to
-> assign $gp before a fix is widely available.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-> Signed-off-by: Yao Zi <me@ziyao.cc>
-> Acked-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> 
-> Changed from v1:
-> - Include a link to LLVM upstream issue in comment
-> - Collect tags
-> - Link to v1: https://lore.kernel.org/linux-mips/20260118090235.60670-1-me@ziyao.cc/
-> 
->  arch/mips/kernel/relocate.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/for-next
+head:   c4f1fe47b106e9200cbb1b8951bd75f036d53bd3
+commit: ba73713da50e5c24499ca8941171593466ea34f7 [27/40] tracing: Clean up use of trace_create_maxlat_file()
+config: arm64-randconfig-003-20260209 (https://download.01.org/0day-ci/archive/20260209/202602092133.fTdojd95-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260209/202602092133.fTdojd95-lkp@intel.com/reproduce)
 
-applied to mips-next
-Thomas.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602092133.fTdojd95-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace.c:1967:6: error: no member named 'd_max_latency' in 'struct trace_array'; did you mean 'max_latency'?
+    1967 |         tr->d_max_latency = trace_create_file("tracing_max_latency",
+         |             ^~~~~~~~~~~~~
+         |             max_latency
+   kernel/trace/trace.h:348:17: note: 'max_latency' declared here
+     348 |         unsigned long           max_latency;
+         |                                 ^
+   kernel/trace/trace.c:9789:23: warning: shift count is negative [-Wshift-count-negative]
+    9789 |                     !((1ULL << i) & TOP_LEVEL_TRACE_FLAGS)) {
+         |                                     ^~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace.c:523:9: note: expanded from macro 'TOP_LEVEL_TRACE_FLAGS'
+     523 |                TRACE_ITER(PROF_TEXT_OFFSET) | FPROFILE_DEFAULT_FLAGS)
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace.h:1439:42: note: expanded from macro 'TRACE_ITER'
+    1439 |         (TRACE_ITER_##flag##_BIT < 0 ? 0 : 1ULL << (TRACE_ITER_##flag##_BIT))
+         |                                                 ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +1967 kernel/trace/trace.c
+
+  1959	
+  1960	static void trace_create_maxlat_file(struct trace_array *tr,
+  1961					     struct dentry *d_tracer)
+  1962	{
+  1963	#ifdef LATENCY_FS_NOTIFY
+  1964		INIT_WORK(&tr->fsnotify_work, latency_fsnotify_workfn);
+  1965		init_irq_work(&tr->fsnotify_irqwork, latency_fsnotify_workfn_irq);
+  1966	#endif
+> 1967		tr->d_max_latency = trace_create_file("tracing_max_latency",
+  1968						      TRACE_MODE_WRITE,
+  1969						      d_tracer, tr,
+  1970						      &tracing_max_lat_fops);
+  1971	}
+  1972	
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
