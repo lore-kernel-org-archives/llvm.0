@@ -1,58 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE9A8632B;
-	Tue, 10 Feb 2026 15:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A0C30B536;
+	Tue, 10 Feb 2026 16:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770736427; cv=none; b=cyanxuc/+IkGrYwXesfjsydDn05KZTjR4nQwEmLBNDKuL62dJbgR3+klWWBoYpFx0If4YdmALHPGJ9zOU4jGD/qr2N6giPB90/S+Tdk6ZQR/KmWe7lMpKk/x2GoPT1Mw3ZLEtqjT4lFdBMEz1NYQjl+nFvaWZZpaFVbpPVQCj1k=
+	t=1770742133; cv=none; b=lhgddcr8cmMAM8XSTTuHeX0uc9wtm+kroCFSC4VhE7IoO7N9VABt7Vs3Ed/fa8Ce6uE0RxbbCUNM7laJ93U3nKonIl3U2lGDtaSR2C/1xUICJqhU8bKLU4et+xJF+HY6P1+WtK8KT7VRmRI4MYxhjei33U23geS4gBgVrkUBcm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770736427; c=relaxed/simple;
-	bh=A1VP8GdVrodlGLPvZG1q7SrpN0GjmJM04K5T83dw5QQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=QsuSP4GSabB1X7/FO1Nl925FTbLQKPrv8ikyyusApxMd03A8uCGOauut5aMK6J5gGyNQV9lA/olGnsaAlqPHJtt6nP5dUHhCBWkIkDMSWX8qw1nAZfzv2vxiM9mebQUwdr7uBNdzhza4HPxbigjMuui3U3Z1TCX7QWoA62OIk2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=czpTJ38h; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1770742133; c=relaxed/simple;
+	bh=kdNxMFE6PwZGO0BEQaRyKBfOGFnaVOqFW1VBpbMc2uw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bDo05/x1EOPeTGTcJnLiSTvUEkS5ACV3MtDLCrAdOeT4I9qTxD90iiFpxOvIpzfhYwa++Efo5lxse1CiysEmGbUd5MOYmC3cJqpKddEyVAksmqn7aCd3pWm3DTy44xjJJTa92z+YjKp2msAjdbvAHooAvFLDbijCJnwn5POtboc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SbbgUIM4; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="czpTJ38h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SbbgUIM4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770736426; x=1802272426;
+  t=1770742132; x=1802278132;
   h=date:from:to:cc:subject:message-id;
-  bh=A1VP8GdVrodlGLPvZG1q7SrpN0GjmJM04K5T83dw5QQ=;
-  b=czpTJ38h93X9JyIg19ZJuJOxS2jhkGnuRJNHBO+oJVteLiCK2oFWZKXH
-   U5AUFoCn7PAMN6jl1zzrNVh7oHhlGFMgAfLGya9WK07GHRF/za+aiNz6s
-   LOACRibN8YIAihSmkEfvm4Hm8/FUgAPTjJB++wH0smzeSKkyhXOlQEQBX
-   b3y/eCuXtfrPNELlJybQOXuq33+JhAaRDTipXEAAUzktKP84J+zXEw4VC
-   oLTBwhjFbQdzweCTd/Hd7NSNJPQ4yv8ydDgJt04CAJkbWUeZQPRsS2Zn9
-   jxeBA9PoII9X2q3sqLeWSd1j4q6lPmSdvhqcEBPlg1K+hgOzUPqhkdbzs
-   w==;
-X-CSE-ConnectionGUID: 5zhPDtWtR2SVzqhJv/0jGg==
-X-CSE-MsgGUID: 27BR67mcRXG2MA6KNPzFkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="75490926"
+  bh=kdNxMFE6PwZGO0BEQaRyKBfOGFnaVOqFW1VBpbMc2uw=;
+  b=SbbgUIM4+KBmHW2qH5JVQKlt4WNRiHrlP1h3JHqnUAzL9iHiGup8PPhg
+   3ZIXGdeLQXkAzkE66KOq0mvw5EkyjzCIbD3PsQNApdxXQMTXwwpto68tl
+   IgeuGp4uSa7JNilwSEIKiY5EuwjrsxcfKGBRikAqgd0GQZZYAUhOsa6WQ
+   aPgEgp4W7eeAlXOgEctnzTTrQV9hRHkKNUSbkzRX3lveEOeSiabm4jXLn
+   RCG65lx2w/I/6keMJDGoxHeZhBzxdffZoIj+/IpUR3u6pTyUhuO4NUZ3j
+   BW3EWAxYn1c/1NKEoQ+cx+rBpyXZ76wO+c3O56nZYoIFjwggxNawL9KP/
+   Q==;
+X-CSE-ConnectionGUID: r3tasrZtQmWBLbnxMzCG7g==
+X-CSE-MsgGUID: FgRLlN6/RKW0GxjaSd65qw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="89290702"
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="75490926"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 07:13:45 -0800
-X-CSE-ConnectionGUID: 4OYDOwMdST+R8OLyZbgVvg==
-X-CSE-MsgGUID: onFo1JzXSEKEqCyPSpRBQA==
+   d="scan'208";a="89290702"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 08:48:50 -0800
+X-CSE-ConnectionGUID: 6Egu1cN2TxipMsxRYd44aw==
+X-CSE-MsgGUID: Nrk/ssK9TACgLChMoovJ5Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="211432625"
+   d="scan'208";a="211009337"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Feb 2026 07:13:44 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 10 Feb 2026 08:48:48 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vppQr-00000000p6e-1c9k;
-	Tue, 10 Feb 2026 15:13:41 +0000
-Date: Tue, 10 Feb 2026 23:13:29 +0800
+	id 1vpqus-00000000pDA-1nSX;
+	Tue, 10 Feb 2026 16:48:46 +0000
+Date: Wed, 11 Feb 2026 00:48:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-slaunch 38/41]
- drivers/firmware/efi/libstub/x86-stub.c:832:34: error: too many arguments to
- function call, expected 0, have 1
-Message-ID: <202602102308.djyeMqpP-lkp@intel.com>
+Subject: [peterz-queue:sched/core 19/19] kernel/sched/fair.c:824:35:
+ error: use of undeclared identifier 'cfs_rq'
+Message-ID: <202602110027.m5vtu490-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,92 +59,60 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-slaunch
-head:   68d6a808368b02c2fdfa0ba1e4e59d6b97668c1a
-commit: a64c42672d622dc2867904b9857ef64a890610bd [38/41] x86/efistub: EFI stub DRTM launch support for Secure Launch
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260210/202602102308.djyeMqpP-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602102308.djyeMqpP-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   2457c33520be9ef61c83b8d2308a46f290273ffe
+commit: 2457c33520be9ef61c83b8d2308a46f290273ffe [19/19] sched/fair: Revert 6d71a9c61604 ("sched/fair: Fix EEVDF entity placement bug causing scheduling lag")
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260211/202602110027.m5vtu490-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602110027.m5vtu490-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602102308.djyeMqpP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602110027.m5vtu490-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/x86-stub.c:832:34: error: too many arguments to function call, expected 0, have 1
-     832 |         status = efi_secure_launch_init(handle);
-         |                  ~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~
-   drivers/firmware/efi/libstub/efistub.h:1258:14: note: 'efi_secure_launch_init' declared here
-    1258 | efi_status_t efi_secure_launch_init(void)
-         |              ^
+>> kernel/sched/fair.c:824:35: error: use of undeclared identifier 'cfs_rq'
+     824 |         u64 max_slice = cfs_rq_max_slice(cfs_rq) + TICK_NSEC;
+         |                                          ^~~~~~
    1 error generated.
 
 
-vim +832 drivers/firmware/efi/libstub/x86-stub.c
+vim +/cfs_rq +824 kernel/sched/fair.c
 
-   810	
-   811	/*
-   812	 * On success, this routine will jump to the relocated image directly and never
-   813	 * return.  On failure, it will exit to the firmware via efi_exit() instead of
-   814	 * returning.
-   815	 */
-   816	void __noreturn efi_stub_entry(efi_handle_t handle,
-   817				       efi_system_table_t *sys_table_arg,
-   818				       struct boot_params *boot_params)
-   819	
-   820	{
-   821		efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
-   822		const struct linux_efi_initrd *initrd = NULL;
-   823		unsigned long kernel_entry;
-   824		struct setup_header *hdr;
-   825		efi_status_t status;
-   826	
-   827		efi_system_table = sys_table_arg;
-   828		/* Check if we were booted by the EFI firmware */
-   829		if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
-   830			efi_exit(handle, EFI_INVALID_PARAMETER);
-   831	
- > 832		status = efi_secure_launch_init(handle);
-   833		switch (status) {
-   834			case EFI_SUCCESS:
-   835			case EFI_UNSUPPORTED:
-   836				break;
-   837			default:
-   838				efi_exit(handle, status);
-   839		}
-   840	
-   841		if (!IS_ENABLED(CONFIG_EFI_HANDOVER_PROTOCOL) || !boot_params) {
-   842			status = efi_allocate_bootparams(handle, &boot_params);
-   843			if (status != EFI_SUCCESS)
-   844				efi_exit(handle, status);
-   845		}
-   846	
-   847		hdr = &boot_params->hdr;
-   848	
-   849		if (have_unsupported_snp_features())
-   850			efi_exit(handle, EFI_UNSUPPORTED);
-   851	
-   852		if (IS_ENABLED(CONFIG_EFI_DXE_MEM_ATTRIBUTES)) {
-   853			efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-   854			if (efi_dxe_table &&
-   855			    efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-   856				efi_warn("Ignoring DXE services table: invalid signature\n");
-   857				efi_dxe_table = NULL;
-   858			}
-   859		}
-   860	
-   861		/* grab the memory attributes protocol if it exists */
-   862		efi_bs_call(locate_protocol, &guid, NULL, (void **)&memattr);
-   863	
-   864		status = efi_setup_5level_paging();
-   865		if (status != EFI_SUCCESS) {
-   866			efi_err("efi_setup_5level_paging() failed!\n");
-   867			goto fail;
-   868		}
-   869	
+b72757d8b39995 Peter Zijlstra 2025-04-22  807  
+86bfbb7ce4f67a Peter Zijlstra 2023-05-31  808  /*
+86bfbb7ce4f67a Peter Zijlstra 2023-05-31  809   * lag_i = S - s_i = w_i * (V - v_i)
+147f3efaa24182 Peter Zijlstra 2023-05-31  810   *
+147f3efaa24182 Peter Zijlstra 2023-05-31  811   * However, since V is approximated by the weighted average of all entities it
+147f3efaa24182 Peter Zijlstra 2023-05-31  812   * is possible -- by addition/removal/reweight to the tree -- to move V around
+147f3efaa24182 Peter Zijlstra 2023-05-31  813   * and end up with a larger lag than we started with.
+147f3efaa24182 Peter Zijlstra 2023-05-31  814   *
+147f3efaa24182 Peter Zijlstra 2023-05-31  815   * Limit this to either double the slice length with a minimum of TICK_NSEC
+147f3efaa24182 Peter Zijlstra 2023-05-31  816   * since that is the timing granularity.
+147f3efaa24182 Peter Zijlstra 2023-05-31  817   *
+147f3efaa24182 Peter Zijlstra 2023-05-31  818   * EEVDF gives the following limit for a steady state system:
+147f3efaa24182 Peter Zijlstra 2023-05-31  819   *
+147f3efaa24182 Peter Zijlstra 2023-05-31  820   *   -r_max < lag < max(r_max, q)
+86bfbb7ce4f67a Peter Zijlstra 2023-05-31  821   */
+2457c33520be9e Peter Zijlstra 2026-01-26  822  static s64 entity_lag(u64 avruntime, struct sched_entity *se)
+86bfbb7ce4f67a Peter Zijlstra 2023-05-31  823  {
+b72757d8b39995 Peter Zijlstra 2025-04-22 @824  	u64 max_slice = cfs_rq_max_slice(cfs_rq) + TICK_NSEC;
+1560d1f6eb6b39 Xuewen Yan     2024-04-22  825  	s64 vlag, limit;
+1560d1f6eb6b39 Xuewen Yan     2024-04-22  826  
+2457c33520be9e Peter Zijlstra 2026-01-26  827  	vlag = avruntime - se->vruntime;
+b72757d8b39995 Peter Zijlstra 2025-04-22  828  	limit = calc_delta_fair(max_slice, se);
+6d71a9c6160479 Peter Zijlstra 2025-01-09  829  
+2457c33520be9e Peter Zijlstra 2026-01-26  830  	return clamp(vlag, -limit, limit);
+2457c33520be9e Peter Zijlstra 2026-01-26  831  }
+2457c33520be9e Peter Zijlstra 2026-01-26  832  
+
+:::::: The code at line 824 was first introduced by commit
+:::::: b72757d8b39995a91663eec1a0b86ff663eaa80a sched/fair: Fix lag clamp
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
