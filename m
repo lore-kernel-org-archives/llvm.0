@@ -1,134 +1,148 @@
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72329326948
-	for <llvm@lists.linux.dev>; Tue, 10 Feb 2026 11:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770722983; cv=pass; b=ZEZyKmgOOApDGcn5MixJUF0G2IGPN8GQx8X4az71E/sH8Xct88FEoMUUky7IRt2DxbRgFv+60W/+duTaF6AJkOsocWqAnnLUjTI7g8gUz0GCqwX3LL7IK23lYP1ZHuSeNjSGtwATeNDDtwZCd59kvE5j50lCfPdHXZ16gP+8ZxQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770722983; c=relaxed/simple;
-	bh=j3nx/ajXEqDdK9tPtrbxfG/uqfq2Fd5vN56+LqjmEiA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n6dqMoJUosUHPcdPg86JQRVkm3iWkwsmMMaSvSj+PtXYwoS3q9vLuFku+X7yxV0NWRy5THh5uy8to+cJry1oC6QnBfB8F+tqntAk/u7sXGIpOpuPOJjY2rwIuDd0YOJPFhTXVCO/AbMvvMOwQFAOH/AutRmkdidUERInTR640G0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EZQUkfY6; arc=pass smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19632319858;
+	Tue, 10 Feb 2026 12:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770724969; cv=none; b=PfNrYGcVBXWR4cXg9SaeXgUmLpp+LF3vhc0Up9vrjnrz1B1bej4VIdZ+tLb4ePAMdLJ5iLgzBHsyFoSr9GpES3YSJJQYQp7TF15nA12Ba6RC2X/9Zemui+SIVYk0P+cKVDCK6b6bZ1U5h+d4Xc7fTU3AU405Q+3lWR32EsMEbYQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770724969; c=relaxed/simple;
+	bh=kAPSTtOVfJfIS9jV+CgJZlMJ295jsAmJD3EnF4QdBNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TYeTqtMX5PL2p4v79K3DPVCaBqqlXgRluYsfk299Y/gcrAZo53qRapOqDZMKpj8cASKjfrLX3VxajfFBqlluVXyfaA2CQRRnLJ5VXsGAMKw87P+sfEG9hTyq9mNNjDtgNZtW+LrAwSAPymX0SubUFq26Sc+DDxTrfhkpbqlxcog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3iQOMrL; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EZQUkfY6"
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-5eeaae02888so1354814137.1
-        for <llvm@lists.linux.dev>; Tue, 10 Feb 2026 03:29:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770722981; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Pp+eeKmsALwxgfFbiLbo6wz+2K1pywhQkaaWjMzhv9zjhwVXvlumPxPLuJg9K5AqRq
-         85NjciiCL9WKQiDtwbVUhYkFWCxRX0V2ofLvQw8CFp2lJuHvGoT0QLH+Qvy2VzW7ZRMz
-         x03YYOuUAeL9GARZnp1PCrM+Ikvq6rCGZ5IPuPFULqrhIvKDcniPComzHGqGWlh4FnDf
-         WlnYHjyfhh8uE3fJhmpu4RqcJGdHbejvDBsyleYQFF+qZXqZX0UCUpKNHOuWlNdl+vRg
-         C7S06iYSmMNaMLb6CXKqXHjLYL4m8rC/NVBywUaW7Ytf/jMhG5qBEMfF7yM9LFrt/IX2
-         uEmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j3nx/ajXEqDdK9tPtrbxfG/uqfq2Fd5vN56+LqjmEiA=;
-        fh=UtYBBJzAwsYGRD7dPaaBHIMkrkyLCOK0M5r8MLJiiU4=;
-        b=jtLy3ODmRICh0gt3SdBvzG5iN0GJx97vfWSdiHWLw5hiVRK6dXad9bwRzENkdxy74l
-         T2cxQGYz1fSGbRvraV7kYs0NaefQQL3da9aAnPeh6vN2LVOzGDKqgD7RiXU6gqItnCX4
-         o7MgIq+MvHTJhLNhHPZKZIo7ILvhPTyv5lopPYvhqjZe+zccx1+UQYtPYjt55FrF+QEn
-         iO9R3xFrw7m2VcqbMAGF63M50FPCCD6EJ39gNbXcf1HcfeaoLOCBlyrvs7/dE7+inlZ1
-         SHbH22Dj3zU22Ijl01EWCK7D6qPsy+zo88uKPXUr6Hos6DGRRBraDI3ucX2eEZ9i/ttT
-         394A==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770722981; x=1771327781; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j3nx/ajXEqDdK9tPtrbxfG/uqfq2Fd5vN56+LqjmEiA=;
-        b=EZQUkfY6hxsjSgsUd5yPM+DIhcMEZNJuwRwvP+bf93us+ADWzh88FMgi5Z0LsxXY+G
-         gjEE0qigkmNKid53vF7qs+IDf8vJO1xKvEBBHs7jAomwUbqfLMwpdKGqkvvW+f3kDKD7
-         Q5POJeevG701ZCZtvqv9kOdwSdxexAA8jDibCW8zVbbsWzTNhhhZWLquSGavUgyoctAC
-         aVK5JIP2YD91StLiGCNhqj/DTfZQPjfM/kdONjldboeDvlKEcmwbu0cj50VYAQvY0w83
-         Zi30QWcjbm/CGOpun76lpIoRxiIxXUApbtuBcyH7JcatJW8rhNkXyuj7LXUnTk8ZhaBj
-         n91A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770722981; x=1771327781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j3nx/ajXEqDdK9tPtrbxfG/uqfq2Fd5vN56+LqjmEiA=;
-        b=uCkGgm5kbsTgEXCxbSIjW9B6C2vFL6Lxl+FkRCly6i8mKD5qoY72A7zpOjzD42uROc
-         7tUE/zI771P3+avJjrvsE/v80E77mhrIrtPUKy50yR5DeQdU9HEjbam1grvAmOUUbiOf
-         GZKh6gztG4kf3NRmjQVvb2ucuyjTw11CiBppe4LUGJFI8mqxhmVMrPymXJvLIxCKCGaI
-         lLQopfCQRpkBJok4kHwnyLyOzyI0Tpih7yr8RpK44kPzVGEyHtC1E9WaYqDqGb+V2trB
-         boLmoA1ulKNDjYFd7oHlicrBjkKBFsz8kCv16DCx1N0TRb06wGCaA1OjXo48beeApJRk
-         Kogw==
-X-Forwarded-Encrypted: i=1; AJvYcCXR0+ujomj2HxuvWcMa/5Rv1Nx38AqgtjcgBgPE1qSA68mmCLewWUHXHxwdycD6KHy2gy0i@lists.linux.dev
-X-Gm-Message-State: AOJu0YzvDBA0/CFHd/JjEEL0ElmaL1RdcrR3j+tRs9qoMKV1nnjJIzgd
-	w7il1/VU19GMQhQ3KVxB5j8CZCfXrLbMNYqwLWJuO0t0sghwgs/UhbS/AgdnDsuv5wLJKoycd+q
-	Om7gqDexIP6Qea61RfcyAlipBSRIImpoTFVPGEc0=
-X-Gm-Gg: AZuq6aK4DWytvFEy5UDpHpiqdQRDmMxT81HABKLRz3MNWklsimfpnpS8g4V+q6Bxfx1
-	FgU76j8vo3fSGetEnJF6UlsYBHtiN8SxYRMe7Bsgi1BFBz6HXAgNUwQX3eBWVRbgmkkJxudf5TX
-	JdKjzpPmOnxab80IJe0HcCULPUvMk8lkfw6LLRj5mbaZ5954dpPinfOfr3YInTwVkPEBcpH0Ha8
-	A4lRj4Vm7m+tsjVFFTThYp+9TeB5ZUlX0gNxa3gCFBWCcv2hOuGvYWu/Pz9t1msE6abxZPmseHd
-	XBW3/cpNuu/6HbSYGiO6kBF0Z1r8F+DEQ/EAgbogPcFZsJ3x0bQcagnTkWc=
-X-Received: by 2002:a05:6102:4187:b0:5de:93bb:c53f with SMTP id
- ada2fe7eead31-5fc48df6ff6mr403676137.25.1770722981155; Tue, 10 Feb 2026
- 03:29:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3iQOMrL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770724968; x=1802260968;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kAPSTtOVfJfIS9jV+CgJZlMJ295jsAmJD3EnF4QdBNw=;
+  b=V3iQOMrLYI6PkDk+WaE4GsLHxw/oHdsQ6fXkUHsKpuHeP9Z0GEWUWPbc
+   /5Xn1s1LiSdwggCOKYv+Bfyxy4T8XCfLN5jmJFgTPKp+KiTIi1fv6xg92
+   7Vm7y9UefK6KCuJHpBmVdikjQyYdTnFbUYYiKvONn+GewPmgYXvZcJ7vn
+   IDQVKAiXh/gAg8uicfvdGrn8TIilac4z076YyoYDTCsLaK+Kyr8ipASYp
+   Lo+7ufvvLQkFcYXxUMvn3+T8ZLJVdhbX56h1MuV+3Y4D0sc/F+d1/nP5O
+   mPNFy2ES1VR1BFZv5BVzz/YVB7vafIjVT6N/lJ4DQiXhWA+p1Nywu0YGI
+   Q==;
+X-CSE-ConnectionGUID: +Av3pbyFSNqcEzQJa339Kg==
+X-CSE-MsgGUID: WwRcVaa6RZq3t6RlCzfRKA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="71893908"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="71893908"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 04:02:48 -0800
+X-CSE-ConnectionGUID: FHhtlCbwTlSbN4KSJ4eG9Q==
+X-CSE-MsgGUID: ouaiq7hVRwuooZ1RvfqwTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="211003400"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 10 Feb 2026 04:02:40 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vpmRw-00000000oyu-1ZR6;
+	Tue, 10 Feb 2026 12:02:36 +0000
+Date: Tue, 10 Feb 2026 20:02:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@resnulli.us>, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	sumit.semwal@linaro.org, benjamin.gaignard@collabora.com,
+	Brian.Starkey@arm.com, jstultz@google.com, tjmercier@google.com,
+	christian.koenig@amd.com, m.szyprowski@samsung.com,
+	robin.murphy@arm.com, jgg@ziepe.ca, leon@kernel.org,
+	sean.anderson@linux.dev, ptesarik@suse.com, catalin.marinas@arm.com,
+	aneesh.kumar@kernel.org, suzuki.poulose@arm.com,
+	steven.price@arm.com, thomas.lendacky@amd.com, john.allen@amd.com,
+	ashish.kalra@amd.com, suravee.suthikulpanit@amd.com,
+	linux-coco@lists.linux.dev
+Subject: Re: [PATCH 5/5] dma-buf: heaps: system: add an option to allocate
+ explicitly decrypted memory
+Message-ID: <202602101926.lsquJdb1-lkp@intel.com>
+References: <20260209153809.250835-6-jiri@resnulli.us>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251121193957.1655580-1-morbo@google.com> <20251121193957.1655580-2-morbo@google.com>
- <d29ca795-ade3-454b-816e-46b5815a1444@app.fastmail.com> <CAGG=3QXC7EH18mhJq6egqE6bvo8_KchPD_N4PeZ7Z7tLOv26-A@mail.gmail.com>
- <a4c3494c-5444-4cc5-b847-4e1754bf3d20@app.fastmail.com>
-In-Reply-To: <a4c3494c-5444-4cc5-b847-4e1754bf3d20@app.fastmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Tue, 10 Feb 2026 03:29:24 -0800
-X-Gm-Features: AZwV_QhncrCadRnYVezoNaR1hRSbJWzPQVVig9dQWodD_Oj6H6DCBbQYrzvwC9g
-Message-ID: <CAGG=3QW0Hs7DdNh9Zt1g3LgdrFGi9POKuhOETMPbe-a2=gvp0Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] Compiler Attributes: Add __counted_by_ptr macro
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Marc Herbert <Marc.Herbert@linux.intel.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, Jan Hendrik Farr <kernel@jfarr.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260209153809.250835-6-jiri@resnulli.us>
 
-On Tue, Feb 10, 2026 at 3:28=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Tue, Feb 10, 2026, at 12:00, Bill Wendling wrote:
-> > On Tue, Feb 10, 2026 at 12:41=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> =
-wrote:
-> >>
-> >> This is every use of __counted_by_ptr() in linux-next at the moment.
-> >>
-> > I assume it's a git snapshot of GCC. :-) What does
-> > `scripts/cc-version.sh` produce for it?
->
-> It shows 'GCC 160000'
->
-> I see my mistake now, I tried to build the lastest snapshot
-> but accidentally checked out an older git commit on that
-> branch, which didn't work.
->
-> I retested with current HEAD now, and that does work.
->
-> Sorry for the confusion.
->
-*whew* I can go to sleep now. :-D
+Hi Jiri,
 
--bw
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm-tip/drm-tip trace/for-next linus/master v6.19]
+[cannot apply to next-20260209]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Pirko/dma-mapping-avoid-random-addr-value-print-out-on-error-path/20260209-234013
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260209153809.250835-6-jiri%40resnulli.us
+patch subject: [PATCH 5/5] dma-buf: heaps: system: add an option to allocate explicitly decrypted memory
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260210/202602101926.lsquJdb1-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602101926.lsquJdb1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602101926.lsquJdb1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/dma-buf/heaps/system_heap.c:66:8: error: call to undeclared function 'set_memory_decrypted'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      66 |         ret = set_memory_decrypted(addr, nr_pages);
+         |               ^
+>> drivers/dma-buf/heaps/system_heap.c:80:8: error: call to undeclared function 'set_memory_encrypted'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      80 |         ret = set_memory_encrypted(addr, nr_pages);
+         |               ^
+   2 errors generated.
+
+
+vim +/set_memory_decrypted +66 drivers/dma-buf/heaps/system_heap.c
+
+    59	
+    60	static int system_heap_set_page_decrypted(struct page *page)
+    61	{
+    62		unsigned long addr = (unsigned long)page_address(page);
+    63		unsigned int nr_pages = 1 << compound_order(page);
+    64		int ret;
+    65	
+  > 66		ret = set_memory_decrypted(addr, nr_pages);
+    67		if (ret)
+    68			pr_warn_ratelimited("dma-buf system heap: failed to decrypt page at %p\n",
+    69					    page_address(page));
+    70	
+    71		return ret;
+    72	}
+    73	
+    74	static int system_heap_set_page_encrypted(struct page *page)
+    75	{
+    76		unsigned long addr = (unsigned long)page_address(page);
+    77		unsigned int nr_pages = 1 << compound_order(page);
+    78		int ret;
+    79	
+  > 80		ret = set_memory_encrypted(addr, nr_pages);
+    81		if (ret)
+    82			pr_warn_ratelimited("dma-buf system heap: failed to re-encrypt page at %p, leaking memory\n",
+    83					    page_address(page));
+    84	
+    85		return ret;
+    86	}
+    87	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
