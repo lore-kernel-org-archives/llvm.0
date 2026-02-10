@@ -1,249 +1,129 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2241238A9C4;
-	Tue, 10 Feb 2026 17:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5850D372B21;
+	Tue, 10 Feb 2026 17:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770745918; cv=none; b=XeQOJioaX3iVbZYDubZdmWYeGjS9H4hvFwPsdAIM4CJ+K4tZ2Q0KsTxDQDKbJ8bmbelUh0bojKFHHDEA4hhxqqsNCC9UPivJOz638poG0chBoilrpw09OfGYJjn37EpuW3mdaBd+O6e/7dkboR8GjRCayAMoTA5UnaWBxMLaG3s=
+	t=1770745919; cv=none; b=NjGQtKqFJ/k+sJWJQrZvWYZ3d3e7Rjgf7rnT4iCrAqDF9j6UjaSZLOdkwNgSI3ovwX+9Mm9hoXpsxLe7hXRYTzZ8z+/0bdYtKo/61OeEsql+sUxWeAy+9Kji4CSINWzKxzs6ZNmzAPAtfKc5CP28UYzOJeDNH0nZ6ZKUfxF9yUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770745918; c=relaxed/simple;
-	bh=PPxvKYAlQiSUuXtMrVXjr8mSYaxiv4xumYCJ9h/dKuc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=YRY7aYHXSJWfz0JJm83+uFnGStKssa0Lx1nScJ0LknC++5/iCm4PN1yFFBHtO/t8t9v0FwlFX6mLt/7WcNJAjqTIX37VHnEM3mmZcA9hy5Cqy0/HX/ml//MnmBYHwM+yyyrT0DrnQAJ0mhdV37qH8yibkjM6pVMLOTC7mcUtfe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lp9PPxFv; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1770745919; c=relaxed/simple;
+	bh=qA06aqPLShHsei2q4s7sufdt3dRHU5s7RVveGATdUlY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLtU/VC5/arROnKEVEqMIV/Np1i+/k0xXgpZ8mY6yjUsriOWeKtU/QNUoC7fodrMm87kzcwM17DzpKyhAOyD8D+IzOAXbZQbzjctg8Q+S2eDuj0TxcRQH4mMiSkhIdi3U/lFgVHR2EeGeZBmsMOHd7HQOemP84TTy08JhnbTEoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U5tDKn5p; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lp9PPxFv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U5tDKn5p"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770745916; x=1802281916;
-  h=date:from:to:cc:subject:message-id;
-  bh=PPxvKYAlQiSUuXtMrVXjr8mSYaxiv4xumYCJ9h/dKuc=;
-  b=Lp9PPxFvxksiZ/B7yoUnbAk+tu1bybHGH+jpAflklTFWtr8i8pNVzkwV
-   TKlaGpJy5F2qPzJ5YvbOVoNAA3/ZPBy7L+q9On0vdn9NR0OHrQLasVc9D
-   XhKuDlSa7vEgigpWjnhvVdfGqLY5VF5EbbC+RQxDY3FfjI44jSM0Dibf/
-   uchboBv3J1U4Iic3ZuJ7tnReH/qxwN3/XD1L9EwYvNG2JszXnueFI+0JB
-   o/3cTy92ylald7pV5O3y0z1yZYMiR1wHrXuG7vBei12OBv8jY5+jNJ9sP
-   BU+Ja12t9Be+psC8Lg8oZCqiyporT0HFYv9uKA5J4oD+CKimfWCdAdKiA
-   g==;
-X-CSE-ConnectionGUID: jr7VkbSyTECkKYYIjK33Dw==
-X-CSE-MsgGUID: Qn1jAv1BRXylXWFarSH9nQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="89473473"
+  t=1770745918; x=1802281918;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qA06aqPLShHsei2q4s7sufdt3dRHU5s7RVveGATdUlY=;
+  b=U5tDKn5pe9Huq749TSHvIeaTGvQ598+9GEQSY/KmxYObscu3XMkWAR7W
+   3qsGW4isHRYpKwelVIlx2NfAJNNeTSLxwEAugNYAMr8zQcNYdeofknwiq
+   PNaabKiIxO6Q+IMHUuggZnu74cjRtKxK39ANkLIyhQA0jnZ7tG5/gE0Rn
+   ULhjA2inFWanVXEwvw5+p8BjM9AgW9Ei4IzIBEZ7esFDohRSnhZ8m+I45
+   o1EzRA8jwbVF0UK9nTiFAcN3iAp0QKRmWbyX8MDLX5gvUIm3ZwMUvXBqG
+   2AT7vrysyv5Dps7eeSyIPQ15nVtjzZ9UcRP1+qptmXL6emuaHt9wHP6Kw
+   w==;
+X-CSE-ConnectionGUID: w6nSWZ5ZSgyh3x2mCJQk2g==
+X-CSE-MsgGUID: ullgCn8AQSirwmkkp1IuQQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="89473475"
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="89473473"
+   d="scan'208";a="89473475"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 09:51:53 -0800
-X-CSE-ConnectionGUID: nRfXvetXRkCDrXofsukijw==
-X-CSE-MsgGUID: 2gNsiz8MQjqhA09f50KwnQ==
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 09:51:55 -0800
+X-CSE-ConnectionGUID: 5euT5pk4QyyxthZ+F314CA==
+X-CSE-MsgGUID: DBvC165RT2emIBVDWIIp4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="216495385"
+   d="scan'208";a="216495371"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
   by fmviesa005.fm.intel.com with ESMTP; 10 Feb 2026 09:51:51 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vprtt-00000000pH2-0SCM;
+	id 1vprtt-00000000pH0-0MlI;
 	Tue, 10 Feb 2026 17:51:49 +0000
-Date: Wed, 11 Feb 2026 01:51:23 +0800
+Date: Wed, 11 Feb 2026 01:51:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [leon-rdma:refactor-umem-v1 73/105]
- drivers/infiniband/hw/cxgb4/cq.c:1018:10: error: member reference type 'const
- struct ib_cq_init_attr *' is a pointer; did you mean to use '->'?
-Message-ID: <202602110124.Y8EAUbI7-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Deepanshu Kartikey <kartikey406@gmail.com>, akpm@linux-foundation.org,
+	david@kernel.org, lorenzo.stoakes@oracle.com,
+	baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	baohua@kernel.org, ackerleytng@google.com, seanjc@google.com,
+	pbonzini@redhat.com, michael.roth@amd.com, vannapurve@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ziy@nvidia.com,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	Deepanshu Kartikey <kartikey406@gmail.com>,
+	syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com
+Subject: Re: [PATCH] mm: thp: Deny THP for guest_memfd and secretmem in
+ file_thp_enabled()
+Message-ID: <202602110124.Y72YFz1K-lkp@intel.com>
+References: <20260209033558.22943-1-kartikey406@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260209033558.22943-1-kartikey406@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git refactor-umem-v1
-head:   b6daace542159a3879b60866e24495985ecffc23
-commit: 23f23fe92e4c96b51f27c4f5ce4f60e881b5efae [73/105] RDMA/cxgb4: Separate kernel and user CQ creation paths
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260211/202602110124.Y8EAUbI7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602110124.Y8EAUbI7-lkp@intel.com/reproduce)
+Hi Deepanshu,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepanshu-Kartikey/mm-thp-Deny-THP-for-guest_memfd-and-secretmem-in-file_thp_enabled/20260209-113800
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260209033558.22943-1-kartikey406%40gmail.com
+patch subject: [PATCH] mm: thp: Deny THP for guest_memfd and secretmem in file_thp_enabled()
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260211/202602110124.Y72YFz1K-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602110124.Y72YFz1K-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602110124.Y8EAUbI7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602110124.Y72YFz1K-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/infiniband/hw/cxgb4/cq.c:1018:10: error: member reference type 'const struct ib_cq_init_attr *' is a pointer; did you mean to use '->'?
-    1018 |         if (attr.cqe > ibdev->attrs.max_cqe)
-         |             ~~~~^
-         |                 ->
-   1 error generated.
+>> mm/huge_memory.c:96:30: error: use of undeclared identifier 'GUEST_MEMFD_MAGIC'
+      96 |         if (inode->i_sb->s_magic == GUEST_MEMFD_MAGIC ||
+         |                                     ^
+>> mm/huge_memory.c:97:30: error: use of undeclared identifier 'SECRETMEM_MAGIC'
+      97 |             inode->i_sb->s_magic == SECRETMEM_MAGIC)
+         |                                     ^
+   2 errors generated.
 
 
-vim +1018 drivers/infiniband/hw/cxgb4/cq.c
+vim +/GUEST_MEMFD_MAGIC +96 mm/huge_memory.c
 
-   996	
-   997	int c4iw_create_user_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
-   998				struct uverbs_attr_bundle *attrs)
-   999	{
-  1000		struct ib_udata *udata = &attrs->driver_udata;
-  1001		struct ib_device *ibdev = ibcq->device;
-  1002		int entries = attr->cqe;
-  1003		int vector = attr->comp_vector;
-  1004		struct c4iw_dev *rhp = to_c4iw_dev(ibcq->device);
-  1005		struct c4iw_cq *chp = to_c4iw_cq(ibcq);
-  1006		struct c4iw_create_cq ucmd;
-  1007		struct c4iw_create_cq_resp uresp;
-  1008		int ret, wr_len;
-  1009		size_t memsize, hwentries;
-  1010		struct c4iw_mm_entry *mm, *mm2;
-  1011		struct c4iw_ucontext *ucontext = rdma_udata_to_drv_context(
-  1012			udata, struct c4iw_ucontext, ibucontext);
-  1013	
-  1014		pr_debug("ib_dev %p entries %d\n", ibdev, entries);
-  1015		if (attr->flags || ibcq->umem)
-  1016			return -EOPNOTSUPP;
-  1017	
-> 1018		if (attr.cqe > ibdev->attrs.max_cqe)
-  1019			return -EINVAL;
-  1020	
-  1021		if (vector >= rhp->rdev.lldi.nciq)
-  1022			return -EINVAL;
-  1023	
-  1024		if (udata->inlen < sizeof(ucmd))
-  1025			ucontext->is_32b_cqe = 1;
-  1026	
-  1027		chp->wr_waitp = c4iw_alloc_wr_wait(GFP_KERNEL);
-  1028		if (!chp->wr_waitp)
-  1029			return -ENOMEM;
-  1030		c4iw_init_wr_wait(chp->wr_waitp);
-  1031	
-  1032		wr_len = sizeof(struct fw_ri_res_wr) + sizeof(struct fw_ri_res);
-  1033		chp->destroy_skb = alloc_skb(wr_len, GFP_KERNEL);
-  1034		if (!chp->destroy_skb) {
-  1035			ret = -ENOMEM;
-  1036			goto err_free_wr_wait;
-  1037		}
-  1038	
-  1039		/* account for the status page. */
-  1040		entries++;
-  1041	
-  1042		/* IQ needs one extra entry to differentiate full vs empty. */
-  1043		entries++;
-  1044	
-  1045		/*
-  1046		 * entries must be multiple of 16 for HW.
-  1047		 */
-  1048		entries = roundup(entries, 16);
-  1049	
-  1050		/*
-  1051		 * Make actual HW queue 2x to avoid cdix_inc overflows.
-  1052		 */
-  1053		hwentries = min(entries * 2, rhp->rdev.hw_queue.t4_max_iq_size);
-  1054	
-  1055		/*
-  1056		 * Make HW queue at least 64 entries so GTS updates aren't too
-  1057		 * frequent.
-  1058		 */
-  1059		if (hwentries < 64)
-  1060			hwentries = 64;
-  1061	
-  1062		memsize = hwentries * (ucontext->is_32b_cqe ?
-  1063				(sizeof(*chp->cq.queue) / 2) : sizeof(*chp->cq.queue));
-  1064	
-  1065		/*
-  1066		 * memsize must be a multiple of the page size if its a user cq.
-  1067		 */
-  1068		memsize = roundup(memsize, PAGE_SIZE);
-  1069	
-  1070		chp->cq.size = hwentries;
-  1071		chp->cq.memsize = memsize;
-  1072		chp->cq.vector = vector;
-  1073	
-  1074		ret = create_cq(&rhp->rdev, &chp->cq, &ucontext->uctx, chp->wr_waitp);
-  1075		if (ret)
-  1076			goto err_free_skb;
-  1077	
-  1078		chp->rhp = rhp;
-  1079		chp->cq.size--;				/* status page */
-  1080		chp->ibcq.cqe = entries - 2;
-  1081		spin_lock_init(&chp->lock);
-  1082		spin_lock_init(&chp->comp_handler_lock);
-  1083		refcount_set(&chp->refcnt, 1);
-  1084		init_completion(&chp->cq_rel_comp);
-  1085		ret = xa_insert_irq(&rhp->cqs, chp->cq.cqid, chp, GFP_KERNEL);
-  1086		if (ret)
-  1087			goto err_destroy_cq;
-  1088	
-  1089		ret = -ENOMEM;
-  1090		mm = kmalloc(sizeof(*mm), GFP_KERNEL);
-  1091		if (!mm)
-  1092			goto err_remove_handle;
-  1093		mm2 = kmalloc(sizeof(*mm2), GFP_KERNEL);
-  1094		if (!mm2)
-  1095			goto err_free_mm;
-  1096	
-  1097		memset(&uresp, 0, sizeof(uresp));
-  1098		uresp.qid_mask = rhp->rdev.cqmask;
-  1099		uresp.cqid = chp->cq.cqid;
-  1100		uresp.size = chp->cq.size;
-  1101		uresp.memsize = chp->cq.memsize;
-  1102		spin_lock(&ucontext->mmap_lock);
-  1103		uresp.key = ucontext->key;
-  1104		ucontext->key += PAGE_SIZE;
-  1105		uresp.gts_key = ucontext->key;
-  1106		ucontext->key += PAGE_SIZE;
-  1107		/* communicate to the userspace that
-  1108		 * kernel driver supports 64B CQE
-  1109		 */
-  1110		uresp.flags |= C4IW_64B_CQE;
-  1111	
-  1112		spin_unlock(&ucontext->mmap_lock);
-  1113		ret = ib_copy_to_udata(udata, &uresp,
-  1114				       ucontext->is_32b_cqe ?
-  1115				       sizeof(uresp) - sizeof(uresp.flags) :
-  1116				       sizeof(uresp));
-  1117		if (ret)
-  1118			goto err_free_mm2;
-  1119	
-  1120		mm->key = uresp.key;
-  1121		mm->addr = 0;
-  1122		mm->vaddr = chp->cq.queue;
-  1123		mm->dma_addr = chp->cq.dma_addr;
-  1124		mm->len = chp->cq.memsize;
-  1125		insert_flag_to_mmap(&rhp->rdev, mm, mm->addr);
-  1126		insert_mmap(ucontext, mm);
-  1127	
-  1128		mm2->key = uresp.gts_key;
-  1129		mm2->addr = chp->cq.bar2_pa;
-  1130		mm2->len = PAGE_SIZE;
-  1131		mm2->vaddr = NULL;
-  1132		mm2->dma_addr = 0;
-  1133		insert_flag_to_mmap(&rhp->rdev, mm2, mm2->addr);
-  1134		insert_mmap(ucontext, mm2);
-  1135	
-  1136		pr_debug("cqid 0x%0x chp %p size %u memsize %zu, dma_addr %pad\n",
-  1137			 chp->cq.cqid, chp, chp->cq.size, chp->cq.memsize,
-  1138			 &chp->cq.dma_addr);
-  1139		return 0;
-  1140	err_free_mm2:
-  1141		kfree(mm2);
-  1142	err_free_mm:
-  1143		kfree(mm);
-  1144	err_remove_handle:
-  1145		xa_erase_irq(&rhp->cqs, chp->cq.cqid);
-  1146	err_destroy_cq:
-  1147		destroy_cq(&chp->rhp->rdev, &chp->cq, &ucontext->uctx,
-  1148			   chp->destroy_skb, chp->wr_waitp);
-  1149	err_free_skb:
-  1150		kfree_skb(chp->destroy_skb);
-  1151	err_free_wr_wait:
-  1152		c4iw_put_wr_wait(chp->wr_waitp);
-  1153		return ret;
-  1154	}
-  1155	
+    84	
+    85	static inline bool file_thp_enabled(struct vm_area_struct *vma)
+    86	{
+    87		struct inode *inode;
+    88	
+    89		if (!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS))
+    90			return false;
+    91	
+    92		if (!vma->vm_file)
+    93			return false;
+    94	
+    95		inode = file_inode(vma->vm_file);
+  > 96		if (inode->i_sb->s_magic == GUEST_MEMFD_MAGIC ||
+  > 97		    inode->i_sb->s_magic == SECRETMEM_MAGIC)
+    98			return false;
+    99	
+   100		return !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
+   101	}
+   102	
 
 -- 
 0-DAY CI Kernel Test Service
