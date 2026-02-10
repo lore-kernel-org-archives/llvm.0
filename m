@@ -1,117 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186A033B6C9;
-	Tue, 10 Feb 2026 08:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B2933A9ED
+	for <llvm@lists.linux.dev>; Tue, 10 Feb 2026 08:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770712835; cv=none; b=V3JWSuN9wLDvfz4tcUepoDg4x5cR1XvpDICHJUqRRLYcNHVNSkEnJD9N1uNR5aLvYWDGKN1vNkpuQgEuSVLxNhw7+nMUCkAJS2f/2w5sE1kZNQoMcSGJl0pp7ysR3CY7vBA73WBiL/uCmo41rpG9vz2T98YNcbs58yqY3VSfPCE=
+	t=1770712910; cv=none; b=P8VWRbvLC1nguKdKvLJd95BBBlA4YJD0sZFdfYh1FDYJ3YEL7ODpcvjP8lcZThRghJ1f4HBsFkKQAVA5BR84Jpj1UFw8qt+wRfbtxD8z2/fu3anICYvbN1JIE4cNjUo0HZ8AtnNT55GoTs/KZh64EBcbVfhfC3PPJyYSWFRA194=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770712835; c=relaxed/simple;
-	bh=cEWD0HKxMC5TFNqsMONA9RsZ0ta5n7ps1wactfIdARQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=akTV2DfWPcFMJgsdzDec/TBKPkkhXA3VXOlOcMvC55bWcwLsRkKxuIZ0+e6Ewmi83k3V88oHbCL/O2lWwprWgzQaQh/M46Y2MWHyJXMo6Ni0x5MJvsTf889MwV68tBYbH78D+8GbZ8QW0BOKIkPUsjI+U2l3i4Ld0hid/FpE/e0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JIBITWTa; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770712910; c=relaxed/simple;
+	bh=BUZauHUvzJgggungSLkUNWiggLCxRRTu3jIqZuxwAGQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=A1GD3hq6W3rYxTxnyeEevKt1pZBF+0qC0/YGZTPOJkxBypEqb8O3BmAAGscFo3faWhlAYul3hSKlXckWDcU6X2r2EWypu/Xe9Cm0pDQBPrH90a+Yd+C4TrSJ9aFTcH7PAsnURCg4r7Ny3PgO61n57zqYZsqjZqYQLsQQFTrqw5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bazB5idg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vRGobxHJ; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JIBITWTa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770712834; x=1802248834;
-  h=date:from:to:cc:subject:message-id;
-  bh=cEWD0HKxMC5TFNqsMONA9RsZ0ta5n7ps1wactfIdARQ=;
-  b=JIBITWTa6VoWjhk8DwkCCD3CXNNJC+6s/vU9280ifILf4AwR05+YbJCx
-   CILXWnZ5pELVbJFZjMSdNdORRZ//ghfjNttOGk2tsARUiREPiIQBuhQ5K
-   yLu7PUrQ3WMEcZxH5Ve18eKNYSMtP5cP7dnVk+qbI4IzRAYJJ5O3aNNBL
-   pOH7503Ejt//EJYrLc55D8ParTQariBH0ajbaLtVBjzhlELdwA8KLxkX0
-   /F7uDjLyEmTteF/79+9edzKbInOfehEHagOoiG3nOmwNstpLP5MHTi6FK
-   Cvbc5xUCAuLWQXbduirqoMqlBQyE4Ii1Ly1G06VPlNfyFfyQiXA4kc/Q8
-   A==;
-X-CSE-ConnectionGUID: 8JsGW5nyRam0HhWgp69gog==
-X-CSE-MsgGUID: /Pk0lkgCR261R35Lhibu/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="82158557"
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="82158557"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 00:40:32 -0800
-X-CSE-ConnectionGUID: w3oK8nc+QmeyBjgCQzrAxw==
-X-CSE-MsgGUID: 3U1//rYLRWSZcBYdfCnhXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="211383770"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Feb 2026 00:40:31 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vpjIK-00000000opG-3Jlu;
-	Tue, 10 Feb 2026 08:40:28 +0000
-Date: Tue, 10 Feb 2026 16:40:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-slaunch 38/41]
- drivers/firmware/efi/libstub/efistub.h:1243:18: warning: declaration of
- 'struct boot_params' will not be visible outside of this function
-Message-ID: <202602101625.89LFgfHU-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bazB5idg";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vRGobxHJ"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id D49491300A94;
+	Tue, 10 Feb 2026 03:41:46 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 10 Feb 2026 03:41:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1770712906;
+	 x=1770720106; bh=NVt6zdzuxxUdmKRAXiJ+AdesYtwQIrVUaYBRhDszmik=; b=
+	bazB5idgjrjJLgAf3YRDx3DUYdJ8lqBAhEDaZcXwjfJemdw4mUCH273RPrxGOvDq
+	EHj70Sy2nN6VVvbyXdQWFL6nLMBbQyqmXkuRojNDOF4d8aanHsfdQgqPBFhtgExK
+	hW9JUFWpdN35wfw9OIwfVsblcCDFQ0zoY3yqFOehnbS4bqwV7X8VYFG3CRIpQZf/
+	JDTA03F45+REUCgoLddrD13kXf2GsKuluuH2MLhbmg/x2Sq1Y/ieAR5JNPZ6453u
+	yff/TkaiuHwe+t3Xsfjy5Z+vS8RzOtf2w5byAn2NlC49lEtvwDykjWe/UwVTkCYj
+	bkagm3uKl4vXUcVV/QFgNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770712906; x=
+	1770720106; bh=NVt6zdzuxxUdmKRAXiJ+AdesYtwQIrVUaYBRhDszmik=; b=v
+	RGobxHJg/ab5SjxMQcDSIQhnR+RCUuqo0c/dhBXtN/yhJbJAZJw9QjBZ1GwtV3Tw
+	82D/AUbI6zqdp8C8LjrBZWVp0B7WwgpE8pXz4k1DgQXWOs+dlWRI6smerkZnLGgu
+	hWhXglOxuhTSf7ycDEX84UGek6TNFiA5B12yX13FUOmkBrQdoajxj3uv4Amwn3az
+	xkN8Ca71ME/rtagyz1zlK91jJcmYbggvmlOeW+9Ww+TyrLVkkPStI3VhA2yaeCZy
+	/uYdfSWk4kV7gr1RN4IgD7ROghkcNds8SttsUdehSfrL1SHvuW3VPcK0JHnrL27K
+	xrYpIdaQIKr1vvJ66XF8g==
+X-ME-Sender: <xms:Se-KaaiLgE8Cn-RHEut2nJqMQ3tN2JKEZ8pxMMHDE_drbY43bc14Yg>
+    <xme:Se-KaV06o6FpfJMe1k9uGrwT4AQtkqOxTN9aXk39-M09pV70SKUshXSKtMZCK0Q-i
+    TDoSEUTv2Ta31pgrRj1jVujizxoRacllu8kIeMr7oUv0nQRI4_k70k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduleelvdefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepgefgjedujedvieejgeelgfdthfduffeiteefudeghfffkeejfeehtdejfeejteef
+    necuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopedviedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgvfhhfgihuse
+    gthhhrohhmihhumhdrohhrghdprhgtphhtthhopegsrhhgvghrshhtsehgmhgrihhlrdgt
+    ohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrg
+    hilhdrtghomhdprhgtphhtthhopehusghiiihjrghksehgmhgrihhlrdgtohhmpdhrtghp
+    thhtohepjhhsthhulhhtiiesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtih
+    hnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhg
+    lhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpd
+    hrtghpthhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrgh
+X-ME-Proxy: <xmx:Se-KadToGxgJ8Kk_xX7AzskBeEwQo1sw2iJkRMm2v1WcIFct-G4xFw>
+    <xmx:Se-KaUPgWiXHzfvEL37woxhPgI7KJnSWomy2K7gNqjbuuSxjK3GhzA>
+    <xmx:Se-KaSxqQoNl-e3QWF2oX6zEWIsm49W_j_rXZn_OnnrgAc1ScsF-uw>
+    <xmx:Se-KaWpVfwEZift3s9tWOP9kSuiGA8TF1BXzROfLLov-2OWRmAZCVw>
+    <xmx:Su-KaWdn0qMRE4yZiYOHILjL06yU046z7NS67fGCoiwb06nlRr-AvQRH>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4E7F6700065; Tue, 10 Feb 2026 03:41:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-ThreadId: Ays0886HgnbJ
+Date: Tue, 10 Feb 2026 09:41:25 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Bill Wendling" <morbo@google.com>, linux-kernel@vger.kernel.org
+Cc: "Kees Cook" <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Miguel Ojeda" <ojeda@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Heiko Carstens" <hca@linux.ibm.com>,
+ "Marc Herbert" <Marc.Herbert@linux.intel.com>,
+ "Uros Bizjak" <ubizjak@gmail.com>, "Tejun Heo" <tj@kernel.org>,
+ "Jeff Xu" <jeffxu@chromium.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ "Shakeel Butt" <shakeel.butt@linux.dev>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "John Stultz" <jstultz@google.com>,
+ "Christian Brauner" <brauner@kernel.org>,
+ "Randy Dunlap" <rdunlap@infradead.org>,
+ "Brian Gerst" <brgerst@gmail.com>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+ "Jan Hendrik Farr" <kernel@jfarr.cc>
+Message-Id: <d29ca795-ade3-454b-816e-46b5815a1444@app.fastmail.com>
+In-Reply-To: <20251121193957.1655580-2-morbo@google.com>
+References: <20251121193957.1655580-1-morbo@google.com>
+ <20251121193957.1655580-2-morbo@google.com>
+Subject: Re: [PATCH 1/2] Compiler Attributes: Add __counted_by_ptr macro
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-slaunch
-head:   68d6a808368b02c2fdfa0ba1e4e59d6b97668c1a
-commit: a64c42672d622dc2867904b9857ef64a890610bd [38/41] x86/efistub: EFI stub DRTM launch support for Secure Launch
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260210/202602101625.89LFgfHU-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602101625.89LFgfHU-lkp@intel.com/reproduce)
+On Fri, Nov 21, 2025, at 20:39, Bill Wendling wrote:
+> 
+> +/*
+> + * Optional: only supported since clang >= 21
+> + *
+> + * clang: https://github.com/llvm/llvm-project/pull/137250
+> + */
+> +#ifdef CONFIG_CC_HAS_COUNTED_BY_FOR_POINTER
+> +#define __counted_by_ptr(member)	__attribute__((__counted_by__(member)))
+> +#else
+> +#define __counted_by_ptr(member)
+> +#endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602101625.89LFgfHU-lkp@intel.com/
+Something changed in recent gcc versions. I had tested gcc-16.0.1
+successfully with CONFIG_CC_HAS_COUNTED_BY_PTR=y, but after upgrading
+to a recent git snapshot, I get this output:
 
-All warnings (new ones prefixed by >>):
+fs/coredump.c:95:15: error: 'counted_by' attribute is not allowed for a non-array field
+   95 |         char *corename __counted_by_ptr(size);
+      |               ^~~~~~~~
+drivers/misc/lkdtm/bugs.c:518:15: error: 'counted_by' attribute is not allowed for a non-array field
+  518 |         char *buf __counted_by_ptr(len);
+      |               ^~~
+drivers/misc/lkdtm/bugs.c:520:29: error: 'counted_by' attribute is not allowed for a non-array field
+  520 |         struct lkdtm_extra *extra __counted_by_ptr(nr_extra);
+      |                             ^~~~~
 
-   In file included from drivers/firmware/efi/libstub/alignedmem.c:6:
->> drivers/firmware/efi/libstub/efistub.h:1243:18: warning: declaration of 'struct boot_params' will not be visible outside of this function [-Wvisibility]
-                                  struct boot_params *boot_params,
-                                         ^
-   drivers/firmware/efi/libstub/efistub.h:1264:47: warning: declaration of 'struct boot_params' will not be visible outside of this function [-Wvisibility]
-   efi_status_t efi_secure_launch_prepare(struct boot_params *boot_params,
-                                                 ^
-   2 warnings generated.
---
-   In file included from drivers/firmware/efi/libstub/tpm.c:11:
-   include/linux/tpm_eventlog.h:169:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-           int mapping_size;
-               ^
-   In file included from drivers/firmware/efi/libstub/tpm.c:14:
->> drivers/firmware/efi/libstub/efistub.h:1243:18: warning: declaration of 'struct boot_params' will not be visible outside of this function [-Wvisibility]
-                                  struct boot_params *boot_params,
-                                         ^
-   drivers/firmware/efi/libstub/efistub.h:1264:47: warning: declaration of 'struct boot_params' will not be visible outside of this function [-Wvisibility]
-   efi_status_t efi_secure_launch_prepare(struct boot_params *boot_params,
-                                                 ^
-   3 warnings generated.
+This is every use of __counted_by_ptr() in linux-next at the moment.
 
-
-vim +1243 drivers/firmware/efi/libstub/efistub.h
-
-  1239	
-  1240	struct grub_slaunch_protocol {
-  1241		efi_status_t
-  1242		(__efiapi *set_image)(struct grub_slaunch_protocol *this,
-> 1243				       struct boot_params *boot_params,
-  1244				       u64 base, u32 header_offset);
-  1245	
-  1246		efi_status_t
-  1247		(__efiapi *launch)(struct grub_slaunch_protocol *this);
-  1248	};
-  1249	typedef struct grub_slaunch_protocol grub_slaunch_protocol_t;
-  1250	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+      Arnd
