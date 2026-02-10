@@ -1,244 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D474319ABD8;
-	Tue, 10 Feb 2026 23:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E36318BA7;
+	Tue, 10 Feb 2026 23:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770766302; cv=none; b=bFC8hua7ESXkWgo4yZmE2p8My8WoWq5iNojwq72U5UaXt2l2zmQtMSbNnrmhWk4dazknP3bKGXCK4e3gQI6ZLbyOG8hlwE2orjDY4YMwDoAPBd40sJrbbnqGDAd+kceR4DXXZFbOJQrwG4eoCks70knT4PPHn8QIkMuMltp+O5k=
+	t=1770767229; cv=none; b=WDpDKINqcw5Obaxco2vVcX3lwW3c3yHni5xpkBvpdc5+PqMOBpvqFtZxkG59bub4KHXaqWcxTJFoQf52hOyrq4ezPeufhUkNUV5L1zgmOfKZ/oiWu8j6ISJ32eYY64c3G7PQ60ES8jH0GpU8cCXhxoVIJXzqm83B2q+pDWZtMaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770766302; c=relaxed/simple;
-	bh=VtBXHm1FH+7ZRNbbiM5oMLqEPCFCwBIb93WPsRDBeCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jYyxTKe+2qsqVJy41Kw7L3sHpkgY+V1uV0gbswy9/2HZGcsf9GqcZrki9YIFmeXybR3T/V//AQVi6tsIWjpttYAC31NyQVXUZMGoXraDw0yi7EMLrBGP7XuOpPsQfguAMv6SjxtsjB2/fRXhlvzQd0X1iepX+R97Ruzz5gzq0P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T4hE3TH8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770767229; c=relaxed/simple;
+	bh=j0LddvgoO6VKip0+pj4/pyUdIAr6z9p6l28CtCtXGik=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Zv0ndf7RKbTWXMBsji0EgripVd5FcP3wGckwO8O5iqQi4RHoJVX27TnaPIjRkcp3jvXIkXRf3ds22hRrMTvVbjZZmCwImtLKA/SVRGf0w3zI/WenuP7D4K4zmyyayMz3VlJ988uIEw4vGlyq9pwDZKun6GtPnTfEvw6JJkiHEDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WXIfz4a2; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T4hE3TH8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B236DC19423;
-	Tue, 10 Feb 2026 23:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770766302;
-	bh=VtBXHm1FH+7ZRNbbiM5oMLqEPCFCwBIb93WPsRDBeCI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T4hE3TH85VY+Qy9yTBAcl62yuXk8XLDd5+NVxbVe9ovqozVC/B0Hkwl+eDMt2602V
-	 I6gHFeVUhGe8EFPpEm8QwvBT1EoDsWlT7W9758l8a8Ioa52YaXIu55reRi0Shb+SG5
-	 Ry66YmMNPaHm6Kaaa2zSe7SBkjMcWXeUcBl7lKdxWyQzkuGz/rmBvFhbHqIiItecTg
-	 D8uTKcX0tb5id+8/kE3+ZbvMZ293r/+gsEpkEx9qFODoeSdK5CLC3AurCb68o9e51F
-	 qSt0d8d3KpPKGYOnHk56lxb1FYzUb7LvKtwMrDpUQnmGH4Jxkl7h4/sbCBtMFSc7II
-	 pJ7inOLAyF51g==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Clint George <clintbgeorge@gmail.com>,
-	Ming Lei <ming.lei@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	linux-block@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.19-6.18] kselftest/kublk: include message in _Static_assert for C11 compatibility
-Date: Tue, 10 Feb 2026 18:30:56 -0500
-Message-ID: <20260210233123.2905307-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260210233123.2905307-1-sashal@kernel.org>
-References: <20260210233123.2905307-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WXIfz4a2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770767227; x=1802303227;
+  h=date:from:to:cc:subject:message-id;
+  bh=j0LddvgoO6VKip0+pj4/pyUdIAr6z9p6l28CtCtXGik=;
+  b=WXIfz4a2RdyZojzROVZqwY91Yoh05LRZQKbnhNJtj2hiQQ7grR/tUXt+
+   stUJUeG7nYrXqczIVdluP4Q0/MKJ6vPZAXQYhVXJZs1P7H28zHZ4rerZ7
+   G3atB7OjiTvyucrGomMEm8GO5gSwbZYaHtwNnB3KvOYv5v7ph4QmOhKch
+   PmAU8qxvJq1TkrpyBDfGB6ogYcxUeFvkVzL52mZRdbQKJTuQokQsxV3vh
+   Dga8zZ3pd4rW7Nrq4hKTAHpsp/NTWGYctNd5bhHkNUW+nXrFEQKsHLdyL
+   TkoO8LIIMQxxMo3UMKfS2NZcodxqd2jI4cRu+AMpUd8GUkDHLzLFOvxmK
+   Q==;
+X-CSE-ConnectionGUID: o5Mg0VEVTM2TNQO7tmWdYg==
+X-CSE-MsgGUID: CNgX97p2R/2xYkyewOQuAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="71897204"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="71897204"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 15:47:05 -0800
+X-CSE-ConnectionGUID: 5Shlde96ThWStv2hgw66yQ==
+X-CSE-MsgGUID: 3/hu0X3tSmiGzIO7oSsfRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="211698694"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 10 Feb 2026 15:47:04 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vpxRe-00000000pWA-0y4p;
+	Tue, 10 Feb 2026 23:47:02 +0000
+Date: Wed, 11 Feb 2026 07:46:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 2/24] fs/namei.c:4138:31: error: use of
+ undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+Message-ID: <202602110755.IJyM2wQb-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Transfer-Encoding: 8bit
 
-From: Clint George <clintbgeorge@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   ab82ce180a346bc50223092e6d94b2aa7c863322
+commit: 123469bc16f8ab7cebb5b7424e43fece577784b5 [2/24] filelock: add support for ignoring deleg breaks for dir change events
+config: arm-randconfig-003-20260211 (https://download.01.org/0day-ci/archive/20260211/202602110755.IJyM2wQb-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602110755.IJyM2wQb-lkp@intel.com/reproduce)
 
-[ Upstream commit 3e6ad272bb8b3199bad952e7b077102af2d8df03 ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602110755.IJyM2wQb-lkp@intel.com/
 
-Add descriptive message in the _Static_assert to comply with the C11
-standard requirement to prevent compiler from throwing out error. The
-compiler throws an error when _Static_assert is used without a message as
-that is a C23 extension.
+All errors (new ones prefixed by >>):
 
-[] Testing:
-The diff between before and after of running the kselftest test of the
-module shows no regression on system with x86 architecture
+>> fs/namei.c:4138:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4138 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, di);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:4438:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4438 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:4993:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4993 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:5135:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5135 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~
+>> fs/namei.c:5241:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5241 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:5372:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5372 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:5519:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5519 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:5651:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5651 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~
+>> fs/namei.c:5921:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
+    5921 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
+         |                                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:5922:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5922 |                                                      LEASE_BREAK_DIR_DELETE,
+         |                                                      ^~~~~~~~~~~~~~~~~~~~~~
+   fs/namei.c:5927:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5927 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                  ^~~~~~~~~~~~~~~~~~~~~~
+   11 errors generated.
 
-[] Error log:
-~/Desktop/kernel-dev/linux-v1/tools/testing/selftests/ublk$ make LLVM=1 W=1
-  CC       kublk
-In file included from kublk.c:6:
-./kublk.h:220:43: error: '_Static_assert' with no message is a C23 extension [-Werror,-Wc23-extensions]
-  220 |         _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-      |                                                  ^
-      |                                                  , ""
-1 error generated.
-In file included from null.c:3:
-./kublk.h:220:43: error: '_Static_assert' with no message is a C23 extension [-Werror,-Wc23-extensions]
-  220 |         _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-      |                                                  ^
-      |                                                  , ""
-1 error generated.
-In file included from file_backed.c:3:
-./kublk.h:220:43: error: '_Static_assert' with no message is a C23 extension [-Werror,-Wc23-extensions]
-  220 |         _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-      |                                                  ^
-      |                                                  , ""
-1 error generated.
-In file included from common.c:3:
-./kublk.h:220:43: error: '_Static_assert' with no message is a C23 extension [-Werror,-Wc23-extensions]
-  220 |         _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-      |                                                  ^
-      |                                                  , ""
-1 error generated.
-In file included from stripe.c:3:
-./kublk.h:220:43: error: '_Static_assert' with no message is a C23 extension [-Werror,-Wc23-extensions]
-  220 |         _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-      |                                                  ^
-      |                                                  , ""
-1 error generated.
-In file included from fault_inject.c:11:
-./kublk.h:220:43: error: '_Static_assert' with no message is a C23 extension [-Werror,-Wc23-extensions]
-  220 |         _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-      |                                                  ^
-      |                                                  , ""
-1 error generated.
-make: *** [../lib.mk:225: ~/Desktop/kernel-dev/linux-v1/tools/testing/selftests/ublk/kublk] Error 1
 
-Link: https://lore.kernel.org/r/20251215085022.7642-1-clintbgeorge@gmail.com
-Signed-off-by: Clint George <clintbgeorge@gmail.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+vim +/LEASE_BREAK_DIR_CREATE +4138 fs/namei.c
 
-LLM Generated explanations, may be completely bogus:
+  4105	
+  4106	/**
+  4107	 * vfs_create - create new file
+  4108	 * @idmap:	idmap of the mount the inode was found from
+  4109	 * @dentry:	dentry of the child file
+  4110	 * @mode:	mode of the child file
+  4111	 * @di:		returns parent inode, if the inode is delegated.
+  4112	 *
+  4113	 * Create a new file.
+  4114	 *
+  4115	 * If the inode has been found through an idmapped mount the idmap of
+  4116	 * the vfsmount must be passed through @idmap. This function will then take
+  4117	 * care to map the inode according to @idmap before checking permissions.
+  4118	 * On non-idmapped mounts or if permission checking is to be performed on the
+  4119	 * raw inode simply pass @nop_mnt_idmap.
+  4120	 */
+  4121	int vfs_create(struct mnt_idmap *idmap, struct dentry *dentry, umode_t mode,
+  4122		       struct delegated_inode *di)
+  4123	{
+  4124		struct inode *dir = d_inode(dentry->d_parent);
+  4125		int error;
+  4126	
+  4127		error = may_create(idmap, dir, dentry);
+  4128		if (error)
+  4129			return error;
+  4130	
+  4131		if (!dir->i_op->create)
+  4132			return -EACCES;	/* shouldn't it be ENOSYS? */
+  4133	
+  4134		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
+  4135		error = security_inode_create(dir, dentry, mode);
+  4136		if (error)
+  4137			return error;
+> 4138		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, di);
+  4139		if (error)
+  4140			return error;
+  4141		error = dir->i_op->create(idmap, dir, dentry, mode, true);
+  4142		if (!error)
+  4143			fsnotify_create(dir, dentry);
+  4144		return error;
+  4145	}
+  4146	EXPORT_SYMBOL(vfs_create);
+  4147	
 
-Now I have all the information needed for a thorough analysis.
-
----
-
-## Detailed Analysis
-
-### 1. Commit Message Analysis
-
-The commit fixes a C11/C23 compatibility issue in
-`tools/testing/selftests/ublk/kublk.h`. The `_Static_assert()` macro is
-used without a message string, which is only valid in C23. When
-compiling with Clang/LLVM, this triggers the `-Wc23-extensions` warning,
-which is promoted to a hard error by `-Werror`.
-
-The commit message includes the full error log showing compilation
-failure across 6 source files that include `kublk.h`. The fix is
-reviewed by Ming Lei (ublk maintainer) and signed off by Shuah Khan
-(kselftest maintainer).
-
-### 2. Code Change Analysis
-
-The change is a single-line modification:
-
-```diff
-- _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-+       _Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7,
-"UBLK_MAX_QUEUES_SHIFT must be <= 7");
-```
-
-This is the most trivial kind of fix possible - adding a string literal
-parameter to comply with C11 standard syntax. The runtime behavior is
-completely unchanged since `_Static_assert` is a compile-time construct
-that generates zero code.
-
-### 3. Impact Assessment
-
-**The build failure is worse than the error log suggests.** The ublk
-selftest Makefile includes `-Werror` **by default** (`ifneq
-($(WERROR),0)` means it's always on unless explicitly disabled). This
-means **any user building the ublk selftest with Clang/LLVM will hit a
-hard build error** - they don't need `W=1` to trigger it; that just adds
-additional warning flags.
-
-### 4. Affected Stable Trees
-
-The buggy `_Static_assert` line was introduced by commit `bf098d72696db`
-("selftests: ublk: kublk: plumb q_id in io_uring user_data") which first
-appeared in the 6.16 cycle. The unfixed line exists in:
-- **6.16.y** (line 252)
-- **6.17.y** (line 223)
-- **6.18.y** (line 223)
-- **6.19.y** (line 226)
-
-It does NOT exist in 6.15.y or earlier (6.12.y LTS, 6.6.y LTS, etc.).
-
-### 5. Stable Criteria Evaluation
-
-| Criterion | Assessment |
-|-----------|-----------|
-| Obviously correct and tested | YES - trivially obvious, tested by
-author |
-| Fixes a real bug | YES - hard compilation error |
-| Important issue | YES - **build fix** (explicitly listed exception
-category) |
-| Small and contained | YES - one line, one file |
-| No new features | YES - purely a build fix |
-| Can apply cleanly | Likely YES with minor context adjustment per tree
-|
-
-### 6. Risk Assessment
-
-**Risk: Essentially zero.** `_Static_assert` is a compile-time
-construct. Adding a message string parameter cannot change runtime
-behavior. The assertion condition itself is unchanged. This is the
-safest possible type of change.
-
-### 7. Dependency Check
-
-No dependencies. The fix is entirely self-contained - it only modifies
-the syntax of an existing assertion. No new includes, no new functions,
-no changed behavior.
-
-### 8. Classification
-
-This is a **build fix** for a kselftest. Build fixes are explicitly
-listed as an allowed exception category for stable ("These are critical
-for users who need to build the kernel"). While this specifically
-affects selftest infrastructure rather than the kernel itself, selftests
-are integral to verifying stable kernel correctness, and CI systems
-(KernelCI, 0-day) regularly run these tests on stable trees.
-
-The fix prevents a **hard build failure** with the Clang/LLVM toolchain
-(widely used, especially in Android and ChromeOS kernel development).
-The `-Werror` flag is enabled by default in the ublk selftest Makefile,
-making this a default-configuration failure, not an edge case.
-
-### Conclusion
-
-This is a trivial, zero-risk build fix that prevents a default-
-configuration compilation error in the ublk kselftest when using
-Clang/LLVM. It meets all stable kernel criteria: obviously correct,
-fixes a real build failure, is tiny and self-contained, and introduces
-no new features. The only limitation is that it only applies to stable
-trees 6.16.y and later where the buggy `_Static_assert` line exists.
-
-**YES**
-
- tools/testing/selftests/ublk/kublk.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
-index 8a83b90ec603a..cae2e30f0cdd5 100644
---- a/tools/testing/selftests/ublk/kublk.h
-+++ b/tools/testing/selftests/ublk/kublk.h
-@@ -223,7 +223,7 @@ static inline __u64 build_user_data(unsigned tag, unsigned op,
- 		unsigned tgt_data, unsigned q_id, unsigned is_target_io)
- {
- 	/* we only have 7 bits to encode q_id */
--	_Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7);
-+	_Static_assert(UBLK_MAX_QUEUES_SHIFT <= 7, "UBLK_MAX_QUEUES_SHIFT must be <= 7");
- 	assert(!(tag >> 16) && !(op >> 8) && !(tgt_data >> 16) && !(q_id >> 7));
- 
- 	return tag | (op << 16) | (tgt_data << 24) |
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
