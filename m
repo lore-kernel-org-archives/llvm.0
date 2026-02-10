@@ -1,146 +1,148 @@
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B2933A9ED
-	for <llvm@lists.linux.dev>; Tue, 10 Feb 2026 08:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422ED2D879B;
+	Tue, 10 Feb 2026 08:51:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770712910; cv=none; b=P8VWRbvLC1nguKdKvLJd95BBBlA4YJD0sZFdfYh1FDYJ3YEL7ODpcvjP8lcZThRghJ1f4HBsFkKQAVA5BR84Jpj1UFw8qt+wRfbtxD8z2/fu3anICYvbN1JIE4cNjUo0HZ8AtnNT55GoTs/KZh64EBcbVfhfC3PPJyYSWFRA194=
+	t=1770713494; cv=none; b=Mgd1ovQ6dLu699v+HnJRmPOSzrtdOXBtTM7RV5xlTEgZ3N3Y7SGI2AiYKVIDjEhSHUWHe1SI44tlyMx3zhcbYCo9JtPrkF+xpaW62ga2y+dTrhan8NpFkMOMGLefmSlKZQMKnEVsCEAljRqYYGklF/mKsFxrRbTMQk/GF2XJ2Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770712910; c=relaxed/simple;
-	bh=BUZauHUvzJgggungSLkUNWiggLCxRRTu3jIqZuxwAGQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=A1GD3hq6W3rYxTxnyeEevKt1pZBF+0qC0/YGZTPOJkxBypEqb8O3BmAAGscFo3faWhlAYul3hSKlXckWDcU6X2r2EWypu/Xe9Cm0pDQBPrH90a+Yd+C4TrSJ9aFTcH7PAsnURCg4r7Ny3PgO61n57zqYZsqjZqYQLsQQFTrqw5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bazB5idg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vRGobxHJ; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1770713494; c=relaxed/simple;
+	bh=ZItjHolhL5oyMG3Ew4G8CmMCjpYD0xCSOht5MqqAZEs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C+MO2wg80f63c7rW2hNGvHCEU9RW2+WRLSbhbIlcAp7QV42NkDCvfxygRjMAfq6L4riLJfIGhl+Zy2t6s1QopjyX72fs8/S2sm10OjgTkpPsrnMAns/Hg5GF0PG7RKwYLwl00qVwD9cZOrLD6K2fWP+IHDkhicPHHu5iVJYMca4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RepijvX6; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bazB5idg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vRGobxHJ"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id D49491300A94;
-	Tue, 10 Feb 2026 03:41:46 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 10 Feb 2026 03:41:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1770712906;
-	 x=1770720106; bh=NVt6zdzuxxUdmKRAXiJ+AdesYtwQIrVUaYBRhDszmik=; b=
-	bazB5idgjrjJLgAf3YRDx3DUYdJ8lqBAhEDaZcXwjfJemdw4mUCH273RPrxGOvDq
-	EHj70Sy2nN6VVvbyXdQWFL6nLMBbQyqmXkuRojNDOF4d8aanHsfdQgqPBFhtgExK
-	hW9JUFWpdN35wfw9OIwfVsblcCDFQ0zoY3yqFOehnbS4bqwV7X8VYFG3CRIpQZf/
-	JDTA03F45+REUCgoLddrD13kXf2GsKuluuH2MLhbmg/x2Sq1Y/ieAR5JNPZ6453u
-	yff/TkaiuHwe+t3Xsfjy5Z+vS8RzOtf2w5byAn2NlC49lEtvwDykjWe/UwVTkCYj
-	bkagm3uKl4vXUcVV/QFgNQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770712906; x=
-	1770720106; bh=NVt6zdzuxxUdmKRAXiJ+AdesYtwQIrVUaYBRhDszmik=; b=v
-	RGobxHJg/ab5SjxMQcDSIQhnR+RCUuqo0c/dhBXtN/yhJbJAZJw9QjBZ1GwtV3Tw
-	82D/AUbI6zqdp8C8LjrBZWVp0B7WwgpE8pXz4k1DgQXWOs+dlWRI6smerkZnLGgu
-	hWhXglOxuhTSf7ycDEX84UGek6TNFiA5B12yX13FUOmkBrQdoajxj3uv4Amwn3az
-	xkN8Ca71ME/rtagyz1zlK91jJcmYbggvmlOeW+9Ww+TyrLVkkPStI3VhA2yaeCZy
-	/uYdfSWk4kV7gr1RN4IgD7ROghkcNds8SttsUdehSfrL1SHvuW3VPcK0JHnrL27K
-	xrYpIdaQIKr1vvJ66XF8g==
-X-ME-Sender: <xms:Se-KaaiLgE8Cn-RHEut2nJqMQ3tN2JKEZ8pxMMHDE_drbY43bc14Yg>
-    <xme:Se-KaV06o6FpfJMe1k9uGrwT4AQtkqOxTN9aXk39-M09pV70SKUshXSKtMZCK0Q-i
-    TDoSEUTv2Ta31pgrRj1jVujizxoRacllu8kIeMr7oUv0nQRI4_k70k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduleelvdefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepgefgjedujedvieejgeelgfdthfduffeiteefudeghfffkeejfeehtdejfeejteef
-    necuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopedviedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgvfhhfgihuse
-    gthhhrohhmihhumhdrohhrghdprhgtphhtthhopegsrhhgvghrshhtsehgmhgrihhlrdgt
-    ohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrg
-    hilhdrtghomhdprhgtphhtthhopehusghiiihjrghksehgmhgrihhlrdgtohhmpdhrtghp
-    thhtohepjhhsthhulhhtiiesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtih
-    hnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhg
-    lhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpd
-    hrtghpthhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrgh
-X-ME-Proxy: <xmx:Se-KadToGxgJ8Kk_xX7AzskBeEwQo1sw2iJkRMm2v1WcIFct-G4xFw>
-    <xmx:Se-KaUPgWiXHzfvEL37woxhPgI7KJnSWomy2K7gNqjbuuSxjK3GhzA>
-    <xmx:Se-KaSxqQoNl-e3QWF2oX6zEWIsm49W_j_rXZn_OnnrgAc1ScsF-uw>
-    <xmx:Se-KaWpVfwEZift3s9tWOP9kSuiGA8TF1BXzROfLLov-2OWRmAZCVw>
-    <xmx:Su-KaWdn0qMRE4yZiYOHILjL06yU046z7NS67fGCoiwb06nlRr-AvQRH>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4E7F6700065; Tue, 10 Feb 2026 03:41:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RepijvX6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770713494; x=1802249494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZItjHolhL5oyMG3Ew4G8CmMCjpYD0xCSOht5MqqAZEs=;
+  b=RepijvX6XMMl0qHpXLC/CEEuKfo5D1UKKLFGQWf8VZteId+hn6btBC8a
+   lkRnY8J5PZPEWG7gWfLYCCuYGwuiMUd5g9a1beoxCVYy7GNrrpHF0v84X
+   g50vnaS/mGtxuxRxSvV27uA7Vj97vrXawqpsgZb1nWMcw7UokF8JERRjf
+   kJifJf6jvE6OmiTnnQ5u+gMiphDG0YaOfrV0q2pfVSU5KIdufds2Hn0FS
+   tcsr/oWaULqLXGSyx3BjhZsNH3GTe5eIhBZ13U4i5if/eV31H8sEMOSmF
+   pYHbFtnSM8A2HUU4T0K6LF99z0qLdN2u/Ylyv2p7PdZcb9BfcX1SCOFKa
+   A==;
+X-CSE-ConnectionGUID: ET/s95t6QV+atZf0LKa42A==
+X-CSE-MsgGUID: /tMHeuiORiasKPiJmublIQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="75462112"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="75462112"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 00:51:33 -0800
+X-CSE-ConnectionGUID: hyRn3uVuRRyIcNY568UNiw==
+X-CSE-MsgGUID: atkoFGqkRLyLLpyn/UmsgA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 10 Feb 2026 00:51:31 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vpjSz-00000000opk-1AiJ;
+	Tue, 10 Feb 2026 08:51:29 +0000
+Date: Tue, 10 Feb 2026 16:50:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenchao Hao <haowenchao22@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] mm: only set fault addrsss' access bit in
+ do_anonymous_page
+Message-ID: <202602101655.FLOBeato-lkp@intel.com>
+References: <20260210043456.2137482-1-haowenchao22@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Ays0886HgnbJ
-Date: Tue, 10 Feb 2026 09:41:25 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Bill Wendling" <morbo@google.com>, linux-kernel@vger.kernel.org
-Cc: "Kees Cook" <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Justin Stitt" <justinstitt@google.com>,
- "Miguel Ojeda" <ojeda@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Marc Herbert" <Marc.Herbert@linux.intel.com>,
- "Uros Bizjak" <ubizjak@gmail.com>, "Tejun Heo" <tj@kernel.org>,
- "Jeff Xu" <jeffxu@chromium.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- "Shakeel Butt" <shakeel.butt@linux.dev>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "John Stultz" <jstultz@google.com>,
- "Christian Brauner" <brauner@kernel.org>,
- "Randy Dunlap" <rdunlap@infradead.org>,
- "Brian Gerst" <brgerst@gmail.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
- "Jan Hendrik Farr" <kernel@jfarr.cc>
-Message-Id: <d29ca795-ade3-454b-816e-46b5815a1444@app.fastmail.com>
-In-Reply-To: <20251121193957.1655580-2-morbo@google.com>
-References: <20251121193957.1655580-1-morbo@google.com>
- <20251121193957.1655580-2-morbo@google.com>
-Subject: Re: [PATCH 1/2] Compiler Attributes: Add __counted_by_ptr macro
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260210043456.2137482-1-haowenchao22@gmail.com>
 
-On Fri, Nov 21, 2025, at 20:39, Bill Wendling wrote:
-> 
-> +/*
-> + * Optional: only supported since clang >= 21
-> + *
-> + * clang: https://github.com/llvm/llvm-project/pull/137250
-> + */
-> +#ifdef CONFIG_CC_HAS_COUNTED_BY_FOR_POINTER
-> +#define __counted_by_ptr(member)	__attribute__((__counted_by__(member)))
-> +#else
-> +#define __counted_by_ptr(member)
-> +#endif
+Hi Wenchao,
 
-Something changed in recent gcc versions. I had tested gcc-16.0.1
-successfully with CONFIG_CC_HAS_COUNTED_BY_PTR=y, but after upgrading
-to a recent git snapshot, I get this output:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-fs/coredump.c:95:15: error: 'counted_by' attribute is not allowed for a non-array field
-   95 |         char *corename __counted_by_ptr(size);
-      |               ^~~~~~~~
-drivers/misc/lkdtm/bugs.c:518:15: error: 'counted_by' attribute is not allowed for a non-array field
-  518 |         char *buf __counted_by_ptr(len);
-      |               ^~~
-drivers/misc/lkdtm/bugs.c:520:29: error: 'counted_by' attribute is not allowed for a non-array field
-  520 |         struct lkdtm_extra *extra __counted_by_ptr(nr_extra);
-      |                             ^~~~~
+[auto build test ERROR on akpm-mm/mm-everything]
 
-This is every use of __counted_by_ptr() in linux-next at the moment.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenchao-Hao/mm-only-set-fault-addrsss-access-bit-in-do_anonymous_page/20260210-123706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260210043456.2137482-1-haowenchao22%40gmail.com
+patch subject: [RFC PATCH] mm: only set fault addrsss' access bit in do_anonymous_page
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260210/202602101655.FLOBeato-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602101655.FLOBeato-lkp@intel.com/reproduce)
 
-      Arnd
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602101655.FLOBeato-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:32:
+>> include/linux/pgtable.h:432:45: error: too few arguments to function call, expected 5, have 4
+     432 |         page_table_check_ptes_set(mm, ptep, pte, nr);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~                  ^
+   include/linux/page_table_check.h:139:20: note: 'page_table_check_ptes_set' declared here
+     139 | static inline void page_table_check_ptes_set(struct mm_struct *mm,
+         |                    ^                         ~~~~~~~~~~~~~~~~~~~~~
+     140 |                                              unsigned long addr, pte_t *ptep,
+         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     141 |                                              pte_t pte, unsigned int nr)
+         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/x86/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1314: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +432 include/linux/pgtable.h
+
+   425	
+   426	#ifndef set_ptes
+   427	static inline void set_anon_ptes(struct mm_struct *mm, unsigned long addr,
+   428			unsigned long fault_addr, pte_t *ptep, pte_t pte, unsigned int nr)
+   429	{
+   430		bool young = pte_young(pte);
+   431	
+ > 432		page_table_check_ptes_set(mm, ptep, pte, nr);
+   433	
+   434		for (;;) {
+   435			if (young && addr == fault_addr)
+   436				pte = pte_mkyoung(pte);
+   437			else
+   438				pte = pte_mkold(pte);
+   439	
+   440			set_pte(ptep, pte);
+   441			if (--nr == 0)
+   442				break;
+   443	
+   444			addr += PAGE_SIZE;
+   445			ptep++;
+   446			pte = pte_next_pfn(pte);
+   447		}
+   448	}
+   449	#else
+   450	#define set_anon_ptes(mm, addr, fault_addr, ptep, pte, nr) \
+   451			set_ptes(mm, addr, ptep, pte, nr)
+   452	#endif
+   453	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
