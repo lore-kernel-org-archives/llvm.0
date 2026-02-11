@@ -1,239 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080C0883F;
-	Wed, 11 Feb 2026 12:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B53A322A;
+	Wed, 11 Feb 2026 14:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770813085; cv=none; b=jbVY30XyBSLyOKshkfUbsbhgPyr/AwnPyugZ/F1qEFWairVdfVfjw62OGrKQw640wGeGM2o0ziR4mBq6LCGQZxkv7xejqUa/RMFkBMUI4pxEJusey3jVrsCRryn9ulfR/8MKyCHc3EF1dUDZ3DKhkstReP/d5FiVnJZKBjCo++s=
+	t=1770821318; cv=none; b=RN7I410jIQoY62Niy+i4sbFIrkPsdZLQgmx3E+M+0ZybujnlEzDtnLCVU4snCA8xPr2DyVCGdXa8bVxkZDzKC4kGuuaW4GJXw0dv04tJnmYax0adnL4iVQY+8Kg9EZu5pMzb6q2vDfFmVKsMOy911ddDaKfyTLBw6AYk0uTKFms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770813085; c=relaxed/simple;
-	bh=dF7buh+/KSmhDiI7blHFt+idgunTa+UYB5eVnlUyFFM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YIl3/O+PLDGsPDkZVaZAZbjmlP5xix+6m4Q5uR2kYHOkgwb2dtSFbWQPZyTvAGaL6j9AcRTaVYBD9FLHdrGg0PL/BJFuTmi0iUS2kCBe3QcqbdfNSIDMcZLTynltUE8Y9cJh+kyW7ZoKGg65GTV0LB8r18Tq1OdFUt2b+FtvfS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S50WHrs+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770821318; c=relaxed/simple;
+	bh=mBhv/ikmf+VJ9MEf6KxEZZCRfxKrD3eR8pUCYe2wTxE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=lwmDo7Z131M1pfok5Q2ChB4jHL882A13M0VjDslLyXrINJ8C0mYq2LbupxD34bgPYXF5EBFOwUUt604F24/KD2+q2Eyu4SgYWlPUYp6uRhdopWny+1FoNilZ1bgJExO5E9uDRhx6yiYinPPatQpxCDrNbkuUebZ7ovoGceZn1G4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YsDJHcus; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S50WHrs+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9F5C19425;
-	Wed, 11 Feb 2026 12:31:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770813084;
-	bh=dF7buh+/KSmhDiI7blHFt+idgunTa+UYB5eVnlUyFFM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=S50WHrs+UPJFGWTIu/DsOpBeWFQJOH9VSxBAeDmEruFPIQ3mZnXENbDPt7sNz+i3v
-	 R0pAMTp/u4koAVWlpjW3pTiH6Nzl3wNNlwoxWiA05ZStkUpVZmj/+PknahrVWXUUMD
-	 g/b/WmkyMAn4e8kAwNNi/tnQdtOcElLdMWdU7kStiZfwhk7zAXPymBVLQ/IdXWNXgr
-	 EDzM7q6f8Libii/ifvHGhhtk7Oa2SUQIN+tLh+IrwAWvIGHZTiOTgjhjvI41JC++tz
-	 xCu91zSBGZc/IUzXb2XyeVNUCGum+CxMHocHNDIL6DlQVn13P+oF9nTCtwduUUWPHV
-	 9voaP1GwyyHLg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Heiko Carstens <hca@linux.ibm.com>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	agordeev@linux.ibm.com,
-	svens@linux.ibm.com,
-	iii@linux.ibm.com,
-	gor@linux.ibm.com,
-	petr.pavlu@suse.com,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.19-6.18] s390/boot: Add -Wno-default-const-init-unsafe to KBUILD_CFLAGS
-Date: Wed, 11 Feb 2026 07:30:15 -0500
-Message-ID: <20260211123112.1330287-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260211123112.1330287-1-sashal@kernel.org>
-References: <20260211123112.1330287-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YsDJHcus"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770821317; x=1802357317;
+  h=date:from:to:cc:subject:message-id;
+  bh=mBhv/ikmf+VJ9MEf6KxEZZCRfxKrD3eR8pUCYe2wTxE=;
+  b=YsDJHcusLnXILQFLA1E89LabTvQ5wlIowOVbhiVhzN1tQVsesr45A0u5
+   vT3PWn39XQ0xw6tXN5e5TmwghZ3H9ZUxjXPOPoZh9vuxviZ8oXJA5ZCnC
+   UML2HSIndiPwyxIrYiYznWKH+6H+2Mn0maStZo4qLUM4wk4jqs19eYpFG
+   t7Lofaz1jRFzTZX11w+T1R9PgKRUhRdfYArgbI78gbLq9tEfreXWKlEBt
+   aEbJFoPG0piSU1jTOdPkiJtN1ChZEvPFroSbDIVGu9rNy8fYwTwGDT88w
+   20dSBsNvIieWRn1vYwfuPyQ8t4KknbagU/UbU01CCvGsVzG9MmNMgrrN0
+   Q==;
+X-CSE-ConnectionGUID: OW3Z/dyETCWj7LhqbLJWPQ==
+X-CSE-MsgGUID: Xb/EdSclTJmBh8HN9fGIBQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="83411538"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="83411538"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 06:48:37 -0800
+X-CSE-ConnectionGUID: 2XhWwCrhQ8OxLNKGwuMUwQ==
+X-CSE-MsgGUID: /ZsnW71cS4WFqK9+XKc26g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="216420295"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 11 Feb 2026 06:48:35 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vqBW4-00000000q4u-3555;
+	Wed, 11 Feb 2026 14:48:32 +0000
+Date: Wed, 11 Feb 2026 22:47:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org
+Subject: [sailus-media-tree:metadata-pre 14/14]
+ drivers/staging/media/ipu7/ipu7-isys-subdev.c:101:5: error: conflicting types
+ for 'ipu7_isys_subdev_set_fmt'
+Message-ID: <202602112253.JRfzluk0-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-From: Heiko Carstens <hca@linux.ibm.com>
+tree:   git://linuxtv.org/sailus/media_tree.git metadata-pre
+head:   11ab80de774b0527a7365d6f03ea5dcd0ace3e85
+commit: 11ab80de774b0527a7365d6f03ea5dcd0ace3e85 [14/14] media: v4l2-subdev: Add struct v4l2_subdev_client_info argument to pad ops
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260211/202602112253.JRfzluk0-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602112253.JRfzluk0-lkp@intel.com/reproduce)
 
-[ Upstream commit 5ba35a6c13fff0929c34aba6b7602dacbe68686c ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602112253.JRfzluk0-lkp@intel.com/
 
-Add -Wno-default-const-init-unsafe to boot KBUILD_CFLAGS, similar to
-scripts/Makefile.extrawarn, since clang generates warnings for the dummy
-variable in typecheck():
+All errors (new ones prefixed by >>):
 
-    CC      arch/s390/boot/version.o
-      arch/s390/include/asm/ptrace.h:221:9: warning: default initialization of an object of type 'typeof (regs->psw)' (aka 'const psw_t') leaves the object uninitialized [-Wdefault-const-init-var-unsafe]
-        221 |         return psw_bits(regs->psw).pstate;
-            |                ^
-      arch/s390/include/asm/ptrace.h:98:2: note: expanded from macro 'psw_bits'
-         98 |         typecheck(psw_t, __psw);                \
-            |         ^
-      include/linux/typecheck.h:11:12: note: expanded from macro 'typecheck'
-         11 |         typeof(x) __dummy2; \
-            |                   ^
+>> drivers/staging/media/ipu7/ipu7-isys-subdev.c:101:5: error: conflicting types for 'ipu7_isys_subdev_set_fmt'
+     101 | int ipu7_isys_subdev_set_fmt(struct v4l2_subdev *sd,
+         |     ^
+   drivers/staging/media/ipu7/ipu7-isys-subdev.h:33:5: note: previous declaration is here
+      33 | int ipu7_isys_subdev_set_fmt(struct v4l2_subdev *sd,
+         |     ^
+   1 error generated.
 
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
 
-LLM Generated explanations, may be completely bogus:
+vim +/ipu7_isys_subdev_set_fmt +101 drivers/staging/media/ipu7/ipu7-isys-subdev.c
 
-Now I have a thorough understanding of this commit. Let me compile my
-analysis.
+a516d36bdc3d83 Bingbu Cao   2025-05-29  100  
+a516d36bdc3d83 Bingbu Cao   2025-05-29 @101  int ipu7_isys_subdev_set_fmt(struct v4l2_subdev *sd,
+11ab80de774b05 Sakari Ailus 2026-01-30  102  			     const struct v4l2_subdev_client_info *ci,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  103  			     struct v4l2_subdev_state *state,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  104  			     struct v4l2_subdev_format *format)
+a516d36bdc3d83 Bingbu Cao   2025-05-29  105  {
+a516d36bdc3d83 Bingbu Cao   2025-05-29  106  	struct ipu7_isys_subdev *asd = to_ipu7_isys_subdev(sd);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  107  	u32 code = asd->supported_codes[0];
+a516d36bdc3d83 Bingbu Cao   2025-05-29  108  	struct v4l2_mbus_framefmt *fmt;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  109  	u32 other_pad, other_stream;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  110  	struct v4l2_rect *crop;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  111  	unsigned int i;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  112  	int ret;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  113  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  114  	/* No transcoding, source and sink formats must match. */
+a516d36bdc3d83 Bingbu Cao   2025-05-29  115  	if ((sd->entity.pads[format->pad].flags & MEDIA_PAD_FL_SOURCE) &&
+a516d36bdc3d83 Bingbu Cao   2025-05-29  116  	    sd->entity.num_pads > 1)
+11ab80de774b05 Sakari Ailus 2026-01-30  117  		return v4l2_subdev_get_fmt(sd, NULL, state, format);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  118  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  119  	format->format.width = clamp(format->format.width, IPU_ISYS_MIN_WIDTH,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  120  				     IPU_ISYS_MAX_WIDTH);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  121  	format->format.height = clamp(format->format.height,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  122  				      IPU_ISYS_MIN_HEIGHT,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  123  				      IPU_ISYS_MAX_HEIGHT);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  124  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  125  	for (i = 0; asd->supported_codes[i]; i++) {
+a516d36bdc3d83 Bingbu Cao   2025-05-29  126  		if (asd->supported_codes[i] == format->format.code) {
+a516d36bdc3d83 Bingbu Cao   2025-05-29  127  			code = asd->supported_codes[i];
+a516d36bdc3d83 Bingbu Cao   2025-05-29  128  			break;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  129  		}
+a516d36bdc3d83 Bingbu Cao   2025-05-29  130  	}
+a516d36bdc3d83 Bingbu Cao   2025-05-29  131  	format->format.code = code;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  132  	format->format.field = V4L2_FIELD_NONE;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  133  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  134  	/* Store the format and propagate it to the source pad. */
+a516d36bdc3d83 Bingbu Cao   2025-05-29  135  	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  136  	if (!fmt)
+a516d36bdc3d83 Bingbu Cao   2025-05-29  137  		return -EINVAL;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  138  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  139  	*fmt = format->format;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  140  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  141  	if (!(sd->entity.pads[format->pad].flags & MEDIA_PAD_FL_SINK))
+a516d36bdc3d83 Bingbu Cao   2025-05-29  142  		return 0;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  143  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  144  	/* propagate format to following source pad */
+a516d36bdc3d83 Bingbu Cao   2025-05-29  145  	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  146  							   format->stream);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  147  	if (!fmt)
+a516d36bdc3d83 Bingbu Cao   2025-05-29  148  		return -EINVAL;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  149  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  150  	*fmt = format->format;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  151  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  152  	ret = v4l2_subdev_routing_find_opposite_end(&state->routing,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  153  						    format->pad,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  154  						    format->stream,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  155  						    &other_pad,
+a516d36bdc3d83 Bingbu Cao   2025-05-29  156  						    &other_stream);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  157  	if (ret)
+a516d36bdc3d83 Bingbu Cao   2025-05-29  158  		return -EINVAL;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  159  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  160  	crop = v4l2_subdev_state_get_crop(state, other_pad, other_stream);
+a516d36bdc3d83 Bingbu Cao   2025-05-29  161  	/* reset crop */
+a516d36bdc3d83 Bingbu Cao   2025-05-29  162  	crop->left = 0;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  163  	crop->top = 0;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  164  	crop->width = fmt->width;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  165  	crop->height = fmt->height;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  166  
+a516d36bdc3d83 Bingbu Cao   2025-05-29  167  	return 0;
+a516d36bdc3d83 Bingbu Cao   2025-05-29  168  }
+a516d36bdc3d83 Bingbu Cao   2025-05-29  169  
 
-## Detailed Analysis
+:::::: The code at line 101 was first introduced by commit
+:::::: a516d36bdc3d8373f904af57c95e76d6f921cf1c media: staging/ipu7: add IPU7 input system device driver
 
-### 1. COMMIT MESSAGE ANALYSIS
+:::::: TO: Bingbu Cao <bingbu.cao@intel.com>
+:::::: CC: Hans Verkuil <hverkuil@xs4all.nl>
 
-The commit subject clearly states it adds `-Wno-default-const-init-
-unsafe` to the s390 boot `KBUILD_CFLAGS`. The commit message explains it
-mirrors the same flag already added in `scripts/Makefile.extrawarn` (now
-`scripts/Makefile.warn`) and provides a concrete compiler warning output
-demonstrating the problem. The author is Heiko Carstens, the s390
-subsystem maintainer.
-
-### 2. CODE CHANGE ANALYSIS
-
-The change is a **single line addition** to `arch/s390/boot/Makefile`:
-
-```
-KBUILD_CFLAGS += $(call cc-option, -Wno-default-const-init-unsafe)
-```
-
-This uses `cc-option`, which means:
-- If the compiler supports the flag, it's added
-- If the compiler doesn't support the flag (older clang, any gcc), it's
-  silently ignored
-- **Zero risk of breaking anything on any compiler version**
-
-### 3. WHY THE S390 BOOT CODE NEEDS A SEPARATE FIX
-
-The key architectural issue is that the s390 boot code builds with its
-own **completely independent** compiler flags. Looking at
-`arch/s390/Makefile` lines 25-38, `KBUILD_CFLAGS_DECOMPRESSOR` is
-constructed from scratch:
-
-```25:38:arch/s390/Makefile
-KBUILD_CFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -O2 -mpacked-stack
--std=gnu11 -fms-extensions
-KBUILD_CFLAGS_DECOMPRESSOR += -DDISABLE_BRANCH_PROFILING -D__NO_FORTIFY
-// ... more flags built independently ...
-```
-
-Then in `arch/s390/boot/Makefile` line 21:
-
-```21:21:arch/s390/boot/Makefile
-KBUILD_CFLAGS := $(filter-out
-$(CC_FLAGS_MARCH),$(KBUILD_CFLAGS_DECOMPRESSOR))
-```
-
-This **completely replaces** the global `KBUILD_CFLAGS` with the
-decompressor-specific flags. So the `-Wno-default-const-init-unsafe`
-flag added by the main fix (`d0afcfeb9e381`, "kbuild: Disable -Wdefault-
-const-init-unsafe") in `scripts/Makefile.warn` is **never seen** by the
-s390 boot code.
-
-### 4. BUILD FAILURE CONFIRMED WITH CONFIG_WERROR
-
-From `scripts/Makefile.lib` line 28, the actual compilation uses:
-```
-$(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) $(ccflags-y)
-```
-
-While `KBUILD_CFLAGS` is overridden for s390 boot, `KBUILD_CPPFLAGS`
-(which includes `-Werror` when `CONFIG_WERROR=y`) is NOT overridden.
-This means with clang 21+ and `CONFIG_WERROR=y`, the s390 boot code will
-**fail to compile** with:
-
-```
-error: default initialization of an object of type 'typeof (regs->psw)'
-(aka 'const psw_t') leaves the object uninitialized [-Werror,-Wdefault-
-const-init-var-unsafe]
-```
-
-The warning comes from the `psw_bits()` macro in
-`arch/s390/include/asm/ptrace.h` line 98 which uses `typecheck()`, and
-`typecheck()` in `include/linux/typecheck.h` line 11 creates a dummy
-variable that triggers this clang 21+ warning.
-
-### 5. RELATIONSHIP TO THE PARENT FIX
-
-The parent commit `d0afcfeb9e381` ("kbuild: Disable -Wdefault-const-
-init-unsafe") by Nathan Chancellor was explicitly tagged `Cc:
-stable@vger.kernel.org`, confirming the upstream maintainers consider
-this class of fix appropriate for stable. The parent fix handles the
-global build system, but misses the s390 boot code because of its
-independent build flags. This commit is the necessary companion fix.
-
-### 6. CLASSIFICATION
-
-This is a **build fix** — one of the categories explicitly allowed in
-stable kernel rules. It:
-- Prevents compilation warnings that become errors with `CONFIG_WERROR`
-- Affects a real architecture (s390/IBM Z mainframes) used heavily in
-  enterprise
-- Is needed when building with clang 21+ (which has the warning enabled
-  by default)
-- Has zero runtime impact — it only affects the compiler's warning
-  behavior
-
-### 7. SCOPE AND RISK ASSESSMENT
-
-- **Lines changed:** 1
-- **Files changed:** 1
-- **Risk:** Essentially zero
-  - `cc-option` ensures no effect on compilers that don't support the
-    flag
-  - No runtime behavioral change whatsoever
-  - No code generation change
-  - Only suppresses a warning
-- **Self-contained:** Yes, completely independent. No dependencies on
-  other patches.
-
-### 8. USER IMPACT
-
-- **Who is affected:** s390 users building with clang 21+ (enterprise
-  Linux distributions on IBM Z)
-- **Severity without fix:** Build failure with `CONFIG_WERROR=y`,
-  annoying warnings without it
-- **Impact with fix:** Clean build, zero runtime change
-
-### 9. STABILITY
-
-- Written by Heiko Carstens, the s390 subsystem maintainer
-- Trivial one-line change with no possible regression path
-- Mirrors exactly what was already done for the global build system
-
-### Conclusion
-
-This is a textbook stable kernel candidate. It's a **one-line build
-fix** that prevents compilation warnings/errors on s390 when using clang
-21+. The parent fix (`d0afcfeb9e381`) was already explicitly tagged for
-stable, and this commit is the necessary companion to handle the s390
-boot code's independent build environment. The risk is essentially zero
-(uses `cc-option` for safe degradation), the fix is self-contained, and
-it addresses a real build issue for s390 enterprise users.
-
-**YES**
-
- arch/s390/boot/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/s390/boot/Makefile b/arch/s390/boot/Makefile
-index 490167faba7a4..a1e719a79d38c 100644
---- a/arch/s390/boot/Makefile
-+++ b/arch/s390/boot/Makefile
-@@ -21,6 +21,7 @@ KBUILD_AFLAGS := $(filter-out $(CC_FLAGS_MARCH),$(KBUILD_AFLAGS_DECOMPRESSOR))
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_MARCH),$(KBUILD_CFLAGS_DECOMPRESSOR))
- KBUILD_AFLAGS += $(CC_FLAGS_MARCH_MINIMUM) -D__DISABLE_EXPORTS
- KBUILD_CFLAGS += $(CC_FLAGS_MARCH_MINIMUM) -D__DISABLE_EXPORTS
-+KBUILD_CFLAGS += $(call cc-option, -Wno-default-const-init-unsafe)
- 
- CFLAGS_sclp_early_core.o += -I$(srctree)/drivers/s390/char
- 
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
