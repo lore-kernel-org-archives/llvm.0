@@ -1,108 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06C234EF06
-	for <llvm@lists.linux.dev>; Wed, 11 Feb 2026 19:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EDA2D5935
+	for <llvm@lists.linux.dev>; Wed, 11 Feb 2026 19:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770838824; cv=none; b=SlIjIZFia4GGurGVwZdWKl+fHl4w/pwZyM72rzwIbK1qMULBdtRQa/Ls9t/T5XOhk90J/FxHfU+GzyB7VNIY/8x3yPP5ZEYfaNqWfZhLLo5Dx7lxuRW9GUPfu0X472y5lUOOB7u04BIfMtw9yeVBx3wkkHJ3fwkh0sps4y2D38c=
+	t=1770839503; cv=none; b=oKWN/ppQPQDQvlRpcUQS5WYowm55fihxkq2Nn+ztXihRdYKtRY+jMoqPX93OHTZMiCgmw64X6DEl5qTzhfSGqDZXQOq7jlRZH60o3hWJZwSZyYIl677gUakw03NwdzcVo9oSUSibEvbjGHypenTIHcLsRGwXyGmLd6N2Qe9iLIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770838824; c=relaxed/simple;
-	bh=08hRwlCOUUB5Rqq+zDdOJN1TDr1r5StwLTwUFXq9iPI=;
+	s=arc-20240116; t=1770839503; c=relaxed/simple;
+	bh=F3SBSpYpJlqNycnaU/w2lwIz0YNicZrGnJOVMR7W+6E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N3b5lPLQ3npK4rI7v6QzAdUnYkwmvQQkwhAwY4EQF9lVHTyMEx8USqGac9bLTuJps5pNR9L3c9snf7RQp2cfx/7d9k6nr9u1ogtBLrhV644ocg1O/SKWy5ttzX/D2bSPw0dc+az+3iyMsIYme3lIO/b/OmPYA6PHr0PeJ1kBmxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geqYDRz8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=p+YE6CHJ9cL0ojrg+dOtgqH/yVIbR7tIagLfWLtKgxxuZFoB+8pAjbT5lCVlCdWDtNFW5pqzpCz2z+07jj1/MbCyipYuSao1PSq/mGVN9ZQlT0HNouy2wNQY+Bo/GJWEDOmbmFLma35lPondIQVJQw5A+nsCmNdjBm3wqk5Tw1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rvieqaR4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geqYDRz8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C915C4CEF7;
-	Wed, 11 Feb 2026 19:40:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rvieqaR4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F36C4CEF7;
+	Wed, 11 Feb 2026 19:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770838824;
-	bh=08hRwlCOUUB5Rqq+zDdOJN1TDr1r5StwLTwUFXq9iPI=;
+	s=k20201202; t=1770839503;
+	bh=F3SBSpYpJlqNycnaU/w2lwIz0YNicZrGnJOVMR7W+6E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=geqYDRz85x0sTGnLtpv1ZldLfg4tAsS7gRD8ejI3kGqbg2DXK9hcRCwpaMTRn394k
-	 qxESC9gPXcluC0NUPC6t/6lectwVE5LkLnpE1S3AGpNrx9mzWb/XhoVMjdOPY5wtc2
-	 pgucvWIlmsDBG6GCJqRURK7F4i36LmMtXreqCNhxcRWMdnn2o3NSobCX+7DPptM4+T
-	 tKMNUREAYmwL2RW4NLFn/C1/wZyb9ctQRwSh5wc3oKdr8nSzrIzpJXL07bEqIAmYy6
-	 OhoO+s+BcRvjilXjhVqGyAeacrBImY/pJ3m36zPRYvjp0pJhIfvJpRF7tI74dXQ9ne
-	 l3m7UYWbOrhHg==
-Date: Wed, 11 Feb 2026 12:40:20 -0700
+	b=rvieqaR4KICAafXD+9qrh7dugePKYc3s/b+pN5eQWEu7b7+GV35B+kK5A4D9jl2iA
+	 Udpx36R8CsQpg2X/j5lSB2E4lTro4MWcSTkMGetAcMLL0/nTRQCe7r4r821k6jq9S9
+	 VfQ0GnopIGIZUAQ00lXGo2C8DXie9BSxkFzY2UBTAltzA8lAjnNvtt18JWCgsgYEpi
+	 pz2UiR62rhkn0vKSxU3e1etpDmPEf7ApN8Lh8BecNuXu5bTX1IBfAt0MThmpEjfUdr
+	 8JiUtUlIiQ7W+t4ZyTYSFqmAOGFYkLY5CY4lhqbYeGpAtRy3oC5VAqgJIP6rjS86Ux
+	 1bJ4Wxq61zjKg==
+Date: Wed, 11 Feb 2026 12:51:39 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Marco Elver <elver@google.com>,
+	clang-built-linux <llvm@lists.linux.dev>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Bart Van Assche <bvanassche@acm.org>
+	Bart Van Assche <bvanassche@acm.org>,
+	Aaron Ballman <aaron@aaronballman.com>,
+	"Jose E. Marchesi" <jemarch@gnu.org>
 Subject: Re: Clang/LLVM 'main' regression testing and -Wthread-safety
-Message-ID: <20260211194020.GA3482274@ax162>
+Message-ID: <20260211195139.GB3482274@ax162>
 References: <aYhfK3tB0X6Y_GyV@gmail.com>
  <177076109527.3702729.10282954256881857059.pr-tracker-bot@kernel.org>
  <CANpmjNODYHBpS_Xn_bbGwQfdEtkgFq_gpdT3S+_31bfgOPoeUg@mail.gmail.com>
+ <CANiq72k6ZHbW+tnX8jjOUaj4aSMigEaH4SEkODX==OJBseKCug@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANpmjNODYHBpS_Xn_bbGwQfdEtkgFq_gpdT3S+_31bfgOPoeUg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72k6ZHbW+tnX8jjOUaj4aSMigEaH4SEkODX==OJBseKCug@mail.gmail.com>
 
-Hi Marco,
-
-On Wed, Feb 11, 2026 at 11:58:55AM +0100, Marco Elver wrote:
-> See below - Clang's -Wthread-safety support was merged.
-
-Congratulations :) I am happy to hear that it has gotten across the
-finish line and I look forward to more people trying it out.
-
-> I'm not too familiar with ClangBuiltLinux testing and regression
-> testing setups; but I wanted to check if LLVM 'main' is being
-> continuously tested somewhere? I know the Intel test robot takes a
-> ~1-2 week old snapshot of LLVM 'main' and tests that.
-
-Yes, it is (at the repository that Miguel pointed out):
-
-  https://github.com/ClangBuiltLinux/continuous-integration2/actions/workflows/mainline-clang-23.yml
-
-You can see our full matrix on the ClangBuiltLinux homepage:
-
-  https://ClangBuiltLinux.github.io
-
-We rely on apt.llvm.org for the nightly builds, which are normally
-updated every few days but it was down for a little over a month because
-of the 22 to 23 transition (if I understand correctly). I actually need
-to chase that transition in TuxMake.
-
-I also have a testing framework I use for local validation of LLVM main,
-so I should be able to flag issues fairly quickly:
-
-  https://github.com/nathanchance/llvm-kernel-testing
-
-> Basically I want to ensure that we're able to catch -Wthread-safety
-> regressions on the Clang side that affect the kernel. While I've been
-> adding more and more tests to the LLVM repo for the rather special
-> patterns we decided to use in the kernel to make Context Analysis
-> work, maybe some slipped through the cracks.
+On Wed, Feb 11, 2026 at 12:54:40PM +0100, Miguel Ojeda wrote:
+> On Wed, Feb 11, 2026 at 11:59 AM Marco Elver <elver@google.com> wrote:
+> >
+> > I recall there was a CI system that did this, but lost track of what's
+> > the latest.
 > 
-> E.g. I've been reviewing
-> https://github.com/llvm/llvm-project/pull/178952 and tested it, too,
-> I'm only 99% certain that PR is ok -- being able to quickly catch a
-> newly introduced issue before waiting for the Intel test robot to
-> start spamming us would be good.
+> I think you may be referring to
+> https://github.com/ClangBuiltLinux/continuous-integration2.
 
-For what it's worth, I have a decent amount of local computing resources
-so if you ever want a pull request explicitly tested, ping me on it and
-I am happy to put it through my tests, which should flag any major
-problems because the context analysis warnings are default on in
-Kconfig.
+Indeed.
 
-> I recall there was a CI system that did this, but lost track of what's
-> the latest.
+> By the way, some time ago I asked Aaron (Cc'd) whether we could get
+> the kernel into upstream LLVM's CI system, i.e. to at least build a
+> minimal kernel configuration of a fixed, tagged release for one or two
+> architectures. Would that help you?
+> 
+> (I also suggested Jose (Cc'd) the same, for GCC.)
+> 
+> The idea is that it helps both sides. It serves to catch issues very
+> early on (including with subtle things like diagnostics), and thus
+> avoids having to play catch up later to fix them (compiler) and/or
+> workaround them (kernel) in either side.
+> 
+> To be clear, this wouldn't replace the other CIs that run out of tree,
+> like Nathan's and the tests I do for Rust stuff etc., i.e. it is not
+> about catching every compiler issue or testing the kernel as a
+> product.
+> 
+> For context, this all happened because I asked the same to upstream
+> Rust and it was a success there. In that case, the goal was to catch
+> issues early with the unstable features we use, but it helps with
+> other things too, and thus I think it would help just the same for
+> Clang and GCC. So far, we only got pinged a few times, so it has not
+> been a lot of work, and it did catch a couple issues (which sometimes
+> may end with a preemptive kernel patch or fixing the upstream PR).
+> 
+> We also did it for upstream `bindgen`, and hopefully it will happen
+> for `rustc_codegen_gcc` (currently we have an out-of-tree one) and GCC
+> Rust eventually.
+> 
+> Anyway, this is a bit of a tangent, but I thought I could raise it up
+> again and see what comes out of it...
 
-Aside from our CI and Intel's, I know Linaro's toolchain group has some
-testing of LLVM main that seems to be fairly up to date:
-
-  https://lore.kernel.org/llvm/?q=f%3Aci_notify%40linaro.org
+It has always been on my backburner to try and get a build of the Linux
+kernel as part of LLVM's continuous integration but I have never had the
+time to sit down and interface with folks to see what exactly that
+entails (I figured it would involve integration with LLVM's build bot
+infrastructure but I have not dug in super hard to the documentation).
+An arm64 and x86_64 defconfig build would probably catch quite a bit of
+initial breakage and it would be easy to pin Linux's version and only
+bump it when thoroughly tested.
 
 Cheers,
 Nathan
