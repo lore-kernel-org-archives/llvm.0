@@ -1,160 +1,147 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088F236AB5B;
-	Wed, 11 Feb 2026 10:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770807406; cv=none; b=JMkABUTTOSWMLAHqFLP9F6wZMtEf0EZoECxbvHYsvsy5pZwBAn3zYWCqwfKFqyginRDhXCO0OF3ZsaPrgIgOb7ARU0HH+ky0wL1XzM2TlW78B1M4xeQMc9szO9bdYqBO99WHudfWd65hDHDrV3AQaK1KhQAQwvA/r7URb0qF0E0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770807406; c=relaxed/simple;
-	bh=gMLlAag35c9LSAaTZF8soL/XlIj++H4vYTe1OQNLlNw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YteAOREBdrypjIjoSP2Dz0fGs/mSveSOaLfuwKpd2JWVEsZl5ireiqLOoSxx3bK0+BgEpD+0rCxunyy0aiGYvDCKcdarA2x2PsBen5Pv/5BppTRYM9AcwWG08iG9yj57UivvgaNdjxcJSskDP8AJQIOEFlKNPfxyBDvkc0UY5k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=AqimoI6M; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF15A36A02F
+	for <llvm@lists.linux.dev>; Wed, 11 Feb 2026 10:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770807575; cv=pass; b=tL+MDH+N6Bjw0fAB+dJ+DVHPUtgnAsxoXZXfvdWPeph3Uz1d0vtKUT3fQBy3LvElNlYKMMghIGs62OhvFK/zZxvwPCgyA8Mw8vMVT/2x8s+PjExlmL/z5ChPHZ1hJ79qBd7wdXDmc8yhQRnCgG8CoJOP+Dyev6EG7TDAzzEW5zA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770807575; c=relaxed/simple;
+	bh=dJD8+7O1m1UnRE7Nih3CmT9aLuOgfLG7Ag9XDO/BEX0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=szGwz5wjb/o9XoqCjUp0ZQ0z/H9iVBb7Pg6gJzHSVTaIwBYUaU8egMxccbOQmT4p/QUkPvKptL6nqJmNo/bexs5R6HRwQHhMZJFO4jiBRJrHkQdIxsBaypRaouPsMSzKQYFQsYkgOMI6zDNMQ/sceU+IgBKho9zXn959ZsNuupI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wbjOJX7X; arc=pass smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="AqimoI6M"
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4f9wNJ5fDgz9tpf;
-	Wed, 11 Feb 2026 11:56:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1770807392; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8D2K+brmcX9jyLHAA/rQuQznyMmiZsmCIlbxqnliqqs=;
-	b=AqimoI6MrWRJ/OVq1KjxAIVBZFJ8CbxzfeYbkIgj+wiOrcquAsbvKT9Ma+OrMQQeEJBuDr
-	egMts1/FDconUdwxJfr7TpJQBvMexWM1Q6KD2O/puui71a3trxgSVhTlGkFoKK4nyDI5pU
-	0uxWVjzj8soaNgSEWsOzMzeQgYC/FPMS+42dj/OmqtAiJS7HJNmtS5h2s33ENMgh6qqybx
-	zt+v2fnjTuBzeQpN5Jl1ZQA+cnQhI/39baMhMV5ubSyK+ykZZxI8SZh4R2iTquG56lfAMZ
-	iJHNo/9/7uIXw5paJTSR3JB+DdwdJJX4ZZOrmvftc6GHrTjfpyqEdZW6mr7W3A==
-Message-ID: <ef514066e5771e8ac1deb3ae6baa14b798305fd2.camel@mailbox.org>
-Subject: Re: [PATCH v6 06/31] drm/sched: Add some scheduling quality unit
- tests
-From: Philipp Stanner <phasta@mailbox.org>
-Reply-To: phasta@kernel.org
-To: kernel test robot <lkp@intel.com>, Tvrtko Ursulin
-	 <tvrtko.ursulin@igalia.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- kernel-dev@igalia.com,  Christian =?ISO-8859-1?Q?K=F6nig?=
- <christian.koenig@amd.com>, Danilo Krummrich <dakr@kernel.org>, Matthew
- Brost <matthew.brost@intel.com>, Philipp Stanner <phasta@kernel.org>,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-Date: Wed, 11 Feb 2026 11:56:27 +0100
-In-Reply-To: <202601292335.YI2PBzhs-lkp@intel.com>
-References: <20260128110806.38350-7-tvrtko.ursulin@igalia.com>
-	 <202601292335.YI2PBzhs-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wbjOJX7X"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12713e56abdso510366c88.1
+        for <llvm@lists.linux.dev>; Wed, 11 Feb 2026 02:59:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770807573; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CDHxwWBIVet/FmzJoXswm9IWzZe58tSyUeDT49cvW6J2fqRMoYxumdtQUgYB5VOwh0
+         TOWo4Z2wDNqgQZltF6oFDNX4MShmoq+MTZa2wJl7w68HgkBQDmbUnwH89qLz76MzvexQ
+         8eDB9SuySkcBW5pHKQkgX7+li0/IrazqjScaobYFYMXoGsEm7dVybZHwKKhYfKMr/eQ1
+         i5nSNzlRsItuBuuhm+XtMfABGsiKGdceXcGUq4W1T/ZVUcKGBrmuvj//4WsNQSnoTNiA
+         5C/CZjhxD3AIpb171KUpGBOpm7TDjXDm7yDjajwsHVSM8C92C4MbnCUOGwf0E3U9obK3
+         IqGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=dJD8+7O1m1UnRE7Nih3CmT9aLuOgfLG7Ag9XDO/BEX0=;
+        fh=6uaIcfdUlcqgdcoBIrI7/MCsskYWfkLVn/v8I0pSZqE=;
+        b=JUERxp6BTezv0OOQt/RFWw0oVYcNRm/+SCvNHqtdSgiQZ3h3+U0J3VF+5/xmCcLEMH
+         xZZrZyoOboULen4vIM23FH+O94p3CA9O09bJkLGH4iFnc1Ika/CzGREMTmvoxC2WziiP
+         pwFvuO1mxl9+Szw4SifXg++Uj3xMYboKadBjpPShXsNBm3FTDvj3joSfzhEV0mSPdq3E
+         ogUF1ut85Vp7+cHuZPoJbQIADlW4GJbWx5FgOGQJAuweFt634Cuiwuwx8FqYa2Sgp3TP
+         i3H6rIfnDCb3U8FuPBX3JqxGZfElm4r4vFBVrVQuNsVLgtwlOxmQXgnaVKvf717XLKZk
+         SfkA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770807573; x=1771412373; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dJD8+7O1m1UnRE7Nih3CmT9aLuOgfLG7Ag9XDO/BEX0=;
+        b=wbjOJX7XtydWu0K5GV1+h0EeOKk5W430vMnYam7I12r5NOgBc8SI2nm66Z4kY1B28O
+         fq66vdh/u8z/93HkQDt0qNNXZu7DNxo3cAsn4SE53zxccBX3iiRf2roFHz88orokJOkj
+         5hWSqngjyeqjFkIcsI1vsOXjzOMCX5tCJ2i0idQsqCw0HCJXhnKpjjRDFf2APEp4cXZr
+         IPM0Z5yYhOqptcqwKjA6/NEmZOubEa4KQ+SvSKmO4bFUkoAYOL7egbTvdf+fzG9HL1cN
+         2FnTfuGt0fFbuFnZsw/7lBAikNFKUri6sz8z7qsJGF7vYOFIj9Ypn/zaD3e7GQBJej3q
+         l1DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770807573; x=1771412373;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dJD8+7O1m1UnRE7Nih3CmT9aLuOgfLG7Ag9XDO/BEX0=;
+        b=WKZpBxdrKvXvwbVqKCVkJfbEXD+XlHb5uYsD04UmjHyUPaKz+ei8ZcsI8zWvPhs50U
+         ZWKWAliOXaVdl7NoOT6BPl+GQr8xfstBgJ6+OdA6VQYHnijaNuUK5D/MHEbRJpqvCTvX
+         7kwbVD9Hpb4Cet9zYek/SKdn/+NxxpRVVrcutVYFb2KkyKBQb6xlCL7+shctip23aYeh
+         DJ4Y9+//9bY5bqLhWyeGwDK18t8Ec64/gV8swO/SEzm7YTIAMoSzxpUURXyQwYMZRFO1
+         sI72IJYfjewJFrsXFurzZ68Oi7kIKTWRS60k643Do2D+Vqaut8FeIembZE1VmoeIdrwT
+         zZQg==
+X-Gm-Message-State: AOJu0YzD4uJgM9T7CBTm1nJyFEF0f345urdsV6TGB2lb/b8DGTS0hnXF
+	tRShdmVYiuU6xoKtmrEvAhmefemEAN76/gmE+pUkh9UEGrU+glhczCCa6uPSxY0ZW5a5f4Z+LWH
+	o4XbiZhSPMxhsJXzNwbtygJzY0dg2vm4YNvFWPxNB
+X-Gm-Gg: AZuq6aJcJlC3lEPaj+Vs85lcbfwW3k8eGyXy5x0uz0Zwh8AjqcZxWvNF6a1DzPwP4wY
+	BjBOO/0JxZuDyEENgf8QiJSPmHUV7PsOWyT6fiqANsYpEN0i2dlAJ2CoxwxBHjWd7S0EznoCwMU
+	SCWq+LMYZNXqp+XiwlVKbUpefhuBqqPs8M+nvG7kc1J2m92DPewkHbfDue7hCzu41AI/JI51UA4
+	gx6d4zRugJi/VTBwaB30A4Gofc0HeJm+0IJl1gV299OLXIJn21yAClP1S6B5fpjSgdGdKYLfQsq
+	Kz/bsSE4PRCUVMQqOhvwqQHG/z9yj0a+1D4ZrDY=
+X-Received: by 2002:a05:7022:691:b0:11b:b471:dc8d with SMTP id
+ a92af1059eb24-12723e9e8afmr1996532c88.2.1770807572688; Wed, 11 Feb 2026
+ 02:59:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MBO-RS-ID: c4318eafb0eaf8ea950
-X-MBO-RS-META: 8856ey5gqawaq6z5rij179qc97fac74p
+References: <aYhfK3tB0X6Y_GyV@gmail.com> <177076109527.3702729.10282954256881857059.pr-tracker-bot@kernel.org>
+In-Reply-To: <177076109527.3702729.10282954256881857059.pr-tracker-bot@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Wed, 11 Feb 2026 11:58:55 +0100
+X-Gm-Features: AZwV_QinRNdChVTHpOoDmNUIlY5KdYUx2fC3AI7Kh4AWHktjvtlhTPMushv1xfs
+Message-ID: <CANpmjNODYHBpS_Xn_bbGwQfdEtkgFq_gpdT3S+_31bfgOPoeUg@mail.gmail.com>
+Subject: Clang/LLVM 'main' regression testing and -Wthread-safety
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
+	Bart Van Assche <bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2026-01-29 at 23:31 +0800, kernel test robot wrote:
-> Hi Tvrtko,
->=20
-> kernel test robot noticed the following build errors:
->=20
-> [auto build test ERROR on drm-misc/drm-misc-next]
-> [also build test ERROR on drm-xe/drm-xe-next daeinki-drm-exynos/exynos-dr=
-m-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes d=
-rm-tip/drm-tip linus/master v6.19-rc7 next-20260128]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi Nathan,
 
-Hi Tvrtko,
+See below - Clang's -Wthread-safety support was merged.
 
-what about this build error? Seems to be an Xe branch conflict?
+I'm not too familiar with ClangBuiltLinux testing and regression
+testing setups; but I wanted to check if LLVM 'main' is being
+continuously tested somewhere? I know the Intel test robot takes a
+~1-2 week old snapshot of LLVM 'main' and tests that.
+
+Basically I want to ensure that we're able to catch -Wthread-safety
+regressions on the Clang side that affect the kernel. While I've been
+adding more and more tests to the LLVM repo for the rather special
+patterns we decided to use in the kernel to make Context Analysis
+work, maybe some slipped through the cracks.
+
+E.g. I've been reviewing
+https://github.com/llvm/llvm-project/pull/178952 and tested it, too,
+I'm only 99% certain that PR is ok -- being able to quickly catch a
+newly introduced issue before waiting for the Intel test robot to
+start spamming us would be good.
+
+I recall there was a CI system that did this, but lost track of what's
+the latest.
+
+Thanks,
+-- Marco
+
+---------- Forwarded message ---------
+From: <pr-tracker-bot@kernel.org>
+Date: Tue, 10 Feb 2026 at 23:05
+Subject: Re: [GIT PULL] locking updates for v6.20
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+<linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+Borislav Petkov <bp@alien8.de>, Uros Bizjak <ubizjak@gmail.com>,
+Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Gary Guo
+<gary@garyguo.net>, Oleg Nesterov <oleg@redhat.com>, Marco Elver
+<elver@google.com>
 
 
-BTW, I think Danilo and I told you a few times already that we would
-like to get the whole patch series into our inboxes. You seem to
-exclude patches for other components, but it's important for me to see
-all the other driver maintainers' RBs etc. there and be easily able to
-ping those who haven't reacted yet and so on. Also quickly coyping an
-mbox to test-apply something etc. etc. is easier
+The pull request you sent on Sun, 8 Feb 2026 11:02:19 +0100:
 
-I guess you want to spare people from noisy mail traffic, but getting
-31 patches is not a problem, those who don't care can simple ignore
-them or collapse the thread in their mail program and so on.
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking-core-2026-02-08
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0923fd0419a1a2c8846e15deacac11b619e996d9
 
-Thanks
-P.
+Thank you!
 
-
->=20
-> url:=C2=A0=C2=A0=C2=A0 https://github.com/intel-lab-lkp/linux/commits/Tvr=
-tko-Ursulin/drm-amdgpu-Reject-impossible-entities-early/20260128-191117
-> base:=C2=A0=C2=A0 https://gitlab.freedesktop.org/drm/misc/kernel.git=C2=
-=A0drm-misc-next
-> patch link:=C2=A0=C2=A0=C2=A0 https://lore.kernel.org/r/20260128110806.38=
-350-7-tvrtko.ursulin%40igalia.com
-> patch subject: [PATCH v6 06/31] drm/sched: Add some scheduling quality un=
-it tests
-> config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260=
-129/202601292335.YI2PBzhs-lkp@intel.com/config)
-> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project=C2=
-=A07cbf1a2591520c2491aa35339f227775f4d3adf6)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260129/202601292335.YI2PBzhs-lkp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202601292335.YI2PBzhs-lkp=
-@intel.com/
->=20
-> All errors (new ones prefixed by >>):
->=20
-> > > drivers/gpu/drm/scheduler/tests/tests_scheduler.c:676:10: error: init=
-ializer element is not a compile-time constant
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_sched_scheduler_two_clien=
-ts_attr),
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~
-> =C2=A0=C2=A0 include/kunit/test.h:224:13: note: expanded from macro 'KUNI=
-T_CASE_PARAM_ATTR'
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .attr =3D attributes, .mod=
-ule_name =3D KBUILD_MODNAME}
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~
-> =C2=A0=C2=A0 1 error generated.
->=20
->=20
-> vim +676 drivers/gpu/drm/scheduler/tests/tests_scheduler.c
->=20
-> =C2=A0=C2=A0 672=09
-> =C2=A0=C2=A0 673	static struct kunit_case drm_sched_scheduler_two_clients=
-_tests[] =3D {
-> =C2=A0=C2=A0 674		KUNIT_CASE_PARAM_ATTR(drm_sched_scheduler_two_clients_t=
-est,
-> =C2=A0=C2=A0 675				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_sched_scheduler_tw=
-o_clients_gen_params,
-> =C2=A0> 676				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_sched_scheduler_two_cli=
-ents_attr),
-> =C2=A0=C2=A0 677		{}
-> =C2=A0=C2=A0 678	};
-> =C2=A0=C2=A0 679=09
->=20
-
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
