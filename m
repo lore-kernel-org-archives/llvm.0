@@ -1,152 +1,159 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0070F27467E;
-	Thu, 12 Feb 2026 09:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AC12D94A5
+	for <llvm@lists.linux.dev>; Thu, 12 Feb 2026 12:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770889500; cv=none; b=kxfXT6iHbCafRWfG9WGsgx0NmQ9DlpAaruYkom1gdo+ZGX84nPGaJapqyrkB4lfs1WQSsnWiOKW/GGKCI0WyT2UIVqAmmWdoSxfGnhB53OQdJ0s02QUjnf3ShbM6/3f4Ub0wfGDnzadfzgue2PvGz2oDJndx+PjR6vyldeSnVrk=
+	t=1770898962; cv=none; b=pys8MKXy87WQtSA2WQcHgysrzDLqPpVZlIdIM3ncvGgHwaaoK4EoIzLu5Sg617iKOlkblF6zecOPXvMVjeMTOc4q3DGph2BnirRdk1XrMW47NkRRSEM1V8MhMtieq7LECX2Fue2i0sWURggrhB+BqxQkYI5+/JxLeHsB5PcHTUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770889500; c=relaxed/simple;
-	bh=YsxgldphmWO694HgD46MlSot+OU+xO8O4VJplMZosF4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YVYrlqqyDIDUgfnMtIf7HowIYQw78GcvWZd4lXIV9QgKYN9OtyLO+cPQ+2nliaj900JUCRBJRP/JO5/gA8UAKQwj1FnsThAV2g/rDXKdN7ItxgARTdu8r+HfiuyzcndIfq+uaQajWQCMOC6bw6LQrQDNejY9DFV+0pIwbPdLbrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Y49CTFPQ; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1770898962; c=relaxed/simple;
+	bh=xaZFJSqarycPgjYP87uZlW5GbRX158HEdIVL26LyF/U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rbvve+F9WPYWdyX2EmP59K6ZDX+LcYt1ndf5zO4vVtr6FUGCs9NhqbN34nhiIfP//tgot+KpPl+r5KpDsf2Jo9TTQXdCZB8cZee3FWJuO0Vk+SIFMsdTkBF6Mt3ngFMrCDo10tGc1D2wx9ZkcpApbxCYq/0t5/OZ2/dnT7weOTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aaronballman.com; spf=pass smtp.mailfrom=aaronballman.com; dkim=pass (2048-bit key) header.d=aaronballman.com header.i=@aaronballman.com header.b=b8ZOFbxo; arc=none smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aaronballman.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aaronballman.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Y49CTFPQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=833/EZZPoRCNa1CzduKQIDoSq5Xvt+n4Hursud2AlLM=; b=Y49CTFPQsx4CSTnl8tDE/haZBZ
-	Fbl6Ojbi3QC0qEIUQ0oi6xQsLR4nJjD6AGDaF3CXNOsXokkKVAjX0bAnYRXNHjh/fxsMKj8Rm1RhR
-	qgSr11cR1/kF9GR/G9SM5BsepG9vWLiX8OIQD8Ljx4YODmZJefSpSVzybv1otFe7UiLXZAxul0EIf
-	c8+VjbsbPk1EpveDQvWoXliNkPsvYYb7SaJBveLdpMyoQbLbPIgr+BoEVLiBGL1Di0cmJnMCvEmxf
-	pVesWdln762VUEvO/cJA2rVGFxbDhTlwEqjGBo0dEOIcnfe+fNYstm85adBG7Qn+7cks3L0C+GnyJ
-	NmWhUeSw==;
-Received: from [90.240.106.137] (helo=[192.168.0.101])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vqTFZ-00HSoJ-EY; Thu, 12 Feb 2026 10:44:41 +0100
-Message-ID: <d5fa40db-c9cc-4dda-8bff-c2f98d7bc421@igalia.com>
-Date: Thu, 12 Feb 2026 09:44:40 +0000
+	dkim=pass (2048-bit key) header.d=aaronballman.com header.i=@aaronballman.com header.b="b8ZOFbxo"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7d45d37f8e4so1683825a34.0
+        for <llvm@lists.linux.dev>; Thu, 12 Feb 2026 04:22:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aaronballman.com; s=google; t=1770898960; x=1771503760; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xaZFJSqarycPgjYP87uZlW5GbRX158HEdIVL26LyF/U=;
+        b=b8ZOFbxoJAblYQxdCdupV4FgqtSggcubOl4GaIq7Rivbp+pJPL5neXGZ4vTT9CWB+Y
+         6PNjz4ziCo0nSUOTyOZRvXNDNU5lQ3KE1tonKD5DeglHP94WtNHwtgvawFa4kLn7lxYS
+         erSpr7+CHlGyv4T+HKhA6hwM9Qw8Gi11uHuh8K1z37aUlFJwTqbTMiTVWU/Swm3TmP47
+         sv/6xm0T2qEm1osmdSpWepaYfjAQoYG/Vm1xPU9zV6v+Aqmoi85ujR7GCgSyqBSFQoos
+         9pRuturumRt/2S0/rlHv54rQbFTq8LawKF5F7qSnxjUgQsF9WUR6T1FDKY6bKS0bKLaI
+         lMAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770898960; x=1771503760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xaZFJSqarycPgjYP87uZlW5GbRX158HEdIVL26LyF/U=;
+        b=jvrAV763WrvNq9p6mAt7VFK3HZ36JycFxHZLXG+7LoNy8vyGS/Yn5ObTGt7QnTKDvM
+         e5ffN0eqMGrOO7jerusBIY2YGtK4dri9GhnhMvo/YrwpcQd+zsTVuzehaY46wv5z6pcZ
+         4PDl31CTsA1pc0hE8dQJbO+boG5XR4VMa8yicQRwE5olBwY81CI9+XoxIsi3RYemnjY0
+         2yLW1+0MKeisIJzHeJ5nRnPaiWXZwAF8FK96o2dVKAYc3Eh9XmvQLt1JdAAjBrWpEmKb
+         eI4GAZmSqHuGTYQpJUwZIbPS5Um8Ro7SKVcaYEqAnnXxUNtC9+8lgdazpNN67IYlcrIx
+         6EhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVK4zmZqcTLq+hwKKVcWZ4JqQAjcf6ZWZyccvmo2f0QekBVnAXZB5Zt65I2pySO9wbSY93u@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPe3xvd1jF57AGndFqsdbHdxR1mjQmhxGTJaxGqO/KZq4umAwG
+	OVXzZZnEb9zXXrqAi9E7kZdpZspfq1wvGuOMJZdmNNrvkJOsXmVi/L4oTgHgpeeQEYhHmFROycr
+	9i1KL
+X-Gm-Gg: AZuq6aLPE+0YEnmWnxMLCsx6o19Qhs5tIi0TsTSksPsY4uoGI0EmuLgwJZ1yN+kmCYS
+	A7hqBosdsNL9yyy0Ywk9x53qwkFUIb7mucuH716hmaKV1ysyUx5ynyrdBdeFScUr4aq51MBQ94h
+	2FVZqoSQz40ljHT+e5ZOJvFEh97vSWV7+pqWZh29lrdMhr4uzSnKQ9dMt71LeAA78Vu6cj5ObID
+	shUWT4yTgXrSmRMmJ9DV1p4LqTUXEI2aK4X4wh2eRHONsN23wRb18JaDx/m1l3GJB6UBXHcbvK1
+	NqfXuNQYX2MGf9TJf5r88fNJ8W/apiL3Y9dyhabKnicMHJdhUyso60HB8Epz3YUTRGz/05eB/sQ
+	afbAiRr03QKOFJJs6h0Nvzo79VRbERkynb/A58E+ktFZFsywadFVfmYh26GBimJdeHsbkpp8XuO
+	Kln5pwuecKXvOZGIPOFP0FG0IID0PobefP5ZcSAPdT0snnL2hi1757XveU49Q+65NLD9GoBGOZw
+	Q==
+X-Received: by 2002:a05:6830:67f8:b0:7cf:cbee:6bd5 with SMTP id 46e09a7af769-7d4b41edb49mr802273a34.19.1770898959579;
+        Thu, 12 Feb 2026 04:22:39 -0800 (PST)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com. [209.85.160.41])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d4a76df04dsm3753494a34.15.2026.02.12.04.22.38
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Feb 2026 04:22:39 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-40438e0cba6so1948551fac.1
+        for <llvm@lists.linux.dev>; Thu, 12 Feb 2026 04:22:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVe/T0qX7QrKhRv8XWefNrHbNlgF818y3NxO7So9FLIdgO+DTa91zzaRbLBzbBXFRb2t+tf@lists.linux.dev
+X-Received: by 2002:a05:6820:448c:b0:663:12b4:9572 with SMTP id
+ 006d021491bc7-675de2f51f2mr595819eaf.84.1770898958157; Thu, 12 Feb 2026
+ 04:22:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 06/31] drm/sched: Add some scheduling quality unit
- tests
-To: phasta@kernel.org, kernel test robot <lkp@intel.com>,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- kernel-dev@igalia.com, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>, Danilo Krummrich <dakr@kernel.org>,
- Matthew Brost <matthew.brost@intel.com>,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-References: <20260128110806.38350-7-tvrtko.ursulin@igalia.com>
- <202601292335.YI2PBzhs-lkp@intel.com>
- <ef514066e5771e8ac1deb3ae6baa14b798305fd2.camel@mailbox.org>
-Content-Language: en-GB
-From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-In-Reply-To: <ef514066e5771e8ac1deb3ae6baa14b798305fd2.camel@mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <aYhfK3tB0X6Y_GyV@gmail.com> <177076109527.3702729.10282954256881857059.pr-tracker-bot@kernel.org>
+ <CANpmjNODYHBpS_Xn_bbGwQfdEtkgFq_gpdT3S+_31bfgOPoeUg@mail.gmail.com>
+ <CANiq72k6ZHbW+tnX8jjOUaj4aSMigEaH4SEkODX==OJBseKCug@mail.gmail.com> <20260211195139.GB3482274@ax162>
+In-Reply-To: <20260211195139.GB3482274@ax162>
+From: Aaron Ballman <aaron@aaronballman.com>
+Date: Thu, 12 Feb 2026 07:22:26 -0500
+X-Gmail-Original-Message-ID: <CAAt6xTtmrrZh-+H-jV+bcteZwG1jabraTxWQ-uLJ_N9h1ZLxdA@mail.gmail.com>
+X-Gm-Features: AZwV_QjwcUDnnyobXg_6nmLwUGbwje6hUaJ7h0EhCJ_ftEpF23I0pbq0D_QXuec
+Message-ID: <CAAt6xTtmrrZh-+H-jV+bcteZwG1jabraTxWQ-uLJ_N9h1ZLxdA@mail.gmail.com>
+Subject: Re: Clang/LLVM 'main' regression testing and -Wthread-safety
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Marco Elver <elver@google.com>, 
+	clang-built-linux <llvm@lists.linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
+	Bart Van Assche <bvanassche@acm.org>, "Jose E. Marchesi" <jemarch@gnu.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Feb 11, 2026 at 2:51=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Wed, Feb 11, 2026 at 12:54:40PM +0100, Miguel Ojeda wrote:
+> > On Wed, Feb 11, 2026 at 11:59=E2=80=AFAM Marco Elver <elver@google.com>=
+ wrote:
+> > >
+> > > I recall there was a CI system that did this, but lost track of what'=
+s
+> > > the latest.
+> >
+> > I think you may be referring to
+> > https://github.com/ClangBuiltLinux/continuous-integration2.
+>
+> Indeed.
+>
+> > By the way, some time ago I asked Aaron (Cc'd) whether we could get
+> > the kernel into upstream LLVM's CI system, i.e. to at least build a
+> > minimal kernel configuration of a fixed, tagged release for one or two
+> > architectures. Would that help you?
+> >
+> > (I also suggested Jose (Cc'd) the same, for GCC.)
+> >
+> > The idea is that it helps both sides. It serves to catch issues very
+> > early on (including with subtle things like diagnostics), and thus
+> > avoids having to play catch up later to fix them (compiler) and/or
+> > workaround them (kernel) in either side.
+> >
+> > To be clear, this wouldn't replace the other CIs that run out of tree,
+> > like Nathan's and the tests I do for Rust stuff etc., i.e. it is not
+> > about catching every compiler issue or testing the kernel as a
+> > product.
+> >
+> > For context, this all happened because I asked the same to upstream
+> > Rust and it was a success there. In that case, the goal was to catch
+> > issues early with the unstable features we use, but it helps with
+> > other things too, and thus I think it would help just the same for
+> > Clang and GCC. So far, we only got pinged a few times, so it has not
+> > been a lot of work, and it did catch a couple issues (which sometimes
+> > may end with a preemptive kernel patch or fixing the upstream PR).
+> >
+> > We also did it for upstream `bindgen`, and hopefully it will happen
+> > for `rustc_codegen_gcc` (currently we have an out-of-tree one) and GCC
+> > Rust eventually.
+> >
+> > Anyway, this is a bit of a tangent, but I thought I could raise it up
+> > again and see what comes out of it...
+>
+> It has always been on my backburner to try and get a build of the Linux
+> kernel as part of LLVM's continuous integration but I have never had the
+> time to sit down and interface with folks to see what exactly that
+> entails (I figured it would involve integration with LLVM's build bot
+> infrastructure but I have not dug in super hard to the documentation).
+> An arm64 and x86_64 defconfig build would probably catch quite a bit of
+> initial breakage and it would be easy to pin Linux's version and only
+> bump it when thoroughly tested.
 
-On 11/02/2026 10:56, Philipp Stanner wrote:
-> On Thu, 2026-01-29 at 23:31 +0800, kernel test robot wrote:
->> Hi Tvrtko,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on drm-misc/drm-misc-next]
->> [also build test ERROR on drm-xe/drm-xe-next daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v6.19-rc7 next-20260128]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> Hi Tvrtko,
-> 
-> what about this build error? Seems to be an Xe branch conflict?
+FWIW, I continue to be in full support of adding post-commit CI
+resources for testing Linux kernel needs. I'm not super familiar with
+the infrastructure side of things, but I'm happy to help make
+connections with the folks who do know if it's of help.
 
-I don't know what happened there in LKP, it appeared for the first time 
-with v6. Drm_sched_scheduler_two_clients_attr looks constant to me:
+~Aaron
 
-static const struct kunit_attributes 
-drm_sched_scheduler_two_clients_attr = {
-	.speed = KUNIT_SPEED_SLOW,
-};
-
-static struct kunit_case drm_sched_scheduler_two_clients_tests[] = {
-	KUNIT_CASE_PARAM_ATTR(drm_sched_scheduler_two_clients_test,
-			      drm_sched_scheduler_two_clients_gen_params,
-			      drm_sched_scheduler_two_clients_attr),
-	{}
-};
-
-It builds fine for me but I will keep an eye on it.
-
-> BTW, I think Danilo and I told you a few times already that we would
-> like to get the whole patch series into our inboxes. You seem to
-> exclude patches for other components, but it's important for me to see
-> all the other driver maintainers' RBs etc. there and be easily able to
-> ping those who haven't reacted yet and so on. Also quickly coyping an
-> mbox to test-apply something etc. etc. is easier
-> 
-> I guess you want to spare people from noisy mail traffic, but getting
-> 31 patches is not a problem, those who don't care can simple ignore
-> them or collapse the thread in their mail program and so on.
-
-I assume all important people are subscribed to dri-devel anyway so all 
-patches should be in their inboxes. But I will try and remember to 
-explicitly cc you two.
-
-Regards,
-
-Tvrtko
-
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Tvrtko-Ursulin/drm-amdgpu-Reject-impossible-entities-early/20260128-191117
->> base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
->> patch link:    https://lore.kernel.org/r/20260128110806.38350-7-tvrtko.ursulin%40igalia.com
->> patch subject: [PATCH v6 06/31] drm/sched: Add some scheduling quality unit tests
->> config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260129/202601292335.YI2PBzhs-lkp@intel.com/config)
->> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601292335.YI2PBzhs-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Closes: https://lore.kernel.org/oe-kbuild-all/202601292335.YI2PBzhs-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/gpu/drm/scheduler/tests/tests_scheduler.c:676:10: error: initializer element is not a compile-time constant
->>                                   drm_sched_scheduler_two_clients_attr),
->>                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>     include/kunit/test.h:224:13: note: expanded from macro 'KUNIT_CASE_PARAM_ATTR'
->>                       .attr = attributes, .module_name = KBUILD_MODNAME}
->>                               ^~~~~~~~~~
->>     1 error generated.
->>
->>
->> vim +676 drivers/gpu/drm/scheduler/tests/tests_scheduler.c
->>
->>     672	
->>     673	static struct kunit_case drm_sched_scheduler_two_clients_tests[] = {
->>     674		KUNIT_CASE_PARAM_ATTR(drm_sched_scheduler_two_clients_test,
->>     675				      drm_sched_scheduler_two_clients_gen_params,
->>   > 676				      drm_sched_scheduler_two_clients_attr),
->>     677		{}
->>     678	};
->>     679	
->>
-> 
-
+>
+> Cheers,
+> Nathan
