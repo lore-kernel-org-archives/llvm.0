@@ -1,65 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C10C1CDFD5;
-	Thu, 12 Feb 2026 03:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0042FC0A;
+	Thu, 12 Feb 2026 06:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770867427; cv=none; b=MOF0MgPxTWevAvgubY64CyXLkFV4QW96Zmlk9+JyCcOXdYbmXXWgG0CsX5Tldm/peY9k3p6TBka7CXqSq4wGmbEdRleBYldLHTrNID1BFqiWKpYYt/aFcn/V0kIobfI5tRSGQ8WDl3HTaUV4ZlHkqtpMut7+ENYjamHz9Ma95bE=
+	t=1770876133; cv=none; b=SsxD4e4FYr/PIz4WlhZiULly2Qap4EGhrydlmTLsFAJO6pyXkLgcxmB04GK78HPSOiIFxxJ0QcbevksV8SjobOyi6qxHPtaOrJ6anJYDsNYUDDHxiCccMTFwsIeEsWmGzfI9OX8mW5GkaJjHN4bx3gEE2QRMlwmS/D9UfY5Nugs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770867427; c=relaxed/simple;
-	bh=NKfao1ygz76tzoQRBfZlrExWua32iDkEJOkINJcRurs=;
+	s=arc-20240116; t=1770876133; c=relaxed/simple;
+	bh=KD29+j71pGyR4yNcgfg11H98jxbreWU3SOi0nowMMBA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKD87n944eXzafe8K6hyeGa/ir6Zge+jB5i9nFDsJQgsKVpGC/qPetnA7g9Q5FtBXxb6hffH1WT3YvZXsubNN21SGrp25nWT0lWBk1TPyqG7R7+Ks9sw58XeZQLSK18a54fat9Buc8o6uKD3dwmF33WPDwlP4W91FjuDBQzNtrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OIiZXz7K; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=upBb1Aa/Lgg4jm9UAVUCMSEma6wWSnvCGoaswUMSu68J3LvedulJxuSbtKFRk0u7phAw3fzQL5n3Ihap4unFEUenFm/WAMTNyKo9X0Z3gbyWZUBXj7lvBZLWRujSu2N5D+hLACqmFrMiZ6p2M9GG8SzpdCw4mTsFl1SBDxjyNB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iy0MDBCz; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OIiZXz7K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iy0MDBCz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770867426; x=1802403426;
+  t=1770876131; x=1802412131;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NKfao1ygz76tzoQRBfZlrExWua32iDkEJOkINJcRurs=;
-  b=OIiZXz7KeF/bIJo6KBDHFV33oIy4of0XsT5g+YU5V2qHynisTKFoW7Oi
-   CUvb8NhpzS/6fQFJVFjE84JacIGQnAoBRg1pJ6tiTYy+ywG77UwEdQ/wi
-   IUa5LK9xi0Z74AxFen+/d3KfyZkhnAUzRuBSMoXoLaoucc8MVuh6X1K+W
-   XE4KMJjwzGGVQ3tOuDHIZF+9SFB5U12SPETK5Oiuaux/hyT7Fjkpu+I3s
-   sEqn532EsdkhFSUEZtl9exxt1oW+FsaCLOO1mCfb3yc8fGrReK/WXJBqs
-   leODtXfOVxOrh2s+KWDL/K5Kw4Nv1WnWTBXoV7l63Hey5WdaY6QpE0/Wg
-   w==;
-X-CSE-ConnectionGUID: cIFI+bBRTT2Vk4AW8mdu2w==
-X-CSE-MsgGUID: +klyAku4R5Stu1Ohjl7dMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="89437584"
+  bh=KD29+j71pGyR4yNcgfg11H98jxbreWU3SOi0nowMMBA=;
+  b=iy0MDBCz7SzfaAtAaSs1kyDQ/Efj9mo6ZALy9D+MuRcLJ54jplT7RWQ5
+   h4StiwZdR79va0BZuzEFZPfIHXErxIUK2X2gIC2dudVeJkH9wcV8F/eha
+   RLdpaATPPQGvGX84Ql8OPVjeLXyU2tCKXnRv33dAVyfYlH12lFZ05cUmS
+   pYZ6o9ASJMKz9QBlQgR3O94egS6+7LMKFv7W8kN1izZwl8dy5ST4vSFt4
+   gkFMVhLnNh4TxyjlYuiQwmwB9t+6ANn4daHapVCuswKIv730qbz5iBpbg
+   XpNYGNQufkAT+VdBPczoPxQRm79QQrqPHa9NFoPbsOpuVc/3wjxXbZxBd
+   A==;
+X-CSE-ConnectionGUID: wndWWV04QiiXEKJmK3n5SQ==
+X-CSE-MsgGUID: cS4J22MOTPiHNf12PBvS6w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="74640956"
 X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
-   d="scan'208";a="89437584"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 19:37:05 -0800
-X-CSE-ConnectionGUID: 4UDyxZNkRe+pwwQEoO+3Yw==
-X-CSE-MsgGUID: k1ubzEQYRAmfo7N5rhdgsw==
+   d="scan'208";a="74640956"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 22:02:10 -0800
+X-CSE-ConnectionGUID: 26tH01k6QNyjFIklZ6n1ug==
+X-CSE-MsgGUID: ZsJBb3I8SXObdc9YfmVs8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
-   d="scan'208";a="211554495"
+   d="scan'208";a="235462530"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 11 Feb 2026 19:37:02 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 11 Feb 2026 22:02:08 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vqNVj-00000000qc0-1kpV;
-	Thu, 12 Feb 2026 03:36:59 +0000
-Date: Thu, 12 Feb 2026 11:36:49 +0800
+	id 1vqPm9-00000000qkm-3mA5;
+	Thu, 12 Feb 2026 06:02:05 +0000
+Date: Thu, 12 Feb 2026 14:01:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	daniel.almeida@collabora.com, aliceryhl@google.com, dakr@kernel.org,
-	airlied@gmail.com, simona@ffwll.ch, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-	broonie@kernel.org, ojeda@kernel.org,
-	rust-for-linux@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>
-Subject: Re: [PATCH v1] drm/tyr: make SRAM supply optional like panthor
-Message-ID: <202602121116.499PMsGK-lkp@intel.com>
-References: <20260211195406.289634-1-work@onurozkan.dev>
+To: Dave Jiang <dave.jiang@intel.com>, linux-cxl@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com,
+	dan.j.williams@intel.com
+Subject: Re: [PATCH v2 3/3] cxl: Clean up cxl_nvdimm devices when removing
+ nvdimm_bus
+Message-ID: <202602121343.8IGnsS7f-lkp@intel.com>
+References: <20260211232630.480509-4-dave.jiang@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,45 +66,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260211195406.289634-1-work@onurozkan.dev>
+In-Reply-To: <20260211232630.480509-4-dave.jiang@intel.com>
 
-Hi Onur,
+Hi Dave,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on broonie-regulator/for-next]
-[also build test ERROR on drm-i915/for-linux-next drm-i915/for-linux-next-fixes v6.19]
-[cannot apply to drm-misc/drm-misc-next daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-tip/drm-tip linus/master next-20260211]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 63fbf275fa9f18f7020fb8acf54fa107e51d0f23]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Onur-zkan/drm-tyr-make-SRAM-supply-optional-like-panthor/20260212-035718
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-patch link:    https://lore.kernel.org/r/20260211195406.289634-1-work%40onurozkan.dev
-patch subject: [PATCH v1] drm/tyr: make SRAM supply optional like panthor
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260212/202602121116.499PMsGK-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602121116.499PMsGK-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Jiang/cxl-Move-devm_cxl_add_nvdimm_bridge-to-cxl_pmem-ko/20260212-073008
+base:   63fbf275fa9f18f7020fb8acf54fa107e51d0f23
+patch link:    https://lore.kernel.org/r/20260211232630.480509-4-dave.jiang%40intel.com
+patch subject: [PATCH v2 3/3] cxl: Clean up cxl_nvdimm devices when removing nvdimm_bus
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260212/202602121343.8IGnsS7f-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602121343.8IGnsS7f-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602121116.499PMsGK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602121343.8IGnsS7f-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error[E0425]: cannot find function `regulator_get_optional` in crate `bindings`
-   --> rust/kernel/regulator.rs:287:23
-   |
-   287  |             bindings::regulator_get_optional(dev.as_raw(), name.as_char_ptr())
-   |                       ^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `regulator_get_voltage`
-   |
-   ::: rust/bindings/bindings_helpers_generated.rs:1306:5
-   |
-   1306 |     pub fn regulator_get_voltage(regulator: *mut regulator) -> ffi::c_int;
-   |     ---------------------------------------------------------------------- similarly named function `regulator_get_voltage` defined here
+>> drivers/cxl/pmem.c:407:7: warning: variable 'cxl_nvd' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     407 |                 if (dev->driver) {
+         |                     ^~~~~~~~~~~
+   drivers/cxl/pmem.c:416:10: note: uninitialized use occurs here
+     416 |         cxlmd = cxl_nvd->cxlmd;
+         |                 ^~~~~~~
+   drivers/cxl/pmem.c:407:3: note: remove the 'if' if its condition is always true
+     407 |                 if (dev->driver) {
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/cxl/pmem.c:399:28: note: initialize the variable 'cxl_nvd' to silence this warning
+     399 |         struct cxl_nvdimm *cxl_nvd;
+         |                                   ^
+         |                                    = NULL
+   1 warning generated.
+
+
+vim +407 drivers/cxl/pmem.c
+
+8fdcb1704f61a8 Dan Williams 2021-06-15  396  
+19398821b25a9c Dan Williams 2023-01-20  397  static int detach_nvdimm(struct device *dev, void *data)
+19398821b25a9c Dan Williams 2023-01-20  398  {
+19398821b25a9c Dan Williams 2023-01-20  399  	struct cxl_nvdimm *cxl_nvd;
+5f761998c93e30 Dave Jiang   2026-02-11  400  	struct cxl_memdev *cxlmd;
+19398821b25a9c Dan Williams 2023-01-20  401  	bool release = false;
+19398821b25a9c Dan Williams 2023-01-20  402  
+19398821b25a9c Dan Williams 2023-01-20  403  	if (!is_cxl_nvdimm(dev))
+19398821b25a9c Dan Williams 2023-01-20  404  		return 0;
+19398821b25a9c Dan Williams 2023-01-20  405  
+7f569e917b7866 Li Ming      2024-08-30  406  	scoped_guard(device, dev) {
+7f569e917b7866 Li Ming      2024-08-30 @407  		if (dev->driver) {
+19398821b25a9c Dan Williams 2023-01-20  408  			cxl_nvd = to_cxl_nvdimm(dev);
+19398821b25a9c Dan Williams 2023-01-20  409  			if (cxl_nvd->cxlmd && cxl_nvd->cxlmd->cxl_nvb == data)
+19398821b25a9c Dan Williams 2023-01-20  410  				release = true;
+7f569e917b7866 Li Ming      2024-08-30  411  		}
+7f569e917b7866 Li Ming      2024-08-30  412  	}
+19398821b25a9c Dan Williams 2023-01-20  413  	if (release)
+19398821b25a9c Dan Williams 2023-01-20  414  		device_release_driver(dev);
+5f761998c93e30 Dave Jiang   2026-02-11  415  
+5f761998c93e30 Dave Jiang   2026-02-11  416  	cxlmd = cxl_nvd->cxlmd;
+5f761998c93e30 Dave Jiang   2026-02-11  417  	devm_release_action(&cxlmd->dev, cxlmd_release_nvdimm, cxlmd);
+5f761998c93e30 Dave Jiang   2026-02-11  418  
+19398821b25a9c Dan Williams 2023-01-20  419  	return 0;
+19398821b25a9c Dan Williams 2023-01-20  420  }
+19398821b25a9c Dan Williams 2023-01-20  421  
 
 -- 
 0-DAY CI Kernel Test Service
