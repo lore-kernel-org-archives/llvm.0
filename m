@@ -1,165 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFACCBA21;
-	Thu, 12 Feb 2026 18:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770922349; cv=none; b=GE/JW/JoXLG9TBSlK4PX2fYRSBWPOAa2uDwj4w0uwpMXIa90f2pFlqt+HIHiXu+nFeoR2FMHgRzgSD1k0GzqUY2D2/eRASQJRID3M6tCSl+RRiAvHPGqHlN8eEhabMB9odSiUX039sDmZNnvuNDofjOGgJw2OknyOFGlYMOcDg4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770922349; c=relaxed/simple;
-	bh=+Ys3Nzyehyy7T5zBEo7o1NSAXzowFsqDv9PZFh6VNQA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DdMbnOZugM8HInnPs+veuO3qdRZt9dJCb8vVCb1/ZhUIoqJQbCJDcEPfnccgNnUkO9W7/KeXdZ8IcqJh6aR36rQqOFGmESjxXDEVtBP0/pN+eyawa+H/YPboo4LsEEyGw+FBw8PcfTm0PNgA2ovO9ybHUMfy7pN7OMvTF7KViY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZI1mvRe4; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07D87081A
+	for <llvm@lists.linux.dev>; Thu, 12 Feb 2026 20:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770926633; cv=pass; b=lOM61EaOmsivxOXPeR0ludNZpF45xf9EQphp92TNehb9Uw071vgufourfKahexjpZqMovs96O4j8mUEbTyNRHOzmBGgg1RvFruVo6+fKwyupbogVM8xe6Qp+4fOHmiN1E9r0N7p/ObP7u9aROUKYFFKsdAu0iKfiaUFOhgO7jz4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770926633; c=relaxed/simple;
+	bh=sluWmViI7IpxKMa2nn/RUCiFtkwPuezKa71baWzwgDA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q7ATu9gyhsWuGCRhhWvrSEVGsLoIxynXmbNhgIeU97CBymdj/g/UVuUXioJdLyt3dmpHEtbsGLdFdmqyxh8aeSdwQKGx55SzhhSXuR5/sGOco32HsgbSquhJ120glTRBIMDxehc/kyuGGoVuKxMMx8Lp2UcCgiSPmhwlDUqiDcQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VWYdiJ39; arc=pass smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZI1mvRe4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770922348; x=1802458348;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+Ys3Nzyehyy7T5zBEo7o1NSAXzowFsqDv9PZFh6VNQA=;
-  b=ZI1mvRe4HADsOkdWwmiTd/carRI1CCSKH7dTQjOd6DYlmMfS77hU1eGt
-   PyshxqQPbM7JEunHxBO8GPHo9utUswjF7PuQvNO6lbp6GVrZSsrsM6Fwm
-   OAFtNoU7xQXNWOitaqvB5UMNY3+EpA2J0QqQDqVhTHt71YhlOFhvCpyAq
-   Sflo/5su7SGQrGeUjhcWaOrgV7grYZFFhXvVYJLrnODPPZo0+EZOZT5fD
-   OpHnY22CKZStQ/K9uH4W2nuvqPBOJxrapEUHoUYG5Jt1CL5xY/EhfGvXO
-   wAFFV6zSE9QdQeHI8t8/ZVrp6TSYVm3CiA9GN3QUp7tI+kb/NgoIFL5TT
-   w==;
-X-CSE-ConnectionGUID: lx3mRV+1SGeuOT3dnvZo1g==
-X-CSE-MsgGUID: k4DUU/e3SKm4QNYqEp0HOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="94744773"
-X-IronPort-AV: E=Sophos;i="6.21,287,1763452800"; 
-   d="scan'208";a="94744773"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 10:52:27 -0800
-X-CSE-ConnectionGUID: HVOYSGJCTGqCu6xEgvroIQ==
-X-CSE-MsgGUID: JtWuuvgmSFSGdd0p4JRZOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,287,1763452800"; 
-   d="scan'208";a="211919746"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Feb 2026 10:52:26 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vqbnc-00000000sSu-0zp6;
-	Thu, 12 Feb 2026 18:52:24 +0000
-Date: Fri, 13 Feb 2026 02:52:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC net-next 3/3] net: usb: usbnet: remove driver_priv
-Message-ID: <202602130213.zIDtfW6G-lkp@intel.com>
-References: <20260210151416.42254-4-oneukum@suse.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VWYdiJ39"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2bab709f867so22830eec.1
+        for <llvm@lists.linux.dev>; Thu, 12 Feb 2026 12:03:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770926632; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W/B5FEAQNmMiwCcqMNRilnTCYYqmL/j6BxlHMtoqI7QF6Xi2ZRMWsKO4YHs73tShpb
+         Xm7yIWhioeoi0pDmEXp2i4xz+gF5dUIkJdcskaNWmQcqDo2emHs0tiJMpW1wnmrpI8Xz
+         gDHNZvEMZuaDCkEVepzZaLXRqmDubfeg1KXpQ3Bo1w6ymVFjWwp/u+b99Gd2/RZg9MsG
+         ywL/5Xn8+5JS5qSpV6QCn+zAxWo6i0TBFRlRZI6tEW7/uACOI0R7VQDpmfhPCzzbw2Mw
+         BaCfdiVfwONM0fnCd7o0UOvUCf+S6N+7d/c3ulDxNngUMF0gBKCAXrPuSleNdXrDS0mf
+         3J9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sluWmViI7IpxKMa2nn/RUCiFtkwPuezKa71baWzwgDA=;
+        fh=fkZVY6Evhlz2fLNk44AugXtTOeWSEaVxWuCX9N+SZJw=;
+        b=kV/icYAkFahwOXHyeXtlTQYgw+j57hxQPbWPP4AMIgUC8Npo0gYQvOFXVm4lYvrM+j
+         E/aIEwNc14TLvH0azBfULWrfaqmrl/PEfpoLD/xEheEJzy1HxA/pdvY04+LUfLhCgLYu
+         TvDUN9SgmXTkqStPA6dHJhRRHpDFWFcbUb1TyOWlq79z1JhFSqNO9GUqbXJyznfgmLD7
+         lz/D5fDPH+B2vjwqAuEhpBOoUY14vrjvNxun9yRQbEBrE/ZKCVoJcz9O13/1VC7YPTKS
+         2sGeiyKo1BhdV8A37oIq712jEZe/+aIRI8LC3NdxPyXERsV1E9MVKx3Wt7b7XT20LgMl
+         74sw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770926632; x=1771531432; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sluWmViI7IpxKMa2nn/RUCiFtkwPuezKa71baWzwgDA=;
+        b=VWYdiJ39QeMxykfDLe5n6g6/Av3rS/Y9zG2b4hYX9g+vbUcSvdvwKfJenb3WXktexL
+         y7QooBPzOsLSHfHVOh2cxJx/ozeVKWXbgytD0PWvlCE8wk9Q7U5XWtBzGDFEF4NlWTyV
+         TvQgbAPsTpE3sBKvqSsKR6Qg3SIRBcLpdYw16FmaqCWM2J0Pw0GB6zVaDZuJcn3qRHOq
+         Fd5aRwH+BbARRAu+1VK35DDekOmhMv8I5YGifo4LEatw7JMRb2Xf1RdBMbMN3z3ZDK7l
+         W+77PDt9MuptYcOqIpAXQ2rBg9mp0xMuvZ3noeRaxih5RSeoc+c8HCgdpYitAElRtBD1
+         +2lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770926632; x=1771531432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sluWmViI7IpxKMa2nn/RUCiFtkwPuezKa71baWzwgDA=;
+        b=Z2seYlWnceTo8sjJmrPHpuCNu1r3KaxYykXHP+1AVx43qEhCpMf2fzHhed+xGikcQl
+         Qt9lmjWlmjfFmWeCzmO+F2jiZvx1iNNQ9kdqattHc37Mj1gxNXIymJDlFs62EhItgSxc
+         MnAR+U3qz8ArU6k+37UhCR+uO0NABx141yBfOxk2l9hT+YAXkz+LaMHC7gTYsV9EF6pI
+         nLZAYuXwRZOS1Y+ZL6WOfazWy828VKEUaWnWpC7I5dj677r4Gb5Fu2wmDRnDM6/hRNqB
+         Dj03hL7zL4MymYfv7yoK+p23xXic7Hhe8oaVmlL29fy1asBd3lxxVmX6qSDa41c7QCtn
+         7thQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHr6amjSoF3SYM83MbAljdp2JtxwsSM4OTVDwkJhfZz+LDv6YdEHPyzvSEzBwckWeUn6AZ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw/A2w/ZOabruvlSy3clF+TvACXeA8db6wLSDQ9syEJkc8qM/9M
+	w4xtK3C5MTTQCNJaCIcasjgzcZIIOgZRL5xtaCySxqTRxfMeiS5PHCb4TJdjC8sZJN88PZLAk9w
+	fFl++7AzQFw4D2pvYv79VURfynEj+1dk=
+X-Gm-Gg: AZuq6aLE96NFi/luvsG6QtjnxdU/Adb26bLyShLkUU5QjjktsiGG+mmUbzs3CnVe01Q
+	YhkAzfKY5QYg1/vkA+6Fnm7zEMlOi+/3alco1xRhQCKp4r7a7pUJ52zhr/804eJLXCBjOuWmDzz
+	HvnCbGwH6DFiEiDxQj7VLbH94DUftcyWniKB0cIaYM5zd53GI7dJ5Y6oFrfOEOgyxnPgDGbOJpK
+	0CmmpeMO3uYKjRsDg6fBNp92nWYX35tgcafVx5DSbC2y4xd43LQ0CfZ4DndYOTQ31oB7oWawm/n
+	CouLwaFzX6nPQnArF7rS+uRlwExTXesSzF2emHa+UBQ/m4Gw1FyRcl+wZMsLmRWroeXwmKca6Hh
+	ngNH/YuAdOfzo6EUSlwJzWeGG
+X-Received: by 2002:a05:693c:2c93:b0:2ab:ca55:89cb with SMTP id
+ 5a478bee46e88-2baba0ae6b2mr21865eec.6.1770926631915; Thu, 12 Feb 2026
+ 12:03:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260210151416.42254-4-oneukum@suse.com>
+References: <aYhfK3tB0X6Y_GyV@gmail.com> <177076109527.3702729.10282954256881857059.pr-tracker-bot@kernel.org>
+ <CANpmjNODYHBpS_Xn_bbGwQfdEtkgFq_gpdT3S+_31bfgOPoeUg@mail.gmail.com>
+ <CANiq72k6ZHbW+tnX8jjOUaj4aSMigEaH4SEkODX==OJBseKCug@mail.gmail.com>
+ <20260211195139.GB3482274@ax162> <CAAt6xTtmrrZh-+H-jV+bcteZwG1jabraTxWQ-uLJ_N9h1ZLxdA@mail.gmail.com>
+In-Reply-To: <CAAt6xTtmrrZh-+H-jV+bcteZwG1jabraTxWQ-uLJ_N9h1ZLxdA@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 12 Feb 2026 21:03:39 +0100
+X-Gm-Features: AZwV_QhXlesg5M0169bOpJQNxPBT5ixofoCGPmCxFzgcSF7apXd9xsdeY-8Yyk0
+Message-ID: <CANiq72=pR7ScacS84yCn+nw57Q_2gGvbpFPfNSwJx7+WwW8YkQ@mail.gmail.com>
+Subject: Re: Clang/LLVM 'main' regression testing and -Wthread-safety
+To: Aaron Ballman <aaron@aaronballman.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Marco Elver <elver@google.com>, 
+	clang-built-linux <llvm@lists.linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
+	Bart Van Assche <bvanassche@acm.org>, "Jose E. Marchesi" <jemarch@gnu.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Oliver,
+On Thu, Feb 12, 2026 at 1:22=E2=80=AFPM Aaron Ballman <aaron@aaronballman.c=
+om> wrote:
+>
+> FWIW, I continue to be in full support of adding post-commit CI
+> resources for testing Linux kernel needs. I'm not super familiar with
+> the infrastructure side of things, but I'm happy to help make
+> connections with the folks who do know if it's of help.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Thanks Aaron. Like Nathan, if you could keep me in the loop, that
+would be great!
 
-[auto build test WARNING on net-next/main]
+By the way, the Rust and `bindgen` cases are a pre-merge CI, i.e. PRs
+do not get merged if it fails to build. Post-commit is good too, but I
+mention it because the Rust one shows it is possible to do even
+pre-merge without being a big hassle to compiler developers.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/net-usb-divorce-private-data-and-cdc-state-in-usbnet/20260210-231805
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260210151416.42254-4-oneukum%40suse.com
-patch subject: [RFC net-next 3/3] net: usb: usbnet: remove driver_priv
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260213/202602130213.zIDtfW6G-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260213/202602130213.zIDtfW6G-lkp@intel.com/reproduce)
+Relatedly, by chance, just a few hours ago there has been a PR in
+upstream Rust for a compiler bug fix that only the Linux kernel CI job
+exercised -- apparently not a single one of 1832 open source crates
+tested exercised the bug. So it shows the kernel is quite a good test
+case ;)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602130213.zIDtfW6G-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/usb/aqc111.c:734:30: warning: variable 'aqc111_data' is uninitialized when used here [-Wuninitialized]
-     734 |         aqc111_read_fw_version(dev, aqc111_data);
-         |                                     ^~~~~~~~~~~
-   drivers/net/usb/aqc111.c:689:33: note: initialize the variable 'aqc111_data' to silence this warning
-     689 |         struct aqc111_data *aqc111_data;
-         |                                        ^
-         |                                         = NULL
-   1 warning generated.
-
-
-vim +/aqc111_data +734 drivers/net/usb/aqc111.c
-
-33cd597fbfe00d Dmitry Bezrukov 2018-11-26  684  
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  685  static int aqc111_bind(struct usbnet *dev, struct usb_interface *intf)
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  686  {
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  687  	struct usb_device *udev = interface_to_usbdev(intf);
-7b8b06544ab035 Dmitry Bezrukov 2018-11-26  688  	enum usb_device_speed usb_speed = udev->speed;
-33cd597fbfe00d Dmitry Bezrukov 2018-11-26  689  	struct aqc111_data *aqc111_data;
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  690  	int ret;
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  691  
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  692  	/* Check if vendor configuration */
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  693  	if (udev->actconfig->desc.bConfigurationValue != 1) {
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  694  		usb_driver_set_configuration(udev, 1);
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  695  		return -ENODEV;
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  696  	}
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  697  
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  698  	usb_reset_configuration(dev->udev);
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  699  
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  700  	ret = usbnet_get_endpoints(dev, intf);
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  701  	if (ret < 0) {
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  702  		netdev_dbg(dev->net, "usbnet_get_endpoints failed");
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  703  		return ret;
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  704  	}
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  705  
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  706  	/* Init the MAC address */
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  707  	ret = aqc111_read_perm_mac(dev);
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  708  	if (ret)
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  709  		goto out;
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  710  
-af804e6db9f60b Jakub Kicinski  2021-10-01  711  	eth_hw_addr_set(dev->net, dev->net->perm_addr);
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  712  
-361459cd964263 Dmitry Bezrukov 2018-11-26  713  	/* Set Rx urb size */
-361459cd964263 Dmitry Bezrukov 2018-11-26  714  	dev->rx_urb_size = URB_SIZE;
-361459cd964263 Dmitry Bezrukov 2018-11-26  715  
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  716  	/* Set TX needed headroom & tailroom */
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  717  	dev->net->needed_headroom += sizeof(u64);
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  718  	dev->net->needed_tailroom += sizeof(u64);
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  719  
-a4017cc264c66b Dmitry Bezrukov 2018-11-26  720  	dev->net->max_mtu = 16334;
-a4017cc264c66b Dmitry Bezrukov 2018-11-26  721  
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  722  	dev->net->netdev_ops = &aqc111_netdev_ops;
-027e6f7800e5ff Dmitry Bezrukov 2018-11-26  723  	dev->net->ethtool_ops = &aqc111_ethtool_ops;
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  724  
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  725  	if (usb_device_no_sg_constraint(dev->udev))
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  726  		dev->can_dma_sg = 1;
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  727  
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  728  	dev->net->hw_features |= AQ_SUPPORT_HW_FEATURE;
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  729  	dev->net->features |= AQ_SUPPORT_FEATURE;
-7afa6c9803eac4 Dmitry Bezrukov 2018-11-26  730  	dev->net->vlan_features |= AQ_SUPPORT_VLAN_FEATURE;
-4a3576d2bcc755 Dmitry Bezrukov 2018-11-26  731  
-ee8b7a1156f357 Jakub Kicinski  2022-05-05  732  	netif_set_tso_max_size(dev->net, 65535);
-de074e7a7e20f0 Dmitry Bezrukov 2018-11-26  733  
-33cd597fbfe00d Dmitry Bezrukov 2018-11-26 @734  	aqc111_read_fw_version(dev, aqc111_data);
-7b8b06544ab035 Dmitry Bezrukov 2018-11-26  735  	aqc111_data->autoneg = AUTONEG_ENABLE;
-7b8b06544ab035 Dmitry Bezrukov 2018-11-26  736  	aqc111_data->advertised_speed = (usb_speed == USB_SPEED_SUPER) ?
-7b8b06544ab035 Dmitry Bezrukov 2018-11-26  737  					 SPEED_5000 : SPEED_1000;
-33cd597fbfe00d Dmitry Bezrukov 2018-11-26  738  
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  739  	return 0;
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  740  
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  741  out:
-df2d59a2ab6c9c Dmitry Bezrukov 2018-11-26  742  	return ret;
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  743  }
-7cea2d40afd053 Dmitry Bezrukov 2018-11-26  744  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
