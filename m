@@ -1,63 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0042FC0A;
-	Thu, 12 Feb 2026 06:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C032C11FA;
+	Thu, 12 Feb 2026 08:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770876133; cv=none; b=SsxD4e4FYr/PIz4WlhZiULly2Qap4EGhrydlmTLsFAJO6pyXkLgcxmB04GK78HPSOiIFxxJ0QcbevksV8SjobOyi6qxHPtaOrJ6anJYDsNYUDDHxiCccMTFwsIeEsWmGzfI9OX8mW5GkaJjHN4bx3gEE2QRMlwmS/D9UfY5Nugs=
+	t=1770884179; cv=none; b=E5y5cJEEIQZ/lmasN6OqgvHj1wX64cW9W9nmhstmMLEJjVGF5LmKxn6RM08EaEILMw8/zeIyfxvtTg6Oj/BbN6CQd8H0zhqToQfFOVTncvhbGX/hQfxWhQ4Pb4x7an3xjPdySiRBS53n2U+LWB1VcPvGqlm7kdaZzAokmSyRLfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770876133; c=relaxed/simple;
-	bh=KD29+j71pGyR4yNcgfg11H98jxbreWU3SOi0nowMMBA=;
+	s=arc-20240116; t=1770884179; c=relaxed/simple;
+	bh=5aoTKAZC9pIwJvooINmvnmCBgU/3N7O7OtGGRHKtH5I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upBb1Aa/Lgg4jm9UAVUCMSEma6wWSnvCGoaswUMSu68J3LvedulJxuSbtKFRk0u7phAw3fzQL5n3Ihap4unFEUenFm/WAMTNyKo9X0Z3gbyWZUBXj7lvBZLWRujSu2N5D+hLACqmFrMiZ6p2M9GG8SzpdCw4mTsFl1SBDxjyNB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iy0MDBCz; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=eN1o82x9fL6GTZ9oF/xANixCjCDJOaM82GvuqznaE4XkAmsNS0XjElDI4ByHN8hEGtoX84vFF80ueLpdKeNp0WjhEtmsyxTQ+YgWRh7UWEge9kavPshieE8nXH08f4h152DPdicNzm9wNTBG6Wms7LxhXVwdhrhaX+stTEEp6qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YnXegkUr; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iy0MDBCz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YnXegkUr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770876131; x=1802412131;
+  t=1770884178; x=1802420178;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KD29+j71pGyR4yNcgfg11H98jxbreWU3SOi0nowMMBA=;
-  b=iy0MDBCz7SzfaAtAaSs1kyDQ/Efj9mo6ZALy9D+MuRcLJ54jplT7RWQ5
-   h4StiwZdR79va0BZuzEFZPfIHXErxIUK2X2gIC2dudVeJkH9wcV8F/eha
-   RLdpaATPPQGvGX84Ql8OPVjeLXyU2tCKXnRv33dAVyfYlH12lFZ05cUmS
-   pYZ6o9ASJMKz9QBlQgR3O94egS6+7LMKFv7W8kN1izZwl8dy5ST4vSFt4
-   gkFMVhLnNh4TxyjlYuiQwmwB9t+6ANn4daHapVCuswKIv730qbz5iBpbg
-   XpNYGNQufkAT+VdBPczoPxQRm79QQrqPHa9NFoPbsOpuVc/3wjxXbZxBd
-   A==;
-X-CSE-ConnectionGUID: wndWWV04QiiXEKJmK3n5SQ==
-X-CSE-MsgGUID: cS4J22MOTPiHNf12PBvS6w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="74640956"
+  bh=5aoTKAZC9pIwJvooINmvnmCBgU/3N7O7OtGGRHKtH5I=;
+  b=YnXegkUrXbRlgAqW7YI+WTM+GkhHSU9r5DwW2uqQ3wi4iDsH38HzuNCj
+   hZ9P5ypiPxZY7AfUsxCvZEq30mGTXroy+kPSgKpAOTZDAmuix35r48Qed
+   gU3OT88aLOkEInN6+eAV8N4H2W/WAMRELF/ufjuZoIBh4MeKJS+3Nr0ME
+   lM8L77p8W3kmC9q9hxnEjiDHvSEIQfV21nlJL0XrMfHdDVdkrniIVMf9o
+   U94wcauKwX9dHhRNKX+eaX6kLGNO+BpPnaPSuNGGXArG8aG7C4wfkgMql
+   SUmKDCqMYmmu/EVvqqbREOoBD5cwmI9oJFeTatpQLUxul0EwganudtwiP
+   w==;
+X-CSE-ConnectionGUID: kIOpQCUrSJ2TnlImhMtweg==
+X-CSE-MsgGUID: mwqjW0WyT22pH3EUOZD1Ow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="82688623"
 X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
-   d="scan'208";a="74640956"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 22:02:10 -0800
-X-CSE-ConnectionGUID: 26tH01k6QNyjFIklZ6n1ug==
-X-CSE-MsgGUID: ZsJBb3I8SXObdc9YfmVs8w==
+   d="scan'208";a="82688623"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 00:16:15 -0800
+X-CSE-ConnectionGUID: QJojZEZqR22zXchZiWs/8g==
+X-CSE-MsgGUID: IN2EF4zZTMiDSwtXTlX7dQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
-   d="scan'208";a="235462530"
+   d="scan'208";a="242151100"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Feb 2026 22:02:08 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 12 Feb 2026 00:16:12 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vqPm9-00000000qkm-3mA5;
-	Thu, 12 Feb 2026 06:02:05 +0000
-Date: Thu, 12 Feb 2026 14:01:32 +0800
+	id 1vqRru-00000000qpC-1UkC;
+	Thu, 12 Feb 2026 08:16:10 +0000
+Date: Thu, 12 Feb 2026 16:15:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>, linux-cxl@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com,
-	dan.j.williams@intel.com
-Subject: Re: [PATCH v2 3/3] cxl: Clean up cxl_nvdimm devices when removing
- nvdimm_bus
-Message-ID: <202602121343.8IGnsS7f-lkp@intel.com>
-References: <20260211232630.480509-4-dave.jiang@intel.com>
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+	yonghong.song@linux.dev, eddyz87@gmail.com
+Subject: Re: [PATCH bpf-next 3/3] bpf: rename bpf_reg_state->off to
+ bpf_reg_state->delta
+Message-ID: <202602121620.Ygb7WrDQ-lkp@intel.com>
+References: <20260211-ptrs-off-migration-v1-3-996c2a37b063@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,73 +66,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260211232630.480509-4-dave.jiang@intel.com>
+In-Reply-To: <20260211-ptrs-off-migration-v1-3-996c2a37b063@gmail.com>
 
-Hi Dave,
+Hi Eduard,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 63fbf275fa9f18f7020fb8acf54fa107e51d0f23]
+[auto build test ERROR on 4475cdac12c46fc26ee815de1b43cfe9f8375140]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Jiang/cxl-Move-devm_cxl_add_nvdimm_bridge-to-cxl_pmem-ko/20260212-073008
-base:   63fbf275fa9f18f7020fb8acf54fa107e51d0f23
-patch link:    https://lore.kernel.org/r/20260211232630.480509-4-dave.jiang%40intel.com
-patch subject: [PATCH v2 3/3] cxl: Clean up cxl_nvdimm devices when removing nvdimm_bus
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260212/202602121343.8IGnsS7f-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602121343.8IGnsS7f-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eduard-Zingerman/bpf-split-check_reg_sane_offset-in-two-parts/20260212-063425
+base:   4475cdac12c46fc26ee815de1b43cfe9f8375140
+patch link:    https://lore.kernel.org/r/20260211-ptrs-off-migration-v1-3-996c2a37b063%40gmail.com
+patch subject: [PATCH bpf-next 3/3] bpf: rename bpf_reg_state->off to bpf_reg_state->delta
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260212/202602121620.Ygb7WrDQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602121620.Ygb7WrDQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602121343.8IGnsS7f-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602121620.Ygb7WrDQ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/cxl/pmem.c:407:7: warning: variable 'cxl_nvd' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     407 |                 if (dev->driver) {
-         |                     ^~~~~~~~~~~
-   drivers/cxl/pmem.c:416:10: note: uninitialized use occurs here
-     416 |         cxlmd = cxl_nvd->cxlmd;
-         |                 ^~~~~~~
-   drivers/cxl/pmem.c:407:3: note: remove the 'if' if its condition is always true
-     407 |                 if (dev->driver) {
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/cxl/pmem.c:399:28: note: initialize the variable 'cxl_nvd' to silence this warning
-     399 |         struct cxl_nvdimm *cxl_nvd;
-         |                                   ^
-         |                                    = NULL
-   1 warning generated.
+>> drivers/net/ethernet/netronome/nfp/bpf/verifier.c:101:14: error: no member named 'off' in 'struct bpf_reg_state'
+     101 |         off = reg3->off + reg3->var_off.value;
+         |               ~~~~  ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:140:34: error: no member named 'off' in 'struct bpf_reg_state'
+     140 |         off = reg->var_off.value + reg->off;
+         |                                    ~~~  ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:150:54: error: no member named 'off' in 'struct bpf_reg_state'
+     150 |         old_off = old_arg->reg.var_off.value + old_arg->reg.off;
+         |                                                ~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:361:22: error: no member named 'off' in 'struct bpf_reg_state'
+     361 |         old_off = meta->ptr.off + meta->ptr.var_off.value;
+         |                   ~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:362:17: error: no member named 'off' in 'struct bpf_reg_state'
+     362 |         new_off = reg->off + reg->var_off.value;
+         |                   ~~~  ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:431:51: error: no member named 'off' in 'struct bpf_reg_state'
+     431 |         off = reg->var_off.value + meta->insn.off + reg->off;
+         |                                                     ~~~  ^
+   6 errors generated.
+--
+>> drivers/net/ethernet/netronome/nfp/bpf/jit.c:1734:58: error: no member named 'off' in 'struct bpf_reg_state'
+    1734 |         lm_off += meta->arg2.reg.var_off.value + meta->arg2.reg.off;
+         |                                                  ~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:2878:20: error: no member named 'off' in 'struct bpf_reg_state'
+    2878 |                                      meta->ptr.off + meta->ptr.var_off.value);
+         |                                      ~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:2989:20: error: no member named 'off' in 'struct bpf_reg_state'
+    2989 |                                      meta->ptr.off + meta->ptr.var_off.value);
+         |                                      ~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:4156:59: error: no member named 'off' in 'struct bpf_reg_state'
+    4156 |         head_ld_off = head_ld_meta->insn.off + head_ld_meta->ptr.off;
+         |                                                ~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:4157:59: error: no member named 'off' in 'struct bpf_reg_state'
+    4157 |         head_st_off = head_st_meta->insn.off + head_st_meta->ptr.off;
+         |                                                ~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:4158:39: error: no member named 'off' in 'struct bpf_reg_state'
+    4158 |         ld_off = ld->off + head_ld_meta->ptr.off;
+         |                            ~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:4329:17: error: no member named 'off' in 'struct bpf_reg_state'
+    4329 |                     meta->ptr.off == range_ptr_off) {
+         |                     ~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/jit.c:4364:35: error: no member named 'off' in 'struct bpf_reg_state'
+    4364 |                 range_ptr_off = range_node->ptr.off;
+         |                                 ~~~~~~~~~~~~~~~ ^
+   8 errors generated.
 
 
-vim +407 drivers/cxl/pmem.c
+vim +101 drivers/net/ethernet/netronome/nfp/bpf/verifier.c
 
-8fdcb1704f61a8 Dan Williams 2021-06-15  396  
-19398821b25a9c Dan Williams 2023-01-20  397  static int detach_nvdimm(struct device *dev, void *data)
-19398821b25a9c Dan Williams 2023-01-20  398  {
-19398821b25a9c Dan Williams 2023-01-20  399  	struct cxl_nvdimm *cxl_nvd;
-5f761998c93e30 Dave Jiang   2026-02-11  400  	struct cxl_memdev *cxlmd;
-19398821b25a9c Dan Williams 2023-01-20  401  	bool release = false;
-19398821b25a9c Dan Williams 2023-01-20  402  
-19398821b25a9c Dan Williams 2023-01-20  403  	if (!is_cxl_nvdimm(dev))
-19398821b25a9c Dan Williams 2023-01-20  404  		return 0;
-19398821b25a9c Dan Williams 2023-01-20  405  
-7f569e917b7866 Li Ming      2024-08-30  406  	scoped_guard(device, dev) {
-7f569e917b7866 Li Ming      2024-08-30 @407  		if (dev->driver) {
-19398821b25a9c Dan Williams 2023-01-20  408  			cxl_nvd = to_cxl_nvdimm(dev);
-19398821b25a9c Dan Williams 2023-01-20  409  			if (cxl_nvd->cxlmd && cxl_nvd->cxlmd->cxl_nvb == data)
-19398821b25a9c Dan Williams 2023-01-20  410  				release = true;
-7f569e917b7866 Li Ming      2024-08-30  411  		}
-7f569e917b7866 Li Ming      2024-08-30  412  	}
-19398821b25a9c Dan Williams 2023-01-20  413  	if (release)
-19398821b25a9c Dan Williams 2023-01-20  414  		device_release_driver(dev);
-5f761998c93e30 Dave Jiang   2026-02-11  415  
-5f761998c93e30 Dave Jiang   2026-02-11  416  	cxlmd = cxl_nvd->cxlmd;
-5f761998c93e30 Dave Jiang   2026-02-11  417  	devm_release_action(&cxlmd->dev, cxlmd_release_nvdimm, cxlmd);
-5f761998c93e30 Dave Jiang   2026-02-11  418  
-19398821b25a9c Dan Williams 2023-01-20  419  	return 0;
-19398821b25a9c Dan Williams 2023-01-20  420  }
-19398821b25a9c Dan Williams 2023-01-20  421  
+8231f8444110c3 Jakub Kicinski 2017-12-14   82  
+527db74b71ee5a Jakub Kicinski 2018-10-16   83  static bool nfp_bpf_map_update_value_ok(struct bpf_verifier_env *env)
+527db74b71ee5a Jakub Kicinski 2018-10-16   84  {
+527db74b71ee5a Jakub Kicinski 2018-10-16   85  	const struct bpf_reg_state *reg1 = cur_regs(env) + BPF_REG_1;
+527db74b71ee5a Jakub Kicinski 2018-10-16   86  	const struct bpf_reg_state *reg3 = cur_regs(env) + BPF_REG_3;
+527db74b71ee5a Jakub Kicinski 2018-10-16   87  	struct bpf_offloaded_map *offmap;
+527db74b71ee5a Jakub Kicinski 2018-10-16   88  	struct bpf_func_state *state;
+527db74b71ee5a Jakub Kicinski 2018-10-16   89  	struct nfp_bpf_map *nfp_map;
+527db74b71ee5a Jakub Kicinski 2018-10-16   90  	int off, i;
+527db74b71ee5a Jakub Kicinski 2018-10-16   91  
+527db74b71ee5a Jakub Kicinski 2018-10-16   92  	state = env->cur_state->frame[reg3->frameno];
+527db74b71ee5a Jakub Kicinski 2018-10-16   93  
+527db74b71ee5a Jakub Kicinski 2018-10-16   94  	/* We need to record each time update happens with non-zero words,
+527db74b71ee5a Jakub Kicinski 2018-10-16   95  	 * in case such word is used in atomic operations.
+527db74b71ee5a Jakub Kicinski 2018-10-16   96  	 * Implicitly depend on nfp_bpf_stack_arg_ok(reg3) being run before.
+527db74b71ee5a Jakub Kicinski 2018-10-16   97  	 */
+527db74b71ee5a Jakub Kicinski 2018-10-16   98  
+527db74b71ee5a Jakub Kicinski 2018-10-16   99  	offmap = map_to_offmap(reg1->map_ptr);
+527db74b71ee5a Jakub Kicinski 2018-10-16  100  	nfp_map = offmap->dev_priv;
+527db74b71ee5a Jakub Kicinski 2018-10-16 @101  	off = reg3->off + reg3->var_off.value;
+527db74b71ee5a Jakub Kicinski 2018-10-16  102  
+527db74b71ee5a Jakub Kicinski 2018-10-16  103  	for (i = 0; i < offmap->map.value_size; i++) {
+527db74b71ee5a Jakub Kicinski 2018-10-16  104  		struct bpf_stack_state *stack_entry;
+527db74b71ee5a Jakub Kicinski 2018-10-16  105  		unsigned int soff;
+527db74b71ee5a Jakub Kicinski 2018-10-16  106  
+527db74b71ee5a Jakub Kicinski 2018-10-16  107  		soff = -(off + i) - 1;
+527db74b71ee5a Jakub Kicinski 2018-10-16  108  		stack_entry = &state->stack[soff / BPF_REG_SIZE];
+527db74b71ee5a Jakub Kicinski 2018-10-16  109  		if (stack_entry->slot_type[soff % BPF_REG_SIZE] == STACK_ZERO)
+527db74b71ee5a Jakub Kicinski 2018-10-16  110  			continue;
+527db74b71ee5a Jakub Kicinski 2018-10-16  111  
+527db74b71ee5a Jakub Kicinski 2018-10-16  112  		if (nfp_map->use_map[i / 4].type == NFP_MAP_USE_ATOMIC_CNT) {
+527db74b71ee5a Jakub Kicinski 2018-10-16  113  			pr_vlog(env, "value at offset %d/%d may be non-zero, bpf_map_update_elem() is required to initialize atomic counters to zero to avoid offload endian issues\n",
+527db74b71ee5a Jakub Kicinski 2018-10-16  114  				i, soff);
+527db74b71ee5a Jakub Kicinski 2018-10-16  115  			return false;
+527db74b71ee5a Jakub Kicinski 2018-10-16  116  		}
+527db74b71ee5a Jakub Kicinski 2018-10-16  117  		nfp_map->use_map[i / 4].non_zero_update = 1;
+527db74b71ee5a Jakub Kicinski 2018-10-16  118  	}
+527db74b71ee5a Jakub Kicinski 2018-10-16  119  
+527db74b71ee5a Jakub Kicinski 2018-10-16  120  	return true;
+527db74b71ee5a Jakub Kicinski 2018-10-16  121  }
+527db74b71ee5a Jakub Kicinski 2018-10-16  122  
 
 -- 
 0-DAY CI Kernel Test Service
