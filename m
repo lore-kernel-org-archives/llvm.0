@@ -1,69 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF9B1D432D;
-	Fri, 13 Feb 2026 17:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F99280014;
+	Fri, 13 Feb 2026 19:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771005048; cv=none; b=Iupympv1i9265gthCdJgigroTrQ/afTeqkOZu1zfXjxDcUPurMNigUJucOiNBJkW1If/IOI9QXEzbdbuZMdiTv5f9Bx10Mxlj/aG959WekUF0MYa047jDBLdp75fITJL9xq77fcl1b80nb3ORXMbtJURpXn8/CykrBrqjOYo3UQ=
+	t=1771010807; cv=none; b=L833U9ylkyS4x1xHjz8rma+VlAok9nLoUSNnZqLyOf/ase+McIdb23vP+of0ZgsWyirA+gFL8xvRdA1gh6Rm3KMbkfbALPcUUi2afMy5l3uW1zxEb+J29AlRYIBzpiyUPoOcB25UvXvygRKHXWaO4+9uq8AoXf5ZySQCT3heMUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771005048; c=relaxed/simple;
-	bh=Hn/YbMCFPNwy7WqclUnTHTDS9PREVwpYJ6OC8kfWHYQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jvXK9DDR6H64vj7J9uQapiO+0z7cELMg0pZhVmx8j0JPE1A+kRg//rZrehe8243moup1ycsbvMKimC+UONdsSHKLRlvWhMt8qpJq0qeWP5p/06hH6ZqaTUxi6N3kOeJ2qSe7re6UxXDcmxAwExWkwqXJIHTeY7O3BQSgT5AArds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lAaxG2qN; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1771010807; c=relaxed/simple;
+	bh=CFsTNibMoX3JymlGIzKmI0+4G8nbxiLX/GpZt45ngU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OlFs1OA9wtRRp7JO42C16ArYSLtO5UfMww3LpG0ebjpaz+SoQOTnv+9KIvNEEcyTMXAENxtNxOAqocAxFN2+oj89VKTslxAm1ii470N6OqhHp3nKOwapP8y9VRZaOMMnhI57/GFx89hgoV3bRlFt4E1tUxuoez7GUwQp63Q9aXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nSIfcPRg; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lAaxG2qN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nSIfcPRg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771005047; x=1802541047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hn/YbMCFPNwy7WqclUnTHTDS9PREVwpYJ6OC8kfWHYQ=;
-  b=lAaxG2qNH4ZlQSogjeXake+jOm5hDzzCm/aBXaiubv6FjmkIshyW69a2
-   B9JUvwb9zEufM83GEzytGhw/Zzf8TS846J1QssbiTomyZ82HX5l7kx/L7
-   O0PW9AB13ZWMZdqpHtlPovHQ7qiATMdYXIjQXPU6q4AaAnUOyKc3Xr7hD
-   +ydrVWl9T3Lfp9zVu2RT8sJpvIMXlVQLRxaL/grtVpw3mJkmkmV2jsRL0
-   bivlc0MqzcWnz6Z8Fgo/iqCLfqrAeQl/gAzV3cxIoYG+HArTLKJ27lOEl
-   rMUOxpcRpQDPRtmWTh9cdoQxNHLIBJl/OyPUN3+2TXvP3kuN0FEltADLF
-   Q==;
-X-CSE-ConnectionGUID: ixAMCQN7QvGVxMyLHdezqQ==
-X-CSE-MsgGUID: VJh5F6VORCm4if2rN/BjEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="76042146"
+  t=1771010805; x=1802546805;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CFsTNibMoX3JymlGIzKmI0+4G8nbxiLX/GpZt45ngU8=;
+  b=nSIfcPRgfhC3vNccRbbG+16f31T2jtqf99B3QviGHtY9RjsdR/hQq4qf
+   PpgAzqnKk0cc0WBCwu3VK1RQBpGDhyHy2RQTjTIeq+IZ4j4hm/9Ox/3g/
+   plC9bWlBOLfcXqv6KjZwwjBS30QGWLsVAgK6N2rS/ueNtL9uN6/tx4fQV
+   3SKdYo4NuRwILGiX8s4TJvc7lwBQrMiXihv7fHezVZ1IDiCkCZcqpurrS
+   9hnNK70C3Y6tn7QI0/de2TUAG6JUKoFIGUiY7W90ILO55rRGMoXR0Os+d
+   VgpfVG9oKZKwdv+UzZAskODNRXDn/qe4ce2u72LIMQPL+SRmP6lBA8iL4
+   g==;
+X-CSE-ConnectionGUID: 2FYEcKJhSJaq1dFcaWTr3w==
+X-CSE-MsgGUID: rPG8E20KSYC2iFELe5Tiew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="97659164"
 X-IronPort-AV: E=Sophos;i="6.21,289,1763452800"; 
-   d="scan'208";a="76042146"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 09:50:46 -0800
-X-CSE-ConnectionGUID: HsqJDspKS4WjuQjo+NXLxQ==
-X-CSE-MsgGUID: bqD5zFG7TJa7NeOs2yrG/Q==
+   d="scan'208";a="97659164"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 11:26:44 -0800
+X-CSE-ConnectionGUID: EQyDCMq2Rdi2ar0xwEniuw==
+X-CSE-MsgGUID: TnlLwFHLT06yxb4bK00d8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,289,1763452800"; 
-   d="scan'208";a="212227967"
+   d="scan'208";a="213022147"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 13 Feb 2026 09:50:40 -0800
+  by orviesa008.jf.intel.com with ESMTP; 13 Feb 2026 11:26:43 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vqxJN-00000000viu-43MR;
-	Fri, 13 Feb 2026 17:50:38 +0000
-Date: Sat, 14 Feb 2026 01:50:20 +0800
+	id 1vqyoK-00000000vmG-1T4z;
+	Fri, 13 Feb 2026 19:26:40 +0000
+Date: Sat, 14 Feb 2026 03:26:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: LiuQingtao <qtliu@mail.ustc.edu.cn>, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jirislaby@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, neil.armstrong@linaro.org,
-	bjorn.andersson@oss.qualcomm.com, marex@nabladev.com, dev@kael-k.io,
-	mani@kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
-	linux-serial@vger.kernel.org, linux-riscv@lists.infradead.org,
-	liu.wenhong35@zte.com.cn, liu.qingtao2@zte.com.cn,
-	hu.yuye@zte.com.cn, dai.hualiang@zte.com.cn,
-	deng.weixian@zte.com.cn, jia.yunxiang@zte.com.cn,
-	bai.lu5@zte.com.cn, yang.susheng@zte.com.cn, shen.lin1@zte.com.cn,
-	tan.hu@zte.com.cn, zuo.jiang@zte.com.cn
-Subject: Re: [PATCH v1 2/2] LRW UART: serial: add driver for the LRW UART
-Message-ID: <202602140108.kLMOYbwS-lkp@intel.com>
-References: <20260213093334.9217-3-qtliu@mail.ustc.edu.cn>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/vdso-compat-checkflags 5/7] ld.lld:
+ error: ./arch/s390/kernel/vmlinux.lds:13: symbol not found: TEXT_OFFSET
+Message-ID: <202602140311.tvFN8qa4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,97 +60,50 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260213093334.9217-3-qtliu@mail.ustc.edu.cn>
 
-Hi LiuQingtao,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.19 next-20260212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/LiuQingtao/LRW-UART-dt-bindings-Add-binding-for-LRW-UART/20260213-173610
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20260213093334.9217-3-qtliu%40mail.ustc.edu.cn
-patch subject: [PATCH v1 2/2] LRW UART: serial: add driver for the LRW UART
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260214/202602140108.kLMOYbwS-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602140108.kLMOYbwS-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/vdso-compat-checkflags
+head:   f3f3c2f9cf8c8793e126868a6f934bd8c333ccfa
+commit: 3348250fad3005f91f96ab4967e4589c9e234235 [5/7] s390: Trim includes in linker scripts
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260214/202602140311.tvFN8qa4-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602140311.tvFN8qa4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602140108.kLMOYbwS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602140311.tvFN8qa4-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/lrw_uart.c:2266:3: warning: variable 'new_mcfg' is uninitialized when used here [-Wuninitialized]
-                   new_mcfg |= UARTMCFG_UARTEN | UARTMCFG_TXE;
-                   ^~~~~~~~
-   drivers/tty/serial/lrw_uart.c:2246:37: note: initialize the variable 'new_mcfg' to silence this warning
-           unsigned int old_mcfg = 0, new_mcfg;
-                                              ^
-                                               = 0
-   1 warning generated.
-
-
-vim +/new_mcfg +2266 drivers/tty/serial/lrw_uart.c
-
-  2240	
-  2241	static void
-  2242	lrw_uart_console_write(struct console *co, const char *s, unsigned int count)
-  2243	{
-  2244		struct lrw_uart_port *sup = lrw_uart_console_ports[co->index];
-  2245		unsigned int old_fccr = 0, new_fccr;
-  2246		unsigned int old_mcfg = 0, new_mcfg;
-  2247		unsigned long flags;
-  2248		int locked = 1;
-  2249	
-  2250		clk_enable(sup->clk);
-  2251	
-  2252		if (oops_in_progress)
-  2253			locked = uart_port_trylock_irqsave(&sup->port, &flags);
-  2254		else
-  2255			uart_port_lock_irqsave(&sup->port, &flags);
-  2256	
-  2257		/*
-  2258		 *	First save the FCCR then disable the interrupts
-  2259		 */
-  2260		if (!sup->vendor->always_enabled) {
-  2261			old_fccr = lrw_uart_read(sup, REG_FCCR);
-  2262			new_fccr = old_fccr & ~UARTFCCR_CTSEN;
-  2263			lrw_uart_write(new_fccr, sup, REG_FCCR);
-  2264	
-  2265			old_mcfg = lrw_uart_read(sup, REG_MCFG);
-> 2266			new_mcfg |= UARTMCFG_UARTEN | UARTMCFG_TXE;
-  2267			lrw_uart_write(new_mcfg, sup, REG_MCFG);
-  2268		}
-  2269	
-  2270		uart_console_write(&sup->port, s, count, lrw_uart_console_putchar);
-  2271	
-  2272		/*
-  2273		 *	Finally, wait for transmitter to become empty and restore the
-  2274		 *	TCR. Allow feature register bits to be inverted to work around
-  2275		 *	errata.
-  2276		 */
-  2277		while ((lrw_uart_read(sup, REG_FR) ^ sup->vendor->inv_fr)
-  2278							& sup->vendor->fr_busy)
-  2279			cpu_relax();
-  2280		if (!sup->vendor->always_enabled) {
-  2281			lrw_uart_write(old_fccr, sup, REG_FCCR);
-  2282			lrw_uart_write(old_mcfg, sup, REG_MCFG);
-  2283		}
-  2284	
-  2285		if (locked)
-  2286			uart_port_unlock_irqrestore(&sup->port, flags);
-  2287	
-  2288		clk_disable(sup->clk);
-  2289	}
-  2290	
+>> ld.lld: error: ./arch/s390/kernel/vmlinux.lds:13: symbol not found: TEXT_OFFSET
+>> ld.lld: error: ./arch/s390/kernel/vmlinux.lds:122: symbol not found: AMODE31_SIZE
+>> ld.lld: error: ./arch/s390/kernel/vmlinux.lds:13: symbol not found: TEXT_OFFSET
+>> ld.lld: error: ./arch/s390/kernel/vmlinux.lds:122: symbol not found: AMODE31_SIZE
+>> ld.lld: error: ./arch/s390/kernel/vmlinux.lds:13: symbol not found: TEXT_OFFSET
+>> ld.lld: error: ./arch/s390/kernel/vmlinux.lds:122: symbol not found: AMODE31_SIZE
+>> ld.lld: error: section .amode31.text file range overlaps with .init.data
+   >>> .amode31.text range is [0x486000, 0x486FFF]
+   >>> .init.data range is [0x486000, 0x49DDF7]
+--
+>> ld.lld: error: section .init.data file range overlaps with .amode31.ex_table
+   >>> .init.data range is [0x486000, 0x49DDF7]
+   >>> .amode31.ex_table range is [0x487000, 0x48702F]
+--
+>> ld.lld: error: section .amode31.text virtual address range overlaps with .init.data
+   >>> .amode31.text range is [0x485000, 0x485FFF]
+   >>> .init.data range is [0x485000, 0x49CDF7]
+--
+>> ld.lld: error: section .init.data virtual address range overlaps with .amode31.ex_table
+   >>> .init.data range is [0x485000, 0x49CDF7]
+   >>> .amode31.ex_table range is [0x486000, 0x48602F]
+--
+>> ld.lld: error: section .amode31.text load address range overlaps with .init.data
+   >>> .amode31.text range is [0x485000, 0x485FFF]
+   >>> .init.data range is [0x485000, 0x49CDF7]
+--
+>> ld.lld: error: section .init.data load address range overlaps with .amode31.ex_table
+   >>> .init.data range is [0x485000, 0x49CDF7]
+   >>> .amode31.ex_table range is [0x486000, 0x48602F]
 
 -- 
 0-DAY CI Kernel Test Service
