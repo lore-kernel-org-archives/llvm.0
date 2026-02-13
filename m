@@ -1,231 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A76263C8C;
-	Fri, 13 Feb 2026 23:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6465533C52A;
+	Fri, 13 Feb 2026 23:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771024253; cv=none; b=PHNSOrPHTW2nNCa02qc33Rtj1JZJnxaJSiteRViw4VpkoeEM4G7PeQihs6lx2GnAs9aptP+GxOHfcwSqvaADheobD4nvWOH2ejKgZdq6gqhnqCHUdEUbLm4QA+JqHCsnkP//l9j3m9C4zZEbFuYNScmMyexTkf++e368EPSwZN0=
+	t=1771024853; cv=none; b=Sf2ohaemLy4OQScwYGR0OvZWX8wRwua/dYVXGWyqszIRDu6MYfQuHrxx5GUwoTMb5p3ykL5cXj+nLzeI/fPVjvQMa+wSl1rRvK4oy1KUkrejd4b+Qxe3ZC5euDS2HdjyvdlJJRIzfimUC9LWjrQnEEi2yQSCSTmzJy0mCy+TQaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771024253; c=relaxed/simple;
-	bh=SXmKxAouT4Cm2cJbQEH5Hd0mYke9hgCKsKTh0tnA0aE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XEh+63zVgPk/2BFWbl7jKHyz69aDDtBgMd1zc51CQZiZ8+WAwbl9mUO/iP1EZiiOBYtSFdoi68PGCseswB3/G8UAJOXMr2tkO7d3JRXxjAauY1YIRh0dR1qWg/jY8L7UK+4pTukAfiplWXojX3bLVdzIcOu0Am33Wx4sDVeW0Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RewahtKr; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1771024853; c=relaxed/simple;
+	bh=EkQtcVmiJ8ec56l6tnyPvJJpdOdXvQyvqzGPx4Fwt9g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aPwbI6QZl1NTBUeGWlqrwIZ1b2K8YV6isuUl4avFWPK9rnXYkRT9bMGIwgyt6vDF1x3MlHN5jxR0XJHML0zRam+UV83oZy/phGfe7O52z+FZ+0bQKHGtHt6NpkpQhcRdYNdA7j1OWTxaMpSbau0gZjDxSqBahkbwLmg3EO4gFcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wbc8Y/Bd; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RewahtKr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wbc8Y/Bd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771024252; x=1802560252;
-  h=date:from:to:cc:subject:message-id;
-  bh=SXmKxAouT4Cm2cJbQEH5Hd0mYke9hgCKsKTh0tnA0aE=;
-  b=RewahtKrDKQ+mUtojdntviIe8k/pq4MsfS2RG+SaKWtmn/6gb4BQFfms
-   3KRGckhenmlIuxSCI+tpTVArfNw46SKuUrpF0EV0K7QgjdUnkM9XHkew0
-   VLSEyc0evuM51WM2dKNG4UzYAOJe18EG2PWP/aZQdChsRyslyMDQlXHJ9
-   tKzRGgqqThWBov9yrk4ppy4Eal/2KuXNEjkbWhkGLoLrnHJWru2c4zWY8
-   c2zDmzA/Mu7/e4Yf4Z+MRzGj8eQQDFLJKYaNf4ujaibXTHKx3gIygJa4S
-   EP0rsGai7k5BSZgH1kjKfuOPTAULVjaOu6u+7saf9z1xjCxiLJ8aBte3l
+  t=1771024852; x=1802560852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EkQtcVmiJ8ec56l6tnyPvJJpdOdXvQyvqzGPx4Fwt9g=;
+  b=Wbc8Y/Bd4Y44zS/Osz24UXLNtpqKZL04tGw0Af8garl7b1UJaNTIJZ3m
+   tdDj2aDsyxgsdgej/VgEr4ono468+GYXb2KbJdMzbydfsM8pFY2cah2wj
+   /zwn1EDGRnjAsw81jvurLzynISk8PEOyGRioML48bnqjL8yhmDYknDCgd
+   kIy8REFjKrKA7LKgWSSCnzBfqyBExnVdxtUPa929PUQTjdlJZtd1HMmkk
+   UUE8aK4N6Ia05s4/LdazE+CHHsgKl7QNX6ZK/8l5TCUUPYsSaeo61iXwL
+   RAxXoe5G3qkXjEE6QULckSJUwaXG5X+hRymNBqUCYWUvq23B878RiCUpH
    w==;
-X-CSE-ConnectionGUID: D2XajgxfTT6tsWr9OcuJTg==
-X-CSE-MsgGUID: rpBj/J7STs+bWcNU4sQCJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="59783156"
+X-CSE-ConnectionGUID: Q1FE0S+CQhmTEtJlFpZOKg==
+X-CSE-MsgGUID: VzfdXvXJR/qtSyZf4uOj/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="72388595"
 X-IronPort-AV: E=Sophos;i="6.21,289,1763452800"; 
-   d="scan'208";a="59783156"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 15:10:52 -0800
-X-CSE-ConnectionGUID: 7JLrVQi6QKyKamTP1GuNyw==
-X-CSE-MsgGUID: 1eAI2FQVT/eoqGo+hShB7Q==
+   d="scan'208";a="72388595"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 15:20:52 -0800
+X-CSE-ConnectionGUID: 7W+sUFmDSdCk37Hj29PTvQ==
+X-CSE-MsgGUID: SPPu+G0iSwq1YTG6h6xeXw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,289,1763452800"; 
-   d="scan'208";a="212444722"
+   d="scan'208";a="211711519"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 13 Feb 2026 15:10:50 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 13 Feb 2026 15:20:50 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vr2JD-00000000vtQ-3roI;
-	Fri, 13 Feb 2026 23:10:47 +0000
-Date: Sat, 14 Feb 2026 07:09:59 +0800
+	id 1vr2Su-00000000vtp-10N7;
+	Fri, 13 Feb 2026 23:20:48 +0000
+Date: Sat, 14 Feb 2026 07:20:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/tracing_multi_5 5/15]
- arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in
- 'struct bpf_tramp_link'
-Message-ID: <202602140713.CBTxR1GY-lkp@intel.com>
+Subject: [thomas-weissschuh:b4/vdso-compat_32bit_time 3/4]
+ lib/vdso/gettimeofday.c:343:2: error: call to undeclared function
+ 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202602140732.Qkr1m15w-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_5
-head:   3bb11e809e06ec473ee881de417d36f0d164f3fe
-commit: 9d5c97a3c65fa6f74af1b36dcfdce91e0c2ab81c [5/15] bpf: Add struct bpf_tramp_node object
-config: powerpc64-randconfig-002-20260214 (https://download.01.org/0day-ci/archive/20260214/202602140713.CBTxR1GY-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602140713.CBTxR1GY-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/vdso-compat_32bit_time
+head:   1a400ee33c91f1c010e4fcbddc3781afdc8ff201
+commit: 194ed9d5b6d11d446fde4eaa8724406aa7cd5fe2 [3/4] generic
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260214/202602140732.Qkr1m15w-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602140732.Qkr1m15w-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602140713.CBTxR1GY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602140732.Qkr1m15w-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
->> arch/powerpc/net/bpf_jit_comp.c:525:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     525 |                 PPC_LI64(_R3, l->cookie);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:529:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     529 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   arch/powerpc/net/bpf_jit_comp.c:529:20: error: no member named 'cookie' in 'struct bpf_tramp_link'
-     529 |                 PPC_LI32(_R3, l->cookie >> 32);
-         |                               ~  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+   In file included from <built-in>:3:
+>> lib/vdso/gettimeofday.c:343:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     343 |         BUILD_BUG_ON(!IS_ENABLED(CONFIG_VDSO_COMPAT_32BIT_TIME));
+         |         ^
+   lib/vdso/gettimeofday.c:496:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     496 |         BUILD_BUG_ON(!IS_ENABLED(CONFIG_VDSO_COMPAT_32BIT_TIME));
+         |         ^
+   2 errors generated.
+   make[3]: *** [arch/arm64/kernel/vdso32/Makefile:135: arch/arm64/kernel/vdso32/vgettimeofday.o] Error 1
+   make[3]: Target 'arch/arm64/kernel/vdso32/vdso.so' not remade because of errors.
+   make[2]: *** [arch/arm64/Makefile:208: vdso_prepare] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +525 arch/powerpc/net/bpf_jit_comp.c
+vim +/BUILD_BUG_ON +343 lib/vdso/gettimeofday.c
 
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  513  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  514  static int invoke_bpf_prog(u32 *image, u32 *ro_image, struct codegen_context *ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  515  			   struct bpf_tramp_link *l, int regs_off, int retval_off,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  516  			   int run_ctx_off, bool save_ret)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  517  {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  518  	struct bpf_prog *p = l->link.prog;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  519  	ppc_inst_t branch_insn;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  520  	u32 jmp_idx;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  521  	int ret = 0;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  522  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  523  	/* Save cookie */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  524  	if (IS_ENABLED(CONFIG_PPC64)) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30 @525  		PPC_LI64(_R3, l->cookie);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  526  		EMIT(PPC_RAW_STD(_R3, _R1, run_ctx_off + offsetof(struct bpf_tramp_run_ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  527  				 bpf_cookie)));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  528  	} else {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  529  		PPC_LI32(_R3, l->cookie >> 32);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  530  		PPC_LI32(_R4, l->cookie);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  531  		EMIT(PPC_RAW_STW(_R3, _R1,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  532  				 run_ctx_off + offsetof(struct bpf_tramp_run_ctx, bpf_cookie)));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  533  		EMIT(PPC_RAW_STW(_R4, _R1,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  534  				 run_ctx_off + offsetof(struct bpf_tramp_run_ctx, bpf_cookie) + 4));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  535  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  536  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  537  	/* __bpf_prog_enter(p, &bpf_tramp_run_ctx) */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  538  	PPC_LI_ADDR(_R3, p);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  539  	EMIT(PPC_RAW_MR(_R25, _R3));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  540  	EMIT(PPC_RAW_ADDI(_R4, _R1, run_ctx_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  541  	ret = bpf_jit_emit_func_call_rel(image, ro_image, ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  542  					 (unsigned long)bpf_trampoline_enter(p));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  543  	if (ret)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  544  		return ret;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  545  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  546  	/* Remember prog start time returned by __bpf_prog_enter */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  547  	EMIT(PPC_RAW_MR(_R26, _R3));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  548  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  549  	/*
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  550  	 * if (__bpf_prog_enter(p) == 0)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  551  	 *	goto skip_exec_of_prog;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  552  	 *
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  553  	 * Emit a nop to be later patched with conditional branch, once offset is known
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  554  	 */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  555  	EMIT(PPC_RAW_CMPLI(_R3, 0));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  556  	jmp_idx = ctx->idx;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  557  	EMIT(PPC_RAW_NOP());
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  558  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  559  	/* p->bpf_func(ctx) */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  560  	EMIT(PPC_RAW_ADDI(_R3, _R1, regs_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  561  	if (!p->jited)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  562  		PPC_LI_ADDR(_R4, (unsigned long)p->insnsi);
-59ba025948be2a Hari Bathini 2025-04-22  563  	/* Account for max possible instructions during dummy pass for size calculation */
-59ba025948be2a Hari Bathini 2025-04-22  564  	if (image && !create_branch(&branch_insn, (u32 *)&ro_image[ctx->idx],
-59ba025948be2a Hari Bathini 2025-04-22  565  				    (unsigned long)p->bpf_func,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  566  				    BRANCH_SET_LINK)) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  567  		image[ctx->idx] = ppc_inst_val(branch_insn);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  568  		ctx->idx++;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  569  	} else {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  570  		EMIT(PPC_RAW_LL(_R12, _R25, offsetof(struct bpf_prog, bpf_func)));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  571  		EMIT(PPC_RAW_MTCTR(_R12));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  572  		EMIT(PPC_RAW_BCTRL());
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  573  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  574  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  575  	if (save_ret)
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  576  		EMIT(PPC_RAW_STL(_R3, _R1, retval_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  577  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  578  	/* Fix up branch */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  579  	if (image) {
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  580  		if (create_cond_branch(&branch_insn, &image[jmp_idx],
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  581  				       (unsigned long)&image[ctx->idx], COND_EQ << 16))
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  582  			return -EINVAL;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  583  		image[jmp_idx] = ppc_inst_val(branch_insn);
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  584  	}
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  585  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  586  	/* __bpf_prog_exit(p, start_time, &bpf_tramp_run_ctx) */
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  587  	EMIT(PPC_RAW_MR(_R3, _R25));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  588  	EMIT(PPC_RAW_MR(_R4, _R26));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  589  	EMIT(PPC_RAW_ADDI(_R5, _R1, run_ctx_off));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  590  	ret = bpf_jit_emit_func_call_rel(image, ro_image, ctx,
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  591  					 (unsigned long)bpf_trampoline_exit(p));
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  592  
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  593  	return ret;
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  594  }
-d243b62b7bd3d5 Naveen N Rao 2024-10-30  595  
-
-:::::: The code at line 525 was first introduced by commit
-:::::: d243b62b7bd3d5314382d3b54e4992226245e936 powerpc64/bpf: Add support for bpf trampolines
-
-:::::: TO: Naveen N Rao <naveen@kernel.org>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+   334	
+   335	#ifdef BUILD_VDSO32
+   336	static __maybe_unused int
+   337	__cvdso_clock_gettime32_data(const struct vdso_time_data *vd, clockid_t clock,
+   338				     struct old_timespec32 *res)
+   339	{
+   340		struct __kernel_timespec ts;
+   341		bool ok;
+   342	
+ > 343		BUILD_BUG_ON(!IS_ENABLED(CONFIG_VDSO_COMPAT_32BIT_TIME));
+   344	
+   345		ok = __cvdso_clock_gettime_common(vd, clock, &ts);
+   346	
+   347		if (unlikely(!ok))
+   348			return clock_gettime32_fallback(clock, res);
+   349	
+   350		/* For ok == true */
+   351		res->tv_sec = ts.tv_sec;
+   352		res->tv_nsec = ts.tv_nsec;
+   353	
+   354		return 0;
+   355	}
+   356	
 
 -- 
 0-DAY CI Kernel Test Service
