@@ -1,244 +1,263 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BE731D744;
-	Sat, 14 Feb 2026 08:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5241DE3AD;
+	Sat, 14 Feb 2026 09:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771059391; cv=none; b=gzY8pVPgIPLMvjalQCgV/9MEkXs/K+IQ3eKlOV2uoqACySrJDDmLRToIlz0eYsmf6pSpkmnCu/ye77/VAaAnSI/lOQelIj3mHZszb8CyWY83pSgTcXIowglU/5e183P45iognsJ2w9B8yM+UwPfItAad5mnlQvx5f/3JPHqVDsE=
+	t=1771060044; cv=none; b=KcOBjGtWUDBcS66V2A5nrnILadM4i8F7TOOn8Qnv+yh6OcsZyBrVN10u2IsanM5Qah6vD+9y9EZRL9gluh09bwFGLCBWGaaeE2PhesOcIvywlQp6vKQT+7QrO/ZGGMIjgxwtcZLRfxSqEfa6XOL4cRwnd0+dHk0nj6tKkncfIw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771059391; c=relaxed/simple;
-	bh=FmU6sN6VTvK2lk9nkffJpXX9j+KGsN9TIxoBy1pLkF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mgH7nO/K9eRav+K0Tb9sYARKPQmVIVxuruXmOkdvmOukAY9f63jWVgCS9SMAnWAYYDQfRjZgZkBF4Oby6f5bGIrPKG+qu6/EMxYklvL4z8hBFFH/DC3yqW/Y/IjqlKVX7u6PqSWpFeOj+dO41Atss3p+AEJXAWAJL/MtixCejiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q663OU/0; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1771060044; c=relaxed/simple;
+	bh=xXNOWvfxhaPYQLE4IVNRYaK3Ajhx2kzeufpZ5U3T5Ds=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=gKA/Vbo8z3kPW553aBrrL0Ys7LwqoHP8S0mXCtsp81vmO/+AACbshH9XaQPikxTDUMqbIXFnLyYsm4+Ayx56FMygbDMWNXXxo/u+mPcio32fCpFD9/tCDyUzcumozEIrZRcvmhd3PyXTf3jNqYxgxhKuLSmQeDMTsL0u6gpm4Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SgSyDLmJ; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q663OU/0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SgSyDLmJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771059387; x=1802595387;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FmU6sN6VTvK2lk9nkffJpXX9j+KGsN9TIxoBy1pLkF0=;
-  b=Q663OU/0kclcSCrHbC+Z7f+IatB68YiepEW42MHDErrv42kUTCpdd3Fn
-   gHDivvz02HUbPiUUsEuKvQXTW9Qgurd+MwwOovwxVviJ49T42DNPpmu0j
-   ZemN1yLrRoudb6iqPFVtePp6EtiDQn07K8WXFlF9uYFHcngQPMjT6iHk0
-   qL93mwAy6V7BLjk0Srd57reY1n4RbRpaRJKAUHu9LeGlw2GBd6J5c37mv
-   peBuB2tyK2E4UKkGkiew4n5zTuK5oG0aWZQbdlEYWjas5z5h/EgnnVfeT
-   VvsCjK07uR/wC3c2R7IOeD7j6YEJQSJvQKY1cM7WBIhKTHwoCAvzQ36Yk
-   g==;
-X-CSE-ConnectionGUID: NrdKyOfaQneGq+IxxzS5LQ==
-X-CSE-MsgGUID: erhWc9lkSuO188xeYHfhYg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="71428987"
+  t=1771060042; x=1802596042;
+  h=date:from:to:cc:subject:message-id;
+  bh=xXNOWvfxhaPYQLE4IVNRYaK3Ajhx2kzeufpZ5U3T5Ds=;
+  b=SgSyDLmJcstd6Gxo8bgoZQ1mdvJDHxTHMgr7tVMCZfFcjs0oQks1OzTS
+   mFfCubhiQAMqvrEZMem4UTVoCa9S27HHJ0AV8/NYNCQ8qZcaIVXP4L7ZY
+   XfWhsNH/znDoghrsHNmZEF9TzhExN4zEaMG9k7IJmtNSBbop69/IYmFaA
+   Eb1puNfVsfXimS7eDUEzUd24adAG8e+yluauiPgyDka/6cbiOjxEUJV5i
+   w5dgT2xBM9sgyO0wMSF47UQKWmfmrObJb1qkBs8U/KvQYFNRJ1JZng77T
+   yByW2pYbap7KnipHVQSBgQfn66Eo5jw+XEt8zlBvQ1BaziRHDFE37tiw9
+   w==;
+X-CSE-ConnectionGUID: CTs/isLFT1eOBKpAoO8o3w==
+X-CSE-MsgGUID: +rlRzqSTTUG9IzDvkbijpw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="72327907"
 X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="71428987"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 00:56:26 -0800
-X-CSE-ConnectionGUID: N824LeOqToGHpVGW64sH6Q==
-X-CSE-MsgGUID: Qhwja1+kR8SCKwHr/L7Utg==
+   d="scan'208";a="72327907"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 01:07:22 -0800
+X-CSE-ConnectionGUID: zKTh15fASly88qy+jqlM/g==
+X-CSE-MsgGUID: PxpwHxhIR46uSVnAS079FQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="218110063"
+   d="scan'208";a="213240142"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 14 Feb 2026 00:56:20 -0800
+  by orviesa007.jf.intel.com with ESMTP; 14 Feb 2026 01:07:20 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vrBRp-00000000wPI-1UDK;
-	Sat, 14 Feb 2026 08:56:17 +0000
-Date: Sat, 14 Feb 2026 16:56:15 +0800
+	id 1vrBcT-00000000wPc-2Hts;
+	Sat, 14 Feb 2026 09:07:17 +0000
+Date: Sat, 14 Feb 2026 17:06:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
+To: Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
-	Amit Sunil Dhamne <amitsd@google.com>
-Subject: Re: [PATCH v6 5/6] power: supply: max77759: add charger driver
-Message-ID: <202602141606.igFDFWAJ-lkp@intel.com>
-References: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
+ David Hildenbrand <david@kernel.org>,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ Alexander Potapenko <glider@google.com>
+Subject: [akpm-mm:mm-nonmm-unstable 30/30]
+ drivers/input/misc/pf1550-onkey.c:190:25: error: use of undeclared identifier
+ 'pf1550_onkey_pm_ops'; did you mean 'pf1550_onkey_probe'?
+Message-ID: <202602141722.pvRjFCqC-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260214-max77759-charger-v6-5-28c09bda74b4@google.com>
 
-Hi Amit,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-mfd-maxim-max77759-reference-power-supply-schema-and-add-regulator-property/20260214-111637
-base:   8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
-patch link:    https://lore.kernel.org/r/20260214-max77759-charger-v6-5-28c09bda74b4%40google.com
-patch subject: [PATCH v6 5/6] power: supply: max77759: add charger driver
-config: powerpc64-randconfig-001-20260214 (https://download.01.org/0day-ci/archive/20260214/202602141606.igFDFWAJ-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602141606.igFDFWAJ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+head:   f88534a6e7afcfe6ad5f93b86f6e64d5d4d23709
+commit: f88534a6e7afcfe6ad5f93b86f6e64d5d4d23709 [30/30] drivers/input/misc/pf1550-onkey.c: fix build with CONFIG_PM_SLEEP=n
+config: i386-buildonly-randconfig-002-20260214 (https://download.01.org/0day-ci/archive/20260214/202602141722.pvRjFCqC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602141722.pvRjFCqC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602141606.igFDFWAJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602141722.pvRjFCqC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/power/supply/max77759_charger.c:623:4: error: cannot jump from this goto statement to its label
-     623 |                         goto err;
-         |                         ^
-   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     631 |         guard(mutex)(&chg->retry_lock);
-         |         ^
-   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
-     414 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:18:1: note: expanded from here
-      18 | __UNIQUE_ID_guard_461
-         | ^
-   drivers/power/supply/max77759_charger.c:615:3: error: cannot jump from this goto statement to its label
-     615 |                 goto err;
-         |                 ^
-   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     631 |         guard(mutex)(&chg->retry_lock);
-         |         ^
-   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
-     414 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:18:1: note: expanded from here
-      18 | __UNIQUE_ID_guard_461
-         | ^
-   drivers/power/supply/max77759_charger.c:606:3: error: cannot jump from this goto statement to its label
-     606 |                 goto err;
-         |                 ^
-   drivers/power/supply/max77759_charger.c:631:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     631 |         guard(mutex)(&chg->retry_lock);
-         |         ^
-   include/linux/cleanup.h:414:15: note: expanded from macro 'guard'
-     414 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:18:1: note: expanded from here
-      18 | __UNIQUE_ID_guard_461
-         | ^
-   3 errors generated.
+   drivers/input/misc/pf1550-onkey.c:179:8: warning: extra tokens at end of #endif directive [-Wextra-tokens]
+     179 | #endif CONFIG_PM_SLEEP
+         |        ^
+         |        //
+>> drivers/input/misc/pf1550-onkey.c:190:25: error: use of undeclared identifier 'pf1550_onkey_pm_ops'; did you mean 'pf1550_onkey_probe'?
+     190 |                 .pm   = pm_sleep_ptr(&pf1550_onkey_pm_ops),
+         |                                       ^~~~~~~~~~~~~~~~~~~
+         |                                       pf1550_onkey_probe
+   include/linux/pm.h:474:65: note: expanded from macro 'pm_sleep_ptr'
+     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^
+   drivers/input/misc/pf1550-onkey.c:60:12: note: 'pf1550_onkey_probe' declared here
+      60 | static int pf1550_onkey_probe(struct platform_device *pdev)
+         |            ^
+>> drivers/input/misc/pf1550-onkey.c:190:11: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'int (*)(struct platform_device *)' [-Werror,-Wincompatible-pointer-types]
+     190 |                 .pm   = pm_sleep_ptr(&pf1550_onkey_pm_ops),
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
+     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for NET_SELFTESTS
+   Depends on [n]: NET [=y] && PHYLIB [=y] && INET [=n]
+   Selected by [y]:
+   - AMD_XGBE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_AMD [=y] && (OF_ADDRESS [=y] || ACPI [=y] || PCI [=y]) && HAS_IOMEM [=y] && (X86 [=y] || ARM64 || COMPILE_TEST [=y]) && PTP_1588_CLOCK_OPTIONAL [=y]
 
 
-vim +623 drivers/power/supply/max77759_charger.c
+vim +190 drivers/input/misc/pf1550-onkey.c
 
-   591	
-   592	static void psy_work_item(struct work_struct *work)
-   593	{
-   594		struct max77759_charger *chg =
-   595			container_of(work, struct max77759_charger, psy_work.work);
-   596		union power_supply_propval current_limit, online;
-   597		int ret;
-   598	
-   599		ret = power_supply_get_property(chg->tcpm_psy,
-   600						POWER_SUPPLY_PROP_CURRENT_MAX,
-   601						&current_limit);
-   602		if (ret) {
-   603			dev_err(chg->dev,
-   604				"Failed to get CURRENT_MAX psy property, ret=%d",
-   605				ret);
-   606			goto err;
-   607		}
-   608	
-   609		ret = power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_ONLINE,
-   610						&online);
-   611		if (ret) {
-   612			dev_err(chg->dev,
-   613				"Failed to get ONLINE psy property, ret=%d",
-   614				ret);
-   615			goto err;
-   616		}
-   617	
-   618		if (online.intval && current_limit.intval) {
-   619			ret = set_input_current_limit(chg, current_limit.intval);
-   620			if (ret) {
-   621				dev_err(chg->dev,
-   622					"Unable to set current limit, ret=%d", ret);
- > 623				goto err;
-   624			}
-   625	
-   626			charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
-   627		} else {
-   628			charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-   629		}
-   630	
-   631		guard(mutex)(&chg->retry_lock);
-   632	
-   633		if (chg->psy_work_retry_cnt)
-   634			dev_dbg(chg->dev, "chg psy_work succeeded after %u tries",
-   635				chg->psy_work_retry_cnt);
-   636		chg->psy_work_retry_cnt = 0;
-   637		return;
-   638	
-   639	err:
-   640		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
-   641		guard(mutex)(&chg->retry_lock);
-   642	
-   643		if (chg->psy_work_retry_cnt >= MAX_NUM_RETRIES) {
-   644			dev_err(chg->dev, "chg psy work failed, giving up");
-   645			return;
-   646		}
-   647	
-   648		++chg->psy_work_retry_cnt;
-   649		dev_dbg(chg->dev, "Retrying %u/%u chg psy_work",
-   650			chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
-   651		schedule_delayed_work(&chg->psy_work,
-   652				      msecs_to_jiffies(PSY_WORK_RETRY_DELAY_MS));
-   653	}
-   654	
+9acb215cbebdce7 Samuel Kayode 2025-10-01   59  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  @60  static int pf1550_onkey_probe(struct platform_device *pdev)
+9acb215cbebdce7 Samuel Kayode 2025-10-01   61  {
+9acb215cbebdce7 Samuel Kayode 2025-10-01   62  	struct onkey_drv_data *onkey;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   63  	struct input_dev *input;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   64  	bool key_power = false;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   65  	int i, irq, error;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   66  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   67  	onkey = devm_kzalloc(&pdev->dev, sizeof(*onkey), GFP_KERNEL);
+9acb215cbebdce7 Samuel Kayode 2025-10-01   68  	if (!onkey)
+9acb215cbebdce7 Samuel Kayode 2025-10-01   69  		return -ENOMEM;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   70  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   71  	onkey->dev = &pdev->dev;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   72  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   73  	onkey->pf1550 = dev_get_drvdata(pdev->dev.parent);
+9acb215cbebdce7 Samuel Kayode 2025-10-01   74  	if (!onkey->pf1550->regmap)
+9acb215cbebdce7 Samuel Kayode 2025-10-01   75  		return dev_err_probe(&pdev->dev, -ENODEV,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   76  				     "failed to get regmap\n");
+9acb215cbebdce7 Samuel Kayode 2025-10-01   77  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   78  	onkey->wakeup = device_property_read_bool(pdev->dev.parent,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   79  						  "wakeup-source");
+9acb215cbebdce7 Samuel Kayode 2025-10-01   80  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   81  	if (device_property_read_bool(pdev->dev.parent,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   82  				      "nxp,disable-key-power")) {
+9acb215cbebdce7 Samuel Kayode 2025-10-01   83  		error = regmap_clear_bits(onkey->pf1550->regmap,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   84  					  PF1550_PMIC_REG_PWRCTRL1,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   85  					  PF1550_ONKEY_RST_EN);
+9acb215cbebdce7 Samuel Kayode 2025-10-01   86  		if (error)
+9acb215cbebdce7 Samuel Kayode 2025-10-01   87  			return dev_err_probe(&pdev->dev, error,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   88  					     "failed: disable turn system off");
+9acb215cbebdce7 Samuel Kayode 2025-10-01   89  	} else {
+9acb215cbebdce7 Samuel Kayode 2025-10-01   90  		key_power = true;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   91  	}
+9acb215cbebdce7 Samuel Kayode 2025-10-01   92  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   93  	input = devm_input_allocate_device(&pdev->dev);
+9acb215cbebdce7 Samuel Kayode 2025-10-01   94  	if (!input)
+9acb215cbebdce7 Samuel Kayode 2025-10-01   95  		return dev_err_probe(&pdev->dev, -ENOMEM,
+9acb215cbebdce7 Samuel Kayode 2025-10-01   96  				     "failed to allocate the input device\n");
+9acb215cbebdce7 Samuel Kayode 2025-10-01   97  
+9acb215cbebdce7 Samuel Kayode 2025-10-01   98  	input->name = pdev->name;
+9acb215cbebdce7 Samuel Kayode 2025-10-01   99  	input->phys = "pf1550-onkey/input0";
+9acb215cbebdce7 Samuel Kayode 2025-10-01  100  	input->id.bustype = BUS_HOST;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  101  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  102  	if (key_power)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  103  		input_set_capability(input, EV_KEY, KEY_POWER);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  104  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  105  	onkey->input = input;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  106  	platform_set_drvdata(pdev, onkey);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  107  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  108  	for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  109  		irq = platform_get_irq(pdev, i);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  110  		if (irq < 0)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  111  			return irq;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  112  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  113  		error = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  114  						  pf1550_onkey_irq_handler,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  115  						  IRQF_NO_SUSPEND,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  116  						  "pf1550-onkey", onkey);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  117  		if (error)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  118  			return dev_err_probe(&pdev->dev, error,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  119  					     "failed: irq request (IRQ: %d)\n",
+9acb215cbebdce7 Samuel Kayode 2025-10-01  120  					     i);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  121  	}
+9acb215cbebdce7 Samuel Kayode 2025-10-01  122  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  123  	error = input_register_device(input);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  124  	if (error)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  125  		return dev_err_probe(&pdev->dev, error,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  126  				     "failed to register input device\n");
+9acb215cbebdce7 Samuel Kayode 2025-10-01  127  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  128  	device_init_wakeup(&pdev->dev, onkey->wakeup);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  129  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  130  	return 0;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  131  }
+9acb215cbebdce7 Samuel Kayode 2025-10-01  132  
+f88534a6e7afcfe Andrew Morton 2026-02-13  133  #ifdef CONFIG_PM_SLEEP
+9acb215cbebdce7 Samuel Kayode 2025-10-01  134  static int pf1550_onkey_suspend(struct device *dev)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  135  {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  136  	struct platform_device *pdev = to_platform_device(dev);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  137  	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  138  	int i, irq;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  139  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  140  	if (!device_may_wakeup(&pdev->dev))
+9acb215cbebdce7 Samuel Kayode 2025-10-01  141  		regmap_write(onkey->pf1550->regmap,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  142  			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  143  			     ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI | ONKEY_IRQ_2SI |
+9acb215cbebdce7 Samuel Kayode 2025-10-01  144  			     ONKEY_IRQ_3SI | ONKEY_IRQ_4SI | ONKEY_IRQ_8SI);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  145  	else
+9acb215cbebdce7 Samuel Kayode 2025-10-01  146  		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  147  			irq = platform_get_irq(pdev, i);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  148  			if (irq > 0)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  149  				enable_irq_wake(irq);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  150  		}
+9acb215cbebdce7 Samuel Kayode 2025-10-01  151  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  152  	return 0;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  153  }
+9acb215cbebdce7 Samuel Kayode 2025-10-01  154  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  155  static int pf1550_onkey_resume(struct device *dev)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  156  {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  157  	struct platform_device *pdev = to_platform_device(dev);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  158  	struct onkey_drv_data *onkey = platform_get_drvdata(pdev);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  159  	int i, irq;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  160  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  161  	if (!device_may_wakeup(&pdev->dev))
+9acb215cbebdce7 Samuel Kayode 2025-10-01  162  		regmap_write(onkey->pf1550->regmap,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  163  			     PF1550_PMIC_REG_ONKEY_INT_MASK0,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  164  			     ~((u8)(ONKEY_IRQ_PUSHI | ONKEY_IRQ_1SI |
+9acb215cbebdce7 Samuel Kayode 2025-10-01  165  			     ONKEY_IRQ_2SI | ONKEY_IRQ_3SI | ONKEY_IRQ_4SI |
+9acb215cbebdce7 Samuel Kayode 2025-10-01  166  			     ONKEY_IRQ_8SI)));
+9acb215cbebdce7 Samuel Kayode 2025-10-01  167  	else
+9acb215cbebdce7 Samuel Kayode 2025-10-01  168  		for (i = 0; i < PF1550_ONKEY_IRQ_NR; i++) {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  169  			irq = platform_get_irq(pdev, i);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  170  			if (irq > 0)
+9acb215cbebdce7 Samuel Kayode 2025-10-01  171  				disable_irq_wake(irq);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  172  		}
+9acb215cbebdce7 Samuel Kayode 2025-10-01  173  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  174  	return 0;
+9acb215cbebdce7 Samuel Kayode 2025-10-01  175  }
+9acb215cbebdce7 Samuel Kayode 2025-10-01  176  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  177  static SIMPLE_DEV_PM_OPS(pf1550_onkey_pm_ops, pf1550_onkey_suspend,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  178  			 pf1550_onkey_resume);
+f88534a6e7afcfe Andrew Morton 2026-02-13 @179  #endif CONFIG_PM_SLEEP
+9acb215cbebdce7 Samuel Kayode 2025-10-01  180  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  181  static const struct platform_device_id pf1550_onkey_id[] = {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  182  	{ "pf1550-onkey", },
+9acb215cbebdce7 Samuel Kayode 2025-10-01  183  	{ /* sentinel */ }
+9acb215cbebdce7 Samuel Kayode 2025-10-01  184  };
+9acb215cbebdce7 Samuel Kayode 2025-10-01  185  MODULE_DEVICE_TABLE(platform, pf1550_onkey_id);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  186  
+9acb215cbebdce7 Samuel Kayode 2025-10-01  187  static struct platform_driver pf1550_onkey_driver = {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  188  	.driver = {
+9acb215cbebdce7 Samuel Kayode 2025-10-01  189  		.name = "pf1550-onkey",
+9acb215cbebdce7 Samuel Kayode 2025-10-01 @190  		.pm   = pm_sleep_ptr(&pf1550_onkey_pm_ops),
+9acb215cbebdce7 Samuel Kayode 2025-10-01  191  	},
+9acb215cbebdce7 Samuel Kayode 2025-10-01  192  	.probe = pf1550_onkey_probe,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  193  	.id_table = pf1550_onkey_id,
+9acb215cbebdce7 Samuel Kayode 2025-10-01  194  };
+9acb215cbebdce7 Samuel Kayode 2025-10-01  195  module_platform_driver(pf1550_onkey_driver);
+9acb215cbebdce7 Samuel Kayode 2025-10-01  196  
+
+:::::: The code at line 190 was first introduced by commit
+:::::: 9acb215cbebdce721af2219e2859ad17342c9084 Input: pf1550 - add onkey support
+
+:::::: TO: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+:::::: CC: Lee Jones <lee@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
