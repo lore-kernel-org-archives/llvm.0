@@ -1,98 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD0C1B7F4
-	for <llvm@lists.linux.dev>; Sat, 14 Feb 2026 17:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E702C11CF;
+	Sat, 14 Feb 2026 17:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771089031; cv=none; b=qEnuUT3rmaT+AfPsvyJKjEtESKhUXxVw9Hl91jx5lLjzT+05w38eykPhvX0/DgzE3fJetv/ePFM/xoqltzsogZV0VSUUw7ZuMt1biW30gs6euWWB1TMBsIKD2dCruMufRV0DZU4/5tsfMku7XL5BBQ2kTdC/MotMn+YTbaZ3Dyw=
+	t=1771090365; cv=none; b=OgA+gXJWrcly4P77jmxlU0nWlL9Prs1YlsXVQLMCbsFOAttYQa32ZYOCQ3Sn6HTQINoo8NWTyA5jDV5GsBiIU9oFxYbYlUX4OL8qlQu0EjGPkmJIX0ypRH0fcMqNYoUjqG8Kv9io74mmePC6VLjEkWjiyKCgxTBI7dU+SFPnWeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771089031; c=relaxed/simple;
-	bh=vNj2Cl497tl7JUutr4WbGWbH8FHNgXU/T1j9z7DicG4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AuhP656GSovc6sd2bzVIzYtbrqv4aohapu0OPnvLO/rS674D1zTNm1InBK1cubWydYg/tj64FPuKH8NsQy/Gycgx8OEcGie4SHpiklFGnL1RRPX2uuOA41SYwQVqTAWmiX5vhbjlDXrrJO0sHQ1/7GUhT5uzL0gcVNtzANkQSvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYXI0xOo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771090365; c=relaxed/simple;
+	bh=Au1/pT582Lvke3JYWksZU3mMTndDsEbHMxz2REa/JVQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SBUlalc4PS0ZY2KljctEKKAd0kfDjBvbR98ySqZg36rYEy/N1kzutRGTUWYypCbHVcmH56Tfp88mF1W8g2C1dvcqudusRmncJoDIMBCJX9ZUhKiRXWHAt3CZeVNjwM0hqjQu8JRpza8X3gVX5bpYuFwd8HVLFxQIOmVgd8Z4TbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gX14mhlF; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYXI0xOo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F70DC16AAE
-	for <llvm@lists.linux.dev>; Sat, 14 Feb 2026 17:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771089031;
-	bh=vNj2Cl497tl7JUutr4WbGWbH8FHNgXU/T1j9z7DicG4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VYXI0xOocCSbJ0D8TjmQO5TdU/LWlIojS9m79aZsDk6cMncoUmI+DKgzR2dNbf+ZC
-	 A+Vq96wit+ariVX+byUs9WfM20kcE1gRrM1C/T3DZgIKlLZeX1tRwRy306e+h/aeNJ
-	 ULSLrum8ZP6TuuWNWJ0eVsNnjPNDPZ2g/KYI1wEcgcF7t9sgtP8lJ0JcujB2qrR9mT
-	 9QLZmbFMdewbqi6QvLEVjJ1JhyUXbsUsySaDW2uhdPcbg+9ehgkkMNqXJGdv+GRaIT
-	 FCHFjiPl2PmFQJjRXoWUcVYUJgTMF3nNKHFJpwEQYk7BeEsWvjqJVTLO3NiFssFNl0
-	 QrhYN/K2ltx6g==
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-64ada2c30a1so1852337d50.0
-        for <llvm@lists.linux.dev>; Sat, 14 Feb 2026 09:10:31 -0800 (PST)
-X-Gm-Message-State: AOJu0YxNuL+ST//O440syo8zT3vf1IKVg7i04cz/hgpXpfKIzr/nxq/D
-	Rfc+sAS8GLeg+ZZETr/ZjO4G49NDhVz5s9NRZPjja8JrJbj2wIHXXEd+EnsEccwzCanySqOI9TK
-	O3e44t0+p47uxR6yGnvRTsFrOz02G1iA=
-X-Received: by 2002:a05:690e:d4e:b0:649:ec59:726c with SMTP id
- 956f58d0204a3-64c197ae855mr5024321d50.21.1771089030392; Sat, 14 Feb 2026
- 09:10:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gX14mhlF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771090364; x=1802626364;
+  h=date:from:to:cc:subject:message-id;
+  bh=Au1/pT582Lvke3JYWksZU3mMTndDsEbHMxz2REa/JVQ=;
+  b=gX14mhlF/nX6+njpwnuqUmcxi3p8asd99gSfb3g7g+hvhY9VWuN53NxA
+   jvHA/HIpqUDQkvPjmlkAu4P0aUa4UzIJSqKBQRKODTnwiJ15rOed6GsIo
+   c+QfLS7nB7njOQnR6rUYPMUH2PsM/YVnq+IQHn2PIHJC0RvxAtRxcZp2M
+   oFD4iJ1jsEp2txl4NNz+Dip1veJn8MbwcuzZiO/P3pGW6IiEDoWSrBMi8
+   fb3JwycZ/OUe6wZNV6u973i+mRXg1zGl/hDoUWx8knSn8Rg13SAEOuCqb
+   pK2o1T4L1LrYZzCWL5otanLB5vONf+eDLqJpUNHOgxHsWUC0w6uu7sNEF
+   Q==;
+X-CSE-ConnectionGUID: okUEtDAoSgGxG4im99Hsrw==
+X-CSE-MsgGUID: bxph2IvvR1qYdWJROnuQZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="71442028"
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="71442028"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 09:32:43 -0800
+X-CSE-ConnectionGUID: TItFRJc1Rg6hTJ1HEhZLHQ==
+X-CSE-MsgGUID: Xv0o3JtiSzCDetsEoYI0hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="242484986"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 14 Feb 2026 09:32:42 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vrJVX-00000000wnM-2Qod;
+	Sat, 14 Feb 2026 17:32:39 +0000
+Date: Sun, 15 Feb 2026 01:31:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:b4/firmare-acpm-counted 3/4]
+ drivers/firmware/samsung/exynos-acpm-dvfs.c:53:33: error: call to undeclared
+ function 'ARRAY_SIZE'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202602150151.N56eN2Xi-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202602142051.bzpo4KnU-lkp@intel.com>
-In-Reply-To: <202602142051.bzpo4KnU-lkp@intel.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Sat, 14 Feb 2026 18:10:19 +0100
-X-Gmail-Original-Message-ID: <CAD++jLmmnNP-x80wT5HGTar0VghXZxsU_kYdcsvZH2nkbtp2sA@mail.gmail.com>
-X-Gm-Features: AaiRm53yv5kV7GXyVXmNTFyw-Khswm9x0DSyWABtFBB7bPq-ax7mPkMES0RWrcg
-Message-ID: <CAD++jLmmnNP-x80wT5HGTar0VghXZxsU_kYdcsvZH2nkbtp2sA@mail.gmail.com>
-Subject: Re: [arm-integrator:b4/aarch64-clear-pages 2/2] make[7]: *** No rule
- to make target 'arch/arm64/kvm/hyp/nvhe/../../../lib/clear_page.nvhe.o',
- needed by 'arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o'.
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 14, 2026 at 1:54=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
+tree:   https://github.com/krzk/linux b4/firmare-acpm-counted
+head:   c446778ac8dbd96a1ec1a82ad39abdabb80594bf
+commit: a185cddcfe370dc12ac5ddeafebeb7a57bd42563 [3/4] firmware: exynos-acpm: Count number of commands in acpm_xfer
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260215/202602150151.N56eN2Xi-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260215/202602150151.N56eN2Xi-lkp@intel.com/reproduce)
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-inte=
-grator.git b4/aarch64-clear-pages
-> head:   a925ec351435c4da7f3ca8877af9e0aee81bcca5
-> commit: a925ec351435c4da7f3ca8877af9e0aee81bcca5 [2/2] arm64: Implement c=
-lear_pages()
-> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260=
-214/202602142051.bzpo4KnU-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd70=
-8029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260214/202602142051.bzpo4KnU-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202602142051.bzpo4KnU-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> make[7]: *** No rule to make target 'arch/arm64/kvm/hyp/nvhe/../../../=
-lib/clear_page.nvhe.o', needed by 'arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o'.
->    make[7]: Target 'arch/arm64/kvm/hyp/nvhe/' not remade because of error=
-s.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602150151.N56eN2Xi-lkp@intel.com/
 
-What is this?
+All errors (new ones prefixed by >>):
 
-It looks 100% like the kind of problem you get when you patch an assembly .=
-S
-file and there are old compile products left in the build tree, but
-Make does not
-have the idea to rebuild them.
+>> drivers/firmware/samsung/exynos-acpm-dvfs.c:53:33: error: call to undeclared function 'ARRAY_SIZE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      53 |         acpm_dvfs_set_xfer(&xfer, cmd, ARRAY_SIZE(cmd), acpm_chan_id, false);
+         |                                        ^
+   drivers/firmware/samsung/exynos-acpm-dvfs.c:73:33: error: call to undeclared function 'ARRAY_SIZE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      73 |         acpm_dvfs_set_xfer(&xfer, cmd, ARRAY_SIZE(cmd), acpm_chan_id, true);
+         |                                        ^
+   2 errors generated.
 
-Usuallt this is solved with make clean/mrproper.
 
-Yours,
-Linus Walleij
+vim +/ARRAY_SIZE +53 drivers/firmware/samsung/exynos-acpm-dvfs.c
+
+    44	
+    45	int acpm_dvfs_set_rate(const struct acpm_handle *handle,
+    46			       unsigned int acpm_chan_id, unsigned int clk_id,
+    47			       unsigned long rate)
+    48	{
+    49		struct acpm_xfer xfer = {0};
+    50		u32 cmd[4];
+    51	
+    52		acpm_dvfs_init_set_rate_cmd(cmd, clk_id, rate);
+  > 53		acpm_dvfs_set_xfer(&xfer, cmd, ARRAY_SIZE(cmd), acpm_chan_id, false);
+    54	
+    55		return acpm_do_xfer(handle, &xfer);
+    56	}
+    57	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
