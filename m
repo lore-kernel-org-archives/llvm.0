@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8828984A35;
-	Sat, 14 Feb 2026 15:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431E7221F1F;
+	Sat, 14 Feb 2026 16:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771083458; cv=none; b=lb03j4eiGe32hZAA2eHUuszzHdQuiW8b2uhZvZMIyUzG+uND0XgPNR2yal/tecioVHE0uvTZt3rXNtKFnoyUAvFcCVoiu9AY349bPA2ZXIHqo0YzPblosnxjlFu7YLZVqspPYg69dSVAIVU+bRo9qd6EiTIwZM37WbDZzHSCwEg=
+	t=1771085982; cv=none; b=dZGRCckv+dZkWZXiPQ2cdA57ctUCVit7s+NDXO90rSAKfkVptBLDgcW5z4/kVtu3EyOqaFThCaHNb/F5UHRRau/jiFOOgSy1JSxtJwvH+KdXjn04CAB1bspHHun8S32zJ4iJJCWSJFXlco95qojVzJiohyNLAWsLIXUeMNe6i/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771083458; c=relaxed/simple;
-	bh=19Ro5BnSXFj562sQ6jj1pDK460WHV/ysLgzGDuHDTXE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=PgfGEw5tiP8xSjbQJH+x3sK3MFvIqpci176KBcLfFgFmC67ShxFtIm9ZryIiW1kNAVsTfOjY03o+UHxUI0ql/pZuF8ELB099fAkXe8knxKAPMxtUpZ97Pq6pHf4YCkba5I8kYrYyPel07REPbDvZcIf1EUeP6MqKHDYv1Q12u1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lBVkVbUD; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1771085982; c=relaxed/simple;
+	bh=OcaDc7hfywvDYdnMkHJ+tAPVdLXfWDHXW4EoX88aoq8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UF3iIvpfK12pryig9gr5sF2tmjdA4Dea6yL0AojChhQieSNMS3acCxTzrmC+yuUgMvQP0ZsZx6kqd8BWbL37WMcPplSYjZlGXZ9Gt1Px4ikulT72TY7OXKpsbryqgxtMnoWGCgCabm6C65Lv5dovWKF33jEOgVILOdqCyyrYhNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D97CDKKw; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lBVkVbUD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D97CDKKw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771083456; x=1802619456;
+  t=1771085980; x=1802621980;
   h=date:from:to:cc:subject:message-id;
-  bh=19Ro5BnSXFj562sQ6jj1pDK460WHV/ysLgzGDuHDTXE=;
-  b=lBVkVbUD//ab+WeNKjiYI1Lo74DTZUqEhNzvo+vcCRUuthyNuCy4XI40
-   eMH+sSPCvgt7Fs/wxcarKD547tQ8BAi+eF+XA7wyXVDdP5JIFKTht0jM4
-   4EvMoMBaFc63HLBBOsamXplzKmw6+bkYIaHn6NMwTjuxpOH7juSCtvH4V
-   Mq6O9618ZQwLCmgtGMvNvWl0g4cSAtuphFTxx76h3ay8QWjlz7S+m2pta
-   PGH5ejM+MPfa4T9dBDu299YV4mGBBUYaDqvy/xfOI4UpKGEAAWJsZMu/E
-   IiJLAhaOjzl4c8R730sxhTNBFeuYIYvvBmlPS7oJa4N+39jFLHtlCpxDi
-   Q==;
-X-CSE-ConnectionGUID: oq/med4ISLmHSJL1Qu7hIg==
-X-CSE-MsgGUID: OljQFlopRumj8L3rrXoQdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="82965595"
+  bh=OcaDc7hfywvDYdnMkHJ+tAPVdLXfWDHXW4EoX88aoq8=;
+  b=D97CDKKwxbvf4Yxb6T9nolJM8b5kEUT42o3QS31SvIdOAiOAB66W3ZH5
+   +Y+Km5qPM7hxDih2Pvej8dR0d6+Kt5daNUtLpDMJ/DgEtFrCR8t51ycks
+   ctmKocvvSKEg4xsDl1UVY1hBu3oPHbLpd3YnKwxoGWtBs2en89LgHSzrK
+   WXeFzDbK2idMms3O2WcAm0R73bAMpjvI/s6LPnQNxX+I35tbuyCqY6YvX
+   sBSbOhzg64mrgdsj9t4bxtpdmIRqQCxZ3CFxqceVUXP7aI2CAf9Qop8AL
+   vd2O3MU5hUQw0J+krYbpiYHRvYyXcg5in0sgB9zE1iNZPI1pVxMg45WTg
+   g==;
+X-CSE-ConnectionGUID: YPiWhFUoR2O1eM9556UUsA==
+X-CSE-MsgGUID: BwFPmSaZS52KYGclUUefCQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="71440262"
 X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="82965595"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 07:37:36 -0800
-X-CSE-ConnectionGUID: fp27VHTsRHKUBv5vYVc3qg==
-X-CSE-MsgGUID: y6JKlC8MSfu8CDJ2SmqYJQ==
+   d="scan'208";a="71440262"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 08:19:40 -0800
+X-CSE-ConnectionGUID: Zw9nVcoTTKmxOj6ahjUP3w==
+X-CSE-MsgGUID: 1sAOVhG4SlCldEMNBitIug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="218160550"
+   d="scan'208";a="250862262"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 14 Feb 2026 07:37:34 -0800
+  by orviesa001.jf.intel.com with ESMTP; 14 Feb 2026 08:19:38 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vrHi7-00000000wfa-2o9J;
-	Sat, 14 Feb 2026 15:37:31 +0000
-Date: Sat, 14 Feb 2026 23:37:16 +0800
+	id 1vrIMp-00000000wiy-3Rgy;
+	Sat, 14 Feb 2026 16:19:35 +0000
+Date: Sun, 15 Feb 2026 00:19:23 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kiryl Shutsemau <kas@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kas:pte_size 13/19] include/linux/mm.h:1809:35: warning:
- operator '<<' has lower precedence than '+'; '+' will be evaluated first
-Message-ID: <202602142324.QVDVb48H-lkp@intel.com>
+Subject: [kas:pte_size 17/19] ld.lld: error:
+ ./arch/loongarch/kernel/vmlinux.lds:19: symbol not found: PTE_SIZE
+Message-ID: <202602150040.nZyumlPP-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,196 +59,36 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
+Hi Kiryl,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git pte_size
 head:   c8cade07a55a710c48535164d08894878eeee29f
-commit: 3f5d0ecef190d94f72a32f822ec40b4330db8dca [13/19] mm: Introduce mkpte() and folio_mkpte()
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260214/202602142324.QVDVb48H-lkp@intel.com/config)
+commit: de93b4195b8a9ad80cd71e4e05bbe3e2a3c14ff8 [17/19] treewide: The rest of the owl
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260215/202602150040.nZyumlPP-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602142324.QVDVb48H-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260215/202602150040.nZyumlPP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602142324.QVDVb48H-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602150040.nZyumlPP-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/core.c:10:
-   In file included from include/linux/highmem.h:10:
->> include/linux/mm.h:1809:35: warning: operator '<<' has lower precedence than '+'; '+' will be evaluated first [-Wshift-op-parentheses]
-    1809 |         return pfn_pte(page_to_pfn(page) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   include/linux/mm.h:1809:35: note: place parentheses around the '+' expression to silence this warning
-    1809 |         return pfn_pte(page_to_pfn(page) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   In file included from kernel/sched/core.c:10:
-   In file included from include/linux/highmem.h:10:
-   include/linux/mm.h:1828:34: warning: operator '<<' has lower precedence than '+'; '+' will be evaluated first [-Wshift-op-parentheses]
-    1828 |         return pfn_pte(folio_pfn(folio) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                                     ^~~ ~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   include/linux/mm.h:1828:34: note: place parentheses around the '+' expression to silence this warning
-    1828 |         return pfn_pte(folio_pfn(folio) + off, pgprot);
-         |                        ~~~~~~~~~~~~~~~~~^~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                                     ^~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   kernel/sched/core.c:2445:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-    2445 | static inline bool rq_has_pinned_tasks(struct rq *rq)
-         |                    ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:5795:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-    5795 | static inline void sched_tick_stop(int cpu) { }
-         |                    ^~~~~~~~~~~~~~~
-   kernel/sched/core.c:6514:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6514 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:6515:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-    6515 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:8305:20: warning: unused function 'balance_hotplug_wait' [-Wunused-function]
-    8305 | static inline void balance_hotplug_wait(void)
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   7 warnings generated.
---
-   In file included from kernel/sched/fair.c:27:
-   In file included from include/linux/mm_api.h:1:
->> include/linux/mm.h:1809:35: warning: operator '<<' has lower precedence than '+'; '+' will be evaluated first [-Wshift-op-parentheses]
-    1809 |         return pfn_pte(page_to_pfn(page) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   include/linux/mm.h:1809:35: note: place parentheses around the '+' expression to silence this warning
-    1809 |         return pfn_pte(page_to_pfn(page) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   In file included from kernel/sched/fair.c:27:
-   In file included from include/linux/mm_api.h:1:
-   include/linux/mm.h:1828:34: warning: operator '<<' has lower precedence than '+'; '+' will be evaluated first [-Wshift-op-parentheses]
-    1828 |         return pfn_pte(folio_pfn(folio) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                                     ^~~ ~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   include/linux/mm.h:1828:34: note: place parentheses around the '+' expression to silence this warning
-    1828 |         return pfn_pte(folio_pfn(folio) + off, pgprot);
-         |                        ~~~~~~~~~~~~~~~~~^~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                                     ^~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   kernel/sched/fair.c:482:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
-     482 | static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:503:19: warning: unused function 'tg_is_idle' [-Wunused-function]
-     503 | static inline int tg_is_idle(struct task_group *tg)
-         |                   ^~~~~~~~~~
-   kernel/sched/fair.c:3997:20: warning: unused function 'load_avg_is_decayed' [-Wunused-function]
-    3997 | static inline bool load_avg_is_decayed(struct sched_avg *sa)
-         |                    ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6640:20: warning: unused function 'sync_throttle' [-Wunused-function]
-    6640 | static inline void sync_throttle(struct task_group *tg, int cpu) {}
-         |                    ^~~~~~~~~~~~~
-   kernel/sched/fair.c:6664:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
-    6664 | static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
-         |                                     ^~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6668:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
-    6668 | static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:9986:20: warning: unused function 'check_misfit_status' [-Wunused-function]
-     9986 | static inline bool check_misfit_status(struct rq *rq)
-          |                    ^~~~~~~~~~~~~~~~~~~
-   9 warnings generated.
---
-   In file included from kernel/sched/build_policy.c:19:
-   In file included from include/linux/sched/isolation.h:5:
-   In file included from include/linux/cpuset.h:17:
->> include/linux/mm.h:1809:35: warning: operator '<<' has lower precedence than '+'; '+' will be evaluated first [-Wshift-op-parentheses]
-    1809 |         return pfn_pte(page_to_pfn(page) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   include/linux/mm.h:1809:35: note: place parentheses around the '+' expression to silence this warning
-    1809 |         return pfn_pte(page_to_pfn(page) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   In file included from kernel/sched/build_policy.c:19:
-   In file included from include/linux/sched/isolation.h:5:
-   In file included from include/linux/cpuset.h:17:
-   include/linux/mm.h:1828:34: warning: operator '<<' has lower precedence than '+'; '+' will be evaluated first [-Wshift-op-parentheses]
-    1828 |         return pfn_pte(folio_pfn(folio) + off, pgprot);
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                                     ^~~ ~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   include/linux/mm.h:1828:34: note: place parentheses around the '+' expression to silence this warning
-    1828 |         return pfn_pte(folio_pfn(folio) + off, pgprot);
-         |                        ~~~~~~~~~~~~~~~~~^~~~~
-   arch/hexagon/include/asm/pgtable.h:340:37: note: expanded from macro 'pfn_pte'
-     340 | #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
-         |                                     ^~~
-   arch/hexagon/include/asm/page.h:71:36: note: expanded from macro '__pte'
-      71 | #define __pte(x)       ((pte_t) { (x) })
-         |                                    ^
-   2 warnings generated.
-
-
-vim +1809 include/linux/mm.h
-
-  1803	
-  1804	#ifdef CONFIG_MMU
-  1805	static inline pte_t mkpte(struct page *page, unsigned long pteoff, pgprot_t pgprot)
-  1806	{
-  1807		unsigned long off = pteoff & ((1UL << (PG_SHIFT - PTE_SHIFT)) - 1);
-  1808	
-> 1809		return pfn_pte(page_to_pfn(page) + off, pgprot);
-  1810	}
-  1811	
+>> ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:19: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:61: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:61: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:61: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:73: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:73: symbol not found: PTE_SIZE
+>> ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:19: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:61: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:61: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:61: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:73: symbol not found: PTE_SIZE
+   ld.lld: error: ./arch/loongarch/kernel/vmlinux.lds:73: symbol not found: PTE_SIZE
 
 -- 
 0-DAY CI Kernel Test Service
