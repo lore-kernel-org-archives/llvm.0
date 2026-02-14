@@ -1,225 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AAA21ADB7;
-	Sat, 14 Feb 2026 01:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABA02E5B19;
+	Sat, 14 Feb 2026 04:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771031145; cv=none; b=rG47SbdjoNrzXAyNHwkLQpGWCc/b9oViJYGNAbf+N2dwRMwuPUh9k4fh5yL4PWH2hhbJQeDNJZwQVLa59ak9uoCr5sQ3Ok8HPr5S+klZ+QwmWwwFGwAFkgw6CA0mjap674UCmaeUaqhsqz+SkWMwtdfuxl/WdyhPWsHA0TtTiJs=
+	t=1771043655; cv=none; b=aQiOzaNS2qddmInAxDmh5esPsSZ4kqGQ5uJ5gMnBLe0jp7A+v6eHBFjy71OOiC55LCt4PUodB9bWNr571U2y4SEU8ziU7Q3n1K38tuGGTd7xDF5N/Xqo/FfQ7PdW8xcnmXhTqrqPXnOyF2kWeHvOMcQWyWkEqtim3QW7woUq5rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771031145; c=relaxed/simple;
-	bh=Mn2BvRC/v2EumkTXNegBNbOaWJXMHSR3yTdmbtsVVVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aHV6KRD6Yq85QmrEZkHnuCr+woaYfVY5WToQHSKfqA1AcGrZcb9WU9enNznCXKsZBfbKdfjhRfdJcjGreni8OgKGcTcZq8cOkVyvUs4eSFNfej1usChrCXLEanRAntmyi0phSCgBj0eqxBDxHpWPfAbkdXOMWMbiIfrHVmQIey8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eu2AK6N4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771043655; c=relaxed/simple;
+	bh=aiUZzn44P7TsJTdKDUDcfUm2UCHqM/TussKifHEIUEo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r/RAuMgkxuz72ycju1DWXZDsDIrBgT3NnpCKcmKBofMR/GsoLDhDX3Khto21vs7LvaWbztZ9bnZDukTfE6CwT4juw4AvmeV0Dc7YlKAoh2nNg6Wbfb2vA9IfEkUO8dDG4rvKwTtdVRoWRoT0hsZleRwsvBFnqPX6z5E28SK2Y4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cRPviRny; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eu2AK6N4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30811C116C6;
-	Sat, 14 Feb 2026 01:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771031145;
-	bh=Mn2BvRC/v2EumkTXNegBNbOaWJXMHSR3yTdmbtsVVVQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Eu2AK6N4wprzWLSEJhfiNJar0dXZ45qW5mPxtjhHvGIjpZQl35QQDOPnSHjJjs+tw
-	 DGgq2xLsApewINY9a0cW3UhGjuLUd184g66dwQHxRJuzKX2/6tW9YEVh9uXC1BDFoA
-	 AXW5iRNHCg51eF6kdhBETUbXd90nJf9TbgOp0tQz1BU0u5pdXRDA+lLWKXunGSGwLF
-	 q/MPy7IgZLHSm0qNi+jEFezBSFs0o1ZEAOVzTOnjEl1z4+KHwTqDTTUBzCNcmQlYcR
-	 DHeDULiKFg6pKnZDEA2FNC1wB7opoAjCjresxzUWF8enjBUcpPHmMn1ZulJv4/JIsF
-	 4a552FgU8QQkg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nicolas Schier <nsc@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	hansg@kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.19-5.10] virt: vbox: uapi: Mark inner unions in packed structs as packed
-Date: Fri, 13 Feb 2026 19:59:22 -0500
-Message-ID: <20260214010245.3671907-82-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260214010245.3671907-1-sashal@kernel.org>
-References: <20260214010245.3671907-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cRPviRny"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771043653; x=1802579653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aiUZzn44P7TsJTdKDUDcfUm2UCHqM/TussKifHEIUEo=;
+  b=cRPviRnyF3LysNllN5QVxzwFiyvpVKgiGCyZ8EXqW46qJ91IyoGDw2dD
+   dOWI1InY9+kq/JLCZBBVAvXU3mXl0/NtDm/Ea4mSJPIwxbXjxngMtSu9O
+   EqCawiL18GswoA48z/sgY1N5bX/xa8CUDnsLWxrURQXtWrUaQUTgYb31f
+   D4S97o2iaRAaQAg8m/N3IhCAGyeSpLlzmEa3NaY1TsaiHHLNsbRd/YtYU
+   xhxuiK9gxqHBAcoYAxYrrEHjo1132cAXQPABRTMXJMcaZIkELcoNyPB98
+   m/HxXZO57tXv3AcKfHT08GzQFynblDp2DXSVpOk9sFYz4U8o0pXKOU9Dn
+   A==;
+X-CSE-ConnectionGUID: gn3OU56QQv+ynxS81VpQ4Q==
+X-CSE-MsgGUID: Z6iw0UvPQ42GDyd4OcuKPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="72128179"
+X-IronPort-AV: E=Sophos;i="6.21,289,1763452800"; 
+   d="scan'208";a="72128179"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 20:34:12 -0800
+X-CSE-ConnectionGUID: OBzX8pdZRoaYiQ6W1GROvA==
+X-CSE-MsgGUID: XVpvDw/qRjaWeOh0OBdGcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,289,1763452800"; 
+   d="scan'208";a="217215968"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 13 Feb 2026 20:34:10 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vr7M8-00000000wDg-0RY8;
+	Sat, 14 Feb 2026 04:34:08 +0000
+Date: Sat, 14 Feb 2026 12:33:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>, linux-cxl@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com,
+	dan.j.williams@intel.com
+Subject: Re: [PATCH v3 1/2] cxl: Move devm_cxl_add_nvdimm_bridge() to
+ cxl_pmem.ko
+Message-ID: <202602141202.umHQ46td-lkp@intel.com>
+References: <20260213224038.549798-2-dave.jiang@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260213224038.549798-2-dave.jiang@intel.com>
 
-From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Hi Dave,
 
-[ Upstream commit c25d01e1c4f2d43f47af87c00e223f5ca7c71792 ]
+kernel test robot noticed the following build warnings:
 
-The unpacked unions within a packed struct generates alignment warnings
-on clang for 32-bit ARM:
+[auto build test WARNING on 63fbf275fa9f18f7020fb8acf54fa107e51d0f23]
 
-./usr/include/linux/vbox_vmmdev_types.h:239:4: error: field u within 'struct vmmdev_hgcm_function_parameter32'
-  is less aligned than 'union (unnamed union at ./usr/include/linux/vbox_vmmdev_types.h:223:2)'
-  and is usually due to 'struct vmmdev_hgcm_function_parameter32' being packed,
-  which can lead to unaligned accesses [-Werror,-Wunaligned-access]
-     239 |         } u;
-         |           ^
+url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Jiang/cxl-Move-devm_cxl_add_nvdimm_bridge-to-cxl_pmem-ko/20260214-064242
+base:   63fbf275fa9f18f7020fb8acf54fa107e51d0f23
+patch link:    https://lore.kernel.org/r/20260213224038.549798-2-dave.jiang%40intel.com
+patch subject: [PATCH v3 1/2] cxl: Move devm_cxl_add_nvdimm_bridge() to cxl_pmem.ko
+config: powerpc64-randconfig-002-20260214 (https://download.01.org/0day-ci/archive/20260214/202602141202.umHQ46td-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602141202.umHQ46td-lkp@intel.com/reproduce)
 
-./usr/include/linux/vbox_vmmdev_types.h:254:6: error: field u within
-  'struct vmmdev_hgcm_function_parameter64::(anonymous union)::(unnamed at ./usr/include/linux/vbox_vmmdev_types.h:249:3)'
-  is less aligned than 'union (unnamed union at ./usr/include/linux/vbox_vmmdev_types.h:251:4)' and is usually due to
-  'struct vmmdev_hgcm_function_parameter64::(anonymous union)::(unnamed at ./usr/include/linux/vbox_vmmdev_types.h:249:3)'
-  being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602141202.umHQ46td-lkp@intel.com/
 
-With the recent changes to compile-test the UAPI headers in more cases,
-these warning in combination with CONFIG_WERROR breaks the build.
+All warnings (new ones prefixed by >>):
 
-Fix the warnings.
+>> Warning: drivers/cxl/pmem.c:24 expecting prototype for __devm_cxl_add_nvdimm_bridge(). Prototype was for devm_cxl_add_nvdimm_bridge() instead
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202512140314.DzDxpIVn-lkp@intel.com/
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://lore.kernel.org/linux-kbuild/20260110-uapi-test-disable-headers-arm-clang-unaligned-access-v1-1-b7b0fa541daa@kernel.org/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-kbuild/29b2e736-d462-45b7-a0a9-85f8d8a3de56@app.fastmail.com/
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Tested-by: Nicolas Schier <nsc@kernel.org>
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Link: https://patch.msgid.link/20260115-kbuild-alignment-vbox-v1-2-076aed1623ff@linutronix.de
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-## Analysis of Commit: Mark inner unions in packed structs as packed
-
-### 1. COMMIT MESSAGE ANALYSIS
-
-The commit fixes **build warnings that become build errors** when
-`CONFIG_WERROR` is enabled, specifically on 32-bit ARM with clang. The
-key phrase is:
-
-> "With the recent changes to compile-test the UAPI headers in more
-cases, these warning in combination with CONFIG_WERROR breaks the
-build."
-
-This is explicitly a **build fix**. The commit has strong credibility
-signals:
-- **Two Reported-by tags**: kernel test robot and Nathan Chancellor (a
-  prominent kernel build/clang maintainer)
-- **Tested-by and Reviewed-by**: Nicolas Schier
-- **Acked-by**: Greg Kroah-Hartman (stable tree maintainer himself)
-- **Suggested-by**: Arnd Bergmann (architecture/cross-compilation
-  expert)
-
-### 2. CODE CHANGE ANALYSIS
-
-The change is minimal and purely mechanical:
-
-1. In `struct vmmdev_hgcm_function_parameter32`: The inner `union`
-   member `u` is marked `__packed` (line: `} __packed u;` replacing `}
-   u;`)
-2. In `struct vmmdev_hgcm_function_parameter64`: An inner `union` member
-   `u` within the `pointer` struct is marked `__packed` (line: `}
-   __packed u;` replacing `} u;`)
-
-These are UAPI header changes, meaning they affect the kernel-userspace
-ABI definition. However, since the outer structs are already `__packed`,
-adding `__packed` to the inner unions doesn't change the actual memory
-layout — it just makes the packing attribute explicit to silence the
-compiler warning. The `VMMDEV_ASSERT_SIZE` macros at the end of each
-struct definition confirm that the sizes remain unchanged (4 + 8 for
-32-bit, 4 + 12 for 64-bit).
-
-### 3. CLASSIFICATION
-
-This is a **build fix** — one of the explicitly allowed exception
-categories for stable backports. Build fixes that prevent compilation
-are critical for users who need to build the kernel.
-
-### 4. SCOPE AND RISK ASSESSMENT
-
-- **Lines changed**: 3 lines (two additions of `__packed`, one
-  replacement)
-- **Files touched**: 1 file (`include/uapi/linux/vbox_vmmdev_types.h`)
-- **Risk**: Extremely low. The `__packed` attribute on inner unions
-  within already-packed structs is redundant in terms of layout but
-  silences legitimate compiler warnings. The `ASSERT_SIZE` macros
-  guarantee no ABI change.
-- **Complexity**: Trivial
-
-### 5. USER IMPACT
-
-Without this fix, users building the kernel for 32-bit ARM with clang
-and `CONFIG_WERROR=y` will get a build failure. This is a real
-configuration used by:
-- Android builds (commonly use clang)
-- Embedded ARM systems
-- CI/build testing infrastructure (kernel test robot hit this)
-
-### 6. STABILITY INDICATORS
-
-- Tested-by, Reviewed-by, Acked-by from well-known kernel developers
-- The fix is obviously correct — it just propagates the `__packed`
-  attribute consistently
-- No functional behavior change whatsoever
-
-### 7. DEPENDENCY CHECK
-
-The commit message mentions "recent changes to compile-test the UAPI
-headers in more cases" which triggered this. However, this fix is
-standalone — the `__packed` attribute is correct regardless of whether
-those compile-test changes are present. Even without the compile-test
-changes, this fix is harmless and correct, and the warning could be
-triggered by other build configurations.
-
-### Conclusion
-
-This is a textbook stable backport candidate:
-- It's a **build fix** (explicitly allowed category)
-- It's **obviously correct** (adding `__packed` to unions inside packed
-  structs)
-- It's **tiny** (3 lines, 1 file)
-- It has **zero risk** of runtime regression (no behavior change, sizes
-  verified by assert macros)
-- It has **strong review** (Acked-by Greg KH, Reviewed/Tested by others)
-- It fixes a **real build failure** reported by multiple people
-- It affects a **UAPI header** used across architectures
-
-**YES**
-
- include/uapi/linux/vbox_vmmdev_types.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/vbox_vmmdev_types.h b/include/uapi/linux/vbox_vmmdev_types.h
-index 6073858d52a2e..11f3627c3729b 100644
---- a/include/uapi/linux/vbox_vmmdev_types.h
-+++ b/include/uapi/linux/vbox_vmmdev_types.h
-@@ -236,7 +236,7 @@ struct vmmdev_hgcm_function_parameter32 {
- 			/** Relative to the request header. */
- 			__u32 offset;
- 		} page_list;
--	} u;
-+	} __packed u;
- } __packed;
- VMMDEV_ASSERT_SIZE(vmmdev_hgcm_function_parameter32, 4 + 8);
- 
-@@ -251,7 +251,7 @@ struct vmmdev_hgcm_function_parameter64 {
- 			union {
- 				__u64 phys_addr;
- 				__u64 linear_addr;
--			} u;
-+			} __packed u;
- 		} __packed pointer;
- 		struct {
- 			/** Size of the buffer described by the page list. */
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
