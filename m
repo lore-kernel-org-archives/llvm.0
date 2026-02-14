@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814A9194098;
-	Sat, 14 Feb 2026 01:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AAA21ADB7;
+	Sat, 14 Feb 2026 01:05:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771031118; cv=none; b=b9/LdTlInQlZPpPxpz31axZc6kMI40+H1dDKtvR/hUizz1AQyQFtAWBZinrrCgWRmjjui1ByK59yWbqb9rLmpftzwtHJgPdaimeQVC6bDTUJVML4QuvHdnFJVjWN+y/BWDVfklKlg4Sry1NWMFYGZYkLnx6EDPWK2k0dihh6Ehs=
+	t=1771031145; cv=none; b=rG47SbdjoNrzXAyNHwkLQpGWCc/b9oViJYGNAbf+N2dwRMwuPUh9k4fh5yL4PWH2hhbJQeDNJZwQVLa59ak9uoCr5sQ3Ok8HPr5S+klZ+QwmWwwFGwAFkgw6CA0mjap674UCmaeUaqhsqz+SkWMwtdfuxl/WdyhPWsHA0TtTiJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771031118; c=relaxed/simple;
-	bh=LQBMBtLQTmfpok0qH5kG1AQJ5d8akvZJuNwR5/VKM8Y=;
+	s=arc-20240116; t=1771031145; c=relaxed/simple;
+	bh=Mn2BvRC/v2EumkTXNegBNbOaWJXMHSR3yTdmbtsVVVQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n6izlnoU9rWrAIbe9X9Xg6+/zfctHUey5Yo9LXYzcunRlxHMnEF3p4iK+eGpmeVjDLNjD+canlAqTXNV4gdex1RedTopq6lAd70Ok/Hckc31rB/slGzRuUuT7rWmrxMyTTTTj2V5RlVZ8cTgQBcJLu0KJPQWZLOFQxIV8DZR0ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KmEDFFU0; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=aHV6KRD6Yq85QmrEZkHnuCr+woaYfVY5WToQHSKfqA1AcGrZcb9WU9enNznCXKsZBfbKdfjhRfdJcjGreni8OgKGcTcZq8cOkVyvUs4eSFNfej1usChrCXLEanRAntmyi0phSCgBj0eqxBDxHpWPfAbkdXOMWMbiIfrHVmQIey8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eu2AK6N4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KmEDFFU0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547CBC116C6;
-	Sat, 14 Feb 2026 01:05:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eu2AK6N4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30811C116C6;
+	Sat, 14 Feb 2026 01:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771031118;
-	bh=LQBMBtLQTmfpok0qH5kG1AQJ5d8akvZJuNwR5/VKM8Y=;
+	s=k20201202; t=1771031145;
+	bh=Mn2BvRC/v2EumkTXNegBNbOaWJXMHSR3yTdmbtsVVVQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KmEDFFU0kfvbbin+im8mXUlvKCxfKKYnMdEW05lBVJ/dcMk4eNoRl5xPkTEzbkxDs
-	 aTL3EhSO3KTU4SDgamPR/I5mmBcOen6x4TdfrLVyKDfdr/LWwOoaeyAjgiWi5HdQu1
-	 baZfP741e5MhI9avZ+kFEa0opGCclGtzEO1w/jstFzTNBf/Kus7NdV+e+fHNEO3a/F
-	 ggtdWFd9C5RSB9LdKDosZsnGH3PiMwqEUP8wBjvqWYVibE8tTUQJiM+MOZ4LdnQ6Jk
-	 DT9bL8GF7eCl2Cm5u8hho3wUnHz2xTqaLUR7Eq0H4O3bt//FcdcuCR5tDLtNOeJk5K
-	 WyHCM+ecVPUCQ==
+	b=Eu2AK6N4wprzWLSEJhfiNJar0dXZ45qW5mPxtjhHvGIjpZQl35QQDOPnSHjJjs+tw
+	 DGgq2xLsApewINY9a0cW3UhGjuLUd184g66dwQHxRJuzKX2/6tW9YEVh9uXC1BDFoA
+	 AXW5iRNHCg51eF6kdhBETUbXd90nJf9TbgOp0tQz1BU0u5pdXRDA+lLWKXunGSGwLF
+	 q/MPy7IgZLHSm0qNi+jEFezBSFs0o1ZEAOVzTOnjEl1z4+KHwTqDTTUBzCNcmQlYcR
+	 DHeDULiKFg6pKnZDEA2FNC1wB7opoAjCjresxzUWF8enjBUcpPHmMn1ZulJv4/JIsF
+	 4a552FgU8QQkg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>,
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	kernel test robot <lkp@intel.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nsc@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	maintainers@bluecherrydvr.com,
-	andrey_utkin@fastmail.com,
-	ismael@iodev.co.uk,
-	linux-media@vger.kernel.org,
+	hansg@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.19-5.10] media: solo6x10: Check for out of bounds chip_id
-Date: Fri, 13 Feb 2026 19:59:09 -0500
-Message-ID: <20260214010245.3671907-69-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.19-5.10] virt: vbox: uapi: Mark inner unions in packed structs as packed
+Date: Fri, 13 Feb 2026 19:59:22 -0500
+Message-ID: <20260214010245.3671907-82-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260214010245.3671907-1-sashal@kernel.org>
 References: <20260214010245.3671907-1-sashal@kernel.org>
@@ -50,191 +50,176 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.19
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Kees Cook <kees@kernel.org>
+From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-[ Upstream commit 0fdf6323c35a134f206dcad5babb4ff488552076 ]
+[ Upstream commit c25d01e1c4f2d43f47af87c00e223f5ca7c71792 ]
 
-Clang with CONFIG_UBSAN_SHIFT=y noticed a condition where a signed type
-(literal "1" is an "int") could end up being shifted beyond 32 bits,
-so instrumentation was added (and due to the double is_tw286x() call
-seen via inlining), Clang decides the second one must now be undefined
-behavior and elides the rest of the function[1]. This is a known problem
-with Clang (that is still being worked on), but we can avoid the entire
-problem by actually checking the existing max chip ID, and now there is
-no runtime instrumentation added at all since everything is known to be
-within bounds.
+The unpacked unions within a packed struct generates alignment warnings
+on clang for 32-bit ARM:
 
-Additionally use an unsigned value for the shift to remove the
-instrumentation even without the explicit bounds checking.
+./usr/include/linux/vbox_vmmdev_types.h:239:4: error: field u within 'struct vmmdev_hgcm_function_parameter32'
+  is less aligned than 'union (unnamed union at ./usr/include/linux/vbox_vmmdev_types.h:223:2)'
+  and is usually due to 'struct vmmdev_hgcm_function_parameter32' being packed,
+  which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+     239 |         } u;
+         |           ^
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/2144 [1]
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
-[hverkuil: fix checkpatch warning for is_tw286x]
+./usr/include/linux/vbox_vmmdev_types.h:254:6: error: field u within
+  'struct vmmdev_hgcm_function_parameter64::(anonymous union)::(unnamed at ./usr/include/linux/vbox_vmmdev_types.h:249:3)'
+  is less aligned than 'union (unnamed union at ./usr/include/linux/vbox_vmmdev_types.h:251:4)' and is usually due to
+  'struct vmmdev_hgcm_function_parameter64::(anonymous union)::(unnamed at ./usr/include/linux/vbox_vmmdev_types.h:249:3)'
+  being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+
+With the recent changes to compile-test the UAPI headers in more cases,
+these warning in combination with CONFIG_WERROR breaks the build.
+
+Fix the warnings.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512140314.DzDxpIVn-lkp@intel.com/
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://lore.kernel.org/linux-kbuild/20260110-uapi-test-disable-headers-arm-clang-unaligned-access-v1-1-b7b0fa541daa@kernel.org/
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-kbuild/29b2e736-d462-45b7-a0a9-85f8d8a3de56@app.fastmail.com/
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Tested-by: Nicolas Schier <nsc@kernel.org>
+Reviewed-by: Nicolas Schier <nsc@kernel.org>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://patch.msgid.link/20260115-kbuild-alignment-vbox-v1-2-076aed1623ff@linutronix.de
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-## Analysis of media: solo6x10: Check for out of bounds chip_id
+## Analysis of Commit: Mark inner unions in packed structs as packed
 
-### 1. Commit Message Analysis
+### 1. COMMIT MESSAGE ANALYSIS
 
-The commit addresses two related issues:
-- **UBSAN shift sanitizer warning**: With `CONFIG_UBSAN_SHIFT=y`, Clang
-  detects that a signed `int` literal `1` could be shifted beyond 32
-  bits in the `is_tw286x()` macro, which is undefined behavior (UB).
-- **Clang miscompilation due to UB**: Because of the UB, Clang's
-  optimizer concludes the second `is_tw286x()` call (after inlining)
-  must be UB and **elides the rest of the function**. This means code is
-  silently dropped by the compiler.
-- The fix adds explicit bounds checking (`chip_num >= TW_NUM_CHIP`) and
-  changes the shift to use an unsigned value (`1U`).
+The commit fixes **build warnings that become build errors** when
+`CONFIG_WERROR` is enabled, specifically on 32-bit ARM with clang. The
+key phrase is:
 
-### 2. Code Change Analysis
+> "With the recent changes to compile-test the UAPI headers in more
+cases, these warning in combination with CONFIG_WERROR breaks the
+build."
 
-Three distinct changes:
+This is explicitly a **build fix**. The commit has strong credibility
+signals:
+- **Two Reported-by tags**: kernel test robot and Nathan Chancellor (a
+  prominent kernel build/clang maintainer)
+- **Tested-by and Reviewed-by**: Nicolas Schier
+- **Acked-by**: Greg Kroah-Hartman (stable tree maintainer himself)
+- **Suggested-by**: Arnd Bergmann (architecture/cross-compilation
+  expert)
 
-**a) Macro fix (`1` → `1U` and added parentheses):**
-```c
--#define is_tw286x(__solo, __id) (!(__solo->tw2815 & (1 << __id)))
-+#define is_tw286x(__solo, __id) (!((__solo)->tw2815 & (1U << (__id))))
-```
-- Changes signed shift to unsigned, eliminating undefined behavior for
-  shifts ≥ 31
-- Adds proper parenthesization (macro hygiene)
-- This is a real UB fix — shifting a signed `1` by ≥ 31 bits is
-  undefined in C
+### 2. CODE CHANGE ANALYSIS
 
-**b) Bounds check in `tw28_set_ctrl_val()`:**
-```c
-+       if (chip_num >= TW_NUM_CHIP)
-+               return -EINVAL;
-```
-- `chip_num` is derived from `ch / 4` where `ch` is a `u8` parameter
-- `TW_NUM_CHIP` defines the maximum number of chips
-- Without this check, an out-of-bounds `chip_num` would cause UB in the
-  `is_tw286x()` shift and potentially out-of-bounds array access in
-  `TW_CHIP_OFFSET_ADDR()`
+The change is minimal and purely mechanical:
 
-**c) Same bounds check in `tw28_get_ctrl_val()`:**
-```c
-+       if (chip_num >= TW_NUM_CHIP)
-+               return -EINVAL;
-```
-- Same protection for the read path
+1. In `struct vmmdev_hgcm_function_parameter32`: The inner `union`
+   member `u` is marked `__packed` (line: `} __packed u;` replacing `}
+   u;`)
+2. In `struct vmmdev_hgcm_function_parameter64`: An inner `union` member
+   `u` within the `pointer` struct is marked `__packed` (line: `}
+   __packed u;` replacing `} u;`)
 
-### 3. Bug Classification
+These are UAPI header changes, meaning they affect the kernel-userspace
+ABI definition. However, since the outer structs are already `__packed`,
+adding `__packed` to the inner unions doesn't change the actual memory
+layout — it just makes the packing attribute explicit to silence the
+compiler warning. The `VMMDEV_ASSERT_SIZE` macros at the end of each
+struct definition confirm that the sizes remain unchanged (4 + 8 for
+32-bit, 4 + 12 for 64-bit).
 
-This fixes **undefined behavior** that leads to **compiler-caused
-miscompilation**. The Clang compiler, upon detecting that UB is
-possible, optimizes away portions of the function. This is not a
-theoretical concern — the linked ClangBuiltLinux issue (#2144) documents
-the actual problem.
+### 3. CLASSIFICATION
 
-The consequences of the UB:
-1. **Silent code elision**: The compiler removes code paths it deems
-   unreachable due to UB, meaning the function silently does nothing in
-   some cases
-2. **Potential out-of-bounds access**: Without bounds checking, invalid
-   `chip_id` values cause shifts beyond type width
-3. **UBSAN runtime warnings**: Noise in kernel logs for users with
-   sanitizers enabled
+This is a **build fix** — one of the explicitly allowed exception
+categories for stable backports. Build fixes that prevent compilation
+are critical for users who need to build the kernel.
 
-### 4. Scope and Risk Assessment
+### 4. SCOPE AND RISK ASSESSMENT
 
-- **Files changed**: 1 file (`solo6x10-tw28.c`)
-- **Lines changed**: ~6 lines of actual logic (macro change + 2 bounds
-  checks)
-- **Risk**: Very low — the macro change preserves semantics while
-  removing UB; bounds checks add early returns for invalid inputs
-- **Subsystem**: Media PCI driver (solo6x10) — contained, no core kernel
-  impact
-- **Could break something**: Extremely unlikely — the macro change only
-  affects behavior for previously-UB cases, and the bounds checks only
-  reject invalid chip IDs
+- **Lines changed**: 3 lines (two additions of `__packed`, one
+  replacement)
+- **Files touched**: 1 file (`include/uapi/linux/vbox_vmmdev_types.h`)
+- **Risk**: Extremely low. The `__packed` attribute on inner unions
+  within already-packed structs is redundant in terms of layout but
+  silences legitimate compiler warnings. The `ASSERT_SIZE` macros
+  guarantee no ABI change.
+- **Complexity**: Trivial
 
-### 5. User Impact
+### 5. USER IMPACT
 
-- Users building with Clang + UBSAN (increasingly common, especially on
-  Android and ChromeOS) hit this directly
-- The miscompilation affects correctness of the driver — functions may
-  be silently broken
-- The solo6x10 is a surveillance/DVR capture card used in production
-  systems
+Without this fix, users building the kernel for 32-bit ARM with clang
+and `CONFIG_WERROR=y` will get a build failure. This is a real
+configuration used by:
+- Android builds (commonly use clang)
+- Embedded ARM systems
+- CI/build testing infrastructure (kernel test robot hit this)
 
-### 6. Stable Kernel Criteria
+### 6. STABILITY INDICATORS
 
-| Criterion | Assessment |
-|-----------|------------|
-| Obviously correct | Yes — straightforward UB fix and bounds check |
-| Fixes real bug | Yes — compiler miscompilation due to UB |
-| Important issue | Medium — affects Clang users, prevents silent code
-elision |
-| Small and contained | Yes — 6 lines of logic in 1 file |
-| No new features | Correct — pure bug fix |
-| Tested | Yes — authored by Kees Cook, reviewed/applied by Hans Verkuil
-|
+- Tested-by, Reviewed-by, Acked-by from well-known kernel developers
+- The fix is obviously correct — it just propagates the `__packed`
+  attribute consistently
+- No functional behavior change whatsoever
 
-### 7. Dependencies
+### 7. DEPENDENCY CHECK
 
-The patch is self-contained. It only references `TW_NUM_CHIP` which is
-already defined in the driver header. No dependencies on other commits.
+The commit message mentions "recent changes to compile-test the UAPI
+headers in more cases" which triggered this. However, this fix is
+standalone — the `__packed` attribute is correct regardless of whether
+those compile-test changes are present. Even without the compile-test
+changes, this fix is harmless and correct, and the warning could be
+triggered by other build configurations.
 
-### Decision
+### Conclusion
 
-This is a legitimate bug fix addressing undefined behavior that causes
-real miscompilation with Clang. The fix is small (6 lines of logic),
-surgical, self-contained, obviously correct, and authored/reviewed by
-well-known kernel developers. It prevents silent code elision by the
-compiler and adds proper bounds checking. The risk of regression is
-negligible.
+This is a textbook stable backport candidate:
+- It's a **build fix** (explicitly allowed category)
+- It's **obviously correct** (adding `__packed` to unions inside packed
+  structs)
+- It's **tiny** (3 lines, 1 file)
+- It has **zero risk** of runtime regression (no behavior change, sizes
+  verified by assert macros)
+- It has **strong review** (Acked-by Greg KH, Reviewed/Tested by others)
+- It fixes a **real build failure** reported by multiple people
+- It affects a **UAPI header** used across architectures
 
 **YES**
 
- drivers/media/pci/solo6x10/solo6x10-tw28.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ include/uapi/linux/vbox_vmmdev_types.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/solo6x10/solo6x10-tw28.c b/drivers/media/pci/solo6x10/solo6x10-tw28.c
-index 1b7c22a9bc94f..8f53946c67928 100644
---- a/drivers/media/pci/solo6x10/solo6x10-tw28.c
-+++ b/drivers/media/pci/solo6x10/solo6x10-tw28.c
-@@ -166,7 +166,7 @@ static const u8 tbl_tw2865_pal_template[] = {
- 	0x64, 0x51, 0x40, 0xaf, 0xFF, 0xF0, 0x00, 0xC0,
- };
+diff --git a/include/uapi/linux/vbox_vmmdev_types.h b/include/uapi/linux/vbox_vmmdev_types.h
+index 6073858d52a2e..11f3627c3729b 100644
+--- a/include/uapi/linux/vbox_vmmdev_types.h
++++ b/include/uapi/linux/vbox_vmmdev_types.h
+@@ -236,7 +236,7 @@ struct vmmdev_hgcm_function_parameter32 {
+ 			/** Relative to the request header. */
+ 			__u32 offset;
+ 		} page_list;
+-	} u;
++	} __packed u;
+ } __packed;
+ VMMDEV_ASSERT_SIZE(vmmdev_hgcm_function_parameter32, 4 + 8);
  
--#define is_tw286x(__solo, __id) (!(__solo->tw2815 & (1 << __id)))
-+#define is_tw286x(__solo, __id) (!((__solo)->tw2815 & (1U << (__id))))
- 
- static u8 tw_readbyte(struct solo_dev *solo_dev, int chip_id, u8 tw6x_off,
- 		      u8 tw_off)
-@@ -686,6 +686,9 @@ int tw28_set_ctrl_val(struct solo_dev *solo_dev, u32 ctrl, u8 ch,
- 	chip_num = ch / 4;
- 	ch %= 4;
- 
-+	if (chip_num >= TW_NUM_CHIP)
-+		return -EINVAL;
-+
- 	if (val > 255 || val < 0)
- 		return -ERANGE;
- 
-@@ -758,6 +761,9 @@ int tw28_get_ctrl_val(struct solo_dev *solo_dev, u32 ctrl, u8 ch,
- 	chip_num = ch / 4;
- 	ch %= 4;
- 
-+	if (chip_num >= TW_NUM_CHIP)
-+		return -EINVAL;
-+
- 	switch (ctrl) {
- 	case V4L2_CID_SHARPNESS:
- 		/* Only 286x has sharpness */
+@@ -251,7 +251,7 @@ struct vmmdev_hgcm_function_parameter64 {
+ 			union {
+ 				__u64 phys_addr;
+ 				__u64 linear_addr;
+-			} u;
++			} __packed u;
+ 		} __packed pointer;
+ 		struct {
+ 			/** Size of the buffer described by the page list. */
 -- 
 2.51.0
 
