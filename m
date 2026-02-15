@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8B3242D67;
-	Sun, 15 Feb 2026 10:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E356261388;
+	Sun, 15 Feb 2026 13:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771152777; cv=none; b=aOLks/DO4pnen1+2+VeDas0LKrh4NTMJPJe6Geqnw6fOgti3lSwcwYdqW61+EIVOh1pgA91auT9hWZjp1UE/Z7/hRspQhD2y0FSEeklzKdevic+f+I/5bFCUbjL6ejPiaklEXQEfiHbH/PPM6XavBfWo0Xs37svrFFvA5pFOCJs=
+	t=1771161554; cv=none; b=BFiLvTHFOO/hXYVveElCLCq9xwc82/VbrLsI+BEB46Q586uPD5wFf52Y2TFdNBf2GGIlt480bWn5c3Zjybx3JI5Rusy5zNMTUS2i2Iihwv2OeibDYmdYaz0mlYAkta0b/5oDU86pRbOKFhUsKa3Hc5Z9Cj5YP8Pqng6ZkvAbYUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771152777; c=relaxed/simple;
-	bh=8h5RTo7B/+N5kEHRUZtMOjNp4zw0CLCTOgksyVVBjDo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=RosQLV4ayJF01SmYDl6zHIMy3x6yNONuUuKwi6XIhIb0FmbbDVwZtKBMmyF8nJfvfhRwc3CJlaCGpIs1mcQ8yCP6yeYFGTKFQvxRWFS7KhEkuTbVsb6IDgQamVSz6FjTnlW+B6Z8ALiwowJZUWZzxudw/OQjGJ+yMhluqrOMjmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EjrGblhW; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1771161554; c=relaxed/simple;
+	bh=o1NCRDTHm6HEjVt+1zrWXj2FcyaT7ZSb1LnbFZCrK6o=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nCYSNuDGQWKyPO365/RmVNMGBsJgI180qYSOzLo64tPiU/mx/iL7F1hX6s/OMvkOCkvhM/wmfAClqssEJol++e1EXje2fpJ+ubdNo5dKk1cbxCqU01t6K25Tcsa0BGubkfxGrx8yuDnzG8il9kSy5iq+pr2Uijh2AC4AuyZ/wkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SGkOqBf0; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EjrGblhW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SGkOqBf0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771152775; x=1802688775;
+  t=1771161552; x=1802697552;
   h=date:from:to:cc:subject:message-id;
-  bh=8h5RTo7B/+N5kEHRUZtMOjNp4zw0CLCTOgksyVVBjDo=;
-  b=EjrGblhWNq77tICyd0/9OOlt4PAV6No1cjHWj1YPAFKTLuDqBSx0twVl
-   rGPTLnY9laJDckjtPY1j3recS9hxvVeyXZJ7wzXjeOPOxBtXcEw/ifNGU
-   RP+Ol+NTD0Oc8bDMDSwRrqlr9xKa3o3rUUFxGhU8/b/ZWWcHNlvEVsBgX
-   vpFMvuWBlMy8iy2BfI30p8HZtsuE71rWYw6WzXxhVVSyzQ05l/nLT2bXI
-   VYwS3mNexAdYMNjcOECCD04yYrb32PclYzW9+XlUKxx2pM7+DTbJ5aWin
-   u8wsaAQAaqpKpK5pPq9kY143l217/AlswsRetNGYV2pK37zf2jtL7dAu0
+  bh=o1NCRDTHm6HEjVt+1zrWXj2FcyaT7ZSb1LnbFZCrK6o=;
+  b=SGkOqBf0YzM1ag+sGuLqpRUR0nFiO6xrSQQ9MsbgGTjdU4VnBV0Bk8GF
+   Sgmx4K9wGETzQS1DPAqfR4d/kQxCj1e0yUo9V2gbTl1ON68PCcKPi3DiW
+   TdZX8DAIrMO4cjwJYCq/O2Hb0DuaYpd/imZ6Tt3AvfxwMGveKR6/0w0EU
+   wT0xlR0p3iSdFZwEoUSUttdxhBLf9YO/huqHLZJlTLemk94WY60q+PwlI
+   Xf62i9csAEB0hDz2TnvyTVuTq4COAe9UiIF3uLMt598Jzmy1iNoN4ed4E
+   C6IoQWz+tK0sXyehpK5QHF9IseM+Zro62KZ1fTYMI7t1re2qQpChLX4cS
    g==;
-X-CSE-ConnectionGUID: uXuuM3axTTizAaXRUG83ew==
-X-CSE-MsgGUID: psWzuwc1QjSyd3lQ2Ejg+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="74867072"
+X-CSE-ConnectionGUID: HMufS+UnSnqcUpxwEWy3cg==
+X-CSE-MsgGUID: U5aWh2gyQwSlNQ0O+wiaqg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="71470181"
 X-IronPort-AV: E=Sophos;i="6.21,292,1763452800"; 
-   d="scan'208";a="74867072"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 02:52:54 -0800
-X-CSE-ConnectionGUID: 4Kaq/yIoSYyOdBbFpQ9fhQ==
-X-CSE-MsgGUID: JLiFa44QSXSxl9qA6GQviQ==
+   d="scan'208";a="71470181"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 05:19:12 -0800
+X-CSE-ConnectionGUID: R6QM3bqQRLagBdT+LgO15A==
+X-CSE-MsgGUID: C7SWQX2/Qb+ZDVt6ixNpRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,292,1763452800"; 
-   d="scan'208";a="213437083"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 15 Feb 2026 02:52:54 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+   d="scan'208";a="212601673"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by orviesa010.jf.intel.com with ESMTP; 15 Feb 2026 05:19:10 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vrZkA-00000000yOO-34ll;
-	Sun, 15 Feb 2026 10:52:50 +0000
-Date: Sun, 15 Feb 2026 18:52:03 +0800
+	id 1vrc1j-0000000027N-2qXH;
+	Sun, 15 Feb 2026 13:19:07 +0000
+Date: Sun, 15 Feb 2026 14:18:39 +0100
 From: kernel test robot <lkp@intel.com>
 To: Eric Biggers <ebiggers@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [ebiggers:wip-aes 6/10] fs/smb/client/cifs_unicode.c:195:13:
  error: call to undeclared function 'get_unaligned_le16'; ISO C99 and later do
  not support implicit function declarations
-Message-ID: <202602151847.Ga9e63EQ-lkp@intel.com>
+Message-ID: <202602151406.eZcaINgz-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,14 +63,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git wip-aes
 head:   1ec222c94bbd407081e99e0efbbfbc5e9c258ee7
 commit: c3c35f7367a6e4195dbd41f3287c4fed5e52e472 [6/10] smb: client: Use AES-CMAC library for SMB3 signature calculation
-config: x86_64-randconfig-003-20260215 (https://download.01.org/0day-ci/archive/20260215/202602151847.Ga9e63EQ-lkp@intel.com/config)
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260215/202602151406.eZcaINgz-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260215/202602151847.Ga9e63EQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260215/202602151406.eZcaINgz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602151847.Ga9e63EQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602151406.eZcaINgz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
