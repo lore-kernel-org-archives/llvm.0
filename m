@@ -1,156 +1,148 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D472652B7
-	for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 11:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50BB276050
+	for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 11:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771240160; cv=none; b=dDDj+P/ru2ZHGMVvfHpu6Eb8l1FkW82VlTpO60Av85CkK9aY0Mt3kJsn9TIIyJkZqjEEJ46nR1K5Dvr89kisWUY134X2EWFYJYzJ7z2m+590lxK9ooCo0Nu1Og+uNoOzQhILzb5xxNwmSHZoVHe4R6aF52rTS31nRR1gsEfKw7s=
+	t=1771240212; cv=none; b=WG9TCuwb2QHFJ6rfyPs/Y0INn5AvjKKzqgU5Tt7tE7+olVGVnoFNr8WiIxNywA+QNEoPjxCLGlolnqCUToYoxE8iAUlC9XP9zOVLExUOnmdkvSfvWfG7cRFhphwvR0U2f0aC7iWBaAxfrWHlprj+jxE4M1aGFWc3bnO+2gGPrHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771240160; c=relaxed/simple;
-	bh=yL10Snrz9gC6XYMsJoWK+o5r2O/79dphE2aaEfhCQ9w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H0YezxgrJBBBVb1Mn57XPG1CqkeMkBEaD9yE79mRPBhoPnwDWAW/uLUeFBs6ZvUXmdE524vpaXr2fUmmzI1IwrztbIlxMw/68LNqtw/KsPjnKgrNOZfjgnlvaLX0g2/ME7nzdtznZ8M86nlr0L05+JmycczuYwEbMLB+CVnO+xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JtZWjj1l; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771240212; c=relaxed/simple;
+	bh=g7dP+8lfwb/lT6YzqLD3i4VHeMrHGPAqez2+4PwA2r0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=IFuKqgs0bWH5UZZFvRWP0rAqmjbkVEkeSn3NRZ2JpHVsb+1Tw7DutnQWX8AvLfIzvs/eDoaDBk8OgRx1CBEq7MtllTe6PoKGTjoU1OnQaFDtSa1ZWXGLGC2RrxVSL8BPdEr69Yei8bE/0mUWGS34mxJy94NABmg6kGewnNzOwfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cF7npTWV; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=apZkDBAb; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JtZWjj1l"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-48374014a77so25087905e9.3
-        for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 03:09:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cF7npTWV";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="apZkDBAb"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GARsBG2068611
+	for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 11:10:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Qv+KamAOdFvslDTauIv8lJA6oKf+reuje9OpvNUDuQI=; b=cF7npTWVaMLA7hgJ
+	+VgnQC/Du9POpXv9zPB4nNsNnBr4BTsq+N/RzEBrcN/9+Vb1dX3spaWZUlLGKr+M
+	0w1XVF3i/okn0I8O0wixnaAnDcwcxv3v7/bTk2FwthPbjq8/ofFgTJNXlKWIc747
+	r9FTevk4Fe72tydjoqZuqUQ1cr9bjfP2eUqtDarM1MoQ6d71Us1y3z5YzzVtPzpm
+	4flGmvZneHlzcPXR1duArp95XBceUbB2u91vwEhTZCWNbOnatkSxha7Yf0jLOqM/
+	vXkdQoxTsF6+aFN+sV9aZq4SveT2iowRy0hoPWUaDazC93GT/8CJagTy32cFcaA4
+	MgOh8g==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cagcf4c9e-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 11:10:10 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c710279d57so216661685a.3
+        for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 03:10:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771240157; x=1771844957; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=86+3Ol8ufgkpxEsjqivLYye2L+eLEE02N4njJxkXOz4=;
-        b=JtZWjj1lZClJ4LwQI2JkWv4u4WeGyhitzJPcOkx5AWx6p0hh1/zO2r+UsN7HQsywqe
-         N6mJG1c2AmCNjycsX1rfFZQwoH5wODlrxY8jCasyGZ7shlUzFJSiwAV/9eFoX6sxX46s
-         AX6udL0GXZfb7rAytXPH7hDPEexFfsQS5eblQSV02TBx5TiBta9gNR6xXvfiL5SOzzsb
-         ITIqY75xBsKQ4nvzw0kMrJb8Msu/mmPDc0VJbwT6TNRBcL6/rSsphxZdSxmY8gnPJkx2
-         4hAyWppcqM3gR+XFxBAiWirNbjFMvTaPQuCULRtbjKdIP0C3v86KkDD/dmpWKM3lPiDW
-         wGRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771240157; x=1771844957;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=oss.qualcomm.com; s=google; t=1771240210; x=1771845010; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=86+3Ol8ufgkpxEsjqivLYye2L+eLEE02N4njJxkXOz4=;
-        b=IUuoEQ/BOOyZWhoJx3OlOp6UIoxViEMcdvxZOMk9mymy0ek9zQlqfKNT9KbI7VnLN/
-         nfEH70dJp21ZPQq6BamSMbzmxmdA7Vw0x3a/Ptix04Gv3ZapYC8YHbczEv89cjD0fMSa
-         XuHKdI7fmIRvQavUmX8dAHjJZFVrjA3xETs5Tmb4FrtRv3s8/36EJkgcZJl/QCUdYlLB
-         DuGboaQTfZFRvNgYPpcdQrVES8XZXWOGxA5WchopC/1fsI9U1nJkIPq5VEK9xYv/PTSq
-         BKGolzjFptbVOYt/4DZl8aXA4cZHqKnWtp2pqjHojCzdPS1F9R4yuYFsxw0+vvBhGM0u
-         HA0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWXnndV1o/d3yY05ikGQNJTFa2Hxr9bQxRwqEci3l9Mo3qltuY9JM5C17xyiE33rdoBHTmH@lists.linux.dev
-X-Gm-Message-State: AOJu0YzixQ9G4Xg8+FYG7cHJS8343l7JyF+URNnitU2j/V4tGM2YiQ1d
-	dUEXMK9aI1mbojQkyu5370JvSogJAW/xvyKe/SoxSXy8v9/FIt7yyOCp
-X-Gm-Gg: AZuq6aIYkxYX45bKAXCZdpYU5fmDdIyAUI3UYtrhh59vWJ4SYSf2+HTXf6wH9+IulZ+
-	SC7Nt43useVM5ay/m02EluWKDOcpFIrYGZxLprF27EK5mZ4gEECWg3aJhCv6nm+ni2pehJ4Jp7T
-	GHOGM4AA+Hk0h7RPuexOpEA/PNI8Q/4jitq1OAzlLG8RKpogufg+zvZ4904T+9Tfg/bwVp41OkO
-	aGdI8SDbHaYtP7wKK2w5545/H4nZb4MZx/Q6kZ6DHvtKLjWjJGNR/Nz0FeIdtFkiVwXelrcFdqS
-	p4ljqh0pUPeVYg4+50U4zKk1cek9miS22YNIXQ+n3gxNDFWqkKSXAT/UiJK+UNXcqJibFS6gFZQ
-	ex1rL1l7s92R4WQpIVLi6o7n+PZBvVJudsGAF0xO6hf7HiJIkQLO9W4L4r3FktvEcaNT+9N7kZN
-	x6jFkazRtxMXpUDXpZ5TlPndc6E/fYmS/au59eSowXz0MMk8K79naXs7eYxN9r6OMZ
-X-Received: by 2002:a05:600c:3e87:b0:480:32da:f338 with SMTP id 5b1f17b1804b1-48373a0f961mr151759405e9.14.1771240156943;
-        Mon, 16 Feb 2026 03:09:16 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835dcfafcdsm657254105e9.9.2026.02.16.03.09.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Feb 2026 03:09:16 -0800 (PST)
-Date: Mon, 16 Feb 2026 11:09:15 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Marco Elver <elver@google.com>, Will Deacon <will@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Thomas
- Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, Waiman
- Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>,
- llvm@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>, Arnd
- Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, Boqun Feng
- <boqun@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260216110915.4f0d5490@pumpkin>
-In-Reply-To: <CAHk-=wioS+vB8aBxWBgdEfXqDq5Ynr9gyY=GhU7gxO9G_C+_6g@mail.gmail.com>
-References: <20260130132951.2714396-1-elver@google.com>
-	<20260130132951.2714396-4-elver@google.com>
-	<aYDFOIskB20CbztD@willie-the-truck>
-	<20260202192923.0707e463@pumpkin>
-	<aYHgNSF5a3F7UGU_@willie-the-truck>
-	<CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
-	<20260204131400.GI2995752@noisy.programming.kicks-ass.net>
-	<aYNUmEfDzq7lTFFr@willie-the-truck>
-	<CANpmjNPHnt6eY-OfkTr5TksHaOon2GyLUokvagcMRa23B6i6_Q@mail.gmail.com>
-	<20260206182650.6c21b0ff@pumpkin>
-	<CANpmjNNFXdMM6cL+HBsiXr2WUA=mttR1jDRMqNYD7+YZs6vRKg@mail.gmail.com>
-	<20260215221656.68b2fc1d@pumpkin>
-	<CANpmjNOnOqq2k41=iNsgZLXAzspVQhcTZ88Nvms_c_0M+7b7YQ@mail.gmail.com>
-	<CAHk-=wioS+vB8aBxWBgdEfXqDq5Ynr9gyY=GhU7gxO9G_C+_6g@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=Qv+KamAOdFvslDTauIv8lJA6oKf+reuje9OpvNUDuQI=;
+        b=apZkDBAbsWDoyyJFf1186BOzrPnQeoTVhDeo/1jysMJmgK6lvZ+5UrChZFwG23s8t5
+         ev7VTvcOCWHM2ul1boLYjDYo5vhn8xQRUYq+vntreVUJjAgxhXuuVObcR4Eru+/hdH6v
+         Z5j4eYYoQtICQHvYf/E44vHrrxeG4VgY7RW8t30d6possiL7WwcA/mNqzTqjyDjT3+MH
+         IlG1uWo2HO0Uu5OZ9EX60EPr/eg9kXS2PS6nUNT8xq19zEDtZ/j3TZz9o1NXpDOZbDmq
+         7/BXQ2/g7LD6h6nfQpfx1mbBypbqxUMC2nZLRCxWlHWiGh+6MWLTDtsX4GVbodMjz0S7
+         dfpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771240210; x=1771845010;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qv+KamAOdFvslDTauIv8lJA6oKf+reuje9OpvNUDuQI=;
+        b=ZGe/EDEbc1gFlcCLmM3XxP0oWYZzqytjonopvXDfBk5m7zwaGjCsVTtXPetsjpaNR8
+         ggMR/0WIItC5NbiIx0QRJ4xQrEGMLfesfdRKknqht8XtAr7SruXJwIshTf67M4GfKL7H
+         Fw1U6oicph2N+wHoNpKYbdMTthJ1kVsVkQXu68U+kuWfjkWFvFLrX0hsbWFkmJeCf9XX
+         Bc1/kvNnlKHvuWtW7rM4ooEtFR6j2+9LgRBE4Akg/JR+chfKUGbtAn9ZoMRnIlE3Q9hm
+         6zzecmog06vjjkk9hYYttg8RzIMUhcek9LnAJGhXn/uv8OAOx+Kcv2RRh98KD7lP1gEa
+         MOFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVeMrXZrO9SFQ7imKHAsDDuE2+apYCVCaHjZHma0HDaxif2aooS8XTWha7q9PRnxzG6QypS@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzfryx1UjwVUWSBpS4J4MRQym+m50W8dohijVQYA4BCxQGEhg4o
+	/V1Ecud5uNIjzXtBT5srKY+ar4Ta4zaD/GHsUEiCna4t93kbE2eLqQoFsOUlUD0eeYcYzcixvsU
+	enz0GVePzNnCiDdvYnEatlSqBo4XPxKlJWKIPIqq3W26usWAK0D/LAMT/D+ZlZ+Zb
+X-Gm-Gg: AZuq6aL340Lb5OFiSKKIShkBsbLEFNWDIL1yRy3mig9HK2rriqI0t1VtyU0qiR8p+qF
+	LvneaP2xGwR2wsA9pLjc/UMrrMaHwV9PzHyrJGDmRs7y6f3N7pUAOqAC6RW4mF2xDq8fTApjxJy
+	HDc4rlw/YtkoClx2K/l41Pj6P+j6MlA5uHv3bZOfajP2coxXDRlfQilpB6nGr/j4evTGY9649tQ
+	s41hhY6QvCzzdt7u58H71uC7ajnHUNQG6xWBu6C2ys9tw4SxL1Wp+roIM9umszyYqxH5shOjpRU
+	EWEGtWBm0mA+Pz0jhYVu18uLsbHGAa7UDf5LMlJ1haojKy5YICZx5JmLL7wxlKyXDFmCHy8RNEF
+	vLaFPG9270YH+R9c1xI08w+LNFkR28GKlmshJtBxtDfUiphgP09oYl2Iz4VnJcz/9V07OCs+qFx
+	yejeY=
+X-Received: by 2002:a05:620a:2905:b0:8c7:1aea:53b7 with SMTP id af79cd13be357-8cb408ccb63mr995466685a.9.1771240210064;
+        Mon, 16 Feb 2026 03:10:10 -0800 (PST)
+X-Received: by 2002:a05:620a:2905:b0:8c7:1aea:53b7 with SMTP id af79cd13be357-8cb408ccb63mr995463785a.9.1771240209609;
+        Mon, 16 Feb 2026 03:10:09 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc762b672sm250474766b.41.2026.02.16.03.10.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Feb 2026 03:10:09 -0800 (PST)
+Message-ID: <5da70eae-a419-4490-87eb-8c61338e3e0f@oss.qualcomm.com>
+Date: Mon, 16 Feb 2026 12:10:07 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] firmware: qcom: uefisecapp: Simplify mutex with
+ guard
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Nathan Chancellor
+ <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260216091525.107935-4-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260216091525.107935-4-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: qoGMnTMImplqv7jK6QBM4OL8DykD5LQ_
+X-Proofpoint-ORIG-GUID: qoGMnTMImplqv7jK6QBM4OL8DykD5LQ_
+X-Authority-Analysis: v=2.4 cv=Sc76t/Ru c=1 sm=1 tr=0 ts=6992fb12 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=EUspDBNiAAAA:8 a=ELWE7tHOECisB7dOq5gA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA5NCBTYWx0ZWRfX8upWU/EdEfHv
+ 95VI/6cZl6LVc1uiJIbh2wyCEl0cEeMOgdh6mPEC6sKUelj79eXDs5CqLJPnWxrFKfHG37qNVqg
+ qv9M6in3sG3es7MySyVuJOrw1FfW3DytasYjRa8ZPxm90HDciqUdhyCO3y5onb7w8Mw8hjVR6s5
+ r+iHqbJyVA5ulYE/jnjR29LN7bViv46wBGUi8X5pzZFS1cGa1SSb2YLmhpTltB07a727RS8ZZwb
+ AlrIEzptcyle1lh6OqFgLTO828BfuEMWz+5AY7qfzZE0XO9veYdDyD6JJRNOWZq65qqegjAsdhD
+ 0wYhDIf9MI7Xs/PyS3FDu3fEkCbUBtLQU1iTpNesF9mtiosE/nTn89SzXPlPlvuKqkmsNHdgBL/
+ kHG8ELNi4ZAin+6nb/ISBT68pAYBs7xbTRLfRE0WklKuo5sjLxXCDOnNHUmvA0xNzpXj4mw8tbS
+ 2zrb79PUmk2LLev03jA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-16_04,2026-02-16_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 spamscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160094
 
-On Sun, 15 Feb 2026 15:40:07 -0800
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> On Sun, 15 Feb 2026 at 14:44, Marco Elver <elver@google.com> wrote:
-> >
-> > I found e.g. xen_get_runstate_snapshot_cpu_delta() uses the >8 byte
-> > case via __READ_ONCE(). READ_ONCE() itself is already restricted to <=
-> > 8 bytes (due to that static assert), but that itself uses the
-> > __READ_ONCE() helper which these patches were touching.  
+On 2/16/26 10:15 AM, Krzysztof Kozlowski wrote:
+> Simplify error path unlocking mutex with the guard.
 > 
-> I think we could just make __READ_ONCE() be totally unchecked - just
-> make it be "const volatile typeof()" and leave it at that.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 > 
-> Anybody who uses __READ_ONCE() would then have to deal with it.
+> ---
 > 
-> There are very few users of that left, I think it's mainly
-> arch_atomic_read(), which just doesn't want any of the checking that a
-> regular "READ_ONCE()" does.
-> 
-> In fact, there are *so* few users left that I think we could probably
-> just remove __READ_ONCE() entirely, and make our "atomic_t" use
-> "volatile" in the type itself.
-> 
-> I generally absolutely hate volatile on data structures - it's a
-> design mistake (an understandable one: it was at least partly designed
-> for memory mapped IO accesses), and the volatile should be in the
-> accesses, not the data, because very often the volatility of the data
-> depends on context, not on the data.
+> Changes in v2:
+> None
+> ---
 
-IIRC The bots are now bleating when there is a READ_ONCE() in one
-place but a write without a matching WRITE_ONCE().
-That is effectively forcing all the accesses to be volatile regardless
-of the context.
-Which is pretty much equivalent to making the structure members volatile.
-So if all you care about is 'inverted CSE' and read/write tearing
-then volatile structure members DTRT.
-What you probably don't want is 'volatile struct foo *'.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-volatile structure members are almost free, you lose CSE and some versions
-of gcc 'forget' that a load zero/sign extended a byte and do it again.
-(I had to use barrier() rather than volatile in some code where I really
-did care about single instructions.)
-
-I've never see gcc reload a local, but I have seen it do CSE then
-spill the value to stack.
-
-	David
-
-
-> 
-> But our "atomic_t" is already properly wrapped, and nobody should be
-> accessing it with anything but our helpers, so putting the volatile
-> there looks ok.
-> 
->              Linus
-> 
-
+Konrad
