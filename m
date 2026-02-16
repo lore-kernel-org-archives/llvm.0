@@ -1,113 +1,172 @@
-Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65932D0C7B
-	for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 15:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB7B1F17E8
+	for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 16:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771255995; cv=none; b=X0tixLY4oDUPLfFu1ABqdSoUPWzP0OeyGgvvS45LRn563NLIriqTCdq34Vx8vz1bpFjFdhR4kVnImiEDwoxmnT5N6rr2spHTjezkSTAz/5D8WdiLE9te/HLUgkbZ9gwT09flRmsSnmrFMAUalYQAP1CDfom0l4DSLTyMhYe6AbA=
+	t=1771258657; cv=none; b=EfEFe3buaAdu8gBK8CaU0qAWL4AOEvF/psGfZgsLpoZ9Wr3m/xXHw4H7UiCZxFoq0W4gaQ+tp2zSSM93tPXfPtIy/2AnB1T9YlTMR9c9670aI4171spI3xFrhYUsP1cl6Wb6EKuN9qCUkOIQfEF133BnRru9UzGFehZyeBeqjAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771255995; c=relaxed/simple;
-	bh=3kn5nhTe0qmD7LbZC/I6w4XOMT95gIJ00NRqjHHgyCk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sw7NWkRxtZoQwsrBhwJEnikao424hmxjz1xKaAiVHiRNBwc/+YujBhPbpsTh7+TX4K+8XxRAfT/9+px9zqb3/B2JuLvBTzo/vkqMN84TKqqef1MDYN9yuUkmhtVHf9CKalqM7KeB2uZhSjkXIUVyl98mjLIc8OHS1l5kWa5skhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MY2fkJrl; arc=none smtp.client-ip=209.85.208.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1771258657; c=relaxed/simple;
+	bh=PSTw93rEWxwyptbbknvkyoCYal5ZyikU+NB5M8sxwoQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jjvh9x/J5thP20Zc0kjJFy8oqQT699Rufxz4NGEgD71OwNdakgxN5SxQo9EyNFSNUfVt1vjnsaZpAOlC/83aL3qeKb48BGlFzqImGnnqogBAm1m/5HWzh/6TVe5F6XMkdg/gf8i52XIQYYX9I+JPxDzFdnUo4KcOEdn3X4H+id4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=DDe0Jtjo; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MY2fkJrl"
-Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-65a2fea1a1eso7661916a12.0
-        for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 07:33:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="DDe0Jtjo"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8cb39f64348so286889285a.0
+        for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 08:17:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1771255992; x=1771860792; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcJklCdj+iuSWVZsmzfOlTt0HmcUV3JKhtJ9znekMoY=;
-        b=MY2fkJrliJHyLOCMxGrTEqlJ9wucUuh1MgoQdXrkxfGyPnUfDdvHVPosDuyWA1L8aK
-         c3c8BItFf0iaGZTyiChrE8o/BSRetyruBMTPfKplhpyMII6YGHEAiewcbfksVhYsZzyS
-         gH/+73HBhiKK0DoVyo9CjptDzSayaiaTW/B0o=
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1771258654; x=1771863454; darn=lists.linux.dev;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=yx5A2gw99GEH72oJ5J3K3NBwM48Lr9vgSpEF2S1mSc0=;
+        b=DDe0Jtjoxcacl8KGAvqJsvt59aDIVFw0f3jIvgeqVutwo4z2yYsaMcuAkJ6B+kuxSa
+         44RIzVZyb+0jtbaQNwJjl+TfEoYWgXTrfs0WadBEZKsp0PGvhcBiqy5ls4cdFv/jXBgQ
+         KHkLM0yoA8tdizKA7lrs5uVrvJZdP/FPfNKcoAmWzC/cLV1C66beZPhfmHcQUI4TGXBe
+         cs/aBPIMe7lXJ4JYifuL/NhCIQTnVoxfkZlNn48X35c6ieJU38BojfviVVf6gMXtm15A
+         ot1RyfY3mQwnL3tqSPTbvdC89xEApD8poGSTDDbma/pBffmccdF0E9H7/vuYC3J/MkWx
+         dKRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771255992; x=1771860792;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YcJklCdj+iuSWVZsmzfOlTt0HmcUV3JKhtJ9znekMoY=;
-        b=guncqte1ezy7Jn6mslEFvNKV2VbEJPB754hzXVY/67flblxsPTK6EPMFg+GxAV0jgK
-         OSV7YPdQaICY8ekTFttwXRZNDIWAUHXee9N2T0lnPxP0BaoWoDYY11lrgOKuTdNGOuh+
-         bl71UYXH7XfpZFw4f81X8yUc7OUyhb+CtbelwrO37wbceew1rM2Pi8C6zcd88P6ewoYF
-         XJOq35t105jt0/UIaVh/JwZUFvV384e2tqeppY2u8yytWDAQnewokp24e7VDEdedhbVx
-         cn/MUXOH9IoPVYFX8/9KNhcNvNqR6l9O8zyRC/qmgpevGTXNp66+YiP1uDkI8xHOxqif
-         ko1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVWVaoGchQuy1KAhcqrvPpB1dELaswWU6m9wW4jt/JdyCC6hPvB73wvh991l0+yLpipB8Hg@lists.linux.dev
-X-Gm-Message-State: AOJu0YzNgRL/WJEVUvda1nwxrV+bfNstexMh16/X6AjfNTHzSxkRTUMX
-	yTIuP8X/TKk8ntioqxxV6t8/1R7QnIwd4iUQiIpCxV/nqrd8EuPPgI55hYlkLe1+YbRwe5w1KN9
-	KeCpCOkXrBA==
-X-Gm-Gg: AZuq6aLOaYAb5Lw7rPxnaEst/4GA/q43661DUc97x1lprjvqu107/E61VHujSAQLN+l
-	GoF34DpUOFxizjSvQH4Kh4qrD5lwTDw8R+icV2IqQzjAthiThVIzaJbdwQ3tl3XuchiKxydoJ2T
-	yeRCIizGAb1zhQcil8Fp5MVrb1kYCrhmWQ7lUSqDWXLzCn3mLABCfmDTniGFWwSyz28AxkVDLkB
-	dRdf6GoMbYtzxQSpP9y6QTPRpB5g/UWkfaWAb1FebK9dyATQ4o4tmXkYKNpchdHLjS9nPUE+YVz
-	fM8cLN516wyi8NtMCNRS97hXYL8r3tMUQCaR/zBzN6WjO9k9mgO91hmHrpW9JA7wultDUrny/yZ
-	chMKnvPKPaJSXAcy9Q11HxwAg07rjRq92IzJRLcYdMSsJ405w8a+3UeVaT3JOwVu92UE3L8ZCYL
-	7MdHIIJWGbJO6nqVT3H4bv567uM7dS43Rkt3PaQoiaGH/Qfvzx7s2xIb7ydqZSVDEkLVTciITA
-X-Received: by 2002:a17:907:7b8f:b0:b83:3295:15d2 with SMTP id a640c23a62f3a-b8fc06f028amr521927966b.30.1771255991742;
-        Mon, 16 Feb 2026 07:33:11 -0800 (PST)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc73f7bf7sm260692166b.29.2026.02.16.07.33.11
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Feb 2026 07:33:11 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-65a2fea1a1eso7661884a12.0
-        for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 07:33:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWuzxtZPAMlyBkV6kU6P1Vb4ZODRgI/dYFBNzc22UVpbjxnqzdBMo3/S+uZBOP6T+1sbJjE@lists.linux.dev
-X-Received: by 2002:a17:907:6e86:b0:b8f:e98e:ff5d with SMTP id
- a640c23a62f3a-b8fe98f297emr298866966b.13.1771255990932; Mon, 16 Feb 2026
- 07:33:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771258654; x=1771863454;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yx5A2gw99GEH72oJ5J3K3NBwM48Lr9vgSpEF2S1mSc0=;
+        b=agcNLDmfOTs8r3eUvONk6afOi8E7gqlRDweKJgvmfv0njT9x4b+mb4w1sgBoZXaH7U
+         u3k52ivfZu8MeAGobswyIRRPmf4VYIx+9IMeL1c+h6F4QniVmrSPnRCVvh1rlzLeU8FA
+         dNxsnpc/590tyzeqIJeZryaoR9+TizHPev3TFgGGlaxx7xRsHLsmuHTMigE/JcNGVT82
+         DbQ+QBJpXZHax1na1YLLglN3an38ZvXubCNV0/+J+hCx3Myv57O5hrc4IMxdOD1W6enR
+         MLMI6tNRPNHnqw58KCk3vhHKjnd/5KqZbXqa7e2szimDGv9HwM6iSDZg1Q2apxfmdRcJ
+         5hMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5cZk9AL8nG3z2Cqu1A9WUWdKyDsiABnCEjjT44fSzx1ibDhllNdM1mm/8/r7T0iPIJmaf@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxx7yG5r0Kd4C39DVhbunZRjqtr1Atu7HDOSW8HC6J1i78TP0wg
+	voEa64gV6ku0Cdm/SFzEDy8gnYBzHKN9qbR1gPpxHYyiiQbJDgP10mA1TREYIkbPLig=
+X-Gm-Gg: AZuq6aJEXJNd4r/rOipXayWI2FCaa3bqv1HI5IMQWuu0R6Mw5az4sYUKxKbYuxSzRpg
+	RO+k7PUVZ7NlwhRTcrevT5b7f3enTJZJnWdEEBYQpxQwQpf/3c2avClolni+7/ZewHlM0RZxkCM
+	O/Z0enEaTwtb9M6LeRARSYPozP50MG2lVVxPmjAfa6LgvV5PHhNaqHcucyWe4pvkaYuQw/NeoUa
+	WskwWV5GRWBnWp2kBCEOTLbY3TZoIB5ZE8kYGDyHaBiDy4sl59hPN7IdV1NcY3Tf8gRO45sSjE5
+	jsErQP2VcAvwbuKItOw9eWUF1C4iyfxNtgewKH7RKMaQt5oYe8z6tHs3rNOfnB+xmBd1YmRm3wh
+	xpUZ9Ljxs00GqoxDn5qDFhp6l/bYlWw1dy89d/dr5V64SXEAfD8BK0I8vdJGTp/z6eehMZbV4if
+	/kkFaUzrp8/JrMTbmZEG26nghlBVpQ
+X-Received: by 2002:a05:620a:40c9:b0:8ca:105b:86b6 with SMTP id af79cd13be357-8cb409219e2mr1421526385a.88.1771258653567;
+        Mon, 16 Feb 2026 08:17:33 -0800 (PST)
+Received: from ?IPv6:2606:6d00:15:210e::5ac? ([2606:6d00:15:210e::5ac])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb4120f939sm883143485a.44.2026.02.16.08.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Feb 2026 08:17:32 -0800 (PST)
+Message-ID: <90e62bf797b0532e5556adaf9e15cc7b73e18411.camel@ndufresne.ca>
+Subject: Re: [PATCH] media: rockchip: Disable VIDEO_ROCKCHIP_VDEC when
+ compile testing for Hexagon
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Nathan Chancellor <nathan@kernel.org>, Detlev Casanova	
+ <detlev.casanova@collabora.com>, Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>,  Mauro Carvalho Chehab	
+ <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Cc: Brian Cain <bcain@kernel.org>, Nick Desaulniers	
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, linux-media@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	llvm@lists.linux.dev
+Date: Mon, 16 Feb 2026 11:17:30 -0500
+In-Reply-To: <20260213-media-disable-rockchip-vdec-hexagon-v1-1-3f903398cc83@kernel.org>
+References: 
+	<20260213-media-disable-rockchip-vdec-hexagon-v1-1-3f903398cc83@kernel.org>
+Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-g0IOH3/wXifty34RwVB5"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260130132951.2714396-1-elver@google.com> <20260130132951.2714396-4-elver@google.com>
- <aYDFOIskB20CbztD@willie-the-truck> <20260202192923.0707e463@pumpkin>
- <aYHgNSF5a3F7UGU_@willie-the-truck> <CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
- <20260204131400.GI2995752@noisy.programming.kicks-ass.net>
- <aYNUmEfDzq7lTFFr@willie-the-truck> <CANpmjNPHnt6eY-OfkTr5TksHaOon2GyLUokvagcMRa23B6i6_Q@mail.gmail.com>
- <20260206182650.6c21b0ff@pumpkin> <CANpmjNNFXdMM6cL+HBsiXr2WUA=mttR1jDRMqNYD7+YZs6vRKg@mail.gmail.com>
- <20260215221656.68b2fc1d@pumpkin> <CANpmjNOnOqq2k41=iNsgZLXAzspVQhcTZ88Nvms_c_0M+7b7YQ@mail.gmail.com>
- <CAHk-=wioS+vB8aBxWBgdEfXqDq5Ynr9gyY=GhU7gxO9G_C+_6g@mail.gmail.com> <20260216110915.4f0d5490@pumpkin>
-In-Reply-To: <20260216110915.4f0d5490@pumpkin>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 16 Feb 2026 07:32:53 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjJQQfWpAxigafuyrgxg8CdQWSimVYMk16_j0vWwEkjag@mail.gmail.com>
-X-Gm-Features: AaiRm51OTGvN2sCSlh8_Rn9ui_eyEBMKbWkgCuwNwrublXNq6jjEcgPmaKvEAvs
-Message-ID: <CAHk-=wjJQQfWpAxigafuyrgxg8CdQWSimVYMk16_j0vWwEkjag@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Marco Elver <elver@google.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, 
-	Waiman Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
-	Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+
+
+--=-g0IOH3/wXifty34RwVB5
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 16 Feb 2026 at 03:09, David Laight <david.laight.linux@gmail.com> wrote:
->
-> volatile structure members are almost free
+Hi Nathan,
 
-No, gcc does absolutely horrible things with volatiles. It disables a
-lot of very basic stuff.
+Le vendredi 13 f=C3=A9vrier 2026 =C3=A0 15:10 -0500, Nathan Chancellor a =
+=C3=A9crit=C2=A0:
+> Building rkvdec-vdpu383-h264.c can take a few hours to finish building
+> with Clang 20.1.0 or newer when compile testing for Hexagon. While this
+> is further investigated and understood on the LLVM side [1], disable
+> CONFIG_VIDEO_ROCKCHIP_VDEC when compile testing for Hexagon.
+>=20
+> Link: https://github.com/llvm/llvm-project/issues/178535=C2=A0[1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> =C2=A0drivers/media/platform/rockchip/rkvdec/Kconfig | 3 ++-
+> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/platform/rockchip/rkvdec/Kconfig b/drivers/med=
+ia/platform/rockchip/rkvdec/Kconfig
+> index 5f3bdd848a2c..d03689464206 100644
+> --- a/drivers/media/platform/rockchip/rkvdec/Kconfig
+> +++ b/drivers/media/platform/rockchip/rkvdec/Kconfig
+> @@ -1,7 +1,8 @@
+> =C2=A0# SPDX-License-Identifier: GPL-2.0
+> =C2=A0config VIDEO_ROCKCHIP_VDEC
+> =C2=A0	tristate "Rockchip Video Decoder driver"
+> -	depends on ARCH_ROCKCHIP || COMPILE_TEST
+> +	# !HEXAGON: https://github.com/llvm/llvm-project/issues/178535
+> +	depends on ARCH_ROCKCHIP || (COMPILE_TEST && !HEXAGON)
 
-Try doing something as simple as a "var++" on a volatile, and cry.
+This is clearly not a pleasing change to make. As this specific data struct=
+ure
+and usage of bitfield has been discussed (along with the numerous issues in
+clang/llvm around these). We also agreed to move away from bitfield for thi=
+s
+data structure and use a bitwriter. I would favour delaying this change to =
+give
+devs the time to port instead. Ping again if nothing moves within few weeks=
+.
 
-We need to have explicit 'READ_ONCE()' etc atomic accesses, just to
-make it very very clear that the compiler will generate shit code.
+best regards,
+Nicolas
 
-We do *not* hide them and make them implicit by marking data
-structures volatile. I very much want those explicit
-READ_ONCE/WRITE_ONCE cases.
+> =C2=A0	depends on VIDEO_DEV
+> =C2=A0	select MEDIA_CONTROLLER
+> =C2=A0	select VIDEOBUF2_DMA_CONTIG
+>=20
+> ---
+> base-commit: c824345288d11e269ce41b36c105715bc2286050
+> change-id: 20260213-media-disable-rockchip-vdec-hexagon-eb67c47292c5
+>=20
+> Best regards,
+> --=C2=A0=20
+> Nathan Chancellor <nathan@kernel.org>
+>=20
 
-           Linus
+--=-g0IOH3/wXifty34RwVB5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaZNDGwAKCRDZQZRRKWBy
+9PhBAPwMxt2qHIuuv8Re3nGYyjxclF1akWrq8joXpNiryhAGZQD8DZ31iVeXv3Jn
+qIdzhD88lbsc2tAt4dDx0Aynb0/hEQw=
+=AYDo
+-----END PGP SIGNATURE-----
+
+--=-g0IOH3/wXifty34RwVB5--
