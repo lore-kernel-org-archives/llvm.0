@@ -1,63 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916621F37D4;
-	Mon, 16 Feb 2026 02:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDAE01D6AA;
+	Mon, 16 Feb 2026 04:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771210279; cv=none; b=s/Bg7nMbo6E0rEDwgAyALPtqIqERMH8qQ9qlmpl8Snz3j14M7Gw4OKdwfRkF7MAQWq2COgZgSIKTCFiFXIVRm3GdtyAShb7RhyEOvjk4AKFd6V3VYx67X9ICTBTL3mS9WcIrOdM8YG7FE4IRzX669OAZRuQIg58T4kwqp5Yqlrw=
+	t=1771217847; cv=none; b=MzdOz+lh2hSLfXoAN+aPvtGpKzjw/85V01UWyrWO8vmO8bJ3KvFU6Ax3SaWDLtpy0yr+hsDk7SEV80Vt4lJU9osm00i+QXvtF4B5z7n1nUzE2zOKaPkI06IjQ6IO8RpsfI07dsY6/GX07feiQhpmh1RJaufANGaEMLg9nvFSXZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771210279; c=relaxed/simple;
-	bh=zECy0mqaOgeJXWyIw7FNUt2iDqlCCCgkdZjUix16Sco=;
+	s=arc-20240116; t=1771217847; c=relaxed/simple;
+	bh=wxPEhoCNfX5ApkUi+QjSsB5zRQFwVKuYuWOp/TBfPDc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tVQ0w20Gto4c6Y4T6rW/z8mDibd50D9+J5/W/2moSR29cSBghHO5NWFoyZuc3W0Aj7a5iJceCMH2UcmtogiUNxcgw1Ed2nZZoF/Cov//G5OO3E6EqFjj2b4U0AG62RIdQJAkUv7knGnYiBWxiyGf8AsHWKXCDXz+UstsPxiTbAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m0RXg2g5; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=AFqP7c6EAJ9MX1EelU55pXpmiJKFfmPNihI5ksOc6Q5gZfmsD0HEgxW8o+7PDmD2WKBn6zTo1DtKNCRuBw7RFzvYJXwtRynTcvNjn07W9FCSoIL9IN1zJoaj5XF6ZbqCvu751PnkA/UHfsBEck1oHbn3bswQjWX2P9mxktRDM6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WKaTGrPy; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m0RXg2g5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WKaTGrPy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771210278; x=1802746278;
+  t=1771217846; x=1802753846;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zECy0mqaOgeJXWyIw7FNUt2iDqlCCCgkdZjUix16Sco=;
-  b=m0RXg2g5/PT3r/5INPAahd97NG/8gLWPNrGi+8vw8jD1f8M9eB8yFc/K
-   0XciyfTNmZvTlPVG+rpVTpqq5p7nIaWnyYkRyIzjFVNP9CDQl/tJiugKP
-   NVTYg85XzUyu0CHRfOaZsRMUtpH8TBN7n30IFG+4cA2ytDckrHb2h2uBn
-   CmSkgY9/s3lHKXpWd1+SAIeWzo9JQJRzvNuCb415zDLsn/n5Txxs7cNA1
-   Q+vHKqIUXt/34sKpOeTZLkhN73gaDj1Ga5nwWkD/HLDQt7iyybiaeKQUh
-   KqvfGbQFL5E9BZGvUkVt3Ux3D1SqXvwh6srLRNKWSIpXpiRN7UBXR4E7m
+  bh=wxPEhoCNfX5ApkUi+QjSsB5zRQFwVKuYuWOp/TBfPDc=;
+  b=WKaTGrPymjpedMk0a2LB9IbCtejrJdQz5QzKU4gr3a5EzGf8D0Ruf778
+   ebOuN6qAlFD1P2Z1TzTdJOSgxZvr+gBtfOFHiehIoHcuUfr1a7irg5dvm
+   j8Bl3eWtMZkzOoJsY0TdPdmrhTQIbdeXGQ1ZisaVbGjeTUQZNhIbpUKfy
+   ZxtHuPHDpPLZitX1U8nC/04iTdx3WjUqJySx/JharbovT+9CDlV6AvzzP
+   G9/YoD6t5zQptUvj1IjqoomfRIvR0QN0Aw8y8g3CdlbisCJaNg3RjWBze
+   i03sLgoHE4Yzl5DyPPczo/omGf5V/nnU5oviAbWjWPV/FslahAZ3T0EDE
    w==;
-X-CSE-ConnectionGUID: JsHj49WGQli5gbfnDBEGxw==
-X-CSE-MsgGUID: bNjWVPn+SKCqZ4CfYZuGcw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="71492824"
+X-CSE-ConnectionGUID: RIkyIIiGQAWbaWXhkL6BrA==
+X-CSE-MsgGUID: ZaCDjwTqQAKOvI2L0bgyzA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="74897020"
 X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
-   d="scan'208";a="71492824"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 18:51:18 -0800
-X-CSE-ConnectionGUID: WWng7x6KTdiqC+6q3mL+QA==
-X-CSE-MsgGUID: hon0aVVWTh6gERwcALI6KQ==
+   d="scan'208";a="74897020"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 20:57:25 -0800
+X-CSE-ConnectionGUID: yfZNHOOiQ9+WtjJzPVzoDA==
+X-CSE-MsgGUID: JDNYBeQ6RPOY8EIElNfzEQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
-   d="scan'208";a="218015367"
+   d="scan'208";a="218050915"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Feb 2026 18:51:16 -0800
+  by orviesa004.jf.intel.com with ESMTP; 15 Feb 2026 20:57:22 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vrohd-00000000zL2-3MTH;
-	Mon, 16 Feb 2026 02:51:13 +0000
-Date: Mon, 16 Feb 2026 10:50:31 +0800
+	id 1vrqff-00000000zPU-1G59;
+	Mon, 16 Feb 2026 04:57:19 +0000
+Date: Mon, 16 Feb 2026 12:57:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Samyak <samyak.bambole07@gmail.com>, marvin24@gmx.de
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Ion Agorria <ion@agorria.com>,
+	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, ac100@lists.launchpad.net,
-	linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Samyak Bambole <samyak.bambole07@gmail.com>
-Subject: Re: [PATCH] staging: nvec: Use kzalloc_obj instead of kzalloc
-Message-ID: <202602161056.Elbb21hV-lkp@intel.com>
-References: <20260215122913.104064-1-samyak.bambole07@gmail.com>
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] mfd: Add driver for ASUS Transformer embedded
+ controller
+Message-ID: <202602161252.Kq5BRohK-lkp@intel.com>
+References: <20260214180959.30714-3-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,68 +72,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260215122913.104064-1-samyak.bambole07@gmail.com>
+In-Reply-To: <20260214180959.30714-3-clamor95@gmail.com>
 
-Hi Samyak,
+Hi Svyatoslav,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on staging/staging-testing]
+[auto build test WARNING on next-20260213]
+[also build test WARNING on linus/master v6.19]
+[cannot apply to dtor-input/next dtor-input/for-linus sre-power-supply/for-next robh/for-next v6.19 v6.19-rc8 v6.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Samyak/staging-nvec-Use-kzalloc_obj-instead-of-kzalloc/20260215-203130
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260215122913.104064-1-samyak.bambole07%40gmail.com
-patch subject: [PATCH] staging: nvec: Use kzalloc_obj instead of kzalloc
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20260216/202602161056.Elbb21hV-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project afd4df07ab0262482829d4410a6bae9f2809d37b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260216/202602161056.Elbb21hV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-embedded-controller-document-ASUS-Transformer-EC/20260215-021406
+base:   next-20260213
+patch link:    https://lore.kernel.org/r/20260214180959.30714-3-clamor95%40gmail.com
+patch subject: [PATCH v3 2/7] mfd: Add driver for ASUS Transformer embedded controller
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260216/202602161252.Kq5BRohK-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260216/202602161252.Kq5BRohK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602161056.Elbb21hV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602161252.Kq5BRohK-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/staging/nvec/nvec_ps2.c:105:12: error: call to undeclared function 'kzalloc_obj'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     105 |         ser_dev = kzalloc_obj(*ser_dev, GFP_KERNEL);
-         |                   ^
->> drivers/staging/nvec/nvec_ps2.c:105:10: error: incompatible integer to pointer conversion assigning to 'struct serio *' from 'int' [-Wint-conversion]
-     105 |         ser_dev = kzalloc_obj(*ser_dev, GFP_KERNEL);
-         |                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/mfd/asus-transformer-ec.c:234:40: warning: field width should have type 'int', but argument has type '__size_t' (aka 'unsigned long') [-Wformat]
+     234 |         dev_dbg(&priv->self->dev, "EC read: %*ph, ret = %d%s\n",
+         |                                             ~~^
+     235 |                 sizeof(priv->ec_data), priv->ec_data,
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:165:31: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ^~~     ~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   include/linux/dynamic_debug.h:285:12: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ^~~    ~~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/kzalloc_obj +105 drivers/staging/nvec/nvec_ps2.c
+vim +234 drivers/mfd/asus-transformer-ec.c
 
-    99	
-   100	static int nvec_mouse_probe(struct platform_device *pdev)
-   101	{
-   102		struct nvec_chip *nvec = dev_get_drvdata(pdev->dev.parent);
-   103		struct serio *ser_dev;
-   104	
- > 105		ser_dev = kzalloc_obj(*ser_dev, GFP_KERNEL);
-   106		if (!ser_dev)
-   107			return -ENOMEM;
-   108	
-   109		ser_dev->id.type = SERIO_8042;
-   110		ser_dev->write = ps2_sendcommand;
-   111		ser_dev->start = ps2_startstreaming;
-   112		ser_dev->stop = ps2_stopstreaming;
-   113	
-   114		strscpy(ser_dev->name, "nvec mouse", sizeof(ser_dev->name));
-   115		strscpy(ser_dev->phys, "nvec", sizeof(ser_dev->phys));
-   116	
-   117		ps2_dev.ser_dev = ser_dev;
-   118		ps2_dev.notifier.notifier_call = nvec_ps2_notifier;
-   119		ps2_dev.nvec = nvec;
-   120		nvec_register_notifier(nvec, &ps2_dev.notifier, 0);
-   121	
-   122		serio_register_port(ser_dev);
-   123	
-   124		return 0;
-   125	}
-   126	
+   227	
+   228	static int asus_ec_read(struct asus_ec_data *priv, bool in_irq)
+   229	{
+   230		int ret = i2c_smbus_read_i2c_block_data(priv->self, ASUSEC_READ_BUF,
+   231							sizeof(priv->ec_data),
+   232							priv->ec_data);
+   233	
+ > 234		dev_dbg(&priv->self->dev, "EC read: %*ph, ret = %d%s\n",
+   235			sizeof(priv->ec_data), priv->ec_data,
+   236			ret, in_irq ? "; in irq" : "");
+   237	
+   238		return ret;
+   239	}
+   240	
 
 -- 
 0-DAY CI Kernel Test Service
