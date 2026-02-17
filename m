@@ -1,308 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6A922541B;
-	Tue, 17 Feb 2026 03:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F5D2D94A3
+	for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 07:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771298840; cv=none; b=DpVDAh2fkrZ8GiYJkEY65SDYeTPEM4m6n+X95Ubr8UuuyeWjpZ1Fdm/6kHHM5XSeNWiLTaMEothVFWEJqYoqjMXS0JLSsPH5q7sL2LScr2wut7PtBog6orBRZVKizCGRZo+aG3E79mrvm9pxWVurjKY0ycjQjVTfplV1dCGoSSM=
+	t=1771314816; cv=none; b=uyL7SCKwDDg99Zsm5NrDyVgWegMShfvvqHZ3xgb7npWcjZM2691eOQAIsaWG7xm0GAthUVCnPOWDbZ9KnDCN6cjtZWOYUD2FOYyVJctdre1doJ8OnLKAmrdin7xZSY7iPp9YnG4KmFcSpOCBmOZIZRMjDymKHebXzVDuv5Pasd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771298840; c=relaxed/simple;
-	bh=2m6koxxuM7n6l/jOLQFHEQ1o9KyPZ+dboD1swuR9uQY=;
+	s=arc-20240116; t=1771314816; c=relaxed/simple;
+	bh=u10W0dZQkXKK92GV/cpGKMrlxzSLCDLg8iUDPQNa+Dw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lTNSZSjyQyoUHn+j8ssn3C1EMZ/DtKYQq50RNgE6jyIScvqjauQgbdBuns9XeG0XMUO76HTQiooenxBKySSWHGssWemJRFPUMF82Xsf9FyoKr3JRmBf+SArELCG46ETNX5UN3JCvzmO4KcxNaGqN7AYOj+0lRbmjT/fVOtvroZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RDW0+wzG; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=eiqmi6wcTnOAuX1N2olAfKzvuVWAmPgW4tzPHUsVI4mEXRHfyI5vSxk0ihyEuKrncE/bTsGadMFvEBg8a4QjWbQGNncl4jJ8R/nwl4HhA3lJhh9VIVPaBW+yQTQlM7LK7VhEWl/NVi6+x+ck9G7pducOp/WLkzCJTOz2f14xcWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kh/DgkVM; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SXdxcNle; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RDW0+wzG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771298838; x=1802834838;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2m6koxxuM7n6l/jOLQFHEQ1o9KyPZ+dboD1swuR9uQY=;
-  b=RDW0+wzGfW3yF9yqM9OnCqgZ0nFD6dSqu23veUBKpzbPpfJs95/e2Rb1
-   lfUgUO9+YrbJIdeNOJGuiXmH1xkwCZ9DT/7A+ovYXKKn5JFS4jAPI+lWe
-   PkkoqLNKS7Vf9TQVFLAl/FX/X6K0TeC9LxTajb4Z9d8y6PGC0N2LEaVn8
-   eivU95N3wzRt2Q64X5d8BctqBlcYrCnxGvCUN5ROUmI+fjiME1fltJYxh
-   wgubWVmgZanJMWdlXKTxcLczGGt4w2/w73WZgyGWa/EHj3Yv525YyM2O6
-   xlM5vdD5Z3Ke80EpdIlrzaywHJ2870D2wnPERtgYkjbGgf+QolZOk/SG8
-   w==;
-X-CSE-ConnectionGUID: 1lqkxEpbQLaSHBNa9zF9Wg==
-X-CSE-MsgGUID: PM8sF/ZmTbO+pTai4O7RMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="97829864"
-X-IronPort-AV: E=Sophos;i="6.21,295,1763452800"; 
-   d="scan'208";a="97829864"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 19:27:18 -0800
-X-CSE-ConnectionGUID: DlXPHptKQkOBfFFlFw7TwA==
-X-CSE-MsgGUID: DTibiXF/SNqAIcHhtzd3Aw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,295,1763452800"; 
-   d="scan'208";a="217726185"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 16 Feb 2026 19:27:11 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vsBjx-000000010aG-0HmP;
-	Tue, 17 Feb 2026 03:27:09 +0000
-Date: Tue, 17 Feb 2026 11:26:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Larisa Grigore <larisa.grigore@oss.nxp.com>, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, sumit.semwal@linaro.org,
-	christian.koenig@amd.com, chester62515@gmail.com,
-	cosmin.stoica@nxp.com, adrian.nitu@freescale.com,
-	stefan-gabriel.mirea@nxp.com, Mihaela.Martinas@freescale.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	s32@nxp.com, imx@lists.linux.dev, clizzi@redhat.com,
-	aruizrui@redhat.com, eballetb@redhat.com, echanude@redhat.com,
-	jkangas@redhat.com, Larisa Grigore <larisa.grigore@oss.nxp.com>,
-	Radu Pirea <radu-nicolae.pirea@nxp.com>,
-	Phu Luu An <phu.luuan@nxp.com>, Js Ha <js.ha@nxp.com>,
-	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-Subject: Re: [PATCH 12/13] serial: linflexuart: Add DMA support
-Message-ID: <202602171112.rMhRspEp-lkp@intel.com>
-References: <20260216150205.212318-13-larisa.grigore@oss.nxp.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kh/DgkVM";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SXdxcNle"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61H54ons2112149
+	for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 07:53:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=HlyIZEog6J3u33MMe7AFXbsT
+	oOYrvaz+iKp7UgWrFA0=; b=kh/DgkVMfTUv94MQxfiFtIZvNho6Sio2iEoAmdwt
+	p9wU7zr1g7ZzxgGBXfXYlLjq3TPOM3hJ8D/b9aSchRwQxwjF3e1rthYMJutvF2vt
+	EDvweYnq4avWV8HWeNz8wQPR0a6rjvhP/Gy9m78DqnJoDvhWhNwFPzf6cYjloITR
+	WlRrIBZZkeKKGf1mPDdDqAGO1R0Pv4FdvTQ5K3zENBUVBmxKAovlQVsrsCZtT5Zr
+	ZFCsnc5h5NmVAks3u2iFAGJ/DgN8EtQRvlauC9OFjC1wQ0CdmcrOqwmQf4/WAy8u
+	PQcuvuH07hVls331ZoxcCkHIK7kDNjmeAsIsWRdN9UFYdw==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cchv4gahe-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 07:53:34 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-896ff58f17aso353475806d6.2
+        for <llvm@lists.linux.dev>; Mon, 16 Feb 2026 23:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1771314813; x=1771919613; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HlyIZEog6J3u33MMe7AFXbsToOYrvaz+iKp7UgWrFA0=;
+        b=SXdxcNleKXi4vADlAiZ5nYBtxDXrj/c31oVrxdmnCC+oGuOIZYFi/ExP8zzXl11E6A
+         133QU0CB86IHFjad4wd36iBREeIjv7QB8yxlakG3Wh+NTrEQlZrsh60OVt/5P9LGvwnM
+         K6aHeG6CW2I66/fpIOVuT5SdHGioR84l4E2Zh5zroLUsBiO00XyJNg3OSBVDzy220QyS
+         XsLOCqqXLcsjoLx5iEb8v2ZunEis5Pd92WALG+BmOng+UdZQbJGqhgFnWNkWRJ9Ddsf7
+         tIbr5gXZutX8mXZ87hrcMbFGVfQ18LSJWPCLsIEeNG6XNK6ON63C9HRNJ0NqPV/TPMnq
+         EAtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771314813; x=1771919613;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HlyIZEog6J3u33MMe7AFXbsToOYrvaz+iKp7UgWrFA0=;
+        b=H/wvZW1rslMQOJcwz+RmpW/mR829V63jzAD/AaCW8BfPCkyDUrAZNQE5wltDgFbTlT
+         q1jLyHzJ81npEWJanpEfIQyK3zeoyGL7D87r3t4LmD4m6AtUHcXFui+P7cvDUjXQrKnW
+         ecCZwXVReTLvUS/gGYZLmqa2uK8qb7xP1qNUXP27UboMdpb37I4ZUMluSkwa7+puQo60
+         ego2eFHnFsYnFdQZgTbE8L6EGCGT3FRJTKPJ9uIDG1Yh7mRKK/YXttsHwZb21EE1XwDf
+         yxVFr0vrJRfJ2D/BxSkCou8XqKn9PR+O2xnYjO1APs863CT5FD4qCHyriPRtgo/vK/Fp
+         3uIg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvZ+XjCe0iB8BC/u0ixOuhJnHwd18UUJeUqcNmIzDFP3IhfVSx8l/kKfKK2ehFwlx3phBS@lists.linux.dev
+X-Gm-Message-State: AOJu0YyN+wShRMs2aEL8OSKQ/pbRSkFVc0n3gm2sDHeQ+kIGSYc+1R0v
+	TYqlyBKHCv9qpd2Y6R3HtQVjJo7qODpry8QFqgIVG9s9F2veMou94oTA2PqywFmI820UNDd7eOk
+	SouS0BEhqlPb0kHguRhD/s0Hm/whvFi+BHMhiMRGgZfN+aO+TqilpMgOy
+X-Gm-Gg: AZuq6aKI0bDBu/IwXRol4g9936ypUz+HEXy/D3CMjRyynA80BaVdDcjST1Gny5wOnv5
+	rPOs74NwW1c4kwgdrk7J6qMSD7KSDeWh5x/xZzgExciSKLqoR8cDZBinrzAJuwYf5PisV7Dcab5
+	6Elry2X4+GZ8Hrjcr9Pp+ZDNvHEPAdaHpZ6Ts/eoZQIN6qKZVKc6NCiXcnhzjjvhRNAzSabzk+b
+	dDZKTD5HtxKBoTgljL10xqauA1haencV/9K0aa1mKZgthwzocGBwv679y90My0oiM1Kc6CgjTmc
+	jTwUcNGtwRzhAzxafp48nhrqYI91mqSAjO9Ucjmwj16osuCh6kL296pVvJ7dSNQeqn3qVCXOIlr
+	OPB3/PiQi0pyUwKfRD4hCNsxkWzZgRSuSMofW
+X-Received: by 2002:a05:620a:1728:b0:8c0:d16b:b0a7 with SMTP id af79cd13be357-8cb4225fdb1mr1520260385a.2.1771314813327;
+        Mon, 16 Feb 2026 23:53:33 -0800 (PST)
+X-Received: by 2002:a05:620a:1728:b0:8c0:d16b:b0a7 with SMTP id af79cd13be357-8cb4225fdb1mr1520259285a.2.1771314812848;
+        Mon, 16 Feb 2026 23:53:32 -0800 (PST)
+Received: from oss.qualcomm.com ([86.121.162.109])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796ac9d77sm29866948f8f.33.2026.02.16.23.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Feb 2026 23:53:30 -0800 (PST)
+Date: Tue, 17 Feb 2026 09:53:29 +0200
+From: Abel Vesa <abel.vesa@oss.qualcomm.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Taniya Das <taniya.das@oss.qualcomm.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Baryshkov <lumag@kernel.org>
+Subject: Re: [PATCH v3 6/6] clk: qcom: Add TCSR clock driver for Eliza
+Message-ID: <ckfybgx4suqpm2hjkm3zgdssxh4rmy4dxxjy35yqarg2ybu6fk@fl77gdnzvnhy>
+References: <20260216-eliza-clocks-v3-6-8afc5a7e3a98@oss.qualcomm.com>
+ <202602171002.SP54PXRC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260216150205.212318-13-larisa.grigore@oss.nxp.com>
+In-Reply-To: <202602171002.SP54PXRC-lkp@intel.com>
+X-Authority-Analysis: v=2.4 cv=eYAwvrEH c=1 sm=1 tr=0 ts=69941e7e cx=c_pps
+ a=UgVkIMxJMSkC9lv97toC5g==:117 a=oauzzCmhM186DRC0Y2yWPg==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=i3X5FwGiAAAA:8
+ a=QyXUC8HyAAAA:8 a=gSbDSvPH9l2sfEXJlosA:9 a=CjuIK1q_8ugA:10
+ a=1HOtulTD9v-eNWfpl4qZ:22 a=mmqRlSCDY2ywfjPLJ4af:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDA2NCBTYWx0ZWRfX/r6wyLQhIDEP
+ MsA6WXxv9qnmxxbcDydm+Tfct4FJgalZN0kDjzICN5YihQA7oNTS+ocPOMqMN/fYHSHtnXrRmwy
+ 6Df26xivUfWuKLEn7qvCX2exPGEHC7950FFmo1eELwOLczMN/DQSoC8F9xSaJiwmwUY3YzPfzn0
+ A9BATG/eFbYhhrCSkTdXwZ0ucscL//RtXCfV+LEmNFD9AB+bBFLrZruaxg3JNQU7SnBPakGoW1r
+ U8csgJ/lLKaNfN44TVY1V7Unj6uqj6BgZPOlz/d+Sm7wgsiFh8Vn5Tewv9+6S4IKPmD+EA1o9HO
+ Ko1uYd/se7bWVzOc+JpJKR64hvPPgyAFF+9liLfvNv+iLRkO3WXyTEwLoFvtYHrtf9PO9XAXXND
+ N6JvdACWF9DfI5lHitPx79oIx/mr41eZKwaO6Heykgdl1lmaou4KPup4bqwyOs52F9mcf+XtL+b
+ WIuop/4XLImxuktnskA==
+X-Proofpoint-GUID: ZJYzk8-WmTNFA2TxVK9qtwdUNpSBDPUu
+X-Proofpoint-ORIG-GUID: ZJYzk8-WmTNFA2TxVK9qtwdUNpSBDPUu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-17_01,2026-02-16_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ phishscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170064
 
-Hi Larisa,
+On 26-02-17 10:31:45, kernel test robot wrote:
+> Hi Abel,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on 635c467cc14ebdffab3f77610217c1dacaf88e8c]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/dt-bindings-clock-qcom-document-the-Eliza-Global-Clock-Controller/20260216-215148
+> base:   635c467cc14ebdffab3f77610217c1dacaf88e8c
+> patch link:    https://lore.kernel.org/r/20260216-eliza-clocks-v3-6-8afc5a7e3a98%40oss.qualcomm.com
+> patch subject: [PATCH v3 6/6] clk: qcom: Add TCSR clock driver for Eliza
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260217/202602171002.SP54PXRC-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171002.SP54PXRC-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202602171002.SP54PXRC-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/clk/qcom/tcsrcc-eliza.c:126:3: error: use of undeclared identifier 'TCSR_HDMI_CLKREF_EN'
+>      126 |         [TCSR_HDMI_CLKREF_EN] = &tcsr_hdmi_clkref_en.clkr,
+>          |          ^
+> >> drivers/clk/qcom/tcsrcc-eliza.c:128:3: error: use of undeclared identifier 'TCSR_PCIE_1_CLKREF_EN'
+>      128 |         [TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
+>          |          ^
+> >> drivers/clk/qcom/tcsrcc-eliza.c:145:14: error: invalid application of 'sizeof' to an incomplete type 'struct clk_regmap *[]'
+>      145 |         .num_clks = ARRAY_SIZE(tcsr_cc_eliza_clocks),
+>          |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+>       11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>          |                                ^~~~~
+>    3 errors generated.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus robh/for-next linus/master v6.19 next-20260216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Larisa-Grigore/serial-linflexuart-Fix-locking-in-set_termios/20260216-231403
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20260216150205.212318-13-larisa.grigore%40oss.nxp.com
-patch subject: [PATCH 12/13] serial: linflexuart: Add DMA support
-config: i386-buildonly-randconfig-002-20260217 (https://download.01.org/0day-ci/archive/20260217/202602171112.rMhRspEp-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171112.rMhRspEp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602171112.rMhRspEp-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/tty/serial/fsl_linflexuart.c:1095:6: warning: variable 'baud' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1095 |         if (port->uartclk) {
-         |             ^~~~~~~~~~~~~
-   drivers/tty/serial/fsl_linflexuart.c:1113:67: note: uninitialized use occurs here
-    1113 |         lfport->dma_rx_timeout = msecs_to_jiffies(DIV_ROUND_UP(10000000, baud));
-         |                                                                          ^~~~
-   include/linux/math.h:49:22: note: expanded from macro 'DIV_ROUND_UP'
-      49 | #define DIV_ROUND_UP __KERNEL_DIV_ROUND_UP
-         |                      ^
-   include/uapi/linux/const.h:51:46: note: expanded from macro '__KERNEL_DIV_ROUND_UP'
-      51 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
-         |                                              ^
-   drivers/tty/serial/fsl_linflexuart.c:1095:2: note: remove the 'if' if its condition is always true
-    1095 |         if (port->uartclk) {
-         |         ^~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/fsl_linflexuart.c:970:19: note: initialize the variable 'baud' to silence this warning
-     970 |         unsigned int baud;
-         |                          ^
-         |                           = 0
-   drivers/tty/serial/fsl_linflexuart.c:205:13: warning: unused function 'linflex_console_putchar' [-Wunused-function]
-     205 | static void linflex_console_putchar(struct uart_port *port, unsigned char ch);
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +1095 drivers/tty/serial/fsl_linflexuart.c
-
-1d3f5f07fafc712 Radu Pirea           2026-02-16   959  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   960  static void
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   961  linflex_set_termios(struct uart_port *port, struct ktermios *termios,
-bec5b814d46c2a7 Ilpo Järvinen        2022-08-16   962  		    const struct ktermios *old)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   963  {
-0b34325c5f79f1f Larisa Grigore       2026-02-16   964  	struct linflex_port *lfport = to_linflex_port(port);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   965  	unsigned long flags;
-1312e6586227421 Larisa Grigore       2026-02-16   966  	unsigned long cr, old_cr, cr1, gcr;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   967  	unsigned int old_csize = old ? old->c_cflag & CSIZE : CS8;
-1d3f5f07fafc712 Radu Pirea           2026-02-16   968  	unsigned long ibr, fbr, divisr, dividr;
-1d3f5f07fafc712 Radu Pirea           2026-02-16   969  	unsigned char ldiv_mul;
-1d3f5f07fafc712 Radu Pirea           2026-02-16   970  	unsigned int baud;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   971  
-a75137a58feb092 Radu Pirea           2026-02-16   972  	uart_port_lock_irqsave(port, &flags);
-a75137a58feb092 Radu Pirea           2026-02-16   973  
-0b34325c5f79f1f Larisa Grigore       2026-02-16   974  	_linflex_stop_rx(port);
-0b34325c5f79f1f Larisa Grigore       2026-02-16   975  	_linflex_stop_tx(port);
-0b34325c5f79f1f Larisa Grigore       2026-02-16   976  
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   977  	old_cr = readl(port->membase + UARTCR) &
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   978  		~(LINFLEXD_UARTCR_RXEN | LINFLEXD_UARTCR_TXEN);
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   979  	cr = old_cr;
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   980  
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   981  	/* In FIFO mode, we should make sure the fifo is empty
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   982  	 * before entering INITM.
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   983  	 */
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   984  	linflex_wait_tx_fifo_empty(port);
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   985  
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   986  	/* disable transmit and receive */
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16   987  	writel(old_cr, port->membase + UARTCR);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   988  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   989  	/* Enter initialization mode by setting INIT bit */
-5e8e1ccacae0470 Larisa Grigore       2026-02-16   990  	cr1 = LINFLEXD_LINCR1_INIT | LINFLEXD_LINCR1_MME;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   991  	writel(cr1, port->membase + LINCR1);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   992  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   993  	/* wait for init mode entry */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   994  	while ((readl(port->membase + LINSR)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   995  		& LINFLEXD_LINSR_LINS_MASK)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   996  		!= LINFLEXD_LINSR_LINS_INITMODE)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   997  		;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   998  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09   999  	/*
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1000  	 * only support CS8 and CS7, and for CS7 must enable PE.
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1001  	 * supported mode:
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1002  	 *	- (7,e/o,1)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1003  	 *	- (8,n,1)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1004  	 *	- (8,e/o,1)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1005  	 */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1006  	/* enter the UART into configuration mode */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1007  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1008  	while ((termios->c_cflag & CSIZE) != CS8 &&
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1009  	       (termios->c_cflag & CSIZE) != CS7) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1010  		termios->c_cflag &= ~CSIZE;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1011  		termios->c_cflag |= old_csize;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1012  		old_csize = CS8;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1013  	}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1014  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1015  	if ((termios->c_cflag & CSIZE) == CS7) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1016  		/* Word length: WL1WL0:00 */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1017  		cr = old_cr & ~LINFLEXD_UARTCR_WL1 & ~LINFLEXD_UARTCR_WL0;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1018  	}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1019  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1020  	if ((termios->c_cflag & CSIZE) == CS8) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1021  		/* Word length: WL1WL0:01 */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1022  		cr = (old_cr | LINFLEXD_UARTCR_WL0) & ~LINFLEXD_UARTCR_WL1;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1023  	}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1024  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1025  	if (termios->c_cflag & CMSPAR) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1026  		if ((termios->c_cflag & CSIZE) != CS8) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1027  			termios->c_cflag &= ~CSIZE;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1028  			termios->c_cflag |= CS8;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1029  		}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1030  		/* has a space/sticky bit */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1031  		cr |= LINFLEXD_UARTCR_WL0;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1032  	}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1033  
-1312e6586227421 Larisa Grigore       2026-02-16  1034  	gcr = readl(port->membase + GCR);
-1312e6586227421 Larisa Grigore       2026-02-16  1035  
-1312e6586227421 Larisa Grigore       2026-02-16  1036  	if (termios->c_cflag & CSTOPB) {
-1312e6586227421 Larisa Grigore       2026-02-16  1037  		/* Use 2 stop bits. */
-1312e6586227421 Larisa Grigore       2026-02-16  1038  		cr = (cr & ~LINFLEXD_UARTCR_SBUR_MASK) |
-1312e6586227421 Larisa Grigore       2026-02-16  1039  			LINFLEXD_UARTCR_SBUR_2SBITS;
-1312e6586227421 Larisa Grigore       2026-02-16  1040  		/* Set STOP in GCR field for 2 stop bits. */
-1312e6586227421 Larisa Grigore       2026-02-16  1041  		gcr = (gcr & ~LINFLEXD_GCR_STOP_MASK) |
-1312e6586227421 Larisa Grigore       2026-02-16  1042  			LINFLEXD_GCR_STOP_2SBITS;
-1312e6586227421 Larisa Grigore       2026-02-16  1043  	} else {
-1312e6586227421 Larisa Grigore       2026-02-16  1044  		/* Use 1 stop bit. */
-1312e6586227421 Larisa Grigore       2026-02-16  1045  		cr = (cr & ~LINFLEXD_UARTCR_SBUR_MASK) |
-1312e6586227421 Larisa Grigore       2026-02-16  1046  			LINFLEXD_UARTCR_SBUR_1SBITS;
-1312e6586227421 Larisa Grigore       2026-02-16  1047  		/* Set STOP in GCR field for 1 stop bit. */
-1312e6586227421 Larisa Grigore       2026-02-16  1048  		gcr = (gcr & ~LINFLEXD_GCR_STOP_MASK) |
-1312e6586227421 Larisa Grigore       2026-02-16  1049  			LINFLEXD_GCR_STOP_1SBITS;
-1312e6586227421 Larisa Grigore       2026-02-16  1050  	}
-1312e6586227421 Larisa Grigore       2026-02-16  1051  	/* Update GCR register. */
-1312e6586227421 Larisa Grigore       2026-02-16  1052  	writel(gcr, port->membase + GCR);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1053  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1054  	/* parity must be enabled when CS7 to match 8-bits format */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1055  	if ((termios->c_cflag & CSIZE) == CS7)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1056  		termios->c_cflag |= PARENB;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1057  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1058  	if ((termios->c_cflag & PARENB)) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1059  		cr |= LINFLEXD_UARTCR_PCE;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1060  		if (termios->c_cflag & PARODD)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1061  			cr = (cr | LINFLEXD_UARTCR_PC0) &
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1062  			     (~LINFLEXD_UARTCR_PC1);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1063  		else
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1064  			cr = cr & (~LINFLEXD_UARTCR_PC1 &
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1065  				   ~LINFLEXD_UARTCR_PC0);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1066  	} else {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1067  		cr &= ~LINFLEXD_UARTCR_PCE;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1068  	}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1069  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1070  	port->read_status_mask = 0;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1071  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1072  	if (termios->c_iflag & INPCK)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1073  		port->read_status_mask |=	(LINFLEXD_UARTSR_FEF |
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1074  						 LINFLEXD_UARTSR_PE0 |
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1075  						 LINFLEXD_UARTSR_PE1 |
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1076  						 LINFLEXD_UARTSR_PE2 |
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1077  						 LINFLEXD_UARTSR_PE3);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1078  	if (termios->c_iflag & (IGNBRK | BRKINT | PARMRK))
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1079  		port->read_status_mask |= LINFLEXD_UARTSR_FEF;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1080  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1081  	/* characters to ignore */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1082  	port->ignore_status_mask = 0;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1083  	if (termios->c_iflag & IGNPAR)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1084  		port->ignore_status_mask |= LINFLEXD_UARTSR_PE;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1085  	if (termios->c_iflag & IGNBRK) {
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1086  		port->ignore_status_mask |= LINFLEXD_UARTSR_PE;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1087  		/*
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1088  		 * if we're ignoring parity and break indicators,
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1089  		 * ignore overruns too (for real raw support).
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1090  		 */
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1091  		if (termios->c_iflag & IGNPAR)
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1092  			port->ignore_status_mask |= LINFLEXD_UARTSR_BOF;
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1093  	}
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1094  
-1d3f5f07fafc712 Radu Pirea           2026-02-16 @1095  	if (port->uartclk) {
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1096  		ldiv_mul = linflex_ldiv_multiplier(port);
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1097  		baud = uart_get_baud_rate(port, termios, old, 0,
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1098  					  port->uartclk / ldiv_mul);
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1099  
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1100  		/* update the per-port timeout */
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1101  		uart_update_timeout(port, termios->c_cflag, baud);
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1102  
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1103  		divisr = port->uartclk;
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1104  		dividr = ((unsigned long)baud * ldiv_mul);
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1105  
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1106  		ibr = divisr / dividr;
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1107  		fbr = ((divisr % dividr) * 16 / dividr) & 0xF;
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1108  
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1109  		writel(ibr, port->membase + LINIBRR);
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1110  		writel(fbr, port->membase + LINFBRR);
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1111  	}
-1d3f5f07fafc712 Radu Pirea           2026-02-16  1112  
-0b34325c5f79f1f Larisa Grigore       2026-02-16  1113  	lfport->dma_rx_timeout = msecs_to_jiffies(DIV_ROUND_UP(10000000, baud));
-0b34325c5f79f1f Larisa Grigore       2026-02-16  1114  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1115  	writel(cr, port->membase + UARTCR);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1116  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1117  	cr1 &= ~(LINFLEXD_LINCR1_INIT);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1118  
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1119  	writel(cr1, port->membase + LINCR1);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1120  
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16  1121  	cr |= (LINFLEXD_UARTCR_TXEN) | (LINFLEXD_UARTCR_RXEN);
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16  1122  	writel(cr, port->membase + UARTCR);
-fb1da4d7f0bec28 Larisa Grigore       2026-02-16  1123  
-0b34325c5f79f1f Larisa Grigore       2026-02-16  1124  	_linflex_start_rx(port);
-0b34325c5f79f1f Larisa Grigore       2026-02-16  1125  	_linflex_start_tx(port);
-0b34325c5f79f1f Larisa Grigore       2026-02-16  1126  
-7c6725ffd581335 Thomas Gleixner      2023-09-14  1127  	uart_port_unlock_irqrestore(port, flags);
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1128  }
-09864c1cdf5c537 Stefan-gabriel Mirea 2019-08-09  1129  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Fixed in v4.
