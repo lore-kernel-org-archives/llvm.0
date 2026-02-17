@@ -1,142 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f196.google.com (mail-lj1-f196.google.com [209.85.208.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25211280A29;
-	Tue, 17 Feb 2026 15:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3690917D2
+	for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 16:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771342077; cv=none; b=Ihxet+uG46gJU0tz4ZU/PYpqgRgYWR5magP8s+qt+LKNsQvS4Fz1U7bmmxp8CcESF1ESXpYu9HhjwzOILwsArQhXekQKWz3us07kiVoPVPBu5/MdVVl+mqzqM2ityLAQH3Qti1U+rtJMMM4nuKh7jXWgAlxNTI7Yqw+c6KjnJ5M=
+	t=1771345919; cv=none; b=FSaI73PS6Sl8On253zm/fMnzgCFrcGjIethW1oV7HExgGRZnQ3cd+xnAQsMhpeMNm3DgDIQdgTDqA/XHFqopu25sZNh5mtkczWwImE0GqXKv6wjDRVgAU3mh9Y8PcqVIC886hYuzK0d5yhGd/Ko7ePhAyzq09qE8bHPIdPcbe1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771342077; c=relaxed/simple;
-	bh=camCf+hMhDCMoC/dJnwKFdEJluxi3duXst4BvOZyGNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n1lDBs4IKgDyxKDm21W0guU9Cjds2L8RDc4o5Yu8MmklKoWUOE3cO8rsV90Uvj9dbTcTZWwhNLn8A00OTbEM5B5pEft1l7f9h0CN3hoFtJ6BIsVumvaVsg7cOlT1KQ/70gTO9f2VX7NaKYa/eoImBCYZ9wOYs6XOHuK6MLyKCfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fGpSXoaz; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771345919; c=relaxed/simple;
+	bh=QPrpZgTs8vPTBHFzbhy83lux56ucmvLYnhqKqXH1vlg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eZaD3B2jg8g9hURTpxVJoj1NlVP1DrFxp4jtmiXg4KdB+UhPfKR8Z1bIB4I4UUxhx4GpKAHWsUtLtwpAQtLSB1yukVI+HRE3xYvZcG6ig3zqtQUOY59aYFszwyqPF53eM4SFJD0/aBdSsUQYQzpkuG/FJeWbkvX0VydNYyWwLfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=gLHjBBOX; arc=none smtp.client-ip=209.85.208.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fGpSXoaz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771342075; x=1802878075;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=camCf+hMhDCMoC/dJnwKFdEJluxi3duXst4BvOZyGNk=;
-  b=fGpSXoazXqWC3rDbu7VBl5RPLO8YLoc7kUGdWTrPDFBgljfpmzaBg5kX
-   ME6pJ5fF1NUfOtfqkUrULhypxKNUypY+RcS9NgzoW7tq4k0O2AAuguU9c
-   5+ASKnhcHWy0CeX1ijijtVHo7emm5h9GCN/o+VN4BQREuri2rJg9UxWpN
-   OS07oDsYWjosZNUpVhOz1q/7KuUWjdTR0tp8/VyaGxG9XnaGvZUgynBIW
-   PAQNfqeYs17RKbPCUg7nIK5o56+4/3pb/FNEsD6y0RcpAC1ZBBdFMKPkZ
-   fkOexs+v9wKwCdw7f5553pE4rv/aAuY5TgRBVD6KM1bBdnwvU9gpItKpm
-   w==;
-X-CSE-ConnectionGUID: zcrh10UqSFaxMTzUPQwCHg==
-X-CSE-MsgGUID: LnNOaX3ORSebCxVCaxtH8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="72125693"
-X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="72125693"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 07:27:54 -0800
-X-CSE-ConnectionGUID: 0xAn4PJMRCqyOVKaDo5Keg==
-X-CSE-MsgGUID: iDkey0zJTbC4GUUgB5IS0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="218043448"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Feb 2026 07:27:50 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vsMzL-0000000115k-15b4;
-	Tue, 17 Feb 2026 15:27:47 +0000
-Date: Tue, 17 Feb 2026 23:27:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Youngjun Park <youngjun.park@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>,
-	Barry Song <baohua@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	gunho.lee@lge.com, taejoon.song@lge.com, austin.kim@lge.com,
-	youngjun.park@lge.com
-Subject: Re: [PATCH v4 1/4] mm: swap: introduce swap tier infrastructure
-Message-ID: <202602172319.SHQ7btgd-lkp@intel.com>
-References: <20260217000950.4015880-2-youngjun.park@lge.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="gLHjBBOX"
+Received: by mail-lj1-f196.google.com with SMTP id 38308e7fff4ca-3871a08189aso34871371fa.1
+        for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 08:31:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1771345916; x=1771950716; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8VVVA27vXMecotvakD3mWfyoVh5TXj3m2nUAse+m5/Y=;
+        b=gLHjBBOXa47Ovwz5K4k3r4WX+s4AMee4mmbGsXGoEyc/sSTEfFpFp4adMdLiSVJSao
+         pftKX2YJoY6h/ULr6YdE22UqUhmrI1xbZJPZoKpvFrvcCBrzxV1K0Erb219E5wmGhR/D
+         TcrWOjrqAhAfHooDlGDv8TI7rYZsfQzMW7tFc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771345916; x=1771950716;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8VVVA27vXMecotvakD3mWfyoVh5TXj3m2nUAse+m5/Y=;
+        b=ZfaRQ5F3G5MX9LQQryqfW/njOWBx8BOcytcfX//J4xCTDdorENOZKVasmCdGAYuhSR
+         cJtvuRQngrfz13YapipDxq9iJeUwnUkhy3dE2I8Xztr25N8ZbH9x1n1yo6ibF43qkbgk
+         rUPeFSySp+iOn/sCkYcAucZF2zcNr3XDevssw8Dgox517kob2NddFEOZyFIXZHVfQJlm
+         dA7SgX3hhyy2mca7EfudizrYtqckj3VP/RXVLh4TbRvhW7Bjl/D4zi+g8vYL0738GFYc
+         nWexS4FknDlEbNmmhroFamzLpHbmm3VjLE7e2UJrdKcVkRjj35usKZ2nhd6YRwZh6JNN
+         piDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUblE/OI75qTJ2c65QDCm5K1Mlt6+V9r8k/zbURiCxN0zaBGSgb4JedDNdU7n/n7lPjb4TQ@lists.linux.dev
+X-Gm-Message-State: AOJu0YyXs1jU47w4A8+/j2AELQMFcTN8Ly6EWhzNGGdD+lHMQW2oNYrp
+	ajFps5b4yYjJ+diBG/+/U5CggJvBFjICauGqVLa9dNBPgGVxR+/eDr+Mj4s7kahTOeA3PfUVHg4
+	sALwCJn8IRDs3
+X-Gm-Gg: AZuq6aLvt8WoKtBPG8KWpYJmCqg+THfG7kC0xhlCgR1olw6KJCxGCgF5S7aH8+SNpFd
+	XaqAny4YOs7deGFgqHkhSix9zwQ30MG/NBgu86C2yubLMRv0f+8cqY+1znjoFw1f6syIj1fF6Sc
+	kZ8uFw+iGOynR25yPxede841sTsmuA/C/eaJb82JLXR4fR8MnEQU5sxUhNiUE0Uxd9v/ScAeRem
+	Ste46LoVPX+3cB5DLdwXtYMpivSBXTfCkXLStGd/lhx9O83OxIsByBuHGVq7uAxMjZOl/NLvpG5
+	tX1L2LvScEftU5WrOsctsSTWn106/DX5IfHcgPUYawrdiCJwv/IDjAEG85rUZgAeJsgTucBKjPI
+	gnykyl0VLG1YZ8VI2Wgup6bF4sE5/K2GTUguREnp3JalrK+yjcWVvCMT2uPDZLeGOM91YjkLwMy
+	gkq2Dy6SLclFpc15Hv5TJbJEutcEVzIcGk8/UB888ttscjw5cnQPbioVuIip9XCfbVJ68sEM3x4
+	cvn
+X-Received: by 2002:a05:651c:f06:b0:383:b9d9:3fdd with SMTP id 38308e7fff4ca-3881057263dmr44787791fa.34.1771345916065;
+        Tue, 17 Feb 2026 08:31:56 -0800 (PST)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3870692b7b8sm35302191fa.44.2026.02.17.08.31.55
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Feb 2026 08:31:55 -0800 (PST)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-38704f70ea3so37529351fa.2
+        for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 08:31:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWMad2FLDuXAaMZz2A1aZv8fnDlqOl/lwNlVOyzTBGYAdnr8n3sB0vn3zbcPQq2l9cNvEHQ@lists.linux.dev
+X-Received: by 2002:a17:907:988:b0:b8e:d04e:e4fb with SMTP id
+ a640c23a62f3a-b8fb44dce24mr825863766b.48.1771345431078; Tue, 17 Feb 2026
+ 08:23:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260217000950.4015880-2-youngjun.park@lge.com>
+References: <20260130132951.2714396-1-elver@google.com> <20260130132951.2714396-4-elver@google.com>
+ <aYDFOIskB20CbztD@willie-the-truck> <20260202192923.0707e463@pumpkin>
+ <aYHgNSF5a3F7UGU_@willie-the-truck> <CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
+ <20260204131400.GI2995752@noisy.programming.kicks-ass.net>
+ <aYNUmEfDzq7lTFFr@willie-the-truck> <CANpmjNPHnt6eY-OfkTr5TksHaOon2GyLUokvagcMRa23B6i6_Q@mail.gmail.com>
+ <20260206182650.6c21b0ff@pumpkin> <CANpmjNNFXdMM6cL+HBsiXr2WUA=mttR1jDRMqNYD7+YZs6vRKg@mail.gmail.com>
+ <20260215221656.68b2fc1d@pumpkin> <CANpmjNOnOqq2k41=iNsgZLXAzspVQhcTZ88Nvms_c_0M+7b7YQ@mail.gmail.com>
+ <CAHk-=wioS+vB8aBxWBgdEfXqDq5Ynr9gyY=GhU7gxO9G_C+_6g@mail.gmail.com>
+ <20260216110915.4f0d5490@pumpkin> <CAHk-=wjJQQfWpAxigafuyrgxg8CdQWSimVYMk16_j0vWwEkjag@mail.gmail.com>
+ <20260216174324.75d47e37@pumpkin>
+In-Reply-To: <20260216174324.75d47e37@pumpkin>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 17 Feb 2026 08:23:34 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgQ8DOxaNY5cBWg+sUkM5Kk6rKYGRHXsZQLtknO_UX+QA@mail.gmail.com>
+X-Gm-Features: AaiRm53uZCbuFwEyfKCGb0ntN5PpXfYQtY2WkHebZ_fqBMtvDsyJbw5Zc4B6Gvw
+Message-ID: <CAHk-=wgQ8DOxaNY5cBWg+sUkM5Kk6rKYGRHXsZQLtknO_UX+QA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
+ analysis through __READ_ONCE() with CONFIG_LTO=y
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Marco Elver <elver@google.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, 
+	Waiman Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
+	Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Youngjun,
+On Mon, 16 Feb 2026 at 09:43, David Laight <david.laight.linux@gmail.com> wrote:
+>
+> >
+> > Try doing something as simple as a "var++" on a volatile, and cry.
+>
+> On x86 I just see a load, inc, store - not that surprising really.
+> (clang did do 'inc memory'.)
+>
+> It's not as though 'inc memory' is atomic (without a lock prefix).
 
-kernel test robot noticed the following build warnings:
+That's not my point. My point is that it makes for absolutely
+disgusting - and pointless - code generation.
 
-[auto build test WARNING on 776250964cbaa49ebe6b8bb2870765cc89cece59]
+That load + inc + store is a sign of the compiler missing truly basic
+optimizations because "volatile" is so badly designed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Youngjun-Park/mm-swap-introduce-swap-tier-infrastructure/20260217-121406
-base:   776250964cbaa49ebe6b8bb2870765cc89cece59
-patch link:    https://lore.kernel.org/r/20260217000950.4015880-2-youngjun.park%40lge.com
-patch subject: [PATCH v4 1/4] mm: swap: introduce swap tier infrastructure
-config: hexagon-randconfig-002-20260217 (https://download.01.org/0day-ci/archive/20260217/202602172319.SHQ7btgd-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602172319.SHQ7btgd-lkp@intel.com/reproduce)
+The thing is, we typically even *want* a single load. We actually want
+not only to have basic optimizations that don't even change the
+semantics - we typically even want CSE.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602172319.SHQ7btgd-lkp@intel.com/
+So we want basic optimizations and combining loads. The main reason to
+use READ_ONCE() is actually a worry about compilers doing even worse
+things, namely rematerialization or memory accesses - something that
+compilers don't even do, because it's a bad idea, but people still
+worry because they are _allowed_ to do it and who knows when something
+silly happens.
 
-All warnings (new ones prefixed by >>):
+So I want that READ_ONCE(), not "volatile" on data structures, because
+*some* day we can rely on more modern things and compilers will
+actually get it right if we do it as
 
->> mm/swap_tier.c:118:10: warning: format specifies type 'long' but the argument has type '__ptrdiff_t' (aka 'int') [-Wformat]
-     116 |                 len += sysfs_emit_at(buf, len, "%-16s %-5ld %-11d %-11d\n",
-         |                                                       ~~~~~
-         |                                                       %-5td
-     117 |                                      tier->name,
-     118 |                                      TIER_IDX(tier),
-         |                                      ^~~~~~~~~~~~~~
-   mm/swap_tier.c:33:24: note: expanded from macro 'TIER_IDX'
-      33 | #define TIER_IDX(tier)  ((tier) - swap_tiers)
-         |                         ^~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+ #define READ_ONCE(ptr) __atomic_load_n(ptr, __ATOMIC_RELAXED)
 
+or similar.
 
-vim +118 mm/swap_tier.c
+But last time I looked at it - which was admittedly a few years ago -
+the compilers we supported didn't actually do anything reasonable here
+(ie the built-in atomics were fundamentally worse than the ones we do
+by hand, and even basic things like __atomic_load_n() weren't
+actually; better than just using 'volatile'.
 
-   105	
-   106	ssize_t swap_tiers_sysfs_show(char *buf)
-   107	{
-   108		struct swap_tier *tier;
-   109		ssize_t len = 0;
-   110	
-   111		len += sysfs_emit_at(buf, len, "%-16s %-5s %-11s %-11s\n",
-   112				 "Name", "Idx", "PrioStart", "PrioEnd");
-   113	
-   114		spin_lock(&swap_tier_lock);
-   115		for_each_active_tier(tier) {
-   116			len += sysfs_emit_at(buf, len, "%-16s %-5ld %-11d %-11d\n",
-   117					     tier->name,
- > 118					     TIER_IDX(tier),
-   119					     tier->prio,
-   120					     TIER_END_PRIO(tier));
-   121		}
-   122		spin_unlock(&swap_tier_lock);
-   123	
-   124		return len;
-   125	}
-   126	
+Maybe that has changed. We've upgraded minimum compilers since.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+             Linus
