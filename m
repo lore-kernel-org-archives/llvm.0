@@ -1,63 +1,63 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D351433064F;
-	Tue, 17 Feb 2026 12:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD2D334690;
+	Tue, 17 Feb 2026 12:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771330597; cv=none; b=p1OrGhzy3NF1BEkQ/57fbo0dgn9HyZjULD/NzIi9q5LgV+N/48/6xTNPdl+At3z4YJuszdsnrxJ0VffVtLedA+nE0qxKpTUYFXg91zbN5K2DHCBNBQPXjXaRTgbdAUsjTzZJOP4dxurI8yDYDEZlFu2dqeGSyu5NFZ8wM8t0S3Q=
+	t=1771331987; cv=none; b=SFGP46M+A/fVRdI13VR9Viq6v7OLh5zRDPpiRcEKbvehg5mpeBLgBVvBshYxA+V866EY7zbwwrIDiaqeAm8y1KGLAFJFsiR9GoIW6uzlsZYDZtd+B6A2JbxYlBdfbY3JhE260mcij8SujY3OTCv5Iz+maUZ0OBHFKhXqoODpdZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771330597; c=relaxed/simple;
-	bh=KqotZ+PM2QOx54GilmxvN+Cj4KXr9i5FgnkflAc0VEw=;
+	s=arc-20240116; t=1771331987; c=relaxed/simple;
+	bh=jkvscVY8jhU91bgbPbEIsETUtHOFLH8AOKAEllmL2rk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=it7Wcn2CsRJq590r6DOIA0eJlIJ2F35GrolfMkcZbcvV7k8GmSCU9bkecWHG0Hku7+K19tCmPmnnzYKec/dh2A5f3pTG/+LkU7T1jcYIBycAG/MIH8zxQ4/llxJex99jQKx47q6RKEfo9pBYrwjRGEgP7k5Iu2YACRn2H/mSVjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iCmmFhwv; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=m1KHlXxOSR3m24UIEdnkBP28Sp6gRJTwW6BsUvDkSzEKDLVaFqTHXtZNz89DzNsAh42cbpudtZtJTaeDfFY3cblbXLMD59rvR67/F20BNKgnrYlIpfeS50A/Zsz+5KdieA2zSJ2AOEcTZ9fFTDAxnagBRqBr1lEBpftl+mWmhRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PQqBwSlg; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iCmmFhwv"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=1hc+l3zgnI4c6QaBzgq7ZMckdC5KQum6uKCRCoXKGfk=; b=iCmmFhwvMmC0jcbw89jRpd6KZR
-	xJX1GlyEcvJEvO3l8L3vUbnjLIMTVd3jdvd4K4PLWKsv9CYhP9zGahFiKL3wh9xXqqfdqaP+nDL4j
-	lmGL07NLREcBwR0CL0nevxeXES9/0g0esSUIb31YofW6729xRDxegJodS8fV4z4c8X8R83T+bRo+Y
-	7Z+evSWggHCtLlE0Veqtb/R4CoQ93AtqHn3G0TUIcuvmGwaLuD4L4paWYSRtX2H6iBUhGeN1W9w8b
-	CZLscVHDavWAFfuX80ilc3LgT9f9aqnoUuItqKWo9swGJZxYCU2uaCuwykOE1SQYVGgAoWTJDqXN9
-	Ekl9RIWQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vsK03-00000004Ozt-3KLK;
-	Tue, 17 Feb 2026 12:16:19 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 563C5300CDE; Tue, 17 Feb 2026 13:16:19 +0100 (CET)
-Date: Tue, 17 Feb 2026 13:16:19 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Marco Elver <elver@google.com>, Will Deacon <will@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Boqun Feng <boqun@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-Message-ID: <20260217121619.GA1395266@noisy.programming.kicks-ass.net>
-References: <aYNUmEfDzq7lTFFr@willie-the-truck>
- <CANpmjNPHnt6eY-OfkTr5TksHaOon2GyLUokvagcMRa23B6i6_Q@mail.gmail.com>
- <20260206182650.6c21b0ff@pumpkin>
- <CANpmjNNFXdMM6cL+HBsiXr2WUA=mttR1jDRMqNYD7+YZs6vRKg@mail.gmail.com>
- <20260215221656.68b2fc1d@pumpkin>
- <CANpmjNOnOqq2k41=iNsgZLXAzspVQhcTZ88Nvms_c_0M+7b7YQ@mail.gmail.com>
- <CAHk-=wioS+vB8aBxWBgdEfXqDq5Ynr9gyY=GhU7gxO9G_C+_6g@mail.gmail.com>
- <20260216110915.4f0d5490@pumpkin>
- <CAHk-=wjJQQfWpAxigafuyrgxg8CdQWSimVYMk16_j0vWwEkjag@mail.gmail.com>
- <20260216174324.75d47e37@pumpkin>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PQqBwSlg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771331985; x=1802867985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jkvscVY8jhU91bgbPbEIsETUtHOFLH8AOKAEllmL2rk=;
+  b=PQqBwSlgdtTZDPzOTPhEbHt/35E4doQ/JS7SGnsnYXuXK1dI1kkYxSGW
+   NZ3ISeYMP2bG7eoQ22tmu6X0NpaR7/LGzuUiKmv/4Xp4DPyulfspIpZTm
+   GeFalHURDQoVJ4gnSAlNgPXugDAtDcuNGqM7U24Kise43kdjHzZDhyDE7
+   HOfap5qJdIdfqFxeFAFAAXgWDaMtalUiXIFM9zAkwIjBf4aC5GXR9BbDY
+   /su9FVFYSxKuPhzZOy4L+4RVQM0RjBxpU7DpL0wB3eU1fKtHu5befuKWe
+   pAvyLYQwticm2CAkOl3f5Z8zbjxN9v5upsubRWseRUmS0husLB1T1xND7
+   w==;
+X-CSE-ConnectionGUID: Uxxt6IjxTcW8n8MKdwDCEQ==
+X-CSE-MsgGUID: 9jmwUTSERAO1KN3ajKubtg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="89810019"
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="89810019"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 04:39:45 -0800
+X-CSE-ConnectionGUID: 6kfB+UeyR7uRw1igXSIHzQ==
+X-CSE-MsgGUID: 2+/IDyIFRpyfXaTbOlIbZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="218003122"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 17 Feb 2026 04:39:41 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vsKMc-000000010xY-2ggC;
+	Tue, 17 Feb 2026 12:39:38 +0000
+Date: Tue, 17 Feb 2026 20:39:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Nikhil P. Rao" <nikhil.rao@amd.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, nikhil.rao@amd.com,
+	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+	sdf@fomichev.me, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	kerneljasonxing@gmail.com
+Subject: Re: [PATCH net v3 2/2] xsk: Fix zero-copy AF_XDP fragment drop
+Message-ID: <202602172046.vf9DtpdF-lkp@intel.com>
+References: <20260217012346.22468-3-nikhil.rao@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,30 +66,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260216174324.75d47e37@pumpkin>
+In-Reply-To: <20260217012346.22468-3-nikhil.rao@amd.com>
 
-On Mon, Feb 16, 2026 at 05:43:24PM +0000, David Laight wrote:
-> On Mon, 16 Feb 2026 07:32:53 -0800
-> Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> 
-> > On Mon, 16 Feb 2026 at 03:09, David Laight <david.laight.linux@gmail.com> wrote:
-> > >
-> > > volatile structure members are almost free  
-> > 
-> > No, gcc does absolutely horrible things with volatiles. It disables a
-> > lot of very basic stuff.
-> > 
-> > Try doing something as simple as a "var++" on a volatile, and cry.
-> 
-> On x86 I just see a load, inc, store - not that surprising really.
-> (clang did do 'inc memory'.)
-> 
-> It's not as though 'inc memory' is atomic (without a lock prefix).
-> 
-> Also var++ will be 3 u-ops the same as the read, inc, write so the
-> underlying execution is much the same (ok you might save on the
-> address generation and the compiler doesn't have to find a register name,
-> but I don't remember anything modern being limited by instruction retirement).
-> You might save a bit of I-cache.
+Hi Nikhil,
 
-Interrupts can tell the difference, and that matters.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikhil-P-Rao/xsk-Fix-fragment-node-deletion-to-prevent-buffer-leak/20260217-092448
+base:   net/main
+patch link:    https://lore.kernel.org/r/20260217012346.22468-3-nikhil.rao%40amd.com
+patch subject: [PATCH net v3 2/2] xsk: Fix zero-copy AF_XDP fragment drop
+config: powerpc64-randconfig-002-20260217 (https://download.01.org/0day-ci/archive/20260217/202602172046.vf9DtpdF-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602172046.vf9DtpdF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602172046.vf9DtpdF-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/xdp/xsk.c:183:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     183 |         if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/xdp/xsk.c:201:9: note: uninitialized use occurs here
+     201 |         return err;
+         |                ^~~
+   net/xdp/xsk.c:183:2: note: remove the 'if' if its condition is always false
+     183 |         if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     184 |                 xs->rx_queue_full++;
+         |                 ~~~~~~~~~~~~~~~~~~~~
+     185 |                 goto err;
+         |                 ~~~~~~~~~
+     186 |         }
+         |         ~
+   net/xdp/xsk.c:171:9: note: initialize the variable 'err' to silence this warning
+     171 |         int err;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +183 net/xdp/xsk.c
+
+   162	
+   163	static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+   164	{
+   165		struct xdp_buff_xsk *xskb = container_of(xdp, struct xdp_buff_xsk, xdp);
+   166		u32 frags = xdp_buff_has_frags(xdp);
+   167		struct xdp_buff_xsk *pos, *tmp;
+   168		struct list_head *xskb_list;
+   169		u32 contd = 0;
+   170		u32 num_desc;
+   171		int err;
+   172	
+   173		if (frags) {
+   174			num_desc = xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;
+   175			contd = XDP_PKT_CONTD;
+   176		} else {
+   177			err = __xsk_rcv_zc(xs, xskb, len, contd);
+   178			if (err)
+   179				goto err;
+   180			return 0;
+   181		}
+   182	
+ > 183		if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
+   184			xs->rx_queue_full++;
+   185			goto err;
+   186		}
+   187	
+   188		__xsk_rcv_zc(xs, xskb, len, contd);
+   189		xskb_list = &xskb->pool->xskb_list;
+   190		list_for_each_entry_safe(pos, tmp, xskb_list, list_node) {
+   191			if (list_is_singular(xskb_list))
+   192				contd = 0;
+   193			len = pos->xdp.data_end - pos->xdp.data;
+   194			__xsk_rcv_zc(xs, pos, len, contd);
+   195			list_del_init(&pos->list_node);
+   196		}
+   197	
+   198		return 0;
+   199	err:
+   200		xsk_buff_free(xdp);
+   201		return err;
+   202	}
+   203	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
