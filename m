@@ -1,142 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB741255E34;
-	Tue, 17 Feb 2026 02:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734BB1A08BC;
+	Tue, 17 Feb 2026 02:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771295535; cv=none; b=J6Eql2mmmurO1TzrQj/iki1ofcxtrx32Oy7sglQNkcX9dAPoIPDpsyT7gxzfawaBpg6HZ3L21CrGh4ErNqpJywzksW+02dh+YiYDOCTR+QZftO+y2lq/IfEk198O+PMr9oKVRqyGs0a68jHapIrDbhD1ZfnbZO46Ujojo851PCE=
+	t=1771295591; cv=none; b=nSx1thKfv09YzYBmTx/PZSilgafEL1x0EkR5vQmiHrR6BklPpaDF3pWskbVpdV68kOVamQDGJkaC42M7BE+N9/LKa6CKMJht/fckQ8OJ5f0LpF/DiJ5dx/Pi3mEQ5C7guGglH9sKc+T4R6VtSboOppNuC8NHvxMCpgiZkfAHjZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771295535; c=relaxed/simple;
-	bh=60Mtu3801euuEVyLTws5S6ILnbLCKXr50OfZCwz+7iU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jRyeJl4XHGdD5ExK1mwf2y8VROYmp2TmsBxROp642mKxjUtreamxorTzSodvmHcP2aNSYtng2EpsnAw63rLXEOraFbUySrKybSPc4Ur6Yxka8ZKUzRgAyzA/+0dKRp2bs8Lvj345xu6QHHmyo2ZYJHRZgfjd4OM1PaH65XBKhNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dhxmJusn; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1771295591; c=relaxed/simple;
+	bh=m98On/y/+3mgXKykpamKcdrnKcGD5thdn60Opua2CsM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Xg8Tq6J37CpCiHjhewdeNyHnkbu+HRr7LYUbbNp7/vcaSpwVj7ouicuu7DOmr8mbTQiXk+0J2Kwip0xgqLnEMyXKESWMm0l2htzupErAlTn+arfhHe+maT5htkIzxpiCsUg4WyjHLjvQqlkzPrbH7H/w/BGUgm7rpggXxIaQUVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fpNWm6qQ; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dhxmJusn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fpNWm6qQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771295534; x=1802831534;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=60Mtu3801euuEVyLTws5S6ILnbLCKXr50OfZCwz+7iU=;
-  b=dhxmJusnxnwpRn37g8nYKwwT/cF48YdArzZcSMEzfT4o7gW+uBXZj0Pv
-   RVtvRIpXuXaPp4kkOvtLzKZknQHwvuBy+xUPeR8sQosvfyQltrleAtvUJ
-   LKkzuvPDa3twoQ006hyBOq+DomxaI2o/MPkJ3s2irlXdAVao7wV+2vgeV
-   ishIWptwTFxnY0fAM8S4ETKZKdMgSoehuqziCfq0WNe5XwB/yjqcoJGaB
-   rKf03Wri1PfkGO/XlF9HZ/je0MsLSDIF6FV4FoG1aOZ35ZRb+i/1UeBzv
-   gIweP6cBmYVCPfpLz8dO56Z8Xil5Ff1/e63DubUN1FOxRjySrtGqbrVQY
-   w==;
-X-CSE-ConnectionGUID: jEhEkoC+TYmwMQBP+rXDaQ==
-X-CSE-MsgGUID: +BzILWOoTteajgVEaMAMIw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="89780117"
+  t=1771295590; x=1802831590;
+  h=date:from:to:cc:subject:message-id;
+  bh=m98On/y/+3mgXKykpamKcdrnKcGD5thdn60Opua2CsM=;
+  b=fpNWm6qQIlJRqacOUn3Vu4WCXmiR157A9WS5H1MJO0W6qJl8P8iKbIky
+   rb1eYGTGGSvUnLyMKGpM+CFDGZktzMCzd4bWyUTrkUWgOukE9h6Y0aFnd
+   DR0/pSaITWLMjkx3FjOquVKoeWH2omX0+uLxSBBiAfYuCHVMCFLlxyNdL
+   jnbkxkml/arujegCHh/d2UYKsqOdnxuDKahcfVVARaNWIREDGP4XUBmdo
+   d2EqAh0BPiTN8qe24yUUldKc8w7kiVmEJXhgJK130VpFOkrVoHpALtfTH
+   cvTKvMWZoJoZYBKLtmvIjRQlDkX/ZO6xoJLJWh0/TuYZb7DB6ChwVXnqF
+   A==;
+X-CSE-ConnectionGUID: uWoJxoKGQlOYfGVw1v5Pgw==
+X-CSE-MsgGUID: ntfgJ2Q7T3C4idmhK/C0og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="83466324"
 X-IronPort-AV: E=Sophos;i="6.21,295,1763452800"; 
-   d="scan'208";a="89780117"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 18:32:13 -0800
-X-CSE-ConnectionGUID: fj8G2+EHTbm4+sKfh/g9rw==
-X-CSE-MsgGUID: kgQtRD/CQ3CwxTRtdTVTxg==
+   d="scan'208";a="83466324"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 18:33:10 -0800
+X-CSE-ConnectionGUID: LVtwsj1QQdajW7EQnkT11A==
+X-CSE-MsgGUID: pvwhlNLtS56K4JLd96v/tA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,295,1763452800"; 
-   d="scan'208";a="218747290"
+   d="scan'208";a="212688111"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 16 Feb 2026 18:32:08 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 16 Feb 2026 18:33:08 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vsAsg-000000010Xg-17Lm;
-	Tue, 17 Feb 2026 02:32:06 +0000
-Date: Tue, 17 Feb 2026 10:31:45 +0800
+	id 1vsAte-000000010Xs-1PKo;
+	Tue, 17 Feb 2026 02:33:06 +0000
+Date: Tue, 17 Feb 2026 10:32:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Taniya Das <taniya.das@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Abel Vesa <abel.vesa@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>
-Subject: Re: [PATCH v3 6/6] clk: qcom: Add TCSR clock driver for Eliza
-Message-ID: <202602171002.SP54PXRC-lkp@intel.com>
-References: <20260216-eliza-clocks-v3-6-8afc5a7e3a98@oss.qualcomm.com>
+To: Brian Cain <brian.cain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcain:bcain/boot_qemu 38/41]
+ arch/hexagon/kernel/setup.c:125:3: warning: format specifies type 'unsigned
+ long' but the argument has type 'int'
+Message-ID: <202602171029.dIuQvGZc-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260216-eliza-clocks-v3-6-8afc5a7e3a98@oss.qualcomm.com>
 
-Hi Abel,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 635c467cc14ebdffab3f77610217c1dacaf88e8c]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/dt-bindings-clock-qcom-document-the-Eliza-Global-Clock-Controller/20260216-215148
-base:   635c467cc14ebdffab3f77610217c1dacaf88e8c
-patch link:    https://lore.kernel.org/r/20260216-eliza-clocks-v3-6-8afc5a7e3a98%40oss.qualcomm.com
-patch subject: [PATCH v3 6/6] clk: qcom: Add TCSR clock driver for Eliza
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260217/202602171002.SP54PXRC-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171002.SP54PXRC-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   62702f080dc2ac995b8515a4e564fac852471147
+commit: 9121b2b3bb709a1cbac9ab005cf55cfd195768fb [38/41] hexagon: add hwcap
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260217/202602171029.dIuQvGZc-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171029.dIuQvGZc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602171002.SP54PXRC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602171029.dIuQvGZc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/clk/qcom/tcsrcc-eliza.c:126:3: error: use of undeclared identifier 'TCSR_HDMI_CLKREF_EN'
-     126 |         [TCSR_HDMI_CLKREF_EN] = &tcsr_hdmi_clkref_en.clkr,
-         |          ^
->> drivers/clk/qcom/tcsrcc-eliza.c:128:3: error: use of undeclared identifier 'TCSR_PCIE_1_CLKREF_EN'
-     128 |         [TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
-         |          ^
->> drivers/clk/qcom/tcsrcc-eliza.c:145:14: error: invalid application of 'sizeof' to an incomplete type 'struct clk_regmap *[]'
-     145 |         .num_clks = ARRAY_SIZE(tcsr_cc_eliza_clocks),
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   3 errors generated.
+>> arch/hexagon/kernel/setup.c:125:3: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
+     122 |         printk(KERN_INFO "Hexagon hwcap: 0x%08lx (ISA enum %lu = v%lx%s%s%s%s%s)\n",
+         |                                                                   ~~~
+         |                                                                   %x
+     123 |                 elf_hwcap,
+     124 |                 elf_hwcap & HWCAP_HEXAGON_ISA_MASK,
+     125 |                 rev.isa,
+         |                 ^~~~~~~
+   include/linux/printk.h:512:60: note: expanded from macro 'printk'
+     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
+     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   arch/hexagon/kernel/setup.c:141:15: error: use of undeclared identifier '__dtb_start'; did you mean '__bss_start'?
+     141 |         void *dtb = &__dtb_start;
+         |                      ^~~~~~~~~~~
+         |                      __bss_start
+   include/asm-generic/sections.h:37:13: note: '__bss_start' declared here
+      37 | extern char __bss_start[], __bss_stop[];
+         |             ^
+   1 warning and 1 error generated.
 
 
-vim +/TCSR_HDMI_CLKREF_EN +126 drivers/clk/qcom/tcsrcc-eliza.c
+vim +125 arch/hexagon/kernel/setup.c
 
-   124	
-   125	static struct clk_regmap *tcsr_cc_eliza_clocks[] = {
- > 126		[TCSR_HDMI_CLKREF_EN] = &tcsr_hdmi_clkref_en.clkr,
-   127		[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
- > 128		[TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
-   129		[TCSR_UFS_CLKREF_EN] = &tcsr_ufs_clkref_en.clkr,
-   130		[TCSR_USB2_CLKREF_EN] = &tcsr_usb2_clkref_en.clkr,
-   131		[TCSR_USB3_CLKREF_EN] = &tcsr_usb3_clkref_en.clkr,
-   132	};
-   133	
-   134	static const struct regmap_config tcsr_cc_eliza_regmap_config = {
-   135		.reg_bits = 32,
-   136		.reg_stride = 4,
-   137		.val_bits = 32,
-   138		.max_register = 0x1c,
-   139		.fast_io = true,
-   140	};
-   141	
-   142	static const struct qcom_cc_desc tcsr_cc_eliza_desc = {
-   143		.config = &tcsr_cc_eliza_regmap_config,
-   144		.clks = tcsr_cc_eliza_clocks,
- > 145		.num_clks = ARRAY_SIZE(tcsr_cc_eliza_clocks),
-   146	};
-   147	
+    47	
+    48	/*
+    49	 * populate hardware capabilities using vmgetinfo
+    50	 */
+    51	static void __init setup_hwcap(void)
+    52	{
+    53		struct vm_rev rev;
+    54		unsigned long hvx_vlength;
+    55	
+    56		elf_hwcap = 0;
+    57	
+    58		/* Get revision information for ISA version */
+    59		rev.raw = __vmgetinfo(vm_info_rev);
+    60	
+    61		/* Set ISA version using enumeration values in 7-bit field (bits 0-6) */
+    62		switch (rev.isa) {
+    63		case 0x79:
+    64			elf_hwcap |= HWCAP_HEXAGON_ISA_V79;
+    65			break;
+    66		case 0x73:
+    67			elf_hwcap |= HWCAP_HEXAGON_ISA_V73;
+    68			break;
+    69		case 0x71:
+    70			elf_hwcap |= HWCAP_HEXAGON_ISA_V71;
+    71			break;
+    72		case 0x69:
+    73			elf_hwcap |= HWCAP_HEXAGON_ISA_V69;
+    74			break;
+    75		case 0x68:
+    76			elf_hwcap |= HWCAP_HEXAGON_ISA_V68;
+    77			break;
+    78		case 0x67:
+    79			elf_hwcap |= HWCAP_HEXAGON_ISA_V67;
+    80			break;
+    81		case 0x66:
+    82			elf_hwcap |= HWCAP_HEXAGON_ISA_V66;
+    83			break;
+    84		case 0x65:
+    85			elf_hwcap |= HWCAP_HEXAGON_ISA_V65;
+    86			break;
+    87		case 0x62:
+    88			elf_hwcap |= HWCAP_HEXAGON_ISA_V62;
+    89			break;
+    90		case 0x60:
+    91			elf_hwcap |= HWCAP_HEXAGON_ISA_V60;
+    92			break;
+    93		case 0x55:
+    94			elf_hwcap |= HWCAP_HEXAGON_ISA_V55;
+    95			break;
+    96		case 5:
+    97			elf_hwcap |= HWCAP_HEXAGON_ISA_V5;
+    98			break;
+    99		case 4:
+   100			elf_hwcap |= HWCAP_HEXAGON_ISA_V4;
+   101			break;
+   102		case 3:
+   103			elf_hwcap |= HWCAP_HEXAGON_ISA_V3;
+   104			break;
+   105		case 2:
+   106			elf_hwcap |= HWCAP_HEXAGON_ISA_V2;
+   107			break;
+   108		default:
+   109			/* Unknown ISA version - leave ISA field as 0 */
+   110			break;
+   111		}
+   112	
+   113		/* Check for HVX support */
+   114		hvx_vlength = __vmgetinfo(vm_info_hvx_vlength);
+   115		if (hvx_vlength) {
+   116			elf_hwcap |= HWCAP_HEXAGON_HVX;
+   117	
+   118			if (hvx_vlength >= 128)
+   119				elf_hwcap |= HWCAP_HEXAGON_HVX_LENGTH_128B;
+   120		}
+   121	
+   122		printk(KERN_INFO "Hexagon hwcap: 0x%08lx (ISA enum %lu = v%lx%s%s%s%s%s)\n",
+   123			elf_hwcap,
+   124			elf_hwcap & HWCAP_HEXAGON_ISA_MASK,
+ > 125			rev.isa,
+   126			(elf_hwcap & HWCAP_HEXAGON_HVX) ? ", HVX" : "",
+   127			(elf_hwcap & HWCAP_HEXAGON_HVX_LENGTH_128B) ? ", HVX-128B" : "",
+   128			(elf_hwcap & HWCAP_HEXAGON_HVX_IEEE_FP) ? ", HVX-IEEE-FP" : "",
+   129			(elf_hwcap & HWCAP_HEXAGON_AUDIO) ? ", Audio" : "",
+   130			(elf_hwcap & HWCAP_HEXAGON_CABAC) ? ", CABAC" : "");
+   131	}
+   132	
 
 -- 
 0-DAY CI Kernel Test Service
