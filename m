@@ -1,140 +1,95 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276732DAFBB
-	for <llvm@lists.linux.dev>; Tue, 17 Feb 2026 09:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD075318EF8;
+	Tue, 17 Feb 2026 09:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771319342; cv=none; b=S90us4FQjGwyWK/DsjKCTC8qtIc++CwsjQk8K16qtGkYLwkNyEuDoVB/J6e2L8kv0sbsQvDoqicFiGGgH65u3JNbbZ4LLuVom6Gw0+dI7b2hpNBqPs9B1mz5lJtZO8fldsTzbVaAFRRkFgP8ydJCsjXpF68h3cHL81KWDHyzmOk=
+	t=1771321835; cv=none; b=QZ6AHe+qJvdKgJQWQBmfj2yD96NurrV/vHsftPD/opOxKw82jbPJOftbe57zF9K+Z92or8+SkwSlw9gc8RzoaK5FM1HEKmYtnz510FsKMB4m4PBDJTUvkmq2PVBj6K5McAVS9vuoxlcbvdv9EapSmW+tdSCPz3w0LeZVnw4vlNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771319342; c=relaxed/simple;
-	bh=hc7N3Hcz2X1ERffhBC9n5L1mAQXuOg1k5MmQ97v6PY8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=TaSA/F36LsjvfPUkP0zn8czSZE0scHYRRRIX+qQ7LZN6SDWF8U3E/1p6d4tXDtoHQUMX2JRhZbCXWu14letjEyMdpv8F9ebfHskT2SKgVODfklEs1+po5HFbqcg6pX6LZ8AOtp3kZGSII44xNYuqVcOkCKC+YeXQIpPOUiR06YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=TxmyFYIy; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1771321835; c=relaxed/simple;
+	bh=4hqnKKFgYM+HUt9oYyGqO1IfY2Nj33yVzUgcARf1qKY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SFPx+1VpaPhKf52r6lDiuwzKvUySvEjsXhUh1DAN/QOQpkOzwkI+HEP9ZfrrdDi1Tck+GQUbu1/cTwVJ4XBL/GM6X+viq550ZK0uy4wvLDFOf5A7GdPOeYvzfawbt0LDkiBg77f3rccGMgBNRlPTTRBwuEiAoFD6BJuXB3kke6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ksM5bxYF; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="TxmyFYIy"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 61H98LiM3055521
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 17 Feb 2026 01:08:22 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 61H98LiM3055521
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026012301; t=1771319303;
-	bh=vjRO4TtNWvyR02oaKkmAKR3Kd+Qq4ZOBV0gsjr9Brp8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=TxmyFYIyLIzuk1O/nhygllYsy9F+CktOZJXrBrHGBin9AcwbDreQvm93ujCZLREw2
-	 Z9LfLYSm5ZBFbY33ciOKiYJYto4bGff7GhywCpFwb/0EWivP0zZ+zJfXevNlzsGSFS
-	 fRM0O0EFNQmRh+h2kA5XnXagiPCt+4tUIloxxgPv3H143tiyIUioiz9Psp7GWOIOxh
-	 zKQSLhZsuBbyRCH7vLEcKEr6Q+Rsxu45dFjbzzmbEIkw7CkKSUNNaEhMyLjBeX91Do
-	 r+NRH6Tap1SSwBKpDsaITpN2E5RsGVIapum8NWDVELBodJryrW+XughfPEbNoA9BNb
-	 /h2zzH6t68UrQ==
-Date: Tue, 17 Feb 2026 01:08:16 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: "Marcel W. Wysocki" <maci.stgn@gmail.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-CC: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, "Marcel W . Wysocki" <maci.stgn@gmail.com>
-Subject: Re: [PATCH] x86/vdso: use calll mnemonic for 32-bit vdso calls
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20260215142834.1455794-1-maci.stgn@gmail.com>
-References: <20260215142834.1455794-1-maci.stgn@gmail.com>
-Message-ID: <6414B894-EAE2-4E7E-A5BE-98E81462E8EC@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ksM5bxYF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771321834; x=1802857834;
+  h=date:from:to:cc:subject:message-id;
+  bh=4hqnKKFgYM+HUt9oYyGqO1IfY2Nj33yVzUgcARf1qKY=;
+  b=ksM5bxYFgVWuX9xg64XhFXSe3fb6/mY31nfKsaFeI6ULYQgUaFcsy0vY
+   R+YkBM0oHbBX5R3O4epNhRXL6yT6RBHDV4jLsvXwWdnAFEKhyJiMwqHlF
+   u4MWHQMzrvIb8fGhZBN2Rg6pJa7L95JOqdsBcVfeRQgp3Nz5fZFBogHlI
+   KRmgdA0a0CCvMAdQt0pzNTABAn31XPammnDk8cqkUjJ1jFDsLbtN9vv8r
+   w2iFaz0xeij/MksHwSqGCAbxV+JPLOKu/yZfbuTxy2HBZvRDDlIB+BT1e
+   tbrv7CQWKS4Vna1dV3u12KM5gz9L2rL4pQNoICj/3/0VwIr6PONfd2bqu
+   Q==;
+X-CSE-ConnectionGUID: M+eAa324RXmSlYpSGTbrwg==
+X-CSE-MsgGUID: JtxyqnmlR6GN0jkEEQy6wA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="72453991"
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="72453991"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 01:50:33 -0800
+X-CSE-ConnectionGUID: DMEJ5aqtSCOOgRwO37BCAQ==
+X-CSE-MsgGUID: O2YsWbJHT7Gmzm0pibJtMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="213844534"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 17 Feb 2026 01:50:31 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vsHiv-000000010oW-152J;
+	Tue, 17 Feb 2026 09:50:29 +0000
+Date: Tue, 17 Feb 2026 17:50:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arnd-playground:highmem-reduce 19/20] error[E0061]: this
+ function takes 4 arguments but 3 arguments were supplied
+Message-ID: <202602171755.8IDBzBkd-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On February 15, 2026 6:28:34 AM PST, "Marcel W=2E Wysocki" <maci=2Estgn@gma=
-il=2Ecom> wrote:
->The VDSO32 fallback functions use unsuffixed "call" in inline asm
->that is compiled in 32-bit mode (-m32)=2E  In AT&T syntax, the
->unsuffixed "call" is ambiguous -- the assembler must infer the
->operand size from context=2E
->
->While both GNU as and the standard LLVM integrated assembler handle
->this correctly in practice, the unsuffixed form is inconsistent with
->other 32-bit assembly in the kernel tree (arch/x86/boot/header=2ES,
->arch/x86/boot/copy=2ES, arch/x86/realmode/rm/wakeup_asm=2ES) which
->already uses the explicit "calll" mnemonic=2E
->
->More importantly, alternative LLVM-based toolchains (e=2Eg=2E zig cc)
->contain a separate assembler implementation that rejects unsuffixed
->"call" in 32-bit inline asm context, preventing VDSO32 compilation
->entirely=2E
->
->Use "calll" -- the canonical AT&T mnemonic for a 32-bit near call
->-- to match existing kernel convention and ensure compatibility
->with all LLVM-based assemblers=2E
->
->No object code change: "call" and "calll" produce identical machine
->code (opcode E8h with 32-bit relative displacement) on all tested
->assemblers (GNU as, LLVM 21, LLVM 20)=2E
->
->Signed-off-by: Marcel W=2E Wysocki <maci=2Estgn@gmail=2Ecom>
->---
-> arch/x86/include/asm/vdso/gettimeofday=2Eh | 10 +++++-----
-> 1 file changed, 5 insertions(+), 5 deletions(-)
->
->diff --git a/arch/x86/include/asm/vdso/gettimeofday=2Eh b/arch/x86/includ=
-e/asm/vdso/gettimeofday=2Eh
->--- a/arch/x86/include/asm/vdso/gettimeofday=2Eh
->+++ b/arch/x86/include/asm/vdso/gettimeofday=2Eh
->@@ -101,7 +101,7 @@
-> 	asm (
-> 		"mov %%ebx, %%edx \n"
-> 		"mov %[clock], %%ebx \n"
->-		"call __kernel_vsyscall \n"
->+		"calll __kernel_vsyscall \n"
-> 		"mov %%edx, %%ebx \n"
-> 		: "=3Da" (ret), "=3Dm" (*_ts)
-> 		: "0" (__NR_clock_gettime64), [clock] "g" (_clkid), "c" (_ts)
->@@ -118,7 +118,7 @@
-> 	asm (
-> 		"mov %%ebx, %%edx \n"
-> 		"mov %[clock], %%ebx \n"
->-		"call __kernel_vsyscall \n"
->+		"calll __kernel_vsyscall \n"
-> 		"mov %%edx, %%ebx \n"
-> 		: "=3Da" (ret), "=3Dm" (*_ts)
-> 		: "0" (__NR_clock_gettime), [clock] "g" (_clkid), "c" (_ts)
->@@ -136,7 +136,7 @@
-> 	asm(
-> 		"mov %%ebx, %%edx \n"
-> 		"mov %2, %%ebx \n"
->-		"call __kernel_vsyscall \n"
->+		"calll __kernel_vsyscall \n"
-> 		"mov %%edx, %%ebx \n"
-> 		: "=3Da" (ret)
-> 		: "0" (__NR_gettimeofday), "g" (_tv), "c" (_tz)
->@@ -153,7 +153,7 @@
-> 	asm (
-> 		"mov %%ebx, %%edx \n"
-> 		"mov %[clock], %%ebx \n"
->-		"call __kernel_vsyscall \n"
->+		"calll __kernel_vsyscall \n"
-> 		"mov %%edx, %%ebx \n"
-> 		: "=3Da" (ret), "=3Dm" (*_ts)
-> 		: "0" (__NR_clock_getres_time64), [clock] "g" (_clkid), "c" (_ts)
->@@ -170,7 +170,7 @@
-> 	asm (
-> 		"mov %%ebx, %%edx \n"
-> 		"mov %[clock], %%ebx \n"
->-		"call __kernel_vsyscall \n"
->+		"calll __kernel_vsyscall \n"
-> 		"mov %%edx, %%ebx \n"
-> 		: "=3Da" (ret), "=3Dm" (*_ts)
-> 		: "0" (__NR_clock_getres), [clock] "g" (_clkid), "c" (_ts)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git highmem-reduce
+head:   718dd72a00e45b52f424a6db19645b761fefc2ac
+commit: 076a0021788d8a03d976c2d17e9887ec2c0b17b2 [19/20] drm: add explict 'gfp' argument to drm_gem_object_init()
+config: x86_64-randconfig-005-20260217 (https://download.01.org/0day-ci/archive/20260217/202602171755.8IDBzBkd-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171755.8IDBzBkd-lkp@intel.com/reproduce)
 
-The "calll" instances you are pointing at are in *16-bit* code, which ther=
-efore need the extra l suffix=2E
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602171755.8IDBzBkd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0061]: this function takes 4 arguments but 3 arguments were supplied
+   --> rust/kernel/drm/gem/mod.rs:211:28
+   |
+   211   |         to_result(unsafe { bindings::drm_gem_object_init(dev.as_raw(), obj.obj.get(), size) })?;
+   |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^----------------------------------- argument #4 of type `u32` is missing
+   |
+   note: function defined here
+   --> rust/bindings/bindings_generated.rs:82854:12
+   |
+   82854 |     pub fn drm_gem_object_init(
+   |            ^^^^^^^^^^^^^^^^^^^
+   help: provide the argument
+   |
+   211   |         to_result(unsafe { bindings::drm_gem_object_init(dev.as_raw(), obj.obj.get(), size, /* u32 */) })?;
+   |                                                                                           +++++++++++
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
