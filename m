@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CA32D8396;
-	Tue, 17 Feb 2026 10:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A950D1624C5;
+	Tue, 17 Feb 2026 11:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771323757; cv=none; b=HJEuDLVfnkejABsQUtCL7UfUSjfREdNfei6PLSDPDNT8EeiWaTlP2ohkfc2i/5ahWs6V1i3FBSRSaTyNkwoWLweHRb1D5cpCtdKSOohB56yGBrx9fEelhUYVB4hEKnIalGeZfojYB34gFdLfDaMEWNRs82q4NEVOpAOLVMztQPg=
+	t=1771327000; cv=none; b=mNZ9fsv0duGeMiX/sMk9+IBmdMDU77f2oiGnImYrSZ0D5IjxgfkKN4Dm9DizK4tWt6OqLWf1jtfLI+ZeqGWan+H8bZtHpKncDeWKZ+vQKiYxqQAlcKHu/LTjHccDyIgarL8wvxT0AA6oUi43yQWFWSC22xGcKpCUB4NhNriCuJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771323757; c=relaxed/simple;
-	bh=76KFKJKFYnBv5kIjFPj9n/sBhfGloYQeLLm+yYupQPU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hQajGMbHdKFClPgvCFsFRR/Dx7+VSTrs0Dx0dA29nvHfIOcnOXeCoT34BkrxXlXIYdPEKudNBD+8If5te9sV+OfKbEaW5ynfese1yIHTIJ2u8DsqKqWgJRYxde96+zoM7o0GSMwrJat2pZ7xANIFaEVCe+DMAq9W1tHzzMN6e5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bgdW/HOq; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1771327000; c=relaxed/simple;
+	bh=kGqfIQDTVCoEnxXWDpVosDZ6o6/h+fp2jwSXEyzWFAA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VDXYywNK91q3+o4Bs7ntzFdfrAJmYepZ6bEQfw0XCHDsZHb5nsOAQ/8O7rXtToBYY7+yzip3XeCVJxwcq5mxnwtywsWZnNdxv1kB2f1VJNZMWPOr8Z9Nl0gaDQ/UIpWcgvXaRGMs12hNEnCVCFWuTAfDS/egLSaO1wl5j3jELpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dDN1I5si; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bgdW/HOq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dDN1I5si"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771323755; x=1802859755;
+  t=1771326999; x=1802862999;
   h=date:from:to:cc:subject:message-id;
-  bh=76KFKJKFYnBv5kIjFPj9n/sBhfGloYQeLLm+yYupQPU=;
-  b=bgdW/HOqVQdTQDoTpXIqnCmwJHoMnNlQe+aA9xPX8rHBaoad0oS/Y0ac
-   TPD6UfbGjZQ19dIEx5EV6hDNKRo0spaK2SaqVzH0hB1Exw27fw6+MZ6Vj
-   59Lyv5EDZo45AEjUpcZfLCbiB+/pJQ1NJRGND9eMB9m6Pf9NxbNTlWCco
-   HGhfx5V1h6c3GRcphmskLwQb9yk9U6SKtaaZOscKrEN/F+xp624H52j3r
-   8GCvLpIH12aXBVxZbk3D1oMF0uAhn0V9E+/8kJ0Sk9eaHwkHP6izdskE5
-   +tarouYOrLUS4NFFtK69gl4Z7uqGEYJOLCZ02kzrhJORIp8/Kt6Or49b6
-   Q==;
-X-CSE-ConnectionGUID: 7TxebVA6Rny8iQWpoI3c8w==
-X-CSE-MsgGUID: hWy8xna+S9es1AiBJzF8ZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="83488639"
+  bh=kGqfIQDTVCoEnxXWDpVosDZ6o6/h+fp2jwSXEyzWFAA=;
+  b=dDN1I5siWN/tF7BZhsivFFzeQYPBJw8WPV6xLNsi2Tfw7PysiYrAcLhG
+   z6P4D8VCU6lHfnwmVXlHgjWvjPJjjdgwAeIS19l2rMFdAhrr29ubxBeBE
+   cQBNEwXqsOWIuGrdFNx2lVSQH4gU7+dciZ1AMvRNSCJGWhaU38fccyVpH
+   CWICVyf/vZuF2W+HIiQFFkOq+xI3dxnYPB/h0qUPfYY31kt9BJPXAxPXc
+   Ag26YeIwzVaEuUsozs/oycV11UQveS4/ZnuerpPH5SHw4pg6DFi0ruIX2
+   B2GKzb774oPB83Rz6+qW4PgYn28eCLl5chD744exof0WakO/odQGIMkZw
+   w==;
+X-CSE-ConnectionGUID: s6Om5PX2QFiW9XiZIIm1oQ==
+X-CSE-MsgGUID: rGc+nKNcRH26X+zl/CeuEw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="74992851"
 X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="83488639"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 02:22:35 -0800
-X-CSE-ConnectionGUID: OLOavUsNRyK9XaV4GRHn4w==
-X-CSE-MsgGUID: +QhZX3vNR0C5FUEuTH1KIg==
+   d="scan'208";a="74992851"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 03:16:38 -0800
+X-CSE-ConnectionGUID: K4vV9UqnRIK1m7VIt6YnWw==
+X-CSE-MsgGUID: qLJOTdwpSTaKfE3wq6wMwQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="213853214"
+   d="scan'208";a="212336353"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 17 Feb 2026 02:22:33 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 17 Feb 2026 03:16:37 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vsIDu-000000010q4-3T9d;
-	Tue, 17 Feb 2026 10:22:30 +0000
-Date: Tue, 17 Feb 2026 18:22:00 +0800
+	id 1vsJ4E-000000010si-1Uqq;
+	Tue, 17 Feb 2026 11:16:34 +0000
+Date: Tue, 17 Feb 2026 19:15:38 +0800
 From: kernel test robot <lkp@intel.com>
 To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Richard Kuo <rkuo@quicinc.com>
-Subject: [bcain:bcain/boot_qemu 17/41]
- arch/hexagon/kernel/setup.c:50:15: error: use of undeclared identifier
- '__dtb_start'; did you mean '__bss_start'?
-Message-ID: <202602171840.g8zDL6Le-lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcain:bcain/boot_qemu 33/41]
+ drivers/video/fbdev/udlfb.c:350:52: error: use of undeclared identifier
+ 'PAGE_SHARED'
+Message-ID: <202602171935.9Pf4NjEl-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,95 +62,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
 head:   62702f080dc2ac995b8515a4e564fac852471147
-commit: f413b9dd0caed096d0b867b56d99c962bd9b2c20 [17/41] hexagon: add platform infrastructure
-config: hexagon-randconfig-001-20260217 (https://download.01.org/0day-ci/archive/20260217/202602171840.g8zDL6Le-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171840.g8zDL6Le-lkp@intel.com/reproduce)
+commit: 548c797c73b9fc63c25c2d482b6f985c4af02adb [33/41] hexagon: fix page table model for hexagon VM
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260217/202602171935.9Pf4NjEl-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602171935.9Pf4NjEl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602171840.g8zDL6Le-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602171935.9Pf4NjEl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/hexagon/kernel/setup.c:22:
-   arch/hexagon/include/asm/platform.h:29:13: error: conflicting types for 'early_memtest'
-      29 | extern void early_memtest(unsigned long start, unsigned long end);
-         |             ^
-   include/linux/memblock.h:610:20: note: previous definition is here
-     610 | static inline void early_memtest(phys_addr_t start, phys_addr_t end) { }
-         |                    ^
-   arch/hexagon/kernel/setup.c:49:13: error: use of undeclared identifier 'external_buffer'
-      49 |         char *p = &external_buffer;
-         |                    ^~~~~~~~~~~~~~~
->> arch/hexagon/kernel/setup.c:50:15: error: use of undeclared identifier '__dtb_start'; did you mean '__bss_start'?
-      50 |         void *dtb = &__dtb_start;
-         |                      ^~~~~~~~~~~
-         |                      __bss_start
-   include/asm-generic/sections.h:37:13: note: '__bss_start' declared here
-      37 | extern char __bss_start[], __bss_stop[];
-         |             ^
-   3 errors generated.
+>> drivers/video/fbdev/udlfb.c:350:52: error: use of undeclared identifier 'PAGE_SHARED'
+     350 |                 if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
+         |                                                                  ^
+   1 error generated.
+--
+>> drivers/video/fbdev/smscufx.c:802:52: error: use of undeclared identifier 'PAGE_SHARED'
+     802 |                 if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
+         |                                                                  ^
+   1 error generated.
 
 
-vim +50 arch/hexagon/kernel/setup.c
+vim +/PAGE_SHARED +350 drivers/video/fbdev/udlfb.c
 
-e03167b26b7fcf Richard Kuo  2011-10-31  41  
-e03167b26b7fcf Richard Kuo  2011-10-31  42  /*
-e03167b26b7fcf Richard Kuo  2011-10-31  43   * setup_arch -  high level architectural setup routine
-e03167b26b7fcf Richard Kuo  2011-10-31  44   * @cmdline_p: pointer to pointer to command-line arguments
-e03167b26b7fcf Richard Kuo  2011-10-31  45   */
-e03167b26b7fcf Richard Kuo  2011-10-31  46  
-e03167b26b7fcf Richard Kuo  2011-10-31  47  void __init setup_arch(char **cmdline_p)
-e03167b26b7fcf Richard Kuo  2011-10-31  48  {
-f79c17d9a3e6ec Brian Cain   2026-01-24  49  	char *p = &external_buffer;
-f79c17d9a3e6ec Brian Cain   2026-01-24 @50  	void *dtb = &__dtb_start;
-e03167b26b7fcf Richard Kuo  2011-10-31  51  
-e03167b26b7fcf Richard Kuo  2011-10-31  52  	/*
-e03167b26b7fcf Richard Kuo  2011-10-31  53  	 * Set up event bindings to handle exceptions and interrupts.
-e03167b26b7fcf Richard Kuo  2011-10-31  54  	 */
-e03167b26b7fcf Richard Kuo  2011-10-31  55  	__vmsetvec(_K_VM_event_vector);
-e03167b26b7fcf Richard Kuo  2011-10-31  56  
-2738f359b1dcae Randy Dunlap 2018-06-14  57  	printk(KERN_INFO "PHYS_OFFSET=0x%08lx\n", PHYS_OFFSET);
-f79c17d9a3e6ec Brian Cain   2026-01-24  58  	/*  initial machine setup from flattened device tree  */
-f79c17d9a3e6ec Brian Cain   2026-01-24  59  	mdesc = setup_machine_fdt(dtb);
-f79c17d9a3e6ec Brian Cain   2026-01-24  60  
-f79c17d9a3e6ec Brian Cain   2026-01-24  61  	if (!mdesc)
-f79c17d9a3e6ec Brian Cain   2026-01-24  62  		panic("setup_machine_fdt returned NULL\n");
-8f5a0b9dffeb3c Richard Kuo  2013-03-22  63  
-f79c17d9a3e6ec Brian Cain   2026-01-24  64  	if (mdesc->setup_arch_platform) {
-f79c17d9a3e6ec Brian Cain   2026-01-24  65  		mdesc->setup_arch_platform();
-f79c17d9a3e6ec Brian Cain   2026-01-24  66  	}
-f79c17d9a3e6ec Brian Cain   2026-01-24  67  
-f79c17d9a3e6ec Brian Cain   2026-01-24  68  	printk("vmversion=0x%08lx\n", vmversion);
-f79c17d9a3e6ec Brian Cain   2026-01-24  69  	printk("vm build id=0x%08lx\n", __vmgetinfo(vm_info_build_id));
-f79c17d9a3e6ec Brian Cain   2026-01-24  70  	printk("boot_info=%p\n", boot_info);
-e03167b26b7fcf Richard Kuo  2011-10-31  71  	/*
-f79c17d9a3e6ec Brian Cain   2026-01-24  72  	 * Will need to work on boot specification.
-e03167b26b7fcf Richard Kuo  2011-10-31  73  	 */
-f79c17d9a3e6ec Brian Cain   2026-01-24  74  	//  Todo:  seriously need to fix this for all platforms
-f79c17d9a3e6ec Brian Cain   2026-01-24  75  #ifdef CONFIG_HEXAGON_MSM8960_FLUID
-f79c17d9a3e6ec Brian Cain   2026-01-24  76  	{
-f79c17d9a3e6ec Brian Cain   2026-01-24  77  		unsigned int *magic;
-f79c17d9a3e6ec Brian Cain   2026-01-24  78  
-f79c17d9a3e6ec Brian Cain   2026-01-24  79  		p = NULL;
-f79c17d9a3e6ec Brian Cain   2026-01-24  80  		for (magic = (unsigned int *)&external_buffer;
-f79c17d9a3e6ec Brian Cain   2026-01-24  81  		     magic < ((unsigned int *)&external_buffer) + 32; magic++) {
-f79c17d9a3e6ec Brian Cain   2026-01-24  82  			if (*magic == 0x54410009) {
-f79c17d9a3e6ec Brian Cain   2026-01-24  83  				p = (char *)++magic;
-f79c17d9a3e6ec Brian Cain   2026-01-24  84  				break;
-f79c17d9a3e6ec Brian Cain   2026-01-24  85  			}
-f79c17d9a3e6ec Brian Cain   2026-01-24  86  		}
-f79c17d9a3e6ec Brian Cain   2026-01-24  87  	}
-f79c17d9a3e6ec Brian Cain   2026-01-24  88  #endif
-e03167b26b7fcf Richard Kuo  2011-10-31  89  
+59277b679f8b5c drivers/staging/udlfb/udlfb.c Bernie Thompson    2009-11-24  323  
+4574203f45eb26 drivers/staging/udlfb/udlfb.c Bernie Thompson    2010-02-15  324  static int dlfb_ops_mmap(struct fb_info *info, struct vm_area_struct *vma)
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  325  {
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  326  	unsigned long start = vma->vm_start;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  327  	unsigned long size = vma->vm_end - vma->vm_start;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  328  	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  329  	unsigned long page, pos;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  330  
+5905585103276b drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2022-04-29  331  	if (info->fbdefio)
+5905585103276b drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2022-04-29  332  		return fb_deferred_io_mmap(info, vma);
+5905585103276b drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2022-04-29  333  
+76f92201b821dd drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2023-11-27  334  	vma->vm_page_prot = pgprot_decrypted(vma->vm_page_prot);
+76f92201b821dd drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2023-11-27  335  
+04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  336  	if (vma->vm_pgoff > (~0UL >> PAGE_SHIFT))
+04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  337  		return -EINVAL;
+04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  338  	if (size > info->fix.smem_len)
+04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  339  		return -EINVAL;
+04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  340  	if (offset > info->fix.smem_len - size)
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  341  		return -EINVAL;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  342  
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  343  	pos = (unsigned long)info->fix.smem_start + offset;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  344  
+5865889fe43194 drivers/video/fbdev/udlfb.c   Ladislav Michl     2018-01-16  345  	dev_dbg(info->dev, "mmap() framebuffer addr:%lu size:%lu\n",
+2685cffa9e7992 drivers/staging/udlfb/udlfb.c Bernie Thompson    2010-09-05  346  		pos, size);
+2685cffa9e7992 drivers/staging/udlfb/udlfb.c Bernie Thompson    2010-09-05  347  
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  348  	while (size > 0) {
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  349  		page = vmalloc_to_pfn((void *)pos);
+f05e0575ed334a drivers/staging/udlfb/udlfb.c Greg Kroah-Hartman 2009-06-03 @350  		if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  351  			return -EAGAIN;
+f05e0575ed334a drivers/staging/udlfb/udlfb.c Greg Kroah-Hartman 2009-06-03  352  
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  353  		start += PAGE_SIZE;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  354  		pos += PAGE_SIZE;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  355  		if (size > PAGE_SIZE)
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  356  			size -= PAGE_SIZE;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  357  		else
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  358  			size = 0;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  359  	}
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  360  
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  361  	return 0;
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  362  }
+88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  363  
 
-:::::: The code at line 50 was first introduced by commit
-:::::: f79c17d9a3e6ecd0eb96254b4c608b9305a410ce hexagon: update boot and setup code
+:::::: The code at line 350 was first introduced by commit
+:::::: f05e0575ed334a23dad91b8f6ed0ac42a3996b8d Staging: udlfb: clean up checkpatch warnings in udlfb.c
 
-:::::: TO: Brian Cain <brian.cain@oss.qualcomm.com>
-:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
+:::::: TO: Greg Kroah-Hartman <gregkh@suse.de>
+:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
 
 -- 
 0-DAY CI Kernel Test Service
