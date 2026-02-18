@@ -1,375 +1,148 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF5031AA8D
-	for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 08:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41A5238C23;
+	Wed, 18 Feb 2026 09:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771402950; cv=none; b=q+20zHYeDWaTfh4SxNV7JU29dvhuzcnQvilFIooACV/0486cNiFaQ3x1gTCuJooBZ7kqO3+hBM40t06u0HCuZhXcEOn/9n+XgaNS0faQjP3U+lGZydCNPQEIt0QsLyRknHdovGS/QSf0lcfmNo25dyEFfom1+P9VUR5MyqgbiS0=
+	t=1771406751; cv=none; b=TzSvOpBu9XeKCqQOdDvj296HzxzY2J1ybbiVfb9bXimgInb05j3JUwi6yxoatsRneiIc8vOftraG9wjc6GyHqq/vGTAIYHvi742832F+yiClgL9ZrfZ5D0QUUAzt9In5r821DeUESrP40gKroKZ060M37kwBa5myK88FngtP1wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771402950; c=relaxed/simple;
-	bh=tipT+x+rzefZm0v6MGWOlLJXq7aNBBX+PV3YXyihiyk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I6zWf+Qw6dHHjaQ912FqjoCBXE9DxhnDYmWVJj3+HgJd8F7Z/38NX8RUmTnvZFxdBn2y7G+b6qSHqMlzeCGz4RER/mJtOwEm9aDzHVOJaA6TZwChBh9VNfsqZWwJW+Lq1u5Q41DwpbGHhCoiYq8R1zt5BSBdpW2eJBQeWGR9Ly8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=m2c+YmlB; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=m2c+YmlB; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1771406751; c=relaxed/simple;
+	bh=7Mi9qac5ReGqC6chwcM+0FI8Kzvlyju/4bHh3m/uhJU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dL3C7OZL4z2in5ZUtCdV4ZhqsarOaKCPm/7E2kgQjnUWabIb5+8JkT+3ru347WXoMwiYb78ZJE8kk0bnaac8PaBdCvVd3v7jcCnTNmqTTtmvbuTueQMQMCtp4IlTqaU11wJ8jYzgyGGQ2qfH8ktytxDOcqbKp/TIvfNMChboeBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hKShtMU2; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="m2c+YmlB";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="m2c+YmlB"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id C08155BCC1;
-	Wed, 18 Feb 2026 08:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1771402946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5n3VBEp5XW54gxR7TQ9eIqPv5CmnPOTbBO3+6ULmth4=;
-	b=m2c+YmlBIvdMzgR4lO5qjDXP3E+pBiM68LAPt+DiXPw1kx3dHf8mFGKQkszUgRrCdEePTu
-	KAAMjOmmcAQVC4rHplVFgKKVH0DUP5K0A8+/AUy48MdJsTEKg7wN4AEHe1ec6oRelYU7rs
-	S5gWViRIDfSSvnHL4ApHYv8JoEJpYf8=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1771402946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5n3VBEp5XW54gxR7TQ9eIqPv5CmnPOTbBO3+6ULmth4=;
-	b=m2c+YmlBIvdMzgR4lO5qjDXP3E+pBiM68LAPt+DiXPw1kx3dHf8mFGKQkszUgRrCdEePTu
-	KAAMjOmmcAQVC4rHplVFgKKVH0DUP5K0A8+/AUy48MdJsTEKg7wN4AEHe1ec6oRelYU7rs
-	S5gWViRIDfSSvnHL4ApHYv8JoEJpYf8=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 576243EA65;
-	Wed, 18 Feb 2026 08:22:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WCovFMJ2lWmSHgAAD6G6ig
-	(envelope-from <jgross@suse.com>); Wed, 18 Feb 2026 08:22:26 +0000
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	kvm@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Juergen Gross <jgross@suse.com>,
-	Xin Li <xin@zytor.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for WRMSR
-Date: Wed, 18 Feb 2026 09:21:26 +0100
-Message-ID: <20260218082133.400602-10-jgross@suse.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260218082133.400602-1-jgross@suse.com>
-References: <20260218082133.400602-1-jgross@suse.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hKShtMU2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771406751; x=1802942751;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7Mi9qac5ReGqC6chwcM+0FI8Kzvlyju/4bHh3m/uhJU=;
+  b=hKShtMU2KvSWIwYpXgsQaTqtm5saMnvTy3iFVnUUqkly+7dxQOrA61Mw
+   ELGSasdoFtMoTgfK2PeoyfqdtbfKOpsbDV6G8z7blr+jzP59mUvARmMZj
+   qTxXlJCflb25kDXnrvAR4AGiT6rwCQJ5YHLjxY47sbgMfqj/QxldQd53+
+   ksUXyI4Ic96gPHZv+/1mgu/b7YWRYo6J7xLqtZBdUZTbQN0Imj+Y/5vmk
+   qABe/QMMG0huf/CEzvv6YD6XjN861E2WiOguI0qyadG6g5bDSJ8Myof4v
+   xxYu9uhvvqYgxCRmfWbwjGsTbdF+CfWu8+2xLtii/KC+mSHe24vZG0B+3
+   w==;
+X-CSE-ConnectionGUID: ZGoKuWmyS72OlI8cBxPIRQ==
+X-CSE-MsgGUID: CGWLyhZ4SL+GXQSxvRs8nQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="75088899"
+X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
+   d="scan'208";a="75088899"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 01:25:50 -0800
+X-CSE-ConnectionGUID: Rh52ltp/RYiXXH6MzyV6iw==
+X-CSE-MsgGUID: wkye9/XKQ3iuGwpAWVPCsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
+   d="scan'208";a="214136496"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 18 Feb 2026 01:25:45 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vsdoT-000000012EC-3hfd;
+	Wed, 18 Feb 2026 09:25:41 +0000
+Date: Wed, 18 Feb 2026 17:25:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	shuah@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-open-source@crowdstrike.com,
+	Slava Imameev <slava.imameev@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines
+ multi-level pointer params test coverage
+Message-ID: <202602181710.tEK6nOl6-lkp@intel.com>
+References: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -5.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-5.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,zytor.com,kernel.org,redhat.com,alien8.de,linux.intel.com,google.com,gmail.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:mid,suse.com:email];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[lkml];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com]
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
 
-When available use one of the non-serializing WRMSR variants (WRMSRNS
-with or without an immediate operand specifying the MSR register) in
-__wrmsrq().
+Hi Slava,
 
-For the safe/unsafe variants make __wrmsrq() to be a common base
-function instead of duplicating the ALTERNATIVE*() macros. This
-requires to let native_wrmsr() use native_wrmsrq() instead of
-__wrmsrq(). While changing this, convert native_wrmsr() into an inline
-function.
+kernel test robot noticed the following build errors:
 
-Replace the only call of wsrmsrns() with the now equivalent call to
-native_wrmsrq() and remove wsrmsrns().
+[auto build test ERROR on bpf-next/master]
 
-The paravirt case will be handled later.
+url:    https://github.com/intel-lab-lkp/linux/commits/Slava-Imameev/bpf-Support-multi-level-pointer-params-via-PTR_TO_MEM-for-trampolines/20260218-062417
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260217221357.18215-3-slava.imameev%40crowdstrike.com
+patch subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines multi-level pointer params test coverage
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260218/202602181710.tEK6nOl6-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602181710.tEK6nOl6-lkp@intel.com/reproduce)
 
-Originally-by: Xin Li (Intel) <xin@zytor.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- new patch, partially taken from "[RFC PATCH v2 21/34] x86/msr: Utilize
-  the alternatives mechanism to write MSR" by Xin Li.
----
- arch/x86/include/asm/fred.h |   2 +-
- arch/x86/include/asm/msr.h  | 144 +++++++++++++++++++++++++++---------
- arch/x86/kvm/vmx/vmx.c      |   2 +-
- 3 files changed, 111 insertions(+), 37 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602181710.tEK6nOl6-lkp@intel.com/
 
-diff --git a/arch/x86/include/asm/fred.h b/arch/x86/include/asm/fred.h
-index 2bb65677c079..71fc0c6e4e32 100644
---- a/arch/x86/include/asm/fred.h
-+++ b/arch/x86/include/asm/fred.h
-@@ -101,7 +101,7 @@ static __always_inline void fred_update_rsp0(void)
- 	unsigned long rsp0 = (unsigned long) task_stack_page(current) + THREAD_SIZE;
- 
- 	if (cpu_feature_enabled(X86_FEATURE_FRED) && (__this_cpu_read(fred_rsp0) != rsp0)) {
--		wrmsrns(MSR_IA32_FRED_RSP0, rsp0);
-+		native_wrmsrq(MSR_IA32_FRED_RSP0, rsp0);
- 		__this_cpu_write(fred_rsp0, rsp0);
- 	}
- }
-diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-index 71f41af11591..ba11c3375cbd 100644
---- a/arch/x86/include/asm/msr.h
-+++ b/arch/x86/include/asm/msr.h
-@@ -7,11 +7,11 @@
- #ifndef __ASSEMBLER__
- 
- #include <asm/asm.h>
--#include <asm/errno.h>
- #include <asm/cpumask.h>
- #include <uapi/asm/msr.h>
- #include <asm/shared/msr.h>
- 
-+#include <linux/errno.h>
- #include <linux/types.h>
- #include <linux/percpu.h>
- 
-@@ -56,6 +56,36 @@ static inline void do_trace_read_msr(u32 msr, u64 val, int failed) {}
- static inline void do_trace_rdpmc(u32 msr, u64 val, int failed) {}
- #endif
- 
-+/* The GNU Assembler (Gas) with Binutils 2.40 adds WRMSRNS support */
-+#if defined(CONFIG_AS_IS_GNU) && CONFIG_AS_VERSION >= 24000
-+#define ASM_WRMSRNS		"wrmsrns\n\t"
-+#else
-+#define ASM_WRMSRNS		_ASM_BYTES(0x0f,0x01,0xc6)
-+#endif
-+
-+/* The GNU Assembler (Gas) with Binutils 2.41 adds the .insn directive support */
-+#if defined(CONFIG_AS_IS_GNU) && CONFIG_AS_VERSION >= 24100
-+#define ASM_WRMSRNS_IMM			\
-+	" .insn VEX.128.F3.M7.W0 0xf6 /0, %[val], %[msr]%{:u32}\n\t"
-+#else
-+/*
-+ * Note, clang also doesn't support the .insn directive.
-+ *
-+ * The register operand is encoded as %rax because all uses of the immediate
-+ * form MSR access instructions reference %rax as the register operand.
-+ */
-+#define ASM_WRMSRNS_IMM			\
-+	" .byte 0xc4,0xe7,0x7a,0xf6,0xc0; .long %c[msr]"
-+#endif
-+
-+#define PREPARE_RDX_FOR_WRMSR		\
-+	"mov %%rax, %%rdx\n\t"		\
-+	"shr $0x20, %%rdx\n\t"
-+
-+#define PREPARE_RCX_RDX_FOR_WRMSR	\
-+	"mov %[msr], %%ecx\n\t"		\
-+	PREPARE_RDX_FOR_WRMSR
-+
- /*
-  * __rdmsr() and __wrmsr() are the two primitives which are the bare minimum MSR
-  * accessors and should not have any tracing or other functionality piggybacking
-@@ -75,12 +105,76 @@ static __always_inline u64 __rdmsr(u32 msr)
- 	return EAX_EDX_VAL(val, low, high);
- }
- 
--static __always_inline void __wrmsrq(u32 msr, u64 val)
-+static __always_inline bool __wrmsrq_variable(u32 msr, u64 val, int type)
- {
--	asm volatile("1: wrmsr\n"
--		     "2:\n"
--		     _ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_WRMSR)
--		     : : "c" (msr), "a" ((u32)val), "d" ((u32)(val >> 32)) : "memory");
-+#ifdef CONFIG_X86_64
-+	BUILD_BUG_ON(__builtin_constant_p(msr));
-+#endif
-+
-+	/*
-+	 * WRMSR is 2 bytes.  WRMSRNS is 3 bytes.  Pad WRMSR with a redundant
-+	 * DS prefix to avoid a trailing NOP.
-+	 */
-+	asm_inline volatile goto(
-+		"1:\n"
-+		ALTERNATIVE("ds wrmsr",
-+			    ASM_WRMSRNS,
-+			    X86_FEATURE_WRMSRNS)
-+		_ASM_EXTABLE_TYPE(1b, %l[badmsr], %c[type])
-+
-+		:
-+		: "c" (msr), "a" ((u32)val), "d" ((u32)(val >> 32)), [type] "i" (type)
-+		: "memory"
-+		: badmsr);
-+
-+	return false;
-+
-+badmsr:
-+	return true;
-+}
-+
-+#ifdef CONFIG_X86_64
-+/*
-+ * Non-serializing WRMSR or its immediate form, when available.
-+ *
-+ * Otherwise, it falls back to a serializing WRMSR.
-+ */
-+static __always_inline bool __wrmsrq_constant(u32 msr, u64 val, int type)
-+{
-+	BUILD_BUG_ON(!__builtin_constant_p(msr));
-+
-+	asm_inline volatile goto(
-+		"1:\n"
-+		ALTERNATIVE_2(PREPARE_RCX_RDX_FOR_WRMSR
-+			      "2: ds wrmsr",
-+			      PREPARE_RCX_RDX_FOR_WRMSR
-+			      ASM_WRMSRNS,
-+			      X86_FEATURE_WRMSRNS,
-+			      ASM_WRMSRNS_IMM,
-+			      X86_FEATURE_MSR_IMM)
-+		_ASM_EXTABLE_TYPE(1b, %l[badmsr], %c[type])	/* For WRMSRNS immediate */
-+		_ASM_EXTABLE_TYPE(2b, %l[badmsr], %c[type])	/* For WRMSR(NS) */
-+
-+		:
-+		: [val] "a" (val), [msr] "i" (msr), [type] "i" (type)
-+		: "memory", "ecx", "rdx"
-+		: badmsr);
-+
-+	return false;
-+
-+badmsr:
-+	return true;
-+}
-+#endif
-+
-+static __always_inline bool __wrmsrq(u32 msr, u64 val, int type)
-+{
-+#ifdef CONFIG_X86_64
-+	if (__builtin_constant_p(msr))
-+		return __wrmsrq_constant(msr, val, type);
-+#endif
-+
-+	return __wrmsrq_variable(msr, val, type);
- }
- 
- #define native_rdmsr(msr, val1, val2)			\
-@@ -95,11 +189,15 @@ static __always_inline u64 native_rdmsrq(u32 msr)
- 	return __rdmsr(msr);
- }
- 
--#define native_wrmsr(msr, low, high)			\
--	__wrmsrq((msr), (u64)(high) << 32 | (low))
-+static __always_inline void native_wrmsrq(u32 msr, u64 val)
-+{
-+	__wrmsrq(msr, val, EX_TYPE_WRMSR);
-+}
- 
--#define native_wrmsrq(msr, val)				\
--	__wrmsrq((msr), (val))
-+static __always_inline void native_wrmsr(u32 msr, u32 low, u32 high)
-+{
-+	native_wrmsrq(msr, (u64)high << 32 | low);
-+}
- 
- static inline u64 native_read_msr(u32 msr)
- {
-@@ -131,15 +229,7 @@ static inline void notrace native_write_msr(u32 msr, u64 val)
- /* Can be uninlined because referenced by paravirt */
- static inline int notrace native_write_msr_safe(u32 msr, u64 val)
- {
--	int err;
--
--	asm volatile("1: wrmsr ; xor %[err],%[err]\n"
--		     "2:\n\t"
--		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_WRMSR_SAFE, %[err])
--		     : [err] "=a" (err)
--		     : "c" (msr), "0" ((u32)val), "d" ((u32)(val >> 32))
--		     : "memory");
--	return err;
-+	return __wrmsrq(msr, val, EX_TYPE_WRMSR_SAFE) ? -EIO : 0;
- }
- 
- extern int rdmsr_safe_regs(u32 regs[8]);
-@@ -158,7 +248,6 @@ static inline u64 native_read_pmc(int counter)
- #ifdef CONFIG_PARAVIRT_XXL
- #include <asm/paravirt.h>
- #else
--#include <linux/errno.h>
- static __always_inline u64 read_msr(u32 msr)
- {
- 	return native_read_msr(msr);
-@@ -250,21 +339,6 @@ static inline int wrmsrq_safe(u32 msr, u64 val)
- 	return err;
- }
- 
--/* Instruction opcode for WRMSRNS supported in binutils >= 2.40 */
--#define ASM_WRMSRNS _ASM_BYTES(0x0f,0x01,0xc6)
--
--/* Non-serializing WRMSR, when available.  Falls back to a serializing WRMSR. */
--static __always_inline void wrmsrns(u32 msr, u64 val)
--{
--	/*
--	 * WRMSR is 2 bytes.  WRMSRNS is 3 bytes.  Pad WRMSR with a redundant
--	 * DS prefix to avoid a trailing NOP.
--	 */
--	asm volatile("1: " ALTERNATIVE("ds wrmsr", ASM_WRMSRNS, X86_FEATURE_WRMSRNS)
--		     "2: " _ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_WRMSR)
--		     : : "c" (msr), "a" ((u32)val), "d" ((u32)(val >> 32)));
--}
--
- static inline void wrmsr(u32 msr, u32 low, u32 high)
- {
- 	wrmsrq(msr, (u64)high << 32 | low);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 3799cbbb4577..e29a2ac24669 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1473,7 +1473,7 @@ static void vmx_write_guest_host_msr(struct vcpu_vmx *vmx, u32 msr, u64 data,
- {
- 	preempt_disable();
- 	if (vmx->vt.guest_state_loaded)
--		wrmsrns(msr, data);
-+		native_wrmsrq(msr, data);
- 	preempt_enable();
- 	*cache = data;
- }
+All errors (new ones prefixed by >>):
+
+>> net/bpf/test_run.c:737:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     737 |         flush_tlb_kernel_range((unsigned long)page_address(page),
+         |         ^
+   net/bpf/test_run.c:760:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     760 |         flush_tlb_kernel_range((unsigned long)addr,
+         |         ^
+   2 errors generated.
+
+
+vim +/flush_tlb_kernel_range +737 net/bpf/test_run.c
+
+   709	
+   710	static void *create_bad_kaddr(void)
+   711	{
+   712		/*
+   713		 * Try to get an address that passes kernel range checks but causes
+   714		 * a page fault handler invocation if accessed from a BPF program.
+   715		 */
+   716	#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
+   717		void *addr = vmalloc(PAGE_SIZE);
+   718	
+   719		if (!addr)
+   720			return NULL;
+   721		/* Make it non-present - any access will fault */
+   722		if (set_memory_np((unsigned long)addr, 1)) {
+   723			vfree(addr);
+   724			return NULL;
+   725		}
+   726		return addr;
+   727	#elif defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
+   728		struct page *page = alloc_page(GFP_KERNEL);
+   729	
+   730		if (!page)
+   731			return NULL;
+   732		/* Remove from direct map - any access will fault */
+   733		if (set_direct_map_invalid_noflush(page)) {
+   734			__free_page(page);
+   735			return NULL;
+   736		}
+ > 737		flush_tlb_kernel_range((unsigned long)page_address(page),
+   738				       (unsigned long)page_address(page) + PAGE_SIZE);
+   739		return page_address(page);
+   740	#endif
+   741		return NULL;
+   742	}
+   743	
+
 -- 
-2.53.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
