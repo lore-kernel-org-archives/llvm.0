@@ -1,194 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A1529AB02;
-	Tue, 17 Feb 2026 20:39:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05D719DF4F;
+	Wed, 18 Feb 2026 00:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771360749; cv=none; b=Q48Rnh4TzFAVECqPEQtxLBwjMsbzoA2Lz0oNGSQ0HY3C0KSqdpgoHNxRUmkl6bw1kUuE9Oe19fZkY+vucLDUbvwrz94DtTjgv5uXp3d/K7yBH0WhZm7VtPGavjB3nNi8CdXjhZatYHbILQAKPpyZ4MTfrkPjwDAoynsTYlXZZYY=
+	t=1771374448; cv=none; b=NSc+Cko2984vmXVJS12WNGUwHIxOz5vwdN0SeLlGo3ViEZG2sAZEweemr3cPEGSy2h05MUBedli+x6Yv3HtjOMjIGSZ8OIuPZTc1+O9UvaZaVV0x/yHmReE0SkouEA8SnWR1b5rUwiurW6pdNxgskHnWPGJA2gF3W1YX89r1HM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771360749; c=relaxed/simple;
-	bh=5O+CrVpw/OJxasjNeiivYlHQmAH0l3hc7P8LOAiBQ68=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=S90M6w1IlKFNznKSseWaWwy91OCwimD3LpUXE1gEbRk/hGAnYJF6YQJj29suMgoFg7UVJxjY9s/5RBWVh13rIW9fxCyNiML8cTKA43BGVLMpcVDm620Wy3Ig0LZqW+Axqtt34OGd648FBb6atkIggUSCjPrX+I7T0DVyFhgN+wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kWOltdMo; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1771374448; c=relaxed/simple;
+	bh=fcWenNUMcYV2dYTPrnEXpTkuHZTjKtFPqvvPipIHmQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TWgZtlvZkaZeTDcntJ40NSz81yinBuluMTAHFNfFyWXr0hW1giDf4UVHnpo2Jk5/0uT79S3oTg7rraLZLzlOKkCiJhlRrx08TOvpGIX+kRMb//XAiWjNRYzQjfwNeOkgvUIJAWt9Vne8wZ/DWzM3gTnp72/5eu4kUS++OWF9+14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yi4JbAaN; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kWOltdMo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yi4JbAaN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771360747; x=1802896747;
-  h=date:from:to:cc:subject:message-id;
-  bh=5O+CrVpw/OJxasjNeiivYlHQmAH0l3hc7P8LOAiBQ68=;
-  b=kWOltdMo7h8+qQDwDwBfKQoPbOvS3AhvxPTn/s4pcbsvTpOqhwuAOimE
-   nOtdZlGg6/4QXFUN9JLeQl9CZlBjPxlDdvqDFBGsXyNZfF+OzFX2ldUI2
-   WHqaPdPXd+SDlQscgwBmTMYSo8tUuAkDKyYNlk009swFOPITwMi8Xh7rV
-   +ccH0QIvObJOmR5uxEmMNDjE987KLBPnLgZEWkQFjjk84S71MHdGfEWKh
-   blP8O3qQaSFuMj0uNIwkhT3Lt43w5dMy6TRdrNpFP7f3GAZFyFcPfLvnD
-   /N2Vzvh49LZmEqLj9QNMb+5T1kiOjE53AGGgvy0bZVg8LtSoOVSawSOuB
-   w==;
-X-CSE-ConnectionGUID: S9MGNv4yRUqNCt3UzqU/JA==
-X-CSE-MsgGUID: Wsh0hu3ZQIaoTIIfXQHdUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="83802866"
-X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="83802866"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 12:39:06 -0800
-X-CSE-ConnectionGUID: quisTjEIRH6hemtwEgWo1g==
-X-CSE-MsgGUID: Es1+uHPITFmjvY1/cCFe5A==
+  t=1771374447; x=1802910447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fcWenNUMcYV2dYTPrnEXpTkuHZTjKtFPqvvPipIHmQw=;
+  b=Yi4JbAaNGOwY9DT+FqnHihus5LLgo3wrtVdi0XHHk2w6rkh+P9Pi380q
+   +eYe8lh/XUGf9NtWW7GIat3Ov/WhIP8wHlsPDpCCH0x1pZ+2p4sJxMfHn
+   iqJpCZnS7Zwgmq0cUZjwyRSA77cyRNaA/bQ2cN+gVT6DrtKDbO5dx6tpU
+   P/s668sM96ongCfux3CKux03MTMJrHJqLfmOdXT3qQnNhUC2U51hkVHn6
+   ViI5P7SdHH4VWlYFnFCr0cgkvI/w2Vx7a8Mkh0+7ahgOLMbE5/7uHw28Q
+   nhx3Yi/a/RNLq0QtmoxEn8EtioIBal5vTL/q96OZgZBMIOeXHciR+NyST
+   g==;
+X-CSE-ConnectionGUID: WREBXu/kQFi6pTJjYAaHzA==
+X-CSE-MsgGUID: 8eNmH1E/Smq1+H9+k0QwgA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="95082143"
+X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
+   d="scan'208";a="95082143"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 16:27:27 -0800
+X-CSE-ConnectionGUID: AoyUbSm4QxWvTyl/s2K+PA==
+X-CSE-MsgGUID: ELDlXahcT5mjgqeEhxUaKg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="213229905"
+X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
+   d="scan'208";a="244632599"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 17 Feb 2026 12:39:05 -0800
+  by orviesa002.jf.intel.com with ESMTP; 17 Feb 2026 16:27:24 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vsRqY-000000011O4-2xgS;
-	Tue, 17 Feb 2026 20:39:02 +0000
-Date: Wed, 18 Feb 2026 04:38:58 +0800
+	id 1vsVPV-000000011s0-24GQ;
+	Wed, 18 Feb 2026 00:27:21 +0000
+Date: Wed, 18 Feb 2026 08:26:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Richard Kuo <rkuo@quicinc.com>
+To: "Guilherme G. Piccoli" <gpiccoli@igalia.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Brian Cain <bcain@kernel.org>
-Subject: [bcain:bcain/boot_qemu 27/41]
- arch/hexagon/kernel/devtree.c:50:4: error: incompatible integer to pointer
- conversion assigning to 'const char *' from 'int'
-Message-ID: <202602180422.VWKS69zM-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+	kernel@gpiccoli.net, gpiccoli@igalia.com,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 2/2] mm/memblock: Add reserve_mem debugfs info
+Message-ID: <202602180820.Vi6LlvfF-lkp@intel.com>
+References: <20260217195816.861684-3-gpiccoli@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260217195816.861684-3-gpiccoli@igalia.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
-head:   62702f080dc2ac995b8515a4e564fac852471147
-commit: dd59a24d47331a5c7830b9e105e7986be52b9b07 [27/41] hexagon: add SM8150 platform support
-config: hexagon-randconfig-001-20260217 (https://download.01.org/0day-ci/archive/20260218/202602180422.VWKS69zM-lkp@intel.com/config)
+Hi Guilherme,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on rppt-memblock/for-next]
+[also build test WARNING on rppt-memblock/fixes akpm-mm/mm-everything linus/master v6.19 next-20260217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guilherme-G-Piccoli/mm-memblock-Print-out-errors-on-reserve_mem-parser/20260218-035935
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock.git for-next
+patch link:    https://lore.kernel.org/r/20260217195816.861684-3-gpiccoli%40igalia.com
+patch subject: [PATCH 2/2] mm/memblock: Add reserve_mem debugfs info
+config: s390-randconfig-002-20260218 (https://download.01.org/0day-ci/archive/20260218/202602180820.Vi6LlvfF-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602180422.VWKS69zM-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602180820.Vi6LlvfF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602180422.VWKS69zM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602180820.Vi6LlvfF-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   arch/hexagon/kernel/devtree.c:17:13: warning: no previous prototype for function 'early_init_dt_add_memory_arch' [-Wmissing-prototypes]
-      17 | void __init early_init_dt_add_memory_arch(u64 base, u64 size)
-         |             ^
-   arch/hexagon/kernel/devtree.c:17:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      17 | void __init early_init_dt_add_memory_arch(u64 base, u64 size)
-         | ^
-         | static 
-   arch/hexagon/kernel/devtree.c:50:6: error: call to undeclared function 'of_get_flat_dt_prop'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
-         |             ^
->> arch/hexagon/kernel/devtree.c:50:4: error: incompatible integer to pointer conversion assigning to 'const char *' from 'int' [-Wint-conversion]
-      50 |         p = of_get_flat_dt_prop(node, "bootargs", &l);
-         |           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/kernel/devtree.c:104:29: warning: attribute declaration must precede definition [-Wignored-attributes]
-     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
-         |                             ^
-   include/linux/init.h:45:17: note: expanded from macro '__init'
-      45 | #define __init          __section(".init.text") __cold __latent_entropy \
-         |                         ^
-   include/linux/compiler_attributes.h:321:56: note: expanded from macro '__section'
-     321 | #define __section(section)              __attribute__((__section__(section)))
-         |                                                        ^
-   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
-      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
-         |                                          ^
-   arch/hexagon/kernel/devtree.c:104:29: warning: attribute declaration must precede definition [-Wignored-attributes]
-     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
-         |                             ^
-   include/linux/init.h:45:41: note: expanded from macro '__init'
-      45 | #define __init          __section(".init.text") __cold __latent_entropy \
-         |                                                 ^
-   include/linux/compiler_types.h:126:34: note: expanded from macro '__cold'
-     126 | #define __cold                          __attribute__((__cold__))
-         |                                                        ^
-   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
-      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
-         |                                          ^
-   arch/hexagon/kernel/devtree.c:104:36: error: redefinition of 'setup_machine_fdt'
-     104 | const struct machine_desc * __init setup_machine_fdt(void *dt_phys)
-         |                                    ^
-   arch/hexagon/include/asm/prom.h:14:42: note: previous definition is here
-      14 | static inline const struct machine_desc *setup_machine_fdt(void *dt_phys)
-         |                                          ^
-   arch/hexagon/kernel/devtree.c:120:2: error: use of undeclared identifier 'initial_boot_params'
-     120 |         initial_boot_params = dt_phys;
-         |         ^~~~~~~~~~~~~~~~~~~
-   arch/hexagon/kernel/devtree.c:126:23: error: use of undeclared identifier 'initial_boot_params'
-     126 |         if (fdt_magic(initial_boot_params) != OF_DT_HEADER) {
-         |                       ^~~~~~~~~~~~~~~~~~~
-   arch/hexagon/kernel/devtree.c:130:12: error: call to undeclared function 'of_get_flat_dt_root'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     130 |         dt_root = of_get_flat_dt_root();
-         |                   ^
-   arch/hexagon/kernel/devtree.c:132:15: error: call to undeclared function 'of_flat_dt_match_machine'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     132 |         mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
-         |                      ^
-   arch/hexagon/kernel/devtree.c:132:13: error: incompatible integer to pointer conversion assigning to 'const struct machine_desc *' from 'int' [-Wint-conversion]
-     132 |         mdesc_best = of_flat_dt_match_machine(NULL, arch_get_next_mach);
-         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/hexagon/kernel/devtree.c:142:9: error: call to undeclared function 'early_init_dt_scan_root'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     142 |         early_init_dt_scan_root();
-         |         ^
-   arch/hexagon/kernel/devtree.c:147:2: error: call to undeclared function 'early_init_dt_scan_chosen'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     147 |         early_init_dt_scan_chosen(boot_command_line);
-         |         ^
-   3 warnings and 10 errors generated.
+>> mm/memblock.c:2721:27: warning: unused variable 'flagname' [-Wunused-const-variable]
+    2721 | static const char * const flagname[] = {
+         |                           ^~~~~~~~
+   1 warning generated.
 
 
-vim +50 arch/hexagon/kernel/devtree.c
+vim +/flagname +2721 mm/memblock.c
 
-af91d653d17fcf Richard Kuo 2025-08-18  33  
-af91d653d17fcf Richard Kuo 2025-08-18  34  //  basically a copy of dt_scan_chosen, but doesn't do the initrd scan.
-af91d653d17fcf Richard Kuo 2025-08-18  35  static int __init early_init_dt_scan_chosen_noinitrd(unsigned long node, const char *uname,
-af91d653d17fcf Richard Kuo 2025-08-18  36  				     int depth, void *data)
-af91d653d17fcf Richard Kuo 2025-08-18  37  {
-dd59a24d47331a Richard Kuo 2025-08-26  38  	int l;
-dd59a24d47331a Richard Kuo 2025-08-26  39  	const char *p;
-af91d653d17fcf Richard Kuo 2025-08-18  40  
-af91d653d17fcf Richard Kuo 2025-08-18  41  	pr_debug("search \"chosen\", depth: %d, uname: %s\n", depth, uname);
-af91d653d17fcf Richard Kuo 2025-08-18  42  
-af91d653d17fcf Richard Kuo 2025-08-18  43  	if (depth != 1 || !data ||
-af91d653d17fcf Richard Kuo 2025-08-18  44  	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
-af91d653d17fcf Richard Kuo 2025-08-18  45  		return 0;
-af91d653d17fcf Richard Kuo 2025-08-18  46  
-af91d653d17fcf Richard Kuo 2025-08-18  47  	//early_init_dt_check_for_initrd(node);
-af91d653d17fcf Richard Kuo 2025-08-18  48  
-af91d653d17fcf Richard Kuo 2025-08-18  49  	/* Retrieve command line */
-af91d653d17fcf Richard Kuo 2025-08-18 @50  	p = of_get_flat_dt_prop(node, "bootargs", &l);
-af91d653d17fcf Richard Kuo 2025-08-18  51  	if (p != NULL && l > 0)
-af91d653d17fcf Richard Kuo 2025-08-18  52  		strscpy(data, p, min((int)l, COMMAND_LINE_SIZE));
-af91d653d17fcf Richard Kuo 2025-08-18  53  
-af91d653d17fcf Richard Kuo 2025-08-18  54  	/*
-af91d653d17fcf Richard Kuo 2025-08-18  55  	 * CONFIG_CMDLINE is meant to be a default in case nothing else
-af91d653d17fcf Richard Kuo 2025-08-18  56  	 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
-af91d653d17fcf Richard Kuo 2025-08-18  57  	 * is set in which case we override whatever was found earlier.
-af91d653d17fcf Richard Kuo 2025-08-18  58  	 */
-af91d653d17fcf Richard Kuo 2025-08-18  59  #ifdef CONFIG_CMDLINE
-af91d653d17fcf Richard Kuo 2025-08-18  60  #ifndef CONFIG_CMDLINE_FORCE
-af91d653d17fcf Richard Kuo 2025-08-18  61  	if (!((char *)data)[0])
-af91d653d17fcf Richard Kuo 2025-08-18  62  #endif
-af91d653d17fcf Richard Kuo 2025-08-18  63  		strscpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
-af91d653d17fcf Richard Kuo 2025-08-18  64  #endif /* CONFIG_CMDLINE */
-af91d653d17fcf Richard Kuo 2025-08-18  65  
-af91d653d17fcf Richard Kuo 2025-08-18  66  	pr_debug("Command line is: %s\n", (char*)data);
-af91d653d17fcf Richard Kuo 2025-08-18  67  
-af91d653d17fcf Richard Kuo 2025-08-18  68  	/* break now */
-af91d653d17fcf Richard Kuo 2025-08-18  69  	return 1;
-af91d653d17fcf Richard Kuo 2025-08-18  70  }
-af91d653d17fcf Richard Kuo 2025-08-18  71  
-
-:::::: The code at line 50 was first introduced by commit
-:::::: af91d653d17fcfa3a9cf14192d21c02f8a9295d3 hexagon: add device tree support
-
-:::::: TO: Richard Kuo <rkuo@quicinc.com>
-:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
+1e4c64b71c9bf2 Steven Rostedt (Google    2024-06-13  2719) 
+54091ffecefa11 Guilherme G. Piccoli      2026-02-17  2720  #ifdef CONFIG_DEBUG_FS
+493f349e38d022 Yuwei Guan                2023-05-19 @2721  static const char * const flagname[] = {
+493f349e38d022 Yuwei Guan                2023-05-19  2722  	[ilog2(MEMBLOCK_HOTPLUG)] = "HOTPLUG",
+493f349e38d022 Yuwei Guan                2023-05-19  2723  	[ilog2(MEMBLOCK_MIRROR)] = "MIRROR",
+493f349e38d022 Yuwei Guan                2023-05-19  2724  	[ilog2(MEMBLOCK_NOMAP)] = "NOMAP",
+493f349e38d022 Yuwei Guan                2023-05-19  2725  	[ilog2(MEMBLOCK_DRIVER_MANAGED)] = "DRV_MNG",
+4f155af0ae4464 Anshuman Khandual         2024-02-09  2726  	[ilog2(MEMBLOCK_RSRV_NOINIT)] = "RSV_NIT",
+4c78cc596bb8d3 Mike Rapoport (Microsoft  2025-05-09  2727) 	[ilog2(MEMBLOCK_RSRV_KERN)] = "RSV_KERN",
+d59f43b5748092 Alexander Graf            2025-05-09  2728  	[ilog2(MEMBLOCK_KHO_SCRATCH)] = "KHO_SCRATCH",
+493f349e38d022 Yuwei Guan                2023-05-19  2729  };
+6d03b885f0926a Benjamin Herrenschmidt    2010-07-06  2730  
 
 -- 
 0-DAY CI Kernel Test Service
