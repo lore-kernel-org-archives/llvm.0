@@ -1,57 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9875419DF4F;
-	Wed, 18 Feb 2026 01:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACE61FF7C7;
+	Wed, 18 Feb 2026 02:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771379894; cv=none; b=hAQUmDao+k7bXkUKOgaEs9+pNZUQBwSKpv46tRymwbrkgHiENpcmdfZP4pldLw2XUSnIXjK4oifGS8KCUqrzosd8kzNg2RyB/MXGitEuslulRmOWHzhaE0ynK4kaeKspjE+RgSAv0lKnUZ5oM2snbmMZMw6KxWlyyX4pfECAwcE=
+	t=1771381352; cv=none; b=ncHsYEXakP9WiTaCXmA6UmPmHRtLZcoL4txWgkBbUbZ+UtxbaKzc4VuuPxk8UVmNft6Q1wEyyNxrnqLRNH4JKe8ZMsYhrXx3rCiDOVB3NR0A5nIZqk6KS1ArgWppHvnHzI7/XWOLLhmhAYQKVmW28sEtLB/Xs5uPC3+YK9JE+Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771379894; c=relaxed/simple;
-	bh=XtBoVnJtFcFB9AHmWXTBm557G9HMMqIjO3imP1ueX+A=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MrPtu2mdJfDAhBhYox5T1XDUt/n60Znt8cdiSVOC6dv12qW+SKW2fcK85zTTHDvnKVshkpUmxBNJJ+f39nltQuIIURRKvWj0DGmnL3omz64HEdO5ybuSA3QyYOZzOFI1ZIz2AxtCqlBsiUaQJRds+qJFzj6beSlCwrQ47RsXi3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AhvALmAS; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1771381352; c=relaxed/simple;
+	bh=gjekzyv017HkC8dltOomfJMrgz+qs6P8g8/ivFYMVNA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mUQ6hGUzWQjA+5EJCj2ZuPemqJoO/BuGBztOVklsapkvnRM4w9lg0E7x2VKRhy8AikLS8Dx+L7gjz5AU9R9zJza9dY5RfCIpjhzRf2y0F0PPT2f3VLfzCXypi8xtdrXLC7rylvUbBftrWwo4E1V2i8p0z4is4HaB5G1/hOamOQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m0dVzC1J; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AhvALmAS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m0dVzC1J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771379894; x=1802915894;
+  t=1771381351; x=1802917351;
   h=date:from:to:cc:subject:message-id;
-  bh=XtBoVnJtFcFB9AHmWXTBm557G9HMMqIjO3imP1ueX+A=;
-  b=AhvALmAS1vT4P2oalyFYg1dAfdG5epKJ5Y2TKEk0tk6EvHfqGZctUgj2
-   lDtrE+JaMQH8dOV9sr5uk6mvUlCs3qYd2C88X92kzxP/KTOC/vTnQup3T
-   p0AjZWj9xJ8J8+LjLg/3tlukfgZX05HJuMzcbTZmNVWBhyOitDskQp6zD
-   uqTpTkPmV9U2nInQYmWk/puPLPDQdP8x/wFoaHh2Jyze+RPhE+qAOJnCK
-   cVoq8M07iaYHfabxMLuMEbuE9Qw9hpwAvyjQ2cUxLMULJih5fXKliQvoF
-   iEWTqDOHsYuFU83oF43ob7EDiYV30Dmc6cHCW0OzuvcBw1/pz72tem5fj
-   Q==;
-X-CSE-ConnectionGUID: lKQDKXmjQ0204LsfpfcRAw==
-X-CSE-MsgGUID: 4yHDdMK3TDC5CdR7rttpxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="72504733"
+  bh=gjekzyv017HkC8dltOomfJMrgz+qs6P8g8/ivFYMVNA=;
+  b=m0dVzC1JLUe6ThkJSmN/kKKl7lf9XhaGBkn9wvKRND8Q6il249VSth6X
+   +KKllrxzA4BMjc6NpyacOF4kesI5R4NTxjqjhuYZGpOqGxTmqZkCvBxCM
+   rPUJVbbHijCF19nva+CvOoHpOPlynFRpLB5tpzN3DSqgZk/2hMgNB/6v3
+   VJ+0jamaC6bkidNjR+yXHkKp8ct282fyz4TqdnnZ4XSwEQJQBQDxgY/za
+   5wmKMu5nJAzt43IYqWu8iSUTsnW7ink9rzxGIoDuBDUUkHlS5eA+8MdvS
+   VV+yrToNNZGqt368o/+duBbS20uztemjiskq47b5y77DngCfDPKxSbvIE
+   A==;
+X-CSE-ConnectionGUID: BPfyffVsQ5OSENla7HUOhQ==
+X-CSE-MsgGUID: pakQVzGQRlGOuXfcwPdzXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="83083176"
 X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="72504733"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 17:58:13 -0800
-X-CSE-ConnectionGUID: oBvrNAwST3KJmRQszdsVnw==
-X-CSE-MsgGUID: XTXrvvBQSwaYfYRi5N6mcg==
+   d="scan'208";a="83083176"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 18:22:30 -0800
+X-CSE-ConnectionGUID: WW/WivXmR/y7d4QCW80jwA==
+X-CSE-MsgGUID: RGbOyng8QOOCbG5x//C96A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="218585094"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 17 Feb 2026 17:58:12 -0800
-Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
+   d="scan'208";a="251752802"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 17 Feb 2026 18:22:29 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vsWpN-000000003Pt-2w0G;
-	Wed, 18 Feb 2026 01:58:09 +0000
-Date: Wed, 18 Feb 2026 02:57:47 +0100
+	id 1vsXCs-000000011wm-1a3N;
+	Wed, 18 Feb 2026 02:22:26 +0000
+Date: Wed, 18 Feb 2026 10:21:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
+To: Jul Lang <jullanggit@proton.me>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:exportd-netlink 8/8] fs/nfsd/export.c:382:19:
- warning: unused variable 'nn'
-Message-ID: <202602180217.Qtsix6p4-lkp@intel.com>
+Subject: [koverstreet-bcachefs:pr/1059 2/3]
+ fs/bcachefs/sb/members.c:173:21: warning: variable 'first_bucket' is
+ uninitialized when used within its own initialization
+Message-ID: <202602181006.rLTgu86r-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,45 +60,79 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git exportd-netlink
-head:   67896fe53a48a300b8826416c1b4023d407c852d
-commit: 67896fe53a48a300b8826416c1b4023d407c852d [8/8] nfsd: send nl_notfiy when a svc_export upcall is queued
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260218/202602180217.Qtsix6p4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602180217.Qtsix6p4-lkp@intel.com/reproduce)
+tree:   https://github.com/koverstreet/bcachefs pr/1059
+head:   b099347f62903a9a0a75f788e823066f10596d0f
+commit: b6aa2c934cb9d7bb0ada1345188237f32e24107d [2/3] bcachefs: validate_member(): extract variables
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260218/202602181006.rLTgu86r-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602181006.rLTgu86r-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602180217.Qtsix6p4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602181006.rLTgu86r-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/nfsd/export.c:382:19: warning: unused variable 'nn' [-Wunused-variable]
-     382 |         struct nfsd_net *nn = net_generic(net, nfsd_net_id);
-         |                          ^~
->> fs/nfsd/export.c:383:8: warning: unused variable 'hdr' [-Wunused-variable]
-     383 |         void *hdr;
-         |               ^~~
->> fs/nfsd/export.c:384:6: warning: unused variable 'err' [-Wunused-variable]
-     384 |         int err;
-         |             ^~~
-   3 warnings generated.
+>> fs/bcachefs/sb/members.c:173:21: warning: variable 'first_bucket' is uninitialized when used within its own initialization [-Wuninitialized]
+     173 |         u16 first_bucket = first_bucket;
+         |             ~~~~~~~~~~~~   ^~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/nn +382 fs/nfsd/export.c
+vim +/first_bucket +173 fs/bcachefs/sb/members.c
 
-   378	
-   379	int nfsd_nl_svc_export_get_doit(struct sk_buff *skb, struct genl_info *info)
-   380	{
-   381		struct net *net = genl_info_net(info);
- > 382		struct nfsd_net *nn = net_generic(net, nfsd_net_id);
- > 383		void *hdr;
- > 384		int err;
-   385	
-   386		return 0;
-   387	}
-   388	
+   159	
+   160	static int validate_member(struct printbuf *err,
+   161				   struct bch_member m,
+   162				   struct bch_sb *sb,
+   163				   int i)
+   164	{
+   165		u64 nbuckets = le64_to_cpu(m.nbuckets);
+   166	
+   167		if (nbuckets > BCH_MEMBER_NBUCKETS_MAX) {
+   168			prt_printf(err, "device %u: too many buckets (got %llu, max %u)",
+   169				   i, nbuckets, BCH_MEMBER_NBUCKETS_MAX);
+   170			return -BCH_ERR_invalid_sb_members;
+   171		}
+   172	
+ > 173		u16 first_bucket = first_bucket;
+   174	
+   175		if (nbuckets - first_bucket < BCH_MIN_NR_NBUCKETS) {
+   176			prt_printf(err, "device %u: not enough buckets (got %llu, min %u)",
+   177				   i, le64_to_cpu(m.nbuckets), BCH_MIN_NR_NBUCKETS);
+   178			return -BCH_ERR_invalid_sb_members;
+   179		}
+   180	
+   181		u16 bucket_size = le16_to_cpu(m.bucket_size);
+   182		u16 block_size = le16_to_cpu(sb->block_size);
+   183	
+   184		if (bucket_size < block_size) {
+   185			prt_printf(err, "device %u: bucket size %u smaller than block size %u",
+   186				   i, bucket_size, block_size);
+   187			return -BCH_ERR_invalid_sb_members;
+   188		}
+   189	
+   190		if (bucket_size < BCH_SB_BTREE_NODE_SIZE(sb)) {
+   191			prt_printf(err, "device %u: bucket size %u smaller than btree node size %llu",
+   192				   i, bucket_size, BCH_SB_BTREE_NODE_SIZE(sb));
+   193			return -BCH_ERR_invalid_sb_members;
+   194		}
+   195	
+   196		if (m.btree_bitmap_shift >= BCH_MI_BTREE_BITMAP_SHIFT_MAX) {
+   197			prt_printf(err, "device %u: invalid btree_bitmap_shift %u", i, m.btree_bitmap_shift);
+   198			return -BCH_ERR_invalid_sb_members;
+   199		}
+   200	
+   201		if (BCH_MEMBER_FREESPACE_INITIALIZED(&m) &&
+   202		    sb->features[0] & cpu_to_le64(BIT_ULL(BCH_FEATURE_no_alloc_info))) {
+   203			prt_printf(err, "device %u: freespace initialized but fs has no alloc info", i);
+   204			return -BCH_ERR_invalid_sb_members;
+   205		}
+   206	
+   207		return 0;
+   208	}
+   209	
 
 -- 
 0-DAY CI Kernel Test Service
