@@ -1,70 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41A5238C23;
-	Wed, 18 Feb 2026 09:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CF02EF64F;
+	Wed, 18 Feb 2026 10:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771406751; cv=none; b=TzSvOpBu9XeKCqQOdDvj296HzxzY2J1ybbiVfb9bXimgInb05j3JUwi6yxoatsRneiIc8vOftraG9wjc6GyHqq/vGTAIYHvi742832F+yiClgL9ZrfZ5D0QUUAzt9In5r821DeUESrP40gKroKZ060M37kwBa5myK88FngtP1wA=
+	t=1771411254; cv=none; b=GNWCzihi/ykpZxlbE46OtPnXH/n0xYAnH5WC6Qki9eLUYdMvmd4nQLiPWaQ+QnAhic9ZMniR61wIPOePP/NImIVqPFWFz6x/NHvvHqlnFPRYTM1ndcN8wOaAyD8MqcQ8K1QpvXNl7w3kDVD4JlG9QD7a2ul77nyS4lk+90a5kPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771406751; c=relaxed/simple;
-	bh=7Mi9qac5ReGqC6chwcM+0FI8Kzvlyju/4bHh3m/uhJU=;
+	s=arc-20240116; t=1771411254; c=relaxed/simple;
+	bh=Cd26PjeVkqMJVQiI+SjBkCnU4JV9CmmiLOsGMTatUp4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dL3C7OZL4z2in5ZUtCdV4ZhqsarOaKCPm/7E2kgQjnUWabIb5+8JkT+3ru347WXoMwiYb78ZJE8kk0bnaac8PaBdCvVd3v7jcCnTNmqTTtmvbuTueQMQMCtp4IlTqaU11wJ8jYzgyGGQ2qfH8ktytxDOcqbKp/TIvfNMChboeBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hKShtMU2; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=edJFAW0uLeldlQoO74YxrYbFu0U6vk8FNcFDLpj9P8aLVinTfc2NNqEkjN+P/tDEUce5SQpX0RFUniuX3EbO395prksjtR6UOog7SXjjrKpcm754QWySIifyE3Es8jbKPRPXZuv6ZcjEgyNZHj4JDeyK3BVAiqdnIhS+UePyBiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BYkR/aFr; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hKShtMU2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BYkR/aFr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771406751; x=1802942751;
+  t=1771411252; x=1802947252;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7Mi9qac5ReGqC6chwcM+0FI8Kzvlyju/4bHh3m/uhJU=;
-  b=hKShtMU2KvSWIwYpXgsQaTqtm5saMnvTy3iFVnUUqkly+7dxQOrA61Mw
-   ELGSasdoFtMoTgfK2PeoyfqdtbfKOpsbDV6G8z7blr+jzP59mUvARmMZj
-   qTxXlJCflb25kDXnrvAR4AGiT6rwCQJ5YHLjxY47sbgMfqj/QxldQd53+
-   ksUXyI4Ic96gPHZv+/1mgu/b7YWRYo6J7xLqtZBdUZTbQN0Imj+Y/5vmk
-   qABe/QMMG0huf/CEzvv6YD6XjN861E2WiOguI0qyadG6g5bDSJ8Myof4v
-   xxYu9uhvvqYgxCRmfWbwjGsTbdF+CfWu8+2xLtii/KC+mSHe24vZG0B+3
-   w==;
-X-CSE-ConnectionGUID: ZGoKuWmyS72OlI8cBxPIRQ==
-X-CSE-MsgGUID: CGWLyhZ4SL+GXQSxvRs8nQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="75088899"
-X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="75088899"
+  bh=Cd26PjeVkqMJVQiI+SjBkCnU4JV9CmmiLOsGMTatUp4=;
+  b=BYkR/aFrfIECyzKPDgkxPgpJ4vHRzJeIr+zTCr6XHumDPzSrNZneQG8r
+   6qI6lefpqgXPvr2TCMBBreSHXnNu5xDp3xOym1yuRm2NCDzKnd4M4Jkvz
+   J0hE32B61q5GoyQQB9agQEICVL2XgmvtSu8W07mmHjIKfOsTH3/uEu3hO
+   lL+cyDQw/C98k1T5TLgl8dw+euKTbA47nn0gdJYTR1N4Eyz9Neb5qIat9
+   Whz++mNq/6dVW9oqXRBeU+UAdhRcMWoQAoiZcb63yk0CtBsujah7Eoq9S
+   rbRaTHvfNNwQdTd7tRicG6Qq+Wv7a9Ea6Tvh95njFNESAaNdIJTDJdCiw
+   g==;
+X-CSE-ConnectionGUID: vWdceIIqRhKC880jWLfxBg==
+X-CSE-MsgGUID: JYyWM/LWQQW/5yz+KHk94Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="76344980"
+X-IronPort-AV: E=Sophos;i="6.21,298,1763452800"; 
+   d="scan'208";a="76344980"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 01:25:50 -0800
-X-CSE-ConnectionGUID: Rh52ltp/RYiXXH6MzyV6iw==
-X-CSE-MsgGUID: wkye9/XKQ3iuGwpAWVPCsg==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 02:40:51 -0800
+X-CSE-ConnectionGUID: d6xlXNzzQI+9kyepzCAGCw==
+X-CSE-MsgGUID: 2I4IkMg5TO6l4UKmR3Hdeg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="214136496"
+X-IronPort-AV: E=Sophos;i="6.21,298,1763452800"; 
+   d="scan'208";a="214148730"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 18 Feb 2026 01:25:45 -0800
+  by orviesa008.jf.intel.com with ESMTP; 18 Feb 2026 02:40:46 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vsdoT-000000012EC-3hfd;
-	Wed, 18 Feb 2026 09:25:41 +0000
-Date: Wed, 18 Feb 2026 17:25:10 +0800
+	id 1vsez6-000000012HG-27wy;
+	Wed, 18 Feb 2026 10:40:44 +0000
+Date: Wed, 18 Feb 2026 18:40:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org
+To: Kairui Song via B4 Relay <devnull+kasong.tencent.com@kernel.org>,
+	linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	shuah@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-open-source@crowdstrike.com,
-	Slava Imameev <slava.imameev@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines
- multi-level pointer params test coverage
-Message-ID: <202602181710.tEK6nOl6-lkp@intel.com>
-References: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>,
+	Barry Song <baohua@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Youngjun Park <youngjun.park@lge.com>, linux-kernel@vger.kernel.org,
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH v3 09/12] mm, swap: use the swap table to track the swap
+ count
+Message-ID: <202602181835.58TEynxc-lkp@intel.com>
+References: <20260218-swap-table-p3-v3-9-f4e34be021a7@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,75 +74,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
+In-Reply-To: <20260218-swap-table-p3-v3-9-f4e34be021a7@tencent.com>
 
-Hi Slava,
+Hi Kairui,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on d9982f38eb6e9a0cb6bdd1116cc87f75a1084aad]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Slava-Imameev/bpf-Support-multi-level-pointer-params-via-PTR_TO_MEM-for-trampolines/20260218-062417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260217221357.18215-3-slava.imameev%40crowdstrike.com
-patch subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines multi-level pointer params test coverage
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260218/202602181710.tEK6nOl6-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602181710.tEK6nOl6-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song-via-B4-Relay/mm-swap-protect-si-swap_file-properly-and-use-as-a-mount-indicator/20260218-040852
+base:   d9982f38eb6e9a0cb6bdd1116cc87f75a1084aad
+patch link:    https://lore.kernel.org/r/20260218-swap-table-p3-v3-9-f4e34be021a7%40tencent.com
+patch subject: [PATCH v3 09/12] mm, swap: use the swap table to track the swap count
+config: i386-buildonly-randconfig-001-20260218 (https://download.01.org/0day-ci/archive/20260218/202602181835.58TEynxc-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602181835.58TEynxc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602181710.tEK6nOl6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602181835.58TEynxc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/bpf/test_run.c:737:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     737 |         flush_tlb_kernel_range((unsigned long)page_address(page),
-         |         ^
-   net/bpf/test_run.c:760:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     760 |         flush_tlb_kernel_range((unsigned long)addr,
-         |         ^
-   2 errors generated.
+>> mm/swapfile.c:1627:6: warning: shift count >= width of type [-Wshift-count-overflow]
+    1626 |                 VM_WARN_ON_ONCE(ci->extend_table[ci_off] >=
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1627 |                                 (BIT(BITS_PER_TYPE(ci->extend_table[0]))) - 1);
+         |                                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^
+   include/linux/mmdebug.h:123:50: note: expanded from macro 'VM_WARN_ON_ONCE'
+     123 | #define VM_WARN_ON_ONCE(cond) (void)WARN_ON_ONCE(cond)
+         |                                     ~~~~~~~~~~~~~^~~~~
+   include/asm-generic/bug.h:120:25: note: expanded from macro 'WARN_ON_ONCE'
+     120 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   1 warning generated.
 
 
-vim +/flush_tlb_kernel_range +737 net/bpf/test_run.c
+vim +1627 mm/swapfile.c
 
-   709	
-   710	static void *create_bad_kaddr(void)
-   711	{
-   712		/*
-   713		 * Try to get an address that passes kernel range checks but causes
-   714		 * a page fault handler invocation if accessed from a BPF program.
-   715		 */
-   716	#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
-   717		void *addr = vmalloc(PAGE_SIZE);
-   718	
-   719		if (!addr)
-   720			return NULL;
-   721		/* Make it non-present - any access will fault */
-   722		if (set_memory_np((unsigned long)addr, 1)) {
-   723			vfree(addr);
-   724			return NULL;
-   725		}
-   726		return addr;
-   727	#elif defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
-   728		struct page *page = alloc_page(GFP_KERNEL);
-   729	
-   730		if (!page)
-   731			return NULL;
-   732		/* Remove from direct map - any access will fault */
-   733		if (set_direct_map_invalid_noflush(page)) {
-   734			__free_page(page);
-   735			return NULL;
-   736		}
- > 737		flush_tlb_kernel_range((unsigned long)page_address(page),
-   738				       (unsigned long)page_address(page) + PAGE_SIZE);
-   739		return page_address(page);
-   740	#endif
-   741		return NULL;
-   742	}
-   743	
+  1596	
+  1597	/* Increase the swap count of one slot. */
+  1598	static int __swap_cluster_dup_entry(struct swap_cluster_info *ci,
+  1599					    unsigned int ci_off)
+  1600	{
+  1601		int count;
+  1602		unsigned long swp_tb;
+  1603	
+  1604		lockdep_assert_held(&ci->lock);
+  1605		swp_tb = __swap_table_get(ci, ci_off);
+  1606		/* Bad or special slots can't be handled */
+  1607		if (WARN_ON_ONCE(swp_tb_is_bad(swp_tb)))
+  1608			return -EINVAL;
+  1609		count = __swp_tb_get_count(swp_tb);
+  1610		/* Must be either cached or have a count already */
+  1611		if (WARN_ON_ONCE(!count && !swp_tb_is_folio(swp_tb)))
+  1612			return -ENOENT;
+  1613	
+  1614		if (likely(count < (SWP_TB_COUNT_MAX - 1))) {
+  1615			__swap_table_set(ci, ci_off, __swp_tb_mk_count(swp_tb, count + 1));
+  1616			VM_WARN_ON_ONCE(ci->extend_table && ci->extend_table[ci_off]);
+  1617		} else if (count == (SWP_TB_COUNT_MAX - 1)) {
+  1618			if (ci->extend_table) {
+  1619				VM_WARN_ON_ONCE(ci->extend_table[ci_off]);
+  1620				ci->extend_table[ci_off] = SWP_TB_COUNT_MAX;
+  1621				__swap_table_set(ci, ci_off, __swp_tb_mk_count(swp_tb, SWP_TB_COUNT_MAX));
+  1622			} else {
+  1623				return -ENOMEM;
+  1624			}
+  1625		} else if (count == SWP_TB_COUNT_MAX) {
+  1626			VM_WARN_ON_ONCE(ci->extend_table[ci_off] >=
+> 1627					(BIT(BITS_PER_TYPE(ci->extend_table[0]))) - 1);
+  1628			++ci->extend_table[ci_off];
+  1629		} else {
+  1630			/* Never happens unless counting went wrong */
+  1631			WARN_ON_ONCE(1);
+  1632		}
+  1633	
+  1634		return 0;
+  1635	}
+  1636	
 
 -- 
 0-DAY CI Kernel Test Service
