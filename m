@@ -1,202 +1,118 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F7C311972;
-	Wed, 18 Feb 2026 20:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDAE34889C
+	for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 21:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771448068; cv=none; b=ncPZ/rHvdYeTZRBFxOwTvpx27XA3zGr2keHzdsGTjA2R0pRkvqOqHAxBbPb74sS4uDgyRUmoPgOusjxKymSseNX2Nd71aPrlcuiTyEGxYyeuGek3OrP3MdW8LMFJCcsu52/aqkGm7ok27EuUBKIqxVwhXUicJ5H5c+r9Pv4tShs=
+	t=1771448405; cv=none; b=kDboh9CIlVLLC5xkG8n1aP89vBk+QLwvcgCHnrmwrfpUSPOFpHzGqeE4SC822Mtr7CNM+3w0exCVN393HzqpDTJ7MvDQntV2LmCOXoewXH8CBhnoaqcklIVcGWsZJLGvSEa4Gqkw8OFbuyz+N8M7I3SszKgzn1S6nv/i6EUT8ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771448068; c=relaxed/simple;
-	bh=NSU5ZxTFZs+vcgV4zbWJc+O5FYAL+ah44/3CcMJAvog=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=gqTZ67EqJez29qjgD/5vjDRnfUV1OwSWAViUi1rDblC0tuTFq9ue3HvW3jp2LZ9U/syV/XZw7usESVUoYb0pmJL9e10Ju8qFdKn3StvGqFzH3kfh1IL/9Ezd1sTaJmCno41cQ2QFPzgfrBgd1GWTFU91l93vyd5BYIIMMynrqkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=txRKTC99; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1771448405; c=relaxed/simple;
+	bh=3rieSb1MLS2AWN6xXHqEUMG3nsi9HN9Z3YzWuQsRPaE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=c88VFDMPy0Pa3hGniVWOGAmx7RxL1bzjdlnfJPG2uER6UxqqfvWdV+uXQlRE6pFYTZn6qIISGL4JTNfhCUNPNAid8iTU8Y6NANLJZYl3CJHa8V4fNu55UcTS80m/ed3Z/Gx2khqJ0IiBuRwahhM6YELxJz5UGw6T7gCpEB35x14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nkJ9ACtY; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="txRKTC99"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 61IKbu3I2307125
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 18 Feb 2026 12:37:56 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 61IKbu3I2307125
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026012301; t=1771447078;
-	bh=/4gUyx2Ogqc4pykP2NXlf3ww6HtU65MDbCy+ciTKta0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=txRKTC99yxQoQhaycyi7tJEOgs9h1U2j5kNLU2/1fwUwtmdQCUwUeEffkAabj72/F
-	 ukff8fZVPMHYRTwmPLaZZGgZSRPefZOtaglDoqq/xRMxcmW0y0HbctJr8LQsjWYLQK
-	 O6BowOLQ73YDd32xR02o7iliOviwQfGShMkbSfNL1NNO3hDb124q5coP7LtTukCrv8
-	 eFIsqBvQBtd8mP5roCm/HLGwm3E5AbDDDTSL/htD5wmZD5oyabOgyU4N/H2+l29yfi
-	 tegGzouqXoi0lCfrG4Cfb4XcWEQvgvnEJNiY8Xg+H/e8oJU5xeLp+CxABvSA1teX2D
-	 ggrrWY1MeeKrQ==
-Date: Wed, 18 Feb 2026 12:37:50 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-coco@lists.linux.dev, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        llvm@lists.linux.dev
-CC: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Kiryl Shutsemau <kas@kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, Ajay Kaher <ajay.kaher@broadcom.com>,
-        Alexey Makhalov <alexey.makhalov@broadcom.com>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Xin Li <xin@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, andy.cooper@citrix.com
-Subject: Re: [PATCH v3 00/16] x86/msr: Inline rdmsr/wrmsr instructions
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20260218082133.400602-1-jgross@suse.com>
-References: <20260218082133.400602-1-jgross@suse.com>
-Message-ID: <3D1FE2A7-F237-4232-9E39-6AFC75F3A4F0@zytor.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nkJ9ACtY"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354be486779so736008a91.0
+        for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 13:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771448402; x=1772053202; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsG+1lVvry8sAt+yZ2U5iF+8eZh9cfdyLiVCQKXrJX8=;
+        b=nkJ9ACtY4Au7kd1CmCQIoAgnrlVA+ZAYxHBmBmuUtmpinXJgXSJzsIhte5Na6D4shx
+         wi6UcqvDLqfz8WKFNAeIsQjU4X9svcgH2Z3MkPDFEjtf0ls5gaDyhwCEvEveqoUnZiRz
+         oR3cgbsdEMxwOpFQcSJLXWJSYgHSO3fUJ52+dIqLL9WHvSALJH8JdesLXn8csNh2krBZ
+         eBDkjfSNJfGxUMV/a3/rSB4jKFhq904kx9fbpsvwWGHqqWNhzfZuGXCOp9V6hzTkgLFK
+         VZrxSPUBg1Tb4Vxoc0xLgFWY+YHymqzcIUEyv++0eLO6eMayEObWSKus53QSgFYm1SIW
+         6yXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771448402; x=1772053202;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsG+1lVvry8sAt+yZ2U5iF+8eZh9cfdyLiVCQKXrJX8=;
+        b=t9yK3Ph+RTNZFEIw9IPDzR8K/ZHIseE8N61/zzZ7pc9tYHjhFh8ZPBEpOwCpTslizs
+         phmih0EbgR4aHAEEHBNmApNm2jtMXxxp364TNd8wU+gLa7F6baHYLK/WZ7nDPk8M3dPQ
+         HWQitglMbT3AptdRW4jtuQ+bSSpR/FTbaj46Mf9bkNyeMHt9Eo8PfItziJ0B1N6vew1o
+         940NLls3Ey2xb0DbWD3vo7IDeQMAgN0qPNYe8hewSRVBLlA0YiycEVD59ZZ5v1Jlqz5M
+         NrNUQKu1Mj83dkYXBaL3B1yJ6L01srLAVEAvCFlZiayJeVA2a27x52oKGhQaUmiaaeKR
+         AKjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXu2zW0msxZj9PArnLwZA3WHlA7pbChw2e93i4LvS7HLHUO9oxSozk7b94ZbDWd4WDhdqVO@lists.linux.dev
+X-Gm-Message-State: AOJu0Yye65BeNY6j4YGkvns13QBXja8FJbeOMm+8ezT7mGhIrwCdFTyj
+	GBQ1yb5X8YbyBpiGA3Ynofiu5swaOUeCBtKCl3To1NUkJMNB2OusvK4w7Vg4LP642q/AWEWYAaA
+	sPS8GHQ==
+X-Received: from pjm13.prod.google.com ([2002:a17:90b:2fcd:b0:354:bde2:b529])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2b4f:b0:34c:fe57:2793
+ with SMTP id 98e67ed59e1d1-35889183210mr3062017a91.20.1771448402130; Wed, 18
+ Feb 2026 13:00:02 -0800 (PST)
+Date: Wed, 18 Feb 2026 13:00:00 -0800
+In-Reply-To: <20260218082133.400602-10-jgross@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260218082133.400602-1-jgross@suse.com> <20260218082133.400602-10-jgross@suse.com>
+Message-ID: <aZYoUE7CmrLg3SVe@google.com>
+Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for WRMSR
+From: Sean Christopherson <seanjc@google.com>
+To: Juergen Gross <jgross@suse.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org, 
+	llvm@lists.linux.dev, Xin Li <xin@zytor.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On February 18, 2026 12:21:17 AM PST, Juergen Gross <jgross@suse=2Ecom> wro=
-te:
->When building a kernel with CONFIG_PARAVIRT_XXL the paravirt
->infrastructure will always use functions for reading or writing MSRs,
->even when running on bare metal=2E
->
->Switch to inline RDMSR/WRMSR instructions in this case, reducing the
->paravirt overhead=2E
->
->The first patch is a prerequisite fix for alternative patching=2E Its
->is needed due to the initial indirect call needs to be padded with
->NOPs in some cases with the following patches=2E
->
->In order to make this less intrusive, some further reorganization of
->the MSR access helpers is done in the patches 1-6=2E
->
->The next 4 patches are converting the non-paravirt case to use direct
->inlining of the MSR access instructions, including the WRMSRNS
->instruction and the immediate variants of RDMSR and WRMSR if possible=2E
->
->Patches 11-13 are some further preparations for making the real switch
->to directly patch in the native MSR instructions easier=2E
->
->Patch 14 is switching the paravirt MSR function interface from normal
->call ABI to one more similar to the native MSR instructions=2E
->
->Patch 15 is a little cleanup patch=2E
->
->Patch 16 is the final step for patching in the native MSR instructions
->when not running as a Xen PV guest=2E
->
->This series has been tested to work with Xen PV and on bare metal=2E
->
->Note that there is more room for improvement=2E This series is sent out
->to get a first impression how the code will basically look like=2E
+On Wed, Feb 18, 2026, Juergen Gross wrote:
+> When available use one of the non-serializing WRMSR variants (WRMSRNS
+> with or without an immediate operand specifying the MSR register) in
+> __wrmsrq().
 
-Does that mean you are considering this patchset an RFC? If so, you should=
- put that in the subject header=2E=20
+Silently using a non-serializing version (or not) seems dangerous (not for KVM,
+but for the kernel at-large), unless the rule is going to be that MSR writes need
+to be treated as non-serializing by default.  Which I'm fine with, but if we go
+that route, then I'd prefer not to special case non-serializing callers.
 
->Right now the same problem is solved differently for the paravirt and
->the non-paravirt cases=2E In case this is not desired, there are two
->possibilities to merge the two implementations=2E Both solutions have
->the common idea to have rather similar code for paravirt and
->non-paravirt variants, but just use a different main macro for
->generating the respective code=2E For making the code of both possible
->scenarios more similar, the following variants are possible:
->
->1=2E Remove the micro-optimizations of the non-paravirt case, making
->   it similar to the paravirt code in my series=2E This has the
->   advantage of being more simple, but might have a very small
->   negative performance impact (probably not really detectable)=2E
->
->2=2E Add the same micro-optimizations to the paravirt case, requiring
->   to enhance paravirt patching to support a to be patched indirect
->   call in the middle of the initial code snipplet=2E
->
->In both cases the native MSR function variants would no longer be
->usable in the paravirt case, but this would mostly affect Xen, as it
->would need to open code the WRMSR/RDMSR instructions to be used
->instead the native_*msr*() functions=2E
->
->Changes since V2:
->- switch back to the paravirt approach
->
->Changes since V1:
->- Use Xin Li's approach for inlining
->- Several new patches
->
->Juergen Gross (16):
->  x86/alternative: Support alt_replace_call() with instructions after
->    call
->  coco/tdx: Rename MSR access helpers
->  x86/sev: Replace call of native_wrmsr() with native_wrmsrq()
->  KVM: x86: Remove the KVM private read_msr() function
->  x86/msr: Minimize usage of native_*() msr access functions
->  x86/msr: Move MSR trace calls one function level up
->  x86/opcode: Add immediate form MSR instructions
->  x86/extable: Add support for immediate form MSR instructions
->  x86/msr: Use the alternatives mechanism for WRMSR
->  x86/msr: Use the alternatives mechanism for RDMSR
->  x86/alternatives: Add ALTERNATIVE_4()
->  x86/paravirt: Split off MSR related hooks into new header
->  x86/paravirt: Prepare support of MSR instruction interfaces
->  x86/paravirt: Switch MSR access pv_ops functions to instruction
->    interfaces
->  x86/msr: Reduce number of low level MSR access helpers
->  x86/paravirt: Use alternatives for MSR access with paravirt
->
-> arch/x86/coco/sev/internal=2Eh              |   7 +-
-> arch/x86/coco/tdx/tdx=2Ec                   |   8 +-
-> arch/x86/hyperv/ivm=2Ec                     |   2 +-
-> arch/x86/include/asm/alternative=2Eh        |   6 +
-> arch/x86/include/asm/fred=2Eh               |   2 +-
-> arch/x86/include/asm/kvm_host=2Eh           |  10 -
-> arch/x86/include/asm/msr=2Eh                | 345 ++++++++++++++++------
-> arch/x86/include/asm/paravirt-msr=2Eh       | 148 ++++++++++
-> arch/x86/include/asm/paravirt=2Eh           |  67 -----
-> arch/x86/include/asm/paravirt_types=2Eh     |  57 ++--
-> arch/x86/include/asm/qspinlock_paravirt=2Eh |   4 +-
-> arch/x86/kernel/alternative=2Ec             |   5 +-
-> arch/x86/kernel/cpu/mshyperv=2Ec            |   7 +-
-> arch/x86/kernel/kvmclock=2Ec                |   2 +-
-> arch/x86/kernel/paravirt=2Ec                |  42 ++-
-> arch/x86/kvm/svm/svm=2Ec                    |  16 +-
-> arch/x86/kvm/vmx/tdx=2Ec                    |   2 +-
-> arch/x86/kvm/vmx/vmx=2Ec                    |   8 +-
-> arch/x86/lib/x86-opcode-map=2Etxt           |   5 +-
-> arch/x86/mm/extable=2Ec                     |  35 ++-
-> arch/x86/xen/enlighten_pv=2Ec               |  52 +++-
-> arch/x86/xen/pmu=2Ec                        |   4 +-
-> tools/arch/x86/lib/x86-opcode-map=2Etxt     |   5 +-
-> tools/objtool/check=2Ec                     |   1 +
-> 24 files changed, 576 insertions(+), 264 deletions(-)
-> create mode 100644 arch/x86/include/asm/paravirt-msr=2Eh
->
+E.g. in the KVM code, I find the use of wrmsrns() intuitive, because KVM doesn't
+need the WRMSR to be serializing and so can eke out a bit of extra performance by
+using wrmsrns() instead of wrmsrq().  But with native_wrmsrq(), it's not clear
+why _this_ particular WRMSR in KVM needs to use the "native" version.
 
-Could you clarify *on the high design level* what "go back to the paravirt=
- approach" means, and the motivation for that?
+There are a pile of other WRMSRs in KVM that are in hot paths, especially with
+the mediated PMU support.  If we're going to make the default version non-serializing,
+then I'd prefer to get that via wrmsrq(), i.e. reap the benefits for all of KVM,
+not just one arbitrary path.
 
-Note that for Xen *most* MSRs fall in one of two categories: those that ar=
-e dropped entirely and those that are just passed straight on to the hardwa=
-re=2E
+> For the safe/unsafe variants make __wrmsrq() to be a common base
+> function instead of duplicating the ALTERNATIVE*() macros. This
+> requires to let native_wrmsr() use native_wrmsrq() instead of
+> __wrmsrq(). While changing this, convert native_wrmsr() into an inline
+> function.
+> 
+> Replace the only call of wsrmsrns() with the now equivalent call to
+> native_wrmsrq() and remove wsrmsrns().
 
-I don't know if anyone cares about optimizing PV Xen anymore, but at least=
- in theory Xen can un-paravirtualize most sites=2E
+...
+
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 3799cbbb4577..e29a2ac24669 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1473,7 +1473,7 @@ static void vmx_write_guest_host_msr(struct vcpu_vmx *vmx, u32 msr, u64 data,
+>  {
+>  	preempt_disable();
+>  	if (vmx->vt.guest_state_loaded)
+> -		wrmsrns(msr, data);
+> +		native_wrmsrq(msr, data);
+>  	preempt_enable();
+>  	*cache = data;
+>  }
+> -- 
+> 2.53.0
+> 
