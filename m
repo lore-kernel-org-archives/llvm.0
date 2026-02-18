@@ -1,118 +1,133 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDAE34889C
-	for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 21:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81862F260C
+	for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 21:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771448405; cv=none; b=kDboh9CIlVLLC5xkG8n1aP89vBk+QLwvcgCHnrmwrfpUSPOFpHzGqeE4SC822Mtr7CNM+3w0exCVN393HzqpDTJ7MvDQntV2LmCOXoewXH8CBhnoaqcklIVcGWsZJLGvSEa4Gqkw8OFbuyz+N8M7I3SszKgzn1S6nv/i6EUT8ew=
+	t=1771450664; cv=none; b=GZL9E3U23v2XJ+k/Aam/n0PQ9NVSAYr6jcuuTYB6yz2mVcMLJQRe/AdfXtNRXG64iBwJiyEEteFO+g99EVWFeIlF4NbZ+2HYw9PKTaDHci48OIPuZ5S0vgpu+W5q/fJ2gntnCxD2a6WopmNf3NctVnKCo/5uTM+4t/BT+S65qL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771448405; c=relaxed/simple;
-	bh=3rieSb1MLS2AWN6xXHqEUMG3nsi9HN9Z3YzWuQsRPaE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=c88VFDMPy0Pa3hGniVWOGAmx7RxL1bzjdlnfJPG2uER6UxqqfvWdV+uXQlRE6pFYTZn6qIISGL4JTNfhCUNPNAid8iTU8Y6NANLJZYl3CJHa8V4fNu55UcTS80m/ed3Z/Gx2khqJ0IiBuRwahhM6YELxJz5UGw6T7gCpEB35x14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nkJ9ACtY; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1771450664; c=relaxed/simple;
+	bh=O4nzDH8oF28hvkW1GBVqLhm5voIXe6UWJWyCWV78F3A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cHPHYTUnbvKVaGFj0X2gNl3BYPlD9WwP55xy3PdL8wP5P1FdD80mCmT6cQN052g1rdOdexvOVfsQIbljfn9lmNm1ogc0S8gpqdlZit3kX3QLzHd1pNl1OP7f3td/hQpw2XgVdaahyH1058+WxASCtscoUEE9a98vkIwtGFmNgy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IUTYd0GX; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nkJ9ACtY"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354be486779so736008a91.0
-        for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 13:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771448402; x=1772053202; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nsG+1lVvry8sAt+yZ2U5iF+8eZh9cfdyLiVCQKXrJX8=;
-        b=nkJ9ACtY4Au7kd1CmCQIoAgnrlVA+ZAYxHBmBmuUtmpinXJgXSJzsIhte5Na6D4shx
-         wi6UcqvDLqfz8WKFNAeIsQjU4X9svcgH2Z3MkPDFEjtf0ls5gaDyhwCEvEveqoUnZiRz
-         oR3cgbsdEMxwOpFQcSJLXWJSYgHSO3fUJ52+dIqLL9WHvSALJH8JdesLXn8csNh2krBZ
-         eBDkjfSNJfGxUMV/a3/rSB4jKFhq904kx9fbpsvwWGHqqWNhzfZuGXCOp9V6hzTkgLFK
-         VZrxSPUBg1Tb4Vxoc0xLgFWY+YHymqzcIUEyv++0eLO6eMayEObWSKus53QSgFYm1SIW
-         6yXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771448402; x=1772053202;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nsG+1lVvry8sAt+yZ2U5iF+8eZh9cfdyLiVCQKXrJX8=;
-        b=t9yK3Ph+RTNZFEIw9IPDzR8K/ZHIseE8N61/zzZ7pc9tYHjhFh8ZPBEpOwCpTslizs
-         phmih0EbgR4aHAEEHBNmApNm2jtMXxxp364TNd8wU+gLa7F6baHYLK/WZ7nDPk8M3dPQ
-         HWQitglMbT3AptdRW4jtuQ+bSSpR/FTbaj46Mf9bkNyeMHt9Eo8PfItziJ0B1N6vew1o
-         940NLls3Ey2xb0DbWD3vo7IDeQMAgN0qPNYe8hewSRVBLlA0YiycEVD59ZZ5v1Jlqz5M
-         NrNUQKu1Mj83dkYXBaL3B1yJ6L01srLAVEAvCFlZiayJeVA2a27x52oKGhQaUmiaaeKR
-         AKjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXu2zW0msxZj9PArnLwZA3WHlA7pbChw2e93i4LvS7HLHUO9oxSozk7b94ZbDWd4WDhdqVO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yye65BeNY6j4YGkvns13QBXja8FJbeOMm+8ezT7mGhIrwCdFTyj
-	GBQ1yb5X8YbyBpiGA3Ynofiu5swaOUeCBtKCl3To1NUkJMNB2OusvK4w7Vg4LP642q/AWEWYAaA
-	sPS8GHQ==
-X-Received: from pjm13.prod.google.com ([2002:a17:90b:2fcd:b0:354:bde2:b529])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2b4f:b0:34c:fe57:2793
- with SMTP id 98e67ed59e1d1-35889183210mr3062017a91.20.1771448402130; Wed, 18
- Feb 2026 13:00:02 -0800 (PST)
-Date: Wed, 18 Feb 2026 13:00:00 -0800
-In-Reply-To: <20260218082133.400602-10-jgross@suse.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IUTYd0GX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771450663; x=1802986663;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=O4nzDH8oF28hvkW1GBVqLhm5voIXe6UWJWyCWV78F3A=;
+  b=IUTYd0GX/xnCxw2zLaxCgeUlhCQPzYpMzwSWWWo25Q3A3ZrH4TKHyWzE
+   b9wofFukJp4IqxJna0G0r0kSIZo+DSyNDjWbtcFE4nR1tD6s7nAhACZzX
+   O8CIFs8waYBQKI1hLt1NGR/syoQPniG/1luYDhMjPfOx+I295i8HiNPla
+   HQQEXBNK9COE+AX8n55yK7SSGkX0Tm8rMRe+G4qkf/Ljf9C6EZhJsMkCn
+   2shdtVATv6iTuMEz73cgrW3lxtrILmaM3StK2OlFKLgxS69ojtWXqG3p2
+   3MAJcZeUJGboY/33VLmvDZ5+dR4s/gM9sGCkhJTBbR9xTCL5OfOFy/mV9
+   Q==;
+X-CSE-ConnectionGUID: Z4HwO80DQMOb7JiHB6d64A==
+X-CSE-MsgGUID: jQVbUhapSw2g2IlBvEcU2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="72424015"
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="72424015"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 13:37:42 -0800
+X-CSE-ConnectionGUID: ev8BJpRoRwSOdOn8aQQejw==
+X-CSE-MsgGUID: YsfSvvBXTDe2HrZgGwKfFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="213407057"
+Received: from unknown (HELO [10.24.81.147]) ([10.24.81.147])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 13:37:43 -0800
+Message-ID: <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
+Date: Wed, 18 Feb 2026 13:37:42 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260218082133.400602-1-jgross@suse.com> <20260218082133.400602-10-jgross@suse.com>
-Message-ID: <aZYoUE7CmrLg3SVe@google.com>
-Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for WRMSR
-From: Sean Christopherson <seanjc@google.com>
-To: Juergen Gross <jgross@suse.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org, 
-	llvm@lists.linux.dev, Xin Li <xin@zytor.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for
+ WRMSR
+To: Sean Christopherson <seanjc@google.com>, Juergen Gross <jgross@suse.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+ llvm@lists.linux.dev, Xin Li <xin@zytor.com>, "H. Peter Anvin"
+ <hpa@zytor.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20260218082133.400602-1-jgross@suse.com>
+ <20260218082133.400602-10-jgross@suse.com> <aZYoUE7CmrLg3SVe@google.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <aZYoUE7CmrLg3SVe@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 18, 2026, Juergen Gross wrote:
-> When available use one of the non-serializing WRMSR variants (WRMSRNS
-> with or without an immediate operand specifying the MSR register) in
-> __wrmsrq().
+On 2/18/26 13:00, Sean Christopherson wrote:
+> On Wed, Feb 18, 2026, Juergen Gross wrote:
+>> When available use one of the non-serializing WRMSR variants (WRMSRNS
+>> with or without an immediate operand specifying the MSR register) in
+>> __wrmsrq().
+> Silently using a non-serializing version (or not) seems dangerous (not for KVM,
+> but for the kernel at-large), unless the rule is going to be that MSR writes need
+> to be treated as non-serializing by default.
 
-Silently using a non-serializing version (or not) seems dangerous (not for KVM,
-but for the kernel at-large), unless the rule is going to be that MSR writes need
-to be treated as non-serializing by default.  Which I'm fine with, but if we go
-that route, then I'd prefer not to special case non-serializing callers.
+Yeah, there's no way we can do this in general. It'll work for 99% of
+the MSRs on 99% of the systems for a long time. Then the one new system
+with WRMSRNS is going to have one hell of a heisenbug that'll take years
+off some poor schmuck's life.
 
-E.g. in the KVM code, I find the use of wrmsrns() intuitive, because KVM doesn't
-need the WRMSR to be serializing and so can eke out a bit of extra performance by
-using wrmsrns() instead of wrmsrq().  But with native_wrmsrq(), it's not clear
-why _this_ particular WRMSR in KVM needs to use the "native" version.
-
-There are a pile of other WRMSRs in KVM that are in hot paths, especially with
-the mediated PMU support.  If we're going to make the default version non-serializing,
-then I'd prefer to get that via wrmsrq(), i.e. reap the benefits for all of KVM,
-not just one arbitrary path.
-
-> For the safe/unsafe variants make __wrmsrq() to be a common base
-> function instead of duplicating the ALTERNATIVE*() macros. This
-> requires to let native_wrmsr() use native_wrmsrq() instead of
-> __wrmsrq(). While changing this, convert native_wrmsr() into an inline
-> function.
-> 
-> Replace the only call of wsrmsrns() with the now equivalent call to
-> native_wrmsrq() and remove wsrmsrns().
-
-...
-
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 3799cbbb4577..e29a2ac24669 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1473,7 +1473,7 @@ static void vmx_write_guest_host_msr(struct vcpu_vmx *vmx, u32 msr, u64 data,
->  {
->  	preempt_disable();
->  	if (vmx->vt.guest_state_loaded)
-> -		wrmsrns(msr, data);
-> +		native_wrmsrq(msr, data);
->  	preempt_enable();
->  	*cache = data;
->  }
-> -- 
-> 2.53.0
-> 
+We should really encourage *new* code to use wrmsrns() when it can at
+least for annotation that it doesn't need serialization. But I don't
+think we should do anything to old, working code.
