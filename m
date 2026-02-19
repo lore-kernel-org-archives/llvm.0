@@ -1,140 +1,112 @@
-Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F202B2DEA95
-	for <llvm@lists.linux.dev>; Thu, 19 Feb 2026 18:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523DB27AC4D;
+	Thu, 19 Feb 2026 19:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771526198; cv=none; b=mv/j5AzCQcY4jmgRahUlCXhtGMAJYeqyBNGqtP4FwcW9FRwTbLEzLp3KxYNP9tESUbnVrxIn9mtzqekvZQ0EX4VeWMyGEF8T3Y9a/sBFRVVC1VofBAhZtEAA17DVTUmnHB64GDEzolJDzMKnDq8j+M0dt1j/ifgWCxQgaSKYmno=
+	t=1771528547; cv=none; b=a1e801jPIZfi2kq7aVajtnKXwmMeQjLzhkaIzYa/GqaFK0c8hkH9Jm7Rp33chZODcbYklGBGn3hVVpOdXnsEP8crw7oxK8asPXd41QURjROjWUaEqe7ZwZSzieGKYO26Us2caj7txI99kHL0Vzpf9c1WAF0CUp6Zj51rza9ZTKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771526198; c=relaxed/simple;
-	bh=1I90A4JfY1uH02YnKbi0+/ezCYxk2PO0i8QHjbYmLRc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BV7wYiecrCL1uTgW62OcvZkBI4BkCt1f10JHeCvVN/y8R9Wju4bvMmGFEP2kB9/dLLGt2QozTxFlfB5wCaFu7O580NrW5XS0+ce/Pimkb/oJB6Sqj9Dto+lKQSDUcH9E4FXXEDlyihkSTnOn+E1NqRhi8OzgDHCGmMUDO3B6eaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=IH+kLrTL; arc=none smtp.client-ip=209.85.208.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1771528547; c=relaxed/simple;
+	bh=6Z081LzIpGyYU0ubZNujB6ZYhzg/b0sDtJVLjBrdrp8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EnmCMGWe3dgZF8czYPGK2TNBuMqjqDYl7Gnxe9EMeglNbWpy0FzxudMJdZ2HCoE08pofjIh91BBgwR87/a933DTuark+bIMBXa36ylWf4wYdldPy5HnzbiERSoaSnFLHunXOgxOB/5qtJOuiuEyTvs5yfLZTM4J4c2pYsdU3rqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3Pp+hCr; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="IH+kLrTL"
-Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-65c0d2f5fe1so2009437a12.3
-        for <llvm@lists.linux.dev>; Thu, 19 Feb 2026 10:36:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1771526195; x=1772130995; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6J64nrxbONTCCmeNdQEVG1FOv3pNfoDRs5IqMpfOIM=;
-        b=IH+kLrTLp4i89qC2uIGhSpWF7nI/mzYnf3HEZ+90It77QH+eSHBNqercqRQh3pnRUO
-         PWQdgMs/tTlLWYKPsci8DiMhdgL1AC7QNBgY1SkfrasSaDI/9HVRBRBdKYZv/gMdwevp
-         oV/NRxBLonYKamSR3+S4Wc1DNuM5gZpfjinPg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771526195; x=1772130995;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r6J64nrxbONTCCmeNdQEVG1FOv3pNfoDRs5IqMpfOIM=;
-        b=XmaVgTLgUWkt5hbPm+PLykOfjX3g3I+ZZuQid0D/Zheum9vfevMYM+zii5H+8GzA/L
-         wVpOiC03KSFCUD0vVo2CcOe7aB7RJm4QP3DXJyYwZrX8w8YFRg5gMgnfdq6Ehvva7cEb
-         a/HtnYWgXgEVXSHhnSbp/IJY5+XlH9BW2tUDAT+4CgkIRnWVj1By9HbwASi03baVSnHw
-         okZetElz0k68LUf7Ge9TEyDU/R6mgR8pDPGpgYF1Sos5rdX7mquYR29GnVFbMVYSeFvF
-         G25NiZ7wrwFysCnG9rwK9wYJnVCDTV39cMzMB5Y19k/dJaFb6rCPH8GBpkjbVB6TXyMw
-         cSWg==
-X-Forwarded-Encrypted: i=1; AJvYcCXibdrX+Z4K3Jb5nAnUeH2jHS9L57WpITUicdX2Q8UGu3h3Fm1N7IUEA8zNvY9wZM7CJHrp@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyccqbuaa/rwLuUQWTUe9UfKjvKe1eGpBM0Cw746nm7mxs9E0JS
-	15yEkd+5CpAO5L2aF+O7uIrdGgKJK661NfR494UGs97NCEafrWyfAawMGRvMutzS4NxqXJuN0Mc
-	6LAxAs6evKJ9M
-X-Gm-Gg: AZuq6aIto6QFSk/IKP+/rXzCKr+fCrev2lI7BNw58sR1aefEp4qfZJyTrcOsIWZLpVB
-	sILyvctqXIdA6vOx6LHhTemjcUMPA3zafwktARLo+xTmfM1PVmeCa8vSyqr2ar9QxbDbcSN0dH2
-	qBgcYTY6tGLCUM94j9a4jLkwzGIA5i8a76QsbAAq4igjIdB+zcHPEIIdxumgdZbUnYHJ3IQ2zO1
-	BhX3mF/YQUf7wrQf/MAzTS5xc9ljtdPU4W3sOez99v2NWbHjrenG6sdGGiRt27Qw5DrpsfIilMh
-	F64EFeORETKgxd7oit+t6uhmU93sc76tJhxCcTmqy0Er+UJw5T/dd3aA63mrMgFLn+MUFfAZLnq
-	NegV7MGR04AOJROkt58HtbFyYtQSNsnHsmyk2GVuTQGHlF+mHQKtfzP3IkBQ3pq4B9nR29CJxLl
-	q3USIeBF7Zm5eEl9uHF8krpe3mEX9GwjZ4cHpa5Vq7bYjLttjfQeXwpHriAAmskTfXDPCjJ/2i
-X-Received: by 2002:a17:907:720a:b0:b88:5953:2f14 with SMTP id a640c23a62f3a-b903da93c4cmr416073066b.16.1771526195047;
-        Thu, 19 Feb 2026 10:36:35 -0800 (PST)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc735e4cbsm605429566b.13.2026.02.19.10.36.33
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Feb 2026 10:36:33 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-65c0d2f5fe1so2009385a12.3
-        for <llvm@lists.linux.dev>; Thu, 19 Feb 2026 10:36:33 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUq7KRvYRCXXQTgb+QGC4XpRmQ/OK+uQHRqcn7DwWaf0+wVhDUGANF4NtDaxJqSSrqbPQl8@lists.linux.dev
-X-Received: by 2002:a17:907:6ea7:b0:b88:716a:e4ae with SMTP id
- a640c23a62f3a-b903dcd017fmr367534466b.61.1771526192836; Thu, 19 Feb 2026
- 10:36:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3Pp+hCr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771528545; x=1803064545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6Z081LzIpGyYU0ubZNujB6ZYhzg/b0sDtJVLjBrdrp8=;
+  b=V3Pp+hCrmK25RGocSu5rOSRcn/IC5cBgkUbhX8Y8WKHRQEZf9YbMS2Fa
+   5anQ5R1EyuOA8cFUmp3R8u5YDv2nios9PLkQXBiVS4SXmdlmq60vXapAA
+   XAKp7VWz+Xu5Kw7PZknvhafZnKk2CvBdDedsQDbFiy/xywPMjyfntksDl
+   IU69ewuw3dW7a+plN8Az+oLqDM+Q4oGnZm4UvBYVhYgE1/m8oU0VYCpIr
+   kfQd61zbUFB7o1EdOrajeRfPSmyHV/oXlMvxtW07XI2U6gVZQqKmg/OMe
+   E2PIddsjXgnWeqDqGShwNGczplHjTAB8d6cIayPI93KLsxKMKqygw/QhY
+   w==;
+X-CSE-ConnectionGUID: 43cLS/rMTQGOiJE/v9XbDA==
+X-CSE-MsgGUID: xk+um6iNQEyIp9zwwEv47Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="72686934"
+X-IronPort-AV: E=Sophos;i="6.21,300,1763452800"; 
+   d="scan'208";a="72686934"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 11:15:44 -0800
+X-CSE-ConnectionGUID: 8k8p55yJTXqs+mXFZ5zjRw==
+X-CSE-MsgGUID: lUJFHNePR/qInLzE5s59Nw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,300,1763452800"; 
+   d="scan'208";a="218774215"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 19 Feb 2026 11:15:42 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vt9Uy-0000000042H-0Cnz;
+	Thu, 19 Feb 2026 19:15:40 +0000
+Date: Thu, 19 Feb 2026 20:14:58 +0100
+From: kernel test robot <lkp@intel.com>
+To: Tim Guttzeit <tgu@tuxedocomputers.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	wse@tuxedocomputers.com, Tim Guttzeit <tgu@tuxedocomputers.com>,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH] HID: generic: add LampArray support via hid-lamparray
+ helper
+Message-ID: <202602192025.xrvVo680-lkp@intel.com>
+References: <20260219130217.2042972-1-tgu@tuxedocomputers.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260130132951.2714396-1-elver@google.com> <20260130132951.2714396-4-elver@google.com>
- <aYDFOIskB20CbztD@willie-the-truck> <20260202192923.0707e463@pumpkin>
- <aYHgNSF5a3F7UGU_@willie-the-truck> <CANpmjNNzx-zc_-ZPgwe5DoWLmexw5irT2n+XMUqxTrfwxTxTmg@mail.gmail.com>
- <20260204131400.GI2995752@noisy.programming.kicks-ass.net>
- <aYNUmEfDzq7lTFFr@willie-the-truck> <CANpmjNPHnt6eY-OfkTr5TksHaOon2GyLUokvagcMRa23B6i6_Q@mail.gmail.com>
- <20260206182650.6c21b0ff@pumpkin> <CANpmjNNFXdMM6cL+HBsiXr2WUA=mttR1jDRMqNYD7+YZs6vRKg@mail.gmail.com>
- <20260215221656.68b2fc1d@pumpkin> <CANpmjNOnOqq2k41=iNsgZLXAzspVQhcTZ88Nvms_c_0M+7b7YQ@mail.gmail.com>
- <CAHk-=wioS+vB8aBxWBgdEfXqDq5Ynr9gyY=GhU7gxO9G_C+_6g@mail.gmail.com>
- <20260216110915.4f0d5490@pumpkin> <CAHk-=wjJQQfWpAxigafuyrgxg8CdQWSimVYMk16_j0vWwEkjag@mail.gmail.com>
- <20260216174324.75d47e37@pumpkin> <CAHk-=wgQ8DOxaNY5cBWg+sUkM5Kk6rKYGRHXsZQLtknO_UX+QA@mail.gmail.com>
- <CAHk-=whFGxN0nUffzCsR_NZnQ5TTu+8QFGSfca1j42kDK1a1tw@mail.gmail.com> <DGJ1H1TJVYBF.PA8G6HMJ0V6W@garyguo.net>
-In-Reply-To: <DGJ1H1TJVYBF.PA8G6HMJ0V6W@garyguo.net>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 19 Feb 2026 10:36:16 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi7W4oeKP-1T-jhJSuVETtsNWxXCxczaepiPM8cy_Cm0Q@mail.gmail.com>
-X-Gm-Features: AaiRm53E-2ixouS_a13WNQ7MnkuMrpdZYTKGOBvavd2yyU4R5GBexVg9Sn5kI5c
-Message-ID: <CAHk-=wi7W4oeKP-1T-jhJSuVETtsNWxXCxczaepiPM8cy_Cm0Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] arm64, compiler-context-analysis: Permit alias
- analysis through __READ_ONCE() with CONFIG_LTO=y
-To: Gary Guo <gary@garyguo.net>
-Cc: David Laight <david.laight.linux@gmail.com>, Marco Elver <elver@google.com>, 
-	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>, 
-	Waiman Long <longman@redhat.com>, Bart Van Assche <bvanassche@acm.org>, llvm@lists.linux.dev, 
-	Catalin Marinas <catalin.marinas@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, Boqun Feng <boqun@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260219130217.2042972-1-tgu@tuxedocomputers.com>
 
-On Thu, 19 Feb 2026 at 07:21, Gary Guo <gary@garyguo.net> wrote:
->
-> However there is some limited optimizations being done to fences, at least I
-> know in LLVM multiple fences do get merged.
+Hi Tim,
 
-I don't think we have any real use for that, in that we typically have
-no real need for combining fences.
+kernel test robot noticed the following build errors:
 
-Yes, we have hacks for "I did an atomic op, so now I'm using a special
-fence that turns into a nop on x86 because the atomic already acted as
-a fence" (ie "smp_mb__after_atomic()" etc). So we have some pain
-points, but it's pain points we've dealt with.
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on linus/master v6.19 next-20260219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Having the compiler reliably deal with that would have been great - 25
-years ago.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tim-Guttzeit/HID-generic-add-LampArray-support-via-hid-lamparray-helper/20260219-211040
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20260219130217.2042972-1-tgu%40tuxedocomputers.com
+patch subject: [PATCH] HID: generic: add LampArray support via hid-lamparray helper
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260219/202602192025.xrvVo680-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260219/202602192025.xrvVo680-lkp@intel.com/reproduce)
 
-But we have the code, and we have to use our own architecture-specific
-atomics anyway because the compiler built-ins aren't reliable or good
-enough.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602192025.xrvVo680-lkp@intel.com/
 
-The thing is, inline asm is *reliable*. It's reliable exactly because
-it isn't a thousand different cases that the compiler has to get
-right. It's *one* case - admittedly a complicated one - that the
-compiler has to get right, but then you can do pretty much anything.
+All errors (new ones prefixed by >>):
 
-And having seen the process - and read the language - of the C memory
-ordering standard, I do not believe anybody can ever understand that
-thing. Memory ordering is very subtle and hard to understand even when
-well documented. The C standard documentation for it is definitely not
-helping.
+>> ld.lld: error: undefined symbol: led_mc_calc_color_components
+   >>> referenced by hid-lamparray.c:585 (drivers/hid/hid-lamparray.c:585)
+   >>>               vmlinux.o:(lamparray_register_led)
+   >>> referenced by hid-lamparray.c:449 (drivers/hid/hid-lamparray.c:449)
+   >>>               vmlinux.o:(lamparray_led_brightness_set)
+--
+>> ld.lld: error: undefined symbol: led_classdev_multicolor_register_ext
+   >>> referenced by led-class-multicolor.h:70 (include/linux/led-class-multicolor.h:70)
+   >>>               vmlinux.o:(lamparray_register_led)
+--
+>> ld.lld: error: undefined symbol: led_classdev_multicolor_unregister
+   >>> referenced by hid-lamparray.c:615 (drivers/hid/hid-lamparray.c:615)
+   >>>               vmlinux.o:(lamparray_unregister_led)
 
-I'm not surprised that compilers don't do better at atomics, because
-if I was a compiler writer, I'd have long since given up trying to
-figure out the meaning of the standards language and just gone "yeah,
-it's an atomic, I won't do anything fancy".
-
-(Which is obviously exactly what happens to volatile too, but at least
-there you can *understand* the rules, at least unless you got confused
-by the C++ horrors, at which point you throw your hands up again).
-
-             Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
