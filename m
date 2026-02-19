@@ -1,88 +1,101 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245892848BB
-	for <llvm@lists.linux.dev>; Wed, 18 Feb 2026 23:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2653EBF0E;
+	Thu, 19 Feb 2026 00:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771458795; cv=none; b=gpBK52a54kBNXWxfhripLrqTKEOvi34YJSNdishAsGIiKES+hOUgF7hYQroW1LzYrgL2WsB+eIWBQ1qx+jjCszHFbYgXzhHKX5VF1EWUxfmj8cjzKJthqF5o7PAuOFz4F8K3kT1MY9fL0OYWBkGO1czN40QQ9/Zk7GjMUT8xmPQ=
+	t=1771459398; cv=none; b=USTALCE1IzBSxn1LHJ+4ODIQDI+LXhHNlqFvFNKC81mqzUNZuEPF3sLhYzBS60drAs+vN4qiyfwGk8FIMjHIFdTG9+kb0OJNgAiS54qPXR0bAzKPqfmdnvcDFOmrwh7/5JRbtYeqgHI/WSmTqi1ItwbtKEd5mD8ytZmPjhNu8Jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771458795; c=relaxed/simple;
-	bh=ud6jjHkpXOUroYYoHpbbrgqTadOtji00RvwIixGXf/Q=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=QwWQF2gDeQ64NkM/3PWxX1aX1XaveBN7d29MXRdsmbXanhtFbzwXRDdIIf54VLH1IN2RUREUEaCF1AfGbkn5ZGIBG6G6xqc7bSxbsfoIiOyGKBqv3kJc25U/ZFFWHmtCnrIQHuqj8iHFUxCEXdVya5DYV4fV/IcvyXt8G/Fcn54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=PgUUqgvO; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1771459398; c=relaxed/simple;
+	bh=yR4TzLEZp88brrZRUGNWEnXcVuEizkSGJ9isozb7jeM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jE8jzVfihvXtY7icDfiFnE456Ol7m9ijO3a3W3+qvkyr/ZgtispISlG3TNhkoDL7zcaxBn3zwINLWdYaHuUmUJSgqQ8nkMJpHBlic+aBOECkBp/PJOFjREZMV2lkiaO/B38JiUCeq8ZEjdZN9rvDSv/3T8cK8M63MD3+N1sZk6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nl/xqxft; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="PgUUqgvO"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 61INastk2596160
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 18 Feb 2026 15:36:55 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 61INastk2596160
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026012301; t=1771457815;
-	bh=ud6jjHkpXOUroYYoHpbbrgqTadOtji00RvwIixGXf/Q=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=PgUUqgvOFZlif81k2hIvBmtYJBzWZ5kYIVHUMsJf2gEHl4gVutCow+eQo9TdLZGy0
-	 Q28R8L2Nd+0oJVYqTwfEck5wxEy9s/IlWtW6tGkIc1u8eeHg4tZkDbmk7nW2RGVZ5I
-	 UGWz7mjAYb4IDILOZrQEZQp4RKcejpczDsRMZbE+409bz1bSa9RhGwaWVJvIYF8sev
-	 bIy8b37Y78oq4RND5Lc4T7JVKgd1b8mnoJt15hOBocPwGLxyCz2DvS4ESg1x9CyUl/
-	 wuk2hUqP5Z+RzOl5C+9UB0dH51yfw2mwq5zxC1YLRG1jm7OCTR7vA9ufW7Cq9CA7K5
-	 QNJLti+LuNxZA==
-Date: Wed, 18 Feb 2026 15:36:48 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Juergen Gross <jgross@suse.com>
-CC: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, Xin Li <xin@zytor.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_09/16=5D_x86/msr=3A_Use_t?=
- =?US-ASCII?Q?he_alternatives_mechanism_for_WRMSR?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
-References: <20260218082133.400602-1-jgross@suse.com> <20260218082133.400602-10-jgross@suse.com> <aZYoUE7CmrLg3SVe@google.com> <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
-Message-ID: <7F627940-578D-4EDF-9812-41DDF3275B4F@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nl/xqxft"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771459395; x=1802995395;
+  h=date:from:to:cc:subject:message-id;
+  bh=yR4TzLEZp88brrZRUGNWEnXcVuEizkSGJ9isozb7jeM=;
+  b=nl/xqxftz0UqriyOb8U/k2XlQK7q4jMBaR1Xdg93AS/Cbc+fSDIUby3a
+   KBswMqaZaSVoY2aARX6azDQKDY/GYCW5AgalwpQ4gItkekSqLuEE0wlcS
+   M69bt1QD5+BWnnV67sZqNeblOvw4C5V5wi4XByG7+jNz+fA6KWaYw/bfl
+   3r5wHtgO5/6rYfrEmlHhhFCr/V2ZGvw9CzRC2jgGROa+MKpt4ZsnYLykc
+   VgUYW68nbGthYyvHBSIaWvFiVxSBuwryvUM2XIAbtNiO1cEo3Kl3B/S4n
+   N/Wm84BbwE4FZKv6pIhXKwpO1fNupEAZ7r/LFeTja34/UKTkBWqJ39zLg
+   w==;
+X-CSE-ConnectionGUID: FWBm4K4YQf2WPwe1Xx1iOw==
+X-CSE-MsgGUID: NTEaADytTKWibdT7Uwzf+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="76380308"
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="76380308"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 16:03:15 -0800
+X-CSE-ConnectionGUID: oUAdWAUzTwCXxdUv7HqZiA==
+X-CSE-MsgGUID: sY1QR5bhT3agSbyp2mMMjg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="212648267"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 18 Feb 2026 16:03:13 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vsrVf-000000012pC-1tJx;
+	Thu, 19 Feb 2026 00:03:11 +0000
+Date: Thu, 19 Feb 2026 08:02:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kas:pte_size 9/27]
+ drivers/input/touchscreen/wdt87xx_i2c.c:40:9: warning: 'PG_SIZE' macro
+ redefined
+Message-ID: <202602190741.2IS0uErT-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On February 18, 2026 1:37:42 PM PST, Dave Hansen <dave=2Ehansen@intel=2Ecom=
-> wrote:
->On 2/18/26 13:00, Sean Christopherson wrote:
->> On Wed, Feb 18, 2026, Juergen Gross wrote:
->>> When available use one of the non-serializing WRMSR variants (WRMSRNS
->>> with or without an immediate operand specifying the MSR register) in
->>> __wrmsrq()=2E
->> Silently using a non-serializing version (or not) seems dangerous (not =
-for KVM,
->> but for the kernel at-large), unless the rule is going to be that MSR w=
-rites need
->> to be treated as non-serializing by default=2E
->
->Yeah, there's no way we can do this in general=2E It'll work for 99% of
->the MSRs on 99% of the systems for a long time=2E Then the one new system
->with WRMSRNS is going to have one hell of a heisenbug that'll take years
->off some poor schmuck's life=2E
->
->We should really encourage *new* code to use wrmsrns() when it can at
->least for annotation that it doesn't need serialization=2E But I don't
->think we should do anything to old, working code=2E
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git pte_size
+head:   1903e57e83c0c0526b0ee193ce32e6aac90863af
+commit: 87ea5e388f0115d9a2ba856cf4d2fecb9880a845 [9/27] mm: Introduce PG_SIZE, PG_SHIFT and PG_MASK
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260219/202602190741.2IS0uErT-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260219/202602190741.2IS0uErT-lkp@intel.com/reproduce)
 
-Correct=2E We need to do this on a user by user basis=2E
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602190741.2IS0uErT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/wdt87xx_i2c.c:40:9: warning: 'PG_SIZE' macro redefined [-Wmacro-redefined]
+      40 | #define PG_SIZE                         0x1000
+         |         ^
+   include/vdso/page.h:34:9: note: previous definition is here
+      34 | #define PG_SIZE         (_AC(1,UL) << CONFIG_PG_SHIFT)
+         |         ^
+   1 warning generated.
+
+
+vim +/PG_SIZE +40 drivers/input/touchscreen/wdt87xx_i2c.c
+
+3e30c11c8a902de HungNien Chen 2015-06-15  39  
+3e30c11c8a902de HungNien Chen 2015-06-15 @40  #define PG_SIZE				0x1000
+3e30c11c8a902de HungNien Chen 2015-06-15  41  #define MAX_RETRIES			3
+3e30c11c8a902de HungNien Chen 2015-06-15  42  
+
+:::::: The code at line 40 was first introduced by commit
+:::::: 3e30c11c8a902de350281a0d821e17cdb45ef156 Input: add a driver for wdt87xx touchscreen controller
+
+:::::: TO: HungNien Chen <hn.chen@weidahitech.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
