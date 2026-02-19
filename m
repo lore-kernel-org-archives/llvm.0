@@ -1,100 +1,104 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2653EBF0E;
-	Thu, 19 Feb 2026 00:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA656FBF;
+	Thu, 19 Feb 2026 00:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771459398; cv=none; b=USTALCE1IzBSxn1LHJ+4ODIQDI+LXhHNlqFvFNKC81mqzUNZuEPF3sLhYzBS60drAs+vN4qiyfwGk8FIMjHIFdTG9+kb0OJNgAiS54qPXR0bAzKPqfmdnvcDFOmrwh7/5JRbtYeqgHI/WSmTqi1ItwbtKEd5mD8ytZmPjhNu8Jw=
+	t=1771459399; cv=none; b=j8o4JEfGZxszZKZeFvp0zIdV0MfRHvFsRm7GjuFjbnJ0StS+g9JaM2zoEkLcyq7t/bRbX9Eq4+zU1QaRIC/nyPD90zifHqZVyAqU30ru5oo2k0hTAVCgn63tVCfTHKkff198Atki7it2aslqwfUBrqWeZgmB7z8NH7oie4qRBSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771459398; c=relaxed/simple;
-	bh=yR4TzLEZp88brrZRUGNWEnXcVuEizkSGJ9isozb7jeM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jE8jzVfihvXtY7icDfiFnE456Ol7m9ijO3a3W3+qvkyr/ZgtispISlG3TNhkoDL7zcaxBn3zwINLWdYaHuUmUJSgqQ8nkMJpHBlic+aBOECkBp/PJOFjREZMV2lkiaO/B38JiUCeq8ZEjdZN9rvDSv/3T8cK8M63MD3+N1sZk6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nl/xqxft; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1771459399; c=relaxed/simple;
+	bh=70C/ZyvTB8MiLKxeNWg3kMOgROmHS3OkM9Wulu5+rUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GwqSAg+Q3XIUyWYGMia5tVpdPZwNTMr6j3igOgkku/FeYxZ76uzEYPrPdpwmT96wqBJSl+cZ8/kMapYoxUglad9SHswaA0kZNIrm6robgxdU+WNtL+pUPCK2ig65eQup8ituFu8eILWiTX/xZp0bgaK3/UamypnDERPDmjKedPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bi5dm9xk; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nl/xqxft"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bi5dm9xk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771459395; x=1802995395;
-  h=date:from:to:cc:subject:message-id;
-  bh=yR4TzLEZp88brrZRUGNWEnXcVuEizkSGJ9isozb7jeM=;
-  b=nl/xqxftz0UqriyOb8U/k2XlQK7q4jMBaR1Xdg93AS/Cbc+fSDIUby3a
-   KBswMqaZaSVoY2aARX6azDQKDY/GYCW5AgalwpQ4gItkekSqLuEE0wlcS
-   M69bt1QD5+BWnnV67sZqNeblOvw4C5V5wi4XByG7+jNz+fA6KWaYw/bfl
-   3r5wHtgO5/6rYfrEmlHhhFCr/V2ZGvw9CzRC2jgGROa+MKpt4ZsnYLykc
-   VgUYW68nbGthYyvHBSIaWvFiVxSBuwryvUM2XIAbtNiO1cEo3Kl3B/S4n
-   N/Wm84BbwE4FZKv6pIhXKwpO1fNupEAZ7r/LFeTja34/UKTkBWqJ39zLg
-   w==;
-X-CSE-ConnectionGUID: FWBm4K4YQf2WPwe1Xx1iOw==
-X-CSE-MsgGUID: NTEaADytTKWibdT7Uwzf+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="76380308"
+  t=1771459398; x=1802995398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=70C/ZyvTB8MiLKxeNWg3kMOgROmHS3OkM9Wulu5+rUE=;
+  b=bi5dm9xkFTn1uKplH1Y3PcF1hjKn7b39x3THjiBOqku6Qz29oYhvNpGs
+   IQIIo5YBQjtZoD3ux3fMncIDsFw1UkxNM13UvRkrrTQwxBE1Uw+S63SKn
+   NGNkOsSJXtrutMCny3DxCvC1Z+Xk0AZ8MrErjzqa/FY351Af5OEpOqlLy
+   oXSoDvhG/AMDymhqOmAzyo5NXF38HNC5DjmFgIGFY6UMVoq200j+8foad
+   dyvxLQmex0erAB1EzFA1GYk71QohRBkT8hC23KI510y+KvTcgD3VdWHuC
+   yfVNmZtU/KmI7a0gNPjQgNRMFAoYQvZIxXoGwH49wj05SLmuEHde1cS6r
+   Q==;
+X-CSE-ConnectionGUID: M3n2k9ErSGKxdFzHrY6O1w==
+X-CSE-MsgGUID: 0a1DtV0hSJWo+naqtZMFEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="76380311"
 X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
-   d="scan'208";a="76380308"
+   d="scan'208";a="76380311"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 16:03:15 -0800
-X-CSE-ConnectionGUID: oUAdWAUzTwCXxdUv7HqZiA==
-X-CSE-MsgGUID: sY1QR5bhT3agSbyp2mMMjg==
+X-CSE-ConnectionGUID: 5HV5mDijRRmYvgnhnQSCnw==
+X-CSE-MsgGUID: G1orgibKRqylRhtoJHLfYw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
-   d="scan'208";a="212648267"
+   d="scan'208";a="212648261"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
   by fmviesa006.fm.intel.com with ESMTP; 18 Feb 2026 16:03:13 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vsrVf-000000012pC-1tJx;
+	id 1vsrVf-000000012pA-1mUe;
 	Thu, 19 Feb 2026 00:03:11 +0000
-Date: Thu, 19 Feb 2026 08:02:30 +0800
+Date: Thu, 19 Feb 2026 08:02:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kas:pte_size 9/27]
- drivers/input/touchscreen/wdt87xx_i2c.c:40:9: warning: 'PG_SIZE' macro
- redefined
-Message-ID: <202602190741.2IS0uErT-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: redacherkaoui <redacherkaoui67@gmail.com>, x86@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@kernel.org,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	hpa@zytor.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/boot/compressed: Fix signedness of rdfs8()
+Message-ID: <202602190815.lFBVk5IE-lkp@intel.com>
+References: <20260218150008.28179-1-redacherkaoui67@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260218150008.28179-1-redacherkaoui67@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git pte_size
-head:   1903e57e83c0c0526b0ee193ce32e6aac90863af
-commit: 87ea5e388f0115d9a2ba856cf4d2fecb9880a845 [9/27] mm: Introduce PG_SIZE, PG_SHIFT and PG_MASK
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260219/202602190741.2IS0uErT-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e86750b29fa0ff207cd43213d66dabe565417638)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260219/202602190741.2IS0uErT-lkp@intel.com/reproduce)
+Hi redacherkaoui,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on tip/master linus/master v6.19 next-20260218]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/redacherkaoui/x86-boot-compressed-Fix-signedness-of-rdfs8/20260218-230616
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20260218150008.28179-1-redacherkaoui67%40gmail.com
+patch subject: [PATCH] x86/boot/compressed: Fix signedness of rdfs8()
+config: x86_64-randconfig-002-20260219 (https://download.01.org/0day-ci/archive/20260219/202602190815.lFBVk5IE-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260219/202602190815.lFBVk5IE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602190741.2IS0uErT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602190815.lFBVk5IE-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/input/touchscreen/wdt87xx_i2c.c:40:9: warning: 'PG_SIZE' macro redefined [-Wmacro-redefined]
-      40 | #define PG_SIZE                         0x1000
-         |         ^
-   include/vdso/page.h:34:9: note: previous definition is here
-      34 | #define PG_SIZE         (_AC(1,UL) << CONFIG_PG_SHIFT)
-         |         ^
-   1 warning generated.
-
-
-vim +/PG_SIZE +40 drivers/input/touchscreen/wdt87xx_i2c.c
-
-3e30c11c8a902de HungNien Chen 2015-06-15  39  
-3e30c11c8a902de HungNien Chen 2015-06-15 @40  #define PG_SIZE				0x1000
-3e30c11c8a902de HungNien Chen 2015-06-15  41  #define MAX_RETRIES			3
-3e30c11c8a902de HungNien Chen 2015-06-15  42  
-
-:::::: The code at line 40 was first introduced by commit
-:::::: 3e30c11c8a902de350281a0d821e17cdb45ef156 Input: add a driver for wdt87xx touchscreen controller
-
-:::::: TO: HungNien Chen <hn.chen@weidahitech.com>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>> ld.lld: error: undefined hidden symbol: get_cmd_line_ptr
+   >>> referenced by ident_map_64.c
+   >>>               arch/x86/boot/compressed/ident_map_64.o:(initialize_identity_maps)
+   >>> referenced by kaslr.c
+   >>>               arch/x86/boot/compressed/kaslr.o:(choose_random_location)
+   >>> referenced by kaslr.c
+   >>>               arch/x86/boot/compressed/kaslr.o:(choose_random_location)
 
 -- 
 0-DAY CI Kernel Test Service
