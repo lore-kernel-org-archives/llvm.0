@@ -1,145 +1,178 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969C031B81C
-	for <llvm@lists.linux.dev>; Fri, 20 Feb 2026 17:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC09786353;
+	Fri, 20 Feb 2026 19:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771609220; cv=none; b=nf2nAUVFSoGD9oUrhEyeIvZIe1HBsGT5biQYOHWhBGx/V/XAyoLqaI4kx2jhEGhggmXa1z3KSdUPRj+Gfcfet36HRzf2OoQ/ieK+FvbEc+4NUJbBV5TQuX8v+Rxqdl72lLRLuHSY8zYCIGT9+HQKs3wNMpNNn9qG8GMqmzuzzAE=
+	t=1771615498; cv=none; b=rUln5xlZYwMr1dzW2xqNCkQtSAHiOskj34rLPYX7GW13Iilka4dLuV5TA38uwCx6oyYBKajn5OB9QK8c1v3zouLropNzlgXmt1N718TGVopQrtyihrfAPtPwdsSaBY0dcIbscOgBWukDLGLvxpsMAAVlEPqE/qLsVB41RsG+fE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771609220; c=relaxed/simple;
-	bh=DdBlfl+5aTLWChtAyWH5RbOfo0h+3Q4SzNLGJCOyn+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XREkJrPFoC34HlOsO/7vyrAYgqIvtFX4wV2TaI4MUN+oREhKykwFs6RifMAB/kGv54Y1SeEoudshbnk9KMU7e2h39yX/FguYnc6qhOAM0V/hw8/5dJONyfGGI0A0yS+Zrg3tL1bHn44t4yxLtmR63knriMUbJ7YteJUwUctXOgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePxkw2DS; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1771615498; c=relaxed/simple;
+	bh=CxGHMCvKqrgIEL1ZXttyxDNzGSQqXIwzxJ1W6l9MfYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GnONRQSDvezEFdJ4HkatDTYSPLp2wyeoaRYVyhMGNEcSTGwkdQ0cWatWLA68NW1WeY8dyXcg4J/7G3KbdOkpb62BbdzuHPLL2KeVG7nkgNxFRDolOlpwUGBOcFPqZtwN4hr9XvMHDK9Pz3tmfHwO96ywtlu550oC6nrw6Hul9nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=On57KZra; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePxkw2DS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="On57KZra"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771609219; x=1803145219;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DdBlfl+5aTLWChtAyWH5RbOfo0h+3Q4SzNLGJCOyn+0=;
-  b=ePxkw2DSFLFEkFZsvevyqnPf5/tzA3Kmc1WgbN/2IrNasDInXESb9qBR
-   hNvC90ql1cfAAwrqpqt/lmbPGxGNl6jJSR5QjmUiUc78p132i4brZAr5F
-   iLdJQcvPd3UBRVl5k8/yxAetDcnahzCd1moLA/HdDjYLf9R3rn5csSdGM
-   8pUJPFAT2k8FpnLhpxhMmXe7O3AOkKg8Q37KS7/Kc4y5uMgfJFVtqA9/4
-   IqCGpWLy2YuAxWHSosSKkhu4V2+qgVk08TmzZ2bqhUCMByulcJInfTBnB
-   2AGUH61wCOtyae4TI03Q6g3UiR0R13r+gd0gPXcG0v52qoL88jEY1YWB/
-   A==;
-X-CSE-ConnectionGUID: oVMSai4TQEOdTQV2IYVw9g==
-X-CSE-MsgGUID: qPG66UT3SuSUza0NC8+aoA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="72611389"
+  t=1771615498; x=1803151498;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CxGHMCvKqrgIEL1ZXttyxDNzGSQqXIwzxJ1W6l9MfYk=;
+  b=On57KZraQG/ntB902DJOZRFrDEoQ9IhcaU1GQ+EH7OnlLJ4z2YScuF+v
+   VHLJ/VRbEg15D+a8pl5ZiNHG8oS/vWCi/hdRlXQ+5LxQcu6vv41+yYgSi
+   Xg250Xc5q9wkQ1Yzbaomry/OZCS1vHc5vu31GVEYFoU49w11o5yxSv0A1
+   RdSpj1/fbT56ekpbbyNVSXvvRdMPYz4Kdq+JJxJBmAz09OyxigndUqM7s
+   5Tjvw/AVB87kuwKB4AurnMS4sSo7y+lK4xvm6RKrQU/MH4cnyYGXB6DSV
+   LmRrAgjTqBNpzcXu4Bp73+ZKsWfxLJnQeflevshht8mJYpln2D8vElFSr
+   g==;
+X-CSE-ConnectionGUID: 29ynDhtSTTKiMDXTEkTCLg==
+X-CSE-MsgGUID: aV7uahPeQcSLvdq4Qxo4sw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="71918912"
 X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="72611389"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 09:40:19 -0800
-X-CSE-ConnectionGUID: SroeXjrgRByrZIrxUKWGDw==
-X-CSE-MsgGUID: tjQYqZl6Q5KvLzbhewKKrQ==
+   d="scan'208";a="71918912"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 11:24:57 -0800
+X-CSE-ConnectionGUID: avG6jDm0RIq8wolc3qY8Dg==
+X-CSE-MsgGUID: QL4BNvEpQw6lhkniQ2HCWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="213444285"
-Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.110.77]) ([10.125.110.77])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 09:40:18 -0800
-Message-ID: <542ff5d7-1cff-4ef9-af48-f0378aa2a05c@intel.com>
-Date: Fri, 20 Feb 2026 09:40:19 -0800
+   d="scan'208";a="213960545"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 20 Feb 2026 11:24:53 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vtW7P-000000004Gb-1NH8;
+	Fri, 20 Feb 2026 19:24:51 +0000
+Date: Fri, 20 Feb 2026 20:24:15 +0100
+From: kernel test robot <lkp@intel.com>
+To: Ahmed Tiba <ahmed.tiba@arm.com>, devicetree@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ahmed Tiba <ahmed.tiba@arm.com>, Dmitry.Lamerov@arm.com,
+	catalin.marinas@arm.com, bp@alien8.de, robh@kernel.org,
+	rafael@kernel.org, will@kernel.org, conor@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	krzk+dt@kernel.org, Michael.Zhao2@arm.com, tony.luck@intel.com
+Subject: Re: [PATCH v2 09/11] ACPI: APEI: share GHES CPER helpers
+Message-ID: <202602202042.cliczLhi-lkp@intel.com>
+References: <20260220-topics-ahmtib01-ras_ffh_arm_internal_review-v2-9-347fa2d7351b@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for
- WRMSR
-To: Xin Li <xin@zytor.com>, =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Cc: Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, kvm@vger.kernel.org, llvm@lists.linux.dev,
- "H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20260218082133.400602-1-jgross@suse.com>
- <20260218082133.400602-10-jgross@suse.com> <aZYoUE7CmrLg3SVe@google.com>
- <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
- <d622a318-f7f8-4cff-b540-38d159ca87f4@suse.com>
- <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260220-topics-ahmtib01-ras_ffh_arm_internal_review-v2-9-347fa2d7351b@arm.com>
 
-On 2/20/26 09:12, Xin Li wrote:
->> I _really_ thought this was discussed upfront by Xin before he sent out his
->> first version of the series.
-> I actually reached out to the Intel architects about this before I started
-> coding. Turns out, if the CPU supports WRMSRNS, you can use it across the
-> board.  The hardware is smart enough to perform a serialized write whenever
-> a non-serialized one isn't proper, so there’s no risk.
+Hi Ahmed,
 
-Could we be a little more specific here, please?
+kernel test robot noticed the following build errors:
 
-If it was universally safe to s/WRMSR/WRMSRNS/, then there wouldn't have
-been a need for WRMSRNS in the ISA.
+[auto build test ERROR on 8bf22c33e7a172fbc72464f4cc484d23a6b412ba]
 
-Even the WRMSRNS description in the SDM talks about some caveats with
-"performance-monitor events" MSRs. That sounds like it contradicts the
-idea that the "hardware is smart enough" universally to tolerate using
-WRMSRNS *EVERYWHERE*.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ahmed-Tiba/ACPI-APEI-GHES-share-macros-via-a-private-header/20260220-214812
+base:   8bf22c33e7a172fbc72464f4cc484d23a6b412ba
+patch link:    https://lore.kernel.org/r/20260220-topics-ahmtib01-ras_ffh_arm_internal_review-v2-9-347fa2d7351b%40arm.com
+patch subject: [PATCH v2 09/11] ACPI: APEI: share GHES CPER helpers
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260220/202602202042.cliczLhi-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260220/202602202042.cliczLhi-lkp@intel.com/reproduce)
 
-It also says:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602202042.cliczLhi-lkp@intel.com/
 
-	Like WRMSR, WRMSRNS will ensure that all operations before it do
-	not use the new MSR value and that all operations after the
-	WRMSRNS do use the new value.
+All errors (new ones prefixed by >>):
 
-Which is a handy guarantee for sure. But, it's far short of a fully
-serializing instruction.
+>> drivers/acpi/apei/ghes_cper.c:261:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     261 |                                  FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
+         |                                  ^
+   1 error generated.
+
+
+vim +/FIELD_GET +261 drivers/acpi/apei/ghes_cper.c
+
+   202	
+   203	bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
+   204					     int sev, bool sync)
+   205	{
+   206		struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+   207		int flags = sync ? MF_ACTION_REQUIRED : 0;
+   208		int length = gdata->error_data_length;
+   209		char error_type[120];
+   210		bool queued = false;
+   211		int sec_sev, i;
+   212		char *p;
+   213	
+   214		sec_sev = ghes_severity(gdata->error_severity);
+   215		if (length >= sizeof(*err)) {
+   216			log_arm_hw_error(err, sec_sev);
+   217		} else {
+   218			pr_warn(FW_BUG "arm error length: %d\n", length);
+   219			pr_warn(FW_BUG "length is too small\n");
+   220			pr_warn(FW_BUG "firmware-generated error record is incorrect\n");
+   221			return false;
+   222		}
+   223	
+   224		if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+   225			return false;
+   226	
+   227		p = (char *)(err + 1);
+   228		length -= sizeof(err);
+   229	
+   230		for (i = 0; i < err->err_info_num; i++) {
+   231			struct cper_arm_err_info *err_info;
+   232			bool is_cache, has_pa;
+   233	
+   234			/* Ensure we have enough data for the error info header */
+   235			if (length < sizeof(*err_info))
+   236				break;
+   237	
+   238			err_info = (struct cper_arm_err_info *)p;
+   239	
+   240			/* Validate the claimed length before using it */
+   241			length -= err_info->length;
+   242			if (length < 0)
+   243				break;
+   244	
+   245			is_cache = err_info->type & CPER_ARM_CACHE_ERROR;
+   246			has_pa = (err_info->validation_bits & CPER_ARM_INFO_VALID_PHYSICAL_ADDR);
+   247	
+   248			/*
+   249			 * The field (err_info->error_info & BIT(26)) is fixed to set to
+   250			 * 1 in some old firmware of HiSilicon Kunpeng920. We assume that
+   251			 * firmware won't mix corrected errors in an uncorrected section,
+   252			 * and don't filter out 'corrected' error here.
+   253			 */
+   254			if (is_cache && has_pa) {
+   255				queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
+   256				p += err_info->length;
+   257				continue;
+   258			}
+   259	
+   260			cper_bits_to_str(error_type, sizeof(error_type),
+ > 261					 FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
+   262					 cper_proc_error_type_strs,
+   263					 ARRAY_SIZE(cper_proc_error_type_strs));
+   264	
+   265			pr_warn_ratelimited(FW_WARN GHES_PFX
+   266					    "Unhandled processor error type 0x%02x: %s%s\n",
+   267					    err_info->type, error_type,
+   268					    (err_info->type & ~CPER_ARM_ERR_TYPE_MASK) ? " with reserved bit(s)" : "");
+   269			p += err_info->length;
+   270		}
+   271	
+   272		return queued;
+   273	}
+   274	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
