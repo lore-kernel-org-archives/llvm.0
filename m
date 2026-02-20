@@ -1,65 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DA21CD1E4;
-	Fri, 20 Feb 2026 14:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F12C11CD;
+	Fri, 20 Feb 2026 15:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771598118; cv=none; b=ixpBn2AQrv8OC1q0glGiGwzuKGHUywgBHKp+w9QCkuxkWCGggr1lUWlopzWFBMq0tZ13+40/q+t9ra0yoKR1kgKKbLJZ0i4nDM2dlHHMdCCRfGMWZ/EK/2kLfxgaUH3pifQv9CiBr34WGPrsFVy9EaGDHfh1PDd/Hyfuki3QwYk=
+	t=1771602913; cv=none; b=qPb8eF0FVTd64zjLM1hWiRfGUTv5y5ME6IQGezWgxdLtECqljV/LxJcyLugxr6Se+A8nIoXKytOvdiT/cguJZJXOPNCGs488+XYfSzfgZFGCOGHk8vEnIBArfGBtJsEk+t7Qt1gd4nKV3vUeBYTbTHfNUSVQzG7fuKiBoh0Y7/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771598118; c=relaxed/simple;
-	bh=65fhXrUGMLksU/tzif3tBwyoXu/ZoORUEpg7RQw/eBk=;
+	s=arc-20240116; t=1771602913; c=relaxed/simple;
+	bh=sf7HrBnxjfkYlmWPVKhmzFIrsPNVYpWlY71R+iCD/MI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ERlipzLXDPKmZswb30TI3zazVewVTsMKrEA6fmgeGOpqarvtpt9JMgXDs82Hy6IdnqfCMU8UPcSJpik0/M5qRv6lqtzpPjkc9jUXaY+FdWQvvZJlyOw0+dc4/6f35iPWOdQzLLGIBlQOLh+lZG74RiIju+Zhv3zmo5BqK/uYi80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DJ+f7a66; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=U0XLavjl9C2s3d22VIcK2Kn0peW+Gz3PEZltv2kDuSTx4bhUUricqLvAUOxjSEfVlb8l0smrTL8L/SzpmdOxpTZJhGqpqDbU85E0u7rIIzQLAYN3BbSnNrnvmxks1aeX7IpV2F3KdVbYLlar2yvyuwodD7mVGrCwq2EUlasx4bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMtq6coy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DJ+f7a66"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771598118; x=1803134118;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=65fhXrUGMLksU/tzif3tBwyoXu/ZoORUEpg7RQw/eBk=;
-  b=DJ+f7a66GAguDHAyYWmO+wRZ7BLFlV7s1Qpl5P4xF2QxDhVNu8Jp1rT+
-   Hg6+WllvBPlmS5Msx/Fuu/8uWYnN/Gy/1y60Ku2oGx86fT6KC1/dpB1Xh
-   qNNi284XlNdr38IdN1zY00bM0AQQBcsT6jOtMCCnH5t2nvkc9j+v4qyMj
-   LqGF8gZrOH6rbnm+Qr/KKmZ/rMygA34tCbzr0QVmHyqjx7whKoI860wG0
-   N93MnIFzMHKAKMep9z1XiL3XW20sds3+kX0Q+X3+jQLS5OhWRUDq348fi
-   XM8FXqBzooXotgO2Ot8o+nCZ7ZmSY+dr9+oPJhq0Gj+xv3SFVKJHNc2w9
-   w==;
-X-CSE-ConnectionGUID: 8O6QMed+TaOGTy86qkpOIQ==
-X-CSE-MsgGUID: /vzAoLJyQliFEPOQqT2X1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="72391811"
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="72391811"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 06:35:17 -0800
-X-CSE-ConnectionGUID: ZSFKqU2JSyCx6FpH2eW0fg==
-X-CSE-MsgGUID: 1clzXpwbSyaIxx4PUVEa0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="213420626"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 20 Feb 2026 06:35:14 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vtRb6-000000014AS-1stg;
-	Fri, 20 Feb 2026 14:35:12 +0000
-Date: Fri, 20 Feb 2026 22:34:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: quic_utiwari@quicinc.com, konrad.dybcio@oss.qualcomm.com,
-	herbert@gondor.apana.org.au, thara.gopinath@gmail.com,
-	davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-crypto@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_neersoni@quicinc.com,
-	quic_utiwari@quicinc.com
-Subject: Re: [PATCH v7] crypto: qce - Add runtime PM and interconnect
- bandwidth scaling support
-Message-ID: <202602202238.PjZ0zYoN-lkp@intel.com>
-References: <20260220072818.2921517-1-quic_utiwari@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMtq6coy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93BE1C116C6;
+	Fri, 20 Feb 2026 15:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771602913;
+	bh=sf7HrBnxjfkYlmWPVKhmzFIrsPNVYpWlY71R+iCD/MI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lMtq6coyU1w+HcU39x8+iNHW5trrgdhfnUnvfElRttjllgaD7tgsS+IM4p1JhmqcL
+	 GwNxz/k1osfXaVXVZ6e4eCL6IrISdlXtvEEr37OWUVexBxmScr7BoQLFqRRLkwgGG4
+	 q32MXNpcESd7QudTXS6cqvLDDsF+UzE8Ytaz7eBzzWI6SgBRpWmc+3ZnFoayKziEn9
+	 C2Pn8hStvf9lQg6NhnIGIZNf9F9FWSMkjAfa0pIftjDbXusi6cUkDwhRjNohAhRb5J
+	 v7wfirYRNnQPyh33JdiccLT5QxV3bX7XizmouCK8dFLL6bEvZ1GogN0TRjvh/6uHAR
+	 q0L1OdWM/dOaw==
+Date: Fri, 20 Feb 2026 16:55:10 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] module: Fix kernel panic when a symbol st_shndx is out
+ of bounds
+Message-ID: <aZhyyIVW95SzGzjJ@macos>
+References: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,58 +47,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260220072818.2921517-1-quic_utiwari@quicinc.com>
+In-Reply-To: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
 
-Hi,
+On 2025-12-30 10:32, Ihor Solodrai wrote:
+> The module loader doesn't check for bounds of the ELF section index in
+> simplify_symbols():
+> 
+>        for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+> 		const char *name = info->strtab + sym[i].st_name;
+> 
+> 		switch (sym[i].st_shndx) {
+> 		case SHN_COMMON:
+> 
+> 		[...]
+> 
+> 		default:
+> 			/* Divert to percpu allocation if a percpu var. */
+> 			if (sym[i].st_shndx == info->index.pcpu)
+> 				secbase = (unsigned long)mod_percpu(mod);
+> 			else
+>   /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+> 			sym[i].st_value += secbase;
+> 			break;
+> 		}
+> 	}
+> 
+> A symbol with an out-of-bounds st_shndx value, for example 0xffff
+> (known as SHN_XINDEX or SHN_HIRESERVE), may cause a kernel panic:
+> 
+>   BUG: unable to handle page fault for address: ...
+>   RIP: 0010:simplify_symbols+0x2b2/0x480
+>   ...
+>   Kernel panic - not syncing: Fatal exception
+> 
+> This can happen when module ELF is legitimately using SHN_XINDEX or
+> when it is corrupted.
+> 
+> Add a bounds check in simplify_symbols() to validate that st_shndx is
+> within the valid range before using it.
+> 
+> This issue was discovered due to a bug in llvm-objcopy, see relevant
+> discussion for details [1].
+> 
+> [1] https://lore.kernel.org/linux-modules/20251224005752.201911-1-ihor.solodrai@linux.dev/
+> 
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master linus/master v6.19 next-20260219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/quic_utiwari-quicinc-com/crypto-qce-Add-runtime-PM-and-interconnect-bandwidth-scaling-support/20260220-153052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20260220072818.2921517-1-quic_utiwari%40quicinc.com
-patch subject: [PATCH v7] crypto: qce - Add runtime PM and interconnect bandwidth scaling support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260220/202602202238.PjZ0zYoN-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260220/202602202238.PjZ0zYoN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602202238.PjZ0zYoN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/crypto/qce/core.c:285:23: error: called object type 'void *' is not a function or function pointer
-     285 |         return pm_clk_suspend(dev);
-         |                ~~~~~~~~~~~~~~^
-   drivers/crypto/qce/core.c:293:21: error: called object type 'void *' is not a function or function pointer
-     293 |         ret = pm_clk_resume(dev);
-         |               ~~~~~~~~~~~~~^
-   drivers/crypto/qce/core.c:304:16: error: called object type 'void *' is not a function or function pointer
-     304 |         pm_clk_suspend(dev);
-         |         ~~~~~~~~~~~~~~^
-   3 errors generated.
-
-
-vim +285 drivers/crypto/qce/core.c
-
-   278	
-   279	static int __maybe_unused qce_runtime_suspend(struct device *dev)
-   280	{
-   281		struct qce_device *qce = dev_get_drvdata(dev);
-   282	
-   283		icc_disable(qce->mem_path);
-   284	
- > 285		return pm_clk_suspend(dev);
-   286	}
-   287	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+ 
