@@ -1,122 +1,145 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709DA3659FF
-	for <llvm@lists.linux.dev>; Fri, 20 Feb 2026 17:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969C031B81C
+	for <llvm@lists.linux.dev>; Fri, 20 Feb 2026 17:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771608757; cv=none; b=do8TdGjgc96QRtrR7yCY1whQlSpHcMiEY6zT8DIDRLAWd3DhiZZJKCJMLE7tG63y0gy6Ah6xa+CrQi1AE2c9sg/AyUrKcwoahrziPDJKv0+PtXQN9zBDFp3Jjj5+7sAH4L7lKcN8POK7NOCJa3pnrEWo9P3w3DVCbQ8DZwd0f7k=
+	t=1771609220; cv=none; b=nf2nAUVFSoGD9oUrhEyeIvZIe1HBsGT5biQYOHWhBGx/V/XAyoLqaI4kx2jhEGhggmXa1z3KSdUPRj+Gfcfet36HRzf2OoQ/ieK+FvbEc+4NUJbBV5TQuX8v+Rxqdl72lLRLuHSY8zYCIGT9+HQKs3wNMpNNn9qG8GMqmzuzzAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771608757; c=relaxed/simple;
-	bh=W1JRdh80NWjdF11Um7td9iykQID8FxM/VZmtOgW1UoI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jMVJ9/GYfDjfAmmhEk8cOwHXuWBQPc4CCqEaTgOqZfh9E3fXOG1b48p3ymP1mtaaM45RRwTsSESa5xYLBmstjZrq6lqJUr8c8sHlPTPp6wsPTDQ6SOOHKnEPFh1vZXezkQyGpkmjlDs0tn5Wo8UHLE3uKiPa5sXSb0M8RkDBFn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eZ+9ytPi; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1771609220; c=relaxed/simple;
+	bh=DdBlfl+5aTLWChtAyWH5RbOfo0h+3Q4SzNLGJCOyn+0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XREkJrPFoC34HlOsO/7vyrAYgqIvtFX4wV2TaI4MUN+oREhKykwFs6RifMAB/kGv54Y1SeEoudshbnk9KMU7e2h39yX/FguYnc6qhOAM0V/hw8/5dJONyfGGI0A0yS+Zrg3tL1bHn44t4yxLtmR63knriMUbJ7YteJUwUctXOgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePxkw2DS; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eZ+9ytPi"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a76f2d7744so25471595ad.3
-        for <llvm@lists.linux.dev>; Fri, 20 Feb 2026 09:32:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771608756; x=1772213556; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=onVkE6V+AcjuNo4zB3rjSlYJ7NJfRJxk0ClpAWsnPUQ=;
-        b=eZ+9ytPiVx3hvUos7XHu69ny9juRL9YWgstsvzKSrAn1GRMwwduXcJOM3w1btfoVxw
-         14uKFzkSrEt5zmRskLd8zSz6a+q2jhCsI+4hUIJaL/g9yQAnhvI8odEicCLdUT6UtHX+
-         vEW6vf89HRWU57341SNqP3/OHXrZ5lOqe5iU6f9UcbzqgZ+cooV5iJpIBmE5ittmK/jt
-         q5+PFcgLUpwcIO4eJd9KiZpNMQTk/D7XFDUMx81fKZMk5G+5Vv7rb7V2nkP+C7ctes0Q
-         WeLyapdlugoSNYPzhJdhFZSrnZuYTnwlAIF6lXYfI7pePRq5mL0x0dq9QK/Zus4LhLNM
-         7eBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771608756; x=1772213556;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=onVkE6V+AcjuNo4zB3rjSlYJ7NJfRJxk0ClpAWsnPUQ=;
-        b=pU9zL9GHA16ncSSE5tIXOCuBEB2f7eNqyXuSUKGs4fw4FW+t1c7vjqmmijcl+wjLDK
-         BGN2Jd8EtiXlo8m4d8eiJfDeGh0Xps5s+5fVO+K43aIAzNStrNnqRb64/l/5PDdOx4ge
-         ZuEsRages+l88vh216N61WxXvInx0KCT2qlinoSQf95q3BgDIh1YHADk34AC9vKM2ios
-         5LCa+/56t523W2hm7Kl7XlcrjBxPx1ZzITbnYOH1/OkhTgYTbHU50YzK8umi7SzNjOym
-         XUweEAZ+DvSp5+6Lb/scsWw+VDUfl/9gqlolUjH777K302+WFl4ScBvp6ebN5lEsG68A
-         DGUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVeyYGCsCxXj9uA3AvaUlXzKUjeGAZhJujO0QoNXwxhu1cIhIYD+55VukRkSJXFAICV5WCX@lists.linux.dev
-X-Gm-Message-State: AOJu0YyBolQ80SeqQmQ3UUiOjb9geWqviBiZntzN02QRYGM5AMmuaJaI
-	qdYrdwUW3o8rhlyb5/n1oMGsOuz2e9H5D86SW9JbjtMOfalZNlXchq2kZyqrDnq8VSLKRiZM/RC
-	wYbO6iQ==
-X-Received: from plhz1.prod.google.com ([2002:a17:902:d9c1:b0:2a9:1508:533a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1a03:b0:2a9:104:795f
- with SMTP id d9443c01a7336-2ad74531fd5mr2612385ad.46.1771608755709; Fri, 20
- Feb 2026 09:32:35 -0800 (PST)
-Date: Fri, 20 Feb 2026 09:32:34 -0800
-In-Reply-To: <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePxkw2DS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771609219; x=1803145219;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DdBlfl+5aTLWChtAyWH5RbOfo0h+3Q4SzNLGJCOyn+0=;
+  b=ePxkw2DSFLFEkFZsvevyqnPf5/tzA3Kmc1WgbN/2IrNasDInXESb9qBR
+   hNvC90ql1cfAAwrqpqt/lmbPGxGNl6jJSR5QjmUiUc78p132i4brZAr5F
+   iLdJQcvPd3UBRVl5k8/yxAetDcnahzCd1moLA/HdDjYLf9R3rn5csSdGM
+   8pUJPFAT2k8FpnLhpxhMmXe7O3AOkKg8Q37KS7/Kc4y5uMgfJFVtqA9/4
+   IqCGpWLy2YuAxWHSosSKkhu4V2+qgVk08TmzZ2bqhUCMByulcJInfTBnB
+   2AGUH61wCOtyae4TI03Q6g3UiR0R13r+gd0gPXcG0v52qoL88jEY1YWB/
+   A==;
+X-CSE-ConnectionGUID: oVMSai4TQEOdTQV2IYVw9g==
+X-CSE-MsgGUID: qPG66UT3SuSUza0NC8+aoA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="72611389"
+X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
+   d="scan'208";a="72611389"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 09:40:19 -0800
+X-CSE-ConnectionGUID: SroeXjrgRByrZIrxUKWGDw==
+X-CSE-MsgGUID: tjQYqZl6Q5KvLzbhewKKrQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
+   d="scan'208";a="213444285"
+Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.110.77]) ([10.125.110.77])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 09:40:18 -0800
+Message-ID: <542ff5d7-1cff-4ef9-af48-f0378aa2a05c@intel.com>
+Date: Fri, 20 Feb 2026 09:40:19 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260218082133.400602-1-jgross@suse.com> <20260218082133.400602-10-jgross@suse.com>
- <aZYoUE7CmrLg3SVe@google.com> <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
- <d622a318-f7f8-4cff-b540-38d159ca87f4@suse.com> <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
-Message-ID: <aZiasvKpOHSaNuQ5@google.com>
-Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for WRMSR
-From: Sean Christopherson <seanjc@google.com>
-To: Xin Li <xin@zytor.com>
-Cc: "=?utf-8?B?SsO8cmdlbiBHcm/Dnw==?=" <jgross@suse.com>, Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	"H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for
+ WRMSR
+To: Xin Li <xin@zytor.com>, =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+Cc: Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, kvm@vger.kernel.org, llvm@lists.linux.dev,
+ "H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20260218082133.400602-1-jgross@suse.com>
+ <20260218082133.400602-10-jgross@suse.com> <aZYoUE7CmrLg3SVe@google.com>
+ <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
+ <d622a318-f7f8-4cff-b540-38d159ca87f4@suse.com>
+ <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 20, 2026, Xin Li wrote:
->=20
-> > On Feb 18, 2026, at 10:44=E2=80=AFPM, J=C3=BCrgen Gro=C3=9F <jgross@sus=
-e.com> wrote:
-> >=20
-> > On 18.02.26 22:37, Dave Hansen wrote:
-> >> On 2/18/26 13:00, Sean Christopherson wrote:
-> >>> On Wed, Feb 18, 2026, Juergen Gross wrote:
-> >>>> When available use one of the non-serializing WRMSR variants (WRMSRN=
-S
-> >>>> with or without an immediate operand specifying the MSR register) in
-> >>>> __wrmsrq().
-> >>> Silently using a non-serializing version (or not) seems dangerous (no=
-t for KVM,
-> >>> but for the kernel at-large), unless the rule is going to be that MSR=
- writes need
-> >>> to be treated as non-serializing by default.
-> >> Yeah, there's no way we can do this in general. It'll work for 99% of
-> >> the MSRs on 99% of the systems for a long time. Then the one new syste=
-m
-> >> with WRMSRNS is going to have one hell of a heisenbug that'll take yea=
-rs
-> >> off some poor schmuck's life.
-> >=20
-> > I _really_ thought this was discussed upfront by Xin before he sent out=
- his
-> > first version of the series.
->=20
-> I actually reached out to the Intel architects about this before I starte=
-d
+On 2/20/26 09:12, Xin Li wrote:
+>> I _really_ thought this was discussed upfront by Xin before he sent out his
+>> first version of the series.
+> I actually reached out to the Intel architects about this before I started
 > coding. Turns out, if the CPU supports WRMSRNS, you can use it across the
-> board.  The hardware is smart enough to perform a serialized write whenev=
-er
-> a non-serialized one isn't proper, so there=E2=80=99s no risk.
+> board.  The hardware is smart enough to perform a serialized write whenever
+> a non-serialized one isn't proper, so there’s no risk.
 
-How can hardware possibly know what's "proper"?  E.g. I don't see how hardw=
-are
-can reason about safety if there's a software sequence that is subtly relyi=
-ng on
-the serialization of WRMSR to provide some form of ordering.
+Could we be a little more specific here, please?
 
-And if that's the _architectural_ behavior, then what's the point of WRMSRN=
-S?
-If it's not architectural, then I don't see how the kernel can rely on it.=
-=20
+If it was universally safe to s/WRMSR/WRMSRNS/, then there wouldn't have
+been a need for WRMSRNS in the ISA.
+
+Even the WRMSRNS description in the SDM talks about some caveats with
+"performance-monitor events" MSRs. That sounds like it contradicts the
+idea that the "hardware is smart enough" universally to tolerate using
+WRMSRNS *EVERYWHERE*.
+
+It also says:
+
+	Like WRMSR, WRMSRNS will ensure that all operations before it do
+	not use the new MSR value and that all operations after the
+	WRMSRNS do use the new value.
+
+Which is a handy guarantee for sure. But, it's far short of a fully
+serializing instruction.
