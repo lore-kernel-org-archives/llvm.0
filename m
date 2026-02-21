@@ -1,130 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9677E3090FD;
-	Sat, 21 Feb 2026 01:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771637144; cv=none; b=oLI1SyZ7WDugEjGlIfBWsGu87G8mYc83nuKVkZf2it8+PXCYLcQzoLKWLwVIUcSYDCy5pZSMRZKa0RJxqNwqylNDIi4z8h1HA63BDMDI1DXc/FbGydQINjRPZpKQTclRXhtW8ng0EB3jL6/rgO6yNa3Lxw4EYMBqbEFEZUlh4sY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771637144; c=relaxed/simple;
-	bh=VNO7bSe94E4iAwMvPPC6DF/o0jW6Va8cJdoPGHz0nRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V/vdzgMkVhoB/7OgnyY5MvnTFbgq79S6qwpxowHFJALF/rLjgz/xhkauiSEpLbQ5UCzuBaLC+wWsPVtvWlQqeMQErc/pFjpkNTT/lPqc2ohEQt8ctvpjaRg+LMCOTb2KMaXArLyfJuJDne0zku0l+p9Ura1ksRhoRhrHLpXzdTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RkEoNEMs; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD24A3595D
+	for <llvm@lists.linux.dev>; Sat, 21 Feb 2026 01:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771638815; cv=pass; b=nyBAx2oFLQe4hV4gVAbrWMf/gJxZ/Zqr16VKBD3qyxSlwldf262ckJpPQVIu2NGRsiNhvwQ6qk/EFKoOWn0xa7hdEASHfZ1IHJ+BP8crhSkb9Hqr54b3zHfMZ0qXnmbHFXeXZKg8+gu5xfUPI84skM4ei0aUGOKhbcZ07EyiZ1s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771638815; c=relaxed/simple;
+	bh=3OjH7n2Wfy0kaVOmZH2x7qSbyM0irwR0JIoRINfr6rY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cI0wiezdWusEf1NjceU3837Jl5cg2OUhefAaZ7K7O3L5x5DoQpdgZTI+t9h0wVhYKm+R0/CG50b5f3bCaOKcA/APX+DARrLboacQ1OX09ROM6kI3tTpalOZyrtWisb5ut071TgwZ1h4PuPRh18rjMH9GB3R/+IutsW7OgV0fjDU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMrOaRN6; arc=pass smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RkEoNEMs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771637142; x=1803173142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VNO7bSe94E4iAwMvPPC6DF/o0jW6Va8cJdoPGHz0nRE=;
-  b=RkEoNEMsDfOwxec3LsT/291fDRowohZeITlE2XBHwoy2LHRn9yol85t8
-   VqKpYl8E+5BjUTsIXzV1CoN/wql8gBIgZHFJnT6hNR+41uWRa6NP6LIMH
-   qIKwmZd3MuNKO3yP7leXYuXTcBsANgl138D71H3CQU32d1cWVpDmBE0+n
-   18lrJZ+hy2QbiGwYaKUYd2uat2DeIVQ6qs09W/uE4dfUYCq8VIiqAvoYY
-   ca36QQk2SRPevvhnpEKD8G24SzG0kFVgHqBQ0uQGQCIaXnyfDMvbUCdD/
-   vhhX1NFR2xXbfUFYI+mSjp10dskP68F70peXr1/s5aCH+LAZeYaW8KLLW
-   w==;
-X-CSE-ConnectionGUID: Ad60FXidRdayQmFB1ae6bg==
-X-CSE-MsgGUID: DtWnklytQkS+N1uec4h3mw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="84091167"
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="84091167"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 17:25:41 -0800
-X-CSE-ConnectionGUID: dZEVgxKBQu25CKsW8FRAQA==
-X-CSE-MsgGUID: E9r7j119SJO4g6xM/6PyDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="219542249"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 20 Feb 2026 17:25:38 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vtbkV-000000014cC-1izw;
-	Sat, 21 Feb 2026 01:25:35 +0000
-Date: Sat, 21 Feb 2026 09:25:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Priit Laes <plaes@plaes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Priit Laes <plaes@plaes.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dan Carpenter <error27@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Artur Stupa <arthur.stupa@gmail.com>,
-	Abraham Samuel Adekunle <abrahamadekunle50@gmail.com>,
-	Navaneeth K <knavaneeth786@gmail.com>,
-	Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
-	Yuvraj Singh Chauhan <ysinghcin@gmail.com>,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/11] staging: rtl8723bs: rtw_ieee80211: Reduce global
- symbols
-Message-ID: <202602210910.tUaMjS3m-lkp@intel.com>
-References: <20260220173104.2410217-1-plaes@plaes.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMrOaRN6"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-649c070ef3bso2646949d50.3
+        for <llvm@lists.linux.dev>; Fri, 20 Feb 2026 17:53:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771638813; cv=none;
+        d=google.com; s=arc-20240605;
+        b=O4S1w+sX/Ysu/KWBcRwe481vR53uW9Ts1b5xvmjyiv6fwIn8+ye69njuL3JqANikH7
+         U1AQC3YV4lclTsH+9hWJGs2eVesTqaBxs1UDfr8HEZ96ZGyMm9s9m3K0/eezepMIp9ti
+         6Qr+qB0nfKXP3Gpima9vLQpWiepakW+vuItFCJs5Laonmfv8bBtIjgrao//bW+7qgOpu
+         uRb1odHLwzijAsTdtEV5d1dl54y0Y++FfYZwUdSnPuDKLB+9fhhppo0d7K9FXtCedYr6
+         2tGjgcFb87NyWpoTupGouDbQeLJhadd/Uf6D5y2Zi9NE6sk8x3jDdgaBm0jdtnmJukEU
+         Xy7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3OjH7n2Wfy0kaVOmZH2x7qSbyM0irwR0JIoRINfr6rY=;
+        fh=ucK4XECs5Ea1GVsu9Bli2PEUWfh0IMhOMn2WH0koY1Q=;
+        b=HQ9XnL0l3xBnn/ItE7K7Jcgn1m42MTSx2qzG/nSoNLGT2hIvS73v6+jm0HlMDZ8v4T
+         JVqLHi5jLUohkYSP//jNLVEy2s7mHjsqF1xASwtVDx6peyK8vWrSC6v9Nz/91V52fZJd
+         5AV7Je+6/qAq/hUmyeWmysM6wH7q6gaITW2ryhoLD2HRUhlPUAl0/3G3WLn84BrIHyVs
+         WQt8oW82mf1zBkrK53RaRA0B1Qj4uZzNoqXi6QP+j24nttM+FOfiT3QYkRmA93bkFjOD
+         GXi5SvWLGHXKUPvCZdbt94vTD58vewIw0Zw/ukM/fvR/FxZVjwJ0TrRkLpulix2T2lUB
+         u/Ow==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771638813; x=1772243613; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OjH7n2Wfy0kaVOmZH2x7qSbyM0irwR0JIoRINfr6rY=;
+        b=QMrOaRN6GDdqVmqN0w3x3I4xZY4v8JiuBViE61DJ/fUId6DYkK3vO54SxkqccdrGkd
+         NCUjROH0Wo9FRwM1yrTGBxysqYHikM6+x2bNNBm4c4kC7XVlzuLzX0UUS4ehNIpIbm20
+         cB7QGdx4lBt3UMtjxa/Ecz80i/40ipg6nEnOeVh7N9svbs3avScaepJt59VdXfOeivbV
+         h5lps+/40+JP6ISPkA5F9m8UX+oRCllbddU6z4kbu91RTmcD+DfpT5qW3SRAb4FPjdKc
+         I5x0n/nECZiE1yX65YbtSR3prIsczGoVLymFtbnQ/pBMZugYu1sbnsEqtGJ/C4Jv1wrx
+         lsQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771638813; x=1772243613;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3OjH7n2Wfy0kaVOmZH2x7qSbyM0irwR0JIoRINfr6rY=;
+        b=SZeK5L0UmQZ9cRm2ZUC7rQ3Ps+5tiuOinlU/HTuLsCS7zeIWSVNzSbAPZjR37Risxf
+         nl5HKQowv8kw8YQ8by22n7Avb4NEG5qXB0weg4MMVsUrsUTa5aqAfyaZv5BH2+qOJzcK
+         m/qTXfot1ROZxqYcJh8EPlnGDxei+BWPB6mdOEjdIo1MtIRSQw/7z+3u7zkZ8J51j1+E
+         0dyKdV64qPNIEreE1HAAeXs6xRHkooUd1mhZuJB/7mrs3JZXrGwg5dg/IkKns/ImeMAz
+         fPmZ4ArcgIyQx8eD4twqcZLqcDuXgCzrz9IGhNfiepgATV1JFAndYhds6annyvUlZqsH
+         Czwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXorDyTD+9hK+5Bx5wtKrneV6wBQXrQptwE9jZkKBwdmvlbA6/qeVvFfGqUmcseyVsM6JF4@lists.linux.dev
+X-Gm-Message-State: AOJu0YzKHObGzgM6ox6WCTAaefBi+u0NxIHmNbDBieNyITvsgtgmgxDj
+	9Zanq9tsrQye/4BlpO78zzaP9+q3Bqm+wCFLEtHyD4ilJSqBAh+zcOcxuUpnetV75UT6pOM0TWY
+	gLVshPEukHq4tPK3Uwy76clX2znbn24E=
+X-Gm-Gg: AZuq6aIq3Q3wR9BK5Zc87+2Sm7VlB2XOkrpSPiMikWug/lS7O6KesZqrKoy4ZLEOt2r
+	sGRAcRgwi7mmGMDjayjbiKj7x0yzwtKxWwXO9QX2zaQUdc9ztuUJnxEL/uId0qymg8eansmjDTC
+	YLvdS8lq/tMPNjay+Mmx72h62ck08CVrANbWRfaxKuHhwMmmjuuU73yoh2GjDNoH1NvS0RDOL3O
+	pc1mJLak7OukDwan661T5zzQrhqIMrbcaArG0MRCNz4Rklesb8t8sUMn8HzcuLNj5H8AN5AmBkr
+	5HvW8xgaxkNk/CO8mX8sl28T7MvC
+X-Received: by 2002:a05:690e:130c:b0:64a:de99:8b58 with SMTP id
+ 956f58d0204a3-64c78d17284mr1594373d50.49.1771638813574; Fri, 20 Feb 2026
+ 17:53:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220173104.2410217-1-plaes@plaes.org>
+References: <20260214102005.1398306-1-sun.jian.kdev@gmail.com>
+ <20260220193353.21870-1-sun.jian.kdev@gmail.com> <20260220194836.GP1282955@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260220194836.GP1282955@noisy.programming.kicks-ass.net>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Sat, 21 Feb 2026 09:53:22 +0800
+X-Gm-Features: AaiRm538Y67EA9AnZLh0Y64vfZ49zmdnn9yjBJfjN1yQHNXS5ydazV26meb_76Y
+Message-ID: <CABFUUZHVCBOAzT6eFvTy1OFYDfRZERwjuYhNc6OMHP-5UKwY6A@mail.gmail.com>
+Subject: Re: [PATCH v2] sched: rcu: fix rq->{curr,donor} address space annotations
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	mgorman@suse.de, vschneid@redhat.com, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Priit,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on staging/staging-testing]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Priit-Laes/staging-rtl8723bs-Remove-unused-BIT32-BIT36-definitions/20260221-013719
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260220173104.2410217-1-plaes%40plaes.org
-patch subject: [PATCH 11/11] staging: rtl8723bs: rtw_ieee80211: Reduce global symbols
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260221/202602210910.tUaMjS3m-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260221/202602210910.tUaMjS3m-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602210910.tUaMjS3m-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/rtl8723bs/core/rtw_ieee80211.c:19:17: warning: unused variable 'WPA_CIPHER_SUITE_WRAP' [-Wunused-const-variable]
-      19 | static const u8 WPA_CIPHER_SUITE_WRAP[] = { 0x00, 0x50, 0xf2, 3 };
-         |                 ^~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/rtl8723bs/core/rtw_ieee80211.c:27:17: warning: unused variable 'RSN_CIPHER_SUITE_WRAP' [-Wunused-const-variable]
-      27 | static const u8 RSN_CIPHER_SUITE_WRAP[] = { 0x00, 0x0f, 0xac, 3 };
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +/WPA_CIPHER_SUITE_WRAP +19 drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-
-    14	
-    15	#define WPA_SELECTOR_LEN 4
-    16	static const u8 WPA_CIPHER_SUITE_NONE[] = { 0x00, 0x50, 0xf2, 0 };
-    17	static const u8 WPA_CIPHER_SUITE_WEP40[] = { 0x00, 0x50, 0xf2, 1 };
-    18	static const u8 WPA_CIPHER_SUITE_TKIP[] = { 0x00, 0x50, 0xf2, 2 };
-  > 19	static const u8 WPA_CIPHER_SUITE_WRAP[] = { 0x00, 0x50, 0xf2, 3 };
-    20	static const u8 WPA_CIPHER_SUITE_CCMP[] = { 0x00, 0x50, 0xf2, 4 };
-    21	static const u8 WPA_CIPHER_SUITE_WEP104[] = { 0x00, 0x50, 0xf2, 5 };
-    22	
-    23	#define RSN_SELECTOR_LEN 4
-    24	static const u8 RSN_CIPHER_SUITE_NONE[] = { 0x00, 0x0f, 0xac, 0 };
-    25	static const u8 RSN_CIPHER_SUITE_WEP40[] = { 0x00, 0x0f, 0xac, 1 };
-    26	static const u8 RSN_CIPHER_SUITE_TKIP[] = { 0x00, 0x0f, 0xac, 2 };
-  > 27	static const u8 RSN_CIPHER_SUITE_WRAP[] = { 0x00, 0x0f, 0xac, 3 };
-    28	static const u8 RSN_CIPHER_SUITE_CCMP[] = { 0x00, 0x0f, 0xac, 4 };
-    29	static const u8 RSN_CIPHER_SUITE_WEP104[] = { 0x00, 0x0f, 0xac, 5 };
-    30	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Sat, Feb 21, 2026 at 3:48=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Sat, Feb 21, 2026 at 03:33:53AM +0800, Sun Jian wrote:
+> > With CONFIG_SCHED_PROXY_EXEC enabled, struct rq::curr and rq::donor are
+> > annotated as __rcu. Several call sites access these pointers as plain
+> > struct task_struct * while holding rq locks, which triggers address
+> > space warnings from sparse.
+>
+> Yeah, lets not do this. It makes the code horrible.
+Understood, I'll drop it.
