@@ -1,72 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F73933B6F3;
-	Mon, 23 Feb 2026 22:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49750379982;
+	Mon, 23 Feb 2026 22:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771885694; cv=none; b=uc9zTv6aAQMA53pZx7Vs1c4pRor7hQ1fHG7WXEloxR/djRosINQcLnZUZgteZNbWgJhv/tYawHTRQkHAFp18T7cKrNkVT/F7zrgjRycIexG+aCucwPGqJ2I3kwIjLa2Lluq05XQmGjih12Xtr5BfGH9nTaQphDtMEM/NTuVy+rk=
+	t=1771886016; cv=none; b=oPmr8ygmg53vL15qVwPGGjGm5WhqUxG5jrpu6IXGqjIxuw91HaH0eXWd+UfO5M4JzK8G1VoSZrS45EPtqROp02YLIFzNeEBKyrJPl0QJ4MtBv1WoaFjUR1auT4vkQgWijHlf8f546sAAulNR4sP0U/3oQOTUP+YgxfMNYuJCKGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771885694; c=relaxed/simple;
-	bh=287aDHfFTNxKKXzxvsvWSRGQ7MceXfi9FELksZ/s8gc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ELFI/Na++/gWJOWDT22EAwlNqdiqOHhA0QyGO0e5n6dfYar00kDoqZIPMry/tTnQdSGqf5CQ77tKWgClub58Yb6DqLmkeJ+SPebfs3K+KPXqpJo3gUQ2o5/tqwYp/+khkHp9WoNB41TxcCwQ1bCPD9p/sYFEKrSZ4iQonv+E5/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iHSmuHZm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771886016; c=relaxed/simple;
+	bh=6luMqdKSuq9XRD6Jc4ImEhLDZ+nlkl7La9U57PIctFw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TNs8tpeJ2M9mdNf1J3pWtyV7iWPI0qMEXs0iNttYJnA9tBJ7rnzYuQOEG1Eskr5A0uCJGK8Xn+/+9h4DMySKPnarZwkUZQEfOu4MGe7AJ/pylSpcZfDdoEvaqLjAReqcOXTUEYLSDMPV6o6kEiNidI0zWzSuR9mpZbF5Xp/fa8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J983x/DU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iHSmuHZm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DD4C116C6;
-	Mon, 23 Feb 2026 22:28:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J983x/DU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAEB5C116C6;
+	Mon, 23 Feb 2026 22:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771885693;
-	bh=287aDHfFTNxKKXzxvsvWSRGQ7MceXfi9FELksZ/s8gc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iHSmuHZmD143C6fEOcUWopj7Fv/hrL/xakQk9NjM35vQqDfVMnMY2v28sdmUDGcG+
-	 Vl0jnLd0KGIX4B82DqP1B68mQ6M535tSlrSkgCPwjkseOY69MzGimoWGybL6z0l8qo
-	 lQO7uYodarPjpNi3qWlKos3LZKdzJMBUXZm5R7d+2Zpv0Zs9X+5srPqfUpH3UmjBWE
-	 mlviugKSUEFAafk0WsHUc1qRLkLCdp5dZXGTN+rxx1OOaTAu0ouF0PdqEZ3Z4F5zPj
-	 NINvPLriKAD4Pae324i0Qtfo/ASrB2HgRpYEVHPHssMPIEuRyPTz1vjC2J9iYLTb8x
-	 cC7a7cqCb/GXw==
+	s=k20201202; t=1771886015;
+	bh=6luMqdKSuq9XRD6Jc4ImEhLDZ+nlkl7La9U57PIctFw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J983x/DUXe3wWA3l+3Y64rA0CyNpkzQkwiWNeGpfi4mVEVqwUoxLSa6SgDkizaiuU
+	 kyf+CQXTpoeB+BorC0kiHBzbL7iajtQVbKZostEWGW0GTy+zMQ2EO0UAxWNsXvZSC3
+	 pYwsPqARByxjspf6jCgBrNJRjb+aVsM3582OK2Z86dHZ4/AT3JjWfCQ7qzfd8TdDO3
+	 HYeH2KFUSJokM4IASGtQF+43uR5nJAj3Me2nQddduKJWxtNjoQfmxUNtzNPpVAXvwE
+	 LXapQT/2pi7TKjubvmD9ZBhqaEtpqEdZ/k1WaiC8FlfJvMknXYqOOUyAsPpsR2WUfK
+	 Z3GgEPZNO4NJQ==
+Date: Mon, 23 Feb 2026 14:33:35 -0800
 From: Kees Cook <kees@kernel.org>
-To: Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] init/Kconfig: Adjust fixed clang version for __builtin_counted_by_ref
-Date: Mon, 23 Feb 2026 14:28:09 -0800
-Message-Id: <177188568476.2083280.10220783288827464439.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260223-fix-clang-version-builtin-counted-by-ref-v1-1-3ea478a24f0a@kernel.org>
-References: <20260223-fix-clang-version-builtin-counted-by-ref-v1-1-3ea478a24f0a@kernel.org>
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-efi@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/2] kbuild: Use '-fms-anonymous-structs' if it is
+ available
+Message-ID: <202602231432.20F3F0CF@keescook>
+References: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
+ <20260223-fms-anonymous-structs-v1-2-8ee406d3c36c@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260223-fms-anonymous-structs-v1-2-8ee406d3c36c@kernel.org>
 
-On Mon, 23 Feb 2026 11:23:12 -0700, Nathan Chancellor wrote:
-> Commit d39a1d7486d9 ("compiler_types: Disable __builtin_counted_by_ref
-> for Clang") used 22.0.0 as the fixed version for a compiler crash but
-> the fix was only merged in main (23.0.0) and release/22.x (22.1.0). With
-> the current fixed version number, prerelease or Android LLVM 22 builds
-> will still be able to hit the compiler crash when building the kernel.
-> This can be particularly disruptive when bisecting LLVM.
+On Mon, Feb 23, 2026 at 12:10:29PM -0700, Nathan Chancellor wrote:
+> Clang recently added '-fms-anonymous-structs' [1] to specifically enable
+> the Microsoft tagged anonymous structure / union extension, for which
+> the kernel added '-fms-extensions' in commit c4781dc3d1cf ("Kbuild:
+> enable -fms-extensions"). Switch to this more narrow option if it is
+> available, which would have helped avoid the issue addressed by
+> commit a6773e6932cb ("jfs: Rename _inline to avoid conflict with clang's
+> '-fms-extensions'"). GCC has talked about adding a similar flag [2] as
+> well but potentially naming it differently.
 > 
-> [...]
+> Move the selection of the flag to Kconfig to make it easier to use
+> cc-option (as CC_FLAGS_DIALECT may be used in arch Makefiles, which may
+> be too early for cc-option in Kbuild) and customize based on compiler
+> flag names.
+> 
+> Link: https://github.com/llvm/llvm-project/commit/c391efe6fb67329d8e2fd231692cc6b0ea902956 [1]
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=123623 [2]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  Makefile     | 2 +-
+>  init/Kconfig | 5 +++++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 06ff3032a6bc..1d5c0ab9ed5c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -791,7 +791,7 @@ endif
+>  
+>  CC_FLAGS_DIALECT := -std=gnu11
+>  # Allow including a tagged struct or union anonymously in another struct/union.
+> -CC_FLAGS_DIALECT += -fms-extensions
+> +CC_FLAGS_DIALECT += $(CONFIG_CC_MS_EXTENSIONS)
+>  # Clang enables warnings about GNU and Microsoft extensions by default, disable
+>  # them because this is expected with the above options.
+>  ifdef CONFIG_CC_IS_CLANG
+> diff --git a/init/Kconfig b/init/Kconfig
+> index c25869cf59c1..c4282d049463 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -960,6 +960,11 @@ config CC_IMPLICIT_FALLTHROUGH
+>  	default "-Wimplicit-fallthrough=5" if CC_IS_GCC && $(cc-option,-Wimplicit-fallthrough=5)
+>  	default "-Wimplicit-fallthrough" if CC_IS_CLANG && $(cc-option,-Wunreachable-code-fallthrough)
+>  
+> +config CC_MS_EXTENSIONS
+> +	string
+> +	default "-fms-anonymous-structs" if $(cc-option,-fms-anonymous-structs)
+> +	default "-fms-extensions"
+> +
+>  # Currently, disable gcc-10+ array-bounds globally.
+>  # It's still broken in gcc-13, so no upper bound yet.
+>  config GCC10_NO_ARRAY_BOUNDS
 
-Applied to for-next/kmalloc_obj, thanks!
+Series looks good to me. One style question, why go the round-trip with
+Kconfig instead of doing it all with a fallback in the Makefile:
 
-[1/1] init/Kconfig: Adjust fixed clang version for __builtin_counted_by_ref
-      https://git.kernel.org/kees/c/8e795ac93b64
+CC_FLAGS_DIALECT += $(call cc-option,-fms-anonymous-structs,-fms-extensions)
 
-Take care,
 
 -- 
 Kees Cook
-
