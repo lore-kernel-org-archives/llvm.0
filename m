@@ -1,82 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC5337F8A3;
-	Mon, 23 Feb 2026 23:34:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFC137F74C;
+	Mon, 23 Feb 2026 23:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771889701; cv=none; b=lGle222LgPHC8pr0Rz60AEvNp2Gn5FbHPBnHf5rYYfDt74L6xFBsOjHBArs9NHpat0ITBYVp4+PatCfz2/Esh6UctwEL0ZejgENrM9JYgNo4wtpGDk+KjPnO8Yvtfa16Sq2XgE5gceumemXCHKBvbiALChzlGHmUAFCcB/azZqc=
+	t=1771889701; cv=none; b=nM0H0Jiy69D2V5Vz/Eufuj2aodQHh8+91zGOkiZIFktoa2r5+QQ7vGVlpUhzij+gORy3kaaT3/e2FjVMapwDjab5Bws8nu9gCqznGrisJEUN9snzh8pKgB2qiTMfqTP6DuHg0ULh6o0hn8+IeeJMmqoNCTcQiNtJ6j4YshlJS2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771889701; c=relaxed/simple;
-	bh=1BnFiSAQkY1ZpdX3lDwDNQ7WqB4JEZZD4Edx4aPLGd4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=AklpMqBiazDhNul2Srf6lqCZs+F0j4BJlYWq0sw4HXAGvbv8CYpBtCkQnuk9SFV3xGWcRPKpett593ZR8cd4k14oo1YDalHyyc+qxcgPs9HX/kp8AisuhgbehGjK5O1t5Z6qI9z641KDKh64XIHPW4xEvcyGk555p/bMCsnJFvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BdF+lvJF; arc=none smtp.client-ip=192.198.163.13
+	bh=12QBzguf+Sdz92WxcJUhXyt70Tdl6GQe5lxoiPkm+S8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OsiR62yH8YhPuUk61JKHy35lEDOiYAxIZcnYoKKT0IbMiBLc+ewWO9u92vA3mLqpSfUQ1BwmfIv49b2s+c1QeNIsFynWo/2PII/JSI68deGi7Ea+Lk7KCu/Z9MvOfPSjZh2x/kZpuL8RlrI4TUJAmo6glqCwrfbjpJM+tgbzWJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iGo9FyHb; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BdF+lvJF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iGo9FyHb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771889697; x=1803425697;
-  h=date:from:to:cc:subject:message-id;
-  bh=1BnFiSAQkY1ZpdX3lDwDNQ7WqB4JEZZD4Edx4aPLGd4=;
-  b=BdF+lvJFuGOh4+eV8b06W0O4iXQex8KVMf7LuVuzwzoG1QsFta+gig4L
-   j3QROdgKAiHPwvgqaPbAryqtxduguRKa/3RRdp8VlGEc3/x19m+ThjibC
-   5RoeXTSjKBWOkwZVEXaMMUjno4TV0w/1tSydB+MtcrAIeRHUwHCwY4ncq
-   +4tMwRPZ5mM3GhF/2HD5W+fE+Ey3zpkJpxyauoOuNGlwxWTE+Q6i95Zhv
-   CyuPONojvls38V9JZjaZwklchHuafC8J3LgG6AkD4l4nHfSMerS6JHInY
-   EdBINC57fe9Dwga+n8uyg1af0kVfh3Xe+WnNGWfEeCc6bN4bNMM5u99uO
-   A==;
-X-CSE-ConnectionGUID: 61ChtK9KT0KTMn9CVM7aaA==
-X-CSE-MsgGUID: CjeVUAmNTAO3cVdDOZLSlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="75504747"
+  t=1771889698; x=1803425698;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=12QBzguf+Sdz92WxcJUhXyt70Tdl6GQe5lxoiPkm+S8=;
+  b=iGo9FyHbguqGth8ZTqLl8UmiDyQNCwi+8HBUw3W6rqEWbknJpxw4NbcZ
+   dU5AYKEpBNGO119gj9oF5zpMBXZxk2XE+mD0Xxhm4yC7rwAdzNzTSGNsH
+   65FCJ8Sa4boqivC6ZidHs/f6QydGZc/aIkkLGIw22ZZMOC/M8BNogKQcj
+   jhnlrRKrENm7x9wzsPpijNSLMgB3smH8WJmpizADWJbrbWmOgC+iD92vL
+   yPuM1SCvwSP3LFD3PnNtU8dspnJCdLNg8sVxxOV3CP/MUFTYEol9JGfVR
+   9jKeNelVKxgUuVVmC0H9nd+I3xxwAFCLmTHoOwMogv7P8EEmLqUi/HN0V
+   g==;
+X-CSE-ConnectionGUID: n/7gDMx9SwC8GivSkKHo4g==
+X-CSE-MsgGUID: vDMMD0ZGSSifgcVw1qYzQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="72808686"
 X-IronPort-AV: E=Sophos;i="6.21,307,1763452800"; 
-   d="scan'208";a="75504747"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 15:34:56 -0800
-X-CSE-ConnectionGUID: 9qF0y4HNR8aPckZvTagDDg==
-X-CSE-MsgGUID: Q8K3s6mDQRuO66npovyQDQ==
+   d="scan'208";a="72808686"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 15:34:58 -0800
+X-CSE-ConnectionGUID: MXqlupThQmmH4PZM0z+Q+w==
+X-CSE-MsgGUID: Q+Y5IiqsQ2iSTcUgG2X6JQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,307,1763452800"; 
-   d="scan'208";a="214015402"
+   d="scan'208";a="215568156"
 Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 23 Feb 2026 15:34:54 -0800
+  by orviesa009.jf.intel.com with ESMTP; 23 Feb 2026 15:34:54 -0800
 Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vufS0-000000000wJ-2AB7;
+	id 1vufS0-000000000wH-227N;
 	Mon, 23 Feb 2026 23:34:52 +0000
-Date: Tue, 24 Feb 2026 07:33:57 +0800
+Date: Tue, 24 Feb 2026 07:33:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nikita Kalyazin <kalyazin@amazon.com>
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	Jingoo Han <jingoohan1@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:uffd+guestmemfd/v1 13/15] ERROR: modpost:
- "filemap_remove_folio" [arch/x86/kvm/kvm.ko] undefined!
-Message-ID: <202602240745.YsKL50hi-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, mayank.rana@oss.qualcomm.com,
+	quic_vbadigan@quicinc.com,
+	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Subject: Re: [PATCH v2 2/3] PCI: dwc: Add helper to Program T_POWER_ON
+Message-ID: <202602240705.ujRk6agl-lkp@intel.com>
+References: <20260223-t_power_on_fux-v2-2-20c921262709@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260223-t_power_on_fux-v2-2-20c921262709@oss.qualcomm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git uffd+guestmemfd/v1
-head:   ea5af993d28d129d273453041a5ad6b3a1a9e31a
-commit: 884e3e4115845fa2b4fd3dcfff1d5058a0b41968 [13/15] KVM: guest_memfd: implement userfaultfd operations
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260224/202602240745.YsKL50hi-lkp@intel.com/config)
+Hi Krishna,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Chaitanya-Chundru/PCI-ASPM-Add-helper-to-encode-L1SS-T_POWER_ON-fields/20260223-192621
+base:   6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+patch link:    https://lore.kernel.org/r/20260223-t_power_on_fux-v2-2-20c921262709%40oss.qualcomm.com
+patch subject: [PATCH v2 2/3] PCI: dwc: Add helper to Program T_POWER_ON
+config: i386-buildonly-randconfig-004-20260223 (https://download.01.org/0day-ci/archive/20260224/202602240705.ujRk6agl-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260224/202602240745.YsKL50hi-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260224/202602240705.ujRk6agl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602240745.YsKL50hi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602240705.ujRk6agl-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-ERROR: modpost: "folio_alloc_mpol_noprof" [arch/x86/kvm/kvm.ko] undefined!
->> ERROR: modpost: "filemap_remove_folio" [arch/x86/kvm/kvm.ko] undefined!
+>> ld.lld: error: call to __compiletime_assert_421 marked "dontcall-error": FIELD_PREP: value too large for the field
 
 -- 
 0-DAY CI Kernel Test Service
