@@ -1,123 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486A91624C5;
-	Sun, 22 Feb 2026 23:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610E86FC5
+	for <llvm@lists.linux.dev>; Mon, 23 Feb 2026 07:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771801550; cv=none; b=WDU2XlLuFm6yvbbyLC02y9d9kkccyQEApe4zD9bzkEsFWWPAENnoFLxPHbIt5hP065UUJc+b1W/ct6RK70+vcBZCUWoGyg8xuFfRvZNZ2XUg2xYYddREGYVQX+E6PvwdVebUjSNwi65UQLajuL3FIkkkrglRfB7fB1YrkJBe7ic=
+	t=1771831407; cv=none; b=dgwdTdaKnkPzpYzZxCKFbB/bur44AewLFkHimGaj2an4SEEXo9b3ajZ6tHXNPLM9fYcHteSQPAOw5CSOzwElKkQxJnEmJUUPhT4PqQ+0gO+XZSvr+oU4FTM0eJISlZ2JZh2hZ34b5uD7nsCEEYqQFHNBgrycROUFCa9yNvAoPbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771801550; c=relaxed/simple;
-	bh=bd2sTvK3CFiA3InaUoknfemsJKuImjXq+nE/Tw6Jq0k=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=fPAqIn8iDe5azaCniEEbbyFncS31dwC55RdeOOPp/oXT9SCV6p4HSzvNyxHKqsTCoxMKeVOObj6jNQKpf8GVbehVFc220pcGsTFsSUpm2+J+XjSweC9KDn0UEon3ybtEqYmEVbbsJV4l/cSDC/8fFxTN735EF1RNgAcnEfyqttY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPkelegg; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771831407; c=relaxed/simple;
+	bh=jSLVi59JSQocH4YQv4gODKjC0OkNyHuWT3R3LxTt3Po=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=b9Zi1CrqK+El7XmBinPM977AU+HFykFckkPcvUOuM0ln01vZ5iaqVFpZo91WiMIgmwddlKC+WPUhwEJFYvpf/3ZeQQEy7Py3h0x/nLVF1KBPrbo+8uRFpb673if7/ch7kPTJGuhOW1c+H9C6Exy9m0sbIcZtiXHOgNmhHkeVpjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AbA/cBZG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPkelegg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771801548; x=1803337548;
-  h=date:from:to:cc:subject:message-id;
-  bh=bd2sTvK3CFiA3InaUoknfemsJKuImjXq+nE/Tw6Jq0k=;
-  b=UPkelegg9gyu4I1j0ePCKtSedL5Ioj54VIuXmL9vuZcUFGCPZifN0a9V
-   Kh/7D5ICC/d9FKT5sl2NOl/OaHH0JQv8WDvt2zNVgRVGuPZCqWPyipS47
-   DGV0fFqHjk+HTsImdmPWM+cq8WZzNMi8gzB0Ri51vLJcHMmVQGC48HEq0
-   Hxbw5FaLcO/g670tcx7KBqGsY0j/HdqDj6UNhHyeTq+T+J/o3AiYaKso/
-   i1b8Twsj6ze3NcU9R9J2G5NNdGJu1SFEBQnovfWZ34O/ECCQ+Mg3xB4GY
-   2mUb75t5He019gxe/LjZfg7s12RWCgeiKdSsGASZmE8bnPVUBKPE4VTPK
-   A==;
-X-CSE-ConnectionGUID: 6jksnUDmQOKGaE5ueCC9JA==
-X-CSE-MsgGUID: bMdpeqS6SLeBKDxlJ/VmLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="90384025"
-X-IronPort-AV: E=Sophos;i="6.21,305,1763452800"; 
-   d="scan'208";a="90384025"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2026 15:05:45 -0800
-X-CSE-ConnectionGUID: g4JMYarRS9qu3yWYJLqc/Q==
-X-CSE-MsgGUID: mwaQ3/b2RxuGpzMhAqnn/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,305,1763452800"; 
-   d="scan'208";a="214483612"
-Received: from lkp-server01.sh.intel.com (HELO c63097897875) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 22 Feb 2026 15:05:43 -0800
-Received: from kbuild by c63097897875 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vuIWD-0000000006K-0KHK;
-	Sun, 22 Feb 2026 23:05:41 +0000
-Date: Mon, 23 Feb 2026 07:05:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gary Guo <gary@garyguo.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [nbdd0121:io_projection 16/19] error[E0405]: cannot find
- trait `FromBytes` in this scope
-Message-ID: <202602230700.rbcI2qkz-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AbA/cBZG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771831405;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o/uR1HUg1N1aVCBS6Xvnk92ZxcOirmw/Qjl1x7KwlSA=;
+	b=AbA/cBZGBLBQq9NVMR5ya6r2vnualg2aU1Yiq1FQleCxsSfht+HvnsWQkFE5x2NF/Ha9oj
+	MQetyih6OzCI0Mwc6FXJijQwdEr+sII9cldxqgZoOMeFLbTBZ0pzNT04fPJDs3KHEUhCJQ
+	btJCz+fnFqql4E2j7LQUUnQJ0egu/gE=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-634-3Py9mrMyMHS_iYWYhvIsCg-1; Mon,
+ 23 Feb 2026 02:23:18 -0500
+X-MC-Unique: 3Py9mrMyMHS_iYWYhvIsCg-1
+X-Mimecast-MFC-AGG-ID: 3Py9mrMyMHS_iYWYhvIsCg_1771831397
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7DC0B1800464
+	for <llvm@lists.linux.dev>; Mon, 23 Feb 2026 07:23:17 +0000 (UTC)
+Received: from [172.20.246.216] (unknown [10.30.45.30])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2FD681800351;
+	Mon, 23 Feb 2026 07:23:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc1,
+ upstream-mainline, 6de23f81)
+Date: Mon, 23 Feb 2026 07:23:16 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <45539.126022302231800402@us-mta-634.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: C6BaBk8pega8ltlZjQvE7bSk2u3pd6m9n4e0DOK9_OI_1771831397
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/nbdd0121/linux io_projection
-head:   c4a22eafa4aa47b5c3c75d57488c44e653827fc6
-commit: d12fb6412e5338bb69eab42f45ede455a57fbfbf [16/19] rust: io: add view type
-config: x86_64-randconfig-073-20260222 (https://download.01.org/0day-ci/archive/20260223/202602230700.rbcI2qkz-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260223/202602230700.rbcI2qkz-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602230700.rbcI2qkz-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> error[E0405]: cannot find trait `FromBytes` in this scope
-   --> rust/kernel/io.rs:667:24
-   |
-   667 |         T: KnownSize + FromBytes + AsBytes,
-   |                        ^^^^^^^^^ not found in this scope
-   |
-   help: consider importing this trait
-   |
-   7   + use crate::transmute::FromBytes;
-   |
---
->> error[E0405]: cannot find trait `AsBytes` in this scope
-   --> rust/kernel/io.rs:667:36
-   |
-   667 |         T: KnownSize + FromBytes + AsBytes,
-   |                                    ^^^^^^^ not found in this scope
-   |
-   help: consider importing this trait
-   |
-   7   + use crate::transmute::AsBytes;
-   |
---
->> error[E0405]: cannot find trait `FromBytes` in this scope
-   --> rust/kernel/io.rs:668:12
-   |
-   668 |         U: FromBytes + AsBytes,
-   |            ^^^^^^^^^ not found in this scope
-   |
-   help: consider importing this trait
-   |
-   7   + use crate::transmute::FromBytes;
-   |
---
->> error[E0405]: cannot find trait `AsBytes` in this scope
-   --> rust/kernel/io.rs:668:24
-   |
-   668 |         U: FromBytes + AsBytes,
-   |                        ^^^^^^^ not found in this scope
-   |
-   help: consider importing this trait
-   |
-   7   + use crate::transmute::AsBytes;
-   |
+Kernel information:
+    Commit message: Linux 7.0-rc1
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2342606174
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
