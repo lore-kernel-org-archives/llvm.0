@@ -1,112 +1,97 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F380733B967
-	for <llvm@lists.linux.dev>; Mon, 23 Feb 2026 18:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDC7315D46;
+	Mon, 23 Feb 2026 18:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771870451; cv=none; b=Rsx+v45zsMEsTMK/Yijno046jmFq+Xdb9yit179iiWeT/FrzTLdju7VaxcI0waV8oHydszt9jEK8EojgRvlDIMnydQySBGPDhAmT7/DN73bZHCCRafh14YoNbjVkHR0YfZwCLVv7MKlnavhmDB8d+oi38JseZbFIi21xuSs8aXY=
+	t=1771871007; cv=none; b=OSOoDGX44AqO/Pme1KyKYXW5DHd/9DXHY/lEchsU5YHfNV2e6S98Lqd7zOanC5byNurekYwNuzB99l+YonQKK0N8xOzlp/YcXEH7IGZtuRBLLFz9mPvVg8eQf4zLZI8GX+2cJ1U9hzQYmc2clRRJ3q4pSxK5tktA8SZWagKou2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771870451; c=relaxed/simple;
-	bh=Ko32fvtk6bixsPt4HIta8+/b+k3DorDq8sDvEEsEea4=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=BY+qubnAXNUkWCRMUaK8zWey9gMwuAFIRpz9W/UHD17Rl63aEO3j/rCa0nN3+e6/f7On2T+LkLzyDPsq334ni/4NFZZyAGP80EG3ky2nSFjPkXR3MAvY7DxJbih2oUWCq0jAr2tDQfKW+Bb0aEPf3gN/L4UPMMIqgabWrDrE5f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=JOqCJZkl; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1771871007; c=relaxed/simple;
+	bh=6+2naQDXV5XODs47cZvDUyCoEdwlayXFA/uMm8d4/HY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rUmdtSLbxQao7lB1qcoVK2vbbC/Qr4RgbjIQizolYiUl1mCYD2ebOAv7t/xix3mX8ANseJM1O8e8O/JmkkIu7+xR7YdfnXl4kGVqn/Kti+RmpYI2G3xAOhQJbsepD0FdA7Q1bBaIKqPygFMZJ+PQzmkFrAiiPVeQQ54Go/tn7gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tSbrhxjJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="JOqCJZkl"
-Received: from smtpclient.apple (c-24-130-165-117.hsd1.ca.comcast.net [24.130.165.117])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 61NHucxE1192396
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 23 Feb 2026 09:56:38 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 61NHucxE1192396
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026012301; t=1771869399;
-	bh=UV96YJDSAQHhfhSHSBGJYnGRmXZYA4GrMJlSRNVtwT0=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-	b=JOqCJZklLApkfkbiGjk/A1+vXEYsAraKpb5+o55SVCygM8fz/+wcu/Nl8q9vXqtJd
-	 tK7mP/fDISsqFbR/J8cceyGu5T9c0TOgEQsHyH9aCSsEOhG79yT6kBWJVLedTNTGFm
-	 gBQV3D/IzTZvm6bRCF13K+YL07eV8QjrNnJVZR5lokI7dNNZRetzSkM3eugIQRR59n
-	 kBKRQO9Cgm7mQL9SlE4ipjAqO9ezexUavEmJ/U6TlvvpzxGTQBaTf+iUVRPT62xUe+
-	 k94/IlhfHOsA2UEVlqTc7WMUako3Di60mkoC7JNQ665JYQiSXaJKvB0yJfMIrbp1Vv
-	 RSBGbRbNskG8A==
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tSbrhxjJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 361BEC116C6;
+	Mon, 23 Feb 2026 18:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771871006;
+	bh=6+2naQDXV5XODs47cZvDUyCoEdwlayXFA/uMm8d4/HY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=tSbrhxjJusGsXpCZ+JQYWKeF+uIsYK3cZ88z58ReYq2CYcg0uN06mm8UtU/Bp1uJo
+	 R4dP3W1XC3+2ITv0dK6x4D07kp530IMPbIJlFkbxbIFZtwQpOY4KZ7sx13N+YYf2QK
+	 n8I28bSszPv6b9m+XFZ2JkVnnpLCo6wsJJptRAsJZ1gNIKEu8qVC4Likeb7mYzdDs1
+	 JYBnYsnfO53sAYwOYjevHbyfGDWqZ4duklAyZKT23Y/6vslC6Z1uh+A0MZh4GShZtI
+	 /ufcqWrsbD296fYJ9sqIxcr+Iv/f3j9y2msNIaQm9ZgVeedhlZ/nVFTIE7PD/sXIy6
+	 qgIIADjl4irbw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 23 Feb 2026 11:23:12 -0700
+Subject: [PATCH] init/Kconfig: Adjust fixed clang version for
+ __builtin_counted_by_ref
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.400.21\))
-Subject: Re: [PATCH v3 09/16] x86/msr: Use the alternatives mechanism for
- WRMSR
-From: Xin Li <xin@zytor.com>
-In-Reply-To: <542ff5d7-1cff-4ef9-af48-f0378aa2a05c@intel.com>
-Date: Mon, 23 Feb 2026 09:56:28 -0800
-Cc: =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org, llvm@lists.linux.dev,
-        "H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <14FE6A05-0864-4BD5-8331-0C2E6B8A28F8@zytor.com>
-References: <20260218082133.400602-1-jgross@suse.com>
- <20260218082133.400602-10-jgross@suse.com> <aZYoUE7CmrLg3SVe@google.com>
- <e05a65a7-bf8e-420b-8a36-2d76e56b43b0@intel.com>
- <d622a318-f7f8-4cff-b540-38d159ca87f4@suse.com>
- <437EC937-24B7-4E69-B369-F9FAFC46F1B1@zytor.com>
- <542ff5d7-1cff-4ef9-af48-f0378aa2a05c@intel.com>
-To: Dave Hansen <dave.hansen@intel.com>
-X-Mailer: Apple Mail (2.3864.400.21)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260223-fix-clang-version-builtin-counted-by-ref-v1-1-3ea478a24f0a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWN2wrCMBBEf6Xsswt1IwH9FfHBJJu6UlLJpVRK/
+ 92tfTwzw5kVCmfhArduhcyzFJmSwvnUgX8908AoQRmoJ9sTGYyyoB+1wZnzvkbXZKyS0E8tVQ7
+ ovpg5IgXmqzU2XkwA1X00lOV/dX8cXJp7s6+7H7btBxdN3YWMAAAA
+X-Change-ID: 20260223-fix-clang-version-builtin-counted-by-ref-2dee9636f43d
+To: Kees Cook <kees@kernel.org>, Bill Wendling <morbo@google.com>, 
+ Justin Stitt <justinstitt@google.com>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1495; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=6+2naQDXV5XODs47cZvDUyCoEdwlayXFA/uMm8d4/HY=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJlzZstkx6xsENulecokm7el2c7F9HpF5vri+r9HA1O5v
+ KNr+6M6SlkYxLgYZMUUWaofqx43NJxzlvHGqUkwc1iZQIYwcHEKwES4XzEyTGyZ7fs602KTIsvx
+ vwIBk9/z/D+d+bvp9rvm5dJ2z2fN3sHIcHh7je/cM9XztwWsXWTG4vyPQ37VKx9p3Uidht/Hbp/
+ dwwoA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
+Commit d39a1d7486d9 ("compiler_types: Disable __builtin_counted_by_ref
+for Clang") used 22.0.0 as the fixed version for a compiler crash but
+the fix was only merged in main (23.0.0) and release/22.x (22.1.0). With
+the current fixed version number, prerelease or Android LLVM 22 builds
+will still be able to hit the compiler crash when building the kernel.
+This can be particularly disruptive when bisecting LLVM.
 
->>> I _really_ thought this was discussed upfront by Xin before he sent =
-out his
->>> first version of the series.
->> I actually reached out to the Intel architects about this before I =
-started
->> coding. Turns out, if the CPU supports WRMSRNS, you can use it across =
-the
->> board.  The hardware is smart enough to perform a serialized write =
-whenever
->> a non-serialized one isn't proper, so there=E2=80=99s no risk.
->=20
-> Could we be a little more specific here, please?
+Use 21.1.0 as the fixed version number to ensure the fix for this crash
+is always present.
 
-Sorry as I=E2=80=99m no longer with Intel, I don=E2=80=99t have access =
-to those emails.
+Fixes: d39a1d7486d9 ("compiler_types: Disable __builtin_counted_by_ref for Clang")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ init/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Got to mention, also to reply to Sean=E2=80=99s challenge, as usual I =
-didn=E2=80=99t get
-detailed explanation about how would hardware implement WRMSRNS,
-except it falls back to do a serialized write when it=E2=80=99s not =
-*proper*.
+diff --git a/init/Kconfig b/init/Kconfig
+index c25869cf59c1..b55deae9256c 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -153,7 +153,7 @@ config CC_HAS_COUNTED_BY_PTR
+ config CC_HAS_BROKEN_COUNTED_BY_REF
+ 	bool
+ 	# https://github.com/llvm/llvm-project/issues/182575
+-	default y if CC_IS_CLANG && CLANG_VERSION < 220000
++	default y if CC_IS_CLANG && CLANG_VERSION < 220100
+ 
+ config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+ 	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
 
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260223-fix-clang-version-builtin-counted-by-ref-2dee9636f43d
 
->=20
-> If it was universally safe to s/WRMSR/WRMSRNS/, then there wouldn't =
-have
-> been a need for WRMSRNS in the ISA.
->=20
-> Even the WRMSRNS description in the SDM talks about some caveats with
-> "performance-monitor events" MSRs. That sounds like it contradicts the
-> idea that the "hardware is smart enough" universally to tolerate using
-> WRMSRNS *EVERYWHERE*.
->=20
-> It also says:
->=20
-> Like WRMSR, WRMSRNS will ensure that all operations before it do
-> not use the new MSR value and that all operations after the
-> WRMSRNS do use the new value.
->=20
-> Which is a handy guarantee for sure. But, it's far short of a fully
-> serializing instruction.
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
