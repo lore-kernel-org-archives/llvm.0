@@ -1,94 +1,89 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC46B3AA1B4
-	for <llvm@lists.linux.dev>; Tue, 24 Feb 2026 18:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3D61A9F8C
+	for <llvm@lists.linux.dev>; Tue, 24 Feb 2026 18:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771958050; cv=none; b=Si0cSGBvXo5XVgrLyYDVI/+dQUgCPXhzhytoZloYJk1rlD94Dl877JeXdriSsJFrKUa7O71PmhVg5b8VQFW6C+szN0AJiH0KYY+Zcm/OhCd9f21nUpcV3iG27AqVb40wSJR+FhJUMs2B05eDlASp7WQbrM57sR1PC7WScfyQtXI=
+	t=1771958720; cv=none; b=i0pa+up/D7C9D4ufPMT9z3EJaaxUAo/HqMKZ2BEh7nfY268hyQWNtZdfhNDwK37oBziTXoFYNF1YBsWf+5Bh8OpmUjRuXnZGnws2tqWUGRj/U1S+YHmR/4LskUFSp/TRmO0Tlz/z/4LSFV5W0pLvdQSy+Id8wWqVbCs/PG6xpUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771958050; c=relaxed/simple;
-	bh=J11iK2XwIj2+zXIcYCQZxiKQs/qMUnRO89klT0AGl1I=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XaH/LcRJf/Er/skb42REP8s90LkXG9FfvcJwqk6mk3E+L7KE2efYhwo0NP1iGy7DuxgDhpIomQ9FFOul30Qvzci55QkiKpgtqElxBE983l/oeKK4d9Xr3XSTUhBwdx5njhM6ctU6A2NERMw5HQgoccLoEIor3BLgOZnPzQqJh38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MiCSnraq; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1771958720; c=relaxed/simple;
+	bh=SqolAWGlUuLI3GWRT27Gw5TF43c8uynCsM1+ZmdyY0Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rxv+iFw5W1ORK8Z1ikkAmLYDXApGHxhkXxVwk8PeQzcD/NUflSSgeX0fe2wVlZjGgpHvQO6ELRNJ5xLUM4HvOCy2hywJ907AySDHH0AirXSkwPFIBMCNP4x1PQTvFU7zjPDNSlM+AVeurDmNF2uWAED5RjszCQvhz/MbkPBzWg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=KUeOs5ER; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MiCSnraq"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ba9a159437so5299770eec.0
-        for <llvm@lists.linux.dev>; Tue, 24 Feb 2026 10:34:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771958048; x=1772562848; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QrjBvSrm8JFCEhJvVydTf7Q6kCsOJiDnm0ZLRH2yvhY=;
-        b=MiCSnraqxVinNLuNugfL9HvI+cCC7J8jvZLI9hxvcKOeF3ElHAqyrtaUqJU2/WTxDl
-         pK621JAMVy1Hjw6+K2yvCazZVT5iCgffZYdIRv7aEEDKP9W48U9lRvAeeZSidDyn0QLy
-         6A1r55UGrjA6LFqsq+EG96gFY2/WUkcSf47jSpaNj1NgAGoStCwwfnO6SNfRHU0GTweh
-         dUXG5SVVG1es2uuk/7SntWk5MJ1E8nnHwRNOgPRZp3LO5pk4Ev53Q2Z5aCG+PCKTrkng
-         gdAzxxBAyERz7WWoB8bbXQcaDGYt073ieUNb4tAwkVcctDxox6U3gV5QpH4dNGUyDw3q
-         5mPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771958048; x=1772562848;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QrjBvSrm8JFCEhJvVydTf7Q6kCsOJiDnm0ZLRH2yvhY=;
-        b=qMrkz44BDZuauvHxi1FqLjwGFbrqK3csC6rZMMnqATUiPt3YPIkBY250/5hWojPxFI
-         pmb4Dhr7JfeWULnOaIJ8B8/JjwZs+mSYF78WAA0Dfd8RpmoQLZJTLapo6lhwT5fzbEM7
-         BAID/6oyL4m3oTrjYFz0wwzcGYrqJiZIVtYB0FUQMdc19p/1CyZIzIW/QlG9ZkJ2xY51
-         pVgJ0GL6ZqRL0aMsEBRC+X4AqDIi5aiMTE1xCiHL33xGugcbpD466E4ttTetq4/T6DqH
-         CxjPZFhZ2N4FNtPaH1UhNSmcyWRnCt0yF/915QcXHdcOsnDbGBHrvhZVlu/hRUKLwhtB
-         tZ2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX2/snOFjmyBY9xMTuC5i17DbxtVIGpQfyOdXubMQQZLqrUEZdiMet6YOQ//+eXDGc1hS/K@lists.linux.dev
-X-Gm-Message-State: AOJu0YwPHZcyvbFn3uWNQlJQC0gD6pAblBtlYALTrCAPd8ZUK75ZGvM2
-	GC+Uad+3eY60gNcSC2XHVZXobh143WfIRFVkeWGOU8YViXf0Tf5ZiaT0azFEcs5LtKG+1UhgIUX
-	vXQyG9qauSWNv6QwfYg2TTAQ9rKHziA==
-X-Received: from dycng10.prod.google.com ([2002:a05:7300:ce0a:b0:2ba:963b:54da])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:d718:b0:2ba:6ffe:450 with SMTP id 5a478bee46e88-2bd7bd3aa44mr4531030eec.33.1771958047807;
- Tue, 24 Feb 2026 10:34:07 -0800 (PST)
-Date: Tue, 24 Feb 2026 18:34:06 +0000
-In-Reply-To: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="KUeOs5ER"
+Message-ID: <ddd8b949-3f73-4e3d-90b9-be95e859f3b1@packett.cool>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
+	s=key1; t=1771958716;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XFvAN+eThWLRnldrhy5N9eq98qVVFyFFadQtYFCknE4=;
+	b=KUeOs5ERjE4CmcrKHoSDRiDxz8WcjSY7WPUhlSjBy9OwKiP2QuHdI20AQstwce59aslGXa
+	ZaFZB1ldfe8hG947Z6XZkTCoWBzk6YMy2r07pha+8ToOvPCHerrlQEna7O4GI8L+rv8Uig
+	srLDuurRuY9eQ0/ejTGLgsrh6PcsKXFWFe867T4VQi3T26oAeu+vWC16v8wpJfVDomNfdi
+	sFsfEp8nrXQZHriQpvcf/+dSCPYpQdQwnz/dSbdzx3w9uC04gjampRnnRTQHRsdDTbJCDE
+	nkYLGN4kR5mINub2UcTyMCZx9tsx0ppZ8+39PKlBnKPF5NGeMrfXvlaUn2Jz7Q==
+Date: Tue, 24 Feb 2026 15:45:05 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
-X-Mailer: b4 0.14.3
-Message-ID: <177195804671.1905199.15508123005606240406.b4-ty@google.com>
-Subject: Re: [PATCH] module: Fix kernel panic when a symbol st_shndx is out of bounds
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Subject: Re: [PATCH v2] remoteproc: qcom_wcnss: Fix handling the lack of PD
+ regulators in v3
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+ Luca Weiss <luca@lucaweiss.eu>, Vladimir Lypak <vladimir.lypak@gmail.com>,
+ =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org,
+ phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev
+References: <20260201210230.911220-1-val@packett.cool>
+ <jup7hphwpa754gyhtcahz25glecp6ctpuxcwzvco6wrbokvnip@quw7hrauahsa>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Val Packett <val@packett.cool>
+In-Reply-To: <jup7hphwpa754gyhtcahz25glecp6ctpuxcwzvco6wrbokvnip@quw7hrauahsa>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 30 Dec 2025 10:32:08 -0800, Ihor Solodrai wrote:
-> The module loader doesn't check for bounds of the ELF section index in
-> simplify_symbols():
-> 
->        for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
-> 		const char *name = info->strtab + sym[i].st_name;
-> 
-> 		switch (sym[i].st_shndx) {
-> 		case SHN_COMMON:
-> 
-> [...]
 
-Applied to modules-next, thanks!
+On 2/23/26 5:03 PM, Bjorn Andersson wrote:
+> On Sun, Feb 01, 2026 at 05:55:03PM -0300, Val Packett wrote:
+>> The changes introduced to handle single power domain platforms have
+>> swapped the info pointer increment from num_pd_vregs to num_pds, which
+>> would shift the info pointer past the end of the array for pronto-v3,
+>> which does not list power domain regulators in vregs.
+>>
+>> This showed up as a difference between GCC- and LLVM-compiled kernels
+>> on SDM632 devices, where only with LLVM one would get the
+>> "regulator request with no identifier" error, because the out-of-bounds
+>> memory ended up being zeroed. Fix by skipping the increment when there
+>> are more power domains than regulators.
+>>
+> Is the error only an error print, or did the thing stop working as well?
 
-[1/1] module: Fix kernel panic when a symbol st_shndx is out of bounds
-      commit: f9d69d5e7bde2295eb7488a56f094ac8f5383b92
+It's a real error. Likely no one would've bothered debugging it if it 
+weren't breaking everything :)
 
-Best regards,
+It was a blocker for allowing LLVM/clang builds of the msm8953 kernel in 
+postmarketOS, the whole reason to dig into this was "switching to clang 
+breaks the modem, WTF?!"
 
-	Sami
-
+~val
 
