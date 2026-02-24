@@ -1,89 +1,115 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3D61A9F8C
-	for <llvm@lists.linux.dev>; Tue, 24 Feb 2026 18:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECE42874FE;
+	Tue, 24 Feb 2026 18:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771958720; cv=none; b=i0pa+up/D7C9D4ufPMT9z3EJaaxUAo/HqMKZ2BEh7nfY268hyQWNtZdfhNDwK37oBziTXoFYNF1YBsWf+5Bh8OpmUjRuXnZGnws2tqWUGRj/U1S+YHmR/4LskUFSp/TRmO0Tlz/z/4LSFV5W0pLvdQSy+Id8wWqVbCs/PG6xpUk=
+	t=1771959250; cv=none; b=SdhIWU9mSoNDhUN0EtK0fhzPvDgyflxtNn+0iAYRwJQt89joZSQI9W1YvrL93gea+FWsmXfatgZO+HfgDc5y9SCGBZbafMsVZpBwGwouMvYJ6f/kRDscTbwt4CxUTOTSfKm1XFeNjomLN3h7dTz/NtDgyCYMQe4DW2NugVOwBp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771958720; c=relaxed/simple;
-	bh=SqolAWGlUuLI3GWRT27Gw5TF43c8uynCsM1+ZmdyY0Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rxv+iFw5W1ORK8Z1ikkAmLYDXApGHxhkXxVwk8PeQzcD/NUflSSgeX0fe2wVlZjGgpHvQO6ELRNJ5xLUM4HvOCy2hywJ907AySDHH0AirXSkwPFIBMCNP4x1PQTvFU7zjPDNSlM+AVeurDmNF2uWAED5RjszCQvhz/MbkPBzWg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=KUeOs5ER; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
+	s=arc-20240116; t=1771959250; c=relaxed/simple;
+	bh=pA3DPEAcwnPXpmcsvOzdGsmazxFwvvrygWXsa6rpajk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n8l2r79ofw5sHyJ9dUSRzV5fTpkTxYHGqu2olWmIIyIL+uii9AkLsV27dx9eHRAB/CQsQObw0OADkGKDjuuODQNBuaH0Jf5WH8CdAfhH1wVTLX8VOE0RFE+E866Ks6CJ+Ovo4+MchJNahXA8ghcKxl2VadiJI/o9OTCd902mNgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l3wMHSgf; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="KUeOs5ER"
-Message-ID: <ddd8b949-3f73-4e3d-90b9-be95e859f3b1@packett.cool>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
-	s=key1; t=1771958716;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XFvAN+eThWLRnldrhy5N9eq98qVVFyFFadQtYFCknE4=;
-	b=KUeOs5ERjE4CmcrKHoSDRiDxz8WcjSY7WPUhlSjBy9OwKiP2QuHdI20AQstwce59aslGXa
-	ZaFZB1ldfe8hG947Z6XZkTCoWBzk6YMy2r07pha+8ToOvPCHerrlQEna7O4GI8L+rv8Uig
-	srLDuurRuY9eQ0/ejTGLgsrh6PcsKXFWFe867T4VQi3T26oAeu+vWC16v8wpJfVDomNfdi
-	sFsfEp8nrXQZHriQpvcf/+dSCPYpQdQwnz/dSbdzx3w9uC04gjampRnnRTQHRsdDTbJCDE
-	nkYLGN4kR5mINub2UcTyMCZx9tsx0ppZ8+39PKlBnKPF5NGeMrfXvlaUn2Jz7Q==
-Date: Tue, 24 Feb 2026 15:45:05 -0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l3wMHSgf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771959249; x=1803495249;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pA3DPEAcwnPXpmcsvOzdGsmazxFwvvrygWXsa6rpajk=;
+  b=l3wMHSgfXacsGGqMqPuZU84RcVQ48CZjiMYv5qq3t30HNl8tJ+37wbBq
+   u8kC9K6ASgcREWrJPjDKbeo+szqWxftH0BcqTNIiXEc8DH7IIfd/PRbWd
+   /gH33gJ+o3pL1TRYkTz6uGN3Y6K659sunGUmdRwSzLG++RAK/O8yFyus4
+   2VCmgSEh5lUsCGB7qCmPBd3Qq3AdNTQoA+luN/xr47nMLAR7ob8BKg8PQ
+   oLe+tpHGakZVXWF+AO0w284PjF4riDnn7b8homekipoP26J9oQIuxU/rn
+   QTn9X6Miy+5aH7NSlHqj/PAYSMQl7NJryi3uX9Le4tKTT7WJJMetWy2Hh
+   w==;
+X-CSE-ConnectionGUID: mRelGBOdRdO5vnomWNIVbQ==
+X-CSE-MsgGUID: moc788QTR9mr3pijNjmXFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11711"; a="95600912"
+X-IronPort-AV: E=Sophos;i="6.21,309,1763452800"; 
+   d="scan'208";a="95600912"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 10:54:08 -0800
+X-CSE-ConnectionGUID: PZ0PD4OjRaGO0XoD1U21dg==
+X-CSE-MsgGUID: oOuji2MwSO6qVUbEwY8SOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,309,1763452800"; 
+   d="scan'208";a="219455954"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 24 Feb 2026 10:54:05 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vuxXn-000000002MX-207S;
+	Tue, 24 Feb 2026 18:54:03 +0000
+Date: Wed, 25 Feb 2026 02:53:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, vbabka@suse.cz,
+	harry.yoo@oracle.com, 00107082@163.com, cl@gentwo.org,
+	rientjes@google.com, roman.gushchin@linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH 1/1] mm/slab: mark alloc tags empty for sheafs allocated
+ with __GFP_NO_OBJ_EXT
+Message-ID: <202602250250.n38q74JK-lkp@intel.com>
+References: <20260224165250.1322946-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] remoteproc: qcom_wcnss: Fix handling the lack of PD
- regulators in v3
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
- Luca Weiss <luca@lucaweiss.eu>, Vladimir Lypak <vladimir.lypak@gmail.com>,
- =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org,
- phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev
-References: <20260201210230.911220-1-val@packett.cool>
- <jup7hphwpa754gyhtcahz25glecp6ctpuxcwzvco6wrbokvnip@quw7hrauahsa>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Val Packett <val@packett.cool>
-In-Reply-To: <jup7hphwpa754gyhtcahz25glecp6ctpuxcwzvco6wrbokvnip@quw7hrauahsa>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260224165250.1322946-1-surenb@google.com>
+
+Hi Suren,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 7dff99b354601dd01829e1511711846e04340a69]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-slab-mark-alloc-tags-empty-for-sheafs-allocated-with-__GFP_NO_OBJ_EXT/20260225-005422
+base:   7dff99b354601dd01829e1511711846e04340a69
+patch link:    https://lore.kernel.org/r/20260224165250.1322946-1-surenb%40google.com
+patch subject: [PATCH 1/1] mm/slab: mark alloc tags empty for sheafs allocated with __GFP_NO_OBJ_EXT
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260225/202602250250.n38q74JK-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260225/202602250250.n38q74JK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602250250.n38q74JK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/slub.c:2787:3: error: call to undeclared function 'mark_objexts_empty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2787 |                 mark_objexts_empty(sheaf);
+         |                 ^
+   1 error generated.
 
 
-On 2/23/26 5:03 PM, Bjorn Andersson wrote:
-> On Sun, Feb 01, 2026 at 05:55:03PM -0300, Val Packett wrote:
->> The changes introduced to handle single power domain platforms have
->> swapped the info pointer increment from num_pd_vregs to num_pds, which
->> would shift the info pointer past the end of the array for pronto-v3,
->> which does not list power domain regulators in vregs.
->>
->> This showed up as a difference between GCC- and LLVM-compiled kernels
->> on SDM632 devices, where only with LLVM one would get the
->> "regulator request with no identifier" error, because the out-of-bounds
->> memory ended up being zeroed. Fix by skipping the increment when there
->> are more power domains than regulators.
->>
-> Is the error only an error print, or did the thing stop working as well?
+vim +/mark_objexts_empty +2787 mm/slub.c
 
-It's a real error. Likely no one would've bothered debugging it if it 
-weren't breaking everything :)
+  2783	
+  2784	static void free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf)
+  2785	{
+  2786		if (s->flags & SLAB_KMALLOC)
+> 2787			mark_objexts_empty(sheaf);
+  2788	
+  2789		kfree(sheaf);
+  2790	
+  2791		stat(s, SHEAF_FREE);
+  2792	}
+  2793	
 
-It was a blocker for allowing LLVM/clang builds of the msm8953 kernel in 
-postmarketOS, the whole reason to dig into this was "switching to clang 
-breaks the modem, WTF?!"
-
-~val
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
