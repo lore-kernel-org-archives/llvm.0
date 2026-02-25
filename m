@@ -1,133 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E493191BB;
-	Wed, 25 Feb 2026 22:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEBB32AAD1;
+	Wed, 25 Feb 2026 22:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772057246; cv=none; b=h86SxET8qZBVot+xCoKKmm3J78mmmfk1UzpQHnyg+ULYAPpGLn6cwgAGbv/Z5Q9/BU+biFIPfL77o9v8W7KfZQGDzD+E/en9OnNtBDEAnCg1P6PbVyrmiqYY148etgRzP+GvBs3Xshvn8v4VKDStXJPhv2nMZGOH0CzBEHshig8=
+	t=1772058195; cv=none; b=hERR3aj1m7WysntodRId9PFVt+2A4PQTcls5zbrR9JpZ3tIDsD0UHr3e2dFt6X7o6sOLTpLEY38I775Ps0/DsqeuPvR8tNVcwi/YA/l3bhINnLglyGzvH+Q4wc/ZbKfn7R8Ugg+BEQ0XfWbkq5fwgx/ABrE8LbclkrgBJ53QpnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772057246; c=relaxed/simple;
-	bh=ZVwDhq7sE+uH86Xby6Jav0733rfjRoZgwhfDqk+hdpY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jnkXrCKuZHiZw+x8ZLnCocByFLsXKXUoiYM/4VFkf0mg92ALiip+JXybq04DICnITzmEXS+AH/z5N/jyEtXkORETBc52zMKowC1gb8cXzHG1utvFP8oqKzybgLNVfqwD/pT/Olc86N2nppdepHlilJMdaSNg8YRD9QGwffKdMEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DtIMGz/r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772058195; c=relaxed/simple;
+	bh=UCsGgwb2GrSNlin1aY4ZbuuW16qaI6AY56aFJsuqHoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fRV47se8NJqCP1Lr1uEHuEIrL9QpGTOV4sLHyM8ifVm9erm9Rhgh+BYp+ducRIdCWlwBl3BtwMALujoA09TzPR6GJ+NU5d5rpNL3Akn4RaJHQ2Cx+Mg6hClX5QjBmgCI/OuDsmwn3oOBwJY4WhZ6jtTwNa6wwfj7SUNH5ss/ae0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jK74oz8t; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DtIMGz/r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401BEC116D0;
-	Wed, 25 Feb 2026 22:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772057246;
-	bh=ZVwDhq7sE+uH86Xby6Jav0733rfjRoZgwhfDqk+hdpY=;
-	h=From:Date:Subject:To:Cc:From;
-	b=DtIMGz/rjbh2EwrTBRlKgfiqmFUw4LbG+mETGxnrGWbk9P+QTxldgQAx8NzBaxyUw
-	 360Mwglc4EoTf3MREGMLO6SaTB5jKXYt0xS7fCOgzuJBxzWHvdHmXQAUpAKF59b3eL
-	 Agam1q1z3vupxEESAP3IxzDjjiNtiJE91wwDcSei/coWZVBqv8k18g8XcDLkOduzw+
-	 5/dcaZ5P6XEgQpqbvXiguUbIkq79vlNCMsPfX96epD2bO8UcKwGkAtYC8Wkdu8D2Ap
-	 psyWJaRGgKzeQY7q/pvp/pJxYOwMWQKAsuApx85Mtci7zdxWkh+bTtabJA50ahn82n
-	 Z5rK8N6tDJUGQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 25 Feb 2026 15:07:17 -0700
-Subject: [PATCH] genksyms: Fix parsing a declarator with a preceding
- attribute
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jK74oz8t"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=1barFty4Bo7aX9Xad6stVkzMQrWN7UjAZzcAxpzX3v4=; b=jK74oz8tfjo09/5V1ByikeC7pk
+	nG6OP19MxyPThJ9LvipnmPP/UWPe4hy+2vvuedWrSEcP6By/N03AYllPEJNjm84Au7H2NwPtj+RC3
+	YxJw6x5Iteq8OreofTjj73OTx6aJGiIeZ2I4LaomIjGijfCZ0wBincbuK7y+shMGROyE71bl/B3DJ
+	u4fxjxcwgU/su67J0qynspAyi//CFnLRgZzsqmhxvk3+ee2ywpQ7KpiwVwSpXY/KE2mCOr99khfhd
+	sc8mYOEdu2teFgHxmzNE5qDqozbV1JKy2bEvy9s4D8+2dw7GSjyKJWYOT/c/8ihQ5W1K47cPShakS
+	L6LuNb8Q==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vvNHe-00000001jq6-3rnw;
+	Wed, 25 Feb 2026 22:23:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A8FE730095A; Wed, 25 Feb 2026 23:23:05 +0100 (CET)
+Date: Wed, 25 Feb 2026 23:23:05 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Marco Elver <elver@google.com>, Bart Van Assche <bvanassche@acm.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, pkg-llvm-team@lists.alioth.debian.org
+Subject: Re: [PATCH] lib/Kconfig.debug: Require a release version of LLVM 22
+ for context analysis
+Message-ID: <20260225222305.GA582287@noisy.programming.kicks-ass.net>
+References: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
+ <20260225145228.GB1282955@noisy.programming.kicks-ass.net>
+ <20260225185357.GA2755225@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260225-genksyms-fix-attribute-declarator-v1-1-1b21478663fb@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNywrCQAyF4VcpWRuoUy3oq4iLzEys8TKVJBWl9
- N0ddfnB4T8zGKuwwb6ZQfkpJmOpWK8aSGcqA6Pkaght6NsQNjhwudr7bniSF5K7SpycMXO6kZK
- PirvY5b6LtE1EUDsP5br9fRyOf9sUL5z8G4Zl+QDQjt9zhQAAAA==
-X-Change-ID: 20260224-genksyms-fix-attribute-declarator-9b3d63ba5caa
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Sun Jian <sun.jian.kdev@gmail.com>, Florian Westphal <fw@strlen.de>, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2642; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ZVwDhq7sE+uH86Xby6Jav0733rfjRoZgwhfDqk+hdpY=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJnzi2aXZ74NvvbH6R7fKn2VEPt1e5UWMs5lW1pr6iIk1
- 7pbbL1eRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZgIz0tGhmWu+212JYY27fro
- zXD7eWrT/xXXTc9v+PT7csjDfKe4AitGhulP3q0xD0g2vbbtttbOe0x/ioK0QqRFzlnkuAZzP6v
- aww8A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260225185357.GA2755225@ax162>
 
-After commit 07919126ecfc ("netfilter: annotate NAT helper hook pointers
-with __rcu"), genksyms fails to parse the __rcu annotation when building
-with CONFIG_DEBUG_INFO_BTF=y, CONFIG_PAHOLE_HAS_BTF_TAG=y, and a version
-of clang that supports btf_type_tag.
+On Wed, Feb 25, 2026 at 11:53:57AM -0700, Nathan Chancellor wrote:
+> On Wed, Feb 25, 2026 at 03:52:28PM +0100, Peter Zijlstra wrote:
+> > On Tue, Feb 24, 2026 at 04:16:30PM -0700, Nathan Chancellor wrote:
+> > > Using a prerelease version as a minimum supported version for
+> > > Peter, could you take this for a 7.0-rc?
+> > 
+> > Yes, I can.
+> 
+> Thanks a lot!
+> 
+> > I would however appreciate the Debian folks to quickly push an update
+> > to the clang-22/experimental package. Otherwise I can't run this fancy
+> > stuff myself no moar.
+> 
+>   https://packages.debian.org/experimental/clang-22
+> 
+> claims that the experimental clang-22 package is at 22.1.0-rc3, so you
+> should be good. 
 
-  $ clang --version | head -1
-  ClangBuiltLinux clang version 22.1.0 (https://github.com/llvm/llvm-project.git 4434dabb69916856b824f68a64b029c67175e532)
+Ah indeed. Operator error; I forgot the -t experimental and apt claimed:
 
-  $ cat kernel/configs/repro.config
-  CONFIG_BPF_SYSCALL=y
-  CONFIG_MODVERSIONS=y
-  # CONFIG_DEBUG_INFO_NONE is not set
-  CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-  CONFIG_DEBUG_INFO_BTF=y
+  clang-22 is already the newest version (1:22~++20251023025710+3f47a7be1ae6-1~exp5).
 
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper defconfig repro.config all
-  WARNING: modpost: EXPORT symbol "nf_nat_ftp_hook" [vmlinux] version generation failed, symbol will not be versioned.
-  ...
-  WARNING: modpost: EXPORT symbol "nf_nat_irc_hook" [vmlinux] version generation failed, symbol will not be versioned.
-  ...
-
-genksyms falls over parsing the __rcu attribute in the declarator:
-
-  # Kernel reproducer
-  $ make -skj"$(nproc)" ARCH=x86_64 KCFLAGS=-D__GENKSYMS__ LLVM=1 net/netfilter/nf_conntrack_ftp.i
-
-  $ scripts/genksyms/genksyms -w <net/netfilter/nf_conntrack_ftp.i &| rg 'syntax error'
-  include/linux/netfilter/nf_conntrack_ftp.h:29: syntax error
-  net/netfilter/nf_conntrack_ftp.c:46: syntax error
-
-  # Trivial reproducer
-  $ cat test.c
-  int (*func)(void *foo, int bar);
-  int (__attribute__((btf_type_tag("rcu"))) *func_with_attr)(void *foo, int bar);
-
-  $ scripts/genksyms/genksyms -w <test.c
-  <stdin>:2: syntax error
-
-Optionally allow an attribute to precede a declarator to resolve this
-error and properly generate symbol versions.
-
-Fixes: 07919126ecfc ("netfilter: annotate NAT helper hook pointers with __rcu")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I plan to take this via the Kbuild tree for 7.0.
----
- scripts/genksyms/parse.y | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/genksyms/parse.y b/scripts/genksyms/parse.y
-index efdcf07c4eb6..cabcd146f3aa 100644
---- a/scripts/genksyms/parse.y
-+++ b/scripts/genksyms/parse.y
-@@ -325,8 +325,8 @@ direct_declarator:
- 		{ $$ = $4; }
- 	| direct_declarator BRACKET_PHRASE
- 		{ $$ = $2; }
--	| '(' declarator ')'
--		{ $$ = $3; }
-+	| '(' attribute_opt declarator ')'
-+		{ $$ = $4; }
- 	;
- 
- /* Nested declarators differ from regular declarators in that they do
-
----
-base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-change-id: 20260224-genksyms-fix-attribute-declarator-9b3d63ba5caa
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+But now I am indeed at 22.1.0-rc3.
 
