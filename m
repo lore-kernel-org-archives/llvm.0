@@ -1,79 +1,106 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C233D3D13;
-	Wed, 25 Feb 2026 14:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A4B33B940;
+	Wed, 25 Feb 2026 17:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772031157; cv=none; b=ZrgpAM9vTf6Z6JnMUoPE92R1JtbqKN4sj5q18VEolEFHS4USFK686D4IvKYiWh/uTK2ToTGSEePBOVMQj/NqNtiKoc9NqGd9uC62gzi8qviW1Ztp4a3i5D8od4VAR+csyUXJYW0+R/rRgqSWGpsMpN4YNWkiDT/zNnwKONqQ3UA=
+	t=1772040959; cv=none; b=X33gO4dk4ZTpmBpCMdlVFQ4gYGSkOQqAiP34z2k9rDsGdYUWW7Lp5MM46K9zYRluVvnqJa1CeIldRwz2/hyZyhRYzD43uXiqxCQ+PpRE5F5PobgTpqE/Bq4NRbP8Jyby+uxHqlysHSwQ+vyORfmHr22x6TitW8IVCYIjZOanZAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772031157; c=relaxed/simple;
-	bh=kSsYurrjq+HVio58mv6AlOarPbhXO6aMR7kWxEXa7CI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hg5H1JivNhnPXfuQtusc2ct2Ls8O5//+AJRwuxm97TFSa4EbjmArHZCxSFh8bmB5H3c81wiQigurJ1JmgsY8B/fXKg+mysLGoQXb57E6iv5aG+HLVvde6b9WB4bJa1Lcbzskz+oYXesKOiFj1DxXRBkXF7Jb9IxEylmgGSZJXME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MvlHQzRi; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1772040959; c=relaxed/simple;
+	bh=jTkuq+opRJ8JdWnn0p+R4+vuxQ1w+E8Ucex1LO69KGM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BYYS99vzl1L65n5XhgX2QM9aJSOlL+7e5kevUOKTy+EPo3qWI/eyjzu5jP/5AHfkwVWS1NYnIe7b8jK+pMxSJFibBKLcLU8EBpmnu2pehDK3bScB6fydY4tABGA/QrVFqr2tY6wZqZ8Q13/gYiY6U7mPCM4uVAnQ2GWTkHWDvbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cFi4eQZt; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MvlHQzRi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=cro4zRxAz58bxQYP6rD+ggmqTIfWBGWN80fbbob5zHE=; b=MvlHQzRifbIvb3VPHIVW+QfHJf
-	nv1XXo5euG6wYXOdatVx6nf0KRb0Y4s4slIY8hhQ1Sq8Jg2QxyRbwHkIu5+zdIfvzBV6sJU1tr9Ps
-	/p/hljevennHdQ1qITDTLeQjZlKFetKRoiJ+J4U3QcQYmfUjN4LmKqRDKTxMO2zWHqnx3KZmqkONz
-	ZWUApbsTdGZFBhh3FdWNXn4420J7Uh/8HLwRhWe0mDuhNQcRjEJd+4trywndHP0YAaRT/FNn2Xwst
-	GI2Ja/vrvCm+822A/aSPqy5LxtZts1Y4tlt26CbfhvaaF8odsyWIXf2l1UN9dIWPFho63egbKETLo
-	9KH7YojQ==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vvGFa-00000001CSC-0Kg9;
-	Wed, 25 Feb 2026 14:52:30 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C1D3E301BD5; Wed, 25 Feb 2026 15:52:28 +0100 (CET)
-Date: Wed, 25 Feb 2026 15:52:28 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Marco Elver <elver@google.com>, Bart Van Assche <bvanassche@acm.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, pkg-llvm-team@lists.alioth.debian.org
-Subject: Re: [PATCH] lib/Kconfig.debug: Require a release version of LLVM 22
- for context analysis
-Message-ID: <20260225145228.GB1282955@noisy.programming.kicks-ass.net>
-References: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cFi4eQZt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772040956; x=1803576956;
+  h=date:from:to:cc:subject:message-id;
+  bh=jTkuq+opRJ8JdWnn0p+R4+vuxQ1w+E8Ucex1LO69KGM=;
+  b=cFi4eQZtSkFJsQzdcX7zw2dXefN2RkTDdcJCGLxesLl85mz7X2VWKFrV
+   61uaVPMzku9/DPAuH2aYCnvz3l49+yGH2oj0zZZCqEVMud7M/wT5PwAUf
+   QIDutrGyLIl1QzXZnd35FMdhjomJ3qzNhBwWPy60YHckMCuv/K5OevTrB
+   ADpm//DpYZUHbVSgtwxsFVtbuVSqm6wsTr1iSOpbp5EP+fw3KhXTijDt3
+   0NE2hGfWh7a6tJdiD4GFWclsJztZqOfWRfxP8YawKHWndEmy3BlGdc/DD
+   FHqwgD1Mbn3VR6E4UWS2C0yiYn2pxwOa0/n9leGwq2kJFFatG3ccKhr10
+   w==;
+X-CSE-ConnectionGUID: pzCXqkR0RfGff+NMzYCSRg==
+X-CSE-MsgGUID: QBfbFcizS7St70RYbrgpoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="84182786"
+X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
+   d="scan'208";a="84182786"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 09:35:56 -0800
+X-CSE-ConnectionGUID: lRQqfHoJS7CPFodJMr/hYw==
+X-CSE-MsgGUID: BNOSVnv5Qh2FXNuzzhu5VA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
+   d="scan'208";a="214576039"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 25 Feb 2026 09:35:53 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvInf-000000006ok-2aJt;
+	Wed, 25 Feb 2026 17:35:51 +0000
+Date: Thu, 26 Feb 2026 01:35:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 76/102]
+ drivers/platform/chrome/chromeos_tbmc.c:49:27: error: expected ';' at end of
+ declaration
+Message-ID: <202602260154.XIWu0fTw-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
 
-On Tue, Feb 24, 2026 at 04:16:30PM -0700, Nathan Chancellor wrote:
-> Using a prerelease version as a minimum supported version for
-> CONFIG_WARN_CONTEXT_ANALYSIS was reasonable to do while LLVM 22 was the
-> development version so that people could immediately build from main and
-> start testing and validating this in their own code. However, it can be
-> problematic when using prerelease versions of LLVM 22, such as Android
-> clang 22.0.1 (the current android mainline compiler) or when bisecting
-> LLVM between llvmorg-22-init and llvmorg-23-init, to build the kernel,
-> as all compiler fixes for the context analysis may not be present,
-> potentially resulting in warnings that can easily turn into errors.
-> 
-> Now that LLVM 22 is released as 22.1.0, upgrade the check to require at
-> least this version to ensure that a user's toolchain actually has all
-> the changes needed for a smooth experience with context analysis.
-> 
-> Fixes: 3269701cb256 ("compiler-context-analysis: Add infrastructure for Context Analysis with Clang")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> Peter, could you take this for a 7.0-rc?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   afb26ba421df11fad71fc4be9b874a901efb0388
+commit: 37ca8e5f81981188405d5722825b58173c275fb5 [76/102] platform/chrome: chromeos_tbmc: Convert to a platform driver
+config: x86_64-randconfig-072-20260225 (https://download.01.org/0day-ci/archive/20260226/202602260154.XIWu0fTw-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260226/202602260154.XIWu0fTw-lkp@intel.com/reproduce)
 
-Yes, I can. I would however appreciate the Debian folks to quickly push
-an update to the clang-22/experimental package. Otherwise I can't run
-this fancy stuff myself no moar.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602260154.XIWu0fTw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/platform/chrome/chromeos_tbmc.c:49:27: error: expected ';' at end of declaration
+      49 |         struct device *dev = data
+         |                                  ^
+         |                                  ;
+   1 error generated.
+
+
+vim +49 drivers/platform/chrome/chromeos_tbmc.c
+
+    46	
+    47	static void chromeos_tbmc_notify(acpi_handle handle, u32 event, void *data)
+    48	{
+  > 49		struct device *dev = data
+    50		struct acpi_device *adev = ACPI_COMPANION(dev);
+    51	
+    52		acpi_pm_wakeup_event(&adev->dev);
+    53		switch (event) {
+    54		case 0x80:
+    55			chromeos_tbmc_query_switch(adev, dev_get_drvdata(dev));
+    56			break;
+    57		default:
+    58			dev_err(dev, "Unexpected event: 0x%08X\n", event);
+    59		}
+    60	}
+    61	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
