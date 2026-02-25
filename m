@@ -1,106 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A4B33B940;
-	Wed, 25 Feb 2026 17:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B939A3161A1;
+	Wed, 25 Feb 2026 18:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772040959; cv=none; b=X33gO4dk4ZTpmBpCMdlVFQ4gYGSkOQqAiP34z2k9rDsGdYUWW7Lp5MM46K9zYRluVvnqJa1CeIldRwz2/hyZyhRYzD43uXiqxCQ+PpRE5F5PobgTpqE/Bq4NRbP8Jyby+uxHqlysHSwQ+vyORfmHr22x6TitW8IVCYIjZOanZAw=
+	t=1772045642; cv=none; b=rIepf3r4cBpnTp8KBKDHY1hj8YINHPEwdE371SAcUB7q41PmTvd0AGwscnvlTwNHlLddpzaPgDPxh491j1kOieYIMwT4YPPnKp7k8TV7o9XKW2e6Hv7PRUpRR7SOGLvqS2esDZLw2gci7jyInLz2/YtD988+IXFjq4+UIOopMzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772040959; c=relaxed/simple;
-	bh=jTkuq+opRJ8JdWnn0p+R4+vuxQ1w+E8Ucex1LO69KGM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BYYS99vzl1L65n5XhgX2QM9aJSOlL+7e5kevUOKTy+EPo3qWI/eyjzu5jP/5AHfkwVWS1NYnIe7b8jK+pMxSJFibBKLcLU8EBpmnu2pehDK3bScB6fydY4tABGA/QrVFqr2tY6wZqZ8Q13/gYiY6U7mPCM4uVAnQ2GWTkHWDvbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cFi4eQZt; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772045642; c=relaxed/simple;
+	bh=Qmdyruk6eTjA5//rr8QWbkOM66msVj2x45cnOBkOKB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tjuxWeaC0/er2sBRe24aqWYM4+9z19GuJ3Fd4rng7P1G981iE0SeI4SqRLTPMaKFvklTvLPQHh9DZk4VjMVwndiSq2Z+uhzA89XtYTbCmd5zS9uvDmWjxS3Nknq2Bgbofgfx4jirQ1oTIreQnGCSgSFR/RN0ddEi7zQXJD9XKsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReQBUarA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cFi4eQZt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772040956; x=1803576956;
-  h=date:from:to:cc:subject:message-id;
-  bh=jTkuq+opRJ8JdWnn0p+R4+vuxQ1w+E8Ucex1LO69KGM=;
-  b=cFi4eQZtSkFJsQzdcX7zw2dXefN2RkTDdcJCGLxesLl85mz7X2VWKFrV
-   61uaVPMzku9/DPAuH2aYCnvz3l49+yGH2oj0zZZCqEVMud7M/wT5PwAUf
-   QIDutrGyLIl1QzXZnd35FMdhjomJ3qzNhBwWPy60YHckMCuv/K5OevTrB
-   ADpm//DpYZUHbVSgtwxsFVtbuVSqm6wsTr1iSOpbp5EP+fw3KhXTijDt3
-   0NE2hGfWh7a6tJdiD4GFWclsJztZqOfWRfxP8YawKHWndEmy3BlGdc/DD
-   FHqwgD1Mbn3VR6E4UWS2C0yiYn2pxwOa0/n9leGwq2kJFFatG3ccKhr10
-   w==;
-X-CSE-ConnectionGUID: pzCXqkR0RfGff+NMzYCSRg==
-X-CSE-MsgGUID: QBfbFcizS7St70RYbrgpoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="84182786"
-X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
-   d="scan'208";a="84182786"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 09:35:56 -0800
-X-CSE-ConnectionGUID: lRQqfHoJS7CPFodJMr/hYw==
-X-CSE-MsgGUID: BNOSVnv5Qh2FXNuzzhu5VA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
-   d="scan'208";a="214576039"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 25 Feb 2026 09:35:53 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvInf-000000006ok-2aJt;
-	Wed, 25 Feb 2026 17:35:51 +0000
-Date: Thu, 26 Feb 2026 01:35:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 76/102]
- drivers/platform/chrome/chromeos_tbmc.c:49:27: error: expected ';' at end of
- declaration
-Message-ID: <202602260154.XIWu0fTw-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ReQBUarA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52223C19421;
+	Wed, 25 Feb 2026 18:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772045642;
+	bh=Qmdyruk6eTjA5//rr8QWbkOM66msVj2x45cnOBkOKB0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ReQBUarAD7R7u2OvY+GBhskGhuBaa65KTvRQJPQ7jHDlZWrSUdmzHbt7v0EclFkTY
+	 GjDPYV/znJAcFOqMRQt1BnOA0kPmSD+E2rUvfe/NqvKYTxwVl5dQmu7qJ3ajXd4/Sp
+	 9UN9QuW+6D9niQU0huvkjVCQk6PHpTdyimzLyzGhn1ts1rU9TIUkjHKRCXrDat4f47
+	 fkDuKQrB3IbvhTgpkd8MUZ6fnjCZD74qaAP7TD3PR/XoHiTRtzw4+v+EflS2M+8WUe
+	 fEIgZjt2g3o2PV5VtLpDIKcWWe3jZ3T8r1mmzKkY4z4RcscS+SlWUKEv3LhS9O49ac
+	 H0BHeGc36a2fA==
+Date: Wed, 25 Feb 2026 11:53:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Marco Elver <elver@google.com>, Bart Van Assche <bvanassche@acm.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, pkg-llvm-team@lists.alioth.debian.org
+Subject: Re: [PATCH] lib/Kconfig.debug: Require a release version of LLVM 22
+ for context analysis
+Message-ID: <20260225185357.GA2755225@ax162>
+References: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
+ <20260225145228.GB1282955@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260225145228.GB1282955@noisy.programming.kicks-ass.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   afb26ba421df11fad71fc4be9b874a901efb0388
-commit: 37ca8e5f81981188405d5722825b58173c275fb5 [76/102] platform/chrome: chromeos_tbmc: Convert to a platform driver
-config: x86_64-randconfig-072-20260225 (https://download.01.org/0day-ci/archive/20260226/202602260154.XIWu0fTw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260226/202602260154.XIWu0fTw-lkp@intel.com/reproduce)
+On Wed, Feb 25, 2026 at 03:52:28PM +0100, Peter Zijlstra wrote:
+> On Tue, Feb 24, 2026 at 04:16:30PM -0700, Nathan Chancellor wrote:
+> > Using a prerelease version as a minimum supported version for
+> > Peter, could you take this for a 7.0-rc?
+> 
+> Yes, I can.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602260154.XIWu0fTw-lkp@intel.com/
+Thanks a lot!
 
-All errors (new ones prefixed by >>):
+> I would however appreciate the Debian folks to quickly push an update
+> to the clang-22/experimental package. Otherwise I can't run this fancy
+> stuff myself no moar.
 
->> drivers/platform/chrome/chromeos_tbmc.c:49:27: error: expected ';' at end of declaration
-      49 |         struct device *dev = data
-         |                                  ^
-         |                                  ;
-   1 error generated.
+  https://packages.debian.org/experimental/clang-22
 
+claims that the experimental clang-22 package is at 22.1.0-rc3, so you
+should be good. If not for some reason, it looks like 22.1.0 should be
+coming down the pipeline soon based on the llvm-toolchain repo:
 
-vim +49 drivers/platform/chrome/chromeos_tbmc.c
+  https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/commits/22
 
-    46	
-    47	static void chromeos_tbmc_notify(acpi_handle handle, u32 event, void *data)
-    48	{
-  > 49		struct device *dev = data
-    50		struct acpi_device *adev = ACPI_COMPANION(dev);
-    51	
-    52		acpi_pm_wakeup_event(&adev->dev);
-    53		switch (event) {
-    54		case 0x80:
-    55			chromeos_tbmc_query_switch(adev, dev_get_drvdata(dev));
-    56			break;
-    57		default:
-    58			dev_err(dev, "Unexpected event: 0x%08X\n", event);
-    59		}
-    60	}
-    61	
+and there is always https://apt.llvm.org or the kernel.org copies if you
+were really in a bind :)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
