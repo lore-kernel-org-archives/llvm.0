@@ -1,77 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B939A3161A1;
-	Wed, 25 Feb 2026 18:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3A427E04C;
+	Wed, 25 Feb 2026 19:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772045642; cv=none; b=rIepf3r4cBpnTp8KBKDHY1hj8YINHPEwdE371SAcUB7q41PmTvd0AGwscnvlTwNHlLddpzaPgDPxh491j1kOieYIMwT4YPPnKp7k8TV7o9XKW2e6Hv7PRUpRR7SOGLvqS2esDZLw2gci7jyInLz2/YtD988+IXFjq4+UIOopMzg=
+	t=1772046105; cv=none; b=J8Agu6OSjQCqh+FuZCrTHarRSXs3vDe/UCRMtez5Q9VLhY0226zfXPc+p/YkYjDGsbDaQQkdiJobuj/7gl4d2rS6v/YHYU8Pb9oR47vbJXcRBG+G6PmF3yl19WNJl8B7bVnFibMtTExOnpsh3u11cTBHsMEEKbl9CalrXzrwGHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772045642; c=relaxed/simple;
-	bh=Qmdyruk6eTjA5//rr8QWbkOM66msVj2x45cnOBkOKB0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tjuxWeaC0/er2sBRe24aqWYM4+9z19GuJ3Fd4rng7P1G981iE0SeI4SqRLTPMaKFvklTvLPQHh9DZk4VjMVwndiSq2Z+uhzA89XtYTbCmd5zS9uvDmWjxS3Nknq2Bgbofgfx4jirQ1oTIreQnGCSgSFR/RN0ddEi7zQXJD9XKsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReQBUarA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772046105; c=relaxed/simple;
+	bh=9CTk22EJQzazYxhnMYkdWoYTEPWUL7mbZjBW4ZinBXk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GwwYxYgrv5Mvq1IwBkJm8hFYoYAAg/1ZdEpWs39VVaqExuOTzBRUYhEDdTZLPV5W+KgokFR5iwxN4bfpKOQB1ElqXlM17CyOoldpkbC12RyFSN3yWPs2CJs4gMao9dn8Kdx8qiSPAzHtg/xlIM6nGmgvc/qYWLiJnuCRVd8T6Bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JykiVysV; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ReQBUarA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52223C19421;
-	Wed, 25 Feb 2026 18:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772045642;
-	bh=Qmdyruk6eTjA5//rr8QWbkOM66msVj2x45cnOBkOKB0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ReQBUarAD7R7u2OvY+GBhskGhuBaa65KTvRQJPQ7jHDlZWrSUdmzHbt7v0EclFkTY
-	 GjDPYV/znJAcFOqMRQt1BnOA0kPmSD+E2rUvfe/NqvKYTxwVl5dQmu7qJ3ajXd4/Sp
-	 9UN9QuW+6D9niQU0huvkjVCQk6PHpTdyimzLyzGhn1ts1rU9TIUkjHKRCXrDat4f47
-	 fkDuKQrB3IbvhTgpkd8MUZ6fnjCZD74qaAP7TD3PR/XoHiTRtzw4+v+EflS2M+8WUe
-	 fEIgZjt2g3o2PV5VtLpDIKcWWe3jZ3T8r1mmzKkY4z4RcscS+SlWUKEv3LhS9O49ac
-	 H0BHeGc36a2fA==
-Date: Wed, 25 Feb 2026 11:53:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Marco Elver <elver@google.com>, Bart Van Assche <bvanassche@acm.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, pkg-llvm-team@lists.alioth.debian.org
-Subject: Re: [PATCH] lib/Kconfig.debug: Require a release version of LLVM 22
- for context analysis
-Message-ID: <20260225185357.GA2755225@ax162>
-References: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
- <20260225145228.GB1282955@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JykiVysV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772046103; x=1803582103;
+  h=date:from:to:cc:subject:message-id;
+  bh=9CTk22EJQzazYxhnMYkdWoYTEPWUL7mbZjBW4ZinBXk=;
+  b=JykiVysV53uFpXx1+IOfF76Zs2rD9fdcSvBnnSS+zi7LKvgYSFlO6f4S
+   x+SbQT9qyMpdkmUYZfUwf0hKtUP9aZGpK3rH0+h8e4WoVexjTjB5GcaBU
+   Cu/WPxbaiQyUKVkilMW04p/HwxAEaala2U0bB/HibC+x8AklPFo4dawMW
+   4V7fq8wzThomVjs11Pr60uyFISeI+xhy0BGuTuCDZLM5fis7DFqHmw6BO
+   3Pc00AWh1vznMVn+PIJseVgDhPq4q+JVnMtGDSh9AC2F5UFiQ3XxlHXFk
+   UFUTFqeRdMqvurQELLx2vfrtmjzBClj148tnLJ514p6RkVlHUSP+3nJ0h
+   A==;
+X-CSE-ConnectionGUID: Fn88rN21QXyE/DhMlHJimg==
+X-CSE-MsgGUID: 836cvMLJQC6d3V2PLqqO1A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="73166390"
+X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
+   d="scan'208";a="73166390"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 11:01:43 -0800
+X-CSE-ConnectionGUID: BwgNdFYCSkKjpAxzWmUhDg==
+X-CSE-MsgGUID: qnbrjQ0wQJqiGUZO7HBN3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
+   d="scan'208";a="219711117"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 25 Feb 2026 11:01:40 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvK8g-0000000075F-3Pbu;
+	Wed, 25 Feb 2026 19:01:38 +0000
+Date: Thu, 26 Feb 2026 03:00:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/tracing_multi_5 6/23]
+ kernel/bpf/syscall.c:3514:42: error: incompatible pointer types passing
+ 'struct bpf_tramp_node *' to parameter of type 'struct bpf_tramp_link *'
+Message-ID: <202602260208.EBEgPZOJ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225145228.GB1282955@noisy.programming.kicks-ass.net>
 
-On Wed, Feb 25, 2026 at 03:52:28PM +0100, Peter Zijlstra wrote:
-> On Tue, Feb 24, 2026 at 04:16:30PM -0700, Nathan Chancellor wrote:
-> > Using a prerelease version as a minimum supported version for
-> > Peter, could you take this for a 7.0-rc?
-> 
-> Yes, I can.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_5
+head:   2e9ff5967a4f3cb4d96c1fd04944036d9961099d
+commit: 8f7a9302fcb5575b82514340a6ceed2c5592a014 [6/23] bpf: Add struct bpf_tramp_node object
+config: s390-randconfig-001-20260226 (https://download.01.org/0day-ci/archive/20260226/202602260208.EBEgPZOJ-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260226/202602260208.EBEgPZOJ-lkp@intel.com/reproduce)
 
-Thanks a lot!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602260208.EBEgPZOJ-lkp@intel.com/
 
-> I would however appreciate the Debian folks to quickly push an update
-> to the clang-22/experimental package. Otherwise I can't run this fancy
-> stuff myself no moar.
+All errors (new ones prefixed by >>):
 
-  https://packages.debian.org/experimental/clang-22
+   In file included from kernel/bpf/syscall.c:5:
+   include/linux/bpf.h:1543:51: warning: declaration of 'struct bpf_tramp_link' will not be visible outside of this function [-Wvisibility]
+    1543 | static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+         |                                                   ^
+   include/linux/bpf.h:1549:53: warning: declaration of 'struct bpf_tramp_link' will not be visible outside of this function [-Wvisibility]
+    1549 | static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+         |                                                     ^
+>> kernel/bpf/syscall.c:3514:42: error: incompatible pointer types passing 'struct bpf_tramp_node *' to parameter of type 'struct bpf_tramp_link *' [-Wincompatible-pointer-types]
+    3514 |         WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
+         |                                                 ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:120:25: note: expanded from macro 'WARN_ON_ONCE'
+     120 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   include/linux/bpf.h:1549:69: note: passing argument to parameter 'link' here
+    1549 | static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+         |                                                                     ^
+   kernel/bpf/syscall.c:3746:33: error: incompatible pointer types passing 'struct bpf_tramp_node *' to parameter of type 'struct bpf_tramp_link *' [-Wincompatible-pointer-types]
+    3746 |         err = bpf_trampoline_link_prog(&link->link.node, tr, tgt_prog);
+         |                                        ^~~~~~~~~~~~~~~~
+   include/linux/bpf.h:1543:67: note: passing argument to parameter 'link' here
+    1543 | static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+         |                                                                   ^
+   2 warnings and 2 errors generated.
 
-claims that the experimental clang-22 package is at 22.1.0-rc3, so you
-should be good. If not for some reason, it looks like 22.1.0 should be
-coming down the pipeline soon based on the llvm-toolchain repo:
 
-  https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/commits/22
+vim +3514 kernel/bpf/syscall.c
 
-and there is always https://apt.llvm.org or the kernel.org copies if you
-were really in a bind :)
+  3508	
+  3509	static void bpf_tracing_link_release(struct bpf_link *link)
+  3510	{
+  3511		struct bpf_tracing_link *tr_link =
+  3512			container_of(link, struct bpf_tracing_link, link.link);
+  3513	
+> 3514		WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
+  3515							tr_link->trampoline,
+  3516							tr_link->tgt_prog));
+  3517	
+  3518		bpf_trampoline_put(tr_link->trampoline);
+  3519	
+  3520		/* tgt_prog is NULL if target is a kernel function */
+  3521		if (tr_link->tgt_prog)
+  3522			bpf_prog_put(tr_link->tgt_prog);
+  3523	}
+  3524	
 
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
