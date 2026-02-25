@@ -1,154 +1,81 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3D019E97B
-	for <llvm@lists.linux.dev>; Wed, 25 Feb 2026 07:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772002840; cv=pass; b=FVU+7ytnmTCmDFPlJd1tjdjU6qgDV3cq6QaQIeRLgd5EWJKWiWSnTHL+JIX9VgN9rKsWS0vJsd59YxOf/fLygZWnOTGLkNXA6Q+bv99WWxl3ROD9J2HdUPPMnG0Dv0lbCcudFQYMKAwWIQnfcByE5t3bvLaFeBAoDaQSuDWlNI8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772002840; c=relaxed/simple;
-	bh=FYgL8nQLIr0JlDcgdRpLSDK9ILU+LZhcUflqkQqVQuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hSEHlw+9/1hPsHOhjhw46H4nRkr5QPTU0r/RFICn+qhy1DGXyUGCoh3TriZjR/jqMMptxrWzhK9zq4eW2KTZpqLb+QWO1tMckIv21Hu/8iHZheLawsb5pC0StFzrMTEQ4N4b4xq0NRiM4Yh8UzLANgYc+bi8V3ZEwT6DnBAg688=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xH/YnqkF; arc=pass smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7222BEC2A;
+	Wed, 25 Feb 2026 07:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772003976; cv=none; b=J7aTgX4FQOU5HXRi763izJ0hGEImlukrb5CE9vExv9O6ldh+xjEHGL3RukAXmPkLF8fEwlSmF43k/8N4BCmByQayOZdvdrVDEMmeYL5ju3cstxNFX6AS2HV6Fs/k9bEoDF8QJy9hil41uM/oLBMpTNtTukNEuAHf6HYt4gm/TiM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772003976; c=relaxed/simple;
+	bh=CbiotcYeTC/xNX/WWvgx2AOcqH/NVwgPal1VsDbilCU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hi3KZkELKULCpYj9AmToOLAEB03l7RhWzb3g1hAX7WYe9xV3mm/PNZNcDaQrlBSPNe7r+48/5ROaHKB2nWWUJYdojh/88zcsAa0t/npGCluHMMJZwQxqnEEXtMlJoiBkmJVeUQwhAef2aViE27uOhDz59wygUpH3ReNXK0N2HGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLZHT7g0; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xH/YnqkF"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-12758ce1e8dso2529464c88.0
-        for <llvm@lists.linux.dev>; Tue, 24 Feb 2026 23:00:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772002838; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YU6of70D+yAwzGHyCZa4jUky6CJhuqUp+3BzIWLFt5G2wS5QaHqZPwPuvT3BFXqd8F
-         Dox5ypIGmiMJmPRAC7OdtZw2u4N3hE6dXV9hQy0IG9fQ4N4x+1opFd+H0Z6vK3KPRsjK
-         Ldt5FqSkmdUSjx2mXefj2k1+BTORw2YiW6hLlywnQa807S1F5pVEuSCJ6E0eZr6++YV0
-         dLzunFr26yOXH/37CMxQQBxZREovnt2sxwJutLfd29SRttgfyfPJHktgel0lTYTbs7Zr
-         ZK8+LJIIK6dWp5/VQ1qBlwzyVEYnp8a7e5Osm0rgFfYw9kk8cVVUVG41mZ8+nVTEdEAQ
-         ZQmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=JVgMngU0FK9sA3i9HvUWQGL6jJ/iPIt1dzriAO3ZNU0=;
-        fh=r872Md3xE5R41EM2Zb/jxT+oB5fUjDrD2N1jYDZW4SI=;
-        b=UvWWhNeD2iDd9lDjhxdjmfmWsCQ+ebB42Nz58AwJ5NJSlw0FpyaatMAN0N+myoZI78
-         NOonRm76bJK2XHvIFa0+Wk5oT6AjiEA33k/xm+HIpI/8iMaw3kGWh9TutoW+FQdb9Iu1
-         JOS2GAkNr5oo+4wgrbIIXdEojr8++VIi9l3R+Eyi6DBc9duDsXput6VZ/nL/oHJsb+ok
-         umvYyZlpLBZ1QoOTincv5rmyqeElyiRPeacXAy5A09LfNDkszIubSoyV/7lg2J1TRBCT
-         eid1vd4Od7yMSl1Vau4/OoZwsjAPmfnx0+pAuTbC3MVPdwmDN3zJRaycT2498YqOdJUJ
-         c1/Q==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772002838; x=1772607638; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JVgMngU0FK9sA3i9HvUWQGL6jJ/iPIt1dzriAO3ZNU0=;
-        b=xH/YnqkFn/Pit0SYe1nLMpKtkx2PR7GNW6w/vV9uIvk+/P/6PvQJegv/Xbwofl9Xqh
-         PsTe8rerBahQh5pGpXrdVA/VlrFAPgFjtkwClQHlpwY4QpPojpFnK6xKrpsiyaGOWt27
-         CV12HstUhurD2tonAB9/lkxDdRxMyGMQs5dEelBF6CnAc0ssfI3jPZNXs75qz7aclR8S
-         1p7D2F5UoosUaQyAk0t8rk0ynKFarvpBkqH0x/Z2ARnDXRe0lZ0d2vJSHKpDDkbkC/fg
-         h+opFNSuQsbOg5AWZN19C7XiyY9m5eeWpnuaYy2+NtqUijn5/OpA05C5zJLYcZrEhOaM
-         xeqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772002838; x=1772607638;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JVgMngU0FK9sA3i9HvUWQGL6jJ/iPIt1dzriAO3ZNU0=;
-        b=V06v7HlZ7gb+MU72Pp4qZN89g9lmIvRdg4Rj9L+5ro2KL1GjXvFNQugnacrEbhnFWj
-         4A4rtQOizV7S87WdXSQLUAJqJggoysThpGnU+Mgrs1P+5qzyaCyhL7HxYcW9q5BrTACJ
-         hw4Aig7rjRDq7NvSCvn+HZ8+0lG3qWMrL2hf5Tz6CWFUEYzjcHtV5AL7csbzkQFKWfvS
-         DCZ3aqvPEMIbc7Ut9JDz5Mx9Dq7fNzwzrU/rm1Hv1awo4+cTOxmq+lCSt9vokitUik21
-         S6EzFf/ywjdbUTWo8jOI7/ldOP3VshjgSFKEnzCtuFByGzRXagDlB4vNS/hOjPRYkypd
-         b0iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4WA375yoik82mNMSeDJeUflp9nvSWbiceJBpEBhqZPwRBLMT0uksHVOqAHdw2ECJ0eZFo@lists.linux.dev
-X-Gm-Message-State: AOJu0YxlhEwauukxpXm0STDOtuMeE/OVDUfgzTswXgQht2Ch1Dsc6OwX
-	iHEpooKiU5lQnWzkMSoEh2iL58FwUjEy3MiDoC/2tx0O2QdiUL2mXIG2t5Ht1lrWh5HSJKJKCln
-	0oqujfolW/Hk+kzmRcMWkipV3cX4Qnz3wXhUj0lK+
-X-Gm-Gg: ATEYQzxUwIGBn6et74tjHYf9qE3dagdvkGK0YG+8T6w1etWVImmUb3YgmcPT7m1rvh0
-	8hfDoAp77ixgtTqWZjSNb2EOFbbVKcosqg6fZUGIKcITAtbiv6Jbd64v1kmteyFkg8p6unZPqYK
-	dJkynl+dLPU0V+l9BjMqGfs49guey9BafkE44e3VUaES4SC8twD8d+ol3kyxz1ZhYgXdS79ZK35
-	xjHHv/rJCOuH0dec2Eb+RvjBBve2S6ODNj3SQv35s/OrXCLQH2Yx28f/8uEA06Bdzm+ehtBJ1yd
-	voHtIJlHOveWqgayP2kaoI+fznGmSaiQeyOurQ==
-X-Received: by 2002:a05:7022:4a3:b0:11b:ca88:c503 with SMTP id
- a92af1059eb24-1276acda3e1mr7121122c88.3.1772002837219; Tue, 24 Feb 2026
- 23:00:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLZHT7g0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772003975; x=1803539975;
+  h=date:from:to:cc:subject:message-id;
+  bh=CbiotcYeTC/xNX/WWvgx2AOcqH/NVwgPal1VsDbilCU=;
+  b=XLZHT7g0nAU6PUO7jWLpyl2AWKcTIXvYDKW+V2yJdOxvZ8BYv5b2YUUa
+   ir1Nbsz0RRMMbhs/ctjBrM6MiTSjCX8BwmJd1gfmd7TxXIAHPPAFMCOvB
+   rUCCmGFR390mQVSoou/tCjyNTzEl1w2xf1W/5t1/C3/80qWzFh4av+qz/
+   KASF5TUC8/Z0o13TcSeysAKtIOV5YNYsgsE+n5uLIe9dZkvkgEPilnJKw
+   6u8nZGoCwbPjN7Of7oBSxz6v1NAivCaL89Xxs+MOsFzXMmeXEY7AioueH
+   e4iSbtTadhTH8JCYEUR3IXf1OonlUfihsFAOAolqJ3yEIQ9UHbI9H6jKp
+   g==;
+X-CSE-ConnectionGUID: 8gJZoy4lSp+i3QbW5jSDZg==
+X-CSE-MsgGUID: xeJ7ByFQT/ChBOf1Vaw2xw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11711"; a="90452077"
+X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
+   d="scan'208";a="90452077"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 23:19:34 -0800
+X-CSE-ConnectionGUID: KhdnH8UoTBKb+MCigyfQHQ==
+X-CSE-MsgGUID: F7ILzBGSTxKstO8NaCxZAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
+   d="scan'208";a="220268724"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 24 Feb 2026 23:19:33 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vv9B9-000000004Rr-1pvn;
+	Wed, 25 Feb 2026 07:19:28 +0000
+Date: Wed, 25 Feb 2026 15:18:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:acpi-rtc 13/14] ERROR: modpost:
+ "devm_rtc_device_register" [drivers/acpi/acpi_tad.ko] undefined!
+Message-ID: <202602251547.aJzUhpzh-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
-In-Reply-To: <20260224-bump-clang-ver-context-analysis-v1-1-16cc7a90a040@kernel.org>
-From: Marco Elver <elver@google.com>
-Date: Wed, 25 Feb 2026 08:00:00 +0100
-X-Gm-Features: AaiRm506Rxogzp4clR7Qgn3HHRmvIaupO6xQq7I1TB1dbjYDHkbI7JwI7Av3w84
-Message-ID: <CANpmjNPLYUMMAvbKU2_D+OdW3Jd_-NPMc3MNfV78SQ3bC5EX1g@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: Require a release version of LLVM 22
- for context analysis
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Bart Van Assche <bvanassche@acm.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 25 Feb 2026 at 00:16, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Using a prerelease version as a minimum supported version for
-> CONFIG_WARN_CONTEXT_ANALYSIS was reasonable to do while LLVM 22 was the
-> development version so that people could immediately build from main and
-> start testing and validating this in their own code. However, it can be
-> problematic when using prerelease versions of LLVM 22, such as Android
-> clang 22.0.1 (the current android mainline compiler) or when bisecting
-> LLVM between llvmorg-22-init and llvmorg-23-init, to build the kernel,
-> as all compiler fixes for the context analysis may not be present,
-> potentially resulting in warnings that can easily turn into errors.
->
-> Now that LLVM 22 is released as 22.1.0, upgrade the check to require at
-> least this version to ensure that a user's toolchain actually has all
-> the changes needed for a smooth experience with context analysis.
->
-> Fixes: 3269701cb256 ("compiler-context-analysis: Add infrastructure for Context Analysis with Clang")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-rtc
+head:   52b552ea2b0e12800942e22f4ed3dbc7f394dec9
+commit: ad9f759418050a355eb90ac010b8db05d4d6f23c [13/14] ACPI: TAD: Add RTC class device interface
+config: x86_64-randconfig-002-20260225 (https://download.01.org/0day-ci/archive/20260225/202602251547.aJzUhpzh-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260225/202602251547.aJzUhpzh-lkp@intel.com/reproduce)
 
-Acked-by: Marco Elver <elver@google.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602251547.aJzUhpzh-lkp@intel.com/
 
-> ---
-> Peter, could you take this for a 7.0-rc?
-> ---
->  lib/Kconfig.debug | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 4e2dfbbd3d78..8e2b858078e6 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -630,7 +630,7 @@ config DEBUG_FORCE_WEAK_PER_CPU
->
->  config WARN_CONTEXT_ANALYSIS
->         bool "Compiler context-analysis warnings"
-> -       depends on CC_IS_CLANG && CLANG_VERSION >= 220000
-> +       depends on CC_IS_CLANG && CLANG_VERSION >= 220100
->         # Branch profiling re-defines "if", which messes with the compiler's
->         # ability to analyze __cond_acquires(..), resulting in false positives.
->         depends on !TRACE_BRANCH_PROFILING
-> @@ -641,7 +641,7 @@ config WARN_CONTEXT_ANALYSIS
->           and releasing user-definable "context locks".
->
->           Clang's name of the feature is "Thread Safety Analysis". Requires
-> -         Clang 22 or later.
-> +         Clang 22.1.0 or later.
->
->           Produces warnings by default. Select CONFIG_WERROR if you wish to
->           turn these warnings into errors.
->
-> ---
-> base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-> change-id: 20260224-bump-clang-ver-context-analysis-b4f5e27d208e
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "devm_rtc_device_register" [drivers/acpi/acpi_tad.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
