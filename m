@@ -1,45 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C82379CD;
-	Wed, 25 Feb 2026 19:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B26F16FF37;
+	Wed, 25 Feb 2026 19:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772046139; cv=none; b=PlaejVceHFBLKdtWxsNESRIZTUDQ0QAqoX8540f5ZZmKJtutDNfmQN/z/JUysUrgvictUtvwwESCTHK9v0IA31iespmgnMPzu6qT3r2SKTRWhZAa/nZyK1RGTEgXOxaLJcuNYSnfCj6oGflT8uro5D+Pj8aj+SGpH4IA3AHUbz8=
+	t=1772047511; cv=none; b=rprUsjK1collwA6q1J/aWobHsjaezQSNjzWAfhMOeOm8i1IBcQb8xMKSIdgaGCQlQQZXYdtrHwTzUGYwIZq+q6Sklm8TuEG8r+0sbdjVKgNMzAYkm9cQgKAqCCOuNfDaoJAnJVkzIF4ZKz5fB5C+bz4Jm92oav2SwdnpSEqepNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772046139; c=relaxed/simple;
-	bh=3J4m6I+NeRwNMzOIEpLwkf6TJbT4imOT5nxMDbUiIY0=;
+	s=arc-20240116; t=1772047511; c=relaxed/simple;
+	bh=yLlDHHE6EIsR0u5akoFM3y92sk3iwDyQzKeafuT9mro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sRvx5pVgLP//4+9NyPLcRA9KXpabpwGCrjXYjTtsBsdCinr7chtDffKhdpFkLiQbjFsg4mJ4fj26CMkNKPCiYK7gu78zP5oslF9QtnpD3Ri1Do852OWs4q2nfaLBfPAiUgKsbjDTLzoaTLBLChnHIlUxsPUU3Ynap0Nh1L89mnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+50fg56; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=h+NJtbQZVKOjzGJwlrYIE5fGAtjIvgvvjMQhOW26WiPzTpOlYSDV203EQuDJmk5s7smFHnjw2Kv9yP9qFq51Sw0Z/x+Yz2Sesxq0tr+wvl+1HNd3FI3cSqrnOFlTj1ce2j52Ic/z4JzyG5AsN0cTM0nsxRtqjDxNmN4nGt6rmno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyP+KFpx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+50fg56"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8084EC116D0;
-	Wed, 25 Feb 2026 19:02:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyP+KFpx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4EAC116D0;
+	Wed, 25 Feb 2026 19:25:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772046138;
-	bh=3J4m6I+NeRwNMzOIEpLwkf6TJbT4imOT5nxMDbUiIY0=;
+	s=k20201202; t=1772047510;
+	bh=yLlDHHE6EIsR0u5akoFM3y92sk3iwDyQzKeafuT9mro=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M+50fg56vT1gIJGSECq3oBEd//N3hMT6tdT8LNST7/95uNVkTuxZlsPPCd8wa8jhW
-	 9UMnrhC2HFq0a/aYwfjL4UFbOVc/c2YpGhf40XCcuFr3wuVdSTYJ8x7enIXY23/Xcr
-	 2OKjLV8JsIZwWZ144IyqzSKVumniJBGqxmmav+GiHgbXChuGw/s97YK3eJGDTetkP2
-	 h/sWuHkbcxtigZ1aDkXShRykWu4e8MjN1+kmpYtn77qeIcWpnASrcQOdKl7BMrivdH
-	 Y9I0MzVwTz1f6A8TWTcxTO3Z3QOxQ+wpMOTd8xoKTEwqRPQbtGwJgtidzsHTMhhJtd
-	 Av9Jbm/SpgA2Q==
-Date: Wed, 25 Feb 2026 12:02:13 -0700
+	b=IyP+KFpxUWVhzoXKl1qNIxeNJYj/RWupYgMXlFKJkf8k40P37oatvs+QuOi43/57o
+	 9mWXVkix+SeEscgxIjnY08aqvJZprxvUB8dK+JStI9Yz7RkIjZwuFTpbZLEGK4b/AL
+	 Ifj4zkxzVe8UUsoXyiCHsoosIk0/CoLZjfDe8z2eQur6C8e8wAleRNv/MWeUrcLrlW
+	 ZKnvKAj4HMaS+YCoMGZDUyuzGErukmrxiWOnuwsE5/Ae8eaoDOsQfMB5P8sRV8LhRJ
+	 MF9jAleS1Cs8qy9ZxZLUAAB1ehJ3lBYb5zzGE5GOmk4CE8rpagNfqj8/L25tAC2tF7
+	 6k9pzSum4QLeA==
+Date: Wed, 25 Feb 2026 12:25:05 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/2] KVM: VMX: Use ASM_INPUT_RM in __vmcs_writel
-Message-ID: <20260225190213.GA2755431@ax162>
-References: <20260211102928.100944-1-ubizjak@gmail.com>
- <20260211102928.100944-2-ubizjak@gmail.com>
+To: Leo Yan <leo.yan@arm.com>, Namhyung Kim <namhyung@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	James Clark <james.clark@linaro.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+Message-ID: <20260225192505.GC2755225@ax162>
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <20260224171956.GA639152@ax162>
+ <202602241310.C3641B97@keescook>
+ <20260225092210.GC4184494@e132581.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,47 +51,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260211102928.100944-2-ubizjak@gmail.com>
+In-Reply-To: <20260225092210.GC4184494@e132581.arm.com>
 
-On Wed, Feb 11, 2026 at 11:28:50AM +0100, Uros Bizjak wrote:
-> Use the ASM_INPUT_RM macro for VMCS write operation in vmx_ops.h to
-> work around clang problems with "rm" asm constraint. clang seems to
-> always chose the memory input, while it is almost always the worst
-> choice.
+On Wed, Feb 25, 2026 at 09:22:10AM +0000, Leo Yan wrote:
+> On Tue, Feb 24, 2026 at 01:11:19PM -0800, Kees Cook wrote:
+> > On Tue, Feb 24, 2026 at 10:19:56AM -0700, Nathan Chancellor wrote:
+> > > Kbuild does not maintain/touch tools/. This should go via another tree
+> > > like perf or something. It does not look like
+> > > tools/scripts/Makefile.include has a clear owner, perf and bpf tend to
+> > > be the ones who touch it the most.
 > 
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Thomas Gleixner <tglx@kernel.org>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> This is a circular deadlock.  Namhyung (the perf maintainer) advised me
+> to send patch to the linux-kbuild [1], for fixing an union init issue
+> found recently.
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+The tools/ build system is not Kbuild, so I do not want to take patches
+for it, sorry. Issues from patches I take become my responsibility to
+deal with and I am not at all familiar with the tools build system
+because I am not a consumer of it. Nicolas may feel differently but I am
+going to assume not based on his level of expertise with tools/ [1]. I
+am not trying to deadlock you though.
 
-FWIW, I hope this issue will soon be fixed in clang properly so we can
-add a version check to this workaround:
+Namhyung, I think this patch can reasonably go via the perf tree since
+it will be a primary consumer of it.
 
-  https://github.com/llvm/llvm-project/pull/181973
+> > You could claim it! ;)
 
-> ---
->  arch/x86/kvm/vmx/vmx_ops.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Heh, Kbuild and ClangBuiltLinux give me more than enough to do around
+here ;)
+
+> > Regardless, I like to see cc-option available here, as I doubt this will
+> > be the last conditional option for tool builds. (Actually, are there
+> > other conditional options that could use this today in the tools
+> > Makefiles?)
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
-> index 1000d37f5b0c..81784befaaf4 100644
-> --- a/arch/x86/kvm/vmx/vmx_ops.h
-> +++ b/arch/x86/kvm/vmx/vmx_ops.h
-> @@ -221,7 +221,7 @@ fault:									\
->  
->  static __always_inline void __vmcs_writel(unsigned long field, unsigned long value)
->  {
-> -	vmx_asm2(vmwrite, "r"(field), "rm"(value), field, value);
-> +	vmx_asm2(vmwrite, "r" (field), ASM_INPUT_RM (value), field, value);
->  }
->  
->  static __always_inline void vmcs_write16(unsigned long field, u16 value)
-> -- 
-> 2.53.0
+> Some subprojects in tools have their own conditional options.
 > 
+> This patch is ambitious that it changes the global Makefile.include file
+> so it can propagate the '-fzero-init-padding-bits=all' option to
+> projects that include it.  Why do we need to do this globally?  This is
+> because Perf needs to build several subprojects (libperf and bpftool).
+
+This seems like a great reason for it to go via the perf tree as noted
+above.
+
+[1]: https://lore.kernel.org/aNhGp7NDCCrtwJqm@levanger/
+
+Cheers,
+Nathan
