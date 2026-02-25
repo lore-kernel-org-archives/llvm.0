@@ -1,122 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B492ED141
-	for <llvm@lists.linux.dev>; Wed, 25 Feb 2026 21:35:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E493191BB;
+	Wed, 25 Feb 2026 22:07:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772055304; cv=none; b=COdoV8YJF48utikOmATXOGNRrOFGu2bjk55z63oHaHzwbNnp9qXM69gMynXhvAetcoms8Hrnooj9GCfg9JdTcnRHv4N5UrWzXKLXAbrVDpJoWpikFrH3zdx9hBggJs+hN54TK1me4P0S8lpx0Kry5S78wdFQDAH6wkMVI9LGxwI=
+	t=1772057246; cv=none; b=h86SxET8qZBVot+xCoKKmm3J78mmmfk1UzpQHnyg+ULYAPpGLn6cwgAGbv/Z5Q9/BU+biFIPfL77o9v8W7KfZQGDzD+E/en9OnNtBDEAnCg1P6PbVyrmiqYY148etgRzP+GvBs3Xshvn8v4VKDStXJPhv2nMZGOH0CzBEHshig8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772055304; c=relaxed/simple;
-	bh=Bf/KZHOSyjrfchLf1TkP1vhNwc6+8dsnnl9EQTuW7sw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bg0TmU/XOIB8pD+MX4oLcEEwNwkB0XMaH5oYOCsoNbdtPqr+6aZs1FjXKB38modu/opv0qovHAz+VWfMdsQ0g45iT3sjQT3TLB0r9bdlLeby6nU3udUQvo4r2jHVtx2+S1e9n4Na4kANHKT5kDGHNJS6w64yQAJ4LxYK5M7HxDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TqXb2aen; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772057246; c=relaxed/simple;
+	bh=ZVwDhq7sE+uH86Xby6Jav0733rfjRoZgwhfDqk+hdpY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jnkXrCKuZHiZw+x8ZLnCocByFLsXKXUoiYM/4VFkf0mg92ALiip+JXybq04DICnITzmEXS+AH/z5N/jyEtXkORETBc52zMKowC1gb8cXzHG1utvFP8oqKzybgLNVfqwD/pT/Olc86N2nppdepHlilJMdaSNg8YRD9QGwffKdMEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DtIMGz/r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TqXb2aen"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B74C116D0;
-	Wed, 25 Feb 2026 21:35:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DtIMGz/r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401BEC116D0;
+	Wed, 25 Feb 2026 22:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772055304;
-	bh=Bf/KZHOSyjrfchLf1TkP1vhNwc6+8dsnnl9EQTuW7sw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TqXb2aenkiPaYp1gJtTBwfuD317E/BSExbt6zNVu9/i42oA37W2o/+G5AqgrFv2Q1
-	 jEc2r0q7NdT4dFLNKDOXdCnpZv+1gOVGLEAdtG+C8lV+LKd4dEcxiYfPQJ6J3iiq2s
-	 jKO1StHCGSIGrMPovjoKoSYBgeOvsXDPfUQjKzXQTO2TlrkXMghUuyQvcY2izA9rdT
-	 mTCcEb9kGhdlQ1jlef7efc7mE4cHlsJGythEgSnx+ZojwSU96HAPxphMrym4L8tzQG
-	 J1kwU/BaR9Dr5qQUuIlCfDhz8ik0I9USAkAle9/BY1jAAjxfyP6MCcYlPufAM/FCIY
-	 dO8imCdmgBiCA==
-Date: Wed, 25 Feb 2026 14:35:00 -0700
+	s=k20201202; t=1772057246;
+	bh=ZVwDhq7sE+uH86Xby6Jav0733rfjRoZgwhfDqk+hdpY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=DtIMGz/rjbh2EwrTBRlKgfiqmFUw4LbG+mETGxnrGWbk9P+QTxldgQAx8NzBaxyUw
+	 360Mwglc4EoTf3MREGMLO6SaTB5jKXYt0xS7fCOgzuJBxzWHvdHmXQAUpAKF59b3eL
+	 Agam1q1z3vupxEESAP3IxzDjjiNtiJE91wwDcSei/coWZVBqv8k18g8XcDLkOduzw+
+	 5/dcaZ5P6XEgQpqbvXiguUbIkq79vlNCMsPfX96epD2bO8UcKwGkAtYC8Wkdu8D2Ap
+	 psyWJaRGgKzeQY7q/pvp/pJxYOwMWQKAsuApx85Mtci7zdxWkh+bTtabJA50ahn82n
+	 Z5rK8N6tDJUGQ==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Aelin <aelin@mainlining.org>
-Cc: Link Mauve <linkmauve@linkmauve.fr>, linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev
-Subject: Re: Failure to build with LLVM for the Wii
-Message-ID: <20260225213500.GI2755225@ax162>
-References: <aXs8sgAcci9FKKpx@luna>
- <20260129223136.GA1614447@ax162>
- <77cd40dd-bc40-4223-a5db-7eb514c13b78@mainlining.org>
+Date: Wed, 25 Feb 2026 15:07:17 -0700
+Subject: [PATCH] genksyms: Fix parsing a declarator with a preceding
+ attribute
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <77cd40dd-bc40-4223-a5db-7eb514c13b78@mainlining.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260225-genksyms-fix-attribute-declarator-v1-1-1b21478663fb@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNywrCQAyF4VcpWRuoUy3oq4iLzEys8TKVJBWl9
+ N0ddfnB4T8zGKuwwb6ZQfkpJmOpWK8aSGcqA6Pkaght6NsQNjhwudr7bniSF5K7SpycMXO6kZK
+ PirvY5b6LtE1EUDsP5br9fRyOf9sUL5z8G4Zl+QDQjt9zhQAAAA==
+X-Change-ID: 20260224-genksyms-fix-attribute-declarator-9b3d63ba5caa
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Sun Jian <sun.jian.kdev@gmail.com>, Florian Westphal <fw@strlen.de>, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2642; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ZVwDhq7sE+uH86Xby6Jav0733rfjRoZgwhfDqk+hdpY=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJnzi2aXZ74NvvbH6R7fKn2VEPt1e5UWMs5lW1pr6iIk1
+ 7pbbL1eRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZgIz0tGhmWu+212JYY27fro
+ zXD7eWrT/xXXTc9v+PT7csjDfKe4AitGhulP3q0xD0g2vbbtttbOe0x/ioK0QqRFzlnkuAZzP6v
+ aww8A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Aelin,
+After commit 07919126ecfc ("netfilter: annotate NAT helper hook pointers
+with __rcu"), genksyms fails to parse the __rcu annotation when building
+with CONFIG_DEBUG_INFO_BTF=y, CONFIG_PAHOLE_HAS_BTF_TAG=y, and a version
+of clang that supports btf_type_tag.
 
-On Wed, Feb 25, 2026 at 12:30:30AM +0100, Aelin wrote:
-> On 1/29/26 11:31 PM, Nathan Chancellor wrote:
-> > Hi Link,
-> > 
-> > On Thu, Jan 29, 2026 at 11:55:46AM +0100, Link Mauve wrote:
-> > > I’m trying to build the kernel for the Nintendo Wii, using LLVM instead
-> > > of gcc, in order to bring Rust support to this architecture (and also
-> > > because my distribution doesn’t ship a cross-compiling gcc), but I get
-> > > this build issue near the end:
-> > > ```
-> > > % make O=wii LLVM=1 ARCH=powerpc -j1
-> > > make[1]: Entering directory '/home/linkmauve/dev/linux/wii'
-> > >    GEN     Makefile
-> > >    CALL    ../scripts/checksyscalls.sh
-> > >    DESCEND objtool
-> > >    INSTALL libsubcmd_headers
-> > >    WRAP    arch/powerpc/boot/dtbImage.wii
-> > > objcopy: Unable to recognise the format of the input file `vmlinux'
-> > > make[3]: *** [../arch/powerpc/boot/Makefile:394: arch/powerpc/boot/dtbImage.wii] Error 1
-> > > make[2]: *** [../arch/powerpc/Makefile:236: zImage] Error 2
-> > > make[1]: *** [/home/linkmauve/dev/linux/Makefile:248: __sub-make] Error 2
-> > > make[1]: Leaving directory '/home/linkmauve/dev/linux/wii'
-> > > make: *** [Makefile:248: __sub-make] Error 2
-> > > ```
-> > > 
-> > > I believe it should use $(OBJCOPY) instead of objcopy, which is set to
-> > > llvm-objcopy, but couldn’t figure out where it is misconfigured.
-> > > 
-> > > Thanks for your help!
-> > 
-> > It is the arch/powerpc/boot/wrapper script:
-> > 
-> >    https://github.com/ClangBuiltLinux/linux/issues/1601
-> > 
-> > I have a WIP series from long ago that may be a good starting point for
-> > getting something working but there were some errors I never got around
-> > to solving before having to shelve it for other issues:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/log/?h=wip/llvm-1-powerpc-boot-wrapper
-> > 
-> > Maybe something I (or someone else) can get back to soon.
-> > 
-> > Cheers,
-> > Nathan
-> > 
-> 
-> Hi Nathan,
-> 
-> your last 3 patches on this branch do indeed fix the wrapper script for the
-> cross-compilation with LLVM=1 ARCH=powerpc without CROSS_COMPILE set or GNU
-> binutils in PATH. They look good to me! Would you be willing to submit them
-> now without touching the VDSO? That part does not seem to be necessary to
-> fix the wrapper script for this usecase, so it should strictly be an
-> improvement. I'd also be happy to pick up your patches, send them and
-> follow-up on feedback if you don't want to do it yourself.
+  $ clang --version | head -1
+  ClangBuiltLinux clang version 22.1.0 (https://github.com/llvm/llvm-project.git 4434dabb69916856b824f68a64b029c67175e532)
 
-Thanks a lot for testing. For the record, I submitted the vDSO parts
-separately and it landed as
+  $ cat kernel/configs/repro.config
+  CONFIG_BPF_SYSCALL=y
+  CONFIG_MODVERSIONS=y
+  # CONFIG_DEBUG_INFO_NONE is not set
+  CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+  CONFIG_DEBUG_INFO_BTF=y
 
-  4406b12214f6 ("powerpc/vdso: Link with ld.lld when requested")
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper defconfig repro.config all
+  WARNING: modpost: EXPORT symbol "nf_nat_ftp_hook" [vmlinux] version generation failed, symbol will not be versioned.
+  ...
+  WARNING: modpost: EXPORT symbol "nf_nat_irc_hook" [vmlinux] version generation failed, symbol will not be versioned.
+  ...
 
-so it can safely be ignored altogether.
+genksyms falls over parsing the __rcu attribute in the declarator:
 
-I am a little busy with things at the moment so I am not sure how soon I
-will be able to pick this up. I am more than happy to let you take over
-from here if you have the time and energy to get it tested and
-submitted now. You can either take full authorship or stick a
-Co-developed-by on it, does not matter to me.
+  # Kernel reproducer
+  $ make -skj"$(nproc)" ARCH=x86_64 KCFLAGS=-D__GENKSYMS__ LLVM=1 net/netfilter/nf_conntrack_ftp.i
 
-Cheers,
-Nathan
+  $ scripts/genksyms/genksyms -w <net/netfilter/nf_conntrack_ftp.i &| rg 'syntax error'
+  include/linux/netfilter/nf_conntrack_ftp.h:29: syntax error
+  net/netfilter/nf_conntrack_ftp.c:46: syntax error
+
+  # Trivial reproducer
+  $ cat test.c
+  int (*func)(void *foo, int bar);
+  int (__attribute__((btf_type_tag("rcu"))) *func_with_attr)(void *foo, int bar);
+
+  $ scripts/genksyms/genksyms -w <test.c
+  <stdin>:2: syntax error
+
+Optionally allow an attribute to precede a declarator to resolve this
+error and properly generate symbol versions.
+
+Fixes: 07919126ecfc ("netfilter: annotate NAT helper hook pointers with __rcu")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I plan to take this via the Kbuild tree for 7.0.
+---
+ scripts/genksyms/parse.y | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/genksyms/parse.y b/scripts/genksyms/parse.y
+index efdcf07c4eb6..cabcd146f3aa 100644
+--- a/scripts/genksyms/parse.y
++++ b/scripts/genksyms/parse.y
+@@ -325,8 +325,8 @@ direct_declarator:
+ 		{ $$ = $4; }
+ 	| direct_declarator BRACKET_PHRASE
+ 		{ $$ = $2; }
+-	| '(' declarator ')'
+-		{ $$ = $3; }
++	| '(' attribute_opt declarator ')'
++		{ $$ = $4; }
+ 	;
+ 
+ /* Nested declarators differ from regular declarators in that they do
+
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260224-genksyms-fix-attribute-declarator-9b3d63ba5caa
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
