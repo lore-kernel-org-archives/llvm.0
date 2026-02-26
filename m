@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157232877FC
-	for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 21:24:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C393B95FB
+	for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 21:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772141043; cv=none; b=Ye5KxEDGnEjUG3PHW1YCh4g8fQVRoSUiXRvQFWD16ODTHj8guh3szVUFxkgK/YINX6KQ3Ml4JN0BOarqKIKIQkl9ZCEmKwuNxw5e5JuRnJDowG9C1B6BRs18jtbriV1w6Um70XPexgXDTrWqwz5N5ToU3g3NzEXXJ3O4sawNzCw=
+	t=1772141043; cv=none; b=Tf/6P9lkA/+QeviDHi6o2Amcj7q6Q4oYYvp7NBl9+bU1KelMp6X4CI/aDGOptGjPkeki5vDDRe1rpmATlLpNl8QISopC4thrCBKlFIPPHrOXUcVzL7Sl/nAL1Z6fPOVIFPS6xQGmZB95sT1USxDTWnQUd3X2CglRT6aZT++7Ues=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772141043; c=relaxed/simple;
-	bh=7nhCbx+WxSIG5JM5HldR/pn6Ks+0+YiL2SV34Hb71V4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tQ2klCYtDigxs9/MsN1CKl7oBw9pAK3Iay0OQ0EypDuruErPwvRAnunLRJLHLX4TEvWWDWtncoh4KDBEJg3OtpqoA1T69GzPDph+yKStjL+AtPjZ7Y+rd5ATWr9ZcRzvRScBDrRPIltShboYEo5jD8AyRDrOOlE98RI1Xvo4QIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=gtY88Zhf; arc=none smtp.client-ip=159.69.126.157
+	bh=1FGS6dDr5QSWYxYp5QuNzmjSC5spq7TyMCgQgfuw30U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JHSK35syt21l0DZ1hwCzrEtowGb9TdYo9ik2xQme+Uy1v853A8iRxmrxXnIrIhrlv8mmpc0wz1Mm8v1bT4YSF6NaHlifik5NnYgVWZMwQXMNWTzvQnaNR9xPbJZH9XQFTZ4j3HjOx+jnm8GRZy2da+0f+x1yyheThtx80ORiFuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dj8wM5hu; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="gtY88Zhf"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dj8wM5hu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1772141040;
-	bh=7nhCbx+WxSIG5JM5HldR/pn6Ks+0+YiL2SV34Hb71V4=;
-	h=From:Subject:Date:To:Cc:From;
-	b=gtY88Zhf1c8aiotvJlH70tuyuLY/Ogp7n3FD4p7CLyjDf7MENIRzfrME0uFvMiKtp
-	 M74F7ELqPLkLzoQLjhHHYlw1KMcT5o6Ve4ecPhOTgmFLna408SfHKXZGQiCQ+2GK/e
-	 EZTZ4VD4jwtEFfF8+PBI+0NugGc7k7RlF4wfzGww=
+	bh=1FGS6dDr5QSWYxYp5QuNzmjSC5spq7TyMCgQgfuw30U=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=dj8wM5huqb2s0LuFXw+u/ZsHOO0766xJDPaCEpa6Cgdxmbjr/VWG1v/3wuK/aXcfJ
+	 IePJt1H8QoFXgVtwW8HWI3hLkfz7yknx1IdKD5lzSD3j4pA3TYzcZmM7OZpJd0rtlM
+	 SmGMY11yTJHvlRCfjdNN+ARm/Q6kTh/cGoZcaK8M=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/2] kbuild: Follow-up to "Reject unexpected values for
- LLVM="
-Date: Thu, 26 Feb 2026 22:23:56 +0100
-Message-Id: <20260226-kbuild-llvm-followup-v1-0-201cc2a492d9@weissschuh.net>
+Date: Thu, 26 Feb 2026 22:23:57 +0100
+Subject: [PATCH 1/2] Documentation/llvm: drop note about LLVM=0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,10 +34,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDIyMz3eyk0sycFN2cnLJc3bT8nJz88tICXdPEFDMjU+M0C9NkCyWg1oK
- i1LTMCrCx0bG1tQBVIDTNZgAAAA==
-X-Change-ID: 20260226-kbuild-llvm-followup-5ad6253f85c8
+Message-Id: <20260226-kbuild-llvm-followup-v1-1-201cc2a492d9@weissschuh.net>
+References: <20260226-kbuild-llvm-followup-v1-0-201cc2a492d9@weissschuh.net>
+In-Reply-To: <20260226-kbuild-llvm-followup-v1-0-201cc2a492d9@weissschuh.net>
 To: Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
@@ -48,30 +46,40 @@ Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772141039; l=523;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772141039; l=1030;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=7nhCbx+WxSIG5JM5HldR/pn6Ks+0+YiL2SV34Hb71V4=;
- b=3gnlGhkBt8C4AftkLHwcRAgB1Uyr9vEV8IkDayElDp8Hv0SbjrKUV4scML3fjavguFXaJwWxt
- BEr3FFREeJPBD3o74UhnJiabR1HtSkoFkN0A0i26x6iQKwbXLTTYcMi
+ bh=1FGS6dDr5QSWYxYp5QuNzmjSC5spq7TyMCgQgfuw30U=;
+ b=eHxXDbtvP3pijsj0f6KTtXShy8g+969IfkcotMUDMA6VmXnLtz1DjnNgITpcXJFn0T7qZ0Cqw
+ V07rs7s6sj9BvUCkxGoAtVxSLwe8IWML55+df2g48T9YUF/lky/4bWQ
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Some cleanups.
+Since commit 502678b88cb3 ("kbuild: Reject unexpected values for LLVM=")
+LLVM=0 generates an error instead of silently behaving unexpectedly.
+
+Drop the now unnecessary note.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (2):
-      Documentation/llvm: drop note about LLVM=0
-      tools/build: Reject unexpected values for LLVM=
+ Documentation/kbuild/llvm.rst | 4 ----
+ 1 file changed, 4 deletions(-)
 
- Documentation/kbuild/llvm.rst  | 4 ----
- tools/scripts/Makefile.include | 2 ++
- 2 files changed, 2 insertions(+), 4 deletions(-)
----
-base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-change-id: 20260226-kbuild-llvm-followup-5ad6253f85c8
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index bc8a283bc44b..441d8786fcbc 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -71,10 +71,6 @@ recommend::
+ 
+ 	PATH=/path/to/llvm/:$PATH make LLVM=-14
+ 
+-``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
+-``LLVM=1``. If you only wish to use certain LLVM utilities, use their
+-respective make variables.
+-
+ The same value used for ``LLVM=`` should be set for each invocation of ``make``
+ if configuring and building via distinct commands. ``LLVM=`` should also be set
+ as an environment variable when running scripts that will eventually run
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.53.0
 
