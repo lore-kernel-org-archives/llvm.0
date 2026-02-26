@@ -1,101 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADCC4418E9;
-	Thu, 26 Feb 2026 22:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA37F331217;
+	Thu, 26 Feb 2026 23:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772146326; cv=none; b=PPcQG7fLwac44V2u/6dGK4Ykk/tFHf0/+qoDr4gG7pXzqlkGR3jw+6Trs87F4JK76zSg1ZLrX5GE5BXD3nJajIVOANBMiIdSSTSZSnnMmJTXx3S25DF61A6wvYSnbXQ0t3ukONlImpQwXQ4i4xCy4siC26zmkx5V6hSAIEui8Bk=
+	t=1772149086; cv=none; b=VDeIkF9Kj6XkrAQgryVcLe1xPcLhOjgY0+VvkgZkwEh2JSenqml3jzDeFdUAs/ibrMUgMpS/TidVGgBqsIBhgY0On8Gj2ApC2iiFcMcUggzWHLGglqOw+3d6TJlgEzFWO4QjigSj21lPwcY2MQDmtzIrTEZcGa5C6WxFEHwuB+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772146326; c=relaxed/simple;
-	bh=2+gjNqN353ZDwdvuA5hCVDrTsV9/BiJ5JmUBZ7zBKJc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JrXFL5dR88Z3yvtu0H1CEGhWHdF1QLqIuDB6E2nvsbDnr8Pw7ocLWjcMlajYoNS+WEfWytjzzDNyNcQsp64ZT7TK0mFlNTXde30SQrhP3o6Kv29Nh3lbrZm1X//CmsiILVjQqefTxenmWx7mjT90yyNoAS5olWPuz1YVKH2yBkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlC+zjdG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772149086; c=relaxed/simple;
+	bh=ycrKLDU4IpRTv1hmXNWpEDbPGZFK9jRLJ8UpYmjOn3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q/PFYxCH67RFerxhyDV+BQCPWZhgaAx8+9/vqGD4quvX5MPgwyF5ukNELWwdsrCWqpDxCMy9ZruCW2KBg/R6g3SvmGZ6Cq3aqtVGp8QOa7pWSyHM5GfZG0d+JfpoiPgBSPWuVPRoMnlIwBLd+BodSn5p/g9j/wj7pKVDM8BjBlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aES+IuGY; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlC+zjdG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A8AC19423;
-	Thu, 26 Feb 2026 22:52:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772146326;
-	bh=2+gjNqN353ZDwdvuA5hCVDrTsV9/BiJ5JmUBZ7zBKJc=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=qlC+zjdGw0ga8OZLY2A7odZzzvnUdFryRcVETmxLLmuZ2oPvWpTXWM20+q/059k4f
-	 uRN8ZXazvLFsSGfaxofwAuiyYgSqHO+Hq2L6c9ZeGVAOuz2j6u2h5zQpWpMloK+Wqt
-	 tkksJ+/95IJdmnxBsxspOnlW6A9ulIhOiSOZ5nOjyRtCjJnd5ctS65RUlDlmKu3yu8
-	 ytwnl0XxYbq9C22c9zNCZgwS7ArfcpbIrx2QaV4zx8vnN60c2VdkdSxkDQvvwTwVUn
-	 Z2yaBD5YG3KJdkQ9g9igIv/rVKgt5as6CovmlTu4a3MlH1EAJfvLQTgNSjcgJ8m+Of
-	 13ljTSzRzd2uQ==
-Message-ID: <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
-Date: Thu, 26 Feb 2026 22:52:01 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aES+IuGY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772149084; x=1803685084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ycrKLDU4IpRTv1hmXNWpEDbPGZFK9jRLJ8UpYmjOn3w=;
+  b=aES+IuGYDLEDHdGKcX+T8b63u7sfmyAlNr5De705Ez6746b5yUrqmwqG
+   UNBUWvhkycx0ORa3aPk/vTjn5VaQzxcGrqX9DPc5NZ4Ii40HvAfZWiaan
+   8Y+AZN0siDUwxyLkCCB+37pw3WpUfdxBqxKNpBkaMTatKoS7VQjfOke7k
+   JZ/wKaQV4DkyyFovvKERwnno7Zh+xglPHCxaLROPSM2+yZNp3/nJCL42i
+   9CcPkGpafauV2HWjsGl9AQZ2P9OKT/tJRxurHL4jilFGeDrSGqBY0AZXy
+   1Z29WIjFOzEy4e8omFOC6QuduPyWzra8VL8s7seQxDhP76VAjI/lUPDoi
+   Q==;
+X-CSE-ConnectionGUID: 2DUBoxl0QP6Mvd7wQq1THQ==
+X-CSE-MsgGUID: 1cYMpyN4SlyWcie3M9v1pw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="72433807"
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="72433807"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 15:38:04 -0800
+X-CSE-ConnectionGUID: +Qj5ItRiRouYZ/kocrgejA==
+X-CSE-MsgGUID: j7DXUfKnRi6gS8lI5hcXuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="220859566"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 26 Feb 2026 15:37:58 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvkti-00000000A0R-3SDC;
+	Thu, 26 Feb 2026 23:37:21 +0000
+Date: Fri, 27 Feb 2026 07:35:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: dhyan19022009@gmail.com, Andy Shevchenko <andy@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jason Donenfeld <Jason@zx2c4.com>, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Dhyan K Prajapati <dhyan19022009@gmail.com>
+Subject: Re: [PATCH] staging: fbtft: fix macro whitespace errors
+Message-ID: <202602270720.2J4j3gHF-lkp@intel.com>
+References: <20260226172531.13714-1-dhyan19022009@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
-To: Namhyung Kim <namhyung@kernel.org>, Leo Yan <leo.yan@arm.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org
-References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
- <aaCTC86U9KjnmZmu@google.com>
-Content-Language: en-GB
-In-Reply-To: <aaCTC86U9KjnmZmu@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260226172531.13714-1-dhyan19022009@gmail.com>
 
-2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
-> Adding bpftool maintainer.
-> 
-> On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
->> GCC-15 release claims [1]:
->>
->>   {0} initializer in C or C++ for unions no longer guarantees clearing
->>   of the whole union (except for static storage duration initialization),
->>   it just initializes the first union member to zero. If initialization
->>   of the whole union including padding bits is desirable, use {} (valid
->>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
->>   restore old GCC behavior.
->>
->> As a result, this new behaviour might cause unexpected data when we
->> initialize a union with using the '{ 0 }' initializer.
->>
->> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
->> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
->> in unions and structures.  This commit applies the same option for tools
->> building.
->>
->> The option is not supported neither by any version older than GCC 15 and
->> is also not supported by LLVM, this patch adds the cc-option function to
->> dynamically detect the compiler option.
->>
->> [1] https://gcc.gnu.org/gcc-15/changes.html
->>
->> Signed-off-by: Leo Yan <leo.yan@arm.com>
+Hi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/dhyan19022009-gmail-com/staging-fbtft-fix-macro-whitespace-errors/20260227-021646
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260226172531.13714-1-dhyan19022009%40gmail.com
+patch subject: [PATCH] staging: fbtft: fix macro whitespace errors
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260227/202602270720.2J4j3gHF-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602270720.2J4j3gHF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602270720.2J4j3gHF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/staging/fbtft/fbtft-bus.c:65:53: error: too few arguments provided to function-like macro invocation
+      65 | define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
+         |                                                     ^
+   drivers/staging/fbtft/fbtft-bus.c:14:9: note: macro 'define_fbtft_write_reg' defined here
+      14 | #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
+         |         ^
+>> drivers/staging/fbtft/fbtft-bus.c:65:1: error: unknown type name 'define_fbtft_write_reg'
+      65 | define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
+         | ^
+   drivers/staging/fbtft/fbtft-bus.c:67:57: error: too few arguments provided to function-like macro invocation
+      67 | define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
+         |                                                         ^
+   drivers/staging/fbtft/fbtft-bus.c:14:9: note: macro 'define_fbtft_write_reg' defined here
+      14 | #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
+         |         ^
+   drivers/staging/fbtft/fbtft-bus.c:67:1: error: unknown type name 'define_fbtft_write_reg'
+      67 | define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
+         | ^
+   4 errors generated.
 
 
-Thank you Namhyung for the Cc.
+vim +65 drivers/staging/fbtft/fbtft-bus.c
 
-I built bpftool with the patch, with gcc 13 (which didn't get the flag,
-as expected) and gcc 15, and it's fine with both. As far as I can tell,
-bpftool does not initialise any union with "{0}" anyway.
+    64	
+  > 65	define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
+    66	define_fbtft_write_reg(fbtft_write_reg16_bus8, __be16, u16, cpu_to_be16)
+    67	define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
+    68	
 
-One potential concern (I didn't try) could be for cross-compilation:
-bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
-and $(CC) could be different versions of gcc, for example. The same
-concern could apply to perf with HOSTCFLAGS, by the way?
-
-Best regards,
-Quentin
-
-
-Note: For fellow bpf@ readers, the original thread is at
-https://lore.kernel.org/linux-kbuild/aaCTC86U9KjnmZmu@google.com/T/#m700907de1a84c007bfda62981af590ad7aed0f11
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
