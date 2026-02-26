@@ -1,123 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE542236F0
-	for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 22:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADCC4418E9;
+	Thu, 26 Feb 2026 22:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772145791; cv=none; b=KrM/nWoEVj7r3ZxifiwiaDUH1k36VNTcNqCm4qSxpRoHwZM0qd++4MY/EWZciHTjhj0NpsYg1T5106dngeVKCJRJAZTpJCIX38btJStH9x/e3BXGlpZpCNLJ9B3dqzZW0VRt7Y3pkOlvTS4NGNoOj2O9fWtt06w1tqUsvSvVo0w=
+	t=1772146326; cv=none; b=PPcQG7fLwac44V2u/6dGK4Ykk/tFHf0/+qoDr4gG7pXzqlkGR3jw+6Trs87F4JK76zSg1ZLrX5GE5BXD3nJajIVOANBMiIdSSTSZSnnMmJTXx3S25DF61A6wvYSnbXQ0t3ukONlImpQwXQ4i4xCy4siC26zmkx5V6hSAIEui8Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772145791; c=relaxed/simple;
-	bh=eoBWcqMohGZKZSim5kobgYSYf7WDHSbJgJTQzuxOtzw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nMnB5dYkyuog6H674bjwCkpgNeK5zIWxUWBZezzMJ/uxaptoi6hJ4UpKTpBi562KV9HDPitMk5WM0WaqcyDK84TX12UAIOM5GV44/KhYniVlynJOTjeVJmWuFu2ugwmbq+iCmkeaimeXQPCOxRByTKFUVsVEL8VO7iwwk3/7YfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KNcOGjgd; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772146326; c=relaxed/simple;
+	bh=2+gjNqN353ZDwdvuA5hCVDrTsV9/BiJ5JmUBZ7zBKJc=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JrXFL5dR88Z3yvtu0H1CEGhWHdF1QLqIuDB6E2nvsbDnr8Pw7ocLWjcMlajYoNS+WEfWytjzzDNyNcQsp64ZT7TK0mFlNTXde30SQrhP3o6Kv29Nh3lbrZm1X//CmsiILVjQqefTxenmWx7mjT90yyNoAS5olWPuz1YVKH2yBkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlC+zjdG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KNcOGjgd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772145788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2a3Ga4id32Yhf37MfEw+Bbimk2nokPQFnptFXxbAvXw=;
-	b=KNcOGjgdq7nodXo8aXSlyr3MEvry49FKKc0q+Y8ODjLJe7h2V2q5/C9O4RbDXq8rzucUsz
-	oUM066wTcqYJkTRMAbSfO7pVlBWDhebsRByt/+GoLqgJJjArAkSNeieSLPw3hpeyRWbnab
-	PGTsH0Q7OR6IJgUa4ffmlrqMM12U6Mc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-31-5_qTO2MfP4irXbvEE6pmhg-1; Thu,
- 26 Feb 2026 17:43:07 -0500
-X-MC-Unique: 5_qTO2MfP4irXbvEE6pmhg-1
-X-Mimecast-MFC-AGG-ID: 5_qTO2MfP4irXbvEE6pmhg_1772145786
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6F9221800464
-	for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 22:43:06 +0000 (UTC)
-Received: from [172.20.201.171] (unknown [10.30.44.137])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 21AD81800351;
-	Thu, 26 Feb 2026 22:43:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc1,
- upstream-mainline, 3f4a08e6)
-Date: Thu, 26 Feb 2026 22:43:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlC+zjdG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A8AC19423;
+	Thu, 26 Feb 2026 22:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772146326;
+	bh=2+gjNqN353ZDwdvuA5hCVDrTsV9/BiJ5JmUBZ7zBKJc=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=qlC+zjdGw0ga8OZLY2A7odZzzvnUdFryRcVETmxLLmuZ2oPvWpTXWM20+q/059k4f
+	 uRN8ZXazvLFsSGfaxofwAuiyYgSqHO+Hq2L6c9ZeGVAOuz2j6u2h5zQpWpMloK+Wqt
+	 tkksJ+/95IJdmnxBsxspOnlW6A9ulIhOiSOZ5nOjyRtCjJnd5ctS65RUlDlmKu3yu8
+	 ytwnl0XxYbq9C22c9zNCZgwS7ArfcpbIrx2QaV4zx8vnN60c2VdkdSxkDQvvwTwVUn
+	 Z2yaBD5YG3KJdkQ9g9igIv/rVKgt5as6CovmlTu4a3MlH1EAJfvLQTgNSjcgJ8m+Of
+	 13ljTSzRzd2uQ==
+Message-ID: <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
+Date: Thu, 26 Feb 2026 22:52:01 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <48885.126022617430700295@us-mta-31.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Bll5VWllwhohGh_esZl1wS1ZFXwNPT3nopbXBHkYw8E_1772145786
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+To: Namhyung Kim <namhyung@kernel.org>, Leo Yan <leo.yan@arm.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>,
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <aaCTC86U9KjnmZmu@google.com>
+Content-Language: en-GB
+In-Reply-To: <aaCTC86U9KjnmZmu@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'kmalloc_obj-v7.0-rc2' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/kees/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2352423067
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
+> Adding bpftool maintainer.
+> 
+> On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
+>> GCC-15 release claims [1]:
+>>
+>>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>>   of the whole union (except for static storage duration initialization),
+>>   it just initializes the first union member to zero. If initialization
+>>   of the whole union including padding bits is desirable, use {} (valid
+>>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+>>   restore old GCC behavior.
+>>
+>> As a result, this new behaviour might cause unexpected data when we
+>> initialize a union with using the '{ 0 }' initializer.
+>>
+>> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+>> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+>> in unions and structures.  This commit applies the same option for tools
+>> building.
+>>
+>> The option is not supported neither by any version older than GCC 15 and
+>> is also not supported by LLVM, this patch adds the cc-option function to
+>> dynamically detect the compiler option.
+>>
+>> [1] https://gcc.gnu.org/gcc-15/changes.html
+>>
+>> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
 
+Thank you Namhyung for the Cc.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+I built bpftool with the patch, with gcc 13 (which didn't get the flag,
+as expected) and gcc 15, and it's fine with both. As far as I can tell,
+bpftool does not initialise any union with "{0}" anyway.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+One potential concern (I didn't try) could be for cross-compilation:
+bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
+and $(CC) could be different versions of gcc, for example. The same
+concern could apply to perf with HOSTCFLAGS, by the way?
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+Quentin
 
+
+Note: For fellow bpf@ readers, the original thread is at
+https://lore.kernel.org/linux-kbuild/aaCTC86U9KjnmZmu@google.com/T/#m700907de1a84c007bfda62981af590ad7aed0f11
