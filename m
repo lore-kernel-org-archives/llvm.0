@@ -1,232 +1,163 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010026.outbound.protection.outlook.com [40.93.198.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351433815DB
-	for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 15:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E08395D8A;
+	Thu, 26 Feb 2026 15:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.26
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772118058; cv=pass; b=Yoev4r/u1CNxbdp7Z7Wk/ETV4OKCFwMIeHjXgAwSk9xhTXYPCnnUg5Ksy7SYSHDowPzd8VysZl7CmJRrgFItUsM3F/DEpYgwVY8tQD19lxQ1g/gkASpa2xegQTWXBPaQL9ICRLhbimy6S+T4mu3F7+kWyZ/hXMyOsGb/1u3s7Kw=
+	t=1772118290; cv=fail; b=jhvEFHrR/GrdhsepeP5RhlEfPo8nMTQqWyevb8cUBW51gkng1wVnwjEvbhSb6Phz/9gNzFFdIAhTrG9yfi1DrwfVwFrZuBjbbtzUiVdafTlvusSdOvi90abl90aJlpoGXd8ny5yqAS+cydnYBrtrteUtV99bPaeLhUQzVHU2Bik=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772118058; c=relaxed/simple;
-	bh=JNnMiJju5QdanijX2DkdqzrfVYG15ENEV+hDxkyhxb8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FAELQaQS7P+fAJ3YwkXuH+fIX1E31wXsrHDLqSswn4WwmmyL81o1EFlWDItFYd5Bt3pnhmGGowcYoBfeRxgnYOkMhrn5e9Z2VF1E+lzmky81nRFIdYsQpBanGdWbSil24XahmEah278rwK97BzMxZe0vh880NEvYDbhjDBqKyDU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uUmnxfeq; arc=pass smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1772118290; c=relaxed/simple;
+	bh=Hgj0y5PWH8k3mhrDBPKa0Nh8tKe+YXKEdu8nALpK3Nc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Gi7ErwDJanxVxkfxtge3G2hX9HlR5bAnddAz5TO23+CGrSS5Qx6n+MnQHbr6IlzL9sbgrQEliOyshZlaVGuOfdKNJ3O13jZ+BFzTr0bsk3WlEy3u08vAQyuYuohv8idhAXCgnWXDsdV0gtYNujJYbjTw2WSIr4q4PCczoGYBWMc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=B7aL2gkO; arc=fail smtp.client-ip=40.93.198.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uUmnxfeq"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-506bad34f51so6994581cf.2
-        for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 07:00:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772118055; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KPQcbu6KrPpkCsZ5ROcnncbl9xR8ws0mWzYIubjxYF5DqGldFQk8uKK5xyZ9+g/fTf
-         xchaBBFtTkgtMqIcDJdvK6CdtZszRZaStEZLIrQdm1NfFob7qHe9kTb2h9EWaLLbGPeG
-         GFsOsT+Nog2L381D7ZTa//BzT+t9OTxWZ+RtnNkLydpws/IjhVaXXigEUOOU5iwl0wIF
-         Ja2U6gxdrnVMfqsZmUrBbry/gVKdi4vG3Y8qjE8Fhh4IOrTd1J++chCjsh6CSNbaS15g
-         CDamC3+PLm/huTnV6eKrW866sHc1679430kv95kmsWmKA031Wy1kk1qyppGTLhdjkt3D
-         /KDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fDBHi6yZMjrS821WY5UBSYf/CSv/xvQn58gGyI0pSxg=;
-        fh=nreCLy8UfKhiWDn4EjA1E0UTHtC5CGENt94zrkPjIr4=;
-        b=WC2OFTvQ1JzI51FWZo4DZG4qY7knKp5rx/p03fyg8qoUGnRAfzxK+ntWnxv/1OGlfQ
-         L39TZdA2QBxq2oZFbVZJ2vQPtq7Eloe5JgxV8/QizMsUO7q28TCV9zQLDaVL7BAZJYmx
-         tBNUhj4b+22BwvVjTVmaZnhBJtOKVe4ZBBoidZMUXJ9Vg4DYAoDbVpoD0YCI4svi7+Tl
-         MmATFy5eURBeQIr5mcpEB0UqRmyodtm+MdMiJLJQoTOVqWwmo3FR3wRYEvm2W4nx4CeE
-         zQnIveh+6GkZ4nPP4P6zI86kNsdxcbukiM3jdSx8u2PuvW4+HYgmjrUTOPJkhWObEr2g
-         Vdyg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772118055; x=1772722855; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fDBHi6yZMjrS821WY5UBSYf/CSv/xvQn58gGyI0pSxg=;
-        b=uUmnxfeqNGxjDfT4ChJtZSnFZpATTIggvuYfCIs7BwUEUgiBJsW6T21mDi7V5U76tj
-         do9TICFWo/E8AqIQaXYJ74hdgfsv6u9ryyBSfnuOh/Zbq7MFZODPV+xlzoiS05OexqJE
-         2zEcUz7F/e8Zxu9btFhubm4Faownsu4fzKax/0gtlpOW/SLnS6IZb58B6I85ckXNowPl
-         8C7r+pBDZROSv9aSe0k32IQP/8QeuA/gEtH9IcakGvfHGXmxaXkvNdjUCohzV8O+ugQ8
-         RwhQukci2VWwpwN8E3WRljyHqlZdQFYRDLrTfWddK6B2HjXb7QTwlcecC43R+Bb7nj5/
-         E24g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772118055; x=1772722855;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fDBHi6yZMjrS821WY5UBSYf/CSv/xvQn58gGyI0pSxg=;
-        b=I2vBkW2EpjTWFgsF8Ix0pRgQhhi+Gse6i7x8LqaILJH/AoJFibffDxPUCvRMmlQTpp
-         00XW4ySIQpGmZwkjc1Bl7h2kz694zsqGIRsv5WZcFRxf4U0y1Oy5TEoVuysKz4LcBIeu
-         CdDiwZFfd8EOlYh6xO+v6DZFfXQtfEQZ2MWjvBy0hvo+tr2ealA7RnkbwFIFFzmTFvWF
-         EHC+MzOgExVJqX3qVuVod5VAeauDdzVASSnSUEo4js0ecLt9N7U4kiZo7bX9ofUUDVIT
-         XSC0PEoLkzSW2kPaaXSini5UPT1JQe66KacL3lzY6vLs/FYGcMi3CfhAYWdQVFPFItpE
-         0rHg==
-X-Forwarded-Encrypted: i=1; AJvYcCXJsOXfezjgUtL9oEux8X5M5FhoyvdjOqTwAIyPQHDlsmKY22FyvZLyWlX7rYAidPIeHuUa@lists.linux.dev
-X-Gm-Message-State: AOJu0YzkvkvJl7QMQMzvA37BZYk3290bqF8Fuh20M5GdT1uNA1PeKMMV
-	bP7jC9mwEM2IUo9f80PZUi9gocPNnPrNelQOPVs3YCUH8qbmTaLwbUWPUwHEW+tg5es2Od2H1Ew
-	xvWkvKvkGzv+4PvjAmEsJBoXySva4yGXkaO26SryL
-X-Gm-Gg: ATEYQzwYWbyBkGtqpzKFW3/YfYF2bzMcdNkLeIW4ftKg/9/Rr+72N6D3W4B7B/dHlPv
-	PeEOM9P3to1yU3eUeiPQRW/8nNfsu/VrkG1CJ7YcaGVx9MOfVePLrwEWdLkiFih83OcypQxsEd3
-	BbTUj9IHQpaG4LvM/0zXyTSmpO6JZDhnZMmAV/69nzx2zYJ3EQnz8PRBIcuuqTz9NEaogI+OGQq
-	8W/aXMR/XTw0CG5YNwjk4gvHG5AwXx3LyOaafdcsSAe+XJKZJgxhzWeeJlhU20Q/Y6FkJjFOjXP
-	JxZkNCBio1+YCKU/IT+CASsHWyMVH4cPHBvcPKAyVA==
-X-Received: by 2002:ac8:5a87:0:b0:506:bd04:4a6f with SMTP id
- d75a77b69052e-5070bba20c3mr311502531cf.12.1772118043996; Thu, 26 Feb 2026
- 07:00:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="B7aL2gkO"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ccG1ShkPxP8+iaNCPAco/UVvQ7B9jMSYAMpSXN/azRSviLbyTckn66iZrbJIYeWATJh2YZJHkNz7Kl0QAU7BbiyETWl5w3Vgk9rreqAZll0fydNfPJXlPNhi3pK9uhrEKEIfFXdbgLx1uglsONTstaFYjUfpSz00gXjLF5AJ6GZzJ5CoL/h7R3nDNGDIW1YAW1Ek6ym4bDDQFfJUIUEzAJvhL3V4Q5O86nl28QXZMPw9q3oPJtqkJoynIyodi8t3Q46q8h+WnfoKszx0aLOyDmofaFtfbAIuDOB81BAThFL91Op6S6idrbIlJvDHVShxnXLavSS/Lokdi8enWFijRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eguFhSG5ISZuZuY6zY8OpcZ3pTsMOJK5D6eaiFJ5gYQ=;
+ b=y0iKieeuYnRRyqrI3PsxDFyGZJOdDIlRKl3fjOIUm8+JKOswWqZPXSS6cOTthusRjinLy5BTDJ8CW9xt4uLLq+Uz8R2k5o/ctj8YAnLMqyxCxft/jmdNzc+BZLoodqkddnO366lNrxw4JyJJzdcC5qeRxk214kp7xWJSCtmrO7pFRBP7F4/eZKcDB5PJRazsJOylnxhc9FzN2+92rSMhIgqRkZCqd+Tv1/CjxalMGPChdM3Wxh1xsra3ETX9Mwh7gSG7Zp78xG4ahR1FtNRz1MhYMDBhPGRZyxT+CXpSP11PbXy0sSaMyMHSF8PgSJ0YD7ZDTcio7QweMigjz9/i+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eguFhSG5ISZuZuY6zY8OpcZ3pTsMOJK5D6eaiFJ5gYQ=;
+ b=B7aL2gkOIVDWpGbiJe4uW+2Ecoy/8vHPQ8Rt32u4Ud8k+5zZN3Ooe0512+wD4S7aKfvXD6I1vAOSrO++bIbIDyqR8QJJ7jhZxyRD+TokiklAcN0ibGDGoGLFho1b+uiL10B2RH7zaKwWu+nqSt+wFZa0Gia+TAKuCluSoE/HKDUMhHdAmk7V7t42m0+xVRZG4EvUCfcjtLbwPgLIgxWBf4Minrc2OM5HRY16AdqTAeKFkEdZD/mUbGr1/cK4sFxK4/EqnG/Wh1rxaXIYq43THB7ibtOuYLPTp8jgfnbmr6dRmqnT9OhQRz8Uf6OpdsH+3kuCnqffwX6Dmfc14ECBmw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by MN0PR12MB6126.namprd12.prod.outlook.com (2603:10b6:208:3c6::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.14; Thu, 26 Feb
+ 2026 15:04:42 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.014; Thu, 26 Feb 2026
+ 15:04:42 +0000
+Date: Thu, 26 Feb 2026 11:04:40 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
+Message-ID: <20260226150440.GB5933@nvidia.com>
+References: <7-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <fc4f0354-4e6d-452d-abfb-fe24e53253a2@amd.com>
+ <20260117154347.GF1134360@nvidia.com>
+ <bc6817bd-4aa5-4033-b89d-88fef637de65@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc6817bd-4aa5-4033-b89d-88fef637de65@amd.com>
+X-ClientProxiedBy: BLAPR03CA0097.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::12) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260226111721.25454-1-yuuchihsu@gmail.com> <CANn89i+rJeZHoGna5PGWN31UGDO3jy1xx-rWs0SA23H6mU6qKw@mail.gmail.com>
- <CAPAzCqEtb9r6pP+A-RjnAKeLbHJJs3Cc3PuGcmNSR9GpaCLjdg@mail.gmail.com>
-In-Reply-To: <CAPAzCqEtb9r6pP+A-RjnAKeLbHJJs3Cc3PuGcmNSR9GpaCLjdg@mail.gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 26 Feb 2026 16:00:31 +0100
-X-Gm-Features: AaiRm52MxdXP-5oiz-lcB0RYshb3-sVF73Z4aiPYgg6GoJ4lwfj_lrudTwi1sIU
-Message-ID: <CANn89iJH-RXQh=3ztsO1xA1uycDetkY7sogyNQTU7r2d7urmrA@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv6: fix ARM64 alignment fault in fib_multipath_hash_from_keys()
-To: Sam Su <yuuchihsu@gmail.com>
-Cc: davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|MN0PR12MB6126:EE_
+X-MS-Office365-Filtering-Correlation-Id: aad7e03d-359d-4e8e-9ecd-08de75485ea0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	cXD5a7tWFYjmfB7Anr20ib1e4twdLxL+5eFQNtOV5JpIdlSzIepMc2bpHto142gPpesYWaYw+zNGl4z6BChkNk6PKWVFpyb+ng1X1QU08B0W3MGiIpREhtS98TWw6VqI2aXhja6bgPan13Ah5jfCl0aqCo6BGtMFDdr3T9L4862pYpmw+Bc/c95hwLrfivLc8MDt+9HwoveCKBgpF5OFKzngU3EYIvc8UpKIJTKiyxWCBAdqw9+TxFuStu94byDNCEuYr7EUkWRvF3uTw28RQABscElP4DHVhD8xCX88NGy9IZp73Q97aohMnwwmU29HxMCaX+r7Psqbn4y8W5j4nMp96v/2DCvg8sVaF7Kxbw1sc3TQlxX0/tZtOIAYiFvrfIMCx59OPnSwZ4+w1j+gwFqHaoVwDCRH/pEm4rSuruFxbhUeRtfpITo4/1L50wjUPNBlcoSXs9c/EX4t/1E6b0HqGQI3JiWTkKh+YYhyf7w4kjMz1EgpDJLOFTwjj/E1CrLXfzi6MKl12VI3i4gQe9ECye80ZXuncR7EVB/yqgdkE1yvPs1Cj+bH3u0jCnCWI5grac9O6UI7GUZKNVYh9WLMsYa6VobmDr2N9W4MA7Oc/Q8OfD5SHWtIlFA5E8nX8xZIyrlKDG2GyHoQitxWefshamLoO0ruhEs3IA+EPbem5ZqehSjE6NibEWrMUrqFvmay12Me+y2yd6U2FuBWzWl4OWcef7arjIOd0DV67cs=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+/3of0oRL5EEcvWNIhqaRD6mIveHlwbZwqSsjAbiA+oBxzvId8QZkRakrqp4?=
+ =?us-ascii?Q?Yi7xxvY5ligL/dDPrBqgM5emlNU5RkjWZcvh7xmCjclBfOEm1oumdJW0+Cp8?=
+ =?us-ascii?Q?F8ijKRHkNvaktOI1cJ5El/E3PgaT93rbw08a0ue2YETKGpUXCDshdV2VyxDU?=
+ =?us-ascii?Q?Yuu3ag8wG/+iIpugMNv0jEJJvOgPb+b/zihfp5xykkPe5reIMkYzmLPvyvLu?=
+ =?us-ascii?Q?1Dcl9PNh5jPcX/HhrWQmYHY5XhLcVT3FqNb2fauZ7sCO9PZJKmak0uHRqJIK?=
+ =?us-ascii?Q?m4Hz1Jg+QdLc59V/xG1sZ8z81zz5/Se/pNWnFm82i9P8sRjEhYIcFPM6YXt/?=
+ =?us-ascii?Q?PZMh7xdbAssP3Uu2NQshjdHVY84ohZL0bxv0j9MVLDDQqJx8nFGh6FzWl+o0?=
+ =?us-ascii?Q?Mdj8BtsyrKep6ejXBR0V9bzNDCNkfJZYmLAVuRZNGjr8ZU9OXurv7hDiYcwW?=
+ =?us-ascii?Q?qz+SJB9xfLiab/SjNd5ac+nlYIpXKSlO9YHcZ8ERQt9//FRh6rOsN0JW56Kv?=
+ =?us-ascii?Q?5UJlM2adMgnuWKuyyTWw2cwoxHjHkFunJUoatw6vMsaJYJra1fP5atmXexZ+?=
+ =?us-ascii?Q?dKjxdM8h0HXqoKz50hlYDl4IuhZVdtwAKJM/bhZfAHEB9xkI10j0MZj69AQ5?=
+ =?us-ascii?Q?2WZDxtnIbu5uq80+gEwUEpcgxxYlxKrqDsN7wj1DjXMVrBWPpl8a0O7G/BR0?=
+ =?us-ascii?Q?dMuxAp0TvzG5z3Kl6MGTP4w4q82t0TizWCRv7vIb6wl156mqByt6d6fJZ6++?=
+ =?us-ascii?Q?WTJR6EZEOfBXPgH/dIx6EPA0RMDvBJcc4n0lHtnqXlj+wY4F42HxulofcTkH?=
+ =?us-ascii?Q?HDbTuX7gLnnz6U/IAy831d1mazADeeIG8qmeLxPbVd13jB8xllk+NQ4wbZJh?=
+ =?us-ascii?Q?gvNyUHmo3IpW+pp64YTey5H15cNJ+ywn9VynaPC6lAiTxmS/XuhxUqspUDHt?=
+ =?us-ascii?Q?n4eya2yNOSkY8I5PuzfA9QXtKL3OH8+BIWjTsNDeJWOikz3T0t4hImKOn90C?=
+ =?us-ascii?Q?Wxyq4oi8jBfa4pNbaJ7cA+sZgFqn4Z3ERAzfYS5O3uTwP5L5zhVX8JRuvl5C?=
+ =?us-ascii?Q?ZY/HlZjX7Cgdgja2jZs2+OWTq0ZAljw1Wi+V3TFIMMiwjrnOPNBw8b11raU8?=
+ =?us-ascii?Q?KjJZLJW8BB4GlWxhFqGEgIyic0CE7SOL9g0zmV0wr3zRzASEbnea3OqQW4VP?=
+ =?us-ascii?Q?cj8SKYcTD7fAlT/u2tHsIpLVkINCQxF5HMGQwAE+jYouRzDAwei0AkxEQexe?=
+ =?us-ascii?Q?WgLyT73HffgXpEA7UwLTwfvuNjkhSKDukRqdkz4vh8mBpQs8D/umGw5umqv1?=
+ =?us-ascii?Q?BuYMVFcT0IauaJPX1Nh037bxtSn9S9Sl/BdXCIiJZs2ev1RJRDfrb3pjjLla?=
+ =?us-ascii?Q?wLxGHG7ni6OFG3Gpfkf1vSt5SHbTr3QiGyFAcQpE0GKTnqIeI8ZneE05i7H5?=
+ =?us-ascii?Q?6KtzbXqW65MkBsfxpbeMaMJ+KMlYFxThqYPhgvrbJ4/ifZWAs62eAASqntAx?=
+ =?us-ascii?Q?4QKq/7IknCsdkUjnhs32I730ddcxwxk6c1baE90gOvzA00wcoE3xCarS1yOj?=
+ =?us-ascii?Q?TkKNkTIWpPdrtIcL9VewGQSrSvG6pRm1bxp+MygoE07fjPsRHy0IzMNYl8I5?=
+ =?us-ascii?Q?6tGzYMlj0zssi/L/ZzaWdBPoa0CHDOevPmQiwB3kzLuAphg6qmw6UpGqpKRj?=
+ =?us-ascii?Q?O05Ou0MyuwKTE0LTirtAgQeluzahYkpQBqmM+tzBa+SeHIJQ0Cm5N1jj3Sh+?=
+ =?us-ascii?Q?SBSSTyKGNg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aad7e03d-359d-4e8e-9ecd-08de75485ea0
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2026 15:04:42.1493
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fWJo2Om+imwJ6avrIwUp87/XOwEwsWbcrz/GUNoPlz5Sx+J3ZTYVvUxGz7cQ5Wk7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6126
 
-On Thu, Feb 26, 2026 at 3:50=E2=80=AFPM Sam Su <yuuchihsu@gmail.com> wrote:
+On Thu, Feb 26, 2026 at 10:11:56AM +1100, Alexey Kardashevskiy wrote:
+> > The flow would be some thing like..
+> >   1) Create an IOAS
+> >   2) Create a HWPT. If there is some known upper bound on RMP/etc page
+> >      size then limit the HWPT page size to the upper bound
+> >   3) Map stuff into the ioas
+> >   4) Build the RMP/etc and map ranges of page granularity
+> >   5) Call iommufd to adjust the page size within ranges
 >
-> Eric Dumazet <edumazet@google.com> =E6=96=BC 2026=E5=B9=B42=E6=9C=8826=E6=
-=97=A5=E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=888:02=E5=AF=AB=E9=81=93=EF=BC=9A
-> >
-> > On Thu, Feb 26, 2026 at 12:18=E2=80=AFPM Yung Chih Su <yuuchihsu@gmail.=
-com> wrote:
-> > >
-> > > struct sysctl_fib_multipath_hash_seed contains two u32 fields (user_s=
-eed
-> > > and mp_seed), making it an 8-byte structure with a 4-byte alignment r=
-equirement.
-> > >
-> > > In fib_multipath_hash_from_keys(), the code evaluates the entire stru=
-ct
-> > > atomically via READ_ONCE():
-> > >
-> > > mp_seed =3D READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed).mp_se=
-ed;
-> > > While this silently works on GCC by falling back to unaligned regular=
- loads
-> > > (e.g., LDR/LDUR) which the ARM64 kernel tolerates, it causes a fatal =
-kernel
-> > > panic when compiled with Clang and LTO enabled.
-> > >
-> > > Commit e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire w=
-hen
-> > > CONFIG_LTO=3Dy") strengthens READ_ONCE() to use Load-Acquire instruct=
-ions
-> > > (ldar / ldapr) to prevent compiler reordering bugs under Clang LTO.
-> > >
-> > > Since the macro evaluates the full 8-byte struct, Clang emits a 64-bi=
-t
-> > > ldar instruction. ARM64 architecture strictly requires ldar to be
-> > > naturally aligned. Executing a 64-bit ldar on a 4-byte aligned addres=
-s
-> > > (e.g., ending in 0xEC) triggers a strict Alignment Fault (FSC =3D 0x2=
-1).
-> > >
-> > > Fix this by moving the READ_ONCE() directly to the specific u32 membe=
-r:
-> > >
-> > > mp_seed =3D READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed.mp_see=
-d);
-> > > This instructs the compiler to emit a 32-bit load (ldar Wn or ldr Wn)=
-,
-> > > which perfectly satisfies the 4-byte alignment requirement and resolv=
-es
-> > > the crash.
-> > >
-> > > Fixes: [4ee2a8cace3fb9a34aea6a56426f89d26dd514f3] ("net: ipv4: Add a =
-sysctl to set multipath hash seed")
-> > > Signed-off-by: Yung Chih Su <yuuchihsu@gmail.com>
-> > > ---
-> > >  include/net/ip_fib.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-> > > index b4495c38e0a0..318593743b6e 100644
-> > > --- a/include/net/ip_fib.h
-> > > +++ b/include/net/ip_fib.h
-> > > @@ -559,7 +559,7 @@ static inline u32 fib_multipath_hash_from_keys(co=
-nst struct net *net,
-> > >         siphash_aligned_key_t hash_key;
-> > >         u32 mp_seed;
-> > >
-> > > -       mp_seed =3D READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_see=
-d).mp_seed;
-> > > +       mp_seed =3D READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_see=
-d.mp_seed);
-> > >         fib_multipath_hash_construct_key(&hash_key, mp_seed);
-> > >
-> > >         return flow_hash_from_keys_seed(keys, &hash_key);
-> >
-> > What about proc_fib_multipath_hash_set_seed() ?
-> >
-> > It has :
-> >
-> > WRITE_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed, new);
-> >
-> > Which is IMO strange, regardless of ARM64 clang and whats not.
->
-> Hi Eric,
->
-> Thank you for taking a look and catching this!
->
-> You are absolutely right. If READ_ONCE() on this 4-byte aligned struct
-> causes an unaligned load-acquire (ldar) fault on ARM64, the
-> WRITE_ONCE() in proc_fib_multipath_hash_set_seed() will inevitably
-> cause an unaligned store-release (stlr) fault when a user tries to
-> modify the sysctl. Using WRITE_ONCE() on an entire struct here is
-> indeed structurally flawed and unsafe.
->
-> To fix the write side properly, I should write the members
-> individually to ensure safe 32-bit atomic operations. I am thinking of
-> updating proc_fib_multipath_hash_set_seed() to something like this:
->
->     WRITE_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed.user_seed,
-> new.user_seed);
+> I am about to try this approach now. 5) means splitting bigger pages
+> to smaller and I remember you working on that hitless IO PDEs
+> smashing, do you have something to play with? I could not spot
+> anything on github but do not want to reinvent. Thanks,
 
-SGTM, but please add this part as well:
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 643763bc214279047c90b5b92a9ba9be6c24a443..1974b826bd9451fd9d8054e1db8=
-11760ff4b5a9f
-100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -500,7 +500,7 @@ static int proc_fib_multipath_hash_seed(const
-struct ctl_table *table, int write
-        int ret;
+I thought this thread had concluded you needed to use the HW engines
+for this and if so then KVM should maintain the IOMMU S2 where it can
+synchronize things and access the HW engines?
 
-        mphs =3D &net->ipv4.sysctl_fib_multipath_hash_seed;
--       user_seed =3D mphs->user_seed;
-+       user_seed =3D READ_ONCE(mphs->user_seed);
+My draft for cut is here:
 
-        tmp =3D *table;
-        tmp.data =3D &user_seed;
+https://github.com/jgunthorpe/linux/commits/iommu_pt_all/
+iommupt: Add cut_mapping op
 
->     WRITE_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed.mp_seed, new.mp_s=
-eed);
->
-> I would like to take a little bit of time to reproduce the
-> WRITE_ONCE() crash on my ARM64 device and thoroughly test this
-> proposed fix to ensure everything works correctly.
-> Once I confirm the fix is solid and runs perfectly on the hardware, I
-> will submit the v2 patch addressing both the read and write sides of
-> this unaligned struct issue.
-> Thanks again for the insightful review!
->
-> Best regards,
-> Yung Chih.
-
-Thanks !
+Jason
