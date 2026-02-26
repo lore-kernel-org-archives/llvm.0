@@ -1,175 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7892E7F08;
-	Thu, 26 Feb 2026 01:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772068476; cv=none; b=U3FMEQUTGLut2dSTir+f4rPMouSipNFOZRxOLKWfbizI9fLdieUSjc5+6PoM6/HD1p9rNJhdsX5dgVUL1/YkVx2rczwYPhrMXkEyObGAvEZFKMrgSVLadCXmtXTag1MV/keGGdoBmChULjiy53SpdIy7f+lpLwnqEjok9zhz9Rs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772068476; c=relaxed/simple;
-	bh=EcPFw3fwdHKBUa9LIKaZnc+0flJAKUAS/QgR7EiNEGs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NUVjJN963h9AeKg1Rd3fOMeCFxY+wy4jcSE20kPEQUPtFOwiPzLPdFfV7uTllJu6DOX08ZuN1FHPPKtcSHSeykPOXaku2RSaJYW+gWCM+j0bSXILcCe0esbfrpwmsbf1NjnR/uJi5hyz9YSkU/1eK4LiHNyg6rEFTUkjzvXvgmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zong3RjQ; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B55389E08
+	for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 04:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772080574; cv=pass; b=WH2E1nBqC7oFKXuKCKOp6H2IA9uP6M2r7lE1bnl5sK/yhLmDRfeiQTeoG0vd5yX4bAtdjaYDRDkJFxm4q8N8Da+K/4t7gQiJOzvabsfTVrecKl4l5wnNIhX2TUxEpz8DeetJcqqfh08eZ0QEzDXwqfjITwMZlKgfkNw0i48qyAo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772080574; c=relaxed/simple;
+	bh=yQ56y6Fx2X+yAbYgVikepnfFcZ+Sxypi1uShKXPHDHw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s6ryK1bGJ4qbYZBExCZE54RX51L2UC+1D1SpYWT+ypF5FrDLQSSCwnzZT5efx/qIX1BK/y2iy1KcZEF25uIs4ukIinx1mmf91a6IwqhwK1UFWDmW4s1/UcH8bXNFr5jlSvkAYo47i5GG5wZiOMPCWlOnOTJOBwZmLqIfxm7qkZY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SFf3xfbX; arc=pass smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zong3RjQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772068475; x=1803604475;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EcPFw3fwdHKBUa9LIKaZnc+0flJAKUAS/QgR7EiNEGs=;
-  b=Zong3RjQy0gu2Btw4zmDUmKMStLgGCFXmAq6DGSZn1tAaMz06M1DBVe/
-   qi24aj3IpJE6vC4LO+L9vvA+3jdS+wSjGYmdkWZ1OTD3W6u3RTIKPEN/0
-   NLUbzizWl8vRqGr2D+rNECR+/YpQRA2V2i3ovBzIXMDkE8wuWRul/opVH
-   EEJ3t1bCOBgVn9enjtaDerfhNUX09QtWnaCHlAABOal58uO1sWp1M6VI5
-   M3EkdR8ldxsB/a7A6r7jv+y206K8uMFievwl3XJ9tXygH1+PPhDCxqpsE
-   TgfL9upHt8YT8JaWnFD8wiwM0o9Ag2spxxy6fzNNoqGlv+mrrPU5I6ut7
-   Q==;
-X-CSE-ConnectionGUID: 7VgHD7/tQByHQSLlV/3dSg==
-X-CSE-MsgGUID: WIO2HK6gSrGTGmIOIys9zA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="75726521"
-X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
-   d="scan'208";a="75726521"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 17:14:34 -0800
-X-CSE-ConnectionGUID: ZDR4v/W6Rt2COLyzL1ABgg==
-X-CSE-MsgGUID: NFxp3jjOTeSap7c3rCMNog==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
-   d="scan'208";a="219780931"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 25 Feb 2026 17:14:32 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvPwY-000000007lJ-2etx;
-	Thu, 26 Feb 2026 01:13:55 +0000
-Date: Thu, 26 Feb 2026 09:12:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-Subject: Re: [PATCH v3 5/5] crypto: pkcs7: add tests for pkcs7_get_authattr
-Message-ID: <202602260949.uDrsr8hd-lkp@intel.com>
-References: <20260225211907.7368-6-James.Bottomley@HansenPartnership.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SFf3xfbX"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-7986fb839f5so3680857b3.0
+        for <llvm@lists.linux.dev>; Wed, 25 Feb 2026 20:36:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772080571; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WbvU94kO2axm10LASYhTuEAcNN0iSyMJsQf9akeZaQ0aQ/i+7/6bbLrWGxrpV14lg4
+         pjYBkT2KCEvqKFhwaCnJ4iPTDWxXX/ddu8A0ot2TZTPBOeYmNNOm+Mq+61fUkEJzOkjV
+         SRD/rsibDS8xJA03nT3IT0mDii4FBrxpgAAt55bA5RLg0146cVvOUtdZr2z+lrO7JIpf
+         h+hAIf7T+PxEguSF6xT+7wWB6472GQHCJ0VG73clu7l97aQE/0dfgXjuJK+pP07gHfDu
+         6A9j0rAXa5IxueXc4tZnyEvWzhFEUWlR6NRbFNlkTGQvy3oKlTPIqA1BFBxqFsogYVRN
+         rJpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2SS+tPAkkC8PsNpjCkuGdUmZJNCDtEH6HSFc6OXXl78=;
+        fh=kbcwKJIl77ia+C1pgzDsJJjiFkIGL2zq82sRP5K09kU=;
+        b=eAxUtSsVL9+gblMNXZFqH3HwDWwzxTILCHx3HOzux/Wcf2rPEq/diPNG63yyuTEb1D
+         6fcHl0wq7SLqDu2g+RXrAmvevb5xwQ6BilECMycGgu7I+GvzkTWvIp8txMOOrkf/OOoj
+         iYnzZRN/WtzRhHrVrnQONl/3mPDa39ZZpOYG/R5RQir+T3k1UXVh/7iF4PYqlVo9E8u7
+         JMokwYFh6Nin1z/LZNM6PFyQfNagL78eBYwTTPGSFBIRC+HT6CQKuRB2bGArl+JhK+0/
+         iW2XazHsg7s+YW8Zn3n+JJ8BLqGCA1GOptcT04lTVyaW8t5u7jYUxarLqq4wETEhteYv
+         zIng==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772080571; x=1772685371; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2SS+tPAkkC8PsNpjCkuGdUmZJNCDtEH6HSFc6OXXl78=;
+        b=SFf3xfbXRWSCt0dpG1yWjVcTPHUnrcD+jq0ekDC+apTL5bWQMYjCL0TSjFYgo3y6hu
+         NYEeVk4tT+j+//rmZnURCqD5up2XWPfv0rXvY5AFceNIKF9PvKtv+8wyqpNSp/o97lfK
+         uCDkpApaEl2+ZhOrRf3qY5/jcDKPai7jCi+r4LAi28W5xMoTrcbY51jzO2lC4ZOfTMDF
+         E4iPplI0w2ebdZukkeGhFa+vB9N2P4gASA8Pz8RXwXgE4AN+EWB4gAm8sonPPWagOLXK
+         jzPlRY5MrOyZX7BMwj0r2rfPPPtoqBEp3USouMAX+JEU8e0jKiqKdRz7xAtJFVYDypIQ
+         tVXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772080571; x=1772685371;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2SS+tPAkkC8PsNpjCkuGdUmZJNCDtEH6HSFc6OXXl78=;
+        b=Xt5GQ/ZsbIx69HcZ5mqi3LbwAb7o94+f2LeHaR+FE6gOpI/62wKVmAF9RLL6aQ62c4
+         TNTRZ6kMddbjmZ6Az32M7oou31stIMHT+5hprRi7vapP5FxPOFIgr5IF1C+Q0ffscPq2
+         I2IaHvXEBC42bG8Y1qkvcg/WWqc1uyFw18Q6yp/E4su5puZo1Zdi+mTeK7tsBQnqG5qO
+         9ITkG+7pwKrzHt3E/AuaCBGmm7wjxlrzBEjCN1GEHiQrqkKfQegoJ8vsI3C+QFdoeEhr
+         gfk2+Rt+Q/AaedUe9qulklsKYhu24shdlTgy2awTtTjiwZW0r+9KY7tESMyhsFY3zMam
+         atiA==
+X-Forwarded-Encrypted: i=1; AJvYcCXOstUNsWrDqVWadC8u7Qg3148fVqF81B219/G4O16Fhf8plf5ps9cGLWOmNI4PIfCTqkDx@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHa0sDcBk08WUAMqWLK0H9h4GXvk64IsKkfyqviDoinO60yS8Q
+	y7yQbY48URw76wNEN9KX57kwoVUdoNTtXlRDGEXuej1zM0upJBUsKUXfUV2HBF6RD50OT6AMgdL
+	6A1/ia5m8UZzwtvdWqiTNa2nGG1A7p7w=
+X-Gm-Gg: ATEYQzx8fRZ//lAcIOkPwnX9x7ETE6b32W7K3toPGKBGA7e1JeDEARSDNkkmLLfeGGO
+	lM5KL7x6CV8cbcoxz6Gi+QJOCfypdBXri774xEX9QqHdBdAFugYmM3wg3xq5kz6EkdSKlEAYUFo
+	NiHR0MOOq7qHA5cMG2jGD23E+f8YdTqz77vSTuirhywFtwdtbo9mN4KOy/VQYH8PpPKrAzuRhWA
+	JtuLaaD6nqrWH5wV1M51bC8FepvOM0CAbmJosIc1r0znCRyNh4aVw3hyAxMmxiQUZEp0blls/bm
+	1VVCRYmfuBdOsyvR6iwQNzEBdA==
+X-Received: by 2002:a05:690c:c4fa:b0:798:7498:4ad7 with SMTP id
+ 00721157ae682-79874984d90mr12254757b3.62.1772080571229; Wed, 25 Feb 2026
+ 20:36:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225211907.7368-6-James.Bottomley@HansenPartnership.com>
+References: <20260225-genksyms-fix-attribute-declarator-v1-1-1b21478663fb@kernel.org>
+In-Reply-To: <20260225-genksyms-fix-attribute-declarator-v1-1-1b21478663fb@kernel.org>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Thu, 26 Feb 2026 12:36:00 +0800
+X-Gm-Features: AaiRm50kzO006Lx2eXxr-zZ4lXv2cILNCfMV8z8b79sYC54jP5X1Cub2Op14EjY
+Message-ID: <CABFUUZGgnKF+C7f7yPkXybFq1KBOJNj3s73R41ru1+aGUGYUQw@mail.gmail.com>
+Subject: Re: [PATCH] genksyms: Fix parsing a declarator with a preceding attribute
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi James,
+On Thu, Feb 26, 2026 at 6:07=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> After commit 07919126ecfc ("netfilter: annotate NAT helper hook pointers
+> with __rcu"), genksyms fails to parse the __rcu annotation when building
+> with CONFIG_DEBUG_INFO_BTF=3Dy, CONFIG_PAHOLE_HAS_BTF_TAG=3Dy, and a vers=
+ion
+> of clang that supports btf_type_tag.
 
-kernel test robot noticed the following build warnings:
+Hi Nathan,
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.0-rc1 next-20260225]
-[cannot apply to herbert-cryptodev-2.6/master herbert-crypto-2.6/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for tracking this down and for the minimal reproducer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/certs-break-out-pkcs7-check-into-its-own-function/20260226-052454
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260225211907.7368-6-James.Bottomley%40HansenPartnership.com
-patch subject: [PATCH v3 5/5] crypto: pkcs7: add tests for pkcs7_get_authattr
-config: i386-buildonly-randconfig-002-20260226 (https://download.01.org/0day-ci/archive/20260226/202602260949.uDrsr8hd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260226/202602260949.uDrsr8hd-lkp@intel.com/reproduce)
+I've noticed the same thing while building on my laptop during MODPOST
+Module.symvers:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602260949.uDrsr8hd-lkp@intel.com/
+WARNING: modpost: EXPORT symbol "nf_nat_ftp_hook" [vmlinux] version
+generation failed, symbol will not be versioned.
+Is "nf_nat_ftp_hook" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "nf_nat_irc_hook" [vmlinux] version
+generation failed, symbol will not be versioned.
+Is "nf_nat_irc_hook" prototyped in <asm/asm-prototypes.h>?
 
-All warnings (new ones prefixed by >>):
+>
+> diff --git a/scripts/genksyms/parse.y b/scripts/genksyms/parse.y
+> index efdcf07c4eb6..cabcd146f3aa 100644
+> --- a/scripts/genksyms/parse.y
+> +++ b/scripts/genksyms/parse.y
+> @@ -325,8 +325,8 @@ direct_declarator:
+>                 { $$ =3D $4; }
+>         | direct_declarator BRACKET_PHRASE
+>                 { $$ =3D $2; }
+> -       | '(' declarator ')'
+> -               { $$ =3D $3; }
+> +       | '(' attribute_opt declarator ')'
+> +               { $$ =3D $4; }
+>         ;
+>
 
->> crypto/asymmetric_keys/pkcs7_key_type.c:99:52: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-      99 |         pr_info("Correctly Got message hash, size=%ld\n", len);
-         |                                                   ~~~     ^~~
-         |                                                   %zu
-   include/linux/printk.h:584:34: note: expanded from macro 'pr_info'
-     584 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:511:60: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+Your grammar tweak to allow an optional attribute before the nested
+declarator looks correct to me.
 
-
-vim +99 crypto/asymmetric_keys/pkcs7_key_type.c
-
-    48	
-    49	/*
-    50	 * Preparse a PKCS#7 wrapped and validated data blob.
-    51	 */
-    52	static int pkcs7_preparse(struct key_preparsed_payload *prep)
-    53	{
-    54		enum key_being_used_for usage = pkcs7_usage;
-    55		int ret;
-    56		struct pkcs7_message *pkcs7;
-    57		const void *data;
-    58		size_t len;
-    59	
-    60		if (usage >= NR__KEY_BEING_USED_FOR) {
-    61			pr_err("Invalid usage type %d\n", usage);
-    62			return -EINVAL;
-    63		}
-    64	
-    65		ret = verify_pkcs7_signature(NULL, 0,
-    66					      prep->data, prep->datalen,
-    67					      VERIFY_USE_SECONDARY_KEYRING, usage,
-    68					      pkcs7_view_content, prep);
-    69		if (ret)
-    70			return ret;
-    71	
-    72		pkcs7 = pkcs7_parse_message(prep->data, prep->datalen);
-    73		if (IS_ERR(pkcs7)) {
-    74			pr_err("pkcs7 parse error\n");
-    75			return PTR_ERR(pkcs7);
-    76		}
-    77	
-    78		/*
-    79		 * the parsed message has no trusted signer, so nothing should
-    80		 * be returned here
-    81		 */
-    82		ret = pkcs7_get_authattr(pkcs7, OID_messageDigest, &data, &len);
-    83		if (ret == 0) {
-    84			pr_err("OID returned when no trust in signer\n");
-    85			goto out;
-    86		}
-    87		/* add trust and check again */
-    88		ret = validate_pkcs7_trust(pkcs7, VERIFY_USE_SECONDARY_KEYRING);
-    89		if (ret) {
-    90			pr_err("validate_pkcs7_trust failed!!\n");
-    91			goto out;
-    92		}
-    93		/* now we should find the OID */
-    94		ret = pkcs7_get_authattr(pkcs7, OID_messageDigest, &data, &len);
-    95		if (ret) {
-    96			pr_err("Failed to get message digest\n");
-    97			goto out;
-    98		}
-  > 99		pr_info("Correctly Got message hash, size=%ld\n", len);
-   100	
-   101	 out:
-   102		pkcs7_free_message(pkcs7);
-   103		return 0;
-   104	}
-   105	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Sun Jian
