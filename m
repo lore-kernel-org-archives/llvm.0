@@ -1,123 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965D23290B8;
-	Thu, 26 Feb 2026 17:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8550627F732;
+	Thu, 26 Feb 2026 18:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772126742; cv=none; b=GQa/qsh2cnG+xphqrL1qxniYb2w2l2zcP89FN48OYqJfn+vsCfP3s8RuVs6IP+VEETXhEggANTItz1XDxBY7kYj02oBwrwo3I1o26DsgLp6GLcoMqL0WOc7bXGWuHDGV/m1LyO5tb3QDumzRVuI3u3Sx0VR42yFM2WBW0NrLP8s=
+	t=1772130783; cv=none; b=h5oCd0tvLSujtIwf7ZkBdSKYhHHdymFIPiY/nCsWF+MsMaOTbpegoanehAf5NWQw3+7e0x/GMDv1qZiH2e85DrA0edBeex6AnsHsm50qpmxhlrp3qiIk6ya8zL+MSC+FXVWDXfiC//YriKpruCuACx4J5S7K0v9UGBORhNklUFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772126742; c=relaxed/simple;
-	bh=HXHhap6egqWT8XC6RhfJfz56j5ScHe5sDUGa7n+j+mc=;
+	s=arc-20240116; t=1772130783; c=relaxed/simple;
+	bh=VSeTKWpqHQ/xQAnBpFUGW6l3RlpfyjkXqHosrfzhgZY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CExuJ8JconWgZLxazBzCGYPPM92Zd/bhSpKSNnVb5aaMrM3/BKfOz6SUmmqGD6AWuOfO/Uyl2jDJFdokQsj1/4MfNnbb+GWvOXDSUxh1360uW4yaqOwVw0kGzhlEpTtqkK9JN7FVUNFrrdq/acjswHptyur65eTYpwBR+oen5C8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cTqKj8NQ; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ivTbPzHHt+bs+815TIjRz0hfkbxar/eoxFMnASXRD/VrpLzCCGZm/IY0N+gfbMWp5BJiyG+XHDrYjxjqRgoXr85zOrovUUsWNAQzg6/58uleawc+B4Xr6tFSqskzier/BwI90AH6fUVihG55EUImzQ4RkC2iO4Kkz8V5xhyHKS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQQM3soB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cTqKj8NQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772126740; x=1803662740;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HXHhap6egqWT8XC6RhfJfz56j5ScHe5sDUGa7n+j+mc=;
-  b=cTqKj8NQfUXQGhPwly8BAF4Gh5bEuFmseE+lCIU1BoiUbRx+DlGg8DVq
-   L0RWQyg4zNHiD1KDs4v9NDup4qElDIXY6YEQ7JAfIQN+wxKyn+mglSSRY
-   lGlOdOGFluiA+DJWVzQqBgFKJ4PxoAXKuzKwJlmdu344xV8tqXBJjC+Q3
-   s4rJZhR7Fi6TDvyZrT784+3CT8oYCeJqX/R+QIjyTkapDhSKsvftZnwpZ
-   v6GlNXphgRN4QnnQ8IOxIKFiEtroHDXN4eGlQH8o9eaMKXNX69rd8lhcb
-   2xFyqMwJaFMgMSCVRk3kOvUJWbGC4KACSk4MBsM+LyG3w2SM3brfvUdVa
-   Q==;
-X-CSE-ConnectionGUID: 9UWTIpa5RwOm4Zw24mOAYA==
-X-CSE-MsgGUID: 9MgH8bM0S0GcYM88Vl0pZw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="83903764"
-X-IronPort-AV: E=Sophos;i="6.21,312,1763452800"; 
-   d="scan'208";a="83903764"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 09:25:40 -0800
-X-CSE-ConnectionGUID: /rZY5GHOQya2xaziO9V65A==
-X-CSE-MsgGUID: IUiPNpQITlKNMrDTm6YNBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,312,1763452800"; 
-   d="scan'208";a="254405774"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 26 Feb 2026 09:25:38 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvf7H-000000009h9-3brh;
-	Thu, 26 Feb 2026 17:25:35 +0000
-Date: Fri, 27 Feb 2026 01:25:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] ring-buffer: Flush and stop persistent ring
- buffer on panic
-Message-ID: <202602270132.zddhkLDS-lkp@intel.com>
-References: <177211311593.419230.2212568977306190482.stgit@mhiramat.tok.corp.google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQQM3soB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAD8C116C6;
+	Thu, 26 Feb 2026 18:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772130783;
+	bh=VSeTKWpqHQ/xQAnBpFUGW6l3RlpfyjkXqHosrfzhgZY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CQQM3soBA3HATli5radoLC4J9n6+UpiXxlyOkuORCYj5pdddFoQskRZYORrR3G3JB
+	 GfAIKWgDkBvzdNVJ7WF+2lgjUKPp/q/dbE0YAW3ixvADk6DBkJE4zj/VOoJLbUhLNR
+	 s8/GIAC3Y2wl6RpxDvFYviVFlyG+21IkIxLxhejxuFcR5BvWZnLYxq8wg1bvmFhBkD
+	 UvqC4y+M7fVoqqdWKZAFTKH4cuqZB+nXtmy8+BSD4RQiTjIRWET8tdk8UAv8mYfpw1
+	 dRbWfxIfqGBCJKsl6rRAkVfd9Bx9nJSHP60Jx38MXvbg8H7VXXj6jdwAOCxG0RY+ly
+	 VtFehVk+deMBg==
+Date: Thu, 26 Feb 2026 10:33:00 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Leo Yan <leo.yan@arm.com>, Kees Cook <kees@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	James Clark <james.clark@linaro.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+Message-ID: <aaCR3JcMKC56E0xq@google.com>
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <20260224171956.GA639152@ax162>
+ <202602241310.C3641B97@keescook>
+ <20260225092210.GC4184494@e132581.arm.com>
+ <20260225192505.GC2755225@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <177211311593.419230.2212568977306190482.stgit@mhiramat.tok.corp.google.com>
+In-Reply-To: <20260225192505.GC2755225@ax162>
 
-Hi Masami,
+Hello,
 
-kernel test robot noticed the following build errors:
+On Wed, Feb 25, 2026 at 12:25:05PM -0700, Nathan Chancellor wrote:
+> On Wed, Feb 25, 2026 at 09:22:10AM +0000, Leo Yan wrote:
+> > On Tue, Feb 24, 2026 at 01:11:19PM -0800, Kees Cook wrote:
+> > > On Tue, Feb 24, 2026 at 10:19:56AM -0700, Nathan Chancellor wrote:
+> > > > Kbuild does not maintain/touch tools/. This should go via another tree
+> > > > like perf or something. It does not look like
+> > > > tools/scripts/Makefile.include has a clear owner, perf and bpf tend to
+> > > > be the ones who touch it the most.
+> > 
+> > This is a circular deadlock.  Namhyung (the perf maintainer) advised me
+> > to send patch to the linux-kbuild [1], for fixing an union init issue
+> > found recently.
+> 
+> The tools/ build system is not Kbuild, so I do not want to take patches
+> for it, sorry. Issues from patches I take become my responsibility to
+> deal with and I am not at all familiar with the tools build system
+> because I am not a consumer of it. Nicolas may feel differently but I am
+> going to assume not based on his level of expertise with tools/ [1]. I
+> am not trying to deadlock you though.
+> 
+> Namhyung, I think this patch can reasonably go via the perf tree since
+> it will be a primary consumer of it.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.0-rc1 next-20260226]
-[cannot apply to trace/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Sorry for the trouble.  I'm fine to take it to the perf tree once
+everyone involved is happy about it.  Let me CC the bpf list in the
+original patch.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/ring-buffer-Flush-and-stop-persistent-ring-buffer-on-panic/20260226-222418
-base:   linus/master
-patch link:    https://lore.kernel.org/r/177211311593.419230.2212568977306190482.stgit%40mhiramat.tok.corp.google.com
-patch subject: [PATCH v5 1/3] ring-buffer: Flush and stop persistent ring buffer on panic
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260227/202602270132.zddhkLDS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602270132.zddhkLDS-lkp@intel.com/reproduce)
+Thanks,
+Namhyung
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602270132.zddhkLDS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/trace/ring_buffer.c:2481:2: error: call to undeclared function 'flush_cache_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2481 |         flush_cache_all();
-         |         ^
-   kernel/trace/ring_buffer.c:2481:2: note: did you mean 'flush_dcache_page'?
-   arch/sparc/include/asm/cacheflush_64.h:51:20: note: 'flush_dcache_page' declared here
-      51 | static inline void flush_dcache_page(struct page *page)
-         |                    ^
-   1 error generated.
-
-
-vim +/flush_cache_all +2481 kernel/trace/ring_buffer.c
-
-  2475	
-  2476	static int rb_flush_buffer_cb(struct notifier_block *nb, unsigned long event, void *data)
-  2477	{
-  2478		struct trace_buffer *buffer = container_of(nb, struct trace_buffer, flush_nb);
-  2479	
-  2480		ring_buffer_record_off(buffer);
-> 2481		flush_cache_all();
-  2482		return NOTIFY_DONE;
-  2483	}
-  2484	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> > > You could claim it! ;)
+> 
+> Heh, Kbuild and ClangBuiltLinux give me more than enough to do around
+> here ;)
+> 
+> > > Regardless, I like to see cc-option available here, as I doubt this will
+> > > be the last conditional option for tool builds. (Actually, are there
+> > > other conditional options that could use this today in the tools
+> > > Makefiles?)
+> > 
+> > Some subprojects in tools have their own conditional options.
+> > 
+> > This patch is ambitious that it changes the global Makefile.include file
+> > so it can propagate the '-fzero-init-padding-bits=all' option to
+> > projects that include it.  Why do we need to do this globally?  This is
+> > because Perf needs to build several subprojects (libperf and bpftool).
+> 
+> This seems like a great reason for it to go via the perf tree as noted
+> above.
+> 
+> [1]: https://lore.kernel.org/aNhGp7NDCCrtwJqm@levanger/
+> 
+> Cheers,
+> Nathan
