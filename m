@@ -1,124 +1,226 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7381533BBA4
-	for <llvm@lists.linux.dev>; Fri, 27 Feb 2026 07:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772176392; cv=pass; b=Q2pUAhdEMtyQqF7OcBFjdfMPTY2MHhm1s6zGvHz8WpyiC1EQ27hF+cN4M1XZtYqjZYEyX+yN3i08iPlYr0AOte2hge6b4Is+KFF/ba0fU2ekDyKW/VYt9G8LDhk/ZnS4792IQaBH5AgXNWWy2dBvPjjBTM8vy78ig3mA1P1BrxA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772176392; c=relaxed/simple;
-	bh=SR/JluC8J7ZCDXxmWSfd3WPNhXumoMmMVukvPS59SxI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f8Xaqy34ZmAeNB6L3vLeI8mfjVhcm8ZzvASIhbbMtZ/FEa0z2RtpQBo5HoAeWG5fkSiX1FccQwkhkW0oVZsApWEK9plWqic0hgLKVh89Zyn2DEFhMEfqO/nKSutqR6LwP85a2YI/V19Cn2vxVV7x9Z/t1uAvkVnrKoJ3Uw9rdVw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZqBsUDHB; arc=pass smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7BD313537;
+	Fri, 27 Feb 2026 07:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772176769; cv=none; b=cuxuzwF/DgcV+d0RPG8/lWItBfLSjnUkChcVt8hAwIK+/aUIXbl14m0pPf6whSm1ueUB1eXViGhcIlyq8XoqqDkJt1ufQVCG6nGky98KzghKPFNIJWJG6ET4Byz/JFas7hrPFIqUtaIREGvVbQ9//Ux+QzwDZBb3fL9DF+fFowc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772176769; c=relaxed/simple;
+	bh=2U53TjftEbw5RN5cFTwe+ZbypmuYQqDKNrfhNmnoT+k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hBb9XuvAB/+1itdBgvahz8cUPBnPiXYMslS+6u2N+WpDFa1oyNtcDDPQGhrZFsGmHnEtJj2nDthCa/9aBPc2fRDx4GXjZ5NlGNY3OYUgpmHWIMTapY5UrGS9Bb0XIeLLMPKX5DkAOEKiyZLSzTvg/V9JfheazCyOCAP/zQk/sEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BRdXbvc/; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZqBsUDHB"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-38a01c80c34so2852111fa.0
-        for <llvm@lists.linux.dev>; Thu, 26 Feb 2026 23:13:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772176390; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QxFMxXULAXG6yvUwbC32dqY/iSJ1PsmE8fnsISkDsWiP63007mqOqdWR+xLe6W4OHn
-         JUWawcaAwJaKwwYaI7zngn0mm6IiojyUoOUJgdVxlbUc7Hi2pCh73Cs1YUKQQ8PKb4JV
-         hS/o3BzNT/Q9+/RKIKf1csooQSiy39SOneN5LatkG4j2ODYEko5WFSH9BgzQqWbnAUKr
-         vQmPa4U5zoYgzM610kN9DdozkNAqxUa/BIP6wsIRKAbOtG2BEdqXKoctCMGn/SImdhR3
-         eakDjK9BXpA4uuDARp9bsTJgOqhk58NeCcnnHGyFFjIcrh+4yccxG9BwLEqfmLbOPetR
-         Fkfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=SR/JluC8J7ZCDXxmWSfd3WPNhXumoMmMVukvPS59SxI=;
-        fh=Q6SejEIvuZlSgvcOp7iDKvh/ooh724a4O4KoMpy5sSU=;
-        b=gpPdZr/yvSMPtV+DOGtWDnIC3NdycicccsVsmWndJte0WkCTtSRL0z4m9y1L0xchOn
-         qBqeKgxghh3Fs3KCGzPAWvT+HV13nnSwoeShs6VOr3jNWWzmju21e2h+scQN0JPsNcnu
-         ZnBDIn2YT344XsnUfsIPdjrYhsUMDCgXaai4+jXg/jDwHjfUuXsLFaQSDjGv5rGC8oia
-         92N48cPvi5eAnf9XIEr/r3ILbeodKwkriZaiAjvXoMAO+Aj5YvEpLmzbjgB+mCwYaJ18
-         KUWeX7mVpEgPksC3LhNuphO7iHFq2GFqwlPvaxkmg3bOatse/c/69QVWmGs63cbKkI+e
-         I/Sw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772176390; x=1772781190; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SR/JluC8J7ZCDXxmWSfd3WPNhXumoMmMVukvPS59SxI=;
-        b=ZqBsUDHBiKl95ZCnFBqb6XmboWt5xXxJKGxWOW3Nw1Yw6QabyzpfeiBnu0yZUnXxfQ
-         826kd95Gcrn8mKhYKadSIGODaTNBbFUvbJPNsSHrRPZtRoQrmjFcH1Edw/H+nv0bDeEt
-         LBInewUgxexwusYNiNvH+r+NWVHtokMKaSKScza58YCslYFV+os9o4+W2tuxbjJNFFaW
-         Qebf7vvV/cxMh5tOLt26N+2fnfgO2K3qtrUAXZOoL5Vjw2FgaBgMYiXXSE5O5Wuakae6
-         8M0f44GdEs+1Ek0FBxWfyYmiZqzEEDzRtZtij5OQaGT5cPn1bYiqHsEObn9Fm7JDzkMd
-         jkDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772176390; x=1772781190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SR/JluC8J7ZCDXxmWSfd3WPNhXumoMmMVukvPS59SxI=;
-        b=llR95A/XyZKW7OEhfpkU3yWhX7HY920vyg2l0JexDHibRCl+b1kO+/HinFlRednpUK
-         iuUo0xPb8pY6ecOxLxCoiJTWh58OMltH254SQ5fdO1RptKz7NIAMPGnPo5FsuIGnEjmn
-         bLzZElyG72BTRQ8UG6HHVCb1CEa9qDzLjL8Pj6OuPTo8LphqKIFnr3KYDkGYAFlCIOEG
-         T7CqA0EGYtTvX/0v7RcNQEv/L55BPzb1wzSL/zFMucqwlj7vL0idrMWd72DaE9oJ/Me2
-         Li4j7Ch0KDBeuRa3XvgJCRz8lDVmoUtsG0FutXiuyD5DBtmDwJPDNi2UfjD7ah6hp+SW
-         u8uA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRmv+XIm/xJUZFK3mfzQzFCCxNUnAvrhh88vyb6rLH+rJHbHeb0PiG96CgRuZbK3FneonY@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx0Iz7ly7suBQdrR+GS8n0KrVdI9TDZ3xpPv/OnSDZ+uNWuNPxl
-	KHhVTj3RITkAqcTQozqDlD/QP3UUvBJHZlY39PX9V0+fFpkDGe/txTFt1nQZFc8kdkkCAhhSQG0
-	NLE2PK9VublXaQ5QrnCDHrLB7s1KO6SI=
-X-Gm-Gg: ATEYQzwy6Ir/E0HZFPRcNmdNNaSEMlnT7varNH53q7a/0OAUAu5ivVTPI+ylt2YEKNa
-	j14chXrelkRU1MRU+8x/N+IypxxKggaiEpqRpZAy8PyhPYG6XrSW6gQnmMtzLLTR1X/5JmNxBDE
-	RMwWEgps93GkoWEsT09LcK8FiD5FZO7ulAFd4Y/YUbwtv6f88V/jUzTPOj/QoPh5eKViXoZvnkm
-	UVMdz+oNXh+AmwMlOKP9Hq48AHY6apQgamVqtmLT0zk4QvSb4ORwPjeVvwQOMjhAD31q85r+9z2
-	4zT0HFGoJyTfY4/+1hpPQvJLJsiX0Foty49DymitNUFlLYF5puHRs5RJ9o7+d4fsU42dWSIPxRB
-	uEPa4KqKUUszWtkOtzHhBoOJo7S/eMmTgFNEKeA==
-X-Received: by 2002:a05:651c:4108:b0:387:6d8:8d61 with SMTP id
- 38308e7fff4ca-389ff136a1emr7706981fa.10.1772176389390; Thu, 26 Feb 2026
- 23:13:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BRdXbvc/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772176768; x=1803712768;
+  h=date:from:to:cc:subject:message-id;
+  bh=2U53TjftEbw5RN5cFTwe+ZbypmuYQqDKNrfhNmnoT+k=;
+  b=BRdXbvc/OenAgMG+xoOL3R3WzJLq2ERcAVQXQnyGnT7ctgwvNuesT6oR
+   7WDPgBt4Z7KJm+gPKzITCCEpl3tOXUwkb1f/FXI3gYqVlDDHrcimJul9Q
+   gBjWdtPfdd8jT5zhUcri9HKFv5mp9aWxFr4QNYFeRD/U86Nka/jXE/c/j
+   DMf7ClULBol7gPuikeTlhC8bQCDVtJbCVS+/KMV9tqVAYj2k3qe3FE9oa
+   cXeIZQAppmVOp6+7Hda3b6l6uQ92gqofiIpuSy4Q62/mEhQv0FOU8/Z5I
+   2qxP8tT9SvBnPyjvD8o79kmb2lJahh9wE073TmBHN8PR54Jq146fu+aya
+   Q==;
+X-CSE-ConnectionGUID: ZdWQ6PLKRCiVs7/KVhly9A==
+X-CSE-MsgGUID: ZzlsloDrTte5d+evkvJgjw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="90658089"
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="90658089"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 23:19:26 -0800
+X-CSE-ConnectionGUID: wC7EKBS+QDS5AhQSs9Frhw==
+X-CSE-MsgGUID: eVYoHptxRQSva2c1hKq7dg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="216720761"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 26 Feb 2026 23:19:24 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvs89-00000000AJJ-1eZB;
+	Fri, 27 Feb 2026 07:19:21 +0000
+Date: Fri, 27 Feb 2026 15:17:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [cornelisnetworks:for-upstream_20260226-0944 30/32]
+ drivers/infiniband/hw/hfi2/sdma_defs.h:7:9: warning: '_HFI2_SDMA_DEFS_H' is
+ used as a header guard here, followed by #define of a different macro
+Message-ID: <202602271552.pLL2VD5M-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260226111721.25454-1-yuuchihsu@gmail.com> <20260226171401.7461b9da@kernel.org>
-In-Reply-To: <20260226171401.7461b9da@kernel.org>
-From: Sam Su <yuuchihsu@gmail.com>
-Date: Fri, 27 Feb 2026 15:12:58 +0800
-X-Gm-Features: AaiRm51KmbDywbvnGCMuI-OEwTFm7sEujKELuXZNIkIKm0lI0JiZrT3nt3bzA3I
-Message-ID: <CAPAzCqE3k9PehK9gec7pcfq-Tnjsx-reD63GUaO+MEnP8LZ0Vg@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv6: fix ARM64 alignment fault in fib_multipath_hash_from_keys()
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, horms@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Jakub Kicinski <kuba@kernel.org> =E6=96=BC 2026=E5=B9=B42=E6=9C=8827=E6=97=
-=A5=E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=889:14=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Thu, 26 Feb 2026 19:17:21 +0800 Yung Chih Su wrote:
-> > Fixes: [4ee2a8cace3fb9a34aea6a56426f89d26dd514f3] ("net: ipv4: Add a sy=
-sctl to set multipath hash seed")
->
-> Please use the traditional abbreviated format of the Fixes tag
+tree:   https://github.com/cornelisnetworks/linux.git for-upstream_20260226-0944
+head:   06fbcbb2c9e97584450614a6d14c0d0f978b8209
+commit: 62158d11e11c670a30dd0becb21732fef40a1ab8 [30/32] RDMA/hfi2: Make it build
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260227/202602271552.pLL2VD5M-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271552.pLL2VD5M-lkp@intel.com/reproduce)
 
-Hi Jakub,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602271552.pLL2VD5M-lkp@intel.com/
 
-Got it, my apologies for the formatting mistake.
-I will format it strictly as 12-char abbreviated without brackets in
-the upcoming v2 patch:
-Fixes: 4ee2a8cace3f ("net: ipv4: Add a sysctl to set multipath hash seed")
+All warnings (new ones prefixed by >>):
 
-I am currently preparing the v2 patch which will also include Eric
-Dumazet's suggestion regarding the WRITE_ONCE() and READ_ONCE() on the
-sysctl read/write side.
- I will send out the v2 after my local testing is done.
+   In file included from drivers/infiniband/hw/hfi2/affinity.c:11:
+   In file included from drivers/infiniband/hw/hfi2/hfi2.h:40:
+   In file included from drivers/infiniband/hw/hfi2/verbs.h:31:
+   In file included from drivers/infiniband/hw/hfi2/iowait.h:14:
+   In file included from drivers/infiniband/hw/hfi2/sdma_txreq.h:9:
+>> drivers/infiniband/hw/hfi2/sdma_defs.h:7:9: warning: '_HFI2_SDMA_DEFS_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+       7 | #ifndef _HFI2_SDMA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hfi2/sdma_defs.h:8:9: note: '_HFI2_SMDA_DEFS_H' is defined here; did you mean '_HFI2_SDMA_DEFS_H'?
+       8 | #define _HFI2_SMDA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+         |         _HFI2_SDMA_DEFS_H
+   1 warning generated.
+--
+>> Warning: drivers/infiniband/hw/hfi2/affinity.c:92 This comment starts with '/**', but isn't a kernel-doc comment. Refer to Documentation/doc-guide/kernel-doc.rst
+    * Remove HT/SMT threads from cores in @cpus.
+--
+   In file included from drivers/infiniband/hw/hfi2/chip.c:16:
+   In file included from drivers/infiniband/hw/hfi2/hfi2.h:40:
+   In file included from drivers/infiniband/hw/hfi2/verbs.h:31:
+   In file included from drivers/infiniband/hw/hfi2/iowait.h:14:
+   In file included from drivers/infiniband/hw/hfi2/sdma_txreq.h:9:
+>> drivers/infiniband/hw/hfi2/sdma_defs.h:7:9: warning: '_HFI2_SDMA_DEFS_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+       7 | #ifndef _HFI2_SDMA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hfi2/sdma_defs.h:8:9: note: '_HFI2_SMDA_DEFS_H' is defined here; did you mean '_HFI2_SDMA_DEFS_H'?
+       8 | #define _HFI2_SMDA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+         |         _HFI2_SDMA_DEFS_H
+>> drivers/infiniband/hw/hfi2/chip.c:11131:28: warning: variable 'extended_vl' set but not used [-Wunused-but-set-variable]
+    11131 |         unsigned int qpns_per_vl, extended_vl, ctxt, i, qpn, n, m;
+          |                                   ^
+   2 warnings generated.
+--
+>> Warning: drivers/infiniband/hw/hfi2/chip_gen.c:588 This comment starts with '/**', but isn't a kernel-doc comment. Refer to Documentation/doc-guide/kernel-doc.rst
+    * Ask cport firmware for the temperature.
+--
+   In file included from drivers/infiniband/hw/hfi2/cport.c:13:
+   In file included from drivers/infiniband/hw/hfi2/hfi2.h:40:
+   In file included from drivers/infiniband/hw/hfi2/verbs.h:31:
+   In file included from drivers/infiniband/hw/hfi2/iowait.h:14:
+   In file included from drivers/infiniband/hw/hfi2/sdma_txreq.h:9:
+>> drivers/infiniband/hw/hfi2/sdma_defs.h:7:9: warning: '_HFI2_SDMA_DEFS_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+       7 | #ifndef _HFI2_SDMA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hfi2/sdma_defs.h:8:9: note: '_HFI2_SMDA_DEFS_H' is defined here; did you mean '_HFI2_SDMA_DEFS_H'?
+       8 | #define _HFI2_SMDA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+         |         _HFI2_SDMA_DEFS_H
+>> drivers/infiniband/hw/hfi2/cport.c:843:50: warning: result of comparison of constant 256 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
+     843 |         if (op_start > op_end || op_start < 0 || op_end >= 256)
+         |                                                  ~~~~~~ ^  ~~~
+   2 warnings generated.
+--
+>> Warning: drivers/infiniband/hw/hfi2/chip.c:8166 function parameter 'ppd' not described in 'set_hdrq_regs'
+>> Warning: drivers/infiniband/hw/hfi2/chip.c:10799 function parameter 'ppd' not described in 'hfi2_get_qp_map'
+>> Warning: drivers/infiniband/hw/hfi2/chip.c:10843 function parameter 'ppd' not described in 'init_qpmap_table'
+>> Warning: drivers/infiniband/hw/hfi2/chip.c:8166 function parameter 'ppd' not described in 'set_hdrq_regs'
+>> Warning: drivers/infiniband/hw/hfi2/chip.c:10799 function parameter 'ppd' not described in 'hfi2_get_qp_map'
+>> Warning: drivers/infiniband/hw/hfi2/chip.c:10843 function parameter 'ppd' not described in 'init_qpmap_table'
+--
+   In file included from drivers/infiniband/hw/hfi2/init.c:19:
+   In file included from drivers/infiniband/hw/hfi2/hfi2.h:40:
+   In file included from drivers/infiniband/hw/hfi2/verbs.h:31:
+   In file included from drivers/infiniband/hw/hfi2/iowait.h:14:
+   In file included from drivers/infiniband/hw/hfi2/sdma_txreq.h:9:
+>> drivers/infiniband/hw/hfi2/sdma_defs.h:7:9: warning: '_HFI2_SDMA_DEFS_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+       7 | #ifndef _HFI2_SDMA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hfi2/sdma_defs.h:8:9: note: '_HFI2_SMDA_DEFS_H' is defined here; did you mean '_HFI2_SDMA_DEFS_H'?
+       8 | #define _HFI2_SMDA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+         |         _HFI2_SDMA_DEFS_H
+>> drivers/infiniband/hw/hfi2/init.c:2499:6: warning: variable 'initfail' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2499 |         if (!ret)
+         |             ^~~~
+   drivers/infiniband/hw/hfi2/init.c:2502:7: note: uninitialized use occurs here
+    2502 |         if (!initfail && !ret)
+         |              ^~~~~~~~
+   drivers/infiniband/hw/hfi2/init.c:2499:2: note: remove the 'if' if its condition is always true
+    2499 |         if (!ret)
+         |         ^~~~~~~~~
+    2500 |                 initfail = hfi2_init(dd, 0);
+   drivers/infiniband/hw/hfi2/init.c:2389:29: note: initialize the variable 'initfail' to silence this warning
+    2389 |         int ret = 0, pidx, initfail;
+         |                                    ^
+         |                                     = 0
+   2 warnings generated.
+--
+>> Warning: drivers/infiniband/hw/hfi2/intr.c:78 function parameter 'ppd' not described in 'handle_linkup_change'
+>> Warning: drivers/infiniband/hw/hfi2/intr.c:78 function parameter 'ppd' not described in 'handle_linkup_change'
+--
+>> Warning: drivers/infiniband/hw/hfi2/init.c:970 function parameter 'index' not described in 'allocate_rcd_index'
+>> Warning: drivers/infiniband/hw/hfi2/init.c:1988 function parameter 'params' not described in 'hfi2_alloc_devdata'
+>> Warning: drivers/infiniband/hw/hfi2/init.c:970 function parameter 'index' not described in 'allocate_rcd_index'
+>> Warning: drivers/infiniband/hw/hfi2/init.c:1988 function parameter 'params' not described in 'hfi2_alloc_devdata'
+--
+   In file included from drivers/infiniband/hw/hfi2/pinning.c:10:
+   In file included from drivers/infiniband/hw/hfi2/trace.h:15:
+   In file included from drivers/infiniband/hw/hfi2/trace_dbg.h:12:
+   In file included from drivers/infiniband/hw/hfi2/hfi2.h:40:
+   In file included from drivers/infiniband/hw/hfi2/verbs.h:31:
+   In file included from drivers/infiniband/hw/hfi2/iowait.h:14:
+   In file included from drivers/infiniband/hw/hfi2/sdma_txreq.h:9:
+>> drivers/infiniband/hw/hfi2/sdma_defs.h:7:9: warning: '_HFI2_SDMA_DEFS_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+       7 | #ifndef _HFI2_SDMA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hfi2/sdma_defs.h:8:9: note: '_HFI2_SMDA_DEFS_H' is defined here; did you mean '_HFI2_SDMA_DEFS_H'?
+       8 | #define _HFI2_SMDA_DEFS_H
+         |         ^~~~~~~~~~~~~~~~~
+         |         _HFI2_SDMA_DEFS_H
+   In file included from drivers/infiniband/hw/hfi2/pinning.c:7:
+   In file included from include/linux/string.h:386:
+   include/linux/fortify-string.h:478:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     478 |                         __write_overflow_field(p_size_field, size);
+         |                         ^
+   2 warnings generated.
+--
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:302 function parameter 'ppd' not described in 'hfi2_netdev_rx_init'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:323 function parameter 'ppd' not described in 'hfi2_netdev_rx_destroy'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:404 function parameter 'ppd' not described in 'hfi2_netdev_enable_queues'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:444 function parameter 'ppd' not described in 'hfi2_netdev_add_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:458 function parameter 'ppd' not described in 'hfi2_netdev_remove_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:471 function parameter 'ppd' not described in 'hfi2_netdev_get_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:484 function parameter 'ppd' not described in 'hfi2_netdev_get_first_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:302 function parameter 'ppd' not described in 'hfi2_netdev_rx_init'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:323 function parameter 'ppd' not described in 'hfi2_netdev_rx_destroy'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:404 function parameter 'ppd' not described in 'hfi2_netdev_enable_queues'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:444 function parameter 'ppd' not described in 'hfi2_netdev_add_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:458 function parameter 'ppd' not described in 'hfi2_netdev_remove_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:471 function parameter 'ppd' not described in 'hfi2_netdev_get_data'
+>> Warning: drivers/infiniband/hw/hfi2/netdev_rx.c:484 function parameter 'ppd' not described in 'hfi2_netdev_get_first_data'
+..
 
-Thanks for the review!
 
-Best regards,
-Yung Chih
+vim +/_HFI2_SDMA_DEFS_H +7 drivers/infiniband/hw/hfi2/sdma_defs.h
+
+3ee29f993aa1b6 Dennis Dalessandro 2026-01-21 @7  #ifndef _HFI2_SDMA_DEFS_H
+3ee29f993aa1b6 Dennis Dalessandro 2026-01-21  8  #define _HFI2_SMDA_DEFS_H
+3ee29f993aa1b6 Dennis Dalessandro 2026-01-21  9  
+
+:::::: The code at line 7 was first introduced by commit
+:::::: 3ee29f993aa1b67ceb78e1a10847d432be93558a RDMA/hfi2: Add IO related headers
+
+:::::: TO: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+:::::: CC: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
