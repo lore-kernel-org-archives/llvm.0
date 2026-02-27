@@ -1,69 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB68121D3F4;
-	Fri, 27 Feb 2026 20:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174E62D0C99;
+	Fri, 27 Feb 2026 20:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772224263; cv=none; b=oyrKjnF+ocTIew+B118Bp2FVYl9ouVoPbSkDSRvW0GK5I1bB4xFVqD9+bJ+4YrcTTzzdKtYXdEZHNEK6aloJgx3i9dO1MnSPZFR3ODrvtFzfcL0cEJelpGpLJdKNxRKw4neQxhkNhtn8dCPV+UxhOfjF1hHmc8lSk/lloeKRPY8=
+	t=1772225625; cv=none; b=hKQP3ra/UcczdWKBDxzy+BE8O6R6f8KdmcxEltwWHjfaUXIZVqicuoSeUEU4apF+YiZ7mcucXTv0xPgJgo/bBY+NS7G16Isxkqmf+12712vxIwfoj4eVzYZve+fMkf7Sg+vTvFaYZmzJiPxWnCsp7hC7W2ZZHEO4ts/DzLeW2xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772224263; c=relaxed/simple;
-	bh=7gMMXSmdmA1tBNKDTNrc8bRUDF2VVsAI+2IBxawq7Ls=;
+	s=arc-20240116; t=1772225625; c=relaxed/simple;
+	bh=sewsWOhrdv0VBl+lVc6DrKsUYvbvkjuiZxBSMLp9LXY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ttcdv+d1HyBICLZ4kCJWXYvdaCZmpIHe/1TntJQrEq1eCE2j5eKKaTOa8zgOSb1PD+Ws7LNGD0EqDlXeqHTk0zo08nWTot9zQOqomir+BCMk3/Xsiu8FWny4dK0Gb1/SwrQVIAi/pyh/ieL6uu+c8TKRZNzz6Dhq7eRncWKCjbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lrkKNIe8; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=khyNJ5C52vH72JhgXhR+36i0i2ag9t99laNZlH5y5NVzTfqHWEQ9Tq/4m1Mb9t3tGkZVxir107QwhCaSET2hiznLEnIxvf6YBxEW5r9LEA4TIqX2mWIR31LPTlv1y8g8j6/LKLTwXOtLx+rUq8ojd9Q5Kndfc/Wn1MPZVNr9EC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AP5adzFU; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lrkKNIe8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AP5adzFU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772224261; x=1803760261;
+  t=1772225625; x=1803761625;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7gMMXSmdmA1tBNKDTNrc8bRUDF2VVsAI+2IBxawq7Ls=;
-  b=lrkKNIe8CWJiyp4+rIsBcAtzkfTi+GqCRXOZdIha4xf3G2Q2tsfeVyDF
-   IXV9RqJO0ILO9Ja96utd8sjtosZI2yRcOMLVJ/9QIn1+3wAJ3OOwb1a+u
-   JMnSWXUteK6lVTokpnNqeVQ0I4CHjrT9bhSAnXPjVo7YOunu+KR3JEbjj
-   6/sNf4rx8G32l4+YrAcADrq18VHyUk7lAl0278eauJ+kiqpubFTGC4fwN
-   3FueL6JJHrXH+aCfFqLsfQhaGxdU4/mgOhteLx77BhSyLDe4sXhTTODiN
-   WSK/0fg0VMj/AFR8DcLKUYImyqmQkclmeE+WeBGqwzIkH1oZJTrnKIQ3S
-   A==;
-X-CSE-ConnectionGUID: 5atQXcpRQbKeRPdXpEv0Fw==
-X-CSE-MsgGUID: fyh9yRVwSGWrlJzGIafmYg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="73225489"
+  bh=sewsWOhrdv0VBl+lVc6DrKsUYvbvkjuiZxBSMLp9LXY=;
+  b=AP5adzFU9qmvp8wixUuf6trHQMnrXto1uyp8oGS4bey6AXQ6O8G8XynD
+   zNLnhl9ZBpnmsjOLe/u1OXmPHJCrYcLmjNQWla2cSGC6qnn8EFanNkVPz
+   KabmP+HNSAzvM1eH1ajGgdLTHacEODzfpC6bpEoApp0zRImcgxeJIsduf
+   bZgyM9nV/P8QQPL6I0bUxDQb84pmy+MiafPtrwER8h6jWQ6rpKi9z6+mJ
+   HHPYuOqeHo+4yMG09vqpiugaiG8VC1iQDmDrv2uZYXwngyMcNfPbuzoum
+   Y6jvODjFOLT01Wy6oqNBj19mII1gVN4MTFlCmRfCztxNQf6ZHRvEmQm/F
+   w==;
+X-CSE-ConnectionGUID: +ywXu/sIRSqV7JcGSXFVFA==
+X-CSE-MsgGUID: hOCTth/8Rf2K5IDPiAHGjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="77157968"
 X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
-   d="scan'208";a="73225489"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 12:31:01 -0800
-X-CSE-ConnectionGUID: HMmeM1m4RHiSOwEk0dTWQw==
-X-CSE-MsgGUID: Mrhtn7flRSezBFQhe6Ft4w==
+   d="scan'208";a="77157968"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 12:53:44 -0800
+X-CSE-ConnectionGUID: YzKUGKEeT6SAcReSVJo2Zg==
+X-CSE-MsgGUID: u7U/NNB9SJScgxP9k1zAuw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
-   d="scan'208";a="240005938"
+   d="scan'208";a="216136986"
 Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 27 Feb 2026 12:30:57 -0800
+  by orviesa006.jf.intel.com with ESMTP; 27 Feb 2026 12:53:41 -0800
 Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vw4Te-00000000B2P-3TnR;
-	Fri, 27 Feb 2026 20:30:37 +0000
-Date: Sat, 28 Feb 2026 04:27:52 +0800
+	id 1vw4oX-00000000B3L-3jhb;
+	Fri, 27 Feb 2026 20:52:40 +0000
+Date: Sat, 28 Feb 2026 04:49:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Ryder Lee <ryder.lee@mediatek.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] PCI: mediatek-gen3: Integrate new pwrctrl API
-Message-ID: <202602280453.4TGe7q2R-lkp@intel.com>
-References: <20260226074524.3808081-6-wenst@chromium.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v5 1/5] bpf: Factor out program return value
+ calculation
+Message-ID: <202602280401.OowzoAl1-lkp@intel.com>
+References: <20260227154616.6846-2-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,48 +66,153 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260226074524.3808081-6-wenst@chromium.org>
+In-Reply-To: <20260227154616.6846-2-emil@etsalapatis.com>
 
-Hi Chen-Yu,
+Hi Emil,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus robh/for-next linus/master v7.0-rc1 next-20260227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yu-Tsai/PCI-mediatek-gen3-Clean-up-mtk_pcie_parse_port-with-dev_err_probe/20260226-155647
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260226074524.3808081-6-wenst%40chromium.org
-patch subject: [PATCH v2 5/7] PCI: mediatek-gen3: Integrate new pwrctrl API
-config: um-randconfig-001-20260227 (https://download.01.org/0day-ci/archive/20260228/202602280453.4TGe7q2R-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Emil-Tsalapatis/bpf-Factor-out-program-return-value-calculation/20260227-235723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260227154616.6846-2-emil%40etsalapatis.com
+patch subject: [PATCH bpf-next v5 1/5] bpf: Factor out program return value calculation
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260228/202602280401.OowzoAl1-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602280453.4TGe7q2R-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602280401.OowzoAl1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602280453.4TGe7q2R-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602280401.OowzoAl1-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: drivers/pci/controller/pcie-mediatek-gen3.o: in function `mtk_pcie_probe':
->> pcie-mediatek-gen3.c:(.ltext+0x7e5): undefined reference to `pci_pwrctrl_create_devices'
->> /usr/bin/ld: pcie-mediatek-gen3.c:(.ltext+0xd45): undefined reference to `pci_pwrctrl_destroy_devices'
-   /usr/bin/ld: drivers/pci/controller/pcie-mediatek-gen3.o: in function `mtk_pcie_remove':
->> pcie-mediatek-gen3.c:(.ltext+0xefd): undefined reference to `pci_pwrctrl_power_off_devices'
-   /usr/bin/ld: pcie-mediatek-gen3.c:(.ltext+0xff0): undefined reference to `pci_pwrctrl_destroy_devices'
-   /usr/bin/ld: drivers/pci/controller/pcie-mediatek-gen3.o: in function `mtk_pcie_device_power_down':
-   pcie-mediatek-gen3.c:(.ltext+0x10cb): undefined reference to `pci_pwrctrl_power_off_devices'
-   /usr/bin/ld: drivers/pci/controller/pcie-mediatek-gen3.o: in function `mtk_pcie_startup_port':
->> pcie-mediatek-gen3.c:(.ltext+0x13f6): undefined reference to `pci_pwrctrl_power_on_devices'
->> /usr/bin/ld: pcie-mediatek-gen3.c:(.ltext+0x1ae1): undefined reference to `pci_pwrctrl_power_off_devices'
-   /usr/bin/ld: drivers/pci/controller/pcie-mediatek-gen3.o: in function `mtk_pcie_suspend_noirq':
-   pcie-mediatek-gen3.c:(.ltext+0x1d19): undefined reference to `pci_pwrctrl_power_off_devices'
-   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+>> kernel/bpf/verifier.c:17864:3: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+    17864 |                 }
+          |                 ^
+   kernel/bpf/verifier.c:17923:6: warning: unused variable 'ret' [-Wunused-variable]
+    17923 |         int ret, err;
+          |             ^~~
+   kernel/bpf/verifier.c:17926:7: warning: unused variable 'return_32bit' [-Wunused-variable]
+    17926 |         bool return_32bit = false;
+          |              ^~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +17864 kernel/bpf/verifier.c
+
+ 17805	
+ 17806	
+ 17807	static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
+ 17808	{
+ 17809		enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+ 17810	
+ 17811		/* Default return value range. */
+ 17812		*range = retval_range(0, 1);
+ 17813	
+ 17814		switch (prog_type) {
+ 17815		case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 17816			switch (env->prog->expected_attach_type) {
+ 17817			case BPF_CGROUP_UDP4_RECVMSG:
+ 17818			case BPF_CGROUP_UDP6_RECVMSG:
+ 17819			case BPF_CGROUP_UNIX_RECVMSG:
+ 17820			case BPF_CGROUP_INET4_GETPEERNAME:
+ 17821			case BPF_CGROUP_INET6_GETPEERNAME:
+ 17822			case BPF_CGROUP_UNIX_GETPEERNAME:
+ 17823			case BPF_CGROUP_INET4_GETSOCKNAME:
+ 17824			case BPF_CGROUP_INET6_GETSOCKNAME:
+ 17825			case BPF_CGROUP_UNIX_GETSOCKNAME:
+ 17826				*range = retval_range(1, 1);
+ 17827				break;
+ 17828			case BPF_CGROUP_INET4_BIND:
+ 17829			case BPF_CGROUP_INET6_BIND:
+ 17830				*range = retval_range(0, 3);
+ 17831				break;
+ 17832			default:
+ 17833				break;
+ 17834			}
+ 17835			break;
+ 17836		case BPF_PROG_TYPE_CGROUP_SKB:
+ 17837			if (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS)
+ 17838				*range = retval_range(0, 3);
+ 17839			break;
+ 17840		case BPF_PROG_TYPE_CGROUP_SOCK:
+ 17841		case BPF_PROG_TYPE_SOCK_OPS:
+ 17842		case BPF_PROG_TYPE_CGROUP_DEVICE:
+ 17843		case BPF_PROG_TYPE_CGROUP_SYSCTL:
+ 17844		case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 17845			break;
+ 17846		case BPF_PROG_TYPE_RAW_TRACEPOINT:
+ 17847			if (!env->prog->aux->attach_btf_id)
+ 17848				return false;
+ 17849			*range = retval_range(0, 0);
+ 17850			break;
+ 17851		case BPF_PROG_TYPE_TRACING:
+ 17852			switch (env->prog->expected_attach_type) {
+ 17853			case BPF_TRACE_FENTRY:
+ 17854			case BPF_TRACE_FEXIT:
+ 17855			case BPF_TRACE_FSESSION:
+ 17856				*range = retval_range(0, 0);
+ 17857				break;
+ 17858			case BPF_TRACE_RAW_TP:
+ 17859			case BPF_MODIFY_RETURN:
+ 17860				return false;
+ 17861			case BPF_TRACE_ITER:
+ 17862				break;
+ 17863			default:
+ 17864			}
+ 17865			break;
+ 17866		case BPF_PROG_TYPE_KPROBE:
+ 17867			switch (env->prog->expected_attach_type) {
+ 17868			case BPF_TRACE_KPROBE_SESSION:
+ 17869			case BPF_TRACE_UPROBE_SESSION:
+ 17870				break;
+ 17871			default:
+ 17872				return false;
+ 17873			}
+ 17874			break;
+ 17875		case BPF_PROG_TYPE_SK_LOOKUP:
+ 17876			*range = retval_range(SK_DROP, SK_PASS);
+ 17877			break;
+ 17878	
+ 17879		case BPF_PROG_TYPE_LSM:
+ 17880			if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
+ 17881				/* no range found, any return value is allowed */
+ 17882				if (!get_func_retval_range(env->prog, range))
+ 17883					return false;
+ 17884				/* no restricted range, any return value is allowed */
+ 17885				if (range->minval == S32_MIN && range->maxval == S32_MAX)
+ 17886					return false;
+ 17887				range->return_32bit = true;
+ 17888			} else if (!env->prog->aux->attach_func_proto->type) {
+ 17889				/* Make sure programs that attach to void
+ 17890				 * hooks don't try to modify return value.
+ 17891				 */
+ 17892				*range = retval_range(1, 1);
+ 17893			}
+ 17894			break;
+ 17895	
+ 17896		case BPF_PROG_TYPE_NETFILTER:
+ 17897			*range = retval_range(NF_DROP, NF_ACCEPT);
+ 17898			break;
+ 17899		case BPF_PROG_TYPE_STRUCT_OPS:
+ 17900			*range = retval_range(0, 0);
+ 17901			break;
+ 17902		case BPF_PROG_TYPE_EXT:
+ 17903			/* freplace program can return anything as its return value
+ 17904			 * depends on the to-be-replaced kernel func or bpf program.
+ 17905			 */
+ 17906		default:
+ 17907			return false;
+ 17908		}
+ 17909	
+ 17910		/* Continue calculating. */
+ 17911	
+ 17912		return true;
+ 17913	}
+ 17914	
 
 -- 
 0-DAY CI Kernel Test Service
