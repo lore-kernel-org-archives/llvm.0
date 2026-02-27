@@ -1,103 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03994346AF4;
-	Fri, 27 Feb 2026 16:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382A733993;
+	Fri, 27 Feb 2026 16:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772210211; cv=none; b=Iy7/DMLNw2ciSRg/eq645O57hLmg6ChaHOBIx0KC8sxb664Yiz11aNeGFSfGNlCiQl5c/C0TsrYhXefPg2QUHMOqqSwo8iDYgxQRGhc565LGj+bVNvpsVpxarGPr3AbkJ9UK6YIvvRmXE1bS2WMIBYjxjHuyKJQPe+bclk4SW5A=
+	t=1772210370; cv=none; b=X1fusGuA+UvaC05PgMoTPLfQl4J6k9qupIYfDqBZ7v06N/YACZsifzUEumbNaGx7brNLfxaao4D/sUifWbBF7Cf8SYbwbXRFD2L1yESjqwwVE1RwLOC7dJmGo2knPRKNIFhYeb/SqoTtY9oSAHhsamVzBm3HiqUEG6p5tSHfwYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772210211; c=relaxed/simple;
-	bh=Z3uhduLHgelJSPSi026On/FywI8UKkvvjlJZUY1E4uI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X4D7hI/LCGcYGwOda4go6qrFfHAv1hzevN6LyErDCSbRaVPLGnU4/g38SKTXmVX4F3HE2svlFGP65SwhInK28GiwnmlY2jJQ1cTyDLGTo8WG5zKya03cetl3WyNNRZrsD6KJd1rDt8HzLdgFxU5JxX65QpxFF6qvrjvTRIM25lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MB9xUxSA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772210370; c=relaxed/simple;
+	bh=cscTOmtCZplhqTxfbKiQ9xxVRQrUo0q9+COKFcFhMbk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Gd5KtsmD6gWh85z9n7rzZuuaDzUqDMUrLkUs30aR7s/1Sm7Tc0kp2ih8K/l5oeyj5FnNWuWKJw74LuHAmKL+Ha00zD8/rra9j/q4KG63+ucYg/t0e8PCgLPDF1qQMBApQVi3/4XJamOxkd0NF/a4NficgyodSi+xWNvNNiFrdJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XDYWtqWT; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MB9xUxSA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1501EC116C6;
-	Fri, 27 Feb 2026 16:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772210210;
-	bh=Z3uhduLHgelJSPSi026On/FywI8UKkvvjlJZUY1E4uI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MB9xUxSAbn+Di/nKHpsy4Owu9dULnOKmLKkKAH28ikPcwz8E+RbfqqGz2GrfUKoS2
-	 rvjh4SLv6O9JiT+L+6SpQ0H/DrDTd5iZ4+QO2UVbr+MNaN2vtvrRDHMh8InzWzLS16
-	 cncFCKpao/cWYr+w7ULn5xRgtHEAxOxUtF8TV9x/Gfm0Xhf56APc04TeRI/vI1HLWn
-	 rCK2y6qdS+KgajafeMKD0K51X5N68v1p6QI6T4oKzSBTbcUtFAPrySuzhetHWqfeao
-	 I9O/HuD47cl1xQtwtjRali7R0u0JCyq+rfuleR6cQliX8wPX4/lv7UgeBNEjV4a1Vi
-	 RyCLvFYLUeHLQ==
-Date: Fri, 27 Feb 2026 17:36:33 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] kbuild: Consolidate C dialect options
-Message-ID: <aaHIEQPiAbd7DGlW@derry.ads.avm.de>
-References: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
- <20260223-fms-anonymous-structs-v1-1-8ee406d3c36c@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XDYWtqWT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772210369; x=1803746369;
+  h=date:from:to:cc:subject:message-id;
+  bh=cscTOmtCZplhqTxfbKiQ9xxVRQrUo0q9+COKFcFhMbk=;
+  b=XDYWtqWT4M75zcero3xcES5CuooBMAyNX9Wq0OTfH02lQpJD44379HnE
+   h6jhRaUJ57dQHFZcyBkoSEcGCmWxsfPrRNIKYnL5ShivHlX0CfQCDBXJE
+   P8g6CO+Sie3fEvRhOxPNMTxNvgjkwXklyMQ4iUmDG8yqdRDOJvvRPY95w
+   7ItNrvPWe8tlXFJNY1lVy7RiEVlZh3q/1W6KaXw53HrojeRXGCBfH7hFu
+   9rNGk1MSFGDZzDR7Cnts3bIY9MATLflODspB7om58CZGmBwGSPuVLiqrl
+   UaqIEOTxYsw99QjvTz4GrkvLhkJiI7MkpvfEjcXbKgU6IRAMnLO2eaGoo
+   w==;
+X-CSE-ConnectionGUID: L8fdFO6vR5S/ydYt/ACh5g==
+X-CSE-MsgGUID: tDAWk6qFSty5Kvcg7ZhcoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="90697869"
+X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
+   d="scan'208";a="90697869"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 08:39:29 -0800
+X-CSE-ConnectionGUID: pEkJE1wvS5el8Jpt2dmPGw==
+X-CSE-MsgGUID: hpdzvNlFQS+LN78jICimzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
+   d="scan'208";a="221936076"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 27 Feb 2026 08:39:26 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vw0rr-00000000Anv-2mvf;
+	Fri, 27 Feb 2026 16:39:12 +0000
+Date: Sat, 28 Feb 2026 00:38:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: hepengpx <pengpengx.he@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Shahidan, Muhammad Shahmil" <muhammad.shahmil.shahidan@intel.com>
+Subject: [acrn:6.17/linux 213/3102]
+ drivers/media/i2c/isx031.c:225:15: error: initializer element is not a
+ compile-time constant
+Message-ID: <202602280018.s45tHWvr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260223-fms-anonymous-structs-v1-1-8ee406d3c36c@kernel.org>
 
-On Mon, Feb 23, 2026 at 12:10:28PM -0700, Nathan Chancellor wrote:
-> Introduce CC_FLAGS_DIALECT to make it easier to update the various
-> places in the tree that rely on the GNU C standard and Microsoft
-> extensions flags atomically. All remaining uses of '-std=gnu11' and
-> '-fms-extensions' are in the tools directory (which has its own build
-> system) and other standalone Makefiles. This will allow the kernel to
-> use a narrower option to enable the Microsoft anonymous tagged structure
-> extension in a simpler manner. Place the CC_FLAGS_DIALECT block after
-> the configuration include (so that a future change can move the
-> selection of the flag to Kconfig) but before the
-> arch/$(SRCARCH)/Makefile include (so that CC_FLAGS_DIALECT is available
-> for use in those Makefiles).
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  Makefile                              | 16 ++++++++++++----
->  arch/arm64/kernel/vdso32/Makefile     |  3 +--
->  arch/loongarch/vdso/Makefile          |  2 +-
->  arch/parisc/boot/compressed/Makefile  |  2 +-
->  arch/powerpc/boot/Makefile            |  3 +--
->  arch/s390/Makefile                    |  3 +--
->  arch/s390/purgatory/Makefile          |  3 +--
->  arch/x86/Makefile                     |  6 +-----
->  arch/x86/boot/compressed/Makefile     |  6 +-----
->  drivers/firmware/efi/libstub/Makefile |  3 +--
->  scripts/Makefile.warn                 |  5 -----
->  11 files changed, 21 insertions(+), 31 deletions(-)
-> 
+tree:   https://github.com/projectacrn/acrn-kernel 6.17/linux
+head:   eac6d3b7a20ffb9d3102dbdc152241a7184a63cd
+commit: ee759f8dcd8fe7bc5720ddfe2a5e55bf6da57a16 [213/3102] max9x: add config in makefile & kconfig
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260228/202602280018.s45tHWvr-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602280018.s45tHWvr-lkp@intel.com/reproduce)
 
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602280018.s45tHWvr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/isx031.c:225:15: error: initializer element is not a compile-time constant
+                   .reg_list = isx031_1920_1080_30fps_reg_list,
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/isx031.c:772:54: warning: address of array 'isx031->platform_data->suffix' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (isx031->platform_data && isx031->platform_data->suffix)
+                                     ~~ ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   1 warning and 1 error generated.
+
+
+vim +225 drivers/media/i2c/isx031.c
+
+f4927c135b40fc Hao Yao 2025-09-30  217  
+f4927c135b40fc Hao Yao 2025-09-30  218  static const struct isx031_mode supported_modes[] = {
+f4927c135b40fc Hao Yao 2025-09-30  219  	{
+f4927c135b40fc Hao Yao 2025-09-30  220  		.width = 1920,
+f4927c135b40fc Hao Yao 2025-09-30  221  		.height = 1080,
+f4927c135b40fc Hao Yao 2025-09-30  222  		.code = MEDIA_BUS_FMT_UYVY8_1X16,
+f4927c135b40fc Hao Yao 2025-09-30  223  		.datatype = MIPI_CSI2_DT_YUV422_8B,
+f4927c135b40fc Hao Yao 2025-09-30  224  		.fps = 30,
+f4927c135b40fc Hao Yao 2025-09-30 @225  		.reg_list = isx031_1920_1080_30fps_reg_list,
+f4927c135b40fc Hao Yao 2025-09-30  226  	},
+f4927c135b40fc Hao Yao 2025-09-30  227  	{
+f4927c135b40fc Hao Yao 2025-09-30  228  		.width = 1280,
+f4927c135b40fc Hao Yao 2025-09-30  229  		.height = 720,
+f4927c135b40fc Hao Yao 2025-09-30  230  		.code = MEDIA_BUS_FMT_UYVY8_1X16,
+f4927c135b40fc Hao Yao 2025-09-30  231  		.datatype = MIPI_CSI2_DT_YUV422_8B,
+f4927c135b40fc Hao Yao 2025-09-30  232  		.fps = 30,
+f4927c135b40fc Hao Yao 2025-09-30  233  		.reg_list = isx031_1280_720_30fps_reg_list,
+f4927c135b40fc Hao Yao 2025-09-30  234  	},
+f4927c135b40fc Hao Yao 2025-09-30  235  	{
+f4927c135b40fc Hao Yao 2025-09-30  236  		.width = 1920,
+f4927c135b40fc Hao Yao 2025-09-30  237  		.height = 1536,
+f4927c135b40fc Hao Yao 2025-09-30  238  		.code = MEDIA_BUS_FMT_UYVY8_1X16,
+f4927c135b40fc Hao Yao 2025-09-30  239  		.datatype = MIPI_CSI2_DT_YUV422_8B,
+f4927c135b40fc Hao Yao 2025-09-30  240  		.fps = 30,
+f4927c135b40fc Hao Yao 2025-09-30  241  		.reg_list = isx031_1920_1536_30fps_reg_list,
+f4927c135b40fc Hao Yao 2025-09-30  242  	},
+f4927c135b40fc Hao Yao 2025-09-30  243  };
+f4927c135b40fc Hao Yao 2025-09-30  244  
+
+:::::: The code at line 225 was first introduced by commit
+:::::: f4927c135b40fcf235caf994b82a1444ca1fcca2 media: ipu7: IPU7 driver release for PTL Beta v6.17 iot
+
+:::::: TO: Hao Yao <hao.yao@intel.com>
+:::::: CC: Shahidan, Muhammad Shahmil <muhammad.shahmil.shahidan@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
