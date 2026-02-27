@@ -1,145 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D46A238C1F;
-	Fri, 27 Feb 2026 14:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03994346AF4;
+	Fri, 27 Feb 2026 16:36:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772202150; cv=none; b=emWGMXYfwJ5Ym3h8wx8omZAVdEEsqI6FoWQ7Yw79lehCxweqwtekCVvD+q5VYkoDRarsHhnUXUeyZYe9qta8lYPZp6ZZCb4hY3tg4eeoh8Bvip87C1af7asjWhoW74RM+NtGkvMlsfO1QDMrKE7KN558feRzUu/WzqYxY0C5jeI=
+	t=1772210211; cv=none; b=Iy7/DMLNw2ciSRg/eq645O57hLmg6ChaHOBIx0KC8sxb664Yiz11aNeGFSfGNlCiQl5c/C0TsrYhXefPg2QUHMOqqSwo8iDYgxQRGhc565LGj+bVNvpsVpxarGPr3AbkJ9UK6YIvvRmXE1bS2WMIBYjxjHuyKJQPe+bclk4SW5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772202150; c=relaxed/simple;
-	bh=MwJlippBhjbnFax4Ckg91H9M2TRxqyDMP73IKGh0OOg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=nH6Qsdm5t+k3SyeGKP1A/ylXn5L/7Yx/FzBfkIWq2W3toRcMX1ZKtA7o8IXXPFP3yYEyiQpoORHv1nMJGFGeaeTqe+8ikN3HHN3KqTA6r12aieohH8sAfjNLTGsrlV7rC9P+8E7LJO5hmtlFMAZCdYpj0kbnZn22cA51JZB/H7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XEem9uuu; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772210211; c=relaxed/simple;
+	bh=Z3uhduLHgelJSPSi026On/FywI8UKkvvjlJZUY1E4uI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X4D7hI/LCGcYGwOda4go6qrFfHAv1hzevN6LyErDCSbRaVPLGnU4/g38SKTXmVX4F3HE2svlFGP65SwhInK28GiwnmlY2jJQ1cTyDLGTo8WG5zKya03cetl3WyNNRZrsD6KJd1rDt8HzLdgFxU5JxX65QpxFF6qvrjvTRIM25lU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MB9xUxSA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XEem9uuu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772202149; x=1803738149;
-  h=date:from:to:cc:subject:message-id;
-  bh=MwJlippBhjbnFax4Ckg91H9M2TRxqyDMP73IKGh0OOg=;
-  b=XEem9uuuE6bsAHTM21ea7+B8+U7P0yFVSEsVgnP9DBoF3Gu0OJieHbtk
-   ZLXvtB9Okn6ID/WkQPi9+6Fb2hK7yb5WxdnHjP+aTsd+mTJA0GHbB7pPr
-   m3Bf2XFxg+kYlGU3hIk/USOJDQ7U5VyE4xPHtmf2AZB1yuLdDZeC0sOi8
-   0omTFOl0oborXH5e602T7gOf7SY04MipsNpaC3Md7fS+O5KDeKPp8zQih
-   gz+ohp2KRHcJ1ZJd8Bsq9MpEbR3WurmzHUNQszLofQulHQ7mPxuuswS3x
-   pVnFFGM/JCYT8eAaJnazdCbZ7IkTPU6unth/rBf562Vq5pcJ80pi1ZyuZ
-   w==;
-X-CSE-ConnectionGUID: j42iXHmXTeyFzj8t0WwjMA==
-X-CSE-MsgGUID: AqWMJXBlQsaNrOeonA7x7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="83615059"
-X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
-   d="scan'208";a="83615059"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 06:22:28 -0800
-X-CSE-ConnectionGUID: CP22tlzfSge4RXIv1vx0HQ==
-X-CSE-MsgGUID: VXDI9+0dTU2w3N0OkppbOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
-   d="scan'208";a="215547023"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 27 Feb 2026 06:22:26 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvyjY-00000000Aez-0YOQ;
-	Fri, 27 Feb 2026 14:22:24 +0000
-Date: Fri, 27 Feb 2026 22:21:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [cornelisnetworks:for-upstream_20260226-0944 30/32] ld.lld:
- error: duplicate symbol: get_platform_config
-Message-ID: <202602272222.1NdXszqv-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MB9xUxSA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1501EC116C6;
+	Fri, 27 Feb 2026 16:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772210210;
+	bh=Z3uhduLHgelJSPSi026On/FywI8UKkvvjlJZUY1E4uI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MB9xUxSAbn+Di/nKHpsy4Owu9dULnOKmLKkKAH28ikPcwz8E+RbfqqGz2GrfUKoS2
+	 rvjh4SLv6O9JiT+L+6SpQ0H/DrDTd5iZ4+QO2UVbr+MNaN2vtvrRDHMh8InzWzLS16
+	 cncFCKpao/cWYr+w7ULn5xRgtHEAxOxUtF8TV9x/Gfm0Xhf56APc04TeRI/vI1HLWn
+	 rCK2y6qdS+KgajafeMKD0K51X5N68v1p6QI6T4oKzSBTbcUtFAPrySuzhetHWqfeao
+	 I9O/HuD47cl1xQtwtjRali7R0u0JCyq+rfuleR6cQliX8wPX4/lv7UgeBNEjV4a1Vi
+	 RyCLvFYLUeHLQ==
+Date: Fri, 27 Feb 2026 17:36:33 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] kbuild: Consolidate C dialect options
+Message-ID: <aaHIEQPiAbd7DGlW@derry.ads.avm.de>
+References: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
+ <20260223-fms-anonymous-structs-v1-1-8ee406d3c36c@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260223-fms-anonymous-structs-v1-1-8ee406d3c36c@kernel.org>
 
-tree:   https://github.com/cornelisnetworks/linux.git for-upstream_20260226-0944
-head:   06fbcbb2c9e97584450614a6d14c0d0f978b8209
-commit: 62158d11e11c670a30dd0becb21732fef40a1ab8 [30/32] RDMA/hfi2: Make it build
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260227/202602272222.1NdXszqv-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602272222.1NdXszqv-lkp@intel.com/reproduce)
+On Mon, Feb 23, 2026 at 12:10:28PM -0700, Nathan Chancellor wrote:
+> Introduce CC_FLAGS_DIALECT to make it easier to update the various
+> places in the tree that rely on the GNU C standard and Microsoft
+> extensions flags atomically. All remaining uses of '-std=gnu11' and
+> '-fms-extensions' are in the tools directory (which has its own build
+> system) and other standalone Makefiles. This will allow the kernel to
+> use a narrower option to enable the Microsoft anonymous tagged structure
+> extension in a simpler manner. Place the CC_FLAGS_DIALECT block after
+> the configuration include (so that a future change can move the
+> selection of the flag to Kconfig) but before the
+> arch/$(SRCARCH)/Makefile include (so that CC_FLAGS_DIALECT is available
+> for use in those Makefiles).
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  Makefile                              | 16 ++++++++++++----
+>  arch/arm64/kernel/vdso32/Makefile     |  3 +--
+>  arch/loongarch/vdso/Makefile          |  2 +-
+>  arch/parisc/boot/compressed/Makefile  |  2 +-
+>  arch/powerpc/boot/Makefile            |  3 +--
+>  arch/s390/Makefile                    |  3 +--
+>  arch/s390/purgatory/Makefile          |  3 +--
+>  arch/x86/Makefile                     |  6 +-----
+>  arch/x86/boot/compressed/Makefile     |  6 +-----
+>  drivers/firmware/efi/libstub/Makefile |  3 +--
+>  scripts/Makefile.warn                 |  5 -----
+>  11 files changed, 21 insertions(+), 31 deletions(-)
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602272222.1NdXszqv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: duplicate symbol: get_platform_config
-   >>> defined at platform.c:108 (drivers/infiniband/hw/hfi1/platform.c:108)
-   >>>            drivers/infiniband/hw/hfi1/platform.o:(get_platform_config) in archive vmlinux.a
-   >>> defined at platform.c:108 (drivers/infiniband/hw/hfi2/platform.c:108)
-   >>>            drivers/infiniband/hw/hfi2/platform.o:(.text+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __cfi_get_platform_config
-   >>> defined at platform.c
-   >>>            drivers/infiniband/hw/hfi1/platform.o:(__cfi_get_platform_config) in archive vmlinux.a
-   >>> defined at platform.c
-   >>>            drivers/infiniband/hw/hfi2/platform.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: qp_to_sdma_engine
-   >>> defined at qp.c:540 (drivers/infiniband/hw/hfi1/qp.c:540)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(qp_to_sdma_engine) in archive vmlinux.a
-   >>> defined at qp.c:560 (drivers/infiniband/hw/hfi2/qp.c:560)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0xd40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __cfi_qp_to_sdma_engine
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi1/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(__cfi_qp_to_sdma_engine) in archive vmlinux.a
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi2/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0xd00) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: qp_to_send_context
-   >>> defined at qp.c:565 (drivers/infiniband/hw/hfi1/qp.c:565)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(qp_to_send_context) in archive vmlinux.a
-   >>> defined at qp.c:587 (drivers/infiniband/hw/hfi2/qp.c:587)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x1080) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __cfi_qp_to_send_context
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi1/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(__cfi_qp_to_send_context) in archive vmlinux.a
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi2/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x1040) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: qp_iter_print
-   >>> defined at qp.c:599 (drivers/infiniband/hw/hfi1/qp.c:599)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(qp_iter_print) in archive vmlinux.a
-   >>> defined at qp.c:622 (drivers/infiniband/hw/hfi2/qp.c:622)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x4200) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __cfi_qp_iter_print
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi1/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(__cfi_qp_iter_print) in archive vmlinux.a
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi2/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x41c0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: qp_priv_alloc
-   >>> defined at qp.c:669 (drivers/infiniband/hw/hfi1/qp.c:669)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(qp_priv_alloc) in archive vmlinux.a
-   >>> defined at qp.c:692 (drivers/infiniband/hw/hfi2/qp.c:692)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x5e40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __cfi_qp_priv_alloc
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi1/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(__cfi_qp_priv_alloc) in archive vmlinux.a
-   >>> defined at qp.c:0 (drivers/infiniband/hw/hfi2/qp.c:0)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x5e00) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: qp_priv_free
-   >>> defined at qp.c:699 (drivers/infiniband/hw/hfi1/qp.c:699)
-   >>>            drivers/infiniband/hw/hfi1/qp.o:(qp_priv_free) in archive vmlinux.a
-   >>> defined at qp.c:722 (drivers/infiniband/hw/hfi2/qp.c:722)
-   >>>            drivers/infiniband/hw/hfi2/qp.o:(.text+0x7740) in archive vmlinux.a
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Nicolas Schier <nsc@kernel.org>
