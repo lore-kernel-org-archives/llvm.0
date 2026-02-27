@@ -1,100 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B036A176ADE;
-	Fri, 27 Feb 2026 09:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A8639526C
+	for <llvm@lists.linux.dev>; Fri, 27 Feb 2026 10:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772185592; cv=none; b=U/YkpEHf+be1UJ1tz0adrzpEUiV0YTUBhZCnXb1lDgy7Sse1zpoFSyc2Btle01kscGyGYWZCPB7ecarE+EExQBzScrRmSkEkYHvIEtYMdQFJwcSG8wH2QvqHGh2w4h+2ZxhMXht4Xazzc/PSo66SOazpz0eFqBZCtVZdKjt8EJU=
+	t=1772188576; cv=none; b=J8WaDiALXos220JinAT1bZ5GygQJv43nsIQbnaFB+2fY7gAAR1ShzlUbfJhdg7VHNdOoVyIVjfMCMKAXUzKK0L9akpvn3cpVXA0lTT6H+88KpBbmhUmtpeE+3EZ/GPhrFU4iNt6c7VSm+aldQXot8IEBoF6PYrjIyTNNJ8Y398M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772185592; c=relaxed/simple;
-	bh=DB+etT43v8fqjRoMSX8OIxDzIOzmYQLycbjbENRUNaU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=uLd5/SLH8g5VnxfH9S9p+v1QYwh7/TN7dcL7gAayzNVf4Tq1KOaDnk1KkysXCiYGc3hI6si5iBW7j7aQVHaWhmOvzc3i85N5Hd0cPvxkHlNZzgo6bcsUU5QMuP4LGKGaU/zNJYKVN2RYztPHUGCG8AshNP6HY6kTFLPcgQcxqrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C6zhZUjA; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C6zhZUjA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772185591; x=1803721591;
-  h=date:from:to:cc:subject:message-id;
-  bh=DB+etT43v8fqjRoMSX8OIxDzIOzmYQLycbjbENRUNaU=;
-  b=C6zhZUjAEllPiQcbBCGLUsgLI3yxSLjVqFOx6sOdYnG9JoU7ksA5aCIw
-   87Q/VkVAEYDhGGSmsgRL7TZE5M44YlfNCrDwWzNfPOCLtLGNZf/jXr+0j
-   ugT7QiY9gtluhB56Z4VU2pf7FVoApDbBuIV9OTYuf+p4/F+f5Wvciduqu
-   ln301wYrJKioEyu0eG2gxu0nKzHrGLfb/3kbTvAUG++Kd6+ZAaVF0WfKh
-   976gkhgGPtvB6KOlV4XUUdwqMavafc6IVGzofjQpPzCt+X5oVB/OLUOII
-   Yf1ItXrsNjHBZzgNqcqg9dyzh4CBGpUCG3ovA+cDCaLMAi3SzyLsb/kQI
-   g==;
-X-CSE-ConnectionGUID: ZibFypPhTpajGyPs7/go2A==
-X-CSE-MsgGUID: erI3YVpNRLeGLGbNQlIWHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="83972598"
-X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="83972598"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 01:46:30 -0800
-X-CSE-ConnectionGUID: iar5mERgRfSr0Df1oYvY2A==
-X-CSE-MsgGUID: J2bE45MpTb+UTkXUjHFDug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="254630730"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 27 Feb 2026 01:46:29 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvuQT-00000000AQp-2sr5;
-	Fri, 27 Feb 2026 09:46:25 +0000
-Date: Fri, 27 Feb 2026 17:45:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yonghua Huang <yonghua.huang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Yifan Liu <yifan1.liu@intel.com>, Fei Li <fei1.li@intel.com>
-Subject: [acrn:6.17/linux 2/8] mm/hugetlb.c:57:10: fatal error:
- 'asm/hypervisor.h' file not found
-Message-ID: <202602271758.f6AQNfwU-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1772188576; c=relaxed/simple;
+	bh=y7T7339wqgGkgXm1KaldrOq1fUHHJCkETOZ0kdpLtUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXhC02BfaZmWR0Te+be8eomsStOPbKnLS7vZzO0n6JpU57x/cLDuRZtjeirHzh37Q5LG6MNU6wakMKTQVaRJst3Gp60yn6mTKQHAEqmcB3BHuamwxQcsx/Csqw3EJDEerVbZl9so8432hIYyakS7sz3Cm8H0RKUQAoNVkemRyoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C8E814BF;
+	Fri, 27 Feb 2026 02:36:07 -0800 (PST)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 588E43F7BD;
+	Fri, 27 Feb 2026 02:36:13 -0800 (PST)
+Date: Fri, 27 Feb 2026 10:36:11 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+Message-ID: <20260227103611.GA1098637@e132581.arm.com>
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <aaCTC86U9KjnmZmu@google.com>
+ <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
 
-tree:   https://github.com/projectacrn/acrn-kernel 6.17/linux
-head:   eac6d3b7a20ffb9d3102dbdc152241a7184a63cd
-commit: 4867d13cd20c2bf8264e53e223e9b7283f667a73 [2/8] postpone ACRN guest VM memory cleanup
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260227/202602271758.f6AQNfwU-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271758.f6AQNfwU-lkp@intel.com/reproduce)
+On Thu, Feb 26, 2026 at 10:52:01PM +0000, Quentin Monnet wrote:
+> 2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
+> > Adding bpftool maintainer.
+> > 
+> > On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
+> >> GCC-15 release claims [1]:
+> >>
+> >>   {0} initializer in C or C++ for unions no longer guarantees clearing
+> >>   of the whole union (except for static storage duration initialization),
+> >>   it just initializes the first union member to zero. If initialization
+> >>   of the whole union including padding bits is desirable, use {} (valid
+> >>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+> >>   restore old GCC behavior.
+> >>
+> >> As a result, this new behaviour might cause unexpected data when we
+> >> initialize a union with using the '{ 0 }' initializer.
+> >>
+> >> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+> >> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+> >> in unions and structures.  This commit applies the same option for tools
+> >> building.
+> >>
+> >> The option is not supported neither by any version older than GCC 15 and
+> >> is also not supported by LLVM, this patch adds the cc-option function to
+> >> dynamically detect the compiler option.
+> >>
+> >> [1] https://gcc.gnu.org/gcc-15/changes.html
+> >>
+> >> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> 
+> 
+> Thank you Namhyung for the Cc.
+> 
+> I built bpftool with the patch, with gcc 13 (which didn't get the flag,
+> as expected) and gcc 15, and it's fine with both. As far as I can tell,
+> bpftool does not initialise any union with "{0}" anyway.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602271758.f6AQNfwU-lkp@intel.com/
+Thanks a lot for testing!
 
-All errors (new ones prefixed by >>):
+> One potential concern (I didn't try) could be for cross-compilation:
+> bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
+> and $(CC) could be different versions of gcc, for example.
 
->> mm/hugetlb.c:57:10: fatal error: 'asm/hypervisor.h' file not found
-      57 | #include <asm/hypervisor.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   1 error generated.
+To avoid confusion, we can use EXTRA_CFLAGS and HOST_EXTRACFLAGS instead
+in Makefile.include:
 
+-----
 
-vim +57 mm/hugetlb.c
+# cc-option
+# Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
+cc-option = $(call try-run, \
+       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
 
-    47	
-    48	#include <linux/io.h>
-    49	#include <linux/hugetlb.h>
-    50	#include <linux/hugetlb_cgroup.h>
-    51	#include <linux/node.h>
-    52	#include <linux/page_owner.h>
-    53	#include "internal.h"
-    54	#include "hugetlb_vmemmap.h"
-    55	#include "hugetlb_cma.h"
-    56	#include <linux/page-isolation.h>
-  > 57	#include <asm/hypervisor.h>
-    58	
+host-cc-option = $(call try-run, \
+       $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+# Explicitly clear padding bits with the initializer '{ 0 }'
+EXTRA_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
+HOST_EXTRACFLAGS += $(call host-cc-option,-fzero-init-padding-bits=all)
+
+-----
+
+Then, in a project, its Makefile can append EXTRA_CFLAGS and
+HOST_EXTRACFLAGS to CFLAGS and HOSTCFLAGS respectively.
+
+If this is fine for us, I will repin patches
+
+> The same concern could apply to perf with HOSTCFLAGS, by the way?
+
+I don't see perf's HOSTCFLAGS to reuse CFLAGS.
+
+Thanks,
+Leo
