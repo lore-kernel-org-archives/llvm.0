@@ -1,116 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479972C859;
-	Fri, 27 Feb 2026 08:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C55372B52;
+	Fri, 27 Feb 2026 08:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772179939; cv=none; b=Vd8kpJXC4NQc3Iqh9OV4axbWYUmV9hI9Z8rhV01E7GwVUzFx/o9K0FZNuAE8HUho3CWDf9CEmM9XAm3L11P9XkD2OCLjCU/I1/B/QV8Lcb277XAHidV7UUTdP1QWyin4GCK+UO7A7uj40L9YkEj1kPNMyONov6kAfgqjd8E0cxs=
+	t=1772180560; cv=none; b=ODmlmLYuNSQvBupCXAe8SBBu7cOkG9DAntbMcUpzAHavMSunR9FDx4tkf//IyVN1XzTTkenBBRON0DCHeLI51g6/18PRli/jKhSrfGsLyrlL6UD/6iak0P21m523/cJq6O2HdfZuw2rPP1RMGhuBXqZI03RqJZAKECa80qw+s5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772179939; c=relaxed/simple;
-	bh=2YW0xpQ35zi4SXo4K6Q76X9ID+4VIjZ33QUmae7hFaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R4UzlKYgZxqzBd4ENyb7wYo9RtIEDlaacS3Xjyb7pW8hWa2BxqKRIjMlu2Ol0CRgqU45dNNqk9wRhpJ1m9AhgxMude6nH9g1W8ulW4cOV7eiXHgcvklfyI1Kp/BmXv1UtXcQO+BUSk6cgfjX1Oof59SwPoZR475rclQJCuw23+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MlIUj4t3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772180560; c=relaxed/simple;
+	bh=Ggu/6bF4/9ukRadrcDP6ItbKIcOTzi8D3vIIlflOYBE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=JW3GqCXaVmRb3Fx+VbFbmT9vH67YE/QqVLBnl+gnYo4mQYDTB/26tcUZIykoE5zPoHmy8WqG+TFe8pk5kMd/BuoujK701tjTHoeXI4nY1mzhcMr1unNOyk46bZy1jMGlqnjf9hHvD3UkRjco/vydTChIO6rQmKuyMA409xGmXlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1eXyrJU; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MlIUj4t3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A355CC116C6;
-	Fri, 27 Feb 2026 08:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772179939;
-	bh=2YW0xpQ35zi4SXo4K6Q76X9ID+4VIjZ33QUmae7hFaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MlIUj4t3n0CNVMTVZwUEyn7o/MimM7l+gyNkLti/e8Z6sLYdqDEiWHbehYpGq6Ova
-	 26hOBmTO24VvWge1BXlPgk1qNW4zgZzXsb1Hp0ZbcX5eW21gs4brTbbbeWg1+D0qag
-	 4xi+O92e66aseou9kbAgIAApYIAG/jbFoYV8DafQAT6uDF0DkbNBRgHva/mST0YeMm
-	 bQ1p0jOKngAss/Munn3xc69nB+n/icgsAxITobuNEuSAt45BoexNKv4GSEOP504R2J
-	 5lZbi5YxxdyRccZllkk3kkG0ofVQEwk8KSF+kjIEnq1WgY5YY5jwHZaP8dq3tqLmW5
-	 RZZd68EdzpJMg==
-Date: Fri, 27 Feb 2026 09:10:27 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] Documentation/llvm: drop note about LLVM=0
-Message-ID: <aaFRc0OR-NlPQcQ8@derry.ads.avm.de>
-References: <20260226-kbuild-llvm-followup-v1-0-201cc2a492d9@weissschuh.net>
- <20260226-kbuild-llvm-followup-v1-1-201cc2a492d9@weissschuh.net>
- <20260226214349.GA1534917@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1eXyrJU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772180558; x=1803716558;
+  h=date:from:to:cc:subject:message-id;
+  bh=Ggu/6bF4/9ukRadrcDP6ItbKIcOTzi8D3vIIlflOYBE=;
+  b=g1eXyrJUL8kA0GP3Newu7sHgXiYSvdsfoRTNHw00HErw8ZNwh+J6CUnV
+   wJJ0yTeXTTiDmLScXaXAGdMl1BpSt2CecgMjHodCib9UQvWoD6DXKKaFJ
+   QCOjJUZ/tWg7i7LNcojbHYsk01QCRQdNV11lxX86GeB1QYfDZIP2A/P1/
+   JxwuR4F4YABZnnw2Y5jXB29S1N/BxImk+QofBc2A0M6tmVtMPFaMdoLPK
+   zWTMLXE4AhsjZoB9eLyYzmu37R4rkwpMvJ11IlmD1nGX6oUa7CkX41paD
+   ekO2MsZZY1WvNxaSBWGE8b6jG4h9r81ta7R4+E8Yjq64tvO3DDGMtmnAn
+   Q==;
+X-CSE-ConnectionGUID: Qqn8nKH9QxqqZycozI+BYQ==
+X-CSE-MsgGUID: ayQliCJLRn+JyBWruSkWTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="73131959"
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="73131959"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 00:22:38 -0800
+X-CSE-ConnectionGUID: OYWO2Ri2TG2RlRpliTgcnQ==
+X-CSE-MsgGUID: uLozu04RQameRMjzrj7Raw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="216069675"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 27 Feb 2026 00:22:37 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvt7K-00000000AMN-0p5N;
+	Fri, 27 Feb 2026 08:22:34 +0000
+Date: Fri, 27 Feb 2026 16:22:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [broonie-ci:arm64-sme-no-cpuidle 2/2] ld.lld: error:
+ duplicate symbol: arch_cpu_idle_enter
+Message-ID: <202602271600.xA8OnON2-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260226214349.GA1534917@ax162>
 
-On Thu, Feb 26, 2026 at 02:43:49PM -0700, Nathan Chancellor wrote:
-> On Thu, Feb 26, 2026 at 10:23:57PM +0100, Thomas Weiﬂschuh wrote:
-> > Since commit 502678b88cb3 ("kbuild: Reject unexpected values for LLVM=")
-> > LLVM=0 generates an error instead of silently behaving unexpectedly.
-> > 
-> > Drop the now unnecessary note.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> 
-> It might be worth keeping the note about LLVM=0 not being the same as
-> omitting LLVM altogether, as neither the documentation nor the error
-> message will say why that is not a valid value. Maybe:
-> 
->   ``LLVM=0`` is not the same as omitting ``LLVM`` altogether. If you
->   only wish to use certain LLVM utilities, use their respective make
->   variables.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git arm64-sme-no-cpuidle
+head:   cb493e527146b1c3eae12bb35c71a165dc6491fd
+commit: cb493e527146b1c3eae12bb35c71a165dc6491fd [2/2] arm64/fpsimd: Ensure we don't contend a SMCU from idling CPUs
+config: arm64-randconfig-003-20260227 (https://download.01.org/0day-ci/archive/20260227/202602271600.xA8OnON2-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271600.xA8OnON2-lkp@intel.com/reproduce)
 
-Yeah, I think that would be a good thing to add, too.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602271600.xA8OnON2-lkp@intel.com/
 
-W/ or w/o:
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
-
-If nobody complains, I am going to add both patches to kbuild-next
-within a few days.
-
-Kind regards,
-Nicolas
-
-
-
-> I don't feel that strongly about it though. Regardless:
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> > ---
-> >  Documentation/kbuild/llvm.rst | 4 ----
-> >  1 file changed, 4 deletions(-)
-> > 
-> > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > index bc8a283bc44b..441d8786fcbc 100644
-> > --- a/Documentation/kbuild/llvm.rst
-> > +++ b/Documentation/kbuild/llvm.rst
-> > @@ -71,10 +71,6 @@ recommend::
-> >  
-> >  	PATH=/path/to/llvm/:$PATH make LLVM=-14
-> >  
-> > -``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> > -``LLVM=1``. If you only wish to use certain LLVM utilities, use their
-> > -respective make variables.
-> > -
-> >  The same value used for ``LLVM=`` should be set for each invocation of ``make``
-> >  if configuring and building via distinct commands. ``LLVM=`` should also be set
-> >  as an environment variable when running scripts that will eventually run
-> > 
-> > -- 
-> > 2.53.0
-> > 
+>> ld.lld: error: duplicate symbol: arch_cpu_idle_enter
+   >>> defined at process.c
+   >>>            arch/arm64/kernel/process.o:(arch_cpu_idle_enter) in archive vmlinux.a
+   >>> defined at topology.c
+   >>>            arch/arm64/kernel/topology.o:(.text+0x104) in archive vmlinux.a
 
 -- 
-Nicolas
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
