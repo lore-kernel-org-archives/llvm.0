@@ -1,280 +1,91 @@
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221A62BEFE5;
-	Fri, 27 Feb 2026 02:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDAA314D2D;
+	Fri, 27 Feb 2026 03:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772158433; cv=none; b=B+gE/4ob9cz2DXru87eOgVpkklwnmlqey3nFyPavrHg6XI7iNVfsut8op5LkiJPcXFWWcqWSbJfXUpi7mEiceuOzb9uMrBwABYNx2olR/tdn/z7s+R/Q+MlpBhZ7GrPgTI66C3K1Qg6T0xhP8ZylIV9ucel2hQsObRnjbY/1kfg=
+	t=1772162207; cv=none; b=ZXigDZYmR5KNpWFS8MhtoqGATk+iotI8L++k3Yn3BHCjcoxLGSrKl6k6RSN5ftBuJxdAlOIaMYfY91yv6SFIkJjdfo2YwZkmsNzRi6ALGsVBdoF3zs2kfRU4OgdKmXir5OOEA2yiXZAbYijf+JlSw4xIjz2Ha9L75mIgO7HOUA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772158433; c=relaxed/simple;
-	bh=pUzfhXPt9/t1WG+dFLR5+cJwUQBfw7GEYe25p4yVmAc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=unN74BG5vJFfCUSS4BXyhw0aH/sUDdiQnlMS93nJAik37kCjhD6QbdlJDBYT34rDlKlMQcF7oywu/cY69Q9uRkjsT3YzCVz1ku0ZnFyFn//TsTogTmC5GuBbsNHmHvEWwL2Azie2cUHhC/3AD3mErZ1O1kgyW64udJoOygnadAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=yvX1brx3; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1772162207; c=relaxed/simple;
+	bh=OnjWxWiDUb2ugPhY+9hPfDYUS6fPgvEuvJCT2+qrEmI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Qp3C2fDV5Ez8oz2V3BzNilS5iDrPruZ4LA5JXqVDIT5eQ5EN6JdoGtPvdnC12iN6GblIrCIs09cjKozomefY9ps/e7IfEzXhQXlloZ/E9PCQpmM6LxfIi8AqZKYPoncKVtxIsX2I8DDtcOTRVasbfybU9abO6caXEJYoj4RbNwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c91iEhLR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="yvX1brx3"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=voAqtAuA68HE0t2honi6L8XVGdT1Q7y+AUf9C/awVpw=;
-	b=yvX1brx34dEfh8Jk2jDfwCYTJBctFaqjFG2qXZxOUugWpPHxKnE78Low/xV0xarG9BZ5zHPgZ
-	Md7OokrOazq6PtuEHY4EMUvY8NnNW8YHA/5SFHBr52BnbGLhTp3kvrGdYC50C3SAPdv94DsvXn9
-	8fuq1fxSVN8yvfCnjW8TPqU=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fMWwB445BzKmWX;
-	Fri, 27 Feb 2026 10:08:58 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 165C2402AB;
-	Fri, 27 Feb 2026 10:13:47 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 27 Feb 2026 10:13:45 +0800
-Message-ID: <ce8f3a69-1313-2d58-dfc2-fcbec849d6b5@huawei.com>
-Date: Fri, 27 Feb 2026 10:13:44 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c91iEhLR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6164C116C6;
+	Fri, 27 Feb 2026 03:16:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772162206;
+	bh=OnjWxWiDUb2ugPhY+9hPfDYUS6fPgvEuvJCT2+qrEmI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=c91iEhLRl70bUvXW3OXDcLUDq2JuJwvxdLNpSyvmnUq9hy+lBM6n80xKSPrVowBpB
+	 6GrEV3V+nU21unnxOfE3thZ8s5ylC8FqMw2feI/14faF2V2lqrVJAIibs9MN4hJySx
+	 DyRi/VrFzomhowcHtwaKf8qpFF1H8uH4L1NtQxydd1ZmxpLzu57m8wtr6uA4FZ4fya
+	 XW3yntiDofMYyEd6sbNzKK4Zqm0awDd1ZBMn/QAeY3WUOqBX1n2ScBO4WZ2ilP7ZNv
+	 BvFF++3f2o5UibnnJL6/cEENKeS1i/+DijuBPnHxAIluMwHYyw48+a8SWL9gs66Hnh
+	 0yp19p71mWu4A==
+From: Will Deacon <will@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Marco Elver <elver@google.com>
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	llvm@lists.linux.dev,
+	David Laight <david.laight.linux@gmail.com>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	Boqun Feng <boqun@kernel.org>
+Subject: Re: [PATCH v4 0/2] arm64: Fixes for __READ_ONCE() with CONFIG_LTO=y
+Date: Fri, 27 Feb 2026 03:16:31 +0000
+Message-ID: <177212898809.385801.8626009504655274507.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260216142436.2207937-2-elver@google.com>
+References: <20260216142436.2207937-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v7 4/5] arm64: kexec: Add support for crashkernel CMA
- reservation
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, <corbet@lwn.net>,
-	<skhan@linuxfoundation.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
-	<chenhuacai@kernel.org>, <kernel@xen0n.name>, <maddy@linux.ibm.com>,
-	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <chleroy@kernel.org>,
-	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-	<alex@ghiti.fr>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <robh@kernel.org>,
-	<saravanak@kernel.org>, <akpm@linux-foundation.org>, <bhe@redhat.com>,
-	<vgoyal@redhat.com>, <dyoung@redhat.com>, <pmladek@suse.com>,
-	<rdunlap@infradead.org>, <dapeng1.mi@linux.intel.com>, <kees@kernel.org>,
-	<paulmck@kernel.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
-References: <20260226130437.1867658-5-ruanjinjie@huawei.com>
- <202602270403.GagykAb8-lkp@intel.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <202602270403.GagykAb8-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
+On Mon, 16 Feb 2026 15:16:21 +0100, Marco Elver wrote:
+> While investigating a Clang Context Analysis [1] false positive [2], I
+> started to dig deeper into arm64's __READ_ONCE() implementation with
+> LTO. That rabbit hole led me to find one critical bug with the current
+> implementation (fixed already in [3]), and subtle improvements that then
+> enabled me to fix the original false positive.
+> 
+> Patch 1 refactors the macro to use a different way of getting an
+> unqualified type and eliminates the ternary conditional.
+> 
+> [...]
 
+Applied to arm64 (for-next/read-once), thanks!
 
-On 2026/2/27 4:34, kernel test robot wrote:
-> Hi Jinjie,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on arm64/for-next/core]
-> [also build test WARNING on robh/for-next linus/master v7.0-rc1 next-20260226]
-> [cannot apply to powerpc/next powerpc/fixes]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/powerpc-crash-sort-crash-memory-ranges-before-preparing-elfcorehdr/20260226-222516
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-> patch link:    https://lore.kernel.org/r/20260226130437.1867658-5-ruanjinjie%40huawei.com
-> patch subject: [PATCH v7 4/5] arm64: kexec: Add support for crashkernel CMA reservation
-> config: x86_64-buildonly-randconfig-004-20260226 (https://download.01.org/0day-ci/archive/20260227/202602270403.GagykAb8-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602270403.GagykAb8-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202602270403.GagykAb8-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/of/kexec.c:312:29: warning: unused variable 'i' [-Wunused-variable]
->      312 |         int ret, chosen_node, len, i;
->          |                                    ^
->    1 warning generated.
-> 
-> 
-> vim +/i +312 drivers/of/kexec.c
-> 
->    294	
->    295	/*
->    296	 * of_kexec_alloc_and_setup_fdt - Alloc and setup a new Flattened Device Tree
->    297	 *
->    298	 * @image:		kexec image being loaded.
->    299	 * @initrd_load_addr:	Address where the next initrd will be loaded.
->    300	 * @initrd_len:		Size of the next initrd, or 0 if there will be none.
->    301	 * @cmdline:		Command line for the next kernel, or NULL if there will
->    302	 *			be none.
->    303	 * @extra_fdt_size:	Additional size for the new FDT buffer.
->    304	 *
->    305	 * Return: fdt on success, or NULL errno on error.
->    306	 */
->    307	void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
->    308					   unsigned long initrd_load_addr,
->    309					   unsigned long initrd_len,
->    310					   const char *cmdline, size_t extra_fdt_size)
->    311	{
->  > 312		int ret, chosen_node, len, i;
->    313		const void *prop;
->    314		size_t fdt_size;
->    315		void *fdt;
+[1/2] arm64: Optimize __READ_ONCE() with CONFIG_LTO=y
+      https://git.kernel.org/arm64/c/abf1be684dc2
+[2/2] arm64, compiler-context-analysis: Permit alias analysis through __READ_ONCE() with CONFIG_LTO=y
+      https://git.kernel.org/arm64/c/773b24bcedc1
 
-If this patch is acceptable for merging, could you please help move the
-loop variable i to a different location as below to avoid resending a
-new version?
+Peter -- please don't pull this just yet. I'd like it to get some
+exposure to the various build bots and CI systems in case of any nasty
+toolchain interactions.
 
---- a/drivers/of/kexec.c
-+++ b/drivers/of/kexec.c
-@@ -309,10 +309,10 @@ void *of_kexec_alloc_and_setup_fdt(const struct
-kimage *image,
-                                   unsigned long initrd_len,
-                                   const char *cmdline, size_t
-extra_fdt_size)
- {
--       void *fdt;
-        int ret, chosen_node, len;
-        const void *prop;
-        size_t fdt_size;
-+       void *fdt;
+Cheers,
+-- 
+Will
 
-        fdt_size = fdt_totalsize(initial_boot_params) +
-                   (cmdline ? strlen(cmdline) : 0) +
-@@ -431,6 +431,15 @@ void *of_kexec_alloc_and_setup_fdt(const struct
-kimage *image,
-                if (ret)
-                        goto out;
-
-+               for (int i = 0; i < crashk_cma_cnt; i++) {
-+                       ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-+                                       "linux,usable-memory-range",
-+                                       crashk_cma_ranges[i].start,
-+                                       crashk_cma_ranges[i].end -
-crashk_cma_ranges[i].start + 1);
-+                       if (ret)
-+                               goto out;
-+               }
-+
-                if (crashk_low_res.end) {
-                        ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-                                        "linux,usable-memory-range",
-
-
->    316	
->    317		fdt_size = fdt_totalsize(initial_boot_params) +
->    318			   (cmdline ? strlen(cmdline) : 0) +
->    319			   FDT_EXTRA_SPACE +
->    320			   extra_fdt_size;
->    321		fdt = kvmalloc(fdt_size, GFP_KERNEL);
->    322		if (!fdt)
->    323			return NULL;
->    324	
->    325		ret = fdt_open_into(initial_boot_params, fdt, fdt_size);
->    326		if (ret < 0) {
->    327			pr_err("Error %d setting up the new device tree.\n", ret);
->    328			goto out;
->    329		}
->    330	
->    331		/* Remove memory reservation for the current device tree. */
->    332		ret = fdt_find_and_del_mem_rsv(fdt, initial_boot_params_pa,
->    333					       fdt_totalsize(initial_boot_params));
->    334		if (ret == -EINVAL) {
->    335			pr_err("Error removing memory reservation.\n");
->    336			goto out;
->    337		}
->    338	
->    339		chosen_node = fdt_path_offset(fdt, "/chosen");
->    340		if (chosen_node == -FDT_ERR_NOTFOUND)
->    341			chosen_node = fdt_add_subnode(fdt, fdt_path_offset(fdt, "/"),
->    342						      "chosen");
->    343		if (chosen_node < 0) {
->    344			ret = chosen_node;
->    345			goto out;
->    346		}
->    347	
->    348		ret = fdt_delprop(fdt, chosen_node, "linux,elfcorehdr");
->    349		if (ret && ret != -FDT_ERR_NOTFOUND)
->    350			goto out;
->    351		ret = fdt_delprop(fdt, chosen_node, "linux,usable-memory-range");
->    352		if (ret && ret != -FDT_ERR_NOTFOUND)
->    353			goto out;
->    354	
->    355		/* Did we boot using an initrd? */
->    356		prop = fdt_getprop(fdt, chosen_node, "linux,initrd-start", &len);
->    357		if (prop) {
->    358			u64 tmp_start, tmp_end, tmp_size;
->    359	
->    360			tmp_start = of_read_number(prop, len / 4);
->    361	
->    362			prop = fdt_getprop(fdt, chosen_node, "linux,initrd-end", &len);
->    363			if (!prop) {
->    364				ret = -EINVAL;
->    365				goto out;
->    366			}
->    367	
->    368			tmp_end = of_read_number(prop, len / 4);
->    369	
->    370			/*
->    371			 * kexec reserves exact initrd size, while firmware may
->    372			 * reserve a multiple of PAGE_SIZE, so check for both.
->    373			 */
->    374			tmp_size = tmp_end - tmp_start;
->    375			ret = fdt_find_and_del_mem_rsv(fdt, tmp_start, tmp_size);
->    376			if (ret == -ENOENT)
->    377				ret = fdt_find_and_del_mem_rsv(fdt, tmp_start,
->    378							       round_up(tmp_size, PAGE_SIZE));
->    379			if (ret == -EINVAL)
->    380				goto out;
->    381		}
->    382	
->    383		/* add initrd-* */
->    384		if (initrd_load_addr) {
->    385			ret = fdt_setprop_u64(fdt, chosen_node, "linux,initrd-start",
->    386					      initrd_load_addr);
->    387			if (ret)
->    388				goto out;
->    389	
->    390			ret = fdt_setprop_u64(fdt, chosen_node, "linux,initrd-end",
->    391					      initrd_load_addr + initrd_len);
->    392			if (ret)
->    393				goto out;
->    394	
->    395			ret = fdt_add_mem_rsv(fdt, initrd_load_addr, initrd_len);
->    396			if (ret)
->    397				goto out;
->    398	
->    399		} else {
->    400			ret = fdt_delprop(fdt, chosen_node, "linux,initrd-start");
->    401			if (ret && (ret != -FDT_ERR_NOTFOUND))
->    402				goto out;
->    403	
->    404			ret = fdt_delprop(fdt, chosen_node, "linux,initrd-end");
->    405			if (ret && (ret != -FDT_ERR_NOTFOUND))
->    406				goto out;
->    407		}
->    408	
->    409		if (image->type == KEXEC_TYPE_CRASH) {
->    410			/* add linux,elfcorehdr */
->    411			ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
->    412					"linux,elfcorehdr", image->elf_load_addr,
->    413					image->elf_headers_sz);
->    414			if (ret)
->    415				goto out;
->    416	
->    417			/*
->    418			 * Avoid elfcorehdr from being stomped on in kdump kernel by
->    419			 * setting up memory reserve map.
->    420			 */
->    421			ret = fdt_add_mem_rsv(fdt, image->elf_load_addr,
->    422					      image->elf_headers_sz);
->    423			if (ret)
->    424				goto out;
->    425	
-> 
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
