@@ -1,100 +1,162 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBBA3542ED
-	for <llvm@lists.linux.dev>; Fri, 27 Feb 2026 04:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B6D34252B;
+	Fri, 27 Feb 2026 05:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772166068; cv=none; b=GGQBAXzBefp9o0GG6KLp3m39O/W29/cxQ1o5S4rENlK0b8U89+RBfUO8TuAp6yWlI6+5hg2ywXAJanCkYbgmKKR/8mYctMfc+77oQilRdg8QfAG4iZPRiPV9xdhPBCNQNiFP9OZUt3bakLM47FqrdQqA83cPYUdHsHks9bMzQPo=
+	t=1772171563; cv=none; b=VdvmJ4gz4mV2uf3q1oaVLukUoH/OMlgUm0ABIc9g/h7qubhYudDwKc5TzBhdYSBgK/6SSQ12dCz9+ZmTAAvm/GUk57EkyeMnI1bVShQpdPUkfDGTi8HMCrGc8LzOWwYJ2Jlc3OJ83r5PYs7YbYQQDJx9Sg13rvadHC6CwpoLPL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772166068; c=relaxed/simple;
-	bh=DjhCwJelsHxDZr2A9nbd6G55W14Jv0FPsNstLX/ZETA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m8MzOLQ6NzHLuVygIXumoBitJGbqwQdMsLFLdmHnalXBLAXVomtOgdlnEqU0UoJ8u5p77OFFRhrR5nghtXdT/enuaAxnT/DEITi6GQIQIav1pLCdJ7KpQzD4K5qaFMZlHzAT0dJGZsYY9J1WG0jWss1KBX2iJXl7SkBeT8lEil4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=lDRlqMaL; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
+	s=arc-20240116; t=1772171563; c=relaxed/simple;
+	bh=LWOdmL0uan22tNsv3PGdyHuaOVgzT4VqOM5Rm/fNGco=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dkexLui0M7AtbWNz9oeZgrLLwQ9QaCwcc1S43ZIGt5uv56YcdnDIxTMRCXHhRGoDX4u4WVpct8gea1OWXhb+cn6YeRk0FASVbU8B8kTP58UD2lGrWmpCCecHpdMN3aLgPyY0Z1wTrvId+51HaO/Tumpel152vE7q4iByuMb2J6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cjwBXqKB; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="lDRlqMaL"
-Message-ID: <4c8e310c-ab39-491b-9a39-99ddbc943b00@packett.cool>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
-	s=key1; t=1772166064;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9n0A5zUZC+lx+LR4fd6ULnk460On2lLPIMiPdwgeFyg=;
-	b=lDRlqMaLbqiYTHS9SlFw+sFcgiORpu7H2cD6sR1nTRI1gsNlTLmO4wB2dHs6Pbo7D8W2mk
-	Kt9mksvkriB37vvj7wanoVOd7H+HqRvthfYEIrdPtKN0II+xPrm3W3DRTr2WjQD4ynPgZ+
-	TnyfS/guUR13OM8DzYZlBHujN5KyJIqm/ssSxWB3okq8dnaVaxoZ9mNbWmKEmkTOWv1gop
-	UgLt0UKUV10d4klh4/T13svGl3atZYKKgB8rI3o4gfjoCjYo/r3cR9Yz0GEymtN6LjXqX1
-	a8JMKTxhYjzUtucdRrUB+bMvHjJigVw1egwxqFqXm9v2V5a8oYnnvDNFvQjWDg==
-Date: Fri, 27 Feb 2026 01:20:48 -0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cjwBXqKB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772171562; x=1803707562;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LWOdmL0uan22tNsv3PGdyHuaOVgzT4VqOM5Rm/fNGco=;
+  b=cjwBXqKBaDRWYKsDGUBHcPgp8tFST9wsOMbwx1XQ4yiN2sL8h/QQKze4
+   4cUO6+UR3W0UVB2Ie4ezaesSPFktQf88KY28VoKxEMC/9a0ujPBRDKxGR
+   gfc0ISBmoEqsFQQ7J3PSkJJta6VcRKDkeUWbUy/0f3lc+h9s+d7mFsaXW
+   6wO4ORbIr1BXOX+HMORt6s0UM0FuiAOvr/BGYAGeqF4zQa8S8cCMK1UVe
+   wJAzDemJCxamUF4inFk24A6nqht/D1VowBT4SPxlRYTZRdNwIDnls2XA4
+   7z90vzLAENR9jTqJnlF1wepbo7JSBEwhz/Ab6b03kwXck8SYjwNyYBuei
+   g==;
+X-CSE-ConnectionGUID: VJ8KgzHTRj2QqNpC2/VbJQ==
+X-CSE-MsgGUID: 1qkZt4uFT1i50MrIoXjTKA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="73121985"
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="73121985"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 21:52:42 -0800
+X-CSE-ConnectionGUID: 62b9Y3uDQlyrKfLirF6oHQ==
+X-CSE-MsgGUID: vnQDeMXOQSSCRScW/BACmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
+   d="scan'208";a="214993740"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Feb 2026 21:52:37 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvqmA-00000000AE3-0V4y;
+	Fri, 27 Feb 2026 05:52:34 +0000
+Date: Fri, 27 Feb 2026 13:52:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Harry Yoo <harry.yoo@oracle.com>, venkat88@linux.ibm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	akpm@linux-foundation.org, ast@kernel.org, cgroups@vger.kernel.org,
+	cl@gentwo.org, hannes@cmpxchg.org, hao.li@linux.dev,
+	harry.yoo@oracle.com, linux-mm@kvack.org, mhocko@kernel.org,
+	muchun.song@linux.dev, rientjes@google.com,
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev, surenb@google.com,
+	vbabka@suse.cz
+Subject: Re: [PATCH] mm/slab: a debug patch to investigate the issue further
+Message-ID: <202602271320.ywOCYQx4-lkp@intel.com>
+References: <20260227030733.9517-1-harry.yoo@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] remoteproc: qcom_wcnss: Fix handling the lack of PD
- regulators in v3
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
- Luca Weiss <luca@lucaweiss.eu>, Vladimir Lypak <vladimir.lypak@gmail.com>,
- =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org,
- phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev
-References: <20260201210230.911220-1-val@packett.cool>
- <jup7hphwpa754gyhtcahz25glecp6ctpuxcwzvco6wrbokvnip@quw7hrauahsa>
- <ddd8b949-3f73-4e3d-90b9-be95e859f3b1@packett.cool>
- <mteufo3laiiuhcgbihxnossy4xfkxhct57mkav2fr4oxvaldp7@k6p7edkfgjt4>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Val Packett <val@packett.cool>
-In-Reply-To: <mteufo3laiiuhcgbihxnossy4xfkxhct57mkav2fr4oxvaldp7@k6p7edkfgjt4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227030733.9517-1-harry.yoo@oracle.com>
+
+Hi Harry,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Harry-Yoo/mm-slab-a-debug-patch-to-investigate-the-issue-further/20260227-111246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260227030733.9517-1-harry.yoo%40oracle.com
+patch subject: [PATCH] mm/slab: a debug patch to investigate the issue further
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260227/202602271320.ywOCYQx4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271320.ywOCYQx4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602271320.ywOCYQx4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/slub.c:1330:6: error: call to undeclared function 'obj_exts_in_slab'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1330 |         if (obj_exts_in_slab(s, slab) && !obj_exts_in_object(s, slab)) {
+         |             ^
+>> mm/slub.c:1332:16: error: call to undeclared function 'obj_exts_offset_in_slab'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1332 |                 remainder -= obj_exts_offset_in_slab(s, slab);
+         |                              ^
+   mm/slub.c:1332:16: note: did you mean 'obj_exts_offset_in_object'?
+   mm/slub.c:793:28: note: 'obj_exts_offset_in_object' declared here
+     793 | static inline unsigned int obj_exts_offset_in_object(struct kmem_cache *s)
+         |                            ^
+>> mm/slub.c:1333:16: error: call to undeclared function 'obj_exts_size_in_slab'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1333 |                 remainder -= obj_exts_size_in_slab(slab);
+         |                              ^
+   3 errors generated.
 
 
-On 2/27/26 12:52 AM, Bjorn Andersson wrote:
-> On Tue, Feb 24, 2026 at 03:45:05PM -0300, Val Packett wrote:
->> On 2/23/26 5:03 PM, Bjorn Andersson wrote:
->>> On Sun, Feb 01, 2026 at 05:55:03PM -0300, Val Packett wrote:
->>>> The changes introduced to handle single power domain platforms have
->>>> swapped the info pointer increment from num_pd_vregs to num_pds, which
->>>> would shift the info pointer past the end of the array for pronto-v3,
->>>> which does not list power domain regulators in vregs.
->>>>
->>>> This showed up as a difference between GCC- and LLVM-compiled kernels
->>>> on SDM632 devices, where only with LLVM one would get the
->>>> "regulator request with no identifier" error, because the out-of-bounds
->>>> memory ended up being zeroed. Fix by skipping the increment when there
->>>> are more power domains than regulators.
->>>>
->>> Is the error only an error print, or did the thing stop working as well?
->> It's a real error. Likely no one would've bothered debugging it if it
->> weren't breaking everything :)
->>
->> It was a blocker for allowing LLVM/clang builds of the msm8953 kernel in
->> postmarketOS, the whole reason to dig into this was "switching to clang
->> breaks the modem, WTF?!"
->>
-> Can you provide me with a Fixes: line please?
->
-Oops, did I lose it at some point? o.0 Sorry!
+vim +/obj_exts_in_slab +1330 mm/slub.c
 
-Fixes: 65991ea8a6d1 ("remoteproc: qcom_wcnss: Handle platforms with only 
-single power domain")
+81819f0fc8285a Christoph Lameter          2007-05-06  1311  
+39b264641a0c3b Christoph Lameter          2008-04-14  1312  /* Check the pad bytes at the end of a slab page */
+adea9876180664 Ilya Leoshkevich           2024-06-21  1313  static pad_check_attributes void
+adea9876180664 Ilya Leoshkevich           2024-06-21  1314  slab_pad_check(struct kmem_cache *s, struct slab *slab)
+81819f0fc8285a Christoph Lameter          2007-05-06  1315  {
+2492268472e7d3 Christoph Lameter          2007-07-17  1316  	u8 *start;
+2492268472e7d3 Christoph Lameter          2007-07-17  1317  	u8 *fault;
+2492268472e7d3 Christoph Lameter          2007-07-17  1318  	u8 *end;
+5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1319  	u8 *pad;
+2492268472e7d3 Christoph Lameter          2007-07-17  1320  	int length;
+2492268472e7d3 Christoph Lameter          2007-07-17  1321  	int remainder;
+81819f0fc8285a Christoph Lameter          2007-05-06  1322  
+81819f0fc8285a Christoph Lameter          2007-05-06  1323  	if (!(s->flags & SLAB_POISON))
+a204e6d626126d Miaohe Lin                 2022-04-19  1324  		return;
+81819f0fc8285a Christoph Lameter          2007-05-06  1325  
+bb192ed9aa7191 Vlastimil Babka            2021-11-03  1326  	start = slab_address(slab);
+bb192ed9aa7191 Vlastimil Babka            2021-11-03  1327  	length = slab_size(slab);
+39b264641a0c3b Christoph Lameter          2008-04-14  1328  	end = start + length;
+70089d01880750 Harry Yoo                  2026-01-13  1329  
+a77d6d33868502 Harry Yoo                  2026-01-13 @1330  	if (obj_exts_in_slab(s, slab) && !obj_exts_in_object(s, slab)) {
+70089d01880750 Harry Yoo                  2026-01-13  1331  		remainder = length;
+70089d01880750 Harry Yoo                  2026-01-13 @1332  		remainder -= obj_exts_offset_in_slab(s, slab);
+70089d01880750 Harry Yoo                  2026-01-13 @1333  		remainder -= obj_exts_size_in_slab(slab);
+70089d01880750 Harry Yoo                  2026-01-13  1334  	} else {
+39b264641a0c3b Christoph Lameter          2008-04-14  1335  		remainder = length % s->size;
+70089d01880750 Harry Yoo                  2026-01-13  1336  	}
+70089d01880750 Harry Yoo                  2026-01-13  1337  
+81819f0fc8285a Christoph Lameter          2007-05-06  1338  	if (!remainder)
+a204e6d626126d Miaohe Lin                 2022-04-19  1339  		return;
+81819f0fc8285a Christoph Lameter          2007-05-06  1340  
+5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1341  	pad = end - remainder;
+a79316c6178ca4 Andrey Ryabinin            2015-02-13  1342  	metadata_access_enable();
+aa1ef4d7b3f67f Andrey Konovalov           2020-12-22  1343  	fault = memchr_inv(kasan_reset_tag(pad), POISON_INUSE, remainder);
+a79316c6178ca4 Andrey Ryabinin            2015-02-13  1344  	metadata_access_disable();
+2492268472e7d3 Christoph Lameter          2007-07-17  1345  	if (!fault)
+a204e6d626126d Miaohe Lin                 2022-04-19  1346  		return;
+2492268472e7d3 Christoph Lameter          2007-07-17  1347  	while (end > fault && end[-1] == POISON_INUSE)
+2492268472e7d3 Christoph Lameter          2007-07-17  1348  		end--;
+2492268472e7d3 Christoph Lameter          2007-07-17  1349  
+3f6f32b14ab354 Hyesoo Yu                  2025-02-26  1350  	slab_bug(s, "Padding overwritten. 0x%p-0x%p @offset=%tu",
+e1b70dd1e6429f Miles Chen                 2019-11-30  1351  		 fault, end - 1, fault - start);
+5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1352  	print_section(KERN_ERR, "Padding ", pad, remainder);
+3f6f32b14ab354 Hyesoo Yu                  2025-02-26  1353  	__slab_err(slab);
+2492268472e7d3 Christoph Lameter          2007-07-17  1354  
+5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1355  	restore_bytes(s, "slab padding", POISON_INUSE, fault, end);
+81819f0fc8285a Christoph Lameter          2007-05-06  1356  }
+81819f0fc8285a Christoph Lameter          2007-05-06  1357  
 
-
-~val
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
