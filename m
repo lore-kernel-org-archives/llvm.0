@@ -1,161 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B6D34252B;
-	Fri, 27 Feb 2026 05:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71953375C2;
+	Fri, 27 Feb 2026 06:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772171563; cv=none; b=VdvmJ4gz4mV2uf3q1oaVLukUoH/OMlgUm0ABIc9g/h7qubhYudDwKc5TzBhdYSBgK/6SSQ12dCz9+ZmTAAvm/GUk57EkyeMnI1bVShQpdPUkfDGTi8HMCrGc8LzOWwYJ2Jlc3OJ83r5PYs7YbYQQDJx9Sg13rvadHC6CwpoLPL0=
+	t=1772174834; cv=none; b=HPIlWOUhXoTDN70RzLvPbI0NcWKdrmAPC/bo8lr2VzZG9yZZ27x5dKg48zwv0llL0fZIG2knCG8ICT5NNkZNv9ZXXWd4M1YideBiAIK1Vlt+aWgZ4f8QVhP3e6AzL8LP+lBTnsYk0VmD7yabtDkTM5vjoA1T77JcXDzuGy/aYHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772171563; c=relaxed/simple;
-	bh=LWOdmL0uan22tNsv3PGdyHuaOVgzT4VqOM5Rm/fNGco=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dkexLui0M7AtbWNz9oeZgrLLwQ9QaCwcc1S43ZIGt5uv56YcdnDIxTMRCXHhRGoDX4u4WVpct8gea1OWXhb+cn6YeRk0FASVbU8B8kTP58UD2lGrWmpCCecHpdMN3aLgPyY0Z1wTrvId+51HaO/Tumpel152vE7q4iByuMb2J6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cjwBXqKB; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1772174834; c=relaxed/simple;
+	bh=FTBoem3N8wjs1l9Nc4rU9G3bNGjYtPHN4mgq35kA64A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XiZLvYELF7aDmIQGMTZ6SB1EvuFztEYngHhKC5+sT0PkSzyTjJi6O6OOFZRftMi+tCBTy8XrgwId8EEmVEafrGiG5lh4Z/LzYobAh45lL0sjQ+7JvBcasdLsPdAop4ykXwcnm2FETP70ppX3Pnaqq6IY3zZQD5+FYQl9hhQPCXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W6fsdAiU; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cjwBXqKB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W6fsdAiU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772171562; x=1803707562;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LWOdmL0uan22tNsv3PGdyHuaOVgzT4VqOM5Rm/fNGco=;
-  b=cjwBXqKBaDRWYKsDGUBHcPgp8tFST9wsOMbwx1XQ4yiN2sL8h/QQKze4
-   4cUO6+UR3W0UVB2Ie4ezaesSPFktQf88KY28VoKxEMC/9a0ujPBRDKxGR
-   gfc0ISBmoEqsFQQ7J3PSkJJta6VcRKDkeUWbUy/0f3lc+h9s+d7mFsaXW
-   6wO4ORbIr1BXOX+HMORt6s0UM0FuiAOvr/BGYAGeqF4zQa8S8cCMK1UVe
-   wJAzDemJCxamUF4inFk24A6nqht/D1VowBT4SPxlRYTZRdNwIDnls2XA4
-   7z90vzLAENR9jTqJnlF1wepbo7JSBEwhz/Ab6b03kwXck8SYjwNyYBuei
-   g==;
-X-CSE-ConnectionGUID: VJ8KgzHTRj2QqNpC2/VbJQ==
-X-CSE-MsgGUID: 1qkZt4uFT1i50MrIoXjTKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="73121985"
+  t=1772174833; x=1803710833;
+  h=date:from:to:cc:subject:message-id;
+  bh=FTBoem3N8wjs1l9Nc4rU9G3bNGjYtPHN4mgq35kA64A=;
+  b=W6fsdAiUjgbCA/Q4Yxv3Vb/Q3v1WpxSFIcRS6lFbmGgrS703dy86ZJ9t
+   FI1q783B5z2iIUmle6csnwQ68/Eew4PQKtj7Oc8bTN0NfyaC6bhaf7CDI
+   h2+7W+4yiq/C5k/TPiLIEF1leEs9quGgEmYk/lMYevpx9hEyNz/EEJI1N
+   2BUhkobxT1gm/7A1Dm2jRxqhkt6XrwY77lny7K/OfK2PH73Mc3q2oBQzY
+   H0q+L6yiP+IxqZUdKcd83IVtJeugiPrtfJanH21y5fdDBKthcVHQNNx0p
+   p8nMGehlgpu/s+HvoH2toTS0pTS+Kk4IH49KxSR8zSM/qg2NTNuynNCae
+   w==;
+X-CSE-ConnectionGUID: Y87vdocbSf67ZuUu6BFScg==
+X-CSE-MsgGUID: KBFPLAmhTQy+uUSlArFT8g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="83959004"
 X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="73121985"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 21:52:42 -0800
-X-CSE-ConnectionGUID: 62b9Y3uDQlyrKfLirF6oHQ==
-X-CSE-MsgGUID: vnQDeMXOQSSCRScW/BACmg==
+   d="scan'208";a="83959004"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 22:47:12 -0800
+X-CSE-ConnectionGUID: 9oTTLiAxTfOfVIaisM3JIQ==
+X-CSE-MsgGUID: SaQ8PP1MRqCd9f9he2NRpQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="214993740"
+   d="scan'208";a="254595621"
 Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Feb 2026 21:52:37 -0800
+  by orviesa001.jf.intel.com with ESMTP; 26 Feb 2026 22:47:11 -0800
 Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vvqmA-00000000AE3-0V4y;
-	Fri, 27 Feb 2026 05:52:34 +0000
-Date: Fri, 27 Feb 2026 13:52:18 +0800
+	id 1vvrcQ-00000000AGh-3VJx;
+	Fri, 27 Feb 2026 06:46:42 +0000
+Date: Fri, 27 Feb 2026 14:45:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Harry Yoo <harry.yoo@oracle.com>, venkat88@linux.ibm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, ast@kernel.org, cgroups@vger.kernel.org,
-	cl@gentwo.org, hannes@cmpxchg.org, hao.li@linux.dev,
-	harry.yoo@oracle.com, linux-mm@kvack.org, mhocko@kernel.org,
-	muchun.song@linux.dev, rientjes@google.com,
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev, surenb@google.com,
-	vbabka@suse.cz
-Subject: Re: [PATCH] mm/slab: a debug patch to investigate the issue further
-Message-ID: <202602271320.ywOCYQx4-lkp@intel.com>
-References: <20260227030733.9517-1-harry.yoo@oracle.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-02-27 64/71]
+ sound/soc/mediatek/mt6797/mt6797-dai-pcm.c:188:12: error: expected ';' at end
+ of declaration
+Message-ID: <202602271436.slKE97Pg-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260227030733.9517-1-harry.yoo@oracle.com>
 
-Hi Harry,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Harry-Yoo/mm-slab-a-debug-patch-to-investigate-the-issue-further/20260227-111246
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260227030733.9517-1-harry.yoo%40oracle.com
-patch subject: [PATCH] mm/slab: a debug patch to investigate the issue further
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260227/202602271320.ywOCYQx4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271320.ywOCYQx4-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-02-27
+head:   70fac1227b8f4cff541671ddd98131030be53492
+commit: 0d2fc26b6b9e1b6dbf496f2e231460cdcae63f24 [64/71] move struct dai
+config: arm64-randconfig-003-20260227 (https://download.01.org/0day-ci/archive/20260227/202602271436.slKE97Pg-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271436.slKE97Pg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602271320.ywOCYQx4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602271436.slKE97Pg-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/slub.c:1330:6: error: call to undeclared function 'obj_exts_in_slab'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1330 |         if (obj_exts_in_slab(s, slab) && !obj_exts_in_object(s, slab)) {
-         |             ^
->> mm/slub.c:1332:16: error: call to undeclared function 'obj_exts_offset_in_slab'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1332 |                 remainder -= obj_exts_offset_in_slab(s, slab);
-         |                              ^
-   mm/slub.c:1332:16: note: did you mean 'obj_exts_offset_in_object'?
-   mm/slub.c:793:28: note: 'obj_exts_offset_in_object' declared here
-     793 | static inline unsigned int obj_exts_offset_in_object(struct kmem_cache *s)
-         |                            ^
->> mm/slub.c:1333:16: error: call to undeclared function 'obj_exts_size_in_slab'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1333 |                 remainder -= obj_exts_size_in_slab(slab);
-         |                              ^
-   3 errors generated.
+>> sound/soc/mediatek/mt6797/mt6797-dai-pcm.c:188:12: error: expected ';' at end of declaration
+     188 |         int dai_id snd_soc_dai_id(dai);
+         |                   ^
+         |                   ;
+   1 error generated.
 
 
-vim +/obj_exts_in_slab +1330 mm/slub.c
+vim +188 sound/soc/mediatek/mt6797/mt6797-dai-pcm.c
 
-81819f0fc8285a Christoph Lameter          2007-05-06  1311  
-39b264641a0c3b Christoph Lameter          2008-04-14  1312  /* Check the pad bytes at the end of a slab page */
-adea9876180664 Ilya Leoshkevich           2024-06-21  1313  static pad_check_attributes void
-adea9876180664 Ilya Leoshkevich           2024-06-21  1314  slab_pad_check(struct kmem_cache *s, struct slab *slab)
-81819f0fc8285a Christoph Lameter          2007-05-06  1315  {
-2492268472e7d3 Christoph Lameter          2007-07-17  1316  	u8 *start;
-2492268472e7d3 Christoph Lameter          2007-07-17  1317  	u8 *fault;
-2492268472e7d3 Christoph Lameter          2007-07-17  1318  	u8 *end;
-5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1319  	u8 *pad;
-2492268472e7d3 Christoph Lameter          2007-07-17  1320  	int length;
-2492268472e7d3 Christoph Lameter          2007-07-17  1321  	int remainder;
-81819f0fc8285a Christoph Lameter          2007-05-06  1322  
-81819f0fc8285a Christoph Lameter          2007-05-06  1323  	if (!(s->flags & SLAB_POISON))
-a204e6d626126d Miaohe Lin                 2022-04-19  1324  		return;
-81819f0fc8285a Christoph Lameter          2007-05-06  1325  
-bb192ed9aa7191 Vlastimil Babka            2021-11-03  1326  	start = slab_address(slab);
-bb192ed9aa7191 Vlastimil Babka            2021-11-03  1327  	length = slab_size(slab);
-39b264641a0c3b Christoph Lameter          2008-04-14  1328  	end = start + length;
-70089d01880750 Harry Yoo                  2026-01-13  1329  
-a77d6d33868502 Harry Yoo                  2026-01-13 @1330  	if (obj_exts_in_slab(s, slab) && !obj_exts_in_object(s, slab)) {
-70089d01880750 Harry Yoo                  2026-01-13  1331  		remainder = length;
-70089d01880750 Harry Yoo                  2026-01-13 @1332  		remainder -= obj_exts_offset_in_slab(s, slab);
-70089d01880750 Harry Yoo                  2026-01-13 @1333  		remainder -= obj_exts_size_in_slab(slab);
-70089d01880750 Harry Yoo                  2026-01-13  1334  	} else {
-39b264641a0c3b Christoph Lameter          2008-04-14  1335  		remainder = length % s->size;
-70089d01880750 Harry Yoo                  2026-01-13  1336  	}
-70089d01880750 Harry Yoo                  2026-01-13  1337  
-81819f0fc8285a Christoph Lameter          2007-05-06  1338  	if (!remainder)
-a204e6d626126d Miaohe Lin                 2022-04-19  1339  		return;
-81819f0fc8285a Christoph Lameter          2007-05-06  1340  
-5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1341  	pad = end - remainder;
-a79316c6178ca4 Andrey Ryabinin            2015-02-13  1342  	metadata_access_enable();
-aa1ef4d7b3f67f Andrey Konovalov           2020-12-22  1343  	fault = memchr_inv(kasan_reset_tag(pad), POISON_INUSE, remainder);
-a79316c6178ca4 Andrey Ryabinin            2015-02-13  1344  	metadata_access_disable();
-2492268472e7d3 Christoph Lameter          2007-07-17  1345  	if (!fault)
-a204e6d626126d Miaohe Lin                 2022-04-19  1346  		return;
-2492268472e7d3 Christoph Lameter          2007-07-17  1347  	while (end > fault && end[-1] == POISON_INUSE)
-2492268472e7d3 Christoph Lameter          2007-07-17  1348  		end--;
-2492268472e7d3 Christoph Lameter          2007-07-17  1349  
-3f6f32b14ab354 Hyesoo Yu                  2025-02-26  1350  	slab_bug(s, "Padding overwritten. 0x%p-0x%p @offset=%tu",
-e1b70dd1e6429f Miles Chen                 2019-11-30  1351  		 fault, end - 1, fault - start);
-5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1352  	print_section(KERN_ERR, "Padding ", pad, remainder);
-3f6f32b14ab354 Hyesoo Yu                  2025-02-26  1353  	__slab_err(slab);
-2492268472e7d3 Christoph Lameter          2007-07-17  1354  
-5d682681f8a2bd Balasubramani Vivekanandan 2018-01-31  1355  	restore_bytes(s, "slab padding", POISON_INUSE, fault, end);
-81819f0fc8285a Christoph Lameter          2007-05-06  1356  }
-81819f0fc8285a Christoph Lameter          2007-05-06  1357  
+   179	
+   180	/* dai ops */
+   181	static int mtk_dai_pcm_hw_params(struct snd_pcm_substream *substream,
+   182					 struct snd_pcm_hw_params *params,
+   183					 struct snd_soc_dai *dai)
+   184	{
+   185		struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+   186		struct snd_soc_dapm_widget *p = snd_soc_dai_stream_widget_get_playback(dai);
+   187		struct snd_soc_dapm_widget *c = snd_soc_dai_stream_widget_get_capture(dai);
+ > 188		int dai_id snd_soc_dai_id(dai);
+   189		unsigned int rate = params_rate(params);
+   190		unsigned int rate_reg = mt6797_rate_transform(afe->dev, rate, dai_id);
+   191		unsigned int pcm_con = 0;
+   192	
+   193		dev_dbg(afe->dev, "%s(), id %d, stream %d, rate %d, rate_reg %d, widget active p %d, c %d\n",
+   194			__func__,
+   195			dai_id,
+   196			substream->stream,
+   197			rate,
+   198			rate_reg,
+   199			p->active,
+   200			c->active);
+   201	
+   202		if (p->active || c->active)
+   203			return 0;
+   204	
+   205		switch (dai_id) {
+   206		case MT6797_DAI_PCM_1:
+   207			pcm_con |= AUD_BCLK_OUT_INV_NO_INVERSE << PCM_BCLK_OUT_INV_SFT;
+   208			pcm_con |= AUD_TX_LCH_RPT_NO_REPEAT << PCM_TX_LCH_RPT_SFT;
+   209			pcm_con |= AUD_VBT_16K_MODE_DISABLE << PCM_VBT_16K_MODE_SFT;
+   210			pcm_con |= AUD_EXT_MODEM_SELECT_INTERNAL << PCM_EXT_MODEM_SFT;
+   211			pcm_con |= 0 << PCM_SYNC_LENGTH_SFT;
+   212			pcm_con |= AUD_PCM_ONE_BCK_CYCLE_SYNC << PCM_SYNC_TYPE_SFT;
+   213			pcm_con |= AUD_BT_MODE_DUAL_MIC_ON_TX << PCM_BT_MODE_SFT;
+   214			pcm_con |= AUD_PCM_AFIFO_AFIFO << PCM_BYP_ASRC_SFT;
+   215			pcm_con |= AUD_PCM_CLOCK_SLAVE_MODE << PCM_SLAVE_SFT;
+   216			pcm_con |= rate_reg << PCM_MODE_SFT;
+   217			pcm_con |= AUD_PCM_FMT_PCM_MODE_B << PCM_FMT_SFT;
+   218	
+   219			regmap_update_bits(afe->regmap, PCM_INTF_CON1,
+   220					   0xfffffffe, pcm_con);
+   221			break;
+   222		case MT6797_DAI_PCM_2:
+   223			pcm_con |= AUD_TX_LCH_RPT_NO_REPEAT << PCM2_TX_LCH_RPT_SFT;
+   224			pcm_con |= AUD_VBT_16K_MODE_DISABLE << PCM2_VBT_16K_MODE_SFT;
+   225			pcm_con |= AUD_BT_MODE_DUAL_MIC_ON_TX << PCM2_BT_MODE_SFT;
+   226			pcm_con |= AUD_PCM_AFIFO_AFIFO << PCM2_AFIFO_SFT;
+   227			pcm_con |= AUD_PCM_WLEN_PCM_32_BCK_CYCLES << PCM2_WLEN_SFT;
+   228			pcm_con |= rate_reg << PCM2_MODE_SFT;
+   229			pcm_con |= AUD_PCM_FMT_PCM_MODE_B << PCM2_FMT_SFT;
+   230	
+   231			regmap_update_bits(afe->regmap, PCM2_INTF_CON,
+   232					   0xfffffffe, pcm_con);
+   233			break;
+   234		default:
+   235			dev_warn(afe->dev, "%s(), id %d not support\n",
+   236				 __func__, dai_id);
+   237			return -EINVAL;
+   238		}
+   239	
+   240		return 0;
+   241	}
+   242	
 
 -- 
 0-DAY CI Kernel Test Service
