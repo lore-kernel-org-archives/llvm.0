@@ -1,113 +1,121 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2A63A7F63
-	for <llvm@lists.linux.dev>; Fri, 27 Feb 2026 23:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772235659; cv=pass; b=K4Zp2ccrpwhQ2HS6ffUGm0L0nIf8r5hCz8jzcjg0DKEzqjYbgAjgbsiY6SZ66HHBOFaGzoXolvSXDviIpEHRMIdiMOze8mIaB9UAUzmkoK++okVeCeZi5Av9O720dw9AcEBMH0kGfGQZji0w1fT+6SKylQtH+vspaepXxCnb5mo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772235659; c=relaxed/simple;
-	bh=RP8tg76wlCDecz2kC4LOkuQOl8f8t3SLtfXwbbGnwFY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d7/OUgUg9ODABd8MkY02k7EMr65QpvBUNQoyZMg3fx2AwfB38BaMf50SBsWKYr+5/gsCEK/lYoOQj4oKGv8yHwRwHA21DPM2ENKJCZbld+qiU8knJEnLkWvCEhBd0u09uLtjOm6K2A+8fKAXiLU4/PxySiuIkMqmk5FCnMUF2Uk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JFrFSSf4; arc=pass smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF70E15C14F;
+	Sat, 28 Feb 2026 00:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772238698; cv=none; b=sqj4teUMd393UojSGsjjgJyGoI5BfXe+vAXLVAHTD/8VgjP/OcdAlegG171WPEAlZBeObmzktUPZSOtmpByb6HSug2gM1STZPYe4uhbh667DQIOlKtNyeMqMU5XcTEEyTbN1m3Ko+CRV9TKRR3sF+HgPVsKlPq0LjJDn9X9r2j0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772238698; c=relaxed/simple;
+	bh=LD4tFWeuXgAJwTskOHuWBZgdA6OhPsX/uDsTm/dyMfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHP8kLeE5dfrmpdnxT4KO0Dyu4FcNfmhXOPwhhGk5nlsi/FMW2fA7Gzg3hRW/arolfAGMy0efX4nrQAmA8/HkoGlZwQRGDPHZIJNdHV8cRuksFdQvbP9AWS9LSyPCP88rxE+sKQa2IGUcr4+MDJzCTfJ+CA0HOT2tWhfaM3oYIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZinpZUBy; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFrFSSf4"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2bdde552635so100855eec.2
-        for <llvm@lists.linux.dev>; Fri, 27 Feb 2026 15:40:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772235657; cv=none;
-        d=google.com; s=arc-20240605;
-        b=b/V0Y4SRgfyIVqvfD5vX9LdE1xgZ+6iauZtai14eJqLV3yVTQm5P5WhNG8Ll4jWdxm
-         dNyP+T8nVXYhv26GHA2uhxpogw8+/pnzNQANLLTb71obAn3O/4+JFMyoxqmdv1mENJSo
-         r/hMB+4mdhBTJjOC5m4cmO3adUTQnzPDb1BM+FyePtMKLV3HjckLnOJLbjGjoz2GXzni
-         U7xsE19dkXmnjKnDmwYVqYEZd3TQVFwKP608uPWc2Stj2/g/BdOaRxu/jFvYLoG1/iJe
-         Bi9aL/rrzKxgUL/hH4D9vo3IbdNdPJxWzVV+hgutyXJTMF9y0VFt4HJbEmSnVy/Hby3a
-         ZzOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RP8tg76wlCDecz2kC4LOkuQOl8f8t3SLtfXwbbGnwFY=;
-        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
-        b=GuE2I55KpUN3Y+rL2jKEdoPNz8iBq8H6uN40G9HjXf2iEYW/cuk50z0EnfyvsTbuBA
-         CSvKH60OXYbz6p1gsLHUlpn/OZo/Gq8eL4qaxR8AgySMYx0qfEbxTv3g/SLk6whdb5K+
-         OAINGYXUZicPmucDz9aBiNCfCj9Tep8DihSsYYElIkilsFIm2mcqlLlKSXE34haaUkES
-         6pIIed8ofdoNip/6LcXD/HR84AGES5IbnSagxy96fXaGyTCg7mD1R3jXdVPZYAXI3ehK
-         UzwqV8/rlnwKdkEzFfEMgollmter3sKgbg8rtDxdhK9MVXAyG9fpM5arHdboLLL6dXaH
-         oEZw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772235657; x=1772840457; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RP8tg76wlCDecz2kC4LOkuQOl8f8t3SLtfXwbbGnwFY=;
-        b=JFrFSSf4mHQoqob7ELIWo9fXyTknd8QobFiZiuTqvhIxdX++8B7Nehfqgd26z54Eai
-         csgLaSPLQuaKYckM38Xlap2DV60E4GafLzJseir3YLfdgTBR3B3sjzGqO364U/GAmTwm
-         AndOvU2OEVj0n4Y/fCws1CMF0x6j+7q+nED7WVHAqB4QCJErXWZmA4gVrcwZ4c9Zyh26
-         v1GSiMrYwF04t9RHaahhuoI6vSPtm710+Tcs2EoYFMvu37kBiXtxCJH5hR/94W1YjCSd
-         d2vMVGFXFMxKimj5qRfI+6vt1WFlLMu4+D3GE/LlTT3hgDVWrL6bIUxl15l02iisCOaj
-         zzsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772235657; x=1772840457;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RP8tg76wlCDecz2kC4LOkuQOl8f8t3SLtfXwbbGnwFY=;
-        b=dOLMKoD16OQ4n4tNFqYVsG71n3cI309CCpGDag3vE9iZF8oxKdxUuC0qeQZakUrSl+
-         EJVXSFR7q2hPrQg3NsTSfX8QZahg6pJmJJk9NLCjsRDXVHHlPalEeHv5JFezJuLGT3ry
-         gXU1eLQc61ZQvBvGKM92FEQogxiEjcrTaDauDHjLcYUMx23ywoAP4wRZPAEJsqlq5dAE
-         yKBgNcPkrGX/LZayngdJ8kiNcClw0a9TKRJysvKbcbVp02vVuxO4WWg4wG+XCdRZfQET
-         mRLittGvONHiWK2Y9ooerG0/XQntXnDSmZna+uimxgdtfRJJqQPNugLwW6/Si5Q/Nuzx
-         OodA==
-X-Gm-Message-State: AOJu0Ywj9W7zIwVab7z/c3iJYbkKW2xbwa79rZbfnQhZZBeqEk4fmN9d
-	ae4jk0YUK8GGaAz4FJ0YmhkZgM2OeykVwmBL6RxiYM9Lpjgt2vhx5VUXs1ifoRPElVNqWUCwteB
-	I5pasPNVEP8IKi+vE/GDekQfYkFZZAys=
-X-Gm-Gg: ATEYQzyv4c+8OnfMcfwrhM6KOmBp8eeBbJbHlXP44/1xGgcTD9b3Gt/UE4HjCr1v09I
-	Hj82RS1GVL40A+wRtmlyUtl7vYXsnniCQKdKbmMHMen4xuglcLCsq05WyrNalhoyoULR/2Ur3tM
-	M7YC+E7u8Fv+EkCRX6NlyQsBb6KNYVLEK6jFLCeA2sF6faJBjuRauke3gYDkt8xhyw/vBsMLbDr
-	hJGS9pUmgxl5X59OPLEQhL0rc8lbu6z/1YUCX9AQwDoXNqil8U281/OPDRni6ruA2KuXCdqA7me
-	PjPiN4KLCYrA/FdokfNNGJh5PwHCWyDj0nTY0ugI+Mu6R0U6NMM2kDJFVg0+HTIo+hXP9a7M7AN
-	Ce5Xdj97XrzEcX2tahXVr8Wd5aLbN
-X-Received: by 2002:a05:7301:169b:b0:2bd:c883:5f90 with SMTP id
- 5a478bee46e88-2bde1b34c6fmr764707eec.2.1772235657148; Fri, 27 Feb 2026
- 15:40:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZinpZUBy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772238697; x=1803774697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LD4tFWeuXgAJwTskOHuWBZgdA6OhPsX/uDsTm/dyMfE=;
+  b=ZinpZUByv8oSAQoCEQ1KXBHpN34uisWNb6lBp9gQU3KzBZrI+WPY44U3
+   W05wrWqwTRmtPDO/TBwWHchmzVgzWMe2R8ibprIx9R38CREOgl5gnPkw4
+   lejeJKIOdpWRex4C4At6TCpouAS1Ut/hE86okwlTi+4DUuJ/6rvqClUMK
+   FK2uQb+PGvotkow0uChH9liMEKzFMcSOrK4nIgBfiGaU1kW3H2FgKapJa
+   QBzmQxP8VcRrm3sRveTCsCDQCie17+nLMOI5bnuj8gpS1DjZrMJJiniSH
+   FU4bJLeeJtZs7v8mUITNuWGqwnSfYW4etEyknulGGrsoSaCmTANUh9/IE
+   Q==;
+X-CSE-ConnectionGUID: Fip0qnXoRuOTE4Ggx2JvzA==
+X-CSE-MsgGUID: C8v0aq/GRLmikuH7wpE55Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="76938745"
+X-IronPort-AV: E=Sophos;i="6.21,315,1763452800"; 
+   d="scan'208";a="76938745"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 16:31:36 -0800
+X-CSE-ConnectionGUID: 7IEm27nSToGjmy+1hT1wrw==
+X-CSE-MsgGUID: GkPb8XHrRT2Jg/+/KBY5/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,315,1763452800"; 
+   d="scan'208";a="216181047"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 27 Feb 2026 16:31:33 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vw8Ea-00000000BCN-3Vmw;
+	Sat, 28 Feb 2026 00:31:10 +0000
+Date: Sat, 28 Feb 2026 08:29:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacob Pan <jacob.pan@linux.microsoft.com>, linux-kernel@vger.kernel.org,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Alex Williamson <alex@shazbot.org>, Joerg Roedel <joro@8bytes.org>,
+	David Matlack <dmatlack@google.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	"Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+	Baolu Lu <baolu.lu@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	skhawaja@google.com, pasha.tatashin@soleen.com,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jean Philippe-Brucker <jean-philippe@linaro.org>,
+	Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 08/11] vfio: Enable cdev noiommu mode under iommufd
+Message-ID: <202602280846.BaUZcBnS-lkp@intel.com>
+References: <20260227175247.26103-9-jacob.pan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260225014834.GA1284670@ax162> <CANiq72=d8c8GJEjPik5tv+LYPdFLiQOpArb1-wNck5sCzdOhkA@mail.gmail.com>
- <20260225201231.GF2755225@ax162>
-In-Reply-To: <20260225201231.GF2755225@ax162>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 28 Feb 2026 00:40:44 +0100
-X-Gm-Features: AaiRm53Pl4cAP2CaQul_k1jDoaKgl9Jo2siq2shmJMczRWqBSNjXZQ9ZbKaPTSA
-Message-ID: <CANiq72mE5QnejOQiNFpnLsPi2QJAUfUNiNW+GZcQtaLsCZ0kNw@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 22.1.0 uploaded
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227175247.26103-9-jacob.pan@linux.microsoft.com>
 
-On Wed, Feb 25, 2026 at 9:12=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hmmm, yeah good point. I had interpreted it as "latest LLVM version" not
-> "latest LLVM stable version of the corresponding major version". I guess
-> I had figured CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE would help prevent any
-> problems and most users would probably prefer the latest version of each
-> tool, rather than the compatible ones, which are still available. I will
-> work on a wording update there (or just revert back to 21.1.8 for those
-> until Rust has LLVM 22 merged).
+Hi Jacob,
 
-Thanks Nathan!
+kernel test robot noticed the following build errors:
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.0-rc1 next-20260227]
+[cannot apply to awilliam-vfio/next awilliam-vfio/for-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Miguel
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacob-Pan/iommufd-Support-a-HWPT-without-an-iommu-driver-for-noiommu/20260228-020145
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260227175247.26103-9-jacob.pan%40linux.microsoft.com
+patch subject: [PATCH 08/11] vfio: Enable cdev noiommu mode under iommufd
+config: i386-buildonly-randconfig-001-20260228 (https://download.01.org/0day-ci/archive/20260228/202602280846.BaUZcBnS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602280846.BaUZcBnS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602280846.BaUZcBnS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: iommu_put_pages_list
+   >>> referenced by iommu_pt.h:768 (drivers/iommu/generic_pt/fmt/../iommu_pt.h:768)
+   >>>               drivers/iommu/generic_pt/fmt/iommu_amdv1.o:(pt_iommu_amdv1_map_pages) in archive vmlinux.a
+   >>> referenced by iommu_pt.h:768 (drivers/iommu/generic_pt/fmt/../iommu_pt.h:768)
+   >>>               drivers/iommu/generic_pt/fmt/iommu_amdv1.o:(pt_iommu_amdv1_map_pages) in archive vmlinux.a
+   >>> referenced by iommu_pt.h:768 (drivers/iommu/generic_pt/fmt/../iommu_pt.h:768)
+   >>>               drivers/iommu/generic_pt/fmt/iommu_amdv1.o:(pt_iommu_amdv1_map_pages) in archive vmlinux.a
+   >>> referenced 1 more times
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for IOMMU_PT
+   Depends on [n]: IOMMU_SUPPORT [=n] && GENERIC_PT [=y]
+   Selected by [y]:
+   - VFIO_NOIOMMU [=y] && VFIO [=y] && VFIO_GROUP [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
