@@ -1,62 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6DB429814;
-	Sat, 28 Feb 2026 10:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7ED342DFE5
+	for <llvm@lists.linux.dev>; Sat, 28 Feb 2026 11:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772276225; cv=none; b=AWQ3S92knh5CVMSMfzzQ0Mzuek1BUeg8rf24uXL3SAAs9VFoTMCwE7PRC1+Uj8YVyKwaChyDZsfgSXq7wvybv962HF9RgKcKBVlPbo3R2Srf7x9+wUAP46aor+2GmZt7smlddk5zJg4TK3IuoU78xVlhMcQ1MFyFEVHKUZWc3A4=
+	t=1772277078; cv=none; b=iq811wTFgR8uXy/HMUZFl+bWm2yB7gFfeA5xIfg6gO/pUvvzKY9lm0swKBag02b7++1sqmZTFQY98+Ac1cTtUVWK/WwLq/aXg0NCuN1+Br/vgvCFj8uscgZqYAOFmgdg8IrSXbY/l5yC7pS2b4F30sILq5odlPFlNYeTP1hQjMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772276225; c=relaxed/simple;
-	bh=gyKSskGdhjjwQeex3oN5MrHUMIsbXLRxIWLXycP202k=;
+	s=arc-20240116; t=1772277078; c=relaxed/simple;
+	bh=qeJjeeYo7h+jV66lUjMWyEjvn5PUYwkmIU9ffj0uwZ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DRiqCFkrH4MZXMqa4zMm3yyERaXG48xO2lGw3IPNtEtQI/GrzRWMt+sM9o1uONKX4jRRqyvx8q5s7GgP7jDzjszWSyqT8hxmDNxpJLlk3T5H9GxgPtlbcRXc1R6xJkkX+ATZ7bBEQNZnMSgPrJYIwO+odJXAQxrQG0xsgp+yDTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h6cEmTz2; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jFvXDpx6+RvVjY/O59P96zrgb7mAGy6yNMavPx5J4Ucvdk0r1XBeZ//kF7IUQnH1Lh4LK09D4vFd/tNCd2rcI/G/lnjC0wSMV35haSC7X/U9p0j1IkGG0VvyWE416Zbl2ZayBrN/aWbiR0tG/j5InC3tJmPGOT/9oUoPcvce5u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b2xiJYPd; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h6cEmTz2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b2xiJYPd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772276223; x=1803812223;
+  t=1772277078; x=1803813078;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gyKSskGdhjjwQeex3oN5MrHUMIsbXLRxIWLXycP202k=;
-  b=h6cEmTz2T5XlooUZwcohJZDRqWfdpvowFKxiZscFddGb31zqecHICp2q
-   FvwqkVZ2nUZ4sJOCOYxvLBB0F3zSmOObAMRVaR6TyaBEjoV+YDV5P1kMn
-   aBlq2KwRGR/xxqBvO+DCMQznGCci+erJ3WQpBQ/8Bsbvi653/Xm3nrSae
-   TOp5/l5o9+XLY2bfhahCtI69DuV3Uqjnv4+QO+jqEcal7rZbaPP5CzGqP
-   //FqBjmT1tZH37wuqbBWZir657gutcIaVay7bR/Rqyq3zu4HAJRd57dfi
-   5Po7DxQbbhrFMplr75bkYPd0tfq27mUj9mJW/aWiM0TI1zaxoZvZbznp2
-   g==;
-X-CSE-ConnectionGUID: YRFv2R55TF6d7dxFt9ohaA==
-X-CSE-MsgGUID: kErfQ5acQCe+HE1wfTLnnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="84055354"
+  bh=qeJjeeYo7h+jV66lUjMWyEjvn5PUYwkmIU9ffj0uwZ4=;
+  b=b2xiJYPdyIevHZkpnIEdRrIgmxx+QzWw7AgE0QpccfnRR4ZAmWFoFZA5
+   3l/oX/WuT/PxOFLCZq9VoXgrpEiDwfHrI/W1KHPxKVCaCAVx3WLx/suQb
+   NleRxV9jqMEIo4hENk/qDAyQHRmNNUtujcdyhKUbAn2inH4iVTCc1y57b
+   QYnDzWvJ+mdQzWAfgtWrMHN0/tyFXsREXZ0pRTZzkQim/StodASia5IsI
+   EFF+96c3Fb+AstXgQkQcjon4glpdZ/erRb9ysNrLKi6w2mJaQrjT4avT4
+   +xwQfD7vzQsHMCFazRSQyXKSSko9TV10vqOYkP3WNMooBLnW9UJDHasNl
+   A==;
+X-CSE-ConnectionGUID: 1Sk3FnwJRxSHXGI1kPFFDw==
+X-CSE-MsgGUID: HeqP240tQQq8zV0UX8b8iA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="75953794"
 X-IronPort-AV: E=Sophos;i="6.21,316,1763452800"; 
-   d="scan'208";a="84055354"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 02:57:03 -0800
-X-CSE-ConnectionGUID: QCASG40uQpWUtGdOlznaHQ==
-X-CSE-MsgGUID: ZEFmp9z7RAazHDCT+wEIAA==
+   d="scan'208";a="75953794"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 03:11:17 -0800
+X-CSE-ConnectionGUID: aefoXC9oRfOTlOj+Up/Z2g==
+X-CSE-MsgGUID: 1XdQ5didTryw51+mxbO38g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,316,1763452800"; 
-   d="scan'208";a="215718074"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 28 Feb 2026 02:57:00 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vwI0H-00000000BTX-31YE;
-	Sat, 28 Feb 2026 10:56:57 +0000
-Date: Sat, 28 Feb 2026 18:56:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ankit Soni <Ankit.Soni@amd.com>, iommu@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	vasant.hegde@amd.com, suravee.suthikulpanit@amd.com,
-	joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/amd: Adhere to IVINFO[VASIZE] for address limits
-Message-ID: <202602281837.QQl5six6-lkp@intel.com>
-References: <cf1a1e3d96c3571ac5caa528caa84751d40be1bc.1772208939.git.Ankit.Soni@amd.com>
+   d="scan'208";a="214490364"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.224])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 03:11:12 -0800
+Date: Sat, 28 Feb 2026 13:11:10 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chuck Lever <cel@kernel.org>
+Cc: Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, llvm@lists.linux.dev,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v3 0/3] sunrpc: Fix `make W=1` build issues
+Message-ID: <aaLNTpODbiNCwmps@ashevche-desk.local>
+References: <20260204202437.2762161-1-andriy.shevchenko@linux.intel.com>
+ <177024270291.126397.9981743455921781902.b4-ty@oracle.com>
+ <aYXDpqqM0qrEVzvy@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,36 +76,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf1a1e3d96c3571ac5caa528caa84751d40be1bc.1772208939.git.Ankit.Soni@amd.com>
+In-Reply-To: <aYXDpqqM0qrEVzvy@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Ankit,
+On Fri, Feb 06, 2026 at 12:34:21PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 04, 2026 at 05:05:35PM -0500, Chuck Lever wrote:
+> > On Wed, 04 Feb 2026 21:21:48 +0100, Andy Shevchenko wrote:
 
-kernel test robot noticed the following build warnings:
+[...]
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.0-rc1 next-20260227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > Applied to nfsd-testing, thanks!
+> 
+> Thanks!
+> 
+> FWIW, I have got a success report from LKP.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankit-Soni/iommu-amd-Adhere-to-IVINFO-VASIZE-for-address-limits/20260228-010009
-base:   linus/master
-patch link:    https://lore.kernel.org/r/cf1a1e3d96c3571ac5caa528caa84751d40be1bc.1772208939.git.Ankit.Soni%40amd.com
-patch subject: [PATCH] iommu/amd: Adhere to IVINFO[VASIZE] for address limits
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260228/202602281837.QQl5six6-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602281837.QQl5six6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602281837.QQl5six6-lkp@intel.com/
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux: section mismatch in reference: ivinfo_vasize_bits+0x8 (section: .text) -> amd_iommu_disabled (section: .init.data)
+Any estimations when this appears in Linux Next (or even vanilla)?
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
