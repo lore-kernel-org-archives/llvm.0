@@ -1,297 +1,219 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957E31A9F88
-	for <llvm@lists.linux.dev>; Sat, 28 Feb 2026 00:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772239833; cv=pass; b=h8NCWwIz6tN2WNj+w+i+i6CAEGrX4Dq+OF8aqQ6DTvANx5WErWXIirivaces4A1ZUCLcTneJ3hwqFvpMkaIQNIL8XTsCGw0sagpfXF8u4MiqyzpFcOXjJg7/WzqfLjl4jDHlLG9Gc3ty+VMaNjJ5Ujrrw1lJWF0Vb4Ab2dclwMw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772239833; c=relaxed/simple;
-	bh=PSDN5yCVC0BV5bcehZDaSuIfMZf1xLmUhw94alfFXlw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XBpThi6UB3+2th+SUmpqpfKcZWgiNSLqCrWmIhUw/3j+JfXbZNAdXlihxKgulZqsyPQCYhyn1Co7q4gaWLNju1r9P24lnDpOKDO/wyODyPm4QgSWh64VKCuMlyCh+4AfY04g4yrpdOX4z8sg3FE2nR4WY/0zCSt8Xfr1onjAZVw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqpQHtV8; arc=pass smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836842EBB90;
+	Sat, 28 Feb 2026 01:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772241770; cv=none; b=mz9bgyL2zf/e/t2dDaxEtn1lEkJ57SldU6ew4da1JzypmvA5lC2vbJnjXWicLTla0l7UPizRPu33HXJbJiRZWSVv0oQfjQPHroVZPrlWRBjWhcSmL9ug6gDvqwYjpTCJOA74ZZRve8ZUMJNCkz9zUiWQcE5cAxbAU2N9J6CPlF0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772241770; c=relaxed/simple;
+	bh=GKTGEJrfx7EBVAgyKuxiijOByb6UX2CLfdacpxzuSxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p91GQ/2V8EcATmSHowdw/FXuq5DfpRKy1OKdrsFT2MmmdC2EGiFRiH8IjL+1fYnnHhQfYCopEty7B33prN6eKixTD63MenYOi+eWAQLTA+8/FvibzMZz56iN+1naXmSXaYOJL50ZkVD2MFx6sJD+o7agPtgS1oZBhKMBnenHLX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YZDRBTVr; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqpQHtV8"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3870a403a92so3379861fa.3
-        for <llvm@lists.linux.dev>; Fri, 27 Feb 2026 16:50:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772239830; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NPmTZZ9IOghl1zTS6mUjVm6b2ZHY2lAlJjwrxtu/HT7ptg60skm2qkul7pJBKEf2WM
-         tNxpqyFTMHvRkQZRh+WUJOV2FPo/q9pDVtwEz+22SjI0jFaoqt/R3feoidYA/de9Z11l
-         oiEdYiG+cgxirYTuTSqLXBToZvKaaWGXunHjG8LuqDOFyBSAHXgjLYpARjZbuZ4bHXRh
-         csOf44TmcdgcflDGLkcMqg1FJogKMPgVf2OK1JFyDe6lu8ASwc6fp2eMZ24tUbpeqNkt
-         B6hZ9DH43O4TCnndoAFpTtNwdH1udOQF65r02okDxRPI6kpaT4YkfuWzHaA26aKrhvmQ
-         JmrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GTVB5dWAl7VOze+/PX3CwHaUaq1aNmGLz1j8IVekX6I=;
-        fh=OjP5xi8JReMkp2DFACWSyFQQdoLsksM8/OsL1ToOQMw=;
-        b=YfKViJmqF1qdLwNP1DVnTi4J3DoL/5p/ymyiW4BbLJrfo9o6rShnO7FFwTUlmrO9b1
-         Ar6U86keBCbhYoxsMIk+vPeE9oQqDu01s33PqdpET/mfW+uxndO7ytKjI8lnJDfyjNZ5
-         xToy53MEJHqHZJ7tLygaFa3DyfAIhwThwfiQaNXxMuYPR9bgQru6YvNIMGPSOOsgkTRS
-         0N90RYYaI3Mh8GcGrDUJLkfFfv6v1BUlRhvxfVQlJcP6Cn+8aAnOX4AGxu7PUJwvWtOw
-         4/wmXMKPPQVn96ucyiIFhvDcGpiBh8vP8fTnUotMgObywXIUzuMy0/krswYarfOysvEc
-         s8cQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772239830; x=1772844630; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GTVB5dWAl7VOze+/PX3CwHaUaq1aNmGLz1j8IVekX6I=;
-        b=fqpQHtV86jRPwnGGTt+TvXwZXtPIYhQj7I0iaXcXA48G1wHszla0WpGld48G/4BNod
-         5LUdh7m7YMR82Oh9K/4jhXWKNXSdhXTGLhXEq5pn2F09NTTMQnQkBQq7mZ5mLVoyNlCj
-         YBPSqH9INnGd4f/O4thziRVcP8Hd3U4RAnz3LX1Xr89KhIpq90t/Ngf/Zhdx9RvzokeQ
-         g9MBuJaCKzNoMFQYPjNGD+EJWVGEKcS0YMc0BQnjMSVEhy0fGuhQeLmu/iDaLYmrjXqR
-         BlFyhJ0V8m2BCTFYwAadGehpDgzUNFUgWNWhBLh86Z2rMCJ9aQW2iuTl+WU4a+hyU2kt
-         2XlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772239830; x=1772844630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GTVB5dWAl7VOze+/PX3CwHaUaq1aNmGLz1j8IVekX6I=;
-        b=O4CrhK/+f2QjTOT9SLlvTxmCHNs5P5E7khyJMEV239iOcncdoMTjFKnPbXTQrSdDcf
-         mSKinkHmmIowjsihxQbwTvr0OUb17hb9om6Dd31KXIWz4WcM24J9CjPGf3wm9bf+Z9PQ
-         x1mBGut1bCGtXAcsR+W+Bynv7H9mI6bdSPDe8K/AN6MfSuRTOam20nGplg8o4d0+ioj1
-         UI4dC9sUKUqPnXheoBwP7lEPTJUi7o3C/mAOM7tRBCitCnH9bdz3X8OW8+gvKgB0UoqT
-         La7R+HXFxPr23le03RjGtF/FLaknBsiUETVwp4kUsKWcFFJlI2G25AHjBGz5vyLvzWQL
-         /ZUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVGJ9+P1raPdFm5disFdOMALMFVhlzV7xk/HcNinN0snd1bkBnjErtcls4YFy7Nk5WZyrPp@lists.linux.dev
-X-Gm-Message-State: AOJu0YwIUuwsTDjoi8zeEk9hmM5iDNIz4umoKnghdO2E76Y4uo9oCE4+
-	l1Dlfb2YP3Po4v8Q/5ixTLD/XsmInytjKAimboCCGvXAFi1C2/BRVfdkqyUO49Q+NOJli4pKwdH
-	n9a58669aEBtUlcVTiokOpQiNqaU9wX0=
-X-Gm-Gg: ATEYQzzD8egAjqCLm7mTQSa0Pu5A6Y7SNUtG+UpRrpdOVU/XqMghzE1ZUNJz8wufHMC
-	tIPwNDRr+jKRPpA/olY+dgA8N+D3BQBc3BCvsPt/eAwks6ZjN75dIkWvOizPL56agtfsiEYNTr8
-	uCBbv4lorf6PVwNfBQYopY4eoWGJytuQR94s0yaCXMTPs4hFaTtg4x9413058eS0IDI04U5KnqQ
-	j1Oa9WoBpGENH+kO/AULngE/yP3f6YklWrtAj1johC5EeEuzLitWCYQ6mypz2Y4eyHSIV6+Xqq8
-	Ndat1nKeFv+lqPwpPBo=
-X-Received: by 2002:a05:651c:4211:b0:385:c05a:4814 with SMTP id
- 38308e7fff4ca-389ff34df78mr13920551fa.4.1772239829430; Fri, 27 Feb 2026
- 16:50:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YZDRBTVr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772241768; x=1803777768;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GKTGEJrfx7EBVAgyKuxiijOByb6UX2CLfdacpxzuSxk=;
+  b=YZDRBTVrDEzI8GyZEnyqAgpsI5Dw6varsxJwxC7SiwFpKf/AZSsexEOq
+   J8kNpELTt55Mro/8EQrnvP6fZ8KnVJ1FTFewauirbFjw48+OpdjAb8zLE
+   yZ6YBu4pnoJ7lT+zJ14EoTDs6E5spq7GStdtBVHc3nI0k/WGCFBIO+78o
+   2FC1mLDyAby2Dput22Jh/FwwRdiRmUJr9FjNBYv4koaCIcEgqLQxxk92i
+   GiXbQjH+WPj0I7NrLcy4Y6ODkJQoiecUbCCwPz2ChCUcbF0uf5JAE9IeS
+   p/Mp/P7v0Aal5Er03D89k2iPw3AjZNqnfgs7ZK+3x404AiDxYjZxFaoD9
+   g==;
+X-CSE-ConnectionGUID: WkvB/VNvSIa8ctxUwpPIZA==
+X-CSE-MsgGUID: 2lTpeDHCS+qq/C0pZoeKBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="98801956"
+X-IronPort-AV: E=Sophos;i="6.21,315,1763452800"; 
+   d="scan'208";a="98801956"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 17:22:47 -0800
+X-CSE-ConnectionGUID: Qxi4aMLCQfqHVYIDFut8Sw==
+X-CSE-MsgGUID: r1s0ap9FQg+EpTpRIqcK4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,315,1763452800"; 
+   d="scan'208";a="244351451"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 27 Feb 2026 17:22:44 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vw92X-00000000BEF-2GkD;
+	Sat, 28 Feb 2026 01:22:41 +0000
+Date: Sat, 28 Feb 2026 09:22:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v5 1/5] bpf: Factor out program return value
+ calculation
+Message-ID: <202602280948.ZMhck27g-lkp@intel.com>
+References: <20260227154616.6846-2-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260227075250.1128175-1-zhaoyang.huang@unisoc.com> <202602271916.OBNa34QU-lkp@intel.com>
-In-Reply-To: <202602271916.OBNa34QU-lkp@intel.com>
-From: Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date: Sat, 28 Feb 2026 08:50:17 +0800
-X-Gm-Features: AaiRm53m8KqzIMzrmY-RAKJ4NM9-fml6sIeBsXd4k5lqshVtOo5_TL5oO80n_ns
-Message-ID: <CAGWkznEBBRCNyxxXvcUnjJacxp1-UMcW6DS9YnhpAFntFo1H0g@mail.gmail.com>
-Subject: Re: [PATCH] mm: bail out when the PMD has been set in bloom filter
-To: kernel test robot <lkp@intel.com>
-Cc: "zhaoyang.huang" <zhaoyang.huang@unisoc.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org, steve.kang@unisoc.com, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227154616.6846-2-emil@etsalapatis.com>
 
-On Fri, Feb 27, 2026 at 7:43=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi zhaoyang.huang,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on akpm-mm/mm-everything]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-=
-bail-out-when-the-PMD-has-been-set-in-bloom-filter/20260227-155729
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-ev=
-erything
-> patch link:    https://lore.kernel.org/r/20260227075250.1128175-1-zhaoyan=
-g.huang%40unisoc.com
-> patch subject: [PATCH] mm: bail out when the PMD has been set in bloom fi=
-lter
-> config: sparc64-randconfig-002-20260227 (https://download.01.org/0day-ci/=
-archive/20260227/202602271916.OBNa34QU-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9=
-a109fbb6e184ec9bcce10615949f598f4c974a9)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260227/202602271916.OBNa34QU-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202602271916.OBNa34QU-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> mm/vmscan.c:4206:24: warning: variable 'mm_state' is uninitialized whe=
-n used here [-Wuninitialized]
->     4206 |         if (test_bloom_filter(mm_state, max_seq, pvmw->pmd))
->          |                               ^~~~~~~~
->    mm/vmscan.c:4185:35: note: initialize the variable 'mm_state' to silen=
-ce this warning
->     4185 |         struct lru_gen_mm_state *mm_state;
->          |                                          ^
->          |                                           =3D NULL
-> >> mm/vmscan.c:4206:34: warning: variable 'max_seq' is uninitialized when=
- used here [-Wuninitialized]
->     4206 |         if (test_bloom_filter(mm_state, max_seq, pvmw->pmd))
->          |                                         ^~~~~~~
->    mm/vmscan.c:4186:23: note: initialize the variable 'max_seq' to silenc=
-e this warning
->     4186 |         unsigned long max_seq;
->          |                              ^
->          |                               =3D 0
->    2 warnings generated.
->
->
-> vim +/mm_state +4206 mm/vmscan.c
->
->   4157
->   4158  /****************************************************************=
-**************
->   4159   *                          rmap/PT walk feedback
->   4160   ****************************************************************=
-**************/
->   4161
->   4162  /*
->   4163   * This function exploits spatial locality when shrink_folio_list=
-() walks the
->   4164   * rmap. It scans the adjacent PTEs of a young PTE and promotes h=
-ot pages. If
->   4165   * the scan was done cacheline efficiently, it adds the PMD entry=
- pointing to
->   4166   * the PTE table to the Bloom filter. This forms a feedback loop =
-between the
->   4167   * eviction and the aging.
->   4168   */
->   4169  bool lru_gen_look_around(struct page_vma_mapped_walk *pvmw)
->   4170  {
->   4171          int i;
->   4172          bool dirty;
->   4173          unsigned long start;
->   4174          unsigned long end;
->   4175          struct lru_gen_mm_walk *walk;
->   4176          struct folio *last =3D NULL;
->   4177          int young =3D 1;
->   4178          pte_t *pte =3D pvmw->pte;
->   4179          unsigned long addr =3D pvmw->address;
->   4180          struct vm_area_struct *vma =3D pvmw->vma;
->   4181          struct folio *folio =3D pfn_folio(pvmw->pfn);
->   4182          struct mem_cgroup *memcg;
->   4183          struct pglist_data *pgdat =3D folio_pgdat(folio);
->   4184          struct lruvec *lruvec;
->   4185          struct lru_gen_mm_state *mm_state;
->   4186          unsigned long max_seq;
->   4187          int gen;
->   4188
->   4189          lockdep_assert_held(pvmw->ptl);
->   4190          VM_WARN_ON_ONCE_FOLIO(folio_test_lru(folio), folio);
->   4191
->   4192          if (!ptep_clear_young_notify(vma, addr, pte))
->   4193                  return false;
->   4194
->   4195          if (spin_is_contended(pvmw->ptl))
->   4196                  return true;
->   4197
->   4198          /* exclude special VMAs containing anon pages from COW */
->   4199          if (vma->vm_flags & VM_SPECIAL)
->   4200                  return true;
->   4201
->   4202          /* avoid taking the LRU lock under the PTL when possible =
-*/
->   4203          walk =3D current->reclaim_state ? current->reclaim_state-=
->mm_walk : NULL;
->   4204
->   4205          /* may the pmd has been set in bloom filter */
-> > 4206          if (test_bloom_filter(mm_state, max_seq, pvmw->pmd))
->   4207                  return true;
->   4208
->   4209          start =3D max(addr & PMD_MASK, vma->vm_start);
->   4210          end =3D min(addr | ~PMD_MASK, vma->vm_end - 1) + 1;
->   4211
->   4212          if (end - start =3D=3D PAGE_SIZE)
->   4213                  return true;
->   4214
->   4215          if (end - start > MIN_LRU_BATCH * PAGE_SIZE) {
->   4216                  if (addr - start < MIN_LRU_BATCH * PAGE_SIZE / 2)
->   4217                          end =3D start + MIN_LRU_BATCH * PAGE_SIZE=
-;
->   4218                  else if (end - addr < MIN_LRU_BATCH * PAGE_SIZE /=
- 2)
->   4219                          start =3D end - MIN_LRU_BATCH * PAGE_SIZE=
-;
->   4220                  else {
->   4221                          start =3D addr - MIN_LRU_BATCH * PAGE_SIZ=
-E / 2;
->   4222                          end =3D addr + MIN_LRU_BATCH * PAGE_SIZE =
-/ 2;
->   4223                  }
->   4224          }
->   4225
->   4226          memcg =3D get_mem_cgroup_from_folio(folio);
->   4227          lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
->   4228          max_seq =3D READ_ONCE((lruvec)->lrugen.max_seq);
->   4229          gen =3D lru_gen_from_seq(max_seq);
->   4230          mm_state =3D get_mm_state(lruvec);
-I am confused about the code base which this test is based on. By
-checking the base that listed above and linux-next and 7.1-rc1, I
-can't find above merged result or I miss anything?
->   4231
->   4232          lazy_mmu_mode_enable();
->   4233
->   4234          pte -=3D (addr - start) / PAGE_SIZE;
->   4235
->   4236          for (i =3D 0, addr =3D start; addr !=3D end; i++, addr +=
-=3D PAGE_SIZE) {
->   4237                  unsigned long pfn;
->   4238                  pte_t ptent =3D ptep_get(pte + i);
->   4239
->   4240                  pfn =3D get_pte_pfn(ptent, vma, addr, pgdat);
->   4241                  if (pfn =3D=3D -1)
->   4242                          continue;
->   4243
->   4244                  folio =3D get_pfn_folio(pfn, memcg, pgdat);
->   4245                  if (!folio)
->   4246                          continue;
->   4247
->   4248                  if (!ptep_clear_young_notify(vma, addr, pte + i))
->   4249                          continue;
->   4250
->   4251                  if (last !=3D folio) {
->   4252                          walk_update_folio(walk, last, gen, dirty)=
-;
->   4253
->   4254                          last =3D folio;
->   4255                          dirty =3D false;
->   4256                  }
->   4257
->   4258                  if (pte_dirty(ptent))
->   4259                          dirty =3D true;
->   4260
->   4261                  young++;
->   4262          }
->   4263
->   4264          walk_update_folio(walk, last, gen, dirty);
->   4265
->   4266          lazy_mmu_mode_disable();
->   4267
->   4268          /* feedback from rmap walkers to page table walkers */
->   4269          if (mm_state && suitable_to_scan(i, young))
->   4270                  update_bloom_filter(mm_state, max_seq, pvmw->pmd)=
-;
->   4271
->   4272          mem_cgroup_put(memcg);
->   4273
->   4274          return true;
->   4275  }
->   4276
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Hi Emil,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Emil-Tsalapatis/bpf-Factor-out-program-return-value-calculation/20260227-235723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260227154616.6846-2-emil%40etsalapatis.com
+patch subject: [PATCH bpf-next v5 1/5] bpf: Factor out program return value calculation
+config: arm-randconfig-001-20260228 (https://download.01.org/0day-ci/archive/20260228/202602280948.ZMhck27g-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602280948.ZMhck27g-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602280948.ZMhck27g-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/verifier.c:17864:3: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+                   }
+                   ^
+   kernel/bpf/verifier.c:17923:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret, err;
+               ^
+   kernel/bpf/verifier.c:17926:7: warning: unused variable 'return_32bit' [-Wunused-variable]
+           bool return_32bit = false;
+                ^
+   3 warnings generated.
+
+
+vim +17864 kernel/bpf/verifier.c
+
+ 17805	
+ 17806	
+ 17807	static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
+ 17808	{
+ 17809		enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+ 17810	
+ 17811		/* Default return value range. */
+ 17812		*range = retval_range(0, 1);
+ 17813	
+ 17814		switch (prog_type) {
+ 17815		case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 17816			switch (env->prog->expected_attach_type) {
+ 17817			case BPF_CGROUP_UDP4_RECVMSG:
+ 17818			case BPF_CGROUP_UDP6_RECVMSG:
+ 17819			case BPF_CGROUP_UNIX_RECVMSG:
+ 17820			case BPF_CGROUP_INET4_GETPEERNAME:
+ 17821			case BPF_CGROUP_INET6_GETPEERNAME:
+ 17822			case BPF_CGROUP_UNIX_GETPEERNAME:
+ 17823			case BPF_CGROUP_INET4_GETSOCKNAME:
+ 17824			case BPF_CGROUP_INET6_GETSOCKNAME:
+ 17825			case BPF_CGROUP_UNIX_GETSOCKNAME:
+ 17826				*range = retval_range(1, 1);
+ 17827				break;
+ 17828			case BPF_CGROUP_INET4_BIND:
+ 17829			case BPF_CGROUP_INET6_BIND:
+ 17830				*range = retval_range(0, 3);
+ 17831				break;
+ 17832			default:
+ 17833				break;
+ 17834			}
+ 17835			break;
+ 17836		case BPF_PROG_TYPE_CGROUP_SKB:
+ 17837			if (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS)
+ 17838				*range = retval_range(0, 3);
+ 17839			break;
+ 17840		case BPF_PROG_TYPE_CGROUP_SOCK:
+ 17841		case BPF_PROG_TYPE_SOCK_OPS:
+ 17842		case BPF_PROG_TYPE_CGROUP_DEVICE:
+ 17843		case BPF_PROG_TYPE_CGROUP_SYSCTL:
+ 17844		case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 17845			break;
+ 17846		case BPF_PROG_TYPE_RAW_TRACEPOINT:
+ 17847			if (!env->prog->aux->attach_btf_id)
+ 17848				return false;
+ 17849			*range = retval_range(0, 0);
+ 17850			break;
+ 17851		case BPF_PROG_TYPE_TRACING:
+ 17852			switch (env->prog->expected_attach_type) {
+ 17853			case BPF_TRACE_FENTRY:
+ 17854			case BPF_TRACE_FEXIT:
+ 17855			case BPF_TRACE_FSESSION:
+ 17856				*range = retval_range(0, 0);
+ 17857				break;
+ 17858			case BPF_TRACE_RAW_TP:
+ 17859			case BPF_MODIFY_RETURN:
+ 17860				return false;
+ 17861			case BPF_TRACE_ITER:
+ 17862				break;
+ 17863			default:
+ 17864			}
+ 17865			break;
+ 17866		case BPF_PROG_TYPE_KPROBE:
+ 17867			switch (env->prog->expected_attach_type) {
+ 17868			case BPF_TRACE_KPROBE_SESSION:
+ 17869			case BPF_TRACE_UPROBE_SESSION:
+ 17870				break;
+ 17871			default:
+ 17872				return false;
+ 17873			}
+ 17874			break;
+ 17875		case BPF_PROG_TYPE_SK_LOOKUP:
+ 17876			*range = retval_range(SK_DROP, SK_PASS);
+ 17877			break;
+ 17878	
+ 17879		case BPF_PROG_TYPE_LSM:
+ 17880			if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
+ 17881				/* no range found, any return value is allowed */
+ 17882				if (!get_func_retval_range(env->prog, range))
+ 17883					return false;
+ 17884				/* no restricted range, any return value is allowed */
+ 17885				if (range->minval == S32_MIN && range->maxval == S32_MAX)
+ 17886					return false;
+ 17887				range->return_32bit = true;
+ 17888			} else if (!env->prog->aux->attach_func_proto->type) {
+ 17889				/* Make sure programs that attach to void
+ 17890				 * hooks don't try to modify return value.
+ 17891				 */
+ 17892				*range = retval_range(1, 1);
+ 17893			}
+ 17894			break;
+ 17895	
+ 17896		case BPF_PROG_TYPE_NETFILTER:
+ 17897			*range = retval_range(NF_DROP, NF_ACCEPT);
+ 17898			break;
+ 17899		case BPF_PROG_TYPE_STRUCT_OPS:
+ 17900			*range = retval_range(0, 0);
+ 17901			break;
+ 17902		case BPF_PROG_TYPE_EXT:
+ 17903			/* freplace program can return anything as its return value
+ 17904			 * depends on the to-be-replaced kernel func or bpf program.
+ 17905			 */
+ 17906		default:
+ 17907			return false;
+ 17908		}
+ 17909	
+ 17910		/* Continue calculating. */
+ 17911	
+ 17912		return true;
+ 17913	}
+ 17914	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
