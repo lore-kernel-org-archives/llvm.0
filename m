@@ -1,209 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C891B175A7F
-	for <llvm@lists.linux.dev>; Sat, 28 Feb 2026 22:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66F922F77B;
+	Sun,  1 Mar 2026 01:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772317332; cv=none; b=YnIBqoSOv8cOSl40msYJQGpNXCMujErjgdKgrq1K7mk+Ie0uzKulXtQFlXm/D9m8q1rCCaQRMml5aejrjZimAUs3pzCW3Zq1pJJ440Ph5XG/Pcmk5Iw1/3P/xIV8qU/YlCPeviIV1vE3Wwkn4aY3kvhs2CIbwI/TMY9pB25BBVc=
+	t=1772327827; cv=none; b=eZKcKIF6K8RNyuU9WhXjO/UzE4UOuQzx6zQrLvTdsmKmbVGyiRKwJSEoyogN69GWFwndJC7K67z8EPebD5gQ6G4tcE39RmoeeFFGWcDKKWJmr/el5w1fJjGqupDaE6i5q8RWR1AgvEXaXHPjle0q7nyNCpafLj0VySRi1CbGspU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772317332; c=relaxed/simple;
-	bh=bzlVO4RwbdguuQBRGJG+qfhJqLGu0dekUozBwKFK1V4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mr7lZ/8H9QTB7bXkzhwOuegiFMk+ke6+27bzjowc7KaOCm/HgIi6as6w2rVeaJxuASRXvimjDO9ZF4PV5s5aFPV/VQAvo81wq/IVgx+CoqZo+1u654Iogyhv/ioGWxZ2zV8tyCWFPsQzeMsOesESVPYRVe2Zauc1DCOl4l9CncI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BBn4liHO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772327827; c=relaxed/simple;
+	bh=bsMz3nxlHaEjPUQnp6P+Da9ZaZ4VsmvFkiZALF3Ufbk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pCvnKJms0iN7yKyUzJoiyPkEwxMaOAXnUrrSQQ15sBY0JoMbgmPyEesW3/0+sZyEe/4WXFkSPWUdFD1K2eMmbqqby6AQ+aRPQ//bk2sQvxlvFce/f5Zesq0AE0p/xQLsG4b7XYuZySlciJhySes5fjiUBsUnqLDvnDhWkkIv2yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PTTGav5D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BBn4liHO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772317329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CaAwJLh6Gldj+waOXNAP7qvt4KpkZq0N1bxA7yUSdcg=;
-	b=BBn4liHOp6i17OAs4cbkopkqyt0ZjUXu+sYBE2SW+0lhVERJbU8bpC9pNGby8IDMYyWqTn
-	aBjrfH1g6HhsiEAc82n39SVO/ogcFu8ji91sHvhUn5pK3PAqHx9AkQruALg8P+qx+wVrN0
-	BgrxxbZaw0A97lknCcRPNuOMa/JNj/M=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-599-SvrT6DqXO3mLWecDM7qBaw-1; Sat,
- 28 Feb 2026 17:22:08 -0500
-X-MC-Unique: SvrT6DqXO3mLWecDM7qBaw-1
-X-Mimecast-MFC-AGG-ID: SvrT6DqXO3mLWecDM7qBaw_1772317327
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 563051956059
-	for <llvm@lists.linux.dev>; Sat, 28 Feb 2026 22:22:07 +0000 (UTC)
-Received: from [172.20.201.171] (unknown [10.30.44.137])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 88D791955D85;
-	Sat, 28 Feb 2026 22:22:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc1,
- upstream-mainline, 9197e594)
-Date: Sat, 28 Feb 2026 22:22:06 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PTTGav5D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8D8C19425;
+	Sun,  1 Mar 2026 01:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772327827;
+	bh=bsMz3nxlHaEjPUQnp6P+Da9ZaZ4VsmvFkiZALF3Ufbk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PTTGav5DSVCFy04YKwaiNYdf1W2hKonmiHC0H/eZAZuPpD2bkREW3lPLDudr1JwN3
+	 Iqvtpr9mXS25os6YD7qht+2g+ERU+fE1oYSve3Qn2HB8PosdAgOvHmyKrHAOQ/S/Lj
+	 rcTzYT7W5WbNcV7sbLahqngKm1ZX3dnaDLG2GccklND4s4LI8GlnIj3tN8xixdBkTx
+	 yrU+De2CFgn8snlnXKA+l1y6lREGQ9ifBksAeygfcUlA3daQBKYzhlEbha+gKZIMEv
+	 yEbOgKZV9gxhQqW3lED9DUPtZc4ufBnjclVev2hm7O/zc6ukPr5FMD0R54N4r/CZOV
+	 /zNCJahYb7reg==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	nathan@kernel.org
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-acpi@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: FAILED: Patch "ACPI: APEI: GHES: Disable KASAN instrumentation when compile testing with clang < 18" failed to apply to 6.18-stable tree
+Date: Sat, 28 Feb 2026 20:17:05 -0500
+Message-ID: <20260301011705.1670912-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <56325.126022817220800108@us-mta-599.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: CWSB-J0pDgIWa-auJ9wE_ozi-IDM_dROaIYQ6pcqINM_1772317327
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Patchwork-Hint: ignore
+X-stable: review
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+The patch below does not apply to the 6.18-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks,
+Sasha
 
+------------------ original commit in Linus's tree ------------------
 
-Kernel information:
-    Commit message: firewire: ohci: initialize page array to use alloc_page=
-s_bulk() correctly
+From b584bfbd7ec417f257f651cc00a90c66e31dfbf1 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 14 Jan 2026 16:27:11 -0700
+Subject: [PATCH] ACPI: APEI: GHES: Disable KASAN instrumentation when compile
+ testing with clang < 18
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2356020215
+After a recent innocuous change to drivers/acpi/apei/ghes.c, building
+ARCH=arm64 allmodconfig with clang-17 or older (which has both
+CONFIG_KASAN=y and CONFIG_WERROR=y) fails with:
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_s390x_kernel_kcidb_tool_20771328_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_s390x_kernel_kcidb_tool_20771329_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_ppc64le_kernel_kcidb_tool_20771324_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_aarch64_kernel_kcidb_tool_20771325_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_aarch64_kernel_kcidb_tool_20771326_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_x86_64_kernel_kcidb_tool_20771322_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        Reboot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_s390x_kernel_kcidb_tool_20771328_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_s390x_kernel_kcidb_tool_20771329_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_aarch64_kernel_kcidb_tool_20771325_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_aarch64_kernel_kcidb_tool_20771326_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_aarch64_kernel_kcidb_tool_20771327_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_x86_64_kernel_kcidb_tool_20771321_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_x86_64_kernel_kcidb_tool_20771322_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356020215_x86_64_kernel_kcidb_tool_20771323_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+  drivers/acpi/apei/ghes.c:902:13: error: stack frame size (2768) exceeds limit (2048) in 'ghes_do_proc' [-Werror,-Wframe-larger-than]
+    902 | static void ghes_do_proc(struct ghes *ghes,
+        |             ^
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
- at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
-:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
-            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
-0017.GAE@google.com/
-            Affected tests:
-                Boot test [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+A KASAN pass that removes unneeded stack instrumentation, enabled by
+default in clang-18 [1], drastically improves stack usage in this case.
+
+To avoid the warning in the common allmodconfig case when it can break
+the build, disable KASAN for ghes.o when compile testing with clang-17
+and older. Disabling KASAN outright may hide legitimate runtime issues,
+so live with the warning in that case; the user can either increase the
+frame warning limit or disable -Werror, which they should probably do
+when debugging with KASAN anyways.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2148
+Link: https://github.com/llvm/llvm-project/commit/51fbab134560ece663517bf1e8c2a30300d08f1a [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Cc: All applicable <stable@vger.kernel.org>
+Link: https://patch.msgid.link/20260114-ghes-avoid-wflt-clang-older-than-18-v1-1-9c8248bfe4f4@kernel.org
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/apei/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/acpi/apei/Makefile b/drivers/acpi/apei/Makefile
+index 5db61dfb46915..1a0b85923cd42 100644
+--- a/drivers/acpi/apei/Makefile
++++ b/drivers/acpi/apei/Makefile
+@@ -1,6 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_ACPI_APEI)		+= apei.o
+ obj-$(CONFIG_ACPI_APEI_GHES)	+= ghes.o
++# clang versions prior to 18 may blow out the stack with KASAN
++ifeq ($(CONFIG_COMPILE_TEST)_$(CONFIG_CC_IS_CLANG)_$(call clang-min-version, 180000),y_y_)
++KASAN_SANITIZE_ghes.o := n
++endif
+ obj-$(CONFIG_ACPI_APEI_PCIEAER)	+= ghes_helpers.o
+ obj-$(CONFIG_ACPI_APEI_EINJ)	+= einj.o
+ einj-y				:= einj-core.o
+-- 
+2.51.0
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
