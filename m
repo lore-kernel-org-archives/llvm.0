@@ -1,40 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E491E2F3C07;
-	Sun,  1 Mar 2026 01:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1E22F3C37;
+	Sun,  1 Mar 2026 02:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772330091; cv=none; b=A4I5TnH4CmtvxFS4fH6Qv213D9LUxrhUMAb1/8FYepkV2ZrrSBp1xZqn4LMkgeb4UMbBF+EtsHLeZPEM/2rL+HlqaLSv6Vo+Tbw6APETZx0IW7qaMckJgP5zRWaPI54jvjNudSL7EPb9QGYHuUMFdscVlzCfbB8QZy+LR3Lnsz8=
+	t=1772330560; cv=none; b=COYH3G/1GsHDTkjPAmdvXL4w+rk0TFc0R01PujMW5iEkxJZfYJiJNufWU6G2LxmpCYkVSZWg7q3/bROnNU5uT1ILI+qXRZjoM1JPLs1YfYioluxAeMIwfJkYh5wlHEVjSSJj4tERI+N0O7GtTCqvmwiqO6DTq6r89vnSn6Vc1Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772330091; c=relaxed/simple;
-	bh=edtenUmGloYbfDmsAkqmocEZRSRiYeLaNyWAquJV9pM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IIFzv4ZVWXWX0EZEyokjEZWsmD8Pn19usbFiXjVbBTZsIi2SIamua//rOD5v91iEGY2NIsm/AKlPCa98t/8XzEuGmwSXWQm61Ep8JKhux0vA8AbqbydSCfcYaLGOjt4/ZmspV7Rm/cb2Zp8Y383bL8Efy8sspLhOQumCtsQNzxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwwtuQZt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772330560; c=relaxed/simple;
+	bh=Mcyp29dq430o9VoroQhncIcVVqY9Tp//qxPrsDZ40jw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ldn4hg2ZEQRDqJ6YXSl8LjPxZHuPaYwlw2/V49kMlUFvKynAij1pB40FZMBo5NjThqdSnl9uT/M91j3IInrdr+WFsYD4iX49QihwRq78b0tjGiKjA0EpBe0K8zMpYS1Q0G1kbWT5daHoyNUF95uWuomo+wjkHJcQUCJWBhaiFAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aN3m/Q0q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwwtuQZt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27575C19421;
-	Sun,  1 Mar 2026 01:54:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aN3m/Q0q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D876EC19421;
+	Sun,  1 Mar 2026 02:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772330090;
-	bh=edtenUmGloYbfDmsAkqmocEZRSRiYeLaNyWAquJV9pM=;
+	s=k20201202; t=1772330560;
+	bh=Mcyp29dq430o9VoroQhncIcVVqY9Tp//qxPrsDZ40jw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=MwwtuQZtWqXZqdw8G9H5c04dTWVYS+YFvTn1zL5t9Nu5ISD4tqGWmz5CZ++Za0e+l
-	 oFU0fDU1fAsL/jtLV7YloIZOc/VNC6gB3kJOmvk1CN8P81PI0dcstclDL6WqvWe5u3
-	 T2pCJaWStg+FNXkI4gkryvFJOg4QI6De5z2qzg+cZ7xGtGo68GFKu1ZImByTaHX1XK
-	 Hquxlbum8gUEnCiYlgkOKFO5AzOEyIs/qo25iC1Pn6PsBh137aEp/Imx7RFi2lpiKu
-	 Or9/4NC+sTAXa5smnsFair/SWsnMM97G7l61junVciQyGbOPhrC9HWCQEn6iQD5iD+
-	 MPjMsxo/Z4Rbw==
+	b=aN3m/Q0qcuHxbPeRwaBrJAYYIP757Jopfo99uDj/KA1AKvEiqLw2vh3nwrD+j5vCA
+	 uromJfVMKj2u3MXrgUMDGQoNMyMcmtOrPzXcG9YbBvgCKladL+dCdMyEYc8uBfWXW7
+	 vkP9x4QkPkL6sSQk/JhRY7nlIqd4+3+Vae823voz5U4ZEWuDrZeJsrTSBVKYxdMh5s
+	 wPgkvLHKb8MNCH6bikR6rY5507nFQQqGWZ7t6hDMGzYW7Ni4P/e4WOjWJV+TZCEYhO
+	 JnAEs5PLBkYGY92nTxN2dzUWs2N4uTI890TAnrGlVHcNI1q3p9iLdczLr2rRCz6BKw
+	 No3f+X+LmsR9w==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	me@ziyao.cc
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
+	nathan@kernel.org
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-acpi@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: FAILED: Patch "MIPS: Work around LLVM bug when gp is used as global register variable" failed to apply to 5.15-stable tree
-Date: Sat, 28 Feb 2026 20:54:48 -0500
-Message-ID: <20260301015449.1721870-1-sashal@kernel.org>
+Subject: FAILED: Patch "ACPI: APEI: GHES: Disable KASAN instrumentation when compile testing with clang < 18" failed to apply to 5.10-stable tree
+Date: Sat, 28 Feb 2026 21:02:38 -0500
+Message-ID: <20260301020238.1730457-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -46,7 +45,7 @@ X-Patchwork-Hint: ignore
 X-stable: review
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the 5.15-stable tree.
+The patch below does not apply to the 5.10-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
@@ -56,102 +55,55 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 30bfc2d6a1132a89a5f1c3b96c59cf3e4d076ea3 Mon Sep 17 00:00:00 2001
-From: Yao Zi <me@ziyao.cc>
-Date: Thu, 5 Feb 2026 15:56:44 +0000
-Subject: [PATCH] MIPS: Work around LLVM bug when gp is used as global register
- variable
+From b584bfbd7ec417f257f651cc00a90c66e31dfbf1 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 14 Jan 2026 16:27:11 -0700
+Subject: [PATCH] ACPI: APEI: GHES: Disable KASAN instrumentation when compile
+ testing with clang < 18
 
-On MIPS, __current_thread_info is defined as global register variable
-locating in $gp, and is simply assigned with new address during kernel
-relocation.
+After a recent innocuous change to drivers/acpi/apei/ghes.c, building
+ARCH=arm64 allmodconfig with clang-17 or older (which has both
+CONFIG_KASAN=y and CONFIG_WERROR=y) fails with:
 
-This however is broken with LLVM, which always restores $gp if it finds
-$gp is clobbered in any form, including when intentionally through a
-global register variable. This is against GCC's documentation[1], which
-requires a callee-saved register used as global register variable not to
-be restored if it's clobbered.
+  drivers/acpi/apei/ghes.c:902:13: error: stack frame size (2768) exceeds limit (2048) in 'ghes_do_proc' [-Werror,-Wframe-larger-than]
+    902 | static void ghes_do_proc(struct ghes *ghes,
+        |             ^
 
-As a result, $gp will continue to point to the unrelocated kernel after
-the epilog of relocate_kernel(), leading to an early crash in init_idle,
+A KASAN pass that removes unneeded stack instrumentation, enabled by
+default in clang-18 [1], drastically improves stack usage in this case.
 
-[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-[    0.000000] Oops[#1]:
-[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-[    0.000000] Tainted: [W]=WARN
-[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-[    0.000000] Hi    : 0000000000000000
-[    0.000000] Lo    : 0000000000000000
-[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-[    0.000000] Cause : 00000008 (ExcCode 02)
-[    0.000000] BadVA : 0000000000000000
-[    0.000000] PrId  : 00006305 (ICT Loongson-3)
-[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-[    0.000000]         ...
-[    0.000000] Call Trace:
-[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+To avoid the warning in the common allmodconfig case when it can break
+the build, disable KASAN for ghes.o when compile testing with clang-17
+and older. Disabling KASAN outright may hide legitimate runtime issues,
+so live with the warning in that case; the user can either increase the
+frame warning limit or disable -Werror, which they should probably do
+when debugging with KASAN anyways.
 
-This bug has been reported to LLVM[2] and affects version from (at
-least) 18 to 21. Let's work around this by using inline assembly to
-assign $gp before a fix is widely available.
-
-Cc: stable@vger.kernel.org
-Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-Signed-off-by: Yao Zi <me@ziyao.cc>
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2148
+Link: https://github.com/llvm/llvm-project/commit/51fbab134560ece663517bf1e8c2a30300d08f1a [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Cc: All applicable <stable@vger.kernel.org>
+Link: https://patch.msgid.link/20260114-ghes-avoid-wflt-clang-older-than-18-v1-1-9c8248bfe4f4@kernel.org
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- arch/mips/kernel/relocate.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/acpi/apei/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-index 7f1c136ad8506..59833210542ff 100644
---- a/arch/mips/kernel/relocate.c
-+++ b/arch/mips/kernel/relocate.c
-@@ -420,7 +420,20 @@ void *__init relocate_kernel(void)
- 			goto out;
- 
- 		/* The current thread is now within the relocated image */
-+#ifndef CONFIG_CC_IS_CLANG
- 		__current_thread_info = RELOCATED(&init_thread_union);
-+#else
-+		/*
-+		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
-+		 * intentionally modified. Work around this by using inline
-+		 * assembly to assign $gp. $gp couldn't be listed as output or
-+		 * clobber, or LLVM will still restore its original value.
-+		 * See also LLVM upstream issue
-+		 * https://github.com/llvm/llvm-project/issues/176546
-+		 */
-+		asm volatile("move $28, %0" : :
-+			     "r" (RELOCATED(&init_thread_union)));
-+#endif
- 
- 		/* Return the new kernel's entry point */
- 		kernel_entry = RELOCATED(start_kernel);
+diff --git a/drivers/acpi/apei/Makefile b/drivers/acpi/apei/Makefile
+index 5db61dfb46915..1a0b85923cd42 100644
+--- a/drivers/acpi/apei/Makefile
++++ b/drivers/acpi/apei/Makefile
+@@ -1,6 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_ACPI_APEI)		+= apei.o
+ obj-$(CONFIG_ACPI_APEI_GHES)	+= ghes.o
++# clang versions prior to 18 may blow out the stack with KASAN
++ifeq ($(CONFIG_COMPILE_TEST)_$(CONFIG_CC_IS_CLANG)_$(call clang-min-version, 180000),y_y_)
++KASAN_SANITIZE_ghes.o := n
++endif
+ obj-$(CONFIG_ACPI_APEI_PCIEAER)	+= ghes_helpers.o
+ obj-$(CONFIG_ACPI_APEI_EINJ)	+= einj.o
+ einj-y				:= einj-core.o
 -- 
 2.51.0
 
