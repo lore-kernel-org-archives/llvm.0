@@ -1,160 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A4F2C08AD;
-	Sun,  1 Mar 2026 02:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0057E2FD7BE;
+	Sun,  1 Mar 2026 03:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772330673; cv=none; b=ncxgyIIv0c2/jnBOmwho2FK+4v7i9cNlvdWHtoiOPkVolGet84qjbVhAPRpkcU7MPAqjqwyGoQur60o+z3+jWy08qLKkibmfHWCL2VBROnPhp+frVWqrGLGBSWAR93BmESUqQYOsuWlcdUWL/So9SrPni6IBkKz9CxLTy0nqNcQ=
+	t=1772335548; cv=none; b=Te//hZwq+v7oxQxhsjc/wS7aWlq+vmJG1SN49ICzgfNdKXm5FOAV428nJzLc/JcoBMH8jAckerCi/j91ycyjfCvTVI0NRHG2oFc7QXNXp2an6RyqoC0dheafQ2PXGOhkt4FsXrSRPmlGaLRdnikvdiyQTUWvM/Kyjm5bAe/1xTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772330673; c=relaxed/simple;
-	bh=P7Z8lm5HCfa1Vf3RSsymgyQbQhcVXA1JRcqMimsgZLk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WXvD7fjGOuv6bXdroxq/kk+EyagNuJCZTFuoffGnOAVXAhF1minbnscQHUfzCM6K72WQ8sZ5BWk+M4frotim2wlU9Gg9XJop5prGW2mlS0Ton8i8+grS4TAA0tpXN0xX48DAQOG2gDETfJFAnpg49a8WQ+87AHfR42VYHA1Xkq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DxFYz1m7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772335548; c=relaxed/simple;
+	bh=RhzQ3LZzwPkVYXc6nQPz1TpSyfdZr3vMiXd2xY3oJAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aPAMXiG47AHq05r0Jd02SbrL+UIaoexnb7VxrhyrmzuvICLFHjEVQeXzvOZPn3r2G3Nzxl9cdlqsPr6Qq/ontZpPSZChsJCaCm3W6J+NzqngD6OrP/NS6gmZc+aIAkgqTNS/AY1ItLbw1SN0ebR1LqyaH10j4kp/EcdMXWdHRW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mq0GSNRF; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DxFYz1m7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F31CC19421;
-	Sun,  1 Mar 2026 02:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772330673;
-	bh=P7Z8lm5HCfa1Vf3RSsymgyQbQhcVXA1JRcqMimsgZLk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=DxFYz1m7AscL1tm1nLAOc2qpYTWwus4Q83Qlqm+hBRVPhjX11xFQanthnH1hDehau
-	 Z0a51FsJQdJhlXwILWVWv6n/VsidYUcypi+4AIiNzXRouLWt0ZVIGMZkVm+MsJeAGH
-	 gAglxkeuAmBnaN7w0BCa5UZxbD6tfZZEiAxjdCALhCYI52mXYmhI2MgeGtn2ahdUJz
-	 I7jRZGx6nQwsA/Xn7Ccqe2HWlLn+iICjL9bOnXCd1thPinmyOs2WxpH03DASyqOWXw
-	 Hd91eIUVs9TD+N6gAgs4uFRvphl4Xm1o05N7ePRTYd6X+BfJstHk4okhSDsRHVmZLC
-	 l4KAXAXluCtBw==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	me@ziyao.cc
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: FAILED: Patch "MIPS: Work around LLVM bug when gp is used as global register variable" failed to apply to 5.10-stable tree
-Date: Sat, 28 Feb 2026 21:04:31 -0500
-Message-ID: <20260301020431.1732982-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mq0GSNRF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772335546; x=1803871546;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RhzQ3LZzwPkVYXc6nQPz1TpSyfdZr3vMiXd2xY3oJAs=;
+  b=mq0GSNRFYFj1oYzihGOLvmwxXIv5D7VyRlDxDtyKxdKdm4pWWdiHXrGd
+   IpU+qAUGxGZyMdLPPCLsuoblpjovd69Faf6eTV5LrEiNh2x0lIBjG3eQ7
+   jKJM0J4CtQhRu0aLiqUJ6+SKl6XQCYotldIbsHpN22/XoIvGoSChBvuAN
+   LxAAL2lDUCtVSf1QDMVVu3yKmWcz3Kf/qtAbgEXSmKP6XeDnNlesbKiD8
+   QjA42vgMQkBfjb0GqEZh0ry0kErdTQXjGpVdc9zv35CxPcmCPtGYtwLjM
+   WNwXuH4yYgU4bHhOR1RuvAqVB1Y/9ZcyeALW+lHTq0WRRY3dA5/iUOlHA
+   w==;
+X-CSE-ConnectionGUID: QfbKw1gcR5qNgbThA1nhdw==
+X-CSE-MsgGUID: uwOB0fklRsqxYbVXJj9mAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11715"; a="73444424"
+X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
+   d="scan'208";a="73444424"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 19:25:41 -0800
+X-CSE-ConnectionGUID: wQcd/xxLSvCEUaJQBRPg5w==
+X-CSE-MsgGUID: CrW+YH30R3CVeCOQbXMmeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
+   d="scan'208";a="216521234"
+Received: from lkp-server01.sh.intel.com (HELO 59784f1c7b2a) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 28 Feb 2026 19:25:40 -0800
+Received: from kbuild by 59784f1c7b2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vwXR3-000000001F9-1kPx;
+	Sun, 01 Mar 2026 03:25:37 +0000
+Date: Sun, 01 Mar 2026 11:24:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/cros_kbd_led-cleanup 3/8] ld.lld:
+ error: duplicate symbol: acpi_dev_found
+Message-ID: <202603011102.CTx6UojI-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
 
-The patch below does not apply to the 5.10-stable tree.
-If someone wants it applied there, or to any other stable or longterm
-tree, then please email the backport, including the original git commit
-id to <stable@vger.kernel.org>.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/cros_kbd_led-cleanup
+head:   1f8a06bba34bbd4d190a7c78f4f81d6a58f7489d
+commit: 2b182d193bb941d68d765d0e973c8494338794f0 [3/8] incl
+config: arm-assabet_defconfig (https://download.01.org/0day-ci/archive/20260301/202603011102.CTx6UojI-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260301/202603011102.CTx6UojI-lkp@intel.com/reproduce)
 
-Thanks,
-Sasha
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603011102.CTx6UojI-lkp@intel.com/
 
------------------- original commit in Linus's tree ------------------
+All errors (new ones prefixed by >>):
 
-From 30bfc2d6a1132a89a5f1c3b96c59cf3e4d076ea3 Mon Sep 17 00:00:00 2001
-From: Yao Zi <me@ziyao.cc>
-Date: Thu, 5 Feb 2026 15:56:44 +0000
-Subject: [PATCH] MIPS: Work around LLVM bug when gp is used as global register
- variable
+>> ld.lld: error: duplicate symbol: acpi_dev_found
+   >>> defined at 8250_core.c
+   >>>            drivers/tty/serial/8250/8250_core.o:(acpi_dev_found)
+   >>> defined at 8250_platform.c
+   >>>            drivers/tty/serial/8250/8250_platform.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: acpi_dev_present
+   >>> defined at 8250_core.c
+   >>>            drivers/tty/serial/8250/8250_core.o:(acpi_dev_present)
+   >>> defined at 8250_platform.c
+   >>>            drivers/tty/serial/8250/8250_platform.o:(.text+0x40)
+--
+>> ld.lld: error: duplicate symbol: acpi_reduced_hardware
+   >>> defined at 8250_core.c
+   >>>            drivers/tty/serial/8250/8250_core.o:(acpi_reduced_hardware)
+   >>> defined at 8250_platform.c
+   >>>            drivers/tty/serial/8250/8250_platform.o:(.text+0x80)
+--
+>> ld.lld: error: duplicate symbol: acpi_check_dsm
+   >>> defined at 8250_core.c
+   >>>            drivers/tty/serial/8250/8250_core.o:(acpi_check_dsm)
+   >>> defined at 8250_platform.c
+   >>>            drivers/tty/serial/8250/8250_platform.o:(.text+0xC0)
+--
+>> ld.lld: error: duplicate symbol: acpi_evaluate_dsm
+   >>> defined at 8250_core.c
+   >>>            drivers/tty/serial/8250/8250_core.o:(acpi_evaluate_dsm)
+   >>> defined at 8250_platform.c
+   >>>            drivers/tty/serial/8250/8250_platform.o:(.text+0x100)
 
-On MIPS, __current_thread_info is defined as global register variable
-locating in $gp, and is simply assigned with new address during kernel
-relocation.
-
-This however is broken with LLVM, which always restores $gp if it finds
-$gp is clobbered in any form, including when intentionally through a
-global register variable. This is against GCC's documentation[1], which
-requires a callee-saved register used as global register variable not to
-be restored if it's clobbered.
-
-As a result, $gp will continue to point to the unrelocated kernel after
-the epilog of relocate_kernel(), leading to an early crash in init_idle,
-
-[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-[    0.000000] Oops[#1]:
-[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-[    0.000000] Tainted: [W]=WARN
-[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-[    0.000000] Hi    : 0000000000000000
-[    0.000000] Lo    : 0000000000000000
-[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-[    0.000000] Cause : 00000008 (ExcCode 02)
-[    0.000000] BadVA : 0000000000000000
-[    0.000000] PrId  : 00006305 (ICT Loongson-3)
-[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-[    0.000000]         ...
-[    0.000000] Call Trace:
-[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
-
-This bug has been reported to LLVM[2] and affects version from (at
-least) 18 to 21. Let's work around this by using inline assembly to
-assign $gp before a fix is widely available.
-
-Cc: stable@vger.kernel.org
-Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-Signed-off-by: Yao Zi <me@ziyao.cc>
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/kernel/relocate.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-index 7f1c136ad8506..59833210542ff 100644
---- a/arch/mips/kernel/relocate.c
-+++ b/arch/mips/kernel/relocate.c
-@@ -420,7 +420,20 @@ void *__init relocate_kernel(void)
- 			goto out;
- 
- 		/* The current thread is now within the relocated image */
-+#ifndef CONFIG_CC_IS_CLANG
- 		__current_thread_info = RELOCATED(&init_thread_union);
-+#else
-+		/*
-+		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
-+		 * intentionally modified. Work around this by using inline
-+		 * assembly to assign $gp. $gp couldn't be listed as output or
-+		 * clobber, or LLVM will still restore its original value.
-+		 * See also LLVM upstream issue
-+		 * https://github.com/llvm/llvm-project/issues/176546
-+		 */
-+		asm volatile("move $28, %0" : :
-+			     "r" (RELOCATED(&init_thread_union)));
-+#endif
- 
- 		/* Return the new kernel's entry point */
- 		kernel_entry = RELOCATED(start_kernel);
 -- 
-2.51.0
-
-
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
