@@ -1,63 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDCE32C8B;
-	Sun,  1 Mar 2026 12:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8752D97BA;
+	Sun,  1 Mar 2026 13:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772368332; cv=none; b=cijx2d8lKdkNAwnt8qSPjbOZMVqYIzttUQs15ZovVFS9KOXOqMPo29WwpR6dzR2BpJ9DGn/UolzM9aInPQURzeG2XzU/9ewELSWZIXD412ALn/4t2LyDtjO2H2cJ0zo5ORbI1g3g+ZJU+K4ZLnt708CnClQhBdT69VvVo75hcmk=
+	t=1772370855; cv=none; b=WLhJEPlJGNwJKdZpIb4z6mypx9krO/LiySFWkXA6CAX4c/HPv+1xfV41GDoTX6kcdkFE3ICm1kXmJpSiO3iiE5R0vSn3US/w8Ew9wCcEyRlHSr2KC4mMnl5cojylRsUfBPAJH6itG1vV4T+TGcTp2jJNu+OajPgxQniI0MO/x8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772368332; c=relaxed/simple;
-	bh=uRNyj79yEJPu2ftsJe+/RGtJ0mZsbDoL/eQlGwFoV0M=;
+	s=arc-20240116; t=1772370855; c=relaxed/simple;
+	bh=2PmoXQbOC5LdLEh4aeiEYZz4GmnSYI7Jxdm/V7UByy0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ITUq2rQ7QEs0xBPAfeErhignKu4XzInbTbbCuMNN7M2HMbaeB1RtIw3qpCz200Ic9Ou81Xgx8BUXRf6n2ykM5P9rf2I7TRPiAHNtHNNY0ogalH/UtJtihau2sXsm29IphUq7dxKZVFmOu22FA7OS9IA9cfna5YTMShZiFtOhOn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OKbTmKxm; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=SCLvXbvMIeHjaGaPaZvLpuDj/rhDT1f7ToiPev01eAscKbLVykG9HSOLz9pPfNHU0hHXDi3piS9jnlDJt0rF1AVexq1P5zleVLWJZtVLA7JtcEajVWwx+1qYYFsNdqHLZXFvmAstgKoM6GLWD2YB5xBVJBlAcs9dh6gIxWo3MlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lYno3AFw; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OKbTmKxm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lYno3AFw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772368329; x=1803904329;
+  t=1772370853; x=1803906853;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=uRNyj79yEJPu2ftsJe+/RGtJ0mZsbDoL/eQlGwFoV0M=;
-  b=OKbTmKxmDutm8UWYsqtN7hUGNGy3nYY2sdwtj70OlVGNrvLaj69DeUQv
-   078okaiSyzWY7y8BaJvjTC4pBUULGP9UFScsFmo1tkZ6K4DOPUp2PW3wl
-   EswV5pikqaWHPIBe752CkOwZUmmifUtfisPf3KtkFQJGHLrfSFrD4cpwV
-   puTDmyCX34fat7C5Kg3ZO5LzFn6+w1medRsacCmwbyxrv087evy2RBl9/
-   NQA2ABVv6bsbcZKnqIrEF3cg0H+riYgx0v6Y0orL3abQFO1LVqEIBXvHc
-   BV4RIs4A5W1y6qSJ2M7C4PoFWJnw8nm9FWL2FD5XSFNVZsGyQjAukBQA/
-   A==;
-X-CSE-ConnectionGUID: Pegqw4CmSAW3GEZ6KwxeCw==
-X-CSE-MsgGUID: ft/TBOHdQKi6QXLB17x9xA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11715"; a="73438772"
+  bh=2PmoXQbOC5LdLEh4aeiEYZz4GmnSYI7Jxdm/V7UByy0=;
+  b=lYno3AFwEAFOfoWK8d/sf+EMjkaVsBUcjsH79RdL8WMnHQYz8+YQlNLW
+   i8qzshT37wBpEafG2qhRMyUurEW5buPmsVLlIDdIyYqv7B1z4nwQELktv
+   EMHANvlN/Z0yMyW4ZIUb+tlDzXyaQKpqgetpHWkqZtfsINAcu0l7QUec0
+   0yH1eytF9AsELGMbd6fVFntaSZIb3UYYEjCcjJQKiprs2WQnZF9l0qSqw
+   qb3ZSlrtRO5JiHb8NlKYv6FOTuiJuCTlIF32VrYK8yFybFEFm8tDCuQqZ
+   v9Qk7QGD0E/3pJGy65eNNsXQO6YhymtFcBJ0AeuCITZTADUm3vC5Sehxv
+   g==;
+X-CSE-ConnectionGUID: 8NcmpRnfTHOUxK7RUNRLgw==
+X-CSE-MsgGUID: /jriTc8aQkmg3KE5OqJA/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11716"; a="96012549"
 X-IronPort-AV: E=Sophos;i="6.21,318,1763452800"; 
-   d="scan'208";a="73438772"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2026 04:32:09 -0800
-X-CSE-ConnectionGUID: yFfGrSWARPC1eygDPBzumg==
-X-CSE-MsgGUID: 4zef/lyIRtiKuQj3WcgOjg==
+   d="scan'208";a="96012549"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2026 05:14:12 -0800
+X-CSE-ConnectionGUID: waAqbHMNTNaLu3rzGxmBvw==
+X-CSE-MsgGUID: NC4b4tKZTsSyFzcS3FUlrQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,318,1763452800"; 
-   d="scan'208";a="217478473"
 Received: from lkp-server01.sh.intel.com (HELO 59784f1c7b2a) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 01 Mar 2026 04:32:07 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 01 Mar 2026 05:14:10 -0800
 Received: from kbuild by 59784f1c7b2a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vwfxr-000000001Rp-3iki;
-	Sun, 01 Mar 2026 12:32:03 +0000
-Date: Sun, 1 Mar 2026 20:31:58 +0800
+	id 1vwgcZ-000000001Sz-1qQM;
+	Sun, 01 Mar 2026 13:14:07 +0000
+Date: Sun, 1 Mar 2026 21:13:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hongbo Li <lihongbo22@huawei.com>, clm@fb.com, dsterba@suse.com,
-	josef@toxicpanda.com, wqu@suse.com
+To: Dmitry Baryshkov <lumag@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Abel Vesa <abelvesa@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	lihongbo22@huawei.com, fdmanana@suse.com,
-	linux-btrfs@vger.kernel.org, sashal@kernel.org
-Subject: Re: [PATCH 6.6 v2] btrfs: free path if inline extents in
- range_is_hole_in_parent()
-Message-ID: <202603012047.GqC1IRml-lkp@intel.com>
-References: <20260227075219.2594937-1-lihongbo22@huawei.com>
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: qcom: ubwc: disable bank swizzling for Glymur
+ platform
+Message-ID: <202603012105.z3eOjLcb-lkp@intel.com>
+References: <20260228-fix-glymur-ubwc-v1-1-d80e3fe0dcc7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,108 +67,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260227075219.2594937-1-lihongbo22@huawei.com>
+In-Reply-To: <20260228-fix-glymur-ubwc-v1-1-d80e3fe0dcc7@oss.qualcomm.com>
 
-Hi Hongbo,
+Hi Dmitry,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v7.0-rc1]
-[also build test ERROR on linus/master next-20260227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongbo-Li/btrfs-free-path-if-inline-extents-in-range_is_hole_in_parent/20260227-155544
-base:   v7.0-rc1
-patch link:    https://lore.kernel.org/r/20260227075219.2594937-1-lihongbo22%40huawei.com
-patch subject: [PATCH 6.6 v2] btrfs: free path if inline extents in range_is_hole_in_parent()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260301/202603012047.GqC1IRml-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260301/202603012047.GqC1IRml-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/soc-qcom-ubwc-disable-bank-swizzling-for-Glymur-platform/20260301-040744
+base:   6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+patch link:    https://lore.kernel.org/r/20260228-fix-glymur-ubwc-v1-1-d80e3fe0dcc7%40oss.qualcomm.com
+patch subject: [PATCH] soc: qcom: ubwc: disable bank swizzling for Glymur platform
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260301/202603012105.z3eOjLcb-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260301/202603012105.z3eOjLcb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603012047.GqC1IRml-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603012105.z3eOjLcb-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/btrfs/send.c:6388:9: error: use of undeclared label 'out'
-    6388 |                         goto out;
-         |                              ^
-   1 error generated.
+>> drivers/soc/qcom/ubwc_config.c:234:19: error: expected '}'
+           .ubwc_swizzle = 0;
+                            ^
+   drivers/soc/qcom/ubwc_config.c:231:54: note: to match this '{'
+   static const struct qcom_ubwc_cfg_data glymur_data = {
+                                                        ^
+>> drivers/soc/qcom/ubwc_config.c:235:2: error: expected identifier or '('
+           .ubwc_bank_spread = true,
+           ^
+>> drivers/soc/qcom/ubwc_config.c:239:1: error: extraneous closing brace ('}')
+   };
+   ^
+   3 errors generated.
 
 
-vim +/out +6388 fs/btrfs/send.c
+vim +234 drivers/soc/qcom/ubwc_config.c
 
-  6334	
-  6335	static int range_is_hole_in_parent(struct send_ctx *sctx,
-  6336					   const u64 start,
-  6337					   const u64 end)
-  6338	{
-  6339		BTRFS_PATH_AUTO_FREE(path);
-  6340		struct btrfs_key key;
-  6341		struct btrfs_root *root = sctx->parent_root;
-  6342		u64 search_start = start;
-  6343		int ret;
-  6344	
-  6345		path = alloc_path_for_send();
-  6346		if (!path)
-  6347			return -ENOMEM;
-  6348	
-  6349		key.objectid = sctx->cur_ino;
-  6350		key.type = BTRFS_EXTENT_DATA_KEY;
-  6351		key.offset = search_start;
-  6352		ret = btrfs_search_slot(NULL, root, &key, path, 0, 0);
-  6353		if (ret < 0)
-  6354			return ret;
-  6355		if (ret > 0 && path->slots[0] > 0)
-  6356			path->slots[0]--;
-  6357	
-  6358		while (search_start < end) {
-  6359			struct extent_buffer *leaf = path->nodes[0];
-  6360			int slot = path->slots[0];
-  6361			struct btrfs_file_extent_item *fi;
-  6362			u64 extent_end;
-  6363	
-  6364			if (slot >= btrfs_header_nritems(leaf)) {
-  6365				ret = btrfs_next_leaf(root, path);
-  6366				if (ret < 0)
-  6367					return ret;
-  6368				if (ret > 0)
-  6369					break;
-  6370				continue;
-  6371			}
-  6372	
-  6373			btrfs_item_key_to_cpu(leaf, &key, slot);
-  6374			if (key.objectid < sctx->cur_ino ||
-  6375			    key.type < BTRFS_EXTENT_DATA_KEY)
-  6376				goto next;
-  6377			if (key.objectid > sctx->cur_ino ||
-  6378			    key.type > BTRFS_EXTENT_DATA_KEY ||
-  6379			    key.offset >= end)
-  6380				break;
-  6381	
-  6382			fi = btrfs_item_ptr(leaf, slot, struct btrfs_file_extent_item);
-  6383			extent_end = btrfs_file_extent_end(path);
-  6384			if (extent_end <= start)
-  6385				goto next;
-  6386			if (btrfs_file_extent_type(leaf, fi) == BTRFS_FILE_EXTENT_INLINE) {
-  6387				ret = 0;
-> 6388				goto out;
-  6389			}
-  6390			if (btrfs_file_extent_disk_bytenr(leaf, fi) == 0) {
-  6391				search_start = extent_end;
-  6392				goto next;
-  6393			}
-  6394			return 0;
-  6395	next:
-  6396			path->slots[0]++;
-  6397		}
-  6398		return 1;
-  6399	}
-  6400	
+   230	
+   231	static const struct qcom_ubwc_cfg_data glymur_data = {
+   232		.ubwc_enc_version = UBWC_5_0,
+   233		.ubwc_dec_version = UBWC_5_0,
+ > 234		.ubwc_swizzle = 0;
+ > 235		.ubwc_bank_spread = true,
+   236		/* TODO: highest_bank_bit = 15 for LP_DDR4 */
+   237		.highest_bank_bit = 16,
+   238		.macrotile_mode = true,
+ > 239	};
+   240	
 
 -- 
 0-DAY CI Kernel Test Service
