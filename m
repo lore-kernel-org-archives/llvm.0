@@ -1,197 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4173218BA
-	for <llvm@lists.linux.dev>; Sun,  1 Mar 2026 12:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDCE32C8B;
+	Sun,  1 Mar 2026 12:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772366589; cv=none; b=OG4g5FyhxDEnnG+TbX30I7MrJsiE97zSIwXfCg/R448yQf/k6BmsXHyjw5Qdmx+pF7DvBexIbsO7/ZdQ4OCQDqFQOx0M6+2bhMJDIE8f2ghv2d0yjwtjDlReny+QfO5Vc7ebqDdKn77Z5VWsKsusjMYgB6PyfdENVLdt1cVLAfI=
+	t=1772368332; cv=none; b=cijx2d8lKdkNAwnt8qSPjbOZMVqYIzttUQs15ZovVFS9KOXOqMPo29WwpR6dzR2BpJ9DGn/UolzM9aInPQURzeG2XzU/9ewELSWZIXD412ALn/4t2LyDtjO2H2cJ0zo5ORbI1g3g+ZJU+K4ZLnt708CnClQhBdT69VvVo75hcmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772366589; c=relaxed/simple;
-	bh=4cPQhieRxZCNnNVDRVMCziEZKwe1Fm2RLbLcMpjk8jg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lvQu4JSE0lj1Eh1ODlsb8BLhAO3OmJgnznOGvKHKsQx9Z3AyHgCbS+5dPeNu3+yxgBjRmLDCz3Ij/6M2ZkqhR7mNLLOaVSus9uCozWZB8roB46HdFDQPBg86KMxBb0zcOLwcJg2ZM2jXDEzVyahbklvMyvBsFvgp35mjsfL0NNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ghagvJg2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772368332; c=relaxed/simple;
+	bh=uRNyj79yEJPu2ftsJe+/RGtJ0mZsbDoL/eQlGwFoV0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ITUq2rQ7QEs0xBPAfeErhignKu4XzInbTbbCuMNN7M2HMbaeB1RtIw3qpCz200Ic9Ou81Xgx8BUXRf6n2ykM5P9rf2I7TRPiAHNtHNNY0ogalH/UtJtihau2sXsm29IphUq7dxKZVFmOu22FA7OS9IA9cfna5YTMShZiFtOhOn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OKbTmKxm; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ghagvJg2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772366585;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=i15zsJ3LP6Tv8NvWg2bxylKqXoc66DONJwxQyg8mMn0=;
-	b=ghagvJg2CIwVdik1fonmXqiO/11fVgPMEFyp2c8ElvqomJoqS0YZGzn0f8GSpMeu2G9oP/
-	4N+P0LldYyAYFTX3U4IyyXVPoA+XmP+EQIxg/2gy8/181MYEsiq9aqVtpXCEFOI/yHBXe6
-	Xd3zEOcSfO6wl3uroQNyHYdy/Tyx48c=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-619-tAsFTIzyOjOXFLpPtE3ScA-1; Sun,
- 01 Mar 2026 07:03:04 -0500
-X-MC-Unique: tAsFTIzyOjOXFLpPtE3ScA-1
-X-Mimecast-MFC-AGG-ID: tAsFTIzyOjOXFLpPtE3ScA_1772366583
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 75BD01800451
-	for <llvm@lists.linux.dev>; Sun,  1 Mar 2026 12:03:03 +0000 (UTC)
-Received: from [172.20.201.171] (unknown [10.30.44.137])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C66B01800590;
-	Sun,  1 Mar 2026 12:03:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc1,
- upstream-mainline, eb71ab2b)
-Date: Sun, 01 Mar 2026 12:03:02 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OKbTmKxm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772368329; x=1803904329;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uRNyj79yEJPu2ftsJe+/RGtJ0mZsbDoL/eQlGwFoV0M=;
+  b=OKbTmKxmDutm8UWYsqtN7hUGNGy3nYY2sdwtj70OlVGNrvLaj69DeUQv
+   078okaiSyzWY7y8BaJvjTC4pBUULGP9UFScsFmo1tkZ6K4DOPUp2PW3wl
+   EswV5pikqaWHPIBe752CkOwZUmmifUtfisPf3KtkFQJGHLrfSFrD4cpwV
+   puTDmyCX34fat7C5Kg3ZO5LzFn6+w1medRsacCmwbyxrv087evy2RBl9/
+   NQA2ABVv6bsbcZKnqIrEF3cg0H+riYgx0v6Y0orL3abQFO1LVqEIBXvHc
+   BV4RIs4A5W1y6qSJ2M7C4PoFWJnw8nm9FWL2FD5XSFNVZsGyQjAukBQA/
+   A==;
+X-CSE-ConnectionGUID: Pegqw4CmSAW3GEZ6KwxeCw==
+X-CSE-MsgGUID: ft/TBOHdQKi6QXLB17x9xA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11715"; a="73438772"
+X-IronPort-AV: E=Sophos;i="6.21,318,1763452800"; 
+   d="scan'208";a="73438772"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2026 04:32:09 -0800
+X-CSE-ConnectionGUID: yFfGrSWARPC1eygDPBzumg==
+X-CSE-MsgGUID: 4zef/lyIRtiKuQj3WcgOjg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,318,1763452800"; 
+   d="scan'208";a="217478473"
+Received: from lkp-server01.sh.intel.com (HELO 59784f1c7b2a) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 01 Mar 2026 04:32:07 -0800
+Received: from kbuild by 59784f1c7b2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vwfxr-000000001Rp-3iki;
+	Sun, 01 Mar 2026 12:32:03 +0000
+Date: Sun, 1 Mar 2026 20:31:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hongbo Li <lihongbo22@huawei.com>, clm@fb.com, dsterba@suse.com,
+	josef@toxicpanda.com, wqu@suse.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	lihongbo22@huawei.com, fdmanana@suse.com,
+	linux-btrfs@vger.kernel.org, sashal@kernel.org
+Subject: Re: [PATCH 6.6 v2] btrfs: free path if inline extents in
+ range_is_hole_in_parent()
+Message-ID: <202603012047.GqC1IRml-lkp@intel.com>
+References: <20260227075219.2594937-1-lihongbo22@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <13340.126030107030400528@us-mta-619.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ck_RiOAbMQ43WMTZfongdEHFbMWGQNb7vgpydCWzTjk_1772366583
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227075219.2594937-1-lihongbo22@huawei.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Hongbo,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on v7.0-rc1]
+[also build test ERROR on linus/master next-20260227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/bpf/bpf
+url:    https://github.com/intel-lab-lkp/linux/commits/Hongbo-Li/btrfs-free-path-if-inline-extents-in-range_is_hole_in_parent/20260227-155544
+base:   v7.0-rc1
+patch link:    https://lore.kernel.org/r/20260227075219.2594937-1-lihongbo22%40huawei.com
+patch subject: [PATCH 6.6 v2] btrfs: free path if inline extents in range_is_hole_in_parent()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260301/202603012047.GqC1IRml-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260301/202603012047.GqC1IRml-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2356464257
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603012047.GqC1IRml-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_s390x_kernel_kcidb_tool_20773104_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_ppc64le_kernel_kcidb_tool_20773099_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_aarch64_kernel_kcidb_tool_20773101_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_x86_64_kernel_kcidb_tool_20773097_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_x86_64_kernel_kcidb_tool_20773098_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        Reboot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_s390x_kernel_kcidb_tool_20773104_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_ppc64le_kernel_kcidb_tool_20773099_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_aarch64_kernel_kcidb_tool_20773101_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_aarch64_kernel_kcidb_tool_20773375_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_aarch64_kernel_kcidb_tool_20773390_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_x86_64_kernel_kcidb_tool_20773097_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_x86_64_kernel_kcidb_tool_20773098_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2356464257_x86_64_kernel_kcidb_tool_20773389_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> fs/btrfs/send.c:6388:9: error: use of undeclared label 'out'
+    6388 |                         goto out;
+         |                              ^
+   1 error generated.
 
 
+vim +/out +6388 fs/btrfs/send.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  6334	
+  6335	static int range_is_hole_in_parent(struct send_ctx *sctx,
+  6336					   const u64 start,
+  6337					   const u64 end)
+  6338	{
+  6339		BTRFS_PATH_AUTO_FREE(path);
+  6340		struct btrfs_key key;
+  6341		struct btrfs_root *root = sctx->parent_root;
+  6342		u64 search_start = start;
+  6343		int ret;
+  6344	
+  6345		path = alloc_path_for_send();
+  6346		if (!path)
+  6347			return -ENOMEM;
+  6348	
+  6349		key.objectid = sctx->cur_ino;
+  6350		key.type = BTRFS_EXTENT_DATA_KEY;
+  6351		key.offset = search_start;
+  6352		ret = btrfs_search_slot(NULL, root, &key, path, 0, 0);
+  6353		if (ret < 0)
+  6354			return ret;
+  6355		if (ret > 0 && path->slots[0] > 0)
+  6356			path->slots[0]--;
+  6357	
+  6358		while (search_start < end) {
+  6359			struct extent_buffer *leaf = path->nodes[0];
+  6360			int slot = path->slots[0];
+  6361			struct btrfs_file_extent_item *fi;
+  6362			u64 extent_end;
+  6363	
+  6364			if (slot >= btrfs_header_nritems(leaf)) {
+  6365				ret = btrfs_next_leaf(root, path);
+  6366				if (ret < 0)
+  6367					return ret;
+  6368				if (ret > 0)
+  6369					break;
+  6370				continue;
+  6371			}
+  6372	
+  6373			btrfs_item_key_to_cpu(leaf, &key, slot);
+  6374			if (key.objectid < sctx->cur_ino ||
+  6375			    key.type < BTRFS_EXTENT_DATA_KEY)
+  6376				goto next;
+  6377			if (key.objectid > sctx->cur_ino ||
+  6378			    key.type > BTRFS_EXTENT_DATA_KEY ||
+  6379			    key.offset >= end)
+  6380				break;
+  6381	
+  6382			fi = btrfs_item_ptr(leaf, slot, struct btrfs_file_extent_item);
+  6383			extent_end = btrfs_file_extent_end(path);
+  6384			if (extent_end <= start)
+  6385				goto next;
+  6386			if (btrfs_file_extent_type(leaf, fi) == BTRFS_FILE_EXTENT_INLINE) {
+  6387				ret = 0;
+> 6388				goto out;
+  6389			}
+  6390			if (btrfs_file_extent_disk_bytenr(leaf, fi) == 0) {
+  6391				search_start = extent_end;
+  6392				goto next;
+  6393			}
+  6394			return 0;
+  6395	next:
+  6396			path->slots[0]++;
+  6397		}
+  6398		return 1;
+  6399	}
+  6400	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
