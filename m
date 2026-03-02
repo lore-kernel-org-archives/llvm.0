@@ -1,97 +1,96 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839E2379ED7
-	for <llvm@lists.linux.dev>; Mon,  2 Mar 2026 06:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E9A3090CC
+	for <llvm@lists.linux.dev>; Mon,  2 Mar 2026 06:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772432017; cv=pass; b=SZ5sr+6Un7FYGqNEoZMhZICQbKrME0tg/3bkb/1PxcDTh1Q2HCX7auHjlfJC4k3XNElhvVOusxb3TsTC959Y2yTqLsHSh0t820LZcjHMOe6oUVBwzzIUXPxsoHi0shCuxAgcX83z7Qt1Jq/ROCkHa8OpT39mAWr2NSUTlDnghUs=
+	t=1772433375; cv=pass; b=qnpWndZrPNKl9YGUNy38jeE7/k84n44Qu8FVw+2qH/9OuL1fXeRh9B2arWJenDl1qYDNzI3I4RILDodQCWuJhl3GWt1eFlCxQ5GHmQ11iq606wEqdws6M2/x0RySQF6Y/EI7pqK1s6Dg9ZUawibLewN7Xa5x7gWbGKjy1AJlqFI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772432017; c=relaxed/simple;
-	bh=+Q6GGX8zNMM8BQ0PS2o57GNeCicr0Q6irsXem04CyRU=;
+	s=arc-20240116; t=1772433375; c=relaxed/simple;
+	bh=2mzkZ+7ay5mPOTVxHTRghXB7Yvl5MwH5CneKgQvRVOk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=avh8u5q+JAXfnazC8y98snbNWKXgNAHi/ERiPOi14TA4LC6Uof7SfQryzQBq4truTIXqKVSG48rSVhdp8p2KM/1DCA/7II1kCBD8xW6pA/TO0hIXBW1Nyv37H4dJ6mEOTDenpO2nYlHFKbEbt76D92RJ85aG15+vsQPJjKf7N4k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nsI6CC29; arc=pass smtp.client-ip=209.85.208.173
+	 To:Cc:Content-Type; b=ePAmcwmQDV5NxuNJE5gqOHxPKTsOmkSMr1dY/SoaoRO6v1oe7f1UYwFZ22zcMXeTJ+F/z5FxGuiMPGA2NY6DDsc7Rs4DzfqJG+6XQVlPSxnTBwr/rc/0KtSb/ufLD90b3eLmYx/1CzlE/t2ouUVjCAWo4zBRiz/oh1hbZaX4hBA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YqMxyE1+; arc=pass smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nsI6CC29"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-386fb2c31e2so68611611fa.1
-        for <llvm@lists.linux.dev>; Sun, 01 Mar 2026 22:13:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772432010; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YqMxyE1+"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-38706f96202so40451771fa.3
+        for <llvm@lists.linux.dev>; Sun, 01 Mar 2026 22:36:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772433373; cv=none;
         d=google.com; s=arc-20240605;
-        b=eNqtbf54a3YNoLS6JO9p1J5uiRZXZgBRYfjy4ctNAeLUGhnUjkyj4XIftl+FJdx8ew
-         FJu8zqTaqq4VTEQFhUW0svK+vBKw2dVQZktQOoFPcIkFa2pBza/YcNQCfXPtT81svD6z
-         2FfMk9D9/gHhSrBVyyI+a9fIyIKFP+VfWfXydYpusUj4qggPuFYwWOlbixfuPNcRPq+y
-         vozacZKy4ksDelvFQu9sS4hWc12KrO8JeW5yMlu+sAzrkG9WJfjf9MWdVCwPRren5F3w
-         LAHHkWXOPx5v9ruL7mZdtFzWsDdIcbZ8kBal/9kbvJfY5lot9sEcQ9Wl37MZ1UAq90o/
-         oRMw==
+        b=XCXHHkULB6lyGK9LTMWnFcrFaPkW+DwCUSOIHx1jeKIhx/fUeSR2oVtJku3/Ix9Gir
+         YOZuKjwr33tysO/F2mSQjOnlW9IonBeavUAAhD2BS0onJ86fyEhgCipZYkgGbN+5B+fj
+         c7XDAD8jqpJ1k+KxjTVd2xef/URggfKhi+TRU0dL4Y4m5R6TTJGEo6ndRwXc/CfsMYvx
+         /xP6pjyNw96Phsm6Df3DOFgjh88T4xGqXEn0PBNWwe5ya+KJ/O5AuTilGMrQeUbUGLbE
+         3iQAwU6E2+JPsXonyZbd2IXpABDNR69lyp5R5zVu2kZ0H026uzSdfYk1dl47v+HqFzIb
+         CfDQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ux5RqO/ZTufyk9Xe7c4ok2Mzm+WSW1boQMNoNgz5Yho=;
-        fh=h4UoZnDlzOoGYCikAApw5u+2wB/baV4ckKuSHyBg1HQ=;
-        b=W5eKaXKyCMANVVm5UMpSde764ai9BJJ8tHxE3G+cagLkwJ4Yqc8qf40prZoSgkPmG+
-         pKqoQweU31YqKCKn3e/6/y5/phv3OuAIBkhkqGVELd/6lsCKAqrcGjzNfFcyplWTBeNC
-         6O3eeyiXBFhiz3+PxUbSxTtR8aYNF6kT9Ko0KdCz0o0YHQYcxv6tU+o3e9y7hWcfVHCO
-         9IWrVjVA6CLASwfNpFoRJXs4kID/hOD6a5eFjt2NByA3cFYNJZvkZWPc+UVnNe7W1XP8
-         PkoHalRjVlJipCUhJo6S/NQ45ITdwKbS1QAjw2FL3/hOH80IE133muC5kLbxyPvSK2Na
-         He/A==;
+        bh=9pmNPDeirZpzNt2b2qSmOZwVDIdXzjn8yvY6dGccuss=;
+        fh=p3xj8wdwCIwJLOIcxY1w2bvkCjCmSZQpYJmo5o+Si08=;
+        b=TNtpcYGloC/WHqK0IKRvi0Gqvwwhu/qqKA4eyXTTKCgGtcXvtZV8pBQlD0ltHT+TDY
+         lS0yh+WDhspNltN6Iflwc04VlROBajMQ0dl/ZC1G5Jv18lLUPZUCQYhArsvMU0N1svVZ
+         CTgtEL+cNYMg5W4yPs+O8e1eqbT/Gx31856+VHFQscjC5TSTKgw5mXYg5yDrs2RZ6qsj
+         UgUpCW3obsBvC+pKPvCwrLxl8GXzrGUawks3cVtla8if3bK1VrR9ynbnP1onDuSzDq6S
+         AR7X9WjUl0yz/XYtrFLFsKLk3/V3EAGKR2OpgyeJi/+/bELkWtZivuUK6ZfBW7H0dRzv
+         sC9g==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772432010; x=1773036810; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1772433373; x=1773038173; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ux5RqO/ZTufyk9Xe7c4ok2Mzm+WSW1boQMNoNgz5Yho=;
-        b=nsI6CC29mVhvzrqUL9Q1RXtuWPyp+XCjtBWa4+TEXCQkuOt+nQxXqHE2QmnHxk90FQ
-         LX+uDHaq+g4n6fm269DQFO1N15EmtGDXKkBvyck/jkJVqkQ9vyALeIS0TVcIO7d2ukVy
-         /4gCjEsF+gehK155eeb2vsscblFcv4ZbUmNV38XbmHEuy5N3OKn3pQratJb8TvK3u8cP
-         /2KU8LLAA1dGuzJPBF+1AV65r9ytwi0z0y9WFNJHS9ybHuz5q4ZeqNbCPYu5DqnOKErO
-         dwFVrzBI4KjyLe971L/Tzr5g4JvIKn/JfQoWk2eZ3dbg5XR7arbEGgAe60lxa4F2MuR7
-         rDYA==
+        bh=9pmNPDeirZpzNt2b2qSmOZwVDIdXzjn8yvY6dGccuss=;
+        b=YqMxyE1+ol1n59OnIbbWgHUGQLwXM2Nu2imnlzEmIM6uK73/vpUkreLKkDARbvA2T1
+         /+Ac0fLzeYBbX0v1yVdk8v4/qoPn25KLaN03Gs1eDNDlfSzvCiWPOq7BjKH9lFxWt8Uf
+         XELA0f1U1hejEsQq4F3iyrzyEtw0Uxm24LHZPJxEcbrryoFi3QXvTPsRa/r2/fxTnGpB
+         pDa4/GoSKUY5VKBd2XvMWmn5tH41yIKtNgUcSewIcC/5YsDvU5kjO+md7j00W6nGhZDM
+         x9xcrYIvJM139B7ykKX//pF1z/cSYPxoNWYJYUhvTSllQzodRig6JhDmVxd+1xnzX81h
+         4Q8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772432010; x=1773036810;
+        d=1e100.net; s=20230601; t=1772433373; x=1773038173;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ux5RqO/ZTufyk9Xe7c4ok2Mzm+WSW1boQMNoNgz5Yho=;
-        b=WbNRaqBFqXOMe0KnFU17nZKWguEVaHZi25ojFxvu0EQs6L4AZ/B6hy4GFQW0lgPJrt
-         bzmJbaUip8aTupnWen34f+b9C1ACMmxYGMYxrMmwb6Ezs8SDX3rot3S5J7/nMkiL4iAy
-         yTwysh6j977ObzkgOxetcp14Br3W+6Jc22le/vxEIagjloiwXZSecxt3vkODtRCEedsY
-         tsInN+67Mjv6dyv2I5yHboi9e/SCLTutAeGX1gN/QxY4VEVmy+YdhsdITB3NEFYOwWTQ
-         9poHo8kAgPpYLv8zh3HnXcOZy1QUYnhj9Qyg2GyLpY8K6fORfX7spLYIueJ9bygq8ov1
-         xgzA==
-X-Forwarded-Encrypted: i=1; AJvYcCXLhsvyKddYHfO8IkJIKHzKCVi5CwOhPLPAftb/W6LfZYNS2tJchkACOhzRB/1nS1hUNq6O@lists.linux.dev
-X-Gm-Message-State: AOJu0YwGddY/vZouaoufo8TnU8XdkJGrj06ti6hi8WUDhu1wPHn6ucuZ
-	6M4TFK29TzDdguFJ2mix9QrOwPQitel38GqfbIxjF1udA/V5EIIqCtPsxHB/Ik6aoBpeNlhxdiw
-	4zmQHLINvDROGJHczy4WaigjUa1F0LZU=
-X-Gm-Gg: ATEYQzwM9AyPupF7rK0MKeVFtWm7Go7mXhlk8quUwqCX/KwrxSIEMIZLF8r5ZA4C5PY
-	YYvAcWgFnf5/n1LPn7GgvYEFK4bCSBBJv1FQ9yz0gwo8GEbuFxNH4k67xyq6FQv2879lc9kBXt8
-	HPccZ65dIiy5RVO4uhF3DlQqKIlUDWwDfzPH16W11L94U5vAXcow4k/ICeL+/C3MHTsdyTgJbiH
-	P7wZDlXT40X/x7wy81rMi8ynh+tBIYiy7SX33EFoYlhbBk2+KhiuR9qjeVT2ipIdNrk4ZB2GUMe
-	v+B1bIiH/PQIe9FHvi6vOICym2IFv0gotHmDA9CfCPMboQHXHk4RFuZl73iVBUwVoPpOeGC0C5f
-	McrmNZBVGXPsKkV0YB68qO628150=
-X-Received: by 2002:a05:651c:19a0:b0:37f:a216:e473 with SMTP id
- 38308e7fff4ca-389ff08accdmr74673101fa.0.1772432010206; Sun, 01 Mar 2026
- 22:13:30 -0800 (PST)
+        bh=9pmNPDeirZpzNt2b2qSmOZwVDIdXzjn8yvY6dGccuss=;
+        b=gZePchPyl2Jx3S3FmyUmx5cGRSvLrOcpEq3ARpPBRXmUR3POlGUkQy+VNFrIkI8LL+
+         0n+DMkpoXfv+JupSzcZJtjXMqhmN3QX403p0kqp09epDfqxBgdx6LbxI10ES5zuXXqAF
+         6y9kN443saFDCc+a4iE+ec1lQaJ+q2QuXDBXz63pT/vphSsNA0mxroGcUDc3aalm5ZM+
+         BXS2sY/pLWlm8pJYfZmMi5557+Kyt8VVTOsqfFEwSUGe67GLuUsCcrqBAop4pkvT+imr
+         GZOUVWyEImcAw3NqLMoSIMODdEkXkonfuBvV54LQnbcMSRqaPQEq46JfzD5VM/LXNhnC
+         jkYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVFr5MbeGHHmboxvoCXV09GDmgc59CcKqpJepZrXIjyxR/AQW1XgPjDqs3ZzgQpKTu6RMML@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx+LcRdhk8PIQVipe6N/U8BDj9+a13AsZtjmgb97fqzJROQCjr/
+	65aw4SdjPn0gR/2/EICAb07aPsTcYXUJwI7GMLvs5kcdxqzg7RtFZAJQRQDRD+H4WWH1T2n45MB
+	xqYDwQa/uPy0MZ/uaHosBy2PCAhy5qpM=
+X-Gm-Gg: ATEYQzx0jdDYucnatgnaRIQDguQM+yMgu0y351iNzzZcj8udrwRK3EuPlTodylaannd
+	sb+VAZJddB2LnG5o0rxlnmP0e1F/8zkUh+qDLBYZn6/dnIsUc8WBZbMd6YBTMzR+9qoXyv1L49G
+	+3Kcr9iwvvtp/XEdytSN1Bcd8WuPVdU1xcxraQBuygy1UuTxPASyLexuY4TccEn8y6yP/0nI4yj
+	R8hJam5LKQwAvxvgzTP9tBpmQN/P/5f/B7vWfviDCIveL0VNoo9w6Twrrf+XIMKf683S3wbhOj3
+	VgvxdRQd9ienVPznjI3TKu7mw6gimh9x0+PYSr4Y6Xx6CuIG+YVZ1BL0jgDRSF1I2ir3ssGj2nR
+	ZwkoP+eoQ9L0hPPQ99T8Vom745Gw=
+X-Received: by 2002:a05:651c:2123:b0:382:4d6b:993b with SMTP id
+ 38308e7fff4ca-389ff365a4bmr80217491fa.35.1772433372378; Sun, 01 Mar 2026
+ 22:36:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260226111721.25454-1-yuuchihsu@gmail.com> <20260226171401.7461b9da@kernel.org>
- <CAPAzCqE3k9PehK9gec7pcfq-Tnjsx-reD63GUaO+MEnP8LZ0Vg@mail.gmail.com>
-In-Reply-To: <CAPAzCqE3k9PehK9gec7pcfq-Tnjsx-reD63GUaO+MEnP8LZ0Vg@mail.gmail.com>
+References: <20260302060247.7066-1-yuuchihsu@gmail.com> <CANn89i+O5b0xfcP5GLtUopqHz2ppewK9zSr4995jsjCPM+3AFQ@mail.gmail.com>
+In-Reply-To: <CANn89i+O5b0xfcP5GLtUopqHz2ppewK9zSr4995jsjCPM+3AFQ@mail.gmail.com>
 From: Sam Su <yuuchihsu@gmail.com>
-Date: Mon, 2 Mar 2026 14:13:18 +0800
-X-Gm-Features: AaiRm50l6QwVrBMPu3EbKOf4uYs_vW7YhtWWMq4Ps4rEAgTsv1FkTCq0fhJK2-0
-Message-ID: <CAPAzCqEmfhZNk4Ysjo80QXX6ijyek7Vz9mexQ91tO0pwA67tvg@mail.gmail.com>
-Subject: Re: [PATCH] net: ipv6: fix ARM64 alignment fault in fib_multipath_hash_from_keys()
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, 
+Date: Mon, 2 Mar 2026 14:36:00 +0800
+X-Gm-Features: AaiRm5370M-3aS4oZ0cTBd8XDVVI1Uw-ouldM7nEfiGAhn2Xv88YDaO3hyfPcuM
+Message-ID: <CAPAzCqHgoiMBC0=r0vAH6jP=J=HVVxDbnQjAUOcgR6MHE2mNsQ@mail.gmail.com>
+Subject: Re: [PATCH v2] net: ipv4: fix ARM64 alignment fault in multipath hash seed
+To: Eric Dumazet <edumazet@google.com>
+Cc: davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, 
 	pabeni@redhat.com, horms@kernel.org, nathan@kernel.org, 
 	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
@@ -100,61 +99,74 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Eric,
 
-I just sent out the v2 patch, which includes this missing READ_ONCE()
-fix for the read side as you suggested.
-
-I also wanted to share a quick update on the WRITE_ONCE() behavior we
-discussed. I tested the sysctl write on my ARM64 device and dumped the
-assembly. Surprisingly, the original code didn't crash.
-
-Looking at the objdump, because the ARM64 kernel workaround for Clang
-LTO (commit e35123d83ee3) only strengthens the read side to use `ldar`
-(Load-Acquire), the WRITE_ONCE() here falls back to regular store
-instructions. Clang actually splits the 8-byte struct write into two
-separate 32-bit `str Wn` instructions:
-
-    b905ae68      str     w8, [x19, #0x5ac]  // user_seed
-    b905b268      str     w8, [x19, #0x5b0]  // mp_seed
-
-This completely confirms your concern: the current WRITE_ONCE(struct)
-quietly destroys atomicity and exposes a tear-write vulnerability
-without crashing the hardware.
-
-Splitting it explicitly into two 32-bit WRITE_ONCE() calls in the v2
-patch was definitely the right move. I have tested all these changes
-on my ARM64 board, and everything works perfectly.
-
-Thanks again for the review and guidance!
+Got it! Thank you so much for the clarification and all your help with
+the review.
 
 Best regards,
 Yung Chih.
 
-Sam Su <yuuchihsu@gmail.com> =E6=96=BC 2026=E5=B9=B42=E6=9C=8827=E6=97=A5=
-=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:12=E5=AF=AB=E9=81=93=EF=BC=9A
+Eric Dumazet <edumazet@google.com> =E6=96=BC 2026=E5=B9=B43=E6=9C=882=E6=97=
+=A5=E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=882:12=E5=AF=AB=E9=81=93=EF=BC=9A
+
 >
-> Jakub Kicinski <kuba@kernel.org> =E6=96=BC 2026=E5=B9=B42=E6=9C=8827=E6=
-=97=A5=E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=889:14=E5=AF=AB=E9=81=93=EF=BC=9A
+> On Mon, Mar 2, 2026 at 7:03=E2=80=AFAM Yung Chih Su <yuuchihsu@gmail.com>=
+ wrote:
 > >
-> > On Thu, 26 Feb 2026 19:17:21 +0800 Yung Chih Su wrote:
-> > > Fixes: [4ee2a8cace3fb9a34aea6a56426f89d26dd514f3] ("net: ipv4: Add a =
-sysctl to set multipath hash seed")
+> > `struct sysctl_fib_multipath_hash_seed` contains two u32 fields
+> > (user_seed and mp_seed), making it an 8-byte structure with a 4-byte
+> > alignment requirement.
 > >
-> > Please use the traditional abbreviated format of the Fixes tag
+> > In `fib_multipath_hash_from_keys()`, the code evaluates the entire
+> > struct atomically via `READ_ONCE()`:
+> >
+> >     mp_seed =3D READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed).mp_=
+seed;
+> >
+> > While this silently works on GCC by falling back to unaligned regular
+> > loads which the ARM64 kernel tolerates, it causes a fatal kernel panic
+> > when compiled with Clang and LTO enabled.
+> >
+> > Commit e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire
+> > when CONFIG_LTO=3Dy") strengthens `READ_ONCE()` to use Load-Acquire
+> > instructions (`ldar` / `ldapr`) to prevent compiler reordering bugs
+> > under Clang LTO. Since the macro evaluates the full 8-byte struct,
+> > Clang emits a 64-bit `ldar` instruction. ARM64 architecture strictly
+> > requires `ldar` to be naturally aligned, thus executing it on a 4-byte
+> > aligned address triggers a strict Alignment Fault (FSC =3D 0x21).
+> >
+> > Fix the read side by moving the `READ_ONCE()` directly to the `u32`
+> > member, which emits a safe 32-bit `ldar Wn`.
+> >
+> > Furthermore, Eric Dumazet pointed out that `WRITE_ONCE()` on the entire
+> > struct in `proc_fib_multipath_hash_set_seed()` is also flawed. Analysis
+> > shows that Clang splits this 8-byte write into two separate 32-bit
+> > `str` instructions. While this avoids an alignment fault, it destroys
+> > atomicity and exposes a tear-write vulnerability. Fix this by
+> > explicitly splitting the write into two 32-bit `WRITE_ONCE()`
+> > operations.
+> >
+> > Finally, add the missing `READ_ONCE()` when reading `user_seed` in
+> > `proc_fib_multipath_hash_seed()` to ensure proper pairing and
+> > concurrency safety.
+> >
+> > Fixes: 4ee2a8cace3f ("net: ipv4: Add a sysctl to set multipath hash see=
+d")
+> > Suggested-by: Eric Dumazet <edumazet@google.com>
 >
-> Hi Jakub,
+> Nit: Use of Suggested-by: implies I made the original suggestion for
+> this patch (before the V1)
+> I simply gave a feedback on your V1. The idea of the patch came from you =
+:)
 >
-> Got it, my apologies for the formatting mistake.
-> I will format it strictly as 12-char abbreviated without brackets in
-> the upcoming v2 patch:
-> Fixes: 4ee2a8cace3f ("net: ipv4: Add a sysctl to set multipath hash seed"=
-)
+> So next time, do not add a "Suggested-by:", as the expected step is
+> that I add a Reviewed-by tag when I am happy with a new version,
+> if I see it in time before it is merged.
 >
-> I am currently preparing the v2 patch which will also include Eric
-> Dumazet's suggestion regarding the WRITE_ONCE() and READ_ONCE() on the
-> sysctl read/write side.
->  I will send out the v2 after my local testing is done.
+> No need for a V3, this is simply a reminder for your next patches.
 >
-> Thanks for the review!
+> > Signed-off-by: Yung Chih Su <yuuchihsu@gmail.com>
+> > ---
 >
-> Best regards,
-> Yung Chih
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+>
+> Thanks !
