@@ -1,178 +1,137 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDE83164D6
-	for <llvm@lists.linux.dev>; Mon,  2 Mar 2026 06:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772431389; cv=none; b=ZxEYG/fkgu7A6FRv2JlJR8C/Rqsf7L0R2egl2Av2MGcYrXB8jqD4ww4r+aAXghimgEBgu6v1VwDih3+6mluXPsQgpcu59JdO+/LezMq5BxGDWqniTzSqtJ7gAEv9Htg7BUgzAMTvqmuy7D/+ks2m/jFAx5iQAg1XnVxGkgFzVJI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772431389; c=relaxed/simple;
-	bh=UMbmZ++93Ph/NbVyX9t23zZtrAjeMmfIxj4l+jZAYNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HDjIPv3VezSBZFGK6fj1KfDMQPcVvwrhkxX9ABVP2aTvFPS7VJZr0t6h9XzVnVxh0X8SXnvPQgkppqWK3Mvot5WeyO6N5yv3sSBpsA1uUGXFEehujxOPt7O88tGQDEHocBnsmxxLpjK6/Jap6PiKCOGZ3wr69BWCEzIjZmGxszU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=icDCHWuq; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314753806A6
+	for <llvm@lists.linux.dev>; Mon,  2 Mar 2026 06:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772431396; cv=pass; b=ODhdp5RBDGzkhajEq1NbLTKWPAeRaiiiESewtAMmSjVhBJ/3IP1uXGDq7psnd+qXvKS5eErOOct+4ZAyfq+8lXJGm54Gl+A/Zthg32uueJ/b+IhmdeWDn500nqqd/wadVWxb4kGnd5olwviMo5YcZVCVzeus0wlKYtc5L76tZac=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772431396; c=relaxed/simple;
+	bh=VoL9+Q5vKBh/stH6CbzLSnBWXCrGTyp5hmi39PUL9ZM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CJVTqX1dSGYmJAJl5EWN53aQNBQBy9sOxFS2EDSoPkZj607d9Wosp76MjVMyar/o1WTKqgOiydv3NxePnoJXStBdVqX+iZpjcmPXcp0SCQe5f/5jKpKPWbc1aJ19QRO1bE5/CuGVUZ70wIAQNLEMK3Y2GhCjgPNLr8+2ECK6vq8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rDkRMd2Z; arc=pass smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="icDCHWuq"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-824a6f2d816so1714429b3a.3
-        for <llvm@lists.linux.dev>; Sun, 01 Mar 2026 22:03:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rDkRMd2Z"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-50336cffef9so36701151cf.0
+        for <llvm@lists.linux.dev>; Sun, 01 Mar 2026 22:03:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772431388; cv=none;
+        d=google.com; s=arc-20240605;
+        b=C4NsCilR7kc5TZ6NMRQqOLF03JfJbJ1tmyfkTeoyumo5Sykepjzb9jSpG/HEXo68O+
+         /0Ohlm4pL7/Ztw+UwDJ/9iy4X6yjCME+6VOqvgjnhYgy/QwhpgXErB4zgs2Ka9LGwCTW
+         fped4VVDmiyI6rUv3ZIM25xPgriIVAU6rzluLCtRGFAIbqpLuLq1xR8MgkmVXvlzP8+G
+         pykUa+GkCh6XsFHo7Jm5dTN9QuUnmGYXr5K4GfLnP6Pr5tDC2oRS8U9T5tA7feCFJ4eV
+         wceEVd4+B1sW6hYjAoVCKTuFpQTTEJbLLhhHt8szuLs0qd5BDRgXeqJw6JIGdCSl3IFt
+         thyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UjR2Jso0hAuDoeUEgb8RQHlOodoa5Tiq2cd7ca0LZWk=;
+        fh=+GEsqHuv/xh6CoCcLsrL8mttB2foX2Hg+HEtnpGqFVk=;
+        b=Z6mNS0Boae5MgNT40fKA5+g5O1HLCeSU/BEhW42+TvTRAB+sQQrC01eeMdAAkl+I2V
+         neAxvdH+cSJwLuVJoG4WnQhSctvSz8g4AJHouIzt33bQiWYng6Kqn91yIOzyYJAG4oW/
+         WxFRS5S6LxArC3+RaOwV5ClOmhPCrSvcsjtHDUDPKcnKGxmJMx5wUjrW/8zf5096wZ6A
+         KPPGBp7mIRdJsxpsU0svbOTYwSkvLuiAMEeVHIf/canVYTxOrpDUDZurM1mbAsjSntX8
+         sdhjNuFVfwzeX83sYQo/JymaYNstNWmKVN8GbjBK8e+3tHeKMFm9mA3JLKB2tNvLBkVI
+         ljZA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772431381; x=1773036181; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3wSCMIgFyPDN8ZsWOziBhAMpjDkgcKvVXQMlKIyyHF0=;
-        b=icDCHWuqGfEUg10L+g/pAyb2SNVE9XtstjttTIp4X3MLNB/8l4FpFUPtzifnegNg+B
-         qQKrUQkkegYYVXoo6q6XUVUlKiwF3CpBdLwySRQVJMOlExV17rwlE8tWa89NUNI/7d34
-         Z+h0omBAC40nsg0uuZE0HiGOSYMEruwOJdrtqo984Ik3CQv7+3qf8cv1fKsBWv3p4k0J
-         GQnnxiIJX848iaHbqzGmIqev1dLcUIGk0END/hHAFxx3rEhsY8lJMvNhLMnlq8Hx2tPx
-         609tVJmdYZsVz+qhHkfwzX0htLNM62yXJ36Khn5XZ/EdWd1sPi4S0xzwkr348AW+mWP2
-         tu+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772431381; x=1773036181;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1772431388; x=1773036188; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3wSCMIgFyPDN8ZsWOziBhAMpjDkgcKvVXQMlKIyyHF0=;
-        b=tnWmiX1UHbGgSXe8Wx3YZikEtU7xy4TIcLfM/ZCgboWiR2P9undcXN4jq+tX97rO3N
-         /6KdppyA4RHVBwTo0hq1zaFJD9xAoOrLvsVHRlrcoNBSsCyq6Ihttu/t0lCBjiKLQGE9
-         0tdMIK5MZd5Sw6uyizJmkQYuLY5xUJtr56Ls5wxYwwtMnDF/xpxVnBL6ggrqKJn+Bofj
-         leFP4m07m5G4FeYlU9sosazp/nJhsmpk5ZBSBsteu5Z7flM9kz0OfWPSluRqd2tu8YKz
-         IcdUg8PKPDwpMcqhmKuGnIWuPZ0AwNFIai7+4Cm0wrl6dY2ffFIjIQ1dffvPjFvcT8K7
-         5IjA==
-X-Forwarded-Encrypted: i=1; AJvYcCWNNA073jwX2y+qI8OTt9zvZaPgDINmPOTuk7dwnSABfCRDpb53ulM7GvDkKxGI1CcKaqCi@lists.linux.dev
-X-Gm-Message-State: AOJu0YxOdkbUCfPgxVOPgW4LJ/imzwVQqYOVHy5EXivHgBCmhSuw6X8P
-	6M43810inMHmlfa3pfAXZuds+QE7FBINJGqYsptz3fNlMSDsKtO2+SY+
-X-Gm-Gg: ATEYQzyh4amJfhC+BQt93GR8xbcBnsm8SQdprMuySO6pmgqSA3LFRGVVeBxd+UtlU+8
-	XouuuqpKbq7z7OsPW0VZZTjx7manWRiSGoLR9rJGZJLSD+BSmJKbdbr8pW7cUZhMHTlILsA1rJa
-	uunzAKFNJD5Jtj7MiLU/Hhc8cwRC0YfXNtbN1+//4pncr/W6PodrVM6psYdwQBsPrTG+xpddfdt
-	rbvI0VHWTPR0/Th7UMqsUb390jajQ3dyM99bCYMFOIEuyucdKJ8NkIt1du2i2GPYy3Xh0LLgamj
-	1Z5/pV9csPbvMeQYrXj2Vs/lN99QCcxNuQpDXk2OTYSRKH8YI/E4E33W6C2Ju/hPaJzHcdhnDya
-	uRojzIt+Z3VnefjQcG7H0wuDLeYSP8AGs20njwNnCulJRBwu97N7Jb6zfMJZ555c6ZNWB1UO3eo
-	aDg3eN0pea/Iy6eFzVoz0DGp8qCzwJAFKhSc6WL8K5L3jaLeTrXwuVsvrqyXbQ9vJ1denm8mGZ4
-	xjJAMtLuJWpWcW66T3KTPKzoqQKuAAqbYfBNkXGcYbVl09lLK9I9NDU1+vA274a7+svJjhtYtA8
-	m7mTKDqhew==
-X-Received: by 2002:a05:6a00:bc83:b0:824:3bd9:aac6 with SMTP id d2e1a72fcca58-8274d95b7f0mr8512139b3a.16.1772431380848;
-        Sun, 01 Mar 2026 22:03:00 -0800 (PST)
-Received: from yuu-U24E.. (2001-b400-e3d7-5aaf-ef7e-1255-80c7-27e1.emome-ip6.hinet.net. [2001:b400:e3d7:5aaf:ef7e:1255:80c7:27e1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8273a060331sm11521915b3a.62.2026.03.01.22.02.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2026 22:03:00 -0800 (PST)
-From: Yung Chih Su <yuuchihsu@gmail.com>
-To: davem@davemloft.net,
-	dsahern@kernel.org,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Yung Chih Su <yuuchihsu@gmail.com>
-Subject: [PATCH v2] net: ipv4: fix ARM64 alignment fault in multipath hash seed
-Date: Mon,  2 Mar 2026 14:02:47 +0800
-Message-ID: <20260302060247.7066-1-yuuchihsu@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=UjR2Jso0hAuDoeUEgb8RQHlOodoa5Tiq2cd7ca0LZWk=;
+        b=rDkRMd2ZOFss4L04qF557h70F/NLoSaCGyP1LWDueoHiJ8dtiaE6cHF7eA3onW2/Z0
+         xTMnkn7oM8EKI3vkGF9c0Yn99wBVmQWPrjyCR67xa/OkX5kxphfnG/TvIjWaqNje+Scc
+         lp96cGC1zBQPQvWPjGXORmPq3fA+7CPls3IY9sLizW8ob8J98tpf/Bnr/zUJWAoQOE8/
+         22FA5E3cByZC8yQZnU1lwqeOVuzDYbL/tBPP45E0ZQ10ychX17JHNEwDZc31Kj51hiBN
+         WUzunu4ZKLJiwsokN5pZOYF2GC3g5geER4lz5BaWkAjoJ8v+8W8DbnfeZ6u+liljdAeR
+         4x/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772431388; x=1773036188;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UjR2Jso0hAuDoeUEgb8RQHlOodoa5Tiq2cd7ca0LZWk=;
+        b=F+EsTY1Imc3H+6dTmAt0AxnBR18fChZLD4+/hpq1A5pZaOUBZjedr6llsmxiEUwMWk
+         YRsoMmTpTxeRZ/oXxby0Hk4oDqwR23UYkbleUuj4P2YRI+FQ7CX6MzaXrYugNW7VoW+m
+         rDmPxfOPR7kTniUu/bzIEw1s5hbZXu3WN/GN1qRaqknYorJ0njzgqJpLUwT3kYqVpk4k
+         SVmuWczutRTbLd+FOZAfPxToW3pA3XwUhDBXuqlQgF06Mr4BLCMWJvMEgD+EZ+BU1Rty
+         1eAakSGq3uRa1SXz7VnvvrQNiNeJMJeIglBVkL+NzBodPSmhp3mw8qOWB2sbBaDXtCA6
+         b+Gw==
+X-Forwarded-Encrypted: i=1; AJvYcCUmx7fgti0p+5HQ+7JHYMaPX/wap82BNJJfao4WTC/oamNAg1rdh01WBiJ1dGeZChwEgO6J@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzb8biHqd0O7rE7VsBq70i0nxezsrorcXB/rSEYyo1HxBU5k/VW
+	7f0dSqee1Gqbxekq8M3Xm55dCkeNWAqMt7VRAa1BsSYCylXXpAFG+xyhgHkD+8SqAcJFpwZVCcS
+	BWq+4sHx23eYwPNmWoEpZSathCQiybFtlneIMkA7R
+X-Gm-Gg: ATEYQzwN3FKQY6ifkEfxgS9bfUSwhf1dtYr3rC2653f2Tt8CBlO5fYC/Dt05uSobgMI
+	LZ8mCedFbWm3NtEp6InDeucX9LwLkLFmgCyPutr7MZashmxTLccvADTZ67CAjWH9WBtZdBjiIkB
+	Ut3LOkabB6i3cm1KEPh9NdRfAEh3BYytKHJ0jzuQl3pB36Fte/2JJd75s3DRS/wTExqSTu+LuID
+	OgBcjeLmtpNnOu1xh+3U0+Tirci9ignf9FH3ClCn7JTcRqlb0bAN9sJzKWltpdTuKLG99W9N1VH
+	6QNv0G8=
+X-Received: by 2002:a05:622a:5ca:b0:4ee:bac:e3a9 with SMTP id
+ d75a77b69052e-50752a0a185mr159644611cf.68.1772431387431; Sun, 01 Mar 2026
+ 22:03:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260301181457.3539105-8-edumazet@google.com> <202603020743.NEL0agrx-lkp@intel.com>
+In-Reply-To: <202603020743.NEL0agrx-lkp@intel.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 2 Mar 2026 07:02:55 +0100
+X-Gm-Features: AaiRm53wQGM3WwCV3bQMeh1Dn2GLN-C3-snKzACE_E-q2yOPyIOVSeKUAVhiYKE
+Message-ID: <CANn89iLCXFOuMSrNQY27CfOwTfzUoVMkq1Zd+-O50YtCMSEmDw@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next 7/7] net-sysfs: use rps_tag_ptr and remove
+ metadata from rps_dev_flow_table
+To: kernel test robot <lkp@intel.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
+	eric.dumazet@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-`struct sysctl_fib_multipath_hash_seed` contains two u32 fields
-(user_seed and mp_seed), making it an 8-byte structure with a 4-byte
-alignment requirement.
+On Mon, Mar 2, 2026 at 12:39=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Eric,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-a=
+dd-rps_tag_ptr-type-and-helpers/20260302-021900
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20260301181457.3539105-8-edumaze=
+t%40google.com
+> patch subject: [PATCH v2 net-next 7/7] net-sysfs: use rps_tag_ptr and rem=
+ove metadata from rps_dev_flow_table
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/202=
+60302/202603020743.NEL0agrx-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009=
+708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260302/202603020743.NEL0agrx-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603020743.NEL0agrx-lkp=
+@intel.com/
 
-In `fib_multipath_hash_from_keys()`, the code evaluates the entire
-struct atomically via `READ_ONCE()`:
+Yeah, in V3 I will remove the BITS_PER_LONG distinction, prone to
+errors like this one.
 
-    mp_seed = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed).mp_seed;
-
-While this silently works on GCC by falling back to unaligned regular
-loads which the ARM64 kernel tolerates, it causes a fatal kernel panic
-when compiled with Clang and LTO enabled.
-
-Commit e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire
-when CONFIG_LTO=y") strengthens `READ_ONCE()` to use Load-Acquire
-instructions (`ldar` / `ldapr`) to prevent compiler reordering bugs
-under Clang LTO. Since the macro evaluates the full 8-byte struct,
-Clang emits a 64-bit `ldar` instruction. ARM64 architecture strictly
-requires `ldar` to be naturally aligned, thus executing it on a 4-byte
-aligned address triggers a strict Alignment Fault (FSC = 0x21).
-
-Fix the read side by moving the `READ_ONCE()` directly to the `u32`
-member, which emits a safe 32-bit `ldar Wn`.
-
-Furthermore, Eric Dumazet pointed out that `WRITE_ONCE()` on the entire
-struct in `proc_fib_multipath_hash_set_seed()` is also flawed. Analysis
-shows that Clang splits this 8-byte write into two separate 32-bit
-`str` instructions. While this avoids an alignment fault, it destroys
-atomicity and exposes a tear-write vulnerability. Fix this by
-explicitly splitting the write into two 32-bit `WRITE_ONCE()`
-operations.
-
-Finally, add the missing `READ_ONCE()` when reading `user_seed` in
-`proc_fib_multipath_hash_seed()` to ensure proper pairing and
-concurrency safety.
-
-Fixes: 4ee2a8cace3f ("net: ipv4: Add a sysctl to set multipath hash seed")
-Suggested-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Yung Chih Su <yuuchihsu@gmail.com>
----
-v2:
-  - Split WRITE_ONCE(struct) into two 32-bit WRITE_ONCE()s in 
-    proc_fib_multipath_hash_set_seed() to fix a tear-write vulnerability.
-  - Add missing READ_ONCE() for user_seed in proc_fib_multipath_hash_seed()
-    per Eric Dumazet's suggestion.
-  - Update Fixes tag to use the standard 12-char abbreviated format
-    per Jakub Kicinski's suggestion.
-
- include/net/ip_fib.h       | 2 +-
- net/ipv4/sysctl_net_ipv4.c | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-index b4495c38e0a0..318593743b6e 100644
---- a/include/net/ip_fib.h
-+++ b/include/net/ip_fib.h
-@@ -559,7 +559,7 @@ static inline u32 fib_multipath_hash_from_keys(const struct net *net,
- 	siphash_aligned_key_t hash_key;
- 	u32 mp_seed;
- 
--	mp_seed = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed).mp_seed;
-+	mp_seed = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed.mp_seed);
- 	fib_multipath_hash_construct_key(&hash_key, mp_seed);
- 
- 	return flow_hash_from_keys_seed(keys, &hash_key);
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 643763bc2142..5654cc9c8a0b 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -486,7 +486,8 @@ static void proc_fib_multipath_hash_set_seed(struct net *net, u32 user_seed)
- 			    proc_fib_multipath_hash_rand_seed),
- 	};
- 
--	WRITE_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed, new);
-+	WRITE_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed.user_seed, new.user_seed);
-+	WRITE_ONCE(net->ipv4.sysctl_fib_multipath_hash_seed.mp_seed, new.mp_seed);
- }
- 
- static int proc_fib_multipath_hash_seed(const struct ctl_table *table, int write,
-@@ -500,7 +501,7 @@ static int proc_fib_multipath_hash_seed(const struct ctl_table *table, int write
- 	int ret;
- 
- 	mphs = &net->ipv4.sysctl_fib_multipath_hash_seed;
--	user_seed = mphs->user_seed;
-+	user_seed = READ_ONCE(mphs->user_seed);
- 
- 	tmp = *table;
- 	tmp.data = &user_seed;
--- 
-2.43.0
-
+ #if BITS_PER_LONG > 32
+ ...
+#else
+  ...
+#endif
