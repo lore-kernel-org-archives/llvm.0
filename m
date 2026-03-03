@@ -1,443 +1,310 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB78D373BF4;
-	Tue,  3 Mar 2026 06:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6FF37B037;
+	Tue,  3 Mar 2026 06:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772518611; cv=none; b=pZD6Rzvw3TfPT7J/HaiNOdvMMiBxJd8b58ElhJRCTTywEXjTIbUJET/GhbRSjPHU8GnZ9WBCb1fdcxYFSBCQYGelh7Eg1/WX1bhc3TFSVfoFZrLj4NQ+DPWm4qKTsz6k2zbAe9k5mX1RtUCraCypTlLbzQ3gRvHJLnEIXDFj8m0=
+	t=1772518638; cv=none; b=Su8dt1MIIhG0F4V6IrwFNMEvQh9TmpHWJAmC7i65vgGlYp6DOds4P5D1U4ntP/3OLm21EJ3lbSspAf7k74/enK7aQYKtLagAkWN37sudt/0o5SBYdO1q61NFmMxOulTQOgIyv3A/UGuh2eJzC/5k4CrK5+LncIFjA7sHxHjVN8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772518611; c=relaxed/simple;
-	bh=qJ+PLK7BdwneDiS8sFPseo/erRuxAvoNiPp5CXXLlx4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XCHn+w9QTrjkOHdoqVXiOQMgyc/MPZmL3uMBfFi3C/T8JEewOANn5WkJ1WvVdSyTDuxrju8uytliP7UqP2aAFsSoGU5cH881m5bgZcSJ7+oi3OInhgQo2vzvdoTYsu7xlZMQcQokEUedQrvBmWu0BYldxu0WEjFWqTHJ0QlTf8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e0CUIRBH; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1772518638; c=relaxed/simple;
+	bh=ka6eL33Jt9I35ApjzE1CrM6M3nQb1iZZQV/GPTd4NfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q2VUYmm1Ia0wUXPtm/9vxXN5xZjsgxwkyCV09ajRv2h8qL4z4L/PSjYINGzMkBG98tMrgvcKoB4kWM41sPKP6KmLOkg2b9lpiVTbpXjy8+Zix5OBtbK5AIY2XD6o7sR/jjVuaBkTC3ZL5YOPbZhM/G1OiazTGGJKPb2pIO2ZVeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yc9DDdd4; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e0CUIRBH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yc9DDdd4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772518609; x=1804054609;
-  h=date:from:to:cc:subject:message-id;
-  bh=qJ+PLK7BdwneDiS8sFPseo/erRuxAvoNiPp5CXXLlx4=;
-  b=e0CUIRBHgVE+56tgPyoMLXFV+l29QoNCyYTntVNj79PGbdt9JMCcInaV
-   pQ80bQiGaMRbvyrNUN0vMdpHddeWsISiU+GEx3T5HL9/J3oHRPsqV9A0r
-   UDTQurNMceB6Zhbra/lvgVtYJndzg+QSLXsP42+2BnHNNQ9qAp7HmY5MA
-   YqTLBY0SIUMrpNUBkQhNn2+Cfr3d0kKD4oXDrqz6r5SuOQopfmR4+Jt80
-   GS46K9e3Xx+E2U5IrjLWopMy362cVGmFMwTRun6zdL5YwR3mSCE09icit
-   b660Y/gwroQb1xlfF5LKIb5csGujZYwlXYhXw7v1wsDt1d8GqCDRc/Ohi
-   w==;
-X-CSE-ConnectionGUID: 6Qv+qmh5SsGsgW6OaAbgKA==
-X-CSE-MsgGUID: Sm3WcHCAQ9OVlnD4YpCqjA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="73608126"
+  t=1772518636; x=1804054636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ka6eL33Jt9I35ApjzE1CrM6M3nQb1iZZQV/GPTd4NfU=;
+  b=Yc9DDdd4BL881fmou8guMZOdfNkJLK1AMexJEjpY0E3ACgNYXqxxT3gJ
+   XKSQrBWl+sxIVUOrptSJ2AfSbZpVpDXpmIfDQOverxxgjZGl/Lbjc2riT
+   CH0dYcQGBot0ot+T4ERINTax27SvNq1csQU9tZ0O5WUn3tDA9x/Ips4ej
+   lYCbay3y9dip6mxiSwZcdaB6I4Br08D7rndJXRizF1EjSaEcz+BXHjpaC
+   8Umee6sw61qqG3QlsnJqRikTo6ezca0ifBkvbkT7wgtANzuO4pytB8uQz
+   t71AtPnKKh6sOvLaOwprnPA3qyH8Z8sebmVk3XSs51DM7q+fegsylFOdn
+   Q==;
+X-CSE-ConnectionGUID: 38utZliGQ86dqNS+apl1OQ==
+X-CSE-MsgGUID: lSJsDAD+SmGUcferLVc0kg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="83881526"
 X-IronPort-AV: E=Sophos;i="6.21,321,1763452800"; 
-   d="scan'208";a="73608126"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 22:16:49 -0800
-X-CSE-ConnectionGUID: Am4G33rWRvSx/jidqSC0xw==
-X-CSE-MsgGUID: eL+TqUP7QDm6HGGmzKcaNA==
+   d="scan'208";a="83881526"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 22:17:15 -0800
+X-CSE-ConnectionGUID: gYofQhR5TsqGfn2cm4Ys0A==
+X-CSE-MsgGUID: sMnBYowSRkqWoGUCHV3PJw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,321,1763452800"; 
-   d="scan'208";a="220920229"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 02 Mar 2026 22:16:47 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
+   d="scan'208";a="222056905"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 02 Mar 2026 22:17:14 -0800
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vxJ3l-000000001mr-10F1;
-	Tue, 03 Mar 2026 06:16:45 +0000
-Date: Tue, 03 Mar 2026 14:16:00 +0800
+	id 1vxJ4B-000000001Nx-1dxo;
+	Tue, 03 Mar 2026 06:17:11 +0000
+Date: Tue, 3 Mar 2026 07:16:52 +0100
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-next 17/17] fs/ceph/addr.c:297:8: error:
- call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202603031429.hAHIfXFH-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Milos Nikic <nikic.milos@gmail.com>, jack@suse.cz
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Milos Nikic <nikic.milos@gmail.com>
+Subject: Re: [PATCH v3 2/2] jbd2: gracefully abort on transaction state
+ corruptions
+Message-ID: <202603030706.NpyA7pqe-lkp@intel.com>
+References: <20260303005502.337108-3-nikic.milos@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303005502.337108-3-nikic.milos@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
-head:   955516269df2e8601e8736e89e91820dc3d053c2
-commit: 955516269df2e8601e8736e89e91820dc3d053c2 [17/17] netfs: Combine prepare and issue ops and grab the buffers on request
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260303/202603031429.hAHIfXFH-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260303/202603031429.hAHIfXFH-lkp@intel.com/reproduce)
+Hi Milos,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on tytso-ext4/dev next-20260302]
+[cannot apply to linus/master v6.16-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Milos-Nikic/jbd2-gracefully-abort-instead-of-panicking-on-unlocked-buffer/20260303-085946
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20260303005502.337108-3-nikic.milos%40gmail.com
+patch subject: [PATCH v3 2/2] jbd2: gracefully abort on transaction state corruptions
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260303/202603030706.NpyA7pqe-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260303/202603030706.NpyA7pqe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603031429.hAHIfXFH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603030706.NpyA7pqe-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/ceph/addr.c:297:8: error: call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     297 |         err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-         |               ^
->> fs/ceph/addr.c:327:71: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     327 |         err = copy_to_iter(iinfo->inline_data + subreq->start, len, &subreq->io_iter);
-         |                                                                      ~~~~~~  ^
-   fs/ceph/addr.c:401:8: error: call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     401 |         err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-         |               ^
-   fs/ceph/addr.c:425:11: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     425 |                 subreq->io_iter.count = len;
-         |                 ~~~~~~  ^
-   fs/ceph/addr.c:427:44: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     427 |                 err = iov_iter_get_pages_alloc2(&subreq->io_iter, &pages, len, &page_off);
-         |                                                  ~~~~~~  ^
-   fs/ceph/addr.c:443:47: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     443 |                 osd_req_op_extent_osd_iter(req, 0, &subreq->io_iter);
-         |                                                     ~~~~~~  ^
->> fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-     472 |         __set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-         |                   ^
->> fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
->> fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
->> fs/ceph/addr.c:517:22: error: no member named 'sreq_max_len' in 'struct netfs_io_stream'
-     517 |         rreq->io_streams[0].sreq_max_len = fsc->mount_options->rsize;
-         |         ~~~~~~~~~~~~~~~~~~~ ^
-   10 errors generated.
---
->> fs/netfs/write_issue.c:218:7: warning: logical not is only applied to the left hand side of this comparison [-Wlogical-not-parentheses]
-     218 |                 if (!stream->collected_to == 0)
-         |                     ^                     ~~
-   fs/netfs/write_issue.c:218:7: note: add parentheses after the '!' to evaluate the comparison first
-     218 |                 if (!stream->collected_to == 0)
-         |                     ^                         
-         |                      (                        )
-   fs/netfs/write_issue.c:218:7: note: add parentheses around left hand side expression to silence this warning
-     218 |                 if (!stream->collected_to == 0)
-         |                     ^
-         |                     (                    )
->> fs/netfs/write_issue.c:555:25: error: no member named 'dispatch_cursor' in 'struct netfs_io_request'
-     555 |                 bvecq_pos_move(&wreq->dispatch_cursor, queue);
-         |                                 ~~~~  ^
-   fs/netfs/write_issue.c:556:9: error: no member named 'dispatch_cursor' in 'struct netfs_io_request'
-     556 |                 wreq->dispatch_cursor.slot = 0;
-         |                 ~~~~  ^
->> fs/netfs/write_issue.c:920:20: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     920 |         _enter("%lx,%lx", iov_iter_count(iter), len);
-         |                 ~~~       ^~~~~~~~~~~~~~~~~~~~
-         |                 %zx
-   fs/netfs/internal.h:598:17: note: expanded from macro '_enter'
-     598 |                 kenter(FMT, ##__VA_ARGS__);     \
-         |                        ~~~    ^~~~~~~~~~~
-   fs/netfs/internal.h:585:65: note: expanded from macro 'kenter'
-     585 | #define kenter(FMT, ...) dbgprintk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-         |                                             ~~~                 ^~~~~~~~~~~
-   fs/netfs/internal.h:583:46: note: expanded from macro 'dbgprintk'
-     583 |         printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
-         |                           ~~~                       ^~~~~~~~~~~
+>> fs/jbd2/transaction.c:1547:11: warning: variable 'journal' is uninitialized when used here [-Wuninitialized]
+    1547 |                                journal->j_devname, jh->b_transaction,
+         |                                ^~~~~~~
+   include/linux/printk.h:554:33: note: expanded from macro 'pr_err'
+     554 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
    include/linux/printk.h:511:60: note: expanded from macro 'printk'
      511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
+         |                                                            ^~~~~~~~~~~
    include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
      483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   fs/netfs/write_issue.c:920:42: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     920 |         _enter("%lx,%lx", iov_iter_count(iter), len);
-         |                     ~~~                         ^~~
-         |                     %zx
-   fs/netfs/internal.h:598:17: note: expanded from macro '_enter'
-     598 |                 kenter(FMT, ##__VA_ARGS__);     \
-         |                        ~~~    ^~~~~~~~~~~
-   fs/netfs/internal.h:585:65: note: expanded from macro 'kenter'
-     585 | #define kenter(FMT, ...) dbgprintk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-         |                                             ~~~                 ^~~~~~~~~~~
-   fs/netfs/internal.h:583:46: note: expanded from macro 'dbgprintk'
-     583 |         printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
-         |                           ~~~                       ^~~~~~~~~~~
-   include/linux/printk.h:511:60: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   3 warnings and 2 errors generated.
---
->> fs/nfs/fscache.c:275:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-     275 |         __set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-         |                   ^
->> fs/nfs/fscache.c:275:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
->> fs/nfs/fscache.c:275:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
->> fs/nfs/fscache.c:276:22: error: no member named 'sreq_max_len' in 'struct netfs_io_stream'
-     276 |         rreq->io_streams[0].sreq_max_len = NFS_SB(rreq->inode->i_sb)->rsize;
-         |         ~~~~~~~~~~~~~~~~~~~ ^
-   4 errors generated.
---
->> fs/smb/client/cifssmb.c:1470:31: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-    1470 |                                  .rq_iter = rdata->subreq.io_iter };
-         |                                             ~~~~~~~~~~~~~ ^
-   fs/smb/client/cifssmb.c:2005:31: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-    2005 |         rqst.rq_iter = wdata->subreq.io_iter;
-         |                        ~~~~~~~~~~~~~ ^
-   2 errors generated.
+         |                                 ^~~~~~~~~~~
+   fs/jbd2/transaction.c:1520:20: note: initialize the variable 'journal' to silence this warning
+    1520 |         journal_t *journal;
+         |                           ^
+         |                            = NULL
+   1 warning generated.
 
 
-vim +/netfs_subreq_get_buffer +297 fs/ceph/addr.c
+vim +/journal +1547 fs/jbd2/transaction.c
 
-   271	
-   272	static int ceph_netfs_issue_op_inline(struct netfs_io_subrequest *subreq,
-   273					      struct netfs_read_context *rctx)
-   274	{
-   275		struct netfs_io_request *rreq = subreq->rreq;
-   276		struct inode *inode = rreq->inode;
-   277		struct ceph_mds_reply_info_parsed *rinfo;
-   278		struct ceph_mds_reply_info_in *iinfo;
-   279		struct ceph_mds_request *req;
-   280		struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(inode->i_sb);
-   281		struct ceph_inode_info *ci = ceph_inode(inode);
-   282		ssize_t err;
-   283		size_t len;
-   284		int mode;
-   285	
-   286		if (rreq->origin != NETFS_UNBUFFERED_READ &&
-   287		    rreq->origin != NETFS_DIO_READ)
-   288			__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
-   289		__clear_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
-   290	
-   291		if (subreq->start >= inode->i_size) {
-   292			__set_bit(NETFS_SREQ_HIT_EOF, &subreq->flags);
-   293			err = 0;
-   294			goto out;
-   295		}
-   296	
- > 297		err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-   298		if (err < 0)
-   299			return err;
-   300	
-   301		/* We need to fetch the inline data. */
-   302		mode = ceph_try_to_choose_auth_mds(inode, CEPH_STAT_CAP_INLINE_DATA);
-   303		req = ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETATTR, mode);
-   304		if (IS_ERR(req))
-   305			return PTR_ERR(req);
-   306	
-   307		req->r_ino1 = ci->i_vino;
-   308		req->r_args.getattr.mask = cpu_to_le32(CEPH_STAT_CAP_INLINE_DATA);
-   309		req->r_num_caps = 2;
-   310	
-   311		/* After this point, we're not allowed to return an error. */
-   312		netfs_mark_read_submission(subreq, rctx);
-   313	
-   314		err = ceph_mdsc_do_request(mdsc, NULL, req);
-   315		if (err < 0)
-   316			goto out;
-   317	
-   318		rinfo = &req->r_reply_info;
-   319		iinfo = &rinfo->targeti;
-   320		if (iinfo->inline_version == CEPH_INLINE_NONE) {
-   321			/* The data got uninlined */
-   322			ceph_mdsc_put_request(req);
-   323			return 1;
-   324		}
-   325	
-   326		len = min_t(size_t, iinfo->inline_len - subreq->start, subreq->len);
- > 327		err = copy_to_iter(iinfo->inline_data + subreq->start, len, &subreq->io_iter);
-   328		if (err == 0) {
-   329			err = -EFAULT;
-   330		} else {
-   331			subreq->transferred += err;
-   332			err = 0;
-   333		}
-   334	
-   335		ceph_mdsc_put_request(req);
-   336	out:
-   337		subreq->error = err;
-   338		trace_netfs_sreq(subreq, netfs_sreq_trace_io_progress);
-   339		netfs_read_subreq_terminated(subreq);
-   340		return -EIOCBQUEUED;
-   341	}
-   342	
-   343	static int ceph_netfs_issue_read(struct netfs_io_subrequest *subreq,
-   344					 struct netfs_read_context *rctx)
-   345	{
-   346		struct netfs_io_request *rreq = subreq->rreq;
-   347		struct inode *inode = rreq->inode;
-   348		struct ceph_inode_info *ci = ceph_inode(inode);
-   349		struct ceph_fs_client *fsc = ceph_inode_to_fs_client(inode);
-   350		struct ceph_client *cl = fsc->client;
-   351		struct ceph_osd_request *req = NULL;
-   352		struct ceph_vino vino = ceph_vino(inode);
-   353		u64 objno, objoff, len, off = subreq->start;
-   354		u32 maxlen;
-   355		int err;
-   356		bool sparse = IS_ENCRYPTED(inode) || ceph_test_mount_opt(fsc, SPARSEREAD);
-   357		int extent_cnt;
-   358	
-   359		if (ceph_inode_is_shutdown(inode))
-   360			return -EIO;
-   361	
-   362		if (ceph_has_inline_data(ci)) {
-   363			err = ceph_netfs_issue_op_inline(subreq, rctx);
-   364			if (err != 1)
-   365				return err;
-   366		}
-   367	
-   368		/* Truncate the extent at the end of the current block */
-   369		ceph_calc_file_object_mapping(&ci->i_layout, subreq->start, subreq->len,
-   370					      &objno, &objoff, &maxlen);
-   371		maxlen = umin(maxlen, fsc->mount_options->rsize);
-   372		len = umin(subreq->len, maxlen);
-   373		subreq->len = len;
-   374	
-   375		// TODO: This rounding here is slightly dodgy.  It *should* work, for
-   376		// now, as the cache only deals in blocks that are a multiple of
-   377		// PAGE_SIZE and fscrypt blocks are at most PAGE_SIZE.  What needs to
-   378		// happen is for the fscrypt driving to be moved into netfslib and the
-   379		// data in the cache also to be stored encrypted.
-   380		ceph_fscrypt_adjust_off_and_len(inode, &off, &len);
-   381	
-   382		req = ceph_osdc_new_request(&fsc->client->osdc, &ci->i_layout, vino,
-   383				off, &len, 0, 1, sparse ? CEPH_OSD_OP_SPARSE_READ : CEPH_OSD_OP_READ,
-   384				CEPH_OSD_FLAG_READ, NULL, ci->i_truncate_seq,
-   385				ci->i_truncate_size, false);
-   386		if (IS_ERR(req))
-   387			return PTR_ERR(req);
-   388	
-   389		if (sparse) {
-   390			extent_cnt = __ceph_sparse_read_ext_count(inode, len);
-   391			err = ceph_alloc_sparse_ext_map(&req->r_ops[0], extent_cnt);
-   392			if (err) {
-   393				ceph_osdc_put_request(req);
-   394				return err;
-   395			}
-   396		}
-   397	
-   398		doutc(cl, "%llx.%llx pos=%llu orig_len=%zu len=%llu\n",
-   399		      ceph_vinop(inode), subreq->start, subreq->len, len);
-   400	
-   401		err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-   402		if (err < 0) {
-   403			ceph_osdc_put_request(req);
-   404			return err;
-   405		}
-   406	
-   407		/*
-   408		 * FIXME: For now, use CEPH_OSD_DATA_TYPE_PAGES instead of _ITER for
-   409		 * encrypted inodes. We'd need infrastructure that handles an iov_iter
-   410		 * instead of page arrays, and we don't have that as of yet. Once the
-   411		 * dust settles on the write helpers and encrypt/decrypt routines for
-   412		 * netfs, we should be able to rework this.
-   413		 */
-   414		if (IS_ENCRYPTED(inode)) {
-   415			struct page **pages;
-   416			size_t page_off;
-   417	
-   418			/*
-   419			 * FIXME: io_iter.count needs to be corrected to aligned
-   420			 * length. Otherwise, iov_iter_get_pages_alloc2() operates
-   421			 * with the initial unaligned length value. As a result,
-   422			 * ceph_msg_data_cursor_init() triggers BUG_ON() in the case
-   423			 * if msg->sparse_read_total > msg->data_length.
-   424			 */
- > 425			subreq->io_iter.count = len;
-   426	
-   427			err = iov_iter_get_pages_alloc2(&subreq->io_iter, &pages, len, &page_off);
-   428			if (err < 0) {
-   429				doutc(cl, "%llx.%llx failed to allocate pages, %d\n",
-   430				      ceph_vinop(inode), err);
-   431				ceph_osdc_put_request(req);
-   432				return -EIO;
-   433			}
-   434	
-   435			/* should always give us a page-aligned read */
-   436			WARN_ON_ONCE(page_off);
-   437			len = err;
-   438			err = 0;
-   439	
-   440			osd_req_op_extent_osd_data_pages(req, 0, pages, len, 0, false,
-   441							 false);
-   442		} else {
- > 443			osd_req_op_extent_osd_iter(req, 0, &subreq->io_iter);
-   444		}
-   445		if (!ceph_inc_osd_stopping_blocker(fsc->mdsc)) {
-   446			ceph_osdc_put_request(req);
-   447			return -EIO;
-   448		}
-   449		req->r_callback = finish_netfs_read;
-   450		req->r_priv = subreq;
-   451		req->r_inode = inode;
-   452		ihold(inode);
-   453	
-   454		/* After this point, we're not allowed to return an error. */
-   455		netfs_mark_read_submission(subreq, rctx);
-   456		ceph_osdc_start_request(req->r_osdc, req);
-   457		ceph_osdc_put_request(req);
-   458		doutc(cl, "%llx.%llx result -EIOCBQUEUED\n", ceph_vinop(inode));
-   459		return -EIOCBQUEUED;
-   460	}
-   461	
-   462	static int ceph_init_request(struct netfs_io_request *rreq, struct file *file)
-   463	{
-   464		struct inode *inode = rreq->inode;
-   465		struct ceph_fs_client *fsc = ceph_inode_to_fs_client(inode);
-   466		struct ceph_client *cl = ceph_inode_to_client(inode);
-   467		int got = 0, want = CEPH_CAP_FILE_CACHE;
-   468		struct ceph_netfs_request_data *priv;
-   469		int ret = 0;
-   470	
-   471		/* [DEPRECATED] Use PG_private_2 to mark folio being written to the cache. */
- > 472		__set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-   473	
-   474		if (rreq->origin != NETFS_READAHEAD)
-   475			return 0;
-   476	
-   477		priv = kzalloc_obj(*priv, GFP_NOFS);
-   478		if (!priv)
-   479			return -ENOMEM;
-   480	
-   481		if (file) {
-   482			struct ceph_rw_context *rw_ctx;
-   483			struct ceph_file_info *fi = file->private_data;
-   484	
-   485			priv->file_ra_pages = file->f_ra.ra_pages;
-   486			priv->file_ra_disabled = file->f_mode & FMODE_RANDOM;
-   487	
-   488			rw_ctx = ceph_find_rw_context(fi);
-   489			if (rw_ctx) {
-   490				rreq->netfs_priv = priv;
-   491				return 0;
-   492			}
-   493		}
-   494	
-   495		/*
-   496		 * readahead callers do not necessarily hold Fcb caps
-   497		 * (e.g. fadvise, madvise).
-   498		 */
-   499		ret = ceph_try_get_caps(inode, CEPH_CAP_FILE_RD, want, true, &got);
-   500		if (ret < 0) {
-   501			doutc(cl, "%llx.%llx, error getting cap\n", ceph_vinop(inode));
-   502			goto out;
-   503		}
-   504	
-   505		if (!(got & want)) {
-   506			doutc(cl, "%llx.%llx, no cache cap\n", ceph_vinop(inode));
-   507			ret = -EACCES;
-   508			goto out;
-   509		}
-   510		if (ret == 0) {
-   511			ret = -EACCES;
-   512			goto out;
-   513		}
-   514	
-   515		priv->caps = got;
-   516		rreq->netfs_priv = priv;
-   517		rreq->io_streams[0].sreq_max_len = fsc->mount_options->rsize;
-   518	
-   519	out:
-   520		if (ret < 0) {
-   521			if (got)
-   522				ceph_put_cap_refs(ceph_inode(inode), got);
-   523			kfree(priv);
-   524		}
-   525	
-   526		return ret;
-   527	}
-   528	
+  1493	
+  1494	/**
+  1495	 * jbd2_journal_dirty_metadata() -  mark a buffer as containing dirty metadata
+  1496	 * @handle: transaction to add buffer to.
+  1497	 * @bh: buffer to mark
+  1498	 *
+  1499	 * mark dirty metadata which needs to be journaled as part of the current
+  1500	 * transaction.
+  1501	 *
+  1502	 * The buffer must have previously had jbd2_journal_get_write_access()
+  1503	 * called so that it has a valid journal_head attached to the buffer
+  1504	 * head.
+  1505	 *
+  1506	 * The buffer is placed on the transaction's metadata list and is marked
+  1507	 * as belonging to the transaction.
+  1508	 *
+  1509	 * Returns error number or 0 on success.
+  1510	 *
+  1511	 * Special care needs to be taken if the buffer already belongs to the
+  1512	 * current committing transaction (in which case we should have frozen
+  1513	 * data present for that commit).  In that case, we don't relink the
+  1514	 * buffer: that only gets done when the old transaction finally
+  1515	 * completes its commit.
+  1516	 */
+  1517	int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
+  1518	{
+  1519		transaction_t *transaction = handle->h_transaction;
+  1520		journal_t *journal;
+  1521		struct journal_head *jh;
+  1522		int ret = 0;
+  1523	
+  1524		if (!buffer_jbd(bh))
+  1525			return -EUCLEAN;
+  1526	
+  1527		/*
+  1528		 * We don't grab jh reference here since the buffer must be part
+  1529		 * of the running transaction.
+  1530		 */
+  1531		jh = bh2jh(bh);
+  1532		jbd2_debug(5, "journal_head %p\n", jh);
+  1533		JBUFFER_TRACE(jh, "entry");
+  1534	
+  1535		/*
+  1536		 * This and the following assertions are unreliable since we may see jh
+  1537		 * in inconsistent state unless we grab bh_state lock. But this is
+  1538		 * crucial to catch bugs so let's do a reliable check until the
+  1539		 * lockless handling is fully proven.
+  1540		 */
+  1541		if (data_race(jh->b_transaction != transaction &&
+  1542		    jh->b_next_transaction != transaction)) {
+  1543			spin_lock(&jh->b_state_lock);
+  1544			if (WARN_ON_ONCE(jh->b_transaction != transaction &&
+  1545					 jh->b_next_transaction != transaction)) {
+  1546				pr_err("JBD2: %s: assertion failure: b_transaction=%p transaction=%p b_next_transaction=%p\n",
+> 1547				       journal->j_devname, jh->b_transaction,
+  1548				       transaction, jh->b_next_transaction);
+  1549				ret = -EINVAL;
+  1550				goto out_unlock_bh;
+  1551			}
+  1552			spin_unlock(&jh->b_state_lock);
+  1553		}
+  1554		if (data_race(jh->b_modified == 1)) {
+  1555			/* If it's in our transaction it must be in BJ_Metadata list. */
+  1556			if (data_race(jh->b_transaction == transaction &&
+  1557			    jh->b_jlist != BJ_Metadata)) {
+  1558				spin_lock(&jh->b_state_lock);
+  1559				if (jh->b_transaction == transaction &&
+  1560				    jh->b_jlist != BJ_Metadata)
+  1561					pr_err("JBD2: assertion failure: h_type=%u h_line_no=%u block_no=%llu jlist=%u\n",
+  1562					       handle->h_type, handle->h_line_no,
+  1563					       (unsigned long long) bh->b_blocknr,
+  1564					       jh->b_jlist);
+  1565				if (WARN_ON_ONCE(jh->b_transaction == transaction &&
+  1566						 jh->b_jlist != BJ_Metadata)) {
+  1567					ret = -EINVAL;
+  1568					goto out_unlock_bh;
+  1569				}
+  1570				spin_unlock(&jh->b_state_lock);
+  1571			}
+  1572			goto out;
+  1573		}
+  1574	
+  1575		spin_lock(&jh->b_state_lock);
+  1576	
+  1577		if (is_handle_aborted(handle)) {
+  1578			/*
+  1579			 * Check journal aborting with @jh->b_state_lock locked,
+  1580			 * since 'jh->b_transaction' could be replaced with
+  1581			 * 'jh->b_next_transaction' during old transaction
+  1582			 * committing if journal aborted, which may fail
+  1583			 * assertion on 'jh->b_frozen_data == NULL'.
+  1584			 */
+  1585			ret = -EROFS;
+  1586			goto out_unlock_bh;
+  1587		}
+  1588	
+  1589		journal = transaction->t_journal;
+  1590	
+  1591		if (jh->b_modified == 0) {
+  1592			/*
+  1593			 * This buffer's got modified and becoming part
+  1594			 * of the transaction. This needs to be done
+  1595			 * once a transaction -bzzz
+  1596			 */
+  1597			if (WARN_ON_ONCE(jbd2_handle_buffer_credits(handle) <= 0)) {
+  1598				ret = -ENOSPC;
+  1599				goto out_unlock_bh;
+  1600			}
+  1601			jh->b_modified = 1;
+  1602			handle->h_total_credits--;
+  1603		}
+  1604	
+  1605		/*
+  1606		 * fastpath, to avoid expensive locking.  If this buffer is already
+  1607		 * on the running transaction's metadata list there is nothing to do.
+  1608		 * Nobody can take it off again because there is a handle open.
+  1609		 * I _think_ we're OK here with SMP barriers - a mistaken decision will
+  1610		 * result in this test being false, so we go in and take the locks.
+  1611		 */
+  1612		if (jh->b_transaction == transaction && jh->b_jlist == BJ_Metadata) {
+  1613			JBUFFER_TRACE(jh, "fastpath");
+  1614			if (unlikely(jh->b_transaction !=
+  1615				     journal->j_running_transaction)) {
+  1616				printk(KERN_ERR "JBD2: %s: "
+  1617				       "jh->b_transaction (%llu, %p, %u) != "
+  1618				       "journal->j_running_transaction (%p, %u)\n",
+  1619				       journal->j_devname,
+  1620				       (unsigned long long) bh->b_blocknr,
+  1621				       jh->b_transaction,
+  1622				       jh->b_transaction ? jh->b_transaction->t_tid : 0,
+  1623				       journal->j_running_transaction,
+  1624				       journal->j_running_transaction ?
+  1625				       journal->j_running_transaction->t_tid : 0);
+  1626				ret = -EINVAL;
+  1627			}
+  1628			goto out_unlock_bh;
+  1629		}
+  1630	
+  1631		set_buffer_jbddirty(bh);
+  1632	
+  1633		/*
+  1634		 * Metadata already on the current transaction list doesn't
+  1635		 * need to be filed.  Metadata on another transaction's list must
+  1636		 * be committing, and will be refiled once the commit completes:
+  1637		 * leave it alone for now.
+  1638		 */
+  1639		if (jh->b_transaction != transaction) {
+  1640			JBUFFER_TRACE(jh, "already on other transaction");
+  1641			if (unlikely(((jh->b_transaction !=
+  1642				       journal->j_committing_transaction)) ||
+  1643				     (jh->b_next_transaction != transaction))) {
+  1644				printk(KERN_ERR "jbd2_journal_dirty_metadata: %s: "
+  1645				       "bad jh for block %llu: "
+  1646				       "transaction (%p, %u), "
+  1647				       "jh->b_transaction (%p, %u), "
+  1648				       "jh->b_next_transaction (%p, %u), jlist %u\n",
+  1649				       journal->j_devname,
+  1650				       (unsigned long long) bh->b_blocknr,
+  1651				       transaction, transaction->t_tid,
+  1652				       jh->b_transaction,
+  1653				       jh->b_transaction ?
+  1654				       jh->b_transaction->t_tid : 0,
+  1655				       jh->b_next_transaction,
+  1656				       jh->b_next_transaction ?
+  1657				       jh->b_next_transaction->t_tid : 0,
+  1658				       jh->b_jlist);
+  1659				WARN_ON(1);
+  1660				ret = -EINVAL;
+  1661			}
+  1662			/* And this case is illegal: we can't reuse another
+  1663			 * transaction's data buffer, ever. */
+  1664			goto out_unlock_bh;
+  1665		}
+  1666	
+  1667		/* That test should have eliminated the following case: */
+  1668		if (WARN_ON_ONCE(jh->b_frozen_data)) {
+  1669			ret = -EINVAL;
+  1670			goto out_unlock_bh;
+  1671		}
+  1672	
+  1673		JBUFFER_TRACE(jh, "file as BJ_Metadata");
+  1674		spin_lock(&journal->j_list_lock);
+  1675		__jbd2_journal_file_buffer(jh, transaction, BJ_Metadata);
+  1676		spin_unlock(&journal->j_list_lock);
+  1677	out_unlock_bh:
+  1678		spin_unlock(&jh->b_state_lock);
+  1679	out:
+  1680		JBUFFER_TRACE(jh, "exit");
+  1681		return ret;
+  1682	}
+  1683	
 
 -- 
 0-DAY CI Kernel Test Service
