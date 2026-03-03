@@ -1,87 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5195D32AAD1;
-	Tue,  3 Mar 2026 21:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38BC382388
+	for <llvm@lists.linux.dev>; Tue,  3 Mar 2026 23:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772572735; cv=none; b=IvprZ988s5NkmDikmhlYY71xa7fhZ/e812U80bdW6JCBPtwyxddXo1+L/Vz/obTYvE2a1LKt2gji0iEtNSByjaqgvkecNz00UK8S+G6xOtLui08tXBZwVPoWXFDx8u+HIN390wUGj13LHl4ehnZWZ6DUGTwisEm89uUZhbeCn6M=
+	t=1772578855; cv=none; b=JJ91+pmmMhr1Ccy6AlTuBIDMXNpgIRq7t0uBSXVkc5gT2QOePHRnePj7jKI7HZiP5NY3xfrmj/Fh9NNdQ+4ZHEymfxMB10woSdg7QnCmO7cvuhFrFe3rd82yVkIEs0FlSUQ4JWH/U8bytLLfRF49D/XMXBOpdGyyAeby+3kQkY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772572735; c=relaxed/simple;
-	bh=1bXDPQo2hsorF9dKVTtulmXykJ9XQFh953QxQfdEFsk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=oJv0nEg9dMmTdRbDf4pZa3YnDhugUmYtYIJDCCBK3mLZIOnBehPQiyu9kUCoF4OJI8rz12gJJ1XJhidWHZbCbREsKwvLk9g3jKG1OvaWwoeKIKWbynAJcZKErmvmBON9jKHq12zF+8kHlNoz4CwaNCZJ1Wk4NmGrRKcRqLWiAwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hgpqIVL+; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772578855; c=relaxed/simple;
+	bh=FnCAM1M4bmOhgdVpm/AhNaTkpp8rO9NC0C89NQYqFhs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NU4x3UWbxNetFlD2KGh1rnZDb7l+XPJoqzXcar3AfKHrWpWzoivYI0jYJoretamB2UPRV+eXPibi0TtOgO7c1y231a5Howvr+tyHSB4TYqnh9NzQgYkz7voxeKW8B3dRsG7TpX1LUXmcAVKxL26aLTC7df6F1Y4VY5ccYq8C4po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pcc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KCTLVG2/; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pcc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgpqIVL+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772572733; x=1804108733;
-  h=date:from:to:cc:subject:message-id;
-  bh=1bXDPQo2hsorF9dKVTtulmXykJ9XQFh953QxQfdEFsk=;
-  b=hgpqIVL+3EjPW6YbYxnTP20scsK7VO1FxyYkJfPWhTE+vA4EPMecG5dX
-   b2zk1tDMVdwxOn/+oxREzRjpUmgTe34WiwlUZiQ861MTVKbV4da7v4gZG
-   lcXN9hcKM9yXAnJlrej7EssgyzsXSTgyXwuyLKUa2FseFLOmbPQmSeion
-   H3BNAM6WeQnQhSelVgH33cRII6h32DTeGKLZmZ7bkUD9emt7GXBMuqYnL
-   HcD/n3YCNklh/XpBILCsbL+wAerlcfgFf6aHXAoyTUscaBO/Pn3erH/M5
-   DaOH2AlOt7tjPwHaqXGQ2QR8RnuP8nv0uM6mg9UtgVwV0930dHGl4hfE7
-   g==;
-X-CSE-ConnectionGUID: rNcsXM56STukCHYDESE1gw==
-X-CSE-MsgGUID: nyuOH2B4RvKs4/IJsXfL+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="73531430"
-X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="73531430"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 13:18:52 -0800
-X-CSE-ConnectionGUID: GX+QaK6hSLiobUFtbRDwEQ==
-X-CSE-MsgGUID: DXprM6xlTP2jOqumPEu1uA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="244905273"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 03 Mar 2026 13:18:50 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxX8h-000000002sV-366p;
-	Tue, 03 Mar 2026 21:18:47 +0000
-Date: Wed, 04 Mar 2026 05:17:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
- LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20260302 10/12]
- ./usr/include/asm/setup_data.h:35:2: error: declaration does not declare
- anything
-Message-ID: <202603040528.xmhp9aIb-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KCTLVG2/"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-1277896014fso105847930c88.1
+        for <llvm@lists.linux.dev>; Tue, 03 Mar 2026 15:00:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772578853; x=1773183653; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iyeIncQFxH1HTyb8/kfTMSd0Ur9Ybipusnwm7N3vzvc=;
+        b=KCTLVG2/U+sjzTsy2TSAVxPPgQZJHyXEaMAhQgpkipnb9uKNR7Su5a+bvAvzHA4mK7
+         t8HFzw8BmXga/dTcY+K6SAAiYBoIiUTRDxayfp6/KZlAcaL4N9THraiNV2trEPwcMZsj
+         6NzlVBVuHURA1VzqY8JhxoFeJgRPhPXrvFiojKqakuwoFb4I//f7jvroIwBrWULteW/E
+         8m0j386jRwwz2sNk8fuhDqehqQkquVklyTQEjI0EhOY+Sjno0iUyovE/PpJeZ0Dboyp9
+         /p7QbNszWg5H4bcq2aM6Z5a5k2+5fsZFNXsAcpOpDnYwuRodhFV48J8RYcYehvkFAm77
+         RAVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772578853; x=1773183653;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iyeIncQFxH1HTyb8/kfTMSd0Ur9Ybipusnwm7N3vzvc=;
+        b=W+DShxtX3dt8pmVW8JM4kr6zRpMXLiW38WFklRnMi3gKozDdtyI9z3DWhqYLGIK6eE
+         I2F3w5MzsFnbJccYUOEUpgay3E3YQjIYrkOTJ4qZPQNvkWL06Qe5uLRW5+9NLgHlfyPs
+         snR/5K0kJiGrab2GcI9Ci/M3yC0ChKCAXW5n4HPU/mj5raDG40zGaglXN/M1POR0ZMaY
+         CDkLFxjrG1MNJrMIwGhrLjwQqKh1wNocwQN79Y//nq82t5Tim4EBOeA18JUdEj1bz5Bw
+         x+jC2KdRZYQJVsJgeO1doO1hJzDjIww3ItklbNFtAtDKmPtMVRYrQybzNl3QAR3pXvnC
+         B3Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCWOhC5cc3Yw7SAJCVWHG0ClOn0rDLIDnERUuEgOQNx5FHjyCDMcQf2a7Bx1DqIaGQWHEkq1@lists.linux.dev
+X-Gm-Message-State: AOJu0YwwoFce0+9XGG0/zOFfRP0xWZUrdfqD2TZs0jbdjAUcD3Jm79OZ
+	OIxlF+Q2tfhoX0w7hEIx+VOoQ4123B39hhfbl1RKIuMvyrce7VKdIWB5fPOc7bj28cXhFQ==
+X-Received: from dlbsj2-n2.prod.google.com ([2002:a05:7022:f902:20b0:11d:cd2a:4c1b])
+ (user=pcc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:fa5:b0:127:7893:b1de
+ with SMTP id a92af1059eb24-1278fd5f760mr8720159c88.32.1772578851579; Tue, 03
+ Mar 2026 15:00:51 -0800 (PST)
+Date: Tue,  3 Mar 2026 15:00:42 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
+Message-ID: <20260303230043.2074593-1-pcc@google.com>
+Subject: [PATCH] perf llvm: Clean up after a failed disassembly
+From: Peter Collingbourne <pcc@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Collingbourne <pcc@google.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20260302
-head:   759ff201de93e9bf74683ac6d4414b9141b12c27
-commit: 0c2f151521b10100c7f4415d3ef1f7ae4999634d [10/12] x86/setup: Avoid multiple -Wflex-array-member-not-at-end warnings
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260304/202603040528.xmhp9aIb-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260304/202603040528.xmhp9aIb-lkp@intel.com/reproduce)
+An error returned from a failed backend will cause perf to call the next
+backend. If the error happens mid-function, e.g. due to an unrecognized
+instruction, we will end up with duplicated instructions in the output
+unless the backend that failed deletes any instructions that it created
+before failing. The capstone backend was already doing this but the LLVM
+backend was not; fix it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603040528.xmhp9aIb-lkp@intel.com/
+Link: https://linux-review.googlesource.com/id/I377eef3cd662ab98fbcd69e5004a259fa3d7aa06
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+---
+ tools/perf/util/llvm.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/asm/setup_data.h:35:2: error: declaration does not declare anything [-Werror,-Wmissing-declarations]
-      35 |         struct setup_data_hdr;
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
+diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+index 0d126d233c019..87fceae8488a7 100644
+--- a/tools/perf/util/llvm.c
++++ b/tools/perf/util/llvm.c
+@@ -261,6 +261,15 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	ret = 0;
+ 
+ err:
++	if (ret != 0) {
++		struct disasm_line *tmp;
++
++		list_for_each_entry_safe(dl, tmp, &notes->src->source,
++					 al.node) {
++			list_del(&dl->al.node);
++			disasm_line__free(dl);
++		}
++	}
+ 	LLVMDisasmDispose(disasm);
+ 	free(code_buf);
+ 	free(line_storage);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0.473.g4a7958ca14-goog
+
