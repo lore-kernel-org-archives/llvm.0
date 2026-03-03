@@ -1,393 +1,488 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843F7386431;
-	Tue,  3 Mar 2026 19:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366E238911B;
+	Tue,  3 Mar 2026 20:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772564687; cv=none; b=SOOSqbdBfDRQ6Nts4CoH6VWj9sWilrwOFdK94mPa6Lx6InapN6wXy+g06UjCj26eYARyfHGtOLDeLrePtNqEFyAUxrqViUzuUK4MIIGqHyd9svv3Ku5iDx9HcypiIyQknyXIE/HkJeAzhd697ZmGe3OUZ1kP6ZATwVcbGXu3X80=
+	t=1772568025; cv=none; b=Z9vy9fIJrjrPqMpbGhGg1A8nCTFq2MA3U3XXqkOVG+6+JFk0aWCi/Z5RVw+SLkEoKO+xgGP2esKV0b3EQNUdXYngVf26yemAlGe8czZKTI9r+H4pIwxbhlsdIGo9wvRkvS4H5s7jJ3vDSbTlLgXyGZAU8WVlibSBGOpWn0iMAh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772564687; c=relaxed/simple;
-	bh=N6X+iuK3TCmh475f3xCAX19glHaLVnP4jp9pYR31bLg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CMEKKB0g55uQVt18ggfcNXfrwfPYNGqdY40ONsQcUc++XD7s0CNdp8ov6vKvzXPkdnMbAR3pqsRevdiabZZoDtD3NDfXDSKw5y5vUQGeZIBiKu6s058gKFjSBKQAAfngrVS2mwVzq8HOmXWX3SqBEK+4GdXV83oQDKIbo/iUc5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e79OHNpw; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1772568025; c=relaxed/simple;
+	bh=l0NRmqCSwvMMJfhAAhWcTftXOi58vTjWIdo1iNAcfnw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BUtEAlFbx4Qx0afBv8O8zfdutuboMNmKrkaXYUJfwKASlFF+3r5VGweoOyNQMlJjPx0TtOKVAsQQwXvBsKIe74mqNgc4MICyb/CUCFHCnR9wLl/pCseTjWCY/v5eiYg+84pI7az8EQWCEfsQrU3yWCWVymTGUoPYMppCNhwf+B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=av7YzfTG; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e79OHNpw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="av7YzfTG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772564683; x=1804100683;
-  h=date:from:to:cc:subject:message-id;
-  bh=N6X+iuK3TCmh475f3xCAX19glHaLVnP4jp9pYR31bLg=;
-  b=e79OHNpwxBBwwxoOjL9j870UjERw1ZIenGn5fw/6ySaJ073kCbnDg0Pt
-   yPlzaWGmCEXAs2xLxi5BqgRHJNhvM9ZxkQ5yqltcyT8i7DRY1zGfz44Ul
-   cMr7Mjy40QrpRxjpkSZlGmXZSUIvAI07nEGeJ1RmQQ4SYAW0nRo3WKjIi
-   1176TIuSWAfsXXjsveCQlhkObv9u/kOo+1J7FXoX0aTMQMVaIMAISLhD8
-   GY+llvpG5E/8wJITFo2hX6qDM4cy8AXZVx7J0cWCZelfw2mSqC9rhheg9
-   Lal8mQRxo4h8/D4QJaEPWQFzNr00UZhhU6GKp51mYnHry1HQC/vI2eFye
-   A==;
-X-CSE-ConnectionGUID: SlLGJDlcSI2tDzp4u1j5Ow==
-X-CSE-MsgGUID: RIG+ga/GRzm3uLTkKHnhcw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="84958592"
+  t=1772568023; x=1804104023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l0NRmqCSwvMMJfhAAhWcTftXOi58vTjWIdo1iNAcfnw=;
+  b=av7YzfTGasAEWzmI+hZ8sUBDqqdvQGWP9DC4pdUCV7aAic9tEpSINzxd
+   vv2cEWaI3rpvGipZpthb6ziIRjdDXf6RWXfkNvZZ4/ZtiZUAhB64Ub7/+
+   oGYYriefDLjuszcS1XQHBnDIJi3C8q/b0yjyfTR7mcg3CPJtLfYQQS+jB
+   dpFskMXElTjIZAnw9Q/AEvh0jRfLZV4cwVX15psSI/MVCUkx9xJu8ltGE
+   3Wx3S/LLAeNt5cAJFK1/sr3OXzM5whmVbjYqXbPrFX1lopVKbGJmdLA3W
+   NCU+tnUdS6Z1FHwFRiowww9AgJ7wHFXUBkAmMTZSJ1DrmoTNCAVh6s+IX
+   g==;
+X-CSE-ConnectionGUID: V9UkJ0jGSwmjNP59SMACkQ==
+X-CSE-MsgGUID: ITM3Cvi0RIClHD+nSYX+dA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="73583318"
 X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="84958592"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 11:04:43 -0800
-X-CSE-ConnectionGUID: GZu1jhOsTG69L8wRVilkow==
-X-CSE-MsgGUID: fEcr15/LTOaGy+/x2qrghQ==
+   d="scan'208";a="73583318"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 12:00:23 -0800
+X-CSE-ConnectionGUID: zulcs+BmRwSfZAdlMyaWxw==
+X-CSE-MsgGUID: E0c3EzSTS0ODwMfLRe2AXg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="218046443"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 03 Mar 2026 11:04:41 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
+   d="scan'208";a="222582179"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 03 Mar 2026 12:00:21 -0800
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vxV2r-000000002iF-3fpw;
-	Tue, 03 Mar 2026 19:04:37 +0000
-Date: Wed, 04 Mar 2026 03:04:27 +0800
+	id 1vxVuk-000000001Wp-1q3E;
+	Tue, 03 Mar 2026 20:00:18 +0000
+Date: Tue, 3 Mar 2026 20:59:20 +0100
 From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Johannes Berg <johannes@sipsolutions.net>,
+	linux-wireless@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
- LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20260302 4/12]
- drivers/scsi/aic94xx/aic94xx_sas.h:323:28: error: field has incomplete type
- 'struct ssp_command_iu_hdr'
-Message-ID: <202603040331.C4EM02yD-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [PATCH wireless-next] wifi: nl80211: split out UHR operation
+ information
+Message-ID: <202603032000.hvuqXXkv-lkp@intel.com>
+References: <20260303152558.00e7bc8e9f4b.Iafdf37fb0f4304bdcdb824977d61e17b38c47685@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303152558.00e7bc8e9f4b.Iafdf37fb0f4304bdcdb824977d61e17b38c47685@changeid>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20260302
-head:   759ff201de93e9bf74683ac6d4414b9141b12c27
-commit: 052ea0d6ef438e32950d71cec77517e300b94872 [4/12] scsi: libsas/aci94xx: Avoid multiple -Wflex-array-member-not-at-end warnings
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260304/202603040331.C4EM02yD-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260304/202603040331.C4EM02yD-lkp@intel.com/reproduce)
+Hi Johannes,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on next-20260303]
+[cannot apply to wireless/main linus/master v6.16-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-nl80211-split-out-UHR-operation-information/20260303-223359
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20260303152558.00e7bc8e9f4b.Iafdf37fb0f4304bdcdb824977d61e17b38c47685%40changeid
+patch subject: [PATCH wireless-next] wifi: nl80211: split out UHR operation information
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260303/202603032000.hvuqXXkv-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260303/202603032000.hvuqXXkv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603040331.C4EM02yD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603032000.hvuqXXkv-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/scsi/aic94xx/aic94xx_init.c:21:
-   In file included from drivers/scsi/aic94xx/aic94xx_reg.h:13:
-   In file included from drivers/scsi/aic94xx/aic94xx_hwi.h:19:
->> drivers/scsi/aic94xx/aic94xx_sas.h:323:28: error: field has incomplete type 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                                   ^
-   drivers/scsi/aic94xx/aic94xx_sas.h:323:9: note: forward declaration of 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                ^
+>> net/wireless/nl80211.c:961:3: error: expected expression
+     961 |         [[NL80211_ATTR_UHR_OPERATION] =
+         |          ^
    1 error generated.
---
-   In file included from drivers/scsi/aic94xx/aic94xx_hwi.c:16:
-   In file included from drivers/scsi/aic94xx/aic94xx_reg.h:13:
-   In file included from drivers/scsi/aic94xx/aic94xx_hwi.h:19:
->> drivers/scsi/aic94xx/aic94xx_sas.h:323:28: error: field has incomplete type 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                                   ^
-   drivers/scsi/aic94xx/aic94xx_sas.h:323:9: note: forward declaration of 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                ^
->> drivers/scsi/aic94xx/aic94xx_hwi.c:342:40: error: no member named 'escb' in 'struct scb'
-     342 |                 struct empty_scb *escb = &ascb->scb->escb;
-         |                                           ~~~~~~~~~  ^
-   2 errors generated.
---
-   In file included from drivers/scsi/aic94xx/aic94xx_scb.c:13:
-   In file included from drivers/scsi/aic94xx/aic94xx_reg.h:13:
-   In file included from drivers/scsi/aic94xx/aic94xx_hwi.h:19:
->> drivers/scsi/aic94xx/aic94xx_sas.h:323:28: error: field has incomplete type 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                                   ^
-   drivers/scsi/aic94xx/aic94xx_sas.h:323:9: note: forward declaration of 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                ^
->> drivers/scsi/aic94xx/aic94xx_scb.c:369:39: error: no member named 'escb' in 'struct scb'
-     369 |         struct empty_scb *escb = &ascb->scb->escb;
-         |                                   ~~~~~~~~~  ^
->> drivers/scsi/aic94xx/aic94xx_scb.c:631:42: error: no member named 'control_phy' in 'struct scb'
-     631 |         struct control_phy *control_phy = &scb->control_phy;
-         |                                            ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_scb.c:770:42: error: no member named 'control_phy' in 'struct scb'
-     770 |         struct control_phy *control_phy = &scb->control_phy;
-         |                                            ~~~  ^
-   4 errors generated.
---
-   In file included from drivers/scsi/aic94xx/aic94xx_tmf.c:12:
->> drivers/scsi/aic94xx/aic94xx_sas.h:323:28: error: field has incomplete type 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                                   ^
-   drivers/scsi/aic94xx/aic94xx_sas.h:323:9: note: forward declaration of 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                ^
->> drivers/scsi/aic94xx/aic94xx_tmf.c:120:7: error: no member named 'clear_nexus' in 'struct scb'
-     120 |         scb->clear_nexus.nexus = NEXUS_ADAPTER;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:129:7: error: no member named 'clear_nexus' in 'struct scb'
-     129 |         scb->clear_nexus.nexus = NEXUS_PORT;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:130:7: error: no member named 'clear_nexus' in 'struct scb'
-     130 |         scb->clear_nexus.conn_mask = port->phy_mask;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:146:7: error: no member named 'clear_nexus' in 'struct scb'
-     146 |         scb->clear_nexus.nexus = NEXUS_I_T;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:149:8: error: no member named 'clear_nexus' in 'struct scb'
-     149 |                 scb->clear_nexus.flags = EXEC_Q | SUSPEND_TX;
-         |                 ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:152:8: error: no member named 'clear_nexus' in 'struct scb'
-     152 |                 scb->clear_nexus.flags = SEND_Q | NOTINQ;
-         |                 ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:155:8: error: no member named 'clear_nexus' in 'struct scb'
-     155 |                 scb->clear_nexus.flags = RESUME_TX;
-         |                 ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:157:7: error: no member named 'clear_nexus' in 'struct scb'
-     157 |         scb->clear_nexus.conn_handle = cpu_to_le16((u16)(unsigned long)
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:206:7: error: no member named 'clear_nexus' in 'struct scb'
-     206 |         scb->clear_nexus.nexus = NEXUS_I_T_L;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:207:7: error: no member named 'clear_nexus' in 'struct scb'
-     207 |         scb->clear_nexus.flags = SEND_Q | EXEC_Q | NOTINQ;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:208:14: error: no member named 'clear_nexus' in 'struct scb'
-     208 |         memcpy(scb->clear_nexus.ssp_task.lun, lun, 8);
-         |                ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:209:7: error: no member named 'clear_nexus' in 'struct scb'
-     209 |         scb->clear_nexus.conn_handle = cpu_to_le16((u16)(unsigned long)
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:220:7: error: no member named 'clear_nexus' in 'struct scb'
-     220 |         scb->clear_nexus.nexus = NEXUS_TAG;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:221:14: error: no member named 'clear_nexus' in 'struct scb'
-     221 |         memcpy(scb->clear_nexus.ssp_task.lun, task->ssp_task.LUN, 8);
-         |                ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:222:7: error: no member named 'clear_nexus' in 'struct scb'
-     222 |         scb->clear_nexus.ssp_task.tag = tascb->tag;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:224:8: error: no member named 'clear_nexus' in 'struct scb'
-     224 |                 scb->clear_nexus.conn_handle = cpu_to_le16((u16)(unsigned long)
-         |                 ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:235:7: error: no member named 'clear_nexus' in 'struct scb'
-     235 |         scb->clear_nexus.nexus = NEXUS_TRANS_CX;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_tmf.c:237:8: error: no member named 'clear_nexus' in 'struct scb'
-     237 |                 scb->clear_nexus.conn_handle = cpu_to_le16((u16)(unsigned long)
-         |                 ~~~  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
---
-   In file included from drivers/scsi/aic94xx/aic94xx_task.c:11:
->> drivers/scsi/aic94xx/aic94xx_sas.h:323:28: error: field has incomplete type 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                                   ^
-   drivers/scsi/aic94xx/aic94xx_sas.h:323:9: note: forward declaration of 'struct ssp_command_iu_hdr'
-     323 |         struct ssp_command_iu_hdr ssp_cmd;
-         |                ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:131:31: note: expanded from macro '__swab64'
-     131 |         (__u64)(__builtin_constant_p(x) ?       \
-         |                                      ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:25:12: note: expanded from macro '___constant_swab64'
-      25 |         (((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:26:12: note: expanded from macro '___constant_swab64'
-      26 |         (((__u64)(x) & (__u64)0x000000000000ff00ULL) << 40) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:27:12: note: expanded from macro '___constant_swab64'
-      27 |         (((__u64)(x) & (__u64)0x0000000000ff0000ULL) << 24) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:28:12: note: expanded from macro '___constant_swab64'
-      28 |         (((__u64)(x) & (__u64)0x00000000ff000000ULL) <<  8) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:29:12: note: expanded from macro '___constant_swab64'
-      29 |         (((__u64)(x) & (__u64)0x000000ff00000000ULL) >>  8) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:30:12: note: expanded from macro '___constant_swab64'
-      30 |         (((__u64)(x) & (__u64)0x0000ff0000000000ULL) >> 24) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:31:12: note: expanded from macro '___constant_swab64'
-      31 |         (((__u64)(x) & (__u64)0x00ff000000000000ULL) >> 40) |   \
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
-     132 |         ___constant_swab64(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:32:12: note: expanded from macro '___constant_swab64'
-      32 |         (((__u64)(x) & (__u64)0xff00000000000000ULL) >> 56)))
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:129:33: error: no member named 'ssp_task' in 'struct scb'
-     129 |                        le64_to_cpu(ascb->scb->ssp_task.sg_element[0].bus_addr);
-         |                                    ~~~~~~~~~  ^
-   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
-      87 | #define le64_to_cpu __le64_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:33:59: note: expanded from macro '__le64_to_cpu'
-      33 | #define __le64_to_cpu(x) __swab64((__force __u64)(__le64)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:133:12: note: expanded from macro '__swab64'
-     133 |         __fswab64(x))
-         |                   ^
->> drivers/scsi/aic94xx/aic94xx_task.c:365:7: error: no member named 'ata_task' in 'struct scb'
-     365 |         scb->ata_task.proto_conn_rate = (1 << 5); /* STP */
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:367:8: error: no member named 'ata_task' in 'struct scb'
-     367 |                 scb->ata_task.proto_conn_rate |= dev->linkrate;
-         |                 ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:369:7: error: no member named 'ata_task' in 'struct scb'
-     369 |         scb->ata_task.total_xfer_len = cpu_to_le32(task->total_xfer_len);
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:370:7: error: no member named 'ata_task' in 'struct scb'
-     370 |         scb->ata_task.fis = task->ata_task.fis;
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:372:8: error: no member named 'ata_task' in 'struct scb'
-     372 |                 scb->ata_task.fis.flags |= 0x80; /* C=1: update ATA cmd reg */
-         |                 ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:373:7: error: no member named 'ata_task' in 'struct scb'
-     373 |         scb->ata_task.fis.flags &= 0xF0; /* PM_PORT field shall be 0 */
-         |         ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:375:15: error: no member named 'ata_task' in 'struct scb'
-     375 |                 memcpy(scb->ata_task.atapi_packet, task->ata_task.atapi_packet,
-         |                        ~~~  ^
-   drivers/scsi/aic94xx/aic94xx_task.c:377:7: error: no member named 'ata_task' in 'struct scb'
-     377 |         scb->ata_task.sister_scb = cpu_to_le16(0xFFFF);
-         |         ~~~  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
 
 
-vim +323 drivers/scsi/aic94xx/aic94xx_sas.h
+vim +961 net/wireless/nl80211.c
 
-   316	
-   317	/* This is both ssp_task and long_ssp_task
-   318	 */
-   319	struct initiate_ssp_task {
-   320		u8     proto_conn_rate;	  /* proto:6,4, conn_rate:3,0 */
-   321		__le32 total_xfer_len;
-   322		struct ssp_frame_hdr  ssp_frame;
- > 323		struct ssp_command_iu_hdr ssp_cmd;
-   324		__le16 sister_scb;	  /* 0xFFFF */
-   325		__le16 conn_handle;	  /* index to DDB for the intended target */
-   326		u8     data_dir;	  /* :1,0 */
-   327	#define DATA_DIR_NONE   0x00
-   328	#define DATA_DIR_IN     0x01
-   329	#define DATA_DIR_OUT    0x02
-   330	#define DATA_DIR_BYRECIPIENT 0x03
-   331	
-   332		u8     _r_a;
-   333		u8     retry_count;
-   334		u8     _r_b[5];
-   335		struct sg_el sg_element[3]; /* 2 real and 1 link */
-   336	} __attribute__ ((packed));
-   337	
+   583	
+   584	static const struct nla_policy nl80211_policy[NUM_NL80211_ATTR] = {
+   585		[0] = { .strict_start_type = NL80211_ATTR_HE_OBSS_PD },
+   586		[NL80211_ATTR_WIPHY] = { .type = NLA_U32 },
+   587		[NL80211_ATTR_WIPHY_NAME] = { .type = NLA_NUL_STRING,
+   588					      .len = 20-1 },
+   589		[NL80211_ATTR_WIPHY_TXQ_PARAMS] = { .type = NLA_NESTED },
+   590	
+   591		[NL80211_ATTR_WIPHY_FREQ] = { .type = NLA_U32 },
+   592		[NL80211_ATTR_WIPHY_CHANNEL_TYPE] = { .type = NLA_U32 },
+   593		[NL80211_ATTR_WIPHY_EDMG_CHANNELS] = NLA_POLICY_RANGE(NLA_U8,
+   594							NL80211_EDMG_CHANNELS_MIN,
+   595							NL80211_EDMG_CHANNELS_MAX),
+   596		[NL80211_ATTR_WIPHY_EDMG_BW_CONFIG] = NLA_POLICY_RANGE(NLA_U8,
+   597							NL80211_EDMG_BW_CONFIG_MIN,
+   598							NL80211_EDMG_BW_CONFIG_MAX),
+   599	
+   600		[NL80211_ATTR_CHANNEL_WIDTH] = { .type = NLA_U32 },
+   601		[NL80211_ATTR_CENTER_FREQ1] = { .type = NLA_U32 },
+   602		[NL80211_ATTR_CENTER_FREQ1_OFFSET] = NLA_POLICY_RANGE(NLA_U32, 0, 999),
+   603		[NL80211_ATTR_CENTER_FREQ2] = { .type = NLA_U32 },
+   604	
+   605		[NL80211_ATTR_WIPHY_RETRY_SHORT] = NLA_POLICY_MIN(NLA_U8, 1),
+   606		[NL80211_ATTR_WIPHY_RETRY_LONG] = NLA_POLICY_MIN(NLA_U8, 1),
+   607		[NL80211_ATTR_WIPHY_FRAG_THRESHOLD] = { .type = NLA_U32 },
+   608		[NL80211_ATTR_WIPHY_RTS_THRESHOLD] = { .type = NLA_U32 },
+   609		[NL80211_ATTR_WIPHY_COVERAGE_CLASS] = { .type = NLA_U8 },
+   610		[NL80211_ATTR_WIPHY_DYN_ACK] = { .type = NLA_FLAG },
+   611	
+   612		[NL80211_ATTR_IFTYPE] = NLA_POLICY_MAX(NLA_U32, NL80211_IFTYPE_MAX),
+   613		[NL80211_ATTR_IFINDEX] = { .type = NLA_U32 },
+   614		[NL80211_ATTR_IFNAME] = { .type = NLA_NUL_STRING, .len = IFNAMSIZ-1 },
+   615	
+   616		[NL80211_ATTR_MAC] = NLA_POLICY_EXACT_LEN_WARN(ETH_ALEN),
+   617		[NL80211_ATTR_PREV_BSSID] = NLA_POLICY_EXACT_LEN_WARN(ETH_ALEN),
+   618	
+   619		[NL80211_ATTR_KEY] = { .type = NLA_NESTED, },
+   620		[NL80211_ATTR_KEY_DATA] = { .type = NLA_BINARY,
+   621					    .len = WLAN_MAX_KEY_LEN },
+   622		[NL80211_ATTR_KEY_IDX] = NLA_POLICY_MAX(NLA_U8, 7),
+   623		[NL80211_ATTR_KEY_CIPHER] = { .type = NLA_U32 },
+   624		[NL80211_ATTR_KEY_DEFAULT] = { .type = NLA_FLAG },
+   625		[NL80211_ATTR_KEY_SEQ] = { .type = NLA_BINARY, .len = 16 },
+   626		[NL80211_ATTR_KEY_TYPE] =
+   627			NLA_POLICY_MAX(NLA_U32, NUM_NL80211_KEYTYPES),
+   628	
+   629		[NL80211_ATTR_BEACON_INTERVAL] = { .type = NLA_U32 },
+   630		[NL80211_ATTR_DTIM_PERIOD] = { .type = NLA_U32 },
+   631		[NL80211_ATTR_BEACON_HEAD] =
+   632			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_beacon_head,
+   633					       IEEE80211_MAX_DATA_LEN),
+   634		[NL80211_ATTR_BEACON_TAIL] =
+   635			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_ie_attr,
+   636					       IEEE80211_MAX_DATA_LEN),
+   637		[NL80211_ATTR_STA_AID] =
+   638			NLA_POLICY_RANGE(NLA_U16, 1, IEEE80211_MAX_AID),
+   639		[NL80211_ATTR_STA_FLAGS] = { .type = NLA_NESTED },
+   640		[NL80211_ATTR_STA_LISTEN_INTERVAL] = { .type = NLA_U16 },
+   641		[NL80211_ATTR_STA_SUPPORTED_RATES] = { .type = NLA_BINARY,
+   642						       .len = NL80211_MAX_SUPP_RATES },
+   643		[NL80211_ATTR_STA_PLINK_ACTION] =
+   644			NLA_POLICY_MAX(NLA_U8, NUM_NL80211_PLINK_ACTIONS - 1),
+   645		[NL80211_ATTR_STA_TX_POWER_SETTING] =
+   646			NLA_POLICY_RANGE(NLA_U8,
+   647					 NL80211_TX_POWER_AUTOMATIC,
+   648					 NL80211_TX_POWER_FIXED),
+   649		[NL80211_ATTR_STA_TX_POWER] = { .type = NLA_S16 },
+   650		[NL80211_ATTR_STA_VLAN] = { .type = NLA_U32 },
+   651		[NL80211_ATTR_MNTR_FLAGS] = { /* NLA_NESTED can't be empty */ },
+   652		[NL80211_ATTR_MESH_ID] = { .type = NLA_BINARY,
+   653					   .len = IEEE80211_MAX_MESH_ID_LEN },
+   654		[NL80211_ATTR_MPATH_NEXT_HOP] = NLA_POLICY_ETH_ADDR_COMPAT,
+   655	
+   656		/* allow 3 for NUL-termination, we used to declare this NLA_STRING */
+   657		[NL80211_ATTR_REG_ALPHA2] = NLA_POLICY_RANGE(NLA_BINARY, 2, 3),
+   658		[NL80211_ATTR_REG_RULES] = { .type = NLA_NESTED },
+   659	
+   660		[NL80211_ATTR_BSS_CTS_PROT] = { .type = NLA_U8 },
+   661		[NL80211_ATTR_BSS_SHORT_PREAMBLE] = { .type = NLA_U8 },
+   662		[NL80211_ATTR_BSS_SHORT_SLOT_TIME] = { .type = NLA_U8 },
+   663		[NL80211_ATTR_BSS_BASIC_RATES] = { .type = NLA_BINARY,
+   664						   .len = NL80211_MAX_SUPP_RATES },
+   665		[NL80211_ATTR_BSS_HT_OPMODE] = { .type = NLA_U16 },
+   666	
+   667		[NL80211_ATTR_MESH_CONFIG] = { .type = NLA_NESTED },
+   668		[NL80211_ATTR_SUPPORT_MESH_AUTH] = { .type = NLA_FLAG },
+   669	
+   670		[NL80211_ATTR_HT_CAPABILITY] = NLA_POLICY_EXACT_LEN_WARN(NL80211_HT_CAPABILITY_LEN),
+   671	
+   672		[NL80211_ATTR_MGMT_SUBTYPE] = { .type = NLA_U8 },
+   673		[NL80211_ATTR_IE] = NLA_POLICY_VALIDATE_FN(NLA_BINARY,
+   674							   validate_ie_attr,
+   675							   IEEE80211_MAX_DATA_LEN),
+   676		[NL80211_ATTR_SCAN_FREQUENCIES] = { .type = NLA_NESTED },
+   677		[NL80211_ATTR_SCAN_SSIDS] = { .type = NLA_NESTED },
+   678	
+   679		[NL80211_ATTR_SSID] = { .type = NLA_BINARY,
+   680					.len = IEEE80211_MAX_SSID_LEN },
+   681		[NL80211_ATTR_AUTH_TYPE] = { .type = NLA_U32 },
+   682		[NL80211_ATTR_REASON_CODE] = { .type = NLA_U16 },
+   683		[NL80211_ATTR_FREQ_FIXED] = { .type = NLA_FLAG },
+   684		[NL80211_ATTR_TIMED_OUT] = { .type = NLA_FLAG },
+   685		[NL80211_ATTR_USE_MFP] = NLA_POLICY_RANGE(NLA_U32,
+   686							  NL80211_MFP_NO,
+   687							  NL80211_MFP_OPTIONAL),
+   688		[NL80211_ATTR_STA_FLAGS2] =
+   689			NLA_POLICY_EXACT_LEN_WARN(sizeof(struct nl80211_sta_flag_update)),
+   690		[NL80211_ATTR_CONTROL_PORT] = { .type = NLA_FLAG },
+   691		[NL80211_ATTR_CONTROL_PORT_ETHERTYPE] = { .type = NLA_U16 },
+   692		[NL80211_ATTR_CONTROL_PORT_NO_ENCRYPT] = { .type = NLA_FLAG },
+   693		[NL80211_ATTR_CONTROL_PORT_OVER_NL80211] = { .type = NLA_FLAG },
+   694		[NL80211_ATTR_PRIVACY] = { .type = NLA_FLAG },
+   695		[NL80211_ATTR_STATUS_CODE] = { .type = NLA_U16 },
+   696		[NL80211_ATTR_CIPHER_SUITE_GROUP] = { .type = NLA_U32 },
+   697		[NL80211_ATTR_WPA_VERSIONS] =
+   698			NLA_POLICY_RANGE(NLA_U32, 0,
+   699					 NL80211_WPA_VERSION_1 |
+   700					 NL80211_WPA_VERSION_2 |
+   701					 NL80211_WPA_VERSION_3),
+   702		[NL80211_ATTR_PID] = { .type = NLA_U32 },
+   703		[NL80211_ATTR_4ADDR] = { .type = NLA_U8 },
+   704		[NL80211_ATTR_PMKID] = NLA_POLICY_EXACT_LEN_WARN(WLAN_PMKID_LEN),
+   705		[NL80211_ATTR_DURATION] = { .type = NLA_U32 },
+   706		[NL80211_ATTR_COOKIE] = { .type = NLA_U64 },
+   707		[NL80211_ATTR_TX_RATES] = { .type = NLA_NESTED },
+   708		[NL80211_ATTR_FRAME] = { .type = NLA_BINARY,
+   709					 .len = IEEE80211_MAX_DATA_LEN },
+   710		[NL80211_ATTR_FRAME_MATCH] = { .type = NLA_BINARY, },
+   711		[NL80211_ATTR_PS_STATE] = NLA_POLICY_RANGE(NLA_U32,
+   712							   NL80211_PS_DISABLED,
+   713							   NL80211_PS_ENABLED),
+   714		[NL80211_ATTR_CQM] = { .type = NLA_NESTED, },
+   715		[NL80211_ATTR_LOCAL_STATE_CHANGE] = { .type = NLA_FLAG },
+   716		[NL80211_ATTR_AP_ISOLATE] = { .type = NLA_U8 },
+   717		[NL80211_ATTR_WIPHY_TX_POWER_SETTING] = { .type = NLA_U32 },
+   718		[NL80211_ATTR_WIPHY_TX_POWER_LEVEL] = { .type = NLA_U32 },
+   719		[NL80211_ATTR_FRAME_TYPE] = { .type = NLA_U16 },
+   720		[NL80211_ATTR_WIPHY_ANTENNA_TX] = { .type = NLA_U32 },
+   721		[NL80211_ATTR_WIPHY_ANTENNA_RX] = { .type = NLA_U32 },
+   722		[NL80211_ATTR_MCAST_RATE] = { .type = NLA_U32 },
+   723		[NL80211_ATTR_OFFCHANNEL_TX_OK] = { .type = NLA_FLAG },
+   724		[NL80211_ATTR_KEY_DEFAULT_TYPES] = { .type = NLA_NESTED },
+   725		[NL80211_ATTR_WOWLAN_TRIGGERS] = { .type = NLA_NESTED },
+   726		[NL80211_ATTR_STA_PLINK_STATE] =
+   727			NLA_POLICY_MAX(NLA_U8, NUM_NL80211_PLINK_STATES - 1),
+   728		[NL80211_ATTR_MEASUREMENT_DURATION] = { .type = NLA_U16 },
+   729		[NL80211_ATTR_MEASUREMENT_DURATION_MANDATORY] = { .type = NLA_FLAG },
+   730		[NL80211_ATTR_MESH_PEER_AID] =
+   731			NLA_POLICY_RANGE(NLA_U16, 1, IEEE80211_MAX_AID),
+   732		[NL80211_ATTR_SCHED_SCAN_INTERVAL] = { .type = NLA_U32 },
+   733		[NL80211_ATTR_REKEY_DATA] = { .type = NLA_NESTED },
+   734		[NL80211_ATTR_SCAN_SUPP_RATES] = { .type = NLA_NESTED },
+   735		[NL80211_ATTR_HIDDEN_SSID] =
+   736			NLA_POLICY_RANGE(NLA_U32,
+   737					 NL80211_HIDDEN_SSID_NOT_IN_USE,
+   738					 NL80211_HIDDEN_SSID_ZERO_CONTENTS),
+   739		[NL80211_ATTR_IE_PROBE_RESP] =
+   740			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_ie_attr,
+   741					       IEEE80211_MAX_DATA_LEN),
+   742		[NL80211_ATTR_IE_ASSOC_RESP] =
+   743			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_ie_attr,
+   744					       IEEE80211_MAX_DATA_LEN),
+   745		[NL80211_ATTR_ROAM_SUPPORT] = { .type = NLA_FLAG },
+   746		[NL80211_ATTR_STA_WME] = NLA_POLICY_NESTED(nl80211_sta_wme_policy),
+   747		[NL80211_ATTR_SCHED_SCAN_MATCH] = { .type = NLA_NESTED },
+   748		[NL80211_ATTR_TX_NO_CCK_RATE] = { .type = NLA_FLAG },
+   749		[NL80211_ATTR_TDLS_ACTION] = { .type = NLA_U8 },
+   750		[NL80211_ATTR_TDLS_DIALOG_TOKEN] = { .type = NLA_U8 },
+   751		[NL80211_ATTR_TDLS_OPERATION] = { .type = NLA_U8 },
+   752		[NL80211_ATTR_TDLS_SUPPORT] = { .type = NLA_FLAG },
+   753		[NL80211_ATTR_TDLS_EXTERNAL_SETUP] = { .type = NLA_FLAG },
+   754		[NL80211_ATTR_TDLS_INITIATOR] = { .type = NLA_FLAG },
+   755		[NL80211_ATTR_DONT_WAIT_FOR_ACK] = { .type = NLA_FLAG },
+   756		[NL80211_ATTR_PROBE_RESP] = { .type = NLA_BINARY,
+   757					      .len = IEEE80211_MAX_DATA_LEN },
+   758		[NL80211_ATTR_DFS_REGION] = { .type = NLA_U8 },
+   759		[NL80211_ATTR_DISABLE_HT] = { .type = NLA_FLAG },
+   760		[NL80211_ATTR_HT_CAPABILITY_MASK] = {
+   761			.len = NL80211_HT_CAPABILITY_LEN
+   762		},
+   763		[NL80211_ATTR_NOACK_MAP] = { .type = NLA_U16 },
+   764		[NL80211_ATTR_INACTIVITY_TIMEOUT] = { .type = NLA_U16 },
+   765		[NL80211_ATTR_BG_SCAN_PERIOD] = { .type = NLA_U16 },
+   766		[NL80211_ATTR_WDEV] = { .type = NLA_U64 },
+   767		[NL80211_ATTR_USER_REG_HINT_TYPE] = { .type = NLA_U32 },
+   768	
+   769		/* need to include at least Auth Transaction and Status Code */
+   770		[NL80211_ATTR_AUTH_DATA] = NLA_POLICY_MIN_LEN(4),
+   771	
+   772		[NL80211_ATTR_VHT_CAPABILITY] = NLA_POLICY_EXACT_LEN_WARN(NL80211_VHT_CAPABILITY_LEN),
+   773		[NL80211_ATTR_SCAN_FLAGS] = { .type = NLA_U32 },
+   774		[NL80211_ATTR_P2P_CTWINDOW] = NLA_POLICY_MAX(NLA_U8, 127),
+   775		[NL80211_ATTR_P2P_OPPPS] = NLA_POLICY_MAX(NLA_U8, 1),
+   776		[NL80211_ATTR_LOCAL_MESH_POWER_MODE] =
+   777			NLA_POLICY_RANGE(NLA_U32,
+   778					 NL80211_MESH_POWER_UNKNOWN + 1,
+   779					 NL80211_MESH_POWER_MAX),
+   780		[NL80211_ATTR_ACL_POLICY] = {. type = NLA_U32 },
+   781		[NL80211_ATTR_MAC_ADDRS] = { .type = NLA_NESTED },
+   782		[NL80211_ATTR_STA_CAPABILITY] = { .type = NLA_U16 },
+   783		[NL80211_ATTR_STA_EXT_CAPABILITY] = { .type = NLA_BINARY, },
+   784		[NL80211_ATTR_SPLIT_WIPHY_DUMP] = { .type = NLA_FLAG, },
+   785		[NL80211_ATTR_DISABLE_VHT] = { .type = NLA_FLAG },
+   786		[NL80211_ATTR_VHT_CAPABILITY_MASK] = {
+   787			.len = NL80211_VHT_CAPABILITY_LEN,
+   788		},
+   789		[NL80211_ATTR_MDID] = { .type = NLA_U16 },
+   790		[NL80211_ATTR_IE_RIC] = { .type = NLA_BINARY,
+   791					  .len = IEEE80211_MAX_DATA_LEN },
+   792		[NL80211_ATTR_CRIT_PROT_ID] = { .type = NLA_U16 },
+   793		[NL80211_ATTR_MAX_CRIT_PROT_DURATION] =
+   794			NLA_POLICY_MAX(NLA_U16, NL80211_CRIT_PROTO_MAX_DURATION),
+   795		[NL80211_ATTR_PEER_AID] =
+   796			NLA_POLICY_RANGE(NLA_U16, 1, IEEE80211_MAX_AID),
+   797		[NL80211_ATTR_CH_SWITCH_COUNT] = { .type = NLA_U32 },
+   798		[NL80211_ATTR_CH_SWITCH_BLOCK_TX] = { .type = NLA_FLAG },
+   799		[NL80211_ATTR_CSA_IES] = { .type = NLA_NESTED },
+   800		[NL80211_ATTR_CNTDWN_OFFS_BEACON] = { .type = NLA_BINARY },
+   801		[NL80211_ATTR_CNTDWN_OFFS_PRESP] = { .type = NLA_BINARY },
+   802		[NL80211_ATTR_STA_SUPPORTED_CHANNELS] = NLA_POLICY_MIN_LEN(2),
+   803		/*
+   804		 * The value of the Length field of the Supported Operating
+   805		 * Classes element is between 2 and 253.
+   806		 */
+   807		[NL80211_ATTR_STA_SUPPORTED_OPER_CLASSES] =
+   808			NLA_POLICY_RANGE(NLA_BINARY, 2, 253),
+   809		[NL80211_ATTR_HANDLE_DFS] = { .type = NLA_FLAG },
+   810		[NL80211_ATTR_OPMODE_NOTIF] = { .type = NLA_U8 },
+   811		[NL80211_ATTR_VENDOR_ID] = { .type = NLA_U32 },
+   812		[NL80211_ATTR_VENDOR_SUBCMD] = { .type = NLA_U32 },
+   813		[NL80211_ATTR_VENDOR_DATA] = { .type = NLA_BINARY },
+   814		[NL80211_ATTR_QOS_MAP] = NLA_POLICY_RANGE(NLA_BINARY,
+   815							  IEEE80211_QOS_MAP_LEN_MIN,
+   816							  IEEE80211_QOS_MAP_LEN_MAX),
+   817		[NL80211_ATTR_MAC_HINT] = NLA_POLICY_EXACT_LEN_WARN(ETH_ALEN),
+   818		[NL80211_ATTR_WIPHY_FREQ_HINT] = { .type = NLA_U32 },
+   819		[NL80211_ATTR_TDLS_PEER_CAPABILITY] = { .type = NLA_U32 },
+   820		[NL80211_ATTR_SOCKET_OWNER] = { .type = NLA_FLAG },
+   821		[NL80211_ATTR_CSA_C_OFFSETS_TX] = { .type = NLA_BINARY },
+   822		[NL80211_ATTR_USE_RRM] = { .type = NLA_FLAG },
+   823		[NL80211_ATTR_TSID] = NLA_POLICY_MAX(NLA_U8, IEEE80211_NUM_TIDS - 1),
+   824		[NL80211_ATTR_USER_PRIO] =
+   825			NLA_POLICY_MAX(NLA_U8, IEEE80211_NUM_UPS - 1),
+   826		[NL80211_ATTR_ADMITTED_TIME] = { .type = NLA_U16 },
+   827		[NL80211_ATTR_SMPS_MODE] = { .type = NLA_U8 },
+   828		[NL80211_ATTR_OPER_CLASS] = { .type = NLA_U8 },
+   829		[NL80211_ATTR_MAC_MASK] = NLA_POLICY_EXACT_LEN_WARN(ETH_ALEN),
+   830		[NL80211_ATTR_WIPHY_SELF_MANAGED_REG] = { .type = NLA_FLAG },
+   831		[NL80211_ATTR_NETNS_FD] = { .type = NLA_U32 },
+   832		[NL80211_ATTR_SCHED_SCAN_DELAY] = { .type = NLA_U32 },
+   833		[NL80211_ATTR_REG_INDOOR] = { .type = NLA_FLAG },
+   834		[NL80211_ATTR_PBSS] = { .type = NLA_FLAG },
+   835		[NL80211_ATTR_BSS_SELECT] = { .type = NLA_NESTED },
+   836		[NL80211_ATTR_STA_SUPPORT_P2P_PS] =
+   837			NLA_POLICY_MAX(NLA_U8, NUM_NL80211_P2P_PS_STATUS - 1),
+   838		[NL80211_ATTR_MU_MIMO_GROUP_DATA] = {
+   839			.len = VHT_MUMIMO_GROUPS_DATA_LEN
+   840		},
+   841		[NL80211_ATTR_MU_MIMO_FOLLOW_MAC_ADDR] = NLA_POLICY_EXACT_LEN_WARN(ETH_ALEN),
+   842		[NL80211_ATTR_NAN_MASTER_PREF] = NLA_POLICY_MIN(NLA_U8, 1),
+   843		[NL80211_ATTR_BANDS] = { .type = NLA_U32 },
+   844		[NL80211_ATTR_NAN_CONFIG] = NLA_POLICY_NESTED(nl80211_nan_conf_policy),
+   845		[NL80211_ATTR_NAN_FUNC] = { .type = NLA_NESTED },
+   846		[NL80211_ATTR_FILS_KEK] = { .type = NLA_BINARY,
+   847					    .len = FILS_MAX_KEK_LEN },
+   848		[NL80211_ATTR_FILS_NONCES] = NLA_POLICY_EXACT_LEN_WARN(2 * FILS_NONCE_LEN),
+   849		[NL80211_ATTR_MULTICAST_TO_UNICAST_ENABLED] = { .type = NLA_FLAG, },
+   850		[NL80211_ATTR_BSSID] = NLA_POLICY_EXACT_LEN_WARN(ETH_ALEN),
+   851		[NL80211_ATTR_SCHED_SCAN_RELATIVE_RSSI] = { .type = NLA_S8 },
+   852		[NL80211_ATTR_SCHED_SCAN_RSSI_ADJUST] = {
+   853			.len = sizeof(struct nl80211_bss_select_rssi_adjust)
+   854		},
+   855		[NL80211_ATTR_TIMEOUT_REASON] = { .type = NLA_U32 },
+   856		[NL80211_ATTR_FILS_ERP_USERNAME] = { .type = NLA_BINARY,
+   857						     .len = FILS_ERP_MAX_USERNAME_LEN },
+   858		[NL80211_ATTR_FILS_ERP_REALM] = { .type = NLA_BINARY,
+   859						  .len = FILS_ERP_MAX_REALM_LEN },
+   860		[NL80211_ATTR_FILS_ERP_NEXT_SEQ_NUM] = { .type = NLA_U16 },
+   861		[NL80211_ATTR_FILS_ERP_RRK] = { .type = NLA_BINARY,
+   862						.len = FILS_ERP_MAX_RRK_LEN },
+   863		[NL80211_ATTR_FILS_CACHE_ID] = NLA_POLICY_EXACT_LEN_WARN(2),
+   864		[NL80211_ATTR_PMK] = { .type = NLA_BINARY, .len = PMK_MAX_LEN },
+   865		[NL80211_ATTR_PMKR0_NAME] = NLA_POLICY_EXACT_LEN(WLAN_PMK_NAME_LEN),
+   866		[NL80211_ATTR_SCHED_SCAN_MULTI] = { .type = NLA_FLAG },
+   867		[NL80211_ATTR_EXTERNAL_AUTH_SUPPORT] = { .type = NLA_FLAG },
+   868	
+   869		[NL80211_ATTR_TXQ_LIMIT] = { .type = NLA_U32 },
+   870		[NL80211_ATTR_TXQ_MEMORY_LIMIT] = { .type = NLA_U32 },
+   871		[NL80211_ATTR_TXQ_QUANTUM] = NLA_POLICY_FULL_RANGE(NLA_U32, &q_range),
+   872		[NL80211_ATTR_HE_CAPABILITY] =
+   873			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_he_capa,
+   874					       NL80211_HE_MAX_CAPABILITY_LEN),
+   875		[NL80211_ATTR_FTM_RESPONDER] =
+   876			NLA_POLICY_NESTED(nl80211_ftm_responder_policy),
+   877		[NL80211_ATTR_TIMEOUT] = NLA_POLICY_MIN(NLA_U32, 1),
+   878		[NL80211_ATTR_PEER_MEASUREMENTS] =
+   879			NLA_POLICY_NESTED(nl80211_pmsr_attr_policy),
+   880		[NL80211_ATTR_AIRTIME_WEIGHT] = NLA_POLICY_MIN(NLA_U16, 1),
+   881		[NL80211_ATTR_SAE_PASSWORD] = { .type = NLA_BINARY,
+   882						.len = SAE_PASSWORD_MAX_LEN },
+   883		[NL80211_ATTR_TWT_RESPONDER] = { .type = NLA_FLAG },
+   884		[NL80211_ATTR_HE_OBSS_PD] = NLA_POLICY_NESTED(he_obss_pd_policy),
+   885		[NL80211_ATTR_VLAN_ID] = NLA_POLICY_RANGE(NLA_U16, 1, VLAN_N_VID - 2),
+   886		[NL80211_ATTR_HE_BSS_COLOR] = NLA_POLICY_NESTED(he_bss_color_policy),
+   887		[NL80211_ATTR_TID_CONFIG] =
+   888			NLA_POLICY_NESTED_ARRAY(nl80211_tid_config_attr_policy),
+   889		[NL80211_ATTR_CONTROL_PORT_NO_PREAUTH] = { .type = NLA_FLAG },
+   890		[NL80211_ATTR_PMK_LIFETIME] = NLA_POLICY_MIN(NLA_U32, 1),
+   891		[NL80211_ATTR_PMK_REAUTH_THRESHOLD] = NLA_POLICY_RANGE(NLA_U8, 1, 100),
+   892		[NL80211_ATTR_RECEIVE_MULTICAST] = { .type = NLA_FLAG },
+   893		[NL80211_ATTR_WIPHY_FREQ_OFFSET] = NLA_POLICY_RANGE(NLA_U32, 0, 999),
+   894		[NL80211_ATTR_SCAN_FREQ_KHZ] = { .type = NLA_NESTED },
+   895		[NL80211_ATTR_HE_6GHZ_CAPABILITY] =
+   896			NLA_POLICY_EXACT_LEN(sizeof(struct ieee80211_he_6ghz_capa)),
+   897		[NL80211_ATTR_FILS_DISCOVERY] =
+   898			NLA_POLICY_NESTED(nl80211_fils_discovery_policy),
+   899		[NL80211_ATTR_UNSOL_BCAST_PROBE_RESP] =
+   900			NLA_POLICY_NESTED(nl80211_unsol_bcast_probe_resp_policy),
+   901		[NL80211_ATTR_S1G_CAPABILITY] =
+   902			NLA_POLICY_EXACT_LEN(IEEE80211_S1G_CAPABILITY_LEN),
+   903		[NL80211_ATTR_S1G_CAPABILITY_MASK] =
+   904			NLA_POLICY_EXACT_LEN(IEEE80211_S1G_CAPABILITY_LEN),
+   905		[NL80211_ATTR_SAE_PWE] =
+   906			NLA_POLICY_RANGE(NLA_U8, NL80211_SAE_PWE_HUNT_AND_PECK,
+   907					 NL80211_SAE_PWE_BOTH),
+   908		[NL80211_ATTR_RECONNECT_REQUESTED] = { .type = NLA_REJECT },
+   909		[NL80211_ATTR_SAR_SPEC] = NLA_POLICY_NESTED(sar_policy),
+   910		[NL80211_ATTR_DISABLE_HE] = { .type = NLA_FLAG },
+   911		[NL80211_ATTR_OBSS_COLOR_BITMAP] = { .type = NLA_U64 },
+   912		[NL80211_ATTR_COLOR_CHANGE_COUNT] = { .type = NLA_U8 },
+   913		[NL80211_ATTR_COLOR_CHANGE_COLOR] = { .type = NLA_U8 },
+   914		[NL80211_ATTR_COLOR_CHANGE_ELEMS] = NLA_POLICY_NESTED(nl80211_policy),
+   915		[NL80211_ATTR_MBSSID_CONFIG] =
+   916				NLA_POLICY_NESTED(nl80211_mbssid_config_policy),
+   917		[NL80211_ATTR_MBSSID_ELEMS] = { .type = NLA_NESTED },
+   918		[NL80211_ATTR_RADAR_BACKGROUND] = { .type = NLA_FLAG },
+   919		[NL80211_ATTR_AP_SETTINGS_FLAGS] = { .type = NLA_U32 },
+   920		[NL80211_ATTR_EHT_CAPABILITY] =
+   921			NLA_POLICY_RANGE(NLA_BINARY,
+   922					 NL80211_EHT_MIN_CAPABILITY_LEN,
+   923					 NL80211_EHT_MAX_CAPABILITY_LEN),
+   924		[NL80211_ATTR_DISABLE_EHT] = { .type = NLA_FLAG },
+   925		[NL80211_ATTR_MLO_LINKS] =
+   926			NLA_POLICY_NESTED_ARRAY(nl80211_policy),
+   927		[NL80211_ATTR_MLO_LINK_ID] =
+   928			NLA_POLICY_RANGE(NLA_U8, 0, IEEE80211_MLD_MAX_NUM_LINKS - 1),
+   929		[NL80211_ATTR_MLD_ADDR] = NLA_POLICY_EXACT_LEN(ETH_ALEN),
+   930		[NL80211_ATTR_MLO_SUPPORT] = { .type = NLA_FLAG },
+   931		[NL80211_ATTR_MAX_NUM_AKM_SUITES] = { .type = NLA_REJECT },
+   932		[NL80211_ATTR_EML_CAPABILITY] = { .type = NLA_U16 },
+   933		[NL80211_ATTR_PUNCT_BITMAP] =
+   934			NLA_POLICY_FULL_RANGE(NLA_U32, &nl80211_punct_bitmap_range),
+   935	
+   936		[NL80211_ATTR_MAX_HW_TIMESTAMP_PEERS] = { .type = NLA_U16 },
+   937		[NL80211_ATTR_HW_TIMESTAMP_ENABLED] = { .type = NLA_FLAG },
+   938		[NL80211_ATTR_EMA_RNR_ELEMS] = { .type = NLA_NESTED },
+   939		[NL80211_ATTR_MLO_LINK_DISABLED] = { .type = NLA_FLAG },
+   940		[NL80211_ATTR_BSS_DUMP_INCLUDE_USE_DATA] = { .type = NLA_FLAG },
+   941		[NL80211_ATTR_MLO_TTLM_DLINK] = NLA_POLICY_EXACT_LEN(sizeof(u16) * 8),
+   942		[NL80211_ATTR_MLO_TTLM_ULINK] = NLA_POLICY_EXACT_LEN(sizeof(u16) * 8),
+   943		[NL80211_ATTR_ASSOC_SPP_AMSDU] = { .type = NLA_FLAG },
+   944		[NL80211_ATTR_VIF_RADIO_MASK] = { .type = NLA_U32 },
+   945		[NL80211_ATTR_SUPPORTED_SELECTORS] =
+   946			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_supported_selectors,
+   947					       NL80211_MAX_SUPP_SELECTORS),
+   948		[NL80211_ATTR_MLO_RECONF_REM_LINKS] = { .type = NLA_U16 },
+   949		[NL80211_ATTR_EPCS] = { .type = NLA_FLAG },
+   950		[NL80211_ATTR_ASSOC_MLD_EXT_CAPA_OPS] = { .type = NLA_U16 },
+   951		[NL80211_ATTR_WIPHY_RADIO_INDEX] = { .type = NLA_U8 },
+   952		[NL80211_ATTR_S1G_LONG_BEACON_PERIOD] = NLA_POLICY_MIN(NLA_U8, 2),
+   953		[NL80211_ATTR_S1G_SHORT_BEACON] =
+   954			NLA_POLICY_NESTED(nl80211_s1g_short_beacon),
+   955		[NL80211_ATTR_BSS_PARAM] = { .type = NLA_FLAG },
+   956		[NL80211_ATTR_S1G_PRIMARY_2MHZ] = { .type = NLA_FLAG },
+   957		[NL80211_ATTR_EPP_PEER] = { .type = NLA_FLAG },
+   958		[NL80211_ATTR_UHR_CAPABILITY] =
+   959			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_uhr_capa, 255),
+   960		[NL80211_ATTR_DISABLE_UHR] = { .type = NLA_FLAG },
+ > 961		[[NL80211_ATTR_UHR_OPERATION] =
+   962			NLA_POLICY_VALIDATE_FN(NLA_BINARY, validate_uhr_operation),
+   963	};
+   964	
 
 -- 
 0-DAY CI Kernel Test Service
