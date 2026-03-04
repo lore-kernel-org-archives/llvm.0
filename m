@@ -1,107 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56236366DAC;
-	Wed,  4 Mar 2026 20:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772657259; cv=none; b=ij5YcS8xLXIFYRAzaNmWSGkM2f50fb3fqeH7Ba9PoO/OsEDLUSzq7zxQpLnW0bL98fZdJyPu/+Q5+oYmZRKJeyoftoZer1u37Imt6YkR82rN9ySRlZtpgA//8T7bEg2nymRqqFvSpsCxKSioEtA+k01CekpLJAiZ/3X+5yZwas4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772657259; c=relaxed/simple;
-	bh=X+ZnfoW3n6oGaL/yvhNEmwBP5nPTP/NRRaMEpYwtc90=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cNiuchIg5OdM4TKpkMCZz7WmMEJ5FvrzDpk1aBRMJLDTXAamOo6vTPrKFil9smGyQrxzW4fByMdZZagzoabA6g7Wcm8cpCdE3J9zSuxBcRgaddcYxE9F3m3O+ypurnRl6RzLQkj1F1wk/vXjw47eEX6JwwrMYtVVquHvzriZpLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hyEL8dDr; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A3637BE80
+	for <llvm@lists.linux.dev>; Wed,  4 Mar 2026 21:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772658619; cv=pass; b=Siq8f7ZO/cdgtUmRTrc/8O0TvFA1khe4W78hNiEZk+GzZzvXJ+jP9VVq+Iph6HzPUnfx+Guu8ggIy4WlIIVQCaiu3Rje8OnIgcE98fKYuszHpD90RHEeuhX00muOKhK1ehxyuNcPpMMrnWbr3iegMWpv0lazoG7Grqvc0ktPvvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772658619; c=relaxed/simple;
+	bh=1x0qGC1z7KcL2RcQBZrnk2++6hcdnbvAAqaO2AwfRBU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z97b3Wae+pHawT2UsteQ+at02TMSJ7cMlkalkbH788SUJB7hKTOBaPAlsO+dTwyTdf8jSonaF6gmQGgMC1Uvx1QoZdHWm13FtfwN8zRAsCwv8ZLmZ+cMiRmGJ+M+I4Tn2Q76N8BgLLnjPBnafHtHg/i5Q94+h+Q12/yvBWz8/E4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=stDTacwy; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hyEL8dDr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772657258; x=1804193258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X+ZnfoW3n6oGaL/yvhNEmwBP5nPTP/NRRaMEpYwtc90=;
-  b=hyEL8dDrPVUcEGLLls6VezV6FQH75ISnzl3GpbC0JBF7sKHaLvVDzXfq
-   x5RocjfnsbUMfOusOHJlO5gkmgk+X1/YIf/3d8Al/LMJFLbjnLg2IvyF/
-   9twlXhVyJelQMmwm8KDaEZVbweHkETkWWTQCPRae+arw3J5x/FWMNqljr
-   4QTbPlbk37tBTGe/B/m48LlXpku4Gvgz/U5yTQ3q11bwzf95ZfkHXwVZZ
-   gCJHowUaBvbhOGjbpLCs1hXo/oiDTN/2ipfW3KaA02KExlw6lAqeJYIQ5
-   rIXZadeN4WACTUkyjrjAU+6XaqpTfl+6yaTnxp7dDkJsV0nyc8szM5G2P
-   A==;
-X-CSE-ConnectionGUID: RXCoK3N8Tp+RpRApK/h6TA==
-X-CSE-MsgGUID: LXLE0/GHSRyJhfi/dmXd1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="85079031"
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="85079031"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 12:47:37 -0800
-X-CSE-ConnectionGUID: OgE2DpaoSOyEy0bQ1Ts5Lw==
-X-CSE-MsgGUID: i9UQngh0RoSSQNLuqGj0qA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="223419138"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa005.jf.intel.com with ESMTP; 04 Mar 2026 12:47:33 -0800
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxt7y-000000001lx-3Gba;
-	Wed, 04 Mar 2026 20:47:30 +0000
-Date: Wed, 4 Mar 2026 21:46:37 +0100
-From: kernel test robot <lkp@intel.com>
-To: Can Guo <can.guo@oss.qualcomm.com>, avri.altman@wdc.com,
-	bvanassche@acm.org, beanhuo@micron.com, martin.petersen@oracle.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-scsi@vger.kernel.org, Can Guo <can.guo@oss.qualcomm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Peter Wang <peter.wang@mediatek.com>,
-	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] scsi: ufs: core: Add support for TX Equalization
-Message-ID: <202603042130.iNqLS3Zo-lkp@intel.com>
-References: <20260304135313.413688-5-can.guo@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="stDTacwy"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ae4b40999bso3295ad.1
+        for <llvm@lists.linux.dev>; Wed, 04 Mar 2026 13:10:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772658618; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eebB7HaZ6/wx61etV0RCcYfnFJLvyXothpKxxKowEplZS19JyfhZIw9nj0L/ekDTgk
+         VVjmZ7dSTSVFTYm9fWra4D5P6FL4n+/nBR/FCoM6sVvPsBE5RtjKzQ99wOsPtVpUijYP
+         n7eEFc9NmL62WoixEBMrl2rCLBjagsffi7iYfPrHBdwvrT3Di2HJdt8okGpWHoVX8tva
+         753BIX6POS0bby56IFDyRRZLpkC5NTRMtxbttHXs6OEsrgk3+YekLbe4l3vNk6iSfuhP
+         2AAYf0zImVjzAfabXElb71M4EvITrXEbpYi0KuM6pTx/799XYAOO6V+gDQTcFjojMZF2
+         652A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1x0qGC1z7KcL2RcQBZrnk2++6hcdnbvAAqaO2AwfRBU=;
+        fh=XZyvpg95KGE/tyms0IqOmM/wrGPX3pQMPAb0VRntKhM=;
+        b=SA2NOkj2Jb8WuA4NKsxvphDdPLGeca2Gz6HvG9pUlr6P1cLZ+SGNuzZahAggm9J/IG
+         Y/+qLSGfGMmCRR0TX7f/nweybKPHVjbXv1R+gKpxQNQUWLS1FlkmRucTOroeZ+xkDySg
+         Un0v+ZtHBD2uXkPxCkIk7UycWfZPOW8FAQMeqKYvHqJUH9Vqx649EW6HYBAMilWEKW01
+         WHeuUNQlEQUCflR6a1DWvsGXMe5hesUVh6DLSRRrtbzQhdnYvVnJ4oktUeFXU3DYsRg/
+         Iw2RuOyzd5RWNzzn3L6CWSvRdVVF0bEJ9ZC8qo4ksgCff5l98L9Z8L9asQLugcieINY0
+         /lUw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772658618; x=1773263418; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1x0qGC1z7KcL2RcQBZrnk2++6hcdnbvAAqaO2AwfRBU=;
+        b=stDTacwyRM2h7y5oH3ZALUY120IuFWBGk1MEWRP/NDl9lvRDRg2RKcp3kHFy7wW5Ht
+         e9XBTk9mXMVGPBTMdsPGoWzBfdcmxd5vamjFtoXfJewh3GbWrsvX/byaA6iTa5e1syRs
+         vUd5NguzOABKkpjswm2MGy0y+FUu1jumxva70/ONpfWPvF7SnpDVxC+TcpUiezArGsxz
+         weEMbjUpOZGDHx/NmdfM/vUSRuzYZIXUzaASc9T7H036h562+TM4JCVgISXD/R0n2aOT
+         gKgsWBA9IH56vUISCRMN+vj7vRuQeo+pwWtm3DxPalfvbQuDH/zfJxTLYWNBiSaINKik
+         g7PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772658618; x=1773263418;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1x0qGC1z7KcL2RcQBZrnk2++6hcdnbvAAqaO2AwfRBU=;
+        b=xB2PVyGN+V65b3tpm9A2HAvmrS4lEerEeLYJL++uzNF/0tdI5vAmcPbe1LjYGjRI6/
+         l5hB/RsQ7OuWAbdkfLFIZzWhekZEzoqRGNCnch/omGGgNstLn7eYhQzEvAWZv+M7ekmR
+         huSUktnNgOPnMOV7jryc5pPde3E5E3XyYI+QSCBIUcJPZ8o4XM+zvq4BDkrv10UZ80ZG
+         XOFTb+lT2ilMEDyliH7cC2RdKLJ1KwSr3B7EjmjaeNxvX3ePFRZt8WP7euh4QW1SmLeY
+         903KyXAQd8pgN5oHmTduq9Gu1toYpDDeEXpPLO04pOeaLH5zikl+JAkmqGl1P+3wJoRS
+         ZLpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUCrjX2fQW8w6HAQrllwxU/I3tFXmcsJD9C36w52ynQ4GADASC8O0aVTg7h9SO06hUkLsK0@lists.linux.dev
+X-Gm-Message-State: AOJu0YwPfstsyZRti3jvx4sPSwhTNRx7UxZbswu8ULme4q5XGqUiyz7Q
+	PfrsdTqHtJa6VTEz5tZgiBbwN9RyzmK9aU+l0BjcUOSWF+cLrvBmyrDZ57x1WgFZd7YTJDn/nBe
+	EuFMCmq1BHDiYjpqAiDEa966C4AqEYSupvxCcUqEu
+X-Gm-Gg: ATEYQzyNfJ52pGL7rN+5mW1JK+IMb1lLZJ/0y2ZQfVWmBTKlnhQ4BZ66wJeOmMeppLf
+	dYVpaxJXXo4ehNZmoLsV5/sSmxzmTQB8T20R85OtEfAazu7gdtdbuKc4jS9et/Uo+BlZaHeFBYb
+	koMR9355M+cxs2cl6c1VP72DnZ/1zMis92I0VjPkVxzJRib48uYUUe5QJ5VyeigrgENJbkEKECC
+	WlVLA/tfrczt5w5p/23pCnf5lHnWyM3GhLSdIyQHMoClYiOBv1sK3tlyFMIAMMjtPiR8xKdZE7E
+	E6NjyRv9VZPlcavyp+3SuLYIbdI2fB/8Gi95
+X-Received: by 2002:a17:903:2291:b0:2a0:89b0:71d7 with SMTP id
+ d9443c01a7336-2ae75200aa6mr154585ad.13.1772658617476; Wed, 04 Mar 2026
+ 13:10:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304135313.413688-5-can.guo@oss.qualcomm.com>
+References: <20260303230043.2074593-1-pcc@google.com> <CAP-5=fWL0jKGQuqBzP0xMWVkzu48c6JzgwWQ1+NkAxgbpSPpcg@mail.gmail.com>
+In-Reply-To: <CAP-5=fWL0jKGQuqBzP0xMWVkzu48c6JzgwWQ1+NkAxgbpSPpcg@mail.gmail.com>
+From: Peter Collingbourne <pcc@google.com>
+Date: Wed, 4 Mar 2026 13:10:02 -0800
+X-Gm-Features: AaiRm51Ju52tciadDjfjY4seviPZ2A98iFg4I_8xpLY0b4aTjYIkv461rYRYz3k
+Message-ID: <CAMn1gO6ojcmH-aciLT8XCMPMx8LaNSpUDzAWGjTUp1kGnwMd4w@mail.gmail.com>
+Subject: Re: [PATCH] perf llvm: Clean up after a failed disassembly
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Can,
+On Tue, Mar 3, 2026 at 3:29=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
+e:
+>
+> On Tue, Mar 3, 2026 at 3:00=E2=80=AFPM Peter Collingbourne <pcc@google.co=
+m> wrote:
+> >
+> > An error returned from a failed backend will cause perf to call the nex=
+t
+> > backend. If the error happens mid-function, e.g. due to an unrecognized
+> > instruction, we will end up with duplicated instructions in the output
+> > unless the backend that failed deletes any instructions that it created
+> > before failing. The capstone backend was already doing this but the LLV=
+M
+> > backend was not; fix it.
+> >
+> > Link: https://linux-review.googlesource.com/id/I377eef3cd662ab98fbcd69e=
+5004a259fa3d7aa06
+> > Signed-off-by: Peter Collingbourne <pcc@google.com>
+>
+> Reviewed-by: Ian Rogers <irogers@google.com>
 
-kernel test robot noticed the following build warnings:
+Thanks for the review. I guess this one should have also had
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next krzk/for-next linus/master v7.0-rc2 next-20260304]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: 048856817888 ("perf annotate: LLVM-based disassembler")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Can-Guo/scsi-ufs-core-Introduce-a-new-ufshcd-vops-negotiate_pwr_mode/20260304-220245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20260304135313.413688-5-can.guo%40oss.qualcomm.com
-patch subject: [PATCH v2 04/11] scsi: ufs: core: Add support for TX Equalization
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260304/202603042130.iNqLS3Zo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260304/202603042130.iNqLS3Zo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603042130.iNqLS3Zo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/ufs/core/ufs-txeq.c:56 cannot understand function prototype: 'const struct __ufs_tx_eq_preset'
->> Warning: drivers/ufs/core/ufs-txeq.c:77 cannot understand function prototype: 'const u32 pa_peer_rx_adapt_initial[UFS_HS_GEAR_MAX] ='
->> Warning: drivers/ufs/core/ufs-txeq.c:91 cannot understand function prototype: 'const u32 rx_adapt_initial_cap[UFS_HS_GEAR_MAX] ='
->> Warning: drivers/ufs/core/ufs-txeq.c:104 cannot understand function prototype: 'const u32 pa_tx_eq_setting[UFS_HS_GEAR_MAX] ='
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Peter
