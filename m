@@ -1,76 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E2129AAF3;
-	Wed,  4 Mar 2026 22:13:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9948B378833;
+	Wed,  4 Mar 2026 22:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772662425; cv=none; b=iFhnCGhIYe9MkSoOe5VrTTVoOEy1BdgExKA1aaEj2VFqyWVrlNiz6zhGwlxDfHkmFCBH0kTQyW4IZHg2LV1KSvwkpMtH0OBROdhT/bjRtsf06jTeLv5N8smLlt7+zHJK1ZDdsM+EsHtCyx3+AsEtxGW0pKYZyUO4dIDFZK0JBjc=
+	t=1772665003; cv=none; b=RD2iK1sDFTuWuNaJkiYtubymD+JOuWWONPbHZMZLQeBFz6qptbCn8yCd5hmXc2q3SX6excMsfFY5H05ed6JNz0OeYsvcTT3tt1JRJzvgfFafme14tZAjz2JM8kWEV7xbSODDMQ1Vfzc97vzWD2j31wnOVwfWtiHbLDtFvfo59aY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772662425; c=relaxed/simple;
-	bh=8viQ62Vl8rOScrYYff4z3W73/71vqWr9R5SU1cx41TU=;
+	s=arc-20240116; t=1772665003; c=relaxed/simple;
+	bh=0rXkdgSsjeXUw9O29HMod7MgndTa2Hf8FCWu+uPgaMY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CNgsCOZJIkeSi3jG6WaAO0kpxG8x28YBMM80sKQtY8ICYdRVkBF6VTHlMLRfmLRHuiJQcUjHCiNDe3oRSZFvfFfcPz7xmZxEQ4303EATnpT2MHimRtDavVcnzmuPUtkTmjKmHVnxrmR1nnUVz6IoxRfNpNRS/S3f/uYsTm6pbAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LGU4lD6T; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=fyPonv6L8nwAfqVGiEl9sqnF/+qrKV4Z+VlXrcUfmLGU1TAP5TslPHwia2HDIGvH5mT2CQQdbfTu/YLwBu/EcUoJ85J6FjHNUZZi8TEmM9oITzV5M52ksdnI9XuMnTtZmrudYUH3DV78DjnJeF2KE1QmsaX5ATTyOqmVvM+WT7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFh4P833; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LGU4lD6T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFh4P833"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772662423; x=1804198423;
+  t=1772665002; x=1804201002;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8viQ62Vl8rOScrYYff4z3W73/71vqWr9R5SU1cx41TU=;
-  b=LGU4lD6T9socxIoLAOWJ85iz5AGm31KQBaDFGz9MLrcDEEMng3nH5Vou
-   Z7xWFbbH/vnLJdHzj3hxdRc3uexUKn7xTGW/9ahtEx9iFtx57uIQOookY
-   ta85xoXLt0ZKV29LSns1bXGsYdqI+mY8I6fkmNZwg/Ex9+beuydJmgC5p
-   IMK40buOf4b3JI0fEMKps77B00L8mUG5KAChryq9Yo75F8DL3WQsengra
-   38lNcvcc6gTvTec7VTiOznm/I3cSUubhrQEHP+EhZJdvNNHNNLPBa3LuZ
-   IAlhMUpvLEyYr9vf5IWlAcDIcx28nkcGEajV2YNtQIvLQ5SQsmsEZo4w1
+  bh=0rXkdgSsjeXUw9O29HMod7MgndTa2Hf8FCWu+uPgaMY=;
+  b=WFh4P833Sug1XkOZIHvYijZPDxiu54CiwqCQinqojkdH0fYmd9abrm9H
+   KB5jEAHa8cv6DvlMa3OdBtwUBkgemnV4f6mKw6mEB4a1e8n1/m/B1pJCq
+   bdkzPL5Ywup8Z1dqIC0fs7pD+qjbXdyQF3xovZ6mN2KxNh/QhsizQyh0M
+   24xZuIJ+4hMhGeIVrTFmomwKpB2ArPXEnsBS/Pf+p5FPq7r/Hx5JGBtPu
+   NSHXa9H5AfXOt2lOZh/Z0ilDY2zmUIjo1JDKexISD/5H2OqEAgFvJh8+l
+   MwycHwYfgqdR7tfSH0k1CHAVQv/+OP3mG36VLXAv7XYdWs3SYhhEYuTch
    Q==;
-X-CSE-ConnectionGUID: 3kButFxAQhG2hKOzzqbM0g==
-X-CSE-MsgGUID: ONyiEjhjStqqeP4ZYRxLdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="61309900"
+X-CSE-ConnectionGUID: UrjoHBH1SNWqW9CSqVhG6w==
+X-CSE-MsgGUID: AYndNFlBTxe5tM5D19CDGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="99209042"
 X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="61309900"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 14:13:42 -0800
-X-CSE-ConnectionGUID: vKgF8lqPSuuf9WEb103q4w==
-X-CSE-MsgGUID: 4DnBmdg1RWOursf8+vRWaA==
+   d="scan'208";a="99209042"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 14:56:42 -0800
+X-CSE-ConnectionGUID: VlbvOeV6QSemWMbmWJyJ+Q==
+X-CSE-MsgGUID: xrxG+dIDSqalZu71ln8rHA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="223440410"
+   d="scan'208";a="222628482"
 Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 04 Mar 2026 14:13:38 -0800
+  by orviesa003.jf.intel.com with ESMTP; 04 Mar 2026 14:56:40 -0800
 Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vxuTF-000000004a9-1tK7;
-	Wed, 04 Mar 2026 22:13:33 +0000
-Date: Thu, 5 Mar 2026 06:13:31 +0800
+	id 1vxv8v-000000004eH-09jN;
+	Wed, 04 Mar 2026 22:56:37 +0000
+Date: Thu, 5 Mar 2026 06:56:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>
+To: Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, kevin-kw.huang@airoha.com,
-	macpaul.lin@mediatek.com, matthias.bgg@gmail.com,
-	kernel@collabora.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-Subject: Re: [PATCH net-next 2/2] net: phy: Introduce Airoha AN8801/R Gigabit
- Ethernet PHY driver
-Message-ID: <202603050606.eulVmYcb-lkp@intel.com>
-References: <20260304-add-airoha-an8801-support-v1-2-0ae4ee5a2f9d@collabora.com>
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>
+Subject: Re: [PATCH] PM: Move to_device() out of CONFIG_PM_SLEEP protection
+Message-ID: <202603050651.Tp7mTeNL-lkp@intel.com>
+References: <20260302105456.4134882-1-pengpeng.hou@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,74 +65,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260304-add-airoha-an8801-support-v1-2-0ae4ee5a2f9d@collabora.com>
+In-Reply-To: <20260302105456.4134882-1-pengpeng.hou@isrc.iscas.ac.cn>
 
-Hi Louis-Alexis,
+Hi Pengpeng,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on ed0abfe93fd135dac223e87a3c945017b1fa8bfc]
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.0-rc2 next-20260303]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Louis-Alexis-Eyraud/dt-bindings-net-Add-support-for-Airoha-AN8801-R-GbE-PHY/20260304-174023
-base:   ed0abfe93fd135dac223e87a3c945017b1fa8bfc
-patch link:    https://lore.kernel.org/r/20260304-add-airoha-an8801-support-v1-2-0ae4ee5a2f9d%40collabora.com
-patch subject: [PATCH net-next 2/2] net: phy: Introduce Airoha AN8801/R Gigabit Ethernet PHY driver
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260305/202603050606.eulVmYcb-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050606.eulVmYcb-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pengpeng-Hou/PM-Move-to_device-out-of-CONFIG_PM_SLEEP-protection/20260302-190351
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20260302105456.4134882-1-pengpeng.hou%40isrc.iscas.ac.cn
+patch subject: [PATCH] PM: Move to_device() out of CONFIG_PM_SLEEP protection
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260305/202603050651.Tp7mTeNL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050651.Tp7mTeNL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603050606.eulVmYcb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603050651.Tp7mTeNL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/phy/air_an8801.c:258:6: warning: variable 'pbus_data_h' is uninitialized when used here [-Wuninitialized]
-     258 |         if (pbus_data_h < 0)
-         |             ^~~~~~~~~~~
-   drivers/net/phy/air_an8801.c:240:30: note: initialize the variable 'pbus_data_h' to silence this warning
-     240 |         int pbus_data_l, pbus_data_h;
-         |                                     ^
-         |                                      = 0
-   1 warning generated.
+   In file included from drivers/base/core.c:38:
+>> drivers/base/power/power.h:163:50: error: no member named 'entry' in 'struct dev_pm_info'
+     163 |         return container_of(entry, struct device, power.entry);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/linux/container_of.h:21:49: note: expanded from macro 'container_of'
+      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+      22 |                       __same_type(*(ptr), void),                        \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      23 |                       "pointer type mismatch in container_of()");       \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:617:74: note: expanded from macro '__same_type'
+     617 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   In file included from drivers/base/core.c:38:
+>> drivers/base/power/power.h:163:9: error: no member named 'entry' in 'dev_pm_info'
+     163 |         return container_of(entry, struct device, power.entry);
+         |                ^                                       ~~~~~~
+   include/linux/container_of.h:24:21: note: expanded from macro 'container_of'
+      24 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^              ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                        ~~~~~~
+   2 errors generated.
 
 
-vim +/pbus_data_h +258 drivers/net/phy/air_an8801.c
+vim +163 drivers/base/power/power.h
 
-   236	
-   237	static int __air_buckpbus_reg_read(struct phy_device *phydev,
-   238					   u32 addr, u32 *data)
-   239	{
-   240		int pbus_data_l, pbus_data_h;
-   241		int ret;
-   242	
-   243		addr |= AN8801_PBUS_ACCESS;
-   244	
-   245		ret = __phy_write(phydev, AIR_BPBUS_MODE, MII_MMD_CTRL_ADDR);
-   246		if (ret < 0)
-   247			return ret;
-   248	
-   249		ret = __phy_write(phydev, AIR_BPBUS_RD_ADDR_HIGH, upper_16_bits(addr));
-   250		if (ret < 0)
-   251			return ret;
-   252	
-   253		ret = __phy_write(phydev, AIR_BPBUS_RD_ADDR_LOW, lower_16_bits(addr));
-   254		if (ret < 0)
-   255			return ret;
-   256	
-   257		ret = __phy_read(phydev, AIR_BPBUS_RD_DATA_HIGH);
- > 258		if (pbus_data_h < 0)
-   259			return pbus_data_h;
-   260	
-   261		pbus_data_l = __phy_read(phydev, AIR_BPBUS_RD_DATA_LOW);
-   262		if (pbus_data_l < 0)
-   263			return pbus_data_l;
-   264	
-   265		*data = (pbus_data_h << 16) | pbus_data_l;
-   266		return 0;
-   267	}
-   268	
+   160	
+   161	static inline struct device *to_device(struct list_head *entry)
+   162	{
+ > 163		return container_of(entry, struct device, power.entry);
+   164	}
+   165	
 
 -- 
 0-DAY CI Kernel Test Service
