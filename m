@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B029436C0C8;
-	Wed,  4 Mar 2026 23:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED4B36C581;
+	Wed,  4 Mar 2026 23:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772666987; cv=none; b=i7BPj3lBwUXLEl0MzR1//HftSLtKBQkI/5ThR0aYF5hNluurd6VVKxCASctBhfZi1qaJuhwCcmkawy4ZzIkVdPHudvUQgiIg0tau/Gw3jYQFf56Aez5DONp2pSfT5co08dP26vxaxISsk8rIHIIbXLA27/NrXdwvEhcNVqiw/BE=
+	t=1772666988; cv=none; b=M9M1SxOdRdLDEqQq+qbnpjaIbtONuJYA33OCob/gXXZ08siawcXly/KUoN0jmSYVjBXGIZol1yGGumV4lib3l+2NYAcs/wwHf0evVM0xI6CdUQ2iEj8Lx4JD2LnDCFfZ1eJcckz4+BcdrTOY1bZwgQmJNJodHqa2n+GcNGjtNV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772666987; c=relaxed/simple;
-	bh=+0H9HprVwAWE2Ar7kp6MKWDYkLmUQNAqugCZREnNhJU=;
+	s=arc-20240116; t=1772666988; c=relaxed/simple;
+	bh=IxhaafHkztuY+zBNGR9QmlTYlbpS+bBlFqY6qE/kIHI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmSE5f6JHYnbgP/vWDdqYX99uQjcD8btKYfyXwJKN/pdJ5b5dJcj/MBedJEua020IFAEzNsWC4wmGMbWvZt1W6/zWc6ZnSEldChpDFRFUgllNsUlhV2a3TP79FHlkn04+zC6DDI4FvtVCqwtyqwfSnvRmfTlK5XQb/qjXeLuwR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ko7KhTz9; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=lo+Ex6w6sGJmWamIFBr0RbFzx0KQgir7QwIU3YYFpdRZtN81CU7fZ6d49cJOopckj+LU33L7myu3AoykrKbVqJpYc1qM2K6Y/Gq/DEop0Hzabw4OPxIJmjBgDyrVRaHC0CfyGg7BSl1G/TJBvMX/uRFB6xYnqauUjYMSTEgAFKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P/ooWKjX; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ko7KhTz9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/ooWKjX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1772666986; x=1804202986;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+0H9HprVwAWE2Ar7kp6MKWDYkLmUQNAqugCZREnNhJU=;
-  b=Ko7KhTz9ZJbpgjLuqWkqACB1N7lUFS1rfODmVUBXOE0x3KHHLG2C27Lu
-   CO8LPhV/twcpWLUYF2H6FEcfr3ucnQEt5O24o+EPC4eQK4ExRwM2IhZgn
-   64yyAyU1lmAchuD83Qqxn8vZXMrB3jVT85RTfhdAxVyTT0Lf/0mlAojiV
-   bHo4/xNALk5UpZBJNLNudHiDVOohhKJ1ONXI4nilF7cVYV/JbyokKBTmY
-   EmWWgLTB2MjWKAmHC31vol+NbO4lnaDKL2rlSYtvqCkwzXvVhxaNyL66S
-   +0Ozn0w2UHlieEn0/11NGHqHk25XPpQX7Qe44/JdUG+k5/g8ZZ0dF4IbE
-   g==;
-X-CSE-ConnectionGUID: xRdibBadQ/2GOR24LJAycg==
-X-CSE-MsgGUID: X9kgmL5/RhO4Ymq0aeFQhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="76346469"
+  bh=IxhaafHkztuY+zBNGR9QmlTYlbpS+bBlFqY6qE/kIHI=;
+  b=P/ooWKjXQsaWU5Y/vhoNqLaycKwgA5uWbawOS8L444WCXjgUAj+TAzUY
+   6h3+dyQh5+YnIU0G8wjNGeyee5H2THVo69rpI9VvkUjelnqs79gTj1laH
+   5iERB30QVT+uEvpkLaJk5xYLmR8zj2mF4CFNcmItZuVxs6l/0KoNIXQUQ
+   D8tJKypum+XryaiHrMJLvjg/6arnBbcXbkWFczADnmVh/MU/fxlbvUIiH
+   I6FEci++2U+1vXbyt/66GYdB9zqShuf/uYGoSRbOotalvfCCfI67ETp7B
+   AQm/dDHpiGXwO78jHiVnhk/tS8tXVuebB2qabCnWIxQ5tHzu2JDkTsk9D
+   A==;
+X-CSE-ConnectionGUID: Y3eQNYmTSC66bJj4rflPjA==
+X-CSE-MsgGUID: OYe4WGdHQ9yUKH1jk3EGOg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73865423"
 X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="76346469"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 15:29:44 -0800
-X-CSE-ConnectionGUID: vYG5u79iQ0SK5e5P5lSF9A==
-X-CSE-MsgGUID: SlKUrp6iQXO6IKL9Gqt3eA==
+   d="scan'208";a="73865423"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 15:29:46 -0800
+X-CSE-ConnectionGUID: 8NrmtTl6TbKliB5/stzpFQ==
+X-CSE-MsgGUID: sDfz6LUbRIu6hfvflP1C4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="256374219"
+   d="scan'208";a="217739473"
 Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 04 Mar 2026 15:29:42 -0800
+  by orviesa010.jf.intel.com with ESMTP; 04 Mar 2026 15:29:43 -0800
 Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vxvet-000000004gP-2ouD;
+	id 1vxvet-000000004gL-2d5F;
 	Wed, 04 Mar 2026 23:29:39 +0000
-Date: Thu, 5 Mar 2026 07:29:25 +0800
+Date: Thu, 5 Mar 2026 07:29:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: wen.yang@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v3 2/2] sysctl: convert kernel/sysctl-test.c to use
- CTLTBL_ENTRY_XXX()
-Message-ID: <202603050724.SZxrEyyu-lkp@intel.com>
-References: <ae37f783d33aeab5769551df4d500467eb0676e5.1772432502.git.wen.yang@linux.dev>
+To: Peter Chen <peter.chen@cixtech.com>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org,
+	pawell@cadence.com, rogerq@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, cix-kernel-upstream@cixtech.com,
+	Peter Chen <peter.chen@cixtech.com>
+Subject: Re: [PATCH 1/2] usb: cdns3: Add USBSSP platform driver support
+Message-ID: <202603050737.OrrASrnZ-lkp@intel.com>
+References: <20260302030339.324196-2-peter.chen@cixtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,183 +67,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae37f783d33aeab5769551df4d500467eb0676e5.1772432502.git.wen.yang@linux.dev>
+In-Reply-To: <20260302030339.324196-2-peter.chen@cixtech.com>
 
-Hi,
+Hi Peter,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on sysctl/sysctl-next]
+[auto build test WARNING on robh/for-next]
 [also build test WARNING on linus/master v7.0-rc2 next-20260304]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/wen-yang-linux-dev/sysctl-introduce-CTLTBL_ENTRY_XXX-helper-macros/20260302-143709
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sysctl/sysctl.git sysctl-next
-patch link:    https://lore.kernel.org/r/ae37f783d33aeab5769551df4d500467eb0676e5.1772432502.git.wen.yang%40linux.dev
-patch subject: [RFC PATCH v3 2/2] sysctl: convert kernel/sysctl-test.c to use CTLTBL_ENTRY_XXX()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260305/202603050724.SZxrEyyu-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050724.SZxrEyyu-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Chen/usb-cdns3-Add-USBSSP-platform-driver-support/20260302-110634
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260302030339.324196-2-peter.chen%40cixtech.com
+patch subject: [PATCH 1/2] usb: cdns3: Add USBSSP platform driver support
+config: hexagon-randconfig-001-20260305 (https://download.01.org/0day-ci/archive/20260305/202603050737.OrrASrnZ-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050737.OrrASrnZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603050724.SZxrEyyu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603050737.OrrASrnZ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/sysctl-test.c:23:37: warning: pointer type mismatch ('void *' and 'int (*)(const struct ctl_table *, int, void *, size_t *, loff_t *)' (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long long *)')) [-Wpointer-type-mismatch]
-      23 |         struct ctl_table null_data_table = CTLTBL_ENTRY_VNMHR(
-         |                                            ^~~~~~~~~~~~~~~~~~~
-      24 |                         SYSCTL_NULL, "foo", 0644, proc_dointvec,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      25 |                         SYSCTL_ZERO, SYSCTL_ONE_HUNDRED);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:440:2: note: expanded from macro 'CTLTBL_ENTRY_VNMHR'
-     440 |         __CTLTBL_ENTRY(__var, __name, __mode, __handler, __min, __max, -1)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:313:18: note: expanded from macro '__CTLTBL_ENTRY'
-     313 |         .proc_handler = __CTL_HANDLER(_handler),                        \
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:284:5: note: expanded from macro '__CTL_HANDLER'
-     284 |         (0 ?                                                            \
-         |            ^
-     285 |                 ((void)sizeof(char[__builtin_types_compatible_p(        \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     286 |                         __typeof__(__handler), proc_handler) ?          \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     287 |                         1 : -1]), NULL) :                               \
-         |                         ~~~~~~~~~~~~~~~
-     288 |         __handler)
-         |         ~~~~~~~~~
-   kernel/sysctl-test.c:67:45: warning: pointer type mismatch ('void *' and 'int (*)(const struct ctl_table *, int, void *, size_t *, loff_t *)' (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long long *)')) [-Wpointer-type-mismatch]
-      67 |         struct ctl_table data_maxlen_unset_table = CTLTBL_ENTRY_VNMHRL(
-         |                                                    ^~~~~~~~~~~~~~~~~~~~
-      68 |                         data, "foo", 0644, proc_dointvec,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      69 |                         SYSCTL_ZERO, SYSCTL_ONE_HUNDRED, 0);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:462:2: note: expanded from macro 'CTLTBL_ENTRY_VNMHRL'
-     462 |         __CTLTBL_ENTRY(__var, __name, __mode, __handler, __min, __max, __maxlen)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:313:18: note: expanded from macro '__CTLTBL_ENTRY'
-     313 |         .proc_handler = __CTL_HANDLER(_handler),                        \
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:284:5: note: expanded from macro '__CTL_HANDLER'
-     284 |         (0 ?                                                            \
-         |            ^
-     285 |                 ((void)sizeof(char[__builtin_types_compatible_p(        \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     286 |                         __typeof__(__handler), proc_handler) ?          \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     287 |                         1 : -1]), NULL) :                               \
-         |                         ~~~~~~~~~~~~~~~
-     288 |         __handler)
-         |         ~~~~~~~~~
-   kernel/sysctl-test.c:105:27: warning: pointer type mismatch ('void *' and 'int (*)(const struct ctl_table *, int, void *, size_t *, loff_t *)' (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long long *)')) [-Wpointer-type-mismatch]
-     105 |         struct ctl_table table = CTLTBL_ENTRY_VNMR(data, "foo",
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     106 |                         0644, SYSCTL_ZERO, SYSCTL_ONE_HUNDRED);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:423:2: note: expanded from macro 'CTLTBL_ENTRY_VNMR'
-     423 |         __CTLTBL_ENTRY(__var, __name, __mode,                           \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     424 |                 __CTL_AUTO_HANDLER_RANGE(__var), __min, __max, -1)
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:313:18: note: expanded from macro '__CTLTBL_ENTRY'
-     313 |         .proc_handler = __CTL_HANDLER(_handler),                        \
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:284:5: note: expanded from macro '__CTL_HANDLER'
-     284 |         (0 ?                                                            \
-         |            ^
-     285 |                 ((void)sizeof(char[__builtin_types_compatible_p(        \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     286 |                         __typeof__(__handler), proc_handler) ?          \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     287 |                         1 : -1]), NULL) :                               \
-         |                         ~~~~~~~~~~~~~~~
-     288 |         __handler)
-         |         ~~~~~~~~~
-   kernel/sysctl-test.c:132:27: warning: pointer type mismatch ('void *' and 'int (*)(const struct ctl_table *, int, void *, size_t *, loff_t *)' (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long long *)')) [-Wpointer-type-mismatch]
-     132 |         struct ctl_table table = CTLTBL_ENTRY_VNMR(data, "foo", 0644,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     133 |                         SYSCTL_ZERO, SYSCTL_ONE_HUNDRED);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:423:2: note: expanded from macro 'CTLTBL_ENTRY_VNMR'
-     423 |         __CTLTBL_ENTRY(__var, __name, __mode,                           \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     424 |                 __CTL_AUTO_HANDLER_RANGE(__var), __min, __max, -1)
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:313:18: note: expanded from macro '__CTLTBL_ENTRY'
-     313 |         .proc_handler = __CTL_HANDLER(_handler),                        \
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysctl.h:284:5: note: expanded from macro '__CTL_HANDLER'
-     284 |         (0 ?                                                            \
-         |            ^
-     285 |                 ((void)sizeof(char[__builtin_types_compatible_p(        \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     286 |                         __typeof__(__handler), proc_handler) ?          \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     287 |                         1 : -1]), NULL) :                               \
-         |                         ~~~~~~~~~~~~~~~
-     288 |         __handler)
-         |         ~~~~~~~~~
-   kernel/sysctl-test.c:160:27: warning: pointer type mismatch ('void *' and 'int (*)(const struct ctl_table *, int, void *, size_t *, loff_t *)' (aka 'int (*)(const struct ctl_table *, int, void *, unsigned long *, long long *)')) [-Wpointer-type-mismatch]
-     160 |         struct ctl_table table = CTLTBL_ENTRY_VNMR(data, "foo", 0644,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     161 |                         SYSCTL_ZERO, SYSCTL_ONE_HUNDRED);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/cdns3/cdns3-plat.c:26:28: warning: unused variable 'cdns3_plat' [-Wunused-const-variable]
+      26 | static const unsigned long cdns3_plat;
+         |                            ^~~~~~~~~~
+   1 warning generated.
 
 
-vim +23 kernel/sysctl-test.c
+vim +/cdns3_plat +26 drivers/usb/cdns3/cdns3-plat.c
 
-    11	
-    12	/*
-    13	 * Test that proc_dointvec will not try to use a NULL .data field even when the
-    14	 * length is non-zero.
-    15	 */
-    16	static void sysctl_test_api_dointvec_null_tbl_data(struct kunit *test)
-    17	{
-    18		/*
-    19		 * Here we are testing that proc_dointvec behaves correctly when
-    20		 * we give it a NULL .data field. Normally this would point to a
-    21		 * piece of memory where the value would be stored.
-    22		 */
-  > 23		struct ctl_table null_data_table = CTLTBL_ENTRY_VNMHR(
-    24				SYSCTL_NULL, "foo", 0644, proc_dointvec,
-    25				SYSCTL_ZERO, SYSCTL_ONE_HUNDRED);
-    26		/*
-    27		 * proc_dointvec expects a buffer in user space, so we allocate one. We
-    28		 * also need to cast it to __user so sparse doesn't get mad.
-    29		 */
-    30		void __user *buffer = (void __user *)kunit_kzalloc(test, sizeof(int),
-    31								   GFP_USER);
-    32		size_t len;
-    33		loff_t pos;
-    34	
-    35		/*
-    36		 * We don't care what the starting length is since proc_dointvec should
-    37		 * not try to read because .data is NULL.
-    38		 */
-    39		len = 1234;
-    40		KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&null_data_table,
-    41						       KUNIT_PROC_READ, buffer, &len,
-    42						       &pos));
-    43		KUNIT_EXPECT_EQ(test, 0, len);
-    44	
-    45		/*
-    46		 * See above.
-    47		 */
-    48		len = 1234;
-    49		KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&null_data_table,
-    50						       KUNIT_PROC_WRITE, buffer, &len,
-    51						       &pos));
-    52		KUNIT_EXPECT_EQ(test, 0, len);
-    53	}
-    54	
+    25	
+  > 26	static const unsigned long cdns3_plat;
+    27	static const unsigned long cdnsp_plat;
+    28	
 
 -- 
 0-DAY CI Kernel Test Service
