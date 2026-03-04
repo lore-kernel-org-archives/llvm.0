@@ -1,120 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164D33AEF4E;
-	Wed,  4 Mar 2026 14:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D96F3DA5BB
+	for <llvm@lists.linux.dev>; Wed,  4 Mar 2026 19:06:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772633496; cv=none; b=fqhdd8jewkfOj2g2/W4nsG56P9MiWX58bHUOE7VIxv2cgkVURGQC/L/X5L+BbHHuWDfz12KpE/ceDQCIRigUoyGjzqsbw6U+H0PoR+tvMbsgy7QG+UI154DJZJDWTTTACLi30FMF4z6Zkbr8709io+owHrVPDT2G+YnMWYmRNgQ=
+	t=1772651180; cv=none; b=cBa3HmJSYOTeegkb5MbTsgw7ZzWwxz/tMcbKtvm1Ze3mavFV/8zwVVIMk7ZKYcfedSQewmqNwFFceA5yxXkR+x0obK6ynikkjq5dGDXS8wK21FbHyyZlIZs0YtLBe3xmf1EaD0xVCY9rrdNx8rOMn3MOOTPwH/LtBwVdMUJg1ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772633496; c=relaxed/simple;
-	bh=Qhu/NXTZvVS1GxryVXLFlGmYcFLtCfndr8DGcuJYgYI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kA21B06YmadWAmQmlSxevXkuEM/Eysfw80OceyA9Vmz6X7BKessfpdAGao8uvSjmSMC2IoxCmOZoL+pUdfksjx4EWSuAJo18QwsYQR039IfIxv13v4s251jp3j6h1eAkIDK5erjuX46d7T06/0sQDvPQUykQ0akrkYvEylejVz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iT3l74AI; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772651180; c=relaxed/simple;
+	bh=rgHhhK904eJTrKQNA3d+lrJY9I8xSxH1hvgB75KvjM8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=HLaMMwKKOpDPJWkXErSTYzrlzzIElng4VcSDQOyO3T2CQKcXY1VLh9/UPXXibb233LDRaFRUGn91CcqJYbIrgQNdcEii09cPOVZkPcfIY5KtCotGynKQJidGciUSjWpnUEdSoSNB4aJxqvvxBouJJtMgH5rUmrFzU0qGu7qGWfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pcc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WPmCjRad; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pcc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iT3l74AI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772633494; x=1804169494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qhu/NXTZvVS1GxryVXLFlGmYcFLtCfndr8DGcuJYgYI=;
-  b=iT3l74AIHQfyfF0qxJE0kQz2lb/qodu9LAFqj96abaygr9qgUMoEcaXj
-   Y/9BzWSoQ8ZZnEjao8iBhQtykDbwcODV+A5gX9XLbQ/B0BxEweBI86EIs
-   yxqdvnmmGc6N0bJMDPMD1s4lTv6ymQ/QOe5S+nF9PK6Ii52Af3YQYh4+c
-   mvbla1UATOn7Ndwl0KzAmtp8OKh9cv7Va47KxKis5f4r+EFWZdt+Z+/3O
-   9bLn9P4tV2+YQ3wSNKARq7RhOXe2HvYMsbVUltyZsaIZowq14SuoHr0h5
-   WXNc1Diktr5a6rRH1D9MuTA8dFVwhURjW2e0yxT0TfkoxwmBrXwcL6YZ1
-   A==;
-X-CSE-ConnectionGUID: Kqqi2AlvTB6DhnGtDWTKcA==
-X-CSE-MsgGUID: UC/WkGN/TdOVfjNGubkoYg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="72719121"
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="72719121"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 06:11:34 -0800
-X-CSE-ConnectionGUID: sn0c9hXNQyCVJos/qzygtA==
-X-CSE-MsgGUID: deoFyIJNTl+N5bf243+/rQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="218302275"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 04 Mar 2026 06:11:31 -0800
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxmwh-000000001ir-4Afg;
-	Wed, 04 Mar 2026 14:11:27 +0000
-Date: Wed, 4 Mar 2026 15:10:46 +0100
-From: kernel test robot <lkp@intel.com>
-To: Haifeng Xu <haifeng.xu@shopee.com>, rafael@kernel.org, lenb@kernel.org,
-	dan.j.williams@intel.com, jonathan.cameron@huawei.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dave@stgolabs.net,
-	dave.jiang@intel.com, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com,
-	linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: Re: [PATCH] ACPI: add a boot parameter to disable parsing CFMWS
- during NUMA init
-Message-ID: <202603041550.t2wIMeDy-lkp@intel.com>
-References: <20260304080647.169434-1-haifeng.xu@shopee.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WPmCjRad"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-1279caef718so7209490c88.1
+        for <llvm@lists.linux.dev>; Wed, 04 Mar 2026 11:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772651179; x=1773255979; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aZoK9TpWtH8M9FGRXi7BDR9wHii+12mE/LlkI5rGic4=;
+        b=WPmCjRaduCZeBPH++CyNBRSrF7J6GXDt77K4+dOZnlfXiduLm+8XSOO53fAuYrzrzn
+         eRCBdasUWHnPHOqcqR1yd8jqcqojuoUIpSlucvwPICXyVMWnEHaM5dvDclH+4yek6zi2
+         g7AUWIhWRrli/QMbKQovIxap1Dgf8WA3xef/9cdhM+dxLD96FAG0ok6ZHrajiRRK18LI
+         RAZejlDu5CciWgscD8r+8wnk0rZkZ0paRScEnm8f3l49HFUAMN1J1SZOGpiG54IxYQ8y
+         +YtGIXRnnqB+PDD4tdpHCe3VLMv7LrKLu4OJsPn9bHACXuUbt+Lmq0IvS8/mRRozv+nm
+         jWXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772651179; x=1773255979;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aZoK9TpWtH8M9FGRXi7BDR9wHii+12mE/LlkI5rGic4=;
+        b=D/gueb1/USo6qiZwhEOJZonG8Q02nImY+GOiwqJyibIrjgHA8AKM389fyMexbgCr+f
+         vO+uu4I6p1E3BGHwYC1X7wqPN1eh0RqglAof2gdlPtm0HqBXTvVkztIrdWVB0TNkVNbJ
+         sTpBf+N3vcfzNNDF2N01VA5AKaKwjkIT2CJbfb3d1yJsddocYx65256y/9l+cWBPNjFf
+         UbdD2EPK/biDV1CH0YvjGaWIMc3UMuwMRPjr40Z6TakchEeBR4CwubFO/l7a1yvxYQ+S
+         /XfSKSIMv0mSrfiESEJbVTvE9A3qE84pj++AZgKmi+VW2ay9irVncfse+zRbodegI4a6
+         KXWg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpX+Iic41UvG1MNRXVr9GphIynw3IsYH/YJuujJc/k2H27gX3QbE0CIHz/c0lGKeG+Auxw@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy9uMCI2XskkilU6TlocE+YTgR7FB5k3CSRwpGhIFJy8ynbNXwl
+	rCtlZyZ7+UOGzx9/T/kjDaHRUHQleK3kptUy8vn5MI4/cAk36bUSrSNNLokOneAaoJpO7A==
+X-Received: from dlbuy16.prod.google.com ([2002:a05:7022:1e10:b0:127:32c4:b97b])
+ (user=pcc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6609:b0:123:2ee9:d1b3
+ with SMTP id a92af1059eb24-128b7075854mr1369664c88.2.1772651178263; Wed, 04
+ Mar 2026 11:06:18 -0800 (PST)
+Date: Wed,  4 Mar 2026 11:06:12 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304080647.169434-1-haifeng.xu@shopee.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
+Message-ID: <20260304190613.2507582-1-pcc@google.com>
+Subject: [PATCH] perf disasm: Fix off-by-one bug in outside check
+From: Peter Collingbourne <pcc@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Collingbourne <pcc@google.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Haifeng,
+If a branch target points to one past the end of a function, the branch
+should be treated as a branch to another function. This can happen
+e.g. with a tail call to a function that is laid out immediately after
+the caller.
 
-kernel test robot noticed the following build warnings:
+Link: https://linux-review.googlesource.com/id/Ide471112e82d68177e0faf08ca411d9fcf0a7bdf
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+---
+ tools/perf/util/disasm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge cxl/next tip/x86/mm linus/master v6.16-rc1 next-20260303]
-[cannot apply to cxl/pending]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haifeng-Xu/ACPI-add-a-boot-parameter-to-disable-parsing-CFMWS-during-NUMA-init/20260304-160933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260304080647.169434-1-haifeng.xu%40shopee.com
-patch subject: [PATCH] ACPI: add a boot parameter to disable parsing CFMWS during NUMA init
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260304/202603041550.t2wIMeDy-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260304/202603041550.t2wIMeDy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603041550.t2wIMeDy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/numa/srat.c:323:12: warning: no previous prototype for function 'cfmws_disabled' [-Wmissing-prototypes]
-     323 | int __init cfmws_disabled(void)
-         |            ^
-   drivers/acpi/numa/srat.c:323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     323 | int __init cfmws_disabled(void)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/cfmws_disabled +323 drivers/acpi/numa/srat.c
-
-   322	
- > 323	int __init cfmws_disabled(void)
-   324	{
-   325		return cfmws_numa < 0;
-   326	}
-   327	
-
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index ddcc488f2e5f0..9e0420e14be19 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -384,7 +384,7 @@ static int jump__parse(const struct arch *arch, struct ins_operands *ops, struct
+ 	start = map__unmap_ip(map, sym->start);
+ 	end = map__unmap_ip(map, sym->end);
+ 
+-	ops->target.outside = target.addr < start || target.addr > end;
++	ops->target.outside = target.addr < start || target.addr >= end;
+ 
+ 	/*
+ 	 * FIXME: things like this in _cpp_lex_token (gcc's cc1 program):
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0.473.g4a7958ca14-goog
+
