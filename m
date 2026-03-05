@@ -1,83 +1,101 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C12837B41E
-	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 10:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B3A3A1CED;
+	Thu,  5 Mar 2026 13:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772707920; cv=none; b=ud+rIRApBcuUMLq/Ga83+pmIFliYf9d2tAMlrHdbNhYFk1e8zHs1dSir4J7QJtA5bSZYFYvqv4+ov7xbzTw51JVj2gh+VrEMygUOj4rqtVcw6byMBQ+FnPGEyrtCAwatcCOdH+zXlTCIcHnF9eHZGN04T7CeJVz5YsqRxnH9XtU=
+	t=1772716381; cv=none; b=N9TtvfFQB3o06h99shKS3cGwSVJwx+fjOmVOSGek7CUTqiiaCkY1SZCNryA5uN1mTF56Wv4z+lkVsfJO+/JxaU5vdppgkhEWloYwkLNaj8aometY0V2oiN4Fyu67GNB2sIecUBpcsjlLn3AQwWuuSpL9TAqayLYOQd+3Pb//ZTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772707920; c=relaxed/simple;
-	bh=zZqmM9VzOQ/O9cEt4xOeQgOy+8UiQys6mbbZHkCbCuo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bdyq++jO1xJ5cnTy22Ptfe34OU8RKtACBkRYI0z6qptuVnY6amQ8qUNsDbUAKP4vO9iyF+hcemP/QmgBfYHo2JnXFw55JPCdkWnSXSSmHA5XkBTavOwa0ASt6nZmiYMnZetoSD5wgHlfWfL7HQ3mqbnaaSe8yPDW/cAnr3nQ23Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PZO+7Cdi; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1772716381; c=relaxed/simple;
+	bh=JObdb+m9ClVNxpjnBzA2ku67CZREKj08yg5gOEcYeK8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=AhuGRPO7IBMXCFvubt8yXWfcUpraZLK7hT9j6XhRrB17MRsjsDF1lmBkYp4npK5LC+W+GlnG6q/m2G8iAeE7AsfEk8h/kIw/gdHq0xIKlPtEKmPv3f5oXnu+fYr5+6aDOwRNla0wCzwMyLJsyc5J6pOBt9xYsYBYp42QMT19qZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MbfCN52U; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PZO+7Cdi"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4806b12ad3fso67150535e9.0
-        for <llvm@lists.linux.dev>; Thu, 05 Mar 2026 02:51:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772707918; x=1773312718; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZqmM9VzOQ/O9cEt4xOeQgOy+8UiQys6mbbZHkCbCuo=;
-        b=PZO+7CdiUYumVdXtErR3oFj8kSPMA+zZ9Nse4geyD3X6AnQxwLWTBgDYQbrX5n9YMB
-         7UOiYUwLAqrlMO7kLYhj2D9aFVuojoI2Fh+1NXdU6POahfpgZefHQqtywe3GvB/VG5XH
-         TcS1RggJGhxUFQeqsPgg0zXUUkGtULp9WaE2IqzlT/tO3h/dxagSrBPZNNI5ZZ3cHBzQ
-         8/YAcasA+wT+rUIDcipzZ1Ur6TyS8TUHZcXZfAsI6FtJGXwjg3R0oqVfkSLO69WY1QZ0
-         YYuJznTVCEAcQw1hLUh8cJA/fpo4ZDG1UalGQbK58PiQoAqE2vSaTS/Afq93FJMs96H5
-         5yeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772707918; x=1773312718;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZqmM9VzOQ/O9cEt4xOeQgOy+8UiQys6mbbZHkCbCuo=;
-        b=ZDjVrJa2i83Zld2uiXGQDclyBg7cGW9yHljNZnKONNrny7mRi+p1ExbGly1Bki/Xfg
-         KurRAnZ2RnJIQeIXX6vjFdQYRGzbT2JjAlqYNtT/p4ae/tCrg3Vxz4Vf0wihqBIR7eKo
-         ZV5fmJHZ40tofqbNoijpVrR9JZp4IWc6DMtXYWqOWdmRyPfkSdQ/+LU/uHAzaOb26PIA
-         6BnNoMyHzwuJD1PpQy5iv6t3GElmHLDRVuV1cIGZ5OtEjDKYvF95Dqj22x+TlPgIyVPF
-         prAo+ZlIdJGMPweQ1AU5A3jVsxG0llTNRac9zXeFb13gRUYFGb63EGWkwjEPtKiphZFM
-         0Klg==
-X-Forwarded-Encrypted: i=1; AJvYcCWmuD0EI3jto87oMd39LZSndsuIQDe9imA3V3WqQrazgUoHRqUvkyQ2MIGhx4j4yyTsXVqP@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyvu3wY+fJu61ZfQPDllhN4DIzr7ocVhjAlCZYLrehth8ausad7
-	DQrVmPYx6BZpJ9/khjrVLBINquS/FTZsFJmlqwlfFGnfIjeYKZBKoSHvvBgSYsIBLs8OeD3F9xJ
-	cSlG6MGjv3Sy3cEAiVQ==
-X-Received: from wmpb29.prod.google.com ([2002:a05:600c:4a9d:b0:480:4be7:3f3a])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:c8a:b0:483:456a:5146 with SMTP id 5b1f17b1804b1-4851989fc75mr80019835e9.25.1772707917693;
- Thu, 05 Mar 2026 02:51:57 -0800 (PST)
-Date: Thu, 5 Mar 2026 10:51:33 +0000
-In-Reply-To: <177270557911.104478.12699746103670684667@derry.ads.avm.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MbfCN52U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772716380; x=1804252380;
+  h=date:from:to:cc:subject:message-id;
+  bh=JObdb+m9ClVNxpjnBzA2ku67CZREKj08yg5gOEcYeK8=;
+  b=MbfCN52UWWgEBNsjqhxSboX6iwoyrn1XY2PmjL01UdZG0OxVNPqbu4ZK
+   XzIF8ttRXEEAzDlj4PawbIAJYpfwuINmlg1oexfjE60+swT5ybU0G31kr
+   SOCkXIfrLQKAaDbsiKswEIBMjeQ2WNBXUDxPJXJpoB06EQZn7nlY/U3Y6
+   aeNQU/0OnKi+p0UFy2y22/RkoTUvSmkEQ0L9BK20IVmutvxT4mbJ439Z3
+   mtwpzQmjDqc5jOYmiYBtj0pZjoTIUhWIQ2tGeOr3J8porJdB7O3GeO3LU
+   RVyDMNfUmY7gVggKz+C88vzh1zHGATQavWtms8OtUzbdmg6tIRr5M0pYk
+   w==;
+X-CSE-ConnectionGUID: 3QQ58HrARz62yJy/MgollA==
+X-CSE-MsgGUID: w2r+wNVwTMqzJYnXnkkUxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73992804"
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="73992804"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 05:12:59 -0800
+X-CSE-ConnectionGUID: Wqft5699RBmFLD3bcvncnw==
+X-CSE-MsgGUID: xUDrUEWySGKo00npvo/9+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="223370182"
+Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Mar 2026 05:12:57 -0800
+Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vy8Va-000000000dq-3XTA;
+	Thu, 05 Mar 2026 13:12:54 +0000
+Date: Thu, 05 Mar 2026 21:12:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe:rw_iter 464/467] error[E0425]: cannot find value
+ `seq_read` in crate `bindings`
+Message-ID: <202603052115.AL2rYS7e-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com>
- <20260203-inline-helpers-v2-1-beb8547a03c9@google.com> <177270557911.104478.12699746103670684667@derry.ads.avm.de>
-Message-ID: <aalgNO1gRJdrWm4p@google.com>
-Subject: Re: [PATCH v2 1/3] kbuild: rust: add `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
-From: Alice Ryhl <aliceryhl@google.com>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	Matthew Maurer <mmaurer@google.com>
-Content-Type: text/plain; charset="utf-8"
 
-On Thu, Mar 05, 2026 at 11:12:59AM +0100, Nicolas Schier wrote:
-> Reviewed-by: Nicolas Schier <nsc@kernel.org>
-> Tested-by: Nicolas Schier <nsc@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git rw_iter
+head:   9d549a35a0c4585bfc4ff24185c5d8cb7485078e
+commit: 1248b180312701c655e99defd535922cb603adc5 [464/467] seq_file: remove seq_read()
+config: x86_64-randconfig-001-20260305 (https://download.01.org/0day-ci/archive/20260305/202603052115.AL2rYS7e-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603052115.AL2rYS7e-lkp@intel.com/reproduce)
 
-Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603052115.AL2rYS7e-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0425]: cannot find value `seq_read` in crate `bindings`
+   --> rust/kernel/debugfs/file_ops.rs:134:34
+   |
+   134   |             read: Some(bindings::seq_read),
+   |                                  ^^^^^^^^ help: a function with a similar name exists: `ec_read`
+   |
+   ::: rust/bindings/bindings_generated.rs:70948:5
+   |
+   70948 |     pub fn ec_read(addr: u8_, val: *mut u8_) -> ffi::c_int;
+   |     ------------------------------------------------------- similarly named function `ec_read` defined here
+--
+>> error[E0425]: cannot find value `seq_read` in crate `bindings`
+   --> rust/kernel/debugfs/file_ops.rs:186:34
+   |
+   186   |             read: Some(bindings::seq_read),
+   |                                  ^^^^^^^^ help: a function with a similar name exists: `ec_read`
+   |
+   ::: rust/bindings/bindings_generated.rs:70948:5
+   |
+   70948 |     pub fn ec_read(addr: u8_, val: *mut u8_) -> ffi::c_int;
+   |     ------------------------------------------------------- similarly named function `ec_read` defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
