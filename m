@@ -1,171 +1,202 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697CA3E5EF6
-	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 18:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772736196; cv=none; b=Y6QeQ8N2bapNy591PQD9wNJDrrqLU9aSY8xm2mF8A2aSDMPclwaNnXi5GAKZoCkz9vTMfjwyzeNy0t0Bj4IjL+x00Mmcqtj0ls5kYDk4dK9pPr0MJfmEQJKK1fX/0R0q49qcPMS381En1pOmRuWKjNklTEWMWE7Uz9rmz5/SjUs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772736196; c=relaxed/simple;
-	bh=pnxoz4idCuWp1cjgR8NlXKfgMViTDq/5rJxjecRq6R4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EOQ/F5/ib/QLtYXdLIOM7macFSV0oTChPljU4Szfbwd49bzvNn8e4EPXSNudjjTHbi5an/+Ll2pDWOnqaaNKFPAUXr+amfaeuejUlKaWCwQtGO8EG0RcvyNKAE+4mFlZFOm2enBgS/nv1gC4JYEPsDc1GWGJUfOMGFY8kGOQ+0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FvICW1C+; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24492D7DD3
+	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 19:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772737551; cv=pass; b=cwt2pDMDMl3Iwwe1rNo2dygNam2u1An6jAHB+oQqo/8au0KDAxcqe31g3nTJzrgyODDa6arXnzgawv6bwbiDh8TbuXz6HSZ9dZcTYEEBsyPpJyUJTDTeukAk07/BpNcuIB7hAnmymXeVWYNUrZ5nGKUiVszF2K1jTPft9Du0MYw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772737551; c=relaxed/simple;
+	bh=OiEKC9dj80TLcUp3yk+ZVSKiJN0ebZG15+u03MmyUhM=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K54oxUZe0gHxsSMeXmFEHFteJdET5uqyNEe2hv74ALZu6imvQrBK8FgdeZu721dw+QanbhdZeRnKo5a/iJ6XNSmgZLE4l3Nu4WEa8JD95PQqfs1Lspfn6mGsdLUaAlGXiw9jMqZwsA89reG9+VjFFM7GcUOrwz1Q6OkmS5j7jms=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nl8FrDk+; arc=pass smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FvICW1C+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1772736193;
-	bh=pnxoz4idCuWp1cjgR8NlXKfgMViTDq/5rJxjecRq6R4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=FvICW1C+Vlwk7C4+2b7hZrZ1qiKUEWLbPrLCzWapdyHqHilwja7f51Mk42/bd4IYS
-	 46BIFvCXXiNaJ+Pja4y+Td9egZ0+ZSeEqthkmqAaA6UmT6YKxhSOOUAl5zJ+z0lf6L
-	 +gNsej+g6pk4/aVVfERQGjaQDW6nYi4DP1BoZchf9c/ktfYhxP4IDNld2oUW2mwAje
-	 4z4UBZdkfg2o4bnQPQSPmnvp7NKwbrYfQkybUPREENsRddcAfsHou8u37b2Y05X2Gu
-	 Y6h1RKLmnJ/1GhWcvkZ+jgbJ5atxN4V5Sw9Hh1RH1DGMSmHwKTlZ/DWOTnUy4wEVzq
-	 baOMHLDz9YL3g==
-Received: from [IPv6:2606:6d00:15:210e::5ac] (unknown [IPv6:2606:6d00:15:210e::5ac])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id AB81F17E026C;
-	Thu,  5 Mar 2026 19:43:11 +0100 (CET)
-Message-ID: <5c8e5f38af10f44f366629e1e7c948ae9af2a196.camel@collabora.com>
-Subject: Re: [PATCH 1/2] [RESEND] media: rkvdec: reduce excessive stack
- usage in assemble_hw_pps()
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>, Detlev
- Casanova <detlev.casanova@collabora.com>, Ezequiel Garcia
- <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
- Nathan Chancellor	 <nathan@kernel.org>, Hans Verkuil
- <hverkuil+cisco@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
-	 <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Kees Cook
-	 <kees@kernel.org>, linux-media@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Thu, 05 Mar 2026 13:43:09 -0500
-In-Reply-To: <e907e900-073f-4aa6-b4fe-36b87e312f62@app.fastmail.com>
-References: <20260305152644.791897-1-arnd@kernel.org>
-	 <1621b56864cb186f1e5433b73b56afc00aa83452.camel@collabora.com>
-	 <e907e900-073f-4aa6-b4fe-36b87e312f62@app.fastmail.com>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-2kH2WREimXA5rID0isEA"
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nl8FrDk+"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79852e01cd1so3780277b3.0
+        for <llvm@lists.linux.dev>; Thu, 05 Mar 2026 11:05:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772737549; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Yclzy01RbKOhBKiZnDbsSLZvKzZWis4XLMJljAHyHlhLCzLG2izwGXRGn3i70yOhfO
+         hvwVmrSNTZCwBRJtfYoAmaKIWUTScUCsIcvoP01Fh32cmAMq/gZoUVVVMYJZXDUUjtki
+         3R+OQ48xF+reI7TAbVa9CVHk2K7AmIAMj97yzMSA/nOZPTQB6N0S/OtndOZhe6PdWrGz
+         oYNYyXBK8HGPbZ6vq7cxWg4wPFGhAAuL7dtrOzcggTnkWhFxccbo28lxWknf7h3z7esg
+         yRJx7LXWXKha+5nDTPoUdFHpz6sn8Ab4caSWOM4VBnl3YUjhBNQSu/P9yzRqResJZ5xY
+         TAkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=DUfdbW7OxfhKiR73pKbZr0uWEl4+qEzhZGOpiUb5qj8=;
+        fh=10dzDL+TtHQalvP6Locf+UAkloRYcpLmD5gr1tSSVh8=;
+        b=bVHGVxqZQY6jopzTAPtP4uFPvaaZhJs2dn9xPD+WDDb+6/swZew1kciikgdtqQGWxG
+         FXsPGE1mJukzsLwM4h1Sq1jXCKeEHzN6w3VgCAKV3RRzdUYg69CGgk5LhCxpjJMzC2qw
+         94AvBjC2450GMglgMjhAVX35zWVTl/TQ9tiRMZtPvfYeZdvrZvllgHXQ3a4Tabfwt9CB
+         875R2anW1VGMTcVnaJKsSF96jQ7gWskue8LOZphEieHaZc3LbAxH+nW5mFfGgH0FWUdD
+         TgHmFykuiahmOWmRoaNlPC3PjP4ePN08XIAq3tyiKqD+90oOUhbtnnZ0Zwz/3W2WktCC
+         xjrg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772737549; x=1773342349; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DUfdbW7OxfhKiR73pKbZr0uWEl4+qEzhZGOpiUb5qj8=;
+        b=nl8FrDk+F6FsKTiT0gUdjg1l6ZjOGx4a3nOpmgHWVgJE82Y/XxcrVec5XvwuoH0V8M
+         ti95nC/XHAg67dLA/xqT9Yi5IjiDBFG6/hkcxyM/bMmpDQGj6xDc6ebdzG8Z/wuNL74s
+         RHnXohHKxDSGpTonnTX2FCtc9xlugBR1MvrjCbJ7S/23hFtKtHgSayX7humumieXjFPj
+         fKJ0x7wlpLyE9wbDhTHiEo5nBhsikFe/cBUUNwBfFgGZAOA6dE+WhbiaWn80bJPIEIIv
+         5/FBLtNvbUkIephygKMevxfNW9Iz2RVZb3L6cOb9FiGCe0tT2F6mWv/Hiie3fbYDRmIW
+         Y0kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772737549; x=1773342349;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DUfdbW7OxfhKiR73pKbZr0uWEl4+qEzhZGOpiUb5qj8=;
+        b=Lk0nkkMcQUHgQfzMyKjJ+m5KXw6NeI1UQtq5V3a0HSsqxau4x63GRhim9TlVLiM4Bf
+         POfHZ1efqkjSnZ1qFUkTej2mJF9uyfHlYQmxT5DBzjxyue7WyLe2XJZ7HgDd3bKeWvoL
+         bSGYjr6A+UuTXqJ1n4LLq++krME/jU6GrapLnE3+K7VteWKgGWYHxle1vec8/+luXe9C
+         YVt2uwcuDjiRfcXrrie8+BF7HDM9VbSPQltOd03EOECSSiU191YarncV3txCFQ+oeUk3
+         QxEmm/gKv8vuOziyMp/J+xVR6yRAbIZROKpbQDG50GQKbk+3/bpN6GxKn/l01rv7i7OF
+         LiTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4tIU3v1GbY3cX0jhrtt1RviXybo8PgPArvZ9RyWW2UUyiRsHn4KesqDQnAZ37ojPdViiO@lists.linux.dev
+X-Gm-Message-State: AOJu0YwLboX7hXWzYRMB4YZgAhrAh1j+WYCg/AdQq7rBJJEYGb1LUmuo
+	kpXB25LyVTjww0z0dQSeiKREE+7aMomF1twBJg/hMZr3AxUxr+DXX2d6cUDjpPMFfdD0a+AlUuJ
+	LQzxucNjf5iEJ3reZmK9xwVsFvt6zt6Y=
+X-Gm-Gg: ATEYQzzCHYE8a7KaTAdLfUnmuNndgEhGn/kAk2Ec0v8vJVQzyLFW52OB3kUp4vr7pCL
+	CmTE5FHlci7ptuay1W54mpHaFU/bufRg1DTg15oj+C0lCeUbnki1palqW7HmwiKEQcv48l1bcoa
+	7bo7EHKRuA+n7NlCEiR+Un+qjtGGMMdFOqH8rS6k3TUugIdIbaNLQkYPdk3jlfRmFEEmOKLaeEb
+	/5AafMSc2I4eJMljMtdL7JyFET4APHsF3tICJs67yQWglbbr+3iPQogBUqObAMcXFTfXGvSzzG2
+	/8nV9w==
+X-Received: by 2002:a05:690c:e3ca:b0:798:1de:f894 with SMTP id
+ 00721157ae682-798c6c843e6mr49794737b3.4.1772737548885; Thu, 05 Mar 2026
+ 11:05:48 -0800 (PST)
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 5 Mar 2026 13:05:48 -0600
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 5 Mar 2026 13:05:48 -0600
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <bd935d83b2fe3ddfedff052323a2b84e85061042.1770232424.git.m.wieczorretman@pm.me>
+References: <cover.1770232424.git.m.wieczorretman@pm.me> <bd935d83b2fe3ddfedff052323a2b84e85061042.1770232424.git.m.wieczorretman@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-
-
---=-2kH2WREimXA5rID0isEA
+Date: Thu, 5 Mar 2026 13:05:48 -0600
+X-Gm-Features: AaiRm51wLGHSZ9SaMaT4E-JYzg2vW23YHvcBblsyf-Lc9uQK9qhJFdTRUjtyx2g
+Message-ID: <CAPAsAGxpHBqzppoKCrqvH0mfhEn6p0aEHR30ZifB3uv81v68EA@mail.gmail.com>
+Subject: Re: [PATCH v10 01/13] kasan: sw_tags: Use arithmetic shift for shadow computation
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Kieran Bingham <kbingham@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: Samuel Holland <samuel.holland@sifive.com>, 
+	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, workflows@vger.kernel.org, linux-mm@kvack.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Maciej Wieczor-Retman <m.wieczorretman@pm.me> writes:
 
-Le jeudi 05 mars 2026 =C3=A0 18:10 +0100, Arnd Bergmann a =C3=A9crit=C2=A0:
-> On Thu, Mar 5, 2026, at 17:37, Nicolas Dufresne wrote:
-> >=20
-> > Le jeudi 05 mars 2026 =C3=A0 16:26 +0100, Arnd Bergmann a =C3=A9crit=C2=
-=A0:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >=20
-> > > The rkvdec_pps had a large set of bitfields, all of which
-> > > as misaligned. This causes clang-21 and likely other versions to
-> > > produce absolutely awful object code and a warning about very
-> > > large stack usage, on targets without unaligned access:
-> >=20
-> > I'm a bit surprised you felt the need for resend. Perhaps you can help =
-us
-> > understand what made you think your patch wasn't being processed ?
->=20
-> I updated the second patch today after I found a corner case that
-> wasn't addressed by the first version. As I had sent both as a series
-> a month ago, and neither was in linux-next yet, it seemed more helpful
-> to send an updated series rather than replace only one of the two.
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -558,6 +558,13 @@ static inline bool kasan_arch_is_ready(void)	{ return true; }
+>  #error kasan_arch_is_ready only works in KASAN generic outline mode!
+>  #endif
+>
+> +#ifndef arch_kasan_non_canonical_hook
+> +static inline bool arch_kasan_non_canonical_hook(unsigned long addr)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+>  #if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+>
+>  void kasan_kunit_test_suite_start(void);
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 62c01b4527eb..53152d148deb 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -642,10 +642,19 @@ void kasan_non_canonical_hook(unsigned long addr)
+>  	const char *bug_type;
+>
+>  	/*
+> -	 * All addresses that came as a result of the memory-to-shadow mapping
+> -	 * (even for bogus pointers) must be >= KASAN_SHADOW_OFFSET.
+> +	 * For Generic KASAN, kasan_mem_to_shadow() uses the logical right shift
+> +	 * and never overflows with the chosen KASAN_SHADOW_OFFSET values. Thus,
+> +	 * the possible shadow addresses (even for bogus pointers) belong to a
+> +	 * single contiguous region that is the result of kasan_mem_to_shadow()
+> +	 * applied to the whole address space.
+>  	 */
+> -	if (addr < KASAN_SHADOW_OFFSET)
+> +	if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
+> +		if (addr < (unsigned long)kasan_mem_to_shadow((void *)(0ULL)) ||
+> +		    addr > (unsigned long)kasan_mem_to_shadow((void *)(~0ULL)))
+> +			return;
+> +	}
+> +
+> +	if (arch_kasan_non_canonical_hook(addr))
+>  		return;
+>
 
-If you updated the code I'd prefer if it is sent as a new version, not a re=
-send.
-As for the media merge window, its been about a week since rc1 got merged i=
-nto
-media tree, with couple of weeks before that waiting for rc1 to land. I bel=
-ieve
-your month gap is there and accurate. I did also took a small break on revi=
-ew
-and PR concurrently.
+I've noticed that we currently classify bugs incorrectly in SW_TAGS
+mode. I've sent the fix for it [1] :
+ [1] https://lkml.kernel.org/r/20260305185659.20807-1-ryabinin.a.a@gmail.com
 
->=20
-> > My PR:
-> > https://patchwork.linuxtv.org/project/linux-media/patch/2074ba5a5d05e23=
-9f432d176eb051105f7e692f9.camel@collabora.com/
-> >=20
-> > And Hans/Mauro did logistic on the #linux-maint IRC channel this mornin=
-g. I
-> > believe I've marked all the relevant patches on patchwork our of "New" =
-state
-> > and
-> > you have my Rb. What else would help you ?
->=20
-> That's fine then, I did not mean to seem impatient. I assume
-> the original patches will be in linux-next then, and [v2 2/2]
-> will conflict. I'll let you review that one first, but can
-> send a rebased version if you think we should merge it on top.
+While at it, I was thinking whether we can make the logic above more
+arch/mode agnotstic and without per-arch hooks, so I've ended up with
+the following patch (it is on top of [1] fix).
+I think it should work with any arch or mode and both with signed or
+unsigned shifting.
 
-It will first reach media media-fixes (and not media-next, to avoid duplica=
-ting
-the patches), but I have no idea if someone picks from media-fixes into lin=
-ux-
-next. I recall there was a gap to be fixed in this "pre-integration" proces=
-s.
-Though, patch from fixes reaches RCs quickly, which are linux-next base.
+diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+index e804b1e1f886..1e4521b5ef14 100644
+--- a/mm/kasan/report.c
++++ b/mm/kasan/report.c
+@@ -640,12 +640,20 @@ void kasan_non_canonical_hook(unsigned long addr)
+ {
+ 	unsigned long orig_addr, user_orig_addr;
+ 	const char *bug_type;
++	void *tagged_null = set_tag(NULL, KASAN_TAG_KERNEL);
++	void *tagged_addr = set_tag((void *)addr, KASAN_TAG_KERNEL);
 
-Now, concurrently, Detlev is working on removing the bitfield for the RPS, =
-and
-the SPS will come later. Perhaps you want to sync to make sure we don't jus=
-t
-cancel out the work.
+ 	/*
+-	 * All addresses that came as a result of the memory-to-shadow mapping
+-	 * (even for bogus pointers) must be >= KASAN_SHADOW_OFFSET.
++	 * Filter out addresses that cannot be shadow memory accesses generated
++	 * by the compiler.
++	 *
++	 * In SW_TAGS mode, when computing a shadow address, the compiler always
++	 * sets the kernel tag (some top bits) on the pointer *before* computing
++	 * the memory-to-shadow mapping. As a result, valid shadow addresses
++	 * are derived from tagged kernel pointers.
+ 	 */
+-	if (addr < KASAN_SHADOW_OFFSET)
++	if (tagged_addr < kasan_mem_to_shadow(tagged_null) ||
++	    tagged_addr > kasan_mem_to_shadow((void *)(~0ULL)))
+ 		return;
 
-To solve the patch conflict issue, you can work on top of your existing ser=
-ies
-(just put a comment in the cover). I'll request a merge of rc2 / rc3 into m=
-edia-
-next, before I pick it up.
-
-regards,
-Nicolas
-
---=-2kH2WREimXA5rID0isEA
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaanOvQAKCRDZQZRRKWBy
-9HEEAP9SxgfNdzeWxoTFoO7BIW/dGlPesVcMOtlIL7jliydbcgD+IVKhK0U8Xtik
-CKB7l0ZE/DrTnjCzPM7uHg1CaqNjXwM=
-=SWbL
------END PGP SIGNATURE-----
-
---=-2kH2WREimXA5rID0isEA--
+ 	orig_addr = (unsigned long)kasan_shadow_to_mem((void *)addr);
+@@ -670,7 +678,7 @@ void kasan_non_canonical_hook(unsigned long addr)
+ 	} else if (user_orig_addr < TASK_SIZE) {
+ 		bug_type = "probably user-memory-access";
+ 		orig_addr = user_orig_addr;
+-	} else if (addr_in_shadow((void *)addr))
++	} else if (addr_in_shadow(tagged_addr))
+ 		bug_type = "probably wild-memory-access";
+ 	else
+ 		bug_type = "maybe wild-memory-access";
+-- 
+2.52.0
