@@ -1,88 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA903E716A;
-	Thu,  5 Mar 2026 18:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697CA3E5EF6
+	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 18:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772736171; cv=none; b=LH9BskhNny1dD33aXCYyw4iSR0u3o6XViYlndZFkWfA/FnuOBf8yS9H0So7+uOYAU+ky7dFQZWcTN1HHgKzWPr0NDkoq4zQ0bkX28Uss5j3JzorwYExiHOqsprNp/JhSTVpwaLj42vMxx246NphRqMtat//JUR2tOUiH1qgXKGo=
+	t=1772736196; cv=none; b=Y6QeQ8N2bapNy591PQD9wNJDrrqLU9aSY8xm2mF8A2aSDMPclwaNnXi5GAKZoCkz9vTMfjwyzeNy0t0Bj4IjL+x00Mmcqtj0ls5kYDk4dK9pPr0MJfmEQJKK1fX/0R0q49qcPMS381En1pOmRuWKjNklTEWMWE7Uz9rmz5/SjUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772736171; c=relaxed/simple;
-	bh=KI8zDkCmjclQpAj1+uZpvTQVLLmR3UqHgSK5fn9JVbc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HdZ2UhVG+qGSijL++OL91R3AUdRT31BWXg+zH/cfOj5Oo9ZUpKduYKfkBSOSap8nU8nhWCuU0kAZWC6MKIPmQfR9oMOgEFmLmgoBOwcIJeKEg7UACH699qDI89X447edx3Z4ZO8uZvC/7UMeMfzfT4r9JKCTyw0h0eLyUcn/lUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T0216r71; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772736196; c=relaxed/simple;
+	bh=pnxoz4idCuWp1cjgR8NlXKfgMViTDq/5rJxjecRq6R4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EOQ/F5/ib/QLtYXdLIOM7macFSV0oTChPljU4Szfbwd49bzvNn8e4EPXSNudjjTHbi5an/+Ll2pDWOnqaaNKFPAUXr+amfaeuejUlKaWCwQtGO8EG0RcvyNKAE+4mFlZFOm2enBgS/nv1gC4JYEPsDc1GWGJUfOMGFY8kGOQ+0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FvICW1C+; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0216r71"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772736169; x=1804272169;
-  h=date:from:to:cc:subject:message-id;
-  bh=KI8zDkCmjclQpAj1+uZpvTQVLLmR3UqHgSK5fn9JVbc=;
-  b=T0216r71GQmyvymuzuzJOphsAy9nO6RL95nORcfIFS6eHgbunJ6U9KYs
-   ppb2uczD3ft5C/bY71zKINZvT020P90KMcmLrBcnMtJh8OGFsAXVch6HJ
-   OgjuakH6KLOOrt/kELMfKlyedNC0a5PHpcfZOaMVhuZ8kuTO0y4572h15
-   YybdvuEA5xAq0AfSjsSnUGSSpfr5FaadO41qRx68xpTQ6iMwEXsrSA3WZ
-   tk5dV7OJo2CinurL4x8JeTIAd1X810MNGrPweEFlXR7p2r4pE4BmYD93I
-   oDKJItmsmvnsnSHGqQ4hzGSz8fUebLIV45siJfsS7Vi1+ruHfYZaoUyyc
-   A==;
-X-CSE-ConnectionGUID: pNYxoakpQ0anPdfMQRcePQ==
-X-CSE-MsgGUID: 2oQd4IceSn+FwVFeqyd9wg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="73749225"
-X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="73749225"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 10:42:49 -0800
-X-CSE-ConnectionGUID: yrMfmZYCRZ2eV4i77nyyWA==
-X-CSE-MsgGUID: dPTpIZujT/SS36rpTD+Bkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="256664937"
-Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 Mar 2026 10:42:48 -0800
-Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vyDem-0000000016w-2hQ7;
-	Thu, 05 Mar 2026 18:42:44 +0000
-Date: Fri, 06 Mar 2026 02:42:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe:rw_iter 304/467] Warning:
- drivers/net/ieee802154/ca8210.c:2444 function parameter 'iocb' not described
- in 'ca8210_test_int_user_write'
-Message-ID: <202603060217.DiUU0rgE-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FvICW1C+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1772736193;
+	bh=pnxoz4idCuWp1cjgR8NlXKfgMViTDq/5rJxjecRq6R4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=FvICW1C+Vlwk7C4+2b7hZrZ1qiKUEWLbPrLCzWapdyHqHilwja7f51Mk42/bd4IYS
+	 46BIFvCXXiNaJ+Pja4y+Td9egZ0+ZSeEqthkmqAaA6UmT6YKxhSOOUAl5zJ+z0lf6L
+	 +gNsej+g6pk4/aVVfERQGjaQDW6nYi4DP1BoZchf9c/ktfYhxP4IDNld2oUW2mwAje
+	 4z4UBZdkfg2o4bnQPQSPmnvp7NKwbrYfQkybUPREENsRddcAfsHou8u37b2Y05X2Gu
+	 Y6h1RKLmnJ/1GhWcvkZ+jgbJ5atxN4V5Sw9Hh1RH1DGMSmHwKTlZ/DWOTnUy4wEVzq
+	 baOMHLDz9YL3g==
+Received: from [IPv6:2606:6d00:15:210e::5ac] (unknown [IPv6:2606:6d00:15:210e::5ac])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id AB81F17E026C;
+	Thu,  5 Mar 2026 19:43:11 +0100 (CET)
+Message-ID: <5c8e5f38af10f44f366629e1e7c948ae9af2a196.camel@collabora.com>
+Subject: Re: [PATCH 1/2] [RESEND] media: rkvdec: reduce excessive stack
+ usage in assemble_hw_pps()
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>, Detlev
+ Casanova <detlev.casanova@collabora.com>, Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+ Nathan Chancellor	 <nathan@kernel.org>, Hans Verkuil
+ <hverkuil+cisco@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	 <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Kees Cook
+	 <kees@kernel.org>, linux-media@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 05 Mar 2026 13:43:09 -0500
+In-Reply-To: <e907e900-073f-4aa6-b4fe-36b87e312f62@app.fastmail.com>
+References: <20260305152644.791897-1-arnd@kernel.org>
+	 <1621b56864cb186f1e5433b73b56afc00aa83452.camel@collabora.com>
+	 <e907e900-073f-4aa6-b4fe-36b87e312f62@app.fastmail.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-2kH2WREimXA5rID0isEA"
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git rw_iter
-head:   9d549a35a0c4585bfc4ff24185c5d8cb7485078e
-commit: 2633f2ba5c3c7e3096bd862c086093077372e6ed [304/467] drivers/net/ieee802154: convert to read/write iterators
-config: arm-randconfig-002-20260305 (https://download.01.org/0day-ci/archive/20260306/202603060217.DiUU0rgE-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603060217.DiUU0rgE-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603060217.DiUU0rgE-lkp@intel.com/
+--=-2kH2WREimXA5rID0isEA
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-All warnings (new ones prefixed by >>):
+Hi,
 
->> Warning: drivers/net/ieee802154/ca8210.c:2444 function parameter 'iocb' not described in 'ca8210_test_int_user_write'
->> Warning: drivers/net/ieee802154/ca8210.c:2444 function parameter 'from' not described in 'ca8210_test_int_user_write'
->> Warning: drivers/net/ieee802154/ca8210.c:2517 function parameter 'iocb' not described in 'ca8210_test_int_user_read'
->> Warning: drivers/net/ieee802154/ca8210.c:2517 function parameter 'to' not described in 'ca8210_test_int_user_read'
->> Warning: drivers/net/ieee802154/ca8210.c:2444 function parameter 'iocb' not described in 'ca8210_test_int_user_write'
->> Warning: drivers/net/ieee802154/ca8210.c:2444 function parameter 'from' not described in 'ca8210_test_int_user_write'
->> Warning: drivers/net/ieee802154/ca8210.c:2517 function parameter 'iocb' not described in 'ca8210_test_int_user_read'
->> Warning: drivers/net/ieee802154/ca8210.c:2517 function parameter 'to' not described in 'ca8210_test_int_user_read'
+Le jeudi 05 mars 2026 =C3=A0 18:10 +0100, Arnd Bergmann a =C3=A9crit=C2=A0:
+> On Thu, Mar 5, 2026, at 17:37, Nicolas Dufresne wrote:
+> >=20
+> > Le jeudi 05 mars 2026 =C3=A0 16:26 +0100, Arnd Bergmann a =C3=A9crit=C2=
+=A0:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >=20
+> > > The rkvdec_pps had a large set of bitfields, all of which
+> > > as misaligned. This causes clang-21 and likely other versions to
+> > > produce absolutely awful object code and a warning about very
+> > > large stack usage, on targets without unaligned access:
+> >=20
+> > I'm a bit surprised you felt the need for resend. Perhaps you can help =
+us
+> > understand what made you think your patch wasn't being processed ?
+>=20
+> I updated the second patch today after I found a corner case that
+> wasn't addressed by the first version. As I had sent both as a series
+> a month ago, and neither was in linux-next yet, it seemed more helpful
+> to send an updated series rather than replace only one of the two.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you updated the code I'd prefer if it is sent as a new version, not a re=
+send.
+As for the media merge window, its been about a week since rc1 got merged i=
+nto
+media tree, with couple of weeks before that waiting for rc1 to land. I bel=
+ieve
+your month gap is there and accurate. I did also took a small break on revi=
+ew
+and PR concurrently.
+
+>=20
+> > My PR:
+> > https://patchwork.linuxtv.org/project/linux-media/patch/2074ba5a5d05e23=
+9f432d176eb051105f7e692f9.camel@collabora.com/
+> >=20
+> > And Hans/Mauro did logistic on the #linux-maint IRC channel this mornin=
+g. I
+> > believe I've marked all the relevant patches on patchwork our of "New" =
+state
+> > and
+> > you have my Rb. What else would help you ?
+>=20
+> That's fine then, I did not mean to seem impatient. I assume
+> the original patches will be in linux-next then, and [v2 2/2]
+> will conflict. I'll let you review that one first, but can
+> send a rebased version if you think we should merge it on top.
+
+It will first reach media media-fixes (and not media-next, to avoid duplica=
+ting
+the patches), but I have no idea if someone picks from media-fixes into lin=
+ux-
+next. I recall there was a gap to be fixed in this "pre-integration" proces=
+s.
+Though, patch from fixes reaches RCs quickly, which are linux-next base.
+
+Now, concurrently, Detlev is working on removing the bitfield for the RPS, =
+and
+the SPS will come later. Perhaps you want to sync to make sure we don't jus=
+t
+cancel out the work.
+
+To solve the patch conflict issue, you can work on top of your existing ser=
+ies
+(just put a comment in the cover). I'll request a merge of rc2 / rc3 into m=
+edia-
+next, before I pick it up.
+
+regards,
+Nicolas
+
+--=-2kH2WREimXA5rID0isEA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaanOvQAKCRDZQZRRKWBy
+9HEEAP9SxgfNdzeWxoTFoO7BIW/dGlPesVcMOtlIL7jliydbcgD+IVKhK0U8Xtik
+CKB7l0ZE/DrTnjCzPM7uHg1CaqNjXwM=
+=SWbL
+-----END PGP SIGNATURE-----
+
+--=-2kH2WREimXA5rID0isEA--
