@@ -1,150 +1,184 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA593BED4D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111FF3A5E7D;
 	Thu,  5 Mar 2026 15:16:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772723787; cv=none; b=gnchcuq15uXMLis60IJCEH8c6aLOOP1+IaI2ygkDIku1sXAx3it70hwTEJfsHR/XuYq791iV1ti/xsyr4loOrIt2HTx6ggLHinAJqKQBhWfP4DoCxR0AiB6/v3rY62aq26k5BBMUW5jQ2tMtf+semIuZNXtic8g906PSDTLQZHs=
+	t=1772723788; cv=none; b=Z9BjLL4NV7Ydek8PKCrER71R8zgZQCqaphzU49GdUTZbeBUcXhPNLTs5Kg+NaVPnzRtWMEv/32WuvhWQ3e7KJYxP3eRI9BfTR74oCR0HyHa6SzY//1XMmeG+1nOtaaeXny7GDqMhtio+vPWbHwol+5xsJscumtOv8sc0BVeI/Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772723787; c=relaxed/simple;
-	bh=aZZgKtJalOouoj+gAlljURHtikPG8/m5S6DSFzx5Y7E=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=mccrcDs+q5rssmK2LxPrK/m7o7th58xY3Imgk0s8D4cUmtvqwWudzHroTNohShR4oJE+MSBVxcOG2E/6UH36u5FyNA0voEtSGKD8j78pD8qiOH26afafeiF0yG7kY+G8CP9fbxaOXtB5ZCYqxSwVEsSUzyCZb7iPnHKvdds3X3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NdqSfarp; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1772723788; c=relaxed/simple;
+	bh=NIqGePwhMB9v9rBzNePQxONPR4S/D8k+T7Bqpz8eGUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FnNaVdf83nFHcdekBo34wo2YtfOiRrzBYzQv9pW3x1uB3sAlV6B3XvM9PhJKij+dxgh82Y/NgY0w8xQzWcnXjCt+tPTCa/iPpiJwoFMIxmOcnunLo4djvoWBxW2ies2BRPjdYQYs9c3HmFZS6JrnaNviZiURe3efbxtZzLXqQLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gyp9QNnl; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NdqSfarp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gyp9QNnl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1772723786; x=1804259786;
-  h=date:from:to:cc:subject:message-id;
-  bh=aZZgKtJalOouoj+gAlljURHtikPG8/m5S6DSFzx5Y7E=;
-  b=NdqSfarpY1hc+G5QhkMV0XOpKNTOZvM3/yHD7slXntpJZKmDnEYycRxJ
-   qB+2n0SkBFr9nFsRob4Y2934WaNwK/yVp2o1XwIGaPo+psyBnCdSB/rBp
-   vGA3CdwZc6An2ho422IEfJKJanGi+BRCo4HjOLfD1G8CUmnxaB1WC7Xv5
-   WEJyBYvSqZU67NHFbvL7/xtJzVATsxDlYOdkMM0xb3OUBSh8y+eFM8h8Y
-   JfftKjaaty7p3u+tBiDspKfZSem1CmYMqwEUskrnU2mxE2PcaVXgFKFVX
-   NYbH7zl/P33bmMOhXxcAyKp1/YD+A8w7LtHzoOEQC9iLF8qWfGz8kZuwd
-   Q==;
-X-CSE-ConnectionGUID: odXFu9SGQW6cwbZkWmrhHw==
-X-CSE-MsgGUID: qm/ueu4IQyK6J94xi8zVdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="96431001"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NIqGePwhMB9v9rBzNePQxONPR4S/D8k+T7Bqpz8eGUc=;
+  b=gyp9QNnltHk+tjTMW5KNR7nRqSh37IXNTceyTDgAEBXrVSPgJXktUz+J
+   E9BMzEpQLL2eLtRBQgA0VS8qJF8gLQsAjIYOqwaWgiX2b9fioRgA/f1if
+   Q1WjhaZDI9Im/Bii796Y8nAZBi8yVjDO9BkUZWgJzAw/bqS3S6IMSODxH
+   2tIneeYjPEYGzZMLnQQSL0VDXKE7r3IMa8EdgLmVas+6u3ePd7DHaIxaP
+   siMuBZz0n7ZCr3XAzHAC8tDRUlmupaGEREUzsKhmkls+VUIBEgq1mwSd8
+   XHM0IrFXPjHbzZ9db6oKidwv/72Ag8oCoStRq5x9jiV3SLhNjt8CzUQoJ
+   g==;
+X-CSE-ConnectionGUID: GpecCsA6QQW4GExWYP3D1A==
+X-CSE-MsgGUID: fknUc08JQB6ZJss4+/dbMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="96431007"
 X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="96431001"
+   d="scan'208";a="96431007"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 07:16:15 -0800
-X-CSE-ConnectionGUID: lZGvJUIsSn2Fo8NpPw4ITg==
-X-CSE-MsgGUID: MeuFIp1QTPGtFGyNG+6pxQ==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 07:16:19 -0800
+X-CSE-ConnectionGUID: wnCKV1F1Q4ykB5mWY2Gqag==
+X-CSE-MsgGUID: Qs67a8/fRH2sHp+KnOhEfg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="223667082"
+   d="scan'208";a="223667087"
 Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
   by orviesa005.jf.intel.com with ESMTP; 05 Mar 2026 07:16:13 -0800
 Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vyAQs-000000000oY-2VwP;
+	id 1vyAQs-000000000oU-2KhI;
 	Thu, 05 Mar 2026 15:16:10 +0000
-Date: Thu, 05 Mar 2026 23:15:44 +0800
+Date: Thu, 5 Mar 2026 23:15:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe:rw_iter 467/467] error[E0609]: no field `read` on
- type `bindings::file_operations`
-Message-ID: <202603052346.tJiBfE6p-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
+	robin.murphy@arm.com, joro@8bytes.org, bhelgaas@google.com,
+	jgg@nvidia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, rafael@kernel.org,
+	lenb@kernel.org, praan@google.com, kees@kernel.org,
+	baolu.lu@linux.intel.com, smostafa@google.com,
+	Alexander.Grest@microsoft.com, kevin.tian@intel.com,
+	miko.lenczewski@arm.com, linux-arm-kernel@lists.infradead.org,
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+	vsethi@nvidia.com
+Subject: Re: [PATCH v1 2/2] iommu/arm-smmu-v3: Recover ATC invalidate timeouts
+Message-ID: <202603052303.jrfwR7CV-lkp@intel.com>
+References: <ca7ab934bf0f433b62a5c15d42241632c4cb9366.1772686998.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca7ab934bf0f433b62a5c15d42241632c4cb9366.1772686998.git.nicolinc@nvidia.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git rw_iter
-head:   9d549a35a0c4585bfc4ff24185c5d8cb7485078e
-commit: fbd53fdafbefc56ceb47b7f9828fd34cdc6ac01a [467/467] fs: finally remove ->read() and ->write() from file_operations
-config: x86_64-randconfig-001-20260305 (https://download.01.org/0day-ci/archive/20260305/202603052346.tJiBfE6p-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603052346.tJiBfE6p-lkp@intel.com/reproduce)
+Hi Nicolin,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus rafael-pm/linux-next rafael-pm/bleeding-edge soc/for-next linus/master v7.0-rc2 next-20260304]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommu-Do-not-call-pci_dev_reset_iommu_done-unless-reset-succeeds/20260305-132923
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/ca7ab934bf0f433b62a5c15d42241632c4cb9366.1772686998.git.nicolinc%40nvidia.com
+patch subject: [PATCH v1 2/2] iommu/arm-smmu-v3: Recover ATC invalidate timeouts
+config: arm64-randconfig-003-20260305 (https://download.01.org/0day-ci/archive/20260305/202603052303.jrfwR7CV-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603052303.jrfwR7CV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603052346.tJiBfE6p-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603052303.jrfwR7CV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0609]: no field `read` on type `bindings::file_operations`
-   --> rust/kernel/drm/gem/mod.rs:307:10
-   |
-   307 |     fops.read = Some(bindings::drm_read);
-   |          ^^^^ unknown field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `llseek`, `read_iter`, `write_iter` ... and 27 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `read`
-   --> rust/kernel/debugfs/file_ops.rs:134:13
-   |
-   134 |             read: Some(bindings::seq_read),
-   |             ^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 24 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `read`
-   --> rust/kernel/debugfs/file_ops.rs:186:13
-   |
-   186 |             read: Some(bindings::seq_read),
-   |             ^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 24 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `write`
-   --> rust/kernel/debugfs/file_ops.rs:187:13
-   |
-   187 |             write: Some(write::<T>),
-   |             ^^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 24 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `write`
-   --> rust/kernel/debugfs/file_ops.rs:243:13
-   |
-   243 |             write: Some(write_only_write::<T>),
-   |             ^^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 25 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `read`
-   --> rust/kernel/debugfs/file_ops.rs:294:13
-   |
-   294 |             read: Some(blob_read::<T>),
-   |             ^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 25 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `write`
-   --> rust/kernel/debugfs/file_ops.rs:348:13
-   |
-   348 |             write: Some(blob_write::<T>),
-   |             ^^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 25 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `read`
-   --> rust/kernel/debugfs/file_ops.rs:372:13
-   |
-   372 |             read: Some(blob_read::<T>),
-   |             ^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 25 others
---
->> error[E0560]: struct `bindings::file_operations` has no field named `write`
-   --> rust/kernel/debugfs/file_ops.rs:373:13
-   |
-   373 |             write: Some(blob_write::<T>),
-   |             ^^^^^ `bindings::file_operations` does not have this field
-   |
-   = note: available fields are: `owner`, `fop_flags`, `read_iter`, `write_iter`, `iopoll` ... and 25 others
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:467:2: error: call to undeclared function 'pci_dev_lock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           pci_dev_lock(pdev);
+           ^
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:471:2: error: call to undeclared function 'pci_dev_unlock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           pci_dev_unlock(pdev);
+           ^
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:480:7: error: call to undeclared function 'pci_reset_function'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!pci_reset_function(pdev)) {
+                ^
+   3 errors generated.
+
+
+vim +/pci_dev_lock +467 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+
+   431	
+   432	static void arm_smmu_atc_recovery_worker(struct work_struct *work)
+   433	{
+   434		struct arm_smmu_atc_recovery_param *param =
+   435			container_of(work, struct arm_smmu_atc_recovery_param, work);
+   436		struct pci_dev *pdev;
+   437	
+   438		scoped_guard(mutex, &param->smmu->streams_mutex) {
+   439			struct arm_smmu_master *master;
+   440	
+   441			master = arm_smmu_find_master(param->smmu, param->sid);
+   442			if (!master || WARN_ON(!dev_is_pci(master->dev)))
+   443				goto free_param;
+   444			pdev = to_pci_dev(master->dev);
+   445			pci_dev_get(pdev);
+   446		}
+   447	
+   448		scoped_guard(spinlock_irqsave, &param->smmu->atc_recovery.lock) {
+   449			struct arm_smmu_atc_recovery_param *e;
+   450	
+   451			list_for_each_entry(e, &param->smmu->atc_recovery.list, node) {
+   452				/* Device is already being recovered */
+   453				if (e->pdev == pdev)
+   454					goto put_pdev;
+   455			}
+   456			param->pdev = pdev;
+   457			list_add(&param->node, &param->smmu->atc_recovery.list);
+   458		}
+   459	
+   460		/*
+   461		 * Stop DMA (PCI) and block ATS (IOMMU) immediately, to prevent memory
+   462		 * corruption. This must take pci_dev_lock to prevent any racy unplug.
+   463		 *
+   464		 * If pci_dev_reset_iommu_prepare() fails, pci_reset_function will call
+   465		 * it again internally.
+   466		 */
+ > 467		pci_dev_lock(pdev);
+   468		pci_clear_master(pdev);
+   469		if (pci_dev_reset_iommu_prepare(pdev))
+   470			pci_err(pdev, "failed to block ATS!\n");
+ > 471		pci_dev_unlock(pdev);
+   472	
+   473		/*
+   474		 * ATC timeout indicates the device has stopped responding to coherence
+   475		 * protocol requests. The only safe recovery is a reset to flush stale
+   476		 * cached translations. Note that pci_reset_function() internally calls
+   477		 * pci_dev_reset_iommu_prepare/done() as well and ensures to block ATS
+   478		 * if PCI-level reset fails.
+   479		 */
+ > 480		if (!pci_reset_function(pdev)) {
+   481			/*
+   482			 * If reset succeeds, set BME back. Otherwise, fence the system
+   483			 * from a faulty device, in which case user will have to replug
+   484			 * the device to invoke pci_set_master().
+   485			 */
+   486			pci_dev_lock(pdev);
+   487			pci_set_master(pdev);
+   488			pci_dev_unlock(pdev);
+   489		}
+   490		scoped_guard(spinlock_irqsave, &param->smmu->atc_recovery.lock)
+   491			list_del(&param->node);
+   492	put_pdev:
+   493		pci_dev_put(pdev);
+   494	free_param:
+   495		kfree(param);
+   496	}
+   497	
 
 -- 
 0-DAY CI Kernel Test Service
