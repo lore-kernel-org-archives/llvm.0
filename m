@@ -1,129 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EFE33BBA2;
-	Thu,  5 Mar 2026 20:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772742733; cv=none; b=MoAUOazjXSJVAPFatHXj7mcLqCOYV7O9dt+c2+L8U+pqB4qK4+j1L4zAdWtxBTABpxnzyA3m+ur+rU+D3omQL9CnNH33JTrfK4hnILgbDdb7BghHP7z3+qx9hhtFmy2G3LPCc62OBZ0JqlFC+35qa+mEOFRRT1xm8Vfar0+anZI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772742733; c=relaxed/simple;
-	bh=hugQiWGkFSYVq+nyZirpvLC+ZZve2bK6FwMh0hbpRhI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1iljytesJ/Qi20H3ONpD3to3WhlelV0Ncrwy/1EWVw2SQrThhUS2jiU8g9Kqlsk2uutROBrWHJGc9evAyjnj+ww8CLMCtLxwYvHLTVjYKpSJvaV6r+HyCfPhDJFYVL2r6ZQLmuuU3mRcpQx19ByMgPaxoBXK2vx5GA8c/ZNHz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUFRzDIT; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE442C21F4
+	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 21:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772745756; cv=pass; b=iwXUkruJv0W8chOl0s19K11w4wqP6g/ZhUpKW7XfkE+jWjOCCxrrSgZHsI1GPk/tt/DHpS/sgpEeSvLTrFrCV5/OnjAJVHLdT0LFtoKh3bNyUnGiGTIpRjJW/MtwnYClrz8fj47nxv/sVI4Fg8Wh56DKcUdfkKcz3uPgOufdXeQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772745756; c=relaxed/simple;
+	bh=xRV4KrgPufJHYoouG5oBzfgHa9sX1mic2JP1prCF/Sk=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qQwfIEw81xvZWsT3So/oiSMxcSJo5S6urml3q9wTUqhPydZe+Jjo4JpVTokleDJiajZ/61hzfSEMt+BtTrMgVktdN0Zyf66IoAktqsbD/qwTCGQq++JbBu18Od8GVRsx/WatAA3ZEYkTj3A4qHD6kAmMIBnxdPXU7msYJDwpHHg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GISBgxH+; arc=pass smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUFRzDIT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772742731; x=1804278731;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hugQiWGkFSYVq+nyZirpvLC+ZZve2bK6FwMh0hbpRhI=;
-  b=HUFRzDITLmLMvwF7tGCHw9cAQEME3xhjnzA/rKK3O2cwdWN4eIOITO34
-   I0ULVCJuxLk1cTBqF1y2LPRg58DExerMw4wOm8oqV6Hr0v0QbY0IkwIdM
-   cB7+9aUQCWGKNowKWuaPEfdYntLvUs2KQqR2hVyeOQpZrmaU4el+mRoEx
-   Xku0doJ8Pr4VpxhA54J8WE1td5cRmwI+K+VyFLw+OiJx/ZHpH1e2VnVvX
-   NY9uC5XSKxtRjsH7xPvJHaCHP0lEcWjomkYdiC8snBVHL43TXHiqPNIoO
-   DtSzVg0uwmLVyxAuha0Upxnn2gHG1vH7pjVWX4PseJ4uxMM6WjACUNOzf
-   w==;
-X-CSE-ConnectionGUID: FFy/Tp8TSlGx0ruJ1FY2vg==
-X-CSE-MsgGUID: Kl4oJuu3QoG8+VtqtLiwLA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="77690777"
-X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="77690777"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 12:32:10 -0800
-X-CSE-ConnectionGUID: dLwqVkZmQF+QYNrEDvZfnw==
-X-CSE-MsgGUID: nTLHGL1wQAOhkWhnUrJNfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="249259129"
-Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 05 Mar 2026 12:32:02 -0800
-Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vyFMU-000000001Cc-0tog;
-	Thu, 05 Mar 2026 20:31:58 +0000
-Date: Fri, 6 Mar 2026 04:31:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chengwen Feng <fengchengwen@huawei.com>, linux-pci@vger.kernel.org,
-	bhelgaas@google.com, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>,
-	Eric Van Tassell <Eric.VanTassell@amd.com>,
-	Ajit Khaparde <ajit.khaparde@broadcom.com>,
-	Somnath Kotur <somnath.kotur@broadcom.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, wei.huang2@amd.com,
-	jonathan.cameron@huawei.com, wangzhou1@hisilicon.com,
-	wanghuiqiang@huawei.com, liuyonglong@huawei.com
-Subject: Re: [PATCH v2] PCI/TPH: Fix get cpu steer-tag fail on ARM64 platform
-Message-ID: <202603060433.2NbZmymR-lkp@intel.com>
-References: <20260305083650.54611-1-fengchengwen@huawei.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GISBgxH+"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79652789a0cso5204437b3.3
+        for <llvm@lists.linux.dev>; Thu, 05 Mar 2026 13:22:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772745754; cv=none;
+        d=google.com; s=arc-20240605;
+        b=McrPLuA0bwrkVDPELVkUxYXeZxbzG0UYq3dAdzX8+vGX9TqbvGfOhWC3bMVjPCZoV7
+         ONnMvHhbP3TtuO4mM5tzDsMtSZ+HYimiCYQCBVxiy6Fj0qoqInaE2NGh3XTi6wFoZESi
+         KwjE/fmYomTX+wG1QY4p9zlap0nhGDIfHt3/udi3+HHjlPlAgjj5wdHZZgewkcdFyUwN
+         TVZydxPcZvKSh1PP2DMSi+L2uqT9Bz7Pk377ibFOvp2PhrnOa/NnZVwG1b06GKH0Uo3d
+         Aa3Pkzsxa7KCjV/7hgniQmBNxW15h3yZOcp/VV4iZBX+5BbCslKF99vXbcWTMcN2Fcft
+         OqCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=xRV4KrgPufJHYoouG5oBzfgHa9sX1mic2JP1prCF/Sk=;
+        fh=OI6zTF0IGqhZYv8p+LpZ4FSa+p1DZ/ftIErkNVZ9ECg=;
+        b=NgTgruldwBwIb+2M1LVXtXBYqeXcv2+sk531lweXeWvGCPcX+fXtxFhqRxUoIIOkyX
+         oqDGNrJnYQrVn1+6Okl+PEgxyKsEW/2ENJ+wNhj8sRu+A72IuYDJBQoA0+hYCx38qprV
+         8NMxlZbJbi2cqlrOsz0p2ac3z2I8jlAkMpVoPwxcQZzKose/M/Z8tzYCk3cKQn5XAw70
+         A4oP8Ud6et49WKYQoAdZU5NKoL1cLgjvim2JHXFjzB8XZ//nswvnctwG3R8RuEnpAFaP
+         C1Ah/uUo43t/3eBZW9IWgdWqC8DqmBIVjBbWU8WIAMFGtm7x4OQxzu1ZUC3li4R7Zush
+         UgZw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772745754; x=1773350554; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xRV4KrgPufJHYoouG5oBzfgHa9sX1mic2JP1prCF/Sk=;
+        b=GISBgxH+G1LkQ+YIdCBJqPiji96X1y0oFehjJmsnJZwXehUBcFA9aRve1F0clcV3MT
+         VTtIXx3hOL5CcJcNVNTTtu8m97FiBOqdBV3DB00mBq1wcV84IzV3sArzjzYMQpmb/4p1
+         IwnjGbN1OtyuLi+r/Si0mFzp/Edce9Augmqc2ZQS2PCDG70ScL1GdJqWV03FnlK59F0g
+         Z/n4Y3K7rTIf1/i5P3wsqjASw+EmIQCWyOonejiivKKFljXALCtRHz0OGOqrndEQnTis
+         eiUi2/jXOWc4nKGAnqr4PPHVMWv64D4sNLY42qnJzD8quM2MO3e+snbbmIM1bMaznJ4U
+         up3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772745754; x=1773350554;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xRV4KrgPufJHYoouG5oBzfgHa9sX1mic2JP1prCF/Sk=;
+        b=eEMUyy43B4ry5b2iQzp2RhOYay3pi2kpdNSBhE99FZHViR2IeJJpHZDh5PNzh+ZLCC
+         xNbUwfSSgGlkZ9El2rMl8VZVAy36nzBmxR4LjgoIo6SmIWsIno0v52dmU0R/qW7pB3KI
+         5LxYwnaAB8njr6vYjhgnkZuJNftV/wZfLHnVrmDuCr9r7r7mHGIlJrtfaDoB57QuoDL0
+         hUmHq+Q4iSM+4IyW1dqn4i0rxzyDKZ3MnbAL18eMV8QWIogT52lK6ukwXlvP6AtD7Dyg
+         TaU2bAPgrHWdNf+8QKwYWP9pgSJBD+GIFW2RBNl7z6lYjmCvQ53u8ErnoTtqNde6UMhZ
+         IB4w==
+X-Forwarded-Encrypted: i=1; AJvYcCWHxaY0F0BuxbgvoUS4GfFwLNG7exIdI0DomycHM8QNmfNoz9MNifv1Kq+7L8jRlStBXIeM@lists.linux.dev
+X-Gm-Message-State: AOJu0YwaRblQkntf1FIvk328Lcqm934KJN7h9Al/pxIWVIX7R3jMhgyA
+	S+BO8FkDZhvAAKex6UzJ7M+M1zMLZbbfceoDqJnRU3G7ko1gq/tghIHh3IUTmNvKh4cZEOXO/js
+	bVwUwNA5YhIRk6IANQV1xfuwAv0N0838=
+X-Gm-Gg: ATEYQzxG+c2+Siob+tOnqyBcrh0/I3vFtFAsgyN/MDtPiSnyuzvLnictrOGazhOSWDp
+	q2fXIwQlfBBU8abyrRnieexvuMGSx8uiygwUj2x6glKTr7jqzoYzOV8GeYdJLQtwGXgrwSqittY
+	ZQh7+bxQ8l20T9bEf4hFX4Bg+nHITlRO8kgzrC2EdtwROnct0kw9YG/kdEdC4ajg2eu6FpV6FCZ
+	dLumM0Kur1eJvw+YfW8zNGR5oRZP58zKN0A+swsR5Mk4mCNHmYkRz1zq5+PnlH6G1tGg/aaBBcS
+	etXBxouO
+X-Received: by 2002:a05:690c:385:b0:794:2fca:81a with SMTP id
+ 00721157ae682-798c6cdffacmr55975367b3.8.1772745753906; Thu, 05 Mar 2026
+ 13:22:33 -0800 (PST)
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Fri, 6 Mar 2026 06:22:32 +0900
+Received: from 95991385052 named unknown by gmailapi.google.com with HTTPREST;
+ Fri, 6 Mar 2026 06:22:32 +0900
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <aanievpHCv0Sz3Bf@wieczorr-mobl1.localdomain>
+References: <cover.1770232424.git.m.wieczorretman@pm.me> <bd935d83b2fe3ddfedff052323a2b84e85061042.1770232424.git.m.wieczorretman@pm.me>
+ <CAPAsAGxpHBqzppoKCrqvH0mfhEn6p0aEHR30ZifB3uv81v68EA@mail.gmail.com> <aanievpHCv0Sz3Bf@wieczorr-mobl1.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260305083650.54611-1-fengchengwen@huawei.com>
+Date: Fri, 6 Mar 2026 06:22:32 +0900
+X-Gm-Features: AaiRm539DykMmBy-Zg-BtYOlfUPQKOJ6bwMQcvFff9WH9ZMuhoRcwF9c8D83p3A
+Message-ID: <CAPAsAGyiukChPLYO_tQci-7Bvmnnxh+w=bO6eUYLrO3RVuUThw@mail.gmail.com>
+Subject: Re: [PATCH v10 01/13] kasan: sw_tags: Use arithmetic shift for shadow computation
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, 
+	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, workflows@vger.kernel.org, linux-mm@kvack.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Chengwen,
+Maciej Wieczor-Retman <m.wieczorretman@pm.me> writes:
 
-kernel test robot noticed the following build warnings:
+> Thanks, that looks really neat! I should've thought of that instead of making
+> separate arch versions :)
+>
+> Do you want me to attach the code you posted here to this patchset or do you
+> intend to post it yourself?
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus arm64/for-next/core tip/x86/core rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v7.0-rc2 next-20260305]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chengwen-Feng/PCI-TPH-Fix-get-cpu-steer-tag-fail-on-ARM64-platform/20260305-164057
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260305083650.54611-1-fengchengwen%40huawei.com
-patch subject: [PATCH v2] PCI/TPH: Fix get cpu steer-tag fail on ARM64 platform
-config: x86_64-buildonly-randconfig-002-20260306 (https://download.01.org/0day-ci/archive/20260306/202603060433.2NbZmymR-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603060433.2NbZmymR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603060433.2NbZmymR-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/cpu/common.c:2649:5: warning: no previous prototype for function 'acpi_get_cpu_acpi_id' [-Wmissing-prototypes]
-    2649 | int acpi_get_cpu_acpi_id(unsigned int cpu)
-         |     ^
-   arch/x86/kernel/cpu/common.c:2649:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2649 | int acpi_get_cpu_acpi_id(unsigned int cpu)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/acpi_get_cpu_acpi_id +2649 arch/x86/kernel/cpu/common.c
-
-  2648	
-> 2649	int acpi_get_cpu_acpi_id(unsigned int cpu)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I think you can just squash my diff into the subject patch.
