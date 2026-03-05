@@ -1,65 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A94330339;
-	Thu,  5 Mar 2026 20:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EFE33BBA2;
+	Thu,  5 Mar 2026 20:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772742006; cv=none; b=HlT3RWyy8XiHFuhRhs2z0SoiWXLpsqde9bLaDufPCHJjVn6g0R18IJbJTjU0CyMvcgoonwnuYJusJV2CBYq6whWZh2/E2YgZFWfY+p0nIG/oxLn/5gNcSiygs7agWrSTmfXcEclUfNgaW8b7/8srCW5S+bsR4pZW+hXd+wBXKws=
+	t=1772742733; cv=none; b=MoAUOazjXSJVAPFatHXj7mcLqCOYV7O9dt+c2+L8U+pqB4qK4+j1L4zAdWtxBTABpxnzyA3m+ur+rU+D3omQL9CnNH33JTrfK4hnILgbDdb7BghHP7z3+qx9hhtFmy2G3LPCc62OBZ0JqlFC+35qa+mEOFRRT1xm8Vfar0+anZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772742006; c=relaxed/simple;
-	bh=b/aA0R2rkxsvdEpn9luZz6MliKLYCgptFmRmP/LpAyE=;
+	s=arc-20240116; t=1772742733; c=relaxed/simple;
+	bh=hugQiWGkFSYVq+nyZirpvLC+ZZve2bK6FwMh0hbpRhI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CtwEvVYSK+niq5R49XCkaqe3uBcvOofwd8+hLB25Jf1UtCqZ5hpid1OutIpUPzt9k4SIRzspJUkxtwJ7sPzCCvPgb3FhFpymnMzIgEoY4dMMiUTpP8Eno2cY3YhrmJkL5kDjh9YFItqAwBAHx7JmrpMSQgdzpFrg26nuCUUMlrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oGNlDZ0V; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1iljytesJ/Qi20H3ONpD3to3WhlelV0Ncrwy/1EWVw2SQrThhUS2jiU8g9Kqlsk2uutROBrWHJGc9evAyjnj+ww8CLMCtLxwYvHLTVjYKpSJvaV6r+HyCfPhDJFYVL2r6ZQLmuuU3mRcpQx19ByMgPaxoBXK2vx5GA8c/ZNHz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUFRzDIT; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oGNlDZ0V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUFRzDIT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772742005; x=1804278005;
+  t=1772742731; x=1804278731;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=b/aA0R2rkxsvdEpn9luZz6MliKLYCgptFmRmP/LpAyE=;
-  b=oGNlDZ0VZ6ExuyRYK/jOCUuOiE30iZBHGU62TkxbpNirbDjdLjfC1vRX
-   XcAMwb8JMrr2g3EGreBunnUT6d30SuY2BCxhizWXm5c8IO6lagAo2Wtht
-   BPogSNljyF1dwlmSDZUFa0JXRF+PcYZcI55ufoQfW6QfunidVDQM+iCRC
-   ucCQFYkrEhfT898j/1+ABQe0aVwj6Unaem3ll0qNCi3TDKYuGGxFzy8jm
-   oJE5hkURgB0mzuHeJexw8kh1ZhRqKkgjaWHUBdNsyZFK3DBVhiBXftHBl
-   Bh8hzS/LR+LOnvmwUcpMGH3asEP3fsQRhVBs0RyX5hMLJ9Pwa7z5jwtSg
-   Q==;
-X-CSE-ConnectionGUID: CjG34sw6QVqQwKCC+7o+7A==
-X-CSE-MsgGUID: MDG5mYcbSrq7iEMyaQIqKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="77714599"
+  bh=hugQiWGkFSYVq+nyZirpvLC+ZZve2bK6FwMh0hbpRhI=;
+  b=HUFRzDITLmLMvwF7tGCHw9cAQEME3xhjnzA/rKK3O2cwdWN4eIOITO34
+   I0ULVCJuxLk1cTBqF1y2LPRg58DExerMw4wOm8oqV6Hr0v0QbY0IkwIdM
+   cB7+9aUQCWGKNowKWuaPEfdYntLvUs2KQqR2hVyeOQpZrmaU4el+mRoEx
+   Xku0doJ8Pr4VpxhA54J8WE1td5cRmwI+K+VyFLw+OiJx/ZHpH1e2VnVvX
+   NY9uC5XSKxtRjsH7xPvJHaCHP0lEcWjomkYdiC8snBVHL43TXHiqPNIoO
+   DtSzVg0uwmLVyxAuha0Upxnn2gHG1vH7pjVWX4PseJ4uxMM6WjACUNOzf
+   w==;
+X-CSE-ConnectionGUID: FFy/Tp8TSlGx0ruJ1FY2vg==
+X-CSE-MsgGUID: Kl4oJuu3QoG8+VtqtLiwLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="77690777"
 X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="77714599"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 12:20:04 -0800
-X-CSE-ConnectionGUID: bC/qC8JjSe6l4ckthTlsNA==
-X-CSE-MsgGUID: rwuba9+YRKeSqiYME3ysFg==
+   d="scan'208";a="77690777"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 12:32:10 -0800
+X-CSE-ConnectionGUID: dLwqVkZmQF+QYNrEDvZfnw==
+X-CSE-MsgGUID: nTLHGL1wQAOhkWhnUrJNfA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
-   d="scan'208";a="218776277"
+   d="scan'208";a="249259129"
 Received: from lkp-server01.sh.intel.com (HELO cadc4577a874) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 05 Mar 2026 12:20:01 -0800
+  by orviesa002.jf.intel.com with ESMTP; 05 Mar 2026 12:32:02 -0800
 Received: from kbuild by cadc4577a874 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vyFAr-000000001Bu-1fKc;
-	Thu, 05 Mar 2026 20:19:57 +0000
-Date: Fri, 6 Mar 2026 04:19:09 +0800
+	id 1vyFMU-000000001Cc-0tog;
+	Thu, 05 Mar 2026 20:31:58 +0000
+Date: Fri, 6 Mar 2026 04:31:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haifeng Xu <haifeng.xu@shopee.com>, rafael@kernel.org, lenb@kernel.org,
-	dan.j.williams@intel.com, jonathan.cameron@huawei.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dave@stgolabs.net,
-	dave.jiang@intel.com, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com,
-	linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: Re: [PATCH] ACPI: add a boot parameter to disable parsing CFMWS
- during NUMA init
-Message-ID: <202603060405.6xBosunB-lkp@intel.com>
-References: <20260304080647.169434-1-haifeng.xu@shopee.com>
+To: Chengwen Feng <fengchengwen@huawei.com>, linux-pci@vger.kernel.org,
+	bhelgaas@google.com, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Andy Gospodarek <andrew.gospodarek@broadcom.com>,
+	Eric Van Tassell <Eric.VanTassell@amd.com>,
+	Ajit Khaparde <ajit.khaparde@broadcom.com>,
+	Somnath Kotur <somnath.kotur@broadcom.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, wei.huang2@amd.com,
+	jonathan.cameron@huawei.com, wangzhou1@hisilicon.com,
+	wanghuiqiang@huawei.com, liuyonglong@huawei.com
+Subject: Re: [PATCH v2] PCI/TPH: Fix get cpu steer-tag fail on ARM64 platform
+Message-ID: <202603060433.2NbZmymR-lkp@intel.com>
+References: <20260305083650.54611-1-fengchengwen@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,52 +82,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260304080647.169434-1-haifeng.xu@shopee.com>
+In-Reply-To: <20260305083650.54611-1-fengchengwen@huawei.com>
 
-Hi Haifeng,
+Hi Chengwen,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge cxl/next tip/x86/mm linus/master v7.0-rc2 next-20260305]
-[cannot apply to cxl/pending]
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus arm64/for-next/core tip/x86/core rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v7.0-rc2 next-20260305]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haifeng-Xu/ACPI-add-a-boot-parameter-to-disable-parsing-CFMWS-during-NUMA-init/20260304-160933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260304080647.169434-1-haifeng.xu%40shopee.com
-patch subject: [PATCH] ACPI: add a boot parameter to disable parsing CFMWS during NUMA init
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260306/202603060405.6xBosunB-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chengwen-Feng/PCI-TPH-Fix-get-cpu-steer-tag-fail-on-ARM64-platform/20260305-164057
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20260305083650.54611-1-fengchengwen%40huawei.com
+patch subject: [PATCH v2] PCI/TPH: Fix get cpu steer-tag fail on ARM64 platform
+config: x86_64-buildonly-randconfig-002-20260306 (https://download.01.org/0day-ci/archive/20260306/202603060433.2NbZmymR-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603060405.6xBosunB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603060433.2NbZmymR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603060405.6xBosunB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603060433.2NbZmymR-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/acpi/numa/srat.c:323:12: warning: no previous prototype for function 'cfmws_disabled' [-Wmissing-prototypes]
-     323 | int __init cfmws_disabled(void)
-         |            ^
-   drivers/acpi/numa/srat.c:323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     323 | int __init cfmws_disabled(void)
+>> arch/x86/kernel/cpu/common.c:2649:5: warning: no previous prototype for function 'acpi_get_cpu_acpi_id' [-Wmissing-prototypes]
+    2649 | int acpi_get_cpu_acpi_id(unsigned int cpu)
+         |     ^
+   arch/x86/kernel/cpu/common.c:2649:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2649 | int acpi_get_cpu_acpi_id(unsigned int cpu)
          | ^
          | static 
    1 warning generated.
 
 
-vim +/cfmws_disabled +323 drivers/acpi/numa/srat.c
+vim +/acpi_get_cpu_acpi_id +2649 arch/x86/kernel/cpu/common.c
 
-   322	
- > 323	int __init cfmws_disabled(void)
-   324	{
-   325		return cfmws_numa < 0;
-   326	}
-   327	
+  2648	
+> 2649	int acpi_get_cpu_acpi_id(unsigned int cpu)
 
 -- 
 0-DAY CI Kernel Test Service
