@@ -1,164 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6AB384250;
-	Thu,  5 Mar 2026 15:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C61D3CC9FA
+	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 16:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772724421; cv=none; b=Y4jSC2QHomvNlh6ZMhZneDeWTDhDbZ3gZX/lE16jYxoX0zphQsYxbqFP4BtsTPNjA7Ew3GR44zgeIFqzYRaJbVIiq3G+Fhysk1P9tbNwkuW8nMm+Z3z7gphWjPBIboX5Zckdr4pJrpAnkygLdC7oKj1+gX378pm1cWhYeifug04=
+	t=1772728656; cv=none; b=FmCp0mSVFWJTsSK65+ZupMWo2Eo9zvWMzdDe7Kp6HUYT8QztMO8ZhZNqZ8Fs4dpH9vfTtAQq+fW6dQgCeJGu/VrjAO9IiaGcPDYU3INAyN1RRPFapNdJ+Un/Z2h002N8gwrk1ds4epWS3sr++raLbeQYamxV3aEF9NDA8C65QXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772724421; c=relaxed/simple;
-	bh=9che9S/rfD6SJcfVDz2SXnU+7MBs/hKF8MhWtpvGqig=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hlGwHU5Mjf+P6NePTpW/4CTts8XEkoDRWoZyVK4kUJYMJJglppldKUty+U/4ie7Qs/qysDa42vV7pLCxYgOB/BEOoCT1BRLeLrnWMLqDk01njSiDt6Of1nNbumb7QpA1gNVF0guErduemqDmvWrQpy/MEt9CVcnve+9eZ9155EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IWiqRWLb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772728656; c=relaxed/simple;
+	bh=hkK2ONkPprV4u/cqSq86tL9InejtreePpSRQTnb8PLU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D5U2WboFbtcvfy9lpr4pRhlwSFUCu/fGQvJmklpwTA/SV7iItH/bSOqXLpAM/2bENStzT8LvwEgnVuqJdB9V9IsCKbXmE9968QvDHeb3zgmfbnkcWsSZCLfqqj8BTanGSDjZR7dkNMnmD3eGk6PIvLRjeRYMq+xTGIlp/VNYUMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=EsfXpCSm; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IWiqRWLb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86731C19423;
-	Thu,  5 Mar 2026 15:26:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772724421;
-	bh=9che9S/rfD6SJcfVDz2SXnU+7MBs/hKF8MhWtpvGqig=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IWiqRWLbDF94tCasvan1T3MoT25tOqEQkcz2TfW2kmEyKjFyzSCCCJ1pf4Fg+oiGc
-	 Kvn6Oc7nCZ5oxJpvT3tYbKQHSNu27DF8jvm7mglAxodFk7mVbnTDOk+tfr6TpoOktl
-	 nEr0kndNA06XG2HZahfe32ZqmvLHBiqUB/sWfSnGVaTwgf4OD6XzGmSjf5PMjJyhA1
-	 sS0DgbPR/h7cH41OJYAu1Isx0Hv/8z1BkChrPxUHgqpGHfALXptkLCm0e/NbGQELI7
-	 pPcidjKrhH4P4g4gbevtk+rLC4rkFY1Eb5uZqvmk64mRAFLQawZzkgWzfHj+YRVESP
-	 LgSEUjZOpch9g==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Detlev Casanova <detlev.casanova@collabora.com>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Alex Bee <knaerzche@gmail.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Kees Cook <kees@kernel.org>,
-	linux-media@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 2/2] [v2] media: rkvdec: reduce stack usage in rkvdec_init_v4l2_vp9_count_tbl()
-Date: Thu,  5 Mar 2026 16:26:17 +0100
-Message-Id: <20260305152644.791897-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EsfXpCSm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1772728653;
+	bh=hkK2ONkPprV4u/cqSq86tL9InejtreePpSRQTnb8PLU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=EsfXpCSmuZhSHchk4H9dKF8uIWDrS/h/Rs9mSwFrC6/wam7h4Hom+k4X+lSVYNWmk
+	 FOrNXbQ9o5D50NzH/9Ny8x6y8baD6773xdiWvIms1qe+RxqWa5MZH3hHF9x3lMwYck
+	 wSJFCtQh3hFk4dIoeYyN1k2C6T/xopVoemStz+U4w6PQIhqdZjI9J7FjU0GV+YGaEq
+	 ZmPp8b93LYfRkfLYnGKKsFaAUPlT+H7zOGlZ7p3u8ZHvTZJpp5ljhkDG4hhSpszzz+
+	 3PohMDDYlyXYjQ2QzTu7h4n2xHjjv86LaLv0GSCMFmbEBt9mn9CdskePr4K6jpm1LM
+	 mvqUhHG1bragA==
+Received: from [IPv6:2606:6d00:15:210e::5ac] (unknown [IPv6:2606:6d00:15:210e::5ac])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8025F17E027A;
+	Thu,  5 Mar 2026 17:37:31 +0100 (CET)
+Message-ID: <1621b56864cb186f1e5433b73b56afc00aa83452.camel@collabora.com>
+Subject: Re: [PATCH 1/2] [RESEND] media: rkvdec: reduce excessive stack
+ usage in assemble_hw_pps()
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Arnd Bergmann <arnd@kernel.org>, Detlev Casanova	
+ <detlev.casanova@collabora.com>, Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>,  Mauro Carvalho Chehab	
+ <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Nathan Chancellor	
+ <nathan@kernel.org>, Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers	
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ linux-media@vger.kernel.org, 	linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, 	linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Date: Thu, 05 Mar 2026 11:37:28 -0500
 In-Reply-To: <20260305152644.791897-1-arnd@kernel.org>
 References: <20260305152644.791897-1-arnd@kernel.org>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-ayQMGRIiYYjBgQDHqjjE"
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-The deeply nested loop in rkvdec_init_v4l2_vp9_count_tbl() needs a lot
-of registers, so when the clang register allocator runs out, it ends up
-spilling countless temporaries to the stack:
+--=-ayQMGRIiYYjBgQDHqjjE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c:966:12: error: stack frame size (1472) exceeds limit (1280) in 'rkvdec_vp9_start' [-Werror,-Wframe-larger-than]
+Hi,
 
-Split out the innermost loop into a separate function that is marked
-noinline_for_stack. I tried out all combinations of having some of
-the inner loops inside of the separate function, but this was the only
-veriant that creates reasonable code with clang-22 on arm64.
+Le jeudi 05 mars 2026 =C3=A0 16:26 +0100, Arnd Bergmann a =C3=A9crit=C2=A0:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The rkvdec_pps had a large set of bitfields, all of which
+> as misaligned. This causes clang-21 and likely other versions to
+> produce absolutely awful object code and a warning about very
+> large stack usage, on targets without unaligned access:
 
-Link: https://lore.kernel.org/linux-media/20260202094804.1231706-1-arnd@kernel.org/T/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
---
-v2: rework after sering more of the same warning with v1 applied.
+I'm a bit surprised you felt the need for resend. Perhaps you can help us
+understand what made you think your patch wasn't being processed ?
 
-My earlier version was much simpler but still exceeded 1280 bytes of
-stack space in some configurations for unnecessary variable spills.
----
- .../platform/rockchip/rkvdec/rkvdec-vp9.c     | 48 ++++++++++---------
- 1 file changed, 26 insertions(+), 22 deletions(-)
+My PR:
+https://patchwork.linuxtv.org/project/linux-media/patch/2074ba5a5d05e239f43=
+2d176eb051105f7e692f9.camel@collabora.com/
 
-diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c b/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-index e4cdd2122873..ecb2819bd566 100644
---- a/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-+++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-@@ -893,12 +893,36 @@ static void rkvdec_vp9_done(struct rkvdec_ctx *ctx,
- 	update_ctx_last_info(vp9_ctx);
- }
- 
-+/* noinline to ensure clang's register allocator doesn't run out of registers */
-+static noinline void
-+rkvdec_init_v4l2_vp9_count_tbl_loop(struct rkvdec_vp9_ctx *vp9_ctx, int i, int j, int k, int l)
-+{
-+	struct rkvdec_vp9_intra_frame_symbol_counts *intra_cnts = vp9_ctx->count_tbl.cpu;
-+	struct rkvdec_vp9_inter_frame_symbol_counts *inter_cnts = vp9_ctx->count_tbl.cpu;
-+
-+	for (int m = 0; m < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0][0][0]); ++m) {
-+		vp9_ctx->inter_cnts.coeff[i][j][k][l][m] =
-+			&inter_cnts->ref_cnt[k][i][j][l][m].coeff;
-+		vp9_ctx->inter_cnts.eob[i][j][k][l][m][0] =
-+			&inter_cnts->ref_cnt[k][i][j][l][m].eob[0];
-+		vp9_ctx->inter_cnts.eob[i][j][k][l][m][1] =
-+			&inter_cnts->ref_cnt[k][i][j][l][m].eob[1];
-+										\
-+		vp9_ctx->intra_cnts.coeff[i][j][k][l][m] =
-+			&intra_cnts->ref_cnt[k][i][j][l][m].coeff;
-+		vp9_ctx->intra_cnts.eob[i][j][k][l][m][0] =
-+			&intra_cnts->ref_cnt[k][i][j][l][m].eob[0];
-+		vp9_ctx->intra_cnts.eob[i][j][k][l][m][1] =
-+			&intra_cnts->ref_cnt[k][i][j][l][m].eob[1];
-+	}
-+}
-+
- static void rkvdec_init_v4l2_vp9_count_tbl(struct rkvdec_ctx *ctx)
- {
- 	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
- 	struct rkvdec_vp9_intra_frame_symbol_counts *intra_cnts = vp9_ctx->count_tbl.cpu;
- 	struct rkvdec_vp9_inter_frame_symbol_counts *inter_cnts = vp9_ctx->count_tbl.cpu;
--	int i, j, k, l, m;
-+	int i, j, k, l;
- 
- 	vp9_ctx->inter_cnts.partition = &inter_cnts->partition;
- 	vp9_ctx->inter_cnts.skip = &inter_cnts->skip;
-@@ -936,31 +960,11 @@ static void rkvdec_init_v4l2_vp9_count_tbl(struct rkvdec_ctx *ctx)
- 	vp9_ctx->inter_cnts.class0_hp = &inter_cnts->class0_hp;
- 	vp9_ctx->inter_cnts.hp = &inter_cnts->hp;
- 
--#define INNERMOST_LOOP \
--	do {										\
--		for (m = 0; m < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0][0][0]); ++m) {\
--			vp9_ctx->inter_cnts.coeff[i][j][k][l][m] =			\
--				&inter_cnts->ref_cnt[k][i][j][l][m].coeff;		\
--			vp9_ctx->inter_cnts.eob[i][j][k][l][m][0] =			\
--				&inter_cnts->ref_cnt[k][i][j][l][m].eob[0];		\
--			vp9_ctx->inter_cnts.eob[i][j][k][l][m][1] =			\
--				&inter_cnts->ref_cnt[k][i][j][l][m].eob[1];		\
--											\
--			vp9_ctx->intra_cnts.coeff[i][j][k][l][m] =			\
--				&intra_cnts->ref_cnt[k][i][j][l][m].coeff;		\
--			vp9_ctx->intra_cnts.eob[i][j][k][l][m][0] =			\
--				&intra_cnts->ref_cnt[k][i][j][l][m].eob[0];		\
--			vp9_ctx->intra_cnts.eob[i][j][k][l][m][1] =			\
--				&intra_cnts->ref_cnt[k][i][j][l][m].eob[1];		\
--		}									\
--	} while (0)
--
- 	for (i = 0; i < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff); ++i)
- 		for (j = 0; j < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0]); ++j)
- 			for (k = 0; k < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0]); ++k)
- 				for (l = 0; l < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0][0]); ++l)
--					INNERMOST_LOOP;
--#undef INNERMOST_LOOP
-+					rkvdec_init_v4l2_vp9_count_tbl_loop(vp9_ctx, i, j, k, l);
- }
- 
- static int rkvdec_vp9_start(struct rkvdec_ctx *ctx)
--- 
-2.39.5
+And Hans/Mauro did logistic on the #linux-maint IRC channel this morning. I
+believe I've marked all the relevant patches on patchwork our of "New" stat=
+e and
+you have my Rb. What else would help you ?
 
+Nicolas
+
+>=20
+> drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c:966:12: error: stack =
+frame
+> size (1472) exceeds limit (1280) in 'rkvdec_vp9_start' [-Werror,-Wframe-
+> larger-than]
+>=20
+> Part of the problem here is how all the bitfield accesses are
+> inlined into a function that already has large structures on
+> the stack.
+>=20
+> Mark set_field_order_cnt() as noinline_for_stack, and split out
+> the following accesses in assemble_hw_pps() into another noinline
+> function, both of which now using around 800 bytes of stack in the
+> same configuration.
+>=20
+> There is clearly still something wrong with clang here, but
+> splitting it into multiple functions reduces the risk of stack
+> overflow.
+>=20
+> Fixes: fde24907570d ("media: rkvdec: Add H264 support for the VDPU383
+> variant")
+> Link: https://godbolt.org/z/acP1eKeq9
+> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> Resending this along with the other patch mainly to point out that
+> this one is still pending as well.
+> ---
+> =C2=A0.../rockchip/rkvdec/rkvdec-vdpu383-h264.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
+ 50 ++++++++++---------
+> =C2=A01 file changed, 27 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> b/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> index 97f1efde2e47..fb4f849d7366 100644
+> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+> @@ -130,7 +130,7 @@ struct rkvdec_h264_ctx {
+> =C2=A0	struct vdpu383_regs_h26x regs;
+> =C2=A0};
+> =C2=A0
+> -static void set_field_order_cnt(struct rkvdec_pps *pps, const struct
+> v4l2_h264_dpb_entry *dpb)
+> +static noinline_for_stack void set_field_order_cnt(struct rkvdec_pps *pp=
+s,
+> const struct v4l2_h264_dpb_entry *dpb)
+> =C2=A0{
+> =C2=A0	pps->top_field_order_cnt0 =3D dpb[0].top_field_order_cnt;
+> =C2=A0	pps->bot_field_order_cnt0 =3D dpb[0].bottom_field_order_cnt;
+> @@ -166,6 +166,31 @@ static void set_field_order_cnt(struct rkvdec_pps *p=
+ps,
+> const struct v4l2_h264_d
+> =C2=A0	pps->bot_field_order_cnt15 =3D dpb[15].bottom_field_order_cnt;
+> =C2=A0}
+> =C2=A0
+> +static noinline_for_stack void set_dec_params(struct rkvdec_pps *pps, co=
+nst
+> struct v4l2_ctrl_h264_decode_params *dec_params)
+> +{
+> +	const struct v4l2_h264_dpb_entry *dpb =3D dec_params->dpb;
+> +
+> +	for (int i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
+> +		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+> +			pps->is_longterm |=3D (1 << i);
+> +		pps->ref_field_flags |=3D
+> +		 (!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD)) << i;
+> +		pps->ref_colmv_use_flag |=3D
+> +		 (!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)) << i;
+> +		pps->ref_topfield_used |=3D
+> +		 (!!(dpb[i].fields & V4L2_H264_TOP_FIELD_REF)) << i;
+> +		pps->ref_botfield_used |=3D
+> +			(!!(dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)) <<
+> i;
+> +	}
+> +	pps->pic_field_flag =3D
+> +		!!(dec_params->flags &
+> V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC);
+> +	pps->pic_associated_flag =3D
+> +		!!(dec_params->flags &
+> V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD);
+> +
+> +	pps->cur_top_field =3D dec_params->top_field_order_cnt;
+> +	pps->cur_bot_field =3D dec_params->bottom_field_order_cnt;
+> +}
+> +
+> =C2=A0static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> =C2=A0			=C2=A0=C2=A0=C2=A0 struct rkvdec_h264_run *run)
+> =C2=A0{
+> @@ -177,7 +202,6 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> =C2=A0	struct rkvdec_h264_priv_tbl *priv_tbl =3D h264_ctx->priv_tbl.cpu;
+> =C2=A0	struct rkvdec_sps_pps *hw_ps;
+> =C2=A0	u32 pic_width, pic_height;
+> -	u32 i;
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * HW read the SPS/PPS information from PPS packet index by PPS id=
+.
+> @@ -261,28 +285,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> =C2=A0		!!(pps->flags & V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT);
+> =C2=A0
+> =C2=A0	set_field_order_cnt(&hw_ps->pps, dpb);
+> +	set_dec_params(&hw_ps->pps, dec_params);
+> =C2=A0
+> -	for (i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
+> -		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+> -			hw_ps->pps.is_longterm |=3D (1 << i);
+> -
+> -		hw_ps->pps.ref_field_flags |=3D
+> -			(!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD))
+> << i;
+> -		hw_ps->pps.ref_colmv_use_flag |=3D
+> -			(!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+> << i;
+> -		hw_ps->pps.ref_topfield_used |=3D
+> -			(!!(dpb[i].fields & V4L2_H264_TOP_FIELD_REF)) << i;
+> -		hw_ps->pps.ref_botfield_used |=3D
+> -			(!!(dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)) <<
+> i;
+> -	}
+> -
+> -	hw_ps->pps.pic_field_flag =3D
+> -		!!(dec_params->flags &
+> V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC);
+> -	hw_ps->pps.pic_associated_flag =3D
+> -		!!(dec_params->flags &
+> V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD);
+> -
+> -	hw_ps->pps.cur_top_field =3D dec_params->top_field_order_cnt;
+> -	hw_ps->pps.cur_bot_field =3D dec_params->bottom_field_order_cnt;
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void rkvdec_write_regs(struct rkvdec_ctx *ctx)
+
+--=-ayQMGRIiYYjBgQDHqjjE
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaamxSQAKCRDZQZRRKWBy
+9ABOAQCelVLDB2BDEu/lz95fCXShra2NCxpj8lLTj+SppYTgMQEA/RTLk5CjmWVI
+lwRwZRetjCIJCD0IU/MonDof26WGwwg=
+=sLJA
+-----END PGP SIGNATURE-----
+
+--=-ayQMGRIiYYjBgQDHqjjE--
