@@ -1,81 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695D71F8755;
-	Thu,  5 Mar 2026 00:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771E93368AE;
+	Thu,  5 Mar 2026 02:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772671007; cv=none; b=q9GGmxBpzD/jtgO2UXapV6eDC1bEoSP49eMcbUw/ZMsyyxwlPEEuhcZIjdAFmaAzSuwN0cTM9tLzWRUQUt1oFDtVAIL/vR4Q+iFOpUwvNFqAvq126ZRcSwzaOXhykSPv/PU/GRGm5mVDXeLcA6gCQm08vSzQJD3s/ajQNv7TjsI=
+	t=1772677048; cv=none; b=Y173zNRUpKwwLhRZBCZIZy/CAGhp+45507kKLrw7bgwT9GiYL+cmJmq9OwQNEqvZFvuIL5wDVxX5Q8xpt5KeOa+SeRMxy4VEiOPu37D6PZwmGy9qBD01b5K9dR70JIa68IFbZzxugAHMxH0GcV+RyJ0v1dOrDgT2+3OAbYoE3vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772671007; c=relaxed/simple;
-	bh=YD8FUpa7/2pLVb4LtAEdgTwaIc8B5tVuTSKvkb8Xuj0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=JFw8l97VFrgYkySX5V4Z+FRIsa2yQpTYGgSqTyCOFZNovew7ZLJx6HOG4UjsriLC7nnDWEYKQ8sEh4tpy1uT/MQ1BtILsV6okdPDWE/UjtZ+E8wI/qkGlfgKysIvHmd7nkdlaawxgrH3LwT2LiBlB6xBiFO9Uo4uwLyJUXZ8JCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxi9b6Jm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772677048; c=relaxed/simple;
+	bh=zZ8A2r2iPohKMdCHLqu2qyEtBml6tLz0/thgm0qkTpk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=EGtFYjZOPh/8uKhfj8F0TBYbGiBZ6q8EsYT0wTkYOpracnA/K3NizRmOjhC3ofqteYfka27LuycBmsoHZhLTvpiA3y7AVqsPO6YQlVHm+NF3tDP3cu5k+3kk5TWYRoVFZojgXiB3I+Q3mKcfEjcl9zH/NxfS0DFaMDszMfZ+SXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iDdU9ORe; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxi9b6Jm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2FDC2BC87;
-	Thu,  5 Mar 2026 00:36:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772671007;
-	bh=YD8FUpa7/2pLVb4LtAEdgTwaIc8B5tVuTSKvkb8Xuj0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dxi9b6JmExAggj1L+HzGaS26FpKJ6lEEEMsZW3/mDd8HdAGmMVCirQtXdkDsAJWP8
-	 jOzPheqRE89h7scG47PZCVWSMrOsO3zTTM398iWa11ApS5KIIWM1rKNEm+upEHGXOC
-	 sbPKzDa41i6oo2c0b6mgBiAH1y4CHvYjAS2LKYZuOPEdi8UXOX8OJq0Mof0Ke4udrd
-	 yF9Xzm6g9dFLQvuI5OPxo65Lyh9Zpg0tjG5JibhIDbDz9Rg+Pld2V+HHqsw9XHglq6
-	 29mqgl2p2StVqGq128sIYcmO2EpHpuHEmuIscCQFab3qh5XdAMIBWaZLbS56tahYtF
-	 a3asGBLhJHj7A==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Sun Jian <sun.jian.kdev@gmail.com>, Florian Westphal <fw@strlen.de>, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev
-In-Reply-To: <20260225-genksyms-fix-attribute-declarator-v1-1-1b21478663fb@kernel.org>
-References: <20260225-genksyms-fix-attribute-declarator-v1-1-1b21478663fb@kernel.org>
-Subject: Re: [PATCH] genksyms: Fix parsing a declarator with a preceding
- attribute
-Message-Id: <177267100491.1730256.722308315936869297.b4-ty@kernel.org>
-Date: Wed, 04 Mar 2026 17:36:44 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iDdU9ORe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772677046; x=1804213046;
+  h=date:from:to:cc:subject:message-id;
+  bh=zZ8A2r2iPohKMdCHLqu2qyEtBml6tLz0/thgm0qkTpk=;
+  b=iDdU9OReRsYkodLw8g6hZqSQkAIye4k5QKi93k/5E+hb96std0Yw5MVw
+   GhcfQb5m0HSE+7yr8Bv6QiRxgrWHzJKRZdsG+2/Xz2aQAFBaNfuBhmHXP
+   0VExCkJ5T6f7yYVY2dNbunrQx9IdQZVaUIwMVH+3+I55Vj7uC6eXFk1DS
+   /vBuOpFdfdjW13gDjusdXYvL2l7NOkd5rrk93MSNKC09nNiueR+nbY1oH
+   KJnffX+VJeAiUJHLEE/a0IJUynKSDR86M395zDVo7mDOE/rFaQVGleuxY
+   W6OY85006UHWaRVH6ty6wICCUUC/z6MoratrdY5mkXdYR/mFJ2LE4oojG
+   g==;
+X-CSE-ConnectionGUID: UApt6XRkQ6eJcCNg+XQ14Q==
+X-CSE-MsgGUID: rzO1YXt7QuaI4LAFwukqVQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73822726"
+X-IronPort-AV: E=Sophos;i="6.21,325,1763452800"; 
+   d="scan'208";a="73822726"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 18:17:25 -0800
+X-CSE-ConnectionGUID: kCdJC8dIRKq2+a8Ai7UZVg==
+X-CSE-MsgGUID: jrxQLOmBSm+VkR0xBhrAxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,325,1763452800"; 
+   d="scan'208";a="218650368"
+Received: from lkp-server01.sh.intel.com (HELO 732d64e62a3e) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 04 Mar 2026 18:17:23 -0800
+Received: from kbuild by 732d64e62a3e with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vxyHA-0000000001x-1lPE;
+	Thu, 05 Mar 2026 02:17:20 +0000
+Date: Thu, 05 Mar 2026 10:17:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:hotplug_vmemmap 14/14] WARNING: modpost:
+ vmlinux: section mismatch in reference: vmemmap_alloc_block+0xc3 (section:
+ .text) -> memmap_alloc (section: .init.text)
+Message-ID: <202603051050.K6a0rLiX-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
 
-On Wed, 25 Feb 2026 15:07:17 -0700, Nathan Chancellor wrote:
-> After commit 07919126ecfc ("netfilter: annotate NAT helper hook pointers
-> with __rcu"), genksyms fails to parse the __rcu annotation when building
-> with CONFIG_DEBUG_INFO_BTF=y, CONFIG_PAHOLE_HAS_BTF_TAG=y, and a version
-> of clang that supports btf_type_tag.
-> 
->   $ clang --version | head -1
->   ClangBuiltLinux clang version 22.1.0 (https://github.com/llvm/llvm-project.git 4434dabb69916856b824f68a64b029c67175e532)
-> 
-> [...]
+tree:   https://github.com/davidhildenbrand/linux hotplug_vmemmap
+head:   477d3b2da9f8d7d098328023598f9403fba2d478
+commit: 477d3b2da9f8d7d098328023598f9403fba2d478 [14/14] mm/sparse-vmemmap: inline __earlyonly_bootmem_alloc()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260305/202603051050.K6a0rLiX-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603051050.K6a0rLiX-lkp@intel.com/reproduce)
 
-Applied to
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603051050.K6a0rLiX-lkp@intel.com/
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Thanks!
+>> WARNING: modpost: vmlinux: section mismatch in reference: vmemmap_alloc_block+0xc3 (section: .text) -> memmap_alloc (section: .init.text)
 
-[1/1] genksyms: Fix parsing a declarator with a preceding attribute
-      https://git.kernel.org/kbuild/c/d2395bb194ef2
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
