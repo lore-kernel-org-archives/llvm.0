@@ -1,129 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576531D61A3;
-	Thu,  5 Mar 2026 04:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C40286A4
+	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 04:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772684453; cv=none; b=hISk4Xb/kZO6aR6jmYRsB3trPWUsnMpfr80RQKvvLQEmA1VB3cQD0zhQH6Gpepmt+hymMhcLInlql8Inb/wCQ+L6upOwGbg4aVXvfaNNX2QHFkT7OQq4dujI53hQsQ14Zw+yuoowpwWck+oUIw/2Ko2gVzKwgWZ75MVBrKdrx/o=
+	t=1772685189; cv=none; b=dvthJjpaesntcn+poRw8Bj5J9z1/t7qxdb04m+DVcTBgfOOeNf/f1ITArlbo0oUe2AwdzZp3QQjx7mWyBIMlDSvkeLi+8wtlCsSWBUUSelFVdVHaN0i/MgNEd7CCwysytzSDGeL8xDTwBYCARxNv2gKFnAudUHX5IpfbssZtyXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772684453; c=relaxed/simple;
-	bh=rwzheNDW+lOxCuTlt6Q/dE1VPSEPfFW3aRr1NzUYCA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SVUUDft1CE3qnFMnxU35jImJG9ebXJyNw9Qse+VO+/EjMuxmrg5JxfhP9yZu57a0c6FVrdlq46p/HAcSJya22gRK4M3KEXze1mIBc6Ot0bJHJMciBc+C8OgABmx7LGWJeFpQzm5P33OuVXz9pdC2P+uyKO2dWUfmoDR/FP5XDiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EjffKefi; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772685189; c=relaxed/simple;
+	bh=yC9C+dVlDX/WCefmdqkBEZN5QbC4eT/Bz4zRAyk0Ky4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=f2MCn6qkDvjVsrvn2Pv6k4HNdPnbvqplKzgWQGgl5YHj+hXwX1aHP/1pNvmVETijB5TP+V/L8VBficIKolJM+V6rB4AppAsbvF4GJ1jNaQCGhMOFM6czAxJXbxjU0LaIKeLRfZMuR6tyouYeaVVo3c1TUghSIJ5pen9n1WJ2r28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fcqqybgE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EjffKefi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772684451; x=1804220451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rwzheNDW+lOxCuTlt6Q/dE1VPSEPfFW3aRr1NzUYCA4=;
-  b=EjffKefijrgvNVuLwaBtSPK8F3aqyPBQ5DibJz7YrZfPm2norIwdz2cH
-   j6tzN3pfjb14IJedDgPhnqgQHorjsaavX8+lbuSXbKVdreeGKovB6oMCu
-   QXakyrh2QnEnPHI+b8JHsyvQChMAWe3z0iusnVbffHBAAZ6qLajti/0pn
-   iJqkh4VD0lj6gYYvVYqG3cCepNY1V6rK11bxpGPccSS4OX5btLwtzCEYC
-   c9DT55i6QWQ9RssHfotNoZji1/7wrCwQLqL8FipXyed4XDafvM9Ygk7IS
-   StfcxUlHZxQTTqno47SNNxiYO3YFo1G1QKHK6sFeFSwkOPYUUt6apeh2m
-   A==;
-X-CSE-ConnectionGUID: oq7iF6iaRke/4/JfsE0o0Q==
-X-CSE-MsgGUID: XWhnUYEWRtyz+WKbfcjJ1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73675133"
-X-IronPort-AV: E=Sophos;i="6.21,325,1763452800"; 
-   d="scan'208";a="73675133"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 20:20:50 -0800
-X-CSE-ConnectionGUID: b7te/GcGQFq9ik40uy83OQ==
-X-CSE-MsgGUID: PculmDjPRs2RPA0SjCs9pQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,325,1763452800"; 
-   d="scan'208";a="222706440"
-Received: from lkp-server02.sh.intel.com (HELO 456988d8841c) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 04 Mar 2026 20:20:48 -0800
-Received: from kbuild by 456988d8841c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vy0C4-0000000005R-0HSC;
-	Thu, 05 Mar 2026 04:20:18 +0000
-Date: Thu, 5 Mar 2026 12:19:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: songxiebing <songxiebing@kylinos.cn>, tiwai@suse.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: hda/intel: Synchronize the module parameter values
- of the power_save
-Message-ID: <202603051210.99ca99nW-lkp@intel.com>
-References: <20260302081218.771520-1-songxiebing@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fcqqybgE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772685187;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zrTLQDBH6Odc+VWx95XKLuKqqwvwo7q9pm2LAkZ7+7k=;
+	b=fcqqybgEX4rJDfY1yoojgY+8Bqz3jnLNwYcOIzWI4CPsPyli5HDzMLBLgMdi+kqPLvJ/yx
+	HwLks36Byde1eKBXE8dpby887nPXh9gb8YO1z6Qb3OBXLM6uI+xcZ1DNNaZn4r28fgE+ri
+	LmLiyLeb/jUYs5/4/yQALc8qKeqT6qw=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-453-ZZr1DeaKN7CFcgmPFzzMLw-1; Wed,
+ 04 Mar 2026 23:33:06 -0500
+X-MC-Unique: ZZr1DeaKN7CFcgmPFzzMLw-1
+X-Mimecast-MFC-AGG-ID: ZZr1DeaKN7CFcgmPFzzMLw_1772685185
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55C9F180034E
+	for <llvm@lists.linux.dev>; Thu,  5 Mar 2026 04:33:05 +0000 (UTC)
+Received: from [172.20.96.208] (unknown [10.30.44.37])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E8F8C30001A1;
+	Thu,  5 Mar 2026 04:33:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc2,
+ upstream-mainline, 0b3bb205)
+Date: Thu, 05 Mar 2026 04:33:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302081218.771520-1-songxiebing@kylinos.cn>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <26268.126030423330600473@us-mta-453.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: sZcF8flEWv_5Ueb6yz5eb2ErJ6Kni0E8YwtFu8agTZE_1772685185
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi songxiebing,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on tiwai-sound/for-next]
-[also build test ERROR on tiwai-sound/for-linus linus/master v7.0-rc2 next-20260304]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/songxiebing/ALSA-hda-intel-Synchronize-the-module-parameter-values-of-the-power_save/20260302-161555
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20260302081218.771520-1-songxiebing%40kylinos.cn
-patch subject: [PATCH] ALSA: hda/intel: Synchronize the module parameter values of the power_save
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260305/202603051210.99ca99nW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603051210.99ca99nW-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'vfs-7.0-rc3.fixes' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vfs/vfs
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603051210.99ca99nW-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2364849586
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
+d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
+text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
+            Affected tests:
+                Boot test [aarch64, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
->> sound/hda/controllers/intel.c:2309:13: error: expression is not assignable
-    2309 |         power_save = val;
-         |         ~~~~~~~~~~ ^
-   1 error generated.
 
 
-vim +2309 sound/hda/controllers/intel.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  2289	
-  2290	static void set_default_power_save(struct azx *chip)
-  2291	{
-  2292		struct hda_intel *hda = container_of(chip, struct hda_intel, chip);
-  2293		int val = power_save;
-  2294	
-  2295		if (pm_blacklist < 0) {
-  2296			const struct snd_pci_quirk *q;
-  2297	
-  2298			q = snd_pci_quirk_lookup(chip->pci, power_save_denylist);
-  2299			if (q && val) {
-  2300				dev_info(chip->card->dev, "device %04x:%04x is on the power_save denylist, forcing power_save to 0\n",
-  2301					 q->subvendor, q->subdevice);
-  2302				val = 0;
-  2303				hda->runtime_pm_disabled = 1;
-  2304			}
-  2305		} else if (pm_blacklist > 0) {
-  2306			dev_info(chip->card->dev, "Forcing power_save to 0 via option\n");
-  2307			val = 0;
-  2308		}
-> 2309		power_save = val;
-  2310		snd_hda_set_power_save(&chip->bus, val * 1000);
-  2311	}
-  2312	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
