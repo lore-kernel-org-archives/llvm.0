@@ -1,95 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D8F31ED8B;
-	Fri,  6 Mar 2026 02:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F53A3242D9;
+	Fri,  6 Mar 2026 02:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772763887; cv=none; b=VyV7ERxCjuGgK7CUqFdkNNCM/vcaqaDLRqqRMBL6elRkGOaQSzgDoE8wBaMJri/IO8Ub/6b2/8OQrF/+8Xh3b7pQHnCQmcCiHPc2EbZDvHf8Sf00uw4/EKJoLQmWWlNTO4YjeHDtWQKmsJ2TzyXsjU2oMVuxQjaSN1/uf6DMfAU=
+	t=1772765928; cv=none; b=hK23D7wMjEl4QiFlJsmY6Gn4C8tmGazkQo1a1QjNuwlhk2y9GoMhYoAteYU77I5uKTYqPAfTKV8PVwuhZEOJ/ZYYsGEBAU92ysR6W4YYsZ9Li/R3cyvNSLy3Bw3Iy76FVeIMh92GOvHB6kDWmdsj2UHix9uQijB5ko9XeqyWZNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772763887; c=relaxed/simple;
-	bh=sEhh7J+6Op6fJqXQ41qlmP+Br6OukmjsfzQUidfmUGI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ULxNLS/RWieBRo1HoJihgV0w4hmo7uTDBT4QFVGKXltWu01uWf6I+ABWLq6nTz8o0eKrD5jWkVuIqdW3Y2E6my9yKMVYQlvkZ2/006WDvabZi2SVuqT9E8ou+Mi7v+/Y2alO91YxssLCPh+A4ED6ARXW54n1K7UzSKajMjM07ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F9bcNroV; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1772765928; c=relaxed/simple;
+	bh=Pz6+P86PyyQvcqGlbAFnCdBMt/lwH/0o+Bui2t/Re1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FIF0IRfowcEDZf1P3memxC9knzNjDVkgEuZL0rgx4Otqes120sSLVZC4OGzVr9PVsNDeAishK2V3D1qadW8G7ZAsqIcvkKXHFmwPfa6W4xfQ/hDBJpogGbYWQVRUR6zhxNbaJAE9gJPvyu8kRdLAd5u52sinTID4oLP6+/5XJXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YvWoq4Zc; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F9bcNroV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YvWoq4Zc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772763885; x=1804299885;
-  h=date:from:to:cc:subject:message-id;
-  bh=sEhh7J+6Op6fJqXQ41qlmP+Br6OukmjsfzQUidfmUGI=;
-  b=F9bcNroVwxLkBjHAUFIpBz+ft7oOTrkluWImRUIGbT083xBUyPb5bJYR
-   LSvPI1IJJY4tymv7Jbaqa/pZprPGmu5K74oC9xLdS1OeS6Rf3myE3tHZU
-   t8CfeZt17w/jRoJGRP53FvuooD5G9ynbWUCXjy/hZj7FpsumHpn/1UGWh
-   npNm/tZR8b6MDa5l4M69NZ2dtYboGGtZMQ46hteWEyEsc7hky3DH+mVXz
-   bBg3CduW4cOiwxbx4d+B3q3M9T4ZYtn5e3MvtbHCZVLYbKReLq9KPtvEL
-   5/gNbbHTFMi1xyEdhNiLPwIRBPc4Ev/CYr7qdeDKSalpJZI160Jwp/uo1
+  t=1772765927; x=1804301927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pz6+P86PyyQvcqGlbAFnCdBMt/lwH/0o+Bui2t/Re1w=;
+  b=YvWoq4ZcAwrpn2MdvElHwLFlxFGT91fV5FN+yGzz5KodUj7LY30JTGbM
+   2b7lS7TKNeO8nB+ETOtH//5Unot9387Kf9LIfrvAZOKdRNyd3qC6MUMQm
+   FoNnBuF+5ZKRhzGHMM0XHMuAzPKFMDpfXNpmd80YpE9+1YDVRvkVD5TgT
+   1Q6nq9VXQsqupMx2bpZiLbUpO6X8x6B20VR2OORdYFeveJ2GZxBS+N0fX
+   JmLFeKFBm7GyZbhO572mxfcbAzh95r1PEyL4Ptgz0V7LL0/QraQVPnl0i
+   V1RWvUhn2RCJl+/b6BNbJ8tEU/+sC9pavZEkTrrOKsqoDF28Ht9yk/vkJ
    A==;
-X-CSE-ConnectionGUID: N8lEnukFRziK3A1sBlaL8Q==
-X-CSE-MsgGUID: fqRfX5nDQqqsytybtGzAtw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="91259140"
+X-CSE-ConnectionGUID: LmJMltv2QGK7uOEQXgqfHg==
+X-CSE-MsgGUID: B83mmwjqST2GAmaS52XJoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="84581722"
 X-IronPort-AV: E=Sophos;i="6.23,104,1770624000"; 
-   d="scan'208";a="91259140"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 18:24:45 -0800
-X-CSE-ConnectionGUID: he9ffZLUR8+MTsmtz0SZtA==
-X-CSE-MsgGUID: Uvw26Q7ATguu6KI7FyWqOA==
+   d="scan'208";a="84581722"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 18:58:47 -0800
+X-CSE-ConnectionGUID: dCpylN9KRVu5crLdHnB61w==
+X-CSE-MsgGUID: WBKSoyn6SvCzpZg86Zqc9Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,104,1770624000"; 
-   d="scan'208";a="216662663"
+   d="scan'208";a="218011886"
 Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 05 Mar 2026 18:24:42 -0800
+  by orviesa006.jf.intel.com with ESMTP; 05 Mar 2026 18:58:44 -0800
 Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vyKro-000000000Cr-0sCH;
-	Fri, 06 Mar 2026 02:24:40 +0000
-Date: Fri, 06 Mar 2026 10:24:17 +0800
+	id 1vyLOj-000000000Ej-38O3;
+	Fri, 06 Mar 2026 02:58:41 +0000
+Date: Fri, 6 Mar 2026 10:58:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
+To: Zhu Yanjun <yanjun.zhu@linux.dev>, jgg@ziepe.ca, leon@kernel.org,
+	zyjzyj2000@gmail.com, dsahern@kernel.org,
+	linux-rdma@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe:rw_iter 441/467] Warning:
- drivers/net/ethernet/intel/libie/fwlog.c:479 function parameter 'iocb' not
- described in 'libie_debugfs_nr_messages_read'
-Message-ID: <202603061007.Nfu17vG3-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+Subject: Re: [PATCHv2 1/1] RDMA/rxe: Add the support that rxe can work in net
+ namespace
+Message-ID: <202603061015.zwXUa3OS-lkp@intel.com>
+References: <20260304041607.11685-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304041607.11685-1-yanjun.zhu@linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git rw_iter
-head:   efeca34a8e5e90b253f0ac73b9fa10aeff4f027c
-commit: 1e6629a61ee4af79ce25da0c9e66d30269fd633b [441/467] ethernet: convert remaining fops to read/write iterators
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260306/202603061007.Nfu17vG3-lkp@intel.com/config)
+Hi Zhu,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on rdma/for-next]
+[also build test WARNING on linus/master v7.0-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhu-Yanjun/RDMA-rxe-Add-the-support-that-rxe-can-work-in-net-namespace/20260304-121951
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/20260304041607.11685-1-yanjun.zhu%40linux.dev
+patch subject: [PATCHv2 1/1] RDMA/rxe: Add the support that rxe can work in net namespace
+config: x86_64-randconfig-014-20260305 (https://download.01.org/0day-ci/archive/20260306/202603061015.zwXUa3OS-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603061007.Nfu17vG3-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603061015.zwXUa3OS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603061007.Nfu17vG3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603061015.zwXUa3OS-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:479 function parameter 'iocb' not described in 'libie_debugfs_nr_messages_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:479 function parameter 'to' not described in 'libie_debugfs_nr_messages_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:550 function parameter 'iocb' not described in 'libie_debugfs_enable_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:550 function parameter 'to' not described in 'libie_debugfs_enable_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:641 function parameter 'iocb' not described in 'libie_debugfs_log_size_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:641 function parameter 'to' not described in 'libie_debugfs_log_size_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:774 function parameter 'iocb' not described in 'libie_debugfs_data_write'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:774 function parameter 'from' not described in 'libie_debugfs_data_write'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:479 function parameter 'iocb' not described in 'libie_debugfs_nr_messages_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:479 function parameter 'to' not described in 'libie_debugfs_nr_messages_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:550 function parameter 'iocb' not described in 'libie_debugfs_enable_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:550 function parameter 'to' not described in 'libie_debugfs_enable_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:641 function parameter 'iocb' not described in 'libie_debugfs_log_size_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:641 function parameter 'to' not described in 'libie_debugfs_log_size_read'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:774 function parameter 'iocb' not described in 'libie_debugfs_data_write'
->> Warning: drivers/net/ethernet/intel/libie/fwlog.c:774 function parameter 'from' not described in 'libie_debugfs_data_write'
+>> WARNING: modpost: drivers/infiniband/sw/rxe/rdma_rxe: section mismatch in reference: rxe_namespace_exit+0x7 (section: .exit.text) -> rxe_net_ops (section: .init.data)
 
 -- 
 0-DAY CI Kernel Test Service
